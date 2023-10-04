@@ -2,6 +2,7 @@ package com.flag4j.operations.sparse.real;
 
 import com.flag4j.Matrix;
 import com.flag4j.SparseMatrix;
+import com.flag4j.SparseVector;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -85,9 +86,9 @@ public class RealSparseMatrixOperations {
 
         return new SparseMatrix(
                 src1.shape,
-                sum.stream().mapToDouble(Double::doubleValue).toArray(),
-                rowIndices.stream().mapToInt(Integer::intValue).toArray(),
-                colIndices.stream().mapToInt(Integer::intValue).toArray()
+                sum,
+                rowIndices,
+                colIndices
         );
     }
 
@@ -110,7 +111,7 @@ public class RealSparseMatrixOperations {
         for(int i=0; i<src.entries.length; i++) {
             row = src.rowIndices[i];
             col = src.colIndices[i];
-            sum[row*src.numCols + col] = src.entries[i];
+            sum[row*src.numCols + col] += src.entries[i];
         }
 
         return new Matrix(src.shape.copy(), sum);
@@ -181,9 +182,9 @@ public class RealSparseMatrixOperations {
 
         return new SparseMatrix(
                 src1.shape,
-                sum.stream().mapToDouble(Double::doubleValue).toArray(),
-                rowIndices.stream().mapToInt(Integer::intValue).toArray(),
-                colIndices.stream().mapToInt(Integer::intValue).toArray()
+                sum,
+                rowIndices,
+                colIndices
         );
     }
 
@@ -198,7 +199,7 @@ public class RealSparseMatrixOperations {
      */
     public static Matrix sub(SparseMatrix src, double a) {
         double[] sum = new double[src.totalEntries().intValueExact()];
-        Arrays.fill(sum, a);
+        Arrays.fill(sum, -a);
 
         int row;
         int col;
@@ -210,5 +211,121 @@ public class RealSparseMatrixOperations {
         }
 
         return new Matrix(src.shape.copy(), sum);
+    }
+
+
+
+    /**
+     * Multiplies two sparse matrices element-wise. This method assumes that the indices of the two matrices are sorted
+     * lexicographically.
+     * @param src1 First matrix in the element-wise multiplication.
+     * @param src2 Second matrix in the element-wise multiplication.
+     * @return The element-wise product of the two matrices {@code src1} and {@code src2}.
+     * @throws IllegalArgumentException If the two matrices do not have the same shape.
+     */
+    public static SparseMatrix elemMult(SparseMatrix src1, SparseMatrix src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        int initCapacity = Math.max(src1.entries.length, src2.entries.length);
+
+        List<Double> product = new ArrayList<>(initCapacity);
+        List<Integer> rowIndices = new ArrayList<>(initCapacity);
+        List<Integer> colIndices = new ArrayList<>(initCapacity);
+
+        int src1Counter = 0;
+        int src2Counter = 0;
+
+        while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
+            if(src1.rowIndices[src1Counter] == src2.rowIndices[src2Counter]
+                    && src1.colIndices[src1Counter] == src2.colIndices[src2Counter]) {
+                product.add(src1.entries[src1Counter]*src2.entries[src2Counter]);
+                rowIndices.add(src1.rowIndices[src1Counter]);
+                colIndices.add(src1.colIndices[src1Counter]);
+                src1Counter++;
+                src2Counter++;
+            } else if(src1.rowIndices[src1Counter] == src2.rowIndices[src2Counter]) {
+                // Matching row indices.
+
+                if(src1.colIndices[src1Counter] < src2.colIndices[src2Counter]) {
+                    src1Counter++;
+                } else {
+                    src2Counter++;
+                }
+            } else {
+                if(src1.rowIndices[src1Counter] < src2.rowIndices[src2Counter]) {
+                    src1Counter++;
+                } else {
+                    src2Counter++;
+                }
+            }
+        }
+
+        return new SparseMatrix(
+                src1.shape,
+                product,
+                rowIndices,
+                colIndices
+        );
+    }
+
+
+    /**
+     * Adds a sparse vector to each column of a sparse matrix as if the vector is a column vector.
+     * @param src The source sparse matrix.
+     * @param col Sparse vector to add to each column of the sparse matrix.
+     * @return A dense copy of the {@code src} matrix with the {@code col} vector added to each row of the matrix.
+     */
+    public static Matrix addToEachCol(SparseMatrix src, SparseVector col) {
+        ParameterChecks.assertEquals(src.numRows, col.size);
+        double[] destEntries = new double[src.totalEntries().intValueExact()];
+
+        // Add values from sparse matrix.
+        for(int i=0; i<src.entries.length; i++) {
+            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = src.entries[i];
+        }
+
+        // Add values from sparse column.
+        for(int i=0; i<col.entries.length; i++) {
+            int idx = col.indices[i]*src.numCols;
+            int end = idx + src.numCols;
+            double value = col.entries[i];
+
+            while(idx < end) {
+                destEntries[idx++] += value;
+            }
+        }
+
+        return new Matrix(src.shape.copy(), destEntries);
+    }
+
+
+    /**
+     * Adds a sparse vector to each row of a sparse matrix as if the vector is a row vector.
+     * @param src The source sparse matrix.
+     * @param row Sparse vector to add to each row of the sparse matrix.
+     * @return A dense copy of the {@code src} matrix with the {@code row} vector added to each row of the matrix.
+     */
+    public static Matrix addToEachRow(SparseMatrix src, SparseVector row) {
+        ParameterChecks.assertEquals(src.numCols, row.size);
+        double[] destEntries = new double[src.totalEntries().intValueExact()];
+
+        // Add values from sparse matrix.
+        for(int i=0; i<src.entries.length; i++) {
+            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = src.entries[i];
+        }
+
+        // Add values from sparse column.
+        for(int i=0; i<row.entries.length; i++) {
+            int idx = 0;
+            int colIdx = row.indices[i];
+            double value = row.entries[i];
+
+            while(idx < destEntries.length) {
+                destEntries[idx + colIdx] += value;
+                idx += src.numCols;
+            }
+        }
+
+        return new Matrix(src.shape.copy(), destEntries);
     }
 }

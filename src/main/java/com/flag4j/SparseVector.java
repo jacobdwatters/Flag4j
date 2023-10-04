@@ -132,6 +132,24 @@ public class SparseVector
 
 
     /**
+     * Creates a sparse vector of specified size, non-zero entries, and non-zero indices.
+     * @param size Full size, including zeros, of the sparse vector.
+     * @param entries Non-zero entries of the sparse vector.
+     * @param indices Non-zero indices of the sparse vector.
+     */
+    public SparseVector(int size, List<Double> entries, List<Integer> indices) {
+        super(new Shape(size),
+                entries.size(),
+                entries.stream().mapToDouble(Double::doubleValue).toArray(),
+                new int[indices.size()][1]
+        );
+
+        this.indices = indices.stream().mapToInt(Integer::intValue).toArray();
+        this.size = size;
+    }
+
+
+    /**
      * Checks if an object is equal to this vector. The object must be a vector (real, complex, dense or sparse).
      * @param b Object to compare to this vector. Valid types are {@link Vector}, {@link SparseVector},
      * {@link CVector}, or {@link SparseCVector}.
@@ -190,7 +208,7 @@ public class SparseVector
             destEntries[idx] = value;
 
         } else{
-            // Then the index was not found int the sparse vector.
+            // Then the index was not found in the sparse vector.
             destIndices = new int[this.indices.length+1];
             destEntries = new double[entries.length+1];
             idx = -(idx+1);
@@ -334,7 +352,7 @@ public class SparseVector
         Arrays.fill(rowIndices, 1);
         System.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);
         System.arraycopy(rowIndices, 0, indices[0], entries.length,  b.size);
-        System.arraycopy(ArrayUtils.rangeInt(0, b.size), 0, indices[1], entries.length,  b.size);
+        System.arraycopy(ArrayUtils.intRange(0, b.size), 0, indices[1], entries.length,  b.size);
 
         return new SparseMatrix(2, b.size, destEntries, indices[0], indices[1]);
     }
@@ -398,7 +416,7 @@ public class SparseVector
         Arrays.fill(rowIndices, 1);
         ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);
         System.arraycopy(rowIndices, 0, indices[0], entries.length,  b.size);
-        System.arraycopy(ArrayUtils.rangeInt(0, b.size), 0, indices[1], entries.length,  b.size);
+        System.arraycopy(ArrayUtils.intRange(0, b.size), 0, indices[1], entries.length,  b.size);
 
         return new SparseCMatrix(2, b.size, destEntries, indices[0], indices[1]);
     }
@@ -775,7 +793,7 @@ public class SparseVector
     /**
      * Gets the element in this tensor at the specified indices. This sparse vectors indices are assumed to
      * be sorted lexicographically. If this is not the case call
-     * {@link #sparseSort() this.sparseSort()} before calling this method.
+     * {@link #sortIndices() this.sparseSort()} before calling this method.
      *
      * @param indices Indices of element.
      * @return The element at the specified indices.
@@ -994,7 +1012,7 @@ public class SparseVector
 
     /**
      * Checks if a vector is parallel to this vector. This sparse vectors indices are assumed to be sorted lexicographically.
-     * If this is not the case call {@link #sparseSort() this.sparseSort()} before calling this method.
+     * If this is not the case call {@link #sortIndices() this.sparseSort()} before calling this method.
      *
      * @param b Vector to compare to this vector.
      * @return True if the vector {@code b} is parallel to this vector and the same size. Otherwise, returns false.
@@ -1190,7 +1208,7 @@ public class SparseVector
         } else {
             matShape = new Shape(this.size, n);
             int[] rowIndices = new int[n];
-            int[] colIndices = ArrayUtils.rangeInt(0, n);
+            int[] colIndices = ArrayUtils.intRange(0, n);
 
             for(int i=0; i<entries.length; i++) {
                 Arrays.fill(rowIndices, indices[i]);
@@ -1261,7 +1279,7 @@ public class SparseVector
      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
      */
     @Override
-    public void sparseSort() {
+    public void sortIndices() {
         SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);
     }
 
@@ -1317,6 +1335,12 @@ public class SparseVector
     @Override
     protected SparseVector getSelf() {
         return this;
+    }
+
+
+    @Override
+    public boolean allClose(SparseVector tensor, double relTol, double absTol) {
+        return RealSparseEquals.allCloseVector(this, tensor, relTol, absTol);
     }
 
 

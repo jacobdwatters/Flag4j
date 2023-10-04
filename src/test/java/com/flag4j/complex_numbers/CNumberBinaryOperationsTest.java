@@ -405,7 +405,7 @@ class CNumberBinaryOperationsTest {
         // --------------- Sub-case 3 ---------------
         a = new CNumber(1.345, -93.13);
         b = new CNumber(0, 0);
-        expResult = CNumber.ZERO;
+        expResult = CNumber.zero();
 
         result = a.mult(b);
 
@@ -415,7 +415,7 @@ class CNumberBinaryOperationsTest {
         // --------------- Sub-case 4 ---------------
         a = new CNumber(0, 0);
         b = new CNumber(1.345, -93.13);
-        expResult = CNumber.ZERO;
+        expResult = CNumber.zero();
 
         result = a.mult(b);
 
@@ -459,7 +459,7 @@ class CNumberBinaryOperationsTest {
         a = new CNumber(0, 0);
         bDouble = 9.234e10;
 
-        expResult = CNumber.ZERO;
+        expResult = CNumber.zero();
 
         result = a.mult(bDouble);
 
@@ -468,7 +468,7 @@ class CNumberBinaryOperationsTest {
         // --------------- Sub-case 3 ---------------
         a = new CNumber(1.345, -93.13);
         bDouble = 0;
-        expResult = CNumber.ZERO;
+        expResult = CNumber.zero();
 
         result = a.mult(bDouble);
 
@@ -520,7 +520,7 @@ class CNumberBinaryOperationsTest {
         // --------------- Sub-case 3 ---------------
         a = new CNumber(1.345, -93.13);
         b = new CNumber(0, 0);
-        expResult = CNumber.NaN;
+        expResult = CNumber.nan();
 
         result = a.div(b);
 
@@ -531,7 +531,7 @@ class CNumberBinaryOperationsTest {
         // --------------- Sub-case 4 ---------------
         a = new CNumber(0, 0);
         b = new CNumber(1.345, -93.13);
-        expResult = CNumber.ZERO;
+        expResult = CNumber.zero();
 
         result = a.div(b);
 
@@ -591,7 +591,7 @@ class CNumberBinaryOperationsTest {
         // --------------- Sub-case 4 ---------------
         a = new CNumber(0, 0);
         bDouble = 24.134;
-        expResult = CNumber.ZERO;
+        expResult = CNumber.zero();
 
         result = a.div(bDouble);
 

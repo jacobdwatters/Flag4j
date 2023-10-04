@@ -76,4 +76,56 @@ interface TensorManipulationsMixin<T> {
      * @throws IllegalArgumentException If the axis is not positive or larger than the rank of this tensor.
      */
     T flatten(int axis);
+
+
+    /**
+     * Rounds each entry of this tensor to the nearest whole number.
+     *
+     * @return A copy of this tensor with each entry rounded to the nearest whole number.
+     * @see #round(int)
+     * @see #roundToZero()
+     * @see #roundToZero(double)
+     */
+    T round();
+
+
+    /**
+     * Rounds each entry in this tensor to the nearest whole number.
+     *
+     * @param precision The number of decimal places to round to. This value must be non-negative.
+     * @return A copy of this matrix with rounded values.
+     * @throws IllegalArgumentException If <code>precision</code> is negative.
+     * @see #round()
+     * @see #roundToZero()
+     * @see #roundToZero(double)
+     */
+    T round(int precision);
+
+
+    /**
+     * Rounds values in this tensor which are close to zero in absolute value to zero. 
+     * If the matrix is complex, both the real and imaginary components will be rounded
+     * independently. By default, the values must be within 1.0*E^-12 of zero. To specify a threshold value see
+     * {@link #roundToZero(double)}.
+     *
+     * @return A copy of this matrix with rounded values.
+     * @see #roundToZero(double)
+     * @see #round()
+     * @see #round(int)
+     */
+    T roundToZero();
+
+
+    /**
+     * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
+     * independently.
+     * @param threshold Threshold for rounding values to zero. That is, if a value in this matrix is less than the threshold in absolute value then it
+     *                  will be rounded to zero. This value must be non-negative.
+     * @return A copy of this matrix with rounded values.
+     * @throws IllegalArgumentException If threshold is negative.
+     * @see #roundToZero()
+     * @see #round()
+     * @see #round(int)
+     */
+    T roundToZero(double threshold);
 }

@@ -62,14 +62,14 @@ class CNumberMinMaxSumTest {
         n4 = new CNumber(0, -2);
         n5 = new CNumber(-9347, 100);
 
-        min = CNumber.minReal(n1, n2, n3, n4, n5);
+        min = CNumber.minRe(n1, n2, n3, n4, n5);
 
         expMin = new CNumber(-9347);
 
         Assertions.assertEquals(expMin, min);
 
         // ------------ Sub-case 2 ------------
-        min = CNumber.minReal();
+        min = CNumber.minRe();
         Assertions.assertTrue(Double.isNaN(min.re));
     }
 
@@ -147,14 +147,14 @@ class CNumberMinMaxSumTest {
         n4 = new CNumber(104.43, -2);
         n5 = new CNumber(0, 100);
 
-        max = CNumber.maxReal(n1, n2, n3, n4, n5);
+        max = CNumber.maxRe(n1, n2, n3, n4, n5);
 
         expMax = new CNumber(104.43);
 
         Assertions.assertEquals(expMax, max);
 
         // ------------ Sub-case 2 ------------
-        max = CNumber.maxReal();
+        max = CNumber.maxRe();
         Assertions.assertTrue(Double.isNaN(max.re));
     }
 

@@ -27,6 +27,7 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.VectorMixin;
 import com.flag4j.core.sparse.ComplexSparseTensorBase;
+import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.complex.ComplexProperties;
 import com.flag4j.operations.common.real.VectorNorms;
@@ -44,6 +45,7 @@ import com.flag4j.operations.sparse.real_complex.RealComplexSparseEquals;
 import com.flag4j.operations.sparse.real_complex.RealComplexSparseVectorOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ParameterChecks;
+import com.flag4j.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -156,6 +158,24 @@ public class SparseCVector
 
 
     /**
+     * Creates a sparse vector of specified size, non-zero entries, and non-zero indices.
+     * @param size Full size, including zeros, of the sparse vector.
+     * @param entries Non-zero entries of the sparse vector.
+     * @param indices Non-zero indices of the sparse vector.
+     */
+    public SparseCVector(int size, List<CNumber> entries, List<Integer> indices) {
+        super(new Shape(size),
+                entries.size(),
+                entries.toArray(CNumber[]::new),
+                new int[indices.size()][1]
+        );
+
+        this.indices = indices.stream().mapToInt(Integer::intValue).toArray();
+        this.size = size;
+    }
+
+
+    /**
      * Checks if an object is equal to this vector. The object must be a vector (real, complex, dense or sparse).
      * @param b Object to compare to this vector. Valid types are {@link Vector}, {@link SparseVector},
      * {@link CVector}, or {@link SparseCVector}.
@@ -198,7 +218,7 @@ public class SparseCVector
 
         // Fill entries with non-zero values.
         for(int i=0; i<src.entries.length; i++) {
-            if(!src.entries[i].equals(CNumber.ZERO)) {
+            if(!src.entries[i].equals(0)) {
                 nonZeroEntries.add(src.entries[i]);
                 indices.add(i);
             }
@@ -220,6 +240,12 @@ public class SparseCVector
     @Override
     protected SparseCVector getSelf() {
         return this;
+    }
+
+
+    @Override
+    public boolean allClose(SparseCVector tensor, double relTol, double absTol) {
+        return ComplexSparseEquals.allCloseVector(this, tensor, relTol, absTol);
     }
 
 
@@ -535,7 +561,7 @@ public class SparseCVector
         Arrays.fill(rowIndices, 1);
         ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);
         System.arraycopy(rowIndices, 0, indices[0], entries.length,  b.size);
-        System.arraycopy(ArrayUtils.rangeInt(0, b.size), 0, indices[1], entries.length,  b.size);
+        System.arraycopy(ArrayUtils.intRange(0, b.size), 0, indices[1], entries.length,  b.size);
 
         return new SparseCMatrix(2, b.size, destEntries, indices[0], indices[1]);
     }
@@ -599,7 +625,7 @@ public class SparseCVector
         Arrays.fill(rowIndices, 1);
         ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);
         System.arraycopy(rowIndices, 0, indices[0], entries.length,  b.size);
-        System.arraycopy(ArrayUtils.rangeInt(0, b.size), 0, indices[1], entries.length,  b.size);
+        System.arraycopy(ArrayUtils.intRange(0, b.size), 0, indices[1], entries.length,  b.size);
 
         return new SparseCMatrix(2, b.size, destEntries, indices[0], indices[1]);
     }
@@ -946,6 +972,34 @@ public class SparseCVector
     @Override
     public CVector sub(CNumber a) {
         return ComplexSparseVectorOperations.sub(this, a);
+    }
+
+
+    /**
+     * A factory for creating a complex sparse tensor.
+     *
+     * @param shape   Shape of the sparse tensor to make.
+     * @param entries Non-zero entries of the sparse tensor to make.
+     * @param indices Non-zero indices of the sparse tensor to make.
+     * @return A tensor created from the specified parameters.
+     */
+    @Override
+    protected SparseCVector makeTensor(Shape shape, CNumber[] entries, int[][] indices) {
+        return new SparseCVector(shape.get(0), entries, indices[0]);
+    }
+
+
+    /**
+     * A factory for creating a real sparse tensor.
+     *
+     * @param shape   Shape of the sparse tensor to make.
+     * @param entries Non-zero entries of the sparse tensor to make.
+     * @param indices Non-zero indices of the sparse tensor to make.
+     * @return A tensor created from the specified parameters.
+     */
+    @Override
+    protected SparseVector makeRealTensor(Shape shape, double[] entries, int[][] indices) {
+        return new SparseVector(shape.get(0), entries, indices[0]);
     }
 
 
@@ -1341,7 +1395,7 @@ public class SparseCVector
         if(this.size!=b.size) {
             result = false;
         } else {
-            result = this.inner(b).equals(CNumber.ZERO);
+            result = this.inner(b).equals(0);
         }
 
         return result;
@@ -1510,7 +1564,7 @@ public class SparseCVector
         } else {
             matShape = new Shape(this.size, n);
             int[] rowIndices = new int[n];
-            int[] colIndices = ArrayUtils.rangeInt(0, n);
+            int[] colIndices = ArrayUtils.intRange(0, n);
 
             for(int i=0; i<entries.length; i++) {
                 Arrays.fill(rowIndices, indices[i]);
@@ -1533,5 +1587,49 @@ public class SparseCVector
     @Override
     public int length() {
         return size;
+    }
+
+
+    /**
+     * Formats this tensor as a human-readable string. Specifically, a string containing the
+     * shape and flatten entries of this tensor.
+     * @return A human-readable string representing this tensor.
+     */
+    public String toString() {
+        int size = nonZeroEntries;
+        StringBuilder result = new StringBuilder(String.format("Full Shape: %s\n", shape));
+        result.append("Non-zero entries: [");
+
+        if(size > 0) {
+            int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+            int width;
+            String value;
+
+            // Get entries up until the stopping point.
+            for(int i=0; i<stopIndex; i++) {
+                value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+                width = PrintOptions.getPadding() + value.length();
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            if(stopIndex < size-1) {
+                width = PrintOptions.getPadding() + 3;
+                value = "...";
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            // Get last entry now
+            value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        result.append("]\n");
+        result.append("Indices: ").append(Arrays.toString(indices));
+
+        return result.toString();
     }
 }

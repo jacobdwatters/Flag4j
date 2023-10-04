@@ -24,10 +24,11 @@
 
 package com.flag4j.linalg.decompositions;
 
-import com.flag4j.Matrix;
+import com.flag4j.SparseMatrix;
 import com.flag4j.core.MatrixMixin;
+import com.flag4j.util.ArrayUtils;
 
-// TODO: Implement LDU decomposition.
+import java.util.Arrays;
 
 /**
  * <p>This abstract class specifies methods for computing the LU decomposition of a matrix.</p>
@@ -59,11 +60,16 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
     /**
      * Permutation matrix to store row swaps if partial pivoting is used.
      */
-    protected Matrix P;
+    protected SparseMatrix P;
     /**
      * Permutation matrix to store column swaps if full pivoting is used.
      */
-    protected Matrix Q;
+    protected SparseMatrix Q;
+
+    protected int numRowSwaps; // Tracks the number of row swaps made during full/partial pivoting.
+    protected int numColSwaps; // Tracks the number of column swaps made during full pivoting.
+    protected int[] rowSwaps; // Array for keeping track of row swaps made with full/partial pivoting.
+    protected int[] colSwaps; // Array for keeping track of column swaps made during full pivoting.
 
 
     /**
@@ -99,12 +105,18 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
     @Override
     public LUDecomposition<T> decompose(T src) {
         initLU(src);
+        numRowSwaps = 0; // Set the number of row swaps to zero.
+        numColSwaps = 0; // Set the number of row swaps to zero.
 
         if(pivotFlag==Pivoting.NONE) {
+            rowSwaps = colSwaps = null;
             noPivot(); // Compute with no pivoting.
         } else if(pivotFlag==Pivoting.PARTIAL) {
+            rowSwaps = ArrayUtils.intRange(0, LU.numRows());
             partialPivot();
         } else {
+            rowSwaps = ArrayUtils.intRange(0, LU.numRows());
+            colSwaps = ArrayUtils.intRange(0, LU.numCols());
             fullPivot();
         }
 
@@ -138,6 +150,17 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
 
 
     /**
+     * Gets the {@code L} and {@code U} matrices of the decomposition combined in a single matrix.
+     * @return The {@code L} and {@code U} matrices of the decomposition stored together in a single matrix.
+     * The diagonal of {@code L} is all ones and is not stored allowing the diagonal of {@code U} to be stored along
+     * the diagonal of the combined matrix.
+     */
+    public T getLU() {
+        return LU;
+    }
+
+
+    /**
      * Gets the unit lower triangular matrix of the decomposition.
      * @return The unit lower triangular matrix of the decomposition.
      */
@@ -155,7 +178,19 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
      * Gets the row permutation matrix of the decomposition.
      * @return The row permutation matrix of the decomposition. If no pivoting was used, null will be returned.
      */
-    public Matrix getP() {
+    public SparseMatrix getP() {
+        if(rowSwaps != null) {
+            double[] entries = new double[rowSwaps.length];
+            Arrays.fill(entries, 1);
+            int[] rowIndices = ArrayUtils.intRange(0, entries.length);
+            int[] colIndices = rowSwaps.clone();
+
+            P = new SparseMatrix(LU.numRows(), entries, rowIndices, colIndices);
+            P.sortIndices();
+        } else {
+            P = null;
+        }
+
         return P;
     }
 
@@ -164,9 +199,71 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
      * Gets the column permutation matrix of the decomposition.
      * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
      */
-    public Matrix getQ() {
+    public SparseMatrix getQ() {
+        if(colSwaps != null) {
+            double[] entries = new double[colSwaps.length];
+            Arrays.fill(entries, 1);
+            int[] rowIndices = colSwaps.clone();
+            int[] colIndices = ArrayUtils.intRange(0, entries.length);
+
+            Q = new SparseMatrix(LU.numCols(), entries, rowIndices, colIndices);
+            Q.sortIndices();
+        } else {
+            Q = null;
+        }
+
         return Q;
     }
+
+
+    /**
+     * Gets the number of row swaps used in the last decomposition.
+     * @return The number of row swaps used in the last decomposition.
+     */
+    public int getNumRowSwaps() {
+        return numRowSwaps;
+    }
+
+
+    /**
+     * Gets the number of column swaps used in the last decomposition.
+     * @return The number of column swaps used in the last decomposition.
+     */
+    public int getNumColSwaps() {
+        return numColSwaps;
+    }
+
+
+    /**
+     * Tracks the swapping of two rows during gaussian elimination.
+     * @param rowIdx1 First row index in swap.
+     * @param rowIdx2 Second row index in swap.
+     */
+    protected void swapRows(int rowIdx1, int rowIdx2) {
+        numRowSwaps++;
+
+        int temp = rowSwaps[rowIdx1];
+        rowSwaps[rowIdx1] = rowSwaps[rowIdx2];
+        rowSwaps[rowIdx2] = temp;
+
+        LU.swapRows(rowIdx1, rowIdx2);
+    }
+
+
+    /**
+     * Tracks the swapping of two columns during gaussian elimination.
+     * @param colIdx1 First column index in swap.
+     * @param colIdx2 Second column index in swap.
+     */
+    protected void swapCols(int colIdx1, int colIdx2) {
+        numColSwaps++;
+        int temp = colSwaps[colIdx1];
+        colSwaps[colIdx1] = colSwaps[colIdx2];
+        colSwaps[colIdx2] = temp;
+
+        LU.swapCols(colIdx1, colIdx2);
+    }
+
 
 
     /**

@@ -27,7 +27,7 @@ package com.flag4j.operations.sparse.real_complex;
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.concurrency.ThreadManager;
-import com.flag4j.util.Axis2D;
+import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 
 
@@ -59,10 +59,11 @@ public class RealComplexSparseMatrixMultiplication {
     public static CNumber[] standard(CNumber[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                      double[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
 
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int cols2 = shape2.dims[1];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fillZeros(dest);
 
         // r1, c1, r2, and c2 store row/column indices for non-zero values in src1 and src2.
         int r1, c1, r2, c2;
@@ -101,10 +102,11 @@ public class RealComplexSparseMatrixMultiplication {
     public static CNumber[] concurrentStandard(CNumber[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                                double[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
 
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int cols2 = shape2.dims[1];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fillZeros(dest);
 
         ThreadManager.concurrentLoop(0, src1.length, (i)->{
             int r1 = rowIndices1[i]; // = i
@@ -138,10 +140,11 @@ public class RealComplexSparseMatrixMultiplication {
     public static CNumber[] standardVector(CNumber[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                            double[] src2, int[] indices, Shape shape2) {
 
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int cols2 = shape2.dims[1];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fillZeros(dest);
 
         // r1, c1, and r2 store the indices for non-zero values in src1 and src2.
         int r1, c1, r2;
@@ -178,10 +181,11 @@ public class RealComplexSparseMatrixMultiplication {
     public static CNumber[] concurrentStandardVector(CNumber[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                                      double[] src2, int[] indices, Shape shape2) {
 
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int cols2 = shape2.dims[1];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fillZeros(dest);
 
         ThreadManager.concurrentLoop(0, src1.length, (i) -> {
             int r1 = rowIndices1[i]; // = i
@@ -215,10 +219,11 @@ public class RealComplexSparseMatrixMultiplication {
     public static CNumber[] standard(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                      CNumber[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
 
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int cols2 = shape2.dims[1];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fillZeros(dest);
 
         // r1, c1, r2, and c2 store row/column indices for non-zero values in src1 and src2.
         int r1, c1, r2, c2;
@@ -257,10 +262,11 @@ public class RealComplexSparseMatrixMultiplication {
     public static CNumber[] concurrentStandard(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                                CNumber[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
 
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int cols2 = shape2.dims[1];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fillZeros(dest);
 
         ThreadManager.concurrentLoop(0, src1.length, (i)->{
             int r1 = rowIndices1[i]; // = i
@@ -294,8 +300,8 @@ public class RealComplexSparseMatrixMultiplication {
     public static CNumber[] standardVector(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                            CNumber[] src2, int[] indices, Shape shape2) {
 
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int cols2 = shape2.dims[1];
 
         CNumber[] dest = new CNumber[rows1*cols2];
 
@@ -334,8 +340,8 @@ public class RealComplexSparseMatrixMultiplication {
     public static CNumber[] concurrentStandardVector(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                                      CNumber[] src2, int[] indices, Shape shape2) {
 
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int cols2 = shape2.dims[1];
 
         CNumber[] dest = new CNumber[rows1*cols2];
 

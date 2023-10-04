@@ -59,7 +59,7 @@ public class ComplexBackSolver implements LinearSolver<CMatrix, CVector> {
             sum = new CNumber();
             uIndex = i*U.numCols;
 
-            if(U.entries[i*(n+1)].equals(CNumber.ZERO)) {
+            if(U.entries[i*(n+1)].equals(0)) {
                 throw new SingularMatrixException("Cannot solve linear system.");
             }
 
@@ -100,7 +100,7 @@ public class ComplexBackSolver implements LinearSolver<CMatrix, CVector> {
                 xIndex = i*X.numCols + j;
 
                 diag = U.entries[i*(n+1)];
-                if(diag.equals(CNumber.ZERO)) {
+                if(diag.equals(0)) {
                     throw new SingularMatrixException("Cannot solve linear system.");
                 }
 

@@ -106,7 +106,7 @@ public interface MatrixOperationsMixin<
      * @return The result of subtracting the tensor B from this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
-    W sub(CMatrix B);
+    CMatrix sub(CMatrix B);
 
 
     /**
@@ -116,35 +116,6 @@ public interface MatrixOperationsMixin<
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     W sub(SparseCMatrix B);
-
-
-
-    /**
-     * Computes the element-wise addition of a matrix with a real dense matrix. The result is stored in this matrix.
-     * @param B The matrix to add to this matrix.
-     */
-    void addEq(Matrix B);
-
-
-    /**
-     * Computes the element-wise subtraction of this matrix with a real dense matrix. The result is stored in this matrix.
-     * @param B The matrix to subtract from this matrix.
-     */
-    void subEq(Matrix B);
-
-
-    /**
-     * Computes the element-wise addition of a matrix with a real sparse matrix. The result is stored in this matrix.
-     * @param B The sparse matrix to add to this matrix.
-     */
-    void addEq(SparseMatrix B);
-
-
-    /**
-     * Computes the element-wise subtraction of this matrix with a real sparse matrix. The result is stored in this matrix.
-     * @param B The sparse matrix to subtract from this matrix.
-     */
-    void subEq(SparseMatrix B);
 
 
     /**
@@ -501,7 +472,7 @@ public interface MatrixOperationsMixin<
      * @param b Vector to add to each column of this matrix.
      * @return The result of adding the vector b to each column of this matrix.
      */
-    T addToEachCol(SparseVector b);
+    U addToEachCol(SparseVector b);
 
 
     /**
@@ -519,7 +490,7 @@ public interface MatrixOperationsMixin<
      * @param b Vector to add to each column of this matrix.
      * @return The result of adding the vector b to each column of this matrix.
      */
-    W addToEachCol(SparseCVector b);
+    CMatrix addToEachCol(SparseCVector b);
 
 
     /**
@@ -537,7 +508,7 @@ public interface MatrixOperationsMixin<
      * @param b Vector to add to each row of this matrix.
      * @return The result of adding the vector b to each row of this matrix.
      */
-    T addToEachRow(SparseVector b);
+    U addToEachRow(SparseVector b);
 
 
     /**
@@ -555,7 +526,7 @@ public interface MatrixOperationsMixin<
      * @param b Vector to add to each row of this matrix.
      * @return The result of adding the vector b to each row of this matrix.
      */
-    W addToEachRow(SparseCVector b);
+    CMatrix addToEachRow(SparseCVector b);
 
 
     /**
@@ -883,14 +854,14 @@ public interface MatrixOperationsMixin<
      * @param i Index of row to get.
      * @return The specified row of this matrix.
      */
-    T getRow(int i);
+    TT getRow(int i);
 
     /**
      * Get the column of this matrix at the specified index.
      * @param j Index of column to get.
      * @return The specified column of this matrix.
      */
-    T getCol(int j);
+    TT getCol(int j);
 
 
     /**
@@ -937,7 +908,7 @@ public interface MatrixOperationsMixin<
      * @throws NegativeArraySizeException If {@code rowStart} is larger than the number of rows in this matrix.
      * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code j} is outside the bounds of this matrix.
      */
-    T getColBelow(int rowStart, int j);
+    TT getColBelow(int rowStart, int j);
 
 
     /**
@@ -949,7 +920,7 @@ public interface MatrixOperationsMixin<
      * @throws NegativeArraySizeException If {@code colStart} is larger than the number of columns in this matrix.
      * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
      */
-    T getRowAfter(int colStart, int i);
+    TT getRowAfter(int colStart, int i);
 
 
     /**
@@ -986,14 +957,14 @@ public interface MatrixOperationsMixin<
      * Computes the inverse of this matrix.
      * @return The inverse of this matrix.
      */
-    T inv();
+    U inv();
 
 
     /**
      * Computes the pseudo-inverse of this matrix.
      * @return The pseudo-inverse of this matrix.
      */
-    T pInv();
+    U pInv();
 
 
     /**

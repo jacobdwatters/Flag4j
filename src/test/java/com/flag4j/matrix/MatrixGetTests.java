@@ -25,16 +25,18 @@ class MatrixGetTests {
 
     @Test
     void getRowTestCase() {
+        Vector exp;
+
         // ------------------- Sub-case 1 -------------------
-        exp = new Matrix(new double[][]{{-8234.5, 15.22, -84.12}});
+        exp = new Vector(-8234.5, 15.22, -84.12);
         assertEquals(exp, A.getRow(1));
 
         // ------------------- Sub-case 2 -------------------
-        exp = new Matrix(new double[][]{{1.123, 5525, 66.74}});
+        exp = new Vector(1.123, 5525, 66.74);
         assertEquals(exp, A.getRow(0));
 
         // ------------------- Sub-case 3 -------------------
-        exp = new Matrix(new double[][]{{-9.451, -45.6, 111.345}});
+        exp = new Vector(-9.451, -45.6, 111.345);
         assertEquals(exp, A.getRow(3));
 
         // ------------------- Sub-case 4 -------------------
@@ -50,15 +52,15 @@ class MatrixGetTests {
         Vector exp;
 
         // ------------------- Sub-case 1 -------------------
-        exp = new Vector(new double[]{-8234.5, 15.22, -84.12});
+        exp = new Vector(-8234.5, 15.22, -84.12);
         assertEquals(exp, A.getRowAsVector(1));
 
         // ------------------- Sub-case 2 -------------------
-        exp = new Vector(new double[]{1.123, 5525, 66.74});
+        exp = new Vector(1.123, 5525, 66.74);
         assertEquals(exp, A.getRowAsVector(0));
 
         // ------------------- Sub-case 3 -------------------
-        exp = new Vector(new double[]{-9.451, -45.6, 111.345});
+        exp = new Vector(-9.451, -45.6, 111.345);
         assertEquals(exp, A.getRowAsVector(3));
 
         // ------------------- Sub-case 4 -------------------
@@ -71,16 +73,18 @@ class MatrixGetTests {
 
     @Test
     void getRowAfterTestCase() {
+        Vector exp;
+
         // ------------------- Sub-case 1 -------------------
-        exp = new Matrix(new double[][]{{15.22, -84.12}});
+        exp = new Vector(15.22, -84.12);
         assertEquals(exp, A.getRowAfter(1, 1));
 
         // ------------------- Sub-case 2 -------------------
-        exp = new Matrix(new double[][]{{66.74}});
+        exp = new Vector(66.74);
         assertEquals(exp, A.getRowAfter(2, 0));
 
         // ------------------- Sub-case 3 -------------------
-        exp = new Matrix(new double[][]{{-9.451, -45.6, 111.345}});
+        exp = new Vector(-9.451, -45.6, 111.345);
         assertEquals(exp, A.getRowAfter(0, 3));
 
         // ------------------- Sub-case 4 -------------------

@@ -70,7 +70,7 @@ public abstract class TensorBase<T, U, W, Z, Y, D extends Serializable, X extend
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
      *                If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-    public TensorBase(Shape shape, D entries) {
+    protected TensorBase(Shape shape, D entries) {
         this.shape = shape;
         this.entries = entries;
     }
@@ -156,4 +156,30 @@ public abstract class TensorBase<T, U, W, Z, Y, D extends Serializable, X extend
      * @return A reference to this tensor.
      */
     protected abstract T getSelf();
+
+
+    /**
+     * Checks if all entries of this tensor are close to the entries of the argument {@code tensor}.
+     * @param tensor Tensor to compare this tensor to.
+     * @return True if the argument {@code tensor} is the same shape as this tensor and all entries are 'close', i.e.
+     * elements {@code a} and {@code b} at the same positions in the two tensors respectively satisfy
+     * {@code |a-b| <= (1E-05 + 1E-08*|b|)}. Otherwise, returns false.
+     * @see #allClose(Object, double, double)
+     */
+    public boolean allClose(T tensor) {
+        return allClose(tensor, 1e-05, 1e-08);
+    }
+
+
+    /**
+     * Checks if all entries of this tensor are close to the entries of the argument {@code tensor}.
+     * @param tensor Tensor to compare this tensor to.
+     * @param absTol Absolute tolerance.
+     * @param relTol Relative tolerance.
+     * @return True if the argument {@code tensor} is the same shape as this tensor and all entries are 'close', i.e.
+     * elements {@code a} and {@code b} at the same positions in the two tensors respectively satisfy
+     * {@code |a-b| <= (atol + rtol*|b|)}. Otherwise, returns false.
+     * @see #allClose(Object)
+     */
+    public abstract boolean allClose(T tensor, double relTol, double absTol);
 }

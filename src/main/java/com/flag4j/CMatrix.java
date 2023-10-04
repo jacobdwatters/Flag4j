@@ -25,21 +25,23 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.complex_numbers.CNumberUtils;
 import com.flag4j.core.ComplexMatrixMixin;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.dense.ComplexDenseTensorBase;
+import com.flag4j.core.dense.DenseMatrixMixin;
 import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.linalg.Invert;
-import com.flag4j.linalg.decompositions.*;
+import com.flag4j.linalg.decompositions.ComplexLUDecomposition;
+import com.flag4j.linalg.decompositions.ComplexSVD;
+import com.flag4j.linalg.decompositions.LUDecomposition;
+import com.flag4j.linalg.decompositions.SVD;
 import com.flag4j.linalg.solvers.ComplexExactSolver;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
-import com.flag4j.operations.dense.complex.ComplexDenseDeterminant;
-import com.flag4j.operations.dense.complex.ComplexDenseEquals;
-import com.flag4j.operations.dense.complex.ComplexDenseOperations;
-import com.flag4j.operations.dense.complex.ComplexDenseSetOperations;
+import com.flag4j.operations.dense.complex.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
@@ -47,11 +49,11 @@ import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultTranspose;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplication;
-import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseOperations;
+import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultTranspose;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixOperations;
 import com.flag4j.util.*;
 
 import java.util.ArrayList;
@@ -63,7 +65,8 @@ import java.util.List;
 public class CMatrix
         extends ComplexDenseTensorBase<CMatrix, Matrix>
         implements MatrixMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, CNumber, CVector, CVector>,
-        ComplexMatrixMixin<CMatrix> {
+        ComplexMatrixMixin<CMatrix>,
+        DenseMatrixMixin<CMatrix, CNumber> {
 
     /**
      * The number of rows in this matrix.
@@ -480,14 +483,16 @@ public class CMatrix
      */
     @Override
     public boolean isI() {
+        int pos = 0;
+
         if(isSquare()) {
             for(int i=0; i<numRows; i++) {
                 for(int j=0; j<numCols; j++) {
-                    if(i==j && !entries[i*numCols + j].equals(CNumber.ONE)) {
-                        return false; // No need to continue
-                    } else if(i!=j && !entries[i*numCols + j].equals(CNumber.ZERO)) {
+                    if((i==j && !entries[pos].equals(1)) || i!=j && !entries[pos].equals(0)) {
                         return false; // No need to continue
                     }
+
+                    pos++;
                 }
             }
 
@@ -498,6 +503,17 @@ public class CMatrix
 
         // If we make it to this point this matrix must be an identity matrix.
         return true;
+    }
+
+
+    /**
+     * Checks that this matrix is close to the identity matrix according to
+     * {@link com.flag4j.operations.common.real.RealProperties#allClose(double[], double[])}
+     * @return True if this matrix is approximately the identity matrix.
+     * @see #isI()
+     */
+    public boolean isCloseToI() {
+        return ComplexDenseProperties.isCloseToIdentity(this);
     }
 
 
@@ -514,7 +530,7 @@ public class CMatrix
         if(!this.isSquare() || !B.isSquare() || !shape.equals(B.shape)) {
             result = false;
         } else {
-            result = this.mult(B).round().isI();
+            result = this.mult(B).isCloseToI();
         }
 
         return result;
@@ -551,34 +567,6 @@ public class CMatrix
             // Unknown axis
             throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));
         }
-    }
-
-
-    /**
-     * Sets an index of this matrix to the specified value.
-     *
-     * @param value Value to set.
-     * @param row   Row index to set.
-     * @param col   Column index to set.
-     * @return A reference to this matrix.
-     */
-    @Override
-    public CMatrix set(double value, int row, int col) {
-        return super.set(value, row, col);
-    }
-
-
-    /**
-     * Sets an index of this matrix to the specified value.
-     *
-     * @param value Value to set.
-     * @param row   Row index to set.
-     * @param col   Column index to set.
-     * @return A reference to this matrix.
-     */
-    @Override
-    public CMatrix set(CNumber value, int row, int col) {
-        return super.set(value, row, col);
     }
 
 
@@ -641,6 +629,17 @@ public class CMatrix
         return this;
     }
 
+
+    @Override
+    public CMatrix set(double value, int row, int col) {
+        return super.set(value, row, col);
+    }
+
+
+    @Override
+    public CMatrix set(CNumber value, int row, int col) {
+        return super.set(value, row, col);
+    }
 
     /**
      * Sets a column of this matrix at the given index to the specified values.
@@ -804,6 +803,25 @@ public class CMatrix
      * Sets a column of this matrix at the given index to the specified values.
      *
      * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
+     */
+    public CMatrix setCol(Vector values, int colIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.size, this.numRows);
+
+        for(int i=0; i<values.size; i++) {
+            super.entries[i*numCols + colIndex] = new CNumber(values.entries[i]);
+        }
+
+        return this;
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
      * @param colIndex The index of the columns which is to be set.
      * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
@@ -813,7 +831,7 @@ public class CMatrix
         ParameterChecks.assertArrayLengthsEq(values.size, numRows);
 
         // Zero-out column
-        ArrayUtils.stridedFillZerosRange(this.entries, colIndex, 1, this.numCols-1);
+        ArrayUtils.stridedFillZeros(this.entries, colIndex, 1, this.numCols-1);
 
         // Copy sparse values
         int index;
@@ -856,7 +874,7 @@ public class CMatrix
         int rowOffset = rowIndex*numCols;
 
         // Fill row with zeros
-        ArrayUtils.fillZerosRange(super.entries, rowOffset, rowOffset+numCols);
+        ArrayUtils.fillZeros(super.entries, rowOffset, rowOffset+numCols);
 
         // Copy sparse values
         for(int i=0; i<values.entries.length; i++) {
@@ -886,7 +904,7 @@ public class CMatrix
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
 
         // Fill slice with zeros
-        ArrayUtils.stridedFillZerosRange(
+        ArrayUtils.stridedFillZeros(
                 this.entries,
                 rowStart*this.numCols+colStart,
                 values.numCols,
@@ -894,7 +912,8 @@ public class CMatrix
         );
 
         // Copy sparse values
-        int rowIndex, colIndex;
+        int rowIndex;
+        int colIndex;
         for(int i=0; i<values.entries.length; i++) {
             rowIndex = values.rowIndices[i];
             colIndex = values.colIndices[i];
@@ -918,7 +937,6 @@ public class CMatrix
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
-    @Override
     public CMatrix setSliceCopy(SparseCMatrix values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
         ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
@@ -927,7 +945,7 @@ public class CMatrix
         CMatrix copy = this.copy();
 
         // Fill slice with zeros.
-        ArrayUtils.stridedFillZerosRange(
+        ArrayUtils.stridedFillZeros(
                 copy.entries,
                 rowStart*copy.numCols+colStart,
                 values.numCols,
@@ -935,7 +953,8 @@ public class CMatrix
         );
 
         // Copy sparse values
-        int rowIndex, colIndex;
+        int rowIndex;
+        int colIndex;
         for(int i=0; i<values.entries.length; i++) {
             rowIndex = values.rowIndices[i];
             colIndex = values.colIndices[i];
@@ -995,7 +1014,7 @@ public class CMatrix
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
 
         // Fill slice with zeros
-        ArrayUtils.stridedFillZerosRange(
+        ArrayUtils.stridedFillZeros(
                 this.entries,
                 rowStart*this.numCols+colStart,
                 values.numCols,
@@ -1003,7 +1022,8 @@ public class CMatrix
         );
 
         // Copy sparse values
-        int rowIndex, colIndex;
+        int rowIndex;
+        int colIndex;
         for(int i=0; i<values.entries.length; i++) {
             rowIndex = values.rowIndices[i];
             colIndex = values.colIndices[i];
@@ -1462,7 +1482,7 @@ public class CMatrix
         CMatrix copy = this.copy();
 
         // Fill slice with zeros.
-        ArrayUtils.stridedFillZerosRange(
+        ArrayUtils.stridedFillZeros(
                 copy.entries,
                 rowStart*copy.numCols+colStart,
                 values.numCols,
@@ -1470,7 +1490,8 @@ public class CMatrix
         );
 
         // Copy sparse values
-        int rowIndex, colIndex;
+        int rowIndex;
+        int colIndex;
         for(int i=0; i<values.entries.length; i++) {
             rowIndex = values.rowIndices[i];
             colIndex = values.colIndices[i];
@@ -1508,7 +1529,7 @@ public class CMatrix
     /**
      * Removes a specified set of rows from this matrix.
      *
-     * @param rowIndices The indices of the rows to remove from this matrix.
+     * @param rowIndices The indices of the rows to remove from this matrix. Must be sorted and unique.
      * @return a copy of this matrix with the specified rows removed.
      */
     @Override
@@ -1518,7 +1539,7 @@ public class CMatrix
         int row = 0;
 
         for(int i=0; i<this.numRows; i++) {
-            if(ArrayUtils.notInArray(rowIndices, i)) {
+            if(ArrayUtils.notContains(rowIndices, i)) {
                 ArrayUtils.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
                 row++;
             }
@@ -1569,7 +1590,7 @@ public class CMatrix
         for(int i=0; i<this.numRows; i++) {
             col = 0;
             for(int j=0; j<this.numCols; j++) {
-                if(ArrayUtils.notInArray(colIndices, j)) {
+                if(ArrayUtils.notContains(colIndices, j)) {
                     copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];
                     col++;
                 }
@@ -1657,7 +1678,7 @@ public class CMatrix
      */
     @Override
     public CMatrix add(SparseMatrix B) {
-        return RealComplexDenseSparseOperations.add(this, B);
+        return RealComplexDenseSparseMatrixOperations.add(this, B);
     }
 
 
@@ -1670,7 +1691,7 @@ public class CMatrix
      */
     @Override
     public CMatrix add(SparseCMatrix B) {
-        return ComplexDenseSparseOperations.add(this, B);
+        return ComplexDenseSparseMatrixOperations.add(this, B);
     }
 
 
@@ -1698,7 +1719,7 @@ public class CMatrix
      */
     @Override
     public CMatrix sub(SparseMatrix B) {
-        return RealComplexDenseSparseOperations.sub(this, B);
+        return RealComplexDenseSparseMatrixOperations.sub(this, B);
     }
 
 
@@ -1793,7 +1814,7 @@ public class CMatrix
     public boolean isUnitary() {
         // TODO: Add approxEq(Object A, double threshold) method to check for approximate equivalence.
         if(isSquare()) {
-            return mult(H()).round().equals(I(numRows));
+            return mult(H()).isCloseToI();
         } else {
             return false;
         }
@@ -1809,7 +1830,7 @@ public class CMatrix
      */
     @Override
     public CMatrix sub(SparseCMatrix B) {
-        return ComplexDenseSparseOperations.sub(this, B);
+        return ComplexDenseSparseMatrixOperations.sub(this, B);
     }
 
 
@@ -1842,7 +1863,7 @@ public class CMatrix
      */
     @Override
     public void addEq(SparseMatrix B) {
-        RealComplexDenseSparseOperations.addEq(this, B);
+        RealComplexDenseSparseMatrixOperations.addEq(this, B);
     }
 
 
@@ -1853,7 +1874,7 @@ public class CMatrix
      */
     @Override
     public void subEq(SparseMatrix B) {
-        RealComplexDenseSparseOperations.subEq(this, B);
+        RealComplexDenseSparseMatrixOperations.subEq(this, B);
     }
 
 
@@ -2130,7 +2151,7 @@ public class CMatrix
      */
     @Override
     public SparseCMatrix elemMult(SparseMatrix B) {
-        return RealComplexDenseSparseOperations.elemMult(this, B);
+        return RealComplexDenseSparseMatrixOperations.elemMult(this, B);
     }
 
 
@@ -2143,7 +2164,7 @@ public class CMatrix
      */
     @Override
     public SparseCMatrix elemMult(SparseCMatrix B) {
-        return ComplexDenseSparseOperations.elemMult(this, B);
+        return ComplexDenseSparseMatrixOperations.elemMult(this, B);
     }
 
 
@@ -2274,7 +2295,8 @@ public class CMatrix
         }
 
         // Copy over second matrix.
-        int row, col;
+        int row;
+        int col;
         for(int i=0; i<B.nonZeroEntries(); i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];
@@ -2326,7 +2348,8 @@ public class CMatrix
         }
 
         // Copy over second matrix.
-        int row, col;
+        int row;
+        int col;
         for(int i=0; i<B.nonZeroEntries(); i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];
@@ -2380,7 +2403,8 @@ public class CMatrix
         }
 
         // Copy over second matrix.
-        int row, col;
+        int row;
+        int col;
         for(int i=0; i<B.nonZeroEntries(); i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];
@@ -2438,7 +2462,8 @@ public class CMatrix
         }
 
         // Copy over second matrix.
-        int row, col;
+        int row;
+        int col;
         for(int i=0; i<B.nonZeroEntries(); i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];
@@ -2713,7 +2738,8 @@ public class CMatrix
 
         ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
 
-        int row, col;
+        int row;
+        int col;
 
         for(int i=0; i<B.entries.length; i++) {
             row = B.rowIndices[i];
@@ -2774,7 +2800,8 @@ public class CMatrix
             }
         }
 
-        int row, col;
+        int row;
+        int col;
         for(int i=0; i<B.entries.length; i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];
@@ -2945,7 +2972,8 @@ public class CMatrix
             System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);
         }
 
-        int row, col;
+        int row;
+        int col;
         for(int i=0; i<B.entries.length; i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];
@@ -3008,7 +3036,8 @@ public class CMatrix
             }
         }
 
-        int row, col;
+        int row;
+        int col;
         for(int i=0; i<B.entries.length; i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];
@@ -3378,13 +3407,13 @@ public class CMatrix
      * @return The specified row of this matrix.
      */
     @Override
-    public CMatrix getRow(int i) {
+    public CVector getRow(int i) {
         int start = i*numCols;
         int stop = start+numCols;
 
         CNumber[] row = ArrayUtils.copyOfRange(this.entries, start, stop);
 
-        return new CMatrix(new Shape(1, numCols), row);
+        return new CVector(row);
     }
 
 
@@ -3410,14 +3439,14 @@ public class CMatrix
      * @return The specified column of this matrix.
      */
     @Override
-    public CMatrix getCol(int j) {
+    public CVector getCol(int j) {
         CNumber[] col = new CNumber[numRows];
 
         for(int i=0; i<numRows; i++) {
             col[i] = entries[i*numCols + j].copy();
         }
 
-        return new CMatrix(new Shape(numRows, 1), col);
+        return new CVector(col);
     }
 
 
@@ -3483,14 +3512,14 @@ public class CMatrix
      * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code j} is outside the bounds of this matrix.
      */
     @Override
-    public CMatrix getColBelow(int rowStart, int j) {
+    public CVector getColBelow(int rowStart, int j) {
         CNumber[] col = new CNumber[numRows-rowStart];
 
         for(int i=rowStart; i<numRows; i++) {
             col[i-rowStart] = entries[i*numCols + j].copy();
         }
 
-        return new CMatrix(new Shape(col.length, 1), col);
+        return new CVector(col);
     }
 
 
@@ -3526,13 +3555,13 @@ public class CMatrix
      * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
      */
     @Override
-    public CMatrix getRowAfter(int colStart, int i) {
+    public CVector getRowAfter(int colStart, int i) {
         if(i > this.numRows || colStart > this.numCols) {
             throw new ArrayIndexOutOfBoundsException(String.format("Index (%d, %d) not in matrix.", i, colStart));
         }
 
         CNumber[] row = ArrayUtils.copyOfRange(this.entries, i*this.numCols + colStart, (i+1)*this.numCols);
-        return new CMatrix(new Shape(1, row.length), row);
+        return new CVector(row);
     }
 
 
@@ -3704,7 +3733,7 @@ public class CMatrix
         int stop = Math.min(numRows, numCols);
 
         for(int i=0; i<stop; i++) {
-            I.entries[i*numCols+i] = CNumber.ONE.copy();
+            I.entries[i*numCols+i] = new CNumber(1);
         }
 
         return I;
@@ -3801,7 +3830,7 @@ public class CMatrix
             // Ensure upper half is zeros.
             for(int i=0; i<numRows; i++) {
                 for(int j=i+1; j<numCols; j++) {
-                    if(!entries[i*numCols + j].equals(CNumber.ZERO)) {
+                    if(!entries[i*numCols + j].equals(1)) {
                         return false; // No need to continue.
                     }
                 }
@@ -3825,7 +3854,7 @@ public class CMatrix
             // Ensure lower half is zeros.
             for(int i=1; i<numRows; i++) {
                 for(int j=0; j<i; j++) {
-                    if(!entries[i*numCols + j].equals(CNumber.ZERO)) {
+                    if(!entries[i*numCols + j].equals(1)) {
                         return false; // No need to continue.
                     }
                 }
@@ -3869,13 +3898,8 @@ public class CMatrix
         boolean result = true;
 
         if(isSquare()) {
-            // Compute the LU decomposition.
-            LUDecomposition<CMatrix> lu = new ComplexLUDecomposition().decompose(this);
-
             double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
-            CNumber det = ComplexDenseDeterminant.detLU(lu.getP(), lu.getL(), lu.getU());
-
-            result = det.mag() < tol;
+            result = det().mag() < tol;
         }
 
         return result;
@@ -3947,9 +3971,9 @@ public class CMatrix
      *
      * @param B Complex sparse matrix to add to this matrix,
      */
-    @Override
+    // TODO: Pull up to a ComplexDenseTensorMixin
     public void addEq(SparseCMatrix B) {
-        ComplexDenseSparseOperations.addEq(this, B);
+        ComplexDenseSparseMatrixOperations.addEq(this, B);
     }
 
 
@@ -3958,9 +3982,9 @@ public class CMatrix
      *
      * @param B Complex sparse matrix to subtract from this matrix,
      */
-    @Override
+    // TODO: Pull up to a ComplexDenseTensorMixin
     public void subEq(SparseCMatrix B) {
-        ComplexDenseSparseOperations.subEq(this, B);
+        ComplexDenseSparseMatrixOperations.subEq(this, B);
     }
 
 
@@ -4130,12 +4154,12 @@ public class CMatrix
             // Find maximum entry string width in each column so columns can be aligned.
             List<Integer> maxList = new ArrayList<>(colStopIndex + 1);
             for (int j = 0; j < colStopIndex; j++) {
-                maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));
+                maxList.add(CNumberUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));
                 totalRowLength += maxList.get(maxList.size() - 1);
             }
 
             if (colStopIndex < this.numCols) {
-                maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols - 1).entries));
+                maxList.add(CNumberUtils.maxStringLength(this.getCol(this.numCols - 1).entries));
                 totalRowLength += maxList.get(maxList.size() - 1);
             }
 

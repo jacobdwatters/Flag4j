@@ -56,14 +56,11 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      * @throws IllegalArgumentException If the number of entries does not equal the product of dimensions in the
      * {@code shape}.
      */
-    public ComplexDenseTensorBase(Shape shape, CNumber[] entries) {
+    protected ComplexDenseTensorBase(Shape shape, CNumber[] entries) {
         super(shape, entries);
         ParameterChecks.assertEquals(shape.totalEntries().intValueExact(), entries.length);
     }
 
-    // TODO: Pull up implementation of all methods which are the same for any real dense tensor.
-    //  e.g. addition/subtraction, element-wise/scalar multiplication/division, any element-wise operation
-    //  such as abs, sqrt, etc.
 
     /**
      * Factory to create a real tensor with the specified shape and size.
@@ -124,7 +121,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
 
     @Override
     public boolean isZeros() {
-        return ArrayUtils.isZeros(entries);
+        return ComplexProperties.isZeros(entries);
     }
 
 
@@ -579,5 +576,49 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
     public T reshape(Shape shape) {
         ParameterChecks.assertBroadcastable(this.shape, shape);
         return makeTensor(shape, this.entries.clone());
+    }
+
+
+    @Override
+    public T round() {
+        return makeTensor(this.shape.copy(), ComplexOperations.round(this.entries));
+    }
+
+
+    @Override
+    public T round(int precision) {
+        return makeTensor(this.shape.copy(), ComplexOperations.round(this.entries, precision));
+    }
+
+
+    @Override
+    public T roundToZero() {
+        this.abs();
+        return makeTensor(this.shape, ComplexOperations.roundToZero(this.entries, DEFAULT_ROUND_TO_ZERO_THRESHOLD));
+    }
+
+
+    @Override
+    public T roundToZero(double threshold) {
+        return makeTensor(this.shape, ComplexOperations.roundToZero(this.entries, threshold));
+    }
+
+
+    @Override
+    public boolean allClose(T tensor, double relTol, double absTol) {
+        boolean close = shape.equals(tensor.shape);
+
+        if(close) {
+            for(int i=0; i<entries.length; i++) {
+                double tol = absTol + relTol*tensor.entries[i].abs();
+
+                if(entries[i].sub(tensor.entries[i]).abs() > tol) {
+                    close = false;
+                    break;
+                }
+            }
+        }
+
+        return close;
     }
 }

@@ -554,6 +554,12 @@ public class SparseTensor
     }
 
 
+    @Override
+    public boolean allClose(SparseTensor tensor, double relTol, double absTol) {
+        return RealSparseEquals.allCloseTensor(this, tensor, relTol, absTol);
+    }
+
+
     /**
      * Converts this sparse tensor to an equivalent dense tensor.
      *

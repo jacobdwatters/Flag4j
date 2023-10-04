@@ -50,7 +50,7 @@ public final class Decompose {
     public static Matrix[] lu(Matrix A) {
         RealLUDecomposition LU = new RealLUDecomposition();
         LU.decompose(A);
-        return new Matrix[]{LU.getP(), LU.getL(), LU.getU()};
+        return new Matrix[]{LU.getP().toDense(), LU.getL(), LU.getU()};
     }
 
 
@@ -65,7 +65,7 @@ public final class Decompose {
     public static CMatrix[] lu(CMatrix A) {
         ComplexLUDecomposition LU = new ComplexLUDecomposition();
         LU.decompose(A);
-        return new CMatrix[]{LU.getP().toComplex(), LU.getL(), LU.getU()};
+        return new CMatrix[]{LU.getP().toComplex().toDense(), LU.getL(), LU.getU()};
     }
 
 

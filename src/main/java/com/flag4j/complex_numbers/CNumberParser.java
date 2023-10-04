@@ -24,10 +24,17 @@
 
 package com.flag4j.complex_numbers;
 
+import com.flag4j.util.ErrorMessages;
+
 /**
  * A parser for complex numbers represented as a string.
  */
 public class CNumberParser {
+
+    private CNumberParser() {
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+    }
+
 
     /**
      * Parses a complex number in the form of a string into its real and imaginary parts.

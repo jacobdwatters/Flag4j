@@ -49,8 +49,8 @@ class SubSpaceTests {
 
         // -------------------- Sub-case 2 --------------------
         expBEntries = new CNumber[][]{
-                {new CNumber(0.003943031758985267, -0.9999878434618978)},
-                {new CNumber(4.719806144154799E-5, -0.0029602704798067105)}
+                {new CNumber(-0.005034449960744143, 0.9999829442968625)},
+                {new CNumber(-5.042897264281646E-5, 0.0029602172030675465)}
         };
         expB = new CMatrix(expBEntries);
 
@@ -72,8 +72,8 @@ class SubSpaceTests {
 
         // -------------------- Sub-case 2 --------------------
         expBEntries = new CNumber[][]{
-                {new CNumber(0.2108548984161248, -0.9760277835186182)},
-                {new CNumber(-0.05394378898805062, -2.1270465893217293E-4)}
+                {new CNumber(-0.21192004255855398, 0.975797068015846)},
+                {new CNumber(0.05394352470531291, 2.7158060783330235E-4)}
         };
         expB = new CMatrix(expBEntries);
 

@@ -26,8 +26,9 @@ package com.flag4j.operations.sparse.real;
 
 import com.flag4j.Shape;
 import com.flag4j.concurrency.ThreadManager;
-import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
+
+;
 
 /**
  * This class contains low level implementations of matrix multiplication for real sparse matrices.
@@ -56,8 +57,8 @@ public class RealSparseMatrixMultiplication {
     public static double[] standard(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                     double[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
 
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int cols2 = shape2.dims[1];
         int rowIdx;
 
         double[] dest = new double[rows1*cols2];
@@ -100,8 +101,8 @@ public class RealSparseMatrixMultiplication {
     public static double[] concurrentStandard(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                     double[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
 
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int cols2 = shape2.dims[1];
 
         double[] dest = new double[rows1*cols2];
 
@@ -125,18 +126,18 @@ public class RealSparseMatrixMultiplication {
 
     /**
      * Computes the multiplication between a sparse matrix and a sparse vector using a standard algorithm.
-     * @param src1 Non-zero entries of the first sparse matrix.
+     *
+     * @param src1        Non-zero entries of the first sparse matrix.
      * @param rowIndices1 Row indices of non-zero entries for the first sparse matrix.
      * @param colIndices1 Column indices of non-zero entries for the first sparse matrix.
-     * @param shape1 Shape of the first sparse matrix.
-     * @param src2 Non-zero entries of the second sparse matrix.
-     * @param indices Indices of non-zero entries in the sparse vector.
-     * @param shape2 Shape of the second sparse matrix.
+     * @param shape1      Shape of the first sparse matrix.
+     * @param src2        Non-zero entries of the second sparse matrix.
+     * @param indices     Indices of non-zero entries in the sparse vector.
      * @return The result of the matrix-vector multiplication stored in a dense matrix.
      */
     public static double[] standardVector(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
-                                    double[] src2, int[] indices, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
+                                    double[] src2, int[] indices) {
+        int rows1 = shape1.dims[0];
         double[] dest = new double[rows1];
 
         // r1, c1, r2, and store the indices for non-zero values in src1 and src2.
@@ -172,7 +173,7 @@ public class RealSparseMatrixMultiplication {
      */
     public static double[] concurrentStandardVector(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                                     double[] src2, int[] indices) {
-        int rows1 = shape1.dims[Axis2D.row()];
+        int rows1 = shape1.dims[0];
         double[] dest = new double[rows1];
 
         ThreadManager.concurrentLoop(0, src1.length, (i) -> {

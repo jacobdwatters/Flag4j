@@ -23,6 +23,7 @@
  */
 
 package com.flag4j.core.sparse;
+
 import com.flag4j.Shape;
 import com.flag4j.core.TensorBase;
 import com.flag4j.util.ParameterChecks;
@@ -64,7 +65,7 @@ public abstract class SparseTensorBase<T, U, W, Z, Y, D extends Serializable, X 
      * @param indices Indices of non-zero entries in this tensor. Must have shape {@code (nonZeroEntries-by-rank)}.
      * @throws IllegalArgumentException If the rank of {@code shape} does not match the number of columns in {@code indices}.
      */
-    public SparseTensorBase(Shape shape, int nonZeroEntries, D entries, int[][] indices) {
+    protected SparseTensorBase(Shape shape, int nonZeroEntries, D entries, int[][] indices) {
         super(shape, entries);
 
         if(indices.length > 0) {
@@ -72,6 +73,40 @@ public abstract class SparseTensorBase<T, U, W, Z, Y, D extends Serializable, X 
         }
 
         this.indices = indices;
+        this.nonZeroEntries = nonZeroEntries;
+    }
+
+
+    /**
+     * Creates a sparse tensor with specified shape, non-zero entries, and non-zero indices.
+     *
+     * @param shape   Shape of this tensor.
+     * @param entries Non-zero entries of this tensor.
+     * @param initIndices Indices of the zero axis of the tensor.
+     * @param restIndices Indices for the rest of this tensor's axes.
+     * @throws IllegalArgumentException If the rank of {@code shape} does not match the number of columns in {@code indices}.
+     */
+    protected SparseTensorBase(Shape shape, int nonZeroEntries, D entries, int[] initIndices, int[]... restIndices) {
+        super(shape, entries);
+
+        int totalIndices = restIndices.length + 1;
+        ParameterChecks.assertEquals(totalIndices, shape.getRank());
+        ParameterChecks.assertArrayLengthsEq(nonZeroEntries, initIndices.length);
+
+        this.indices = new int[totalIndices][];
+        this.indices[0] = initIndices;
+
+        for(int i=1; i<totalIndices; i++) {
+            if(restIndices[i-1].length != initIndices.length) {
+                throw new IllegalArgumentException(
+                        String.format("All index array must have the same length but got %d and %d.",
+                                initIndices.length, restIndices[i-1].length));
+            }
+
+            this.indices[i] = restIndices[i-1];
+        }
+
+
         this.nonZeroEntries = nonZeroEntries;
     }
 

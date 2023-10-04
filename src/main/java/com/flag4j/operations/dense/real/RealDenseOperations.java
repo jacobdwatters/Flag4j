@@ -235,7 +235,7 @@ public final class RealDenseOperations {
             norm += Math.pow(colSum, q/p);
         }
 
-        return Math.pow(norm, 1/q);
+        return Math.pow(norm, 1.0/q);
     }
 
 
@@ -270,7 +270,7 @@ public final class RealDenseOperations {
 
 
     /**
-     * Compute the L<sub>2</sub> norm of a matrix. This is equivalent to passing {@code q=1} to
+     * Compute the L<sub>2</sub> norm of a matrix. This is equivalent to passing {@code p=2, q=2} to
      * {@link RealDenseOperations#matrixNormLpq(double[], Shape, double, double)}
      * @param src Entries of the matrix.
      * @param shape Shape of the matrix.
@@ -296,7 +296,7 @@ public final class RealDenseOperations {
 
 
     /**
-     * Computes the L<sub>2</sub> norm of a tensor (i.e. the Frobenius norm).
+     * Computes the L<sub>2</sub> norm of a tensor.
      * @param src Entries of the tensor.
      * @return The L<sub>2</sub> norm of the tensor.
      */
@@ -312,7 +312,7 @@ public final class RealDenseOperations {
 
 
     /**
-     * Computes the L<sub>p</sub> norm of a tensor (i.e. the Frobenius norm).
+     * Computes the L<sub>p</sub> norm of a tensor.
      * @param src Entries of the tensor.
      * @param p The {@code p} parameter of the L<sub>p</sub> norm.
      * @return The L<sub>p</sub> norm of the tensor.

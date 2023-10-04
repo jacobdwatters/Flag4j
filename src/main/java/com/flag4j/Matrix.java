@@ -25,8 +25,10 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.complex_numbers.CNumberUtils;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.RealMatrixMixin;
+import com.flag4j.core.dense.DenseMatrixMixin;
 import com.flag4j.core.dense.RealDenseTensorBase;
 import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.io.PrintOptions;
@@ -40,17 +42,16 @@ import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
-import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.*;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultTranspose;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultiplication;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseOperations;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultTranspose;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixOperations;
 import com.flag4j.util.*;
 
 import java.util.ArrayList;
@@ -63,7 +64,8 @@ import java.util.List;
 public class Matrix
         extends RealDenseTensorBase<Matrix, CMatrix>
         implements MatrixMixin<Matrix, Matrix, SparseMatrix, CMatrix, Double, Vector, Vector>,
-        RealMatrixMixin<Matrix, CMatrix> {
+        RealMatrixMixin<Matrix, CMatrix>,
+        DenseMatrixMixin<Matrix, Double> {
 
     /**
      * The number of rows in this matrix.
@@ -268,7 +270,7 @@ public class Matrix
      */
     @Override
     protected Matrix makeTensor(Shape shape, double[] entries) {
-        return new Matrix(shape, entries);
+        return new Matrix(shape.dims[0], shape.dims[1], entries);
     }
 
 
@@ -373,21 +375,53 @@ public class Matrix
 
 
     /**
+     * Converts this matrix to a sparse matrix. It is only
+     * @return A sparse equivalent to this matrix.
+     */
+    public SparseMatrix toSparse() {
+        List<Double> sparseEntries = new ArrayList<>();
+        List<Integer> rowIndices = new ArrayList<>();
+        List<Integer> colIndices = new ArrayList<>();
+
+        for(int i=0; i<numRows; i++) {
+            int rowOffset = i*numCols;
+            int stop = rowOffset + numCols;
+            int j=0;
+
+            while(rowOffset < stop) {
+                double value = entries[rowOffset++];
+                if(value!=0) {
+                    // Then we have a non-zero value.
+                    sparseEntries.add(value);
+                    rowIndices.add(i);
+                    colIndices.add(j++);
+                }
+            }
+        }
+
+        return new SparseMatrix(shape.copy(), sparseEntries, rowIndices, colIndices);
+    }
+
+
+    /**
      * Checks if this matrix is the identity matrix. That is, checks if this matrix is square and contains
      * only ones along the principle diagonal and zeros everywhere else.
      *
      * @return True if this matrix is the identity matrix. Otherwise, returns false.
+     * @see #isCloseToI()
      */
     @Override
     public boolean isI() {
+        int pos = 0;
+
         if(isSquare()) {
             for(int i=0; i<numRows; i++) {
                 for(int j=0; j<numCols; j++) {
-                    if(i==j && entries[i*numCols + j]!=1) {
-                        return false; // No need to continue
-                    } else if(i!=j && entries[i*numCols + j]!=0) {
+                    if((i==j && entries[pos]!=1) || (i!=j && entries[pos]!=0)) {
                         return false; // No need to continue
                     }
+
+                    pos++;
                 }
             }
 
@@ -396,8 +430,19 @@ public class Matrix
             return false;
         }
 
-        // If we make it to this point this matrix must be an identity matrix.
+        // If we make it to this point, this matrix must be an identity matrix.
         return true;
+    }
+
+
+    /**
+     * Checks that this matrix is close to the identity matrix according to
+     * {@link com.flag4j.operations.common.real.RealProperties#allClose(double[], double[])}
+     * @return True if this matrix is approximately the identity matrix.
+     * @see #isI()
+     */
+    public boolean isCloseToI() {
+        return RealDenseProperties.isCloseToIdentity(this);
     }
 
 
@@ -450,7 +495,7 @@ public class Matrix
         if(!this.isSquare() || !B.isSquare() || !shape.equals(B.shape)) {
             result = false;
         } else {
-            result = this.mult(B).round().isI();
+            result = this.mult(B).isCloseToI();
         }
 
         return result;
@@ -667,8 +712,32 @@ public class Matrix
     public Matrix setCol(Vector values, int colIndex) {
         ParameterChecks.assertArrayLengthsEq(values.size, this.numRows);
 
+        int rowOffset = 0;
         for(int i=0; i<values.size; i++) {
-            super.entries[i*numCols + colIndex] = values.entries[i];
+            super.entries[rowOffset + colIndex] = values.entries[i];
+            rowOffset += numCols;
+        }
+
+        return this;
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column. This method assumes that the indices of the sparse vector are sorted.
+     *                 If this is not the case, call {@link SparseVector#sortIndices()} first.
+     * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the {@code values} vector has a different length than the number of rows of this matrix.
+     */
+    public Matrix setCol(SparseVector values, int colIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.size, this.numRows);
+
+        int sparseIdx = 0;
+        for(int i=0; i<values.size; i++) {
+            super.entries[i*numCols + colIndex] = (i == values.indices[sparseIdx]) ?
+                    values.entries[sparseIdx++] : 0;
         }
 
         return this;
@@ -825,7 +894,7 @@ public class Matrix
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
 
         // Fill slice with zeros
-        ArrayUtils.stridedFillZerosRange(
+        ArrayUtils.stridedFillZeros(
                 this.entries,
                 rowStart*this.numCols+colStart,
                 values.numCols,
@@ -1002,7 +1071,7 @@ public class Matrix
         Matrix copy = this.copy();
 
         // Fill slice with zeros
-        ArrayUtils.stridedFillZerosRange(
+        ArrayUtils.stridedFillZeros(
                 copy.entries,
                 rowStart*copy.numCols+colStart,
                 values.numCols,
@@ -1161,7 +1230,7 @@ public class Matrix
         int row = 0;
 
         for(int i=0; i<this.numRows; i++) {
-            if(ArrayUtils.notInArray(rowIndices, i)) {
+            if(ArrayUtils.notContains(rowIndices, i)) {
                 System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
                 row++;
             }
@@ -1212,7 +1281,7 @@ public class Matrix
         for(int i=0; i<this.numRows; i++) {
             col = 0;
             for(int j=0; j<this.numCols; j++) {
-                if(ArrayUtils.notInArray(colIndices, j)) {
+                if(ArrayUtils.notContains(colIndices, j)) {
                     copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];
                     col++;
                 }
@@ -1220,61 +1289,6 @@ public class Matrix
         }
 
         return copy;
-    }
-
-
-    /**
-     * Rounds this matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
-     * be rounded independently.
-     *
-     * @return A copy of this matrix with each entry rounded to the nearest whole number.
-     */
-    @Override
-    public Matrix round() {
-        return new Matrix(this.shape, RealOperations.round(this.entries));
-    }
-
-
-    /**
-     * Rounds a matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
-     * be rounded independently.
-     *
-     * @param precision The number of decimal places to round to. This value must be non-negative.
-     * @return A copy of this matrix with rounded values.
-     * @throws IllegalArgumentException If <code>precision</code> is negative.
-     */
-    @Override
-    public Matrix round(int precision) {
-        return new Matrix(this.shape, RealOperations.round(this.entries, precision));
-    }
-
-
-    /**
-     * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
-     * independently. By default, the values must be within 1.0*E^-12 of zero. To specify a threshold value see
-     * {@link #roundToZero(double)}.
-     *
-     * @return A copy of this matrix with rounded values.
-     */
-    @Override
-    public Matrix roundToZero() {
-        this.abs();
-        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, DEFAULT_ROUND_TO_ZERO_THRESHOLD));
-    }
-
-
-    /**
-     * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
-     * independently.
-     *
-     * @param threshold Threshold for rounding values to zero. That is, if a value in this matrix is less than the threshold in absolute value then it
-     *                  will be rounded to zero. This value must be non-negative.
-     * @return A copy of this matrix with rounded values.
-     * @throws IllegalArgumentException If threshold is negative.
-     */
-    @Override
-    public Matrix roundToZero(double threshold) {
-        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, threshold));
     }
 
 
@@ -1287,7 +1301,7 @@ public class Matrix
      */
     @Override
     public Matrix add(SparseMatrix B) {
-        return RealDenseSparseOperations.add(this, B);
+        return RealDenseSparseMatrixOperations.add(this, B);
     }
 
 
@@ -1315,7 +1329,7 @@ public class Matrix
      */
     @Override
     public CMatrix add(SparseCMatrix B) {
-        return RealComplexDenseSparseOperations.add(this, B);
+        return RealComplexDenseSparseMatrixOperations.add(this, B);
     }
 
 
@@ -1327,7 +1341,7 @@ public class Matrix
      */
     @Override
     public void subEq(SparseMatrix B) {
-        RealDenseSparseOperations.subEq(this, B);
+        RealDenseSparseMatrixOperations.subEq(this, B);
     }
 
 
@@ -1339,7 +1353,7 @@ public class Matrix
      */
     @Override
     public void addEq(SparseMatrix B) {
-        RealDenseSparseOperations.addEq(this, B);
+        RealDenseSparseMatrixOperations.addEq(this, B);
     }
 
 
@@ -1374,7 +1388,7 @@ public class Matrix
      */
     @Override
     public Matrix sub(SparseMatrix B) {
-        return RealDenseSparseOperations.sub(this, B);
+        return RealDenseSparseMatrixOperations.sub(this, B);
     }
 
 
@@ -1403,7 +1417,7 @@ public class Matrix
      */
     @Override
     public CMatrix sub(SparseCMatrix B) {
-        return RealComplexDenseSparseOperations.sub(this, B);
+        return RealComplexDenseSparseMatrixOperations.sub(this, B);
     }
 
 
@@ -1678,7 +1692,7 @@ public class Matrix
      */
     @Override
     public SparseMatrix elemMult(SparseMatrix B) {
-        return RealDenseSparseOperations.elemMult(this, B);
+        return RealDenseSparseMatrixOperations.elemMult(this, B);
     }
 
 
@@ -1707,7 +1721,7 @@ public class Matrix
      */
     @Override
     public SparseCMatrix elemMult(SparseCMatrix B) {
-        return RealComplexDenseSparseOperations.elemMult(this, B);
+        return RealComplexDenseSparseMatrixOperations.elemMult(this, B);
     }
 
 
@@ -2945,13 +2959,13 @@ public class Matrix
      * the number of rows in this matrix.
      */
     @Override
-    public Matrix getRow(int rowIdx) {
+    public Vector getRow(int rowIdx) {
         int start = rowIdx*numCols;
         int stop = start+numCols;
 
         double[] row = Arrays.copyOfRange(this.entries, start, stop);
 
-        return new Matrix(new Shape(1, numCols), row);
+        return new Vector(row);
     }
 
 
@@ -2979,14 +2993,14 @@ public class Matrix
      * the number of columns in this matrix.
      */
     @Override
-    public Matrix getCol(int colIdx) {
+    public Vector getCol(int colIdx) {
         double[] col = new double[numRows];
 
         for(int i=0; i<numRows; i++) {
             col[i] = entries[i*numCols + colIdx];
         }
 
-        return new Matrix(new Shape(numRows, 1), col);
+        return new Vector(col);
     }
 
 
@@ -3000,14 +3014,14 @@ public class Matrix
      * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code colIdx} is outside the bounds of this matrix.
      */
     @Override
-    public Matrix getColBelow(int rowStart, int colIdx) {
+    public Vector getColBelow(int rowStart, int colIdx) {
         double[] col = new double[numRows-rowStart];
 
         for(int i=rowStart; i<numRows; i++) {
             col[i-rowStart] = entries[i*numCols + colIdx];
         }
 
-        return new Matrix(new Shape(col.length, 1), col);
+        return new Vector(col);
     }
 
 
@@ -3043,13 +3057,13 @@ public class Matrix
      * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} or {@code colStart} is outside the bounds of this matrix.
      */
     @Override
-    public Matrix getRowAfter(int colStart, int rowIdx) {
+    public Vector getRowAfter(int colStart, int rowIdx) {
         if(rowIdx > this.numRows ||  rowIdx < 0 || colStart > this.numCols || colStart < 0) {
             throw new ArrayIndexOutOfBoundsException(String.format("Index (%d, %d) not in matrix.", rowIdx, colStart));
         }
 
         double[] row = Arrays.copyOfRange(this.entries, rowIdx*this.numCols + colStart, (rowIdx+1)*this.numCols);
-        return new Matrix(new Shape(1, row.length), row);
+        return new Vector(row);
     }
 
 
@@ -3133,8 +3147,12 @@ public class Matrix
         // Solve inv(A)*L = inv(U) for inv(A) by solving L^T*inv(A)^T = inv(U)^T
         RealExactSolver solver = new RealExactSolver();
         Matrix UinvT = Invert.invTriU(lu.getU()).T();
+
+        // TODO: Add triangular solver to solve this more efficiently.
+        //  Note that lu.getL.T() is upper triangular and UinvT is lower triangular.
         Matrix inverse = solver.solve(lu.getL().T(), UinvT).T();
 
+        // TODO: Add efficient method for applying permutations.
         return inverse.mult(lu.getP()); // Finally, apply permutation matrix for LU decomposition.
     }
 
@@ -3422,7 +3440,7 @@ public class Matrix
             LUDecomposition<Matrix> lu = new RealLUDecomposition().decompose(this);
 
             double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
-            double det = RealDenseDeterminant.detLU(lu.getP(), lu.getL(), lu.getU());
+            double det = RealDenseDeterminant.detLU(lu.getP().toDense(), lu.getU());
 
             result = Math.abs(det) < tol;
         }
@@ -3470,11 +3488,14 @@ public class Matrix
         ParameterChecks.assertGreaterEq(rowIndex2, this.numRows-1);
 
         double temp;
-        for(int j=0; j<numCols; j++) {
-            // Swap elements.
-            temp = entries[rowIndex1*numCols + j];
-            entries[rowIndex1*numCols + j] = entries[rowIndex2*numCols + j];
-            entries[rowIndex2*numCols + j] = temp;
+        int row1Start = rowIndex1*numCols;
+        int row2Start = rowIndex2*numCols;
+        int stop = row1Start + numCols;
+
+        while(row1Start < stop) {
+            temp = entries[row1Start];
+            entries[row1Start++] = entries[row2Start];
+            entries[row2Start++] = temp;
         }
 
         return this;
@@ -3651,9 +3672,8 @@ public class Matrix
      */
     @Override
     public boolean isOrthogonal() {
-        // TODO: Add approxEq(Object A, double threshold) method to check for approximate equivalence.
-        if(isSquare()) {
-            return this.mult(this.T()).round().equals(I(numRows));
+        if(numRows == numCols) {
+            return RealDenseProperties.isCloseToIdentity(this.mult(this.T()));
         } else {
             return false;
         }
@@ -3700,12 +3720,12 @@ public class Matrix
             // Find maximum entry string width in each column so columns can be aligned.
             List<Integer> maxList = new ArrayList<>(colStopIndex + 1);
             for (int j = 0; j < colStopIndex; j++) {
-                maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));
+                maxList.add(CNumberUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));
                 totalRowLength += maxList.get(maxList.size() - 1);
             }
 
             if (colStopIndex < this.numCols) {
-                maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols - 1).entries));
+                maxList.add(CNumberUtils.maxStringLength(this.getCol(this.numCols - 1).entries));
                 totalRowLength += maxList.get(maxList.size() - 1);
             }
 

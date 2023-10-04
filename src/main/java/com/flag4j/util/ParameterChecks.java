@@ -314,8 +314,20 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If the shape is not of rank 2 with equal rows and columns.
      */
     public static void assertSquare(Shape shape) {
-        if(shape.getRank()!=2 || shape.get(0)!=shape.get(1)) {
+        if(shape.getRank()!=2 || shape.dims[0]!=shape.dims[1]) {
             throw new LinearAlgebraException(ErrorMessages.getSquareShapeErr(shape));
+        }
+    }
+
+    /**
+     * Checks if a shape represents a square matrix.
+     * @param numRows Number of rows in the matrix.
+     * @param numCols Number of columns in the matrix.
+     * @throws IllegalArgumentException If the shape is not of rank 2 with equal rows and columns.
+     */
+    public static void assertSquare(int numRows, int numCols) {
+        if(numRows!=numCols) {
+            throw new LinearAlgebraException(ErrorMessages.getSquareShapeErr(new Shape(numRows, numCols)));
         }
     }
 

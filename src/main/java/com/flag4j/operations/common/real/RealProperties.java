@@ -74,4 +74,64 @@ public class RealProperties {
 
         return result;
     }
+
+    /**
+     * Checks if an array contains only zeros.
+     * @param src Array to check if it only contains zeros.
+     * @return True if the {@code src} array contains only zeros.
+     */
+    public static boolean isZeros(double[] src) {
+        boolean allZeros = true;
+
+        for(double value : src) {
+            if(value!=0) {
+                allZeros = false;
+                break;
+            }
+        }
+
+        return allZeros;
+    }
+
+
+    /**
+     * Checks if all entries of two arrays are 'close'.
+     * @param src1 First array in comparison.
+     * @param src2 Second array in comparison.
+     * @return True if both arrays have the same length and all entries are 'close' element-wise, i.e.
+     * elements {@code a} and {@code b} at the same positions in the two arrays respectively and satisfy
+     * {@code |a-b| <= (1E-05 + 1E-08*|b|)}. Otherwise, returns false.
+     * @see #allClose(double[], double[], double, double)
+     */
+    public static boolean allClose(double[] src1, double[] src2) {
+        return allClose(src1, src2, 1e-05, 1e-08);
+    }
+
+
+
+    /**
+     * Checks if all entries of two arrays are 'close'.
+     * @param src1 First array in comparison.
+     * @param src2 Second array in comparison.
+     * @return True if both arrays have the same length and all entries are 'close' element-wise, i.e.
+     * elements {@code a} and {@code b} at the same positions in the two arrays respectively and satisfy
+     * {@code |a-b| <= (absTol + relTol*|b|)}. Otherwise, returns false.
+     * @see #allClose(double[], double[])
+     */
+    public static boolean allClose(double[] src1, double[] src2, double relTol, double absTol) {
+        boolean close = src1.length==src2.length;
+
+        if(close) {
+            for(int i=0; i<src1.length; i++) {
+                double tol = absTol + relTol*Math.abs(src2[i]);
+
+                if(Math.abs(src1[i]-src2[i]) > tol) {
+                    close = false;
+                    break;
+                }
+            }
+        }
+
+        return close;
+    }
 }

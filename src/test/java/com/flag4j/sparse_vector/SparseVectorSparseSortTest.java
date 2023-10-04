@@ -29,7 +29,7 @@ class SparseVectorSparseSortTest {
         expEntries = new double[]{1.34, 5.15, -989.234, 1.345, 5126.234, 456.3, 617.4};
         exp = new SparseVector(sparseSize, expEntries, expIndices);
 
-        a.sparseSort();
+        a.sortIndices();
         assertEquals(exp, a);
     }
 }

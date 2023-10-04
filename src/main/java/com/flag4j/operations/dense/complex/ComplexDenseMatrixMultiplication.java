@@ -60,7 +60,7 @@ public class ComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fill(dest, CNumber.ZERO);
+        ArrayUtils.fill(dest, 0);
 
         int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
 
@@ -100,7 +100,7 @@ public class ComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fill(dest, CNumber.ZERO);
+        ArrayUtils.fill(dest, 0);
 
         int src2Index, destIndex, src1Start, destIndexStart, end;
         int src1Index;
@@ -139,7 +139,7 @@ public class ComplexDenseMatrixMultiplication {
         int cols1 = shape1.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1 * cols2];
-        ArrayUtils.fill(dest, CNumber.ZERO);
+        ArrayUtils.fill(dest, 0);
 
         int blockSize = Configurations.getBlockSize();
         int iBound, jBound, kBound;
@@ -193,7 +193,7 @@ public class ComplexDenseMatrixMultiplication {
         int cols1 = shape1.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fill(dest, CNumber.ZERO);
+        ArrayUtils.fill(dest, 0);
 
         int blockSize = Configurations.getBlockSize();
         int iBound, jBound, kBound;
@@ -249,7 +249,7 @@ public class ComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fill(dest, CNumber.ZERO);
+        ArrayUtils.fill(dest, 0);
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
             int src1IndexStart = i*cols1;
@@ -286,7 +286,7 @@ public class ComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fill(dest, CNumber.ZERO);
+        ArrayUtils.fill(dest, 0);
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
             int src1IndexStart = i*rows2;
@@ -322,7 +322,7 @@ public class ComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fill(dest, CNumber.ZERO);
+        ArrayUtils.fill(dest, 0);
         int blockSize = Configurations.getBlockSize();
 
         ThreadManager.concurrentLoop(0, rows1, blockSize, (ii) -> {
@@ -374,7 +374,7 @@ public class ComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fill(dest, CNumber.ZERO);
+        ArrayUtils.fill(dest, 0);
         int blockSize = Configurations.getBlockSize();
 
         ThreadManager.concurrentLoop(0, rows1, blockSize, (ii) -> {
@@ -425,7 +425,7 @@ public class ComplexDenseMatrixMultiplication {
         int rows2 = shape2.dims[Axis2D.row()];
 
         CNumber[] dest = new CNumber[rows1];
-        ArrayUtils.fill(dest, CNumber.ZERO);
+        ArrayUtils.fill(dest, 0);
         int src1Index, src2Index;
 
         for(int i=0; i<rows1; i++) {
@@ -455,7 +455,7 @@ public class ComplexDenseMatrixMultiplication {
         int rows2 = shape2.dims[Axis2D.row()];
 
         CNumber[] dest = new CNumber[rows1];
-        ArrayUtils.fill(dest, CNumber.ZERO);
+        ArrayUtils.fill(dest, 0);
         int blockSize = Configurations.getBlockSize();
         int iBound, kBound;
         int src1Index, src2Index;
@@ -498,7 +498,7 @@ public class ComplexDenseMatrixMultiplication {
         int rows2 = shape2.dims[Axis2D.row()];
 
         CNumber[] dest = new CNumber[rows1];
-        ArrayUtils.fill(dest, CNumber.ZERO);
+        ArrayUtils.fill(dest, 0);
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
             int src1Index = i*cols1;
@@ -528,7 +528,7 @@ public class ComplexDenseMatrixMultiplication {
         int rows2 = shape2.dims[Axis2D.row()];
 
         CNumber[] dest = new CNumber[rows1];
-        ArrayUtils.fill(dest, CNumber.ZERO);
+        ArrayUtils.fill(dest, 0);
         int blockSize = Configurations.getBlockSize();
 
         ThreadManager.concurrentLoop(0, rows1, blockSize, (ii) -> {

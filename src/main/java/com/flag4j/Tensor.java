@@ -38,7 +38,7 @@ import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseOperations;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseTensorOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
 import com.flag4j.util.ErrorMessages;
@@ -298,7 +298,7 @@ public class Tensor
      */
     @Override
     public void addEq(SparseTensor B) {
-        RealDenseSparseOperations.addEq(this, B);
+        RealDenseSparseTensorOperations.addEq(this, B);
     }
 
 
@@ -454,7 +454,7 @@ public class Tensor
      */
     @Override
     public Tensor add(SparseTensor B) {
-        return RealDenseSparseOperations.add(this, B);
+        return RealDenseSparseTensorOperations.add(this, B);
     }
 
 
@@ -496,7 +496,7 @@ public class Tensor
      */
     @Override
     public Tensor sub(SparseTensor B) {
-        return RealDenseSparseOperations.sub(this, B);
+        return RealDenseSparseTensorOperations.sub(this, B);
     }
 
 
@@ -537,7 +537,7 @@ public class Tensor
      */
     @Override
     public void subEq(SparseTensor B) {
-        RealDenseSparseOperations.subEq(this, B);
+        RealDenseSparseTensorOperations.subEq(this, B);
     }
 
 
@@ -574,7 +574,7 @@ public class Tensor
      */
     @Override
     public SparseTensor elemMult(SparseTensor B) {
-        return RealDenseSparseOperations.elemMult(this, B);
+        return RealDenseSparseTensorOperations.elemMult(this, B);
     }
 
 

@@ -1,6 +1,9 @@
 package com.flag4j;
 
 import com.flag4j.core.MatrixMixin;
+import com.flag4j.core.dense.DenseTensorBase;
+
+import java.util.Arrays;
 
 public class TestHelpers {
 
@@ -86,5 +89,30 @@ public class TestHelpers {
         }
 
         System.out.println("\n};");
+    }
+
+
+    /**
+     * Finds differences between two dense tensors and prints them out.
+     * @param a First tensor to compare.
+     * @param b Second tensor to compare.
+     */
+    public static <T extends DenseTensorBase<?, ?, ?, ?, ?>> void findDiff(T a, T b) {
+        if(!a.shape.equals(b.shape)) {
+            System.out.printf("Not the same shape: %s and %s\n", a.shape, b.shape);
+        }
+
+        int stop = a.totalEntries().intValueExact();
+
+        for(int i=0; i<stop; i++) {
+            int[] indices = a.shape.getIndices(i);
+
+            if(!a.get(indices).equals(b.get(indices))) {
+                System.out.printf("Difference at %s: %s, %s\n",
+                        Arrays.toString(a.shape.getIndices(i)),
+                        a.get(indices),
+                        b.get(indices));
+            }
+        }
     }
 }

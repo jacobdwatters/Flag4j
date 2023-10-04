@@ -26,6 +26,8 @@ package com.flag4j.operations.dense_sparse.real_complex;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.operations.common.complex.ComplexProperties;
+import com.flag4j.operations.common.real.RealProperties;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 
@@ -71,7 +73,7 @@ public class RealComplexDenseSparseEquals {
 
             if(equal) {
                 // Now, if this vector is equal to the sparse vector, there should only be zeros left in the entriesStack
-                equal = ArrayUtils.isZeros(src1Copy);
+                equal = RealProperties.isZeros(src1Copy);
             }
 
         } else {
@@ -112,7 +114,7 @@ public class RealComplexDenseSparseEquals {
 
             if(equal) {
                 // Now, if this vector is equal to the sparse vector, there should only be zeros left in the entriesStack
-                equal = ArrayUtils.isZeros(src1Copy);
+                equal = ComplexProperties.isZeros(src1Copy);
             }
 
         } else {
@@ -154,7 +156,7 @@ public class RealComplexDenseSparseEquals {
 
             if(equal) {
                 // Now, if this matrix is equal to the sparse matrix, there should only be zeros left in the entriesStack
-                equal = ArrayUtils.isZeros(entriesCopy);
+                equal = RealProperties.isZeros(entriesCopy);
             }
 
         } else {
@@ -196,7 +198,7 @@ public class RealComplexDenseSparseEquals {
 
             if(equal) {
                 // Now, if this matrix is equal to the sparse matrix, there should only be zeros left in the entriesStack
-                equal = ArrayUtils.isZeros(entriesCopy);
+                equal = ComplexProperties.isZeros(entriesCopy);
             }
 
         } else {
@@ -234,7 +236,7 @@ public class RealComplexDenseSparseEquals {
 
             if(equal) {
                 // Now, if this tensor is equal to the sparse tensor, there should only be zeros left in the entriesStack
-                equal = ArrayUtils.isZeros(entriesCopy);
+                equal = RealProperties.isZeros(entriesCopy);
             }
 
         } else {
@@ -273,7 +275,7 @@ public class RealComplexDenseSparseEquals {
 
             if(equal) {
                 // Now, if this tensor is equal to the sparse tensor, there should only be zeros left in the entriesStack
-                equal = ArrayUtils.isZeros(entriesCopy);
+                equal = ComplexProperties.isZeros(entriesCopy);
             }
 
         } else {

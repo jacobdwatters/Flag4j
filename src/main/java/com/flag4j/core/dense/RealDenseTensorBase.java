@@ -34,7 +34,6 @@ import com.flag4j.operations.common.real.RealProperties;
 import com.flag4j.operations.dense.complex.ComplexDenseOperations;
 import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ParameterChecks;
 
 import java.util.Arrays;
@@ -57,7 +56,7 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
      * @throws IllegalArgumentException If the number of entries does not equal the product of dimensions in the
      * {@code shape}.
      */
-    public RealDenseTensorBase(Shape shape, double[] entries) {
+    protected RealDenseTensorBase(Shape shape, double[] entries) {
         super(shape, entries);
         ParameterChecks.assertEquals(shape.totalEntries().intValueExact(), entries.length);
     }
@@ -157,7 +156,7 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
 
     @Override
     public boolean isZeros() {
-        return ArrayUtils.isZeros(entries);
+        return RealProperties.isZeros(entries);
     }
 
 
@@ -429,6 +428,37 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
     @Override
     public int hashCode() {
         return Arrays.hashCode(entries)+Arrays.hashCode(shape.dims);
+    }
+
+
+    @Override
+    public T round() {
+        return makeTensor(this.shape.copy(), RealOperations.round(this.entries));
+    }
+
+
+    @Override
+    public T round(int precision) {
+        return makeTensor(this.shape.copy(), RealOperations.round(this.entries, precision));
+    }
+
+
+    @Override
+    public T roundToZero() {
+        this.abs();
+        return makeTensor(this.shape, RealOperations.roundToZero(this.entries, DEFAULT_ROUND_TO_ZERO_THRESHOLD));
+    }
+
+
+    @Override
+    public T roundToZero(double threshold) {
+        return makeTensor(this.shape, RealOperations.roundToZero(this.entries, threshold));
+    }
+
+
+    @Override
+    public boolean allClose(T tensor, double relTol, double absTol) {
+        return shape.equals(tensor.shape) && RealProperties.allClose(entries, tensor.entries, relTol, absTol);
     }
 }
 

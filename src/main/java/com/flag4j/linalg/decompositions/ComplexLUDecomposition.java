@@ -25,7 +25,6 @@
 package com.flag4j.linalg.decompositions;
 
 import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.exceptions.LinearAlgebraException;
 
@@ -101,7 +100,6 @@ public final class ComplexLUDecomposition extends LUDecomposition<CMatrix> {
      */
     @Override
     protected void partialPivot() {
-        P = Matrix.I(LU.numRows);
         int maxIndex;
 
         // Using Gaussian elimination with row pivoting.
@@ -110,8 +108,7 @@ public final class ComplexLUDecomposition extends LUDecomposition<CMatrix> {
 
             // Make the appropriate swaps in LU and P (This is the partial pivoting step).
             if(j!=maxIndex && maxIndex>=0) {
-                LU.swapRows(j, maxIndex);
-                P.swapRows(j, maxIndex);
+                swapRows(j, maxIndex);
             }
 
             computeRows(j);
@@ -124,8 +121,6 @@ public final class ComplexLUDecomposition extends LUDecomposition<CMatrix> {
      */
     @Override
     protected void fullPivot() {
-        P = Matrix.I(LU.numRows);
-        Q = Matrix.I(LU.numCols);
         int[] maxIndex;
 
         // Using Gaussian elimination with row and column (rook) pivoting.
@@ -134,12 +129,10 @@ public final class ComplexLUDecomposition extends LUDecomposition<CMatrix> {
 
             // Make the appropriate swaps in LU, P and Q (This is the full pivoting step).
             if(j!=maxIndex[0] && maxIndex[0]!=-1) {
-                LU.swapRows(j, maxIndex[0]);
-                P.swapRows(j, maxIndex[0]);
+                swapRows(j, maxIndex[0]);
             }
             if(j!=maxIndex[1] && maxIndex[1]!=-1) {
-                LU.swapCols(j, maxIndex[1]);
-                Q.swapCols(j, maxIndex[1]);
+                swapCols(j, maxIndex[1]);
             }
 
             computeRows(j);
@@ -156,7 +149,7 @@ public final class ComplexLUDecomposition extends LUDecomposition<CMatrix> {
 
         for(int i=j+1; i<LU.numRows; i++) {
             m = LU.entries[i*LU.numCols + j];
-            m = LU.entries[j*LU.numCols + j].equals(CNumber.ZERO) ? m.copy() : m.div(LU.entries[j*LU.numCols + j]);
+            m = LU.entries[j*LU.numCols + j].equals(0) ? m.copy() : m.div(LU.entries[j*LU.numCols + j]);
 
             for(int k=j; k<LU.numCols; k++) {
                 LU.entries[i*LU.numCols + k] = LU.entries[i*LU.numCols + k].sub(m.mult(LU.entries[j*LU.numCols + k]));
@@ -256,24 +249,5 @@ public final class ComplexLUDecomposition extends LUDecomposition<CMatrix> {
         }
 
         return U;
-    }
-
-
-    /**
-     * Gets the row permutation matrix of the decomposition.
-     * @return The row permutation matrix of the decomposition. If no pivoting was used, null will be returned.
-     */
-    @Override
-    public Matrix getP() {
-        return P;
-    }
-
-
-    /**
-     * Gets the column permutation matrix of the decomposition.
-     * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
-     */
-    public Matrix getQ() {
-        return Q;
     }
 }

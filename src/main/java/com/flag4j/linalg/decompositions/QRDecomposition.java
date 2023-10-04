@@ -105,7 +105,7 @@ public abstract class QRDecomposition<
         U col;
 
         for(int i=0; i<stop; i++) {
-            col = R.getColBelow(i, i).toVector();
+            col = R.getColBelow(i, i);
 
             // If the column has zeros below the diagonal it is in the correct form. No need to compute reflector.
             if(col.maxAbs() > tol) {
