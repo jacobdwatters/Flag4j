@@ -411,6 +411,12 @@ public class SparseCMatrix
     }
 
 
+    @Override
+    public boolean allClose(SparseCMatrix tensor, double relTol, double absTol) {
+        return ComplexSparseEquals.allCloseMatrix(this, tensor, relTol, absTol);
+    }
+
+
     /**
      * Gets the number of rows in this matrix.
      * @return The number of rows in this matrix.
@@ -539,7 +545,7 @@ public class SparseCMatrix
                 rowIndices.clone()
         );
 
-        transpose.sparseSort(); // Ensure the indices are sorted correctly.
+        transpose.sortIndices(); // Ensure the indices are sorted correctly.
 
         return transpose;
     }
@@ -636,7 +642,7 @@ public class SparseCMatrix
      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
      */
     @Override
-    public void sparseSort() {
+    public void sortIndices() {
         SparseDataWrapper.wrap(entries, rowIndices, colIndices).sparseSort().unwrap(entries, rowIndices, colIndices);
     }
 
@@ -649,6 +655,7 @@ public class SparseCMatrix
     @Override
     public CMatrix toDense() {
         CNumber[] entries = new CNumber[totalEntries().intValueExact()];
+        ArrayUtils.fillZeros(entries);
         int row;
         int col;
 
@@ -1403,7 +1410,7 @@ public class SparseCMatrix
                 colIndices.add(0);
             } else {
                 // A value already exists with this row index. Update it.
-                entries.set(idx, entries.get(i).add(this.entries[i]));
+                entries.set(idx, entries.get(idx).add(this.entries[i]));
             }
         }
 
@@ -1419,12 +1426,13 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix sumRows() {
+        // TODO: Refactor sumRows and sumCols to return vectors instead.
         List<CNumber> entries = new ArrayList<>();
         List<Integer> rowIndices = new ArrayList<>();
         List<Integer> colIndices = new ArrayList<>();
 
         for(int i=0; i<this.entries.length; i++) {
-            int idx = rowIndices.indexOf(this.colIndices[i]);
+            int idx = colIndices.indexOf(this.colIndices[i]);
 
             if(idx < 0) {
                 // No value with this column index exists.
@@ -1433,11 +1441,14 @@ public class SparseCMatrix
                 colIndices.add(this.colIndices[i]);
             } else {
                 // A value already exists with this column index. Update it.
-                entries.set(idx, entries.get(i).add(this.entries[i]));
+                entries.set(idx, entries.get(idx).add(this.entries[i]));
             }
         }
 
-        return new SparseCMatrix(new Shape(1, numCols), entries, rowIndices, colIndices);
+        SparseCMatrix mat = new SparseCMatrix(new Shape(1, numCols), entries, rowIndices, colIndices);
+        mat.sortIndices(); // Ensure indices are properly sorted.
+
+        return mat;
     }
 
 
@@ -1808,7 +1819,7 @@ public class SparseCMatrix
                 destColIndices, colIndices.length, B.colIndices.length);
 
         SparseCMatrix dest = new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
-        dest.sparseSort(); // Ensure indices are sorted properly.
+        dest.sortIndices(); // Ensure indices are sorted properly.
 
         return dest;
     }
@@ -1877,7 +1888,7 @@ public class SparseCMatrix
                 destColIndices, colIndices.length, B.colIndices.length);
 
         SparseCMatrix dest = new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
-        dest.sparseSort(); // Ensure indices are sorted properly.
+        dest.sortIndices(); // Ensure indices are sorted properly.
 
         return dest;
     }
@@ -2129,7 +2140,7 @@ public class SparseCMatrix
         Arrays.fill(destColIndices, entries.length, destColIndices.length, numCols);
 
         SparseCMatrix dest = new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
-        dest.sparseSort(); // Ensure that the indices are sorted properly.
+        dest.sortIndices(); // Ensure that the indices are sorted properly.
 
         return dest;
     }
@@ -2165,7 +2176,7 @@ public class SparseCMatrix
         Arrays.fill(destColIndices, entries.length, destColIndices.length, numCols);
 
         SparseCMatrix dest = new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
-        dest.sparseSort(); // Ensure that the indices are sorted properly.
+        dest.sortIndices(); // Ensure that the indices are sorted properly.
 
         return dest;
     }
@@ -2201,7 +2212,7 @@ public class SparseCMatrix
         Arrays.fill(destColIndices, entries.length, destColIndices.length, numCols);
 
         SparseCMatrix dest = new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
-        dest.sparseSort(); // Ensure that the indices are sorted properly.
+        dest.sortIndices(); // Ensure that the indices are sorted properly.
 
         return dest;
     }
@@ -2237,7 +2248,7 @@ public class SparseCMatrix
         Arrays.fill(destColIndices, entries.length, destColIndices.length, numCols);
 
         SparseCMatrix dest = new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
-        dest.sparseSort(); // Ensure that the indices are sorted properly.
+        dest.sortIndices(); // Ensure that the indices are sorted properly.
 
         return dest;
     }
@@ -2669,7 +2680,7 @@ public class SparseCMatrix
                 rowIndices.clone()
         );
 
-        hTranspose.sparseSort(); // Ensure the indices are sorted correctly.
+        hTranspose.sortIndices(); // Ensure the indices are sorted correctly.
 
         return hTranspose;
     }

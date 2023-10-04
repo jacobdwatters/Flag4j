@@ -1742,7 +1742,8 @@ public class CNumber extends Number {
     public String toString() {
         String result = "";
 
-        double real = re, imaginary = im;
+        double real = re;
+        double imaginary = im;
 
         if (real != 0) {
             if (real % 1 == 0) {

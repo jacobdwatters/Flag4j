@@ -68,7 +68,7 @@ public abstract class Configurations {
      * This is implemented as: <code>numThreads = {@link Runtime#availableProcessors() Runtime.getRuntime().availableProcessors()};</code>
      * @return The new value of numThreads, i.e. the number of available processors.
      */
-    static int setNumThreadsAsAvailableProcessors() {
+    public static int setNumThreadsAsAvailableProcessors() {
         ThreadManager.threadPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
         return ThreadManager.threadPool.getParallelism();
     }

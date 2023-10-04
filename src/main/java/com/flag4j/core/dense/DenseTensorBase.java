@@ -50,7 +50,7 @@ public abstract class DenseTensorBase<T, W, Y, D extends Serializable, X extends
      * @param entries Entries of this tensor. The number of entries must match the product of
      *                all {@code shape} dimensions. <b>Warning</b>: this is not enforced.
      */
-    public DenseTensorBase(Shape shape, D entries) {
+    protected DenseTensorBase(Shape shape, D entries) {
         super(shape, entries);
     }
 

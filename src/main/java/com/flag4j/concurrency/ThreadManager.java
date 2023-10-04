@@ -37,6 +37,12 @@ import java.util.stream.IntStream;
  */
 public class ThreadManager {
 
+    private ThreadManager() {
+        // Hide default constructor for utility class.
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+    }
+
+
     /**
      * Thread pool for managing threads executing concurrent operations.
      */
@@ -45,12 +51,13 @@ public class ThreadManager {
 
     /**
      * Applies a concurrent loop to a function.
-     * @param startIndex Starting index for concurrent loop.
+     * @param startIndex Starting index for concurrent loop (inclusive).
      * @param endIndex Ending index for concurrent loop (exclusive).
      * @param function Function to apply each iteration. Function may be dependent on iteration index but should
      *                 individual iterations should be independent of each other.
      */
     public static void concurrentLoop(int startIndex, int endIndex, IntConsumer function) {
+
         try {
             threadPool.submit(() -> IntStream.range(startIndex, endIndex).parallel().forEach(function)).get();
         } catch (InterruptedException | ExecutionException e) {
@@ -60,12 +67,11 @@ public class ThreadManager {
     }
 
 
-
     /**
-     * Applies a concurrent loop to a function.
-     * @param startIndex Starting index for concurrent loop.
+     * Applies a concurrent strided-loop to a function.
+     * @param startIndex Starting index for concurrent loop (inclusive).
      * @param endIndex Ending index for concurrent loop (exclusive).
-     * @param step Step size for the index variable of the loop.
+     * @param step Step size for the index variable of the loop (i.e. the stride size).
      * @param function Function to apply each iteration. Function may be dependent on iteration index but should
      *      individual iterations should be independent of each other.
      */

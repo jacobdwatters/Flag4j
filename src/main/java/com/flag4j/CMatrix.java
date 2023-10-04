@@ -41,10 +41,7 @@ import com.flag4j.linalg.solvers.ComplexExactSolver;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
-import com.flag4j.operations.dense.complex.ComplexDenseDeterminant;
-import com.flag4j.operations.dense.complex.ComplexDenseEquals;
-import com.flag4j.operations.dense.complex.ComplexDenseOperations;
-import com.flag4j.operations.dense.complex.ComplexDenseSetOperations;
+import com.flag4j.operations.dense.complex.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
@@ -486,14 +483,16 @@ public class CMatrix
      */
     @Override
     public boolean isI() {
+        int pos = 0;
+
         if(isSquare()) {
             for(int i=0; i<numRows; i++) {
                 for(int j=0; j<numCols; j++) {
-                    if(i==j && !entries[i*numCols + j].equals(1)) {
-                        return false; // No need to continue
-                    } else if(i!=j && !entries[i*numCols + j].equals(0)) {
+                    if((i==j && !entries[pos].equals(1)) || i!=j && !entries[pos].equals(0)) {
                         return false; // No need to continue
                     }
+
+                    pos++;
                 }
             }
 
@@ -504,6 +503,17 @@ public class CMatrix
 
         // If we make it to this point this matrix must be an identity matrix.
         return true;
+    }
+
+
+    /**
+     * Checks that this matrix is close to the identity matrix according to
+     * {@link com.flag4j.operations.common.real.RealProperties#allClose(double[], double[])}
+     * @return True if this matrix is approximately the identity matrix.
+     * @see #isI()
+     */
+    public boolean isCloseToI() {
+        return ComplexDenseProperties.isCloseToIdentity(this);
     }
 
 
@@ -520,7 +530,7 @@ public class CMatrix
         if(!this.isSquare() || !B.isSquare() || !shape.equals(B.shape)) {
             result = false;
         } else {
-            result = this.mult(B).round().isI();
+            result = this.mult(B).isCloseToI();
         }
 
         return result;
@@ -1804,7 +1814,7 @@ public class CMatrix
     public boolean isUnitary() {
         // TODO: Add approxEq(Object A, double threshold) method to check for approximate equivalence.
         if(isSquare()) {
-            return mult(H()).round().equals(I(numRows));
+            return mult(H()).isCloseToI();
         } else {
             return false;
         }

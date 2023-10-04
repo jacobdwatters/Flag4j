@@ -793,7 +793,7 @@ public class SparseVector
     /**
      * Gets the element in this tensor at the specified indices. This sparse vectors indices are assumed to
      * be sorted lexicographically. If this is not the case call
-     * {@link #sparseSort() this.sparseSort()} before calling this method.
+     * {@link #sortIndices() this.sparseSort()} before calling this method.
      *
      * @param indices Indices of element.
      * @return The element at the specified indices.
@@ -1012,7 +1012,7 @@ public class SparseVector
 
     /**
      * Checks if a vector is parallel to this vector. This sparse vectors indices are assumed to be sorted lexicographically.
-     * If this is not the case call {@link #sparseSort() this.sparseSort()} before calling this method.
+     * If this is not the case call {@link #sortIndices() this.sparseSort()} before calling this method.
      *
      * @param b Vector to compare to this vector.
      * @return True if the vector {@code b} is parallel to this vector and the same size. Otherwise, returns false.
@@ -1279,7 +1279,7 @@ public class SparseVector
      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
      */
     @Override
-    public void sparseSort() {
+    public void sortIndices() {
         SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);
     }
 
@@ -1335,6 +1335,12 @@ public class SparseVector
     @Override
     protected SparseVector getSelf() {
         return this;
+    }
+
+
+    @Override
+    public boolean allClose(SparseVector tensor, double relTol, double absTol) {
+        return RealSparseEquals.allCloseVector(this, tensor, relTol, absTol);
     }
 
 

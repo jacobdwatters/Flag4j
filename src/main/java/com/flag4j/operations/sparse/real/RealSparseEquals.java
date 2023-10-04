@@ -28,6 +28,8 @@ package com.flag4j.operations.sparse.real;
 import com.flag4j.SparseMatrix;
 import com.flag4j.SparseTensor;
 import com.flag4j.SparseVector;
+import com.flag4j.operations.common.real.RealProperties;
+import com.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 
@@ -35,6 +37,13 @@ import java.util.Arrays;
  * This class contains methods for checking the equality of real sparse tensors.
  */
 public class RealSparseEquals {
+
+
+    private RealSparseEquals(){
+        // Hide default constructor for base class.
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+    }
+
 
     /**
      * Checks if two real sparse tensors are real. Assumes the indices of each sparse tensor are sorted.
@@ -45,6 +54,7 @@ public class RealSparseEquals {
     public static boolean tensorEquals(SparseTensor a, SparseTensor b) {
         // Check indices first to avoid checking entries if possible.
         return a.shape.equals(b.shape)
+                // TODO: Investigate if a self implemented 2d array equals would be significantly faster than the Arrays.deepEquals method.
                 && Arrays.deepEquals(a.indices, b.indices)
                 && Arrays.equals(a.entries, b.entries);
     }
@@ -76,5 +86,57 @@ public class RealSparseEquals {
         return a.size == b.size
                 && Arrays.equals(a.indices, b.indices)
                 && Arrays.equals(a.entries, b.entries);
+    }
+
+
+    /**
+     * Checks that all non-zero entries are "close" according to {@link RealProperties#allClose(double[], double[])} and
+     *      * all indices are the same.
+     * @param src1 First matrix in comparison.
+     * @param src2 Second matrix in comparison.
+     * @param relTol Relative tolerance.
+     * @param absTol Absolute tolerance.
+     * @return True if all entries are "close". Otherwise, false.
+     */
+    public static boolean allCloseMatrix(SparseMatrix src1, SparseMatrix src2, double relTol, double absTol) {
+        // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
+        return src1.shape.equals(src2.shape)
+                && Arrays.equals(src1.rowIndices, src2.rowIndices)
+                && Arrays.equals(src1.colIndices, src2.colIndices)
+                && RealProperties.allClose(src1.entries, src2.entries, relTol, absTol);
+    }
+
+
+    /**
+     * Checks that all non-zero entries are "close" according to {@link RealProperties#allClose(double[], double[], double, double)} and
+     * all indices are the same.
+     * @param src1 First tensor in comparison.
+     * @param src2 Second tensor in comparison.
+     * @param relTol Relative tolerance.
+     * @param absTol Absolute tolerance.
+     * @return True if all entries are "close". Otherwise, false.
+     */
+    public static boolean allCloseTensor(SparseTensor src1, SparseTensor src2, double relTol, double absTol) {
+        // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
+        return src1.shape.equals(src2.shape)
+                && Arrays.deepEquals(src1.indices, src2.indices)
+                && RealProperties.allClose(src1.entries, src2.entries, relTol, absTol);
+    }
+
+
+    /**
+     * Checks that all non-zero entries are "close" according to {@link RealProperties#allClose(double[], double[])} and
+     * all indices are the same.
+     * @param src1 First vector in comparison.
+     * @param src2 Second vector in comparison.
+     * @param relTol Relative tolerance.
+     * @param absTol Absolute tolerance.
+     * @return True if all entries are "close". Otherwise, false.
+     */
+    public static boolean allCloseVector(SparseVector src1, SparseVector src2, double relTol, double absTol) {
+        // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
+        return src1.shape.equals(src2.shape)
+                && Arrays.equals(src1.indices, src2.indices)
+                && RealProperties.allClose(src1.entries, src2.entries, relTol, absTol);
     }
 }

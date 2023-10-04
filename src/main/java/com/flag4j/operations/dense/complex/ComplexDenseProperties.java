@@ -24,6 +24,7 @@
 
 package com.flag4j.operations.dense.complex;
 
+import com.flag4j.CMatrix;
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ErrorMessages;
@@ -100,7 +101,9 @@ public final class ComplexDenseProperties {
             return false;
         }
 
-        int count1, count2, stop;
+        int count1;
+        int count2;
+        int stop;
 
         for(int i=0; i<shape.dims[0]; i++) {
             count1 = i*shape.dims[1];
@@ -117,5 +120,44 @@ public final class ComplexDenseProperties {
         }
 
         return true;
+    }
+
+
+    /**
+     * Checks if a matrix is the identity matrix approximately. Specifically, if the diagonal entries are no farther than
+     * 1.001E-5 in absolute value from 1.0 and the non-diagonal entries are no larger than 1e-08 in absolute value.
+     * These tolerances are derived from the {@link com.flag4j.core.TensorBase#allClose(Object)} method.
+     * @param src Matrix of interest to check if it is the identity matrix.
+     * @return True if the {@code src} matrix is exactly the identity matrix.
+     */
+    public static boolean isCloseToIdentity(CMatrix src) {
+        boolean isI = src.numRows==src.numCols;
+
+        // Tolerances corresponds to the allClose(...) methods.
+        double diagTol = 1.001E-5;
+        double nonDiagTol = 1e-08;
+
+        if(isI) {
+            int rows = src.numRows;
+            int cols = src.numCols;
+            int pos = 0;
+            for(int i=0; i<rows; i++) {
+                for(int j=0; j<cols; j++) {
+                    if(i==j) {
+                        if(src.entries[pos].sub(1).abs() > diagTol) {
+                            return false;
+                        }
+                    } else {
+                        if(src.entries[pos].abs() > nonDiagTol) {
+                            return false;
+                        }
+                    }
+
+                    pos++;
+                }
+            }
+        }
+
+        return isI;
     }
 }

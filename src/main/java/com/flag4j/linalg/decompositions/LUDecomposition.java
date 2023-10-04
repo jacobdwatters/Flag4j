@@ -186,7 +186,7 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
             int[] colIndices = rowSwaps.clone();
 
             P = new SparseMatrix(LU.numRows(), entries, rowIndices, colIndices);
-            P.sparseSort();
+            P.sortIndices();
         } else {
             P = null;
         }
@@ -207,7 +207,7 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
             int[] colIndices = ArrayUtils.intRange(0, entries.length);
 
             Q = new SparseMatrix(LU.numCols(), entries, rowIndices, colIndices);
-            Q.sparseSort();
+            Q.sortIndices();
         } else {
             Q = null;
         }

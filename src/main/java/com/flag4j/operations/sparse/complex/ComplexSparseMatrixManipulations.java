@@ -170,7 +170,7 @@ public class ComplexSparseMatrixManipulations {
         }
 
         // Ensure indices remain sorted properly.
-        src.sparseSort();
+        src.sortIndices();
 
         return src;
     }
@@ -191,7 +191,7 @@ public class ComplexSparseMatrixManipulations {
         }
 
         // Ensure indices remain sorted properly.
-        src.sparseSort();
+        src.sortIndices();
 
         return src;
     }

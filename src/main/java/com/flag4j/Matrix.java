@@ -270,7 +270,7 @@ public class Matrix
      */
     @Override
     protected Matrix makeTensor(Shape shape, double[] entries) {
-        return new Matrix(shape, entries);
+        return new Matrix(shape.dims[0], shape.dims[1], entries);
     }
 
 
@@ -385,13 +385,16 @@ public class Matrix
 
         for(int i=0; i<numRows; i++) {
             int rowOffset = i*numCols;
+            int stop = rowOffset + numCols;
+            int j=0;
 
-            for(int j=0; j<numCols; j++) {
-                if(entries[rowOffset + j]!=0) {
+            while(rowOffset < stop) {
+                double value = entries[rowOffset++];
+                if(value!=0) {
                     // Then we have a non-zero value.
-                    sparseEntries.add(entries[rowOffset + j]);
+                    sparseEntries.add(value);
                     rowIndices.add(i);
-                    colIndices.add(j);
+                    colIndices.add(j++);
                 }
             }
         }
@@ -405,17 +408,20 @@ public class Matrix
      * only ones along the principle diagonal and zeros everywhere else.
      *
      * @return True if this matrix is the identity matrix. Otherwise, returns false.
+     * @see #isCloseToI()
      */
     @Override
     public boolean isI() {
+        int pos = 0;
+
         if(isSquare()) {
             for(int i=0; i<numRows; i++) {
                 for(int j=0; j<numCols; j++) {
-                    if(i==j && entries[i*numCols + j]!=1) {
-                        return false; // No need to continue
-                    } else if(i!=j && entries[i*numCols + j]!=0) {
+                    if((i==j && entries[pos]!=1) || (i!=j && entries[pos]!=0)) {
                         return false; // No need to continue
                     }
+
+                    pos++;
                 }
             }
 
@@ -424,8 +430,19 @@ public class Matrix
             return false;
         }
 
-        // If we make it to this point this matrix must be an identity matrix.
+        // If we make it to this point, this matrix must be an identity matrix.
         return true;
+    }
+
+
+    /**
+     * Checks that this matrix is close to the identity matrix according to
+     * {@link com.flag4j.operations.common.real.RealProperties#allClose(double[], double[])}
+     * @return True if this matrix is approximately the identity matrix.
+     * @see #isI()
+     */
+    public boolean isCloseToI() {
+        return RealDenseProperties.isCloseToIdentity(this);
     }
 
 
@@ -478,7 +495,7 @@ public class Matrix
         if(!this.isSquare() || !B.isSquare() || !shape.equals(B.shape)) {
             result = false;
         } else {
-            result = this.mult(B).round().isI();
+            result = this.mult(B).isCloseToI();
         }
 
         return result;
@@ -709,7 +726,7 @@ public class Matrix
      * Sets a column of this matrix at the given index to the specified values.
      *
      * @param values   New values for the column. This method assumes that the indices of the sparse vector are sorted.
-     *                 If this is not the case, call {@link SparseVector#sparseSort()} first.
+     *                 If this is not the case, call {@link SparseVector#sortIndices()} first.
      * @param colIndex The index of the column which is to be set.
      * @return A reference to this matrix.
      * @throws IllegalArgumentException If the {@code values} vector has a different length than the number of rows of this matrix.
@@ -3481,13 +3498,6 @@ public class Matrix
             entries[row2Start++] = temp;
         }
 
-//        for(int j=0; j<numCols; j++) {
-//            // Swap elements.
-//            temp = entries[row1Start + j];
-//            entries[row1Start + j] = entries[row2Start + j];
-//            entries[row2Start + j] = temp;
-//        }
-
         return this;
     }
 
@@ -3662,9 +3672,8 @@ public class Matrix
      */
     @Override
     public boolean isOrthogonal() {
-        // TODO: Add approxEq(Object A, double threshold) method to check for approximate equivalence.
-        if(isSquare()) {
-            return this.mult(this.T()).round().equals(I(numRows));
+        if(numRows == numCols) {
+            return RealDenseProperties.isCloseToIdentity(this.mult(this.T()));
         } else {
             return false;
         }

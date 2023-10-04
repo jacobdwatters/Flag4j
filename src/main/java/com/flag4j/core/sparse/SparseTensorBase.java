@@ -65,7 +65,7 @@ public abstract class SparseTensorBase<T, U, W, Z, Y, D extends Serializable, X 
      * @param indices Indices of non-zero entries in this tensor. Must have shape {@code (nonZeroEntries-by-rank)}.
      * @throws IllegalArgumentException If the rank of {@code shape} does not match the number of columns in {@code indices}.
      */
-    public SparseTensorBase(Shape shape, int nonZeroEntries, D entries, int[][] indices) {
+    protected SparseTensorBase(Shape shape, int nonZeroEntries, D entries, int[][] indices) {
         super(shape, entries);
 
         if(indices.length > 0) {
@@ -86,7 +86,7 @@ public abstract class SparseTensorBase<T, U, W, Z, Y, D extends Serializable, X 
      * @param restIndices Indices for the rest of this tensor's axes.
      * @throws IllegalArgumentException If the rank of {@code shape} does not match the number of columns in {@code indices}.
      */
-    public SparseTensorBase(Shape shape, int nonZeroEntries, D entries, int[] initIndices, int[]... restIndices) {
+    protected SparseTensorBase(Shape shape, int nonZeroEntries, D entries, int[] initIndices, int[]... restIndices) {
         super(shape, entries);
 
         int totalIndices = restIndices.length + 1;

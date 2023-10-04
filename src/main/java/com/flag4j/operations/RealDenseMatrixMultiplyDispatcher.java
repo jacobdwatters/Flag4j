@@ -36,6 +36,7 @@ import java.util.Map;
 import static com.flag4j.util.ParameterChecks.assertArrayLengthsEq;
 import static com.flag4j.util.ParameterChecks.assertMatMultShapes;
 
+// TODO: The selection algorithm should be redesigned. All threshold values should be specified in a config file.
 
 /**
  * Singleton class which stores a map of all viable real dense matrix multiply algorithms and uses that map to dispatch
@@ -127,7 +128,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * on the size of the matrices.
      * @param A First matrix in the multiplication.
      * @param B Second matrix in the multiplication and the matrix to transpose.
-     * @return
+     * @return The matrix multiply-transpose result of {@code A} and {@code B}.
      */
     public static double[] dispatchTranspose(Matrix A, Matrix B) {
         assertArrayLengthsEq(A.numCols, B.numCols);
@@ -145,7 +146,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * @param shape2 The shape fo the second matrix.
      * @return The algorithm to use in the matrix multiplication.
      */
-    protected static AlgorithmNames selectAlgorithm(Shape shape1, Shape shape2) {
+    static AlgorithmNames selectAlgorithm(Shape shape1, Shape shape2) {
         AlgorithmNames name;
 
         int rows1 = shape1.get(Axis2D.row());
@@ -209,7 +210,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * @param shape Shape of the first matrix.
      * @return The algorithm to use to compute the matrix multiplication-transpose.
      */
-    protected static AlgorithmNames selectAlgorithmTranspose(Shape shape) {
+    static AlgorithmNames selectAlgorithmTranspose(Shape shape) {
         AlgorithmNames name;
         int rows = shape.dims[0];
 

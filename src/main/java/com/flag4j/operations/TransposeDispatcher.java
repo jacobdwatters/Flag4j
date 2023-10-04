@@ -63,7 +63,7 @@ public final class TransposeDispatcher {
 
 
     /**
-     * Dispatches a matrix transpose problem to the appropriate algorithm based in its shape and size.
+     * Dispatches a matrix transpose problem to the appropriate algorithm based on its shape and size.
      * @param src Matrix to transpose.
      * @return The transpose of the source matrix.
      */

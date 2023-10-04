@@ -33,5 +33,5 @@ public interface SparseTensorMixin {
     /**
      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
      */
-    void sparseSort();
+    void sortIndices();
 }

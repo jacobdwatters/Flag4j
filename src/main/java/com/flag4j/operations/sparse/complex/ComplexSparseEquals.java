@@ -27,6 +27,8 @@ package com.flag4j.operations.sparse.complex;
 import com.flag4j.SparseCMatrix;
 import com.flag4j.SparseCTensor;
 import com.flag4j.SparseCVector;
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.operations.common.complex.ComplexProperties;
 import com.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
@@ -76,5 +78,57 @@ public class ComplexSparseEquals {
      */
     public static boolean vectorEquals(SparseCVector a, SparseCVector b) {
         return a.size == b.size && Arrays.equals(a.indices, b.indices) && Arrays.equals(a.entries, b.entries);
+    }
+
+
+    /**
+     * Checks that all non-zero entries are "close" according to {@link ComplexProperties#allClose(CNumber[], CNumber[])} and
+     *      * all indices are the same.
+     * @param src1 First matrix in comparison.
+     * @param src2 Second matrix in comparison.
+     * @param relTol Relative tolerance.
+     * @param absTol Absolute tolerance.
+     * @return True if all entries are "close". Otherwise, false.
+     */
+    public static boolean allCloseMatrix(SparseCMatrix src1, SparseCMatrix src2, double relTol, double absTol) {
+        // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
+        return src1.shape.equals(src2.shape)
+                && Arrays.equals(src1.rowIndices, src2.rowIndices)
+                && Arrays.equals(src1.colIndices, src2.colIndices)
+                && ComplexProperties.allClose(src1.entries, src2.entries, relTol, absTol);
+    }
+
+
+    /**
+     * Checks that all non-zero entries are "close" according to {@link ComplexProperties#allClose(CNumber[], CNumber[])} and
+     * all indices are the same.
+     * @param src1 First tensor in comparison.
+     * @param src2 Second tensor in comparison.
+     * @param relTol Relative tolerance.
+     * @param absTol Absolute tolerance.
+     * @return True if all entries are "close". Otherwise, false.
+     */
+    public static boolean allCloseTensor(SparseCTensor src1, SparseCTensor src2, double relTol, double absTol) {
+        // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
+        return src1.shape.equals(src2.shape)
+                && Arrays.deepEquals(src1.indices, src2.indices)
+                && ComplexProperties.allClose(src1.entries, src2.entries, relTol, absTol);
+    }
+
+
+    /**
+     * Checks that all non-zero entries are "close" according to {@link ComplexProperties#allClose(CNumber[], CNumber[])} and
+     * all indices are the same.
+     * @param src1 First vector in comparison.
+     * @param src2 Second vector in comparison.
+     * @param relTol Relative tolerance.
+     * @param absTol Absolute tolerance.
+     * @return True if all entries are "close". Otherwise, false.
+     */
+    public static boolean allCloseVector(SparseCVector src1, SparseCVector src2, double relTol, double absTol) {
+        // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
+        return src1.shape.equals(src2.shape)
+                && Arrays.equals(src1.indices, src2.indices)
+                && ComplexProperties.allClose(src1.entries, src2.entries, relTol, absTol);
     }
 }

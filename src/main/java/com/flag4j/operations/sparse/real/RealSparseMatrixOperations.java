@@ -111,7 +111,7 @@ public class RealSparseMatrixOperations {
         for(int i=0; i<src.entries.length; i++) {
             row = src.rowIndices[i];
             col = src.colIndices[i];
-            sum[row*src.numCols + col] = src.entries[i];
+            sum[row*src.numCols + col] += src.entries[i];
         }
 
         return new Matrix(src.shape.copy(), sum);
@@ -199,7 +199,7 @@ public class RealSparseMatrixOperations {
      */
     public static Matrix sub(SparseMatrix src, double a) {
         double[] sum = new double[src.totalEntries().intValueExact()];
-        Arrays.fill(sum, a);
+        Arrays.fill(sum, -a);
 
         int row;
         int col;

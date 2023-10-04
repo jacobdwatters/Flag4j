@@ -69,7 +69,7 @@ public abstract class RealSparseTensorBase<
      * @throws IllegalArgumentException If the number of columns in the entries array is not equal to the rank of this
      * tensor.
      */
-    public RealSparseTensorBase(Shape shape, int nonZeroEntries, double[] entries, int[][] indices) {
+    protected RealSparseTensorBase(Shape shape, int nonZeroEntries, double[] entries, int[][] indices) {
         super(shape, nonZeroEntries, entries, indices);
 
         if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) < 0) {
@@ -90,7 +90,7 @@ public abstract class RealSparseTensorBase<
      * @param initIndices Non-zero indices of the first axis of the tensor.
      * @param restIndices Non-zero indices of the rest of this tensor's axes.
      */
-    public RealSparseTensorBase(Shape shape, int nonZeroEntries, double[] entries, int[] initIndices, int[]... restIndices) {
+    protected RealSparseTensorBase(Shape shape, int nonZeroEntries, double[] entries, int[] initIndices, int[]... restIndices) {
         super(shape, nonZeroEntries, entries, initIndices, restIndices);
 
         if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) < 0) {
@@ -143,8 +143,8 @@ public abstract class RealSparseTensorBase<
     * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
     */
     @Override
-    public void sparseSort() {
-     SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);
+    public void sortIndices() {
+        SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);
     }
 
 

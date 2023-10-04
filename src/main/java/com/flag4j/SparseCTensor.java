@@ -149,6 +149,12 @@ public class SparseCTensor
     }
 
 
+    @Override
+    public boolean allClose(SparseCTensor tensor, double relTol, double absTol) {
+        return ComplexSparseEquals.allCloseTensor(this, tensor, relTol, absTol);
+    }
+
+
     /**
      * Checks if this tensor has only real valued entries.
      *
@@ -713,7 +719,7 @@ public class SparseCTensor
      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
      */
     @Override
-    public void sparseSort() {
+    public void sortIndices() {
 
     }
 

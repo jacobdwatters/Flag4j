@@ -56,7 +56,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      * @throws IllegalArgumentException If the number of entries does not equal the product of dimensions in the
      * {@code shape}.
      */
-    public ComplexDenseTensorBase(Shape shape, CNumber[] entries) {
+    protected ComplexDenseTensorBase(Shape shape, CNumber[] entries) {
         super(shape, entries);
         ParameterChecks.assertEquals(shape.totalEntries().intValueExact(), entries.length);
     }
@@ -601,5 +601,24 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
     @Override
     public T roundToZero(double threshold) {
         return makeTensor(this.shape, ComplexOperations.roundToZero(this.entries, threshold));
+    }
+
+
+    @Override
+    public boolean allClose(T tensor, double relTol, double absTol) {
+        boolean close = shape.equals(tensor.shape);
+
+        if(close) {
+            for(int i=0; i<entries.length; i++) {
+                double tol = absTol + relTol*tensor.entries[i].abs();
+
+                if(entries[i].sub(tensor.entries[i]).abs() > tol) {
+                    close = false;
+                    break;
+                }
+            }
+        }
+
+        return close;
     }
 }

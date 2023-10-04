@@ -450,7 +450,7 @@ public class SparseMatrix
                 rowIndices.clone()
         );
 
-        transpose.sparseSort(); // Ensure the indices are sorted correctly.
+        transpose.sortIndices(); // Ensure the indices are sorted correctly.
 
         return transpose;
     }
@@ -557,7 +557,7 @@ public class SparseMatrix
      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
      */
     @Override
-    public void sparseSort() {
+    public void sortIndices() {
         SparseDataWrapper.wrap(entries, rowIndices, colIndices).sparseSort().unwrap(entries, rowIndices, colIndices);
     }
 
@@ -1124,7 +1124,7 @@ public class SparseMatrix
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
      * {@code this.mult(B.T())}.
-     * For large matrices, this method may
+     * For large matrices, this method <i>may</i>
      * be significantly faster than directly computing the transpose followed by the multiplication as
      * {@code this.mult(B.T())}.
      *
@@ -1133,22 +1133,23 @@ public class SparseMatrix
      */
     @Override
     public Matrix multTranspose(Matrix B) {
-        Matrix product = new Matrix(
-                shape.copy(),
+        ParameterChecks.assertEquals(numCols, B.numCols);
+        Matrix Bt = TransposeDispatcher.dispatch(B);
+
+        return new Matrix(
+                numRows, Bt.numCols,
                 RealDenseSparseMatrixMultiplication.concurrentStandard(
                     entries, rowIndices, colIndices, shape,
-                    B.entries, B.shape
+                    Bt.entries, Bt.shape
                 )
         );
-
-        return TransposeDispatcher.dispatch(product);
     }
 
 
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
      * {@code this.mult(B.T())}.
-     * For large matrices, this method may
+     * For large matrices, this method <i>may</i>
      * be significantly faster than directly computing the transpose followed by the multiplication as
      * {@code this.mult(B.T())}.
      *
@@ -1157,22 +1158,23 @@ public class SparseMatrix
      */
     @Override
     public Matrix multTranspose(SparseMatrix B) {
-        Matrix product = new Matrix(
-                shape.copy(),
+        ParameterChecks.assertEquals(numCols, B.numCols);
+        SparseMatrix Bt = B.transpose();
+
+        return new Matrix(
+                numRows, Bt.numCols,
                 RealSparseMatrixMultiplication.concurrentStandard(
                         entries, rowIndices, colIndices, shape,
-                        B.entries, B.rowIndices, B.colIndices, B.shape
+                        Bt.entries, Bt.rowIndices, Bt.colIndices, Bt.shape
                 )
         );
-
-        return TransposeDispatcher.dispatch(product);
     }
 
 
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
      * {{@code this.mult(B.T())}.
-     * For large matrices, this method may
+     * For large matrices, this method <i>may</i>
      * be significantly faster than directly computing the transpose followed by the multiplication as
      * {@code this.mult(B.T())}.
      *
@@ -1181,22 +1183,23 @@ public class SparseMatrix
      */
     @Override
     public CMatrix multTranspose(CMatrix B) {
-        CMatrix product = new CMatrix(
-                shape.copy(),
+        ParameterChecks.assertEquals(numCols, B.numCols);
+        CMatrix Bt = TransposeDispatcher.dispatch(B);
+
+        return new CMatrix(
+                numRows, Bt.numCols,
                 RealComplexDenseSparseMatrixMultiplication.concurrentStandard(
                         entries, rowIndices, colIndices, shape,
-                        B.entries, B.shape
+                        Bt.entries, Bt.shape
                 )
         );
-
-        return TransposeDispatcher.dispatch(product);
     }
 
 
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
      * {@code this.mult(B.T())}.
-     * For large matrices, this method may
+     * For large matrices, this method <i>may</i>
      * be significantly faster than directly computing the transpose followed by the multiplication as
      * {@code this.mult(B.T())}.
      *
@@ -1205,22 +1208,23 @@ public class SparseMatrix
      */
     @Override
     public CMatrix multTranspose(SparseCMatrix B) {
-        CMatrix product = new CMatrix(
-                shape.copy(),
+        ParameterChecks.assertEquals(numCols, B.numCols);
+        SparseCMatrix Bt = B.T();
+
+        return new CMatrix(
+                numRows, Bt.numCols,
                 RealComplexSparseMatrixMultiplication.concurrentStandard(
                         entries, rowIndices, colIndices, shape,
-                        B.entries, B.rowIndices, B.colIndices, B.shape
+                        Bt.entries, Bt.rowIndices, Bt.colIndices, Bt.shape
                 )
         );
-
-        return TransposeDispatcher.dispatch(product);
     }
 
 
     /**
      * Computes the matrix power with a given exponent. This is equivalent to multiplying a matrix to itself 'exponent'
-     * times. Note, this method is preferred over repeated multiplication of a matrix as this method will be significantly
-     * faster.
+     * times. Note, this method is preferred over repeated multiplication of a matrix as this method <i>may</i> be significantly
+     * faster for large matrices as it will not make superfluous copies.
      *
      * @param exponent The exponent in the matrix power. If {@code exponent = 0} then the identity matrix will be
      *                 returned.
@@ -1246,7 +1250,7 @@ public class SparseMatrix
                     entries, rowIndices, colIndices, shape
             );
 
-            // Compute the remaining dense-sparse matrix multiplication.
+            // Compute the remaining dense-sparse matrix multiplications.
             for(int i=2; i<exponent; i++) {
                 destEntries = RealDenseSparseMatrixMultiplication.concurrentStandard(
                         destEntries, shape,
@@ -1676,7 +1680,7 @@ public class SparseMatrix
                 colIndices.add(0);
             } else {
                 // A value already exists with this row index. Update it.
-                entries.set(idx, entries.get(i) + this.entries[i]);
+                entries.set(idx, entries.get(idx) + this.entries[i]);
             }
         }
 
@@ -1697,7 +1701,7 @@ public class SparseMatrix
         List<Integer> colIndices = new ArrayList<>();
 
         for(int i=0; i<this.entries.length; i++) {
-            int idx = rowIndices.indexOf(this.colIndices[i]);
+            int idx = colIndices.indexOf(this.colIndices[i]);
 
             if(idx < 0) {
                 // No value with this column index exists.
@@ -1706,11 +1710,14 @@ public class SparseMatrix
                 colIndices.add(this.colIndices[i]);
             } else {
                 // A value already exists with this column index. Update it.
-                entries.set(idx, entries.get(i) + this.entries[i]);
+                entries.set(idx, entries.get(idx) + this.entries[i]);
             }
         }
 
-        return new SparseMatrix(new Shape(1, numCols), entries, rowIndices, colIndices);
+        SparseMatrix mat = new SparseMatrix(new Shape(1, numCols), entries, rowIndices, colIndices);
+        mat.sortIndices(); // Ensure indices are properly sorted.
+
+        return mat;
     }
 
 
@@ -2080,7 +2087,7 @@ public class SparseMatrix
                 destColIndices, colIndices.length, B.colIndices.length);
         
         SparseMatrix dest = new SparseMatrix(destShape, destEntries, destRowIndices, destColIndices);
-        dest.sparseSort(); // Ensure indices are sorted properly.
+        dest.sortIndices(); // Ensure indices are sorted properly.
 
         return dest;
     }
@@ -2149,7 +2156,7 @@ public class SparseMatrix
                 destColIndices, colIndices.length, B.colIndices.length);
 
         SparseCMatrix dest = new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
-        dest.sparseSort(); // Ensure indices are sorted properly.
+        dest.sortIndices(); // Ensure indices are sorted properly.
 
         return dest;
     }
@@ -2398,7 +2405,7 @@ public class SparseMatrix
         Arrays.fill(destColIndices, entries.length, destColIndices.length, numCols);
 
         SparseMatrix dest = new SparseMatrix(destShape, destEntries, destRowIndices, destColIndices);
-        dest.sparseSort(); // Ensure that the indices are sorted properly.
+        dest.sortIndices(); // Ensure that the indices are sorted properly.
 
         return dest;
     }
@@ -2432,7 +2439,7 @@ public class SparseMatrix
         Arrays.fill(destColIndices, entries.length, destColIndices.length, numCols);
 
         SparseMatrix dest = new SparseMatrix(destShape, destEntries, destRowIndices, destColIndices);
-        dest.sparseSort(); // Ensure that the indices are sorted properly.
+        dest.sortIndices(); // Ensure that the indices are sorted properly.
 
         return dest;
     }
@@ -2466,7 +2473,7 @@ public class SparseMatrix
         Arrays.fill(destColIndices, entries.length, destColIndices.length, numCols);
 
         SparseCMatrix dest = new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
-        dest.sparseSort(); // Ensure that the indices are sorted properly.
+        dest.sortIndices(); // Ensure that the indices are sorted properly.
 
         return dest;
     }
@@ -2501,7 +2508,7 @@ public class SparseMatrix
 
         SparseCMatrix dest = new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
 
-        dest.sparseSort(); // Ensure that the indices are sorted properly.
+        dest.sortIndices(); // Ensure that the indices are sorted properly.
 
         return dest;
     }
@@ -2738,7 +2745,7 @@ public class SparseMatrix
         }
 
         return new SparseVector(
-                numRows,
+                Math.min(numRows, numCols),
                 destEntries.stream().mapToDouble(Double::doubleValue).toArray(),
                 destIndices.stream().mapToInt(Integer::intValue).toArray()
         );
@@ -3110,6 +3117,12 @@ public class SparseMatrix
     @Override
     protected SparseMatrix getSelf() {
         return this;
+    }
+
+
+    @Override
+    public boolean allClose(SparseMatrix tensor, double relTol, double absTol) {
+        return RealSparseEquals.allCloseMatrix(this, tensor, relTol, absTol);
     }
 
 

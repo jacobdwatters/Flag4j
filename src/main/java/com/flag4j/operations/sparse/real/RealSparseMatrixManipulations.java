@@ -176,7 +176,7 @@ public class RealSparseMatrixManipulations {
         }
 
         // Ensure indices remain sorted properly.
-        src.sparseSort();
+        src.sortIndices();
 
         return src;
     }
@@ -197,7 +197,7 @@ public class RealSparseMatrixManipulations {
         }
 
         // Ensure indices remain sorted properly.
-        src.sparseSort();
+        src.sortIndices();
 
         return src;
     }

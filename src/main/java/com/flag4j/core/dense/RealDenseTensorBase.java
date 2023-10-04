@@ -56,7 +56,7 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
      * @throws IllegalArgumentException If the number of entries does not equal the product of dimensions in the
      * {@code shape}.
      */
-    public RealDenseTensorBase(Shape shape, double[] entries) {
+    protected RealDenseTensorBase(Shape shape, double[] entries) {
         super(shape, entries);
         ParameterChecks.assertEquals(shape.totalEntries().intValueExact(), entries.length);
     }
@@ -453,6 +453,12 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
     @Override
     public T roundToZero(double threshold) {
         return makeTensor(this.shape, RealOperations.roundToZero(this.entries, threshold));
+    }
+
+
+    @Override
+    public boolean allClose(T tensor, double relTol, double absTol) {
+        return shape.equals(tensor.shape) && RealProperties.allClose(entries, tensor.entries, relTol, absTol);
     }
 }
 

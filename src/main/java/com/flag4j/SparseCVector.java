@@ -243,6 +243,12 @@ public class SparseCVector
     }
 
 
+    @Override
+    public boolean allClose(SparseCVector tensor, double relTol, double absTol) {
+        return ComplexSparseEquals.allCloseVector(this, tensor, relTol, absTol);
+    }
+
+
     /**
      * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
      * and takes the complex conjugate of the elements along these axes. Same as {@link #H}.

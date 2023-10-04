@@ -358,7 +358,7 @@ public class ComplexSparseMatrixGetSet {
                 destColIndices.stream().mapToInt(Integer::intValue).toArray()
         );
 
-        dest.sparseSort();
+        dest.sortIndices();
 
         return dest;
     }
@@ -402,7 +402,7 @@ public class ComplexSparseMatrixGetSet {
                 destColIndices.stream().mapToInt(Integer::intValue).toArray()
         );
 
-        dest.sparseSort();
+        dest.sortIndices();
 
         return dest;
     }
@@ -450,7 +450,7 @@ public class ComplexSparseMatrixGetSet {
                 destColIndices.stream().mapToInt(Integer::intValue).toArray()
         );
 
-        dest.sparseSort();
+        dest.sortIndices();
 
         return dest;
     }
@@ -483,7 +483,7 @@ public class ComplexSparseMatrixGetSet {
 
         // Create matrix and ensure entries are properly sorted.
         SparseCMatrix mat = new SparseCMatrix(src.shape.copy(), entries, rowIndices, colIndices);
-        mat.sparseSort();
+        mat.sortIndices();
 
         return mat;
     }
@@ -516,7 +516,7 @@ public class ComplexSparseMatrixGetSet {
 
         // Create matrix and ensure entries are properly sorted.
         SparseCMatrix mat = new SparseCMatrix(src.shape.copy(), entries, rowIndices, colIndices);
-        mat.sparseSort();
+        mat.sortIndices();
 
         return mat;
     }
@@ -616,7 +616,7 @@ public class ComplexSparseMatrixGetSet {
 
         // Create matrix and ensure entries are properly sorted.
         SparseCMatrix mat = new SparseCMatrix(src.shape.copy(), entries, rowIndices, colIndices);
-        mat.sparseSort();
+        mat.sortIndices();
 
         return mat;
     }
@@ -648,7 +648,7 @@ public class ComplexSparseMatrixGetSet {
 
         // Create matrix and ensure entries are properly sorted.
         SparseCMatrix mat = new SparseCMatrix(src.shape.copy(), entries, rowIndices, colIndices);
-        mat.sparseSort();
+        mat.sortIndices();
 
         return mat;
     }
