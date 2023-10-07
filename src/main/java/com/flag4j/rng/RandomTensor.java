@@ -25,6 +25,7 @@
 package com.flag4j.rng;
 
 import com.flag4j.*;
+import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.linalg.Decompose;
 import com.flag4j.linalg.decompositions.ComplexQRDecomposition;
 import com.flag4j.linalg.decompositions.RealQRDecomposition;
@@ -599,6 +600,79 @@ public class RandomTensor {
      */
     public CMatrix randnCMatrix(Shape shape, double mean, double std) {
         return randnCMatrix(shape.get(0), shape.get(1), mean, std);
+    }
+
+
+    /**
+     * Generates a random sparse matrix with the specified sparsity. The non-zero values will have a uniform
+     * distribution in {@code [min, max)}. Values will be uniformly distributed throughout the matrix.
+     * @param rows Number of rows in the sparse matrix.
+     * @param cols Number of columns in the sparse matrix.
+     * @param min Minimum value for random non-zero values in the sparse matrix.
+     * @param max Maximum value for random non-zero values
+     * @param sparsity Desired sparsity of the resulting matrix. i.e. the percent of values which are zero. Must be
+     *                 a value in {@code [0.0, 1.0]}.
+     * @return A sparse matrix with sparsity approximately equal to {@code sparsity} filled with random values uniformly
+     * distributed in {@code [min, max)}.
+     */
+    public SparseCMatrix randomSparseCMatrix(int rows, int cols, double min, double max, double sparsity) {
+        return randomSparseCMatrix(new Shape(rows, cols), min, max, sparsity);
+    }
+
+
+    /**
+     * Generates a random sparse matrix with the specified sparsity. The non-zero values will have a uniform
+     * distribution in {@code [min, max)}. Values will be uniformly distributed throughout the matrix.
+     * @param shape Shape of the sparse matrix to generate.
+     * @param min Minimum value for random non-zero values in the sparse matrix.
+     * @param max Maximum value for random non-zero values
+     * @param sparsity Desired sparsity of the resulting matrix. i.e. the percent of values which are zero. Must be
+     *                 a value in {@code [0.0, 1.0]}.
+     * @return A sparse matrix with sparsity approximately equal to {@code sparsity} filled with random values uniformly
+     * distributed in {@code [min, max)}.
+     */
+    public SparseCMatrix randomSparseCMatrix(Shape shape, double min, double max, double sparsity) {
+        ParameterChecks.assertInRange(sparsity, 0, 1, "sparsity");
+        int numEntries = new BigDecimal(shape.totalEntries()).multiply(BigDecimal.valueOf(1.0-sparsity))
+                .setScale(0, RoundingMode.HALF_UP).intValueExact();
+
+        return randomSparseCMatrix(shape, min, max, numEntries);
+    }
+
+
+    /**
+     * Generates a random sparse matrix with the specified number of non-zero entries. The non-zero values will have
+     * a uniform distribution in {@code [min, max)}. Values will be uniformly distributed throughout the matrix.
+     * @param rows Number of rows in the random sparse matrix.
+     * @param cols Number of columns in the random sparse matrix.
+     * @param min Minimum value for random non-zero values in the sparse matrix.
+     * @param max Maximum value for random non-zero values
+     * @param numNonZeroEntries Desired number of non-zero entries int the random sparse matrix.
+     * @return A sparse matrix filled with the specified number of non-zero entries uniformly
+     * distributed in {@code [min, max)}.
+     */
+    public SparseCMatrix randomSparseCMatrix(int rows, int cols, double min, double max, int numNonZeroEntries) {
+        return randomSparseCMatrix(new Shape(rows, cols), min, max, numNonZeroEntries);
+    }
+
+
+    /**
+     * Generates a random sparse matrix with the specified number of non-zero entries. The non-zero values will have
+     * a uniform distribution in {@code [min, max)}. Values will be uniformly distributed throughout the matrix.
+     * @param shape Shape of the sparse matrix to generate.
+     * @param min Minimum value for random non-zero values in the sparse matrix.
+     * @param max Maximum value for random non-zero values
+     * @param numNonZeroEntries Desired number of non-zero entries int the random sparse matrix.
+     * @return A sparse matrix filled with the specified number of non-zero entries uniformly
+     * distributed in {@code [min, max)}.
+     */
+    public SparseCMatrix randomSparseCMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
+        ParameterChecks.assertGreaterEq(0, numNonZeroEntries);
+
+        CNumber[] entries = RAND_ARRAY.genUniformComplexArray(numNonZeroEntries, min, max);
+        int[][] indices = RAND_ARRAY.randomUniqueIndices2D(numNonZeroEntries, 0, shape.get(0), 0, shape.get(1));
+
+        return new SparseCMatrix(shape, entries, indices[0], indices[1]);
     }
 
 
