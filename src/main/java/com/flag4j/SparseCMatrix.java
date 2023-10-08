@@ -50,7 +50,6 @@ import com.flag4j.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Complex sparse matrix. Stored in coordinate list (COO) format.
@@ -2832,7 +2831,9 @@ public class SparseCMatrix
     @Override
     public SparseCMatrix setCol(Integer[] values, int colIndex) {
         return ComplexSparseMatrixGetSet.setCol(
-                this, colIndex, Stream.of(values).mapToDouble(Integer::doubleValue).toArray()
+                this,
+                colIndex,
+                ArrayUtils.copy2CNumber(values, null)
         );
     }
 
@@ -2866,7 +2867,7 @@ public class SparseCMatrix
         return ComplexSparseMatrixGetSet.setCol(
                 this,
                 colIndex,
-                Arrays.stream(values).asDoubleStream().toArray()
+                ArrayUtils.copy2CNumber(values, null)
         );
     }
 
@@ -2910,7 +2911,7 @@ public class SparseCMatrix
     @Override
     public SparseCMatrix setRow(Integer[] values, int rowIndex) {
         return ComplexSparseMatrixGetSet.setRow(
-                this, rowIndex, Stream.of(values).mapToDouble(Integer::doubleValue).toArray()
+                this, rowIndex, ArrayUtils.copy2CNumber(values, null)
         );
     }
 
@@ -2942,7 +2943,7 @@ public class SparseCMatrix
         return ComplexSparseMatrixGetSet.setRow(
                 this,
                 rowIndex,
-                Arrays.stream(values).asDoubleStream().toArray()
+                ArrayUtils.copy2CNumber(values, null)
         );
     }
 

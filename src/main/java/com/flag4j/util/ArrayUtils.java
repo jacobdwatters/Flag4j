@@ -62,15 +62,21 @@ public final class ArrayUtils {
      * Converts array to an array of {@link CNumber complex numbers}.
      *
      * @param src  Array to convert.
-     * @param dest Destination array.
+     * @param dest Destination array. If the destination array is null, a new array will be created.
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     * @return A reference to the {@code dest} array.
      */
-    public static void copy2CNumber(int[] src, CNumber[] dest) {
+    public static CNumber[] copy2CNumber(int[] src, CNumber[] dest) {
+        if(dest == null) {
+            dest = new CNumber[src.length];
+        }
         ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
 
         for (int i = 0; i < dest.length; i++) {
             dest[i] = new CNumber(src[i]);
         }
+
+        return dest;
     }
 
 
@@ -78,15 +84,21 @@ public final class ArrayUtils {
      * Converts array to an array of {@link CNumber complex numbers}.
      *
      * @param src  Array to convert.
-     * @param dest Destination array.
+     * @param dest Destination array. If the destination array is null, a new array will be created.
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     * @return A reference to the {@code dest} array.
      */
-    public static void copy2CNumber(double[] src, CNumber[] dest) {
+    public static CNumber[] copy2CNumber(double[] src, CNumber[] dest) {
+        if(dest == null) {
+            dest = new CNumber[src.length];
+        }
         ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
 
         for (int i = 0; i < dest.length; i++) {
             dest[i] = new CNumber(src[i]);
         }
+
+        return dest;
     }
 
 
@@ -94,15 +106,21 @@ public final class ArrayUtils {
      * Converts array to an array of {@link CNumber complex numbers}.
      *
      * @param src  Array to convert.
-     * @param dest Destination array.
+     * @param dest Destination array. If the destination array is null, a new array will be created.
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     * @return A reference to the {@code dest} array.
      */
-    public static void copy2CNumber(Integer[] src, CNumber[] dest) {
+    public static CNumber[] copy2CNumber(Integer[] src, CNumber[] dest) {
+        if(dest == null) {
+            dest = new CNumber[src.length];
+        }
         ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
 
         for (int i = 0; i < dest.length; i++) {
             dest[i] = new CNumber(src[i]);
         }
+
+        return dest;
     }
 
 
@@ -110,15 +128,21 @@ public final class ArrayUtils {
      * Converts array to an array of {@link CNumber complex numbers}.
      *
      * @param src  Array to convert.
-     * @param dest Destination array.
+     * @param dest Destination array. If the destination array is null, a new array will be created.
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     * @return A reference to the {@code dest} array.
      */
-    public static void copy2CNumber(Double[] src, CNumber[] dest) {
+    public static CNumber[] copy2CNumber(Double[] src, CNumber[] dest) {
+        if(dest == null) {
+            dest = new CNumber[src.length];
+        }
         ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
 
         for (int i = 0; i < dest.length; i++) {
             dest[i] = new CNumber(src[i]);
         }
+
+        return dest;
     }
 
 
@@ -126,30 +150,43 @@ public final class ArrayUtils {
      * Converts array to an array of {@link CNumber complex numbers}.
      *
      * @param src  Array to convert.
-     * @param dest Destination array.
+     * @param dest Destination array. If the destination array is null, a new array will be created.
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     * @return A reference to the {@code dest} array.
      */
-    public static void copy2CNumber(String[] src, CNumber[] dest) {
+    public static CNumber[] copy2CNumber(String[] src, CNumber[] dest) {
+        if(dest == null) {
+            dest = new CNumber[src.length];
+        }
         ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
 
         for (int i = 0; i < dest.length; i++) {
             dest[i] = new CNumber(src[i]);
         }
+
+        return dest;
     }
 
 
     /**
      * Converts array to an array of {@link CNumber complex numbers}.
      *
-     * @param src  Source array to convert.
-     * @param dest Destination array.
+     * @param src  Array to convert.
+     * @param dest Destination array. If the destination array is null, a new array will be created.
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     * @return A reference to the {@code dest} array.
      */
-    public static void copy2CNumber(CNumber[] src, CNumber[] dest) {
+    public static CNumber[] copy2CNumber(CNumber[] src, CNumber[] dest) {
+        if(dest == null) {
+            dest = new CNumber[src.length];
+        }
         ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+
         for (int i = 0; i < dest.length; i++) {
             dest[i] = new CNumber(src[i]);
         }
+
+        return dest;
     }
 
 

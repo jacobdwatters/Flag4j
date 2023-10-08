@@ -51,7 +51,6 @@ import com.flag4j.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Real sparse matrix. Matrix is stored in coordinate list (COO) format.
@@ -193,7 +192,7 @@ public class SparseMatrix
     public SparseMatrix(int size, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
         super(new Shape(size, size),
                 nonZeroEntries.length,
-                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),
+                ArrayUtils.asDouble(nonZeroEntries, null),
                 rowIndices, colIndices
         );
 
@@ -215,9 +214,10 @@ public class SparseMatrix
     public SparseMatrix(int rows, int cols, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
         super(new Shape(rows, cols),
                 nonZeroEntries.length,
-                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),
+                ArrayUtils.asDouble(nonZeroEntries, null),
                 rowIndices, colIndices
         );
+
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
         numRows = shape.dims[0];
@@ -237,9 +237,10 @@ public class SparseMatrix
     public SparseMatrix(Shape shape, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
         super(shape,
                 nonZeroEntries.length,
-                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),
+                ArrayUtils.asDouble(nonZeroEntries, null),
                 rowIndices, colIndices
         );
+
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
         numRows = shape.dims[0];
@@ -281,6 +282,7 @@ public class SparseMatrix
             ArrayUtils.fromIntegerList(rowIndices),
             ArrayUtils.fromIntegerList(colIndices)
         );
+
         this.rowIndices = indices[0];
         this.colIndices = indices[1];
         numRows = shape.dims[0];
@@ -678,7 +680,7 @@ public class SparseMatrix
         return RealSparseMatrixGetSet.setCol(
                 this,
                 colIndex,
-                Stream.of(values).mapToDouble(Integer::doubleValue).toArray()
+                ArrayUtils.asDouble(values, null)
         );
     }
 
@@ -723,7 +725,7 @@ public class SparseMatrix
         return RealSparseMatrixGetSet.setCol(
                 this,
                 colIndex,
-                Arrays.stream(values).asDoubleStream().toArray()
+                ArrayUtils.asDouble(values, null)
         );
     }
 
@@ -741,7 +743,7 @@ public class SparseMatrix
         return RealSparseMatrixGetSet.setRow(
                 this,
                 rowIndex,
-                Stream.of(values).mapToDouble(Double::doubleValue).toArray()
+                ArrayUtils.unbox(values)
         );
     }
 
@@ -2746,8 +2748,8 @@ public class SparseMatrix
 
         return new SparseVector(
                 Math.min(numRows, numCols),
-                destEntries.stream().mapToDouble(Double::doubleValue).toArray(),
-                destIndices.stream().mapToInt(Integer::intValue).toArray()
+                ArrayUtils.fromDoubleList(destEntries),
+                ArrayUtils.fromIntegerList(destIndices)
         );
     }
 
