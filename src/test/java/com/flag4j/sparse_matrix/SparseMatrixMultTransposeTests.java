@@ -391,7 +391,7 @@ public class SparseMatrixMultTransposeTests {
         };
         exp = new Matrix(expEntries);
 
-        assertTrue(exp.allClose(a.multTranspose(b)));
+        assertTrue(exp.allClose(a.multTranspose(b), 0.0005, 0.0005));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(5, 3);

@@ -182,7 +182,6 @@ public class SparseVector
 
     /**
      * Sets an index of a copy of this vector to a specified value.
-     *
      * Creates a copy of this vector and sets an index to the specified value. Note, unlike the dense version of this
      * method, this <b>does not</b> affect this vector.
      *

@@ -893,7 +893,7 @@ public class SparseCMatrix
     @Override
     public CMatrix mult(Matrix B) {
         ParameterChecks.assertMatMultShapes(shape, B.shape);
-        CNumber[] dest = RealComplexDenseSparseMatrixMultiplication.concurrentStandard(
+        CNumber[] dest = RealComplexDenseSparseMatrixMultiplication.standard(
                 entries, rowIndices, colIndices, shape,
                 B.entries, B.shape
         );
@@ -912,7 +912,7 @@ public class SparseCMatrix
     @Override
     public CVector mult(SparseCVector B) {
         ParameterChecks.assertEquals(numCols, B.size);
-        CNumber[] dest = ComplexSparseMatrixMultiplication.concurrentStandardVector(
+        CNumber[] dest = ComplexSparseMatrixMultiplication.standardVector(
                 entries, rowIndices, colIndices, shape,
                 B.entries, B.indices
         );
@@ -937,7 +937,7 @@ public class SparseCMatrix
 
         return new CMatrix(
                 numRows, Bt.numCols,
-                RealComplexDenseSparseMatrixMultiplication.concurrentStandard(
+                RealComplexDenseSparseMatrixMultiplication.standard(
                         entries, rowIndices, colIndices, shape,
                         Bt.entries, Bt.shape
                 )
@@ -962,7 +962,7 @@ public class SparseCMatrix
 
         return new CMatrix(
                 numRows, Bt.numCols,
-                RealComplexSparseMatrixMultiplication.concurrentStandard(
+                RealComplexSparseMatrixMultiplication.standard(
                         entries, rowIndices, colIndices, shape,
                         Bt.entries, Bt.rowIndices, Bt.colIndices, Bt.shape
                 )
@@ -987,7 +987,7 @@ public class SparseCMatrix
 
         return new CMatrix(
                 numRows, Bt.numCols,
-                ComplexDenseSparseMatrixMultiplication.concurrentStandard(
+                ComplexDenseSparseMatrixMultiplication.standard(
                         entries, rowIndices, colIndices, shape,
                         Bt.entries, Bt.shape
                 )
@@ -1012,7 +1012,7 @@ public class SparseCMatrix
 
         return new CMatrix(
                 numRows, Bt.numCols,
-                ComplexSparseMatrixMultiplication.concurrentStandard(
+                ComplexSparseMatrixMultiplication.standard(
                         entries, rowIndices, colIndices, shape,
                         Bt.entries, Bt.rowIndices, Bt.colIndices, Bt.shape
                 )
@@ -1041,14 +1041,14 @@ public class SparseCMatrix
             power = this.toDense();
         } else {
             // Compute the first sparse-sparse matrix multiplication.
-            CNumber[] destEntries = ComplexSparseMatrixMultiplication.concurrentStandard(
+            CNumber[] destEntries = ComplexSparseMatrixMultiplication.standard(
                     entries, rowIndices, colIndices, shape,
                     entries, rowIndices, colIndices, shape
             );
 
             // Compute the remaining dense-sparse matrix multiplications.
             for(int i=2; i<exponent; i++) {
-                destEntries = ComplexDenseSparseMatrixMultiplication.concurrentStandard(
+                destEntries = ComplexDenseSparseMatrixMultiplication.standard(
                         destEntries, shape,
                         entries, rowIndices, colIndices, shape
                 );
@@ -2559,7 +2559,7 @@ public class SparseCMatrix
         ParameterChecks.assertMatMultShapes(shape, B.shape);
 
         return new CMatrix(numRows, B.numCols,
-                ComplexSparseMatrixMultiplication.concurrentStandard(
+                ComplexSparseMatrixMultiplication.standard(
                         entries, rowIndices, colIndices, shape,
                         B.entries, B.rowIndices, B.colIndices, B.shape
                 )
@@ -2579,7 +2579,7 @@ public class SparseCMatrix
         ParameterChecks.assertMatMultShapes(shape, new Shape(b.size, 1));
 
         return new CVector(
-                RealComplexDenseSparseMatrixMultiplication.concurrentStandardVector(
+                RealComplexDenseSparseMatrixMultiplication.standardVector(
                         this.entries, this.rowIndices, this.colIndices, this.shape,
                         b.entries, b.shape
                 )
@@ -2596,7 +2596,7 @@ public class SparseCMatrix
      */
     @Override
     public CVector mult(SparseVector b) {
-        CNumber[] product = RealComplexSparseMatrixMultiplication.concurrentStandardVector(
+        CNumber[] product = RealComplexSparseMatrixMultiplication.standardVector(
                 entries, rowIndices, colIndices, shape,
                 b.entries, b.indices, b.shape
         );
@@ -2616,7 +2616,7 @@ public class SparseCMatrix
     public CVector mult(CVector b) {
         ParameterChecks.assertEquals(numCols, b.size);
 
-        CNumber[] product = ComplexDenseSparseMatrixMultiplication.concurrentStandardVector(
+        CNumber[] product = ComplexDenseSparseMatrixMultiplication.standardVector(
                 entries, rowIndices, colIndices, shape,
                 b.entries, b.shape
         );
@@ -2637,7 +2637,7 @@ public class SparseCMatrix
         ParameterChecks.assertMatMultShapes(shape, B.shape);
 
         return new CMatrix(numRows, B.numCols,
-                RealComplexSparseMatrixMultiplication.concurrentStandard(
+                RealComplexSparseMatrixMultiplication.standard(
                         entries, rowIndices, colIndices, shape,
                         B.entries, B.rowIndices, B.colIndices, B.shape
                 )
@@ -2657,7 +2657,7 @@ public class SparseCMatrix
         ParameterChecks.assertMatMultShapes(shape, B.shape);
 
         return new CMatrix(numRows, B.numCols,
-                ComplexDenseSparseMatrixMultiplication.concurrentStandard(
+                ComplexDenseSparseMatrixMultiplication.standard(
                         entries, rowIndices, colIndices, shape,
                         B.entries, B.shape
                 )

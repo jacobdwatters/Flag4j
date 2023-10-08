@@ -76,7 +76,7 @@ public class RealSparseMatrixMultiplication {
                 c2 = colIndices2[j]; // = j
 
                 if(c1==r2) { // Then we multiply and add to sum.
-                    dest[rowIdx + c2] += src1[i]*src2[j];
+                   dest[rowIdx + c2] += src1[i]*src2[j];
                 }
             }
         }
@@ -115,7 +115,11 @@ public class RealSparseMatrixMultiplication {
                 int c2 = colIndices2[j]; // = j
 
                 if(c1==r2) { // Then we multiply and add to sum.
-                    dest[r1*cols2 + c2] += src1[i]*src2[j];
+                    double product = src1[i]*src2[j];
+
+                    synchronized (dest) {
+                        dest[r1*cols2 + c2] += product;
+                    }
                 }
             }
         });
@@ -184,7 +188,11 @@ public class RealSparseMatrixMultiplication {
                 int r2 = indices[j]; // = k
 
                 if(c1==r2) { // Then we multiply and add to sum.
-                    dest[r1] += src1[i]*src2[j];
+                    double product = src1[i]*src2[j];
+
+                    synchronized (dest) {
+                        dest[r1] += product;
+                    }
                 }
             }
         });

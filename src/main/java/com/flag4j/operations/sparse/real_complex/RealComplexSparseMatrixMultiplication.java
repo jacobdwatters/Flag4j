@@ -117,7 +117,11 @@ public class RealComplexSparseMatrixMultiplication {
                 int c2 = colIndices2[j]; // = j
 
                 if(c1==r2) { // Then we multiply and add to sum.
-                    dest[r1*cols2 + c2].addEq(src1[i].mult(src2[j]));
+                    CNumber product = src1[i].mult(src2[j]);
+
+                    synchronized (dest) {
+                        dest[r1*cols2 + c2].addEq(product);
+                    }
                 }
             }
         });
@@ -195,7 +199,11 @@ public class RealComplexSparseMatrixMultiplication {
                 int r2 = indices[j]; // = k
 
                 if(c1==r2) { // Then we multiply and add to sum.
-                    dest[r1*cols2].addEq(src1[i].mult(src2[j]));
+                    CNumber product = src1[i].mult(src2[j]);
+
+                    synchronized (dest) {
+                        dest[r1*cols2].addEq(product);
+                    }
                 }
             }
         });
@@ -277,7 +285,11 @@ public class RealComplexSparseMatrixMultiplication {
                 int c2 = colIndices2[j]; // = j
 
                 if(c1==r2) { // Then we multiply and add to sum.
-                    dest[r1*cols2 + c2].addEq(src2[j].mult(src1[i]));
+                    CNumber product = src2[j].mult(src1[i]);
+
+                    synchronized (dest) {
+                        dest[r1*cols2 + c2].addEq(product);
+                    }
                 }
             }
         });
@@ -353,7 +365,11 @@ public class RealComplexSparseMatrixMultiplication {
                 int r2 = indices[j]; // = k
 
                 if(c1==r2) { // Then we multiply and add to sum.
-                    dest[r1*cols2].addEq(src2[j].mult(src1[i]));
+                    CNumber product = src2[j].mult(src1[i]);
+
+                    synchronized (dest) {
+                        dest[r1*cols2].addEq(product);
+                    }
                 }
             }
         });
