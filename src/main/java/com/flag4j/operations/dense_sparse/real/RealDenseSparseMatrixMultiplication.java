@@ -138,8 +138,11 @@ public class RealDenseSparseMatrixMultiplication {
             for(int j=0; j<src2.length; j++) {
                 int row = rowIndices[j];
                 int col = colIndices[j];
+                double product = src1[i*cols1 + row]*src2[j];
 
-                dest[i*cols2 + col] += src1[i*cols1 + row]*src2[j];
+                synchronized (dest) {
+                    dest[i*cols2 + col] += product;
+                }
             }
         });
 
@@ -171,7 +174,11 @@ public class RealDenseSparseMatrixMultiplication {
             int col = colIndices[i];
 
             for(int j=0; j<cols2; j++) {
-                dest[row*cols2 + j] += src1[i]*src2[col*cols2 + j];
+                double product = src1[i]*src2[col*cols2 + j];
+
+                synchronized (dest) {
+                    dest[row*cols2 + j] += product;
+                }
             }
         });
 
@@ -316,7 +323,11 @@ public class RealDenseSparseMatrixMultiplication {
             int row = rowIndices[i];
             int col = colIndices[i];
 
-            dest[row] += src1[i]*src2[col];
+            double product = src1[i]*src2[col];
+
+            synchronized (dest) {
+                dest[row] += product;
+            }
         });
 
         return dest;

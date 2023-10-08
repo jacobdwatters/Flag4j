@@ -89,8 +89,9 @@ public class SparseVector
      */
     public SparseVector(int size, int[] nonZeroEntries, int[] indices) {
         super(new Shape(size), nonZeroEntries.length,
-                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),
-                RealDenseTranspose.blockedIntMatrix(new int[][]{indices}));
+                ArrayUtils.asDouble(nonZeroEntries, null),
+                RealDenseTranspose.blockedIntMatrix(new int[][]{indices})
+        );
         this.size = size;
         this.indices = indices;
     }
@@ -140,11 +141,11 @@ public class SparseVector
     public SparseVector(int size, List<Double> entries, List<Integer> indices) {
         super(new Shape(size),
                 entries.size(),
-                entries.stream().mapToDouble(Double::doubleValue).toArray(),
+                ArrayUtils.fromDoubleList(entries),
                 new int[indices.size()][1]
         );
 
-        this.indices = indices.stream().mapToInt(Integer::intValue).toArray();
+        this.indices = ArrayUtils.fromIntegerList(indices);
         this.size = size;
     }
 
@@ -182,7 +183,6 @@ public class SparseVector
 
     /**
      * Sets an index of a copy of this vector to a specified value.
-     *
      * Creates a copy of this vector and sets an index to the specified value. Note, unlike the dense version of this
      * method, this <b>does not</b> affect this vector.
      *
@@ -1381,8 +1381,8 @@ public class SparseVector
 
         return new SparseVector(
                 src.size,
-                nonZeroEntries.stream().mapToDouble(Double::doubleValue).toArray(),
-                indices.stream().mapToInt(Integer::intValue).toArray()
+                ArrayUtils.fromDoubleList(nonZeroEntries),
+                ArrayUtils.fromIntegerList(indices)
         );
     }
 

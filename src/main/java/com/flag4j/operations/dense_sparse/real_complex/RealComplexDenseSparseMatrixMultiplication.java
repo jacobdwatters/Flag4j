@@ -140,8 +140,11 @@ int col;
             for(int j=0; j<src2.length; j++) {
                 int row = rowIndices[j];
                 int col = colIndices[j];
+                CNumber product = src2[j].mult(src1[i*cols1 + row]);
 
-                dest[i*cols2 + col].addEq(src2[j].mult(src1[i*cols1 + row]));
+                synchronized (dest) {
+                    dest[i*cols2 + col].addEq(product);
+                }
             }
         });
 
@@ -174,7 +177,11 @@ int col;
             int col = colIndices[i];
 
             for(int j=0; j<cols2; j++) {
-                dest[row*cols2 + j].addEq(src2[col*cols2 + j].mult(src1[i]));
+                CNumber product = src2[col*cols2 + j].mult(src1[i]);
+
+                synchronized (dest) {
+                    dest[row*cols2 + j].addEq(product);
+                }
             }
         });
 
@@ -238,7 +245,7 @@ int col;
         ArrayUtils.fill(dest, 0);
 
         int row;
-int col;
+        int col;
 
         for(int i=0; i<src1.length; i++) {
             row = rowIndices[i];
@@ -277,8 +284,11 @@ int col;
             for(int j=0; j<src2.length; j++) {
                 int row = rowIndices[j];
                 int col = colIndices[j];
+                CNumber product = src1[i*cols1 + row].mult(src2[j]);
 
-                dest[i*cols2 + col].addEq(src1[i*cols1 + row].mult(src2[j]));
+                synchronized (dest) {
+                    dest[i*cols2 + col].addEq(product);
+                }
             }
         });
 
@@ -311,7 +321,11 @@ int col;
             int col = colIndices[i];
 
             for(int j=0; j<cols2; j++) {
-                dest[row*cols2 + j].addEq(src1[i].mult(src2[col*cols2 + j]));
+                CNumber product = src1[i].mult(src2[col*cols2 + j]);
+
+                synchronized (dest) {
+                    dest[row*cols2 + j].addEq(product);
+                }
             }
         });
 
@@ -462,8 +476,11 @@ int col;
         ThreadManager.concurrentLoop(0, src1.length, i -> {
             int row = rowIndices[i];
             int col = colIndices[i];
+            CNumber product = src2[col].mult(src1[i]);
 
-            dest[row].addEq(src2[col].mult(src1[i]));
+            synchronized (dest) {
+                dest[row].addEq(product);
+            }
         });
 
         return dest;
@@ -644,8 +661,11 @@ int col;
         ThreadManager.concurrentLoop(0, src1.length, i -> {
             int row = rowIndices[i];
             int col = colIndices[i];
+            CNumber product = src1[i].mult(src2[col]);
 
-            dest[row].addEq(src1[i].mult(src2[col]));
+            synchronized (dest) {
+                dest[row].addEq(product);
+            }
         });
 
         return dest;

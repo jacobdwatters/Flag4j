@@ -2,11 +2,20 @@ package com.flag4j.complex_sparse_matrix;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.io.PrintOptions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SparseCMatrixMultTransposeTests {
+
+    @BeforeAll
+    static void setup() {
+        PrintOptions.setPrecision(100);
+        PrintOptions.setMaxRowsCols(100);
+    }
 
     @Test
     void realSparseMultTransposeTest() {
@@ -67,13 +76,13 @@ public class SparseCMatrixMultTransposeTests {
                 {new CNumber(0.0, 0.0), new CNumber(0.7089692988, 0.7015881761999999), new CNumber(0.7621726756, 0.7542376493999999), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.8434754748, 0.8346940002), new CNumber(0.0, 0.0), new CNumber(0.9379100192, 0.9281453807999999)},
                 {new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0)},
                 {new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0)},
-                {new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.39252840780000003, 1.0988197383), new CNumber(0.1151079296, 0.43780308479999996), new CNumber(0.025890041600000004, 0.0984705408), new CNumber(0.23763404680000005, 0.6377181543), new CNumber(0.0524833092, 0.33374790899999995), new CNumber(0.1679083654, 0.9300847443), new CNumber(0.20244428130000003, 0.8256217883)},
+                {new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.39252840780000003, 1.0988197383), new CNumber(0.1151079296, 0.43780308479999996), new CNumber(0.025890041600000004, 0.0984705408), new CNumber(0.23763404680000005, 0.6377181543), new CNumber(0.0524833092, 0.33374790899999995), new CNumber(0.1679083654, 0.9300847443), new CNumber(0.20244428130000003, 0.8256217883000001)},
                 {new CNumber(0.22680804, 0.48263224), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.2973701241, 0.6327836046), new CNumber(0.0422968975, 0.026165854000000002), new CNumber(0.159894956, 0.0989147744), new CNumber(0.0, 0.0), new CNumber(0.0489886215, 0.0303055116), new CNumber(0.0, 0.0), new CNumber(0.043655150499999996, 0.0270061012), new CNumber(0.0, 0.0)},
                 {new CNumber(0.0, 0.0), new CNumber(0.2751999468, 0.4924514778), new CNumber(0.2958518516, 0.5294066486), new CNumber(0.0458110479, 0.31780167940000004), new CNumber(0.0297696645, 0.206518947), new CNumber(0.158459616, 0.0987261345), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.32741108280000003, 0.5858797338), new CNumber(0.0, 0.0), new CNumber(0.3640676512, 0.6514741552)},
                 {new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0)}
         };
-        exp = new CMatrix(expEntries);
 
+        exp = new CMatrix(expEntries);
         assertEquals(exp, a.multTranspose(b));
 
         // ---------------------  Sub-case 3 ---------------------
@@ -212,7 +221,7 @@ public class SparseCMatrixMultTransposeTests {
         expEntries = new CNumber[][]{
                 {new CNumber(0.0, 0.0), new CNumber(0.5041229467000001, 1.1345101517), new CNumber(0.24952547240000006, 1.0543731129), new CNumber(-0.015226200000000002, 0.28234329939999997), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.6744114998, 1.5859558232000002), new CNumber(-0.07600698659999994, 1.5456070745000001), new CNumber(-0.43907186040000007, 0.18928093840000002), new CNumber(0.046531072199999995, 0.37417912859999997), new CNumber(-0.0975775928, 0.7889532967000001)},
                 {new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.058597500600000046, 1.0802855158), new CNumber(-0.08719577350000002, 0.13022300650000002), new CNumber(0.0, 0.0), new CNumber(0.011725000200000009, 0.1401311631), new CNumber(-0.12255934739999996, 0.1762521958), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0)},
-                {new CNumber(0.0, 0.0), new CNumber(-0.5927944554, 1.2435035643), new CNumber(-0.2849313674, 0.6772671918), new CNumber(0.08239720699999997, 0.2653166225), new CNumber(-0.39289732529999993, 0.6011732743), new CNumber(0.22182264210000002, 0.3709350777), new CNumber(-0.0011956625999999804, 0.43418583569999997), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(-0.15898989460000004, 0.9007990528), new CNumber(0.0, 0.0)},
+                {new CNumber(0.0, 0.0), new CNumber(-0.5927944554, 1.2435035643), new CNumber(-0.2849313674, 0.6772671918000001), new CNumber(0.08239720699999997, 0.2653166225), new CNumber(-0.39289732529999993, 0.6011732743), new CNumber(0.22182264210000002, 0.3709350777), new CNumber(-0.0011956625999999804, 0.43418583569999997), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(-0.15898989460000004, 0.9007990528), new CNumber(0.0, 0.0)},
                 {new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0)},
                 {new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.8032446517, 0.5981473664), new CNumber(0.41787374019999995, 0.9924672119), new CNumber(-0.23530508850000004, 0.6645160883000001), new CNumber(0.45128538329999995, 0.32465147639999997), new CNumber(0.0, 0.0)},
                 {new CNumber(0.31788576180000006, 0.582581744), new CNumber(0.0, 0.0), new CNumber(-0.14256448309999992, 0.6736574292999999), new CNumber(-0.3001711066999999, 0.6172964485), new CNumber(-0.12581449159999997, 0.6494094918), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.16386615460000004, 0.5969238085999999), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(-0.08253581580000002, 0.4474645036)},
@@ -224,7 +233,7 @@ public class SparseCMatrixMultTransposeTests {
         };
         exp = new CMatrix(expEntries);
 
-        assertTrue(exp.allClose(a.multTranspose(b), 1e-4, 1e-4));
+        assertEquals(exp, a.multTranspose(b));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(5, 3);
@@ -534,13 +543,13 @@ public class SparseCMatrixMultTransposeTests {
                 {new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0)},
                 {new CNumber(0.03074601229999996, 0.38662297), new CNumber(-0.4481117106, 0.9387060263), new CNumber(0.04731514739999999, 0.7330740530000001), new CNumber(-0.3971851536999999, 0.9776822462), new CNumber(-0.5167736116, 1.0251282487), new CNumber(-0.4581868534, 0.8309926957), new CNumber(-0.8003288335000001, 0.3751776325), new CNumber(0.013017728700000009, 0.41059236660000004), new CNumber(-0.5454624232, 1.097233165), new CNumber(0.09995373940000002, 1.1853524856), new CNumber(-0.3580233945, 0.780290392)},
                 {new CNumber(-0.1598398829999999, 0.7575118317999999), new CNumber(-0.13832342699999997, 0.6590241368), new CNumber(-0.11649829439999995, 1.232114131), new CNumber(-0.2467757028, 0.3157613952), new CNumber(0.04933067580000003, 0.9974883483999999), new CNumber(-0.5143208578, 0.8939020416), new CNumber(-0.6581470011999999, 0.5746908802), new CNumber(0.00572493040000005, 0.9985417322), new CNumber(-0.08307246399999998, 0.7830736548), new CNumber(-0.15513695160000002, 0.8648640731999999), new CNumber(-0.019989464199999973, 0.7307557444)},
-                {new CNumber(-0.14544583980000003, 0.9912384508000001), new CNumber(-0.44872586560000005, 0.9579569728), new CNumber(0.22278971549999982, 2.9111484078), new CNumber(-0.1399135259, 2.0655533996999997), new CNumber(0.7762645653, 2.530124631), new CNumber(-0.7555320964000001, 2.7135990291), new CNumber(-0.7863866324, 1.6606081466), new CNumber(0.41902252799999995, 2.3268939181999997), new CNumber(0.16321233989999995, 2.8717600534999996), new CNumber(0.6212351062999999, 1.7220599834000003), new CNumber(-0.11687056620000008, 1.9238829277)},
+                {new CNumber(-0.14544583980000003, 0.9912384508000001), new CNumber(-0.44872586560000005, 0.9579569728), new CNumber(0.22278971549999982, 2.9111484078), new CNumber(-0.1399135259, 2.0655533996999997), new CNumber(0.7762645653, 2.530124631), new CNumber(-0.7555320964000001, 2.7135990291), new CNumber(-0.7863866324, 1.6606081466), new CNumber(0.41902252799999995, 2.3268939181999997), new CNumber(0.16321233989999995, 2.8717600535), new CNumber(0.6212351062999999, 1.7220599834000003), new CNumber(-0.11687056620000014, 1.9238829277)},
                 {new CNumber(0.060536667700000046, 0.6518694048999999), new CNumber(0.08048906310000004, 0.5418739860999999), new CNumber(0.002529656700000049, 0.9176109295), new CNumber(-0.23122435610000003, 0.14024318930000002), new CNumber(0.34112388300000007, 0.6638082576), new CNumber(-0.12452363239999997, 0.6454756754000001), new CNumber(-0.34714446359999995, 0.8030230084000001), new CNumber(0.2745868564, 0.7486142447999999), new CNumber(0.12349327780000002, 0.44496031399999997), new CNumber(-0.06025278769999998, 0.7325064317000001), new CNumber(0.19259437580000008, 0.6521394146)},
                 {new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0)}
         };
         exp = new CMatrix(expEntries);
 
-        assertTrue(exp.allClose(a.multTranspose(b), 1e-4, 1e-4));
+        assertEquals(exp, a.multTranspose(b));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(5, 3);

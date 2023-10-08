@@ -170,7 +170,7 @@ public class SparseCVector
                 new int[indices.size()][1]
         );
 
-        this.indices = indices.stream().mapToInt(Integer::intValue).toArray();
+        this.indices = ArrayUtils.fromIntegerList(indices);
         this.size = size;
     }
 
@@ -227,7 +227,7 @@ public class SparseCVector
         return new SparseCVector(
                 src.size,
                 nonZeroEntries.toArray(CNumber[]::new),
-                indices.stream().mapToInt(Integer::intValue).toArray()
+                ArrayUtils.fromIntegerList(indices)
         );
     }
 

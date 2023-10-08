@@ -422,17 +422,10 @@ public class ComplexSparseMatrixGetSet {
         ParameterChecks.assertIndexInBounds(src.numCols, colIdx);
         ParameterChecks.assertEquals(src.numRows, col.length);
 
-        Integer[] colIndices = new Integer[col.length];
-        Arrays.fill(colIndices, colIdx);
-        CNumber[] entries = new CNumber[col.length];
-        ArrayUtils.copy2CNumber(col, entries);
-
         // Initialize destination arrays with the new column and the appropriate indices.
-        List<CNumber> destEntries = ArrayUtils.toArrayList(entries);
-        List<Integer> destRowIndices = IntStream.of(
-                ArrayUtils.intRange(0, col.length)
-        ).boxed().collect(Collectors.toList());
-        List<Integer> destColIndices = new ArrayList<>(Arrays.asList(colIndices));
+        List<CNumber> destEntries = new ArrayList<>(src.entries.length);
+        List<Integer> destRowIndices = new ArrayList<>(src.entries.length);
+        List<Integer> destColIndices = new ArrayList<>(src.entries.length);
 
         // Add all entries in old matrix that are NOT in the specified column.
         for(int i=0; i<src.entries.length; i++) {
@@ -443,11 +436,18 @@ public class ComplexSparseMatrixGetSet {
             }
         }
 
+        int[] colIndices = new int[col.length];
+        Arrays.fill(colIndices, colIdx);
+
+        CNumber[] destEntriesArr = ArrayUtils.spliceDouble(destEntries, col, 0);
+        int[] destRowIndicesArr = ArrayUtils.splice(destRowIndices, ArrayUtils.intRange(0, col.length), 0);
+        int[] destColIndicesArr = ArrayUtils.splice(destColIndices, colIndices, 0);
+
         SparseCMatrix dest = new SparseCMatrix(
                 src.shape.copy(),
-                destEntries.toArray(CNumber[]::new),
-                destRowIndices.stream().mapToInt(Integer::intValue).toArray(),
-                destColIndices.stream().mapToInt(Integer::intValue).toArray()
+                destEntriesArr,
+                destRowIndicesArr,
+                destColIndicesArr
         );
 
         dest.sortIndices();

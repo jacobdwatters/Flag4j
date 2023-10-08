@@ -139,8 +139,11 @@ public class ComplexDenseSparseMatrixMultiplication {
             for(int j=0; j<src2.length; j++) {
                 int row = rowIndices[j];
                 int col = colIndices[j];
+                CNumber product = src1[i*cols1 + row].mult(src2[j]);
 
-                dest[i*cols2 + col].addEq(src1[i*cols1 + row].mult(src2[j]));
+                synchronized (dest) {
+                    dest[i*cols2 + col].addEq(product);
+                }
             }
         });
 
@@ -173,7 +176,11 @@ public class ComplexDenseSparseMatrixMultiplication {
             int col = colIndices[i];
 
             for(int j=0; j<cols2; j++) {
-                dest[row*cols2 + j].addEq(src1[i].mult(src2[col*cols2 + j]));
+                CNumber product = src1[i].mult(src2[col*cols2 + j]);
+
+                synchronized (dest) {
+                    dest[row*cols2 + j].addEq(product);
+                }
             }
         });
 
@@ -324,7 +331,11 @@ public class ComplexDenseSparseMatrixMultiplication {
             int row = rowIndices[i];
             int col = colIndices[i];
 
-            dest[row].addEq(src1[i].mult(src2[col]));
+            CNumber product = src1[i].mult(src2[col]);
+
+            synchronized (dest) {
+                dest[row].addEq(product);
+            }
         });
 
         return dest;

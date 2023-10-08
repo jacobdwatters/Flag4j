@@ -3,7 +3,9 @@ package com.flag4j;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.dense.DenseTensorBase;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class TestHelpers {
 
@@ -97,12 +99,13 @@ public class TestHelpers {
      * @param a First tensor to compare.
      * @param b Second tensor to compare.
      */
-    public static <T extends DenseTensorBase<?, ?, ?, ?, ?>> void findDiff(T a, T b) {
+    public static <T extends DenseTensorBase<?, ?, ?, ?, ?>> List<int[]> findDiff(T a, T b) {
         if(!a.shape.equals(b.shape)) {
             System.out.printf("Not the same shape: %s and %s\n", a.shape, b.shape);
         }
 
         int stop = a.totalEntries().intValueExact();
+        List<int[]> diffIndices = new ArrayList<>();
 
         for(int i=0; i<stop; i++) {
             int[] indices = a.shape.getIndices(i);
@@ -112,7 +115,10 @@ public class TestHelpers {
                         Arrays.toString(a.shape.getIndices(i)),
                         a.get(indices),
                         b.get(indices));
+                diffIndices.add(indices);
             }
         }
+
+        return diffIndices;
     }
 }
