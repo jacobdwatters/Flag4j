@@ -105,9 +105,11 @@ public class RealDenseSparseMatrixMultiplication {
         for(int i=0; i<src1.length; i++) {
             row = rowIndices[i];
             col = colIndices[i];
+            int destRow = row*cols2;
+            int src2Row = col*cols2;
 
             for(int j=0; j<cols2; j++) {
-                dest[row*cols2 + j] += src1[i]*src2[col*cols2 + j];
+                dest[destRow + j] += src1[i]*src2[src2Row + j];
             }
         }
 
@@ -127,27 +129,38 @@ public class RealDenseSparseMatrixMultiplication {
      */
     public static double[] concurrentStandard(double[] src1, Shape shape1, double[] src2,
                                     int[] rowIndices, int[] colIndices, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int cols1 = shape1.dims[1];
+        int cols2 = shape2.dims[1];
 
         double[] dest = new double[rows1*cols2];
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
+            double[] localResult = new double[cols2]; // Store the result for the local thread.
+            int destRow = i*cols2;
+            int src1Row = i*cols1;
+
             // Loop over non-zero entries of sparse matrix.
             for(int j=0; j<src2.length; j++) {
                 int row = rowIndices[j];
                 int col = colIndices[j];
-                double product = src1[i*cols1 + row]*src2[j];
 
-                synchronized (dest) {
-                    dest[i*cols2 + col] += product;
+                localResult[col] += src1[src1Row + row]*src2[j];
+            }
+
+            // Update the shared destination array by accumulating the local result.
+            synchronized(dest) {
+                for (int j=0; j<cols2; j++) {
+                    dest[destRow + j] += localResult[j];
                 }
             }
         });
 
         return dest;
     }
+
+
+    // ----------------------------------- Matrix-Vector Multiplication -----------------------------------
 
 
     /**

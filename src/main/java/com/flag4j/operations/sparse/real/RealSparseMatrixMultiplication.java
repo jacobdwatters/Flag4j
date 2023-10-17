@@ -28,6 +28,11 @@ import com.flag4j.Shape;
 import com.flag4j.concurrency.ThreadManager;
 import com.flag4j.util.ErrorMessages;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 ;
 
 /**
@@ -59,24 +64,28 @@ public class RealSparseMatrixMultiplication {
 
         int rows1 = shape1.dims[0];
         int cols2 = shape2.dims[1];
-        int rowIdx;
 
         double[] dest = new double[rows1*cols2];
 
-        // r1, c1, r2, and c2 store row/column indices for non-zero values in src1 and src2.
-        int r1, c1, r2, c2;
+        // Create a map where key is row index from src2.
+        // and value is a list of indices in src2 where this row appears.
+        Map<Integer, List<Integer>> map = new HashMap<>();
+
+        for(int j=0; j<src2.length; j++) {
+            int r2 = rowIndices2[j]; // = k
+            map.computeIfAbsent(r2, x -> new ArrayList<>()).add(j);
+        }
 
         for(int i=0; i<src1.length; i++) {
-            r1 = rowIndices1[i]; // = i
-            rowIdx = r1*cols2;
-            c1 = colIndices1[i]; // = k
+            int r1 = rowIndices1[i]; // = i
+            int c1 = colIndices1[i]; // = k
+            int rowIdx = r1*cols2;
 
-            for(int j=0; j<src2.length; j++) {
-                r2 = rowIndices2[j]; // = k
-                c2 = colIndices2[j]; // = j
-
-                if(c1==r2) { // Then we multiply and add to sum.
-                   dest[rowIdx + c2] += src1[i]*src2[j];
+            // Check if any values in src2 have the same row index as the column index of the value in src1.
+            if(map.containsKey(c1)) {
+                for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
+                    int c2 = colIndices2[j]; // = j
+                    dest[rowIdx + c2] += src1[i]*src2[j];
                 }
             }
         }
@@ -100,7 +109,6 @@ public class RealSparseMatrixMultiplication {
      */
     public static double[] concurrentStandard(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                     double[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
-
         int rows1 = shape1.dims[0];
         int cols2 = shape2.dims[1];
 
@@ -117,6 +125,8 @@ public class RealSparseMatrixMultiplication {
                 if(c1==r2) { // Then we multiply and add to sum.
                     double product = src1[i]*src2[j];
 
+                    // TODO: Update a local copy in this loop then accumulate in shared `dest` array in synchronized
+                    //  block in outer concurrentLoop.
                     synchronized (dest) {
                         dest[r1*cols2 + c2] += product;
                     }
@@ -126,6 +136,9 @@ public class RealSparseMatrixMultiplication {
 
         return dest;
     }
+
+
+    // ----------------------------------- Matrix-Vector Multiplication -----------------------------------
 
 
     /**

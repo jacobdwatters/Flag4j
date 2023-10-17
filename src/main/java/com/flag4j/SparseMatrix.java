@@ -2777,7 +2777,7 @@ public class SparseMatrix
         ParameterChecks.assertMatMultShapes(shape, B.shape);
 
         return new Matrix(numRows, B.numCols,
-                RealSparseMatrixMultiplication.standard(
+                RealSparseMatrixMultiplication.concurrentStandard(
                     entries, rowIndices, colIndices, shape,
                     B.entries, B.rowIndices, B.colIndices, B.shape
                 )
