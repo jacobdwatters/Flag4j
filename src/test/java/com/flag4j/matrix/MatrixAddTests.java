@@ -190,7 +190,7 @@ class MatrixAddTests {
         int[] bRowIndices;
         int[] bColIndices;
         Shape bShape;
-        SparseMatrix B;
+        CooMatrix B;
 
         // --------------- Sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
@@ -200,7 +200,7 @@ class MatrixAddTests {
         bRowIndices = new int[]{0, 1, 1, 3};
         bColIndices = new int[]{1, 0, 2, 0};
         bShape = A.shape.copy();
-        B = new SparseMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        B = new CooMatrix(bShape, bEntries, bRowIndices, bColIndices);
 
         expEntries = new double[]{1, 2-0.99, 3, 4+1, 5, 6+14.2, 7, 8, 9, 10+8.3, 11, 12};
         expShape = A.shape.copy();
@@ -216,9 +216,9 @@ class MatrixAddTests {
         bRowIndices = new int[]{0, 1, 1, 3};
         bColIndices = new int[]{1, 0, 2, 0};
         bShape = new Shape(4, 3);
-        B = new SparseMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        B = new CooMatrix(bShape, bEntries, bRowIndices, bColIndices);
 
-        SparseMatrix finalB = B;
+        CooMatrix finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.add(finalB));
     }
 
@@ -229,7 +229,7 @@ class MatrixAddTests {
         int[] bRowIndices;
         int[] bColIndices;
         Shape bShape;
-        SparseCMatrix B;
+        CooCMatrix B;
 
         // --------------- Sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
@@ -240,7 +240,7 @@ class MatrixAddTests {
         bRowIndices = new int[]{0, 1, 1, 3};
         bColIndices = new int[]{1, 0, 2, 0};
         bShape = A.shape.copy();
-        B = new SparseCMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        B = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
 
         expEntriesC = new CNumber[]{
                 new CNumber(1), new CNumber(2-0.123, 1), new CNumber(3),
@@ -261,9 +261,9 @@ class MatrixAddTests {
         bRowIndices = new int[]{0, 1, 1, 3};
         bColIndices = new int[]{1, 0, 2, 0};
         bShape = new Shape(4, 3);
-        B = new SparseCMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        B = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
 
-        SparseCMatrix finalB = B;
+        CooCMatrix finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.add(finalB));
     }
 }

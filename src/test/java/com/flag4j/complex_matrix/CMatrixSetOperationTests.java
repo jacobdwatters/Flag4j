@@ -1009,7 +1009,7 @@ class CMatrixSetOperationTests {
     @Test
     void setSliceSparseMatrixTestCase() {
         double[] valueEntries;
-        SparseMatrix values;
+        CooMatrix values;
         int row, col;
 
         // ----------------------- Sub-case 1 -----------------------
@@ -1017,7 +1017,7 @@ class CMatrixSetOperationTests {
         sparseShape = new Shape(2, 3);
         rowIndices = new int[]{0, 1, 1};
         colIndices = new int[]{2, 0, 2};
-        values = new SparseMatrix(sparseShape, valueEntries, rowIndices, colIndices);
+        values = new CooMatrix(sparseShape, valueEntries, rowIndices, colIndices);
         row = 0;
         col = 0;
         entriesA = new CNumber[][]{
@@ -1037,7 +1037,7 @@ class CMatrixSetOperationTests {
         sparseShape = new Shape(2, 2);
         rowIndices = new int[]{0, 1, 1};
         colIndices = new int[]{1, 0, 1};
-        values = new SparseMatrix(sparseShape, valueEntries, rowIndices, colIndices);
+        values = new CooMatrix(sparseShape, valueEntries, rowIndices, colIndices);
         row = 0;
         col = 1;
         entriesA = new CNumber[][]{
@@ -1057,7 +1057,7 @@ class CMatrixSetOperationTests {
         sparseShape = new Shape(21, 2);
         rowIndices = new int[]{0, 1, 1};
         colIndices = new int[]{1, 0, 1};
-        values = new SparseMatrix(sparseShape, valueEntries, rowIndices, colIndices);
+        values = new CooMatrix(sparseShape, valueEntries, rowIndices, colIndices);
         row = 0;
         col = 1;
         entriesA = new CNumber[][]{
@@ -1065,7 +1065,7 @@ class CMatrixSetOperationTests {
                 {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
         A = new CMatrix(entriesA);
 
-        SparseMatrix finalValues = values;
+        CooMatrix finalValues = values;
         int finalRow = row;
         int finalCol = col;
         assertThrows(IllegalArgumentException.class, ()->A.setSlice(finalValues, finalRow, finalCol));
@@ -1075,7 +1075,7 @@ class CMatrixSetOperationTests {
         sparseShape = new Shape(2, 2);
         rowIndices = new int[]{0, 1, 1};
         colIndices = new int[]{1, 0, 1};
-        values = new SparseMatrix(sparseShape, valueEntries, rowIndices, colIndices);
+        values = new CooMatrix(sparseShape, valueEntries, rowIndices, colIndices);
         row = 3;
         col = 1;
         entriesA = new CNumber[][]{
@@ -1083,7 +1083,7 @@ class CMatrixSetOperationTests {
                 {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
         A = new CMatrix(entriesA);
 
-        SparseMatrix finalValues1 = values;
+        CooMatrix finalValues1 = values;
         int finalRow1 = row;
         int finalCol1 = col;
         assertThrows(IllegalArgumentException.class, ()->A.setSlice(finalValues1, finalRow1, finalCol1));
@@ -1093,7 +1093,7 @@ class CMatrixSetOperationTests {
     @Test
     void setSliceCopySparseMatrixTestCase() {
         double[] valueEntries;
-        SparseMatrix values;
+        CooMatrix values;
         CMatrix B;
         int row, col;
 
@@ -1102,7 +1102,7 @@ class CMatrixSetOperationTests {
         sparseShape = new Shape(2, 3);
         rowIndices = new int[]{0, 1, 1};
         colIndices = new int[]{2, 0, 2};
-        values = new SparseMatrix(sparseShape, valueEntries, rowIndices, colIndices);
+        values = new CooMatrix(sparseShape, valueEntries, rowIndices, colIndices);
         row = 0;
         col = 0;
         entriesA = new CNumber[][]{
@@ -1122,7 +1122,7 @@ class CMatrixSetOperationTests {
         sparseShape = new Shape(2, 2);
         rowIndices = new int[]{0, 1, 1};
         colIndices = new int[]{1, 0, 1};
-        values = new SparseMatrix(sparseShape, valueEntries, rowIndices, colIndices);
+        values = new CooMatrix(sparseShape, valueEntries, rowIndices, colIndices);
         row = 0;
         col = 1;
         entriesA = new CNumber[][]{
@@ -1142,7 +1142,7 @@ class CMatrixSetOperationTests {
         sparseShape = new Shape(21, 2);
         rowIndices = new int[]{0, 1, 1};
         colIndices = new int[]{1, 0, 1};
-        values = new SparseMatrix(sparseShape, valueEntries, rowIndices, colIndices);
+        values = new CooMatrix(sparseShape, valueEntries, rowIndices, colIndices);
         row = 0;
         col = 1;
         entriesA = new CNumber[][]{
@@ -1150,7 +1150,7 @@ class CMatrixSetOperationTests {
                 {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
         A = new CMatrix(entriesA);
 
-        SparseMatrix finalValues = values;
+        CooMatrix finalValues = values;
         int finalRow = row;
         int finalCol = col;
         assertThrows(IllegalArgumentException.class, ()->A.setSliceCopy(finalValues, finalRow, finalCol));
@@ -1160,7 +1160,7 @@ class CMatrixSetOperationTests {
         sparseShape = new Shape(2, 2);
         rowIndices = new int[]{0, 1, 1};
         colIndices = new int[]{1, 0, 1};
-        values = new SparseMatrix(sparseShape, valueEntries, rowIndices, colIndices);
+        values = new CooMatrix(sparseShape, valueEntries, rowIndices, colIndices);
         row = 3;
         col = 1;
         entriesA = new CNumber[][]{
@@ -1168,7 +1168,7 @@ class CMatrixSetOperationTests {
                 {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
         A = new CMatrix(entriesA);
 
-        SparseMatrix finalValues1 = values;
+        CooMatrix finalValues1 = values;
         int finalRow1 = row;
         int finalCol1 = col;
         assertThrows(IllegalArgumentException.class, ()->A.setSliceCopy(finalValues1, finalRow1, finalCol1));
@@ -1631,7 +1631,7 @@ class CMatrixSetOperationTests {
     @Test
     void setSliceSparseCMatrixTestCase() {
         CNumber[] values;
-        SparseCMatrix mat;
+        CooCMatrix mat;
         int row, col;
 
         // -------------- Sub-case 1 --------------
@@ -1639,7 +1639,7 @@ class CMatrixSetOperationTests {
         sparseShape = new Shape(2, 3);
         rowIndices = new int[]{0, 1};
         colIndices = new int[]{2, 1};
-        mat = new SparseCMatrix(sparseShape, values, rowIndices, colIndices);
+        mat = new CooCMatrix(sparseShape, values, rowIndices, colIndices);
         row = 0;
         col = 0;
         entriesA = new CNumber[][]{
@@ -1659,7 +1659,7 @@ class CMatrixSetOperationTests {
         sparseShape = new Shape(2, 2);
         rowIndices = new int[]{0, 1};
         colIndices = new int[]{1, 0};
-        mat = new SparseCMatrix(sparseShape, values, rowIndices, colIndices);
+        mat = new CooCMatrix(sparseShape, values, rowIndices, colIndices);
         row = 0;
         col = 2;
         entriesA = new CNumber[][]{
@@ -1680,13 +1680,13 @@ class CMatrixSetOperationTests {
         sparseShape = new Shape(15, 60);
         rowIndices = new int[]{0, 1};
         colIndices = new int[]{1, 0};
-        mat = new SparseCMatrix(sparseShape, values, rowIndices, colIndices);
+        mat = new CooCMatrix(sparseShape, values, rowIndices, colIndices);
         entriesA = new CNumber[][]{{new CNumber(-99.234), new CNumber(132), new CNumber(2.2), new CNumber(83.1)}, {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
         A = new CMatrix(entriesA);
         entriesExp = new CNumber[][]{{new CNumber(-99.234), new CNumber(132), new CNumber(-71), new CNumber(34)}, {new CNumber(11.346), new CNumber(124.6), new CNumber(-99), new CNumber(-13)}};
         exp = new CMatrix(entriesExp);
 
-        SparseCMatrix finalValues = mat;
+        CooCMatrix finalValues = mat;
         assertThrows(IllegalArgumentException.class, ()->A.setSlice(finalValues, 1, 2));
     }
 
@@ -1694,7 +1694,7 @@ class CMatrixSetOperationTests {
     @Test
     void setSliceCopySparseCMatrixTestCase() {
         CNumber[] values;
-        SparseCMatrix mat;
+        CooCMatrix mat;
         CMatrix B;
         int row, col;
 
@@ -1703,7 +1703,7 @@ class CMatrixSetOperationTests {
         sparseShape = new Shape(2, 3);
         rowIndices = new int[]{0, 1};
         colIndices = new int[]{2, 1};
-        mat = new SparseCMatrix(sparseShape, values, rowIndices, colIndices);
+        mat = new CooCMatrix(sparseShape, values, rowIndices, colIndices);
         row = 0;
         col = 0;
         entriesA = new CNumber[][]{
@@ -1723,7 +1723,7 @@ class CMatrixSetOperationTests {
         sparseShape = new Shape(2, 2);
         rowIndices = new int[]{0, 1};
         colIndices = new int[]{1, 0};
-        mat = new SparseCMatrix(sparseShape, values, rowIndices, colIndices);
+        mat = new CooCMatrix(sparseShape, values, rowIndices, colIndices);
         row = 0;
         col = 2;
         entriesA = new CNumber[][]{
@@ -1743,13 +1743,13 @@ class CMatrixSetOperationTests {
         sparseShape = new Shape(15, 60);
         rowIndices = new int[]{0, 1};
         colIndices = new int[]{1, 0};
-        mat = new SparseCMatrix(sparseShape, values, rowIndices, colIndices);
+        mat = new CooCMatrix(sparseShape, values, rowIndices, colIndices);
         entriesA = new CNumber[][]{{new CNumber(-99.234), new CNumber(132), new CNumber(2.2), new CNumber(83.1)}, {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
         A = new CMatrix(entriesA);
         entriesExp = new CNumber[][]{{new CNumber(-99.234), new CNumber(132), new CNumber(-71), new CNumber(34)}, {new CNumber(11.346), new CNumber(124.6), new CNumber(-99), new CNumber(-13)}};
         exp = new CMatrix(entriesExp);
 
-        SparseCMatrix finalValues = mat;
+        CooCMatrix finalValues = mat;
         assertThrows(IllegalArgumentException.class, ()->A.setSliceCopy(finalValues, 1, 2));
     }
 }

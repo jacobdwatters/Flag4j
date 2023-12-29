@@ -26,7 +26,7 @@ package com.flag4j.operations.dense_sparse.complex;
 
 import com.flag4j.CMatrix;
 import com.flag4j.CTensor;
-import com.flag4j.SparseCMatrix;
+import com.flag4j.CooCMatrix;
 import com.flag4j.SparseCTensor;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.common.complex.ComplexProperties;
@@ -52,7 +52,7 @@ public class ComplexDenseSparseEquals {
      * @param B Second matrix.
      * @return True if the two matrices are element-wise equivalent.
      */
-    public static boolean matrixEquals(CMatrix A, SparseCMatrix B) {
+    public static boolean matrixEquals(CMatrix A, CooCMatrix B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {

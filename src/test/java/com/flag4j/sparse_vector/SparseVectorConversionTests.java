@@ -29,13 +29,13 @@ class SparseVectorConversionTests {
         double[] expEntries;
         int[][] expIndices;
         Shape expShape;
-        SparseMatrix exp;
+        CooMatrix exp;
 
         // ------------------- Sub-case 1 -------------------
         expEntries = new double[]{1.345, -989.234, 5.15, 617.4};
         expIndices = new int[][]{{4, 56, 9903, 14643}, {0, 0, 0, 0}};
         expShape = new Shape(sparseSize, 1);
-        exp = new SparseMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
+        exp = new CooMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
 
         assertEquals(exp, a.toMatrix());
 
@@ -43,7 +43,7 @@ class SparseVectorConversionTests {
         expEntries = new double[]{1.345, -989.234, 5.15, 617.4};
         expIndices = new int[][]{{4, 56, 9903, 14643}, {0, 0, 0, 0}};
         expShape = new Shape(sparseSize, 1);
-        exp = new SparseMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
+        exp = new CooMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
 
         assertEquals(exp, a.toMatrix(true));
 
@@ -51,7 +51,7 @@ class SparseVectorConversionTests {
         expEntries = new double[]{1.345, -989.234, 5.15, 617.4};
         expIndices = new int[][]{{0, 0, 0, 0}, {4, 56, 9903, 14643}};
         expShape = new Shape(1, sparseSize);
-        exp = new SparseMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
+        exp = new CooMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
 
         assertEquals(exp, a.toMatrix(false));
     }

@@ -44,7 +44,7 @@ class CMatrixDirectSumTests {
     @Test
     void realSparseDirectSumTestCase() {
         double[] bEntries;
-        SparseMatrix B;
+        CooMatrix B;
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{
@@ -56,7 +56,7 @@ class CMatrixDirectSumTests {
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{1, 0};
         sparseShape = new Shape(3, 2);
-        B = new SparseMatrix(sparseShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
         expEntries = new CNumber[][]{{new CNumber("9.234-0.864i"), new CNumber("58.1+3.0i"), new CNumber("-984.0-72.3i"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("1.0"), new CNumber("0.0"), new CNumber("0.0+87.3i"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("2.456")},
@@ -97,7 +97,7 @@ class CMatrixDirectSumTests {
     @Test
     void complexSparseDirectSumTestCase() {
         CNumber[] bEntries;
-        SparseCMatrix B;
+        CooCMatrix B;
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{
@@ -109,7 +109,7 @@ class CMatrixDirectSumTests {
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{1, 0};
         sparseShape = new Shape(3, 2);
-        B = new SparseCMatrix(sparseShape, bEntries, rowIndices, colIndices);
+        B = new CooCMatrix(sparseShape, bEntries, rowIndices, colIndices);
         expEntries = new CNumber[][]{{new CNumber("9.234-0.864i"), new CNumber("58.1+3.0i"), new CNumber("-984.0-72.3i"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("1.0"), new CNumber("0.0"), new CNumber("0.0+87.3i"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber(234.6567, -6344.256)},
@@ -152,7 +152,7 @@ class CMatrixDirectSumTests {
     @Test
     void realInvSparseDirectSumTestCase() {
         double[] bEntries;
-        SparseMatrix B;
+        CooMatrix B;
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{
@@ -164,7 +164,7 @@ class CMatrixDirectSumTests {
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{1, 0};
         sparseShape = new Shape(3, 2);
-        B = new SparseMatrix(sparseShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
         expEntries = new CNumber[][]{
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("2.456")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
@@ -208,7 +208,7 @@ class CMatrixDirectSumTests {
     @Test
     void complexInvSparseDirectSumTestCase() {
         CNumber[] bEntries;
-        SparseCMatrix B;
+        CooCMatrix B;
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{
@@ -220,7 +220,7 @@ class CMatrixDirectSumTests {
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{1, 0};
         sparseShape = new Shape(3, 2);
-        B = new SparseCMatrix(sparseShape, bEntries, rowIndices, colIndices);
+        B = new CooCMatrix(sparseShape, bEntries, rowIndices, colIndices);
         expEntries = new CNumber[][]{
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber(234.6567, -6344.256)},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},

@@ -34,7 +34,7 @@ class SparseCVectorConversionTests {
         CNumber[] expEntries;
         int[][] expIndices;
         Shape expShape;
-        SparseCMatrix exp;
+        CooCMatrix exp;
 
         // ------------------- Sub-case 1 -------------------
         expEntries = new CNumber[]{
@@ -43,7 +43,7 @@ class SparseCVectorConversionTests {
         };
         expIndices = new int[][]{{4, 56, 9903, 14643}, {0, 0, 0, 0}};
         expShape = new Shape(sparseSize, 1);
-        exp = new SparseCMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
+        exp = new CooCMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
 
         assertEquals(exp, a.toMatrix());
 
@@ -54,7 +54,7 @@ class SparseCVectorConversionTests {
         };
         expIndices = new int[][]{{4, 56, 9903, 14643}, {0, 0, 0, 0}};
         expShape = new Shape(sparseSize, 1);
-        exp = new SparseCMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
+        exp = new CooCMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
 
         assertEquals(exp, a.toMatrix(true));
 
@@ -65,7 +65,7 @@ class SparseCVectorConversionTests {
         };
         expIndices = new int[][]{{0, 0, 0, 0}, {4, 56, 9903, 14643}};
         expShape = new Shape(1, sparseSize);
-        exp = new SparseCMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
+        exp = new CooCMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
 
         assertEquals(exp, a.toMatrix(false));
     }

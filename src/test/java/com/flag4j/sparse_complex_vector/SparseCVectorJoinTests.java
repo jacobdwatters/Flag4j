@@ -113,7 +113,7 @@ class SparseCVectorJoinTests {
         int[] rowIndices, colIndices;
         Shape shape;
         Vector b;
-        SparseCMatrix exp;
+        CooCMatrix exp;
 
         // ------------------- Sub-case 1 -------------------
         bEntries = new double[]{24.53, 66.1, -234.5, 0.0, 1.4, 51.6, -99.345, 16.6};
@@ -126,7 +126,7 @@ class SparseCVectorJoinTests {
         shape = new Shape(2, 8);
         rowIndices = new int[]{0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1};
         colIndices = new int[]{0, 1, 6, 0, 1, 2, 3, 4, 5, 6, 7};
-        exp = new SparseCMatrix(shape, expEntries, rowIndices, colIndices);
+        exp = new CooCMatrix(shape, expEntries, rowIndices, colIndices);
 
         assertEquals(exp, a.stack(b));
         assertEquals(exp, a.stack(b, 0));
@@ -149,7 +149,7 @@ class SparseCVectorJoinTests {
         int[] rowIndices, colIndices;
         Shape shape;
         CVector b;
-        SparseCMatrix exp;
+        CooCMatrix exp;
 
         // ------------------- Sub-case 1 -------------------
         bEntries = new CNumber[]{
@@ -167,7 +167,7 @@ class SparseCVectorJoinTests {
         shape = new Shape(2, 8);
         rowIndices = new int[]{0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1};
         colIndices = new int[]{0, 1, 6, 0, 1, 2, 3, 4, 5, 6, 7};
-        exp = new SparseCMatrix(shape, expEntries, rowIndices, colIndices);
+        exp = new CooCMatrix(shape, expEntries, rowIndices, colIndices);
 
         assertEquals(exp, a.stack(b));
         assertEquals(exp, a.stack(b, 0));
@@ -193,7 +193,7 @@ class SparseCVectorJoinTests {
         int[] rowIndices, colIndices;
         Shape shape;
         SparseVector b;
-        SparseCMatrix exp;
+        CooCMatrix exp;
 
         // ------------------- Sub-case 1 -------------------
         bEntries = new double[]{24.53, 66.1, -234.5, 1.3};
@@ -205,7 +205,7 @@ class SparseCVectorJoinTests {
         shape = new Shape(2, 8);
         rowIndices = new int[]{0, 0, 0, 1, 1, 1, 1};
         colIndices = new int[]{0, 1, 6, 0, 5, 6, 7};
-        exp = new SparseCMatrix(shape, expEntries, rowIndices, colIndices);
+        exp = new CooCMatrix(shape, expEntries, rowIndices, colIndices);
 
         assertEquals(exp, a.stack(b));
         assertEquals(exp, a.stack(b, 0));
@@ -230,7 +230,7 @@ class SparseCVectorJoinTests {
         int[] rowIndices, colIndices;
         Shape shape;
         SparseCVector b;
-        SparseCMatrix exp;
+        CooCMatrix exp;
 
         // ------------------- Sub-case 1 -------------------
         bEntries = new CNumber[]{new CNumber(24.5, -0.12), new CNumber(24.5, 3.4),
@@ -245,7 +245,7 @@ class SparseCVectorJoinTests {
         shape = new Shape(2, 8);
         rowIndices = new int[]{0, 0, 0, 1, 1, 1, 1};
         colIndices = new int[]{0, 1, 6, 0, 5, 6, 7};
-        exp = new SparseCMatrix(shape, expEntries, rowIndices, colIndices);
+        exp = new CooCMatrix(shape, expEntries, rowIndices, colIndices);
 
         assertEquals(exp, a.stack(b));
         assertEquals(exp, a.stack(b, 0));
@@ -270,7 +270,7 @@ class SparseCVectorJoinTests {
         CNumber[] expEntries;
         int[] rowIndices, colIndices;
         Shape shape;
-        SparseCMatrix exp;
+        CooCMatrix exp;
 
         // ------------------- Sub-case 1 -------------------
         expEntries = new CNumber[]{
@@ -281,7 +281,7 @@ class SparseCVectorJoinTests {
         shape = new Shape(4, 8);
         rowIndices = new int[]{0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3};
         colIndices = new int[]{0, 1, 6, 0, 1, 6, 0, 1, 6, 0, 1, 6};
-        exp = new SparseCMatrix(shape, expEntries, rowIndices, colIndices);
+        exp = new CooCMatrix(shape, expEntries, rowIndices, colIndices);
 
         assertEquals(exp, a.extend(4, 0));
         assertEquals(exp.T(), a.extend(4, 1));

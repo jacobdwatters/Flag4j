@@ -130,7 +130,7 @@ class CMatrixSubTests {
     @Test
     void realSparseTestCase() {
         double[] bEntries;
-        SparseMatrix B;
+        CooMatrix B;
 
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new CNumber[][]{
@@ -142,7 +142,7 @@ class CMatrixSubTests {
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols);
-        B = new SparseMatrix(sparseShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
         expEntries = new CNumber[][]{
                 {new CNumber(234.56, -0.23).sub(B.entries[0]), new CNumber(4)},
                 {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
@@ -161,9 +161,9 @@ class CMatrixSubTests {
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols+4);
-        B = new SparseMatrix(sparseShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
 
-        SparseMatrix finalB = B;
+        CooMatrix finalB = B;
         assertThrows(LinearAlgebraException.class,()->A.sub(finalB));
 
         // ---------------------- Sub-case 2 ----------------------
@@ -176,9 +176,9 @@ class CMatrixSubTests {
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows+1, A.numCols);
-        B = new SparseMatrix(sparseShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
 
-        SparseMatrix finalB1 = B;
+        CooMatrix finalB1 = B;
         assertThrows(LinearAlgebraException.class,()->A.sub(finalB1));
     }
 
@@ -186,7 +186,7 @@ class CMatrixSubTests {
     @Test
     void complexSparseTestCase() {
         CNumber[] bEntries;
-        SparseCMatrix B;
+        CooCMatrix B;
 
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new CNumber[][]{
@@ -198,7 +198,7 @@ class CMatrixSubTests {
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols);
-        B = new SparseCMatrix(sparseShape, bEntries, rowIndices, colIndices);
+        B = new CooCMatrix(sparseShape, bEntries, rowIndices, colIndices);
 
         expEntries = new CNumber[][]{
                 {new CNumber(234.56, -0.23).sub(B.entries[0]), new CNumber(4)},
@@ -218,9 +218,9 @@ class CMatrixSubTests {
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows+345, A.numCols+234);
-        B = new SparseCMatrix(sparseShape, bEntries, rowIndices, colIndices);
+        B = new CooCMatrix(sparseShape, bEntries, rowIndices, colIndices);
 
-        SparseCMatrix finalB = B;
+        CooCMatrix finalB = B;
         assertThrows(LinearAlgebraException.class,()->A.sub(finalB));
 
         // ---------------------- Sub-case 2 ----------------------
@@ -233,9 +233,9 @@ class CMatrixSubTests {
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols+1000);
-        B = new SparseCMatrix(sparseShape, bEntries, rowIndices, colIndices);
+        B = new CooCMatrix(sparseShape, bEntries, rowIndices, colIndices);
 
-        SparseCMatrix finalB1 = B;
+        CooCMatrix finalB1 = B;
         assertThrows(LinearAlgebraException.class,()->A.sub(finalB1));
     }
 

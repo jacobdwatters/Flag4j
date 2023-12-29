@@ -36,13 +36,13 @@ import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseVectorOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
-import com.flag4j.operations.sparse.real.RealSparseEquals;
-import com.flag4j.operations.sparse.real.RealSparseVectorOperations;
-import com.flag4j.operations.sparse.real_complex.RealComplexSparseEquals;
-import com.flag4j.operations.sparse.real_complex.RealComplexSparseVectorOperations;
+import com.flag4j.operations.sparse.coo.real.RealSparseEquals;
+import com.flag4j.operations.sparse.coo.real.RealSparseVectorOperations;
+import com.flag4j.operations.sparse.coo.real_complex.RealComplexSparseEquals;
+import com.flag4j.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ParameterChecks;
-import com.flag4j.util.SparseDataWrapper;
+import com.flag4j.operations.sparse.coo.SparseDataWrapper;
 import com.flag4j.util.StringUtils;
 
 import java.util.ArrayList;
@@ -50,11 +50,11 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Real sparse vector of arbitrary size.
+ * Real sparse vector stored in coordinate (COO) format.
  */
 public class SparseVector
         extends RealSparseTensorBase<SparseVector, Vector, SparseCVector, CVector>
-        implements VectorMixin<SparseVector, Vector, SparseVector, SparseCVector, Double, SparseMatrix, Matrix, SparseCMatrix> {
+        implements VectorMixin<SparseVector, Vector, SparseVector, SparseCVector, Double, CooMatrix, Matrix, CooCMatrix> {
 
     /**
      * The size of this vector. That is, the number of entries in this vector.
@@ -337,7 +337,7 @@ public class SparseVector
      *                                  the vector {@code b}.
      */
     @Override
-    public SparseMatrix stack(Vector b) {
+    public CooMatrix stack(Vector b) {
         ParameterChecks.assertEqualShape(this.shape, b.shape);
 
         double[] destEntries = new double[nonZeroEntries + b.length()];
@@ -354,7 +354,7 @@ public class SparseVector
         System.arraycopy(rowIndices, 0, indices[0], entries.length,  b.size);
         System.arraycopy(ArrayUtils.intRange(0, b.size), 0, indices[1], entries.length,  b.size);
 
-        return new SparseMatrix(2, b.size, destEntries, indices[0], indices[1]);
+        return new CooMatrix(2, b.size, destEntries, indices[0], indices[1]);
     }
 
 
@@ -368,7 +368,7 @@ public class SparseVector
      *                                  the vector {@code b}.
      */
     @Override
-    public SparseMatrix stack(SparseVector b) {
+    public CooMatrix stack(SparseVector b) {
         ParameterChecks.assertEqualShape(this.shape, b.shape);
 
         double[] entries = new double[this.entries.length + b.entries.length];
@@ -387,7 +387,7 @@ public class SparseVector
         // Copy indices from b vector to the column indices.
         System.arraycopy(b.indices, 0, indices[1], this.entries.length, b.entries.length);
 
-        return new SparseMatrix(new Shape(2, this.size), entries, indices[0], indices[1]);
+        return new CooMatrix(new Shape(2, this.size), entries, indices[0], indices[1]);
     }
 
 
@@ -401,7 +401,7 @@ public class SparseVector
      *                                  the vector {@code b}.
      */
     @Override
-    public SparseCMatrix stack(CVector b) {
+    public CooCMatrix stack(CVector b) {
         ParameterChecks.assertEqualShape(this.shape, b.shape);
 
         CNumber[] destEntries = new CNumber[nonZeroEntries + b.length()];
@@ -418,7 +418,7 @@ public class SparseVector
         System.arraycopy(rowIndices, 0, indices[0], entries.length,  b.size);
         System.arraycopy(ArrayUtils.intRange(0, b.size), 0, indices[1], entries.length,  b.size);
 
-        return new SparseCMatrix(2, b.size, destEntries, indices[0], indices[1]);
+        return new CooCMatrix(2, b.size, destEntries, indices[0], indices[1]);
     }
 
 
@@ -432,7 +432,7 @@ public class SparseVector
      *                                  the vector {@code b}.
      */
     @Override
-    public SparseCMatrix stack(SparseCVector b) {
+    public CooCMatrix stack(SparseCVector b) {
         ParameterChecks.assertEqualShape(this.shape, b.shape);
 
         CNumber[] entries = new CNumber[this.entries.length + b.entries.length];
@@ -451,7 +451,7 @@ public class SparseVector
         // Copy indices from b vector to the column indices.
         System.arraycopy(b.indices, 0, indices[1], this.entries.length, b.entries.length);
 
-        return new SparseCMatrix(new Shape(2, this.size), entries, indices[0], indices[1]);
+        return new CooCMatrix(new Shape(2, this.size), entries, indices[0], indices[1]);
     }
 
 
@@ -479,7 +479,7 @@ public class SparseVector
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public SparseMatrix stack(Vector b, int axis) {
+    public CooMatrix stack(Vector b, int axis) {
         ParameterChecks.assertAxis2D(axis);
         return axis==0 ? stack(b) : stack(b).T();
     }
@@ -509,7 +509,7 @@ public class SparseVector
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public SparseMatrix stack(SparseVector b, int axis) {
+    public CooMatrix stack(SparseVector b, int axis) {
         ParameterChecks.assertAxis2D(axis);
         return axis==0 ? stack(b) : stack(b).T();
     }
@@ -539,7 +539,7 @@ public class SparseVector
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public SparseCMatrix stack(CVector b, int axis) {
+    public CooCMatrix stack(CVector b, int axis) {
         ParameterChecks.assertAxis2D(axis);
         return axis==0 ? stack(b) : stack(b).T();
     }
@@ -569,7 +569,7 @@ public class SparseVector
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public SparseCMatrix stack(SparseCVector b, int axis) {
+    public CooCMatrix stack(SparseCVector b, int axis) {
         ParameterChecks.assertAxis2D(axis);
         return axis==0 ? stack(b) : stack(b).T();
     }
@@ -1093,11 +1093,11 @@ public class SparseVector
      * @see #toMatrix(boolean)
      */
     @Override
-    public SparseMatrix toMatrix() {
+    public CooMatrix toMatrix() {
         int[] rowIndices = indices.clone();
         int[] colIndices = new int[entries.length];
 
-        return new SparseMatrix(this.size, 1, entries.clone(), rowIndices, colIndices);
+        return new CooMatrix(this.size, 1, entries.clone(), rowIndices, colIndices);
     }
 
 
@@ -1111,19 +1111,19 @@ public class SparseVector
      * @see #toMatrix()
      */
     @Override
-    public SparseMatrix toMatrix(boolean columVector) {
+    public CooMatrix toMatrix(boolean columVector) {
         if(columVector) {
             // Convert to column vector
             int[] rowIndices = indices.clone();
             int[] colIndices = new int[entries.length];
 
-            return new SparseMatrix(this.size, 1, entries.clone(), rowIndices, colIndices);
+            return new CooMatrix(this.size, 1, entries.clone(), rowIndices, colIndices);
         } else {
             // Convert to row vector.
             int[] rowIndices = new int[entries.length];
             int[] colIndices = indices.clone();
 
-            return new SparseMatrix(1, this.size, entries.clone(), rowIndices, colIndices);
+            return new CooMatrix(1, this.size, entries.clone(), rowIndices, colIndices);
         }
     }
 
@@ -1186,7 +1186,7 @@ public class SparseVector
      * @return A matrix which is the result of extending a vector {@code n} times.
      */
     @Override
-    public SparseMatrix extend(int n, int axis) {
+    public CooMatrix extend(int n, int axis) {
         ParameterChecks.assertGreaterEq(1, n, "n");
         ParameterChecks.assertAxis2D(axis);
 
@@ -1219,7 +1219,7 @@ public class SparseVector
             }
         }
 
-        return new SparseMatrix(matShape, matEntries, matIndices[0], matIndices[1]);
+        return new CooMatrix(matShape, matEntries, matIndices[0], matIndices[1]);
     }
 
 

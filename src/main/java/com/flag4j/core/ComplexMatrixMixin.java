@@ -25,7 +25,7 @@
 package com.flag4j.core;
 
 import com.flag4j.CVector;
-import com.flag4j.SparseCMatrix;
+import com.flag4j.CooCMatrix;
 import com.flag4j.SparseCVector;
 import com.flag4j.complex_numbers.CNumber;
 
@@ -175,5 +175,5 @@ public interface ComplexMatrixMixin<T> {
      * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
      * fit completely within this matrix.
      */
-    T setSlice(SparseCMatrix values, int rowStart, int colStart);
+    T setSlice(CooCMatrix values, int rowStart, int colStart);
 }

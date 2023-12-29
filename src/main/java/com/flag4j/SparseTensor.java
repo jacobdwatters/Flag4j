@@ -29,13 +29,13 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.sparse.RealSparseTensorBase;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
-import com.flag4j.operations.sparse.real.RealSparseEquals;
-import com.flag4j.operations.sparse.real_complex.RealComplexSparseEquals;
+import com.flag4j.operations.sparse.coo.real.RealSparseEquals;
+import com.flag4j.operations.sparse.coo.real_complex.RealComplexSparseEquals;
 
 import java.util.Arrays;
 
 /**
- * Real sparse tensor. Can be any rank.
+ * Real sparse tensor. Can be any rank. Stored in coordinate (COO) format.
  */
 public class SparseTensor
         extends RealSparseTensorBase<SparseTensor, Tensor, SparseCTensor, CTensor>

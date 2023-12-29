@@ -38,7 +38,7 @@ import com.flag4j.operations.dense.real.RealDenseProperties;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
-import com.flag4j.util.SparseDataWrapper;
+import com.flag4j.operations.sparse.coo.SparseDataWrapper;
 
 import java.math.BigInteger;
 

@@ -28,12 +28,12 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.sparse.ComplexSparseTensorBase;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
-import com.flag4j.operations.sparse.complex.ComplexSparseEquals;
-import com.flag4j.operations.sparse.real_complex.RealComplexSparseEquals;
+import com.flag4j.operations.sparse.coo.complex.ComplexSparseEquals;
+import com.flag4j.operations.sparse.coo.real_complex.RealComplexSparseEquals;
 
 
 /**
- * Complex sparse tensor.
+ * Complex sparse tensor. Stored in coordinate (COO) format.
  */
 public class SparseCTensor
         extends ComplexSparseTensorBase<SparseCTensor, CTensor, SparseTensor>

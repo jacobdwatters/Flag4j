@@ -24,8 +24,8 @@
 
 package com.flag4j.core;
 
+import com.flag4j.CooMatrix;
 import com.flag4j.Matrix;
-import com.flag4j.SparseMatrix;
 
 /**
  * This interface specifies manipulations which all matrices should implement.
@@ -196,7 +196,7 @@ public interface MatrixManipulationsMixin<
      * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
      * fit completely within this matrix.
      */
-    T setSlice(SparseMatrix values, int rowStart, int colStart);
+    T setSlice(CooMatrix values, int rowStart, int colStart);
 
 
     /**

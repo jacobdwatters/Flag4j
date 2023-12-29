@@ -61,7 +61,7 @@ public interface MatrixOperationsMixin<
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
-    T add(SparseMatrix B);
+    T add(CooMatrix B);
 
 
     /**
@@ -79,7 +79,7 @@ public interface MatrixOperationsMixin<
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
-    W add(SparseCMatrix B);
+    W add(CooCMatrix B);
 
 
     /**
@@ -97,7 +97,7 @@ public interface MatrixOperationsMixin<
      * @return The result of subtracting the tensor B from this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
-    T sub(SparseMatrix B);
+    T sub(CooMatrix B);
 
 
     /**
@@ -115,7 +115,7 @@ public interface MatrixOperationsMixin<
      * @return The result of subtracting the tensor B from this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
-    W sub(SparseCMatrix B);
+    W sub(CooCMatrix B);
 
 
     /**
@@ -154,7 +154,7 @@ public interface MatrixOperationsMixin<
      * @return The result of matrix multiplying this matrix with matrix B.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
-    U mult(SparseMatrix B);
+    U mult(CooMatrix B);
 
 
     /**
@@ -172,7 +172,7 @@ public interface MatrixOperationsMixin<
      * @return The result of matrix multiplying this matrix with matrix B.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
-    CMatrix mult(SparseCMatrix B);
+    CMatrix mult(CooCMatrix B);
 
 
     /**
@@ -232,7 +232,7 @@ public interface MatrixOperationsMixin<
      * @param B The second matrix in the multiplication and the matrix to transpose/
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
-    U multTranspose(SparseMatrix B);
+    U multTranspose(CooMatrix B);
 
 
     /**
@@ -256,7 +256,7 @@ public interface MatrixOperationsMixin<
      * @param B The second matrix in the multiplication and the matrix to transpose/
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
-    CMatrix multTranspose(SparseCMatrix B);
+    CMatrix multTranspose(CooCMatrix B);
 
 
     /**
@@ -284,7 +284,7 @@ public interface MatrixOperationsMixin<
      * @return The result of element-wise multiplication of this matrix with the matrix B.
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
-    V elemMult(SparseMatrix B);
+    V elemMult(CooMatrix B);
 
 
     /**
@@ -302,7 +302,7 @@ public interface MatrixOperationsMixin<
      * @return The result of element-wise multiplication of this matrix with the matrix B.
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
-    SparseCMatrix elemMult(SparseCMatrix B);
+    CooCMatrix elemMult(CooCMatrix B);
 
 
     /**
@@ -348,7 +348,7 @@ public interface MatrixOperationsMixin<
      * @return The Frobenius inner product of this matrix and matrix B.
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
-    X fib(SparseMatrix B);
+    X fib(CooMatrix B);
 
 
     /**
@@ -366,7 +366,7 @@ public interface MatrixOperationsMixin<
      * @return The Frobenius inner product of this matrix and matrix B.
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
-    CNumber fib(SparseCMatrix B);
+    CNumber fib(CooCMatrix B);
 
 
     /**
@@ -382,7 +382,7 @@ public interface MatrixOperationsMixin<
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    T directSum(SparseMatrix B);
+    T directSum(CooMatrix B);
 
 
     /**
@@ -398,7 +398,7 @@ public interface MatrixOperationsMixin<
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    W directSum(SparseCMatrix B);
+    W directSum(CooCMatrix B);
 
 
     /**
@@ -422,7 +422,7 @@ public interface MatrixOperationsMixin<
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    T invDirectSum(SparseMatrix B);
+    T invDirectSum(CooMatrix B);
 
 
     /**
@@ -438,7 +438,7 @@ public interface MatrixOperationsMixin<
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    W invDirectSum(SparseCMatrix B);
+    W invDirectSum(CooCMatrix B);
 
 
     /**
@@ -548,7 +548,7 @@ public interface MatrixOperationsMixin<
      * @return The result of stacking this matrix on top of the matrix B.
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
-    T stack(SparseMatrix B);
+    T stack(CooMatrix B);
 
 
     /**
@@ -570,7 +570,7 @@ public interface MatrixOperationsMixin<
      * @return The result of stacking this matrix on top of the matrix B.
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
-    W stack(SparseCMatrix B);
+    W stack(CooCMatrix B);
 
 
     /**
@@ -600,7 +600,7 @@ public interface MatrixOperationsMixin<
      * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    T stack(SparseMatrix B, int axis);
+    T stack(CooMatrix B, int axis);
 
 
     /**
@@ -630,7 +630,7 @@ public interface MatrixOperationsMixin<
      * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    W stack(SparseCMatrix B, int axis);
+    W stack(CooCMatrix B, int axis);
 
 
     /**
@@ -652,7 +652,7 @@ public interface MatrixOperationsMixin<
      * @return The result of stacking B to the right of this matrix.
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
-    T augment(SparseMatrix B);
+    T augment(CooMatrix B);
 
 
     /**
@@ -674,7 +674,7 @@ public interface MatrixOperationsMixin<
      * @return The result of stacking B to the right of this matrix.
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
-    W augment(SparseCMatrix B);
+    W augment(CooCMatrix B);
 
 
     /**

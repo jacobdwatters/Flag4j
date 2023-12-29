@@ -131,7 +131,7 @@ public class RealComplexDenseSparseEquals {
      * @param B Second matrix.
      * @return True if the two matrices are element-wise equivalent.
      */
-    public static boolean matrixEquals(Matrix A, SparseCMatrix B) {
+    public static boolean matrixEquals(Matrix A, CooCMatrix B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
@@ -173,7 +173,7 @@ public class RealComplexDenseSparseEquals {
      * @param B Second matrix.
      * @return True if the two matrices are element-wise equivalent.
      */
-    public static boolean matrixEquals(CMatrix A, SparseMatrix B) {
+    public static boolean matrixEquals(CMatrix A, CooMatrix B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {

@@ -17,8 +17,8 @@ class CMatrixEqualsTests {
     int[] rowIndices, colIndices;
     Shape sparseShape;
 
-    SparseMatrix BRealSparse;
-    SparseCMatrix BComplexSparse;
+    CooMatrix BRealSparse;
+    CooCMatrix BComplexSparse;
     Matrix BReal;
     CMatrix A, B;
 
@@ -140,7 +140,7 @@ class CMatrixEqualsTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols);
-        BRealSparse = new SparseMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
+        BRealSparse = new CooMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
 
         assertTrue(A.equals(BRealSparse));
 
@@ -154,7 +154,7 @@ class CMatrixEqualsTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols);
-        BRealSparse = new SparseMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
+        BRealSparse = new CooMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
 
         assertFalse(A.equals(BRealSparse));
 
@@ -168,7 +168,7 @@ class CMatrixEqualsTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows+1, A.numCols);
-        BRealSparse = new SparseMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
+        BRealSparse = new CooMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
 
         assertFalse(A.equals(BRealSparse));
 
@@ -182,7 +182,7 @@ class CMatrixEqualsTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols);
-        BRealSparse = new SparseMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
+        BRealSparse = new CooMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
 
         assertFalse(A.equals(BRealSparse));
     }
@@ -200,7 +200,7 @@ class CMatrixEqualsTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols);
-        BComplexSparse = new SparseCMatrix(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
+        BComplexSparse = new CooCMatrix(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
 
         assertTrue(A.equals(BComplexSparse));
 
@@ -214,7 +214,7 @@ class CMatrixEqualsTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols);
-        BComplexSparse = new SparseCMatrix(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
+        BComplexSparse = new CooCMatrix(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
 
         assertFalse(A.equals(BComplexSparse));
 
@@ -228,7 +228,7 @@ class CMatrixEqualsTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols+3);
-        BComplexSparse = new SparseCMatrix(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
+        BComplexSparse = new CooCMatrix(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
 
         assertFalse(A.equals(BComplexSparse));
 
@@ -242,7 +242,7 @@ class CMatrixEqualsTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols);
-        BComplexSparse = new SparseCMatrix(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
+        BComplexSparse = new CooCMatrix(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
 
         assertFalse(A.equals(BComplexSparse));
     }

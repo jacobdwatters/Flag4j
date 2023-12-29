@@ -24,7 +24,7 @@
 
 package com.flag4j.linalg.decompositions;
 
-import com.flag4j.SparseMatrix;
+import com.flag4j.CooMatrix;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.util.ArrayUtils;
 
@@ -60,11 +60,11 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
     /**
      * Permutation matrix to store row swaps if partial pivoting is used.
      */
-    protected SparseMatrix P;
+    protected CooMatrix P;
     /**
      * Permutation matrix to store column swaps if full pivoting is used.
      */
-    protected SparseMatrix Q;
+    protected CooMatrix Q;
 
     protected int numRowSwaps; // Tracks the number of row swaps made during full/partial pivoting.
     protected int numColSwaps; // Tracks the number of column swaps made during full pivoting.
@@ -178,14 +178,14 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
      * Gets the row permutation matrix of the decomposition.
      * @return The row permutation matrix of the decomposition. If no pivoting was used, null will be returned.
      */
-    public SparseMatrix getP() {
+    public CooMatrix getP() {
         if(rowSwaps != null) {
             double[] entries = new double[rowSwaps.length];
             Arrays.fill(entries, 1);
             int[] rowIndices = ArrayUtils.intRange(0, entries.length);
             int[] colIndices = rowSwaps.clone();
 
-            P = new SparseMatrix(LU.numRows(), entries, rowIndices, colIndices);
+            P = new CooMatrix(LU.numRows(), entries, rowIndices, colIndices);
             P.sortIndices();
         } else {
             P = null;
@@ -199,14 +199,14 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
      * Gets the column permutation matrix of the decomposition.
      * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
      */
-    public SparseMatrix getQ() {
+    public CooMatrix getQ() {
         if(colSwaps != null) {
             double[] entries = new double[colSwaps.length];
             Arrays.fill(entries, 1);
             int[] rowIndices = colSwaps.clone();
             int[] colIndices = ArrayUtils.intRange(0, entries.length);
 
-            Q = new SparseMatrix(LU.numCols(), entries, rowIndices, colIndices);
+            Q = new CooMatrix(LU.numCols(), entries, rowIndices, colIndices);
             Q.sortIndices();
         } else {
             Q = null;

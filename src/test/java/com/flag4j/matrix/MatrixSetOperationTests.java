@@ -1,8 +1,8 @@
 package com.flag4j.matrix;
 
+import com.flag4j.CooMatrix;
 import com.flag4j.Matrix;
 import com.flag4j.Shape;
-import com.flag4j.SparseMatrix;
 import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -629,7 +629,7 @@ class MatrixSetOperationTests {
     @Test
     void setSliceSparseMatrixTestCase() {
         double[] valueEntries;
-        SparseMatrix values;
+        CooMatrix values;
         int row, col;
         Shape sparseShape;
         int[][] indices;
@@ -638,7 +638,7 @@ class MatrixSetOperationTests {
         valueEntries = new double[]{1.345, -0.002345};
         indices = new int[][]{{0, 1}, {0, 0}};
         sparseShape = new Shape(2, 2);
-        values = new SparseMatrix(sparseShape, valueEntries, indices[0], indices[1]);
+        values = new CooMatrix(sparseShape, valueEntries, indices[0], indices[1]);
         row = 0;
         col = 0;
         entriesA = new double[][]{{-99.234, 132, 2.2, 83.1}, {11.346, 124.6, -7.13, 0.00013}};
@@ -656,7 +656,7 @@ class MatrixSetOperationTests {
     @Test
     void setSliceCopySparseMatrixTestCase() {
         double[] valueEntries;
-        SparseMatrix values;
+        CooMatrix values;
         int row, col;
         Shape sparseShape;
         int[][] indices;
@@ -665,7 +665,7 @@ class MatrixSetOperationTests {
         valueEntries = new double[]{1.345, -0.002345};
         indices = new int[][]{{0, 1}, {0, 0}};
         sparseShape = new Shape(2, 2);
-        values = new SparseMatrix(sparseShape, valueEntries, indices[0], indices[1]);
+        values = new CooMatrix(sparseShape, valueEntries, indices[0], indices[1]);
         row = 0;
         col = 0;
         entriesA = new double[][]{{-99.234, 132, 2.2, 83.1}, {11.346, 124.6, -7.13, 0.00013}};

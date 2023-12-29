@@ -64,7 +64,7 @@ import java.util.List;
  */
 public class CMatrix
         extends ComplexDenseTensorBase<CMatrix, Matrix>
-        implements MatrixMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, CNumber, CVector, CVector>,
+        implements MatrixMixin<CMatrix, CMatrix, CooCMatrix, CMatrix, CNumber, CVector, CVector>,
         ComplexMatrixMixin<CMatrix>,
         DenseMatrixMixin<CMatrix, CNumber> {
 
@@ -449,7 +449,7 @@ public class CMatrix
     /**
      * Checks if an object is equal to this matrix.
      * @param B Object to compare this matrix to.
-     * @return True if B is an instance of a matrix ({@link Matrix}, {@link CMatrix}, {@link SparseMatrix}, or {@link SparseCMatrix})
+     * @return True if B is an instance of a matrix ({@link Matrix}, {@link CMatrix}, {@link CooMatrix}, or {@link CooCMatrix})
      * and is numerically element-wise equal to this matrix.
      */
     @Override
@@ -462,11 +462,11 @@ public class CMatrix
         } else if(B instanceof Matrix) {
             Matrix mat = (Matrix) B;
             equal = RealComplexDenseEquals.matrixEquals(mat, this);
-        } else if(B instanceof SparseMatrix) {
-            SparseMatrix mat = (SparseMatrix) B;
+        } else if(B instanceof CooMatrix) {
+            CooMatrix mat = (CooMatrix) B;
             equal = RealComplexDenseSparseEquals.matrixEquals(this, mat);
-        } else if(B instanceof SparseCMatrix) {
-            SparseCMatrix mat = (SparseCMatrix) B;
+        } else if(B instanceof CooCMatrix) {
+            CooCMatrix mat = (CooCMatrix) B;
             equal = ComplexDenseSparseEquals.matrixEquals(this, mat);
         } else {
             equal = false;
@@ -898,7 +898,7 @@ public class CMatrix
      *                                   fit completely within this matrix.
      */
     @Override
-    public CMatrix setSlice(SparseCMatrix values, int rowStart, int colStart) {
+    public CMatrix setSlice(CooCMatrix values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
         ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
@@ -937,7 +937,7 @@ public class CMatrix
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
-    public CMatrix setSliceCopy(SparseCMatrix values, int rowStart, int colStart) {
+    public CMatrix setSliceCopy(CooCMatrix values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
         ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
@@ -1008,7 +1008,7 @@ public class CMatrix
      *                                   fit completely within this matrix.
      */
     @Override
-    public CMatrix setSlice(SparseMatrix values, int rowStart, int colStart) {
+    public CMatrix setSlice(CooMatrix values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
         ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
@@ -1474,7 +1474,7 @@ public class CMatrix
      *                                   fit completely within this matrix.
      */
     @Override
-    public CMatrix setSliceCopy(SparseMatrix values, int rowStart, int colStart) {
+    public CMatrix setSliceCopy(CooMatrix values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
         ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
@@ -1677,7 +1677,7 @@ public class CMatrix
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public CMatrix add(SparseMatrix B) {
+    public CMatrix add(CooMatrix B) {
         return RealComplexDenseSparseMatrixOperations.add(this, B);
     }
 
@@ -1690,7 +1690,7 @@ public class CMatrix
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public CMatrix add(SparseCMatrix B) {
+    public CMatrix add(CooCMatrix B) {
         return ComplexDenseSparseMatrixOperations.add(this, B);
     }
 
@@ -1718,7 +1718,7 @@ public class CMatrix
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public CMatrix sub(SparseMatrix B) {
+    public CMatrix sub(CooMatrix B) {
         return RealComplexDenseSparseMatrixOperations.sub(this, B);
     }
 
@@ -1829,7 +1829,7 @@ public class CMatrix
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public CMatrix sub(SparseCMatrix B) {
+    public CMatrix sub(CooCMatrix B) {
         return ComplexDenseSparseMatrixOperations.sub(this, B);
     }
 
@@ -1862,7 +1862,7 @@ public class CMatrix
      * @param B The sparse matrix to add to this matrix.
      */
     @Override
-    public void addEq(SparseMatrix B) {
+    public void addEq(CooMatrix B) {
         RealComplexDenseSparseMatrixOperations.addEq(this, B);
     }
 
@@ -1873,7 +1873,7 @@ public class CMatrix
      * @param B The sparse matrix to subtract from this matrix.
      */
     @Override
-    public void subEq(SparseMatrix B) {
+    public void subEq(CooMatrix B) {
         RealComplexDenseSparseMatrixOperations.subEq(this, B);
     }
 
@@ -1902,7 +1902,7 @@ public class CMatrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
     @Override
-    public CMatrix mult(SparseMatrix B) {
+    public CMatrix mult(CooMatrix B) {
         ParameterChecks.assertMatMultShapes(this.shape, B.shape);
         CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standard(
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
@@ -1937,7 +1937,7 @@ public class CMatrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
     @Override
-    public CMatrix mult(SparseCMatrix B) {
+    public CMatrix mult(CooCMatrix B) {
         ParameterChecks.assertMatMultShapes(this.shape, B.shape);
         CNumber[] entries = ComplexDenseSparseMatrixMultiplication.standard(
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
@@ -2030,7 +2030,7 @@ public class CMatrix
 
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
-     * {@code this.}{@link #mult(SparseMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * {@code this.}{@link #mult(CooMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
      * For large matrices, this method may
      * be significantly faster than directly computing the transpose followed by the multiplication as
      * {@code this.mult(B.T())}.
@@ -2039,7 +2039,7 @@ public class CMatrix
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
     @Override
-    public CMatrix multTranspose(SparseMatrix B) {
+    public CMatrix multTranspose(CooMatrix B) {
         // Ensure this matrix can be multiplied to the transpose of B.
         ParameterChecks.assertEquals(this.numCols, B.numCols);
 
@@ -2076,7 +2076,7 @@ public class CMatrix
 
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
-     * {@code this.}{@link #mult(SparseCMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * {@code this.}{@link #mult(CooCMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
      * For large matrices, this method may
      * be significantly faster than directly computing the transpose followed by the multiplication as
      * {@code this.mult(B.T())}.
@@ -2085,7 +2085,7 @@ public class CMatrix
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
     @Override
-    public CMatrix multTranspose(SparseCMatrix B) {
+    public CMatrix multTranspose(CooCMatrix B) {
         // Ensure this matrix can be multiplied to the transpose of B.
         ParameterChecks.assertEquals(this.numCols, B.numCols);
 
@@ -2150,7 +2150,7 @@ public class CMatrix
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public SparseCMatrix elemMult(SparseMatrix B) {
+    public CooCMatrix elemMult(CooMatrix B) {
         return RealComplexDenseSparseMatrixOperations.elemMult(this, B);
     }
 
@@ -2163,7 +2163,7 @@ public class CMatrix
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public SparseCMatrix elemMult(SparseCMatrix B) {
+    public CooCMatrix elemMult(CooCMatrix B) {
         return ComplexDenseSparseMatrixOperations.elemMult(this, B);
     }
 
@@ -2219,7 +2219,7 @@ public class CMatrix
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public CNumber fib(SparseMatrix B) {
+    public CNumber fib(CooMatrix B) {
         ParameterChecks.assertEqualShape(this.shape, B.shape);
         return this.T().mult(B).trace();
     }
@@ -2247,7 +2247,7 @@ public class CMatrix
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public CNumber fib(SparseCMatrix B) {
+    public CNumber fib(CooCMatrix B) {
         ParameterChecks.assertEqualShape(this.shape, B.shape);
         return this.T().mult(B).trace();
     }
@@ -2286,7 +2286,7 @@ public class CMatrix
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public CMatrix directSum(SparseMatrix B) {
+    public CMatrix directSum(CooMatrix B) {
         CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
 
         // Copy over first matrix.
@@ -2339,7 +2339,7 @@ public class CMatrix
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public CMatrix directSum(SparseCMatrix B) {
+    public CMatrix directSum(CooCMatrix B) {
         CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
 
         // Copy over first matrix.
@@ -2394,7 +2394,7 @@ public class CMatrix
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public CMatrix invDirectSum(SparseMatrix B) {
+    public CMatrix invDirectSum(CooMatrix B) {
         CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
 
         // Copy over first matrix.
@@ -2451,7 +2451,7 @@ public class CMatrix
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public CMatrix invDirectSum(SparseCMatrix B) {
+    public CMatrix invDirectSum(CooCMatrix B) {
         CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
 
         // Copy over first matrix.
@@ -2732,7 +2732,7 @@ public class CMatrix
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
     @Override
-    public CMatrix stack(SparseMatrix B) {
+    public CMatrix stack(CooMatrix B) {
         ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);
         CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));
 
@@ -2790,7 +2790,7 @@ public class CMatrix
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
     @Override
-    public CMatrix stack(SparseCMatrix B) {
+    public CMatrix stack(CooCMatrix B) {
         ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);
         CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));
 
@@ -2854,7 +2854,7 @@ public class CMatrix
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public CMatrix stack(SparseMatrix B, int axis) {
+    public CMatrix stack(CooMatrix B, int axis) {
         CMatrix stacked;
 
         if(axis==0) {
@@ -2910,7 +2910,7 @@ public class CMatrix
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public CMatrix stack(SparseCMatrix B, int axis) {
+    public CMatrix stack(CooCMatrix B, int axis) {
         CMatrix stacked;
 
         if(axis==0) {
@@ -2963,7 +2963,7 @@ public class CMatrix
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
     @Override
-    public CMatrix augment(SparseMatrix B) {
+    public CMatrix augment(CooMatrix B) {
         ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);
         CMatrix augmented = new CMatrix(new Shape(this.numRows, this.numCols+B.numCols));
 
@@ -3025,7 +3025,7 @@ public class CMatrix
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
     @Override
-    public CMatrix augment(SparseCMatrix B) {
+    public CMatrix augment(CooCMatrix B) {
         ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);
         CMatrix augmented = new CMatrix(new Shape(this.numRows, this.numCols+B.numCols));
 
@@ -3972,7 +3972,7 @@ public class CMatrix
      * @param B Complex sparse matrix to add to this matrix,
      */
     // TODO: Pull up to a ComplexDenseTensorMixin
-    public void addEq(SparseCMatrix B) {
+    public void addEq(CooCMatrix B) {
         ComplexDenseSparseMatrixOperations.addEq(this, B);
     }
 
@@ -3983,7 +3983,7 @@ public class CMatrix
      * @param B Complex sparse matrix to subtract from this matrix,
      */
     // TODO: Pull up to a ComplexDenseTensorMixin
-    public void subEq(SparseCMatrix B) {
+    public void subEq(CooCMatrix B) {
         ComplexDenseSparseMatrixOperations.subEq(this, B);
     }
 
