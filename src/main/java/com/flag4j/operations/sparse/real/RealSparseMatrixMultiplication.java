@@ -26,10 +26,9 @@ package com.flag4j.operations.sparse.real;
 
 import com.flag4j.Shape;
 import com.flag4j.concurrency.ThreadManager;
+import com.flag4j.operations.sparse.SparseUtils;
 import com.flag4j.util.ErrorMessages;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -70,20 +69,16 @@ public class RealSparseMatrixMultiplication {
 
         // Create a map where key is row index from src2.
         // and value is a list of indices in src2 where this row appears.
-        Map<Integer, List<Integer>> map = new HashMap<>();
-
-        for(int j=0; j<src2.length; j++) {
-            int r2 = rowIndices2[j]; // = k
-            map.computeIfAbsent(r2, x -> new ArrayList<>()).add(j);
-        }
+        Map<Integer, List<Integer>> map = SparseUtils.createMap(src2.length, rowIndices2);
 
         for(int i=0; i<src1.length; i++) {
-            int r1 = rowIndices1[i]; // = i
             int c1 = colIndices1[i]; // = k
-            int rowIdx = r1*cols2;
 
             // Check if any values in src2 have the same row index as the column index of the value in src1.
             if(map.containsKey(c1)) {
+                int r1 = rowIndices1[i]; // = i
+                int rowIdx = r1*cols2;
+
                 for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
                     int c2 = colIndices2[j]; // = j
                     dest[rowIdx + c2] += src1[i]*src2[j];
@@ -97,7 +92,10 @@ public class RealSparseMatrixMultiplication {
 
     /**
      * Computes the matrix multiplication between two sparse matrices using a concurrent implementation of
-     * the standard algorithm.
+     * the standard algorithm. <br><br>
+     *
+     * NOTE: Caution should be exercised when using this method. It is rarely faster than
+     * {@link #standard(double[], int[], int[], Shape, double[], int[], int[], Shape)}
      * @param src1 Non-zero entries of the first sparse matrix.
      * @param rowIndices1 Row indices of non-zero entries for the first sparse matrix.
      * @param colIndices1 Column indices of non-zero entries for the first sparse matrix.
@@ -114,83 +112,11 @@ public class RealSparseMatrixMultiplication {
         int cols2 = shape2.dims[1];
 
         double[] dest = new double[rows1*cols2];
-
-        ThreadManager.concurrentLoop(0, src1.length, (i)->{
-            int r1 = rowIndices1[i]; // = i
-            int c1 = colIndices1[i]; // = k
-
-            for(int j=0; j<src2.length; j++) {
-                int r2 = rowIndices2[j]; // = k
-                int c2 = colIndices2[j]; // = j
-
-                if(c1==r2) { // Then we multiply and add to sum.
-                    double product = src1[i]*src2[j];
-
-                    synchronized (dest) {
-                        dest[r1*cols2 + c2] += product;
-                    }
-                }
-            }
-        });
-
-        return dest;
-    }
-
-
-    public static double[] concurrentTest(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
-                                     double[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
-        int rows1 = shape1.dims[0];
-        int cols2 = shape2.dims[1];
-
-        double[] dest = new double[rows1*cols2];
-
-        // Create a map where key is row index from src2.
-        // and value is a list of indices in src2 where this row appears.
-        Map<Integer, List<Integer>> map = new HashMap<>();
-
-        for(int j=0; j<src2.length; j++) {
-            int r2 = rowIndices2[j]; // = k
-            map.computeIfAbsent(r2, x -> new ArrayList<>()).add(j);
-        }
-
-        ThreadManager.concurrentLoop(0, src1.length, (i)->{
-            int r1 = rowIndices1[i]; // = i
-            int c1 = colIndices1[i]; // = k
-            int rowIdx = r1*cols2;
-
-            // Check if any values in src2 have the same row index as the column index of the value in src1.
-            if(map.containsKey(c1)) {
-                for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
-                    int c2 = colIndices2[j]; // = j
-                    double product = src1[i]*src2[j];
-
-                    synchronized (dest) {
-                        dest[rowIdx + c2] += product;
-                    }
-                }
-            }
-        });
-
-        return dest;
-    }
-
-
-    public static double[] concurrentTest1(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
-                                          double[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
-        int rows1 = shape1.dims[0];
-        int cols2 = shape2.dims[1];
-
-        double[] dest = new double[rows1*cols2];
         ConcurrentMap<Integer, Double> destMap = new ConcurrentHashMap<>();
 
         // Create a map where key is row index from src2.
         // and value is a list of indices in src2 where this row appears.
-        Map<Integer, List<Integer>> map = new HashMap<>();
-
-        for(int j=0; j<src2.length; j++) {
-            int r2 = rowIndices2[j]; // = k
-            map.computeIfAbsent(r2, x -> new ArrayList<>()).add(j);
-        }
+        Map<Integer, List<Integer>> map = SparseUtils.createMap(src2.length, rowIndices2);
 
         ThreadManager.concurrentLoop(0, src1.length, (i)->{
             int c1 = colIndices1[i]; // = k

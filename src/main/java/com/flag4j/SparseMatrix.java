@@ -2756,6 +2756,7 @@ public class SparseMatrix
 
     /**
      * Compute the hermation transpose of this matrix. That is, the complex conjugate transpose of this matrix.
+     * For real matrices, this is equivalent to the standard transpose.
      *
      * @return The complex conjugate transpose of this matrix.
      */
@@ -2777,7 +2778,7 @@ public class SparseMatrix
         ParameterChecks.assertMatMultShapes(shape, B.shape);
 
         return new Matrix(numRows, B.numCols,
-                RealSparseMatrixMultiplication.concurrentStandard(
+                RealSparseMatrixMultiplication.standard(
                     entries, rowIndices, colIndices, shape,
                     B.entries, B.rowIndices, B.colIndices, B.shape
                 )

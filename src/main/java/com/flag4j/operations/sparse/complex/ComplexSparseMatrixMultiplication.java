@@ -27,9 +27,15 @@ package com.flag4j.operations.sparse.complex;
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.concurrency.ThreadManager;
+import com.flag4j.operations.sparse.SparseUtils;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
+
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * This class contains low level methods for computing the matrix multiplication of sparse complex matrices/vectors.<br>
@@ -57,28 +63,34 @@ public class ComplexSparseMatrixMultiplication {
      */
     public static CNumber[] standard(CNumber[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                      CNumber[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
-
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int cols2 = shape2.dims[1];
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fill(dest, 0);
+        ConcurrentMap<Integer, CNumber> destMap = new ConcurrentHashMap<>();
 
-        // r1, c1, r2, and c2 store row/column indices for non-zero values in src1 and src2.
-        int r1, c1, r2, c2;
+        // Create a map where key is row index from src2.
+        // and value is a list of indices in src2 where this row appears.
+        Map<Integer, List<Integer>> map = SparseUtils.createMap(src2.length, rowIndices2);
 
-        for(int i=0; i<src1.length; i++) {
-            r1 = rowIndices1[i]; // = i
-            c1 = colIndices1[i]; // = k
+        ThreadManager.concurrentLoop(0, src1.length, (i)->{
+            int c1 = colIndices1[i]; // = k
 
-            for(int j=0; j<src2.length; j++) {
-                r2 = rowIndices2[j]; // = k
-                c2 = colIndices2[j]; // = j
+            // Check if any values in src2 have the same row index as the column index of the value in src1.
+            if(map.containsKey(c1)) {
+                int r1 = rowIndices1[i]; // = i
+                int rowIdx = r1*cols2;
 
-                if(c1==r2) { // Then we multiply and add to sum.
-                    dest[r1*cols2 + c2].addEq(src1[i].mult(src2[j]));
+                for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
+                    int idx = rowIdx + colIndices2[j];
+                    destMap.put(idx, destMap.getOrDefault(idx, new CNumber()).add(src1[i].mult(src2[j])));
                 }
             }
+        });
+
+        // Copy values from map to destination array.
+        for(int idx : destMap.keySet()) {
+            dest[idx] = destMap.get(idx);
         }
 
         return dest;
@@ -87,7 +99,9 @@ public class ComplexSparseMatrixMultiplication {
 
     /**
      * Computes the matrix multiplication between two sparse matrices using a concurrent implementation of
-     * the standard algorithm.
+     * the standard algorithm. <br><br>
+     * 
+     * NOTE: Caution should be exercised when using this method. It is rarely faster than {@link #standard(CNumber[], int[], int[], Shape, CNumber[], int[], int[], Shape)}
      * @param src1 Non-zero entries of the first sparse matrix.
      * @param rowIndices1 Row indices of non-zero entries for the first sparse matrix.
      * @param colIndices1 Column indices of non-zero entries for the first sparse matrix.
@@ -100,30 +114,35 @@ public class ComplexSparseMatrixMultiplication {
      */
     public static CNumber[] concurrentStandard(CNumber[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                                CNumber[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
-
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int cols2 = shape2.dims[1];
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fill(dest, 0);
+        ConcurrentMap<Integer, CNumber> destMap = new ConcurrentHashMap<>();
+
+        // Create a map where key is row index from src2.
+        // and value is a list of indices in src2 where this row appears.
+        Map<Integer, List<Integer>> map = SparseUtils.createMap(src2.length, rowIndices2);
 
         ThreadManager.concurrentLoop(0, src1.length, (i)->{
-            int r1 = rowIndices1[i]; // = i
             int c1 = colIndices1[i]; // = k
 
-            for(int j=0; j<src2.length; j++) {
-                int r2 = rowIndices2[j]; // = k
-                int c2 = colIndices2[j]; // = j
+            // Check if any values in src2 have the same row index as the column index of the value in src1.
+            if(map.containsKey(c1)) {
+                int r1 = rowIndices1[i]; // = i
+                int rowIdx = r1*cols2;
 
-                if(c1==r2) { // Then we multiply and add to sum.
-                    CNumber product = src1[i].mult(src2[j]);
-
-                    synchronized (dest) {
-                        dest[r1*cols2 + c2].addEq(product);
-                    }
+                for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
+                    int idx = rowIdx + colIndices2[j];
+                    destMap.put(idx, destMap.getOrDefault(idx, new CNumber()).add(src1[i].mult(src2[j])));
                 }
             }
         });
+
+        // Copy values from map to destination array.
+        for(int idx : destMap.keySet()) {
+            dest[idx] = destMap.get(idx);
+        }
 
         return dest;
     }
