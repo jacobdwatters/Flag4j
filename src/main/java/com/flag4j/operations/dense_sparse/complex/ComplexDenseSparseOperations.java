@@ -48,7 +48,7 @@ public class ComplexDenseSparseOperations {
      * @param src2 Complex sparse tensor.
      * @return The result of the element-wise subtraction.
      */
-    public static CTensor add(CTensor src1, SparseCTensor src2) {
+    public static CTensor add(CTensor src1, CooCTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         CTensor dest = new CTensor(src1);
@@ -67,7 +67,7 @@ public class ComplexDenseSparseOperations {
      * @param src2 Complex sparse tensor.
      * @return The result of the element-wise addition.
      */
-    public static void addEq(CTensor src1, SparseCTensor src2) {
+    public static void addEq(CTensor src1, CooCTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
@@ -82,7 +82,7 @@ public class ComplexDenseSparseOperations {
      * @param src2 Complex sparse tensor.
      * @return The result of the element-wise tensor subtraction.
      */
-    public static CTensor sub(CTensor src1, SparseCTensor src2) {
+    public static CTensor sub(CTensor src1, CooCTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
         CTensor dest = new CTensor(src1);
 
@@ -100,7 +100,7 @@ public class ComplexDenseSparseOperations {
      * @param src2 Complex sparse tensor.
      * @return The result of the element-wise subtraction.
      */
-    public static void subEq(CTensor src1, SparseCTensor src2) {
+    public static void subEq(CTensor src1, CooCTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
@@ -115,7 +115,7 @@ public class ComplexDenseSparseOperations {
      * @param src2 Complex sparse tensor.
      * @return THe result of the element-wise tensor multiplication.
      */
-    public static SparseCTensor elemMult(CTensor src1, SparseCTensor src2) {
+    public static CooCTensor elemMult(CTensor src1, CooCTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         CNumber[] destEntries = new CNumber[src2.nonZeroEntries()];
@@ -126,7 +126,7 @@ public class ComplexDenseSparseOperations {
             destEntries[i] = src1.entries[src2.shape.entriesIndex(src2.indices[i])].mult(src2.entries[i]);
         }
 
-        return new SparseCTensor(src2.shape.copy(), destEntries, indices);
+        return new CooCTensor(src2.shape.copy(), destEntries, indices);
     }
 
 

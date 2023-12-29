@@ -260,7 +260,7 @@ public class ComplexSparseMatrixOperations {
      * @param col Sparse vector to add to each column of the sparse matrix.
      * @return A dense copy of the {@code src} matrix with the {@code col} vector added to each row of the matrix.
      */
-    public static CMatrix addToEachCol(CooCMatrix src, SparseCVector col) {
+    public static CMatrix addToEachCol(CooCMatrix src, CooCVector col) {
         ParameterChecks.assertEquals(src.numRows, col.size);
         CNumber[] destEntries = new CNumber[src.totalEntries().intValueExact()];
 
@@ -290,7 +290,7 @@ public class ComplexSparseMatrixOperations {
      * @param row Sparse vector to add to each row of the sparse matrix.
      * @return A dense copy of the {@code src} matrix with the {@code row} vector added to each row of the matrix.
      */
-    public static CMatrix addToEachRow(CooCMatrix src, SparseCVector row) {
+    public static CMatrix addToEachRow(CooCMatrix src, CooCVector row) {
         ParameterChecks.assertEquals(src.numCols, row.size);
         CNumber[] destEntries = new CNumber[src.totalEntries().intValueExact()];
 

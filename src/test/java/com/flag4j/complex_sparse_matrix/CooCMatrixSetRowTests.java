@@ -2,8 +2,8 @@ package com.flag4j.complex_sparse_matrix;
 
 import com.flag4j.CVector;
 import com.flag4j.CooCMatrix;
+import com.flag4j.CooCVector;
 import com.flag4j.Shape;
-import com.flag4j.SparseCVector;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +23,7 @@ class CooCMatrixSetRowTests {
         Shape bShape;
         int[] bindices;
         CNumber[] bEntries;
-        SparseCVector b;
+        CooCVector b;
 
         Shape expShape;
         int[] expRowIndices;
@@ -41,7 +41,7 @@ class CooCMatrixSetRowTests {
         bShape = new Shape(3);
         bEntries = new CNumber[]{new CNumber("0.18568+0.10002i")};
         bindices = new int[]{2};
-        b = new SparseCVector(bShape.get(0), bEntries, bindices);
+        b = new CooCVector(bShape.get(0), bEntries, bindices);
 
         expShape = new Shape(5, 3);
         expEntries = new CNumber[]{new CNumber("0.18568+0.10002i"), new CNumber("0.13544+0.86431i"), new CNumber("0.42906+0.88227i")};
@@ -61,7 +61,7 @@ class CooCMatrixSetRowTests {
         bShape = new Shape(23);
         bEntries = new CNumber[]{new CNumber("0.09868+0.82283i"), new CNumber("0.5747+0.68314i"), new CNumber("0.97588+0.37176i"), new CNumber("0.01652+0.29332i")};
         bindices = new int[]{2, 8, 16, 21};
-        b = new SparseCVector(bShape.get(0), bEntries, bindices);
+        b = new CooCVector(bShape.get(0), bEntries, bindices);
 
         expShape = new Shape(11, 23);
         expEntries = new CNumber[]{new CNumber("0.25343+0.33083i"), new CNumber("0.09868+0.82283i"), new CNumber("0.5747+0.68314i"), new CNumber("0.97588+0.37176i"), new CNumber("0.01652+0.29332i"), new CNumber("0.89061+0.1353i"), new CNumber("0.83798+0.5638i"), new CNumber("0.22808+0.99318i"), new CNumber("0.51957+0.88361i")};
@@ -81,7 +81,7 @@ class CooCMatrixSetRowTests {
         bShape = new Shape(1000);
         bEntries = new CNumber[]{new CNumber("0.83231+0.0157i"), new CNumber("0.94923+0.26837i"), new CNumber("0.15318+0.79913i"), new CNumber("0.8847+0.9145i"), new CNumber("0.05361+0.50878i")};
         bindices = new int[]{111, 401, 626, 664, 884};
-        b = new SparseCVector(bShape.get(0), bEntries, bindices);
+        b = new CooCVector(bShape.get(0), bEntries, bindices);
 
         expShape = new Shape(5, 1000);
         expEntries = new CNumber[]{new CNumber("0.63307+0.18148i"), new CNumber("0.89993+0.94657i"), new CNumber("0.01684+0.17543i"), new CNumber("0.29048+0.35145i"), new CNumber("0.03111+0.05317i"), new CNumber("0.3826+0.46659i"), new CNumber("0.83231+0.0157i"), new CNumber("0.94923+0.26837i"), new CNumber("0.15318+0.79913i"), new CNumber("0.8847+0.9145i"), new CNumber("0.05361+0.50878i")};
@@ -101,10 +101,10 @@ class CooCMatrixSetRowTests {
         bShape = new Shape(4);
         bEntries = new CNumber[]{new CNumber("0.32913+0.94182i")};
         bindices = new int[]{1};
-        b = new SparseCVector(bShape.get(0), bEntries, bindices);
+        b = new CooCVector(bShape.get(0), bEntries, bindices);
 
         CooCMatrix final0a = a;
-        SparseCVector final0b = b;
+        CooCVector final0b = b;
         assertThrows(Exception.class, ()->final0a.setRow(final0b, 2));
 
         // ---------------------  Sub-case 5 ---------------------
@@ -117,10 +117,10 @@ class CooCMatrixSetRowTests {
         bShape = new Shape(6);
         bEntries = new CNumber[]{new CNumber("0.10412+0.70557i"), new CNumber("0.193+0.2337i")};
         bindices = new int[]{1, 5};
-        b = new SparseCVector(bShape.get(0), bEntries, bindices);
+        b = new CooCVector(bShape.get(0), bEntries, bindices);
 
         CooCMatrix final1a = a;
-        SparseCVector final1b = b;
+        CooCVector final1b = b;
         assertThrows(Exception.class, ()->final1a.setRow(final1b, 1));
 
         // ---------------------  Sub-case 6 ---------------------
@@ -133,10 +133,10 @@ class CooCMatrixSetRowTests {
         bShape = new Shape(5);
         bEntries = new CNumber[]{new CNumber("0.09009+0.73789i"), new CNumber("0.07688+0.38056i")};
         bindices = new int[]{2, 4};
-        b = new SparseCVector(bShape.get(0), bEntries, bindices);
+        b = new CooCVector(bShape.get(0), bEntries, bindices);
 
         CooCMatrix final2a = a;
-        SparseCVector final2b = b;
+        CooCVector final2b = b;
         assertThrows(Exception.class, ()->final2a.setRow(final2b, -1));
 
         // ---------------------  Sub-case 7 ---------------------
@@ -149,10 +149,10 @@ class CooCMatrixSetRowTests {
         bShape = new Shape(5);
         bEntries = new CNumber[]{new CNumber("0.14938+0.44828i"), new CNumber("0.3092+0.80895i")};
         bindices = new int[]{1, 3};
-        b = new SparseCVector(bShape.get(0), bEntries, bindices);
+        b = new CooCVector(bShape.get(0), bEntries, bindices);
 
         CooCMatrix final3a = a;
-        SparseCVector final3b = b;
+        CooCVector final3b = b;
         assertThrows(Exception.class, ()->final3a.setRow(final3b, 5));
     }
 

@@ -19,7 +19,7 @@ class ComplexDenseSparseMatMultTransposeTests {
     static CMatrix A;
     static CooCMatrix B;
     static CVector bvec;
-    static SparseCVector bSparse;
+    static CooCVector bSparse;
 
     @BeforeAll
     static void setup() {
@@ -41,7 +41,7 @@ class ComplexDenseSparseMatMultTransposeTests {
     }
 
     static void createSparseVector() {
-        bSparse = new SparseCVector(sparseSize, bVecSparseEntries, sparseVecIndices);
+        bSparse = new CooCVector(sparseSize, bVecSparseEntries, sparseVecIndices);
     }
 
     @Test

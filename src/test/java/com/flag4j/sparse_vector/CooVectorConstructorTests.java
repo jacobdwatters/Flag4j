@@ -1,20 +1,20 @@
 package com.flag4j.sparse_vector;
 
+import com.flag4j.CooVector;
 import com.flag4j.Shape;
-import com.flag4j.SparseVector;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SparseVectorConstructorTests {
+class CooVectorConstructorTests {
     int expSize;
     Shape expShape;
     double[] expEntries;
     int[] expEntriesI;
     int[] expIndices;
-    SparseVector a, b;
+    CooVector a, b;
 
 
     @Test
@@ -24,7 +24,7 @@ class SparseVectorConstructorTests {
         expShape = new Shape(expSize);
         expEntries = new double[0];
         expIndices = new int[0];
-        a = new SparseVector(expSize);
+        a = new CooVector(expSize);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -33,7 +33,7 @@ class SparseVectorConstructorTests {
 
         // ------------- Sub-case 2 -------------
         expSize = -1;
-        assertThrows(IllegalArgumentException.class, () -> new SparseVector(expSize));
+        assertThrows(IllegalArgumentException.class, () -> new CooVector(expSize));
     }
 
 
@@ -44,7 +44,7 @@ class SparseVectorConstructorTests {
         expShape = new Shape(expSize);
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        a = new SparseVector(expSize, expEntries, expIndices);
+        a = new CooVector(expSize, expEntries, expIndices);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -52,7 +52,7 @@ class SparseVectorConstructorTests {
 
         // ------------- Sub-case 2 -------------
         expSize = -1;
-        assertThrows(IllegalArgumentException.class, () -> new SparseVector(expSize, expEntries, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooVector(expSize, expEntries, expIndices));
 
         // ------------- Sub-case 3 -------------
         expSize = 1001234;
@@ -60,7 +60,7 @@ class SparseVectorConstructorTests {
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseVector(expSize, expEntries, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooVector(expSize, expEntries, expIndices));
 
 
         // ------------- Sub-case 4 -------------
@@ -69,7 +69,7 @@ class SparseVectorConstructorTests {
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseVector(expSize, expEntries, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooVector(expSize, expEntries, expIndices));
     }
 
 
@@ -81,7 +81,7 @@ class SparseVectorConstructorTests {
         expEntriesI = new int[]{1, 4, 5, 1001, -11};
         expEntries = Arrays.stream(expEntriesI).asDoubleStream().toArray();
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        a = new SparseVector(expSize, expEntriesI, expIndices);
+        a = new CooVector(expSize, expEntriesI, expIndices);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -91,7 +91,7 @@ class SparseVectorConstructorTests {
         expSize = -1;
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034};
-        assertThrows(IllegalArgumentException.class, () -> new SparseVector(expSize, expEntriesI, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooVector(expSize, expEntriesI, expIndices));
 
         // ------------- Sub-case 3 -------------
         expSize = 1001234;
@@ -100,7 +100,7 @@ class SparseVectorConstructorTests {
         expEntries = Arrays.stream(expEntriesI).asDoubleStream().toArray();
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseVector(expSize, expEntriesI, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooVector(expSize, expEntriesI, expIndices));
 
 
         // ------------- Sub-case 4 -------------
@@ -110,7 +110,7 @@ class SparseVectorConstructorTests {
         expEntries = Arrays.stream(expEntriesI).asDoubleStream().toArray();
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseVector(expSize, expEntriesI, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooVector(expSize, expEntriesI, expIndices));
     }
 
 
@@ -121,8 +121,8 @@ class SparseVectorConstructorTests {
         expShape = new Shape(expSize);
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        b = new SparseVector(expSize, expEntries, expIndices);
-        a = new SparseVector(b);
+        b = new CooVector(expSize, expEntries, expIndices);
+        a = new CooVector(b);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);

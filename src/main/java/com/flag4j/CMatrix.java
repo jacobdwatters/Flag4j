@@ -827,7 +827,7 @@ public class CMatrix
      * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
      */
     @Override
-    public CMatrix setCol(SparseCVector values, int colIndex) {
+    public CMatrix setCol(CooCVector values, int colIndex) {
         ParameterChecks.assertArrayLengthsEq(values.size, numRows);
 
         // Zero-out column
@@ -869,7 +869,7 @@ public class CMatrix
      * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
      */
     @Override
-    public CMatrix setRow(SparseCVector values, int rowIndex) {
+    public CMatrix setRow(CooCVector values, int rowIndex) {
         ParameterChecks.assertArrayLengthsEq(values.size, numCols);
         int rowOffset = rowIndex*numCols;
 
@@ -1970,7 +1970,7 @@ public class CMatrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public CVector mult(SparseVector b) {
+    public CVector mult(CooVector b) {
         ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.blockedVector(this.entries, this.shape, b.entries, b.indices);
         return new CVector(entries);
@@ -1999,7 +1999,7 @@ public class CMatrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public CVector mult(SparseCVector b) {
+    public CVector mult(CooCVector b) {
         ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         CNumber[] entries = ComplexDenseSparseMatrixMultiplication.blockedVector(this.entries, this.shape, b.entries, b.indices);
         return new CVector(entries);
@@ -2545,7 +2545,7 @@ public class CMatrix
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public CMatrix addToEachCol(SparseVector b) {
+    public CMatrix addToEachCol(CooVector b) {
         ParameterChecks.assertArrayLengthsEq(numRows, b.size);
         CMatrix sum = new CMatrix(this);
 
@@ -2593,7 +2593,7 @@ public class CMatrix
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public CMatrix addToEachCol(SparseCVector b) {
+    public CMatrix addToEachCol(CooCVector b) {
         ParameterChecks.assertArrayLengthsEq(numRows, b.size);
         CMatrix sum = new CMatrix(this);
 
@@ -2641,7 +2641,7 @@ public class CMatrix
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public CMatrix addToEachRow(SparseVector b) {
+    public CMatrix addToEachRow(CooVector b) {
         ParameterChecks.assertArrayLengthsEq(numCols, b.size);
         CMatrix sum = new CMatrix(this);
 
@@ -2687,7 +2687,7 @@ public class CMatrix
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public CMatrix addToEachRow(SparseCVector b) {
+    public CMatrix addToEachRow(CooCVector b) {
         ParameterChecks.assertArrayLengthsEq(numCols, b.size);
         CMatrix sum = new CMatrix(this);
 
@@ -3074,7 +3074,7 @@ public class CMatrix
     /**
      * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
      * does not affect the output of this function. All vectors will be treated as row vectors.<br>
-     * Also see {@link #stack(SparseVector, int)} and {@link #augment(SparseVector)}.
+     * Also see {@link #stack(CooVector, int)} and {@link #augment(CooVector)}.
      *
      * @param b Vector to stack to this matrix.
      * @return The result of stacking this matrix on top of the vector b.
@@ -3082,7 +3082,7 @@ public class CMatrix
      *                                  the vector b.
      */
     @Override
-    public CMatrix stack(SparseVector b) {
+    public CMatrix stack(CooVector b) {
         ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());
         CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);
 
@@ -3131,7 +3131,7 @@ public class CMatrix
     /**
      * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
      * does not affect the output of this function. All vectors will be treated as row vectors.<br>
-     * Also see {@link #stack(SparseCVector, int)} and {@link #augment(SparseCVector)}.
+     * Also see {@link #stack(CooCVector, int)} and {@link #augment(CooCVector)}.
      *
      * @param b Vector to stack to this matrix.
      * @return The result of stacking this matrix on top of the vector b.
@@ -3139,7 +3139,7 @@ public class CMatrix
      *                                  the vector b.
      */
     @Override
-    public CMatrix stack(SparseCVector b) {
+    public CMatrix stack(CooCVector b) {
         ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());
         CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);
 
@@ -3195,16 +3195,16 @@ public class CMatrix
      *
      * @param b    Vector to stack to this matrix.
      * @param axis Axis along which to stack. <br>
-     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(SparseVector)}. In this case, the
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(CooVector)}. In this case, the
      *             vector b will be treated as a column vector regardless of the true orientation. <br>
-     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(SparseVector)}. In this case, the
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(CooVector)}. In this case, the
      *             vector b will be treated as a row vector regardless of the true orientation.
      * @return The result of stacking this matrix and B along the specified axis.
      * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public CMatrix stack(SparseVector b, int axis) {
+    public CMatrix stack(CooVector b, int axis) {
         CMatrix stacked;
 
         if(axis==0) {
@@ -3255,16 +3255,16 @@ public class CMatrix
      *
      * @param b    Vector to stack to this matrix.
      * @param axis Axis along which to stack. <br>
-     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(SparseCVector)}. In this case, the
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(CooCVector)}. In this case, the
      *             vector b will be treated as a column vector regardless of the true orientation. <br>
-     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(SparseCVector)}. In this case, the
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(CooCVector)}. In this case, the
      *             vector b will be treated as a row vector regardless of the true orientation.
      * @return The result of stacking this matrix and B along the specified axis.
      * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public CMatrix stack(SparseCVector b, int axis) {
+    public CMatrix stack(CooCVector b, int axis) {
         CMatrix stacked;
 
         if(axis==0) {
@@ -3312,14 +3312,14 @@ public class CMatrix
      * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
      * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
      * treated as a column vector regardless of the true orientation.<br>
-     * Also see {@link #stack(SparseVector)} and {@link #stack(SparseVector, int)}.
+     * Also see {@link #stack(CooVector)} and {@link #stack(CooVector, int)}.
      *
      * @param b vector to augment to this matrix.
      * @return The result of augmenting b to the right of this matrix.
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public CMatrix augment(SparseVector b) {
+    public CMatrix augment(CooVector b) {
         ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());
         CMatrix stacked = new CMatrix(numRows, numCols+1);
 
@@ -3373,14 +3373,14 @@ public class CMatrix
      * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
      * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
      * treated as a column vector regardless of the true orientation.<br>
-     * Also see {@link #stack(SparseCVector)} and {@link #stack(SparseCVector, int)}.
+     * Also see {@link #stack(CooCVector)} and {@link #stack(CooCVector, int)}.
      *
      * @param b vector to augment to this matrix.
      * @return The result of augmenting b to the right of this matrix.
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public CMatrix augment(SparseCVector b) {
+    public CMatrix augment(CooCVector b) {
         ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());
         CMatrix stacked = new CMatrix(numRows, numCols+1);
 

@@ -2,19 +2,19 @@ package com.flag4j.sparse_tensor;
 
 
 import com.flag4j.Shape;
-import com.flag4j.SparseTensor;
+import com.flag4j.CooTensor;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SparseTensorConstructorTests {
+class CooTensorConstructorTests {
     double[] expNonZero;
     int[] expNonZeroI;
     int[][] expIndices;
     Shape expShape;
-    SparseTensor A, B;
+    CooTensor A, B;
 
     @Test
     void shapeTestCase() {
@@ -23,7 +23,7 @@ class SparseTensorConstructorTests {
         expNonZero = new double[0];
         expIndices = new int[0][0];
 
-        A = new SparseTensor(expShape);
+        A = new CooTensor(expShape);
 
         assertEquals(expShape, A.getShape());
         assertArrayEquals(expNonZero, A.entries);
@@ -34,7 +34,7 @@ class SparseTensorConstructorTests {
         expNonZero = new double[0];
         expIndices = new int[0][0];
 
-        A = new SparseTensor(expShape);
+        A = new CooTensor(expShape);
 
         assertEquals(expShape, A.getShape());
         assertArrayEquals(expNonZero, A.entries);
@@ -49,7 +49,7 @@ class SparseTensorConstructorTests {
         expNonZero = new double[]{1, 223.1333, -0.991233, 100.1234};
         expIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
 
-        A = new SparseTensor(expShape, expNonZero, expIndices);
+        A = new CooTensor(expShape, expNonZero, expIndices);
 
         assertEquals(expShape, A.getShape());
         assertArrayEquals(expNonZero, A.entries);
@@ -60,7 +60,7 @@ class SparseTensorConstructorTests {
         expNonZero = new double[]{1, 223.1333};
         expIndices = new int[][]{{98, 0}, {99, 1}};
 
-        A = new SparseTensor(expShape, expNonZero, expIndices);
+        A = new CooTensor(expShape, expNonZero, expIndices);
 
         assertEquals(expShape, A.getShape());
         assertArrayEquals(expNonZero, A.entries);
@@ -72,21 +72,21 @@ class SparseTensorConstructorTests {
         expNonZero = new double[]{1, 223.1333, 50, 133, 1335.34};
         expIndices = new int[][]{{95, 1}, {96, 0}, {97, 1}, {98, 0}, {99, 1}};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseTensor(expShape, expNonZero, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooTensor(expShape, expNonZero, expIndices));
 
         // --------------- Sub-case 4 ---------------
         expShape = new Shape(2, 2);
         expNonZero = new double[]{1, 223.1333, 50, 133};
         expIndices = new int[][]{{98, 0}, {99, 1}};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseTensor(expShape, expNonZero, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooTensor(expShape, expNonZero, expIndices));
 
         // --------------- Sub-case 4 ---------------
         expShape = new Shape(2, 2);
         expNonZero = new double[]{1, 223.1333};
         expIndices = new int[][]{{98, 0, 1}, {99, 1, 8}};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseTensor(expShape, expNonZero, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooTensor(expShape, expNonZero, expIndices));
     }
 
 
@@ -98,7 +98,7 @@ class SparseTensorConstructorTests {
         expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();
         expIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
 
-        A = new SparseTensor(expShape, expNonZeroI, expIndices);
+        A = new CooTensor(expShape, expNonZeroI, expIndices);
 
         assertEquals(expShape, A.getShape());
         assertArrayEquals(expNonZero, A.entries);
@@ -110,7 +110,7 @@ class SparseTensorConstructorTests {
         expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();
         expIndices = new int[][]{{98, 0}, {99, 1}};
 
-        A = new SparseTensor(expShape, expNonZeroI, expIndices);
+        A = new CooTensor(expShape, expNonZeroI, expIndices);
 
         assertEquals(expShape, A.getShape());
         assertArrayEquals(expNonZero, A.entries);
@@ -121,21 +121,21 @@ class SparseTensorConstructorTests {
         expNonZeroI = new int[]{1, 223, 50, 133, 1335};
         expIndices = new int[][]{{95, 1}, {96, 0}, {97, 1}, {98, 0}, {99, 1}};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseTensor(expShape, expNonZeroI, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooTensor(expShape, expNonZeroI, expIndices));
 
         // --------------- Sub-case 4 ---------------
         expShape = new Shape(2, 2);
         expNonZeroI = new int[]{1, 223, 50, 133};
         expIndices = new int[][]{{98, 0}, {99, 1}};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseTensor(expShape, expNonZeroI, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooTensor(expShape, expNonZeroI, expIndices));
 
         // --------------- Sub-case 4 ---------------
         expShape = new Shape(2, 2);
         expNonZeroI = new int[]{1, 223};
         expIndices = new int[][]{{98, 0, 1}, {99, 1, 8}};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseTensor(expShape, expNonZeroI, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooTensor(expShape, expNonZeroI, expIndices));
     }
 
 
@@ -145,8 +145,8 @@ class SparseTensorConstructorTests {
         expNonZero = new double[]{1, 223.1333, -0.991233, 100.1234};
         expIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
 
-        B = new SparseTensor(expShape, expNonZero, expIndices);
-        A = new SparseTensor(B);
+        B = new CooTensor(expShape, expNonZero, expIndices);
+        A = new CooTensor(B);
 
         assertEquals(expShape, A.getShape());
         assertArrayEquals(expNonZero, A.entries);

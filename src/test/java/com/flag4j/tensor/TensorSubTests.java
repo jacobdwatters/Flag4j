@@ -76,7 +76,7 @@ class TensorSubTests {
     @Test
     void realSparseTestCase() {
         double[] bEntries, expEntries;
-        SparseTensor B;
+        CooTensor B;
         Tensor exp;
 
         // ------------------------- Sub-case 1 -------------------------
@@ -87,7 +87,7 @@ class TensorSubTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new SparseTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensor(bShape, bEntries, sparseIndices);
         expEntries = new double[]{
                 1.23, 2.556, -121.5, 15.61, 14.15, -99.23425,
                 0.001345, 2.677, 8.14, -0.000194, 1, 234
@@ -108,9 +108,9 @@ class TensorSubTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new SparseTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensor(bShape, bEntries, sparseIndices);
 
-        SparseTensor finalB = B;
+        CooTensor finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.sub(finalB));
     }
 
@@ -158,7 +158,7 @@ class TensorSubTests {
     @Test
     void complexSparseTestCase() {
         CNumber[] bEntries, expEntries;
-        SparseCTensor B;
+        CooCTensor B;
         CTensor exp;
 
         // ------------------------- Sub-case 1 -------------------------
@@ -169,7 +169,7 @@ class TensorSubTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}
         };
-        B = new SparseCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensor(bShape, bEntries, sparseIndices);
         expEntries = new CNumber[]{
                 new CNumber(1.23), new CNumber(2.556), new CNumber(-121.5), new CNumber(15.61), new CNumber(14.15), new CNumber(-99.23425),
                 new CNumber(0.001345), new CNumber(2.677), new CNumber(8.14), new CNumber(-0.000194), new CNumber(1), new CNumber(234)
@@ -189,9 +189,9 @@ class TensorSubTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}
         };
-        B = new SparseCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensor(bShape, bEntries, sparseIndices);
 
-        SparseCTensor finalB = B;
+        CooCTensor finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.sub(finalB));
     }
 
@@ -289,7 +289,7 @@ class TensorSubTests {
     @Test
     void realSparseSubEqTestCase() {
         double[] bEntries, expEntries;
-        SparseTensor B;
+        CooTensor B;
         Tensor exp;
 
         // ------------------------- Sub-case 1 -------------------------
@@ -300,7 +300,7 @@ class TensorSubTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new SparseTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensor(bShape, bEntries, sparseIndices);
         expEntries = new double[]{
                 1.23, 2.556, -121.5, 15.61, 14.15, -99.23425,
                 0.001345, 2.677, 8.14, -0.000194, 1, 234
@@ -322,9 +322,9 @@ class TensorSubTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new SparseTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensor(bShape, bEntries, sparseIndices);
 
-        SparseTensor finalB = B;
+        CooTensor finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.subEq(finalB));
     }
 

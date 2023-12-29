@@ -1,8 +1,8 @@
-package com.flag4j.sparse_complex_vector;
+package com.flag4j.sparse_vector;
 
 import com.flag4j.CVector;
-import com.flag4j.SparseCVector;
-import com.flag4j.SparseVector;
+import com.flag4j.CooCVector;
+import com.flag4j.CooVector;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.exceptions.LinearAlgebraException;
@@ -11,62 +11,59 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class SparseCVectorSubTests {
-    SparseCVector a;
+class CooVectorSubTests {
+
+    CooVector a;
 
     @Test
     void sparseSubTestCase() {
-        SparseVector b;
-        SparseCVector exp;
+        CooVector b, exp;
 
-        CNumber[] aValues = {new CNumber(32.5, 98), new CNumber(-8.2, 55.1), new CNumber(0, 14.5)};
+        double[] aValues = {1.34, 51.6, -0.00245};
         int[] aIndices = {0, 5, 103};
         int size = 304;
-        a = new SparseCVector(size, aValues, aIndices);
+        a = new CooVector(size, aValues, aIndices);
 
         double[] bValues = {44, -5.66, 22.445, -0.994, 10.5};
         int[] bIndices = {1, 5, 11, 67, 200};
-        b = new SparseVector(size, bValues, bIndices);
+        b = new CooVector(size, bValues, bIndices);
 
         // --------------------- Sub-case 1 ---------------------
-        CNumber[] expValues = {new CNumber(32.5, 98), new CNumber(44).addInv(), new CNumber(-8.2, 55.1).sub(-5.66),
-                new CNumber(22.445).addInv(), new CNumber(-0.994).addInv(), new CNumber(0, 14.5), new CNumber(10.50).addInv()};
+        double[] expValues = {1.34, -44, 51.6+5.66, -22.445, 0.994, -0.00245, -10.5};
         int[] expIndices = {0, 1, 5, 11, 67, 103, 200};
-        exp = new SparseCVector(size, expValues, expIndices);
+        exp = new CooVector(size, expValues, expIndices);
 
         assertEquals(exp, a.sub(b));
 
         // --------------------- Sub-case 2 ---------------------
         bValues = new double[]{44, -5.66, 22.445, -0.994, 10.5};
         bIndices = new int[]{1, 5, 11, 67, 200};
-        b = new SparseVector(size+13, bValues, bIndices);
+        b = new CooVector(size+13, bValues, bIndices);
 
-        SparseVector finalB = b;
+        CooVector finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.sub(finalB));
     }
 
 
     @Test
     void sparseComplexSubTestCase() {
-        SparseCVector b, exp;
+        CooCVector b, exp;
 
-        CNumber[] aValues = {new CNumber(32.5, 98), new CNumber(-8.2, 55.1), new CNumber(0, 14.5)};
+        double[] aValues = {1.34, 51.6, -0.00245};
         int[] aIndices = {0, 5, 103};
         int size = 304;
-        a = new SparseCVector(size, aValues, aIndices);
+        a = new CooVector(size, aValues, aIndices);
 
         CNumber[] bValues = {new CNumber(1, -0.024),
                 new CNumber(99.24, 1.5), new CNumber(0, 1.4)};
         int[] bIndices = {1, 5, 6};
-        b = new SparseCVector(size, bValues, bIndices);
+        b = new CooCVector(size, bValues, bIndices);
 
         // --------------------- Sub-case 1 ---------------------
-        CNumber[] expValues = {new CNumber(32.5, 98), new CNumber(1, -0.024).addInv(),
-                new CNumber(-8.2, 55.1).sub(new CNumber(99.24, 1.5)), new CNumber(0, 1.4).addInv(),
-                new CNumber(0, 14.5)
-        };
+        CNumber[] expValues = {new CNumber(1.34), new CNumber(-1, 0.024),
+                new CNumber(51.6-99.24, -1.5), new CNumber(0, -1.4), new CNumber(-0.00245)};
         int[] expIndices = {0, 1, 5, 6, 103};
-        exp = new SparseCVector(size, expValues, expIndices);
+        exp = new CooCVector(size, expValues, expIndices);
 
         assertEquals(exp, a.sub(b));
 
@@ -74,33 +71,28 @@ class SparseCVectorSubTests {
         bValues = new CNumber[]{new CNumber(1, -0.024),
                 new CNumber(99.24, 1.5), new CNumber(0, 1.4)};
         bIndices = new int[]{1, 5, 6};
-        b = new SparseCVector(size+13, bValues, bIndices);
+        b = new CooCVector(size+13, bValues, bIndices);
 
-        SparseCVector finalB = b;
+        CooCVector finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.sub(finalB));
     }
 
 
     @Test
     void denseTestCase() {
-        Vector b;
-        CVector exp;
+        Vector b, exp;
 
-        CNumber[] aValues = {new CNumber(32.5, 98), new CNumber(-8.2, 55.1), new CNumber(0, 14.5)};
+        double[] aValues = {1.34, 51.6, -0.00245};
         int[] aIndices = {0, 2, 5};
         int size = 8;
-        a = new SparseCVector(size, aValues, aIndices);
+        a = new CooVector(size, aValues, aIndices);
 
         double[] bValues = {1, 5, -0.0024, 1, 2001.256, 61, -99.24, 1.5};
         b = new Vector(bValues);
 
         // --------------------- Sub-case 1 ---------------------
-        CNumber[] expValues = {
-                aValues[0].sub(new CNumber(1)), new CNumber(5).addInv(),
-                aValues[1].sub(new CNumber(-0.0024)), new CNumber(1).addInv(),
-                new CNumber(2001.256).addInv(), aValues[2].sub(new CNumber(61)),
-                new CNumber(-99.24).addInv(), new CNumber(1.5).addInv()};
-        exp = new CVector(expValues);
+        double[] expValues = {-1+1.34, -5, 0.0024+51.6, -1, -2001.256, -61-0.00245, 99.24, -1.5};
+        exp = new Vector(expValues);
 
         assertEquals(exp, a.sub(b));
 
@@ -117,19 +109,18 @@ class SparseCVectorSubTests {
     void denseComplexTestCase() {
         CVector b, exp;
 
-        CNumber[] aValues = {new CNumber(32.5, 98), new CNumber(-8.2, 55.1)};
+        double[] aValues = {1.34, 51.6};
         int[] aIndices = {0, 2};
         int size = 5;
-        a = new SparseCVector(size, aValues, aIndices);
+        a = new CooVector(size, aValues, aIndices);
 
         CNumber[] bValues = {new CNumber(1.445, -9.24), new CNumber(1.45),
                 new CNumber(0, -99.145), new CNumber(4.51, 8.456), new CNumber(11.34, -0.00245)};
         b = new CVector(bValues);
 
         // --------------------- Sub-case 1 ---------------------
-        CNumber[] expValues = {new CNumber(32.5, 98).sub(new CNumber(1.445, -9.24)), new CNumber(1.45).addInv(),
-                new CNumber(-8.2, 55.1).sub(new CNumber(0, -99.145)), new CNumber(4.51, 8.456).addInv(),
-                new CNumber(11.34, -0.00245).addInv()};
+        CNumber[] expValues = {new CNumber(-1.445+1.34, 9.24), new CNumber(-1.45),
+                new CNumber(51.6, 99.145), new CNumber(-4.51, -8.456), new CNumber(-11.34, 0.00245)};
         exp = new CVector(expValues);
 
         assertEquals(exp, a.sub(b));
@@ -148,19 +139,18 @@ class SparseCVectorSubTests {
     @Test
     void scalarTestCase() {
         double b;
-        CVector exp;
+        Vector exp;
 
-        CNumber[] aValues = {new CNumber(32.5, 98), new CNumber(-8.2, 55.1), new CNumber(0, 14.5)};
+        double[] aValues = {1.34, 51.6, -0.00245};
         int[] aIndices = {0, 2, 5};
         int size = 8;
-        a = new SparseCVector(size, aValues, aIndices);
+        a = new CooVector(size, aValues, aIndices);
 
         b = 2.345;
 
         // --------------------- Sub-case 1 ---------------------
-        CNumber[] expValues = {aValues[0].sub(new CNumber(b)), new CNumber(-b), aValues[1].sub(new CNumber(b)), new CNumber(-b),
-                new CNumber(-b), aValues[2].sub(new CNumber(b)), new CNumber(-b), new CNumber(-b)};
-        exp = new CVector(expValues);
+        double[] expValues = {1.34-2.345, -2.345, 51.6-2.345, -2.345, -2.345, -0.00245-2.345, -2.345, -2.345};
+        exp = new Vector(expValues);
 
         assertEquals(exp, a.sub(b));
     }
@@ -171,16 +161,17 @@ class SparseCVectorSubTests {
         CNumber b;
         CVector exp;
 
-        CNumber[] aValues = {new CNumber(32.5, 98), new CNumber(-8.2, 55.1), new CNumber(0, 14.5)};
+        double[] aValues = {1.34, 51.6, -0.00245};
         int[] aIndices = {0, 2, 3};
         int size = 5;
-        a = new SparseCVector(size, aValues, aIndices);
+        a = new CooVector(size, aValues, aIndices);
 
         b = new CNumber(13.455, -1459.4521);
 
         // --------------------- Sub-case 1 ---------------------
-        CNumber[] expValues = {new CNumber(32.5, 98).sub(b), b.addInv(), new CNumber(-8.2, 55.1).sub(b),
-                new CNumber(0, 14.5).sub(b), b.addInv()};
+        CNumber[] expValues = {new CNumber(-13.455+1.34, 1459.4521), new CNumber(-13.455, 1459.4521),
+                new CNumber(-13.455+51.6, 1459.4521), new CNumber(-13.455-0.00245, 1459.4521),
+                new CNumber(-13.455, 1459.4521)};
         exp = new CVector(expValues);
 
         assertEquals(exp, a.sub(b));

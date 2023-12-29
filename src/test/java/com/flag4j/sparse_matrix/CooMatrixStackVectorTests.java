@@ -20,7 +20,7 @@ class CooMatrixStackVectorTests {
         Shape bShape;
         int[] bindices;
         double[] bEntries;
-        SparseVector b;
+        CooVector b;
 
         Shape expShape;
         int[] expRowIndices;
@@ -38,7 +38,7 @@ class CooMatrixStackVectorTests {
         bShape = new Shape(5);
         bEntries = new double[]{0.51982, 0.38743};
         bindices = new int[]{1, 3};
-        b = new SparseVector(bShape.get(0), bEntries, bindices);
+        b = new CooVector(bShape.get(0), bEntries, bindices);
 
         expShape = new Shape(4, 5);
         expEntries = new double[]{0.1144, 0.74731, 0.51996, 0.09408, 0.20219, 0.51982, 0.38743};
@@ -58,7 +58,7 @@ class CooMatrixStackVectorTests {
         bShape = new Shape(2);
         bEntries = new double[]{0.67691};
         bindices = new int[]{0};
-        b = new SparseVector(bShape.get(0), bEntries, bindices);
+        b = new CooVector(bShape.get(0), bEntries, bindices);
 
         expShape = new Shape(2, 2);
         expEntries = new double[]{0.3056, 0.67691};
@@ -78,10 +78,10 @@ class CooMatrixStackVectorTests {
         bShape = new Shape(3);
         bEntries = new double[]{0.31166};
         bindices = new int[]{1};
-        b = new SparseVector(bShape.get(0), bEntries, bindices);
+        b = new CooVector(bShape.get(0), bEntries, bindices);
 
         CooMatrix finala = a;
-        SparseVector finalb = b;
+        CooVector finalb = b;
         assertThrows(Exception.class, ()->finala.stack(finalb));
     }
 
@@ -97,7 +97,7 @@ class CooMatrixStackVectorTests {
         Shape bShape;
         int[] bindices;
         CNumber[] bEntries;
-        SparseCVector b;
+        CooCVector b;
 
         Shape expShape;
         int[] expRowIndices;
@@ -115,7 +115,7 @@ class CooMatrixStackVectorTests {
         bShape = new Shape(5);
         bEntries = new CNumber[]{new CNumber("0.6745+0.85839i"), new CNumber("0.50328+0.7547i")};
         bindices = new int[]{0, 2};
-        b = new SparseCVector(bShape.get(0), bEntries, bindices);
+        b = new CooCVector(bShape.get(0), bEntries, bindices);
 
         expShape = new Shape(4, 5);
         expEntries = new CNumber[]{new CNumber("0.50192"), new CNumber("0.42775"), new CNumber("0.82651"), new CNumber("0.77339"), new CNumber("0.54693"), new CNumber("0.6745+0.85839i"), new CNumber("0.50328+0.7547i")};
@@ -135,7 +135,7 @@ class CooMatrixStackVectorTests {
         bShape = new Shape(2);
         bEntries = new CNumber[]{new CNumber("0.70721+0.27207i")};
         bindices = new int[]{1};
-        b = new SparseCVector(bShape.get(0), bEntries, bindices);
+        b = new CooCVector(bShape.get(0), bEntries, bindices);
 
         expShape = new Shape(2, 2);
         expEntries = new CNumber[]{new CNumber("0.97237"), new CNumber("0.70721+0.27207i")};
@@ -155,10 +155,10 @@ class CooMatrixStackVectorTests {
         bShape = new Shape(3);
         bEntries = new CNumber[]{new CNumber("0.57138+0.88361i")};
         bindices = new int[]{0};
-        b = new SparseCVector(bShape.get(0), bEntries, bindices);
+        b = new CooCVector(bShape.get(0), bEntries, bindices);
 
         CooMatrix finala = a;
-        SparseCVector finalb = b;
+        CooCVector finalb = b;
         assertThrows(Exception.class, ()->finala.stack(finalb));
     }
 

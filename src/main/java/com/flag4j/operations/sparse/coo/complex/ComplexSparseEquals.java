@@ -25,8 +25,8 @@
 package com.flag4j.operations.sparse.coo.complex;
 
 import com.flag4j.CooCMatrix;
-import com.flag4j.SparseCTensor;
-import com.flag4j.SparseCVector;
+import com.flag4j.CooCVector;
+import com.flag4j.CooCTensor;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.common.complex.ComplexProperties;
 import com.flag4j.util.ErrorMessages;
@@ -50,7 +50,7 @@ public class ComplexSparseEquals {
      * @param b First matrix in the equality check.
      * @return True if the matrices are equal. False otherwise.
      */
-    public static boolean tensorEquals(SparseCTensor a, SparseCTensor b) {
+    public static boolean tensorEquals(CooCTensor a, CooCTensor b) {
         return a.shape.equals(b.shape)
                 && Arrays.equals(a.entries, b.entries)
                 && Arrays.deepEquals(a.indices, b.indices);
@@ -76,7 +76,7 @@ public class ComplexSparseEquals {
      * @param b Second vector in the equality check.
      * @return True if the vectors are equal. False otherwise.
      */
-    public static boolean vectorEquals(SparseCVector a, SparseCVector b) {
+    public static boolean vectorEquals(CooCVector a, CooCVector b) {
         return a.size == b.size && Arrays.equals(a.indices, b.indices) && Arrays.equals(a.entries, b.entries);
     }
 
@@ -108,7 +108,7 @@ public class ComplexSparseEquals {
      * @param absTol Absolute tolerance.
      * @return True if all entries are "close". Otherwise, false.
      */
-    public static boolean allCloseTensor(SparseCTensor src1, SparseCTensor src2, double relTol, double absTol) {
+    public static boolean allCloseTensor(CooCTensor src1, CooCTensor src2, double relTol, double absTol) {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.deepEquals(src1.indices, src2.indices)
@@ -125,7 +125,7 @@ public class ComplexSparseEquals {
      * @param absTol Absolute tolerance.
      * @return True if all entries are "close". Otherwise, false.
      */
-    public static boolean allCloseVector(SparseCVector src1, SparseCVector src2, double relTol, double absTol) {
+    public static boolean allCloseVector(CooCVector src1, CooCVector src2, double relTol, double absTol) {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.equals(src1.indices, src2.indices)

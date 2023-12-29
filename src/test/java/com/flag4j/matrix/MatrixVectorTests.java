@@ -98,7 +98,7 @@ class MatrixVectorTests {
     void matVecMultSparseTestCase() {
         double[] bEntries;
         int[] indices;
-        SparseVector B;
+        CooVector B;
 
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
@@ -108,7 +108,7 @@ class MatrixVectorTests {
         A = new Matrix(aEntries);
         bEntries = new double[]{-0.9345341};
         indices = new int[]{1};
-        B = new SparseVector(3, bEntries, indices);
+        B = new CooVector(3, bEntries, indices);
         expEntries = new double[]{-92.7375568794,
                 -515.255376035,
                 -0.00012148943299999999,
@@ -126,9 +126,9 @@ class MatrixVectorTests {
         A = new Matrix(aEntries);
         bEntries = new double[]{-0.9345341};
         indices = new int[]{1};
-        B = new SparseVector(14, bEntries, indices);
+        B = new CooVector(14, bEntries, indices);
 
-        SparseVector finalB = B;
+        CooVector finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 
@@ -137,7 +137,7 @@ class MatrixVectorTests {
     void matVecMultSparseComplexTestCase() {
         CNumber[] bEntries;
         int[] indices;
-        SparseCVector B;
+        CooCVector B;
 
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
@@ -147,7 +147,7 @@ class MatrixVectorTests {
         A = new Matrix(aEntries);
         bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i")};
         indices = new int[]{2};
-        B = new SparseCVector(3, bEntries, indices);
+        B = new CooCVector(3, bEntries, indices);
         expCEntries = new CNumber[]{
                 new CNumber("-0.00011494769430000002+0.0011500500000000001i"),
                 new CNumber("0.8629674786220001-8.633977i"),
@@ -166,9 +166,9 @@ class MatrixVectorTests {
         A = new Matrix(aEntries);
         bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i")};
         indices = new int[]{2};
-        B = new SparseCVector(9, bEntries, indices);
+        B = new CooCVector(9, bEntries, indices);
 
-        SparseCVector finalB = B;
+        CooCVector finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 }

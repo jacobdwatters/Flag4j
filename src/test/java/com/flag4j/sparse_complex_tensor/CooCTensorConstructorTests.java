@@ -1,21 +1,21 @@
 package com.flag4j.sparse_complex_tensor;
 
+import com.flag4j.CooCTensor;
 import com.flag4j.Shape;
-import com.flag4j.SparseCTensor;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ArrayUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SparseCTensorConstructorTests {
+class CooCTensorConstructorTests {
 
     Shape expShape;
     CNumber[] expNonZero;
     double[] expNonZeroD;
     int[] expNonZeroI;
     int[][] expIndices;
-    SparseCTensor A, B;
+    CooCTensor A, B;
 
 
     @Test
@@ -24,7 +24,7 @@ class SparseCTensorConstructorTests {
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZero = new CNumber[0];
         expIndices = new int[0][0];
-        A = new SparseCTensor(expShape);
+        A = new CooCTensor(expShape);
 
         assertEquals(expShape, A.getShape());
         assertArrayEquals(expIndices, A.indices);
@@ -37,7 +37,7 @@ class SparseCTensorConstructorTests {
         expShape = new Shape(12);
         expNonZero = new CNumber[0];
         expIndices = new int[0][0];
-        A = new SparseCTensor(expShape);
+        A = new CooCTensor(expShape);
 
         assertEquals(expShape, A.getShape());
         assertArrayEquals(expIndices, A.indices);
@@ -54,7 +54,7 @@ class SparseCTensorConstructorTests {
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZero = new CNumber[]{new CNumber(1, -0.92342), new CNumber(-100, 123.44)};
         expIndices = new int[][]{{0, 0, 10, 1, 0, 9}, {0, 1, 22, 2, 0, 10}};
-        A = new SparseCTensor(expShape, expNonZero, expIndices);
+        A = new CooCTensor(expShape, expNonZero, expIndices);
 
         assertEquals(expShape, A.getShape());
         assertArrayEquals(expIndices, A.indices);
@@ -67,19 +67,19 @@ class SparseCTensorConstructorTests {
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZero = new CNumber[]{new CNumber(1, -0.92342), new CNumber(-100, 123.44)};
         expIndices = new int[][]{{0, 0, 10, 1, 0, 9}, {0, 1, 22, 2, 0, 10}, {0, 1, 22, 3, 0, 10}};
-        assertThrows(IllegalArgumentException.class, () -> new SparseCTensor(expShape, expNonZero, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZero, expIndices));
 
         // ------------ Sub-case 3 ------------
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZero = new CNumber[]{new CNumber(1, -0.92342), new CNumber(-100, 123.44)};
         expIndices = new int[][]{{0, 0, 10, 1, 0}, {0, 1, 22, 2, 0}};
-        assertThrows(IllegalArgumentException.class, () -> new SparseCTensor(expShape, expNonZero, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZero, expIndices));
 
         // ------------ Sub-case 4 ------------
         expShape = new Shape(2);
         expNonZero = new CNumber[]{new CNumber(1, -0.92342), new CNumber(-100, 123.44), new CNumber(0, 1)};
         expIndices = new int[][]{{0, 0, 10, 1, 0, 9}, {0, 1, 22, 2, 0, 10}};
-        assertThrows(IllegalArgumentException.class, () -> new SparseCTensor(expShape, expNonZero, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZero, expIndices));
     }
 
 
@@ -92,7 +92,7 @@ class SparseCTensorConstructorTests {
         ArrayUtils.copy2CNumber(expNonZeroD, expNonZero);
         expIndices = new int[][]{{0, 0, 10, 1, 0, 9}, {0, 1, 22, 2, 0, 10}, {0, 1, 24, 2, 0, 10},
                 {0, 1, 26, 2, 0, 10}, {0, 1, 28, 3, 0, 10}};
-        A = new SparseCTensor(expShape, expNonZeroD, expIndices);
+        A = new CooCTensor(expShape, expNonZeroD, expIndices);
 
         assertEquals(expShape, A.getShape());
         assertArrayEquals(expIndices, A.indices);
@@ -107,7 +107,7 @@ class SparseCTensorConstructorTests {
         expNonZero = new CNumber[expNonZeroD.length];
         ArrayUtils.copy2CNumber(expNonZeroD, expNonZero);
         expIndices = new int[][]{{0, 0}, {1, 1}, {2, 2}};
-        assertThrows(IllegalArgumentException.class, () -> new SparseCTensor(expShape, expNonZeroD, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZeroD, expIndices));
 
         // ------------ Sub-case 3 ------------
         expShape = new Shape(5, 3);
@@ -115,7 +115,7 @@ class SparseCTensorConstructorTests {
         expNonZero = new CNumber[expNonZeroD.length];
         ArrayUtils.copy2CNumber(expNonZeroD, expNonZero);
         expIndices = new int[][]{{0, 0, 10, 1, 0}, {0, 1, 22, 2, 0}};
-        assertThrows(IllegalArgumentException.class, () -> new SparseCTensor(expShape, expNonZeroD, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZeroD, expIndices));
 
         // ------------ Sub-case 4 ------------
         expShape = new Shape(2);
@@ -123,7 +123,7 @@ class SparseCTensorConstructorTests {
         expNonZero = new CNumber[expNonZeroD.length];
         ArrayUtils.copy2CNumber(expNonZeroD, expNonZero);
         expIndices = new int[][]{{0}, {1}};
-        assertThrows(IllegalArgumentException.class, () -> new SparseCTensor(expShape, expNonZeroD, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZeroD, expIndices));
     }
 
 
@@ -136,7 +136,7 @@ class SparseCTensorConstructorTests {
         ArrayUtils.copy2CNumber(expNonZeroI, expNonZero);
         expIndices = new int[][]{{0, 0, 10, 1, 0, 9}, {0, 1, 22, 2, 0, 10}, {0, 1, 24, 2, 0, 10},
                 {0, 1, 26, 2, 0, 10}, {0, 1, 28, 3, 0, 10}};
-        A = new SparseCTensor(expShape, expNonZeroI, expIndices);
+        A = new CooCTensor(expShape, expNonZeroI, expIndices);
 
         assertEquals(expShape, A.getShape());
         assertArrayEquals(expIndices, A.indices);
@@ -151,7 +151,7 @@ class SparseCTensorConstructorTests {
         expNonZero = new CNumber[expNonZeroI.length];
         ArrayUtils.copy2CNumber(expNonZeroI, expNonZero);
         expIndices = new int[][]{{0, 0}, {1, 1}, {2, 2}};
-        assertThrows(IllegalArgumentException.class, () -> new SparseCTensor(expShape, expNonZeroI, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZeroI, expIndices));
 
         // ------------ Sub-case 3 ------------
         expShape = new Shape(5, 3);
@@ -159,7 +159,7 @@ class SparseCTensorConstructorTests {
         expNonZero = new CNumber[expNonZeroI.length];
         ArrayUtils.copy2CNumber(expNonZeroI, expNonZero);
         expIndices = new int[][]{{0, 0, 10, 1, 0}, {0, 1, 22, 2, 0}};
-        assertThrows(IllegalArgumentException.class, () -> new SparseCTensor(expShape, expNonZeroI, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZeroI, expIndices));
 
         // ------------ Sub-case 4 ------------
         expShape = new Shape(2);
@@ -167,7 +167,7 @@ class SparseCTensorConstructorTests {
         expNonZero = new CNumber[expNonZeroI.length];
         ArrayUtils.copy2CNumber(expNonZeroI, expNonZero);
         expIndices = new int[][]{{0}, {1}};
-        assertThrows(IllegalArgumentException.class, () -> new SparseCTensor(expShape, expNonZeroI, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZeroI, expIndices));
     }
 
 
@@ -177,8 +177,8 @@ class SparseCTensorConstructorTests {
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZero = new CNumber[]{new CNumber(1, -0.92342), new CNumber(-100, 123.44)};
         expIndices = new int[][]{{0, 0, 10, 1, 0, 9}, {0, 1, 22, 2, 0, 10}};
-        B = new SparseCTensor(expShape, expNonZero, expIndices);
-        A = new SparseCTensor(B);
+        B = new CooCTensor(expShape, expNonZero, expIndices);
+        A = new CooCTensor(B);
 
         assertEquals(expShape, A.getShape());
         assertArrayEquals(expIndices, A.indices);

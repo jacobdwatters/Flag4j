@@ -9,12 +9,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class SparseCVectorConversionTests {
+class CooCVectorConversionTests {
 
     static int[] aIndices;
     static CNumber[] aEntries;
     static int sparseSize;
-    static SparseCVector a;
+    static CooCVector a;
 
 
     @BeforeAll
@@ -25,7 +25,7 @@ class SparseCVectorConversionTests {
         };
         aIndices = new int[]{4, 56, 9903, 14643};
         sparseSize = 24_023;
-        a = new SparseCVector(sparseSize, aEntries, aIndices);
+        a = new CooCVector(sparseSize, aEntries, aIndices);
     }
 
 
@@ -76,13 +76,13 @@ class SparseCVectorConversionTests {
         double[] expEntries;
         int[] expIndices;
         int expSize;
-        SparseVector exp;
+        CooVector exp;
 
         // ------------------- Sub-case 1 -------------------
         expEntries = new double[]{2.455, 0, 24.56, -9356.1};
         expIndices = new int[]{4, 56, 9903, 14643};
         expSize = sparseSize;
-        exp = new SparseVector(expSize, expEntries, expIndices);
+        exp = new CooVector(expSize, expEntries, expIndices);
 
         assertEquals(exp, a.toReal());
     }
@@ -93,7 +93,7 @@ class SparseCVectorConversionTests {
         CNumber[] expEntries;
         int[][] expIndices;
         Shape expShape;
-        SparseCTensor exp;
+        CooCTensor exp;
 
         // ------------------- Sub-case 1 -------------------
         expEntries = new CNumber[]{
@@ -102,7 +102,7 @@ class SparseCVectorConversionTests {
         };
         expIndices = new int[][]{{4}, {56}, {9903}, {14643}};
         expShape = new Shape(sparseSize);
-        exp = new SparseCTensor(expShape, expEntries, expIndices);
+        exp = new CooCTensor(expShape, expEntries, expIndices);
 
         assertEquals(exp, a.toTensor());
     }
@@ -139,6 +139,6 @@ class SparseCVectorConversionTests {
         denseEntries[aIndices[3]] = aEntries[3].copy();
         denseVector = new CVector(denseEntries);
 
-        assertEquals(a, SparseCVector.fromDense(denseVector));
+        assertEquals(a, CooCVector.fromDense(denseVector));
     }
 }

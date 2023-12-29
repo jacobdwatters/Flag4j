@@ -26,8 +26,8 @@ package com.flag4j.operations.sparse.coo.real;
 
 
 import com.flag4j.CooMatrix;
-import com.flag4j.SparseTensor;
-import com.flag4j.SparseVector;
+import com.flag4j.CooTensor;
+import com.flag4j.CooVector;
 import com.flag4j.operations.common.real.RealProperties;
 import com.flag4j.util.ErrorMessages;
 
@@ -51,7 +51,7 @@ public class RealSparseEquals {
      * @param b Second tensor in the equality check.
      * @return True if the tensors are equal. False otherwise.
      */
-    public static boolean tensorEquals(SparseTensor a, SparseTensor b) {
+    public static boolean tensorEquals(CooTensor a, CooTensor b) {
         // Check indices first to avoid checking entries if possible.
         return a.shape.equals(b.shape)
                 // TODO: Investigate if a self implemented 2d array equals would be significantly faster than the Arrays.deepEquals method.
@@ -81,7 +81,7 @@ public class RealSparseEquals {
      * @param b Second vector in the equality check.
      * @return True if the vectors are equal. False otherwise.
      */
-    public static boolean vectorEquals(SparseVector a, SparseVector b) {
+    public static boolean vectorEquals(CooVector a, CooVector b) {
         // Check indices first to avoid checking entries if possible.
         return a.size == b.size
                 && Arrays.equals(a.indices, b.indices)
@@ -116,7 +116,7 @@ public class RealSparseEquals {
      * @param absTol Absolute tolerance.
      * @return True if all entries are "close". Otherwise, false.
      */
-    public static boolean allCloseTensor(SparseTensor src1, SparseTensor src2, double relTol, double absTol) {
+    public static boolean allCloseTensor(CooTensor src1, CooTensor src2, double relTol, double absTol) {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.deepEquals(src1.indices, src2.indices)
@@ -133,7 +133,7 @@ public class RealSparseEquals {
      * @param absTol Absolute tolerance.
      * @return True if all entries are "close". Otherwise, false.
      */
-    public static boolean allCloseVector(SparseVector src1, SparseVector src2, double relTol, double absTol) {
+    public static boolean allCloseVector(CooVector src1, CooVector src2, double relTol, double absTol) {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.equals(src1.indices, src2.indices)

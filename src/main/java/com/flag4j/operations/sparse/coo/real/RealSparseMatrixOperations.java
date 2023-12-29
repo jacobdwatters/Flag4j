@@ -1,8 +1,8 @@
 package com.flag4j.operations.sparse.coo.real;
 
 import com.flag4j.CooMatrix;
+import com.flag4j.CooVector;
 import com.flag4j.Matrix;
-import com.flag4j.SparseVector;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -275,7 +275,7 @@ public class RealSparseMatrixOperations {
      * @param col Sparse vector to add to each column of the sparse matrix.
      * @return A dense copy of the {@code src} matrix with the {@code col} vector added to each row of the matrix.
      */
-    public static Matrix addToEachCol(CooMatrix src, SparseVector col) {
+    public static Matrix addToEachCol(CooMatrix src, CooVector col) {
         ParameterChecks.assertEquals(src.numRows, col.size);
         double[] destEntries = new double[src.totalEntries().intValueExact()];
 
@@ -305,7 +305,7 @@ public class RealSparseMatrixOperations {
      * @param row Sparse vector to add to each row of the sparse matrix.
      * @return A dense copy of the {@code src} matrix with the {@code row} vector added to each row of the matrix.
      */
-    public static Matrix addToEachRow(CooMatrix src, SparseVector row) {
+    public static Matrix addToEachRow(CooMatrix src, CooVector row) {
         ParameterChecks.assertEquals(src.numCols, row.size);
         double[] destEntries = new double[src.totalEntries().intValueExact()];
 

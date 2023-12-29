@@ -1,8 +1,8 @@
 package com.flag4j.complex_sparse_matrix;
 
 import com.flag4j.CooCMatrix;
+import com.flag4j.CooCVector;
 import com.flag4j.Shape;
-import com.flag4j.SparseCVector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.sparse.coo.complex.ComplexSparseMatrixGetSet;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ class CooCMatrixGetRowColTests {
         Shape expShape;
         int[] expIndices;
         CNumber[] expEntries;
-        SparseCVector exp;
+        CooCVector exp;
 
         // ---------------------  Sub-case 1 ---------------------
         aShape = new Shape(5, 3);
@@ -35,7 +35,7 @@ class CooCMatrixGetRowColTests {
         expShape = new Shape(3);
         expEntries = new CNumber[]{};
         expIndices = new int[]{};
-        exp = new SparseCVector(expShape.get(0), expEntries, expIndices);
+        exp = new CooCVector(expShape.get(0), expEntries, expIndices);
 
         assertEquals(exp, a.getRow(2));
 
@@ -49,7 +49,7 @@ class CooCMatrixGetRowColTests {
         expShape = new Shape(11);
         expEntries = new CNumber[]{};
         expIndices = new int[]{};
-        exp = new SparseCVector(expShape.get(0), expEntries, expIndices);
+        exp = new CooCVector(expShape.get(0), expEntries, expIndices);
 
         assertEquals(exp, a.getRow(18));
 
@@ -63,7 +63,7 @@ class CooCMatrixGetRowColTests {
         expShape = new Shape(5);
         expEntries = new CNumber[]{};
         expIndices = new int[]{};
-        exp = new SparseCVector(expShape.get(0), expEntries, expIndices);
+        exp = new CooCVector(expShape.get(0), expEntries, expIndices);
 
         assertEquals(exp, a.getRow(0));
 
@@ -100,7 +100,7 @@ class CooCMatrixGetRowColTests {
         Shape expShape;
         int[] expIndices;
         CNumber[] expEntries;
-        SparseCVector exp;
+        CooCVector exp;
 
         // ---------------------  Sub-case 1 ---------------------
         aShape = new Shape(5, 3);
@@ -112,7 +112,7 @@ class CooCMatrixGetRowColTests {
         expShape = new Shape(2);
         expEntries = new CNumber[]{};
         expIndices = new int[]{};
-        exp = new SparseCVector(expShape.get(0), expEntries, expIndices);
+        exp = new CooCVector(expShape.get(0), expEntries, expIndices);
 
         assertEquals(exp, ComplexSparseMatrixGetSet.getRow(a, 2, 1, 3));
 
@@ -126,7 +126,7 @@ class CooCMatrixGetRowColTests {
         expShape = new Shape(7);
         expEntries = new CNumber[]{};
         expIndices = new int[]{};
-        exp = new SparseCVector(expShape.get(0), expEntries, expIndices);
+        exp = new CooCVector(expShape.get(0), expEntries, expIndices);
 
         assertEquals(exp, ComplexSparseMatrixGetSet.getRow(a,18, 0, 7));
 
@@ -140,7 +140,7 @@ class CooCMatrixGetRowColTests {
         expShape = new Shape(3);
         expEntries = new CNumber[]{};
         expIndices = new int[]{};
-        exp = new SparseCVector(expShape.get(0), expEntries, expIndices);
+        exp = new CooCVector(expShape.get(0), expEntries, expIndices);
 
         assertEquals(exp, ComplexSparseMatrixGetSet.getRow(a,0, 1, 4));
 
@@ -197,7 +197,7 @@ class CooCMatrixGetRowColTests {
         Shape expShape;
         int[] expIndices;
         CNumber[] expEntries;
-        SparseCVector exp;
+        CooCVector exp;
 
         // ---------------------  Sub-case 1 ---------------------
         aShape = new Shape(3, 5);
@@ -209,7 +209,7 @@ class CooCMatrixGetRowColTests {
         expShape = new Shape(3);
         expEntries = new CNumber[]{new CNumber("0.57563+0.65813i"), new CNumber("0.95458+0.46474i")};
         expIndices = new int[]{0, 2};
-        exp = new SparseCVector(expShape.get(0), expEntries, expIndices);
+        exp = new CooCVector(expShape.get(0), expEntries, expIndices);
 
         assertEquals(exp, a.getCol(2));
 
@@ -223,7 +223,7 @@ class CooCMatrixGetRowColTests {
         expShape = new Shape(11);
         expEntries = new CNumber[]{};
         expIndices = new int[]{};
-        exp = new SparseCVector(expShape.get(0), expEntries, expIndices);
+        exp = new CooCVector(expShape.get(0), expEntries, expIndices);
 
         assertEquals(exp, a.getCol(18));
 
@@ -237,7 +237,7 @@ class CooCMatrixGetRowColTests {
         expShape = new Shape(5);
         expEntries = new CNumber[]{};
         expIndices = new int[]{};
-        exp = new SparseCVector(expShape.get(0), expEntries, expIndices);
+        exp = new CooCVector(expShape.get(0), expEntries, expIndices);
 
         assertEquals(exp, a.getCol(0));
 
@@ -271,7 +271,7 @@ class CooCMatrixGetRowColTests {
         expShape = new Shape(5);
         expEntries = new CNumber[]{new CNumber("0.8627+0.19761i"), new CNumber("0.88528+0.83323i")};
         expIndices = new int[]{0, 3};
-        exp = new SparseCVector(expShape.get(0), expEntries, expIndices);
+        exp = new CooCVector(expShape.get(0), expEntries, expIndices);
 
         assertEquals(exp, a.getCol(2));
 
@@ -285,7 +285,7 @@ class CooCMatrixGetRowColTests {
         expShape = new Shape(5);
         expEntries = new CNumber[]{};
         expIndices = new int[]{};
-        exp = new SparseCVector(expShape.get(0), expEntries, expIndices);
+        exp = new CooCVector(expShape.get(0), expEntries, expIndices);
 
         assertEquals(exp, a.getCol(2));
     }

@@ -74,7 +74,7 @@ public final class CustomAssertions extends Assert {
      * @param exp Expected vector.
      * @param act Actual vector.
      */
-    public static void assertEqualsNaN(SparseVector exp, SparseVector act) {
+    public static void assertEqualsNaN(CooVector exp, CooVector act) {
         assertEquals(exp.shape, act.shape);
         assertArrayEquals(exp.indices, act.indices);
         for(int i=0; i<exp.entries.length; i++) {

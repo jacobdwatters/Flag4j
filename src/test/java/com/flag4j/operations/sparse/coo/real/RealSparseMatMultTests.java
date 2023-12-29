@@ -1,9 +1,9 @@
 package com.flag4j.operations.sparse.coo.real;
 
 import com.flag4j.CooMatrix;
+import com.flag4j.CooVector;
 import com.flag4j.Matrix;
 import com.flag4j.Shape;
-import com.flag4j.SparseVector;
 import org.junit.jupiter.api.Test;
 
 import static com.flag4j.operations.sparse.coo.real.RealSparseMatrixMultiplication.*;
@@ -18,7 +18,7 @@ class RealSparseMatMultTests {
     Shape aShape, bShape;
 
     CooMatrix A, B;
-    SparseVector bVector;
+    CooVector bVector;
     Matrix exp;
 
     @Test
@@ -61,7 +61,7 @@ class RealSparseMatMultTests {
 
         bEntries = new double[]{1.34};
         indices = new int[]{1};
-        bVector = new SparseVector(3, bEntries, indices);
+        bVector = new CooVector(3, bEntries, indices);
 
         expEntries = new double[][]{{0}, {0}, {12.6362}, {0}};
         exp = new Matrix(expEntries);

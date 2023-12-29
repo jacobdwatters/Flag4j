@@ -24,7 +24,7 @@
 
 package com.flag4j.operations.dense_sparse.real;
 
-import com.flag4j.SparseTensor;
+import com.flag4j.CooTensor;
 import com.flag4j.Tensor;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
@@ -48,7 +48,7 @@ public class RealDenseSparseTensorOperations {
      * @return The result of the tensor addition.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static Tensor add(Tensor src1, SparseTensor src2) {
+    public static Tensor add(Tensor src1, CooTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int[] indices;
@@ -70,7 +70,7 @@ public class RealDenseSparseTensorOperations {
      * @return The result ofm element-wise multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static SparseTensor elemMult(Tensor src1, SparseTensor src2) {
+    public static CooTensor elemMult(Tensor src1, CooTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int index;
@@ -83,7 +83,7 @@ public class RealDenseSparseTensorOperations {
             destEntries[i] = src1.entries[index]*src2.entries[i];
         }
 
-        return new SparseTensor(src2.shape.copy(), destEntries, destIndices);
+        return new CooTensor(src2.shape.copy(), destEntries, destIndices);
     }
 
 
@@ -94,7 +94,7 @@ public class RealDenseSparseTensorOperations {
      * @return The result of the tensor addition.
      * @throws IllegalArgumentException If the tensors do not have the same shape.t
      */
-    public static Tensor sub(Tensor src1, SparseTensor src2) {
+    public static Tensor sub(Tensor src1, CooTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         Tensor dest = new Tensor(src1);
@@ -113,7 +113,7 @@ public class RealDenseSparseTensorOperations {
      * @param src2 Second tensor in sum.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static void addEq(Tensor src1, SparseTensor src2) {
+    public static void addEq(Tensor src1, CooTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
@@ -128,7 +128,7 @@ public class RealDenseSparseTensorOperations {
      * @param src2 Second tensor in difference.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static void subEq(Tensor src1, SparseTensor src2) {
+    public static void subEq(Tensor src1, CooTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {

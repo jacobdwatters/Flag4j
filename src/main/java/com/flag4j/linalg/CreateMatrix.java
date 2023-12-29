@@ -63,7 +63,7 @@ public class CreateMatrix {
 //     * @param values Values to use as diagonal components of the resultant matrix.
 //     * @return A square, diagonal matrix whose non-zero components are equivalent to those specified by 'values'.
 //     */
-//    CooMatrix toDiag(SparseVector values){/*TODO:*/return null;}
+//    CooMatrix toDiag(CooVector values){/*TODO:*/return null;}
 //
 //
 //    /**

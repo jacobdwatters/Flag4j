@@ -26,7 +26,7 @@ package com.flag4j.core;
 
 import com.flag4j.CVector;
 import com.flag4j.CooCMatrix;
-import com.flag4j.SparseCVector;
+import com.flag4j.CooCVector;
 import com.flag4j.complex_numbers.CNumber;
 
 
@@ -139,7 +139,7 @@ public interface ComplexMatrixMixin<T> {
      * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
      * @throws IndexOutOfBoundsException If {@code colIndex} is not within the matrix.
      */
-    T setCol(SparseCVector values, int colIndex);
+    T setCol(CooCVector values, int colIndex);
 
 
     /**
@@ -161,7 +161,7 @@ public interface ComplexMatrixMixin<T> {
      * @throws IllegalArgumentException If the {@code values} vector has a different length than the number of columns of this matrix.
      * @throws IndexOutOfBoundsException If {@code rowIndex} is not within the matrix.
      */
-    T setRow(SparseCVector values, int rowIndex);
+    T setRow(CooCVector values, int rowIndex);
 
 
     /**

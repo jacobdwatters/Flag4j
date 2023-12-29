@@ -25,8 +25,8 @@
 package com.flag4j.operations.dense_sparse.real_complex;
 
 import com.flag4j.CVector;
-import com.flag4j.SparseCVector;
-import com.flag4j.SparseVector;
+import com.flag4j.CooCVector;
+import com.flag4j.CooVector;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.common.complex.ComplexOperations;
@@ -225,7 +225,7 @@ public class RealComplexDenseSparseVectorOperations {
      * @return The result of the vector addition.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static CVector add(Vector src1, SparseCVector src2) {
+    public static CVector add(Vector src1, CooCVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         CVector dest = new CVector(src1);
@@ -247,7 +247,7 @@ public class RealComplexDenseSparseVectorOperations {
      * @return The result of the vector addition.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static CVector add(CVector src1, SparseVector src2) {
+    public static CVector add(CVector src1, CooVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         CVector dest = new CVector(src1);
@@ -269,7 +269,7 @@ public class RealComplexDenseSparseVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static CVector sub(Vector src1, SparseCVector src2) {
+    public static CVector sub(Vector src1, CooCVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         CVector dest = new CVector(src1);
@@ -291,7 +291,7 @@ public class RealComplexDenseSparseVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static CVector sub(SparseCVector src1, Vector src2) {
+    public static CVector sub(CooCVector src1, Vector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
         CVector dest = new CVector(RealOperations.scalMult(src2.entries, -1));
 
@@ -310,7 +310,7 @@ public class RealComplexDenseSparseVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static CVector sub(SparseVector src1, CVector src2) {
+    public static CVector sub(CooVector src1, CVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
         CVector dest = new CVector(ComplexOperations.scalMult(src2.entries, -1));
 
@@ -329,7 +329,7 @@ public class RealComplexDenseSparseVectorOperations {
      * @return The result of the element-wise multiplication.
      * @throws IllegalArgumentException If the two vectors are not the same size.
      */
-    public static SparseCVector elemMult(Vector src1, SparseCVector src2) {
+    public static CooCVector elemMult(Vector src1, CooCVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         CNumber[] entries = new CNumber[src2.entries.length];
@@ -338,7 +338,7 @@ public class RealComplexDenseSparseVectorOperations {
             entries[i] = src2.entries[i].mult(src1.entries[src2.indices[i]]);
         }
 
-        return new SparseCVector(src1.size, entries, src2.indices.clone());
+        return new CooCVector(src1.size, entries, src2.indices.clone());
     }
 
 
@@ -349,7 +349,7 @@ public class RealComplexDenseSparseVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static CVector sub(CVector src1, SparseVector src2) {
+    public static CVector sub(CVector src1, CooVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         CVector dest = new CVector(src1);
@@ -371,7 +371,7 @@ public class RealComplexDenseSparseVectorOperations {
      * @param src2 Second vector to add.
      * @throws IllegalArgumentException If the vectors do not have the same size.
      */
-    public static void addEq(CVector src1, SparseVector src2) {
+    public static void addEq(CVector src1, CooVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int index;
@@ -388,7 +388,7 @@ public class RealComplexDenseSparseVectorOperations {
      * @param src1 First vector in subtraction.
      * @param src2 Second vector in subtraction.
      */
-    public static void subEq(CVector src1, SparseVector src2) {
+    public static void subEq(CVector src1, CooVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int index;
@@ -406,7 +406,7 @@ public class RealComplexDenseSparseVectorOperations {
      * @return The result of the element-wise multiplication.
      * @throws IllegalArgumentException If the two vectors are not the same size.
      */
-    public static SparseCVector elemMult(CVector src1, SparseVector src2) {
+    public static CooCVector elemMult(CVector src1, CooVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         CNumber[] entries = new CNumber[src2.entries.length];
@@ -415,7 +415,7 @@ public class RealComplexDenseSparseVectorOperations {
             entries[i] = src1.entries[src2.indices[i]].mult(src2.entries[i]);
         }
 
-        return new SparseCVector(src1.size, entries, src2.indices.clone());
+        return new CooCVector(src1.size, entries, src2.indices.clone());
     }
 
 
@@ -425,7 +425,7 @@ public class RealComplexDenseSparseVectorOperations {
      * @param src2 Second vector in the element-wise division.
      * @return The result of the element-wise vector division.
      */
-    public static SparseCVector elemDiv(SparseCVector src1, Vector src2) {
+    public static CooCVector elemDiv(CooCVector src1, Vector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
         CNumber[] dest = new CNumber[src1.entries.length];
 
@@ -433,7 +433,7 @@ public class RealComplexDenseSparseVectorOperations {
             dest[i] = src1.entries[i].div(src2.entries[src1.indices[i]]);
         }
 
-        return new SparseCVector(src1.size, dest, src1.indices.clone());
+        return new CooCVector(src1.size, dest, src1.indices.clone());
     }
 
 
@@ -443,7 +443,7 @@ public class RealComplexDenseSparseVectorOperations {
      * @param src2 Second vector in the element-wise division.
      * @return The result of the element-wise vector division.
      */
-    public static SparseCVector elemDiv(SparseVector src1, CVector src2) {
+    public static CooCVector elemDiv(CooVector src1, CVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
         CNumber[] dest = new CNumber[src1.entries.length];
 
@@ -451,6 +451,6 @@ public class RealComplexDenseSparseVectorOperations {
             dest[i] = new CNumber(src1.entries[i]).div(src2.entries[src1.indices[i]]);
         }
 
-        return new SparseCVector(src1.size, dest, src1.indices.clone());
+        return new CooCVector(src1.size, dest, src1.indices.clone());
     }
 }

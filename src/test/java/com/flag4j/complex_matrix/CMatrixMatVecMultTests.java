@@ -105,7 +105,7 @@ class CMatrixMatVecMultTests {
     void matMultSparseTestCase() {
         double[] bEntries;
         int[] rowIndices;
-        SparseVector B;
+        CooVector B;
 
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new CNumber[][]{
@@ -116,7 +116,7 @@ class CMatrixMatVecMultTests {
         A = new CMatrix(aEntries);
         bEntries = new double[]{-0.9345341};
         rowIndices = new int[]{1};
-        B = new SparseVector(3, bEntries, rowIndices);
+        B = new CooVector(3, bEntries, rowIndices);
         expEntries = new CNumber[]{
                 new CNumber("-42.240941320000005+0.031119985530000005i"),
                 new CNumber("0.0+694.4522897100001i"),
@@ -135,9 +135,9 @@ class CMatrixMatVecMultTests {
         A = new CMatrix(aEntries);
         bEntries = new double[]{-0.9345341};
         rowIndices = new int[]{1};
-        B = new SparseVector(14, bEntries, rowIndices);
+        B = new CooVector(14, bEntries, rowIndices);
 
-        SparseVector finalB = B;
+        CooVector finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 
@@ -146,7 +146,7 @@ class CMatrixMatVecMultTests {
     void matMultSparseComplexTestCase() {
         CNumber[] bEntries;
         int[] rowIndices, colIndices;
-        SparseCVector B;
+        CooCVector B;
         Shape bShape;
 
         // ---------------------- Sub-case 1 ----------------------
@@ -158,7 +158,7 @@ class CMatrixMatVecMultTests {
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i")};
         rowIndices = new int[]{1};
-        B = new SparseCVector(3, bEntries, rowIndices);
+        B = new CooCVector(3, bEntries, rowIndices);
         expEntries = new CNumber[]{
                 new CNumber("-41.929586320000006+422.65111998553i"),
                 new CNumber("6947.985+694.4522897100001i"),
@@ -178,9 +178,9 @@ class CMatrixMatVecMultTests {
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i"), new CNumber("11.67-2.0i")};
         rowIndices = new int[]{1687, 2569070};
-        B = new SparseCVector(3450941, bEntries, rowIndices);
+        B = new CooCVector(3450941, bEntries, rowIndices);
 
-        SparseCVector finalB = B;
+        CooCVector finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 

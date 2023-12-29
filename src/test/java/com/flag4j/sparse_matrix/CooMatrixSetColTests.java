@@ -1,8 +1,8 @@
 package com.flag4j.sparse_matrix;
 
 import com.flag4j.CooMatrix;
+import com.flag4j.CooVector;
 import com.flag4j.Shape;
-import com.flag4j.SparseVector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -142,7 +142,7 @@ class CooMatrixSetColTests {
         Shape bShape;
         int[] bindices;
         double[] bEntries;
-        SparseVector b;
+        CooVector b;
 
         Shape expShape;
         int[] expRowIndices;
@@ -160,7 +160,7 @@ class CooMatrixSetColTests {
         bShape = new Shape(5);
         bEntries = new double[]{0.42925, 0.95116};
         bindices = new int[]{2, 3};
-        b = new SparseVector(bShape.get(0), bEntries, bindices);
+        b = new CooVector(bShape.get(0), bEntries, bindices);
 
         expShape = new Shape(5, 3);
         expEntries = new double[]{0.69683, 0.42925, 0.95116, 0.01005};
@@ -180,7 +180,7 @@ class CooMatrixSetColTests {
         bShape = new Shape(11);
         bEntries = new double[]{0.42701, 0.22431, 0.48719, 0.79679};
         bindices = new int[]{5, 6, 7, 10};
-        b = new SparseVector(bShape.get(0), bEntries, bindices);
+        b = new CooVector(bShape.get(0), bEntries, bindices);
 
         expShape = new Shape(11, 23);
         expEntries = new double[]{0.09879, 0.44944, 0.42701, 0.22431, 0.48719, 0.51234, 0.10826, 0.79679};
@@ -200,7 +200,7 @@ class CooMatrixSetColTests {
         bShape = new Shape(5);
         bEntries = new double[]{0.92473, 0.36888};
         bindices = new int[]{1, 4};
-        b = new SparseVector(bShape.get(0), bEntries, bindices);
+        b = new CooVector(bShape.get(0), bEntries, bindices);
 
         expShape = new Shape(5, 1000);
         expEntries = new double[]{0.548, 0.12782, 0.71044, 0.03123, 0.92473, 0.73197, 0.23329, 0.76449, 0.62306, 0.77283, 0.36888};
@@ -220,10 +220,10 @@ class CooMatrixSetColTests {
         bShape = new Shape(3);
         bEntries = new double[]{0.93917};
         bindices = new int[]{2};
-        b = new SparseVector(bShape.get(0), bEntries, bindices);
+        b = new CooVector(bShape.get(0), bEntries, bindices);
 
         CooMatrix final0a = a;
-        SparseVector final0b = b;
+        CooVector final0b = b;
         assertThrows(Exception.class, ()->final0a.setCol(final0b, 6));
 
         // ---------------------  Sub-case 5 ---------------------
@@ -236,10 +236,10 @@ class CooMatrixSetColTests {
         bShape = new Shape(5);
         bEntries = new double[]{0.41526, 0.41046};
         bindices = new int[]{0, 2};
-        b = new SparseVector(bShape.get(0), bEntries, bindices);
+        b = new CooVector(bShape.get(0), bEntries, bindices);
 
         CooMatrix final1a = a;
-        SparseVector final1b = b;
+        CooVector final1b = b;
         assertThrows(Exception.class, ()->final1a.setCol(final1b, 3));
 
         // ---------------------  Sub-case 6 ---------------------
@@ -252,10 +252,10 @@ class CooMatrixSetColTests {
         bShape = new Shape(2);
         bEntries = new double[]{0.55374};
         bindices = new int[]{1};
-        b = new SparseVector(bShape.get(0), bEntries, bindices);
+        b = new CooVector(bShape.get(0), bEntries, bindices);
 
         CooMatrix final2a = a;
-        SparseVector final2b = b;
+        CooVector final2b = b;
         assertThrows(Exception.class, ()->final2a.setCol(final2b, 3));
 
         // ---------------------  Sub-case 7 ---------------------
@@ -268,10 +268,10 @@ class CooMatrixSetColTests {
         bShape = new Shape(3);
         bEntries = new double[]{0.838};
         bindices = new int[]{0};
-        b = new SparseVector(bShape.get(0), bEntries, bindices);
+        b = new CooVector(bShape.get(0), bEntries, bindices);
 
         CooMatrix final3a = a;
-        SparseVector final3b = b;
+        CooVector final3b = b;
         assertThrows(Exception.class, ()->final3a.setCol(final3b, 19));
     }
 }

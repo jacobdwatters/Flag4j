@@ -41,7 +41,7 @@ public class RealComplexSparseEquals {
      * @param b Second tensor in the equality check.
      * @return True if the tensors are equal. False otherwise.
      */
-    public static boolean tensorEquals(SparseTensor a, SparseCTensor b) {
+    public static boolean tensorEquals(CooTensor a, CooCTensor b) {
         return a.shape.equals(b.shape) && ArrayUtils.equals(a.entries, b.entries)
                 && Arrays.deepEquals(a.indices, b.indices);
     }
@@ -66,7 +66,7 @@ public class RealComplexSparseEquals {
      * @param b Second vector in the equality check.
      * @return True if the vectors are equal. False otherwise.
      */
-    public static boolean vectorEquals(SparseVector a, SparseCVector b) {
+    public static boolean vectorEquals(CooVector a, CooCVector b) {
         return a.size==b.size && Arrays.equals(a.indices, b.indices) && ArrayUtils.equals(a.entries, b.entries);
     }
 }

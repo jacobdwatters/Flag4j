@@ -1,18 +1,18 @@
 package com.flag4j.sparse_vector;
 
-import com.flag4j.SparseVector;
+import com.flag4j.CooVector;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class SparseVectorAggregateTests {
+class CooVectorAggregateTests {
 
     static double[] aValues;
     static int[] aIndices;
     static int size;
-    static SparseVector a;
+    static CooVector a;
 
 
     @BeforeAll
@@ -20,7 +20,7 @@ class SparseVectorAggregateTests {
         aValues = new double[]{1.34, 51.6, -0.00245};
         aIndices = new int[]{0, 5, 103};
         size = 304;
-        a = new SparseVector(size, aValues, aIndices);
+        a = new CooVector(size, aValues, aIndices);
     }
 
 

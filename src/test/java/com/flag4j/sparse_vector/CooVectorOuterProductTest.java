@@ -9,18 +9,18 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class SparseVectorOuterProductTest {
+class CooVectorOuterProductTest {
 
     int[] bIndices;
     static int sparseSize;
-    static SparseVector a;
+    static CooVector a;
 
     @BeforeAll
     static void setup() {
         double[] aEntries = {1.0, 5.6, -9.355};
         int[] aIndices = {1, 2, 4};
         sparseSize = 5;
-        a = new SparseVector(sparseSize, aEntries, aIndices);
+        a = new CooVector(sparseSize, aEntries, aIndices);
     }
 
 
@@ -28,13 +28,13 @@ class SparseVectorOuterProductTest {
     void sparseOuterProdTestCase() {
         double[] bEntries;
         double[][] expEntries;
-        SparseVector b;
+        CooVector b;
         Matrix exp;
 
         // -------------------- Sub-case 1 --------------------
         bEntries = new double[]{1.34, -99.4};
         bIndices = new int[]{0, 2};
-        b = new SparseVector(sparseSize, bEntries, bIndices);
+        b = new CooVector(sparseSize, bEntries, bIndices);
         expEntries = new double[][]{
                 {0.0, 0.0, 0.0, 0.0, 0.0},
                 {1.34, 0.0, -99.4, 0.0, 0.0},
@@ -48,9 +48,9 @@ class SparseVectorOuterProductTest {
         // -------------------- Sub-case 2 --------------------
         bEntries = new double[]{1.34, -99.4};
         bIndices = new int[]{0, 2};
-        b = new SparseVector(sparseSize+1445, bEntries, bIndices);
+        b = new CooVector(sparseSize+1445, bEntries, bIndices);
 
-        SparseVector finalB = b;
+        CooVector finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.outer(finalB));
     }
 
@@ -59,13 +59,13 @@ class SparseVectorOuterProductTest {
     void sparseComplexOuterProdTestCase() {
         CNumber[] bEntries;
         CNumber[][] expEntries;
-        SparseCVector b;
+        CooCVector b;
         CMatrix exp;
 
         // -------------------- Sub-case 1 --------------------
         bEntries = new CNumber[]{new CNumber(1.34, 0.0244), new CNumber(-99, 815.66)};
         bIndices = new int[]{0, 2};
-        b = new SparseCVector(sparseSize, bEntries, bIndices);
+        b = new CooCVector(sparseSize, bEntries, bIndices);
         expEntries = new CNumber[][]{
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("1.34+0.0244i"), new CNumber("0.0"), new CNumber("-99.0+815.66i"), new CNumber("0.0"), new CNumber("0.0")},
@@ -79,9 +79,9 @@ class SparseVectorOuterProductTest {
         // -------------------- Sub-case 2 --------------------
         bEntries = new CNumber[]{new CNumber(1.34, 0.0244), new CNumber(-99, 815.66)};
         bIndices = new int[]{0, 2};
-        b = new SparseCVector(sparseSize+103, bEntries, bIndices);
+        b = new CooCVector(sparseSize+103, bEntries, bIndices);
 
-        SparseCVector finalB = b;
+        CooCVector finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.outer(finalB));
     }
 

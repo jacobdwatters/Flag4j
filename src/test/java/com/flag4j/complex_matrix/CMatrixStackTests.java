@@ -463,7 +463,7 @@ class CMatrixStackTests {
     @Test
     void realSparseVectorTestCase() {
         double[] bEntries;
-        SparseVector B;
+        CooVector B;
 
         // ----------------------- Sub-case 1 -----------------------
         aEntries = new CNumber[][]{
@@ -472,7 +472,7 @@ class CMatrixStackTests {
         A = new CMatrix(aEntries);
         bEntries = new double[]{1.234};
         rowIndices = new int[]{0};
-        B = new SparseVector(2, bEntries, rowIndices);
+        B = new CooVector(2, bEntries, rowIndices);
         expEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3), new CNumber(1.234)},
                 {new CNumber(1), new CNumber(), new CNumber(0, 87.3), new CNumber()}};
@@ -487,9 +487,9 @@ class CMatrixStackTests {
         A = new CMatrix(aEntries);
         bEntries = new double[]{1.234};
         rowIndices = new int[]{0};
-        B = new SparseVector(24, bEntries, rowIndices);
+        B = new CooVector(24, bEntries, rowIndices);
 
-        SparseVector finalB = B;
+        CooVector finalB = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB, 0));
 
         // ----------------------- Sub-case 3 -----------------------
@@ -499,7 +499,7 @@ class CMatrixStackTests {
         A = new CMatrix(aEntries);
         bEntries = new double[]{1.234};
         rowIndices = new int[]{0};
-        B = new SparseVector(3, bEntries, rowIndices);
+        B = new CooVector(3, bEntries, rowIndices);
         expEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), new CNumber(), new CNumber(0, 87.3)},
@@ -515,9 +515,9 @@ class CMatrixStackTests {
         A = new CMatrix(aEntries);
         bEntries = new double[]{1.234};
         rowIndices = new int[]{0};
-        B = new SparseVector(3546, bEntries, rowIndices);
+        B = new CooVector(3546, bEntries, rowIndices);
 
-        SparseVector finalB1 = B;
+        CooVector finalB1 = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB1, 1));
 
         // ----------------------- Sub-case 5 -----------------------
@@ -527,9 +527,9 @@ class CMatrixStackTests {
         A = new CMatrix(aEntries);
         bEntries = new double[]{1.234};
         rowIndices = new int[]{0};
-        B = new SparseVector(3, bEntries, rowIndices);
+        B = new CooVector(3, bEntries, rowIndices);
 
-        SparseVector finalB2 = B;
+        CooVector finalB2 = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB1, 2));
     }
 
@@ -537,7 +537,7 @@ class CMatrixStackTests {
     @Test
     void complexSparseVectorTestCase() {
         CNumber[] bEntries;
-        SparseCVector B;
+        CooCVector B;
 
         // ----------------------- Sub-case 1 -----------------------
         aEntries = new CNumber[][]{
@@ -546,7 +546,7 @@ class CMatrixStackTests {
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber(23.45, -732.4)};
         rowIndices = new int[]{0};
-        B = new SparseCVector(2, bEntries, rowIndices);
+        B = new CooCVector(2, bEntries, rowIndices);
         expEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3), new CNumber(23.45, -732.4)},
                 {new CNumber(1), new CNumber(), new CNumber(0, 87.3), new CNumber()}};
@@ -561,9 +561,9 @@ class CMatrixStackTests {
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber(23.45, -732.4)};
         rowIndices = new int[]{0};
-        B = new SparseCVector(24, bEntries, rowIndices);
+        B = new CooCVector(24, bEntries, rowIndices);
 
-        SparseCVector finalB = B;
+        CooCVector finalB = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB, 0));
 
         // ----------------------- Sub-case 3 -----------------------
@@ -573,7 +573,7 @@ class CMatrixStackTests {
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber(23.45, -732.4)};
         rowIndices = new int[]{0};
-        B = new SparseCVector(3, bEntries, rowIndices);
+        B = new CooCVector(3, bEntries, rowIndices);
         expEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), new CNumber(), new CNumber(0, 87.3)},
@@ -589,9 +589,9 @@ class CMatrixStackTests {
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber(23.45, -732.4)};
         rowIndices = new int[]{0};
-        B = new SparseCVector(3546, bEntries, rowIndices);
+        B = new CooCVector(3546, bEntries, rowIndices);
 
-        SparseCVector finalB1 = B;
+        CooCVector finalB1 = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB1, 1));
 
         // ----------------------- Sub-case 5 -----------------------
@@ -601,9 +601,9 @@ class CMatrixStackTests {
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber(23.45, -732.4)};
         rowIndices = new int[]{0};
-        B = new SparseCVector(3, bEntries, rowIndices);
+        B = new CooCVector(3, bEntries, rowIndices);
 
-        SparseCVector finalB2 = B;
+        CooCVector finalB2 = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB1, 2));
     }
 }

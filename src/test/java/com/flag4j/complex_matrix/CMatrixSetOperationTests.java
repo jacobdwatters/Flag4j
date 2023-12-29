@@ -427,14 +427,14 @@ class CMatrixSetOperationTests {
     @Test
     void setColumnSparseCVectorTestCase() {
         CNumber[] values;
-        SparseCVector valuesVec;
+        CooCVector valuesVec;
         int col;
 
         // ----------------------- Sub-case 1 -----------------------
         values = new CNumber[]{new CNumber(2.445, -0.91354), new CNumber(0, 6.2132)};
         sparseSize = 3;
         sparseIndices = new int[]{0, 2};
-        valuesVec = new SparseCVector(sparseSize, values, sparseIndices);
+        valuesVec = new CooCVector(sparseSize, values, sparseIndices);
         col = 0;
         entriesExp = new CNumber[][]{
                 {new CNumber(2.445, -0.91354), new CNumber(0)},
@@ -454,7 +454,7 @@ class CMatrixSetOperationTests {
         values = new CNumber[]{new CNumber(2.445, -0.91354)};
         sparseSize = 3;
         sparseIndices = new int[]{1};
-        valuesVec = new SparseCVector(sparseSize, values, sparseIndices);
+        valuesVec = new CooCVector(sparseSize, values, sparseIndices);
         col = 1;
         entriesExp = new CNumber[][]{
                 {new CNumber(0), new CNumber()},
@@ -474,7 +474,7 @@ class CMatrixSetOperationTests {
         values = new CNumber[]{new CNumber(2.445, -0.91354)};
         sparseSize = 4;
         sparseIndices = new int[]{1};
-        valuesVec = new SparseCVector(sparseSize, values, sparseIndices);
+        valuesVec = new CooCVector(sparseSize, values, sparseIndices);
         col = 1;
         entriesA = new CNumber[][]{
                 {new CNumber(0), new CNumber(0)},
@@ -482,7 +482,7 @@ class CMatrixSetOperationTests {
                 {new CNumber(1331.14), new CNumber(-1334.5)}};
         A = new CMatrix(entriesA);
 
-        SparseCVector finalValuesVec = valuesVec;
+        CooCVector finalValuesVec = valuesVec;
         int finalCol = col;
         assertThrows(IllegalArgumentException.class, ()->A.setCol(finalValuesVec, finalCol));
 
@@ -491,7 +491,7 @@ class CMatrixSetOperationTests {
         values = new CNumber[]{new CNumber(2.445, -0.91354)};
         sparseSize = 3;
         sparseIndices = new int[]{1};
-        valuesVec = new SparseCVector(sparseSize, values, sparseIndices);
+        valuesVec = new CooCVector(sparseSize, values, sparseIndices);
         col = 13;
         entriesA = new CNumber[][]{
                 {new CNumber(0), new CNumber(0)},
@@ -499,7 +499,7 @@ class CMatrixSetOperationTests {
                 {new CNumber(1331.14), new CNumber(-1334.5)}};
         A = new CMatrix(entriesA);
 
-        SparseCVector finalValuesVec1 = valuesVec;
+        CooCVector finalValuesVec1 = valuesVec;
         int finalCol1 = col;
         assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.setCol(finalValuesVec1, finalCol1));
     }
@@ -821,14 +821,14 @@ class CMatrixSetOperationTests {
     @Test
     void setRowSparseCVectorTestCase() {
         CNumber[] values;
-        SparseCVector valuesVec;
+        CooCVector valuesVec;
         int row;
 
         // -------------- Sub-case 1 --------------
         values = new CNumber[]{new CNumber(34, -55.6)};
         sparseSize = 2;
         sparseIndices = new int[]{0};
-        valuesVec = new SparseCVector(sparseSize, values, sparseIndices);
+        valuesVec = new CooCVector(sparseSize, values, sparseIndices);
         row = 0;
         entriesExp = new CNumber[][]{
                 {new CNumber(34, -55.6), new CNumber(0)},
@@ -848,7 +848,7 @@ class CMatrixSetOperationTests {
         values = new CNumber[]{new CNumber(34, -55.6)};
         sparseSize = 2;
         sparseIndices = new int[]{0};
-        valuesVec = new SparseCVector(sparseSize, values, sparseIndices);
+        valuesVec = new CooCVector(sparseSize, values, sparseIndices);
         row = 2;
         entriesExp = new CNumber[][]{
                 {new CNumber(), new CNumber()},
@@ -868,7 +868,7 @@ class CMatrixSetOperationTests {
         values = new CNumber[]{new CNumber(34, -55.6)};
         sparseSize = 2;
         sparseIndices = new int[]{0};
-        valuesVec = new SparseCVector(sparseSize, values, sparseIndices);
+        valuesVec = new CooCVector(sparseSize, values, sparseIndices);
         row = 3;
         entriesA = new CNumber[][]{
                 {new CNumber(0), new CNumber(0)},
@@ -876,7 +876,7 @@ class CMatrixSetOperationTests {
                 {new CNumber(1331.14), new CNumber(-1334.5)}};
         A = new CMatrix(entriesA);
 
-        SparseCVector finalValuesVec = valuesVec;
+        CooCVector finalValuesVec = valuesVec;
         int finalRow = row;
         assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.setRow(finalValuesVec, finalRow));
 
@@ -884,7 +884,7 @@ class CMatrixSetOperationTests {
         values = new CNumber[]{new CNumber(34, -55.6)};
         sparseSize = 13;
         sparseIndices = new int[]{0};
-        valuesVec = new SparseCVector(sparseSize, values, sparseIndices);
+        valuesVec = new CooCVector(sparseSize, values, sparseIndices);
         row = 1;
         entriesA = new CNumber[][]{
                 {new CNumber(0), new CNumber(0)},
@@ -892,7 +892,7 @@ class CMatrixSetOperationTests {
                 {new CNumber(1331.14), new CNumber(-1334.5)}};
         A = new CMatrix(entriesA);
 
-        SparseCVector finalValuesVec2 = valuesVec;
+        CooCVector finalValuesVec2 = valuesVec;
         int finalRow2 = row;
         assertThrows(IllegalArgumentException.class, ()->A.setRow(finalValuesVec2, finalRow2));
     }

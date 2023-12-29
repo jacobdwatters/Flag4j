@@ -1,6 +1,6 @@
 package com.flag4j.vector;
 
-import com.flag4j.SparseVector;
+import com.flag4j.CooVector;
 import com.flag4j.Vector;
 import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -47,7 +47,7 @@ class VectorAddSubEqTests {
     @Test
     void realSparseAddEqTestCase() {
         double[] bEntries, expEntries;
-        SparseVector B;
+        CooVector B;
         Vector exp;
 
         // -------------------- Sub-case 1 --------------------
@@ -56,7 +56,7 @@ class VectorAddSubEqTests {
         bEntries = new double[]{34.677};
         indices = new int[]{0};
         size = 3;
-        B = new SparseVector(size, bEntries, indices);
+        B = new CooVector(size, bEntries, indices);
         expEntries = new double[]{1.34+34.677, 6.266, -90.45};
         exp = new Vector(expEntries);
 
@@ -69,9 +69,9 @@ class VectorAddSubEqTests {
         bEntries = new double[]{34.677};
         indices = new int[]{0};
         size = 201;
-        B = new SparseVector(size, bEntries, indices);
+        B = new CooVector(size, bEntries, indices);
 
-        SparseVector finalB = B;
+        CooVector finalB = B;
         assertThrows(LinearAlgebraException.class, () -> A.addEq(finalB));
     }
 
@@ -125,7 +125,7 @@ class VectorAddSubEqTests {
     @Test
     void realSparseSubTestCase() {
         double[] bEntries, expEntries;
-        SparseVector B;
+        CooVector B;
         Vector exp;
 
         // -------------------- Sub-case 1 --------------------
@@ -134,7 +134,7 @@ class VectorAddSubEqTests {
         bEntries = new double[]{34.677};
         indices = new int[]{0};
         size = 3;
-        B = new SparseVector(size, bEntries, indices);
+        B = new CooVector(size, bEntries, indices);
         expEntries = new double[]{1.34-34.677, 6.266, -90.45};
         exp = new Vector(expEntries);
 
@@ -147,9 +147,9 @@ class VectorAddSubEqTests {
         bEntries = new double[]{34.677};
         indices = new int[]{0};
         size = 201;
-        B = new SparseVector(size, bEntries, indices);
+        B = new CooVector(size, bEntries, indices);
 
-        SparseVector finalB = B;
+        CooVector finalB = B;
         assertThrows(LinearAlgebraException.class, () -> A.subEq(finalB));
     }
 

@@ -245,7 +245,7 @@ public class ComplexSparseMatrixGetSet {
      * @param row Dense array containing the entries of the row to set.
      * @return A copy of the {@code src} matrix with the specified row set to the dense {@code row} array.
      */
-    public static CooCMatrix setRow(CooCMatrix src, int rowIdx, SparseCVector row) {
+    public static CooCMatrix setRow(CooCMatrix src, int rowIdx, CooCVector row) {
         ParameterChecks.assertIndexInBounds(src.numRows, rowIdx);
         ParameterChecks.assertEquals(src.numCols, row.size);
 
@@ -374,7 +374,7 @@ public class ComplexSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code col} array does not have the same length as the number of
      * rows in {@code src} matrix.
      */
-    public static CooCMatrix setCol(CooCMatrix src, int colIdx, SparseCVector col) {
+    public static CooCMatrix setCol(CooCMatrix src, int colIdx, CooCVector col) {
         ParameterChecks.assertIndexInBounds(src.numCols, colIdx);
         ParameterChecks.assertEquals(src.numRows, col.size);
 
@@ -743,7 +743,7 @@ public class ComplexSparseMatrixGetSet {
      * @param rowIdx Index of the row to extract from the {@code src} matrix.
      * @return Returns the specified row from this sparse matrix.
      */
-    public static SparseCVector getRow(CooCMatrix src, int rowIdx) {
+    public static CooCVector getRow(CooCMatrix src, int rowIdx) {
         ParameterChecks.assertIndexInBounds(src.numRows, rowIdx);
 
         List<CNumber> entries = new ArrayList<>();
@@ -756,7 +756,7 @@ public class ComplexSparseMatrixGetSet {
             }
         }
 
-        return new SparseCVector(src.numCols, entries, indices);
+        return new CooCVector(src.numCols, entries, indices);
     }
 
 
@@ -769,7 +769,7 @@ public class ComplexSparseMatrixGetSet {
      * @param end Ending column index of the column to be extracted (exclusive)
      * @return Returns the specified column range from this sparse matrix.
      */
-    public static SparseCVector getRow(CooCMatrix src, int rowIdx, int start, int end) {
+    public static CooCVector getRow(CooCMatrix src, int rowIdx, int start, int end) {
         ParameterChecks.assertIndexInBounds(src.numRows, rowIdx);
         ParameterChecks.assertIndexInBounds(src.numCols, start, end-1);
         ParameterChecks.assertLessEq(end-1, start);
@@ -784,7 +784,7 @@ public class ComplexSparseMatrixGetSet {
             }
         }
 
-        return new SparseCVector(end-start, entries, indices);
+        return new CooCVector(end-start, entries, indices);
     }
 
 
@@ -794,7 +794,7 @@ public class ComplexSparseMatrixGetSet {
      * @param colIdx Index of the column to extract from the {@code src} matrix.
      * @return Returns the specified column from this sparse matrix.
      */
-    public static SparseCVector getCol(CooCMatrix src, int colIdx) {
+    public static CooCVector getCol(CooCMatrix src, int colIdx) {
         ParameterChecks.assertIndexInBounds(src.numCols, colIdx);
 
         List<CNumber> entries = new ArrayList<>();
@@ -807,7 +807,7 @@ public class ComplexSparseMatrixGetSet {
             }
         }
 
-        return new SparseCVector(src.numRows, entries, indices);
+        return new CooCVector(src.numRows, entries, indices);
     }
 
 
@@ -819,7 +819,7 @@ public class ComplexSparseMatrixGetSet {
      * @param end Ending row index of the column to be extracted (exclusive)
      * @return Returns the specified column range from this sparse matrix.
      */
-    public static SparseCVector getCol(CooCMatrix src, int colIdx, int start, int end) {
+    public static CooCVector getCol(CooCMatrix src, int colIdx, int start, int end) {
         ParameterChecks.assertIndexInBounds(src.numCols, colIdx);
         ParameterChecks.assertIndexInBounds(src.numRows, start, end);
         ParameterChecks.assertLessEq(end, start);
@@ -834,7 +834,7 @@ public class ComplexSparseMatrixGetSet {
             }
         }
 
-        return new SparseCVector(end-start, entries, indices);
+        return new CooCVector(end-start, entries, indices);
     }
 
 

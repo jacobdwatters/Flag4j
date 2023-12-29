@@ -48,7 +48,7 @@ public class RealComplexDenseSparseOperations {
      * @return The result of element-wise multiplication between the two tensors.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static SparseCTensor elemMult(Tensor src1, SparseCTensor src2) {
+    public static CooCTensor elemMult(Tensor src1, CooCTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int index;
@@ -61,7 +61,7 @@ public class RealComplexDenseSparseOperations {
             destEntries[i] = src2.entries[i].mult(src1.entries[index]);
         }
 
-        return new SparseCTensor(src2.shape.copy(), destEntries, destIndices);
+        return new CooCTensor(src2.shape.copy(), destEntries, destIndices);
     }
 
 
@@ -72,7 +72,7 @@ public class RealComplexDenseSparseOperations {
      * @return The result of the tensor addition.
      * @throws IllegalArgumentException If the tensors do not have the same shape.t
      */
-    public static CTensor add(Tensor src1, SparseCTensor src2) {
+    public static CTensor add(Tensor src1, CooCTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         CTensor dest = new CTensor(src1);
@@ -92,7 +92,7 @@ public class RealComplexDenseSparseOperations {
      * @return The result of the tensor addition.
      * @throws IllegalArgumentException If the tensors do not have the same shape.t
      */
-    public static CTensor sub(Tensor src1, SparseCTensor src2) {
+    public static CTensor sub(Tensor src1, CooCTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         CTensor dest = new CTensor(src1);
@@ -111,7 +111,7 @@ public class RealComplexDenseSparseOperations {
      * @param src2 Real sparse tensor.
      * @return The result of the tensor addition.
      */
-    public static CTensor add(CTensor src1, SparseTensor src2) {
+    public static CTensor add(CTensor src1, CooTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
         CTensor dest = new CTensor(src1);
 
@@ -129,7 +129,7 @@ public class RealComplexDenseSparseOperations {
      * @param src2 Real sparse tensor.
      * @return The result of the tensor addition.
      */
-    public static CTensor sub(CTensor src1, SparseTensor src2) {
+    public static CTensor sub(CTensor src1, CooTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
         CTensor dest = new CTensor(src1);
 
@@ -147,7 +147,7 @@ public class RealComplexDenseSparseOperations {
      * @param src1 The complex dense tensor. Also, the storage for the computation.
      * @param src2 The real sparse tensor.
      */
-    public static void addEq(CTensor src1, SparseTensor src2) {
+    public static void addEq(CTensor src1, CooTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
@@ -162,7 +162,7 @@ public class RealComplexDenseSparseOperations {
      * @param src1 The complex dense tensor. Also, the storage for the computation.
      * @param src2 The real sparse tensor.
      */
-    public static void subEq(CTensor src1, SparseTensor src2) {
+    public static void subEq(CTensor src1, CooTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
@@ -178,7 +178,7 @@ public class RealComplexDenseSparseOperations {
      * @return The result of element-wise multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static SparseCTensor elemMult(CTensor src1, SparseTensor src2) {
+    public static CooCTensor elemMult(CTensor src1, CooTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         CNumber[] destEntries = new CNumber[src2.nonZeroEntries()];
@@ -190,7 +190,7 @@ public class RealComplexDenseSparseOperations {
             destEntries[i] = src1.entries[src2.shape.entriesIndex(src2.indices[i])].mult(src2.entries[i]);
         }
 
-        return new SparseCTensor(src2.shape.copy(), destEntries, indices);
+        return new CooCTensor(src2.shape.copy(), destEntries, indices);
     }
 
 

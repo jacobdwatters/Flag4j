@@ -3,7 +3,7 @@ package com.flag4j.operations.sparse.coo.complex;
 import com.flag4j.CMatrix;
 import com.flag4j.CooCMatrix;
 import com.flag4j.Shape;
-import com.flag4j.SparseCVector;
+import com.flag4j.CooCVector;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +20,7 @@ class ComplexSparseMatMultTests {
     Shape aShape, bShape;
 
     CooCMatrix A, B;
-    SparseCVector bVector;
+    CooCVector bVector;
     CMatrix exp;
 
     @Test
@@ -62,7 +62,7 @@ class ComplexSparseMatMultTests {
 
         bEntries = new CNumber[]{new CNumber("1.34+13.4i")};
         indices = new int[]{1};
-        bVector = new SparseCVector(3, bEntries, indices);
+        bVector = new CooCVector(3, bEntries, indices);
 
         expEntries = new CNumber[][]{{new CNumber("0.0")},
                 {new CNumber("0.0")},

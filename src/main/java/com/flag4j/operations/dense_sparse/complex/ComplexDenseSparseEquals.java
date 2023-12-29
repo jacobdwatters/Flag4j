@@ -27,7 +27,7 @@ package com.flag4j.operations.dense_sparse.complex;
 import com.flag4j.CMatrix;
 import com.flag4j.CTensor;
 import com.flag4j.CooCMatrix;
-import com.flag4j.SparseCTensor;
+import com.flag4j.CooCTensor;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.common.complex.ComplexProperties;
 import com.flag4j.util.ArrayUtils;
@@ -135,7 +135,7 @@ public class ComplexDenseSparseEquals {
      * @param B Complex sparse tensor.
      * @return True if the two tensors are element-wise equivalent.
      */
-    public static boolean tensorEquals(CTensor A, SparseCTensor B) {
+    public static boolean tensorEquals(CTensor A, CooCTensor B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {

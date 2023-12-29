@@ -32,14 +32,14 @@ class VectorStackJoinTests {
     @Test
     void realSparseJoinTestCase() {
         double[] bEntries, expEntries;
-        SparseVector b;
+        CooVector b;
         Vector exp;
 
         // ---------------------- Sub-case 1 ----------------------
         bEntries = new double[]{0.9345, 1.5};
         sparseSize = 5;
         indices = new int[]{0, 3};
-        b = new SparseVector(sparseSize, bEntries, indices);
+        b = new CooVector(sparseSize, bEntries, indices);
         expEntries = new double[]{1.5, 6.2546, -0.24, 0.9345, 0, 0, 1.5, 0};
         exp = new Vector(expEntries);
 
@@ -66,14 +66,14 @@ class VectorStackJoinTests {
     @Test
     void complexSparseJoinTestCase() {
         CNumber[] bEntries, expEntries;
-        SparseCVector b;
+        CooCVector b;
         CVector exp;
 
         // ---------------------- Sub-case 1 ----------------------
         bEntries = new CNumber[]{new CNumber(1.56, -99345.2), new CNumber("i")};
         sparseSize = 5;
         indices = new int[]{0, 3};
-        b = new SparseCVector(sparseSize, bEntries, indices);
+        b = new CooCVector(sparseSize, bEntries, indices);
         expEntries = new CNumber[]{new CNumber(1.5), new CNumber(6.2546), new CNumber(-0.24),
                 new CNumber(1.56, -99345.2), new CNumber(), new CNumber(), new CNumber("i"), new CNumber()};
         exp = new CVector(expEntries);
@@ -140,7 +140,7 @@ class VectorStackJoinTests {
     @Test
     void realSparseStackTestCase() {
         double[] bEntries;
-        SparseVector b;
+        CooVector b;
         double[][] expEntries;
         Matrix exp;
 
@@ -148,7 +148,7 @@ class VectorStackJoinTests {
         bEntries = new double[]{0.9345};
         sparseSize = 3;
         indices = new int[]{2};
-        b = new SparseVector(sparseSize, bEntries, indices);
+        b = new CooVector(sparseSize, bEntries, indices);
         expEntries = new double[][]{{1.5, 6.2546, -0.24}, {0, 0, 0.9345}};
         exp = new Matrix(expEntries);
 
@@ -158,16 +158,16 @@ class VectorStackJoinTests {
         bEntries = new double[]{0.9345};
         sparseSize = 104001;
         indices = new int[]{2};
-        b = new SparseVector(sparseSize, bEntries, indices);
+        b = new CooVector(sparseSize, bEntries, indices);
 
-        SparseVector finalB = b;
+        CooVector finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB));
 
         // ---------------------- Sub-case 3 ----------------------
         bEntries = new double[]{0.9345};
         sparseSize = 3;
         indices = new int[]{2};
-        b = new SparseVector(sparseSize, bEntries, indices);
+        b = new CooVector(sparseSize, bEntries, indices);
         expEntries = new double[][]{{1.5, 6.2546, -0.24}, {0, 0, 0.9345}};
         exp = new Matrix(expEntries);
 
@@ -177,16 +177,16 @@ class VectorStackJoinTests {
         bEntries = new double[]{0.9345};
         sparseSize = 104001;
         indices = new int[]{2};
-        b = new SparseVector(sparseSize, bEntries, indices);
+        b = new CooVector(sparseSize, bEntries, indices);
 
-        SparseVector finalB2 = b;
+        CooVector finalB2 = b;
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB2, 0));
 
         // ---------------------- Sub-case 5 ----------------------
         bEntries = new double[]{0.9345};
         sparseSize = 3;
         indices = new int[]{2};
-        b = new SparseVector(sparseSize, bEntries, indices);
+        b = new CooVector(sparseSize, bEntries, indices);
         expEntries = new double[][]{{1.5, 0}, {6.2546, 0}, {-0.24, 0.9345}};
         exp = new Matrix(expEntries);
 
@@ -196,9 +196,9 @@ class VectorStackJoinTests {
         bEntries = new double[]{0.9345};
         sparseSize = 104001;
         indices = new int[]{2};
-        b = new SparseVector(sparseSize, bEntries, indices);
+        b = new CooVector(sparseSize, bEntries, indices);
 
-        SparseVector finalB3 = b;
+        CooVector finalB3 = b;
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB3, 1));
     }
 
@@ -271,7 +271,7 @@ class VectorStackJoinTests {
     @Test
     void complexSparseStackTestCase() {
         CNumber[] bEntries;
-        SparseCVector b;
+        CooCVector b;
         CNumber[][] expEntries;
         CMatrix exp;
 
@@ -279,7 +279,7 @@ class VectorStackJoinTests {
         bEntries = new CNumber[]{new CNumber(-0.234242, 8.1)};
         sparseSize = 3;
         indices = new int[]{2};
-        b = new SparseCVector(sparseSize, bEntries, indices);
+        b = new CooCVector(sparseSize, bEntries, indices);
         expEntries = new CNumber[][]{{new CNumber(1.5), new CNumber(6.2546), new CNumber(-0.24)},
                 {new CNumber(), new CNumber(), new CNumber(-0.234242, 8.1)}};
         exp = new CMatrix(expEntries);
@@ -290,16 +290,16 @@ class VectorStackJoinTests {
         bEntries = new CNumber[]{new CNumber(-0.234242, 8.1)};
         sparseSize = 104001;
         indices = new int[]{2};
-        b = new SparseCVector(sparseSize, bEntries, indices);
+        b = new CooCVector(sparseSize, bEntries, indices);
 
-        SparseCVector finalB = b;
+        CooCVector finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB));
 
         // ---------------------- Sub-case 3 ----------------------
         bEntries = new CNumber[]{new CNumber(-0.234242, 8.1)};
         sparseSize = 3;
         indices = new int[]{2};
-        b = new SparseCVector(sparseSize, bEntries, indices);
+        b = new CooCVector(sparseSize, bEntries, indices);
         expEntries = new CNumber[][]{{new CNumber(1.5), new CNumber(6.2546), new CNumber(-0.24)},
                 {new CNumber(), new CNumber(), new CNumber(-0.234242, 8.1)}};
         exp = new CMatrix(expEntries);
@@ -310,16 +310,16 @@ class VectorStackJoinTests {
         bEntries = new CNumber[]{new CNumber(-0.234242, 8.1)};
         sparseSize = 104001;
         indices = new int[]{2};
-        b = new SparseCVector(sparseSize, bEntries, indices);
+        b = new CooCVector(sparseSize, bEntries, indices);
 
-        SparseCVector finalB2 = b;
+        CooCVector finalB2 = b;
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB2, 0));
 
         // ---------------------- Sub-case 5 ----------------------
         bEntries = new CNumber[]{new CNumber(-0.234242, 8.1)};
         sparseSize = 3;
         indices = new int[]{2};
-        b = new SparseCVector(sparseSize, bEntries, indices);
+        b = new CooCVector(sparseSize, bEntries, indices);
         expEntries = new CNumber[][]{{new CNumber(1.5), new CNumber()},
                 {new CNumber(6.2546), new CNumber()},
                 {new CNumber(-0.24), new CNumber(-0.234242, 8.1)}};
@@ -331,9 +331,9 @@ class VectorStackJoinTests {
         bEntries = new CNumber[]{new CNumber(-0.234242, 8.1)};
         sparseSize = 104001;
         indices = new int[]{2};
-        b = new SparseCVector(sparseSize, bEntries, indices);
+        b = new CooCVector(sparseSize, bEntries, indices);
 
-        SparseCVector finalB3 = b;
+        CooCVector finalB3 = b;
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB3, 1));
     }
 }

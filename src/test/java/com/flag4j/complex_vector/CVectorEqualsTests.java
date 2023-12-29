@@ -25,8 +25,8 @@
 package com.flag4j.complex_vector;
 
 import com.flag4j.CVector;
-import com.flag4j.SparseCVector;
-import com.flag4j.SparseVector;
+import com.flag4j.CooCVector;
+import com.flag4j.CooVector;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
@@ -95,7 +95,7 @@ class CVectorEqualsTests {
     @Test
     void realSparseTestCase() {
         double[] bEntries;
-        SparseVector b;
+        CooVector b;
 
         // ----------------- Sub-case 1 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245),
@@ -104,7 +104,7 @@ class CVectorEqualsTests {
         bEntries = new double[]{8.245, 1.3};
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 2};
-        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVector(sparseSize, bEntries, sparseIndices);
         assertEquals(a, b);
 
         // ----------------- Sub-case 2 -----------------
@@ -114,7 +114,7 @@ class CVectorEqualsTests {
         bEntries = new double[]{8.245, -99.1331};
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 3};
-        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVector(sparseSize, bEntries, sparseIndices);
         assertEquals(a, b);
 
 
@@ -125,7 +125,7 @@ class CVectorEqualsTests {
         bEntries = new double[]{8.245, -99.1331};
         sparseSize = 612345;
         sparseIndices = new int[]{1, 3};
-        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVector(sparseSize, bEntries, sparseIndices);
         assertNotEquals(a, b);
 
         // ----------------- Sub-case 4 -----------------
@@ -135,7 +135,7 @@ class CVectorEqualsTests {
         bEntries = new double[]{8.245, -99.1331};
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 3};
-        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVector(sparseSize, bEntries, sparseIndices);
         assertNotEquals(a, b);
 
         // ----------------- Sub-case 5 -----------------
@@ -145,7 +145,7 @@ class CVectorEqualsTests {
         bEntries = new double[]{8.245, -99.1331};
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 3};
-        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVector(sparseSize, bEntries, sparseIndices);
         assertNotEquals(a, b);
 
         // ----------------- Sub-case 6 -----------------
@@ -155,7 +155,7 @@ class CVectorEqualsTests {
         bEntries = new double[]{8.245, -99.1331};
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 2};
-        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVector(sparseSize, bEntries, sparseIndices);
         assertNotEquals(a, b);
 
         // ----------------- Sub-case 7 -----------------
@@ -165,7 +165,7 @@ class CVectorEqualsTests {
         bEntries = new double[]{8.245, -99.1331};
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 3};
-        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVector(sparseSize, bEntries, sparseIndices);
         assertNotEquals(a, b);
     }
 
@@ -248,7 +248,7 @@ class CVectorEqualsTests {
     @Test
     void complexSparseTestCase() {
         CNumber[] bEntries;
-        SparseCVector b;
+        CooCVector b;
 
         // ----------------- Sub-case 1 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
@@ -257,7 +257,7 @@ class CVectorEqualsTests {
         bEntries = new CNumber[]{new CNumber(8.245, 9.2165), new CNumber(1.3, -0.000023465)};
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 2};
-        b = new SparseCVector(sparseSize, bEntries, sparseIndices);
+        b = new CooCVector(sparseSize, bEntries, sparseIndices);
         assertEquals(a, b);
 
         // ----------------- Sub-case 2 -----------------
@@ -267,7 +267,7 @@ class CVectorEqualsTests {
         bEntries = new CNumber[]{new CNumber(8.245, 9.2165), new CNumber(1.3, -0.000023465)};
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 3};
-        b = new SparseCVector(sparseSize, bEntries, sparseIndices);
+        b = new CooCVector(sparseSize, bEntries, sparseIndices);
         assertNotEquals(a, b);
 
         // ----------------- Sub-case 3 -----------------
@@ -277,7 +277,7 @@ class CVectorEqualsTests {
         bEntries = new CNumber[]{new CNumber(8.245, 13.65), new CNumber(1.3, -0.000023465)};
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 2};
-        b = new SparseCVector(sparseSize, bEntries, sparseIndices);
+        b = new CooCVector(sparseSize, bEntries, sparseIndices);
         assertNotEquals(a, b);
 
         // ----------------- Sub-case 4 -----------------
@@ -287,7 +287,7 @@ class CVectorEqualsTests {
         bEntries = new CNumber[]{new CNumber(8.245, 9.2165), new CNumber(12.3, -0.000023465)};
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 2};
-        b = new SparseCVector(sparseSize, bEntries, sparseIndices);
+        b = new CooCVector(sparseSize, bEntries, sparseIndices);
         assertNotEquals(a, b);
 
         // ----------------- Sub-case 5 -----------------
@@ -297,7 +297,7 @@ class CVectorEqualsTests {
         bEntries = new CNumber[]{new CNumber(8.245, 9.2165), new CNumber(12.3, -0.000023465)};
         sparseSize = 100234;
         sparseIndices = new int[]{1, 2};
-        b = new SparseCVector(sparseSize, bEntries, sparseIndices);
+        b = new CooCVector(sparseSize, bEntries, sparseIndices);
         assertNotEquals(a, b);
     }
 

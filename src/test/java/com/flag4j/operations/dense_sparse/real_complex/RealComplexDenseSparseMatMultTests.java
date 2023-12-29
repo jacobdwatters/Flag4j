@@ -20,7 +20,7 @@ class RealComplexDenseSparseMatMultTests {
     Shape shape;
 
     CooMatrix ASparse;
-    SparseVector ASparseVector;
+    CooVector ACooVector;
     double[] aSparseEntries;
 
     int[] rowIndices, colIndices;
@@ -180,7 +180,7 @@ class RealComplexDenseSparseMatMultTests {
         // ---------------------- Sub-case 4 ----------------------
         aSparseEntries = new double[]{9.43};
         rowIndices = new int[]{1};
-        ASparseVector = new SparseVector(2, aSparseEntries, rowIndices);
+        ACooVector = new CooVector(2, aSparseEntries, rowIndices);
         bComplexEntries = new CNumber[][]{
                 {new CNumber(1.34, 13.4), new CNumber(234.6, 6)},
                 {new CNumber(-9.55, 1.9414), new CNumber(9, 1)},
@@ -192,13 +192,13 @@ class RealComplexDenseSparseMatMultTests {
         expC = new CMatrix(expCEntries);
 
         assertArrayEquals(expC.entries, standardVector(BComplex.entries, BComplex.shape,
-                ASparseVector.entries, ASparseVector.indices));
+                ACooVector.entries, ACooVector.indices));
         assertArrayEquals(expC.entries, concurrentStandardVector(BComplex.entries, BComplex.shape,
-                ASparseVector.entries, ASparseVector.indices));
+                ACooVector.entries, ACooVector.indices));
         assertArrayEquals(expC.entries, blockedVector(BComplex.entries, BComplex.shape,
-                ASparseVector.entries, ASparseVector.indices));
+                ACooVector.entries, ACooVector.indices));
         assertArrayEquals(expC.entries, concurrentBlockedVector(BComplex.entries, BComplex.shape,
-                ASparseVector.entries, ASparseVector.indices));
+                ACooVector.entries, ACooVector.indices));
 
     }
 }

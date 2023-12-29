@@ -1,8 +1,8 @@
 package com.flag4j.vector;
 
 import com.flag4j.CVector;
-import com.flag4j.SparseCVector;
-import com.flag4j.SparseVector;
+import com.flag4j.CooVector;
+import com.flag4j.CooCVector;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
@@ -85,7 +85,7 @@ class VectorEqualsTests {
     @Test
     void realSparseTestCase() {
         double[] bEntries;
-        SparseVector B;
+        CooVector B;
 
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[]{0, 543.354, 0};
@@ -93,7 +93,7 @@ class VectorEqualsTests {
         bEntries = new double[]{543.354};
         indices = new int[]{1};
         sparseSize = 3;
-        B = new SparseVector(sparseSize, bEntries, indices);
+        B = new CooVector(sparseSize, bEntries, indices);
 
         assertTrue(A.equals(B));
 
@@ -103,7 +103,7 @@ class VectorEqualsTests {
         bEntries = new double[]{543.354};
         indices = new int[]{2};
         sparseSize = 3;
-        B = new SparseVector(sparseSize, bEntries, indices);
+        B = new CooVector(sparseSize, bEntries, indices);
 
         assertFalse(A.equals(B));
 
@@ -113,7 +113,7 @@ class VectorEqualsTests {
         bEntries = new double[]{543.354};
         indices = new int[]{1};
         sparseSize = 4;
-        B = new SparseVector(sparseSize, bEntries, indices);
+        B = new CooVector(sparseSize, bEntries, indices);
 
         assertFalse(A.equals(B));
     }
@@ -122,7 +122,7 @@ class VectorEqualsTests {
     @Test
     void complexSparseTestCase() {
         CNumber[] bEntries;
-        SparseCVector B;
+        CooCVector B;
 
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[]{0, 543.354, 0};
@@ -130,7 +130,7 @@ class VectorEqualsTests {
         bEntries = new CNumber[]{new CNumber(543.354)};
         indices = new int[]{1};
         sparseSize = 3;
-        B = new SparseCVector(sparseSize, bEntries, indices);
+        B = new CooCVector(sparseSize, bEntries, indices);
 
         assertTrue(A.equals(B));
 
@@ -140,7 +140,7 @@ class VectorEqualsTests {
         bEntries = new CNumber[]{new CNumber(543.354, -9.34)};
         indices = new int[]{1};
         sparseSize = 3;
-        B = new SparseCVector(sparseSize, bEntries, indices);
+        B = new CooCVector(sparseSize, bEntries, indices);
 
         assertFalse(A.equals(B));
 
@@ -150,7 +150,7 @@ class VectorEqualsTests {
         bEntries = new CNumber[]{new CNumber(543.354)};
         indices = new int[]{1};
         sparseSize = 4;
-        B = new SparseCVector(sparseSize, bEntries, indices);
+        B = new CooCVector(sparseSize, bEntries, indices);
 
         assertFalse(A.equals(B));
     }

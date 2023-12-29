@@ -1,20 +1,20 @@
 package com.flag4j.sparse_complex_vector;
 
+import com.flag4j.CooCVector;
 import com.flag4j.Shape;
-import com.flag4j.SparseCVector;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SparseCVectorConstructorTests {
+class CooCVectorConstructorTests {
     int expSize;
     Shape expShape;
     CNumber[] expEntries;
     double[] expEntriesD;
     int[] expEntriesI;
     int[] expIndices;
-    SparseCVector a, b;
+    CooCVector a, b;
 
 
     @Test
@@ -24,7 +24,7 @@ class SparseCVectorConstructorTests {
         expShape = new Shape(expSize);
         expEntries = new CNumber[0];
         expIndices = new int[0];
-        a = new SparseCVector(expSize);
+        a = new CooCVector(expSize);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -33,7 +33,7 @@ class SparseCVectorConstructorTests {
 
         // ------------- Sub-case 2 -------------
         expSize = -1;
-        assertThrows(IllegalArgumentException.class, () -> new SparseCVector(expSize));
+        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize));
     }
 
 
@@ -45,7 +45,7 @@ class SparseCVectorConstructorTests {
         expEntries = new CNumber[]{new CNumber(-1233, 1.3314), new CNumber(9034, 10.23445),
             new CNumber(83.133, -334), new CNumber(-92.133, -9.4), new CNumber(0, 13.435)};
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        a = new SparseCVector(expSize, expEntries, expIndices);
+        a = new CooCVector(expSize, expEntries, expIndices);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -53,7 +53,7 @@ class SparseCVectorConstructorTests {
 
         // ------------- Sub-case 2 -------------
         expSize = -1;
-        assertThrows(IllegalArgumentException.class, () -> new SparseCVector(expSize, expEntries, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize, expEntries, expIndices));
 
         // ------------- Sub-case 3 -------------
         expSize = 1001234;
@@ -62,7 +62,7 @@ class SparseCVectorConstructorTests {
                 new CNumber(83.133, -334), new CNumber(-92.133, -9.4), new CNumber(0, 13.435)};
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseCVector(expSize, expEntries, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize, expEntries, expIndices));
 
 
         // ------------- Sub-case 4 -------------
@@ -72,7 +72,7 @@ class SparseCVectorConstructorTests {
                 new CNumber(83.133, -334), new CNumber(-92.133, -9.4), new CNumber(0, 13.435)};
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseCVector(expSize, expEntries, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize, expEntries, expIndices));
     }
 
 
@@ -87,7 +87,7 @@ class SparseCVectorConstructorTests {
             expEntries[i] = new CNumber(expEntriesI[i]);
         }
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        a = new SparseCVector(expSize, expEntriesI, expIndices);
+        a = new CooCVector(expSize, expEntriesI, expIndices);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -96,7 +96,7 @@ class SparseCVectorConstructorTests {
         // ------------- Sub-case 2 -------------
         expSize = -1;
         expIndices = new int[]{0, 11, 10003, 20034};
-        assertThrows(IllegalArgumentException.class, () -> new SparseCVector(expSize, expEntriesI, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize, expEntriesI, expIndices));
 
         // ------------- Sub-case 3 -------------
         expSize = 1001234;
@@ -109,7 +109,7 @@ class SparseCVectorConstructorTests {
         }
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseCVector(expSize, expEntriesI, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize, expEntriesI, expIndices));
 
 
         // ------------- Sub-case 4 -------------
@@ -123,7 +123,7 @@ class SparseCVectorConstructorTests {
         }
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseCVector(expSize, expEntriesI, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize, expEntriesI, expIndices));
     }
 
 
@@ -138,7 +138,7 @@ class SparseCVectorConstructorTests {
             expEntries[i] = new CNumber(expEntriesD[i]);
         }
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        a = new SparseCVector(expSize, expEntriesD, expIndices);
+        a = new CooCVector(expSize, expEntriesD, expIndices);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -147,7 +147,7 @@ class SparseCVectorConstructorTests {
         // ------------- Sub-case 2 -------------
         expSize = -1;
         expIndices = new int[]{0, 11, 10003, 20034};
-        assertThrows(IllegalArgumentException.class, () -> new SparseCVector(expSize, expEntriesD, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize, expEntriesD, expIndices));
 
         // ------------- Sub-case 3 -------------
         expSize = 1001234;
@@ -159,7 +159,7 @@ class SparseCVectorConstructorTests {
         }
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseCVector(expSize, expEntriesD, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize, expEntriesD, expIndices));
 
 
         // ------------- Sub-case 4 -------------
@@ -172,7 +172,7 @@ class SparseCVectorConstructorTests {
         }
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseCVector(expSize, expEntriesD, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize, expEntriesD, expIndices));
     }
 
 
@@ -184,8 +184,8 @@ class SparseCVectorConstructorTests {
         expEntries = new CNumber[]{new CNumber(-1233, 1.3314), new CNumber(9034, 10.23445),
                 new CNumber(83.133, -334), new CNumber(-92.133, -9.4), new CNumber(0, 13.435)};
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        b = new SparseCVector(expSize, expEntries, expIndices);
-        a = new SparseCVector(b);
+        b = new CooCVector(expSize, expEntries, expIndices);
+        a = new CooCVector(b);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);

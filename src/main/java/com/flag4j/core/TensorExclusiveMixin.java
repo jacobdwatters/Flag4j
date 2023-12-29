@@ -25,8 +25,8 @@
 package com.flag4j.core;
 
 import com.flag4j.CTensor;
-import com.flag4j.SparseCTensor;
-import com.flag4j.SparseTensor;
+import com.flag4j.CooCTensor;
+import com.flag4j.CooTensor;
 import com.flag4j.Tensor;
 
 
@@ -42,7 +42,7 @@ import com.flag4j.Tensor;
 public interface TensorExclusiveMixin<T, U, V, W> {
 
     // TODO: add toVector() and toMatrix() methods.
-    // TODO: Add tensorDot(...) methods for Tensor, CTensor, SparseTensor, SparseCTensor.
+    // TODO: Add tensorDot(...) methods for Tensor, CTensor, CooTensor, CooCTensor.
 
     /**
      * Computes the tensor contraction of this tensor with a specified tensor over the specified axes. That is,
@@ -140,7 +140,7 @@ public interface TensorExclusiveMixin<T, U, V, W> {
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    T add(SparseTensor B);
+    T add(CooTensor B);
 
 
     /**
@@ -180,7 +180,7 @@ public interface TensorExclusiveMixin<T, U, V, W> {
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    W add(SparseCTensor B);
+    W add(CooCTensor B);
 
 
     /**
@@ -190,7 +190,7 @@ public interface TensorExclusiveMixin<T, U, V, W> {
      * @return The result of subtracting the tensor B from this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    T sub(SparseTensor B);
+    T sub(CooTensor B);
 
 
     /**
@@ -210,7 +210,7 @@ public interface TensorExclusiveMixin<T, U, V, W> {
      * @return The result of subtracting the tensor B from this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    W sub(SparseCTensor B);
+    W sub(CooCTensor B);
 
 
     /**
@@ -219,7 +219,7 @@ public interface TensorExclusiveMixin<T, U, V, W> {
      * @param B Second tensor in the subtraction.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    void addEq(SparseTensor B);
+    void addEq(CooTensor B);
 
 
     /**
@@ -228,7 +228,7 @@ public interface TensorExclusiveMixin<T, U, V, W> {
      * @param B Second tensor in the subtraction.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    void subEq(SparseTensor B);
+    void subEq(CooTensor B);
 
 
     /**
@@ -246,7 +246,7 @@ public interface TensorExclusiveMixin<T, U, V, W> {
      * @return The result of the element-wise tensor multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    V elemMult(SparseTensor B);
+    V elemMult(CooTensor B);
 
 
     /**
@@ -264,7 +264,7 @@ public interface TensorExclusiveMixin<T, U, V, W> {
      * @return The result of the element-wise tensor multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    SparseCTensor elemMult(SparseCTensor B);
+    CooCTensor elemMult(CooCTensor B);
 
 
     /**

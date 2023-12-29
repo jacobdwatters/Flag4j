@@ -76,7 +76,7 @@ class TensorElemMultTests {
     @Test
     void realSparseTestCase() {
         double[] bEntries, expEntries;
-        SparseTensor B;
+        CooTensor B;
         Tensor exp;
 
         // ------------------------- Sub-case 1 -------------------------
@@ -87,7 +87,7 @@ class TensorElemMultTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new SparseTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensor(bShape, bEntries, sparseIndices);
         expEntries = new double[aEntries.length];
         expShape = new Shape(2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] = bEntries[0]*aEntries[expShape.entriesIndex(sparseIndices[0])];
@@ -105,9 +105,9 @@ class TensorElemMultTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new SparseTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensor(bShape, bEntries, sparseIndices);
 
-        SparseTensor finalB = B;
+        CooTensor finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.elemMult(finalB));
     }
 
@@ -155,7 +155,7 @@ class TensorElemMultTests {
     @Test
     void complexSparseTestCase() {
         CNumber[] bEntries, expEntries;
-        SparseCTensor B;
+        CooCTensor B;
         CTensor exp;
 
         // ------------------------- Sub-case 1 -------------------------
@@ -166,7 +166,7 @@ class TensorElemMultTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}
         };
-        B = new SparseCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensor(bShape, bEntries, sparseIndices);
         expEntries = new CNumber[]{
                 new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber(),
                 new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber()
@@ -186,9 +186,9 @@ class TensorElemMultTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}
         };
-        B = new SparseCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensor(bShape, bEntries, sparseIndices);
 
-        SparseCTensor finalB = B;
+        CooCTensor finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.elemMult(finalB));
     }
 }

@@ -20,7 +20,7 @@ class CooCMatrixAugmentVectorTests {
         Shape bShape;
         int[] bindices;
         double[] bEntries;
-        SparseVector b;
+        CooVector b;
 
         Shape expShape;
         int[] expRowIndices;
@@ -38,7 +38,7 @@ class CooCMatrixAugmentVectorTests {
         bShape = new Shape(3);
         bEntries = new double[]{0.54073};
         bindices = new int[]{1};
-        b = new SparseVector(bShape.get(0), bEntries, bindices);
+        b = new CooVector(bShape.get(0), bEntries, bindices);
 
         expShape = new Shape(3, 6);
         expEntries = new CNumber[]{new CNumber("0.09868+0.62735i"), new CNumber("0.67488+0.96181i"), new CNumber("0.36458+0.34928i"), new CNumber("0.00493+0.29436i"), new CNumber("0.54073"), new CNumber("0.02579+0.55809i")};
@@ -58,7 +58,7 @@ class CooCMatrixAugmentVectorTests {
         bShape = new Shape(2);
         bEntries = new double[]{0.95187};
         bindices = new int[]{1};
-        b = new SparseVector(bShape.get(0), bEntries, bindices);
+        b = new CooVector(bShape.get(0), bEntries, bindices);
 
         expShape = new Shape(2, 2);
         expEntries = new CNumber[]{new CNumber("0.65883+0.21666i"), new CNumber("0.95187")};
@@ -78,10 +78,10 @@ class CooCMatrixAugmentVectorTests {
         bShape = new Shape(3);
         bEntries = new double[]{0.75597};
         bindices = new int[]{2};
-        b = new SparseVector(bShape.get(0), bEntries, bindices);
+        b = new CooVector(bShape.get(0), bEntries, bindices);
 
         CooCMatrix finala = a;
-        SparseVector finalb = b;
+        CooVector finalb = b;
         assertThrows(Exception.class, ()->finala.augment(finalb));
     }
 
@@ -97,7 +97,7 @@ class CooCMatrixAugmentVectorTests {
         Shape bShape;
         int[] bindices;
         CNumber[] bEntries;
-        SparseCVector b;
+        CooCVector b;
 
         Shape expShape;
         int[] expRowIndices;
@@ -115,7 +115,7 @@ class CooCMatrixAugmentVectorTests {
         bShape = new Shape(3);
         bEntries = new CNumber[]{new CNumber("0.57124+0.51268i")};
         bindices = new int[]{0};
-        b = new SparseCVector(bShape.get(0), bEntries, bindices);
+        b = new CooCVector(bShape.get(0), bEntries, bindices);
 
         expShape = new Shape(3, 6);
         expEntries = new CNumber[]{new CNumber("0.25755+0.03656i"), new CNumber("0.0597+0.3623i"), new CNumber("0.57124+0.51268i"), new CNumber("0.55296+0.62671i"), new CNumber("0.86631+0.03059i"), new CNumber("0.68804+0.52549i")};
@@ -135,7 +135,7 @@ class CooCMatrixAugmentVectorTests {
         bShape = new Shape(2);
         bEntries = new CNumber[]{new CNumber("0.33923+0.32409i")};
         bindices = new int[]{1};
-        b = new SparseCVector(bShape.get(0), bEntries, bindices);
+        b = new CooCVector(bShape.get(0), bEntries, bindices);
 
         expShape = new Shape(2, 2);
         expEntries = new CNumber[]{new CNumber("0.26302+0.62028i"), new CNumber("0.33923+0.32409i")};
@@ -155,10 +155,10 @@ class CooCMatrixAugmentVectorTests {
         bShape = new Shape(3);
         bEntries = new CNumber[]{new CNumber("0.35569+0.58202i")};
         bindices = new int[]{0};
-        b = new SparseCVector(bShape.get(0), bEntries, bindices);
+        b = new CooCVector(bShape.get(0), bEntries, bindices);
 
         CooCMatrix finala = a;
-        SparseCVector finalb = b;
+        CooCVector finalb = b;
         assertThrows(Exception.class, ()->finala.augment(finalb));
     }
 

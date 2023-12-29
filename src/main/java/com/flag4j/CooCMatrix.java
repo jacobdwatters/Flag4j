@@ -56,7 +56,7 @@ import java.util.List;
  */
 public class CooCMatrix
         extends ComplexSparseTensorBase<CooCMatrix, CMatrix, CooMatrix>
-        implements MatrixMixin<CooCMatrix, CMatrix, CooCMatrix, CooCMatrix, CNumber, SparseCVector, CVector>,
+        implements MatrixMixin<CooCMatrix, CMatrix, CooCMatrix, CooCMatrix, CNumber, CooCVector, CVector>,
         ComplexMatrixMixin<CooCMatrix>
 {
 
@@ -772,7 +772,7 @@ public class CooCMatrix
      * @throws IndexOutOfBoundsException If {@code rowIndex} is not within the matrix.
      */
     @Override
-    public CooCMatrix setRow(SparseCVector values, int rowIndex) {
+    public CooCMatrix setRow(CooCVector values, int rowIndex) {
         return ComplexSparseMatrixGetSet.setRow(this, rowIndex, values);
     }
 
@@ -909,7 +909,7 @@ public class CooCMatrix
      *                                  entries {@code B}.
      */
     @Override
-    public CVector mult(SparseCVector B) {
+    public CVector mult(CooCVector B) {
         ParameterChecks.assertEquals(numCols, B.size);
         CNumber[] dest = ComplexSparseMatrixMultiplication.standardVector(
                 entries, rowIndices, colIndices, shape,
@@ -1473,7 +1473,7 @@ public class CooCMatrix
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public CMatrix addToEachCol(SparseVector b) {
+    public CMatrix addToEachCol(CooVector b) {
         return RealComplexSparseMatrixOperations.addToEachCol(this, b);
     }
 
@@ -1499,7 +1499,7 @@ public class CooCMatrix
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public CMatrix addToEachCol(SparseCVector b) {
+    public CMatrix addToEachCol(CooCVector b) {
         return ComplexSparseMatrixOperations.addToEachCol(this, b);
     }
 
@@ -1525,7 +1525,7 @@ public class CooCMatrix
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public CMatrix addToEachRow(SparseVector b) {
+    public CMatrix addToEachRow(CooVector b) {
         return RealComplexSparseMatrixOperations.addToEachRow(this, b);
     }
 
@@ -1551,7 +1551,7 @@ public class CooCMatrix
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public CMatrix addToEachRow(SparseCVector b) {
+    public CMatrix addToEachRow(CooCVector b) {
         return ComplexSparseMatrixOperations.addToEachRow(this, b);
     }
 
@@ -1930,7 +1930,7 @@ public class CooCMatrix
     /**
      * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
      * does not affect the output of this function. All vectors will be treated as row vectors.<br>
-     * Also see {@link #stack(SparseVector, int)} and {@link #augment(SparseVector)}.
+     * Also see {@link #stack(CooVector, int)} and {@link #augment(CooVector)}.
      *
      * @param b Vector to stack to this matrix.
      * @return The result of stacking this matrix on top of the vector b.
@@ -1938,7 +1938,7 @@ public class CooCMatrix
      *                                  the vector b.
      */
     @Override
-    public CooCMatrix stack(SparseVector b) {
+    public CooCMatrix stack(CooVector b) {
         ParameterChecks.assertEquals(numCols, b.size);
 
         Shape destShape = new Shape(numRows + 1, numCols);
@@ -1996,7 +1996,7 @@ public class CooCMatrix
     /**
      * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
      * does not affect the output of this function. All vectors will be treated as row vectors.<br>
-     * Also see {@link #stack(SparseCVector, int)} and {@link #augment(SparseCVector)}.
+     * Also see {@link #stack(CooCVector, int)} and {@link #augment(CooCVector)}.
      *
      * @param b Vector to stack to this matrix.
      * @return The result of stacking this matrix on top of the vector b.
@@ -2004,7 +2004,7 @@ public class CooCMatrix
      *                                  the vector b.
      */
     @Override
-    public CooCMatrix stack(SparseCVector b) {
+    public CooCMatrix stack(CooCVector b) {
         ParameterChecks.assertEquals(numCols, b.size);
 
         Shape destShape = new Shape(numRows + 1, numCols);
@@ -2053,16 +2053,16 @@ public class CooCMatrix
      *
      * @param b    Vector to stack to this matrix.
      * @param axis Axis along which to stack. <br>
-     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(SparseVector)}. In this case, the
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(CooVector)}. In this case, the
      *             vector b will be treated as a column vector regardless of the true orientation. <br>
-     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(SparseVector)}. In this case, the
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(CooVector)}. In this case, the
      *             vector b will be treated as a row vector regardless of the true orientation.
      * @return The result of stacking this matrix and B along the specified axis.
      * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public CooCMatrix stack(SparseVector b, int axis) {
+    public CooCMatrix stack(CooVector b, int axis) {
         ParameterChecks.assertInRange(axis, 0, 1, "axis");
         return axis==0 ? this.augment(b) : this.stack(b);
     }
@@ -2095,16 +2095,16 @@ public class CooCMatrix
      *
      * @param b    Vector to stack to this matrix.
      * @param axis Axis along which to stack. <br>
-     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(SparseCVector)}. In this case, the
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(CooCVector)}. In this case, the
      *             vector b will be treated as a column vector regardless of the true orientation. <br>
-     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(SparseCVector)}. In this case, the
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(CooCVector)}. In this case, the
      *             vector b will be treated as a row vector regardless of the true orientation.
      * @return The result of stacking this matrix and B along the specified axis.
      * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public CooCMatrix stack(SparseCVector b, int axis) {
+    public CooCMatrix stack(CooCVector b, int axis) {
         ParameterChecks.assertInRange(axis, 0, 1, "axis");
         return axis==0 ? this.augment(b) : this.stack(b);
     }
@@ -2150,14 +2150,14 @@ public class CooCMatrix
      * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
      * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
      * treated as a column vector regardless of the true orientation.<br>
-     * Also see {@link #stack(SparseVector)} and {@link #stack(SparseVector, int)}.
+     * Also see {@link #stack(CooVector)} and {@link #stack(CooVector, int)}.
      *
      * @param b vector to augment to this matrix.
      * @return The result of augmenting b to the right of this matrix.
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public CooCMatrix augment(SparseVector b) {
+    public CooCMatrix augment(CooVector b) {
         ParameterChecks.assertEquals(numRows, b.size);
 
         Shape destShape = new Shape(numRows, numCols + 1);
@@ -2222,14 +2222,14 @@ public class CooCMatrix
      * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
      * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
      * treated as a column vector regardless of the true orientation.<br>
-     * Also see {@link #stack(SparseCVector)} and {@link #stack(SparseCVector, int)}.
+     * Also see {@link #stack(CooCVector)} and {@link #stack(CooCVector, int)}.
      *
      * @param b vector to augment to this matrix.
      * @return The result of augmenting b to the right of this matrix.
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public CooCMatrix augment(SparseCVector b) {
+    public CooCMatrix augment(CooCVector b) {
         ParameterChecks.assertEquals(numRows, b.size);
 
         Shape destShape = new Shape(numRows, numCols + 1);
@@ -2261,7 +2261,7 @@ public class CooCMatrix
      * @return The specified row of this matrix.
      */
     @Override
-    public SparseCVector getRow(int i) {
+    public CooCVector getRow(int i) {
         return ComplexSparseMatrixGetSet.getRow(this, i);
     }
 
@@ -2273,7 +2273,7 @@ public class CooCMatrix
      * @return The specified column of this matrix.
      */
     @Override
-    public SparseCVector getCol(int j) {
+    public CooCVector getCol(int j) {
         return ComplexSparseMatrixGetSet.getCol(this, j);
     }
 
@@ -2290,7 +2290,7 @@ public class CooCMatrix
      * @throws NegativeArraySizeException If {@code rowEnd} is less than {@code rowStart}.
      */
     @Override
-    public SparseCVector getCol(int colIdx, int rowStart, int rowEnd) {
+    public CooCVector getCol(int colIdx, int rowStart, int rowEnd) {
         return ComplexSparseMatrixGetSet.getCol(this, colIdx, rowStart, rowEnd);
     }
 
@@ -2302,14 +2302,14 @@ public class CooCMatrix
      * @return A vector equivalent to this matrix.
      */
     @Override
-    public SparseCVector toVector() {
+    public CooCVector toVector() {
         int[] destIndices = new int[indices.length];
 
         for(int i=0; i<entries.length; i++) {
             destIndices[i] = rowIndices[i]*colIndices[i];
         }
 
-        return new SparseCVector(numRows*numCols, ArrayUtils.copyOf(entries), destIndices);
+        return new CooCVector(numRows*numCols, ArrayUtils.copyOf(entries), destIndices);
     }
 
 
@@ -2346,7 +2346,7 @@ public class CooCMatrix
      * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code j} is outside the bounds of this matrix.
      */
     @Override
-    public SparseCVector getColBelow(int rowStart, int j) {
+    public CooCVector getColBelow(int rowStart, int j) {
         return ComplexSparseMatrixGetSet.getCol(this, j, rowStart, numRows);
     }
 
@@ -2361,7 +2361,7 @@ public class CooCMatrix
      * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
      */
     @Override
-    public SparseCVector getRowAfter(int colStart, int i) {
+    public CooCVector getRowAfter(int colStart, int i) {
         return ComplexSparseMatrixGetSet.getRow(this, i, colStart, numCols);
     }
 
@@ -2377,7 +2377,7 @@ public class CooCMatrix
      * @throws IndexOutOfBoundsException If {@code j} is not within the bounds of this matrix.
      */
     @Override
-    public CooCMatrix setCol(SparseCVector values, int j) {
+    public CooCMatrix setCol(CooCVector values, int j) {
         return ComplexSparseMatrixGetSet.setCol(this, j, values);
     }
 
@@ -2458,7 +2458,7 @@ public class CooCMatrix
      * @return A vector containing the diagonal entries of this matrix.
      */
     @Override
-    public SparseCVector getDiag() {
+    public CooCVector getDiag() {
         List<CNumber> destEntries = new ArrayList<>();
         List<Integer> destIndices = new ArrayList<>();
 
@@ -2472,7 +2472,7 @@ public class CooCMatrix
 
         CNumber[] destArr = new CNumber[destEntries.size()];
 
-        return new SparseCVector(
+        return new CooCVector(
                 numRows,
                 ArrayUtils.fromList(destEntries, destArr),
                 ArrayUtils.fromIntegerList(destIndices)
@@ -2594,7 +2594,7 @@ public class CooCMatrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public CVector mult(SparseVector b) {
+    public CVector mult(CooVector b) {
         CNumber[] product = RealComplexSparseMatrixMultiplication.standardVector(
                 entries, rowIndices, colIndices, shape,
                 b.entries, b.indices, b.shape

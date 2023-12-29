@@ -62,7 +62,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @param b Vector to join with this vector.
      * @return A vector resulting from joining the specified vector with this vector.
      */
-    T join(SparseVector b);
+    T join(CooVector b);
 
 
     /**
@@ -70,7 +70,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @param b Vector to join with this vector.
      * @return A vector resulting from joining the specified vector with this vector.
      */
-    W join(SparseCVector b);
+    W join(CooCVector b);
 
     // TODO: Add stack(vec, axis) methods so vectors can be stacked as if column vectors.
 
@@ -95,7 +95,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * - If the number of entries in this vector is different from the number of entries in
      * the vector {@code b}.
      */
-    TT stack(SparseVector b);
+    TT stack(CooVector b);
 
 
     /**
@@ -119,7 +119,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * - If the number of entries in this vector is different from the number of entries in
      * the vector {@code b}.
      */
-    WW stack(SparseCVector b);
+    WW stack(CooCVector b);
 
 
     /**
@@ -171,7 +171,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * entries in the vector {@code b}.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    TT stack(SparseVector b, int axis);
+    TT stack(CooVector b, int axis);
 
 
     /**
@@ -223,7 +223,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * entries in the vector {@code b}.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    WW stack(SparseCVector b, int axis);
+    WW stack(CooCVector b, int axis);
 
 
     /**
@@ -241,7 +241,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    T add(SparseVector B);
+    T add(CooVector B);
 
 
     /**
@@ -259,7 +259,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    W add(SparseCVector B);
+    W add(CooCVector B);
 
 
     /**
@@ -277,7 +277,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the element-wise vector subtraction.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    T sub(SparseVector B);
+    T sub(CooVector B);
 
 
     /**
@@ -295,7 +295,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the element-wise vector subtraction.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    W sub(SparseCVector B);
+    W sub(CooCVector B);
 
 
     /**
@@ -313,7 +313,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The vector resulting from the element-wise multiplication.
      * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
      */
-    V elemMult(SparseVector B);
+    V elemMult(CooVector B);
 
 
     /**
@@ -331,7 +331,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The vector resulting from the element-wise multiplication.
      * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
      */
-    SparseCVector elemMult(SparseCVector B);
+    CooCVector elemMult(CooCVector B);
 
 
     /**
@@ -367,7 +367,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
-    X inner(SparseVector b);
+    X inner(CooVector b);
 
 
     /**
@@ -394,7 +394,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
-    CNumber inner(SparseCVector b);
+    CNumber inner(CooCVector b);
 
 
     /**
@@ -412,7 +412,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the vector outer product between this vector and b.
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
-    UU outer(SparseVector b);
+    UU outer(CooVector b);
 
 
     /**
@@ -430,10 +430,10 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the vector outer product between this vector and b.
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
-    CMatrix outer(SparseCVector b);
+    CMatrix outer(CooCVector b);
 
 
-    // TODO: ADD isParallel(CVector b), isParallel(SparseVector b), and isParallel(sparseCVector)
+    // TODO: ADD isParallel(CVector b), isParallel(CooVector b), and isParallel(sparseCVector)
     /**
      * Checks if a vector is parallel to this vector.
      *
@@ -443,7 +443,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
     boolean isParallel(Vector b);
 
 
-    // TODO: Add isPerp(CVector b), isPerp(SparseVector b), and isPerp(sparseCVector)
+    // TODO: Add isPerp(CVector b), isPerp(CooVector b), and isPerp(sparseCVector)
     /**
      * Checks if a vector is perpendicular to this vector.
      *

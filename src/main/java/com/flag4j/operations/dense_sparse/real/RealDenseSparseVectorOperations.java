@@ -25,7 +25,7 @@
 package com.flag4j.operations.dense_sparse.real;
 
 
-import com.flag4j.SparseVector;
+import com.flag4j.CooVector;
 import com.flag4j.Vector;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.util.ErrorMessages;
@@ -124,7 +124,7 @@ public class RealDenseSparseVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static Vector sub(Vector src1, SparseVector src2) {
+    public static Vector sub(Vector src1, CooVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
         Vector dest = new Vector(src1);
 
@@ -143,7 +143,7 @@ public class RealDenseSparseVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static Vector sub(SparseVector src1, Vector src2) {
+    public static Vector sub(CooVector src1, Vector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
         Vector dest = new Vector(RealOperations.scalMult(src2.entries, -1));
 
@@ -161,7 +161,7 @@ public class RealDenseSparseVectorOperations {
      * @param src2 Sparse vector.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static void addEq(Vector src1, SparseVector src2) {
+    public static void addEq(Vector src1, CooVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
@@ -176,7 +176,7 @@ public class RealDenseSparseVectorOperations {
      * @param src2 Sparse vector.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static void subEq(Vector src1, SparseVector src2) {
+    public static void subEq(Vector src1, CooVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
@@ -192,7 +192,7 @@ public class RealDenseSparseVectorOperations {
      * @return The result of the element-wise multiplication.
      * @throws IllegalArgumentException If the two vectors are not the same size.
      */
-    public static SparseVector elemMult(Vector src1, SparseVector src2) {
+    public static CooVector elemMult(Vector src1, CooVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         double[] entries = new double[src2.entries.length];
@@ -201,7 +201,7 @@ public class RealDenseSparseVectorOperations {
             entries[i] = src1.entries[src2.indices[i]]*src2.entries[i];
         }
 
-        return new SparseVector(src1.size, entries, src2.indices.clone());
+        return new CooVector(src1.size, entries, src2.indices.clone());
     }
 
 
@@ -212,7 +212,7 @@ public class RealDenseSparseVectorOperations {
      * @param src2 Entries of second vector in the sum.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static Vector add(Vector src1, SparseVector src2) {
+    public static Vector add(Vector src1, CooVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
         Vector dest = new Vector(src1);
 
@@ -230,7 +230,7 @@ public class RealDenseSparseVectorOperations {
      * @param src2 Second vector in the element-wise division.
      * @return The result of the element-wise vector division.
      */
-    public static SparseVector elemDiv(SparseVector src1, Vector src2) {
+    public static CooVector elemDiv(CooVector src1, Vector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
         double[] dest = new double[src1.entries.length];
 
@@ -238,6 +238,6 @@ public class RealDenseSparseVectorOperations {
             dest[i] = src1.entries[i]/src2.entries[src1.indices[i]];
         }
 
-        return new SparseVector(src1.size, dest, src1.indices.clone());
+        return new CooVector(src1.size, dest, src1.indices.clone());
     }
 }

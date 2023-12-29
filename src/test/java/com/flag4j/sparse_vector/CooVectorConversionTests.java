@@ -7,12 +7,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class SparseVectorConversionTests {
+class CooVectorConversionTests {
 
     static int[] aIndices;
     static double[] aEntries;
     static int sparseSize;
-    static SparseVector a;
+    static CooVector a;
 
 
     @BeforeAll
@@ -20,7 +20,7 @@ class SparseVectorConversionTests {
         aEntries = new double[]{1.345, -989.234, 5.15, 617.4};
         aIndices = new int[]{4, 56, 9903, 14643};
         sparseSize = 24023;
-        a = new SparseVector(sparseSize, aEntries, aIndices);
+        a = new CooVector(sparseSize, aEntries, aIndices);
     }
 
 
@@ -62,7 +62,7 @@ class SparseVectorConversionTests {
         CNumber[] expEntries;
         int[] expIndices;
         int expSize;
-        SparseCVector exp;
+        CooCVector exp;
 
         // ------------------- Sub-case 1 -------------------
         expEntries = new CNumber[]{
@@ -70,7 +70,7 @@ class SparseVectorConversionTests {
                 new CNumber(5.15), new CNumber(617.4)};
         expIndices = new int[]{4, 56, 9903, 14643};
         expSize = sparseSize;
-        exp = new SparseCVector(expSize, expEntries, expIndices);
+        exp = new CooCVector(expSize, expEntries, expIndices);
 
         assertEquals(exp, a.toComplex());
     }
@@ -81,13 +81,13 @@ class SparseVectorConversionTests {
         double[] expEntries;
         int[][] expIndices;
         Shape expShape;
-        SparseTensor exp;
+        CooTensor exp;
 
         // ------------------- Sub-case 1 -------------------
         expEntries = new double[]{1.345, -989.234, 5.15, 617.4};
         expIndices = new int[][]{{4}, {56}, {9903}, {14643}};
         expShape = new Shape(sparseSize);
-        exp = new SparseTensor(expShape, expEntries, expIndices);
+        exp = new CooTensor(expShape, expEntries, expIndices);
 
         assertEquals(exp, a.toTensor());
     }
@@ -123,6 +123,6 @@ class SparseVectorConversionTests {
         denseEntries[aIndices[3]] = aEntries[3];
         denseVector = new Vector(denseEntries);
 
-        assertEquals(a, SparseVector.fromDense(denseVector));
+        assertEquals(a, CooVector.fromDense(denseVector));
     }
 }
