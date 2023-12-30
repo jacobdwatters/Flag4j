@@ -7,6 +7,24 @@ import java.util.Arrays;
 
 public class CsrMatrix {
 
+
+//    /**
+//     * Row indices of the non-zero entries of the sparse matrix.
+//     */
+//    public final int[] rowPointers;
+//    /**
+//     * Column indices of the non-zero entries of the sparse matrix.
+//     */
+//    public final int[] colIndices;
+//    /**
+//     * The number of rows in this matrix.
+//     */
+//    public final int numRows;
+//    /**
+//     * The number of columns in this matrix.
+//     */
+//    public final int numCols;
+
     public final int[] rows;
     public final int[] colIndices;
     public final double[] nnz;

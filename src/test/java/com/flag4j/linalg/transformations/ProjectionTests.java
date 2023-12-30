@@ -51,8 +51,6 @@ class ProjectionTests {
 
     @Test
     void orthogonalTestCase() {
-        PrintOptions.setPrecision(50);
-
         // -------------------------- Sub-case 1 --------------------------
         expEntries = new double[][]{
                 {0.0392156862745098, 0, 0, 0},

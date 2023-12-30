@@ -11,12 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CooMatrixMultTransposeTests {
 
-    @BeforeAll
-    static void setup() {
-        PrintOptions.setMaxRowsCols(1000);
-        PrintOptions.setPrecision(100);
-    }
-
     @Test
     void realSparseMultTransposeTest() {
         Shape aShape;

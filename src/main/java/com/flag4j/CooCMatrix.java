@@ -59,7 +59,6 @@ public class CooCMatrix
         implements MatrixMixin<CooCMatrix, CMatrix, CooCMatrix, CooCMatrix, CNumber, CooCVector, CVector>,
         ComplexMatrixMixin<CooCMatrix>
 {
-
     /**
      * Row indices of the non-zero entries of the sparse matrix.
      */

@@ -6,11 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PrintOptionsTests {
-    int pad, maxRows, maxColumns, precision;
-    boolean useScientific, center;
 
     @Test
-
     void testprintOptionTestCase() {
         assertEquals(2, PrintOptions.getPadding());
         assertEquals(10, PrintOptions.getMaxRows());

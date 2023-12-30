@@ -2,19 +2,11 @@ package com.flag4j.complex_sparse_matrix;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.io.PrintOptions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CooCMatrixMultTransposeTests {
-
-    @BeforeAll
-    static void setup() {
-        PrintOptions.setPrecision(100);
-        PrintOptions.setMaxRowsCols(100);
-    }
 
     @Test
     void realSparseMultTransposeTest() {
