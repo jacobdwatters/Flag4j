@@ -36,7 +36,7 @@ public class CreateMatrix {
 //     * @param values Values to use as diagonal components of the resultant matrix.
 //     * @return A square, diagonal matrix whose non-zero components are equivalent to those specified by 'values'.
 //     */
-//    SparseMatrix toDiag(int[] values){/*TODO:*/return null;}
+//    CooMatrix toDiag(int[] values){/*TODO:*/return null;}
 //
 //
 //    /**
@@ -45,7 +45,7 @@ public class CreateMatrix {
 //     * @param values Values to use as diagonal components of the resultant matrix.
 //     * @return A square, diagonal matrix whose non-zero components are equivalent to those specified by 'values'.
 //     */
-//    SparseMatrix toDiag(double[] values){/*TODO:*/return null;}
+//    CooMatrix toDiag(double[] values){/*TODO:*/return null;}
 //
 //
 //    /**
@@ -54,7 +54,7 @@ public class CreateMatrix {
 //     * @param values Values to use as diagonal components of the resultant matrix.
 //     * @return A square, diagonal matrix whose non-zero components are equivalent to those specified by 'values'.
 //     */
-//    SparseMatrix toDiag(Vector values){/*TODO:*/return null;}
+//    CooMatrix toDiag(Vector values){/*TODO:*/return null;}
 //
 //
 //    /**
@@ -63,7 +63,7 @@ public class CreateMatrix {
 //     * @param values Values to use as diagonal components of the resultant matrix.
 //     * @return A square, diagonal matrix whose non-zero components are equivalent to those specified by 'values'.
 //     */
-//    SparseMatrix toDiag(SparseVector values){/*TODO:*/return null;}
+//    CooMatrix toDiag(CooVector values){/*TODO:*/return null;}
 //
 //
 //    /**
@@ -72,7 +72,7 @@ public class CreateMatrix {
 //     * @param values Values to use as diagonal components of the resultant matrix.
 //     * @return A square, diagonal matrix whose non-zero components are equivalent to those specified by 'values'.
 //     */
-//    SparseCMatrix toDiag(CNumber[] values){/*TODO:*/return null;}
+//    CooCMatrix toDiag(CNumber[] values){/*TODO:*/return null;}
 //
 //
 //    /**
@@ -81,7 +81,7 @@ public class CreateMatrix {
 //     * @param values Values to use as diagonal components of the resultant matrix.
 //     * @return A square, diagonal matrix whose non-zero components are equivalent to those specified by 'values'.
 //     */
-//    SparseCMatrix toDiag(CVector values){/*TODO:*/return null;}
+//    CooCMatrix toDiag(CVector values){/*TODO:*/return null;}
 //
 //
 //    /**
@@ -90,7 +90,7 @@ public class CreateMatrix {
 //     * @param values Values to use as diagonal components of the resultant matrix.
 //     * @return A square, diagonal matrix whose non-zero components are equivalent to those specified by 'values'.
 //     */
-//    SparseCMatrix toDiag(SparseCMatrix values){/*TODO:*/return null;}
+//    CooCMatrix toDiag(CooCMatrix values){/*TODO:*/return null;}
 
     // TODO: add toDiag(int diagAxis), toTril(), toTriu(), toTri(),
     //  toTril(int diagAxis), toTriu(int diagAxis), toTri(int diagAxis).

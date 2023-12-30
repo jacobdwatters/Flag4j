@@ -17,9 +17,9 @@ class ComplexDenseSparseMatMultTransposeTests {
     static CNumber[] bEntries, bVecEntries, bVecSparseEntries, expEntries;
 
     static CMatrix A;
-    static SparseCMatrix B;
+    static CooCMatrix B;
     static CVector bvec;
-    static SparseCVector bSparse;
+    static CooCVector bSparse;
 
     @BeforeAll
     static void setup() {
@@ -33,7 +33,7 @@ class ComplexDenseSparseMatMultTransposeTests {
 
     static void createMatrices() {
         A = new CMatrix(aEntries);
-        B = new SparseCMatrix(sparseShape.copy().swapAxes(0, 1), bEntries, sparseIndices[1], sparseIndices[0]);
+        B = new CooCMatrix(sparseShape.copy().swapAxes(0, 1), bEntries, sparseIndices[1], sparseIndices[0]);
     }
 
     static void createDenseVector() {
@@ -41,7 +41,7 @@ class ComplexDenseSparseMatMultTransposeTests {
     }
 
     static void createSparseVector() {
-        bSparse = new SparseCVector(sparseSize, bVecSparseEntries, sparseVecIndices);
+        bSparse = new CooCVector(sparseSize, bVecSparseEntries, sparseVecIndices);
     }
 
     @Test
@@ -52,7 +52,7 @@ class ComplexDenseSparseMatMultTransposeTests {
                 {0, 1},
                 {1, 4}};
         createMatrices();
-        expEntries = A.mult(new SparseCMatrix(sparseShape.copy(), bEntries, sparseIndices[0], sparseIndices[1])).entries;
+        expEntries = A.mult(new CooCMatrix(sparseShape.copy(), bEntries, sparseIndices[0], sparseIndices[1])).entries;
 
 
         Assertions.assertArrayEquals(expEntries,

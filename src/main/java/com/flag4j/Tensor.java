@@ -52,7 +52,7 @@ import java.util.Arrays;
  */
 public class Tensor
         extends RealDenseTensorBase<Tensor, CTensor>
-        implements TensorExclusiveMixin<Tensor, Tensor, SparseTensor, CTensor> {
+        implements TensorExclusiveMixin<Tensor, Tensor, CooTensor, CTensor> {
 
 
     /**
@@ -246,7 +246,7 @@ public class Tensor
 
     /**
      * Checks if an object is equal to this tensor object. Valid object types are: {@link Tensor}, {@link CTensor},
-     * {@link SparseTensor}, and {@link SparseCTensor}. These tensors are equal to this tensor if all entries are
+     * {@link CooTensor}, and {@link CooCTensor}. These tensors are equal to this tensor if all entries are
      * numerically equal to the corresponding element of this tensor. If the tensor is complex, then the imaginary
      * component must be zero to be equal.
      * @param object Object to check equality with this tensor.
@@ -263,12 +263,12 @@ public class Tensor
             CTensor tensor = (CTensor) object;
             equal = RealComplexDenseEquals.tensorEquals(this, tensor);
 
-        } else if(object instanceof SparseTensor) {
-            SparseTensor tensor = (SparseTensor) object;
+        } else if(object instanceof CooTensor) {
+            CooTensor tensor = (CooTensor) object;
             equal = RealDenseSparseEquals.tensorEquals(this, tensor);
 
-        } else if(object instanceof SparseCTensor) {
-            SparseCTensor tensor = (SparseCTensor) object;
+        } else if(object instanceof CooCTensor) {
+            CooCTensor tensor = (CooCTensor) object;
             equal = RealComplexDenseSparseEquals.tensorEquals(this, tensor);
 
         } else {
@@ -297,7 +297,7 @@ public class Tensor
      * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
      */
     @Override
-    public void addEq(SparseTensor B) {
+    public void addEq(CooTensor B) {
         RealDenseSparseTensorOperations.addEq(this, B);
     }
 
@@ -453,7 +453,7 @@ public class Tensor
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public Tensor add(SparseTensor B) {
+    public Tensor add(CooTensor B) {
         return RealDenseSparseTensorOperations.add(this, B);
     }
 
@@ -482,7 +482,7 @@ public class Tensor
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CTensor add(SparseCTensor B) {
+    public CTensor add(CooCTensor B) {
         return RealComplexDenseSparseOperations.add(this, B);
     }
 
@@ -495,7 +495,7 @@ public class Tensor
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public Tensor sub(SparseTensor B) {
+    public Tensor sub(CooTensor B) {
         return RealDenseSparseTensorOperations.sub(this, B);
     }
 
@@ -524,7 +524,7 @@ public class Tensor
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CTensor sub(SparseCTensor B) {
+    public CTensor sub(CooCTensor B) {
         return RealComplexDenseSparseOperations.sub(this, B);
     }
 
@@ -536,7 +536,7 @@ public class Tensor
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public void subEq(SparseTensor B) {
+    public void subEq(CooTensor B) {
         RealDenseSparseTensorOperations.subEq(this, B);
     }
 
@@ -573,7 +573,7 @@ public class Tensor
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     @Override
-    public SparseTensor elemMult(SparseTensor B) {
+    public CooTensor elemMult(CooTensor B) {
         return RealDenseSparseTensorOperations.elemMult(this, B);
     }
 
@@ -600,7 +600,7 @@ public class Tensor
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     @Override
-    public SparseCTensor elemMult(SparseCTensor B) {
+    public CooCTensor elemMult(CooCTensor B) {
         return RealComplexDenseSparseOperations.elemMult(this, B);
     }
 

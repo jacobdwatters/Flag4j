@@ -107,7 +107,7 @@ class CMatrixElemMultTests {
     @Test
     void sparseRealTestCase() {
         double[] bEntries;
-        SparseMatrix B;
+        CooMatrix B;
 
         // ------------------- Sub-case 1 -------------------
         aEntries = new CNumber[][]{
@@ -120,7 +120,7 @@ class CMatrixElemMultTests {
         rowIndices = new int[]{0, 2, 3};
         colIndies = new int[]{1, 1, 0};
         sparseShape = new Shape(A.shape);
-        B = new SparseMatrix(sparseShape, bEntries, rowIndices, colIndies);
+        B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndies);
         expEntries = new CNumber[][]{{new CNumber("0.0"), new CNumber("60.568000000000005-0.04462200000000001i"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("-0.0"), new CNumber("0.0")},
@@ -139,9 +139,9 @@ class CMatrixElemMultTests {
         rowIndices = new int[]{0, 2, 3};
         colIndies = new int[]{1, 1, 0};
         sparseShape = new Shape(56, 191114);
-        B = new SparseMatrix(sparseShape, bEntries, rowIndices, colIndies);
+        B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndies);
 
-        SparseMatrix finalB = B;
+        CooMatrix finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.elemMult(finalB));
     }
 
@@ -149,7 +149,7 @@ class CMatrixElemMultTests {
     @Test
     void sparseComplexTestCase() {
         CNumber[] bEntries;
-        SparseCMatrix B;
+        CooCMatrix B;
 
         // ------------------- Sub-case 1 -------------------
         aEntries = new CNumber[][]{
@@ -162,7 +162,7 @@ class CMatrixElemMultTests {
         rowIndices = new int[]{0, 2, 3};
         colIndies = new int[]{1, 1, 0};
         sparseShape = new Shape(A.shape);
-        B = new SparseCMatrix(sparseShape, bEntries, rowIndices, colIndies);
+        B = new CooCMatrix(sparseShape, bEntries, rowIndices, colIndies);
         expEntries = new CNumber[][]{{new CNumber("0.0"), new CNumber("15624.253530000002+4241.811519999999i"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("-0.0"), new CNumber("0.0")},
@@ -181,9 +181,9 @@ class CMatrixElemMultTests {
         rowIndices = new int[]{0, 2, 3};
         colIndies = new int[]{1, 1, 0};
         sparseShape = new Shape(56, 191114);
-        B = new SparseCMatrix(sparseShape, bEntries, rowIndices, colIndies);
+        B = new CooCMatrix(sparseShape, bEntries, rowIndices, colIndies);
 
-        SparseCMatrix finalB = B;
+        CooCMatrix finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.elemMult(finalB));
     }
 }

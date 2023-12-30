@@ -211,7 +211,7 @@ public class CTensor
 
     /**
      * Checks if an object is equal to this tensor object. Valid object types are: {@link Tensor}, {@link CTensor},
-     * {@link SparseTensor}, and {@link SparseCTensor}. These tensors are equal to this tensor if all entries are
+     * {@link CooTensor}, and {@link CooCTensor}. These tensors are equal to this tensor if all entries are
      * numerically equal to the corresponding element of this tensor.
      * @param object Object to check equality with this tensor.
      * @return True if the two tensors are numerically equivalent and false otherwise.
@@ -227,12 +227,12 @@ public class CTensor
             CTensor tensor = (CTensor) object;
             equal = ComplexDenseEquals.tensorEquals(entries, shape, tensor.entries, tensor.shape);
 
-        } else if(object instanceof SparseTensor) {
-            SparseTensor tensor = (SparseTensor) object;
+        } else if(object instanceof CooTensor) {
+            CooTensor tensor = (CooTensor) object;
             equal = RealComplexDenseSparseEquals.tensorEquals(this, tensor);
 
-        } else if(object instanceof SparseCTensor) {
-            SparseCTensor tensor = (SparseCTensor) object;
+        } else if(object instanceof CooCTensor) {
+            CooCTensor tensor = (CooCTensor) object;
             equal = ComplexDenseSparseEquals.tensorEquals(this, tensor);
 
         } else {
@@ -370,7 +370,7 @@ public class CTensor
      * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
      */
     @Override
-    public void addEq(SparseCTensor B) {
+    public void addEq(CooCTensor B) {
         ComplexDenseSparseOperations.addEq(this, B);
     }
 
@@ -394,7 +394,7 @@ public class CTensor
      * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
      */
     @Override
-    public void subEq(SparseCTensor B) {
+    public void subEq(CooCTensor B) {
         ComplexDenseSparseOperations.subEq(this, B);
     }
 
@@ -524,7 +524,7 @@ public class CTensor
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CTensor add(SparseTensor B) {
+    public CTensor add(CooTensor B) {
         return new CTensor(RealComplexDenseSparseOperations.add(this, B));
     }
 
@@ -568,7 +568,7 @@ public class CTensor
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CTensor add(SparseCTensor B) {
+    public CTensor add(CooCTensor B) {
         return ComplexDenseSparseOperations.add(this, B);
     }
 
@@ -581,7 +581,7 @@ public class CTensor
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CTensor sub(SparseTensor B) {
+    public CTensor sub(CooTensor B) {
         return RealComplexDenseSparseOperations.sub(this, B);
     }
 
@@ -616,7 +616,7 @@ public class CTensor
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CTensor sub(SparseCTensor B) {
+    public CTensor sub(CooCTensor B) {
         return ComplexDenseSparseOperations.sub(this, B);
     }
 
@@ -628,7 +628,7 @@ public class CTensor
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public void addEq(SparseTensor B) {
+    public void addEq(CooTensor B) {
         RealComplexDenseSparseOperations.addEq(this, B);
     }
 
@@ -640,7 +640,7 @@ public class CTensor
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public void subEq(SparseTensor B) {
+    public void subEq(CooTensor B) {
         RealComplexDenseSparseOperations.subEq(this, B);
     }
 
@@ -669,7 +669,7 @@ public class CTensor
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     @Override
-    public SparseCTensor elemMult(SparseTensor B) {
+    public CooCTensor elemMult(CooTensor B) {
         return RealComplexDenseSparseOperations.elemMult(this, B);
     }
 
@@ -682,7 +682,7 @@ public class CTensor
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     @Override
-    public SparseCTensor elemMult(SparseCTensor B) {
+    public CooCTensor elemMult(CooCTensor B) {
         return ComplexDenseSparseOperations.elemMult(this, B);
     }
 

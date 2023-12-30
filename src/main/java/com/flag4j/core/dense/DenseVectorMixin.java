@@ -24,7 +24,7 @@
 
 package com.flag4j.core.dense;
 
-import com.flag4j.SparseVector;
+import com.flag4j.CooVector;
 import com.flag4j.Vector;
 
 
@@ -48,7 +48,7 @@ public interface DenseVectorMixin {
      * @param B Vector to add to this vector.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    void addEq(SparseVector B);
+    void addEq(CooVector B);
 
 
     /**
@@ -66,5 +66,5 @@ public interface DenseVectorMixin {
      * @param B Vector to subtract this vector.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    void subEq(SparseVector B);
+    void subEq(CooVector B);
 }

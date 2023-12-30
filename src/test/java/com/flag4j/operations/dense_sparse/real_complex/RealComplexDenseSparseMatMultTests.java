@@ -16,11 +16,11 @@ class RealComplexDenseSparseMatMultTests {
     CMatrix expC, BComplex;
 
     CNumber[] bEntries;
-    SparseCMatrix BSparseComplex;
+    CooCMatrix BSparseComplex;
     Shape shape;
 
-    SparseMatrix ASparse;
-    SparseVector ASparseVector;
+    CooMatrix ASparse;
+    CooVector ACooVector;
     double[] aSparseEntries;
 
     int[] rowIndices, colIndices;
@@ -37,7 +37,7 @@ class RealComplexDenseSparseMatMultTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         shape = new Shape(3, 2);
-        BSparseComplex = new SparseCMatrix(shape, bEntries, rowIndices, colIndices);
+        BSparseComplex = new CooCMatrix(shape, bEntries, rowIndices, colIndices);
         expCEntries = new CNumber[][]{{new CNumber("-92.7375568794+927.8378999999999i"), new CNumber("0.00143541-0.000246i")},
                 {new CNumber("-515.255376035+5155.1225i"), new CNumber("-10.7763114+1.84684i")},
                 {new CNumber("-0.00012148943299999999+0.0012154999999999998i"), new CNumber("0.0")},
@@ -58,7 +58,7 @@ class RealComplexDenseSparseMatMultTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         shape = new Shape(3, 4);
-        BSparseComplex = new SparseCMatrix(shape, bEntries, rowIndices, colIndices);
+        BSparseComplex = new CooCMatrix(shape, bEntries, rowIndices, colIndices);
         expCEntries = new CNumber[][]{{new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("-1.04985560794+10.503789999999999i"), new CNumber("-92.7375568794+927.8378999999999i"), new CNumber("-0.00011494769430000002+0.0011500500000000001i")},
                 {new CNumber("-10881.6915+1864.9i"), new CNumber("6434.2545-1102.7i"), new CNumber("-10.7763114+1.84684i")}};
@@ -72,7 +72,7 @@ class RealComplexDenseSparseMatMultTests {
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{2, 1};
         shape = new Shape(4, 3);
-        ASparse = new SparseMatrix(shape, aSparseEntries, rowIndices, colIndices);
+        ASparse = new CooMatrix(shape, aSparseEntries, rowIndices, colIndices);
         bComplexEntries = new CNumber[][]{
                 {new CNumber(1.34, 13.4), new CNumber(234.6, 6)},
                 {new CNumber(-9.55, 1.9414), new CNumber(9, 1)},
@@ -94,7 +94,7 @@ class RealComplexDenseSparseMatMultTests {
         rowIndices = new int[]{0, 1};
         colIndices = new int[]{2, 1};
         shape = new Shape(2, 3);
-        ASparse = new SparseMatrix(shape, aSparseEntries, rowIndices, colIndices);
+        ASparse = new CooMatrix(shape, aSparseEntries, rowIndices, colIndices);
         bComplexEntries = new CNumber[][]{
                 {new CNumber(1.34, 13.4), new CNumber(234.6, 6)},
                 {new CNumber(-9.55, 1.9414), new CNumber(9, 1)},
@@ -124,7 +124,7 @@ class RealComplexDenseSparseMatMultTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 0};
         shape = new Shape(3, 1);
-        BSparseComplex = new SparseCMatrix(shape, bEntries, rowIndices, colIndices);
+        BSparseComplex = new CooCMatrix(shape, bEntries, rowIndices, colIndices);
         expCEntries = new CNumber[][]{{new CNumber("-92.7361214694+927.8376539999999i")},
                 {new CNumber("-526.0316874350001+5156.969340000001i")},
                 {new CNumber("-0.00012148943299999999+0.0012154999999999998i")},
@@ -146,7 +146,7 @@ class RealComplexDenseSparseMatMultTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         shape = new Shape(3, 4);
-        BSparseComplex = new SparseCMatrix(shape, bEntries, rowIndices, colIndices);
+        BSparseComplex = new CooCMatrix(shape, bEntries, rowIndices, colIndices);
         expCEntries = new CNumber[][]{{new CNumber("0.0")},
                 {new CNumber("-1.04985560794+10.503789999999999i")},
                 {new CNumber("-10881.6915+1864.9i")}};
@@ -160,7 +160,7 @@ class RealComplexDenseSparseMatMultTests {
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{2, 1};
         shape = new Shape(4, 3);
-        ASparse = new SparseMatrix(shape, aSparseEntries, rowIndices, colIndices);
+        ASparse = new CooMatrix(shape, aSparseEntries, rowIndices, colIndices);
         bComplexEntries = new CNumber[][]{
                 {new CNumber(1.34, 13.4)},
                 {new CNumber(-9.55, 1.9414)},
@@ -180,7 +180,7 @@ class RealComplexDenseSparseMatMultTests {
         // ---------------------- Sub-case 4 ----------------------
         aSparseEntries = new double[]{9.43};
         rowIndices = new int[]{1};
-        ASparseVector = new SparseVector(2, aSparseEntries, rowIndices);
+        ACooVector = new CooVector(2, aSparseEntries, rowIndices);
         bComplexEntries = new CNumber[][]{
                 {new CNumber(1.34, 13.4), new CNumber(234.6, 6)},
                 {new CNumber(-9.55, 1.9414), new CNumber(9, 1)},
@@ -192,13 +192,13 @@ class RealComplexDenseSparseMatMultTests {
         expC = new CMatrix(expCEntries);
 
         assertArrayEquals(expC.entries, standardVector(BComplex.entries, BComplex.shape,
-                ASparseVector.entries, ASparseVector.indices));
+                ACooVector.entries, ACooVector.indices));
         assertArrayEquals(expC.entries, concurrentStandardVector(BComplex.entries, BComplex.shape,
-                ASparseVector.entries, ASparseVector.indices));
+                ACooVector.entries, ACooVector.indices));
         assertArrayEquals(expC.entries, blockedVector(BComplex.entries, BComplex.shape,
-                ASparseVector.entries, ASparseVector.indices));
+                ACooVector.entries, ACooVector.indices));
         assertArrayEquals(expC.entries, concurrentBlockedVector(BComplex.entries, BComplex.shape,
-                ASparseVector.entries, ASparseVector.indices));
+                ACooVector.entries, ACooVector.indices));
 
     }
 }

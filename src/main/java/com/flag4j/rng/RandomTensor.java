@@ -338,7 +338,7 @@ public class RandomTensor {
      * @return A sparse matrix with sparsity approximately equal to {@code sparsity} filled with random values uniformly
      * distributed in {@code [min, max)}.
      */
-    public SparseMatrix randomSparseMatrix(int rows, int cols, double min, double max, double sparsity) {
+    public CooMatrix randomSparseMatrix(int rows, int cols, double min, double max, double sparsity) {
         return randomSparseMatrix(new Shape(rows, cols), min, max, sparsity);
     }
 
@@ -354,7 +354,7 @@ public class RandomTensor {
      * @return A sparse matrix with sparsity approximately equal to {@code sparsity} filled with random values uniformly
      * distributed in {@code [min, max)}.
      */
-    public SparseMatrix randomSparseMatrix(Shape shape, double min, double max, double sparsity) {
+    public CooMatrix randomSparseMatrix(Shape shape, double min, double max, double sparsity) {
         ParameterChecks.assertInRange(sparsity, 0, 1, "sparsity");
         int numEntries = new BigDecimal(shape.totalEntries()).multiply(BigDecimal.valueOf(1.0-sparsity))
                 .setScale(0, RoundingMode.HALF_UP).intValueExact();
@@ -374,7 +374,7 @@ public class RandomTensor {
      * @return A sparse matrix filled with the specified number of non-zero entries uniformly
      * distributed in {@code [min, max)}.
      */
-    public SparseMatrix randomSparseMatrix(int rows, int cols, double min, double max, int numNonZeroEntries) {
+    public CooMatrix randomSparseMatrix(int rows, int cols, double min, double max, int numNonZeroEntries) {
         return randomSparseMatrix(new Shape(rows, cols), min, max, numNonZeroEntries);
     }
 
@@ -389,13 +389,13 @@ public class RandomTensor {
      * @return A sparse matrix filled with the specified number of non-zero entries uniformly
      * distributed in {@code [min, max)}.
      */
-    public SparseMatrix randomSparseMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
+    public CooMatrix randomSparseMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
         ParameterChecks.assertGreaterEq(0, numNonZeroEntries);
 
         double[] entries = RAND_ARRAY.genUniformRealArray(numNonZeroEntries, min, max);
         int[][] indices = RAND_ARRAY.randomUniqueIndices2D(numNonZeroEntries, 0, shape.get(0), 0, shape.get(1));
 
-        return new SparseMatrix(shape, entries, indices[0], indices[1]);
+        return new CooMatrix(shape, entries, indices[0], indices[1]);
     }
 
 
@@ -615,7 +615,7 @@ public class RandomTensor {
      * @return A sparse matrix with sparsity approximately equal to {@code sparsity} filled with random values uniformly
      * distributed in {@code [min, max)}.
      */
-    public SparseCMatrix randomSparseCMatrix(int rows, int cols, double min, double max, double sparsity) {
+    public CooCMatrix randomSparseCMatrix(int rows, int cols, double min, double max, double sparsity) {
         return randomSparseCMatrix(new Shape(rows, cols), min, max, sparsity);
     }
 
@@ -631,7 +631,7 @@ public class RandomTensor {
      * @return A sparse matrix with sparsity approximately equal to {@code sparsity} filled with random values uniformly
      * distributed in {@code [min, max)}.
      */
-    public SparseCMatrix randomSparseCMatrix(Shape shape, double min, double max, double sparsity) {
+    public CooCMatrix randomSparseCMatrix(Shape shape, double min, double max, double sparsity) {
         ParameterChecks.assertInRange(sparsity, 0, 1, "sparsity");
         int numEntries = new BigDecimal(shape.totalEntries()).multiply(BigDecimal.valueOf(1.0-sparsity))
                 .setScale(0, RoundingMode.HALF_UP).intValueExact();
@@ -651,7 +651,7 @@ public class RandomTensor {
      * @return A sparse matrix filled with the specified number of non-zero entries uniformly
      * distributed in {@code [min, max)}.
      */
-    public SparseCMatrix randomSparseCMatrix(int rows, int cols, double min, double max, int numNonZeroEntries) {
+    public CooCMatrix randomSparseCMatrix(int rows, int cols, double min, double max, int numNonZeroEntries) {
         return randomSparseCMatrix(new Shape(rows, cols), min, max, numNonZeroEntries);
     }
 
@@ -666,13 +666,13 @@ public class RandomTensor {
      * @return A sparse matrix filled with the specified number of non-zero entries uniformly
      * distributed in {@code [min, max)}.
      */
-    public SparseCMatrix randomSparseCMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
+    public CooCMatrix randomSparseCMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
         ParameterChecks.assertGreaterEq(0, numNonZeroEntries);
 
         CNumber[] entries = RAND_ARRAY.genUniformComplexArray(numNonZeroEntries, min, max);
         int[][] indices = RAND_ARRAY.randomUniqueIndices2D(numNonZeroEntries, 0, shape.get(0), 0, shape.get(1));
 
-        return new SparseCMatrix(shape, entries, indices[0], indices[1]);
+        return new CooCMatrix(shape, entries, indices[0], indices[1]);
     }
 
 

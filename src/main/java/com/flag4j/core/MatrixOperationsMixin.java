@@ -61,7 +61,7 @@ public interface MatrixOperationsMixin<
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
-    T add(SparseMatrix B);
+    T add(CooMatrix B);
 
 
     /**
@@ -79,7 +79,7 @@ public interface MatrixOperationsMixin<
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
-    W add(SparseCMatrix B);
+    W add(CooCMatrix B);
 
 
     /**
@@ -97,7 +97,7 @@ public interface MatrixOperationsMixin<
      * @return The result of subtracting the tensor B from this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
-    T sub(SparseMatrix B);
+    T sub(CooMatrix B);
 
 
     /**
@@ -115,7 +115,7 @@ public interface MatrixOperationsMixin<
      * @return The result of subtracting the tensor B from this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
-    W sub(SparseCMatrix B);
+    W sub(CooCMatrix B);
 
 
     /**
@@ -154,7 +154,7 @@ public interface MatrixOperationsMixin<
      * @return The result of matrix multiplying this matrix with matrix B.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
-    U mult(SparseMatrix B);
+    U mult(CooMatrix B);
 
 
     /**
@@ -172,7 +172,7 @@ public interface MatrixOperationsMixin<
      * @return The result of matrix multiplying this matrix with matrix B.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
-    CMatrix mult(SparseCMatrix B);
+    CMatrix mult(CooCMatrix B);
 
 
     /**
@@ -190,7 +190,7 @@ public interface MatrixOperationsMixin<
      * @return The result of matrix multiplying this matrix with vector b.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
-    UU mult(SparseVector b);
+    UU mult(CooVector b);
 
 
     /**
@@ -208,7 +208,7 @@ public interface MatrixOperationsMixin<
      * @return The result of matrix multiplying this matrix with vector b.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
-    CVector mult(SparseCVector b);
+    CVector mult(CooCVector b);
 
 
     /**
@@ -232,7 +232,7 @@ public interface MatrixOperationsMixin<
      * @param B The second matrix in the multiplication and the matrix to transpose/
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
-    U multTranspose(SparseMatrix B);
+    U multTranspose(CooMatrix B);
 
 
     /**
@@ -256,7 +256,7 @@ public interface MatrixOperationsMixin<
      * @param B The second matrix in the multiplication and the matrix to transpose/
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
-    CMatrix multTranspose(SparseCMatrix B);
+    CMatrix multTranspose(CooCMatrix B);
 
 
     /**
@@ -284,7 +284,7 @@ public interface MatrixOperationsMixin<
      * @return The result of element-wise multiplication of this matrix with the matrix B.
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
-    V elemMult(SparseMatrix B);
+    V elemMult(CooMatrix B);
 
 
     /**
@@ -302,7 +302,7 @@ public interface MatrixOperationsMixin<
      * @return The result of element-wise multiplication of this matrix with the matrix B.
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
-    SparseCMatrix elemMult(SparseCMatrix B);
+    CooCMatrix elemMult(CooCMatrix B);
 
 
     /**
@@ -348,7 +348,7 @@ public interface MatrixOperationsMixin<
      * @return The Frobenius inner product of this matrix and matrix B.
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
-    X fib(SparseMatrix B);
+    X fib(CooMatrix B);
 
 
     /**
@@ -366,7 +366,7 @@ public interface MatrixOperationsMixin<
      * @return The Frobenius inner product of this matrix and matrix B.
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
-    CNumber fib(SparseCMatrix B);
+    CNumber fib(CooCMatrix B);
 
 
     /**
@@ -382,7 +382,7 @@ public interface MatrixOperationsMixin<
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    T directSum(SparseMatrix B);
+    T directSum(CooMatrix B);
 
 
     /**
@@ -398,7 +398,7 @@ public interface MatrixOperationsMixin<
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    W directSum(SparseCMatrix B);
+    W directSum(CooCMatrix B);
 
 
     /**
@@ -422,7 +422,7 @@ public interface MatrixOperationsMixin<
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    T invDirectSum(SparseMatrix B);
+    T invDirectSum(CooMatrix B);
 
 
     /**
@@ -438,7 +438,7 @@ public interface MatrixOperationsMixin<
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    W invDirectSum(SparseCMatrix B);
+    W invDirectSum(CooCMatrix B);
 
 
     /**
@@ -472,7 +472,7 @@ public interface MatrixOperationsMixin<
      * @param b Vector to add to each column of this matrix.
      * @return The result of adding the vector b to each column of this matrix.
      */
-    U addToEachCol(SparseVector b);
+    U addToEachCol(CooVector b);
 
 
     /**
@@ -490,7 +490,7 @@ public interface MatrixOperationsMixin<
      * @param b Vector to add to each column of this matrix.
      * @return The result of adding the vector b to each column of this matrix.
      */
-    CMatrix addToEachCol(SparseCVector b);
+    CMatrix addToEachCol(CooCVector b);
 
 
     /**
@@ -508,7 +508,7 @@ public interface MatrixOperationsMixin<
      * @param b Vector to add to each row of this matrix.
      * @return The result of adding the vector b to each row of this matrix.
      */
-    U addToEachRow(SparseVector b);
+    U addToEachRow(CooVector b);
 
 
     /**
@@ -526,7 +526,7 @@ public interface MatrixOperationsMixin<
      * @param b Vector to add to each row of this matrix.
      * @return The result of adding the vector b to each row of this matrix.
      */
-    CMatrix addToEachRow(SparseCVector b);
+    CMatrix addToEachRow(CooCVector b);
 
 
     /**
@@ -548,7 +548,7 @@ public interface MatrixOperationsMixin<
      * @return The result of stacking this matrix on top of the matrix B.
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
-    T stack(SparseMatrix B);
+    T stack(CooMatrix B);
 
 
     /**
@@ -570,7 +570,7 @@ public interface MatrixOperationsMixin<
      * @return The result of stacking this matrix on top of the matrix B.
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
-    W stack(SparseCMatrix B);
+    W stack(CooCMatrix B);
 
 
     /**
@@ -600,7 +600,7 @@ public interface MatrixOperationsMixin<
      * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    T stack(SparseMatrix B, int axis);
+    T stack(CooMatrix B, int axis);
 
 
     /**
@@ -630,7 +630,7 @@ public interface MatrixOperationsMixin<
      * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    W stack(SparseCMatrix B, int axis);
+    W stack(CooCMatrix B, int axis);
 
 
     /**
@@ -652,7 +652,7 @@ public interface MatrixOperationsMixin<
      * @return The result of stacking B to the right of this matrix.
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
-    T augment(SparseMatrix B);
+    T augment(CooMatrix B);
 
 
     /**
@@ -674,7 +674,7 @@ public interface MatrixOperationsMixin<
      * @return The result of stacking B to the right of this matrix.
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
-    W augment(SparseCMatrix B);
+    W augment(CooCMatrix B);
 
 
     /**
@@ -693,14 +693,14 @@ public interface MatrixOperationsMixin<
     /**
      * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
      * does not affect the output of this function. All vectors will be treated as row vectors.<br>
-     * Also see {@link #stack(SparseVector, int)} and {@link #augment(SparseVector)}.
+     * Also see {@link #stack(CooVector, int)} and {@link #augment(CooVector)}.
      *
      * @param b Vector to stack to this matrix.
      * @return The result of stacking this matrix on top of the vector b.
      * @throws IllegalArgumentException If the number of columns in this matrix is different from the number of entries in
      * the vector b.
      */
-    T stack(SparseVector b);
+    T stack(CooVector b);
 
 
     /**
@@ -719,14 +719,14 @@ public interface MatrixOperationsMixin<
     /**
      * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
      * does not affect the output of this function. All vectors will be treated as row vectors.<br>
-     * Also see {@link #stack(SparseCVector, int)} and {@link #augment(SparseCVector)}.
+     * Also see {@link #stack(CooCVector, int)} and {@link #augment(CooCVector)}.
      *
      * @param b Vector to stack to this matrix.
      * @return The result of stacking this matrix on top of the vector b.
      * @throws IllegalArgumentException If the number of columns in this matrix is different from the number of entries in
      * the vector b.
      */
-    W stack(SparseCVector b);
+    W stack(CooCVector b);
 
 
     /**
@@ -752,15 +752,15 @@ public interface MatrixOperationsMixin<
      *
      * @param b Vector to stack to this matrix.
      * @param axis Axis along which to stack. <br>
-     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(SparseVector)}. In this case, the
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(CooVector)}. In this case, the
      *             vector b will be treated as a column vector regardless of the true orientation. <br>
-     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(SparseVector)}. In this case, the
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(CooVector)}. In this case, the
      *             vector b will be treated as a row vector regardless of the true orientation.
      * @return The result of stacking this matrix and B along the specified axis.
      * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    T stack(SparseVector b, int axis);
+    T stack(CooVector b, int axis);
 
 
     /**
@@ -786,15 +786,15 @@ public interface MatrixOperationsMixin<
      *
      * @param b Vector to stack to this matrix.
      * @param axis Axis along which to stack. <br>
-     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(SparseCVector)}. In this case, the
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(CooCVector)}. In this case, the
      *             vector b will be treated as a column vector regardless of the true orientation. <br>
-     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(SparseCVector)}. In this case, the
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(CooCVector)}. In this case, the
      *             vector b will be treated as a row vector regardless of the true orientation.
      * @return The result of stacking this matrix and B along the specified axis.
      * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    W stack(SparseCVector b, int axis);
+    W stack(CooCVector b, int axis);
 
 
     /**
@@ -814,13 +814,13 @@ public interface MatrixOperationsMixin<
      * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
      * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
      * treated as a column vector regardless of the true orientation.<br>
-     * Also see {@link #stack(SparseVector)} and {@link #stack(SparseVector, int)}.
+     * Also see {@link #stack(CooVector)} and {@link #stack(CooVector, int)}.
      *
      * @param b vector to augment to this matrix.
      * @return The result of augmenting b to the right of this matrix.
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
-    T augment(SparseVector b);
+    T augment(CooVector b);
 
 
     /**
@@ -840,13 +840,13 @@ public interface MatrixOperationsMixin<
      * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
      * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
      * treated as a column vector regardless of the true orientation.<br>
-     * Also see {@link #stack(SparseCVector)} and {@link #stack(SparseCVector, int)}.
+     * Also see {@link #stack(CooCVector)} and {@link #stack(CooCVector, int)}.
      *
      * @param b vector to augment to this matrix.
      * @return The result of augmenting b to the right of this matrix.
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
-    W augment(SparseCVector b);
+    W augment(CooCVector b);
 
 
     /**

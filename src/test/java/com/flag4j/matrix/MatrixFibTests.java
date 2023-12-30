@@ -12,7 +12,7 @@ class MatrixFibTests {
     double[][] aEntries, bEntries;
     double[] bSparseEntries;
     Matrix A, B;
-    SparseMatrix BSparse;
+    CooMatrix BSparse;
     Shape sparseShape;
     int[] rowIndices, colIndices;
     Double exp;
@@ -76,7 +76,7 @@ class MatrixFibTests {
         rowIndices = new int[]{0, 1, 3};
         colIndices = new int[]{2, 0, 1};
         sparseShape = new Shape(A.shape);
-        BSparse = new SparseMatrix(sparseShape, bSparseEntries, rowIndices, colIndices);
+        BSparse = new CooMatrix(sparseShape, bSparseEntries, rowIndices, colIndices);
         exp = 8910.767650000002;
 
         assertEquals(exp, A.fib(BSparse));
@@ -91,7 +91,7 @@ class MatrixFibTests {
         rowIndices = new int[]{0, 1, 3};
         colIndices = new int[]{2, 0, 1};
         sparseShape = new Shape(5, 600);
-        BSparse = new SparseMatrix(sparseShape, bSparseEntries, rowIndices, colIndices);
+        BSparse = new CooMatrix(sparseShape, bSparseEntries, rowIndices, colIndices);
 
         assertThrows(LinearAlgebraException.class, ()->A.fib(BSparse));
     }
@@ -155,7 +155,7 @@ class MatrixFibTests {
 
     @Test
     void complexSparseMatrixFibTestCase() {
-        SparseCMatrix BSparse;
+        CooCMatrix BSparse;
         CNumber exp;
 
         // ------------------------- Sub-case 1 -------------------------
@@ -168,7 +168,7 @@ class MatrixFibTests {
         rowIndices = new int[]{0, 1, 3};
         colIndices = new int[]{2, 0, 1};
         sparseShape = new Shape(A.shape);
-        BSparse = new SparseCMatrix(sparseShape, bSparseEntries, rowIndices, colIndices);
+        BSparse = new CooCMatrix(sparseShape, bSparseEntries, rowIndices, colIndices);
         exp = new CNumber(8910.767650000002);
 
         assertEquals(exp, A.fib(BSparse));
@@ -183,9 +183,9 @@ class MatrixFibTests {
         rowIndices = new int[]{0, 1, 3};
         colIndices = new int[]{2, 0, 1};
         sparseShape = new Shape(5, 600);
-        BSparse = new SparseCMatrix(sparseShape, bSparseEntries, rowIndices, colIndices);
+        BSparse = new CooCMatrix(sparseShape, bSparseEntries, rowIndices, colIndices);
 
-        SparseCMatrix finalBSparse = BSparse;
+        CooCMatrix finalBSparse = BSparse;
         assertThrows(LinearAlgebraException.class, ()->A.fib(finalBSparse));
     }
 }

@@ -1,8 +1,8 @@
 package com.flag4j.vector;
 
 import com.flag4j.CVector;
-import com.flag4j.SparseCVector;
-import com.flag4j.SparseVector;
+import com.flag4j.CooCVector;
+import com.flag4j.CooVector;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.exceptions.LinearAlgebraException;
@@ -73,19 +73,19 @@ class VectorElemMultDivTests {
     void realSparseMultTestCase() {
         int[] expIndices;
         double[] bEntries, expEntries;
-        SparseVector b, exp;
+        CooVector b, exp;
 
         // ------------------------ Sub-case 1 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new Vector(aEntries);
         bEntries = new double[]{8.55};
         indices = new int[]{2};
-        b = new SparseVector(3, bEntries, indices);
+        b = new CooVector(3, bEntries, indices);
         expEntries = new double[]{aEntries[2]*bEntries[0]};
         expIndices = new int[]{2};
-        exp = new SparseVector(3, expEntries, expIndices);
+        exp = new CooVector(3, expEntries, expIndices);
 
-        SparseVector act = a.elemMult(b);
+        CooVector act = a.elemMult(b);
 
         assertEquals(exp.size, act.size);
         assertArrayEquals(exp.entries, act.entries);
@@ -96,9 +96,9 @@ class VectorElemMultDivTests {
         a = new Vector(aEntries);
         bEntries = new double[]{8.55};
         indices = new int[]{2};
-        b = new SparseVector(402, bEntries, indices);
+        b = new CooVector(402, bEntries, indices);
 
-        SparseVector finalB = b;
+        CooVector finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.elemMult(finalB));
     }
 
@@ -107,19 +107,19 @@ class VectorElemMultDivTests {
     void complexSparseMultTestCase() {
         int[] expIndices;
         CNumber[] bEntries, expEntries;
-        SparseCVector b, exp;
+        CooCVector b, exp;
 
         // ------------------------ Sub-case 1 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new Vector(aEntries);
         bEntries = new CNumber[]{new CNumber(-9.234, 1.5)};
         indices = new int[]{2};
-        b = new SparseCVector(3, bEntries, indices);
+        b = new CooCVector(3, bEntries, indices);
         expEntries = new CNumber[]{bEntries[0].mult(aEntries[2])};
         expIndices = new int[]{2};
-        exp = new SparseCVector(3, expEntries, expIndices);
+        exp = new CooCVector(3, expEntries, expIndices);
 
-        SparseCVector act = a.elemMult(b);
+        CooCVector act = a.elemMult(b);
 
         assertEquals(exp.size, act.size);
         assertArrayEquals(exp.entries, act.entries);
@@ -130,9 +130,9 @@ class VectorElemMultDivTests {
         a = new Vector(aEntries);
         bEntries = new CNumber[]{new CNumber(-9.234, 1.5)};
         indices = new int[]{2};
-        b = new SparseCVector(31, bEntries, indices);
+        b = new CooCVector(31, bEntries, indices);
 
-        SparseCVector finalB = b;
+        CooCVector finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.elemMult(finalB));
     }
 

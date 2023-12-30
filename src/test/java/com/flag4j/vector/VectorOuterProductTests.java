@@ -39,7 +39,7 @@ class VectorOuterProductTests {
     @Test
     void realSparseOuterTestCase() {
         double[] bEntries;
-        SparseVector b;
+        CooVector b;
         double[][] expEntries;
         Matrix exp;
 
@@ -51,7 +51,7 @@ class VectorOuterProductTests {
         bEntries = new double[]{16.345};
         sparseIndices = new int[]{1};
         sparseSize = 3;
-        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVector(sparseSize, bEntries, sparseIndices);
         expEntries = new double[][]{{0.0, 16.345, 0.0},
                 {0.0, 91.53199999999998, 0.0},
                 {0.0, -152.907475, 0.0}};
@@ -84,7 +84,7 @@ class VectorOuterProductTests {
     @Test
     void complexSparseOuterTestCase() {
         CNumber[] bEntries;
-        SparseCVector b;
+        CooCVector b;
         CNumber[][] expEntries;
         CMatrix exp;
 
@@ -94,7 +94,7 @@ class VectorOuterProductTests {
         bEntries = new CNumber[]{new CNumber("71.5-8.0i")};
         sparseIndices = new int[]{2};
         sparseSize = 3;
-        b = new SparseCVector(sparseSize, bEntries, sparseIndices);
+        b = new CooCVector(sparseSize, bEntries, sparseIndices);
         expEntries = new CNumber[][]{{new CNumber("0.0"), new CNumber("0.0"), new CNumber("71.5+8.0i")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("400.4+44.8i")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("-668.8825-74.84i")}};

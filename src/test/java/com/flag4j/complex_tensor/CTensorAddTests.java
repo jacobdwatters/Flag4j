@@ -79,7 +79,7 @@ class CTensorAddTests {
     @Test
     void realSparseTestCase() {
         double[] bEntries;
-        SparseTensor B;
+        CooTensor B;
 
         // ------------------------- Sub-case 1 -------------------------
         bEntries = new double[]{
@@ -89,7 +89,7 @@ class CTensorAddTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new SparseTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensor(bShape, bEntries, sparseIndices);
         expEntries = ArrayUtils.copyOf(aEntries);
         expShape = new Shape(2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])].addEq(bEntries[0]);
@@ -107,9 +107,9 @@ class CTensorAddTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new SparseTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensor(bShape, bEntries, sparseIndices);
 
-        SparseTensor finalB = B;
+        CooTensor finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.add(finalB));
     }
 
@@ -157,7 +157,7 @@ class CTensorAddTests {
     @Test
     void complexSparseTestCase() {
         CNumber[] bEntries;
-        SparseCTensor B;
+        CooCTensor B;
 
         // ------------------------- Sub-case 1 -------------------------
         bEntries = new CNumber[]{
@@ -167,7 +167,7 @@ class CTensorAddTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}
         };
-        B = new SparseCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensor(bShape, bEntries, sparseIndices);
         expEntries = ArrayUtils.copyOf(aEntries);
         expShape = new Shape(2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])].addEq(bEntries[0]);
@@ -184,9 +184,9 @@ class CTensorAddTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}
         };
-        B = new SparseCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensor(bShape, bEntries, sparseIndices);
 
-        SparseCTensor finalB = B;
+        CooCTensor finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.add(finalB));
     }
 
@@ -282,7 +282,7 @@ class CTensorAddTests {
     @Test
     void realSparseAddEqTestCase() {
         double[] bEntries;
-        SparseTensor B;
+        CooTensor B;
 
         // ------------------------- Sub-case 1 -------------------------
         bEntries = new double[]{
@@ -292,7 +292,7 @@ class CTensorAddTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new SparseTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensor(bShape, bEntries, sparseIndices);
         expEntries = ArrayUtils.copyOf(aEntries);
         expShape = new Shape(2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])].addEq(bEntries[0]);
@@ -311,9 +311,9 @@ class CTensorAddTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new SparseTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensor(bShape, bEntries, sparseIndices);
 
-        SparseTensor finalB = B;
+        CooTensor finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.addEq(finalB));
     }
 
@@ -396,7 +396,7 @@ class CTensorAddTests {
     @Test
     void complexSparseAddEqTestCase() {
         CNumber[] bEntries;
-        SparseCTensor B;
+        CooCTensor B;
 
         // ------------------------- Sub-case 1 -------------------------
         bEntries = new CNumber[]{
@@ -406,7 +406,7 @@ class CTensorAddTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new SparseCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensor(bShape, bEntries, sparseIndices);
         expEntries = ArrayUtils.copyOf(aEntries);
         expShape = new Shape(2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])].addEq(bEntries[0]);
@@ -425,9 +425,9 @@ class CTensorAddTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new SparseCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensor(bShape, bEntries, sparseIndices);
 
-        SparseCTensor finalB = B;
+        CooCTensor finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.addEq(finalB));
     }
 

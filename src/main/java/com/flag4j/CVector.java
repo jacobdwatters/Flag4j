@@ -47,7 +47,7 @@ import java.util.Arrays;
  * Complex dense vector. This class is mostly equivalent to a rank 1 complex tensor.
  */
 public class CVector extends ComplexDenseTensorBase<CVector, Vector>
-        implements VectorMixin<CVector, CVector, SparseCVector, CVector, CNumber, CMatrix, CMatrix, CMatrix>,
+        implements VectorMixin<CVector, CVector, CooCVector, CVector, CNumber, CMatrix, CMatrix, CMatrix>,
         DenseVectorMixin {
 
     /**
@@ -146,7 +146,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
 
     /**
      * Checks if two this vector is numerically element-wise equal to another object. Objects which can be equal are, {@link Vector},
-     * {@link CVector}, {@link SparseVector}, {@link SparseCVector}.
+     * {@link CVector}, {@link CooVector}, {@link CooCVector}.
      *
      * @param b Object to compare to this vector.
      * @return True if this vector and object {@code b} are equivalent element-wise. Otherwise, returns false.
@@ -161,11 +161,11 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
         } else if(b instanceof CVector) {
             CVector vec = (CVector) b;
             equal = Arrays.equals(this.entries, vec.entries);
-        } else if(b instanceof SparseVector) {
-            SparseVector vec = (SparseVector) b;
+        } else if(b instanceof CooVector) {
+            CooVector vec = (CooVector) b;
             equal = RealComplexDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);
-        } else if(b instanceof SparseCVector) {
-            SparseCVector vec = (SparseCVector) b;
+        } else if(b instanceof CooCVector) {
+            CooCVector vec = (CooCVector) b;
             equal = ComplexDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);
         }
 
@@ -181,7 +181,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public CVector add(SparseCVector B) {
+    public CVector add(CooCVector B) {
         return ComplexDenseSparseVectorOperations.add(this, B);
     }
 
@@ -207,7 +207,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public CVector sub(SparseVector B) {
+    public CVector sub(CooVector B) {
         return RealComplexDenseSparseVectorOperations.sub(this, B);
     }
 
@@ -220,7 +220,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public CVector sub(SparseCVector B) {
+    public CVector sub(CooCVector B) {
         return ComplexDenseSparseVectorOperations.sub(this, B);
     }
 
@@ -232,7 +232,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public void addEq(SparseVector B) {
+    public void addEq(CooVector B) {
         RealComplexDenseSparseVectorOperations.addEq(this, B);
     }
 
@@ -244,7 +244,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @param B Vector to add to this vector.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    public void addEq(SparseCVector B) {
+    public void addEq(CooCVector B) {
         ComplexDenseSparseVectorOperations.addEq(this, B);
     }
 
@@ -256,7 +256,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public void subEq(SparseVector B) {
+    public void subEq(CooVector B) {
         RealComplexDenseSparseVectorOperations.subEq(this, B);
     }
 
@@ -268,7 +268,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @param B Vector to add to this vector.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    public void subEq(SparseCVector B) {
+    public void subEq(CooCVector B) {
         ComplexDenseSparseVectorOperations.subEq(this, B);
     }
 
@@ -294,7 +294,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
      */
     @Override
-    public SparseCVector elemMult(SparseVector B) {
+    public CooCVector elemMult(CooVector B) {
         return RealComplexDenseSparseVectorOperations.elemMult(this, B);
     }
 
@@ -307,7 +307,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
      */
     @Override
-    public SparseCVector elemMult(SparseCVector B) {
+    public CooCVector elemMult(CooCVector B) {
         return ComplexDenseSparseVectorOperations.elemMult(this, B);
     }
 
@@ -470,7 +470,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @return A vector resulting from joining the specified vector with this vector.
      */
     @Override
-    public CVector join(SparseVector b) {
+    public CVector join(CooVector b) {
         CVector joined = new CVector(this.size+b.size);
         ArrayUtils.arraycopy(this.entries, 0, joined.entries, 0, this.size);
 
@@ -492,7 +492,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @return A vector resulting from joining the specified vector with this vector.
      */
     @Override
-    public CVector join(SparseCVector b) {
+    public CVector join(CooCVector b) {
         CVector joined = new CVector(this.size+b.size);
         ArrayUtils.arraycopy(this.entries, 0, joined.entries, 0, this.size);
 
@@ -539,7 +539,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      *                                  the vector b.
      */
     @Override
-    public CMatrix stack(SparseVector b) {
+    public CMatrix stack(CooVector b) {
         ParameterChecks.assertArrayLengthsEq(this.size, b.size);
         CMatrix stacked = new CMatrix(2, this.size);
 
@@ -589,7 +589,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      *                                  the vector b.
      */
     @Override
-    public CMatrix stack(SparseCVector b) {
+    public CMatrix stack(CooCVector b) {
         ParameterChecks.assertArrayLengthsEq(this.size, b.size);
         CMatrix stacked = new CMatrix(2, this.size);
 
@@ -679,7 +679,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public CMatrix stack(SparseVector b, int axis) {
+    public CMatrix stack(CooVector b, int axis) {
         ParameterChecks.assertAxis2D(axis);
         CMatrix stacked;
 
@@ -781,7 +781,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public CMatrix stack(SparseCVector b, int axis) {
+    public CMatrix stack(CooCVector b, int axis) {
         ParameterChecks.assertAxis2D(axis);
         CMatrix stacked;
 
@@ -832,7 +832,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public CVector add(SparseVector B) {
+    public CVector add(CooVector B) {
         return new CVector(RealComplexDenseSparseVectorOperations.add(this, B));
     }
 
@@ -874,7 +874,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
     @Override
-    public CNumber inner(SparseVector b) {
+    public CNumber inner(CooVector b) {
         return RealComplexDenseSparseVectorOperations.inner(this.entries, b.entries, b.indices, b.size);
     }
 
@@ -913,7 +913,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
     @Override
-    public CNumber inner(SparseCVector b) {
+    public CNumber inner(CooCVector b) {
         return ComplexDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);
     }
 
@@ -980,7 +980,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
     @Override
-    public CMatrix outer(SparseVector b) {
+    public CMatrix outer(CooVector b) {
         return new CMatrix(this.size, b.size,
                 RealComplexDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));
     }
@@ -1008,7 +1008,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
     @Override
-    public CMatrix outer(SparseCVector b) {
+    public CMatrix outer(CooCVector b) {
         return new CMatrix(this.size, b.size,
                 ComplexDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));
     }

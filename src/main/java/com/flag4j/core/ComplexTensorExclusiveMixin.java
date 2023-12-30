@@ -26,7 +26,7 @@ package com.flag4j.core;
 
 
 import com.flag4j.CTensor;
-import com.flag4j.SparseCTensor;
+import com.flag4j.CooCTensor;
 import com.flag4j.Tensor;
 
 /**
@@ -34,7 +34,7 @@ import com.flag4j.Tensor;
  * @param <T> Tensor type.
  */
 public interface ComplexTensorExclusiveMixin<T>
-        extends TensorExclusiveMixin<T, CTensor, SparseCTensor, T> {
+        extends TensorExclusiveMixin<T, CTensor, CooCTensor, T> {
 
     /**
      * Computes the conjugate transpose of a tensor. Same as {@link #H(int, int)}.
@@ -101,7 +101,7 @@ public interface ComplexTensorExclusiveMixin<T>
      * @param B Second tensor in the addition.
      * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
      */
-    void addEq(SparseCTensor B);
+    void addEq(CooCTensor B);
 
 
     /**
@@ -119,5 +119,5 @@ public interface ComplexTensorExclusiveMixin<T>
      * @param B Second tensor in the subtraction.
      * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
      */
-    void subEq(SparseCTensor B);
+    void subEq(CooCTensor B);
 }

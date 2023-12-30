@@ -1,8 +1,8 @@
 package com.flag4j.complex_vector;
 
 import com.flag4j.CVector;
-import com.flag4j.SparseCVector;
-import com.flag4j.SparseVector;
+import com.flag4j.CooCVector;
+import com.flag4j.CooVector;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.exceptions.LinearAlgebraException;
@@ -187,13 +187,13 @@ class CVectorAddTests {
     @Test
     void realSparseTestCase() {
         double[] bEntries;
-        SparseVector b;
+        CooVector b;
 
         // ------------------ Sub-case 1 ------------------
         bEntries = new double[]{54.1354, -1.4};
         sparseSize = 4;
         sparseIndices = new int[]{0, 2};
-        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVector(sparseSize, bEntries, sparseIndices);
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24).add(54.1354), new CNumber(-24.565, 9.3),
                 new CNumber(3.54698).add(-1.4), new CNumber(0, 8.356)};
@@ -205,7 +205,7 @@ class CVectorAddTests {
         bEntries = new double[]{-1.4};
         sparseSize = 4;
         sparseIndices = new int[]{3};
-        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVector(sparseSize, bEntries, sparseIndices);
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24), new CNumber(-24.565, 9.3),
                 new CNumber(3.54698), new CNumber(0, 8.356).add(-1.4)};
@@ -218,18 +218,18 @@ class CVectorAddTests {
         bEntries = new double[]{-1.4};
         sparseSize = 4234;
         sparseIndices = new int[]{3};
-        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVector(sparseSize, bEntries, sparseIndices);
 
-        SparseVector finalB = b;
+        CooVector finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.add(finalB));
 
         // ------------------ Sub-case 4 ------------------
         bEntries = new double[]{-1.4};
         sparseSize = 3;
         sparseIndices = new int[]{3};
-        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVector(sparseSize, bEntries, sparseIndices);
 
-        SparseVector finalB2 = b;
+        CooVector finalB2 = b;
         assertThrows(LinearAlgebraException.class, ()->a.add(finalB2));
     }
 
@@ -283,13 +283,13 @@ class CVectorAddTests {
     @Test
     void complexSparseTestCase() {
         CNumber[] bEntries;
-        SparseCVector b;
+        CooCVector b;
 
         // ------------------ Sub-case 1 ------------------
         bEntries = new CNumber[]{new CNumber(-9.24, 8.14), new CNumber(0, 22455.6126)};
         sparseSize = 4;
         sparseIndices = new int[]{0, 2};
-        b = new SparseCVector(sparseSize, bEntries, sparseIndices);
+        b = new CooCVector(sparseSize, bEntries, sparseIndices);
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24).add(bEntries[0]), new CNumber(-24.565, 9.3),
                 new CNumber(3.54698).add(bEntries[1]), new CNumber(0, 8.356)};
@@ -301,7 +301,7 @@ class CVectorAddTests {
         bEntries = new CNumber[]{new CNumber(4.5, 0.00245)};
         sparseSize = 4;
         sparseIndices = new int[]{3};
-        b = new SparseCVector(sparseSize, bEntries, sparseIndices);
+        b = new CooCVector(sparseSize, bEntries, sparseIndices);
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24), new CNumber(-24.565, 9.3),
                 new CNumber(3.54698), new CNumber(0, 8.356).add(bEntries[0])};
@@ -314,18 +314,18 @@ class CVectorAddTests {
         bEntries = new CNumber[]{new CNumber(9.3455, 15.6)};
         sparseSize = 4234;
         sparseIndices = new int[]{3};
-        b = new SparseCVector(sparseSize, bEntries, sparseIndices);
+        b = new CooCVector(sparseSize, bEntries, sparseIndices);
 
-        SparseCVector finalB = b;
+        CooCVector finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.add(finalB));
 
         // ------------------ Sub-case 4 ------------------
         bEntries = new CNumber[]{new CNumber(9.3455, 15.6)};
         sparseSize = 3;
         sparseIndices = new int[]{3};
-        b = new SparseCVector(sparseSize, bEntries, sparseIndices);
+        b = new CooCVector(sparseSize, bEntries, sparseIndices);
 
-        SparseCVector finalB2 = b;
+        CooCVector finalB2 = b;
         assertThrows(LinearAlgebraException.class, ()->a.add(finalB2));
     }
 
@@ -511,14 +511,14 @@ class CVectorAddTests {
     @Test
     void realSparseEqTestCase() {
         double[] bEntries;
-        SparseVector b;
+        CooVector b;
 
         // ------------------ Sub-case 1 ------------------
         setup();
         bEntries = new double[]{54.1354, -1.4};
         sparseSize = 4;
         sparseIndices = new int[]{0, 2};
-        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVector(sparseSize, bEntries, sparseIndices);
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24).add(54.1354), new CNumber(-24.565, 9.3),
                 new CNumber(3.54698).add(-1.4), new CNumber(0, 8.356)};
@@ -532,7 +532,7 @@ class CVectorAddTests {
         bEntries = new double[]{-1.4};
         sparseSize = 4;
         sparseIndices = new int[]{3};
-        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVector(sparseSize, bEntries, sparseIndices);
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24), new CNumber(-24.565, 9.3),
                 new CNumber(3.54698), new CNumber(0, 8.356).add(-1.4)};
@@ -546,9 +546,9 @@ class CVectorAddTests {
         bEntries = new double[]{-1.4};
         sparseSize = 4234;
         sparseIndices = new int[]{3};
-        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVector(sparseSize, bEntries, sparseIndices);
 
-        SparseVector finalB = b;
+        CooVector finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.addEq(finalB));
 
         // ------------------ Sub-case 4 ------------------
@@ -556,9 +556,9 @@ class CVectorAddTests {
         bEntries = new double[]{-1.4};
         sparseSize = 3;
         sparseIndices = new int[]{3};
-        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVector(sparseSize, bEntries, sparseIndices);
 
-        SparseVector finalB2 = b;
+        CooVector finalB2 = b;
         assertThrows(LinearAlgebraException.class, ()->a.addEq(finalB2));
     }
 
@@ -618,14 +618,14 @@ class CVectorAddTests {
     @Test
     void complexSparseEqTestCase() {
         CNumber[] bEntries;
-        SparseCVector b;
+        CooCVector b;
 
         // ------------------ Sub-case 1 ------------------
         setup();
         bEntries = new CNumber[]{new CNumber(-9.24, 8.14), new CNumber(0, 22455.6126)};
         sparseSize = 4;
         sparseIndices = new int[]{0, 2};
-        b = new SparseCVector(sparseSize, bEntries, sparseIndices);
+        b = new CooCVector(sparseSize, bEntries, sparseIndices);
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24).add(bEntries[0]), new CNumber(-24.565, 9.3),
                 new CNumber(3.54698).add(bEntries[1]), new CNumber(0, 8.356)};
@@ -639,7 +639,7 @@ class CVectorAddTests {
         bEntries = new CNumber[]{new CNumber(4.5, 0.00245)};
         sparseSize = 4;
         sparseIndices = new int[]{3};
-        b = new SparseCVector(sparseSize, bEntries, sparseIndices);
+        b = new CooCVector(sparseSize, bEntries, sparseIndices);
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24), new CNumber(-24.565, 9.3),
                 new CNumber(3.54698), new CNumber(0, 8.356).add(bEntries[0])};
@@ -653,9 +653,9 @@ class CVectorAddTests {
         bEntries = new CNumber[]{new CNumber(9.3455, 15.6)};
         sparseSize = 4234;
         sparseIndices = new int[]{3};
-        b = new SparseCVector(sparseSize, bEntries, sparseIndices);
+        b = new CooCVector(sparseSize, bEntries, sparseIndices);
 
-        SparseCVector finalB = b;
+        CooCVector finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.addEq(finalB));
 
         // ------------------ Sub-case 4 ------------------
@@ -663,9 +663,9 @@ class CVectorAddTests {
         bEntries = new CNumber[]{new CNumber(9.3455, 15.6)};
         sparseSize = 3;
         sparseIndices = new int[]{3};
-        b = new SparseCVector(sparseSize, bEntries, sparseIndices);
+        b = new CooCVector(sparseSize, bEntries, sparseIndices);
 
-        SparseCVector finalB2 = b;
+        CooCVector finalB2 = b;
         assertThrows(LinearAlgebraException.class, ()->a.addEq(finalB2));
     }
 }

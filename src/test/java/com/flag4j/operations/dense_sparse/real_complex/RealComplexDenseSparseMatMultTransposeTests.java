@@ -22,8 +22,8 @@ class RealComplexDenseSparseMatMultTransposeTests {
 
     static Matrix realDense;
     static CMatrix complexDense;
-    static SparseMatrix realSp;
-    static SparseCMatrix complexSp;
+    static CooMatrix realSp;
+    static CooCMatrix complexSp;
 
     static CMatrix exp;
 
@@ -53,15 +53,15 @@ class RealComplexDenseSparseMatMultTransposeTests {
 
         realDense = new Matrix(rdEntries);
         complexDense = new CMatrix(cdEntries);
-        realSp = new SparseMatrix(rspShape, rspEntries, rindices[0], rindices[1]);
-        complexSp = new SparseCMatrix(cspShape, cspEntries, cindices[0], cindices[1]);
+        realSp = new CooMatrix(rspShape, rspEntries, rindices[0], rindices[1]);
+        complexSp = new CooCMatrix(cspShape, cspEntries, cindices[0], cindices[1]);
     }
 
 
     @Test
     void realDenseComplexSpTestCase() {
         // ---------------------- sub-case 1 ----------------------
-        exp = realDense.mult(new SparseCMatrix(complexSp.shape.copy().swapAxes(0, 1),
+        exp = realDense.mult(new CooCMatrix(complexSp.shape.copy().swapAxes(0, 1),
                 complexSp.entries, complexSp.colIndices, complexSp.rowIndices));
         assertEquals(exp, realDense.multTranspose(complexSp));
     }
@@ -70,7 +70,7 @@ class RealComplexDenseSparseMatMultTransposeTests {
     @Test
     void complexDenseRealSpTestCase() {
         // ---------------------- sub-case 1 ----------------------
-        exp = complexDense.mult(new SparseMatrix(realSp.shape.copy().swapAxes(0, 1),
+        exp = complexDense.mult(new CooMatrix(realSp.shape.copy().swapAxes(0, 1),
                 realSp.entries, realSp.colIndices, realSp.rowIndices));
         assertEquals(exp, complexDense.multTranspose(realSp));
     }

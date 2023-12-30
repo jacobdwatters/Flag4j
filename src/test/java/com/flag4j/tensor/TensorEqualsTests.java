@@ -90,7 +90,7 @@ class TensorEqualsTests {
         sparseSetup();
 
         double[] bEntries;
-        SparseTensor B;
+        CooTensor B;
 
         // ---------------------- Sub-case 1 ----------------------
         bEntries = new double[]{1.23, -99.23425, 2.677, -0.000194};
@@ -101,7 +101,7 @@ class TensorEqualsTests {
                 aShape.getIndices(7),
                 aShape.getIndices(9)
         };
-        B = new SparseTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensor(bShape, bEntries, sparseIndices);
 
         assertEquals(A, B);
 
@@ -114,7 +114,7 @@ class TensorEqualsTests {
                 aShape.getIndices(7),
                 aShape.getIndices(9)
         };
-        B = new SparseTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensor(bShape, bEntries, sparseIndices);
 
         assertNotEquals(A, B);
 
@@ -127,7 +127,7 @@ class TensorEqualsTests {
                 bShape.getIndices(7),
                 bShape.getIndices(9)
         };
-        B = new SparseTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensor(bShape, bEntries, sparseIndices);
 
         assertNotEquals(A, B);
 
@@ -140,7 +140,7 @@ class TensorEqualsTests {
                 aShape.getIndices(7),
                 aShape.getIndices(9)
         };
-        B = new SparseTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensor(bShape, bEntries, sparseIndices);
 
         assertNotEquals(A, B);
     }
@@ -208,7 +208,7 @@ class TensorEqualsTests {
         sparseSetup();
 
         CNumber[] bEntries;
-        SparseCTensor B;
+        CooCTensor B;
 
         // ---------------------- Sub-case 1 ----------------------
         bEntries = new CNumber[]{
@@ -221,7 +221,7 @@ class TensorEqualsTests {
                 aShape.getIndices(7),
                 aShape.getIndices(9)
         };
-        B = new SparseCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensor(bShape, bEntries, sparseIndices);
 
         assertEquals(A, B);
 
@@ -236,7 +236,7 @@ class TensorEqualsTests {
                 aShape.getIndices(7),
                 aShape.getIndices(9)
         };
-        B = new SparseCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensor(bShape, bEntries, sparseIndices);
 
         assertNotEquals(A, B);
 
@@ -251,7 +251,7 @@ class TensorEqualsTests {
                 bShape.getIndices(7),
                 bShape.getIndices(9)
         };
-        B = new SparseCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensor(bShape, bEntries, sparseIndices);
 
         assertNotEquals(A, B);
 
@@ -266,7 +266,7 @@ class TensorEqualsTests {
                 aShape.getIndices(7),
                 aShape.getIndices(9)
         };
-        B = new SparseCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensor(bShape, bEntries, sparseIndices);
 
         assertNotEquals(A, B);
     }

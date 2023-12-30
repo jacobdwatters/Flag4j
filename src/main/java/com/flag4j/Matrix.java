@@ -63,7 +63,7 @@ import java.util.List;
  */
 public class Matrix
         extends RealDenseTensorBase<Matrix, CMatrix>
-        implements MatrixMixin<Matrix, Matrix, SparseMatrix, CMatrix, Double, Vector, Vector>,
+        implements MatrixMixin<Matrix, Matrix, CooMatrix, CMatrix, Double, Vector, Vector>,
         RealMatrixMixin<Matrix, CMatrix>,
         DenseMatrixMixin<Matrix, Double> {
 
@@ -378,7 +378,7 @@ public class Matrix
      * Converts this matrix to a sparse matrix. It is only
      * @return A sparse equivalent to this matrix.
      */
-    public SparseMatrix toSparse() {
+    public CooMatrix toSparse() {
         List<Double> sparseEntries = new ArrayList<>();
         List<Integer> rowIndices = new ArrayList<>();
         List<Integer> colIndices = new ArrayList<>();
@@ -399,7 +399,7 @@ public class Matrix
             }
         }
 
-        return new SparseMatrix(shape.copy(), sparseEntries, rowIndices, colIndices);
+        return new CooMatrix(shape.copy(), sparseEntries, rowIndices, colIndices);
     }
 
 
@@ -448,7 +448,7 @@ public class Matrix
 
     /**
      * Checks if an object is equal to this matrix object. Valid object types are: {@link Matrix}, {@link CMatrix},
-     * {@link SparseMatrix}, and {@link SparseCMatrix}. These matrices are equal to this matrix if all entries are
+     * {@link CooMatrix}, and {@link CooCMatrix}. These matrices are equal to this matrix if all entries are
      * numerically equal to the corresponding element of this matrix. If the matrix is complex, then the imaginary
      * component must be zero to be equal.
      * @param object Object to check equality with this matrix.
@@ -465,12 +465,12 @@ public class Matrix
             CMatrix mat = (CMatrix) object;
             equal = RealComplexDenseEquals.matrixEquals(this, mat);
 
-        } else if(object instanceof SparseMatrix) {
-            SparseMatrix mat = (SparseMatrix) object;
+        } else if(object instanceof CooMatrix) {
+            CooMatrix mat = (CooMatrix) object;
             equal = RealDenseSparseEquals.matrixEquals(this, mat);
 
-        } else if(object instanceof SparseCMatrix) {
-            SparseCMatrix mat = (SparseCMatrix) object;
+        } else if(object instanceof CooCMatrix) {
+            CooCMatrix mat = (CooCMatrix) object;
             equal = RealComplexDenseSparseEquals.matrixEquals(this, mat);
 
         } else {
@@ -726,12 +726,12 @@ public class Matrix
      * Sets a column of this matrix at the given index to the specified values.
      *
      * @param values   New values for the column. This method assumes that the indices of the sparse vector are sorted.
-     *                 If this is not the case, call {@link SparseVector#sortIndices()} first.
+     *                 If this is not the case, call {@link CooVector#sortIndices()} first.
      * @param colIndex The index of the column which is to be set.
      * @return A reference to this matrix.
      * @throws IllegalArgumentException If the {@code values} vector has a different length than the number of rows of this matrix.
      */
-    public Matrix setCol(SparseVector values, int colIndex) {
+    public Matrix setCol(CooVector values, int colIndex) {
         ParameterChecks.assertArrayLengthsEq(values.size, this.numRows);
 
         int sparseIdx = 0;
@@ -888,7 +888,7 @@ public class Matrix
      *                                   fit completely within this matrix.
      */
     @Override
-    public Matrix setSlice(SparseMatrix values, int rowStart, int colStart) {
+    public Matrix setSlice(CooMatrix values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
         ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
@@ -1067,7 +1067,7 @@ public class Matrix
      *                                   fit completely within this matrix.
      */
     @Override
-    public Matrix setSliceCopy(SparseMatrix values, int rowStart, int colStart) {
+    public Matrix setSliceCopy(CooMatrix values, int rowStart, int colStart) {
         Matrix copy = this.copy();
 
         // Fill slice with zeros
@@ -1300,7 +1300,7 @@ public class Matrix
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Matrix add(SparseMatrix B) {
+    public Matrix add(CooMatrix B) {
         return RealDenseSparseMatrixOperations.add(this, B);
     }
 
@@ -1328,7 +1328,7 @@ public class Matrix
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public CMatrix add(SparseCMatrix B) {
+    public CMatrix add(CooCMatrix B) {
         return RealComplexDenseSparseMatrixOperations.add(this, B);
     }
 
@@ -1340,7 +1340,7 @@ public class Matrix
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public void subEq(SparseMatrix B) {
+    public void subEq(CooMatrix B) {
         RealDenseSparseMatrixOperations.subEq(this, B);
     }
 
@@ -1352,7 +1352,7 @@ public class Matrix
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public void addEq(SparseMatrix B) {
+    public void addEq(CooMatrix B) {
         RealDenseSparseMatrixOperations.addEq(this, B);
     }
 
@@ -1387,7 +1387,7 @@ public class Matrix
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Matrix sub(SparseMatrix B) {
+    public Matrix sub(CooMatrix B) {
         return RealDenseSparseMatrixOperations.sub(this, B);
     }
 
@@ -1416,7 +1416,7 @@ public class Matrix
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public CMatrix sub(SparseCMatrix B) {
+    public CMatrix sub(CooCMatrix B) {
         return RealComplexDenseSparseMatrixOperations.sub(this, B);
     }
 
@@ -1445,7 +1445,7 @@ public class Matrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
     @Override
-    public Matrix mult(SparseMatrix B) {
+    public Matrix mult(CooMatrix B) {
         ParameterChecks.assertMatMultShapes(this.shape, B.shape);
         double[] entries = RealDenseSparseMatrixMultiplication.standard(
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
@@ -1480,7 +1480,7 @@ public class Matrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
     @Override
-    public CMatrix mult(SparseCMatrix B) {
+    public CMatrix mult(CooCMatrix B) {
         ParameterChecks.assertMatMultShapes(this.shape, B.shape);
         CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standard(
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
@@ -1514,7 +1514,7 @@ public class Matrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public Vector mult(SparseVector b) {
+    public Vector mult(CooVector b) {
         ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         double[] entries = RealDenseSparseMatrixMultiplication.standardVector(
                 this.entries, this.shape, b.entries, b.indices
@@ -1550,7 +1550,7 @@ public class Matrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public CVector mult(SparseCVector b) {
+    public CVector mult(CooCVector b) {
         ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standardVector(
                 this.entries, this.shape, b.entries, b.indices
@@ -1584,7 +1584,7 @@ public class Matrix
 
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
-     * {@code this.}{@link #mult(SparseMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * {@code this.}{@link #mult(CooMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
      * For large matrices, this method may
      * be significantly faster than directly computing the transpose followed by the multiplication as
      * {@code this.mult(B.T())}.
@@ -1593,7 +1593,7 @@ public class Matrix
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
     @Override
-    public Matrix multTranspose(SparseMatrix B) {
+    public Matrix multTranspose(CooMatrix B) {
         // Ensure this matrix can be multiplied to the transpose of B.
         ParameterChecks.assertEquals(this.numCols, B.numCols);
 
@@ -1630,7 +1630,7 @@ public class Matrix
 
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
-     * {@code this.}{@link #mult(SparseCMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * {@code this.}{@link #mult(CooCMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
      * For large matrices, this method may
      * be significantly faster than directly computing the transpose followed by the multiplication as
      * {@code this.mult(B.T())}.
@@ -1639,7 +1639,7 @@ public class Matrix
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
     @Override
-    public CMatrix multTranspose(SparseCMatrix B) {
+    public CMatrix multTranspose(CooCMatrix B) {
         // Ensure this matrix can be multiplied to the transpose of B.
         ParameterChecks.assertEquals(this.numCols, B.numCols);
 
@@ -1691,7 +1691,7 @@ public class Matrix
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public SparseMatrix elemMult(SparseMatrix B) {
+    public CooMatrix elemMult(CooMatrix B) {
         return RealDenseSparseMatrixOperations.elemMult(this, B);
     }
 
@@ -1720,7 +1720,7 @@ public class Matrix
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public SparseCMatrix elemMult(SparseCMatrix B) {
+    public CooCMatrix elemMult(CooCMatrix B) {
         return RealComplexDenseSparseMatrixOperations.elemMult(this, B);
     }
 
@@ -1776,7 +1776,7 @@ public class Matrix
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public Double fib(SparseMatrix B) {
+    public Double fib(CooMatrix B) {
         ParameterChecks.assertEqualShape(this.shape, B.shape);
         return this.T().mult(B).tr();
     }
@@ -1804,7 +1804,7 @@ public class Matrix
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public CNumber fib(SparseCMatrix B) {
+    public CNumber fib(CooCMatrix B) {
         ParameterChecks.assertEqualShape(this.shape, B.shape);
         return this.T().mult(B).tr();
     }
@@ -1841,7 +1841,7 @@ public class Matrix
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public Matrix directSum(SparseMatrix B) {
+    public Matrix directSum(CooMatrix B) {
         Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);
 
         // Copy over first matrix.
@@ -1895,7 +1895,7 @@ public class Matrix
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public CMatrix directSum(SparseCMatrix B) {
+    public CMatrix directSum(CooCMatrix B) {
         CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
 
         // Copy over first matrix.
@@ -1949,7 +1949,7 @@ public class Matrix
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public Matrix invDirectSum(SparseMatrix B) {
+    public Matrix invDirectSum(CooMatrix B) {
         Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);
 
         // Copy over first matrix.
@@ -2005,7 +2005,7 @@ public class Matrix
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public CMatrix invDirectSum(SparseCMatrix B) {
+    public CMatrix invDirectSum(CooCMatrix B) {
         CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
 
         // Copy over first matrix.
@@ -2099,7 +2099,7 @@ public class Matrix
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public Matrix addToEachCol(SparseVector b) {
+    public Matrix addToEachCol(CooVector b) {
         ParameterChecks.assertArrayLengthsEq(numRows, b.size);
         Matrix sum = new Matrix(this);
 
@@ -2147,7 +2147,7 @@ public class Matrix
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public CMatrix addToEachCol(SparseCVector b) {
+    public CMatrix addToEachCol(CooCVector b) {
         ParameterChecks.assertArrayLengthsEq(numRows, b.size);
         CMatrix sum = new CMatrix(this);
 
@@ -2195,7 +2195,7 @@ public class Matrix
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public Matrix addToEachRow(SparseVector b) {
+    public Matrix addToEachRow(CooVector b) {
         ParameterChecks.assertArrayLengthsEq(numCols, b.size);
         Matrix sum = new Matrix(this);
 
@@ -2241,7 +2241,7 @@ public class Matrix
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public CMatrix addToEachRow(SparseCVector b) {
+    public CMatrix addToEachRow(CooCVector b) {
         ParameterChecks.assertArrayLengthsEq(numCols, b.size);
         CMatrix sum = new CMatrix(this);
 
@@ -2286,7 +2286,7 @@ public class Matrix
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
     @Override
-    public Matrix stack(SparseMatrix B) {
+    public Matrix stack(CooMatrix B) {
         ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);
         Matrix stacked = new Matrix(new Shape(this.numRows + B.numRows, this.numCols));
 
@@ -2343,7 +2343,7 @@ public class Matrix
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
     @Override
-    public CMatrix stack(SparseCMatrix B) {
+    public CMatrix stack(CooCMatrix B) {
         ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);
         CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));
 
@@ -2406,7 +2406,7 @@ public class Matrix
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Matrix stack(SparseMatrix B, int axis) {
+    public Matrix stack(CooMatrix B, int axis) {
         Matrix stacked;
 
         if(axis==0) {
@@ -2462,7 +2462,7 @@ public class Matrix
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public CMatrix stack(SparseCMatrix B, int axis) {
+    public CMatrix stack(CooCMatrix B, int axis) {
         CMatrix stacked;
 
         if(axis==0) {
@@ -2515,7 +2515,7 @@ public class Matrix
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
     @Override
-    public Matrix augment(SparseMatrix B) {
+    public Matrix augment(CooMatrix B) {
         ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);
         Matrix augmented = new Matrix(new Shape(this.numRows, this.numCols+B.numCols));
 
@@ -2576,7 +2576,7 @@ public class Matrix
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
     @Override
-    public CMatrix augment(SparseCMatrix B) {
+    public CMatrix augment(CooCMatrix B) {
         ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);
         CMatrix augmented = new CMatrix(new Shape(this.numRows, this.numCols+B.numCols));
 
@@ -2624,7 +2624,7 @@ public class Matrix
     /**
      * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
      * does not affect the output of this function. All vectors will be treated as row vectors.<br>
-     * Also see {@link #stack(SparseVector, int)} and {@link #augment(SparseVector)}.
+     * Also see {@link #stack(CooVector, int)} and {@link #augment(CooVector)}.
      *
      * @param b Vector to stack to this matrix.
      * @return The result of stacking this matrix on top of the vector b.
@@ -2632,7 +2632,7 @@ public class Matrix
      *                                  the vector b.
      */
     @Override
-    public Matrix stack(SparseVector b) {
+    public Matrix stack(CooVector b) {
         ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());
         Matrix stacked = new Matrix(this.numRows+1, this.numCols);
 
@@ -2681,7 +2681,7 @@ public class Matrix
     /**
      * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
      * does not affect the output of this function. All vectors will be treated as row vectors.<br>
-     * Also see {@link #stack(SparseCVector, int)} and {@link #augment(SparseCVector)}.
+     * Also see {@link #stack(CooCVector, int)} and {@link #augment(CooCVector)}.
      *
      * @param b Vector to stack to this matrix.
      * @return The result of stacking this matrix on top of the vector b.
@@ -2689,7 +2689,7 @@ public class Matrix
      *                                  the vector b.
      */
     @Override
-    public CMatrix stack(SparseCVector b) {
+    public CMatrix stack(CooCVector b) {
         ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());
         CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);
 
@@ -2745,16 +2745,16 @@ public class Matrix
      *
      * @param b    Vector to stack to this matrix.
      * @param axis Axis along which to stack. <br>
-     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(SparseVector)}. In this case, the
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(CooVector)}. In this case, the
      *             vector b will be treated as a column vector regardless of the true orientation. <br>
-     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(SparseVector)}. In this case, the
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(CooVector)}. In this case, the
      *             vector b will be treated as a row vector regardless of the true orientation.
      * @return The result of stacking this matrix and B along the specified axis.
      * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Matrix stack(SparseVector b, int axis) {
+    public Matrix stack(CooVector b, int axis) {
         Matrix stacked;
 
         if(axis==0) {
@@ -2805,16 +2805,16 @@ public class Matrix
      *
      * @param b    Vector to stack to this matrix.
      * @param axis Axis along which to stack. <br>
-     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(SparseCVector)}. In this case, the
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(CooCVector)}. In this case, the
      *             vector b will be treated as a column vector regardless of the true orientation. <br>
-     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(SparseCVector)}. In this case, the
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(CooCVector)}. In this case, the
      *             vector b will be treated as a row vector regardless of the true orientation.
      * @return The result of stacking this matrix and B along the specified axis.
      * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public CMatrix stack(SparseCVector b, int axis) {
+    public CMatrix stack(CooCVector b, int axis) {
         CMatrix stacked;
 
         if(axis==0) {
@@ -2862,14 +2862,14 @@ public class Matrix
      * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
      * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
      * treated as a column vector regardless of the true orientation.<br>
-     * Also see {@link #stack(SparseVector)} and {@link #stack(SparseVector, int)}.
+     * Also see {@link #stack(CooVector)} and {@link #stack(CooVector, int)}.
      *
      * @param b vector to augment to this matrix.
      * @return The result of augmenting b to the right of this matrix.
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public Matrix augment(SparseVector b) {
+    public Matrix augment(CooVector b) {
         ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());
         Matrix stacked = new Matrix(numRows, numCols+1);
 
@@ -2923,14 +2923,14 @@ public class Matrix
      * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
      * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
      * treated as a column vector regardless of the true orientation.<br>
-     * Also see {@link #stack(SparseCVector)} and {@link #stack(SparseCVector, int)}.
+     * Also see {@link #stack(CooCVector)} and {@link #stack(CooCVector, int)}.
      *
      * @param b vector to augment to this matrix.
      * @return The result of augmenting b to the right of this matrix.
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public CMatrix augment(SparseCVector b) {
+    public CMatrix augment(CooCVector b) {
         ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());
         CMatrix stacked = new CMatrix(numRows, numCols+1);
 

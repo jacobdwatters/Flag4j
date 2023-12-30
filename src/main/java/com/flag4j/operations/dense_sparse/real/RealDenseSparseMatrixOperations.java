@@ -1,8 +1,8 @@
 package com.flag4j.operations.dense_sparse.real;
 
 
+import com.flag4j.CooMatrix;
 import com.flag4j.Matrix;
-import com.flag4j.SparseMatrix;
 import com.flag4j.Vector;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.util.ErrorMessages;
@@ -26,7 +26,7 @@ public class RealDenseSparseMatrixOperations {
      * @return The result of the matrix addition.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static Matrix add(Matrix src1, SparseMatrix src2) {
+    public static Matrix add(Matrix src1, CooMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
@@ -49,7 +49,7 @@ public class RealDenseSparseMatrixOperations {
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static Matrix sub(Matrix src1, SparseMatrix src2) {
+    public static Matrix sub(Matrix src1, CooMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
@@ -72,7 +72,7 @@ public class RealDenseSparseMatrixOperations {
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static Matrix sub(SparseMatrix src2, Matrix src1) {
+    public static Matrix sub(CooMatrix src2, Matrix src1) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
@@ -94,7 +94,7 @@ public class RealDenseSparseMatrixOperations {
      * @param src2 Entries of second matrix in the sum.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static void addEq(Matrix src1, SparseMatrix src2) {
+    public static void addEq(Matrix src1, CooMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
@@ -113,7 +113,7 @@ public class RealDenseSparseMatrixOperations {
      * @param src2 Entries of second matrix in difference.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static void subEq(Matrix src1, SparseMatrix src2) {
+    public static void subEq(Matrix src1, CooMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
@@ -133,7 +133,7 @@ public class RealDenseSparseMatrixOperations {
      * @param src2 Entries of second matrix in element-wise product.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static SparseMatrix elemMult(Matrix src1, SparseMatrix src2) {
+    public static CooMatrix elemMult(Matrix src1, CooMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
@@ -145,7 +145,7 @@ public class RealDenseSparseMatrixOperations {
             product[i] = src1.entries[row*src1.numCols + col]*src2.entries[i];
         }
 
-        return new SparseMatrix(src2.shape.copy(), product, src2.rowIndices.clone(), src2.colIndices.clone());
+        return new CooMatrix(src2.shape.copy(), product, src2.rowIndices.clone(), src2.colIndices.clone());
     }
 
 
@@ -167,7 +167,7 @@ public class RealDenseSparseMatrixOperations {
      * @return The element-wise quotient of {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} and {@code src2} do not have the same shape.
      */
-    public static SparseMatrix elemDiv(SparseMatrix src1, Matrix src2) {
+    public static CooMatrix elemDiv(CooMatrix src1, Matrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         double[] quotient = new double[src1.entries.length];
@@ -181,7 +181,7 @@ public class RealDenseSparseMatrixOperations {
             quotient[i] = src1.entries[i] / src2.entries[row*src2.numCols + col];
         }
 
-        return new SparseMatrix(src1.shape.copy(), quotient, src1.rowIndices.clone(), src1.colIndices.clone());
+        return new CooMatrix(src1.shape.copy(), quotient, src1.rowIndices.clone(), src1.colIndices.clone());
     }
 
 
@@ -193,7 +193,7 @@ public class RealDenseSparseMatrixOperations {
      * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
      * of rows in the {@code src} matrix.
      */
-    public static Matrix addToEachCol(SparseMatrix src, Vector col) {
+    public static Matrix addToEachCol(CooMatrix src, Vector col) {
         Matrix sum = new Matrix(src.numRows, src.numCols);
 
         for(int j=0; j<sum.numCols; j++) {
@@ -216,7 +216,7 @@ public class RealDenseSparseMatrixOperations {
      * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
      * of columns in the {@code src} matrix.
      */
-    public static Matrix addToEachRow(SparseMatrix src, Vector row) {
+    public static Matrix addToEachRow(CooMatrix src, Vector row) {
         Matrix sum = new Matrix(src.numRows, src.numCols);
 
         for(int i=0; i<sum.numRows; i++) {

@@ -30,6 +30,8 @@ import com.flag4j.concurrency.ThreadManager;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 
+import java.util.concurrent.atomic.AtomicReferenceArray;
+
 /**
  * This class contains low level methods for computing the matrix multiplication (and matrix vector multiplication) between
  * a real dense/sparse matrix and a real sparse/dense matrix or vector.
@@ -105,9 +107,11 @@ public class RealDenseSparseMatrixMultiplication {
         for(int i=0; i<src1.length; i++) {
             row = rowIndices[i];
             col = colIndices[i];
+            int destRow = row*cols2;
+            int src2Row = col*cols2;
 
             for(int j=0; j<cols2; j++) {
-                dest[row*cols2 + j] += src1[i]*src2[col*cols2 + j];
+                dest[destRow + j] += src1[i]*src2[src2Row + j];
             }
         }
 
@@ -127,21 +131,29 @@ public class RealDenseSparseMatrixMultiplication {
      */
     public static double[] concurrentStandard(double[] src1, Shape shape1, double[] src2,
                                     int[] rowIndices, int[] colIndices, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int cols1 = shape1.dims[1];
+        int cols2 = shape2.dims[1];
 
         double[] dest = new double[rows1*cols2];
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
+            double[] localResult = new double[cols2]; // Store the result for the local thread.
+            int destRow = i*cols2;
+            int src1Row = i*cols1;
+
             // Loop over non-zero entries of sparse matrix.
             for(int j=0; j<src2.length; j++) {
                 int row = rowIndices[j];
                 int col = colIndices[j];
-                double product = src1[i*cols1 + row]*src2[j];
 
-                synchronized (dest) {
-                    dest[i*cols2 + col] += product;
+                localResult[col] += src1[src1Row + row]*src2[j];
+            }
+
+            // Update the shared destination array by accumulating the local result.
+            synchronized(dest) {
+                for (int j=0; j<cols2; j++) {
+                    dest[destRow + j] += localResult[j];
                 }
             }
         });
@@ -163,25 +175,64 @@ public class RealDenseSparseMatrixMultiplication {
      * @return The result of the matrix multiplication.
      */
     public static double[] concurrentStandard(double[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
-                                    double[] src2, Shape shape2) {
+                                              double[] src2, Shape shape2) {
         int rows1 = shape1.dims[0];
         int cols2 = shape2.dims[1];
 
         double[] dest = new double[rows1*cols2];
 
-        ThreadManager.concurrentLoop(0, src1.length, i -> {
-            int row = rowIndices[i];
-            int col = colIndices[i];
+        ThreadManager.concurrentLoop(0, src1.length, (i) -> {
+            int r1 = rowIndices[i];
+            int c1 = colIndices[i];
 
-            for(int j=0; j<cols2; j++) {
-                double product = src1[i]*src2[col*cols2 + j];
+            int destRowStart = r1 * cols2;
+            int src2RowStart = c1 * cols2;
 
-                synchronized (dest) {
-                    dest[row*cols2 + j] += product;
+            double[] localResult = new double[cols2];
+            for (int j = 0; j < cols2; j++) {
+                localResult[j] = src1[i]*src2[src2RowStart + j];
+            }
+
+            synchronized (dest) {
+                for (int j = 0; j < cols2; j++) {
+                    dest[destRowStart + j] += localResult[j];
                 }
             }
         });
 
+
+        return dest;
+    }
+
+
+    public static double[] concurrentAtomicArray(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
+                                                 double[] src2, Shape shape2) {
+        int rows1 = shape1.dims[0];
+        int cols2 = shape2.dims[1];
+
+        double[] dest = new double[rows1 * cols2];
+        AtomicReferenceArray<Double> destAtomic = new AtomicReferenceArray<>(rows1 * cols2);
+        for(int i=0; i<destAtomic.length(); i++) {
+            destAtomic.set(i, 0d);
+        }
+
+        ThreadManager.concurrentLoop(0, src1.length, (i) -> {
+            int row = rowIndices1[i];
+            int col = colIndices1[i];
+            int destRow = row*cols2;
+            int src2Row = col*cols2;
+
+            for(int j=0; j<cols2; j++) {
+                double prev = destAtomic.get(destRow + j);
+                double update = prev += src1[i]*src2[src2Row + j];
+                destAtomic.compareAndSet(i, prev, update);
+            }
+        });
+
+        // Convert AtomicDoubleArray back to a normal double array for the result.
+        for (int i = 0; i < dest.length; i++) {
+            dest[i] = destAtomic.get(i);
+        }
 
         return dest;
     }

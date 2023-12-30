@@ -20,9 +20,9 @@ class MatrixAddToEachRowTests {
     CMatrix expComplex;
 
     Vector b;
-    SparseVector bSparse;
+    CooVector bSparse;
     CVector bComplex;
-    SparseCVector bSparseComplex;
+    CooCVector bSparseComplex;
 
     @Test
     void vectorTestCase() {
@@ -66,7 +66,7 @@ class MatrixAddToEachRowTests {
         bEntries = new double[]{3.4};
         bIndices = new int[]{1};
         bSize = 2;
-        bSparse = new SparseVector(bSize, bEntries, bIndices);
+        bSparse = new CooVector(bSize, bEntries, bIndices);
         expEntries = new double[][]{
                 {1, 2.3+3.4},
                 {-9, 13.5+3.4},
@@ -84,7 +84,7 @@ class MatrixAddToEachRowTests {
         bEntries = new double[]{3.4};
         bIndices = new int[]{1};
         bSize = 56;
-        bSparse = new SparseVector(bSize, bEntries, bIndices);
+        bSparse = new CooVector(bSize, bEntries, bIndices);
 
         assertThrows(IllegalArgumentException.class, ()->A.addToEachRow(bSparse));
     }
@@ -132,7 +132,7 @@ class MatrixAddToEachRowTests {
         bComplexEntries = new CNumber[]{new CNumber(9.234, -.13)};
         bIndices = new int[]{0};
         bSize = 2;
-        bSparseComplex = new SparseCVector(bSize, bComplexEntries, bIndices);
+        bSparseComplex = new CooCVector(bSize, bComplexEntries, bIndices);
         expComplexEntries = new CNumber[][]{
                 {new CNumber(1).add(bComplexEntries[0]), new CNumber(2.3)},
                 {new CNumber(-9).add(bComplexEntries[0]), new CNumber(13.5)},
@@ -150,7 +150,7 @@ class MatrixAddToEachRowTests {
         bComplexEntries = new CNumber[]{new CNumber(9.234, -.13)};
         bIndices = new int[]{0};
         bSize = 8;
-        bSparseComplex = new SparseCVector(bSize, bComplexEntries, bIndices);
+        bSparseComplex = new CooCVector(bSize, bComplexEntries, bIndices);
 
         assertThrows(IllegalArgumentException.class, ()->A.addToEachRow(bSparseComplex));
     }

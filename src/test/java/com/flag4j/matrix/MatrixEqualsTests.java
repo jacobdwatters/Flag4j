@@ -21,8 +21,8 @@ class MatrixEqualsTests {
     boolean exp;
     Matrix A;
     CMatrix B;
-    SparseMatrix C;
-    SparseCMatrix D;
+    CooMatrix C;
+    CooCMatrix D;
 
     @Test
     void matrixCMatrixEqualsTestCase() {
@@ -84,7 +84,7 @@ class MatrixEqualsTests {
         cShape = new Shape(aEntries.length, aEntries[0].length);
         cEntries = new double[]{1, 6, 8, 9, 10};
         cIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        C = new SparseMatrix(cShape, cEntries, cIndices[0], cIndices[1]);
+        C = new CooMatrix(cShape, cEntries, cIndices[0], cIndices[1]);
 
         exp = true;
 
@@ -96,7 +96,7 @@ class MatrixEqualsTests {
         cShape = new Shape(aEntries.length, aEntries[0].length);
         cEntries = new double[]{1, 6, 8, 9, 10};
         cIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        C = new SparseMatrix(cShape, cEntries, cIndices[0], cIndices[1]);
+        C = new CooMatrix(cShape, cEntries, cIndices[0], cIndices[1]);
 
         exp = false;
 
@@ -108,7 +108,7 @@ class MatrixEqualsTests {
         cShape = new Shape(aEntries.length, aEntries[0].length);
         cEntries = new double[]{1, -8, 8, 9, 10};
         cIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        C = new SparseMatrix(cShape, cEntries, cIndices[0], cIndices[1]);
+        C = new CooMatrix(cShape, cEntries, cIndices[0], cIndices[1]);
 
         exp = false;
 
@@ -120,7 +120,7 @@ class MatrixEqualsTests {
         cShape = new Shape(aEntries.length, aEntries[0].length);
         cEntries = new double[]{1, 4, 6, 8, 9, 10};
         cIndices = new int[][]{{0, 0, 1, 2, 2, 2}, {0, 3, 2, 1, 2, 3}};
-        C = new SparseMatrix(cShape, cEntries, cIndices[0], cIndices[1]);
+        C = new CooMatrix(cShape, cEntries, cIndices[0], cIndices[1]);
 
         exp = false;
 
@@ -132,7 +132,7 @@ class MatrixEqualsTests {
         cShape = new Shape(3, 4);
         cEntries = new double[]{1, 6, 8, 9, 10};
         cIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        C = new SparseMatrix(cShape, cEntries, cIndices[0], cIndices[1]);
+        C = new CooMatrix(cShape, cEntries, cIndices[0], cIndices[1]);
 
         exp = false;
 
@@ -149,7 +149,7 @@ class MatrixEqualsTests {
         dEntries = new CNumber[]{new CNumber(1), new CNumber(6), new CNumber(8),
                 new CNumber(9), new CNumber(10)};
         dIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        D = new SparseCMatrix(dShape, dEntries, dIndices[0], dIndices[1]);
+        D = new CooCMatrix(dShape, dEntries, dIndices[0], dIndices[1]);
 
         exp = true;
 
@@ -162,7 +162,7 @@ class MatrixEqualsTests {
         dEntries = new CNumber[]{new CNumber(1), new CNumber(6, 1), new CNumber(8),
                 new CNumber(9), new CNumber(10)};
         dIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        D = new SparseCMatrix(dShape, dEntries, dIndices[0], dIndices[1]);
+        D = new CooCMatrix(dShape, dEntries, dIndices[0], dIndices[1]);
 
         exp = false;
 
@@ -175,7 +175,7 @@ class MatrixEqualsTests {
         dEntries = new CNumber[]{new CNumber(1), new CNumber(6), new CNumber(8),
                 new CNumber(9), new CNumber(10)};
         dIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        D = new SparseCMatrix(dShape, dEntries, dIndices[0], dIndices[1]);
+        D = new CooCMatrix(dShape, dEntries, dIndices[0], dIndices[1]);
 
         exp = false;
 
@@ -188,7 +188,7 @@ class MatrixEqualsTests {
         dEntries = new CNumber[]{new CNumber(1), new CNumber(6), new CNumber(8),
                 new CNumber(9), new CNumber(10)};
         dIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        D = new SparseCMatrix(dShape, dEntries, dIndices[0], dIndices[1]);
+        D = new CooCMatrix(dShape, dEntries, dIndices[0], dIndices[1]);
 
         exp = true;
 
@@ -201,7 +201,7 @@ class MatrixEqualsTests {
         dEntries = new CNumber[]{new CNumber(1), new CNumber(6), new CNumber(8),
                 new CNumber(9), new CNumber(10)};
         dIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        D = new SparseCMatrix(dShape, dEntries, dIndices[0], dIndices[1]);
+        D = new CooCMatrix(dShape, dEntries, dIndices[0], dIndices[1]);
 
         exp = false;
 
@@ -214,7 +214,7 @@ class MatrixEqualsTests {
         dEntries = new CNumber[]{new CNumber(1), new CNumber(6), new CNumber(8),
                 new CNumber(9), new CNumber(10)};
         dIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        D = new SparseCMatrix(dShape, dEntries, dIndices[0], dIndices[1]);
+        D = new CooCMatrix(dShape, dEntries, dIndices[0], dIndices[1]);
 
         exp = false;
 
