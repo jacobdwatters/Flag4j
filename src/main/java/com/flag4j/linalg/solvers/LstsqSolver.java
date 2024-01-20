@@ -24,7 +24,6 @@
 
 package com.flag4j.linalg.solvers;
 
-
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
 import com.flag4j.core.MatrixMixin;
@@ -97,10 +96,7 @@ public abstract class LstsqSolver<
      */
     @Override
     public T solve(T A, T B) {
-        long start = System.nanoTime();
         decompose(A); // Compute the reduced QR decomposition of A.
-        double time = (System.nanoTime()-start)*1.0e-6;
-
         return backSolver.solve(R, Qh.mult(B));
     }
 

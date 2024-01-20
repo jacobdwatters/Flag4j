@@ -43,7 +43,7 @@ import com.flag4j.linalg.decompositions.SVD;
 public interface MatrixOperationsMixin<
         T,
         U, V, W, X extends Number,
-        TT extends VectorMixin<TT, UU, ?, ?, X, T, U, W>,
+        TT extends VectorMixin<TT, UU, ?, ?, ?, ?, ?, ?>,
         UU extends VectorMixin<UU, UU, ?, CVector, X, U, U, CMatrix>> {
 
     /**

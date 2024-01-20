@@ -1218,7 +1218,7 @@ public class CNumber extends Number {
      */
     public static CNumber round(CNumber n, int decimals) {
         if (decimals < 0) {
-            throw new IllegalArgumentException(ErrorMessages.negValueErr(decimals));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(decimals));
         }
 
         double real, imaginary;
@@ -1265,7 +1265,7 @@ public class CNumber extends Number {
      */
     public static boolean nearZero(CNumber n, double tol) {
         if (tol < 0) {
-            throw new IllegalArgumentException(ErrorMessages.negValueErr(tol));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(tol));
         }
 
         return n.mag() <= tol;

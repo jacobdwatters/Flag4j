@@ -35,7 +35,6 @@ import com.flag4j.Matrix;
  */
 public interface MatrixManipulationsMixin<
         T,
-        U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>,
         X extends Number> {
 
     /**

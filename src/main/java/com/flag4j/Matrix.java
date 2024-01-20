@@ -44,14 +44,14 @@ import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.*;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultTranspose;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultiplication;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixOperations;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultTranspose;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixOperations;
+import com.flag4j.operations.dense_sparse.coo.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixMultTranspose;
+import com.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixMultiplication;
+import com.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
+import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultTranspose;
+import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
+import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
 import com.flag4j.util.*;
 
 import java.util.ArrayList;
@@ -375,10 +375,11 @@ public class Matrix
 
 
     /**
-     * Converts this matrix to a sparse matrix. It is only
-     * @return A sparse equivalent to this matrix.
+     * Converts this matrix to a sparse COO matrix.
+     * @return A sparse coo matrix equivalent to this matrix.
+     * @see #toCsr()
      */
-    public CooMatrix toSparse() {
+    public CooMatrix toCoo() {
         List<Double> sparseEntries = new ArrayList<>();
         List<Integer> rowIndices = new ArrayList<>();
         List<Integer> colIndices = new ArrayList<>();
@@ -390,16 +391,29 @@ public class Matrix
 
             while(rowOffset < stop) {
                 double value = entries[rowOffset++];
+
                 if(value!=0) {
                     // Then we have a non-zero value.
                     sparseEntries.add(value);
                     rowIndices.add(i);
-                    colIndices.add(j++);
+                    colIndices.add(j);
                 }
+
+                j++;
             }
         }
 
         return new CooMatrix(shape.copy(), sparseEntries, rowIndices, colIndices);
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent sparse CSR matrix.
+     * @return A sparse coo matrix equivalent to this matrix.
+     * @see #toCoo()
+     */
+    public CsrMatrix toCsr() {
+        return toCoo().toCsr();
     }
 
 
@@ -1364,7 +1378,7 @@ public class Matrix
      */
     @Override
     public Matrix transpose() {
-        return TransposeDispatcher.dispatch(this);
+        return T();
     }
 
 
@@ -1375,7 +1389,7 @@ public class Matrix
      */
     @Override
     public Matrix T() {
-        return transpose();
+        return TransposeDispatcher.dispatch(this);
     }
 
 
@@ -3137,6 +3151,7 @@ public class Matrix
         ParameterChecks.assertSquare(shape);
         LUDecomposition<Matrix> lu = new RealLUDecomposition().decompose(this);
 
+        // TODO: Should this be a globally defined final value?
         double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
         double det = RealDenseDeterminant.detTri(lu.getU());
 
@@ -3250,6 +3265,8 @@ public class Matrix
      * @param size Size of the identity matrix.
      * @return An identity matrix of specified size.
      * @throws IllegalArgumentException If the specified size is less than 1.
+     * @see #I(Shape)
+     * @see #I(int, int)
      */
     public static Matrix I(int size) {
         return I(size, size);
@@ -3264,6 +3281,8 @@ public class Matrix
      * @param numCols Number of columns in the identity-like matrix.
      * @return An identity matrix of specified shape.
      * @throws IllegalArgumentException If the specified number of rows or columns is less than 1.
+     * @see #I(int)
+     * @see #I(Shape)
      */
     public static Matrix I(int numRows, int numCols) {
         ParameterChecks.assertGreaterEq(1, numRows, numCols);
@@ -3285,6 +3304,8 @@ public class Matrix
      * @param shape Shape of the identity-like matrix.
      * @return An identity matrix of specified size.
      * @throws IllegalArgumentException If the specified shape is not rank 2.
+     * @see #I(int)
+     * @see #I(int, int)
      */
     public static Matrix I(Shape shape) {
         ParameterChecks.assertRank(2, shape);
@@ -3348,6 +3369,9 @@ public class Matrix
      * Checks if this matrix is triangular (i.e. upper triangular, diagonal, lower triangular).
      *
      * @return True is this matrix is triangular. Otherwise, returns false.
+     * @see #isTriL()
+     * @see #isTriU()
+     * @see #isDiag()
      */
     @Override
     public boolean isTri() {
@@ -3359,6 +3383,9 @@ public class Matrix
      * Checks if this matrix is lower triangular.
      *
      * @return True is this matrix is lower triangular. Otherwise, returns false.
+     * @see #isTri()
+     * @see #isTriU()
+     * @see #isDiag()
      */
     @Override
     public boolean isTriL() {
@@ -3383,6 +3410,9 @@ public class Matrix
      * Checks if this matrix is upper triangular.
      *
      * @return True is this matrix is upper triangular. Otherwise, returns false.
+     * @see #isTri()
+     * @see #isTriL()
+     * @see #isDiag()
      */
     @Override
     public boolean isTriU() {
@@ -3407,6 +3437,9 @@ public class Matrix
      * Checks if this matrix is diagonal.
      *
      * @return True is this matrix is diagonal. Otherwise, returns false.
+     * @see #isTri()
+     * @see #isTriU()
+     * @see #isTriL()
      */
     @Override
     public boolean isDiag() {
@@ -3590,7 +3623,8 @@ public class Matrix
 
     /**
      * Computes the rank of this matrix (i.e. the number of linearly independent rows/columns in this matrix).
-     * Note that here, rank is <b>NOT</b> the same as a tensor rank.
+     * Note that here, rank is <b>NOT</b> the same as a tensor rank (i.e. number of indices needed to specify an entry in
+     * the tensor).
      *
      * @return The matrix rank of this matrix.
      */
@@ -3647,6 +3681,7 @@ public class Matrix
     /**
      * Checks if a matrix is symmetric. That is, if the matrix is square and equal to its transpose.
      * @return True if this matrix is symmetric. Otherwise, returns false.
+     * @see #isAntiSymmetric()
      */
     @Override
     public boolean isSymmetric() {
@@ -3658,6 +3693,7 @@ public class Matrix
      * Checks if a matrix is anti-symmetric. That is, if the matrix is equal to the negative of its transpose.
      *
      * @return True if this matrix is anti-symmetric. Otherwise, returns false.
+     * @see #isSymmetric()
      */
     @Override
     public boolean isAntiSymmetric() {

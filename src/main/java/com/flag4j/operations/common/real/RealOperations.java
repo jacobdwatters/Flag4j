@@ -133,7 +133,7 @@ public class RealOperations {
      */
     public static double[] round(double[] src, int precision) {
         if(precision<0) {
-            throw new IllegalArgumentException(ErrorMessages.negValueErr(precision));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(precision));
         }
 
         BigDecimal bd;
@@ -159,7 +159,7 @@ public class RealOperations {
      */
     public static double[] roundToZero(double[] src, double threshold) {
         if(threshold<0) {
-            throw new IllegalArgumentException(ErrorMessages.negValueErr(threshold));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(threshold));
         }
 
         double[] dest = new double[src.length];

@@ -33,12 +33,12 @@ import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.dense.real.RealDenseOperations;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultiplication;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixOperations;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixOperations;
+import com.flag4j.operations.dense_sparse.coo.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixMultiplication;
+import com.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
+import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
+import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
 import com.flag4j.operations.sparse.coo.real.*;
 import com.flag4j.operations.sparse.coo.real_complex.RealComplexSparseEquals;
 import com.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixMultiplication;
@@ -350,6 +350,15 @@ public class CooMatrix
     @Override
     public Shape shape() {
         return shape;
+    }
+
+
+    /**
+     * Converts this COO matrix to an equivalent CSR matrix.
+     * @return
+     */
+    public CsrMatrix toCsr() {
+        return new CsrMatrix(this);
     }
 
 

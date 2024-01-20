@@ -32,12 +32,12 @@ import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.dense.complex.ComplexDenseOperations;
-import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
-import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplication;
-import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixOperations;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixOperations;
+import com.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixMultiplication;
+import com.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixOperations;
+import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
+import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
 import com.flag4j.operations.sparse.coo.complex.*;
 import com.flag4j.operations.sparse.coo.real_complex.RealComplexSparseEquals;
 import com.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixMultiplication;
@@ -665,6 +665,15 @@ public class CooCMatrix
         }
 
         return new CMatrix(shape.copy(), entries);
+    }
+
+
+    /**
+     * Converts this COO matrix to an equivalent CSR matrix.
+     * @return An equivalent matrix in {@link CsrMatrix CSR format}.
+     */
+    public CsrCMatrix toCsr() {
+        return new CsrCMatrix(this);
     }
 
 

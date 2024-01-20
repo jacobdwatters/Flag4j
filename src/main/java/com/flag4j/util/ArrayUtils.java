@@ -50,9 +50,9 @@ public final class ArrayUtils {
      */
     public static void deepCopy(int[][] src, int[][] dest) {
         ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
-        if (src.length > 0) ParameterChecks.assertArrayLengthsEq(src[0].length, dest[0].length);
 
         for (int i = 0; i < src.length; i++) {
+            dest[i] = new int[src[i].length];
             System.arraycopy(src[i], 0, dest[i], 0, src[i].length);
         }
     }

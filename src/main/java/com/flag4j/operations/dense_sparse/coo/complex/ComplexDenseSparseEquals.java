@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.flag4j.operations.dense_sparse.complex;
+package com.flag4j.operations.dense_sparse.coo.complex;
 
 import com.flag4j.CMatrix;
 import com.flag4j.CTensor;

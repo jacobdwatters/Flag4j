@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.flag4j.operations.dense_sparse.real;
+package com.flag4j.operations.dense_sparse.coo.real;
 
 import com.flag4j.Shape;
 import com.flag4j.concurrency.Configurations;

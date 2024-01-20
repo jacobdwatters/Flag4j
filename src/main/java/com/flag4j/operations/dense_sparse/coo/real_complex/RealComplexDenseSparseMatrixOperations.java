@@ -1,4 +1,4 @@
-package com.flag4j.operations.dense_sparse.real_complex;
+package com.flag4j.operations.dense_sparse.coo.real_complex;
 
 
 import com.flag4j.*;

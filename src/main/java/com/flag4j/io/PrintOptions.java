@@ -148,7 +148,7 @@ public abstract class PrintOptions {
      */
     public static void setPrecision(int precision) {
         if(precision < 0) {
-            throw new IllegalArgumentException(ErrorMessages.negValueErr(precision));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(precision));
         }
 
         PrintOptions.precision = precision;
@@ -179,7 +179,7 @@ public abstract class PrintOptions {
      */
     public static void setMaxColumns(int maxColumns) {
         if(maxColumns < 0) {
-            throw new IllegalArgumentException(ErrorMessages.negValueErr(maxColumns));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(maxColumns));
         }
 
         PrintOptions.maxColumns = maxColumns;
@@ -201,7 +201,7 @@ public abstract class PrintOptions {
      */
     public static void setMaxRows(int maxRows) {
         if(maxRows < 0) {
-            throw new IllegalArgumentException(ErrorMessages.negValueErr(maxRows));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(maxRows));
         }
 
         PrintOptions.maxRows = maxRows;
@@ -248,7 +248,7 @@ public abstract class PrintOptions {
      */
     public static void setPadding(int padding) {
         if(padding < 0) {
-            throw new IllegalArgumentException(ErrorMessages.negValueErr(padding));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(padding));
         }
 
         PrintOptions.padding = padding;

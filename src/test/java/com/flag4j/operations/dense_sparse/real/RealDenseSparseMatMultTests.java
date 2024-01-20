@@ -5,7 +5,7 @@ import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import org.junit.jupiter.api.Test;
 
-import static com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultiplication.*;
+import static com.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixMultiplication.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class RealDenseSparseMatMultTests {

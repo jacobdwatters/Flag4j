@@ -104,7 +104,7 @@ public abstract class RealSparseTensorBase<
      * @return A deep copy of the indices of this sparse tensor.
      */
     private int[][] copyIndices() {
-        int[][] newIndices = new int[indices.length][indices[0].length];
+        int[][] newIndices = new int[indices.length][];
         ArrayUtils.deepCopy(indices, newIndices);
         return newIndices;
     }

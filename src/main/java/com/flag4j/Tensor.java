@@ -37,10 +37,10 @@ import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseTensorOperations;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
+import com.flag4j.operations.dense_sparse.coo.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.coo.real.RealDenseSparseTensorOperations;
+import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.StringUtils;
 

@@ -22,30 +22,27 @@
  * SOFTWARE.
  */
 
-package com.flag4j.operations.dense_sparse.real_complex;
+package com.flag4j.operations.dense_sparse.coo.real;
 
 import com.flag4j.Shape;
-import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 
-
 /**
  * This class contains several low level methods for computing matrix-matrix multiplications with a transpose for
- * a real/complex sparse/dense  <br>
+ * a real dense matrix and a real sparse matrix. <br>
  * <b>WARNING:</b> These methods do not perform any sanity checks.
  */
-public class RealComplexDenseSparseMatrixMultTranspose {
+public class RealDenseSparseMatrixMultTranspose {
 
-    private RealComplexDenseSparseMatrixMultTranspose() {
+    private RealDenseSparseMatrixMultTranspose() {
         // Hide default constructor.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
 
     /**
-     * Multiplies a real dense matrix to the transpose of a complex sparse matrix.
+     * Multiplies a real dense matrix to the transpose of a real sparse matrix.
      * @param dSrc Entries of dense matrix.
      * @param dShape Shape of dense matrix.
      * @param spSrc Non-zero entries of sparse matrix.
@@ -54,14 +51,13 @@ public class RealComplexDenseSparseMatrixMultTranspose {
      * @param spShape Shape of the sparse matrix.
      * @return The entries of the matrix resulting from multiplying the first matrix by the transpose of the second matrix.
      */
-    public static CNumber[] multTranspose(double[] dSrc, Shape dShape,
-                                          CNumber[] spSrc, int[] rowIndices, int[] colIndices, Shape spShape) {
+    public static double[] multTranspose(double[] dSrc, Shape dShape,
+                                         double[] spSrc, int[] rowIndices, int[] colIndices, Shape spShape) {
         int rows1 = dShape.dims[Axis2D.row()];
         int rows2 = spShape.dims[Axis2D.row()];
         int cols2 = spShape.dims[Axis2D.col()];
 
-        CNumber[] dest = new CNumber[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.
-        ArrayUtils.fillZeros(dest);
+        double[] dest = new double[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.
 
         int row, col;
         int destStart, dSrcStart;
@@ -75,46 +71,7 @@ public class RealComplexDenseSparseMatrixMultTranspose {
                 row = colIndices[j];
                 col = rowIndices[j];
 
-                dest[destStart + col].addEq(spSrc[j].mult(dSrc[dSrcStart + row]));
-            }
-        }
-
-        return dest;
-    }
-
-
-    /**
-     * Multiplies a complex dense matrix to the transpose of a real sparse matrix.
-     * @param dSrc Entries of dense matrix.
-     * @param dShape Shape of dense matrix.
-     * @param spSrc Non-zero entries of sparse matrix.
-     * @param rowIndices Row indices of non-zero entries in the sparse matrix.
-     * @param colIndices Column indices of non-zero entries in the sparse matrix.
-     * @param spShape Shape of the sparse matrix.
-     * @return The entries of the matrix resulting from multiplying the first matrix by the transpose of the second matrix.
-     */
-    public static CNumber[] multTranspose(CNumber[] dSrc, Shape dShape,
-                                          double[] spSrc, int[] rowIndices, int[] colIndices, Shape spShape) {
-        int rows1 = dShape.dims[Axis2D.row()];
-        int rows2 = spShape.dims[Axis2D.row()];
-        int cols2 = spShape.dims[Axis2D.col()];
-
-        CNumber[] dest = new CNumber[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.
-        ArrayUtils.fillZeros(dest);
-
-        int row, col;
-        int destStart, dSrcStart;
-
-        for(int i=0; i<rows1; i++) {
-            destStart = i*rows2;
-            dSrcStart = i*cols2;
-
-            // Loop over non-zero entries of sparse matrix.
-            for(int j=0; j<spSrc.length; j++) {
-                row = colIndices[j];
-                col = rowIndices[j];
-
-                dest[destStart + col].addEq(dSrc[dSrcStart + row].mult(spSrc[j]));
+                dest[destStart + col] += dSrc[dSrcStart + row]*spSrc[j];
             }
         }
 

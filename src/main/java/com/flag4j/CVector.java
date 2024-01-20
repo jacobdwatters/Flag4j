@@ -35,10 +35,10 @@ import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
-import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
-import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseVectorOperations;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
+import com.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseVectorOperations;
+import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import com.flag4j.util.*;
 
 import java.util.Arrays;

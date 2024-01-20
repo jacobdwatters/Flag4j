@@ -32,10 +32,10 @@ import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.common.real.VectorNorms;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseVectorOperations;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
+import com.flag4j.operations.dense_sparse.coo.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import com.flag4j.operations.sparse.coo.real.RealSparseEquals;
 import com.flag4j.operations.sparse.coo.real.RealSparseVectorOperations;
 import com.flag4j.operations.sparse.coo.real_complex.RealComplexSparseEquals;
@@ -98,10 +98,11 @@ public class CooVector
 
 
     /**
-     * Creates a sparse vector of specified size filled with zeros.
+     * Creates a sparse vector of specified size along with non-zero entries and their indices.
      * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
-     * @param nonZeroEntries The nonZero entries of this sparse vector.
-     * @param indices Indices of the nonZero entries.
+     * @param nonZeroEntries The nonZero entries of this sparse vector. Entries assumed to be sorted by indices
+     *                       (not enforced).
+     * @param indices Indices of the nonZero entries. Assumed to be sorted (not enforced).
      * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
      * the length of the nonZeroEntries array is greater than the size.
      */

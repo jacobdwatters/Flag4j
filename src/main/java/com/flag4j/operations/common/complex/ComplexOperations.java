@@ -116,7 +116,7 @@ public class ComplexOperations {
      */
     public static CNumber[] round(CNumber[] src, int precision) {
         if(precision<0) {
-            throw new IllegalArgumentException(ErrorMessages.negValueErr(precision));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(precision));
         }
 
         CNumber[] dest = new CNumber[src.length];
@@ -139,7 +139,7 @@ public class ComplexOperations {
      */
     public static CNumber[] roundToZero(CNumber[] src, double threshold) {
         if(threshold<0) {
-            throw new IllegalArgumentException(ErrorMessages.negValueErr(threshold));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(threshold));
         }
 
         CNumber[] dest = new CNumber[src.length];

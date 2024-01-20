@@ -27,8 +27,8 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.sparse.RealSparseTensorBase;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.coo.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.sparse.coo.real.RealSparseEquals;
 import com.flag4j.operations.sparse.coo.real_complex.RealComplexSparseEquals;
 
