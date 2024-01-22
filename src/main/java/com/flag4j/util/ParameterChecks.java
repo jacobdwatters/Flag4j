@@ -432,7 +432,7 @@ public final class ParameterChecks {
      * @throws IndexOutOfBoundsException If {@code indices} is not a valid index into a tensor
      * of the specified {@code shape}.
      */
-    public static void assertValidIndices(Shape shape, int... indices) {
+    public static void assertValidIndex(Shape shape, int... indices) {
         if(shape.dims.length != indices.length) {
             throw new IndexOutOfBoundsException("Expected " + shape.dims.length
                     + " indices but got " + indices.length + ".");
@@ -443,6 +443,27 @@ public final class ParameterChecks {
                 String errMsg = indices[i]<0 ?
                         "Index " + i + " is out of bounds for lower bound of 0" :
                         "Index " + i + " is out of bounds for upper bound of " + shape.dims[i] + ".";
+
+                throw new IndexOutOfBoundsException(errMsg);
+            }
+        }
+    }
+
+
+    /**
+     * Checks if the provided indices are contained in an iterable with the given {@code length}.
+     * @param length length of iterable.
+     * @param indices Indices to check.
+     * @throws IndexOutOfBoundsException If {@code indices} is not a valid index into an iterable
+     * of the specified {@code length}.
+     */
+    public static void assertValidIndices(int length, int... indices) {
+
+        for(int i=0; i<indices.length; i++) {
+            if(indices[i] < 0 || indices[i] >= length) {
+                String errMsg = indices[i]<0 ?
+                        "Index " + i + " is out of bounds for lower bound of 0" :
+                        "Index " + i + " is out of bounds for upper bound of " + length + ".";
 
                 throw new IndexOutOfBoundsException(errMsg);
             }

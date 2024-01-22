@@ -40,7 +40,8 @@ public class DecomposeTests {
         lu_complex.decompose(AC);
 
         CMatrix[] res_complex = Decompose.lu(AC);
-        assertArrayEquals(res_complex, new CMatrix[]{lu_complex.getP().toComplex().toDense(), lu_complex.getL(), lu_complex.getU()});
+        assertArrayEquals(res_complex, new CMatrix[]{lu_complex.getP().toDense().toComplex(),
+                lu_complex.getL(), lu_complex.getU()});
     }
 
 

@@ -39,13 +39,13 @@ import com.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperatio
 import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
+import com.flag4j.operations.sparse.coo.SparseDataWrapper;
 import com.flag4j.operations.sparse.coo.real.*;
 import com.flag4j.operations.sparse.coo.real_complex.RealComplexSparseEquals;
 import com.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixMultiplication;
 import com.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ParameterChecks;
-import com.flag4j.operations.sparse.coo.SparseDataWrapper;
 import com.flag4j.util.StringUtils;
 
 import java.util.ArrayList;
@@ -133,6 +133,7 @@ public class CooMatrix
                 nonZeroEntries,
                 rowIndices, colIndices
         );
+        ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
         numRows = shape.dims[0];
@@ -154,7 +155,7 @@ public class CooMatrix
                 nonZeroEntries,
                 rowIndices, colIndices
         );
-
+        ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
         numRows = shape.dims[0];
@@ -175,6 +176,7 @@ public class CooMatrix
                 nonZeroEntries,
                 rowIndices, colIndices
         );
+        ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
         numRows = shape.dims[0];
@@ -195,7 +197,7 @@ public class CooMatrix
                 ArrayUtils.asDouble(nonZeroEntries, null),
                 rowIndices, colIndices
         );
-
+        ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
         numRows = shape.dims[0];
@@ -217,7 +219,7 @@ public class CooMatrix
                 ArrayUtils.asDouble(nonZeroEntries, null),
                 rowIndices, colIndices
         );
-
+        ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
         numRows = shape.dims[0];
@@ -240,7 +242,7 @@ public class CooMatrix
                 ArrayUtils.asDouble(nonZeroEntries, null),
                 rowIndices, colIndices
         );
-
+        ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
         numRows = shape.dims[0];
@@ -282,7 +284,7 @@ public class CooMatrix
             ArrayUtils.fromIntegerList(rowIndices),
             ArrayUtils.fromIntegerList(colIndices)
         );
-
+        ParameterChecks.assertEquals(entries.size(), rowIndices.size(), colIndices.size());
         this.rowIndices = indices[0];
         this.colIndices = indices[1];
         numRows = shape.dims[0];
@@ -3139,11 +3141,12 @@ public class CooMatrix
 
 
     /**
-     * Sets an index of this tensor to a specified value.
+     * Sets an index of this tensor to a specified value. Note: Unlike with dense matrices, this will
+     * return a new copy of the sparse matrix.
      *
      * @param value   Value to set.
      * @param indices The indices of this tensor for which to set the value.
-     * @return A reference to this tensor.
+     * @return A copy of this matrix with the specified value set.
      * @throws IllegalArgumentException If there are not exactly two {@code indices} provided.
      */
     @Override

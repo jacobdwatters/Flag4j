@@ -261,28 +261,11 @@ public class Shape implements Serializable {
      */
     @Override
     public boolean equals(Object b) {
-        boolean result = true;
+        if(this == b) return true;
+        if(b==null) return false;
+        if(!(b instanceof Shape)) return false;
 
-        // Ensure the object is the same type
-        if(b instanceof Shape) {
-            Shape bCopy = (Shape) b;
-
-            if(this.dims.length == bCopy.dims.length) {
-                for(int i=0; i<dims.length; i++) {
-                    if(dims[i] != bCopy.dims[i]) {
-                        result = false;
-                        break;
-                    }
-                }
-            } else {
-                result = false;
-            }
-
-        } else {
-            result = false;
-        }
-
-        return result;
+        return Arrays.equals(dims, ((Shape) b).dims);
     }
 
 

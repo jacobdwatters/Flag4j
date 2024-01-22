@@ -38,13 +38,13 @@ import com.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixOp
 import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
+import com.flag4j.operations.sparse.coo.SparseDataWrapper;
 import com.flag4j.operations.sparse.coo.complex.*;
 import com.flag4j.operations.sparse.coo.real_complex.RealComplexSparseEquals;
 import com.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixMultiplication;
 import com.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ParameterChecks;
-import com.flag4j.operations.sparse.coo.SparseDataWrapper;
 import com.flag4j.util.StringUtils;
 
 import java.util.ArrayList;
@@ -131,6 +131,7 @@ public class CooCMatrix
                 nonZeroEntries,
                 rowIndices, colIndices
         );
+        ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         this.rowIndices = indices[0];
         this.colIndices = indices[1];
         this.numRows = size;
@@ -154,6 +155,7 @@ public class CooCMatrix
                 nonZeroEntries,
                 rowIndices, colIndices
         );
+        ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         this.rowIndices = indices[0];
         this.colIndices = indices[1];
         this.numRows = rows;
@@ -176,6 +178,7 @@ public class CooCMatrix
                 nonZeroEntries,
                 rowIndices, colIndices
         );
+        ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         this.rowIndices = indices[0];
         this.colIndices = indices[1];
         this.numRows = shape.dims[0];
@@ -198,6 +201,7 @@ public class CooCMatrix
                 new CNumber[nonZeroEntries.length],
                 rowIndices, colIndices
         );
+        ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         ArrayUtils.copy2CNumber(nonZeroEntries, entries);
         this.rowIndices = indices[0];
         this.colIndices = indices[1];
@@ -222,6 +226,7 @@ public class CooCMatrix
                 new CNumber[nonZeroEntries.length],
                 rowIndices, colIndices
         );
+        ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         ArrayUtils.copy2CNumber(nonZeroEntries, entries);
         this.rowIndices = indices[0];
         this.colIndices = indices[1];
@@ -245,6 +250,7 @@ public class CooCMatrix
                 new CNumber[nonZeroEntries.length],
                 rowIndices, colIndices
         );
+        ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         ArrayUtils.copy2CNumber(nonZeroEntries, entries);
         this.rowIndices = indices[0];
         this.colIndices = indices[1];
@@ -268,6 +274,7 @@ public class CooCMatrix
                 new CNumber[nonZeroEntries.length],
                 rowIndices, colIndices
         );
+        ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         ArrayUtils.copy2CNumber(nonZeroEntries, entries);
         this.rowIndices = indices[0];
         this.colIndices = indices[1];
@@ -292,6 +299,7 @@ public class CooCMatrix
                 new CNumber[nonZeroEntries.length],
                 rowIndices, colIndices
         );
+        ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         ArrayUtils.copy2CNumber(nonZeroEntries, entries);
         this.rowIndices = indices[0];
         this.colIndices = indices[1];
@@ -315,6 +323,7 @@ public class CooCMatrix
                 new CNumber[nonZeroEntries.length],
                 rowIndices, colIndices
         );
+        ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         ArrayUtils.copy2CNumber(nonZeroEntries, entries);
         this.rowIndices = indices[0];
         this.colIndices = indices[1];
@@ -338,6 +347,7 @@ public class CooCMatrix
                 ArrayUtils.fromIntegerList(rowIndices),
                 ArrayUtils.fromIntegerList(colIndices)
         );
+        ParameterChecks.assertEquals(entries.size(), rowIndices.size(), colIndices.size());
         this.rowIndices = indices[0];
         this.colIndices = indices[1];
         numRows = shape.dims[0];

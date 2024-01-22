@@ -78,8 +78,9 @@ public final class RealDenseOperations {
     public static double[] sub(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         ParameterChecks.assertEqualShape(shape1, shape2);
         double[] sum = new double[src1.length];
+        int length = sum.length;
 
-        for(int i=0; i<sum.length; i++) {
+        for(int i=0; i<length; i++) {
             sum[i] = src1[i] - src2[i];
         }
 
@@ -95,8 +96,9 @@ public final class RealDenseOperations {
      */
     public static double[] sub(double[] src, double b) {
         double[] sum = new double[src.length];
+        int length = sum.length;
 
-        for(int i=0; i<src.length; i++) {
+        for(int i=0; i<length; i++) {
             sum[i] = src[i] - b;
         }
 
@@ -114,8 +116,9 @@ public final class RealDenseOperations {
      */
     public static void subEq(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         ParameterChecks.assertEqualShape(shape1, shape2);
+        int length = src1.length;
 
-        for(int i=0; i<src1.length; i++) {
+        for(int i=0; i<length; i++) {
             src1[i] -= src2[i];
         }
     }
@@ -127,7 +130,8 @@ public final class RealDenseOperations {
      * @param b Scalar to subtract.
      */
     public static void subEq(double[] src, double b) {
-        for(int i=0; i<src.length; i++) {
+        int length = src.length;
+        for(int i=0; i<length; i++) {
             src[i] -= b;
         }
     }
@@ -143,8 +147,8 @@ public final class RealDenseOperations {
      */
     public static void addEq(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         ParameterChecks.assertEqualShape(shape1, shape2);
-
-        for(int i=0; i<src1.length; i++) {
+        int length = src1.length;
+        for(int i=0; i<length; i++) {
             src1[i] += src2[i];
         }
     }
@@ -156,7 +160,8 @@ public final class RealDenseOperations {
      * @param b Scalar to add.
      */
     public static void addEq(double[] src, double b) {
-        for(int i=0; i<src.length; i++) {
+        int length = src.length;
+        for(int i=0; i<length; i++) {
             src[i] += b;
         }
     }
@@ -169,8 +174,9 @@ public final class RealDenseOperations {
      */
     public static double prod(double[] src) {
         double product;
+        int length = src.length;
 
-        if(src.length > 0) {
+        if(length > 0) {
             product=1;
             for(double value : src) {
                 product *= value;
@@ -253,8 +259,8 @@ public final class RealDenseOperations {
 
         double norm = 0;
         double colSum;
-        int rows = shape.dims[Axis2D.row()];
-        int cols = shape.dims[Axis2D.col()];
+        int rows = shape.dims[0];
+        int cols = shape.dims[1];
 
         for(int j=0; j<cols; j++) {
             colSum=0;
@@ -278,8 +284,8 @@ public final class RealDenseOperations {
      */
     public static double matrixNormL2(double[] src, Shape shape) {
         double norm = 0;
-        int rows = shape.dims[Axis2D.row()];
-        int cols = shape.dims[Axis2D.col()];
+        int rows = shape.dims[0];
+        int cols = shape.dims[1];
 
         double colSum;
 
@@ -345,8 +351,8 @@ public final class RealDenseOperations {
      * @return The infinity norm of the matrix.
      */
     public static double matrixInfNorm(double[] src, Shape shape) {
-        int rows = shape.dims[Axis2D.row()];
-        int cols = shape.dims[Axis2D.col()];
+        int rows = shape.dims[0];
+        int cols = shape.dims[1];
         double[] rowSums = new double[rows];
 
         for(int i=0; i<rows; i++) {
@@ -366,9 +372,10 @@ public final class RealDenseOperations {
      * @return The tensor scalar addition.
      */
     public static double[] add(double[] src, double b) {
-        double[] sum = new double[src.length];
+        int length = src.length;
+        double[] sum = new double[length];
 
-        for(int i=0; i<src.length; i++) {
+        for(int i=0; i<length; i++) {
             sum[i] = src[i] + b;
         }
 

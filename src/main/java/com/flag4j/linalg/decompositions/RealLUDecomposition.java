@@ -26,7 +26,6 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.Matrix;
 import com.flag4j.exceptions.LinearAlgebraException;
-import com.flag4j.util.ArrayUtils;
 
 /**
  * <p>This class provides methods for computing the LU decomposition of a real dense matrix.</p>

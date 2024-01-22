@@ -2,7 +2,6 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.sparse.ComplexSparseTensorBase;
-import com.flag4j.core.sparse.RealSparseTensorBase;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.StringUtils;
@@ -37,7 +36,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
      * @param colIndices Column indices for CSR matrix.
      */
     public CsrCMatrix(Shape shape, CNumber[] entries, int[] rowPointers, int[] colIndices) {
-        super(shape, entries.length, entries, new int[colIndices.length], colIndices);
+        super(shape, entries.length, entries, rowPointers, colIndices);
 
         this.rowPointers = rowPointers;
         this.colIndices = colIndices;

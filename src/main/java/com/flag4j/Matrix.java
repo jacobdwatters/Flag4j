@@ -59,7 +59,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Real dense matrix. Stored in row major format. This class is mostly equivalent to a real dense tensor of rank 2.
+ * Real dense matrix. Stored in row major format. This class is mostly equivalent to a {@link Tensor real dense tensor}.
+ * However, specialized methods are provided for this class which may result in slightly better performance than
+ * equivalent operations with a {@link Tensor real dense tensor} of rank 2. Additionally, methods specific to matrices
+ * which may not be available for tensors are provided.
  */
 public class Matrix
         extends RealDenseTensorBase<Matrix, CMatrix>
@@ -270,7 +273,7 @@ public class Matrix
      */
     @Override
     protected Matrix makeTensor(Shape shape, double[] entries) {
-        return new Matrix(shape.dims[0], shape.dims[1], entries);
+        return new Matrix(shape, entries);
     }
 
 
@@ -3167,8 +3170,8 @@ public class Matrix
         //  Note that lu.getL.T() is upper triangular and UinvT is lower triangular.
         Matrix inverse = solver.solve(lu.getL().T(), UinvT).T();
 
-        // TODO: Add efficient method for applying permutations.
-        return inverse.mult(lu.getP()); // Finally, apply permutation matrix for LU decomposition.
+        return lu.getP().rightMult(inverse); // Finally, apply permutation matrix for LU decomposition.
+//        return inverse.mult(lu.getP());
     }
 
 

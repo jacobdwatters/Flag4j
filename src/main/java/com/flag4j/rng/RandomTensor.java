@@ -390,7 +390,7 @@ public class RandomTensor {
      * distributed in {@code [min, max)}.
      */
     public CooMatrix randomCooMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
-        ParameterChecks.assertPositive(numNonZeroEntries);
+        ParameterChecks.assertGreaterEq(0, numNonZeroEntries);
         ParameterChecks.assertLessEq(shape.totalEntries(), numNonZeroEntries, "numNonZeroEntries");
 
         double[] entries = RAND_ARRAY.genUniformRealArray(numNonZeroEntries, min, max);

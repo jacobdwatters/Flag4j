@@ -57,9 +57,7 @@ public class RealDenseDeterminant {
         } else if (A.numRows == 2) {
             return A.entries[0] * A.entries[3] - A.entries[1] * A.entries[2];
         } else if (A.numRows == 3) {
-            double det = A.entries[0] * (A.entries[4] * A.entries[8] - A.entries[5] * A.entries[7]);
-            det -= A.entries[1] * (A.entries[3] * A.entries[8] - A.entries[5] * A.entries[6]);
-            return det + A.entries[2] * (A.entries[3] * A.entries[7] - A.entries[4] * A.entries[6]);
+            return det3(A);
         } else {
             LUDecomposition<Matrix> lu = new RealLUDecomposition().decompose(A);
             // Compute the determinant of P. (Check if lowest bit is zero to determine parity)

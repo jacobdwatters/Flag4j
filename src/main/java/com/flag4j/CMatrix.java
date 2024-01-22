@@ -3627,7 +3627,8 @@ public class CMatrix
         CMatrix LT = lu.getL().H();
         CMatrix inverse = solver.solve(LT, UinvT).H();
 
-        return inverse.mult(lu.getP()); // Finally, apply permutation matrix for LU decomposition.
+        return lu.getP().rightMult(inverse); // Finally, apply permutation matrix for LU decomposition.
+//        return inverse.mult(lu.getP());
     }
 
 

@@ -119,7 +119,7 @@ public class RandomCNumber extends Random {
      * deviation of 1.0.
      */
     public CNumber randn() {
-        return random(nextGaussian());
+        return random(Math.abs(nextGaussian()));
     }
 
 

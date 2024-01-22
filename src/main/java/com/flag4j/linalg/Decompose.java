@@ -65,7 +65,7 @@ public final class Decompose {
     public static CMatrix[] lu(CMatrix A) {
         ComplexLUDecomposition LU = new ComplexLUDecomposition();
         LU.decompose(A);
-        return new CMatrix[]{LU.getP().toComplex().toDense(), LU.getL(), LU.getU()};
+        return new CMatrix[]{LU.getP().toDense().toComplex(), LU.getL(), LU.getU()};
     }
 
 

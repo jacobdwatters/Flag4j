@@ -30,8 +30,6 @@ import com.flag4j.concurrency.ThreadManager;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 
-import java.util.concurrent.CountDownLatch;
-
 /**
  * This class contains several low level methods for computing matrix-matrix multiplications. <br>
  * <b>WARNING:</b> These methods do not perform any sanity checks.
@@ -97,21 +95,25 @@ public class RealDenseMatrixMultiplication {
 
         double[] dest = new double[rows1*cols2];
 
-        int src2Index, destIndex, src1Start, destIndexStart, end;
-        int src1Index;
+        double src1Val;
+        int src2Index;
+        int destIndex;
+        int src1Start;
+        int destIndexStart;
+        int end;
 
         for(int i=0; i<rows1; i++) {
             src1Start = i*cols1;
             destIndexStart = i*cols2;
 
             for(int k=0; k<cols1; k++) {
-                src1Index = src1Start+k;
                 src2Index = k*cols2;
                 destIndex = destIndexStart;
                 end = src2Index + cols2;
+                src1Val = src1[src1Start+k];
 
                 while(src2Index<end) {
-                    dest[destIndex++] += src1[src1Index]*src2[src2Index++];
+                    dest[destIndex++] += src1Val*src2[src2Index++];
                 }
             }
         }

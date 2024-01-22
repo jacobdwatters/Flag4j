@@ -262,7 +262,7 @@ public final class RandomArray {
      * @see #randomUniqueIndices(int, int, int)
      */
     public int[][] randomUniqueIndices2D(int numIndices, int rowStart, int rowEnd, int colStart, int colEnd) {
-        ParameterChecks.assertPositive(numIndices);
+        ParameterChecks.assertGreaterEq(0, numIndices);
         ParameterChecks.assertLessEq((rowEnd-rowStart)*(colEnd-colStart), numIndices);
 
         int[] colIndices = new int[numIndices];
@@ -323,8 +323,9 @@ public final class RandomArray {
      * Randomly shuffles array using the Fisher–Yates algorithm. This is done in place.
      *
      * @param arr Array to shuffle.
+     * @return A reference to {@code arr}.
      */
-    public void shuffle(int[] arr) {
+    public int[] shuffle(int[] arr) {
         for (int i = arr.length-1; i>0; i--) {
 
             // Pick a random index from 0 to i
@@ -333,6 +334,8 @@ public final class RandomArray {
             // Swap arr[i] with the element at random index
             ArrayUtils.swap(arr, i, j);
         }
+
+        return arr;
     }
 
 

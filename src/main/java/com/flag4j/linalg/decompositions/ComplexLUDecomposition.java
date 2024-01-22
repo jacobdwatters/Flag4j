@@ -34,6 +34,10 @@ import com.flag4j.exceptions.LinearAlgebraException;
  * <p>The following decompositions are provided: {@code A=LU}, {@code PA=LU}, and {@code PAQ=LU}.</p>
  */
 public final class ComplexLUDecomposition extends LUDecomposition<CMatrix> {
+    /**
+     * Complex number equal to zero.
+     */
+    static final CNumber z = CNumber.zero();
 
     /**
      * Constructs a LU decomposer to decompose the specified matrix using partial pivoting.
@@ -146,15 +150,22 @@ public final class ComplexLUDecomposition extends LUDecomposition<CMatrix> {
      */
     private void computeRows(int j) {
         CNumber m;
+        int pivotRow = j*LU.numCols;
 
         for(int i=j+1; i<LU.numRows; i++) {
-            m = LU.entries[i*LU.numCols + j];
-            m = LU.entries[j*LU.numCols + j].equals(0) ? m.copy() : m.div(LU.entries[j*LU.numCols + j]);
+            int iRow = i*LU.numCols;
+            m = LU.entries[iRow + j];
+            m = LU.entries[pivotRow + j].equals(z) ? m.copy() : m.div(LU.entries[pivotRow + j]);
 
-            for(int k=j; k<LU.numCols; k++) {
-                LU.entries[i*LU.numCols + k] = LU.entries[i*LU.numCols + k].sub(m.mult(LU.entries[j*LU.numCols + k]));
-                LU.entries[i*LU.numCols + j] = m;
+            if(!m.equals(z)) {
+                // Compute and set U values.
+                for(int k=j; k<LU.numCols; k++) {
+                    LU.entries[iRow + k].subEq(m.mult(LU.entries[pivotRow + k]));
+                }
             }
+
+            // Compute and set L value.
+            LU.entries[iRow + j] = m;
         }
     }
 

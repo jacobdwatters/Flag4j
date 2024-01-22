@@ -78,7 +78,8 @@ public class ComplexExactSolver extends ExactSolver<CMatrix, CVector> {
      */
     @Override
     protected CVector permuteRows(CVector b) {
-        return rowPermute.mult(b);
+        return rowPermute.leftMult(b);
+//        return rowPermute.mult(b);
     }
 
 
@@ -91,6 +92,7 @@ public class ComplexExactSolver extends ExactSolver<CMatrix, CVector> {
      */
     @Override
     protected CMatrix permuteRows(CMatrix B) {
-        return rowPermute.mult(B);
+        return rowPermute.leftMult(B);
+//        return rowPermute.mult(B);
     }
 }

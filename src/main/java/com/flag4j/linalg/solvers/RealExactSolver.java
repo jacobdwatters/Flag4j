@@ -30,8 +30,6 @@ import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.linalg.decompositions.RealLUDecomposition;
 import com.flag4j.operations.dense.real.RealDenseDeterminant;
 
-import static com.flag4j.operations.dense.real.RealDenseDeterminant.detLU;
-
 
 /**
  * Solver for solving a well determined system of linear equations in an exact sense using the
@@ -80,7 +78,8 @@ public class RealExactSolver extends ExactSolver<Matrix, Vector> {
      */
     @Override
     protected Vector permuteRows(Vector b) {
-        return rowPermute.mult(b);
+        return rowPermute.leftMult(b);
+//        return rowPermute.mult(b);
     }
 
 
@@ -93,6 +92,7 @@ public class RealExactSolver extends ExactSolver<Matrix, Vector> {
      */
     @Override
     protected Matrix permuteRows(Matrix B) {
-        return rowPermute.mult(B);
+        return rowPermute.leftMult(B);
+//        return rowPermute.mult(B);
     }
 }

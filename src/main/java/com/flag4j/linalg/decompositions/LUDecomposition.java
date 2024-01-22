@@ -24,11 +24,9 @@
 
 package com.flag4j.linalg.decompositions;
 
-import com.flag4j.CooMatrix;
+import com.flag4j.PermutationMatrix;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.util.ArrayUtils;
-
-import java.util.Arrays;
 
 /**
  * <p>This abstract class specifies methods for computing the LU decomposition of a matrix.</p>
@@ -60,11 +58,11 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
     /**
      * Permutation matrix to store row swaps if partial pivoting is used.
      */
-    protected CooMatrix P;
+    protected PermutationMatrix P;
     /**
      * Permutation matrix to store column swaps if full pivoting is used.
      */
-    protected CooMatrix Q;
+    protected PermutationMatrix Q;
 
     protected int numRowSwaps; // Tracks the number of row swaps made during full/partial pivoting.
     protected int numColSwaps; // Tracks the number of column swaps made during full pivoting.
@@ -178,15 +176,9 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
      * Gets the row permutation matrix of the decomposition.
      * @return The row permutation matrix of the decomposition. If no pivoting was used, null will be returned.
      */
-    public CooMatrix getP() {
+    public PermutationMatrix getP() {
         if(rowSwaps != null) {
-            double[] entries = new double[rowSwaps.length];
-            Arrays.fill(entries, 1);
-            int[] rowIndices = ArrayUtils.intRange(0, entries.length);
-            int[] colIndices = rowSwaps.clone();
-
-            P = new CooMatrix(LU.numRows(), entries, rowIndices, colIndices);
-            P.sortIndices();
+            P = new PermutationMatrix(rowSwaps.clone());
         } else {
             P = null;
         }
@@ -199,15 +191,9 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
      * Gets the column permutation matrix of the decomposition.
      * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
      */
-    public CooMatrix getQ() {
+    public PermutationMatrix getQ() {
         if(colSwaps != null) {
-            double[] entries = new double[colSwaps.length];
-            Arrays.fill(entries, 1);
-            int[] rowIndices = colSwaps.clone();
-            int[] colIndices = ArrayUtils.intRange(0, entries.length);
-
-            Q = new CooMatrix(LU.numCols(), entries, rowIndices, colIndices);
-            Q.sortIndices();
+            Q = new PermutationMatrix(colSwaps.clone()).inv(); // Invert to ensure matrix represents column swaps.
         } else {
             Q = null;
         }
@@ -235,13 +221,12 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
 
 
     /**
-     * Tracks the swapping of two rows during gaussian elimination.
+     * Tracks the swapping of two rows during gaussian elimination with partial or full pivoting.
      * @param rowIdx1 First row index in swap.
      * @param rowIdx2 Second row index in swap.
      */
     protected void swapRows(int rowIdx1, int rowIdx2) {
         numRowSwaps++;
-
         int temp = rowSwaps[rowIdx1];
         rowSwaps[rowIdx1] = rowSwaps[rowIdx2];
         rowSwaps[rowIdx2] = temp;
@@ -251,7 +236,7 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
 
 
     /**
-     * Tracks the swapping of two columns during gaussian elimination.
+     * Tracks the swapping of two columns during gaussian elimination with full pivoting.
      * @param colIdx1 First column index in swap.
      * @param colIdx2 Second column index in swap.
      */

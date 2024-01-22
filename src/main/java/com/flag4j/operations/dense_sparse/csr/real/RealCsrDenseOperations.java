@@ -112,4 +112,34 @@ public class RealCsrDenseOperations {
 
         return new CsrMatrix(src1.shape.copy(), entries, rowPointers, colIndices);
     }
+
+
+    /**
+     * Applies the specified binary operator element-wise to a matrix and a scalar.
+     * @param src1 First matrix in element-wise binary operation.
+     * @param b Scalar to apply elementwise using the specified operation.
+     * @param opp Binary operator to apply element-wise to the two matrices.
+     * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
+     */
+    public static Matrix applyBinOpp(CsrMatrix src1, double b, BinaryOperator<Double> opp) {
+        double[] dest = new double[src1.entries.length];
+
+        for(int i=0; i<src1.rowPointers.length-1; i++) {
+            int start = src1.rowPointers[i];
+            int stop = src1.rowPointers[i+1];
+
+            int rowOffset = i*src1.numCols;
+
+            for(int j=start; j<stop; j++) {
+                int idx = rowOffset + src1.colIndices[i];
+
+                dest[idx] = opp.apply(
+                        src1.entries[j],
+                        b
+                );
+            }
+        }
+
+        return new Matrix(src1.shape.copy(), dest);
+    }
 }
