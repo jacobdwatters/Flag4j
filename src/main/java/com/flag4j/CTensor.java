@@ -62,6 +62,7 @@ public class CTensor
      */
     public CTensor(Shape shape) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
+        shape.makeStridesIfNull();
         ArrayUtils.fillZeros(super.entries);
     }
 
@@ -73,6 +74,7 @@ public class CTensor
      */
     public CTensor(Shape shape, double fillValue) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
+        shape.makeStridesIfNull();
         ArrayUtils.fill(super.entries, fillValue);
     }
 
@@ -84,6 +86,7 @@ public class CTensor
      */
     public CTensor(Shape shape, CNumber fillValue) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
+        shape.makeStridesIfNull();
         ArrayUtils.fill(super.entries, fillValue);
     }
 
@@ -96,6 +99,7 @@ public class CTensor
      */
     public CTensor(Shape shape, double[] entries) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
+        shape.makeStridesIfNull();
 
         if(entries.length != super.totalEntries().intValue()) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));
@@ -113,6 +117,7 @@ public class CTensor
      */
     public CTensor(Shape shape, int[] entries) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
+        shape.makeStridesIfNull();
 
         if(entries.length != super.totalEntries().intValue()) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));
@@ -131,6 +136,7 @@ public class CTensor
      */
     public CTensor(Shape shape, CNumber[] entries) {
         super(shape, entries);
+        shape.makeStridesIfNull();
     }
 
 
@@ -140,6 +146,7 @@ public class CTensor
      */
     public CTensor(Tensor A) {
         super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);
+        shape.makeStridesIfNull();
         ArrayUtils.copy2CNumber(A.entries, super.entries);
     }
 
@@ -150,6 +157,7 @@ public class CTensor
      */
     public CTensor(CTensor A) {
         super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);
+        shape.makeStridesIfNull();
         ArrayUtils.copy2CNumber(A.entries, super.entries);
     }
 
@@ -163,6 +171,7 @@ public class CTensor
      */
     @Override
     protected CTensor makeTensor(Shape shape, CNumber[] entries) {
+        shape.makeStridesIfNull();
         return new CTensor(shape, entries);
     }
 
@@ -187,6 +196,7 @@ public class CTensor
      */
     @Override
     protected Tensor makeRealTensor(Shape shape, double[] entries) {
+        shape.makeStridesIfNull();
         return new Tensor(shape, entries);
     }
 
@@ -203,7 +213,7 @@ public class CTensor
         int[] dims = new int[this.getRank()];
         Arrays.fill(dims, 1);
         dims[axis] = shape.totalEntries().intValueExact();
-        Shape flatShape = new Shape(dims);
+        Shape flatShape = new Shape(true, dims);
 
         return new CTensor(flatShape, entries.clone());
     }
@@ -710,7 +720,7 @@ public class CTensor
      */
     @Override
     public CTensor flatten() {
-        return new CTensor(new Shape(entries.length), this.entries.clone());
+        return new CTensor(new Shape(true, entries.length), this.entries.clone());
     }
 
     

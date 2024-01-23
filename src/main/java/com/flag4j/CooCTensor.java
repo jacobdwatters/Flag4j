@@ -47,6 +47,7 @@ public class CooCTensor
      */
     public CooCTensor(Shape shape) {
         super(shape, 0, new CNumber[0], new int[0][0]);
+        this.shape.makeStridesIfNull();
     }
 
 
@@ -58,6 +59,7 @@ public class CooCTensor
      */
     public CooCTensor(Shape shape, double[] nonZeroEntries, int[][] indices) {
         super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);
+        this.shape.makeStridesIfNull();
 
         for(int i=0; i<indices.length; i++) {
             super.entries[i] = new CNumber(nonZeroEntries[i]);
@@ -73,6 +75,7 @@ public class CooCTensor
      */
     public CooCTensor(Shape shape, int[] nonZeroEntries, int[][] indices) {
         super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);
+        this.shape.makeStridesIfNull();
 
         for(int i=0; i<indices.length; i++) {
             super.entries[i] = new CNumber(nonZeroEntries[i]);
@@ -88,6 +91,7 @@ public class CooCTensor
      */
     public CooCTensor(Shape shape, CNumber[] nonZeroEntries, int[][] indices) {
         super(shape, nonZeroEntries.length, nonZeroEntries, indices);
+        this.shape.makeStridesIfNull();
     }
 
 
@@ -98,6 +102,8 @@ public class CooCTensor
      */
     public CooCTensor(CooCTensor A) {
         super(A.shape.copy(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);
+        shape.makeStridesIfNull();
+
         for(int i=0; i<indices.length; i++) {
             super.indices[i] = A.indices[i].clone();
         }

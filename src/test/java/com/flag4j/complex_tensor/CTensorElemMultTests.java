@@ -84,14 +84,14 @@ class CTensorElemMultTests {
         bEntries = new double[]{
                 1.34, -0.0245, 8001.1
         };
-        bShape = new Shape(2, 3, 2);
+        bShape = new Shape(true, 2, 3, 2);
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
         expEntries = new CNumber[aEntries.length];
         ArrayUtils.fillZeros(expEntries);
-        expShape = new Shape(2, 3, 2);
+        expShape = new Shape(true, 2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] = aEntries[expShape.entriesIndex(sparseIndices[0])].mult(bEntries[0]);
         expEntries[expShape.entriesIndex(sparseIndices[1])] = aEntries[expShape.entriesIndex(sparseIndices[1])].mult(bEntries[1]);
         expEntries[expShape.entriesIndex(sparseIndices[2])] = aEntries[expShape.entriesIndex(sparseIndices[2])].mult(bEntries[2]);
@@ -172,7 +172,7 @@ class CTensorElemMultTests {
                 new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber(),
                 new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber()
         };
-        expShape = new Shape(2, 3, 2);
+        expShape = new Shape(true, 2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] = aEntries[expShape.entriesIndex(sparseIndices[0])].mult(bEntries[0]);
         expEntries[expShape.entriesIndex(sparseIndices[1])] = aEntries[expShape.entriesIndex(sparseIndices[1])].mult(bEntries[1]);
         exp = new CTensor(expShape, expEntries);

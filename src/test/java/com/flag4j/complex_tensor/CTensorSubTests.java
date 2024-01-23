@@ -91,7 +91,7 @@ class CTensorSubTests {
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
         expEntries = ArrayUtils.copyOf(aEntries);
-        expShape = new Shape(2, 3, 2);
+        expShape = new Shape(true,2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])].subEq(bEntries[0]);
         expEntries[expShape.entriesIndex(sparseIndices[1])].subEq(bEntries[1]);
         expEntries[expShape.entriesIndex(sparseIndices[2])].subEq(bEntries[2]);
@@ -163,13 +163,13 @@ class CTensorSubTests {
         bEntries = new CNumber[]{
                 new CNumber(1, -0.2045), new CNumber(-800.145, 3204.5)
         };
-        bShape = new Shape(2, 3, 2);
+        bShape = new Shape(true, 2, 3, 2);
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}
         };
         B = new CooCTensor(bShape, bEntries, sparseIndices);
         expEntries = ArrayUtils.copyOf(aEntries);
-        expShape = new Shape(2, 3, 2);
+        expShape = new Shape(true, 2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])].subEq(bEntries[0]);
         expEntries[expShape.entriesIndex(sparseIndices[1])].subEq(bEntries[1]);
         exp = new CTensor(expShape, expEntries);
@@ -288,13 +288,13 @@ class CTensorSubTests {
         bEntries = new double[]{
                 1.34, -0.0245, 8001.1
         };
-        bShape = new Shape(2, 3, 2);
+        bShape = new Shape(true,2, 3, 2);
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
         expEntries = ArrayUtils.copyOf(aEntries);
-        expShape = new Shape(2, 3, 2);
+        expShape = new Shape(true,2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])].subEq(bEntries[0]);
         expEntries[expShape.entriesIndex(sparseIndices[1])].subEq(bEntries[1]);
         expEntries[expShape.entriesIndex(sparseIndices[2])].subEq(bEntries[2]);
@@ -408,7 +408,7 @@ class CTensorSubTests {
         };
         B = new CooCTensor(bShape, bEntries, sparseIndices);
         expEntries = ArrayUtils.copyOf(aEntries);
-        expShape = new Shape(2, 3, 2);
+        expShape = new Shape(true, 2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])].subEq(bEntries[0]);
         expEntries[expShape.entriesIndex(sparseIndices[1])].subEq(bEntries[1]);
         expEntries[expShape.entriesIndex(sparseIndices[2])].subEq(bEntries[2]);

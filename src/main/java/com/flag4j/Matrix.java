@@ -562,7 +562,8 @@ public class Matrix
      */
     @Override
     public Matrix set(double value, int row, int col) {
-        return super.set(value, row, col);
+        entries[row*numCols + col] = value;
+        return this;
     }
 
 
@@ -576,7 +577,8 @@ public class Matrix
      */
     @Override
     public Matrix set(Double value, int row, int col) {
-        return super.set(value, row, col);
+        entries[row*numCols + col] = value;
+        return this;
     }
 
 
@@ -3621,6 +3623,13 @@ public class Matrix
     @Override
     public double infNorm() {
         return RealDenseOperations.matrixInfNorm(entries, shape);
+    }
+
+
+    @Override
+    public Double get(int... indices) {
+        ParameterChecks.assertValidIndex(shape, indices);
+        return entries[indices[0]*numCols + indices[1]];
     }
 
 

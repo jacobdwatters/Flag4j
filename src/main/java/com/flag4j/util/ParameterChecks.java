@@ -241,6 +241,19 @@ public final class ParameterChecks {
 
 
     /**
+     * Checks if a single value is greater than or equal to a specified threshold.
+     * @param threshold Threshold value.
+     * @param value Value to compare against threshold.
+     * @throws IllegalArgumentException If the values is less than the threshold.
+     */
+    public static void assertGreaterEq(int threshold, int value) {
+        if(value<threshold) {
+            throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(threshold, value));
+        }
+    }
+
+
+    /**
      * Checks if a set of values is greater than or equal to a specified threshold.
      * @param threshold Threshold value.
      * @param value Values to compare against threshold.

@@ -4,6 +4,7 @@ package com.flag4j.operations.dense_sparse.csr.real;
 import com.flag4j.CsrMatrix;
 import com.flag4j.Matrix;
 import com.flag4j.Shape;
+import com.flag4j.Vector;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -95,5 +96,36 @@ public class RealCsrDenseMatrixMultiplication {
         }
 
         return new Matrix(new Shape(src1.numRows, src2.numRows), destEntries);
+    }
+
+
+    /**
+     * Computes the matrix-vector multiplication between a real sparse CSR matrix and a real dense vector.
+     * @param src1 The matrix in the multiplication.
+     * @param src2 Vector in multiplication. Treated as a column vector.
+     * @return The result of the matrix-vector multiplication.
+     * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the length of
+     * {@code src2}.
+     */
+    public static Vector standardVector(CsrMatrix src1, Vector src2) {
+        // Ensure the matrix and vector have shapes conducive to multiplication.
+        ParameterChecks.assertEquals(src1.numCols, src2.size);
+
+        double[] destEntries = new double[src1.numRows];
+        int rows1 = src1.numRows;
+
+        for (int i = 0; i < rows1; i++) {
+            int start = src1.rowPointers[i];
+            int stop = src1.rowPointers[i + 1];
+
+            for (int aIndex = start; aIndex<stop; aIndex++) {
+                int aCol = src1.colIndices[aIndex];
+                double aVal = src1.entries[aIndex];
+
+                destEntries[i] += aVal*src2.entries[aCol];
+            }
+        }
+
+        return new Vector(destEntries);
     }
 }

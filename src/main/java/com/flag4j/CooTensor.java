@@ -49,6 +49,7 @@ public class CooTensor
      */
     public CooTensor(Shape shape) {
         super(shape, 0, new double[0], new int[0][0]);
+        this.shape.makeStridesIfNull();
     }
 
 
@@ -60,6 +61,7 @@ public class CooTensor
      */
     public CooTensor(Shape shape, double[] nonZeroEntries, int[][] indices) {
         super(shape, nonZeroEntries.length, nonZeroEntries, indices);
+        this.shape.makeStridesIfNull();
     }
 
 
@@ -71,6 +73,7 @@ public class CooTensor
      */
     public CooTensor(Shape shape, int[] nonZeroEntries, int[][] indices) {
         super(shape, nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(), indices);
+        this.shape.makeStridesIfNull();
     }
 
 
@@ -81,6 +84,7 @@ public class CooTensor
      */
     public CooTensor(CooTensor A) {
         super(A.shape.copy(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);
+        shape.makeStridesIfNull();
         for(int i=0; i<indices.length; i++) {
             super.indices[i] = A.indices[i].clone();
         }

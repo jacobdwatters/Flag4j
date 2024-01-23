@@ -27,7 +27,6 @@ package com.flag4j.operations.dense.real;
 import com.flag4j.Shape;
 import com.flag4j.concurrency.Configurations;
 import com.flag4j.concurrency.ThreadManager;
-import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 
 /**
@@ -51,9 +50,9 @@ public class RealDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static double[] standard(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int rows2 = shape2.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int rows2 = shape2.dims[0];
+        int cols2 = shape2.dims[1];
 
         double[] dest = new double[rows1*cols2];
         int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
@@ -131,9 +130,9 @@ public class RealDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static double[] blocked(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
-        int cols1 = shape1.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int cols2 = shape2.dims[1];
+        int cols1 = shape1.dims[1];
 
         double[] dest = new double[rows1 * cols2];
         int blockSize = Configurations.getBlockSize();
@@ -183,9 +182,9 @@ public class RealDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static double[] blockedReordered(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
-        int cols1 = shape1.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int cols2 = shape2.dims[1];
+        int cols1 = shape1.dims[1];
 
         double[] dest = new double[rows1*cols2];
         int blockSize = Configurations.getBlockSize();
@@ -238,9 +237,9 @@ public class RealDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static double[] concurrentStandard(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int cols1 = shape1.dims[1];
+        int cols2 = shape2.dims[1];
 
         double[] dest = new double[rows1*cols2];
 
@@ -311,9 +310,9 @@ public class RealDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static double[] concurrentBlocked(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int cols1 = shape1.dims[1];
+        int cols2 = shape2.dims[1];
 
         double[] dest = new double[rows1*cols2];
         int blockSize = Configurations.getBlockSize();
@@ -412,9 +411,9 @@ public class RealDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static double[] standardVector(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int rows2 = shape2.dims[Axis2D.row()];
+        int rows1 = shape1.dims[0];
+        int cols1 = shape1.dims[1];
+        int rows2 = shape2.dims[0];
 
         double[] dest = new double[rows1];
         int src1Index, src2Index;
@@ -441,9 +440,9 @@ public class RealDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static double[] blockedVector(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int rows2 = shape2.dims[Axis2D.row()];
+        int rows1 = shape1.dims[0];
+        int cols1 = shape1.dims[1];
+        int rows2 = shape2.dims[0];
 
         double[] dest = new double[rows1];
         int blockSize = Configurations.getBlockSize();
@@ -483,9 +482,9 @@ public class RealDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static double[] concurrentStandardVector(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int rows2 = shape2.dims[Axis2D.row()];
+        int rows1 = shape1.dims[0];
+        int cols1 = shape1.dims[1];
+        int rows2 = shape2.dims[0];
 
         double[] dest = new double[rows1];
 

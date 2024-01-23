@@ -144,14 +144,14 @@ public class RealComplexDenseSparseEquals {
             for(int i=0; i<B.nonZeroEntries(); i++) {
                 rowIndex = B.rowIndices[i];
                 colIndex = B.colIndices[i];
-                entriesIndex = A.shape.entriesIndex(rowIndex, colIndex);
+                int idx = rowIndex*A.numCols + colIndex;
 
-                if(entriesCopy[entriesIndex] != B.entries[i].re || B.entries[i].im != 0) {
+                if(entriesCopy[idx] != B.entries[i].re || B.entries[i].im != 0) {
                     equal = false;
                     break;
                 }
 
-                entriesCopy[A.shape.entriesIndex(rowIndex, colIndex)] = 0;
+                entriesCopy[idx] = 0;
             }
 
             if(equal) {
@@ -180,20 +180,19 @@ public class RealComplexDenseSparseEquals {
             CNumber[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);
 
             int rowIndex, colIndex;
-            int entriesIndex;
 
             // Remove all nonZero entries from the entries of this matrix.
             for(int i=0; i<B.nonZeroEntries(); i++) {
                 rowIndex = B.rowIndices[i];
                 colIndex = B.colIndices[i];
-                entriesIndex = A.shape.entriesIndex(rowIndex, colIndex);
+                int idx = rowIndex*A.numCols + colIndex;
 
-                if(!entriesCopy[entriesIndex].equals(B.entries[i])) {
+                if(!entriesCopy[idx].equals(B.entries[i])) {
                     equal = false;
                     break;
                 }
 
-                entriesCopy[A.shape.entriesIndex(rowIndex, colIndex)] = new CNumber();
+                entriesCopy[idx] = new CNumber();
             }
 
             if(equal) {

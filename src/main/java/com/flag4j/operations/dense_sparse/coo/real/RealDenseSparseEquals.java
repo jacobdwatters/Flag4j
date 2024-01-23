@@ -24,9 +24,9 @@
 
 package com.flag4j.operations.dense_sparse.coo.real;
 
+import com.flag4j.CooMatrix;
 import com.flag4j.CooTensor;
 import com.flag4j.Matrix;
-import com.flag4j.CooMatrix;
 import com.flag4j.Tensor;
 import com.flag4j.operations.common.real.RealProperties;
 import com.flag4j.util.ErrorMessages;
@@ -104,14 +104,14 @@ public class RealDenseSparseEquals {
             for(int i=0; i<B.nonZeroEntries(); i++) {
                 rowIndex = B.rowIndices[i];
                 colIndex = B.colIndices[i];
-                entriesIndex = A.shape.entriesIndex(rowIndex, colIndex);
+                int idx = rowIndex*A.numCols + colIndex;
 
-                if(entriesCopy[entriesIndex] != B.entries[i]) {
+                if(entriesCopy[idx] != B.entries[i]) {
                     equal = false;
                     break;
                 }
 
-                entriesCopy[A.shape.entriesIndex(rowIndex, colIndex)] = 0;
+                entriesCopy[idx] = 0;
             }
 
             if(equal) {

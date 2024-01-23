@@ -632,13 +632,15 @@ public class CMatrix
 
     @Override
     public CMatrix set(double value, int row, int col) {
-        return super.set(value, row, col);
+        entries[row*numCols + col] = new CNumber(value);
+        return this;
     }
 
 
     @Override
     public CMatrix set(CNumber value, int row, int col) {
-        return super.set(value, row, col);
+        entries[row*numCols + col] = value;
+        return this;
     }
 
     /**
@@ -1284,8 +1286,10 @@ public class CMatrix
         CMatrix copy = new CMatrix(this);
 
         for(int i=0; i<values.numRows; i++) {
+            int copyRowOffset = (i+rowStart)*numCols;
+            int valuesRowOffset = i*values.numCols;
             for(int j=0; j<values.numCols; j++) {
-                copy.entries[(i+rowStart)*numCols + j+colStart] = values.entries[values.shape.entriesIndex(i, j)].copy();
+                copy.entries[copyRowOffset + j + colStart] = values.entries[valuesRowOffset + j].copy();
             }
         }
 
@@ -1451,9 +1455,11 @@ public class CMatrix
         CMatrix copy = new CMatrix(this);
 
         for(int i=0; i<values.numRows; i++) {
+            int copyRowOffset = (i+rowStart)*numCols;
+            int valuesRowOffset = i*values.numCols;
             for(int j=0; j<values.numCols; j++) {
-                copy.entries[(i+rowStart)*numCols + j+colStart] =
-                        new CNumber(values.entries[values.shape.entriesIndex(i, j)]);
+                copy.entries[copyRowOffset + j + colStart] =
+                        new CNumber(values.entries[valuesRowOffset + j]);
             }
         }
 
@@ -4035,6 +4041,13 @@ public class CMatrix
         }
 
         return this;
+    }
+
+
+    @Override
+    public CNumber get(int... indices) {
+        ParameterChecks.assertValidIndex(shape, indices);
+        return entries[indices[0]*numCols + indices[1]];
     }
 
 

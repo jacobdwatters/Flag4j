@@ -52,12 +52,22 @@ public class Shape implements Serializable {
      */
     public Shape(int... dims) {
         // Ensure all dimensions for the shape object are non-negative.
-        if(Arrays.stream(dims).anyMatch(i -> i < 0)) {
-            throw new IllegalArgumentException(ErrorMessages.negativeDimErrMsg(dims));
-        }
+        ParameterChecks.assertGreaterEq(0, dims);
+        this.dims = dims;
+    }
 
-        this.dims = dims.clone();
-        this.strides = this.createNewStrides();
+
+    /**
+     * Constructs a shape object from specified dimension measurements.
+     * @param dims A list of the dimension measurements for this shape object. All entries must be non-negative.
+     * @param computeStrides Flag indicating if shape strides should be computed.
+     * @throws IllegalArgumentException If any dimension is negative.
+     */
+    public Shape(boolean computeStrides, int... dims) {
+        // Ensure all dimensions for the shape object are non-negative.
+        ParameterChecks.assertGreaterEq(0, dims);
+        this.dims = dims;
+        if(computeStrides) this.strides = this.createNewStrides();
     }
 
 
@@ -67,7 +77,21 @@ public class Shape implements Serializable {
      */
     public Shape(Shape shape) {
         this.dims = shape.dims.clone();
-        this.strides = shape.strides.clone();
+        if(shape.strides!=null) this.strides = shape.strides.clone();
+    }
+
+
+    /**
+     * Copy constructor which creates a copy of the specified shape.
+     * @param shape Shape to copy.
+     */
+    public Shape(boolean computeStrides, Shape shape) {
+        this.dims = shape.dims.clone();
+
+        if(computeStrides) {
+            if(shape.strides!=null) this.strides = shape.strides.clone();
+            else createNewStrides();
+        }
     }
 
 
@@ -126,6 +150,14 @@ public class Shape implements Serializable {
         }
 
         return strides;
+    }
+
+
+    /**
+     * If strides are null, create them. Otherwise, do nothing.
+     */
+    public void makeStridesIfNull() {
+        if(strides==null) strides = createNewStrides();
     }
 
 
@@ -192,7 +224,7 @@ public class Shape implements Serializable {
         dims[axis1] = dims[axis2];
         dims[axis2] = temp;
 
-        this.strides = this.createNewStrides();
+        if(strides!=null) this.strides = this.createNewStrides();
 
         return this;
     }
@@ -218,7 +250,7 @@ public class Shape implements Serializable {
         }
 
         this.dims = tempDims;
-        this.strides = this.createNewStrides();
+        if(strides!=null) this.strides = this.createNewStrides();
 
         return this;
     }
@@ -250,7 +282,7 @@ public class Shape implements Serializable {
      * @return A deep copy of this shape object.
      */
     public Shape copy() {
-        return new Shape(dims.clone());
+        return new Shape(this);
     }
 
 

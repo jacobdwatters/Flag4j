@@ -61,6 +61,7 @@ public class Tensor
      */
     public Tensor(Shape shape) {
         super(shape, new double[shape.totalEntries().intValueExact()]);
+        shape.makeStridesIfNull();
     }
 
 
@@ -75,6 +76,8 @@ public class Tensor
         for(int i=0; i<super.totalEntries().intValueExact(); i++) {
             super.entries[i] = fillValue;
         }
+
+        shape.makeStridesIfNull();
     }
 
 
@@ -86,6 +89,7 @@ public class Tensor
      */
     public Tensor(Shape shape, double[] entries) {
         super(shape, entries);
+        shape.makeStridesIfNull();
 
         if(entries.length != super.totalEntries().intValueExact()) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));
@@ -101,6 +105,7 @@ public class Tensor
      */
     public Tensor(Shape shape, int[] entries) {
         super(shape, Arrays.stream(entries).asDoubleStream().toArray());
+        shape.makeStridesIfNull();
 
         if(entries.length != super.totalEntries().intValueExact()) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));
@@ -116,6 +121,7 @@ public class Tensor
      */
     public Tensor(Shape shape, Double[] entries) {
         super(shape, new double[entries.length]);
+        shape.makeStridesIfNull();
 
         if(entries.length != super.totalEntries().intValueExact()) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));
@@ -137,6 +143,7 @@ public class Tensor
      */
     public Tensor(Shape shape, Integer[] entries) {
         super(shape, new double[entries.length]);
+        shape.makeStridesIfNull();
 
         if(entries.length != super.totalEntries().intValueExact()) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));
@@ -156,6 +163,7 @@ public class Tensor
      */
     public Tensor(Tensor A) {
         super(A.shape.copy(), A.entries.clone());
+        shape.makeStridesIfNull();
     }
 
 
@@ -165,6 +173,7 @@ public class Tensor
      */
     public Tensor(Matrix A) {
         super(A.shape.copy(), A.entries.clone());
+        shape.makeStridesIfNull();
     }
 
 
@@ -174,6 +183,7 @@ public class Tensor
      */
     public Tensor(Vector A) {
         super(A.shape.copy(), A.entries.clone());
+        shape.makeStridesIfNull();
     }
 
 
@@ -186,6 +196,7 @@ public class Tensor
      */
     @Override
     protected Tensor makeTensor(Shape shape, double[] entries) {
+        shape.makeStridesIfNull();
         return new Tensor(shape, entries);
     }
 
@@ -199,6 +210,7 @@ public class Tensor
      */
     @Override
     protected CTensor makeComplexTensor(Shape shape, double[] entries) {
+        shape.makeStridesIfNull();
         return new CTensor(shape, entries);
     }
 
@@ -212,6 +224,7 @@ public class Tensor
      */
     @Override
     protected CTensor makeComplexTensor(Shape shape, CNumber[] entries) {
+        shape.makeStridesIfNull();
         return new CTensor(shape, entries);
     }
 
@@ -238,7 +251,7 @@ public class Tensor
         int[] dims = new int[this.getRank()];
         Arrays.fill(dims, 1);
         dims[axis] = shape.totalEntries().intValueExact();
-        Shape flatShape = new Shape(dims);
+        Shape flatShape = new Shape(true, dims);
 
         return new Tensor(flatShape, entries.clone());
     }
@@ -286,7 +299,7 @@ public class Tensor
      */
     @Override
     public Tensor flatten() {
-        return new Tensor(new Shape(entries.length), this.entries.clone());
+        return new Tensor(new Shape(true, entries.length), this.entries.clone());
     }
 
 
