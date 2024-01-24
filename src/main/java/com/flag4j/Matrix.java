@@ -37,7 +37,8 @@ import com.flag4j.linalg.decompositions.LUDecomposition;
 import com.flag4j.linalg.decompositions.RealLUDecomposition;
 import com.flag4j.linalg.decompositions.RealSVD;
 import com.flag4j.linalg.decompositions.SVD;
-import com.flag4j.linalg.solvers.RealExactSolver;
+import com.flag4j.linalg.solvers.RealBackSolver;
+import com.flag4j.linalg.solvers.RealForwardSolver;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
@@ -3164,16 +3165,15 @@ public class Matrix
             throw new SingularMatrixException("Cannot invert.");
         }
 
-        // Solve inv(A)*L = inv(U) for inv(A) by solving L^T*inv(A)^T = inv(U)^T
-        RealExactSolver solver = new RealExactSolver();
-        Matrix UinvT = Invert.invTriU(lu.getU()).T();
+        // Solve U*inv(A) = inv(L) for inv(A)
+        RealBackSolver backSolver = new RealBackSolver();
+        RealForwardSolver forwardSolver = new RealForwardSolver(true);
 
-        // TODO: Add triangular solver to solve this more efficiently.
-        //  Note that lu.getL.T() is upper triangular and UinvT is lower triangular.
-        Matrix inverse = solver.solve(lu.getL().T(), UinvT).T();
+        // Compute the inverse of unit lower triangular matrix L.
+        Matrix Linv = forwardSolver.solveIdentity(lu.getL());
+        Matrix inverse = backSolver.solveLower(lu.getU(), Linv); // Compute inverse of row permuted A.
 
-        return lu.getP().rightMult(inverse); // Finally, apply permutation matrix for LU decomposition.
-//        return inverse.mult(lu.getP());
+        return lu.getP().rightMult(inverse); // Finally, apply permutation matrix from LU decomposition.
     }
 
 
@@ -3567,17 +3567,18 @@ public class Matrix
 
     /**
      * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
+     * This will be equal to the largest singular value of the matrix.
      *
      * @return the 2-norm of this tensor.
      */
     @Override
     public double norm() {
-        return RealDenseOperations.matrixNormL2(entries, shape);
+        return RealDenseOperations.tensorNormL2(entries);
     }
 
 
     /**
-     * Computes the p-norm of this tensor.
+     * Computes the p-norm of this tensor. Equivalent to calling {@link #norm(double, double) norm(p, p)}
      *
      * @param p The p value in the p-norm. <br>
      *          - If p is inf, then this method computes the maximum/infinite norm.
@@ -3595,7 +3596,7 @@ public class Matrix
                 norm = minAbs();
             }
         } else {
-            norm = RealDenseOperations.matrixNormLp(entries, shape, p);
+            norm = RealDenseOperations.tensorNormLp(entries, p);
         }
 
         return norm;

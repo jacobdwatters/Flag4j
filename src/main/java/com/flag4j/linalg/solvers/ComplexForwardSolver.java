@@ -104,6 +104,22 @@ public class ComplexForwardSolver implements LinearSolver<CMatrix, CVector> {
 
 
     /**
+     * Performs forward substitution for a unit lower triangular matrix {@code L} and the identity matrix.
+     * That is, solves the linear system {@code L*X=I} where {@code L} is a lower triangular matrix and {@code I} is
+     * the appropriately sized identity matrix.
+     * @param L Lower triangular coefficient matrix. If {@code L} is not lower triangular, it will be treated
+     *          as if it were.
+     * @return The result of solving the linear system {@code L*X=B} where {@code L} is a lower triangular matrix.
+     * @throws SingularMatrixException If the matrix lower triangular {@code L} is singular (i.e. has a zero on
+     * the principle diagonal).
+     */
+    public CMatrix solveIdentity(CMatrix L) {
+        ParameterChecks.assertSquare(L.shape);
+        return isUnit ? solveUnitLowerIdentity(L) : solveLowerIdentity(L);
+    }
+
+
+    /**
      * Solves a linear system where the coefficient matrix is unit lower triangular.
      * @param L Lower triangular coefficient matrix. If {@code L} is not lower triangular, it will be treated
      *          as if it were.
@@ -129,6 +145,79 @@ public class ComplexForwardSolver implements LinearSolver<CMatrix, CVector> {
         }
 
         return x;
+    }
+
+
+    /**
+     * Solves a linear system where the coefficient matrix is unit lower triangular and the constant matrix
+     * is the identity matrix.
+     * @param L Unit lower triangular matrix.
+     * @return The solution of {@code X} for the linear system {@code L*X=I}.
+     * @throws SingularMatrixException If the matrix lower triangular {@code L} is singular (i.e. has a zero on
+     * the principle diagonal).
+     */
+    private CMatrix solveUnitLowerIdentity(CMatrix L) {
+        CNumber sum;
+        int lIndexStart, xIndex;
+        CMatrix X = new CMatrix(L.shape);
+
+        X.entries[0] = CNumber.one();
+
+        for(int j=0; j<L.numCols; j++) {
+            for(int i=1; i<L.numRows; i++) {
+                sum = (i==j) ? CNumber.one() : CNumber.zero();
+                lIndexStart = i*L.numCols;
+                xIndex = lIndexStart + j;
+
+                for(int k=0; k<i; k++) {
+                    sum.subEq(L.entries[lIndexStart++].mult(X.entries[k*X.numCols + j]));
+                }
+
+                X.entries[xIndex] = sum;
+            }
+        }
+
+        return X;
+    }
+
+
+    /**
+     * Solves a linear system {@code L*X=I} where the coefficient matrix {@code L} is lower triangular and the
+     * constant matrix {@code I} is the appropriately sized identity matrix.
+     * @param L Unit lower triangular matrix (Note, this is not checked).
+     *          If {@code L} is not lower triangular, it will be treated as if it were. No error will be thrown.
+     * @return The solution of {@code X} for the linear system {@code L*X=I}.
+     * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
+     * principle diagonal).
+     */
+    private CMatrix solveLowerIdentity(CMatrix L) {
+        CNumber sum, diag;
+        int lIndexStart, xIndex;
+        CMatrix X = new CMatrix(L.shape);
+
+        // Only check the diagonal has no zeros once.
+        if(zeroOnDiag(L)) {
+            throw new SingularMatrixException("Cannot solve linear system.");
+        }
+
+        X.entries[0] = L.entries[0].multInv();
+
+        for(int j=0; j<L.numCols; j++) {
+            for(int i=1; i<L.numRows; i++) {
+                sum = (i==j) ? CNumber.one() : CNumber.zero();
+                lIndexStart = i*L.numCols;
+                xIndex = lIndexStart + j;
+                diag = L.entries[i*(L.numCols + 1)];
+
+                for(int k=0; k<i; k++) {
+                    sum.subEq(L.entries[lIndexStart++].mult(X.entries[k*X.numCols + j]));
+                }
+
+                X.entries[xIndex] = sum.div(diag);
+            }
+        }
+
+        return X;
     }
 
 

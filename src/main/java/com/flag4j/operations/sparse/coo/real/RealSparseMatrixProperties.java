@@ -59,7 +59,7 @@ public class RealSparseMatrixProperties {
         int row;
         int col;
 
-        while(result && entries.size() > 0) {
+        while(result && !entries.isEmpty()) {
             // Extract value of interest.
             value = entries.remove(0);
             row = rowIndices.remove(0);
@@ -114,7 +114,7 @@ public class RealSparseMatrixProperties {
         int row;
         int col;
 
-        while(result && entries.size() > 0) {
+        while(result && !entries.isEmpty()) {
             // Extract value of interest.
             value = entries.remove(0);
             row = rowIndices.remove(0);

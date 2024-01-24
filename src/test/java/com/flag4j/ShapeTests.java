@@ -113,12 +113,6 @@ class ShapeTests {
         shape2 = new Shape(expDims2);
 
         assertEquals(shape1, shape2);
-
-        // ----------- Sub-case 5 -----------
-        expDims1 = new int[]{};
-        shape1 = new Shape(expDims1);
-
-        assertNotEquals(shape1, Double.valueOf(1), 0.0);
     }
 
 

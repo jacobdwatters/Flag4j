@@ -211,6 +211,19 @@ public final class ParameterChecks {
 
 
     /**
+     * Checks that two values are not equal.
+     * @param a First value.
+     * @param b Second value.
+     * @throws IllegalArgumentException If {@code a==b}.
+     */
+    public static void assertNotEquals(double a, double b) {
+        if(a==b) {
+            throw new IllegalArgumentException("Expecting values to not be equal but got: " + a + ", " + b + ".");
+        }
+    }
+
+
+    /**
      * Checks if a set of values is greater than or equal to a specified threshold.
      * @param threshold Threshold value.
      * @param values Values to compare against threshold.
@@ -339,7 +352,7 @@ public final class ParameterChecks {
      * @throws LinearAlgebraException If the shape is not of rank 2 with equal rows and columns.
      */
     public static void assertSquare(Shape shape) {
-        if(shape.getRank()!=2 || shape.dims[0]!=shape.dims[1]) {
+        if(shape.dims.length!=2 || shape.dims[0]!=shape.dims[1]) {
             throw new LinearAlgebraException(ErrorMessages.getSquareShapeErr(shape));
         }
     }

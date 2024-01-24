@@ -180,12 +180,13 @@ public class Shape implements Serializable {
         int index = 0;
 
         for(int i=0; i<indices.length-1; i++) {
-            if(indices[i] < 0 || indices[i] >= dims[i]) {
-                throw new IndexOutOfBoundsException("Index " + indices[i] + " out of bounds for axis " + i +
+            int idx = indices[i];
+            if(idx < 0 || idx >= dims[i]) {
+                throw new IndexOutOfBoundsException("Index " + idx + " out of bounds for axis " + i +
                         " of tensor with shape " + this);
             }
 
-            index += indices[i]*strides[i];
+            index += idx*strides[i];
         }
 
         return index + indices[indices.length-1];

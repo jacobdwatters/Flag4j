@@ -37,7 +37,8 @@ import com.flag4j.linalg.decompositions.ComplexLUDecomposition;
 import com.flag4j.linalg.decompositions.ComplexSVD;
 import com.flag4j.linalg.decompositions.LUDecomposition;
 import com.flag4j.linalg.decompositions.SVD;
-import com.flag4j.linalg.solvers.ComplexExactSolver;
+import com.flag4j.linalg.solvers.ComplexBackSolver;
+import com.flag4j.linalg.solvers.ComplexForwardSolver;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
@@ -3620,6 +3621,7 @@ public class CMatrix
         ParameterChecks.assertSquare(shape);
         LUDecomposition<CMatrix> lu = new ComplexLUDecomposition().decompose(this);
 
+        // TODO: Should this be a globally defined final value?
         double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
         CNumber det = ComplexDenseDeterminant.detLU(lu.getL(), lu.getU());
 
@@ -3627,14 +3629,15 @@ public class CMatrix
             throw new SingularMatrixException("Cannot invert.");
         }
 
-        // Solve inv(A)*L = inv(U) for inv(A) by solving L^H*inv(A)^H = inv(U)^H
-        ComplexExactSolver solver = new ComplexExactSolver();
-        CMatrix UinvT = Invert.invTriU(lu.getU()).H();
-        CMatrix LT = lu.getL().H();
-        CMatrix inverse = solver.solve(LT, UinvT).H();
+        // Solve U*inv(A) = inv(L) for inv(A)
+        ComplexBackSolver backSolver = new ComplexBackSolver();
+        ComplexForwardSolver forwardSolver = new ComplexForwardSolver(true);
 
-        return lu.getP().rightMult(inverse); // Finally, apply permutation matrix for LU decomposition.
-//        return inverse.mult(lu.getP());
+        // Compute the inverse of unit lower triangular matrix L.
+        CMatrix Linv = forwardSolver.solveIdentity(lu.getL());
+        CMatrix inverse = backSolver.solveLower(lu.getU(), Linv); // Compute inverse of row permuted A.
+
+        return lu.getP().rightMult(inverse); // Finally, apply permutation matrix from LU decomposition.
     }
 
 

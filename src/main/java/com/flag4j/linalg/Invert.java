@@ -61,7 +61,7 @@ public class Invert {
         }
 
         RealBackSolver backSolver = new RealBackSolver();
-        return backSolver.solve(src, Matrix.I(src.shape));
+        return backSolver.solveIdentity(src);
     }
 
 
@@ -74,13 +74,12 @@ public class Invert {
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static Matrix invTriL(Matrix src) {
-        ParameterChecks.assertSquare(src.shape);
         if(zeroOnDiag(src)) {
             throw new SingularMatrixException("Cannot invert.");
         }
 
         RealForwardSolver forwardSolver = new RealForwardSolver();
-        return forwardSolver.solve(src, Matrix.I(src.shape));
+        return forwardSolver.solveIdentity(src);
     }
 
 
@@ -131,7 +130,7 @@ public class Invert {
         }
 
         ComplexBackSolver backSolver = new ComplexBackSolver();
-        return backSolver.solve(src, CMatrix.I(src.shape));
+        return backSolver.solveIdentity(src);
     }
 
 
@@ -144,13 +143,12 @@ public class Invert {
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static CMatrix invTriL(CMatrix src) {
-        ParameterChecks.assertSquare(src.shape);
         if(zeroOnDiag(src)) {
             throw new SingularMatrixException("Cannot invert.");
         }
 
         ComplexForwardSolver forwardSolver = new ComplexForwardSolver();
-        return forwardSolver.solve(src, CMatrix.I(src.shape));
+        return forwardSolver.solveIdentity(src);
     }
 
 

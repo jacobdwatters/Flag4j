@@ -26,6 +26,7 @@ package com.flag4j.linalg.solvers;
 
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
+import com.flag4j.Matrix;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.exceptions.SingularMatrixException;
 
@@ -109,6 +110,88 @@ public class ComplexBackSolver implements LinearSolver<CMatrix, CVector> {
                 }
 
                 X.entries[xIndex] = B.entries[xIndex].sub(sum).div(diag);
+            }
+        }
+
+        return X;
+    }
+
+
+    /**
+     * Solves the linear system of equations given by {@code U*X=I} where the coefficient matrix {@code U}
+     * is an {@link CMatrix#isTriU() upper triangular} matrix and {@code I} is the {@link Matrix#isI() identity}
+     * matrix of appropriate size.
+     *
+     * @param U Upper triangular coefficient matrix in the linear system. If {@code U} is not actually
+     *          upper triangular, it will be treated as if it were.
+     * @return The solution to {@code X} in the linear system {@code U*X=B}.
+     * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. has a zero on the principle diagonal).
+     */
+    public CMatrix solveIdentity(CMatrix U) {
+        CNumber sum, diag;
+        int uIndex, xIndex;
+        int n = U.numRows;
+        CMatrix X = new CMatrix(U.shape);
+        CNumber z = CNumber.zero();
+
+        X.entries[X.entries.length-1] = U.entries[n*n-1].multInv();
+
+        for(int j=0; j<U.numCols; j++) {
+            for(int i=n-2; i>-1; i--) {
+                sum = (i == j) ? CNumber.one() : CNumber.zero();
+                uIndex = i*U.numCols;
+                xIndex = uIndex + j;
+                uIndex += i+1;
+                diag = U.entries[i*(n+1)];
+
+                if(diag.equals(z)) throw new SingularMatrixException("Cannot solve linear system.");
+
+                for(int k=i+1; k<n; k++) {
+                    sum.subEq(U.entries[uIndex++].mult(X.entries[k*X.numCols + j]));
+                }
+
+                X.entries[xIndex] = sum.div(diag);
+            }
+        }
+
+        return X;
+    }
+
+
+    /**
+     * Solves a special case of the linear system {@code U*X=L} for {@code X} where the coefficient matrix {@code U}
+     * is an {@link CMatrix#isTriU() upper triangular} matrix and the constant matrix {@code L} is
+     * {@link CMatrix#isTriL() lower triangular}.
+     *
+     * @param U Upper triangular coefficient matrix
+     * @param L Lower triangular constant matrix.
+     * @return The result of solving the linear system {@code U*X=L} for the matrix {@code X}.
+     */
+    public CMatrix solveLower(CMatrix U, CMatrix L) {
+        CNumber sum, diag;
+        int uIndex, xIndex;
+        int n = L.numRows;
+        CNumber uValue = U.entries[n*n-1];
+        int rowOffset = (n-1)*n;
+        CMatrix X = new CMatrix(L.shape);
+        CNumber z = CNumber.zero();
+
+        for(int j=0; j<n; j++) {
+            X.entries[rowOffset] = L.entries[rowOffset++].div(uValue);
+
+            for(int i=L.numCols-2; i>=0; i--) {
+                sum = CNumber.zero();
+                uIndex = i*U.numCols;
+                xIndex = uIndex + j;
+                diag = U.entries[i*(n+1)];
+
+                if(diag.equals(z)) throw new SingularMatrixException("Cannot solve linear system.");
+
+                for(int k=i+1; k<n; k++) {
+                    sum.addEq(U.entries[uIndex + k].mult(X.entries[k*X.numCols + j]));
+                }
+
+                X.entries[xIndex] = L.entries[xIndex].sub(sum).div(diag);
             }
         }
 

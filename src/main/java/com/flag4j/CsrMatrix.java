@@ -11,6 +11,7 @@ import com.flag4j.operations.dense_sparse.csr.real.RealCsrDenseMatrixMultiplicat
 import com.flag4j.operations.dense_sparse.csr.real.RealCsrDenseOperations;
 import com.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
+import com.flag4j.operations.sparse.csr.real.RealCsrEquals;
 import com.flag4j.operations.sparse.csr.real.RealCsrMatrixMultiplication;
 import com.flag4j.operations.sparse.csr.real.RealCsrMatrixProperties;
 import com.flag4j.operations.sparse.csr.real.RealCsrOperations;
@@ -1046,8 +1047,9 @@ public class CsrMatrix
      */
     @Override
     public Matrix stack(Matrix B, int axis) {
-        // TODO: Implementation
-        return null;
+        if(axis==0) return this.augment(B);
+        if(axis==1) return this.stack(B);
+        throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
     }
 
 
@@ -1065,8 +1067,9 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix stack(CooMatrix B, int axis) {
-        // TODO: Implementation
-        return null;
+        if(axis==0) return this.augment(B);
+        if(axis==1) return this.stack(B);
+        throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
     }
 
 
@@ -1084,8 +1087,9 @@ public class CsrMatrix
      */
     @Override
     public CMatrix stack(CMatrix B, int axis) {
-        // TODO: Implementation
-        return null;
+        if(axis==0) return this.augment(B);
+        if(axis==1) return this.stack(B);
+        throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
     }
 
 
@@ -1103,8 +1107,9 @@ public class CsrMatrix
      */
     @Override
     public CsrCMatrix stack(CooCMatrix B, int axis) {
-        // TODO: Implementation
-        return null;
+        if(axis==0) return this.augment(B);
+        if(axis==1) return this.stack(B);
+        throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
     }
 
 
@@ -1252,8 +1257,9 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix stack(Vector b, int axis) {
-        // TODO: Implementation
-        return null;
+        if(axis==0) return this.augment(b);
+        if(axis==1) return this.stack(b);
+        throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
     }
 
 
@@ -1273,8 +1279,9 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix stack(CooVector b, int axis) {
-        // TODO: Implementation
-        return null;
+        if(axis==0) return this.augment(b);
+        if(axis==1) return this.stack(b);
+        throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
     }
 
 
@@ -1294,8 +1301,9 @@ public class CsrMatrix
      */
     @Override
     public CsrCMatrix stack(CVector b, int axis) {
-        // TODO: Implementation
-        return null;
+        if(axis==0) return this.augment(b);
+        if(axis==1) return this.stack(b);
+        throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
     }
 
 
@@ -1315,8 +1323,9 @@ public class CsrMatrix
      */
     @Override
     public CsrCMatrix stack(CooCVector b, int axis) {
-        // TODO: Implementation
-        return null;
+        if(axis==0) return this.augment(b);
+        if(axis==1) return this.stack(b);
+        throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
     }
 
 
@@ -1762,8 +1771,7 @@ public class CsrMatrix
      */
     @Override
     public Vector mult(Vector b) {
-        // TODO: Implementation
-        return null;
+        return RealCsrDenseMatrixMultiplication.standardVector(this, b);
     }
 
 
@@ -2415,8 +2423,7 @@ public class CsrMatrix
      */
     @Override
     public double norm(double p, double q) {
-        // TODO: Implementation
-        return 0;
+        return RealCsrOperations.matrixNormLpq(this, p, q);
     }
 
 
@@ -2474,7 +2481,7 @@ public class CsrMatrix
      */
     @Override
     public boolean isOrthogonal() {
-        return isSquare() && this.mult(this.T()).round().equals(Matrix.I(numRows));
+        return isSquare() && this.mult(this.T()).allClose(Matrix.I(numRows));
     }
 
 
@@ -2537,18 +2544,17 @@ public class CsrMatrix
     /**
      * Checks if all entries of this tensor are close to the entries of the argument {@code tensor}.
      *
-     * @param tensor Tensor to compare this tensor to.
+     * @param src Tensor to compare this tensor to.
      * @param relTol Relative tolerance.
      * @param absTol Absolute tolerance.
      * @return True if the argument {@code tensor} is the same shape as this tensor and all entries are 'close', i.e.
      * elements {@code a} and {@code b} at the same positions in the two tensors respectively satisfy
      * {@code |a-b| <= (atol + rtol*|b|)}. Otherwise, returns false.
-     * @see #allClose(Object)
+     * @see com.flag4j.core.TensorBase#allClose(Object, double, double)
      */
     @Override
-    public boolean allClose(CsrMatrix tensor, double relTol, double absTol) {
-        // TODO: Implementation
-        return false;
+    public boolean allClose(CsrMatrix src, double relTol, double absTol) {
+        return RealCsrEquals.allClose(this, src, relTol, absTol);
     }
 
 
@@ -2746,8 +2752,7 @@ public class CsrMatrix
      */
     @Override
     public double norm() {
-        // TODO: Implementation
-        return 0;
+        return RealDenseOperations.tensorNormL2(entries); // Zeros do not contribute to this norm.
     }
 
 
@@ -2761,8 +2766,7 @@ public class CsrMatrix
      */
     @Override
     public double norm(double p) {
-        // TODO: Implementation
-        return 0;
+        return RealDenseOperations.tensorNormLp(entries, p); // Zeros do not contribute to this norm.
     }
 
 

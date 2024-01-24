@@ -291,7 +291,6 @@ public class PermutationMatrix implements Serializable {
         int colIdx;
         int rowOffset;
 
-
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
             colIdx = swapPointers[rowIdx];
             for(int j=0; j<src.numRows; j++) {

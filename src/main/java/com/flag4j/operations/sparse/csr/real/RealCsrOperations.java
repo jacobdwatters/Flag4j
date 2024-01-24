@@ -131,7 +131,33 @@ public final class RealCsrOperations {
             }
         }
 
-        return new CsrMatrix(src.shape.copy().swapAxes(0, 1), dest, rowPtrs, colIndices);
+        return new CsrMatrix(src.numCols, src.numRows, dest, rowPtrs, colIndices);
+    }
+
+
+    /**
+     * Compute the L<sub>p,q</sub> norm of a sparse CSR matrix.
+     * @param src Sparse CSR matrix to compute norm of.
+     * @return The L<sub>p,q</sub> norm of the matrix.
+     */
+    public static double matrixNormLpq(CsrMatrix src, double p, double q) {
+        CsrMatrix tSrc = transpose(src);
+        double norm = 0;
+        double pOverQ = p/q;
+
+        for(int i=0; i<tSrc.numRows; i++) {
+            int start = tSrc.rowPointers[i];
+            int stop = tSrc.rowPointers[i+1];
+            double colNorm = 0;
+
+            for(int j=start; j<stop; j++) {
+                colNorm += Math.pow(Math.abs(tSrc.entries[j]), p);
+            }
+
+            norm += Math.pow(colNorm, pOverQ);
+        }
+
+        return Math.pow(norm, 1.0/q);
     }
 }
 

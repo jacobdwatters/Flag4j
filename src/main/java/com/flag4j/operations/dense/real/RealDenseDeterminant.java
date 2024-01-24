@@ -157,9 +157,10 @@ public class RealDenseDeterminant {
     public static double detTri(Matrix A) {
         double det = 1;
         int step = A.numCols + 1;
+        int size =  A.entries.length;
 
         // Compute the determinant of U
-        for (int i = 0; i < A.entries.length; i += step) {
+        for (int i=0; i<size; i += step) {
             det *= A.entries[i];
         }
 
