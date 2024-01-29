@@ -27,8 +27,8 @@ package com.flag4j.linalg;
 import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.linalg.decompositions.ComplexLUDecomposition;
-import com.flag4j.linalg.decompositions.RealLUDecomposition;
+import com.flag4j.linalg.decompositions.lu.ComplexLUDecomposition;
+import com.flag4j.linalg.decompositions.lu.RealLUDecomposition;
 
 /**
  * This class contains several methods for computing row echelon, reduced row echelon, and extended reduced row echelon

@@ -24,6 +24,9 @@
 
 package com.flag4j.operations.dense.real;
 
+import com.flag4j.Matrix;
+import com.flag4j.Vector;
+import com.flag4j.concurrency.ThreadManager;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -31,7 +34,12 @@ import com.flag4j.util.ParameterChecks;
 /**
  * This class provides low level implementations for several vector operation.
  */
-public class RealDenseVectorOperations {
+public final class RealDenseVectorOperations {
+
+    /**
+     * Minimum number of entries to apply concurrent algorithm for outer product.
+     */
+    private static final int OUTER_CONCURRENT_THRESHOLD = 275_000;
 
     private RealDenseVectorOperations() {
         // Hide default constructor for utility class.
@@ -69,13 +77,50 @@ public class RealDenseVectorOperations {
 
         for(int i=0; i<src1.length; i++) {
             destIndex = i*src2.length;
+            double v1 = src1[i];
 
-            for(double v : src2) {
-                dest[destIndex++] = src1[i]*v;
+            for(double v2 : src2) {
+                dest[destIndex++] = v1*v2;
             }
         }
 
         return dest;
     }
 
+
+    /**
+     * Computes the vector outer product between two real dense vectors.
+     * @param src1 Entries of first vector.
+     * @param src2 Entries of second vector.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static double[] outerProductConcurrent(double[] src1, double[] src2) {
+        double[] dest = new double[src1.length*src2.length];
+
+        ThreadManager.concurrentLoop(0, src1.length, (int i)->{
+            int destIndex = i*src2.length;
+            double v1 = src1[i];
+
+            for(double v2 : src2) {
+                dest[destIndex++] = v1*v2;
+            }
+        });
+
+        return dest;
+    }
+
+
+    /**
+     * Dispatches an outer product problem to an appropriate implementation based on the size of the vectors involved.
+     * @param src1 First vector in outer product.
+     * @param src2 Second vector in outer product.
+     * @return The outer product of the two vectors {@code src1} and {@code src2}.
+     */
+    public static Matrix dispatchOuter(Vector src1, Vector src2) {
+        int totalEntries = src1.size*src2.size;
+        if(totalEntries < OUTER_CONCURRENT_THRESHOLD)
+            return new Matrix(src1.size, src2.size, outerProduct(src1.entries, src2.entries));
+        else
+            return new Matrix(src1.size, src2.size, outerProductConcurrent(src1.entries, src2.entries));
+    }
 }

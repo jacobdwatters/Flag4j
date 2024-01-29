@@ -46,7 +46,7 @@ public class Householder {
     /**
      * Computes the Householder reflector which describes a reflection through a hyperplane containing the origin which
      * is normal to the specified {@code normal} vector.
-     * @param normal The vector normal to the plane the Householder reflector will reflect through\.
+     * @param normal The vector normal to the plane the Householder reflector will reflect through.
      * @return A transformation matrix which describes a reflection through a plane containing the origin with the
      * specified {@code normal} vector, i.e. a Householder reflector.
      */
@@ -57,15 +57,42 @@ public class Householder {
         v = normal.div(normal.entries[0] - signedNorm);
         v.entries[0] = 1;
 
-        // Create projection matrix
-        Matrix P = v.outer(v).mult(-2.0/v.inner(v));
+        // Create Householder matrix
+        Matrix H = v.outer(v).mult(-2.0/v.inner(v));
 
-        int step = P.numCols+1;
-        for(int i=0; i<P.entries.length; i+=step) {
-            P.entries[i] = 1 + P.entries[i];
+        int step = H.numCols+1;
+        for(int i=0; i<H.entries.length; i+=step) {
+            H.entries[i] = 1 + H.entries[i];
         }
 
-        return P;
+        return H;
+    }
+
+
+    /**
+     * Computes the vector {@code v} in of a Householder matrix {@code H=I-2vv}<sup>T</sup> where {@code H} is a
+     * transformation matrix which reflects a vector across the plane normal to {@code normal}.
+     * @param normal Vector normal to the plane which {@code H} reflects across.
+     * @return The vector {@code v} in of a Householder matrix {@code H=I-2vv}<sup>T</sup> which reflects across a plane
+     * normal to {@code normal}.
+     */
+    public static Vector getVector(Vector normal) {
+        double normX = normal.norm();
+        double x1 = normal.entries[0];
+        normX = (x1 >= 0) ? -normX : normX;
+        double v1 = x1 - normX;
+
+        // Initialize v with norm and set first element
+        Vector v = normal.copy();
+        v.entries[0] = v1;
+
+        // Compute norm of v noting that it only differs from normal by the first element.
+        double normV = Math.sqrt(normX*normX - x1*x1 + v1*v1);
+
+        for(int i=0; i<v.entries.length; i++)
+            v.entries[i] /= normV; // Normalize v to make it a unit vector
+
+        return v;
     }
 
 

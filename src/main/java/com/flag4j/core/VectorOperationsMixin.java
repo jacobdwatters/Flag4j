@@ -457,9 +457,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
 
     /**
      * Converts a vector to an equivalent matrix.
-     * @return A matrix equivalent to this vector. This method will respect the orientation of the vector. That is, if
-     * this vector is a row vector, then the resulting matrix will have a single row. If this vector is a column vector, then the
-     * resulting matrix will have a single column.
+     * @return A matrix equivalent to this vector where the vector is treated as a column vector.
      */
     TT toMatrix();
 

@@ -28,7 +28,7 @@ import com.flag4j.CMatrix;
 import com.flag4j.CVector;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;
-import com.flag4j.linalg.decompositions.QRDecomposition;
+import com.flag4j.linalg.decompositions.qr.QRDecomposition;
 
 
 // TODO: Add option to use SVD instead of QR (SVD should be default). It will be slower but has better numerical properties.
@@ -50,7 +50,7 @@ public abstract class LstsqSolver<
     /**
      * Decomposer to compute the {@code QR} decomposition for using the least-squares solver.
      */
-    protected final QRDecomposition<T, U> qr;
+    protected final QRDecomposition<T, ?> qr;
     /**
      * {@code Q} The hermation transpose of the orthonormal matrix from the {@code QR} decomposition.
      */
@@ -66,7 +66,7 @@ public abstract class LstsqSolver<
      * @param backSolver The solver to solve the upper triangular system resulting from the {@code QR} decomposition
      *                   which is equivalent to solving the normal equations
      */
-    protected LstsqSolver(QRDecomposition<T, U> qr, LinearSolver<T, U> backSolver) {
+    protected LstsqSolver(QRDecomposition<T, ?> qr, LinearSolver<T, U> backSolver) {
         this.qr = qr;
         this.backSolver = backSolver;
     }

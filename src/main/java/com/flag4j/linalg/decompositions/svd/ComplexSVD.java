@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.decompositions;
+package com.flag4j.linalg.decompositions.svd;
 
 
 import com.flag4j.CMatrix;

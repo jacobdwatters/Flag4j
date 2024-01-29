@@ -22,18 +22,19 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.decompositions;
+package com.flag4j.linalg.decompositions.hess;
 
-import com.flag4j.Matrix;
-import com.flag4j.Vector;
+import com.flag4j.CMatrix;
+import com.flag4j.CVector;
+import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.linalg.transformations.Householder;
 
 /**
- * <p>Computes the Hessenburg decomposition of a real dense square matrix. That is, for a square matrix
- * {@code A}, computes the decomposition {@code A=QHQ<sup>T</sup>} where {@code Q} is an orthogonal matrix and
+ * <p>Computes the Hessenburg decomposition of a complex dense square matrix. That is, for a square matrix
+ * {@code A}, computes the decomposition {@code A=QHQ<sup>H</sup>} where {@code Q} is a unitary matrix and
  * {@code H} is a matrix in upper Hessenburg form which is similar to {@code A} (i.e. has the same eigenvalues/vectors).</p>
  *
- * <p>A matrix {@code H} is in upper Hessenburg form if it is nearly upper triangular. Specifically, if {@code H} has
+ * <p>A matrix {@code B} is in upper Hessenburg form if it is nearly upper triangular. Specifically, if {@code B} has
  * all zeros below the first sub-diagonal.</p>
  *
  * <p>For example, the following matrix is in upper Hessenburg form where each {@code x} may hold a different value:
@@ -45,27 +46,26 @@ import com.flag4j.linalg.transformations.Householder;
  *      [ 0 0 0 x x ]]</pre>
  * </p>
  */
-public final class RealHessenburgDecomposition extends HessenburgDecomposition<Matrix, Vector> {
-
+public final class ComplexHessenburgDecomposition extends HessenburgDecomposition<CMatrix, CVector> {
 
     /**
-     * Constructs a {@link RealHessenburgDecomposition Hessenburg decomposer} for real dense matrices.
-     * This decomposer will compute the orthogonal matrix {@code Q} corresponding to {@code A=QBQ<sup>T</sup>}. To
-     * create a Hessenburg decomposer which <b>does not</b> compute {@code Q}, see {@link #RealHessenburgDecomposition(boolean)}.
+     * Constructs a {@link ComplexHessenburgDecomposition Hessenburg decomposer} for real dense matrices.
+     * This decomposer will compute the unitary matrix {@code Q} corresponding to {@code A=QHQ<sup>H</sup>}. To
+     * create a Hessenburg decomposer which <b>does not</b> compute {@code Q}, see {@link #ComplexHessenburgDecomposition(boolean)}.
      */
-    public RealHessenburgDecomposition() {
+    public ComplexHessenburgDecomposition() {
         super(true);
     }
 
 
     /**
      * Constructs a {@link RealHessenburgDecomposition Hessenburg decomposer} for real dense matrices. The
-     * @param computeQ Flag for computing {@code Q} in the decomposition corresponding to {@code A=QHQ<sup>T</sup>}.<br>
+     * @param computeQ Flag for computing {@code Q} in the decomposition corresponding to {@code A=QHQ<sup>H</sup>}.<br>
      *                 - If true, {@code Q} will be computed.<br>
      *                 - If false, {@code Q} will <b>not</b> be computed. This may give a performance increase if
      *                 {@code Q} is not needed.
      */
-    public RealHessenburgDecomposition(boolean computeQ) {
+    public ComplexHessenburgDecomposition(boolean computeQ) {
         super(computeQ);
     }
 
@@ -77,7 +77,7 @@ public final class RealHessenburgDecomposition extends HessenburgDecomposition<M
      * @return Householder reflector embedded in an identity matrix with the same size as {@code H}.
      */
     @Override
-    protected Matrix initRef(Vector col) {
+    protected CMatrix initRef(CVector col) {
         return Householder.getReflector(col);
     }
 
@@ -88,8 +88,8 @@ public final class RealHessenburgDecomposition extends HessenburgDecomposition<M
      * @return The initial {@code Q} matrix in the Hessenburg decomposition.
      */
     @Override
-    protected Matrix initQ() {
-        return Matrix.I(H.numRows);
+    protected CMatrix initQ() {
+        return CMatrix.I(this.H.numRows);
     }
 
 
@@ -101,10 +101,7 @@ public final class RealHessenburgDecomposition extends HessenburgDecomposition<M
     @Override
     protected void setZeros(int k) {
         for(int i=k+2; i<H.numRows; i++) {
-            H.entries[i*H.numCols + k] = 0;
+            H.entries[i*H.numCols + k] = new CNumber();
         }
     }
 }
-
-
-

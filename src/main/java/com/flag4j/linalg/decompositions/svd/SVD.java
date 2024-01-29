@@ -22,17 +22,18 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.decompositions;
+package com.flag4j.linalg.decompositions.svd;
 
 import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.core.MatrixMixin;
+import com.flag4j.linalg.decompositions.Decomposition;
 
 import java.util.Arrays;
 
 /**
  * This abstract class specifies methods for computing the singular value decomposition (SVD) of a matrix.
- * That is, decompose a rectangular matrix {@code M} as {@code M=USV<sup>H</sup>} where {@code U} and {@code V} are
+ * That is, decompose a rectangular matrix {@code M} as {@code M=USV}<sup>H</sup> where {@code U} and {@code V} are
  * unitary matrices whose columns are the left and right singular vectors of {@code M} and {@code S} is a rectangular
  * diagonal matrix containing the singular values of {@code M}.
  * @param <T> The type of the matrix to compute the singular value decomposition of.
@@ -50,15 +51,15 @@ public abstract class SVD<
      */
     protected boolean reduced;
     /**
-     * The unitary matrix {@code U} corresponding to {@code M=USV<sup>H</sup>} in the SVD.
+     * The unitary matrix {@code U} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
      */
     protected T U;
     /**
-     * The rectangular diagonal {@code S} corresponding to {@code M=USV<sup>H</sup>} in the SVD.
+     * The rectangular diagonal {@code S} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
      */
     protected Matrix S;
     /**
-     * The unitary matrix {@code V} corresponding to {@code M=USV<sup>H</sup>} in the SVD.
+     * The unitary matrix {@code V} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
      */
     protected T V;
     /**
@@ -85,8 +86,8 @@ public abstract class SVD<
 
 
     /**
-     * Gets the unitary matrix {@code U} corresponding to {@code M=USV<sup>H</sup>} in the SVD.
-     * @return {@code U} corresponding to {@code M=USV<sup>H</sup>} in the SVD.
+     * Gets the unitary matrix {@code U} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
+     * @return {@code U} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
      */
     public T getU() {
         return U;
@@ -94,8 +95,8 @@ public abstract class SVD<
 
 
     /**
-     * Gets the diagonal matrix {@code S} corresponding to {@code M=USV<sup>H</sup>} in the SVD.
-     * @return {@code S} corresponding to {@code M=USV<sup>H</sup>} in the SVD.
+     * Gets the diagonal matrix {@code S} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
+     * @return {@code S} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
      */
     public Matrix getS() {
         return S;
@@ -103,8 +104,8 @@ public abstract class SVD<
 
 
     /**
-     * Gets the unitary matrix {@code V} corresponding to {@code M=USV<sup>H</sup>} in the SVD.
-     * @return {@code V} corresponding to {@code M=USV<sup>H</sup>} in the SVD. Note that the hermation transpose has
+     * Gets the unitary matrix {@code V} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
+     * @return {@code V} corresponding to {@code M=USV}<sup>H</sup> in the SVD. Note that the hermation transpose has
      * <b>not</b> been computed.
      */
     public T getV() {
@@ -187,7 +188,7 @@ public abstract class SVD<
 
 
     /**
-     * Gets the eigen values and vectors of symmetric the block matrix which corresponds
+     * Gets the eigen values and vectors of symmetric block matrix which corresponds
      * to the singular values and vectors of the matrix being decomposed.
      * @param B Symmetric block matrix to compute the eigenvalues of.
      * @param eigVals Storage for eigenvalues.

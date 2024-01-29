@@ -27,13 +27,14 @@ package com.flag4j.linalg.solvers;
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
 import com.flag4j.exceptions.SingularMatrixException;
-import com.flag4j.linalg.decompositions.ComplexLUDecomposition;
+import com.flag4j.linalg.decompositions.lu.ComplexLUDecomposition;
+import com.flag4j.linalg.decompositions.lu.LUDecomposition;
 import com.flag4j.operations.dense.complex.ComplexDenseDeterminant;
 
 
 /**
  * Solver for solving a well determined system of linear equations in an exact sense using the
- * {@link com.flag4j.linalg.decompositions.LUDecomposition LU decomposition.}
+ * {@link LUDecomposition LU decomposition.}
  */
 public class ComplexExactSolver extends ExactSolver<CMatrix, CVector> {
 

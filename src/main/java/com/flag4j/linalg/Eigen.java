@@ -29,9 +29,9 @@ import com.flag4j.CVector;
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.linalg.decompositions.ComplexSchurDecomposition;
-import com.flag4j.linalg.decompositions.RealSchurDecomposition;
-import com.flag4j.linalg.decompositions.SchurDecomposition;
+import com.flag4j.linalg.decompositions.schur.ComplexSchurDecomposition;
+import com.flag4j.linalg.decompositions.schur.RealSchurDecomposition;
+import com.flag4j.linalg.decompositions.schur.SchurDecomposition;
 import com.flag4j.linalg.solvers.ComplexBackSolver;
 import com.flag4j.linalg.solvers.RealBackSolver;
 

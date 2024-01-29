@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.decompositions;
+package com.flag4j.linalg.decompositions.schur;
 
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
@@ -31,9 +31,11 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;
 import com.flag4j.linalg.Eigen;
+import com.flag4j.linalg.decompositions.Decomposition;
+import com.flag4j.linalg.decompositions.hess.HessenburgDecomposition;
 import com.flag4j.linalg.transformations.Givens;
-import com.flag4j.util.ParameterChecks;
 import com.flag4j.rng.RandomCNumber;
+import com.flag4j.util.ParameterChecks;
 
 /**
  * <p>This abstract class specifies methods for computing the Schur decomposition of a square matrix.

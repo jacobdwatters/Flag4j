@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.decompositions;
+package com.flag4j.linalg.decompositions.cholesky;
 
 import com.flag4j.Matrix;
 import com.flag4j.linalg.PositiveDefiniteness;
@@ -53,13 +53,15 @@ public final class RealCholeskyDecomposition extends CholeskyDecomposition<Matri
     /**
      * Constructs a Cholesky decomposer.
      *
-     * @param checkPosDef Flag indicating if the positive definiteness of the matrix should be checked before decomposing.
+     * @param enforcePosDef Flag indicating if the symmetric positive definiteness of the matrix should be checked
+     *                    before decomposing.
      *                    If true, a check for positive definiteness will be done before the matrix is decomposed. If
      *                    it is not, an error will be thrown. If false, no check will be made and the matrix will be
-     *                    assumed to be positive definite.
+     *                    assumed to be positive definite. <b>WARNING: </b> Checking positive definiteness can
+     *                    be very computationally expensive.
      */
-    public RealCholeskyDecomposition(boolean checkPosDef) {
-        super(checkPosDef);
+    public RealCholeskyDecomposition(boolean enforcePosDef) {
+        super(enforcePosDef);
     }
 
 
@@ -84,9 +86,9 @@ public final class RealCholeskyDecomposition extends CholeskyDecomposition<Matri
      */
     @Override
     public RealCholeskyDecomposition decompose(Matrix src) {
-        if(checkPosDef && !PositiveDefiniteness.isPosDef(src)) {
+        if(enforcePosDef && !(src.isSymmetric() && PositiveDefiniteness.isPosDef(src))) {
             throw new IllegalArgumentException("Matrix must be positive definite.");
-        } else if(!checkPosDef) {
+        } else if(!enforcePosDef) {
             ParameterChecks.assertSquare(src.shape);
         }
 

@@ -22,10 +22,11 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.decompositions;
+package com.flag4j.linalg.decompositions.hess;
 
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;
+import com.flag4j.linalg.decompositions.Decomposition;
 import com.flag4j.util.ParameterChecks;
 
 /**

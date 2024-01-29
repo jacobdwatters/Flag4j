@@ -46,12 +46,15 @@ public class VectorNorms {
      */
     public static double norm(double... src) {
         double norm = 0;
+        double maxAbs = AggregateReal.maxAbs(src);
 
+        // Compute norm as a = |max(src)|, ||src|| = a*||src * (1/a)|| to help protect against overflow.
         for(double v : src) {
-            norm += v*v;
+            double vScaled = v/maxAbs;
+            norm += vScaled*vScaled;
         }
 
-        return Math.sqrt(norm);
+        return Math.sqrt(norm)*maxAbs;
     }
 
 
@@ -62,14 +65,16 @@ public class VectorNorms {
      */
     public static double norm(CNumber... src) {
         double norm = 0;
-        double mag;
+        double scaledMag;
+        double maxAbs = AggregateComplex.maxAbs(src);
 
+        // Compute norm as a = |max(src)|, ||src|| = a*||src * (1/a)|| to help protect against overflow.
         for(CNumber cNumber : src) {
-            mag = cNumber.mag();
-            norm += mag*mag;
+            scaledMag = cNumber.mag() / maxAbs;
+            norm += scaledMag*scaledMag;
         }
 
-        return Math.sqrt(norm);
+        return Math.sqrt(norm)*maxAbs;
     }
 
 

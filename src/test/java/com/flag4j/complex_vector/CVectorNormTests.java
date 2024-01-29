@@ -24,7 +24,7 @@ class CVectorNormTests {
     @Test
     void normTestCase() {
         // ------------------ Sub-case 1 ------------------
-        expNorm = 6126.638392078557;
+        expNorm = 6126.638392078558;
         assertEquals(expNorm, a.norm());
     }
 

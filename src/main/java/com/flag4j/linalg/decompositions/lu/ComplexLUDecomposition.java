@@ -22,21 +22,27 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.decompositions;
+package com.flag4j.linalg.decompositions.lu;
 
-import com.flag4j.Matrix;
+import com.flag4j.CMatrix;
+import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.exceptions.LinearAlgebraException;
 
+
 /**
- * <p>This class provides methods for computing the LU decomposition of a real dense matrix.</p>
+ * <p>This class provides methods for computing the LU decomposition of a complex dense matrix.</p>
  * <p>The following decompositions are provided: {@code A=LU}, {@code PA=LU}, and {@code PAQ=LU}.</p>
  */
-public final class RealLUDecomposition extends LUDecomposition<Matrix> {
+public final class ComplexLUDecomposition extends LUDecomposition<CMatrix> {
+    /**
+     * Complex number equal to zero.
+     */
+    static final CNumber z = CNumber.zero();
 
     /**
      * Constructs a LU decomposer to decompose the specified matrix using partial pivoting.
      */
-    public RealLUDecomposition() {
+    public ComplexLUDecomposition() {
         super(Pivoting.PARTIAL.ordinal());
     }
 
@@ -47,7 +53,7 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
      * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
      *                 will be used. If pivoting is any other value, no pivoting will be used.
      */
-    public RealLUDecomposition(int pivoting) {
+    public ComplexLUDecomposition(int pivoting) {
         super(pivoting);
     }
 
@@ -61,7 +67,7 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
      *                     no pivoting. If a pivot value (value along the principle diagonal of U) is within this tolerance
      *                     from zero, then an exception will be thrown if solving with no pivoting.
      */
-    public RealLUDecomposition(int pivoting, double zeroPivotTol) {
+    public ComplexLUDecomposition(int pivoting, double zeroPivotTol) {
         super(pivoting, zeroPivotTol);
     }
 
@@ -71,8 +77,8 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
      * @param src Source matrix to decompose.
      */
     @Override
-    protected void initLU(Matrix src) {
-        LU = new Matrix(src);
+    protected void initLU(CMatrix src) {
+        LU = new CMatrix(src);
     }
 
 
@@ -81,11 +87,9 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
      */
     @Override
     protected void noPivot() {
-        int colStop = Math.min(LU.numCols, LU.numRows);
-
         // Using Gaussian elimination and no pivoting
-        for(int j=0; j<colStop; j++) {
-            if(j<LU.numRows && Math.abs(LU.entries[j*LU.numCols + j]) < zeroPivotTol) {
+        for(int j=0; j<LU.numCols; j++) {
+            if(j<LU.numRows && (LU.entries[j*LU.numCols + j]).mag() < zeroPivotTol) {
                 throw new LinearAlgebraException("Zero pivot encountered in decomposition." +
                         " Consider using LU decomposition with partial pivoting.");
             }
@@ -100,11 +104,10 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
      */
     @Override
     protected void partialPivot() {
-        int colStop = Math.min(LU.numCols, LU.numRows);
         int maxIndex;
 
         // Using Gaussian elimination with row pivoting.
-        for(int j=0; j<colStop; j++) {
+        for(int j=0; j<LU.numCols; j++) {
             maxIndex = maxColIndex(j); // Find row index of max value (in absolute value) in column j so that the index >= j.
 
             // Make the appropriate swaps in LU and P (This is the partial pivoting step).
@@ -123,10 +126,9 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
     @Override
     protected void fullPivot() {
         int[] maxIndex;
-        int colStop = Math.min(LU.numCols, LU.numRows);
 
         // Using Gaussian elimination with row and column (rook) pivoting.
-        for(int j=0; j<colStop; j++) {
+        for(int j=0; j<LU.numCols; j++) {
             maxIndex = maxIndex(j);
 
             // Make the appropriate swaps in LU, P and Q (This is the full pivoting step).
@@ -147,19 +149,18 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
      * @param j Column for which to compute values to the right of.
      */
     private void computeRows(int j) {
-        double m;
+        CNumber m;
         int pivotRow = j*LU.numCols;
-        int iRow;
 
         for(int i=j+1; i<LU.numRows; i++) {
-            iRow = i*LU.numCols;
+            int iRow = i*LU.numCols;
             m = LU.entries[iRow + j];
-            m = LU.entries[pivotRow + j] == 0 ? m : m/LU.entries[pivotRow + j];
+            m = LU.entries[pivotRow + j].equals(z) ? m.copy() : m.div(LU.entries[pivotRow + j]);
 
-            if(m!=0) {
+            if(!m.equals(z)) {
                 // Compute and set U values.
-                for (int k = j; k < LU.numCols; k++) {
-                    LU.entries[iRow + k] -= m * LU.entries[pivotRow + k];
+                for(int k=j; k<LU.numCols; k++) {
+                    LU.entries[iRow + k].subEq(m.mult(LU.entries[pivotRow + k]));
                 }
             }
 
@@ -180,7 +181,7 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
         double value;
 
         for(int i=j; i<LU.numRows; i++) {
-            value = Math.abs(LU.entries[i*LU.numCols + j]);
+            value = LU.entries[i*LU.numCols+j].mag();
             if(value > currentMax) {
                 currentMax = value;
                 maxIndex = i;
@@ -198,17 +199,15 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
      */
     private int[] maxIndex(int startIndex) {
         double currentMax = -1;
-        double value;
-        int rowIdx;
         int[] index = {-1, -1};
-
+        double value;
+        int idx;
 
         for(int i=startIndex; i<LU.numRows; i++) {
-            rowIdx = i*LU.numCols;
+            idx = i*LU.numCols;
 
             for(int j=startIndex; j<LU.numCols; j++) {
-                value = Math.abs(LU.entries[rowIdx+j]);
-
+                value = LU.entries[idx+j].mag();
                 if(value > currentMax) {
                     currentMax = value;
                     index[0] = i;
@@ -227,14 +226,15 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
      * @return The lower triangular matrix of the decomposition.
      */
     @Override
-    public Matrix getL() {
-        Matrix L = new Matrix(LU.numRows, Math.min(LU.numRows, LU.numCols));
+    public CMatrix getL() {
+        CMatrix L = new CMatrix(LU.numRows, Math.min(LU.numRows, LU.numCols));
 
         // Copy L values from LU matrix.
         for(int i=0; i<LU.numRows; i++) {
             if(i<LU.numCols) {
-                L.entries[i*L.numCols+i] = 1; // Set principle diagonal to be 1, so it is unit lower-triangular.
+                L.entries[i*L.numCols+i] = new CNumber(1); // Set principle diagonal to be ones.
             }
+
             System.arraycopy(LU.entries, i*LU.numCols, L.entries, i*L.numCols, i);
         }
 
@@ -248,8 +248,8 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
      * @return The lower triangular matrix of the decomposition.
      */
     @Override
-    public Matrix getU() {
-        Matrix U = new Matrix(Math.min(LU.numRows, LU.numCols), LU.numCols);
+    public CMatrix getU() {
+        CMatrix U = new CMatrix(Math.min(LU.numRows, LU.numCols), LU.numCols);
 
         int stopIdx = Math.min(LU.numRows, LU.numCols);
 

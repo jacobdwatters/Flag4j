@@ -27,13 +27,14 @@ package com.flag4j.linalg.solvers;
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.exceptions.SingularMatrixException;
-import com.flag4j.linalg.decompositions.RealLUDecomposition;
+import com.flag4j.linalg.decompositions.lu.LUDecomposition;
+import com.flag4j.linalg.decompositions.lu.RealLUDecomposition;
 import com.flag4j.operations.dense.real.RealDenseDeterminant;
 
 
 /**
  * Solver for solving a well determined system of linear equations in an exact sense using the
- * {@link com.flag4j.linalg.decompositions.LUDecomposition LU decomposition.}
+ * {@link LUDecomposition LU decomposition.}
  */
 public class RealExactSolver extends ExactSolver<Matrix, Vector> {
 

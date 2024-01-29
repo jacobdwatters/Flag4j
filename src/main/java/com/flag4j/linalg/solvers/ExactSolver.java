@@ -29,7 +29,7 @@ import com.flag4j.PermutationMatrix;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;
 import com.flag4j.exceptions.SingularMatrixException;
-import com.flag4j.linalg.decompositions.LUDecomposition;
+import com.flag4j.linalg.decompositions.lu.LUDecomposition;
 import com.flag4j.util.ParameterChecks;
 
 /**

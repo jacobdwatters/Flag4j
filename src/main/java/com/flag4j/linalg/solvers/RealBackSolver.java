@@ -169,7 +169,7 @@ public class RealBackSolver implements LinearSolver<Matrix, Vector> {
         double sum, diag;
         int uIndex, xIndex;
         int n = L.numRows;
-        double uValue = U.entries[n*n-1];
+        double uValue = U.entries[U.entries.length-1];
         int rowOffset = (n-1)*n;
         Matrix X = new Matrix(L.shape);
 

@@ -2,8 +2,8 @@ package com.flag4j.linalg.solvers;
 
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
-import com.flag4j.linalg.decompositions.ComplexQRDecomposition;
-import com.flag4j.linalg.decompositions.QRDecomposition;
+import com.flag4j.linalg.decompositions.qr.ComplexQRDecomposition;
+import com.flag4j.linalg.decompositions.qr.QRDecomposition;
 
 /**
  * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,
@@ -20,6 +20,6 @@ public class ComplexLstsqSolver extends LstsqSolver<CMatrix, CVector> {
      * {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
      */
     public ComplexLstsqSolver() {
-        super(new ComplexQRDecomposition(false), new ComplexBackSolver());
+        super(new ComplexQRDecomposition(), new ComplexBackSolver());
     }
 }

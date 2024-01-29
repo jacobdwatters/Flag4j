@@ -22,33 +22,45 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.decompositions;
+package com.flag4j.linalg.decompositions.schur;
 
 import com.flag4j.CMatrix;
-import com.flag4j.CVector;
+import com.flag4j.Matrix;
+import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.linalg.Eigen;
+import com.flag4j.linalg.decompositions.hess.RealHessenburgDecomposition;
 import com.flag4j.linalg.transformations.Householder;
+
 
 /**
  * <p>This class computes the Schur decomposition of a square matrix.
- * That is, decompose a square matrix {@code A} into {@code A=QUQ<sup>H</sup>} where {@code Q} is a unitary
- * matrix whose columns are the eigenvectors of {@code A} and {@code U} is an upper triangular matrix in
- * Schur form whose diagonal entries are the eigenvalues of {@code A}, corresponding to the columns of {@code Q},
- * repeated per their multiplicity.</p>
+ * That is, decompose a square matrix {@code A} into {@code A=UTU<sup>H</sup>} where {@code U} is a unitary
+ * matrix and {@code T} is an upper triangular matrix (or possibly block
+ * upper triangular matrix) in Schur form whose diagonal entries are the eigenvalues of {@code A}.</p>
  *
  * <p>Note, even if a matrix has only real entries, both {@code Q} and {@code U} may contain complex values.</p>
  */
-public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVector> {
+public class RealSchurDecomposition extends SchurDecomposition<Matrix, Vector> {
 
     /**
-     * Creates a Schur decomposer for a real dense matrix.
+     * Flag which indicates if {@code T} should be stored in real or complex Schur form.
+     * If true, {@code T} will be stored in real schur form (default). If false, {@code T}\
+     * will be stored in complex schur form.
      */
-    public ComplexSchurDecomposition() {
+    private final boolean realSchur;
+
+    /**
+     * Creates a Schur decomposer for a real dense matrix. {@code T} will be stored in
+     * Real Schur form. To convert {@code T} to real schur from see
+     * {@link SchurDecomposition#real2ComplexSchur(Matrix, Matrix)} or
+     */
+    public RealSchurDecomposition() {
         super(true);
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-        hess = new ComplexHessenburgDecomposition(computeU);
+        hess = new RealHessenburgDecomposition(super.computeU);
+        realSchur = true;
     }
 
 
@@ -59,11 +71,49 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVect
      *                 - If false, the {@code Q} matrix will <b>not</b> be computed. If it is not needed, this may
      *                 provide a performance improvement.
      */
-    public ComplexSchurDecomposition(boolean computeU) {
+    public RealSchurDecomposition(boolean computeU) {
         super(computeU);
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-        hess = new ComplexHessenburgDecomposition(computeU);
+        hess = new RealHessenburgDecomposition(computeU);
+        realSchur = true;
+    }
+
+
+    /**
+     * Creates a decomposer to compute the Schur decomposition.
+     * @param computeU A flag which indicates if the unitary matrix {@code Q} should be computed.<br>
+     *                 - If true, the {@code Q} matrix will be computed.
+     *                 - If false, the {@code Q} matrix will <b>not</b> be computed. If it is not needed, this may
+     *                 provide a performance improvement.
+     * @param realSchur Flag which indicates weather the real schur form or complex schur form should be computed.
+     */
+    public RealSchurDecomposition(boolean computeU, boolean realSchur) {
+        super(computeU);
+        /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
+           Hessenburg decomposition. */
+        hess = new RealHessenburgDecomposition(computeU);
+        this.realSchur = realSchur;
+    }
+
+
+    /**
+     * Gets the real Schur form of the {@code T} matrix from the Schur decomposition.
+     * @return The real Schur form of the {@code T} matrix from the Schur decomposition.
+     */
+    public Matrix getRealT() {
+        return workT;
+    }
+
+
+    /**
+     * Gets the {@code U} matrix in the Schur decomposition corresponding to the real
+     * Schur form of the {@code T} matrix in the Schur decomposition.
+     * @return The{@code U} matrix in the Schur decomposition corresponding to the real
+     * Schur form of the {@code T} matrix in the Schur decomposition.
+     */
+    public Matrix getRealU() {
+        return workU;
     }
 
 
@@ -80,14 +130,20 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVect
      * @return A reference to this decomposer.
      */
     @Override
-    public ComplexSchurDecomposition decompose(CMatrix src) {
+    public RealSchurDecomposition decompose(Matrix src) {
         applyQR(src); // Apply a variant of the QR algorithm.
 
-        T = workT; // Update the T matrix.
+        // Collect Hessenburg decomposition similarity transformations.
+        if(computeU) workU = hess.getQ().mult(workU);
 
-        if(computeU) {
-            // Collect Hessenburg decomposition similarity transformations.
-            U = hess.Q.mult(workU);
+        if(realSchur) {
+            T = workT.toComplex();
+            if(computeU) U = workU.toComplex();
+        } else {
+            // Convert to the complex schur form.
+            CMatrix[] TU = SchurDecomposition.real2ComplexSchur(workT, workU);
+            T = TU[0];
+            if(computeU) U = TU[1];
         }
 
         return this;
@@ -95,55 +151,47 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVect
 
 
     /**
-     * Computes the Wilkinson shift for a complex matrix. That is, the eigenvalue of the lower left 2x2 sub matrix
-     * which is closest in magnitude to the lower left entry of the matrix.
-     * @return The Wilkinson shift for the {@code src} matrix.
-     */
-    private CNumber getWilkinsonShift() {
-        // Compute eigenvalues of lower 2x2 block.
-        CVector lambdas = Eigen.get2x2LowerRightBlockEigenValues(workT);
-        CNumber v = workT.entries[workT.entries.length-1];
-
-        if(v.sub(lambdas.entries[0]).mag() < v.sub(lambdas.entries[1]).mag()) {
-            return lambdas.entries[0];
-        } else {
-            return lambdas.entries[1];
-        }
-    }
-
-
-    /**
-     * Applies an implicit double shift QR iteration using the generalized Rayleigh quotient shift
+     * Applies an implicit double shift QR iteration using the generalized Rayleigh quotient shift.
      */
     @Override
     protected void applyDoubleShift() {
         // Compute eigenvalues of lower right 2x2 block.
-        CVector rho = Eigen.get2x2LowerRightBlockEigenValues(workT);
+        CNumber[] rho = Eigen.get2x2LowerRightBlockEigenValues(workT).entries;
 
-        CNumber a = workT.entries[0];
-        CNumber b = workT.entries[1];
-        CNumber c = workT.entries[workT.numCols];
-        CNumber d = workT.entries[workT.numCols + 1];
-        CNumber e = workT.entries[2*workT.numCols + 1];
+        double p0, p1, p2;
 
-        CVector p = new CVector(
-                a.sub(rho.get(0)).mult( a.sub(rho.get(1)) ).add( b.mult(c) ),
-                c.mult( a.add(d).sub(rho.get(0)).sub(rho.get(1)) ),
-                e.mult(c)
-        );
+        double a = workT.entries[0];
+        double b = workT.entries[1];
+        double c = workT.entries[workT.numCols];
+        double d = workT.entries[workT.numCols + 1];
+
+        // Check if the eigen values are complex conjugates.
+        if(Math.abs(rho[0].im) > Math.ulp(1.0)) {
+            double x = rho[0].re;
+            double y = rho[0].im;
+
+            p0 = a*(a - 2*x) + x*x + y*y + b*c;
+            p1 = c*(a + d - 2*x);
+        } else {
+            p0 = (a - rho[0].re)*(a - rho[1].re) + b*c;
+            p1 = c*(a + d - (rho[0].re + rho[1].re));
+        }
+
+        p2 = workT.entries[2*workT.numCols + 1]*c;
 
         // Apply reflector and introduce bulge.
-        applyTransforms(Householder.getReflector(p));
+        applyTransforms(Householder.getReflector(new Vector(p0, p1, p2)));
         chaseBulge(2); // Chase the bulge.
     }
 
 
     /**
-     * Applies a single shift implicit QR iteration using the Wilkinson shift.
+     * Applies a single shift implicit QR iteration using the Rayleigh quotient shift.
      */
     @Override
     protected void applySingleShift() {
-        applySingleShift(getWilkinsonShift());
+        // TODO: If the matrix is symmetric, the Wilkinson shift will be real and so that should be used instead.
+        applySingleShift(workT.entries[workT.entries.length-1]);
     }
 
 
@@ -151,16 +199,15 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVect
      * Applies a single shift implicit QR iteration with a specified shift.
      * @param shift Shift to use for the single shift implicit QR iteration.
      */
-    private void applySingleShift(CNumber shift) {
-        CVector p = new CVector(
-                workT.entries[0].sub(shift),
+    private void applySingleShift(double shift) {
+        Vector p = new Vector(
+                workT.entries[0] - shift,
                 workT.entries[workT.numCols]
         );
+        Matrix ref = Householder.getReflector(p);
 
-        CMatrix ref = Householder.getReflector(p);
-
-        applyTransforms(ref); // Apply reflector to T and introduce bulge.
-        chaseBulge(1); // Chase the bulge from T.
+        applyTransforms(ref); // Apply reflector to workT and introduce bulge.
+        chaseBulge(1); // Chase the bulge from workT.
     }
 
 
@@ -180,8 +227,8 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVect
      * @return An initial {@code U} matrix. i.e. an identity matrix.
      */
     @Override
-    protected CMatrix initU() {
-        return CMatrix.I(workT.numRows);
+    protected Matrix initU() {
+        return Matrix.I(workT.numRows);
     }
 
 
@@ -193,31 +240,28 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVect
      * the first entry.
      */
     @Override
-    protected CMatrix initRef(CVector col) {
+    protected Matrix initRef(Vector col) {
         return Householder.getReflector(col);
     }
 
 
     /**
-     * Deflates the {@code T} matrix in the decomposition and updates {@code U} if needed.
-     *
-     * @param m Row and column index of the lower right entry of the 2x2 block to deflate in {@code T}.
-     */
-    @Override
-    protected void deflateT(int m) {
-        deflateT(workT, workU, m);
-    }
-
-
-    /**
      * Constructs a shift in a random direction which is of the same magnitude as the elements
-     * in the {@link #T} matrix.
+     * in the {@link #workT} matrix.
      * @param m Lower right index of the sub-matrix currently being worked on.
      * @return A shift in a random direction which is of the same magnitude as the elements
-     * in the {@link #T} matrix.
+     * in the {@link #workT} matrix.
      */
-    private CNumber getExceptionalShift(int m) {
-        return rand.random(workT.get(m, m).mag());
+    private double getExceptionalShift(int m) {
+        double shift = Math.abs(workT.entries[m*(workT.numCols + 1)]);
+        shift = shift==0 ? 1 : shift; // Avoid using a zero shift.
+
+        double p = 1.0 - Math.pow(0.1, numExceptionalShifts);
+        shift *= p + 2.0*(1.0 - p)*(rand.nextDouble() - 0.5);
+
+        shift = rand.nextBoolean() ? -shift : shift;
+
+        return shift;
     }
 
 
@@ -235,6 +279,8 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVect
      */
     @Override
     protected boolean notConverged(int m) {
-        return notConverged(workT, m);
+        return Math.abs(workT.entries[m*(workT.numCols + 1) - 1])
+                > TOL*Math.abs( workT.entries[(m-1)*(workT.numCols + 1)]
+                + Math.abs(workT.entries[m*(workT.numCols + 1)]) );
     }
 }

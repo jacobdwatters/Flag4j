@@ -30,6 +30,8 @@ import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.linalg.Decompose;
+import com.flag4j.linalg.decompositions.lu.LUDecomposition;
+import com.flag4j.linalg.decompositions.lu.RealLUDecomposition;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -111,8 +113,8 @@ public class ComplexDenseDeterminant {
      * @param U Upper triangular matrix.
      * @return The determinant of the matrix which has been factored into a unit lower triangular matrix {@code L}
      * and an upper triangular matrix {@code U}.
-     * @see com.flag4j.linalg.decompositions.LUDecomposition
-     * @see com.flag4j.linalg.decompositions.RealLUDecomposition
+     * @see LUDecomposition
+     * @see RealLUDecomposition
      */
     public static CNumber detLU(CMatrix L, CMatrix U) {
         CNumber detU = new CNumber(1);

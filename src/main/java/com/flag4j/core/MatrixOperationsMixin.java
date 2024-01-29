@@ -27,7 +27,7 @@ package com.flag4j.core;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.linalg.decompositions.SVD;
+import com.flag4j.linalg.decompositions.svd.SVD;
 
 
 /**
@@ -992,10 +992,19 @@ public interface MatrixOperationsMixin<
     T H();
 
 
-    // This method is specified here for compatibility purposes in generic classes.
+    // This method is specified here in addition to the tensor mixin for compatibility purposes in generic classes.
     /**
      * Copies this matrix.
      * @return A deep copy of this matrix.
      */
     T copy();
+
+
+    // This method is specified here in addition to the tensor mixin for compatibility purposes in generic classes.
+    /**
+     * Computes scalar multiplication of a matrix.
+     * @param factor Scalar value to multiply with matrix.
+     * @return The result of multiplying this matrix by the specified scalar.
+     */
+    T mult(double factor);
 }

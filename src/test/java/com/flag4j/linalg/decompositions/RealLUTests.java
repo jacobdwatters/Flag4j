@@ -1,6 +1,8 @@
 package com.flag4j.linalg.decompositions;
 
 import com.flag4j.Matrix;
+import com.flag4j.linalg.decompositions.lu.LUDecomposition;
+import com.flag4j.linalg.decompositions.lu.RealLUDecomposition;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

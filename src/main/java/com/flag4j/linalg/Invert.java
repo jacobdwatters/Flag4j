@@ -28,6 +28,8 @@ import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.exceptions.SingularMatrixException;
+import com.flag4j.linalg.decompositions.cholesky.CholeskyDecomposition;
+import com.flag4j.linalg.decompositions.cholesky.RealCholeskyDecomposition;
 import com.flag4j.linalg.solvers.ComplexBackSolver;
 import com.flag4j.linalg.solvers.ComplexForwardSolver;
 import com.flag4j.linalg.solvers.RealBackSolver;
@@ -207,6 +209,41 @@ public class Invert {
         }
 
         return result;
+    }
+
+
+    /**
+     * Inverts a symmetric positive definite matrix.
+     * @param src Positive definite matrix. It will not be verified if {@code src} is actually symmetric positive definite.
+     * @return The inverse of the {@code src} matrix.
+     * @throws IllegalArgumentException If the matrix is not square.
+     * @throws SingularMatrixException If the {@code src} matrix is singular.
+     * @see #invSymPosDef(Matrix, boolean)
+     */
+    public static Matrix invSymPosDef(Matrix src) {
+        return invSymPosDef(src, false);
+    }
+
+
+    /**
+     * Inverts a symmetric positive definite matrix.
+     * @param src Positive definite matrix.
+     * @param checkPosDef Flag indicating if a check should be made to see if {@code src} is actually symmetric
+     *                    positive definite. <b>WARNING</b>: Checking if the matrix is positive definite can be very computationally
+     *                    expensive.
+     * @return The inverse of the {@code src} matrix.
+     * @throws IllegalArgumentException If the matrix is not square.
+     * @throws SingularMatrixException If the {@code src} matrix is singular.
+     */
+    public static Matrix invSymPosDef(Matrix src, boolean checkPosDef) {
+        CholeskyDecomposition<Matrix> chol = new RealCholeskyDecomposition(checkPosDef).decompose(src);
+        RealBackSolver backSolver = new RealBackSolver();
+        RealForwardSolver forwardSolver = new RealForwardSolver(true);
+
+        // Compute the inverse of unit lower triangular matrix L.
+        Matrix Linv = forwardSolver.solveIdentity(chol.getL());
+
+        return backSolver.solveLower(chol.getLH(), Linv); // Compute inverse of src.
     }
 
 

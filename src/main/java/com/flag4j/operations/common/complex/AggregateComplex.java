@@ -89,9 +89,7 @@ public class AggregateComplex {
         double currMax = 0;
 
         for(CNumber value : entries) {
-            if(value.mag() > currMax) {
-                currMax = value.mag(); // Update current maximum.
-            }
+            currMax = Math.max(currMax, value.mag());
         }
 
         return currMax;

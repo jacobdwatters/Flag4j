@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.decompositions;
+package com.flag4j.linalg.decompositions.cholesky;
 
 import com.flag4j.CMatrix;
 import com.flag4j.complex_numbers.CNumber;
@@ -75,9 +75,9 @@ public final class ComplexCholeskyDecomposition extends CholeskyDecomposition<CM
      */
     @Override
     public ComplexCholeskyDecomposition decompose(CMatrix src) {
-        if(checkPosDef && !PositiveDefiniteness.isPosDef(src)) {
+        if(enforcePosDef && !PositiveDefiniteness.isPosDef(src)) {
             throw new IllegalArgumentException("Matrix must be positive definite.");
-        } else if(!checkPosDef) {
+        } else if(!enforcePosDef) {
             ParameterChecks.assertSquare(src.shape);
         }
 

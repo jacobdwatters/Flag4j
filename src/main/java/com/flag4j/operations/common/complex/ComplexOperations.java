@@ -176,13 +176,7 @@ public class ComplexOperations {
      * @return The result of the scalar multiplication of a tensor.
      */
     public static CNumber[] scalMult(CNumber[] src, CNumber factor) {
-        CNumber[] dest = new CNumber[src.length];
-
-        for(int i=0; i<src.length; i++) {
-            dest[i] = src[i].mult(factor);
-        }
-
-        return dest;
+        return scalMult(src, null, factor);
     }
 
 
@@ -200,6 +194,45 @@ public class ComplexOperations {
         }
 
         return product;
+    }
+
+
+    /**
+     * Computes the scalar multiplication of a tensor.
+     * @param src Entries of the tensor.
+     * @param dest Array to store result in. May be null.
+     * @param factor Scalar value to multiply.
+     * @return A reference to the {@code dest} array if it was not null. Otherwise, a new array will be formed.
+     * @throws ArrayIndexOutOfBoundsException If {@code dest} is not at least the size of {@code src}.
+     */
+    public static CNumber[] scalMult(CNumber[] src, CNumber[] dest, CNumber factor) {
+        int size = src.length;
+        if(dest==null) dest = new CNumber[size];
+
+        for(int i=0; i<size; i++)
+            dest[i] = src[i].mult(factor);
+
+        return dest;
+    }
+
+
+    /**
+     * Computes the scalar multiplication of a tensor.
+     * @param src Entries of the tensor.
+     * @param dest Array to store result in. May be null.
+     * @param factor Scalar value to multiply.
+     * @param start Starting index of scalar multiplication.
+     * @param stop Stopping index of scalar multiplication.
+     * @return A reference to the {@code dest} array if it was not null. Otherwise, a new array will be formed.
+     * @throws ArrayIndexOutOfBoundsException If {@code dest} is not the size of {@code src}.
+     */
+    public static CNumber[] scalMult(CNumber[] src, CNumber[] dest, CNumber factor, int start, int stop) {
+        if(dest==null) dest = new CNumber[src.length];
+
+        for(int i=start; i<stop; i++)
+            dest[i] = src[i].mult(factor);
+
+        return dest;
     }
 
 

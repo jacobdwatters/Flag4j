@@ -29,6 +29,7 @@ import com.flag4j.core.ComplexMatrixMixin;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.sparse.ComplexSparseTensorBase;
 import com.flag4j.io.PrintOptions;
+import com.flag4j.linalg.decompositions.svd.SVD;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.dense.complex.ComplexDenseOperations;
@@ -2458,7 +2459,7 @@ public class CooCMatrix
 
 
     /**
-     * Computes the condition number of this matrix using the {@link com.flag4j.linalg.decompositions.SVD SVD}.
+     * Computes the condition number of this matrix using the {@link SVD SVD}.
      * Specifically, the condition number is computed as the maximum singular value divided by the minimum singular
      * value of this matrix.
      *

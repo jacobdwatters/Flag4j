@@ -26,7 +26,12 @@ package com.flag4j.linalg;
 
 import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
-import com.flag4j.linalg.decompositions.*;
+import com.flag4j.linalg.decompositions.cholesky.ComplexCholeskyDecomposition;
+import com.flag4j.linalg.decompositions.cholesky.RealCholeskyDecomposition;
+import com.flag4j.linalg.decompositions.lu.ComplexLUDecomposition;
+import com.flag4j.linalg.decompositions.lu.RealLUDecomposition;
+import com.flag4j.linalg.decompositions.qr.ComplexQRDecomposition;
+import com.flag4j.linalg.decompositions.qr.RealQRDecomposition;
 import com.flag4j.util.ErrorMessages;
 
 

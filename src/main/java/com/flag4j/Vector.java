@@ -887,8 +887,7 @@ public class Vector
      */
     @Override
     public Matrix outer(Vector b) {
-        return new Matrix(this.size, b.size,
-                RealDenseVectorOperations.outerProduct(this.entries, b.entries));
+        return RealDenseVectorOperations.dispatchOuter(this, b);
     }
 
 

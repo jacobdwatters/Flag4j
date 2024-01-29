@@ -22,10 +22,11 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.decompositions;
+package com.flag4j.linalg.decompositions.cholesky;
 
 
 import com.flag4j.core.MatrixMixin;
+import com.flag4j.linalg.decompositions.Decomposition;
 
 /**
  * <p>This abstract class specifies methods for computing the Cholesky decomposition of a positive-definite matrix.</p>
@@ -45,17 +46,17 @@ public abstract class CholeskyDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?,
     /**
      * Flag indicating if the positive definiteness of the matrix should be checked before decomposing.
      */
-    final boolean checkPosDef;
+    final boolean enforcePosDef;
 
     /**
      * Constructs a Cholesky decomposer.
-     * @param checkPosDef Flag indicating if the positive definiteness of the matrix should be checked before decomposing.
+     * @param enforcePosDef Flag indicating if the positive definiteness of the matrix should be checked before decomposing.
      *                    If true, a check for positive definiteness will be done before the matrix is decomposed. If
      *                    it is not, an error will be thrown. If false, no check will be made and the matrix will be
      *                    assumed to be positive definite.
      */
-    public CholeskyDecomposition(boolean checkPosDef) {
-        this.checkPosDef = checkPosDef;
+    public CholeskyDecomposition(boolean enforcePosDef) {
+        this.enforcePosDef = enforcePosDef;
     }
 
 

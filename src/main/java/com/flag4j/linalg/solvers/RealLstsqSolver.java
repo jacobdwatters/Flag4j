@@ -27,8 +27,8 @@ package com.flag4j.linalg.solvers;
 
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
-import com.flag4j.linalg.decompositions.QRDecomposition;
-import com.flag4j.linalg.decompositions.RealQRDecomposition;
+import com.flag4j.linalg.decompositions.qr.QRDecomposition;
+import com.flag4j.linalg.decompositions.qr.RealQRDecomposition;
 
 
 /**
@@ -46,6 +46,6 @@ public class RealLstsqSolver extends LstsqSolver<Matrix, Vector> {
      * {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
      */
     public RealLstsqSolver() {
-        super(new RealQRDecomposition(false), new RealBackSolver());
+        super(new RealQRDecomposition(), new RealBackSolver());
     }
 }

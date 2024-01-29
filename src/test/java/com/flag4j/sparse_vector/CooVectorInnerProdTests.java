@@ -153,10 +153,9 @@ class CooVectorInnerProdTests {
     @Test
     void normalizeTestCase() {
         // ----------------------- Sub-case 1 -----------------------
-        double mag = Math.sqrt(1.0 + 5.6*5.6 + 9.355*9.355 + 215.0*215.0);
-        double[] expEntries = {1.0, 5.6, -9.355, 215.0};
+        double[] expEntries = {0.0046451435284722955, 0.026012803759444855, -0.043455317708858326, 0.9987058586215436};
         int[] expIndices = {1, 2, 8, 13};
-        CooVector exp = new CooVector(sparseSize, expEntries, expIndices).div(mag);
+        CooVector exp = new CooVector(sparseSize, expEntries, expIndices);
 
         assertEquals(exp, a.normalize());
     }
