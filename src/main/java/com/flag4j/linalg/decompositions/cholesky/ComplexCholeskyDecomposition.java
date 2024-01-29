@@ -78,7 +78,7 @@ public final class ComplexCholeskyDecomposition extends CholeskyDecomposition<CM
         if(enforcePosDef && !PositiveDefiniteness.isPosDef(src)) {
             throw new IllegalArgumentException("Matrix must be positive definite.");
         } else if(!enforcePosDef) {
-            ParameterChecks.assertSquare(src.shape);
+            ParameterChecks.assertSquareMatrix(src.shape);
         }
 
         L = new CMatrix(src.numRows);

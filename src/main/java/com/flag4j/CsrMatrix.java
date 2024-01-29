@@ -1595,7 +1595,7 @@ public class CsrMatrix
      */
     @Override
     public Double tr() {
-        ParameterChecks.assertSquare(shape);
+        ParameterChecks.assertSquareMatrix(shape);
 
         double trace = 0;
 

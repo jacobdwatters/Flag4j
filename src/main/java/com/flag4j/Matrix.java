@@ -1686,7 +1686,7 @@ public class Matrix
     @Override
     public Matrix pow(int exponent) {
         ParameterChecks.assertGreaterEq(0, exponent);
-        ParameterChecks.assertSquare(this.shape);
+        ParameterChecks.assertSquareMatrix(this.shape);
         Matrix result;
 
         if(exponent==0) {
@@ -3117,7 +3117,7 @@ public class Matrix
      */
     @Override
     public Double trace() {
-        ParameterChecks.assertSquare(this.shape);
+        ParameterChecks.assertSquareMatrix(this.shape);
         double sum = 0;
         int colsOffset = this.numCols+1;
 
@@ -3154,7 +3154,7 @@ public class Matrix
      */
     @Override
     public Matrix inv() {
-        ParameterChecks.assertSquare(shape);
+        ParameterChecks.assertSquareMatrix(shape);
         LUDecomposition<Matrix> lu = new RealLUDecomposition().decompose(this);
 
         // TODO: Should this be a globally defined final value?

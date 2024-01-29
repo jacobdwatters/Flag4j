@@ -77,7 +77,7 @@ public abstract class HessenburgDecomposition<
      */
     @Override
     public HessenburgDecomposition<T, U> decompose(T src) {
-        ParameterChecks.assertSquare(src.shape());
+        ParameterChecks.assertSquareMatrix(src.shape());
 
         // TODO: Add a decomposition for symmetric matrices.
         generalDecomposition(src);

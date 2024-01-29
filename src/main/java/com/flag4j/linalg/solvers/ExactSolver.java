@@ -112,7 +112,7 @@ public abstract class ExactSolver<
      */
     @Override
     public U solve(T A, U b) {
-        ParameterChecks.assertSquare(A.shape()); // Ensure A is square.
+        ParameterChecks.assertSquareMatrix(A.shape()); // Ensure A is square.
         ParameterChecks.assertEquals(A.numCols(), b.size()); // b must have the same number of entries as columns in A.
 
         decompose(A); // Compute LU decomposition.
@@ -136,7 +136,7 @@ public abstract class ExactSolver<
      */
     @Override
     public T solve(T A, T B) {
-        ParameterChecks.assertSquare(A.shape()); // Ensure A is square.
+        ParameterChecks.assertSquareMatrix(A.shape()); // Ensure A is square.
         ParameterChecks.assertEquals(A.numCols(), B.numRows()); // b must have the same number of entries as columns in A.
 
         decompose(A); // Compute LU decomposition.

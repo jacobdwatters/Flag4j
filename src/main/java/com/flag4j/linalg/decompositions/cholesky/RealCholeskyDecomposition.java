@@ -89,7 +89,7 @@ public final class RealCholeskyDecomposition extends CholeskyDecomposition<Matri
         if(enforcePosDef && !(src.isSymmetric() && PositiveDefiniteness.isPosDef(src))) {
             throw new IllegalArgumentException("Matrix must be positive definite.");
         } else if(!enforcePosDef) {
-            ParameterChecks.assertSquare(src.shape);
+            ParameterChecks.assertSquareMatrix(src.shape);
         }
 
         L = new Matrix(src.numRows);

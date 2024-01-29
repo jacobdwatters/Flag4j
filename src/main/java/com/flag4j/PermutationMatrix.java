@@ -52,7 +52,7 @@ public class PermutationMatrix implements Serializable {
      * @throws com.flag4j.exceptions.LinearAlgebraException If {@code shape} is not square.
      */
     public PermutationMatrix(Shape shape) {
-        ParameterChecks.assertSquare(shape);
+        ParameterChecks.assertSquareMatrix(shape);
         this.size = shape.dims[0];
         swapPointers = ArrayUtils.intRange(0, size);
     }

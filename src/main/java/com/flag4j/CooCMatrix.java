@@ -1048,7 +1048,7 @@ public class CooCMatrix
      */
     @Override
     public CMatrix pow(int exponent) {
-        ParameterChecks.assertSquare(shape);
+        ParameterChecks.assertSquareMatrix(shape);
         ParameterChecks.assertGreaterEq(0, exponent);
 
         CMatrix power;

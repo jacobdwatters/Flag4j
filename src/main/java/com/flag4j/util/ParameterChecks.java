@@ -211,6 +211,30 @@ public final class ParameterChecks {
 
 
     /**
+     * Checks if a set of values are all equal.
+     * @param values Values to check if they are equal.
+     * @throws IllegalArgumentException If any of the specified values are not equal.
+     */
+    public static void assertEquals(int... values) {
+        if(values.length > 0) {
+            boolean equal = true;
+            double base = values[0];
+
+            for(double v : values) {
+                if(v != base) {
+                    equal = false;
+                    break;
+                }
+            }
+
+            if(!equal) {
+                throw new IllegalArgumentException("Expecting values to be equal but got: " + Arrays.toString(values));
+            }
+        }
+    }
+
+
+    /**
      * Checks that two values are not equal.
      * @param a First value.
      * @param b Second value.
@@ -351,11 +375,22 @@ public final class ParameterChecks {
      * @param shape Shape to check.
      * @throws LinearAlgebraException If the shape is not of rank 2 with equal rows and columns.
      */
-    public static void assertSquare(Shape shape) {
+    public static void assertSquareMatrix(Shape shape) {
         if(shape.dims.length!=2 || shape.dims[0]!=shape.dims[1]) {
             throw new LinearAlgebraException(ErrorMessages.getSquareShapeErr(shape));
         }
     }
+
+
+    /**
+     * Checks if a shape represents a square tensor.
+     * @param shape Shape to check.
+     * @throws LinearAlgebraException If all axis of the shape are not the same length.
+     */
+    public static void assertSquare(Shape shape) {
+        ParameterChecks.assertEquals(shape.dims);
+    }
+
 
     /**
      * Checks if a shape represents a square matrix.
@@ -363,7 +398,7 @@ public final class ParameterChecks {
      * @param numCols Number of columns in the matrix.
      * @throws LinearAlgebraException If the shape is not of rank 2 with equal rows and columns.
      */
-    public static void assertSquare(int numRows, int numCols) {
+    public static void assertSquareMatrix(int numRows, int numCols) {
         if(numRows!=numCols) {
             throw new LinearAlgebraException(ErrorMessages.getSquareShapeErr(new Shape(numRows, numCols)));
         }

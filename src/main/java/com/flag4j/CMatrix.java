@@ -2116,7 +2116,7 @@ public class CMatrix
     @Override
     public CMatrix pow(int exponent) {
         ParameterChecks.assertGreaterEq(0, exponent);
-        ParameterChecks.assertSquare(this.shape);
+        ParameterChecks.assertSquareMatrix(this.shape);
         CMatrix result;
 
         if(exponent==0) {
@@ -3581,7 +3581,7 @@ public class CMatrix
      */
     @Override
     public CNumber trace() {
-        ParameterChecks.assertSquare(this.shape);
+        ParameterChecks.assertSquareMatrix(this.shape);
         CNumber sum = new CNumber();
         int colsOffset = this.numCols+1;
 
@@ -3618,7 +3618,7 @@ public class CMatrix
      */
     @Override
     public CMatrix inv() {
-        ParameterChecks.assertSquare(shape);
+        ParameterChecks.assertSquareMatrix(shape);
         LUDecomposition<CMatrix> lu = new ComplexLUDecomposition().decompose(this);
 
         // TODO: Should this be a globally defined final value?

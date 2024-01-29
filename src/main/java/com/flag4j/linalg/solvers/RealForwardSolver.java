@@ -76,7 +76,7 @@ public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
      */
     @Override
     public Vector solve(Matrix L, Vector b) {
-        ParameterChecks.assertSquare(L.shape);
+        ParameterChecks.assertSquareMatrix(L.shape);
         ParameterChecks.assertEquals(L.numRows, b.size);
         return isUnit ? solveUnitLower(L, b) : solveLower(L, b);
     }
@@ -94,7 +94,7 @@ public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
      */
     @Override
     public Matrix solve(Matrix L, Matrix B) {
-        ParameterChecks.assertSquare(L.shape);
+        ParameterChecks.assertSquareMatrix(L.shape);
         ParameterChecks.assertEquals(L.numRows, B.numRows);
         return isUnit ? solveUnitLower(L, B) : solveLower(L, B);
     }
@@ -111,7 +111,7 @@ public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
      * the principle diagonal).
      */
     public Matrix solveIdentity(Matrix L) {
-        ParameterChecks.assertSquare(L.shape);
+        ParameterChecks.assertSquareMatrix(L.shape);
         return isUnit ? solveUnitLowerIdentity(L) : solveLowerIdentity(L);
     }
 

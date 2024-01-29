@@ -54,7 +54,7 @@ public class ComplexDenseDeterminant {
      * @throws IllegalArgumentException If matrix is not square.
      */
     public static CNumber det(CMatrix A) {
-        ParameterChecks.assertSquare(A.shape);
+        ParameterChecks.assertSquareMatrix(A.shape);
         CNumber det;
 
         switch (A.numRows) {
@@ -83,7 +83,7 @@ public class ComplexDenseDeterminant {
      * @throws IllegalArgumentException If matrix is not square.
      */
     public static CNumber detLU(CMatrix A) {
-        ParameterChecks.assertSquare(A.shape);
+        ParameterChecks.assertSquareMatrix(A.shape);
         CMatrix[] LU = Decompose.lu(A);
 
         return detLU(LU[0].toReal(), LU[1], LU[2]);

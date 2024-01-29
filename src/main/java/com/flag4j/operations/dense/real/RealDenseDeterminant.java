@@ -51,7 +51,7 @@ public class RealDenseDeterminant {
      */
     public static double det(Matrix A) {
         int rows = A.numRows;
-        ParameterChecks.assertSquare(rows, A.numCols);
+        ParameterChecks.assertSquareMatrix(rows, A.numCols);
 
         switch(rows) {
             case 1: // 1x1 determinant
@@ -84,7 +84,7 @@ public class RealDenseDeterminant {
      * @throws IllegalArgumentException If matrix is not square.
      */
     public static double detLU(Matrix A) {
-        ParameterChecks.assertSquare(A.numRows, A.numCols);
+        ParameterChecks.assertSquareMatrix(A.numRows, A.numCols);
 
         RealLUDecomposition lu = new RealLUDecomposition();
         lu.decompose(A);

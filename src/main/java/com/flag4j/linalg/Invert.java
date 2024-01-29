@@ -57,7 +57,7 @@ public class Invert {
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static Matrix invTriU(Matrix src) {
-        ParameterChecks.assertSquare(src.shape);
+        ParameterChecks.assertSquareMatrix(src.shape);
         if(zeroOnDiag(src)) {
             throw new SingularMatrixException("Cannot invert.");
         }
@@ -94,7 +94,7 @@ public class Invert {
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static Matrix invDiag(Matrix src) {
-        ParameterChecks.assertSquare(src.shape);
+        ParameterChecks.assertSquareMatrix(src.shape);
 
         Matrix inverse = new Matrix(src.shape);
 
@@ -126,7 +126,7 @@ public class Invert {
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static CMatrix invTriU(CMatrix src) {
-        ParameterChecks.assertSquare(src.shape);
+        ParameterChecks.assertSquareMatrix(src.shape);
         if(zeroOnDiag(src)) {
             throw new SingularMatrixException("Cannot invert.");
         }
@@ -163,7 +163,7 @@ public class Invert {
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static CMatrix invDiag(CMatrix src) {
-        ParameterChecks.assertSquare(src.shape);
+        ParameterChecks.assertSquareMatrix(src.shape);
 
         CMatrix inverse = new CMatrix(src.shape);
 

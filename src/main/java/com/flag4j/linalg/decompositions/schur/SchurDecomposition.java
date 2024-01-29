@@ -201,7 +201,7 @@ public abstract class SchurDecomposition<
      * @param src The matrix to decompose.
      */
     protected final void applyQR(T src) {
-        ParameterChecks.assertSquare(src.shape());
+        ParameterChecks.assertSquareMatrix(src.shape());
         hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).
 
         shiftedImplicitQR(hess.getH()); // Use shifted implicit QR algorithm.
