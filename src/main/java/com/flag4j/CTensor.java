@@ -26,8 +26,10 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexTensorExclusiveMixin;
+import com.flag4j.core.TensorBase;
 import com.flag4j.core.dense.ComplexDenseTensorBase;
 import com.flag4j.io.PrintOptions;
+import com.flag4j.linalg.TensorInvert;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.dense.complex.ComplexDenseEquals;
@@ -410,22 +412,6 @@ public class CTensor
 
 
     /**
-     * Computes the transpose of a tensor. Same as {@link #T(int, int)}.
-     * In the context of a tensor, this exchanges the specified axes.
-     * Also see {@link #transpose() transpose()} and
-     * {@link #T() T()} to exchange first and last axes.
-     *
-     * @param axis1 First axis to exchange.
-     * @param axis2 Second axis to exchange.
-     * @return The transpose of this tensor.
-     */
-    @Override
-    public CTensor transpose(int axis1, int axis2) {
-        return T(axis1, axis2);
-    }
-
-
-    /**
      * Computes the transpose of a tensor. Same as {@link #transpose(int, int)}.
      * In the context of a tensor, this exchanges the specified axes.
      * Also see {@link #transpose()} and
@@ -440,19 +426,6 @@ public class CTensor
         return TransposeDispatcher.dispatchTensor(this, axis1, axis2);
     }
 
-    /**
-     * Computes the transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
-     * the specified axes permutation. Same as {@link #T(int[])}.
-     *
-     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
-     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
-     * @return The transpose of this tensor with its axes permuted by the {@code axes} array.
-     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
-     */
-    @Override
-    public CTensor transpose(int... axes) {
-        return T(axes);
-    }
 
     /**
      * Computes the transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
@@ -470,24 +443,6 @@ public class CTensor
                 this.shape.copy().swapAxes(axes),
                 ComplexDenseTranspose.standardConcurrent(this.entries, this.shape, axes)
         );
-    }
-
-
-    /**
-     * Computes the tensor contraction of this tensor with a specified tensor over the specified axes. That is,
-     * computes the sum of products between the two tensors along the specified axes.
-     *
-     * @param src2  Tensor to contract with this tensor.
-     * @param aAxis Axis along which to compute products for this tensor.
-     * @param bAxis Axis along which to compute products for {@code src2} tensor.
-     * @return The tensor dot product over the specified axes.
-     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes {@code aAxis}
-     *                                  and {@code bAxis}.
-     * @throws IllegalArgumentException If either axis is out of bounds of the corresponding tensor.
-     */
-    @Override
-    public CTensor tensorDot(CTensor src2, int aAxis, int bAxis) {
-        return ComplexDenseTensorDot.tensorDot(this, src2, new int[]{aAxis}, new int[]{bAxis});
     }
 
 
@@ -521,7 +476,7 @@ public class CTensor
      *                                  along the second-to-last axis.
      */
     @Override
-    public CTensor dot(CTensor src2) {
+    public CTensor tensorDot(CTensor src2) {
         return ComplexDenseTensorDot.dot(this, src2);
     }
 
@@ -710,6 +665,24 @@ public class CTensor
                 shape.copy(),
                 RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
         );
+    }
+
+
+    /**
+     * Computes the 'inverse' of this tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
+     * {@link com.flag4j.core.TensorExclusiveMixin#tensorDot(TensorBase, int) this.tensorDot(X, numIndices)} is the
+     * 'identity' tensor for the tensor
+     * dot product
+     * operation.
+     * A tensor {@code I} is the identity for a tensor dot product if {@code this.tensorDot(I, numIndices).equals(this)}.
+     *
+     * @param numIndices The number of first numIndices which are involved in the inverse sum.
+     * @return The 'inverse' of this tensor as defined in the above sense.
+     * @see #tensorInv()
+     */
+    @Override
+    public CTensor tensorInv(int numIndices) {
+        return TensorInvert.inv(this, numIndices);
     }
 
 

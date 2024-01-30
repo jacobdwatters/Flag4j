@@ -124,6 +124,23 @@ public final class RealDenseMatrixMultiplyDispatcher {
 
 
     /**
+     * Dispatches a matrix multiply problem to the appropriate algorithm based on the size of the matrices.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape of the second matrix.
+     * @return The result of the matrix multiplication.
+     */
+    public static double[] dispatch(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+        assertMatMultShapes(shape1, shape2); // Ensure matrix shapes are conducive to matrix multiplication.
+
+        RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();
+        AlgorithmNames name = selectAlgorithm(shape1, shape2);
+        return dispatcher.algorithmMap.get(name).apply(src1, shape1, src2, shape2);
+    }
+
+
+    /**
      * Dispatches a matrix multiply-transpose problem equivalent to A.mult(B.T()) to the appropriate algorithm based
      * on the size of the matrices.
      * @param A First matrix in the multiplication.

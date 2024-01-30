@@ -28,6 +28,7 @@ import com.flag4j.CTensor;
 import com.flag4j.CooCTensor;
 import com.flag4j.CooTensor;
 import com.flag4j.Tensor;
+import com.flag4j.util.ArrayUtils;
 
 
 /**
@@ -39,10 +40,33 @@ import com.flag4j.Tensor;
  * @param <V> Sparse tensor type.
  * @param <W> Complex tensor type.
  */
-public interface TensorExclusiveMixin<T, U, V, W> {
+public interface TensorExclusiveMixin<
+        T extends TensorBase<T, U, W, ?, ?, ?, ?>,
+        U, V, W> {
 
     // TODO: add toVector() and toMatrix() methods.
-    // TODO: Add tensorDot(...) methods for Tensor, CTensor, CooTensor, CooCTensor.
+
+    /**
+     * Computes the tensor contraction of this tensor with a specified tensor over the specified axes. If {@code axes=N}, then
+     * the product sums will be computed along the last {@code N} dimensions of this tensor and the first {@code N} dimensions of
+     * the {@code src2} tensor.
+     * @param src2 Tensor to contract with this tensor.
+     * @param axes Axes specifying the number of axes to compute the tensor dot product over. If {@code axes=N}, then
+     *             the product sums will be computed along the last {@code N} dimensions of this tensor and the first {@code N}
+     *             dimensions of.
+     * @return The tensor dot product over the specified axes.
+     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes {@code aAxis}
+     * and {@code bAxis}.
+     * @throws IllegalArgumentException If either axis is out of bounds of the corresponding tensor.
+     */
+    default T tensorDot(T src2, int axes){
+        int rank2 = src2.getRank();
+        int[] src1Axes = ArrayUtils.intRange(0, axes);
+        int[] src2Axes = ArrayUtils.intRange(rank2-axes, rank2);
+
+        return tensorDot(src2, src1Axes, src2Axes);
+    }
+
 
     /**
      * Computes the tensor contraction of this tensor with a specified tensor over the specified axes. That is,
@@ -55,7 +79,9 @@ public interface TensorExclusiveMixin<T, U, V, W> {
      * and {@code bAxis}.
      * @throws IllegalArgumentException If either axis is out of bounds of the corresponding tensor.
      */
-    T tensorDot(T src2, int aAxis, int bAxis);
+    default T tensorDot(T src2, int aAxis, int bAxis) {
+        return tensorDot(src2, new int[]{aAxis}, new int[]{bAxis});
+    }
 
 
     /**
@@ -82,7 +108,7 @@ public interface TensorExclusiveMixin<T, U, V, W> {
      * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
      * along the second-to-last axis.
      */
-    T dot(T src2);
+    T tensorDot(T src2);
 
 
     /**
@@ -95,7 +121,9 @@ public interface TensorExclusiveMixin<T, U, V, W> {
      * @param axis2 Second axis to exchange.
      * @return The transpose of this tensor.
      */
-    T transpose(int axis1, int axis2);
+    default T transpose(int axis1, int axis2){
+        return T(axis1, axis2);
+    }
 
 
     /**
@@ -119,7 +147,9 @@ public interface TensorExclusiveMixin<T, U, V, W> {
      * @return The transpose of this tensor with its axes permuted by the {@code axes} array.
      * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
      */
-    T transpose(int... axes);
+    default T transpose(int... axes){
+        return T(axes);
+    }
 
 
     /**
@@ -283,4 +313,27 @@ public interface TensorExclusiveMixin<T, U, V, W> {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     T elemDiv(Tensor B);
+
+
+    /**
+     * Computes the 'inverse' of this tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
+     * {@link #tensorDot(TensorBase, int) this.tensorDot(X, 2)} is the 'identity' tensor for the tensor dot product operation.
+     * A tensor {@code I} is the identity for a tensor dot product if {@code this.tensorDot(I, 2).equals(this)}.
+     * @return The 'inverse' of this tensor as defined in the above sense.
+     * @see #tensorInv(int)
+     */
+    default T tensorInv(){
+        return tensorInv(2);
+    }
+
+
+    /**
+     * Computes the 'inverse' of this tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
+     * {@link #tensorDot(TensorBase, int) this.tensorDot(X, numIndices)} is the 'identity' tensor for the tensor dot product operation.
+     * A tensor {@code I} is the identity for a tensor dot product if {@code this.tensorDot(I, numIndices).equals(this)}.
+     * @param numIndices The number of first numIndices which are involved in the inverse sum.
+     * @return The 'inverse' of this tensor as defined in the above sense.
+     * @see #tensorInv()
+     */
+    T tensorInv(int numIndices);
 }

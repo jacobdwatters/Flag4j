@@ -283,7 +283,7 @@ public class Shape implements Serializable {
      * @return A deep copy of this shape object.
      */
     public Shape copy() {
-        return new Shape(this);
+        return new Shape(strides!=null,this);
     }
 
 

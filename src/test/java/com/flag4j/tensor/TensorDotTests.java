@@ -138,12 +138,12 @@ class TensorDotTests {
         expShape = new Shape(2, 2, 4, 2);
         exp = new Tensor(expShape, expEntries);
 
-        assertEquals(exp, A.dot(B));
+        assertEquals(exp, A.tensorDot(B));
 
 
         // --------------------- Sub-case 1 ---------------------
         A = A.reshape(2, 2, 3);
         B = B.reshape(4, 2, 3);
-        assertThrows(IllegalArgumentException.class, ()->A.dot(B));
+        assertThrows(IllegalArgumentException.class, ()->A.tensorDot(B));
     }
 }

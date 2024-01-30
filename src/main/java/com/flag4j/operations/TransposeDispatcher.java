@@ -154,6 +154,26 @@ public final class TransposeDispatcher {
 
     /**
      * Dispatches a tensor transpose problem to the appropriate algorithm based on its shape and size.
+     * @param src Entries of tensor to transpose.
+     * @param shape Shape of the tensor to transpose.
+     * @param axes Permutation of axes in the tensor transpose.
+     * @return The result of the tensor transpose.
+     * @throws ArrayIndexOutOfBoundsException If either axis is not within the {@code src} tensor.
+     */
+    public static double[] dispatchTensor(double[] src, Shape shape, int[] axes) {
+        double[] dest;
+        Algorithm algorithm = chooseAlgorithmTensor(src.length);
+
+        dest = algorithm == Algorithm.STANDARD ?
+                RealDenseTranspose.standard(src, shape, axes):
+                RealDenseTranspose.standardConcurrent(src, shape, axes);
+
+        return dest;
+    }
+
+
+    /**
+     * Dispatches a tensor transpose problem to the appropriate algorithm based on its shape and size.
      * @param src Tensor to transpose.
      * @param axis1 First axis in tensor transpose.
      * @param axis2 Second axis in tensor transpose.
@@ -179,6 +199,17 @@ public final class TransposeDispatcher {
      */
     private static Algorithm chooseAlgorithmTensor(int length1, int length2) {
         int numEntries = length1*length2; // Number of entries involved in transpose.
+        return numEntries < CONCURRENT_THRESHOLD ? Algorithm.STANDARD : Algorithm.CONCURRENT_STANDARD;
+    }
+
+
+
+    /**
+     * Chooses the appropriate algorithm for computing a tensor transpose.
+     * @param numEntries Total number of entries in tensor to transpose.
+     * @return The algorithm to use for the tensor transpose.
+     */
+    private static Algorithm chooseAlgorithmTensor(int numEntries) {
         return numEntries < CONCURRENT_THRESHOLD ? Algorithm.STANDARD : Algorithm.CONCURRENT_STANDARD;
     }
 
