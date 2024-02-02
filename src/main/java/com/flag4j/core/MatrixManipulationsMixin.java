@@ -308,6 +308,7 @@ public interface MatrixManipulationsMixin<
      */
     T swapRows(int rowIndex1, int rowIndex2);
 
+
     /**
      * Swaps columns in the matrix.
      * @param colIndex1 Index of first column to swap.

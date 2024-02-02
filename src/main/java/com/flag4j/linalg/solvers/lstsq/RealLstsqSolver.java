@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.solvers.lstq;
+package com.flag4j.linalg.solvers.lstsq;
 
 
 import com.flag4j.Matrix;

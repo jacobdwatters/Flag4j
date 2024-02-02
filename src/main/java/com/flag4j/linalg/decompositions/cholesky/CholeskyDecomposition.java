@@ -24,7 +24,6 @@
 
 package com.flag4j.linalg.decompositions.cholesky;
 
-
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.linalg.decompositions.Decomposition;
 
@@ -32,11 +31,11 @@ import com.flag4j.linalg.decompositions.Decomposition;
  * <p>This abstract class specifies methods for computing the Cholesky decomposition of a positive-definite matrix.</p>
  *
  * <p>Given a hermation positive-definite matrix {@code A}, the Cholesky decomposition will decompose it into
- * {@code A=LL<sup>*</sup>} where {@code L} is a lower triangular matrix and {@code L<sup>*</sup>} is the conjugate
+ * {@code A=LL}<sup>H</sup> where {@code L} is a lower triangular matrix and {@code L}<sup>H</sup> is the conjugate
  * transpose of {@code L}.</p>
  *
  * <p>If {@code A} is a real valued symmetric positive-definite matrix, then the decomposition simplifies to
- * {@code A=LL<sup>T</sup>}.</p>
+ * {@code A=LL}<sup>T</sup>.</p>
  *
  * @param <T> The type of matrix to compute the Cholesky decomposition of.
  */
@@ -44,19 +43,24 @@ public abstract class CholeskyDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?,
         implements Decomposition<T> {
 
     /**
-     * Flag indicating if the positive definiteness of the matrix should be checked before decomposing.
+     * Default tolerance for considering a value along the diagonal of L to be non-positive.
      */
-    final boolean enforcePosDef;
+    protected static final double DEFAULT_POS_DEF_TOLERANCE = 1.0e-10;
+
+    /**
+     * Flag indicating if the matrix to be decomposed should be explicitly checked to be hermation (true). If false, no check
+     * will be made and the matrix will be treated as if it were hermation and only the lower half of the matrix will be accessed.
+     */
+    final boolean enforceHermation;
 
     /**
      * Constructs a Cholesky decomposer.
-     * @param enforcePosDef Flag indicating if the positive definiteness of the matrix should be checked before decomposing.
-     *                    If true, a check for positive definiteness will be done before the matrix is decomposed. If
-     *                    it is not, an error will be thrown. If false, no check will be made and the matrix will be
-     *                    assumed to be positive definite.
+     * @param enforceHermation Flag indicating if the symmetry of the matrix to be decomposed should be explicitly checked (true).
+     *                         If false, no check will be made and the matrix will be treated as if it were symmetric and only the
+     *                         lower half of the matrix will be accessed.
      */
-    public CholeskyDecomposition(boolean enforcePosDef) {
-        this.enforcePosDef = enforcePosDef;
+    public CholeskyDecomposition(boolean enforceHermation) {
+        this.enforceHermation = enforceHermation;
     }
 
 
@@ -76,8 +80,10 @@ public abstract class CholeskyDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?,
 
 
     /**
-     * Gets the conjugate transpose of the {@code L} matrix computed by the Cholesky decomposition {@code A=LL<sup>*</sup>}.
-     * @return The conjugate transpose of the {@code L} matrix from the Cholesky decomposition {@code A=LL<sup>*</sup>}.
+     * Gets the {@code L} matrix computed by the Cholesky decomposition {@code A=LL<sup>*</sup>}.
+     * @return The {@code L} matrix from the Cholesky decomposition {@code A=LL<sup>*</sup>}.
      */
-    public abstract T getLH();
+    public T getLH() {
+        return L.H();
+    }
 }

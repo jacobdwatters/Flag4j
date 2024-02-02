@@ -26,7 +26,7 @@ package com.flag4j.linalg.decompositions.cholesky;
 
 import com.flag4j.CMatrix;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.linalg.PositiveDefiniteness;
+import com.flag4j.exceptions.LinearAlgebraException;
 import com.flag4j.util.ParameterChecks;
 
 
@@ -42,10 +42,10 @@ public final class ComplexCholeskyDecomposition extends CholeskyDecomposition<CM
 
 
     /**
-     * Constructs a Cholesky decomposer. If you would like to enforce a check for positive definiteness at the time
-     * of decomposition, see {@link #ComplexCholeskyDecomposition(boolean)}. However, note that this may have a
-     * significant negative impact on performance.
-     * slower.
+     * <p>Constructs a Cholesky decomposer.</p>
+     *
+     * <p>If you would like to enforce a check for hermation symmetry at the time
+     * of decomposition, see {@link #ComplexCholeskyDecomposition(boolean)}.</p>
      */
     public ComplexCholeskyDecomposition() {
         super(false);
@@ -55,10 +55,9 @@ public final class ComplexCholeskyDecomposition extends CholeskyDecomposition<CM
     /**
      * Constructs a Cholesky decomposer.
      *
-     * @param checkPosDef Flag indicating if the positive definiteness of the matrix should be checked before decomposing.
-     *                    If true, a check for positive definiteness will be done before the matrix is decomposed. If
-     *                    it is not, an error will be thrown. If false, no check will be made and the matrix will be
-     *                    assumed to be positive definite.
+     * @param checkPosDef flag indicating if the matrix to be decomposed should be explicitly checked to be hermation (true). If
+     *                    false, no check will be made and the matrix will be treated as if it were hermation and only the lower
+     *                    half of the matrix will be accessed
      */
     public ComplexCholeskyDecomposition(boolean checkPosDef) {
         super(checkPosDef);
@@ -66,21 +65,24 @@ public final class ComplexCholeskyDecomposition extends CholeskyDecomposition<CM
 
 
     /**
-     * Decompose a matrix into {@code A=LL<sup>*</sup>} where {@code L} is a lower triangular matrix and {@code L<sup>*</sup>} is the conjugate
-     * transpose of {@code L}.
+     * Decompose a matrix into {@code A=LL}<sup>H</sup> where {@code L} is a lower triangular matrix and {@code L}<sup>H</sup> is
+     * the conjugate transpose of {@code L}.
      *
      * @param src The source matrix to decompose. Must be hermation positive-definite.
      * @return A reference to this decomposer.
-     * @throws IllegalArgumentException If {@code src} is not hermation positive-definite.
+     * @throws IllegalArgumentException If {@code src} is not symmetric and {@link #ComplexCholeskyDecomposition(boolean)
+     * enforceSymmetric} was set to true when this decomposer was instantiated.
+     * @throws com.flag4j.exceptions.LinearAlgebraException If {@code src} is not positive-definite.
      */
     @Override
     public ComplexCholeskyDecomposition decompose(CMatrix src) {
-        if(enforcePosDef && !PositiveDefiniteness.isPosDef(src)) {
-            throw new IllegalArgumentException("Matrix must be positive definite.");
-        } else if(!enforcePosDef) {
+        if(enforceHermation && src.isHermitian()) {
+            throw new IllegalArgumentException("Matrix must be positive-definite.");
+        } else {
             ParameterChecks.assertSquareMatrix(src.shape);
         }
 
+        double posDefTolerance = Math.max(L.numRows*Math.ulp(1.0), DEFAULT_POS_DEF_TOLERANCE);
         L = new CMatrix(src.numRows);
         CNumber sum;
 
@@ -101,7 +103,12 @@ public final class ComplexCholeskyDecomposition extends CholeskyDecomposition<CM
                 }
 
                 if(i==j) {
-                    L.entries[lIndex3] = CNumber.sqrt(src.entries[lIndex3].sub(sum));
+                    CNumber diag = src.entries[lIndex3].sub(sum);
+                    if(diag.re <= 0 || diag.mag() <= posDefTolerance) {
+                        throw new LinearAlgebraException("Matrix is not symmetric positive-definite.");
+                    }
+
+                    L.entries[lIndex3] = CNumber.sqrt(diag);
                 } else {
                     if(!L.entries[j*(L.numCols + 1)].equals(0)) {
                         L.entries[lIndex3] = (src.entries[lIndex3].sub(sum)).div(L.entries[lIndex2 + j]);
@@ -111,16 +118,5 @@ public final class ComplexCholeskyDecomposition extends CholeskyDecomposition<CM
         }
 
         return this;
-    }
-
-
-    /**
-     * Gets the conjugate transpose of the {@code L} matrix computed by the Cholesky decomposition {@code A=LL<sup>*</sup>}.
-     *
-     * @return The conjugate transpose of the {@code L} matrix from the Cholesky decomposition {@code A=LL<sup>*</sup>}.
-     */
-    @Override
-    public CMatrix getLH() {
-        return L.H();
     }
 }

@@ -25,7 +25,7 @@
 package com.flag4j.linalg.decompositions.cholesky;
 
 import com.flag4j.Matrix;
-import com.flag4j.linalg.PositiveDefiniteness;
+import com.flag4j.exceptions.LinearAlgebraException;
 import com.flag4j.util.ParameterChecks;
 
 
@@ -41,9 +41,8 @@ public final class RealCholeskyDecomposition extends CholeskyDecomposition<Matri
 
 
     /**
-     * Constructs a Cholesky decomposer. If you would like to enforce a check for positive definiteness at the time
-     * of decomposition, see {@link #RealCholeskyDecomposition(boolean)}. However, note that this will be significantly
-     * slower.
+     * Constructs a Cholesky decomposer. If you would like to enforce a check for symmetry at the time
+     * of decomposition, see {@link #RealCholeskyDecomposition(boolean)}.
      */
     public RealCholeskyDecomposition() {
         super(false);
@@ -53,45 +52,36 @@ public final class RealCholeskyDecomposition extends CholeskyDecomposition<Matri
     /**
      * Constructs a Cholesky decomposer.
      *
-     * @param enforcePosDef Flag indicating if the symmetric positive definiteness of the matrix should be checked
-     *                    before decomposing.
-     *                    If true, a check for positive definiteness will be done before the matrix is decomposed. If
-     *                    it is not, an error will be thrown. If false, no check will be made and the matrix will be
-     *                    assumed to be positive definite. <b>WARNING: </b> Checking positive definiteness can
-     *                    be very computationally expensive.
+     * @param enforceSymmetric Flag indicating if the symmetry of the matrix to be decomposed should be explicitly checked (true).
+     *                      If false, no check will be made and the matrix will be treated as if it were symmetric and only the
+     *                      lower half of the matrix will be accessed.
      */
-    public RealCholeskyDecomposition(boolean enforcePosDef) {
-        super(enforcePosDef);
+    public RealCholeskyDecomposition(boolean enforceSymmetric) {
+        super(enforceSymmetric);
     }
 
 
     /**
-     * Gets the transpose of the {@code L} matrix computed by the Cholesky decomposition {@code A=LL<sup>T</sup>}.
-     *
-     * @return The transpose of the {@code L} matrix from the Cholesky decomposition {@code A=LL<sup>T</sup>}.
-     */
-    @Override
-    public Matrix getLH() {
-        return L.T();
-    }
-
-
-    /**
-     * Decompose a matrix into {@code A=LL<sup>T</sup>} where {@code L} is a lower triangular matrix and {@code L<sup>T</sup>} is the
+     * Decompose a matrix into {@code A=LL}<sup>T</sup> where {@code L} is a lower triangular matrix and {@code L}<sup>T</sup> is the
      * transpose of {@code L}.
      *
-     * @param src The source matrix to decompose. Must be symmetric positive-definite.
+     * @param src The source matrix to decompose. Must be symmetric positive-definite. Note, symmetry will only be checked explicitly
+     *            if {@link #RealCholeskyDecomposition(boolean) enforceSymmetric} was set to true when this decomposer was
+     *            instantiated.
      * @return A reference to this decomposer.
-     * @throws IllegalArgumentException If {@code src} is not symmetric positive-definite.
+     * @throws IllegalArgumentException If {@code src} is not symmetric and {@link #RealCholeskyDecomposition(boolean)
+     * enforceSymmetric} was set to true when this decomposer was instantiated.
+     * @throws LinearAlgebraException If this matrix is not positive-definite.
      */
     @Override
     public RealCholeskyDecomposition decompose(Matrix src) {
-        if(enforcePosDef && !(src.isSymmetric() && PositiveDefiniteness.isPosDef(src))) {
-            throw new IllegalArgumentException("Matrix must be positive definite.");
-        } else if(!enforcePosDef) {
+        if(enforceHermation && src.isSymmetric()) {
+            throw new IllegalArgumentException("Matrix must be positive-definite.");
+        } else {
             ParameterChecks.assertSquareMatrix(src.shape);
         }
 
+        double posDefTolerance = Math.max(L.numRows*Math.ulp(1.0), DEFAULT_POS_DEF_TOLERANCE);
         L = new Matrix(src.numRows);
         double sum;
 
@@ -112,7 +102,13 @@ public final class RealCholeskyDecomposition extends CholeskyDecomposition<Matri
                 }
 
                 if(i==j) {
-                    L.entries[lIndex3] = Math.sqrt(src.entries[lIndex3]-sum);
+                    double diag = src.entries[lIndex3]-sum;
+                    if(diag <= posDefTolerance) {
+                        // Diagonal entries of L must be positive (non-zero) for original matrix to be positive-definite.
+                        throw new LinearAlgebraException("Matrix is not symmetric positive-definite.");
+                    }
+
+                    L.entries[lIndex3] = Math.sqrt(diag);
                 } else {
                     if(L.entries[j*(L.numCols + 1)] != 0) {
                         L.entries[lIndex3] = (src.entries[lIndex3]-sum)/L.entries[lIndex2 + j];

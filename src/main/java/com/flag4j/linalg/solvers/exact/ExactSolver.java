@@ -31,7 +31,7 @@ import com.flag4j.core.VectorMixin;
 import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.linalg.decompositions.lu.LUDecomposition;
 import com.flag4j.linalg.solvers.LinearSolver;
-import com.flag4j.linalg.solvers.lstq.LstsqSolver;
+import com.flag4j.linalg.solvers.lstsq.LstsqSolver;
 import com.flag4j.util.ParameterChecks;
 
 /**

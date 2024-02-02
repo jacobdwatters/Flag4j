@@ -41,7 +41,8 @@ import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
 /**
- * This class provides methods for computing the inverse of a matrix.
+ * This class provides methods for computing the inverse of a matrix. Specialized methods are provided for inverting triangular,
+ * diagonal, and symmetric positive definite matrices.
  */
 public class Invert {
 
@@ -112,13 +113,7 @@ public class Invert {
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static Matrix invTriU(Matrix src) {
-        ParameterChecks.assertSquareMatrix(src.shape);
-        if(zeroOnDiag(src)) {
-            throw new SingularMatrixException("Cannot invert.");
-        }
-
-        RealBackSolver backSolver = new RealBackSolver();
-        return backSolver.solveIdentity(src);
+        return new RealBackSolver().solveIdentity(src); // If the matrix is singular, it will be caught here.
     }
 
 
@@ -131,12 +126,7 @@ public class Invert {
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static Matrix invTriL(Matrix src) {
-        if(zeroOnDiag(src)) {
-            throw new SingularMatrixException("Cannot invert.");
-        }
-
-        RealForwardSolver forwardSolver = new RealForwardSolver();
-        return forwardSolver.solveIdentity(src);
+        return new RealForwardSolver().solveIdentity(src); // If the matrix is singular, it will be caught here.
     }
 
 
@@ -154,18 +144,18 @@ public class Invert {
         Matrix inverse = new Matrix(src.shape);
 
         double value;
-        int idx = 0;
         int step = src.numCols+1;
+        double rank_condition = Math.ulp(1d);
+        double det = 1;
 
-        for(int i=0; i<src.numRows; i++) {
-            value = src.entries[idx];
-            idx += step;
+        for(int i=0; i<src.numRows; i+=step) {
+            value = src.entries[i];
+            det *= value;
+            inverse.entries[i] = 1.0/value;
+        }
 
-            if(value==0) {
-                throw new SingularMatrixException("Cannot invert.");
-            }
-
-            inverse.entries[idx] = 1.0/value;
+        if(Math.abs(det) <= rank_condition*Math.max(src.numRows, src.numCols)) {
+            throw new SingularMatrixException("Could not invert.");
         }
 
         return inverse;
@@ -181,13 +171,7 @@ public class Invert {
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static CMatrix invTriU(CMatrix src) {
-        ParameterChecks.assertSquareMatrix(src.shape);
-        if(zeroOnDiag(src)) {
-            throw new SingularMatrixException("Cannot invert.");
-        }
-
-        ComplexBackSolver backSolver = new ComplexBackSolver();
-        return backSolver.solveIdentity(src);
+        return new ComplexBackSolver().solveIdentity(src); // If matrix is singular, it will be caught here.
     }
 
 
@@ -200,12 +184,7 @@ public class Invert {
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static CMatrix invTriL(CMatrix src) {
-        if(zeroOnDiag(src)) {
-            throw new SingularMatrixException("Cannot invert.");
-        }
-
-        ComplexForwardSolver forwardSolver = new ComplexForwardSolver();
-        return forwardSolver.solveIdentity(src);
+        return new ComplexForwardSolver().solveIdentity(src); // If matrix is singular, it will be caught here.
     }
 
 
@@ -223,47 +202,21 @@ public class Invert {
         CMatrix inverse = new CMatrix(src.shape);
 
         CNumber value;
-        int idx = 0;
         int step = src.numCols+1;
+        double rank_condition = Math.ulp(1.0d);
+        CNumber det = CNumber.one();
 
-        for(int i=0; i<src.numRows; i++) {
-            value = src.entries[idx];
-            idx += step;
+        for(int i=0; i<src.numRows; i+=step) {
+            value = src.entries[i];
+            det.multEq(value);
+            inverse.entries[i] = value.multInv();
+        }
 
-            if(value.re==0 && value.im==0) {
-                throw new SingularMatrixException("Cannot invert.");
-            }
-
-            inverse.entries[idx] = value.multInv();
+        if(det.mag() <= rank_condition*Math.max(src.numRows, src.numCols)) {
+            throw new SingularMatrixException("Could not invert.");
         }
 
         return inverse;
-    }
-
-
-    /**
-     * Checks if a matrix has a zero entry on the diagonal.
-     * @param src Matrix of interest. Assumed to be square but not explicitly verified.
-     * @return True if the {@code src} matrix has zeros on the diagonal. False otherwise.
-     */
-    private static boolean zeroOnDiag(Matrix src) {
-        boolean result = false;
-
-        double value;
-        int idx = 0;
-        int step = src.numCols+1;
-
-        for(int i=0; i<src.numRows; i++) {
-            value = src.entries[idx];
-            idx += step;
-
-            if(value==0) {
-                result = true;
-                break;
-            }
-        }
-
-        return result;
     }
 
 
@@ -299,31 +252,5 @@ public class Invert {
         Matrix Linv = forwardSolver.solveIdentity(chol.getL());
 
         return backSolver.solveLower(chol.getLH(), Linv); // Compute inverse of src.
-    }
-
-
-    /**
-     * Checks if a matrix has a zero entry on the diagonal.
-     * @param src Matrix of interest. Assumed to be square but not explicitly verified.
-     * @return True if the {@code src} matrix has zeros on the diagonal. False otherwise.
-     */
-    private static boolean zeroOnDiag(CMatrix src) {
-        boolean result = false;
-
-        CNumber value;
-        int idx = 0;
-        int step = src.numCols+1;
-
-        for(int i=0; i<src.numRows; i++) {
-            value = src.entries[idx];
-            idx += step;
-
-            if(value.re==0 && value.im==0) {
-                result = true;
-                break;
-            }
-        }
-
-        return result;
     }
 }

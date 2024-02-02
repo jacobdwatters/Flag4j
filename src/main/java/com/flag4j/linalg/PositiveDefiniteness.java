@@ -41,7 +41,7 @@ public class PositiveDefiniteness {
 
     /**
      * Checks if the matrix is positive definite. A matrix {@code M} is positive definite iff
-     * {@code x<sup>T</sup>Mx &gt 0} for any vector {@code x}, or equivalently, if the matrix is symmetric and
+     * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if the matrix is symmetric and
      * all eigenvalues are strictly greater than zero.
      *
      * @param src Matrix to check if it is positive definite.
@@ -64,7 +64,7 @@ public class PositiveDefiniteness {
 
     /**
      * Checks if the matrix is positive definite. A matrix {@code M} is positive definite iff
-     * {@code x<sup>T</sup>Mx &gt 0} for any vector {@code x}, or equivalently, if the matrix is hermation and
+     * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if the matrix is hermation and
      * all eigenvalues are strictly greater than zero.
      *
      * @param src Matrix to check if it is positive definite.
@@ -87,7 +87,7 @@ public class PositiveDefiniteness {
 
     /**
      * Checks if the matrix is positive semi-definite. A matrix {@code M} is positive semi-definite iff
-     * {@code x<sup>T</sup>Mx &ge 0} for any vector {@code x}, or equivalently, if the matrix is symmetric and
+     * {@code x}<sup>T</sup>{@code Mx >= 0} for any vector {@code x}, or equivalently, if the matrix is symmetric and
      * all eigenvalues are greater than or equal to zero.
      *
      * @param src Matrix to check if it is positive semi-definite.
@@ -110,7 +110,7 @@ public class PositiveDefiniteness {
 
     /**
      * Checks if the matrix is positive semi-definite. A matrix {@code M} is positive semi-definite iff
-     * {@code x<sup>T</sup>Mx &ge 0} for any vector {@code x}, or equivalently, if the matrix is hermation and
+     * {@code x}<sup>T</sup>{@code Mx >= 0} for any vector {@code x}, or equivalently, if the matrix is hermation and
      * all eigenvalues are greater than or equal to zero.
      *
      * @param src Matrix to check if it is positive semi-definite.
