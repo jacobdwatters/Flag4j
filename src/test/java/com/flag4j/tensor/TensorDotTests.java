@@ -137,6 +137,7 @@ class TensorDotTests {
                 7376.4858083, 78860.54000000001, 16039.49902, 1099.454797616};
         expShape = new Shape(2, 2, 4, 2);
         exp = new Tensor(expShape, expEntries);
+        B = B.reshape(4, 3, 2);
 
         assertEquals(exp, A.tensorDot(B));
 
@@ -144,6 +145,6 @@ class TensorDotTests {
         // --------------------- Sub-case 1 ---------------------
         A = A.reshape(2, 2, 3);
         B = B.reshape(4, 2, 3);
-        assertThrows(IllegalArgumentException.class, ()->A.tensorDot(B));
+        assertThrows(LinearAlgebraException.class, ()->A.tensorDot(B));
     }
 }

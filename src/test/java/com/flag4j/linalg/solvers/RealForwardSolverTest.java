@@ -4,6 +4,7 @@ import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.exceptions.LinearAlgebraException;
 import com.flag4j.exceptions.SingularMatrixException;
+import com.flag4j.linalg.solvers.exact.RealForwardSolver;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

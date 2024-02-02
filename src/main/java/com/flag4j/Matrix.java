@@ -37,8 +37,6 @@ import com.flag4j.linalg.decompositions.lu.LUDecomposition;
 import com.flag4j.linalg.decompositions.lu.RealLUDecomposition;
 import com.flag4j.linalg.decompositions.svd.RealSVD;
 import com.flag4j.linalg.decompositions.svd.SVD;
-import com.flag4j.linalg.solvers.RealBackSolver;
-import com.flag4j.linalg.solvers.RealForwardSolver;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
@@ -1374,17 +1372,6 @@ public class Matrix
     @Override
     public void addEq(CooMatrix B) {
         RealDenseSparseMatrixOperations.addEq(this, B);
-    }
-
-
-    /**
-     * Computes the transpose of the matrix. Same as {@link #T()}.
-     *
-     * @return The transpose of this matrix.
-     */
-    @Override
-    public Matrix transpose() {
-        return T();
     }
 
 
@@ -2922,26 +2909,7 @@ public class Matrix
      */
     @Override
     public Matrix inv() {
-        ParameterChecks.assertSquareMatrix(shape);
-        LUDecomposition<Matrix> lu = new RealLUDecomposition().decompose(this);
-
-        // TODO: Should this be a globally defined final value?
-        double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
-        double det = RealDenseDeterminant.detTri(lu.getU());
-
-        if(Math.abs(det) < tol) {
-            throw new SingularMatrixException("Cannot invert.");
-        }
-
-        // Solve U*inv(A) = inv(L) for inv(A)
-        RealBackSolver backSolver = new RealBackSolver();
-        RealForwardSolver forwardSolver = new RealForwardSolver(true);
-
-        // Compute the inverse of unit lower triangular matrix L.
-        Matrix Linv = forwardSolver.solveIdentity(lu.getL());
-        Matrix inverse = backSolver.solveLower(lu.getU(), Linv); // Compute inverse of row permuted A.
-
-        return lu.getP().rightMult(inverse); // Finally, apply permutation matrix from LU decomposition.
+        return Invert.inv(this);
     }
 
 
@@ -3024,7 +2992,7 @@ public class Matrix
      * Compute the transpose of this matrix. That is, the complex conjugate transpose of this matrix. Since this is
      * a real matrix, this is equivalent to the {@link #T standard transpose}.
      *
-     * @return The transpose of this matrix.
+     * @return The conjugate transpose of this matrix.
      */
     @Override
     public Matrix H() {
@@ -3139,20 +3107,6 @@ public class Matrix
 
 
     /**
-     * Checks if this matrix is triangular (i.e. upper triangular, diagonal, lower triangular).
-     *
-     * @return True is this matrix is triangular. Otherwise, returns false.
-     * @see #isTriL()
-     * @see #isTriU()
-     * @see #isDiag()
-     */
-    @Override
-    public boolean isTri() {
-        return isTriL() || isTriU();
-    }
-
-
-    /**
      * Checks if this matrix is lower triangular.
      *
      * @return True is this matrix is lower triangular. Otherwise, returns false.
@@ -3207,20 +3161,6 @@ public class Matrix
 
 
     /**
-     * Checks if this matrix is diagonal.
-     *
-     * @return True is this matrix is diagonal. Otherwise, returns false.
-     * @see #isTri()
-     * @see #isTriU()
-     * @see #isTriL()
-     */
-    @Override
-    public boolean isDiag() {
-        return isTriL() && isTriU();
-    }
-
-
-    /**
      * Checks if a matrix has full rank. That is, if a matrices rank is equal to the number of rows in the matrix.
      *
      * @return True if this matrix has full rank. Otherwise, returns false.
@@ -3252,18 +3192,6 @@ public class Matrix
         }
 
         return result;
-    }
-
-
-    /**
-     * Checks if a matrix is invertible.<br>
-     * Also see {@link #isSingular()}.
-     *
-     * @return True if this matrix is invertible.
-     */
-    @Override
-    public boolean isInvertible() {
-        return !isSingular();
     }
 
 

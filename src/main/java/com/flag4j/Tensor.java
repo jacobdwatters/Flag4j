@@ -316,17 +316,6 @@ public class Tensor
         RealDenseSparseTensorOperations.addEq(this, B);
     }
 
-
-    /**
-     * Computes the transpose of a tensor. Same as {@link #T()}.
-     *
-     * @return The transpose of this tensor.
-     */
-    @Override
-    public Tensor transpose() {
-        return null;
-    }
-
     /**
      * Computes the transpose of a tensor. Same as {@link #transpose()}.
      * In the context of a tensor, this exchanges the first and last axis of the tensor.

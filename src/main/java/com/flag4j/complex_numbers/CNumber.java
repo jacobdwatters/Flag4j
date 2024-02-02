@@ -445,11 +445,11 @@ public class CNumber extends Number {
      * @param b Second complex number in the product.
      */
     public void multEq(CNumber b) {
-        double tempRe = this.re * b.re - this.im * b.im;
-        double tempIm = this.re * b.im + this.im * b.re;
+        double tempRe = re*b.re - im*b.im;
+        double tempIm = re*b.im + im*b.re;
 
-        this.re = tempRe;
-        this.im = tempIm;
+        re = tempRe;
+        im = tempIm;
     }
 
 

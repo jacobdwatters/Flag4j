@@ -128,17 +128,6 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
 
     /**
      * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
-     * and takes the complex conjugate of the elements along these axes. Same as {@link #H}.
-     *
-     * @return The complex transpose of this tensor.
-     */
-    @Override
-    public CsrCMatrix hermTranspose() {
-        return null;
-    }
-
-    /**
-     * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
      * and takes the complex conjugate of the elements along these axes. Same as {@link #hermTranspose()}.
      *
      * @return The complex transpose of this tensor.

@@ -28,12 +28,13 @@ package com.flag4j.core;
 import com.flag4j.CTensor;
 import com.flag4j.CooCTensor;
 import com.flag4j.Tensor;
+import com.flag4j.complex_numbers.CNumber;
 
 /**
  * This class specifies methods which any complex tensor that is <b>NOT</b> a matrix or vector should implement.
  * @param <T> Tensor type.
  */
-public interface ComplexTensorExclusiveMixin<T>
+public interface ComplexTensorExclusiveMixin<T extends TensorBase<T, CTensor, T, ?, ?, ?, CNumber>>
         extends TensorExclusiveMixin<T, CTensor, CooCTensor, T> {
 
     /**
@@ -47,7 +48,9 @@ public interface ComplexTensorExclusiveMixin<T>
      * @param axis2 Second axis to exchange and apply complex conjugate.
      * @return The conjugate transpose of this tensor.
      */
-    T hermTranspose(int axis1, int axis2);
+    default T hermTranspose(int axis1, int axis2) {
+        return H(axis1, axis2);
+    }
 
 
     /**
@@ -72,7 +75,9 @@ public interface ComplexTensorExclusiveMixin<T>
      * @return The conjugate transpose of this tensor with its axes permuted by the {@code axes} array.
      * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
      */
-    T hermTranspose(int... axes);
+    default T hermTranspose(int... axes) {
+        return H(axes);
+    }
 
 
     /**

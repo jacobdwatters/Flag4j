@@ -1,23 +1,23 @@
-package com.flag4j.linalg.solvers;
+package com.flag4j.linalg.solvers.exact;
 
-
-import com.flag4j.Matrix;
+import com.flag4j.CMatrix;
+import com.flag4j.CTensor;
+import com.flag4j.CVector;
 import com.flag4j.Shape;
-import com.flag4j.Tensor;
-import com.flag4j.Vector;
+
 
 /**
- * Solver for solving a real well determined linear tensor equation {@code A*X=B} in an exact sense.
+ * Solver for solving a complex well determined linear tensor equation {@code A*X=B} in an exact sense.
  */
-public class RealExactTensorSolver extends ExactTensorSolver<Tensor, Matrix, Vector> {
+public class ComplexExactTensorSolver extends ExactTensorSolver<CTensor, CMatrix, CVector> {
 
 
     /**
      * Creates an exact tensor solver for solving a well determined linear tensor equation {@code A*X=B}
      * for {@code X} in an exact sense.
      */
-    public RealExactTensorSolver() {
-        super(new RealExactSolver());
+    public ComplexExactTensorSolver() {
+        super(new ComplexExactSolver());
     }
 
 
@@ -29,8 +29,8 @@ public class RealExactTensorSolver extends ExactTensorSolver<Tensor, Matrix, Vec
      * @return A matrix with the same entries as tensor {@code A} with shape (prod, prod).
      */
     @Override
-    protected Matrix initMatrix(Tensor A, int prod) {
-        return new Matrix(prod, prod, A.entries);
+    protected CMatrix initMatrix(CTensor A, int prod) {
+        return new CMatrix(prod, prod, A.entries);
     }
 
 
@@ -41,8 +41,8 @@ public class RealExactTensorSolver extends ExactTensorSolver<Tensor, Matrix, Vec
      * @return Flattens tensor {@code B} and converts to a vector.
      */
     @Override
-    protected Vector initVector(Tensor B) {
-        return new Vector(B.entries);
+    protected CVector initVector(CTensor B) {
+        return new CVector(B.entries);
     }
 
 
@@ -54,7 +54,7 @@ public class RealExactTensorSolver extends ExactTensorSolver<Tensor, Matrix, Vec
      * @return The solution {@code X} to the linear tensor equation {@code A*X=B}.
      */
     @Override
-    protected Tensor wrap(Vector x, Shape outputShape) {
-        return new Tensor(outputShape, x.entries);
+    protected CTensor wrap(CVector x, Shape outputShape) {
+        return new CTensor(outputShape, x.entries);
     }
 }

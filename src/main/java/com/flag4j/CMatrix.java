@@ -33,12 +33,9 @@ import com.flag4j.core.dense.DenseMatrixMixin;
 import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.linalg.Invert;
-import com.flag4j.linalg.decompositions.lu.ComplexLUDecomposition;
 import com.flag4j.linalg.decompositions.lu.LUDecomposition;
 import com.flag4j.linalg.decompositions.svd.ComplexSVD;
 import com.flag4j.linalg.decompositions.svd.SVD;
-import com.flag4j.linalg.solvers.ComplexBackSolver;
-import com.flag4j.linalg.solvers.ComplexForwardSolver;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
@@ -1731,18 +1728,6 @@ public class CMatrix
 
 
     /**
-     * Computes the transpose of a tensor. Same as {@link #T()}.<br>
-     * This method does <b>NOT</b> compute the conjugate transpose. You may be looking for {@link #H()}.
-     *
-     * @return The transpose of this tensor.
-     */
-    @Override
-    public CMatrix transpose() {
-        return T();
-    }
-
-
-    /**
      * Computes the transpose of a tensor. Same as {@link #transpose()}.<br>
      * This method does <b>NOT</b> compute the conjugate transpose. You may be looking for {@link #H()}.
      *
@@ -1751,30 +1736,6 @@ public class CMatrix
     @Override
     public CMatrix T() {
         return TransposeDispatcher.dispatch(this);
-    }
-
-
-    /**
-     * Computes the complex conjugate transpose of a tensor.
-     * Same as {@link #hermTranspose()} and {@link #H()}.
-     *
-     * @return The complex conjugate transpose of this tensor.
-     */
-    @Override
-    public CMatrix conjT() {
-        return H();
-    }
-
-
-    /**
-     * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
-     * Same as {@link #conjT()} and {@link #H()}.
-     *
-     * @return he complex conjugate transpose (Hermitian transpose) of this tensor.
-     */
-    @Override
-    public CMatrix hermTranspose() {
-        return H();
     }
 
 
@@ -3386,26 +3347,7 @@ public class CMatrix
      */
     @Override
     public CMatrix inv() {
-        ParameterChecks.assertSquareMatrix(shape);
-        LUDecomposition<CMatrix> lu = new ComplexLUDecomposition().decompose(this);
-
-        // TODO: Should this be a globally defined final value?
-        double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
-        CNumber det = ComplexDenseDeterminant.detLU(lu.getL(), lu.getU());
-
-        if(det.mag() < tol) {
-            throw new SingularMatrixException("Cannot invert.");
-        }
-
-        // Solve U*inv(A) = inv(L) for inv(A)
-        ComplexBackSolver backSolver = new ComplexBackSolver();
-        ComplexForwardSolver forwardSolver = new ComplexForwardSolver(true);
-
-        // Compute the inverse of unit lower triangular matrix L.
-        CMatrix Linv = forwardSolver.solveIdentity(lu.getL());
-        CMatrix inverse = backSolver.solveLower(lu.getU(), Linv); // Compute inverse of row permuted A.
-
-        return lu.getP().rightMult(inverse); // Finally, apply permutation matrix from LU decomposition.
+        return Invert.inv(this);
     }
 
 
@@ -3585,17 +3527,6 @@ public class CMatrix
 
 
     /**
-     * Checks if this matrix is triangular (i.e. upper triangular, diagonal, lower triangular).
-     *
-     * @return True is this matrix is triangular. Otherwise, returns false.
-     */
-    @Override
-    public boolean isTri() {
-        return isTriL() || isTriU();
-    }
-
-
-    /**
      * Checks if this matrix is lower triangular.
      *
      * @return True is this matrix is lower triangular. Otherwise, returns false.
@@ -3644,17 +3575,6 @@ public class CMatrix
 
 
     /**
-     * Checks if this matrix is diagonal.
-     *
-     * @return True is this matrix is diagonal. Otherwise, returns false.
-     */
-    @Override
-    public boolean isDiag() {
-        return isTriL() && isTriU();
-    }
-
-
-    /**
      * Checks if a matrix has full rank. That is, if a matrices rank is equal to the number of rows in the matrix.
      *
      * @return True if this matrix has full rank. Otherwise, returns false.
@@ -3681,18 +3601,6 @@ public class CMatrix
         }
 
         return result;
-    }
-
-
-    /**
-     * Checks if a matrix is invertible.<br>
-     * Also see {@link #isSingular()}.
-     *
-     * @return True if this matrix is invertible.
-     */
-    @Override
-    public boolean isInvertible() {
-        return !isSingular();
     }
 
 

@@ -2501,17 +2501,6 @@ public class CsrMatrix
 
 
     /**
-     * Computes the transpose of a tensor. Same as {@link #T()}.
-     *
-     * @return The transpose of this tensor.
-     */
-    @Override
-    public CsrMatrix transpose() {
-        return T();
-    }
-
-
-    /**
      * Computes the transpose of a tensor. Same as {@link #transpose()}.
      *
      * @return The transpose of this tensor.

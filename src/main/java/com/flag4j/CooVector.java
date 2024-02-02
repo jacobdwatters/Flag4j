@@ -36,13 +36,13 @@ import com.flag4j.operations.dense_sparse.coo.real.RealDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
 import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
+import com.flag4j.operations.sparse.coo.SparseDataWrapper;
 import com.flag4j.operations.sparse.coo.real.RealSparseEquals;
 import com.flag4j.operations.sparse.coo.real.RealSparseVectorOperations;
 import com.flag4j.operations.sparse.coo.real_complex.RealComplexSparseEquals;
 import com.flag4j.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ParameterChecks;
-import com.flag4j.operations.sparse.coo.SparseDataWrapper;
 import com.flag4j.util.StringUtils;
 
 import java.util.ArrayList;
@@ -764,18 +764,6 @@ public class CooVector
     @Override
     public CooCVector div(CNumber divisor) {
         return new CooCVector(size, ComplexOperations.scalDiv(entries, divisor), indices.clone());
-    }
-
-
-    /**
-     * Computes the transpose of a tensor. Same as {@link #T()}. Since a vector is a rank 1 tensor, this just
-     * copies the vector.
-     *
-     * @return The transpose of this tensor.
-     */
-    @Override
-    public CooVector transpose() {
-        return this.copy();
     }
 
 

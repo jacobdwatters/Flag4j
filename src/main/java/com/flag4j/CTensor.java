@@ -255,19 +255,6 @@ public class CTensor
     }
 
 
-
-    /**
-     * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
-     * and takes the complex conjugate of the elements along these axes. Same as {@link #H}.
-     *
-     * @return The complex transpose of this tensor.
-     */
-    @Override
-    public CTensor hermTranspose() {
-        return H();
-    }
-
-
     /**
      * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
      * and takes the complex conjugate of the elements along these axes. Same as {@link #hermTranspose()}.
@@ -285,23 +272,6 @@ public class CTensor
                     getRank()-1
                 )
         );
-    }
-
-
-    /**
-     * Computes the conjugate transpose of a tensor. Same as {@link #H(int, int)}.
-     * In the context of a tensor, this exchanges the specified axes and takes the complex conjugate of elements along
-     * those axes.
-     * Also see {@link #hermTranspose() hermTranspose()} and
-     * {@link #H() H()} to conjugate transpose first and last axes.
-     *
-     * @param axis1 First axis to exchange and apply complex conjugate.
-     * @param axis2 Second axis to exchange and apply complex conjugate.
-     * @return The conjugate transpose of this tensor.
-     */
-    @Override
-    public CTensor hermTranspose(int axis1, int axis2) {
-        return H(axis1, axis2);
     }
 
 
@@ -327,21 +297,6 @@ public class CTensor
                         axis2
                 )
         );
-    }
-
-
-    /**
-     * Computes the conjugate transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
-     * the specified axes permutation and takes the complex conjugate of the elements of these axes. Same as {@link #H(int[])}.
-     *
-     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
-     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
-     * @return The conjugate transpose of this tensor with its axes permuted by the {@code axes} array.
-     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
-     */
-    @Override
-    public CTensor hermTranspose(int... axes) {
-        return H(axes);
     }
 
 
@@ -548,17 +503,6 @@ public class CTensor
     @Override
     public CTensor sub(CooTensor B) {
         return RealComplexDenseSparseOperations.sub(this, B);
-    }
-
-
-    /**
-     * Computes the transpose of a tensor. Same as {@link #T()}.
-     *
-     * @return The transpose of this tensor.
-     */
-    @Override
-    public CTensor transpose() {
-        return T();
     }
 
 

@@ -1,9 +1,11 @@
-package com.flag4j.linalg.solvers;
+package com.flag4j.linalg.solvers.exact;
 
 import com.flag4j.Shape;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.TensorBase;
 import com.flag4j.core.VectorMixin;
+import com.flag4j.linalg.solvers.LinearSolver;
+import com.flag4j.linalg.solvers.LinearTensorSolver;
 import com.flag4j.util.ParameterChecks;
 
 

@@ -697,4 +697,46 @@ public class RandomTensor {
         CMatrix randMat = new CMatrix(size, size, RAND_ARRAY.genUniformComplexArray(size));
         return new ComplexQRDecomposition().decompose(randMat).getQ();
     }
+
+
+    /**
+     * Gets a pseudorandom upper triangular matrix of the specified size. The entries will be distributed according to a
+     * standard normal distribution with a mean of 0 and standard deviation of 1.
+     * @param size Size if the upper triangular matrix.
+     * @return A pseudorandom upper triangular matrix of the specified size.
+     */
+    public Matrix getRandomTriuMatrix(int size, int min, int max) {
+        double[] entries = new double[size*size];
+        double maxMin = max-min;
+
+        for(int i=0; i<size; i++) {
+            int rowOffset = i*size;
+            for(int j=i; j<size; j++) {
+                entries[rowOffset + j] = COMPLEX_RNG.nextDouble()*maxMin + min;
+            }
+        }
+
+        return new Matrix(new Shape(size, size), entries);
+    }
+
+
+    /**
+     * Gets a pseudorandom lower triangular matrix of the specified size. The entries will be distributed according to a
+     * standard normal distribution with a mean of 0 and standard deviation of 1.
+     * @param size Size if the lower triangular matrix.
+     * @return A pseudorandom lower triangular matrix of the specified size.
+     */
+    public Matrix geRandomTrilMatrix(int size, int min, int max) {
+        double[] entries = new double[size*size];
+        double maxMin = max-min;
+
+        for(int i=0; i<size; i++) {
+            int rowOffset = i*size;
+            for(int j=0; j<=i; j++) {
+                entries[rowOffset + j] = COMPLEX_RNG.nextDouble()*maxMin + min;
+            }
+        }
+
+        return new Matrix(new Shape(size, size), entries);
+    }
 }

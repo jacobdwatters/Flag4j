@@ -22,35 +22,35 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.solvers;
+package com.flag4j.linalg.solvers.exact;
 
-import com.flag4j.Matrix;
-import com.flag4j.Vector;
+import com.flag4j.CMatrix;
+import com.flag4j.CVector;
 import com.flag4j.exceptions.SingularMatrixException;
+import com.flag4j.linalg.decompositions.lu.ComplexLUDecomposition;
 import com.flag4j.linalg.decompositions.lu.LUDecomposition;
-import com.flag4j.linalg.decompositions.lu.RealLUDecomposition;
-import com.flag4j.operations.dense.real.RealDenseDeterminant;
+import com.flag4j.operations.dense.complex.ComplexDenseDeterminant;
 
 
 /**
  * Solver for solving a well determined system of linear equations in an exact sense using the
  * {@link LUDecomposition LU decomposition.}
  */
-public class RealExactSolver extends ExactSolver<Matrix, Vector> {
+public class ComplexExactSolver extends ExactSolver<CMatrix, CVector> {
 
     /**
      * Threshold for determining if a determinant is to be considered zero when checking if the coefficient matrix is
      * full rank.
      */
-    private static final double RANK_CONDITION = 1.0e-15;
+    private static final double RANK_CONDITION = 1.0E-8;
 
     /**
      * Constructs an exact LU solver where the coefficient matrix is real dense.
      */
-    public RealExactSolver() {
-        super(new RealLUDecomposition(),
-                new RealForwardSolver(true),
-                new RealBackSolver()
+    public ComplexExactSolver() {
+        super(new ComplexLUDecomposition(),
+                new ComplexForwardSolver(true),
+                new ComplexBackSolver()
         );
     }
 
@@ -62,7 +62,7 @@ public class RealExactSolver extends ExactSolver<Matrix, Vector> {
      */
     @Override
     protected void checkSingular() {
-        double det = Math.abs(RealDenseDeterminant.detTri(upper));
+        double det = ComplexDenseDeterminant.detLU(lower, upper).mag();
 
         if(det <= RANK_CONDITION*Math.max(lower.numRows, upper.numCols) || Double.isNaN(det)) {
             throw new SingularMatrixException("Could not solve system.");
@@ -78,7 +78,7 @@ public class RealExactSolver extends ExactSolver<Matrix, Vector> {
      * to the vector {@code b}.
      */
     @Override
-    protected Vector permuteRows(Vector b) {
+    protected CVector permuteRows(CVector b) {
         return rowPermute.leftMult(b);
 //        return rowPermute.mult(b);
     }
@@ -92,7 +92,7 @@ public class RealExactSolver extends ExactSolver<Matrix, Vector> {
      * to the matrix {@code B}.
      */
     @Override
-    protected Matrix permuteRows(Matrix B) {
+    protected CMatrix permuteRows(CMatrix B) {
         return rowPermute.leftMult(B);
 //        return rowPermute.mult(B);
     }

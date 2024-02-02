@@ -39,18 +39,20 @@ public interface ComplexMatrixMixin<T> {
 
     /**
      * Computes the complex conjugate transpose of a tensor.
-     * Same as {@link #hermTranspose()} and {@link MatrixOperationsMixin#H()}.
+     * Same as {@link #H()}.
      * @return The complex conjugate transpose of this tensor.
      */
-    T conjT();
+    default T conjT() {
+        return H();
+    }
 
 
     /**
      * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
-     * Same as {@link #conjT()} and {@link MatrixOperationsMixin#H()}.
+     * Same as {@link #conjT()}.
      * @return The complex conjugate transpose (Hermitian transpose) of this tensor.
      */
-    T hermTranspose();
+    T H();
 
 
     /**

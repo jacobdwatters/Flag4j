@@ -54,50 +54,21 @@ public class ComplexDenseTensorDot {
      * along the second-to-last axis.
      */
     public static CTensor dot(CTensor src1, CTensor src2) {
-        int src1Dim = src1.getRank(); // Rank of first tensor.
-        int src2Dim = src2.getRank(); // Rank of second tensor.
+        int src1Rank = src1.getRank();
+        int src2Rank = src2.getRank();
 
-        // Ensure tensors have same length along last axis.
-        ParameterChecks.assertEquals(src1.shape.get(src1Dim-1), src2.shape.get(src2Dim-2));
-
-        int axisLength = src1.shape.get(src1Dim-1); // Length of axis along which to compute dot product.
-        CTensor src2Swap = src2.T(src2Dim-1, src2Dim-2);
-
-        int iStop = src1.totalEntries().intValueExact()/src1.shape.get(src1Dim-1);
-        int jStop = src2.totalEntries().intValueExact()/src2.shape.get(src2Dim-2);
-        int[] dims = new int[src1Dim+src2Dim-2];
-        int idx = 0;
-
-        // Copy shape dimensions from each tensor.
-        for(int i=0; i<src1Dim-1; i++) {
-            dims[idx++] = src1.shape.dims[i];
+        if(src1Rank==2 && src2Rank==2) {
+            // Product is simply a matrix multiplication problem.
+            return new CTensor(
+                    new Shape(src1.shape.dims[0], src2.shape.dims[1]),
+                    MatrixMultiplyDispatcher.dispatch(src1.entries, src1.shape, src2.entries, src2.shape)
+            );
         }
 
-        for(int i=0; i<src2Dim-1; i++) {
-            dims[idx++] = src2Swap.shape.dims[i];
-        }
+        // If second tensor has rank one, then use zero axis. Otherwise, use second to last axis.
+        src2Rank = (src2Rank==1) ? 0 : src2Rank-2;
 
-        Shape destShape = new Shape(dims);
-        CNumber[] dest = new CNumber[destShape.totalEntries().intValueExact()];
-        ArrayUtils.fillZeros(dest);
-        int src1_start, src2_start;
-
-        idx = 0;
-        for(int i=0; i<iStop; i++) {
-            src1_start = i*axisLength;
-
-            for(int j=0; j<jStop; j++) {
-                src2_start = j*axisLength;
-
-                for(int k=0; k<axisLength; k++) {
-                    dest[idx].addEq(src1.entries[src1_start + k].mult(src2Swap.entries[src2_start + k]));
-                }
-
-                idx++;
-            }
-        }
-
-        return new CTensor(destShape, dest);
+        return tensorDot(src1, src2, new int[]{src1Rank - 1}, new int[]{src2Rank});
     }
 
 

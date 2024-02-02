@@ -22,13 +22,14 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.solvers;
+package com.flag4j.linalg.solvers.lstq;
 
 
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.linalg.decompositions.qr.QRDecomposition;
 import com.flag4j.linalg.decompositions.qr.RealQRDecomposition;
+import com.flag4j.linalg.solvers.exact.RealBackSolver;
 
 
 /**

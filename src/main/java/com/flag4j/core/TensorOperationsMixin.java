@@ -148,7 +148,9 @@ interface TensorOperationsMixin<T, U, W, Z, Y, X extends Number> {
      * Computes the transpose of a tensor. Same as {@link #T()}.
      * @return The transpose of this tensor.
      */
-    T transpose();
+    default T transpose(){
+        return T();
+    }
 
 
     /**

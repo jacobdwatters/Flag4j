@@ -78,7 +78,9 @@ public interface ComplexTensorMixin<T, Y> {
      * and takes the complex conjugate of the elements along these axes. Same as {@link #H}.
      * @return The complex transpose of this tensor.
      */
-    T hermTranspose();
+    default T hermTranspose() {
+        return H();
+    }
 
 
     /**

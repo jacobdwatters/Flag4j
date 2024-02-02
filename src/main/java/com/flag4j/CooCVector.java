@@ -251,18 +251,6 @@ public class CooCVector
 
     /**
      * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
-     * and takes the complex conjugate of the elements along these axes. Same as {@link #H}.
-     *
-     * @return The complex transpose of this tensor.
-     */
-    @Override
-    public CooCVector hermTranspose() {
-        return H();
-    }
-
-
-    /**
-     * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
      * and takes the complex conjugate of the elements along these axes. Same as {@link #hermTranspose()}.
      *
      * @return The complex transpose of this tensor.

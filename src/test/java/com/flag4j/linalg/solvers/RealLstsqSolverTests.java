@@ -2,6 +2,7 @@ package com.flag4j.linalg.solvers;
 
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
+import com.flag4j.linalg.solvers.lstq.RealLstsqSolver;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

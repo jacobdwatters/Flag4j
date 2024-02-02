@@ -211,53 +211,67 @@ public final class MatrixMultiplyDispatcher {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static CNumber[] dispatch(CMatrix A, CMatrix B) {
-        assertMatMultShapes(A.shape, B.shape);
+        return dispatch(A.entries, A.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Dispatches a matrix multiplication problem to the appropriate algorithm based on the size.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape of the second matrix.
+     * @return The result of the matrix multiplication between the two matrices.
+     */
+    public static CNumber[] dispatch(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+        assertMatMultShapes(shape1, shape2);
 
         AlgorithmName algorithm;
         CNumber[] dest;
 
-        if(B.numCols==1) {
-            algorithm = chooseAlgorithmComplexVector(A.shape);
+        if(shape2.dims[1]==1) {
+            // Then B is a column vector.
+            algorithm = chooseAlgorithmComplexVector(shape1);
         } else {
-            algorithm = chooseAlgorithmComplex(A.shape, B.shape);
+            algorithm = chooseAlgorithmComplex(shape1, shape2);
         }
 
         switch(algorithm) {
             case STANDARD:
-                dest = ComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
+                dest = ComplexDenseMatrixMultiplication.standard(src1, shape1, src2, shape2);
                 break;
             case REORDERED:
-                dest = ComplexDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
+                dest = ComplexDenseMatrixMultiplication.reordered(src1, shape1, src2, shape2);
                 break;
             case BLOCKED:
-                dest = ComplexDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
+                dest = ComplexDenseMatrixMultiplication.blocked(src1, shape1, src2, shape2);
                 break;
             case BLOCKED_REORDERED:
-                dest = ComplexDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
+                dest = ComplexDenseMatrixMultiplication.blockedReordered(src1, shape1, src2, shape2);
                 break;
             case CONCURRENT_STANDARD:
-                dest = ComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
+                dest = ComplexDenseMatrixMultiplication.concurrentStandard(src1, shape1, src2, shape2);
                 break;
             case CONCURRENT_REORDERED:
-                dest = ComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+                dest = ComplexDenseMatrixMultiplication.concurrentReordered(src1, shape1, src2, shape2);
                 break;
             case CONCURRENT_BLOCKED:
-                dest = ComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
+                dest = ComplexDenseMatrixMultiplication.concurrentBlocked(src1, shape1, src2, shape2);
                 break;
             case CONCURRENT_BLOCKED_REORDERED:
-                dest = ComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
+                dest = ComplexDenseMatrixMultiplication.concurrentBlockedReordered(src1, shape1, src2, shape2);
                 break;
             case STANDARD_VECTOR:
-                dest = ComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);
+                dest = ComplexDenseMatrixMultiplication.standardVector(src1, shape1, src2, shape2);
                 break;
             case BLOCKED_VECTOR:
-                dest = ComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);
+                dest = ComplexDenseMatrixMultiplication.blockedVector(src1, shape1, src2, shape2);
                 break;
             case CONCURRENT_STANDARD_VECTOR:
-                dest = ComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
+                dest = ComplexDenseMatrixMultiplication.concurrentStandardVector(src1, shape1, src2, shape2);
                 break;
             default:
-                dest = ComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
+                dest = ComplexDenseMatrixMultiplication.concurrentBlockedVector(src1, shape1, src2, shape2);
                 break;
         }
 

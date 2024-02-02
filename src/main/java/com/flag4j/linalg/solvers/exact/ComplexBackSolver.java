@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.solvers;
+package com.flag4j.linalg.solvers.exact;
 
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
@@ -34,7 +34,36 @@ import com.flag4j.exceptions.SingularMatrixException;
  * This solver solves linear systems of equations where the coefficient matrix in an upper triangular complex dense matrix
  * and the constant vector is a complex dense vector.
  */
-public class ComplexBackSolver implements LinearSolver<CMatrix, CVector> {
+public class ComplexBackSolver extends BackSolver<CMatrix, CVector, CNumber[]> {
+
+    /**
+     * For computing determinant of coefficient matrix during solve.
+     */
+    protected CNumber det;
+    /**
+     * For checking against other values.
+     */
+    private final CNumber z = CNumber.zero();
+
+
+    /**
+     * Creates a solver for solving linear systems for upper triangular coefficient matrices. Note, by default no check will
+     * be made to ensure the coefficient matrix is upper triangular. If you would like to enforce this, see
+     * {@link #ComplexBackSolver(boolean)}.
+     */
+    public ComplexBackSolver() {
+        super(false);
+    }
+
+
+    /**
+     * Creates a solver for solving linear systems for upper triangular coefficient matrices.
+     * @param enforceTriU Flag indicating if an explicit check should be made that the coefficient matrix is upper triangular.
+     */
+    public ComplexBackSolver(boolean enforceTriU) {
+        super(enforceTriU);
+    }
+
 
     /**
      * Solves the linear system of equations given by {@code U*x=b} where the coefficient matrix {@code U}
@@ -49,27 +78,31 @@ public class ComplexBackSolver implements LinearSolver<CMatrix, CVector> {
      */
     @Override
     public CVector solve(CMatrix U, CVector b) {
+        checkParams(U, b.size);
+
         CNumber sum;
         int uIndex;
         int n = b.size;
-        CVector x = new CVector(U.numRows);
+        x = new CVector(U.numRows);
+        det = U.entries[n*n-1];
 
-        x.entries[n-1] = b.entries[n-1].div(U.entries[n*n-1]);
+        x.entries[n-1] = b.entries[n-1].div(det);
 
         for(int i=n-2; i>-1; i--) {
             sum = new CNumber();
             uIndex = i*U.numCols;
 
-            if(U.entries[i*(n+1)].equals(0)) {
-                throw new SingularMatrixException("Cannot solve linear system.");
-            }
+            CNumber diag = U.entries[i*(n+1)];
+            det.multEq(diag);
 
             for(int j=i+1; j<n; j++) {
                 sum.addEq(U.entries[uIndex + j].mult(x.entries[j]));
             }
 
-            x.entries[i] = (b.entries[i].sub(sum)).div(U.entries[i*(n+1)]);
+            x.entries[i] = (b.entries[i].sub(sum)).div(diag);
         }
+
+        checkSingular(det.mag(), U.numRows, U.numCols); // Ensure the matrix is not singular.
 
         return x;
     }
@@ -87,13 +120,23 @@ public class ComplexBackSolver implements LinearSolver<CMatrix, CVector> {
      */
     @Override
     public CMatrix solve(CMatrix U, CMatrix B) {
+        checkParams(U, B.numRows);
+
         CNumber sum, diag;
         int uIndex, xIndex;
         int n = B.numRows;
-        CMatrix X = new CMatrix(B.shape);
+        X = new CMatrix(B.shape);
+        det = U.entries[n*n-1].copy();
+
+        xCol = new CNumber[n];
 
         for(int j=0; j<B.numCols; j++) {
-            X.entries[(n-1)*X.numCols + j] = B.entries[(n-1)*X.numCols + j].div(U.entries[n*n-1]).copy();
+            X.entries[(n-1)*X.numCols + j] = B.entries[(n-1)*X.numCols + j].div(U.entries[n*n-1]);
+
+            // Store column to improve cache performance on innermost loop.
+            for(int k=0; k<n; k++) {
+                xCol[k] = X.entries[k*X.numCols + j].copy();
+            }
 
             for(int i=n-2; i>-1; i--) {
                 sum = new CNumber();
@@ -101,17 +144,19 @@ public class ComplexBackSolver implements LinearSolver<CMatrix, CVector> {
                 xIndex = i*X.numCols + j;
 
                 diag = U.entries[i*(n+1)];
-                if(diag.equals(0)) {
-                    throw new SingularMatrixException("Cannot solve linear system.");
-                }
+                det.multEq(diag);
 
                 for(int k=i+1; k<n; k++) {
-                    sum.addEq(U.entries[uIndex + k].mult(X.entries[k*X.numCols + j]));
+                    sum.addEq(U.entries[uIndex + k].mult(xCol[k]));
                 }
 
-                X.entries[xIndex] = B.entries[xIndex].sub(sum).div(diag);
+                CNumber value = B.entries[xIndex].sub(sum).div(diag);
+                X.entries[xIndex] = value;
+                xCol[i] = value;
             }
         }
+
+        checkSingular(det.mag(), U.numRows, U.numCols); // Ensure the matrix is not singular.
 
         return X;
     }
@@ -128,15 +173,23 @@ public class ComplexBackSolver implements LinearSolver<CMatrix, CVector> {
      * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. has a zero on the principle diagonal).
      */
     public CMatrix solveIdentity(CMatrix U) {
+        checkParams(U, U.numRows);
+
         CNumber sum, diag;
         int uIndex, xIndex;
         int n = U.numRows;
-        CMatrix X = new CMatrix(U.shape);
-        CNumber z = CNumber.zero();
+        X = new CMatrix(U.shape);
+        det = U.entries[n*n-1].copy();
 
-        X.entries[X.entries.length-1] = U.entries[n*n-1].multInv();
+        xCol = new CNumber[n];
+        X.entries[X.entries.length-1] = det.multInv();
 
         for(int j=0; j<U.numCols; j++) {
+            // Store column to improve cache performance on innermost loop.
+            for(int k=0; k<n; k++) {
+                xCol[k] = X.entries[k*X.numCols + j];
+            }
+
             for(int i=n-2; i>-1; i--) {
                 sum = (i == j) ? CNumber.one() : CNumber.zero();
                 uIndex = i*U.numCols;
@@ -144,15 +197,19 @@ public class ComplexBackSolver implements LinearSolver<CMatrix, CVector> {
                 uIndex += i+1;
                 diag = U.entries[i*(n+1)];
 
-                if(diag.equals(z)) throw new SingularMatrixException("Cannot solve linear system.");
+                det.multEq(diag);
 
                 for(int k=i+1; k<n; k++) {
-                    sum.subEq(U.entries[uIndex++].mult(X.entries[k*X.numCols + j]));
+                    sum.subEq(U.entries[uIndex++].mult(xCol[k]));
                 }
 
-                X.entries[xIndex] = sum.div(diag);
+                CNumber value = sum.div(diag);
+                X.entries[xIndex] = value;
+                xCol[i] = value;
             }
         }
+
+        checkSingular(det.mag(), U.numRows, U.numCols); // Ensure the matrix is not singular.
 
         return X;
     }
@@ -168,16 +225,25 @@ public class ComplexBackSolver implements LinearSolver<CMatrix, CVector> {
      * @return The result of solving the linear system {@code U*X=L} for the matrix {@code X}.
      */
     public CMatrix solveLower(CMatrix U, CMatrix L) {
+        checkParams(U, L.numRows);
+
         CNumber sum, diag;
         int uIndex, xIndex;
         int n = L.numRows;
         CNumber uValue = U.entries[n*n-1];
         int rowOffset = (n-1)*n;
-        CMatrix X = new CMatrix(L.shape);
-        CNumber z = CNumber.zero();
+        X = new CMatrix(L.shape);
+        det = uValue.copy();
+
+        xCol = new CNumber[n];
 
         for(int j=0; j<n; j++) {
             X.entries[rowOffset] = L.entries[rowOffset++].div(uValue);
+
+            // Store column to improve cache performance on innermost loop.
+            for(int k=0; k<n; k++) {
+                xCol[k] = X.entries[k*X.numCols + j];
+            }
 
             for(int i=L.numCols-2; i>=0; i--) {
                 sum = CNumber.zero();
@@ -185,15 +251,19 @@ public class ComplexBackSolver implements LinearSolver<CMatrix, CVector> {
                 xIndex = uIndex + j;
                 diag = U.entries[i*(n+1)];
 
-                if(diag.equals(z)) throw new SingularMatrixException("Cannot solve linear system.");
+                det.multEq(diag);
 
                 for(int k=i+1; k<n; k++) {
-                    sum.addEq(U.entries[uIndex + k].mult(X.entries[k*X.numCols + j]));
+                    sum.addEq(U.entries[uIndex + k].mult(xCol[k]));
                 }
 
-                X.entries[xIndex] = L.entries[xIndex].sub(sum).div(diag);
+                CNumber value = L.entries[xIndex].sub(sum).div(diag);
+                X.entries[xIndex] = value;
+                xCol[i] = value;
             }
         }
+
+        checkSingular(det.mag(), U.numRows, U.numCols); // Ensure the matrix is not singular.
 
         return X;
     }

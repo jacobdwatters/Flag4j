@@ -161,6 +161,6 @@ class CTensorDotTests {
         // --------------------- Sub-case 1 ---------------------
         A = A.reshape(2, 2, 3);
         B = B.reshape(4, 2, 3);
-        assertThrows(IllegalArgumentException.class, ()->A.tensorDot(B));
+        assertThrows(LinearAlgebraException.class, ()->A.tensorDot(B));
     }
 }

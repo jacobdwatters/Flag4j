@@ -22,13 +22,14 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.solvers;
+package com.flag4j.linalg.solvers.lstq;
 
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;
 import com.flag4j.linalg.decompositions.qr.QRDecomposition;
+import com.flag4j.linalg.solvers.LinearSolver;
 
 
 // TODO: Add option to use SVD instead of QR (SVD should be default). It will be slower but has better numerical properties.

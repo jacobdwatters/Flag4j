@@ -30,10 +30,13 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.linalg.decompositions.cholesky.CholeskyDecomposition;
 import com.flag4j.linalg.decompositions.cholesky.RealCholeskyDecomposition;
-import com.flag4j.linalg.solvers.ComplexBackSolver;
-import com.flag4j.linalg.solvers.ComplexForwardSolver;
-import com.flag4j.linalg.solvers.RealBackSolver;
-import com.flag4j.linalg.solvers.RealForwardSolver;
+import com.flag4j.linalg.decompositions.lu.ComplexLUDecomposition;
+import com.flag4j.linalg.decompositions.lu.LUDecomposition;
+import com.flag4j.linalg.decompositions.lu.RealLUDecomposition;
+import com.flag4j.linalg.solvers.exact.ComplexBackSolver;
+import com.flag4j.linalg.solvers.exact.ComplexForwardSolver;
+import com.flag4j.linalg.solvers.exact.RealBackSolver;
+import com.flag4j.linalg.solvers.exact.RealForwardSolver;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -45,6 +48,58 @@ public class Invert {
     private Invert() {
         // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+    }
+
+
+    /**
+     * Computes the inverse of this matrix. This is done by computing the {@link LUDecomposition LU decomposition} of
+     * this matrix, inverting {@code L} using a back-solve algorithm, then solving {@code U*inv(src)=inv(L)}
+     * for {@code inv(src)}.
+     *
+     * @param src Matrix to compute inverse of.
+     * @return The inverse of this matrix.
+     * @throws IllegalArgumentException If the {@code src} matrix is not square.
+     * @throws SingularMatrixException If the {@code src} matrix is singular (i.e. not invertible).
+     */
+    public static Matrix inv(Matrix src) {
+        ParameterChecks.assertSquareMatrix(src.shape);
+        LUDecomposition<Matrix> lu = new RealLUDecomposition().decompose(src);
+
+        // Solve U*inv(A) = inv(L) for inv(A)
+        RealBackSolver backSolver = new RealBackSolver();
+        RealForwardSolver forwardSolver = new RealForwardSolver(true);
+
+        // Compute the inverse of unit lower triangular matrix L.
+        Matrix Linv = forwardSolver.solveIdentity(lu.getL());
+        Matrix inverse = backSolver.solveLower(lu.getU(), Linv); // Compute inverse of row permuted A.
+
+        return lu.getP().rightMult(inverse); // Finally, apply permutation matrix from LU decomposition.
+    }
+
+
+    /**
+     * Computes the inverse of this matrix. This is done by computing the {@link LUDecomposition LU decomposition} of
+     * this matrix, inverting {@code L} using a back-solve algorithm, then solving {@code U*inv(src)=inv(L)}
+     * for {@code inv(src)}.
+     *
+     * @param src Matrix to compute inverse of.
+     * @return The inverse of this matrix.
+     * @throws IllegalArgumentException If the {@code src} matrix is not square.
+     * @throws SingularMatrixException If the {@code src} matrix is singular (i.e. not invertible).
+     */
+    public static CMatrix inv(CMatrix src) {
+        ParameterChecks.assertSquareMatrix(src.shape);
+        LUDecomposition<CMatrix> lu = new ComplexLUDecomposition().decompose(src);
+
+        // Solve U*inv(A) = inv(L) for inv(A)
+        ComplexBackSolver backSolver = new ComplexBackSolver();
+        ComplexForwardSolver forwardSolver = new ComplexForwardSolver(true);
+
+        // Compute the inverse of unit lower triangular matrix L.
+        CMatrix Linv = forwardSolver.solveIdentity(lu.getL());
+        CMatrix inverse = backSolver.solveLower(lu.getU(), Linv); // Compute inverse of row permuted A.
+
+        return lu.getP().rightMult(inverse); // Finally, apply permutation matrix from LU decomposition.
     }
 
 

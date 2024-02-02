@@ -326,17 +326,6 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
 
 
     /**
-     * Computes the transpose of a tensor. Same as {@link #T()}.
-     * This has no effect on a vector.
-     * @return The transpose of this tensor.
-     */
-    @Override
-    public CVector transpose() {
-        return T();
-    }
-
-
-    /**
      * Computes the transpose of a tensor. Same as {@link #transpose()}.
      * This has no effect on a vector.
      * @return The transpose of this tensor.
@@ -1131,18 +1120,6 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
     @Override
     public int length() {
         return this.size;
-    }
-
-
-    /**
-     * Computes the conjugate transpose of this vector. Since a vector is a rank 1 tensor, this simply
-     * computes the complex conjugate of this vector.
-     *
-     * @return The complex conjugate of this vector.
-     */
-    @Override
-    public CVector hermTranspose() {
-        return conj();
     }
 
 

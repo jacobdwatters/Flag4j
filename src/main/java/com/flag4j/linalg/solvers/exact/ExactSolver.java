@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.solvers;
+package com.flag4j.linalg.solvers.exact;
 
 
 import com.flag4j.PermutationMatrix;
@@ -30,6 +30,8 @@ import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;
 import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.linalg.decompositions.lu.LUDecomposition;
+import com.flag4j.linalg.solvers.LinearSolver;
+import com.flag4j.linalg.solvers.lstq.LstsqSolver;
 import com.flag4j.util.ParameterChecks;
 
 /**
@@ -116,10 +118,9 @@ public abstract class ExactSolver<
         ParameterChecks.assertEquals(A.numCols(), b.size()); // b must have the same number of entries as columns in A.
 
         decompose(A); // Compute LU decomposition.
-        checkSingular(); // Ensure the coefficient matrix is not singular using LU decomposition.
 
         U y = forwardSolver.solve(lower, permuteRows(b));
-        return backSolver.solve(upper, y);
+        return backSolver.solve(upper, y); // If A is singular, then U will be singular, and it will be discovered here.
     }
 
 

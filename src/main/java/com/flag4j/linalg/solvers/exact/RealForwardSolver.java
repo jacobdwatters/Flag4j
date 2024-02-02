@@ -22,11 +22,12 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.solvers;
+package com.flag4j.linalg.solvers.exact;
 
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.exceptions.SingularMatrixException;
+import com.flag4j.linalg.solvers.LinearSolver;
 import com.flag4j.util.ParameterChecks;
 
 

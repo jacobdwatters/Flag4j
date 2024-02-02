@@ -45,7 +45,8 @@ public final class RealDenseTensorDot {
 
 
     /**
-     * Computes the tensor dot product along the first tensors last axis and the second tensors second-to-last axis.
+     * Computes the tensor dot product along the first tensors last axis and the second tensors second-to-last axis. Or, if the second
+     * tensor has rank 1, the last axis of the second tensor.
      * @param src1 First tensor in the tensor product.
      * @param src2 Second tensor in the tensor product.
      * @return The tensor dot product along the first tensors last axis and the second tensors second-to-last axis.
@@ -53,16 +54,21 @@ public final class RealDenseTensorDot {
      * along the second-to-last axis.
      */
     public static Tensor tensorDot(Tensor src1, Tensor src2) {
-        if(src1.getRank()==2 && src2.getRank()==2) {
-            // Simply a matrix multiplication problem.
+        int src1Rank = src1.getRank();
+        int src2Rank = src2.getRank();
+
+        if(src1Rank==2 && src2Rank==2) {
+            // Product is simply a matrix multiplication problem.
             return new Tensor(
                     new Shape(src1.shape.dims[0], src2.shape.dims[1]),
                     RealDenseMatrixMultiplyDispatcher.dispatch(src1.entries, src1.shape, src2.entries, src2.shape)
             );
         }
 
-        int rank1 = src1.getRank();
-        return tensorDot(src1, src2, new int[]{rank1-2, rank1-1}, new int[]{0, 1});
+        // If second tensor has rank one, then use zero axis. Otherwise, use second to last axis.
+        src2Rank = (src2Rank==1) ? 0 : src2Rank-2;
+
+        return tensorDot(src1, src2, new int[]{src1Rank - 1}, new int[]{src2Rank});
     }
 
 

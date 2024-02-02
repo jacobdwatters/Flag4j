@@ -689,18 +689,6 @@ public class CooCMatrix
 
 
     /**
-     * Computes the complex conjugate transpose of a tensor.
-     * Same as {@link #hermTranspose()} and {@link #H()}.
-     *
-     * @return The complex conjugate transpose of this tensor.
-     */
-    @Override
-    public CooCMatrix conjT() {
-        return H();
-    }
-
-
-    /**
      * Checks if a matrix is Hermitian. That is, if the matrix is equal to its conjugate transpose.
      *
      * @return True if this matrix is Hermitian. Otherwise, returns false.

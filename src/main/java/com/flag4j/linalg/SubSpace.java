@@ -32,8 +32,8 @@ import com.flag4j.Vector;
 import com.flag4j.linalg.decompositions.svd.ComplexSVD;
 import com.flag4j.linalg.decompositions.svd.RealSVD;
 import com.flag4j.linalg.decompositions.svd.SVD;
-import com.flag4j.linalg.solvers.ComplexLstsqSolver;
-import com.flag4j.linalg.solvers.RealLstsqSolver;
+import com.flag4j.linalg.solvers.lstq.ComplexLstsqSolver;
+import com.flag4j.linalg.solvers.lstq.RealLstsqSolver;
 import com.flag4j.util.ErrorMessages;
 
 /**
