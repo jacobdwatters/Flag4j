@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.solvers.exact;
+package com.flag4j.linalg.solvers.exact.triangular;
 
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
@@ -62,6 +62,14 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, CNumber[]> {
      */
     public ComplexBackSolver(boolean enforceTriU) {
         super(enforceTriU);
+    }
+
+
+    /**
+     * Gets the determinant computed during the last solve.
+     */
+    public CNumber getDet() {
+        return det;
     }
 
 

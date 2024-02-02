@@ -26,10 +26,10 @@ package com.flag4j.linalg.solvers.exact;
 
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
-import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.linalg.decompositions.lu.ComplexLUDecomposition;
 import com.flag4j.linalg.decompositions.lu.LUDecomposition;
-import com.flag4j.operations.dense.complex.ComplexDenseDeterminant;
+import com.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
+import com.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolver;
 
 
 /**
@@ -37,12 +37,6 @@ import com.flag4j.operations.dense.complex.ComplexDenseDeterminant;
  * {@link LUDecomposition LU decomposition.}
  */
 public class ComplexExactSolver extends ExactSolver<CMatrix, CVector> {
-
-    /**
-     * Threshold for determining if a determinant is to be considered zero when checking if the coefficient matrix is
-     * full rank.
-     */
-    private static final double RANK_CONDITION = 1.0E-8;
 
     /**
      * Constructs an exact LU solver where the coefficient matrix is real dense.
@@ -56,21 +50,6 @@ public class ComplexExactSolver extends ExactSolver<CMatrix, CVector> {
 
 
     /**
-     * Checks if the matrix is singular by computing the determinant using the LU decomposition assuming that
-     * the LU decomposition produces a unit lower triangular matrix for {@code L}.
-     * @throws SingularMatrixException If the matrix U contains a zero along the diagonal.
-     */
-    @Override
-    protected void checkSingular() {
-        double det = ComplexDenseDeterminant.detLU(lower, upper).mag();
-
-        if(det <= RANK_CONDITION*Math.max(lower.numRows, upper.numCols) || Double.isNaN(det)) {
-            throw new SingularMatrixException("Could not solve system.");
-        }
-    }
-
-
-    /**
      * Permute the rows of a vector using the row permutation matrix from the LU decomposition.
      *
      * @param b Vector to permute the rows of.
@@ -80,7 +59,6 @@ public class ComplexExactSolver extends ExactSolver<CMatrix, CVector> {
     @Override
     protected CVector permuteRows(CVector b) {
         return rowPermute.leftMult(b);
-//        return rowPermute.mult(b);
     }
 
 
@@ -94,6 +72,5 @@ public class ComplexExactSolver extends ExactSolver<CMatrix, CVector> {
     @Override
     protected CMatrix permuteRows(CMatrix B) {
         return rowPermute.leftMult(B);
-//        return rowPermute.mult(B);
     }
 }

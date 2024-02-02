@@ -141,19 +141,10 @@ public abstract class ExactSolver<
         ParameterChecks.assertEquals(A.numCols(), B.numRows()); // b must have the same number of entries as columns in A.
 
         decompose(A); // Compute LU decomposition.
-        checkSingular(); // Ensure the coefficient matrix is not singular using LU decomposition.
 
         T Y = forwardSolver.solve(lower, permuteRows(B));
-        return backSolver.solve(upper, Y);
+        return backSolver.solve(upper, Y); // If A is singular, it will be discovered in the back solve.
     }
-
-
-    /**
-     * Checks if the coefficient matrix is singular by computing the determinant using the LU decomposition assuming that
-     * the LU decomposition produces a unit lower triangular matrix for {@code L}.
-     * @throws SingularMatrixException If the coefficient matrix is singular.
-     */
-    protected abstract void checkSingular();
 
 
     /**

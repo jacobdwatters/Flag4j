@@ -4,7 +4,7 @@ import com.flag4j.CMatrix;
 import com.flag4j.CVector;
 import com.flag4j.linalg.decompositions.qr.ComplexQRDecomposition;
 import com.flag4j.linalg.decompositions.qr.QRDecomposition;
-import com.flag4j.linalg.solvers.exact.ComplexBackSolver;
+import com.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 
 /**
  * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,

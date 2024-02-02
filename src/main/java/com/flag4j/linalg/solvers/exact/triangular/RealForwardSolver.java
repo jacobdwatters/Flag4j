@@ -22,12 +22,11 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.solvers.exact;
+package com.flag4j.linalg.solvers.exact.triangular;
 
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.exceptions.SingularMatrixException;
-import com.flag4j.linalg.solvers.LinearSolver;
 import com.flag4j.util.ParameterChecks;
 
 
@@ -35,22 +34,19 @@ import com.flag4j.util.ParameterChecks;
  * This solver solves linear systems of equations where the coefficient matrix in a lower triangular real dense matrix
  * and the constant vector is a real dense vector.
  */
-public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
+public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
     /**
-     * Flag which indicates if lower triangular matrix is unit lower triangular (i.e. ones along principle diagonal)
-     * or not.
-     * True indicates unit lower triangular and false indicates simply lower triangular.
+     * For computing determinant of lower triangular matrix during solve.
      */
-    protected boolean isUnit;
+    private double det;
 
 
     /**
      * Creates a solver to solve a linear system where the coefficient matrix is lower triangular.
      */
     public RealForwardSolver() {
-        super();
-        isUnit = false;
+        super(false, false);
     }
 
 
@@ -61,8 +57,27 @@ public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
      *               - If true, the coefficient matrix is expected to be lower triangular.
      */
     public RealForwardSolver(boolean isUnit) {
-        super();
-        this.isUnit = isUnit;
+        super(isUnit, false);
+    }
+
+
+    /**
+     * Creates a solver to solve a linear system where the coefficient matrix is lower triangular or unit lower triangular.
+     * @param isUnit Flag which indicates if the coefficient matrix is unit lower triangular or not. <br>
+     *               - If true, the coefficient matrix is expected to be unit lower triangular. <br>
+     *               - If true, the coefficient matrix is expected to be lower triangular.
+     * @param enforceLower Flag indicating if an explicit check should be made that the coefficient matrix is lower triangular.
+     */
+    public RealForwardSolver(boolean isUnit, boolean enforceLower) {
+        super(isUnit, enforceLower);
+    }
+
+
+    /**
+     * Gets the determinant computed during the last solve.
+     */
+    public double getDet() {
+        return det;
     }
 
 
@@ -122,13 +137,14 @@ public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
      * @param L Unit lower triangular matrix.
      * @param b Vector of constants in the linear system.
      * @return The solution of {@code x} for the linear system {@code L*x=b}.
-     * @throws SingularMatrixException If the matrix lower triangular {@code L} is singular (i.e. has a zero on
-     * the principle diagonal).
      */
     private Vector solveUnitLower(Matrix L, Vector b) {
+        checkParams(L, b.size);
+
         double sum;
         int lIndexStart;
-        Vector x = new Vector(L.numRows);
+        x = new Vector(L.numRows);
+        det = L.numRows; // Since it is unit lower, matrix has full rank.
 
         x.entries[0] = b.entries[0];
 
@@ -143,6 +159,7 @@ public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
             x.entries[i] = b.entries[i]-sum;
         }
 
+        // No need to check if matrix is singular since it has full rank.
         return x;
     }
 
@@ -156,24 +173,20 @@ public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
      * principle diagonal).
      */
     private Vector solveLower(Matrix L, Vector b) {
+        checkParams(L, b.size);
+
         double sum, diag;
         int lIndexStart;
-        Vector x = new Vector(L.numRows);
-
-        if(L.entries[0]==0) {
-            throw new SingularMatrixException("Cannot solve linear system.");
-        }
-
-        x.entries[0] = b.entries[0]/L.entries[0];
+        x = new Vector(L.numRows);
+        det = L.entries[0];
+        x.entries[0] = b.entries[0]/det;
 
         for(int i=1; i<L.numRows; i++) {
             sum = 0;
             lIndexStart = i*L.numCols;
 
             diag = L.entries[i*(L.numCols + 1)];
-            if(diag==0) {
-                throw new SingularMatrixException("Cannot solve linear system.");
-            }
+            det *= diag;
 
             for(int j=i-1; j>-1; j--) {
                 sum += L.entries[lIndexStart + j]*x.entries[j];
@@ -181,6 +194,8 @@ public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
 
             x.entries[i] = (b.entries[i]-sum)/diag;
         }
+
+        checkSingular(Math.abs(det), L.numRows, L.numCols); // Ensure matrix is not singular.
 
         return x;
     }
@@ -191,16 +206,23 @@ public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
      * @param L Unit lower triangular matrix.
      * @param B Matrix of constants in the linear system.
      * @return The solution of {@code X} for the linear system {@code L*X=b}.
-     * @throws SingularMatrixException If the matrix lower triangular {@code L} is singular (i.e. has a zero on
-     * the principle diagonal).
      */
     private Matrix solveUnitLower(Matrix L, Matrix B) {
+        checkParams(L, B.numRows);
+
         double sum;
         int lIndexStart, xIndex;
-        Matrix X = new Matrix(B.shape);
+        X = new Matrix(B.shape);
+        xCol = new double[L.numRows];
+        det = L.numRows; // Since it is unit lower, matrix has full rank.
 
         for(int j=0; j<B.numCols; j++) {
             X.entries[j] = B.entries[j];
+
+            // Temporarily store column for better cache performance on innermost loop.
+            for(int k=0; k<xCol.length; k++) {
+                xCol[k] = X.entries[k*X.numCols + j];
+            }
 
             for(int i=1; i<L.numRows; i++) {
                 sum = 0;
@@ -211,9 +233,61 @@ public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
                     sum += L.entries[lIndexStart--]*X.entries[k*X.numCols + j];
                 }
 
-                X.entries[xIndex] = B.entries[xIndex] - sum;
+
+                xCol[i] = X.entries[xIndex] = B.entries[xIndex] - sum;
             }
         }
+
+        // No need to check if matrix is singular since it has full rank.
+        return X;
+    }
+
+
+    /**
+     * Solves a linear system where the coefficient matrix is lower triangular.
+     * @param L Unit lower triangular matrix.
+     * @param B Matrix of constants in the linear system.
+     * @return The solution of {@code X} for the linear system {@code L*X=b}.
+     * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
+     * principle diagonal).
+     */
+    private Matrix solveLower(Matrix L, Matrix B) {
+        checkParams(L, B.numRows);
+
+        double sum;
+        double diag;
+        int lIndexStart, xIndex;
+        X = new Matrix(B.shape);
+        xCol = new double[L.numRows];
+        det = L.entries[0];
+
+        for(int j=0; j<B.numCols; j++) {
+            X.entries[j] = B.entries[j]/L.entries[0];
+
+            // Temporarily store column for better cache performance on innermost loop.
+            for(int k=0; k<xCol.length; k++) {
+                xCol[k] = X.entries[k*X.numCols + j];
+            }
+
+            for(int i=1; i<L.numRows; i++) {
+                sum = 0;
+                lIndexStart = i*L.numCols;
+                xIndex = i*X.numCols + j;
+
+                diag = L.entries[i*(L.numCols + 1)];
+                det *= diag;
+
+                for(int k=0; k<i; k++) {
+                    sum += L.entries[lIndexStart++]*xCol[k];
+                }
+
+                double value = (B.entries[xIndex] - sum) / diag;
+                X.entries[xIndex] = value;
+                xCol[i] = value;
+            }
+        }
+
+        checkSingular(Math.abs(det), L.numRows, L.numCols); // Ensure matrix is not singular.
 
         return X;
     }
@@ -224,30 +298,38 @@ public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
      * is the identity matrix.
      * @param L Unit lower triangular matrix.
      * @return The solution of {@code X} for the linear system {@code L*X=I}.
-     * @throws SingularMatrixException If the matrix lower triangular {@code L} is singular (i.e. has a zero on
-     * the principle diagonal).
      */
     private Matrix solveUnitLowerIdentity(Matrix L) {
+        checkParams(L, L.numRows);
+
         double sum;
         int lIndexStart, xIndex;
-        Matrix X = new Matrix(L.shape);
+        X = new Matrix(L.shape);
+        xCol = new double[L.numRows];
+        det = L.numRows; // Since it is unit lower, matrix has full rank.
 
         X.entries[0] = 1.0;
 
         for(int j=0; j<L.numCols; j++) {
+            // Temporarily store column for better cache performance on innermost loop.
+            for(int k=0; k<xCol.length; k++) {
+                xCol[k] = X.entries[k*X.numCols + j];
+            }
+
             for(int i=1; i<L.numRows; i++) {
                 sum = (i==j) ? 1.0 : 0.0;
                 lIndexStart = i*L.numCols;
                 xIndex = lIndexStart + j;
 
                 for(int k=0; k<i; k++) {
-                    sum -= L.entries[lIndexStart++]*X.entries[k*X.numCols + j];
+                    sum -= L.entries[lIndexStart++]*xCol[k];
                 }
 
-                X.entries[xIndex] = sum;
+                xCol[i] = X.entries[xIndex] = sum;
             }
         }
 
+        // No need to check if matrix is singular since it has full rank.
         return X;
     }
 
@@ -262,92 +344,40 @@ public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
      * principle diagonal).
      */
     private Matrix solveLowerIdentity(Matrix L) {
+        checkParams(L, L.numRows);
+
         double sum, diag;
         int lIndexStart, xIndex;
-        Matrix X = new Matrix(L.shape);
-
-        // Only check the diagonal has no zeros once.
-        if(zeroOnDiag(L)) {
-            throw new SingularMatrixException("Cannot solve linear system.");
-        }
-
-        X.entries[0] = 1.0/L.entries[0];
+        X = new Matrix(L.shape);
+        xCol = new double[L.numRows];
+        det = L.entries[0];
+        X.entries[0] = 1.0/det;
 
         for(int j=0; j<L.numCols; j++) {
+            // Temporarily store column for better cache performance on innermost loop.
+            for(int k=0; k<xCol.length; k++) {
+                xCol[k] = X.entries[k*X.numCols + j];
+            }
+
             for(int i=1; i<L.numRows; i++) {
                 sum = (i==j) ? 1.0 : 0.0;
                 lIndexStart = i*L.numCols;
                 xIndex = lIndexStart + j;
                 diag = L.entries[i*(L.numCols + 1)];
+                det*=diag;
 
                 for(int k=0; k<i; k++) {
-                    sum -= L.entries[lIndexStart++]*X.entries[k*X.numCols + j];
+                    sum -= L.entries[lIndexStart++]*xCol[k];
                 }
 
-                X.entries[xIndex] = sum / diag;
+                double value = sum / diag;
+                X.entries[xIndex] = value;
+                xCol[i] = value;
             }
         }
+
+        checkSingular(Math.abs(det), L.numRows, L.numCols); // Ensure matrix is not singular.
 
         return X;
-    }
-
-
-    /**
-     * Solves a linear system where the coefficient matrix is lower triangular.
-     * @param L Unit lower triangular matrix.
-     * @param B Matrix of constants in the linear system.
-     * @return The solution of {@code X} for the linear system {@code L*X=b}.
-     * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
-     * principle diagonal).
-     */
-    private Matrix solveLower(Matrix L, Matrix B) {
-        double sum, diag;
-        int lIndexStart, xIndex;
-        Matrix X = new Matrix(B.shape);
-
-        // Only check the diagonal has no zeros once.
-        if(zeroOnDiag(L)) {
-            throw new SingularMatrixException("Cannot solve linear system.");
-        }
-
-        for(int j=0; j<B.numCols; j++) {
-
-            X.entries[j] = B.entries[j]/L.entries[0];
-
-            for(int i=1; i<L.numRows; i++) {
-                sum = 0;
-                lIndexStart = i*(L.numCols + 1) - 1;
-                xIndex = i*X.numCols + j;
-
-                diag = L.entries[i*(L.numCols + 1)];
-
-                for(int k=i-1; k>-1; k--) {
-                    sum += L.entries[lIndexStart--]*X.entries[k*X.numCols + j];
-                }
-
-                X.entries[xIndex] = (B.entries[xIndex] - sum) / diag;
-            }
-        }
-
-        return X;
-    }
-
-
-    /**
-     * Checks if a matrix has a zero on the diagonal of a matrix.
-     * @param src Matrix of interest. Assumed to be square.
-     * @return True if the matrix has a zero on the diagonal. False otherwise.
-     */
-    private boolean zeroOnDiag(Matrix src) {
-        boolean result = false;
-
-        for(int i=0; i<src.entries.length; i+=src.numCols + 1) {
-            if(src.entries[i]==0) {
-                result = true;
-                break; // No need to continue.
-            }
-        }
-
-        return result;
     }
 }

@@ -1,4 +1,4 @@
-package com.flag4j.linalg.solvers.exact;
+package com.flag4j.linalg.solvers.exact.triangular;
 
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;

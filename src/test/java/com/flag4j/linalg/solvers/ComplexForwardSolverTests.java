@@ -4,7 +4,7 @@ import com.flag4j.CMatrix;
 import com.flag4j.CVector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.exceptions.SingularMatrixException;
-import com.flag4j.linalg.solvers.exact.ComplexForwardSolver;
+import com.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolver;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

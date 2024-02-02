@@ -29,7 +29,7 @@ import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.linalg.decompositions.qr.QRDecomposition;
 import com.flag4j.linalg.decompositions.qr.RealQRDecomposition;
-import com.flag4j.linalg.solvers.exact.RealBackSolver;
+import com.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
 
 
 /**

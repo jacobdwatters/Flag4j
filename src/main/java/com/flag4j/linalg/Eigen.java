@@ -32,8 +32,8 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.linalg.decompositions.schur.ComplexSchurDecomposition;
 import com.flag4j.linalg.decompositions.schur.RealSchurDecomposition;
 import com.flag4j.linalg.decompositions.schur.SchurDecomposition;
-import com.flag4j.linalg.solvers.exact.ComplexBackSolver;
-import com.flag4j.linalg.solvers.exact.RealBackSolver;
+import com.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
+import com.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
 
 /**
  * This class provides several methods useful for computing eigen values, eigen vectors, as well as singular values and

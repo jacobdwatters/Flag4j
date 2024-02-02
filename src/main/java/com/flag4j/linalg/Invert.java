@@ -33,10 +33,10 @@ import com.flag4j.linalg.decompositions.cholesky.RealCholeskyDecomposition;
 import com.flag4j.linalg.decompositions.lu.ComplexLUDecomposition;
 import com.flag4j.linalg.decompositions.lu.LUDecomposition;
 import com.flag4j.linalg.decompositions.lu.RealLUDecomposition;
-import com.flag4j.linalg.solvers.exact.ComplexBackSolver;
-import com.flag4j.linalg.solvers.exact.ComplexForwardSolver;
-import com.flag4j.linalg.solvers.exact.RealBackSolver;
-import com.flag4j.linalg.solvers.exact.RealForwardSolver;
+import com.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
+import com.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolver;
+import com.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
+import com.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 

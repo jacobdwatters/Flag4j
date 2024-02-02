@@ -22,14 +22,13 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.solvers.exact;
+package com.flag4j.linalg.solvers.exact.triangular;
 
 
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.exceptions.SingularMatrixException;
-import com.flag4j.linalg.solvers.LinearSolver;
 import com.flag4j.util.ParameterChecks;
 
 
@@ -37,23 +36,20 @@ import com.flag4j.util.ParameterChecks;
  * This solver solves linear systems of equations where the coefficient matrix in a lower triangular complex dense matrix
  * and the constant vector is a complex dense vector.
  */
-public class ComplexForwardSolver implements LinearSolver<CMatrix, CVector> {
+public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumber[]> {
 
 
     /**
-     * Flag which indicates if lower triangular matrix is unit lower triangular (i.e. ones along principle diagonal)
-     * or not.
-     * True indicates unit lower triangular and false indicates simply lower triangular.
+     * For computing determinant of lower triangular matrix during solve.
      */
-    protected boolean isUnit;
+    private CNumber det;
 
 
     /**
      * Creates a solver to solve a linear system where the coefficient matrix is lower triangular.
      */
-    public ComplexForwardSolver() {
-        super();
-        isUnit = false;
+    public  ComplexForwardSolver() {
+        super(false, false);
     }
 
 
@@ -64,8 +60,27 @@ public class ComplexForwardSolver implements LinearSolver<CMatrix, CVector> {
      *               - If true, the coefficient matrix is expected to be lower triangular.
      */
     public ComplexForwardSolver(boolean isUnit) {
-        super();
-        this.isUnit = isUnit;
+        super(isUnit, false);
+    }
+
+
+    /**
+     * Creates a solver to solve a linear system where the coefficient matrix is lower triangular or unit lower triangular.
+     * @param isUnit Flag which indicates if the coefficient matrix is unit lower triangular or not. <br>
+     *               - If true, the coefficient matrix is expected to be unit lower triangular. <br>
+     *               - If true, the coefficient matrix is expected to be lower triangular.
+     * @param enforceLower Flag indicating if an explicit check should be made that the coefficient matrix is lower triangular.
+     */
+    public ComplexForwardSolver(boolean isUnit, boolean enforceLower) {
+        super(isUnit, enforceLower);
+    }
+
+
+    /**
+     * Gets the determinant computed during the last solve.
+     */
+    public CNumber getDet() {
+        return det;
     }
 
 
@@ -128,9 +143,12 @@ public class ComplexForwardSolver implements LinearSolver<CMatrix, CVector> {
      * @return The solution of {@code x} for the linear system {@code L*x=b}.
      */
     private CVector solveUnitLower(CMatrix L, CVector b) {
+        checkParams(L, b.size);
+
         CNumber sum;
         int lIndexStart;
         CVector x = new CVector(L.numRows);
+        det = new CNumber(L.numRows); // Since it is unit lower, matrix has full rank.
 
         x.entries[0] = b.entries[0].copy();
 
@@ -145,7 +163,7 @@ public class ComplexForwardSolver implements LinearSolver<CMatrix, CVector> {
             x.entries[i] = b.entries[i].sub(sum);
         }
 
-        return x;
+        return x; // No need to check singularity since the matrix is full rank.
     }
 
 
@@ -158,27 +176,37 @@ public class ComplexForwardSolver implements LinearSolver<CMatrix, CVector> {
      * the principle diagonal).
      */
     private CMatrix solveUnitLowerIdentity(CMatrix L) {
+        checkParams(L, L.numRows);
+
         CNumber sum;
         int lIndexStart, xIndex;
         CMatrix X = new CMatrix(L.shape);
+        det = new CNumber(L.numRows); // Since it is unit lower, matrix has full rank.
+        xCol = new CNumber[L.numRows];
 
         X.entries[0] = CNumber.one();
 
         for(int j=0; j<L.numCols; j++) {
+            // Temporarily store column for better cache performance on innermost loop.
+            for(int k=0; k<xCol.length; k++) {
+                xCol[k] = X.entries[k*X.numCols + j];
+            }
+
             for(int i=1; i<L.numRows; i++) {
                 sum = (i==j) ? CNumber.one() : CNumber.zero();
                 lIndexStart = i*L.numCols;
                 xIndex = lIndexStart + j;
 
                 for(int k=0; k<i; k++) {
-                    sum.subEq(L.entries[lIndexStart++].mult(X.entries[k*X.numCols + j]));
+                    sum.subEq(L.entries[lIndexStart++].mult(xCol[k]));
                 }
 
                 X.entries[xIndex] = sum;
+                xCol[i] = sum;
             }
         }
 
-        return X;
+        return X; // No need to check singularity since the matrix is full rank.
     }
 
 
@@ -192,31 +220,40 @@ public class ComplexForwardSolver implements LinearSolver<CMatrix, CVector> {
      * principle diagonal).
      */
     private CMatrix solveLowerIdentity(CMatrix L) {
+        checkParams(L, L.numRows);
+
         CNumber sum, diag;
         int lIndexStart, xIndex;
         CMatrix X = new CMatrix(L.shape);
-
-        // Only check the diagonal has no zeros once.
-        if(zeroOnDiag(L)) {
-            throw new SingularMatrixException("Cannot solve linear system.");
-        }
+        det = L.entries[0].copy();
+        xCol = new CNumber[L.numRows];
 
         X.entries[0] = L.entries[0].multInv();
 
         for(int j=0; j<L.numCols; j++) {
+            // Temporarily store column for better cache performance on innermost loop.
+            for(int k=0; k<xCol.length; k++) {
+                xCol[k] = X.entries[k*X.numCols + j];
+            }
+
             for(int i=1; i<L.numRows; i++) {
                 sum = (i==j) ? CNumber.one() : CNumber.zero();
                 lIndexStart = i*L.numCols;
                 xIndex = lIndexStart + j;
                 diag = L.entries[i*(L.numCols + 1)];
+                det.multEq(diag);
 
                 for(int k=0; k<i; k++) {
-                    sum.subEq(L.entries[lIndexStart++].mult(X.entries[k*X.numCols + j]));
+                    sum.subEq(L.entries[lIndexStart++].mult(xCol[k]));
                 }
 
-                X.entries[xIndex] = sum.div(diag);
+                CNumber value = sum.div(diag);
+                X.entries[xIndex] = value;
+                xCol[i] = value;
             }
         }
+
+        checkSingular(det.mag(), L.numRows, L.numCols); // Ensure matrix is not singular.
 
         return X;
     }
@@ -231,24 +268,19 @@ public class ComplexForwardSolver implements LinearSolver<CMatrix, CVector> {
      * principle diagonal).
      */
     private CVector solveLower(CMatrix L, CVector b) {
+        checkParams(L, b.size);
+
         CNumber sum, diag;
         int lIndexStart;
         CVector x = new CVector(L.numRows);
-
-        if(L.entries[0].equals(0)) {
-            throw new SingularMatrixException("Cannot solve linear system.");
-        }
-
+        det = L.entries[0].copy();
         x.entries[0] = b.entries[0].div(L.entries[0]);
 
         for(int i=1; i<L.numRows; i++) {
             sum = new CNumber();
             lIndexStart = i*L.numCols;
-
             diag = L.entries[i*(L.numCols + 1)];
-            if(diag.equals(0)) {
-                throw new SingularMatrixException("Cannot solve linear system.");
-            }
+            det.multEq(diag);
 
             for(int j=i-1; j>-1; j--) {
                 sum.addEq(L.entries[lIndexStart + j].mult(x.entries[j]));
@@ -256,6 +288,8 @@ public class ComplexForwardSolver implements LinearSolver<CMatrix, CVector> {
 
             x.entries[i] = b.entries[i].sub(sum).div(diag);
         }
+
+        checkSingular(det.mag(), L.numRows, L.numCols); // Ensure matrix is not singular.
 
         return x;
     }
@@ -268,27 +302,38 @@ public class ComplexForwardSolver implements LinearSolver<CMatrix, CVector> {
      * @return The solution of {@code X} for the linear system {@code L*X=b}.
      */
     private CMatrix solveUnitLower(CMatrix L, CMatrix B) {
+        checkParams(L, B.numRows);
+
         CNumber sum;
         int lIndexStart, xIndex;
         CMatrix X = new CMatrix(B.shape);
+        det = new CNumber(L.numRows); // Since it is unit lower, matrix has full rank.
+        xCol = new CNumber[L.numRows];
 
         for(int j=0; j<B.numCols; j++) {
             X.entries[j] = B.entries[j].copy();
 
+            // Temporarily store column for better cache performance on innermost loop.
+            for(int k=0; k<xCol.length; k++) {
+                xCol[k] = X.entries[k*X.numCols + j];
+            }
+
             for(int i=1; i<L.numRows; i++) {
                 sum = new CNumber();
-                lIndexStart = i*(L.numCols + 1) - 1;
+                lIndexStart = i*L.numCols;
                 xIndex = i*X.numCols + j;
 
-                for(int k=i-1; k>-1; k--) {
-                    sum.addEq(L.entries[lIndexStart--].mult(X.entries[k*X.numCols + j]));
+                for(int k=0; k<i; k++) {
+                    sum.addEq(L.entries[lIndexStart++].mult(xCol[k]));
                 }
 
-                X.entries[xIndex] = B.entries[xIndex].sub(sum);
+                CNumber value = B.entries[xIndex].sub(sum);
+                X.entries[xIndex] = value;
+                xCol[i] = value;
             }
         }
 
-        return X;
+        return X; // No need to check singularity since the matrix is full rank.
     }
 
 
@@ -301,50 +346,42 @@ public class ComplexForwardSolver implements LinearSolver<CMatrix, CVector> {
      * principle diagonal).
      */
     private CMatrix solveLower(CMatrix L, CMatrix B) {
+        checkParams(L, B.numRows);
+
         CNumber sum;
+        CNumber diag;
         int lIndexStart, xIndex;
         CMatrix X = new CMatrix(B.shape);
-
-        // Only check the diagonal has no zeros once.
-        if(zeroOnDiag(L)) {
-            throw new SingularMatrixException("Cannot solve linear system.");
-        }
+        det = L.entries[0].copy();
+        xCol = new CNumber[L.numRows];
 
         for(int j=0; j<B.numCols; j++) {
             X.entries[j] = B.entries[j].div(L.entries[0]);
 
-            for(int i=1; i<L.numRows; i++) {
-                sum = new CNumber();
-                lIndexStart = i*(L.numCols + 1) - 1;
-                xIndex = i*X.numCols + j;
+            // Temporarily store column for better cache performance on innermost loop.
+            for(int k=0; k<xCol.length; k++) {
+                xCol[k] = X.entries[k*X.numCols + j];
+            }
 
-                for(int k=i-1; k>-1; k--) {
-                    sum.addEq(L.entries[lIndexStart--].mult(X.entries[k*X.numCols + j]));
+            for(int i=1; i<L.numRows; i++) {
+                sum = CNumber.zero();
+                lIndexStart = i*L.numCols;
+                xIndex = i*X.numCols + j;
+                diag = L.entries[i*(L.numCols + 1)];
+                det.multEq(diag);
+
+                for(int k=0; k<i; k++) {
+                    sum.addEq(L.entries[lIndexStart++].mult(xCol[k]));
                 }
 
-                X.entries[xIndex] = B.entries[xIndex].sub(sum).div(L.entries[i*(L.numCols + 1)]);
+                CNumber value = B.entries[xIndex].sub(sum).div(diag);
+                X.entries[xIndex] = value;
+                xCol[i] = value;
             }
         }
+
+        checkSingular(det.mag(), L.numRows, L.numCols); // Ensure matrix is not singular.
 
         return X;
-    }
-
-
-    /**
-     * Checks if a matrix has a zero on the diagonal of a matrix.
-     * @param src Matrix of interest. Assumed to be square.
-     * @return True if the matrix has a zero on the diagonal. False otherwise.
-     */
-    private boolean zeroOnDiag(CMatrix src) {
-        boolean result = false;
-
-        for(int i=0; i<src.numRows; i++) {
-            if(src.entries[i*(src.numCols  + 1)].equals(0)) {
-                result = true;
-                break; // No need to continue.
-            }
-        }
-
-        return result;
     }
 }

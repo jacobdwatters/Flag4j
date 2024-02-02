@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg.solvers.exact;
+package com.flag4j.linalg.solvers.exact.triangular;
 
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
@@ -61,7 +61,7 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Gets the determinant computed during the last solve. If no determinant was computed, this method will simply return 0.
+     * Gets the determinant computed during the last solve.
      */
     public double getDet() {
         return det;

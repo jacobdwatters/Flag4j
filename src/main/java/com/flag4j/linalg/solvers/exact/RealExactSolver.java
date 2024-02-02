@@ -26,10 +26,10 @@ package com.flag4j.linalg.solvers.exact;
 
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
-import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.linalg.decompositions.lu.LUDecomposition;
 import com.flag4j.linalg.decompositions.lu.RealLUDecomposition;
-import com.flag4j.operations.dense.real.RealDenseDeterminant;
+import com.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
+import com.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
 
 
 /**
@@ -52,21 +52,6 @@ public class RealExactSolver extends ExactSolver<Matrix, Vector> {
                 new RealForwardSolver(true),
                 new RealBackSolver()
         );
-    }
-
-
-    /**
-     * Checks if the matrix is singular by computing the determinant using the LU decomposition assuming that
-     * the LU decomposition produces a unit lower triangular matrix for {@code L}.
-     * @throws SingularMatrixException If the matrix U contains a zero along the diagonal.
-     */
-    @Override
-    protected void checkSingular() {
-        double det = Math.abs(RealDenseDeterminant.detTri(upper));
-
-        if(det <= RANK_CONDITION*Math.max(lower.numRows, upper.numCols) || Double.isNaN(det)) {
-            throw new SingularMatrixException("Could not solve system.");
-        }
     }
 
 
