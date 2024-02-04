@@ -46,7 +46,8 @@ import com.flag4j.util.ParameterChecks;
  *      [ 0 0 0 x x ]]</pre>
  * </p>
  */
-public abstract class HessenburgDecomposition<
+@Deprecated
+public abstract class HessenburgDecompositionOld<
         T extends MatrixMixin<T, T, ?, ?, ?, U, ?>,
         U extends VectorMixin<U, U, ?, ?, ?, T, T, ?>>
         implements Decomposition<T> {
@@ -76,7 +77,7 @@ public abstract class HessenburgDecomposition<
      * @throws IllegalArgumentException If the {@code src} matrix is not square.
      */
     @Override
-    public HessenburgDecomposition<T, U> decompose(T src) {
+    public HessenburgDecompositionOld<T, U> decompose(T src) {
         ParameterChecks.assertSquareMatrix(src.shape());
 
         // TODO: Add a decomposition for symmetric matrices.
@@ -94,7 +95,7 @@ public abstract class HessenburgDecomposition<
      *                 - If false, the unitary {@code Q} matrix will not be computed which may give a performance
      *                 increase if it is not needed.
      */
-    protected HessenburgDecomposition(boolean computeQ) {
+    protected HessenburgDecompositionOld(boolean computeQ) {
         this.computeQ = computeQ;
     }
 
@@ -132,7 +133,7 @@ public abstract class HessenburgDecomposition<
         Q = computeQ ? initQ() : null;
 
         for(int k = 0; k<H.numRows()-2; k++) {
-            col = H.getCol(k, k+1, H.numCols());
+            col = H.getCol(k, k+1, H.numRows());
 
             // If the column is zeros, no need to compute reflector. It is already in the correct form.
             if(col.maxAbs() > tol) {
@@ -183,4 +184,5 @@ public abstract class HessenburgDecomposition<
      * @param k Index of column to set values below the first sub-diagonal to zero.
      */
     protected abstract void setZeros(int k);
+
 }

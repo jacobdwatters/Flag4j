@@ -13,7 +13,8 @@ import com.flag4j.linalg.decompositions.Decomposition;
  * @param <T> The type of the matrix to be decomposed.
 *  @param <V> The internal storage type for the matrix to be decomposed.
  */
-public abstract class QRDecomposition<
+@Deprecated
+public abstract class QRDecompositionOld<
         T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>, V>
         implements Decomposition<T> {
 
@@ -50,7 +51,7 @@ public abstract class QRDecomposition<
     protected V householderVector;
     /**
      * For temporarily storage when applying Householder vectors. This is useful for
-     * avoiding unneeded garbage collection.
+     * avoiding unneeded garbage collection and for improving cache performance when traversing columns.
      */
     protected V workArray;
     /**
@@ -71,7 +72,7 @@ public abstract class QRDecomposition<
      * Creates a {@code QR} decomposer.
      * @param reduced Flag indicating if this decomposer should compute the full or reduced {@code QR} decomposition.
      */
-    protected QRDecomposition(boolean reduced) {
+    protected QRDecompositionOld(boolean reduced) {
         this.reduced = reduced;
     }
 
@@ -97,7 +98,7 @@ public abstract class QRDecomposition<
      * @return A reference to this decomposer.
      */
     @Override
-    public QRDecomposition<T, V> decompose(T src) {
+    public QRDecompositionOld<T, V> decompose(T src) {
         setUp(src); // Initialize datastructures and storage for the decomposition.
 
         for(int j=0; j<minAxisSize; j++) {

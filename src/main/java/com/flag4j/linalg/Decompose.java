@@ -30,8 +30,8 @@ import com.flag4j.linalg.decompositions.cholesky.ComplexCholeskyDecomposition;
 import com.flag4j.linalg.decompositions.cholesky.RealCholeskyDecomposition;
 import com.flag4j.linalg.decompositions.lu.ComplexLUDecomposition;
 import com.flag4j.linalg.decompositions.lu.RealLUDecomposition;
-import com.flag4j.linalg.decompositions.qr.ComplexQRDecomposition;
-import com.flag4j.linalg.decompositions.qr.RealQRDecomposition;
+import com.flag4j.linalg.decompositions.qr.ComplexQRDecompositionOld;
+import com.flag4j.linalg.decompositions.qr.RealQRDecompositionOld;
 import com.flag4j.util.ErrorMessages;
 
 
@@ -75,26 +75,26 @@ public final class Decompose {
 
 
     /**
-     * Compute the full {@link RealQRDecomposition QR factorization} of a matrix using Householder reflectors. That is, decomposes an m-by-n matrix
+     * Compute the full {@link RealQRDecompositionOld QR factorization} of a matrix using Householder reflectors. That is, decomposes an m-by-n matrix
      * {@code A} into {@code A=QR} where {@code Q} is an {@link Matrix#isOrthogonal() orthogonal} matrix and {@code R} is an {@link Matrix#isTriU() upper triangular} matrix.
      * @param A Matrix to decompose.
      * @return Returns an array of matrices containing in order {@code {Q, R}} corresponding to {@code A=QR}.
      */
     public static Matrix[] qr(Matrix A) {
-        RealQRDecomposition QR = new RealQRDecomposition();
+        RealQRDecompositionOld QR = new RealQRDecompositionOld();
         QR.decompose(A);
         return new Matrix[]{QR.getQ(), QR.getR()};
     }
 
 
     /**
-     * Compute the full {@link ComplexQRDecomposition QR factorization} of a matrix using Householder reflectors. That is, decomposes an m-by-n matrix
+     * Compute the full {@link ComplexQRDecompositionOld QR factorization} of a matrix using Householder reflectors. That is, decomposes an m-by-n matrix
      * {@code A} into {@code A=QR} where {@code Q} is {@link CMatrix#isUnitary() unitary} matrix and {@code R} is an {@link CMatrix#isTriU() upper triangular} matrix.
      * @param A Matrix to decompose.
      * @return Returns an array of matrices containing in order {@code {Q, R}} corresponding to {@code A=QR}.
      */
     public static CMatrix[] qr(CMatrix A) {
-        ComplexQRDecomposition QR = new ComplexQRDecomposition();
+        ComplexQRDecompositionOld QR = new ComplexQRDecompositionOld();
         QR.decompose(A);
         return new CMatrix[]{QR.getQ(), QR.getR()};
     }

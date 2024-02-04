@@ -81,8 +81,8 @@ public final class RealCholeskyDecomposition extends CholeskyDecomposition<Matri
             ParameterChecks.assertSquareMatrix(src.shape);
         }
 
-        double posDefTolerance = Math.max(L.numRows*Math.ulp(1.0), DEFAULT_POS_DEF_TOLERANCE);
         L = new Matrix(src.numRows);
+        double posDefTolerance = Math.max(L.numRows*Math.ulp(1.0), DEFAULT_POS_DEF_TOLERANCE);
         double sum;
 
         int lIndex1;

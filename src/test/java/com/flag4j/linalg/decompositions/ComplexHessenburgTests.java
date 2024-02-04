@@ -21,7 +21,7 @@ class ComplexHessenburgTests {
                 {"25.66-90.25i", "34.5", "3.4+2i"},
                 {"-i", "3.4-2i", "16.67+9.2i"}};
         A = new CMatrix(aEntries);
-        hess = new ComplexHessenburgDecomposition(true);
+        hess = new ComplexHessenburgDecomposition();
         hess.decompose(A);
 
         H = hess.getH();
@@ -43,7 +43,7 @@ class ComplexHessenburgTests {
                 {"22+9i", "0", "0", "1+i"},
                 {"6+9i", "-25-4i", "1-i", "-1.2+3i"}};
         A = new CMatrix(aEntries);
-        hess = new ComplexHessenburgDecomposition(true);
+        hess = new ComplexHessenburgDecomposition();
         hess.decompose(A);
 
         H = hess.getH();

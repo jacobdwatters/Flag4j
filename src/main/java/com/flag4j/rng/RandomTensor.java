@@ -27,8 +27,8 @@ package com.flag4j.rng;
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.linalg.Decompose;
-import com.flag4j.linalg.decompositions.qr.ComplexQRDecomposition;
-import com.flag4j.linalg.decompositions.qr.RealQRDecomposition;
+import com.flag4j.linalg.decompositions.qr.ComplexQRDecompositionOld;
+import com.flag4j.linalg.decompositions.qr.RealQRDecompositionOld;
 import com.flag4j.util.ParameterChecks;
 
 import java.math.BigDecimal;
@@ -491,7 +491,7 @@ public class RandomTensor {
      */
     public Matrix randomOrthogonalMatrix(int size) {
         Matrix randMat = new Matrix(size, size, RAND_ARRAY.genUniformRealArray(size));
-        return new RealQRDecomposition().decompose(randMat).getQ();
+        return new RealQRDecompositionOld().decompose(randMat).getQ();
     }
 
 
@@ -695,7 +695,7 @@ public class RandomTensor {
      */
     public CMatrix randomUnitaryMatrix(int size) {
         CMatrix randMat = new CMatrix(size, size, RAND_ARRAY.genUniformComplexArray(size));
-        return new ComplexQRDecomposition().decompose(randMat).getQ();
+        return new ComplexQRDecompositionOld().decompose(randMat).getQ();
     }
 
 

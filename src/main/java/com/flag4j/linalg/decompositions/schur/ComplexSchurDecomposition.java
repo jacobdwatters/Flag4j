@@ -28,7 +28,7 @@ import com.flag4j.CMatrix;
 import com.flag4j.CVector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.linalg.Eigen;
-import com.flag4j.linalg.decompositions.hess.ComplexHessenburgDecomposition;
+import com.flag4j.linalg.decompositions.hess.ComplexHessenburgDecompositionOld;
 import com.flag4j.linalg.transformations.Householder;
 
 /**
@@ -49,7 +49,7 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVect
         super(true);
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-        hess = new ComplexHessenburgDecomposition(computeU);
+        hess = new ComplexHessenburgDecompositionOld(computeU);
     }
 
 
@@ -64,7 +64,7 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVect
         super(computeU);
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-        hess = new ComplexHessenburgDecomposition(computeU);
+        hess = new ComplexHessenburgDecompositionOld(computeU);
     }
 
 

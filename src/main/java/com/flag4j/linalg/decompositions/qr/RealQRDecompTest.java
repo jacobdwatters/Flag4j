@@ -1,28 +1,29 @@
 package com.flag4j.linalg.decompositions.qr;
 
-import com.flag4j.CMatrix;
-import com.flag4j.linalg.decompositions.unitary.ComplexUnitaryDecomposition;
+import com.flag4j.Matrix;
+import com.flag4j.linalg.decompositions.unitary.RealUnitaryDecomposition;
 
 
 /**
- * <p>Instances of this class compute the {@code QR} decomposition of a complex dense matrix.</p>
- * <p>The {@code QR} decomposition, decomposes a matrix {@code A} into a unitary matrix {@code Q}
+ * <p>Instances of this class compute the {@code QR} decomposition of a real dense matrix.</p>
+ * <p>The {@code QR} decomposition, decomposes a matrix {@code A} into an orthogonal matrix {@code Q}
  * and an upper triangular matrix {@code R} such that {@code A=QR}.</p>
  *
  * <p>Much of this code has been adapted from the EJML library.</p>
  */
-public class ComplexQRDecomposition extends ComplexUnitaryDecomposition {
+public class RealQRDecompTest extends RealUnitaryDecomposition {
 
     /**
      * Flag indicating if the reduced (true) or full (false) {@code QR} decomposition should be computed.
      */
     protected final boolean reduced;
 
+
     /**
      * Creates a {@code QR} decomposer. This decomposer will compute the reduced {@code QR} decomposition.
-     * @see #ComplexQRDecomposition(boolean)
+     * @see #RealQRDecompTest(boolean)
      */
-    public ComplexQRDecomposition() {
+    public RealQRDecompTest() {
         super(0);
         this.reduced = true;
     }
@@ -33,7 +34,7 @@ public class ComplexQRDecomposition extends ComplexUnitaryDecomposition {
      *
      * @param reduced Flag indicating if this decomposer should compute the full or reduced {@code QR} decomposition.
      */
-    public ComplexQRDecomposition(boolean reduced) {
+    public RealQRDecompTest(boolean reduced) {
         super(0);
         this.reduced = reduced;
     }
@@ -45,7 +46,7 @@ public class ComplexQRDecomposition extends ComplexUnitaryDecomposition {
      * @return A reference to this decomposer.
      */
     @Override
-    public ComplexQRDecomposition decompose(CMatrix src) {
+    public RealQRDecompTest decompose(Matrix src) {
         decomposeBase(src);
         return this;
     }
@@ -57,19 +58,19 @@ public class ComplexQRDecomposition extends ComplexUnitaryDecomposition {
      * @return An identity matrix with the appropriate size.
      */
     @Override
-    protected CMatrix initQ() {
+    protected Matrix initQ() {
         int qCols = reduced ? minAxisSize : numRows; // Get Q in reduced form or not.
-        return CMatrix.I(numRows, qCols);
+        return Matrix.I(numRows, qCols);
     }
 
 
     /**
-     * Gets the upper triangular matrix {@code R} from the last decomposition.
+     * Gets the upper triangular matrix {@code R} from the last decomposition. Same as {@link #getR()}.
      *
-     * @return The upper triangular matrix {@code R} from the last decomposition.
+     * @return The upper triangular matrix from the last decomposition.
      */
     @Override
-    protected CMatrix getUpper() {
+    protected Matrix getUpper() {
         return getR();
     }
 
@@ -78,8 +79,8 @@ public class ComplexQRDecomposition extends ComplexUnitaryDecomposition {
      * Gets the upper triangular matrix {@code R} from the {@code QR} decomposition.
      * @return The upper triangular matrix {@code R} from the {@code QR} decomposition.
      */
-    public CMatrix getR() {
+    public Matrix getR() {
         int rRows = reduced ? minAxisSize : numRows; // Get R in reduced form or not.
-        return getUpper(new CMatrix(rRows, numCols));
+        return getUpper(new Matrix(rRows, numCols));
     }
 }

@@ -28,7 +28,7 @@ import com.flag4j.CMatrix;
 import com.flag4j.CVector;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;
-import com.flag4j.linalg.decompositions.qr.QRDecomposition;
+import com.flag4j.linalg.decompositions.qr.QRDecompositionOld;
 import com.flag4j.linalg.solvers.LinearSolver;
 
 
@@ -37,7 +37,7 @@ import com.flag4j.linalg.solvers.LinearSolver;
 /**
  * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,
  * minimizes {@code ||Ax-b||<sub>2</sub>} which is equivalent to solving the normal equations {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
- * This is done using a {@link QRDecomposition}.
+ * This is done using a {@link QRDecompositionOld}.
  */
 public abstract class LstsqSolver<
         T extends MatrixMixin<T, T, ?, CMatrix, ?, U, U>,
@@ -51,7 +51,7 @@ public abstract class LstsqSolver<
     /**
      * Decomposer to compute the {@code QR} decomposition for using the least-squares solver.
      */
-    protected final QRDecomposition<T, ?> qr;
+    protected final QRDecompositionOld<T, ?> qr;
     /**
      * {@code Q} The hermation transpose of the orthonormal matrix from the {@code QR} decomposition.
      */
@@ -67,7 +67,7 @@ public abstract class LstsqSolver<
      * @param backSolver The solver to solve the upper triangular system resulting from the {@code QR} decomposition
      *                   which is equivalent to solving the normal equations
      */
-    protected LstsqSolver(QRDecomposition<T, ?> qr, LinearSolver<T, U> backSolver) {
+    protected LstsqSolver(QRDecompositionOld<T, ?> qr, LinearSolver<T, U> backSolver) {
         this.qr = qr;
         this.backSolver = backSolver;
     }

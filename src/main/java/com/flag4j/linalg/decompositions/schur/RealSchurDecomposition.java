@@ -29,7 +29,7 @@ import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.linalg.Eigen;
-import com.flag4j.linalg.decompositions.hess.RealHessenburgDecomposition;
+import com.flag4j.linalg.decompositions.hess.RealHessenburgDecompositionOld;
 import com.flag4j.linalg.transformations.Householder;
 
 
@@ -59,7 +59,7 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix, Vector> {
         super(true);
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-        hess = new RealHessenburgDecomposition(super.computeU);
+        hess = new RealHessenburgDecompositionOld(super.computeU);
         realSchur = true;
     }
 
@@ -75,7 +75,7 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix, Vector> {
         super(computeU);
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-        hess = new RealHessenburgDecomposition(computeU);
+        hess = new RealHessenburgDecompositionOld(computeU);
         realSchur = true;
     }
 
@@ -92,7 +92,7 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix, Vector> {
         super(computeU);
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-        hess = new RealHessenburgDecomposition(computeU);
+        hess = new RealHessenburgDecompositionOld(computeU);
         this.realSchur = realSchur;
     }
 

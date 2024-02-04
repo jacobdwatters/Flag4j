@@ -1,7 +1,7 @@
 package com.flag4j.linalg.decompositions;
 
 import com.flag4j.Matrix;
-import com.flag4j.linalg.decompositions.qr.RealQRDecomposition;
+import com.flag4j.linalg.decompositions.qr.RealQRDecompositionOld;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -10,12 +10,12 @@ class RealQRTests {
 
     double[][] aEntries, expQEntries, expREntries;
     Matrix A, expQ, expR;
-    RealQRDecomposition QR;
+    RealQRDecompositionOld QR;
 
     @Test
     void fullTestCase() {
         // Tests account for numerical loss of precision.
-        QR = new RealQRDecomposition();
+        QR = new RealQRDecompositionOld();
 
         // --------------------------- Sub-case 1 ---------------------------
         aEntries = new double[][]

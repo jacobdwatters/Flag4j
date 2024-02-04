@@ -82,8 +82,8 @@ public final class ComplexCholeskyDecomposition extends CholeskyDecomposition<CM
             ParameterChecks.assertSquareMatrix(src.shape);
         }
 
-        double posDefTolerance = Math.max(L.numRows*Math.ulp(1.0), DEFAULT_POS_DEF_TOLERANCE);
         L = new CMatrix(src.numRows);
+        double posDefTolerance = Math.max(L.numRows*Math.ulp(1.0), DEFAULT_POS_DEF_TOLERANCE);
         CNumber sum;
 
         int lIndex1;

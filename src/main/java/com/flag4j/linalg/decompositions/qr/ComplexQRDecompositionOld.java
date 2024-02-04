@@ -1,33 +1,43 @@
 package com.flag4j.linalg.decompositions.qr;
 
-import com.flag4j.Matrix;
-import com.flag4j.linalg.decompositions.QRDecompositionUtils;
 
+import com.flag4j.CMatrix;
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.linalg.decompositions.HouseholderUtils;
 
 /**
- * <p>Instances of this class compute the {@code QR} decomposition of a real dense matrix.</p>
- * <p>The {@code QR} decomposition, decomposes a matrix {@code A} into an orthogonal matrix {@code Q}
+ * <p>Instances of this class compute the {@code QR} decomposition of a complex dense matrix.</p>
+ * <p>The {@code QR} decomposition, decomposes a matrix {@code A} into a unitary matrix {@code Q}
  * and an upper triangular matrix {@code R} such that {@code A=QR}.</p>
  *
  * <p>Much of this code has been adapted from the EJML library.</p>
  */
-public class RealQRDecomposition extends QRDecomposition<Matrix, double[]> {
+@Deprecated
+public class ComplexQRDecompositionOld extends QRDecompositionOld<CMatrix, CNumber[]> {
+
 
     /**
      * Scalar factor of the currently computed Householder reflector.
      */
-    private double currentFactor;
+    private CNumber currentFactor;
     /**
      * Stores the shifted value of the first entry in a Householder vector.
      */
-    private double shift;
-
+    private CNumber shift;
+    /**
+     * For storing the scaled norm. This may be complex.
+     */
+    private CNumber phaseAdjustedNorm;
+    /**
+     * The complex number equal to zero.
+     */
+    static final CNumber ZERO = CNumber.zero();
 
     /**
      * Creates a {@code QR} decomposer. This decomposer will compute the reduced {@code QR} decomposition.
-     * @see #RealQRDecomposition(boolean)
+     * @see #ComplexQRDecompositionOld(boolean)
      */
-    public RealQRDecomposition() {
+    public ComplexQRDecompositionOld() {
         super(true);
     }
 
@@ -37,7 +47,7 @@ public class RealQRDecomposition extends QRDecomposition<Matrix, double[]> {
      *
      * @param reduced Flag indicating if this decomposer should compute the full or reduced {@code QR} decomposition.
      */
-    public RealQRDecomposition(boolean reduced) {
+    public ComplexQRDecompositionOld(boolean reduced) {
         super(reduced);
     }
 
@@ -48,19 +58,19 @@ public class RealQRDecomposition extends QRDecomposition<Matrix, double[]> {
      * @return The {@code Q} matrix from the {@code QR} decomposition.
      */
     @Override
-    public Matrix getQ() {
+    public CMatrix getQ() {
         int qCols = reduced ? minAxisSize : numRows;
-        Matrix Q = Matrix.I(numRows, qCols);
+        CMatrix Q = CMatrix.I(numRows, qCols);
 
-        for(int j=minAxisSize - 1; j>=0; j--) {
-            householderVector[j] = 1;
+        for(int j=minAxisSize-1; j>=0; j--) {
+            householderVector[j] = CNumber.one();
             for(int i=j + 1; i<numRows; i++) {
                 householderVector[i] = qrData[i*numCols + j];
             }
 
             // Apply the reflector to the entries.
-            if(qFactors[j]!=0)
-                QRDecompositionUtils.rightMultReflector(Q, householderVector, qFactors[j], j, j, numRows, workArray);
+            if(qFactors[j]!=null && !qFactors[j].equals(ZERO))
+                HouseholderUtils.leftMultReflector(Q, householderVector, qFactors[j], j, j, numRows, workArray);
         }
 
         return Q;
@@ -73,11 +83,11 @@ public class RealQRDecomposition extends QRDecomposition<Matrix, double[]> {
      * @return The upper triangular matrix {@code R} from the {@code QR} decomposition.
      */
     @Override
-    public Matrix getR() {
+    public CMatrix getR() {
         int rRows = reduced ? minAxisSize : numRows;
-        Matrix R = new Matrix(rRows, numCols); // Get R in reduced form.
+        CMatrix R = new CMatrix(rRows, numCols); // Get R in reduced form.
 
-        for (int i=0; i<minAxisSize; i++) {
+        for(int i=0; i<minAxisSize; i++) {
             int idx = i*numCols + i;
 
             for(int j=i; j<numCols; j++) {
@@ -97,9 +107,9 @@ public class RealQRDecomposition extends QRDecomposition<Matrix, double[]> {
     @Override
     protected void initWorkArrays(int maxAxisSize) {
         qrData = QR.entries; // Create reference to the internal data array of the QR matrix.
-        qFactors = new double[minAxisSize]; // Stores scaler factors for the Householder vectors.
-        householderVector = new double[maxAxisSize];
-        workArray = new double[maxAxisSize];
+        qFactors = new CNumber[minAxisSize]; // Stores scaler factors for the Householder vectors.
+        householderVector = new CNumber[maxAxisSize];
+        workArray = new CNumber[maxAxisSize];
     }
 
 
@@ -116,13 +126,13 @@ public class RealQRDecomposition extends QRDecomposition<Matrix, double[]> {
         norm = 0; // Ensure norm is reset.
 
         if(maxAbs < Math.ulp(1.0)) {
-            currentFactor = 0;
+            currentFactor = CNumber.zero();
         } else {
-            computeSignedNorm(j, maxAbs);
+            computePhasedNorm(j, maxAbs);
+            householderVector[j] = CNumber.one(); // Ensure first value in Householder vector is one.
 
-            householderVector[j] = 1; // Ensure first value in Householder vector is one.
-            for (int i=j+1; i<numRows; i++) {
-                householderVector[i] /= shift; // Scale all but first entry of the Householder vector.
+            for(int i=j+1; i<numRows; i++) {
+                householderVector[i].divEq(shift); // Scale all but first entry of the Householder vector.
             }
         }
 
@@ -135,9 +145,9 @@ public class RealQRDecomposition extends QRDecomposition<Matrix, double[]> {
      * @param j Index of sub-matrix for which the Householder reflector was computed for.
      */
     protected void updateData(int j) {
-        QRDecompositionUtils.rightMultReflector(QR, householderVector, qFactors[j], j, j, numRows, workArray);
+        HouseholderUtils.leftMultReflector(QR, householderVector, qFactors[j], j, j, numRows, workArray);
 
-        if(j < numCols) qrData[j + j*numCols] = -norm;
+        if(j < numCols) qrData[j + j*numCols] = phaseAdjustedNorm.addInv();
 
         // Store the Q matrix in the lower portion of QR.
         for(int i=j+1; i<numRows; i++) {
@@ -152,21 +162,21 @@ public class RealQRDecomposition extends QRDecomposition<Matrix, double[]> {
      * @param j Column to compute norm of below the {@code j}th row.
      * @param maxAbs Maximum absolute value in the column. Used for scaling norm to minimize potential overflow issues.
      */
-    protected void computeSignedNorm(int j, double maxAbs) {
+    protected void computePhasedNorm(int j, double maxAbs) {
         // Computes the 2-norm of the column.
         for(int i=j; i<numRows; i++) {
-            householderVector[i] /= maxAbs; // Scale entries of the householder vector to help reduce potential overflow.
-            double scaledValue = householderVector[i];
-            norm += scaledValue*scaledValue;
+            householderVector[i].divEq(maxAbs); // Scale entries of the householder vector to help reduce potential overflow.
+            CNumber scaledValue = householderVector[i];
+            norm += scaledValue.magSquared();
         }
         norm = Math.sqrt(norm); // Finish 2-norm computation for the column.
 
-        // Change sign of norm depending on first entry in column for stability purposes in Householder vector.
-        if(householderVector[j] < 0) norm = -norm;
+        // Change phase of the norm depending on first entry in column for stability purposes in Householder vector.
+        phaseAdjustedNorm = householderVector[j].equals(ZERO) ? new CNumber(norm) : CNumber.sgn(householderVector[j]).mult(norm);
 
-        shift = householderVector[j] + norm;
-        currentFactor = shift/norm;
-        norm *= maxAbs; // Rescale norm.
+        shift = householderVector[j].add(phaseAdjustedNorm);
+        currentFactor = shift.div(phaseAdjustedNorm);
+        phaseAdjustedNorm.multEq(maxAbs); // Rescale norm.
     }
 
 
@@ -181,9 +191,9 @@ public class RealQRDecomposition extends QRDecomposition<Matrix, double[]> {
         int idx = j*numCols + j;
 
         for(int i=j; i<numRows; i++) {
-            double d = householderVector[i] = qrData[idx];
+            CNumber d = householderVector[i] = qrData[idx].copy();
             idx += numCols; // Move index to next row.
-            maxAbs = Math.max(Math.abs(d), maxAbs);
+            maxAbs = Math.max(d.mag(), maxAbs);
         }
 
         return maxAbs;
