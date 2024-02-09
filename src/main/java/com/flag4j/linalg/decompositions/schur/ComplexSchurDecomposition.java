@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,9 +24,9 @@
 
 package com.flag4j.linalg.decompositions.schur;
 
-import com.flag4j.CMatrix;
-import com.flag4j.CVector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.CVector;
 import com.flag4j.linalg.Eigen;
 import com.flag4j.linalg.decompositions.hess.ComplexHessenburgDecompositionOld;
 import com.flag4j.linalg.transformations.Householder;
@@ -231,7 +231,7 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVect
      * (i.e. {@link Math#ulp(double)  Math.ulp(1.0d)}).
      * @param m Row index of the value of interest within the {@code T} matrix.
      * @return True if the specified entry has not converged. That is, the entry in the {@code T} matrix is greater
-     * than (in absolute value) machine precision (i.e. Math.ulp(1.0)) times the absolute sum of the entries along the
+     * than (in absolute value) machine precision (i.e. Flag4jConstants.EPS_F64) times the absolute sum of the entries along the
      * block 2x2 matrix on the diagonal of {@code T} containing the entry. Otherwise, returns false.
      */
     @Override

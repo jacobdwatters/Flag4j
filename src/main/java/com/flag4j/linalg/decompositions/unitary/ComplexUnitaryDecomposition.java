@@ -1,9 +1,34 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2023-2024. Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.flag4j.linalg.decompositions.unitary;
 
-import com.flag4j.CMatrix;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.linalg.decompositions.HouseholderUtils;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.linalg.transformations.Householder;
 import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.Flag4jConstants;
 
 /**
  * This class is the base class for complex matrix decompositions which proceed by using unitary transformations
@@ -63,7 +88,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
             }
 
             if(!(qFactors[j]==null || qFactors[j].equals(ZERO))) { // Otherwise, no reflector to apply.
-                HouseholderUtils.leftMultReflector(Q, householderVector, qFactors[j], j, j, numRows, workArray);
+                Householder.leftMultReflector(Q, householderVector, qFactors[j], j, j, numRows, workArray);
             }
         }
 
@@ -122,7 +147,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
         double maxAbs = findMaxAndInit(j);
         normRe = 0; // Ensure norm is reset.
 
-        applyUpdate = maxAbs >= Math.ulp(1.0);
+        applyUpdate = maxAbs >= Flag4jConstants.EPS_F64;
 
         if(!applyUpdate) {
             currentFactor = CNumber.zero();
@@ -192,10 +217,10 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
     @Override
     protected void updateData(int j) {
         if(subDiagonal >= 0) // Right multiply transform matrix to reflector. (i.e. left multiply reflector to matrix).
-            HouseholderUtils.leftMultReflector(transformMatrix, householderVector, qFactors[j], j, j, numRows, workArray);
+            Householder.leftMultReflector(transformMatrix, householderVector, qFactors[j], j, j, numRows, workArray);
 
         if(subDiagonal == 1) // Left multiply transform matrix to reflector. (i.e. right multiply reflector to matrix).
-            HouseholderUtils.rightMultReflector(transformMatrix, householderVector, qFactors[j], 0, j, numRows);
+            Householder.rightMultReflector(transformMatrix, householderVector, qFactors[j], 0, j, numRows);
 
         if(j < numCols) transformData[j*numCols + j - subDiagonal] = norm.addInv();
 

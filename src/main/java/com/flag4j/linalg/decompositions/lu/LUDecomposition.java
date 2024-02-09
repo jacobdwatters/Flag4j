@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,9 +24,9 @@
 
 package com.flag4j.linalg.decompositions.lu;
 
-import com.flag4j.PermutationMatrix;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.linalg.decompositions.Decomposition;
+import com.flag4j.sparse.PermutationMatrix;
 import com.flag4j.util.ArrayUtils;
 
 /**

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,11 @@
 
 package com.flag4j.linalg.solvers.lstsq;
 
-import com.flag4j.CMatrix;
-import com.flag4j.CVector;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;
-import com.flag4j.linalg.decompositions.qr.QRDecompositionOld;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.CVector;
+import com.flag4j.linalg.decompositions.unitary.UnitaryDecomposition;
 import com.flag4j.linalg.solvers.LinearSolver;
 
 
@@ -36,8 +36,9 @@ import com.flag4j.linalg.solvers.LinearSolver;
 
 /**
  * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,
- * minimizes {@code ||Ax-b||<sub>2</sub>} which is equivalent to solving the normal equations {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
- * This is done using a {@link QRDecompositionOld}.
+ * minimizes {@code ||Ax-b||}<sub>2</sub> which is equivalent to solving the normal equations {@code A}<sup>T</sup>{@code Ax=A}<sup>T
+ * </sup>{@code b}.
+ * This is done using a {@link UnitaryDecomposition QR decomposition}.
  */
 public abstract class LstsqSolver<
         T extends MatrixMixin<T, T, ?, CMatrix, ?, U, U>,
@@ -51,7 +52,7 @@ public abstract class LstsqSolver<
     /**
      * Decomposer to compute the {@code QR} decomposition for using the least-squares solver.
      */
-    protected final QRDecompositionOld<T, ?> qr;
+    protected final UnitaryDecomposition<T, ?> qr;
     /**
      * {@code Q} The hermation transpose of the orthonormal matrix from the {@code QR} decomposition.
      */
@@ -67,7 +68,7 @@ public abstract class LstsqSolver<
      * @param backSolver The solver to solve the upper triangular system resulting from the {@code QR} decomposition
      *                   which is equivalent to solving the normal equations
      */
-    protected LstsqSolver(QRDecompositionOld<T, ?> qr, LinearSolver<T, U> backSolver) {
+    protected LstsqSolver(UnitaryDecomposition<T, ?> qr, LinearSolver<T, U> backSolver) {
         this.qr = qr;
         this.backSolver = backSolver;
     }
@@ -109,6 +110,6 @@ public abstract class LstsqSolver<
     protected void decompose(T A) {
         qr.decompose(A);
         Qh = qr.getQ().H();
-        R = qr.getR();
+        R = qr.getUpper();
     }
 }

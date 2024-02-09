@@ -1,8 +1,8 @@
 package com.flag4j.matrix;
 
 
-import com.flag4j.Matrix;
-import com.flag4j.Vector;
+import com.flag4j.dense.Matrix;
+import com.flag4j.dense.Vector;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -123,15 +123,15 @@ class MatrixGetTests {
         Vector exp;
 
         // ------------------- Sub-case 1 -------------------
-        exp = new Vector(new double[]{5525, 15.22, 8, -45.6});
+        exp = new Vector(5525, 15.22, 8, -45.6);
         assertEquals(exp, A.getColAsVector(1));
 
         // ------------------- Sub-case 2 -------------------
-        exp = new Vector(new double[]{1.123, -8234.5, 234, -9.451});
+        exp = new Vector(1.123, -8234.5, 234, -9.451);
         assertEquals(exp, A.getColAsVector(0));
 
         // ------------------- Sub-case 3 -------------------
-        exp = new Vector(new double[]{66.74, -84.12, 1, 111.345});
+        exp = new Vector(66.74, -84.12, 1, 111.345);
         assertEquals(exp, A.getColAsVector(2));
 
         // ------------------- Sub-case 4 -------------------

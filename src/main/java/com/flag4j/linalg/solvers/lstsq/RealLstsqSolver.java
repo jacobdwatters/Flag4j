@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,18 +25,17 @@
 package com.flag4j.linalg.solvers.lstsq;
 
 
-import com.flag4j.Matrix;
-import com.flag4j.Vector;
-import com.flag4j.linalg.decompositions.qr.QRDecompositionOld;
-import com.flag4j.linalg.decompositions.qr.RealQRDecompositionOld;
+import com.flag4j.dense.Matrix;
+import com.flag4j.dense.Vector;
+import com.flag4j.linalg.decompositions.qr.RealQRDecomposition;
 import com.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
 
 
 /**
  * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,
- * minimizes {@code ||Ax-b||<sub>2</sub>} which is equivalent to solving the normal equations
- * {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
- * This is done using a {@link QRDecompositionOld}.
+ * minimizes {@code ||Ax-b||}<sub>2</sub> which is equivalent to solving the normal equations
+ * {@code A}<sup>T</sup>{@code Ax=A}<sup>T</sup>{@code b}.
+ * This is done efficiently using a {@link RealQRDecomposition QR decomposition}.
  */
 public class RealLstsqSolver extends LstsqSolver<Matrix, Vector> {
 
@@ -47,6 +46,6 @@ public class RealLstsqSolver extends LstsqSolver<Matrix, Vector> {
      * {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
      */
     public RealLstsqSolver() {
-        super(new RealQRDecompositionOld(), new RealBackSolver());
+        super(new RealQRDecomposition(), new RealBackSolver());
     }
 }

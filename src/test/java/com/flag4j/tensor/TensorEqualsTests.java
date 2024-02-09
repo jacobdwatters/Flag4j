@@ -1,8 +1,12 @@
 package com.flag4j.tensor;
 
 
-import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.CTensor;
+import com.flag4j.dense.Tensor;
+import com.flag4j.sparse.CooCTensor;
+import com.flag4j.sparse.CooTensor;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -283,6 +287,6 @@ class TensorEqualsTests {
         assertNotEquals(A, Double.valueOf(2.245));
 
         // ---------------------- Sub-case 3 ----------------------
-        assertNotEquals(A, String.valueOf("Hello Flag4j"));
+        assertNotEquals(A, "Hello Flag4j");
     }
 }

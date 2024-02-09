@@ -6,8 +6,8 @@ com.flag4j.complex_tensor
 com.flag4j.complex_vector
 com.flag4j.concurrency
 com.flag4j.core
-com.flag4j.core.dense
-com.flag4j.core.sparse
+com.flag4j.core.dense_base
+com.flag4j.core.sparse_base
 com.flag4j.exceptions
 com.flag4j.io
 com.flag4j.linalg

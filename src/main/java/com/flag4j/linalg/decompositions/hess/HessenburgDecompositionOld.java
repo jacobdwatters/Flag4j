@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ package com.flag4j.linalg.decompositions.hess;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;
 import com.flag4j.linalg.decompositions.Decomposition;
+import com.flag4j.util.Flag4jConstants;
 import com.flag4j.util.ParameterChecks;
 
 /**
@@ -124,7 +125,7 @@ public abstract class HessenburgDecompositionOld<
      */
     protected void generalDecomposition(T src) {
         // Tolerance for considering a value zero when determining if a column of H is in the correct form.
-        double tol = Math.ulp(1.0);
+        double tol = Flag4jConstants.EPS_F64;
 
         H = src.copy(); // Storage for upper Hessenburg matrix
         T ref; // For storing Householder reflector

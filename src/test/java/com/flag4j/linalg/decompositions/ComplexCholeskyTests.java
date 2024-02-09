@@ -1,6 +1,6 @@
 package com.flag4j.linalg.decompositions;
 
-import com.flag4j.CMatrix;
+import com.flag4j.dense.CMatrix;
 import com.flag4j.linalg.decompositions.cholesky.ComplexCholeskyDecomposition;
 import org.junit.jupiter.api.Test;
 

@@ -1,5 +1,9 @@
 package com.flag4j;
 
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.Matrix;
+import com.flag4j.sparse.CooMatrix;
+import com.flag4j.sparse.CooVector;
 import junit.framework.Assert;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;

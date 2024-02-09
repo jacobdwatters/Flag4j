@@ -1,6 +1,6 @@
 package com.flag4j.operations;
 
-import com.flag4j.Shape;
+import com.flag4j.core.Shape;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

@@ -1,7 +1,7 @@
 package com.flag4j.sparse_vector;
 
-import com.flag4j.CooVector;
-import com.flag4j.Vector;
+import com.flag4j.dense.Vector;
+import com.flag4j.sparse.CooVector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;

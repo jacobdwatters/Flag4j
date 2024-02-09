@@ -1,7 +1,7 @@
 package com.flag4j.tensor;
 
-import com.flag4j.Shape;
-import com.flag4j.Tensor;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.Tensor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

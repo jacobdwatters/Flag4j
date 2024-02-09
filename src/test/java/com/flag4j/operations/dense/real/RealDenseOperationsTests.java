@@ -1,6 +1,6 @@
 package com.flag4j.operations.dense.real;
 
-import com.flag4j.Shape;
+import com.flag4j.core.Shape;
 import com.flag4j.exceptions.LinearAlgebraException;
 import com.flag4j.operations.common.real.RealOperations;
 import org.junit.jupiter.api.Test;

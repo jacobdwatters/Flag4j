@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +24,12 @@
 
 package com.flag4j.operations.dense_sparse.coo.complex;
 
-import com.flag4j.CMatrix;
-import com.flag4j.CTensor;
-import com.flag4j.CooCMatrix;
-import com.flag4j.CooCTensor;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.CTensor;
 import com.flag4j.operations.common.complex.ComplexProperties;
+import com.flag4j.sparse.CooCMatrix;
+import com.flag4j.sparse.CooCTensor;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 

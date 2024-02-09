@@ -1,7 +1,7 @@
 package com.flag4j.vector;
 
 
-import com.flag4j.Vector;
+import com.flag4j.dense.Vector;
 import com.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;

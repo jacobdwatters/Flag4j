@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,9 +24,10 @@
 
 package com.flag4j.linalg.decompositions.cholesky;
 
-import com.flag4j.CMatrix;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.dense.CMatrix;
 import com.flag4j.exceptions.LinearAlgebraException;
+import com.flag4j.util.Flag4jConstants;
 import com.flag4j.util.ParameterChecks;
 
 
@@ -83,7 +84,7 @@ public final class ComplexCholeskyDecomposition extends CholeskyDecomposition<CM
         }
 
         L = new CMatrix(src.numRows);
-        double posDefTolerance = Math.max(L.numRows*Math.ulp(1.0), DEFAULT_POS_DEF_TOLERANCE);
+        double posDefTolerance = Math.max(L.numRows*Flag4jConstants.EPS_F64, DEFAULT_POS_DEF_TOLERANCE);
         CNumber sum;
 
         int lIndex1;

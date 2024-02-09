@@ -1,8 +1,12 @@
 package com.flag4j.complex_matrix;
 
 
-import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.CTensor;
+import com.flag4j.dense.CVector;
+import com.flag4j.dense.Matrix;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;

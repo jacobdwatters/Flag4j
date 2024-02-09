@@ -1,8 +1,8 @@
 package com.flag4j.operations.dense.real_complex;
 
 
-import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.Shape;
 import com.flag4j.exceptions.LinearAlgebraException;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import org.junit.jupiter.api.Assertions;

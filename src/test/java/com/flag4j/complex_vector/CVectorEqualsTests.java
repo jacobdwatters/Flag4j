@@ -24,11 +24,11 @@
 
 package com.flag4j.complex_vector;
 
-import com.flag4j.CVector;
-import com.flag4j.CooCVector;
-import com.flag4j.CooVector;
-import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.dense.CVector;
+import com.flag4j.dense.Vector;
+import com.flag4j.sparse.CooCVector;
+import com.flag4j.sparse.CooVector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -309,14 +309,14 @@ class CVectorEqualsTests {
                 new CNumber(1.3, -0.000023465), new CNumber()};
         a = new CVector(aEntries);
         String bString = "Hello World!";
-        assertFalse(a.equals(bString));
+        assertNotEquals(a, bString);
 
         // ----------------- Sub-case 2 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
                 new CNumber(1.3, -0.000023465), new CNumber()};
         a = new CVector(aEntries);
         Double num = 123.4;
-        assertFalse(a.equals(num));
+        assertNotEquals(a, num, 0.0);
 
         // ----------------- Sub-case 3 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
@@ -324,6 +324,6 @@ class CVectorEqualsTests {
         a = new CVector(aEntries);
         CNumber[] arr = {new CNumber(0), new CNumber(8.245, 9.2165),
                 new CNumber(1.3, -0.000023465), new CNumber()};
-        assertFalse(a.equals(num));
+        assertNotEquals(a, num, 0.0);
     }
 }

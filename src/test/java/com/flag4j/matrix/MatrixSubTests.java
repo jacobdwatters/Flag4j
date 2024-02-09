@@ -1,8 +1,12 @@
 package com.flag4j.matrix;
 
-import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.Matrix;
 import com.flag4j.exceptions.LinearAlgebraException;
+import com.flag4j.sparse.CooCMatrix;
+import com.flag4j.sparse.CooMatrix;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,7 +33,7 @@ public class MatrixSubTests {
         A = new Matrix(aEntries);
         B = new Matrix(bEntries);
         expShape = A.shape.copy();
-        expEntries = new double[]{1-0.333, 2-56.4, 3-13.4, 4+1.44, 5-5, 6-85.1, 7-1.343, 8-6.7, 9+88.4};
+        expEntries = new double[]{1-0.333, 2-56.4, 3-13.4, 4+1.44, 0, 6-85.1, 7-1.343, 8-6.7, 9+88.4};
         exp = new Matrix(expShape, expEntries);
 
         sum = A.sub(B);
@@ -42,7 +46,7 @@ public class MatrixSubTests {
         A = new Matrix(aEntries);
         B = new Matrix(bEntries);
         expShape = A.shape.copy();
-        expEntries = new double[]{1-0.333, 2-56.4, 3-13.4, 4 + 1.44, 5-5, 6-85.1};
+        expEntries = new double[]{1-0.333, 2-56.4, 3-13.4, 4 + 1.44, 0, 6-85.1};
         exp = new Matrix(expShape, expEntries);
 
         sum = A.sub(B);
@@ -143,7 +147,7 @@ public class MatrixSubTests {
         expEntriesC = new CNumber[]{
                 new CNumber(1-1.23, 344.5), new CNumber(2-2.33, -5.6), new CNumber(3-3.13, 34),
                 new CNumber(4, -66.45), new CNumber(5-33.1334, -5513.5), new CNumber(6-99.3),
-                new CNumber(7-1.23), new CNumber(8-8, -3), new CNumber(9-9, 0.000000001)
+                new CNumber(7-1.23), new CNumber(0, -3), new CNumber(0, 0.000000001)
         };
 
         sumC = A.sub(BC);

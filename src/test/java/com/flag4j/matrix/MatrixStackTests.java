@@ -1,7 +1,15 @@
 package com.flag4j.matrix;
 
-import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.CVector;
+import com.flag4j.dense.Matrix;
+import com.flag4j.dense.Vector;
+import com.flag4j.sparse.CooCMatrix;
+import com.flag4j.sparse.CooCVector;
+import com.flag4j.sparse.CooMatrix;
+import com.flag4j.sparse.CooVector;
 import com.flag4j.util.ArrayUtils;
 import org.junit.jupiter.api.Test;
 

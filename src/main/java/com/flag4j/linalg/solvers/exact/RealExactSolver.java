@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,8 @@
 
 package com.flag4j.linalg.solvers.exact;
 
-import com.flag4j.Matrix;
-import com.flag4j.Vector;
+import com.flag4j.dense.Matrix;
+import com.flag4j.dense.Vector;
 import com.flag4j.linalg.decompositions.lu.LUDecomposition;
 import com.flag4j.linalg.decompositions.lu.RealLUDecomposition;
 import com.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
@@ -37,12 +37,6 @@ import com.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
  * {@link LUDecomposition LU decomposition.}
  */
 public class RealExactSolver extends ExactSolver<Matrix, Vector> {
-
-    /**
-     * Threshold for determining if a determinant is to be considered zero when checking if the coefficient matrix is
-     * full rank.
-     */
-    private static final double RANK_CONDITION = Math.ulp(1.0);
 
     /**
      * Constructs an exact LU solver where the coefficient matrix is real dense.

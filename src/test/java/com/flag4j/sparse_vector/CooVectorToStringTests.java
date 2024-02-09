@@ -1,7 +1,7 @@
 package com.flag4j.sparse_vector;
 
-import com.flag4j.CooVector;
 import com.flag4j.io.PrintOptions;
+import com.flag4j.sparse.CooVector;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

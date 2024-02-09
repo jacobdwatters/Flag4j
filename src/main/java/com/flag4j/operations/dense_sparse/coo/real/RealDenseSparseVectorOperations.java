@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,9 @@
 package com.flag4j.operations.dense_sparse.coo.real;
 
 
-import com.flag4j.CooVector;
-import com.flag4j.Vector;
+import com.flag4j.dense.Vector;
 import com.flag4j.operations.common.real.RealOperations;
+import com.flag4j.sparse.CooVector;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 

@@ -1,8 +1,8 @@
 package com.flag4j.linalg.decompositions;
 
-import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.Matrix;
 import com.flag4j.linalg.decompositions.lu.ComplexLUDecomposition;
 import com.flag4j.linalg.decompositions.lu.LUDecomposition;
 import org.junit.jupiter.api.Test;

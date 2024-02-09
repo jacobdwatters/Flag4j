@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +25,10 @@
 package com.flag4j.core;
 
 
-import com.flag4j.CTensor;
-import com.flag4j.CooCTensor;
-import com.flag4j.Tensor;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.dense.CTensor;
+import com.flag4j.dense.Tensor;
+import com.flag4j.sparse.CooCTensor;
 
 /**
  * This class specifies methods which any complex tensor that is <b>NOT</b> a matrix or vector should implement.

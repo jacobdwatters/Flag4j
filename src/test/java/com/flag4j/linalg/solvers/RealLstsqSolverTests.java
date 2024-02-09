@@ -1,7 +1,7 @@
 package com.flag4j.linalg.solvers;
 
-import com.flag4j.Matrix;
-import com.flag4j.Vector;
+import com.flag4j.dense.Matrix;
+import com.flag4j.dense.Vector;
 import com.flag4j.linalg.solvers.lstsq.RealLstsqSolver;
 import org.junit.jupiter.api.Test;
 

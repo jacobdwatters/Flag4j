@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,14 @@
 
 package com.flag4j.rng;
 
-import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.*;
 import com.flag4j.linalg.Decompose;
-import com.flag4j.linalg.decompositions.qr.ComplexQRDecompositionOld;
-import com.flag4j.linalg.decompositions.qr.RealQRDecompositionOld;
+import com.flag4j.linalg.decompositions.qr.ComplexQRDecomposition;
+import com.flag4j.linalg.decompositions.qr.RealQRDecomposition;
+import com.flag4j.sparse.CooCMatrix;
+import com.flag4j.sparse.CooMatrix;
 import com.flag4j.util.ParameterChecks;
 
 import java.math.BigDecimal;
@@ -491,7 +494,7 @@ public class RandomTensor {
      */
     public Matrix randomOrthogonalMatrix(int size) {
         Matrix randMat = new Matrix(size, size, RAND_ARRAY.genUniformRealArray(size));
-        return new RealQRDecompositionOld().decompose(randMat).getQ();
+        return new RealQRDecomposition().decompose(randMat).getQ();
     }
 
 
@@ -695,7 +698,7 @@ public class RandomTensor {
      */
     public CMatrix randomUnitaryMatrix(int size) {
         CMatrix randMat = new CMatrix(size, size, RAND_ARRAY.genUniformComplexArray(size));
-        return new ComplexQRDecompositionOld().decompose(randMat).getQ();
+        return new ComplexQRDecomposition().decompose(randMat).getQ();
     }
 
 

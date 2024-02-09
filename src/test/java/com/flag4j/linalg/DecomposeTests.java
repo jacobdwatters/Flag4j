@@ -1,13 +1,13 @@
 package com.flag4j.linalg;
 
-import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.Matrix;
 import com.flag4j.linalg.decompositions.cholesky.ComplexCholeskyDecomposition;
 import com.flag4j.linalg.decompositions.cholesky.RealCholeskyDecomposition;
 import com.flag4j.linalg.decompositions.lu.ComplexLUDecomposition;
 import com.flag4j.linalg.decompositions.lu.RealLUDecomposition;
-import com.flag4j.linalg.decompositions.qr.ComplexQRDecompositionOld;
-import com.flag4j.linalg.decompositions.qr.RealQRDecompositionOld;
+import com.flag4j.linalg.decompositions.qr.ComplexQRDecomposition;
+import com.flag4j.linalg.decompositions.qr.RealQRDecomposition;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -52,8 +52,8 @@ public class DecomposeTests {
 
     @Test
     void qrTestCase() {
-        RealQRDecompositionOld qr = new RealQRDecompositionOld();
-        ComplexQRDecompositionOld qr_complex = new ComplexQRDecompositionOld();
+        RealQRDecomposition qr = new RealQRDecomposition();
+        ComplexQRDecomposition qr_complex = new ComplexQRDecomposition();
 
         // ----------------------- Sub-case 1 -----------------------
         aEntries = new double[][]{

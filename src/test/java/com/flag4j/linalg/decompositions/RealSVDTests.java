@@ -1,6 +1,6 @@
 package com.flag4j.linalg.decompositions;
 
-import com.flag4j.Matrix;
+import com.flag4j.dense.Matrix;
 import com.flag4j.linalg.decompositions.svd.RealSVD;
 import com.flag4j.linalg.decompositions.svd.SVD;
 

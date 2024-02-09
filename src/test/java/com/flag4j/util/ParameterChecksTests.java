@@ -1,6 +1,6 @@
 package com.flag4j.util;
 
-import com.flag4j.Shape;
+import com.flag4j.core.Shape;
 import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 

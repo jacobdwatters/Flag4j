@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@
 
 package com.flag4j.linalg.transformations;
 
-import com.flag4j.Matrix;
+import com.flag4j.dense.Matrix;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -92,7 +92,7 @@ public class Projection {
 
         // Convert the field of views to radians.
         double fovXRad = Math.toRadians(fovX);
-        double fovYRad = Math.toRadians(fovX);
+        double fovYRad = Math.toRadians(fovY);
 
         perspective.entries[0] = 1.0/(aspectRatio*Math.tan(fovXRad/2.0));
         perspective.entries[5] = 1.0/(Math.tan(fovYRad/2.0));

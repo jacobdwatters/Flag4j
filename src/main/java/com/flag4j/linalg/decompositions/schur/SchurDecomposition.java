@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,17 +24,18 @@
 
 package com.flag4j.linalg.decompositions.schur;
 
-import com.flag4j.CMatrix;
-import com.flag4j.CVector;
-import com.flag4j.Matrix;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.CVector;
+import com.flag4j.dense.Matrix;
 import com.flag4j.linalg.Eigen;
 import com.flag4j.linalg.decompositions.Decomposition;
 import com.flag4j.linalg.decompositions.hess.HessenburgDecompositionOld;
 import com.flag4j.linalg.transformations.Givens;
 import com.flag4j.rng.RandomCNumber;
+import com.flag4j.util.Flag4jConstants;
 import com.flag4j.util.ParameterChecks;
 
 /**
@@ -242,7 +243,7 @@ public abstract class SchurDecomposition<
     protected void chaseBulge(int bulgeSize) {
         int stop = bulgeSize + 2;
 
-        double tol = Math.ulp(1.0); // Tolerance for considering value zero.
+        double tol = Flag4jConstants.EPS_F64; // Tolerance for considering value zero.
         T ref; // Storage for Householder reflector.
         U col; // Normal vector for Householder reflector computation.
 
@@ -408,7 +409,7 @@ public abstract class SchurDecomposition<
      * (i.e. {@link Math#ulp(double)  Math.ulp(1.0d)}).
      * @param m Row index of the value of interest within the {@code T} matrix.
      * @return True if the specified entry has not converged. That is, the entry in the {@code T} matrix is greater
-     * than (in absolute value) machine precision (i.e. Math.ulp(1.0)) times the absolute sum of the entries along the
+     * than (in absolute value) machine precision (i.e. Flag4jConstants.EPS_F64) times the absolute sum of the entries along the
      * block 2x2 matrix on the diagonal of {@code T} containing the entry. Otherwise, returns false.
      */
     protected abstract boolean notConverged(int m);
@@ -424,7 +425,7 @@ public abstract class SchurDecomposition<
      * @param T The {@code T} Matrix in the Schur decomposition.
      * @param m Row index of the value of interest within the {@code T} matrix.
      * @return True if the specified entry has not converged. That is, the entry in the {@code T} matrix is greater
-     * than (in absolute value) machine precision (i.e. Math.ulp(1.0)) times the absolute sum of the entries along the
+     * than (in absolute value) machine precision (i.e. Flag4jConstants.EPS_F64) times the absolute sum of the entries along the
      * block 2x2 matrix on the diagonal of {@code T} containing the entry. Otherwise, returns false.
      */
     protected static boolean notConverged(CMatrix T, int m) {

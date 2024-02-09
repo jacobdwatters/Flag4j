@@ -1,8 +1,8 @@
 package com.flag4j.complex_tensor;
 
-import com.flag4j.CTensor;
-import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.CTensor;
 import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

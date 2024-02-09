@@ -1,7 +1,11 @@
 package com.flag4j.complex_vector;
 
-import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.CVector;
+import com.flag4j.dense.Vector;
+import com.flag4j.sparse.CooCVector;
+import com.flag4j.sparse.CooVector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -101,7 +105,7 @@ class CVectorOuterProductTests {
         expEntries = new CNumber[][]{
                 {new CNumber("52477.27385+150487.385602i"), new CNumber("-35.352014499999996-58567.8722275i")},
                 {new CNumber("-184.042444+201.87304i"), new CNumber("88.25954-47.832319000000005i")},
-                {new CNumber("-254.25465000000003-1460.5939269999997i"), new CNumber("-88.18537925+537.6341775i")}};;
+                {new CNumber("-254.25465000000003-1460.5939269999997i"), new CNumber("-88.18537925+537.6341775i")}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, a.outer(b));

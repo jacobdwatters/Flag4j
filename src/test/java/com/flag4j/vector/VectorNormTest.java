@@ -1,6 +1,6 @@
 package com.flag4j.vector;
 
-import com.flag4j.Vector;
+import com.flag4j.dense.Vector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

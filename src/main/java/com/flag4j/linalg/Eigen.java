@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,16 +24,19 @@
 
 package com.flag4j.linalg;
 
-import com.flag4j.CMatrix;
-import com.flag4j.CVector;
-import com.flag4j.Matrix;
-import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.CVector;
+import com.flag4j.dense.Matrix;
+import com.flag4j.dense.Vector;
 import com.flag4j.linalg.decompositions.schur.ComplexSchurDecomposition;
 import com.flag4j.linalg.decompositions.schur.RealSchurDecomposition;
 import com.flag4j.linalg.decompositions.schur.SchurDecomposition;
 import com.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 import com.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
+import com.flag4j.operations.common.complex.AggregateComplex;
+import com.flag4j.operations.common.real.AggregateReal;
+import com.flag4j.util.ParameterChecks;
 
 /**
  * This class provides several methods useful for computing eigen values, eigen vectors, as well as singular values and
@@ -47,20 +50,32 @@ public class Eigen {
      * @return A complex vector containing the eigenvalues of the 2x2 {@code src} matrix.
      */
     public static CVector get2x2EigenValues(Matrix src) {
+        ParameterChecks.assertEquals(2, src.numRows, src.numCols);
+        return new CVector(get2x2EigenValues(src.entries[0], src.entries[1], src.entries[2], src.entries[3]));
+    }
+
+
+    /**
+     * Computes the eigenvalues of a 2x2 matrix explicitly.
+     * @param a11 First entry in matrix (at index (0, 0)).
+     * @param a12 Second entry in matrix (at index (0, 1)).
+     * @param a21 Third entry in matrix (at index (1, 0)).
+     * @param a22 Fourth entry in matrix (at index (1, 1)).
+     * @return A complex array containing the eigenvalues of the 2x2 {@code src} matrix.
+     */
+    public static CNumber[] get2x2EigenValues(double a11, double a12, double a21, double a22) {
         // This method computes eigenvalues in a stable way which is more resilient to overflow errors than
         // standard methods.
-        CVector lambda = new CVector(2);
-        double maxAbs = src.maxAbs(); // Find the maximum absolute value.
+        CNumber[] lambda = new CNumber[2];
+        double maxAbs = AggregateReal.maxAbs(a11, a12, a21, a22);
 
         if(maxAbs == 0) {
             return lambda;
         } else {
-            Matrix scaled = src.div(maxAbs);
-
-            double a11 = scaled.entries[0];
-            double a12 = scaled.entries[1];
-            double a21 = scaled.entries[2];
-            double a22 = scaled.entries[3];
+            a11 /= maxAbs;
+            a12 /= maxAbs;
+            a21 /= maxAbs;
+            a22 /= maxAbs;
 
             double c;
             double s;
@@ -101,13 +116,13 @@ public class Eigen {
                 a11 = b11 - cs*(b12 + b21);
                 a22 = b11 + cs*(b12 + b21);
 
-                lambda.entries[0] = new CNumber(a11*maxAbs);
-                lambda.entries[1] = new CNumber(a22*maxAbs);
+                lambda[0] = new CNumber(a11*maxAbs);
+                lambda[1] = new CNumber(a22*maxAbs);
             } else {
                 double im = Math.sqrt(-b21*b12);
 
-                lambda.entries[0] = new CNumber(b11*maxAbs, im*maxAbs);
-                lambda.entries[1] = new CNumber(b11*maxAbs, -im*maxAbs);
+                lambda[0] = new CNumber(b11*maxAbs, im*maxAbs);
+                lambda[1] = new CNumber(b11*maxAbs, -im*maxAbs);
             }
         }
 
@@ -121,25 +136,37 @@ public class Eigen {
      * @return A complex vector containing the eigenvalues of the 2x2 {@code src} matrix.
      */
     public static CVector get2x2EigenValues(CMatrix src) {
+        ParameterChecks.assertEquals(2, src.numRows, src.numCols);
+        return new CVector(get2x2EigenValues(src.entries[0], src.entries[1], src.entries[2], src.entries[3]));
+    }
+
+
+    /**
+     * Computes the eigenvalues of a 2x2 matrix explicitly.
+     * @param a First entry in matrix.
+     * @param b Second entry in matrix.
+     * @param c Third entry in matrix.
+     * @param d Fourth entry in matrix.
+     * @return A complex vector containing the eigenvalues of the 2x2 {@code src} matrix.
+     */
+    public static CNumber[] get2x2EigenValues(CNumber a, CNumber b, CNumber c, CNumber d) {
         // TODO: While theoretically correct, there are some numerical issues here.
-        CVector lambda = new CVector(2);
+        CNumber[] lambda = new CNumber[2];
 
-        double maxAbs = src.max();
-
-        // Get the four entries from lower right 2x2 sub-matrix and scale values.
-        CNumber a = src.entries[0].div(maxAbs);
-        CNumber b = src.entries[1].div(maxAbs);
-        CNumber c = src.entries[2].div(maxAbs);
-        CNumber d = src.entries[3].div(maxAbs);
+        double maxAbs = AggregateComplex.maxAbs(a, b, c, d);
+        a = a.div(maxAbs);
+        b = b.div(maxAbs);
+        c = c.div(maxAbs);
+        d = d.div(maxAbs);
 
         CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.
-        CNumber htr = a.add(d).div(2); // Half of the 2x2 trace.
+        CNumber htr = a.add(d).div(2.0); // Half of the 2x2 trace.
 
         // 2x2 eigenvalues.
-        lambda.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));
-        lambda.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));
+        lambda[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det))).mult(maxAbs);
+        lambda[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det))).mult(maxAbs);
 
-        return lambda.mult(maxAbs);
+        return lambda;
     }
 
 

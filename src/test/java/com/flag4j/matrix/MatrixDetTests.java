@@ -1,6 +1,6 @@
 package com.flag4j.matrix;
 
-import com.flag4j.Matrix;
+import com.flag4j.dense.Matrix;
 import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 

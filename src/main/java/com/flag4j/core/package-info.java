@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,6 @@
 
 /**
  * This package contains the core interfaces and abstract classes that specify the functionality of the algebraic objects
- * within Flag4j. Namely, tensors, matrices, and vectors.
+ * within Flag4j. Namely: tensors, matrices, and vectors.
  */
 package com.flag4j.core;

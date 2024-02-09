@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,11 @@
 
 package com.flag4j.linalg.decompositions.svd;
 
-import com.flag4j.Matrix;
-import com.flag4j.Shape;
 import com.flag4j.core.MatrixMixin;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.Matrix;
 import com.flag4j.linalg.decompositions.Decomposition;
+import com.flag4j.util.Flag4jConstants;
 
 import java.util.Arrays;
 
@@ -177,7 +178,7 @@ public abstract class SVD<
         Arrays.sort(sorted);
 
         // Tolerance for considering a singular value zero.
-        double tol = 2.0*Math.max(rows, cols)*Math.ulp(1.0)*sorted[sorted.length-1];
+        double tol = 2.0*Math.max(rows, cols)* Flag4jConstants.EPS_F64*sorted[sorted.length-1];
 
         for(double val : singularValues) {
             if(val > tol) {

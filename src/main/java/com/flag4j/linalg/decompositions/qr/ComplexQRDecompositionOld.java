@@ -1,9 +1,34 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024. Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.flag4j.linalg.decompositions.qr;
 
 
-import com.flag4j.CMatrix;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.linalg.decompositions.HouseholderUtils;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.linalg.transformations.Householder;
+import com.flag4j.util.Flag4jConstants;
 
 /**
  * <p>Instances of this class compute the {@code QR} decomposition of a complex dense matrix.</p>
@@ -70,7 +95,7 @@ public class ComplexQRDecompositionOld extends QRDecompositionOld<CMatrix, CNumb
 
             // Apply the reflector to the entries.
             if(qFactors[j]!=null && !qFactors[j].equals(ZERO))
-                HouseholderUtils.leftMultReflector(Q, householderVector, qFactors[j], j, j, numRows, workArray);
+                Householder.leftMultReflector(Q, householderVector, qFactors[j], j, j, numRows, workArray);
         }
 
         return Q;
@@ -125,7 +150,7 @@ public class ComplexQRDecompositionOld extends QRDecompositionOld<CMatrix, CNumb
         double maxAbs = findMaxAndInit(j);
         norm = 0; // Ensure norm is reset.
 
-        if(maxAbs < Math.ulp(1.0)) {
+        if(maxAbs < Flag4jConstants.EPS_F64) {
             currentFactor = CNumber.zero();
         } else {
             computePhasedNorm(j, maxAbs);
@@ -145,7 +170,7 @@ public class ComplexQRDecompositionOld extends QRDecompositionOld<CMatrix, CNumb
      * @param j Index of sub-matrix for which the Householder reflector was computed for.
      */
     protected void updateData(int j) {
-        HouseholderUtils.leftMultReflector(QR, householderVector, qFactors[j], j, j, numRows, workArray);
+        Householder.leftMultReflector(QR, householderVector, qFactors[j], j, j, numRows, workArray);
 
         if(j < numCols) qrData[j + j*numCols] = phaseAdjustedNorm.addInv();
 

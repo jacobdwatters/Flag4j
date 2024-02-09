@@ -1,14 +1,13 @@
 package com.flag4j.vector;
 
-import com.flag4j.CVector;
-import com.flag4j.CooVector;
-import com.flag4j.CooCVector;
-import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.dense.CVector;
+import com.flag4j.dense.Vector;
+import com.flag4j.sparse.CooCVector;
+import com.flag4j.sparse.CooVector;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class VectorEqualsTests {
 
@@ -29,7 +28,7 @@ class VectorEqualsTests {
         bEntries = new double[]{1.234, 543.354, -0.3456};
         B = new Vector(bEntries);
 
-        assertTrue(A.equals(B));
+        assertEquals(A, B);
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new double[]{1.234, 543.354, -0.3456};
@@ -37,7 +36,7 @@ class VectorEqualsTests {
         bEntries = new double[]{1.234, 123.5, -0.3456};
         B = new Vector(bEntries);
 
-        assertFalse(A.equals(B));
+        assertNotEquals(A, B);
 
 
         // -------------------- Sub-case 3 --------------------
@@ -46,7 +45,7 @@ class VectorEqualsTests {
         bEntries = new double[]{1.234, 543.354, -0.3456, 0};
         B = new Vector(bEntries);
 
-        assertFalse(A.equals(B));
+        assertNotEquals(A, B);
     }
 
 
@@ -61,7 +60,7 @@ class VectorEqualsTests {
         bEntries = new CNumber[]{new CNumber(1.234), new CNumber(543.354), new CNumber(-0.3456)};
         B = new CVector(bEntries);
 
-        assertTrue(A.equals(B));
+        assertEquals(A, B);
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new double[]{1.234, 543.354, -0.3456};
@@ -69,7 +68,7 @@ class VectorEqualsTests {
         bEntries = new CNumber[]{new CNumber(1.234, 13.4), new CNumber(543.354), new CNumber(-0.3456)};
         B = new CVector(bEntries);
 
-        assertFalse(A.equals(B));
+        assertNotEquals(A, B);
 
 
         // -------------------- Sub-case 3 --------------------
@@ -78,7 +77,7 @@ class VectorEqualsTests {
         bEntries = new CNumber[]{new CNumber(1.234), new CNumber(543.354), new CNumber(-0.3456), new CNumber(0, 123.5)};
         B = new CVector(bEntries);
 
-        assertFalse(A.equals(B));
+        assertNotEquals(A, B);
     }
 
 
@@ -95,7 +94,7 @@ class VectorEqualsTests {
         sparseSize = 3;
         B = new CooVector(sparseSize, bEntries, indices);
 
-        assertTrue(A.equals(B));
+        assertEquals(A, B);
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new double[]{0, 543.354, 0};
@@ -105,7 +104,7 @@ class VectorEqualsTests {
         sparseSize = 3;
         B = new CooVector(sparseSize, bEntries, indices);
 
-        assertFalse(A.equals(B));
+        assertNotEquals(A, B);
 
         // -------------------- Sub-case 3 --------------------
         aEntries = new double[]{0, 543.354, 0};
@@ -115,7 +114,7 @@ class VectorEqualsTests {
         sparseSize = 4;
         B = new CooVector(sparseSize, bEntries, indices);
 
-        assertFalse(A.equals(B));
+        assertNotEquals(A, B);
     }
 
 
@@ -132,7 +131,7 @@ class VectorEqualsTests {
         sparseSize = 3;
         B = new CooCVector(sparseSize, bEntries, indices);
 
-        assertTrue(A.equals(B));
+        assertEquals(A, B);
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new double[]{0, 543.354, 0};
@@ -142,7 +141,7 @@ class VectorEqualsTests {
         sparseSize = 3;
         B = new CooCVector(sparseSize, bEntries, indices);
 
-        assertFalse(A.equals(B));
+        assertNotEquals(A, B);
 
         // -------------------- Sub-case 3 --------------------
         aEntries = new double[]{0, 543.354, 0};
@@ -152,7 +151,7 @@ class VectorEqualsTests {
         sparseSize = 4;
         B = new CooCVector(sparseSize, bEntries, indices);
 
-        assertFalse(A.equals(B));
+        assertNotEquals(A, B);
     }
 
 
@@ -163,13 +162,13 @@ class VectorEqualsTests {
         A = new Vector(aEntries);
         Double B = 123.4;
 
-        assertFalse(A.equals(B));
+        assertNotEquals(A, B, 0.0);
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new double[]{0, 543.354, 0};
         A = new Vector(aEntries);
         String BString = "hello";
 
-        assertFalse(A.equals(BString));
+        assertNotEquals(A, BString);
     }
 }

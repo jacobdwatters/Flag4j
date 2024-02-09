@@ -76,9 +76,9 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
 <div class="inheritance"><a href="core/TensorBase.html" title="class in com.flag4j.core">com.flag4j.core.TensorBase</a>&lt;T,&#8203;T,&#8203;W,&#8203;W,&#8203;Y,&#8203;D,&#8203;X&gt;
-<div class="inheritance"><a href="core/dense/DenseTensorBase.html" title="class in com.flag4j.core.dense">com.flag4j.core.dense.DenseTensorBase</a>&lt;T,&#8203;T,&#8203;Y,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>[],&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;
-<div class="inheritance"><a href="core/dense/ComplexDenseTensorBase.html" title="class in com.flag4j.core.dense">com.flag4j.core.dense.ComplexDenseTensorBase</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>&gt;
-<div class="inheritance">com.flag4j.CMatrix</div>
+<div class="inheritance"><a href="core/dense/DenseTensorBase.html" title="class in com.flag4j.core.dense_base">com.flag4j.core.dense_base.DenseTensorBase</a>&lt;T,&#8203;T,&#8203;Y,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>[],&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;
+<div class="inheritance"><a href="core/dense/ComplexDenseTensorBase.html" title="class in com.flag4j.core.dense_base">com.flag4j.core.dense_base.ComplexDenseTensorBase</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>&gt;
+<div class="inheritance">com.flag4j.dense.CMatrix</div>
 </div>
 </div>
 </div>
@@ -86,12 +86,12 @@ loadScripts(document, 'script');</script>
 <section class="description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="core/ComplexMatrixMixin.html" title="interface in com.flag4j.core">ComplexMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>&gt;</code>, <code><a href="core/ComplexTensorMixin.html" title="interface in com.flag4j.core">ComplexTensorMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>&gt;</code>, <code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code>, <code><a href="core/dense/DenseMixin.html" title="interface in com.flag4j.core.dense">DenseMixin</a>&lt;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code>, <code><a href="core/MatrixComparisonsMixin.html" title="interface in com.flag4j.core">MatrixComparisonsMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>&gt;</code>, <code><a href="core/MatrixManipulationsMixin.html" title="interface in com.flag4j.core">MatrixManipulationsMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="CVector.html" title="class in com.flag4j">CVector</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code>, <code><a href="core/MatrixMixin.html" title="interface in com.flag4j.core">MatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="SparseCMatrix.html" title="class in com.flag4j">SparseCMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>,&#8203;<a href="CVector.html" title="class in com.flag4j">CVector</a>,&#8203;<a href="CVector.html" title="class in com.flag4j">CVector</a>&gt;</code>, <code><a href="core/MatrixOperationsMixin.html" title="interface in com.flag4j.core">MatrixOperationsMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="SparseCMatrix.html" title="class in com.flag4j">SparseCMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>,&#8203;<a href="CVector.html" title="class in com.flag4j">CVector</a>,&#8203;<a href="CVector.html" title="class in com.flag4j">CVector</a>&gt;</code>, <code><a href="core/MatrixPropertiesMixin.html" title="interface in com.flag4j.core">MatrixPropertiesMixin</a></code>, <code><a href="core/TensorComparisonsMixin.html" title="interface in com.flag4j.core">TensorComparisonsMixin</a></code>, <code><a href="core/TensorManipulationsMixin.html" title="interface in com.flag4j.core">TensorManipulationsMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>&gt;</code>, <code><a href="core/TensorOperationsMixin.html" title="interface in com.flag4j.core">TensorOperationsMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code>, <code><a href="core/TensorPropertiesMixin.html" title="interface in com.flag4j.core">TensorPropertiesMixin</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code></dd>
+<dd><code><a href="core/ComplexMatrixMixin.html" title="interface in com.flag4j.core">ComplexMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>&gt;</code>, <code><a href="core/ComplexTensorMixin.html" title="interface in com.flag4j.core">ComplexTensorMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>&gt;</code>, <code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense_base">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code>, <code><a href="core/dense/DenseMixin.html" title="interface in com.flag4j.core.dense_base">DenseMixin</a>&lt;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code>, <code><a href="core/MatrixComparisonsMixin.html" title="interface in com.flag4j.core">MatrixComparisonsMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>&gt;</code>, <code><a href="core/MatrixManipulationsMixin.html" title="interface in com.flag4j.core">MatrixManipulationsMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="CVector.html" title="class in com.flag4j">CVector</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code>, <code><a href="core/MatrixMixin.html" title="interface in com.flag4j.core">MatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="SparseCMatrix.html" title="class in com.flag4j">SparseCMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>,&#8203;<a href="CVector.html" title="class in com.flag4j">CVector</a>,&#8203;<a href="CVector.html" title="class in com.flag4j">CVector</a>&gt;</code>, <code><a href="core/MatrixOperationsMixin.html" title="interface in com.flag4j.core">MatrixOperationsMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="SparseCMatrix.html" title="class in com.flag4j">SparseCMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>,&#8203;<a href="CVector.html" title="class in com.flag4j">CVector</a>,&#8203;<a href="CVector.html" title="class in com.flag4j">CVector</a>&gt;</code>, <code><a href="core/MatrixPropertiesMixin.html" title="interface in com.flag4j.core">MatrixPropertiesMixin</a></code>, <code><a href="core/TensorComparisonsMixin.html" title="interface in com.flag4j.core">TensorComparisonsMixin</a></code>, <code><a href="core/TensorManipulationsMixin.html" title="interface in com.flag4j.core">TensorManipulationsMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>&gt;</code>, <code><a href="core/TensorOperationsMixin.html" title="interface in com.flag4j.core">TensorOperationsMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code>, <code><a href="core/TensorPropertiesMixin.html" title="interface in com.flag4j.core">TensorPropertiesMixin</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">CMatrix</span>
-<span class="extends-implements">extends <a href="core/dense/ComplexDenseTensorBase.html" title="class in com.flag4j.core.dense">ComplexDenseTensorBase</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>&gt;
-implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">MatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="SparseCMatrix.html" title="class in com.flag4j">SparseCMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>,&#8203;<a href="CVector.html" title="class in com.flag4j">CVector</a>,&#8203;<a href="CVector.html" title="class in com.flag4j">CVector</a>&gt;, <a href="core/ComplexMatrixMixin.html" title="interface in com.flag4j.core">ComplexMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>&gt;, <a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</span></div>
+<span class="extends-implements">extends <a href="core/dense/ComplexDenseTensorBase.html" title="class in com.flag4j.core.dense_base">ComplexDenseTensorBase</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>&gt;
+implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">MatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="SparseCMatrix.html" title="class in com.flag4j">SparseCMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>,&#8203;<a href="CVector.html" title="class in com.flag4j">CVector</a>,&#8203;<a href="CVector.html" title="class in com.flag4j">CVector</a>&gt;, <a href="core/ComplexMatrixMixin.html" title="interface in com.flag4j.core">ComplexMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>&gt;, <a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense_base">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</span></div>
 <div class="block">Complex dense matrix. Stored in row major format.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -1223,7 +1223,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
 </div>
 </div>
 <div class="inherited-list">
-<h3 id="methods.inherited.from.class.com.flag4j.core.dense.ComplexDenseTensorBase">Methods inherited from class&nbsp;com.flag4j.core.dense.<a href="core/dense/ComplexDenseTensorBase.html" title="class in com.flag4j.core.dense">ComplexDenseTensorBase</a></h3>
+<h3 id="methods.inherited.from.class.com.flag4j.core.dense.ComplexDenseTensorBase">Methods inherited from class&nbsp;com.flag4j.core.dense_base.<a href="core/dense/ComplexDenseTensorBase.html" title="class in com.flag4j.core.dense_base">ComplexDenseTensorBase</a></h3>
 <code><a href="core/dense/ComplexDenseTensorBase.html#abs()">abs</a>, <a href="core/dense/ComplexDenseTensorBase.html#add(double)">add</a>, <a href="core/dense/ComplexDenseTensorBase.html#add(com.flag4j.complex_numbers.CNumber)">add</a>, <a href="core/dense/ComplexDenseTensorBase.html#add(T)">add</a>, <a href="core/dense/ComplexDenseTensorBase.html#addEq(com.flag4j.complex_numbers.CNumber)">addEq</a>, <a href="core/dense/ComplexDenseTensorBase.html#addEq(java.lang.Double)">addEq</a>, <a href="core/dense/ComplexDenseTensorBase.html#addEq(T)">addEq</a>, <a href="core/dense/ComplexDenseTensorBase.html#argMax()">argMax</a>, <a href="core/dense/ComplexDenseTensorBase.html#argMin()">argMin</a>, <a href="core/dense/ComplexDenseTensorBase.html#conj()">conj</a>, <a href="core/dense/ComplexDenseTensorBase.html#copy()">copy</a>, <a href="core/dense/ComplexDenseTensorBase.html#div(double)">div</a>, <a href="core/dense/ComplexDenseTensorBase.html#div(com.flag4j.complex_numbers.CNumber)">div</a>, <a href="core/dense/ComplexDenseTensorBase.html#elemDiv(T)">elemDiv</a>, <a href="core/dense/ComplexDenseTensorBase.html#elemMult(T)">elemMult</a>, <a href="core/dense/ComplexDenseTensorBase.html#get(int...)">get</a>, <a href="core/dense/ComplexDenseTensorBase.html#hashCode()">hashCode</a>, <a href="core/dense/ComplexDenseTensorBase.html#isComplex()">isComplex</a>, <a href="core/dense/ComplexDenseTensorBase.html#isOnes()">isOnes</a>, <a href="core/dense/ComplexDenseTensorBase.html#isReal()">isReal</a>, <a href="core/dense/ComplexDenseTensorBase.html#isZeros()">isZeros</a>, <a href="core/dense/ComplexDenseTensorBase.html#max()">max</a>, <a href="core/dense/ComplexDenseTensorBase.html#maxAbs()">maxAbs</a>, <a href="core/dense/ComplexDenseTensorBase.html#min()">min</a>, <a href="core/dense/ComplexDenseTensorBase.html#minAbs()">minAbs</a>, <a href="core/dense/ComplexDenseTensorBase.html#mult(double)">mult</a>, <a href="core/dense/ComplexDenseTensorBase.html#mult(com.flag4j.complex_numbers.CNumber)">mult</a>, <a href="core/dense/ComplexDenseTensorBase.html#recip()">recip</a>, <a href="core/dense/ComplexDenseTensorBase.html#reshape(int...)">reshape</a>, <a href="core/dense/ComplexDenseTensorBase.html#reshape(com.flag4j.Shape)">reshape</a>, <a href="core/dense/ComplexDenseTensorBase.html#set(double,int...)">set</a>, <a href="core/dense/ComplexDenseTensorBase.html#set(com.flag4j.complex_numbers.CNumber,int...)">set</a>, <a href="core/dense/ComplexDenseTensorBase.html#sqrt()">sqrt</a>, <a href="core/dense/ComplexDenseTensorBase.html#sub(double)">sub</a>, <a href="core/dense/ComplexDenseTensorBase.html#sub(com.flag4j.complex_numbers.CNumber)">sub</a>, <a href="core/dense/ComplexDenseTensorBase.html#sub(T)">sub</a>, <a href="core/dense/ComplexDenseTensorBase.html#subEq(com.flag4j.complex_numbers.CNumber)">subEq</a>, <a href="core/dense/ComplexDenseTensorBase.html#subEq(java.lang.Double)">subEq</a>, <a href="core/dense/ComplexDenseTensorBase.html#subEq(T)">subEq</a>, <a href="core/dense/ComplexDenseTensorBase.html#sum()">sum</a>, <a href="core/dense/ComplexDenseTensorBase.html#toReal()">toReal</a>, <a href="core/dense/ComplexDenseTensorBase.html#toRealSafe()">toRealSafe</a></code></div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.com.flag4j.core.TensorBase">Methods inherited from class&nbsp;com.flag4j.core.<a href="core/TensorBase.html" title="class in com.flag4j.core">TensorBase</a></h3>
@@ -1527,7 +1527,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
 <div class="block">Factory to create a tensor with the specified shape and size.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="core/dense/DenseTensorBase.html#makeTensor(com.flag4j.Shape,D)">makeTensor</a></code>&nbsp;in class&nbsp;<code><a href="core/dense/DenseTensorBase.html" title="class in com.flag4j.core.dense">DenseTensorBase</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>[],&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="core/dense/DenseTensorBase.html#makeTensor(com.flag4j.Shape,D)">makeTensor</a></code>&nbsp;in class&nbsp;<code><a href="core/dense/DenseTensorBase.html" title="class in com.flag4j.core.dense_base">DenseTensorBase</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>[],&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>shape</code> - Shape of the tensor to make.</dd>
 <dd><code>entries</code> - Entries of the tensor to make.</dd>
@@ -1557,7 +1557,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
 <div class="block">Factory to create a real tensor with the specified shape and size.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="core/dense/ComplexDenseTensorBase.html#makeRealTensor(com.flag4j.Shape,double%5B%5D)">makeRealTensor</a></code>&nbsp;in class&nbsp;<code><a href="core/dense/ComplexDenseTensorBase.html" title="class in com.flag4j.core.dense">ComplexDenseTensorBase</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>&gt;</code></dd>
+<dd><code><a href="core/dense/ComplexDenseTensorBase.html#makeRealTensor(com.flag4j.Shape,double%5B%5D)">makeRealTensor</a></code>&nbsp;in class&nbsp;<code><a href="core/dense/ComplexDenseTensorBase.html" title="class in com.flag4j.core.dense_base">ComplexDenseTensorBase</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>shape</code> - Shape of the tensor to make.</dd>
 <dd><code>entries</code> - Entries of the tensor to make.</dd>
@@ -1750,7 +1750,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
 <div class="block">Sets the value of this matrix using a 2D array.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="core/dense/DenseMatrixMixin.html#setValues(X%5B%5D%5B%5D)">setValues</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="core/dense/DenseMatrixMixin.html#setValues(X%5B%5D%5B%5D)">setValues</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense_base">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>values</code> - New values of the matrix.</dd>
 <dt>Returns:</dt>
@@ -1767,7 +1767,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
 <div class="block">Sets the value of this matrix using a 2D array.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="core/dense/DenseMatrixMixin.html#setValues(java.lang.Double%5B%5D%5B%5D)">setValues</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="core/dense/DenseMatrixMixin.html#setValues(java.lang.Double%5B%5D%5B%5D)">setValues</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense_base">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>values</code> - New values of the matrix.</dd>
 <dt>Returns:</dt>
@@ -1784,7 +1784,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
 <div class="block">Sets the value of this matrix using a 2D array.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="core/dense/DenseMatrixMixin.html#setValues(double%5B%5D%5B%5D)">setValues</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="core/dense/DenseMatrixMixin.html#setValues(double%5B%5D%5B%5D)">setValues</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense_base">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>values</code> - New values of the matrix.</dd>
 <dt>Returns:</dt>
@@ -1801,7 +1801,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
 <div class="block">Sets the value of this matrix using a 2D array.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="core/dense/DenseMatrixMixin.html#setValues(int%5B%5D%5B%5D)">setValues</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="core/dense/DenseMatrixMixin.html#setValues(int%5B%5D%5B%5D)">setValues</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense_base">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>values</code> - New values of the matrix.</dd>
 <dt>Returns:</dt>
@@ -2331,7 +2331,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
  left index location of the slice to set.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="core/dense/DenseMatrixMixin.html#setSliceCopy(T,int,int)">setSliceCopy</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="core/dense/DenseMatrixMixin.html#setSliceCopy(T,int,int)">setSliceCopy</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense_base">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>values</code> - New values for the specified slice.</dd>
 <dd><code>rowStart</code> - Starting row index for the slice (inclusive).</dd>
@@ -2355,7 +2355,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
  left index location of the slice to set.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="core/dense/DenseMatrixMixin.html#setSliceCopy(X%5B%5D%5B%5D,int,int)">setSliceCopy</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="core/dense/DenseMatrixMixin.html#setSliceCopy(X%5B%5D%5B%5D,int,int)">setSliceCopy</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense_base">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>values</code> - New values for the specified slice.</dd>
 <dd><code>rowStart</code> - Starting row index for the slice (inclusive).</dd>
@@ -2379,7 +2379,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
  left index location of the slice to set.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="core/dense/DenseMatrixMixin.html#setSliceCopy(java.lang.Double%5B%5D%5B%5D,int,int)">setSliceCopy</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="core/dense/DenseMatrixMixin.html#setSliceCopy(java.lang.Double%5B%5D%5B%5D,int,int)">setSliceCopy</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense_base">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>values</code> - New values for the specified slice.</dd>
 <dd><code>rowStart</code> - Starting row index for the slice (inclusive).</dd>
@@ -2403,7 +2403,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
  left index location of the slice to set.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="core/dense/DenseMatrixMixin.html#setSliceCopy(java.lang.Integer%5B%5D%5B%5D,int,int)">setSliceCopy</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="core/dense/DenseMatrixMixin.html#setSliceCopy(java.lang.Integer%5B%5D%5B%5D,int,int)">setSliceCopy</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense_base">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>values</code> - New values for the specified slice.</dd>
 <dd><code>rowStart</code> - Starting row index for the slice (inclusive).</dd>
@@ -2427,7 +2427,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
  left index location of the slice to set.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="core/dense/DenseMatrixMixin.html#setSliceCopy(double%5B%5D%5B%5D,int,int)">setSliceCopy</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="core/dense/DenseMatrixMixin.html#setSliceCopy(double%5B%5D%5B%5D,int,int)">setSliceCopy</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense_base">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>values</code> - New values for the specified slice.</dd>
 <dd><code>rowStart</code> - Starting row index for the slice (inclusive).</dd>
@@ -2451,7 +2451,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
  left index location of the slice to set.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="core/dense/DenseMatrixMixin.html#setSliceCopy(int%5B%5D%5B%5D,int,int)">setSliceCopy</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="core/dense/DenseMatrixMixin.html#setSliceCopy(int%5B%5D%5B%5D,int,int)">setSliceCopy</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense_base">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>values</code> - New values for the specified slice.</dd>
 <dd><code>rowStart</code> - Starting row index for the slice (inclusive).</dd>
@@ -2475,7 +2475,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
  left index location of the slice to set.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="core/dense/DenseMatrixMixin.html#setSliceCopy(com.flag4j.Matrix,int,int)">setSliceCopy</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="core/dense/DenseMatrixMixin.html#setSliceCopy(com.flag4j.Matrix,int,int)">setSliceCopy</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense_base">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>values</code> - New values for the specified slice.</dd>
 <dd><code>rowStart</code> - Starting row index for the slice (inclusive).</dd>
@@ -2499,7 +2499,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
  left index location of the slice to set.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="core/dense/DenseMatrixMixin.html#setSliceCopy(com.flag4j.SparseMatrix,int,int)">setSliceCopy</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="core/dense/DenseMatrixMixin.html#setSliceCopy(com.flag4j.SparseMatrix,int,int)">setSliceCopy</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense_base">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>values</code> - New values for the specified slice.</dd>
 <dd><code>rowStart</code> - Starting row index for the slice (inclusive).</dd>
@@ -2583,7 +2583,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
 <dt>Specified by:</dt>
 <dd><code><a href="core/TensorManipulationsMixin.html#round()">round</a></code>&nbsp;in interface&nbsp;<code><a href="core/TensorManipulationsMixin.html" title="interface in com.flag4j.core">TensorManipulationsMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>&gt;</code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="core/dense/ComplexDenseTensorBase.html#round()">round</a></code>&nbsp;in class&nbsp;<code><a href="core/dense/ComplexDenseTensorBase.html" title="class in com.flag4j.core.dense">ComplexDenseTensorBase</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>&gt;</code></dd>
+<dd><code><a href="core/dense/ComplexDenseTensorBase.html#round()">round</a></code>&nbsp;in class&nbsp;<code><a href="core/dense/ComplexDenseTensorBase.html" title="class in com.flag4j.core.dense_base">ComplexDenseTensorBase</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>A copy of this matrix with each entry rounded to the nearest whole number.</dd>
 <dt>See Also:</dt>
@@ -2603,7 +2603,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
 <dt>Specified by:</dt>
 <dd><code><a href="core/TensorManipulationsMixin.html#round(int)">round</a></code>&nbsp;in interface&nbsp;<code><a href="core/TensorManipulationsMixin.html" title="interface in com.flag4j.core">TensorManipulationsMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>&gt;</code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="core/dense/ComplexDenseTensorBase.html#round(int)">round</a></code>&nbsp;in class&nbsp;<code><a href="core/dense/ComplexDenseTensorBase.html" title="class in com.flag4j.core.dense">ComplexDenseTensorBase</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>&gt;</code></dd>
+<dd><code><a href="core/dense/ComplexDenseTensorBase.html#round(int)">round</a></code>&nbsp;in class&nbsp;<code><a href="core/dense/ComplexDenseTensorBase.html" title="class in com.flag4j.core.dense_base">ComplexDenseTensorBase</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>precision</code> - The number of decimal places to round to. This value must be non-negative.</dd>
 <dt>Returns:</dt>
@@ -2628,7 +2628,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
 <dt>Specified by:</dt>
 <dd><code><a href="core/TensorManipulationsMixin.html#roundToZero()">roundToZero</a></code>&nbsp;in interface&nbsp;<code><a href="core/TensorManipulationsMixin.html" title="interface in com.flag4j.core">TensorManipulationsMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>&gt;</code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="core/dense/ComplexDenseTensorBase.html#roundToZero()">roundToZero</a></code>&nbsp;in class&nbsp;<code><a href="core/dense/ComplexDenseTensorBase.html" title="class in com.flag4j.core.dense">ComplexDenseTensorBase</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>&gt;</code></dd>
+<dd><code><a href="core/dense/ComplexDenseTensorBase.html#roundToZero()">roundToZero</a></code>&nbsp;in class&nbsp;<code><a href="core/dense/ComplexDenseTensorBase.html" title="class in com.flag4j.core.dense_base">ComplexDenseTensorBase</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>A copy of this matrix with rounded values.</dd>
 <dt>See Also:</dt>
@@ -2647,7 +2647,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
 <dt>Specified by:</dt>
 <dd><code><a href="core/TensorManipulationsMixin.html#roundToZero(double)">roundToZero</a></code>&nbsp;in interface&nbsp;<code><a href="core/TensorManipulationsMixin.html" title="interface in com.flag4j.core">TensorManipulationsMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>&gt;</code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="core/dense/ComplexDenseTensorBase.html#roundToZero(double)">roundToZero</a></code>&nbsp;in class&nbsp;<code><a href="core/dense/ComplexDenseTensorBase.html" title="class in com.flag4j.core.dense">ComplexDenseTensorBase</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>&gt;</code></dd>
+<dd><code><a href="core/dense/ComplexDenseTensorBase.html#roundToZero(double)">roundToZero</a></code>&nbsp;in class&nbsp;<code><a href="core/dense/ComplexDenseTensorBase.html" title="class in com.flag4j.core.dense_base">ComplexDenseTensorBase</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="Matrix.html" title="class in com.flag4j">Matrix</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>threshold</code> - Threshold for rounding values to zero. That is, if a value in this matrix is less than the threshold in absolute value then it
                   will be rounded to zero. This value must be non-negative.</dd>
@@ -2884,7 +2884,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
 <div class="block">Computes the element-wise addition of a matrix with a real dense matrix. The result is stored in this matrix.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="core/dense/DenseMatrixMixin.html#addEq(com.flag4j.Matrix)">addEq</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="core/dense/DenseMatrixMixin.html#addEq(com.flag4j.Matrix)">addEq</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense_base">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - The matrix to add to this matrix.</dd>
 </dl>
@@ -2897,7 +2897,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
 <div class="block">Computes the element-wise subtraction of this matrix with a real dense matrix. The result is stored in this matrix.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="core/dense/DenseMatrixMixin.html#subEq(com.flag4j.Matrix)">subEq</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="core/dense/DenseMatrixMixin.html#subEq(com.flag4j.Matrix)">subEq</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense_base">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - The matrix to subtract from this matrix.</dd>
 </dl>
@@ -2910,7 +2910,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
 <div class="block">Computes the element-wise addition of a matrix with a real sparse matrix. The result is stored in this matrix.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="core/dense/DenseMatrixMixin.html#addEq(com.flag4j.SparseMatrix)">addEq</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="core/dense/DenseMatrixMixin.html#addEq(com.flag4j.SparseMatrix)">addEq</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense_base">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - The sparse matrix to add to this matrix.</dd>
 </dl>
@@ -2923,7 +2923,7 @@ implements <a href="core/MatrixMixin.html" title="interface in com.flag4j.core">
 <div class="block">Computes the element-wise subtraction of this matrix with a real sparse matrix. The result is stored in this matrix.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="core/dense/DenseMatrixMixin.html#subEq(com.flag4j.SparseMatrix)">subEq</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="core/dense/DenseMatrixMixin.html#subEq(com.flag4j.SparseMatrix)">subEq</a></code>&nbsp;in interface&nbsp;<code><a href="core/dense/DenseMatrixMixin.html" title="interface in com.flag4j.core.dense_base">DenseMatrixMixin</a>&lt;<a href="CMatrix.html" title="class in com.flag4j">CMatrix</a>,&#8203;<a href="complex_numbers/CNumber.html" title="class in com.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - The sparse matrix to subtract from this matrix.</dd>
 </dl>

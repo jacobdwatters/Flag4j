@@ -1,7 +1,11 @@
 package com.flag4j.tensor;
 
-import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.CTensor;
+import com.flag4j.dense.Matrix;
+import com.flag4j.dense.Tensor;
+import com.flag4j.dense.Vector;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

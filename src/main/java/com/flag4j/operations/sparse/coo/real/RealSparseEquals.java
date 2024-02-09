@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +25,10 @@
 package com.flag4j.operations.sparse.coo.real;
 
 
-import com.flag4j.CooMatrix;
-import com.flag4j.CooTensor;
-import com.flag4j.CooVector;
 import com.flag4j.operations.common.real.RealProperties;
+import com.flag4j.sparse.CooMatrix;
+import com.flag4j.sparse.CooTensor;
+import com.flag4j.sparse.CooVector;
 import com.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;

@@ -1,7 +1,12 @@
 package com.flag4j.complex_sparse_matrix;
 
-import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.CVector;
+import com.flag4j.dense.Vector;
+import com.flag4j.sparse.CooCMatrix;
+import com.flag4j.sparse.CooCVector;
+import com.flag4j.sparse.CooVector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

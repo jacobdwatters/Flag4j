@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,13 +25,13 @@
 package com.flag4j.linalg.solvers.exact;
 
 
-import com.flag4j.PermutationMatrix;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;
 import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.linalg.decompositions.lu.LUDecomposition;
 import com.flag4j.linalg.solvers.LinearSolver;
 import com.flag4j.linalg.solvers.lstsq.LstsqSolver;
+import com.flag4j.sparse.PermutationMatrix;
 import com.flag4j.util.ParameterChecks;
 
 /**
@@ -58,13 +58,9 @@ public abstract class ExactSolver<
      */
     protected final LUDecomposition<T> lu;
     /**
-     * Unit lower triangular matrix in {@code} LU decomposition.
+     * The unit-lower and upper triangular matrices from the {@code LU} decomposition stored in a single matrix.
      */
-    protected T lower;
-    /**
-     * Upper triangular matrix in {@code} LU decomposition.
-     */
-    protected T upper;
+    protected T LU;
     /**
      * Row permutation matrix for {@code LU} decomposition.
      */
@@ -93,8 +89,7 @@ public abstract class ExactSolver<
      */
     protected void decompose(T A) {
         lu.decompose(A);
-        lower = lu.getL();
-        upper = lu.getU();
+        LU = lu.getLU();
         rowPermute = lu.getP();
     }
 
@@ -119,8 +114,8 @@ public abstract class ExactSolver<
 
         decompose(A); // Compute LU decomposition.
 
-        U y = forwardSolver.solve(lower, permuteRows(b));
-        return backSolver.solve(upper, y); // If A is singular, then U will be singular, and it will be discovered here.
+        U y = forwardSolver.solve(LU, permuteRows(b));
+        return backSolver.solve(LU, y); // If A is singular, then U will be singular, and it will be discovered here.
     }
 
 
@@ -142,8 +137,8 @@ public abstract class ExactSolver<
 
         decompose(A); // Compute LU decomposition.
 
-        T Y = forwardSolver.solve(lower, permuteRows(B));
-        return backSolver.solve(upper, Y); // If A is singular, it will be discovered in the back solve.
+        T Y = forwardSolver.solve(LU, permuteRows(B));
+        return backSolver.solve(LU, Y); // If A is singular, it will be discovered in the back solve.
     }
 
 

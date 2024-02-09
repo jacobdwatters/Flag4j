@@ -1,6 +1,6 @@
 package com.flag4j.operations.dense.real;
 
-import com.flag4j.Shape;
+import com.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
 
 import static com.flag4j.operations.dense.real.RealDenseTranspose.*;
