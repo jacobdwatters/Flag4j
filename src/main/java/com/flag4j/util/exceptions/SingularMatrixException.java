@@ -22,19 +22,29 @@
  * SOFTWARE.
  */
 
-package com.flag4j.exceptions;
-
+package com.flag4j.util.exceptions;
 
 /**
- * An exception which is thrown when a linear algebra related error occurs at runtime.
+ * An exception which is thrown when some operation not defined for singular matrices is attempted to be
+ * performed on a singular matrix. For example, attempting to invert a singular matrix.
  */
-public class LinearAlgebraException extends RuntimeException {
+public class SingularMatrixException extends LinearAlgebraException {
+
+    private static final String INFO = "Matrix is singular.";
 
     /**
-     * Creates a {@link LinearAlgebraException} to be thrown for a linear algebra related error.
-     * @param errMsg Error message for the exception.
+     * Creates a SingularMatrixException with the simple error message "Matrix is singular."
      */
-    public LinearAlgebraException(String errMsg) {
-        super(errMsg);
+    public SingularMatrixException() {
+        super(INFO);
+    }
+
+    /**
+     * Creates a SingularMatrixException with a specified error message. Note, the string " Matrix is singular." will
+     * be automatically appended to the error message.
+     * @param errMsg Error message to display when this SingularMatrixException is thrown.
+     */
+    public SingularMatrixException(String errMsg) {
+        super(errMsg + " " + INFO);
     }
 }

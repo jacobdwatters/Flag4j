@@ -34,9 +34,10 @@ import com.flag4j.linalg.decompositions.schur.RealSchurDecomposition;
 import com.flag4j.linalg.decompositions.schur.SchurDecomposition;
 import com.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 import com.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
-import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.util.ParameterChecks;
+
+import static com.flag4j.util.Flag4jConstants.EPS_F64;
 
 /**
  * This class provides several methods useful for computing eigen values, eigen vectors, as well as singular values and
@@ -141,30 +142,42 @@ public class Eigen {
     }
 
 
-    /**
-     * Computes the eigenvalues of a 2x2 matrix explicitly.
-     * @param a First entry in matrix.
-     * @param b Second entry in matrix.
-     * @param c Third entry in matrix.
-     * @param d Fourth entry in matrix.
-     * @return A complex vector containing the eigenvalues of the 2x2 {@code src} matrix.
-     */
-    public static CNumber[] get2x2EigenValues(CNumber a, CNumber b, CNumber c, CNumber d) {
-        // TODO: While theoretically correct, there are some numerical issues here.
+    public static CNumber[] get2x2EigenValues(CNumber a11, CNumber a12, CNumber a21, CNumber a22) {
+        // Initialize eigenvalues array
         CNumber[] lambda = new CNumber[2];
 
-        double maxAbs = AggregateComplex.maxAbs(a, b, c, d);
-        a = a.div(maxAbs);
-        b = b.div(maxAbs);
-        c = c.div(maxAbs);
-        d = d.div(maxAbs);
+        // Compute maximum magnitude for scaling
+        double maxAbs = Math.max(Math.max(a11.mag(), a12.mag()), Math.max(a21.mag(), a22.mag()));
 
-        CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.
-        CNumber htr = a.add(d).div(2.0); // Half of the 2x2 trace.
+        if(maxAbs == 0) {
+            lambda[0] = new CNumber(0, 0);
+            lambda[1] = new CNumber(0, 0);
+            return lambda;
+        }
 
-        // 2x2 eigenvalues.
-        lambda[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det))).mult(maxAbs);
-        lambda[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det))).mult(maxAbs);
+        // Scale the matrix to avoid overflow/underflow
+        a11 = a11.div(new CNumber(maxAbs, 0));
+        a12 = a12.div(new CNumber(maxAbs, 0));
+        a21 = a21.div(new CNumber(maxAbs, 0));
+        a22 = a22.div(new CNumber(maxAbs, 0));
+
+        // Trace and determinant for the 2x2 matrix
+        CNumber trace = a11.add(a22);
+        CNumber det = a11.mult(a22).sub(a12.mult(a21));
+
+        // Compute the middle term of the quadratic equation
+        CNumber middleTerm = trace.mult(trace).div(new CNumber(4, 0)).sub(det);
+
+        // Compute the square root of the middle term
+        CNumber sqrtMiddle = CNumber.sqrt(middleTerm);
+
+        // Compute eigenvalues
+        lambda[0] = trace.div(new CNumber(2)).add(sqrtMiddle);
+        lambda[1] = trace.div(new CNumber(2)).sub(sqrtMiddle);
+
+        // Scale back the eigenvalues
+        lambda[0] = lambda[0].mult(new CNumber(maxAbs, 0));
+        lambda[1] = lambda[1].mult(new CNumber(maxAbs, 0));
 
         return lambda;
     }
@@ -212,12 +225,26 @@ public class Eigen {
     public static CVector getEigenValues(Matrix src) {
         CVector lambdas = new CVector(src.numRows);
 
-        SchurDecomposition<Matrix, Vector> schur = new RealSchurDecomposition(false, false).decompose(src);
-        CMatrix T = schur.getT();
+        SchurDecomposition<Matrix, double[]> schur = new RealSchurDecomposition(false).decompose(src);
+        Matrix T = schur.getT();
 
-        // Extract diagonal of T.
-        for(int i=0; i<T.numRows; i++) {
-            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];
+        int numRows = src.numRows;
+
+        // Extract eigenvalues of T.
+        for(int m=0; m<numRows; m++) {
+            double a11 = T.entries[m*numRows + m];
+            double a12 = T.entries[m*numRows + m + 1];
+            double a21 = T.entries[(m+1)*numRows + m];
+            double a22 = T.entries[(m+1)*numRows + m  +1];
+
+            if(Math.abs(a21) > EPS_F64*(Math.abs(a11) + Math.abs(a22))) {
+                // Non-converged 2x2 block found.
+                CNumber[] mu = Eigen.get2x2EigenValues(a11, a12, a21, a22);
+                lambdas.entries[m] = mu[0];
+                lambdas.entries[++m] = mu[1];
+            } else {
+                lambdas.entries[m] = new CNumber(a22);
+            }
         }
 
         return lambdas;
@@ -232,14 +259,29 @@ public class Eigen {
     public static CVector getEigenValues(CMatrix src) {
         CVector lambdas = new CVector(src.numRows);
 
-        // TODO: To compute eigenvalues, we can take advantage of deflating the matrix to avoid computing the
-        //  QR decomposition of the full matrix to find each eigenvalue. Also, the full T matrix need not be computed.
-        SchurDecomposition<CMatrix, CVector> schur = new ComplexSchurDecomposition(false).decompose(src);
+        SchurDecomposition<CMatrix, CNumber[]> schur = new ComplexSchurDecomposition(false).decompose(src);
         CMatrix T = schur.getT();
+        int numRows = src.numRows;
 
-        // Extract diagonal of T.
-        for(int i=0; i<T.numRows; i++) {
-            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];
+        // Extract eigenvalues of T.
+        for(int m=0; m<numRows; m++) {
+            if(m == numRows-1) {
+                lambdas.entries[m] = T.entries[m*numRows + m];
+            } else {
+                CNumber a11 = T.entries[m*numRows + m];
+                CNumber a12 = T.entries[m*numRows + m + 1];
+                CNumber a21 = T.entries[(m+1)*numRows + m];
+                CNumber a22 = T.entries[(m+1)*numRows + m  +1];
+
+                if(a21.mag() > EPS_F64*(a11.mag() + a22.mag())) {
+                    // Non-converged 2x2 block found.
+                    CNumber[] mu = Eigen.get2x2EigenValues(a11, a12, a21, a22);
+                    lambdas.entries[m] = mu[0];
+                    lambdas.entries[++m] = mu[1];
+                } else {
+                    lambdas.entries[m] = a22.copy();
+                }
+            }
         }
 
         return lambdas;
@@ -252,15 +294,16 @@ public class Eigen {
      * @return A matrix containing the eigenvectors of {@code src} as its columns.
      */
     public static CMatrix getEigenVectors(Matrix src) {
-        SchurDecomposition<Matrix, Vector> schur = new RealSchurDecomposition(true, false).decompose(src);
-        CMatrix U = schur.getU();
+        RealSchurDecomposition schur = new RealSchurDecomposition(true).decompose(src);
+        CMatrix[] complexTU = schur.real2ComplexSchur();
+        CMatrix U = complexTU[1];
 
         if(src.isSymmetric()) {
             // Then the columns of U are the complete orthonormal set of eigenvectors of the src matrix.
             return U;
         } else {
             // For a non-symmetric matrix, only the first column of U will be an eigenvector of the src matrix.
-            CMatrix Q = getEigenVectorsTriu(schur.getT()); // Compute the eigenvectors of T.
+            CMatrix Q = getEigenVectorsTriu(complexTU[0]); // Compute the eigenvectors of T.
             return U.mult(Q); // Convert the eigenvectors of T to the eigenvectors of the src matrix.
         }
     }
@@ -272,7 +315,7 @@ public class Eigen {
      * @return A matrix containing the eigenvectors of {@code src} as its columns.
      */
     public static CMatrix getEigenVectors(CMatrix src) {
-        SchurDecomposition<CMatrix, CVector> schur = new ComplexSchurDecomposition(true).decompose(src);
+        SchurDecomposition<CMatrix, CNumber[]> schur = new ComplexSchurDecomposition(true).decompose(src);
         CMatrix U = schur.getU();
 
         if(src.isHermitian()) {
@@ -360,13 +403,28 @@ public class Eigen {
     public static CMatrix[] getEigenPairs(Matrix src) {
         CMatrix lambdas = new CMatrix(1, src.numRows);
 
-        SchurDecomposition<Matrix, Vector> schur = new RealSchurDecomposition(true, false).decompose(src);
-        CMatrix T = schur.getT();
-        CMatrix U = schur.getU();
+        RealSchurDecomposition schur = new RealSchurDecomposition(true).decompose(src);
+        CMatrix[] complexTU = schur.real2ComplexSchur();
+        Matrix tReal = schur.getT();
+        CMatrix T = complexTU[0];
+        CMatrix U = complexTU[1];
+        int numRows = src.numRows;
 
-        // Extract diagonal of T.
-        for(int i=0; i<T.numRows; i++) {
-            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];
+        // Extract eigenvalues of T.
+        for(int m=0; m<numRows; m++) {
+            double a11 = tReal.entries[m*numRows + m];
+            double a12 = tReal.entries[m*numRows + m + 1];
+            double a21 = tReal.entries[(m+1)*numRows + m];
+            double a22 = tReal.entries[(m+1)*numRows + m  +1];
+
+            if(Math.abs(a21) > EPS_F64*(Math.abs(a11) + Math.abs(a22))) {
+                // Non-converged 2x2 block found.
+                CNumber[] mu = Eigen.get2x2EigenValues(a11, a12, a21, a22);
+                lambdas.entries[m] = mu[0];
+                lambdas.entries[++m] = mu[1];
+            } else {
+                lambdas.entries[m] = new CNumber(a22);
+            }
         }
 
         if(!src.isSymmetric()) {
@@ -388,13 +446,30 @@ public class Eigen {
     public static CMatrix[] getEigenPairs(CMatrix src) {
         CMatrix lambdas = new CMatrix(1, src.numRows);
 
-        SchurDecomposition<CMatrix, CVector> schur = new ComplexSchurDecomposition(true).decompose(src);
+        SchurDecomposition<CMatrix, CNumber[]> schur = new ComplexSchurDecomposition(true).decompose(src);
         CMatrix T = schur.getT();
         CMatrix U = schur.getU();
+        int numRows = src.numRows;
 
-        // Extract diagonal of T.
-        for(int i=0; i<T.numRows; i++) {
-            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];
+        // Extract eigenvalues of T.
+        for(int m=0; m<numRows; m++) {
+            if(m == numRows-1) {
+                lambdas.entries[m] = T.entries[m*numRows + m];
+            } else {
+                CNumber a11 = T.entries[m*numRows + m];
+                CNumber a12 = T.entries[m*numRows + m + 1];
+                CNumber a21 = T.entries[(m+1)*numRows + m];
+                CNumber a22 = T.entries[(m+1)*numRows + m  +1];
+
+                if(a21.mag() > EPS_F64*(a11.mag() + a22.mag())) {
+                    // Non-converged 2x2 block found.
+                    CNumber[] mu = Eigen.get2x2EigenValues(a11, a12, a21, a22);
+                    lambdas.entries[m] = mu[0];
+                    lambdas.entries[++m] = mu[1];
+                } else {
+                    lambdas.entries[m] = a22.copy();
+                }
+            }
         }
 
         if(!src.isHermitian()) {

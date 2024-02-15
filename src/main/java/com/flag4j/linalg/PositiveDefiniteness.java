@@ -23,12 +23,13 @@
  */
 
 package com.flag4j.linalg;
+
 import com.flag4j.dense.CMatrix;
 import com.flag4j.dense.Matrix;
-import com.flag4j.exceptions.LinearAlgebraException;
 import com.flag4j.linalg.decompositions.cholesky.ComplexCholeskyDecomposition;
 import com.flag4j.linalg.decompositions.cholesky.RealCholeskyDecomposition;
 import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.exceptions.LinearAlgebraException;
 
 
 /**

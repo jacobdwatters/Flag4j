@@ -25,9 +25,9 @@
 package com.flag4j.linalg.decompositions.cholesky;
 
 import com.flag4j.dense.Matrix;
-import com.flag4j.exceptions.LinearAlgebraException;
 import com.flag4j.util.Flag4jConstants;
 import com.flag4j.util.ParameterChecks;
+import com.flag4j.util.exceptions.LinearAlgebraException;
 
 
 /**

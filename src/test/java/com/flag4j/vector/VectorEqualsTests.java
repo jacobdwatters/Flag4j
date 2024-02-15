@@ -7,7 +7,8 @@ import com.flag4j.sparse.CooCVector;
 import com.flag4j.sparse.CooVector;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class VectorEqualsTests {
 
@@ -162,7 +163,7 @@ class VectorEqualsTests {
         A = new Vector(aEntries);
         Double B = 123.4;
 
-        assertNotEquals(A, B, 0.0);
+        assertNotEquals(A, B);
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new double[]{0, 543.354, 0};

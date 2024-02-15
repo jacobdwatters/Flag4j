@@ -27,6 +27,7 @@ package com.flag4j.linalg.decompositions.hess;
 import com.flag4j.dense.Matrix;
 import com.flag4j.linalg.decompositions.unitary.RealUnitaryDecomposition;
 import com.flag4j.util.ParameterChecks;
+import com.flag4j.util.exceptions.LinearAlgebraException;
 
 
 /**
@@ -63,7 +64,7 @@ public class RealHessenburgDecomposition extends RealUnitaryDecomposition {
      *
      * @param src The source matrix to decompose.
      * @return A reference to this decomposer.
-     * @throws com.flag4j.exceptions.LinearAlgebraException If {@code src} is not a square matrix.
+     * @throws LinearAlgebraException If {@code src} is not a square matrix.
      */
     @Override
     public RealHessenburgDecomposition decompose(Matrix src) {

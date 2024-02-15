@@ -31,7 +31,6 @@ import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.Shape;
 import com.flag4j.core.dense_base.ComplexDenseTensorBase;
 import com.flag4j.core.dense_base.DenseMatrixMixin;
-import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.linalg.Invert;
 import com.flag4j.linalg.decompositions.lu.LUDecomposition;
@@ -58,6 +57,7 @@ import com.flag4j.sparse.CooCVector;
 import com.flag4j.sparse.CooMatrix;
 import com.flag4j.sparse.CooVector;
 import com.flag4j.util.*;
+import com.flag4j.util.exceptions.SingularMatrixException;
 
 import java.util.ArrayList;
 import java.util.List;

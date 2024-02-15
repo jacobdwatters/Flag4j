@@ -26,10 +26,10 @@ package com.flag4j.linalg.solvers.exact.triangular;
 
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;
-import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.linalg.solvers.LinearSolver;
 import com.flag4j.util.Flag4jConstants;
 import com.flag4j.util.ParameterChecks;
+import com.flag4j.util.exceptions.SingularMatrixException;
 
 /**
  * Base class for solvers which solve a linear system of equations {@code U*x=b} or {@code U*X=B} where {@code U} is an upper

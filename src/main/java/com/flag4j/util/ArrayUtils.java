@@ -288,6 +288,7 @@ public final class ArrayUtils {
      * @param start Starting index of range to fill (inclusive).
      * @param end   Ending index of range to fill (Exclusive).
      * @param dest  Array to fill specified range with zeros.
+     * @throws ArrayIndexOutOfBoundsException If {@code start} or {@code end} are out of range for the provided array.
      */
     public static void fillZeros(CNumber[] dest, int start, int end) {
         for (int i = start; i < end; i++) {

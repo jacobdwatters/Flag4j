@@ -26,7 +26,7 @@ package com.flag4j.linalg.solvers.exact.triangular;
 
 import com.flag4j.dense.Matrix;
 import com.flag4j.dense.Vector;
-import com.flag4j.exceptions.SingularMatrixException;
+import com.flag4j.util.exceptions.SingularMatrixException;
 
 
 /**

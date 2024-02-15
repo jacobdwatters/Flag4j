@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,411 +24,291 @@
 
 package com.flag4j.linalg.decompositions.schur;
 
-import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.MatrixMixin;
-import com.flag4j.core.VectorMixin;
-import com.flag4j.dense.CMatrix;
-import com.flag4j.dense.CVector;
-import com.flag4j.dense.Matrix;
-import com.flag4j.linalg.Eigen;
 import com.flag4j.linalg.decompositions.Decomposition;
-import com.flag4j.linalg.decompositions.hess.HessenburgDecompositionOld;
-import com.flag4j.linalg.transformations.Givens;
+import com.flag4j.linalg.decompositions.unitary.UnitaryDecomposition;
 import com.flag4j.rng.RandomCNumber;
-import com.flag4j.util.Flag4jConstants;
 import com.flag4j.util.ParameterChecks;
+import com.flag4j.util.exceptions.LinearAlgebraException;
+
 
 /**
- * <p>This abstract class specifies methods for computing the Schur decomposition of a square matrix.
- * That is, decompose a square matrix {@code A} into {@code A=UTU<sup>H</sup>} where {@code U} is a unitary
- * matrix whose columns are the eigenvectors of {@code A} and {@code T} is an upper triangular matrix in
- * Schur form whose diagonal entries are the eigenvalues of {@code A}, corresponding to the columns of {@code U},
- * repeated per their multiplicity.</p>
+ * <p>The base class for Schur decompositions.</p>
  *
- * <p>Note, even if a matrix has only real entries, both {@code U} and {@code T} may contain complex values.</p>
+ * <p>The Schur decomposition decompose a square matrix {@code A} into {@code A=UTU<sup>H</sup>} where {@code U} is a unitary
+ * matrix and {@code T} is a quasi-upper triangular matrix called the Schur form of {@code A}. {@code T} is upper triangular
+ * except for possibly 2x2 blocks along the diagonal. {@code T} is similar to {@code A} meaning they share the same eigenvalues.
+ * </p>
  *
- * @param <T> The type of matrix to compute the Schur decomposition of.
- * @param <U> Vector type for columns of the matrices of the Schur decomposition.
+ * @param <T> The type of matrix to be decomposed.
+ * @param <U> The type for the internal storage datastructure of the matrix to be decomposed.
  */
 public abstract class SchurDecomposition<
-        T extends MatrixMixin<T, T, ?, ?, ?, U, ?>,
-        U extends VectorMixin<U, U, ?, ?, ?, T, T, ?>>
-        implements Decomposition<T> {
+        T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>,
+        U> implements Decomposition<T> {
 
     /**
-     * Complex pseudorandom number generator for generating random exceptional shifts.
+     * Random number generator to be used when computing a random exceptional shift.
      */
-    RandomCNumber rand = new RandomCNumber(1998);
-
+    protected final RandomCNumber rng;
     /**
-     * Tolerance for considering an element zero.
+     * Default number of iterations to apply before doing an exceptional shift.
      */
-    static protected final double TOL = Math.ulp(1.0d);
-
+    protected final int DEFAULT_EXCEPTIONAL_ITERS = 20;
     /**
-     * The number of iterations to run before performing an exceptional shift.
+     * Default factor for computing the maximum number of iterations to perform.
      */
-    protected final static int EXCEPTIONAL_SHIT_TOL = 20;
-
+    protected final int DEFAULT_MAX_ITERS_FACTOR = 30;
     /**
-     * The maximum number of iterations to run the QR algorithm for.
+     *For storing the (possibly block) upper triangular matrix {@code T} in the Schur decomposition.
      */
-    protected final static int MAX_ITERATIONS = 20*EXCEPTIONAL_SHIT_TOL - 1;
-
+    protected T T;
     /**
-     * Tracks the number of exceptional shifts.
+     *For storing the unitary {@code U} matrix in the Schur decomposition.
      */
-    protected int numExceptionalShifts;
-
+    protected T U;
     /**
-     * Flag which indicates if the unitary {@code U} should be computed in the decomposition.
+     *Decomposer to compute the Hessenburg decomposition as a setup step for the implicit double step QR algorithm.
+     */
+    protected UnitaryDecomposition<T, U> hess;
+    /**
+     *Stores the number of rows in the matrix being decomposed.
+     */
+    protected int numRows;
+    /**
+     * Stores the vector {@code v} in the Householder reflector {@code P = I - }&alpha{@code vv}<sup>T</sup>.
+     */
+    protected U householderVector;
+    /**
+     * Stores the non-zero entries of the first column of the shifted matrix {@code (A-}&rho<sub>1</sub>{@code I)(A-}&rho<sub>2</sub
+     * >{@code I)}
+     * where
+     * &rho<sub>1</sub> and &rho<sub>2</sub> are the two shifts.
+     */
+    protected U shiftCol;
+    /**
+     * An array for storing temporary values along the colum of a matrix when applying Householder reflectors.
+     * This can help improve cache performance when applying the reflector.
+     */
+    protected U workArray;
+    /**
+     * Array for holding temporary values when computing the shifts.
+     */
+    protected U temp;
+    /**
+     * Factor for computing the maximum number of iterations to run the {@code QR} algorithm for.
+     */
+    protected int maxIterationsFactor;
+    /**
+     * Maximum number of iterations to run QR algorithm for.
+     */
+    protected int maxIterations;
+    /**
+     * Number of iterations to run without deflation before an exceptional shift is done.
+     */
+    protected int exceptionalThreshold;
+    /**
+     * The number of iterations run in the QR algorithm without deflating or performing an exceptional shift.
+     */
+    protected int sinceLastExceptional;
+    /**
+     * The total number of exceptional shifts that have been used during the decomposition.
+     */
+    protected int numExceptional;
+    /**
+     * Flag indicating if a check should be made during the decomposition that the working matrix contains only finite values.
+     * If true, an explicit check will be made and an exception will be thrown if {@link Double#isFinite(double) non-finite} values are
+     * found. If false, no check will be made and the floating point arithmetic will carry on with {@link Double#POSITIVE_INFINITY
+     * infinities},  {@link Double#NEGATIVE_INFINITY negative-infinities}, and {@link Double#NaN NaNs} present.
+     */
+    protected boolean checkFinite;  // TODO: Make use of this field.
+    /**
+     * Flag indicating if the orthogonal matrix {@code U} in the Schur decomposition should be computed. If false, {@code U} will
+     * not be computed. This may provide performance improvements for large matrices when {@code U} is not required (for instance:
+     * in eigenvalue computations where eigenvectors are not needed).
      */
     protected final boolean computeU;
 
-    /**
-     * Storage for the unitary {@code U} matrix in the Schur decomposition corresponding to {@code A=UTU<sup>H</sup>}.
-     */
-    protected CMatrix U;
 
     /**
-     * Storage for the upper triangular {@code T} matrix in the Schur decomposition corresponding to
-     * {@code A=UTU<sup>H</sup>}.
+     * <p>Creates a decomposer to compute the Schur decomposition for a real dense matrix.</p>
+     *
+     * <p>If the {@code U} matrix is not needed, passing {@code computeU = false} may provide a performance improvement.</p>
+     *
+     * @param computeU Flag indicating if the unitary {@code U} matrix should be computed for the Schur decomposition. If true,
+     * {@code U} will be computed. If false, {@code U} will not be computed.
+     * @param rng Random number generator to use when performing random exceptional shifts.
+     * @param hess Decomposer to compute the Hessenburg decomposition as a setup step for the {@code QR} algorithm.
      */
-    protected CMatrix T;
-
-    /**
-     * Matrix for holding the working copy of the upper triangular matrix {@code T} in
-     * the schur decomposition.
-     */
-    protected T workT;
-
-    /**
-     * Matrix for holding the working copy of the upper triangular matrix {@code T} in
-     * the schur decomposition.
-     */
-    protected T workU;
-
-    /**
-     * Decomposer to compute the Hessenburg matrix similar to the source matrix. This Hessenburg
-     * matrix will be the actual matrix that the Schur decomposition is computed for.
-     */
-    protected HessenburgDecompositionOld<T, U> hess;
-
-
-    /**
-     * Creates a decomposer to compute the Schur decomposition which will run for at most {@code maxIterations}
-     * iterations.
-     * @param computeU A flag which indicates if the unitary matrix {@code Q} should be computed.<br>
-     *                 - If true, the {@code Q} matrix will be computed.
-     *                 - If false, the {@code Q} matrix will <b>not</b> be computed. If it is not needed, this may
-     *                 provide a performance improvement.
-     */
-    protected SchurDecomposition(boolean computeU) {
+    public SchurDecomposition(boolean computeU, RandomCNumber rng, UnitaryDecomposition<T, U> hess) {
+        maxIterationsFactor = DEFAULT_MAX_ITERS_FACTOR;
+        exceptionalThreshold = DEFAULT_EXCEPTIONAL_ITERS;
+        this.rng = rng;
         this.computeU = computeU;
+        this.hess = hess;
     }
 
 
     /**
-     * Computes the Schur decomposition of a matrix using Francis' double shift
-     * algorithm (i.e. The implicit double shifted QR algorithm).
-     * @param H The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
+     * <p>Sets the number of iterations of the {@code QR} algorithm to perform without deflation before performing a random shift.</p>
+     *
+     * <p>That is, if {@code exceptionalThreshold = 10}, then at most 10 iterations {@code QR} algorithm iterations will be performed.
+     * If, by the 10th iteration, no convergence has been detected which allows for deflation, then a {@code QR} algorithm iteration
+     * will be performed with a random (i.e. exceptional) shift.</p>
+     *
+     * <p>By default, the threshold is set to {@link #DEFAULT_EXCEPTIONAL_ITERS}</p>
+     *
+     * @param exceptionalThreshold The new exceptional shift threshold. i.e. the number of iterations to perform without deflation
+     *                             before performing an iteration with random shifts.
+     * @return A reference to this decomposer.
+     * @throws IllegalArgumentException If {@code exceptionalThreshold} is not positive.
      */
-    protected void shiftedImplicitQR(T H) {
-        int iters;
-
-        // Initialize matrices.
-        workT = H;
-        workU = computeU ? initU() : null;
-
-        int m = workT.numRows()-1;
-        int lastExceptional = 0;
-
-        while(m > 0) {
-            iters = 0; // Reset the number of iterations.
-
-            while(notConverged(m) && iters < MAX_ITERATIONS) {
-                iters++;
-
-                if(iters-lastExceptional > EXCEPTIONAL_SHIT_TOL) {
-                    // Then perform an exceptional shift (i.e.) shift in a random direction.
-                    applyExceptionalShift(m);
-                    lastExceptional = iters; // Update the index of the last exceptional shift.
-                    numExceptionalShifts++; // Increase the total number of exceptional shifts.
-                } else {
-                    if(H.numRows() > 2) {
-                        // Perform the standard implicit double shift.
-                        applyDoubleShift();
-                    } else {
-                        // Perform an implicit single shift iteration.
-                        applySingleShift();
-                    }
-                }
-            }
-
-            if(iters < MAX_ITERATIONS) {
-                // Deflate 1x1 block.
-                workT.set(0, m, m-1); // Ensure the sub-diagonal value is set to zero.
-                m--;
-            } else {
-                // Deflate 2x2 block.
-                deflateT(m);
-                m-=2;
-            }
-        }
+    public SchurDecomposition<T, U> setExceptionalThreshold(int exceptionalThreshold) {
+        ParameterChecks.assertPositive(exceptionalThreshold);
+        this.exceptionalThreshold = exceptionalThreshold;
+        return this;
     }
 
 
     /**
-     * Applies a single shift implicit QR iteration.
+     * <p>Specify maximum iteration factor for computing the total number of iterations to run the {@code QR} algorithm
+     * for when computing the decomposition. The maximum number of iterations is computed as
+     * <pre>
+     *     {@code maxIteration = maxIterationFactor * src.numRows;} </pre>
+     * If the algorithm does not converge within this limit, an error will be thrown.</p>
+     *
+     * <p>By default, this is computed as
+     * <pre>
+     *     {@code maxIterations = }{@link #DEFAULT_MAX_ITERS_FACTOR}{@code * src.numRows;}</pre>
+     *
+     * where {@code src} is the matrix
+     * being decomposed.</p>
+     *
+     * @param maxIterationFactor maximum iteration factor for use in computing the total maximum number of iterations to run the
+     * {@code QR} algorithm for.
+     * @throws IllegalArgumentException If {@code maxIterationFactor} is not positive.
      */
-    protected abstract void applySingleShift();
-
-
-    /**
-     * Applies an implicit double shift QR iteration using the generalized Rayleigh quotient shift.
-     */
-    protected abstract void applyDoubleShift();
-
-
-    /**
-     * Applies a single shift implicit QR iterations with a random shift.
-     * @param m Lower right index of the sub-matrix currently being worked on.
-     */
-    protected abstract void applyExceptionalShift(int m);
-
-
-    /**
-     * Computes the Schur decomposition of the {@code src} matrix using a variant of the QR algorithm.
-     * @param src The matrix to decompose.
-     */
-    protected final void applyQR(T src) {
-        ParameterChecks.assertSquareMatrix(src.shape());
-        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).
-
-        shiftedImplicitQR(hess.getH()); // Use shifted implicit QR algorithm.
+    public SchurDecomposition<T, U> setMaxIterationFactor(int maxIterationFactor) {
+        ParameterChecks.assertPositive(maxIterationFactor);
+        this.maxIterationsFactor = maxIterationFactor;
+        return this;
     }
 
 
     /**
-     * Applies unitary transformations and creates a bulge in the {@code T} matrix of the Schur decomposition.
-     * @param ref The unitary transformation to apply.
+     * Gets the upper, or possibly block-upper, triangular Schur matrix {@code T} from the Schur decomposition
+     * @return The T matrix from the Schur decomposition {@code A=UTU}<sup>H</sup>
      */
-    protected void applyTransforms(T ref) {
-        // Apply transform and create bulge.
-        workT.setSlice(
-                ref.H().mult(workT.getSlice(0, ref.numRows(), 0, workT.numCols())),
-                0, 0
-        );
-        workT.setSlice(
-                workT.getSlice(0, workT.numRows(), 0, ref.numRows()).mult(ref),
-                0, 0
-        );
-
-        if(computeU) {
-            // Collect similarity transformations.
-            workU.setSlice(
-                    workU.getSlice(0, workU.numRows(), 0, ref.numRows()).mult(ref),
-                    0, 0
-            );
-        }
-    }
-
-
-    /**
-     * Chases the bulge from the {@code T} matrix introduced by the unitary transformations and returns {@code T}
-     * to upper Hessenburg form.
-     * @param bulgeSize Size of the bulge to be chased (i.e. the number of rows below the first sub-diagonal which
-     *                  are non-zero).
-     */
-    protected void chaseBulge(int bulgeSize) {
-        int stop = bulgeSize + 2;
-
-        double tol = Flag4jConstants.EPS_F64; // Tolerance for considering value zero.
-        T ref; // Storage for Householder reflector.
-        U col; // Normal vector for Householder reflector computation.
-
-        for (int k = 0; k < workT.numRows() - bulgeSize - 1; k++) {
-            col = workT.getCol(k, k + 1, k + stop);
-
-            // If the column is zeros, no need to compute reflector. It is already in the correct form.
-            if (col.maxAbs() > tol) {
-                ref = initRef(col); // Initialize a Householder reflector.
-
-                // Apply Householder reflector to both sides of matrix.
-                workT.setSlice(
-                        ref.mult(workT.getSlice(k + 1, k + stop, 0, workT.numCols())),
-                        k + 1, 0
-                );
-                workT.setSlice(
-                        workT.getSlice(0, workT.numRows(), k + 1, k + stop).mult(ref.H()),
-                        0, k + 1
-                );
-
-                if (computeU) {
-                    // Collect similarity transformations.
-                    workU.setSlice(
-                            workU.getSlice(0, workT.numRows(), k + 1, k + stop).mult(ref),
-                            0, k + 1
-                    );
-                }
-            }
-
-            // Ensure values below first sub-diagonal are truly zero.
-            workT.set(0, k+2, k);
-            if(bulgeSize == 2) workT.set(0, k+3, k);
-        }
-    }
-
-    /**
-     * Initializes the unitary matrix in the schur decomposition.
-     * @return An initial {@code U} matrix. i.e. an identity matrix.
-     */
-    protected abstract T initU();
-
-
-    /**
-     * Initializes a Householder reflector for use in the bulge chase.
-     * @param col Column vector to compute the Householder for.
-     * @return A Householder reflector which zeros the values in {@code col} after
-     * the first entry.
-     */
-    protected abstract T initRef(U col);
-
-
-    /**
-     * Gets the upper triangular matrix {@code T} from the Schur decomposition corresponding to {@code A=UTU<sup>H</sup>}.
-     * @return The {@code T} from the Schur decomposition corresponding to {@code A=UTU<sup>H</sup>}.
-     */
-    public CMatrix getT() {
+    public T getT() {
         return T;
     }
 
 
     /**
-     * Gets the unitary matrix {@code U} from the Schur decomposition corresponding to {@code A=UTU<sup>H</sup>}.
-     * @return The {@code U} from the Schur decomposition corresponding to {@code A=UTU<sup>H</sup>}.
+     * Gets the unitary matrix {@code U} from the Schur decomposition containing the Schur vectors as its columns.
+     * @return {@code A=UTU}<sup>H</sup>
      */
-    public CMatrix getU() {
+    public T getU() {
         return U;
     }
 
 
     /**
-     * Converts a matrix in real Schur form to a complex Schur form.
-     * @param realT The real Schur matrix {@code T} in the Schur decomposition {@code {@code A=UTU<sup>T</sup>}}
-     * @return An array of complex matrices corresponding to the complex Schur form of the two matrices {@code realT} and
-     * {@code realU} in order.
-     * @see #real2ComplexSchur(Matrix)
+     * <p>Computes the Schur decomposition of the input matrix.</p>
+     *
+     * @implNote The Schur decomposition is computed using Francis implicit double shifted {@code QR} algorithm.
+     * There are known cases where this variant of the {@code QR} algorithm fail to converge. Random shifting is employed when the
+     * matrix is not converging which greatly minimizes this issue. It is unlikely that a general matrix will fail to converge with
+     * these random shifts however, no guarantees of convergence can be made.
+     * @param src The source matrix to decompose.
+     * @throws LinearAlgebraException If the decomposition does not converge within the specified number of max iterations. See
+     * {@link }
      */
-    public static CMatrix real2ComplexSchur(Matrix realT) {
-        return real2ComplexSchur(realT, null)[0];
-    }
+    public void decomposeBase(T src) {
+        setUp(src);
 
+        int workingSize = numRows-1;
+        int iters = 0;
 
-    /**
-     * Converts a matrix decomposed into a real Schur form to a complex Schur form.
-     * @param realT The real Schur matrix {@code T} in the Schur decomposition {@code {@code A=UTU<sup>T</sup>}}
-     * @param realU The orthogonal matrix {@code U} in the real Schur decomposition {@code A=UTU<sup>T</sup>}. Can be null.
-     * @return An array of complex matrices corresponding to the complex Schur form of the two matrices {@code realT} and
-     * {@code realU} in order.
-     * @see #real2ComplexSchur(Matrix)
-     */
-    // Code adapted from scipy rsf2csf https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.rsf2csf.html
-    public static CMatrix[] real2ComplexSchur(Matrix realT, Matrix realU) {
-        CMatrix T = realT.toComplex();
-        CMatrix U = realU == null ? null : realU.toComplex();
-
-        for(int m=realT.numRows-1; m>0; m--) {
-
-            // Check for convergence.
-            if(notConverged(T, m)) {
-                // Then a 2x2 block must be deflated.
-                deflateT(T, U, m);
+        while(workingSize >= 2 && iters < maxIterations) {
+            if(sinceLastExceptional >= exceptionalThreshold) {
+                // Perform an exceptional shift iteration.
+                sinceLastExceptional = 0; // Reset number of iterations completed.
+                performExceptionalShift(workingSize);
             } else {
-                T.set(0, m, m-1); // Ensure the sub-diagonal value is set to zero.
+                // Perform a normal double shift iteration.
+                sinceLastExceptional++; // Increase number of iterations performed without an exceptional shift.
+                numExceptional++;
+                performDoubleShift(workingSize);
             }
+
+            // Check for convergence and deflate as needed.
+            int deflate = checkConvergence(workingSize);
+            if(deflate > 0) {
+                sinceLastExceptional = 0; // Reset the number of iterations since the last exceptional shift.
+                workingSize -= deflate; // Reduce working size.
+            }
+
+            iters++;
         }
 
-        return new CMatrix[]{T, U};
+        if(iters == maxIterations)
+            throw new LinearAlgebraException("Schur decomposition failed to converge in " + maxIterations + " iterations.");
     }
 
 
     /**
-     * Deflates the {@code T} matrix in the decomposition and updates {@code U} if needed.
-     * @param m Row and column index of the lower right entry of the 2x2 block to deflate in {@code T}.
+     * Performs basic setup and initializes data structures to be used in the decomposition.
+     * @param src The matrix to be decomposed.
      */
-    protected void deflateT(int m) {
-        // By default, this method does nothing. This is intended.
+    protected void setUp(T src) {
+        ParameterChecks.assertSquare(src.shape());
+
+        sinceLastExceptional = 0;
+        numExceptional = 0;
+        numRows = src.numRows();
+        maxIterations = numRows*maxIterationsFactor;
+
+        setUpArrays();
+
+        hess.decompose(src);
+        T = hess.getUpper(); // Reduce matrix to upper Hessenburg form.
+        // Initialize U as the product of transformations used in Hessenburg decomposition if requested.
+        U = computeU ? hess.getQ() : null; // Hessenburg decomposition computes U lazily only when getQ() is called.
     }
 
 
     /**
-     * Deflates a 2x2 block of the {@code T} matrix from the Schur decomposition and accumulates similarity transformations
-     * used in deflation in the {@code U} matrix of the Schur decomposition.
-     * @param T The {@code T} matrix from the Schur decomposition.
-     * @param U The {@code U} matrix of the Schur decomposition.
-     * @param m Row and column index of the lower right entry of the 2x2 block to deflate in {@code T}.
+     * Initializes temporary work arrays to be used in the decomposition.
      */
-    // Code adapted from scipy rsf2csf https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.rsf2csf.html
-    protected static void deflateT(CMatrix T, CMatrix U, int m) {
-        // Compute the eigenvalues of the 2x2 block.
-        CVector mu = Eigen.get2x2EigenValues(
-                T.getSlice(m-1, m+1, m-1, m+1)
-        ).sub(T.get(m, m));
-
-        CMatrix G = Givens.get2x2Rotator(new CVector(mu.get(0), new CNumber(T.get(m, m-1))));
-
-        // Apply rotation to T matrix to bring it into upper triangular form
-        T.setSlice(
-                G.mult(T.getSlice(m-1, m+1, m-1, T.numCols)),
-                m-1, m-1
-        );
-        T.setSlice(
-                T.getSlice(0, m+1, m-1, m+1).mult(G.H()),
-                0, m-1
-        );
-
-        if(U != null) {
-            // Accumulate similarity transforms in the U matrix.
-            U.setSlice(
-                    U.getSlice(0, U.numRows, m-1, m+1).mult(G.H()),
-                    0, m-1
-            );
-        }
-
-        T.set(0, m, m-1);
-    }
+    protected abstract void setUpArrays();
 
 
     /**
-     * Checks if an entry along the first sub-diagonal of the {@code T} matrix in the Schur decomposition has
-     * converged to zero within machine precision. A value is considered to be converged if it is small relative to the
-     * two values on the diagonal of the {@code T} matrix immediately next to the value of interest. That is, a
-     * value at index {@code (m, m-1)} is considered converged if it is less in absolute value than the absolute
-     * sum of the entries at {@code (m-1, m-1)} and {@code (m, m)} times machine epsilon
-     * (i.e. {@link Math#ulp(double)  Math.ulp(1.0d)}).
-     * @param m Row index of the value of interest within the {@code T} matrix.
-     * @return True if the specified entry has not converged. That is, the entry in the {@code T} matrix is greater
-     * than (in absolute value) machine precision (i.e. Flag4jConstants.EPS_F64) times the absolute sum of the entries along the
-     * block 2x2 matrix on the diagonal of {@code T} containing the entry. Otherwise, returns false.
+     * Performs a full iteration of the single shifted {@code QR} algorithm (this includes the bulge chase) where the shift is
+     * chosen to be a random value with the same magnitude as the lower right element of the working matrix. This can help the
+     * {@code QR} converge for certain pathological cases where the double shift algorithm oscillates or fails to converge for
+     * repeated eigenvalues.
+     * @param workingSize The current working size for the decomposition. I.e. all entries below this row have converged to an upper
+     *                   or possible 2x2 block upper triangular form.
      */
-    protected abstract boolean notConverged(int m);
+    protected abstract void performExceptionalShift(int workingSize);
 
 
     /**
-     * Checks if an entry along the first sub-diagonal of the {@code T} matrix in the Schur decomposition has
-     * converged to zero within machine precision. A value is considered to be converged if it is small relative to the
-     * two values on the diagonal of the {@code T} matrix immediately next to the value of interest. That is, a
-     * value at index {@code (m, m-1)} is considered converged if it is less in absolute value than the absolute
-     * sum of the entries at {@code (m-1, m-1)} and {@code (m, m)} times machine epsilon
-     * (i.e. {@link Math#ulp(double)  Math.ulp(1.0d)}).
-     * @param T The {@code T} Matrix in the Schur decomposition.
-     * @param m Row index of the value of interest within the {@code T} matrix.
-     * @return True if the specified entry has not converged. That is, the entry in the {@code T} matrix is greater
-     * than (in absolute value) machine precision (i.e. Flag4jConstants.EPS_F64) times the absolute sum of the entries along the
-     * block 2x2 matrix on the diagonal of {@code T} containing the entry. Otherwise, returns false.
+     * Performs a full iteration of the Francis implicit double shifted {@code QR} algorithm (this includes the bulge chase).
+     * @param workingSize The current working size for the decomposition. I.e. all entries below this row have converged to an upper
+     *                   or possible 2x2 block upper triangular form.
      */
-    protected static boolean notConverged(CMatrix T, int m) {
-        return T.get(m, m-1).mag() > TOL*( T.get(m-1, m-1).mag() + T.get(m, m).mag() );
-    }
+    protected abstract void performDoubleShift(int workingSize);
+
+
+    /**
+     * Checks for convergence of lower 2x2 sub-matrix within working matrix to upper triangular or block upper triangular form. If
+     * convergence is found, this will also zero out the values which have converged to near zero.
+     * @param workingSize Size of current working matrix.
+     * @return Returns the amount the working matrix size should be deflated. Will be zero if no convergence is detected, one if
+     * convergence to upper triangular form is detected and two if convergence to block upper triangular form is detected.
+     */
+    protected abstract int checkConvergence(int workingSize);
 }

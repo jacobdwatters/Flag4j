@@ -22,39 +22,19 @@
  * SOFTWARE.
  */
 
-package com.flag4j.exceptions;
+package com.flag4j.util.exceptions;
 
-import com.flag4j.core.Shape;
 
 /**
- *
+ * An exception which is thrown when a linear algebra related error occurs at runtime.
  */
-public class TensorShapeException extends LinearAlgebraException {
+public class LinearAlgebraException extends RuntimeException {
 
     /**
      * Creates a {@link LinearAlgebraException} to be thrown for a linear algebra related error.
-     *
      * @param errMsg Error message for the exception.
      */
-    public TensorShapeException(String errMsg) {
-        super(errMsg);
-    }
-
-    /**
-     * Creates a {@link LinearAlgebraException} to be thrown for a linear algebra related error.
-     *
-     * @param errMsg Error message for the exception.
-     */
-    public TensorShapeException(String errMsg, Shape shape) {
-        super(errMsg);
-    }
-
-    /**
-     * Creates a {@link LinearAlgebraException} to be thrown for a linear algebra related error.
-     *
-     * @param errMsg Error message for the exception.
-     */
-    public TensorShapeException(String errMsg, Shape shape1, Shape shape2) {
+    public LinearAlgebraException(String errMsg) {
         super(errMsg);
     }
 }

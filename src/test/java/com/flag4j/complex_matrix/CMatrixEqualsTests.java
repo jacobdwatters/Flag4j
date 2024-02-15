@@ -8,7 +8,8 @@ import com.flag4j.sparse.CooCMatrix;
 import com.flag4j.sparse.CooMatrix;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class CMatrixEqualsTests {
     double[][] bRealEntries;
@@ -259,7 +260,7 @@ class CMatrixEqualsTests {
                 {new CNumber(67.1, 1.556), new CNumber()},
                 {new CNumber(), new CNumber(-9.431,834.1)}};
         A = new CMatrix(aEntries);
-        assertNotEquals(A, Double.valueOf(32.45), 0.0);
+        assertNotEquals(A, Double.valueOf(32.45));
         assertNotEquals(A, new Shape(4, 56));
         assertNotEquals("Hello World!", A);
     }

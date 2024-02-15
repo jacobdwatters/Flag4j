@@ -26,7 +26,7 @@ package com.flag4j.util;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.Shape;
-import com.flag4j.exceptions.LinearAlgebraException;
+import com.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.math.BigInteger;
 import java.util.Arrays;

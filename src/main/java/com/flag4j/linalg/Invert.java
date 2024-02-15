@@ -27,7 +27,6 @@ package com.flag4j.linalg;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.dense.CMatrix;
 import com.flag4j.dense.Matrix;
-import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.linalg.decompositions.cholesky.CholeskyDecomposition;
 import com.flag4j.linalg.decompositions.cholesky.RealCholeskyDecomposition;
 import com.flag4j.linalg.decompositions.lu.ComplexLUDecomposition;
@@ -39,6 +38,7 @@ import com.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
 import com.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
+import com.flag4j.util.exceptions.SingularMatrixException;
 
 /**
  * This class provides methods for computing the inverse of a matrix. Specialized methods are provided for inverting triangular,

@@ -26,9 +26,9 @@ package com.flag4j.linalg.decompositions.cholesky;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.dense.CMatrix;
-import com.flag4j.exceptions.LinearAlgebraException;
 import com.flag4j.util.Flag4jConstants;
 import com.flag4j.util.ParameterChecks;
+import com.flag4j.util.exceptions.LinearAlgebraException;
 
 
 /**
@@ -73,7 +73,7 @@ public final class ComplexCholeskyDecomposition extends CholeskyDecomposition<CM
      * @return A reference to this decomposer.
      * @throws IllegalArgumentException If {@code src} is not symmetric and {@link #ComplexCholeskyDecomposition(boolean)
      * enforceSymmetric} was set to true when this decomposer was instantiated.
-     * @throws com.flag4j.exceptions.LinearAlgebraException If {@code src} is not positive-definite.
+     * @throws LinearAlgebraException If {@code src} is not positive-definite.
      */
     @Override
     public ComplexCholeskyDecomposition decompose(CMatrix src) {

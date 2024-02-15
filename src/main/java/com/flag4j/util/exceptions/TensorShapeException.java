@@ -22,29 +22,39 @@
  * SOFTWARE.
  */
 
-package com.flag4j.exceptions;
+package com.flag4j.util.exceptions;
+
+import com.flag4j.core.Shape;
 
 /**
- * An exception which is thrown when some operation not defined for singular matrices is attempted to be
- * performed on a singular matrix. For example, attempting to invert a singular matrix.
+ *
  */
-public class SingularMatrixException extends LinearAlgebraException {
-
-    private static final String INFO = "Matrix is singular.";
+public class TensorShapeException extends LinearAlgebraException {
 
     /**
-     * Creates a SingularMatrixException with the simple error message "Matrix is singular."
+     * Creates a {@link LinearAlgebraException} to be thrown for a linear algebra related error.
+     *
+     * @param errMsg Error message for the exception.
      */
-    public SingularMatrixException() {
-        super(INFO);
+    public TensorShapeException(String errMsg) {
+        super(errMsg);
     }
 
     /**
-     * Creates a SingularMatrixException with a specified error message. Note, the string " Matrix is singular." will
-     * be automatically appended to the error message.
-     * @param errMsg Error message to display when this SingularMatrixException is thrown.
+     * Creates a {@link LinearAlgebraException} to be thrown for a linear algebra related error.
+     *
+     * @param errMsg Error message for the exception.
      */
-    public SingularMatrixException(String errMsg) {
-        super(errMsg + " " + INFO);
+    public TensorShapeException(String errMsg, Shape shape) {
+        super(errMsg);
+    }
+
+    /**
+     * Creates a {@link LinearAlgebraException} to be thrown for a linear algebra related error.
+     *
+     * @param errMsg Error message for the exception.
+     */
+    public TensorShapeException(String errMsg, Shape shape1, Shape shape2) {
+        super(errMsg);
     }
 }

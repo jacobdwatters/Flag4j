@@ -26,7 +26,7 @@ package com.flag4j.linalg.decompositions.lu;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.dense.CMatrix;
-import com.flag4j.exceptions.LinearAlgebraException;
+import com.flag4j.util.exceptions.LinearAlgebraException;
 
 
 /**

@@ -31,7 +31,6 @@ import com.flag4j.core.RealMatrixMixin;
 import com.flag4j.core.Shape;
 import com.flag4j.core.dense_base.DenseMatrixMixin;
 import com.flag4j.core.dense_base.RealDenseTensorBase;
-import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.linalg.Invert;
 import com.flag4j.linalg.decompositions.lu.LUDecomposition;
@@ -54,6 +53,7 @@ import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSpars
 import com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
 import com.flag4j.sparse.*;
 import com.flag4j.util.*;
+import com.flag4j.util.exceptions.SingularMatrixException;
 
 import java.util.ArrayList;
 import java.util.Arrays;

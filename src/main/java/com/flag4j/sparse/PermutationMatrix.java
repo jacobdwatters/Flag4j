@@ -33,6 +33,7 @@ import com.flag4j.dense.Matrix;
 import com.flag4j.dense.Vector;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ParameterChecks;
+import com.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -78,7 +79,7 @@ public class PermutationMatrix implements Serializable {
     /**
      * Creates a permutation matrix which is equivalent to the identity matrix of the specified size.
      * @param shape Shape of the permutation matrix. That is, the number of rows and columns. Must be a square shape.
-     * @throws com.flag4j.exceptions.LinearAlgebraException If {@code shape} is not square.
+     * @throws LinearAlgebraException If {@code shape} is not square.
      */
     public PermutationMatrix(Shape shape) {
         ParameterChecks.assertSquareMatrix(shape);

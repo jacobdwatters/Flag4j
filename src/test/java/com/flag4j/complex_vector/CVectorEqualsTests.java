@@ -31,7 +31,8 @@ import com.flag4j.sparse.CooCVector;
 import com.flag4j.sparse.CooVector;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class CVectorEqualsTests {
 
@@ -316,7 +317,7 @@ class CVectorEqualsTests {
                 new CNumber(1.3, -0.000023465), new CNumber()};
         a = new CVector(aEntries);
         Double num = 123.4;
-        assertNotEquals(a, num, 0.0);
+        assertNotEquals(a, num);
 
         // ----------------- Sub-case 3 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
@@ -324,6 +325,6 @@ class CVectorEqualsTests {
         a = new CVector(aEntries);
         CNumber[] arr = {new CNumber(0), new CNumber(8.245, 9.2165),
                 new CNumber(1.3, -0.000023465), new CNumber()};
-        assertNotEquals(a, num, 0.0);
+        assertNotEquals(a, num);
     }
 }

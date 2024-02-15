@@ -3,8 +3,8 @@ package com.flag4j.linalg.solvers;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.dense.CMatrix;
 import com.flag4j.dense.CVector;
-import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolver;
+import com.flag4j.util.exceptions.SingularMatrixException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

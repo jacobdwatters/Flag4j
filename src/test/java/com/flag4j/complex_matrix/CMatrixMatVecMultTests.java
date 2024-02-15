@@ -5,10 +5,10 @@ import com.flag4j.core.Shape;
 import com.flag4j.dense.CMatrix;
 import com.flag4j.dense.CVector;
 import com.flag4j.dense.Vector;
-import com.flag4j.exceptions.LinearAlgebraException;
 import com.flag4j.sparse.CooCVector;
 import com.flag4j.sparse.CooVector;
 import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

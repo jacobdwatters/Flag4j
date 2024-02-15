@@ -4,6 +4,7 @@ import com.flag4j.dense.Matrix;
 import com.flag4j.linalg.decompositions.svd.RealSVD;
 import com.flag4j.linalg.decompositions.svd.SVD;
 
+
 class RealSVDTests {
 
     final SVD<Matrix> svd = new RealSVD(true);
@@ -13,6 +14,7 @@ class RealSVDTests {
     Matrix A, expS, expU, expV;
 
     // TODO: There seems to be issues with SVD. Bring back tests when issues are fixed.
+    //  The issues are likely related to eigenvector computation which is probably incorrect and inefficient.
 
 //    @Test
 //    void svdTestCase() {
@@ -44,6 +46,11 @@ class RealSVDTests {
 //        expV = new Matrix(expVEntries);
 //
 //        svd.decompose(A);
+//
+//        System.out.println("U\n" + svd.getU() + "\n");
+//        System.out.println("S\n" + svd.getS() + "\n");
+//        System.out.println("V\n" + svd.getV() + "\n");
+//
 //        Matrix Ahat = svd.getU().mult(svd.getS()).mult(svd.getV().H());
 //        assertEquals(new Matrix(A.shape), A.sub(Ahat).round(10));
 //
@@ -71,7 +78,7 @@ class RealSVDTests {
 //        svd.decompose(A);
 //        Ahat = svd.getU().mult(svd.getS()).mult(svd.getV().H());
 //        assertEquals(new Matrix(A.shape), A.sub(Ahat).round(10));
-
+//
 //        // -------------------- Sub-case 4 --------------------
 //        // This Toeplitz matrix is known to be difficult to compute eigenvalues of. As such, it is a good test matrix.
 //        aEntries = new double[][]{

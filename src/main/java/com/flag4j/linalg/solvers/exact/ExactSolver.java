@@ -27,12 +27,12 @@ package com.flag4j.linalg.solvers.exact;
 
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;
-import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.linalg.decompositions.lu.LUDecomposition;
 import com.flag4j.linalg.solvers.LinearSolver;
 import com.flag4j.linalg.solvers.lstsq.LstsqSolver;
 import com.flag4j.sparse.PermutationMatrix;
 import com.flag4j.util.ParameterChecks;
+import com.flag4j.util.exceptions.SingularMatrixException;
 
 /**
  * <p>Solves a well determined system of equations {@code Ax=b} in an exact sense by using a {@code LU} decomposition.</p>

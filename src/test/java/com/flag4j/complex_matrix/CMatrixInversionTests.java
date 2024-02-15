@@ -2,7 +2,7 @@ package com.flag4j.complex_matrix;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.dense.CMatrix;
-import com.flag4j.exceptions.LinearAlgebraException;
+import com.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
