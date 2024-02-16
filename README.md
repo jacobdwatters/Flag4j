@@ -21,7 +21,7 @@ Updates:
 ___
 
 ## Features and Functionality
-Highlighted features are a work in progress and currently not fully implemented.
+
 ### Algebraic Objects
 - Complex Numbers
 - Vectors
@@ -39,6 +39,7 @@ Highlighted features are a work in progress and currently not fully implemented.
     - <mark>Real Sparse Tensor</mark>
     - Complex Dense Tensor
     - <mark>Complex Sparse Tensor</mark>
+    - Tensor solver
 
 ### Operations
 - Basic Arithmetic Operations: Add, subtract, scalar/element multiply, scalar/element divide, etc.
@@ -53,7 +54,7 @@ Highlighted features are a work in progress and currently not fully implemented.
   - Features: Matrix rank, symmetric, definiteness, eigenvalues and vectors, singularity, triangular, etc.
   - Comparisons: Similar, etc. 
 - Tensor Operations:
-  - Arithmetic: Tensor dot product, tensor transpose, etc.
+  - Arithmetic: Tensor dot product, tensor transpose, tensor invers, etc.
   - Comparisons: Tensor rank/dimension, etc.
 
 ### Matrix Decompositions
@@ -70,7 +71,10 @@ Highlighted features are a work in progress and currently not fully implemented.
 - Singular Value Decomposition
 
 ### Linear Solvers
-- Exact solution for well determined systems
+- Exact solution for well determined matrix systems
+  - General systems
+  - Triangular systems
+- Exact solution for well determined tensor equations
 - Least Squares solution
 
 ### Linear and Homography Transformations
