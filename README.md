@@ -6,9 +6,18 @@
 # Flag4j
 Flag4j is a fast linear algebra library for Java and provides operations and linear algebra routines for real/complex sparse/dense tensors, matrices, and vectors.
 
-## State of Project as of 6-30-2023
-Flag4j is currently in the final steps of development before an initial beta release. Nearly all features have been fully implemented or at least have a rudimentary beta implementation.
-There is still some work to be done for sparse tensors and matrices. Once that has been completed, a beta release will be imminent.
+## State of Project as of 16-FEB-2024
+Flag4j is currently in the final steps of development before an initial beta release. Nearly all features have been fully implemented or beta implementations.
+
+Updates: 
+- The QR, Hessenburg and Schur decompositions have had a complete overhall.
+  - QR/Hessenburg/Schur: The way reflectors are computed and applied has been significantly improved in terms of performance, stability, and sensitivity to over(under)flow issues.
+  - Schur: Some correcness issues have been ironed out and significant performance enhancements have been made. The decomposition uses an implicit double shifted QR algorithm.
+    This means computing eigenvalues should be more accuract/correct and significantly faster in most cases.
+- Tensor Solver: Added a solver which can solve tensor equations of the form $A \cdot X = B$ where $A, \ X$, and $B$ are tensors of arbirary rank and shape as long as the shapes are conducive to
+  computing the tensor dot product `B = A.dot(X)`.
+- Tensor Inverse: Added ability to compute the inverse of an arbitary invertible tensor $A$, $A^{-1}$ relative to the tensor product
+  `X.tensorDot(Y, new int[]{n, n+1,..., X.rank()}, new int[]{0, 1,..., n})` where $n \in \mathbb{N}^+$.
 ___
 
 ## Features and Functionality
