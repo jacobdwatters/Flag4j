@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,10 @@
 
 package com.flag4j.operations.dense.real;
 
-import com.flag4j.Matrix;
-import com.flag4j.Shape;
-import com.flag4j.Tensor;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.Tensor;
 import com.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
+import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -45,57 +45,30 @@ public final class RealDenseTensorDot {
 
 
     /**
-     * Computes the tensor dot product along the first tensors last axis and the second tensors second-to-last axis.
+     * Computes the tensor dot product along the first tensors last axis and the second tensors second-to-last axis. Or, if the second
+     * tensor has rank 1, the last axis of the second tensor.
      * @param src1 First tensor in the tensor product.
      * @param src2 Second tensor in the tensor product.
      * @return The tensor dot product along the first tensors last axis and the second tensors second-to-last axis.
      * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
      * along the second-to-last axis.
      */
-    public static Tensor dot(Tensor src1, Tensor src2) {
-        int src1Dim = src1.getRank(); // Rank of first tensor.
-        int src2Dim = src2.getRank(); // Rank of second tensor.
+    public static Tensor tensorDot(Tensor src1, Tensor src2) {
+        int src1Rank = src1.getRank();
+        int src2Rank = src2.getRank();
 
-        // Ensure tensors have same length along last axis.
-        ParameterChecks.assertEquals(src1.shape.get(src1Dim-1), src2.shape.get(src2Dim-2));
-
-        int axisLength = src1.shape.get(src1Dim-1); // Length of axis along which to compute dot product.
-        Tensor src2Swap = src2.T(src2Dim-1, src2Dim-2);
-
-        int iStop = src1.totalEntries().intValueExact()/src1.shape.get(src1Dim-1);
-        int jStop = src2.totalEntries().intValueExact()/src2.shape.get(src2Dim-2);
-        int[] dims = new int[src1Dim+src2Dim-2];
-        int idx = 0;
-
-        // Copy shape dimensions from each tensor.
-        for(int i=0; i<src1Dim-1; i++) {
-            dims[idx++] = src1.shape.dims[i];
+        if(src1Rank==2 && src2Rank==2) {
+            // Product is simply a matrix multiplication problem.
+            return new Tensor(
+                    new Shape(src1.shape.dims[0], src2.shape.dims[1]),
+                    RealDenseMatrixMultiplyDispatcher.dispatch(src1.entries, src1.shape, src2.entries, src2.shape)
+            );
         }
 
-        for(int i=0; i<src2Dim-1; i++) {
-            dims[idx++] = src2Swap.shape.dims[i];
-        }
+        // If second tensor has rank one, then use zero axis. Otherwise, use second to last axis.
+        src2Rank = (src2Rank==1) ? 0 : src2Rank-2;
 
-        Shape destShape = new Shape(dims);
-        double[] dest = new double[destShape.totalEntries().intValueExact()];
-        int src1_start, src2_start;
-
-        idx = 0;
-        for(int i=0; i<iStop; i++) {
-            src1_start = i*axisLength;
-
-            for(int j=0; j<jStop; j++) {
-                src2_start = j*axisLength;
-
-                for(int k=0; k<axisLength; k++) {
-                    dest[idx] += src1.entries[src1_start + k]*src2Swap.entries[src2_start + k];
-                }
-
-                idx++;
-            }
-        }
-
-        return new Tensor(destShape, dest);
+        return tensorDot(src1, src2, new int[]{src1Rank - 1}, new int[]{src2Rank});
     }
 
 
@@ -113,6 +86,11 @@ public final class RealDenseTensorDot {
      * are out of bounds for the corresponding tensor.
      */
     public static Tensor tensorDot(Tensor src1, Tensor src2, int[] src1Axes, int[] src2Axes) {
+        if(src1.getRank()==2 && src2.getRank()==2) {
+
+        }
+
+
         // Each array must specify the same number of axes.
         ParameterChecks.assertEquals(src1Axes.length, src2Axes.length);
 
@@ -133,15 +111,16 @@ public final class RealDenseTensorDot {
 
         n2 = 1;
         for(int axis : src1Axes) {
-            n2 *= src1.shape.get(axis);
+            n2 *= src1.shape.dims[axis];
         }
 
         n1 = 1;
         int[] src1OldDims = new int[notin.length];
         pos = 0;
         for(int axis : notin) {
-            n1 *= src1.shape.get(axis);
-            src1OldDims[pos++] = src1.shape.get(axis);
+            int a = src1.shape.dims[axis];
+            n1 *= a;
+            src1OldDims[pos++] = a;
         }
 
         Shape src1NewShape = new Shape(n1, n2);
@@ -153,31 +132,26 @@ public final class RealDenseTensorDot {
 
         n2 = 1;
         for(int axis : src2Axes) {
-            n2 *= src2.shape.get(axis);
+            n2 *= src2.shape.dims[axis];
         }
 
         n1 = 1;
         pos = 0;
         int[] src2OldDims = new int[notin.length];
         for(int axis : notin) {
-            n1 *= src2.shape.get(axis);
-            src2OldDims[pos++] = src2.shape.get(axis);
+            int a = src2.shape.dims[axis];
+            n1 *= a;
+            src2OldDims[pos++] = a;
         }
 
         Shape src2NewShape = new Shape(n2, n1);
         // -----------------------------------------------------
 
         // Reform tensor dot product problem as a matrix multiplication problem.
-        Matrix at = new Matrix(
-                src1NewShape,
-                RealDenseTranspose.standardConcurrent(src1.entries, src1.shape, src1NewAxes)
-        );
-        Matrix bt = new Matrix(
-                src2NewShape,
-                RealDenseTranspose.standardConcurrent(src2.entries, src2.shape, src2NewAxes)
-        );
+        double[] at = TransposeDispatcher.dispatchTensor(src1.entries, src1.shape, src1NewAxes);
+        double[] bt = RealDenseTranspose.standardConcurrent(src2.entries, src2.shape, src2NewAxes);
 
-        double[] destEntries = RealDenseMatrixMultiplyDispatcher.dispatch(at, bt);
+        double[] destEntries = RealDenseMatrixMultiplyDispatcher.dispatch(at, src1NewShape, bt, src2NewShape);
         Shape destShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));
 
         return new Tensor(destShape, destEntries);

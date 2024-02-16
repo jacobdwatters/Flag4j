@@ -1,8 +1,12 @@
 package com.flag4j.tensor;
 
-import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.exceptions.LinearAlgebraException;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.CTensor;
+import com.flag4j.dense.Tensor;
+import com.flag4j.sparse.CooCTensor;
+import com.flag4j.sparse.CooTensor;
+import com.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -83,13 +87,13 @@ class TensorElemMultTests {
         bEntries = new double[]{
                 1.34, -0.0245, 8001.1
         };
-        bShape = new Shape(2, 3, 2);
+        bShape = new Shape(true, 2, 3, 2);
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
         expEntries = new double[aEntries.length];
-        expShape = new Shape(2, 3, 2);
+        expShape = new Shape(true,2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] = bEntries[0]*aEntries[expShape.entriesIndex(sparseIndices[0])];
         expEntries[expShape.entriesIndex(sparseIndices[1])] = bEntries[1]*aEntries[expShape.entriesIndex(sparseIndices[1])];
         expEntries[expShape.entriesIndex(sparseIndices[2])] = bEntries[2]*aEntries[expShape.entriesIndex(sparseIndices[2])];
@@ -162,7 +166,7 @@ class TensorElemMultTests {
         bEntries = new CNumber[]{
                 new CNumber(1, -0.2045), new CNumber(-800.145, 3204.5)
         };
-        bShape = new Shape(2, 3, 2);
+        bShape = new Shape(true, 2, 3, 2);
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}
         };
@@ -171,7 +175,7 @@ class TensorElemMultTests {
                 new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber(),
                 new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber()
         };
-        expShape = new Shape(2, 3, 2);
+        expShape = new Shape(true, 2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] = bEntries[0].mult(aEntries[expShape.entriesIndex(sparseIndices[0])]);
         expEntries[expShape.entriesIndex(sparseIndices[1])] = bEntries[1].mult(aEntries[expShape.entriesIndex(sparseIndices[1])]);
         exp = new CTensor(expShape, expEntries);

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,12 @@
 
 package com.flag4j.core;
 
-import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.CVector;
+import com.flag4j.dense.Vector;
+import com.flag4j.sparse.CooCVector;
+import com.flag4j.sparse.CooVector;
 
 /**
  * This interface specifies operations which should be implemented by any vector.
@@ -457,9 +461,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
 
     /**
      * Converts a vector to an equivalent matrix.
-     * @return A matrix equivalent to this vector. This method will respect the orientation of the vector. That is, if
-     * this vector is a row vector, then the resulting matrix will have a single row. If this vector is a column vector, then the
-     * resulting matrix will have a single column.
+     * @return A matrix equivalent to this vector where the vector is treated as a column vector.
      */
     TT toMatrix();
 

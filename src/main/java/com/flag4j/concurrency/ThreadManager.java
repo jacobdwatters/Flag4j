@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,12 @@ package com.flag4j.concurrency;
 import com.flag4j.util.ErrorMessages;
 
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.function.IntConsumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
 /**
@@ -36,17 +40,55 @@ import java.util.stream.IntStream;
  * pool.
  */
 public class ThreadManager {
-
     private ThreadManager() {
         // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
+    /**
+     * Simple thread factory for creating basic daemon threads.
+     */
+    private static final ThreadFactory daemonFactory = r -> {
+        Thread t = new Thread(r);
+        t.setDaemon(true); // Set the thread as a daemon thread
+        return t;
+    };
+
+    /**
+     * The parallelism level for the thread manager. That is, the number of threads to be used in the thread pool
+     * when executing concurrent operations.
+     */
+    private static int parallelismLevel = Configurations.DEFAULT_NUM_THREADS;
+
+    /**
+     * Simple logger for when a thread throws an exception during execution.
+     */
+    private static final Logger threadLogger = Logger.getLogger(ThreadManager.class.getName());
 
     /**
      * Thread pool for managing threads executing concurrent operations.
      */
-    protected static ForkJoinPool threadPool = new ForkJoinPool();
+    protected static ExecutorService threadPool = Executors.newFixedThreadPool(parallelismLevel, daemonFactory);
+
+
+    /**
+     * Sets the number of threads to use in the thread pool.
+     * @param parallelismLevel Number of threads to use in the thread pool. If this is less than 1, the parallelism will
+     *                         simply be set to 1.
+     */
+    protected static void setParallelismLevel(int parallelismLevel) {
+        ThreadManager.parallelismLevel = Math.max(parallelismLevel, 1);
+        threadPool = Executors.newFixedThreadPool(parallelismLevel, daemonFactory);
+    }
+
+
+    /**
+     * Gets the current parallelism level for the ThreadManager. That is, the number of threads used in the thread pool.
+     * @return The current parallelism level for the ThreadManager.
+     */
+    public static int getParallelismLevel() {
+        return parallelismLevel;
+    }
 
 
     /**
@@ -57,11 +99,11 @@ public class ThreadManager {
      *                 individual iterations should be independent of each other.
      */
     public static void concurrentLoop(int startIndex, int endIndex, IntConsumer function) {
-
         try {
             threadPool.submit(() -> IntStream.range(startIndex, endIndex).parallel().forEach(function)).get();
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            threadLogger.setLevel(Level.WARNING);
+            threadLogger.warning(e.getMessage());
             Thread.currentThread().interrupt();
         }
     }
@@ -77,7 +119,7 @@ public class ThreadManager {
      */
     public static void concurrentLoop(int startIndex, int endIndex, int step, IntConsumer function ) {
         if (step <= 0)
-            throw new IllegalArgumentException(ErrorMessages.negValueErr(startIndex));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(startIndex));
         try {
             int range = endIndex - startIndex;
             int iterations = range/step + ((range%step == 0) ? 0 : 1);
@@ -85,7 +127,8 @@ public class ThreadManager {
                     i -> function.accept(startIndex + i*step))
             ).get();
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            threadLogger.setLevel(Level.WARNING);
+            threadLogger.warning(e.getMessage());
             Thread.currentThread().interrupt();
         }
     }

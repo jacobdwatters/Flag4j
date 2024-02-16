@@ -1,11 +1,15 @@
 package com.flag4j.complex_matrix;
 
-import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.Matrix;
+import com.flag4j.sparse.CooCMatrix;
+import com.flag4j.sparse.CooMatrix;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class CMatrixEqualsTests {
     double[][] bRealEntries;
@@ -36,7 +40,7 @@ class CMatrixEqualsTests {
                 {new CNumber(-723.234, 4), new CNumber(-9.431)}};
         B = new CMatrix(bEntries);
 
-        assertTrue(A.equals(B));
+        assertEquals(A, B);
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new CNumber[][]{
@@ -49,7 +53,7 @@ class CMatrixEqualsTests {
                 {new CNumber(-723.234, 4), new CNumber(-9.431), new CNumber(8.4554, -98.2)}};
         B = new CMatrix(bEntries);
 
-        assertFalse(A.equals(B));
+        assertNotEquals(A, B);
 
 
         // ---------------------- Sub-case 3 ----------------------
@@ -64,7 +68,7 @@ class CMatrixEqualsTests {
                 {new CNumber(-723.234, 4), new CNumber(-9.431)}};
         B = new CMatrix(bEntries);
 
-        assertFalse(A.equals(B));
+        assertNotEquals(A, B);
     }
 
 
@@ -82,7 +86,7 @@ class CMatrixEqualsTests {
                 {-723.234, -9.431}};
         BReal = new Matrix(bRealEntries);
 
-        assertTrue(A.equals(BReal));
+        assertEquals(A, BReal);
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new CNumber[][]{
@@ -95,7 +99,7 @@ class CMatrixEqualsTests {
                 {8.4554, -723.234, -9.431}};
         BReal = new Matrix(bRealEntries);
 
-        assertFalse(A.equals(BReal));
+        assertNotEquals(A, BReal);
 
         // ---------------------- Sub-case 3 ----------------------
         aEntries = new CNumber[][]{
@@ -109,7 +113,7 @@ class CMatrixEqualsTests {
                 {-723.234, -9.431}};
         BReal = new Matrix(bRealEntries);
 
-        assertFalse(A.equals(BReal));
+        assertNotEquals(A, BReal);
 
 
         // ---------------------- Sub-case 4 ----------------------
@@ -124,7 +128,7 @@ class CMatrixEqualsTests {
                 {-723.234, -9.431}};
         BReal = new Matrix(bRealEntries);
 
-        assertFalse(A.equals(BReal));
+        assertNotEquals(A, BReal);
     }
 
 
@@ -142,7 +146,7 @@ class CMatrixEqualsTests {
         sparseShape = new Shape(A.numRows, A.numCols);
         BRealSparse = new CooMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
 
-        assertTrue(A.equals(BRealSparse));
+        assertEquals(A, BRealSparse);
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new CNumber[][]{
@@ -156,7 +160,7 @@ class CMatrixEqualsTests {
         sparseShape = new Shape(A.numRows, A.numCols);
         BRealSparse = new CooMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
 
-        assertFalse(A.equals(BRealSparse));
+        assertNotEquals(A, BRealSparse);
 
         // ---------------------- Sub-case 3 ----------------------
         aEntries = new CNumber[][]{
@@ -170,7 +174,7 @@ class CMatrixEqualsTests {
         sparseShape = new Shape(A.numRows+1, A.numCols);
         BRealSparse = new CooMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
 
-        assertFalse(A.equals(BRealSparse));
+        assertNotEquals(A, BRealSparse);
 
         // ---------------------- Sub-case 4 ----------------------
         aEntries = new CNumber[][]{
@@ -184,7 +188,7 @@ class CMatrixEqualsTests {
         sparseShape = new Shape(A.numRows, A.numCols);
         BRealSparse = new CooMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
 
-        assertFalse(A.equals(BRealSparse));
+        assertNotEquals(A, BRealSparse);
     }
 
 
@@ -202,7 +206,7 @@ class CMatrixEqualsTests {
         sparseShape = new Shape(A.numRows, A.numCols);
         BComplexSparse = new CooCMatrix(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
 
-        assertTrue(A.equals(BComplexSparse));
+        assertEquals(A, BComplexSparse);
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new CNumber[][]{
@@ -216,7 +220,7 @@ class CMatrixEqualsTests {
         sparseShape = new Shape(A.numRows, A.numCols);
         BComplexSparse = new CooCMatrix(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
 
-        assertFalse(A.equals(BComplexSparse));
+        assertNotEquals(A, BComplexSparse);
 
         // ---------------------- Sub-case 3 ----------------------
         aEntries = new CNumber[][]{
@@ -230,7 +234,7 @@ class CMatrixEqualsTests {
         sparseShape = new Shape(A.numRows, A.numCols+3);
         BComplexSparse = new CooCMatrix(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
 
-        assertFalse(A.equals(BComplexSparse));
+        assertNotEquals(A, BComplexSparse);
 
         // ---------------------- Sub-case 4 ----------------------
         aEntries = new CNumber[][]{
@@ -244,7 +248,7 @@ class CMatrixEqualsTests {
         sparseShape = new Shape(A.numRows, A.numCols);
         BComplexSparse = new CooCMatrix(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
 
-        assertFalse(A.equals(BComplexSparse));
+        assertNotEquals(A, BComplexSparse);
     }
 
 
@@ -256,8 +260,8 @@ class CMatrixEqualsTests {
                 {new CNumber(67.1, 1.556), new CNumber()},
                 {new CNumber(), new CNumber(-9.431,834.1)}};
         A = new CMatrix(aEntries);
-        assertFalse(A.equals(Double.valueOf(32.45)));
-        assertFalse(A.equals(new Shape(4, 56)));
-        assertFalse(A.equals("Hello World!"));
+        assertNotEquals(A, Double.valueOf(32.45));
+        assertNotEquals(A, new Shape(4, 56));
+        assertNotEquals("Hello World!", A);
     }
 }

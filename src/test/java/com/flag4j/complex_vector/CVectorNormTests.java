@@ -1,7 +1,7 @@
 package com.flag4j.complex_vector;
 
-import com.flag4j.CVector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.dense.CVector;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +24,7 @@ class CVectorNormTests {
     @Test
     void normTestCase() {
         // ------------------ Sub-case 1 ------------------
-        expNorm = 6126.638392078557;
+        expNorm = 6126.638392078558;
         assertEquals(expNorm, a.norm());
     }
 

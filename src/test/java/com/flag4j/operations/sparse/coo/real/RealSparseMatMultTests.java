@@ -1,9 +1,9 @@
 package com.flag4j.operations.sparse.coo.real;
 
-import com.flag4j.CooMatrix;
-import com.flag4j.CooVector;
-import com.flag4j.Matrix;
-import com.flag4j.Shape;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.Matrix;
+import com.flag4j.sparse.CooMatrix;
+import com.flag4j.sparse.CooVector;
 import org.junit.jupiter.api.Test;
 
 import static com.flag4j.operations.sparse.coo.real.RealSparseMatrixMultiplication.*;

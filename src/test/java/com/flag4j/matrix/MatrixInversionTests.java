@@ -1,7 +1,7 @@
 package com.flag4j.matrix;
 
-import com.flag4j.Matrix;
-import com.flag4j.exceptions.LinearAlgebraException;
+import com.flag4j.dense.Matrix;
+import com.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,7 +23,7 @@ class MatrixInversionTests {
         };
         A = new Matrix(aEntries);
         expEntries = new double[][]{
-                {-1.734723475976807E-18, 0.5714285714285714, -0.1428571428571428},
+                {0.0, 0.5714285714285714, -0.14285714285714285},
                 {0.02127659574468085, 0.09726443768996962, -0.06686930091185411},
                 {-0.02127659574468085, -0.8115501519756839, 0.49544072948328266}
         };

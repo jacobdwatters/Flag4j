@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -59,19 +59,10 @@ public class AggregateReal {
      * @return The minimum value in the tensor.
      */
     public static double min(final double[] entries) {
-        double currMin;
+        double currMin = (entries.length==0) ? 0 : Double.MAX_VALUE;
 
-        if(entries.length!=0) {
-            currMin = Double.MAX_VALUE;
-
-            for(double value : entries) {
-                if(value < currMin) {
-                    currMin = value; // Update current minimum.
-                }
-            }
-
-        } else {
-            currMin = 0;
+        for(double value : entries) {
+            currMin = Math.min(value, currMin);
         }
 
         return currMin;
@@ -85,19 +76,10 @@ public class AggregateReal {
      * @return The maximum value in the tensor.
      */
     public static double max(final double[] entries) {
-        double currMax;
+        double currMax = (entries.length==0) ? 0 : Double.MIN_NORMAL;
 
-        if(entries.length!=0) {
-            currMax = Double.MIN_NORMAL;
-
-            for(double value : entries) {
-                if(value > currMax) {
-                    currMax = value; // Update current maximum.
-                }
-            }
-
-        } else {
-            currMax = 0;
+        for(double value : entries) {
+            currMax = Math.max(value, currMax);
         }
 
         return currMax;
@@ -111,19 +93,10 @@ public class AggregateReal {
      * @return The minimum absolute value in the tensor.
      */
     public static double minAbs(final double[] entries) {
-        double currMin;
+        double currMin = (entries.length==0) ? 0 : Double.MAX_VALUE;
 
-        if(entries.length!=0) {
-            currMin = Double.MAX_VALUE;
-
-            for(double value : entries) {
-                if(Math.abs(value) < currMin) {
-                    currMin = Math.abs(value); // Update current minimum.
-                }
-            }
-
-        } else {
-            currMin = 0;
+        for(double value : entries) {
+            currMin = Math.min(Math.abs(value), currMin);
         }
 
         return currMin;
@@ -136,13 +109,11 @@ public class AggregateReal {
      * @param entries Entries of the tensor.
      * @return The maximum absolute value in the tensor.
      */
-    public static double maxAbs(final double[] entries) {
+    public static double maxAbs(final double... entries) {
         double currMax = 0;
 
         for(double value : entries) {
-            if(Math.abs(value) > currMax) {
-                currMax = Math.abs(value); // Update current maximum.
-            }
+            currMax = Math.max(Math.abs(value), currMax);
         }
 
         return currMax;

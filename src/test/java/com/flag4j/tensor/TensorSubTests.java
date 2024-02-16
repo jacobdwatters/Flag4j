@@ -1,8 +1,12 @@
 package com.flag4j.tensor;
 
-import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.exceptions.LinearAlgebraException;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.CTensor;
+import com.flag4j.dense.Tensor;
+import com.flag4j.sparse.CooCTensor;
+import com.flag4j.sparse.CooTensor;
+import com.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -83,7 +87,7 @@ class TensorSubTests {
         bEntries = new double[]{
                 1.34, -0.0245, 8001.1
         };
-        bShape = new Shape(2, 3, 2);
+        bShape = new Shape(true,2, 3, 2);
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
@@ -92,7 +96,7 @@ class TensorSubTests {
                 1.23, 2.556, -121.5, 15.61, 14.15, -99.23425,
                 0.001345, 2.677, 8.14, -0.000194, 1, 234
         };
-        expShape = new Shape(2, 3, 2);
+        expShape = new Shape(true,2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] -= bEntries[0];
         expEntries[expShape.entriesIndex(sparseIndices[1])] -= bEntries[1];
         expEntries[expShape.entriesIndex(sparseIndices[2])] -= bEntries[2];
@@ -104,7 +108,7 @@ class TensorSubTests {
         bEntries = new double[]{
                 1.34, -0.0245, 8001.1
         };
-        bShape = new Shape(4, 3, 2);
+        bShape = new Shape(true,4, 3, 2);
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
@@ -165,7 +169,7 @@ class TensorSubTests {
         bEntries = new CNumber[]{
                 new CNumber(1, -0.2045), new CNumber(-800.145, 3204.5)
         };
-        bShape = new Shape(2, 3, 2);
+        bShape = new Shape(true,2, 3, 2);
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}
         };
@@ -174,7 +178,7 @@ class TensorSubTests {
                 new CNumber(1.23), new CNumber(2.556), new CNumber(-121.5), new CNumber(15.61), new CNumber(14.15), new CNumber(-99.23425),
                 new CNumber(0.001345), new CNumber(2.677), new CNumber(8.14), new CNumber(-0.000194), new CNumber(1), new CNumber(234)
         };
-        expShape = new Shape(2, 3, 2);
+        expShape = new Shape(true,2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])].subEq(bEntries[0]);
         expEntries[expShape.entriesIndex(sparseIndices[1])].subEq(bEntries[1]);
         exp = new CTensor(expShape, expEntries);
@@ -296,7 +300,7 @@ class TensorSubTests {
         bEntries = new double[]{
                 1.34, -0.0245, 8001.1
         };
-        bShape = new Shape(2, 3, 2);
+        bShape = new Shape(true,2, 3, 2);
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
@@ -305,7 +309,7 @@ class TensorSubTests {
                 1.23, 2.556, -121.5, 15.61, 14.15, -99.23425,
                 0.001345, 2.677, 8.14, -0.000194, 1, 234
         };
-        expShape = new Shape(2, 3, 2);
+        expShape = new Shape(true,2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] -= bEntries[0];
         expEntries[expShape.entriesIndex(sparseIndices[1])] -= bEntries[1];
         expEntries[expShape.entriesIndex(sparseIndices[2])] -= bEntries[2];

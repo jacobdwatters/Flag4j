@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,17 @@
 package com.flag4j.core;
 
 
-import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.linalg.decompositions.SVD;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.CVector;
+import com.flag4j.dense.Matrix;
+import com.flag4j.dense.Vector;
+import com.flag4j.linalg.decompositions.svd.SVD;
+import com.flag4j.sparse.CooCMatrix;
+import com.flag4j.sparse.CooCVector;
+import com.flag4j.sparse.CooMatrix;
+import com.flag4j.sparse.CooVector;
+import com.flag4j.util.ErrorMessages;
 
 
 /**
@@ -43,7 +51,7 @@ import com.flag4j.linalg.decompositions.SVD;
 public interface MatrixOperationsMixin<
         T,
         U, V, W, X extends Number,
-        TT extends VectorMixin<TT, UU, ?, ?, X, T, U, W>,
+        TT extends VectorMixin<TT, UU, ?, ?, ?, ?, ?, ?>,
         UU extends VectorMixin<UU, UU, ?, CVector, X, U, U, CMatrix>> {
 
     /**
@@ -585,7 +593,19 @@ public interface MatrixOperationsMixin<
      * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    U stack(Matrix B, int axis);
+    default U stack(Matrix B, int axis){
+        U stacked;
+
+        if(axis==0) {
+            stacked = this.augment(B);
+        } else if(axis==1) {
+            stacked = this.stack(B);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
+        }
+
+        return stacked;
+    }
 
 
     /**
@@ -600,7 +620,19 @@ public interface MatrixOperationsMixin<
      * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    T stack(CooMatrix B, int axis);
+    default T stack(CooMatrix B, int axis){
+        T stacked;
+
+        if(axis==0) {
+            stacked = this.augment(B);
+        } else if(axis==1) {
+            stacked = this.stack(B);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
+        }
+
+        return stacked;
+    }
 
 
     /**
@@ -615,7 +647,19 @@ public interface MatrixOperationsMixin<
      * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    CMatrix stack(CMatrix B, int axis);
+    default CMatrix stack(CMatrix B, int axis){
+        CMatrix stacked;
+
+        if(axis==0) {
+            stacked = this.augment(B);
+        } else if(axis==1) {
+            stacked = this.stack(B);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
+        }
+
+        return stacked;
+    }
 
 
     /**
@@ -630,7 +674,19 @@ public interface MatrixOperationsMixin<
      * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    W stack(CooCMatrix B, int axis);
+    default W stack(CooCMatrix B, int axis){
+        W stacked;
+
+        if(axis==0) {
+            stacked = this.augment(B);
+        } else if(axis==1) {
+            stacked = this.stack(B);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
+        }
+
+        return stacked;
+    }
 
 
     /**
@@ -743,7 +799,19 @@ public interface MatrixOperationsMixin<
      * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    T stack(Vector b, int axis);
+    default T stack(Vector b, int axis) {
+        T stacked;
+
+        if(axis==0) {
+            stacked = this.augment(b);
+        } else if(axis==1) {
+            stacked = this.stack(b);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
+        }
+
+        return stacked;
+    }
 
 
     /**
@@ -760,7 +828,19 @@ public interface MatrixOperationsMixin<
      * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    T stack(CooVector b, int axis);
+    default T stack(CooVector b, int axis) {
+        T stacked;
+
+        if(axis==0) {
+            stacked = this.augment(b);
+        } else if(axis==1) {
+            stacked = this.stack(b);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
+        }
+
+        return stacked;
+    }
 
 
     /**
@@ -777,7 +857,19 @@ public interface MatrixOperationsMixin<
      * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    W stack(CVector b, int axis);
+    default W stack(CVector b, int axis) {
+        W stacked;
+
+        if(axis==0) {
+            stacked = this.augment(b);
+        } else if(axis==1) {
+            stacked = this.stack(b);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
+        }
+
+        return stacked;
+    }
 
 
     /**
@@ -794,7 +886,19 @@ public interface MatrixOperationsMixin<
      * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    W stack(CooCVector b, int axis);
+    default W stack(CooCVector b, int axis) {
+        W stacked;
+
+        if(axis==0) {
+            stacked = this.augment(b);
+        } else if(axis==1) {
+            stacked = this.stack(b);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
+        }
+
+        return stacked;
+    }
 
 
     /**
@@ -855,6 +959,7 @@ public interface MatrixOperationsMixin<
      * @return The specified row of this matrix.
      */
     TT getRow(int i);
+
 
     /**
      * Get the column of this matrix at the specified index.
@@ -992,10 +1097,19 @@ public interface MatrixOperationsMixin<
     T H();
 
 
-    // This method is specified here for compatibility purposes in generic classes.
+    // This method is specified here in addition to the tensor mixin for compatibility purposes in generic classes.
     /**
      * Copies this matrix.
      * @return A deep copy of this matrix.
      */
     T copy();
+
+
+    // This method is specified here in addition to the tensor mixin for compatibility purposes in generic classes.
+    /**
+     * Computes scalar multiplication of a matrix.
+     * @param factor Scalar value to multiply with matrix.
+     * @return The result of multiplying this matrix by the specified scalar.
+     */
+    T mult(double factor);
 }

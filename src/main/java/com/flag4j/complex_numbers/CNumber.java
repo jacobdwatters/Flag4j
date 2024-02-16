@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -353,7 +353,7 @@ public class CNumber extends Number {
      * @param b The value to add to this complex number.
      */
     public void addEq(double b) {
-        this.re += b;
+        re += b;
     }
 
 
@@ -362,8 +362,8 @@ public class CNumber extends Number {
      * @param b The value to add to this complex number.
      */
     public void subEq(CNumber b) {
-        this.re -= b.re;
-        this.im -= b.im;
+        re -= b.re;
+        im -= b.im;
     }
 
 
@@ -372,7 +372,7 @@ public class CNumber extends Number {
      * @param b The value to add to this complex number.
      */
     public void subEq(double b) {
-        this.re -= b;
+        re -= b;
     }
 
 
@@ -445,8 +445,11 @@ public class CNumber extends Number {
      * @param b Second complex number in the product.
      */
     public void multEq(CNumber b) {
-        this.re = this.re*b.re - this.im*b.im;
-        this.im = this.re*b.im + this.im*b.re;
+        double tempRe = re*b.re - im*b.im;
+        double tempIm = re*b.im + im*b.re;
+
+        re = tempRe;
+        im = tempIm;
     }
 
 
@@ -456,8 +459,8 @@ public class CNumber extends Number {
      * @param b Second complex number in the product.
      */
     public void multEq(double b) {
-        this.re *= b;
-        this.im *= b;
+        re *= b;
+        im *= b;
     }
 
 
@@ -505,6 +508,42 @@ public class CNumber extends Number {
         }
 
         return quotient;
+    }
+
+
+    /**
+     * Computes the division of a complex numbers with a double value and stores in this complex number.
+     * @param b The divisor for the complex division.
+     */
+    public void divEq(double b) {
+        this.re/=b;
+        this.im/=b;
+    }
+
+
+    /**
+     * Computes the division of a complex numbers with a double value and stores in this complex number.
+     * @param b The divisor for the complex division.
+     */
+    public void divEq(CNumber b) {
+        boolean bIsNotZero = !b.equals(ZERO);
+
+        if(re==0 && im==0 && bIsNotZero) {
+            re = im = 0;
+
+        } else if(im == 0 && bIsNotZero) {
+            re/=b.re;
+            im/=b.re;
+
+        } else {
+            double divisor = b.re*b.re + b.im*b.im;
+
+            double newRe = (re*b.re + im*b.im) / divisor;
+            double newIm = (im*b.re - re*b.im) / divisor;
+
+            re = newRe;
+            im = newIm;
+        }
     }
 
 
@@ -630,6 +669,15 @@ public class CNumber extends Number {
         }
 
         return result;
+    }
+
+
+    /**
+     * Squares this magnitude of this complex number.
+     * @return The square of the magnitude of this complex number as a real value.
+     */
+    public double magSquared() {
+        return re*re + im*im;
     }
 
 
@@ -841,14 +889,9 @@ public class CNumber extends Number {
         if(value.equals(CNumber.ZERO)) {
             result = new CNumber();
 
-        } else if(value.im == 0) {
-            if(value.re > 0) {
-                result = new CNumber(1);
-            } else {
-                result = new CNumber(-1);
-            }
         } else {
-            result = value.div(value.mag());
+            double magnitude = value.mag();
+            return new CNumber(value.re / magnitude, value.im / magnitude);
         }
 
         return result;
@@ -1218,7 +1261,7 @@ public class CNumber extends Number {
      */
     public static CNumber round(CNumber n, int decimals) {
         if (decimals < 0) {
-            throw new IllegalArgumentException(ErrorMessages.negValueErr(decimals));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(decimals));
         }
 
         double real, imaginary;
@@ -1265,7 +1308,7 @@ public class CNumber extends Number {
      */
     public static boolean nearZero(CNumber n, double tol) {
         if (tol < 0) {
-            throw new IllegalArgumentException(ErrorMessages.negValueErr(tol));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(tol));
         }
 
         return n.mag() <= tol;

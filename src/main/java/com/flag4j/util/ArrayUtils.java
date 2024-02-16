@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -50,9 +50,9 @@ public final class ArrayUtils {
      */
     public static void deepCopy(int[][] src, int[][] dest) {
         ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
-        if (src.length > 0) ParameterChecks.assertArrayLengthsEq(src[0].length, dest[0].length);
 
         for (int i = 0; i < src.length; i++) {
+            dest[i] = new int[src[i].length];
             System.arraycopy(src[i], 0, dest[i], 0, src[i].length);
         }
     }
@@ -288,6 +288,7 @@ public final class ArrayUtils {
      * @param start Starting index of range to fill (inclusive).
      * @param end   Ending index of range to fill (Exclusive).
      * @param dest  Array to fill specified range with zeros.
+     * @throws ArrayIndexOutOfBoundsException If {@code start} or {@code end} are out of range for the provided array.
      */
     public static void fillZeros(CNumber[] dest, int start, int end) {
         for (int i = start; i < end; i++) {

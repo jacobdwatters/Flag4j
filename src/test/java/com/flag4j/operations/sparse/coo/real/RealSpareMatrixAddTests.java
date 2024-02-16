@@ -1,10 +1,10 @@
 package com.flag4j.operations.sparse.coo.real;
 
-import com.flag4j.CooMatrix;
-import com.flag4j.Shape;
+import com.flag4j.core.Shape;
+import com.flag4j.sparse.CooMatrix;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RealSpareMatrixAddTests {
 

@@ -1,8 +1,12 @@
 package com.flag4j.vector;
 
-import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.io.PrintOptions;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.CVector;
+import com.flag4j.dense.Matrix;
+import com.flag4j.dense.Vector;
+import com.flag4j.sparse.CooCVector;
+import com.flag4j.sparse.CooVector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,8 +46,6 @@ class VectorOuterProductTests {
         CooVector b;
         double[][] expEntries;
         Matrix exp;
-
-        PrintOptions.setPrecision(500);
 
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[]{1.0, 5.6, -9.355};

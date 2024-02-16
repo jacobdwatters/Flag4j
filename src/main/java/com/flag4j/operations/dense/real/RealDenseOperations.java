@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,9 +24,8 @@
 
 package com.flag4j.operations.dense.real;
 
-import com.flag4j.Shape;
+import com.flag4j.core.Shape;
 import com.flag4j.operations.common.real.RealOperations;
-import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -78,8 +77,9 @@ public final class RealDenseOperations {
     public static double[] sub(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         ParameterChecks.assertEqualShape(shape1, shape2);
         double[] sum = new double[src1.length];
+        int length = sum.length;
 
-        for(int i=0; i<sum.length; i++) {
+        for(int i=0; i<length; i++) {
             sum[i] = src1[i] - src2[i];
         }
 
@@ -95,8 +95,9 @@ public final class RealDenseOperations {
      */
     public static double[] sub(double[] src, double b) {
         double[] sum = new double[src.length];
+        int length = sum.length;
 
-        for(int i=0; i<src.length; i++) {
+        for(int i=0; i<length; i++) {
             sum[i] = src[i] - b;
         }
 
@@ -114,8 +115,9 @@ public final class RealDenseOperations {
      */
     public static void subEq(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         ParameterChecks.assertEqualShape(shape1, shape2);
+        int length = src1.length;
 
-        for(int i=0; i<src1.length; i++) {
+        for(int i=0; i<length; i++) {
             src1[i] -= src2[i];
         }
     }
@@ -127,7 +129,8 @@ public final class RealDenseOperations {
      * @param b Scalar to subtract.
      */
     public static void subEq(double[] src, double b) {
-        for(int i=0; i<src.length; i++) {
+        int length = src.length;
+        for(int i=0; i<length; i++) {
             src[i] -= b;
         }
     }
@@ -143,8 +146,8 @@ public final class RealDenseOperations {
      */
     public static void addEq(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         ParameterChecks.assertEqualShape(shape1, shape2);
-
-        for(int i=0; i<src1.length; i++) {
+        int length = src1.length;
+        for(int i=0; i<length; i++) {
             src1[i] += src2[i];
         }
     }
@@ -156,7 +159,8 @@ public final class RealDenseOperations {
      * @param b Scalar to add.
      */
     public static void addEq(double[] src, double b) {
-        for(int i=0; i<src.length; i++) {
+        int length = src.length;
+        for(int i=0; i<length; i++) {
             src[i] += b;
         }
     }
@@ -169,8 +173,9 @@ public final class RealDenseOperations {
      */
     public static double prod(double[] src) {
         double product;
+        int length = src.length;
 
-        if(src.length > 0) {
+        if(length > 0) {
             product=1;
             for(double value : src) {
                 product *= value;
@@ -224,8 +229,8 @@ public final class RealDenseOperations {
 
         double norm = 0;
         double colSum;
-        int rows = shape.dims[Axis2D.row()];
-        int cols = shape.dims[Axis2D.col()];
+        int rows = shape.dims[0];
+        int cols = shape.dims[1];
 
         for(int j=0; j<cols; j++) {
             colSum=0;
@@ -240,62 +245,6 @@ public final class RealDenseOperations {
 
 
     /**
-     * Compute the L<sub>p</sub> norm of a matrix. This is equivalent to passing {@code q=1} to
-     * {@link RealDenseOperations#matrixNormLpq(double[], Shape, double, double)}
-     * @param src Entries of the matrix.
-     * @param shape Shape of the matrix.
-     * @param p Parameter in L<sub>p</sub> norm.
-     * @return The L<sub>p</sub> norm of the matrix.
-     * @throws IllegalArgumentException If {@code p} is less than 1.
-     */
-    public static double matrixNormLp(double[] src, Shape shape, double p) {
-        ParameterChecks.assertGreaterEq(1, p);
-
-        double norm = 0;
-        double colSum;
-        int rows = shape.dims[Axis2D.row()];
-        int cols = shape.dims[Axis2D.col()];
-
-        for(int j=0; j<cols; j++) {
-            colSum=0;
-            for(int i=0; i<rows; i++) {
-                colSum += Math.pow(Math.abs(src[i*cols + j]), p);
-            }
-
-            norm += Math.pow(colSum, 1.0/p);
-        }
-
-        return norm;
-    }
-
-
-    /**
-     * Compute the L<sub>2</sub> norm of a matrix. This is equivalent to passing {@code p=2, q=2} to
-     * {@link RealDenseOperations#matrixNormLpq(double[], Shape, double, double)}
-     * @param src Entries of the matrix.
-     * @param shape Shape of the matrix.
-     * @return The L<sub>2</sub> norm of the matrix.
-     */
-    public static double matrixNormL2(double[] src, Shape shape) {
-        double norm = 0;
-        int rows = shape.dims[Axis2D.row()];
-        int cols = shape.dims[Axis2D.col()];
-
-        double colSum;
-
-        for(int j=0; j<cols; j++) {
-            colSum = 0;
-            for(int i=0; i<rows; i++) {
-                colSum += Math.pow(src[i*cols + j], 2);
-            }
-            norm += Math.sqrt(colSum);
-        }
-
-        return norm;
-    }
-
-
-    /**
      * Computes the L<sub>2</sub> norm of a tensor.
      * @param src Entries of the tensor.
      * @return The L<sub>2</sub> norm of the tensor.
@@ -304,7 +253,7 @@ public final class RealDenseOperations {
         double norm = 0;
 
         for(double value : src) {
-            norm += Math.pow(value, 2);
+            norm += Math.pow(Math.abs(value), 2);
         }
 
         return Math.sqrt(norm);
@@ -318,10 +267,11 @@ public final class RealDenseOperations {
      * @return The L<sub>p</sub> norm of the tensor.
      */
     public static double tensorNormLp(double[] src, double p) {
+        ParameterChecks.assertNotEquals(0, p);
         double norm = 0;
 
         for(double value : src) {
-            norm += Math.pow(value, p);
+            norm += Math.pow(Math.abs(value), p);
         }
 
         return Math.pow(norm, 1.0/p);
@@ -345,8 +295,8 @@ public final class RealDenseOperations {
      * @return The infinity norm of the matrix.
      */
     public static double matrixInfNorm(double[] src, Shape shape) {
-        int rows = shape.dims[Axis2D.row()];
-        int cols = shape.dims[Axis2D.col()];
+        int rows = shape.dims[0];
+        int cols = shape.dims[1];
         double[] rowSums = new double[rows];
 
         for(int i=0; i<rows; i++) {
@@ -366,9 +316,10 @@ public final class RealDenseOperations {
      * @return The tensor scalar addition.
      */
     public static double[] add(double[] src, double b) {
-        double[] sum = new double[src.length];
+        int length = src.length;
+        double[] sum = new double[length];
 
-        for(int i=0; i<src.length; i++) {
+        for(int i=0; i<length; i++) {
             sum[i] = src[i] + b;
         }
 

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +25,13 @@
 package com.flag4j.operations.dense.complex;
 
 
-import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
-import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.Matrix;
 import com.flag4j.linalg.Decompose;
+import com.flag4j.linalg.decompositions.lu.LUDecomposition;
+import com.flag4j.linalg.decompositions.lu.RealLUDecomposition;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -52,7 +54,7 @@ public class ComplexDenseDeterminant {
      * @throws IllegalArgumentException If matrix is not square.
      */
     public static CNumber det(CMatrix A) {
-        ParameterChecks.assertSquare(A.shape);
+        ParameterChecks.assertSquareMatrix(A.shape);
         CNumber det;
 
         switch (A.numRows) {
@@ -81,7 +83,7 @@ public class ComplexDenseDeterminant {
      * @throws IllegalArgumentException If matrix is not square.
      */
     public static CNumber detLU(CMatrix A) {
-        ParameterChecks.assertSquare(A.shape);
+        ParameterChecks.assertSquareMatrix(A.shape);
         CMatrix[] LU = Decompose.lu(A);
 
         return detLU(LU[0].toReal(), LU[1], LU[2]);
@@ -111,8 +113,8 @@ public class ComplexDenseDeterminant {
      * @param U Upper triangular matrix.
      * @return The determinant of the matrix which has been factored into a unit lower triangular matrix {@code L}
      * and an upper triangular matrix {@code U}.
-     * @see com.flag4j.linalg.decompositions.LUDecomposition
-     * @see com.flag4j.linalg.decompositions.RealLUDecomposition
+     * @see LUDecomposition
+     * @see RealLUDecomposition
      */
     public static CNumber detLU(CMatrix L, CMatrix U) {
         CNumber detU = new CNumber(1);

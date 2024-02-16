@@ -1,9 +1,9 @@
 package com.flag4j.complex_tensor;
 
-import com.flag4j.CTensor;
-import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.exceptions.LinearAlgebraException;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.CTensor;
+import com.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -156,11 +156,11 @@ class CTensorDotTests {
         expShape = new Shape(2, 2, 4, 2);
         exp = new CTensor(expShape, expEntries);
 
-        assertEquals(exp, A.dot(B));
+        assertEquals(exp, A.tensorDot(B));
 
         // --------------------- Sub-case 1 ---------------------
         A = A.reshape(2, 2, 3);
         B = B.reshape(4, 2, 3);
-        assertThrows(IllegalArgumentException.class, ()->A.dot(B));
+        assertThrows(LinearAlgebraException.class, ()->A.tensorDot(B));
     }
 }

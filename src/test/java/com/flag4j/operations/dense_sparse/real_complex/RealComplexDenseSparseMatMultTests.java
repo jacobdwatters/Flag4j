@@ -1,10 +1,15 @@
 package com.flag4j.operations.dense_sparse.real_complex;
 
-import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.Matrix;
+import com.flag4j.sparse.CooCMatrix;
+import com.flag4j.sparse.CooMatrix;
+import com.flag4j.sparse.CooVector;
 import org.junit.jupiter.api.Test;
 
-import static com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication.*;
+import static com.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class RealComplexDenseSparseMatMultTests {

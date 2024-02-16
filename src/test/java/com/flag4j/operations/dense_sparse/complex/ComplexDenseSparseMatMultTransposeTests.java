@@ -1,7 +1,12 @@
 package com.flag4j.operations.dense_sparse.complex;
 
-import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.CVector;
+import com.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixMultTranspose;
+import com.flag4j.sparse.CooCMatrix;
+import com.flag4j.sparse.CooCVector;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

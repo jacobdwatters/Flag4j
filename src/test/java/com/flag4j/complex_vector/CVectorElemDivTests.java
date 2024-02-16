@@ -1,9 +1,9 @@
 package com.flag4j.complex_vector;
 
-import com.flag4j.CVector;
-import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.exceptions.LinearAlgebraException;
+import com.flag4j.dense.CVector;
+import com.flag4j.dense.Vector;
+import com.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

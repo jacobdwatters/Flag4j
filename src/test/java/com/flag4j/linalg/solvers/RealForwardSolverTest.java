@@ -1,9 +1,10 @@
 package com.flag4j.linalg.solvers;
 
-import com.flag4j.Matrix;
-import com.flag4j.Vector;
-import com.flag4j.exceptions.LinearAlgebraException;
-import com.flag4j.exceptions.SingularMatrixException;
+import com.flag4j.dense.Matrix;
+import com.flag4j.dense.Vector;
+import com.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
+import com.flag4j.util.exceptions.LinearAlgebraException;
+import com.flag4j.util.exceptions.SingularMatrixException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -132,8 +133,8 @@ class RealForwardSolverTest {
                 {582.6772744761905, -2351.5154069047617, 667579.2104547619},
                 {-7.706842857142858, 28.955732142857148, -4.339107142857143},
                 {80448.99855450512, -324667.19996819267, 9.217477511851482E7},
-                {-574777.0750422318, 2319812.2611380727, -6.577871287236997E8},
-                {5.0738121751018417E8, -2.0478013119683797E9, 5.806578804847219E11}
+                {-574777.0750422318, 2319812.2611380727, -6.577871287236996E8},
+                {5.0738121751018417E8, -2.0478013119683797E9, 5.806578804847218E11}
         };
         exp = new Matrix(expEntries);
 

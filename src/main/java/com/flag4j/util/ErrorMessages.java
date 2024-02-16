@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,8 +25,9 @@
 package com.flag4j.util;
 
 
-import com.flag4j.Shape;
+import com.flag4j.core.Shape;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 
 /**
@@ -70,6 +71,10 @@ public abstract class ErrorMessages {
      * Error message for a negative value when a non-negative was expected.
      */
     private static final String NEG_VALUE_ERR = "Expecting value to be non-negative but got %s";
+    /**
+     * Error message for a non-positive value when a positive non-zero value is expected.
+     */
+    private static final String NON_POS_ERR = "Expecting value to be positive but got %s";
     /**
      * Error message for disallowed axis.
      */
@@ -120,6 +125,10 @@ public abstract class ErrorMessages {
      * Error message for named parameter which is expected to be less than or equal to some threshold.
      */
     private static final String NAMED_LESS_EQ_ERR = "Expecting %s to be less than or equal to %f but got %f.";
+    /**
+     * Error message for named parameter which is expected to be less than or equal to some threshold.
+     */
+    private static final String NAMED_LESS_EQ_BI_ERR = "Expecting %s to be less than or equal to %s but got %f.";
     /**
      * Error message for parameters which are expected to be square.
      */
@@ -195,8 +204,18 @@ public abstract class ErrorMessages {
      * @param value Negative value.
      * @return An error message for a negative value.
      */
-    public static String negValueErr(double value) {
+    public static String getNegValueErr(double value) {
         return String.format(NEG_VALUE_ERR, value);
+    }
+
+
+    /**
+     * Gets an error message for a non-positive value when a positive, non-zero value was expected.
+     * @param value Non-positive value.
+     * @return An error message for a Non-positive value.
+     */
+    public static String getNonPosErr(double value) {
+        return String.format(NON_POS_ERR, value);
     }
 
 
@@ -328,6 +347,18 @@ public abstract class ErrorMessages {
      */
     public static String getNamedLessEqErr(double threshold, double value, String name) {
         return String.format(NAMED_LESS_EQ_ERR, name, threshold, value);
+    }
+
+
+    /**
+     * Gets an error message for a value which was expected to be less than of equal to a specified threshold but wasn't.
+     * @param threshold Threshold value.
+     * @param value Value expected to be less than or equal to the threshold value.
+     * @return An error message for a value which was expected to be greater than of equal to a
+     * specified threshold but wasn't.
+     */
+    public static String getNamedLessEqErr(BigInteger threshold, double value, String name) {
+        return String.format(NAMED_LESS_EQ_BI_ERR, name, threshold, value);
     }
 
 

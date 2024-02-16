@@ -1,7 +1,8 @@
 package com.flag4j;
 
 import com.flag4j.core.MatrixMixin;
-import com.flag4j.core.dense.DenseTensorBase;
+import com.flag4j.core.dense_base.DenseTensorBase;
+import com.flag4j.dense.CMatrix;
 
 import java.util.ArrayList;
 import java.util.Arrays;

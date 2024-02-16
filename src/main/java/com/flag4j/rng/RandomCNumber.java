@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -119,7 +119,7 @@ public class RandomCNumber extends Random {
      * deviation of 1.0.
      */
     public CNumber randn() {
-        return random(nextGaussian());
+        return random(Math.abs(nextGaussian()));
     }
 
 

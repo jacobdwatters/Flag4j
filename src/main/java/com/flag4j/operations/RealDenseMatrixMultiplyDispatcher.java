@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,8 @@
 
 package com.flag4j.operations;
 
-import com.flag4j.Matrix;
-import com.flag4j.Shape;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.Matrix;
 import com.flag4j.operations.dense.real.RealDenseMatrixMultTranspose;
 import com.flag4j.operations.dense.real.RealDenseMatrixMultiplication;
 import com.flag4j.util.Axis2D;
@@ -120,6 +120,23 @@ public final class RealDenseMatrixMultiplyDispatcher {
         RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();
         AlgorithmNames name = selectAlgorithm(A.shape, B.shape);
         return dispatcher.algorithmMap.get(name).apply(A.entries, A.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Dispatches a matrix multiply problem to the appropriate algorithm based on the size of the matrices.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape of the second matrix.
+     * @return The result of the matrix multiplication.
+     */
+    public static double[] dispatch(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+        assertMatMultShapes(shape1, shape2); // Ensure matrix shapes are conducive to matrix multiplication.
+
+        RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();
+        AlgorithmNames name = selectAlgorithm(shape1, shape2);
+        return dispatcher.algorithmMap.get(name).apply(src1, shape1, src2, shape2);
     }
 
 

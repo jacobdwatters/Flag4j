@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,11 @@
 
 package com.flag4j.linalg;
 
-import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.linalg.decompositions.ComplexLUDecomposition;
-import com.flag4j.linalg.decompositions.RealLUDecomposition;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.Matrix;
+import com.flag4j.linalg.decompositions.lu.ComplexLUDecomposition;
+import com.flag4j.linalg.decompositions.lu.RealLUDecomposition;
 
 /**
  * This class contains several methods for computing row echelon, reduced row echelon, and extended reduced row echelon

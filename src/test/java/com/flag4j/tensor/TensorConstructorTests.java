@@ -1,9 +1,9 @@
 package com.flag4j.tensor;
 
-import com.flag4j.Matrix;
-import com.flag4j.Shape;
-import com.flag4j.Tensor;
-import com.flag4j.Vector;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.Matrix;
+import com.flag4j.dense.Tensor;
+import com.flag4j.dense.Vector;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

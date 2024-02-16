@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -46,12 +46,16 @@ public class VectorNorms {
      */
     public static double norm(double... src) {
         double norm = 0;
+        double maxAbs = AggregateReal.maxAbs(src);
+        if(maxAbs == 0) return 0; // Early return for zero norm.
 
+        // Compute norm as a = |max(src)|, ||src|| = a*||src * (1/a)|| to help protect against overflow.
         for(double v : src) {
-            norm += v*v;
+            double vScaled = v/maxAbs;
+            norm += vScaled*vScaled;
         }
 
-        return Math.sqrt(norm);
+        return Math.sqrt(norm)*maxAbs;
     }
 
 
@@ -62,14 +66,18 @@ public class VectorNorms {
      */
     public static double norm(CNumber... src) {
         double norm = 0;
-        double mag;
+        double scaledMag;
+        double maxAbs = AggregateComplex.maxAbs(src);
 
+        if(maxAbs == 0) return 0; // Early return for zero norm.
+
+        // Compute norm as a = |max(src)|, ||src|| = a*||src * (1/a)|| to help protect against overflow.
         for(CNumber cNumber : src) {
-            mag = cNumber.mag();
-            norm += mag*mag;
+            scaledMag = cNumber.mag() / maxAbs;
+            norm += scaledMag*scaledMag;
         }
 
-        return Math.sqrt(norm);
+        return Math.sqrt(norm)*maxAbs;
     }
 
 

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -148,7 +148,9 @@ interface TensorOperationsMixin<T, U, W, Z, Y, X extends Number> {
      * Computes the transpose of a tensor. Same as {@link #T()}.
      * @return The transpose of this tensor.
      */
-    T transpose();
+    default T transpose(){
+        return T();
+    }
 
 
     /**

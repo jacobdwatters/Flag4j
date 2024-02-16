@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,10 @@
 
 package com.flag4j.operations.dense.real;
 
-import com.flag4j.Matrix;
-import com.flag4j.Shape;
-import com.flag4j.linalg.decompositions.LUDecomposition;
-import com.flag4j.linalg.decompositions.RealLUDecomposition;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.Matrix;
+import com.flag4j.linalg.decompositions.lu.LUDecomposition;
+import com.flag4j.linalg.decompositions.lu.RealLUDecomposition;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -50,21 +50,28 @@ public class RealDenseDeterminant {
      * @throws IllegalArgumentException If matrix is not square.
      */
     public static double det(Matrix A) {
-        ParameterChecks.assertSquare(A.numRows, A.numCols);
+        int rows = A.numRows;
+        ParameterChecks.assertSquareMatrix(rows, A.numCols);
 
-        if (A.numRows == 1) {
-            return A.entries[0];
-        } else if (A.numRows == 2) {
-            return A.entries[0] * A.entries[3] - A.entries[1] * A.entries[2];
-        } else if (A.numRows == 3) {
-            double det = A.entries[0] * (A.entries[4] * A.entries[8] - A.entries[5] * A.entries[7]);
-            det -= A.entries[1] * (A.entries[3] * A.entries[8] - A.entries[5] * A.entries[6]);
-            return det + A.entries[2] * (A.entries[3] * A.entries[7] - A.entries[4] * A.entries[6]);
-        } else {
-            LUDecomposition<Matrix> lu = new RealLUDecomposition().decompose(A);
-            // Compute the determinant of P. (Check if lowest bit is zero to determine parity)
-            double detP = (lu.getNumRowSwaps() & 1) == 0 ? 1 : -1;
-            return detP * detTri(lu.getLU());
+        switch(rows) {
+            case 1: // 1x1 determinant
+                return A.entries[0];
+            case 2: // 2x2 determinant
+                return A.entries[0] * A.entries[3] - A.entries[1] * A.entries[2];
+            case 3: // 3x3 determinant
+                double a3 = A.entries[3];
+                double a4 = A.entries[4];
+                double a5 = A.entries[5];
+                double a6 = A.entries[6];
+                double a7 = A.entries[7];
+                double a8 = A.entries[8];
+
+                return A.entries[0]*(a4*a8 - a5*a7) - A.entries[1]*(a3*a8 - a5*a6) + A.entries[2]*(a3*a7 - a4*a6);
+            default:
+                LUDecomposition<Matrix> lu = new RealLUDecomposition().decompose(A);
+                // Compute the determinant of P. (Check if lowest bit is zero to determine parity)
+                double detP = (lu.getNumRowSwaps() & 1) == 0 ? 1 : -1;
+                return detP * detTri(lu.getLU());
         }
     }
 
@@ -77,7 +84,7 @@ public class RealDenseDeterminant {
      * @throws IllegalArgumentException If matrix is not square.
      */
     public static double detLU(Matrix A) {
-        ParameterChecks.assertSquare(A.numRows, A.numCols);
+        ParameterChecks.assertSquareMatrix(A.numRows, A.numCols);
 
         RealLUDecomposition lu = new RealLUDecomposition();
         lu.decompose(A);
@@ -159,9 +166,10 @@ public class RealDenseDeterminant {
     public static double detTri(Matrix A) {
         double det = 1;
         int step = A.numCols + 1;
+        int size =  A.entries.length;
 
         // Compute the determinant of U
-        for (int i = 0; i < A.entries.length; i += step) {
+        for (int i=0; i<size; i += step) {
             det *= A.entries[i];
         }
 

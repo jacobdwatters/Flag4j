@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,6 @@ package com.flag4j.concurrency;
 
 import com.flag4j.util.ErrorMessages;
 
-import java.util.concurrent.ForkJoinPool;
-
 /**
  * Configurations for standard and concurrent operations.
  */
@@ -39,7 +37,7 @@ public abstract class Configurations {
     /**
      * The default number of threads to use for concurrent algorithms.
      */
-    private static final int DEFAULT_NUM_THREADS = Runtime.getRuntime().availableProcessors();
+    public static final int DEFAULT_NUM_THREADS = Runtime.getRuntime().availableProcessors();
     /**
      * The default block size for blocked algorithms.
      */
@@ -69,8 +67,8 @@ public abstract class Configurations {
      * @return The new value of numThreads, i.e. the number of available processors.
      */
     public static int setNumThreadsAsAvailableProcessors() {
-        ThreadManager.threadPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
-        return ThreadManager.threadPool.getParallelism();
+        ThreadManager.setParallelismLevel(Runtime.getRuntime().availableProcessors());
+        return ThreadManager.getParallelismLevel();
     }
 
 
@@ -79,7 +77,7 @@ public abstract class Configurations {
      * @return Current number of threads to use in concurrent algorithms.
      */
     public static int getNumThreads() {
-        return ThreadManager.threadPool.getParallelism();
+        return ThreadManager.getParallelismLevel();
     }
 
 
@@ -88,7 +86,7 @@ public abstract class Configurations {
      * @param numThreads Number of threads to use in concurrent algorithms.
      */
     public static void setNumThreads(int numThreads) {
-        ThreadManager.threadPool = new ForkJoinPool(Math.max(1, numThreads));
+        ThreadManager.setParallelismLevel(numThreads);
     }
 
 
@@ -132,7 +130,7 @@ public abstract class Configurations {
      * Resets all configurations to their default values.
      */
     public static void resetAll() {
-        ThreadManager.threadPool = new ForkJoinPool(DEFAULT_NUM_THREADS);
+        ThreadManager.setParallelismLevel(DEFAULT_NUM_THREADS);
         blockSize = DEFAULT_BLOCK_SIZE;
         minRecursiveSize = DEFAULT_MIN_RECURSIVE_SIZE;
     }

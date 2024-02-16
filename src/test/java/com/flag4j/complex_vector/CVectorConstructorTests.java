@@ -1,9 +1,9 @@
 package com.flag4j.complex_vector;
 
-import com.flag4j.CVector;
-import com.flag4j.Shape;
-import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.CVector;
+import com.flag4j.dense.Vector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,7 +39,7 @@ class CVectorConstructorTests {
 
         // ----------- Sub-case 2 ------------
         expSize = 0;
-        expShape = new Shape(new int[]{expSize});
+        expShape = new Shape(expSize);
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber();
@@ -106,7 +106,7 @@ class CVectorConstructorTests {
         // ----------- Sub-case 1 ------------
         expSize = 5;
         fillValueD = 10.234;
-        expShape = new Shape(new int[]{expSize});
+        expShape = new Shape(expSize);
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber(fillValueD);
@@ -123,7 +123,7 @@ class CVectorConstructorTests {
         // ----------- Sub-case 2 ------------
         expSize = 0;
         fillValueD = -10.234;
-        expShape = new Shape(new int[]{expSize});
+        expShape = new Shape(expSize);
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber(fillValueD);

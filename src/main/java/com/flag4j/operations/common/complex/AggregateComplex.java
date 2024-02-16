@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -85,13 +85,11 @@ public class AggregateComplex {
      * @param entries Entries of the tensor.
      * @return The maximum absolute value in the tensor.
      */
-    public static double maxAbs(final CNumber[] entries) {
+    public static double maxAbs(final CNumber... entries) {
         double currMax = 0;
 
         for(CNumber value : entries) {
-            if(value.mag() > currMax) {
-                currMax = value.mag(); // Update current maximum.
-            }
+            currMax = Math.max(currMax, value.mag());
         }
 
         return currMax;

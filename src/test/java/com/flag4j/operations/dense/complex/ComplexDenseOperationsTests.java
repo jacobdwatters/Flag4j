@@ -1,9 +1,9 @@
 package com.flag4j.operations.dense.complex;
 
-import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.exceptions.LinearAlgebraException;
+import com.flag4j.core.Shape;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
+import com.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static com.flag4j.operations.common.complex.AggregateComplex.sum;

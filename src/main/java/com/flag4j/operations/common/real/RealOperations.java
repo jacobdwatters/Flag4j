@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -47,13 +47,46 @@ public class RealOperations {
      * @return The scalar multiplication of the tensor.
      */
     public static double[] scalMult(double[] src, double factor) {
-        double[] product = new double[src.length];
+        return scalMult(src, null, factor);
+    }
 
-        for(int i=0; i<product.length; i++) {
-            product[i] = src[i]*factor;
-        }
 
-        return product;
+    /**
+     * Computes the scalar multiplication of a tensor.
+     * @param src Entries of the tensor.
+     * @param dest Array to store result in. May be null.
+     * @param factor Scalar value to multiply.
+     * @return A reference to the {@code dest} array if it was not null. Otherwise, a new array will be formed.
+     * @throws ArrayIndexOutOfBoundsException If {@code dest} is not at least the size of {@code src}.
+     */
+    public static double[] scalMult(double[] src, double[] dest, double factor) {
+        int size = src.length;
+        if(dest==null) dest = new double[size];
+
+        for(int i=0; i<size; i++)
+            dest[i] = src[i]*factor;
+
+        return dest;
+    }
+
+
+    /**
+     * Computes the scalar multiplication of a tensor.
+     * @param src Entries of the tensor.
+     * @param dest Array to store result in. May be null.
+     * @param factor Scalar value to multiply.
+     * @param start Starting index of scalar multiplication.
+     * @param stop Stopping index of scalar multiplication.
+     * @return A reference to the {@code dest} array if it was not null. Otherwise, a new array will be formed.
+     * @throws ArrayIndexOutOfBoundsException If {@code dest} is not the size of {@code src}.
+     */
+    public static double[] scalMult(double[] src, double[] dest, double factor, int start, int stop) {
+        if(dest==null) dest = new double[src.length];
+
+        for(int i=start; i<stop; i++)
+            dest[i] = src[i]*factor;
+
+        return dest;
     }
 
 
@@ -133,7 +166,7 @@ public class RealOperations {
      */
     public static double[] round(double[] src, int precision) {
         if(precision<0) {
-            throw new IllegalArgumentException(ErrorMessages.negValueErr(precision));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(precision));
         }
 
         BigDecimal bd;
@@ -159,7 +192,7 @@ public class RealOperations {
      */
     public static double[] roundToZero(double[] src, double threshold) {
         if(threshold<0) {
-            throw new IllegalArgumentException(ErrorMessages.negValueErr(threshold));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(threshold));
         }
 
         double[] dest = new double[src.length];

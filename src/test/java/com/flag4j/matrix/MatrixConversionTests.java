@@ -1,10 +1,10 @@
 package com.flag4j.matrix;
 
 
-import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
-import com.flag4j.Tensor;
-import com.flag4j.Vector;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.Matrix;
+import com.flag4j.dense.Tensor;
+import com.flag4j.dense.Vector;
 import com.flag4j.util.ArrayUtils;
 import org.junit.jupiter.api.Test;
 

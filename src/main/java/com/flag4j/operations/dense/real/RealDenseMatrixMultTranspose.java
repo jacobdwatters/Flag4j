@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,9 @@
 
 package com.flag4j.operations.dense.real;
 
-import com.flag4j.Shape;
 import com.flag4j.concurrency.Configurations;
 import com.flag4j.concurrency.ThreadManager;
-import com.flag4j.util.Axis2D;
+import com.flag4j.core.Shape;
 import com.flag4j.util.ErrorMessages;
 
 /**
@@ -53,9 +52,9 @@ public class RealDenseMatrixMultTranspose {
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
     public static double[] multTranspose(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int rows2 = shape2.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int rows2 = shape2.dims[0];
+        int cols2 = shape2.dims[1];
 
         double[] dest = new double[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.
         int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
@@ -90,9 +89,9 @@ public class RealDenseMatrixMultTranspose {
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
     public static double[] multTransposeBlocked(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int rows2 = shape2.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int rows2 = shape2.dims[0];
+        int cols2 = shape2.dims[1];
 
         double[] dest = new double[rows1 * rows2];
         int blockSize = Configurations.getBlockSize();
@@ -145,9 +144,9 @@ public class RealDenseMatrixMultTranspose {
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
     public static double[] multTransposeConcurrent(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int rows2 = shape2.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int rows2 = shape2.dims[0];
+        int cols2 = shape2.dims[1];
 
         double[] dest = new double[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.
 
@@ -181,9 +180,9 @@ public class RealDenseMatrixMultTranspose {
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
     public static double[] multTransposeBlockedConcurrent(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int rows2 = shape2.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int rows2 = shape2.dims[0];
+        int cols2 = shape2.dims[1];
 
         double[] dest = new double[rows1*rows2];
         int blockSize = Configurations.getBlockSize();

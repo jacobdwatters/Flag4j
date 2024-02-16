@@ -1,8 +1,8 @@
 package com.flag4j.complex_matrix;
 
-import com.flag4j.CMatrix;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.exceptions.LinearAlgebraException;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,9 +23,9 @@ class CMatrixInversionTests {
         };
         A = new CMatrix(aEntries);
         expEntries = new CNumber[][]{
-                {new CNumber(-0.020890310281788768, -0.08401682835191364), new CNumber(0.03041740044745477, 0.00290515089267757), new CNumber(-0.011345283148180457, 0.020625927995890685)},
-                {new CNumber(0.1502148762820325, 0.01519693661063067), new CNumber(-0.00881122784258471, -0.004051902797816908), new CNumber(-0.007622836636394525, -0.008153804836961875)},
-                {new CNumber(0.021439567207676365, 0.09645349255347833), new CNumber(-2.3065935238219268E-4, -0.002301110100512131), new CNumber(0.008806824872674934, -0.029115034319768644)}
+                {new CNumber(-0.020890310281788768, -0.08401682835191364), new CNumber(0.030417400447454772, 0.00290515089267757), new CNumber(-0.011345283148180455, 0.020625927995890685)},
+                {new CNumber(0.1502148762820325, 0.01519693661063067), new CNumber(-0.008811227842584712, -0.004051902797816908), new CNumber(-0.007622836636394531, -0.008153804836961882)},
+                {new CNumber(0.021439567207676365, 0.09645349255347833), new CNumber(-2.306593523821924E-4, -0.002301110100512132), new CNumber(0.008806824872674935, -0.029115034319768644)}
         };
         exp = new CMatrix(expEntries);
         assertEquals(exp, A.inv());

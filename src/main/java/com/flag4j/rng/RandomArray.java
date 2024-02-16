@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024. Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.flag4j.rng;
 
 import com.flag4j.complex_numbers.CNumber;
@@ -5,6 +29,8 @@ import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ParameterChecks;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class contains methods useful for generating arrays filled with random values.
@@ -61,9 +87,10 @@ public final class RandomArray {
      */
     public double[] genUniformRealArray(int length, double min, double max) {
         double[] values = new double[length];
+        double maxMin = max-min;
 
         for(int i=0; i<length; i++) {
-            values[i] = rng.nextDouble()*(max - min) + min;
+            values[i] = rng.nextDouble()*maxMin + min;
         }
 
         return values;
@@ -98,9 +125,10 @@ public final class RandomArray {
      */
     public int[] genUniformRealIntArray(int length, int min, int max) {
         int[] values = new int[length];
+        int maxMinDiff = max - min;
 
         for(int i=0; i<length; i++) {
-            values[i] = rng.nextInt(max - min) + min;
+            values[i] = rng.nextInt(maxMinDiff) + min;
         }
 
         return values;
@@ -258,9 +286,13 @@ public final class RandomArray {
      * @see #randomUniqueIndices(int, int, int)
      */
     public int[][] randomUniqueIndices2D(int numIndices, int rowStart, int rowEnd, int colStart, int colEnd) {
+        ParameterChecks.assertGreaterEq(0, numIndices);
+        ParameterChecks.assertLessEq((rowEnd-rowStart)*(colEnd-colStart), numIndices);
+
         int[] colIndices = new int[numIndices];
-        int[] rowIndices = genUniformRealIntArray(numIndices, rowStart, rowEnd); // Get random row indices.
-        Arrays.sort(rowIndices);
+//        int[] rowIndices = genUniformRealIntArray(numIndices, rowStart, rowEnd); // Get random row indices.
+//        Arrays.sort(rowIndices);
+        int[] rowIndices = genRandomRows(numIndices, rowStart, rowEnd, colEnd-colStart);
 
         // Generate unique column indices for each row index.
         int idx = 0;
@@ -280,11 +312,44 @@ public final class RandomArray {
 
 
     /**
+     * Helper function to generate random row indices for use in {@link #randomUniqueIndices2D(int, int, int, int, int)}.
+     * This method generates random row indices so that a single row is not repeated more than {@code maxReps} times.
+     * @param numIndices Number of indices to generate. Assumed to be less than or equal to {@code rowEnd - rowStart}.
+     * @param rowStart Minimum row index. Assumed that {@code 0 <= rowStart < rowEnd}.
+     * @param rowEnd Maximum row index. Assumed that {@code 0 <= rowStart < rowEnd}.
+     * @param maxReps Maximum number of times a single row index can be repeated.
+     * @return An array containing random row indices such that no index is repeated more than {@code maxReps} times.
+     * Note: the array is sorted before it is returned.
+     */
+    private int[] genRandomRows(int numIndices, int rowStart, int rowEnd, int maxReps) {
+        int[] rowIndices = new int[numIndices];
+        int maxMinDiff = rowEnd - rowStart;
+        int validCount = 0;
+        Map<Integer, Integer> map = new HashMap<>(maxMinDiff); // Key=index, value=number of occurrences
+
+        while(validCount < numIndices) {
+            int value = rng.nextInt(maxMinDiff) + rowStart; // Generate index in the specified bounds.
+            int occurrences = map.getOrDefault(value, 0);
+
+            // Ensure the value has not already been generated more than the maximum number of allowed times.
+            if(occurrences < maxReps) {
+                map.put(value, occurrences+1);
+                rowIndices[validCount++] = value;
+            }
+        }
+
+        Arrays.sort(rowIndices);
+        return rowIndices;
+    }
+
+
+    /**
      * Randomly shuffles array using the Fisher–Yates algorithm. This is done in place.
      *
      * @param arr Array to shuffle.
+     * @return A reference to {@code arr}.
      */
-    public void shuffle(int[] arr) {
+    public int[] shuffle(int[] arr) {
         for (int i = arr.length-1; i>0; i--) {
 
             // Pick a random index from 0 to i
@@ -293,6 +358,8 @@ public final class RandomArray {
             // Swap arr[i] with the element at random index
             ArrayUtils.swap(arr, i, j);
         }
+
+        return arr;
     }
 
 

@@ -1,10 +1,10 @@
 package com.flag4j.vector;
 
-import com.flag4j.CVector;
-import com.flag4j.CooCVector;
-import com.flag4j.CooVector;
-import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.dense.CVector;
+import com.flag4j.dense.Vector;
+import com.flag4j.sparse.CooCVector;
+import com.flag4j.sparse.CooVector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -87,7 +87,7 @@ class VectorInnerProductTest {
         Vector exp;
 
         // ----------------------- Sub-case 1 -----------------------
-        expEntries = new double[]{0.004645143528472296, 0.02601280375944486, -0.04345531770885833, 0.9987058586215437};
+        expEntries = new double[]{0.0046451435284722955, 0.026012803759444855, -0.043455317708858326, 0.9987058586215436};
         exp = new Vector(expEntries);
 
         assertEquals(exp, a.normalize());

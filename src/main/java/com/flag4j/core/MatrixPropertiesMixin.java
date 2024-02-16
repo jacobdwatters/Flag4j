@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -65,7 +65,9 @@ public interface MatrixPropertiesMixin {
      * Checks if this matrix is triangular (i.e. upper triangular, diagonal, lower triangular).
      * @return True is this matrix is triangular. Otherwise, returns false.
      */
-    boolean isTri();
+    default boolean isTri() {
+        return isTriL() || isTriU();
+    }
 
 
     /**
@@ -86,7 +88,9 @@ public interface MatrixPropertiesMixin {
      * Checks if this matrix is diagonal.
      * @return True is this matrix is diagonal. Otherwise, returns false.
      */
-    boolean isDiag();
+    default boolean isDiag() {
+        return isTriL() && isTriU();
+    }
 
 
     /**
@@ -109,7 +113,9 @@ public interface MatrixPropertiesMixin {
      * Also see {@link #isSingular()}.
      * @return True if this matrix is invertible.
      */
-    boolean isInvertible();
+    default boolean isInvertible() {
+        return !isSingular();
+    }
 
 
     /**

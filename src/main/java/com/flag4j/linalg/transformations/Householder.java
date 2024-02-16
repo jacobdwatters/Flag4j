@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,13 @@
 
 package com.flag4j.linalg.transformations;
 
-import com.flag4j.CMatrix;
-import com.flag4j.CVector;
-import com.flag4j.Matrix;
-import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.CVector;
+import com.flag4j.dense.Matrix;
+import com.flag4j.dense.Vector;
+import com.flag4j.operations.common.complex.ComplexOperations;
+import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.util.ErrorMessages;
 
 /**
@@ -46,7 +48,7 @@ public class Householder {
     /**
      * Computes the Householder reflector which describes a reflection through a hyperplane containing the origin which
      * is normal to the specified {@code normal} vector.
-     * @param normal The vector normal to the plane the Householder reflector will reflect through\.
+     * @param normal The vector normal to the plane the Householder reflector will reflect through.
      * @return A transformation matrix which describes a reflection through a plane containing the origin with the
      * specified {@code normal} vector, i.e. a Householder reflector.
      */
@@ -55,23 +57,60 @@ public class Householder {
 
         double signedNorm = -Math.copySign(normal.norm(), normal.entries[0]);
         v = normal.div(normal.entries[0] - signedNorm);
-        v.entries[0] = 1;
+        v.entries[0] = 1.0;
 
-        // Create projection matrix
-        Matrix P = v.outer(v).mult(-2.0/v.inner(v));
+        // Create Householder matrix
+        Matrix H = v.outer(v).mult(-2.0/v.inner(v));
 
-        int step = P.numCols+1;
-        for(int i=0; i<P.entries.length; i+=step) {
-            P.entries[i] = 1 + P.entries[i];
+        int step = H.numCols+1;
+        for(int i=0; i<H.entries.length; i+=step) {
+            H.entries[i] = 1 + H.entries[i];
         }
 
-        return P;
+        return H;
+    }
+
+
+    /**
+     * Computes the vector {@code v} in of a Householder matrix {@code H=I-2vv}<sup>T</sup> where {@code H} is a
+     * transformation matrix which reflects a vector across the plane normal to {@code normal}.
+     *
+     * <p>This method may be used in conjunction with {@link #leftMultReflector(Matrix, Vector, double, int, int, int)} and
+     * {@link #rightMultReflector(Matrix, Vector, double, int, int, int)} to efficiently apply reflectors. Doing this is O(n^2)
+     * while forming the full Householder matrix and performing matrix multiplication is O(n^3)</p>
+     *
+     * @param normal Vector normal to the plane which {@code H} reflects across.
+     * @return The vector {@code v} in of a Householder matrix {@code H=I-2vv}<sup>T</sup> which reflects across a plane
+     * normal to {@code normal}.
+     */
+    public static Vector getVector(Vector normal) {
+        double normX = normal.norm();
+        double x1 = normal.entries[0];
+        normX = (x1 >= 0) ? -normX : normX;
+        double v1 = x1 - normX;
+
+        // Initialize v with norm and set first element
+        Vector v = normal.copy();
+        v.entries[0] = v1;
+
+        // Compute norm of v noting that it only differs from normal by the first element.
+        double normV = Math.sqrt(normX*normX - x1*x1 + v1*v1);
+
+        for(int i=0; i<v.entries.length; i++)
+            v.entries[i] /= normV; // Normalize v to make it a unit vector
+
+        return v;
     }
 
 
     /**
      * Computes the Householder reflector which describes a reflection through a hyperplane containing the origin which
      * is normal to the specified {@code normal} vector.
+     *
+     * <p>This method may be used in conjunction with {@link #leftMultReflector(CMatrix, CVector, CNumber, int, int, int)} and
+     * {@link #rightMultReflector(CMatrix, CVector, CNumber, int, int, int)} to efficiently apply reflectors. Doing this is O(n^2)
+     * while forming the full Householder matrix and performing matrix multiplication is O(n^3)</p>
+     *
      * @param normal The vector normal to the plane the Householder reflector will reflect through\.
      * @return A transformation matrix which describes a reflection through a plane containing the origin with the
      * specified {@code normal} vector, i.e. a Householder reflector.
@@ -95,5 +134,266 @@ public class Householder {
         }
 
         return P;
+    }
+
+
+    /**
+     * Left multiplies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>T</sup>, represented by the vector
+     * {@code v}, to another matrix {@code A}. That is, computes {@code H}<sup>T</sup>{@code *A = (I-}&alpha{@code vv}<sup>T</sup
+     * >{@code )}<sup>T</sup>{@code *A}.
+     * @param src Source matrix apply Householder vector to (modified).
+     * @param householderVector Householder vector {@code v}.
+     * @param alpha Scalar value in Householder matrix.
+     * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
+     * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
+     * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
+     * @param workArray An array to store temporary column data. This can help both with cache performance and reducing unneeded
+     *                  garbage collection if this method is called repeatedly.
+     */
+    public static void leftMultReflector(Matrix src,
+                                         double[] householderVector,
+                                         double alpha,
+                                         int startCol,
+                                         int startRow, int endRow,
+                                         double[] workArray) {
+        // Note: this computes A - (alpha*v)*(v^T*A) rather than A - (alpha*v*v^T)*A.
+        // The first method takes ~2(n^2 + n) flops while the second method takes ~(n^3 + n^2 + 2n) flops.
+
+
+
+        int numCols = src.numCols;
+        int srcRowOffset = startRow*numCols;
+        double v0 = householderVector[startRow];
+
+        for(int i=startCol; i<numCols; i++) {
+            workArray[i] = v0*src.entries[srcRowOffset + i];
+        }
+
+        for(int k=startRow + 1; k<endRow; k++) {
+            int srcIdx = k*numCols + startCol;
+            double reflectorValue = householderVector[k];
+            for(int i=startCol; i<numCols; i++) {
+                workArray[i] += reflectorValue*src.entries[srcIdx++];
+            }
+        }
+
+        RealOperations.scalMult(workArray, workArray, alpha, startCol, numCols);
+
+        for(int i=startRow; i<endRow; i++) {
+            double reflectorValue = householderVector[i];
+            int indexA = i*numCols + startCol;
+
+            for(int j=startCol; j<numCols; j++) {
+                src.entries[indexA++] -= reflectorValue*workArray[j];
+            }
+        }
+    }
+
+
+    /**
+     * Right multiplies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>T</sup>, represented by the vector
+     * {@code v}, to another matrix {@code A}. That is, computes {@code A*H = A*(I-}&alpha{@code vv}<sup>T</sup>{@code )}.
+     * @param src Source matrix apply Householder vector to (modified).
+     * @param householderVector Householder vector {@code v}.
+     * @param alpha Scalar value in Householder matrix.
+     * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
+     * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
+     * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
+     */
+    public static void rightMultReflector(Matrix src,
+                                          double[] householderVector,
+                                          double alpha,
+                                          int startCol,
+                                          int startRow, int endRow) {
+
+        for(int i=startCol; i<src.numRows; i++) {
+            int startIndex = i*src.numCols + startRow;
+            double sum = 0;
+            int rowIndex = startIndex;
+
+            for(int j = startRow; j < endRow; j++) {
+                sum += src.entries[rowIndex++]*householderVector[j];
+            }
+            sum *= -alpha;
+
+            rowIndex = startIndex;
+            for(int j=startRow; j<endRow; j++) {
+                src.entries[rowIndex++] += sum*householderVector[j];
+            }
+        }
+    }
+
+
+    /**
+     * Left multiplies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>H</sup>, represented by the vector
+     * {@code v}, to another matrix {@code A}. That is, computes {@code H*A = (I-}&alpha{@code vv}<sup>H</sup>{@code )*A}.
+     * @param src Source matrix apply Householder vector to (modified).
+     * @param householderVector Householder vector {@code v}.
+     * @param alpha Scalar value in Householder matrix.
+     * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
+     * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
+     * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
+     * @param workArray An array to store temporary column data. This can help both with cache performance and reducing unneeded
+     *                  garbage collection if this method is called repeatedly.
+     */
+    public static void leftMultReflector(CMatrix src,
+                                         CNumber[] householderVector,
+                                         CNumber alpha,
+                                         int startCol,
+                                         int startRow, int endRow,
+                                         CNumber[] workArray) {
+        int numCols = src.numCols;
+        int srcRowOffset = startRow*numCols;
+        CNumber v0 = householderVector[startRow].conj();
+
+        for(int i=startCol; i<numCols; i++) {
+            workArray[i] = v0.mult(src.entries[srcRowOffset + i]);
+        }
+
+        for(int k=startRow + 1; k<endRow; k++) {
+            int srcIdx = k*numCols + startCol;
+            CNumber reflectorValue = householderVector[k].conj();
+            for(int i=startCol; i<numCols; i++) {
+                workArray[i].addEq(reflectorValue.mult(src.entries[srcIdx++]));
+            }
+        }
+
+        ComplexOperations.scalMult(workArray, workArray, alpha, startCol, numCols);
+
+        for(int i=startRow; i<endRow; i++) {
+            CNumber reflectorValue = householderVector[i];
+            int indexA = i*numCols + startCol;
+
+            for(int j=startCol; j<numCols; j++) {
+                src.entries[indexA++].subEq(reflectorValue.mult(workArray[j]));
+            }
+        }
+    }
+
+
+    /**
+     * Right multiplies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>H</sup>, represented by the vector
+     * {@code v}, to another matrix {@code A}. That is, computes {@code A*H = A*(I-}&alpha{@code vv}<sup>H</sup>{@code )}.
+     * @param src Source matrix apply Householder vector to (modified).
+     * @param householderVector Householder vector {@code v}.
+     * @param alpha Scalar value in Householder matrix.
+     * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
+     * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
+     * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
+     */
+    public static void rightMultReflector(CMatrix src,
+                                          CNumber[] householderVector,
+                                          CNumber alpha,
+                                          int startCol,
+                                          int startRow, int endRow) {
+        CNumber negAlpha = alpha.addInv();
+
+        for(int i=startCol; i<src.numRows; i++) {
+            int startIndex = i*src.numCols + startRow;
+            CNumber sum = CNumber.zero();
+            int rowIndex = startIndex;
+
+            for(int j = startRow; j < endRow; j++) {
+                sum.addEq(src.entries[rowIndex++].mult(householderVector[j]));
+            }
+            sum.multEq(negAlpha);
+
+            rowIndex = startIndex;
+            for(int j=startRow; j<endRow; j++) {
+                src.entries[rowIndex++].addEq(sum.mult(householderVector[j].conj()));
+            }
+        }
+    }
+
+
+    /**
+     * Left multiplies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>T</sup>, represented by the vector
+     * {@code v}, to another matrix {@code A}. That is, computes {@code H*A = (I-}&alpha{@code vv}<sup>T</sup>{@code )*A}.
+     *
+     * <p>This method is significantly more efficient than forming the full Householder matrix and multiplying it to the other
+     * matrix.</p>
+     * @param src Source matrix apply Householder vector to (modified).
+     * @param householderVector Householder vector {@code v}.
+     * @param alpha Scalar value in Householder matrix.
+     * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
+     * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
+     * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
+     */
+    public static void leftMultReflector(Matrix src,
+                                         Vector householderVector,
+                                         double alpha,
+                                         int startCol,
+                                         int startRow, int endRow) {
+        leftMultReflector(src, householderVector.entries, alpha, startCol, startRow, endRow, new double[src.numCols-startCol]);
+    }
+
+
+    /**
+     * Right multiplies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>T</sup>, represented by the vector
+     * {@code v}, to another matrix {@code A}. That is, computes {@code A*H = A*(I-}&alpha{@code vv}<sup>T</sup>{@code )}.
+     *
+     * <p>This method is significantly more efficient than forming the full Householder matrix and multiplying it to the other
+     * matrix.</p>
+     *
+     * @param src Source matrix apply Householder vector to (modified).
+     * @param householderVector Householder vector {@code v}.
+     * @param alpha Scalar value in Householder matrix.
+     * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
+     * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
+     * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
+     */
+    public static void rightMultReflector(Matrix src,
+                                          Vector householderVector,
+                                          double alpha,
+                                          int startCol,
+                                          int startRow, int endRow) {
+
+        rightMultReflector(src, householderVector.entries, alpha, startCol, startRow, endRow);
+    }
+
+
+    /**
+     * Left multiplies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>H</sup>, represented by the vector
+     * {@code v}, to another matrix {@code A}. That is, computes {@code H*A = (I-}&alpha{@code vv}<sup>H</sup>{@code )*A}.
+     *
+     * <p>This method is significantly more efficient than forming the full Householder matrix and multiplying it to the other
+     * matrix.</p>
+     *
+     * @param src Source matrix apply Householder vector to (modified).
+     * @param householderVector Householder vector {@code v}.
+     * @param alpha Scalar value in Householder matrix.
+     * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
+     * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
+     * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
+     */
+    public static void leftMultReflector(CMatrix src,
+                                         CVector householderVector,
+                                         CNumber alpha,
+                                         int startCol,
+                                         int startRow, int endRow) {
+        leftMultReflector(src, householderVector.entries, alpha, startCol, startRow, endRow, new CNumber[src.numCols-startCol]);
+    }
+
+
+    /**
+     * Right multiplies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>H</sup>, represented by the vector
+     * {@code v}, to another matrix {@code A}. That is, computes {@code A*H = A*(I-}&alpha{@code vv}<sup>H</sup>{@code )}.
+     *
+     * <p>This method is significantly more efficient than forming the full Householder matrix and multiplying it to the other
+     * matrix.</p>
+     *
+     * @param src Source matrix apply Householder vector to (modified).
+     * @param householderVector Householder vector {@code v}.
+     * @param alpha Scalar value in Householder matrix.
+     * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
+     * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
+     * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
+     */
+    public static void rightMultReflector(CMatrix src,
+                                          CVector householderVector,
+                                          CNumber alpha,
+                                          int startCol,
+                                          int startRow, int endRow) {
+        rightMultReflector(src, householderVector.entries, alpha, startCol, startRow, endRow);
     }
 }

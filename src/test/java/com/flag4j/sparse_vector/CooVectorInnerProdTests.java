@@ -1,12 +1,12 @@
 package com.flag4j.sparse_vector;
 
-import com.flag4j.CVector;
-import com.flag4j.CooCVector;
-import com.flag4j.CooVector;
-import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.exceptions.LinearAlgebraException;
+import com.flag4j.dense.CVector;
+import com.flag4j.dense.Vector;
 import com.flag4j.operations.common.complex.AggregateComplex;
+import com.flag4j.sparse.CooCVector;
+import com.flag4j.sparse.CooVector;
+import com.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -153,10 +153,9 @@ class CooVectorInnerProdTests {
     @Test
     void normalizeTestCase() {
         // ----------------------- Sub-case 1 -----------------------
-        double mag = Math.sqrt(1.0 + 5.6*5.6 + 9.355*9.355 + 215.0*215.0);
-        double[] expEntries = {1.0, 5.6, -9.355, 215.0};
+        double[] expEntries = {0.0046451435284722955, 0.026012803759444855, -0.043455317708858326, 0.9987058586215436};
         int[] expIndices = {1, 2, 8, 13};
-        CooVector exp = new CooVector(sparseSize, expEntries, expIndices).div(mag);
+        CooVector exp = new CooVector(sparseSize, expEntries, expIndices);
 
         assertEquals(exp, a.normalize());
     }

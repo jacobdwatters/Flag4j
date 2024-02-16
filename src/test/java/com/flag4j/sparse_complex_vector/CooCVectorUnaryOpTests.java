@@ -1,8 +1,8 @@
 package com.flag4j.sparse_complex_vector;
 
-import com.flag4j.CooCVector;
-import com.flag4j.CooVector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.sparse.CooCVector;
+import com.flag4j.sparse.CooVector;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

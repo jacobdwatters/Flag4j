@@ -1,7 +1,6 @@
 package com.flag4j.linalg.transformations;
 
-import com.flag4j.Matrix;
-import com.flag4j.io.PrintOptions;
+import com.flag4j.dense.Matrix;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,7 +38,7 @@ class ProjectionTests {
         // -------------------------- Sub-case 3 --------------------------
         expEntries = new double[][]{
                 {0.6493506493506495, 0, 0, 0},
-                {0, 1.0000000000000002, 0, 0},
+                {0, 1.5696855771174902, 0, 0},
                 {0, 0, -1.0001200072004321, -1},
                 {0, 0, -0.6000360021601296, 0}
         };

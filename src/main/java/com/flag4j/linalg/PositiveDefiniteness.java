@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,9 +23,13 @@
  */
 
 package com.flag4j.linalg;
-import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
+
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.Matrix;
+import com.flag4j.linalg.decompositions.cholesky.ComplexCholeskyDecomposition;
+import com.flag4j.linalg.decompositions.cholesky.RealCholeskyDecomposition;
 import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.exceptions.LinearAlgebraException;
 
 
 /**
@@ -41,7 +45,7 @@ public class PositiveDefiniteness {
 
     /**
      * Checks if the matrix is positive definite. A matrix {@code M} is positive definite iff
-     * {@code x<sup>T</sup>Mx &gt 0} for any vector {@code x}, or equivalently, if the matrix is symmetric and
+     * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if
      * all eigenvalues are strictly greater than zero.
      *
      * @param src Matrix to check if it is positive definite.
@@ -63,8 +67,30 @@ public class PositiveDefiniteness {
 
 
     /**
+     * Checks if the matrix is symmetric positive definite. A matrix {@code M} is positive definite iff
+     * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if all eigenvalues are strictly
+     * greater than zero.
+     *
+     * @param src Matrix to check if it is positive definite.
+     * @return True if the matrix is positive definite. Otherwise, returns false.
+     * @see #isPosSemiDef(Matrix)
+     */
+    public static boolean isSymmPosDef(Matrix src) {
+        boolean result = true;
+
+        try {
+            new RealCholeskyDecomposition(true).decompose(src);
+        } catch(LinearAlgebraException | IllegalArgumentException e) {
+            result = false; // Could not compute Cholesky decomposition. Matrix is not symmetric positive definite.
+        }
+
+        return result;
+    }
+
+
+    /**
      * Checks if the matrix is positive definite. A matrix {@code M} is positive definite iff
-     * {@code x<sup>T</sup>Mx &gt 0} for any vector {@code x}, or equivalently, if the matrix is hermation and
+     * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if the matrix is hermation and
      * all eigenvalues are strictly greater than zero.
      *
      * @param src Matrix to check if it is positive definite.
@@ -86,8 +112,30 @@ public class PositiveDefiniteness {
 
 
     /**
+     * Checks if the matrix is symmetric positive definite. A matrix {@code M} is positive definite iff
+     * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if all eigenvalues are strictly
+     * greater than zero.
+     *
+     * @param src Matrix to check if it is positive definite.
+     * @return True if the matrix is positive definite. Otherwise, returns false.
+     * @see #isPosSemiDef(Matrix)
+     */
+    public static boolean isSymmPosDef(CMatrix src) {
+        boolean result = true;
+
+        try {
+            new ComplexCholeskyDecomposition(true).decompose(src);
+        } catch(LinearAlgebraException | IllegalArgumentException e) {
+            result = false; // Could not compute Cholesky decomposition. Matrix is not symmetric positive definite.
+        }
+
+        return result;
+    }
+
+
+    /**
      * Checks if the matrix is positive semi-definite. A matrix {@code M} is positive semi-definite iff
-     * {@code x<sup>T</sup>Mx &ge 0} for any vector {@code x}, or equivalently, if the matrix is symmetric and
+     * {@code x}<sup>T</sup>{@code Mx >= 0} for any vector {@code x}, or equivalently, if the matrix is symmetric and
      * all eigenvalues are greater than or equal to zero.
      *
      * @param src Matrix to check if it is positive semi-definite.
@@ -110,7 +158,7 @@ public class PositiveDefiniteness {
 
     /**
      * Checks if the matrix is positive semi-definite. A matrix {@code M} is positive semi-definite iff
-     * {@code x<sup>T</sup>Mx &ge 0} for any vector {@code x}, or equivalently, if the matrix is hermation and
+     * {@code x}<sup>T</sup>{@code Mx >= 0} for any vector {@code x}, or equivalently, if the matrix is hermation and
      * all eigenvalues are greater than or equal to zero.
      *
      * @param src Matrix to check if it is positive semi-definite.

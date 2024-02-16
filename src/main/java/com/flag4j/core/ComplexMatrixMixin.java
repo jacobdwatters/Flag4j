@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,10 @@
 
 package com.flag4j.core;
 
-import com.flag4j.CVector;
-import com.flag4j.CooCMatrix;
-import com.flag4j.CooCVector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.dense.CVector;
+import com.flag4j.sparse.CooCMatrix;
+import com.flag4j.sparse.CooCVector;
 
 
 /**
@@ -39,18 +39,20 @@ public interface ComplexMatrixMixin<T> {
 
     /**
      * Computes the complex conjugate transpose of a tensor.
-     * Same as {@link #hermTranspose()} and {@link MatrixOperationsMixin#H()}.
+     * Same as {@link #H()}.
      * @return The complex conjugate transpose of this tensor.
      */
-    T conjT();
+    default T conjT() {
+        return H();
+    }
 
 
     /**
      * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
-     * Same as {@link #conjT()} and {@link MatrixOperationsMixin#H()}.
+     * Same as {@link #conjT()}.
      * @return The complex conjugate transpose (Hermitian transpose) of this tensor.
      */
-    T hermTranspose();
+    T H();
 
 
     /**

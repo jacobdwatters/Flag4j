@@ -1,6 +1,7 @@
 package com.flag4j.linalg.decompositions;
 
-import com.flag4j.Matrix;
+import com.flag4j.dense.Matrix;
+import com.flag4j.linalg.decompositions.hess.RealHessenburgDecomposition;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,7 +32,7 @@ class RealHessenburgTests {
         assertEquals(new Matrix(A.shape.copy()).round(), A.sub(A_hat).round());
 
         // ----------------------- Sub-case 1.1 -----------------------
-        hess = new RealHessenburgDecomposition(false);
+        hess = new RealHessenburgDecomposition();
         hess.decompose(A);
 
         assertEquals(H, hess.getH());
@@ -53,7 +54,7 @@ class RealHessenburgTests {
         assertEquals(new Matrix(A.shape.copy()), A.sub(A_hat).roundToZero(1.0e-10));
 
         // ----------------------- Sub-case 2.1 -----------------------
-        hess = new RealHessenburgDecomposition(false);
+        hess = new RealHessenburgDecomposition();
         hess.decompose(A);
 
         assertEquals(H, hess.getH());

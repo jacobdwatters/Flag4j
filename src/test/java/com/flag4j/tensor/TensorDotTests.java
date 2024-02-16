@@ -1,8 +1,8 @@
 package com.flag4j.tensor;
 
-import com.flag4j.Shape;
-import com.flag4j.Tensor;
-import com.flag4j.exceptions.LinearAlgebraException;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.Tensor;
+import com.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -137,13 +137,14 @@ class TensorDotTests {
                 7376.4858083, 78860.54000000001, 16039.49902, 1099.454797616};
         expShape = new Shape(2, 2, 4, 2);
         exp = new Tensor(expShape, expEntries);
+        B = B.reshape(4, 3, 2);
 
-        assertEquals(exp, A.dot(B));
+        assertEquals(exp, A.tensorDot(B));
 
 
         // --------------------- Sub-case 1 ---------------------
         A = A.reshape(2, 2, 3);
         B = B.reshape(4, 2, 3);
-        assertThrows(IllegalArgumentException.class, ()->A.dot(B));
+        assertThrows(LinearAlgebraException.class, ()->A.tensorDot(B));
     }
 }

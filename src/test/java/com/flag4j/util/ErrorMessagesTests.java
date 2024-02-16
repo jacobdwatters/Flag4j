@@ -1,6 +1,6 @@
 package com.flag4j.util;
 
-import com.flag4j.Shape;
+import com.flag4j.core.Shape;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -16,8 +16,8 @@ class ErrorMessagesTests {
     @Test
     void EqualShapeErrMsgTestCase() {
         // --------- sub-case 1 ---------
-        s1 = new Shape(new int[]{2});
-        s2 = new Shape(new int[]{5});
+        s1 = new Shape(2);
+        s2 = new Shape(5);
         expMsg = String.format("Expecting matrices to have the same shape but got shapes %s and %s.",
                 "2", "5");
 

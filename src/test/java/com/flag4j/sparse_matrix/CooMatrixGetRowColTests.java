@@ -1,9 +1,9 @@
 package com.flag4j.sparse_matrix;
 
-import com.flag4j.CooMatrix;
-import com.flag4j.CooVector;
-import com.flag4j.Shape;
+import com.flag4j.core.Shape;
 import com.flag4j.operations.sparse.coo.real.RealSparseMatrixGetSet;
+import com.flag4j.sparse.CooMatrix;
+import com.flag4j.sparse.CooVector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

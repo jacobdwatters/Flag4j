@@ -1,11 +1,11 @@
 package com.flag4j.operations.dense_sparse.real;
 
-import com.flag4j.Matrix;
-import com.flag4j.Shape;
-import com.flag4j.CooMatrix;
+import com.flag4j.core.Shape;
+import com.flag4j.dense.Matrix;
+import com.flag4j.sparse.CooMatrix;
 import org.junit.jupiter.api.Test;
 
-import static com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultTranspose.multTranspose;
+import static com.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixMultTranspose.multTranspose;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class RealDenseSparseMatMultTransposeTests {

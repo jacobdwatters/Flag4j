@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,8 @@
 
 package com.flag4j.core;
 
-
-import com.flag4j.CMatrix;
-import com.flag4j.CVector;
-import com.flag4j.Shape;
+import com.flag4j.dense.CMatrix;
+import com.flag4j.dense.CVector;
 
 /**
  * This interface specified methods which all matrices should implement.
@@ -43,11 +41,11 @@ import com.flag4j.Shape;
 public interface MatrixMixin<
         T,
         U, V, W, X extends Number,
-        TT extends VectorMixin<TT, UU, ?, ?, X, T, U, W>,
+        TT extends VectorMixin<TT, UU, ?, ?, ?, ?, ?, ?>,
         UU extends VectorMixin<UU, UU, ?, CVector, X, U, U, CMatrix>>
         extends MatrixPropertiesMixin,
         MatrixComparisonsMixin<T>,
-        MatrixManipulationsMixin<T, TT, X>,
+        MatrixManipulationsMixin<T, X>,
         MatrixOperationsMixin<T, U, V, W, X, TT, UU> {
 
     /**
@@ -71,7 +69,7 @@ public interface MatrixMixin<
      * @throws IllegalArgumentException If {@code indices} is not of length 2.
      * @throws ArrayIndexOutOfBoundsException If any indices are not within this matrix.
      */
-    X get(int... indices); // This method is specified here an in the tensor mixin interface intentionally.
+    X get(int... indices); // This method is specified here and in the TensorMixin interface intentionally.
 
 
     /**
