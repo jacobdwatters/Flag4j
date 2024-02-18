@@ -40,8 +40,7 @@ import com.flag4j.util.ParameterChecks;
 import static com.flag4j.util.Flag4jConstants.EPS_F64;
 
 /**
- * This class provides several methods useful for computing eigen values, eigen vectors, as well as singular values and
- * singular vectors.
+ * This class provides several methods useful for computing eigenvalues and eigenvectors.
  */
 public class Eigen {
 
@@ -180,40 +179,6 @@ public class Eigen {
         lambda[1] = lambda[1].mult(new CNumber(maxAbs, 0));
 
         return lambda;
-    }
-
-
-    /**
-     * Computes the eigenvalues for the lower right 2x2 block matrix of a larger matrix.
-     * @param src Source matrix to compute eigenvalues of lower right 2x2 block.
-     * @return A vector of length 2 containing the eigenvalues of the lower right 2x2 block of {@code src}.
-     */
-    public static CVector get2x2LowerRightBlockEigenValues(CMatrix src) {
-        int n = src.numRows-1;
-
-        return get2x2EigenValues(
-                new CMatrix(new CNumber[][]{
-                    {src.entries[(n-1)*(src.numCols + 1)], src.entries[(n-1)*src.numCols + n]},
-                    {src.entries[n*(src.numCols + 1) - 1], src.entries[n*(src.numCols + 1)]}
-                })
-        );
-    }
-
-
-    /**
-     * Computes the eigenvalues for the lower right 2x2 block matrix of a larger matrix.
-     * @param src Source matrix to compute eigenvalues of lower right 2x2 block.
-     * @return A vector of length 2 containing the eigenvalues of the lower right 2x2 block of {@code src}.
-     */
-    public static CVector get2x2LowerRightBlockEigenValues(Matrix src) {
-        int n = src.numRows-1;
-
-        return get2x2EigenValues(
-                new Matrix(new double[][]{
-                        {src.entries[(n-1)*(src.numCols + 1)], src.entries[(n-1)*src.numCols + n]},
-                        {src.entries[n*(src.numCols + 1) - 1], src.entries[n*(src.numCols + 1)]}
-                })
-        );
     }
 
 
@@ -414,7 +379,9 @@ public class Eigen {
         CMatrix U = complexTU[1];
 
         // Extract eigenvalues of T.
-        if (numRows >= 0) System.arraycopy(T.entries, 0 * numRows + 0, lambdas.entries, 0, numRows);
+        for(int i=0; i<numRows; i++) {
+            lambdas.entries[i] = T.entries[i*numRows + i].copy();
+        }
 
         // If the source matrix is symmetric, then U will contain its eigenvectors.
         if(!src.isSymmetric()) {
