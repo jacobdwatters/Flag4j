@@ -232,18 +232,22 @@ public class Eigen {
 
         // Extract eigenvalues of T.
         for(int m=0; m<numRows; m++) {
-            double a11 = T.entries[m*numRows + m];
-            double a12 = T.entries[m*numRows + m + 1];
-            double a21 = T.entries[(m+1)*numRows + m];
-            double a22 = T.entries[(m+1)*numRows + m  +1];
-
-            if(Math.abs(a21) > EPS_F64*(Math.abs(a11) + Math.abs(a22))) {
-                // Non-converged 2x2 block found.
-                CNumber[] mu = Eigen.get2x2EigenValues(a11, a12, a21, a22);
-                lambdas.entries[m] = mu[0];
-                lambdas.entries[++m] = mu[1];
+            if(m == numRows-1) {
+                lambdas.entries[m] = new CNumber(T.entries[m*numRows + m]);
             } else {
-                lambdas.entries[m] = new CNumber(a22);
+                double a11 = T.entries[m*numRows + m];
+                double a12 = T.entries[m*numRows + m + 1];
+                double a21 = T.entries[(m+1)*numRows + m];
+                double a22 = T.entries[(m+1)*numRows + m  +1];
+
+                if(Math.abs(a21) > EPS_F64*(Math.abs(a11) + Math.abs(a22))) {
+                    // Non-converged 2x2 block found.
+                    CNumber[] mu = Eigen.get2x2EigenValues(a11, a12, a21, a22);
+                    lambdas.entries[m] = mu[0];
+                    lambdas.entries[++m] = mu[1];
+                } else {
+                    lambdas.entries[m] = new CNumber(a22);
+                }
             }
         }
 
@@ -266,7 +270,7 @@ public class Eigen {
         // Extract eigenvalues of T.
         for(int m=0; m<numRows; m++) {
             if(m == numRows-1) {
-                lambdas.entries[m] = T.entries[m*numRows + m];
+                lambdas.entries[m] = T.entries[m*numRows + m].copy();
             } else {
                 CNumber a11 = T.entries[m*numRows + m];
                 CNumber a12 = T.entries[m*numRows + m + 1];
@@ -401,34 +405,19 @@ public class Eigen {
      * eigenvectors of the {@code src} matrix as its columns.
      */
     public static CMatrix[] getEigenPairs(Matrix src) {
+        int numRows = src.numRows;
         CMatrix lambdas = new CMatrix(1, src.numRows);
 
         RealSchurDecomposition schur = new RealSchurDecomposition(true).decompose(src);
         CMatrix[] complexTU = schur.real2ComplexSchur();
-        Matrix tReal = schur.getT();
         CMatrix T = complexTU[0];
         CMatrix U = complexTU[1];
-        int numRows = src.numRows;
 
         // Extract eigenvalues of T.
-        for(int m=0; m<numRows; m++) {
-            double a11 = tReal.entries[m*numRows + m];
-            double a12 = tReal.entries[m*numRows + m + 1];
-            double a21 = tReal.entries[(m+1)*numRows + m];
-            double a22 = tReal.entries[(m+1)*numRows + m  +1];
+        if (numRows >= 0) System.arraycopy(T.entries, 0 * numRows + 0, lambdas.entries, 0, numRows);
 
-            if(Math.abs(a21) > EPS_F64*(Math.abs(a11) + Math.abs(a22))) {
-                // Non-converged 2x2 block found.
-                CNumber[] mu = Eigen.get2x2EigenValues(a11, a12, a21, a22);
-                lambdas.entries[m] = mu[0];
-                lambdas.entries[++m] = mu[1];
-            } else {
-                lambdas.entries[m] = new CNumber(a22);
-            }
-        }
-
+        // If the source matrix is symmetric, then U will contain its eigenvectors.
         if(!src.isSymmetric()) {
-            // For a non-symmetric matrix, only the first column of U will be an eigenvector of the src matrix.
             U = U.mult(getEigenVectorsTriu(T)); // Compute the eigenvectors of T and convert to eigenvectors of src.
         }
 
@@ -452,28 +441,12 @@ public class Eigen {
         int numRows = src.numRows;
 
         // Extract eigenvalues of T.
-        for(int m=0; m<numRows; m++) {
-            if(m == numRows-1) {
-                lambdas.entries[m] = T.entries[m*numRows + m];
-            } else {
-                CNumber a11 = T.entries[m*numRows + m];
-                CNumber a12 = T.entries[m*numRows + m + 1];
-                CNumber a21 = T.entries[(m+1)*numRows + m];
-                CNumber a22 = T.entries[(m+1)*numRows + m  +1];
-
-                if(a21.mag() > EPS_F64*(a11.mag() + a22.mag())) {
-                    // Non-converged 2x2 block found.
-                    CNumber[] mu = Eigen.get2x2EigenValues(a11, a12, a21, a22);
-                    lambdas.entries[m] = mu[0];
-                    lambdas.entries[++m] = mu[1];
-                } else {
-                    lambdas.entries[m] = a22.copy();
-                }
-            }
+        for(int i=0; i<numRows; i++) {
+            lambdas.entries[i] = T.entries[i*numRows + i].copy();
         }
 
+        // If the src matrix is hermitian, then U will contain the eigenvectors.
         if(!src.isHermitian()) {
-            // For a non-symmetric matrix, only the first column of U will be an eigenvector of the src matrix.
             U = U.mult(getEigenVectorsTriu(T)); // Compute the eigenvectors of T and convert to eigenvectors of src.
         }
 

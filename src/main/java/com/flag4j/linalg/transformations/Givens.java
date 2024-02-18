@@ -185,9 +185,9 @@ public class Givens {
 
 
     /**
-     * <p>Left multiplies a 2x2 Givens rotator to a matrix at the specified row.</p>
+     * <p>Left multiplies a 2x2 Givens rotator to a matrix at the specified row. This is done in place.</p>
      *
-     * <p>Specifically, computes {@code G*A[i-1:i+1][i-1:i+1]} where {@code G} is the 2x2 Givens rotator,
+     * <p>Specifically, computes {@code G*A[i-1:i+1][i-1:i+1]} where {@code i=row}, {@code G} is the 2x2 Givens rotator,
      * {@code A} is the matrix to apply the reflector to, and {@code A[i-1:i+1][i-1:]}
      * represents the slice of {@code A} the reflector effects which has shape {@code (2, A.numCols - i - 1)}.</p>
      *
@@ -233,10 +233,10 @@ public class Givens {
 
 
     /**
-     * <p>Right multiplies a 2x2 Givens rotator to a matrix at the specified row. </p>
+     * <p>Right multiplies a 2x2 Givens rotator to a matrix at the specified row. This is done in place</p>
      *
      * <p>Specifically, computes {@code A[:][i-1:i+1]*G}<sup>H</sup>
-     * where {@code G} is the 2x2 Givens rotator, {@code A} is the matrix to apply the reflector to, and {@code A[:i+1][i-1:i+1]}
+     * where {@code i=row}, {@code G} is the 2x2 Givens rotator, {@code A} is the matrix to apply the reflector to, and {@code A[:i+1][i-1:i+1]}
      * represents the slice of {@code A} the reflector effects which has shape {@code (row+1, 2)}.</p>
      *
      * <p>This method is likely to be faster than computing this multiplication explicitly.</p>
@@ -253,7 +253,8 @@ public class Givens {
         double[] src2 = G.entries;
 
         int cols1 = src.numCols;
-        if(workArray==null) workArray = new double[2*(row+1)]; // Has shape (row+1, 2)
+        int rows1 = src.numRows;
+        if(workArray==null) workArray = new double[2*rows1]; // Has shape (row+1, 2)
 
         int m = row - 1;
 
@@ -263,7 +264,7 @@ public class Givens {
         double g22 = src2[3];
 
         // Apply the rotator.
-        for(int i=0; i<row+1; i++) {
+        for(int i=0; i<rows1; i++) {
             int tempIdx1 = i*2;
             int tempIdx2 = tempIdx1 + 1;
             int src1Idx1 = i*cols1 + m;
@@ -276,7 +277,7 @@ public class Givens {
         }
 
         // Copy result back into source matrix.
-        for(int i=0; i<row+1; i++) {
+        for(int i=0; i<rows1; i++) {
             src1[i*cols1 + m] = workArray[i*2];
             src1[i*cols1 + row] = workArray[i*2 + 1];
         }
@@ -284,9 +285,9 @@ public class Givens {
 
 
     /**
-     * <p>Left multiplies a 2x2 Givens rotator to a matrix at the specified row.</p>
+     * <p>Left multiplies a 2x2 Givens rotator to a matrix at the specified row. This is done in place.</p>
      *
-     * <p>Specifically, computes {@code G*A[i-1:i+1][i-1:i+1]} where {@code G} is the 2x2 Givens rotator,
+     * <p>Specifically, computes {@code G*A[i-1:i+1][i-1:i+1]} where {@code i=row}, {@code G} is the 2x2 Givens rotator,
      * {@code A} is the matrix to apply the reflector to, and {@code A[i-1:i+1][i-1:]}
      * represents the slice of {@code A} the reflector effects which has shape {@code (2, A.numCols - i - 1)}.</p>
      *
@@ -335,10 +336,12 @@ public class Givens {
 
 
     /**
-     * <p>Right multiplies a 2x2 Givens rotator to a matrix at the specified row. </p>
+     * <p>Right multiplies a 2x2 Givens rotator to a matrix at the specified row. This is done in place</p>
      *
      * <p>Specifically, computes {@code A[:][i-1:i+1]*G}<sup>H</sup>
-     * where {@code G} is the 2x2 Givens rotator, {@code A} is the matrix to apply the reflector to, and {@code A[:i+1][i-1:i+1]}
+     * where {@code i=row}, {@code G} is the 2x2 Givens rotator, {@code A} is the matrix to apply the reflector to, and {@code A[:i
+     * +1][i
+     * -1:i+1]}
      * represents the slice of {@code A} the reflector effects which has shape {@code (row+1, 2)}.</p>
      *
      * <p>This method is likely to be faster than computing this multiplication explicitly.</p>
@@ -355,8 +358,9 @@ public class Givens {
         CNumber[] src2 = G.entries;
 
         int cols1 = src.numCols;
-        if(workArray==null) workArray = new CNumber[2*(row+1)]; // Has shape (row+1, 2)
-        ArrayUtils.fillZeros(workArray, 0, 2*(row+1));
+        int rows1 = src.numRows;
+        if(workArray==null) workArray = new CNumber[2*rows1]; // Has shape (row+1, 2)
+        ArrayUtils.fillZeros(workArray);
 
         int m = row - 1;
 
@@ -366,7 +370,7 @@ public class Givens {
         CNumber g22 = src2[3].conj();
 
         // Apply the rotator.
-        for(int i=0; i<row+1; i++) {
+        for(int i=0; i<rows1; i++) {
             int tempIdx1 = i*2;
             int tempIdx2 = tempIdx1 + 1;
             int src1Idx1 = i*cols1 + m;
@@ -379,7 +383,7 @@ public class Givens {
         }
 
         // Copy result back into source matrix.
-        for(int i=0; i<row+1; i++) {
+        for(int i=0; i<rows1; i++) {
             src1[i*cols1 + m] = workArray[i*2];
             src1[i*cols1 + row] = workArray[i*2 + 1];
         }

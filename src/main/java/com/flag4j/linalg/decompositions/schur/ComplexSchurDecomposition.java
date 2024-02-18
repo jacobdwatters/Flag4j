@@ -27,6 +27,7 @@ package com.flag4j.linalg.decompositions.schur;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.dense.CMatrix;
 import com.flag4j.dense.CVector;
+import com.flag4j.dense.Matrix;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.linalg.Eigen;
 import com.flag4j.linalg.decompositions.hess.ComplexHessenburgDecomposition;
@@ -556,32 +557,45 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CNumb
 
 
     public static void main(String[] args) {
-        char matrixChoice = 'A';
-        PrintOptions.setPrecision(100);
+        char matrixChoice = 'D';
+        PrintOptions.setPrecision(10);
 
         RandomTensor rtg = new RandomTensor();
-        CMatrix A = new CMatrix(new String[][]{
-                {"2-3i", "4.55+9i", "5+2i"},
-                {"8i", "-i", "1+i"},
-                {"1-i", "5", "1-3i"}});
-        CMatrix B = new CMatrix(new String[][]{
-                {"1", "1", "1"},
-                {"1", "1", "1"},
-                {"1", "1", "1"}});
-        CMatrix C = new CMatrix(new String[][]{
-                {"0", "0", "0", "1"},
-                {"1", "0", "0", "0"},
-                {"0", "1", "0", "0"},
-                {"0", "0", "1", "0",}});
-        CMatrix[] matrices = {A, B, C};
+        Matrix A = new Matrix(new double[][]{
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}});
+        Matrix B = new Matrix(new double[][]{
+                {3, -2},
+                {4, -1}});  // Eigenvalues: 1+2i, 1-2i
+        Matrix C = new Matrix(new double[][]{
+                {1, -4, 0, 14.5},
+                {0.0015, 15, 13.5, -43},
+                {-4.15, 15, 151.3, 6},
+                {0, 0, -1, 1}
+        });
+        Matrix D = new Matrix(new double[][]{
+                {0, 0, 0, 1},
+                {1, 0, 0, 0},
+                {0, 1, 0, 0},
+                {0, 0, 1, 0}
+        });
 
-        CMatrix mat = matrices[Character.toUpperCase(matrixChoice) - 65];
-        CVector eigVals = Eigen.getEigenValues(mat);
-        CMatrix eigVecs = Eigen.getEigenVectors(mat);
 
-        System.out.println(eigVals + "\n");
-        System.out.println(eigVecs);
+        Matrix[] matrices = {A, B, C, D};
+        Matrix mat = matrices[Character.toUpperCase(matrixChoice) - 65];
 
-//        System.out.println(eigVecs.);
+        CMatrix[] eigPairs = Eigen.getEigenPairs(mat);
+        CVector lambda = eigPairs[0].toVector();
+        CMatrix V = eigPairs[1];
+
+        System.out.println("Eigenvalues: " + lambda + "\n");
+        System.out.println("Eigenvectors:\n" + V + "\n");
+
+        CMatrix prod = mat.mult(V);
+
+        for(int j=0; j<prod.numCols; j++) {
+            System.out.println(prod.getCol(j).sub(V.getCol(j).mult(lambda.get(j))));
+        }
     }
 }
