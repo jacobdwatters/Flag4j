@@ -30,6 +30,8 @@ import com.flag4j.dense.CMatrix;
 import com.flag4j.dense.Matrix;
 import com.flag4j.linalg.Eigen;
 
+import java.util.Arrays;
+
 /**
  * Instances of this class can be used to compute the singular value decomposition (SVD) of a real dense matrix.
  * That is, decompose a rectangular matrix {@code M} as {@code M=USV<sup>T</sup>} where {@code U} and {@code V} are
@@ -90,6 +92,7 @@ public class RealSVD extends SVD<Matrix> {
         CMatrix[] pairs = Eigen.getEigenPairs(B);
 
         double[] vals = pairs[0].toReal().entries;
+        System.out.println("vals: " + Arrays.toString(vals));
         System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
 
         return pairs[1].toReal();

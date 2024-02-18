@@ -26,16 +26,11 @@ package com.flag4j.linalg.decompositions.schur;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.dense.CMatrix;
-import com.flag4j.dense.CVector;
-import com.flag4j.dense.Matrix;
-import com.flag4j.io.PrintOptions;
 import com.flag4j.linalg.Eigen;
 import com.flag4j.linalg.decompositions.hess.ComplexHessenburgDecomposition;
-import com.flag4j.linalg.transformations.Givens;
 import com.flag4j.linalg.transformations.Householder;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.rng.RandomCNumber;
-import com.flag4j.rng.RandomTensor;
 
 import static com.flag4j.util.Flag4jConstants.EPS_F64;
 
@@ -509,93 +504,5 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CNumb
         }
 
         return 0; // No convergence detected. Do not deflate.
-    }
-
-
-    /**
-     * <p>Converts the block schur form computed in the last decomposition to the reduced Schur form which will be properly upper
-     * triangular.</p>
-     *
-     * <p>That is, converts the real block
-     * upper triangular Schur matrix to a complex valued properly upper triangular matrix. If the unitary transformation matrix
-     * {@code U} was computed, the transformations will also be updated accordingly.</p>
-     *
-     * <p>This method was adapted from the code given by
-     * <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.rsf2csf.html">scipy.linalg.rsf2csf</a> (v1.12.0).</p>
-     */
-    private void toReducedSchur() {
-        // Convert matrices to complex matrices.
-        CNumber[] givensWorkComplex = new CNumber[2*numRows];
-
-        for(int m=numRows-1; m>0; m--) {
-            CNumber a11 = T.entries[(m - 1)*numRows + m - 1];
-            CNumber a12 = T.entries[(m - 1)*numRows + m];
-            CNumber a21 = T.entries[m*numRows + m - 1];
-            CNumber a22 = T.entries[m*numRows + m];
-
-            if(a21.mag() > EPS_F64*(a11.mag() + a22.mag())) {
-                // non-converged 2x2 block found.
-                CNumber[] mu = Eigen.get2x2EigenValues(a11, a12, a21, a22);
-                mu[0].subEq(a22); // Shift eigenvalue.
-
-                // Construct a givens rotator to bring matrix into properly upper triangular form.
-                CMatrix G = Givens.get2x2Rotator(new CVector(mu[0], a21));
-                // Apply rotation to T matrix to bring it into upper triangular form.
-                Givens.leftMult2x2Rotator(T, G, m, givensWorkComplex);
-                // Apply hermation transpose to keep transformation similar.
-                Givens.rightMult2x2Rotator(T, G, m, givensWorkComplex);
-
-                if(computeU) {
-                    // Accumulate similarity transforms in the U matrix.
-                    Givens.rightMult2x2Rotator(U, G, m, givensWorkComplex);
-                }
-
-                T.set(0, m, m-1);
-            }
-        }
-    }
-
-
-    public static void main(String[] args) {
-        char matrixChoice = 'D';
-        PrintOptions.setPrecision(10);
-
-        RandomTensor rtg = new RandomTensor();
-        Matrix A = new Matrix(new double[][]{
-                {1, 2, 3},
-                {4, 5, 6},
-                {7, 8, 9}});
-        Matrix B = new Matrix(new double[][]{
-                {3, -2},
-                {4, -1}});  // Eigenvalues: 1+2i, 1-2i
-        Matrix C = new Matrix(new double[][]{
-                {1, -4, 0, 14.5},
-                {0.0015, 15, 13.5, -43},
-                {-4.15, 15, 151.3, 6},
-                {0, 0, -1, 1}
-        });
-        Matrix D = new Matrix(new double[][]{
-                {0, 0, 0, 1},
-                {1, 0, 0, 0},
-                {0, 1, 0, 0},
-                {0, 0, 1, 0}
-        });
-
-
-        Matrix[] matrices = {A, B, C, D};
-        Matrix mat = matrices[Character.toUpperCase(matrixChoice) - 65];
-
-        CMatrix[] eigPairs = Eigen.getEigenPairs(mat);
-        CVector lambda = eigPairs[0].toVector();
-        CMatrix V = eigPairs[1];
-
-        System.out.println("Eigenvalues: " + lambda + "\n");
-        System.out.println("Eigenvectors:\n" + V + "\n");
-
-        CMatrix prod = mat.mult(V);
-
-        for(int j=0; j<prod.numCols; j++) {
-            System.out.println(prod.getCol(j).sub(V.getCol(j).mult(lambda.get(j))));
-        }
     }
 }

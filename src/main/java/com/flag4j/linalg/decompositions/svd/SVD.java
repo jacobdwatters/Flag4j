@@ -132,6 +132,7 @@ public abstract class SVD<
     @Override
     public SVD<T> decompose(T src) {
         T B = src.invDirectSum(src.H()); // Convert the problem to an eigenvalue problem.
+        System.out.println("B:\n" + B);
 
         double[] singularVals = new double[B.numRows()];
         int stopIdx;
