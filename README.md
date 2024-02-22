@@ -16,8 +16,7 @@ Updates:
     This means computing eigenvalues should be more accuract/correct and significantly faster in most cases.
 - Tensor Solver: Added a solver which can solve tensor equations of the form $A \cdot X = B$ where $A, \ X$, and $B$ are tensors of arbirary rank and shape as long as the shapes are conducive to
   computing the tensor dot product `B = A.dot(X)`.
-- Tensor Inverse: Added ability to compute the inverse of an arbitary invertible tensor $A$, $A^{-1}$ relative to the tensor product
-  `X.tensorDot(Y, new int[]{n, n+1,..., X.rank()}, new int[]{0, 1,..., n})` where $n \in \mathbb{N}^+$.
+- Tensor Inverse: Added ability to compute the inverse of an arbitary invertible tensor $A$, $A^{-1}$ relative to a specified tensor product.
 ___
 
 ## Features and Functionality
@@ -25,21 +24,19 @@ ___
 ### Algebraic Objects
 - Complex Numbers
 - Vectors
-  - Real Dense Vector
-  - Real Sparse Vector
-  - Complex Dense Vector
-  - Complex Sparse Vector
+  - Real/Complex Dense Vector
+  - Real/Complex Sparse Vector
 - Matrices
-    - Real Dense Matrix
-    - <mark>Real Sparse Matrix</mark>
-    - Complex Dense Matrix
-    - <mark>Complex Sparse Matrix</mark>
+    - Dense Matrices
+        - Real/Complex Dense Matrix
+    - Sparse Matrices
+        - Real/Complex COO Matrix
+        - Real/Complex CSR Matrix
+        - Real/Complex Symmetric Tri-diagonal Matrix. 
+        - Permutation Matrix
 - Tensors
-    - Real Dense Tensor
-    - <mark>Real Sparse Tensor</mark>
-    - Complex Dense Tensor
-    - <mark>Complex Sparse Tensor</mark>
-    - Tensor solver
+    - Real/Complex Dense Tensor
+    - Real/Complex Sparse COO Tensor
 
 ### Operations
 - Basic Arithmetic Operations: Add, subtract, scalar/element multiply, scalar/element divide, etc.
@@ -80,8 +77,8 @@ ___
 ### Linear and Homography Transformations
 - Scale
 - Shift
-- <mark>Rotate</mark>
-- <mark>Affine</mark>
+- Rotate
+- Affine
 - Projections
   - Orthographic
   - Perspective
