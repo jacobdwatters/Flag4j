@@ -1,0 +1,45 @@
+package org.flag4j.linalg.decompositions;
+
+import org.flag4j.dense.CMatrix;
+import org.flag4j.linalg.decompositions.chol.ComplexCholesky;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class ComplexCholeskyTests {
+
+    static String[][] aEntries;
+    static CMatrix A, L, A_hat;
+
+    static void setMatrices() {
+        A = new CMatrix(aEntries);
+    }
+
+
+    @Test
+    void testcholeskyTestCase() {
+        ComplexCholesky cholesky = new ComplexCholesky();
+
+        // --------------------- Sub-case 1 ---------------------
+        aEntries = new String[][]{
+                {"1", "-2i"},
+                {"2i", "5"}};
+        setMatrices();
+
+        L = cholesky.decompose(A).getL();
+        A_hat = L.mult(L.H());
+
+        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+
+        // --------------------- Sub-case 2 ---------------------
+        aEntries = new String[][]{
+                {"2", "i"},
+                {"-i", "2"}};
+        setMatrices();
+
+        L = cholesky.decompose(A).getL();
+        A_hat = L.mult(L.H());
+
+        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+    }
+}
