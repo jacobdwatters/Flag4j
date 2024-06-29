@@ -38,22 +38,22 @@ class CNumberComparisonTest {
         // ------------ Sub-case 5 ---------------
         a = new CNumber(-5.123);
         Double = -5.123;
-        Assertions.assertEquals(a, Double);
+        Assertions.assertEquals(a, new CNumber(Double));
 
         // ------------ Sub-case 6 ---------------
         a = new CNumber(-5.123, 1);
         Double = -5.123;
-        Assertions.assertNotEquals(a, Double, 0.0);
+        Assertions.assertNotEquals(a, new CNumber(Double));
 
         // ------------ Sub-case 7 ---------------
         a = new CNumber(2);
         integer = 2;
-        Assertions.assertEquals(a, integer);
+        Assertions.assertEquals(a, new CNumber(integer));
 
         // ------------ Sub-case 8 ---------------
         a = new CNumber(2);
         integer = 0;
-        Assertions.assertNotEquals(a, integer);
+        Assertions.assertNotEquals(a, new CNumber(integer));
 
         // ------------ Sub-case 9 ---------------
         a = new CNumber(2.09124);

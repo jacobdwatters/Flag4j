@@ -532,8 +532,23 @@ public class CsrMatrix
      */
     @Override
     public Matrix pow(int exponent) {
+        ParameterChecks.assertPositive(exponent);
         // TODO: Implementation.
-        return null;
+
+        if(exponent==0) {
+            return new Matrix(this.shape.copy());
+        } else if(exponent==1) {
+            return this.toDense();
+        }
+        else {
+            Matrix exp = this.mult(this); // First multiplication is sparse-sparse multiplication.
+
+            for(int i=2; i<exponent; i++) {
+//                exp.mult(this); // The Matrix.Mult(CsrMatrix) method needs to be implemented in the Matrix class.
+            }
+
+            return exp;
+        }
     }
 
 
@@ -1497,7 +1512,7 @@ public class CsrMatrix
      */
     @Override
     public Matrix pInv() {
-        // TODO: Should have specialized algorithms for inverting sparse matrix.
+        // TODO: Should have specialized algorithms for pseudo-inverting sparse matrix.
         return toDense().pInv();
     }
 

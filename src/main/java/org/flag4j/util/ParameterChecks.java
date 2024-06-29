@@ -364,9 +364,23 @@ public final class ParameterChecks {
      * Checks if a value is positive.
      * @param value Value of interest.
      * @throws IllegalArgumentException If {@code value} is not positive.
+     * @see #assertNonNegative(int)
      */
     public static void assertPositive(int value) {
         if(value <= 0) throw new IllegalArgumentException(ErrorMessages.getNonPosErr(value));
+    }
+
+
+    /**
+     * Checks if a value is non-negative. Note, this method differs from {@link #assertPositive(int)} as it
+     * allows zero values where {@link #assertPositive(int)} does not.
+     * value
+     * @param value Value of interest.
+     * @throws IllegalArgumentException If {@code value} is negative.
+     * @see #assertPositive(int) 
+     */
+    public static void assertNonNegative(int value) {
+        if(value < 0) throw new IllegalArgumentException(ErrorMessages.getNegValueErr(value));
     }
 
 
