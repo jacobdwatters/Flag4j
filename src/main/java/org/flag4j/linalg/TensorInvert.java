@@ -63,8 +63,8 @@ public final class TensorInvert {
         Shape invShape = getInvShape(originalShape, numIndices);
         int prod = getProduct(originalShape.dims, numIndices);
 
-        // Convert to an equivalent matrix inverse problem.
-        Matrix matInverse = new Matrix(prod, src.entries.length-prod, src.entries).inv();
+        // Convert to an equivalent matrix inverse problem and solve.
+        Matrix matInverse = Invert.inv(new Matrix(prod, src.entries.length-prod, src.entries));
 
         return new Tensor(invShape, matInverse.entries); // Reshape as tensor.
     }
@@ -88,7 +88,7 @@ public final class TensorInvert {
         int prod = getProduct(originalShape.dims, numIndices);
 
         // Convert to an equivalent matrix inverse problem.
-        CMatrix matInverse = new CMatrix(prod, src.entries.length-prod, src.entries).inv();
+        CMatrix matInverse = Invert.inv(new CMatrix(prod, src.entries.length-prod, src.entries));
 
         return new CTensor(invShape, matInverse.entries); // Reshape as tensor.
     }

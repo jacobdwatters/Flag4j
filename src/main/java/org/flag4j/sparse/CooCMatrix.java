@@ -2270,28 +2270,6 @@ public class CooCMatrix
 
 
     /**
-     * Computes the inverse of this matrix.
-     *
-     * @return The inverse of this matrix.
-     */
-    @Override
-    public CMatrix inv() {
-        return toDense().inv();
-    }
-
-
-    /**
-     * Computes the pseudo-inverse of this matrix.
-     *
-     * @return The pseudo-inverse of this matrix.
-     */
-    @Override
-    public CMatrix pInv() {
-        return toDense().pInv();
-    }
-
-
-    /**
      * Computes the condition number of this matrix using the {@link SVD SVD}.
      * Specifically, the condition number is computed as the maximum singular value divided by the minimum singular
      * value of this matrix.

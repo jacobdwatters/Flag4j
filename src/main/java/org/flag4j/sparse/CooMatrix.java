@@ -2531,32 +2531,6 @@ public class CooMatrix
 
 
     /**
-     * Computes the inverse of this matrix.
-     *
-     * <p><b>WARNING:</b> Currently, this method will convert this matrix to a dense matrix.</p>
-     *
-     * @return The inverse of this matrix.
-     */
-    @Override
-    public Matrix inv() {
-        return toDense().inv();
-    }
-
-
-    /**
-     * Computes the pseudo-inverse of this matrix.
-     *
-     * <p><b>WARNING:</b> Currently, this method will convert this matrix to a dense matrix.</p>
-     *
-     * @return The pseudo-inverse of this matrix.
-     */
-    @Override
-    public Matrix pInv() {
-        return toDense().inv();
-    }
-    
-
-    /**
      * Computes the condition number of this matrix using {@link SVD SVD}.
      * Specifically, the condition number is computed as the maximum singular value divided by the minimum singular
      * value of this matrix.

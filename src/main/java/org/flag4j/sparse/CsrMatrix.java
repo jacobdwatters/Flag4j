@@ -1492,32 +1492,6 @@ public class CsrMatrix
 
 
     /**
-     * Computes the inverse of this matrix. Warning: Currently, this method converts the matrix to a dense matrix
-     * first then computes the inverse using a standard dense algorithm {@link Matrix#inv()}.
-     *
-     * @return The inverse of this matrix.
-     */
-    @Override
-    public Matrix inv() {
-        // TODO: Should have specialized algorithms for inverting sparse matrix.
-        return toDense().inv();
-    }
-
-
-    /**
-     * Computes the pseudo-inverse of this matrix. Warning: Currently, this method converts the matrix to a dense matrix
-     * first then computes the pseudo-inverse using a standard dense algorithm {@link Matrix#pInv()}.
-     *
-     * @return The pseudo-inverse of this matrix.
-     */
-    @Override
-    public Matrix pInv() {
-        // TODO: Should have specialized algorithms for pseudo-inverting sparse matrix.
-        return toDense().pInv();
-    }
-
-
-    /**
      * Computes the condition number of this matrix using {@link SVD SVD}.
      * Specifically, the condition number is computed as the maximum singular value divided by the minimum singular
      * value of this matrix.

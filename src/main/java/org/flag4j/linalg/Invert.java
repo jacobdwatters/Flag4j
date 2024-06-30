@@ -32,6 +32,9 @@ import org.flag4j.linalg.decompositions.chol.RealCholesky;
 import org.flag4j.linalg.decompositions.lu.ComplexLU;
 import org.flag4j.linalg.decompositions.lu.LU;
 import org.flag4j.linalg.decompositions.lu.RealLU;
+import org.flag4j.linalg.decompositions.svd.ComplexSVD;
+import org.flag4j.linalg.decompositions.svd.RealSVD;
+import org.flag4j.linalg.decompositions.svd.SVD;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolver;
 import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
@@ -252,5 +255,46 @@ public class Invert {
         Matrix Linv = forwardSolver.solveIdentity(chol.getL());
 
         return backSolver.solveLower(chol.getLH(), Linv); // Compute inverse of src.
+    }
+
+    // ------------------------------------------- Pseudo-inverses below -------------------------------------------
+
+    /**
+     * Computes the pseudo-inverse of this matrix. That is, for a matrix {@code A}, computes the Moore–Penrose
+     * {@code A}<sup>+</sup> such that the following hold:
+     * <ol>
+     *   <li>{@code AA}<sup>+</sup>{@code A=A}.</li>
+     *   <li>{@code A}<sup>+</sup>{@code AA}<sup>+</sup>{@code =A}<sup>+</sup>.</li>
+     *   <li>{@code AA}<sup>+</sup> is Hermation.</li>
+     *   <li>{@code A}<sup>+</sup>{@code A} is also Hermation.</li>
+     * </ol>
+     *
+     * @return The Moore–Penrose pseudo-inverse of this matrix.
+     */
+    public static Matrix pInv(Matrix src) {
+        SVD<Matrix> svd = new RealSVD().decompose(src);
+        Matrix sInv = Invert.invDiag(svd.getS());
+
+        return svd.getV().mult(sInv).mult(svd.getU().T());
+    }
+
+
+    /**
+     * Computes the pseudo-inverse of this matrix. That is, for a matrix {@code A}, computes the Moore–Penrose
+     * {@code A}<sup>+</sup> such that the following hold:
+     * <ol>
+     *   <li>{@code AA}<sup>+</sup>{@code A=A}.</li>
+     *   <li>{@code A}<sup>+</sup>{@code AA}<sup>+</sup>{@code =A}<sup>+</sup>.</li>
+     *   <li>{@code AA}<sup>+</sup> is Hermation.</li>
+     *   <li>{@code A}<sup>+</sup>{@code A} is also Hermation.</li>
+     * </ol>
+     *
+     * @return The Moore–Penrose pseudo-inverse of this matrix.
+     */
+    public CMatrix pInv(CMatrix src) {
+        SVD<CMatrix> svd = new ComplexSVD().decompose(src);
+        Matrix sInv = Invert.invDiag(svd.getS());
+
+        return svd.getV().mult(sInv).mult(svd.getU().H());
     }
 }

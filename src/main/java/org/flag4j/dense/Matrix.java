@@ -33,9 +33,7 @@ import org.flag4j.core.dense_base.DenseMatrixMixin;
 import org.flag4j.core.dense_base.RealDenseTensorBase;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.Invert;
-import org.flag4j.linalg.decompositions.lu.LU;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
-import org.flag4j.linalg.decompositions.svd.SVD;
 import org.flag4j.operations.MatrixMultiplyDispatcher;
 import org.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import org.flag4j.operations.TransposeDispatcher;
@@ -53,7 +51,6 @@ import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSpars
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
 import org.flag4j.sparse.*;
 import org.flag4j.util.*;
-import org.flag4j.util.exceptions.SingularMatrixException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -2900,36 +2897,6 @@ public class Matrix
 
 
     /**
-     * Computes the inverse of this matrix. This is done by computing the {@link LU LU decomposition} of
-     * this matrix, inverting {@code U} using a back-solve algorithm, then solving {@code inv(this)*L=inv(U)}
-     * for {@code inv(this)}.
-     *
-     * @return The inverse of this matrix.
-     * @throws IllegalArgumentException If this matrix is not square.
-     * @throws SingularMatrixException If this matrix is singular (i.e. not invertible).
-     * @see #isInvertible()
-     */
-    @Override
-    public Matrix inv() {
-        return Invert.inv(this);
-    }
-
-
-    /**
-     * Computes the pseudo-inverse of this matrix.
-     *
-     * @return The pseudo-inverse of this matrix.
-     */
-    @Override
-    public Matrix pInv() {
-        SVD<Matrix> svd = new RealSVD().decompose(this);
-        Matrix sInv = Invert.invDiag(svd.getS());
-
-        return svd.getV().mult(sInv).mult(svd.getU().T());
-    }
-
-
-    /**
      * Computes the condition number of this matrix using the 2-norm.
      * Specifically, the condition number is computed as the norm of this matrix multiplied by the norm
      * of the inverse of this matrix.
@@ -2964,7 +2931,7 @@ public class Matrix
             Vector s = new RealSVD(false).decompose(this).getS().getDiag();
             cond = p==2 ? s.max()/s.min() : s.min()/s.max();
         } else {
-            cond = norm(p)*inv().norm(p);
+            cond = norm(p)*Invert.inv(this).norm(p);
         }
 
         return cond;
