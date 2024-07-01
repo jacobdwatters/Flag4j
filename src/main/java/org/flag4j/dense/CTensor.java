@@ -33,9 +33,7 @@ import org.flag4j.core.dense_base.ComplexDenseTensorBase;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.TensorInvert;
 import org.flag4j.operations.TransposeDispatcher;
-import org.flag4j.operations.common.complex.AggregateComplex;
 import org.flag4j.operations.dense.complex.ComplexDenseEquals;
-import org.flag4j.operations.dense.complex.ComplexDenseOperations;
 import org.flag4j.operations.dense.complex.ComplexDenseTensorDot;
 import org.flag4j.operations.dense.complex.ComplexDenseTranspose;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
@@ -642,42 +640,6 @@ public class CTensor
     @Override
     public CTensor flatten() {
         return new CTensor(new Shape(true, entries.length), this.entries.clone());
-    }
-
-    
-    /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
-     *
-     * @return the 2-norm of this tensor.
-     */
-    @Override
-    public double norm() {
-        return ComplexDenseOperations.tensorNormL2(entries);
-    }
-
-
-    /**
-     * Computes the p-norm of this tensor.
-     *
-     * @param p The p value in the p-norm. <br>
-     *          - If p is inf, then this method computes the maximum/infinite norm.
-     * @return The p-norm of this tensor.
-     * @throws IllegalArgumentException If p is less than 1.
-     */
-    @Override
-    public double norm(double p) {
-        return ComplexDenseOperations.tensorNormLp(entries, p);
-    }
-
-
-    /**
-     * Computes the maximum/infinite norm of this tensor.
-     *
-     * @return The maximum/infinite norm of this tensor.
-     */
-    @Override
-    public double infNorm() {
-        return AggregateComplex.maxAbs(entries);
     }
 
 

@@ -25,7 +25,6 @@
 package org.flag4j.operations.dense.real;
 
 import org.flag4j.core.Shape;
-import org.flag4j.operations.common.real.AggregateReal;
 import org.flag4j.operations.common.real.RealOperations;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -240,71 +239,6 @@ public final class RealDenseOperations {
         }
 
         return Math.pow(norm, 1.0/q);
-    }
-
-
-    /**
-     * Computes the L<sub>2</sub> norm of a tensor.
-     * @param src Entries of the tensor.
-     * @return The L<sub>2</sub> norm of the tensor.
-     */
-    public static double tensorNormL2(double[] src) {
-        double norm = 0;
-
-        for(double value : src) {
-            norm += Math.pow(Math.abs(value), 2);
-        }
-
-        return Math.sqrt(norm);
-    }
-
-
-    /**
-     * Computes the L<sub>p</sub> norm of a tensor.
-     * @param src Entries of the tensor.
-     * @param p The {@code p} parameter of the L<sub>p</sub> norm.
-     * @return The L<sub>p</sub> norm of the tensor.
-     */
-    public static double tensorNormLp(double[] src, double p) {
-        ParameterChecks.assertNotEquals(0, p);
-        double norm = 0;
-
-        for(double value : src) {
-            norm += Math.pow(Math.abs(value), p);
-        }
-
-        return Math.pow(norm, 1.0/p);
-    }
-
-
-    /**
-     * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
-     * @param src Entries of the matrix.
-     * @return The infinity norm of the matrix.
-     */
-    public static double matrixMaxNorm(double[] src) {
-        return AggregateReal.maxAbs(src);
-    }
-
-
-    /**
-     * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
-     * @param src Entries of the matrix.
-     * @param shape Shape of the matrix.
-     * @return The infinity norm of the matrix.
-     */
-    public static double matrixInfNorm(double[] src, Shape shape) {
-        int rows = shape.dims[0];
-        int cols = shape.dims[1];
-        double[] rowSums = new double[rows];
-
-        for(int i=0; i<rows; i++) {
-            for(int j=0; j<cols; j++) {
-                rowSums[i] += Math.abs(src[i*cols + j]);
-            }
-        }
-
-        return AggregateReal.maxAbs(rowSums);
     }
 
 

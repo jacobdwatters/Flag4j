@@ -33,7 +33,6 @@ import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.TensorInvert;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.dense.real.RealDenseEquals;
-import org.flag4j.operations.dense.real.RealDenseOperations;
 import org.flag4j.operations.dense.real.RealDenseTensorDot;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
@@ -500,31 +499,6 @@ public class Tensor
 
 
     /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
-     *
-     * @return the 2-norm of this tensor.
-     */
-    @Override
-    public double norm() {
-        return RealDenseOperations.tensorNormL2(entries);
-    }
-
-
-    /**
-     * Computes the p-norm of this tensor.
-     *
-     * @param p The p value in the p-norm. <br>
-     *          - If p is inf, then this method computes the maximum/infinite norm.
-     * @return The p-norm of this tensor.
-     * @throws IllegalArgumentException If p is less than 1.
-     */
-    @Override
-    public double norm(double p) {
-        return RealDenseOperations.tensorNormLp(entries, p);
-    }
-
-
-    /**
      * Computes the element-wise multiplication between two tensors.
      * @param B Tensor to element-wise multiply to this tensor.
      * @return The result of the element-wise tensor multiplication.
@@ -624,7 +598,7 @@ public class Tensor
 
     /**
      * Formats this tensor as a human-readable string. Specifically, a string containing the
-     * shape and flatten entries of this tensor.
+     * shape and flattened entries of this tensor.
      * @return A human-readable string representing this tensor.
      */
     public String toString() {

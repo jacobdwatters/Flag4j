@@ -24,13 +24,20 @@
 
 package org.flag4j.linalg;
 
+import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.dense_base.ComplexDenseTensorBase;
 import org.flag4j.core.dense_base.RealDenseTensorBase;
+import org.flag4j.dense.CTensor;
+import org.flag4j.dense.Tensor;
+import org.flag4j.operations.common.complex.AggregateComplex;
+import org.flag4j.sparse.CooCTensor;
+import org.flag4j.sparse.CooTensor;
 import org.flag4j.util.ErrorMessages;
+import org.flag4j.util.ParameterChecks;
 
 
 /**
- * Utility class for computing norms of tensors.
+ * Utility class for computing "norms" of tensors.
  */
 public class TensorNorms {
 
@@ -57,5 +64,185 @@ public class TensorNorms {
      */
     public static double infNorm(ComplexDenseTensorBase<?, ?> src) {
         return src.maxAbs();
+    }
+
+
+    /**
+     * Computes the 2-norm of this tensor as if the tensor was a vector (i.e. as if by {@code VectorNorm(Tensor.toVector())}).
+     * This is equivalent to {@link #norm(Tensor, double) norm(src, 2)}.
+     *
+     * @param src Tensor to compute norm of.
+     * @return the 2-norm of this tensor.
+     */
+    public static double norm(Tensor src) {
+        return tensorNormL2(src.entries);
+    }
+
+
+    /**
+     * Computes the p-norm of this tensor.
+     *
+     * @param src Tensor to compute norm of.
+     * @param p The {@code p} value in the p-norm. <br>
+     *          - If {@code p} is inf, then this method computes the maximum/infinite norm.
+     * @return The p-norm of this tensor.
+     * @throws IllegalArgumentException If p is less than 1.
+     */
+    public static double norm(Tensor src, double p) {
+        return tensorNormLp(src.entries, p);
+    }
+
+
+    /**
+     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(CTensor, double) norm(src, 2)}.
+     *
+     * @return the 2-norm of this tensor.
+     */
+    public double norm(CTensor src) {
+        return tensorNormL2(src.entries);
+    }
+
+
+    /**
+     * Computes the p-norm of this tensor.
+     *
+     * @param src Tensor to compute norm of.
+     * @param p The p value in the p-norm. <br>
+     *          - If p is inf, then this method computes the maximum/infinite norm.
+     * @return The p-norm of this tensor.
+     * @throws IllegalArgumentException If p is less than 1.
+     */
+    public double norm(CTensor src, double p) {
+        return tensorNormLp(src.entries, p);
+    }
+
+
+    /**
+     * Computes the maximum/infinite norm of this tensor.
+     *
+     * @param src Tensor to compute norm of.
+     * @return The maximum/infinite norm of this tensor.
+     */
+    public double infNorm(CTensor src) {
+        return AggregateComplex.maxAbs(src.entries);
+    }
+
+
+    /**
+     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(CooTensor, double) norm(src, 2)}.
+     *
+     * @param src Tensor to compute norm of.
+     * @return the 2-norm of this tensor.
+     */
+    public static double norm(CooTensor src) {
+        return tensorNormL2(src.entries);
+    }
+
+
+    /**
+     * Computes the p-norm of this tensor.
+     *
+     * @param src Tensor to compute norm of.
+     * @param p The p value in the p-norm. <br>
+     *          - If p is inf, then this method computes the maximum/infinite norm.
+     * @return The p-norm of this tensor.
+     * @throws IllegalArgumentException If p is less than 1.
+     */
+    public double norm(CooTensor src, double p) {
+        return tensorNormLp(src.entries, p);
+    }
+
+
+    /**
+     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(CooTensor, double) norm(src, 2)}.
+     *
+     * @param src Tensor to compute norm of.
+     * @return the 2-norm of this tensor.
+     */
+    public static double norm(CooCTensor src) {
+        return tensorNormL2(src.entries);
+    }
+
+
+    /**
+     * Computes the p-norm of this tensor.
+     *
+     * @param src Tensor to compute norm of.
+     * @param p The p value in the p-norm. <br>
+     *          - If p is inf, then this method computes the maximum/infinite norm.
+     * @return The p-norm of this tensor.
+     * @throws IllegalArgumentException If p is less than 1.
+     */
+    public double norm(CooCTensor src, double p) {
+        return tensorNormLp(src.entries, p);
+    }
+
+
+    // -------------------------------------------------- Low-level implementations --------------------------------------------------
+
+    /**
+     * Computes the L<sub>2</sub> norm of a tensor.
+     * @param src Entries of the tensor.
+     * @return The L<sub>2</sub> norm of the tensor.
+     */
+    protected static double tensorNormL2(double[] src) {
+        double norm = 0;
+
+        for(double value : src) {
+            norm += Math.pow(Math.abs(value), 2);
+        }
+
+        return Math.sqrt(norm);
+    }
+
+
+    /**
+     * Computes the L<sub>p</sub> norm of a tensor.
+     * @param src Entries of the tensor.
+     * @param p The {@code p} parameter of the L<sub>p</sub> norm.
+     * @return The L<sub>p</sub> norm of the tensor.
+     */
+    protected static double tensorNormLp(double[] src, double p) {
+        ParameterChecks.assertNotEquals(0, p);
+        double norm = 0;
+
+        for(double value : src) {
+            norm += Math.pow(Math.abs(value), p);
+        }
+
+        return Math.pow(norm, 1.0/p);
+    }
+
+
+    /**
+     * Computes the L<sub>2</sub> norm of a tensor (i.e. the Frobenius norm).
+     * @param src Entries of the tensor.
+     * @return The L<sub>2</sub> norm of the tensor.
+     */
+    public static double tensorNormL2(CNumber[] src) {
+        double norm = 0;
+
+        for(CNumber cNumber : src) {
+            norm += CNumber.pow(cNumber, 2).mag();
+        }
+
+        return Math.sqrt(norm);
+    }
+
+
+    /**
+     * Computes the L<sub>p</sub> norm of a tensor (i.e. the Frobenius norm).
+     * @param src Entries of the tensor.
+     * @param p The {@code p} parameter of the L<sub>p</sub> norm.
+     * @return The L<sub>p</sub> norm of the tensor.
+     */
+    public static double tensorNormLp(CNumber[] src, double p) {
+        double norm = 0;
+
+        for(CNumber cNumber : src) {
+            norm += CNumber.pow(cNumber, p).mag();
+        }
+
+        return Math.pow(norm, 1.0/p);
     }
 }

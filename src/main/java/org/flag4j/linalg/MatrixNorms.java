@@ -25,17 +25,21 @@
 package org.flag4j.linalg;
 
 
+import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.core.Shape;
 import org.flag4j.dense.CMatrix;
 import org.flag4j.dense.Matrix;
-import org.flag4j.operations.dense.complex.ComplexDenseOperations;
+import org.flag4j.operations.common.complex.AggregateComplex;
+import org.flag4j.operations.common.real.AggregateReal;
 import org.flag4j.operations.dense.real.RealDenseOperations;
 import org.flag4j.operations.sparse.coo.complex.ComplexSparseNorms;
 import org.flag4j.operations.sparse.coo.real.RealSparseNorms;
-import org.flag4j.operations.sparse.csr.real.RealCsrOperations;
 import org.flag4j.sparse.CooCMatrix;
 import org.flag4j.sparse.CooMatrix;
 import org.flag4j.sparse.CsrMatrix;
+import org.flag4j.util.Axis2D;
 import org.flag4j.util.ErrorMessages;
+import org.flag4j.util.ParameterChecks;
 
 /**
  * Utility class for computing norms of matrices.
@@ -57,7 +61,7 @@ public class MatrixNorms {
      * @return the 2-norm of this tensor.
      */
     public static double norm(Matrix src) {
-        return RealDenseOperations.tensorNormL2(src.entries);
+        return TensorNorms.tensorNormL2(src.entries);
     }
 
 
@@ -80,7 +84,7 @@ public class MatrixNorms {
                 norm = src.minAbs();
             }
         } else {
-            norm = RealDenseOperations.tensorNormLp(src.entries, p);
+            norm = TensorNorms.tensorNormLp(src.entries, p);
         }
 
         return norm;
@@ -95,7 +99,7 @@ public class MatrixNorms {
      * @see #infNorm(Matrix)
      */
     public static double maxNorm(Matrix src) {
-        return RealDenseOperations.matrixMaxNorm(src.entries);
+        return matrixMaxNorm(src.entries);
     }
 
 
@@ -107,7 +111,7 @@ public class MatrixNorms {
      * @see #maxNorm(Matrix)
      */
     public static double infNorm(Matrix src) {
-        return RealDenseOperations.matrixInfNorm(src.entries, src.shape);
+        return matrixInfNorm(src.entries, src.shape);
     }
 
 
@@ -132,7 +136,7 @@ public class MatrixNorms {
      * @return The L<sub>p, q</sub> norm of this matrix.
      */
     public static double norm(CMatrix src, double p, double q) {
-        return ComplexDenseOperations.matrixNormLpq(src.entries, src.shape, p, q);
+        return matrixNormLpq(src.entries, src.shape, p, q);
     }
 
 
@@ -143,7 +147,7 @@ public class MatrixNorms {
      * @return The max norm of this matrix.
      */
     public static double maxNorm(CMatrix src) {
-        return ComplexDenseOperations.matrixMaxNorm(src.entries);
+        return matrixMaxNorm(src.entries);
     }
 
 
@@ -154,7 +158,7 @@ public class MatrixNorms {
      * @return the 2-norm of this tensor.
      */
     public static double norm(CMatrix src) {
-        return ComplexDenseOperations.matrixNormL2(src.entries, src.shape);
+        return matrixNormL2(src.entries, src.shape);
     }
 
 
@@ -177,7 +181,7 @@ public class MatrixNorms {
                 norm = src.minAbs();
             }
         } else {
-            norm = ComplexDenseOperations.matrixNormLp(src.entries, src.shape, p);
+            norm = matrixNormLp(src.entries, src.shape, p);
         }
 
         return norm;
@@ -191,7 +195,7 @@ public class MatrixNorms {
      * @return The maximum/infinite norm of this tensor.
      */
     public static double infNorm(CMatrix src) {
-        return ComplexDenseOperations.matrixInfNorm(src.entries, src.shape);
+        return matrixInfNorm(src.entries, src.shape);
     }
 
 
@@ -218,7 +222,7 @@ public class MatrixNorms {
      * @return The max norm of this matrix.
      */
     public static double maxNorm(CooMatrix src) {
-        return RealDenseOperations.matrixMaxNorm(src.entries);
+        return matrixMaxNorm(src.entries);
     }
 
 
@@ -273,7 +277,7 @@ public class MatrixNorms {
      * @return The max norm of this matrix.
      */
     public static double maxNorm(CooCMatrix src) {
-        return ComplexDenseOperations.matrixMaxNorm(src.entries);
+        return matrixMaxNorm(src.entries);
     }
 
 
@@ -317,7 +321,7 @@ public class MatrixNorms {
      * @return The L<sub>p, q</sub> norm of this matrix.
      */
     public static double norm(CsrMatrix src, double p, double q) {
-        return RealCsrOperations.matrixNormLpq(src, p, q);
+        return matrixNormLpq(src, p, q);
     }
 
 
@@ -328,7 +332,7 @@ public class MatrixNorms {
      * @return The max norm of this matrix.
      */
     public static double maxNorm(CsrMatrix src) {
-        return RealDenseOperations.matrixMaxNorm(src.entries);
+        return matrixMaxNorm(src.entries);
     }
 
 
@@ -339,7 +343,7 @@ public class MatrixNorms {
      * @return the 2-norm of this tensor.
      */
     public double norm(CsrMatrix src) {
-        return RealDenseOperations.tensorNormL2(src.entries); // Zeros do not contribute to this norm.
+        return TensorNorms.tensorNormL2(src.entries); // Zeros do not contribute to this norm.
     }
 
 
@@ -353,6 +357,178 @@ public class MatrixNorms {
      * @throws IllegalArgumentException If p is less than 1.
      */
     public double norm(CsrMatrix src, double p) {
-        return RealDenseOperations.tensorNormLp(src.entries, p); // Zeros do not contribute to this norm.
+        return TensorNorms.tensorNormLp(src.entries, p); // Zeros do not contribute to this norm.
+    }
+
+
+    // -------------------------------------------------- Low-level implementations --------------------------------------------------
+    /**
+     * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
+     * @param src Entries of the matrix.
+     * @return The infinity norm of the matrix.
+     */
+    private static double matrixMaxNorm(double[] src) {
+        return AggregateReal.maxAbs(src);
+    }
+
+
+    /**
+     * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return The infinity norm of the matrix.
+     */
+    private static double matrixInfNorm(double[] src, Shape shape) {
+        int rows = shape.dims[0];
+        int cols = shape.dims[1];
+        double[] rowSums = new double[rows];
+
+        for(int i=0; i<rows; i++) {
+            for(int j=0; j<cols; j++) {
+                rowSums[i] += Math.abs(src[i*cols + j]);
+            }
+        }
+
+        return AggregateReal.maxAbs(rowSums);
+    }
+
+    /**
+     * Compute the L<sub>p, q</sub> norm of a matrix.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @param p First parameter in L<sub>p, q</sub> norm.
+     * @param q Second parameter in L<sub>p, q</sub> norm.
+     * @return The L<sub>p, q</sub> norm of the matrix.
+     * @throws IllegalArgumentException If {@code p} or {@code q} is less than 1.
+     */
+    private static double matrixNormLpq(CNumber[] src, Shape shape, double p, double q) {
+        ParameterChecks.assertGreaterEq(1, p, q);
+
+        double norm = 0;
+        double colSum;
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+
+        for(int j=0; j<cols; j++) {
+            colSum = 0;
+            for(int i=0; i<rows; i++) {
+                colSum += (Math.pow(src[i*cols + j].mag(), p));
+            }
+            norm += Math.pow(colSum, q/p);
+        }
+
+        return Math.pow(norm, 1/q);
+    }
+
+
+    /**
+     * Compute the L<sub>p</sub> norm of a matrix. This is equivalent to passing {@code q=1} to
+     * {@link #matrixNormLpq(CNumber[], Shape, double, double)}
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @param p Parameter in L<sub>p</sub> norm.
+     * @return The L<sub>p</sub> norm of the matrix.
+     * @throws IllegalArgumentException If {@code p} is less than 1.
+     */
+    private static double matrixNormLp(CNumber[] src, Shape shape, double p) {
+        ParameterChecks.assertGreaterEq(1, p);
+
+        double norm = 0;
+        double colSum;
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+
+        for(int j=0; j<cols; j++) {
+            colSum=0;
+            for(int i=0; i<rows; i++) {
+                colSum += Math.pow(src[i*cols + j].mag(), p);
+            }
+
+            norm += Math.pow(colSum, 1.0/p);
+        }
+
+        return norm;
+    }
+
+
+    /**
+     * Compute the L<sub>2</sub> norm of a matrix. This is equivalent to passing {@code q=1} to
+     * {@link #matrixNormLpq(CNumber[], Shape, double, double)}
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return The L<sub>2</sub> norm of the matrix.
+     */
+    private static double matrixNormL2(CNumber[] src, Shape shape) {
+        double norm = 0;
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+
+        double colSum;
+
+        for(int j=0; j<cols; j++) {
+            colSum = 0;
+            for(int i=0; i<rows; i++) {
+                colSum += Math.pow(src[i*cols + j].mag(), 2);
+            }
+            norm += Math.sqrt(colSum);
+        }
+
+        return norm;
+    }
+
+
+    /**
+     * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
+     * @param src Entries of the matrix.
+     * @return The infinity norm of the matrix.
+     */
+    private static double matrixMaxNorm(CNumber[] src) {
+        return AggregateComplex.maxAbs(src);
+    }
+
+
+    /**
+     * Computes the infinity/maximum norm of a matrix. That is, the maximum absolute value in this matrix.
+     * @param src Entries of the matrix.
+     * @return The infinity norm of the matrix.
+     */
+    private static double matrixInfNorm(CNumber[] src, Shape shape) {
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+        double[] rowSums = new double[rows];
+
+        for(int i=0; i<rows; i++) {
+            for(int j=0; j<cols; j++) {
+                rowSums[i] += src[i*cols + j].mag();
+            }
+        }
+
+        return AggregateReal.maxAbs(rowSums);
+    }
+
+
+    /**
+     * Compute the L<sub>p,q</sub> norm of a sparse CSR matrix.
+     * @param src Sparse CSR matrix to compute norm of.
+     * @return The L<sub>p,q</sub> norm of the matrix.
+     */
+    public static double matrixNormLpq(CsrMatrix src, double p, double q) {
+        CsrMatrix tSrc = src.transpose();
+        double norm = 0;
+        double pOverQ = p/q;
+
+        for(int i=0; i<tSrc.numRows; i++) {
+            int start = tSrc.rowPointers[i];
+            int stop = tSrc.rowPointers[i+1];
+            double colNorm = 0;
+
+            for(int j=start; j<stop; j++) {
+                colNorm += Math.pow(Math.abs(tSrc.entries[j]), p);
+            }
+
+            norm += Math.pow(colNorm, pOverQ);
+        }
+
+        return Math.pow(norm, 1.0/q);
     }
 }

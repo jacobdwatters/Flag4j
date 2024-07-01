@@ -29,6 +29,7 @@ import org.flag4j.core.Shape;
 import org.flag4j.dense.Matrix;
 import org.flag4j.util.ParameterChecks;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -48,7 +49,7 @@ import java.util.Arrays;
  *      [ 0 0 0 X X ]]</pre>
  * </p>
  */
-public class SymmTriDiagonal {
+public class SymmTriDiagonal implements Serializable {
 
     /**
      * Stores the diagonal entries of this symmetric tri-diagonal matrix.
