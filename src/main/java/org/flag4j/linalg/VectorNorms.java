@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,29 +22,137 @@
  * SOFTWARE.
  */
 
-package org.flag4j.operations.common.real;
-
+package org.flag4j.linalg;
 
 import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.core.dense_base.ComplexDenseTensorBase;
+import org.flag4j.core.dense_base.RealDenseTensorBase;
+import org.flag4j.dense.CVector;
+import org.flag4j.dense.Vector;
 import org.flag4j.operations.common.complex.AggregateComplex;
+import org.flag4j.operations.common.real.AggregateReal;
+import org.flag4j.sparse.CooCVector;
+import org.flag4j.sparse.CooVector;
+import org.flag4j.util.ErrorMessages;
+
 
 /**
- * This class contains low level implementations of vector norms for real valued vectors.
+ * Utility class for computing norms of vectors. To compute the infinite norm see
+ * {@link TensorNorms#infNorm(ComplexDenseTensorBase)} or {@link TensorNorms#infNorm(RealDenseTensorBase)}
  */
 public class VectorNorms {
 
     private VectorNorms() {
-        // Hide default constructor for utility class.
-        throw new IllegalStateException();
+        // Hide default constructor for utility class
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+    }
+
+    /**
+     * Computes the 2-norm of this vector. This is equivalent to {@link #norm(Vector, double) norm(2)}.
+     *
+     * @param src Vector to compute norm of.
+     * @return the 2-norm of this vector.
+     */
+    public static double norm(Vector src) {
+        return norm(src.entries);
     }
 
 
+    /**
+     * Computes the p-norm of this vector.
+     *
+     * @param src Vector to compute norm of.
+     * @param p The p value in the p-norm. <br>
+     *          - If p is inf, then this method computes the maximum/infinite norm.
+     * @return The p-norm of this vector.
+     * @throws IllegalArgumentException If p is less than 1.
+     */
+    public static double norm(Vector src, double p) {
+        return norm(src.entries, p);
+    }
+
+
+    /**
+     * Computes the 2-norm of this vector. This is equivalent to {@link #norm(Vector, double) norm(2)}.
+     *
+     * @param src Vector to compute norm of.
+     * @return the 2-norm of this vector.
+     */
+    public static double norm(CooVector src) {
+        return norm(src.entries);
+    }
+
+
+    /**
+     * Computes the p-norm of this vector.
+     *
+     * @param src Vector to compute norm of.
+     * @param p The p value in the p-norm. <br>
+     *          - If p is inf, then this method computes the maximum/infinite norm.
+     * @return The p-norm of this vector.
+     * @throws IllegalArgumentException If p is less than 1.
+     */
+    public static double norm(CooVector src, double p) {
+        return norm(src.entries, p);
+    }
+
+
+    /**
+     * Computes the 2-norm of this vector. This is equivalent to {@link #norm(CVector, double) norm(2)}.
+     *
+     * @return the 2-norm of this vector.
+     */
+    public static double norm(CVector src) {
+        return VectorNorms.norm(src.entries);
+    }
+
+
+    /**
+     * Computes the p-norm of this vector. Warning, if p is large in absolute value, overflow issues may occur.
+     *
+     * @param p The p value in the p-norm. <br>
+     *          - If p is {@link Double#POSITIVE_INFINITY}, then this method computes the maximum/infinite norm. <br>
+     *          - If p is {@link Double#NEGATIVE_INFINITY}, then this method computes the minimum norm.
+     * @return The p-norm of this vector.
+     */
+    public static double norm(CVector src, double p) {
+        return VectorNorms.norm(src.entries, p);
+    }
+
+
+    /**
+     * Computes the 2-norm of this vector. This is equivalent to {@link #norm(CooCVector, double) norm(2)}.
+     *
+     * @param src Vector to compute norm of.
+     * @return the 2-norm of this vector.
+     */
+    public static double norm(CooCVector src) {
+        return VectorNorms.norm(src.entries);
+    }
+
+
+    /**
+     * Computes the p-norm of this vector.
+     *
+     * @param src Vector to compute norm of.
+     * @param p The p value in the p-norm. <br>
+     *          - If p is inf, then this method computes the maximum/infinite norm.
+     * @return The p-norm of this vector.
+     * @throws IllegalArgumentException If p is less than 1.
+     */
+    public static double norm(CooCVector src, double p) {
+        return VectorNorms.norm(src.entries, p);
+    }
+
+
+
+    // ---------------------------------------------- Low-level Implementations ----------------------------------------------
     /**
      * Computes the 2-norm of a vector.
      * @param src Entries of the vector (or non-zero entries if vector is sparse).
      * @return The 2-norm of the vector.
      */
-    public static double norm(double... src) {
+    private static double norm(double... src) {
         double norm = 0;
         double maxAbs = AggregateReal.maxAbs(src);
         if(maxAbs == 0) return 0; // Early return for zero norm.
@@ -64,7 +172,7 @@ public class VectorNorms {
      * @param src Entries of the vector (or non-zero entries if vector is sparse).
      * @return The 2-norm of the vector.
      */
-    public static double norm(CNumber... src) {
+    private static double norm(CNumber... src) {
         double norm = 0;
         double scaledMag;
         double maxAbs = AggregateComplex.maxAbs(src);
@@ -90,7 +198,7 @@ public class VectorNorms {
      *          Warning, if {@code p} is large in absolute value, overflow errors may occur.
      * @return The {@code p}-norm of the vector.
      */
-    public static double norm(double[] src, double p) {
+    private static double norm(double[] src, double p) {
         if(Double.isInfinite(p)) {
             if(p > 0) {
                 return AggregateReal.maxAbs(src); // Maximum / infinite norm.
@@ -118,7 +226,7 @@ public class VectorNorms {
      *          Warning, if {@code p} is large in absolute value, overflow errors may occur.
      * @return The {@code p}-norm of the vector.
      */
-    public static double norm(CNumber[] src, double p) {
+    private static double norm(CNumber[] src, double p) {
         if(Double.isInfinite(p)) {
             if(p > 0) {
                 return AggregateComplex.maxAbs(src); // Maximum / infinite norm.

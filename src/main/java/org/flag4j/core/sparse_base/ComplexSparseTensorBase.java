@@ -169,12 +169,6 @@ public abstract class ComplexSparseTensorBase<T, U, Y>
 
 
     @Override
-    public double infNorm() {
-        return AggregateComplex.maxAbs(entries);
-    }
-
-
-    @Override
     public boolean isZeros() {
         return ComplexProperties.isZeros(entries);
     }

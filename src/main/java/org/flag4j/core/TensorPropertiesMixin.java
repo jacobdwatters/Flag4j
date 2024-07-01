@@ -75,28 +75,4 @@ interface TensorPropertiesMixin {
      * entry (in row-major ordering) are returned.
      */
     int[] argMax();
-
-
-    /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
-     * @return the 2-norm of this tensor.
-     */
-    double norm();
-
-
-    /**
-     * Computes the p-norm of this tensor.
-     * @param p The p value in the p-norm. <br>
-     *          - If p is inf, then this method computes the maximum/infinite norm.
-     * @return The p-norm of this tensor.
-     * @throws IllegalArgumentException If p is less than 1.
-     */
-    double norm(double p);
-
-
-    /**
-     * Computes the maximum/infinite norm of this tensor.
-     * @return The maximum/infinite norm of this tensor.
-     */
-    double infNorm();
 }

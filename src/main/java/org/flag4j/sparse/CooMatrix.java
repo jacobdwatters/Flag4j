@@ -34,10 +34,8 @@ import org.flag4j.dense.CVector;
 import org.flag4j.dense.Matrix;
 import org.flag4j.dense.Vector;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.decompositions.svd.SVD;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.common.complex.ComplexOperations;
-import org.flag4j.operations.dense.real.RealDenseOperations;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixMultiplication;
@@ -600,26 +598,6 @@ public class CooMatrix
     @Override
     public boolean isI() {
         return RealSparseMatrixProperties.isIdentity(this);
-    }
-
-
-    /**
-     * Checks if matrices are inverses of each other.
-     *
-     * @param B Second matrix.
-     * @return True if matrix B is an inverse of this matrix. Otherwise, returns false. Otherwise, returns false.
-     */
-    @Override
-    public boolean isInv(CooMatrix B) {
-        boolean result;
-
-        if(!this.isSquare() || !B.isSquare() || !shape.equals(B.shape)) {
-            result = false;
-        } else {
-            result = this.mult(B).round().isI();
-        }
-
-        return result;
     }
 
 
@@ -2528,23 +2506,6 @@ public class CooMatrix
 
         return trace;
     }
-
-
-    /**
-     * Computes the condition number of this matrix using {@link SVD SVD}.
-     * Specifically, the condition number is computed as the maximum singular value divided by the minimum singular
-     * value of this matrix.
-     *
-     * <p>
-     *     WARNING: This method will convert the sparse matrix to a dense matrix to perform the computation.
-     * </p>
-     *
-     * @return The condition number of this matrix (Assuming Frobenius norm).
-     */
-    @Override
-    public double cond() {
-        return toDense().cond();
-    }
     
 
     /**
@@ -2827,32 +2788,6 @@ public class CooMatrix
 
 
     /**
-     * Computes the L<sub>p, q</sub> norm of this matrix.
-     *
-     * @param p P value in the L<sub>p, q</sub> norm.
-     * @param q Q value in the L<sub>p, q</sub> norm.
-     * @return The L<sub>p, q</sub> norm of this matrix.
-     */
-    @Override
-    public double norm(double p, double q) {
-        // Sparse implementation is usually only faster for very sparse matrices.
-        return sparsity()>=0.95 ? RealSparseNorms.matrixNormLpq(this, p, q) :
-                toDense().norm(p, q);
-    }
-
-
-    /**
-     * Computes the max norm of a matrix.
-     *
-     * @return The max norm of this matrix.
-     */
-    @Override
-    public double maxNorm() {
-        return RealDenseOperations.matrixMaxNorm(entries);
-    }
-
-
-    /**
      * Computes the rank of this matrix (i.e. the dimension of the column space of this matrix).
      * Note that here, rank is <b>NOT</b> the same as a tensor rank.
      *
@@ -2988,35 +2923,6 @@ public class CooMatrix
         }
 
         return new CooMatrix(new Shape(dims), entries.clone(), rowIndices, colIndices);
-    }
-
-
-    /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
-     *
-     * @return the 2-norm of this tensor.
-     */
-    @Override
-    public double norm() {
-        // Sparse implementation is usually only faster for very sparse matrices.
-        return sparsity()>=0.95 ? RealSparseNorms.matrixNormL2(this) :
-                toDense().norm();
-    }
-
-
-    /**
-     * Computes the p-norm of this tensor.
-     *
-     * @param p The p value in the p-norm. <br>
-     *          - If p is inf, then this method computes the maximum/infinite norm.
-     * @return The p-norm of this tensor.
-     * @throws IllegalArgumentException If p is less than 1.
-     */
-    @Override
-    public double norm(double p) {
-        // Sparse implementation is usually only faster for very sparse matrices.
-        return sparsity()>=0.95 ? RealSparseNorms.matrixNormLp(this, p) :
-                toDense().norm(p);
     }
 
 

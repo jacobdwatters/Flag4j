@@ -32,13 +32,16 @@ import org.flag4j.core.Shape;
 import org.flag4j.core.dense_base.ComplexDenseTensorBase;
 import org.flag4j.core.dense_base.DenseMatrixMixin;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.Invert;
+import org.flag4j.linalg.MatrixNorms;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;
 import org.flag4j.operations.MatrixMultiplyDispatcher;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.common.complex.ComplexOperations;
 import org.flag4j.operations.common.real.RealProperties;
-import org.flag4j.operations.dense.complex.*;
+import org.flag4j.operations.dense.complex.ComplexDenseDeterminant;
+import org.flag4j.operations.dense.complex.ComplexDenseEquals;
+import org.flag4j.operations.dense.complex.ComplexDenseProperties;
+import org.flag4j.operations.dense.complex.ComplexDenseSetOperations;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
@@ -527,26 +530,6 @@ public class CMatrix
      */
     public boolean isCloseToI() {
         return ComplexDenseProperties.isCloseToIdentity(this);
-    }
-
-
-    /**
-     * Checks if matrices are inverses of each other.
-     *
-     * @param B Second matrix.
-     * @return True if matrix B is an inverse (approximately) of this matrix. Otherwise, returns false. Otherwise, returns false.
-     */
-    @Override
-    public boolean isInv(CMatrix B) {
-        boolean result;
-
-        if(!this.isSquare() || !B.isSquare() || !shape.equals(B.shape)) {
-            result = false;
-        } else {
-            result = this.mult(B).isCloseToI();
-        }
-
-        return result;
     }
 
 
@@ -3351,48 +3334,6 @@ public class CMatrix
 
 
     /**
-     * Computes the condition number of this matrix using the 2-norm.
-     * Specifically, the condition number is computed as the norm of this matrix multiplied by the norm
-     * of the inverse of this matrix.
-     *
-     * @return The condition number of this matrix (Assuming 2-norm). This value may be
-     * {@link Double#POSITIVE_INFINITY infinite}.
-     */
-    @Override
-    public double cond() {
-        return cond(2);
-    }
-
-
-    /**
-     * Computes the condition number of this matrix using a specified norm. The condition number of a matrix is defined
-     * as the norm of a matrix multiplied by the norm of the inverse of the matrix.
-     * @param p Specifies the order of the norm to be used when computing the condition number.
-     *          Common {@code p} values include:<br>
-     *          - {@code p} = {@link Double#POSITIVE_INFINITY}, {@link #infNorm()}.<br>
-     *          - {@code p} = 2, The standard matrix 2-norm (the largest singular value).<br>
-     *          - {@code p} = -2, The Smallest singular value.<br>
-     *          - {@code p} = 1, Maximum absolute row sum.<br>
-     * @return The condition number of this matrix using the specified norm. This value may be
-     * {@link Double#POSITIVE_INFINITY infinite}.
-     */
-    // TODO Pull up to matrix mixin
-    public double cond(double p) {
-        double cond;
-
-        if(p==2 || p==-2) {
-            // Compute the singular value decomposition of the matrix.
-            Vector s = new ComplexSVD(false).decompose(this).getS().getDiag();
-            cond = p==2 ? s.max()/s.min() : s.min()/s.max();
-        } else {
-            cond = norm(p)*Invert.inv(this).norm(p);
-        }
-
-        return cond;
-    }
-
-
-    /**
      * Extracts the diagonal elements of this matrix and returns them as a vector.
      * @return A vector containing the diagonal entries of this matrix.
      */
@@ -3590,30 +3531,6 @@ public class CMatrix
 
 
     /**
-     * Computes the L<sub>p, q</sub> norm of this matrix.
-     *
-     * @param p P value in the L<sub>p, q</sub> norm.
-     * @param q Q value in the L<sub>p, q</sub> norm.
-     * @return The L<sub>p, q</sub> norm of this matrix.
-     */
-    @Override
-    public double norm(double p, double q) {
-        return ComplexDenseOperations.matrixNormLpq(entries, shape, p, q);
-    }
-
-
-    /**
-     * Computes the max norm of a matrix.
-     *
-     * @return The max norm of this matrix.
-     */
-    @Override
-    public double maxNorm() {
-        return ComplexDenseOperations.matrixMaxNorm(entries);
-    }
-
-
-    /**
      * Computes the rank of this matrix (i.e. the dimension of the column space of this matrix).
      * Note that here, rank is <b>NOT</b> the same as a tensor rank.
      *
@@ -3624,7 +3541,9 @@ public class CMatrix
         Matrix S = new ComplexSVD(false).decompose(this).getS();
         int stopIdx = Math.min(numRows, numCols);
 
-        double tol = 2.0*Math.max(numRows, numCols)* Flag4jConstants.EPS_F64*norm(); // Tolerance for determining if a singular value should be considered zero.
+        double tol = 2.0*Math.max(numRows, numCols)* Flag4jConstants.EPS_F64*MatrixNorms.norm(this); // Tolerance for determining if a
+        // singular
+        // value should be considered zero.
         int rank = 0;
 
         for(int i=0; i<stopIdx; i++) {
@@ -3712,54 +3631,6 @@ public class CMatrix
     public CNumber get(int... indices) {
         ParameterChecks.assertValidIndex(shape, indices);
         return entries[indices[0]*numCols + indices[1]];
-    }
-
-
-    /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
-     *
-     * @return the 2-norm of this tensor.
-     */
-    @Override
-    public double norm() {
-        return ComplexDenseOperations.matrixNormL2(entries, shape);
-    }
-
-
-    /**
-     * Computes the p-norm of this tensor.
-     *
-     * @param p The p value in the p-norm. <br>
-     *          - If p is inf, then this method computes the maximum/infinite norm.
-     * @return The p-norm of this tensor.
-     * @throws IllegalArgumentException If p is less than 1.
-     */
-    @Override
-    public double norm(double p) {
-        double norm;
-
-        if(Double.isInfinite(p)) {
-            if(p > 0) {
-                norm = maxNorm();
-            } else {
-                norm = minAbs();
-            }
-        } else {
-            norm = ComplexDenseOperations.matrixNormLp(entries, shape, p);
-        }
-
-        return norm;
-    }
-
-
-    /**
-     * Computes the maximum/infinite norm of this tensor.
-     *
-     * @return The maximum/infinite norm of this tensor.
-     */
-    @Override
-    public double infNorm() {
-        return ComplexDenseOperations.matrixInfNorm(entries, shape);
     }
 
 

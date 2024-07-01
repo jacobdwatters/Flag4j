@@ -33,9 +33,9 @@ import org.flag4j.dense.CVector;
 import org.flag4j.dense.Matrix;
 import org.flag4j.dense.Vector;
 import org.flag4j.io.PrintOptions;
+import org.flag4j.linalg.VectorNorms;
 import org.flag4j.operations.common.complex.ComplexOperations;
 import org.flag4j.operations.common.real.RealOperations;
-import org.flag4j.operations.common.real.VectorNorms;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
@@ -913,7 +913,7 @@ public class CooVector
      */
     @Override
     public CooVector normalize() {
-        double norm = this.norm();
+        double norm = VectorNorms.norm(this);
         return norm==0 ? new CooVector(size) : this.div(norm);
     }
 
@@ -1132,42 +1132,6 @@ public class CooVector
                 this.entries.clone(),
                 RealDenseTranspose.blockedIntMatrix(new int[][]{this.indices.clone()})
         );
-    }
-
-
-    /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
-     *
-     * @return the 2-norm of this tensor.
-     */
-    @Override
-    public double norm() {
-        return VectorNorms.norm(entries);
-    }
-
-
-    /**
-     * Computes the p-norm of this tensor.
-     *
-     * @param p The p value in the p-norm. <br>
-     *          - If p is inf, then this method computes the maximum/infinite norm.
-     * @return The p-norm of this tensor.
-     * @throws IllegalArgumentException If p is less than 1.
-     */
-    @Override
-    public double norm(double p) {
-        return VectorNorms.norm(entries, p);
-    }
-
-
-    /**
-     * Computes the maximum/infinite norm of this tensor.
-     *
-     * @return The maximum/infinite norm of this tensor.
-     */
-    @Override
-    public double infNorm() {
-        return maxAbs();
     }
 
 

@@ -291,10 +291,52 @@ public class Invert {
      *
      * @return The Moore–Penrose pseudo-inverse of this matrix.
      */
-    public CMatrix pInv(CMatrix src) {
+    public static CMatrix pInv(CMatrix src) {
         SVD<CMatrix> svd = new ComplexSVD().decompose(src);
         Matrix sInv = Invert.invDiag(svd.getS());
 
         return svd.getV().mult(sInv).mult(svd.getU().H());
+    }
+
+    // -------------------------------------------------------------------
+
+    /**
+     * Checks if matrices are inverses of each other. This method rounds values near zero to zero when checking
+     * if the two matrices are inverses to account for floating point precision loss.
+     *
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
+     * @return True if matrix src2 is an inverse of this matrix. Otherwise, returns false. Otherwise, returns false.
+     */
+    public static boolean isInv(Matrix src1, Matrix src2) {
+        boolean result;
+
+        if(!src1.isSquare() || !src2.isSquare() || !src1.shape.equals(src2.shape)) {
+            result = false;
+        } else {
+            result = src1.mult(src2).isCloseToI();
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Checks if matrices are inverses of each other.
+     *
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
+     * @return True if matrix src2 is an inverse (approximately) of this matrix. Otherwise, returns false. Otherwise, returns false.
+     */
+    public static boolean isInv(CMatrix src1, CMatrix src2) {
+        boolean result;
+
+        if(!src1.isSquare() || !src2.isSquare() || !src1.shape.equals(src2.shape)) {
+            result = false;
+        } else {
+            result = src1.mult(src2).isCloseToI();
+        }
+
+        return result;
     }
 }

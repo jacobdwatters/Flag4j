@@ -119,22 +119,6 @@ public interface MatrixPropertiesMixin {
 
 
     /**
-     * Computes the L<sub>p, q</sub> norm of this matrix.
-     * @param p P value in the L<sub>p, q</sub> norm.
-     * @param q Q value in the L<sub>p, q</sub> norm.
-     * @return The L<sub>p, q</sub> norm of this matrix.
-     */
-    double norm(double p, double q);
-
-
-    /**
-     * Computes the max norm of a matrix.
-     * @return The max norm of this matrix.
-     */
-    double maxNorm();
-
-
-    /**
      * Computes the rank of this matrix (i.e. the dimension of the column space of this matrix).
      * Note that here, rank is <b>NOT</b> the same as a tensor rank.
      *

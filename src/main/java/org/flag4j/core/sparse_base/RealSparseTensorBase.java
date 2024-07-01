@@ -183,12 +183,6 @@ public abstract class RealSparseTensorBase<
 
 
     @Override
-    public double infNorm() {
-    return AggregateReal.maxAbs(entries);
-    }
-
-
-    @Override
     public boolean isPos() {
     return RealProperties.isPos(entries);
     }
