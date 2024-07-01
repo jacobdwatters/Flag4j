@@ -137,12 +137,6 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
 
 
     @Override
-    public double infNorm() {
-        return AggregateReal.maxAbs(entries);
-    }
-
-
-    @Override
     public boolean isPos() {
         return RealProperties.isPos(entries);
     }

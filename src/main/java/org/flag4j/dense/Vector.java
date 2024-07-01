@@ -30,7 +30,7 @@ import org.flag4j.core.VectorMixin;
 import org.flag4j.core.dense_base.DenseVectorMixin;
 import org.flag4j.core.dense_base.RealDenseTensorBase;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.operations.common.real.VectorNorms;
+import org.flag4j.linalg.VectorNorms;
 import org.flag4j.operations.dense.real.RealDenseEquals;
 import org.flag4j.operations.dense.real.RealDenseVectorOperations;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
@@ -810,7 +810,7 @@ public class Vector
      */
     @Override
     public Vector normalize() {
-        double norm = this.norm();
+        double norm = VectorNorms.norm(this);
         return norm==0 ? new Vector(size) : this.div(norm);
     }
 
@@ -1034,31 +1034,6 @@ public class Vector
      */
     public Tensor toTensor() {
         return new Tensor(this.shape.copy(), this.entries.clone());
-    }
-
-
-    /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
-     *
-     * @return the 2-norm of this tensor.
-     */
-    @Override
-    public double norm() {
-        return VectorNorms.norm(entries);
-    }
-
-
-    /**
-     * Computes the p-norm of this tensor. Warning, if p is large in absolute value, overflow errors may occur.
-     *
-     * @param p The p value in the p-norm. <br>
-     *          - If p is {@link Double#POSITIVE_INFINITY}, then this method computes the maximum/infinite norm.
-     *          - If p is {@link Double#NEGATIVE_INFINITY}, then this method computes the minimum norm.
-     * @return The p-norm of this tensor.
-     */
-    @Override
-    public double norm(double p) {
-        return VectorNorms.norm(entries, p);
     }
 
 

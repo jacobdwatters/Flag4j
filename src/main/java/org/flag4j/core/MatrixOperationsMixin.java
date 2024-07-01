@@ -30,7 +30,6 @@ import org.flag4j.dense.CMatrix;
 import org.flag4j.dense.CVector;
 import org.flag4j.dense.Matrix;
 import org.flag4j.dense.Vector;
-import org.flag4j.linalg.decompositions.svd.SVD;
 import org.flag4j.sparse.CooCMatrix;
 import org.flag4j.sparse.CooCVector;
 import org.flag4j.sparse.CooMatrix;
@@ -1057,15 +1056,6 @@ public interface MatrixOperationsMixin<
      */
     X tr();
 
-
-    /**
-     * Computes the condition number of this matrix using {@link SVD SVD}.
-     * Specifically, the condition number is computed as the maximum singular value divided by the minimum singular
-     * value of this matrix.
-     *
-     * @return The condition number of this matrix (Assuming Frobenius norm).
-     */
-    double cond();
 
     /**
      * Extracts the diagonal elements of this matrix and returns them as a vector.

@@ -32,14 +32,16 @@ import org.flag4j.core.Shape;
 import org.flag4j.core.dense_base.DenseMatrixMixin;
 import org.flag4j.core.dense_base.RealDenseTensorBase;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.Invert;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
 import org.flag4j.operations.MatrixMultiplyDispatcher;
 import org.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.common.complex.ComplexOperations;
 import org.flag4j.operations.common.real.RealProperties;
-import org.flag4j.operations.dense.real.*;
+import org.flag4j.operations.dense.real.RealDenseDeterminant;
+import org.flag4j.operations.dense.real.RealDenseEquals;
+import org.flag4j.operations.dense.real.RealDenseProperties;
+import org.flag4j.operations.dense.real.RealDenseSetOperations;
 import org.flag4j.operations.dense.real_complex.*;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixMultTranspose;
@@ -263,6 +265,21 @@ public class Matrix
 
 
     /**
+     * Constructs a matrix with specified shape and entries. Note, unlike other constructors, the entries' parameter
+     * is not copied.
+     * @param numRows Number of rows in this matrix.
+     * @param numCols Number of columns in this matrix.
+     * @param entries Entries of the matrix.
+     */
+    public Matrix(int numRows, int numCols, double[] entries) {
+        super(new Shape(numRows, numCols), entries);
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
+    }
+
+
+
+    /**
      * Factory to create a tensor with the specified shape and size.
      *
      * @param shape   Shape of the tensor to make.
@@ -309,20 +326,6 @@ public class Matrix
     @Override
     protected Matrix getSelf() {
         return this;
-    }
-
-
-    /**
-     * Constructs a matrix with specified shape and entries. Note, unlike other constructors, the entries' parameter
-     * is not copied.
-     * @param numRows Number of rows in this matrix.
-     * @param numCols Number of columns in this matrix.
-     * @param entries Entries of the matrix.
-     */
-    public Matrix(int numRows, int numCols, double[] entries) {
-        super(new Shape(numRows, numCols), entries);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
     }
 
 
@@ -493,27 +496,6 @@ public class Matrix
         }
 
         return equal;
-    }
-
-
-    /**
-     * Checks if matrices are inverses of each other. This method rounds values near zero to zero when checking
-     * if the two matrices are inverses to account for floating point precision loss.
-     *
-     * @param B Second matrix.
-     * @return True if matrix B is an inverse of this matrix. Otherwise, returns false. Otherwise, returns false.
-     */
-    @Override
-    public boolean isInv(Matrix B) {
-        boolean result;
-
-        if(!this.isSquare() || !B.isSquare() || !shape.equals(B.shape)) {
-            result = false;
-        } else {
-            result = this.mult(B).isCloseToI();
-        }
-
-        return result;
     }
 
 
@@ -2897,48 +2879,6 @@ public class Matrix
 
 
     /**
-     * Computes the condition number of this matrix using the 2-norm.
-     * Specifically, the condition number is computed as the norm of this matrix multiplied by the norm
-     * of the inverse of this matrix.
-     *
-     * @return The condition number of this matrix (Assuming 2-norm). This value may be
-     * {@link Double#POSITIVE_INFINITY infinite}.
-     */
-    @Override
-    public double cond() {
-        return cond(2);
-    }
-
-
-    /**
-     * Computes the condition number of this matrix using a specified norm. The condition number of a matrix is defined
-     * as the norm of a matrix multiplied by the norm of the inverse of the matrix.
-     * @param p Specifies the order of the norm to be used when computing the condition number.
-     *          Common {@code p} values include:<br>
-     *          - {@code p} = {@link Double#POSITIVE_INFINITY}, {@link #infNorm()}.<br>
-     *          - {@code p} = 2, The standard matrix 2-norm (the largest singular value).<br>
-     *          - {@code p} = -2, The Smallest singular value.<br>
-     *          - {@code p} = 1, Maximum absolute row sum.<br>
-     * @return The condition number of this matrix using the specified norm. This value may be
-     * {@link Double#POSITIVE_INFINITY infinite}.
-     */
-    // TODO Pull up to matrix mixin
-    public double cond(double p) {
-        double cond;
-
-        if(p==2 || p==-2) {
-            // Compute the singular value decomposition of the matrix.
-            Vector s = new RealSVD(false).decompose(this).getS().getDiag();
-            cond = p==2 ? s.max()/s.min() : s.min()/s.max();
-        } else {
-            cond = norm(p)*Invert.inv(this).norm(p);
-        }
-
-        return cond;
-    }
-
-
-    /**
      * Extracts the diagonal elements of this matrix and returns them as a vector.
      * @return A vector containing the diagonal entries of this matrix.
      */
@@ -3162,19 +3102,6 @@ public class Matrix
 
 
     /**
-     * Computes the L<sub>p, q</sub> norm of this matrix.
-     *
-     * @param p P value in the L<sub>p, q</sub> norm.
-     * @param q Q value in the L<sub>p, q</sub> norm.
-     * @return The L<sub>p, q</sub> norm of this matrix.
-     */
-    @Override
-    public double norm(double p, double q) {
-        return RealDenseOperations.matrixNormLpq(entries, shape, p, q);
-    }
-
-
-    /**
      * Swaps specified rows in the matrix. This is done in place.
      * @param rowIndex1 Index of the first row to swap.
      * @param rowIndex2 Index of the second row to swap.
@@ -3224,68 +3151,6 @@ public class Matrix
         }
 
         return this;
-    }
-
-
-    /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
-     * This will be equal to the largest singular value of the matrix.
-     *
-     * @return the 2-norm of this tensor.
-     */
-    @Override
-    public double norm() {
-        return RealDenseOperations.tensorNormL2(entries);
-    }
-
-
-    /**
-     * Computes the p-norm of this tensor. Equivalent to calling {@link #norm(double, double) norm(p, p)}
-     *
-     * @param p The p value in the p-norm. <br>
-     *          - If p is inf, then this method computes the maximum/infinite norm.
-     * @return The p-norm of this tensor.
-     * @throws IllegalArgumentException If p is less than 1.
-     */
-    @Override
-    public double norm(double p) {
-        double norm;
-
-        if(Double.isInfinite(p)) {
-            if(p > 0) {
-                norm = maxNorm();
-            } else {
-                norm = minAbs();
-            }
-        } else {
-            norm = RealDenseOperations.tensorNormLp(entries, p);
-        }
-
-        return norm;
-    }
-
-
-    /**
-     * Computes the maximum norm of this matrix. That is, the maximum value in the matrix.
-     *
-     * @return The maximum norm of this matrix.
-     * @see #infNorm()
-     */
-    @Override
-    public double maxNorm() {
-        return RealDenseOperations.matrixMaxNorm(entries);
-    }
-
-
-    /**
-     * Computes the infinite norm of this matrix. that is the maximum row sum in the matrix.
-     *
-     * @return The infinite norm of this matrix.
-     * @see #maxNorm()
-     */
-    @Override
-    public double infNorm() {
-        return RealDenseOperations.matrixInfNorm(entries, shape);
     }
 
 

@@ -34,7 +34,6 @@ import org.flag4j.dense.Vector;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.operations.common.complex.ComplexOperations;
 import org.flag4j.operations.common.complex.ComplexProperties;
-import org.flag4j.operations.common.real.VectorNorms;
 import org.flag4j.operations.dense.complex.AggregateDenseComplex;
 import org.flag4j.operations.dense.complex.ComplexDenseOperations;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
@@ -1236,19 +1235,6 @@ public class CooCVector
 
 
     /**
-     * Computes a unit vector in the same direction as this vector.
-     *
-     * @return A unit vector with the same direction as this vector. If this vector is zeros, then an equivalently sized
-     * zero vector will be returned.
-     */
-    @Override
-    public CooCVector normalize() {
-        double norm = this.norm();
-        return norm==0 ? new CooCVector(size) : this.div(norm);
-    }
-
-
-    /**
      * Computes the inner product between two vectors.
      *
      * @param b Second vector in the inner product.
@@ -1459,31 +1445,6 @@ public class CooCVector
     public int[] argMax() {
         int idx = AggregateDenseComplex.argMax(entries);
         return new int[]{indices[idx]};
-    }
-
-
-    /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
-     *
-     * @return the 2-norm of this tensor.
-     */
-    @Override
-    public double norm() {
-        return VectorNorms.norm(entries);
-    }
-
-
-    /**
-     * Computes the p-norm of this tensor.
-     *
-     * @param p The p value in the p-norm. <br>
-     *          - If p is inf, then this method computes the maximum/infinite norm.
-     * @return The p-norm of this tensor.
-     * @throws IllegalArgumentException If p is less than 1.
-     */
-    @Override
-    public double norm(double p) {
-        return VectorNorms.norm(entries, p);
     }
 
 

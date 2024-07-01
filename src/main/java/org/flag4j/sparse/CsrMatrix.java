@@ -35,9 +35,7 @@ import org.flag4j.dense.CVector;
 import org.flag4j.dense.Matrix;
 import org.flag4j.dense.Vector;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.decompositions.svd.SVD;
 import org.flag4j.operations.common.complex.ComplexOperations;
-import org.flag4j.operations.dense.real.RealDenseOperations;
 import org.flag4j.operations.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.csr.real.RealCsrDenseOperations;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
@@ -1492,19 +1490,6 @@ public class CsrMatrix
 
 
     /**
-     * Computes the condition number of this matrix using {@link SVD SVD}.
-     * Specifically, the condition number is computed as the maximum singular value divided by the minimum singular
-     * value of this matrix.
-     *
-     * @return The condition number of this matrix (Assuming Frobenius norm).
-     */
-    @Override
-    public double cond() {
-        return toDense().cond();
-    }
-
-
-    /**
      * Extracts the diagonal elements of this matrix and returns them as a vector.
      *
      * @return A vector containing the diagonal entries of this matrix.
@@ -1634,26 +1619,6 @@ public class CsrMatrix
      */
     public boolean isI() {
         return RealCsrMatrixProperties.isIdentity(this);
-    }
-
-    
-    /**
-     * Checks if matrices are inverses of each other.
-     *
-     * @param B Second matrix.
-     * @return True if matrix B is an inverse of this matrix. Otherwise, returns false. Otherwise, returns false.
-     */
-    @Override
-    public boolean isInv(CsrMatrix B) {
-        boolean result;
-
-        if(!this.isSquare() || !B.isSquare() || !shape.equals(B.shape)) {
-            result = false;
-        } else {
-            result = this.mult(B).isCloseToI();
-        }
-
-        return result;
     }
 
 
@@ -2267,30 +2232,6 @@ public class CsrMatrix
 
 
     /**
-     * Computes the L<sub>p, q</sub> norm of this matrix.
-     *
-     * @param p P value in the L<sub>p, q</sub> norm.
-     * @param q Q value in the L<sub>p, q</sub> norm.
-     * @return The L<sub>p, q</sub> norm of this matrix.
-     */
-    @Override
-    public double norm(double p, double q) {
-        return RealCsrOperations.matrixNormLpq(this, p, q);
-    }
-
-
-    /**
-     * Computes the max norm of a matrix.
-     *
-     * @return The max norm of this matrix.
-     */
-    @Override
-    public double maxNorm() {
-        return RealDenseOperations.matrixMaxNorm(entries);
-    }
-
-
-    /**
      * Computes the rank of this matrix (i.e. the dimension of the column space of this matrix).
      * Note that here, rank is <b>NOT</b> the same as a tensor rank.
      *
@@ -2583,31 +2524,6 @@ public class CsrMatrix
     @Override
     public CsrMatrix elemDiv(Matrix B) {
         return RealCsrDenseOperations.applyBinOppToSparse(B, this, (Double x, Double y)->y/x);
-    }
-
-
-    /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
-     *
-     * @return the 2-norm of this tensor.
-     */
-    @Override
-    public double norm() {
-        return RealDenseOperations.tensorNormL2(entries); // Zeros do not contribute to this norm.
-    }
-
-
-    /**
-     * Computes the p-norm of this tensor.
-     *
-     * @param p The p value in the p-norm. <br>
-     *          - If p is inf, then this method computes the maximum/infinite norm.
-     * @return The p-norm of this tensor.
-     * @throws IllegalArgumentException If p is less than 1.
-     */
-    @Override
-    public double norm(double p) {
-        return RealDenseOperations.tensorNormLp(entries, p); // Zeros do not contribute to this norm.
     }
 
 

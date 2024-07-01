@@ -41,12 +41,4 @@ public interface MatrixComparisonsMixin<T> {
      * @return True if this matrix is the identity matrix. Otherwise, returns false.
      */
     boolean isI();
-
-
-    /**
-     * Checks if matrices are inverses of each other.
-     * @param B Second matrix.
-     * @return True if matrix B is an inverse of this matrix. Otherwise, returns false. Otherwise, returns false.
-     */
-    boolean isInv(T B);
 }
