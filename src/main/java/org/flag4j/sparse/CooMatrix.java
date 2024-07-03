@@ -37,15 +37,12 @@ import org.flag4j.io.PrintOptions;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.common.complex.ComplexOperations;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
-import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
 import org.flag4j.operations.sparse.coo.SparseDataWrapper;
 import org.flag4j.operations.sparse.coo.real.*;
-import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseEquals;
 import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixMultiplication;
 import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixOperations;
 import org.flag4j.util.ArrayUtils;
@@ -137,6 +134,7 @@ public class CooMatrix
                 nonZeroEntries,
                 rowIndices, colIndices
         );
+
         ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
@@ -297,36 +295,18 @@ public class CooMatrix
 
 
     /**
-     * Checks if an object is equal to this sparse matrix.
-     * @param object Object to compare this sparse matrix to.
-     * @return True if the object is a matrix (real or complex, dense or sparse) and is element-wise equal to this
+     * Checks if an object is equal to this sparse COO matrix.
+     * @param object Object to compare this sparse COO matrix to.
+     * @return True if the object is a {@link CooMatrix}, has the same shape as this matrix, and is element-wise equal to this
      * matrix.
      */
     @Override
     public boolean equals(Object object) {
-        boolean equal;
+        if(this == object) return true;
+        if(!(object instanceof CooMatrix)) return false;
 
-        if(object instanceof Matrix) {
-            Matrix mat = (Matrix) object;
-            equal = RealDenseSparseEquals.matrixEquals(mat, this);
-
-        } else if(object instanceof CMatrix) {
-            CMatrix mat = (CMatrix) object;
-            equal = RealComplexDenseSparseEquals.matrixEquals(mat, this);
-
-        } else if(object instanceof CooMatrix) {
-            CooMatrix mat = (CooMatrix) object;
-            equal = RealSparseEquals.matrixEquals(this, mat);
-
-        } else if(object instanceof CooCMatrix) {
-            CooCMatrix mat = (CooCMatrix) object;
-            equal = RealComplexSparseEquals.matrixEquals(this, mat);
-
-        } else {
-            equal = false;
-        }
-
-        return equal;
+        CooMatrix src2 = (CooMatrix) object;
+        return RealSparseEquals.matrixEquals(this, src2);
     }
 
 
@@ -2399,7 +2379,7 @@ public class CooMatrix
 
 
     /**
-     * Converts this matrix to an equivalent complex tensor.
+     * Converts this matrix to an equivalent sparse tensor.
      * @return A tensor which is equivalent to this matrix.
      */
     public CooTensor toTensor() {

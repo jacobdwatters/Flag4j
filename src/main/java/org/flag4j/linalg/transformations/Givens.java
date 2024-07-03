@@ -29,6 +29,7 @@ import org.flag4j.dense.CMatrix;
 import org.flag4j.dense.CVector;
 import org.flag4j.dense.Matrix;
 import org.flag4j.dense.Vector;
+import org.flag4j.linalg.VectorNorms;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -136,7 +137,7 @@ public class Givens {
     public static CMatrix getRotator(CVector v, int i) {
         ParameterChecks.assertIndexInBounds(v.size, i);
 
-        double r = v.norm();
+        double r = VectorNorms.norm(v);
         CNumber c = v.entries[0].div(r);
         CNumber s = v.entries[i].div(r);
 

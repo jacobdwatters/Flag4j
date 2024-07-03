@@ -126,17 +126,18 @@ public class SymmTriDiagonal implements Serializable {
     /**
      * Checks if an object is equal to this symmetric tri-diagonal matrix. An object is considered equal to this matrix if it is
      * an instance of {@link SymmTriDiagonal} and all diagonal and off diagonal entries are equal.
-     * @param b Object to compare to this symmetric tri-diagonal matrix.
+     * @param object Object to compare to this symmetric tri-diagonal matrix.
      * @return True if {@code b} is an instance of {@link SymmTriDiagonal} and all diagonal and off diagonal entries are equal to the
      * corresponding values in this symmetric tri-diagonal matrix.
      */
-    public boolean equals(Object b) {
-        if(b instanceof SymmTriDiagonal) {
-            SymmTriDiagonal mat = (SymmTriDiagonal) b;
-            return Arrays.equals(mat.diag, diag) && Arrays.equals(mat.offDiag, offDiag);
-        }
+    public boolean equals(Object object) {
+        // Check for quick returns.
+        if(this == object) return true;
+        if(!(object instanceof SymmTriDiagonal)) return false;
 
-        return false; // Not an instance of this class.
+        SymmTriDiagonal src2 = (SymmTriDiagonal) object;
+
+        return Arrays.equals(src2.diag, diag) && Arrays.equals(src2.offDiag, offDiag);
     }
 
 

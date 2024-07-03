@@ -45,9 +45,28 @@ public interface TensorComparisonsMixin {
 
 
     /**
-     * Checks if this tensor is equal to a specified Object.
+     * Checks if this tensor is equal to a specified Object. Note, this method differs from {@link #tensorEquals(TensorBase)} as, in
+     * this method, the types of the objects must match where in {@link #tensorEquals(TensorBase)} the typed need not match.
      * @param B Object to compare this tensor to.
+     * @return True if B is the same object type as this tensor, has the same shape, and each element of the two tensors are
+     * numerically equal. Otherwise, returns false.
      */
     @Override
     boolean equals(Object B);
+
+
+    /**
+     * <p>Checks if two tensors are equal. Note, this method is much more permissive than {@link #equals(Object)} as it allows for
+     * comparisons with any tensor, matrix, or vector. If the shapes are equal and entries are element-wise equivalent then this
+     * method returns true regardless of the types of the two tensors.</p>
+     *
+     * <p>xFor Example, a {@link org.flag4j.dense.Tensor Dense Tensor} of rank 2 with the same values as a</p>
+     *
+     * {@link org.flag4j.sparse.CsrMatrix Sparse CSR Matrix} will be considered equal.
+     * @param B Tensor, matrix, or vector to compare to this tensor.
+     * @return True if both tensors (or matrix/vector) have the same shape and all entries are numerically equivalent by index. This
+     * accounts for possible zero values in sparse objects. Returns false if the tensors do not have the same shape or if the
+     * tensors differ in value at <i>any</i>  index.
+     */
+    boolean tensorEquals(TensorBase<?, ?, ?, ?, ?, ?, ?> B);
 }

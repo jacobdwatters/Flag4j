@@ -214,35 +214,6 @@ public final class RealDenseOperations {
 
 
     /**
-     * Compute the L<sub>p, q</sub> norm of a matrix.
-     * @param src Entries of the matrix.
-     * @param shape Shape of the matrix.
-     * @param p First parameter in L<sub>p, q</sub> norm.
-     * @param q Second parameter in L<sub>p, q</sub> norm.
-     * @return The L<sub>p, q</sub> norm of the matrix.
-     * @throws IllegalArgumentException If {@code p} or {@code q} is less than 1.
-     */
-    public static double matrixNormLpq(double[] src, Shape shape, double p, double q) {
-        ParameterChecks.assertGreaterEq(1, p, q);
-
-        double norm = 0;
-        double colSum;
-        int rows = shape.dims[0];
-        int cols = shape.dims[1];
-
-        for(int j=0; j<cols; j++) {
-            colSum=0;
-            for(int i=0; i<rows; i++) {
-                colSum += Math.pow(Math.abs(src[i*cols + j]), p);
-            }
-            norm += Math.pow(colSum, q/p);
-        }
-
-        return Math.pow(norm, 1.0/q);
-    }
-
-
-    /**
      * Adds a scalar to every element of a tensor.
      * @param src src of tensor to add scalar to.
      * @param b Scalar to add to tensor.

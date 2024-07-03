@@ -90,7 +90,6 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
     }
 
 
-
     /**
      * Converts a sparse COO matrix to a sparse CSR matrix.
      * @param src COO matrix to convert. Indices must be sorted lexicographically.
@@ -152,6 +151,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
         }
     }
 
+
     /**
      * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
      * and takes the complex conjugate of the elements along these axes. Same as {@link #hermTranspose()}.
@@ -162,6 +162,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
     public CsrCMatrix H() {
         return null;
     }
+
 
     /**
      * Sets an index of this tensor to a specified value.
@@ -177,6 +178,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
         return null;
     }
 
+
     /**
      * Simply returns a reference of this tensor.
      *
@@ -186,6 +188,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
     protected CsrCMatrix getSelf() {
         return null;
     }
+
 
     /**
      * Checks if all entries of this tensor are close to the entries of the argument {@code tensor}.
@@ -203,6 +206,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
         return false;
     }
 
+
     /**
      * Sets an index of this tensor to a specified value.
      *
@@ -215,6 +219,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
         return null;
     }
 
+
     /**
      * Flattens a tensor along the specified axis.
      *
@@ -225,6 +230,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
     public CsrCMatrix flatten(int axis) {
         return null;
     }
+
 
     /**
      * Computes the element-wise addition between two tensors of the same rank.
@@ -238,6 +244,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
         return null;
     }
 
+
     /**
      * Adds specified value to all entries of this tensor.
      *
@@ -249,6 +256,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
         return null;
     }
 
+
     /**
      * Adds specified value to all entries of this tensor.
      *
@@ -259,6 +267,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
     public CMatrix add(CNumber a) {
         return null;
     }
+
 
     /**
      * Computes the element-wise subtraction between two tensors of the same rank.
@@ -272,6 +281,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
         return null;
     }
 
+
     /**
      * Adds specified value to all entries of this tensor.
      *
@@ -282,6 +292,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
     public CMatrix sub(double a) {
         return null;
     }
+
 
     /**
      * Subtracts a specified value from all entries of this tensor.
@@ -294,6 +305,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
         return null;
     }
 
+
     /**
      * Computes the transpose of a tensor. Same as {@link #T()}.
      *
@@ -304,6 +316,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
         return null;
     }
 
+
     /**
      * Computes the transpose of a tensor. Same as {@link #transpose()}.
      *
@@ -313,6 +326,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
     public CsrCMatrix T() {
         return null;
     }
+
 
     /**
      * Gets the element in this tensor at the specified indices.
@@ -326,6 +340,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
         return null;
     }
 
+
     /**
      * Creates a copy of this tensor.
      *
@@ -335,6 +350,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
     public CsrCMatrix copy() {
         return null;
     }
+
 
     /**
      * Computes the element-wise multiplication between two tensors.
@@ -348,6 +364,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
         return null;
     }
 
+
     /**
      * Computes the element-wise division between two tensors.
      *
@@ -360,28 +377,6 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
         return null;
     }
 
-    /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
-     *
-     * @return the 2-norm of this tensor.
-     */
-    @Override
-    public double norm() {
-        return 0;
-    }
-
-    /**
-     * Computes the p-norm of this tensor.
-     *
-     * @param p The p value in the p-norm. <br>
-     *          - If p is inf, then this method computes the maximum/infinite norm.
-     * @return The p-norm of this tensor.
-     * @throws IllegalArgumentException If p is less than 1.
-     */
-    @Override
-    public double norm(double p) {
-        return 0;
-    }
 
     /**
      * A factory for creating a complex sparse tensor.
@@ -396,6 +391,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
         return null;
     }
 
+
     /**
      * A factory for creating a real sparse tensor.
      *
@@ -409,6 +405,7 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
         return null;
     }
 
+
     /**
      * Converts this sparse tensor to an equivalent dense tensor.
      *
@@ -416,7 +413,26 @@ public class CsrCMatrix extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, Csr
      */
     @Override
     public CMatrix toDense() {
-        return null;
+        CNumber[] dest = new CNumber[shape.totalEntries().intValueExact()];
+
+        for(int i=0; i<rowPointers.length-1; i++) {
+            int rowOffset = i*numCols;
+
+            for(int j=rowPointers[i]; j<rowPointers[i+1]; j++) {
+                dest[rowOffset + colIndices[j]] = entries[j].copy();
+            }
+        }
+
+        return new CMatrix(shape.copy(), dest);
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent sparse tensor.
+     * @return A sparse tensor which is equivalent to this matrix.
+     */
+    public CooCTensor toTensor() {
+        return toCoo().toTensor();
     }
 
 

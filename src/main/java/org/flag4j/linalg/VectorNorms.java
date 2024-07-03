@@ -48,7 +48,7 @@ public class VectorNorms {
     }
 
     /**
-     * Computes the 2-norm of this vector. This is equivalent to {@link #norm(Vector, double) norm(2)}.
+     * Computes the 2-norm of this vector. This is equivalent to {@link #norm(Vector, double) norm(src, 2)}.
      *
      * @param src Vector to compute norm of.
      * @return the 2-norm of this vector.
@@ -121,7 +121,7 @@ public class VectorNorms {
 
 
     /**
-     * Computes the 2-norm of this vector. This is equivalent to {@link #norm(CooCVector, double) norm(2)}.
+     * Computes the 2-norm of this vector. This is equivalent to {@link #norm(CooCVector, double) norm(src, 2)}.
      *
      * @param src Vector to compute norm of.
      * @return the 2-norm of this vector.
@@ -144,6 +144,45 @@ public class VectorNorms {
         return VectorNorms.norm(src.entries, p);
     }
 
+
+    /**
+     * Computes the infinity norm of a tensor, matrix, or vector. That is, the largest absolute value.
+     * @param src The vector to compute the norm of.
+     * @return The infinity norm of the source vector.
+     */
+    public static double infNorm(CooVector src) {
+        return src.maxAbs();
+    }
+
+
+    /**
+     * Computes the infinity norm of a vector. That is, the largest absolute value.
+     * @param src The vector to compute the norm of.
+     * @return The infinity norm of the source vector.
+     */
+    public static double infNorm(CooCVector src) {
+        return src.maxAbs();
+    }
+
+
+    /**
+     * Computes the infinity norm of a tensor, matrix, or vector. That is, the largest absolute value.
+     * @param src The vector to compute the norm of.
+     * @return The infinity norm of the source vector.
+     */
+    public static double infNorm(Vector src) {
+        return src.maxAbs();
+    }
+
+
+    /**
+     * Computes the infinity norm of a vector. That is, the largest absolute value.
+     * @param src The vector to compute the norm of.
+     * @return The infinity norm of the source vector.
+     */
+    public static double infNorm(CVector src) {
+        return src.maxAbs();
+    }
 
 
     // ---------------------------------------------- Low-level Implementations ----------------------------------------------

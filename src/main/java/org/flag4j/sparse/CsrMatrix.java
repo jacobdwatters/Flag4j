@@ -190,21 +190,22 @@ public class CsrMatrix
      * False otherwise. If {@code src2} is null, false is returned.
      */
     public boolean equals(Object src2) {
-        // TODO: The equals method in the other matrix, vector, and tensor classes should only accept their
-        //  own type as well. Add an additional static equals method like Arrays.equals(...)
-        //  to check numerical equality. The Object.equals method should also check type.
         if(this == src2) return true;
-        if(src2 == null) return false;
         if(!(src2 instanceof CsrMatrix)) return false;
 
         CsrMatrix b = (CsrMatrix) src2;
 
-        // TODO: If one matrix stores explicit zeros and the other does not, this may fail.
-        //  Add a dropZeros() method to remove any explicitly stored zeros.
-        return shape.equals(b.shape)
-                && Arrays.equals(entries, b.entries)
-                && Arrays.equals(rowPointers, b.rowPointers)
-                && Arrays.equals(colIndices, b.colIndices);
+        if(entries.length == b.entries.length) {
+            // Arrays can be directly compared (even with explicitly stored zeros).
+            return shape.equals(b.shape)
+                    && Arrays.equals(entries, b.entries)
+                    && Arrays.equals(rowPointers, b.rowPointers)
+                    && Arrays.equals(colIndices, b.colIndices);
+        } else {
+            // Then possible explicitly stored zero value must be considered
+            // (e.g. one matrix explicitly stores a zero at some position and the other does not).
+            return SparseUtils.CSREquals(this, b);
+        }
     }
 
 
@@ -1379,6 +1380,15 @@ public class CsrMatrix
         }
 
         return new CooVector(shape.totalEntries().intValueExact(), destEntries, indices);
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent sparse tensor.
+     * @return A sparse tensor which is equivalent to this matrix.
+     */
+    public CooTensor toTensor() {
+        return toCoo().toTensor();
     }
 
 

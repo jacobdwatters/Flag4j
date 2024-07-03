@@ -29,6 +29,7 @@ import org.flag4j.dense.CMatrix;
 import org.flag4j.dense.CVector;
 import org.flag4j.dense.Matrix;
 import org.flag4j.dense.Vector;
+import org.flag4j.linalg.VectorNorms;
 import org.flag4j.operations.common.complex.ComplexOperations;
 import org.flag4j.operations.common.real.RealOperations;
 import org.flag4j.util.ErrorMessages;
@@ -55,7 +56,7 @@ public class Householder {
     public static Matrix getReflector(Vector normal) {
         Vector v;
 
-        double signedNorm = -Math.copySign(normal.norm(), normal.entries[0]);
+        double signedNorm = -Math.copySign(VectorNorms.norm(normal), normal.entries[0]);
         v = normal.div(normal.entries[0] - signedNorm);
         v.entries[0] = 1.0;
 
@@ -84,7 +85,7 @@ public class Householder {
      * normal to {@code normal}.
      */
     public static Vector getVector(Vector normal) {
-        double normX = normal.norm();
+        double normX = VectorNorms.norm(normal);
         double x1 = normal.entries[0];
         normX = (x1 >= 0) ? -normX : normX;
         double v1 = x1 - normX;
@@ -120,7 +121,7 @@ public class Householder {
 
         // Compute signed norm using modified sgn function.
         CNumber signedNorm = normal.entries[0].equals(0) ?
-                new CNumber(-normal.norm()) : CNumber.sgn(normal.entries[0]).mult(-normal.norm());
+                new CNumber(-VectorNorms.norm(normal)) : CNumber.sgn(normal.entries[0]).mult(-VectorNorms.norm(normal));
 
         v = normal.div(normal.entries[0].sub(signedNorm));
         v.entries[0] = new CNumber(1);

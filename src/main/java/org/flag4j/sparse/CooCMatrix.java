@@ -36,15 +36,12 @@ import org.flag4j.dense.Vector;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.common.complex.ComplexOperations;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
 import org.flag4j.operations.sparse.coo.SparseDataWrapper;
 import org.flag4j.operations.sparse.coo.complex.*;
-import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseEquals;
 import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixMultiplication;
 import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixOperations;
 import org.flag4j.util.ArrayUtils;
@@ -379,36 +376,18 @@ public class CooCMatrix
 
 
     /**
-     * Checks if an object is equal to this sparse matrix.
-     * @param object Object to compare this sparse matrix to.
-     * @return True if the object is a matrix (real or complex, dense or sparse) and is element-wise equal to this
+     * Checks if an object is equal to this sparse COO matrix.
+     * @param object Object to compare this sparse COO matrix to.
+     * @return True if the object is a {@link CooCMatrix}, has the same shape as this matrix, and is element-wise equal to this
      * matrix.
      */
     @Override
     public boolean equals(Object object) {
-        boolean equal;
+        if(this == object) return true;
+        if(!(object instanceof CooCMatrix)) return false;
 
-        if(object instanceof Matrix) {
-            Matrix mat = (Matrix) object;
-            equal = RealComplexDenseSparseEquals.matrixEquals(mat, this);
-
-        } else if(object instanceof CMatrix) {
-            CMatrix mat = (CMatrix) object;
-            equal = ComplexDenseSparseEquals.matrixEquals(mat, this);
-
-        } else if(object instanceof CooMatrix) {
-            CooMatrix mat = (CooMatrix) object;
-            equal = RealComplexSparseEquals.matrixEquals(mat, this);
-
-        } else if(object instanceof CooCMatrix) {
-            CooCMatrix mat = (CooCMatrix) object;
-            equal = ComplexSparseEquals.matrixEquals(this, mat);
-
-        } else {
-            equal = false;
-        }
-
-        return equal;
+        CooCMatrix src2 = (CooCMatrix) object;
+        return ComplexSparseEquals.matrixEquals(this, src2);
     }
 
 
@@ -2142,6 +2121,18 @@ public class CooCMatrix
     @Override
     public CooCVector getCol(int colIdx, int rowStart, int rowEnd) {
         return ComplexSparseMatrixGetSet.getCol(this, colIdx, rowStart, rowEnd);
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent complex tensor.
+     * @return A tensor which is equivalent to this matrix.
+     */
+    public CooCTensor toTensor() {
+        int[][] destIndices = new int[indices.length][indices[0].length];
+        ArrayUtils.deepCopy(indices, destIndices);
+
+        return new CooCTensor(this.shape.copy(), ArrayUtils.copyOf(entries), destIndices);
     }
 
 

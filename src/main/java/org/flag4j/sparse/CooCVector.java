@@ -32,19 +32,17 @@ import org.flag4j.dense.CMatrix;
 import org.flag4j.dense.CVector;
 import org.flag4j.dense.Vector;
 import org.flag4j.io.PrintOptions;
+import org.flag4j.linalg.VectorNorms;
 import org.flag4j.operations.common.complex.ComplexOperations;
 import org.flag4j.operations.common.complex.ComplexProperties;
 import org.flag4j.operations.dense.complex.AggregateDenseComplex;
 import org.flag4j.operations.dense.complex.ComplexDenseOperations;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseVectorOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import org.flag4j.operations.sparse.coo.complex.ComplexSparseEquals;
 import org.flag4j.operations.sparse.coo.complex.ComplexSparseVectorOperations;
-import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseEquals;
 import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
@@ -179,33 +177,18 @@ public class CooCVector
 
 
     /**
-     * Checks if an object is equal to this vector. The object must be a vector (real, complex, dense or sparse).
-     * @param b Object to compare to this vector. Valid types are {@link Vector}, {@link CooVector},
-     * {@link CVector}, or {@link CooCVector}.
-     * @return True if {@code b} is a vector and is element-wise equal to this vector.
+     * Checks if an object is equal to this sparse COO vector.
+     * @param object Object to compare this sparse COO vector to.
+     * @return True if the object is a {@link CooVector}, has the same shape as this vector, and is element-wise equal to this
+     * vector.
      */
     @Override
-    public boolean equals(Object b) {
-        boolean equal = false;
+    public boolean equals(Object object) {
+        if(this == object) return true;
+        if(!(object instanceof CooCVector)) return false;
 
-        if(b instanceof CooVector) {
-            CooVector vec = (CooVector) b;
-            equal = RealComplexSparseEquals.vectorEquals(vec, this);
-
-        } else if(b instanceof Vector) {
-            Vector vec = (Vector) b;
-            equal = RealComplexDenseSparseEquals.vectorEquals(vec.entries, this.entries, this.indices, this.size);
-
-        } else if(b instanceof CooCVector) {
-            CooCVector vec = (CooCVector) b;
-            equal = ComplexSparseEquals.vectorEquals(this, vec);
-
-        } else if(b instanceof CVector) {
-            CVector vec = (CVector) b;
-            equal = ComplexDenseSparseEquals.vectorEquals(vec.entries, this.entries, this.indices, this.size);
-        }
-
-        return equal;
+        CooCVector src2 = (CooCVector) object;
+        return ComplexSparseEquals.vectorEquals(this, src2);
     }
 
 
@@ -1218,6 +1201,24 @@ public class CooCVector
     @Override
     public CNumber inner(CooVector b) {
         return RealComplexSparseVectorOperations.inner(this, b);
+    }
+
+
+    /**
+     * Computes a unit vector in the same direction as this vector.
+     *
+     * @return A unit vector with the same direction as this vector. If this vector is zeros, then an equivalently sized
+     * zero vector will be returned.
+     */
+    @Override
+    public CooCVector normalize() {
+        if(this.entries.length == 0) {
+            // Return early for no non-zero values.
+            return new CooCVector(size);
+        }
+
+        double norm = VectorNorms.norm(this);
+        return norm==0 ? new CooCVector(size) : this.div(norm);
     }
 
 

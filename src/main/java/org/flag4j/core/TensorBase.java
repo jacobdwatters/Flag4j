@@ -24,6 +24,7 @@
 
 package org.flag4j.core;
 
+import org.flag4j.operations.common.TensorEquals;
 import org.flag4j.util.ErrorMessages;
 
 import java.io.Serializable;
@@ -181,4 +182,10 @@ public abstract class TensorBase<T, U, W, Z, Y, D extends Serializable, X extend
      * @see #allClose(Object)
      */
     public abstract boolean allClose(T tensor, double relTol, double absTol);
+
+
+    @Override
+    public boolean tensorEquals(TensorBase<?, ?, ?, ?, ?, ?, ?> src2) {
+        return TensorEquals.generalEquals(this, src2);
+    }
 }

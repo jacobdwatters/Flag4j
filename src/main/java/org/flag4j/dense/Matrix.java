@@ -42,12 +42,13 @@ import org.flag4j.operations.dense.real.RealDenseDeterminant;
 import org.flag4j.operations.dense.real.RealDenseEquals;
 import org.flag4j.operations.dense.real.RealDenseProperties;
 import org.flag4j.operations.dense.real.RealDenseSetOperations;
-import org.flag4j.operations.dense.real_complex.*;
-import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseEquals;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixMultTranspose;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultTranspose;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
@@ -465,37 +466,19 @@ public class Matrix
 
 
     /**
-     * Checks if an object is equal to this matrix object. Valid object types are: {@link Matrix}, {@link CMatrix},
-     * {@link CooMatrix}, and {@link CooCMatrix}. These matrices are equal to this matrix if all entries are
-     * numerically equal to the corresponding element of this matrix. If the matrix is complex, then the imaginary
-     * component must be zero to be equal.
+     * Checks if an object is equal to this matrix object.
      * @param object Object to check equality with this matrix.
-     * @return True if the two matrices are numerically equivalent and false otherwise.
+     * @return True if the two matrices have the same shape, are numerically equivalent, and are of type {@link Matrix}.
+     * False otherwise.
      */
     @Override
     public boolean equals(Object object) {
-        boolean equal;
+        if(this == object) return true;
+        if(!(object instanceof Matrix)) return false;
 
-        if(object instanceof Matrix) {
-            Matrix mat = (Matrix) object;
-            equal = RealDenseEquals.matrixEquals(this, mat);
-        } else if(object instanceof CMatrix) {
-            CMatrix mat = (CMatrix) object;
-            equal = RealComplexDenseEquals.matrixEquals(this, mat);
+        Matrix src2 = (Matrix) object;
 
-        } else if(object instanceof CooMatrix) {
-            CooMatrix mat = (CooMatrix) object;
-            equal = RealDenseSparseEquals.matrixEquals(this, mat);
-
-        } else if(object instanceof CooCMatrix) {
-            CooCMatrix mat = (CooCMatrix) object;
-            equal = RealComplexDenseSparseEquals.matrixEquals(this, mat);
-
-        } else {
-            equal = false;
-        }
-
-        return equal;
+        return RealDenseEquals.tensorEquals(this.entries, this.shape, src2.entries, src2.shape);
     }
 
 
@@ -3176,49 +3159,6 @@ public class Matrix
 
 
     /**
-     * Gets row of matrix formatted as a human-readable String. Helper method for {@link #toString} method.
-     * @param i Index of row to get.
-     * @param colStopIndex Stopping index for printing columns.
-     * @param maxList List of maximum string representation lengths for each column of this matrix. This
-     *                is used to align columns when printing.
-     * @return A human-readable String representation of the specified row.
-     */
-    private String rowToString(int i, int colStopIndex, List<Integer> maxList) {
-        int width;
-        String value;
-        StringBuilder result = new StringBuilder();
-
-        if(i>0) {
-            result.append(" [");
-        }  else {
-            result.append("[");
-        }
-
-        for(int j=0; j<colStopIndex; j++) {
-            value = StringUtils.ValueOfRound(this.get(i, j), PrintOptions.getPrecision());
-            width = PrintOptions.getPadding() + maxList.get(j);
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-            result.append(String.format("%-" + width + "s", value));
-        }
-
-        if(PrintOptions.getMaxColumns() < this.numCols) {
-            width = PrintOptions.getPadding() + 3;
-            value = "...";
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-            result.append(String.format("%-" + width + "s", value));
-        }
-
-        // Get last entry in the column now
-        value = StringUtils.ValueOfRound(this.get(i, this.numCols-1), PrintOptions.getPrecision());
-        width = PrintOptions.getPadding() + maxList.get(maxList.size()-1);
-        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-        result.append(String.format("%-" + width + "s]", value));
-
-        return result.toString();
-    }
-
-
-    /**
      * Checks if a matrix is symmetric. That is, if the matrix is square and equal to its transpose.
      * @return True if this matrix is symmetric. Otherwise, returns false.
      * @see #isAntiSymmetric()
@@ -3268,6 +3208,48 @@ public class Matrix
         return new CMatrix(shape, ComplexOperations.sqrt(entries));
     }
 
+
+    /**
+     * Gets row of matrix formatted as a human-readable String. Helper method for {@link #toString} method.
+     * @param i Index of row to get.
+     * @param colStopIndex Stopping index for printing columns.
+     * @param maxList List of maximum string representation lengths for each column of this matrix. This
+     *                is used to align columns when printing.
+     * @return A human-readable String representation of the specified row.
+     */
+    private String rowToString(int i, int colStopIndex, List<Integer> maxList) {
+        int width;
+        String value;
+        StringBuilder result = new StringBuilder();
+
+        if(i>0) {
+            result.append(" [");
+        }  else {
+            result.append("[");
+        }
+
+        for(int j=0; j<colStopIndex; j++) {
+            value = StringUtils.ValueOfRound(this.get(i, j), PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + maxList.get(j);
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(PrintOptions.getMaxColumns() < this.numCols) {
+            width = PrintOptions.getPadding() + 3;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry in the column now
+        value = StringUtils.ValueOfRound(this.get(i, this.numCols-1), PrintOptions.getPrecision());
+        width = PrintOptions.getPadding() + maxList.get(maxList.size()-1);
+        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s]", value));
+
+        return result.toString();
+    }
 
 
     /**

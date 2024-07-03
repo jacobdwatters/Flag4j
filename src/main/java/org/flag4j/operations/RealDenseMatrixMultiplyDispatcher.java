@@ -35,6 +35,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 // TODO: The selection algorithm should be redesigned. All threshold values should be specified in a config file.
+// TODO: Investigate the performance of utilizing a selection cache which caches the implementation to be used for recent matrix sizes.
+//  Should probably be implemented as a LRU cache (or similar) by extending LinkedHashMap
 
 /**
  * Singleton class which stores a map of all viable real dense matrix multiply algorithms and uses that map to dispatch
@@ -164,8 +166,8 @@ public final class RealDenseMatrixMultiplyDispatcher {
     static AlgorithmNames selectAlgorithm(Shape shape1, Shape shape2) {
         AlgorithmNames name;
 
-        int rows1 = shape1.get(Axis2D.row());
-        int cols1 = shape1.get(Axis2D.col());
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
 
         // Determine the matrix shape.
         int matrixShape;

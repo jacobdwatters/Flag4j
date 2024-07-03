@@ -38,7 +38,6 @@ import java.util.Arrays;
  */
 public class RealSparseEquals {
 
-
     private RealSparseEquals(){
         // Hide default constructor for base class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());

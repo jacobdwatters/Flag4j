@@ -78,23 +78,24 @@ public class RealDenseEquals {
 
 
     /**
-     * Checks if two dense tensors are equal.
+     * Checks if two dense tensors are equal. For the purposes of this method, {@link Double#NaN} values are considered equal.
      * @param src1 Entries of first tensor.
      * @param shape1 Shape of first tensor.
      * @param src2 Entries of second tensor.
      * @param shape2 Shape of second tensor.
-     * @return True if the two tensors are numerically element-wise equivalent.
+     * @return True if the two tensors are the same shape and numerically element-wise equivalent.
      */
-    private static boolean tensorEquals(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        boolean arrayEquals = true;
+    public static boolean tensorEquals(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+        // Early return for mismatch in shapes.
+        if(!shape1.equals(shape2)) return false;
 
         for(int i=0; i<src1.length; i++) {
             if(src1[i]!=src2[i] && !(Double.isNaN(src1[i]) && Double.isNaN(src2[i]))) {
-                arrayEquals = false;
-                break;
+                // Then tensors are not equal.
+                return false;
             }
         }
 
-        return shape1.equals(shape2) && arrayEquals;
+        return true;
     }
 }

@@ -37,11 +37,8 @@ import org.flag4j.operations.dense.real.RealDenseTensorDot;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseTensorOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
 import org.flag4j.sparse.CooCTensor;
 import org.flag4j.sparse.CooTensor;
@@ -262,37 +259,19 @@ public class Tensor
 
 
     /**
-     * Checks if an object is equal to this tensor object. Valid object types are: {@link Tensor}, {@link CTensor},
-     * {@link CooTensor}, and {@link CooCTensor}. These tensors are equal to this tensor if all entries are
-     * numerically equal to the corresponding element of this tensor. If the tensor is complex, then the imaginary
-     * component must be zero to be equal.
+     * Checks if an object is equal to this tensor object.
      * @param object Object to check equality with this tensor.
-     * @return True if the two tensors are numerically equivalent and false otherwise.
+     * @return True if the two tensors have the same shape, are numerically equivalent, and are of type {@link Tensor}.
+     * False otherwise.
      */
     @Override
     public boolean equals(Object object) {
-        boolean equal;
+        if(this == object) return true;
+        if(!(object instanceof Tensor)) return false;
 
-        if(object instanceof Tensor) {
-            Tensor tensor = (Tensor) object;
-            equal = RealDenseEquals.tensorEquals(this, tensor);
-        } else if(object instanceof CTensor) {
-            CTensor tensor = (CTensor) object;
-            equal = RealComplexDenseEquals.tensorEquals(this, tensor);
+        Tensor src2 = (Tensor) object;
 
-        } else if(object instanceof CooTensor) {
-            CooTensor tensor = (CooTensor) object;
-            equal = RealDenseSparseEquals.tensorEquals(this, tensor);
-
-        } else if(object instanceof CooCTensor) {
-            CooCTensor tensor = (CooCTensor) object;
-            equal = RealComplexDenseSparseEquals.tensorEquals(this, tensor);
-
-        } else {
-            equal = false;
-        }
-
-        return equal;
+        return RealDenseEquals.tensorEquals(this.entries, this.shape, src2.entries, src2.shape);
     }
 
 

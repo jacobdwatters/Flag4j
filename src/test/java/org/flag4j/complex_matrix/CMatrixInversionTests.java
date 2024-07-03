@@ -2,6 +2,7 @@ package org.flag4j.complex_matrix;
 
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.dense.CMatrix;
+import org.flag4j.linalg.Invert;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +29,7 @@ class CMatrixInversionTests {
                 {new CNumber(0.021439567207676365, 0.09645349255347833), new CNumber(-2.306593523821924E-4, -0.002301110100512132), new CNumber(0.008806824872674935, -0.029115034319768644)}
         };
         exp = new CMatrix(expEntries);
-        assertEquals(exp, A.inv());
+        assertEquals(exp, Invert.inv(A));
 
         // --------------------- Sub-case 2 ---------------------
         aEntries = new CNumber[][]{
@@ -37,7 +38,7 @@ class CMatrixInversionTests {
         }; // This matrix is singular.
         A = new CMatrix(aEntries);
 
-        assertThrows(RuntimeException.class, ()->A.inv());
+        assertThrows(RuntimeException.class, ()->Invert.inv(A));
 
 
         // --------------------- Sub-case 3 ---------------------
@@ -47,7 +48,7 @@ class CMatrixInversionTests {
         };
         A = new CMatrix(aEntries);
 
-        assertThrows(LinearAlgebraException.class, ()->A.inv());
-        assertThrows(LinearAlgebraException.class, ()->A.T().inv());
+        assertThrows(LinearAlgebraException.class, ()->Invert.inv(A));
+        assertThrows(LinearAlgebraException.class, ()->Invert.inv(A.T()));
     }
 }

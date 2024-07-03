@@ -145,18 +145,18 @@ public class PermutationMatrix implements Serializable {
     /**
      * Checks if this permutation matrix is equal to the given object. A permutation matrix is considered equal to an
      * object if that object is also a permutation matrix and represents the same matrix.
-     * @param b Object to compare to this permutation matrix.
+     * @param object Object to compare to this permutation matrix.
      * @return True if {@code b} is a permutation matrix and equivalent to this matrix (in terms of matrix equality).
      */
     @Override
-    public boolean equals(Object b) {
-        boolean equal = false;
+    public boolean equals(Object object) {
+        // Check for quick returns.
+        if(this == object) return true;
+        if(!(object instanceof PermutationMatrix)) return false;
 
-        if(b instanceof PermutationMatrix) {
-            equal = Arrays.equals(swapPointers, ((PermutationMatrix) b).swapPointers);
-        }
+        PermutationMatrix src2 = (PermutationMatrix) object;
 
-        return equal;
+        return Arrays.equals(swapPointers, src2.swapPointers);
     }
 
 

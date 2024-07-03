@@ -44,13 +44,10 @@ import org.flag4j.operations.dense.complex.ComplexDenseProperties;
 import org.flag4j.operations.dense.complex.ComplexDenseSetOperations;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixMultTranspose;
 import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultTranspose;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
@@ -463,32 +460,19 @@ public class CMatrix
 
 
     /**
-     * Checks if an object is equal to this matrix.
-     * @param B Object to compare this matrix to.
-     * @return True if B is an instance of a matrix ({@link Matrix}, {@link CMatrix}, {@link CooMatrix}, or {@link CooCMatrix})
-     * and is numerically element-wise equal to this matrix.
+     * Checks if an object is equal to this matrix object.
+     * @param object Object to check equality with this matrix.
+     * @return True if the two matrices have the same shape, are numerically equivalent, and are of type {@link CMatrix}.
+     * False otherwise.
      */
     @Override
-    public boolean equals(Object B) {
-        boolean equal;
+    public boolean equals(Object object) {
+        if(this == object) return true;
+        if(!(object instanceof CMatrix)) return false;
 
-        if(B instanceof CMatrix) {
-            CMatrix mat = (CMatrix) B;
-            equal = ComplexDenseEquals.matrixEquals(this, mat);
-        } else if(B instanceof Matrix) {
-            Matrix mat = (Matrix) B;
-            equal = RealComplexDenseEquals.matrixEquals(mat, this);
-        } else if(B instanceof CooMatrix) {
-            CooMatrix mat = (CooMatrix) B;
-            equal = RealComplexDenseSparseEquals.matrixEquals(this, mat);
-        } else if(B instanceof CooCMatrix) {
-            CooCMatrix mat = (CooCMatrix) B;
-            equal = ComplexDenseSparseEquals.matrixEquals(this, mat);
-        } else {
-            equal = false;
-        }
+        CMatrix src2 = (CMatrix) object;
 
-        return equal;
+        return ComplexDenseEquals.tensorEquals(this.entries, this.shape, src2.entries, src2.shape);
     }
 
 

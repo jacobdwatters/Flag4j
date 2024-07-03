@@ -37,14 +37,11 @@ import org.flag4j.linalg.VectorNorms;
 import org.flag4j.operations.common.complex.ComplexOperations;
 import org.flag4j.operations.common.real.RealOperations;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
-import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import org.flag4j.operations.sparse.coo.SparseDataWrapper;
 import org.flag4j.operations.sparse.coo.real.RealSparseEquals;
 import org.flag4j.operations.sparse.coo.real.RealSparseVectorOperations;
-import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseEquals;
 import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
@@ -157,33 +154,18 @@ public class CooVector
 
 
     /**
-     * Checks if an object is equal to this vector. The object must be a vector (real, complex, dense or sparse).
-     * @param b Object to compare to this vector. Valid types are {@link Vector}, {@link CooVector},
-     * {@link CVector}, or {@link CooCVector}.
-     * @return True if {@code b} is a vector and is element-wise equal to this vector.
+     * Checks if an object is equal to this sparse COO vector.
+     * @param object Object to compare this sparse COO vector to.
+     * @return True if the object is a {@link CooVector}, has the same shape as this vector, and is element-wise equal to this
+     * vector.
      */
     @Override
-    public boolean equals(Object b) {
-        boolean equal = false;
+    public boolean equals(Object object) {
+        if(this == object) return true;
+        if(!(object instanceof CooVector)) return false;
 
-        if(b instanceof CooVector) {
-            CooVector vec = (CooVector) b;
-            equal = RealSparseEquals.vectorEquals(this, vec);
-
-        } else if(b instanceof Vector) {
-            Vector vec = (Vector) b;
-            equal = RealDenseSparseEquals.vectorEquals(vec.entries, this.entries, this.indices, this.size);
-
-        } else if(b instanceof CooCVector) {
-            CooCVector vec = (CooCVector) b;
-            equal = RealComplexSparseEquals.vectorEquals(this, vec);
-
-        } else if(b instanceof CVector) {
-            CVector vec = (CVector) b;
-            equal = RealComplexDenseSparseEquals.vectorEquals(vec.entries, this.entries, this.indices, this.size);
-        }
-
-        return equal;
+        CooVector src2 = (CooVector) object;
+        return RealSparseEquals.vectorEquals(this, src2);
     }
 
 

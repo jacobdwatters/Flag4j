@@ -1,6 +1,7 @@
 package org.flag4j.matrix;
 
 import org.flag4j.dense.Matrix;
+import org.flag4j.linalg.Invert;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +30,7 @@ class MatrixInversionTests {
         };
         exp = new Matrix(expEntries);
 
-        assertEquals(exp, A.inv());
+        assertEquals(exp, Invert.inv(A));
 
 
         // --------------------- Sub-case 2 ---------------------
@@ -39,7 +40,7 @@ class MatrixInversionTests {
         }; // This matrix is singular
         A = new Matrix(aEntries);
 
-        assertThrows(RuntimeException.class, ()->A.inv());
+        assertThrows(RuntimeException.class, ()->Invert.inv(A));
 
 
         // --------------------- Sub-case 3 ---------------------
@@ -49,7 +50,7 @@ class MatrixInversionTests {
         };
         A = new Matrix(aEntries);
 
-        assertThrows(LinearAlgebraException.class, ()->A.inv());
-        assertThrows(LinearAlgebraException.class, ()->A.T().inv());
+        assertThrows(LinearAlgebraException.class, ()->Invert.inv(A));
+        assertThrows(LinearAlgebraException.class, ()->Invert.inv(A.T()));
     }
 }

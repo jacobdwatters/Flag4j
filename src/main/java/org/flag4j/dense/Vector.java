@@ -37,9 +37,7 @@ import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
-import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import org.flag4j.sparse.CooCVector;
 import org.flag4j.sparse.CooVector;
@@ -142,35 +140,19 @@ public class Vector
 
 
     /**
-     * Checks if two this vector is numerically element-wise equal to another object. Objects which can be equal are, {@link Vector},
-     * {@link CVector}, {@link CooVector}, {@link CooCVector}.
-     *
-     * @param b Object to compare to this vector.
-     * @return True if this vector and object {@code b} are equivalent element-wise. Otherwise, returns false.
+     * Checks if an object is equal to this vector object.
+     * @param object Object to check equality with this vector.
+     * @return True if the two vectors have the same shape, are numerically equivalent, and are of type {@link Vector}.
+     * False otherwise.
      */
     @Override
-    public boolean equals(Object b) {
-        boolean equal = false;
+    public boolean equals(Object object) {
+        if(this == object) return true;
+        if(!(object instanceof Vector)) return false;
 
-        if(b instanceof Vector) {
-            Vector vec = (Vector) b;
-            equal = RealDenseEquals.vectorEquals(this.entries, vec.entries);
+        Vector src2 = (Vector) object;
 
-        } else if(b instanceof CVector) {
-            CVector vec = (CVector) b;
-            equal = ArrayUtils.equals(this.entries, vec.entries);
-
-        } else if(b instanceof CooVector) {
-            CooVector vec = (CooVector) b;
-            equal = RealDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);
-
-        } else if(b instanceof CooCVector) {
-            CooCVector vec = (CooCVector) b;
-            equal = RealComplexDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);
-
-        }
-
-        return equal;
+        return RealDenseEquals.tensorEquals(this.entries, this.shape, src2.entries, src2.shape);
     }
 
 

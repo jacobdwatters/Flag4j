@@ -74,7 +74,7 @@ public class RealComplexDenseEquals {
      * @param shape2 Shape of second tensor.
      * @return True if the two tensors are numerically element-wise equivalent.
      */
-    private static boolean tensorEquals(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static boolean tensorEquals(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
         return shape1.equals(shape2) && ArrayUtils.equals(src1, src2);
     }
 }

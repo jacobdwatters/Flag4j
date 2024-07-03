@@ -50,7 +50,7 @@ public class TensorNorms {
     /**
      * Computes the infinity norm of a tensor, matrix, or vector. That is, the largest absolute value.
      * @param src The tensor, matrix, or vector to compute the norm of.
-     * @return The infinity norm of the source matrix.
+     * @return The infinity norm of the source tensor, matrix, or vector.
      */
     public static double infNorm(RealDenseTensorBase<?, ?> src) {
         return src.maxAbs();
@@ -60,7 +60,7 @@ public class TensorNorms {
     /**
      * Computes the infinity norm of a tensor, matrix, or vector. That is, the largest value by magnitude.
      * @param src The tensor, matrix, or vector to compute the norm of.
-     * @return The infinity norm of the source matrix.
+     * @return The infinity norm of the source tensor, matrix, or vector.
      */
     public static double infNorm(ComplexDenseTensorBase<?, ?> src) {
         return src.maxAbs();

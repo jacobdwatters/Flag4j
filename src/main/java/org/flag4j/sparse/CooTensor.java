@@ -30,10 +30,7 @@ import org.flag4j.core.Shape;
 import org.flag4j.core.sparse_base.RealSparseTensorBase;
 import org.flag4j.dense.CTensor;
 import org.flag4j.dense.Tensor;
-import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseEquals;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
 import org.flag4j.operations.sparse.coo.real.RealSparseEquals;
-import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseEquals;
 
 import java.util.Arrays;
 
@@ -95,38 +92,18 @@ public class CooTensor
 
 
     /**
-     * Checks if an object is equal to this sparse tensor object. Valid object types are: {@link Tensor}, {@link CTensor},
-     * {@link CooTensor}, and {@link CooCTensor}. These tensors are equal to this tensor if all entries are
-     * numerically equal to the corresponding element of this tensor.
-     *
-     * @param object Object to check equality with this tensor.
-     * @return True if the two tensors are numerically equivalent and false otherwise.
+     * Checks if an object is equal to this sparse COO tensor.
+     * @param object Object to compare this sparse COO tensor to.
+     * @return True if the object is a {@link CooTensor}, has the same shape as this tensor, and is element-wise equal to this
+     * tensor.
      */
     @Override
     public boolean equals(Object object) {
-        boolean equal;
+        if(this == object) return true;
+        if(!(object instanceof CooTensor)) return false;
 
-        if(object instanceof Tensor) {
-            Tensor tensor = (Tensor) object;
-            equal = RealDenseSparseEquals.tensorEquals(tensor, this);
-
-        } else if(object instanceof CTensor) {
-            CTensor tensor = (CTensor) object;
-            equal = RealComplexDenseSparseEquals.tensorEquals(tensor, this);
-
-        } else if(object instanceof CooTensor) {
-            CooTensor tensor = (CooTensor) object;
-            equal = RealSparseEquals.tensorEquals(this, tensor);
-
-        } else if(object instanceof CooCTensor) {
-            CooCTensor tensor = (CooCTensor) object;
-            equal = RealComplexSparseEquals.tensorEquals(this, tensor);
-
-        } else {
-            equal = false;
-        }
-
-        return equal;
+        CooTensor src2 = (CooTensor) object;
+        return RealSparseEquals.tensorEquals(this, src2);
     }
 
 

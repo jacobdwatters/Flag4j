@@ -1,5 +1,6 @@
 package org.flag4j.sparse_vector;
 
+import org.flag4j.linalg.VectorNorms;
 import org.flag4j.sparse.CooVector;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -53,26 +54,26 @@ class CooVectorAggregateTests {
 
         // --------------------- Sub-case 1 ---------------------
         exp = 51.61739635047955;
-        assertEquals(exp, a.norm());
+        assertEquals(exp, VectorNorms.norm(a));
 
         // --------------------- Sub-case 2 ---------------------
         exp = 51.82204923335818;
-        assertEquals(exp, a.norm(1.4));
+        assertEquals(exp, VectorNorms.norm(a, 1.4));
 
         // --------------------- Sub-case 3 ---------------------
         exp = 51.599999999999994;
-        assertEquals(exp, a.norm(23));
+        assertEquals(exp, VectorNorms.norm(a, 23));
 
         // --------------------- Sub-case 4 ---------------------
         exp = 152.7777441673176;
-        assertEquals(exp, a.norm(0.3));
+        assertEquals(exp, VectorNorms.norm(a, 0.3));
 
         // --------------------- Sub-case 5 ---------------------
         exp = 51.6;
-        assertEquals(exp, a.norm(Double.POSITIVE_INFINITY));
+        assertEquals(exp, VectorNorms.norm(a, Double.POSITIVE_INFINITY));
 
         // --------------------- Sub-case 6 ---------------------
         exp = 51.6;
-        assertEquals(exp, a.infNorm());
+        assertEquals(exp, VectorNorms.infNorm(a));
     }
 }

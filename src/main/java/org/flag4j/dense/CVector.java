@@ -31,20 +31,17 @@ import org.flag4j.core.dense_base.ComplexDenseTensorBase;
 import org.flag4j.core.dense_base.DenseVectorMixin;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.VectorNorms;
+import org.flag4j.operations.dense.complex.ComplexDenseEquals;
 import org.flag4j.operations.dense.complex.ComplexDenseVectorOperations;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseVectorOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import org.flag4j.sparse.CooCVector;
 import org.flag4j.sparse.CooVector;
 import org.flag4j.util.*;
-
-import java.util.Arrays;
 
 /**
  * Complex dense vector. This class is mostly equivalent to a rank 1 complex tensor.
@@ -160,31 +157,19 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
 
 
     /**
-     * Checks if two this vector is numerically element-wise equal to another object. Objects which can be equal are, {@link Vector},
-     * {@link CVector}, {@link CooVector}, {@link CooCVector}.
-     *
-     * @param b Object to compare to this vector.
-     * @return True if this vector and object {@code b} are equivalent element-wise. Otherwise, returns false.
+     * Checks if an object is equal to this vector object.
+     * @param object Object to check equality with this vector.
+     * @return True if the two vectors have the same shape, are numerically equivalent, and are of type {@link CVector}.
+     * False otherwise.
      */
     @Override
-    public boolean equals(Object b) {
-        boolean equal = false;
+    public boolean equals(Object object) {
+        if(this == object) return true;
+        if(!(object instanceof CVector)) return false;
 
-        if(b instanceof Vector) {
-            Vector vec = (Vector) b;
-            equal = ArrayUtils.equals(vec.entries, this.entries);
-        } else if(b instanceof CVector) {
-            CVector vec = (CVector) b;
-            equal = Arrays.equals(this.entries, vec.entries);
-        } else if(b instanceof CooVector) {
-            CooVector vec = (CooVector) b;
-            equal = RealComplexDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);
-        } else if(b instanceof CooCVector) {
-            CooCVector vec = (CooCVector) b;
-            equal = ComplexDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);
-        }
+        CVector src2 = (CVector) object;
 
-        return equal;
+        return ComplexDenseEquals.tensorEquals(this.entries, this.shape, src2.entries, src2.shape);
     }
 
 
