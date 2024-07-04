@@ -177,6 +177,7 @@ public class Shape implements Serializable {
                     (indices.length-1) + " of tensor with shape " + this);
         }
 
+        makeStridesIfNull(); // Computes strides if not previously computed.
         int index = 0;
 
         for(int i=0; i<indices.length-1; i++) {
@@ -194,7 +195,7 @@ public class Shape implements Serializable {
 
 
     /**
-     * Computes the tensor indices based on an index from the internal 1D data array.
+     * Computes the nD tensor indices based on an index from the internal 1D data array.
      * @param index Index of internal 1D data array.
      * @return The multidimensional indices corresponding to the 1D data array index. This will be an array of integers
      * with size equal to the rank of this shape.

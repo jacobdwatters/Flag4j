@@ -175,29 +175,31 @@ public class CNumber extends Number {
     /**
      * Checks if two complex numbers are equal. That is, if both numbers have equivalent real and complex parts.
      * @param b The object to compare.
-     * @return True if: <br>
-     * - {@code b} is a complex number and is equivalent to this complex number in both the real and
-     * imaginary components. <br>
-     * - This complex number has zero imaginary component and {@code b} is a {@link Float} or {@link Double} equal to this complex numbers
-     * real component. <br>
-     * - This complex number has zero imaginary component and {@code b} is a {@link Byte}, {@link Short}, {@link Integer},
-     * or {@link Long} equal to this complex numbers
-     * real component. <br>
-     * Otherwise, returns false.
+     * @return True if {@code b} has real and imaginary components equal to that of this
      */
     @Override
     public boolean equals(Object b) {
-        boolean result = false;
+        // Check for quick returns.
+        if(this == b) return true;
+        if(b == null) return false;
+        if(!(b instanceof CNumber)) return false;
 
-        if(b instanceof CNumber) {
-            CNumber num = (CNumber) b;
-            result = re==num.re && im==num.im;
-        } else if(b instanceof Number) {
-            double num = ((Number) b).doubleValue();
-            result = re==num && im==0;
-        }
+        CNumber num = (CNumber) b;
+        return re==num.re && im==num.im;
+    }
 
-        return result;
+
+    /**
+     * Checks if a {@link Number} is numerically equal to this complex number.
+     * @param b Number to compare to this complex number.
+     * @return True if this complex number has zero imaginary component and the real component is equal to {@code b.doubleValue()}.
+     */
+    public boolean equalsNumber(Number b) {
+        // Check for quick return.
+        if(b == null) return false;
+        if(b.getClass() == this.getClass()) return equals(b);
+
+        return im==0 && re==b.doubleValue();
     }
 
 

@@ -107,7 +107,7 @@ class TensorEqualsTests {
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
 
-        assertEquals(A, B);
+        assertEquals(A.toCoo(), B);
 
         // ---------------------- Sub-case 2 ----------------------
         bEntries = new double[]{1.23, -99.25, 2.677, -0.000194};
@@ -120,7 +120,7 @@ class TensorEqualsTests {
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
 
-        assertNotEquals(A, B);
+        assertNotEquals(A.toCoo(), B);
 
         // ---------------------- Sub-case 3 ----------------------
         bEntries = new double[]{1.23, -99.23425, 2.677, -0.000194};
@@ -133,7 +133,7 @@ class TensorEqualsTests {
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
 
-        assertNotEquals(A, B);
+        assertNotEquals(A.toCoo(), B);
 
         // ---------------------- Sub-case 4 ----------------------
         bEntries = new double[]{1.23, -99.25, 2.677, -0.000194};
@@ -146,7 +146,7 @@ class TensorEqualsTests {
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
 
-        assertNotEquals(A, B);
+        assertNotEquals(A.toCoo(), B);
     }
 
 
@@ -167,7 +167,7 @@ class TensorEqualsTests {
         bShape = new Shape(2, 3, 2);
         B = new CTensor(bShape, bEntries);
 
-        assertEquals(A, B);
+        assertEquals(A.toComplex(), B);
 
         // ----------------------- Sub-case 2 -----------------------
         bEntries = new CNumber[]{
@@ -179,7 +179,7 @@ class TensorEqualsTests {
         bShape = new Shape(2, 3, 2);
         B = new CTensor(bShape, bEntries);
 
-        assertNotEquals(A, B);
+        assertNotEquals(A.toComplex(), B);
 
         // ----------------------- Sub-case 3 -----------------------
         bEntries = new CNumber[]{
@@ -191,7 +191,7 @@ class TensorEqualsTests {
         bShape = new Shape(4, 3);
         B = new CTensor(bShape, bEntries);
 
-        assertNotEquals(A, B);
+        assertNotEquals(A.toComplex(), B);
 
         // ----------------------- Sub-case 4 -----------------------
         bEntries = new CNumber[]{
@@ -203,7 +203,7 @@ class TensorEqualsTests {
         bShape = new Shape(2, 3, 2);
         B = new CTensor(bShape, bEntries);
 
-        assertNotEquals(A, B);
+        assertNotEquals(A.toComplex(), B);
     }
 
     
@@ -227,7 +227,7 @@ class TensorEqualsTests {
         };
         B = new CooCTensor(bShape, bEntries, sparseIndices);
 
-        assertEquals(A, B);
+        assertEquals(A.toCoo().toComplex(), B);
 
         // ---------------------- Sub-case 2 ----------------------
         bEntries = new CNumber[]{
@@ -242,7 +242,7 @@ class TensorEqualsTests {
         };
         B = new CooCTensor(bShape, bEntries, sparseIndices);
 
-        assertNotEquals(A, B);
+        assertNotEquals(A.toCoo().toComplex(), B);
 
         // ---------------------- Sub-case 3 ----------------------
         bEntries = new CNumber[]{
@@ -257,7 +257,7 @@ class TensorEqualsTests {
         };
         B = new CooCTensor(bShape, bEntries, sparseIndices);
 
-        assertNotEquals(A, B);
+        assertNotEquals(A.toCoo().toComplex(), B);
 
         // ---------------------- Sub-case 4 ----------------------
         bEntries = new CNumber[]{
@@ -272,7 +272,7 @@ class TensorEqualsTests {
         };
         B = new CooCTensor(bShape, bEntries, sparseIndices);
 
-        assertNotEquals(A, B);
+        assertNotEquals(A.toCoo().toComplex(), B);
     }
 
 

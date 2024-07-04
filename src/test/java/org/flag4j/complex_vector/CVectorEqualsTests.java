@@ -31,8 +31,7 @@ import org.flag4j.sparse.CooCVector;
 import org.flag4j.sparse.CooVector;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CVectorEqualsTests {
 
@@ -52,7 +51,7 @@ class CVectorEqualsTests {
         a = new CVector(aEntries);
         bEntries = new double[]{1, 0, 1.3, 0};
         b = new Vector(bEntries);
-        assertNotEquals(a, b);
+        assertFalse(a.tensorEquals(b));
 
         // ----------------- Sub-case 2 -----------------
         aEntries = new CNumber[]{new CNumber(1), new CNumber(0),
@@ -60,7 +59,7 @@ class CVectorEqualsTests {
         a = new CVector(aEntries);
         bEntries = new double[]{1, 0, 1.3, -19345.612};
         b = new Vector(bEntries);
-        assertEquals(a, b);
+        assertTrue(a.tensorEquals(b));
 
         // ----------------- Sub-case 3 -----------------
         aEntries = new CNumber[]{new CNumber(1), new CNumber(0),
@@ -68,7 +67,7 @@ class CVectorEqualsTests {
         a = new CVector(aEntries);
         bEntries = new double[]{1, 0, 1.3};
         b = new Vector(bEntries);
-        assertNotEquals(a, b);
+        assertFalse(a.tensorEquals(b));
 
         // ----------------- Sub-case 4 -----------------
         aEntries = new CNumber[]{new CNumber(1), new CNumber(0),
@@ -76,7 +75,7 @@ class CVectorEqualsTests {
         a = new CVector(aEntries);
         bEntries = new double[]{1, 0, 1.3, 0};
         b = new Vector(bEntries);
-        assertNotEquals(a, b);
+        assertFalse(a.tensorEquals(b));
 
         // ----------------- Sub-case 5 -----------------
         aEntries = new CNumber[]{new CNumber(1.334), new CNumber(0.645),
@@ -84,12 +83,12 @@ class CVectorEqualsTests {
         a = new CVector(aEntries);
         bEntries = new double[]{1, 0, 1.3, -72};
         b = new Vector(bEntries);
-        assertNotEquals(a, b);
+        assertFalse(a.tensorEquals(b));
 
         // ----------------- Sub-case 6 -----------------
         a = new CVector(2495, 1.45);
         b = new Vector(2495, 1.45);
-        assertEquals(a, b);
+        assertTrue(a.tensorEquals(b));
     }
 
 
@@ -106,7 +105,7 @@ class CVectorEqualsTests {
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 2};
         b = new CooVector(sparseSize, bEntries, sparseIndices);
-        assertEquals(a, b);
+        assertTrue(a.tensorEquals(b));
 
         // ----------------- Sub-case 2 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245),
@@ -116,7 +115,7 @@ class CVectorEqualsTests {
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 3};
         b = new CooVector(sparseSize, bEntries, sparseIndices);
-        assertEquals(a, b);
+        assertTrue(a.tensorEquals(b));
 
 
         // ----------------- Sub-case 3 -----------------
@@ -127,7 +126,7 @@ class CVectorEqualsTests {
         sparseSize = 612345;
         sparseIndices = new int[]{1, 3};
         b = new CooVector(sparseSize, bEntries, sparseIndices);
-        assertNotEquals(a, b);
+        assertFalse(a.tensorEquals(b));
 
         // ----------------- Sub-case 4 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245),
@@ -137,7 +136,7 @@ class CVectorEqualsTests {
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 3};
         b = new CooVector(sparseSize, bEntries, sparseIndices);
-        assertNotEquals(a, b);
+        assertFalse(a.tensorEquals(b));
 
         // ----------------- Sub-case 5 -----------------
         aEntries = new CNumber[]{new CNumber(0.1), new CNumber(8.245),
@@ -147,7 +146,7 @@ class CVectorEqualsTests {
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 3};
         b = new CooVector(sparseSize, bEntries, sparseIndices);
-        assertNotEquals(a, b);
+        assertFalse(a.tensorEquals(b));
 
         // ----------------- Sub-case 6 -----------------
         aEntries = new CNumber[]{new CNumber(), new CNumber(8.245),
@@ -157,7 +156,7 @@ class CVectorEqualsTests {
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 2};
         b = new CooVector(sparseSize, bEntries, sparseIndices);
-        assertNotEquals(a, b);
+        assertFalse(a.tensorEquals(b));
 
         // ----------------- Sub-case 7 -----------------
         aEntries = new CNumber[]{new CNumber(), new CNumber(8.245),
@@ -167,7 +166,7 @@ class CVectorEqualsTests {
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 3};
         b = new CooVector(sparseSize, bEntries, sparseIndices);
-        assertNotEquals(a, b);
+        assertFalse(a.tensorEquals(b));
     }
 
 
@@ -259,7 +258,7 @@ class CVectorEqualsTests {
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 2};
         b = new CooCVector(sparseSize, bEntries, sparseIndices);
-        assertEquals(a, b);
+        assertTrue(a.tensorEquals(b));
 
         // ----------------- Sub-case 2 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
@@ -269,7 +268,7 @@ class CVectorEqualsTests {
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 3};
         b = new CooCVector(sparseSize, bEntries, sparseIndices);
-        assertNotEquals(a, b);
+        assertFalse(a.tensorEquals(b));
 
         // ----------------- Sub-case 3 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
@@ -279,7 +278,7 @@ class CVectorEqualsTests {
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 2};
         b = new CooCVector(sparseSize, bEntries, sparseIndices);
-        assertNotEquals(a, b);
+        assertFalse(a.tensorEquals(b));
 
         // ----------------- Sub-case 4 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
@@ -289,7 +288,7 @@ class CVectorEqualsTests {
         sparseSize = aEntries.length;
         sparseIndices = new int[]{1, 2};
         b = new CooCVector(sparseSize, bEntries, sparseIndices);
-        assertNotEquals(a, b);
+        assertFalse(a.tensorEquals(b));
 
         // ----------------- Sub-case 5 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
@@ -299,7 +298,7 @@ class CVectorEqualsTests {
         sparseSize = 100234;
         sparseIndices = new int[]{1, 2};
         b = new CooCVector(sparseSize, bEntries, sparseIndices);
-        assertNotEquals(a, b);
+        assertFalse(a.tensorEquals(b));
     }
 
 

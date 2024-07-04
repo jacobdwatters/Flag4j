@@ -69,7 +69,7 @@ class CVectorElemMultTests {
                 new CNumber(), new CNumber()};
         exp = new CVector(expEntries);
 
-        assertEquals(exp, a.elemMult(b));
+        assertEquals(exp, a.elemMult(b).toDense());
 
         // ------------------- Sub-case 2 -------------------
         bEntries = new double[]{2.455, 24.50001};
@@ -80,7 +80,7 @@ class CVectorElemMultTests {
                 new CNumber(), aEntries[3].mult(bEntries[1])};
         exp = new CVector(expEntries);
 
-        assertEquals(exp, a.elemMult(b));
+        assertEquals(exp, a.elemMult(b).toDense());
 
         // ------------------- Sub-case 3 -------------------
         bEntries = new double[]{2.455, 24.50001};
@@ -131,7 +131,7 @@ class CVectorElemMultTests {
                 new CNumber(), new CNumber()};
         exp = new CVector(expEntries);
 
-        assertEquals(exp, a.elemMult(b));
+        assertEquals(exp.toCoo(), a.elemMult(b));
 
         // ------------------- Sub-case 2 -------------------
         bEntries = new CNumber[]{new CNumber(-23.566, 0), new CNumber(0, 15.5)};
@@ -142,7 +142,7 @@ class CVectorElemMultTests {
                 new CNumber(), aEntries[3].mult(bEntries[1])};
         exp = new CVector(expEntries);
 
-        assertEquals(exp, a.elemMult(b));
+        assertEquals(exp.toCoo(), a.elemMult(b));
 
         // ------------------- Sub-case 3 -------------------
         bEntries = new CNumber[]{new CNumber(-23.566, 0), new CNumber(0, 15.5)};

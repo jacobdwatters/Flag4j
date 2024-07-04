@@ -92,7 +92,7 @@ public class CooVector
     public CooVector(int size, int[] nonZeroEntries, int[] indices) {
         super(new Shape(size), nonZeroEntries.length,
                 ArrayUtils.asDouble(nonZeroEntries, null),
-                RealDenseTranspose.blockedIntMatrix(new int[][]{indices})
+                RealDenseTranspose.standardIntMatrix(new int[][]{indices})
         );
         this.size = size;
         this.indices = indices;
@@ -112,7 +112,7 @@ public class CooVector
         super(new Shape(size),
                 nonZeroEntries.length,
                 nonZeroEntries,
-                RealDenseTranspose.blockedIntMatrix(new int[][]{indices})
+                RealDenseTranspose.standardIntMatrix(new int[][]{indices})
         );
 
         this.size = size;
@@ -1112,7 +1112,7 @@ public class CooVector
         return new CooTensor(
                 this.shape.copy(),
                 this.entries.clone(),
-                RealDenseTranspose.blockedIntMatrix(new int[][]{this.indices.clone()})
+                RealDenseTranspose.standardIntMatrix(new int[][]{this.indices.clone()})
         );
     }
 
@@ -1184,7 +1184,7 @@ public class CooVector
      */
     @Override
     protected CooVector makeTensor(Shape shape, double[] entries, int[][] indices) {
-        return new CooVector(size, entries, RealDenseTranspose.blockedIntMatrix(indices)[0]);
+        return new CooVector(size, entries, RealDenseTranspose.standardIntMatrix(indices)[0]);
     }
 
 
@@ -1211,7 +1211,7 @@ public class CooVector
      */
     @Override
     protected CooCVector makeComplexTensor(Shape shape, CNumber[] entries, int[][] indices) {
-        return new CooCVector(size, entries, RealDenseTranspose.blockedIntMatrix(indices)[0]);
+        return new CooCVector(size, entries, RealDenseTranspose.standardIntMatrix(indices)[0]);
     }
 
 
@@ -1313,7 +1313,7 @@ public class CooVector
 
         // Fill entries with non-zero values.
         for(int i=0; i<src.entries.length; i++) {
-            if(src.entries[i]!=0) {
+            if(src.entries[i] != 0d) {
                 nonZeroEntries.add(src.entries[i]);
                 indices.add(i);
             }

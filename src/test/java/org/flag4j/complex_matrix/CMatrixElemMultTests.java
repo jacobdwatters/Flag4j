@@ -9,8 +9,7 @@ import org.flag4j.sparse.CooMatrix;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CMatrixElemMultTests {
     Shape sparseShape;
@@ -131,7 +130,7 @@ class CMatrixElemMultTests {
                 {new CNumber("108.38494654884786+108.38494654884786i"), new CNumber("0.0"), new CNumber("-0.0")}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, A.elemMult(B));
+        assertTrue(exp.tensorEquals(A.elemMult(B)));
 
         // ------------------- Sub-case 2 -------------------
         aEntries = new CNumber[][]{
@@ -173,7 +172,7 @@ class CMatrixElemMultTests {
                 {new CNumber("13.823007675795091+13.823007675795091i"), new CNumber("0.0"), new CNumber("-0.0")}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, A.elemMult(B));
+        assertTrue(exp.tensorEquals(A.elemMult(B)));
 
         // ------------------- Sub-case 2 -------------------
         aEntries = new CNumber[][]{

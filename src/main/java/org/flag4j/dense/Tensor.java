@@ -276,6 +276,17 @@ public class Tensor
 
 
     /**
+     * Converts this dense tensor to an equivalent sparse COO tensor.
+     *
+     * @return A sparse COO tensor which is equivalent to this dense tensor.
+     */
+    @Override
+    public CooTensor toCoo() {
+        return CooTensor.fromDense(this);
+    }
+
+
+    /**
      * Flattens tensor to single dimension.
      *
      * @return The flattened tensor.

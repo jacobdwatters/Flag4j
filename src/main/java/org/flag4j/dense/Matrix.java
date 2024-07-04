@@ -384,31 +384,9 @@ public class Matrix
      * @return A sparse coo matrix equivalent to this matrix.
      * @see #toCsr()
      */
+    @Override
     public CooMatrix toCoo() {
-        List<Double> sparseEntries = new ArrayList<>();
-        List<Integer> rowIndices = new ArrayList<>();
-        List<Integer> colIndices = new ArrayList<>();
-
-        for(int i=0; i<numRows; i++) {
-            int rowOffset = i*numCols;
-            int stop = rowOffset + numCols;
-            int j=0;
-
-            while(rowOffset < stop) {
-                double value = entries[rowOffset++];
-
-                if(value!=0) {
-                    // Then we have a non-zero value.
-                    sparseEntries.add(value);
-                    rowIndices.add(i);
-                    colIndices.add(j);
-                }
-
-                j++;
-            }
-        }
-
-        return new CooMatrix(shape.copy(), sparseEntries, rowIndices, colIndices);
+        return CooMatrix.fromDense(this);
     }
 
 

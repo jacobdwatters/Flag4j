@@ -36,6 +36,7 @@ import org.flag4j.dense.Vector;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.common.complex.ComplexOperations;
+import org.flag4j.operations.dense.real.RealDenseTranspose;
 import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
@@ -2129,9 +2130,7 @@ public class CooCMatrix
      * @return A tensor which is equivalent to this matrix.
      */
     public CooCTensor toTensor() {
-        int[][] destIndices = new int[indices.length][indices[0].length];
-        ArrayUtils.deepCopy(indices, destIndices);
-
+        int[][] destIndices = RealDenseTranspose.standardIntMatrix(indices);
         return new CooCTensor(this.shape.copy(), ArrayUtils.copyOf(entries), destIndices);
     }
 
@@ -2157,6 +2156,36 @@ public class CooCMatrix
     @Override
     public CooMatrix toReal() {
         return new CooMatrix(shape.copy(), ComplexOperations.toReal(entries), rowIndices.clone(), colIndices.clone());
+    }
+
+
+    /**
+     * Constructs a sparse COO matrix from a dense matrix. Any value that is not exactly zero will be considered a non-zero value.
+     * @param src Dense matrix to convert to sparse COO matrix.
+     * @return An sparse COO matrix equivalent to the dense {@code src} matrix.
+     */
+    public static CooCMatrix fromDense(CMatrix src) {
+        int rows = src.numRows;
+        int cols = src.numCols;
+        List<CNumber> entries = new ArrayList<>();
+        List<Integer> rowIndices = new ArrayList<>();
+        List<Integer> colIndices = new ArrayList<>();
+
+        for(int i=0; i<rows; i++) {
+            int rowOffset = i*cols;
+
+            for(int j=0; j<cols; j++) {
+                CNumber val = src.entries[rowOffset + j];
+
+                if(!val.equals(0)) {
+                    entries.add(val.copy());
+                    rowIndices.add(i);
+                    colIndices.add(j);
+                }
+            }
+        }
+
+        return new CooCMatrix(src.shape.copy(), entries, rowIndices, colIndices);
     }
 
 

@@ -61,7 +61,7 @@ class VectorEqualsTests {
         bEntries = new CNumber[]{new CNumber(1.234), new CNumber(543.354), new CNumber(-0.3456)};
         B = new CVector(bEntries);
 
-        assertEquals(A, B);
+        assertEquals(A.toComplex(), B);
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new double[]{1.234, 543.354, -0.3456};
@@ -69,7 +69,7 @@ class VectorEqualsTests {
         bEntries = new CNumber[]{new CNumber(1.234, 13.4), new CNumber(543.354), new CNumber(-0.3456)};
         B = new CVector(bEntries);
 
-        assertNotEquals(A, B);
+        assertNotEquals(A.toComplex(), B);
 
 
         // -------------------- Sub-case 3 --------------------
@@ -78,7 +78,7 @@ class VectorEqualsTests {
         bEntries = new CNumber[]{new CNumber(1.234), new CNumber(543.354), new CNumber(-0.3456), new CNumber(0, 123.5)};
         B = new CVector(bEntries);
 
-        assertNotEquals(A, B);
+        assertNotEquals(A.toComplex(), B);
     }
 
 
@@ -95,7 +95,7 @@ class VectorEqualsTests {
         sparseSize = 3;
         B = new CooVector(sparseSize, bEntries, indices);
 
-        assertEquals(A, B);
+        assertEquals(A.toCoo(), B);
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new double[]{0, 543.354, 0};
@@ -105,7 +105,7 @@ class VectorEqualsTests {
         sparseSize = 3;
         B = new CooVector(sparseSize, bEntries, indices);
 
-        assertNotEquals(A, B);
+        assertNotEquals(A.toCoo(), B);
 
         // -------------------- Sub-case 3 --------------------
         aEntries = new double[]{0, 543.354, 0};
@@ -115,7 +115,7 @@ class VectorEqualsTests {
         sparseSize = 4;
         B = new CooVector(sparseSize, bEntries, indices);
 
-        assertNotEquals(A, B);
+        assertNotEquals(A.toCoo(), B);
     }
 
 
@@ -132,7 +132,7 @@ class VectorEqualsTests {
         sparseSize = 3;
         B = new CooCVector(sparseSize, bEntries, indices);
 
-        assertEquals(A, B);
+        assertEquals(A.toCoo().toComplex(), B);
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new double[]{0, 543.354, 0};
@@ -142,7 +142,7 @@ class VectorEqualsTests {
         sparseSize = 3;
         B = new CooCVector(sparseSize, bEntries, indices);
 
-        assertNotEquals(A, B);
+        assertNotEquals(A.toCoo().toComplex(), B);
 
         // -------------------- Sub-case 3 --------------------
         aEntries = new double[]{0, 543.354, 0};
@@ -152,7 +152,7 @@ class VectorEqualsTests {
         sparseSize = 4;
         B = new CooCVector(sparseSize, bEntries, indices);
 
-        assertNotEquals(A, B);
+        assertNotEquals(A.toCoo().toComplex(), B);
     }
 
 

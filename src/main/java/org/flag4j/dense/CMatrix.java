@@ -51,10 +51,7 @@ import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixOp
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultTranspose;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
-import org.flag4j.sparse.CooCMatrix;
-import org.flag4j.sparse.CooCVector;
-import org.flag4j.sparse.CooMatrix;
-import org.flag4j.sparse.CooVector;
+import org.flag4j.sparse.*;
 import org.flag4j.util.*;
 
 import java.util.ArrayList;
@@ -456,6 +453,28 @@ public class CMatrix
     @Override
     public CVector toVector() {
         return new CVector(ArrayUtils.copyOfRange(entries, 0, entries.length));
+    }
+
+
+    /**
+     * Converts this dense matrix to an equivalent {@link CooCMatrix}. Note, this is likely only worthwhile for <i>very</i> sparse
+     * matrices.
+     * @return A {@link CooCMatrix} that is equivalent to this dense matrix.
+     * @see #toCsr()
+     */
+    @Override
+    public CooCMatrix toCoo() {
+        return CooCMatrix.fromDense(this);
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent sparse CSR matrix.
+     * @return A sparse coo matrix equivalent to this matrix.
+     * @see #toCoo()
+     */
+    public CsrCMatrix toCsr() {
+        return toCoo().toCsr();
     }
 
 

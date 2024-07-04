@@ -178,6 +178,18 @@ public class CTensor
 
 
     /**
+     * Converts this dense tensor to an equivalent sparse COO tensor.
+     *
+     * @return A sparse COO tensor which is equivalent to this dense tensor.
+     */
+    @Override
+    public CooCTensor toCoo() {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
      * Simply returns a reference of this tensor.
      *
      * @return A reference to this tensor.

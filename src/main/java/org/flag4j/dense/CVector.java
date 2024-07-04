@@ -1072,7 +1072,18 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
         CNumber[] entries = new CNumber[this.size];
         ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);
 
-        return new CTensor(this.shape.copy(), this.entries);
+        return new CTensor(this.shape.copy(), entries);
+    }
+
+
+    /**
+     * Converts this dense vector to an equivalent {@link CooCVector}. Note, this is likely only worthwhile for <i>very</i> sparse
+     * vectors.
+     * @return A {@link CooCVector} that is equivalent to this dense vector.
+     */
+    @Override
+    public CooCVector toCoo() {
+        return CooCVector.fromDense(this);
     }
 
 

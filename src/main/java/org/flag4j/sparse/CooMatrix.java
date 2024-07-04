@@ -311,6 +311,36 @@ public class CooMatrix
 
 
     /**
+     * Constructs a sparse COO matrix from a dense matrix. Any value that is not exactly zero will be considered a non-zero value.
+     * @param src Dense matrix to convert to sparse COO matrix.
+     * @return An sparse COO matrix equivalent to the dense {@code src} matrix.
+     */
+    public static CooMatrix fromDense(Matrix src) {
+        int rows = src.numRows;
+        int cols = src.numCols;
+        List<Double> entries = new ArrayList<>();
+        List<Integer> rowIndices = new ArrayList<>();
+        List<Integer> colIndices = new ArrayList<>();
+
+        for(int i=0; i<rows; i++) {
+            int rowOffset = i*cols;
+
+            for(int j=0; j<cols; j++) {
+                double val = src.entries[rowOffset + j];
+
+                if(val != 0d) {
+                    entries.add(val);
+                    rowIndices.add(i);
+                    colIndices.add(j);
+                }
+            }
+        }
+
+        return new CooMatrix(src.shape.copy(), entries, rowIndices, colIndices);
+    }
+
+
+    /**
      * Gets the number of rows in this matrix.
      * @return The number of rows in this matrix.
      */
@@ -2383,9 +2413,7 @@ public class CooMatrix
      * @return A tensor which is equivalent to this matrix.
      */
     public CooTensor toTensor() {
-        int[][] destIndices = new int[indices.length][indices[0].length];
-        ArrayUtils.deepCopy(indices, destIndices);
-
+        int[][] destIndices = RealDenseTranspose.standardIntMatrix(indices);
         return new CooTensor(this.shape.copy(), this.entries.clone(), destIndices);
     }
 

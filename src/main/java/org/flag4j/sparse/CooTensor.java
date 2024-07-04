@@ -31,8 +31,11 @@ import org.flag4j.core.sparse_base.RealSparseTensorBase;
 import org.flag4j.dense.CTensor;
 import org.flag4j.dense.Tensor;
 import org.flag4j.operations.sparse.coo.real.RealSparseEquals;
+import org.flag4j.util.ArrayUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Real sparse tensor. Can be any rank. Stored in coordinate (COO) format.
@@ -115,7 +118,36 @@ public class CooTensor
      */
     @Override
     public CooCTensor toComplex() {
-        return null;
+        return new CooCTensor(
+                shape.copy(),
+                ArrayUtils.copy2CNumber(entries, null),
+                ArrayUtils.deepCopy(indices, null)
+        );
+    }
+
+
+    /**
+     * Converts a sparse {@link CooTensor} from a dense {@link Tensor}. This is likely only worthwhile for very sparse tensors.
+     * @param src Dense tensor to convert to sparse COO tensor.
+     * @return A COO tensor which is equivalent to the {@code src} dense tensor.
+     */
+    public static CooTensor fromDense(Tensor src) {
+        List<Double> entries = new ArrayList<>();
+        List<int[]> indices = new ArrayList<>();
+
+        int size = src.entries.length;
+        double value;
+
+        for(int i=0; i<size; i++) {
+            value = src.entries[i];
+
+            if(value != 0) {
+                entries.add(value);
+                indices.add(src.shape.getIndices(i));
+            }
+        }
+
+        return new CooTensor(src.shape.copy(), ArrayUtils.fromDoubleList(entries), indices.toArray(new int[0][]));
     }
 
 

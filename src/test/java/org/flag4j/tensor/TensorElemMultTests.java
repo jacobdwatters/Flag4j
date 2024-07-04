@@ -10,6 +10,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -99,7 +100,7 @@ class TensorElemMultTests {
         expEntries[expShape.entriesIndex(sparseIndices[2])] = bEntries[2]*aEntries[expShape.entriesIndex(sparseIndices[2])];
         exp = new Tensor(expShape, expEntries);
 
-        assertEquals(exp, A.elemMult(B));
+        assertTrue(exp.tensorEquals(A.elemMult(B)));
 
         // ------------------------- Sub-case 2 -------------------------
         bEntries = new double[]{
@@ -180,7 +181,7 @@ class TensorElemMultTests {
         expEntries[expShape.entriesIndex(sparseIndices[1])] = bEntries[1].mult(aEntries[expShape.entriesIndex(sparseIndices[1])]);
         exp = new CTensor(expShape, expEntries);
 
-        assertEquals(exp, A.elemMult(B));
+        assertTrue(exp.tensorEquals(A.elemMult(B)));
 
         // ------------------------- Sub-case 2 -------------------------
         bEntries = new CNumber[]{

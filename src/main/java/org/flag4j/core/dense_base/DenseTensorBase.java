@@ -26,6 +26,7 @@ package org.flag4j.core.dense_base;
 
 import org.flag4j.core.Shape;
 import org.flag4j.core.TensorBase;
+import org.flag4j.core.sparse_base.SparseTensorBase;
 
 import java.io.Serializable;
 
@@ -70,7 +71,7 @@ public abstract class DenseTensorBase<T, W, Y, D extends Serializable, X extends
      * @param B Second tensor in the subtraction.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    abstract void addEq(T B);
+    public abstract void addEq(T B);
 
 
     /**
@@ -79,5 +80,12 @@ public abstract class DenseTensorBase<T, W, Y, D extends Serializable, X extends
      * @param B Second tensor in the subtraction.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    abstract void subEq(T B);
+    public abstract void subEq(T B);
+
+
+    /**
+     * Converts this dense tensor to an equivalent sparse COO tensor.
+     * @return A sparse COO tensor which is equivalent to this dense tensor.
+     */
+    public abstract SparseTensorBase<?, ?, ?, ?, ?, ?, ?> toCoo();
 }

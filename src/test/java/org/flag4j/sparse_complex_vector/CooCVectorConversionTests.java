@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CooCVectorConversionTests {
 
@@ -120,13 +121,14 @@ class CooCVectorConversionTests {
 
         // ------------------- Sub-case 1 -------------------
         expEntries = new CNumber[sparseSize];
+        ArrayUtils.fillZeros(expEntries);
         expEntries[aIndices[0]] = aEntries[0].copy();
         expEntries[aIndices[1]] = aEntries[1].copy();
         expEntries[aIndices[2]] = aEntries[2].copy();
         expEntries[aIndices[3]] = aEntries[3].copy();
         exp = new CVector(expEntries);
 
-        assertEquals(exp, a.toDense());
+        assertTrue(exp.tensorEquals(a.toDense()));
     }
 
 

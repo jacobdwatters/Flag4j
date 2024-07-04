@@ -27,6 +27,7 @@ package org.flag4j.operations.dense.real;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.core.Shape;
+import org.flag4j.rng.RandomArray;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -302,6 +303,28 @@ public final class RealDenseTranspose {
     }
 
 
+    // ------------------------------------ Integer Transpose ------------------------------------
+    /**
+     * Transposes a matrix using the standard algorithm.
+     * @param src Entries of the matrix to transpose.
+     * @return The transpose of the matrix.
+     */
+    public static int[][] standardIntMatrix(final int[][] src) {
+
+        int rows = src.length;
+        int cols = src[0].length;
+        int[][] dest = new int[cols][rows];
+
+        for(int i=0; i<rows; i++) {
+            for(int j=0; j<cols; j++) {
+                dest[j][i] = src[i][j];
+            }
+        }
+
+        return dest;
+    }
+
+
     /**
      * Transposes an integer matrix using a blocked algorithm.
      * @param src Entries of the matrix to transpose.
@@ -329,5 +352,45 @@ public final class RealDenseTranspose {
         }
 
         return dest;
+    }
+
+
+    public static void main(String[] args) {
+        RandomArray rag = new RandomArray();
+
+        int warmupRuns = 5;
+        int numRuns = 10;
+
+        int rows = 500;
+        int cols = 500;
+
+        int[][] arr = new int[rows][cols];
+
+        double bTime = 0;
+        double sTime = 0;
+
+        for(int i=0; i<numRuns+warmupRuns; i++) {
+            // Generate random array to transpose.
+            for(int k=0; k<rows; k++) {
+                arr[k] = rag.genUniformRealIntArray(cols, -100, 100);
+            }
+
+            long sStart = System.nanoTime();
+            standardIntMatrix(arr);
+            long sEnd = System.nanoTime();
+
+            long bStart = System.nanoTime();
+            blockedIntMatrix(arr);
+            long bEnd = System.nanoTime();
+
+            if(i >= warmupRuns) {
+                bTime += (bEnd-bStart)*10e-6;
+                sTime += (sEnd-sStart)*10e-6;
+            }
+        }
+
+        System.out.printf("Shape: (%d, %d)\n\n", rows, cols);
+        System.out.printf("Standard Time: %.5f ms\n", sTime/numRuns);
+        System.out.printf("Blocked Time: %.5f ms\n", bTime/numRuns);
     }
 }

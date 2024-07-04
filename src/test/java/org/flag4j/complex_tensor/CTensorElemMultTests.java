@@ -11,8 +11,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CTensorElemMultTests {
     static CNumber[] aEntries ,expEntries;
@@ -101,7 +100,7 @@ class CTensorElemMultTests {
         expEntries[expShape.entriesIndex(sparseIndices[2])] = aEntries[expShape.entriesIndex(sparseIndices[2])].mult(bEntries[2]);
         exp = new CTensor(expShape, expEntries);
 
-        assertEquals(exp, A.elemMult(B));
+        assertTrue(exp.tensorEquals(A.elemMult(B)));
 
         // ------------------------- Sub-case 2 -------------------------
         bEntries = new double[]{
@@ -181,7 +180,7 @@ class CTensorElemMultTests {
         expEntries[expShape.entriesIndex(sparseIndices[1])] = aEntries[expShape.entriesIndex(sparseIndices[1])].mult(bEntries[1]);
         exp = new CTensor(expShape, expEntries);
 
-        assertEquals(exp, A.elemMult(B));
+        assertTrue(exp.tensorEquals(A.elemMult(B)));
 
         // ------------------------- Sub-case 2 -------------------------
         bEntries = new CNumber[]{

@@ -1479,9 +1479,10 @@ public class CooCVector
     @Override
     public CVector toDense() {
         CNumber[] entries = new CNumber[size];
+        ArrayUtils.fillZeros(entries);
 
         for(int i=0; i<nonZeroEntries; i++) {
-            entries[indices[i]] = this.entries[i];
+            entries[indices[i]] = this.entries[i].copy();
         }
 
         return new CVector(entries);

@@ -42,19 +42,27 @@ public final class ArrayUtils {
 
 
     /**
-     * Creates a deep copy of a 2D array.
+     * Creates a deep copy of a 2D array. Assumes arrays are <i>not</i> jagged.
      *
      * @param src  Source array to copy.
-     * @param dest Destination array of copy.
+     * @param dest Destination array of copy. If {@code null}, a new array will be initialized.
+     * @return A reference to {@code dest} if it was not {@code null}. In the case where {@code dest} is {@code null}, then a new
+     * array will be initialized and returned.
      * @throws IllegalArgumentException If the two arrays are not the same shape.
      */
-    public static void deepCopy(int[][] src, int[][] dest) {
-        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+    public static int[][] deepCopy(int[][] src, int[][] dest) {
+        if(dest == null) {
+            dest = new int[src.length][src[0].length];
+        } else {
+            ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+        }
 
         for (int i = 0; i < src.length; i++) {
             dest[i] = new int[src[i].length];
             System.arraycopy(src[i], 0, dest[i], 0, src[i].length);
         }
+
+        return dest;
     }
 
 

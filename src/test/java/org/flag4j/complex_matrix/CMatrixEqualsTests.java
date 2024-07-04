@@ -8,8 +8,7 @@ import org.flag4j.sparse.CooCMatrix;
 import org.flag4j.sparse.CooMatrix;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CMatrixEqualsTests {
     double[][] bRealEntries;
@@ -86,7 +85,7 @@ class CMatrixEqualsTests {
                 {-723.234, -9.431}};
         BReal = new Matrix(bRealEntries);
 
-        assertEquals(A, BReal);
+        assertEquals(A, BReal.toComplex());
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new CNumber[][]{
@@ -99,7 +98,7 @@ class CMatrixEqualsTests {
                 {8.4554, -723.234, -9.431}};
         BReal = new Matrix(bRealEntries);
 
-        assertNotEquals(A, BReal);
+        assertNotEquals(A, BReal.toComplex());
 
         // ---------------------- Sub-case 3 ----------------------
         aEntries = new CNumber[][]{
@@ -113,8 +112,7 @@ class CMatrixEqualsTests {
                 {-723.234, -9.431}};
         BReal = new Matrix(bRealEntries);
 
-        assertNotEquals(A, BReal);
-
+        assertNotEquals(A, BReal.toComplex());
 
         // ---------------------- Sub-case 4 ----------------------
         aEntries = new CNumber[][]{
@@ -128,7 +126,7 @@ class CMatrixEqualsTests {
                 {-723.234, -9.431}};
         BReal = new Matrix(bRealEntries);
 
-        assertNotEquals(A, BReal);
+        assertNotEquals(A, BReal.toComplex());
     }
 
 
@@ -146,7 +144,7 @@ class CMatrixEqualsTests {
         sparseShape = new Shape(A.numRows, A.numCols);
         BRealSparse = new CooMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
 
-        assertEquals(A, BRealSparse);
+        assertTrue(A.tensorEquals(BRealSparse));
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new CNumber[][]{
@@ -160,7 +158,7 @@ class CMatrixEqualsTests {
         sparseShape = new Shape(A.numRows, A.numCols);
         BRealSparse = new CooMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
 
-        assertNotEquals(A, BRealSparse);
+        assertFalse(A.tensorEquals(BRealSparse));
 
         // ---------------------- Sub-case 3 ----------------------
         aEntries = new CNumber[][]{
@@ -174,7 +172,7 @@ class CMatrixEqualsTests {
         sparseShape = new Shape(A.numRows+1, A.numCols);
         BRealSparse = new CooMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
 
-        assertNotEquals(A, BRealSparse);
+        assertFalse(A.tensorEquals(BRealSparse));
 
         // ---------------------- Sub-case 4 ----------------------
         aEntries = new CNumber[][]{
@@ -188,7 +186,7 @@ class CMatrixEqualsTests {
         sparseShape = new Shape(A.numRows, A.numCols);
         BRealSparse = new CooMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
 
-        assertNotEquals(A, BRealSparse);
+        assertFalse(A.tensorEquals(BRealSparse));
     }
 
 
@@ -206,7 +204,7 @@ class CMatrixEqualsTests {
         sparseShape = new Shape(A.numRows, A.numCols);
         BComplexSparse = new CooCMatrix(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
 
-        assertEquals(A, BComplexSparse);
+        assertTrue(A.tensorEquals(BComplexSparse));
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new CNumber[][]{

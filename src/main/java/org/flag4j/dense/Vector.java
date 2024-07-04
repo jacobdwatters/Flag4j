@@ -1062,6 +1062,17 @@ public class Vector
 
 
     /**
+     * Converts this dense vector to an equivalent {@link CooVector}. Note, this is likely only worthwhile for <i>very</i> sparse
+     * vectors.
+     * @return A {@link CooVector} that is equivalent to this dense vector.
+     */
+    @Override
+    public CooVector toCoo() {
+        return CooVector.fromDense(this);
+    }
+
+
+    /**
      * Simply returns this tensor.
      *
      * @return A reference to this tensor.

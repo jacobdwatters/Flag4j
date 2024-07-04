@@ -40,7 +40,7 @@ class MatrixEqualsTests {
         B = new CMatrix(bEntries);
         exp = true;
 
-        assertEquals(exp, A.equals(B));
+        assertEquals(exp, A.tensorEquals(B));
 
         // -------------- Sub-case 2 --------------
         aEntries = new double[][]{{1, 2, 3, 4}, {4, 5, 6, 7}, {7, 8, 9, 10}};
@@ -52,7 +52,7 @@ class MatrixEqualsTests {
         B = new CMatrix(bEntries);
         exp = false;
 
-        assertEquals(exp, A.equals(B));
+        assertEquals(exp, A.tensorEquals(B));
 
         // -------------- Sub-case 3 --------------
         aEntries = new double[][]{{1, 2}, {4, 5}, {7, 8}};
@@ -64,7 +64,7 @@ class MatrixEqualsTests {
         B = new CMatrix(bEntries);
         exp = true;
 
-        assertEquals(exp, A.equals(B));
+        assertEquals(exp, A.tensorEquals(B));
 
         // -------------- Sub-case 4 --------------
         aEntries = new double[][]{{1, 2}, {4, 5}, {7, 8}};
@@ -76,7 +76,7 @@ class MatrixEqualsTests {
         B = new CMatrix(bEntries);
         exp = false;
 
-        assertEquals(exp, A.equals(B));
+        assertEquals(exp, A.tensorEquals(B));
     }
 
 
@@ -92,7 +92,7 @@ class MatrixEqualsTests {
 
         exp = true;
 
-        assertEquals(exp, A.equals(C));
+        assertEquals(exp, A.tensorEquals(C));
 
         // -------------- Sub-case 2 --------------
         aEntries = new double[][]{{1, 0, 0, 1}, {0, 0, 6, 0}, {0, 8, 9, 10}};
@@ -104,7 +104,7 @@ class MatrixEqualsTests {
 
         exp = false;
 
-        assertEquals(exp, A.equals(C));
+        assertEquals(exp, A.tensorEquals(C));
 
         // -------------- Sub-case 3 --------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 8, 9, 10}};
@@ -116,7 +116,7 @@ class MatrixEqualsTests {
 
         exp = false;
 
-        assertEquals(exp, A.equals(C));
+        assertEquals(exp, A.tensorEquals(C));
 
         // -------------- Sub-case 4 --------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 8, 9, 10}};
@@ -128,7 +128,7 @@ class MatrixEqualsTests {
 
         exp = false;
 
-        assertEquals(exp, A.equals(C));
+        assertEquals(exp, A.tensorEquals(C));
 
         // -------------- Sub-case 1 --------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 8, 9, 10}, {0, 0, 0, 0}};
@@ -140,14 +140,17 @@ class MatrixEqualsTests {
 
         exp = false;
 
-        assertEquals(exp, A.equals(C));
+        assertEquals(exp, A.tensorEquals(C));
     }
 
 
     @Test
     void matrixSparseCMatrixEqualsTestCase() {
         // -------------- Sub-case 1 --------------
-        aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 8, 9, 10}};
+        aEntries = new double[][]{
+                {1, 0, 0, 0},
+                {0, 0, 6, 0},
+                {0, 8, 9, 10}};
         A = new Matrix(aEntries);
         dShape = new Shape(aEntries.length, aEntries[0].length);
         dEntries = new CNumber[]{new CNumber(1), new CNumber(6), new CNumber(8),
@@ -157,7 +160,7 @@ class MatrixEqualsTests {
 
         exp = true;
 
-        assertEquals(exp, A.equals(D));
+        assertEquals(exp, A.tensorEquals(D));
 
         // -------------- Sub-case 2 --------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 8, 9, 10}};
@@ -170,7 +173,7 @@ class MatrixEqualsTests {
 
         exp = false;
 
-        assertEquals(exp, A.equals(D));
+        assertEquals(exp, A.tensorEquals(D));
 
         // -------------- Sub-case 3 --------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 8, -9.34, 10}};
@@ -183,7 +186,7 @@ class MatrixEqualsTests {
 
         exp = false;
 
-        assertEquals(exp, A.equals(D));
+        assertEquals(exp, A.tensorEquals(D));
 
         // -------------- Sub-case 4 --------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 8, 9, 10}, {0, 0, 0, 0}};
@@ -196,7 +199,7 @@ class MatrixEqualsTests {
 
         exp = true;
 
-        assertEquals(exp, A.equals(D));
+        assertEquals(exp, A.tensorEquals(D));
 
         // -------------- Sub-case 5 --------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 0, 0, 0}, {0, 8, 9, 10}};
@@ -209,7 +212,7 @@ class MatrixEqualsTests {
 
         exp = false;
 
-        assertEquals(exp, A.equals(D));
+        assertEquals(exp, A.tensorEquals(D));
 
         // ----------------- Sub-case 6 -----------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 8, 9, 10}, {0, 0, 0, 0}};
@@ -222,6 +225,6 @@ class MatrixEqualsTests {
 
         exp = false;
 
-        assertEquals(exp, A.equals(D));
+        assertEquals(exp, A.tensorEquals(D));
     }
 }

@@ -10,6 +10,8 @@ import org.flag4j.util.ArrayUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -45,14 +47,14 @@ class CooMatrixEqualsTest {
         fillDense(bEntries);
         B = new Matrix(bEntries);
 
-        assertEquals(A, B);
+        assertTrue(A.tensorEquals(B));
 
         // --------------------- Sub-case 2 ---------------------
         bEntries = new double[aShape.get(0)-1][aShape.get(1)+13];
         fillDense(bEntries);
         B = new Matrix(bEntries);
 
-        assertNotEquals(A, B);
+        assertFalse(A.tensorEquals(B));
 
         // --------------------- Sub-case 3 ---------------------
         bEntries = new double[aShape.get(0)][aShape.get(1)];
@@ -60,7 +62,7 @@ class CooMatrixEqualsTest {
         bEntries[134][7624] = -1;
         B = new Matrix(bEntries);
 
-        assertNotEquals(A, B);
+        assertFalse(A.tensorEquals(B));
 
         // --------------------- Sub-case 4 ---------------------
         bEntries = new double[aShape.get(0)][aShape.get(1)];
@@ -68,7 +70,7 @@ class CooMatrixEqualsTest {
         bEntries[141][41] = 0;
         B = new Matrix(bEntries);
 
-        assertNotEquals(A, B);
+        assertFalse(A.tensorEquals(B));
     }
 
 
@@ -83,7 +85,7 @@ class CooMatrixEqualsTest {
         fillDense(bEntries);
         B = new CMatrix(bEntries);
 
-        assertEquals(A, B);
+        assertTrue(A.tensorEquals(B));
 
         // --------------------- Sub-case 2 ---------------------
         bEntries = new CNumber[aShape.get(0)-1][aShape.get(1)+13];
@@ -91,7 +93,7 @@ class CooMatrixEqualsTest {
         fillDense(bEntries);
         B = new CMatrix(bEntries);
 
-        assertNotEquals(A, B);
+        assertFalse(A.tensorEquals(B));
 
         // --------------------- Sub-case 3 ---------------------
         bEntries = new CNumber[aShape.get(0)][aShape.get(1)];
@@ -100,7 +102,7 @@ class CooMatrixEqualsTest {
         bEntries[134][7624] = new CNumber(0, -0.3);
         B = new CMatrix(bEntries);
 
-        assertNotEquals(A, B);
+        assertFalse(A.tensorEquals(B));
 
         // --------------------- Sub-case 4 ---------------------
         bEntries = new CNumber[aShape.get(0)][aShape.get(1)];
@@ -109,7 +111,7 @@ class CooMatrixEqualsTest {
         bEntries[141][41] = new CNumber();
         B = new CMatrix(bEntries);
 
-        assertNotEquals(A, B);
+        assertFalse(A.tensorEquals(B));
     }
 
 
@@ -151,7 +153,7 @@ class CooMatrixEqualsTest {
 
         // --------------------- Sub-case 1 ---------------------
         B = A.toComplex();
-        assertEquals(A, B);
+        assertTrue(A.tensorEquals(B));
 
         // --------------------- Sub-case 2 ---------------------
         bEntries = new double[]{1.34, 100.14, -9.245, 0.00234, 52.5, 24.5};
@@ -160,7 +162,7 @@ class CooMatrixEqualsTest {
                 {1_002, 5, 41, 12_234, 9_013, 27}
         };
         B = new CooCMatrix(A.shape.copy(), bEntries, bIndices[0], bIndices[1]);
-        assertNotEquals(A, B);
+        assertFalse(A.tensorEquals(B));
 
         // --------------------- Sub-case 3 ---------------------
         bEntries = new double[]{1.34, 100.14, -9.245, 0.00234, 52.5};
@@ -169,7 +171,7 @@ class CooMatrixEqualsTest {
                 {1_002, 5, 41, 12_234, 9_013}
         };
         B = new CooCMatrix(new Shape(2451, 134415), bEntries, bIndices[0], bIndices[1]);
-        assertNotEquals(A, B);
+        assertFalse(A.tensorEquals(B));
     }
 
 
