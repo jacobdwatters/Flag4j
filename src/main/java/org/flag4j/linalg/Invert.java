@@ -180,7 +180,7 @@ public class Invert {
 
     /**
      * Inverts a lower triangular matrix. <b>WARNING:</b> this method does not check that the matrix is actually
-     * lower triangular.
+     * lower triangular and will treat it as such even if it is not triangular.
      * @param src Lower triangular matrix to compute the inverse of.
      * @return The inverse of the lower triangular matrix.
      * @throws SingularMatrixException If the matrix is singular (i.e. has at least one zero along the diagonal).
@@ -225,7 +225,7 @@ public class Invert {
 
     /**
      * Inverts a symmetric positive definite matrix.
-     * @param src Positive definite matrix. It will not be verified if {@code src} is actually symmetric positive definite.
+     * @param src Positive definite matrix. It will <i>not</i> be verified if {@code src} is actually symmetric positive definite.
      * @return The inverse of the {@code src} matrix.
      * @throws IllegalArgumentException If the matrix is not square.
      * @throws SingularMatrixException If the {@code src} matrix is singular.

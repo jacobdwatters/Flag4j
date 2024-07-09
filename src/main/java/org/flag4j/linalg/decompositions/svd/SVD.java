@@ -131,8 +131,7 @@ public abstract class SVD<
      */
     @Override
     public SVD<T> decompose(T src) {
-        T B = src.invDirectSum(src.H()); // Convert the problem to an eigenvalue problem.
-        System.out.println("B:\n" + B);
+        T B = invDirectSum(src); // Convert the problem to an eigenvalue problem.
 
         double[] singularVals = new double[B.numRows()];
         int stopIdx;
@@ -163,6 +162,14 @@ public abstract class SVD<
 
         return this;
     }
+
+
+    /**
+     * Computes the inverse direct sum of a matrix and its hermation transpose.
+     * @param src Matrix to inverse direct add with its hermation transpose.
+     * @return The inverse direct sum of the {@code src} matrix with its hermation transpose.
+     */
+    protected abstract T invDirectSum(T src);
 
 
     /**

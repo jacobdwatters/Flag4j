@@ -71,6 +71,7 @@ public class Eigen {
         double maxAbs = AggregateReal.maxAbs(a11, a12, a21, a22);
 
         if(maxAbs == 0) {
+            ArrayUtils.fillZeros(lambda);
             return lambda;
         } else {
             a11 /= maxAbs;
@@ -184,15 +185,62 @@ public class Eigen {
 
 
     /**
-     * Computes the eigenvalues of a square real dense matrix.
+     * Computes the eigenvalues of a square real dense matrix. For reproducibility see {@link #getEigenValues(Matrix, long)}. If the
+     * algorithm fails to converge within the default maximum number of iterations, {@link #getEigenValues(Matrix, long, int)} can
+     * be used to specify a larger number of iterations to attempt.
      * @param src The matrix to compute the eigenvalues of.
      * @return The eigenvalues of the {@code src} matrix.
+     * @see #getEigenValues(Matrix, long)
+     * @see #getEigenValues(Matrix, long, int)
      */
     public static CVector getEigenValues(Matrix src) {
-        CVector lambdas = new CVector(src.numRows);
+        RealSchur schur = new RealSchur(false);
+        return getEigenValues(src, schur);
+    }
 
-        Schur<Matrix, double[]> schur = new RealSchur(false).decompose(src);
-        Matrix T = schur.getT();
+
+    /**
+     * Computes the eigenvalues of a square real dense matrix. If the algorithm fails to converge within the default maximum number
+     * of iterations, {@link #getEigenValues(Matrix, long, int)} can be used to specify a larger number of iterations to attempt.
+     * @param src The matrix to compute the eigenvalues of.
+     * @param seed Seed for random shifts used in computing the eigenvalues.
+     * @return The eigenvalues of the {@code src} matrix.
+     * @see #getEigenValues(Matrix)
+     * @see #getEigenValues(Matrix, long, int)
+     */
+    public static CVector getEigenValues(Matrix src, long seed) {
+        RealSchur schur = new RealSchur(false, seed);
+        return getEigenValues(src, schur);
+    }
+
+
+    /**
+     * Computes the eigenvalues of a square real dense matrix.
+     * @param src The matrix to compute the eigenvalues of.
+     * @param seed Seed for random shifts used in computing the eigenvalues.
+     * @param maxIterationFactor maximum iteration factor for use in computing the total maximum number of iterations to run the
+     * {@code QR} algorithm for during eigenvalue computation. The maximum number of iterations will be computed as:
+     * <pre>
+     *      {@code maxIteration = maxIterationFactor * src.numRows;}</pre>
+     * @return The eigenvalues of the {@code src} matrix.
+     * @see #getEigenValues(Matrix)
+     * @see #getEigenValues(Matrix, long)
+     */
+    public static CVector getEigenValues(Matrix src, long seed, int maxIterationFactor) {
+        RealSchur schur = new RealSchur(false, seed).setMaxIterationFactor(maxIterationFactor);
+        return getEigenValues(src, schur);
+    }
+
+
+    /**
+     * Computes the eigenvalues of a real dense square matrix.
+     * @param src Matrix to compute eigenvalues of.
+     * @param schur Schur decomposer to use in the eigenvalue computation.
+     * @return The eigenvalues of the {@code src} matrix stored in a complex vector ({@link CVector}).
+     */
+    private static CVector getEigenValues(Matrix src, RealSchur schur) {
+        CVector lambdas = new CVector(src.numRows);
+        Matrix T = schur.decompose(src).getT();
 
         int numRows = src.numRows;
 
@@ -204,7 +252,7 @@ public class Eigen {
                 double a11 = T.entries[m*numRows + m];
                 double a12 = T.entries[m*numRows + m + 1];
                 double a21 = T.entries[(m+1)*numRows + m];
-                double a22 = T.entries[(m+1)*numRows + m  +1];
+                double a22 = T.entries[(m+1)*numRows + m + 1];
 
                 if(Math.abs(a21) > EPS_F64*(Math.abs(a11) + Math.abs(a22))) {
                     // Non-converged 2x2 block found.
@@ -212,7 +260,7 @@ public class Eigen {
                     lambdas.entries[m] = mu[0];
                     lambdas.entries[++m] = mu[1];
                 } else {
-                    lambdas.entries[m] = new CNumber(a22);
+                    lambdas.entries[m] = new CNumber(a11);
                 }
             }
         }
@@ -222,15 +270,56 @@ public class Eigen {
 
 
     /**
-     * Computes the eigenvalues of a square complex dense matrix.
+     * Computes the eigenvalues of a square complex dense matrix. For reproducibility see {@link #getEigenValues(CMatrix, long)}.
      * @param src The matrix to compute the eigenvalues of.
      * @return The eigenvalues of the {@code src} matrix.
+     * @see #getEigenValues(CMatrix, long)
      */
     public static CVector getEigenValues(CMatrix src) {
-        CVector lambdas = new CVector(src.numRows);
+        return getEigenValues(src, new ComplexSchur(false));
+    }
 
-        Schur<CMatrix, CNumber[]> schur = new ComplexSchur(false).decompose(src);
-        CMatrix T = schur.getT();
+
+    /**
+     * Computes the eigenvalues of a square complex dense matrix.
+     * @param src The matrix to compute the eigenvalues of.
+     * @param seed Seed for random shifts used in computing the eigenvalues. This allows for reproducibility despite randomness in the
+     * eigenvalue computation algorithm.
+     * @return The eigenvalues of the {@code src} matrix.
+     * @see #getEigenValues(CMatrix)
+     */
+    public static CVector getEigenValues(CMatrix src, long seed) {
+        return getEigenValues(src, new ComplexSchur(false, seed));
+    }
+
+
+    /**
+     * Computes the eigenvalues of a square complex dense matrix.
+     * @param src The matrix to compute the eigenvalues of.
+     * @param seed Seed for random shifts used in computing the eigenvalues.
+     * @param maxIterationFactor maximum iteration factor for use in computing the total maximum number of iterations to run the
+     * {@code QR} algorithm for during eigenvalue computation. The maximum number of iterations will be computed as:
+     * <pre>
+     *      {@code maxIteration = maxIterationFactor * src.numRows;}</pre>
+     * @return The eigenvalues of the {@code src} matrix.
+     * @see #getEigenValues(Matrix)
+     * @see #getEigenValues(Matrix, long)
+     */
+    public static CVector getEigenValues(CMatrix src, long seed, int maxIterationFactor) {
+        return getEigenValues(src,
+                new ComplexSchur(false, seed).setMaxIterationFactor(maxIterationFactor));
+    }
+
+
+    /**
+     * Computes the eigenvalues of a square complex dense matrix.
+     * @param src The matrix to compute the eigenvalues of.
+     * @param schur The schur decomposer to use in the eigenvalue decomposition.
+     * @return The eigenvalues of the {@code src} matrix.
+     */
+    private static CVector getEigenValues(CMatrix src, ComplexSchur schur) {
+        CVector lambdas = new CVector(src.numRows);
+        CMatrix T = schur.decompose(src).getT();
         int numRows = src.numRows;
 
         // Extract eigenvalues of T.
@@ -249,7 +338,7 @@ public class Eigen {
                     lambdas.entries[m] = mu[0];
                     lambdas.entries[++m] = mu[1];
                 } else {
-                    lambdas.entries[m] = a22.copy();
+                    lambdas.entries[m] = a11.copy();
                 }
             }
         }
@@ -262,9 +351,64 @@ public class Eigen {
      * Computes the eigenvectors of a square real dense matrix.
      * @param src The matrix to compute the eigenvectors of.
      * @return A matrix containing the eigenvectors of {@code src} as its columns.
+     * @see #getEigenVectors(Matrix, long)
+     * @see #getEigenVectors(Matrix, long, int)
+     * @see #getEigenValues(Matrix)
+     * @see #getEigenValues(Matrix, long)
+     * @see #getEigenValues(Matrix, long, int)
      */
     public static CMatrix getEigenVectors(Matrix src) {
-        RealSchur schur = new RealSchur(true).decompose(src);
+        return getEigenVectors(src, new RealSchur(true));
+    }
+
+
+    /**
+     * Computes the eigenvectors of a square real dense matrix. This method accepts a seed for the random number generator involved in
+     * the algorithm for computing the eigenvalues. This allows for reproducibility between calls.
+     * @param src The matrix to compute the eigenvectors of.
+     * @param seed Seed for random shifts used in the algorithm to compute the eigenvalues of.
+     * @return A matrix containing the eigenvectors of {@code src} as its columns.
+     * @see #getEigenVectors(Matrix)
+     * @see #getEigenVectors(Matrix, long, int)
+     * @see #getEigenValues(Matrix)
+     * @see #getEigenValues(Matrix, long)
+     * @see #getEigenValues(Matrix, long, int)
+     */
+    public static CMatrix getEigenVectors(Matrix src, long seed) {
+        return getEigenVectors(src, new RealSchur(true, seed));
+    }
+
+
+    /**
+     * Computes the eigenvectors of a square real dense matrix. This method accepts a seed for the random number generator involved in
+     * the algorithm for computing the eigenvalues. This allows for reproducibility between calls.
+     * @param src The matrix to compute the eigenvectors of.
+     * @param seed Seed for random shifts used in the algorithm to compute the eigenvalues of.
+     * @param maxIterationFactor maximum iteration factor for use in computing the total maximum number of iterations to run the
+     * {@code QR} algorithm for during eigenvalue computation. The maximum number of iterations will be computed as:
+     * <pre>
+     *      {@code maxIteration = maxIterationFactor * src.numRows;}</pre>
+     * @return A matrix containing the eigenvectors of {@code src} as its columns.
+     * @see #getEigenVectors(CMatrix)
+     * @see #getEigenVectors(CMatrix, long)
+     * @see #getEigenValues(CMatrix)
+     * @see #getEigenValues(CMatrix, long)
+     * @see #getEigenValues(CMatrix, long, int)
+     */
+    public static CMatrix getEigenVectors(Matrix src, long seed, int maxIterationFactor) {
+        return getEigenVectors(src,
+                new RealSchur(true, seed).setMaxIterationFactor(maxIterationFactor));
+    }
+
+
+    /**
+     * Computes the eigenvectors of a square real dense matrix.
+     * @param src The matrix to compute the eigenvectors of.
+     * @param schur Schur decomposer to use in the computation of the eigenvectors.
+     * @return A matrix containing the eigenvectors of {@code src} as its columns.
+     */
+    private static CMatrix getEigenVectors(Matrix src, RealSchur schur) {
+        schur.decompose(src);
         CMatrix[] complexTU = schur.real2ComplexSchur();
         CMatrix U = complexTU[1];
 
@@ -280,20 +424,85 @@ public class Eigen {
 
 
     /**
-     * Computes the eigenvectors of a square complex dense matrix.
+     * Computes the eigenvectors of a square real dense matrix.
      * @param src The matrix to compute the eigenvectors of.
      * @return A matrix containing the eigenvectors of {@code src} as its columns.
+     * @see #getEigenVectors(CMatrix, long)
+     * @see #getEigenVectors(CMatrix, long, int)
+     * @see #getEigenValues(CMatrix)
+     * @see #getEigenValues(CMatrix, long)
+     * @see #getEigenValues(CMatrix, long, int)
      */
     public static CMatrix getEigenVectors(CMatrix src) {
-        Schur<CMatrix, CNumber[]> schur = new ComplexSchur(true).decompose(src);
-        CMatrix U = schur.getU();
+        return getEigenVectors(src, new ComplexSchur(true));
+    }
+
+
+    /**
+     * Computes the eigenvectors of a square real dense matrix. This method accepts a seed for the random number generator involved in
+     * the algorithm for computing the eigenvalues. This allows for reproducibility between calls.
+     * @param src The matrix to compute the eigenvectors of.
+     * @param seed Seed for random shifts used in the algorithm to compute the eigenvalues of.
+     * @return A matrix containing the eigenvectors of {@code src} as its columns.
+     * @see #getEigenVectors(CMatrix)
+     * @see #getEigenVectors(CMatrix, long, int)
+     * @see #getEigenValues(CMatrix)
+     * @see #getEigenValues(CMatrix, long)
+     * @see #getEigenValues(CMatrix, long, int)
+     */
+    public static CMatrix getEigenVectors(CMatrix src, long seed) {
+        return getEigenVectors(src, new ComplexSchur(true, seed));
+    }
+
+
+    /**
+     * Computes the eigenvectors of a square real dense matrix. This method accepts a seed for the random number generator involved in
+     * the algorithm for computing the eigenvalues. This allows for reproducibility between calls.
+     * @param src The matrix to compute the eigenvectors of.
+     * @param seed Seed for random shifts used in the algorithm to compute the eigenvalues of.
+     * @param maxIterationFactor maximum iteration factor for use in computing the total maximum number of iterations to run the
+     * {@code QR} algorithm for during eigenvalue computation. The maximum number of iterations will be computed as:
+     * <pre>
+     *      {@code maxIteration = maxIterationFactor * src.numRows;}</pre>
+     * @return A matrix containing the eigenvectors of {@code src} as its columns.
+     * @see #getEigenVectors(CMatrix)
+     * @see #getEigenVectors(CMatrix, long)
+     * @see #getEigenValues(CMatrix)
+     * @see #getEigenValues(CMatrix, long)
+     * @see #getEigenValues(CMatrix, long, int)
+     */
+    public static CMatrix getEigenVectors(CMatrix src, long seed, int maxIterationFactor) {
+        return getEigenVectors(src,
+                new ComplexSchur(true, seed).setMaxIterationFactor(maxIterationFactor));
+    }
+
+
+    /**
+     * Computes the eigenvectors of a square complex dense matrix.
+     * @param src The matrix to compute the eigenvectors of.
+     * @param schur Schur decomposer to use when computing the eigenvectors.
+     * @return A matrix containing the eigenvectors of {@code src} as its columns.
+     */
+    private static CMatrix getEigenVectors(CMatrix src, ComplexSchur schur) {
+        schur.decompose(src);
+        CMatrix T;
+        CMatrix U;
+
+        if(src.numRows == 2) {
+            CMatrix[] complexTU = schur.real2ComplexSchur();
+            T = complexTU[0];
+            U = complexTU[1];
+        } else {
+            T = schur.getT();
+            U = schur.getU();
+        }
 
         if(src.isHermitian()) {
             // Then the columns of U are the complete orthonormal set of eigenvectors of the src matrix.
             return U;
         } else {
             // For a non-symmetric matrix, only the first column of U will be an eigenvector of the src matrix.
-            CMatrix Q = getEigenVectorsTriu(schur.getT()); // Compute the eigenvectors of T.
+            CMatrix Q = getEigenVectorsTriu(T); // Compute the eigenvectors of T.
             return U.mult(Q); // Convert the eigenvectors of T to the eigenvectors of the src matrix.
         }
     }
@@ -461,25 +670,5 @@ public class Eigen {
         }
 
         return new CMatrix[]{lambdas, U};
-    }
-
-    public static void main(String[] args) {
-        Matrix A = new Matrix(new double[][]{
-                {0, 0, 0, 1},
-                {1, 0, 0, 0},
-                {0, 1, 0, 0},
-                {0, 0, 1, 0}});
-
-        CMatrix[] eig = Eigen.getEigenPairs(A);
-        CVector eigvals = eig[0].toVector();
-        CMatrix eigvectors = eig[1];
-
-        System.out.println("Eigenvalues: " + eigvals + "\n");
-        System.out.println("Eigenvectors:\n" + eigvectors + "\n");
-
-        for(int j=0; j<eigvectors.numCols; j++) {
-            CVector v = eigvectors.getCol(j);
-            System.out.println(A.mult(v).sub(v.mult(eigvals.get(j))) + "\n");
-        }
     }
 }

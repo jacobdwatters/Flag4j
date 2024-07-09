@@ -132,7 +132,7 @@ class CNumberSqrtTest {
 
         // ------------- Sub-case 8 -------------
         aComplex = new CNumber(-84.3453, 32.337847);
-        expResult = new CNumber(1.7301266590439461, 9.345514338779571);
+        expResult = new CNumber(1.7301266590439484, 9.345514338779571);
         actResult = CNumber.sqrt(aComplex);
         Assertions.assertEquals(expResult, actResult);
 

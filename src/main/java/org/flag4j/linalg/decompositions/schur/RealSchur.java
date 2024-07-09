@@ -127,7 +127,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
      * @throws IllegalArgumentException If {@code exceptionalThreshold} is not positive.
      */
     public RealSchur setExceptionalThreshold(int exceptionalThreshold) {
-        // Provided so calls like the following can be made:
+        // Provided so that calls like the following can be made:
         //    RealSchur schur = new RealSchur().setExceptionalThreshold(x).decompose()
         return (RealSchur) super.setExceptionalThreshold(exceptionalThreshold);
     }
@@ -412,7 +412,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
         // Scale components for stability and overflow purposes.
         double maxAbs = Math.max(Math.abs(p1), Math.max(Math.abs(p2), Math.abs(p3)));
 
-        if(maxAbs < EPS_F64*Math.abs(T.entries[i*numRows + i])) {
+        if(maxAbs <= EPS_F64*Math.abs(T.entries[i*numRows + i])) {
             return false; // No reflector needs to be constructed or applied.
         }
 
@@ -448,7 +448,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
      */
     protected boolean makeReflector(int i, double p1, double p2) {
         double maxAbs = Math.max(Math.abs(p1), Math.abs(p2));
-        if(maxAbs < EPS_F64*Math.abs(T.entries[i*numRows + i])) {
+        if(maxAbs <= EPS_F64*Math.abs(T.entries[i*numRows + i])) {
             return false; // No reflector needs to be constructed or applied.
         }
 

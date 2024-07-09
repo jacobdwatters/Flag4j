@@ -56,7 +56,7 @@ class CNumberUnaryOperationsTest {
 
         // ----------- Sub-case 5 --------------
         a = new CNumber(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
-        expValueDouble = Math.sqrt(Math.pow(Double.POSITIVE_INFINITY, 2) + Math.pow(Double.NEGATIVE_INFINITY, 2));
+        expValueDouble = Double.NaN;
 
         valueDouble = a.mag();
 
@@ -107,7 +107,7 @@ class CNumberUnaryOperationsTest {
 
         // ----------- Sub-case 5 --------------
         a = new CNumber(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
-        expValueDouble = Math.sqrt(Math.pow(Double.POSITIVE_INFINITY, 2) + Math.pow(Double.NEGATIVE_INFINITY, 2));
+        expValueDouble = Double.NaN;
         valueDouble = a.mag();
         Assertions.assertEquals(expValueDouble, valueDouble);
 
@@ -156,7 +156,7 @@ class CNumberUnaryOperationsTest {
 
         // ----------- Sub-case 5 --------------
         a = new CNumber(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
-        expValueDouble = Math.sqrt(Math.pow(Double.POSITIVE_INFINITY, 2) + Math.pow(Double.NEGATIVE_INFINITY, 2));
+        expValueDouble = Double.NaN;
         valueDouble = a.abs();
         Assertions.assertEquals(expValueDouble, valueDouble);
 

@@ -29,8 +29,10 @@ import org.flag4j.core.Shape;
 import org.flag4j.dense.CMatrix;
 import org.flag4j.dense.Matrix;
 import org.flag4j.linalg.Eigen;
+import org.flag4j.linalg.ops.DirectSum;
 
 import java.util.Arrays;
+
 
 /**
  * Instances of this class can be used to compute the singular value decomposition (SVD) of a real dense matrix.
@@ -75,6 +77,19 @@ public class RealSVD extends SVD<Matrix> {
      */
     public RealSVD(boolean computeUV, boolean reduced) {
         super(computeUV, reduced);
+    }
+
+
+    /**
+     * Computes the inverse direct sum of a matrix and its hermation transpose.
+     *
+     * @param src Matrix to inverse direct add with its hermation transpose.
+     *
+     * @return The inverse direct sum of the {@code src} matrix with its hermation transpose.
+     */
+    @Override
+    protected Matrix invDirectSum(Matrix src) {
+        return DirectSum.invDirectSum(src, src.H());
     }
 
 

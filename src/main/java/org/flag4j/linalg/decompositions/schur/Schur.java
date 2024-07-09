@@ -252,8 +252,9 @@ public abstract class Schur<
             iters++;
         }
 
-        if(iters == maxIterations)
+        if(iters == maxIterations) {
             throw new LinearAlgebraException("Schur decomposition failed to converge in " + maxIterations + " iterations.");
+        }
     }
 
 

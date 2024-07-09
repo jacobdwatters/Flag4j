@@ -89,12 +89,12 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
 
 
     /**
-     * <p>Gets the unitary {@code Q} matrix from the {@code QR} decomposition.</p>
+     * <p>Gets the unitary {@code Q} matrix from the unitary decomposition.</p>
      *
      * <p>Note, if the reflectors for this decomposition were not saved, then {@code Q} can not be computed and this method will be
      * null.</p>
      *
-     * @return The {@code Q} matrix from the {@code QR} decomposition. Note, if the reflectors for this decomposition were not saved,
+     * @return The {@code Q} matrix from the unitary decomposition. Note, if the reflectors for this decomposition were not saved,
      * then {@code Q} can not be computed and this method will return {@code null}.
      */
     @Override

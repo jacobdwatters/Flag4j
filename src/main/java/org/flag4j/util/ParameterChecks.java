@@ -399,7 +399,7 @@ public final class ParameterChecks {
     /**
      * Checks if a shape represents a square tensor.
      * @param shape Shape to check.
-     * @throws LinearAlgebraException If all axis of the shape are not the same length.
+     * @throws IllegalArgumentException If all axis of the shape are not the same length.
      */
     public static void assertSquare(Shape shape) {
         ParameterChecks.assertEquals(shape.dims);

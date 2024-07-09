@@ -26,12 +26,16 @@ package org.flag4j.linalg.decompositions.schur;
 
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.dense.CMatrix;
+import org.flag4j.dense.CVector;
 import org.flag4j.linalg.Eigen;
 import org.flag4j.linalg.decompositions.hess.ComplexHess;
+import org.flag4j.linalg.transformations.Givens;
 import org.flag4j.linalg.transformations.Householder;
 import org.flag4j.operations.common.complex.AggregateComplex;
 import org.flag4j.rng.RandomCNumber;
 import org.flag4j.util.Flag4jConstants;
+
+import static org.flag4j.util.Flag4jConstants.EPS_F64;
 
 
 /**
@@ -405,7 +409,7 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
         // Scale components for stability and overflow purposes.
         double maxAbs = Math.max(p1.mag(), Math.max(p2.mag(), p3.mag()));
 
-        if(maxAbs < Flag4jConstants.EPS_F64*T.entries[i*numRows + i].mag()) {
+        if(maxAbs <= Flag4jConstants.EPS_F64*T.entries[i*numRows + i].mag()) {
             return false; // No reflector needs to be constructed or applied.
         }
 
@@ -445,7 +449,7 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
      */
     protected boolean makeReflector(int i, CNumber p1, CNumber p2) {
         double maxAbs = Math.max(p1.mag(), p2.mag());
-        if(maxAbs < Flag4jConstants.EPS_F64*T.entries[i*numRows + i].mag()) {
+        if(maxAbs <= Flag4jConstants.EPS_F64*T.entries[i*numRows + i].mag()) {
             return false; // No reflector needs to be constructed or applied.
         }
 
@@ -492,16 +496,52 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
         // Uses deflation criteria proposed by Wilkinson: |A[k, k-1]| < eps*(|A[k, k]| + |A[k-1, k-1]|)
         // AND the deflation criteria proposed by Ahues and Tisseur:
         //     |A[k, k-1]| *|A[k-1, k]| <= eps * |A[k, k]| * |A[k, k] - A[k-1, k-1]|
-
-        if(a32.mag() < Flag4jConstants.EPS_F64*( a33.mag() + a22.mag() )
-                && a32.mag()*a23.mag() <= Flag4jConstants.EPS_F64*a33.mag() * (a33.sub(a22)).mag()) {
+        if(a32.mag() < EPS_F64*(a33.mag() + a22.mag())
+                && a32.mag()*a23.mag() <= EPS_F64*a33.mag() * (a33.sub(a22)).mag()) {
             T.entries[workingSize*numRows + workingSize - 1] = CNumber.zero(); // Zero out converged value.
             return 1; // Deflate by 1.
-        } else if(a21.mag() < Flag4jConstants.EPS_F64*( a11.mag() + a22.mag() )) {
+        } else if(a21.mag() < EPS_F64*(a11.mag() + a22.mag())) {
             T.entries[leftRow + workingSize - 2] = CNumber.zero(); // Zero out converged value.
             return 2; // Deflate by 2.
         }
 
         return 0; // No convergence detected. Do not deflate.
+    }
+
+
+    public CMatrix[] real2ComplexSchur() {
+        // Convert matrices to complex matrices.
+        CMatrix tComplex = T.copy();
+        CMatrix uComplex = computeU ? U.copy() : null;
+        CNumber[] givensWorkComplex = new CNumber[2*numRows];
+
+        for(int m=numRows-1; m>0; m--) {
+            CNumber a11 = tComplex.entries[(m - 1)*numRows + m - 1];
+            CNumber a12 = tComplex.entries[(m - 1)*numRows + m];
+            CNumber a21 = tComplex.entries[m*numRows + m - 1];
+            CNumber a22 = tComplex.entries[m*numRows + m];
+
+            if(a21.mag() > EPS_F64*(a11.mag() + a22.mag())) {
+                // non-converged 2x2 block found.
+                CNumber[] mu = Eigen.get2x2EigenValues(a11, a12, a21, a22);
+                mu[0].subEq(a22); // Shift eigenvalue.
+
+                // Construct a givens rotator to bring matrix into properly upper triangular form.
+                CMatrix G = Givens.get2x2Rotator(new CVector(mu[0], a21));
+                // Apply rotation to T matrix to bring it into upper triangular form.
+                Givens.leftMult2x2Rotator(tComplex, G, m, givensWorkComplex);
+                // Apply hermation transpose to keep transformation similar.
+                Givens.rightMult2x2Rotator(tComplex, G, m, givensWorkComplex);
+
+                if(uComplex != null) {
+                    // Accumulate similarity transforms in the U matrix.
+                    Givens.rightMult2x2Rotator(uComplex, G, m, givensWorkComplex);
+                }
+
+                tComplex.set(0, m, m-1);
+            }
+        }
+
+        return new CMatrix[]{tComplex, uComplex};
     }
 }

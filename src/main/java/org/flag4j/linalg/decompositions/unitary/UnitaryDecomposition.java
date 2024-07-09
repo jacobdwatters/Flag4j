@@ -132,6 +132,7 @@ public abstract class UnitaryDecomposition<
 
         for(int j=0; j<minAxisSize-offSet; j++) {
             computeHouseholder(j + subDiagonal); // Compute the householder reflector.
+
             if(applyUpdate) updateData(j + subDiagonal); // Update the upper-triangular matrix and store the reflectors.
         }
     }

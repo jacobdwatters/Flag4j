@@ -28,6 +28,7 @@ package org.flag4j.linalg.decompositions.svd;
 import org.flag4j.core.Shape;
 import org.flag4j.dense.CMatrix;
 import org.flag4j.linalg.Eigen;
+import org.flag4j.linalg.ops.DirectSum;
 
 
 /**
@@ -75,6 +76,19 @@ public class ComplexSVD extends SVD<CMatrix> {
      */
     public ComplexSVD(boolean computeUV, boolean reduced) {
         super(computeUV, reduced);
+    }
+
+
+    /**
+     * Computes the inverse direct sum of a matrix and its hermation transpose.
+     *
+     * @param src Matrix to inverse direct add with its hermation transpose.
+     *
+     * @return The inverse direct sum of the {@code src} matrix with its hermation transpose.
+     */
+    @Override
+    protected CMatrix invDirectSum(CMatrix src) {
+        return DirectSum.directSum(src, src.H());
     }
 
 

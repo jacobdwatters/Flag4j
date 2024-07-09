@@ -306,58 +306,61 @@ public class Householder {
 
 
     /**
-     * Applies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>T</sup>, represented by the vector {@code v} to a
-     * matrix {@code A}. That is, computes {@code H*A*H = }
+     * <p>Applies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>T</sup>, represented by the vector {@code v} to a
+     * symmetric matrix {@code A} on both the left and right side. That is, computes {@code H*A*H}.</p>
+     *
+     * <p>Note: no check is made to
+     * explicitly check that the {@code src} matrix is actually symmetric.</p>
+     *
+     * @param src Matrix to apply the Householder reflector to. Assumed to be square and symmetric. Upper triangular portion
+     * overwritten with the result.
+     * @param householderVector Householder vector {@code v} from the definition of a Householder reflector matrix.
+     * @param alpha The scalar &alpha value in Householder reflector matrix definition.
+     * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
+     * @param workArray Array for storing temporary values during the computation. Contents will be overwritten.
      */
     public static void symmLeftRightMultReflector(Matrix src,
-                                                  double[] u,
-                                                  double gamma,
-                                                  int row,
-                                                  double[] w) {
-        int N = src.numRows;
+                                                  double[] householderVector,
+                                                  double alpha,
+                                                  int startCol,
+                                                  double[] workArray) {
+        int numRows = src.numRows;
 
-        // compute v = -gamma*A*u
-        for(int i=row; i<N; i++) {
+        // Computes w = -alpha*A*v
+        for(int i=startCol; i<numRows; i++) {
             double total = 0;
-            // the lower triangle is not written to so it needs to traverse upwards
-            // to get the information. Reduces the number of matrix writes need
-            // improving large matrix performance
-            for(int j=row; j<i; j++) {
-                total += src.entries[j*N + i]*u[j];
-                System.out.printf("accessing: (%d, %d)\n", j, i);
+            int rowOffset = i*numRows;
+
+            for(int j=startCol; j<i; j++) {
+                total += src.entries[j*numRows + i]*householderVector[j];
             }
-            for(int j=i; j<N; j++) {
-                total += src.entries[i*N + j]*u[j];
-                System.out.printf("accessing: (%d, %d)\n", i, j);
+            for(int j=i; j<src.numRows; j++) {
+                total += src.entries[rowOffset + j]*householderVector[j];
             }
 
-            w[i] = -gamma*total;
+            workArray[i] = -alpha*total;
         }
 
-        // alpha = -0.5*gamma*u^T*v
-        double alpha = 0;
-
-        for(int i=row; i<N; i++) {
-            alpha += u[i]*w[i];
+        // Computes -0.5*alpha*v^T*w
+        double innerProd = 0;
+        for(int i=startCol; i<numRows; i++) {
+            innerProd += householderVector[i]*workArray[i];
         }
-        alpha *= -0.5*gamma;
+        innerProd *= -0.5*alpha;
 
-        // w = v + alpha*u
-        for(int i=row; i<N; i++) {
-            w[i] += alpha*u[i];
+        // Computes w + innerProd*v
+        for(int i=startCol; i<numRows; i++) {
+            workArray[i] += innerProd*householderVector[i];
         }
 
-        // A = A + w*u^T + u*w^T
-        for(int i=row; i<N; i++) {
+        // Computes A + w*v^T + v*w^T
+        for(int i=startCol; i<numRows; i++) {
+            double prod = workArray[i];
+            double h = householderVector[i];
+            int rowOffset = i*numRows;
 
-            double ww = w[i];
-            double uu = u[i];
-
-            int rowA = i*N;
-            for(int j=i; j<N; j++) {
-                // only write to the upper portion of the matrix
-                // this reduces the number of cache misses
-                src.entries[rowA + j] += ww*u[j] + w[j]*uu;
+            for(int j=i; j<src.numRows; j++) {
+                src.entries[rowOffset + j] += prod*householderVector[j] + workArray[j]*h;
             }
         }
     }

@@ -4,6 +4,7 @@ import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.dense.CMatrix;
 import org.flag4j.dense.Matrix;
+import org.flag4j.linalg.ops.DirectSum;
 import org.flag4j.sparse.CooCMatrix;
 import org.flag4j.sparse.CooMatrix;
 import org.junit.jupiter.api.Test;
@@ -51,7 +52,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{1, 3, 5};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.directSum(b));
+        assertEquals(exp, DirectSum.directSum(a, b));
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(1, 2);
@@ -72,7 +73,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{3, 3};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.directSum(b));
+        assertEquals(exp, DirectSum.directSum(a, b));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(14, 5);
@@ -93,7 +94,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{1, 2, 4, 2, 0, 1, 2, 0, 3, 0, 3, 0, 2, 2, 7, 7, 10, 9, 10, 8, 10, 9, 7, 8, 5, 10, 10, 8, 7, 8, 8};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.directSum(b));
+        assertEquals(exp, DirectSum.directSum(a, b));
     }
 
 
@@ -136,7 +137,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{0, 3, 5};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.directSum(b));
+        assertEquals(exp, DirectSum.directSum(a, b));
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(1, 2);
@@ -157,7 +158,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{2, 3};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.directSum(b));
+        assertEquals(exp, DirectSum.directSum(a, b));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(14, 5);
@@ -178,7 +179,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{2, 3, 0, 4, 0, 4, 1, 3, 0, 0, 2, 0, 2, 4, 9, 8, 8, 9, 9, 8, 10, 5, 6, 7, 5, 10, 10, 6, 7, 8, 10};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.directSum(b));
+        assertEquals(exp, DirectSum.directSum(a, b));
     }
 
 
@@ -219,7 +220,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{2, 3, 4, 5, 3, 4, 5, 3, 4, 5, 3, 4, 5};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.directSum(b));
+        assertEquals(exp, DirectSum.directSum(a, b));
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(1, 2);
@@ -242,7 +243,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{2, 3, 2, 3, 2, 3, 2, 3, 2, 3};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.directSum(b));
+        assertEquals(exp, DirectSum.directSum(a, b));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(14, 5);
@@ -274,7 +275,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{0, 1, 3, 0, 2, 2, 3, 0, 1, 2, 2, 2, 0, 2, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.directSum(b));
+        assertEquals(exp, DirectSum.directSum(a, b));
     }
 
 
@@ -315,7 +316,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{0, 3, 4, 5, 3, 4, 5, 3, 4, 5, 3, 4, 5};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.directSum(b));
+        assertEquals(exp, DirectSum.directSum(a, b));
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(1, 2);
@@ -338,7 +339,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{2, 3, 2, 3, 2, 3, 2, 3, 2, 3};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.directSum(b));
+        assertEquals(exp, DirectSum.directSum(a, b));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(14, 5);
@@ -370,7 +371,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{1, 4, 4, 0, 1, 1, 4, 0, 1, 4, 1, 2, 2, 4, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.directSum(b));
+        assertEquals(exp, DirectSum.directSum(a, b));
     }
 
 
@@ -413,7 +414,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{5, 5, 2};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.invDirectSum(b));
+        assertEquals(exp, DirectSum.invDirectSum(a, b));
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(1, 2);
@@ -434,7 +435,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{3, 3};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.invDirectSum(b));
+        assertEquals(exp, DirectSum.invDirectSum(a, b));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(14, 5);
@@ -455,7 +456,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{7, 10, 7, 10, 6, 9, 6, 9, 7, 7, 9, 9, 10, 9, 6, 6, 8, 2, 4, 1, 4, 3, 0, 4, 1, 4, 2, 1, 2, 3, 0};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.invDirectSum(b));
+        assertEquals(exp, DirectSum.invDirectSum(a, b));
     }
 
 
@@ -498,7 +499,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{5, 4, 1};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.invDirectSum(b));
+        assertEquals(exp, DirectSum.invDirectSum(a, b));
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(1, 2);
@@ -519,7 +520,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{3, 2};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.invDirectSum(b));
+        assertEquals(exp, DirectSum.invDirectSum(a, b));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(14, 5);
@@ -540,7 +541,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{8, 7, 9, 6, 10, 8, 5, 7, 9, 10, 6, 6, 5, 6, 6, 8, 10, 1, 4, 0, 0, 1, 0, 4, 3, 1, 3, 2, 0, 3, 4};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.invDirectSum(b));
+        assertEquals(exp, DirectSum.invDirectSum(a, b));
     }
 
 
@@ -581,7 +582,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{3, 4, 5, 3, 4, 5, 3, 4, 5, 3, 4, 5, 2};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.invDirectSum(b));
+        assertEquals(exp, DirectSum.invDirectSum(a, b));
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(1, 2);
@@ -604,7 +605,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{2, 3, 2, 3, 2, 3, 2, 3, 2, 3};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.invDirectSum(b));
+        assertEquals(exp, DirectSum.invDirectSum(a, b));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(14, 5);
@@ -636,7 +637,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 3, 3, 4, 3, 3, 1, 2, 1, 2, 2, 1, 4, 1, 1};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.invDirectSum(b));
+        assertEquals(exp, DirectSum.invDirectSum(a, b));
     }
 
 
@@ -677,7 +678,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{3, 4, 5, 3, 4, 5, 3, 4, 5, 3, 4, 5, 1};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.invDirectSum(b));
+        assertEquals(exp, DirectSum.invDirectSum(a, b));
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(1, 2);
@@ -700,7 +701,7 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{2, 3, 2, 3, 2, 3, 2, 3, 2, 3};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.invDirectSum(b));
+        assertEquals(exp, DirectSum.invDirectSum(a, b));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(14, 5);
@@ -732,6 +733,6 @@ class CooMatrixDirectSumTests {
         expColIndices = new int[]{5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 0, 2, 3, 1, 3, 3, 4, 1, 4, 1, 1, 1, 2, 1};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.invDirectSum(b));
+        assertEquals(exp, DirectSum.invDirectSum(a, b));
     }
 }

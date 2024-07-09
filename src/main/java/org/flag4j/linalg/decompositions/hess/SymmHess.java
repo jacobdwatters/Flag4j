@@ -28,7 +28,6 @@ package org.flag4j.linalg.decompositions.hess;
 import org.flag4j.dense.Matrix;
 import org.flag4j.linalg.decompositions.Decomposition;
 import org.flag4j.linalg.transformations.Householder;
-import org.flag4j.sparse.SymmTriDiagonal;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -56,25 +55,19 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 public class SymmHess implements Decomposition<Matrix> {
 
     /**
-     * For holding a working copy of the source matrix to be decomposed.
+     * Flag indicating if an explicit check should be made that the matrix to be decomposed is symmetric.
      */
-    protected Matrix A;
+    protected boolean enforceSymmetric;
+
     /**
-     * Stores the symmetric tri-diagonal matrix from the symmetric Hessenburg Decomposition.
+     * Storage for the symmetric tri-diagonal matrix and if requested, the Householder vectors used to bring the original matrix
+     * into upper Hessenberg form. The symmetric tri-diagonal matrix will be stored in the principle diagonal and the first
+     * super-diagonal (Since the matrix is symmetric there is no need to store the first sub-diagonal). The rows of the strictly
+     * lower-triangular portion of the matrix will be used to store the Householder vectors used to transform the source matrix
+     * to upper Hessenburg form if it is requested via {@link #computeQ}. These can be used to compute the full orthogonal matrix
+     * {@code Q} of the Hessenberg decomposition.
      */
-    protected SymmTriDiagonal H;
-    /**
-     * For storing the diagonal entries of the symmetric tri-diagonal matrix.
-     */
-    protected double[] diag;
-    /**
-     * For storing the off-diagonal entries of the symmetric tri-diagonal matrix.
-     */
-    protected double[] offDiag;
-    /**
-     * Stores the orthogonal Q matrix from the Hessenburg decomposition {@code A=QHQ}<sup>T</sup>
-     */
-    protected Matrix Q;
+    protected Matrix transformMatrix;
     /**
      * For storing norms of columns in A when computing Householder reflectors.
      */
@@ -84,9 +77,9 @@ public class SymmHess implements Decomposition<Matrix> {
      */
     protected int size;
     /**
-     * Flag indicating if an explicit check should be made that the matrix to be decomposed is symmetric.
+     * Flag indicating if the orthogonal transformation matrix from the Hessenburg decomposition should be explicitly computed.
      */
-    protected final boolean enforceSymmetric = true; // TODO: Make this configurable via constructors.
+    protected boolean computeQ;
     /**
      * Stores the scalar factor for the current Householder reflector.
      */
@@ -115,6 +108,41 @@ public class SymmHess implements Decomposition<Matrix> {
 
 
     /**
+     * Constructs a Hessenberg decomposer for symmetric matrices. To compute the
+     */
+    public SymmHess() {
+        computeQ = false;
+        enforceSymmetric = false;
+    }
+
+
+    /**
+     * Constructs a Hessenberg decomposer for symmetric matrices.
+     * @param computeQ Flag indicating if the orthogonal {@code Q} matrix from the Hessenberg decomposition should be explicitly computed.
+     * If true, then the {@code Q} matrix will be computed explicitly.
+     */
+    public SymmHess(boolean computeQ) {
+        enforceSymmetric = false;
+        this.computeQ = computeQ;
+    }
+
+
+    /**
+     * Constructs a Hessenberg decomposer for symmetric matrices.
+     * @param computeQ Flag indicating if the orthogonal {@code Q} matrix from the Hessenberg decomposition should be explicitly computed.
+     * If true, then the {@code Q} matrix will be computed explicitly.
+     * @param enforceSymmetric Flag indicating if an explicit check should be made to ensure any matrix passed to
+     * {@link #decompose(Matrix)} is truly symmetric. If true, an exception will be thrown if the matrix is not symmetric. If false,
+     * the decomposition will proceed under the assumption that the matrix is symmetric whether it actually is or not. If the
+     * matrix is not symmetric, then the values in the upper triangular portion of the matrix are taken to be the values.
+     */
+    public SymmHess(boolean computeQ, boolean enforceSymmetric) {
+        this.enforceSymmetric = enforceSymmetric;
+        this.computeQ = computeQ;
+    }
+
+
+    /**
      * Applies decomposition to the source matrix.
      *
      * @param src The source matrix to decompose. (Assumed to be a symmetric matrix).
@@ -123,41 +151,82 @@ public class SymmHess implements Decomposition<Matrix> {
     @Override
     public SymmHess decompose(Matrix src) {
         setUp(src);
-
-        int stop = size-1;
+        int stop = size-2;
 
         for(int k=0; k<stop; k++) {
             computeHouseholder(k+1);
-            if(applyUpdate) {
-                Householder.symmLeftRightMultReflector(A, householderVector, currentFactor, k+1, new double[size]);
-                // TODO: Apply reflector to symmetric matrix.
-            }
+            if(applyUpdate) updateData(k+1);
         }
 
         return this;
     }
 
 
-    public Matrix getT() {
-        Matrix T = new Matrix(size);
+    /**
+     * Gets the Hessenberg matrix from the decomposition. The matrix will be symmetric tri-diagonal.
+     * @return The symmetric tri-diagonal (Hessenberg) matrix from this decomposition.
+     */
+    public Matrix getH() {
+        Matrix H = new Matrix(size);
+        H.entries[0] = transformMatrix.entries[0];
 
-        System.out.println("A_HESS:\n" + A);
-
-        T.entries[0] = A.entries[0];
+        int idx1;
+        int idx0;
+        int rowOffset = H.numRows;
 
         for(int i=1; i<size; i++) {
-            T.set(A.get(i, i), i, i);
-            double a = A.get(i - 1, i);
-            T.set(a, i - 1, i);
-            T.set(a, i, i - 1);
+            idx1 = rowOffset + i;
+            idx0 = idx1 - H.numRows;
+
+            H.entries[idx1] = transformMatrix.entries[idx1]; // extract diagonal value.
+
+            // extract off-diagonal values.
+            double a = transformMatrix.entries[idx0];
+            H.entries[idx0] = a;
+            H.entries[idx1 - 1] = a;
+
+            // Update row index.
+            rowOffset += H.numRows;
         }
 
         if(size > 1) {
-            T.entries[(size - 1)*size + size - 1] = A.entries[(size - 1)*size + size - 1];
-            T.entries[(size - 1)*size + size - 2] = A.entries[(size - 2)*size + size - 1];
+            int rowColBase = size*size - 1;
+            H.entries[rowColBase] = transformMatrix.entries[rowColBase];
+            H.entries[rowColBase - 1] = transformMatrix.entries[rowColBase - size];
         }
 
-        return T;
+        return H;
+    }
+
+
+    /**
+     * <p>Gets the unitary {@code Q} matrix from the Hessenberg decomposition.</p>
+     *
+     * <p>Note, if the reflectors for this decomposition were not saved, then {@code Q} can not be computed and this method will be
+     * null.</p>
+     *
+     * @return The {@code Q} matrix from the {@code QR} decomposition. Note, if the reflectors for this decomposition were not saved,
+     * then {@code Q} can not be computed and this method will return {@code null}.
+     */
+    public Matrix getQ() {
+        if(!computeQ)
+            return null;
+
+        Matrix Q = Matrix.I(size);
+
+        for(int j=size - 1; j>=1; j--) {
+            householderVector[j] = 1.0; // Ensure first value of reflector is 1.
+
+            for(int i=j + 1; i<size; i++) {
+                householderVector[i] = transformMatrix.entries[i*size + j - 1]; // Extract column containing reflector vector.
+            }
+
+            if(qFactors[j]!=0) { // Otherwise, no reflector to apply.
+                Householder.leftMultReflector(Q, householderVector, qFactors[j], j, j, size, workArray);
+            }
+        }
+
+        return Q;
     }
 
 
@@ -214,30 +283,20 @@ public class SymmHess implements Decomposition<Matrix> {
 
 
     /**
-     * Finds the maximum value in {@link #A} at column {@code j} at or below the {@code j}th row. This method also initializes
+     * Finds the maximum value in {@link #transformMatrix} at column {@code j} at or below the {@code j}th row. This method also initializes
      * the first {@code numRows-j} entries of the storage array {@link #householderVector} to the entries of this column.
      * @param j Index of column (and starting row) to compute max of.
-     * @return The maximum value in {@link #A} at column {@code j} at or below the {@code j}th row.
+     * @return The maximum value in {@link #transformMatrix} at column {@code j} at or below the {@code j}th row.
      */
     protected double findMaxAndInit(int j) {
         double maxAbs = 0;
-        System.out.println("A:\n" + A);
 
-        // Compute max-abs value in column. (Equivalent to max value in row since matrix is symmetric.)
+        // Compute max-abs value in row. (Equivalent to max value in column since matrix is symmetric.)
         int rowU = (j-1)*size;
         for(int i=j; i<size; i++) {
-            double d = householderVector[i] = A.entries[rowU + i];
+            double d = householderVector[i] = transformMatrix.entries[rowU + i];
             maxAbs = Math.max(Math.abs(d), maxAbs);
         }
-
-        System.out.println("Max abs: " + maxAbs + "\n\n");
-
-//        // Max-abs value in column
-//        for(int i=j; i<size; i++) {
-//            double d = householderVector[i] = A.entries[idx];
-//            idx += size; // Move index to next row.
-//            maxAbs = Math.max(Math.abs(d), maxAbs);
-//        }
 
         return maxAbs;
     }
@@ -258,76 +317,40 @@ public class SymmHess implements Decomposition<Matrix> {
         size = src.numRows;
         householderVector = new double[size];
         qFactors = new double[size];
-//        copyLowerTri(src);
+        workArray = new double[size];
         copyUpperTri(src);
-//        A = src.copy();
-        diag = new double[size];
-        offDiag = new double[size-1];
     }
 
 
     /**
-     * Copies the lower triangular portion of a matrix to the working matrix {@link #A}.
-     * @param src The source matrix to decompose of.
-     */
-    protected void copyLowerTri(Matrix src) {
-        A = new Matrix(size);
-
-        // Copy lower triangular portion.
-        for(int i=0; i<size; i++) {
-            System.arraycopy(src.entries, i*size, A.entries, i*size, i+1);
-        }
-    }
-
-
-    /**
-     * Copies the upper triangular portion of a matrix to the working matrix {@link #A}.
+     * Copies the upper triangular portion of a matrix to the working matrix {@link #transformMatrix}.
      * @param src The source matrix to decompose of.
      */
     protected void copyUpperTri(Matrix src) {
-        A = new Matrix(size);
+        transformMatrix = new Matrix(size);
 
-        // Copy lower triangular portion.
+        // Copy upper triangular portion.
         for(int i=0; i<size; i++) {
             int pos = i*size + i;
-            System.arraycopy(src.entries, pos, A.entries, pos, size - i);
+            System.arraycopy(src.entries, pos, transformMatrix.entries, pos, size - i);
         }
     }
 
 
-    public static void main(String[] args) {
-        Matrix A = new Matrix(new double[][]{
-                {1, 2, 3},
-                {2, 5, 6},
-                {3, 6, 9}
-        });
+    /**
+     * Updates the {@link #transformMatrix} matrix using the computed Householder vector from {@link #computeHouseholder(int)}.
+     * @param j Index of sub-matrix for which the Householder reflector was computed for.
+     */
+    protected void updateData(int j) {
+        Householder.symmLeftRightMultReflector(transformMatrix, householderVector, currentFactor, j, workArray);
 
-        Matrix B = new Matrix(new double[][]{
-                {1,  -4,   2.5, 15, 0   },
-                {-4,  2,   8.1, 4,  1   },
-                {2.5, 8.1, 4,  -9,  8.25},
-                {15,  4,  -9, 10.3, 6   },
-                {0,   1,  8.25, 6, -18.5},
-        });
-
-        Matrix C = new Matrix(new double[][]{
-                {1.4, -0.002, 14.51},
-                {-0.002, 4.501, -9.14},
-                {14.51, -9.14, 16.5}
-        });
-
-        SymmHess symmHess = new SymmHess();
-
-//        symmHess.decompose(A);
-//        System.out.println("A:\n" + A + "\n");
-//        System.out.println("T:\n" + symmHess.getT() + "\n\n");
-//
-//        symmHess.decompose(B);
-//        System.out.println("B:\n" + B + "\n");
-//        System.out.println("T:\n" + symmHess.getT());
-
-        symmHess.decompose(C);
-        System.out.println("C:\n" + C + "\n");
-        System.out.println("T:\n" + symmHess.getT());
+        if(j < size) transformMatrix.entries[(j-1)*size + j] = -norm;
+        if(computeQ) {
+            // Store the Q matrix in the lower portion of the transformation data matrix.
+            int col = j-1;
+            for(int i=j+1; i<size; i++) {
+                transformMatrix.entries[i*size + col] = householderVector[i];
+            }
+        }
     }
 }

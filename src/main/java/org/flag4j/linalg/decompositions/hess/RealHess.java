@@ -112,41 +112,4 @@ public class RealHess extends RealUnitaryDecomposition {
     public Matrix getH() {
         return getUpper(new Matrix(numRows));
     }
-
-
-    public static void main(String[] args) {
-        Matrix A = new Matrix(new double[][]{
-                {1, 2, 3},
-                {2, 5, 6},
-                {3, 6, 9}
-        });
-
-        Matrix B = new Matrix(new double[][]{
-                {1,  -4,   2.5, 15, 0   },
-                {-4,  2,   8.1, 4,  1   },
-                {2.5, 8.1, 4,  -9,  8.25},
-                {15,  4,  -9, 10.3, 6   },
-                {0,   1,  8.25, 6, -18.5},
-        });
-
-        Matrix C = new Matrix(new double[][]{
-                {1.4, -0.002, 14.51},
-                {-0.002, 4.501, -9.14},
-                {14.51, -9.14, 16.5}
-        });
-
-        RealHess hess = new RealHess();
-
-//        hess.decompose(A);
-//        System.out.println("A:\n" + A + "\n");
-//        System.out.println("T:\n" + hess.getT() + "\n\n");
-//
-//        hess.decompose(B);
-//        System.out.println("B:\n" + B + "\n");
-//        System.out.println("T:\n" + hess.getT());
-
-        hess.decompose(C);
-        System.out.println("C:\n" + C + "\n");
-        System.out.println("T:\n" + hess.getH());
-    }
 }

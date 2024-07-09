@@ -564,8 +564,24 @@ public class CNumber extends Number {
      * @return The absolute value/magnitude of this complex number as a double.
      */
     public double mag() {
-        // TODO: Improve to avoid over/underflow while squaring components.
-        return Math.sqrt(this.re*this.re + this.im*this.im);
+        double absRe = Math.abs(this.re);
+        double absIm = Math.abs(this.im);
+        double max, min;
+
+        if(absRe > absIm) {
+            max = absRe;
+            min = absIm;
+        } else {
+            max = absIm;
+            min = absRe;
+        }
+
+        if(max == 0.0) {
+            return 0.0;
+        }
+
+        double ratio = min / max;
+        return max * Math.sqrt(1 + ratio*ratio);
     }
 
 
