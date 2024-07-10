@@ -86,11 +86,11 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
         int uIndex;
         int n = b.size;
         x = new Vector(U.numRows);
-        det = 1;
+        det = U.entries[n*n-1];
 
-        x.entries[n-1] = b.entries[n-1]/U.entries[n*n-1];
+        x.entries[n-1] = b.entries[n-1]/det;
 
-        for(int i=n-2; i>-1; i--) {
+        for(int i=n-2; i>=0; i--) {
             sum = 0;
             uIndex = i*U.numCols;
 
@@ -130,7 +130,7 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
         double uValue = U.entries[n*n-1];
         int rowOffset = (n-1)*B.numCols;
         X = new Matrix(B.shape);
-        det = 1;
+        det = U.entries[n*n-1];
 
         xCol = new double[n];
 
@@ -148,7 +148,7 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
                 xIndex = i*X.numCols + j;
                 diag = U.entries[i*(n+1)];
 
-                det*=diag;
+                if(j==0) det *= diag;
 
                 for(int k=i+1; k<n; k++) {
                     sum += U.entries[uIndex + k]*xCol[k];
@@ -189,20 +189,20 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
         xCol = new double[n];
         X.entries[X.entries.length-1] = 1.0/det;
 
-        for(int j=0; j<U.numCols; j++) {
+        for(int j=0; j<n; j++) {
             // Store column to improve cache performance on innermost loop.
             for(int k=0; k<n; k++) {
                 xCol[k] = X.entries[k*X.numCols + j];
             }
 
-            for(int i=n-2; i>-1; i--) {
+            for(int i=n-2; i>=0; i--) {
                 sum = (i == j) ? 1 : 0;
-                uIndex = i*U.numCols;
+                uIndex = i*n;
                 xIndex = uIndex + j;
                 uIndex += i+1;
                 diag = U.entries[i*(n+1)];
 
-                det*=diag;
+                if(j==0) det *= diag;
 
                 for(int k=i+1; k<n; k++) {
                     sum -= U.entries[uIndex++]*xCol[k];
@@ -256,9 +256,9 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
                 sum = 0;
                 uIndex = i*U.numCols;
                 xIndex = uIndex + j;
-
                 diag = U.entries[i*(n+1)];
-                det*=diag;
+
+                if(j==0) det *= diag;
 
                 for(int k=i+1; k<n; k++) {
                     sum += U.entries[uIndex + k]*xCol[k];

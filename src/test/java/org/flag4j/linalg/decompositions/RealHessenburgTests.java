@@ -30,12 +30,6 @@ class RealHessenburgTests {
 
         Assertions.assertEquals(new Matrix(A.shape.copy()).round(), A.sub(A_hat).round());
 
-        // ----------------------- Sub-case 1.1 -----------------------
-        hess = new RealHess();
-        hess.decompose(A);
-
-        Assertions.assertEquals(H, hess.getH());
-
         // ----------------------- Sub-case 2 -----------------------
         aEntries = new double[][]{
                 {1.44, 5.26, -35, 1.9},

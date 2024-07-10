@@ -275,7 +275,8 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
                 xIndex = i*X.numCols + j;
 
                 diag = L.entries[i*(L.numCols + 1)];
-                det *= diag;
+
+                if(j == 0) det *= diag;
 
                 for(int k=0; k<i; k++) {
                     sum += L.entries[lIndexStart++]*xCol[k];
@@ -364,7 +365,8 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
                 lIndexStart = i*L.numCols;
                 xIndex = lIndexStart + j;
                 diag = L.entries[i*(L.numCols + 1)];
-                det*=diag;
+
+                if(j==0) det*=diag;
 
                 for(int k=0; k<i; k++) {
                     sum -= L.entries[lIndexStart++]*xCol[k];

@@ -237,11 +237,12 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
             }
 
             for(int i=1; i<L.numRows; i++) {
+                if(j==0) det.multEq(L.entries[i*L.numCols + i]);
+
                 sum = (i==j) ? CNumber.one() : CNumber.zero();
                 lIndexStart = i*L.numCols;
                 xIndex = lIndexStart + j;
                 diag = L.entries[i*(L.numCols + 1)];
-                det.multEq(diag);
 
                 for(int k=0; k<i; k++) {
                     sum.subEq(L.entries[lIndexStart++].mult(xCol[k]));
@@ -368,7 +369,8 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
                 lIndexStart = i*L.numCols;
                 xIndex = i*X.numCols + j;
                 diag = L.entries[i*(L.numCols + 1)];
-                det.multEq(diag);
+
+                if(j==0) det.multEq(diag);
 
                 for(int k=0; k<i; k++) {
                     sum.addEq(L.entries[lIndexStart++].mult(xCol[k]));

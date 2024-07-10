@@ -44,11 +44,11 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
     /**
      * Scalar factor of the currently computed Householder reflector.
      */
-    private double currentFactor;
+    protected double currentFactor;
     /**
      * Stores the shifted value of the first entry in a Householder vector.
      */
-    private double shift;
+    protected double shift;
 
 
     /**

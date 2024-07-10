@@ -40,10 +40,6 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, CNumber[]> {
      * For computing determinant of coefficient matrix during solve.
      */
     protected CNumber det;
-    /**
-     * For checking against other values.
-     */
-    private final CNumber z = CNumber.zero();
 
 
     /**
@@ -92,7 +88,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, CNumber[]> {
         int uIndex;
         int n = b.size;
         x = new CVector(U.numRows);
-        det = U.entries[n*n-1];
+        det = U.entries[n*n-1].copy();
 
         x.entries[n-1] = b.entries[n-1].div(det);
 
@@ -134,12 +130,13 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, CNumber[]> {
         int uIndex, xIndex;
         int n = B.numRows;
         X = new CMatrix(B.shape);
-        det = U.entries[n*n-1].copy();
+        det = U.entries[U.entries.length-1].copy();
 
         xCol = new CNumber[n];
 
         for(int j=0; j<B.numCols; j++) {
             X.entries[(n-1)*X.numCols + j] = B.entries[(n-1)*X.numCols + j].div(U.entries[n*n-1]);
+            det.multEq(U.entries[j*(n+1)]);
 
             // Store column to improve cache performance on innermost loop.
             for(int k=0; k<n; k++) {
@@ -150,9 +147,9 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, CNumber[]> {
                 sum = new CNumber();
                 uIndex = i*U.numCols;
                 xIndex = i*X.numCols + j;
-
                 diag = U.entries[i*(n+1)];
-                det.multEq(diag);
+
+                if(j==0) det.multEq(diag);
 
                 for(int k=i+1; k<n; k++) {
                     sum.addEq(U.entries[uIndex + k].mult(xCol[k]));
@@ -187,12 +184,13 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, CNumber[]> {
         int uIndex, xIndex;
         int n = U.numRows;
         X = new CMatrix(U.shape);
-        det = U.entries[n*n-1].copy();
+        det = U.entries[U.entries.length-1].copy();
 
         xCol = new CNumber[n];
         X.entries[X.entries.length-1] = det.multInv();
 
         for(int j=0; j<U.numCols; j++) {
+
             // Store column to improve cache performance on innermost loop.
             for(int k=0; k<n; k++) {
                 xCol[k] = X.entries[k*X.numCols + j];
@@ -205,7 +203,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, CNumber[]> {
                 uIndex += i+1;
                 diag = U.entries[i*(n+1)];
 
-                det.multEq(diag);
+                if(j==0) det.multEq(diag);
 
                 for(int k=i+1; k<n; k++) {
                     sum.subEq(U.entries[uIndex++].mult(xCol[k]));
@@ -241,7 +239,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, CNumber[]> {
         CNumber uValue = U.entries[n*n-1];
         int rowOffset = (n-1)*n;
         X = new CMatrix(L.shape);
-        det = uValue.copy();
+        det = U.entries[U.entries.length-1].copy();
 
         xCol = new CNumber[n];
 
@@ -259,7 +257,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, CNumber[]> {
                 xIndex = uIndex + j;
                 diag = U.entries[i*(n+1)];
 
-                det.multEq(diag);
+                if(j==0) det.multEq(diag);
 
                 for(int k=i+1; k<n; k++) {
                     sum.addEq(U.entries[uIndex + k].mult(xCol[k]));

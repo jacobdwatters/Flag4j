@@ -125,7 +125,7 @@ class ComplexForwardSolverTests {
         lEntries = new CNumber[][]{
                 {new CNumber(1.25, -9.25), new CNumber(), new CNumber()},
                 {new CNumber(-815.5, 1.444), new CNumber(2.45, 15.5), new CNumber()},
-                {new CNumber(0, -9.256), new CNumber(2.45, -83.2), new CNumber()}
+                {new CNumber(0, -9.256), new CNumber(2.45, -83.2), new CNumber(1)}
         };
         L = new CMatrix(lEntries);
         bEntries = new CNumber[][]{

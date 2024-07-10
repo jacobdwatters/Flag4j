@@ -132,7 +132,6 @@ public abstract class UnitaryDecomposition<
 
         for(int j=0; j<minAxisSize-offSet; j++) {
             computeHouseholder(j + subDiagonal); // Compute the householder reflector.
-
             if(applyUpdate) updateData(j + subDiagonal); // Update the upper-triangular matrix and store the reflectors.
         }
     }
@@ -173,7 +172,7 @@ public abstract class UnitaryDecomposition<
      * Initializes storage and other parameters for the decomposition.
      * @param src Source matrix to be decomposed.
      */
-    private void setUp(T src) {
+    protected void setUp(T src) {
         transformMatrix = src.copy(); // Initialize QR as the matrix to be decomposed.
         numRows = transformMatrix.numRows();
         numCols = transformMatrix.numCols();
