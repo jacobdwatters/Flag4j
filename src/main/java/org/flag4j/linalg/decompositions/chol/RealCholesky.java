@@ -77,13 +77,13 @@ public final class RealCholesky extends Cholesky<Matrix> {
     @Override
     public RealCholesky decompose(Matrix src) {
         if(enforceHermation && src.isSymmetric()) {
-            throw new IllegalArgumentException("Matrix must be symmetric positive-definite.");
+            throw new LinearAlgebraException("Matrix must be symmetric positive-definite.");
         } else {
             ParameterChecks.assertSquareMatrix(src.shape);
         }
 
         L = new Matrix(src.numRows);
-        double posDefTolerance = Math.max(L.numRows* Flag4jConstants.EPS_F64, DEFAULT_POS_DEF_TOLERANCE);
+        double posDefTolerance = Math.max(L.numRows*Flag4jConstants.EPS_F64, DEFAULT_POS_DEF_TOLERANCE);
         double sum;
 
         int lIndex1;

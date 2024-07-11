@@ -28,6 +28,7 @@ import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.dense.CMatrix;
 import org.flag4j.dense.Matrix;
 import org.flag4j.linalg.decompositions.chol.Cholesky;
+import org.flag4j.linalg.decompositions.chol.ComplexCholesky;
 import org.flag4j.linalg.decompositions.chol.RealCholesky;
 import org.flag4j.linalg.decompositions.lu.ComplexLU;
 import org.flag4j.linalg.decompositions.lu.LU;
@@ -42,6 +43,8 @@ import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.SingularMatrixException;
+
+import static org.flag4j.util.Flag4jConstants.EPS_F64;
 
 /**
  * This class provides methods for computing the inverse of a matrix. Specialized methods are provided for inverting triangular,
@@ -143,21 +146,19 @@ public class Invert {
      */
     public static Matrix invDiag(Matrix src) {
         ParameterChecks.assertSquareMatrix(src.shape);
-
         Matrix inverse = new Matrix(src.shape);
 
         double value;
         int step = src.numCols+1;
-        double rank_condition = Math.ulp(1d);
         double det = 1;
 
-        for(int i=0; i<src.numRows; i+=step) {
+        for(int i=0; i<src.entries.length; i+=step) {
             value = src.entries[i];
             det *= value;
             inverse.entries[i] = 1.0/value;
         }
 
-        if(Math.abs(det) <= rank_condition*Math.max(src.numRows, src.numCols)) {
+        if(Math.abs(det) <= EPS_F64*Math.max(src.numRows, src.numCols)) {
             throw new SingularMatrixException("Could not invert.");
         }
 
@@ -206,16 +207,15 @@ public class Invert {
 
         CNumber value;
         int step = src.numCols+1;
-        double rank_condition = Math.ulp(1.0d);
         CNumber det = CNumber.one();
 
-        for(int i=0; i<src.numRows; i+=step) {
+        for(int i=0; i<src.entries.length; i+=step) {
             value = src.entries[i];
             det.multEq(value);
             inverse.entries[i] = value.multInv();
         }
 
-        if(det.mag() <= rank_condition*Math.max(src.numRows, src.numCols)) {
+        if(det.mag() <= EPS_F64*Math.max(src.numRows, src.numCols)) {
             throw new SingularMatrixException("Could not invert.");
         }
 
@@ -249,13 +249,49 @@ public class Invert {
     public static Matrix invSymPosDef(Matrix src, boolean checkPosDef) {
         Cholesky<Matrix> chol = new RealCholesky(checkPosDef).decompose(src);
         RealBackSolver backSolver = new RealBackSolver();
-        RealForwardSolver forwardSolver = new RealForwardSolver(true);
+        RealForwardSolver forwardSolver = new RealForwardSolver();
 
-        // Compute the inverse of unit lower triangular matrix L.
+        // Compute the inverse of lower triangular matrix L.
         Matrix Linv = forwardSolver.solveIdentity(chol.getL());
 
         return backSolver.solveLower(chol.getLH(), Linv); // Compute inverse of src.
     }
+
+
+    /**
+     * Inverts a hermation positive definite matrix.
+     * @param src Positive definite matrix. It will <i>not</i> be verified if {@code src} is actually hermation positive definite.
+     * @return The inverse of the {@code src} matrix.
+     * @throws IllegalArgumentException If the matrix is not square.
+     * @throws SingularMatrixException If the {@code src} matrix is singular.
+     * @see #invSymPosDef(Matrix, boolean)
+     */
+    public static CMatrix invHermPosDef(CMatrix src) {
+        return invHermPosDef(src, false);
+    }
+
+
+    /**
+     * Inverts a hermation positive definite matrix.
+     * @param src Positive definite matrix.
+     * @param checkPosDef Flag indicating if a check should be made to see if {@code src} is actually hermation
+     *                    positive definite. <b>WARNING</b>: Checking if the matrix is positive definite can be very computationally
+     *                    expensive.
+     * @return The inverse of the {@code src} matrix.
+     * @throws IllegalArgumentException If the matrix is not square.
+     * @throws SingularMatrixException If the {@code src} matrix is singular.
+     */
+    public static CMatrix invHermPosDef(CMatrix src, boolean checkPosDef) {
+        Cholesky<CMatrix> chol = new ComplexCholesky(checkPosDef).decompose(src);
+        ComplexBackSolver backSolver = new ComplexBackSolver();
+        ComplexForwardSolver forwardSolver = new ComplexForwardSolver();
+
+        // Compute the inverse of lower triangular matrix L.
+        CMatrix Linv = forwardSolver.solveIdentity(chol.getL());
+
+        return backSolver.solveLower(chol.getLH(), Linv); // Compute inverse of src.
+    }
+
 
     // ------------------------------------------- Pseudo-inverses below -------------------------------------------
 

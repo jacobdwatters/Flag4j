@@ -269,6 +269,7 @@ public class CMatrix
     }
 
 
+
     /**
      * Creates a complex dense matrix whose entries are specified by a double array.
      * @param entries Entries of the real dense matrix.
