@@ -566,7 +566,8 @@ public class CNumber extends Number {
     public double mag() {
         double absRe = Math.abs(this.re);
         double absIm = Math.abs(this.im);
-        double max, min;
+        double max;
+        double min;
 
         if(absRe > absIm) {
             max = absRe;
@@ -1282,7 +1283,8 @@ public class CNumber extends Number {
             throw new IllegalArgumentException(ErrorMessages.getNegValueErr(decimals));
         }
 
-        double real, imaginary;
+        double real;
+        double imaginary;
 
         if(Double.isFinite(n.re)) {
             real = BigDecimal.valueOf(n.re).setScale(decimals, RoundingMode.HALF_UP).doubleValue();
