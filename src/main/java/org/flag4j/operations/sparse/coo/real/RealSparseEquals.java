@@ -25,10 +25,10 @@
 package org.flag4j.operations.sparse.coo.real;
 
 
+import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays.sparse.CooTensor;
+import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.operations.common.real.RealProperties;
-import org.flag4j.sparse.CooMatrix;
-import org.flag4j.sparse.CooTensor;
-import org.flag4j.sparse.CooVector;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;

@@ -25,11 +25,11 @@
 package org.flag4j.linalg.solvers.exact;
 
 
+import org.flag4j.arrays.sparse.PermutationMatrix;
 import org.flag4j.core.MatrixMixin;
 import org.flag4j.core.VectorMixin;
 import org.flag4j.linalg.solvers.LinearSolver;
 import org.flag4j.linalg.solvers.lstsq.LstsqSolver;
-import org.flag4j.sparse.PermutationMatrix;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.SingularMatrixException;
 

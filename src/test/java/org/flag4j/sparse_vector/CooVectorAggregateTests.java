@@ -1,7 +1,7 @@
 package org.flag4j.sparse_vector;
 
+import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.sparse.CooVector;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

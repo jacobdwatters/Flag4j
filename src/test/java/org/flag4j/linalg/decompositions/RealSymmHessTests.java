@@ -1,7 +1,7 @@
 package org.flag4j.linalg.decompositions;
 
 
-import org.flag4j.dense.Matrix;
+import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.decompositions.hess.SymmHess;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Assertions;

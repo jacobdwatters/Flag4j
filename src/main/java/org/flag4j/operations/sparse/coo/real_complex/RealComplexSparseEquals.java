@@ -24,7 +24,7 @@
 
 package org.flag4j.operations.sparse.coo.real_complex;
 
-import org.flag4j.sparse.*;
+import org.flag4j.arrays.sparse.*;
 import org.flag4j.util.ArrayUtils;
 
 import java.util.Arrays;

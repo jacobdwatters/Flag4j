@@ -24,10 +24,10 @@
 
 package org.flag4j.operations.sparse.coo.complex;
 
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.dense.CMatrix;
-import org.flag4j.sparse.CooCMatrix;
-import org.flag4j.sparse.CooCVector;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;

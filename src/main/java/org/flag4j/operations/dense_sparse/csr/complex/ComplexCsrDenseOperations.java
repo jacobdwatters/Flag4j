@@ -25,9 +25,9 @@
 package org.flag4j.operations.dense_sparse.csr.complex;
 
 
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.dense.CMatrix;
-import org.flag4j.sparse.CsrCMatrix;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 

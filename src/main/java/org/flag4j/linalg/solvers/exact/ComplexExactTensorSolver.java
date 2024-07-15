@@ -24,10 +24,10 @@
 
 package org.flag4j.linalg.solvers.exact;
 
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.core.Shape;
-import org.flag4j.dense.CMatrix;
-import org.flag4j.dense.CTensor;
-import org.flag4j.dense.CVector;
 
 
 /**

@@ -24,10 +24,10 @@
 
 package org.flag4j.linalg.solvers.lstsq;
 
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.core.MatrixMixin;
 import org.flag4j.core.VectorMixin;
-import org.flag4j.dense.CMatrix;
-import org.flag4j.dense.CVector;
 import org.flag4j.linalg.decompositions.unitary.UnitaryDecomposition;
 import org.flag4j.linalg.solvers.LinearSolver;
 

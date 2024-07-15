@@ -24,8 +24,8 @@
 
 package org.flag4j.linalg.decompositions.unitary;
 
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.dense.CMatrix;
 import org.flag4j.linalg.transformations.Householder;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.Flag4jConstants;

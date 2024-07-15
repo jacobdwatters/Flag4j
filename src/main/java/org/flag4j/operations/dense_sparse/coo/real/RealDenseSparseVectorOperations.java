@@ -25,9 +25,9 @@
 package org.flag4j.operations.dense_sparse.coo.real;
 
 
-import org.flag4j.dense.Vector;
+import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.operations.common.real.RealOperations;
-import org.flag4j.sparse.CooVector;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 

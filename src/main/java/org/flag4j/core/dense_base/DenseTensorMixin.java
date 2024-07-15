@@ -25,7 +25,7 @@
 package org.flag4j.core.dense_base;
 
 
-import org.flag4j.dense.Tensor;
+import org.flag4j.arrays.dense.Tensor;
 
 /**
  * This interface specifies methods which should be implemented by all dense tensors.

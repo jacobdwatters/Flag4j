@@ -1,7 +1,8 @@
 package org.flag4j.sparse_matrix;
 
+import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.core.Shape;
-import org.flag4j.sparse.CooMatrix;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,7 +21,7 @@ class CooMatrixSumRowColTests {
         int[] expRowIndices;
         int[] expColIndices;
         double[] expEntries;
-        CooMatrix exp;
+        Vector exp;
 
         // ---------------------  Sub-case 1 ---------------------
         aShape = new Shape(3, 5);
@@ -33,7 +34,7 @@ class CooMatrixSumRowColTests {
         expEntries = new double[]{0.37581, 1.01516};
         expRowIndices = new int[]{0, 0};
         expColIndices = new int[]{2, 4};
-        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices).toDense().toVector();
 
         assertEquals(exp, a.sumRows());
 
@@ -48,7 +49,7 @@ class CooMatrixSumRowColTests {
         expEntries = new double[]{1.70211, 0.37059, 1.10314};
         expRowIndices = new int[]{0, 0, 0};
         expColIndices = new int[]{6, 7, 12};
-        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices).toDense().toVector();
 
         assertEquals(exp, a.sumRows());
 
@@ -63,7 +64,7 @@ class CooMatrixSumRowColTests {
         expEntries = new double[]{0.4785, 0.17159, 0.46607, 0.24502, 0.8769, 0.62606, 0.13609, 0.5781, 0.73937, 0.61864, 0.93716, 0.62992, 0.23704, 0.54622, 0.38655, 0.50434, 0.4739, 0.90436, 0.6692, 0.38363, 0.19221, 0.15313, 0.98819, 0.8235, 0.22669, 0.47365, 0.40845, 0.05947, 0.4159, 0.5845, 0.01247, 0.06662, 0.33021, 0.1922, 0.4283, 0.05181, 0.19392, 0.72445, 0.46027, 0.30073, 0.01189, 0.14504, 0.0097, 0.13658, 0.98692, 0.05981, 0.6649, 0.86071, 0.31174, 0.73593, 0.59199, 0.52538, 0.43234, 0.54012, 0.37653, 0.45423, 0.38205, 0.73111, 0.72307, 0.46481, 0.91421, 0.42013, 0.54509, 0.71848, 0.73038, 0.02115, 0.22429, 0.8632, 0.7439, 0.55608, 0.06188, 1.04572, 0.63293, 0.14248, 0.70111, 0.71148, 0.01256, 0.43561, 0.31349, 0.01496, 0.43713, 0.30878, 0.31086, 0.17841, 0.93422, 0.85915, 0.76178, 0.94445, 0.41648, 0.61657, 0.03912, 0.81465, 0.0089, 0.84288, 1.0304};
         expRowIndices = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         expColIndices = new int[]{8, 14, 16, 27, 40, 51, 54, 66, 78, 89, 94, 97, 105, 109, 118, 124, 143, 145, 151, 159, 180, 183, 187, 193, 203, 209, 230, 245, 248, 251, 254, 272, 315, 320, 334, 335, 352, 364, 382, 388, 389, 395, 402, 403, 436, 437, 445, 453, 459, 460, 464, 522, 524, 534, 551, 559, 587, 593, 596, 612, 631, 648, 651, 652, 658, 665, 678, 680, 688, 700, 704, 705, 707, 726, 728, 729, 744, 770, 779, 780, 796, 804, 809, 848, 852, 864, 870, 880, 959, 962, 963, 973, 974, 976, 983};
-        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices).toDense().toVector();
 
         assertEquals(exp, a.sumRows());
 
@@ -78,7 +79,7 @@ class CooMatrixSumRowColTests {
         expEntries = new double[]{0.86217, 1.5440399999999999};
         expRowIndices = new int[]{0, 0};
         expColIndices = new int[]{0, 1};
-        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices).toDense().toVector();
 
         assertEquals(exp, a.sumRows());
 
@@ -93,7 +94,7 @@ class CooMatrixSumRowColTests {
         expEntries = new double[]{0.26569, 0.11514, 1.2598099999999999};
         expRowIndices = new int[]{0, 0, 0};
         expColIndices = new int[]{0, 1, 2};
-        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices).toDense().toVector();
 
         assertEquals(exp, a.sumRows());
 
@@ -108,7 +109,7 @@ class CooMatrixSumRowColTests {
         expEntries = new double[]{0.18137, 0.8925099999999999};
         expRowIndices = new int[]{0, 0};
         expColIndices = new int[]{1, 2};
-        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices).toDense().toVector();
 
         assertEquals(exp, a.sumRows());
 
@@ -123,7 +124,7 @@ class CooMatrixSumRowColTests {
         expEntries = new double[]{0.67254, 0.44883, 1.79823};
         expRowIndices = new int[]{0, 0, 0};
         expColIndices = new int[]{0, 1, 2};
-        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices).toDense().toVector();
 
         assertEquals(exp, a.sumRows());
     }
@@ -141,7 +142,7 @@ class CooMatrixSumRowColTests {
         int[] expRowIndices;
         int[] expColIndices;
         double[] expEntries;
-        CooMatrix exp;
+        Vector exp;
 
         // ---------------------  Sub-case 1 ---------------------
         aShape = new Shape(3, 5);
@@ -154,7 +155,7 @@ class CooMatrixSumRowColTests {
         expEntries = new double[]{0.75389, 0.99437};
         expRowIndices = new int[]{0, 1};
         expColIndices = new int[]{0, 0};
-        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices).toDense().toVector();
 
         assertEquals(exp, a.sumCols());
 
@@ -169,7 +170,7 @@ class CooMatrixSumRowColTests {
         expEntries = new double[]{0.41181, 0.85439, 0.63607, 0.42909};
         expRowIndices = new int[]{1, 4, 8, 10};
         expColIndices = new int[]{0, 0, 0, 0};
-        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices).toDense().toVector();
 
         assertEquals(exp, a.sumCols());
 
@@ -184,7 +185,7 @@ class CooMatrixSumRowColTests {
         expEntries = new double[]{9.91093, 11.826459999999999, 12.6771, 13.68167, 7.833210000000001};
         expRowIndices = new int[]{0, 1, 2, 3, 4};
         expColIndices = new int[]{0, 0, 0, 0, 0};
-        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices).toDense().toVector();
 
         assertEquals(exp, a.sumCols());
 
@@ -199,7 +200,7 @@ class CooMatrixSumRowColTests {
         expEntries = new double[]{1.12196, 0.63648, 0.05163};
         expRowIndices = new int[]{0, 1, 2};
         expColIndices = new int[]{0, 0, 0};
-        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices).toDense().toVector();
 
         assertEquals(exp, a.sumCols());
 
@@ -214,7 +215,7 @@ class CooMatrixSumRowColTests {
         expEntries = new double[]{0.57081, 0.2302, 1.20198};
         expRowIndices = new int[]{0, 1, 4};
         expColIndices = new int[]{0, 0, 0};
-        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices).toDense().toVector();
 
         assertEquals(exp, a.sumCols());
 
@@ -229,7 +230,7 @@ class CooMatrixSumRowColTests {
         expEntries = new double[]{0.91105, 1.55582};
         expRowIndices = new int[]{0, 4};
         expColIndices = new int[]{0, 0};
-        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices).toDense().toVector();
 
         assertEquals(exp, a.sumCols());
 
@@ -244,7 +245,7 @@ class CooMatrixSumRowColTests {
         expEntries = new double[]{0.71268, 1.4497300000000002, 0.61015};
         expRowIndices = new int[]{1, 3, 4};
         expColIndices = new int[]{0, 0, 0};
-        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices).toDense().toVector();
 
         assertEquals(exp, a.sumCols());
     }

@@ -1,15 +1,15 @@
 package org.flag4j.complex_matrix;
 
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.arrays.sparse.CooCVector;
+import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
-import org.flag4j.dense.CMatrix;
-import org.flag4j.dense.CVector;
-import org.flag4j.dense.Matrix;
-import org.flag4j.dense.Vector;
-import org.flag4j.sparse.CooCMatrix;
-import org.flag4j.sparse.CooCVector;
-import org.flag4j.sparse.CooMatrix;
-import org.flag4j.sparse.CooVector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

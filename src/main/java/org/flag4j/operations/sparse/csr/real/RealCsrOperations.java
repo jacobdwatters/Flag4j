@@ -24,8 +24,10 @@
 
 package org.flag4j.operations.sparse.csr.real;
 
-import org.flag4j.dense.Matrix;
-import org.flag4j.sparse.CsrMatrix;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -156,6 +158,67 @@ public final class RealCsrOperations {
         }
 
         return new CsrMatrix(src.numCols, src.numRows, dest, rowPtrs, colIndices);
+    }
+
+
+    /**
+     * Gets a specified slice of a CSR matrix.
+     *
+     * @param src Sparse CSR matrix to extract slice from.
+     * @param rowStart Starting row index of slice (inclusive).
+     * @param rowEnd   Ending row index of slice (exclusive).
+     * @param colStart Starting column index of slice (inclusive).
+     * @param colEnd   Ending row index of slice (exclusive).
+     * @return The specified slice of this matrix. This is a completely new matrix and <b>NOT</b> a view into the matrix.
+     * @throws ArrayIndexOutOfBoundsException If any of the indices are out of bounds of this matrix.
+     * @throws IllegalArgumentException       If {@code rowEnd} is not greater than {@code rowStart} or if {@code colEnd} is not greater than {@code colStart}.
+     */
+    public static CsrMatrix getSlice(CsrMatrix src, int rowStart, int rowEnd, int colStart, int colEnd) {
+        List<Double> slice = new ArrayList<>();
+        List<Integer> sliceRowIndices = new ArrayList<>();
+        List<Integer> sliceColIndices = new ArrayList<>();
+
+        // Efficiently construct COO matrix then convert to a CSR matrix.
+        int rowStop = rowEnd-1;
+        for(int i=rowStart; i<rowStop; i++) {
+            // Beginning and ending indices for the row.
+            int begin = src.rowPointers[i];
+            int end = src.rowPointers[i+1];
+
+            for(int j=begin; j<end; j++) {
+                int col = src.colIndices[j];
+
+                // Add value if it is within the slice.
+                if(col >= colStart && col < colEnd) {
+                    slice.add(src.entries[j]);
+                    sliceRowIndices.add(i);
+                    sliceColIndices.add(col);
+                }
+            }
+        }
+
+        return new CooMatrix(
+                new Shape(rowEnd-rowStart, colEnd-colStart),
+                slice, sliceRowIndices, sliceColIndices).toCsr();
+    }
+
+
+    // TODO: TEMP FOR TESTING
+    public static void main(String[] args) {
+        double[][] entries = new double[][]{
+                {10, 20, 0, 0, 0, 0},
+                {0, 30, 0, 40, 0, 0},
+                {0, 0, 50, 60, 70, 0},
+                {0, 0, 0, 0, 0, 80}};
+        CsrMatrix A = new Matrix(entries).toCsr();
+
+        System.out.println("A Dense:\n" + A.toDense() + "\n");
+        System.out.println("A CSR:\n" + A + "\n\n");
+
+        A.swapRows(2, 1);
+
+        System.out.println("\n\nAFTER SWAP:\n");
+        System.out.println("A CSR:\n" + A + "\n\n");
     }
 }
 

@@ -1,8 +1,8 @@
 package org.flag4j.complex_sparse_matrix;
 
+import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
-import org.flag4j.sparse.CooCMatrix;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,7 +37,7 @@ class CooCMatrixSumRowColTests {
         expColIndices = new int[]{1, 2, 3};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.sumRows());
+        assertEquals(exp.toDense().toVector(), a.sumRows());
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(11, 23);
@@ -52,7 +52,7 @@ class CooCMatrixSumRowColTests {
         expColIndices = new int[]{3, 4, 7, 16, 21};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.sumRows());
+        assertEquals(exp.toDense().toVector(), a.sumRows());
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(5, 1000);
@@ -67,7 +67,7 @@ class CooCMatrixSumRowColTests {
         expColIndices = new int[]{25, 33, 37, 51, 84, 91, 101, 102, 104, 110, 119, 120, 121, 140, 142, 146, 147, 154, 160, 162, 186, 197, 200, 219, 233, 274, 290, 303, 304, 308, 316, 325, 337, 352, 353, 356, 373, 379, 401, 419, 427, 434, 436, 444, 447, 466, 468, 483, 495, 504, 505, 521, 533, 535, 537, 542, 546, 556, 559, 577, 583, 584, 607, 611, 617, 625, 628, 646, 655, 662, 689, 703, 710, 718, 720, 751, 800, 808, 833, 837, 845, 853, 855, 870, 871, 877, 885, 899, 923, 924, 926, 962, 970, 978, 984, 987, 996};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.sumRows());
+        assertEquals(exp.toDense().toVector(), a.sumRows());
 
         // ---------------------  Sub-case 4 ---------------------
         aShape = new Shape(5, 3);
@@ -82,7 +82,7 @@ class CooCMatrixSumRowColTests {
         expColIndices = new int[]{0, 1};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.sumRows());
+        assertEquals(exp.toDense().toVector(), a.sumRows());
 
         // ---------------------  Sub-case 5 ---------------------
         aShape = new Shape(5, 3);
@@ -97,7 +97,7 @@ class CooCMatrixSumRowColTests {
         expColIndices = new int[]{1, 2};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.sumRows());
+        assertEquals(exp.toDense().toVector(), a.sumRows());
 
         // ---------------------  Sub-case 6 ---------------------
         aShape = new Shape(5, 3);
@@ -112,7 +112,7 @@ class CooCMatrixSumRowColTests {
         expColIndices = new int[]{0, 1};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.sumRows());
+        assertEquals(exp.toDense().toVector(), a.sumRows());
 
         // ---------------------  Sub-case 7 ---------------------
         aShape = new Shape(5, 3);
@@ -127,7 +127,7 @@ class CooCMatrixSumRowColTests {
         expColIndices = new int[]{0, 1, 2};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.sumRows());
+        assertEquals(exp.toDense().toVector(), a.sumRows());
     }
 
 
@@ -158,7 +158,7 @@ class CooCMatrixSumRowColTests {
         expColIndices = new int[]{0, 0, 0};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.sumCols());
+        assertEquals(exp.toDense().toVector(), a.sumCols());
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(11, 23);
@@ -173,7 +173,7 @@ class CooCMatrixSumRowColTests {
         expColIndices = new int[]{0, 0, 0, 0};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.sumCols());
+        assertEquals(exp.toDense().toVector(), a.sumCols());
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(5, 1000);
@@ -188,7 +188,7 @@ class CooCMatrixSumRowColTests {
         expColIndices = new int[]{0, 0, 0, 0, 0};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.sumCols());
+        assertEquals(exp.toDense().toVector(), a.sumCols());
 
         // ---------------------  Sub-case 4 ---------------------
         aShape = new Shape(5, 3);
@@ -203,7 +203,7 @@ class CooCMatrixSumRowColTests {
         expColIndices = new int[]{0, 0, 0};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.sumCols());
+        assertEquals(exp.toDense().toVector(), a.sumCols());
 
         // ---------------------  Sub-case 5 ---------------------
         aShape = new Shape(5, 3);
@@ -218,7 +218,7 @@ class CooCMatrixSumRowColTests {
         expColIndices = new int[]{0, 0, 0, 0};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.sumCols());
+        assertEquals(exp.toDense().toVector(), a.sumCols());
 
         // ---------------------  Sub-case 6 ---------------------
         aShape = new Shape(5, 3);
@@ -233,7 +233,7 @@ class CooCMatrixSumRowColTests {
         expColIndices = new int[]{0, 0, 0, 0};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.sumCols());
+        assertEquals(exp.toDense().toVector(), a.sumCols());
 
         // ---------------------  Sub-case 7 ---------------------
         aShape = new Shape(5, 3);
@@ -248,6 +248,6 @@ class CooCMatrixSumRowColTests {
         expColIndices = new int[]{0, 0, 0};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.sumCols());
+        assertEquals(exp.toDense().toVector(), a.sumCols());
     }
 }

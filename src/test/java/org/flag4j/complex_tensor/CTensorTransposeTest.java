@@ -1,8 +1,8 @@
 package org.flag4j.complex_tensor;
 
+import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
-import org.flag4j.dense.CTensor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -24,10 +24,10 @@
 
 package org.flag4j.operations.dense.complex;
 
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.core.TensorBase;
-import org.flag4j.dense.CMatrix;
 import org.flag4j.util.ErrorMessages;
 
 /**

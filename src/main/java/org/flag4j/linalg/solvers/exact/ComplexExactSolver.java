@@ -24,8 +24,8 @@
 
 package org.flag4j.linalg.solvers.exact;
 
-import org.flag4j.dense.CMatrix;
-import org.flag4j.dense.CVector;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.linalg.decompositions.lu.ComplexLU;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolver;

@@ -25,9 +25,9 @@
 package org.flag4j.operations.dense_sparse.coo.complex;
 
 
+import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.dense.CTensor;
-import org.flag4j.sparse.CooCTensor;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
