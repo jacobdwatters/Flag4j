@@ -3,8 +3,8 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=jacobdwatters_Flag4j&metric=coverage)](https://sonarcloud.io/summary/new_code?id=jacobdwatters_Flag4j)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=jacobdwatters_Flag4j&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=jacobdwatters_Flag4j)
 
-# Flag4j
-Flag4j is a fast linear algebra library for Java and provides operations and linear algebra routines for real/complex sparse/dense tensors, matrices, and vectors.
+# Flag4j - Fast Linear Algebra for Java
+Flag4j is a fast anbd easy to use linear algebra library for Java and provides operations and linear algebra routines for real/complex sparse/dense tensors, matrices, and vectors.
 
 ## State of Project as of 16-FEB-2024
 Flag4j is currently in the final steps of development before an initial beta release. Nearly all features have been fully implemented or beta implementations.
