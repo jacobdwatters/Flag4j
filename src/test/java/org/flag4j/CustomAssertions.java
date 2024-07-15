@@ -1,10 +1,10 @@
 package org.flag4j;
 
 import junit.framework.Assert;
-import org.flag4j.dense.CMatrix;
-import org.flag4j.dense.Matrix;
-import org.flag4j.sparse.CooMatrix;
-import org.flag4j.sparse.CooVector;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays.sparse.CooVector;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 

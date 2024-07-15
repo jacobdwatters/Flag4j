@@ -24,13 +24,13 @@
 
 package org.flag4j.rng;
 
+import org.flag4j.arrays.dense.*;
+import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
-import org.flag4j.dense.*;
 import org.flag4j.linalg.decompositions.qr.ComplexQR;
 import org.flag4j.linalg.decompositions.qr.RealQR;
-import org.flag4j.sparse.CooCMatrix;
-import org.flag4j.sparse.CooMatrix;
 import org.flag4j.util.ParameterChecks;
 
 import java.math.BigDecimal;

@@ -25,7 +25,7 @@
 package org.flag4j.linalg.decompositions.hess;
 
 
-import org.flag4j.dense.Matrix;
+import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.transformations.Householder;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.LinearAlgebraException;

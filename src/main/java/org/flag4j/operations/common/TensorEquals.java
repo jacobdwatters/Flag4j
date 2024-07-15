@@ -24,13 +24,14 @@
 
 package org.flag4j.operations.common;
 
+import org.flag4j.arrays.dense.*;
+import org.flag4j.arrays.sparse.*;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.TensorBase;
 import org.flag4j.core.dense_base.ComplexDenseTensorBase;
 import org.flag4j.core.dense_base.DenseTensorBase;
 import org.flag4j.core.dense_base.RealDenseTensorBase;
 import org.flag4j.core.sparse_base.SparseTensorBase;
-import org.flag4j.dense.*;
 import org.flag4j.operations.dense.complex.ComplexDenseEquals;
 import org.flag4j.operations.dense.real.RealDenseEquals;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
@@ -40,7 +41,6 @@ import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSpars
 import org.flag4j.operations.sparse.coo.complex.ComplexSparseEquals;
 import org.flag4j.operations.sparse.coo.real.RealSparseEquals;
 import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseEquals;
-import org.flag4j.sparse.*;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.HashMap;

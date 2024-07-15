@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.decompositions.chol;
 
-import org.flag4j.dense.Matrix;
+import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.LinearAlgebraException;

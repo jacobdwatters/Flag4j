@@ -24,9 +24,9 @@
 
 package org.flag4j.operations.dense.real;
 
+import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.core.Shape;
 import org.flag4j.core.TensorBase;
-import org.flag4j.dense.Matrix;
 import org.flag4j.util.ErrorMessages;
 
 /**

@@ -25,10 +25,10 @@
 package org.flag4j.core;
 
 
+import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.dense.CTensor;
-import org.flag4j.dense.Tensor;
-import org.flag4j.sparse.CooCTensor;
 
 /**
  * This class specifies methods which any complex tensor that is <b>NOT</b> a matrix or vector should implement.

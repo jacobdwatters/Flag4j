@@ -22,17 +22,17 @@
  * SOFTWARE.
  */
 
-package org.flag4j.sparse;
+package org.flag4j.arrays.sparse;
 
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.ComplexMatrixMixin;
 import org.flag4j.core.MatrixMixin;
 import org.flag4j.core.Shape;
 import org.flag4j.core.sparse_base.ComplexSparseTensorBase;
-import org.flag4j.dense.CMatrix;
-import org.flag4j.dense.CVector;
-import org.flag4j.dense.Matrix;
-import org.flag4j.dense.Vector;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.common.complex.ComplexOperations;
@@ -1177,29 +1177,18 @@ public class CooCMatrix
      * Sums together the columns of a matrix as if each column was a column vector.
      *
      * @return The result of summing together all columns of the matrix as column vectors. If this matrix is an m-by-n matrix, then the result will be
-     * an m-by-1 matrix.
+     * a vectors of length m.
      */
     @Override
-    public CooCMatrix sumCols() {
-        List<CNumber> entries = new ArrayList<>();
-        List<Integer> rowIndices = new ArrayList<>();
-        List<Integer> colIndices = new ArrayList<>();
+    public CVector sumCols() {
+        CVector sum = new CVector(numRows);
 
-        for(int i=0; i<this.entries.length; i++) {
-            int idx = rowIndices.indexOf(this.rowIndices[i]);
-
-            if(idx < 0) {
-                // No value with this row index exists.
-                entries.add(this.entries[i]);
-                rowIndices.add(this.rowIndices[i]);
-                colIndices.add(0);
-            } else {
-                // A value already exists with this row index. Update it.
-                entries.set(idx, entries.get(idx).add(this.entries[i]));
-            }
+        int nnz = entries.length;
+        for(int i=0; i<nnz; i++) {
+            sum.entries[rowIndices[i]].addEq(entries[i]);
         }
 
-        return new CooCMatrix(new Shape(this.numRows, 1), entries, rowIndices, colIndices);
+        return sum;
     }
 
 
@@ -1207,33 +1196,18 @@ public class CooCMatrix
      * Sums together the rows of a matrix as if each row was a row vector.
      *
      * @return The result of summing together all rows of the matrix as row vectors. If this matrix is an m-by-n matrix, then the result will be
-     * an 1-by-n matrix.
+     * a vector of length n.
      */
     @Override
-    public CooCMatrix sumRows() {
-        // TODO: Refactor sumRows and sumCols to return vectors instead.
-        List<CNumber> entries = new ArrayList<>();
-        List<Integer> rowIndices = new ArrayList<>();
-        List<Integer> colIndices = new ArrayList<>();
+    public CVector sumRows() {
+        CVector sum = new CVector(numCols);
 
-        for(int i=0; i<this.entries.length; i++) {
-            int idx = colIndices.indexOf(this.colIndices[i]);
-
-            if(idx < 0) {
-                // No value with this column index exists.
-                entries.add(this.entries[i]);
-                rowIndices.add(0);
-                colIndices.add(this.colIndices[i]);
-            } else {
-                // A value already exists with this column index. Update it.
-                entries.set(idx, entries.get(idx).add(this.entries[i]));
-            }
+        int nnz = entries.length;
+        for(int i=0; i<nnz; i++) {
+            sum.entries[colIndices[i]].addEq(entries[i]);
         }
 
-        CooCMatrix mat = new CooCMatrix(new Shape(1, numCols), entries, rowIndices, colIndices);
-        mat.sortIndices(); // Ensure indices are properly sorted.
-
-        return mat;
+        return sum;
     }
 
 

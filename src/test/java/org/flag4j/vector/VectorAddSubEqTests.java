@@ -1,7 +1,7 @@
 package org.flag4j.vector;
 
-import org.flag4j.dense.Vector;
-import org.flag4j.sparse.CooVector;
+import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 

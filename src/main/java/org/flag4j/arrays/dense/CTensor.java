@@ -22,8 +22,10 @@
  * SOFTWARE.
  */
 
-package org.flag4j.dense;
+package org.flag4j.arrays.dense;
 
+import org.flag4j.arrays.sparse.CooCTensor;
+import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.ComplexTensorExclusiveMixin;
 import org.flag4j.core.Shape;
@@ -41,8 +43,6 @@ import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
-import org.flag4j.sparse.CooCTensor;
-import org.flag4j.sparse.CooTensor;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.StringUtils;

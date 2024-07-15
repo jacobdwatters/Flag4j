@@ -1,10 +1,10 @@
 package org.flag4j.linalg.transformations;
 
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.dense.CMatrix;
-import org.flag4j.dense.CVector;
-import org.flag4j.dense.Matrix;
-import org.flag4j.dense.Vector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertThrows;

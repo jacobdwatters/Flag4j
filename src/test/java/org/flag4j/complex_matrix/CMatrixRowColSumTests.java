@@ -1,11 +1,11 @@
 package org.flag4j.complex_matrix;
 
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays.sparse.CooCVector;
+import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.dense.CMatrix;
-import org.flag4j.dense.CVector;
-import org.flag4j.dense.Vector;
-import org.flag4j.sparse.CooCVector;
-import org.flag4j.sparse.CooVector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,8 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class CMatrixRowColSumTests {
 
     int[] indices;
-    CNumber[][] aEntries, expEntries;
-    CMatrix A, exp;
+    CNumber[][] aEntries;
+    CNumber[][] expEntries;
+    CNumber[] expVecEntries;
+    CMatrix A;
+    CMatrix exp;
+    CVector expVec;
 
 
     @Test
@@ -27,10 +31,11 @@ class CMatrixRowColSumTests {
                 {new CNumber(7617.445), new CNumber(0), new CNumber()},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
-        expEntries = new CNumber[][]{{new CNumber("7976.594999999999-354.3i"), new CNumber("54.4146623235-728.0333i"), new CNumber("-33.1-93.0i")}};
-        exp = new CMatrix(expEntries);
+        expVecEntries = new CNumber[]{new CNumber("7976.594999999999-354.3i"), new CNumber("54.4146623235-728.0333i"), new CNumber(
+                "-33.1-93.0i")};
+        expVec = new CVector(expVecEntries);
 
-        assertEquals(exp, A.sumRows());
+        assertEquals(expVec, A.sumRows());
     }
 
 
@@ -49,7 +54,8 @@ class CMatrixRowColSumTests {
         bEntries = new double[]{1.445, -775.14, 9.4};
         b = new Vector(bEntries);
         expEntries = new CNumber[][]{
-                {new CNumber(123.5, -9.3).add(bEntries[0]), new CNumber(45.2, -0.0333).add(bEntries[1]), new CNumber(5.4).add(bEntries[2])},
+                {new CNumber(123.5, -9.3).add(bEntries[0]), new CNumber(45.2, -0.0333).add(bEntries[1]),
+                        new CNumber(5.4).add(bEntries[2])},
                 {new CNumber(1).add(bEntries[0]), new CNumber(0, -743.1).add(bEntries[1]), new CNumber(-34.5, -93.).add(bEntries[2])},
                 {new CNumber(7617.445).add(bEntries[0]), new CNumber(0).add(bEntries[1]), new CNumber().add(bEntries[2])},
                 {new CNumber(234.65, -345.).add(bEntries[0]), new CNumber(9.2146623235, 15.1).add(bEntries[1]), new CNumber(-4).add(bEntries[2])}};
@@ -199,14 +205,14 @@ class CMatrixRowColSumTests {
                 {new CNumber(7617.445), new CNumber(0), new CNumber()},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
-        expEntries = new CNumber[][]{
-                {new CNumber("174.1-9.333300000000001i")},
-                {new CNumber("-33.5-836.1i")},
-                {new CNumber("7617.445")},
-                {new CNumber("239.8646623235-329.9i")}};
-        exp = new CMatrix(expEntries);
+        expVecEntries = new CNumber[]{
+                new CNumber("174.1-9.333300000000001i"),
+                new CNumber("-33.5-836.1i"),
+                new CNumber("7617.445"),
+                new CNumber("239.8646623235-329.9i")};
+        expVec = new CVector(expVecEntries);
 
-        assertEquals(exp, A.sumCols());
+        assertEquals(expVec, A.sumCols());
     }
 
 

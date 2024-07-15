@@ -1,7 +1,7 @@
 package org.flag4j.operations.sparse.coo.real;
 
+import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.core.Shape;
-import org.flag4j.sparse.CooMatrix;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

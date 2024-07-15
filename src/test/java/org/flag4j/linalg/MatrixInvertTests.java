@@ -1,6 +1,6 @@
 package org.flag4j.linalg;
 
-import org.flag4j.dense.Matrix;
+import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.SingularMatrixException;

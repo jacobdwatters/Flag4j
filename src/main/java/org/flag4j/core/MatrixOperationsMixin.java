@@ -25,15 +25,15 @@
 package org.flag4j.core;
 
 
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.arrays.sparse.CooCVector;
+import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.dense.CMatrix;
-import org.flag4j.dense.CVector;
-import org.flag4j.dense.Matrix;
-import org.flag4j.dense.Vector;
-import org.flag4j.sparse.CooCMatrix;
-import org.flag4j.sparse.CooCVector;
-import org.flag4j.sparse.CooMatrix;
-import org.flag4j.sparse.CooVector;
 import org.flag4j.util.ErrorMessages;
 
 
@@ -378,18 +378,20 @@ public interface MatrixOperationsMixin<
 
     /**
      * Sums together the columns of a matrix as if each column was a column vector.
+     *
      * @return The result of summing together all columns of the matrix as column vectors. If this matrix is an m-by-n matrix, then the result will be
-     * an m-by-1 matrix.
+     * a vectors of length m.
      */
-    T sumCols();
+    UU sumCols();
 
 
     /**
      * Sums together the rows of a matrix as if each row was a row vector.
+     *
      * @return The result of summing together all rows of the matrix as row vectors. If this matrix is an m-by-n matrix, then the result will be
-     * an 1-by-n matrix.
+     * a vector of length n.
      */
-    T sumRows();
+    UU sumRows();
 
 
     /**

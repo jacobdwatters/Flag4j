@@ -25,15 +25,15 @@
 package org.flag4j.operations.dense_sparse.coo.real_complex;
 
 
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.dense.CMatrix;
-import org.flag4j.dense.CVector;
-import org.flag4j.dense.Matrix;
-import org.flag4j.dense.Vector;
 import org.flag4j.operations.common.complex.ComplexOperations;
 import org.flag4j.operations.common.real.RealOperations;
-import org.flag4j.sparse.CooCMatrix;
-import org.flag4j.sparse.CooMatrix;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 

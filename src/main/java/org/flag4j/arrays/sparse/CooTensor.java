@@ -22,14 +22,14 @@
  * SOFTWARE.
  */
 
-package org.flag4j.sparse;
+package org.flag4j.arrays.sparse;
 
 
+import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.core.sparse_base.RealSparseTensorBase;
-import org.flag4j.dense.CTensor;
-import org.flag4j.dense.Tensor;
 import org.flag4j.operations.sparse.coo.real.RealSparseEquals;
 import org.flag4j.util.ArrayUtils;
 

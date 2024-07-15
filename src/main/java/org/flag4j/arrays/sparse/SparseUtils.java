@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.flag4j.sparse;
+package org.flag4j.arrays.sparse;
 
 import org.flag4j.util.ErrorMessages;
 

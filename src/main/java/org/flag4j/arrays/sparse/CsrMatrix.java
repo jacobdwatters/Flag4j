@@ -22,18 +22,18 @@
  * SOFTWARE.
  */
 
-package org.flag4j.sparse;
+package org.flag4j.arrays.sparse;
 
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.MatrixMixin;
 import org.flag4j.core.RealMatrixMixin;
 import org.flag4j.core.Shape;
 import org.flag4j.core.TensorBase;
 import org.flag4j.core.sparse_base.RealSparseTensorBase;
-import org.flag4j.dense.CMatrix;
-import org.flag4j.dense.CVector;
-import org.flag4j.dense.Matrix;
-import org.flag4j.dense.Vector;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.operations.common.complex.ComplexOperations;
 import org.flag4j.operations.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
@@ -767,12 +767,20 @@ public class CsrMatrix
      * Sums together the columns of a matrix as if each column was a column vector.
      *
      * @return The result of summing together all columns of the matrix as column vectors. If this matrix is an m-by-n matrix, then the result will be
-     * an m-by-1 matrix.
+     * a vectors of length m.
      */
     @Override
-    public CsrMatrix sumCols() {
-        // TODO: Implementation
-        return null;
+    public Vector sumCols() {
+        Vector sum = new Vector(numRows);
+
+        int rowStop = rowPointers.length-1;
+        for(int i=0; i<rowStop; i++) {
+            for(int j=rowPointers[i]; j<rowPointers[i+1]; j++) {
+                sum.entries[i] += entries[j];
+            }
+        }
+
+        return sum;
     }
 
 
@@ -780,12 +788,18 @@ public class CsrMatrix
      * Sums together the rows of a matrix as if each row was a row vector.
      *
      * @return The result of summing together all rows of the matrix as row vectors. If this matrix is an m-by-n matrix, then the result will be
-     * an 1-by-n matrix.
+     * a vector of length n.
      */
     @Override
-    public CsrMatrix sumRows() {
-        // TODO: Implementation
-        return null;
+    public Vector sumRows() {
+        Vector sum = new Vector(numCols);
+
+        int nnz = entries.length;
+        for(int i=0; i<nnz; i++) {
+            sum.entries[colIndices[i]] += entries[i];
+        }
+
+        return new Vector(sum);
     }
 
 
@@ -1288,8 +1302,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
-        // TODO: Implementation
-        return null;
+        return RealCsrOperations.getSlice(this, rowStart, rowEnd, colStart, colEnd);
     }
 
 
@@ -1312,15 +1325,29 @@ public class CsrMatrix
      * Get a specified row of this matrix at and after a specified column.
      *
      * @param colStart Index of the row to begin at.
-     * @param i        Index of the row to get.
+     * @param rowIdx        Index of the row to get.
      * @return The specified row of this matrix beginning at the specified column.
      * @throws NegativeArraySizeException     If {@code colStart} is larger than the number of columns in this matrix.
-     * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} or {@code colStart} is outside the bounds of this matrix.
      */
     @Override
-    public CooVector getRowAfter(int colStart, int i) {
-        // TODO: Implementation
-        return null;
+    public CooVector getRowAfter(int colStart, int rowIdx) {
+        int start = rowPointers[rowIdx];
+        int end = rowPointers[rowIdx+1];
+
+        List<Double> row = new ArrayList<>();
+        List<Integer> indices = new ArrayList<>();
+
+        for(int j=start; j<end; j++) {
+            int col = colIndices[j];
+
+            if(col >= colStart) {
+                row.add(entries[j]);
+                indices.add(col-colStart);
+            }
+        }
+
+        return new CooVector(this.numCols-colStart, row, indices);
     }
 
 
@@ -1901,8 +1928,67 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix swapRows(int rowIndex1, int rowIndex2) {
+        if(rowIndex1 == rowIndex2) return this;
+        else if(rowIndex1 > rowIndex2) {
+            // ensure the second index is larger than the first.
+            int temp = rowIndex1;
+            rowIndex1 = rowIndex2;
+            rowIndex2 = temp;
+        }
+
+        // Get range for values in the given rows.
+        int start1 = rowPointers[rowIndex1];
+        int end1 = rowPointers[rowIndex1+1];
+        int nnz1 = end1-start1;  // Number of non-zero entries in the first row to swap.
+
+        int start2 = rowPointers[rowIndex2];
+        int end2 = rowPointers[rowIndex2+1];
+        int nnz2 = end2-start2;  // Number of non-zero entries in the second row to swap.
+
+        int destPos = 0;
+
+        double[] updatedEntries = new double[entries.length];
+        int[] updatedColIndices = new int[colIndices.length];
+        int[] updatedRowPointers = new int[rowPointers.length];
+
+        // TODO: There is no need to copy values before first row or after the second row as they will be unchanged.
+
+        // Copy all entries preceding the first row to be swapped.
+        System.arraycopy(entries, 0, updatedEntries, destPos, start1);
+        System.arraycopy(colIndices, 0, updatedColIndices, destPos, start1);
+
+        // Copy entries from second row in swap.
+        destPos += start1;
+        System.arraycopy(entries, start2, updatedEntries, start1, nnz2);
+        System.arraycopy(entries, start2, updatedEntries, start1, nnz2);
+
+        // Copy entries between rows.
+        destPos += nnz2;
+        System.arraycopy(entries, end1, updatedEntries, destPos, start2-end1);
+        System.arraycopy(colIndices, end1, updatedColIndices, destPos, start2-end1);
+
+        // Copy entries from first row in swap.
+        destPos += (start2-end1);
+        System.arraycopy(entries, start1, updatedEntries, destPos, nnz1);
+        System.arraycopy(colIndices, start1, updatedColIndices, destPos, nnz1);
+
+        // Copy entries after second row in swap.
+        destPos += nnz1;
+        System.arraycopy(entries, end2, updatedEntries, destPos, entries.length-end2);
+        System.arraycopy(colIndices, end2, updatedColIndices, destPos, entries.length-end2);
+
+        System.out.println("updatedEntries: " + Arrays.toString(updatedEntries));
+
+        if(nnz1 > nnz2) {
+            // TODO: Recompute the rowPointers where there are more values in the first row than the second row.
+            //  rows before second row will now have a lower number.
+        } else if(nnz1 < nnz2) {
+            // TODO: Recompute the rowPointers where there are less values in the first row than the second row.
+            //  rows before second row will now have a larger number.
+        }  // Otherwise no updates to rowPointers is needed.
+
         // TODO: Implementation
-        return null;
+        return this;
     }
 
 

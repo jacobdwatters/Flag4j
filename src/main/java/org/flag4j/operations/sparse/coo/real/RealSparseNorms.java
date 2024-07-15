@@ -24,7 +24,7 @@
 
 package org.flag4j.operations.sparse.coo.real;
 
-import org.flag4j.sparse.CooMatrix;
+import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;

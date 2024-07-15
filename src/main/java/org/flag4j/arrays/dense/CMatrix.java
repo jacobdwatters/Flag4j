@@ -22,8 +22,9 @@
  * SOFTWARE.
  */
 
-package org.flag4j.dense;
+package org.flag4j.arrays.dense;
 
+import org.flag4j.arrays.sparse.*;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.complex_numbers.CNumberUtils;
 import org.flag4j.core.ComplexMatrixMixin;
@@ -51,7 +52,6 @@ import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixOp
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultTranspose;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
-import org.flag4j.sparse.*;
 import org.flag4j.util.*;
 
 import java.util.ArrayList;
@@ -2227,11 +2227,11 @@ public class CMatrix
      * Sums together the columns of a matrix as if each column was a column vector.
      *
      * @return The result of summing together all columns of the matrix as column vectors. If this matrix is an m-by-n matrix, then the result will be
-     * an m-by-1 matrix.
+     * a vectors of length m.
      */
     @Override
-    public CMatrix sumCols() {
-        CMatrix sum = new CMatrix(this.numRows, 1);
+    public CVector sumCols() {
+        CVector sum = new CVector(this.numRows);
 
         for(int i=0; i<this.numRows; i++) {
             for(int j=0; j<this.numCols; j++) {
@@ -2247,11 +2247,11 @@ public class CMatrix
      * Sums together the rows of a matrix as if each row was a row vector.
      *
      * @return The result of summing together all rows of the matrix as row vectors. If this matrix is an m-by-n matrix, then the result will be
-     * an 1-by-n matrix.
+     * a vector of length n.
      */
     @Override
-    public CMatrix sumRows() {
-        CMatrix sum = new CMatrix(1, this.numCols);
+    public CVector sumRows() {
+        CVector sum = new CVector(this.numCols);
 
         for(int i=0; i<this.numRows; i++) {
             for(int j=0; j<this.numCols; j++) {

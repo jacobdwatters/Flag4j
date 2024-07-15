@@ -1,7 +1,7 @@
 package org.flag4j.vector;
 
-import org.flag4j.dense.Matrix;
-import org.flag4j.dense.Vector;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

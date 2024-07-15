@@ -24,12 +24,12 @@
 
 package org.flag4j.operations.dense_sparse.coo.complex;
 
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.dense.CMatrix;
-import org.flag4j.dense.CTensor;
 import org.flag4j.operations.common.complex.ComplexProperties;
-import org.flag4j.sparse.CooCMatrix;
-import org.flag4j.sparse.CooCTensor;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 

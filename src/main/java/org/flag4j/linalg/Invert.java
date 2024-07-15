@@ -24,9 +24,9 @@
 
 package org.flag4j.linalg;
 
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.dense.CMatrix;
-import org.flag4j.dense.Matrix;
 import org.flag4j.linalg.decompositions.chol.Cholesky;
 import org.flag4j.linalg.decompositions.chol.ComplexCholesky;
 import org.flag4j.linalg.decompositions.chol.RealCholesky;

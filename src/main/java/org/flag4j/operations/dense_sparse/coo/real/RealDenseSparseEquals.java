@@ -24,11 +24,11 @@
 
 package org.flag4j.operations.dense_sparse.coo.real;
 
-import org.flag4j.dense.Matrix;
-import org.flag4j.dense.Tensor;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.operations.common.real.RealProperties;
-import org.flag4j.sparse.CooMatrix;
-import org.flag4j.sparse.CooTensor;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;

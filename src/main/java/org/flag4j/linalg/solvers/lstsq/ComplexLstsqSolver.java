@@ -24,8 +24,8 @@
 
 package org.flag4j.linalg.solvers.lstsq;
 
-import org.flag4j.dense.CMatrix;
-import org.flag4j.dense.CVector;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.linalg.decompositions.qr.ComplexQR;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 

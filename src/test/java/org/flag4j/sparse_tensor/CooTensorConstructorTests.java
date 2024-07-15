@@ -1,8 +1,8 @@
 package org.flag4j.sparse_tensor;
 
 
+import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.core.Shape;
-import org.flag4j.sparse.CooTensor;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

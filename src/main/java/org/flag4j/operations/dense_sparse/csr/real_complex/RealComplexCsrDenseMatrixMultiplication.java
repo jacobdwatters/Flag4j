@@ -24,11 +24,11 @@
 
 package org.flag4j.operations.dense_sparse.csr.real_complex;
 
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
-import org.flag4j.dense.CMatrix;
-import org.flag4j.dense.Matrix;
-import org.flag4j.sparse.CsrMatrix;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;

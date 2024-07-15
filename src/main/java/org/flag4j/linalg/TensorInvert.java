@@ -24,13 +24,13 @@
 
 package org.flag4j.linalg;
 
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.core.Shape;
 import org.flag4j.core.TensorBase;
 import org.flag4j.core.TensorExclusiveMixin;
-import org.flag4j.dense.CMatrix;
-import org.flag4j.dense.CTensor;
-import org.flag4j.dense.Matrix;
-import org.flag4j.dense.Tensor;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 

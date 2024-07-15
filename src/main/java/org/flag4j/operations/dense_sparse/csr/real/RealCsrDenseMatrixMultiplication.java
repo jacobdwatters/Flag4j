@@ -25,10 +25,10 @@
 package org.flag4j.operations.dense_sparse.csr.real;
 
 
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.core.Shape;
-import org.flag4j.dense.Matrix;
-import org.flag4j.dense.Vector;
-import org.flag4j.sparse.CsrMatrix;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 

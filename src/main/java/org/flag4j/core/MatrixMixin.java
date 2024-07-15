@@ -24,8 +24,8 @@
 
 package org.flag4j.core;
 
-import org.flag4j.dense.CMatrix;
-import org.flag4j.dense.CVector;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
 
 /**
  * This interface specified methods which all matrices should implement.

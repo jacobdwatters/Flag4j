@@ -24,9 +24,9 @@
 
 package org.flag4j.operations.dense.real;
 
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
 import org.flag4j.concurrency.ThreadManager;
-import org.flag4j.dense.Matrix;
-import org.flag4j.dense.Vector;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 

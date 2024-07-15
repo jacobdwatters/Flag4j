@@ -1,8 +1,8 @@
 package org.flag4j.matrix;
 
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.core.Shape;
-import org.flag4j.dense.Matrix;
-import org.flag4j.sparse.CooMatrix;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
