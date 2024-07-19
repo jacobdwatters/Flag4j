@@ -49,4 +49,14 @@ public interface VectorMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return
      */
     int size();
+
+
+    /**
+     * Repeats a vector {@code n} times along a certain axis to create a matrix.
+     * @param n Number of times to repeat vector.
+     * @param axis Axis along which to repeat vector. If {@code axis=0} then each row of the resulting matrix will be equivalent to
+     * this vector. If {@code axis=1} then each column of the resulting matrix will be equivalent to this vector.
+     * @return A matrix whose rows/columns are this vector repeated.
+     */
+    TT repeat(int n, int axis);
 }

@@ -54,7 +54,17 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Real sparse matrix. Matrix is stored in coordinate list (COO) format.
+ * <p>Real sparse matrix. Matrix is stored in coordinate list (COO) format.</p>
+ *
+ * <p>COO matrices are best suited for efficient modification and construction of sparse matrices. Coo matrices are <b>not</b> well
+ * suited for matrix-matrix or matrix-vector multiplication (see {@link CsrMatrix}).</p>
+ *
+ * <p>If a sparse matrix needs to be incrementally constructed, then a COO matrix should be used to construct the matrix as it
+ * allows for efficient modification. If the matrix then needs to be used in a matrix-matrix or matrix-vector multiplication
+ * problem, it should first be converted to a {@link CsrMatrix} in most cases.</p>
+ *
+ * @see CsrMatrix
+ * @see CooCMatrix
  */
 public class CooMatrix
         extends RealSparseTensorBase<CooMatrix, Matrix, CooCMatrix, CMatrix>

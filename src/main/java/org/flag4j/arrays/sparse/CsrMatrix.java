@@ -40,10 +40,7 @@ import org.flag4j.operations.dense_sparse.csr.real.RealCsrDenseMatrixMultiplicat
 import org.flag4j.operations.dense_sparse.csr.real.RealCsrDenseOperations;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
-import org.flag4j.operations.sparse.csr.real.RealCsrEquals;
-import org.flag4j.operations.sparse.csr.real.RealCsrMatrixMultiplication;
-import org.flag4j.operations.sparse.csr.real.RealCsrMatrixProperties;
-import org.flag4j.operations.sparse.csr.real.RealCsrOperations;
+import org.flag4j.operations.sparse.csr.real.*;
 import org.flag4j.operations.sparse.csr.real_complex.RealComplexCsrMatrixMultiplication;
 import org.flag4j.operations.sparse.csr.real_complex.RealComplexCsrOperations;
 import org.flag4j.util.ArrayUtils;
@@ -56,24 +53,24 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Real sparse matrix stored in compressed sparse row (CSR) format.<br><br>
+ * <p>Real sparse matrix stored in compressed sparse row (CSR) format.</p>
  *
- * CSR matrices are best suited for efficient access and matrix operations. Specifically, matrix-matrix and
- * matrix-vector multiplication. CSR matrices are <b>not</b> well suited for modification (see {@link CooMatrix}).
- * <br><br>
+ * <p>CSR matrices are best suited for efficient access and matrix operations. Specifically, matrix-matrix and
+ * matrix-vector multiplication. CSR matrices are <b>not</b> well suited for modification (see {@link CooMatrix}).</p>
  *
- * The CSR format stores a sparse <code>m-by-n</code> matrix as three one-dimensional arrays: {@link #entries},
- * {@link #rowPointers}, and {@link #colIndices}.<br>
- * <pre>
- *   <b>- entries</b>: Stores the non-zero values of the sparse matrix. Note, zero values can be
- *   stored explicitly in this array. Hence, the term "non-zero values" is a misnomer.
- *   <b>- rowPointers</b>: Encodes the total number of non-zero values above each row.
- *     Has length <code>m+1</code>. For example, <code>rowPointers[j]</code> contains
- *     the total number of non-zero values above row <code>j</code>.
- *     The first entry is always 0 and the last element is always <code>entries.length</code>
- *   <b>- colIndices</b>: Contains the column indices for all non-zero entries. Has length <code>entries.length</code>
- * </pre>
+ * <p>The CSR format stores a sparse <code>m-by-n</code> matrix as three one-dimensional arrays: {@link #entries},
+ * {@link #rowPointers}, and {@link #colIndices}.</p>
+ *
+ * <ul>
+ *     <li><b>entries</b>: Stores the non-zero values of the sparse matrix. Note, zero values can be stored explicitly in this array.
+ *     Hence, the term "non-zero values" is a misnomer.</li>
+ *     <li><b>rowPointers</b>: Encodes the total number of non-zero values above each row. Has length <code>m+1</code>. For example,
+ *     <code>rowPointers[j]</code> contains the total number of non-zero values above row <code>j</code>. The first entry is always
+ *     0 and the last element is always <code>entries.length</code></li>
+ *     <li><b>colIndices</b>: Contains the column indices for all non-zero entries. Has length <code>entries.length</code></li>
+ * </ul>
  * @see CooMatrix
+ * @see CsrCMatrix
  */
 public class CsrMatrix
         extends RealSparseTensorBase<CsrMatrix, Matrix, CsrCMatrix, CMatrix>
@@ -812,8 +809,7 @@ public class CsrMatrix
      */
     @Override
     public Matrix addToEachCol(Vector b) {
-        // TODO: Implementation
-        return null;
+        return RealCsrOperations.addToEachCol(this, b);
     }
 
 
@@ -826,8 +822,7 @@ public class CsrMatrix
      */
     @Override
     public Matrix addToEachCol(CooVector b) {
-        // TODO: Implementation
-        return null;
+        return RealCsrOperations.addToEachCol(this, b);
     }
 
 
@@ -840,8 +835,7 @@ public class CsrMatrix
      */
     @Override
     public CMatrix addToEachCol(CVector b) {
-        // TODO: Implementation
-        return null;
+        return RealCsrOperations.addToEachCol(this, b);
     }
 
 
@@ -854,8 +848,7 @@ public class CsrMatrix
      */
     @Override
     public CMatrix addToEachCol(CooCVector b) {
-        // TODO: Implementation
-        return null;
+        return RealCsrOperations.addToEachCol(this, b);
     }
 
 
@@ -1920,7 +1913,7 @@ public class CsrMatrix
 
 
     /**
-     * Swaps rows in the matrix.
+     * Swaps two rows in this matrix.
      *
      * @param rowIndex1 Index of first row to swap.
      * @param rowIndex2 index of second row to swap.
@@ -1928,66 +1921,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix swapRows(int rowIndex1, int rowIndex2) {
-        if(rowIndex1 == rowIndex2) return this;
-        else if(rowIndex1 > rowIndex2) {
-            // ensure the second index is larger than the first.
-            int temp = rowIndex1;
-            rowIndex1 = rowIndex2;
-            rowIndex2 = temp;
-        }
-
-        // Get range for values in the given rows.
-        int start1 = rowPointers[rowIndex1];
-        int end1 = rowPointers[rowIndex1+1];
-        int nnz1 = end1-start1;  // Number of non-zero entries in the first row to swap.
-
-        int start2 = rowPointers[rowIndex2];
-        int end2 = rowPointers[rowIndex2+1];
-        int nnz2 = end2-start2;  // Number of non-zero entries in the second row to swap.
-
-        int destPos = 0;
-
-        double[] updatedEntries = new double[entries.length];
-        int[] updatedColIndices = new int[colIndices.length];
-        int[] updatedRowPointers = new int[rowPointers.length];
-
-        // TODO: There is no need to copy values before first row or after the second row as they will be unchanged.
-
-        // Copy all entries preceding the first row to be swapped.
-        System.arraycopy(entries, 0, updatedEntries, destPos, start1);
-        System.arraycopy(colIndices, 0, updatedColIndices, destPos, start1);
-
-        // Copy entries from second row in swap.
-        destPos += start1;
-        System.arraycopy(entries, start2, updatedEntries, start1, nnz2);
-        System.arraycopy(entries, start2, updatedEntries, start1, nnz2);
-
-        // Copy entries between rows.
-        destPos += nnz2;
-        System.arraycopy(entries, end1, updatedEntries, destPos, start2-end1);
-        System.arraycopy(colIndices, end1, updatedColIndices, destPos, start2-end1);
-
-        // Copy entries from first row in swap.
-        destPos += (start2-end1);
-        System.arraycopy(entries, start1, updatedEntries, destPos, nnz1);
-        System.arraycopy(colIndices, start1, updatedColIndices, destPos, nnz1);
-
-        // Copy entries after second row in swap.
-        destPos += nnz1;
-        System.arraycopy(entries, end2, updatedEntries, destPos, entries.length-end2);
-        System.arraycopy(colIndices, end2, updatedColIndices, destPos, entries.length-end2);
-
-        System.out.println("updatedEntries: " + Arrays.toString(updatedEntries));
-
-        if(nnz1 > nnz2) {
-            // TODO: Recompute the rowPointers where there are more values in the first row than the second row.
-            //  rows before second row will now have a lower number.
-        } else if(nnz1 < nnz2) {
-            // TODO: Recompute the rowPointers where there are less values in the first row than the second row.
-            //  rows before second row will now have a larger number.
-        }  // Otherwise no updates to rowPointers is needed.
-
-        // TODO: Implementation
+        RealCsrManipulations.swapRows(this, rowIndex1, rowIndex2);
         return this;
     }
 
@@ -2001,8 +1935,9 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix swapCols(int colIndex1, int colIndex2) {
-        // TODO: Implementation
-        return null;
+//        RealCsrManipulations.swapCols(this, colIndex1, colIndex2);
+        RealCsrManipulations.swapColsTest(this, colIndex1, colIndex2);
+        return this;
     }
 
 
@@ -2374,7 +2309,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix add(CsrMatrix B) {
-        return RealCsrOperations.applyBinOpp(this, B, Double::sum);
+        return RealCsrOperations.applyBinOpp(this, B, Double::sum, null);
     }
 
 
@@ -2411,7 +2346,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix sub(CsrMatrix B) {
-        return RealCsrOperations.applyBinOpp(this, B, (Double a, Double b) -> a-b);
+        return RealCsrOperations.applyBinOpp(this, B, (Double a, Double b) -> a-b, (Double a) -> -a);
     }
 
 
@@ -2489,7 +2424,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix elemMult(CsrMatrix B) {
-        return RealCsrOperations.applyBinOpp(this, B, (Double a, Double b) -> a*b);
+        return RealCsrOperations.applyBinOpp(this, B, (Double a, Double b) -> a*b, null);
     }
 
 

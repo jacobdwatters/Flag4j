@@ -1472,6 +1472,49 @@ public class CooCVector
 
 
     /**
+     * Repeats a vector {@code n} times along a certain axis to create a matrix.
+     *
+     * @param n Number of times to repeat vector.
+     * @param axis Axis along which to repeat vector. If {@code axis=0} then each row of the resulting matrix will be equivalent to
+     * this vector. If {@code axis=1} then each column of the resulting matrix will be equivalent to this vector.
+     *
+     * @return A matrix whose rows/columns are this vector repeated.
+     */
+    @Override
+    public CooCMatrix repeat(int n, int axis) {
+        ParameterChecks.assertInRange(axis, 0, 1, "axis");
+        ParameterChecks.assertGreaterEq(0, n, "n");
+
+        Shape tiledShape;
+        CNumber[] tiledEntries = new CNumber[n*entries.length];
+        int[] tiledRows = new int[tiledEntries.length];
+        int[] tiledCols = new int[tiledEntries.length];
+        int nnz = entries.length;
+
+        if(axis==0) {
+            tiledShape = new Shape(n, size);
+
+            for(int i=0; i<n; i++) { // Copy values into row and set col indices as vector indices.
+                ArrayUtils.arraycopy(entries, 0, tiledEntries, i*nnz, nnz);
+                System.arraycopy(indices, 0, tiledCols, i*nnz, indices.length);
+                Arrays.fill(tiledRows, i*nnz, (i+1)*nnz, i);
+            }
+        } else {
+            int[] colIndices = ArrayUtils.intRange(0, n);
+            tiledShape = new Shape(size, n);
+
+            for(int i=0; i<entries.length; i++) {
+                ArrayUtils.fill(tiledEntries, i*n, (i+1)*n, entries[i]);
+                Arrays.fill(tiledRows, i*n, (i+1)*n, indices[i]);
+                System.arraycopy(colIndices, 0, tiledCols, i*n, n);
+            }
+        }
+
+        return new CooCMatrix(tiledShape, tiledEntries, tiledRows, tiledCols);
+    }
+
+
+    /**
      * Converts this sparse tensor to an equivalent dense tensor.
      *
      * @return A dense tensor which is equivalent to this sparse tensor.

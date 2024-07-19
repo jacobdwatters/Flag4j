@@ -25,10 +25,14 @@
 package org.flag4j.arrays.sparse;
 
 import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.core.sparse_base.ComplexSparseTensorBase;
 import org.flag4j.operations.sparse.coo.complex.ComplexSparseEquals;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -671,7 +675,32 @@ public class CooCTensor
      */
     @Override
     public void sortIndices() {
+        // TODO: Implementation
+    }
 
+
+    /**
+     * Converts a sparse {@link CooCTensor} from a dense {@link Tensor}. This is likely only worthwhile for very sparse tensors.
+     * @param src Dense tensor to convert to sparse COO tensor.
+     * @return A COO tensor which is equivalent to the {@code src} dense tensor.
+     */
+    public static CooCTensor fromDense(CTensor src) {
+        List<CNumber> entries = new ArrayList<>();
+        List<int[]> indices = new ArrayList<>();
+
+        int size = src.entries.length;
+        CNumber value;
+
+        for(int i=0; i<size; i++) {
+            value = src.entries[i].copy();
+
+            if(value.equals(CNumber.zero())) {
+                entries.add(value);
+                indices.add(src.shape.getIndices(i));
+            }
+        }
+
+        return new CooCTensor(src.shape.copy(), entries.toArray(new CNumber[0]), indices.toArray(new int[0][]));
     }
 
 

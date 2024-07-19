@@ -3,11 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.flag4j</groupId>
+    <groupId>org.flag4j</groupId>
     <artifactId>flag4j</artifactId>
-    <version>v0.0.1-beta</version>
-
+    <version>v0.1.0-beta</version>
     <distributionManagement>
         <repository>
             <id>github</id>
@@ -15,7 +13,6 @@
             <url>https://maven.pkg.github.com/jacobdwatters/Flag4j</url>
         </repository>
     </distributionManagement>
-
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -30,7 +27,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>16</maven.compiler.target>
@@ -38,10 +34,8 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
     <build>
         <testSourceDirectory>src/test/java</testSourceDirectory>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -52,7 +46,6 @@
                     <target>11</target>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -61,7 +54,6 @@
                     <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -88,5 +80,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
