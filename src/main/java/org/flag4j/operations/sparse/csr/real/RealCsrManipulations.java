@@ -106,7 +106,7 @@ public class RealCsrManipulations {
      * @throws IndexOutOfBoundsException If either {@code colIndex1} or {@code colIndex2} is out of bounds of the columns of this
      * matrix.
      */
-    public static void swapColsTest(CsrMatrix src, int colIdx1, int colIdx2) {
+    public static void swapCols(CsrMatrix src, int colIdx1, int colIdx2) {
         if(colIdx1 == colIdx2) return;
 
         // Ensure colIndex1 < colIndex2 for simplicity

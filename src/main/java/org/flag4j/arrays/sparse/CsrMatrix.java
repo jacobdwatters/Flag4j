@@ -861,8 +861,7 @@ public class CsrMatrix
      */
     @Override
     public Matrix addToEachRow(Vector b) {
-        // TODO: Implementation
-        return null;
+        return RealCsrOperations.addToEachRow(this, b);
     }
 
 
@@ -875,8 +874,7 @@ public class CsrMatrix
      */
     @Override
     public Matrix addToEachRow(CooVector b) {
-        // TODO: Implementation
-        return null;
+        return RealCsrOperations.addToEachRow(this, b);
     }
 
 
@@ -889,8 +887,7 @@ public class CsrMatrix
      */
     @Override
     public CMatrix addToEachRow(CVector b) {
-        // TODO: Implementation
-        return null;
+        return RealCsrOperations.addToEachRow(this, b);
     }
 
 
@@ -903,8 +900,7 @@ public class CsrMatrix
      */
     @Override
     public CMatrix addToEachRow(CooCVector b) {
-        // TODO: Implementation
-        return null;
+        return RealCsrOperations.addToEachRow(this, b);
     }
 
 
@@ -1935,8 +1931,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix swapCols(int colIndex1, int colIndex2) {
-//        RealCsrManipulations.swapCols(this, colIndex1, colIndex2);
-        RealCsrManipulations.swapColsTest(this, colIndex1, colIndex2);
+        RealCsrManipulations.swapCols(this, colIndex1, colIndex2);
         return this;
     }
 

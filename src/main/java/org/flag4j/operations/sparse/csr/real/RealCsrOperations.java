@@ -223,6 +223,7 @@ public final class RealCsrOperations {
      * @return The result of adding the vector src2 to each column of this matrix.
      */
     public static Matrix addToEachCol(CsrMatrix src1, Vector src2) {
+        ParameterChecks.assertEquals(src1.numRows, src2.size);
         Matrix sum = src2.repeat(src1.numCols, 1);
 
         for(int i=0; i<src1.numRows; i++) {
@@ -248,6 +249,7 @@ public final class RealCsrOperations {
      * @return The result of adding the vector src2 to each column of this matrix.
      */
     public static Matrix addToEachCol(CsrMatrix src1, CooVector src2) {
+        ParameterChecks.assertEquals(src1.numRows, src2.size);
         Matrix sum = src2.repeat(src1.numCols, 1).toDense();
 
         for(int i=0; i<src1.numRows; i++) {
@@ -273,6 +275,7 @@ public final class RealCsrOperations {
      * @return The result of adding the vector src2 to each column of this matrix.
      */
     public static CMatrix addToEachCol(CsrMatrix src1, CVector src2) {
+        ParameterChecks.assertEquals(src1.numRows, src2.size);
         CMatrix sum = src2.repeat(src1.numCols, 1);
 
         for(int i=0; i<src1.numRows; i++) {
@@ -298,6 +301,7 @@ public final class RealCsrOperations {
      * @return The result of adding the vector src2 to each column of this matrix.
      */
     public static CMatrix addToEachCol(CsrMatrix src1, CooCVector src2) {
+        ParameterChecks.assertEquals(src1.numRows, src2.size);
         CMatrix sum = src2.repeat(src1.numCols, 1).toDense();
 
         for(int i=0; i<src1.numRows; i++) {
@@ -322,9 +326,20 @@ public final class RealCsrOperations {
      * @param src2 Vector to add to each row of this matrix.
      * @return The result of adding the vector src2 to each row of this matrix.
      */
-    public Matrix addToEachRow(CsrMatrix src1, Vector src2) {
-        // TODO: Implementation
-        return null;
+    public static Matrix addToEachRow(CsrMatrix src1, Vector src2) {
+        ParameterChecks.assertEquals(src1.numCols, src2.size);
+        Matrix sum = src2.repeat(src1.numRows, 0);
+
+        for(int i=0; i<src1.numRows; i++) {
+            int rowStart = src1.rowPointers[i];
+            int rowEnd = src1.rowPointers[i+1];
+
+            for(int j=rowStart; j<rowEnd; j++) {
+                sum.entries[i*sum.numCols + src1.colIndices[j]] += src1.entries[j];
+            }
+        }
+
+        return sum;
     }
 
 
@@ -337,8 +352,19 @@ public final class RealCsrOperations {
      * @return The result of adding the vector src2 to each row of this matrix.
      */
     public static Matrix addToEachRow(CsrMatrix src1, CooVector src2) {
-        // TODO: Implementation
-        return null;
+        ParameterChecks.assertEquals(src1.numCols, src2.size);
+        Matrix sum = src2.repeat(src1.numRows, 0).toDense();
+
+        for(int i=0; i<src1.numRows; i++) {
+            int rowStart = src1.rowPointers[i];
+            int rowEnd = src1.rowPointers[i+1];
+
+            for(int j=rowStart; j<rowEnd; j++) {
+                sum.entries[i*sum.numCols + src1.colIndices[j]] += src1.entries[j];
+            }
+        }
+
+        return sum;
     }
 
 
@@ -346,12 +372,24 @@ public final class RealCsrOperations {
      * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
      * treated as if it were a row vector for this operation.
      *
-     * @param b Vector to add to each row of this matrix.
-     * @return The result of adding the vector b to each row of this matrix.
+     * @param src1 CSR matrix to add vector to each row of.
+     * @param src2 Vector to add to each row of this matrix.
+     * @return The result of adding the vector src2 to each row of this matrix.
      */
-    public static CMatrix addToEachRow(CsrMatrix src1, CVector b) {
-        // TODO: Implementation
-        return null;
+    public static CMatrix addToEachRow(CsrMatrix src1, CVector src2) {
+        ParameterChecks.assertEquals(src1.numCols, src2.size);
+        CMatrix sum = src2.repeat(src1.numRows, 0);
+
+        for(int i=0; i<src1.numRows; i++) {
+            int rowStart = src1.rowPointers[i];
+            int rowEnd = src1.rowPointers[i+1];
+
+            for(int j=rowStart; j<rowEnd; j++) {
+                sum.entries[i*sum.numCols + src1.colIndices[j]].addEq(src1.entries[j]);
+            }
+        }
+
+        return sum;
     }
 
 
@@ -359,12 +397,24 @@ public final class RealCsrOperations {
      * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
      * treated as if it were a row vector for this operation.
      *
-     * @param b Vector to add to each row of this matrix.
-     * @return The result of adding the vector b to each row of this matrix.
+     * @param src1 CSR matrix to add vector to each row of.
+     * @param src2 Vector to add to each row of this matrix.
+     * @return The result of adding the vector src2 to each row of this matrix.
      */
-    public static CMatrix addToEachRow(CsrMatrix src1, CooCVector b) {
-        // TODO: Implementation
-        return null;
+    public static CMatrix addToEachRow(CsrMatrix src1, CooCVector src2) {
+        ParameterChecks.assertEquals(src1.numCols, src2.size);
+        CMatrix sum = src2.repeat(src1.numRows, 0).toDense();
+
+        for(int i=0; i<src1.numRows; i++) {
+            int rowStart = src1.rowPointers[i];
+            int rowEnd = src1.rowPointers[i+1];
+
+            for(int j=rowStart; j<rowEnd; j++) {
+                sum.entries[i*sum.numCols + src1.colIndices[j]].addEq(src1.entries[j]);
+            }
+        }
+
+        return sum;
     }
 }
 
