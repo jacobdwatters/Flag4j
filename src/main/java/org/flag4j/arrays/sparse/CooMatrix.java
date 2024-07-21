@@ -1084,10 +1084,10 @@ public class CooMatrix
 
 
     @Override
-    public Vector mult(CooVector B) {
+    public Vector mult(CooVector b) {
         double[] dest = RealSparseMatrixMultiplication.standardVector(
                 entries, rowIndices, colIndices, shape,
-                B.entries, B.indices
+                b.entries, b.indices
         );
         return new Vector(dest);
     }

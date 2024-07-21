@@ -67,4 +67,34 @@ public final class RealCsrMatrixProperties {
 
         return diagCount == src.numCols;
     }
+
+
+    /**
+     * Checks if the {@code src} matrix is symmetric.
+     * @param src Source matrix to check symmetry of.
+     * @return True if {@code src} is symmetric. Otherwise, returns false.
+     */
+    public static boolean isSymmetric(CsrMatrix src) {
+        // Check for early returns.
+        if(!src.isSquare()) return false;
+        if(src == null) return false;
+        if(src.entries.length == 0) return true;
+
+        return src.T().equals(src);
+    }
+
+
+    /**
+     * Checks if the {@code src} matrix is anti-symmetric.
+     * @param src Source matrix to check symmetry of.
+     * @return True if {@code src} is symmetric. Otherwise, returns false.
+     */
+    public static boolean isAntiSymmetric(CsrMatrix src) {
+        // Check for early returns.
+        if(!src.isSquare()) return false;
+        if(src == null) return false;
+        if(src.entries.length == 0) return true;
+
+        return src.T().mult(-1).equals(src);
+    }
 }

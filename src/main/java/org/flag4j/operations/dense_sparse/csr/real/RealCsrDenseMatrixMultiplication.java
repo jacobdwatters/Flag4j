@@ -27,6 +27,7 @@ package org.flag4j.operations.dense_sparse.csr.real;
 
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ErrorMessages;
@@ -138,7 +139,7 @@ public class RealCsrDenseMatrixMultiplication {
         double[] destEntries = new double[src1.numRows];
         int rows1 = src1.numRows;
 
-        for (int i = 0; i < rows1; i++) {
+        for (int i=0; i<rows1; i++) {
             int start = src1.rowPointers[i];
             int stop = src1.rowPointers[i + 1];
 
@@ -147,6 +148,44 @@ public class RealCsrDenseMatrixMultiplication {
                 double aVal = src1.entries[aIndex];
 
                 destEntries[i] += aVal*src2.entries[aCol];
+            }
+        }
+
+        return new Vector(destEntries);
+    }
+
+
+    /**
+     * Computes the matrix-vector multiplication between a real sparse CSR matrix and a real sparse COO vector.
+     * @param src1 The matrix in the multiplication.
+     * @param src2 Vector in multiplication. Treated as a column vector in COO format.
+     * @return The result of the matrix-vector multiplication.
+     * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the number of columns in {@code src2}.
+     */
+    public static Vector standardVector(CsrMatrix src1, CooVector src2) {
+        // Ensure the matrix and vector have shapes conducive to multiplication.
+        ParameterChecks.assertEquals(src1.numCols, src2.size);
+
+        double[] destEntries = new double[src1.numRows];
+        int rows1 = src1.numRows;
+
+        // Iterate over the non-zero elements of the sparse vector.
+        for (int k=0; k < src2.entries.length; k++) {
+            int col = src2.indices[k];
+            double val = src2.entries[k];
+
+            // Perform multiplication only for the non-zero elements.
+            for (int i=0; i<rows1; i++) {
+                int start = src1.rowPointers[i];
+                int stop = src1.rowPointers[i + 1];
+
+                for (int aIndex=start; aIndex < stop; aIndex++) {
+                    int aCol = src1.colIndices[aIndex];
+                    if (aCol == col) {
+                        double aVal = src1.entries[aIndex];
+                        destEntries[i] += aVal*val;
+                    }
+                }
             }
         }
 

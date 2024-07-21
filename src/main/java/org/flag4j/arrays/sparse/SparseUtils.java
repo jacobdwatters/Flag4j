@@ -54,7 +54,6 @@ final class SparseUtils {
      */
     static boolean CSREquals(CsrMatrix src1, CsrMatrix src2) {
         if(src1.numRows != src2.numRows || src1.numCols != src2.numCols) {
-            System.out.println("false return 1");
             return false;
         }
 
@@ -82,7 +81,6 @@ final class SparseUtils {
                     int src2Col = src2.colIndices[src2Index];
 
                     if (src1Col != src2Col) {
-                        System.out.println("false return 2");
                         return false;
                     }
 
@@ -98,14 +96,12 @@ final class SparseUtils {
                 } else if (src1Index < src1RowEnd) {
                     // Remaining entries in src1 row
                     if (src1.entries[src1Index] != 0) {
-                        System.out.println("false return 3");
                         return false;
                     }
                     src1Index++;
                 } else if (src2Index < src2RowEnd) {
                     // Remaining entries in src2 row
                     if (src2.entries[src2Index] != 0) {
-                        System.out.println("false return 4");
                         return false;
                     }
                     src2Index++;

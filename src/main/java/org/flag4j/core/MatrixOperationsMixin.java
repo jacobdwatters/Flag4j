@@ -137,12 +137,12 @@ public interface MatrixOperationsMixin<
 
     /**
      * Computes the matrix-vector multiplication.
-     * @param B Vector to multiply this matrix to.
-     * @return The vector result from multiplying this matrix by the vector {@code B}.
+     * @param b Vector to multiply this matrix to.
+     * @return The vector result from multiplying this matrix by the vector {@code b}.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of
-     * entries {@code B}.
+     * entries {@code b}.
      */
-    UU mult(TT B);
+    UU mult(TT b);
 
 
     /**
