@@ -35,6 +35,7 @@ import org.flag4j.util.ParameterChecks;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.UnaryOperator;
 
 /**
  * This class contains low-level implementations for element-wise operations on real/complex CSR matrices.
@@ -57,11 +58,16 @@ public class RealComplexCsrOperations {
      * @param src1 The first matrix in the operation.
      * @param src2 The second matrix in the operation.
      * @param opp Binary operator to apply element-wise to <code>src1</code> and <code>src2</code>.
+     * @param uOpp Optional unary operator for binary operations which are not communicative such as subtraction. This operation is
+     * applied to an element of the second matrix when a non-zero element in the first matrix does not exist at the same index. If
+     * null, this operation is ignored.
      * @return The result of applying the specified binary operation to <code>src1</code> and <code>src2</code>
      * element-wise.
      * @throws IllegalArgumentException If <code>src1</code> and <code>src2</code> do not have the same shape.
      */
-    public static CsrCMatrix applyBinOpp(CsrMatrix src1, CsrCMatrix src2, BiFunction<Double, CNumber, CNumber> opp) {
+    public static CsrCMatrix applyBinOpp(CsrMatrix src1, CsrCMatrix src2,
+                                         BiFunction<Double, CNumber, CNumber> opp,
+                                         UnaryOperator<CNumber> uOpp) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         List<CNumber> dest = new ArrayList<>();
@@ -86,7 +92,8 @@ public class RealComplexCsrOperations {
                     colIndices.add(col1);
                     rowPtr1++;
                 } else {
-                    dest.add(src2.entries[rowPtr2].copy());
+                    if(uOpp!=null) dest.add(uOpp.apply(src2.entries[rowPtr2].copy()));
+                    else dest.add(src2.entries[rowPtr2].copy());
                     colIndices.add(col2);
                     rowPtr2++;
                 }
@@ -102,7 +109,8 @@ public class RealComplexCsrOperations {
             }
 
             while(rowPtr2 < src2.rowPointers[i+1]) {
-                dest.add(src2.entries[rowPtr2].copy());
+                if(uOpp!=null) dest.add(uOpp.apply(src2.entries[rowPtr2].copy()));
+                else dest.add(src2.entries[rowPtr2].copy());
                 colIndices.add(src2.colIndices[rowPtr2]);
                 rowPtr2++;
                 rowPointers[i+1]++;
@@ -132,11 +140,16 @@ public class RealComplexCsrOperations {
      * @param src1 The first matrix in the operation.
      * @param src2 The second matrix in the operation.
      * @param opp Binary operator to apply element-wise to <code>src1</code> and <code>src2</code>.
+     * @param uOpp Optional unary operator for binary operations which are not communicative such as subtraction. This operation is
+     * applied to an element of the second matrix when a non-zero element in the first matrix does not exist at the same index. If
+     * null, this operation is ignored.
      * @return The result of applying the specified binary operation to <code>src1</code> and <code>src2</code>
      * element-wise.
      * @throws IllegalArgumentException If <code>src1</code> and <code>src2</code> do not have the same shape.
      */
-    public static CsrCMatrix applyBinOpp(CsrCMatrix src1, CsrMatrix src2, BiFunction<CNumber, Double, CNumber> opp) {
+    public static CsrCMatrix applyBinOpp(CsrCMatrix src1, CsrMatrix src2,
+                                         BiFunction<CNumber, Double, CNumber> opp,
+                                         UnaryOperator<Double> uOpp) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         List<CNumber> dest = new ArrayList<>();
@@ -161,7 +174,8 @@ public class RealComplexCsrOperations {
                     colIndices.add(col1);
                     rowPtr1++;
                 } else {
-                    dest.add(new CNumber(src2.entries[rowPtr2]));
+                    if(uOpp!=null) dest.add(new CNumber(uOpp.apply(src2.entries[rowPtr2])));
+                    else dest.add(new CNumber(src2.entries[rowPtr2]));
                     colIndices.add(col2);
                     rowPtr2++;
                 }
@@ -177,7 +191,8 @@ public class RealComplexCsrOperations {
             }
 
             while(rowPtr2 < src2.rowPointers[i+1]) {
-                dest.add(new CNumber(src2.entries[rowPtr2]));
+                if(uOpp!=null) dest.add(new CNumber(uOpp.apply(src2.entries[rowPtr2])));
+                else dest.add(new CNumber(src2.entries[rowPtr2]));
                 colIndices.add(src2.colIndices[rowPtr2]);
                 rowPtr2++;
                 rowPointers[i+1]++;

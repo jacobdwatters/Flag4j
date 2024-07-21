@@ -1106,6 +1106,37 @@ public class Vector
 
 
     /**
+     * Repeats a vector {@code n} times along a certain axis to create a matrix.
+     *
+     * @param n Number of times to repeat vector.
+     * @param axis Axis along which to repeat vector. If {@code axis=0} then each row of the resulting matrix will be equivalent to
+     * this vector. If {@code axis=1} then each column of the resulting matrix will be equivalent to this vector.
+     *
+     * @return A matrix whose rows/columns are this vector repeated.
+     */
+    @Override
+    public Matrix repeat(int n, int axis) {
+        ParameterChecks.assertInRange(axis, 0, 1, "axis");
+        ParameterChecks.assertGreaterEq(0, n, "n");
+        Matrix tiled;
+
+        if(axis==0) {
+            tiled = new Matrix(new Shape(n, size));
+
+            for(int i=0; i<tiled.numRows; i++) // Set each row of the tiled matrix to be the vector values.
+                System.arraycopy(entries, 0, tiled.entries, i*tiled.numCols, size);
+        } else {
+            tiled = new Matrix(new Shape(size, n));
+
+            for(int i=0; i<tiled.numRows; i++) // Fill each row of the tiled matrix with a single value from the vector.
+                Arrays.fill(tiled.entries, i*tiled.numCols, (i+1)*tiled.numCols, entries[i]);
+        }
+
+        return tiled;
+    }
+
+
+    /**
      * Flattens a tensor along the specified axis. For a vector, this simply copies the vector.
      *
      * @param axis Axis along which to flatten tensor.

@@ -1144,7 +1144,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      */
     @Override
     public CVector flatten(int axis) {
-        return null;
+        return this.copy();
     }
 
 
@@ -1156,6 +1156,36 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
     @Override
     public int size() {
         return size;
+    }
+
+
+    /**
+     * Repeats a vector {@code n} times along a certain axis to create a matrix.
+     *
+     * @param n Number of times to repeat vector.
+     * @param axis Axis along which to repeat vector. If {@code axis=0} then each row of the resulting matrix will be equivalent to
+     * this vector. If {@code axis=1} then each column of the resulting matrix will be equivalent to this vector.
+     *
+     * @return A matrix whose rows/columns are this vector repeated.
+     */
+    @Override
+    public CMatrix repeat(int n, int axis) {
+        ParameterChecks.assertInRange(axis, 0, 1, "axis");
+        ParameterChecks.assertGreaterEq(0, n, "n");
+        Shape tiledShape;
+        CNumber[] tiledEntries = new CNumber[size*n];
+
+        if(axis==0) {
+            tiledShape = new Shape(n, size);
+            for(int i=0; i<n; i++) // Set each row of the tiled matrix to be the vector values.
+                ArrayUtils.arraycopy(entries, 0, tiledEntries, i*size, size);
+        } else {
+            tiledShape = new Shape(size, n);
+            for(int i=0; i<size; i++) // Fill each row of the tiled matrix with a single value from the vector.
+                ArrayUtils.fill(tiledEntries, i*n, (i+1)*n, entries[i]);
+        }
+
+        return new CMatrix(tiledShape, tiledEntries);
     }
 
 

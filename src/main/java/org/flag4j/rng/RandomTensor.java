@@ -27,10 +27,12 @@ package org.flag4j.rng;
 import org.flag4j.arrays.dense.*;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.linalg.decompositions.qr.ComplexQR;
 import org.flag4j.linalg.decompositions.qr.RealQR;
+import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
 
 import java.math.BigDecimal;
@@ -406,6 +408,81 @@ public class RandomTensor {
 
 
     /**
+     * Generates a random sparse matrix with the specified sparsity. The non-zero values will have a uniform
+     * distribution in {@code [min, max)}. Values will be uniformly distributed throughout the matrix.
+     * @param rows Number of rows in the sparse matrix.
+     * @param cols Number of columns in the sparse matrix.
+     * @param min Minimum value for random non-zero values in the sparse matrix.
+     * @param max Maximum value for random non-zero values
+     * @param sparsity Desired sparsity of the resulting matrix. i.e. the percent of values which are zero. Must be
+     *                 a value in {@code [0.0, 1.0]}.
+     * @return A sparse matrix with sparsity approximately equal to {@code sparsity} filled with random values uniformly
+     * distributed in {@code [min, max)}.
+     */
+    public CsrMatrix randomCsrMatrix(int rows, int cols, double min, double max, double sparsity) {
+        return randomCooMatrix(new Shape(rows, cols), min, max, sparsity).toCsr();
+    }
+
+
+    /**
+     * Generates a random sparse matrix with the specified sparsity. The non-zero values will have a uniform
+     * distribution in {@code [min, max)}. Values will be uniformly distributed throughout the matrix.
+     * @param shape Shape of the sparse matrix to generate.
+     * @param min Minimum value for random non-zero values in the sparse matrix.
+     * @param max Maximum value for random non-zero values
+     * @param sparsity Desired sparsity of the resulting matrix. i.e. the percent of values which are zero. Must be
+     *                 a value in {@code [0.0, 1.0]}.
+     * @return A sparse matrix with sparsity approximately equal to {@code sparsity} filled with random values uniformly
+     * distributed in {@code [min, max)}.
+     */
+    public CsrMatrix randomCsrMatrix(Shape shape, double min, double max, double sparsity) {
+        ParameterChecks.assertRank(2, shape);
+
+        int numEntries = new BigDecimal(shape.totalEntries()).multiply(BigDecimal.valueOf(1.0-sparsity))
+                .setScale(0, RoundingMode.HALF_UP).intValueExact();
+
+        return randomCooMatrix(shape, min, max, numEntries).toCsr();
+    }
+
+
+    /**
+     * Generates a random sparse matrix with the specified number of non-zero entries. The non-zero values will have
+     * a uniform distribution in {@code [min, max)}. Values will be uniformly distributed throughout the matrix.
+     * @param rows Number of rows in the random sparse matrix.
+     * @param cols Number of columns in the random sparse matrix.
+     * @param min Minimum value for random non-zero values in the sparse matrix.
+     * @param max Maximum value for random non-zero values
+     * @param numNonZeroEntries Desired number of non-zero entries int the random sparse matrix.
+     * @return A sparse matrix filled with the specified number of non-zero entries uniformly
+     * distributed in {@code [min, max)}.
+     */
+    public CsrMatrix randomCsrMatrix(int rows, int cols, double min, double max, int numNonZeroEntries) {
+        return randomCooMatrix(new Shape(rows, cols), min, max, numNonZeroEntries).toCsr();
+    }
+
+
+    /**
+     * Generates a random sparse matrix with the specified number of non-zero entries. The non-zero values will have
+     * a uniform distribution in {@code [min, max)}. Values will be uniformly distributed throughout the matrix.
+     * @param shape Shape of the sparse matrix to generate.
+     * @param min Minimum value for random non-zero values in the sparse matrix.
+     * @param max Maximum value for random non-zero values
+     * @param numNonZeroEntries Desired number of non-zero entries int the random sparse matrix.
+     * @return A sparse matrix filled with the specified number of non-zero entries uniformly
+     * distributed in {@code [min, max)}.
+     */
+    public CsrMatrix randomCsrMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
+        ParameterChecks.assertGreaterEq(0, numNonZeroEntries);
+        ParameterChecks.assertLessEq(shape.totalEntries(), numNonZeroEntries, "numNonZeroEntries");
+
+        double[] entries = RAND_ARRAY.genUniformRealArray(numNonZeroEntries, min, max);
+        int[][] indices = RAND_ARRAY.randomUniqueIndices2D(numNonZeroEntries, 0, shape.get(0), 0, shape.get(1));
+
+        return new CooMatrix(shape, entries, indices[0], indices[1]).toCsr();
+    }
+
+
+    /**
      * Generates a matrix filled with pseudorandom values sampled from a normal distribution with a mean of 0.0 and
      * a standard deviation of 1.0.
      * @param rows The number of rows in the resulting matrix.
@@ -468,7 +545,7 @@ public class RandomTensor {
      * @param size Number of rows and columns in the resulting matrix (the result will be a square matrix).
      * @return A symmetric matrix filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
      */
-    public Matrix getRandomSymmetricMatrix(int size) {
+    public Matrix randomSymmetricMatrix(int size) {
         Matrix randMat = new Matrix(size);
 
         for(int i=0; i<size; i++) {
@@ -485,8 +562,59 @@ public class RandomTensor {
 
 
     /**
+     * Generates a symmetric {@link CooMatrix COO matrix} filled with pseudorandom values uniformly distributed in {@code [min, max)}.
+     * @param size Number of rows and columns in the resulting matrix (the result will be a square matrix).
+     * @param min Minimum value in uniform distribution.
+     * @param max Maximum value in uniform distribution.
+     * @param sparsity Desired sparsity of the resulting matrix. i.e. the percent of values which are zero. Must be
+     * a value in {@code [0.0, 1.0]}. The true sparsity may slightly differ to ensure the matrix is symmetric.
+     * @return A symmetric matrix filled with pseudorandom values uniformly distributed in {@code [min, max)}.
+     * @throws IllegalArgumentException If {@code sparsity} is not in the range {@code [0.0, 1.0]}.
+     */
+    public CooMatrix randomSymmetricCooMatrix(int size, int min, int max, double sparsity) {
+        ParameterChecks.assertInRange(sparsity, 0, 1, "sparsity");
+        Shape shape = new Shape(size, size);
+
+        int numEntries = new BigDecimal(size).pow(2).multiply(BigDecimal.valueOf(1.0-sparsity))
+                .setScale(0, RoundingMode.HALF_UP).intValueExact();
+        numEntries /= 2;
+
+        // Generate half of the random entries.
+        double[] entries = RAND_ARRAY.genUniformRealArray(numEntries, min, max);
+        int[][] indices = RAND_ARRAY.randomUniqueIndices2D(numEntries, 0, shape.get(0), 0, shape.get(1));
+
+        // Mirror entries across diagonal.
+        entries = ArrayUtils.join(entries, entries);
+        indices = new int[][]{
+                ArrayUtils.join(indices[0], indices[1]),
+                ArrayUtils.join(indices[1], indices[0])
+        };
+
+        CooMatrix randMat = new CooMatrix(shape, entries, indices[0], indices[1]);
+        randMat.sortIndices();
+
+        return new CooMatrix(shape, entries, indices[0], indices[1]);
+    }
+
+
+    /**
+     * Generates a symmetric {@link CsrMatrix CSR matrix} filled with pseudorandom values uniformly distributed in {@code [min, max)}.
+     * @param size Number of rows and columns in the resulting matrix (the result will be a square matrix).
+     * @param min Minimum value in uniform distribution.
+     * @param max Maximum value in uniform distribution.
+     * @param sparsity Desired sparsity of the resulting matrix. i.e. the percent of values which are zero. Must be
+     * a value in {@code [0.0, 1.0]}. The true sparsity may slightly differ to ensure the matrix is symmetric.
+     * @return A symmetric matrix filled with pseudorandom values uniformly distributed in {@code [min, max)}.
+     * @throws IllegalArgumentException If {@code sparsity} is not in the range {@code [0.0, 1.0]}.
+     */
+    public CsrMatrix randomSymmetricCsrMatrix(int size, int min, int max, double sparsity) {
+        return randomSymmetricCooMatrix(size, min, max, sparsity).toCsr();
+    }
+
+
+    /**
      * Gets a pseudorandom orthogonal matrix. From an implementation point of view, a pseudorandom matrix is generated
-     * as if by {@link #randomMatrix(int, int) getRandomMatrix(size, size)}. Then, a {@link RealQR QR}
+     * as if by {@link #randomMatrix(int, int) randomMatrix(size, size)}. Then, a {@link RealQR QR}
      * decomposition is computed on this pseudorandom matrix and the {@code Q} matrix from this decomposition is returned.
      * @param size Size of the orthogonal matrix (i.e. the number rows and columns for the square matrix).
      * @return A pseudorandom orthogonal matrix.
@@ -690,7 +818,7 @@ public class RandomTensor {
 
     /**
      * Gets a pseudorandom unitary matrix. From an implementation point of view, a pseudorandom complex matrix is generated
-     * as if by {@link #randomCMatrix(int, int) getRandomMatrix(size, size)}. Then, a {@link ComplexQR QR}
+     * as if by {@link #randomCMatrix(int, int) randomCMatrix(size, size)}. Then, a {@link ComplexQR QR}
      * decomposition is computed on this pseudorandom matrix and the {@code Q} matrix from this decomposition is returned.
      * @param size Size of the unitary matrix (i.e. the number rows and columns for the square matrix).
      * @return A pseudorandom unitary matrix.
@@ -707,7 +835,7 @@ public class RandomTensor {
      * @param size Size if the upper triangular matrix.
      * @return A pseudorandom upper triangular matrix of the specified size.
      */
-    public Matrix getRandomTriuMatrix(int size, int min, int max) {
+    public Matrix randomTriuMatrix(int size, int min, int max) {
         double[] entries = new double[size*size];
         double maxMin = max-min;
 

@@ -30,7 +30,9 @@ import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
+import java.util.Arrays;
 import java.util.function.BinaryOperator;
+import java.util.function.UnaryOperator;
 
 /**
  * This class contains low-level operations which act on a real dense and a real sparse {@link CsrMatrix CSR matrix}.
@@ -48,11 +50,22 @@ public class RealCsrDenseOperations {
      * @param src1 First matrix in element-wise binary operation.
      * @param src2 Second matrix in element-wise binary operation.
      * @param opp Binary operator to apply element-wise to the two matrices.
+     * @param uOpp Optional unary operator for binary operations which are not communicative such as subtraction. This operation is
+     * applied to an element of the second matrix when a non-zero element in the first matrix does not exist at the same index. If
+     * null, this operation is ignored.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static Matrix applyBinOpp(CsrMatrix src1, Matrix src2, BinaryOperator<Double> opp) {
+    public static Matrix applyBinOpp(CsrMatrix src1, Matrix src2,
+                                     BinaryOperator<Double> opp,
+                                     UnaryOperator<Double> uOpp) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
-        double[] dest = new double[src2.entries.length];
+        double[] dest = src2.entries.clone();
+
+        if(uOpp != null) {
+            // Apply unary operator to all entries in second matrix.
+            for(int i = 0; i < dest.length; i++)
+               dest[i] = uOpp.apply(dest[i]);
+        }
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
             int start = src1.rowPointers[i];
@@ -65,7 +78,7 @@ public class RealCsrDenseOperations {
 
                 dest[idx] = opp.apply(
                         src1.entries[j],
-                        src2.entries[idx]
+                        dest[idx]
                 );
             }
         }
@@ -80,11 +93,22 @@ public class RealCsrDenseOperations {
      * @param src1 First matrix in element-wise binary operation.
      * @param src2 Second matrix in element-wise binary operation.
      * @param opp Binary operator to apply element-wise to the two matrices.
+     * @param uOpp Optional unary operator for binary operations which are not communicative such as subtraction. This operation is
+     * applied to an element of the second matrix when a non-zero element in the first matrix does not exist at the same index. If
+     * null, this operation is ignored.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static Matrix applyBinOpp(Matrix src1, CsrMatrix src2, BinaryOperator<Double> opp) {
+    public static Matrix applyBinOpp(Matrix src1, CsrMatrix src2,
+                                     BinaryOperator<Double> opp,
+                                     UnaryOperator<Double> uOpp) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
-        double[] dest = new double[src2.entries.length];
+        double[] dest = src2.entries.clone();
+
+        if(uOpp != null) {
+            // Apply unary operator to all entries in second matrix.
+            for(int i = 0; i < dest.length; i++)
+                dest[i] = uOpp.apply(dest[i]);
+        }
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -97,7 +121,7 @@ public class RealCsrDenseOperations {
 
                 dest[idx] = opp.apply(
                         src1.entries[idx],
-                        src2.entries[j]
+                        dest[j]
                 );
             }
         }
@@ -112,15 +136,16 @@ public class RealCsrDenseOperations {
      * @param src1 The first matrix in the operation.
      * @param src2 Second matrix in the operation.
      * @param opp Operation to apply to the matrices.
+
      * @return The result of applying the operation element-wise to the matrices. Result is a sparse CSR matrix.
      */
-    public static CsrMatrix applyBinOppToSparse(Matrix src1, CsrMatrix src2, BinaryOperator<Double> opp) {
+    public static CsrMatrix applyBinOppToSparse(Matrix src1, CsrMatrix src2,
+                                                BinaryOperator<Double> opp) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
         int[] rowPointers = src2.rowPointers.clone();
         int[] colIndices = src2.colIndices.clone();
         double[] entries = new double[src2.entries.length];
-
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -143,10 +168,18 @@ public class RealCsrDenseOperations {
      * @param src1 First matrix in element-wise binary operation.
      * @param b Scalar to apply elementwise using the specified operation.
      * @param opp Binary operator to apply element-wise to the two matrices.
+     * @param uOpp Optional unary operator for binary operations which are not communicative such as subtraction. This operation is
+     * applied to an element of the second matrix when a non-zero element in the first matrix does not exist at the same index. If
+     * null, this operation is ignored.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static Matrix applyBinOpp(CsrMatrix src1, double b, BinaryOperator<Double> opp) {
+    public static Matrix applyBinOpp(CsrMatrix src1, double b,
+                                     BinaryOperator<Double> opp,
+                                     UnaryOperator<Double> uOpp) {
         double[] dest = new double[src1.entries.length];
+
+        // Apply unary operator if specified.
+        if(uOpp != null) Arrays.fill(dest, uOpp.apply(b));
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
             int start = src1.rowPointers[i];
@@ -159,7 +192,7 @@ public class RealCsrDenseOperations {
 
                 dest[idx] = opp.apply(
                         src1.entries[j],
-                        b
+                        dest[idx]
                 );
             }
         }

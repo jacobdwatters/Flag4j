@@ -184,8 +184,7 @@ public class CTensor
      */
     @Override
     public CooCTensor toCoo() {
-        // TODO: Implementation.
-        return null;
+        return CooCTensor.fromDense(this);
     }
 
 

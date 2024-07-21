@@ -488,7 +488,8 @@ public final class ArrayUtils {
 
 
     /**
-     * Fills an array with specified value.
+     * Fills an array with specified value. Similar to {@link Arrays#fill(Object[], Object)} but creates  deep copy of the fill value
+     * for each position.
      *
      * @param dest      Array to fill.
      * @param start     Starting index of range to fill (Inclusive).

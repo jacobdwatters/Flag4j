@@ -1,14 +1,13 @@
 package org.flag4j;
 
-import junit.framework.Assert;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooVector;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-public final class CustomAssertions extends Assert {
+public final class CustomAssertions {
 
 
     /**
@@ -22,7 +21,7 @@ public final class CustomAssertions extends Assert {
             if(Double.isNaN(exp.entries[i])) {
                 assertTrue(Double.isNaN(act.entries[i]));
             } else {
-                assertEquals(exp.entries[i], act.entries[i]);
+                assertEquals(exp.entries[i], act.entries[i], 0);
             }
         }
     }
@@ -40,13 +39,13 @@ public final class CustomAssertions extends Assert {
                 if(Double.isNaN(exp.entries[i].re)) {
                     assertTrue(Double.isNaN(act.entries[i].re));
                 } else {
-                    assertEquals(exp.entries[i].re, act.entries[i].re);
+                    assertEquals(exp.entries[i].re, act.entries[i].re, 0);
                 }
 
                 if(Double.isNaN(exp.entries[i].im)) {
                     assertTrue(Double.isNaN(act.entries[i].im));
                 } else {
-                    assertEquals(exp.entries[i].im, act.entries[i].im);
+                    assertEquals(exp.entries[i].im, act.entries[i].im, 0);
                 }
             } else {
                 assertEquals(exp.entries[i], act.entries[i]);
@@ -67,7 +66,7 @@ public final class CustomAssertions extends Assert {
             if(Double.isNaN(exp.entries[i])) {
                 assertTrue(Double.isNaN(act.entries[i]));
             } else {
-                assertEquals(exp.entries[i], act.entries[i]);
+                assertEquals(exp.entries[i], act.entries[i], 0);
             }
         }
     }
@@ -85,7 +84,7 @@ public final class CustomAssertions extends Assert {
             if(Double.isNaN(exp.entries[i])) {
                 assertTrue(Double.isNaN(act.entries[i]));
             } else {
-                assertEquals(exp.entries[i], act.entries[i]);
+                assertEquals(exp.entries[i], act.entries[i], 0);
             }
         }
     }

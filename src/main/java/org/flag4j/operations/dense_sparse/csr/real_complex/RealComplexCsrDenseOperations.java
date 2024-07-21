@@ -34,6 +34,7 @@ import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
 import java.util.function.BiFunction;
+import java.util.function.UnaryOperator;
 
 /**
  * This class contains low-level operations which act on a real/complex dense and a complex/real
@@ -267,13 +268,19 @@ public class RealComplexCsrDenseOperations {
     /**
      * Applies the specified binary operator element-wise to a matrix and a scalar.
      * @param src1 First matrix in element-wise binary operation.
-     * @param b Scalar to apply elementwise using the specified operation.
+     * @param b Scalar to apply element-wise using the specified operation.
      * @param opp Binary operator to apply element-wise to the two matrices.
+     * @param uOpp Optional unary operator for binary operations which are not communicative such as subtraction. This operation is
+     * applied to an element of the second matrix when a non-zero element in the first matrix does not exist at the same index. If
+     * null, this operation is ignored.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static CMatrix applyBinOpp(CsrMatrix src1, CNumber b, BiFunction<Double, CNumber, CNumber> opp) {
+    public static CMatrix applyBinOpp(CsrMatrix src1, CNumber b,
+                                      BiFunction<Double, CNumber, CNumber> opp,
+                                      UnaryOperator<CNumber> uOpp) {
         CNumber[] dest = new CNumber[src1.entries.length];
-        ArrayUtils.fillZeros(dest);
+        if(uOpp != null) b = b.addInv();  // Apply unary operator if specified.
+        ArrayUtils.fill(dest, b);
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
             int start = src1.rowPointers[i];
@@ -286,7 +293,7 @@ public class RealComplexCsrDenseOperations {
 
                 dest[idx] = opp.apply(
                         src1.entries[j],
-                        b
+                        dest[idx]
                 );
             }
         }

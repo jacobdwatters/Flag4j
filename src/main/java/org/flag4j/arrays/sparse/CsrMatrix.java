@@ -40,10 +40,7 @@ import org.flag4j.operations.dense_sparse.csr.real.RealCsrDenseMatrixMultiplicat
 import org.flag4j.operations.dense_sparse.csr.real.RealCsrDenseOperations;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
-import org.flag4j.operations.sparse.csr.real.RealCsrEquals;
-import org.flag4j.operations.sparse.csr.real.RealCsrMatrixMultiplication;
-import org.flag4j.operations.sparse.csr.real.RealCsrMatrixProperties;
-import org.flag4j.operations.sparse.csr.real.RealCsrOperations;
+import org.flag4j.operations.sparse.csr.real.*;
 import org.flag4j.operations.sparse.csr.real_complex.RealComplexCsrMatrixMultiplication;
 import org.flag4j.operations.sparse.csr.real_complex.RealComplexCsrOperations;
 import org.flag4j.util.ArrayUtils;
@@ -51,29 +48,27 @@ import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
- * Real sparse matrix stored in compressed sparse row (CSR) format.<br><br>
+ * <p>Real sparse matrix stored in compressed sparse row (CSR) format.</p>
  *
- * CSR matrices are best suited for efficient access and matrix operations. Specifically, matrix-matrix and
- * matrix-vector multiplication. CSR matrices are <b>not</b> well suited for modification (see {@link CooMatrix}).
- * <br><br>
+ * <p>CSR matrices are best suited for efficient access and matrix operations. Specifically, matrix-matrix and
+ * matrix-vector multiplication. CSR matrices are <b>not</b> well suited for modification (see {@link CooMatrix}).</p>
  *
- * The CSR format stores a sparse <code>m-by-n</code> matrix as three one-dimensional arrays: {@link #entries},
- * {@link #rowPointers}, and {@link #colIndices}.<br>
- * <pre>
- *   <b>- entries</b>: Stores the non-zero values of the sparse matrix. Note, zero values can be
- *   stored explicitly in this array. Hence, the term "non-zero values" is a misnomer.
- *   <b>- rowPointers</b>: Encodes the total number of non-zero values above each row.
- *     Has length <code>m+1</code>. For example, <code>rowPointers[j]</code> contains
- *     the total number of non-zero values above row <code>j</code>.
- *     The first entry is always 0 and the last element is always <code>entries.length</code>
- *   <b>- colIndices</b>: Contains the column indices for all non-zero entries. Has length <code>entries.length</code>
- * </pre>
+ * <p>The CSR format stores a sparse <code>m-by-n</code> matrix as three one-dimensional arrays: {@link #entries},
+ * {@link #rowPointers}, and {@link #colIndices}.</p>
+ *
+ * <ul>
+ *     <li><b>entries</b>: Stores the non-zero values of the sparse matrix. Note, zero values can be stored explicitly in this array.
+ *     Hence, the term "non-zero values" is a misnomer.</li>
+ *     <li><b>rowPointers</b>: Encodes the total number of non-zero values above each row. Has length <code>m+1</code>. For example,
+ *     <code>rowPointers[j]</code> contains the total number of non-zero values above row <code>j</code>. The first entry is always
+ *     0 and the last element is always <code>entries.length</code></li>
+ *     <li><b>colIndices</b>: Contains the column indices for all non-zero entries. Has length <code>entries.length</code></li>
+ * </ul>
  * @see CooMatrix
+ * @see CsrCMatrix
  */
 public class CsrMatrix
         extends RealSparseTensorBase<CsrMatrix, Matrix, CsrCMatrix, CMatrix>
@@ -257,7 +252,7 @@ public class CsrMatrix
      */
     @Override
     public Matrix add(Matrix B) {
-        return RealCsrDenseOperations.applyBinOpp(this, B, Double::sum);
+        return RealCsrDenseOperations.applyBinOpp(this, B, Double::sum, null);
     }
 
 
@@ -310,7 +305,7 @@ public class CsrMatrix
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     public CsrCMatrix add(CsrCMatrix B) {
-        return RealComplexCsrOperations.applyBinOpp(this, B, (Double a, CNumber b)->b.add(a));
+        return RealComplexCsrOperations.applyBinOpp(this, B, (Double a, CNumber b)->b.add(a), null);
     }
 
 
@@ -323,7 +318,8 @@ public class CsrMatrix
      */
     @Override
     public Matrix sub(Matrix B) {
-        return RealCsrDenseOperations.applyBinOpp(this, B,(Double a, Double b)->a-b);
+        return RealCsrDenseOperations.applyBinOpp(this, B,
+                Double::sum, (Double a) -> -a);
     }
 
 
@@ -376,7 +372,7 @@ public class CsrMatrix
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     public CsrCMatrix sub(CsrCMatrix B) {
-        return RealComplexCsrOperations.applyBinOpp(this, B, (Double a, CNumber b)->new CNumber(a).sub(b));
+        return RealComplexCsrOperations.applyBinOpp(this, B, (Double a, CNumber b)->new CNumber(a).sub(b), CNumber::addInv);
     }
 
 
@@ -397,15 +393,14 @@ public class CsrMatrix
     /**
      * Computes the matrix-vector multiplication.
      *
-     * @param B Vector to multiply this matrix to.
-     * @return The vector result from multiplying this matrix by the vector {@code B}.
+     * @param b Vector to multiply this matrix to.
+     * @return The vector result from multiplying this matrix by the vector {@code b}.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of
-     *                                  entries {@code B}.
+     *                                  entries {@code b}.
      */
     @Override
-    public Vector mult(CooVector B) {
-        // TODO: Implementation
-        return null;
+    public Vector mult(CooVector b) {
+        return RealCsrDenseMatrixMultiplication.standardVector(this, b);
     }
 
 
@@ -418,8 +413,7 @@ public class CsrMatrix
      */
     @Override
     public CVector mult(CVector b) {
-        // TODO: Implementation
-        return null;
+        return RealComplexCsrDenseMatrixMultiplication.standardVector(this, b);
     }
 
 
@@ -432,8 +426,7 @@ public class CsrMatrix
      */
     @Override
     public CVector mult(CooCVector b) {
-        // TODO: Implementation
-        return null;
+        return RealComplexCsrDenseMatrixMultiplication.standardVector(this, b);
     }
 
 
@@ -812,8 +805,7 @@ public class CsrMatrix
      */
     @Override
     public Matrix addToEachCol(Vector b) {
-        // TODO: Implementation
-        return null;
+        return RealCsrOperations.addToEachCol(this, b);
     }
 
 
@@ -826,8 +818,7 @@ public class CsrMatrix
      */
     @Override
     public Matrix addToEachCol(CooVector b) {
-        // TODO: Implementation
-        return null;
+        return RealCsrOperations.addToEachCol(this, b);
     }
 
 
@@ -840,8 +831,7 @@ public class CsrMatrix
      */
     @Override
     public CMatrix addToEachCol(CVector b) {
-        // TODO: Implementation
-        return null;
+        return RealCsrOperations.addToEachCol(this, b);
     }
 
 
@@ -854,8 +844,7 @@ public class CsrMatrix
      */
     @Override
     public CMatrix addToEachCol(CooCVector b) {
-        // TODO: Implementation
-        return null;
+        return RealCsrOperations.addToEachCol(this, b);
     }
 
 
@@ -868,8 +857,7 @@ public class CsrMatrix
      */
     @Override
     public Matrix addToEachRow(Vector b) {
-        // TODO: Implementation
-        return null;
+        return RealCsrOperations.addToEachRow(this, b);
     }
 
 
@@ -882,8 +870,7 @@ public class CsrMatrix
      */
     @Override
     public Matrix addToEachRow(CooVector b) {
-        // TODO: Implementation
-        return null;
+        return RealCsrOperations.addToEachRow(this, b);
     }
 
 
@@ -896,8 +883,7 @@ public class CsrMatrix
      */
     @Override
     public CMatrix addToEachRow(CVector b) {
-        // TODO: Implementation
-        return null;
+        return RealCsrOperations.addToEachRow(this, b);
     }
 
 
@@ -910,8 +896,7 @@ public class CsrMatrix
      */
     @Override
     public CMatrix addToEachRow(CooCVector b) {
-        // TODO: Implementation
-        return null;
+        return RealCsrOperations.addToEachRow(this, b);
     }
 
 
@@ -925,8 +910,7 @@ public class CsrMatrix
      */
     @Override
     public Matrix stack(Matrix B) {
-        // TODO: Implementation
-        return null;
+        return toCoo().stack(B);
     }
 
 
@@ -940,8 +924,20 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix stack(CooMatrix B) {
-        // TODO: Implementation
-        return null;
+        return toCoo().stack(B).toCsr();
+    }
+
+
+    /**
+     * Stacks matrices along columns. <br>
+     * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking this matrix on top of the matrix B.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
+     */
+    public CsrMatrix stack(CsrMatrix B) {
+        return toCoo().stack(B.toCoo()).toCsr();
     }
 
 
@@ -955,8 +951,7 @@ public class CsrMatrix
      */
     @Override
     public CMatrix stack(CMatrix B) {
-        // TODO: Implementation
-        return null;
+        return toCoo().stack(B);
     }
 
 
@@ -970,8 +965,20 @@ public class CsrMatrix
      */
     @Override
     public CsrCMatrix stack(CooCMatrix B) {
-        // TODO: Implementation
-        return null;
+        return toCoo().stack(B).toCsr();
+    }
+
+
+    /**
+     * Stacks matrices along columns. <br>
+     * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking this matrix on top of the matrix B.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
+     */
+    public CsrCMatrix stack(CsrCMatrix B) {
+        return toCoo().stack(B.toCoo()).toCsr();
     }
 
 
@@ -985,8 +992,7 @@ public class CsrMatrix
      */
     @Override
     public Matrix augment(Matrix B) {
-        // TODO: Implementation
-        return null;
+        return toCoo().augment(B);
     }
 
 
@@ -1000,8 +1006,20 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix augment(CooMatrix B) {
-        // TODO: Implementation
-        return null;
+        return toCoo().augment(B).toCsr();
+    }
+
+
+    /**
+     * Stacks matrices along rows. <br>
+     * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking B to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
+     */
+    public CsrMatrix augment(CsrMatrix B) {
+        return toCoo().augment(B.toCoo()).toCsr();
     }
 
 
@@ -1015,8 +1033,7 @@ public class CsrMatrix
      */
     @Override
     public CMatrix augment(CMatrix B) {
-        // TODO: Implementation
-        return null;
+        return toCoo().augment(B);
     }
 
 
@@ -1030,8 +1047,20 @@ public class CsrMatrix
      */
     @Override
     public CsrCMatrix augment(CooCMatrix B) {
-        // TODO: Implementation
-        return null;
+        return toCoo().augment(B).toCsr();
+    }
+
+
+    /**
+     * Stacks matrices along rows. <br>
+     * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking B to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
+     */
+    public CsrCMatrix augment(CsrCMatrix B) {
+        return toCoo().augment(B.toCoo()).toCsr();
     }
 
 
@@ -1047,8 +1076,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix stack(Vector b) {
-        // TODO: Implementation
-        return null;
+        return toCoo().stack(b).toCsr();
     }
 
 
@@ -1064,8 +1092,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix stack(CooVector b) {
-        // TODO: Implementation
-        return null;
+        return toCoo().stack(b).toCsr();
     }
 
 
@@ -1081,8 +1108,7 @@ public class CsrMatrix
      */
     @Override
     public CsrCMatrix stack(CVector b) {
-        // TODO: Implementation
-        return null;
+        return toCoo().stack(b).toCsr();
     }
 
 
@@ -1098,8 +1124,7 @@ public class CsrMatrix
      */
     @Override
     public CsrCMatrix stack(CooCVector b) {
-        // TODO: Implementation
-        return null;
+        return toCoo().stack(b).toCsr();
     }
 
 
@@ -1115,8 +1140,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix augment(Vector b) {
-        // TODO: Implementation
-        return null;
+        return toCoo().stack(b).toCsr();
     }
 
 
@@ -1132,8 +1156,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix augment(CooVector b) {
-        // TODO: Implementation
-        return null;
+        return toCoo().stack(b).toCsr();
     }
 
 
@@ -1149,8 +1172,7 @@ public class CsrMatrix
      */
     @Override
     public CsrCMatrix augment(CVector b) {
-        // TODO: Implementation
-        return null;
+        return toCoo().stack(b).toCsr();
     }
 
 
@@ -1166,8 +1188,7 @@ public class CsrMatrix
      */
     @Override
     public CsrCMatrix augment(CooCVector b) {
-        // TODO: Implementation
-        return null;
+        return toCoo().stack(b).toCsr();
     }
 
 
@@ -1363,8 +1384,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix setCol(CooVector values, int j) {
-        // TODO: Implementation
-        return null;
+        return toCoo().setCol(values, j).toCsr();
     }
 
 
@@ -1624,8 +1644,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix setCol(Double[] values, int colIndex) {
-        // TODO: Implementation
-        return null;
+        return toCoo().setCol(values, colIndex).toCsr();
     }
 
 
@@ -1639,8 +1658,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix setCol(Integer[] values, int colIndex) {
-        // TODO: Implementation
-        return null;
+        return toCoo().setCol(values, colIndex).toCsr();
     }
 
 
@@ -1654,8 +1672,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix setCol(double[] values, int colIndex) {
-        // TODO: Implementation
-        return null;
+        return toCoo().setCol(values, colIndex).toCsr();
     }
 
 
@@ -1669,8 +1686,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix setCol(int[] values, int colIndex) {
-        // TODO: Implementation
-        return null;
+        return toCoo().setCol(values, colIndex).toCsr();
     }
 
 
@@ -1684,8 +1700,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix setRow(Double[] values, int rowIndex) {
-        // TODO: Implementation
-        return null;
+        return toCoo().setRow(values, rowIndex).toCsr();
     }
 
 
@@ -1699,8 +1714,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix setRow(Integer[] values, int rowIndex) {
-        // TODO: Implementation
-        return null;
+        return toCoo().setRow(values, rowIndex).toCsr();
     }
 
 
@@ -1714,8 +1728,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix setRow(double[] values, int rowIndex) {
-        // TODO: Implementation
-        return null;
+        return toCoo().setRow(values, rowIndex).toCsr();
     }
 
 
@@ -1729,8 +1742,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix setRow(int[] values, int rowIndex) {
-        // TODO: Implementation
-        return null;
+        return toCoo().setRow(values, rowIndex).toCsr();
     }
 
 
@@ -1748,8 +1760,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix setSlice(CsrMatrix values, int rowStart, int colStart) {
-        // TODO: Implementation
-        return null;
+        return toCoo().setSlice(values.toCoo(), rowStart, colStart).toCsr();
     }
 
 
@@ -1767,8 +1778,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix setSlice(Matrix values, int rowStart, int colStart) {
-        // TODO: Implementation
-        return null;
+        return toCoo().setSlice(values, rowStart, colStart).toCsr();
     }
 
 
@@ -1786,8 +1796,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix setSlice(CooMatrix values, int rowStart, int colStart) {
-        // TODO: Implementation
-        return null;
+        return toCoo().setSlice(values, rowStart, colStart).toCsr();
     }
 
 
@@ -1805,8 +1814,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix setSlice(Double[][] values, int rowStart, int colStart) {
-        // TODO: Implementation
-        return null;
+        return toCoo().setSlice(values, rowStart, colStart).toCsr();
     }
 
 
@@ -1824,8 +1832,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix setSlice(Integer[][] values, int rowStart, int colStart) {
-        // TODO: Implementation
-        return null;
+        return toCoo().setSlice(values, rowStart, colStart).toCsr();
     }
 
 
@@ -1843,8 +1850,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix setSlice(double[][] values, int rowStart, int colStart) {
-        // TODO: Implementation
-        return null;
+        return toCoo().setSlice(values, rowStart, colStart).toCsr();
     }
 
 
@@ -1862,8 +1868,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix setSlice(int[][] values, int rowStart, int colStart) {
-        // TODO: Implementation
-        return null;
+        return toCoo().setSlice(values, rowStart, colStart).toCsr();
     }
 
 
@@ -1872,37 +1877,120 @@ public class CsrMatrix
      *
      * @param rowIndex Index of the row to remove from this matrix.
      * @return a copy of this matrix with the specified row removed.
+     * @throws IndexOutOfBoundsException If {@code rowIndex >= this.numRows()}.
      */
     @Override
     public CsrMatrix removeRow(int rowIndex) {
-        // TODO: Implementation
-        return null;
+        ParameterChecks.assertIndexInBounds(numRows, rowIndex);
+
+        int numRemoved = rowPointers[rowIndex+1] - rowPointers[rowIndex];  // Number of entries in the row to be removed.
+
+        double[] destEntries = new double[nnz-numRemoved];
+        int[] destColIndices = new int[destEntries.length];
+        int[] destRowPointers = new int[rowPointers.length-1];
+
+        // Copy row pointers.
+        System.arraycopy(rowPointers, 0, destRowPointers, 0, rowIndex+1);
+        System.arraycopy(rowPointers, rowIndex+1, destRowPointers, rowIndex, rowPointers.length-(rowIndex+1));
+
+        int destIdx = 0;
+        for(int i=0; i<numRows; i++) {
+            if(i!=rowIndex) {
+                int rowStart = rowPointers[i];
+                int rowEnd = rowPointers[i+1];
+
+                for(int j=rowStart; j<rowEnd; j++) {
+                    // Copy over value and column index.
+                    destEntries[destIdx] = entries[j];
+                    destColIndices[destIdx++] = colIndices[j];
+                }
+            }
+
+            // Adjust the row pointers after the row being removed.
+            if(i>=rowIndex) destRowPointers[i] -= numRemoved;
+        }
+
+        return new CsrMatrix(numRows-1, numCols, destEntries, destRowPointers, destColIndices);
     }
 
 
     /**
-     * Removes a specified set of rows from this matrix.
+     * Removes a specified set of rows from this matrix. Note: this will construct an intermediate {@link CooMatrix}.
      *
      * @param rowIndices The indices of the rows to remove from this matrix.
      * @return a copy of this matrix with the specified rows removed.
      */
     @Override
     public CsrMatrix removeRows(int... rowIndices) {
-        // TODO: Implementation
-        return null;
+        ParameterChecks.assertIndexInBounds(numRows, rowIndices);
+
+        // Create and fill hashset for efficient row index lookup.
+        Set<Integer> indexSet = new HashSet<>(rowIndices.length);
+        for(int rowIdx : rowIndices) indexSet.add(rowIdx);
+
+        // Guess the expected number of non-zero entries as the average number of entries per row times the number of rows in the
+        //  resulting matrix.
+        Shape destShape = new Shape(numRows-rowIndices.length, numCols);
+        int expSize = Math.max(10, (nnz/numRows)*destShape.get(0));
+
+        // For simplicity, construct as COO matrix and convert to CSR.
+        List<Double> destEntries = new ArrayList<>(expSize);
+        List<Integer> destColIndices = new ArrayList<>(expSize);
+        List<Integer> destRowIndices = new ArrayList<>(expSize);
+
+        for(int i=0; i<numRows; i++) {
+            if(!indexSet.contains(i)) {
+                int startRowIdx = rowPointers[i];
+                int endRowIdx = rowPointers[i+1];
+
+                for(int j=startRowIdx; j<endRowIdx; j++) {
+                    destEntries.add(entries[j]);
+                    destColIndices.add(colIndices[j]);
+                    destRowIndices.add(i);
+                }
+            }
+        }
+
+        // Convert to CSR matrix and return.
+        return new CooMatrix(destShape, destEntries, destRowIndices, destColIndices).toCsr();
     }
 
 
     /**
-     * Removes a specified column from this matrix.
+     * Removes a specified column from this matrix. Note: this will construct an intermediate {@link CooMatrix}.
      *
      * @param colIndex Index of the column to remove from this matrix.
      * @return a copy of this matrix with the specified column removed.
      */
     @Override
     public CsrMatrix removeCol(int colIndex) {
-        // TODO: Implementation
-        return null;
+        ParameterChecks.assertIndexInBounds(numRows, colIndex);
+
+        // Guess the expected number of non-zero entries as the average number of entries per column times the number of columns
+        //  in the resulting matrix.
+        Shape destShape = new Shape(numRows, numCols-1);
+        int expSize = Math.max(10, (nnz/numCols)*destShape.get(1));
+
+        // For simplicity, construct as COO matrix and convert to CSR.
+        List<Double> destEntries = new ArrayList<>(expSize);
+        List<Integer> destColIndices = new ArrayList<>(expSize);
+        List<Integer> destRowIndices = new ArrayList<>(expSize);
+
+        for(int i=0; i<numRows; i++) {
+            int startRowIdx = rowPointers[i];
+            int endRowIdx = rowPointers[i+1];
+
+            for(int j=startRowIdx; j<endRowIdx; j++) {
+                if(j!=colIndex) {
+                    destEntries.add(entries[j]);
+                    destColIndices.add(colIndices[j]);
+                    destRowIndices.add(i);
+                }
+            }
+        }
+
+        // Convert to CSR matrix and return.
+        return new CooMatrix(destShape, destEntries, destRowIndices, destColIndices).toCsr();
     }
 
 
@@ -1914,13 +2002,42 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix removeCols(int... colIndices) {
-        // TODO: Implementation
-        return null;
+        ParameterChecks.assertIndexInBounds(numRows, colIndices);
+
+        // Create and fill hashset for efficient row index lookup.
+        Set<Integer> indexSet = new HashSet<>(colIndices.length);
+        for(int colIdx : colIndices) indexSet.add(colIdx);
+
+        // Guess the expected number of non-zero entries as the average number of entries per column times the number of columns
+        //  in the resulting matrix.
+        Shape destShape = new Shape(numRows, numCols-colIndices.length);
+        int expSize = Math.max(10, (nnz/numCols)*destShape.get(1));
+
+        // For simplicity, construct as COO matrix and convert to CSR.
+        List<Double> destEntries = new ArrayList<>(expSize);
+        List<Integer> destColIndices = new ArrayList<>(expSize);
+        List<Integer> destRowIndices = new ArrayList<>(expSize);
+
+        for(int i=0; i<numRows; i++) {
+            int startRowIdx = rowPointers[i];
+            int endRowIdx = rowPointers[i+1];
+
+            for(int j=startRowIdx; j<endRowIdx; j++) {
+                if(!indexSet.contains(j)) {
+                    destEntries.add(entries[j]);
+                    destColIndices.add(colIndices[j]);
+                    destRowIndices.add(i);
+                }
+            }
+        }
+
+        // Convert to CSR matrix and return.
+        return new CooMatrix(destShape, destEntries, destRowIndices, destColIndices).toCsr();
     }
 
 
     /**
-     * Swaps rows in the matrix.
+     * Swaps two rows in this matrix.
      *
      * @param rowIndex1 Index of first row to swap.
      * @param rowIndex2 index of second row to swap.
@@ -1928,66 +2045,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix swapRows(int rowIndex1, int rowIndex2) {
-        if(rowIndex1 == rowIndex2) return this;
-        else if(rowIndex1 > rowIndex2) {
-            // ensure the second index is larger than the first.
-            int temp = rowIndex1;
-            rowIndex1 = rowIndex2;
-            rowIndex2 = temp;
-        }
-
-        // Get range for values in the given rows.
-        int start1 = rowPointers[rowIndex1];
-        int end1 = rowPointers[rowIndex1+1];
-        int nnz1 = end1-start1;  // Number of non-zero entries in the first row to swap.
-
-        int start2 = rowPointers[rowIndex2];
-        int end2 = rowPointers[rowIndex2+1];
-        int nnz2 = end2-start2;  // Number of non-zero entries in the second row to swap.
-
-        int destPos = 0;
-
-        double[] updatedEntries = new double[entries.length];
-        int[] updatedColIndices = new int[colIndices.length];
-        int[] updatedRowPointers = new int[rowPointers.length];
-
-        // TODO: There is no need to copy values before first row or after the second row as they will be unchanged.
-
-        // Copy all entries preceding the first row to be swapped.
-        System.arraycopy(entries, 0, updatedEntries, destPos, start1);
-        System.arraycopy(colIndices, 0, updatedColIndices, destPos, start1);
-
-        // Copy entries from second row in swap.
-        destPos += start1;
-        System.arraycopy(entries, start2, updatedEntries, start1, nnz2);
-        System.arraycopy(entries, start2, updatedEntries, start1, nnz2);
-
-        // Copy entries between rows.
-        destPos += nnz2;
-        System.arraycopy(entries, end1, updatedEntries, destPos, start2-end1);
-        System.arraycopy(colIndices, end1, updatedColIndices, destPos, start2-end1);
-
-        // Copy entries from first row in swap.
-        destPos += (start2-end1);
-        System.arraycopy(entries, start1, updatedEntries, destPos, nnz1);
-        System.arraycopy(colIndices, start1, updatedColIndices, destPos, nnz1);
-
-        // Copy entries after second row in swap.
-        destPos += nnz1;
-        System.arraycopy(entries, end2, updatedEntries, destPos, entries.length-end2);
-        System.arraycopy(colIndices, end2, updatedColIndices, destPos, entries.length-end2);
-
-        System.out.println("updatedEntries: " + Arrays.toString(updatedEntries));
-
-        if(nnz1 > nnz2) {
-            // TODO: Recompute the rowPointers where there are more values in the first row than the second row.
-            //  rows before second row will now have a lower number.
-        } else if(nnz1 < nnz2) {
-            // TODO: Recompute the rowPointers where there are less values in the first row than the second row.
-            //  rows before second row will now have a larger number.
-        }  // Otherwise no updates to rowPointers is needed.
-
-        // TODO: Implementation
+        RealCsrManipulations.swapRows(this, rowIndex1, rowIndex2);
         return this;
     }
 
@@ -2001,8 +2059,8 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix swapCols(int colIndex1, int colIndex2) {
-        // TODO: Implementation
-        return null;
+        RealCsrManipulations.swapCols(this, colIndex1, colIndex2);
+        return this;
     }
 
 
@@ -2229,8 +2287,7 @@ public class CsrMatrix
      */
     @Override
     public boolean isSymmetric() {
-        // TODO: Implementation
-        return false;
+        return RealCsrMatrixProperties.isSymmetric(this);
     }
 
 
@@ -2241,8 +2298,7 @@ public class CsrMatrix
      */
     @Override
     public boolean isAntiSymmetric() {
-        // TODO: Implementation
-        return false;
+        return RealCsrMatrixProperties.isAntiSymmetric(this);
     }
 
 
@@ -2374,7 +2430,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix add(CsrMatrix B) {
-        return RealCsrOperations.applyBinOpp(this, B, Double::sum);
+        return RealCsrOperations.applyBinOpp(this, B, Double::sum, null);
     }
 
 
@@ -2386,7 +2442,7 @@ public class CsrMatrix
      */
     @Override
     public Matrix add(double a) {
-        return RealCsrDenseOperations.applyBinOpp(this, a, Double::sum);
+        return RealCsrDenseOperations.applyBinOpp(this, a, Double::sum, null);
     }
 
 
@@ -2398,7 +2454,7 @@ public class CsrMatrix
      */
     @Override
     public CMatrix add(CNumber a) {
-        return RealComplexCsrDenseOperations.applyBinOpp(this, a, (Double x, CNumber y)->y.add(x));
+        return RealComplexCsrDenseOperations.applyBinOpp(this, a, (Double x, CNumber y)->y.add(x), null);
     }
 
 
@@ -2411,7 +2467,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix sub(CsrMatrix B) {
-        return RealCsrOperations.applyBinOpp(this, B, (Double a, Double b) -> a-b);
+        return RealCsrOperations.applyBinOpp(this, B, (Double a, Double b) -> a-b, (Double a) -> -a);
     }
 
 
@@ -2423,7 +2479,7 @@ public class CsrMatrix
      */
     @Override
     public Matrix sub(double a) {
-        return RealCsrDenseOperations.applyBinOpp(this, a, (Double x, Double y)->x-y);
+        return RealCsrDenseOperations.applyBinOpp(this, a, Double::sum, (Double x) -> -x);
     }
 
 
@@ -2435,7 +2491,7 @@ public class CsrMatrix
      */
     @Override
     public CMatrix sub(CNumber a) {
-        return RealComplexCsrDenseOperations.applyBinOpp(this, a, (Double x, CNumber y)->new CNumber(x).sub(y));
+        return RealComplexCsrDenseOperations.applyBinOpp(this, a, (Double x, CNumber y)->y.add(x), CNumber::addInv);
     }
 
 
@@ -2489,7 +2545,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix elemMult(CsrMatrix B) {
-        return RealCsrOperations.applyBinOpp(this, B, (Double a, Double b) -> a*b);
+        return RealCsrOperations.applyBinOpp(this, B, (Double a, Double b) -> a*b, null);
     }
 
 

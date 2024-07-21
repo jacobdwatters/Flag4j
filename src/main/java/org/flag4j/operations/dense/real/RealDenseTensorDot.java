@@ -86,11 +86,6 @@ public final class RealDenseTensorDot {
      * are out of bounds for the corresponding tensor.
      */
     public static Tensor tensorDot(Tensor src1, Tensor src2, int[] src1Axes, int[] src2Axes) {
-        if(src1.getRank()==2 && src2.getRank()==2) {
-
-        }
-
-
         // Each array must specify the same number of axes.
         ParameterChecks.assertEquals(src1Axes.length, src2Axes.length);
 
@@ -152,7 +147,14 @@ public final class RealDenseTensorDot {
         double[] bt = RealDenseTranspose.standardConcurrent(src2.entries, src2.shape, src2NewAxes);
 
         double[] destEntries = RealDenseMatrixMultiplyDispatcher.dispatch(at, src1NewShape, bt, src2NewShape);
-        Shape destShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));
+
+        // TODO: Should allow for zero dim shape indicating a scalar. Then only the else block would be needed.
+        Shape destShape;
+        if(src1Axes.length == src1.getRank() && src2Axes.length == src2.getRank()) {
+             destShape = new Shape(1);
+        } else {
+            destShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));
+        }
 
         return new Tensor(destShape, destEntries);
     }

@@ -893,17 +893,17 @@ public class CooCMatrix
     /**
      * Computes the matrix-vector multiplication.
      *
-     * @param B Vector to multiply this matrix to.
+     * @param b Vector to multiply this matrix to.
      * @return The vector result from multiplying this matrix by the vector {@code B}.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of
      *                                  entries {@code B}.
      */
     @Override
-    public CVector mult(CooCVector B) {
-        ParameterChecks.assertEquals(numCols, B.size);
+    public CVector mult(CooCVector b) {
+        ParameterChecks.assertEquals(numCols, b.size);
         CNumber[] dest = ComplexSparseMatrixMultiplication.standardVector(
                 entries, rowIndices, colIndices, shape,
-                B.entries, B.indices
+                b.entries, b.indices
         );
         return new CVector(dest);
     }
