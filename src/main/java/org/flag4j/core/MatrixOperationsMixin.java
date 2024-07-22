@@ -227,7 +227,9 @@ public interface MatrixOperationsMixin<
      * @param B The second matrix in the multiplication and the matrix to transpose/
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
-    U multTranspose(Matrix B);
+    default U multTranspose(Matrix B) {
+        return this.mult(B.T());
+    }
 
 
     /**
@@ -239,7 +241,9 @@ public interface MatrixOperationsMixin<
      * @param B The second matrix in the multiplication and the matrix to transpose/
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
-    U multTranspose(CooMatrix B);
+    default U multTranspose(CooMatrix B) {
+        return this.mult(B.T());
+    }
 
 
     /**
@@ -251,7 +255,9 @@ public interface MatrixOperationsMixin<
      * @param B The second matrix in the multiplication and the matrix to transpose/
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
-    CMatrix multTranspose(CMatrix B);
+    default CMatrix multTranspose(CMatrix B) {
+        return this.mult(B.T());
+    }
 
 
     /**
@@ -263,7 +269,9 @@ public interface MatrixOperationsMixin<
      * @param B The second matrix in the multiplication and the matrix to transpose/
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
-    CMatrix multTranspose(CooCMatrix B);
+    default CMatrix multTranspose(CooCMatrix B) {
+        return this.mult(B.T());
+    }
 
 
     /**
@@ -997,7 +1005,7 @@ public interface MatrixOperationsMixin<
     // This is specified here rather than in the ComplexMatrixMixin interface for compatibility purposes of real matrix
     // types in generic methods.
     /**
-     * Compute the hermation transpose of this matrix. That is, the complex conjugate transpose of this matrix.
+     * Compute the hermitian transpose of this matrix. That is, the complex conjugate transpose of this matrix.
      * @return The complex conjugate transpose of this matrix.
      */
     T H();

@@ -22,17 +22,19 @@
  * SOFTWARE.
  */
 
-package org.flag4j.operations.sparse.csr.real;
+package org.flag4j.operations.sparse.csr.complex;
 
-import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ErrorMessages;
 
-/**
- * This class contains low-level implementations for determining certain properties of real sparse CSR matrices.
- */
-public final class RealCsrMatrixProperties {
 
-    private RealCsrMatrixProperties() {
+/**
+ * This class contains low-level implementations for determining certain properties of complex sparse CSR matrices.
+ */
+public class ComplexCsrProperties {
+
+    private ComplexCsrProperties() {
         // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
@@ -43,44 +45,43 @@ public final class RealCsrMatrixProperties {
      * @param src The matrix to check if it is the identity matrix.
      * @return True if the {@code src} matrix is the identity matrix. False otherwise.
      */
-    public static boolean isIdentity(CsrMatrix src) {
-        int diagCount = 0;
-
+    public static boolean isIdentity(CsrCMatrix src) {
         if(src.isSquare() && src.colIndices.length >= src.numCols) {
+            int diagCount = 0;
+            CNumber one = CNumber.one();
+            CNumber zero = CNumber.zero();
+
             for(int i=0; i<src.rowPointers.length-1; i++) {
                 for(int j=src.rowPointers[i]; j<src.rowPointers[i+1]; j++) {
-                    if(src.entries[j] == 1) {
-                        if(src.colIndices[j] != i) {
-                            return false;
-                        }
-
+                    if(src.entries[j].equals(one)) {
+                        if(src.colIndices[j] != i) return false;
                         diagCount++;
-                    } else if(src.entries[j] != 0) {
+                    } else if(!src.entries[j].equals(zero)) {
                         return false;
                     }
                 }
             }
 
+            return diagCount == src.numCols;
+
         } else {
             return false;
         }
-
-        return diagCount == src.numCols;
     }
 
 
     /**
-     * Checks if the {@code src} matrix is symmetric.
-     * @param src Source matrix to check symmetry of.
+     * Checks if the {@code src} matrix is Hermitian.
+     * @param src Source matrix to check if it is Hermitian.
      * @return True if {@code src} is symmetric. Otherwise, returns false.
      */
-    public static boolean isSymmetric(CsrMatrix src) {
+    public static boolean isHermitian(CsrCMatrix src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
         if(src == null) return false;
         if(src.entries.length == 0) return true;
 
-        return src.T().equals(src);
+        return src.H().equals(src);
     }
 
 
@@ -89,12 +90,12 @@ public final class RealCsrMatrixProperties {
      * @param src Source matrix to check symmetry of.
      * @return True if {@code src} is symmetric. Otherwise, returns false.
      */
-    public static boolean isAntiSymmetric(CsrMatrix src) {
+    public static boolean isAntiHermitian(CsrCMatrix src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
         if(src == null) return false;
         if(src.entries.length == 0) return true;
 
-        return src.T().mult(-1).equals(src);
+        return src.H().mult(-1).equals(src);
     }
 }

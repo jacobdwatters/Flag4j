@@ -678,7 +678,7 @@ public class CooCMatrix
      */
     @Override
     public boolean isHermitian() {
-        return ComplexSparseMatrixProperties.isHermation(this);
+        return ComplexSparseMatrixProperties.isHermitian(this);
     }
 
 
@@ -689,7 +689,7 @@ public class CooCMatrix
      */
     @Override
     public boolean isAntiHermitian() {
-        return ComplexSparseMatrixProperties.isAntiHermation(this);
+        return ComplexSparseMatrixProperties.isAntiHermitian(this);
     }
 
 

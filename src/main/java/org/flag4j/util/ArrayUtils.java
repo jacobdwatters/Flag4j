@@ -27,6 +27,8 @@ package org.flag4j.util;
 import org.flag4j.complex_numbers.CNumber;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 
 /**
@@ -51,13 +53,10 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If the two arrays are not the same shape.
      */
     public static int[][] deepCopy(int[][] src, int[][] dest) {
-        if(dest == null) {
-            dest = new int[src.length][src[0].length];
-        } else {
-            ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
-        }
+        if(dest == null) dest = new int[src.length][src[0].length];
+        else ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
 
-        for (int i = 0; i < src.length; i++) {
+        for(int i = 0; i < src.length; i++) {
             dest[i] = new int[src[i].length];
             System.arraycopy(src[i], 0, dest[i], 0, src[i].length);
         }
@@ -75,14 +74,11 @@ public final class ArrayUtils {
      * @return A reference to the {@code dest} array.
      */
     public static CNumber[] copy2CNumber(int[] src, CNumber[] dest) {
-        if(dest == null) {
-            dest = new CNumber[src.length];
-        }
-        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+        if(dest == null) dest = new CNumber[src.length];
+        else ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
 
-        for (int i = 0; i < dest.length; i++) {
+        for (int i = 0; i < dest.length; i++)
             dest[i] = new CNumber(src[i]);
-        }
 
         return dest;
     }
@@ -97,14 +93,11 @@ public final class ArrayUtils {
      * @return A reference to the {@code dest} array.
      */
     public static CNumber[] copy2CNumber(double[] src, CNumber[] dest) {
-        if(dest == null) {
-            dest = new CNumber[src.length];
-        }
-        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+        if(dest == null) dest = new CNumber[src.length];
+        else ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
 
-        for (int i = 0; i < dest.length; i++) {
+        for(int i=0; i<dest.length; i++)
             dest[i] = new CNumber(src[i]);
-        }
 
         return dest;
     }
@@ -119,14 +112,11 @@ public final class ArrayUtils {
      * @return A reference to the {@code dest} array.
      */
     public static CNumber[] copy2CNumber(Integer[] src, CNumber[] dest) {
-        if(dest == null) {
-            dest = new CNumber[src.length];
-        }
-        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+        if(dest == null) dest = new CNumber[src.length];
+        else ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
 
-        for (int i = 0; i < dest.length; i++) {
+        for (int i=0; i<dest.length; i++)
             dest[i] = new CNumber(src[i]);
-        }
 
         return dest;
     }
@@ -141,14 +131,11 @@ public final class ArrayUtils {
      * @return A reference to the {@code dest} array.
      */
     public static CNumber[] copy2CNumber(Double[] src, CNumber[] dest) {
-        if(dest == null) {
-            dest = new CNumber[src.length];
-        }
-        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+        if(dest == null) dest = new CNumber[src.length];
+        else ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
 
-        for (int i = 0; i < dest.length; i++) {
+        for(int i=0; i<dest.length; i++)
             dest[i] = new CNumber(src[i]);
-        }
 
         return dest;
     }
@@ -284,9 +271,8 @@ public final class ArrayUtils {
      * @param dest Array to fill with zeros.
      */
     public static void fillZeros(CNumber[] dest) {
-        for (int i = 0; i < dest.length; i++) {
+        for(int i=0; i<dest.length; i++)
             dest[i] = new CNumber();
-        }
     }
 
 
@@ -299,7 +285,7 @@ public final class ArrayUtils {
      * @throws ArrayIndexOutOfBoundsException If {@code start} or {@code end} are out of range for the provided array.
      */
     public static void fillZeros(CNumber[] dest, int start, int end) {
-        for (int i = start; i < end; i++) {
+        for(int i=start; i<end; i++) {
             dest[i] = new CNumber();
         }
     }
@@ -336,9 +322,8 @@ public final class ArrayUtils {
         ParameterChecks.assertGreaterEq(1, stride);
         ParameterChecks.assertGreaterEq(0, start);
 
-        for (int i = start; i < dest.length; i += stride) {
+        for(int i = start; i < dest.length; i += stride)
             dest[i] = 0;
-        }
     }
 
 
@@ -361,16 +346,15 @@ public final class ArrayUtils {
         ParameterChecks.assertGreaterEq(1, stride);
         ParameterChecks.assertGreaterEq(0, start);
 
-        for (int i = start; i < dest.length; i += stride) {
+        for(int i = start; i < dest.length; i += stride)
             dest[i] = new CNumber();
-        }
     }
 
 
     /**
      * <p>
-     * Fills an array with a range of zeros, each seperated by the given stride. Specifically, the destination array will
-     * be filled with several sequential ranges of zeros of specified length. Each range of zeros will be seperated by
+     * Fills an array with a range of zeros, each separated by the given stride. Specifically, the destination array will
+     * be filled with several sequential ranges of zeros of specified length. Each range of zeros will be separated by
      * the stride.
      * </p>
      *
@@ -436,9 +420,8 @@ public final class ArrayUtils {
      * @param fillValue Value to fill array with.
      */
     public static void fill(CNumber[] dest, double fillValue) {
-        for (int i = 0; i < dest.length; i++) {
+        for (int i = 0; i < dest.length; i++)
             dest[i] = new CNumber(fillValue);
-        }
     }
 
 
@@ -468,9 +451,8 @@ public final class ArrayUtils {
     public static void fill(CNumber[] dest, double fillValue, int from, int to) {
         ParameterChecks.assertLessEq(to, from + 1);
 
-        for (int i = from; i < to; i++) {
+        for (int i = from; i < to; i++)
             dest[i] = new CNumber(fillValue);
-        }
     }
 
 
@@ -481,9 +463,8 @@ public final class ArrayUtils {
      * @param fillValue Value to fill array with.
      */
     public static void fill(CNumber[] dest, CNumber fillValue) {
-        for (int i = 0; i < dest.length; i++) {
+        for (int i = 0; i < dest.length; i++)
             dest[i] = fillValue.copy();
-        }
     }
 
 
@@ -499,9 +480,8 @@ public final class ArrayUtils {
      * @throws ArrayIndexOutOfBoundsException If {@code start} or {@code end} is not within the destination array.
      */
     public static void fill(CNumber[] dest, int start, int end, CNumber fillValue) {
-        for (int i = start; i < end; i++) {
+        for (int i = start; i < end; i++)
             dest[i] = fillValue.copy();
-        }
     }
 
 
@@ -512,9 +492,8 @@ public final class ArrayUtils {
      * @param fillValue Value to fill array with.
      */
     public static void fill(double[][] dest, double fillValue) {
-        for (double[] doubles : dest) {
+        for (double[] doubles : dest)
             Arrays.fill(doubles, fillValue);
-        }
     }
 
 
@@ -527,9 +506,8 @@ public final class ArrayUtils {
     public static ArrayList<Double> toArrayList(double[] src) {
         ArrayList<Double> list = new ArrayList<>(src.length);
 
-        for (double value : src) {
+        for(double value : src)
             list.add(value);
-        }
 
         return list;
     }
@@ -544,9 +522,8 @@ public final class ArrayUtils {
     public static ArrayList<CNumber> toArrayList(CNumber[] src) {
         ArrayList<CNumber> list = new ArrayList<>(src.length);
 
-        for (CNumber value : src) {
+        for(CNumber value : src)
             list.add(value.copy());
-        }
 
         return list;
     }
@@ -561,9 +538,8 @@ public final class ArrayUtils {
     public static ArrayList<CNumber> toComplexArrayList(double[] src) {
         ArrayList<CNumber> list = new ArrayList<>(src.length);
 
-        for (double value : src) {
+        for (double value : src)
             list.add(new CNumber(value));
-        }
 
         return list;
     }
@@ -578,9 +554,8 @@ public final class ArrayUtils {
     public static ArrayList<Integer> toArrayList(int[] src) {
         ArrayList<Integer> list = new ArrayList<>(src.length);
 
-        for (int value : src) {
+        for (int value : src)
             list.add(value);
-        }
 
         return list;
     }
@@ -595,9 +570,8 @@ public final class ArrayUtils {
     public static double[] fromDoubleList(List<Double> src) {
         double[] dest = new double[src.size()];
 
-        for (int i = 0; i < dest.length; i++) {
+        for (int i = 0; i < dest.length; i++)
             dest[i] = src.get(i);
-        }
 
         return dest;
     }
@@ -612,9 +586,8 @@ public final class ArrayUtils {
     public static int[] fromIntegerList(List<Integer> src) {
         int[] dest = new int[src.size()];
 
-        for (int i = 0; i < dest.length; i++) {
+        for (int i = 0; i < dest.length; i++)
             dest[i] = src.get(i);
-        }
 
         return dest;
     }
@@ -630,9 +603,8 @@ public final class ArrayUtils {
     public static int[] fromIntegerList(List<Integer> src, int[] dest) {
         ParameterChecks.assertGreaterEq(src.size(), dest.length);
 
-        for (int i = 0; i < dest.length; i++) {
+        for (int i = 0; i < dest.length; i++)
             dest[i] = src.get(i);
-        }
 
         return dest;
     }
@@ -682,9 +654,8 @@ public final class ArrayUtils {
         int[] swapped = new int[src.length];
         int i = 0;
 
-        for (int value : indices) {
+        for(int value : indices)
             swapped[i++] = src[value];
-        }
 
         System.arraycopy(swapped, 0, src, 0, swapped.length);
     }
@@ -730,10 +701,9 @@ public final class ArrayUtils {
     public static double[] range(int start, int end) {
         double[] rangeArr = new double[end - start];
 
-        int j = 0;
-        for (int i = start; i < end; i++) {
-            rangeArr[j++] = i;
-        }
+        int randeIdx = 0;
+        for(int i = start; i < end; i++)
+            rangeArr[randeIdx++] = i;
 
         return rangeArr;
     }
@@ -749,10 +719,9 @@ public final class ArrayUtils {
     public static int[] intRange(int start, int end) {
         int[] rangeArr = new int[end - start];
 
-        int j = 0;
-        for (int i = start; i < end; i++) {
-            rangeArr[j++] = i;
-        }
+        int rangeIdx = 0;
+        for(int i = start; i < end; i++)
+            rangeArr[rangeIdx++] = i;
 
         return rangeArr;
     }
@@ -901,12 +870,10 @@ public final class ArrayUtils {
         int[] flat = new int[src.length * src[0].length];
 
         // Copy 2D array to 1D array.
-        int i = 0;
-        for (int[] row : src) {
-            for (int value : row) {
-                flat[i++] = value;
-            }
-        }
+        int flatIdx = 0;
+        for(int[] row : src)
+            for (int value : row)
+                flat[flatIdx++] = value;
 
         return flat;
     }
@@ -922,12 +889,10 @@ public final class ArrayUtils {
         double[] flat = new double[src.length * src[0].length];
 
         // Copy 2D array to 1D array.
-        int i = 0;
-        for (double[] row : src) {
-            for (double value : row) {
-                flat[i++] = value;
-            }
-        }
+        int flatIdx = 0;
+        for (double[] row : src)
+            for (double value : row)
+                flat[flatIdx++] = value;
 
         return flat;
     }
@@ -943,12 +908,10 @@ public final class ArrayUtils {
         double[] flat = new double[src.length * src[0].length];
 
         // Copy 2D array to 1D array.
-        int i = 0;
-        for (Double[] row : src) {
-            for (double value : row) {
-                flat[i++] = value;
-            }
-        }
+        int flatIdx = 0;
+        for (Double[] row : src)
+            for (double value : row)
+                flat[flatIdx++] = value;
 
         return flat;
     }
@@ -964,12 +927,10 @@ public final class ArrayUtils {
         CNumber[] flat = new CNumber[src.length * src[0].length];
 
         // Copy 2D array to 1D array.
-        int i = 0;
-        for (CNumber[] row : src) {
-            for (CNumber value : row) {
-                flat[i++] = value.copy();
-            }
-        }
+        int flatIdx = 0;
+        for (CNumber[] row : src)
+            for (CNumber value : row)
+                flat[flatIdx++] = value.copy();
 
         return flat;
     }
@@ -1027,11 +988,10 @@ public final class ArrayUtils {
         int notinIndex = 0;
 
         for (int i = 0; i < dim; i++) {
-            if (srcIndex < srcAxesCopy.length && srcAxesCopy[srcIndex] == i) {
+            if(srcIndex < srcAxesCopy.length && srcAxesCopy[srcIndex] == i)
                 srcIndex++;
-            } else {
+            else
                 notin[notinIndex++] = i;
-            }
         }
 
         return notin;
@@ -1063,9 +1023,8 @@ public final class ArrayUtils {
      * @see #shift(int, int[])
      */
     public static int[] shiftRange(int shift, int[] indices, int start, int stop) {
-        for (int i = start; i < stop; i++) {
+        for (int i = start; i < stop; i++)
             indices[i] += shift;
-        }
 
         return indices;
     }
@@ -1080,9 +1039,8 @@ public final class ArrayUtils {
     public static int[] uniqueSorted(int[] src) {
         HashSet<Integer> hashSet = new HashSet<>();
 
-        for (int j : src) {
+        for(int j : src)
             hashSet.add(j);
-        }
 
         return hashSet.stream().mapToInt(Integer::intValue).sorted().toArray();
     }
@@ -1098,11 +1056,8 @@ public final class ArrayUtils {
      * not occur in the array, {@code -1} will be returned.
      */
     public static int indexOf(int[] arr, int key) {
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i] == key) {
-                return i;
-            }
-        }
+        for(int i = 0; i < arr.length; i++)
+            if (arr[i] == key) return i;
 
         return -1;
     }
@@ -1118,9 +1073,8 @@ public final class ArrayUtils {
         int size = arr.length;
         double[] prim = new double[size];
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++)
             prim[i] = arr[i];
-        }
 
         return prim;
     }
@@ -1136,9 +1090,8 @@ public final class ArrayUtils {
         int size = arr.length;
         int[] prim = new int[size];
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++)
             prim[i] = arr[i];
-        }
 
         return prim;
     }
@@ -1154,9 +1107,8 @@ public final class ArrayUtils {
         int size = src.length;
         Double[] boxed = new Double[size];
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++)
             boxed[i] = src[i];
-        }
 
         return boxed;
     }
@@ -1172,9 +1124,8 @@ public final class ArrayUtils {
         int size = src.length;
         Integer[] boxed = new Integer[size];
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++)
             boxed[i] = src[i];
-        }
 
         return boxed;
     }
@@ -1190,11 +1141,8 @@ public final class ArrayUtils {
         // For very large arrays, HashMap is quite a bit faster than HashSet.
         Map<Double, Double> map = new HashMap<>(arr.length);
 
-        for (double a : arr) {
-            if (!map.containsKey(a)) {
-                map.put(a, a);
-            }
-        }
+        for(double a : arr)
+            if(!map.containsKey(a)) map.put(a, a);
 
         return map.keySet().size();
     }
@@ -1210,11 +1158,8 @@ public final class ArrayUtils {
         // For very large arrays, HashMap is quite a bit faster than HashSet.
         Map<Integer, Integer> map = new HashMap<>(arr.length);
 
-        for (int a : arr) {
-            if (!map.containsKey(a)) {
-                map.put(a, a);
-            }
-        }
+        for(int a : arr)
+            if (!map.containsKey(a)) map.put(a, a);
 
         return map.keySet().size();
     }
@@ -1270,20 +1215,14 @@ public final class ArrayUtils {
         // Find first entry with the specified row key.
         int lowerBound = keyIdx;
         for (int i = keyIdx; i >= 0; i--) {
-            if (src[i] == key) {
-                lowerBound = i;
-            } else {
-                break;
-            }
+            if (src[i] == key) lowerBound = i;
+            else break;
         }
 
         int upperBound = keyIdx + 1;
         for (int i = upperBound; i < src.length; i++) {
-            if (src[i] == key) {
-                upperBound = i + 1;
-            } else {
-                break;
-            }
+            if (src[i] == key) upperBound = i + 1;
+            else break;
         }
 
         return new int[]{lowerBound, upperBound};
@@ -1300,9 +1239,8 @@ public final class ArrayUtils {
     public static int[] repeat(int numTimes, int[] src) {
         int[] repeated = new int[src.length * numTimes];
 
-        for (int i = 0; i < repeated.length; i += src.length) {
+        for(int i = 0; i < repeated.length; i += src.length)
             System.arraycopy(src, 0, repeated, i, src.length);
-        }
 
         return repeated;
     }
@@ -1333,13 +1271,10 @@ public final class ArrayUtils {
      * @return A reference to the {@code dest} array.
      */
     public static double[] asDouble(int[] src, double[] dest) {
-        if (dest == null) {
-            dest = new double[src.length];
-        }
+        if(dest == null) dest = new double[src.length];
 
-        for (int i = 0; i < src.length; i++) {
+        for (int i = 0; i < src.length; i++)
             dest[i] = src[i];
-        }
 
         return dest;
     }
@@ -1354,16 +1289,10 @@ public final class ArrayUtils {
      * @return A reference to the {@code dest} array.
      */
     public static double[] asDouble(Integer[] src, double[] dest) {
-        // TODO: Several of the methods in this class should take a destination array which may be null
-        //  just like this method. This way, new arrays only need be instantiated when necessary.
+        if (dest == null) dest = new double[src.length];
 
-        if (dest == null) {
-            dest = new double[src.length];
-        }
-
-        for (int i = 0; i < src.length; i++) {
+        for(int i = 0; i < src.length; i++)
             dest[i] = src[i];
-        }
 
         return dest;
     }
@@ -1481,15 +1410,13 @@ public final class ArrayUtils {
         ParameterChecks.assertIndexInBounds(list.size() + 1, spliceIdx);
         double[] spliced = new double[list.size() + arr.length];
 
-        for (int i = 0; i < spliceIdx; i++) {
+        for(int i = 0; i < spliceIdx; i++)
             spliced[i] = list.get(i);
-        }
 
         System.arraycopy(arr, 0, spliced, spliceIdx, arr.length);
 
-        for (int i = spliceIdx; i < list.size(); i++) {
+        for(int i = spliceIdx; i < list.size(); i++)
             spliced[i + arr.length] = list.get(i);
-        }
 
         return spliced;
     }
@@ -1507,15 +1434,13 @@ public final class ArrayUtils {
         ParameterChecks.assertIndexInBounds(list.size() + 1, spliceIdx);
         CNumber[] spliced = new CNumber[list.size() + arr.length];
 
-        for (int i = 0; i < spliceIdx; i++) {
+        for (int i = 0; i < spliceIdx; i++)
             spliced[i] = list.get(i);
-        }
 
         ArrayUtils.arraycopy(arr, 0, spliced, spliceIdx, arr.length);
 
-        for (int i = spliceIdx; i < list.size(); i++) {
+        for(int i = spliceIdx; i < list.size(); i++)
             spliced[i + arr.length] = list.get(i);
-        }
 
         return spliced;
     }
@@ -1533,15 +1458,13 @@ public final class ArrayUtils {
         ParameterChecks.assertIndexInBounds(list.size() + 1, spliceIdx);
         CNumber[] spliced = new CNumber[list.size() + arr.length];
 
-        for (int i = 0; i < spliceIdx; i++) {
+        for (int i = 0; i < spliceIdx; i++)
             spliced[i] = list.get(i);
-        }
 
         ArrayUtils.arraycopy(arr, 0, spliced, spliceIdx, arr.length);
 
-        for (int i = spliceIdx; i < list.size(); i++) {
+        for (int i = spliceIdx; i < list.size(); i++)
             spliced[i + arr.length] = list.get(i);
-        }
 
         return spliced;
     }
@@ -1559,20 +1482,84 @@ public final class ArrayUtils {
         ParameterChecks.assertIndexInBounds(list.size() + 1, spliceIdx);
         int[] spliced = new int[list.size() + arr.length];
 
-        for (int i = 0; i < spliceIdx; i++) {
+        for (int i = 0; i < spliceIdx; i++)
             spliced[i] = list.get(i);
-        }
 
         System.arraycopy(arr, 0, spliced, spliceIdx, arr.length);
 
-        for (int i = spliceIdx; i < list.size(); i++) {
+        for (int i = spliceIdx; i < list.size(); i++)
             spliced[i + arr.length] = list.get(i);
-        }
 
         return spliced;
     }
+
+
+    /**
+     * Applies a transform to an array. This is done in place.
+     * @param src Array to apply transform to. Modified.
+     * @param opp Operation to use to transform the array.
+     * @return A reference to the {@code src} array.
+     */
+    public static double[] applyTransform(double[] src, UnaryOperator<Double> opp) {
+        for(int i=0; i<src.length; i++)
+            src[i] = opp.apply(src[i]);
+
+        return src;
+    }
+
+
+    /**
+     * Applies a transform to an array. This is done in place.
+     * @param src Array to apply transform to. Modified.
+     * @param opp Operation to use to transform the array.
+     * @return A reference to the {@code src} array.
+     */
+    public static <T> T[] applyTransform(T[] src, UnaryOperator<T> opp) {
+        for(int i=0; i<src.length; i++)
+            src[i] = opp.apply(src[i]);
+
+        return src;
+    }
+
+
+    /**
+     * Applies a transform to an array. Note, unlike {@link #applyTransform(double[], UnaryOperator)} and
+     * {@link #applyTransform(Object[], UnaryOperator)}, this method does <b>not</b> work in place.
+     *
+     * @param src Array to apply transform to.
+     * @param opp Operation to use to transform the array.
+     * @return A new array containing the result of the transformation.
+     *
+     * @see #applyTransform(Object[], UnaryOperator)
+     * @see #applyTransform(double[], UnaryOperator)
+     */
+    public static CNumber[] applyTransform(double[] src, Function<Double, CNumber> opp) {
+        CNumber[] dest = new CNumber[src.length];
+
+        for(int i=0; i<src.length; i++)
+            dest[i] = opp.apply(src[i]);
+
+        return dest;
+    }
+
+
+    /**
+     * Applies a transform to an array. Note, unlike {@link #applyTransform(double[], UnaryOperator)} and
+     * {@link #applyTransform(Object[], UnaryOperator)}, this method does <b>not</b> work in place.
+     *
+     * @param src Array to apply transform to.
+     * @param opp Operation to use to transform the array.
+     * @return A new array containing the result of the transformation.
+     *
+     * @see #applyTransform(Object[], UnaryOperator)
+     * @see #applyTransform(double[], UnaryOperator)
+     */
+    public static double[] applyTransform(CNumber[] src, Function<CNumber, Double> opp) {
+        double[] dest = new double[src.length];
+
+        for(int i=0; i<src.length; i++)
+            dest[i] = opp.apply(src[i]);
+
+        return dest;
+    }
 }
-
-
-
-

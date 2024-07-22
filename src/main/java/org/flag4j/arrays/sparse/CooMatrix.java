@@ -1347,7 +1347,6 @@ public class CooMatrix
      */
     @Override
     public Double fib(Matrix B) {
-        ParameterChecks.assertEqualShape(this.shape, B.shape);
         return this.T().mult(B).tr();
     }
 
@@ -1361,7 +1360,6 @@ public class CooMatrix
      */
     @Override
     public Double fib(CooMatrix B) {
-        ParameterChecks.assertEqualShape(this.shape, B.shape);
         return this.T().mult(B).tr();
     }
 
@@ -1375,7 +1373,6 @@ public class CooMatrix
      */
     @Override
     public CNumber fib(CMatrix B) {
-        ParameterChecks.assertEqualShape(this.shape, B.shape);
         return this.T().mult(B).tr();
     }
 
@@ -1389,7 +1386,6 @@ public class CooMatrix
      */
     @Override
     public CNumber fib(CooCMatrix B) {
-        ParameterChecks.assertEqualShape(this.shape, B.shape);
         return this.T().mult(B).tr();
     }
 
@@ -2258,7 +2254,7 @@ public class CooMatrix
 
 
     /**
-     * Compute the hermation transpose of this matrix. That is, the complex conjugate transpose of this matrix.
+     * Compute the hermitian transpose of this matrix. That is, the complex conjugate transpose of this matrix.
      * For real matrices, this is equivalent to the standard transpose.
      *
      * @return The complex conjugate transpose of this matrix.

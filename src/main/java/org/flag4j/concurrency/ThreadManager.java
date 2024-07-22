@@ -117,8 +117,8 @@ public class ThreadManager {
      * @param function Function to apply each iteration. Function may be dependent on iteration index but should
      *      individual iterations should be independent of each other.
      */
-    public static void concurrentLoop(int startIndex, int endIndex, int step, IntConsumer function ) {
-        if (step <= 0)
+    public static void concurrentLoop(int startIndex, int endIndex, int step, IntConsumer function) {
+        if(step <= 0)
             throw new IllegalArgumentException(ErrorMessages.getNegValueErr(startIndex));
         try {
             int range = endIndex - startIndex;

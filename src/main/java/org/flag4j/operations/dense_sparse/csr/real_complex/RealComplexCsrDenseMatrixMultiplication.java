@@ -27,7 +27,8 @@ package org.flag4j.operations.dense_sparse.csr.real_complex;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooCVector;
+import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
@@ -162,13 +163,55 @@ public class RealComplexCsrDenseMatrixMultiplication {
 
 
     /**
-     * Computes the matrix-vector multiplication between a real sparse CSR matrix and a complex sparse COO vector.
-     * @param src1 The matrix in the multiplication.
-     * @param src2 Vector in multiplication. Treated as a column vector in COO format.
-     * @return The result of the matrix-vector multiplication.
-     * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the number of columns in {@code src2}.
+     * Computes the matrix multiplication between a complex sparse CSR matrix and a real dense matrix.
+     * WARNING: If the first matrix is very large but not very sparse, this method may be slower than converting the
+     * first matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link Matrix#mult(CMatrix)}.
+     * @param src1 First matrix in the matrix multiplication.
+     * @param src2 Second matrix in the matrix multiplication.
+     * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
+     * @throws IllegalArgumentException If {@code src1} does not have the same number of columns as {@code src2} has
+     * rows.
      */
-    public static CVector standardVector(CsrMatrix src1, CooCVector src2) {
+    public static CMatrix standard(CsrCMatrix src1, Matrix src2) {
+        // Ensure matrices have shapes conducive to matrix multiplication.
+        ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
+
+        CNumber[] destEntries = new CNumber[src1.numRows*src2.numCols];
+        ArrayUtils.fillZeros(destEntries);
+        int rows1 = src1.numRows;
+        int cols2 = src2.numCols;
+
+        for(int i=0; i<rows1; i++) {
+            int rowOffset = i*src2.numCols;
+            int start = src1.rowPointers[i];
+            int stop = src1.rowPointers[i+1];
+            int innerStop = rowOffset + cols2;
+
+            for(int aIndex=start; aIndex<stop; aIndex++) {
+                int aCol = src1.colIndices[aIndex];
+                CNumber aVal = src1.entries[aIndex];
+                int src2Idx = aCol*src2.numCols;
+                int destIdx = rowOffset;
+
+                while(destIdx < innerStop) {
+                    destEntries[destIdx++].addEq(aVal.mult(src2.entries[src2Idx++]));
+                }
+            }
+        }
+
+        return new CMatrix(new Shape(src1.numRows, src2.numCols), destEntries);
+    }
+
+
+    /**
+     * Computes the matrix-vector multiplication between a real sparse CSR matrix and a complex dense vector.
+     * @param src1 The matrix in the multiplication.
+     * @param src2 Vector in multiplication. Treated as a column vector.
+     * @return The result of the matrix-vector multiplication.
+     * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the length of
+     * {@code src2}.
+     */
+    public static CVector standardVector(CsrCMatrix src1, Vector src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
         ParameterChecks.assertEquals(src1.numCols, src2.size);
 
@@ -176,23 +219,15 @@ public class RealComplexCsrDenseMatrixMultiplication {
         ArrayUtils.fillZeros(destEntries);
         int rows1 = src1.numRows;
 
-        // Iterate over the non-zero elements of the sparse vector.
-        for (int k=0; k < src2.entries.length; k++) {
-            int col = src2.indices[k];
-            CNumber val = src2.entries[k];
+        for (int i = 0; i < rows1; i++) {
+            int start = src1.rowPointers[i];
+            int stop = src1.rowPointers[i + 1];
 
-            // Perform multiplication only for the non-zero elements.
-            for (int i=0; i<rows1; i++) {
-                int start = src1.rowPointers[i];
-                int stop = src1.rowPointers[i + 1];
+            for (int aIndex = start; aIndex<stop; aIndex++) {
+                int aCol = src1.colIndices[aIndex];
+                CNumber aVal = src1.entries[aIndex];
 
-                for (int aIndex=start; aIndex < stop; aIndex++) {
-                    int aCol = src1.colIndices[aIndex];
-                    if (aCol == col) {
-                        double aVal = src1.entries[aIndex];
-                        destEntries[i].addEq(val.mult(aVal));
-                    }
-                }
+                destEntries[i].addEq(aVal.mult(src2.entries[aCol]));
             }
         }
 

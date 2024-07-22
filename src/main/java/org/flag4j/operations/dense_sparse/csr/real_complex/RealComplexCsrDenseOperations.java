@@ -53,11 +53,18 @@ public class RealComplexCsrDenseOperations {
      * @param src1 First matrix in element-wise binary operation.
      * @param src2 Second matrix in element-wise binary operation.
      * @param opp Binary operator to apply element-wise to the two matrices.
+     * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
+     * commutative this should be null.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static CMatrix applyBinOpp(CsrCMatrix src1, Matrix src2, BiFunction<CNumber, Double, CNumber> opp) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
-        CNumber[] dest = new CNumber[src2.entries.length];
+    public static CMatrix applyBinOpp(CsrCMatrix src1, Matrix src2,
+                                      BiFunction<CNumber, Double, CNumber> opp,
+                                      UnaryOperator<Double> uOpp) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);  // Ensure both matrices are same shape.
+
+        CNumber[] dest;
+        if(uOpp == null) dest = ArrayUtils.copy2CNumber(src2.entries, null);
+        else dest = ArrayUtils.applyTransform(src2.entries, (Double a)->new CNumber(uOpp.apply(a)));
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
             int start = src1.rowPointers[i];
@@ -70,7 +77,7 @@ public class RealComplexCsrDenseOperations {
 
                 dest[idx] = opp.apply(
                         src1.entries[j],
-                        src2.entries[idx]
+                        dest[idx].re
                 );
             }
         }
@@ -88,7 +95,8 @@ public class RealComplexCsrDenseOperations {
      */
     public static CMatrix applyBinOpp(Matrix src1, CsrCMatrix src2, BiFunction<Double, CNumber, CNumber> opp) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
-        CNumber[] dest = new CNumber[src2.entries.length];
+
+        CNumber[] dest = ArrayUtils.copy2CNumber(src1.entries, null);
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -186,7 +194,6 @@ public class RealComplexCsrDenseOperations {
         int[] rowPointers = src2.rowPointers.clone();
         int[] colIndices = src2.colIndices.clone();
         CNumber[] entries = new CNumber[src2.entries.length];
-
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];

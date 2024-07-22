@@ -136,6 +136,10 @@ public class CsrMatrix
     }
 
 
+    /**
+     * Constructs a sparse CSR matrix which is a deep copy of the {@code src} matrix.
+     * @param src Matrix to create copy of.
+     */
     public CsrMatrix(CsrMatrix src) {
         super(src.shape.copy(), src.entries.length, src.entries.clone(),
                 src.rowPointers.clone(), src.colIndices.clone());
@@ -426,92 +430,7 @@ public class CsrMatrix
      */
     @Override
     public CVector mult(CooCVector b) {
-        return RealComplexCsrDenseMatrixMultiplication.standardVector(this, b);
-    }
-
-
-    /**
-     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
-     * {@code this.mult(B.T())}.
-     *
-     * @param B The second matrix in the multiplication and the matrix to transpose/
-     * @return The result of multiplying this matrix with the transpose of {@code B}.
-     */
-    @Override
-    public Matrix multTranspose(Matrix B) {
-        return this.mult(B.T());
-    }
-
-
-    /**
-     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
-     * {@code this.mult(B.T())}.
-     *
-     * @param B The second matrix in the multiplication and the matrix to transpose/
-     * @return The result of multiplying this matrix with the transpose of {@code B}.
-     */
-    @Override
-    public Matrix multTranspose(CooMatrix B) {
-        return this.multTranspose(B.toCsr());
-    }
-
-
-    /**
-     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
-     * {@code this.mult(B.T())}.
-     *
-     * @param B The second matrix in the multiplication and the matrix to transpose/
-     * @return The result of multiplying this matrix with the transpose of {@code B}.
-     */
-    public Matrix multTranspose(CsrMatrix B) {
-        return this.mult(B.T());
-    }
-
-
-    /**
-     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
-     * {{@code this.mult(B.T())}.
-     * For large matrices, this method may
-     * be significantly faster than directly computing the transpose followed by the multiplication as
-     * {@code this.mult(B.T())}.
-     *
-     * @param B The second matrix in the multiplication and the matrix to transpose/
-     * @return The result of multiplying this matrix with the transpose of {@code B}.
-     */
-    @Override
-    public CMatrix multTranspose(CMatrix B) {
-        return this.mult(B.T());
-    }
-
-
-    /**
-     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
-     * {@code this.mult(B.T())}.
-     * For large matrices, this method may
-     * be significantly faster than directly computing the transpose followed by the multiplication as
-     * {@code this.mult(B.T())}.
-     *
-     * @param B The second matrix in the multiplication and the matrix to transpose/
-     * @return The result of multiplying this matrix with the transpose of {@code B}.
-     */
-    @Override
-    public CMatrix multTranspose(CooCMatrix B) {
-        return this.multTranspose(B.toCsr());
-    }
-
-
-    /**
-     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
-     * {@code this.mult(B.T())}.
-     * For large matrices, this method may
-     * be significantly faster than directly computing the transpose followed by the multiplication as
-     * {@code this.mult(B.T())}.
-     *
-     * @param B The second matrix in the multiplication and the matrix to transpose/
-     * @return The result of multiplying this matrix with the transpose of {@code B}.
-     */
-    public CMatrix multTranspose(CsrCMatrix B) {
-        return this.mult(B.T());
+        return RealComplexCsrMatrixMultiplication.standardVector(this, b);
     }
 
 
@@ -1420,7 +1339,7 @@ public class CsrMatrix
 
             for(int j=rowPtr; j<stop; j++) {
                 if(i==colIndices[j]) {
-                    trace++;
+                    trace += entries[j];
                 }
             }
         }
@@ -1456,7 +1375,7 @@ public class CsrMatrix
 
 
     /**
-     * Compute the hermation transpose of this matrix. That is, the complex conjugate transpose of this matrix.
+     * Compute the hermitian transpose of this matrix. That is, the complex conjugate transpose of this matrix.
      *
      * @return The complex conjugate transpose of this matrix.
      */
@@ -1558,7 +1477,7 @@ public class CsrMatrix
      * @return True if this matrix is the identity matrix. Otherwise, returns false.
      */
     public boolean isI() {
-        return RealCsrMatrixProperties.isIdentity(this);
+        return RealCsrProperties.isIdentity(this);
     }
 
 
@@ -2131,13 +2050,9 @@ public class CsrMatrix
     public int vectorType() {
         int type = -1;
 
-        if(numRows==1 && numCols==1) {
-            type=0;
-        } else if(numRows==1) {
-            type=1;
-        } else if(numCols==1) {
-            type=2;
-        }
+        if(numRows==1 && numCols==1) type=0;
+        else if(numRows==1) type=1;
+        else if(numCols==1) type=2;
 
         return type;
     }
@@ -2246,9 +2161,9 @@ public class CsrMatrix
 
     /**
      * Checks if a matrix is singular. That is, if the matrix is <b>NOT</b> invertible.<br>
-     * Also see {@link #isInvertible()}.
      *
      * @return True if this matrix is singular. Otherwise, returns false.
+     * @see #isInvertible()
      */
     @Override
     public boolean isSingular() {
@@ -2257,25 +2172,16 @@ public class CsrMatrix
 
 
     /**
-     * Checks if a matrix is invertible.<br>
-     * Also see {@link #isSingular()}.
+     * <p>Computes the rank of this matrix (i.e. the dimension of the column space of this matrix).
+     * Note that here, rank is <b>NOT</b> the same as a tensor rank.</p>
      *
-     * @return True if this matrix is invertible.
-     */
-    @Override
-    public boolean isInvertible() {
-        return !isSingular();
-    }
-
-
-    /**
-     * Computes the rank of this matrix (i.e. the dimension of the column space of this matrix).
-     * Note that here, rank is <b>NOT</b> the same as a tensor rank.
+     * <p><b>WARNING</b>: This method will convert this matrix to a dense matrix to compute the rank.</p>
      *
      * @return The matrix rank of this matrix.
      */
     @Override
     public int matrixRank() {
+        // TODO: Investigate methods of rank computation for sparse matrices.
         return toDense().matrixRank();
     }
 
@@ -2287,7 +2193,7 @@ public class CsrMatrix
      */
     @Override
     public boolean isSymmetric() {
-        return RealCsrMatrixProperties.isSymmetric(this);
+        return RealCsrProperties.isSymmetric(this);
     }
 
 
@@ -2298,7 +2204,7 @@ public class CsrMatrix
      */
     @Override
     public boolean isAntiSymmetric() {
-        return RealCsrMatrixProperties.isAntiSymmetric(this);
+        return RealCsrProperties.isAntiSymmetric(this);
     }
 
 
@@ -2409,13 +2315,13 @@ public class CsrMatrix
     @Override
     public CsrMatrix flatten(int axis) {
         if(axis==0) {
-            // Flatten to single row
+            // Flatten to single row.
             return reshape(new Shape(1, entries.length));
         } else if(axis==1) {
-            // Flatten to single column
+            // Flatten to single column.
             return reshape(new Shape(entries.length, 1));
         } else {
-            // Unknown axis
+            // Unknown axis.
             throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
     }

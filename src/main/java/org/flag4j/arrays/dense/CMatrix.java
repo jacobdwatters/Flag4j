@@ -1742,14 +1742,14 @@ public class CMatrix
 
 
     /**
-     * Computes the hermation transpose (i.e. the conjugate transpose) of the matrix.
+     * Computes the hermitian transpose (i.e. the conjugate transpose) of the matrix.
      * Same as {@link #hermTranspose()}.
      *
      * @return The conjugate transpose.
      */
     @Override
     public CMatrix H() {
-        return TransposeDispatcher.dispatchHermation(this);
+        return TransposeDispatcher.dispatchHermitian(this);
     }
 
 
@@ -1776,7 +1776,7 @@ public class CMatrix
 
 
     /**
-     * Checks if this matrix is unitary. That is, if this matrices inverse is equal to its hermation transpose.
+     * Checks if this matrix is unitary. That is, if this matrices inverse is equal to its hermitian transpose.
      *
      * @return True if this matrix it is unitary. Otherwise, returns false.
      */
@@ -2177,7 +2177,7 @@ public class CMatrix
     @Override
     public CNumber fib(Matrix B) {
         ParameterChecks.assertEqualShape(this.shape, B.shape);
-        return this.T().mult(B).trace();
+        return this.H().mult(B).trace();
     }
 
 
@@ -2191,7 +2191,7 @@ public class CMatrix
     @Override
     public CNumber fib(CooMatrix B) {
         ParameterChecks.assertEqualShape(this.shape, B.shape);
-        return this.T().mult(B).trace();
+        return this.H().mult(B).trace();
     }
 
 
@@ -2205,7 +2205,7 @@ public class CMatrix
     @Override
     public CNumber fib(CMatrix B) {
         ParameterChecks.assertEqualShape(this.shape, B.shape);
-        return this.T().mult(B).trace();
+        return this.H().mult(B).trace();
     }
 
 
@@ -2219,7 +2219,7 @@ public class CMatrix
     @Override
     public CNumber fib(CooCMatrix B) {
         ParameterChecks.assertEqualShape(this.shape, B.shape);
-        return this.T().mult(B).trace();
+        return this.H().mult(B).trace();
     }
 
 
@@ -3304,8 +3304,7 @@ public class CMatrix
         boolean result = true;
 
         if(isSquare()) {
-            double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
-            result = det().mag() < tol;
+            result = det().mag() < Flag4jConstants.EPS_F64;
         }
 
         return result;

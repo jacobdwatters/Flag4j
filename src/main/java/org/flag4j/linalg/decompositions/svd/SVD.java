@@ -106,7 +106,7 @@ public abstract class SVD<
 
     /**
      * Gets the unitary matrix {@code V} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
-     * @return {@code V} corresponding to {@code M=USV}<sup>H</sup> in the SVD. Note that the hermation transpose has
+     * @return {@code V} corresponding to {@code M=USV}<sup>H</sup> in the SVD. Note that the hermitian transpose has
      * <b>not</b> been computed.
      */
     public T getV() {
@@ -165,9 +165,9 @@ public abstract class SVD<
 
 
     /**
-     * Computes the inverse direct sum of a matrix and its hermation transpose.
-     * @param src Matrix to inverse direct add with its hermation transpose.
-     * @return The inverse direct sum of the {@code src} matrix with its hermation transpose.
+     * Computes the inverse direct sum of a matrix and its hermitian transpose.
+     * @param src Matrix to inverse direct add with its hermitian transpose.
+     * @return The inverse direct sum of the {@code src} matrix with its hermitian transpose.
      */
     protected abstract T invDirectSum(T src);
 

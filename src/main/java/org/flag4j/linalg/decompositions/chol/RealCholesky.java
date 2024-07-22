@@ -76,7 +76,7 @@ public final class RealCholesky extends Cholesky<Matrix> {
      */
     @Override
     public RealCholesky decompose(Matrix src) {
-        if(enforceHermation && src.isSymmetric()) {
+        if(enforceHermitian && src.isSymmetric()) {
             throw new LinearAlgebraException("Matrix must be symmetric positive-definite.");
         } else {
             ParameterChecks.assertSquareMatrix(src.shape);

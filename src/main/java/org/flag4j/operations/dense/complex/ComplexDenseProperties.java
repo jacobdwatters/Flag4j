@@ -61,12 +61,12 @@ public final class ComplexDenseProperties {
 
 
     /**
-     * Checks if a complex dense matrix is hermation. That is, if the and equal to its conjugate transpose.
+     * Checks if a complex dense matrix is hermitian. That is, if the and equal to its conjugate transpose.
      * @param src Entries of the matrix.
      * @param shape Shape of the matrix.
-     * @return True if this matrix is hermation. Otherwise, returns false.
+     * @return True if this matrix is hermitian. Otherwise, returns false.
      */
-    public static boolean isHermation(CNumber[] src, Shape shape) {
+    public static boolean isHermitian(CNumber[] src, Shape shape) {
         if(shape.dims[0]!=shape.dims[1]) {
             return false;
         }
@@ -92,12 +92,12 @@ public final class ComplexDenseProperties {
 
 
     /**
-     * Checks if a real dense matrix is anti-hermation. That is, if the and equal to its negative conjugate transpose.
+     * Checks if a real dense matrix is anti-hermitian. That is, if the and equal to its negative conjugate transpose.
      * @param src Entries of the matrix.
      * @param shape Shape of the matrix.
-     * @return True if this matrix is anti-hermation. Otherwise, returns false.
+     * @return True if this matrix is anti-hermitian. Otherwise, returns false.
      */
-    public static boolean isAntiHermation(CNumber[] src, Shape shape) {
+    public static boolean isAntiHermitian(CNumber[] src, Shape shape) {
         if(shape.dims[0]!=shape.dims[1]) {
             return false;
         }

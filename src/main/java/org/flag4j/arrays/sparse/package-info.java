@@ -22,24 +22,8 @@
  * SOFTWARE.
  */
 
-package org.flag4j.util;
-
-
 /**
- * A simple utility class containing useful constants.
+ * Contains the real and complex sparse array objects. Specifically, vectors, matrices, and tenors. All objects have a sparse
+ * coordinate (COO) format and the matrices also have a compressed sparse row (CSR) format.
  */
-public final class Flag4jConstants {
-    /**
-     * The rounding error for 32-bit floating point numbers.
-     */
-    public static final float EPS_F32 = Math.ulp(1.0f);
-    /**
-     * The rounding error for 64-bit double precision floating point numbers.
-     */
-    public static final double EPS_F64 = Math.ulp(1.0d);
-
-    private Flag4jConstants() {
-        // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
-    }
-}
+package org.flag4j.arrays.sparse;

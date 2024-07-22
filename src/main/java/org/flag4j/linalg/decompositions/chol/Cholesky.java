@@ -30,7 +30,7 @@ import org.flag4j.linalg.decompositions.Decomposition;
 /**
  * <p>This abstract class specifies methods for computing the Cholesky decomposition of a positive-definite matrix.</p>
  *
- * <p>Given a hermation positive-definite matrix {@code A}, the Cholesky decomposition will decompose it into
+ * <p>Given a hermitian positive-definite matrix {@code A}, the Cholesky decomposition will decompose it into
  * {@code A=LL}<sup>H</sup> where {@code L} is a lower triangular matrix and {@code L}<sup>H</sup> is the conjugate
  * transpose of {@code L}.</p>
  *
@@ -48,19 +48,19 @@ public abstract class Cholesky<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>>
     protected static final double DEFAULT_POS_DEF_TOLERANCE = 1.0e-10;
 
     /**
-     * Flag indicating if the matrix to be decomposed should be explicitly checked to be hermation (true). If false, no check
-     * will be made and the matrix will be treated as if it were hermation and only the lower half of the matrix will be accessed.
+     * Flag indicating if the matrix to be decomposed should be explicitly checked to be hermitian (true). If false, no check
+     * will be made and the matrix will be treated as if it were hermitian and only the lower half of the matrix will be accessed.
      */
-    final boolean enforceHermation;
+    final boolean enforceHermitian;
 
     /**
      * Constructs a Cholesky decomposer.
-     * @param enforceHermation Flag indicating if the symmetry of the matrix to be decomposed should be explicitly checked (true).
+     * @param enforceHermitian Flag indicating if the symmetry of the matrix to be decomposed should be explicitly checked (true).
      *                         If false, no check will be made and the matrix will be treated as if it were symmetric and only the
      *                         lower half of the matrix will be accessed.
      */
-    public Cholesky(boolean enforceHermation) {
-        this.enforceHermation = enforceHermation;
+    public Cholesky(boolean enforceHermitian) {
+        this.enforceHermitian = enforceHermitian;
     }
 
 
