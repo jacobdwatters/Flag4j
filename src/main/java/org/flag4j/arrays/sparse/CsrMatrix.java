@@ -284,7 +284,7 @@ public class CsrMatrix
      */
     @Override
     public CMatrix add(CMatrix B) {
-        return RealComplexCsrDenseOperations.applyBinOpp(this, B, (Double a, CNumber b) -> b.add(a));
+        return RealComplexCsrDenseOperations.applyBinOpp(this, B, (Double a, CNumber b) -> b.add(a), null);
     }
 
 
@@ -351,7 +351,7 @@ public class CsrMatrix
      */
     @Override
     public CMatrix sub(CMatrix B) {
-        return RealComplexCsrDenseOperations.applyBinOpp(this, B, (Double a, CNumber b)->new CNumber(a).sub(b));
+        return RealComplexCsrDenseOperations.applyBinOpp(this, B, (Double a, CNumber b)->new CNumber(a).add(b), CNumber::addInv);
     }
 
 
@@ -444,19 +444,17 @@ public class CsrMatrix
     @Override
     public Matrix pow(int exponent) {
         ParameterChecks.assertPositive(exponent);
-        // TODO: Implementation.
 
         if(exponent==0) {
-            return new Matrix(this.shape.copy());
+            return Matrix.I(shape);
         } else if(exponent==1) {
             return this.toDense();
         }
         else {
             Matrix exp = this.mult(this); // First multiplication is sparse-sparse multiplication.
 
-            for(int i=2; i<exponent; i++) {
-//                exp.mult(this); // The Matrix.Mult(CsrMatrix) method needs to be implemented in the Matrix class.
-            }
+            for(int i=2; i<exponent; i++)
+                exp = exp.mult(this);
 
             return exp;
         }

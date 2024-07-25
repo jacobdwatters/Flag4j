@@ -277,6 +277,18 @@ public final class ArrayUtils {
 
 
     /**
+     * Fills an array of complex numbers with zeros.
+     *
+     * @param dest Array to fill with zeros.
+     */
+    public static void fillZeros(CNumber[][] dest) {
+        for(int i=0; i<dest.length; i++)
+            for(int j=0; j<dest[i].length; j++)
+                dest[i][j] = new CNumber();
+    }
+
+
+    /**
      * Fills a specified range of an array of complex numbers with zeros.
      *
      * @param start Starting index of range to fill (inclusive).

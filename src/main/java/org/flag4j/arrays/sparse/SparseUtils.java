@@ -24,6 +24,7 @@
 
 package org.flag4j.arrays.sparse;
 
+import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -53,9 +54,7 @@ final class SparseUtils {
      * @return True if all non-zero values stored in the two matrices are equal and occur at the same indices.
      */
     static boolean CSREquals(CsrMatrix src1, CsrMatrix src2) {
-        if(src1.numRows != src2.numRows || src1.numCols != src2.numCols) {
-            return false;
-        }
+        if(!src1.shape.equals(src2.shape)) return false;
 
         // Compare row by row
         for (int i=0; i<src1.numRows; i++) {
@@ -69,25 +68,19 @@ final class SparseUtils {
 
             while (src1Index < src1RowEnd || src2Index < src2RowEnd) {
                 // Skip explicit zeros in both matrices
-                while (src1Index < src1RowEnd && src1.entries[src1Index] == 0) {
+                while (src1Index < src1RowEnd && src1.entries[src1Index] == 0)
                     src1Index++;
-                }
-                while (src2Index < src2RowEnd && src2.entries[src2Index] == 0) {
+
+                while (src2Index < src2RowEnd && src2.entries[src2Index] == 0)
                     src2Index++;
-                }
 
                 if (src1Index < src1RowEnd && src2Index < src2RowEnd) {
                     int src1Col = src1.colIndices[src1Index];
                     int src2Col = src2.colIndices[src2Index];
-
-                    if (src1Col != src2Col) {
-                        return false;
-                    }
-
                     double src1Value = src1.entries[src1Index];
                     double src2Value = src2.entries[src2Index];
 
-                    if (Double.compare(src1Value, src2Value) != 0) {
+                    if(src1Col != src2Col || Double.compare(src1Value, src2Value) != 0) {
                         return false;
                     }
 
@@ -95,19 +88,83 @@ final class SparseUtils {
                     src2Index++;
                 } else if (src1Index < src1RowEnd) {
                     // Remaining entries in src1 row
-                    if (src1.entries[src1Index] != 0) {
-                        return false;
-                    }
+                    if (src1.entries[src1Index] != 0) return false;
+
                     src1Index++;
                 } else if (src2Index < src2RowEnd) {
                     // Remaining entries in src2 row
-                    if (src2.entries[src2Index] != 0) {
-                        return false;
-                    }
+                    if (src2.entries[src2Index] != 0) return false;
+
                     src2Index++;
                 }
             }
         }
+
+        return true;
+    }
+
+
+    /**
+     * <p>Checks if two {@link CsrCMatrix Complex CSR Matrices} are equal considering the fact that one may explicitly store zeros at
+     * some
+     * position that the other does not store.</p>
+     *
+     * <p>
+     * If zeros are explicitly stored at some position in only one matrix, it will be checked that the
+     * other matrix does not have a non-zero value at the same index. If it does, the matrices will not be equal. If no value is
+     * stored for that index then it is assumed to be zero by definition of the CSR format and the equality check continues with the
+     * remaining values.
+     * </p>
+     *
+     * @param src1 First CSR matrix in the equality comparison.
+     * @param src2 Second CSR matrix in the equality comparison.
+     * @return True if all non-zero values stored in the two matrices are equal and occur at the same indices.
+     */
+    static boolean CSREquals(CsrCMatrix src1, CsrCMatrix src2) {
+        if(!src1.shape.equals(src2.shape)) return false;
+
+        final CNumber ZERO = CNumber.zero();
+
+        // Compare row by row
+        for (int i=0; i<src1.numRows; i++) {
+            int src1RowStart = src1.rowPointers[i];
+            int src1RowEnd = src1.rowPointers[i + 1];
+            int src2RowStart = src2.rowPointers[i];
+            int src2RowEnd = src2.rowPointers[i + 1];
+
+            int src1Index = src1RowStart;
+            int src2Index = src2RowStart;
+
+            while (src1Index < src1RowEnd || src2Index < src2RowEnd) {
+                // Skip explicit zeros in both matrices
+                while (src1Index < src1RowEnd && src1.entries[src1Index].equals(ZERO))
+                    src1Index++;
+
+                while (src2Index < src2RowEnd && src2.entries[src2Index].equals(ZERO))
+                    src2Index++;
+
+                if (src1Index < src1RowEnd && src2Index < src2RowEnd) {
+                    int src1Col = src1.colIndices[src1Index];
+                    int src2Col = src2.colIndices[src2Index];
+
+                    if(src1Col != src2Col || !src1.entries[src1Index].equals(src2.entries[src2Index])) {
+                        return false;
+                    }
+
+                    src1Index++;
+                    src2Index++;
+                } else if (src1Index < src1RowEnd) {
+                    // Remaining entries in src1 row
+                    if (!src1.entries[src1Index].equals(ZERO)) return false;
+                    src1Index++;
+                } else if (src2Index < src2RowEnd) {
+                    // Remaining entries in src2 row
+                    if (!src2.entries[src2Index].equals(ZERO)) return false;
+                    src2Index++;
+                }
+            }
+        }
+
         return true;
     }
 }

@@ -50,9 +50,10 @@ public class RealCsrDenseOperations {
      * @param src1 First matrix in element-wise binary operation.
      * @param src2 Second matrix in element-wise binary operation.
      * @param opp Binary operator to apply element-wise to the two matrices.
-     * @param uOpp Optional unary operator for binary operations which are not communicative such as subtraction. This operation is
-     * applied to an element of the second matrix when a non-zero element in the first matrix does not exist at the same index. If
-     * null, this operation is ignored.
+     * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
+     * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
+     * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
+     * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
     public static Matrix applyBinOpp(CsrMatrix src1, Matrix src2,
@@ -67,14 +68,14 @@ public class RealCsrDenseOperations {
                dest[i] = uOpp.apply(dest[i]);
         }
 
-        for(int i=0; i<src1.rowPointers.length-1; i++) {
+        for(int i=0; i<src1.numRows; i++) {
             int start = src1.rowPointers[i];
             int stop = src1.rowPointers[i+1];
 
             int rowOffset = i*src1.numCols;
 
             for(int j=start; j<stop; j++) {
-                int idx = rowOffset + src1.colIndices[i];
+                int idx = rowOffset + src1.colIndices[j];
 
                 dest[idx] = opp.apply(
                         src1.entries[j],
@@ -93,22 +94,13 @@ public class RealCsrDenseOperations {
      * @param src1 First matrix in element-wise binary operation.
      * @param src2 Second matrix in element-wise binary operation.
      * @param opp Binary operator to apply element-wise to the two matrices.
-     * @param uOpp Optional unary operator for binary operations which are not communicative such as subtraction. This operation is
-     * applied to an element of the second matrix when a non-zero element in the first matrix does not exist at the same index. If
-     * null, this operation is ignored.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
     public static Matrix applyBinOpp(Matrix src1, CsrMatrix src2,
-                                     BinaryOperator<Double> opp,
-                                     UnaryOperator<Double> uOpp) {
+                                     BinaryOperator<Double> opp) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
-        double[] dest = src2.entries.clone();
 
-        if(uOpp != null) {
-            // Apply unary operator to all entries in second matrix.
-            for(int i = 0; i < dest.length; i++)
-                dest[i] = uOpp.apply(dest[i]);
-        }
+        double[] dest = src1.entries.clone();
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -117,11 +109,11 @@ public class RealCsrDenseOperations {
             int rowOffset = i*src1.numCols;
 
             for(int j=start; j<stop; j++) {
-                int idx = rowOffset + src2.colIndices[i];
+                int idx = rowOffset + src2.colIndices[j];
 
                 dest[idx] = opp.apply(
                         src1.entries[idx],
-                        dest[j]
+                        src2.entries[j]
                 );
             }
         }
@@ -168,18 +160,20 @@ public class RealCsrDenseOperations {
      * @param src1 First matrix in element-wise binary operation.
      * @param b Scalar to apply elementwise using the specified operation.
      * @param opp Binary operator to apply element-wise to the two matrices.
-     * @param uOpp Optional unary operator for binary operations which are not communicative such as subtraction. This operation is
-     * applied to an element of the second matrix when a non-zero element in the first matrix does not exist at the same index. If
-     * null, this operation is ignored.
+     * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
+     * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
+     * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
+     * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
     public static Matrix applyBinOpp(CsrMatrix src1, double b,
                                      BinaryOperator<Double> opp,
                                      UnaryOperator<Double> uOpp) {
-        double[] dest = new double[src1.entries.length];
+        double[] dest = new double[src1.totalEntries().intValueExact()];
 
         // Apply unary operator if specified.
         if(uOpp != null) Arrays.fill(dest, uOpp.apply(b));
+        else Arrays.fill(dest, b);
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
             int start = src1.rowPointers[i];
@@ -188,7 +182,7 @@ public class RealCsrDenseOperations {
             int rowOffset = i*src1.numCols;
 
             for(int j=start; j<stop; j++) {
-                int idx = rowOffset + src1.colIndices[i];
+                int idx = rowOffset + src1.colIndices[j];
 
                 dest[idx] = opp.apply(
                         src1.entries[j],

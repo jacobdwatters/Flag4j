@@ -86,6 +86,46 @@ public class RealCsrDenseMatrixMultiplication {
 
 
     /**
+     * Computes the matrix multiplication between a real dense matrix and a real sparse CSR matrix.
+     * WARNING: If the second matrix is very large but not very sparse, this method may be slower than converting the
+     * second matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link Matrix#mult(Matrix)}.
+     * @param src1 First matrix in the matrix multiplication (dense matrix).
+     * @param src2 Second matrix in the matrix multiplication (sparse CSR matrix).
+     * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
+     * @throws IllegalArgumentException If {@code src1} does not have the same number of columns as {@code src2} has
+     * rows.
+     */
+    public static Matrix standard(Matrix src1, CsrMatrix src2) {
+        // Ensure matrices have shapes conducive to matrix multiplication.
+        ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
+
+        double[] destEntries = new double[src1.numRows * src2.numCols];
+        int rows1 = src1.numRows;
+        int cols1 = src1.numCols;
+        int cols2 = src2.numCols;
+
+        for (int i = 0; i < rows1; i++) {
+            int rowOffset = i*cols2;
+            int src1RowOffset = i*cols1;
+
+            for (int j = 0; j < cols1; j++) {
+                double src1Val = src1.entries[src1RowOffset + j];
+                int start = src2.rowPointers[j];
+                int stop = src2.rowPointers[j + 1];
+
+                for (int aIndex = start; aIndex < stop; aIndex++) {
+                    int aCol = src2.colIndices[aIndex];
+                    double aVal = src2.entries[aIndex];
+                    destEntries[rowOffset + aCol] += src1Val * aVal;
+                }
+            }
+        }
+
+        return new Matrix(new Shape(rows1, cols2), destEntries);
+    }
+
+
+    /**
      * Computes the matrix multiplication between a real sparse CSR matrix and the transpose of a real dense matrix.
      * WARNING: This method is likely slower than {@link #standard(CsrMatrix, Matrix) standard(src1, src2.T())} unless
      * {@code src1} has many more columns than rows and is very sparse.

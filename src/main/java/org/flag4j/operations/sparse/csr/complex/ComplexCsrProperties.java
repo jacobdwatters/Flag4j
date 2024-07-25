@@ -78,7 +78,6 @@ public class ComplexCsrProperties {
     public static boolean isHermitian(CsrCMatrix src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
-        if(src == null) return false;
         if(src.entries.length == 0) return true;
 
         return src.H().equals(src);
@@ -93,7 +92,6 @@ public class ComplexCsrProperties {
     public static boolean isAntiHermitian(CsrCMatrix src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
-        if(src == null) return false;
         if(src.entries.length == 0) return true;
 
         return src.H().mult(-1).equals(src);

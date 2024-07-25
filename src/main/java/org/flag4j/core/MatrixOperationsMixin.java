@@ -29,10 +29,7 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays.sparse.*;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ErrorMessages;
 
@@ -77,6 +74,25 @@ public interface MatrixOperationsMixin<
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
+    T add(CsrMatrix B);
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    W add(CsrCMatrix B);
+
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
     CMatrix add(CMatrix B);
 
 
@@ -105,6 +121,24 @@ public interface MatrixOperationsMixin<
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     T sub(CooMatrix B);
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     * @param B Second tensor in the subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    T sub(CsrMatrix B);
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     * @param B Second tensor in the subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    W sub(CsrCMatrix B);
 
 
     /**
@@ -170,6 +204,15 @@ public interface MatrixOperationsMixin<
      * @return The result of matrix multiplying this matrix with matrix B.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
+    U mult(CsrMatrix B);
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     * @param B Second matrix in the matrix multiplication.
+     * @return The result of matrix multiplying this matrix with matrix B.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
     CMatrix mult(CMatrix B);
 
 
@@ -180,6 +223,15 @@ public interface MatrixOperationsMixin<
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
     CMatrix mult(CooCMatrix B);
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     * @param B Second matrix in the matrix multiplication.
+     * @return The result of matrix multiplying this matrix with matrix B.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
+    CMatrix mult(CsrCMatrix B);
 
 
     /**
@@ -248,6 +300,20 @@ public interface MatrixOperationsMixin<
 
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+     * {@code this.mult(B.T())}.
+     * For large matrices, this method may
+     * be significantly faster than directly computing the transpose followed by the multiplication as
+     * {@code this.mult(B.T())}.
+     * @param B The second matrix in the multiplication and the matrix to transpose/
+     * @return The result of multiplying this matrix with the transpose of {@code B}.
+     */
+    default U multTranspose(CsrMatrix B) {
+        return this.mult(B.T());
+    }
+
+
+    /**
+     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
      * {{@code this.mult(B.T())}.
      * For large matrices, this method may
      * be significantly faster than directly computing the transpose followed by the multiplication as
@@ -270,6 +336,20 @@ public interface MatrixOperationsMixin<
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
     default CMatrix multTranspose(CooCMatrix B) {
+        return this.mult(B.T());
+    }
+
+
+    /**
+     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+     * {@code this.mult(B.T())}.
+     * For large matrices, this method may
+     * be significantly faster than directly computing the transpose followed by the multiplication as
+     * {@code this.mult(B.T())}.
+     * @param B The second matrix in the multiplication and the matrix to transpose/
+     * @return The result of multiplying this matrix with the transpose of {@code B}.
+     */
+    default CMatrix multTranspose(CsrCMatrix B) {
         return this.mult(B.T());
     }
 
@@ -504,6 +584,32 @@ public interface MatrixOperationsMixin<
      * @return The result of stacking this matrix on top of the matrix B.
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
+    default T stack(CsrMatrix B) {
+        return this.stack(B.toCoo());
+    }
+
+
+    /**
+     * Stacks matrices along columns. <br>
+     * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking this matrix on top of the matrix B.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
+     */
+    default W stack(CsrCMatrix B) {
+        return this.stack(B.toCoo());
+    }
+
+
+    /**
+     * Stacks matrices along columns. <br>
+     * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking this matrix on top of the matrix B.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
+     */
     CMatrix stack(CMatrix B);
 
 
@@ -584,6 +690,40 @@ public interface MatrixOperationsMixin<
      * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
+    default W stack(CsrCMatrix B, int axis){
+        return stack(B.toCoo(), axis);
+    }
+
+
+    /**
+     * Stacks matrices along specified axis. <br>
+     * Also see {@link #stack(Matrix)} and {@link #augment(Matrix)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @param axis Axis along which to stack. <br>
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Matrix)}.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    default T stack(CsrMatrix B, int axis){
+        return stack(B.toCoo(), axis);
+    }
+
+
+    /**
+     * Stacks matrices along specified axis. <br>
+     * Also see {@link #stack(Matrix)} and {@link #augment(Matrix)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @param axis Axis along which to stack. <br>
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Matrix)}.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
     default CMatrix stack(CMatrix B, int axis){
         CMatrix stacked;
 
@@ -646,6 +786,32 @@ public interface MatrixOperationsMixin<
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
     T augment(CooMatrix B);
+
+
+    /**
+     * Stacks matrices along rows. <br>
+     * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking B to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
+     */
+    default T augment(CsrMatrix B) {
+        return augment(B.toCoo());
+    }
+
+
+    /**
+     * Stacks matrices along rows. <br>
+     * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking B to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
+     */
+    default W augment(CsrCMatrix B) {
+        return augment(B.toCoo());
+    }
 
 
     /**
@@ -739,13 +905,9 @@ public interface MatrixOperationsMixin<
     default T stack(Vector b, int axis) {
         T stacked;
 
-        if(axis==0) {
-            stacked = this.augment(b);
-        } else if(axis==1) {
-            stacked = this.stack(b);
-        } else {
-            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
-        }
+        if(axis==0) stacked = this.augment(b);
+        else if(axis==1) stacked = this.stack(b);
+        else throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
 
         return stacked;
     }
@@ -768,13 +930,9 @@ public interface MatrixOperationsMixin<
     default T stack(CooVector b, int axis) {
         T stacked;
 
-        if(axis==0) {
-            stacked = this.augment(b);
-        } else if(axis==1) {
-            stacked = this.stack(b);
-        } else {
-            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
-        }
+        if(axis==0) stacked = this.augment(b);
+        else if(axis==1) stacked = this.stack(b);
+        else throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
 
         return stacked;
     }
@@ -797,13 +955,9 @@ public interface MatrixOperationsMixin<
     default W stack(CVector b, int axis) {
         W stacked;
 
-        if(axis==0) {
-            stacked = this.augment(b);
-        } else if(axis==1) {
-            stacked = this.stack(b);
-        } else {
-            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
-        }
+        if(axis==0) stacked = this.augment(b);
+        else if(axis==1) stacked = this.stack(b);
+        else throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
 
         return stacked;
     }
@@ -826,13 +980,9 @@ public interface MatrixOperationsMixin<
     default W stack(CooCVector b, int axis) {
         W stacked;
 
-        if(axis==0) {
-            stacked = this.augment(b);
-        } else if(axis==1) {
-            stacked = this.stack(b);
-        } else {
-            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
-        }
+        if(axis==0) stacked = this.augment(b);
+        else if(axis==1) stacked = this.stack(b);
+        else throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
 
         return stacked;
     }

@@ -4,7 +4,7 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CsrMatrixTransposeTests {
 
@@ -48,5 +48,58 @@ class CsrMatrixTransposeTests {
         };
         makeMatrices();
         assertEquals(exp, A.T());
+    }
+
+
+    @Test
+    void isSymmetricTests() {
+        // -------------------- Sub-case 1 ---------------------
+        aDenseEntries = new double[5][5];
+        aDenseEntries[0][0] = 1;
+        aDenseEntries[2][1] = -491.3;
+        aDenseEntries[1][2] = -491.3;
+        aDenseEntries[3][4] = 5.3;
+        aDenseEntries[4][3] = 5.3;
+        aDenseEntries[3][3] = 9;
+        makeMatrices();
+
+        assertTrue(A.isSymmetric());
+
+        // -------------------- Sub-case 2 ---------------------
+        aDenseEntries = new double[5][6];
+        aDenseEntries[0][0] = 1;
+        aDenseEntries[2][1] = -491.3;
+        aDenseEntries[1][2] = -491.3;
+        aDenseEntries[3][4] = 5.3;
+        aDenseEntries[4][3] = 5.3;
+        aDenseEntries[3][3] = 9;
+        makeMatrices();
+
+        assertFalse(A.isSymmetric());
+
+        // -------------------- Sub-case 1 ---------------------
+        aDenseEntries = new double[415][415];
+        aDenseEntries[0][0] = 1;
+        aDenseEntries[2][1] = -491.3;
+        aDenseEntries[1][2] = -491.3;
+        aDenseEntries[3][4] = 5.3;
+        aDenseEntries[4][3] = 5.3;
+        aDenseEntries[3][3] = 9;
+        aDenseEntries[45][2] = 10.3;
+        aDenseEntries[2][45] = 10.3;
+        aDenseEntries[13][44] = -94.2;
+        aDenseEntries[44][13] = -94.2;
+        aDenseEntries[255][255] = 1.3;
+        aDenseEntries[304][34] = 849.1;
+        aDenseEntries[34][304] = 849.1;
+        aDenseEntries[304][55] = -8.4;
+        aDenseEntries[55][304] = -8.4;
+        aDenseEntries[400][400] = 84;
+        aDenseEntries[402][0] = -29.32;
+        aDenseEntries[0][402] = -29.32;
+
+        makeMatrices();
+
+        assertTrue(A.isSymmetric());
     }
 }

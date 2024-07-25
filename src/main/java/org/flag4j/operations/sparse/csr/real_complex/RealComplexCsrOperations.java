@@ -58,9 +58,10 @@ public class RealComplexCsrOperations {
      * @param src1 The first matrix in the operation.
      * @param src2 The second matrix in the operation.
      * @param opp Binary operator to apply element-wise to <code>src1</code> and <code>src2</code>.
-     * @param uOpp Optional unary operator for binary operations which are not communicative such as subtraction. This operation is
-     * applied to an element of the second matrix when a non-zero element in the first matrix does not exist at the same index. If
-     * null, this operation is ignored.
+     * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
+     * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
+     * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
+     * {@code opp.apply(x, uOpp.apply(y))}.
      * @return The result of applying the specified binary operation to <code>src1</code> and <code>src2</code>
      * element-wise.
      * @throws IllegalArgumentException If <code>src1</code> and <code>src2</code> do not have the same shape.
@@ -140,9 +141,10 @@ public class RealComplexCsrOperations {
      * @param src1 The first matrix in the operation.
      * @param src2 The second matrix in the operation.
      * @param opp Binary operator to apply element-wise to <code>src1</code> and <code>src2</code>.
-     * @param uOpp Optional unary operator for binary operations which are not communicative such as subtraction. This operation is
-     * applied to an element of the second matrix when a non-zero element in the first matrix does not exist at the same index. If
-     * null, this operation is ignored.
+     * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
+     * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
+     * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
+     * {@code opp.apply(x, uOpp.apply(y))}.
      * @return The result of applying the specified binary operation to <code>src1</code> and <code>src2</code>
      * element-wise.
      * @throws IllegalArgumentException If <code>src1</code> and <code>src2</code> do not have the same shape.
@@ -165,7 +167,8 @@ public class RealComplexCsrOperations {
                 int col2 = src2.colIndices[rowPtr2];
 
                 if(col1 == col2) {
-                    dest.add(opp.apply(src1.entries[rowPtr1], src2.entries[rowPtr2]));
+                    double val2 = uOpp==null ? src2.entries[rowPtr2] : uOpp.apply(src2.entries[rowPtr2]);
+                    dest.add(opp.apply(src1.entries[rowPtr1], val2));
                     colIndices.add(col1);
                     rowPtr1++;
                     rowPtr2++;

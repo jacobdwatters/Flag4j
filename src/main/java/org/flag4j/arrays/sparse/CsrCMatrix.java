@@ -794,19 +794,17 @@ public class CsrCMatrix
     @Override
     public CMatrix pow(int exponent) {
         ParameterChecks.assertPositive(exponent);
-        // TODO: Implementation.
 
         if(exponent==0) {
-            return new CMatrix(this.shape.copy());
+            return CMatrix.I(shape);
         } else if(exponent==1) {
             return this.toDense();
         }
         else {
             CMatrix exp = this.mult(this); // First multiplication is sparse-sparse multiplication.
 
-            for(int i=2; i<exponent; i++) {
-//                exp.mult(this); // The Matrix.Mult(CsrMatrix) method needs to be implemented in the Matrix class.
-            }
+            for(int i=2; i<exponent; i++)
+                exp = exp.mult(this);
 
             return exp;
         }
@@ -1839,6 +1837,7 @@ public class CsrCMatrix
     @Override
     public CMatrix toDense() {
         CNumber[] dest = new CNumber[shape.totalEntries().intValueExact()];
+        ArrayUtils.fillZeros(dest);
 
         for(int i=0; i<rowPointers.length-1; i++) {
             int rowOffset = i*numCols;
@@ -2490,6 +2489,32 @@ public class CsrCMatrix
     @Override
     public boolean isSquare() {
         return numRows == numCols;
+    }
+
+
+    /**
+     * Checks if this CSR matrix is equal to another CSR matrix.
+     * @param src2 Object to compare this matrix to.
+     * @return True if {@code src2} is an instance of {@link CsrMatrix} this CSR matrix is equal to {@code src2}.
+     * False otherwise. If {@code src2} is null, false is returned.
+     */
+    public boolean equals(Object src2) {
+        if(this == src2) return true;
+        if(!(src2 instanceof CsrCMatrix)) return false;
+
+        CsrCMatrix b = (CsrCMatrix) src2;
+
+        if(entries.length == b.entries.length) {
+            // Arrays can be directly compared (even with explicitly stored zeros).
+            return shape.equals(b.shape)
+                    && Arrays.equals(entries, b.entries)
+                    && Arrays.equals(rowPointers, b.rowPointers)
+                    && Arrays.equals(colIndices, b.colIndices);
+        } else {
+            // Then possible explicitly stored zero value must be considered
+            // (e.g. one matrix explicitly stores a zero at some position and the other does not).
+            return SparseUtils.CSREquals(this, b);
+        }
     }
 
 

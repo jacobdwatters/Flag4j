@@ -402,6 +402,36 @@ public class CooMatrix
 
 
     /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     *
+     * @return The result of adding the tensor B to this tensor element-wise.
+     *
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public CooMatrix add(CsrMatrix B) {
+        return add(B.toCoo());
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     *
+     * @return The result of adding the tensor B to this tensor element-wise.
+     *
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public CooCMatrix add(CsrCMatrix B) {
+        return add(B.toCoo());
+    }
+
+
+    /**
      * Adds specified value to all entries of this tensor.
      *
      * @param a Value to add to all entries of this tensor.
@@ -435,6 +465,36 @@ public class CooMatrix
     @Override
     public CooMatrix sub(CooMatrix B) {
         return RealSparseMatrixOperations.sub(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     *
+     * @param B Second tensor in the subtraction.
+     *
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     *
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public CooMatrix sub(CsrMatrix B) {
+        return sub(B.toCoo());
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     *
+     * @param B Second tensor in the subtraction.
+     *
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     *
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public CooCMatrix sub(CsrCMatrix B) {
+        return sub(B.toCoo());
     }
 
 
@@ -2289,6 +2349,21 @@ public class CooMatrix
      * Computes the matrix multiplication between two matrices.
      *
      * @param B Second matrix in the matrix multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with matrix B.
+     *
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
+    @Override
+    public Matrix mult(CsrMatrix B) {
+        return mult(B.toCoo());
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param B Second matrix in the matrix multiplication.
      * @return The result of matrix multiplying this matrix with matrix B.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
@@ -2322,6 +2397,21 @@ public class CooMatrix
                         B.entries, B.rowIndices, B.colIndices, B.shape
                 )
         );
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param B Second matrix in the matrix multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with matrix B.
+     *
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
+    @Override
+    public CMatrix mult(CsrCMatrix B) {
+        return mult(B.toCoo());
     }
 
 

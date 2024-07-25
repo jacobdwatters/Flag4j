@@ -52,13 +52,18 @@ import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixOp
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultTranspose;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
+import org.flag4j.operations.dense_sparse.csr.complex.ComplexCsrDenseOperations;
+import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
 import org.flag4j.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Complex dense matrix. Stored in row major format.
+ * Complex dense matrix. Stored in row major format. This class is mostly equivalent to a {@link CTensor complex dense tensor}.
+ * However, specialized methods are provided for this class which may result in slightly better performance than
+ * equivalent operations with a {@link CTensor complex dense tensor} of rank 2. Additionally, methods specific to matrices
+ * which may not be available for tensors are provided.
  */
 public class CMatrix
         extends ComplexDenseTensorBase<CMatrix, Matrix>
@@ -1318,13 +1323,15 @@ public class CMatrix
         CMatrix copy = new CMatrix(this);
 
         for(int i=0; i<values.length; i++) {
+            int rowOffset = (i+rowStart)*numCols;
             for(int j=0; j<values[0].length; j++) {
-                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j].copy();
+                copy.entries[rowOffset + j+colStart] = values[i][j].copy();
             }
         }
 
         return copy;
     }
+
 
     /**
      * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
@@ -1340,7 +1347,20 @@ public class CMatrix
      */
     @Override
     public CMatrix setSliceCopy(Double[][] values, int rowStart, int colStart) {
-        return null;
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
+        CMatrix copy = new CMatrix(this);
+
+        for(int i=0; i<values.length; i++) {
+            int rowOffset = (i+rowStart)*numCols;
+            for(int j=0; j<values[0].length; j++) {
+                copy.entries[rowOffset + j+colStart] = new CNumber(values[i][j]);
+            }
+        }
+
+        return copy;
     }
 
 
@@ -1365,8 +1385,9 @@ public class CMatrix
         CMatrix copy = new CMatrix(this);
 
         for(int i=0; i<values.length; i++) {
+            int rowOffset = (i+rowStart)*numCols;
             for(int j=0; j<values[0].length; j++) {
-                copy.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
+                copy.entries[rowOffset + j+colStart] = new CNumber(values[i][j]);
             }
         }
 
@@ -1395,8 +1416,9 @@ public class CMatrix
         CMatrix copy = new CMatrix(this);
 
         for(int i=0; i<values.length; i++) {
+            int rowOffset = (i+rowStart)*numCols;
             for(int j=0; j<values[0].length; j++) {
-                copy.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
+                copy.entries[rowOffset + j+colStart] = new CNumber(values[i][j]);
             }
         }
 
@@ -1425,8 +1447,9 @@ public class CMatrix
         CMatrix copy = new CMatrix(this);
 
         for(int i=0; i<values.length; i++) {
+            int rowOffset = (i+rowStart)*numCols;
             for(int j=0; j<values[0].length; j++) {
-                copy.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
+                copy.entries[rowOffset + j+colStart] = new CNumber(values[i][j]);
             }
         }
 
@@ -1692,6 +1715,36 @@ public class CMatrix
      * Computes the element-wise addition between two tensors of the same rank.
      *
      * @param B Second tensor in the addition.
+     *
+     * @return The result of adding the tensor B to this tensor element-wise.
+     *
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public CMatrix add(CsrMatrix B) {
+        return RealComplexCsrDenseOperations.applyBinOpp(this, B, CNumber::add);
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     *
+     * @return The result of adding the tensor B to this tensor element-wise.
+     *
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public CMatrix add(CsrCMatrix B) {
+        return ComplexCsrDenseOperations.applyBinOpp(this, B, CNumber::sub);
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
@@ -1726,6 +1779,36 @@ public class CMatrix
     @Override
     public CMatrix sub(CooMatrix B) {
         return RealComplexDenseSparseMatrixOperations.sub(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     *
+     * @param B Second tensor in the subtraction.
+     *
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     *
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public CMatrix sub(CsrMatrix B) {
+        return RealComplexCsrDenseOperations.applyBinOpp(this, B, CNumber::sub);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     *
+     * @param B Second tensor in the subtraction.
+     *
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     *
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public CMatrix sub(CsrCMatrix B) {
+        return ComplexCsrDenseOperations.applyBinOpp(this, B, CNumber::sub);
     }
 
 
@@ -1887,6 +1970,22 @@ public class CMatrix
      * Computes the matrix multiplication between two matrices.
      *
      * @param B Second matrix in the matrix multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with matrix B.
+     *
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
+    @Override
+    public CMatrix mult(CsrMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param B Second matrix in the matrix multiplication.
      * @return The result of matrix multiplying this matrix with matrix B.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
@@ -1915,6 +2014,22 @@ public class CMatrix
         Shape shape = new Shape(this.numRows, B.numCols);
 
         return new CMatrix(shape, entries);
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param B Second matrix in the matrix multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with matrix B.
+     *
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
+    @Override
+    public CMatrix mult(CsrCMatrix B) {
+        // TODO: Implementation.
+        return null;
     }
 
 
