@@ -89,9 +89,9 @@ class RealComplexCsrCsrMatMultTests {
                 {new CNumber(0), new CNumber(0), new CNumber(4.45, -67.2), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(1)}};
         aEntries = new double[][]{
-                {0, 0.90836, 0, 0, 0, 0, 0, 0, -912567.34, 0, 0},
-                {0, 0, 0, 0, 0, 0, 8.3, 0, 0, 0, 6},
-                {0.23691, 0, 4.1, 0, 739.15, 0, 0, 0, 0, 0.0000125, 0}};
+                {0, 0.90836, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 8.3, 0},
+                {0.23691, 0, 4.1, 0, 739.15, 0, 0, 0}};
         build(false);
 
         assertThrows(LinearAlgebraException.class, ()-> A.mult(B));
