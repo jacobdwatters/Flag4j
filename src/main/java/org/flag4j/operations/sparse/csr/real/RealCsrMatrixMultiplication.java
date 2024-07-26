@@ -88,6 +88,9 @@ public final class RealCsrMatrixMultiplication {
      * @return Sparse CSR matrix resulting from the matrix multiplication of the two sparse CSR matrices.
      */
     public static CsrMatrix standardAsSparse(CsrMatrix src1, CsrMatrix src2) {
+        // Ensure matrices have shapes conducive to matrix multiplication.
+        ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
+
         int[] resultRowPtr = new int[src1.numRows + 1];
         ArrayList<Double> resultList = new ArrayList<>();
         ArrayList<Integer> resultColIndexList = new ArrayList<>();

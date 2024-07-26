@@ -456,7 +456,7 @@ public class Matrix
     @Override
     public boolean equals(Object object) {
         if(this == object) return true;
-        if(!(object instanceof Matrix)) return false;
+        if(object == null || object.getClass() != getClass()) return false;
 
         Matrix src2 = (Matrix) object;
 

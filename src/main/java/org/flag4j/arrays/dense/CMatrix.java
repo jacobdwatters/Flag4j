@@ -493,7 +493,7 @@ public class CMatrix
     @Override
     public boolean equals(Object object) {
         if(this == object) return true;
-        if(!(object instanceof CMatrix)) return false;
+        if(object == null || object.getClass() != getClass()) return false;
 
         CMatrix src2 = (CMatrix) object;
 

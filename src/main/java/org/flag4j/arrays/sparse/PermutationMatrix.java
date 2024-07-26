@@ -152,7 +152,7 @@ public class PermutationMatrix implements Serializable {
     public boolean equals(Object object) {
         // Check for quick returns.
         if(this == object) return true;
-        if(!(object instanceof PermutationMatrix)) return false;
+        if(object == null || object.getClass() != getClass()) return false;
 
         PermutationMatrix src2 = (PermutationMatrix) object;
 

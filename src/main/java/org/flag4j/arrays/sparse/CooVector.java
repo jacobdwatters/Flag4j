@@ -162,7 +162,7 @@ public class CooVector
     @Override
     public boolean equals(Object object) {
         if(this == object) return true;
-        if(!(object instanceof CooVector)) return false;
+        if(object == null || object.getClass() != getClass()) return false;
 
         CooVector src2 = (CooVector) object;
         return RealSparseEquals.vectorEquals(this, src2);

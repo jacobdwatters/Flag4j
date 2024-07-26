@@ -385,7 +385,7 @@ public class CooCMatrix
     @Override
     public boolean equals(Object object) {
         if(this == object) return true;
-        if(!(object instanceof CooCMatrix)) return false;
+        if(object == null || object.getClass() != getClass()) return false;
 
         CooCMatrix src2 = (CooCMatrix) object;
         return ComplexSparseEquals.matrixEquals(this, src2);

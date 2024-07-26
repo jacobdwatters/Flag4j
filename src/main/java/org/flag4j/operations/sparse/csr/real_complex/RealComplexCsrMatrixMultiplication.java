@@ -134,6 +134,9 @@ public class RealComplexCsrMatrixMultiplication {
      * @return Sparse CSR matrix resulting from the matrix multiplication of the two sparse CSR matrices.
      */
     public static CsrCMatrix standardAsSparse(CsrMatrix src1, CsrCMatrix src2) {
+        // Ensure matrices have shapes conducive to matrix multiplication.
+        ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
+
         int[] resultRowPtr = new int[src1.numRows + 1];
         ArrayList<CNumber> resultList = new ArrayList<>();
         ArrayList<Integer> resultColIndexList = new ArrayList<>();
@@ -161,6 +164,71 @@ public class RealComplexCsrMatrixMultiplication {
                         hasValue[bCol] = true;
                     }
                     tempValues[bCol].addEq(bVal.mult(aVal));
+                }
+            }
+
+            for(int j=0; j<src2.numCols; j++) {
+                if (hasValue[j]) {
+                    resultColIndexList.add(j);
+                    resultList.add(tempValues[j]);
+                }
+            }
+            resultRowPtr[i + 1] = resultRowPtr[i] + resultColIndexList.size() - (i > 0 ? resultRowPtr[i] : 0);
+        }
+
+        CNumber[] resultValues = new CNumber[resultList.size()];
+        int[] resultColIndices = new int[resultColIndexList.size()];
+        for(int i = 0; i < resultList.size(); i++) {
+            resultValues[i] = resultList.get(i);
+            resultColIndices[i] = resultColIndexList.get(i);
+        }
+
+        return new CsrCMatrix(new Shape(src1.numRows, src2.numCols), resultValues, resultRowPtr, resultColIndices);
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two sparse CSR matrices and returns the result as a sparse matrix. <br>
+     *
+     * Warning: This method may be slower than {@link #standard(CsrCMatrix, CsrMatrix)}
+     * if the result of multiplying this matrix with {@code src2} is not very sparse. Further, multiplying two
+     * sparse matrices (even very sparse matrices) may result in a dense matrix so this method should be used with
+     * caution.
+     * @param src1 First CSR matrix in the multiplication.
+     * @param src2 Second CSR matrix in the multiplication.
+     * @return Sparse CSR matrix resulting from the matrix multiplication of the two sparse CSR matrices.
+     */
+    public static CsrCMatrix standardAsSparse(CsrCMatrix src1, CsrMatrix src2) {
+        // Ensure matrices have shapes conducive to matrix multiplication.
+        ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
+
+        int[] resultRowPtr = new int[src1.numRows + 1];
+        ArrayList<CNumber> resultList = new ArrayList<>();
+        ArrayList<Integer> resultColIndexList = new ArrayList<>();
+
+        CNumber[] tempValues = new CNumber[src2.numCols];
+        boolean[] hasValue = new boolean[src2.numCols];
+
+        for (int i=0; i<src1.numRows; i++) {
+            Arrays.fill(hasValue, false);
+            int start = src1.rowPointers[i];
+            int stop = src1.rowPointers[i + 1];
+
+            for (int aIndex=start; aIndex<stop; aIndex++) {
+                int aCol = src1.colIndices[aIndex];
+                CNumber aVal = src1.entries[aIndex];
+                int innerStart = src2.rowPointers[aCol];
+                int innerStop = src2.rowPointers[aCol + 1];
+
+                for(int bIndex=innerStart; bIndex<innerStop; bIndex++) {
+                    int bCol = src2.colIndices[bIndex];
+                    double bVal = src2.entries[bIndex];
+
+                    if(!hasValue[bCol]) {
+                        tempValues[bCol] = new CNumber(0); // Ensure the value is initialized
+                        hasValue[bCol] = true;
+                    }
+                    tempValues[bCol].addEq(aVal.mult(bVal));
                 }
             }
 

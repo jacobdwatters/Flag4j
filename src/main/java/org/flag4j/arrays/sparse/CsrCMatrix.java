@@ -751,6 +751,58 @@ public class CsrCMatrix
 
 
     /**
+     * Computes the matrix multiplication between two sparse CSR matrices and stores the result in a CSR matrix.
+     * Warning: This method will likely be slower than {@link #mult(CsrMatrix)} if the result of multiplying this matrix
+     * with {@code B} is not very sparse. Further, multiplying two sparse matrices may result in a dense matrix so this
+     * method should be used with caution.
+     * @param B Matrix to multiply to this matrix.
+     * @return The result of matrix multiplying this matrix with {@code B} as a sparse CSR matrix.
+     */
+    public CsrCMatrix mult2CSR(CsrMatrix B) {
+        return RealComplexCsrMatrixMultiplication.standardAsSparse(this, B);
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two sparse CSR matrices and stores the result in a CSR matrix.
+     * Warning: This method will likely be slower than {@link #mult(CsrCMatrix)} if the result of multiplying this matrix
+     * with {@code B} is not very sparse. Further, multiplying two sparse matrices may result in a dense matrix so this
+     * method should be used with caution.
+     * @param B Matrix to multiply to this matrix.
+     * @return The result of matrix multiplying this matrix with {@code B} as a sparse CSR matrix.
+     */
+    public CsrCMatrix mult2CSR(CsrCMatrix B) {
+        return ComplexCsrMatrixMultiplication.standardAsSparse(this, B);
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two sparse matrices and stores the result in a CSR matrix.
+     * Warning: This method will likely be slower than {@link #mult(CooMatrix)} if the result of multiplying this matrix
+     * with {@code B} is not very sparse. Further, multiplying two sparse matrices may result in a dense matrix so this
+     * method should be used with caution.
+     * @param B Matrix to multiply to this matrix.
+     * @return The result of matrix multiplying this matrix with {@code B} as a sparse CSR matrix.
+     */
+    public CsrCMatrix mult2CSR(CooMatrix B) {
+        return RealComplexCsrMatrixMultiplication.standardAsSparse(this, B.toCsr());
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two sparse matrices and stores the result in a CSR matrix.
+     * Warning: This method will likely be slower than {@link #mult(CooCMatrix)} if the result of multiplying this matrix
+     * with {@code B} is not very sparse. Further, multiplying two sparse matrices may result in a dense matrix so this
+     * method should be used with caution.
+     * @param B Matrix to multiply to this matrix.
+     * @return The result of matrix multiplying this matrix with {@code B} as a sparse CSR matrix.
+     */
+    public CsrCMatrix mult2CSR(CooCMatrix B) {
+        return ComplexCsrMatrixMultiplication.standardAsSparse(this, B.toCsr());
+    }
+
+
+    /**
      * Computes the matrix multiplication between two matrices.
      *
      * @param B Second matrix in the matrix multiplication.
@@ -2499,8 +2551,9 @@ public class CsrCMatrix
      * False otherwise. If {@code src2} is null, false is returned.
      */
     public boolean equals(Object src2) {
+        // Check for early returns.
         if(this == src2) return true;
-        if(!(src2 instanceof CsrCMatrix)) return false;
+        if(src2 == null || src2.getClass() != getClass()) return false;
 
         CsrCMatrix b = (CsrCMatrix) src2;
 

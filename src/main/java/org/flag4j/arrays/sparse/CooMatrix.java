@@ -313,7 +313,7 @@ public class CooMatrix
     @Override
     public boolean equals(Object object) {
         if(this == object) return true;
-        if(!(object instanceof CooMatrix)) return false;
+        if(object == null || object.getClass() != getClass()) return false;
 
         CooMatrix src2 = (CooMatrix) object;
         return RealSparseEquals.matrixEquals(this, src2);

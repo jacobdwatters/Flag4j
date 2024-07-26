@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PrintOptionsTests {
 
     @Test
-    void testprintOptionTestCase() {
+    void printOptionTestCase() {
         assertEquals(2, PrintOptions.getPadding());
         assertEquals(10, PrintOptions.getMaxRows());
         assertEquals(10, PrintOptions.getMaxColumns());
