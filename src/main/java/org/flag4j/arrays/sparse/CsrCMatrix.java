@@ -2571,6 +2571,19 @@ public class CsrCMatrix
     }
 
 
+    @Override
+    public int hashCode() {
+        int result = 17;
+
+        result = 31 * result + numRows;
+        result = 31 * result + numCols;
+        result = 31 * result + Arrays.hashCode(rowPointers);
+        result = 31 * result + Arrays.hashCode(colIndices);
+        result = 31 * result + Arrays.hashCode(entries);
+        return result;
+    }
+
+
     /**
      * Checks if a matrix can be represented as a vector. That is, if a matrix has only one row or one column.
      *

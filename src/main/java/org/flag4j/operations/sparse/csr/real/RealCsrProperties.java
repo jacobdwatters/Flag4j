@@ -73,7 +73,6 @@ public final class RealCsrProperties {
     public static boolean isSymmetric(CsrMatrix src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
-        if(src == null) return false;
         if(src.entries.length == 0) return true;
 
         return src.T().equals(src);
@@ -88,7 +87,6 @@ public final class RealCsrProperties {
     public static boolean isAntiSymmetric(CsrMatrix src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
-        if(src == null) return false;
         if(src.entries.length == 0) return true;
 
         return src.T().mult(-1).equals(src);

@@ -1844,6 +1844,19 @@ public class CsrMatrix
     }
 
 
+    @Override
+    public int hashCode() {
+        int result = 17;
+
+        result = 31 * result + numRows;
+        result = 31 * result + numCols;
+        result = 31 * result + Arrays.hashCode(rowPointers);
+        result = 31 * result + Arrays.hashCode(colIndices);
+        result = 31 * result + Arrays.hashCode(entries);
+        return result;
+    }
+
+
     /**
      * Removes a specified set of rows from this matrix. Note: this will construct an intermediate {@link CooMatrix}.
      *
