@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ComplexCsrCsrMatMultTests {
+class ComplexRealCsrCsrMatMultTests {
     static CsrCMatrix A;
     static CMatrix aDense;
     static CNumber[][] aEntries;
