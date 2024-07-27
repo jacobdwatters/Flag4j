@@ -2450,7 +2450,7 @@ public class CsrMatrix
         int col = indices[1];
         int loc = Arrays.binarySearch(colIndices, rowPointers[row], rowPointers[row+1], col);
 
-        if(loc > 0) return entries[loc];
+        if(loc >= 0) return entries[loc];
         else return 0d;
     }
 

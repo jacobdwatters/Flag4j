@@ -576,7 +576,7 @@ public class CsrCMatrix
         int col = indices[1];
         int loc = Arrays.binarySearch(colIndices, rowPointers[row], rowPointers[row+1], col);
 
-        if(loc > 0) return entries[loc];
+        if(loc >= 0) return entries[loc];
         else return CNumber.zero();
     }
 
@@ -1972,6 +1972,7 @@ public class CsrCMatrix
     public CsrCMatrix set(CNumber value, int row, int col) {
         // Ensure indices are in bounds.
         ParameterChecks.assertValidIndex(shape, row, col);
+
         CNumber[] newEntries;
         int[] newRowPointers = rowPointers.clone();
         int[] newColIndices;
