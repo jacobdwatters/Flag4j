@@ -92,23 +92,10 @@ public abstract class SparseTensorBase<T, U, W, Z, Y, D extends Serializable, X 
         int totalIndices = restIndices.length + 1;
         ParameterChecks.assertEquals(totalIndices, shape.getRank());
 
-        // TODO: This needs to be enforced in CooMatrix class
-//        ParameterChecks.assertArrayLengthsEq(nonZeroEntries, initIndices.length);
-
         this.indices = new int[totalIndices][];
         this.indices[0] = initIndices;
 
-        // TODO: This needs to be enforced in CooMatrix class.
-//        for(int i=1; i<totalIndices; i++) {
-//            if(restIndices[i-1].length != initIndices.length) {
-//                throw new IllegalArgumentException(
-//                        String.format("All index array must have the same length but got %d and %d.",
-//                                initIndices.length, restIndices[i-1].length));
-//            }
-//        }
-
         System.arraycopy(restIndices, 0, this.indices, 1, totalIndices - 1);
-
 
         this.nonZeroEntries = nonZeroEntries;
     }

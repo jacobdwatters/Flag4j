@@ -97,6 +97,37 @@ public class CsrCMatrix
 
 
     /**
+     * Constructs an empty sparse CSR matrix with the specified shape.
+     * @param shape Shape of the CSR matrix.
+     */
+    public CsrCMatrix(Shape shape) {
+        super(shape, 0, new CNumber[0], new int[shape.dims[0]+1], new int[0]);
+
+        numRows = shape.dims[0];
+        numCols = shape.dims[1];
+        this.rowPointers = indices[0];
+        this.colIndices = indices[1];
+        nnz = entries.length;
+    }
+
+
+    /**
+     * Constructs an empty sparse CSR matrix with the specified shape.
+     * @param numRows Number of rows in the CSR matrix.
+     * @param numCols Number of columns in the CSR matrix.
+     */
+    public CsrCMatrix(int numRows, int numCols) {
+        super(new Shape(numRows, numCols), 0, new CNumber[0], new int[numRows+1], new int[0]);
+
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
+        this.rowPointers = indices[0];
+        this.colIndices = indices[1];
+        nnz = entries.length;
+    }
+
+
+    /**
      * Constructs a sparse matrix in CSR format with specified row-pointers, column indices and non-zero entries.
      * @param shape Shape of the matrix.
      * @param entries Non-zero entries for CSR matrix.
@@ -1841,9 +1872,9 @@ public class CsrCMatrix
             int start = rowPointers[i];
             int stop = rowPointers[i+1];
 
-            int loc = Arrays.binarySearch(colIndices, i, start, stop); // Search for matching column index
+            int loc = Arrays.binarySearch(colIndices, start, stop, i); // Search for matching column index
 
-            if(loc > 0) {
+            if(loc >= 0) {
                 destEntries.add(entries[loc].copy());
                 destIndices.add(i);
             }
