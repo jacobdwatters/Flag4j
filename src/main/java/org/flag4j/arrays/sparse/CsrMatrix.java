@@ -48,7 +48,9 @@ import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * <p>Real sparse matrix stored in compressed sparse row (CSR) format.</p>
@@ -1833,47 +1835,6 @@ public class CsrMatrix
     }
 
 
-    /**
-     * Removes a specified row from this matrix.
-     *
-     * @param rowIndex Index of the row to remove from this matrix.
-     * @return a copy of this matrix with the specified row removed.
-     * @throws IndexOutOfBoundsException If {@code rowIndex >= this.numRows()}.
-     */
-    @Override
-    public CsrMatrix removeRow(int rowIndex) {
-        ParameterChecks.assertIndexInBounds(numRows, rowIndex);
-
-        int numRemoved = rowPointers[rowIndex+1] - rowPointers[rowIndex];  // Number of entries in the row to be removed.
-
-        double[] destEntries = new double[nnz-numRemoved];
-        int[] destColIndices = new int[destEntries.length];
-        int[] destRowPointers = new int[rowPointers.length-1];
-
-        // Copy row pointers.
-        System.arraycopy(rowPointers, 0, destRowPointers, 0, rowIndex+1);
-        System.arraycopy(rowPointers, rowIndex+1, destRowPointers, rowIndex, rowPointers.length-(rowIndex+1));
-
-        int destIdx = 0;
-        for(int i=0; i<numRows; i++) {
-            if(i!=rowIndex) {
-                int rowStart = rowPointers[i];
-                int rowEnd = rowPointers[i+1];
-
-                for(int j=rowStart; j<rowEnd; j++) {
-                    // Copy over value and column index.
-                    destEntries[destIdx] = entries[j];
-                    destColIndices[destIdx++] = colIndices[j];
-                }
-            }
-
-            // Adjust the row pointers after the row being removed.
-            if(i>=rowIndex) destRowPointers[i] -= numRemoved;
-        }
-
-        return new CsrMatrix(numRows-1, numCols, destEntries, destRowPointers, destColIndices);
-    }
-
 
     @Override
     public int hashCode() {
@@ -1889,6 +1850,19 @@ public class CsrMatrix
 
 
     /**
+     * Removes a specified row from this matrix.
+     *
+     * @param rowIndex Index of the row to remove from this matrix.
+     * @return a copy of this matrix with the specified row removed.
+     * @throws IndexOutOfBoundsException If {@code rowIndex >= this.numRows()}.
+     */
+    @Override
+    public CsrMatrix removeRow(int rowIndex) {
+        return toCoo().removeRow(rowIndex).toCsr();
+    }
+
+
+    /**
      * Removes a specified set of rows from this matrix. Note: this will construct an intermediate {@link CooMatrix}.
      *
      * @param rowIndices The indices of the rows to remove from this matrix.
@@ -1896,37 +1870,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix removeRows(int... rowIndices) {
-        ParameterChecks.assertIndexInBounds(numRows, rowIndices);
-
-        // Create and fill hashset for efficient row index lookup.
-        Set<Integer> indexSet = new HashSet<>(rowIndices.length);
-        for(int rowIdx : rowIndices) indexSet.add(rowIdx);
-
-        // Guess the expected number of non-zero entries as the average number of entries per row times the number of rows in the
-        //  resulting matrix.
-        Shape destShape = new Shape(numRows-rowIndices.length, numCols);
-        int expSize = Math.max(10, (nnz/numRows)*destShape.get(0));
-
-        // For simplicity, construct as COO matrix and convert to CSR.
-        List<Double> destEntries = new ArrayList<>(expSize);
-        List<Integer> destColIndices = new ArrayList<>(expSize);
-        List<Integer> destRowIndices = new ArrayList<>(expSize);
-
-        for(int i=0; i<numRows; i++) {
-            if(!indexSet.contains(i)) {
-                int startRowIdx = rowPointers[i];
-                int endRowIdx = rowPointers[i+1];
-
-                for(int j=startRowIdx; j<endRowIdx; j++) {
-                    destEntries.add(entries[j]);
-                    destColIndices.add(colIndices[j]);
-                    destRowIndices.add(i);
-                }
-            }
-        }
-
-        // Convert to CSR matrix and return.
-        return new CooMatrix(destShape, destEntries, destRowIndices, destColIndices).toCsr();
+        return toCoo().removeRows(rowIndices).toCsr();
     }
 
 
@@ -1938,33 +1882,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix removeCol(int colIndex) {
-        ParameterChecks.assertIndexInBounds(numRows, colIndex);
-
-        // Guess the expected number of non-zero entries as the average number of entries per column times the number of columns
-        //  in the resulting matrix.
-        Shape destShape = new Shape(numRows, numCols-1);
-        int expSize = Math.max(10, (nnz/numCols)*destShape.get(1));
-
-        // For simplicity, construct as COO matrix and convert to CSR.
-        List<Double> destEntries = new ArrayList<>(expSize);
-        List<Integer> destColIndices = new ArrayList<>(expSize);
-        List<Integer> destRowIndices = new ArrayList<>(expSize);
-
-        for(int i=0; i<numRows; i++) {
-            int startRowIdx = rowPointers[i];
-            int endRowIdx = rowPointers[i+1];
-
-            for(int j=startRowIdx; j<endRowIdx; j++) {
-                if(j!=colIndex) {
-                    destEntries.add(entries[j]);
-                    destColIndices.add(colIndices[j]);
-                    destRowIndices.add(i);
-                }
-            }
-        }
-
-        // Convert to CSR matrix and return.
-        return new CooMatrix(destShape, destEntries, destRowIndices, destColIndices).toCsr();
+        return toCoo().removeCols(colIndex).toCsr();
     }
 
 
@@ -1976,37 +1894,7 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix removeCols(int... colIndices) {
-        ParameterChecks.assertIndexInBounds(numRows, colIndices);
-
-        // Create and fill hashset for efficient row index lookup.
-        Set<Integer> indexSet = new HashSet<>(colIndices.length);
-        for(int colIdx : colIndices) indexSet.add(colIdx);
-
-        // Guess the expected number of non-zero entries as the average number of entries per column times the number of columns
-        //  in the resulting matrix.
-        Shape destShape = new Shape(numRows, numCols-colIndices.length);
-        int expSize = Math.max(10, (nnz/numCols)*destShape.get(1));
-
-        // For simplicity, construct as COO matrix and convert to CSR.
-        List<Double> destEntries = new ArrayList<>(expSize);
-        List<Integer> destColIndices = new ArrayList<>(expSize);
-        List<Integer> destRowIndices = new ArrayList<>(expSize);
-
-        for(int i=0; i<numRows; i++) {
-            int startRowIdx = rowPointers[i];
-            int endRowIdx = rowPointers[i+1];
-
-            for(int j=startRowIdx; j<endRowIdx; j++) {
-                if(!indexSet.contains(j)) {
-                    destEntries.add(entries[j]);
-                    destColIndices.add(colIndices[j]);
-                    destRowIndices.add(i);
-                }
-            }
-        }
-
-        // Convert to CSR matrix and return.
-        return new CooMatrix(destShape, destEntries, destRowIndices, destColIndices).toCsr();
+        return toCoo().removeCols(colIndices).toCsr();
     }
 
 
