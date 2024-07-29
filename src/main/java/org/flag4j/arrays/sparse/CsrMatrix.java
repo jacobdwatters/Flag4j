@@ -1190,7 +1190,7 @@ public class CsrMatrix
     /**
      * Gets a specified column of this matrix between {@code rowStart} (inclusive) and {@code rowEnd} (exclusive).
      *
-     * @param j   Index of the column of this matrix to get.
+     * @param colIdx   Index of the column of this matrix to get.
      * @param rowStart Starting row of the column (inclusive).
      * @param rowEnd   Ending row of the column (exclusive).
      * @return The column at index {@code colIdx} of this matrix between the {@code rowStart} and {@code rowEnd}
@@ -1199,7 +1199,10 @@ public class CsrMatrix
      * @throws IllegalArgumentException If {@code rowEnd} is less than {@code rowStart}.
      */
     @Override
-    public CooVector getCol(int j, int rowStart, int rowEnd) {
+    public CooVector getCol(int colIdx, int rowStart, int rowEnd) {
+        ParameterChecks.assertIndexInBounds(numCols, colIdx);
+        ParameterChecks.assertIndexInBounds(numRows, rowStart, rowEnd-1);
+
         List<Double> destEntries = new ArrayList<>();
         List<Integer> destIndices = new ArrayList<>();
 
@@ -1207,9 +1210,9 @@ public class CsrMatrix
             int start = rowPointers[i];
             int stop = rowPointers[i+1];
 
-            for(int colIdx=start; colIdx<stop; colIdx++) {
-                if(colIndices[colIdx]==j) {
-                    destEntries.add(entries[colIdx]);
+            for(int j=start; j<stop; j++) {
+                if(colIndices[j]==colIdx) {
+                    destEntries.add(entries[j]);
                     destIndices.add(i);
                     break; // Should only be a single entry with this row and column index.
                 }

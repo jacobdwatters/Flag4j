@@ -1667,6 +1667,9 @@ public class CsrCMatrix
      */
     @Override
     public CooCVector getCol(int colIdx, int rowStart, int rowEnd) {
+        ParameterChecks.assertIndexInBounds(numCols, colIdx);
+        ParameterChecks.assertIndexInBounds(numRows, rowStart, rowEnd-1);
+
         List<CNumber> destEntries = new ArrayList<>();
         List<Integer> destIndices = new ArrayList<>();
 
