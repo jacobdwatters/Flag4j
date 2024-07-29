@@ -53,11 +53,20 @@ public class RealComplexCsrDenseOperations {
      * @param src1 First matrix in element-wise binary operation.
      * @param src2 Second matrix in element-wise binary operation.
      * @param opp Binary operator to apply element-wise to the two matrices.
+     * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
+     * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
+     * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
+     * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static CMatrix applyBinOpp(CsrCMatrix src1, Matrix src2, BiFunction<CNumber, Double, CNumber> opp) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
-        CNumber[] dest = new CNumber[src2.entries.length];
+    public static CMatrix applyBinOpp(CsrCMatrix src1, Matrix src2,
+                                      BiFunction<CNumber, Double, CNumber> opp,
+                                      UnaryOperator<Double> uOpp) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);  // Ensure both matrices are same shape.
+
+        CNumber[] dest;
+        if(uOpp == null) dest = ArrayUtils.copy2CNumber(src2.entries, null);
+        else dest = ArrayUtils.applyTransform(src2.entries, (Double a)->new CNumber(uOpp.apply(a)));
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
             int start = src1.rowPointers[i];
@@ -66,12 +75,11 @@ public class RealComplexCsrDenseOperations {
             int rowOffset = i*src1.numCols;
 
             for(int j=start; j<stop; j++) {
-                int idx = rowOffset + src1.colIndices[i];
+                int idx = rowOffset + src1.colIndices[j];
 
                 dest[idx] = opp.apply(
                         src1.entries[j],
-                        src2.entries[idx]
-                );
+                        dest[idx].re);
             }
         }
 
@@ -88,7 +96,8 @@ public class RealComplexCsrDenseOperations {
      */
     public static CMatrix applyBinOpp(Matrix src1, CsrCMatrix src2, BiFunction<Double, CNumber, CNumber> opp) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
-        CNumber[] dest = new CNumber[src2.entries.length];
+
+        CNumber[] dest = ArrayUtils.copy2CNumber(src1.entries, null);
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -101,8 +110,7 @@ public class RealComplexCsrDenseOperations {
 
                 dest[idx] = opp.apply(
                         src1.entries[idx],
-                        src2.entries[j]
-                );
+                        src2.entries[j]);
             }
         }
 
@@ -115,11 +123,20 @@ public class RealComplexCsrDenseOperations {
      * @param src1 First matrix in element-wise binary operation.
      * @param src2 Second matrix in element-wise binary operation.
      * @param opp Binary operator to apply element-wise to the two matrices.
+     * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
+     * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
+     * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
+     * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static CMatrix applyBinOpp(CsrMatrix src1, CMatrix src2, BiFunction<Double, CNumber, CNumber> opp) {
+    public static CMatrix applyBinOpp(CsrMatrix src1, CMatrix src2,
+                                      BiFunction<Double, CNumber, CNumber> opp,
+                                      UnaryOperator<CNumber> uOpp) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
-        CNumber[] dest = new CNumber[src2.entries.length];
+        CNumber[] dest;
+
+        if(uOpp == null) dest = ArrayUtils.copy2CNumber(src2.entries, null);
+        else dest = ArrayUtils.applyTransform(src2.entries, uOpp);
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
             int start = src1.rowPointers[i];
@@ -128,12 +145,11 @@ public class RealComplexCsrDenseOperations {
             int rowOffset = i*src1.numCols;
 
             for(int j=start; j<stop; j++) {
-                int idx = rowOffset + src1.colIndices[i];
+                int idx = rowOffset + src1.colIndices[j];
 
                 dest[idx] = opp.apply(
                         src1.entries[j],
-                        src2.entries[idx]
-                );
+                        dest[idx]);
             }
         }
 
@@ -163,8 +179,7 @@ public class RealComplexCsrDenseOperations {
 
                 dest[idx] = opp.apply(
                         src1.entries[idx],
-                        src2.entries[j]
-                );
+                        src2.entries[j]);
             }
         }
 
@@ -186,7 +201,6 @@ public class RealComplexCsrDenseOperations {
         int[] rowPointers = src2.rowPointers.clone();
         int[] colIndices = src2.colIndices.clone();
         CNumber[] entries = new CNumber[src2.entries.length];
-
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -270,16 +284,17 @@ public class RealComplexCsrDenseOperations {
      * @param src1 First matrix in element-wise binary operation.
      * @param b Scalar to apply element-wise using the specified operation.
      * @param opp Binary operator to apply element-wise to the two matrices.
-     * @param uOpp Optional unary operator for binary operations which are not communicative such as subtraction. This operation is
-     * applied to an element of the second matrix when a non-zero element in the first matrix does not exist at the same index. If
-     * null, this operation is ignored.
+     * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
+     * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
+     * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
+     * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
     public static CMatrix applyBinOpp(CsrMatrix src1, CNumber b,
                                       BiFunction<Double, CNumber, CNumber> opp,
                                       UnaryOperator<CNumber> uOpp) {
-        CNumber[] dest = new CNumber[src1.entries.length];
-        if(uOpp != null) b = b.addInv();  // Apply unary operator if specified.
+        CNumber[] dest = new CNumber[src1.totalEntries().intValueExact()];
+        if(uOpp != null) b = uOpp.apply(b);  // Apply unary operator if specified.
         ArrayUtils.fill(dest, b);
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
@@ -289,7 +304,7 @@ public class RealComplexCsrDenseOperations {
             int rowOffset = i*src1.numCols;
 
             for(int j=start; j<stop; j++) {
-                int idx = rowOffset + src1.colIndices[i];
+                int idx = rowOffset + src1.colIndices[j];
 
                 dest[idx] = opp.apply(
                         src1.entries[j],

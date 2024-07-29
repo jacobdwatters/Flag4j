@@ -240,7 +240,7 @@ public class CTensor
     @Override
     public boolean equals(Object object) {
         if(this == object) return true;
-        if(!(object instanceof CTensor)) return false;
+        if(object == null || object.getClass() != getClass()) return false;
 
         CTensor src2 = (CTensor) object;
 

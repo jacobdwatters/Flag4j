@@ -54,7 +54,7 @@ public abstract class LstsqSolver<
      */
     protected final UnitaryDecomposition<T, ?> qr;
     /**
-     * {@code Q} The hermation transpose of the orthonormal matrix from the {@code QR} decomposition.
+     * {@code Q} The hermitian transpose of the orthonormal matrix from the {@code QR} decomposition.
      */
     protected T Qh;
     /**

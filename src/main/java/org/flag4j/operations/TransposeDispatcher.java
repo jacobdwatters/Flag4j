@@ -47,7 +47,7 @@ public final class TransposeDispatcher {
      */
     private static final int COMPLEX_BLOCKED_THRESHOLD = 5_000;
     /**
-     * Threshold for using blocked hermation algorithm
+     * Threshold for using blocked hermitian algorithm
      */
     private static final int HERMATION_BLOCKED_THRESHOLD = 50_000;
     /**
@@ -117,14 +117,14 @@ public final class TransposeDispatcher {
 
 
     /**
-     * Dispatches a matrix hermation transpose problem to the appropriate algorithm based on its shape and size.
+     * Dispatches a matrix hermitian transpose problem to the appropriate algorithm based on its shape and size.
      * @param src Matrix to transpose.
      * @return The transpose of the source matrix.
      */
-    public static CMatrix dispatchHermation(CMatrix src) {
+    public static CMatrix dispatchHermitian(CMatrix src) {
         CNumber[] dest;
 
-        Algorithm algorithm = chooseAlgorithmHermation(src.shape);
+        Algorithm algorithm = chooseAlgorithmHermitian(src.shape);
 
         if(algorithm==Algorithm.BLOCKED) {
             dest = ComplexDenseTranspose.blockedMatrixHerm(src.entries, src.numRows, src.numCols);
@@ -231,11 +231,11 @@ public final class TransposeDispatcher {
 
 
     /**
-     * Chooses the appropriate matrix hermation transpose algorithm based on the shape of a matrix.
+     * Chooses the appropriate matrix hermitian transpose algorithm based on the shape of a matrix.
      * @param shape Shape of matrix to transpose.
      * @return The appropriate matrix transpose algorithm.
      */
-    private static Algorithm chooseAlgorithmHermation(Shape shape) {
+    private static Algorithm chooseAlgorithmHermitian(Shape shape) {
         int numEntries = shape.totalEntries().intValueExact();
         return numEntries < HERMATION_BLOCKED_THRESHOLD ? Algorithm.BLOCKED : Algorithm.CONCURRENT_BLOCKED;
     }

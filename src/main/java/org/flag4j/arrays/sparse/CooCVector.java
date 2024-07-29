@@ -185,7 +185,7 @@ public class CooCVector
     @Override
     public boolean equals(Object object) {
         if(this == object) return true;
-        if(!(object instanceof CooCVector)) return false;
+        if(object == null || object.getClass() != getClass()) return false;
 
         CooCVector src2 = (CooCVector) object;
         return ComplexSparseEquals.vectorEquals(this, src2);

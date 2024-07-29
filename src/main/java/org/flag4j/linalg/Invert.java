@@ -259,8 +259,8 @@ public class Invert {
 
 
     /**
-     * Inverts a hermation positive definite matrix.
-     * @param src Positive definite matrix. It will <i>not</i> be verified if {@code src} is actually hermation positive definite.
+     * Inverts a hermitian positive definite matrix.
+     * @param src Positive definite matrix. It will <i>not</i> be verified if {@code src} is actually hermitian positive definite.
      * @return The inverse of the {@code src} matrix.
      * @throws IllegalArgumentException If the matrix is not square.
      * @throws SingularMatrixException If the {@code src} matrix is singular.
@@ -272,9 +272,9 @@ public class Invert {
 
 
     /**
-     * Inverts a hermation positive definite matrix.
+     * Inverts a hermitian positive definite matrix.
      * @param src Positive definite matrix.
-     * @param checkPosDef Flag indicating if a check should be made to see if {@code src} is actually hermation
+     * @param checkPosDef Flag indicating if a check should be made to see if {@code src} is actually hermitian
      *                    positive definite. <b>WARNING</b>: Checking if the matrix is positive definite can be very computationally
      *                    expensive.
      * @return The inverse of the {@code src} matrix.
@@ -301,8 +301,8 @@ public class Invert {
      * <ol>
      *   <li>{@code AA}<sup>+</sup>{@code A=A}.</li>
      *   <li>{@code A}<sup>+</sup>{@code AA}<sup>+</sup>{@code =A}<sup>+</sup>.</li>
-     *   <li>{@code AA}<sup>+</sup> is Hermation.</li>
-     *   <li>{@code A}<sup>+</sup>{@code A} is also Hermation.</li>
+     *   <li>{@code AA}<sup>+</sup> is Hermitian.</li>
+     *   <li>{@code A}<sup>+</sup>{@code A} is also Hermitian.</li>
      * </ol>
      *
      * @return The Moore–Penrose pseudo-inverse of this matrix.
@@ -321,8 +321,8 @@ public class Invert {
      * <ol>
      *   <li>{@code AA}<sup>+</sup>{@code A=A}.</li>
      *   <li>{@code A}<sup>+</sup>{@code AA}<sup>+</sup>{@code =A}<sup>+</sup>.</li>
-     *   <li>{@code AA}<sup>+</sup> is Hermation.</li>
-     *   <li>{@code A}<sup>+</sup>{@code A} is also Hermation.</li>
+     *   <li>{@code AA}<sup>+</sup> is Hermitian.</li>
+     *   <li>{@code A}<sup>+</sup>{@code A} is also Hermitian.</li>
      * </ol>
      *
      * @return The Moore–Penrose pseudo-inverse of this matrix.

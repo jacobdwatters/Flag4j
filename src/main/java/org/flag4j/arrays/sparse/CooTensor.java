@@ -103,7 +103,7 @@ public class CooTensor
     @Override
     public boolean equals(Object object) {
         if(this == object) return true;
-        if(!(object instanceof CooTensor)) return false;
+        if(object == null || object.getClass() != getClass()) return false;
 
         CooTensor src2 = (CooTensor) object;
         return RealSparseEquals.tensorEquals(this, src2);

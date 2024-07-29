@@ -165,7 +165,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
     @Override
     public boolean equals(Object object) {
         if(this == object) return true;
-        if(!(object instanceof CVector)) return false;
+        if(object == null || object.getClass() != getClass()) return false;
 
         CVector src2 = (CVector) object;
 

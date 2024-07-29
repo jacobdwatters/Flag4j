@@ -122,7 +122,7 @@ public class CooCTensor
     @Override
     public boolean equals(Object object) {
         if(this == object) return true;
-        if(!(object instanceof CooCTensor)) return false;
+        if(object == null || object.getClass() != getClass()) return false;
 
         CooCTensor src2 = (CooCTensor) object;
         return ComplexSparseEquals.tensorEquals(this, src2);

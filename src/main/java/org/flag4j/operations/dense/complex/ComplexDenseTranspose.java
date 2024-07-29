@@ -288,7 +288,7 @@ public class ComplexDenseTranspose {
         return dest;
     }
 
-    // ----------------------- Below are the Hermation transposes (i.e. conjugate transpose) -----------------------
+    // ----------------------- Below are the Hermitian transposes (i.e. conjugate transpose) -----------------------
 
     /**
      * Computes complex conjugate transpose of a tensor along specified axes using a standard transpose algorithm.

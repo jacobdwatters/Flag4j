@@ -53,6 +53,10 @@ import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperatio
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultTranspose;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
+import org.flag4j.operations.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
+import org.flag4j.operations.dense_sparse.csr.real.RealCsrDenseOperations;
+import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
+import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
 import org.flag4j.util.*;
 
 import java.util.ArrayList;
@@ -452,7 +456,7 @@ public class Matrix
     @Override
     public boolean equals(Object object) {
         if(this == object) return true;
-        if(!(object instanceof Matrix)) return false;
+        if(object == null || object.getClass() != getClass()) return false;
 
         Matrix src2 = (Matrix) object;
 
@@ -1269,6 +1273,36 @@ public class Matrix
      * Computes the element-wise addition between two tensors of the same rank.
      *
      * @param B Second tensor in the addition.
+     *
+     * @return The result of adding the tensor B to this tensor element-wise.
+     *
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public Matrix add(CsrMatrix B) {
+        return RealCsrDenseOperations.applyBinOpp(this, B, Double::sum);
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     *
+     * @return The result of adding the tensor B to this tensor element-wise.
+     *
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public CMatrix add(CsrCMatrix B) {
+        return RealComplexCsrDenseOperations.applyBinOpp(this, B, (Double a, CNumber b)->b.add(a));
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
@@ -1345,6 +1379,36 @@ public class Matrix
      * Computes the element-wise subtraction of two tensors of the same rank.
      *
      * @param B Second tensor in the subtraction.
+     *
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     *
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public Matrix sub(CsrMatrix B) {
+        return RealCsrDenseOperations.applyBinOpp(this, B, (Double a, Double b) -> a-b);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     *
+     * @param B Second tensor in the subtraction.
+     *
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     *
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public CMatrix sub(CsrCMatrix B) {
+        return RealComplexCsrDenseOperations.applyBinOpp(this, B, (Double a, CNumber b)->b.sub(a));
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     *
+     * @param B Second tensor in the subtraction.
      * @return The result of subtracting the tensor B from this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
@@ -1409,6 +1473,21 @@ public class Matrix
      * Computes the matrix multiplication between two matrices.
      *
      * @param B Second matrix in the matrix multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with matrix B.
+     *
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
+    @Override
+    public Matrix mult(CsrMatrix B) {
+        return RealCsrDenseMatrixMultiplication.standard(this, B);
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param B Second matrix in the matrix multiplication.
      * @return The result of matrix multiplying this matrix with matrix B.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
@@ -1437,6 +1516,21 @@ public class Matrix
         Shape shape = new Shape(this.numRows, B.numCols);
 
         return new CMatrix(shape, entries);
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param B Second matrix in the matrix multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with matrix B.
+     *
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
+    @Override
+    public CMatrix mult(CsrCMatrix B) {
+        return RealComplexCsrDenseMatrixMultiplication.standard(this, B);
     }
 
 

@@ -80,11 +80,11 @@ public class ComplexSVD extends SVD<CMatrix> {
 
 
     /**
-     * Computes the inverse direct sum of a matrix and its hermation transpose.
+     * Computes the inverse direct sum of a matrix and its hermitian transpose.
      *
-     * @param src Matrix to inverse direct add with its hermation transpose.
+     * @param src Matrix to inverse direct add with its hermitian transpose.
      *
-     * @return The inverse direct sum of the {@code src} matrix with its hermation transpose.
+     * @return The inverse direct sum of the {@code src} matrix with its hermitian transpose.
      */
     @Override
     protected CMatrix invDirectSum(CMatrix src) {

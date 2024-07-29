@@ -32,10 +32,10 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 
 
 /**
- * <p>This abstract class specifies methods for computing the Cholesky decomposition of a hermation
+ * <p>This abstract class specifies methods for computing the Cholesky decomposition of a hermitian
  * positive-definite matrix.</p>
  *
- * <p>Given a hermation positive-definite matrix {@code A}, the Cholesky decomposition will decompose it into
+ * <p>Given a hermitian positive-definite matrix {@code A}, the Cholesky decomposition will decompose it into
  * {@code A=LL<sup>*</sup>} where {@code L} is a lower triangular matrix and {@code L<sup>*</sup>} is the conjugate
  * transpose of {@code L}.</p>
  */
@@ -45,7 +45,7 @@ public final class ComplexCholesky extends Cholesky<CMatrix> {
     /**
      * <p>Constructs a Cholesky decomposer.</p>
      *
-     * <p>If you would like to enforce a check for hermation symmetry at the time
+     * <p>If you would like to enforce a check for hermitian symmetry at the time
      * of decomposition, see {@link #ComplexCholesky(boolean)}.</p>
      */
     public ComplexCholesky() {
@@ -56,8 +56,8 @@ public final class ComplexCholesky extends Cholesky<CMatrix> {
     /**
      * Constructs a Cholesky decomposer.
      *
-     * @param checkPosDef flag indicating if the matrix to be decomposed should be explicitly checked to be hermation (true). If
-     *                    false, no check will be made and the matrix will be treated as if it were hermation and only the lower
+     * @param checkPosDef flag indicating if the matrix to be decomposed should be explicitly checked to be hermitian (true). If
+     *                    false, no check will be made and the matrix will be treated as if it were hermitian and only the lower
      *                    half of the matrix will be accessed
      */
     public ComplexCholesky(boolean checkPosDef) {
@@ -69,7 +69,7 @@ public final class ComplexCholesky extends Cholesky<CMatrix> {
      * Decompose a matrix into {@code A=LL}<sup>H</sup> where {@code L} is a lower triangular matrix and {@code L}<sup>H</sup> is
      * the conjugate transpose of {@code L}.
      *
-     * @param src The source matrix to decompose. Must be hermation positive-definite.
+     * @param src The source matrix to decompose. Must be hermitian positive-definite.
      * @return A reference to this decomposer.
      * @throws IllegalArgumentException If {@code src} is not symmetric and {@link #ComplexCholesky(boolean)
      * enforceSymmetric} was set to true when this decomposer was instantiated.
@@ -77,7 +77,7 @@ public final class ComplexCholesky extends Cholesky<CMatrix> {
      */
     @Override
     public ComplexCholesky decompose(CMatrix src) {
-        if(enforceHermation && src.isHermitian()) {
+        if(enforceHermitian && src.isHermitian()) {
             throw new IllegalArgumentException("Matrix must be positive-definite.");
         } else {
             ParameterChecks.assertSquareMatrix(src.shape);

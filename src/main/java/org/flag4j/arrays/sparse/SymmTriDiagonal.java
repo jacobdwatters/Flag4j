@@ -133,7 +133,7 @@ public class SymmTriDiagonal implements Serializable {
     public boolean equals(Object object) {
         // Check for quick returns.
         if(this == object) return true;
-        if(!(object instanceof SymmTriDiagonal)) return false;
+        if(object == null || object.getClass() != getClass()) return false;
 
         SymmTriDiagonal src2 = (SymmTriDiagonal) object;
 

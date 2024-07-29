@@ -30,9 +30,9 @@ import org.flag4j.util.ErrorMessages;
 /**
  * This class contains low-level implementations for determining certain properties of real sparse CSR matrices.
  */
-public final class RealCsrMatrixProperties {
+public final class RealCsrProperties {
 
-    private RealCsrMatrixProperties() {
+    private RealCsrProperties() {
         // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
@@ -44,16 +44,13 @@ public final class RealCsrMatrixProperties {
      * @return True if the {@code src} matrix is the identity matrix. False otherwise.
      */
     public static boolean isIdentity(CsrMatrix src) {
-        int diagCount = 0;
-
         if(src.isSquare() && src.colIndices.length >= src.numCols) {
+            int diagCount = 0;
+
             for(int i=0; i<src.rowPointers.length-1; i++) {
                 for(int j=src.rowPointers[i]; j<src.rowPointers[i+1]; j++) {
                     if(src.entries[j] == 1) {
-                        if(src.colIndices[j] != i) {
-                            return false;
-                        }
-
+                        if(src.colIndices[j] != i) return false;
                         diagCount++;
                     } else if(src.entries[j] != 0) {
                         return false;
@@ -61,11 +58,10 @@ public final class RealCsrMatrixProperties {
                 }
             }
 
+            return diagCount == src.numCols;
         } else {
             return false;
         }
-
-        return diagCount == src.numCols;
     }
 
 
@@ -77,7 +73,6 @@ public final class RealCsrMatrixProperties {
     public static boolean isSymmetric(CsrMatrix src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
-        if(src == null) return false;
         if(src.entries.length == 0) return true;
 
         return src.T().equals(src);
@@ -92,7 +87,6 @@ public final class RealCsrMatrixProperties {
     public static boolean isAntiSymmetric(CsrMatrix src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
-        if(src == null) return false;
         if(src.entries.length == 0) return true;
 
         return src.T().mult(-1).equals(src);

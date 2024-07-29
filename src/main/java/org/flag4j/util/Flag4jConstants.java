@@ -29,9 +29,6 @@ package org.flag4j.util;
  * A simple utility class containing useful constants.
  */
 public final class Flag4jConstants {
-
-    // TODO: Consider making the EPS values slightly larger than true machine precision. e.g. EPS_F64 = 1e-14 or EPS_F64 = 1e-12.
-
     /**
      * The rounding error for 32-bit floating point numbers.
      */

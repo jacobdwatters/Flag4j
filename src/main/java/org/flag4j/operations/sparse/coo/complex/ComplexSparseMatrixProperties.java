@@ -71,11 +71,11 @@ public class ComplexSparseMatrixProperties {
 
 
     /**
-     * Checks if a complex sparse matrix is hermation.
-     * @param src Matrix to check if it is the hermation matrix.
-     * @return True if the {@code src} matrix is hermation. False otherwise.
+     * Checks if a complex sparse matrix is hermitian.
+     * @param src Matrix to check if it is the hermitian matrix.
+     * @return True if the {@code src} matrix is hermitian. False otherwise.
      */
-    public static boolean isHermation(CooCMatrix src) {
+    public static boolean isHermitian(CooCMatrix src) {
         boolean result = src.isSquare();
 
         List<CNumber> entries = Arrays.asList(src.entries);
@@ -126,11 +126,11 @@ public class ComplexSparseMatrixProperties {
 
 
     /**
-     * Checks if a real sparse matrix is anti-hermation.
-     * @param src Matrix to check if it is the anti-hermation matrix.
-     * @return True if the {@code src} matrix is anti-hermation. False otherwise.
+     * Checks if a real sparse matrix is anti-hermitian.
+     * @param src Matrix to check if it is the anti-hermitian matrix.
+     * @return True if the {@code src} matrix is anti-hermitian. False otherwise.
      */
-    public static boolean isAntiHermation(CooCMatrix src) {
+    public static boolean isAntiHermitian(CooCMatrix src) {
         boolean result = src.isSquare();
 
         List<CNumber> entries = Arrays.asList(src.entries);

@@ -109,7 +109,7 @@ class CMatrixUnaryOperationsTests {
 
 
     @Test
-    void hermationTransposeTestCase() {
+    void hermitianTransposeTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1), new CNumber(32.4), new CNumber(394728.1)},
