@@ -53,6 +53,7 @@ import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSpars
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
 import org.flag4j.operations.dense_sparse.csr.complex.ComplexCsrDenseOperations;
+import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
 import org.flag4j.util.*;
 
@@ -1977,8 +1978,7 @@ public class CMatrix
      */
     @Override
     public CMatrix mult(CsrMatrix B) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexCsrDenseMatrixMultiplication.standard(this, B);
     }
 
 

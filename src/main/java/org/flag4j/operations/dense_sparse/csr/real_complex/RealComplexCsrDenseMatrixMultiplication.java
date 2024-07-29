@@ -103,6 +103,7 @@ public class RealComplexCsrDenseMatrixMultiplication {
         ParameterChecks.assertEquals(src1.numCols, src2.numCols);
 
         CNumber[] destEntries = new CNumber[src1.numRows*src2.numRows];
+        ArrayUtils.fillZeros(destEntries);
         int rows1 = src1.numRows;
         int rows2 = src2.numRows;
         int src2RowOffset;
@@ -120,7 +121,7 @@ public class RealComplexCsrDenseMatrixMultiplication {
 
                 while(start < stop) {
                     destEntries[destRowOffset].addEq(
-                            src2.entries[src2RowOffset + src1.colIndices[start++]].mult(src1.entries[start])
+                            src2.entries[src2RowOffset + src1.colIndices[start]].mult(src1.entries[start++])
                     );
                 }
             }
@@ -314,5 +315,6 @@ public class RealComplexCsrDenseMatrixMultiplication {
         }
 
         return new CVector(destEntries);
+
     }
 }
