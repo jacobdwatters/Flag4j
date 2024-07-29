@@ -137,7 +137,4 @@ public final class ComplexProperties {
 
         return close;
     }
-
-
-
 }
