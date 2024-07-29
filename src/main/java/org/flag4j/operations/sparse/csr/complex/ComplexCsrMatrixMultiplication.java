@@ -35,8 +35,7 @@ import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * This class contains low-level implementations of complex-complex sparse-sparse matrix multiplication where the sparse matrices
@@ -97,15 +96,15 @@ public class ComplexCsrMatrixMultiplication {
      * @return Sparse CSR matrix resulting from the matrix multiplication of the two sparse CSR matrices.
      */
     public static CsrCMatrix standardAsSparse(CsrCMatrix src1, CsrCMatrix src2) {
-        int[] resultRowPtr = new int[src1.numRows + 1];
-        ArrayList<CNumber> resultList = new ArrayList<>();
-        ArrayList<Integer> resultColIndexList = new ArrayList<>();
+        // Ensure matrices have shapes conducive to matrix multiplication.
+        ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
 
-        CNumber[] tempValues = new CNumber[src2.numCols];
-        boolean[] hasValue = new boolean[src2.numCols];
+        int[] resultRowPtr = new int[src1.numRows + 1];
+        List<CNumber> resultList = new ArrayList<>();
+        List<Integer> resultColIndexList = new ArrayList<>();
 
         for (int i=0; i<src1.numRows; i++) {
-            Arrays.fill(hasValue, false);
+            Map<Integer, CNumber> tempMap = new HashMap<>();
             int start = src1.rowPointers[i];
             int stop = src1.rowPointers[i + 1];
 
@@ -115,33 +114,28 @@ public class ComplexCsrMatrixMultiplication {
                 int innerStart = src2.rowPointers[aCol];
                 int innerStop = src2.rowPointers[aCol + 1];
 
-                for(int bIndex=innerStart; bIndex<innerStop; bIndex++) {
+                for (int bIndex=innerStart; bIndex<innerStop; bIndex++) {
                     int bCol = src2.colIndices[bIndex];
                     CNumber bVal = src2.entries[bIndex];
 
-                    if(!hasValue[bCol]) {
-                        tempValues[bCol] = new CNumber(0); // Ensure the value is initialized
-                        hasValue[bCol] = true;
-                    }
-                    tempValues[bCol].addEq(bVal.mult(aVal));
+                    tempMap.merge(bCol, bVal.mult(aVal), CNumber::add);
                 }
             }
 
-            for(int j=0; j<src2.numCols; j++) {
-                if (hasValue[j]) {
-                    resultColIndexList.add(j);
-                    resultList.add(tempValues[j]);
-                }
+            // Ensure entries within each row are sorted by the column indices.
+            List<Integer> tempColIndices = new ArrayList<>(tempMap.keySet());
+            Collections.sort(tempColIndices);
+
+            for (int colIndex : tempColIndices) {
+                resultColIndexList.add(colIndex);
+                resultList.add(tempMap.get(colIndex));
             }
-            resultRowPtr[i + 1] = resultRowPtr[i] + resultColIndexList.size() - (i > 0 ? resultRowPtr[i] : 0);
+
+            resultRowPtr[i + 1] = resultList.size();
         }
 
-        CNumber[] resultValues = new CNumber[resultList.size()];
-        int[] resultColIndices = new int[resultColIndexList.size()];
-        for(int i = 0; i < resultList.size(); i++) {
-            resultValues[i] = resultList.get(i);
-            resultColIndices[i] = resultColIndexList.get(i);
-        }
+        CNumber[] resultValues = resultList.toArray(new CNumber[0]);
+        int[] resultColIndices = ArrayUtils.fromIntegerList(resultColIndexList);
 
         return new CsrCMatrix(new Shape(src1.numRows, src2.numCols), resultValues, resultRowPtr, resultColIndices);
     }

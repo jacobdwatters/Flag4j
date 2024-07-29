@@ -39,8 +39,7 @@ public class TestHelpers {
             System.out.print("\t[");
             for(int j=0; j<A.numCols(); j++) {
 
-                if(A instanceof CMatrix) {
-                    CMatrix B = (CMatrix) A;
+                if(A instanceof CMatrix B) {
                     if(B.get(i, j).im > 0) {
                         System.out.print(B.get(i, j).re + "+" + B.get(i, j).im + "j");
                     } else {
@@ -72,8 +71,7 @@ public class TestHelpers {
         for(int i=0; i<A.numRows(); i++) {
             System.out.print("\t{");
             for(int j=0; j<A.numCols(); j++) {
-                if(A instanceof CMatrix) {
-                    CMatrix B = (CMatrix) A;
+                if(A instanceof CMatrix B) {
                     System.out.print("new CNumber(" + B.get(i, j).re + ", " + B.get(i, j).im + ")");
                 } else {
                     // Then must be real.

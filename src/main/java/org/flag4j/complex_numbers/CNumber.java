@@ -182,9 +182,8 @@ public class CNumber extends Number {
         // Check for quick returns.
         if(this == b) return true;
         if(b == null) return false;
-        if(!(b instanceof CNumber)) return false;
+        if(!(b instanceof CNumber num)) return false;
 
-        CNumber num = (CNumber) b;
         return re==num.re && im==num.im;
     }
 
@@ -343,10 +342,13 @@ public class CNumber extends Number {
     /**
      * Adds a specified number to this complex number and stores the result in this complex number.
      * @param b The value to add to this complex number.
+     * @return A reference to this complex number.
      */
-    public void addEq(CNumber b) {
+    public CNumber addEq(CNumber b) {
         this.re += b.re;
         this.im += b.im;
+
+        return this;
     }
 
 
