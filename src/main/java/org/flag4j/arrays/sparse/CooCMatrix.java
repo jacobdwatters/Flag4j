@@ -2957,6 +2957,40 @@ public class CooCMatrix
 
 
     /**
+     * Copies and reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
+     * in the reshaped matrix.
+     *
+     * @param newShape Shape of the new matrix.
+     *
+     * @return A matrix which is equivalent to this matrix but with the specified shape.
+     *
+     * @throws IllegalArgumentException If this matrix cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public CooCMatrix reshape(Shape newShape) {
+        ParameterChecks.assertBroadcastable(shape, newShape);
+
+        int oldColCount = shape.dims[1];
+        int newColCount = newShape.dims[1];
+
+        // Initialize new COO structures with the same size as the original
+        int[] newRowIndices = new int[rowIndices.length];
+        int[] newColIndices = new int[colIndices.length];
+        CNumber[] newEntries = new CNumber[entries.length];
+
+        for (int i=0; i<rowIndices.length; i++) {
+            int flatIndex = rowIndices[i] * oldColCount + colIndices[i];
+
+            newRowIndices[i] = flatIndex / newColCount;
+            newColIndices[i] = flatIndex % newColCount;
+            newEntries[i] = entries[i].copy();
+        }
+
+        return new CooCMatrix(newShape, newEntries, newRowIndices, newColIndices);
+    }
+
+
+    /**
      * Formats this sparse matrix as a human-readable string.
      * @return A human-readable string representing this sparse matrix.
      */

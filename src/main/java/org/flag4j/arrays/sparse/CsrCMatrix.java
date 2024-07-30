@@ -441,6 +441,59 @@ public class CsrCMatrix
 
 
     /**
+     * Copies and reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
+     * in the reshaped matrix.
+     *
+     * @param newShape Shape of the new matrix.
+     *
+     * @return A matrix which is equivalent to this matrix but with the specified shape.
+     *
+     * @throws IllegalArgumentException If this matrix cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public CsrCMatrix reshape(Shape newShape) {
+        ParameterChecks.assertBroadcastable(shape, newShape);
+
+        int oldRowCount = shape.dims[0];
+        int newRowCount = newShape.dims[0];
+        int newColCount = newShape.dims[1];
+
+        // Initialize new CSR structures with estimated sizes
+        CNumber[] newEntries = new CNumber[entries.length];
+        int[] newRowPointers = new int[newRowCount + 1];
+        int[] newColIndices = new int[colIndices.length];
+
+        int index = 0;
+
+        for(int i=0; i<oldRowCount; i++) {
+            int rowOffset = i*oldRowCount;
+            int rowStart = rowPointers[i];
+            int rowEnd = rowPointers[i+1];
+
+            for(int j=rowStart; j<rowEnd; j++) {
+                int flatIndex = rowOffset + colIndices[j];
+
+                int newRow = flatIndex / newColCount;
+                int newCol = flatIndex % newColCount;
+
+                newEntries[index] = entries[j].copy();
+                newColIndices[index] = newCol;
+
+                newRowPointers[newRow + 1]++;
+                index++;
+            }
+        }
+
+        // Accumulate row pointers
+        for(int i = 0; i < newRowCount; i++) {
+            newRowPointers[i + 1] += newRowPointers[i];
+        }
+
+        return new CsrCMatrix(newShape, newEntries, newRowPointers, newColIndices);
+    }
+
+
+    /**
      * Flattens a tensor along the specified axis.
      *
      * @param axis Axis along which to flatten tensor.

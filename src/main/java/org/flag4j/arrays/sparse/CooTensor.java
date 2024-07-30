@@ -34,7 +34,6 @@ import org.flag4j.operations.sparse.coo.real.RealSparseEquals;
 import org.flag4j.util.ArrayUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -75,7 +74,7 @@ public class CooTensor
      * @param indices Indices of the non-zero entries of the tensor.
      */
     public CooTensor(Shape shape, int[] nonZeroEntries, int[][] indices) {
-        super(shape, nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(), indices);
+        super(shape, nonZeroEntries.length, ArrayUtils.asDouble(nonZeroEntries, null), indices);
         this.shape.makeStridesIfNull();
     }
 

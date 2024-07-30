@@ -259,13 +259,6 @@ public abstract class RealSparseTensorBase<
 
 
     @Override
-    public T reshape(Shape newShape) {
-        ParameterChecks.assertBroadcastable(shape, newShape);
-        return makeTensor(newShape, entries.clone(), copyIndices());
-    }
-
-
-    @Override
     public T flatten() {
         return makeTensor(
                 new Shape(shape.totalEntries().intValueExact()),

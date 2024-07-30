@@ -311,21 +311,6 @@ public abstract class ComplexSparseTensorBase<T, U, Y>
      * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
      * in the reshaped tensor.
      *
-     * @param newShape Shape of the new tensor.
-     * @return A tensor which is equivalent to this tensor but with the specified shape.
-     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
-     */
-    @Override
-    public T reshape(Shape newShape) {
-        ParameterChecks.assertBroadcastable(shape, newShape);
-        return makeTensor(newShape, ArrayUtils.copyOf(entries), copyIndices());
-    }
-
-
-    /**
-     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
-     * in the reshaped tensor.
-     *
      * @param dims Shape of the new tensor.
      * @return A tensor which is equivalent to this tensor but with the specified shape.
      * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
