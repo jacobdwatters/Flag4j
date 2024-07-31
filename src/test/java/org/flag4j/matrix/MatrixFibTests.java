@@ -79,7 +79,7 @@ class MatrixFibTests {
         bSparseEntries = new double[]{1.55, 89.23, -16.23};
         rowIndices = new int[]{0, 1, 3};
         colIndices = new int[]{2, 0, 1};
-        sparseShape = new Shape(A.shape);
+        sparseShape = A.shape;
         BSparse = new CooMatrix(sparseShape, bSparseEntries, rowIndices, colIndices);
         exp = 8910.767650000002;
 
@@ -171,7 +171,7 @@ class MatrixFibTests {
         bSparseEntries = new double[]{1.55, 89.23, -16.23};
         rowIndices = new int[]{0, 1, 3};
         colIndices = new int[]{2, 0, 1};
-        sparseShape = new Shape(A.shape);
+        sparseShape = A.shape;
         BSparse = new CooCMatrix(sparseShape, bSparseEntries, rowIndices, colIndices);
         exp = new CNumber(8910.767650000002);
 

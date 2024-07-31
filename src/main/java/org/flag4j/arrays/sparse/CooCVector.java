@@ -147,7 +147,7 @@ public class CooCVector
      * @param a Vector to copy.
      */
     public CooCVector(CooCVector a) {
-        super(a.shape.copy(),
+        super(a.shape,
                 a.nonZeroEntries(),
                 new CNumber[a.nonZeroEntries()],
                 RealDenseTranspose.blockedIntMatrix(new int[][]{a.indices})
@@ -343,7 +343,7 @@ public class CooCVector
      */
     public CooCTensor toTensor() {
         return new CooCTensor(
-                this.shape.copy(),
+                this.shape,
                 ArrayUtils.copyOf(entries),
                 RealDenseTranspose.blockedIntMatrix(new int[][]{this.indices.clone()})
         );
@@ -374,8 +374,8 @@ public class CooCVector
     @Override
     public CooCVector reshape(Shape shape) {
         ParameterChecks.assertRank(1, shape);
-        ParameterChecks.assertEquals(size, shape.get(0));
-        return new CooCVector(this);
+        ParameterChecks.assertBroadcastable(this.shape, shape);
+        return copy();
     }
 
     

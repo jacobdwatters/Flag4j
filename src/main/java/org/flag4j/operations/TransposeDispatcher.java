@@ -152,7 +152,7 @@ public final class TransposeDispatcher {
                 RealDenseTranspose.standard(src.entries, src.shape, axis1, axis2):
                 RealDenseTranspose.standardConcurrent(src.entries, src.shape, axis1, axis2);
 
-        return new Tensor(src.shape.copy().swapAxes(axis1, axis2), dest);
+        return new Tensor(src.shape.swapAxes(axis1, axis2), dest);
     }
 
 
@@ -191,7 +191,7 @@ public final class TransposeDispatcher {
                 ComplexDenseTranspose.standard(src.entries, src.shape, axis1, axis2):
                 ComplexDenseTranspose.standardConcurrent(src.entries, src.shape, axis1, axis2);
 
-        return new CTensor(src.shape.copy().swapAxes(axis1, axis2), dest);
+        return new CTensor(src.shape.swapAxes(axis1, axis2), dest);
     }
 
 

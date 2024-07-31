@@ -129,7 +129,7 @@ public final class RealCsrOperations {
             rowPointers[i] += rowPointers[i-1];
         }
 
-        return new CsrMatrix(src1.shape.copy(),
+        return new CsrMatrix(src1.shape,
                 ArrayUtils.fromDoubleList(dest),
                 rowPointers,
                 ArrayUtils.fromIntegerList(colIndices)

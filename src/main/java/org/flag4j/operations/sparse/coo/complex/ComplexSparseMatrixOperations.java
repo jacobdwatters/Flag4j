@@ -138,7 +138,7 @@ public class ComplexSparseMatrixOperations {
             sum[row*src.numCols + col].addEq(src.entries[i]);
         }
 
-        return new CMatrix(src.shape.copy(), sum);
+        return new CMatrix(src.shape, sum);
     }
 
 

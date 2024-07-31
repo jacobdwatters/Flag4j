@@ -96,7 +96,7 @@ class CMatrixToStringTests {
         PrintOptions.setMaxRows(1);
         PrintOptions.setMaxColumns(4);
         PrintOptions.setCentering(true);
-        exp = "Full Shape: 2x4\n" +
+        exp = "Full Shape: (2, 4)\n" +
                 "[ [               ...                ]\n" +
                 " [ 56.25  0  -1.45i  -3.36 - 84.25i ]]";
 
@@ -114,7 +114,7 @@ class CMatrixToStringTests {
         PrintOptions.setMaxRows(2);
         PrintOptions.setMaxColumns(3);
         PrintOptions.setCentering(true);
-        exp = "Full Shape: 2x4\n" +
+        exp = "Full Shape: (2, 4)\n" +
                 "[[ 2 + 4.25i  0  ...       1.26      ]\n" +
                 " [   56.25    0  ...  -3.36 - 84.25i ]]";
 
@@ -132,7 +132,7 @@ class CMatrixToStringTests {
         PrintOptions.setMaxRows(2);
         PrintOptions.setMaxColumns(2);
         PrintOptions.setCentering(true);
-        exp = "Full Shape: 2x4\n" +
+        exp = "Full Shape: (2, 4)\n" +
                 "[[ 2 + 4.25i  ...       1.26      ]\n" +
                 " [   56.25    ...  -3.36 - 84.25i ]]";
 

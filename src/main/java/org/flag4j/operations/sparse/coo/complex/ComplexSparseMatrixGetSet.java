@@ -106,7 +106,7 @@ public class ComplexSparseMatrixGetSet {
             destColIndices = src.colIndices.clone();
         }
 
-        return new CooCMatrix(src.shape.copy(), destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(src.shape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -184,7 +184,7 @@ public class ComplexSparseMatrixGetSet {
             );
         }
 
-        return new CooCMatrix(src.shape.copy(), destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(src.shape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -262,7 +262,7 @@ public class ComplexSparseMatrixGetSet {
             );
         }
 
-        return new CooCMatrix(src.shape.copy(), destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(src.shape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -342,7 +342,7 @@ public class ComplexSparseMatrixGetSet {
             );
         }
 
-        return new CooCMatrix(src.shape.copy(), destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(src.shape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -380,7 +380,7 @@ public class ComplexSparseMatrixGetSet {
         }
 
         CooCMatrix dest = new CooCMatrix(
-                src.shape.copy(),
+                src.shape,
                 destEntries.toArray(CNumber[]::new),
                 destRowIndices.stream().mapToInt(Integer::intValue).toArray(),
                 destColIndices.stream().mapToInt(Integer::intValue).toArray()
@@ -424,7 +424,7 @@ public class ComplexSparseMatrixGetSet {
         }
 
         CooCMatrix dest = new CooCMatrix(
-                src.shape.copy(),
+                src.shape,
                 destEntries.toArray(CNumber[]::new),
                 destRowIndices.stream().mapToInt(Integer::intValue).toArray(),
                 destColIndices.stream().mapToInt(Integer::intValue).toArray()
@@ -472,7 +472,7 @@ public class ComplexSparseMatrixGetSet {
         int[] destColIndicesArr = ArrayUtils.splice(destColIndices, colIndices, 0);
 
         CooCMatrix dest = new CooCMatrix(
-                src.shape.copy(),
+                src.shape,
                 destEntriesArr,
                 destRowIndicesArr,
                 destColIndicesArr
@@ -510,7 +510,7 @@ public class ComplexSparseMatrixGetSet {
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
         // Create matrix and ensure entries are properly sorted.
-        CooCMatrix mat = new CooCMatrix(src.shape.copy(), entries, rowIndices, colIndices);
+        CooCMatrix mat = new CooCMatrix(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
         return mat;
@@ -543,7 +543,7 @@ public class ComplexSparseMatrixGetSet {
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
         // Create matrix and ensure entries are properly sorted.
-        CooCMatrix mat = new CooCMatrix(src.shape.copy(), entries, rowIndices, colIndices);
+        CooCMatrix mat = new CooCMatrix(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
         return mat;
@@ -643,7 +643,7 @@ public class ComplexSparseMatrixGetSet {
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
         // Create matrix and ensure entries are properly sorted.
-        CooCMatrix mat = new CooCMatrix(src.shape.copy(), entries, rowIndices, colIndices);
+        CooCMatrix mat = new CooCMatrix(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
         return mat;
@@ -675,7 +675,7 @@ public class ComplexSparseMatrixGetSet {
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
         // Create matrix and ensure entries are properly sorted.
-        CooCMatrix mat = new CooCMatrix(src.shape.copy(), entries, rowIndices, colIndices);
+        CooCMatrix mat = new CooCMatrix(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
         return mat;

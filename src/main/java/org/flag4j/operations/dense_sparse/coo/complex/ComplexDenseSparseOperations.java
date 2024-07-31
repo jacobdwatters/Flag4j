@@ -127,7 +127,7 @@ public class ComplexDenseSparseOperations {
             destEntries[i] = src1.entries[src2.shape.entriesIndex(src2.indices[i])].mult(src2.entries[i]);
         }
 
-        return new CooCTensor(src2.shape.copy(), destEntries, indices);
+        return new CooCTensor(src2.shape, destEntries, indices);
     }
 
 

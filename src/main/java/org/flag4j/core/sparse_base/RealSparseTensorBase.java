@@ -218,37 +218,37 @@ public abstract class RealSparseTensorBase<
 
     @Override
     public T mult(double factor) {
-        return makeTensor(shape.copy(), RealOperations.scalMult(entries, factor), copyIndices());
+        return makeTensor(shape, RealOperations.scalMult(entries, factor), copyIndices());
     }
 
 
     @Override
     public W mult(CNumber factor) {
-        return makeComplexTensor(shape.copy(), ComplexOperations.scalMult(entries, factor), copyIndices());
+        return makeComplexTensor(shape, ComplexOperations.scalMult(entries, factor), copyIndices());
     }
 
 
     @Override
     public T div(double divisor) {
-        return makeTensor(shape.copy(), RealOperations.scalMult(entries, divisor), copyIndices());
+        return makeTensor(shape, RealOperations.scalMult(entries, divisor), copyIndices());
     }
 
 
     @Override
     public W div(CNumber divisor) {
-        return makeComplexTensor(shape.copy(), ComplexOperations.scalMult(entries, divisor), copyIndices());
+        return makeComplexTensor(shape, ComplexOperations.scalMult(entries, divisor), copyIndices());
     }
 
 
     @Override
     public T sqrt() {
-        return makeTensor(shape.copy(), RealOperations.sqrt(entries), copyIndices());
+        return makeTensor(shape, RealOperations.sqrt(entries), copyIndices());
     }
 
 
     @Override
     public T abs() {
-        return makeTensor(shape.copy(), RealOperations.abs(entries), copyIndices());
+        return makeTensor(shape, RealOperations.abs(entries), copyIndices());
     }
 
 
@@ -283,26 +283,26 @@ public abstract class RealSparseTensorBase<
 
     @Override
     public T recip() {
-        return makeTensor(shape.copy(), RealDenseOperations.recip(entries), copyIndices());
+        return makeTensor(shape, RealDenseOperations.recip(entries), copyIndices());
     }
 
 
     @Override
     public T round() {
-        return makeTensor(shape.copy(), RealOperations.round(this.entries), copyIndices());
+        return makeTensor(shape, RealOperations.round(this.entries), copyIndices());
     }
 
 
     @Override
     public T round(int precision) {
-        return makeTensor(shape.copy(), RealOperations.round(this.entries, precision), copyIndices());
+        return makeTensor(shape, RealOperations.round(this.entries, precision), copyIndices());
     }
 
 
     @Override
     public T roundToZero() {
         return makeTensor(
-                shape.copy(),
+                shape,
                 RealOperations.roundToZero(this.entries, DEFAULT_ROUND_TO_ZERO_THRESHOLD),
                 copyIndices()
         );
@@ -312,7 +312,7 @@ public abstract class RealSparseTensorBase<
     @Override
     public T roundToZero(double threshold) {
         return makeTensor(
-                shape.copy(),
+                shape,
                 RealOperations.roundToZero(this.entries, threshold),
                 copyIndices()
         );

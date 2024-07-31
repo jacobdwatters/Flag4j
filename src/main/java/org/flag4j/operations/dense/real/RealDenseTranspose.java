@@ -60,7 +60,7 @@ public final class RealDenseTranspose {
         }
 
         double[] dest = new double[shape.totalEntries().intValue()];
-        Shape destShape = shape.copy().swapAxes(axis1, axis2);
+        Shape destShape = shape.swapAxes(axis1, axis2);
         int[] destIndices;
 
         for(int i=0; i<src.length; i++) {
@@ -93,7 +93,7 @@ public final class RealDenseTranspose {
         }
 
         double[] dest = new double[shape.totalEntries().intValue()];
-        Shape destShape = shape.copy().swapAxes(axes);
+        Shape destShape = shape.swapAxes(axes);
         int[] destIndices;
 
         for(int i=0; i<src.length; i++) {
@@ -126,7 +126,7 @@ public final class RealDenseTranspose {
         }
 
         double[] dest = new double[shape.totalEntries().intValue()];
-        Shape destShape = shape.copy().swapAxes(axes);
+        Shape destShape = shape.swapAxes(axes);
 
         ThreadManager.concurrentLoop(0, src.length, (i) -> {
             int[] destIndices = shape.getIndices(i);
@@ -154,7 +154,7 @@ public final class RealDenseTranspose {
         }
 
         double[] dest = new double[shape.totalEntries().intValue()];
-        Shape destShape = shape.copy().swapAxes(axis1, axis2);
+        Shape destShape = shape.swapAxes(axis1, axis2);
 
         // Compute transpose concurrently
         ThreadManager.concurrentLoop(0, src.length, (i) -> {

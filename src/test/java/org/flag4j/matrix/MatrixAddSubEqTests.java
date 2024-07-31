@@ -56,7 +56,7 @@ class MatrixAddSubEqTests {
         bEntries = new double[]{1.34, -93.346};
         rowIndices = new int[]{0, 1};
         colIndices = new int[]{2, 1};
-        sparseShape = new Shape(A.shape);
+        sparseShape = A.shape;
         B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
         exp = A.add(B);
 
@@ -132,7 +132,7 @@ class MatrixAddSubEqTests {
         bEntries = new double[]{1.34, -93.346};
         rowIndices = new int[]{0, 1};
         colIndices = new int[]{2, 1};
-        sparseShape = new Shape(A.shape);
+        sparseShape = A.shape;
         B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
         exp = A.sub(B);
 

@@ -61,8 +61,8 @@ public class RealSparseMatrixMultiplication {
      */
     public static double[] standard(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                     double[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
-        int rows1 = shape1.dims[0];
-        int cols2 = shape2.dims[1];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         double[] dest = new double[rows1*cols2];
 
@@ -107,8 +107,8 @@ public class RealSparseMatrixMultiplication {
      */
     public static double[] concurrentStandard(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                     double[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
-        int rows1 = shape1.dims[0];
-        int cols2 = shape2.dims[1];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         double[] dest = new double[rows1*cols2];
         ConcurrentMap<Integer, Double> destMap = new ConcurrentHashMap<>();
@@ -156,7 +156,7 @@ public class RealSparseMatrixMultiplication {
      */
     public static double[] standardVector(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                     double[] src2, int[] indices) {
-        int rows1 = shape1.dims[0];
+        int rows1 = shape1.get(0);
         double[] dest = new double[rows1];
 
         // r1, c1, r2, and store the indices for non-zero values in src1 and src2.
@@ -192,7 +192,7 @@ public class RealSparseMatrixMultiplication {
      */
     public static double[] concurrentStandardVector(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                                     double[] src2, int[] indices) {
-        int rows1 = shape1.dims[0];
+        int rows1 = shape1.get(0);
         double[] dest = new double[rows1];
 
         ThreadManager.concurrentLoop(0, src1.length, (i) -> {

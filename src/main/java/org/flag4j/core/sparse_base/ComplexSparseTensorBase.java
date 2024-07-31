@@ -192,49 +192,49 @@ public abstract class ComplexSparseTensorBase<T, U, Y>
 
     @Override
     public T mult(double a) {
-        return makeTensor(shape.copy(), ComplexOperations.scalMult(entries, a), copyIndices());
+        return makeTensor(shape, ComplexOperations.scalMult(entries, a), copyIndices());
     }
 
 
     @Override
     public T mult(CNumber a) {
-        return makeTensor(shape.copy(), ComplexOperations.scalMult(entries, a), copyIndices());
+        return makeTensor(shape, ComplexOperations.scalMult(entries, a), copyIndices());
     }
 
 
     @Override
     public T div(double divisor) {
-        return makeTensor(shape.copy(), ComplexOperations.scalMult(entries, divisor), copyIndices());
+        return makeTensor(shape, ComplexOperations.scalMult(entries, divisor), copyIndices());
     }
 
 
     @Override
     public T div(CNumber divisor) {
-        return makeTensor(shape.copy(), ComplexOperations.scalMult(entries, divisor), copyIndices());
+        return makeTensor(shape, ComplexOperations.scalMult(entries, divisor), copyIndices());
     }
 
 
     @Override
     public T sqrt() {
-        return makeTensor(shape.copy(), ComplexOperations.sqrt(entries), copyIndices());
+        return makeTensor(shape, ComplexOperations.sqrt(entries), copyIndices());
     }
 
 
     @Override
     public Y abs() {
-        return makeRealTensor(shape.copy(), ComplexOperations.abs(entries), copyIndices());
+        return makeRealTensor(shape, ComplexOperations.abs(entries), copyIndices());
     }
 
 
     @Override
     public T conj() {
-        return makeTensor(shape.copy(), ComplexOperations.conj(entries), copyIndices());
+        return makeTensor(shape, ComplexOperations.conj(entries), copyIndices());
     }
 
 
     @Override
     public T recip() {
-        return makeTensor(shape.copy(), ComplexDenseOperations.recip(entries), copyIndices());
+        return makeTensor(shape, ComplexDenseOperations.recip(entries), copyIndices());
     }
 
 
@@ -252,13 +252,13 @@ public abstract class ComplexSparseTensorBase<T, U, Y>
 
     @Override
     public T round() {
-        return makeTensor(shape.copy(), ComplexOperations.round(this.entries), copyIndices());
+        return makeTensor(shape, ComplexOperations.round(this.entries), copyIndices());
     }
 
 
     @Override
     public T round(int precision) {
-        return makeTensor(shape.copy(), ComplexOperations.round(this.entries, precision), copyIndices());
+        return makeTensor(shape, ComplexOperations.round(this.entries, precision), copyIndices());
     }
 
 
@@ -284,7 +284,7 @@ public abstract class ComplexSparseTensorBase<T, U, Y>
      */
     @Override
     public Y toReal() {
-        return makeRealTensor(this.shape.copy(), ComplexOperations.toReal(this.entries), copyIndices());
+        return makeRealTensor(this.shape, ComplexOperations.toReal(this.entries), copyIndices());
     }
 
 
@@ -333,7 +333,7 @@ public abstract class ComplexSparseTensorBase<T, U, Y>
     @Override
     public T roundToZero() {
         return makeTensor(
-                shape.copy(),
+                shape,
                 ComplexOperations.roundToZero(this.entries, DEFAULT_ROUND_TO_ZERO_THRESHOLD),
                 copyIndices()
         );
@@ -343,7 +343,7 @@ public abstract class ComplexSparseTensorBase<T, U, Y>
     @Override
     public T roundToZero(double threshold) {
         return makeTensor(
-                shape.copy(),
+                shape,
                 ComplexOperations.roundToZero(this.entries, threshold),
                 copyIndices()
         );

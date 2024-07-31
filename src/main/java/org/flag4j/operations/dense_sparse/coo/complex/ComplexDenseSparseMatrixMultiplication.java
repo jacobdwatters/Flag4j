@@ -29,7 +29,6 @@ import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.Axis2D;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -58,9 +57,9 @@ public class ComplexDenseSparseMatrixMultiplication {
      */
     public static CNumber[] standard(CNumber[] src1, Shape shape1, CNumber[] src2,
                                      int[] rowIndices, int[] colIndices, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fillZeros(dest);
@@ -94,8 +93,8 @@ public class ComplexDenseSparseMatrixMultiplication {
      */
     public static CNumber[] standard(CNumber[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
                                      CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fillZeros(dest); // Initialize to zeros
@@ -127,9 +126,9 @@ public class ComplexDenseSparseMatrixMultiplication {
      */
     public static CNumber[] concurrentStandard(CNumber[] src1, Shape shape1, CNumber[] src2,
                                               int[] rowIndices, int[] colIndices, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fillZeros(dest); // Initialize to zeros
@@ -165,8 +164,8 @@ public class ComplexDenseSparseMatrixMultiplication {
      */
     public static CNumber[] concurrentStandard(CNumber[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
                                               CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fillZeros(dest); // Initialize to zeros
@@ -199,8 +198,8 @@ public class ComplexDenseSparseMatrixMultiplication {
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] standardVector(CNumber[] src1, Shape shape1, CNumber[] src2, int[] indices) {
-        int denseRows = shape1.dims[Axis2D.row()];
-        int denseCols = shape1.dims[Axis2D.col()];
+        int denseRows = shape1.get(0);
+        int denseCols = shape1.get(1);
         int nonZeros = src2.length;
 
         CNumber[] dest = new CNumber[denseRows];
@@ -231,7 +230,7 @@ public class ComplexDenseSparseMatrixMultiplication {
      */
     public static CNumber[] standardVector(CNumber[] src1, int[] rowIndices, int[] colIndices,
                                           Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
+        int rows1 = shape1.get(0);
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fillZeros(dest); // Initialize to zeros
 
@@ -257,8 +256,8 @@ public class ComplexDenseSparseMatrixMultiplication {
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] blockedVector(CNumber[] src1, Shape shape1, CNumber[] src2, int[] indices) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
         int bsize = Configurations.getBlockSize(); // Get the block size to use.
@@ -293,8 +292,8 @@ public class ComplexDenseSparseMatrixMultiplication {
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] concurrentStandardVector(CNumber[] src1, Shape shape1, CNumber[] src2, int[] indices) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
         CNumber[] dest = new CNumber[rows1];
@@ -323,7 +322,7 @@ public class ComplexDenseSparseMatrixMultiplication {
      */
     public static CNumber[] concurrentStandardVector(CNumber[] src1, int[] rowIndices, int[] colIndices,
                                                     Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
+        int rows1 = shape1.get(0);
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fillZeros(dest); // Initialize to zeros
 
@@ -351,8 +350,8 @@ public class ComplexDenseSparseMatrixMultiplication {
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] concurrentBlockedVector(CNumber[] src1, Shape shape1, CNumber[] src2, int[] indices) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
         final int bsize = Configurations.getBlockSize(); // Get the block size to use.

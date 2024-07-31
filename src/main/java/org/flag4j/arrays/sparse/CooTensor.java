@@ -29,9 +29,13 @@ import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
+import org.flag4j.core.TensorBase;
+import org.flag4j.core.TensorExclusiveMixin;
 import org.flag4j.core.sparse_base.RealSparseTensorBase;
+import org.flag4j.operations.dense.real.RealDenseOperations;
 import org.flag4j.operations.sparse.coo.real.RealSparseEquals;
 import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ParameterChecks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +45,7 @@ import java.util.List;
  */
 public class CooTensor
         extends RealSparseTensorBase<CooTensor, Tensor, CooCTensor, CTensor>
-//        implements TensorExclusiveMixin<CooTensor, Tensor, CooTensor, CooCTensor>
+        implements TensorExclusiveMixin<CooTensor, Tensor, CooTensor, CooCTensor>
 {
 
 
@@ -85,7 +89,7 @@ public class CooTensor
      * @param A Tensor to copy.
      */
     public CooTensor(CooTensor A) {
-        super(A.shape.copy(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);
+        super(A.shape, A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);
         shape.makeStridesIfNull();
         for(int i=0; i<indices.length; i++) {
             super.indices[i] = A.indices[i].clone();
@@ -118,7 +122,7 @@ public class CooTensor
     @Override
     public CooCTensor toComplex() {
         return new CooCTensor(
-                shape.copy(),
+                shape,
                 ArrayUtils.copy2CNumber(entries, null),
                 ArrayUtils.deepCopy(indices, null)
         );
@@ -146,7 +150,7 @@ public class CooTensor
             }
         }
 
-        return new CooTensor(src.shape.copy(), ArrayUtils.fromDoubleList(entries), indices.toArray(new int[0][]));
+        return new CooTensor(src.shape, ArrayUtils.fromDoubleList(entries), indices.toArray(new int[0][]));
     }
 
 
@@ -197,6 +201,7 @@ public class CooTensor
      */
     @Override
     public boolean isOnes() {
+        // TODO: Implementation.
         return false;
     }
 
@@ -210,6 +215,7 @@ public class CooTensor
      */
     @Override
     public CooTensor set(double value, int... indices) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -218,23 +224,129 @@ public class CooTensor
      * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
      * in the reshaped tensor.
      *
-     * @param shape Shape of the new tensor.
+     * @param newShape Shape of the new tensor.
      * @return A tensor which is equivalent to this tensor but with the specified shape.
      * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
      */
     @Override
-    public CooTensor reshape(Shape shape) {
+    public CooTensor reshape(Shape newShape) {
+        ParameterChecks.assertBroadcastable(shape, newShape);
+        newShape.makeStridesIfNull(); // Ensure this shape object has strides computed.
+
+        int rank = indices[0].length;
+        int nnz = entries.length;
+
+        int[] oldStrides = shape.getStrides();
+        int[] newStrides = newShape.getStrides();
+
+        int[][] newIndices = new int[nnz][rank];
+
+        for (int i = 0; i < nnz; i++) {
+            int flatIndex = 0;
+            for (int j = 0; j < rank; j++) {
+                flatIndex += indices[i][j] * oldStrides[j];
+            }
+
+            for (int j = 0; j < rank; j++) {
+                newIndices[i][j] = flatIndex / newStrides[j];
+                flatIndex %= newStrides[j];
+            }
+        }
+
+        return new CooTensor(newShape, entries.clone(), newIndices);
+    }
+
+
+    /**
+     * Flattens tensor to single dimension. To flatten tensor along a single axis see {@link #flatten(int)}.
+     *
+     * @return The flattened tensor.
+     * @see #flatten(int)
+     */
+    @Override
+    public CooTensor flatten() {
+        int[][] destIndices = new int[entries.length][1];
+
+        for(int i = 0; i < entries.length; i++)
+            destIndices[i][0] = RealDenseOperations.prod(indices[i]);
+
+        return new CooTensor(shape, entries.clone(), destIndices);
+    }
+
+
+    /**
+     * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
+     * computes the sum of products between the two tensors along the specified set of axes.
+     *
+     * @param src2 Tensor to contract with this tensor.
+     * @param aAxes Axes along which to compute products for this tensor.
+     * @param bAxes Axes along which to compute products for {@code src2} tensor.
+     *
+     * @return The tensor dot product over the specified axes.
+     *
+     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes pairwise in
+     *                                  {@code aAxes} and {@code bAxes}.
+     * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
+     *                                  are out of bounds for the corresponding tensor.
+     */
+    @Override
+    public CooTensor tensorDot(CooTensor src2, int[] aAxes, int[] bAxes) {
+        // TODO: Implementation.
         return null;
     }
 
 
     /**
-     * Flattens tensor to single dimension. To flatten tensor along a single axis.
+     * Computes the tensor dot product of this tensor with a second tensor. That is, sums the product of two tensor
+     * elements over the last axis of this tensor and the second-to-last axis of {@code src2}. If both tensors are
+     * rank 2, this is equivalent to matrix multiplication.
      *
-     * @return The flattened tensor.
+     * @param src2 Tensor to compute dot product with this tensor.
+     *
+     * @return The tensor dot product over the last axis of this tensor and the second to last axis of {@code src2}.
+     *
+     * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
+     *                                  along the second-to-last axis.
      */
     @Override
-    public CooTensor flatten() {
+    public CooTensor tensorDot(CooTensor src2) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #transpose(int, int)}.
+     * In the context of a tensor, this exchanges the specified axes.
+     * Also see {@link #transpose()} and
+     * {@link #T()} to exchange first and last axes.
+     *
+     * @param axis1 First axis to exchange.
+     * @param axis2 Second axis to exchange.
+     *
+     * @return The transpose of this tensor.
+     */
+    @Override
+    public CooTensor T(int axis1, int axis2) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
+     * the specified axes permutation. Same as {@link #transpose(int[])}.
+     *
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     * {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     *
+     * @return The transpose of this tensor with its axes permuted by the {@code axes} array.
+     *
+     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     */
+    @Override
+    public CooTensor T(int... axes) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -248,6 +360,71 @@ public class CooTensor
      */
     @Override
     public CooTensor add(CooTensor B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     *
+     * @return The result of adding the tensor B to this tensor element-wise.
+     *
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public Tensor add(Tensor B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     *
+     * @return The result of adding the tensor B to this tensor element-wise.
+     *
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public Tensor sub(Tensor B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     *
+     * @return The result of adding the tensor B to this tensor element-wise.
+     *
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor add(CTensor B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     *
+     * @return The result of adding the tensor B to this tensor element-wise.
+     *
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CooCTensor add(CooCTensor B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -260,6 +437,7 @@ public class CooTensor
      */
     @Override
     public Tensor add(double a) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -272,6 +450,7 @@ public class CooTensor
      */
     @Override
     public CTensor add(CNumber a) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -285,6 +464,81 @@ public class CooTensor
      */
     @Override
     public CooTensor sub(CooTensor B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise subtraction between two tensors of the same rank.
+     *
+     * @param B Second tensor in element-wise subtraction.
+     *
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     *
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor sub(CTensor B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise subtraction between two tensors of the same rank.
+     *
+     * @param B Second tensor in element-wise subtraction.
+     *
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     *
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CooCTensor sub(CooCTensor B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     *
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void addEq(CooTensor B) {
+
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     *
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void subEq(CooTensor B) {
+
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     *
+     * @param B Tensor to element-wise multiply to this tensor.
+     *
+     * @return The result of the element-wise tensor multiplication.
+     *
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
+    public CooTensor elemMult(Tensor B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -297,6 +551,7 @@ public class CooTensor
      */
     @Override
     public Tensor sub(double a) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -309,6 +564,7 @@ public class CooTensor
      */
     @Override
     public CTensor sub(CNumber a) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -321,6 +577,7 @@ public class CooTensor
      */
     @Override
     public CooTensor mult(double factor) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -333,6 +590,7 @@ public class CooTensor
      */
     @Override
     public CooCTensor mult(CNumber factor) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -346,6 +604,7 @@ public class CooTensor
      */
     @Override
     public CooTensor div(double divisor) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -359,6 +618,7 @@ public class CooTensor
      */
     @Override
     public CooCTensor div(CNumber divisor) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -370,6 +630,7 @@ public class CooTensor
      */
     @Override
     public Double sum() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -382,6 +643,7 @@ public class CooTensor
      */
     @Override
     public CooTensor sqrt() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -394,6 +656,7 @@ public class CooTensor
      */
     @Override
     public CooTensor abs() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -405,6 +668,7 @@ public class CooTensor
      */
     @Override
     public CooTensor transpose() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -416,6 +680,7 @@ public class CooTensor
      */
     @Override
     public CooTensor T() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -428,6 +693,7 @@ public class CooTensor
      */
     @Override
     public CooTensor recip() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -441,6 +707,7 @@ public class CooTensor
      */
     @Override
     public Double get(int... indices) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -452,6 +719,7 @@ public class CooTensor
      */
     @Override
     public CooTensor copy() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -465,6 +733,55 @@ public class CooTensor
      */
     @Override
     public CooTensor elemMult(CooTensor B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     *
+     * @param B Tensor to element-wise multiply to this tensor.
+     *
+     * @return The result of the element-wise tensor multiplication.
+     *
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
+    public CTensor elemMult(CTensor B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     *
+     * @param B Tensor to element-wise multiply to this tensor.
+     *
+     * @return The result of the element-wise tensor multiplication.
+     *
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
+    public CooCTensor elemMult(CooCTensor B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise division between two tensors.
+     *
+     * @param B Tensor to element-wise divide with this tensor.
+     *
+     * @return The result of the element-wise tensor division.
+     *
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
+    public CTensor elemDiv(CTensor B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -478,6 +795,25 @@ public class CooTensor
      */
     @Override
     public CooTensor elemDiv(Tensor B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the 'inverse' of this tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
+     * {@link #tensorDot(TensorBase, int) this.tensorDot(X, numIndices)} is the 'identity' tensor for the tensor dot product operation.
+     * A tensor {@code I} is the identity for a tensor dot product if {@code this.tensorDot(I, numIndices).equals(this)}.
+     *
+     * @param numIndices The number of first numIndices which are involved in the inverse sum.
+     *
+     * @return The 'inverse' of this tensor as defined in the above sense.
+     *
+     * @see #tensorInv()
+     */
+    @Override
+    public CooTensor tensorInv(int numIndices) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -492,6 +828,7 @@ public class CooTensor
      */
     @Override
     public CooTensor reshape(int... shape) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -563,6 +900,6 @@ public class CooTensor
             entries[shape.entriesIndex(indices[i])] = this.entries[i];
         }
 
-        return new Tensor(shape.copy(), entries);
+        return new Tensor(shape, entries);
     }
 }

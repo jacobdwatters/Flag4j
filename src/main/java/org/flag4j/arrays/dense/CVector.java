@@ -62,7 +62,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
     public CVector(int size) {
         super(new Shape(size), new CNumber[size]);
         ArrayUtils.fillZeros(super.entries);
-        this.size = shape.dims[0];
+        this.size = shape.get(0);
     }
 
 
@@ -74,7 +74,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
     public CVector(int size, double fillValue) {
         super(new Shape(size), new CNumber[size]);
         ArrayUtils.fill(super.entries, fillValue);
-        this.size = shape.dims[0];
+        this.size = shape.get(0);
     }
 
 
@@ -86,7 +86,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
     public CVector(int size, CNumber fillValue) {
         super(new Shape(size), new CNumber[size]);
         ArrayUtils.fill(super.entries, fillValue);
-        this.size = shape.dims[0];
+        this.size = shape.get(0);
     }
 
 
@@ -97,7 +97,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
     public CVector(double... entries) {
         super(new Shape(entries.length), new CNumber[entries.length]);
         ArrayUtils.copy2CNumber(entries, super.entries);
-        this.size = shape.dims[0];
+        this.size = shape.get(0);
     }
 
 
@@ -108,7 +108,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
     public CVector(int... entries) {
         super(new Shape(entries.length), new CNumber[entries.length]);
         ArrayUtils.copy2CNumber(entries, super.entries);
-        this.size = shape.dims[0];
+        this.size = shape.get(0);
     }
 
 
@@ -118,7 +118,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      */
     public CVector(CNumber... entries) {
         super(new Shape(entries.length), entries);
-        this.size = shape.dims[0];
+        this.size = shape.get(0);
     }
 
 
@@ -127,9 +127,9 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @param a Real vector to copy.
      */
     public CVector(Vector a) {
-        super(a.shape.copy(), new CNumber[a.totalEntries().intValue()]);
+        super(a.shape, new CNumber[a.totalEntries().intValue()]);
         ArrayUtils.copy2CNumber(a.entries, super.entries);
-        this.size = shape.dims[0];
+        this.size = shape.get(0);
     }
 
 
@@ -138,9 +138,9 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @param a Complex vector to copy.
      */
     public CVector(CVector a) {
-        super(a.shape.copy(), new CNumber[a.totalEntries().intValue()]);
+        super(a.shape, new CNumber[a.totalEntries().intValue()]);
         ArrayUtils.copy2CNumber(a.entries, super.entries);
-        this.size = shape.dims[0];
+        this.size = shape.get(0);
     }
 
 
@@ -1072,7 +1072,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
         CNumber[] entries = new CNumber[this.size];
         ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);
 
-        return new CTensor(this.shape.copy(), entries);
+        return new CTensor(this.shape, entries);
     }
 
 

@@ -100,7 +100,7 @@ public class RealDenseSparseMatrixOperations {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
-        Matrix dest = new Matrix(src1.shape.copy(), RealOperations.scalMult(src1.entries, -1));
+        Matrix dest = new Matrix(src1.shape, RealOperations.scalMult(src1.entries, -1));
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             row = src2.rowIndices[i];
@@ -169,7 +169,7 @@ public class RealDenseSparseMatrixOperations {
             product[i] = src1.entries[row*src1.numCols + col]*src2.entries[i];
         }
 
-        return new CooMatrix(src2.shape.copy(), product, src2.rowIndices.clone(), src2.colIndices.clone());
+        return new CooMatrix(src2.shape, product, src2.rowIndices.clone(), src2.colIndices.clone());
     }
 
 
@@ -205,7 +205,7 @@ public class RealDenseSparseMatrixOperations {
             quotient[i] = src1.entries[i] / src2.entries[row*src2.numCols + col];
         }
 
-        return new CooMatrix(src1.shape.copy(), quotient, src1.rowIndices.clone(), src1.colIndices.clone());
+        return new CooMatrix(src1.shape, quotient, src1.rowIndices.clone(), src1.colIndices.clone());
     }
 
 

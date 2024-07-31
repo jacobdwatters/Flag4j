@@ -179,29 +179,29 @@ class ShapeTests {
     void swapAxesTestCase() {
         // -------------- Sub-case 1 --------------
         shape1 = new Shape(true,4, 2, 3);
-        shape1.swapAxes(0, 1);
+        shape2 = shape1.swapAxes(0, 1);
         expDims1 = new int[]{2, 4, 3};
         expStrides = new int[]{12, 3, 1};
 
-        assertArrayEquals(expDims1, shape1.dims);
-        assertArrayEquals(expStrides, shape1.getStrides());
+        assertArrayEquals(expDims1, shape2.getDims());
+        assertArrayEquals(expStrides, shape2.getStrides());
 
         // -------------- Sub-case 2 --------------
         shape1 = new Shape(true,4, 2, 3);
-        shape1.swapAxes(1, 0);
+        shape2 = shape1.swapAxes(1, 0);
         expDims1 = new int[]{2, 4, 3};
         expStrides = new int[]{12, 3, 1};
 
-        assertArrayEquals(expDims1, shape1.dims);
-        assertArrayEquals(expStrides, shape1.getStrides());
+        assertArrayEquals(expDims1, shape2.getDims());
+        assertArrayEquals(expStrides, shape2.getStrides());
 
         // -------------- Sub-case 3 --------------
         shape1 = new Shape(true,4, 2, 3);
-        shape1.swapAxes(0, 2);
+        shape2 = shape1.swapAxes(0, 2);
         expDims1 = new int[]{3, 2, 4};
         expStrides = new int[]{8, 4, 1};
 
-        assertArrayEquals(expDims1, shape1.dims);
-        assertArrayEquals(expStrides, shape1.getStrides());
+        assertArrayEquals(expDims1, shape2.getDims());
+        assertArrayEquals(expStrides, shape2.getStrides());
     }
 }

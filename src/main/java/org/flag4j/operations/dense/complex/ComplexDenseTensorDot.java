@@ -60,7 +60,7 @@ public class ComplexDenseTensorDot {
         if(src1Rank==2 && src2Rank==2) {
             // Product is simply a matrix multiplication problem.
             return new CTensor(
-                    new Shape(src1.shape.dims[0], src2.shape.dims[1]),
+                    new Shape(src1.shape.get(0), src2.shape.get(1)),
                     MatrixMultiplyDispatcher.dispatch(src1.entries, src1.shape, src2.entries, src2.shape)
             );
         }

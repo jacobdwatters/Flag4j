@@ -90,8 +90,8 @@ public class CMatrix
     public CMatrix(int size) {
         super(new Shape(size, size), new CNumber[size*size]);
         ArrayUtils.fillZeros(super.entries);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -103,8 +103,8 @@ public class CMatrix
      */
     public CMatrix(int size, double value) {
         super(new Shape(size, size), new CNumber[size*size]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         for(int i=0; i<entries.length; i++) {
             super.entries[i] = new CNumber(value);
@@ -120,8 +120,8 @@ public class CMatrix
      */
     public CMatrix(int size, CNumber value) {
         super(new Shape(size, size), new CNumber[size*size]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         for(int i=0; i<entries.length; i++) {
             super.entries[i] = value.copy();
@@ -138,8 +138,8 @@ public class CMatrix
     public CMatrix(int rows, int cols) {
         super(new Shape(rows, cols), new CNumber[rows*cols]);
         ArrayUtils.fillZeros(super.entries);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -152,8 +152,8 @@ public class CMatrix
      */
     public CMatrix(int rows, int cols, double value) {
         super(new Shape(rows, cols), new CNumber[rows*cols]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         for(int i=0; i<entries.length; i++) {
             super.entries[i] = new CNumber(value);
@@ -170,8 +170,8 @@ public class CMatrix
      */
     public CMatrix(int rows, int cols, CNumber value) {
         super(new Shape(rows, cols), new CNumber[rows*cols]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         for(int i=0; i<entries.length; i++) {
             super.entries[i] = value.copy();
@@ -186,8 +186,8 @@ public class CMatrix
     public CMatrix(Shape shape) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
         ArrayUtils.fillZeros(super.entries);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -198,8 +198,8 @@ public class CMatrix
      */
     public CMatrix(Shape shape, double value) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         for(int i=0; i<entries.length; i++) {
             super.entries[i] = new CNumber(value);
@@ -214,8 +214,8 @@ public class CMatrix
      */
     public CMatrix(Shape shape, double... entries) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         ArrayUtils.copy2CNumber(entries, this.entries);
     }
@@ -228,8 +228,8 @@ public class CMatrix
      */
     public CMatrix(Shape shape, CNumber value) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         for(int i=0; i<entries.length; i++) {
             super.entries[i] = value.copy();
@@ -243,8 +243,8 @@ public class CMatrix
      */
     public CMatrix(String[][] entries) {
         super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         // Copy the string array
         int index=0;
@@ -262,8 +262,8 @@ public class CMatrix
      */
     public CMatrix(CNumber[][] entries) {
         super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         // Copy the string array
         int index=0;
@@ -282,8 +282,8 @@ public class CMatrix
      */
     public CMatrix(double[][] entries) {
         super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         // Copy the double array
         int index=0;
@@ -301,8 +301,8 @@ public class CMatrix
      */
     public CMatrix(int[][] entries) {
         super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         // Copy the int array
         int index=0;
@@ -319,10 +319,10 @@ public class CMatrix
      * @param A The matrix defining the entries for this matrix.
      */
     public CMatrix(Matrix A) {
-        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);
+        super(A.shape, new CNumber[A.totalEntries().intValue()]);
         ArrayUtils.copy2CNumber(A.entries, super.entries);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -331,10 +331,10 @@ public class CMatrix
      * @param A The matrix defining the entries for this matrix.
      */
     public CMatrix(CMatrix A) {
-        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);
+        super(A.shape, new CNumber[A.totalEntries().intValue()]);
         ArrayUtils.copy2CNumber(A.entries, super.entries);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -346,8 +346,8 @@ public class CMatrix
      */
     public CMatrix(Shape shape, CNumber... entries) {
         super(shape, entries);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -409,8 +409,8 @@ public class CMatrix
      */
     public CMatrix(int numRows, int numCols, CNumber[] entries) {
         super(new Shape(numRows, numCols), entries);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -448,7 +448,7 @@ public class CMatrix
      * @return A complex tensor which is equivalent to this matrix.
      */
     public CTensor toTensor() {
-        return new CTensor(this.shape.copy(), ArrayUtils.copyOfRange(entries, 0, entries.length));
+        return new CTensor(this.shape, ArrayUtils.copyOfRange(entries, 0, entries.length));
     }
 
 
@@ -1693,7 +1693,7 @@ public class CMatrix
      */
     @Override
     public CMatrix add(Matrix B) {
-        return new CMatrix(this.shape.copy(),
+        return new CMatrix(this.shape,
                 RealComplexDenseOperations.add(this.entries, this.shape, B.entries, B.shape)
         );
     }
@@ -1764,7 +1764,7 @@ public class CMatrix
      */
     @Override
     public CMatrix sub(Matrix B) {
-        return new CMatrix(this.shape.copy(),
+        return new CMatrix(this.shape,
                 RealComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
         );
     }
@@ -2221,7 +2221,7 @@ public class CMatrix
     @Override
     public CMatrix elemMult(Matrix B) {
         return new CMatrix(
-                shape.copy(),
+                shape,
                 RealComplexDenseElemMult.dispatch(entries, shape, B.entries, B.shape)
         );
     }
@@ -2264,7 +2264,7 @@ public class CMatrix
     @Override
     public CMatrix elemDiv(Matrix B) {
         return new CMatrix(
-                shape.copy(),
+                shape,
                 RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
         );
     }

@@ -67,14 +67,14 @@ public final class ComplexDenseProperties {
      * @return True if this matrix is hermitian. Otherwise, returns false.
      */
     public static boolean isHermitian(CNumber[] src, Shape shape) {
-        if(shape.dims[0]!=shape.dims[1]) {
+        if(shape.get(0)!=shape.get(1)) {
             return false;
         }
 
         int count1, count2, stop;
 
-        for(int i=0; i<shape.dims[0]; i++) {
-            count1 = i*shape.dims[1];
+        for(int i=0; i<shape.get(0); i++) {
+            count1 = i*shape.get(1);
             count2 = i;
             stop = count1 + i;
 
@@ -83,7 +83,7 @@ public final class ComplexDenseProperties {
                     return false;
                 }
 
-                count2+=shape.dims[1];
+                count2+=shape.get(1);
             }
         }
 
@@ -98,7 +98,7 @@ public final class ComplexDenseProperties {
      * @return True if this matrix is anti-hermitian. Otherwise, returns false.
      */
     public static boolean isAntiHermitian(CNumber[] src, Shape shape) {
-        if(shape.dims[0]!=shape.dims[1]) {
+        if(shape.get(0)!=shape.get(1)) {
             return false;
         }
 
@@ -106,8 +106,8 @@ public final class ComplexDenseProperties {
         int count2;
         int stop;
 
-        for(int i=0; i<shape.dims[0]; i++) {
-            count1 = i*shape.dims[1];
+        for(int i=0; i<shape.get(0); i++) {
+            count1 = i*shape.get(1);
             count2 = i;
             stop = count1 + i;
 
@@ -116,7 +116,7 @@ public final class ComplexDenseProperties {
                     return false;
                 }
 
-                count2+=shape.dims[1];
+                count2+=shape.get(1);
             }
         }
 

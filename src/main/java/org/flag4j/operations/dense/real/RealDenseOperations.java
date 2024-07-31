@@ -170,17 +170,27 @@ public final class RealDenseOperations {
      * @return The product of all entries in the tensor.
      */
     public static double prod(double[] src) {
-        double product;
-        int length = src.length;
+        if(src == null || src.length == 0) return 0;
 
-        if(length > 0) {
-            product=1;
-            for(double value : src) {
-                product *= value;
-            }
-        } else {
-            product=0;
-        }
+        double product=1;
+        for(double value : src)
+            product *= value;
+
+        return product;
+    }
+
+
+    /**
+     * Multiplies all entries in a tensor.
+     * @param src The entries of the tensor.
+     * @return The product of all entries in the tensor.
+     */
+    public static int prod(int[] src) {
+        if(src == null || src.length == 0) return 0;
+
+        int product=1;
+        for(int value : src)
+            product *= value;
 
         return product;
     }

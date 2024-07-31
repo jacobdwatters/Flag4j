@@ -64,7 +64,7 @@ public class RealComplexDenseSparseOperations {
             destEntries[i] = src2.entries[i].mult(src1.entries[index]);
         }
 
-        return new CooCTensor(src2.shape.copy(), destEntries, destIndices);
+        return new CooCTensor(src2.shape, destEntries, destIndices);
     }
 
 
@@ -193,7 +193,7 @@ public class RealComplexDenseSparseOperations {
             destEntries[i] = src1.entries[src2.shape.entriesIndex(src2.indices[i])].mult(src2.entries[i]);
         }
 
-        return new CooCTensor(src2.shape.copy(), destEntries, indices);
+        return new CooCTensor(src2.shape, destEntries, indices);
     }
 
 

@@ -122,7 +122,7 @@ class CMatrixElemMultTests {
         bEntries = new double[]{1.34, -994.1, 34.5};
         rowIndices = new int[]{0, 2, 3};
         colIndies = new int[]{1, 1, 0};
-        sparseShape = new Shape(A.shape);
+        sparseShape = A.shape;
         B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndies);
         expEntries = new CNumber[][]{{new CNumber("0.0"), new CNumber("60.568000000000005-0.04462200000000001i"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
@@ -164,7 +164,7 @@ class CMatrixElemMultTests {
         bEntries = new CNumber[]{new CNumber(345.6, 94.1), new CNumber(-9.4, 34), new CNumber(4.4)};
         rowIndices = new int[]{0, 2, 3};
         colIndies = new int[]{1, 1, 0};
-        sparseShape = new Shape(A.shape);
+        sparseShape = A.shape;
         B = new CooCMatrix(sparseShape, bEntries, rowIndices, colIndies);
         expEntries = new CNumber[][]{{new CNumber("0.0"), new CNumber("15624.253530000002+4241.811519999999i"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},

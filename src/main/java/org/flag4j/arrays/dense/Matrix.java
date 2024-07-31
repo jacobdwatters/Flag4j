@@ -92,8 +92,8 @@ public class Matrix
      */
     public Matrix(int size) {
         super(new Shape(size, size), new double[size*size]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -106,8 +106,8 @@ public class Matrix
     public Matrix(int size, double value) {
         super(new Shape(size, size), new double[size*size]);
         Arrays.fill(super.entries, value);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -119,8 +119,8 @@ public class Matrix
      */
     public Matrix(int rows, int cols) {
         super(new Shape(rows, cols), new double[rows*cols]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -134,8 +134,8 @@ public class Matrix
     public Matrix(int rows, int cols, double value) {
         super(new Shape(rows, cols), new double[rows*cols]);
         Arrays.fill(super.entries, value);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -146,8 +146,8 @@ public class Matrix
     public Matrix(Double[][] entries) {
         super(new Shape(entries.length, entries[0].length),
                 new double[entries.length*entries[0].length]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         int index = 0;
         for(Double[] row : entries) {
@@ -165,8 +165,8 @@ public class Matrix
     public Matrix(Integer[][] entries) {
         super(new Shape(entries.length, entries[0].length),
                 new double[entries.length*entries[0].length]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         int index = 0;
         for(Integer[] row : entries) {
@@ -184,8 +184,8 @@ public class Matrix
     public Matrix(double[][] entries) {
         super(new Shape(entries.length, entries[0].length),
                 new double[entries.length*entries[0].length]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         int index = 0;
         for(double[] row : entries) {
@@ -202,8 +202,8 @@ public class Matrix
      */
     public Matrix(int[][] entries) {
         super(new Shape(entries.length, entries[0].length), new double[entries.length*entries[0].length]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         // Copy the int array
         int index=0;
@@ -220,9 +220,9 @@ public class Matrix
      * @param A The matrix defining the entries for this matrix.
      */
     public Matrix(Matrix A) {
-        super(A.shape.copy(), A.entries.clone());
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        super(A.shape, A.entries.clone());
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -234,8 +234,8 @@ public class Matrix
     public Matrix(Shape shape) {
         super(shape, new double[shape.totalEntries().intValue()]);
         ParameterChecks.assertRank(2, shape);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -249,8 +249,8 @@ public class Matrix
         super(shape, new double[shape.totalEntries().intValue()]);
         Arrays.fill(super.entries, value);
         ParameterChecks.assertRank(2, shape);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -264,8 +264,8 @@ public class Matrix
     public Matrix(Shape shape, double[] entries) {
         super(shape, entries);
         ParameterChecks.assertRank(2, shape);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -278,8 +278,8 @@ public class Matrix
      */
     public Matrix(int numRows, int numCols, double[] entries) {
         super(new Shape(numRows, numCols), entries);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -368,7 +368,7 @@ public class Matrix
      * @return A tensor which is equivalent to this matrix.
      */
     public Tensor toTensor() {
-        return new Tensor(this.shape.copy(), this.entries.clone());
+        return new Tensor(this.shape, this.entries.clone());
     }
 
 
@@ -1308,7 +1308,7 @@ public class Matrix
      */
     @Override
     public CMatrix add(CMatrix B) {
-        return new CMatrix(this.shape.copy(),
+        return new CMatrix(this.shape,
                 RealComplexDenseOperations.add(B.entries, B.shape, this.entries, this.shape)
         );
     }
@@ -1415,7 +1415,7 @@ public class Matrix
     @Override
     public CMatrix sub(CMatrix B) {
         return new CMatrix(
-                shape.copy(),
+                shape,
                 RealComplexDenseOperations.sub(entries, shape, B.entries, B.shape)
         );
     }
@@ -1749,7 +1749,7 @@ public class Matrix
     @Override
     public CMatrix elemMult(CMatrix B) {
         return new CMatrix(
-                shape.copy(),
+                shape,
                 RealComplexDenseElemMult.dispatch(B.entries, B.shape, entries, shape)
         );
     }
@@ -1779,7 +1779,7 @@ public class Matrix
     @Override
     public CMatrix elemDiv(CMatrix B) {
         return new CMatrix(
-                shape.copy(),
+                shape,
                 RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
         );
     }

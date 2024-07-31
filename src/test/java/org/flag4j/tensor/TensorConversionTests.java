@@ -36,7 +36,7 @@ class TensorConversionTests {
                 new CNumber(15.61), new CNumber(14.15), new CNumber(-99.23425),
                 new CNumber(0.001345), new CNumber(2.677), new CNumber(8.14),
                 new CNumber(-0.000194), new CNumber(1), new CNumber(234)};
-        exp = new CTensor(shape.copy(), expEntries);
+        exp = new CTensor(shape, expEntries);
 
         assertEquals(exp, A.toComplex());
     }

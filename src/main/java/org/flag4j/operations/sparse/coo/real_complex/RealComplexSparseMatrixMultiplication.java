@@ -64,8 +64,8 @@ public class RealComplexSparseMatrixMultiplication {
      */
     public static CNumber[] standard(CNumber[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                      double[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
-        int rows1 = shape1.dims[0];
-        int cols2 = shape2.dims[1];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fillZeros(dest);
@@ -108,8 +108,8 @@ public class RealComplexSparseMatrixMultiplication {
      */
     public static CNumber[] concurrentStandard(CNumber[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                                double[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
-        int rows1 = shape1.dims[0];
-        int cols2 = shape2.dims[1];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fillZeros(dest);
@@ -157,8 +157,8 @@ public class RealComplexSparseMatrixMultiplication {
     public static CNumber[] standardVector(CNumber[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                            double[] src2, int[] indices, Shape shape2) {
 
-        int rows1 = shape1.dims[0];
-        int cols2 = shape2.dims[1];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fillZeros(dest);
@@ -198,8 +198,8 @@ public class RealComplexSparseMatrixMultiplication {
     public static CNumber[] concurrentStandardVector(CNumber[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                                      double[] src2, int[] indices, Shape shape2) {
 
-        int rows1 = shape1.dims[0];
-        int cols2 = shape2.dims[1];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fillZeros(dest);
@@ -239,8 +239,8 @@ public class RealComplexSparseMatrixMultiplication {
      */
     public static CNumber[] standard(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                      CNumber[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
-        int rows1 = shape1.dims[0];
-        int cols2 = shape2.dims[1];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fillZeros(dest);
@@ -283,8 +283,8 @@ public class RealComplexSparseMatrixMultiplication {
      */
     public static CNumber[] concurrentStandard(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                                CNumber[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
-        int rows1 = shape1.dims[0];
-        int cols2 = shape2.dims[1];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fillZeros(dest);
@@ -332,8 +332,8 @@ public class RealComplexSparseMatrixMultiplication {
     public static CNumber[] standardVector(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                            CNumber[] src2, int[] indices, Shape shape2) {
 
-        int rows1 = shape1.dims[0];
-        int cols2 = shape2.dims[1];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fillZeros(dest);
@@ -373,8 +373,8 @@ public class RealComplexSparseMatrixMultiplication {
     public static CNumber[] concurrentStandardVector(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                                      CNumber[] src2, int[] indices, Shape shape2) {
 
-        int rows1 = shape1.dims[0];
-        int cols2 = shape2.dims[1];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fillZeros(dest);

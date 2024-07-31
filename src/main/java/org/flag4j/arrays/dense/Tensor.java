@@ -163,7 +163,7 @@ public class Tensor
      * @param A tensor to copy.
      */
     public Tensor(Tensor A) {
-        super(A.shape.copy(), A.entries.clone());
+        super(A.shape, A.entries.clone());
         shape.makeStridesIfNull();
     }
 
@@ -173,7 +173,7 @@ public class Tensor
      * @param A Matrix to copy to tensor.
      */
     public Tensor(Matrix A) {
-        super(A.shape.copy(), A.entries.clone());
+        super(A.shape, A.entries.clone());
         shape.makeStridesIfNull();
     }
 
@@ -183,7 +183,7 @@ public class Tensor
      * @param A Vector to copy to tensor.
      */
     public Tensor(Vector A) {
-        super(A.shape.copy(), A.entries.clone());
+        super(A.shape, A.entries.clone());
         shape.makeStridesIfNull();
     }
 
@@ -386,7 +386,7 @@ public class Tensor
     public Tensor T(int... axes) {
         // TODO: Add dispatcher for this method to choose between concurrent and sequential implementations.
         return new Tensor(
-                shape.copy().swapAxes(axes),
+                shape.swapAxes(axes),
                 RealDenseTranspose.standardConcurrent(this.entries, this.shape, axes)
         );
     }
@@ -415,7 +415,7 @@ public class Tensor
     @Override
     public CTensor add(CTensor B) {
         return new CTensor(
-                shape.copy(),
+                shape,
                 RealComplexDenseOperations.add(B.entries, B.shape, this.entries, this.shape)
         );
     }
@@ -457,7 +457,7 @@ public class Tensor
     @Override
     public CTensor sub(CTensor B) {
         return new CTensor(
-                shape.copy(),
+                shape,
                 RealComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
         );
     }
@@ -509,7 +509,7 @@ public class Tensor
     @Override
     public CTensor elemMult(CTensor B) {
         return new CTensor(
-                this.shape.copy(),
+                this.shape,
                 RealComplexDenseElemMult.dispatch(B.entries, B.shape, this.entries, this.shape)
         );
     }
@@ -536,7 +536,7 @@ public class Tensor
     @Override
     public CTensor elemDiv(CTensor B) {
         return new CTensor(
-                shape.copy(),
+                shape,
                 RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
         );
     }
@@ -577,7 +577,7 @@ public class Tensor
         Matrix mat;
 
         if(this.getRank()==2) {
-            mat = new Matrix(this.shape.copy(), this.entries.clone());
+            mat = new Matrix(this.shape, this.entries.clone());
         } else {
             mat = new Matrix(1, this.entries.length, this.entries.clone());
         }

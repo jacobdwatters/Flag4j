@@ -146,7 +146,7 @@ public class CTensor
      * @param A Tensor specifying shape and entries.
      */
     public CTensor(Tensor A) {
-        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);
+        super(A.shape, new CNumber[A.totalEntries().intValue()]);
         shape.makeStridesIfNull();
         ArrayUtils.copy2CNumber(A.entries, super.entries);
     }
@@ -157,7 +157,7 @@ public class CTensor
      * @param A Tensor specifying shape and entries.
      */
     public CTensor(CTensor A) {
-        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);
+        super(A.shape, new CNumber[A.totalEntries().intValue()]);
         shape.makeStridesIfNull();
         ArrayUtils.copy2CNumber(A.entries, super.entries);
     }
@@ -257,7 +257,7 @@ public class CTensor
     @Override
     public CTensor H() {
         return new CTensor(
-                shape.copy().swapAxes(0, getRank()-1),
+                shape.swapAxes(0, getRank()-1),
                 ComplexDenseTranspose.standardConcurrentHerm(
                     entries,
                     shape,
@@ -282,7 +282,7 @@ public class CTensor
     @Override
     public CTensor H(int axis1, int axis2) {
         return new CTensor(
-                shape.copy().swapAxes(axis1, axis2),
+                shape.swapAxes(axis1, axis2),
                 ComplexDenseTranspose.standardConcurrentHerm(
                         entries,
                         shape,
@@ -305,7 +305,7 @@ public class CTensor
     @Override
     public CTensor H(int... axes) {
         return new CTensor(
-                this.shape.copy().swapAxes(axes),
+                this.shape.swapAxes(axes),
                 ComplexDenseTranspose.standardConcurrentHerm(this.entries, this.shape, axes)
         );
     }
@@ -388,7 +388,7 @@ public class CTensor
     public CTensor T(int... axes) {
         // TODO: Add dispatcher for this method to choose between concurrent and sequential implementations.
         return new CTensor(
-                this.shape.copy().swapAxes(axes),
+                this.shape.swapAxes(axes),
                 ComplexDenseTranspose.standardConcurrent(this.entries, this.shape, axes)
         );
     }
@@ -452,7 +452,7 @@ public class CTensor
     @Override
     public CTensor add(Tensor B) {
         return new CTensor(
-                this.shape.copy(),
+                this.shape,
                 RealComplexDenseOperations.add(this.entries, this.shape, B.entries, B.shape)
         );
     }
@@ -467,7 +467,7 @@ public class CTensor
     @Override
     public CTensor sub(Tensor B) {
         return new CTensor(
-                this.shape.copy(),
+                this.shape,
                 RealComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
         );
     }
@@ -557,7 +557,7 @@ public class CTensor
     @Override
     public CTensor elemMult(Tensor B) {
         return new CTensor(
-                this.shape.copy(),
+                this.shape,
                 RealComplexDenseElemMult.dispatch(this.entries, this.shape, B.entries, B.shape)
         );
     }
@@ -599,7 +599,7 @@ public class CTensor
     @Override
     public CTensor elemDiv(Tensor B) {
         return new CTensor(
-                shape.copy(),
+                shape,
                 RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
         );
     }
@@ -659,7 +659,7 @@ public class CTensor
         ArrayUtils.copy2CNumber(this.entries, entries);
 
         if(this.getRank()==2) {
-            mat = new CMatrix(this.shape.copy(), entries);
+            mat = new CMatrix(this.shape, entries);
         } else {
             mat = new CMatrix(1, this.entries.length, entries);
         }

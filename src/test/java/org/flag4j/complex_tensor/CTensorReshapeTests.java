@@ -35,25 +35,25 @@ class CTensorReshapeTests {
         expShape = new Shape(1, 1, 12, 1);
         exp = new CTensor(expShape, ArrayUtils.copyOf(aEntries));
 
-        assertEquals(exp, A.reshape(expShape.copy()));
+        assertEquals(exp, A.reshape(expShape));
 
         // -------------------------- Sub-case 2 --------------------------
         expShape = new Shape(4, 3);
         exp = new CTensor(expShape, ArrayUtils.copyOf(aEntries));
 
-        assertEquals(exp, A.reshape(expShape.copy()));
+        assertEquals(exp, A.reshape(expShape));
 
         // -------------------------- Sub-case 3 --------------------------
         expShape = new Shape(2, 3, 2);
         exp = new CTensor(expShape, ArrayUtils.copyOf(aEntries));
 
-        assertEquals(exp, A.reshape(expShape.copy()));
+        assertEquals(exp, A.reshape(expShape));
 
         // -------------------------- Sub-case 4 --------------------------
         expShape = new Shape(2, 2, 3, 1);
         exp = new CTensor(expShape, ArrayUtils.copyOf(aEntries));
 
-        assertEquals(exp, A.reshape(expShape.copy()));
+        assertEquals(exp, A.reshape(expShape));
     }
 
 

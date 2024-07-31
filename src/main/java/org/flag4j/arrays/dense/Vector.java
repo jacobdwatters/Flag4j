@@ -65,7 +65,7 @@ public class Vector
      */
     public Vector(int size) {
         super(new Shape(size), new double[size]);
-        this.size = shape.dims[0];
+        this.size = shape.get(0);
     }
 
 
@@ -77,7 +77,7 @@ public class Vector
     public Vector(int size, double fillValue) {
         super(new Shape(size), new double[size]);
         Arrays.fill(super.entries, fillValue);
-        this.size = shape.dims[0];
+        this.size = shape.get(0);
     }
 
 
@@ -87,8 +87,8 @@ public class Vector
      * @throws IllegalArgumentException If the shapes is not rank 1.
      */
     public Vector(Shape shape) {
-        super(shape, new double[shape.dims[0]]);
-        this.size = shape.dims[0];
+        super(shape, new double[shape.get(0)]);
+        this.size = shape.get(0);
     }
 
 
@@ -99,9 +99,9 @@ public class Vector
      * @throws IllegalArgumentException If the shapes is not rank 1.
      */
     public Vector(Shape shape, double fillValue) {
-        super(shape, new double[shape.dims[0]]);
+        super(shape, new double[shape.get(0)]);
         Arrays.fill(super.entries, fillValue);
-        this.size = shape.dims[0];
+        this.size = shape.get(0);
     }
 
 
@@ -111,7 +111,7 @@ public class Vector
      */
     public Vector(double... entries) {
         super(new Shape(entries.length), entries.clone());
-        this.size = shape.dims[0];
+        this.size = shape.get(0);
     }
 
 
@@ -121,7 +121,7 @@ public class Vector
      */
     public Vector(int... entries) {
         super(new Shape(entries.length), new double[entries.length]);
-        this.size = shape.dims[0];
+        this.size = shape.get(0);
 
         for(int i=0; i<entries.length; i++) {
             super.entries[i] = entries[i];
@@ -134,8 +134,8 @@ public class Vector
      * @param a Vector to make copy of.
      */
     public Vector(Vector a) {
-        super(a.shape.copy(), a.entries.clone());
-        this.size = shape.dims[0];
+        super(a.shape, a.entries.clone());
+        this.size = shape.get(0);
     }
 
 
@@ -1015,7 +1015,7 @@ public class Vector
      * @return A tensor which is equivalent to this vector.
      */
     public Tensor toTensor() {
-        return new Tensor(this.shape.copy(), this.entries.clone());
+        return new Tensor(this.shape, this.entries.clone());
     }
 
 

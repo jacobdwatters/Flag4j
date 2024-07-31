@@ -103,10 +103,10 @@ public class CsrCMatrix
      * @param shape Shape of the CSR matrix.
      */
     public CsrCMatrix(Shape shape) {
-        super(shape, 0, new CNumber[0], new int[shape.dims[0]+1], new int[0]);
+        super(shape, 0, new CNumber[0], new int[shape.get(0)+1], new int[0]);
 
-        numRows = shape.dims[0];
-        numCols = shape.dims[1];
+        numRows = shape.get(0);
+        numCols = shape.get(1);
         this.rowPointers = indices[0];
         this.colIndices = indices[1];
         nnz = entries.length;
@@ -121,8 +121,8 @@ public class CsrCMatrix
     public CsrCMatrix(int numRows, int numCols) {
         super(new Shape(numRows, numCols), 0, new CNumber[0], new int[numRows+1], new int[0]);
 
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
         this.rowPointers = indices[0];
         this.colIndices = indices[1];
         nnz = entries.length;
@@ -141,8 +141,8 @@ public class CsrCMatrix
 
         this.rowPointers = rowPointers;
         this.colIndices = colIndices;
-        numRows = shape.dims[0];
-        numCols = shape.dims[1];
+        numRows = shape.get(0);
+        numCols = shape.get(1);
         nnz = entries.length;
     }
 
@@ -160,8 +160,8 @@ public class CsrCMatrix
 
         this.rowPointers = rowPointers;
         this.colIndices = colIndices;
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
         nnz = entries.length;
     }
 
@@ -180,8 +180,8 @@ public class CsrCMatrix
 
         this.rowPointers = rowPointers;
         this.colIndices = colIndices;
-        numRows = shape.dims[0];
-        numCols = shape.dims[1];
+        numRows = shape.get(0);
+        numCols = shape.get(1);
         nnz = entries.length;
     }
 
@@ -191,13 +191,13 @@ public class CsrCMatrix
      * @param src Matrix to create copy of.
      */
     public CsrCMatrix(CsrCMatrix src) {
-        super(src.shape.copy(), src.entries.length, ArrayUtils.copyOf(src.entries),
+        super(src.shape, src.entries.length, ArrayUtils.copyOf(src.entries),
                 src.rowPointers.clone(), src.colIndices.clone());
 
         this.rowPointers = indices[0];
         this.colIndices = indices[1];
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
         nnz = entries.length;
     }
 
@@ -207,7 +207,7 @@ public class CsrCMatrix
      * @param src COO matrix to convert. Indices must be sorted lexicographically.
      */
     public CsrCMatrix(CooCMatrix src) {
-        super(src.shape.copy(),
+        super(src.shape,
                 src.entries.length,
                 new CNumber[src.entries.length],
                 new int[src.numRows + 1],
@@ -216,8 +216,8 @@ public class CsrCMatrix
 
         rowPointers = this.indices[0];
         colIndices = this.indices[1];
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
         nnz = entries.length;
 
         ArrayUtils.copy2CNumber(src.entries, entries); // Deep copy non-zero entries.
@@ -239,7 +239,7 @@ public class CsrCMatrix
      * @param src COO matrix to convert. Indices must be sorted lexicographically.
      */
     public CsrCMatrix(CooMatrix src) {
-        super(src.shape.copy(),
+        super(src.shape,
                 src.entries.length,
                 new CNumber[src.entries.length],
                 new int[src.numRows + 1],
@@ -248,8 +248,8 @@ public class CsrCMatrix
 
         rowPointers = this.indices[0];
         colIndices = this.indices[1];
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
         nnz = entries.length;
 
         ArrayUtils.copy2CNumber(src.entries, entries); // Deep copy non-zero entries.
@@ -454,12 +454,11 @@ public class CsrCMatrix
     public CsrCMatrix reshape(Shape newShape) {
         ParameterChecks.assertBroadcastable(shape, newShape);
 
-        int oldRowCount = shape.dims[0];
-        int newRowCount = newShape.dims[0];
-        int newColCount = newShape.dims[1];
+        int oldRowCount = shape.get(0);
+        int newRowCount = newShape.get(0);
+        int newColCount = newShape.get(1);
 
-        // Initialize new CSR structures with estimated sizes
-        CNumber[] newEntries = new CNumber[entries.length];
+        // Initialize new CSR structures.
         int[] newRowPointers = new int[newRowCount + 1];
         int[] newColIndices = new int[colIndices.length];
 
@@ -476,7 +475,6 @@ public class CsrCMatrix
                 int newRow = flatIndex / newColCount;
                 int newCol = flatIndex % newColCount;
 
-                newEntries[index] = entries[j].copy();
                 newColIndices[index] = newCol;
 
                 newRowPointers[newRow + 1]++;
@@ -489,7 +487,7 @@ public class CsrCMatrix
             newRowPointers[i + 1] += newRowPointers[i];
         }
 
-        return new CsrCMatrix(newShape, newEntries, newRowPointers, newColIndices);
+        return new CsrCMatrix(newShape, ArrayUtils.copyOf(entries), newRowPointers, newColIndices);
     }
 
 
@@ -1988,7 +1986,7 @@ public class CsrCMatrix
             }
         }
 
-        return new CMatrix(shape.copy(), dest);
+        return new CMatrix(shape, dest);
     }
 
 
@@ -2018,7 +2016,7 @@ public class CsrCMatrix
             }
         }
 
-        return new CooCMatrix(shape.copy(), dest, destRowIdx, destColIdx);
+        return new CooCMatrix(shape, dest, destRowIdx, destColIdx);
     }
 
 
@@ -2102,7 +2100,7 @@ public class CsrCMatrix
             }
         }
 
-        return new CsrCMatrix(shape.copy(), newEntries, newRowPointers, newColIndices);
+        return new CsrCMatrix(shape, newEntries, newRowPointers, newColIndices);
     }
 
 

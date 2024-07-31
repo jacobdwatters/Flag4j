@@ -242,7 +242,7 @@ public class ComplexCsrOperations {
             rowPointers[i] += rowPointers[i-1];
         }
 
-        return new CsrCMatrix(src1.shape.copy(),
+        return new CsrCMatrix(src1.shape,
                 ArrayUtils.fromList(dest, new CNumber[dest.size()]),
                 rowPointers,
                 ArrayUtils.fromIntegerList(colIndices)

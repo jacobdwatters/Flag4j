@@ -141,7 +141,7 @@ public class RealComplexSparseMatrixOperations {
             sum[row*src.numCols + col] = src.entries[i];
         }
 
-        return new CMatrix(src.shape.copy(), sum);
+        return new CMatrix(src.shape, sum);
     }
 
 
@@ -166,7 +166,7 @@ public class RealComplexSparseMatrixOperations {
             sum[row*src.numCols + col].addEq(src.entries[i]);
         }
 
-        return new CMatrix(src.shape.copy(), sum);
+        return new CMatrix(src.shape, sum);
     }
 
 
@@ -418,7 +418,7 @@ public class RealComplexSparseMatrixOperations {
             }
         }
 
-        return new CMatrix(src.shape.copy(), destEntries);
+        return new CMatrix(src.shape, destEntries);
     }
 
 
@@ -449,7 +449,7 @@ public class RealComplexSparseMatrixOperations {
             }
         }
 
-        return new CMatrix(src.shape.copy(), destEntries);
+        return new CMatrix(src.shape, destEntries);
     }
 
 

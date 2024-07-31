@@ -305,7 +305,7 @@ public class Givens {
         CNumber[] src1 = G.entries;
         CNumber[] src2 = src.entries;
 
-        int cols2 = src.shape.dims[1];
+        int cols2 = src.shape.get(1);
         int destCols = (cols2 - (row-1));
         if(workArray==null) workArray = new CNumber[2*destCols];
         ArrayUtils.fillZeros(workArray, 0, 2*destCols);

@@ -36,7 +36,7 @@ class CTensorConversionTests {
 
         // --------------------- Sub-case 1 ---------------------
         expEntries = new double[]{1.4415, 235.61, 0, 1.0, -85.1, 1.345, 0.014, -140.0, 0, 51.0, 6.1, -0.00014};
-        exp = new Tensor(shape.copy(), expEntries);
+        exp = new Tensor(shape, expEntries);
 
         assertEquals(exp, A.toReal());
     }

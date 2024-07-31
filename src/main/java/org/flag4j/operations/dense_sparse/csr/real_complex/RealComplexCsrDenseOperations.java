@@ -83,7 +83,7 @@ public class RealComplexCsrDenseOperations {
             }
         }
 
-        return new CMatrix(src2.shape.copy(), dest);
+        return new CMatrix(src2.shape, dest);
     }
 
 
@@ -114,7 +114,7 @@ public class RealComplexCsrDenseOperations {
             }
         }
 
-        return new CMatrix(src2.shape.copy(), dest);
+        return new CMatrix(src2.shape, dest);
     }
 
 
@@ -153,7 +153,7 @@ public class RealComplexCsrDenseOperations {
             }
         }
 
-        return new CMatrix(src2.shape.copy(), dest);
+        return new CMatrix(src2.shape, dest);
     }
 
 
@@ -183,7 +183,7 @@ public class RealComplexCsrDenseOperations {
             }
         }
 
-        return new CMatrix(src2.shape.copy(), dest);
+        return new CMatrix(src2.shape, dest);
     }
 
 
@@ -214,7 +214,7 @@ public class RealComplexCsrDenseOperations {
             }
         }
 
-        return new CsrCMatrix(src1.shape.copy(), entries, rowPointers, colIndices);
+        return new CsrCMatrix(src1.shape, entries, rowPointers, colIndices);
     }
 
 
@@ -246,7 +246,7 @@ public class RealComplexCsrDenseOperations {
             }
         }
 
-        return new CsrCMatrix(src1.shape.copy(), entries, rowPointers, colIndices);
+        return new CsrCMatrix(src1.shape, entries, rowPointers, colIndices);
     }
 
 
@@ -275,7 +275,7 @@ public class RealComplexCsrDenseOperations {
             }
         }
 
-        return new CsrCMatrix(src1.shape.copy(), entries, rowPointers, colIndices);
+        return new CsrCMatrix(src1.shape, entries, rowPointers, colIndices);
     }
 
 
@@ -313,6 +313,6 @@ public class RealComplexCsrDenseOperations {
             }
         }
 
-        return new CMatrix(src1.shape.copy(), dest);
+        return new CMatrix(src1.shape, dest);
     }
 }

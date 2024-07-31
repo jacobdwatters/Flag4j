@@ -83,7 +83,7 @@ public class RealDenseSparseTensorOperations {
             destEntries[i] = src1.entries[index]*src2.entries[i];
         }
 
-        return new CooTensor(src2.shape.copy(), destEntries, destIndices);
+        return new CooTensor(src2.shape, destEntries, destIndices);
     }
 
 

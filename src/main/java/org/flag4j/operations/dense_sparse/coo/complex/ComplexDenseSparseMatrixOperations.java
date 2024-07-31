@@ -100,7 +100,7 @@ public class ComplexDenseSparseMatrixOperations {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
-        CMatrix dest = new CMatrix(src1.shape.copy(), ComplexOperations.scalMult(src1.entries, -1));
+        CMatrix dest = new CMatrix(src1.shape, ComplexOperations.scalMult(src1.entries, -1));
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             row = src2.rowIndices[i];
@@ -167,7 +167,7 @@ public class ComplexDenseSparseMatrixOperations {
             destEntries[i] = src1.entries[row*src1.numCols + col].mult(src2.entries[i]);
         }
 
-        return new CooCMatrix(src2.shape.copy(), destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
+        return new CooCMatrix(src2.shape, destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
     }
 
 
@@ -203,7 +203,7 @@ public class ComplexDenseSparseMatrixOperations {
             quotient[i] = src1.entries[i].div(src2.entries[row*src2.numCols + col]);
         }
 
-        return new CooCMatrix(src1.shape.copy(), quotient, src1.rowIndices.clone(), src1.colIndices.clone());
+        return new CooCMatrix(src1.shape, quotient, src1.rowIndices.clone(), src1.colIndices.clone());
     }
 
 

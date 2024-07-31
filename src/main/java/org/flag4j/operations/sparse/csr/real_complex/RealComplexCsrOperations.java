@@ -123,7 +123,7 @@ public class RealComplexCsrOperations {
             rowPointers[i] += rowPointers[i-1];
         }
 
-        return new CsrCMatrix(src1.shape.copy(),
+        return new CsrCMatrix(src1.shape,
                 dest.toArray(CNumber[]::new),
                 rowPointers,
                 ArrayUtils.fromIntegerList(colIndices)
@@ -207,7 +207,7 @@ public class RealComplexCsrOperations {
             rowPointers[i] += rowPointers[i-1];
         }
 
-        return new CsrCMatrix(src1.shape.copy(),
+        return new CsrCMatrix(src1.shape,
                 dest.toArray(CNumber[]::new),
                 rowPointers,
                 ArrayUtils.fromIntegerList(colIndices)
@@ -254,7 +254,7 @@ public class RealComplexCsrOperations {
             rowPointers[i] += rowPointers[i-1];
         }
 
-        return new CsrCMatrix(src1.shape.copy(),
+        return new CsrCMatrix(src1.shape,
                 dest.toArray(CNumber[]::new),
                 rowPointers,
                 ArrayUtils.fromIntegerList(colIndices)

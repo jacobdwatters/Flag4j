@@ -29,7 +29,10 @@ import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.core.sparse_base.ComplexSparseTensorBase;
+import org.flag4j.operations.dense.real.RealDenseOperations;
 import org.flag4j.operations.sparse.coo.complex.ComplexSparseEquals;
+import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ParameterChecks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +107,7 @@ public class CooCTensor
      * @param A The sparse complex tensor to construct a copy of.
      */
     public CooCTensor(CooCTensor A) {
-        super(A.shape.copy(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);
+        super(A.shape, A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);
         shape.makeStridesIfNull();
 
         for(int i=0; i<indices.length; i++) {
@@ -296,13 +299,36 @@ public class CooCTensor
      * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
      * in the reshaped tensor.
      *
-     * @param shape Shape of the new tensor.
+     * @param newShape Shape of the new tensor.
      * @return A tensor which is equivalent to this tensor but with the specified shape.
      * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
      */
     @Override
-    public CooCTensor reshape(Shape shape) {
-        return null;
+    public CooCTensor reshape(Shape newShape) {
+        ParameterChecks.assertBroadcastable(shape, newShape);
+        newShape.makeStridesIfNull();
+
+        int rank = indices[0].length;
+        int nnz = entries.length;
+
+        int[] oldStrides = shape.getStrides();
+        int[] newStrides = newShape.getStrides();
+
+        int[][] newIndices = new int[nnz][rank];
+
+        for (int i = 0; i < nnz; i++) {
+            int flatIndex = 0;
+            for (int j = 0; j < rank; j++) {
+                flatIndex += indices[i][j] * oldStrides[j];
+            }
+
+            for (int j = 0; j < rank; j++) {
+                newIndices[i][j] = flatIndex / newStrides[j];
+                flatIndex %= newStrides[j];
+            }
+        }
+
+        return new CooCTensor(newShape, ArrayUtils.copyOf(entries), newIndices);
     }
 
 
@@ -313,7 +339,12 @@ public class CooCTensor
      */
     @Override
     public CooCTensor flatten() {
-        return null;
+        int[][] destIndices = new int[entries.length][1];
+
+        for(int i = 0; i < entries.length; i++)
+            destIndices[i][0] = RealDenseOperations.prod(indices[i]);
+
+        return new CooCTensor(shape, ArrayUtils.copyOf(entries), destIndices);
     }
 
 
@@ -700,7 +731,7 @@ public class CooCTensor
             }
         }
 
-        return new CooCTensor(src.shape.copy(), entries.toArray(new CNumber[0]), indices.toArray(new int[0][]));
+        return new CooCTensor(src.shape, entries.toArray(new CNumber[0]), indices.toArray(new int[0][]));
     }
 
 
@@ -717,6 +748,6 @@ public class CooCTensor
             entries[shape.entriesIndex(indices[i])] = this.entries[i];
         }
 
-        return new CTensor(shape.copy(), entries);
+        return new CTensor(shape, entries);
     }
 }

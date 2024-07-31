@@ -125,7 +125,7 @@ public class CooVector
      * @param a Sparse vector to copy
      */
     public CooVector(CooVector a) {
-        super(a.shape.copy(),
+        super(a.shape,
                 a.nonZeroEntries(),
                 a.entries.clone(),
                 new int[a.indices.length][1]
@@ -211,6 +211,25 @@ public class CooVector
         }
 
         return new CooVector(size, destEntries, destIndices);
+    }
+
+
+    /**
+     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+     * in the reshaped tensor.
+     *
+     * @param shape Shape of the new tensor.
+     *
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     *
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public CooVector reshape(Shape shape) {
+        // TODO: This should return a tensor. This would allow for a matrix or vector to be reshaped to any rank.
+        ParameterChecks.assertRank(1, shape);
+        ParameterChecks.assertBroadcastable(this.shape, shape);
+        return copy();
     }
 
 
@@ -1110,7 +1129,7 @@ public class CooVector
      */
     public CooTensor toTensor() {
         return new CooTensor(
-                this.shape.copy(),
+                this.shape,
                 this.entries.clone(),
                 RealDenseTranspose.standardIntMatrix(new int[][]{this.indices.clone()})
         );

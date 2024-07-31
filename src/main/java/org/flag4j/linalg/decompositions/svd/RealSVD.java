@@ -136,8 +136,8 @@ public class RealSVD extends SVD<Matrix> {
      */
     @Override
     protected void initUV(Shape src, int cols) {
-        U = new Matrix(src.dims[0], cols);
-        V = new Matrix(src.dims[1], cols);
+        U = new Matrix(src.get(0), cols);
+        V = new Matrix(src.get(1), cols);
     }
 
 

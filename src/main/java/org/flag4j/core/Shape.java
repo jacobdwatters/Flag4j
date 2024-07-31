@@ -24,6 +24,7 @@
 
 package org.flag4j.core;
 
+import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -31,18 +32,23 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Arrays;
 
+// TODO: Make shape object immutable.
 /**
- * An object to store the shape of a tensor. Note that this object is mutable.
+ * An object to store the shape of a tensor. Shapes are immutable.
  */
 public class Shape implements Serializable {
     /**
      * An array containing the size of each dimension of this shape.
      */
-    public int[] dims;
+    private final int[] dims;
     /**
      * An array containing the strides of all dimensions within this shape.
      */
-    public int[] strides;
+    private int[] strides;
+    /**
+     * Total entries of this shape.
+     */
+    private BigInteger totalEntries = null;
 
 
     /**
@@ -72,30 +78,6 @@ public class Shape implements Serializable {
 
 
     /**
-     * Copy constructor which creates a copy of the specified shape.
-     * @param shape Shape to copy.
-     */
-    public Shape(Shape shape) {
-        this.dims = shape.dims.clone();
-        if(shape.strides!=null) this.strides = shape.strides.clone();
-    }
-
-
-    /**
-     * Copy constructor which creates a copy of the specified shape.
-     * @param shape Shape to copy.
-     */
-    public Shape(boolean computeStrides, Shape shape) {
-        this.dims = shape.dims.clone();
-
-        if(computeStrides) {
-            if(shape.strides!=null) this.strides = shape.strides.clone();
-            else createNewStrides();
-        }
-    }
-
-
-    /**
      * Gets the rank of a tensor with this shape.
      * @return The rank for a tensor with this shape.
      */
@@ -109,7 +91,7 @@ public class Shape implements Serializable {
      * @return Shape of a tensor as an integer array.
      */
     public int[] getDims() {
-        return this.dims;
+        return this.dims.clone();
     }
 
 
@@ -118,7 +100,7 @@ public class Shape implements Serializable {
      * @return Shape of a tensor as an integer array.
      */
     public int[] getStrides() {
-        return this.strides;
+        return this.strides.clone();
     }
 
 
@@ -134,7 +116,7 @@ public class Shape implements Serializable {
 
     /**
      * Constructs strides for each dimension of this shape as if for a newly constructed tensor.
-     * i.e. Strides will be a decreasing sequence with the last stride being 1.
+     * i.e. Strides will be a monotonically decreasing sequence with the last stride being 1.
      * @return The strides for all dimensions of a newly constructed tensor with this shape.
      */
     public int[] createNewStrides() {
@@ -218,17 +200,17 @@ public class Shape implements Serializable {
      * Swaps two axes of this shape. New strides are constructed for this shape.
      * @param axis1 First axis to swap.
      * @param axis2 Second axis to swap.
-     * @return Returns this shape.
+     * @return A copy of this shape with the specified axis swapped.
      * @throws ArrayIndexOutOfBoundsException If either axis is not within [0, {@link #getRank() rank}-1].
      */
     public Shape swapAxes(int axis1, int axis2) {
-        int temp = dims[axis1];
-        dims[axis1] = dims[axis2];
-        dims[axis2] = temp;
+        int[] newDims = dims.clone();
+        ArrayUtils.swap(newDims, axis1, axis2);
+        Shape newShape = new Shape(newDims);
 
-        if(strides!=null) this.strides = this.createNewStrides();
+        if(strides!=null) newShape.strides = newShape.createNewStrides();
 
-        return this;
+        return newShape;
     }
 
 
@@ -244,17 +226,15 @@ public class Shape implements Serializable {
         ParameterChecks.assertPermutation(axes);
 
         int[] tempDims = new int[dims.length];
+
         int i=0;
-
-        // Permute axes.
-        for(int axis : axes) {
+        for(int axis : axes)  // Permute axes.
             tempDims[i++] = dims[axis];
-        }
 
-        this.dims = tempDims;
-        if(strides!=null) this.strides = this.createNewStrides();
+        Shape newShape = new Shape(tempDims);
+        if(strides!=null) newShape.strides = newShape.createNewStrides();
 
-        return this;
+        return newShape;
     }
 
 
@@ -263,6 +243,9 @@ public class Shape implements Serializable {
      * @return The total number of entries for a tensor with this shape.
      */
     public BigInteger totalEntries() {
+        // Check if totalEntries has already been computed for this shape.
+        if(totalEntries!=null) return totalEntries;
+
         BigInteger product;
 
         if(dims.length>0) {
@@ -275,16 +258,9 @@ public class Shape implements Serializable {
             product = BigInteger.ZERO;
         }
 
+        totalEntries = product;
+
         return product;
-    }
-
-
-    /**
-     * Creates a deep copy of this shape object. This is a distinct object not a reference to the same object.
-     * @return A deep copy of this shape object.
-     */
-    public Shape copy() {
-        return new Shape(strides!=null,this);
     }
 
 
@@ -295,9 +271,10 @@ public class Shape implements Serializable {
      */
     @Override
     public boolean equals(Object b) {
+        // Check for early returns.
         if(this == b) return true;
         if(b==null) return false;
-        if(!(b instanceof Shape)) return false;
+        if(b.getClass() != getClass()) return false;
 
         return Arrays.equals(dims, ((Shape) b).dims);
     }
@@ -333,12 +310,12 @@ public class Shape implements Serializable {
      * @return The string representation for this Shape object.
      */
     public String toString() {
-        StringBuilder result = new StringBuilder();
+        StringBuilder result = new StringBuilder("(");
 
-        for(int d : dims) {
-            result.append(d).append("x");
-        }
-        result.deleteCharAt(result.length()-1); // Remove excess 'x' character.
+        for(int d : dims)
+            result.append(d).append(", ");
+
+        result.replace(result.length()-2, result.length(), ")");  // Remove excess ', ' characters.
 
         return result.toString();
     }

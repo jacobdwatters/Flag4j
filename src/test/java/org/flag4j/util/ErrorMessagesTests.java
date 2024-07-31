@@ -18,7 +18,7 @@ class ErrorMessagesTests {
         s1 = new Shape(2);
         s2 = new Shape(5);
         expMsg = String.format("Expecting matrices to have the same shape but got shapes %s and %s.",
-                "2", "5");
+                "(2)", "(5)");
 
         assertEquals(expMsg, ErrorMessages.equalShapeErrMsg(s1, s2));
 
@@ -27,7 +27,7 @@ class ErrorMessagesTests {
         s1 = new Shape(1, 2, 3, 4);
         s2 = new Shape(4, 3, 2, 1);
         expMsg = String.format("Expecting matrices to have the same shape but got shapes %s and %s.",
-                "1x2x3x4", "4x3x2x1");
+                "(1, 2, 3, 4)", "(4, 3, 2, 1)");
 
         assertEquals(expMsg, ErrorMessages.equalShapeErrMsg(s1, s2));
     }
@@ -40,7 +40,7 @@ class ErrorMessagesTests {
         s2 = new Shape(14, 4);
         expMsg = String.format("Expecting the number of columns in the first matrix to" +
                         " match the number rows in the second matrix but got shapes %s and %s.",
-                "10x5", "14x4");
+                "(10, 5)", "(14, 4)");
 
         assertEquals(expMsg, ErrorMessages.matMultShapeErrMsg(s1, s2));
     }

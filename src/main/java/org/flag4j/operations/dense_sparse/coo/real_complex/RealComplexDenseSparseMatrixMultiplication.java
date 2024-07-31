@@ -30,7 +30,6 @@ import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.Axis2D;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -57,9 +56,9 @@ public class RealComplexDenseSparseMatrixMultiplication {
      */
     public static CNumber[] standard(double[] src1, Shape shape1, CNumber[] src2,
                                      int[] rowIndices, int[] colIndices, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
@@ -94,8 +93,8 @@ int col;
      */
     public static CNumber[] standard(double[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
                                     CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
@@ -128,9 +127,9 @@ int col;
      */
     public static CNumber[] concurrentStandard(double[] src1, Shape shape1, CNumber[] src2,
                                               int[] rowIndices, int[] colIndices, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
@@ -166,8 +165,8 @@ int col;
      */
     public static CNumber[] concurrentStandard(double[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
                                               CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
@@ -201,9 +200,9 @@ int col;
      */
     public static CNumber[] standard(CNumber[] src1, Shape shape1, double[] src2,
                                      int[] rowIndices, int[] colIndices, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
@@ -238,8 +237,8 @@ int col;
      */
     public static CNumber[] standard(CNumber[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
                                      double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
@@ -272,9 +271,9 @@ int col;
      */
     public static CNumber[] concurrentStandard(CNumber[] src1, Shape shape1, double[] src2,
                                                int[] rowIndices, int[] colIndices, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
@@ -310,8 +309,8 @@ int col;
      */
     public static CNumber[] concurrentStandard(CNumber[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
                                                double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[0];
-        int cols2 = shape2.dims[1];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
@@ -344,8 +343,8 @@ int col;
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] standardVector(double[] src1, Shape shape1, CNumber[] src2, int[] indices) {
-        int denseRows = shape1.dims[Axis2D.row()];
-        int denseCols = shape1.dims[Axis2D.col()];
+        int denseRows = shape1.get(0);
+        int denseCols = shape1.get(1);
         int nonZeros = src2.length;
 
         CNumber[] dest = new CNumber[denseRows];
@@ -375,7 +374,7 @@ int col;
      */
     public static CNumber[] standardVector(double[] src1, int[] rowIndices, int[] colIndices,
                                           Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
+        int rows1 = shape1.get(0);
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
         int row;
@@ -401,8 +400,8 @@ int col;
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] blockedVector(double[] src1, Shape shape1, CNumber[] src2, int[] indices) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
         int bsize = Configurations.getBlockSize(); // Get the block size to use.
@@ -438,8 +437,8 @@ int col;
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] concurrentStandardVector(double[] src1, Shape shape1, CNumber[] src2, int[] indices) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
         CNumber[] dest = new CNumber[rows1];
@@ -468,7 +467,7 @@ int col;
      */
     public static CNumber[] concurrentStandardVector(double[] src1, int[] rowIndices, int[] colIndices,
                                                     Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
+        int rows1 = shape1.get(0);
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
 
@@ -496,8 +495,8 @@ int col;
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] concurrentBlockedVector(double[] src1, Shape shape1, CNumber[] src2, int[] indices) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
         final int bsize = Configurations.getBlockSize(); // Get the block size to use.
@@ -531,8 +530,8 @@ int col;
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] standardVector(CNumber[] src1, Shape shape1, double[] src2, int[] indices) {
-        int denseRows = shape1.dims[Axis2D.row()];
-        int denseCols = shape1.dims[Axis2D.col()];
+        int denseRows = shape1.get(0);
+        int denseCols = shape1.get(1);
         int nonZeros = src2.length;
 
         CNumber[] dest = new CNumber[denseRows];
@@ -562,7 +561,7 @@ int col;
      */
     public static CNumber[] standardVector(CNumber[] src1, int[] rowIndices, int[] colIndices,
                                            Shape shape1, double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
+        int rows1 = shape1.get(0);
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
         int row;
@@ -588,8 +587,8 @@ int col;
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] blockedVector(CNumber[] src1, Shape shape1, double[] src2, int[] indices) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
         int bsize = Configurations.getBlockSize(); // Get the block size to use.
@@ -624,8 +623,8 @@ int col;
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] concurrentStandardVector(CNumber[] src1, Shape shape1, double[] src2, int[] indices) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
         CNumber[] dest = new CNumber[rows1];
@@ -654,7 +653,7 @@ int col;
      */
     public static CNumber[] concurrentStandardVector(CNumber[] src1, int[] rowIndices, int[] colIndices,
                                                      Shape shape1, double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
+        int rows1 = shape1.get(0);
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
 
@@ -681,8 +680,8 @@ int col;
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] concurrentBlockedVector(CNumber[] src1, Shape shape1, double[] src2, int[] indices) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
         final int bsize = Configurations.getBlockSize(); // Get the block size to use.

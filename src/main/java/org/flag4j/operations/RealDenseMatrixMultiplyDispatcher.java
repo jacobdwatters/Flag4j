@@ -229,7 +229,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
      */
     static AlgorithmNames selectAlgorithmTranspose(Shape shape) {
         AlgorithmNames name;
-        int rows = shape.dims[0];
+        int rows = shape.get(0);
 
         // TODO: This currently only works well if both matrices are square.
 
