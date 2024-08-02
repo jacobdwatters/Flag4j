@@ -29,6 +29,9 @@ import org.flag4j.util.ErrorMessages;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+// TODO: This object should be immutable. The only methods that require the object to be mutable are the addEq and similar methods.
+//      It is unlikely the performance benefits of such methods outweigh the need to deep copy all complex numbers for complex tensor
+//      operations. Further, the constants could then be provided as public fields with no getter methods.
 /**
  * A complex number stored in rectangular form. The real and imaginary components of the complex number are stored as
  * 64 bit doubles.

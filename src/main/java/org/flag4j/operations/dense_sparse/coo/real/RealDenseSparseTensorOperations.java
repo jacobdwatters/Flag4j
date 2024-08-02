@@ -108,6 +108,26 @@ public class RealDenseSparseTensorOperations {
 
 
     /**
+     * Subtracts a real dense tensor from a real sparse tensor.
+     * @param src1 First tensor in the sum.
+     * @param src2 Second tensor in the sum.
+     * @return The result of the tensor addition.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.t
+     */
+    public static Tensor sub(CooTensor src1, Tensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        Tensor dest = src2.mult(-1);
+
+        for(int i=0; i<src1.nnz; i++) {
+            dest.entries[src1.shape.entriesIndex(src1.indices[i])] += src1.entries[i];
+        }
+
+        return dest;
+    }
+
+
+    /**
      * Adds a real dense tensor to a real sparse tensor and stores the result in the first tensor.
      * @param src1 First tensor in sum. Also, storage of result.
      * @param src2 Second tensor in sum.
@@ -134,5 +154,23 @@ public class RealDenseSparseTensorOperations {
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             src1.entries[src1.shape.entriesIndex(src2.indices[i])] -= src2.entries[i];
         }
+    }
+
+
+    /**
+     * Adds a scalar to a real sparse COO tensor.
+     * @param src1 Sparse tensor in sum.
+     * @param b Scalar in sum.
+     * @return A dense tensor which is the sum of {@code src1} and {@code b} such that {@code b} is added to each element of {@code
+     * src1}.
+     */
+    public static Tensor add(CooTensor src1, double b) {
+        Tensor sum = new Tensor(src1.shape, b);
+
+        for(int i=0; i<src1.nnz; i++) {
+            sum.entries[src1.shape.entriesIndex(src1.indices[i])] += src1.entries[i];
+        }
+
+        return sum;
     }
 }

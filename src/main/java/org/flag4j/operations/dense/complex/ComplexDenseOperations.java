@@ -285,6 +285,23 @@ public final class ComplexDenseOperations {
 
 
     /**
+     * Computes the scalar division of a tensor.
+     * @param entries Entries of the tensor.
+     * @param divisor Scalar value to divide by.
+     * @return The scalar division of the tensor.
+     */
+    public static CNumber[] scalDiv(CNumber[] entries, double divisor) {
+        CNumber[] quotient = new CNumber[entries.length];
+
+        for(int i=0; i<quotient.length; i++) {
+            quotient[i] = entries[i].div(divisor);
+        }
+
+        return quotient;
+    }
+
+
+    /**
      * Computes the reciprocals, element-wise, of a tensor.
      * @param src Elements of the tensor.
      * @return The element-wise reciprocals of the tensor.

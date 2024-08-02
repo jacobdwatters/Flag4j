@@ -24,15 +24,15 @@
 
 package org.flag4j.core;
 
+import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.StringJoiner;
 
-// TODO: Make shape object immutable.
 /**
  * An object to store the shape of a tensor. Shapes are immutable.
  */
@@ -46,7 +46,7 @@ public class Shape implements Serializable {
      */
     private int[] strides;
     /**
-     * Total entries of this shape.
+     * Total entries of this shape. This is only computed on demand by {@link #totalEntries()}
      */
     private BigInteger totalEntries = null;
 
@@ -151,28 +151,22 @@ public class Shape implements Serializable {
      * @throws IndexOutOfBoundsException If any index does not fit within a tensor with this shape.
      */
     public int entriesIndex(int... indices) {
-        if(indices.length != dims.length) {
-            throw new IllegalArgumentException(ErrorMessages.getIndicesRankErr(indices.length, dims.length));
-        }
-        if(indices.length>0 && indices[indices.length-1] >= dims[dims.length-1]) {
-            throw new IndexOutOfBoundsException("Index " + indices[indices.length-1] + " out of bounds for axis " +
-                    (indices.length-1) + " of tensor with shape " + this);
-        }
+        if(indices.length != dims.length)
+            throw new IllegalArgumentException("Indices rank " + indices.length + " does not match tensor rank " + dims.length);
 
         makeStridesIfNull(); // Computes strides if not previously computed.
-        int index = 0;
 
-        for(int i=0; i<indices.length-1; i++) {
+        int index = 0;
+        for(int i = 0; i < indices.length; i++) {
             int idx = indices[i];
             if(idx < 0 || idx >= dims[i]) {
                 throw new IndexOutOfBoundsException("Index " + idx + " out of bounds for axis " + i +
                         " of tensor with shape " + this);
             }
-
-            index += idx*strides[i];
+            index += idx * strides[i];
         }
 
-        return index + indices[indices.length-1];
+        return index;
     }
 
 
@@ -310,13 +304,19 @@ public class Shape implements Serializable {
      * @return The string representation for this Shape object.
      */
     public String toString() {
-        StringBuilder result = new StringBuilder("(");
+        StringJoiner joiner = new StringJoiner(", ", "(", ")");
 
         for(int d : dims)
-            result.append(d).append(", ");
+            joiner.add(Integer.toString(d));
 
-        result.replace(result.length()-2, result.length(), ")");  // Remove excess ', ' characters.
+        return joiner.toString();
+    }
 
-        return result.toString();
+
+    public static void main(String[] args) {
+        Shape s = new Shape();
+        Tensor t = new Tensor(s);
+
+        System.out.println(t.entries.length);
     }
 }

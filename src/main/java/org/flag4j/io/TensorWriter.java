@@ -25,10 +25,15 @@
 package org.flag4j.io;
 
 
+import org.flag4j.core.MatrixMixin;
 import org.flag4j.core.TensorBase;
 import org.flag4j.util.ErrorMessages;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.StringJoiner;
 
 /**
  * The TensorWriter class provides several static methods for writing serialized
@@ -63,5 +68,46 @@ public class TensorWriter {
         }
 
         return successfulWrite;
+    }
+
+
+    /**
+     * Writes the specified matrix to a csv file.
+     * @param fileName File path to write matrix to.
+     * @param src Matrix to write to csv file.
+     * @param delimiter Delimiter to use in csv file.
+     * @return True if the write was successful. False if the write failed.
+     */
+    public static boolean toCsv(String fileName, MatrixMixin<?, ?, ?, ?, ?, ?, ?> src, String delimiter) {
+        boolean successfulWrite = true;
+
+        int numRows = src.numRows();
+        int numCols = src.numCols();
+
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(fileName))) {
+            for (int i = 0; i < numRows; i++) {
+                StringJoiner rowJoiner = new StringJoiner(delimiter);
+                for (int j = 0; j < numCols; j++) {
+                    rowJoiner.add(src.get(i, j).toString());
+                }
+                writer.write(rowJoiner.toString());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            successfulWrite = false;
+        }
+
+        return successfulWrite;
+    }
+
+
+    /**
+     * Writes the specified matrix to a csv file.
+     * @param fileName File path to write matrix to.
+     * @param src Matrix to write to csv file.
+     * @return True if the write was successful. False if the write failed.
+     */
+    public static boolean toCsv(String fileName, MatrixMixin<?, ?, ?, ?, ?, ?, ?> src) {
+        return toCsv(fileName, src, ", ");
     }
 }

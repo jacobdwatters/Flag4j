@@ -96,6 +96,26 @@ public class ComplexDenseSparseOperations {
 
 
     /**
+     * Subtracts a complex dense tensor from a complex sparse tensor.
+     * @param src1 First tensor in the sum.
+     * @param src2 Second tensor in the sum.
+     * @return The result of the tensor addition.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.t
+     */
+    public static CTensor sub(CooCTensor src1, CTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        CTensor dest = src2.mult(-1);
+
+        for(int i=0; i<src1.nnz; i++) {
+            dest.entries[src1.shape.entriesIndex(src1.indices[i])].addEq(src1.entries[i]);
+        }
+
+        return dest;
+    }
+
+
+    /**
      * Computes element-wise subtraction of a complex dense tensor with a complex sparse tensor.
      * @param src1 Complex dense tensor.
      * @param src2 Complex sparse tensor.
@@ -131,4 +151,20 @@ public class ComplexDenseSparseOperations {
     }
 
 
+    /**
+     * Adds a scalar to a complex sparse COO tensor.
+     * @param src1 Sparse tensor in sum.
+     * @param b Scalar in sum.
+     * @return A dense tensor which is the sum of {@code src1} and {@code b} such that {@code b} is added to each element of {@code
+     * src1}.
+     */
+    public static CTensor add(CooCTensor src1, CNumber b) {
+        CTensor sum = new CTensor(src1.shape, b);
+
+        for(int i=0; i<src1.nnz; i++) {
+            sum.entries[src1.shape.entriesIndex(src1.indices[i])].addEq(src1.entries[i]);
+        }
+
+        return sum;
+    }
 }

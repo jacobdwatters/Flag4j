@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,53 +22,21 @@
  * SOFTWARE.
  */
 
-package org.flag4j.operations.dense.real;
+package org.flag4j.operations.sparse.coo.real;
 
 import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.core.Shape;
-import org.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
-import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
+public final class RealCooTensorDot {
 
-/**
- * This class contains methods for computing a tensor dot product, i.e. tensor contraction, between two real dense tensors.
- */
-public final class RealDenseTensorDot {
-
-    private RealDenseTensorDot() {
-        // Hide utility class constructor.
-        throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());
-    }
-
-
-    /**
-     * Computes the tensor dot product along the first tensors last axis and the second tensors second-to-last axis. Or, if the second
-     * tensor has rank 1, the last axis of the second tensor.
-     * @param src1 First tensor in the tensor product.
-     * @param src2 Second tensor in the tensor product.
-     * @return The tensor dot product along the first tensors last axis and the second tensors second-to-last axis.
-     * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
-     * along the second-to-last axis.
-     */
-    public static Tensor tensorDot(Tensor src1, Tensor src2) {
-        int src1Rank = src1.getRank();
-        int src2Rank = src2.getRank();
-
-        if(src1Rank==2 && src2Rank==2) {
-            // Product is simply a matrix multiplication problem.
-            return new Tensor(
-                    new Shape(src1.shape.get(0), src2.shape.get(1)),
-                    RealDenseMatrixMultiplyDispatcher.dispatch(src1.entries, src1.shape, src2.entries, src2.shape)
-            );
-        }
-
-        // If second tensor has rank one, then use zero axis. Otherwise, use second to last axis.
-        src2Rank = (src2Rank==1) ? 0 : src2Rank-2;
-
-        return tensorDot(src1, src2, new int[]{src1Rank - 1}, new int[]{src2Rank});
+    private RealCooTensorDot() {
+        // Hide default constructor for utility class.
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
 
@@ -85,7 +53,7 @@ public final class RealDenseTensorDot {
      * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
      * are out of bounds for the corresponding tensor.
      */
-    public static Tensor tensorDot(Tensor src1, Tensor src2, int[] src1Axes, int[] src2Axes) {
+    public static Tensor tensorDot(CooTensor src1, CooTensor src2, int[] src1Axes, int[] src2Axes) {
         // Each array must specify the same number of axes.
         ParameterChecks.assertEquals(src1Axes.length, src2Axes.length);
 
@@ -143,19 +111,19 @@ public final class RealDenseTensorDot {
         // -----------------------------------------------------
 
         // Reform tensor dot product problem as a matrix multiplication problem.
-        double[] at = TransposeDispatcher.dispatchTensor(src1.entries, src1.shape, src1NewAxes);
-        double[] bt = TransposeDispatcher.dispatchTensor(src2.entries, src2.shape, src2NewAxes);
+        CooMatrix at = src1.T(src1NewAxes).toMatrix(src1NewShape);
+        CooMatrix bt = src2.T(src2NewAxes).toMatrix(src2NewShape);
 
-        double[] destEntries = RealDenseMatrixMultiplyDispatcher.dispatch(at, src1NewShape, bt, src2NewShape);
+        Tensor product = at.mult(bt).toTensor();
 
         // TODO: Should allow for zero dim shape indicating a scalar. Then only the else block would be needed.
-        Shape destShape;
+        Shape productShape;
         if(src1Axes.length == src1.getRank() && src2Axes.length == src2.getRank()) {
-            destShape = new Shape(1);
+            productShape = new Shape(1);
         } else {
-            destShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));
+            productShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));
         }
 
-        return new Tensor(destShape, destEntries);
+        return product.reshape(productShape);
     }
 }

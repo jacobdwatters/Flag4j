@@ -43,11 +43,12 @@ import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseTensorOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
 import org.flag4j.util.ErrorMessages;
+import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.StringUtils;
 
 import java.util.Arrays;
 
-
+// TODO: Allow for zero dimension shapes for scalar tensors.
 /**
  * Real Dense Tensor. May have any rank (that is, may have any number of unique axes/dimensions).
  */
@@ -303,7 +304,6 @@ public class Tensor
      * @param B Second tensor in the addition.
      * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
      */
-    @Override
     public void addEq(CooTensor B) {
         RealDenseSparseTensorOperations.addEq(this, B);
     }
@@ -482,7 +482,6 @@ public class Tensor
      * @param B Second tensor in the subtraction.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    @Override
     public void subEq(CooTensor B) {
         RealDenseSparseTensorOperations.subEq(this, B);
     }
@@ -564,6 +563,19 @@ public class Tensor
      */
     public Vector toVector() {
         return new Vector(this.entries.clone());
+    }
+
+
+    /**
+     * Converts this tensor to a matrix with the specified shape.
+     * @param matShape Shape of the resulting matrix. Must be broadcastable with the shape of this tensor.
+     * @return A matrix of shape {@code matShape} with the values of this tensor.
+     */
+    public Matrix toMatrix(Shape matShape) {
+        ParameterChecks.assertBroadcastable(shape, matShape);
+        ParameterChecks.assertRank(2, matShape);
+
+        return new Matrix(matShape, entries.clone());
     }
 
 

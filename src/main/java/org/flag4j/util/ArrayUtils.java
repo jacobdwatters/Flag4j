@@ -54,6 +54,7 @@ public final class ArrayUtils {
      */
     public static int[][] deepCopy(int[][] src, int[][] dest) {
         if(dest == null) dest = new int[src.length][src[0].length];
+        if(src == dest) return dest;
         else ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
 
         for(int i = 0; i < src.length; i++) {
@@ -700,6 +701,22 @@ public final class ArrayUtils {
         Object temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
+    }
+
+
+    /**
+     * Copy and swaps to elements from a source array to a destination array.
+     *
+     * @param src Array to swap elements in.
+     * @param i   Index of first value to swap.
+     * @param j   Index of second value to swap.
+     * @param dest Destination array for copy (Assumed to be correctly sized).
+     * @throws IndexOutOfBoundsException If {@code i} or {@code j} are out of the bounds of {@code src}.
+     */
+    public static void swapCopy(int[] src, int i, int j, int[] dest) {
+        int temp = src[i];
+        src[i] = src[j];
+        src[j] = temp;
     }
 
 

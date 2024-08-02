@@ -45,6 +45,7 @@ import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseOperatio
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
+import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.StringUtils;
 
 import java.util.Arrays;
@@ -529,7 +530,6 @@ public class CTensor
      * @param B Second tensor in the subtraction.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    @Override
     public void addEq(CooTensor B) {
         RealComplexDenseSparseOperations.addEq(this, B);
     }
@@ -541,7 +541,6 @@ public class CTensor
      * @param B Second tensor in the subtraction.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    @Override
     public void subEq(CooTensor B) {
         RealComplexDenseSparseOperations.subEq(this, B);
     }
@@ -643,6 +642,19 @@ public class CTensor
         ArrayUtils.copy2CNumber(this.entries, entries);
 
         return new CVector(entries);
+    }
+
+
+    /**
+     * Converts this tensor to a matrix with the specified shape.
+     * @param matShape Shape of the resulting matrix. Must be broadcastable with the shape of this tensor.
+     * @return A matrix of shape {@code matShape} with the values of this tensor.
+     */
+    public CMatrix toMatrix(Shape matShape) {
+        ParameterChecks.assertBroadcastable(shape, matShape);
+        ParameterChecks.assertRank(2, matShape);
+
+        return new CMatrix(matShape, ArrayUtils.copyOf(entries));
     }
 
 

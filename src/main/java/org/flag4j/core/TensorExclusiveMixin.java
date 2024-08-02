@@ -244,24 +244,6 @@ public interface TensorExclusiveMixin<
 
 
     /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    void addEq(CooTensor B);
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    void subEq(CooTensor B);
-
-
-    /**
      * Computes the element-wise multiplication between two tensors.
      * @param B Tensor to element-wise multiply to this tensor.
      * @return The result of the element-wise tensor multiplication.
@@ -303,7 +285,7 @@ public interface TensorExclusiveMixin<
      * @return The result of the element-wise tensor division.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    CTensor elemDiv(CTensor B);
+    W elemDiv(CTensor B);
 
 
     /**
@@ -322,7 +304,7 @@ public interface TensorExclusiveMixin<
      * @return The 'inverse' of this tensor as defined in the above sense.
      * @see #tensorInv(int)
      */
-    default T tensorInv(){
+    default U tensorInv(){
         return tensorInv(2);
     }
 
@@ -335,5 +317,5 @@ public interface TensorExclusiveMixin<
      * @return The 'inverse' of this tensor as defined in the above sense.
      * @see #tensorInv()
      */
-    T tensorInv(int numIndices);
+    U tensorInv(int numIndices);
 }

@@ -402,7 +402,7 @@ public class CooCVector
      */
     @Override
     public CooCVector flatten() {
-        return new CooCVector(this);
+        return copy();
     }
 
 
@@ -523,8 +523,8 @@ public class CooCVector
     public CooCMatrix stack(Vector b) {
         ParameterChecks.assertEqualShape(this.shape, b.shape);
 
-        CNumber[] destEntries = new CNumber[nonZeroEntries + b.length()];
-        int[][] indices = new int[2][nonZeroEntries + b.length()];
+        CNumber[] destEntries = new CNumber[nnz + b.length()];
+        int[][] indices = new int[2][nnz + b.length()];
 
         // Copy sparse values and column indices (row indices will be implicitly zero)
         ArrayUtils.arraycopy(entries, 0, destEntries,0,  entries.length);
@@ -587,8 +587,8 @@ public class CooCVector
     public CooCMatrix stack(CVector b) {
         ParameterChecks.assertEqualShape(this.shape, b.shape);
 
-        CNumber[] destEntries = new CNumber[nonZeroEntries + b.length()];
-        int[][] indices = new int[2][nonZeroEntries + b.length()];
+        CNumber[] destEntries = new CNumber[nnz + b.length()];
+        int[][] indices = new int[2][nnz + b.length()];
 
         // Copy sparse values and column indices (row indices will be implicitly zero)
         ArrayUtils.arraycopy(entries, 0, destEntries,0,  entries.length);
@@ -1524,7 +1524,7 @@ public class CooCVector
         CNumber[] entries = new CNumber[size];
         ArrayUtils.fillZeros(entries);
 
-        for(int i=0; i<nonZeroEntries; i++) {
+        for(int i = 0; i< nnz; i++) {
             entries[indices[i]] = this.entries[i].copy();
         }
 
@@ -1544,8 +1544,8 @@ public class CooCVector
         ParameterChecks.assertGreaterEq(1, n, "n");
         ParameterChecks.assertAxis2D(axis);
 
-        int[][] matIndices = new int[2][n*nonZeroEntries];
-        CNumber[] matEntries = new CNumber[n*nonZeroEntries];
+        int[][] matIndices = new int[2][n*nnz];
+        CNumber[] matEntries = new CNumber[n*nnz];
         Shape matShape;
 
         if(axis==0) {
@@ -1554,9 +1554,9 @@ public class CooCVector
 
             for(int i=0; i<n; i++) {
                 Arrays.fill(rowIndices, i);
-                System.arraycopy(entries, 0, matEntries, (n-1)*i, nonZeroEntries);
-                System.arraycopy(rowIndices, 0, matIndices[0], (n-1)*i, nonZeroEntries);
-                System.arraycopy(indices, 0, matIndices[1], (n-1)*i, nonZeroEntries);
+                System.arraycopy(entries, 0, matEntries, (n-1)*i, nnz);
+                System.arraycopy(rowIndices, 0, matIndices[0], (n-1)*i, nnz);
+                System.arraycopy(indices, 0, matIndices[1], (n-1)*i, nnz);
             }
 
         } else {
@@ -1594,7 +1594,7 @@ public class CooCVector
      * @return A human-readable string representing this tensor.
      */
     public String toString() {
-        int size = nonZeroEntries;
+        int size = nnz;
         StringBuilder result = new StringBuilder(String.format("Full Shape: %s\n", shape));
         result.append("Non-zero entries: [");
 

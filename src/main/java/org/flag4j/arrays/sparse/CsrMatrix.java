@@ -95,10 +95,6 @@ public class CsrMatrix
      * The number of columns in this matrix.
      */
     public final int numCols;
-    /**
-     * The number of non-zero entries stored in this sparse matrix.
-     */
-    public final int nnz;
 
 
     /**
@@ -112,7 +108,6 @@ public class CsrMatrix
         numCols = shape.get(1);
         this.rowPointers = indices[0];
         this.colIndices = indices[1];
-        nnz = entries.length;
     }
 
 
@@ -128,7 +123,6 @@ public class CsrMatrix
         this.numCols = shape.get(1);
         this.rowPointers = indices[0];
         this.colIndices = indices[1];
-        nnz = entries.length;
     }
 
 
@@ -146,7 +140,6 @@ public class CsrMatrix
         this.colIndices = colIndices;
         numRows = shape.get(0);
         numCols = shape.get(1);
-        nnz = entries.length;
     }
 
 
@@ -165,7 +158,6 @@ public class CsrMatrix
         this.colIndices = colIndices;
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
-        nnz = entries.length;
     }
 
 
@@ -181,7 +173,6 @@ public class CsrMatrix
         this.colIndices = indices[1];
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
-        nnz = entries.length;
     }
 
 
@@ -201,7 +192,6 @@ public class CsrMatrix
         colIndices = this.indices[1];
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
-        nnz = entries.length;
 
         // Copy the non-zero entries anc column indices. Count number of entries per row.
         for(int i=0; i<src.entries.length; i++) {
@@ -2302,6 +2292,17 @@ public class CsrMatrix
 
 
     /**
+     * Flattens tensor to single dimension. To flatten tensor along a single axis.
+     *
+     * @return The flattened tensor.
+     */
+    @Override
+    public CsrMatrix flatten() {
+        return toCoo().flatten().toCsr();
+    }
+
+
+    /**
      * Flattens a tensor along the specified axis.
      *
      * @param axis Axis along which to flatten tensor.
@@ -2530,7 +2531,7 @@ public class CsrMatrix
      * @return A human-readable string representing this sparse matrix.
      */
     public String toString() {
-        int size = nonZeroEntries;
+        int size = nnz;
         StringBuilder result = new StringBuilder(String.format("Full Shape: %s\n", shape));
         result.append("Non-zero entries: [");
 

@@ -55,6 +55,7 @@ public abstract class RealSparseTensorBase<
         extends SparseTensorBase<T, U, W, Z, T, double[], Double>
         implements RealTensorMixin<T, W> {
 
+
     /**
      * Creates a sparse tensor with specified shape. Note, this constructor stores indices for each element in the
      * <b>same</b> array. That is, for a shape with rank {@code m} and {@code n} non-zero entries,
@@ -255,15 +256,6 @@ public abstract class RealSparseTensorBase<
     @Override
     public T reshape(int... dims) {
         return reshape(new Shape(dims));
-    }
-
-
-    @Override
-    public T flatten() {
-        return makeTensor(
-                new Shape(shape.totalEntries().intValueExact()),
-                entries.clone(), copyIndices()
-        );
     }
 
 

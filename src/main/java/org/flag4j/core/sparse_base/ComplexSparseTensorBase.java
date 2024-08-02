@@ -322,15 +322,6 @@ public abstract class ComplexSparseTensorBase<T, U, Y>
 
 
     @Override
-    public T flatten() {
-        return makeTensor(
-                new Shape(shape.totalEntries().intValueExact()),
-                entries.clone(), copyIndices()
-        );
-    }
-
-
-    @Override
     public T roundToZero() {
         return makeTensor(
                 shape,

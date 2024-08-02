@@ -659,7 +659,7 @@ public class CooMatrix
         int row;
         int col;
 
-        for(int i=0; i<nonZeroEntries; i++) {
+        for(int i = 0; i< nnz; i++) {
             row = rowIndices[i];
             col = colIndices[i];
 
@@ -1996,7 +1996,7 @@ public class CooMatrix
         ParameterChecks.assertEquals(numRows, b.size);
 
         Shape destShape = new Shape(numRows, numCols + 1);
-        double[] destEntries = new double[nonZeroEntries + b.size];
+        double[] destEntries = new double[nnz + b.size];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -2030,7 +2030,7 @@ public class CooMatrix
         ParameterChecks.assertEquals(numRows, b.size);
 
         Shape destShape = new Shape(numRows, numCols + 1);
-        double[] destEntries = new double[nonZeroEntries + b.entries.length];
+        double[] destEntries = new double[nnz + b.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -2064,7 +2064,7 @@ public class CooMatrix
         ParameterChecks.assertEquals(numRows, b.size);
 
         Shape destShape = new Shape(numRows, numCols + 1);
-        CNumber[] destEntries = new CNumber[nonZeroEntries + b.size];
+        CNumber[] destEntries = new CNumber[nnz + b.size];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -2098,7 +2098,7 @@ public class CooMatrix
         ParameterChecks.assertEquals(numRows, b.size);
 
         Shape destShape = new Shape(numRows, numCols + 1);
-        CNumber[] destEntries = new CNumber[nonZeroEntries + b.entries.length];
+        CNumber[] destEntries = new CNumber[nnz + b.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -2742,6 +2742,23 @@ public class CooMatrix
 
 
     /**
+     * Flattens tensor to single dimension. To flatten tensor along a single axis.
+     *
+     * @return The flattened tensor.
+     */
+    @Override
+    public CooMatrix flatten() {
+        int[] destIndices = new int[entries.length];
+
+        for(int i = 0; i < entries.length; i++) {
+            destIndices[i] = shape.entriesIndex(rowIndices[i], colIndices[i]);
+        }
+
+        return new CooMatrix(shape, entries.clone(), new int[entries.length], destIndices);
+    }
+
+
+    /**
      * Flattens a tensor along the specified axis.
      *
      * @param axis Axis along which to flatten tensor.
@@ -2773,7 +2790,7 @@ public class CooMatrix
      * @return A human-readable string representing this sparse matrix.
      */
     public String toString() {
-        int size = nonZeroEntries;
+        int size = nnz;
         StringBuilder result = new StringBuilder(String.format("Full Shape: %s\n", shape));
         result.append("Non-zero entries: [");
 
