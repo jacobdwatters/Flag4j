@@ -137,7 +137,7 @@ public final class RealComplexDenseOperations {
         ParameterChecks.assertEqualShape(shape1, shape2);
 
         for(int i=0; i<src1.length; i++) {
-            src1[i].subEq(src2[i]);
+            src1[i] = src1[i].sub(src2[i]);
         }
     }
 
@@ -148,9 +148,8 @@ public final class RealComplexDenseOperations {
      * @param b Scalar to subtract.
      */
     public static void subEq(CNumber[] src, double b) {
-        for(CNumber cNumber : src) {
-            cNumber.subEq(b);
-        }
+        for(int i=0; i<src.length; i++)
+            src[i] = src[i].sub(b);
     }
 
 
@@ -166,7 +165,7 @@ public final class RealComplexDenseOperations {
         ParameterChecks.assertEqualShape(shape1, shape2);
 
         for(int i=0; i<src1.length; i++) {
-            src1[i].addEq(src2[i]);
+            src1[i] = src1[i].add(src2[i]);
         }
     }
 
@@ -177,9 +176,8 @@ public final class RealComplexDenseOperations {
      * @param b Scalar to add.
      */
     public static void addEq(CNumber[] src, double b) {
-        for(CNumber cNumber : src) {
-            cNumber.addEq(b);
-        }
+        for(int i=0; i<src.length; i++)
+            src[i] = src[i].add(b);
     }
 
 
@@ -194,11 +192,9 @@ public final class RealComplexDenseOperations {
         double denom = divisor.re*divisor.re + divisor.im*divisor.im;
 
         for(int i=0; i<quotient.length; i++) {
-
             quotient[i] = new CNumber(
                     entries[i]*divisor.re / denom,
-                    -entries[i]*divisor.im / denom
-                    );
+                    -entries[i]*divisor.im / denom);
         }
 
         return quotient;

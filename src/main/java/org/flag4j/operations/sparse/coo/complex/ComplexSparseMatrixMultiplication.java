@@ -31,6 +31,7 @@ import org.flag4j.operations.sparse.coo.SparseUtils;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -40,7 +41,7 @@ import java.util.concurrent.ConcurrentMap;
  * This class contains low level methods for computing the matrix multiplication of sparse complex matrices/vectors.<br>
  * <b>WARNING:</b> The methods in this class do not perform any sanity checks.
  */
-public class ComplexSparseMatrixMultiplication {
+public final class ComplexSparseMatrixMultiplication {
 
     private ComplexSparseMatrixMultiplication() {
         // Hide default constructor for utility class.
@@ -66,7 +67,7 @@ public class ComplexSparseMatrixMultiplication {
         int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
 
         // Create a map where key is row index from src2.
         // and value is a list of indices in src2 where this row appears.
@@ -82,7 +83,7 @@ public class ComplexSparseMatrixMultiplication {
 
                 for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
                     int c2 = colIndices2[j]; // = j
-                    dest[rowIdx + c2].addEq(src1[i].mult(src2[j]));
+                    dest[rowIdx + c2] = dest[rowIdx + c2].add(src1[i].mult(src2[j]));
                 }
             }
         }
@@ -112,7 +113,7 @@ public class ComplexSparseMatrixMultiplication {
         int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
         ConcurrentMap<Integer, CNumber> destMap = new ConcurrentHashMap<>();
 
         // Create a map where key is row index from src2.
@@ -129,7 +130,7 @@ public class ComplexSparseMatrixMultiplication {
 
                 for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
                     int idx = rowIdx + colIndices2[j];
-                    destMap.put(idx, destMap.getOrDefault(idx, new CNumber()).add(src1[i].mult(src2[j])));
+                    destMap.put(idx, destMap.getOrDefault(idx, CNumber.ZERO).add(src1[i].mult(src2[j])));
                 }
             }
         });
@@ -172,7 +173,7 @@ public class ComplexSparseMatrixMultiplication {
                 r2 = indices[j]; // = k
 
                 if(c1==r2) { // Then we multiply and add to sum.
-                    dest[r1].addEq(src1[i].mult(src2[j]));
+                    dest[r1] = dest[r1].add(src1[i].mult(src2[j]));
                 }
             }
         }
@@ -210,7 +211,7 @@ public class ComplexSparseMatrixMultiplication {
                     CNumber product = src1[i].mult(src2[j]);
 
                     synchronized (dest) {
-                        dest[r1].addEq(product);
+                        dest[r1] = dest[r1].add(product);
                     }
                 }
             }

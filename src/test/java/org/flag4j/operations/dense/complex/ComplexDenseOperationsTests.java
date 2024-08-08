@@ -153,7 +153,7 @@ class ComplexDenseOperationsTests {
 
         // ---------- Sub-case 2 -----------------
         src1 = new CNumber[]{};
-        expResultC = new CNumber();
+        expResultC = CNumber.ZERO;
         assertEquals(expResultC, prod(src1));
     }
 

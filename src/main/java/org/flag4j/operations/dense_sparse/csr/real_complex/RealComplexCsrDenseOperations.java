@@ -33,6 +33,7 @@ import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
+import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.UnaryOperator;
 
@@ -40,7 +41,7 @@ import java.util.function.UnaryOperator;
  * This class contains low-level operations which act on a real/complex dense and a complex/real
  * sparse {@link CsrCMatrix CSR matrix}.
  */
-public class RealComplexCsrDenseOperations {
+public final class RealComplexCsrDenseOperations {
 
     private RealComplexCsrDenseOperations() {
         // Hide default constructor for utility class.
@@ -135,7 +136,7 @@ public class RealComplexCsrDenseOperations {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
         CNumber[] dest;
 
-        if(uOpp == null) dest = ArrayUtils.copy2CNumber(src2.entries, null);
+        if(uOpp == null) dest = Arrays.copyOf(src2.entries, src2.entries.length);
         else dest = ArrayUtils.applyTransform(src2.entries, uOpp);
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
@@ -295,7 +296,7 @@ public class RealComplexCsrDenseOperations {
                                       UnaryOperator<CNumber> uOpp) {
         CNumber[] dest = new CNumber[src1.totalEntries().intValueExact()];
         if(uOpp != null) b = uOpp.apply(b);  // Apply unary operator if specified.
-        ArrayUtils.fill(dest, b);
+        Arrays.fill(dest, b);
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
             int start = src1.rowPointers[i];

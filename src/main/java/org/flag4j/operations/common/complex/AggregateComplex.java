@@ -31,7 +31,7 @@ import org.flag4j.util.ErrorMessages;
 /**
  * This class contains several low-level methods useful for computing aggregation operations on dense/sparse complex tensors.
  */
-public class AggregateComplex {
+public final class AggregateComplex {
 
     private AggregateComplex() {
         // Hide default constructor.
@@ -45,9 +45,9 @@ public class AggregateComplex {
      * @return The sum of all entries in this tensor.
      */
     public static CNumber sum(final CNumber[] entries) {
-        CNumber sum = new CNumber();
+        CNumber sum = CNumber.ZERO;
         for(CNumber value : entries) {
-            sum.addEq(value);
+            sum = sum.add(value);
         }
         return sum;
     }

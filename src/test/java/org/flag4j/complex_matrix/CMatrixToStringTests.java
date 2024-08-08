@@ -20,7 +20,7 @@ class CMatrixToStringTests {
         aEntries = new CNumber[][]{
                 {new CNumber(2, 4.25), new CNumber(-0.0002345),
                         new CNumber(0, 9.4), new CNumber(1.2598)},
-                {new CNumber(56.25, -0.0024), new CNumber(),
+                {new CNumber(56.25, -0.0024), CNumber.ZERO,
                         new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
         A = new CMatrix(aEntries);
         PrintOptions.setPrecision(50);
@@ -37,7 +37,7 @@ class CMatrixToStringTests {
         aEntries = new CNumber[][]{
                 {new CNumber(2, 4.25), new CNumber(-0.0002345),
                         new CNumber(0, 9.4), new CNumber(1.2598)},
-                {new CNumber(56.25, -0.0024), new CNumber(),
+                {new CNumber(56.25, -0.0024), CNumber.ZERO,
                         new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
         A = new CMatrix(aEntries);
         PrintOptions.setPrecision(3);
@@ -54,7 +54,7 @@ class CMatrixToStringTests {
         aEntries = new CNumber[][]{
                 {new CNumber(2, 4.25), new CNumber(-0.0002345),
                         new CNumber(0, 9.4), new CNumber(1.2598)},
-                {new CNumber(56.25, -0.0024), new CNumber(),
+                {new CNumber(56.25, -0.0024), CNumber.ZERO,
                         new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
         A = new CMatrix(aEntries);
         PrintOptions.setPrecision(0);
@@ -71,7 +71,7 @@ class CMatrixToStringTests {
         aEntries = new CNumber[][]{
                 {new CNumber(2, 4.25), new CNumber(-0.0002345),
                         new CNumber(0, 9.4), new CNumber(1.2598)},
-                {new CNumber(56.25, -0.0024), new CNumber(),
+                {new CNumber(56.25, -0.0024), CNumber.ZERO,
                         new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
         A = new CMatrix(aEntries);
         PrintOptions.setPrecision(2);
@@ -88,7 +88,7 @@ class CMatrixToStringTests {
         aEntries = new CNumber[][]{
                 {new CNumber(2, 4.25), new CNumber(-0.0002345),
                         new CNumber(0, 9.4), new CNumber(1.2598)},
-                {new CNumber(56.25, -0.0024), new CNumber(),
+                {new CNumber(56.25, -0.0024), CNumber.ZERO,
                         new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
         A = new CMatrix(aEntries);
         PrintOptions.setPrecision(2);
@@ -106,7 +106,7 @@ class CMatrixToStringTests {
         aEntries = new CNumber[][]{
                 {new CNumber(2, 4.25), new CNumber(-0.0002345),
                         new CNumber(0, 9.4), new CNumber(1.2598)},
-                {new CNumber(56.25, -0.0024), new CNumber(),
+                {new CNumber(56.25, -0.0024), CNumber.ZERO,
                         new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
         A = new CMatrix(aEntries);
         PrintOptions.setPrecision(2);
@@ -124,7 +124,7 @@ class CMatrixToStringTests {
         aEntries = new CNumber[][]{
                 {new CNumber(2, 4.25), new CNumber(-0.0002345),
                         new CNumber(0, 9.4), new CNumber(1.2598)},
-                {new CNumber(56.25, -0.0024), new CNumber(),
+                {new CNumber(56.25, -0.0024), CNumber.ZERO,
                         new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
         A = new CMatrix(aEntries);
         PrintOptions.setPrecision(2);
@@ -142,7 +142,7 @@ class CMatrixToStringTests {
         aEntries = new CNumber[][]{
                 {new CNumber(2, 4.25), new CNumber(-0.0002345),
                         new CNumber(0, 9.4), new CNumber(1.2598)},
-                {new CNumber(56.25, -0.0024), new CNumber(),
+                {new CNumber(56.25, -0.0024), CNumber.ZERO,
                         new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
         A = new CMatrix(aEntries);
         PrintOptions.setPrecision(3);

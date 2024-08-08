@@ -410,7 +410,7 @@ public class Vector
     public CVector join(CVector b) {
         CNumber[] entries = new CNumber[this.size+b.size];
         ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);
-        ArrayUtils.arraycopy(b.entries, 0, entries, this.size, b.size);
+        System.arraycopy(b.entries, 0, entries, this.size, b.size);
 
         return new CVector(entries);
     }
@@ -453,7 +453,7 @@ public class Vector
         int index;
         for(int i=0; i<b.entries.length; i++) {
             index = b.indices[i];
-            joined.entries[this.size+index] = b.entries[i].copy();
+            joined.entries[this.size+index] = b.entries[i];
         }
 
         return joined;
@@ -523,7 +523,7 @@ public class Vector
 
         // Copy entries from each vector to the matrix.
         ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);
-        ArrayUtils.arraycopy(b.entries, 0, entries, this.size, b.size);
+        System.arraycopy(b.entries, 0, entries, this.size, b.size);
 
         return new CMatrix(2, this.size, entries);
     }
@@ -549,7 +549,7 @@ public class Vector
         int index;
         for(int i=0; i<b.entries.length; i++) {
             index = b.indices[i];
-            stacked.entries[stacked.numCols + index] = b.entries[i].copy();
+            stacked.entries[stacked.numCols + index] = b.entries[i];
         }
 
         return stacked;
@@ -694,7 +694,7 @@ public class Vector
 
             for(int i=0; i<stackedEntries.length; i+=2) {
                 stackedEntries[i] = new CNumber(this.entries[count]);
-                stackedEntries[i+1] = b.entries[count++].copy();
+                stackedEntries[i+1] = b.entries[count++];
             }
 
             stacked = new CMatrix(this.size, 2, stackedEntries);
@@ -737,7 +737,7 @@ public class Vector
         } else {
             ParameterChecks.assertArrayLengthsEq(this.size, b.size);
             CNumber[] stackedEntries = new CNumber[2*this.size];
-            ArrayUtils.fillZeros(stackedEntries);
+            Arrays.fill(stackedEntries, CNumber.ZERO);
 
             // Copy dense values.
             for(int i=0; i<this.size; i++) {
@@ -748,7 +748,7 @@ public class Vector
             int index;
             for(int i=0; i<b.entries.length; i++) {
                 index = b.indices[i];
-                stackedEntries[index*2 + 1] = b.entries[i].copy();
+                stackedEntries[index*2 + 1] = b.entries[i];
             }
 
             stacked = new CMatrix(this.size, 2, stackedEntries);

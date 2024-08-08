@@ -55,7 +55,8 @@ public class ComplexDenseSparseOperations {
         CTensor dest = new CTensor(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            dest.entries[src2.shape.entriesIndex(src2.indices[i])].addEq(src2.entries[i]);
+            dest.entries[src2.shape.entriesIndex(src2.indices[i])] =
+                    dest.entries[src2.shape.entriesIndex(src2.indices[i])].add(src2.entries[i]);
         }
 
         return dest;
@@ -72,7 +73,8 @@ public class ComplexDenseSparseOperations {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            src1.entries[src2.shape.entriesIndex(src2.indices[i])].addEq(src2.entries[i]);
+            src1.entries[src2.shape.entriesIndex(src2.indices[i])] =
+                    src1.entries[src2.shape.entriesIndex(src2.indices[i])].add(src2.entries[i]);
         }
     }
 
@@ -88,7 +90,8 @@ public class ComplexDenseSparseOperations {
         CTensor dest = new CTensor(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            dest.entries[src2.shape.entriesIndex(src2.indices[i])].subEq(src2.entries[i]);
+            dest.entries[src2.shape.entriesIndex(src2.indices[i])] =
+                    dest.entries[src2.shape.entriesIndex(src2.indices[i])].sub(src2.entries[i]);
         }
 
         return dest;
@@ -108,7 +111,8 @@ public class ComplexDenseSparseOperations {
         CTensor dest = src2.mult(-1);
 
         for(int i=0; i<src1.nnz; i++) {
-            dest.entries[src1.shape.entriesIndex(src1.indices[i])].addEq(src1.entries[i]);
+            dest.entries[src1.shape.entriesIndex(src1.indices[i])] =
+                    dest.entries[src1.shape.entriesIndex(src1.indices[i])].add(src1.entries[i]);
         }
 
         return dest;
@@ -125,7 +129,8 @@ public class ComplexDenseSparseOperations {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            src1.entries[src2.shape.entriesIndex(src2.indices[i])].subEq(src2.entries[i]);
+            src1.entries[src2.shape.entriesIndex(src2.indices[i])] =
+                    src1.entries[src2.shape.entriesIndex(src2.indices[i])].sub(src2.entries[i]);
         }
     }
 
@@ -162,7 +167,8 @@ public class ComplexDenseSparseOperations {
         CTensor sum = new CTensor(src1.shape, b);
 
         for(int i=0; i<src1.nnz; i++) {
-            sum.entries[src1.shape.entriesIndex(src1.indices[i])].addEq(src1.entries[i]);
+            sum.entries[src1.shape.entriesIndex(src1.indices[i])] =
+                    sum.entries[src1.shape.entriesIndex(src1.indices[i])].add(src1.entries[i]);
         }
 
         return sum;

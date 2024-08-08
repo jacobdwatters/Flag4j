@@ -34,7 +34,7 @@ import org.flag4j.util.ErrorMessages;
 /**
  * This class contains several algorithms for computing the transpose of a complex dense tensor.
  */
-public class ComplexDenseTranspose {
+public final class ComplexDenseTranspose {
 
 
     private ComplexDenseTranspose() {
@@ -65,7 +65,7 @@ public class ComplexDenseTranspose {
         for(int i=0; i<src.length; i++) {
             destIndices = shape.getIndices(i);
             ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
-            dest[destShape.entriesIndex(destIndices)] = src[i].copy(); // Apply transpose for the element
+            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
         }
 
         return dest;
@@ -94,7 +94,7 @@ public class ComplexDenseTranspose {
         ThreadManager.concurrentLoop(0, src.length, (i) -> {
             int[] destIndices = shape.getIndices(i);
             ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
-            dest[destShape.entriesIndex(destIndices)] = src[i].copy(); // Apply transpose for the element
+            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
         });
 
         return dest;
@@ -181,7 +181,7 @@ public class ComplexDenseTranspose {
             end = destIndex + numRows;
 
             while (destIndex < end) {
-                dest[destIndex++] = src[srcIndex].copy();
+                dest[destIndex++] = src[srcIndex];
                 srcIndex += numCols;
             }
         }
@@ -217,7 +217,7 @@ public class ComplexDenseTranspose {
                     end = destIndex + blockRowEnd;
 
                     while (destIndex < end) {
-                        dest[destIndex++] = src[srcIndex].copy();
+                        dest[destIndex++] = src[srcIndex];
                         srcIndex += numCols;
                     }
                 }
@@ -245,7 +245,7 @@ public class ComplexDenseTranspose {
             int end = destIndex + numRows;
 
             while (destIndex < end) {
-                dest[destIndex++] = src[srcIndex].copy();
+                dest[destIndex++] = src[srcIndex];
                 srcIndex += numCols;
             }
         });
@@ -278,7 +278,7 @@ public class ComplexDenseTranspose {
                     int end = destIndex + blockRowEnd;
 
                     while (destIndex < end) {
-                        dest[destIndex++] = src[srcIndex].copy();
+                        dest[destIndex++] = src[srcIndex];
                         srcIndex += numCols;
                     }
                 }

@@ -275,7 +275,7 @@ public class CooVector
     @Override
     public CVector join(CVector b) {
         CNumber[] newEntries = new CNumber[this.size + b.entries.length];
-        ArrayUtils.fillZeros(newEntries);
+        Arrays.fill(newEntries, CNumber.ZERO);
 
         // Copy over sparse values.
         for(int i=0; i<this.entries.length; i++) {
@@ -283,7 +283,7 @@ public class CooVector
         }
 
         // Copy over dense values.
-        ArrayUtils.arraycopy(b.entries, 0, newEntries, this.size, b.entries.length);
+        System.arraycopy(b.entries, 0, newEntries, this.size, b.entries.length);
 
         return new CVector(newEntries);
     }
@@ -331,7 +331,7 @@ public class CooVector
         // Copy values from this vector.
         ArrayUtils.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);
         // Copy values from vector b.
-        ArrayUtils.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);
+        System.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);
 
         // Copy indices from this vector.
         System.arraycopy(this.indices, 0, newIndices, 0, this.entries.length);
@@ -432,7 +432,7 @@ public class CooVector
         // Copy dense values. Set column indices as range and set row indices to 1.
         int[] rowIndices = new int[b.size];
         Arrays.fill(rowIndices, 1);
-        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);
+        System.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);
         System.arraycopy(rowIndices, 0, indices[0], entries.length,  b.size);
         System.arraycopy(ArrayUtils.intRange(0, b.size), 0, indices[1], entries.length,  b.size);
 
@@ -459,7 +459,7 @@ public class CooVector
         // Copy values from this vector.
         ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.entries.length);
         // Copy values from vector b.
-        ArrayUtils.arraycopy(b.entries, 0, entries, this.entries.length, b.entries.length);
+        System.arraycopy(b.entries, 0, entries, this.entries.length, b.entries.length);
 
         // Set row indices to 1 for b values (this vectors row indices are 0 which was implicitly set already).
         Arrays.fill(indices[0], this.indices.length, entries.length, 1);

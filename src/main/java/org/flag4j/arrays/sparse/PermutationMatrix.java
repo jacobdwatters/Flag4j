@@ -232,7 +232,7 @@ public class PermutationMatrix implements Serializable {
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
             colIdx = swapPointers[rowIdx];
-            ArrayUtils.arraycopy(src.entries, colIdx*src.numCols, destEntries, rowIdx*src.numCols, src.numCols);
+            System.arraycopy(src.entries, colIdx*src.numCols, destEntries, rowIdx*src.numCols, src.numCols);
         }
 
         return new CMatrix(src.shape, destEntries);

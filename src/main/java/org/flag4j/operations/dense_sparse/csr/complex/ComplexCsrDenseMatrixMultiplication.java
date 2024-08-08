@@ -31,16 +31,17 @@ import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
-import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
+
+import java.util.Arrays;
 
 
 /**
  * This class contains low-level implementations of complex-complex sparse-sparse matrix multiplication where the sparse matrices
  * are in CSR format.
  */
-public class ComplexCsrDenseMatrixMultiplication {
+public final class ComplexCsrDenseMatrixMultiplication {
 
     private ComplexCsrDenseMatrixMultiplication() {
         // Hide default constructor for utility method.
@@ -63,7 +64,7 @@ public class ComplexCsrDenseMatrixMultiplication {
         ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
 
         CNumber[] destEntries = new CNumber[src1.numRows*src2.numCols];
-        ArrayUtils.fillZeros(destEntries);
+        Arrays.fill(destEntries, CNumber.ZERO);
         int rows1 = src1.numRows;
         int cols2 = src2.numCols;
 
@@ -80,12 +81,52 @@ public class ComplexCsrDenseMatrixMultiplication {
                 int destIdx = rowOffset;
 
                 while(destIdx < innerStop) {
-                    destEntries[destIdx++].addEq(src2.entries[src2Idx++].mult(aVal));
+                    destEntries[destIdx] = destEntries[destIdx++].add(src2.entries[src2Idx++].mult(aVal));
                 }
             }
         }
 
         return new CMatrix(new Shape(src1.numRows, src2.numCols), destEntries);
+    }
+
+
+    /**
+     * Computes the matrix multiplication between a complex dense matrix and a complex sparse CSR matrix.
+     * WARNING: If the second matrix is very large but not very sparse, this method may be slower than converting the
+     * second matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link Matrix#mult(Matrix)}.
+     * @param src1 First matrix in the matrix multiplication (dense matrix).
+     * @param src2 Second matrix in the matrix multiplication (sparse CSR matrix).
+     * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
+     * @throws IllegalArgumentException If {@code src1} does not have the same number of columns as {@code src2} has
+     * rows.
+     */
+    public static CMatrix standard(CMatrix src1, CsrCMatrix src2) {
+        // Ensure matrices have shapes conducive to matrix multiplication.
+        ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
+
+        CNumber[] destEntries = new CNumber[src1.numRows * src2.numCols];
+        int rows1 = src1.numRows;
+        int cols1 = src1.numCols;
+        int cols2 = src2.numCols;
+
+        for (int i = 0; i < rows1; i++) {
+            int rowOffset = i*cols2;
+            int src1RowOffset = i*cols1;
+
+            for (int j = 0; j < cols1; j++) {
+                CNumber src1Val = src1.entries[src1RowOffset + j];
+                int start = src2.rowPointers[j];
+                int stop = src2.rowPointers[j + 1];
+
+                for (int aIndex = start; aIndex < stop; aIndex++) {
+                    int aCol = src2.colIndices[aIndex];
+                    CNumber aVal = src2.entries[aIndex];
+                    destEntries[rowOffset + aCol] = destEntries[rowOffset + aCol].add(src1Val.mult(aVal));
+                }
+            }
+        }
+
+        return new CMatrix(new Shape(rows1, cols2), destEntries);
     }
 
 
@@ -102,7 +143,7 @@ public class ComplexCsrDenseMatrixMultiplication {
         ParameterChecks.assertEquals(src1.numCols, src2.size);
 
         CNumber[] destEntries = new CNumber[src1.numRows];
-        ArrayUtils.fillZeros(destEntries);
+        Arrays.fill(destEntries, CNumber.ZERO);
         int rows1 = src1.numRows;
 
         for (int i = 0; i < rows1; i++) {
@@ -113,7 +154,7 @@ public class ComplexCsrDenseMatrixMultiplication {
                 int aCol = src1.colIndices[aIndex];
                 CNumber aVal = src1.entries[aIndex];
 
-                destEntries[i].addEq(src2.entries[aCol].mult(aVal));
+                destEntries[i] = destEntries[i].add(src2.entries[aCol].mult(aVal));
             }
         }
 

@@ -51,7 +51,7 @@ class RealEigenTests {
                 {0, 0},
                 {0, 0}};
         A = new Matrix(entries);
-        expEntries = new CNumber[]{new CNumber(), new CNumber()};
+        expEntries = new CNumber[]{CNumber.ZERO, CNumber.ZERO};
         exp = new CVector(expEntries);
         assertEquals(exp, Eigen.get2x2EigenValues(A));
     }

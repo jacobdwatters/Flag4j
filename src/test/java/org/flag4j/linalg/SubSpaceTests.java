@@ -24,7 +24,7 @@ class SubSpaceTests {
 
         bEntries = new CNumber[][]{
                 {new CNumber(44.5, -9.43), new CNumber(0, 2.45)},
-                {new CNumber(), new CNumber(-0.03, 2.5)}};
+                {CNumber.ZERO, new CNumber(-0.03, 2.5)}};
 
         A = new Matrix(aEntries);
         B = new CMatrix(bEntries);

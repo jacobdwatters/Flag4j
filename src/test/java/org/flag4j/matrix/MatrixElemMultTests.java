@@ -76,7 +76,7 @@ class MatrixElemMultTests {
     void elemMultComplexTestCase() {
         // ----------------- Sub-case 1 -----------------
         entriesA = new double[][]{{1, 2, -3.324, 13.44}, {4, 5, -6, 0}};
-        entriesBC = new CNumber[][]{{new CNumber(1.4, 5), new CNumber(0, -1), new CNumber(1.3), new CNumber()},
+        entriesBC = new CNumber[][]{{new CNumber(1.4, 5), new CNumber(0, -1), new CNumber(1.3), CNumber.ZERO},
                 {new CNumber(4.55, -93.2), new CNumber(-2, -13), new CNumber(8.9), new CNumber(0, 13)}};
         A = new Matrix(entriesA);
         BC = new CMatrix(entriesBC);
@@ -141,7 +141,7 @@ class MatrixElemMultTests {
         shape = new Shape(entriesA.length, entriesA[0].length);
         BSparseComplex = new CooCMatrix(shape, bEntriesSparseComplex, rowIndices, colIndices);
 
-        expEntriesSparseComplex = new CNumber[]{bEntriesSparseComplex[0].mult(2), bEntriesSparseComplex[1].mult(-6), new CNumber()};
+        expEntriesSparseComplex = new CNumber[]{bEntriesSparseComplex[0].mult(2), bEntriesSparseComplex[1].mult(-6), CNumber.ZERO};
         expSparseComplex = new CooCMatrix(shape, expEntriesSparseComplex, rowIndices.clone(), colIndices.clone());
 
         sparseComplexResult = A.elemMult(BSparseComplex);

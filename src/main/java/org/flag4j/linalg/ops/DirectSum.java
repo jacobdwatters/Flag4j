@@ -148,7 +148,7 @@ public final class DirectSum {
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
-            sum.entries[(row+A.numRows)*sum.numCols + (col+A.numCols)] = B.entries[i].copy();
+            sum.entries[(row+A.numRows)*sum.numCols + (col+A.numCols)] = B.entries[i];
         }
 
         return sum;
@@ -227,7 +227,7 @@ public final class DirectSum {
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
             for(int j=0; j<B.numCols; j++) {
-                sum.entries[i*sum.numCols + j + A.numCols] = B.entries[i*B.numCols + j].copy();
+                sum.entries[i*sum.numCols + j + A.numCols] = B.entries[i*B.numCols + j];
             }
         }
 
@@ -258,7 +258,7 @@ public final class DirectSum {
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
-            sum.entries[row*sum.numCols + col + A.numCols] = B.entries[i].copy();
+            sum.entries[row*sum.numCols + col + A.numCols] = B.entries[i];
         }
 
         return sum;
@@ -279,7 +279,7 @@ public final class DirectSum {
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
-            ArrayUtils.arraycopy(A.entries, i*A.numCols , sum.entries, i*sum.numCols, A.numCols);
+            System.arraycopy(A.entries, i*A.numCols , sum.entries, i*sum.numCols, A.numCols);
         }
 
         // Copy over second matrix.
@@ -305,7 +305,7 @@ public final class DirectSum {
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
-            ArrayUtils.arraycopy(A.entries, i*A.numCols, sum.entries, i*sum.numCols, A.numCols);
+            System.arraycopy(A.entries, i*A.numCols, sum.entries, i*sum.numCols, A.numCols);
         }
 
         // Copy over second matrix.
@@ -334,12 +334,12 @@ public final class DirectSum {
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
-            ArrayUtils.arraycopy(A.entries, i*A.numCols, sum.entries, i*sum.numCols, A.numCols);
+            System.arraycopy(A.entries, i*A.numCols, sum.entries, i*sum.numCols, A.numCols);
         }
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
-            ArrayUtils.arraycopy(B.entries, i*B.numCols, sum.entries, (i+A.numRows)*sum.numCols + A.numCols, B.numCols);
+            System.arraycopy(B.entries, i*B.numCols, sum.entries, (i+A.numRows)*sum.numCols + A.numCols, B.numCols);
         }
 
         return sum;
@@ -358,7 +358,7 @@ public final class DirectSum {
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
-            ArrayUtils.arraycopy(A.entries, i*A.numCols, sum.entries, i*sum.numCols, A.numCols);
+            System.arraycopy(A.entries, i*A.numCols, sum.entries, i*sum.numCols, A.numCols);
         }
 
         // Copy over second matrix.
@@ -368,7 +368,7 @@ public final class DirectSum {
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
-            sum.entries[(row+A.numRows)*sum.numCols + (col+A.numCols)] = B.entries[i].copy();
+            sum.entries[(row+A.numRows)*sum.numCols + (col+A.numCols)] = B.entries[i];
         }
 
         return sum;
@@ -387,13 +387,16 @@ public final class DirectSum {
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
-            ArrayUtils.arraycopy(A.entries, i*A.numCols, sum.entries, (i+B.numRows)*sum.numCols, A.numCols);
+            System.arraycopy(A.entries, i*A.numCols, sum.entries, (i+B.numRows)*sum.numCols, A.numCols);
         }
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
+            int sumRowOffset = i*sum.numCols + A.numCols;
+            int bRowOffset = i*B.numCols;
+
             for(int j=0; j<B.numCols; j++) {
-                sum.entries[i*sum.numCols + j + A.numCols] = new CNumber(B.entries[i*B.numCols + j]);
+                sum.entries[sumRowOffset + j] = new CNumber(B.entries[bRowOffset + j]);
             }
         }
 
@@ -413,7 +416,7 @@ public final class DirectSum {
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
-            ArrayUtils.arraycopy(A.entries, i*A.numCols, sum.entries, (i+B.numRows)*sum.numCols, A.numCols);
+            System.arraycopy(A.entries, i*A.numCols, sum.entries, (i+B.numRows)*sum.numCols, A.numCols);
         }
 
         // Copy over second matrix.
@@ -442,15 +445,18 @@ public final class DirectSum {
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
+            int sumRowOffset = (i+B.numRows)*sum.numCols;
+            int aRowOffset = i*A.numCols;
+
             for(int j=0; j<A.numCols; j++) {
-                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(A.entries[i*A.numCols + j]);
+                sum.entries[sumRowOffset + j] = A.entries[aRowOffset + j];
             }
         }
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
             for(int j=0; j<B.numCols; j++) {
-                sum.entries[i*sum.numCols + j + A.numCols] = B.entries[i*B.numCols + j].copy();
+                sum.entries[i*sum.numCols + j + A.numCols] = B.entries[i*B.numCols + j];
             }
         }
 
@@ -470,8 +476,11 @@ public final class DirectSum {
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
+            int sumRowOffset = (i+B.numRows)*sum.numCols;
+            int aRowOffset = i*A.numCols;
+
             for(int j=0; j<A.numCols; j++) {
-                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(A.entries[i*A.numCols + j]);
+                sum.entries[sumRowOffset + j] = A.entries[aRowOffset + j];
             }
         }
 
@@ -482,7 +491,7 @@ public final class DirectSum {
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
-            sum.entries[row*sum.numCols + col + A.numCols] = B.entries[i].copy();
+            sum.entries[row*sum.numCols + col + A.numCols] = B.entries[i];
         }
 
         return sum;
@@ -576,7 +585,7 @@ public final class DirectSum {
 
         // Copy entries from both matrices.
         ArrayUtils.arraycopy(A.entries, 0, destEntries, 0, A.entries.length);
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, A.entries.length, B.entries.length);
+        System.arraycopy(B.entries, 0, destEntries, A.entries.length, B.entries.length);
 
         // Copy indices of first matrix in the direct sum.
         System.arraycopy(A.rowIndices, 0, destRowIndices, 0, A.rowIndices.length);
@@ -612,7 +621,7 @@ public final class DirectSum {
 
         // Copy entries from both matrices.
         ArrayUtils.arraycopy(A.entries, 0, destEntries, 0, A.entries.length);
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, A.entries.length, B.entries.length);
+        System.arraycopy(B.entries, 0, destEntries, A.entries.length, B.entries.length);
 
         // Copy indices of first matrix in the direct sum.
         System.arraycopy(A.rowIndices, 0, destRowIndices, 0, A.rowIndices.length);
@@ -710,7 +719,7 @@ public final class DirectSum {
         int[] destColIndices = new int[destEntries.length];
 
         // Copy entries from both matrices.
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
+        System.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
         ArrayUtils.arraycopy(A.entries, 0, destEntries, B.entries.length, A.entries.length);
 
         // Compute shifted indices.
@@ -743,7 +752,7 @@ public final class DirectSum {
         int[] destColIndices = new int[destEntries.length];
 
         // Copy entries from both matrices.
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
+        System.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
         ArrayUtils.arraycopy(A.entries, 0, destEntries, B.entries.length, A.entries.length);
 
         // Compute shifted indices.
@@ -777,7 +786,7 @@ public final class DirectSum {
         int[] destColIndices = new int[destEntries.length];
 
         // Copy entries from both matrices.
-        ArrayUtils.arraycopy(A.entries, 0, destEntries, 0, A.entries.length);
+        System.arraycopy(A.entries, 0, destEntries, 0, A.entries.length);
         ArrayUtils.arraycopy(B.entries, 0, destEntries, A.entries.length, B.entries.length);
 
         // Copy indices of first matrix in the direct sum.
@@ -813,7 +822,7 @@ public final class DirectSum {
         int[] destColIndices = new int[destEntries.length];
 
         // Copy entries from both matrices.
-        ArrayUtils.arraycopy(A.entries, 0, destEntries, 0, A.entries.length);
+        System.arraycopy(A.entries, 0, destEntries, 0, A.entries.length);
         ArrayUtils.arraycopy(B.entries, 0, destEntries, A.entries.length, B.entries.length);
 
         // Copy indices of first matrix in the direct sum.
@@ -847,8 +856,8 @@ public final class DirectSum {
         int[] destColIndices = new int[destEntries.length];
 
         // Copy entries from both matrices.
-        ArrayUtils.arraycopy(A.entries, 0, destEntries, 0, A.entries.length);
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, A.entries.length, B.entries.length);
+        System.arraycopy(A.entries, 0, destEntries, 0, A.entries.length);
+        System.arraycopy(B.entries, 0, destEntries, A.entries.length, B.entries.length);
 
         // Copy indices of first matrix in the direct sum.
         System.arraycopy(A.rowIndices, 0, destRowIndices, 0, A.rowIndices.length);
@@ -883,8 +892,8 @@ public final class DirectSum {
         int[] destColIndices = new int[destEntries.length];
 
         // Copy entries from both matrices.
-        ArrayUtils.arraycopy(A.entries, 0, destEntries, 0, A.entries.length);
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, A.entries.length, B.entries.length);
+        System.arraycopy(A.entries, 0, destEntries, 0, A.entries.length);
+        System.arraycopy(B.entries, 0, destEntries, A.entries.length, B.entries.length);
 
         // Copy indices of first matrix in the direct sum.
         System.arraycopy(A.rowIndices, 0, destRowIndices, 0, A.rowIndices.length);
@@ -918,7 +927,7 @@ public final class DirectSum {
 
         // Copy entries from both matrices.
         ArrayUtils.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
-        ArrayUtils.arraycopy(A.entries, 0, destEntries, B.entries.length, A.entries.length);
+        System.arraycopy(A.entries, 0, destEntries, B.entries.length, A.entries.length);
 
         // Compute shifted indices.
         int[] shiftedRowIndices = ArrayUtils.shift(B.numRows, A.rowIndices.clone());
@@ -950,8 +959,8 @@ public final class DirectSum {
         int[] destColIndices = new int[destEntries.length];
 
         // Copy entries from both matrices.
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
-        ArrayUtils.arraycopy(A.entries, 0, destEntries, B.entries.length, A.entries.length);
+        System.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
+        System.arraycopy(A.entries, 0, destEntries, B.entries.length, A.entries.length);
 
         // Compute shifted indices.
         int[] shiftedColIndices = ArrayUtils.shift(A.numCols, B.colIndices.clone());
@@ -983,7 +992,7 @@ public final class DirectSum {
 
         // Copy entries from both matrices.
         ArrayUtils.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
-        ArrayUtils.arraycopy(A.entries, 0, destEntries, B.entries.length, A.entries.length);
+        System.arraycopy(A.entries, 0, destEntries, B.entries.length, A.entries.length);
 
         // Compute shifted indices.
         int[] shiftedColIndices = ArrayUtils.shift(A.numCols, B.colIndices.clone());
@@ -1014,8 +1023,8 @@ public final class DirectSum {
         int[] destColIndices = new int[destEntries.length];
 
         // Copy entries from both matrices.
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
-        ArrayUtils.arraycopy(A.entries, 0, destEntries, B.entries.length, A.entries.length);
+        System.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
+        System.arraycopy(A.entries, 0, destEntries, B.entries.length, A.entries.length);
 
         // Compute shifted indices.
         int[] shiftedRowIndices = ArrayUtils.shift(B.numRows, A.rowIndices.clone());

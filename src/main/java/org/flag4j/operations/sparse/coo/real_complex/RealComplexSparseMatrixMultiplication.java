@@ -28,9 +28,9 @@ import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.core.Shape;
 import org.flag4j.operations.sparse.coo.SparseUtils;
-import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,7 +42,7 @@ import java.util.concurrent.ConcurrentMap;
  * matrix/vector. <br>
  * <b>WARNING:</b> The methods in this class do not provide sanity checks.
  */
-public class RealComplexSparseMatrixMultiplication {
+public final class RealComplexSparseMatrixMultiplication {
 
     private RealComplexSparseMatrixMultiplication() {
         // Hide default constructor for utility class.
@@ -68,7 +68,7 @@ public class RealComplexSparseMatrixMultiplication {
         int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
 
         // Create a map where key is row index from src2.
         // and value is a list of indices in src2 where this row appears.
@@ -84,7 +84,7 @@ public class RealComplexSparseMatrixMultiplication {
 
                 for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
                     int c2 = colIndices2[j]; // = j
-                    dest[rowIdx + c2].addEq(src1[i].mult(src2[j]));
+                    dest[rowIdx + c2] = dest[rowIdx + c2].add(src1[i].mult(src2[j]));
                 }
             }
         }
@@ -112,7 +112,7 @@ public class RealComplexSparseMatrixMultiplication {
         int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
         ConcurrentMap<Integer, CNumber> destMap = new ConcurrentHashMap<>();
 
         // Create a map where key is row index from src2.
@@ -129,7 +129,7 @@ public class RealComplexSparseMatrixMultiplication {
 
                 for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
                     int idx = rowIdx + colIndices2[j];
-                    destMap.put(idx, destMap.getOrDefault(idx, new CNumber()).add(src1[i].mult(src2[j])));
+                    destMap.put(idx, destMap.getOrDefault(idx, CNumber.ZERO).add(src1[i].mult(src2[j])));
                 }
             }
         });
@@ -161,7 +161,7 @@ public class RealComplexSparseMatrixMultiplication {
         int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
 
         // r1, c1, and r2 store the indices for non-zero values in src1 and src2.
         int r1, c1, r2;
@@ -174,7 +174,7 @@ public class RealComplexSparseMatrixMultiplication {
                 r2 = indices[j]; // = k
 
                 if(c1==r2) { // Then we multiply and add to sum.
-                    dest[r1*cols2].addEq(src1[i].mult(src2[j]));
+                    dest[r1*cols2] = dest[r1*cols2].add(src1[i].mult(src2[j]));
                 }
             }
         }
@@ -202,7 +202,7 @@ public class RealComplexSparseMatrixMultiplication {
         int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
 
         ThreadManager.concurrentLoop(0, src1.length, (i) -> {
             int r1 = rowIndices1[i]; // = i
@@ -215,7 +215,7 @@ public class RealComplexSparseMatrixMultiplication {
                     CNumber product = src1[i].mult(src2[j]);
 
                     synchronized (dest) {
-                        dest[r1*cols2].addEq(product);
+                        dest[r1*cols2] = dest[r1*cols2].add(product);
                     }
                 }
             }
@@ -243,7 +243,7 @@ public class RealComplexSparseMatrixMultiplication {
         int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
 
         // Create a map where key is row index from src2.
         // and value is a list of indices in src2 where this row appears.
@@ -259,7 +259,7 @@ public class RealComplexSparseMatrixMultiplication {
 
                 for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
                     int c2 = colIndices2[j]; // = j
-                    dest[rowIdx + c2].addEq(src2[j].mult(src1[i]));
+                    dest[rowIdx + c2] = dest[rowIdx + c2].add(src2[j].mult(src1[i]));
                 }
             }
         }
@@ -287,7 +287,7 @@ public class RealComplexSparseMatrixMultiplication {
         int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
         ConcurrentMap<Integer, CNumber> destMap = new ConcurrentHashMap<>();
 
         // Create a map where key is row index from src2.
@@ -304,7 +304,7 @@ public class RealComplexSparseMatrixMultiplication {
 
                 for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
                     int idx = rowIdx + colIndices2[j];
-                    destMap.put(idx, destMap.getOrDefault(idx, new CNumber()).add(src2[j].mult(src1[i])));
+                    destMap.put(idx, destMap.getOrDefault(idx, CNumber.ZERO).add(src2[j].mult(src1[i])));
                 }
             }
         });
@@ -336,7 +336,7 @@ public class RealComplexSparseMatrixMultiplication {
         int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
 
         // r1, c1, r2, and store the indices for non-zero values in src1 and src2.
         int r1, c1, r2;
@@ -349,7 +349,7 @@ public class RealComplexSparseMatrixMultiplication {
                 r2 = indices[j]; // = k
 
                 if(c1==r2) { // Then we multiply and add to sum.
-                    dest[r1*cols2].addEq(src2[j].mult(src1[i]));
+                    dest[r1*cols2] = dest[r1*cols2].add(src2[j].mult(src1[i]));
                 }
             }
         }
@@ -377,7 +377,7 @@ public class RealComplexSparseMatrixMultiplication {
         int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
 
         ThreadManager.concurrentLoop(0, src1.length, (i) -> {
             int r1 = rowIndices1[i]; // = i
@@ -390,7 +390,7 @@ public class RealComplexSparseMatrixMultiplication {
                     CNumber product = src2[j].mult(src1[i]);
 
                     synchronized (dest) {
-                        dest[r1*cols2].addEq(product);
+                        dest[r1*cols2] = dest[r1*cols2].add(product);
                     }
                 }
             }

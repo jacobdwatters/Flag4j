@@ -38,7 +38,7 @@ import org.flag4j.util.ErrorMessages;
  * multiplications. <br>
  * <b>WARNING:</b> These methods do not perform any sanity checks.
  */
-public class RealComplexDenseMatrixMultiplication {
+public final class RealComplexDenseMatrixMultiplication {
 
 
     private RealComplexDenseMatrixMultiplication() {
@@ -76,8 +76,7 @@ public class RealComplexDenseMatrixMultiplication {
                 end = src1Index + rows2;
 
                 while(src1Index<end) {
-                    dest[destIndex].addEq(src2[src2Index].mult(src1[src1Index++])
-);
+                    dest[destIndex] = dest[destIndex].add(src2[src2Index].mult(src1[src1Index++]));
                     src2Index += cols2;
                 }
             }
@@ -118,8 +117,8 @@ public class RealComplexDenseMatrixMultiplication {
                 end = src2Index + cols2;
 
                 while(src2Index<end) {
-                    dest[destIndex++].addEq(src2[src2Index++].mult(src1[src1Index])
-);
+                    dest[destIndex] = dest[destIndex].add(src2[src2Index++].mult(src1[src1Index]));
+                    destIndex++;
                 }
             }
         }
@@ -168,9 +167,8 @@ public class RealComplexDenseMatrixMultiplication {
                             src2Index = kk*cols2 + j;
 
                             while(src1Index < stopIndex) {
-                                dest[destIndex].addEq(src2[src2Index].mult(src1[src1Index++])
-);
-                                src2Index+=cols2;
+                                dest[destIndex] = dest[destIndex].add(src2[src2Index].mult(src1[src1Index++]));
+                                src2Index += cols2;
                             }
                         }
                     }
@@ -225,8 +223,8 @@ public class RealComplexDenseMatrixMultiplication {
                             src2Index = k*cols2 + jj;
 
                             while(destIndex<stopIndex) {
-                                dest[destIndex++].addEq(src2[src2Index].mult(src1[src1Index])
-);
+                                dest[destIndex] = dest[destIndex].add(src2[src2Index].mult(src1[src1Index]));
+                                destIndex++;
                                 src2Index++;
                             }
                         }
@@ -266,8 +264,7 @@ public class RealComplexDenseMatrixMultiplication {
                 int destIndex = destIndexStart + j;
 
                 for(int k=0; k<cols1; k++) {
-                    dest[destIndex].addEq(src2[src2Index].mult(src1[src1Index++])
-);
+                    dest[destIndex] = dest[destIndex].add(src2[src2Index].mult(src1[src1Index++]));
                     src2Index += cols2;
                 }
             }
@@ -304,8 +301,8 @@ public class RealComplexDenseMatrixMultiplication {
                 int end = src2Index + cols2;
 
                 while(src2Index<end) {
-                    dest[destIndex++].addEq(src2[src2Index++].mult(src1[src1IndexStart + k])
-);
+                    dest[destIndex] = dest[destIndex].add(src2[src2Index++].mult(src1[src1IndexStart + k]));
+                    destIndex++;
                 }
             }
         });
@@ -353,8 +350,7 @@ public class RealComplexDenseMatrixMultiplication {
                             int src2Index = kk*cols2 + j;
 
                             while(src1Index < stopIndex) {
-                                dest[destIndex].addEq(src2[src2Index].mult(src1[src1Index++])
-);
+                                dest[destIndex] = dest[destIndex].add(src2[src2Index].mult(src1[src1Index++]));
                                 src2Index+=cols2;
                             }
                         }
@@ -406,8 +402,8 @@ public class RealComplexDenseMatrixMultiplication {
                             int src2Index = k*cols2 + jj;
 
                             while(destIndex<stopIndex) {
-                                dest[destIndex++].addEq(src2[src2Index].mult(src1[src1Index])
-);
+                                dest[destIndex] = dest[destIndex].add(src2[src2Index].mult(src1[src1Index]));
+                                destIndex++;
                                 src2Index++;
                             }
                         }
@@ -442,8 +438,7 @@ public class RealComplexDenseMatrixMultiplication {
             src2Index = 0;
 
             while(src2Index<rows2) {
-                dest[i].addEq(src2[src2Index++].mult(src1[src1Index++])
-);
+                dest[i] = dest[i].add(src2[src2Index++].mult(src1[src1Index++]));
             }
         }
 
@@ -483,8 +478,7 @@ public class RealComplexDenseMatrixMultiplication {
                     src2Index = kk;
 
                     while(src2Index<kBound) {
-                        dest[i].addEq(src2[src2Index++].mult(src1[src1Index++])
-);
+                        dest[i] = dest[i].add(src2[src2Index++].mult(src1[src1Index++]));
                     }
                 }
             }
@@ -516,8 +510,7 @@ public class RealComplexDenseMatrixMultiplication {
             int src2Index = 0;
 
             while(src2Index<rows2) {
-                dest[i].addEq(src2[src2Index++].mult(src1[src1Index++])
-);
+                dest[i] = dest[i].add(src2[src2Index++].mult(src1[src1Index++]));
             }
         });
 
@@ -555,8 +548,7 @@ public class RealComplexDenseMatrixMultiplication {
                     int src2Index = kk;
 
                     while(src2Index<kBound) {
-                        dest[i].addEq(src2[src2Index++].mult(src1[src1Index++])
-);
+                        dest[i] = dest[i].add(src2[src2Index++].mult(src1[src1Index++]));
                     }
                 }
             }
@@ -565,13 +557,6 @@ public class RealComplexDenseMatrixMultiplication {
         return dest;
     }
 
-    // ------------------------------------------------------------------------------------------------------------------
-    // ------------------------------------------------------------------------------------------------------------------
-    // ------------------------------------------------------------------------------------------------------------------
-    // ------------------------------------------------------------------------------------------------------------------
-    // ------------------------------------------------------------------------------------------------------------------
-    // ------------------------------------------------------------------------------------------------------------------
-    // ------------------------------------------------------------------------------------------------------------------
 
     /**
      * Computes the matrix multiplication between a real dense matrix with a complex dense matrix using the standard algorithm.
@@ -602,7 +587,7 @@ public class RealComplexDenseMatrixMultiplication {
                 end = src1Index + rows2;
 
                 while(src1Index<end) {
-                    dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index]));
+                    dest[destIndex] = dest[destIndex].add(src1[src1Index++].mult(src2[src2Index]));
                     src2Index += cols2;
                 }
             }
@@ -643,7 +628,8 @@ public class RealComplexDenseMatrixMultiplication {
                 end = src2Index + cols2;
 
                 while(src2Index<end) {
-                    dest[destIndex++].addEq(src1[src1Index].mult(src2[src2Index++]));
+                    dest[destIndex] = dest[destIndex].add(src1[src1Index].mult(src2[src2Index++]));
+                    destIndex++;
                 }
             }
         }
@@ -692,7 +678,7 @@ public class RealComplexDenseMatrixMultiplication {
                             src2Index = kk*cols2 + j;
 
                             while(src1Index < stopIndex) {
-                                dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index]));
+                                dest[destIndex] = dest[destIndex].add(src1[src1Index++].mult(src2[src2Index]));
                                 src2Index+=cols2;
                             }
                         }
@@ -748,7 +734,8 @@ public class RealComplexDenseMatrixMultiplication {
                             src2Index = k*cols2 + jj;
 
                             while(destIndex<stopIndex) {
-                                dest[destIndex++].addEq(src1[src1Index].mult(src2[src2Index]));
+                                dest[destIndex] = dest[destIndex].add(src1[src1Index].mult(src2[src2Index]));
+                                destIndex++;
                                 src2Index++;
                             }
                         }
@@ -788,7 +775,7 @@ public class RealComplexDenseMatrixMultiplication {
                 int destIndex = destIndexStart + j;
 
                 for(int k=0; k<cols1; k++) {
-                    dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index]));
+                    dest[destIndex] = dest[destIndex].add(src1[src1Index++].mult(src2[src2Index]));
                     src2Index += cols2;
                 }
             }
@@ -825,7 +812,8 @@ public class RealComplexDenseMatrixMultiplication {
                 int end = src2Index + cols2;
 
                 while(src2Index<end) {
-                    dest[destIndex++].addEq(src1[src1IndexStart + k].mult(src2[src2Index++]));
+                    dest[destIndex] = dest[destIndex].add(src1[src1IndexStart + k].mult(src2[src2Index++]));
+                    destIndex++;
                 }
             }
         });
@@ -873,7 +861,7 @@ public class RealComplexDenseMatrixMultiplication {
                             int src2Index = kk*cols2 + j;
 
                             while(src1Index < stopIndex) {
-                                dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index]));
+                                dest[destIndex] = dest[destIndex].add(src1[src1Index++].mult(src2[src2Index]));
                                 src2Index+=cols2;
                             }
                         }
@@ -925,7 +913,8 @@ public class RealComplexDenseMatrixMultiplication {
                             int src2Index = k*cols2 + jj;
 
                             while(destIndex<stopIndex) {
-                                dest[destIndex++].addEq(src1[src1Index].mult(src2[src2Index]));
+                                dest[destIndex] = dest[destIndex].add(src1[src1Index].mult(src2[src2Index]));
+                                destIndex++;
                                 src2Index++;
                             }
                         }
@@ -960,7 +949,7 @@ public class RealComplexDenseMatrixMultiplication {
             src2Index = 0;
 
             while(src2Index<rows2) {
-                dest[i].addEq(src1[src1Index++].mult(src2[src2Index++]));
+                dest[i] = dest[i].add(src1[src1Index++].mult(src2[src2Index++]));
             }
         }
 
@@ -1000,7 +989,7 @@ public class RealComplexDenseMatrixMultiplication {
                     src2Index = kk;
 
                     while(src2Index<kBound) {
-                        dest[i].addEq(src1[src1Index++].mult(src2[src2Index++]));
+                        dest[i] = dest[i].add(src1[src1Index++].mult(src2[src2Index++]));
                     }
                 }
             }
@@ -1032,7 +1021,7 @@ public class RealComplexDenseMatrixMultiplication {
             int src2Index = 0;
 
             while(src2Index<rows2) {
-                dest[i].addEq(src1[src1Index++].mult(src2[src2Index++]));
+                dest[i] = dest[i].add(src1[src1Index++].mult(src2[src2Index++]));
             }
         });
 
@@ -1070,7 +1059,7 @@ public class RealComplexDenseMatrixMultiplication {
                     int src2Index = kk;
 
                     while(src2Index<kBound) {
-                        dest[i].addEq(src1[src1Index++].mult(src2[src2Index++]));
+                        dest[i] = dest[i].add(src1[src1Index++].mult(src2[src2Index++]));
                     }
                 }
             }

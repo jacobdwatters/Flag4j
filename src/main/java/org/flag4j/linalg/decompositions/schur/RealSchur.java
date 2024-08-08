@@ -534,7 +534,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
             if(a21.mag() > EPS_F64*(a11.mag() + a22.mag())) {
                 // non-converged 2x2 block found.
                 CNumber[] mu = Eigen.get2x2EigenValues(a11, a12, a21, a22);
-                mu[0].subEq(a22); // Shift eigenvalue.
+                mu[0] = mu[0].sub(a22); // Shift eigenvalue.
 
                 // Construct a givens rotator to bring matrix into properly upper triangular form.
                 CMatrix G = Givens.get2x2Rotator(new CVector(mu[0], a21));

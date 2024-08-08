@@ -27,7 +27,6 @@ package org.flag4j.linalg.decompositions.unitary;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.linalg.transformations.Householder;
-import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.Flag4jConstants;
 
 /**
@@ -53,10 +52,6 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
      * Stores the shifted value of the first entry in a Householder vector.
      */
     private CNumber shift;
-    /**
-     * The complex number equal to zero.
-     */
-    private static final CNumber ZERO = CNumber.zero();
 
 
     /**
@@ -112,13 +107,13 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
         CMatrix Q = initQ();
 
         for(int j=minAxisSize - 1; j>=subDiagonal; j--) {
-            householderVector[j] = CNumber.one(); // Ensure first value of reflector is 1.
+            householderVector[j] = CNumber.ONE; // Ensure first value of reflector is 1.
 
             for(int i=j + 1; i<numRows; i++) {
                 householderVector[i] = transformData[i*numCols + j - subDiagonal]; // Extract column containing reflector vector.
             }
 
-            if(!(qFactors[j]==null || qFactors[j].equals(ZERO))) { // Otherwise, no reflector to apply.
+            if(!(qFactors[j]==null || qFactors[j].equals(CNumber.ZERO))) { // Otherwise, no reflector to apply.
                 Householder.leftMultReflector(Q, householderVector, qFactors[j], j, j, numRows, workArray);
             }
         }
@@ -136,7 +131,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
         // Copy top rows.
         for(int i=0; i<subDiagonal; i++) {
             int rowOffset = i*numCols;
-            ArrayUtils.arraycopy(transformData, rowOffset, H.entries, rowOffset, numCols);
+            System.arraycopy(transformData, rowOffset, H.entries, rowOffset, numCols);
         }
 
         // Copy rest of the rows.
@@ -144,7 +139,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
             int rowOffset = i*numCols;
 
             int length = numCols - (i-subDiagonal);
-            ArrayUtils.arraycopy(transformData, rowOffset + i - subDiagonal,
+            System.arraycopy(transformData, rowOffset + i - subDiagonal,
                     H.entries, rowOffset + i - subDiagonal, length);
         }
 
@@ -181,13 +176,13 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
         applyUpdate = maxAbs >= Flag4jConstants.EPS_F64;
 
         if(!applyUpdate) {
-            currentFactor = CNumber.zero();
+            currentFactor = CNumber.ZERO;
         } else {
             computePhasedNorm(j, maxAbs);
 
-            householderVector[j] = CNumber.one(); // Ensure first value in Householder vector is one.
+            householderVector[j] = CNumber.ONE; // Ensure first value in Householder vector is one.
             for(int i=j+1; i<numRows; i++) {
-                householderVector[i].divEq(shift); // Scale all but first entry of the Householder vector.
+                householderVector[i] = householderVector[i].div(shift); // Scale all but first entry of the Householder vector.
             }
         }
 
@@ -205,18 +200,19 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
     protected void computePhasedNorm(int j, double maxAbs) {
         // Computes the 2-norm of the column.
         for(int i=j; i<numRows; i++) {
-            householderVector[i].divEq(maxAbs); // Scale entries of the householder vector to help reduce potential overflow.
+            householderVector[i] = householderVector[i].div(maxAbs); // Scale entries of the householder vector to help reduce
+            // potential overflow.
             CNumber scaledValue = householderVector[i];
             normRe += scaledValue.magSquared();
         }
         normRe = Math.sqrt(normRe); // Finish 2-norm computation for the column.
 
         // Change phase of the norm depending on first entry in column for stability purposes in Householder vector.
-        norm = householderVector[j].equals(ZERO) ? new CNumber(normRe) : CNumber.sgn(householderVector[j]).mult(normRe);
+        norm = householderVector[j].equals(CNumber.ZERO) ? new CNumber(normRe) : CNumber.sgn(householderVector[j]).mult(normRe);
 
         shift = householderVector[j].add(norm);
         currentFactor = shift.div(norm);
-        norm.multEq(maxAbs); // Rescale norm.
+        norm = norm.mult(maxAbs); // Rescale norm.
     }
 
 
@@ -232,7 +228,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
         int idx = j*numCols + j - subDiagonal;
 
         for(int i=j; i<numRows; i++) {
-            CNumber d = householderVector[i] = transformData[idx].copy();
+            CNumber d = householderVector[i] = transformData[idx];
             idx += numCols; // Move index to next row.
             maxAbs = Math.max(d.mag(), maxAbs);
         }

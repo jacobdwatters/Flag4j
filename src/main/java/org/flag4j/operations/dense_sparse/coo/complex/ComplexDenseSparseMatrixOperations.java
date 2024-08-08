@@ -35,9 +35,9 @@ import org.flag4j.util.ParameterChecks;
 /**
  * This class contains low level implementations for operations between a dense and a sparse complex matrix.
  */
-public class ComplexDenseSparseMatrixOperations {
+public final class ComplexDenseSparseMatrixOperations {
 
-    public ComplexDenseSparseMatrixOperations() {
+    private ComplexDenseSparseMatrixOperations() {
         // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
@@ -57,9 +57,8 @@ public class ComplexDenseSparseMatrixOperations {
         CMatrix dest = new CMatrix(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            row = src2.rowIndices[i];
-            col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col].addEq(src2.entries[i]);
+            int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
+            dest.entries[idx] = dest.entries[idx].add(src2.entries[i]);
         }
 
         return dest;
@@ -80,9 +79,8 @@ public class ComplexDenseSparseMatrixOperations {
         CMatrix dest = new CMatrix(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            row = src2.rowIndices[i];
-            col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col].subEq(src2.entries[i]);
+            int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
+            dest.entries[idx] = dest.entries[idx].sub(src2.entries[i]);
         }
 
         return dest;
@@ -103,9 +101,8 @@ public class ComplexDenseSparseMatrixOperations {
         CMatrix dest = new CMatrix(src1.shape, ComplexOperations.scalMult(src1.entries, -1));
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            row = src2.rowIndices[i];
-            col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col].addEq(src2.entries[i]);
+            int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
+            dest.entries[idx] = dest.entries[idx].add(src2.entries[i]);
         }
 
         return dest;
@@ -124,9 +121,8 @@ public class ComplexDenseSparseMatrixOperations {
         int row, col;
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            row = src2.rowIndices[i];
-            col = src2.colIndices[i];
-            src1.entries[row*src1.numCols + col].addEq(src2.entries[i]);
+            int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
+            src1.entries[idx] = src1.entries[idx].add(src2.entries[i]);
         }
     }
 
@@ -143,9 +139,8 @@ public class ComplexDenseSparseMatrixOperations {
         int row, col;
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            row = src2.rowIndices[i];
-            col = src2.colIndices[i];
-            src1.entries[row*src1.numCols + col].subEq(src2.entries[i]);
+            int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
+            src1.entries[idx] = src1.entries[idx].sub(src2.entries[i]);
         }
     }
 
@@ -223,7 +218,8 @@ public class ComplexDenseSparseMatrixOperations {
         }
 
         for(int i=0; i<src.entries.length; i++) {
-            sum.entries[src.rowIndices[i]*src.numCols + src.colIndices[i]].addEq(src.entries[i]);
+            int idx = src.rowIndices[i]*src.numCols + src.colIndices[i];
+            sum.entries[idx] = sum.entries[idx].add(src.entries[i]);
         }
 
         return sum;
@@ -246,7 +242,8 @@ public class ComplexDenseSparseMatrixOperations {
         }
 
         for(int i=0; i<src.entries.length; i++) {
-            sum.entries[src.rowIndices[i]*src.numCols + src.colIndices[i]].addEq(src.entries[i]);
+            int idx = src.rowIndices[i]*src.numCols + src.colIndices[i];
+            sum.entries[idx] = sum.entries[idx].add(src.entries[i]);
         }
 
         return sum;

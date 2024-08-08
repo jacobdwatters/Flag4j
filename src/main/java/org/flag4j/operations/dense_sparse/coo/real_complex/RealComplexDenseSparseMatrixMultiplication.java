@@ -32,11 +32,13 @@ import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 
+import java.util.Arrays;
+
 /**
  * This class contains low level methods for computing the matrix multiplication (and matrix vector multiplication) between
  * a real dense/sparse matrix and a real sparse/dense matrix or vector.
  */
-public class RealComplexDenseSparseMatrixMultiplication {
+public final class RealComplexDenseSparseMatrixMultiplication {
 
     private RealComplexDenseSparseMatrixMultiplication() {
         // Hide default constructor.
@@ -61,18 +63,21 @@ public class RealComplexDenseSparseMatrixMultiplication {
         int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, CNumber.ZERO);
 
         int row;
-int col;
+        int col;
 
         for(int i=0; i<rows1; i++) {
             // Loop over non-zero entries of sparse matrix.
-            for(int j=0; j<src2.length; j++) {
+            int destRowOffset = i*cols2;
+            int src1RowOffset = i*cols1;
+
+            for(int j=0, len=src2.length; j<len; j++) {
                 row = rowIndices[j];
                 col = colIndices[j];
 
-                dest[i*cols2 + col].addEq(src2[j].mult(src1[i*cols1 + row]));
+                dest[destRowOffset + col] = dest[destRowOffset + col].add(src2[j].mult(src1[src1RowOffset + row]));
             }
         }
 
@@ -100,14 +105,16 @@ int col;
         ArrayUtils.fill(dest, 0);
 
         int row;
-int col;
+        int col;
 
         for(int i=0; i<src1.length; i++) {
             row = rowIndices[i];
             col = colIndices[i];
+            int destRowOffset = row*cols2;
+            int src2RowOffset = col*cols2;
 
             for(int j=0; j<cols2; j++) {
-                dest[row*cols2 + j].addEq(src2[col*cols2 + j].mult(src1[i]));
+                dest[destRowOffset + j] = dest[destRowOffset + j].add(src2[src2RowOffset + j].mult(src1[i]));
             }
         }
 
@@ -142,7 +149,7 @@ int col;
                 CNumber product = src2[j].mult(src1[i*cols1 + row]);
 
                 synchronized (dest) {
-                    dest[i*cols2 + col].addEq(product);
+                    dest[i*cols2 + col] = dest[i*cols2 + col].add(product);
                 }
             }
         });
@@ -179,7 +186,7 @@ int col;
                 CNumber product = src2[col*cols2 + j].mult(src1[i]);
 
                 synchronized (dest) {
-                    dest[row*cols2 + j].addEq(product);
+                    dest[row*cols2 + j] = dest[row*cols2 + j].add(product);
                 }
             }
         });
@@ -216,7 +223,7 @@ int col;
                 row = rowIndices[j];
                 col = colIndices[j];
 
-                dest[i*cols2 + col].addEq(src1[i*cols1 + row].mult(src2[j]));
+                dest[i*cols2 + col] = dest[i*cols2 + col].add(src1[i*cols1 + row].mult(src2[j]));
             }
         }
 
@@ -249,9 +256,11 @@ int col;
         for(int i=0; i<src1.length; i++) {
             row = rowIndices[i];
             col = colIndices[i];
+            int destRowOffset = row*cols2;
+            int src2RowOffset = col*cols2;
 
             for(int j=0; j<cols2; j++) {
-                dest[row*cols2 + j].addEq(src1[i].mult(src2[col*cols2 + j]));
+                dest[destRowOffset + j] = dest[destRowOffset + j].add(src1[i].mult(src2[src2RowOffset + j]));
             }
         }
 
@@ -286,7 +295,7 @@ int col;
                 CNumber product = src1[i*cols1 + row].mult(src2[j]);
 
                 synchronized (dest) {
-                    dest[i*cols2 + col].addEq(product);
+                    dest[i*cols2 + col] = dest[i*cols2 + col].add(product);
                 }
             }
         });
@@ -323,7 +332,7 @@ int col;
                 CNumber product = src1[i].mult(src2[col*cols2 + j]);
 
                 synchronized (dest) {
-                    dest[row*cols2 + j].addEq(product);
+                    dest[row*cols2 + j] = dest[row*cols2 + j].add(product);
                 }
             }
         });
@@ -352,9 +361,11 @@ int col;
         int k;
 
         for(int i=0; i<denseRows; i++) {
+            int src1RowOffset = i*denseCols;
+
             for(int j=0; j<nonZeros; j++) {
                 k = indices[j];
-                dest[i].addEq(src2[j].mult(src1[i*denseCols + k]));
+                dest[i] = dest[i].add(src2[j].mult(src1[src1RowOffset + k]));
             }
         }
 
@@ -378,13 +389,13 @@ int col;
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
         int row;
-int col;
+        int col;
 
         for(int i=0; i<src1.length; i++) {
             row = rowIndices[i];
             col = colIndices[i];
 
-            dest[row].addEq(src2[col].mult(src1[i]));
+            dest[row] = dest[row].add(src2[col].mult(src1[i]));
         }
 
         return dest;
@@ -409,16 +420,16 @@ int col;
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
 
-        int k;
 
         // Blocked matrix-vector multiply
         for(int ii=0; ii<rows1; ii += bsize) {
             for(int jj=0; jj<rows2; jj += bsize) {
                 // Multiply the current blocks
                 for(int i=ii; i<ii+bsize && i<rows1; i++) {
+                    int src1RowOffset = i*cols1;
+
                     for(int j=jj; j<jj+bsize && j<rows2; j++) {
-                        k = indices[j];
-                        dest[i].addEq(src2[j].mult(src1[i*cols1 + k]));
+                        dest[i] = dest[i].add(src2[j].mult(src1[src1RowOffset + indices[j]]));
                     }
                 }
             }
@@ -447,7 +458,7 @@ int col;
         ThreadManager.concurrentLoop(0, rows1, i -> {
             for(int j=0; j<rows2; j++) {
                 int k = indices[j];
-                dest[i].addEq(src2[j].mult(src1[i*cols1 + k]));
+                dest[i] = dest[i].add(src2[j].mult(src1[i*cols1 + k]));
             }
         });
 
@@ -478,7 +489,7 @@ int col;
             CNumber product = src2[col].mult(src1[i]);
 
             synchronized (dest) {
-                dest[row].addEq(product);
+                dest[row] = dest[row].add(product);
             }
         });
 
@@ -511,7 +522,7 @@ int col;
                 for(int i=ii; i<ii+bsize && i<rows1; i++) {
                     for(int j=jj; j<jj+bsize && j<rows2; j++) {
                         int k = indices[j];
-                        dest[i].addEq(src2[j].mult(src1[i*cols1 + k]));
+                        dest[i] = dest[i].add(src2[j].mult(src1[i*cols1 + k]));
                     }
                 }
             }
@@ -541,7 +552,7 @@ int col;
         for(int i=0; i<denseRows; i++) {
             for(int j=0; j<nonZeros; j++) {
                 k = indices[j];
-                dest[i].addEq(src1[i*denseCols + k].mult(src2[j]));
+                dest[i] = dest[i].add(src1[i*denseCols + k].mult(src2[j]));
             }
         }
 
@@ -565,13 +576,13 @@ int col;
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
         int row;
-int col;
+        int col;
 
         for(int i=0; i<src1.length; i++) {
             row = rowIndices[i];
             col = colIndices[i];
 
-            dest[row].addEq(src1[i].mult(src2[col]));
+            dest[row] = dest[row].add(src1[i].mult(src2[col]));
         }
 
         return dest;
@@ -604,7 +615,7 @@ int col;
                 for(int i=ii; i<ii+bsize && i<rows1; i++) {
                     for(int j=jj; j<jj+bsize && j<rows2; j++) {
                         k = indices[j];
-                        dest[i].addEq(src1[i*cols1 + k].mult(src2[j]));
+                        dest[i] = dest[i].add(src1[i*cols1 + k].mult(src2[j]));
                     }
                 }
             }
@@ -633,7 +644,7 @@ int col;
         ThreadManager.concurrentLoop(0, rows1, i -> {
             for(int j=0; j<rows2; j++) {
                 int k = indices[j];
-                dest[i].addEq(src1[i*cols1 + k].mult(src2[j]));
+                dest[i] = dest[i].add(src1[i*cols1 + k].mult(src2[j]));
             }
         });
 
@@ -663,7 +674,7 @@ int col;
             CNumber product = src1[i].mult(src2[col]);
 
             synchronized (dest) {
-                dest[row].addEq(product);
+                dest[row] = dest[row].add(product);
             }
         });
 
@@ -696,7 +707,7 @@ int col;
                 for(int i=ii; i<ii+bsize && i<rows1; i++) {
                     for(int j=jj; j<jj+bsize && j<rows2; j++) {
                         int k = indices[j];
-                        dest[i].addEq(src1[i*cols1 + k].mult(src2[j]));
+                        dest[i] = dest[i].add(src1[i*cols1 + k].mult(src2[j]));
                     }
                 }
             }

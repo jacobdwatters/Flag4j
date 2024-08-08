@@ -24,14 +24,14 @@ class CNumberSqrtTest {
 
         // ------------- Sub-case 3 -------------
         a = 2;
-        expResult = CNumber.rootTwo();
+        expResult = CNumber.ROOT_TWO;
         actResult = CNumber.sqrt(a);
         Assertions.assertEquals(expResult, actResult);
 
 
         // ------------- Sub-case 4 -------------
         a = 3;
-        expResult = CNumber.rootThree();
+        expResult = CNumber.ROOT_THREE;
         actResult = CNumber.sqrt(a);
         Assertions.assertEquals(expResult, actResult);
 
@@ -83,14 +83,14 @@ class CNumberSqrtTest {
 
         // ------------- Sub-case 3 -------------
         aComplex = new CNumber(2);
-        expResult = CNumber.rootTwo();
+        expResult = CNumber.ROOT_TWO;
         actResult = CNumber.sqrt(aComplex);
         Assertions.assertEquals(expResult, actResult);
 
 
         // ------------- Sub-case 4 -------------
         aComplex = new CNumber(3);
-        expResult = CNumber.rootThree();
+        expResult = CNumber.ROOT_THREE;
         actResult = CNumber.sqrt(aComplex);
         Assertions.assertEquals(expResult, actResult);
 

@@ -30,7 +30,6 @@ import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.operations.common.complex.ComplexProperties;
-import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
@@ -38,7 +37,7 @@ import java.util.Arrays;
 /**
  * This class provides methods for checking the equality of a complex dense tensor with a complex sparse tensor.
  */
-public class ComplexDenseSparseEquals {
+public final class ComplexDenseSparseEquals {
 
     private ComplexDenseSparseEquals() {
         // Hide constructor for utility class.
@@ -71,7 +70,7 @@ public class ComplexDenseSparseEquals {
                     break;
                 }
 
-                entriesCopy[idx] = new CNumber();
+                entriesCopy[idx] = CNumber.ZERO;
             }
 
             if(equal) {
@@ -101,7 +100,7 @@ public class ComplexDenseSparseEquals {
         if(src1.length==sparseSize) {
             int index;
             CNumber[] src1Copy = new CNumber[src1.length];
-            ArrayUtils.copy2CNumber(src1, src1Copy);
+            System.arraycopy(src1, 0, src1Copy, 0, src1.length);
 
             for(int i=0; i<src2.length; i++) {
                 index = indices[i];
@@ -111,7 +110,7 @@ public class ComplexDenseSparseEquals {
                     break;
 
                 } else {
-                    src1Copy[index] = new CNumber();
+                    src1Copy[index] = CNumber.ZERO;
                 }
             }
 
@@ -139,7 +138,7 @@ public class ComplexDenseSparseEquals {
 
         if(A.shape.equals(B.shape)) {
             CNumber[] entriesCopy = new CNumber[A.entries.length];
-            ArrayUtils.copy2CNumber(A.entries, entriesCopy);
+            System.arraycopy(A.entries, 0, entriesCopy, 0, A.entries.length);
             int entriesIndex;
 
             // Remove all nonZero entries from the entries of this matrix.
@@ -151,7 +150,7 @@ public class ComplexDenseSparseEquals {
                     break;
                 }
 
-                entriesCopy[A.shape.entriesIndex(B.indices[i])] = new CNumber();
+                entriesCopy[A.shape.entriesIndex(B.indices[i])] = CNumber.ZERO;
             }
 
             if(equal) {

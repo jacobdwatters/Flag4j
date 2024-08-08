@@ -40,7 +40,7 @@ class RealComplexDenseSparseMatMultTransposeTests {
         };
         cdEntries = new CNumber[][]{
                 {new CNumber(-0.24, 14.5), new CNumber(0.425)},
-                {new CNumber(8.33, -84.4), new CNumber()},
+                {new CNumber(8.33, -84.4), CNumber.ZERO},
                 {new CNumber(4.5, -9.24), new CNumber(0, -85.2)},
                 {new CNumber("1.345"), new CNumber("-85.445+15.5i")}
         };

@@ -35,6 +35,7 @@ import org.flag4j.operations.dense.real.RealDenseOperations;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
 import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
+import org.flag4j.operations.sparse.coo.complex.ComplexCooTensorDot;
 import org.flag4j.operations.sparse.coo.complex.ComplexCooTensorOperations;
 import org.flag4j.operations.sparse.coo.complex.ComplexSparseEquals;
 import org.flag4j.operations.sparse.coo.real_complex.RealComplexCooTensorOperations;
@@ -258,7 +259,7 @@ public class CooCTensor
             }
         }
 
-        return new CooCTensor(newShape, ArrayUtils.copyOf(entries), newIndices);
+        return new CooCTensor(newShape, Arrays.copyOf(entries, entries.length), newIndices);
     }
 
 
@@ -274,7 +275,7 @@ public class CooCTensor
         for(int i = 0; i < entries.length; i++)
             destIndices[i][0] = RealDenseOperations.prod(indices[i]);
 
-        return new CooCTensor(shape, ArrayUtils.copyOf(entries), destIndices);
+        return new CooCTensor(shape, Arrays.copyOf(entries, entries.length), destIndices);
     }
 
 
@@ -294,28 +295,8 @@ public class CooCTensor
      *                                  are out of bounds for the corresponding tensor.
      */
     @Override
-    public CooCTensor tensorDot(CooCTensor src2, int[] aAxes, int[] bAxes) {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Computes the tensor dot product of this tensor with a second tensor. That is, sums the product of two tensor
-     * elements over the last axis of this tensor and the second-to-last axis of {@code src2}. If both tensors are
-     * rank 2, this is equivalent to matrix multiplication.
-     *
-     * @param src2 Tensor to compute dot product with this tensor.
-     *
-     * @return The tensor dot product over the last axis of this tensor and the second to last axis of {@code src2}.
-     *
-     * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
-     *                                  along the second-to-last axis.
-     */
-    @Override
-    public CooCTensor tensorDot(CooCTensor src2) {
-        // TODO: Implementation.
-        return null;
+    public CTensor tensorDot(CooCTensor src2, int[] aAxes, int[] bAxes) {
+        return ComplexCooTensorDot.tensorDot(this, src2, aAxes, bAxes);
     }
 
 
@@ -341,7 +322,7 @@ public class CooCTensor
         CNumber[] transposeEntries = new CNumber[nnz];
 
         for(int i=0; i<nnz; i++) {
-            transposeEntries[i] = entries[i].copy();
+            transposeEntries[i] = entries[i];
             transposeIndices[i] = indices[i].clone();
             ArrayUtils.swap(transposeIndices[i], axis1, axis2);
         }
@@ -376,7 +357,7 @@ public class CooCTensor
 
         // Permute the indices according to the permutation array.
         for(int i = 0; i < nnz; i++) {
-            transposeEntries[i] = entries[i].copy();
+            transposeEntries[i] = entries[i];
             transposeIndices[i] = indices[i].clone();
 
             for(int j = 0; j < rank; j++) {
@@ -645,7 +626,7 @@ public class CooCTensor
             }
         }
 
-        return CNumber.zero(); // Return zero if the index is not found
+        return CNumber.ZERO; // Return zero if the index is not found
     }
 
 
@@ -656,7 +637,7 @@ public class CooCTensor
      */
     @Override
     public CooCTensor copy() {
-        return new CooCTensor(shape, ArrayUtils.copyOf(entries), ArrayUtils.deepCopy(indices, null));
+        return new CooCTensor(shape, Arrays.copyOf(entries, entries.length), ArrayUtils.deepCopy(indices, null));
     }
 
 
@@ -786,9 +767,9 @@ public class CooCTensor
         CNumber value;
 
         for(int i=0; i<size; i++) {
-            value = src.entries[i].copy();
+            value = src.entries[i];
 
-            if(value.equals(CNumber.zero())) {
+            if(value.equals(CNumber.ZERO)) {
                 entries.add(value);
                 indices.add(src.shape.getIndices(i));
             }

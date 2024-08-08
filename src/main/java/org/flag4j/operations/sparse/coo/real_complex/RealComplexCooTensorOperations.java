@@ -80,7 +80,7 @@ public final class RealComplexCooTensorOperations {
             if(src2Pos < src2.nnz && Arrays.equals(src1Idx, src2Indices[src2Pos])) {
                 sumEntries.add(val1.add(src2.entries[src2Pos++]));
             } else {
-                sumEntries.add(val1.copy());
+                sumEntries.add(val1);
             }
             sumIndices.add(src1Idx);
         }
@@ -129,7 +129,7 @@ public final class RealComplexCooTensorOperations {
             if(src2Pos < src2.nnz && Arrays.equals(src1Idx, src2Indices[src2Pos])) {
                 sumEntries.add(val1.sub(src2.entries[src2Pos++]));
             } else {
-                sumEntries.add(val1.copy());
+                sumEntries.add(val1);
             }
             sumIndices.add(src1Idx);
         }

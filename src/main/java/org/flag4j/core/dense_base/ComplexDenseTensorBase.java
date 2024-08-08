@@ -32,7 +32,6 @@ import org.flag4j.operations.common.complex.ComplexOperations;
 import org.flag4j.operations.common.complex.ComplexProperties;
 import org.flag4j.operations.dense.complex.*;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
 
 import java.util.Arrays;
@@ -246,7 +245,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     @Override
     public T copy() {
-        return makeTensor(this.shape, ArrayUtils.copyOf(entries));
+        return makeTensor(this.shape, Arrays.copyOf(entries, entries.length));
     }
 
 

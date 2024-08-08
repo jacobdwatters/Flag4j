@@ -40,7 +40,7 @@ import java.util.Arrays;
  * @param <T> The type of the matrix to compute the singular value decomposition of.
  */
 public abstract class SVD<
-        T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>>
+        T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>>
         implements Decomposition<T> {
 
     /**

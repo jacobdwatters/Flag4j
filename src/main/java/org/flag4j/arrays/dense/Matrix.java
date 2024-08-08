@@ -71,7 +71,7 @@ import java.util.List;
  */
 public class Matrix
         extends RealDenseTensorBase<Matrix, CMatrix>
-        implements MatrixMixin<Matrix, Matrix, CooMatrix, CMatrix, Double, Vector, Vector>,
+        implements MatrixMixin<Matrix, Matrix, CooMatrix, CMatrix, CooCMatrix, Double, Vector, Vector>,
         RealMatrixMixin<Matrix, CMatrix>,
         DenseMatrixMixin<Matrix, Double> {
 
@@ -1759,7 +1759,9 @@ public class Matrix
      * Computes the element-wise multiplication (Hadamard product) between two matrices.
      *
      * @param B Second matrix in the element-wise multiplication.
+     *
      * @return The result of element-wise multiplication of this matrix with the matrix B.
+     *
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
@@ -1956,7 +1958,7 @@ public class Matrix
 
         for(int i=0; i<sum.numRows; i++) {
             for(int j=0; j<sum.numCols; j++) {
-                sum.entries[i*sum.numCols + j].addEq(b.entries[i]);
+                sum.entries[i*sum.numCols + j] = sum.entries[i*sum.numCols + j].add(b.entries[i]);
             }
         }
 
@@ -1982,7 +1984,7 @@ public class Matrix
             index = b.indices[i];
 
             for(int j=0; j<sum.numCols; j++) {
-                sum.entries[index*sum.numCols + j].addEq(b.entries[i]);
+                sum.entries[index*sum.numCols + j] = sum.entries[index*sum.numCols + j].add(b.entries[i]);
             }
         }
 
@@ -2003,8 +2005,10 @@ public class Matrix
         Matrix sum = new Matrix(this);
 
         for(int i=0; i<sum.numRows; i++) {
+            int rowOffset = i*sum.numCols;
+
             for(int j=0; j<sum.numCols; j++) {
-                sum.entries[i*sum.numCols + j] += b.entries[j];
+                sum.entries[rowOffset + j] += b.entries[j];
             }
         }
 
@@ -2024,11 +2028,11 @@ public class Matrix
         ParameterChecks.assertArrayLengthsEq(numCols, b.size);
         Matrix sum = new Matrix(this);
 
-        int col;
         for(int i=0; i<sum.numRows; i++) {
+            int rowOffset = i*sum.numCols;
+
             for(int j=0; j<b.nonZeroEntries(); j++) {
-                col = b.indices[j];
-                sum.entries[i*sum.numCols + col] += b.entries[j];
+                sum.entries[rowOffset + b.indices[j]] += b.entries[j];
             }
         }
 
@@ -2049,8 +2053,10 @@ public class Matrix
         CMatrix sum = new CMatrix(this);
 
         for(int i=0; i<sum.numRows; i++) {
+            int rowOffset = i*sum.numCols;
+
             for(int j=0; j<sum.numCols; j++) {
-                sum.entries[i*sum.numCols + j].addEq(b.entries[j]);
+                sum.entries[rowOffset + j] = sum.entries[rowOffset + j].add(b.entries[j]);
             }
         }
 
@@ -2072,9 +2078,11 @@ public class Matrix
 
         int col;
         for(int i=0; i<sum.numRows; i++) {
+            int rowOffset = i*sum.numCols;
+
             for(int j=0; j<b.nonZeroEntries(); j++) {
                 col = b.indices[j];
-                sum.entries[i*sum.numCols + col].addEq(b.entries[j]);
+                sum.entries[rowOffset + col] = sum.entries[rowOffset + col].add(b.entries[j]);
             }
         }
 
@@ -2145,14 +2153,12 @@ public class Matrix
 
         for(int i=0; i<numRows; i++) {
             for(int j=0; j<numCols; j++) {
-                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];
+                stacked.entries[i*stacked.numCols + j] = new CNumber(entries[i*numCols+j]);
             }
         }
 
         for(int i=0; i<B.numRows; i++) {
-            for(int j=0; j<B.numCols; j++) {
-                stacked.entries[(i + numRows)*stacked.numCols + j] = B.entries[i*B.numCols+j].copy();
-            }
+            System.arraycopy(B.entries, i*B.numCols, stacked.entries, (i + numRows)*stacked.numCols, B.numCols);
         }
 
         return stacked;
@@ -2174,7 +2180,7 @@ public class Matrix
 
         for(int i=0; i<numRows; i++) {
             for(int j=0; j<numCols; j++) {
-                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];
+                stacked.entries[i*stacked.numCols + j] = new CNumber(entries[i*numCols+j]);
             }
         }
 
@@ -2183,7 +2189,7 @@ public class Matrix
             row = B.rowIndices[i];
             col = B.colIndices[i];
             // Offset the row index for destination matrix. i.e. row+this.numRows
-            stacked.entries[(row+this.numRows)*stacked.numCols + col] = B.entries[i].copy();
+            stacked.entries[(row+this.numRows)*stacked.numCols + col] = B.entries[i];
         }
 
         return stacked;
@@ -2264,16 +2270,20 @@ public class Matrix
 
         // Copy entries from this matrix.
         for(int i=0; i<numRows; i++) {
+            int rowOffset = i*numCols;
+            int augmentedRowOffset = i*augmented.numCols;
+
             for(int j=0; j<numCols; j++) {
-                augmented.entries[i*augmented.numCols + j].re = entries[i*numCols + j];
+                augmented.entries[augmentedRowOffset + j] = new CNumber(entries[rowOffset + j]);
             }
         }
 
         // Copy entries from the B matrix.
         for(int i=0; i<B.numRows; i++) {
-            for(int j=0; j<B.numCols; j++) {
-                augmented.entries[i*augmented.numCols + j + numCols] = B.entries[i*B.numCols + j].copy();
-            }
+            int bRowOffset = i*B.numCols;
+            int augmentedRowOffset = i*augmented.numCols + numCols;
+
+            System.arraycopy(B.entries, bRowOffset, augmented.entries, augmentedRowOffset, B.numCols);
         }
 
         return augmented;
@@ -2295,8 +2305,11 @@ public class Matrix
 
         // Copy entries from this matrix.
         for(int i=0; i<numRows; i++) {
+            int rowOffset = i*numCols;
+            int augmentedRowOffset = i*augmented.numCols;
+
             for(int j=0; j<numCols; j++) {
-                augmented.entries[i*augmented.numCols + j].re = entries[i*numCols + j];
+                augmented.entries[augmentedRowOffset + j] = new CNumber(entries[rowOffset + j]);
             }
         }
 
@@ -2305,7 +2318,7 @@ public class Matrix
             row = B.rowIndices[i];
             col = B.colIndices[i];
             // Offset the col index for destination matrix. i.e. col+this.numCols
-            augmented.entries[row*augmented.numCols + (col + numCols)] = B.entries[i].copy();
+            augmented.entries[row*augmented.numCols + (col + numCols)] = B.entries[i];
         }
 
         return augmented;
@@ -2378,14 +2391,14 @@ public class Matrix
         CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);
 
         for(int i=0; i<numRows; i++) {
+            int stackedRowOffset = i*stacked.numCols;
+
             for(int j=0; j<numCols; j++) {
-                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];
+                stacked.entries[stackedRowOffset + j] = new CNumber(entries[i*numCols+j]);
             }
         }
 
-        for(int i=0; i<b.entries.length; i++) {
-            stacked.entries[(stacked.numRows-1)*numCols + i] = b.entries[i].copy();
-        }
+        System.arraycopy(b.entries, 0, stacked.entries, (stacked.numRows - 1)*numCols, b.entries.length);
 
         return stacked;
     }
@@ -2407,8 +2420,10 @@ public class Matrix
         CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);
 
         for(int i=0; i<numRows; i++) {
+            int stackedRowOffset = i*stacked.numCols;
+
             for(int j=0; j<numCols; j++) {
-                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];
+                stacked.entries[stackedRowOffset + j] = new CNumber(entries[i*numCols+j]);
             }
         }
 
@@ -2468,8 +2483,7 @@ public class Matrix
 
         // Copy elements of this matrix.
         for(int i=0; i<numRows; i++) {
-            if (numCols >= 0)
-                System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);
+            System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);
         }
 
         // Copy elements from b vector.
@@ -2498,14 +2512,17 @@ public class Matrix
 
         // Copy elements of this matrix.
         for(int i=0; i<numRows; i++) {
+            int stackedRowOffset = i*stacked.numCols;
+            int rowOffset = i*numCols;
+
             for(int j=0; j<numCols; j++) {
-                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];
+                stacked.entries[stackedRowOffset + j] = new CNumber(entries[rowOffset + j]);
             }
         }
 
         // Copy elements from b vector.
         for(int i=0; i<b.entries.length; i++) {
-            stacked.entries[i*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();
+            stacked.entries[i*stacked.numCols + stacked.numCols-1] = b.entries[i];
         }
 
         return stacked;
@@ -2529,14 +2546,17 @@ public class Matrix
 
         // Copy elements of this matrix.
         for(int i=0; i<numRows; i++) {
+            int stackedRowOffset = i*stacked.numCols;
+            int rowOffset = i*numCols;
+
             for(int j=0; j<numCols; j++) {
-                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];
+                stacked.entries[stackedRowOffset + j] = new CNumber(entries[rowOffset + j]);
             }
         }
 
         // Copy elements from b vector.
         for(int i=0; i<b.entries.length; i++) {
-            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();
+            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = b.entries[i];
         }
 
         return stacked;
@@ -3098,7 +3118,7 @@ public class Matrix
 
         // Get last entry in the column now
         value = StringUtils.ValueOfRound(this.get(i, this.numCols-1), PrintOptions.getPrecision());
-        width = PrintOptions.getPadding() + maxList.get(maxList.size()-1);
+        width = PrintOptions.getPadding() + maxList.getLast();
         value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
         result.append(String.format("%-" + width + "s]", value));
 
@@ -3133,12 +3153,12 @@ public class Matrix
             List<Integer> maxList = new ArrayList<>(colStopIndex + 1);
             for (int j = 0; j < colStopIndex; j++) {
                 maxList.add(CNumberUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));
-                totalRowLength += maxList.get(maxList.size() - 1);
+                totalRowLength += maxList.getLast();
             }
 
             if (colStopIndex < this.numCols) {
                 maxList.add(CNumberUtils.maxStringLength(this.getCol(this.numCols - 1).entries));
-                totalRowLength += maxList.get(maxList.size() - 1);
+                totalRowLength += maxList.getLast();
             }
 
             if (colStopIndex < this.numCols - 1) {

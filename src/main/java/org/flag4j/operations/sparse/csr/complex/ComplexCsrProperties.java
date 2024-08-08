@@ -32,7 +32,7 @@ import org.flag4j.util.ErrorMessages;
 /**
  * This class contains low-level implementations for determining certain properties of complex sparse CSR matrices.
  */
-public class ComplexCsrProperties {
+public final class ComplexCsrProperties {
 
     private ComplexCsrProperties() {
         // Hide default constructor for utility class.
@@ -48,8 +48,8 @@ public class ComplexCsrProperties {
     public static boolean isIdentity(CsrCMatrix src) {
         if(src.isSquare() && src.colIndices.length >= src.numCols) {
             int diagCount = 0;
-            CNumber one = CNumber.one();
-            CNumber zero = CNumber.zero();
+            CNumber one = CNumber.ONE;
+            CNumber zero = CNumber.ZERO;
 
             for(int i=0; i<src.rowPointers.length-1; i++) {
                 for(int j=src.rowPointers[i]; j<src.rowPointers[i+1]; j++) {

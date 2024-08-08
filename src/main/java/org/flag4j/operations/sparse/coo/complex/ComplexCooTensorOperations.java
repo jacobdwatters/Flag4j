@@ -71,7 +71,7 @@ public final class ComplexCooTensorOperations {
 
             // Insert elements from src2 whose index is less than the current element from src1
             while(src2Pos < src2.nnz && Arrays.compare(src2Indices[src2Pos], src1Idx) < 0) {
-                sumEntries.add(src2.entries[src2Pos].copy());
+                sumEntries.add(src2.entries[src2Pos]);
                 sumIndices.add(src2Indices[src2Pos++]);
             }
 
@@ -79,14 +79,14 @@ public final class ComplexCooTensorOperations {
             if(src2Pos < src2.nnz && Arrays.equals(src1Idx, src2Indices[src2Pos])) {
                 sumEntries.add(val1.add(src2.entries[src2Pos++]));
             } else {
-                sumEntries.add(val1.copy());
+                sumEntries.add(val1);
             }
             sumIndices.add(src1Idx);
         }
 
         // Insert any remaining elements from src2
         while(src2Pos < src2.nnz) {
-            sumEntries.add(src2.entries[src2Pos].copy());
+            sumEntries.add(src2.entries[src2Pos]);
             sumIndices.add(src2Indices[src2Pos++]);
         }
 
@@ -128,7 +128,7 @@ public final class ComplexCooTensorOperations {
             if(src2Pos < src2.nnz && Arrays.equals(src1Idx, src2Indices[src2Pos])) {
                 sumEntries.add(val1.sub(src2.entries[src2Pos++]));
             } else {
-                sumEntries.add(val1.copy());
+                sumEntries.add(val1);
             }
             sumIndices.add(src1Idx);
         }

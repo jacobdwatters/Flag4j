@@ -278,10 +278,8 @@ public class CooTensor
     public CooTensor flatten() {
         int[][] destIndices = new int[entries.length][1];
 
-        for(int i = 0; i < entries.length; i++) {
+        for(int i = 0; i < entries.length; i++)
             destIndices[i][0] = shape.entriesIndex(indices[i]);
-
-        }
 
         return new CooTensor(shape, entries.clone(), destIndices);
     }
@@ -303,27 +301,8 @@ public class CooTensor
      *                                  are out of bounds for the corresponding tensor.
      */
     @Override
-    public CooTensor tensorDot(CooTensor src2, int[] aAxes, int[] bAxes) {
+    public Tensor tensorDot(CooTensor src2, int[] aAxes, int[] bAxes) {
         return RealCooTensorDot.tensorDot(this, src2, aAxes, bAxes);
-    }
-
-
-    /**
-     * Computes the tensor dot product of this tensor with a second tensor. That is, sums the product of two tensor
-     * elements over the last axis of this tensor and the second-to-last axis of {@code src2}. If both tensors are
-     * rank 2, this is equivalent to matrix multiplication.
-     *
-     * @param src2 Tensor to compute dot product with this tensor.
-     *
-     * @return The tensor dot product over the last axis of this tensor and the second to last axis of {@code src2}.
-     *
-     * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
-     *                                  along the second-to-last axis.
-     */
-    @Override
-    public CooTensor tensorDot(CooTensor src2) {
-        // TODO: Implementation.
-        return null;
     }
 
 

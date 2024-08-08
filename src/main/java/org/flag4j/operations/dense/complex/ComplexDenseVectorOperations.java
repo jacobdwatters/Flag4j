@@ -48,10 +48,10 @@ public class ComplexDenseVectorOperations {
      */
     public static CNumber innerProduct(CNumber[] src1, CNumber[] src2) {
         ParameterChecks.assertArrayLengthsEq(src1.length, src2.length);
-        CNumber innerProd = new CNumber();
+        CNumber innerProd = CNumber.ZERO;
 
         for(int i=0; i<src1.length; i++) {
-            innerProd.addEq(src1[i].mult(src2[i].conj()));
+            innerProd = innerProd.add(src1[i].mult(src2[i].conj()));
         }
 
         return innerProd;

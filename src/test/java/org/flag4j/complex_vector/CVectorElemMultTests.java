@@ -66,7 +66,7 @@ class CVectorElemMultTests {
         sparseSize = 4;
         b = new CooVector(sparseSize, bEntries, sparseIndices);
         expEntries = new CNumber[]{aEntries[0].mult(bEntries[0]), aEntries[1].mult(bEntries[1]),
-                new CNumber(), new CNumber()};
+                CNumber.ZERO, CNumber.ZERO};
         exp = new CVector(expEntries);
 
         assertEquals(exp, a.elemMult(b).toDense());
@@ -76,8 +76,8 @@ class CVectorElemMultTests {
         sparseIndices = new int[]{1, 3};
         sparseSize = 4;
         b = new CooVector(sparseSize, bEntries, sparseIndices);
-        expEntries = new CNumber[]{new CNumber(), aEntries[1].mult(bEntries[0]),
-                new CNumber(), aEntries[3].mult(bEntries[1])};
+        expEntries = new CNumber[]{CNumber.ZERO, aEntries[1].mult(bEntries[0]),
+                CNumber.ZERO, aEntries[3].mult(bEntries[1])};
         exp = new CVector(expEntries);
 
         assertEquals(exp, a.elemMult(b).toDense());
@@ -128,7 +128,7 @@ class CVectorElemMultTests {
         sparseSize = 4;
         b = new CooCVector(sparseSize, bEntries, sparseIndices);
         expEntries = new CNumber[]{aEntries[0].mult(bEntries[0]), aEntries[1].mult(bEntries[1]),
-                new CNumber(), new CNumber()};
+                CNumber.ZERO, CNumber.ZERO};
         exp = new CVector(expEntries);
 
         assertEquals(exp.toCoo(), a.elemMult(b));
@@ -138,8 +138,8 @@ class CVectorElemMultTests {
         sparseIndices = new int[]{1, 3};
         sparseSize = 4;
         b = new CooCVector(sparseSize, bEntries, sparseIndices);
-        expEntries = new CNumber[]{new CNumber(), aEntries[1].mult(bEntries[0]),
-                new CNumber(), aEntries[3].mult(bEntries[1])};
+        expEntries = new CNumber[]{CNumber.ZERO, aEntries[1].mult(bEntries[0]),
+                CNumber.ZERO, aEntries[3].mult(bEntries[1])};
         exp = new CVector(expEntries);
 
         assertEquals(exp.toCoo(), a.elemMult(b));

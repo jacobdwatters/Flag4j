@@ -28,7 +28,7 @@ public class CNumberToStringTest {
         Assertions.assertEquals(expStr.length(), CNumber.length(a));
 
         // ---------- Sub-case 4 ------------
-        a = new CNumber();
+        a = CNumber.ZERO;
         expStr = "0";
         Assertions.assertEquals(expStr, a.toString());
         Assertions.assertEquals(expStr.length(), CNumber.length(a));

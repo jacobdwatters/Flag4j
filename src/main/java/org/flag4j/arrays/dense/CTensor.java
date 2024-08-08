@@ -65,7 +65,7 @@ public class CTensor
     public CTensor(Shape shape) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
         shape.makeStridesIfNull();
-        ArrayUtils.fillZeros(super.entries);
+        Arrays.fill(super.entries, CNumber.ZERO);
     }
 
 
@@ -89,7 +89,7 @@ public class CTensor
     public CTensor(Shape shape, CNumber fillValue) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
         shape.makeStridesIfNull();
-        ArrayUtils.fill(super.entries, fillValue);
+        Arrays.fill(super.entries, fillValue);
     }
 
 
@@ -160,7 +160,7 @@ public class CTensor
     public CTensor(CTensor A) {
         super(A.shape, new CNumber[A.totalEntries().intValue()]);
         shape.makeStridesIfNull();
-        ArrayUtils.copy2CNumber(A.entries, super.entries);
+        System.arraycopy(A.entries, 0, super.entries, 0, A.entries.length);
     }
 
 
@@ -639,7 +639,7 @@ public class CTensor
      */
     public CVector toVector() {
         CNumber[] entries = new CNumber[this.entries.length];
-        ArrayUtils.copy2CNumber(this.entries, entries);
+        System.arraycopy(this.entries, 0, entries, 0, entries.length);
 
         return new CVector(entries);
     }
@@ -654,7 +654,7 @@ public class CTensor
         ParameterChecks.assertBroadcastable(shape, matShape);
         ParameterChecks.assertRank(2, matShape);
 
-        return new CMatrix(matShape, ArrayUtils.copyOf(entries));
+        return new CMatrix(matShape, Arrays.copyOf(entries, entries.length));
     }
 
 
@@ -668,7 +668,7 @@ public class CTensor
         CMatrix mat;
 
         CNumber[] entries = new CNumber[this.entries.length];
-        ArrayUtils.copy2CNumber(this.entries, entries);
+        System.arraycopy(this.entries, 0, entries, 0, entries.length);
 
         if(this.getRank()==2) {
             mat = new CMatrix(this.shape, entries);

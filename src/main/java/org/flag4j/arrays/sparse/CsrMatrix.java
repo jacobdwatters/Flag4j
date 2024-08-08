@@ -74,7 +74,7 @@ import java.util.List;
  */
 public class CsrMatrix
         extends RealSparseTensorBase<CsrMatrix, Matrix, CsrCMatrix, CMatrix>
-        implements MatrixMixin<CsrMatrix, Matrix, CsrMatrix, CsrCMatrix, Double, CooVector, Vector>,
+        implements MatrixMixin<CsrMatrix, Matrix, CsrMatrix, CsrCMatrix, CsrCMatrix, Double, CooVector, Vector>,
         RealMatrixMixin<CsrMatrix, CsrCMatrix>
 {
 
@@ -544,8 +544,8 @@ public class CsrMatrix
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public CooCMatrix elemMult(CooCMatrix B) {
-        return this.elemMult(B.toCsr()).toCoo();
+    public CsrCMatrix elemMult(CooCMatrix B) {
+        return this.elemMult(B.toCsr());
     }
 
 

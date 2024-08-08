@@ -34,7 +34,7 @@ class ComplexExactSolverTests {
         // ----------------- Sub-case 1 -----------------
         aEntries = new CNumber[][]{
                 {new CNumber(24.5, -0.35), new CNumber(25.6, -22.04), new CNumber(9.52, 2.3)},
-                {new CNumber(-2.04), new CNumber(), new CNumber(5.662)},
+                {new CNumber(-2.04), CNumber.ZERO, new CNumber(5.662)},
                 {new CNumber(0.3456), new CNumber(0, -1.56), new CNumber(-23.5, -20.245)}
         };
         bEntries = new CNumber[]{new CNumber(35.6, -6.3), new CNumber(-0.0245, 0.024), new CNumber(0, 100.3)};
@@ -49,7 +49,7 @@ class ComplexExactSolverTests {
         // ----------------- Sub-case 2 -----------------
         aEntries = new CNumber[][]{
                 {new CNumber(24.5, -0.35), new CNumber(25.6, -22.04), new CNumber(9.52, 2.3)},
-                {new CNumber(-2.04), new CNumber(), new CNumber(5.662)},
+                {new CNumber(-2.04), CNumber.ZERO, new CNumber(5.662)},
                 {new CNumber(0.3456), new CNumber(0, -1.56), new CNumber(-23.5, -20.245)}
         };
         bEntries = new CNumber[]{new CNumber(35.6, -6.3), new CNumber(-0.0245, 0.024),

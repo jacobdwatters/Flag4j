@@ -59,7 +59,7 @@ public interface TensorExclusiveMixin<
      * and {@code bAxis}.
      * @throws IllegalArgumentException If either axis is out of bounds of the corresponding tensor.
      */
-    default T tensorDot(T src2, int axes){
+    default U tensorDot(T src2, int axes){
         int rank2 = src2.getRank();
         int[] src1Axes = ArrayUtils.intRange(0, axes);
         int[] src2Axes = ArrayUtils.intRange(rank2-axes, rank2);
@@ -79,7 +79,7 @@ public interface TensorExclusiveMixin<
      * and {@code bAxis}.
      * @throws IllegalArgumentException If either axis is out of bounds of the corresponding tensor.
      */
-    default T tensorDot(T src2, int aAxis, int bAxis) {
+    default U tensorDot(T src2, int aAxis, int bAxis) {
         return tensorDot(src2, new int[]{aAxis}, new int[]{bAxis});
     }
 
@@ -96,7 +96,7 @@ public interface TensorExclusiveMixin<
      * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
      * are out of bounds for the corresponding tensor.
      */
-    T tensorDot(T src2, int[] aAxes, int[] bAxes);
+    U tensorDot(T src2, int[] aAxes, int[] bAxes);
 
 
     /**
@@ -108,7 +108,15 @@ public interface TensorExclusiveMixin<
      * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
      * along the second-to-last axis.
      */
-    T tensorDot(T src2);
+    default U tensorDot(T src2) {
+        int src1Rank = this.getRank();
+        int src2Rank = src2.getRank();
+
+        // If second tensor has rank one, then use zero axis. Otherwise, use second to last axis.
+        src2Rank = (src2Rank==1) ? 0 : src2Rank-2;
+
+        return this.tensorDot(src2, new int[]{src1Rank - 1}, new int[]{src2Rank});
+    }
 
 
     /**
@@ -318,4 +326,14 @@ public interface TensorExclusiveMixin<
      * @see #tensorInv()
      */
     U tensorInv(int numIndices);
+
+
+    /**
+     * <p>Gets the rank of this tensor. The rank is the number of indices required to uniquely identify an element in the tensor.</p>
+     *
+     * <p>Note, this differs from matrix rank.</p>
+     *
+     * @return The rank of this tensor.
+     */
+    int getRank();
 }

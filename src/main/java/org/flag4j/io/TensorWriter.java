@@ -78,7 +78,7 @@ public class TensorWriter {
      * @param delimiter Delimiter to use in csv file.
      * @return True if the write was successful. False if the write failed.
      */
-    public static boolean toCsv(String fileName, MatrixMixin<?, ?, ?, ?, ?, ?, ?> src, String delimiter) {
+    public static boolean toCsv(String fileName, MatrixMixin<?, ?, ?, ?, ?, ?, ?, ?> src, String delimiter) {
         boolean successfulWrite = true;
 
         int numRows = src.numRows();
@@ -107,7 +107,7 @@ public class TensorWriter {
      * @param src Matrix to write to csv file.
      * @return True if the write was successful. False if the write failed.
      */
-    public static boolean toCsv(String fileName, MatrixMixin<?, ?, ?, ?, ?, ?, ?> src) {
+    public static boolean toCsv(String fileName, MatrixMixin<?, ?, ?, ?, ?, ?, ?, ?> src) {
         return toCsv(fileName, src, ", ");
     }
 }

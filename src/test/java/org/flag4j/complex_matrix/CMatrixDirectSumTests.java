@@ -27,7 +27,7 @@ class CMatrixDirectSumTests {
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
-                {new CNumber(1), new CNumber(), new CNumber(0, 87.3)}
+                {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}
         };
         A = new CMatrix(aEntries);
         bEntries = new double[][]{
@@ -54,7 +54,7 @@ class CMatrixDirectSumTests {
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
-                {new CNumber(1), new CNumber(), new CNumber(0, 87.3)}
+                {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}
         };
         A = new CMatrix(aEntries);
         bEntries = new double[]{2.456, -7.41};
@@ -81,7 +81,7 @@ class CMatrixDirectSumTests {
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
-                {new CNumber(1), new CNumber(), new CNumber(0, 87.3)}
+                {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}
         };
         A = new CMatrix(aEntries);
         bEntries = new CNumber[][]{{new CNumber("1.0+9.435i"), new CNumber("-3.23-8.234i")},
@@ -107,7 +107,7 @@ class CMatrixDirectSumTests {
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
-                {new CNumber(1), new CNumber(), new CNumber(0, 87.3)}
+                {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}
         };
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber(234.6567, -6344.256), new CNumber(Double.NEGATIVE_INFINITY, 234.56)};
@@ -134,7 +134,7 @@ class CMatrixDirectSumTests {
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
-                {new CNumber(1), new CNumber(), new CNumber(0, 87.3)}
+                {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}
         };
         A = new CMatrix(aEntries);
         bEntries = new double[][]{
@@ -162,7 +162,7 @@ class CMatrixDirectSumTests {
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
-                {new CNumber(1), new CNumber(), new CNumber(0, 87.3)}
+                {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}
         };
         A = new CMatrix(aEntries);
         bEntries = new double[]{2.456, -7.41};
@@ -190,7 +190,7 @@ class CMatrixDirectSumTests {
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
-                {new CNumber(1), new CNumber(), new CNumber(0, 87.3)}
+                {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}
         };
         A = new CMatrix(aEntries);
         bEntries = new CNumber[][]{
@@ -218,7 +218,7 @@ class CMatrixDirectSumTests {
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
-                {new CNumber(1), new CNumber(), new CNumber(0, 87.3)}
+                {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}
         };
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber(234.6567, -6344.256), new CNumber(Double.NEGATIVE_INFINITY, 234.56)};

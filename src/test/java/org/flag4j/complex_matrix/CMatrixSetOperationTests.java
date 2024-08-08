@@ -444,7 +444,7 @@ class CMatrixSetOperationTests {
         col = 0;
         entriesExp = new CNumber[][]{
                 {new CNumber(2.445, -0.91354), new CNumber(0)},
-                {new CNumber(), new CNumber(4)},
+                {CNumber.ZERO, new CNumber(4)},
                 {new CNumber(0, 6.2132), new CNumber(-1334.5)}};
         exp = new CMatrix(entriesExp);
         entriesA = new CNumber[][]{
@@ -463,9 +463,9 @@ class CMatrixSetOperationTests {
         valuesVec = new CooCVector(sparseSize, values, sparseIndices);
         col = 1;
         entriesExp = new CNumber[][]{
-                {new CNumber(0), new CNumber()},
+                {new CNumber(0), CNumber.ZERO},
                 {new CNumber(1), new CNumber(2.445, -0.91354)},
-                {new CNumber(1331.14), new CNumber()}};
+                {new CNumber(1331.14), CNumber.ZERO}};
         exp = new CMatrix(entriesExp);
         entriesA = new CNumber[][]{
                 {new CNumber(0), new CNumber(0)},
@@ -857,9 +857,9 @@ class CMatrixSetOperationTests {
         valuesVec = new CooCVector(sparseSize, values, sparseIndices);
         row = 2;
         entriesExp = new CNumber[][]{
-                {new CNumber(), new CNumber()},
+                {CNumber.ZERO, CNumber.ZERO},
                 {new CNumber(1), new CNumber(4)},
-                {new CNumber(34, -55.6), new CNumber()}};
+                {new CNumber(34, -55.6), CNumber.ZERO}};
         exp = new CMatrix(entriesExp);
         entriesA = new CNumber[][]{
                 {new CNumber(0), new CNumber(0)},
@@ -1031,8 +1031,8 @@ class CMatrixSetOperationTests {
                 {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
         A = new CMatrix(entriesA);
         entriesExp = new CNumber[][]{
-                {new CNumber(), new CNumber(), new CNumber(1.3), new CNumber(83.1)},
-                {new CNumber(5.626), new CNumber(), new CNumber(-3.0001), new CNumber(0.00013)}};
+                {CNumber.ZERO, CNumber.ZERO, new CNumber(1.3), new CNumber(83.1)},
+                {new CNumber(5.626), CNumber.ZERO, new CNumber(-3.0001), new CNumber(0.00013)}};
         exp = new CMatrix(entriesExp);
 
         A.setSlice(values, row, col);
@@ -1051,7 +1051,7 @@ class CMatrixSetOperationTests {
                 {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
         A = new CMatrix(entriesA);
         entriesExp = new CNumber[][]{
-                {new CNumber(-99.234), new CNumber(), new CNumber(1.3), new CNumber(83.1)},
+                {new CNumber(-99.234), CNumber.ZERO, new CNumber(1.3), new CNumber(83.1)},
                 {new CNumber(11.346), new CNumber( 5.626), new CNumber(-3.0001), new CNumber(0.00013)}};
         exp = new CMatrix(entriesExp);
 
@@ -1116,8 +1116,8 @@ class CMatrixSetOperationTests {
                 {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
         A = new CMatrix(entriesA);
         entriesExp = new CNumber[][]{
-                {new CNumber(), new CNumber(), new CNumber(1.3), new CNumber(83.1)},
-                {new CNumber(5.626), new CNumber(), new CNumber(-3.0001), new CNumber(0.00013)}};
+                {CNumber.ZERO, CNumber.ZERO, new CNumber(1.3), new CNumber(83.1)},
+                {new CNumber(5.626), CNumber.ZERO, new CNumber(-3.0001), new CNumber(0.00013)}};
         exp = new CMatrix(entriesExp);
 
         B = A.setSliceCopy(values, row, col);
@@ -1136,7 +1136,7 @@ class CMatrixSetOperationTests {
                 {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
         A = new CMatrix(entriesA);
         entriesExp = new CNumber[][]{
-                {new CNumber(-99.234), new CNumber(), new CNumber(1.3), new CNumber(83.1)},
+                {new CNumber(-99.234), CNumber.ZERO, new CNumber(1.3), new CNumber(83.1)},
                 {new CNumber(11.346), new CNumber( 5.626), new CNumber(-3.0001), new CNumber(0.00013)}};
         exp = new CMatrix(entriesExp);
 
@@ -1653,8 +1653,8 @@ class CMatrixSetOperationTests {
                 {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
         A = new CMatrix(entriesA);
         entriesExp = new CNumber[][]{
-                {new CNumber(), new CNumber(), new CNumber(234.5, -99.234), new CNumber(83.1)},
-                {new CNumber(), new CNumber(new CNumber(0, -88.245)), new CNumber(), new CNumber(0.00013)}};
+                {CNumber.ZERO, CNumber.ZERO, new CNumber(234.5, -99.234), new CNumber(83.1)},
+                {CNumber.ZERO, new CNumber(0, -88.245), CNumber.ZERO, new CNumber(0.00013)}};
         exp = new CMatrix(entriesExp);
 
         A.setSlice(mat, row, col);
@@ -1673,8 +1673,8 @@ class CMatrixSetOperationTests {
                 {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
         A = new CMatrix(entriesA);
         entriesExp = new CNumber[][]{
-                {new CNumber(-99.234), new CNumber(132), new CNumber(), new CNumber(234.5, -99.234)},
-                {new CNumber(11.346), new CNumber(124.6), new CNumber(0, -88.245), new CNumber()}};
+                {new CNumber(-99.234), new CNumber(132), CNumber.ZERO, new CNumber(234.5, -99.234)},
+                {new CNumber(11.346), new CNumber(124.6), new CNumber(0, -88.245), CNumber.ZERO}};
         exp = new CMatrix(entriesExp);
 
         A.setSlice(mat, row, col);
@@ -1717,8 +1717,8 @@ class CMatrixSetOperationTests {
                 {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
         A = new CMatrix(entriesA);
         entriesExp = new CNumber[][]{
-                {new CNumber(), new CNumber(), new CNumber(234.5, -99.234), new CNumber(83.1)},
-                {new CNumber(), new CNumber(new CNumber(0, -88.245)), new CNumber(), new CNumber(0.00013)}};
+                {CNumber.ZERO, CNumber.ZERO, new CNumber(234.5, -99.234), new CNumber(83.1)},
+                {CNumber.ZERO, new CNumber(0, -88.245), CNumber.ZERO, new CNumber(0.00013)}};
         exp = new CMatrix(entriesExp);
 
         B = A.setSliceCopy(mat, row, col);
@@ -1737,8 +1737,8 @@ class CMatrixSetOperationTests {
                 {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
         A = new CMatrix(entriesA);
         entriesExp = new CNumber[][]{
-                {new CNumber(-99.234), new CNumber(132), new CNumber(), new CNumber(234.5, -99.234)},
-                {new CNumber(11.346), new CNumber(124.6), new CNumber(0, -88.245), new CNumber()}};
+                {new CNumber(-99.234), new CNumber(132), CNumber.ZERO, new CNumber(234.5, -99.234)},
+                {new CNumber(11.346), new CNumber(124.6), new CNumber(0, -88.245), CNumber.ZERO}};
         exp = new CMatrix(entriesExp);
 
         B = A.setSliceCopy(mat, row, col);

@@ -68,7 +68,7 @@ import java.util.List;
  */
 public class CooMatrix
         extends RealSparseTensorBase<CooMatrix, Matrix, CooCMatrix, CMatrix>
-        implements MatrixMixin<CooMatrix, Matrix, CooMatrix, CooCMatrix, Double, CooVector, Vector>,
+        implements MatrixMixin<CooMatrix, Matrix, CooMatrix, CooCMatrix, CooCMatrix, Double, CooVector, Vector>,
         RealMatrixMixin<CooMatrix, CooCMatrix>
 {
 
@@ -1669,10 +1669,10 @@ public class CooMatrix
         CNumber[] destEntries = new CNumber[destShape.totalEntries().intValueExact()];
 
         // Copy values from B
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, shape.totalEntries().intValueExact(), B.entries.length);
+        System.arraycopy(B.entries, 0, destEntries, shape.totalEntries().intValueExact(), B.entries.length);
 
         // Copy non-zero values from this matrix (and set zero values to zero.).
-        ArrayUtils.fillZeros(destEntries, 0, shape.totalEntries().intValueExact());
+        Arrays.fill(destEntries, 0, shape.totalEntries().intValueExact(), CNumber.ZERO);
         for(int i=0; i<entries.length; i++) {
             destEntries[rowIndices[i]*numCols + colIndices[i]] = new CNumber(entries[i]);
         }
@@ -1700,7 +1700,7 @@ public class CooMatrix
 
         // Copy non-zero values.
         ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+        System.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
 
         // Copy row indices.
         int[] shiftedRowIndices = ArrayUtils.shift(numRows, B.rowIndices.clone());
@@ -1797,7 +1797,7 @@ public class CooMatrix
 
         Shape destShape = new Shape(numRows, numCols + B.numCols);
         CNumber[] destEntries = new CNumber[destShape.totalEntries().intValueExact()];
-        ArrayUtils.fillZeros(destEntries);
+        Arrays.fill(destEntries, CNumber.ZERO);
 
         // Copy sparse values.
         for(int i=0; i<entries.length; i++) {
@@ -1807,7 +1807,7 @@ public class CooMatrix
         // Copy dense values by row.
         for(int i=0; i<numRows; i++) {
             int startIdx = i*destShape.get(1) + numCols;
-            ArrayUtils.arraycopy(B.entries, i*B.numCols, destEntries, startIdx, B.numCols);
+            System.arraycopy(B.entries, i*B.numCols, destEntries, startIdx, B.numCols);
         }
 
         return new CMatrix(destShape, destEntries);
@@ -1833,7 +1833,7 @@ public class CooMatrix
 
         // Copy non-zero values.
         ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+        System.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
 
         // Copy row indices.
         System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
@@ -1942,7 +1942,7 @@ public class CooMatrix
         System.arraycopy(colIndices, 0, destColIndices, 0, colIndices.length);
 
         // Copy values from vector and create indices.
-        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.size);
+        System.arraycopy(b.entries, 0, destEntries, entries.length, b.size);
         Arrays.fill(destRowIndices, entries.length, destRowIndices.length, numRows);
         System.arraycopy(ArrayUtils.intRange(0, numCols), 0, destColIndices, entries.length, numCols);
 
@@ -1975,7 +1975,7 @@ public class CooMatrix
         System.arraycopy(colIndices, 0, destColIndices, 0, entries.length);
 
         // Copy values and indices from vector.
-        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
+        System.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
         Arrays.fill(destRowIndices, entries.length, destRowIndices.length, numRows);
         System.arraycopy(b.indices, 0, destColIndices, entries.length, b.entries.length);
 
@@ -2074,7 +2074,7 @@ public class CooMatrix
         System.arraycopy(colIndices, 0, destColIndices, 0, entries.length);
 
         // Copy entries and indices from vector.
-        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
+        System.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
         System.arraycopy(ArrayUtils.intRange(0, numRows), 0, destRowIndices, entries.length, numRows);
         Arrays.fill(destColIndices, entries.length, destColIndices.length, numCols);
 
@@ -2108,7 +2108,7 @@ public class CooMatrix
         System.arraycopy(colIndices, 0, destColIndices, 0, entries.length);
 
         // Copy entries and indices from vector.
-        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
+        System.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
         System.arraycopy(b.indices, 0, destRowIndices, entries.length, b.entries.length);
         Arrays.fill(destColIndices, entries.length, destColIndices.length, numCols);
 

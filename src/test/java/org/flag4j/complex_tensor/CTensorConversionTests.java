@@ -6,9 +6,10 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
-import org.flag4j.util.ArrayUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -51,14 +52,14 @@ class CTensorConversionTests {
         CMatrix exp;
 
         // ----------------------- Sub-case 1 -----------------------
-        expEntries = ArrayUtils.copyOf(aEntries);
+        expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expShape = new Shape(1, aEntries.length);
         exp = new CMatrix(expShape, expEntries);
 
         assertEquals(exp, A.toMatrix());
 
         // ----------------------- Sub-case 2 -----------------------
-        expEntries = ArrayUtils.copyOf(aEntries);
+        expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expShape = new Shape(4, 3);
         B = A.reshape(expShape);
         exp = new CMatrix(expShape, expEntries);
@@ -73,7 +74,7 @@ class CTensorConversionTests {
         CVector exp;
 
         // ----------------------- Sub-case 1 -----------------------
-        expEntries = ArrayUtils.copyOf(aEntries);
+        expEntries = Arrays.copyOf(aEntries, aEntries.length);
         exp = new CVector(expEntries);
 
         assertEquals(exp, A.toVector());

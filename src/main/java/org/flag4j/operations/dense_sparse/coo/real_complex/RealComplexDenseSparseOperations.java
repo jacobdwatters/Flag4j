@@ -36,7 +36,7 @@ import org.flag4j.util.ParameterChecks;
 /**
  * This class contains methods to apply common binary operations to a real/complex dense matrix and to a complex/real sparse matrix.
  */
-public class RealComplexDenseSparseOperations {
+public final class RealComplexDenseSparseOperations {
 
     private RealComplexDenseSparseOperations() {
         // Hide default constructor for utility class.
@@ -81,7 +81,8 @@ public class RealComplexDenseSparseOperations {
         CTensor dest = new CTensor(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            dest.entries[dest.shape.entriesIndex(src2.indices[i])].addEq(src2.entries[i]);
+            int idx = dest.shape.entriesIndex(src2.indices[i]);
+            dest.entries[idx] = dest.entries[idx].add(src2.entries[i]);
         }
 
         return dest;
@@ -101,7 +102,8 @@ public class RealComplexDenseSparseOperations {
         CTensor dest = new CTensor(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            dest.entries[dest.shape.entriesIndex(src2.indices[i])].subEq(src2.entries[i]);
+            int idx = dest.shape.entriesIndex(src2.indices[i]);
+            dest.entries[idx] = dest.entries[idx].sub(src2.entries[i]);
         }
 
         return dest;
@@ -119,7 +121,8 @@ public class RealComplexDenseSparseOperations {
         CTensor dest = new CTensor(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            dest.entries[dest.shape.entriesIndex(src2.indices[i])].addEq(src2.entries[i]);
+            int idx = dest.shape.entriesIndex(src2.indices[i]);
+            dest.entries[idx] = dest.entries[idx].add(src2.entries[i]);
         }
 
         return dest;
@@ -137,7 +140,8 @@ public class RealComplexDenseSparseOperations {
         CTensor dest = new CTensor(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            dest.entries[dest.shape.entriesIndex(src2.indices[i])].subEq(src2.entries[i]);
+            int idx = dest.shape.entriesIndex(src2.indices[i]);
+            dest.entries[idx] = dest.entries[idx].sub(src2.entries[i]);
         }
 
         return dest;
@@ -154,7 +158,8 @@ public class RealComplexDenseSparseOperations {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            src1.entries[src2.shape.entriesIndex(src2.indices[i])].addEq(src2.entries[i]);
+            int idx = src2.shape.entriesIndex(src2.indices[i]);
+            src1.entries[idx] = src1.entries[idx].add(src2.entries[i]);
         }
     }
 
@@ -169,7 +174,8 @@ public class RealComplexDenseSparseOperations {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            src1.entries[src2.shape.entriesIndex(src2.indices[i])].subEq(src2.entries[i]);
+            int idx = src2.shape.entriesIndex(src2.indices[i]);
+            src1.entries[idx] = src1.entries[idx].sub(src2.entries[i]);
         }
     }
 
@@ -210,7 +216,8 @@ public class RealComplexDenseSparseOperations {
         CTensor dest = src2.mult(-1);
 
         for(int i=0; i<src1.nnz; i++) {
-            dest.entries[src1.shape.entriesIndex(src1.indices[i])].addEq(src1.entries[i]);
+            int idx = src1.shape.entriesIndex(src1.indices[i]);
+            dest.entries[idx] = dest.entries[idx].add(src1.entries[i]);
         }
 
         return dest;
@@ -230,7 +237,8 @@ public class RealComplexDenseSparseOperations {
         CTensor dest = src2.mult(-1).toComplex();
 
         for(int i=0; i<src1.nnz; i++) {
-            dest.entries[src1.shape.entriesIndex(src1.indices[i])].addEq(src1.entries[i]);
+            int idx = src1.shape.entriesIndex(src1.indices[i]);
+            dest.entries[idx] = dest.entries[idx].add(src1.entries[i]);
         }
 
         return dest;
@@ -248,7 +256,8 @@ public class RealComplexDenseSparseOperations {
         CTensor sum = new CTensor(src1.shape, b);
 
         for(int i=0; i<src1.nnz; i++) {
-            sum.entries[src1.shape.entriesIndex(src1.indices[i])].addEq(src1.entries[i]);
+            int idx = src1.shape.entriesIndex(src1.indices[i]);
+            sum.entries[idx].add(src1.entries[i]);
         }
 
         return sum;
@@ -266,8 +275,8 @@ public class RealComplexDenseSparseOperations {
         CTensor sum = new CTensor(src1.shape, b);
 
         for(int i=0; i<src1.nnz; i++) {
-            sum.entries[src1.shape.entriesIndex(src1.indices[i])].re += src1.entries[i].re;
-            sum.entries[src1.shape.entriesIndex(src1.indices[i])].im = src1.entries[i].im;
+            int idx = src1.shape.entriesIndex(src1.indices[i]);
+            sum.entries[idx] = sum.entries[idx].add(src1.entries[i]);
         }
 
         return sum;

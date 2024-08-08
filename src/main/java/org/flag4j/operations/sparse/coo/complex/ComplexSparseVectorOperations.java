@@ -33,12 +33,13 @@ import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * This class contains low level implementations of operations on two complex sparse tensors.
  */
-public class ComplexSparseVectorOperations {
+public final class ComplexSparseVectorOperations {
 
     private ComplexSparseVectorOperations() {
         // Hide default constructor in utility clas.
@@ -56,7 +57,8 @@ public class ComplexSparseVectorOperations {
         ArrayUtils.fill(dest, a);
 
         for(int i=0; i<src.entries.length; i++) {
-            dest[src.indices[i]].addEq(src.entries[i]);
+            int idx = src.indices[i];
+            dest[src.indices[i]] = dest[src.indices[i]].add(src.entries[i]);
         }
 
         return new CVector(dest);
@@ -71,10 +73,11 @@ public class ComplexSparseVectorOperations {
      */
     public static CVector add(CooCVector src, CNumber a) {
         CNumber[] dest = new CNumber[src.size];
-        ArrayUtils.fill(dest, a);
+        Arrays.fill(dest, a);
 
         for(int i=0; i<src.entries.length; i++) {
-            dest[src.indices[i]].addEq(src.entries[i]);
+            int idx = src.indices[i];
+            dest[idx] = dest[idx].add(src.entries[i]);
         }
 
         return new CVector(dest);
@@ -92,7 +95,8 @@ public class ComplexSparseVectorOperations {
         ArrayUtils.fill(dest, -a);
 
         for(int i=0; i<src.entries.length; i++) {
-            dest[src.indices[i]].addEq(src.entries[i]);
+            int idx = src.indices[i];
+            dest[idx] = dest[idx].add(src.entries[i]);
         }
 
         return new CVector(dest);
@@ -107,10 +111,11 @@ public class ComplexSparseVectorOperations {
      */
     public static CVector sub(CooCVector src, CNumber a) {
         CNumber[] dest = new CNumber[src.size];
-        ArrayUtils.fill(dest, a.addInv());
+        Arrays.fill(dest, a.addInv());
 
         for(int i=0; i<src.entries.length; i++) {
-            dest[src.indices[i]].addEq(src.entries[i]);
+            int idx = src.indices[i];
+            dest[idx] = dest[idx].add(src.entries[i]);
         }
 
         return new CVector(dest);
@@ -141,11 +146,11 @@ public class ComplexSparseVectorOperations {
                 src2Counter++;
 
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
-                values.add(src1.entries[src1Counter].copy());
+                values.add(src1.entries[src1Counter]);
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
             } else {
-                values.add(src2.entries[src2Counter].copy());
+                values.add(src2.entries[src2Counter]);
                 indices.add(src2.indices[src2Counter]);
                 src2Counter++;
             }
@@ -154,12 +159,12 @@ public class ComplexSparseVectorOperations {
         // Finish inserting the rest of the values.
         if(src1Counter < src1.entries.length) {
             for(int i=src1Counter; i<src1.entries.length; i++) {
-                values.add(src1.entries[i].copy());
+                values.add(src1.entries[i]);
                 indices.add(src1.indices[i]);
             }
         } else if(src2Counter < src2.entries.length) {
             for(int i=src2Counter; i<src2.entries.length; i++) {
-                values.add(src2.entries[i].copy());
+                values.add(src2.entries[i]);
                 indices.add(src2.indices[i]);
             }
         }
@@ -196,7 +201,7 @@ public class ComplexSparseVectorOperations {
                 src2Counter++;
 
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
-                values.add(src1.entries[src1Counter].copy());
+                values.add(src1.entries[src1Counter]);
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
             } else {
@@ -209,7 +214,7 @@ public class ComplexSparseVectorOperations {
         // Finish inserting the rest of the values.
         if(src1Counter < src1.entries.length) {
             for(int i=src1Counter; i<src1.entries.length; i++) {
-                values.add(src1.entries[i].copy());
+                values.add(src1.entries[i]);
                 indices.add(src1.indices[i]);
             }
         } else if(src2Counter < src2.entries.length) {
@@ -275,7 +280,7 @@ public class ComplexSparseVectorOperations {
      */
     public static CNumber inner(CooCVector src1, CooCVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
-        CNumber product = new CNumber();
+        CNumber product = CNumber.ZERO;
 
         int src1Counter = 0;
         int src2Counter = 0;
@@ -283,7 +288,7 @@ public class ComplexSparseVectorOperations {
         while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
             if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
                 // Then indices match, add product of elements.
-                product.addEq(src1.entries[src1Counter].mult(src2.entries[src2Counter].conj()));
+                product = product.add(src1.entries[src1Counter].mult(src2.entries[src2Counter].conj()));
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
                 src1Counter++;
             } else {
@@ -303,7 +308,7 @@ public class ComplexSparseVectorOperations {
      */
     public static CMatrix outerProduct(CooCVector src1, CooCVector src2) {
         CNumber[] dest = new CNumber[src2.size*src1.size];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
 
         int destRow;
         int index1;

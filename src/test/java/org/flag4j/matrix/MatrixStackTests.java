@@ -125,12 +125,12 @@ class MatrixStackTests {
 
         // -----------------------  Sub-case 3 -----------------------
         entries = new double[][]{{1, 2, 3}, {4, 14, -5.12}, {0, 9.34, -0.13}};
-        CEntries = new CNumber[][]{{new CNumber(1.234, -0.234), new CNumber(), new CNumber(92.44, 14.5)}};
+        CEntries = new CNumber[][]{{new CNumber(1.234, -0.234), CNumber.ZERO, new CNumber(92.44, 14.5)}};
 
         expCEntries = new CNumber[][]{{new CNumber(1), new CNumber(2), new CNumber(3)},
                 {new CNumber(4), new CNumber(14), new CNumber(-5.12)},
                 {new CNumber(0), new CNumber(9.34), new CNumber(-0.13)},
-                {new CNumber(1.234, -0.234), new CNumber(), new CNumber(92.44, 14.5)}
+                {new CNumber(1.234, -0.234), CNumber.ZERO, new CNumber(92.44, 14.5)}
         };
         expC = new CMatrix(expCEntries);
 
@@ -254,8 +254,8 @@ class MatrixStackTests {
 
         expCEntries = new CNumber[][]{
                 {new CNumber(1), new CNumber(2), new CNumber(3), new CNumber(81, -9.2), new CNumber(1, 8.34)},
-                {new CNumber(4), new CNumber(14), new CNumber(-5.12), new CNumber(), new CNumber()},
-                {new CNumber(), new CNumber(9.34), new CNumber(-0.13), new CNumber(), new CNumber(-93)}};
+                {new CNumber(4), new CNumber(14), new CNumber(-5.12), CNumber.ZERO, CNumber.ZERO},
+                {CNumber.ZERO, new CNumber(9.34), new CNumber(-0.13), CNumber.ZERO, new CNumber(-93)}};
         expC = new CMatrix(expCEntries);
 
         realDense = new Matrix(entries);
@@ -403,12 +403,12 @@ class MatrixStackTests {
 
         // -----------------------  Sub-case 3 -----------------------
         entries = new double[][]{{1, 2, 3}, {4, 14, -5.12}, {0, 9.34, -0.13}};
-        CEntries = new CNumber[][]{{new CNumber(1.234, -0.234), new CNumber(), new CNumber(92.44, 14.5)}};
+        CEntries = new CNumber[][]{{new CNumber(1.234, -0.234), CNumber.ZERO, new CNumber(92.44, 14.5)}};
 
         expCEntries = new CNumber[][]{{new CNumber(1), new CNumber(2), new CNumber(3)},
                 {new CNumber(4), new CNumber(14), new CNumber(-5.12)},
                 {new CNumber(0), new CNumber(9.34), new CNumber(-0.13)},
-                {new CNumber(1.234, -0.234), new CNumber(), new CNumber(92.44, 14.5)}
+                {new CNumber(1.234, -0.234), CNumber.ZERO, new CNumber(92.44, 14.5)}
         };
         expC = new CMatrix(expCEntries);
 
@@ -517,8 +517,8 @@ class MatrixStackTests {
 
         expCEntries = new CNumber[][]{
                 {new CNumber(1), new CNumber(2), new CNumber(3), new CNumber(81, -9.2)},
-                {new CNumber(4), new CNumber(14), new CNumber(-5.12), new CNumber()},
-                {new CNumber(), new CNumber(9.34), new CNumber(-0.13), new CNumber()}};
+                {new CNumber(4), new CNumber(14), new CNumber(-5.12), CNumber.ZERO},
+                {CNumber.ZERO, new CNumber(9.34), new CNumber(-0.13), CNumber.ZERO}};
         expC = new CMatrix(expCEntries);
 
         realDense = new Matrix(entries);
@@ -551,7 +551,7 @@ class MatrixStackTests {
                 {new CNumber(1), new CNumber(2), new CNumber(3)},
                 {new CNumber(4), new CNumber(14), new CNumber(-5.12)},
                 {new CNumber(0), new CNumber(9.34), new CNumber(-0.13)},
-                {new CNumber(), new CNumber(81, -9.2), new CNumber()}};
+                {CNumber.ZERO, new CNumber(81, -9.2), CNumber.ZERO}};
         expC = new CMatrix(expCEntries);
 
         realDense = new Matrix(entries);

@@ -32,6 +32,10 @@ import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
+
+/**
+ * <p>Utility class for computing tensor dot products between two {@link CooTensor real sparse COO tensors}.</p>
+ */
 public final class RealCooTensorDot {
 
     private RealCooTensorDot() {
@@ -69,7 +73,7 @@ public final class RealCooTensorDot {
         int pos;
 
         // ---- Compute new axes and shapes for first tensor. ----
-        notin = ArrayUtils.notinAxes(src1Axes, src1.getRank());
+        notin = ArrayUtils.notInAxes(src1Axes, src1.getRank());
         int[] src1NewAxes = ArrayUtils.join(notin, src1Axes);
 
         n2 = 1;
@@ -90,7 +94,7 @@ public final class RealCooTensorDot {
         // -----------------------------------------------------
 
         // ---- Compute new axes and shapes for second tensor. ----
-        notin = ArrayUtils.notinAxes(src2Axes, src2.getRank());
+        notin = ArrayUtils.notInAxes(src2Axes, src2.getRank());
         int[] src2NewAxes = ArrayUtils.join(src2Axes, notin);
 
         n2 = 1;

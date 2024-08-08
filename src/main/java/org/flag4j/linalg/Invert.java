@@ -207,11 +207,11 @@ public class Invert {
 
         CNumber value;
         int step = src.numCols+1;
-        CNumber det = CNumber.one();
+        CNumber det = CNumber.ONE;
 
         for(int i=0; i<src.entries.length; i+=step) {
             value = src.entries[i];
-            det.multEq(value);
+            det = det.mult(value);
             inverse.entries[i] = value.multInv();
         }
 

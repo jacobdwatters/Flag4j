@@ -27,7 +27,7 @@ public class CTensorConstructorTests {
         expShape = new Shape(4, 5, 6, 7, 1, 2, 4);
         expEntries = new CNumber[expShape.totalEntries().intValue()];
         for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber();
+            expEntries[i] = CNumber.ZERO;
         }
         expRank = expShape.getRank();
         A = new CTensor(expShape);
@@ -39,7 +39,7 @@ public class CTensorConstructorTests {
         expShape = new Shape();
         expEntries = new CNumber[expShape.totalEntries().intValue()];
         for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber();
+            expEntries[i] = CNumber.ZERO;
         }
         expRank = expShape.getRank();
         A = new CTensor(expShape);
@@ -51,7 +51,7 @@ public class CTensorConstructorTests {
         expShape = new Shape(1003);
         expEntries = new CNumber[expShape.totalEntries().intValue()];
         for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber();
+            expEntries[i] = CNumber.ZERO;
         }
         expRank = expShape.getRank();
         A = new CTensor(expShape);
@@ -111,8 +111,9 @@ public class CTensorConstructorTests {
         expShape = new Shape(4, 5, 6, 7, 1, 2, 4);
         expEntries = new CNumber[expShape.totalEntries().intValue()];
         for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber(valueC);
+            expEntries[i] = valueC;
         }
+
         expRank = expShape.getRank();
         A = new CTensor(expShape, valueC);
         assertEquals(expShape, A.shape);
@@ -124,7 +125,7 @@ public class CTensorConstructorTests {
         expShape = new Shape();
         expEntries = new CNumber[expShape.totalEntries().intValue()];
         for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber(valueC);
+            expEntries[i] = valueC;
         }
         expRank = expShape.getRank();
         A = new CTensor(expShape, valueC);
@@ -137,7 +138,7 @@ public class CTensorConstructorTests {
         expShape = new Shape(1003);
         expEntries = new CNumber[expShape.totalEntries().intValue()];
         for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber(valueC);
+            expEntries[i] = valueC;
         }
         expRank = expShape.getRank();
         A = new CTensor(expShape, valueC);

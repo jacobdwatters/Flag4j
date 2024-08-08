@@ -42,8 +42,8 @@ class CooCVectorJoinTests {
         // ------------------- Sub-case 1 -------------------
         bEntries = new double[]{24.53, 66.1, -234.5, 0.0};
         b = new Vector(bEntries);
-        expEntries = new CNumber[]{new CNumber(224.5, -93.2), new CNumber(322.5), new CNumber(),
-                new CNumber(), new CNumber(), new CNumber(), new CNumber(46.72), new CNumber(),
+        expEntries = new CNumber[]{new CNumber(224.5, -93.2), new CNumber(322.5), CNumber.ZERO,
+                CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, new CNumber(46.72), CNumber.ZERO,
                 new CNumber(24.53), new CNumber(66.1), new CNumber(-234.5), new CNumber(0.0)
         };
         exp = new CVector(expEntries);

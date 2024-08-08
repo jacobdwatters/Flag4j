@@ -95,12 +95,12 @@ public final class ComplexCholesky extends Cholesky<CMatrix> {
             lIndex1 = i*L.numCols;
 
             for(int j=0; j<=i; j++) {
-                sum = new CNumber();
+                sum = CNumber.ZERO;
                 lIndex2 = j*L.numCols;
                 lIndex3 = lIndex1 + j;
 
                 for(int k=0; k<j; k++) {
-                    sum.addEq(L.entries[lIndex1 + k].mult(L.entries[lIndex2 + k].conj()));
+                    sum = sum.add(L.entries[lIndex1 + k].mult(L.entries[lIndex2 + k].conj()));
                 }
 
                 if(i==j) {

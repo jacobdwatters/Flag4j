@@ -17,7 +17,7 @@ class CMatrixMultiplyTests {
         entriesA = new CNumber[][]{
                 {new CNumber(1.234, -0.0924), new CNumber(1.345), new CNumber(0, 8.55)},
                 {new CNumber(-234.5), new CNumber(9.24, 6.772), new CNumber(-93.1567, -22.7)},
-                {new CNumber(), new CNumber(0, 0.2224), new CNumber(-2.56, 34)}};
+                {CNumber.ZERO, new CNumber(0, 0.2224), new CNumber(-2.56, 34)}};
         entriesB = new CNumber[][]{
                 {new CNumber(0.924, 515.2), new CNumber(5, 1), new CNumber(0, 0.3)},
                 {new CNumber(7.55, -0.009824), new CNumber(0.2245), new CNumber(90.24)},
@@ -119,7 +119,7 @@ class CMatrixMultiplyTests {
         entriesA = new CNumber[][]{
                 {new CNumber(1.234, -0.0924), new CNumber(1.345), new CNumber(0, 8.55)},
                 {new CNumber(-234.5), new CNumber(9.24, 6.772), new CNumber(-93.1567, -22.7)},
-                {new CNumber(), new CNumber(0, 0.2224), new CNumber(-2.56, 34)}};
+                {CNumber.ZERO, new CNumber(0, 0.2224), new CNumber(-2.56, 34)}};
         entriesB = new CNumber[][]{
                 {new CNumber(0.924, 515.2)},
                 {new CNumber(7.55, -0.009824)},

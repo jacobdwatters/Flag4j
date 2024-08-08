@@ -35,12 +35,13 @@ import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * This class has low level implementations for operations between a real sparse matrix and a complex sparse matrix.
  */
-public class RealComplexSparseMatrixOperations {
+public final class RealComplexSparseMatrixOperations {
 
     private RealComplexSparseMatrixOperations() {
         // Hide default constructor for utility class.
@@ -99,7 +100,7 @@ public class RealComplexSparseMatrixOperations {
                 src1Counter++;
                 src2Counter++;
             } else if(add1) {
-                values.add(src1.entries[src1Counter].copy());
+                values.add(src1.entries[src1Counter]);
                 rowIndices.add(src1.rowIndices[src1Counter]);
                 colIndices.add(src1.colIndices[src1Counter]);
                 src1Counter++;
@@ -155,15 +156,14 @@ public class RealComplexSparseMatrixOperations {
      */
     public static CMatrix add(CooMatrix src, CNumber a) {
         CNumber[] sum = new CNumber[src.totalEntries().intValueExact()];
-        ArrayUtils.fill(sum, a);
+        Arrays.fill(sum, a);
 
         int row;
         int col;
 
         for(int i=0; i<src.entries.length; i++) {
-            row = src.rowIndices[i];
-            col = src.colIndices[i];
-            sum[row*src.numCols + col].addEq(src.entries[i]);
+            int idx = src.rowIndices[i]*src.numCols + src.colIndices[i];
+            sum[idx] = sum[idx].add(src.entries[i]);
         }
 
         return new CMatrix(src.shape, sum);
@@ -220,7 +220,7 @@ public class RealComplexSparseMatrixOperations {
                 src1Counter++;
                 src2Counter++;
             } else if(add1) {
-                values.add(src1.entries[src1Counter].copy());
+                values.add(src1.entries[src1Counter]);
                 rowIndices.add(src1.rowIndices[src1Counter]);
                 colIndices.add(src1.colIndices[src1Counter]);
                 src1Counter++;
@@ -414,7 +414,7 @@ public class RealComplexSparseMatrixOperations {
             CNumber value = col.entries[i];
 
             while(idx < end) {
-                destEntries[idx++].addEq(value);
+                destEntries[idx] = destEntries[idx++].add(value);
             }
         }
 
@@ -444,7 +444,7 @@ public class RealComplexSparseMatrixOperations {
             CNumber value = row.entries[i];
 
             while(idx < destEntries.length) {
-                destEntries[idx + colIdx].addEq(value);
+                destEntries[idx + colIdx] = destEntries[idx + colIdx].add(value);
                 idx += src.numCols;
             }
         }
@@ -475,7 +475,7 @@ public class RealComplexSparseMatrixOperations {
             CNumber value = new CNumber(col.entries[i]);
 
             while(idx < end) {
-                destEntries[idx++].addEq(value);
+                destEntries[idx] = destEntries[idx++].add(value);
             }
         }
 
@@ -505,7 +505,7 @@ public class RealComplexSparseMatrixOperations {
             CNumber value = new CNumber(row.entries[i]);
 
             while(idx < destEntries.length) {
-                destEntries[idx + colIdx].addEq(value);
+                destEntries[idx + colIdx] = destEntries[idx + colIdx].add(value);
                 idx += src.numCols;
             }
         }

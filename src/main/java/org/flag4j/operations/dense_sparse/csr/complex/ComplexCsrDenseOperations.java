@@ -32,13 +32,14 @@ import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
+import java.util.Arrays;
 import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
 
 /**
  * This class contains low-level operations which act on a complex dense and a complex sparse {@link CsrCMatrix CSR matrix}.
  */
-public class ComplexCsrDenseOperations {
+public final class ComplexCsrDenseOperations {
 
     private ComplexCsrDenseOperations() {
         // Hide default constructor for utility class.
@@ -63,7 +64,7 @@ public class ComplexCsrDenseOperations {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
         CNumber[] dest;
-        if(uOpp == null) dest = ArrayUtils.copy2CNumber(src2.entries, null);
+        if(uOpp == null) dest = Arrays.copyOf(src2.entries, src2.entries.length);
         else dest = ArrayUtils.applyTransform(src2.entries, uOpp);
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
@@ -100,7 +101,7 @@ public class ComplexCsrDenseOperations {
         // TODO: Subtracting a sparse matrix from a dense matrix does not require a unary operator.
         //  Ensure that no method of this form requires this.
 
-        CNumber[] dest = ArrayUtils.copy2CNumber(src2.entries, null);
+        CNumber[] dest = Arrays.copyOf(src2.entries, src2.entries.length);
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -179,8 +180,8 @@ public class ComplexCsrDenseOperations {
         CNumber[] dest = new CNumber[src1.totalEntries().intValueExact()];
 
         // Apply unary operator if specified.
-        if(uOpp != null) ArrayUtils.fill(dest, uOpp.apply(b));
-        else ArrayUtils.fill(dest, b);
+        if(uOpp != null) Arrays.fill(dest, uOpp.apply(b));
+        else Arrays.fill(dest, b);
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
             int start = src1.rowPointers[i];

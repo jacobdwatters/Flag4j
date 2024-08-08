@@ -179,8 +179,8 @@ class TensorAddTests {
                 new CNumber(0.001345), new CNumber(2.677), new CNumber(8.14), new CNumber(-0.000194), new CNumber(1), new CNumber(234)
         };
         expShape = new Shape(true,2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])].addEq(bEntries[0]);
-        expEntries[expShape.entriesIndex(sparseIndices[1])].addEq(bEntries[1]);
+        expEntries[expShape.entriesIndex(sparseIndices[0])] = expEntries[expShape.entriesIndex(sparseIndices[0])].add(bEntries[0]);
+        expEntries[expShape.entriesIndex(sparseIndices[1])] = expEntries[expShape.entriesIndex(sparseIndices[1])].add(bEntries[1]);
         exp = new CTensor(expShape, expEntries);
 
         assertEquals(exp, A.add(B));

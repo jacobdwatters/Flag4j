@@ -13,7 +13,7 @@ public class TestHelpers {
     public static void printAsNumpyArray(Object... args) {
         for(Object arg : args) {
             if(arg instanceof MatrixMixin) {
-                printAsNumpyArray((MatrixMixin<?, ?, ?, ?, ?, ?, ?>) arg);
+                printAsNumpyArray((MatrixMixin<?, ?, ?, ?, ?, ?, ?, ?>) arg);
             } else {
                 System.out.print(arg.toString());
             }
@@ -24,7 +24,7 @@ public class TestHelpers {
     public static void printAsJavaArray(Object... args) {
         for(Object arg : args) {
             if(arg instanceof MatrixMixin) {
-                printAsJavaArray((MatrixMixin<?, ?, ?, ?, ?, ?, ?>) arg);
+                printAsJavaArray((MatrixMixin<?, ?, ?, ?, ?, ?, ?, ?>) arg);
             } else {
                 System.out.print(arg.toString());
             }
@@ -32,7 +32,7 @@ public class TestHelpers {
     }
 
 
-    private static <T extends MatrixMixin<?, ?, ?, ?, ?, ?, ?>> void printAsNumpyArray(T A) {
+    private static <T extends MatrixMixin<?, ?, ?, ?, ?, ?, ?, ?>> void printAsNumpyArray(T A) {
         System.out.println(" = np.array([");
 
         for(int i=0; i<A.numRows(); i++) {
@@ -65,7 +65,7 @@ public class TestHelpers {
     }
 
 
-    private static <T extends MatrixMixin<?, ?, ?, ?, ?, ?, ?>> void printAsJavaArray(T A) {
+    private static <T extends MatrixMixin<?, ?, ?, ?, ?, ?, ?, ?>> void printAsJavaArray(T A) {
         System.out.println("{");
 
         for(int i=0; i<A.numRows(); i++) {

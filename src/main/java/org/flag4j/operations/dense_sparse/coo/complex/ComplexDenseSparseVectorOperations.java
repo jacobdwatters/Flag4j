@@ -29,15 +29,16 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.operations.common.complex.ComplexOperations;
-import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
+
+import java.util.Arrays;
 
 /**
  * This class provides low level methods for computing operations between complex dense/sparse and complex
  * sparse/dense vectors.
  */
-public class ComplexDenseSparseVectorOperations {
+public final class ComplexDenseSparseVectorOperations {
 
     private ComplexDenseSparseVectorOperations() {
         // Hide default constructor in utility class.
@@ -56,12 +57,12 @@ public class ComplexDenseSparseVectorOperations {
      */
     public static CNumber innerProduct(CNumber[] src1, CNumber[] src2, int[] indices, int sparseSize) {
         ParameterChecks.assertArrayLengthsEq(src1.length, sparseSize);
-        CNumber innerProd = new CNumber();
+        CNumber innerProd = CNumber.ZERO;
         int index;
 
         for(int i=0; i<src2.length; i++) {
             index = indices[i];
-            innerProd.addEq(src2[i].conj().mult(src1[index]));
+            innerProd = innerProd.add(src2[i].conj().mult(src1[index]));
         }
 
         return innerProd;
@@ -79,12 +80,12 @@ public class ComplexDenseSparseVectorOperations {
      */
     public static CNumber innerProduct(CNumber[] src1, int[] indices, int sparseSize, CNumber[] src2) {
         ParameterChecks.assertArrayLengthsEq(src1.length, sparseSize);
-        CNumber innerProd = new CNumber();
+        CNumber innerProd = CNumber.ZERO;
         int index;
 
         for(int i=0; i<src1.length; i++) {
             index = indices[i];
-            innerProd.addEq(src1[i].mult(src2[index].conj()));
+            innerProd = innerProd.add(src1[i].mult(src2[index].conj()));
         }
 
         return innerProd;
@@ -100,7 +101,7 @@ public class ComplexDenseSparseVectorOperations {
      */
     public static CNumber[] outerProduct(CNumber[] src1, CNumber[] src2, int[] indices, int sparseSize) {
         CNumber[] dest = new CNumber[src1.length*sparseSize];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
         int index;
 
         for(int i=0; i<src1.length; i++) {
@@ -150,7 +151,8 @@ public class ComplexDenseSparseVectorOperations {
         CVector dest = new CVector(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            dest.entries[src2.indices[i]].addEq(src2.entries[i]);
+            int idx = src2.indices[i];
+            dest.entries[idx] = dest.entries[idx].add(src2.entries[i]);
         }
 
         return dest;
@@ -167,7 +169,8 @@ public class ComplexDenseSparseVectorOperations {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            src1.entries[src2.indices[i]].addEq(src2.entries[i]);
+            int idx = src2.indices[i];
+            src1.entries[idx] = src1.entries[idx].add(src2.entries[i]);
         }
     }
 
@@ -188,7 +191,7 @@ public class ComplexDenseSparseVectorOperations {
 
         for(int i=0; i<src2.entries.length; i++) {
             index = src2.indices[i];
-            dest.entries[index].subEq(src2.entries[i]);
+            dest.entries[index] = dest.entries[index].sub(src2.entries[i]);
         }
 
         return dest;
@@ -207,7 +210,8 @@ public class ComplexDenseSparseVectorOperations {
         CVector dest = new CVector(ComplexOperations.scalMult(src2.entries, -1));
 
         for(int i=0; i<src1.nonZeroEntries(); i++) {
-            dest.entries[src1.indices[i]].addEq(src1.entries[i]);
+            int idx = src1.indices[i];
+            dest.entries[idx] = dest.entries[idx].add(src1.entries[i]);
         }
 
         return dest;
@@ -224,7 +228,8 @@ public class ComplexDenseSparseVectorOperations {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            src1.entries[src2.indices[i]].subEq(src2.entries[i]);
+            int idx = src2.indices[i];
+            src1.entries[idx] = src1.entries[idx].sub(src2.entries[i]);
         }
     }
 

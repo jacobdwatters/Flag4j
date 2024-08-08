@@ -31,16 +31,17 @@ import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.operations.common.complex.ComplexOperations;
 import org.flag4j.operations.common.real.RealOperations;
-import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
+
+import java.util.Arrays;
 
 
 /**
  * This class provides low level methods for computing operations between a real/complex dense/sparse vector and a
  * complex/real sparse/dense vector.
  */
-public class RealComplexDenseSparseVectorOperations {
+public final class RealComplexDenseSparseVectorOperations {
 
 
     private RealComplexDenseSparseVectorOperations() {
@@ -60,12 +61,12 @@ public class RealComplexDenseSparseVectorOperations {
      */
     public static CNumber inner(double[] src1, CNumber[] src2, int[] indices, int sparseSize) {
         ParameterChecks.assertArrayLengthsEq(src1.length, sparseSize);
-        CNumber innerProd = new CNumber();
+        CNumber innerProd = CNumber.ZERO;
         int index;
 
         for(int i=0; i<src2.length; i++) {
             index = indices[i];
-            innerProd.addEq(src2[i].conj().mult(src1[index]));
+            innerProd = innerProd.add(src2[i].conj().mult(src1[index]));
         }
 
         return innerProd;
@@ -83,12 +84,12 @@ public class RealComplexDenseSparseVectorOperations {
      */
     public static CNumber inner(CNumber[] src1, double[] src2, int[] indices, int sparseSize) {
         ParameterChecks.assertArrayLengthsEq(src1.length, sparseSize);
-        CNumber innerProd = new CNumber();
+        CNumber innerProd = CNumber.ZERO;
         int index;
 
         for(int i=0; i<src2.length; i++) {
             index = indices[i];
-            innerProd.addEq(src1[index].mult(src2[i]));
+            innerProd = innerProd.add(src1[index].mult(src2[i]));
         }
 
         return innerProd;
@@ -106,12 +107,12 @@ public class RealComplexDenseSparseVectorOperations {
      */
     public static CNumber inner(double[] src1, int[] indices, int sparseSize, CNumber[] src2) {
         ParameterChecks.assertArrayLengthsEq(src2.length, sparseSize);
-        CNumber innerProd = new CNumber();
+        CNumber innerProd = CNumber.ZERO;
         int index;
 
         for(int i=0; i<src1.length; i++) {
             index = indices[i];
-            innerProd.addEq(src2[index].conj().mult(src1[i]));
+            innerProd = innerProd.add(src2[index].conj().mult(src1[i]));
         }
 
         return innerProd;
@@ -128,7 +129,7 @@ public class RealComplexDenseSparseVectorOperations {
      */
     public static CNumber[] outerProduct(double[] src1, CNumber[] src2, int[] indices, int sparseSize) {
         CNumber[] dest = new CNumber[src1.length*sparseSize];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
         int index;
 
         for(int i=0; i<src1.length; i++) {
@@ -153,7 +154,7 @@ public class RealComplexDenseSparseVectorOperations {
      */
     public static CNumber[] outerProduct(CNumber[] src1, double[] src2, int[] indices, int sparseSize) {
         CNumber[] dest = new CNumber[sparseSize*src1.length];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
         int index;
 
         for(int i=0; i<src1.length; i++) {
@@ -179,7 +180,7 @@ public class RealComplexDenseSparseVectorOperations {
         ParameterChecks.assertEquals(sparseSize, src2.length);
 
         CNumber[] dest = new CNumber[src2.length*sparseSize];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
         int destIndex;
 
         for(int i=0; i<src1.length; i++) {
@@ -204,7 +205,7 @@ public class RealComplexDenseSparseVectorOperations {
      */
     public static CNumber[] outerProduct(CNumber[] src1, int[] indices, int sparseSize, double[] src2) {
         CNumber[] dest = new CNumber[sparseSize*src2.length];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
         int index;
 
         for(int i=0; i<src2.length; i++) {
@@ -233,7 +234,7 @@ public class RealComplexDenseSparseVectorOperations {
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             index = src2.indices[i];
-            dest.entries[index].addEq(src2.entries[i]);
+            dest.entries[index] = dest.entries[index].add(src2.entries[i]);
         }
 
         return dest;
@@ -255,7 +256,7 @@ public class RealComplexDenseSparseVectorOperations {
 
         for(int i=0; i<src2.entries.length; i++) {
             index = src2.indices[i];
-            dest.entries[index].addEq(src2.entries[i]);
+            dest.entries[index] = dest.entries[index].add(src2.entries[i]);
         }
 
         return dest;
@@ -277,7 +278,7 @@ public class RealComplexDenseSparseVectorOperations {
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             index = src2.indices[i];
-            dest.entries[index].subEq(src2.entries[i]);
+            dest.entries[index] = dest.entries[index].sub(src2.entries[i]);
         }
 
         return dest;
@@ -296,7 +297,8 @@ public class RealComplexDenseSparseVectorOperations {
         CVector dest = new CVector(RealOperations.scalMult(src2.entries, -1));
 
         for(int i=0; i<src1.nonZeroEntries(); i++) {
-            dest.entries[src1.indices[i]].addEq(src1.entries[i]);
+            int idx = src1.indices[i];
+            dest.entries[idx] = dest.entries[idx].add(src1.entries[i]);
         }
 
         return dest;
@@ -315,7 +317,8 @@ public class RealComplexDenseSparseVectorOperations {
         CVector dest = new CVector(ComplexOperations.scalMult(src2.entries, -1));
 
         for(int i=0; i<src1.nonZeroEntries(); i++) {
-            dest.entries[src1.indices[i]].addEq(src1.entries[i]);
+            int idx = src1.indices[i];
+            dest.entries[idx] = dest.entries[idx].add(src1.entries[i]);
         }
 
         return dest;
@@ -357,7 +360,7 @@ public class RealComplexDenseSparseVectorOperations {
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             index = src2.indices[i];
-            dest.entries[index].subEq(src2.entries[i]);
+            dest.entries[index] = dest.entries[index].sub(src2.entries[i]);
         }
 
         return dest;
@@ -377,7 +380,7 @@ public class RealComplexDenseSparseVectorOperations {
         int index;
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             index = src2.indices[i];
-            src1.entries[index].addEq(src2.entries[i]);
+            src1.entries[index] = src1.entries[index].add(src2.entries[i]);
         }
     }
 
@@ -394,7 +397,7 @@ public class RealComplexDenseSparseVectorOperations {
         int index;
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             index = src2.indices[i];
-            src1.entries[index].subEq(src2.entries[i]);
+            src1.entries[index] = src1.entries[index].sub(src2.entries[i]);
         }
     }
 

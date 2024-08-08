@@ -41,7 +41,7 @@ import org.flag4j.util.ParameterChecks;
  */
 public abstract class ExactTensorSolver<
         T extends TensorBase<T, ?, ?, ?, ?, ?, ?>,
-        U extends MatrixMixin<U, ?, ?, ?, ?, V, ?>,
+        U extends MatrixMixin<U, ?, ?, ?, ?, ?, V, ?>,
         V extends VectorMixin<V, ?, ?, ?, ?, U, ?, ?>>
         implements LinearTensorSolver<T> {
 
