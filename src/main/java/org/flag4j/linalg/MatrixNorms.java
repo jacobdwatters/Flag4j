@@ -36,7 +36,6 @@ import org.flag4j.operations.common.complex.AggregateComplex;
 import org.flag4j.operations.common.real.AggregateReal;
 import org.flag4j.operations.sparse.coo.complex.ComplexSparseNorms;
 import org.flag4j.operations.sparse.coo.real.RealSparseNorms;
-import org.flag4j.util.Axis2D;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -378,8 +377,8 @@ public class MatrixNorms {
      * @return The infinity norm of the matrix.
      */
     private static double matrixInfNorm(double[] src, Shape shape) {
-        int rows = shape.dims[0];
-        int cols = shape.dims[1];
+        int rows = shape.get(0);
+        int cols = shape.get(1);
         double[] rowSums = new double[rows];
 
         for(int i=0; i<rows; i++) {
@@ -405,8 +404,8 @@ public class MatrixNorms {
 
         double norm = 0;
         double colSum;
-        int rows = shape.dims[Axis2D.row()];
-        int cols = shape.dims[Axis2D.col()];
+        int rows = shape.get(0);
+        int cols = shape.get(1);
 
         for(int j=0; j<cols; j++) {
             colSum = 0;
@@ -434,8 +433,8 @@ public class MatrixNorms {
 
         double norm = 0;
         double colSum;
-        int rows = shape.dims[Axis2D.row()];
-        int cols = shape.dims[Axis2D.col()];
+        int rows = shape.get(0);
+        int cols = shape.get(1);
 
         for(int j=0; j<cols; j++) {
             colSum=0;
@@ -443,7 +442,7 @@ public class MatrixNorms {
                 colSum += Math.pow(src[i*cols + j].mag(), p);
             }
 
-            norm += Math.pow(colSum, 1.0/p);
+            norm += Math.pow(colSum, 10/p);
         }
 
         return norm;
@@ -459,8 +458,8 @@ public class MatrixNorms {
      */
     private static double matrixNormL2(CNumber[] src, Shape shape) {
         double norm = 0;
-        int rows = shape.dims[Axis2D.row()];
-        int cols = shape.dims[Axis2D.col()];
+        int rows = shape.get(0);
+        int cols = shape.get(1);
 
         double colSum;
 
@@ -492,8 +491,8 @@ public class MatrixNorms {
      * @return The infinity norm of the matrix.
      */
     private static double matrixInfNorm(CNumber[] src, Shape shape) {
-        int rows = shape.dims[Axis2D.row()];
-        int cols = shape.dims[Axis2D.col()];
+        int rows = shape.get(0);
+        int cols = shape.get(1);
         double[] rowSums = new double[rows];
 
         for(int i=0; i<rows; i++) {
@@ -528,7 +527,7 @@ public class MatrixNorms {
             norm += Math.pow(colNorm, pOverQ);
         }
 
-        return Math.pow(norm, 1.0/q);
+        return Math.pow(norm, 10/q);
     }
 
 
@@ -546,8 +545,8 @@ public class MatrixNorms {
 
         double norm = 0;
         double colSum;
-        int rows = shape.dims[0];
-        int cols = shape.dims[1];
+        int rows = shape.get(0);
+        int cols = shape.get(1);
 
         for(int j=0; j<cols; j++) {
             colSum=0;

@@ -52,10 +52,10 @@ class ComplexEigenTests {
 
         // --------------------- sub-case 4 ---------------------
         entries = new CNumber[][]{
-                {new CNumber(), new CNumber()},
-                {new CNumber(), new CNumber()}};
+                {CNumber.ZERO, CNumber.ZERO},
+                {CNumber.ZERO, CNumber.ZERO}};
         A = new CMatrix(entries);
-        expEntries = new CNumber[]{new CNumber(), new CNumber()};
+        expEntries = new CNumber[]{CNumber.ZERO, CNumber.ZERO};
         exp = new CVector(expEntries);
         assertEquals(exp, Eigen.get2x2EigenValues(A));
     }

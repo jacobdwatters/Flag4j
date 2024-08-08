@@ -55,7 +55,7 @@ public abstract class SparseTensorBase<T, U, W, Z, Y, D extends Serializable, X 
     /**
      * The number of non-zero entries in this sparse tensor.
      */
-    protected final int nonZeroEntries;
+    public final int nnz;
 
     /**
      * Creates a sparse tensor with specified shape, non-zero entries, and non-zero indices.
@@ -65,7 +65,7 @@ public abstract class SparseTensorBase<T, U, W, Z, Y, D extends Serializable, X 
      * @param indices Indices of non-zero entries in this tensor. Must have shape {@code (nonZeroEntries-by-rank)}.
      * @throws IllegalArgumentException If the rank of {@code shape} does not match the number of columns in {@code indices}.
      */
-    protected SparseTensorBase(Shape shape, int nonZeroEntries, D entries, int[][] indices) {
+    protected SparseTensorBase(Shape shape, int nnz, D entries, int[][] indices) {
         super(shape, entries);
 
         if(indices.length > 0) {
@@ -73,7 +73,7 @@ public abstract class SparseTensorBase<T, U, W, Z, Y, D extends Serializable, X 
         }
 
         this.indices = indices;
-        this.nonZeroEntries = nonZeroEntries;
+        this.nnz = nnz;
     }
 
 
@@ -86,7 +86,7 @@ public abstract class SparseTensorBase<T, U, W, Z, Y, D extends Serializable, X 
      * @param restIndices Indices for the rest of this tensor's axes.
      * @throws IllegalArgumentException If the rank of {@code shape} does not match the number of columns in {@code indices}.
      */
-    protected SparseTensorBase(Shape shape, int nonZeroEntries, D entries, int[] initIndices, int[]... restIndices) {
+    protected SparseTensorBase(Shape shape, int nnz, D entries, int[] initIndices, int[]... restIndices) {
         super(shape, entries);
 
         int totalIndices = restIndices.length + 1;
@@ -97,7 +97,7 @@ public abstract class SparseTensorBase<T, U, W, Z, Y, D extends Serializable, X 
 
         System.arraycopy(restIndices, 0, this.indices, 1, totalIndices - 1);
 
-        this.nonZeroEntries = nonZeroEntries;
+        this.nnz = nnz;
     }
 
 
@@ -106,7 +106,7 @@ public abstract class SparseTensorBase<T, U, W, Z, Y, D extends Serializable, X 
      * @return The number of non-zero entries in this sparse tensor.
      */
     public int nonZeroEntries() {
-        return nonZeroEntries;
+        return nnz;
     }
 
 
@@ -127,7 +127,7 @@ public abstract class SparseTensorBase<T, U, W, Z, Y, D extends Serializable, X 
      * @return The density of this tensor.
      */
     public double density() {
-        BigDecimal density = BigDecimal.valueOf(this.nonZeroEntries).divide(
+        BigDecimal density = BigDecimal.valueOf(this.nnz).divide(
                 new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP
         );
 

@@ -32,7 +32,7 @@ import org.flag4j.util.ParameterChecks;
  * This class provides low level implementations for vector operations with a real/complex dense vector and a complex/real
  * dense vector.
  */
-public class RealComplexDenseVectorOperations {
+public final class RealComplexDenseVectorOperations {
 
 
     private RealComplexDenseVectorOperations() {
@@ -49,10 +49,10 @@ public class RealComplexDenseVectorOperations {
      */
     public static CNumber innerProduct(double[] src1, CNumber[] src2) {
         ParameterChecks.assertArrayLengthsEq(src1.length, src2.length);
-        CNumber innerProd = new CNumber();
+        CNumber innerProd = CNumber.ZERO;
 
         for(int i=0; i<src1.length; i++) {
-            innerProd.addEq(src2[i].conj().mult(src1[i]));
+            innerProd = innerProd.add(src2[i].conj().mult(src1[i]));
         }
 
         return innerProd;
@@ -68,10 +68,10 @@ public class RealComplexDenseVectorOperations {
      */
     public static CNumber innerProduct(CNumber[] src1, double[] src2) {
         ParameterChecks.assertArrayLengthsEq(src1.length, src2.length);
-        CNumber innerProd = new CNumber();
+        CNumber innerProd = CNumber.ZERO;
 
         for(int i=0; i<src1.length; i++) {
-            innerProd.addEq(src1[i].mult(src2[i]));
+            innerProd = innerProd.add(src1[i].mult(src2[i]));
         }
 
         return innerProd;

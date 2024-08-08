@@ -8,9 +8,10 @@ import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
-import org.flag4j.util.ArrayUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -121,11 +122,11 @@ class CooCVectorConversionTests {
 
         // ------------------- Sub-case 1 -------------------
         expEntries = new CNumber[sparseSize];
-        ArrayUtils.fillZeros(expEntries);
-        expEntries[aIndices[0]] = aEntries[0].copy();
-        expEntries[aIndices[1]] = aEntries[1].copy();
-        expEntries[aIndices[2]] = aEntries[2].copy();
-        expEntries[aIndices[3]] = aEntries[3].copy();
+        Arrays.fill(expEntries, CNumber.ZERO);       
+        expEntries[aIndices[0]] = aEntries[0];
+        expEntries[aIndices[1]] = aEntries[1];
+        expEntries[aIndices[2]] = aEntries[2];
+        expEntries[aIndices[3]] = aEntries[3];
         exp = new CVector(expEntries);
 
         assertTrue(exp.tensorEquals(a.toDense()));
@@ -139,11 +140,11 @@ class CooCVectorConversionTests {
 
         // ------------------- Sub-case 1 -------------------
         denseEntries = new CNumber[sparseSize];
-        ArrayUtils.fillZeros(denseEntries);
-        denseEntries[aIndices[0]] = aEntries[0].copy();
-        denseEntries[aIndices[1]] = aEntries[1].copy();
-        denseEntries[aIndices[2]] = aEntries[2].copy();
-        denseEntries[aIndices[3]] = aEntries[3].copy();
+        Arrays.fill(denseEntries, CNumber.ZERO);
+        denseEntries[aIndices[0]] = aEntries[0];
+        denseEntries[aIndices[1]] = aEntries[1];
+        denseEntries[aIndices[2]] = aEntries[2];
+        denseEntries[aIndices[3]] = aEntries[3];
         denseVector = new CVector(denseEntries);
 
         assertEquals(a, CooCVector.fromDense(denseVector));

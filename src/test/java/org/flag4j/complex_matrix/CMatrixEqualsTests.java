@@ -134,9 +134,9 @@ class CMatrixEqualsTests {
     void realSparseTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new CNumber[][]{
-                {new CNumber(), new CNumber()},
-                {new CNumber(67.1), new CNumber()},
-                {new CNumber(), new CNumber(-9.431)}};
+                {CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(67.1), CNumber.ZERO},
+                {CNumber.ZERO, new CNumber(-9.431)}};
         A = new CMatrix(aEntries);
         bRealSparseEntries = new double[]{67.1, -9.431};
         rowIndices = new int[]{1, 2};
@@ -148,9 +148,9 @@ class CMatrixEqualsTests {
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new CNumber[][]{
-                {new CNumber(), new CNumber()},
+                {CNumber.ZERO, CNumber.ZERO},
                 {new CNumber(67.1), new CNumber(1)},
-                {new CNumber(), new CNumber(-9.431)}};
+                {CNumber.ZERO, new CNumber(-9.431)}};
         A = new CMatrix(aEntries);
         bRealSparseEntries = new double[]{67.1, -9.431};
         rowIndices = new int[]{1, 2};
@@ -162,9 +162,9 @@ class CMatrixEqualsTests {
 
         // ---------------------- Sub-case 3 ----------------------
         aEntries = new CNumber[][]{
-                {new CNumber(), new CNumber()},
-                {new CNumber(67.1), new CNumber()},
-                {new CNumber(), new CNumber(-9.431)}};
+                {CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(67.1), CNumber.ZERO},
+                {CNumber.ZERO, new CNumber(-9.431)}};
         A = new CMatrix(aEntries);
         bRealSparseEntries = new double[]{67.1, -9.431};
         rowIndices = new int[]{1, 2};
@@ -176,9 +176,9 @@ class CMatrixEqualsTests {
 
         // ---------------------- Sub-case 4 ----------------------
         aEntries = new CNumber[][]{
-                {new CNumber(), new CNumber()},
-                {new CNumber(67.1, 1.4), new CNumber()},
-                {new CNumber(), new CNumber(-9.431)}};
+                {CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(67.1, 1.4), CNumber.ZERO},
+                {CNumber.ZERO, new CNumber(-9.431)}};
         A = new CMatrix(aEntries);
         bRealSparseEntries = new double[]{67.1, -9.431};
         rowIndices = new int[]{1, 2};
@@ -194,9 +194,9 @@ class CMatrixEqualsTests {
     void complexSparseTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new CNumber[][]{
-                {new CNumber(), new CNumber()},
-                {new CNumber(67.1, 1.556), new CNumber()},
-                {new CNumber(), new CNumber(-9.431,834.1)}};
+                {CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(67.1, 1.556), CNumber.ZERO},
+                {CNumber.ZERO, new CNumber(-9.431,834.1)}};
         A = new CMatrix(aEntries);
         bComplexSparseEntries = new CNumber[]{new CNumber(67.1, 1.556), new CNumber(-9.431, 834.1)};
         rowIndices = new int[]{1, 2};
@@ -208,9 +208,9 @@ class CMatrixEqualsTests {
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new CNumber[][]{
-                {new CNumber(), new CNumber()},
+                {CNumber.ZERO, CNumber.ZERO},
                 {new CNumber(67.1, 1.556), new CNumber(1)},
-                {new CNumber(), new CNumber(-9.431,834.1)}};
+                {CNumber.ZERO, new CNumber(-9.431,834.1)}};
         A = new CMatrix(aEntries);
         bComplexSparseEntries = new CNumber[]{new CNumber(67.1, 1.556), new CNumber(-9.431, 834.1)};
         rowIndices = new int[]{1, 2};
@@ -222,9 +222,9 @@ class CMatrixEqualsTests {
 
         // ---------------------- Sub-case 3 ----------------------
         aEntries = new CNumber[][]{
-                {new CNumber(), new CNumber()},
-                {new CNumber(67.1, 1.556), new CNumber()},
-                {new CNumber(), new CNumber(-9.431,834.1)}};
+                {CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(67.1, 1.556), CNumber.ZERO},
+                {CNumber.ZERO, new CNumber(-9.431,834.1)}};
         A = new CMatrix(aEntries);
         bComplexSparseEntries = new CNumber[]{new CNumber(67.1, 1.556), new CNumber(-9.431, 834.1)};
         rowIndices = new int[]{1, 2};
@@ -236,9 +236,9 @@ class CMatrixEqualsTests {
 
         // ---------------------- Sub-case 4 ----------------------
         aEntries = new CNumber[][]{
-                {new CNumber(), new CNumber()},
-                {new CNumber(67.1), new CNumber()},
-                {new CNumber(), new CNumber(-9.431,834.1)}};
+                {CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(67.1), CNumber.ZERO},
+                {CNumber.ZERO, new CNumber(-9.431,834.1)}};
         A = new CMatrix(aEntries);
         bComplexSparseEntries = new CNumber[]{new CNumber(67.1, 1.556), new CNumber(-9.431, 834.1)};
         rowIndices = new int[]{1, 2};
@@ -254,9 +254,9 @@ class CMatrixEqualsTests {
     void otherObjectTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new CNumber[][]{
-                {new CNumber(), new CNumber()},
-                {new CNumber(67.1, 1.556), new CNumber()},
-                {new CNumber(), new CNumber(-9.431,834.1)}};
+                {CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(67.1, 1.556), CNumber.ZERO},
+                {CNumber.ZERO, new CNumber(-9.431,834.1)}};
         A = new CMatrix(aEntries);
         assertNotEquals(A, Double.valueOf(32.45));
         assertNotEquals(A, new Shape(4, 56));

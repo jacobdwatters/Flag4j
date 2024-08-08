@@ -22,7 +22,7 @@ class CMatrixElemDivTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.0)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(Math.PI, Math.PI), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new double[][]{
@@ -43,7 +43,7 @@ class CMatrixElemDivTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()}};
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO}};
         A = new CMatrix(aEntries);
         bEntries = new double[][]{
                 {12.3, 4.45, -878.2},
@@ -87,7 +87,7 @@ class CMatrixElemDivTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()}};
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO}};
         A = new CMatrix(aEntries);
         bEntries = new CNumber[][]{
                 {new CNumber(1519.0500000000002,-114.39000000000001), new CNumber(201.14000000000001, -0.148185)},

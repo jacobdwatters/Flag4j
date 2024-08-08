@@ -27,7 +27,7 @@ class CMatrixElemMultTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(Math.PI, Math.PI), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new double[][]{
@@ -49,7 +49,7 @@ class CMatrixElemMultTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()}};
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO}};
         A = new CMatrix(aEntries);
         bEntries = new double[][]{
                 {12.3, 4.45, -878.2},
@@ -72,7 +72,7 @@ class CMatrixElemMultTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(Math.PI, Math.PI), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new CNumber[][]{
@@ -93,7 +93,7 @@ class CMatrixElemMultTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()}};
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO}};
         A = new CMatrix(aEntries);
         bEntries = new CNumber[][]{
                 {new CNumber(1519.0500000000002,-114.39000000000001), new CNumber(201.14000000000001, -0.148185)},
@@ -116,13 +116,13 @@ class CMatrixElemMultTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.1)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(Math.PI, Math.PI), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new double[]{1.34, -994.1, 34.5};
         rowIndices = new int[]{0, 2, 3};
         colIndies = new int[]{1, 1, 0};
-        sparseShape = new Shape(A.shape);
+        sparseShape = A.shape;
         B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndies);
         expEntries = new CNumber[][]{{new CNumber("0.0"), new CNumber("60.568000000000005-0.04462200000000001i"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
@@ -136,7 +136,7 @@ class CMatrixElemMultTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()}};
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO}};
         A = new CMatrix(aEntries);
         bEntries = new double[]{1.34, -994.1, 34.5};
         rowIndices = new int[]{0, 2, 3};
@@ -158,13 +158,13 @@ class CMatrixElemMultTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.1)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(Math.PI, Math.PI), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber(345.6, 94.1), new CNumber(-9.4, 34), new CNumber(4.4)};
         rowIndices = new int[]{0, 2, 3};
         colIndies = new int[]{1, 1, 0};
-        sparseShape = new Shape(A.shape);
+        sparseShape = A.shape;
         B = new CooCMatrix(sparseShape, bEntries, rowIndices, colIndies);
         expEntries = new CNumber[][]{{new CNumber("0.0"), new CNumber("15624.253530000002+4241.811519999999i"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
@@ -178,7 +178,7 @@ class CMatrixElemMultTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()}};
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO}};
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber(345.6, 94.1), new CNumber(-9.4, 34), new CNumber(4.4)};
         rowIndices = new int[]{0, 2, 3};

@@ -55,7 +55,7 @@ class MatrixElemMultTests {
         entriesB = new double[][]{{4.344, 555.6, 94, -0.4442}, {0.0000234, 1333.4, 44.5, 134.3}};
         A = new Matrix(entriesA);
         B = new Matrix(entriesB);
-        expResult = new Matrix(A.shape.copy(), getExp(A.entries, B.entries));
+        expResult = new Matrix(A.shape, getExp(A.entries, B.entries));
 
         result = A.elemMult(B);
 
@@ -76,11 +76,11 @@ class MatrixElemMultTests {
     void elemMultComplexTestCase() {
         // ----------------- Sub-case 1 -----------------
         entriesA = new double[][]{{1, 2, -3.324, 13.44}, {4, 5, -6, 0}};
-        entriesBC = new CNumber[][]{{new CNumber(1.4, 5), new CNumber(0, -1), new CNumber(1.3), new CNumber()},
+        entriesBC = new CNumber[][]{{new CNumber(1.4, 5), new CNumber(0, -1), new CNumber(1.3), CNumber.ZERO},
                 {new CNumber(4.55, -93.2), new CNumber(-2, -13), new CNumber(8.9), new CNumber(0, 13)}};
         A = new Matrix(entriesA);
         BC = new CMatrix(entriesBC);
-        expResultC = new CMatrix(A.shape.copy(), getExp(A.entries, BC.entries));
+        expResultC = new CMatrix(A.shape, getExp(A.entries, BC.entries));
 
         resultC = A.elemMult(BC);
 
@@ -110,7 +110,7 @@ class MatrixElemMultTests {
         BSparse = new CooMatrix(shape, bEntriesSparse, rowIndices, colIndices);
 
         expEntriesSparse = new double[]{2*1.45, -6*31.13, 0};
-        expSparse = new CooMatrix(shape.copy(), expEntriesSparse, rowIndices.clone(), colIndices.clone());
+        expSparse = new CooMatrix(shape, expEntriesSparse, rowIndices.clone(), colIndices.clone());
 
         sparseResult = A.elemMult(BSparse);
 
@@ -141,8 +141,8 @@ class MatrixElemMultTests {
         shape = new Shape(entriesA.length, entriesA[0].length);
         BSparseComplex = new CooCMatrix(shape, bEntriesSparseComplex, rowIndices, colIndices);
 
-        expEntriesSparseComplex = new CNumber[]{bEntriesSparseComplex[0].mult(2), bEntriesSparseComplex[1].mult(-6), new CNumber()};
-        expSparseComplex = new CooCMatrix(shape.copy(), expEntriesSparseComplex, rowIndices.clone(), colIndices.clone());
+        expEntriesSparseComplex = new CNumber[]{bEntriesSparseComplex[0].mult(2), bEntriesSparseComplex[1].mult(-6), CNumber.ZERO};
+        expSparseComplex = new CooCMatrix(shape, expEntriesSparseComplex, rowIndices.clone(), colIndices.clone());
 
         sparseComplexResult = A.elemMult(BSparseComplex);
 

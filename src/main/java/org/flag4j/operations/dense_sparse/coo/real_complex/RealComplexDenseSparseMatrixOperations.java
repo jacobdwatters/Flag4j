@@ -40,7 +40,7 @@ import org.flag4j.util.ParameterChecks;
 /**
  * This class contains low level implementations of operations between real/complex and dense/sparse matrices.
  */
-public class RealComplexDenseSparseMatrixOperations {
+public final class RealComplexDenseSparseMatrixOperations {
 
     private RealComplexDenseSparseMatrixOperations() {
         // Hide private constructor for utility class.
@@ -64,7 +64,7 @@ public class RealComplexDenseSparseMatrixOperations {
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col].addEq(src2.entries[i]);
+            dest.entries[row*src1.numCols + col] = dest.entries[row*src1.numCols + col].add(src2.entries[i]);
         }
 
         return dest;
@@ -80,14 +80,11 @@ public class RealComplexDenseSparseMatrixOperations {
      */
     public static CMatrix add(CMatrix src1, CooMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
-
-        int row, col;
         CMatrix dest = new CMatrix(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            row = src2.rowIndices[i];
-            col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col].addEq(src2.entries[i]);
+            int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
+            dest.entries[idx] = dest.entries[idx].add(src2.entries[i]);
         }
 
         return dest;
@@ -104,13 +101,11 @@ public class RealComplexDenseSparseMatrixOperations {
     public static CMatrix sub(Matrix src1, CooCMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
-        int row, col;
         CMatrix dest = new CMatrix(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            row = src2.rowIndices[i];
-            col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col].subEq(src2.entries[i]);
+            int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
+            dest.entries[idx] = dest.entries[idx].sub(src2.entries[i]);
         }
 
         return dest;
@@ -131,9 +126,8 @@ public class RealComplexDenseSparseMatrixOperations {
         CMatrix dest = new CMatrix(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            row = src2.rowIndices[i];
-            col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col].subEq(src2.entries[i]);
+            int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
+            dest.entries[idx] = dest.entries[idx].sub(src2.entries[i]);
         }
 
         return dest;
@@ -151,12 +145,11 @@ public class RealComplexDenseSparseMatrixOperations {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
-        CMatrix dest = new CMatrix(src1.shape.copy(), RealOperations.scalMult(src1.entries, -1));
+        CMatrix dest = new CMatrix(src1.shape, RealOperations.scalMult(src1.entries, -1));
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            row = src2.rowIndices[i];
-            col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col].addEq(src2.entries[i]);
+            int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
+            dest.entries[idx] = dest.entries[idx].add(src2.entries[i]);
         }
 
         return dest;
@@ -174,12 +167,11 @@ public class RealComplexDenseSparseMatrixOperations {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
-        CMatrix dest = new CMatrix(src1.shape.copy(), ComplexOperations.scalMult(src1.entries, -1));
+        CMatrix dest = new CMatrix(src1.shape, ComplexOperations.scalMult(src1.entries, -1));
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            row = src2.rowIndices[i];
-            col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col].addEq(src2.entries[i]);
+            int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
+            dest.entries[idx] = dest.entries[idx].add(src2.entries[i]);
         }
 
         return dest;
@@ -198,9 +190,8 @@ public class RealComplexDenseSparseMatrixOperations {
         int row, col;
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            row = src2.rowIndices[i];
-            col = src2.colIndices[i];
-            src1.entries[row*src1.numCols + col].addEq(src2.entries[i]);
+            int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
+            src1.entries[idx] = src1.entries[idx].add(src2.entries[i]);
         }
     }
 
@@ -217,9 +208,8 @@ public class RealComplexDenseSparseMatrixOperations {
         int row, col;
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
-            row = src2.rowIndices[i];
-            col = src2.colIndices[i];
-            src1.entries[row*src1.numCols + col].subEq(src2.entries[i]);
+            int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
+            src1.entries[idx] = src1.entries[idx].sub(src2.entries[i]);
         }
     }
 
@@ -243,7 +233,7 @@ public class RealComplexDenseSparseMatrixOperations {
             destEntries[i] = src2.entries[i].mult(src1.entries[row*src1.numCols + col]);
         }
 
-        return new CooCMatrix(src2.shape.copy(), destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
+        return new CooCMatrix(src2.shape, destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
     }
 
 
@@ -266,7 +256,7 @@ public class RealComplexDenseSparseMatrixOperations {
             destEntries[i] = src1.entries[row*src1.numCols + col].mult(src2.entries[i]);
         }
 
-        return new CooCMatrix(src2.shape.copy(), destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
+        return new CooCMatrix(src2.shape, destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
     }
 
 
@@ -302,7 +292,7 @@ public class RealComplexDenseSparseMatrixOperations {
             quotient[i] = src1.entries[i].div(src2.entries[row*src2.numCols + col]);
         }
 
-        return new CooCMatrix(src1.shape.copy(), quotient, src1.rowIndices.clone(), src1.colIndices.clone());
+        return new CooCMatrix(src1.shape, quotient, src1.rowIndices.clone(), src1.colIndices.clone());
     }
 
 
@@ -338,7 +328,7 @@ public class RealComplexDenseSparseMatrixOperations {
             quotient[i] = new CNumber(src1.entries[i]).div(src2.entries[row*src2.numCols + col]);
         }
 
-        return new CooCMatrix(src1.shape.copy(), quotient, src1.rowIndices.clone(), src1.colIndices.clone());
+        return new CooCMatrix(src1.shape, quotient, src1.rowIndices.clone(), src1.colIndices.clone());
     }
 
 
@@ -358,7 +348,8 @@ public class RealComplexDenseSparseMatrixOperations {
         }
 
         for(int i=0; i<src.entries.length; i++) {
-            sum.entries[src.rowIndices[i]*src.numCols + src.colIndices[i]].addEq(src.entries[i]);
+            int idx = src.rowIndices[i]*src.numCols + src.colIndices[i];
+            sum.entries[idx] = sum.entries[idx].add(src.entries[i]);
         }
 
         return sum;
@@ -381,7 +372,8 @@ public class RealComplexDenseSparseMatrixOperations {
         }
 
         for(int i=0; i<src.entries.length; i++) {
-            sum.entries[src.rowIndices[i]*src.numCols + src.colIndices[i]].addEq(src.entries[i]);
+            int idx = src.rowIndices[i]*src.numCols + src.colIndices[i];
+            sum.entries[idx] = sum.entries[idx].add(src.entries[i]);
         }
 
         return sum;
@@ -404,7 +396,8 @@ public class RealComplexDenseSparseMatrixOperations {
         }
 
         for(int i=0; i<src.entries.length; i++) {
-            sum.entries[src.rowIndices[i]*src.numCols + src.colIndices[i]].addEq(src.entries[i]);
+            int idx = src.rowIndices[i]*src.numCols + src.colIndices[i];
+            sum.entries[idx] = sum.entries[idx].add(src.entries[i]);
         }
 
         return sum;
@@ -427,7 +420,8 @@ public class RealComplexDenseSparseMatrixOperations {
         }
 
         for(int i=0; i<src.entries.length; i++) {
-            sum.entries[src.rowIndices[i]*src.numCols + src.colIndices[i]].addEq(src.entries[i]);
+            int idx = src.rowIndices[i]*src.numCols + src.colIndices[i];
+            sum.entries[idx] = sum.entries[idx].add(src.entries[i]);
         }
 
         return sum;

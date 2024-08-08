@@ -103,7 +103,7 @@ public class RealSparseMatrixGetSet {
             destColIndices = src.colIndices.clone();
         }
 
-        return new CooMatrix(src.shape.copy(), destEntries, destRowIndices, destColIndices);
+        return new CooMatrix(src.shape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -181,7 +181,7 @@ public class RealSparseMatrixGetSet {
             );
         }
 
-        return new CooMatrix(src.shape.copy(), destEntries, destRowIndices, destColIndices);
+        return new CooMatrix(src.shape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -257,7 +257,7 @@ public class RealSparseMatrixGetSet {
         }
 
         CooMatrix dest = new CooMatrix(
-                src.shape.copy(),
+                src.shape,
                 destEntries,
                 destRowIndices,
                 destColIndices
@@ -299,7 +299,7 @@ public class RealSparseMatrixGetSet {
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
         // Create matrix and ensure entries are properly sorted.
-        CooMatrix mat = new CooMatrix(src.shape.copy(), entries, rowIndices, colIndices);
+        CooMatrix mat = new CooMatrix(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
         return mat;
@@ -463,7 +463,7 @@ public class RealSparseMatrixGetSet {
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
         // Create matrix and ensure entries are properly sorted.
-        CooMatrix mat = new CooMatrix(src.shape.copy(), entries, rowIndices, colIndices);
+        CooMatrix mat = new CooMatrix(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
         return mat;

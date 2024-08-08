@@ -73,7 +73,7 @@ import java.util.List;
  */
 public class CsrCMatrix
         extends ComplexSparseTensorBase<CsrCMatrix, CMatrix, CsrMatrix>
-        implements MatrixMixin<CsrCMatrix, CMatrix, CsrCMatrix, CsrCMatrix, CNumber, CooCVector, CVector>,
+        implements MatrixMixin<CsrCMatrix, CMatrix, CsrCMatrix, CsrCMatrix, CsrCMatrix, CNumber, CooCVector, CVector>,
         ComplexMatrixMixin<CsrCMatrix> {
 
     /**
@@ -92,10 +92,6 @@ public class CsrCMatrix
      * The number of columns in this matrix.
      */
     public final int numCols;
-    /**
-     * The number of non-zero entries stored in this sparse matrix.
-     */
-    public final int nnz;
 
 
     /**
@@ -103,13 +99,12 @@ public class CsrCMatrix
      * @param shape Shape of the CSR matrix.
      */
     public CsrCMatrix(Shape shape) {
-        super(shape, 0, new CNumber[0], new int[shape.dims[0]+1], new int[0]);
+        super(shape, 0, new CNumber[0], new int[shape.get(0)+1], new int[0]);
 
-        numRows = shape.dims[0];
-        numCols = shape.dims[1];
+        numRows = shape.get(0);
+        numCols = shape.get(1);
         this.rowPointers = indices[0];
         this.colIndices = indices[1];
-        nnz = entries.length;
     }
 
 
@@ -121,11 +116,10 @@ public class CsrCMatrix
     public CsrCMatrix(int numRows, int numCols) {
         super(new Shape(numRows, numCols), 0, new CNumber[0], new int[numRows+1], new int[0]);
 
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
         this.rowPointers = indices[0];
         this.colIndices = indices[1];
-        nnz = entries.length;
     }
 
 
@@ -141,9 +135,8 @@ public class CsrCMatrix
 
         this.rowPointers = rowPointers;
         this.colIndices = colIndices;
-        numRows = shape.dims[0];
-        numCols = shape.dims[1];
-        nnz = entries.length;
+        numRows = shape.get(0);
+        numCols = shape.get(1);
     }
 
 
@@ -160,9 +153,8 @@ public class CsrCMatrix
 
         this.rowPointers = rowPointers;
         this.colIndices = colIndices;
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
-        nnz = entries.length;
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -180,9 +172,8 @@ public class CsrCMatrix
 
         this.rowPointers = rowPointers;
         this.colIndices = colIndices;
-        numRows = shape.dims[0];
-        numCols = shape.dims[1];
-        nnz = entries.length;
+        numRows = shape.get(0);
+        numCols = shape.get(1);
     }
 
 
@@ -191,14 +182,13 @@ public class CsrCMatrix
      * @param src Matrix to create copy of.
      */
     public CsrCMatrix(CsrCMatrix src) {
-        super(src.shape.copy(), src.entries.length, ArrayUtils.copyOf(src.entries),
+        super(src.shape, src.entries.length, Arrays.copyOf(src.entries, src.entries.length),
                 src.rowPointers.clone(), src.colIndices.clone());
 
         this.rowPointers = indices[0];
         this.colIndices = indices[1];
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
-        nnz = entries.length;
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -207,7 +197,7 @@ public class CsrCMatrix
      * @param src COO matrix to convert. Indices must be sorted lexicographically.
      */
     public CsrCMatrix(CooCMatrix src) {
-        super(src.shape.copy(),
+        super(src.shape,
                 src.entries.length,
                 new CNumber[src.entries.length],
                 new int[src.numRows + 1],
@@ -216,11 +206,10 @@ public class CsrCMatrix
 
         rowPointers = this.indices[0];
         colIndices = this.indices[1];
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
-        nnz = entries.length;
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
-        ArrayUtils.copy2CNumber(src.entries, entries); // Deep copy non-zero entries.
+        System.arraycopy(src.entries, 0, entries, 0, entries.length); // Copy non-zero entries.
 
         // Copy the non-zero entries anc column indices. Count number of entries per row.
         for(int i=0; i<src.entries.length; i++) {
@@ -239,7 +228,7 @@ public class CsrCMatrix
      * @param src COO matrix to convert. Indices must be sorted lexicographically.
      */
     public CsrCMatrix(CooMatrix src) {
-        super(src.shape.copy(),
+        super(src.shape,
                 src.entries.length,
                 new CNumber[src.entries.length],
                 new int[src.numRows + 1],
@@ -248,9 +237,8 @@ public class CsrCMatrix
 
         rowPointers = this.indices[0];
         colIndices = this.indices[1];
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
-        nnz = entries.length;
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         ArrayUtils.copy2CNumber(src.entries, entries); // Deep copy non-zero entries.
 
@@ -441,6 +429,68 @@ public class CsrCMatrix
 
 
     /**
+     * Copies and reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
+     * in the reshaped matrix.
+     *
+     * @param newShape Shape of the new matrix.
+     *
+     * @return A matrix which is equivalent to this matrix but with the specified shape.
+     *
+     * @throws IllegalArgumentException If this matrix cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public CsrCMatrix reshape(Shape newShape) {
+        ParameterChecks.assertBroadcastable(shape, newShape);
+
+        int oldRowCount = shape.get(0);
+        int newRowCount = newShape.get(0);
+        int newColCount = newShape.get(1);
+
+        // Initialize new CSR structures.
+        int[] newRowPointers = new int[newRowCount + 1];
+        int[] newColIndices = new int[colIndices.length];
+
+        int index = 0;
+
+        for(int i=0; i<oldRowCount; i++) {
+            int rowOffset = i*oldRowCount;
+            int rowStart = rowPointers[i];
+            int rowEnd = rowPointers[i+1];
+
+            for(int j=rowStart; j<rowEnd; j++) {
+                int flatIndex = rowOffset + colIndices[j];
+
+                int newRow = flatIndex / newColCount;
+                int newCol = flatIndex % newColCount;
+
+                newColIndices[index] = newCol;
+
+                newRowPointers[newRow + 1]++;
+                index++;
+            }
+        }
+
+        // Accumulate row pointers
+        for(int i = 0; i < newRowCount; i++) {
+            newRowPointers[i + 1] += newRowPointers[i];
+        }
+
+        return new CsrCMatrix(newShape, Arrays.copyOf(entries, entries.length), newRowPointers, newColIndices);
+    }
+
+
+    /**
+     * Flattens tensor to single dimension. To flatten tensor along a single axis.
+     *
+     * @return The flattened tensor.
+     */
+    @Override
+    public CsrCMatrix flatten() {
+        return toCoo().flatten().toCsr();
+    }
+
+
+    /**
      * Flattens a tensor along the specified axis.
      *
      * @param axis Axis along which to flatten tensor.
@@ -610,7 +660,7 @@ public class CsrCMatrix
         int loc = Arrays.binarySearch(colIndices, rowPointers[row], rowPointers[row+1], col);
 
         if(loc >= 0) return entries[loc];
-        else return CNumber.zero();
+        else return CNumber.ZERO;
     }
 
 
@@ -965,10 +1015,8 @@ public class CsrCMatrix
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public CooCMatrix elemMult(CooCMatrix B) {
-        // TODO: This should return a CsrCMatrix. Need to add complex sparse type as generic type parameter to MatrixOperationsMixin
-        //  for this to work properly.
-        return this.elemMult(B.toCsr()).toCoo();
+    public CsrCMatrix elemMult(CooCMatrix B) {
+        return this.elemMult(B.toCsr());
     }
 
 
@@ -1207,7 +1255,7 @@ public class CsrCMatrix
         int rowStop = rowPointers.length-1;
         for(int i=0; i<rowStop; i++) {
             for(int j=rowPointers[i]; j<rowPointers[i+1]; j++) {
-                sum.entries[i].addEq(entries[j]);
+                sum.entries[i] = sum.entries[i].add(entries[j]);
             }
         }
 
@@ -1227,7 +1275,7 @@ public class CsrCMatrix
 
         int nnz = entries.length;
         for(int i=0; i<nnz; i++) {
-            sum.entries[colIndices[i]].addEq(entries[i]);
+            sum.entries[colIndices[i]] = sum.entries[colIndices[i]].add(entries[i]);
         }
 
         return new CVector(sum);
@@ -1632,7 +1680,7 @@ public class CsrCMatrix
         CNumber[] destEntries = new CNumber[rowPointers[i+1]-start];
         int[] destIndices = new int[destEntries.length];
 
-        ArrayUtils.arraycopy(entries, start, destEntries, 0, destEntries.length);
+        System.arraycopy(entries, start, destEntries, 0, destEntries.length);
         System.arraycopy(colIndices, start, destIndices, 0, destEntries.length);
 
         return new CooCVector(this.numCols, destEntries, destIndices);
@@ -1679,7 +1727,7 @@ public class CsrCMatrix
 
             for(int j=start; j<stop; j++) {
                 if(colIndices[j]==colIdx) {
-                    destEntries.add(entries[j].copy());
+                    destEntries.add(entries[j]);
                     destIndices.add(i);
                     break; // Should only be a single entry with this row and column index.
                 }
@@ -1700,7 +1748,7 @@ public class CsrCMatrix
     public CooCVector toVector() {
         int type = vectorType();
 
-        CNumber[] destEntries = ArrayUtils.copyOf(entries); // Copy non-zero values.
+        CNumber[] destEntries = Arrays.copyOf(entries, entries.length); // Copy non-zero values.
         int[] indices = new int[entries.length];
 
         if(type == -1) {
@@ -1793,7 +1841,7 @@ public class CsrCMatrix
             int col = colIndices[j];
 
             if(col >= colStart) {
-                row.add(entries[j].copy());
+                row.add(entries[j]);
                 indices.add(col-colStart);
             }
         }
@@ -1846,7 +1894,7 @@ public class CsrCMatrix
     public CNumber tr() {
         ParameterChecks.assertSquareMatrix(shape);
 
-        CNumber trace = new CNumber();
+        CNumber trace = CNumber.ZERO;
 
         for(int i=0; i<numRows; i++) {
             int rowPtr = rowPointers[i];
@@ -1854,7 +1902,7 @@ public class CsrCMatrix
 
             for(int j=rowPtr; j<stop; j++) {
                 if(i==colIndices[j]) {
-                    trace.addEq(entries[j]);
+                    trace = trace.add(entries[j]);
                 }
             }
         }
@@ -1880,7 +1928,7 @@ public class CsrCMatrix
             int loc = Arrays.binarySearch(colIndices, start, stop, i); // Search for matching column index
 
             if(loc >= 0) {
-                destEntries.add(entries[loc].copy());
+                destEntries.add(entries[loc]);
                 destIndices.add(i);
             }
         }
@@ -1925,17 +1973,17 @@ public class CsrCMatrix
     @Override
     public CMatrix toDense() {
         CNumber[] dest = new CNumber[shape.totalEntries().intValueExact()];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
 
         for(int i=0; i<rowPointers.length-1; i++) {
             int rowOffset = i*numCols;
 
             for(int j=rowPointers[i]; j<rowPointers[i+1]; j++) {
-                dest[rowOffset + colIndices[j]] = entries[j].copy();
+                dest[rowOffset + colIndices[j]] = entries[j];
             }
         }
 
-        return new CMatrix(shape.copy(), dest);
+        return new CMatrix(shape, dest);
     }
 
 
@@ -1965,7 +2013,7 @@ public class CsrCMatrix
             }
         }
 
-        return new CooCMatrix(shape.copy(), dest, destRowIdx, destColIdx);
+        return new CooCMatrix(shape, dest, destRowIdx, destColIdx);
     }
 
 
@@ -2024,8 +2072,8 @@ public class CsrCMatrix
         }
 
         if(found) {
-            newEntries = ArrayUtils.copyOf(entries);
-            newEntries[loc] = value.copy();
+            newEntries = Arrays.copyOf(entries, entries.length);
+            newEntries[loc] = value;
             newRowPointers = rowPointers.clone();
             newColIndices = colIndices.clone();
         } else {
@@ -2034,9 +2082,9 @@ public class CsrCMatrix
             newColIndices = new int[entries.length + 1];
 
             // Copy old entries and insert new one.
-            ArrayUtils.arraycopy(entries, 0, newEntries, 0, loc);
-            newEntries[loc] = value.copy();
-            ArrayUtils.arraycopy(entries, loc, newEntries, loc+1, entries.length-loc);
+            System.arraycopy(entries, 0, newEntries, 0, loc);
+            newEntries[loc] = value;
+            System.arraycopy(entries, loc, newEntries, loc+1, entries.length-loc);
 
             // Copy old column indices and insert new one.
             System.arraycopy(colIndices, 0, newColIndices, 0, loc);
@@ -2049,7 +2097,7 @@ public class CsrCMatrix
             }
         }
 
-        return new CsrCMatrix(shape.copy(), newEntries, newRowPointers, newColIndices);
+        return new CsrCMatrix(shape, newEntries, newRowPointers, newColIndices);
     }
 
 
@@ -2546,7 +2594,7 @@ public class CsrCMatrix
     @Override
     public boolean isTriL() {
         boolean result = isSquare();
-        CNumber zero = CNumber.zero();
+        CNumber zero = CNumber.ZERO;
 
         if(result) {
             for(int i=0; i<numRows; i++) {
@@ -2575,7 +2623,7 @@ public class CsrCMatrix
     @Override
     public boolean isTriU() {
         boolean result = isSquare();
-        CNumber zero = CNumber.zero();
+        CNumber zero = CNumber.ZERO;
 
         if(result) {
             for(int i=1; i<numRows; i++) {
@@ -2639,7 +2687,7 @@ public class CsrCMatrix
      * @return A human-readable string representing this sparse matrix.
      */
     public String toString() {
-        int size = nonZeroEntries;
+        int size = nnz;
         StringBuilder result = new StringBuilder(String.format("Full Shape: %s\n", shape));
         result.append("Non-zero entries: [");
 

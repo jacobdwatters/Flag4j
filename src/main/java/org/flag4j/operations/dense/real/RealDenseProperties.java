@@ -60,19 +60,19 @@ public class RealDenseProperties {
 
 
     /**
-     * Checks if a real dense matrix is symmetric. That is, if the and equal to its transpose.
+     * Checks if a real dense matrix is symmetric. That is, if the matrix is equal to its transpose.
      * @param src Entries of the matrix.
      * @param shape Shape of the matrix.
      * @return True if this matrix is symmetric
      */
     public static boolean isSymmetric(double[] src, Shape shape) {
         // Quick return if possible.
-        if(shape.dims[0]!=shape.dims[1]) return false;
+        if(shape.get(0)!=shape.get(1)) return false;
 
         int count1, count2, stop;
 
-        for(int i=0; i<shape.dims[0]; i++) {
-            count1 = i*shape.dims[1];
+        for(int i=0; i<shape.get(0); i++) {
+            count1 = i*shape.get(1);
             count2 = i;
             stop = count1 + i;
 
@@ -81,7 +81,7 @@ public class RealDenseProperties {
                     return false;
                 }
 
-                count2+=shape.dims[1];
+                count2+=shape.get(1);
             }
         }
 
@@ -90,13 +90,13 @@ public class RealDenseProperties {
 
 
     /**
-     * Checks if a real dense matrix is anti-symmetric. That is, if the and equal to its negative transpose.
+     * Checks if a real dense matrix is anti-symmetric. That is, if the matrix is equal to its negative transpose.
      * @param src Entries of the matrix.
      * @param shape Shape of the matrix.
      * @return True if this matrix is anti-symmetric
      */
     public static boolean isAntiSymmetric(double[] src, Shape shape) {
-        if(shape.dims[0]!=shape.dims[1]) {
+        if(shape.get(0)!=shape.get(1)) {
             return false;
         }
 
@@ -104,8 +104,8 @@ public class RealDenseProperties {
         int count2;
         int stop;
 
-        for(int i=0; i<shape.dims[0]; i++) {
-            count1 = i*shape.dims[1];
+        for(int i=0; i<shape.get(0); i++) {
+            count1 = i*shape.get(1);
             count2 = i;
             stop = count1 + i;
 
@@ -114,7 +114,7 @@ public class RealDenseProperties {
                     return false;
                 }
 
-                count2+=shape.dims[1];
+                count2+=shape.get(1);
             }
         }
 

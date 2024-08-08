@@ -66,7 +66,7 @@ public final class ParameterChecks {
     public static void assertMatMultShapes(Shape shape1, Shape shape2) {
         if(shape1.getRank() != 2
                 || shape2.getRank() != 2
-                || shape1.dims[1] != shape2.dims[0]) {
+                || shape1.get(1) != shape2.get(0)) {
             throw new LinearAlgebraException(
                     ErrorMessages.matMultShapeErrMsg(shape1, shape2)
             );
@@ -390,7 +390,7 @@ public final class ParameterChecks {
      * @throws LinearAlgebraException If the shape is not of rank 2 with equal rows and columns.
      */
     public static void assertSquareMatrix(Shape shape) {
-        if(shape.dims.length!=2 || shape.dims[0]!=shape.dims[1]) {
+        if(shape.getRank()!=2 || shape.get(0)!=shape.get(1)) {
             throw new LinearAlgebraException(ErrorMessages.getSquareShapeErr(shape));
         }
     }
@@ -402,7 +402,7 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If all axis of the shape are not the same length.
      */
     public static void assertSquare(Shape shape) {
-        ParameterChecks.assertEquals(shape.dims);
+        ParameterChecks.assertEquals(shape.getDims());
     }
 
 
@@ -508,16 +508,16 @@ public final class ParameterChecks {
      * of the specified {@code shape}.
      */
     public static void assertValidIndex(Shape shape, int... indices) {
-        if(shape.dims.length != indices.length) {
-            throw new IndexOutOfBoundsException("Expected " + shape.dims.length
+        if(shape.getRank() != indices.length) {
+            throw new IndexOutOfBoundsException("Expected " + shape.getRank()
                     + " indices but got " + indices.length + ".");
         }
 
         for(int i=0; i<indices.length; i++) {
-            if(indices[i] < 0 || indices[i] >= shape.dims[i]) {
+            if(indices[i] < 0 || indices[i] >= shape.get(i)) {
                 String errMsg = indices[i]<0 ?
                         "Index " + i + " is out of bounds for lower bound of 0" :
-                        "Index " + i + " is out of bounds for upper bound of " + shape.dims[i] + ".";
+                        "Index " + i + " is out of bounds for upper bound of " + shape.get(i) + ".";
 
                 throw new IndexOutOfBoundsException(errMsg);
             }

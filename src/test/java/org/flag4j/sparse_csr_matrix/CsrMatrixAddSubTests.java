@@ -158,7 +158,7 @@ class CsrMatrixAddSubTests {
                 {0, 14.1, 0, 0, 0, 0},
                 {0, 0, 0, 9.143, 1.4, -2.1}};
         bCmpEntries = new CNumber[aEntries.length][aEntries[0].length];
-        ArrayUtils.fillZeros(bCmpEntries);
+        ArrayUtils.fill(bCmpEntries, CNumber.ZERO);
         bCmpEntries[0][0] = new CNumber(23, 1.34);
         bCmpEntries[1][0] = new CNumber(0.133, -41.4);
         bCmpEntries[1][3] = new CNumber(-4.1, -34.1);
@@ -191,7 +191,7 @@ class CsrMatrixAddSubTests {
                 {0, 14.1, 0, 0, 0, 0},
                 {0, 0, 0, 9.143, 1.4, -2.1}};
         bCmpEntries = new CNumber[aEntries.length][aEntries[0].length];
-        ArrayUtils.fillZeros(bCmpEntries);
+        ArrayUtils.fill(bCmpEntries, CNumber.ZERO);
         bCmpEntries[0][0] = new CNumber(23, 1.34);
         bCmpEntries[1][0] = new CNumber(0.133, -41.4);
         bCmpEntries[1][3] = new CNumber(-4.1, -34.1);

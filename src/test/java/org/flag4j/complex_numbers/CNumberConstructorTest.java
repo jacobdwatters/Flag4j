@@ -14,7 +14,7 @@ class CNumberConstructorTest {
     @Test
     void defaultConstructorTestCase() {
         // ---------- sub-case 1 ----------
-        a = new CNumber();
+        a = CNumber.ZERO;
         expRe=0;
         expIm=0;
 
@@ -136,10 +136,10 @@ class CNumberConstructorTest {
     @Test
     void copyConstructorTestCase() {
         // ---------- sub-case 1 ----------
-        a = new CNumber();
+        a = CNumber.ZERO;
         expRe = a.re;
         expIm = a.im;
-        b = new CNumber(a);
+        b = a;
 
         assertEquals(expRe, b.re);
         assertEquals(expIm, b.im);
@@ -148,7 +148,7 @@ class CNumberConstructorTest {
         a = new CNumber(1023.343);
         expRe = a.re;
         expIm = a.im;
-        b = new CNumber(a);
+        b = a;
 
         assertEquals(expRe, b.re);
         assertEquals(expIm, b.im);
@@ -158,7 +158,7 @@ class CNumberConstructorTest {
         a = new CNumber(Double.POSITIVE_INFINITY, 03.3210003);
         expRe = a.re;
         expIm = a.im;
-        b = new CNumber(a);
+        b = a;
 
         assertEquals(expRe, b.re);
         assertEquals(expIm, b.im);

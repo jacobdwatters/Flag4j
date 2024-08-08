@@ -26,7 +26,7 @@ class CVectorConstructorTests {
         expShape = new Shape(expSize);
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber();
+            expEntries[i] = CNumber.ZERO;
         }
 
         a = new CVector(expSize);
@@ -42,7 +42,7 @@ class CVectorConstructorTests {
         expShape = new Shape(expSize);
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber();
+            expEntries[i] = CNumber.ZERO;
         }
 
         a = new CVector(expSize);
@@ -66,7 +66,7 @@ class CVectorConstructorTests {
         expShape = new Shape(expSize);
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber(fillValue);
+            expEntries[i] = fillValue;
         }
 
         a = new CVector(expSize, fillValue);
@@ -83,7 +83,7 @@ class CVectorConstructorTests {
         expShape = new Shape(expSize);
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber(fillValue);
+            expEntries[i] = fillValue;
         }
 
         a = new CVector(expSize,fillValue);

@@ -19,40 +19,40 @@ class CsrCMatrixToVectorTests {
     @Test
     void toVectorTests() {
         // ------------------------- Sub-case 1 -------------------------
-        aEntries = new CNumber[][]{{new CNumber(1.23, -9.25), new CNumber(), new CNumber(),
-                new CNumber(), new CNumber(), new CNumber(1.526, -3.1),
-                new CNumber(), new CNumber(), new CNumber(0, 1.2)}};
+        aEntries = new CNumber[][]{{new CNumber(1.23, -9.25), CNumber.ZERO, CNumber.ZERO,
+                CNumber.ZERO, CNumber.ZERO, new CNumber(1.526, -3.1),
+                CNumber.ZERO, CNumber.ZERO, new CNumber(0, 1.2)}};
         A = new CMatrix(aEntries).toCsr();
-        expEntries = new CNumber[]{new CNumber(1.23, -9.25), new CNumber(), new CNumber(),
-                new CNumber(), new CNumber(), new CNumber(1.526, -3.1),
-                new CNumber(), new CNumber(), new CNumber(0, 1.2)};
+        expEntries = new CNumber[]{new CNumber(1.23, -9.25), CNumber.ZERO, CNumber.ZERO,
+                CNumber.ZERO, CNumber.ZERO, new CNumber(1.526, -3.1),
+                CNumber.ZERO, CNumber.ZERO, new CNumber(0, 1.2)};
         exp = new CVector(expEntries).toCoo();
 
         assertEquals(exp, A.toVector());
 
         // ------------------------- Sub-case 2 -------------------------
-        aEntries = new CNumber[][]{{new CNumber(1.23, -9.25)}, {new CNumber()}, {new CNumber()},
-                {new CNumber()}, {new CNumber()}, {new CNumber(1.526, -3.1)},
-                {new CNumber()}, {new CNumber()}, {new CNumber(0, 1.2)}};
+        aEntries = new CNumber[][]{{new CNumber(1.23, -9.25)}, {CNumber.ZERO}, {CNumber.ZERO},
+                {CNumber.ZERO}, {CNumber.ZERO}, {new CNumber(1.526, -3.1)},
+                {CNumber.ZERO}, {CNumber.ZERO}, {new CNumber(0, 1.2)}};
         A = new CMatrix(aEntries).toCsr();
-        expEntries = new CNumber[]{new CNumber(1.23, -9.25), new CNumber(), new CNumber(),
-                new CNumber(), new CNumber(), new CNumber(1.526, -3.1),
-                new CNumber(), new CNumber(), new CNumber(0, 1.2)};
+        expEntries = new CNumber[]{new CNumber(1.23, -9.25), CNumber.ZERO, CNumber.ZERO,
+                CNumber.ZERO, CNumber.ZERO, new CNumber(1.526, -3.1),
+                CNumber.ZERO, CNumber.ZERO, new CNumber(0, 1.2)};
         exp = new CVector(expEntries).toCoo();
 
         assertEquals(exp, A.toVector());
 
         // ------------------------- Sub-case 3 -------------------------
         aEntries = new CNumber[][]{
-                {new CNumber(1.23, -9.25), new CNumber()},
-                {new CNumber(), new CNumber()},
-                {new CNumber(), new CNumber(1.526, -3.1)},
-                {new CNumber(), new CNumber()},
-                {new CNumber(0, 1.2), new CNumber()}};
+                {new CNumber(1.23, -9.25), CNumber.ZERO},
+                {CNumber.ZERO, CNumber.ZERO},
+                {CNumber.ZERO, new CNumber(1.526, -3.1)},
+                {CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(0, 1.2), CNumber.ZERO}};
         A = new CMatrix(aEntries).toCsr();
-        expEntries = new CNumber[]{new CNumber(1.23, -9.25), new CNumber(), new CNumber(),
-                new CNumber(), new CNumber(), new CNumber(1.526, -3.1),
-                new CNumber(), new CNumber(), new CNumber(0, 1.2), new CNumber()};
+        expEntries = new CNumber[]{new CNumber(1.23, -9.25), CNumber.ZERO, CNumber.ZERO,
+                CNumber.ZERO, CNumber.ZERO, new CNumber(1.526, -3.1),
+                CNumber.ZERO, CNumber.ZERO, new CNumber(0, 1.2), CNumber.ZERO};
         exp = new CVector(expEntries).toCoo();
 
         assertEquals(exp, A.toVector());

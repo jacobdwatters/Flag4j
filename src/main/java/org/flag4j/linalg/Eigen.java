@@ -35,8 +35,9 @@ import org.flag4j.linalg.decompositions.schur.Schur;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
 import org.flag4j.operations.common.real.AggregateReal;
-import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
+
+import java.util.Arrays;
 
 import static org.flag4j.util.Flag4jConstants.EPS_F64;
 
@@ -71,7 +72,7 @@ public class Eigen {
         double maxAbs = AggregateReal.maxAbs(a11, a12, a21, a22);
 
         if(maxAbs == 0) {
-            ArrayUtils.fillZeros(lambda);
+            Arrays.fill(lambda, CNumber.ZERO);
             return lambda;
         } else {
             a11 /= maxAbs;
@@ -151,34 +152,34 @@ public class Eigen {
         double maxAbs = Math.max(Math.max(a11.mag(), a12.mag()), Math.max(a21.mag(), a22.mag()));
 
         if(maxAbs == 0) {
-            lambda[0] = new CNumber(0, 0);
-            lambda[1] = new CNumber(0, 0);
+            lambda[0] = CNumber.ZERO;
+            lambda[1] = CNumber.ZERO;
             return lambda;
         }
 
         // Scale the matrix to avoid overflow/underflow
-        a11 = a11.div(new CNumber(maxAbs, 0));
-        a12 = a12.div(new CNumber(maxAbs, 0));
-        a21 = a21.div(new CNumber(maxAbs, 0));
-        a22 = a22.div(new CNumber(maxAbs, 0));
+        a11 = a11.div(maxAbs);
+        a12 = a12.div(maxAbs);
+        a21 = a21.div(maxAbs);
+        a22 = a22.div(maxAbs);
 
         // Trace and determinant for the 2x2 matrix
         CNumber trace = a11.add(a22);
         CNumber det = a11.mult(a22).sub(a12.mult(a21));
 
         // Compute the middle term of the quadratic equation
-        CNumber middleTerm = trace.mult(trace).div(new CNumber(4, 0)).sub(det);
+        CNumber middleTerm = trace.mult(trace).div(4).sub(det);
 
         // Compute the square root of the middle term
         CNumber sqrtMiddle = CNumber.sqrt(middleTerm);
 
         // Compute eigenvalues
-        lambda[0] = trace.div(new CNumber(2)).add(sqrtMiddle);
-        lambda[1] = trace.div(new CNumber(2)).sub(sqrtMiddle);
+        lambda[0] = trace.div(2).add(sqrtMiddle);
+        lambda[1] = trace.div(2).sub(sqrtMiddle);
 
         // Scale back the eigenvalues
-        lambda[0] = lambda[0].mult(new CNumber(maxAbs, 0));
-        lambda[1] = lambda[1].mult(new CNumber(maxAbs, 0));
+        lambda[0] = lambda[0].mult(new CNumber(maxAbs));
+        lambda[1] = lambda[1].mult(new CNumber(maxAbs));
 
         return lambda;
     }
@@ -325,7 +326,7 @@ public class Eigen {
         // Extract eigenvalues of T.
         for(int m=0; m<numRows; m++) {
             if(m == numRows-1) {
-                lambdas.entries[m] = T.entries[m*numRows + m].copy();
+                lambdas.entries[m] = T.entries[m*numRows + m];
             } else {
                 CNumber a11 = T.entries[m*numRows + m];
                 CNumber a12 = T.entries[m*numRows + m + 1];
@@ -338,7 +339,7 @@ public class Eigen {
                     lambdas.entries[m] = mu[0];
                     lambdas.entries[++m] = mu[1];
                 } else {
-                    lambdas.entries[m] = a11.copy();
+                    lambdas.entries[m] = a11;
                 }
             }
         }
@@ -587,8 +588,8 @@ public class Eigen {
         for(int i=0; i<j; i++) {
             int tRow = i*T.numRows;
             int diffRow = i*j;
-            ArrayUtils.arraycopy(T.entries, tRow, S_hat.entries, diffRow, j);
-            S_hat.entries[diffRow + i].subEq(lam);
+            System.arraycopy(T.entries, tRow, S_hat.entries, diffRow, j);
+            S_hat.entries[diffRow + i] = S_hat.entries[diffRow + i].sub(lam);
             r.entries[i] = T.entries[tRow + j].mult(-1);
         }
     }
@@ -632,7 +633,7 @@ public class Eigen {
 
         // Extract eigenvalues of T.
         for(int i=0; i<numRows; i++) {
-            lambdas.entries[i] = T.entries[i*numRows + i].copy();
+            lambdas.entries[i] = T.entries[i*numRows + i];
         }
 
         // If the source matrix is symmetric, then U will contain its eigenvectors.
@@ -661,7 +662,7 @@ public class Eigen {
 
         // Extract eigenvalues of T.
         for(int i=0; i<numRows; i++) {
-            lambdas.entries[i] = T.entries[i*numRows + i].copy();
+            lambdas.entries[i] = T.entries[i*numRows + i];
         }
 
         // If the src matrix is hermitian, then U will contain the eigenvectors.

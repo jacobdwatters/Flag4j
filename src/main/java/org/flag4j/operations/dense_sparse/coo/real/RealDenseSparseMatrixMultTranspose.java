@@ -25,7 +25,6 @@
 package org.flag4j.operations.dense_sparse.coo.real;
 
 import org.flag4j.core.Shape;
-import org.flag4j.util.Axis2D;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -53,9 +52,9 @@ public class RealDenseSparseMatrixMultTranspose {
      */
     public static double[] multTranspose(double[] dSrc, Shape dShape,
                                          double[] spSrc, int[] rowIndices, int[] colIndices, Shape spShape) {
-        int rows1 = dShape.dims[Axis2D.row()];
-        int rows2 = spShape.dims[Axis2D.row()];
-        int cols2 = spShape.dims[Axis2D.col()];
+        int rows1 = dShape.get(0);
+        int rows2 = spShape.get(0);
+        int cols2 = spShape.get(1);
 
         double[] dest = new double[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.
 

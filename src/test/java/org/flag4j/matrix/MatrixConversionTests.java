@@ -49,7 +49,7 @@ class MatrixConversionTests {
         // --------------------- Sub-case 1  ---------------------
         aEntries = new double[][]{{1, 2, 3, 0.0000245}, {452.745, -8234, -2.234, 345.324}};
         A = new Matrix(aEntries);
-        exp = new Tensor(A.shape.copy(), ArrayUtils.flatten(aEntries));
+        exp = new Tensor(A.shape, ArrayUtils.flatten(aEntries));
 
         assertEquals(exp, A.toTensor());
     }

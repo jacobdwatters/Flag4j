@@ -138,7 +138,7 @@ public class RealSparseMatrixOperations {
             sum[row*src.numCols + col] += src.entries[i];
         }
 
-        return new Matrix(src.shape.copy(), sum);
+        return new Matrix(src.shape, sum);
     }
 
 
@@ -234,7 +234,7 @@ public class RealSparseMatrixOperations {
             sum[row*src.numCols + col] += src.entries[i];
         }
 
-        return new Matrix(src.shape.copy(), sum);
+        return new Matrix(src.shape, sum);
     }
 
 
@@ -319,7 +319,7 @@ public class RealSparseMatrixOperations {
             }
         }
 
-        return new Matrix(src.shape.copy(), destEntries);
+        return new Matrix(src.shape, destEntries);
     }
 
 
@@ -350,6 +350,6 @@ public class RealSparseMatrixOperations {
             }
         }
 
-        return new Matrix(src.shape.copy(), destEntries);
+        return new Matrix(src.shape, destEntries);
     }
 }

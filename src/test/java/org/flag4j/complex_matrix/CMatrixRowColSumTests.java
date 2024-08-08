@@ -28,7 +28,7 @@ class CMatrixRowColSumTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         expVecEntries = new CNumber[]{new CNumber("7976.594999999999-354.3i"), new CNumber("54.4146623235-728.0333i"), new CNumber(
@@ -48,7 +48,7 @@ class CMatrixRowColSumTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new double[]{1.445, -775.14, 9.4};
@@ -57,7 +57,7 @@ class CMatrixRowColSumTests {
                 {new CNumber(123.5, -9.3).add(bEntries[0]), new CNumber(45.2, -0.0333).add(bEntries[1]),
                         new CNumber(5.4).add(bEntries[2])},
                 {new CNumber(1).add(bEntries[0]), new CNumber(0, -743.1).add(bEntries[1]), new CNumber(-34.5, -93.).add(bEntries[2])},
-                {new CNumber(7617.445).add(bEntries[0]), new CNumber(0).add(bEntries[1]), new CNumber().add(bEntries[2])},
+                {new CNumber(7617.445).add(bEntries[0]), new CNumber(0).add(bEntries[1]), CNumber.ZERO.add(bEntries[2])},
                 {new CNumber(234.65, -345.).add(bEntries[0]), new CNumber(9.2146623235, 15.1).add(bEntries[1]), new CNumber(-4).add(bEntries[2])}};
         exp = new CMatrix(expEntries);
 
@@ -67,7 +67,7 @@ class CMatrixRowColSumTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new double[]{23.456};
@@ -87,7 +87,7 @@ class CMatrixRowColSumTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber(234.6, 8.4), new CNumber(0.345, -9), new CNumber(23.56, -7.34)};
@@ -95,7 +95,7 @@ class CMatrixRowColSumTests {
         expEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3).add(bEntries[0]), new CNumber(45.2, -0.0333).add(bEntries[1]), new CNumber(5.4).add(bEntries[2])},
                 {new CNumber(1).add(bEntries[0]), new CNumber(0, -743.1).add(bEntries[1]), new CNumber(-34.5, -93.).add(bEntries[2])},
-                {new CNumber(7617.445).add(bEntries[0]), new CNumber(0).add(bEntries[1]), new CNumber().add(bEntries[2])},
+                {new CNumber(7617.445).add(bEntries[0]), new CNumber(0).add(bEntries[1]), CNumber.ZERO.add(bEntries[2])},
                 {new CNumber(234.65, -345.).add(bEntries[0]), new CNumber(9.2146623235, 15.1).add(bEntries[1]), new CNumber(-4).add(bEntries[2])}};
         exp = new CMatrix(expEntries);
 
@@ -105,7 +105,7 @@ class CMatrixRowColSumTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber(234.6, 8.4), new CNumber(0.345, -9), new CNumber(23.56, -7.34), new CNumber(84.35, -6767)};
@@ -125,7 +125,7 @@ class CMatrixRowColSumTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber(32.56, -8.4)};
@@ -134,7 +134,7 @@ class CMatrixRowColSumTests {
         expEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333).add(bEntries[0]), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1).add(bEntries[0]), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0).add(bEntries[0]), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0).add(bEntries[0]), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1).add(bEntries[0]), new CNumber(-4)}};
         exp = new CMatrix(expEntries);
 
@@ -144,7 +144,7 @@ class CMatrixRowColSumTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber(32.56, -8.4)};
@@ -165,7 +165,7 @@ class CMatrixRowColSumTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new double[]{3.46567};
@@ -174,7 +174,7 @@ class CMatrixRowColSumTests {
         expEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333).add(bEntries[0]), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1).add(bEntries[0]), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0).add(bEntries[0]), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0).add(bEntries[0]), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1).add(bEntries[0]), new CNumber(-4)}};
         exp = new CMatrix(expEntries);
 
@@ -184,7 +184,7 @@ class CMatrixRowColSumTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new double[]{-9899234.2};
@@ -202,7 +202,7 @@ class CMatrixRowColSumTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         expVecEntries = new CNumber[]{
@@ -225,7 +225,7 @@ class CMatrixRowColSumTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new double[]{234.66, -8.54, 9.45, 16};
@@ -233,7 +233,7 @@ class CMatrixRowColSumTests {
         expEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3).add(bEntries[0]), new CNumber(45.2, -0.0333).add(bEntries[0]), new CNumber(5.4).add(bEntries[0])},
                 {new CNumber(1).add(bEntries[1]), new CNumber(0, -743.1).add(bEntries[1]), new CNumber(-34.5, -93.).add(bEntries[1])},
-                {new CNumber(7617.445).add(bEntries[2]), new CNumber(0).add(bEntries[2]), new CNumber().add(bEntries[2])},
+                {new CNumber(7617.445).add(bEntries[2]), new CNumber(0).add(bEntries[2]), CNumber.ZERO.add(bEntries[2])},
                 {new CNumber(234.65, -345.).add(bEntries[3]), new CNumber(9.2146623235, 15.1).add(bEntries[3]), new CNumber(-4).add(bEntries[3])}};
         exp = new CMatrix(expEntries);
 
@@ -243,7 +243,7 @@ class CMatrixRowColSumTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new double[]{234.66, -8.54, 9.45};
@@ -263,7 +263,7 @@ class CMatrixRowColSumTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber(234.6, 8.4), new CNumber(0.345, -9), new CNumber(23.56, -7.34), new CNumber(84.35, -6767)};
@@ -271,7 +271,7 @@ class CMatrixRowColSumTests {
         expEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3).add(bEntries[0]), new CNumber(45.2, -0.0333).add(bEntries[0]), new CNumber(5.4).add(bEntries[0])},
                 {new CNumber(1).add(bEntries[1]), new CNumber(0, -743.1).add(bEntries[1]), new CNumber(-34.5, -93.).add(bEntries[1])},
-                {new CNumber(7617.445).add(bEntries[2]), new CNumber(0).add(bEntries[2]), new CNumber().add(bEntries[2])},
+                {new CNumber(7617.445).add(bEntries[2]), new CNumber(0).add(bEntries[2]), CNumber.ZERO.add(bEntries[2])},
                 {new CNumber(234.65, -345.).add(bEntries[3]), new CNumber(9.2146623235, 15.1).add(bEntries[3]), new CNumber(-4).add(bEntries[3])}};
         exp = new CMatrix(expEntries);
 
@@ -281,7 +281,7 @@ class CMatrixRowColSumTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber(234.6, 8.4), new CNumber(0.345, -9), new CNumber(23.56, -7.34)};
@@ -301,7 +301,7 @@ class CMatrixRowColSumTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new double[]{234.66};
@@ -310,7 +310,7 @@ class CMatrixRowColSumTests {
         expEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445).add(234.66), new CNumber(0).add(234.66), new CNumber().add(234.66)},
+                {new CNumber(7617.445).add(234.66), new CNumber(0).add(234.66), CNumber.ZERO.add(234.66)},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         exp = new CMatrix(expEntries);
 
@@ -320,7 +320,7 @@ class CMatrixRowColSumTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new double[]{234.66};
@@ -341,7 +341,7 @@ class CMatrixRowColSumTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber(3.678, -8.4322)};
@@ -350,7 +350,7 @@ class CMatrixRowColSumTests {
         expEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1).add(bEntries[0]), new CNumber(0, -743.1).add(bEntries[0]), new CNumber(-34.5, -93.).add(bEntries[0])},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         exp = new CMatrix(expEntries);
 
@@ -360,7 +360,7 @@ class CMatrixRowColSumTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(234.65, -345.), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber(3.678, -8.4322)};

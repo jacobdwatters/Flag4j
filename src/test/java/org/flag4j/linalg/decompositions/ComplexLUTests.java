@@ -45,7 +45,7 @@ public class ComplexLUTests {
         U = lu.getU();
         A_hat = L.mult(U);
 
-        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
 
         // --------------------- Sub-case 2 ---------------------
         aEntries = new CNumber[][]{
@@ -59,7 +59,7 @@ public class ComplexLUTests {
         U = lu.getU();
         A_hat = L.mult(U);
 
-        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
 
         // --------------------- Sub-case 3 ---------------------
         aEntries = new CNumber[][]{
@@ -72,7 +72,7 @@ public class ComplexLUTests {
         U = lu.getU();
         A_hat = L.mult(U);
 
-        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
     }
 
 
@@ -94,7 +94,7 @@ public class ComplexLUTests {
         U = lu.getU();
         A_hat = P.T().mult(L).mult(U);
 
-        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
 
         // --------------------- Sub-case 2 ---------------------
         aEntries = new CNumber[][]{
@@ -109,7 +109,7 @@ public class ComplexLUTests {
         U = lu.getU();
         A_hat = P.T().mult(L).mult(U);
 
-        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
 
         // --------------------- Sub-case 3 ---------------------
         aEntries = new CNumber[][]{
@@ -123,7 +123,7 @@ public class ComplexLUTests {
         U = lu.getU();
         A_hat = P.T().mult(L).mult(U);
 
-        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
     }
 
 
@@ -145,7 +145,7 @@ public class ComplexLUTests {
         U = lu.getU();
         A_hat = P.T().mult(L).mult(U).mult(Q.T());
 
-        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
 
         // --------------------- Sub-case 2 ---------------------
         aEntries = new CNumber[][]{
@@ -161,7 +161,7 @@ public class ComplexLUTests {
         U = lu.getU();
         A_hat = P.T().mult(L).mult(U).mult(Q.T());
 
-        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
 
         // --------------------- Sub-case 3 ---------------------
         aEntries = new CNumber[][]{
@@ -176,6 +176,6 @@ public class ComplexLUTests {
         U = lu.getU();
         A_hat = P.T().mult(L).mult(U).mult(Q.T());
 
-        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
     }
 }

@@ -47,22 +47,22 @@ class CVectorZeroOneTests {
         assertTrue(a.isZeros());
 
         // ------------------ Sub-case 3 ------------------
-        aEntries = new CNumber[]{new CNumber(), new CNumber(), new CNumber()};
+        aEntries = new CNumber[]{CNumber.ZERO, CNumber.ZERO, CNumber.ZERO};
         a = new CVector(aEntries);
         assertTrue(a.isZeros());
 
         // ------------------ Sub-case 4 ------------------
-        aEntries = new CNumber[]{new CNumber(), new CNumber(1), new CNumber()};
+        aEntries = new CNumber[]{CNumber.ZERO, new CNumber(1), CNumber.ZERO};
         a = new CVector(aEntries);
         assertFalse(a.isZeros());
 
         // ------------------ Sub-case 5 ------------------
-        aEntries = new CNumber[]{new CNumber(), new CNumber(9.4, -6.233), new CNumber()};
+        aEntries = new CNumber[]{CNumber.ZERO, new CNumber(9.4, -6.233), CNumber.ZERO};
         a = new CVector(aEntries);
         assertFalse(a.isZeros());
 
         // ------------------ Sub-case 6 ------------------
-        aEntries = new CNumber[]{new CNumber(), new CNumber(), new CNumber(0, -8.234)};
+        aEntries = new CNumber[]{CNumber.ZERO, CNumber.ZERO, new CNumber(0, -8.234)};
         a = new CVector(aEntries);
         assertFalse(a.isZeros());
     }

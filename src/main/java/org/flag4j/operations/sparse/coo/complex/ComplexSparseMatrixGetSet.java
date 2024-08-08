@@ -63,7 +63,7 @@ public class ComplexSparseMatrixGetSet {
      */
     public static CNumber matrixGet(CooCMatrix src, int row, int col) {
         int idx = SparseElementSearch.matrixBinarySearch(src.rowIndices, src.colIndices, row, col);
-        return idx<0 ? new CNumber() : src.entries[idx];
+        return idx<0 ? CNumber.ZERO : src.entries[idx];
     }
 
 
@@ -85,7 +85,7 @@ public class ComplexSparseMatrixGetSet {
         if(idx < 0) {
             // No non-zero element with these indices exists. Insert new value.
             destEntries = new CNumber[src.entries.length + 1];
-            ArrayUtils.arraycopy(src.entries, 0, destEntries, 0, -idx-1);
+            System.arraycopy(src.entries, 0, destEntries, 0, -idx-1);
             destEntries[-idx-1] = value;
             System.arraycopy(src.entries, -idx-1, destEntries, -idx, src.entries.length+idx+1);
 
@@ -100,13 +100,13 @@ public class ComplexSparseMatrixGetSet {
             System.arraycopy(src.colIndices, -idx-1, destColIndices, -idx, src.colIndices.length+idx+1);
         } else {
             // Value with these indices exists. Simply update value.
-            destEntries = ArrayUtils.copyOf(src.entries);
+            destEntries = Arrays.copyOf(src.entries, src.entries.length);
             destEntries[idx] = value;
             destRowIndices = src.rowIndices.clone();
             destColIndices = src.colIndices.clone();
         }
 
-        return new CooCMatrix(src.shape.copy(), destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(src.shape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -135,9 +135,9 @@ public class ComplexSparseMatrixGetSet {
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
-            ArrayUtils.arraycopy(src.entries, 0, destEntries, 0, -start-1);
+            System.arraycopy(src.entries, 0, destEntries, 0, -start-1);
             ArrayUtils.arraycopy(row, 0, destEntries, -start-1, row.length);
-            ArrayUtils.arraycopy(
+            System.arraycopy(
                     src.entries, -start-1,
                     destEntries, -start-1+row.length, destEntries.length-(row.length - start - 1)
             );
@@ -162,9 +162,9 @@ public class ComplexSparseMatrixGetSet {
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
-            ArrayUtils.arraycopy(src.entries, 0, destEntries, 0, start);
+            System.arraycopy(src.entries, 0, destEntries, 0, start);
             ArrayUtils.arraycopy(row, 0, destEntries, start, row.length);
-            ArrayUtils.arraycopy(
+            System.arraycopy(
                     src.entries, end,
                     destEntries, start + row.length, destEntries.length-(start + row.length)
             );
@@ -184,7 +184,7 @@ public class ComplexSparseMatrixGetSet {
             );
         }
 
-        return new CooCMatrix(src.shape.copy(), destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(src.shape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -213,9 +213,9 @@ public class ComplexSparseMatrixGetSet {
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
-            ArrayUtils.arraycopy(src.entries, 0, destEntries, 0, -start-1);
-            ArrayUtils.arraycopy(row, 0, destEntries, -start-1, row.length);
-            ArrayUtils.arraycopy(
+            System.arraycopy(src.entries, 0, destEntries, 0, -start-1);
+            System.arraycopy(row, 0, destEntries, -start-1, row.length);
+            System.arraycopy(
                     src.entries, -start-1,
                     destEntries, -start-1+row.length, destEntries.length-(row.length - start - 1)
             );
@@ -240,9 +240,9 @@ public class ComplexSparseMatrixGetSet {
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
-            ArrayUtils.arraycopy(src.entries, 0, destEntries, 0, start);
-            ArrayUtils.arraycopy(row, 0, destEntries, start, row.length);
-            ArrayUtils.arraycopy(
+            System.arraycopy(src.entries, 0, destEntries, 0, start);
+            System.arraycopy(row, 0, destEntries, start, row.length);
+            System.arraycopy(
                     src.entries, end,
                     destEntries, start + row.length, destEntries.length-(start + row.length)
             );
@@ -262,7 +262,7 @@ public class ComplexSparseMatrixGetSet {
             );
         }
 
-        return new CooCMatrix(src.shape.copy(), destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(src.shape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -291,9 +291,9 @@ public class ComplexSparseMatrixGetSet {
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
-            ArrayUtils.arraycopy(src.entries, 0, destEntries, 0, -start-1);
-            ArrayUtils.arraycopy(row.entries, 0, destEntries, -start-1, row.entries.length);
-            ArrayUtils.arraycopy(
+            System.arraycopy(src.entries, 0, destEntries, 0, -start-1);
+            System.arraycopy(row.entries, 0, destEntries, -start-1, row.entries.length);
+            System.arraycopy(
                     src.entries, -start-1,
                     destEntries, -start-1+row.entries.length, destEntries.length-(row.entries.length - start - 1)
             );
@@ -318,11 +318,11 @@ public class ComplexSparseMatrixGetSet {
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
-            ArrayUtils.arraycopy(src.entries, 0, destEntries, 0, start);
-            ArrayUtils.arraycopy(row.entries, 0, destEntries, start, row.entries.length);
+            System.arraycopy(src.entries, 0, destEntries, 0, start);
+            System.arraycopy(row.entries, 0, destEntries, start, row.entries.length);
             int length = destEntries.length - (start + row.entries.length);
 
-            ArrayUtils.arraycopy(
+            System.arraycopy(
                     src.entries, end,
                     destEntries, start + row.entries.length, length
             );
@@ -342,7 +342,7 @@ public class ComplexSparseMatrixGetSet {
             );
         }
 
-        return new CooCMatrix(src.shape.copy(), destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(src.shape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -373,14 +373,14 @@ public class ComplexSparseMatrixGetSet {
         // Add all entries in old matrix that are NOT in the specified column.
         for(int i=0; i<src.entries.length; i++) {
             if(src.colIndices[i]!=colIdx) {
-                destEntries.add(src.entries[i].copy());
+                destEntries.add(src.entries[i]);
                 destRowIndices.add(src.rowIndices[i]);
                 destColIndices.add(src.colIndices[i]);
             }
         }
 
         CooCMatrix dest = new CooCMatrix(
-                src.shape.copy(),
+                src.shape,
                 destEntries.toArray(CNumber[]::new),
                 destRowIndices.stream().mapToInt(Integer::intValue).toArray(),
                 destColIndices.stream().mapToInt(Integer::intValue).toArray()
@@ -417,14 +417,14 @@ public class ComplexSparseMatrixGetSet {
         // Add all entries in old matrix that are NOT in the specified column.
         for(int i=0; i<src.entries.length; i++) {
             if(src.colIndices[i]!=colIdx) {
-                destEntries.add(src.entries[i].copy());
+                destEntries.add(src.entries[i]);
                 destRowIndices.add(src.rowIndices[i]);
                 destColIndices.add(src.colIndices[i]);
             }
         }
 
         CooCMatrix dest = new CooCMatrix(
-                src.shape.copy(),
+                src.shape,
                 destEntries.toArray(CNumber[]::new),
                 destRowIndices.stream().mapToInt(Integer::intValue).toArray(),
                 destColIndices.stream().mapToInt(Integer::intValue).toArray()
@@ -458,7 +458,7 @@ public class ComplexSparseMatrixGetSet {
         // Add all entries in old matrix that are NOT in the specified column.
         for(int i=0; i<src.entries.length; i++) {
             if(src.colIndices[i]!=colIdx) {
-                destEntries.add(src.entries[i].copy());
+                destEntries.add(src.entries[i]);
                 destRowIndices.add(src.rowIndices[i]);
                 destColIndices.add(src.colIndices[i]);
             }
@@ -472,7 +472,7 @@ public class ComplexSparseMatrixGetSet {
         int[] destColIndicesArr = ArrayUtils.splice(destColIndices, colIndices, 0);
 
         CooCMatrix dest = new CooCMatrix(
-                src.shape.copy(),
+                src.shape,
                 destEntriesArr,
                 destRowIndicesArr,
                 destColIndicesArr
@@ -510,7 +510,7 @@ public class ComplexSparseMatrixGetSet {
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
         // Create matrix and ensure entries are properly sorted.
-        CooCMatrix mat = new CooCMatrix(src.shape.copy(), entries, rowIndices, colIndices);
+        CooCMatrix mat = new CooCMatrix(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
         return mat;
@@ -543,7 +543,7 @@ public class ComplexSparseMatrixGetSet {
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
         // Create matrix and ensure entries are properly sorted.
-        CooCMatrix mat = new CooCMatrix(src.shape.copy(), entries, rowIndices, colIndices);
+        CooCMatrix mat = new CooCMatrix(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
         return mat;
@@ -643,7 +643,7 @@ public class ComplexSparseMatrixGetSet {
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
         // Create matrix and ensure entries are properly sorted.
-        CooCMatrix mat = new CooCMatrix(src.shape.copy(), entries, rowIndices, colIndices);
+        CooCMatrix mat = new CooCMatrix(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
         return mat;
@@ -675,7 +675,7 @@ public class ComplexSparseMatrixGetSet {
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
         // Create matrix and ensure entries are properly sorted.
-        CooCMatrix mat = new CooCMatrix(src.shape.copy(), entries, rowIndices, colIndices);
+        CooCMatrix mat = new CooCMatrix(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
         return mat;
@@ -779,7 +779,7 @@ public class ComplexSparseMatrixGetSet {
 
         for(int i=0; i<src.entries.length; i++) {
             if(src.rowIndices[i]==rowIdx) {
-                entries.add(src.entries[i].copy());
+                entries.add(src.entries[i]);
                 indices.add(src.colIndices[i]);
             }
         }
@@ -807,7 +807,7 @@ public class ComplexSparseMatrixGetSet {
 
         for(int i=0; i<src.entries.length; i++) {
             if(src.rowIndices[i]==rowIdx && src.colIndices[i] >= start && src.colIndices[i] < end) {
-                entries.add(src.entries[i].copy());
+                entries.add(src.entries[i]);
                 indices.add(src.colIndices[i]);
             }
         }
@@ -830,7 +830,7 @@ public class ComplexSparseMatrixGetSet {
 
         for(int i=0; i<src.entries.length; i++) {
             if(src.colIndices[i]==colIdx) {
-                entries.add(src.entries[i].copy());
+                entries.add(src.entries[i]);
                 indices.add(src.rowIndices[i]);
             }
         }
@@ -857,7 +857,7 @@ public class ComplexSparseMatrixGetSet {
 
         for(int i=0; i<src.entries.length; i++) {
             if(src.colIndices[i]==colIdx && src.rowIndices[i] >= start && src.rowIndices[i] < end) {
-                entries.add(src.entries[i].copy());
+                entries.add(src.entries[i]);
                 indices.add(src.rowIndices[i]);
             }
         }
@@ -934,7 +934,7 @@ public class ComplexSparseMatrixGetSet {
             if( !(ArrayUtils.contains(rowRange, src.rowIndices[i])
                     && ArrayUtils.contains(colRange, src.colIndices[i])) ) {
                 // Then the entry is not in the slice so add it.
-                entries.add(src.entries[i].copy());
+                entries.add(src.entries[i]);
                 rowIndices.add(src.rowIndices[i]);
                 colIndices.add(src.colIndices[i]);
             }
@@ -942,7 +942,7 @@ public class ComplexSparseMatrixGetSet {
     }
 
 
-    private static <T extends MatrixMixin<?, ?, ?, ?, ?, ?, ?>, U extends MatrixMixin<?, ?, ?, ?, ?, ?, ?>>
+    private static <T extends MatrixMixin<?, ?, ?, ?, ?, ?, ?, ?>, U extends MatrixMixin<?, ?, ?, ?, ?, ?, ?, ?>>
     void setSliceParamCheck(T src, U values, int row, int col) {
         ParameterChecks.assertIndexInBounds(src.numRows(), row);
         ParameterChecks.assertIndexInBounds(src.numCols(), col);
@@ -951,7 +951,7 @@ public class ComplexSparseMatrixGetSet {
     }
 
 
-    private static <T extends MatrixMixin<?, ?, ?, ?, ?, ?, ?>>
+    private static <T extends MatrixMixin<?, ?, ?, ?, ?, ?, ?, ?>>
     void setSliceParamCheck(T src, int valueRows, int valueCols, int row, int col) {
         ParameterChecks.assertIndexInBounds(src.numRows(), row);
         ParameterChecks.assertIndexInBounds(src.numCols(), col);

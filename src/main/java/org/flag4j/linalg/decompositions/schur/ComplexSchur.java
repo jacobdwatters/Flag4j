@@ -56,7 +56,7 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
     /**
      * The complex number equal to zero.
      */
-    private final static CNumber ZERO = CNumber.zero();
+    private final static CNumber ZERO = CNumber.ZERO;
 
     /**
      * For computing the norm of a column for use when computing Householder reflectors.
@@ -231,8 +231,8 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
      */
     protected void computeImplicitSingleShift(int k, CNumber shift) {
         int leftIdx = k-1;
-        shiftCol[0] = T.entries[leftIdx*numRows + leftIdx].copy().sub(shift);
-        shiftCol[1] = T.entries[k*numRows + leftIdx].copy();
+        shiftCol[0] = T.entries[leftIdx*numRows + leftIdx].sub(shift);
+        shiftCol[1] = T.entries[k*numRows + leftIdx];
     }
 
 
@@ -255,8 +255,8 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
                 applySingleShiftReflector(i, i>0); // Apply the reflector if needed.
 
             // Set values to be used in computing the next bulge chasing reflector.
-            p1 = T.entries[(i + 1)*numRows + i].copy();
-            if(i < workingSize-1) p2 = T.entries[(i + 2)*numRows + i].copy();
+            p1 = T.entries[(i + 1)*numRows + i];
+            if(i < workingSize-1) p2 = T.entries[(i + 2)*numRows + i];
         }
     }
 
@@ -280,7 +280,7 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
         if(set) {
             // Explicitly zeros out values which should be zeroed by the reflector.
             T.entries[i*numRows + i - 1] = norm.addInv();
-            T.entries[(i+1)*numRows + i - 1] = CNumber.zero();
+            T.entries[(i+1)*numRows + i - 1] = CNumber.ZERO;
         }
     }
 
@@ -305,9 +305,9 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
                 applyDoubleShiftReflector(i, i>0); // Apply the reflector if needed.
 
             // Set values to be used in computing the next bulge chasing reflector.
-            p1 = T.entries[(i + 1)*numRows + i].copy();
-            p2 = T.entries[(i + 2)*numRows + i].copy();
-            if(i < workingSize-2) p3 = T.entries[(i + 3)*numRows + i].copy();
+            p1 = T.entries[(i + 1)*numRows + i];
+            p2 = T.entries[(i + 2)*numRows + i];
+            if(i < workingSize-2) p3 = T.entries[(i + 3)*numRows + i];
         }
 
         // The last reflector in the bulge chase only acts on last two rows of the working matrix.
@@ -329,25 +329,25 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
 
         // Extract values from lower right 2x2 sub-matrix within the working size.
         int leftIdx = workingSize-1;
-        CNumber x11 = T.entries[leftIdx*numRows + leftIdx].copy();
-        CNumber x12 = T.entries[leftIdx*numRows + workingSize].copy();
-        CNumber x21 = T.entries[workingSize*numRows + leftIdx].copy();
-        CNumber x22 = T.entries[workingSize*numRows + workingSize].copy();
+        CNumber x11 = T.entries[leftIdx*numRows + leftIdx];
+        CNumber x12 = T.entries[leftIdx*numRows + workingSize];
+        CNumber x21 = T.entries[workingSize*numRows + leftIdx];
+        CNumber x22 = T.entries[workingSize*numRows + workingSize];
 
         // Extract top right entries of T for use in computing the shift p.
-        CNumber a11 = T.entries[0].copy();
-        CNumber a12 = T.entries[1].copy();
-        CNumber a21 = T.entries[numRows].copy();
-        CNumber a22 = T.entries[numRows + 1].copy();
-        CNumber a32 = T.entries[2*numRows + 1].copy();
+        CNumber a11 = T.entries[0];
+        CNumber a12 = T.entries[1];
+        CNumber a21 = T.entries[numRows];
+        CNumber a22 = T.entries[numRows + 1];
+        CNumber a32 = T.entries[2*numRows + 1];
 
         // Scale values to improve stability and help avoid possible over(under)flow issues.
         temp[0] = a11; temp[1] = a21; temp[2] = a12; temp[3] = a22; temp[4] = a32;
         temp[5] = x11; temp[6] = x22; temp[7] = x12; temp[8] = x21;
         double maxAbs = AggregateComplex.maxAbs(temp);
 
-        a11.divEq(maxAbs); a12.divEq(maxAbs); a21.divEq(maxAbs); a22.divEq(maxAbs); a32.divEq(maxAbs);
-        x11.divEq(maxAbs); x12.divEq(maxAbs); x21.divEq(maxAbs); x22.divEq(maxAbs);
+        a11 = a11.div(maxAbs); a12 = a12.div(maxAbs); a21 = a21.div(maxAbs); a22 = a22.div(maxAbs); a32 = a32.div(maxAbs);
+        x11 = x11.div(maxAbs); x12 = x12.div(maxAbs); x21 = x21.div(maxAbs); x22 = x22.div(maxAbs);
 
         CNumber[] rho = Eigen.get2x2EigenValues(x11, x12, x21, x22); // Compute shifts to be eigenvalues of trailing 2x2 sub-matrix.
 
@@ -369,8 +369,8 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
         if(set) {
             // Explicitly zeros out values which should be zeroed by the reflector.
             T.entries[i*numRows + i - 1] = norm.addInv();
-            T.entries[(i+1)*numRows + i - 1] = CNumber.zero();
-            T.entries[(i+2)*numRows + i - 1] = CNumber.zero();
+            T.entries[(i+1)*numRows + i - 1] = CNumber.ZERO;
+            T.entries[(i+2)*numRows + i - 1] = CNumber.ZERO;
         }
     }
 
@@ -413,9 +413,9 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
             return false; // No reflector needs to be constructed or applied.
         }
 
-        p1.divEq(maxAbs);
-        p2.divEq(maxAbs);
-        p3.divEq(maxAbs);
+        p1 = p1.div(maxAbs);
+        p2 = p2.div(maxAbs);
+        p3 = p3.div(maxAbs);
 
         double m1 = p1.mag();
         double m2 = p2.mag();
@@ -428,9 +428,9 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
 
         CNumber div = p1.add(norm);
         currentFactor = div.div(norm);
-        norm.multEq(maxAbs); // Rescale norm to be proper magnitude.
+        norm = norm.mult(maxAbs); // Rescale norm to be proper magnitude.
 
-        householderVector[i] = CNumber.one();
+        householderVector[i] = CNumber.ONE;
         householderVector[i+1] = p2.div(div);
         householderVector[i+2] = p3.div(div);
 
@@ -454,8 +454,8 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
         }
 
         // Scale components for stability and over(under)flow purposes.
-        p1.divEq(maxAbs);
-        p2.divEq(maxAbs);
+        p1 = p1.div(maxAbs);
+        p2 = p2.div(maxAbs);
 
         double m1 = p1.mag();
         double m2 = p2.mag();
@@ -467,9 +467,9 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
 
         CNumber divisor = p1.add(norm);
         currentFactor = divisor.div(norm);
-        norm.multEq(maxAbs); // Rescale norm to be proper magnitude.
+        norm = norm.mult(maxAbs); // Rescale norm to be proper magnitude.
 
-        householderVector[i] = CNumber.one(); // Ensure first value of reflector is 1.
+        householderVector[i] = CNumber.ONE; // Ensure first value of reflector is 1.
         householderVector[i+1] = p2.div(divisor);
 
         return true; // Reflector has been constructed and must be applied.
@@ -498,10 +498,10 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
         //     |A[k, k-1]| *|A[k-1, k]| <= eps * |A[k, k]| * |A[k, k] - A[k-1, k-1]|
         if(a32.mag() < EPS_F64*(a33.mag() + a22.mag())
                 && a32.mag()*a23.mag() <= EPS_F64*a33.mag() * (a33.sub(a22)).mag()) {
-            T.entries[workingSize*numRows + workingSize - 1] = CNumber.zero(); // Zero out converged value.
+            T.entries[workingSize*numRows + workingSize - 1] = CNumber.ZERO; // Zero out converged value.
             return 1; // Deflate by 1.
         } else if(a21.mag() < EPS_F64*(a11.mag() + a22.mag())) {
-            T.entries[leftRow + workingSize - 2] = CNumber.zero(); // Zero out converged value.
+            T.entries[leftRow + workingSize - 2] = CNumber.ZERO; // Zero out converged value.
             return 2; // Deflate by 2.
         }
 
@@ -524,7 +524,7 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
             if(a21.mag() > EPS_F64*(a11.mag() + a22.mag())) {
                 // non-converged 2x2 block found.
                 CNumber[] mu = Eigen.get2x2EigenValues(a11, a12, a21, a22);
-                mu[0].subEq(a22); // Shift eigenvalue.
+                mu[0] = mu[0].sub(a22); // Shift eigenvalue.
 
                 // Construct a givens rotator to bring matrix into properly upper triangular form.
                 CMatrix G = Givens.get2x2Rotator(new CVector(mu[0], a21));

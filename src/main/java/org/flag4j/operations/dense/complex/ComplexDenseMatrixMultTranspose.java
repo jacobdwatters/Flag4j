@@ -29,9 +29,9 @@ import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.core.Shape;
-import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.Axis2D;
 import org.flag4j.util.ErrorMessages;
+
+import java.util.Arrays;
 
 
 /**
@@ -39,7 +39,7 @@ import org.flag4j.util.ErrorMessages;
  * dense complex matrices. <br>
  * <b>WARNING:</b> These methods do not perform any sanity checks.
  */
-public class ComplexDenseMatrixMultTranspose {
+public final class ComplexDenseMatrixMultTranspose {
 
     private ComplexDenseMatrixMultTranspose() {
         // Hide default constructor.
@@ -57,12 +57,12 @@ public class ComplexDenseMatrixMultTranspose {
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
     public static CNumber[] multTranspose(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int rows2 = shape2.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int rows2 = shape2.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
 
         int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
 
@@ -77,7 +77,7 @@ public class ComplexDenseMatrixMultTranspose {
                 destIndex = destIndexStart + j;
 
                 while(src1Index<end) {
-                    dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index++]));
+                    dest[destIndex] = dest[destIndex].add(src1[src1Index++].mult(src2[src2Index++]));
                 }
             }
         }
@@ -96,12 +96,12 @@ public class ComplexDenseMatrixMultTranspose {
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
     public static CNumber[] multTransposeBlocked(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int rows2 = shape2.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int rows2 = shape2.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*rows2];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
 
         int blockSize = Configurations.getBlockSize();
         int iBound, jBound, kBound;
@@ -129,7 +129,7 @@ public class ComplexDenseMatrixMultTranspose {
                             src2Index = j*cols2 + kk;
 
                             while(src1Index<end) {
-                                dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index++]));
+                                dest[destIndex] = dest[destIndex].add(src1[src1Index++].mult(src2[src2Index++]));
                             }
                         }
                     }
@@ -152,12 +152,12 @@ public class ComplexDenseMatrixMultTranspose {
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
     public static CNumber[] multTransposeConcurrent(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int rows2 = shape2.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int rows2 = shape2.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
             int src1IndexStart = i*cols2;
@@ -170,7 +170,7 @@ public class ComplexDenseMatrixMultTranspose {
                 int destIndex = destIndexStart + j;
 
                 while(src1Index<end) {
-                    dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index++]));
+                    dest[destIndex] = dest[destIndex].add(src1[src1Index++].mult(src2[src2Index++]));
                 }
             }
         });
@@ -189,12 +189,12 @@ public class ComplexDenseMatrixMultTranspose {
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
     public static CNumber[] multTransposeBlockedConcurrent(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int rows2 = shape2.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int rows2 = shape2.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*rows2];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
 
         int blockSize = Configurations.getBlockSize();
 
@@ -219,7 +219,7 @@ public class ComplexDenseMatrixMultTranspose {
                             int src2Index = j*cols2 + kk;
 
                             while(src1Index<end) {
-                                dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index++]));
+                                dest[destIndex] = dest[destIndex].add(src1[src1Index++].mult(src2[src2Index++]));
                             }
                         }
                     }

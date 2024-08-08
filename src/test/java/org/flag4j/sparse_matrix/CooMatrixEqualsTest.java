@@ -81,7 +81,7 @@ class CooMatrixEqualsTest {
 
         // --------------------- Sub-case 1 ---------------------
         bEntries = new CNumber[aShape.get(0)][aShape.get(1)];
-        ArrayUtils.fill(bEntries, CNumber.zero());
+        ArrayUtils.fill(bEntries, CNumber.ZERO);
         fillDense(bEntries);
         B = new CMatrix(bEntries);
 
@@ -89,7 +89,7 @@ class CooMatrixEqualsTest {
 
         // --------------------- Sub-case 2 ---------------------
         bEntries = new CNumber[aShape.get(0)-1][aShape.get(1)+13];
-        ArrayUtils.fill(bEntries, CNumber.zero());
+        ArrayUtils.fill(bEntries, CNumber.ZERO);
         fillDense(bEntries);
         B = new CMatrix(bEntries);
 
@@ -97,7 +97,7 @@ class CooMatrixEqualsTest {
 
         // --------------------- Sub-case 3 ---------------------
         bEntries = new CNumber[aShape.get(0)][aShape.get(1)];
-        ArrayUtils.fill(bEntries, CNumber.zero());
+        ArrayUtils.fill(bEntries, CNumber.ZERO);
         fillDense(bEntries);
         bEntries[134][7624] = new CNumber(0, -0.3);
         B = new CMatrix(bEntries);
@@ -106,9 +106,9 @@ class CooMatrixEqualsTest {
 
         // --------------------- Sub-case 4 ---------------------
         bEntries = new CNumber[aShape.get(0)][aShape.get(1)];
-        ArrayUtils.fill(bEntries, CNumber.zero());
+        ArrayUtils.fill(bEntries, CNumber.ZERO);
         fillDense(bEntries);
-        bEntries[141][41] = new CNumber();
+        bEntries[141][41] = CNumber.ZERO;
         B = new CMatrix(bEntries);
 
         assertFalse(A.tensorEquals(B));
@@ -131,7 +131,7 @@ class CooMatrixEqualsTest {
                 {9, 13, 141, 141, 398, 400},
                 {1_002, 5, 41, 12_234, 9_013, 27}
         };
-        B = new CooMatrix(A.shape.copy(), bEntries, bIndices[0], bIndices[1]);
+        B = new CooMatrix(A.shape, bEntries, bIndices[0], bIndices[1]);
         assertNotEquals(A, B);
 
         // --------------------- Sub-case 3 ---------------------
@@ -161,7 +161,7 @@ class CooMatrixEqualsTest {
                 {9, 13, 141, 141, 398, 400},
                 {1_002, 5, 41, 12_234, 9_013, 27}
         };
-        B = new CooCMatrix(A.shape.copy(), bEntries, bIndices[0], bIndices[1]);
+        B = new CooCMatrix(A.shape, bEntries, bIndices[0], bIndices[1]);
         assertFalse(A.tensorEquals(B));
 
         // --------------------- Sub-case 3 ---------------------

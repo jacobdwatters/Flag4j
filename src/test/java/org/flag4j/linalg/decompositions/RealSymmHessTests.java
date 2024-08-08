@@ -26,7 +26,7 @@ class RealSymmHessTests {
         Q = hess.getQ();
         A_hat = Q.mult(H).multTranspose(Q);
 
-        Assertions.assertEquals(new Matrix(A.shape.copy()), A.sub(A_hat).round());
+        Assertions.assertEquals(new Matrix(A.shape), A.sub(A_hat).round());
 
         // ----------------------- Sub-case 2 -----------------------
         aEntries = new double[][]{
@@ -40,7 +40,7 @@ class RealSymmHessTests {
         Q = hess.getQ();
         A_hat = Q.mult(H).multTranspose(Q);
 
-        Assertions.assertEquals(new Matrix(A.shape.copy()), A.sub(A_hat).round());
+        Assertions.assertEquals(new Matrix(A.shape), A.sub(A_hat).round());
 
         // ----------------------- Sub-case 3 -----------------------
         aEntries = new double[][]{
@@ -56,7 +56,7 @@ class RealSymmHessTests {
         Q = hess.getQ();
         A_hat = Q.mult(H).multTranspose(Q);
 
-        Assertions.assertEquals(new Matrix(A.shape.copy()), A.sub(A_hat).round());
+        Assertions.assertEquals(new Matrix(A.shape), A.sub(A_hat).round());
 
         // ----------------------- Sub-case 4 -----------------------
         aEntries = new double[][]{
@@ -69,7 +69,7 @@ class RealSymmHessTests {
         Q = hess.getQ();
         A_hat = Q.mult(H).multTranspose(Q);
 
-        Assertions.assertEquals(new Matrix(A.shape.copy()), A.sub(A_hat).round());
+        Assertions.assertEquals(new Matrix(A.shape), A.sub(A_hat).round());
 
         // ----------------------- Sub-case 5 -----------------------
         aEntries = new double[][]{

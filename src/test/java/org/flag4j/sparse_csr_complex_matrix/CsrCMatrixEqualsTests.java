@@ -29,10 +29,9 @@ public class CsrCMatrixEqualsTests {
     void realCsrEqualsTests() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new CNumber[150][235];
-        ArrayUtils.fillZeros(aEntries);
+        ArrayUtils.fill(aEntries, CNumber.ZERO);
         bEntries = new CNumber[150][235];
-        ArrayUtils.fillZeros(bEntries);
-
+        ArrayUtils.fill(bEntries, CNumber.ZERO);
         aEntries[0][1] = new CNumber(134.4, -0.0234);
         aEntries[15][234] = new CNumber(-0.00024, 1.45);
         aEntries[49][1] = new CNumber(234.25000024, 234.5);
@@ -71,12 +70,12 @@ public class CsrCMatrixEqualsTests {
         assertEquals(A, B);
 
         // ---------------------- Sub-case 3 ----------------------
-        aNnz = new CNumber[]{new CNumber(234.5, -0.2), new CNumber(), new CNumber(345.1, 2.5), new CNumber(9.4, -1),
-                new CNumber(235.1, 94.2), new CNumber(3.12, 4), new CNumber(),
+        aNnz = new CNumber[]{new CNumber(234.5, -0.2), CNumber.ZERO, new CNumber(345.1, 2.5), new CNumber(9.4, -1),
+                new CNumber(235.1, 94.2), new CNumber(3.12, 4), CNumber.ZERO,
                 new CNumber(0, 1), new CNumber(2,9733)};
-        bNnz = new CNumber[]{new CNumber(234.5, -0.2), new CNumber(), new CNumber(), new CNumber(), new CNumber(345.1, 2.5),
+        bNnz = new CNumber[]{new CNumber(234.5, -0.2), CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, new CNumber(345.1, 2.5),
                 new CNumber(9.4, -1),
-                new CNumber(), new CNumber(235.1, 94.2), new CNumber(3.12, 4),
+                CNumber.ZERO, new CNumber(235.1, 94.2), new CNumber(3.12, 4),
                 new CNumber(0, 1), new CNumber(2,9733)};
         aIndices = new int[][]{
                 {0, 0, 0, 1, 5, 12, 14, 67, 67},
@@ -93,11 +92,11 @@ public class CsrCMatrixEqualsTests {
 
         // ---------------------- Sub-case 4 ----------------------
         aNnz = new CNumber[]{new CNumber(234.5, -0.2), new CNumber(4.23, 9), new CNumber(345.1, 2.5), new CNumber(9.4, -1),
-                new CNumber(235.1, 94.2), new CNumber(3.12, 4), new CNumber(),
+                new CNumber(235.1, 94.2), new CNumber(3.12, 4), CNumber.ZERO,
                 new CNumber(0, 1), new CNumber(2,9733)};
-        bNnz = new CNumber[]{new CNumber(234.5, -0.2), new CNumber(), new CNumber(), new CNumber(), new CNumber(345.1, 2.5),
+        bNnz = new CNumber[]{new CNumber(234.5, -0.2), CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, new CNumber(345.1, 2.5),
                 new CNumber(9.4, -1),
-                new CNumber(), new CNumber(235.1, 94.2), new CNumber(3.12, 4),
+                CNumber.ZERO, new CNumber(235.1, 94.2), new CNumber(3.12, 4),
                 new CNumber(0, 1), new CNumber(2,9733)};
         aIndices = new int[][]{
                 {0, 0, 0, 1, 5, 12, 14, 67, 67},
@@ -113,12 +112,12 @@ public class CsrCMatrixEqualsTests {
         assertNotEquals(A, B);
 
         // ---------------------- Sub-case 5 ----------------------
-        aNnz = new CNumber[]{new CNumber(234.5, -0.2), new CNumber(), new CNumber(345.1, 2.5), new CNumber(9.4, -1),
-                new CNumber(235.1, 94.2), new CNumber(3.12, 4), new CNumber(),
+        aNnz = new CNumber[]{new CNumber(234.5, -0.2), CNumber.ZERO, new CNumber(345.1, 2.5), new CNumber(9.4, -1),
+                new CNumber(235.1, 94.2), new CNumber(3.12, 4), CNumber.ZERO,
                 new CNumber(0, 1), new CNumber(2,9733)};
-        bNnz = new CNumber[]{new CNumber(234.5, -0.2), new CNumber(), new CNumber(), new CNumber(), new CNumber(345.1, 2.5),
+        bNnz = new CNumber[]{new CNumber(234.5, -0.2), CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, new CNumber(345.1, 2.5),
                 new CNumber(9.4, -1),
-                new CNumber(), new CNumber(235.1, 94.2), new CNumber(3.12, 4),
+                CNumber.ZERO, new CNumber(235.1, 94.2), new CNumber(3.12, 4),
                 new CNumber(0, 1), new CNumber(2,9733)};
         aIndices = new int[][]{
                 {0, 0, 0, 1, 3, 12, 14, 67, 67},
@@ -134,12 +133,12 @@ public class CsrCMatrixEqualsTests {
         assertNotEquals(A, B);
 
         // ---------------------- Sub-case 6 ----------------------
-        aNnz = new CNumber[]{new CNumber(234.5, -0.2), new CNumber(), new CNumber(345.1, 2.5), new CNumber(9.4, -1),
-                new CNumber(235.1, 94.2), new CNumber(3.12, 4), new CNumber(),
+        aNnz = new CNumber[]{new CNumber(234.5, -0.2), CNumber.ZERO, new CNumber(345.1, 2.5), new CNumber(9.4, -1),
+                new CNumber(235.1, 94.2), new CNumber(3.12, 4), CNumber.ZERO,
                 new CNumber(0, 1), new CNumber(2,9733)};
-        bNnz = new CNumber[]{new CNumber(234.5, -0.2), new CNumber(), new CNumber(), new CNumber(), new CNumber(345.1, 2.5),
+        bNnz = new CNumber[]{new CNumber(234.5, -0.2), CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, new CNumber(345.1, 2.5),
                 new CNumber(9.4, -1),
-                new CNumber(), new CNumber(235.1, 94.2), new CNumber(3.12, 4),
+                CNumber.ZERO, new CNumber(235.1, 94.2), new CNumber(3.12, 4),
                 new CNumber(0, 1), new CNumber(2,9733)};
         aIndices = new int[][]{
                 {0, 0, 0, 1, 5, 12, 14, 67, 67},

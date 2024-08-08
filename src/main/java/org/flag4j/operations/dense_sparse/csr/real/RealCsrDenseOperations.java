@@ -84,7 +84,7 @@ public class RealCsrDenseOperations {
             }
         }
 
-        return new Matrix(src2.shape.copy(), dest);
+        return new Matrix(src2.shape, dest);
     }
 
 
@@ -118,7 +118,7 @@ public class RealCsrDenseOperations {
             }
         }
 
-        return new Matrix(src2.shape.copy(), dest);
+        return new Matrix(src2.shape, dest);
     }
 
 
@@ -151,7 +151,7 @@ public class RealCsrDenseOperations {
             }
         }
 
-        return new CsrMatrix(src1.shape.copy(), entries, rowPointers, colIndices);
+        return new CsrMatrix(src1.shape, entries, rowPointers, colIndices);
     }
 
 
@@ -191,6 +191,6 @@ public class RealCsrDenseOperations {
             }
         }
 
-        return new Matrix(src1.shape.copy(), dest);
+        return new Matrix(src1.shape, dest);
     }
 }

@@ -43,7 +43,7 @@ import java.util.*;
  * This class provides low-level implementation of matrix multiplication between a real CSR matrix and a complex
  * CSR matrix.
  */
-public class RealComplexCsrMatrixMultiplication {
+public final class RealComplexCsrMatrixMultiplication {
 
     private RealComplexCsrMatrixMultiplication() {
         // Hide default constructor for utility class.
@@ -62,7 +62,7 @@ public class RealComplexCsrMatrixMultiplication {
         ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
 
         CNumber[] destEntries = new CNumber[src1.numRows*src2.numCols];
-        ArrayUtils.fillZeros(destEntries);
+        Arrays.fill(destEntries, CNumber.ZERO);
 
         for(int i=0; i<src1.numRows; i++) {
             int rowOffset = i*src2.numCols;
@@ -77,7 +77,7 @@ public class RealComplexCsrMatrixMultiplication {
                     int bCol = src2.colIndices[bIndex];
                     CNumber bVal = src2.entries[bIndex];
 
-                    destEntries[rowOffset + bCol].addEq(bVal.mult(aVal));
+                    destEntries[rowOffset + bCol] = destEntries[rowOffset + bCol].add(bVal.mult(aVal));
                 }
             }
         }
@@ -97,7 +97,7 @@ public class RealComplexCsrMatrixMultiplication {
         ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
 
         CNumber[] destEntries = new CNumber[src1.numRows*src2.numCols];
-        ArrayUtils.fillZeros(destEntries);
+        Arrays.fill(destEntries, CNumber.ZERO);
 
         for(int i=0; i<src1.numRows; i++) {
             int rowOffset = i*src2.numCols;
@@ -112,7 +112,7 @@ public class RealComplexCsrMatrixMultiplication {
                     int bCol = src2.colIndices[bIndex];
                     double bVal = src2.entries[bIndex];
 
-                    destEntries[rowOffset + bCol].addEq(aVal.mult(bVal));
+                    destEntries[rowOffset + bCol] = destEntries[rowOffset + bCol].add(aVal.mult(bVal));
                 }
             }
         }
@@ -247,7 +247,7 @@ public class RealComplexCsrMatrixMultiplication {
         ParameterChecks.assertEquals(src1.numCols, src2.size);
 
         CNumber[] destEntries = new CNumber[src1.numRows];
-        ArrayUtils.fillZeros(destEntries);
+        Arrays.fill(destEntries, CNumber.ZERO);
         int rows1 = src1.numRows;
 
         // Iterate over the non-zero elements of the sparse vector.
@@ -259,12 +259,13 @@ public class RealComplexCsrMatrixMultiplication {
             for (int i=0; i<rows1; i++) {
                 int start = src1.rowPointers[i];
                 int stop = src1.rowPointers[i + 1];
+                CNumber destVal = destEntries[col];
 
                 for (int aIndex=start; aIndex < stop; aIndex++) {
                     int aCol = src1.colIndices[aIndex];
                     if (aCol == col) {
                         double aVal = src1.entries[aIndex];
-                        destEntries[i].addEq(val.mult(aVal));
+                        destVal = destVal.add(val.mult(aVal));
                     }
                 }
             }
@@ -286,7 +287,7 @@ public class RealComplexCsrMatrixMultiplication {
         ParameterChecks.assertEquals(src1.numCols, src2.size);
 
         CNumber[] destEntries = new CNumber[src1.numRows];
-        ArrayUtils.fillZeros(destEntries);
+        Arrays.fill(destEntries, CNumber.ZERO);
         int rows1 = src1.numRows;
 
         // Iterate over the non-zero elements of the sparse vector.
@@ -298,12 +299,13 @@ public class RealComplexCsrMatrixMultiplication {
             for (int i=0; i<rows1; i++) {
                 int start = src1.rowPointers[i];
                 int stop = src1.rowPointers[i + 1];
+                CNumber destVal = destEntries[i];
 
                 for (int aIndex=start; aIndex < stop; aIndex++) {
                     int aCol = src1.colIndices[aIndex];
                     if (aCol == col) {
                         CNumber aVal = src1.entries[aIndex];
-                        destEntries[i].addEq(aVal.mult(val));
+                        destVal = destVal.add(aVal.mult(val));
                     }
                 }
             }

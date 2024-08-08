@@ -162,61 +162,61 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
 
     @Override
     public T abs() {
-        return makeTensor(shape.copy(), RealOperations.abs(entries));
+        return makeTensor(shape, RealOperations.abs(entries));
     }
 
 
     @Override
     public T sqrt() {
-        return makeTensor(shape.copy(), RealOperations.sqrt(entries));
+        return makeTensor(shape, RealOperations.sqrt(entries));
     }
 
 
     @Override
     public T add(T B) {
-        return makeTensor(shape.copy(), RealDenseOperations.add(entries, shape, B.entries, B.shape));
+        return makeTensor(shape, RealDenseOperations.add(entries, shape, B.entries, B.shape));
     }
 
 
     @Override
     public T sub(T B) {
-        return makeTensor(shape.copy(), RealDenseOperations.sub(entries, shape, B.entries, B.shape));
+        return makeTensor(shape, RealDenseOperations.sub(entries, shape, B.entries, B.shape));
     }
 
 
     @Override
     public T add(double b) {
-        return makeTensor(shape.copy(), RealDenseOperations.add(entries, b));
+        return makeTensor(shape, RealDenseOperations.add(entries, b));
     }
 
 
     @Override
     public T sub(double b) {
-        return makeTensor(shape.copy(), RealDenseOperations.sub(entries, b));
+        return makeTensor(shape, RealDenseOperations.sub(entries, b));
     }
 
 
     @Override
     public T mult(double b) {
-        return makeTensor(shape.copy(), RealOperations.scalMult(entries, b));
+        return makeTensor(shape, RealOperations.scalMult(entries, b));
     }
 
 
     @Override
     public T div(double b) {
-        return makeTensor(shape.copy(), RealDenseOperations.scalDiv(entries, b));
+        return makeTensor(shape, RealDenseOperations.scalDiv(entries, b));
     }
 
 
     @Override
     public T elemMult(T B) {
-        return makeTensor(shape.copy(), RealDenseElemMult.dispatch(entries, shape, B.entries, B.shape));
+        return makeTensor(shape, RealDenseElemMult.dispatch(entries, shape, B.entries, B.shape));
     }
 
 
     @Override
     public T elemDiv(T B) {
-        return makeTensor(shape.copy(), RealDenseElemDiv.dispatch(entries, shape, B.entries, B.shape));
+        return makeTensor(shape, RealDenseElemDiv.dispatch(entries, shape, B.entries, B.shape));
     }
 
 
@@ -283,7 +283,7 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
     @Override
     public T reshape(Shape shape) {
         ParameterChecks.assertBroadcastable(this.shape, shape);
-        return makeTensor(shape.copy(), this.entries.clone());
+        return makeTensor(shape, this.entries.clone());
     }
 
 
@@ -310,7 +310,7 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
     @Override
     public T recip() {
         return makeTensor(
-                shape.copy(),
+                shape,
                 RealDenseOperations.recip(entries)
         );
     }
@@ -337,7 +337,7 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
      */
     @Override
     public T copy() {
-        return makeTensor(shape.copy(), entries.clone());
+        return makeTensor(shape, entries.clone());
     }
 
 
@@ -349,7 +349,7 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
      */
     @Override
     public W toComplex() {
-        return makeComplexTensor(shape.copy(), entries);
+        return makeComplexTensor(shape, entries);
     }
 
 
@@ -362,7 +362,7 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
     @Override
     public W add(CNumber a) {
         return makeComplexTensor(
-                shape.copy(),
+                shape,
                 ComplexDenseOperations.add(entries, a)
         );
     }
@@ -377,7 +377,7 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
     @Override
     public W sub(CNumber a) {
         return makeComplexTensor(
-                shape.copy(),
+                shape,
                 ComplexDenseOperations.sub(entries, a)
         );
     }
@@ -392,7 +392,7 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
     @Override
     public W mult(CNumber factor) {
         return makeComplexTensor(
-                shape.copy(),
+                shape,
                 ComplexOperations.scalMult(entries, factor)
         );
     }
@@ -408,7 +408,7 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
     @Override
     public W div(CNumber divisor) {
         return makeComplexTensor(
-                shape.copy(),
+                shape,
                 RealComplexDenseOperations.scalDiv(entries, divisor)
         );
     }
@@ -421,19 +421,19 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
      */
     @Override
     public int hashCode() {
-        return Arrays.hashCode(entries)+Arrays.hashCode(shape.dims);
+        return Arrays.hashCode(entries)+Arrays.hashCode(shape.getDims());
     }
 
 
     @Override
     public T round() {
-        return makeTensor(this.shape.copy(), RealOperations.round(this.entries));
+        return makeTensor(this.shape, RealOperations.round(this.entries));
     }
 
 
     @Override
     public T round(int precision) {
-        return makeTensor(this.shape.copy(), RealOperations.round(this.entries, precision));
+        return makeTensor(this.shape, RealOperations.round(this.entries, precision));
     }
 
 

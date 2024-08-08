@@ -88,19 +88,19 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, CNumber[]> {
         int uIndex;
         int n = b.size;
         x = new CVector(U.numRows);
-        det = U.entries[n*n-1].copy();
+        det = U.entries[n*n-1];
 
         x.entries[n-1] = b.entries[n-1].div(det);
 
         for(int i=n-2; i>-1; i--) {
-            sum = new CNumber();
+            sum = CNumber.ZERO;
             uIndex = i*U.numCols;
 
             CNumber diag = U.entries[i*(n+1)];
-            det.multEq(diag);
+            det = det.mult(diag);
 
             for(int j=i+1; j<n; j++) {
-                sum.addEq(U.entries[uIndex + j].mult(x.entries[j]));
+                sum = sum.add(U.entries[uIndex + j].mult(x.entries[j]));
             }
 
             x.entries[i] = (b.entries[i].sub(sum)).div(diag);
@@ -130,29 +130,29 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, CNumber[]> {
         int uIndex, xIndex;
         int n = B.numRows;
         X = new CMatrix(B.shape);
-        det = U.entries[U.entries.length-1].copy();
+        det = U.entries[U.entries.length-1];
 
         xCol = new CNumber[n];
 
         for(int j=0; j<B.numCols; j++) {
             X.entries[(n-1)*X.numCols + j] = B.entries[(n-1)*X.numCols + j].div(U.entries[n*n-1]);
-            det.multEq(U.entries[j*(n+1)]);
+            det = det.mult(U.entries[j*(n+1)]);
 
             // Store column to improve cache performance on innermost loop.
             for(int k=0; k<n; k++) {
-                xCol[k] = X.entries[k*X.numCols + j].copy();
+                xCol[k] = X.entries[k*X.numCols + j];
             }
 
             for(int i=n-2; i>-1; i--) {
-                sum = new CNumber();
+                sum = CNumber.ZERO;
                 uIndex = i*U.numCols;
                 xIndex = i*X.numCols + j;
                 diag = U.entries[i*(n+1)];
 
-                if(j==0) det.multEq(diag);
+                if(j==0) det = det.mult(diag);
 
                 for(int k=i+1; k<n; k++) {
-                    sum.addEq(U.entries[uIndex + k].mult(xCol[k]));
+                    sum = sum.add(U.entries[uIndex + k].mult(xCol[k]));
                 }
 
                 CNumber value = B.entries[xIndex].sub(sum).div(diag);
@@ -184,7 +184,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, CNumber[]> {
         int uIndex, xIndex;
         int n = U.numRows;
         X = new CMatrix(U.shape);
-        det = U.entries[U.entries.length-1].copy();
+        det = U.entries[U.entries.length-1];
 
         xCol = new CNumber[n];
         X.entries[X.entries.length-1] = det.multInv();
@@ -197,16 +197,16 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, CNumber[]> {
             }
 
             for(int i=n-2; i>-1; i--) {
-                sum = (i == j) ? CNumber.one() : CNumber.zero();
+                sum = (i == j) ? CNumber.ONE : CNumber.ZERO;
                 uIndex = i*U.numCols;
                 xIndex = uIndex + j;
                 uIndex += i+1;
                 diag = U.entries[i*(n+1)];
 
-                if(j==0) det.multEq(diag);
+                if(j==0) det = det.mult(diag);
 
                 for(int k=i+1; k<n; k++) {
-                    sum.subEq(U.entries[uIndex++].mult(xCol[k]));
+                    sum = sum.sub(U.entries[uIndex++].mult(xCol[k]));
                 }
 
                 CNumber value = sum.div(diag);
@@ -239,7 +239,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, CNumber[]> {
         CNumber uValue = U.entries[n*n-1];
         int rowOffset = (n-1)*n;
         X = new CMatrix(L.shape);
-        det = U.entries[U.entries.length-1].copy();
+        det = U.entries[U.entries.length-1];
 
         xCol = new CNumber[n];
 
@@ -252,15 +252,15 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, CNumber[]> {
             }
 
             for(int i=L.numCols-2; i>=0; i--) {
-                sum = CNumber.zero();
+                sum = CNumber.ZERO;
                 uIndex = i*U.numCols;
                 xIndex = uIndex + j;
                 diag = U.entries[i*(n+1)];
 
-                if(j==0) det.multEq(diag);
+                if(j==0) det = det.mult(diag);
 
                 for(int k=i+1; k<n; k++) {
-                    sum.addEq(U.entries[uIndex + k].mult(xCol[k]));
+                    sum = sum.add(U.entries[uIndex + k].mult(xCol[k]));
                 }
 
                 CNumber value = L.entries[xIndex].sub(sum).div(diag);

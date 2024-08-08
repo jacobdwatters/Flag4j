@@ -37,16 +37,17 @@ import org.flag4j.util.ErrorMessages;
 /**
  * This interface specifies operations which should be implemented by any matrix (rank 2 tensor).
  * @param <T> Matrix type.
- * @param <U> Dense Matrix type.
- * @param <V> Sparse Matrix type.
- * @param <W> Complex Matrix type.
+ * @param <U> Dense matrix type.
+ * @param <V> Sparse matrix type.
+ * @param <W> Complex matrix type.
+ * @param <Y> Complex sparse matrix type.
  * @param <X> Matrix entry type.
  * @param <TT> Vector type equivalent.
  * @param <UU> Dense vector type.
  */
 public interface MatrixOperationsMixin<
         T,
-        U, V, W, X extends Number,
+        U, V, W, Y, X extends Number,
         TT extends VectorMixin<TT, UU, ?, ?, ?, ?, ?, ?>,
         UU extends VectorMixin<UU, UU, ?, CVector, X, U, U, CMatrix>> {
 
@@ -397,7 +398,7 @@ public interface MatrixOperationsMixin<
      * @return The result of element-wise multiplication of this matrix with the matrix B.
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
-    CooCMatrix elemMult(CooCMatrix B);
+    Y elemMult(CooCMatrix B);
 
 
     /**

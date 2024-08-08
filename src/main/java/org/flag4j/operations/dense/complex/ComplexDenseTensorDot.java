@@ -60,7 +60,7 @@ public class ComplexDenseTensorDot {
         if(src1Rank==2 && src2Rank==2) {
             // Product is simply a matrix multiplication problem.
             return new CTensor(
-                    new Shape(src1.shape.dims[0], src2.shape.dims[1]),
+                    new Shape(src1.shape.get(0), src2.shape.get(1)),
                     MatrixMultiplyDispatcher.dispatch(src1.entries, src1.shape, src2.entries, src2.shape)
             );
         }
@@ -101,7 +101,7 @@ public class ComplexDenseTensorDot {
         int pos;
 
         // ---- Compute new axes and shapes for first tensor. ----
-        notin = ArrayUtils.notinAxes(src1Axes, src1.getRank());
+        notin = ArrayUtils.notInAxes(src1Axes, src1.getRank());
         int[] src1NewAxes = ArrayUtils.join(notin, src1Axes);
 
         n2 = 1;
@@ -121,7 +121,7 @@ public class ComplexDenseTensorDot {
         // -----------------------------------------------------
 
         // ---- Compute new axes and shapes for second tensor. ----
-        notin = ArrayUtils.notinAxes(src2Axes, src2.getRank());
+        notin = ArrayUtils.notInAxes(src2Axes, src2.getRank());
         int[] src2NewAxes = ArrayUtils.join(src2Axes, notin);
 
         n2 = 1;

@@ -74,7 +74,7 @@ import java.util.List;
  */
 public class CsrMatrix
         extends RealSparseTensorBase<CsrMatrix, Matrix, CsrCMatrix, CMatrix>
-        implements MatrixMixin<CsrMatrix, Matrix, CsrMatrix, CsrCMatrix, Double, CooVector, Vector>,
+        implements MatrixMixin<CsrMatrix, Matrix, CsrMatrix, CsrCMatrix, CsrCMatrix, Double, CooVector, Vector>,
         RealMatrixMixin<CsrMatrix, CsrCMatrix>
 {
 
@@ -95,10 +95,6 @@ public class CsrMatrix
      * The number of columns in this matrix.
      */
     public final int numCols;
-    /**
-     * The number of non-zero entries stored in this sparse matrix.
-     */
-    public final int nnz;
 
 
     /**
@@ -106,13 +102,12 @@ public class CsrMatrix
      * @param shape Shape of the CSR matrix.
      */
     public CsrMatrix(Shape shape) {
-        super(shape, 0, new double[0], new int[shape.dims[0]+1], new int[0]);
+        super(shape, 0, new double[0], new int[shape.get(0)+1], new int[0]);
 
-        numRows = shape.dims[0];
-        numCols = shape.dims[1];
+        numRows = shape.get(0);
+        numCols = shape.get(1);
         this.rowPointers = indices[0];
         this.colIndices = indices[1];
-        nnz = entries.length;
     }
 
 
@@ -124,11 +119,10 @@ public class CsrMatrix
     public CsrMatrix(int numRows, int numCols) {
         super(new Shape(numRows, numCols), 0, new double[0], new int[numRows+1], new int[0]);
 
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
         this.rowPointers = indices[0];
         this.colIndices = indices[1];
-        nnz = entries.length;
     }
 
 
@@ -144,9 +138,8 @@ public class CsrMatrix
 
         this.rowPointers = rowPointers;
         this.colIndices = colIndices;
-        numRows = shape.dims[0];
-        numCols = shape.dims[1];
-        nnz = entries.length;
+        numRows = shape.get(0);
+        numCols = shape.get(1);
     }
 
 
@@ -163,9 +156,8 @@ public class CsrMatrix
 
         this.rowPointers = rowPointers;
         this.colIndices = colIndices;
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
-        nnz = entries.length;
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -174,14 +166,13 @@ public class CsrMatrix
      * @param src Matrix to create copy of.
      */
     public CsrMatrix(CsrMatrix src) {
-        super(src.shape.copy(), src.entries.length, src.entries.clone(),
+        super(src.shape, src.entries.length, src.entries.clone(),
                 src.rowPointers.clone(), src.colIndices.clone());
 
         this.rowPointers = indices[0];
         this.colIndices = indices[1];
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
-        nnz = entries.length;
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -190,7 +181,7 @@ public class CsrMatrix
      * @param src COO matrix to convert. Indices must be sorted lexicographically.
      */
     public CsrMatrix(CooMatrix src) {
-        super(src.shape.copy(),
+        super(src.shape,
                 src.entries.length,
                 src.entries.clone(),
                 new int[src.numRows + 1],
@@ -199,9 +190,8 @@ public class CsrMatrix
 
         rowPointers = this.indices[0];
         colIndices = this.indices[1];
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
-        nnz = entries.length;
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         // Copy the non-zero entries anc column indices. Count number of entries per row.
         for(int i=0; i<src.entries.length; i++) {
@@ -554,8 +544,8 @@ public class CsrMatrix
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public CooCMatrix elemMult(CooCMatrix B) {
-        return this.elemMult(B.toCsr()).toCoo();
+    public CsrCMatrix elemMult(CooCMatrix B) {
+        return this.elemMult(B.toCsr());
     }
 
 
@@ -606,7 +596,7 @@ public class CsrMatrix
      * @return An identity-like matrix stored in CSR format.
      */
     public static CsrMatrix I(Shape shape) {
-        return I(shape.dims[0], shape.dims[1]);
+        return I(shape.get(0), shape.get(1));
     }
 
 
@@ -1582,7 +1572,7 @@ public class CsrMatrix
             }
         }
 
-        return new CsrMatrix(shape.copy(), newEntries, newRowPointers, newColIndices);
+        return new CsrMatrix(shape, newEntries, newRowPointers, newColIndices);
     }
 
 
@@ -2173,7 +2163,7 @@ public class CsrMatrix
      */
     @Override
     public CsrCMatrix sqrtComplex() {
-        return new CsrCMatrix(shape.copy(), ComplexOperations.sqrt(entries), rowPointers.clone(), colIndices.clone());
+        return new CsrCMatrix(shape, ComplexOperations.sqrt(entries), rowPointers.clone(), colIndices.clone());
     }
 
 
@@ -2185,7 +2175,7 @@ public class CsrMatrix
      */
     @Override
     public CsrCMatrix toComplex() {
-        return new CsrCMatrix(shape.copy(), ComplexOperations.sqrt(entries), rowPointers.clone(), colIndices.clone());
+        return new CsrCMatrix(shape, ComplexOperations.sqrt(entries), rowPointers.clone(), colIndices.clone());
     }
 
 
@@ -2217,7 +2207,7 @@ public class CsrMatrix
             }
         }
 
-        return new CooMatrix(shape.copy(), dest, destRowIdx, destColIdx);
+        return new CooMatrix(shape, dest, destRowIdx, destColIdx);
     }
 
 
@@ -2249,6 +2239,66 @@ public class CsrMatrix
     public CsrMatrix set(double value, int... indices) {
         ParameterChecks.assertValidIndex(shape, indices);
         return set(value, indices[0], indices[1]);
+    }
+
+
+    /**
+     * Copies and reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
+     * in the reshaped matrix.
+     *
+     * @param newShape Shape of the new matrix.
+     *
+     * @return A matrix which is equivalent to this matrix but with the specified shape.
+     *
+     * @throws IllegalArgumentException If this matrix cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public CsrMatrix reshape(Shape newShape) {
+        ParameterChecks.assertBroadcastable(shape, newShape);
+
+        int oldRowCount = shape.get(0);
+        int newRowCount = newShape.get(0);
+        int newColCount = newShape.get(1);
+
+        // Initialize new CSR structures.
+        int[] newRowPointers = new int[newRowCount + 1];
+        int[] newColIndices = new int[colIndices.length];
+
+        int index = 0;
+
+        for(int i = 0; i < oldRowCount; i++) {
+            int rowOffset = i*oldRowCount;
+
+            for(int j = rowPointers[i]; j < rowPointers[i + 1]; j++) {
+                int flatIndex = rowOffset + colIndices[j];
+
+                int newRow = flatIndex / newColCount;
+                int newCol = flatIndex % newColCount;
+
+                newColIndices[index] = newCol;
+
+                newRowPointers[newRow + 1]++;
+                index++;
+            }
+        }
+
+        // Accumulate row pointers
+        for(int i = 0; i < newRowCount; i++) {
+            newRowPointers[i + 1] += newRowPointers[i];
+        }
+
+        return new CsrMatrix(newShape, entries.clone(), newRowPointers, newColIndices);
+    }
+
+
+    /**
+     * Flattens tensor to single dimension. To flatten tensor along a single axis.
+     *
+     * @return The flattened tensor.
+     */
+    @Override
+    public CsrMatrix flatten() {
+        return toCoo().flatten().toCsr();
     }
 
 
@@ -2472,7 +2522,7 @@ public class CsrMatrix
             }
         }
 
-        return new Matrix(shape.copy(), dest);
+        return new Matrix(shape, dest);
     }
 
 
@@ -2481,7 +2531,7 @@ public class CsrMatrix
      * @return A human-readable string representing this sparse matrix.
      */
     public String toString() {
-        int size = nonZeroEntries;
+        int size = nnz;
         StringBuilder result = new StringBuilder(String.format("Full Shape: %s\n", shape));
         result.append("Non-zero entries: [");
 

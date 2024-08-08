@@ -128,7 +128,7 @@ public class RowEchelon {
                 m = U.entries[iRow + j];
 
                 for(int k=j; k<U.numCols; k++) {
-                    U.entries[iRow + k].subEq(m.mult(U.entries[pivotRow + k]));
+                    U.entries[iRow + k] = U.entries[iRow + k].sub(m.mult(U.entries[pivotRow + k]));
                 }
             }
         }

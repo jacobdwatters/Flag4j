@@ -29,7 +29,6 @@ import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.Axis2D;
 import org.flag4j.util.ErrorMessages;
 
 
@@ -38,7 +37,7 @@ import org.flag4j.util.ErrorMessages;
  * multiplications. <br>
  * <b>WARNING:</b> These methods do not perform any sanity checks.
  */
-public class ComplexDenseMatrixMultiplication {
+public final class ComplexDenseMatrixMultiplication {
 
     private ComplexDenseMatrixMultiplication() {
         // Hide default constructor.
@@ -55,9 +54,9 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] standard(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int rows2 = shape2.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int rows2 = shape2.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
@@ -75,7 +74,7 @@ public class ComplexDenseMatrixMultiplication {
                 end = src1Index + rows2;
 
                 while(src1Index<end) {
-                    dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index]));
+                    dest[destIndex] = dest[destIndex].add(src1[src1Index++].mult(src2[src2Index]));
                     src2Index += cols2;
                 }
             }
@@ -95,9 +94,9 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] reordered(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
@@ -116,7 +115,8 @@ public class ComplexDenseMatrixMultiplication {
                 end = src2Index + cols2;
 
                 while(src2Index<end) {
-                    dest[destIndex++].addEq(src1[src1Index].mult(src2[src2Index++]));
+                    dest[destIndex] = dest[destIndex].add(src1[src1Index].mult(src2[src2Index++]));
+                    destIndex++;
                 }
             }
         }
@@ -134,9 +134,9 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] blocked(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
-        int cols1 = shape1.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
+        int cols1 = shape1.get(1);
 
         CNumber[] dest = new CNumber[rows1 * cols2];
         ArrayUtils.fill(dest, 0);
@@ -165,7 +165,7 @@ public class ComplexDenseMatrixMultiplication {
                             src2Index = kk*cols2 + j;
 
                             while(src1Index < stopIndex) {
-                                dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index]));
+                                dest[destIndex] = dest[destIndex].add(src1[src1Index++].mult(src2[src2Index]));
                                 src2Index+=cols2;
                             }
                         }
@@ -188,9 +188,9 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] blockedReordered(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
-        int cols1 = shape1.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
+        int cols1 = shape1.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
@@ -221,7 +221,8 @@ public class ComplexDenseMatrixMultiplication {
                             src2Index = k*cols2 + jj;
 
                             while(destIndex<stopIndex) {
-                                dest[destIndex++].addEq(src1[src1Index].mult(src2[src2Index]));
+                                dest[destIndex] = dest[destIndex].add(src1[src1Index].mult(src2[src2Index]));
+                                destIndex++;
                                 src2Index++;
                             }
                         }
@@ -244,9 +245,9 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] concurrentStandard(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
@@ -261,7 +262,7 @@ public class ComplexDenseMatrixMultiplication {
                 int destIndex = destIndexStart + j;
 
                 for(int k=0; k<cols1; k++) {
-                    dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index]));
+                    dest[destIndex] = dest[destIndex].add(src1[src1Index++].mult(src2[src2Index]));
                     src2Index += cols2;
                 }
             }
@@ -281,9 +282,9 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] concurrentReordered(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int rows2 = shape2.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int rows2 = shape2.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
@@ -298,7 +299,8 @@ public class ComplexDenseMatrixMultiplication {
                 int end = src2Index + cols2;
 
                 while(src2Index<end) {
-                    dest[destIndex++].addEq(src1[src1IndexStart + k].mult(src2[src2Index++]));
+                    dest[destIndex] = dest[destIndex].add(src1[src1IndexStart + k].mult(src2[src2Index++]));
+                    destIndex++;
                 }
             }
         });
@@ -317,9 +319,9 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] concurrentBlocked(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
@@ -346,7 +348,7 @@ public class ComplexDenseMatrixMultiplication {
                             int src2Index = kk*cols2 + j;
 
                             while(src1Index < stopIndex) {
-                                dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index]));
+                                dest[destIndex] = dest[destIndex].add(src1[src1Index++].mult(src2[src2Index]));
                                 src2Index+=cols2;
                             }
                         }
@@ -369,9 +371,9 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] concurrentBlockedReordered(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
@@ -398,7 +400,8 @@ public class ComplexDenseMatrixMultiplication {
                             int src2Index = k*cols2 + jj;
 
                             while(destIndex<stopIndex) {
-                                dest[destIndex++].addEq(src1[src1Index].mult(src2[src2Index]));
+                                dest[destIndex] = dest[destIndex].add(src1[src1Index].mult(src2[src2Index]));
+                                destIndex++;
                                 src2Index++;
                             }
                         }
@@ -420,9 +423,9 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] standardVector(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int rows2 = shape2.dims[Axis2D.row()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
+        int rows2 = shape2.get(0);
 
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
@@ -433,7 +436,7 @@ public class ComplexDenseMatrixMultiplication {
             src2Index = 0;
 
             while(src2Index<rows2) {
-                dest[i].addEq(src1[src1Index++].mult(src2[src2Index++]));
+                dest[i] = dest[i].add(src1[src1Index++].mult(src2[src2Index++]));
             }
         }
 
@@ -450,9 +453,9 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] blockedVector(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int rows2 = shape2.dims[Axis2D.row()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
+        int rows2 = shape2.get(0);
 
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
@@ -473,7 +476,7 @@ public class ComplexDenseMatrixMultiplication {
                     src2Index = kk;
 
                     while(src2Index<kBound) {
-                        dest[i].addEq(src1[src1Index++].mult(src2[src2Index++]));
+                        dest[i] = dest[i].add(src1[src1Index++].mult(src2[src2Index++]));
                     }
                 }
             }
@@ -493,9 +496,9 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] concurrentStandardVector(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int rows2 = shape2.dims[Axis2D.row()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
+        int rows2 = shape2.get(0);
 
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
@@ -505,7 +508,7 @@ public class ComplexDenseMatrixMultiplication {
             int src2Index = 0;
 
             while(src2Index<rows2) {
-                dest[i].addEq(src1[src1Index++].mult(src2[src2Index++]));
+                dest[i] = dest[i].add(src1[src1Index++].mult(src2[src2Index++]));
             }
         });
 
@@ -523,9 +526,9 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] concurrentBlockedVector(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int rows2 = shape2.dims[Axis2D.row()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
+        int rows2 = shape2.get(0);
 
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
@@ -543,7 +546,7 @@ public class ComplexDenseMatrixMultiplication {
                     int src2Index = kk;
 
                     while(src2Index<kBound) {
-                        dest[i].addEq(src1[src1Index++].mult(src2[src2Index++]));
+                        dest[i] = dest[i].add(src1[src1Index++].mult(src2[src2Index++]));
                     }
                 }
             }

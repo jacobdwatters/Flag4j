@@ -179,7 +179,7 @@ class CsrCMatrixAddSubTests {
                 {new CNumber("0.030397833484514858+0.0339598081443111i"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.8303067369813061+0.6672665799918752i"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.08364434412041977+0.4996667151892932i"), new CNumber("0.4271149460271625+0.6885614097388274i"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")}};
         bEntriesCmp = new CNumber[aEntries.length][aEntries[0].length];
-        ArrayUtils.fillZeros(bEntriesCmp);
+        ArrayUtils.fill(bEntriesCmp, CNumber.ZERO);
         bEntriesCmp[0][0] = new CNumber(23, 1.34);
         bEntriesCmp[1][0] = new CNumber(0.133, -41.4);
         bEntriesCmp[1][3] = new CNumber(-4.1, -34.1);
@@ -215,7 +215,7 @@ class CsrCMatrixAddSubTests {
                 {new CNumber("0.030397833484514858+0.0339598081443111i"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.8303067369813061+0.6672665799918752i"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.08364434412041977+0.4996667151892932i"), new CNumber("0.4271149460271625+0.6885614097388274i"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")}};
         bEntriesCmp = new CNumber[aEntries.length][aEntries[0].length];
-        ArrayUtils.fillZeros(bEntriesCmp);
+        ArrayUtils.fill(bEntriesCmp, CNumber.ZERO);
         bEntriesCmp[0][0] = new CNumber(23, 1.34);
         bEntriesCmp[1][0] = new CNumber(0.133, -41.4);
         bEntriesCmp[1][3] = new CNumber(-4.1, -34.1);

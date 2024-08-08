@@ -6,10 +6,11 @@ import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
-import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -93,7 +94,7 @@ class CTensorElemMultTests {
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
         expEntries = new CNumber[aEntries.length];
-        ArrayUtils.fillZeros(expEntries);
+        Arrays.fill(expEntries, CNumber.ZERO);
         expShape = new Shape(true, 2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] = aEntries[expShape.entriesIndex(sparseIndices[0])].mult(bEntries[0]);
         expEntries[expShape.entriesIndex(sparseIndices[1])] = aEntries[expShape.entriesIndex(sparseIndices[1])].mult(bEntries[1]);
@@ -172,8 +173,8 @@ class CTensorElemMultTests {
         };
         B = new CooCTensor(bShape, bEntries, sparseIndices);
         expEntries = new CNumber[]{
-                new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber(),
-                new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber()
+                CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO,
+                CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO
         };
         expShape = new Shape(true, 2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] = aEntries[expShape.entriesIndex(sparseIndices[0])].mult(bEntries[0]);

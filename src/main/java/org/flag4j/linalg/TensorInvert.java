@@ -59,9 +59,9 @@ public final class TensorInvert {
     public static Tensor inv(Tensor src, int numIndices) {
         ParameterChecks.assertPositive(numIndices);
 
-        Shape originalShape = src.shape.copy();
+        Shape originalShape = src.shape;
         Shape invShape = getInvShape(originalShape, numIndices);
-        int prod = getProduct(originalShape.dims, numIndices);
+        int prod = getProduct(originalShape.getDims(), numIndices);
 
         // Convert to an equivalent matrix inverse problem and solve.
         Matrix matInverse = Invert.inv(new Matrix(prod, src.entries.length-prod, src.entries));
@@ -83,9 +83,9 @@ public final class TensorInvert {
     public static CTensor inv(CTensor src, int numIndices) {
         ParameterChecks.assertPositive(numIndices);
 
-        Shape originalShape = src.shape.copy();
+        Shape originalShape = src.shape;
         Shape invShape = getInvShape(originalShape, numIndices);
-        int prod = getProduct(originalShape.dims, numIndices);
+        int prod = getProduct(originalShape.getDims(), numIndices);
 
         // Convert to an equivalent matrix inverse problem.
         CMatrix matInverse = Invert.inv(new CMatrix(prod, src.entries.length-prod, src.entries));
@@ -102,8 +102,9 @@ public final class TensorInvert {
      */
     private static Shape getInvShape(Shape originalShape, int numIndices) {
         int[] invDims = new int[2*numIndices];
-        System.arraycopy(originalShape.dims, numIndices, invDims, 0, numIndices);
-        System.arraycopy(originalShape.dims, 0, invDims, numIndices, 2 * numIndices - numIndices);
+        int[] origDims = originalShape.getDims();
+        System.arraycopy(origDims, numIndices, invDims, 0, numIndices);
+        System.arraycopy(origDims, 0, invDims, numIndices, 2 * numIndices - numIndices);
         return new Shape(true, invDims);
     }
 

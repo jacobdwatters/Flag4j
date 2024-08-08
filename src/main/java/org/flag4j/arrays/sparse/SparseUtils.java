@@ -123,7 +123,7 @@ final class SparseUtils {
     static boolean CSREquals(CsrCMatrix src1, CsrCMatrix src2) {
         if(!src1.shape.equals(src2.shape)) return false;
 
-        final CNumber ZERO = CNumber.zero();
+        final CNumber ZERO = CNumber.ZERO;
 
         // Compare row by row
         for (int i=0; i<src1.numRows; i++) {

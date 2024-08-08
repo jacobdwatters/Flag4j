@@ -173,8 +173,8 @@ class TensorElemMultTests {
         };
         B = new CooCTensor(bShape, bEntries, sparseIndices);
         expEntries = new CNumber[]{
-                new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber(),
-                new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber(), new CNumber()
+                CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO,
+                CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO
         };
         expShape = new Shape(true, 2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] = bEntries[0].mult(aEntries[expShape.entriesIndex(sparseIndices[0])]);

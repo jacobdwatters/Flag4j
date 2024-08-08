@@ -231,7 +231,7 @@ public final class MatrixMultiplyDispatcher {
         AlgorithmName algorithm;
         CNumber[] dest;
 
-        if(shape2.dims[1]==1) {
+        if(shape2.get(1)==1) {
             // Then B is a column vector.
             algorithm = chooseAlgorithmComplexVector(shape1);
         } else {

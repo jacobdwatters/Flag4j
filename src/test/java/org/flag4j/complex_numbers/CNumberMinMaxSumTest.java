@@ -27,7 +27,7 @@ class CNumberMinMaxSumTest {
 
         // ------------ Sub-case 2 ------------
         sum = CNumber.sum();
-        expSum = new CNumber();
+        expSum = CNumber.ZERO;
         Assertions.assertEquals(sum, expSum);
     }
 

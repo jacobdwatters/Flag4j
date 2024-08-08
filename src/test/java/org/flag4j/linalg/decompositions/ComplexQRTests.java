@@ -31,7 +31,7 @@ class ComplexQRTests {
         R = qr.getR();
         A_hat = Q.mult(R);
 
-        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
 
         // --------------------------- Sub-case 2 ---------------------------
         aEntriesReal = new double[][]{
@@ -46,7 +46,7 @@ class ComplexQRTests {
         R = qr.getR();
         A_hat = Q.mult(R);
 
-        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
 
         // --------------------------- Sub-case 3 ---------------------------
         aEntries = new String[][]{
@@ -59,7 +59,7 @@ class ComplexQRTests {
         R = qr.getR();
         A_hat = Q.mult(R);
 
-        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
 
         // --------------------------- Sub-case 4 ---------------------------
         aEntries = new String[][]{
@@ -74,7 +74,7 @@ class ComplexQRTests {
         R = qr.getR();
         A_hat = Q.mult(R);
 
-        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
 
         // --------------------------- Sub-case 4 ---------------------------
         aEntries = new String[][]{
@@ -88,7 +88,7 @@ class ComplexQRTests {
         R = qr.getR();
         A_hat = Q.mult(R);
 
-        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero(1.0E-10));
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0E-10));
     }
 
     @Test
@@ -109,7 +109,7 @@ class ComplexQRTests {
         R = qr.getR();
         A_hat = Q.mult(R);
 
-        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
 
         // --------------------------- Sub-case 2 ---------------------------
         aEntriesReal = new double[][]{
@@ -124,7 +124,7 @@ class ComplexQRTests {
         R = qr.getR();
         A_hat = Q.mult(R);
 
-        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
 
         // --------------------------- Sub-case 3 ---------------------------
         aEntries = new String[][]{
@@ -137,7 +137,7 @@ class ComplexQRTests {
         R = qr.getR();
         A_hat = Q.mult(R);
 
-        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
 
         // --------------------------- Sub-case 4 ---------------------------
         aEntries = new String[][]{
@@ -152,7 +152,7 @@ class ComplexQRTests {
         R = qr.getR();
         A_hat = Q.mult(R);
 
-        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
 
         // --------------------------- Sub-case 4 ---------------------------
         aEntries = new String[][]{
@@ -166,6 +166,6 @@ class ComplexQRTests {
         R = qr.getR();
         A_hat = Q.mult(R);
 
-        assertEquals(new CMatrix(A.shape.copy()), A.sub(A_hat).roundToZero(1.0E-10));
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0E-10));
     }
 }

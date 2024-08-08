@@ -30,7 +30,7 @@ class CMatrixMatVecMultTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(Math.PI, Math.PI), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new double[][]{{1.666},
@@ -50,7 +50,7 @@ class CMatrixMatVecMultTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(Math.PI, Math.PI), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new double[][]{{1.666, 11.5},
@@ -73,7 +73,7 @@ class CMatrixMatVecMultTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(Math.PI, Math.PI), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new CNumber[][]{{new CNumber("1.666+1.0i")},
@@ -94,7 +94,7 @@ class CMatrixMatVecMultTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(Math.PI, Math.PI), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new CNumber[][]{{new CNumber("1.666+1.0i"), new CNumber("11.5-9.123i")},
@@ -116,7 +116,7 @@ class CMatrixMatVecMultTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(Math.PI, Math.PI), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new double[]{-0.9345341};
@@ -135,7 +135,7 @@ class CMatrixMatVecMultTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(Math.PI, Math.PI), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new double[]{-0.9345341};
@@ -158,7 +158,7 @@ class CMatrixMatVecMultTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(Math.PI, Math.PI), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i")};
@@ -178,7 +178,7 @@ class CMatrixMatVecMultTests {
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
-                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(Math.PI, Math.PI), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
         A = new CMatrix(aEntries);
         bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i"), new CNumber("11.67-2.0i")};

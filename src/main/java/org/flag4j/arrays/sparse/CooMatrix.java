@@ -68,7 +68,7 @@ import java.util.List;
  */
 public class CooMatrix
         extends RealSparseTensorBase<CooMatrix, Matrix, CooCMatrix, CMatrix>
-        implements MatrixMixin<CooMatrix, Matrix, CooMatrix, CooCMatrix, Double, CooVector, Vector>,
+        implements MatrixMixin<CooMatrix, Matrix, CooMatrix, CooCMatrix, CooCMatrix, Double, CooVector, Vector>,
         RealMatrixMixin<CooMatrix, CooCMatrix>
 {
 
@@ -99,8 +99,8 @@ public class CooMatrix
         super(new Shape(size, size), 0, new double[0], new int[0][0]);
         rowIndices = new int[0];
         colIndices = new int[0];
-        numRows = shape.dims[0];
-        numCols = shape.dims[1];
+        numRows = shape.get(0);
+        numCols = shape.get(1);
     }
 
 
@@ -113,8 +113,8 @@ public class CooMatrix
         super(new Shape(rows, cols), 0, new double[0], new int[0][0]);
         rowIndices = new int[0];
         colIndices = new int[0];
-        numRows = shape.dims[0];
-        numCols = shape.dims[1];
+        numRows = shape.get(0);
+        numCols = shape.get(1);
     }
 
 
@@ -126,8 +126,8 @@ public class CooMatrix
         super(shape, 0, new double[0], new int[0][0]);
         rowIndices = new int[0];
         colIndices = new int[0];
-        numRows = shape.dims[0];
-        numCols = shape.dims[1];
+        numRows = shape.get(0);
+        numCols = shape.get(1);
     }
 
 
@@ -148,8 +148,8 @@ public class CooMatrix
         ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
-        numRows = shape.dims[0];
-        numCols = shape.dims[1];
+        numRows = shape.get(0);
+        numCols = shape.get(1);
     }
 
 
@@ -170,8 +170,8 @@ public class CooMatrix
         ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
-        numRows = shape.dims[0];
-        numCols = shape.dims[1];
+        numRows = shape.get(0);
+        numCols = shape.get(1);
     }
 
 
@@ -191,8 +191,8 @@ public class CooMatrix
         ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
-        numRows = shape.dims[0];
-        numCols = shape.dims[1];
+        numRows = shape.get(0);
+        numCols = shape.get(1);
     }
 
 
@@ -212,8 +212,8 @@ public class CooMatrix
         ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
-        numRows = shape.dims[0];
-        numCols = shape.dims[1];
+        numRows = shape.get(0);
+        numCols = shape.get(1);
     }
 
 
@@ -234,8 +234,8 @@ public class CooMatrix
         ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
-        numRows = shape.dims[0];
-        numCols = shape.dims[1];
+        numRows = shape.get(0);
+        numCols = shape.get(1);
     }
 
 
@@ -257,8 +257,8 @@ public class CooMatrix
         ParameterChecks.assertEquals(nonZeroEntries.length, rowIndices.length, colIndices.length);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
-        numRows = shape.dims[0];
-        numCols = shape.dims[1];
+        numRows = shape.get(0);
+        numCols = shape.get(1);
     }
 
 
@@ -268,7 +268,7 @@ public class CooMatrix
      * @param A Sparse Matrix to copy.
      */
     public CooMatrix(CooMatrix A) {
-        super(A.shape.copy(),
+        super(A.shape,
                 A.nonZeroEntries(),
                 A.entries.clone(),
                 A.rowIndices.clone(),
@@ -276,8 +276,8 @@ public class CooMatrix
         );
         this.rowIndices = indices[0];
         this.colIndices = indices[1];
-        numRows = shape.dims[0];
-        numCols = shape.dims[1];
+        numRows = shape.get(0);
+        numCols = shape.get(1);
     }
 
 
@@ -299,8 +299,8 @@ public class CooMatrix
         ParameterChecks.assertEquals(entries.size(), rowIndices.size(), colIndices.size());
         this.rowIndices = indices[0];
         this.colIndices = indices[1];
-        numRows = shape.dims[0];
-        numCols = shape.dims[1];
+        numRows = shape.get(0);
+        numCols = shape.get(1);
     }
 
 
@@ -346,7 +346,7 @@ public class CooMatrix
             }
         }
 
-        return new CooMatrix(src.shape.copy(), entries, rowIndices, colIndices);
+        return new CooMatrix(src.shape, entries, rowIndices, colIndices);
     }
 
 
@@ -530,7 +530,7 @@ public class CooMatrix
     @Override
     public CooMatrix T() {
         CooMatrix transpose = new CooMatrix(
-                shape.copy().swapAxes(0, 1),
+                shape.swapAxes(0, 1),
                 entries.clone(),
                 colIndices.clone(),
                 rowIndices.clone()
@@ -566,7 +566,7 @@ public class CooMatrix
      */
     @Override
     public CooMatrix copy() {
-        return new CooMatrix(shape.copy(), entries.clone(), rowIndices.clone(), colIndices.clone());
+        return new CooMatrix(shape, entries.clone(), rowIndices.clone(), colIndices.clone());
     }
 
 
@@ -659,14 +659,14 @@ public class CooMatrix
         int row;
         int col;
 
-        for(int i=0; i<nonZeroEntries; i++) {
+        for(int i = 0; i< nnz; i++) {
             row = rowIndices[i];
             col = colIndices[i];
 
             entries[row*numCols + col] = this.entries[i];
         }
 
-        return new Matrix(shape.copy(), entries);
+        return new Matrix(shape, entries);
     }
 
 
@@ -1324,7 +1324,7 @@ public class CooMatrix
                 );
             }
 
-            power = new Matrix(shape.copy(), destEntries);
+            power = new Matrix(shape, destEntries);
         }
 
         return power;
@@ -1669,10 +1669,10 @@ public class CooMatrix
         CNumber[] destEntries = new CNumber[destShape.totalEntries().intValueExact()];
 
         // Copy values from B
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, shape.totalEntries().intValueExact(), B.entries.length);
+        System.arraycopy(B.entries, 0, destEntries, shape.totalEntries().intValueExact(), B.entries.length);
 
         // Copy non-zero values from this matrix (and set zero values to zero.).
-        ArrayUtils.fillZeros(destEntries, 0, shape.totalEntries().intValueExact());
+        Arrays.fill(destEntries, 0, shape.totalEntries().intValueExact(), CNumber.ZERO);
         for(int i=0; i<entries.length; i++) {
             destEntries[rowIndices[i]*numCols + colIndices[i]] = new CNumber(entries[i]);
         }
@@ -1700,7 +1700,7 @@ public class CooMatrix
 
         // Copy non-zero values.
         ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+        System.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
 
         // Copy row indices.
         int[] shiftedRowIndices = ArrayUtils.shift(numRows, B.rowIndices.clone());
@@ -1732,12 +1732,12 @@ public class CooMatrix
 
         // Copy sparse values.
         for(int i=0; i<entries.length; i++) {
-            destEntries[rowIndices[i]*destShape.dims[1] + colIndices[i]] = entries[i];
+            destEntries[rowIndices[i]*destShape.get(1) + colIndices[i]] = entries[i];
         }
 
         // Copy dense values by row.
         for(int i=0; i<numRows; i++) {
-            int startIdx = i*destShape.dims[1] + numCols;
+            int startIdx = i*destShape.get(1) + numCols;
             System.arraycopy(B.entries, i*B.numCols, destEntries, startIdx, B.numCols);
         }
 
@@ -1797,17 +1797,17 @@ public class CooMatrix
 
         Shape destShape = new Shape(numRows, numCols + B.numCols);
         CNumber[] destEntries = new CNumber[destShape.totalEntries().intValueExact()];
-        ArrayUtils.fillZeros(destEntries);
+        Arrays.fill(destEntries, CNumber.ZERO);
 
         // Copy sparse values.
         for(int i=0; i<entries.length; i++) {
-            destEntries[rowIndices[i]*destShape.dims[1] + colIndices[i]] = new CNumber(entries[i]);
+            destEntries[rowIndices[i]*destShape.get(1) + colIndices[i]] = new CNumber(entries[i]);
         }
 
         // Copy dense values by row.
         for(int i=0; i<numRows; i++) {
-            int startIdx = i*destShape.dims[1] + numCols;
-            ArrayUtils.arraycopy(B.entries, i*B.numCols, destEntries, startIdx, B.numCols);
+            int startIdx = i*destShape.get(1) + numCols;
+            System.arraycopy(B.entries, i*B.numCols, destEntries, startIdx, B.numCols);
         }
 
         return new CMatrix(destShape, destEntries);
@@ -1833,7 +1833,7 @@ public class CooMatrix
 
         // Copy non-zero values.
         ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+        System.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
 
         // Copy row indices.
         System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
@@ -1942,7 +1942,7 @@ public class CooMatrix
         System.arraycopy(colIndices, 0, destColIndices, 0, colIndices.length);
 
         // Copy values from vector and create indices.
-        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.size);
+        System.arraycopy(b.entries, 0, destEntries, entries.length, b.size);
         Arrays.fill(destRowIndices, entries.length, destRowIndices.length, numRows);
         System.arraycopy(ArrayUtils.intRange(0, numCols), 0, destColIndices, entries.length, numCols);
 
@@ -1975,7 +1975,7 @@ public class CooMatrix
         System.arraycopy(colIndices, 0, destColIndices, 0, entries.length);
 
         // Copy values and indices from vector.
-        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
+        System.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
         Arrays.fill(destRowIndices, entries.length, destRowIndices.length, numRows);
         System.arraycopy(b.indices, 0, destColIndices, entries.length, b.entries.length);
 
@@ -1996,7 +1996,7 @@ public class CooMatrix
         ParameterChecks.assertEquals(numRows, b.size);
 
         Shape destShape = new Shape(numRows, numCols + 1);
-        double[] destEntries = new double[nonZeroEntries + b.size];
+        double[] destEntries = new double[nnz + b.size];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -2030,7 +2030,7 @@ public class CooMatrix
         ParameterChecks.assertEquals(numRows, b.size);
 
         Shape destShape = new Shape(numRows, numCols + 1);
-        double[] destEntries = new double[nonZeroEntries + b.entries.length];
+        double[] destEntries = new double[nnz + b.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -2064,7 +2064,7 @@ public class CooMatrix
         ParameterChecks.assertEquals(numRows, b.size);
 
         Shape destShape = new Shape(numRows, numCols + 1);
-        CNumber[] destEntries = new CNumber[nonZeroEntries + b.size];
+        CNumber[] destEntries = new CNumber[nnz + b.size];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -2074,7 +2074,7 @@ public class CooMatrix
         System.arraycopy(colIndices, 0, destColIndices, 0, entries.length);
 
         // Copy entries and indices from vector.
-        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
+        System.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
         System.arraycopy(ArrayUtils.intRange(0, numRows), 0, destRowIndices, entries.length, numRows);
         Arrays.fill(destColIndices, entries.length, destColIndices.length, numCols);
 
@@ -2098,7 +2098,7 @@ public class CooMatrix
         ParameterChecks.assertEquals(numRows, b.size);
 
         Shape destShape = new Shape(numRows, numCols + 1);
-        CNumber[] destEntries = new CNumber[nonZeroEntries + b.entries.length];
+        CNumber[] destEntries = new CNumber[nnz + b.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -2108,7 +2108,7 @@ public class CooMatrix
         System.arraycopy(colIndices, 0, destColIndices, 0, entries.length);
 
         // Copy entries and indices from vector.
-        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
+        System.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
         System.arraycopy(b.indices, 0, destRowIndices, entries.length, b.entries.length);
         Arrays.fill(destColIndices, entries.length, destColIndices.length, numCols);
 
@@ -2185,7 +2185,7 @@ public class CooMatrix
      */
     public CooTensor toTensor() {
         int[][] destIndices = RealDenseTranspose.standardIntMatrix(indices);
-        return new CooTensor(this.shape.copy(), this.entries.clone(), destIndices);
+        return new CooTensor(this.shape, this.entries.clone(), destIndices);
     }
 
 
@@ -2442,7 +2442,7 @@ public class CooMatrix
      */
     @Override
     public boolean isSquare() {
-        return shape.dims[0]==shape.dims[1];
+        return shape.get(0)==shape.get(1);
     }
 
 
@@ -2657,7 +2657,7 @@ public class CooMatrix
      */
     @Override
     public CooCMatrix sqrtComplex() {
-        return new CooCMatrix(shape.copy(), ComplexOperations.sqrt(entries), rowIndices.clone(), colIndices.clone());
+        return new CooCMatrix(shape, ComplexOperations.sqrt(entries), rowIndices.clone(), colIndices.clone());
     }
 
 
@@ -2671,7 +2671,7 @@ public class CooMatrix
     public CooCMatrix toComplex() {
         CNumber[] dest = new CNumber[entries.length];
         ArrayUtils.copy2CNumber(entries, dest);
-        return new CooCMatrix(shape.copy(), dest, rowIndices.clone(), colIndices.clone());
+        return new CooCMatrix(shape, dest, rowIndices.clone(), colIndices.clone());
     }
 
 
@@ -2709,6 +2709,56 @@ public class CooMatrix
 
 
     /**
+     * Copies and reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
+     * in the reshaped matrix.
+     *
+     * @param newShape Shape of the new matrix.
+     *
+     * @return A matrix which is equivalent to this matrix but with the specified shape.
+     *
+     * @throws IllegalArgumentException If this matrix cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public CooMatrix reshape(Shape newShape) {
+        ParameterChecks.assertBroadcastable(shape, newShape);
+
+        int oldColCount = shape.get(1);
+        int newColCount = newShape.get(1);
+
+        // Initialize new COO structures with the same size as the original
+        int[] newRowIndices = new int[rowIndices.length];
+        int[] newColIndices = new int[colIndices.length];
+        double[] newEntries = new double[entries.length];
+
+        for (int i = 0; i < rowIndices.length; i++) {
+            int flatIndex = rowIndices[i]*oldColCount + colIndices[i];
+
+            newRowIndices[i] = flatIndex / newColCount;
+            newColIndices[i] = flatIndex % newColCount;
+        }
+
+        return new CooMatrix(newShape, entries.clone(), newRowIndices, newColIndices);
+    }
+
+
+    /**
+     * Flattens tensor to single dimension. To flatten tensor along a single axis.
+     *
+     * @return The flattened tensor.
+     */
+    @Override
+    public CooMatrix flatten() {
+        int[] destIndices = new int[entries.length];
+
+        for(int i = 0; i < entries.length; i++) {
+            destIndices[i] = shape.entriesIndex(rowIndices[i], colIndices[i]);
+        }
+
+        return new CooMatrix(shape, entries.clone(), new int[entries.length], destIndices);
+    }
+
+
+    /**
      * Flattens a tensor along the specified axis.
      *
      * @param axis Axis along which to flatten tensor.
@@ -2740,7 +2790,7 @@ public class CooMatrix
      * @return A human-readable string representing this sparse matrix.
      */
     public String toString() {
-        int size = nonZeroEntries;
+        int size = nnz;
         StringBuilder result = new StringBuilder(String.format("Full Shape: %s\n", shape));
         result.append("Non-zero entries: [");
 

@@ -85,7 +85,7 @@ class MatrixToStringTest {
         PrintOptions.setMaxRows(1);
         PrintOptions.setMaxColumns(4);
         PrintOptions.setCentering(true);
-        exp = "Full Shape: 2x4\n" +
+        exp = "Full Shape: (2, 4)\n" +
                 "[ [           ...            ]\n" +
                 " [ 0  1.46  -123.4  2341.56 ]]";
 
@@ -101,7 +101,7 @@ class MatrixToStringTest {
         PrintOptions.setMaxRows(2);
         PrintOptions.setMaxColumns(3);
         PrintOptions.setCentering(true);
-        exp = "Full Shape: 2x4\n" +
+        exp = "Full Shape: (2, 4)\n" +
                 "[[ 1.32  2.47  ...   -0.11  ]\n" +
                 " [  0    1.46  ...  2341.56 ]]";
 
@@ -117,7 +117,7 @@ class MatrixToStringTest {
         PrintOptions.setMaxRows(2);
         PrintOptions.setMaxColumns(2);
         PrintOptions.setCentering(true);
-        exp = "Full Shape: 2x4\n" +
+        exp = "Full Shape: (2, 4)\n" +
                 "[[ 1.32  ...   -0.11  ]\n" +
                 " [  0    ...  2341.56 ]]";
 

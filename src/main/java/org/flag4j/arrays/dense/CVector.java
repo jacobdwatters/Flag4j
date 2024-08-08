@@ -43,6 +43,8 @@ import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseVectorOp
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import org.flag4j.util.*;
 
+import java.util.Arrays;
+
 /**
  * Complex dense vector. This class is mostly equivalent to a rank 1 complex tensor.
  */
@@ -61,8 +63,8 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      */
     public CVector(int size) {
         super(new Shape(size), new CNumber[size]);
-        ArrayUtils.fillZeros(super.entries);
-        this.size = shape.dims[0];
+        Arrays.fill(super.entries, CNumber.ZERO);
+        this.size = shape.get(0);
     }
 
 
@@ -74,7 +76,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
     public CVector(int size, double fillValue) {
         super(new Shape(size), new CNumber[size]);
         ArrayUtils.fill(super.entries, fillValue);
-        this.size = shape.dims[0];
+        this.size = shape.get(0);
     }
 
 
@@ -85,8 +87,8 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      */
     public CVector(int size, CNumber fillValue) {
         super(new Shape(size), new CNumber[size]);
-        ArrayUtils.fill(super.entries, fillValue);
-        this.size = shape.dims[0];
+        Arrays.fill(super.entries, fillValue);
+        this.size = shape.get(0);
     }
 
 
@@ -97,7 +99,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
     public CVector(double... entries) {
         super(new Shape(entries.length), new CNumber[entries.length]);
         ArrayUtils.copy2CNumber(entries, super.entries);
-        this.size = shape.dims[0];
+        this.size = shape.get(0);
     }
 
 
@@ -108,7 +110,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
     public CVector(int... entries) {
         super(new Shape(entries.length), new CNumber[entries.length]);
         ArrayUtils.copy2CNumber(entries, super.entries);
-        this.size = shape.dims[0];
+        this.size = shape.get(0);
     }
 
 
@@ -118,7 +120,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      */
     public CVector(CNumber... entries) {
         super(new Shape(entries.length), entries);
-        this.size = shape.dims[0];
+        this.size = shape.get(0);
     }
 
 
@@ -127,9 +129,9 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @param a Real vector to copy.
      */
     public CVector(Vector a) {
-        super(a.shape.copy(), new CNumber[a.totalEntries().intValue()]);
+        super(a.shape, new CNumber[a.totalEntries().intValue()]);
         ArrayUtils.copy2CNumber(a.entries, super.entries);
-        this.size = shape.dims[0];
+        this.size = shape.get(0);
     }
 
 
@@ -138,9 +140,9 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      * @param a Complex vector to copy.
      */
     public CVector(CVector a) {
-        super(a.shape.copy(), new CNumber[a.totalEntries().intValue()]);
-        ArrayUtils.copy2CNumber(a.entries, super.entries);
-        this.size = shape.dims[0];
+        super(a.shape, new CNumber[a.totalEntries().intValue()]);
+        System.arraycopy(a.entries, 0, super.entries, 0, a.entries.length);
+        this.size = shape.get(0);
     }
 
 
@@ -183,6 +185,32 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
     @Override
     public CVector add(CooCVector B) {
         return ComplexDenseSparseVectorOperations.add(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector and stores the result
+     * in this vector.
+     *
+     * @param B Vector to add to this vector.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public void addEq(Vector B) {
+        RealComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
+     * in this vector.
+     *
+     * @param B Vector to subtract this vector.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public void subEq(Vector B) {
+        RealComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);
     }
 
 
@@ -365,7 +393,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
         if(axis==0) {
             extended = new CMatrix(n, this.size);
             for(int i=0; i<n; i++) {
-                ArrayUtils.arraycopy(this.entries, 0, extended.entries, i*extended.numCols, this.size);
+                System.arraycopy(this.entries, 0, extended.entries, i*extended.numCols, this.size);
             }
 
         } else if(axis==1) {
@@ -373,7 +401,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
             CNumber[] row = new CNumber[n];
 
             for(int i=0; i<this.size; i++) {
-                ArrayUtils.fill(row, this.entries[i]);
+                Arrays.fill(row, this.entries[i]);
                 System.arraycopy(row, 0, extended.entries, i*extended.numCols, row.length);
             }
         } else {
@@ -393,7 +421,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
     @Override
     public CVector join(Vector b) {
         CNumber[] entries = new CNumber[this.size+b.size];
-        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);
+        System.arraycopy(this.entries, 0, entries, 0, this.size);
         ArrayUtils.arraycopy(b.entries, 0, entries, this.size, b.size);
 
         return new CVector(entries);
@@ -425,7 +453,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
     @Override
     public CVector join(CooVector b) {
         CVector joined = new CVector(this.size+b.size);
-        ArrayUtils.arraycopy(this.entries, 0, joined.entries, 0, this.size);
+        System.arraycopy(this.entries, 0, joined.entries, 0, this.size);
 
         // Copy entries from sparse vector.
         int index;
@@ -447,13 +475,13 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
     @Override
     public CVector join(CooCVector b) {
         CVector joined = new CVector(this.size+b.size);
-        ArrayUtils.arraycopy(this.entries, 0, joined.entries, 0, this.size);
+        System.arraycopy(this.entries, 0, joined.entries, 0, this.size);
 
         // Copy entries from sparse vector.
         int index;
         for(int i=0; i<b.entries.length; i++) {
             index = b.indices[i];
-            joined.entries[this.size+index] = b.entries[i].copy();
+            joined.entries[this.size+index] = b.entries[i];
         }
 
         return joined;
@@ -475,7 +503,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
         CMatrix stacked = new CMatrix(2, this.size);
 
         // Copy entries from each vector to the matrix.
-        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.size);
+        System.arraycopy(this.entries, 0, stacked.entries, 0, this.size);
         ArrayUtils.arraycopy(b.entries, 0, stacked.entries, this.size, b.size);
 
         return stacked;
@@ -497,7 +525,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
         CMatrix stacked = new CMatrix(2, this.size);
 
         // Copy entries from dense vector to the matrix.
-        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.size);
+        System.arraycopy(this.entries, 0, stacked.entries, 0, this.size);
 
         // Copy entries from sparse vector to the matrix.
         int index;
@@ -525,8 +553,8 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
         CNumber[] entries = new CNumber[this.size+b.size];
 
         // Copy entries from each vector to the matrix.
-        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);
-        ArrayUtils.arraycopy(b.entries, 0, entries, this.size, b.size);
+        System.arraycopy(this.entries, 0, entries, 0, this.size);
+        System.arraycopy(b.entries, 0, entries, this.size, b.size);
 
         return new CMatrix(2, this.size, entries);
     }
@@ -547,13 +575,13 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
         CMatrix stacked = new CMatrix(2, this.size);
 
         // Copy entries from dense vector to the matrix.
-        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.size);
+        System.arraycopy(this.entries, 0, stacked.entries, 0, this.size);
 
         // Copy entries from sparse vector to the matrix.
         int index;
         for(int i=0; i<b.entries.length; i++) {
             index = b.indices[i];
-            stacked.entries[stacked.numCols + index] = b.entries[i].copy();
+            stacked.entries[stacked.numCols + index] = b.entries[i];
         }
 
         return stacked;
@@ -597,7 +625,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
             int count = 0;
 
             for(int i=0; i<stackedEntries.length; i+=2) {
-                stackedEntries[i] = this.entries[count].copy();
+                stackedEntries[i] = this.entries[count];
                 stackedEntries[i+1] = new CNumber(b.entries[count++]);
             }
 
@@ -641,11 +669,11 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
         } else {
             ParameterChecks.assertArrayLengthsEq(this.size, b.size);
             CNumber[] stackedEntries = new CNumber[2*this.size];
-            ArrayUtils.fillZeros(stackedEntries);
+            Arrays.fill(stackedEntries, CNumber.ZERO);
 
             // Copy dense values.
             for(int i=0; i<this.size; i++) {
-                stackedEntries[i*2] = this.entries[i].copy();
+                stackedEntries[i*2] = this.entries[i];
             }
 
             // Copy sparse values.
@@ -699,8 +727,8 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
             int count = 0;
 
             for(int i=0; i<stackedEntries.length; i+=2) {
-                stackedEntries[i] = this.entries[count].copy();
-                stackedEntries[i+1] = b.entries[count++].copy();
+                stackedEntries[i] = this.entries[count];
+                stackedEntries[i+1] = b.entries[count++];
             }
 
             stacked = new CMatrix(this.size, 2, stackedEntries);
@@ -743,18 +771,18 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
         } else {
             ParameterChecks.assertArrayLengthsEq(this.size, b.size);
             CNumber[] stackedEntries = new CNumber[2*this.size];
-            ArrayUtils.fillZeros(stackedEntries);
+            Arrays.fill(stackedEntries, CNumber.ZERO);
 
             // Copy dense values.
             for(int i=0; i<this.size; i++) {
-                stackedEntries[i*2] = this.entries[i].copy();
+                stackedEntries[i*2] = this.entries[i];
             }
 
             // Copy sparse values.
             int index;
             for(int i=0; i<b.entries.length; i++) {
                 index = b.indices[i];
-                stackedEntries[index*2 + 1] = b.entries[i].copy();
+                stackedEntries[index*2 + 1] = b.entries[i];
             }
 
             stacked = new CMatrix(this.size, 2, stackedEntries);
@@ -985,7 +1013,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
             result = true; // Any vector is parallel to zero vector.
         } else {
             result = true;
-            CNumber scale = new CNumber();
+            CNumber scale = CNumber.ZERO;
 
             // Find first non-zero entry of b to compute the scaling factor.
             for(int i=0; i<b.size; i++) {
@@ -1018,11 +1046,8 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
     public boolean isPerp(Vector b) {
         boolean result;
 
-        if(this.size!=b.size) {
-            result = false;
-        } else {
-            result = this.inner(b).equals(0);
-        }
+        if(this.size!=b.size) result = false;
+        else result = this.inner(b).equals(0);
 
         return result;
     }
@@ -1038,7 +1063,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
     @Override
     public CMatrix toMatrix() {
         CNumber[] entries = new CNumber[this.size];
-        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);
+        System.arraycopy(this.entries, 0, entries, 0, this.size);
         return new CMatrix(this.entries.length, 1, entries);
     }
 
@@ -1058,7 +1083,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
         } else {
             // Convert to row vector.
             CNumber[] entries = new CNumber[this.size];
-            ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);
+            System.arraycopy(this.entries, 0, entries, 0, this.size);
             return new CMatrix(1, this.entries.length, entries);
         }
     }
@@ -1070,9 +1095,9 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
      */
     public CTensor toTensor() {
         CNumber[] entries = new CNumber[this.size];
-        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);
+        System.arraycopy(this.entries, 0, entries, 0, this.size);
 
-        return new CTensor(this.shape.copy(), entries);
+        return new CTensor(this.shape, entries);
     }
 
 
@@ -1178,7 +1203,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
         if(axis==0) {
             tiledShape = new Shape(n, size);
             for(int i=0; i<n; i++) // Set each row of the tiled matrix to be the vector values.
-                ArrayUtils.arraycopy(entries, 0, tiledEntries, i*size, size);
+                System.arraycopy(entries, 0, tiledEntries, i*size, size);
         } else {
             tiledShape = new Shape(size, n);
             for(int i=0; i<size; i++) // Fill each row of the tiled matrix with a single value from the vector.
@@ -1255,31 +1280,5 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
         result.append("]");
 
         return result.toString();
-    }
-
-
-    /**
-     * Computes the element-wise addition between this vector and the specified vector and stores the result
-     * in this vector.
-     *
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public void addEq(Vector B) {
-        RealComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);
-    }
-
-
-    /**
-     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
-     * in this vector.
-     *
-     * @param B Vector to subtract this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public void subEq(Vector B) {
-        RealComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);
     }
 }

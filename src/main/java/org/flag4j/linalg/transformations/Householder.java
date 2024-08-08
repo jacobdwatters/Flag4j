@@ -38,7 +38,7 @@ import org.flag4j.util.ErrorMessages;
  * This class contains methods for computing real or complex Householder reflectors (also known as elementary reflectors).
  * A Householder reflector is a transformation matrix which reflects a vector about a hyperplane containing the origin.
  */
-public class Householder {
+public final class Householder {
 
     private Householder() {
         // Hide default constructor for utility class.
@@ -131,7 +131,7 @@ public class Householder {
 
         int step = P.numCols+1;
         for(int i=0; i<P.entries.length; i+=step) {
-            P.entries[i].addEq(1.0);
+            P.entries[i] = P.entries[i].add(1.0);
         }
 
         return P;
@@ -252,8 +252,9 @@ public class Householder {
         for(int k=startRow + 1; k<endRow; k++) {
             int srcIdx = k*numCols + startCol;
             CNumber reflectorValue = householderVector[k].conj();
+
             for(int i=startCol; i<numCols; i++) {
-                workArray[i].addEq(reflectorValue.mult(src.entries[srcIdx++]));
+                workArray[i] = workArray[i].add(reflectorValue.mult(src.entries[srcIdx++]));
             }
         }
 
@@ -264,7 +265,7 @@ public class Householder {
             int indexA = i*numCols + startCol;
 
             for(int j=startCol; j<numCols; j++) {
-                src.entries[indexA++].subEq(reflectorValue.mult(workArray[j]));
+                src.entries[indexA] = src.entries[indexA++].sub(reflectorValue.mult(workArray[j]));
             }
         }
     }
@@ -289,17 +290,17 @@ public class Householder {
 
         for(int i=startCol; i<src.numRows; i++) {
             int startIndex = i*src.numCols + startRow;
-            CNumber sum = CNumber.zero();
+            CNumber sum = CNumber.ZERO;
             int rowIndex = startIndex;
 
             for(int j = startRow; j < endRow; j++) {
-                sum.addEq(src.entries[rowIndex++].mult(householderVector[j]));
+                sum = sum.add(src.entries[rowIndex++].mult(householderVector[j]));
             }
-            sum.multEq(negAlpha);
+            sum = sum.mult(negAlpha);
 
             rowIndex = startIndex;
             for(int j=startRow; j<endRow; j++) {
-                src.entries[rowIndex++].addEq(sum.mult(householderVector[j].conj()));
+                src.entries[rowIndex] = src.entries[rowIndex++].add(sum.mult(householderVector[j].conj()));
             }
         }
     }

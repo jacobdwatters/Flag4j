@@ -134,8 +134,8 @@ public class ComplexSVD extends SVD<CMatrix> {
      */
     @Override
     protected void initUV(Shape src, int cols) {
-        U = new CMatrix(src.dims[0], cols);
-        V = new CMatrix(src.dims[1], cols);
+        U = new CMatrix(src.get(0), cols);
+        V = new CMatrix(src.get(1), cols);
     }
 
 

@@ -32,7 +32,7 @@ import org.flag4j.util.ParameterChecks;
 /**
  * This class contains low-level implementations of setting operations for complex dense tensors.
  */
-public class ComplexDenseSetOperations {
+public final class ComplexDenseSetOperations {
 
     private ComplexDenseSetOperations() {
         // Hide constructor.
@@ -130,7 +130,7 @@ public class ComplexDenseSetOperations {
 
         for(CNumber[] cNumbers : src) {
             for(int j = 0; j < src[0].length; j++) {
-                dest[count++] = cNumbers[j].copy();
+                dest[count++] = cNumbers[j];
             }
         }
     }
@@ -233,6 +233,6 @@ public class ComplexDenseSetOperations {
      * @param indices Indices of tensor value to be set.
      */
     public static void set(CNumber[] src, Shape shape, CNumber value, int... indices) {
-        src[shape.entriesIndex(indices)] = new CNumber(value);
+        src[shape.entriesIndex(indices)] = value;
     }
 }

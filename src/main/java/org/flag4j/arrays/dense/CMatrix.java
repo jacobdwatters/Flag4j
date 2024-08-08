@@ -52,12 +52,14 @@ import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixOp
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultTranspose;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
+import org.flag4j.operations.dense_sparse.csr.complex.ComplexCsrDenseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.csr.complex.ComplexCsrDenseOperations;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
 import org.flag4j.util.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -68,7 +70,7 @@ import java.util.List;
  */
 public class CMatrix
         extends ComplexDenseTensorBase<CMatrix, Matrix>
-        implements MatrixMixin<CMatrix, CMatrix, CooCMatrix, CMatrix, CNumber, CVector, CVector>,
+        implements MatrixMixin<CMatrix, CMatrix, CooCMatrix, CMatrix, CooCMatrix, CNumber, CVector, CVector>,
         ComplexMatrixMixin<CMatrix>,
         DenseMatrixMixin<CMatrix, CNumber> {
 
@@ -89,9 +91,9 @@ public class CMatrix
      */
     public CMatrix(int size) {
         super(new Shape(size, size), new CNumber[size*size]);
-        ArrayUtils.fillZeros(super.entries);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        Arrays.fill(super.entries, CNumber.ZERO);
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -103,8 +105,8 @@ public class CMatrix
      */
     public CMatrix(int size, double value) {
         super(new Shape(size, size), new CNumber[size*size]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         for(int i=0; i<entries.length; i++) {
             super.entries[i] = new CNumber(value);
@@ -120,11 +122,11 @@ public class CMatrix
      */
     public CMatrix(int size, CNumber value) {
         super(new Shape(size, size), new CNumber[size*size]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         for(int i=0; i<entries.length; i++) {
-            super.entries[i] = value.copy();
+            super.entries[i] = value;
         }
     }
 
@@ -137,9 +139,9 @@ public class CMatrix
      */
     public CMatrix(int rows, int cols) {
         super(new Shape(rows, cols), new CNumber[rows*cols]);
-        ArrayUtils.fillZeros(super.entries);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        Arrays.fill(super.entries, CNumber.ZERO);
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -152,8 +154,8 @@ public class CMatrix
      */
     public CMatrix(int rows, int cols, double value) {
         super(new Shape(rows, cols), new CNumber[rows*cols]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         for(int i=0; i<entries.length; i++) {
             super.entries[i] = new CNumber(value);
@@ -170,11 +172,11 @@ public class CMatrix
      */
     public CMatrix(int rows, int cols, CNumber value) {
         super(new Shape(rows, cols), new CNumber[rows*cols]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         for(int i=0; i<entries.length; i++) {
-            super.entries[i] = value.copy();
+            super.entries[i] = value;
         }
     }
 
@@ -185,9 +187,9 @@ public class CMatrix
      */
     public CMatrix(Shape shape) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
-        ArrayUtils.fillZeros(super.entries);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        Arrays.fill(super.entries, CNumber.ZERO);
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -198,8 +200,8 @@ public class CMatrix
      */
     public CMatrix(Shape shape, double value) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         for(int i=0; i<entries.length; i++) {
             super.entries[i] = new CNumber(value);
@@ -214,8 +216,8 @@ public class CMatrix
      */
     public CMatrix(Shape shape, double... entries) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         ArrayUtils.copy2CNumber(entries, this.entries);
     }
@@ -228,12 +230,10 @@ public class CMatrix
      */
     public CMatrix(Shape shape, CNumber value) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
-        for(int i=0; i<entries.length; i++) {
-            super.entries[i] = value.copy();
-        }
+        Arrays.fill(super.entries, value);
     }
 
 
@@ -243,8 +243,8 @@ public class CMatrix
      */
     public CMatrix(String[][] entries) {
         super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         // Copy the string array
         int index=0;
@@ -262,14 +262,14 @@ public class CMatrix
      */
     public CMatrix(CNumber[][] entries) {
         super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         // Copy the string array
         int index=0;
         for(CNumber[] row : entries) {
             for(CNumber value : row) {
-                super.entries[index++] = value.copy();
+                super.entries[index++] = value;
             }
         }
     }
@@ -282,8 +282,8 @@ public class CMatrix
      */
     public CMatrix(double[][] entries) {
         super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         // Copy the double array
         int index=0;
@@ -301,8 +301,8 @@ public class CMatrix
      */
     public CMatrix(int[][] entries) {
         super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
 
         // Copy the int array
         int index=0;
@@ -319,10 +319,10 @@ public class CMatrix
      * @param A The matrix defining the entries for this matrix.
      */
     public CMatrix(Matrix A) {
-        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);
+        super(A.shape, new CNumber[A.totalEntries().intValue()]);
         ArrayUtils.copy2CNumber(A.entries, super.entries);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -331,10 +331,10 @@ public class CMatrix
      * @param A The matrix defining the entries for this matrix.
      */
     public CMatrix(CMatrix A) {
-        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);
-        ArrayUtils.copy2CNumber(A.entries, super.entries);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        super(A.shape, new CNumber[A.entries.length]);
+        System.arraycopy(A.entries, 0, super.entries, 0, A.entries.length);
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -346,8 +346,8 @@ public class CMatrix
      */
     public CMatrix(Shape shape, CNumber... entries) {
         super(shape, entries);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -409,8 +409,8 @@ public class CMatrix
      */
     public CMatrix(int numRows, int numCols, CNumber[] entries) {
         super(new Shape(numRows, numCols), entries);
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
@@ -448,7 +448,7 @@ public class CMatrix
      * @return A complex tensor which is equivalent to this matrix.
      */
     public CTensor toTensor() {
-        return new CTensor(this.shape.copy(), ArrayUtils.copyOfRange(entries, 0, entries.length));
+        return new CTensor(this.shape, Arrays.copyOfRange(entries, 0, entries.length));
     }
 
 
@@ -459,7 +459,7 @@ public class CMatrix
      */
     @Override
     public CVector toVector() {
-        return new CVector(ArrayUtils.copyOfRange(entries, 0, entries.length));
+        return new CVector(Arrays.copyOfRange(entries, 0, entries.length));
     }
 
 
@@ -662,7 +662,7 @@ public class CMatrix
         ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
-            super.entries[i*numCols + colIndex] = values[i].copy();
+            super.entries[i*numCols + colIndex] = values[i];
         }
 
         return this;
@@ -760,9 +760,7 @@ public class CMatrix
     public CMatrix setRow(CNumber[] values, int rowIndex) {
         ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);
 
-        for(int i=0; i<values.length; i++) {
-            super.entries[rowIndex*numCols + i] = values[i].copy();
-        }
+        System.arraycopy(values, 0, super.entries, rowIndex*numCols, values.length);
 
         return this;
     }
@@ -800,7 +798,7 @@ public class CMatrix
         ParameterChecks.assertArrayLengthsEq(values.size, this.numRows);
 
         for(int i=0; i<values.size; i++) {
-            super.entries[i*numCols + colIndex] = values.entries[i].copy();
+            super.entries[i*numCols + colIndex] = values.entries[i];
         }
 
         return this;
@@ -845,7 +843,7 @@ public class CMatrix
         int index;
         for(int i=0; i<values.entries.length; i++) {
             index = values.indices[i];
-            super.entries[index*numCols + colIndex] = values.entries[i].copy();
+            super.entries[index*numCols + colIndex] = values.entries[i];
         }
 
         return this;
@@ -863,7 +861,7 @@ public class CMatrix
     @Override
     public CMatrix setRow(CVector values, int rowIndex) {
         ParameterChecks.assertArrayLengthsEq(values.size, numCols);
-        ArrayUtils.arraycopy(values.entries, 0, super.entries, rowIndex*numCols, this.numCols);
+        System.arraycopy(values.entries, 0, super.entries, rowIndex*numCols, this.numCols);
         return this;
     }
 
@@ -882,12 +880,10 @@ public class CMatrix
         int rowOffset = rowIndex*numCols;
 
         // Fill row with zeros
-        ArrayUtils.fillZeros(super.entries, rowOffset, rowOffset+numCols);
+        Arrays.fill(super.entries, rowOffset, rowOffset+numCols, CNumber.ZERO);
 
         // Copy sparse values
-        for(int i=0; i<values.entries.length; i++) {
-            super.entries[rowOffset + i] = values.entries[i].copy();
-        }
+        System.arraycopy(values.entries, 0, super.entries, rowOffset, values.entries.length);
 
         return this;
     }
@@ -926,7 +922,7 @@ public class CMatrix
             rowIndex = values.rowIndices[i];
             colIndex = values.colIndices[i];
 
-            this.entries[(rowIndex+rowStart)*this.numCols + colIndex + colStart] = values.entries[i].copy();
+            this.entries[(rowIndex+rowStart)*this.numCols + colIndex + colStart] = values.entries[i];
         }
 
         return this;
@@ -967,7 +963,7 @@ public class CMatrix
             rowIndex = values.rowIndices[i];
             colIndex = values.colIndices[i];
 
-            copy.entries[(rowIndex+rowStart)*copy.numCols + colIndex + colStart] = new CNumber(values.entries[i]);
+            copy.entries[(rowIndex+rowStart)*copy.numCols + colIndex + colStart] = values.entries[i];
         }
 
         return copy;
@@ -1122,9 +1118,11 @@ public class CMatrix
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
 
         for(int i=0; i<values.numRows; i++) {
+            int src1RowOffset = (i+rowStart)*numCols;
+            int src2RowOffset = i*values.numCols;
+
             for(int j=0; j<values.numCols; j++) {
-                this.entries[(i+rowStart)*numCols + j+colStart] =
-                        values.entries[i* values.numCols + j].copy();
+                this.entries[src1RowOffset + j + colStart] = values.entries[src2RowOffset + j];
             }
         }
 
@@ -1151,8 +1149,10 @@ public class CMatrix
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
 
         for(int i=0; i<values.length; i++) {
+            int src1RowOffset = (i+rowStart)*numCols;
+
             for(int j=0; j<values[0].length; j++) {
-                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j].copy();
+                this.entries[src1RowOffset + j + colStart] = values[i][j];
             }
         }
 
@@ -1178,8 +1178,10 @@ public class CMatrix
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
 
         for(int i=0; i<values.length; i++) {
+            int src1RowOffset = (i+rowStart)*numCols;
+
             for(int j=0; j<values[0].length; j++) {
-                this.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
+                this.entries[src1RowOffset + j + colStart] = new CNumber(values[i][j]);
             }
         }
 
@@ -1206,8 +1208,10 @@ public class CMatrix
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
 
         for(int i=0; i<values.length; i++) {
+            int src1RowOffset = (i+rowStart)*numCols;
+
             for(int j=0; j<values[0].length; j++) {
-                this.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
+                this.entries[src1RowOffset + j + colStart] = new CNumber(values[i][j]);
             }
         }
 
@@ -1234,8 +1238,10 @@ public class CMatrix
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
 
         for(int i=0; i<values.length; i++) {
+            int src1RowOffset = (i+rowStart)*numCols;
+
             for(int j=0; j<values[0].length; j++) {
-                this.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
+                this.entries[src1RowOffset + j + colStart] = new CNumber(values[i][j]);
             }
         }
 
@@ -1262,8 +1268,10 @@ public class CMatrix
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
 
         for(int i=0; i<values.length; i++) {
+            int src1RowOffset = (i+rowStart)*numCols;
+
             for(int j=0; j<values[0].length; j++) {
-                this.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
+                this.entries[src1RowOffset + j+colStart] = new CNumber(values[i][j]);
             }
         }
 
@@ -1294,8 +1302,9 @@ public class CMatrix
         for(int i=0; i<values.numRows; i++) {
             int copyRowOffset = (i+rowStart)*numCols;
             int valuesRowOffset = i*values.numCols;
+
             for(int j=0; j<values.numCols; j++) {
-                copy.entries[copyRowOffset + j + colStart] = values.entries[valuesRowOffset + j].copy();
+                copy.entries[copyRowOffset + j + colStart] = values.entries[valuesRowOffset + j];
             }
         }
 
@@ -1326,7 +1335,7 @@ public class CMatrix
         for(int i=0; i<values.length; i++) {
             int rowOffset = (i+rowStart)*numCols;
             for(int j=0; j<values[0].length; j++) {
-                copy.entries[rowOffset + j+colStart] = values[i][j].copy();
+                copy.entries[rowOffset + j+colStart] = values[i][j];
             }
         }
 
@@ -1547,7 +1556,7 @@ public class CMatrix
 
         for(int i=0; i<this.numRows; i++) {
             if(i!=rowIndex) {
-                ArrayUtils.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
+                System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
                 row++;
             }
         }
@@ -1570,7 +1579,7 @@ public class CMatrix
 
         for(int i=0; i<this.numRows; i++) {
             if(ArrayUtils.notContains(rowIndices, i)) {
-                ArrayUtils.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
+                System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
                 row++;
             }
         }
@@ -1693,7 +1702,7 @@ public class CMatrix
      */
     @Override
     public CMatrix add(Matrix B) {
-        return new CMatrix(this.shape.copy(),
+        return new CMatrix(this.shape,
                 RealComplexDenseOperations.add(this.entries, this.shape, B.entries, B.shape)
         );
     }
@@ -1764,7 +1773,7 @@ public class CMatrix
      */
     @Override
     public CMatrix sub(Matrix B) {
-        return new CMatrix(this.shape.copy(),
+        return new CMatrix(this.shape,
                 RealComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
         );
     }
@@ -2028,8 +2037,7 @@ public class CMatrix
      */
     @Override
     public CMatrix mult(CsrCMatrix B) {
-        // TODO: Implementation.
-        return null;
+        return ComplexCsrDenseMatrixMultiplication.standard(this, B);
     }
 
 
@@ -2221,7 +2229,7 @@ public class CMatrix
     @Override
     public CMatrix elemMult(Matrix B) {
         return new CMatrix(
-                shape.copy(),
+                shape,
                 RealComplexDenseElemMult.dispatch(entries, shape, B.entries, B.shape)
         );
     }
@@ -2264,7 +2272,7 @@ public class CMatrix
     @Override
     public CMatrix elemDiv(Matrix B) {
         return new CMatrix(
-                shape.copy(),
+                shape,
                 RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
         );
     }
@@ -2350,7 +2358,7 @@ public class CMatrix
 
         for(int i=0; i<this.numRows; i++) {
             for(int j=0; j<this.numCols; j++) {
-                sum.entries[i].addEq(this.entries[i*numCols + j]);
+                sum.entries[i] = sum.entries[i].add(this.entries[i*numCols + j]);
             }
         }
 
@@ -2370,7 +2378,7 @@ public class CMatrix
 
         for(int i=0; i<this.numRows; i++) {
             for(int j=0; j<this.numCols; j++) {
-                sum.entries[j].addEq(this.entries[i*numCols + j]);
+                sum.entries[j] = sum.entries[j].add(this.entries[i*numCols + j]);
             }
         }
 
@@ -2391,8 +2399,10 @@ public class CMatrix
         CMatrix sum = new CMatrix(this);
 
         for(int i=0; i<sum.numRows; i++) {
+            int rowOffset = i*sum.numCols;
+
             for(int j=0; j<sum.numCols; j++) {
-                sum.entries[i*sum.numCols + j].addEq(b.entries[i]);
+                sum.entries[rowOffset + j] = sum.entries[rowOffset + j].add(b.entries[i]);
             }
         }
 
@@ -2418,7 +2428,7 @@ public class CMatrix
             index = b.indices[i];
 
             for(int j=0; j<sum.numCols; j++) {
-                sum.entries[index*sum.numCols + j].addEq(b.entries[i]);
+                sum.entries[index*sum.numCols + j] = sum.entries[index*sum.numCols + j].add(b.entries[i]);
             }
         }
 
@@ -2439,8 +2449,10 @@ public class CMatrix
         CMatrix sum = new CMatrix(this);
 
         for(int i=0; i<sum.numRows; i++) {
+            int rowOffset = i*sum.numCols;
+
             for(int j=0; j<sum.numCols; j++) {
-                sum.entries[i*sum.numCols + j].addEq(b.entries[i]);
+                sum.entries[rowOffset + j] = sum.entries[rowOffset + j].add(b.entries[i]);
             }
         }
 
@@ -2466,7 +2478,7 @@ public class CMatrix
             index = b.indices[i];
 
             for(int j=0; j<sum.numCols; j++) {
-                sum.entries[index*sum.numCols + j].addEq(b.entries[i]);
+                sum.entries[index*sum.numCols + j] = sum.entries[index*sum.numCols + j].add(b.entries[i]);
             }
         }
 
@@ -2487,8 +2499,10 @@ public class CMatrix
         CMatrix sum = new CMatrix(this);
 
         for(int i=0; i<sum.numRows; i++) {
+            int rowOffset = i*sum.numCols;
+
             for(int j=0; j<sum.numCols; j++) {
-                sum.entries[i*sum.numCols + j].addEq(b.entries[j]);
+                sum.entries[rowOffset + j] = sum.entries[rowOffset + j].add(b.entries[j]);
             }
         }
 
@@ -2508,11 +2522,11 @@ public class CMatrix
         ParameterChecks.assertArrayLengthsEq(numCols, b.size);
         CMatrix sum = new CMatrix(this);
 
-        int col;
         for(int i=0; i<sum.numRows; i++) {
+            int rowOffset = i*sum.numCols;
+
             for(int j=0; j<b.nonZeroEntries(); j++) {
-                col = b.indices[j];
-                sum.entries[i*sum.numCols + col].addEq(b.entries[j]);
+                sum.entries[rowOffset + b.indices[j]] = sum.entries[rowOffset + b.indices[j]].add(b.entries[j]);
             }
         }
 
@@ -2533,8 +2547,10 @@ public class CMatrix
         CMatrix sum = new CMatrix(this);
 
         for(int i=0; i<sum.numRows; i++) {
+            int rowOffset = i*sum.numCols;
+
             for(int j=0; j<sum.numCols; j++) {
-                sum.entries[i*sum.numCols + j].addEq(b.entries[j]);
+                sum.entries[rowOffset + j] = sum.entries[rowOffset + j].add(b.entries[j]);
             }
         }
 
@@ -2554,11 +2570,12 @@ public class CMatrix
         ParameterChecks.assertArrayLengthsEq(numCols, b.size);
         CMatrix sum = new CMatrix(this);
 
-        int col;
         for(int i=0; i<sum.numRows; i++) {
+            int rowOffset = i*sum.numCols;
+
             for(int j=0; j<b.nonZeroEntries(); j++) {
-                col = b.indices[j];
-                sum.entries[i*sum.numCols + col].addEq(b.entries[j]);
+                int idx = rowOffset + b.indices[j];
+                sum.entries[idx] = sum.entries[idx].add(b.entries[j]);
             }
         }
 
@@ -2579,7 +2596,7 @@ public class CMatrix
         ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);
         CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));
 
-        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
+        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
         ArrayUtils.arraycopy(B.entries, 0, stacked.entries, this.entries.length, B.entries.length);
 
         return stacked;
@@ -2599,7 +2616,7 @@ public class CMatrix
         ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);
         CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));
 
-        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
+        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
 
         int row;
         int col;
@@ -2629,15 +2646,11 @@ public class CMatrix
         CMatrix stacked = new CMatrix(new Shape(numRows+B.numRows, numCols));
 
         for(int i=0; i<numRows; i++) {
-            for(int j=0; j<numCols; j++) {
-                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();
-            }
+            System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);
         }
 
         for(int i=0; i<B.numRows; i++) {
-            for(int j=0; j<B.numCols; j++) {
-                stacked.entries[(i + numRows)*stacked.numCols + j] = B.entries[i*B.numCols+j].copy();
-            }
+            System.arraycopy(B.entries, i*B.numCols, stacked.entries, (i + numRows)*stacked.numCols, B.numCols);
         }
 
         return stacked;
@@ -2658,9 +2671,7 @@ public class CMatrix
         CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));
 
         for(int i=0; i<numRows; i++) {
-            for(int j=0; j<numCols; j++) {
-                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();
-            }
+            System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);
         }
 
         int row;
@@ -2669,7 +2680,7 @@ public class CMatrix
             row = B.rowIndices[i];
             col = B.colIndices[i];
             // Offset the row index for destination matrix. i.e. row+this.numRows
-            stacked.entries[(row+this.numRows)*stacked.numCols + col] = B.entries[i].copy();
+            stacked.entries[(row+this.numRows)*stacked.numCols + col] = B.entries[i];
         }
 
         return stacked;
@@ -2696,8 +2707,11 @@ public class CMatrix
 
         // Copy entries from the B matrix.
         for(int i=0; i<B.numRows; i++) {
+            int bRowOffset = i*B.numCols;
+            int augmentedRowColOffset = i*augmented.numCols + numCols;
+
             for(int j=0; j<B.numCols; j++) {
-                augmented.entries[i*augmented.numCols + j + numCols] = new CNumber(B.entries[i*B.numCols + j]);
+                augmented.entries[augmentedRowColOffset + j] = new CNumber(B.entries[bRowOffset + j]);
             }
         }
 
@@ -2751,15 +2765,13 @@ public class CMatrix
 
         // Copy entries from this matrix.
         for(int i=0; i<numRows; i++) {
-            for(int j=0; j<numCols; j++) {
-                augmented.entries[i*augmented.numCols + j] = entries[i*numCols + j].copy();
-            }
+            System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);
         }
 
         // Copy entries from the B matrix.
         for(int i=0; i<B.numRows; i++) {
             for(int j=0; j<B.numCols; j++) {
-                augmented.entries[i*augmented.numCols + j + numCols] = B.entries[i*B.numCols + j].copy();
+                augmented.entries[i*augmented.numCols + j + numCols] = B.entries[i*B.numCols + j];
             }
         }
 
@@ -2782,9 +2794,7 @@ public class CMatrix
 
         // Copy entries from this matrix.
         for(int i=0; i<numRows; i++) {
-            for(int j=0; j<numCols; j++) {
-                augmented.entries[i*augmented.numCols + j] = entries[i*numCols + j].copy();
-            }
+            System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);
         }
 
         int row;
@@ -2793,7 +2803,7 @@ public class CMatrix
             row = B.rowIndices[i];
             col = B.colIndices[i];
             // Offset the col index for destination matrix. i.e. col+this.numCols
-            augmented.entries[row*augmented.numCols + (col + numCols)] = B.entries[i].copy();
+            augmented.entries[row*augmented.numCols + (col + numCols)] = B.entries[i];
         }
 
         return augmented;
@@ -2815,7 +2825,7 @@ public class CMatrix
         ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);
         CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);
 
-        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
+        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
         ArrayUtils.arraycopy(b.entries, 0, stacked.entries, this.entries.length, b.entries.length);
 
         return stacked;
@@ -2866,14 +2876,10 @@ public class CMatrix
         CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);
 
         for(int i=0; i<numRows; i++) {
-            for(int j=0; j<numCols; j++) {
-                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();
-            }
+            System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);
         }
 
-        for(int i=0; i<b.entries.length; i++) {
-            stacked.entries[(stacked.numRows-1)*numCols + i] = b.entries[i].copy();
-        }
+        System.arraycopy(b.entries, 0, stacked.entries, (stacked.numRows - 1)*numCols, b.entries.length);
 
         return stacked;
     }
@@ -2895,9 +2901,7 @@ public class CMatrix
         CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);
 
         for(int i=0; i<numRows; i++) {
-            for(int j=0; j<numCols; j++) {
-                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();
-            }
+            System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);
         }
 
         int index;
@@ -2986,14 +2990,12 @@ public class CMatrix
 
         // Copy elements of this matrix.
         for(int i=0; i<numRows; i++) {
-            for(int j=0; j<numCols; j++) {
-                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();
-            }
+            System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);
         }
 
         // Copy elements from b vector.
         for(int i=0; i<b.entries.length; i++) {
-            stacked.entries[i*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();
+            stacked.entries[i*stacked.numCols + stacked.numCols-1] = b.entries[i];
         }
 
         return stacked;
@@ -3017,14 +3019,12 @@ public class CMatrix
 
         // Copy elements of this matrix.
         for(int i=0; i<numRows; i++) {
-            for(int j=0; j<numCols; j++) {
-                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();
-            }
+            System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);
         }
 
         // Copy elements from b vector.
         for(int i=0; i<b.entries.length; i++) {
-            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();
+            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = b.entries[i];
         }
 
         return stacked;
@@ -3042,7 +3042,7 @@ public class CMatrix
         int start = i*numCols;
         int stop = start+numCols;
 
-        CNumber[] row = ArrayUtils.copyOfRange(this.entries, start, stop);
+        CNumber[] row = Arrays.copyOfRange(this.entries, start, stop);
 
         return new CVector(row);
     }
@@ -3059,7 +3059,7 @@ public class CMatrix
     public CVector getRowAsVector(int i) {
         int start = i*numCols;
         int stop = start+numCols;
-        return new CVector(ArrayUtils.copyOfRange(this.entries, start, stop));
+        return new CVector(Arrays.copyOfRange(this.entries, start, stop));
     }
 
 
@@ -3074,7 +3074,7 @@ public class CMatrix
         CNumber[] col = new CNumber[numRows];
 
         for(int i=0; i<numRows; i++) {
-            col[i] = entries[i*numCols + j].copy();
+            col[i] = entries[i*numCols + j];
         }
 
         return new CVector(col);
@@ -3093,7 +3093,7 @@ public class CMatrix
         CNumber[] col = new CNumber[numRows];
 
         for(int i=0; i<numRows; i++) {
-            col[i] = entries[i*numCols + j].copy();
+            col[i] = entries[i*numCols + j];
         }
 
         return new CVector(col);
@@ -3147,7 +3147,7 @@ public class CMatrix
         CNumber[] col = new CNumber[numRows-rowStart];
 
         for(int i=rowStart; i<numRows; i++) {
-            col[i-rowStart] = entries[i*numCols + j].copy();
+            col[i-rowStart] = entries[i*numCols + j];
         }
 
         return new CVector(col);
@@ -3169,7 +3169,7 @@ public class CMatrix
         CNumber[] col = new CNumber[rowEnd-rowStart];
 
         for(int i=rowStart; i<rowEnd; i++) {
-            col[i-rowStart] = entries[i*numCols + colIdx].copy();
+            col[i-rowStart] = entries[i*numCols + colIdx];
         }
 
         return new CVector(col);
@@ -3191,7 +3191,7 @@ public class CMatrix
             throw new ArrayIndexOutOfBoundsException(String.format("Index (%d, %d) not in matrix.", i, colStart));
         }
 
-        CNumber[] row = ArrayUtils.copyOfRange(this.entries, i*this.numCols + colStart, (i+1)*this.numCols);
+        CNumber[] row = Arrays.copyOfRange(this.entries, i*this.numCols + colStart, (i+1)*this.numCols);
         return new CVector(row);
     }
 
@@ -3206,11 +3206,11 @@ public class CMatrix
     @Override
     public CNumber trace() {
         ParameterChecks.assertSquareMatrix(this.shape);
-        CNumber sum = new CNumber();
+        CNumber sum = CNumber.ZERO;
         int colsOffset = this.numCols+1;
 
         for(int i=0; i<this.numRows; i++) {
-            sum.addEq(this.entries[i*colsOffset]);
+            sum = sum.add(this.entries[i*colsOffset]);
         }
 
         return sum;
@@ -3565,7 +3565,7 @@ public class CMatrix
 
         // Get last entry in the column now
         value = StringUtils.ValueOfRound(this.get(i, this.numCols-1), PrintOptions.getPrecision());
-        width = PrintOptions.getPadding() + maxList.get(maxList.size()-1);
+        width = PrintOptions.getPadding() + maxList.getLast();
         value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
         result.append(String.format("%-" + width + "s]", value));
 
@@ -3600,12 +3600,12 @@ public class CMatrix
             List<Integer> maxList = new ArrayList<>(colStopIndex + 1);
             for (int j = 0; j < colStopIndex; j++) {
                 maxList.add(CNumberUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));
-                totalRowLength += maxList.get(maxList.size() - 1);
+                totalRowLength += maxList.getLast();
             }
 
             if (colStopIndex < this.numCols) {
                 maxList.add(CNumberUtils.maxStringLength(this.getCol(this.numCols - 1).entries));
-                totalRowLength += maxList.get(maxList.size() - 1);
+                totalRowLength += maxList.getLast();
             }
 
             if (colStopIndex < this.numCols - 1) {

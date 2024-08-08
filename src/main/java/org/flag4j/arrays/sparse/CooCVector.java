@@ -147,12 +147,13 @@ public class CooCVector
      * @param a Vector to copy.
      */
     public CooCVector(CooCVector a) {
-        super(a.shape.copy(),
+        super(a.shape,
                 a.nonZeroEntries(),
                 new CNumber[a.nonZeroEntries()],
                 RealDenseTranspose.blockedIntMatrix(new int[][]{a.indices})
         );
-        ArrayUtils.copy2CNumber(a.entries, super.entries);
+
+        System.arraycopy(a.entries, 0, super.entries, 0, a.entries.length);
         this.size = a.size;
         this.indices = a.indices.clone();
     }
@@ -268,7 +269,7 @@ public class CooCVector
         if(idx >= 0) {
             // Then the index was found in the sparse vector.
             destIndices = this.indices.clone();
-            destEntries = ArrayUtils.copyOf(entries);
+            destEntries = Arrays.copyOf(entries, entries.length);
             destEntries[idx] = value;
 
         } else{
@@ -343,8 +344,8 @@ public class CooCVector
      */
     public CooCTensor toTensor() {
         return new CooCTensor(
-                this.shape.copy(),
-                ArrayUtils.copyOf(entries),
+                this.shape,
+                Arrays.copyOf(entries, entries.length),
                 RealDenseTranspose.blockedIntMatrix(new int[][]{this.indices.clone()})
         );
     }
@@ -374,8 +375,8 @@ public class CooCVector
     @Override
     public CooCVector reshape(Shape shape) {
         ParameterChecks.assertRank(1, shape);
-        ParameterChecks.assertEquals(size, shape.get(0));
-        return new CooCVector(this);
+        ParameterChecks.assertBroadcastable(this.shape, shape);
+        return copy();
     }
 
     
@@ -402,7 +403,7 @@ public class CooCVector
      */
     @Override
     public CooCVector flatten() {
-        return new CooCVector(this);
+        return copy();
     }
 
 
@@ -415,7 +416,7 @@ public class CooCVector
     @Override
     public CVector join(Vector b) {
         CNumber[] newEntries = new CNumber[this.size + b.entries.length];
-        ArrayUtils.fillZeros(newEntries);
+        Arrays.fill(newEntries, CNumber.ZERO);
 
         // Copy over sparse values.
         for(int i=0; i<this.entries.length; i++) {
@@ -438,15 +439,15 @@ public class CooCVector
     @Override
     public CVector join(CVector b) {
         CNumber[] newEntries = new CNumber[this.size + b.entries.length];
-        ArrayUtils.fillZeros(newEntries);
+        Arrays.fill(newEntries, CNumber.ZERO);
 
         // Copy over sparse values.
         for(int i=0; i<this.entries.length; i++) {
-            newEntries[indices[i]] = new CNumber(entries[i]);
+            newEntries[indices[i]] = entries[i];
         }
 
         // Copy over dense values.
-        ArrayUtils.arraycopy(b.entries, 0, newEntries, this.size, b.entries.length);
+        System.arraycopy(b.entries, 0, newEntries, this.size, b.entries.length);
 
         return new CVector(newEntries);
     }
@@ -461,11 +462,11 @@ public class CooCVector
     @Override
     public CooCVector join(CooVector b) {
         CNumber[] newEntries = new CNumber[this.entries.length + b.entries.length];
-        ArrayUtils.fillZeros(newEntries);
+        Arrays.fill(newEntries, CNumber.ZERO);
         int[] newIndices = new int[this.indices.length + b.indices.length];
 
         // Copy values from this vector.
-        ArrayUtils.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);
+        System.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);
         // Copy values from vector b.
         ArrayUtils.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);
 
@@ -490,13 +491,13 @@ public class CooCVector
     @Override
     public CooCVector join(CooCVector b) {
         CNumber[] newEntries = new CNumber[this.entries.length + b.entries.length];
-        ArrayUtils.fillZeros(newEntries);
+        Arrays.fill(newEntries, CNumber.ZERO);
         int[] newIndices = new int[this.indices.length + b.indices.length];
 
         // Copy values from this vector.
-        ArrayUtils.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);
+        System.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);
         // Copy values from vector b.
-        ArrayUtils.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);
+        System.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);
 
         // Copy indices from this vector.
         System.arraycopy(this.indices, 0, newIndices, 0, this.entries.length);
@@ -523,11 +524,11 @@ public class CooCVector
     public CooCMatrix stack(Vector b) {
         ParameterChecks.assertEqualShape(this.shape, b.shape);
 
-        CNumber[] destEntries = new CNumber[nonZeroEntries + b.length()];
-        int[][] indices = new int[2][nonZeroEntries + b.length()];
+        CNumber[] destEntries = new CNumber[nnz + b.length()];
+        int[][] indices = new int[2][nnz + b.length()];
 
         // Copy sparse values and column indices (row indices will be implicitly zero)
-        ArrayUtils.arraycopy(entries, 0, destEntries,0,  entries.length);
+        System.arraycopy(entries, 0, destEntries,0,  entries.length);
         System.arraycopy(this.indices, 0, indices[1], 0, this.indices.length);
 
         // Copy dense values. Set column indices as range and set row indices to 1.
@@ -558,7 +559,7 @@ public class CooCVector
         int[][] indices = new int[2][this.indices.length + b.indices.length]; // Row and column indices.
 
         // Copy values from this vector.
-        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.entries.length);
+        System.arraycopy(this.entries, 0, entries, 0, this.entries.length);
         // Copy values from vector b.
         ArrayUtils.arraycopy(b.entries, 0, entries, this.entries.length, b.entries.length);
 
@@ -587,17 +588,17 @@ public class CooCVector
     public CooCMatrix stack(CVector b) {
         ParameterChecks.assertEqualShape(this.shape, b.shape);
 
-        CNumber[] destEntries = new CNumber[nonZeroEntries + b.length()];
-        int[][] indices = new int[2][nonZeroEntries + b.length()];
+        CNumber[] destEntries = new CNumber[nnz + b.length()];
+        int[][] indices = new int[2][nnz + b.length()];
 
         // Copy sparse values and column indices (row indices will be implicitly zero)
-        ArrayUtils.arraycopy(entries, 0, destEntries,0,  entries.length);
+        System.arraycopy(entries, 0, destEntries,0,  entries.length);
         System.arraycopy(this.indices, 0, indices[1], 0, this.indices.length);
 
         // Copy dense values. Set column indices as range and set row indices to 1.
         int[] rowIndices = new int[b.size];
         Arrays.fill(rowIndices, 1);
-        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);
+        System.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);
         System.arraycopy(rowIndices, 0, indices[0], entries.length,  b.size);
         System.arraycopy(ArrayUtils.intRange(0, b.size), 0, indices[1], entries.length,  b.size);
 
@@ -622,9 +623,9 @@ public class CooCVector
         int[][] indices = new int[2][this.indices.length + b.indices.length]; // Row and column indices.
 
         // Copy values from this vector.
-        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.entries.length);
+        System.arraycopy(this.entries, 0, entries, 0, this.entries.length);
         // Copy values from vector b.
-        ArrayUtils.arraycopy(b.entries, 0, entries, this.entries.length, b.entries.length);
+        System.arraycopy(b.entries, 0, entries, this.entries.length, b.entries.length);
 
         // Set row indices to 1 for b values (this vectors row indices are 0 which was implicitly set already).
         Arrays.fill(indices[0], this.indices.length, entries.length, 1);
@@ -1327,12 +1328,12 @@ public class CooCVector
         } else {
             result = true;
             int sparseIndex = 0;
-            CNumber scale = new CNumber();
+            CNumber scale = CNumber.ZERO;
 
             // Find first non-zero entry in b and compute the scaling factor (we know there is at least one from else-if).
             for(int i=0; i<b.size; i++) {
                 if(b.entries[i]!=0) {
-                    scale = new CNumber(this.entries[i]).div(b.entries[this.indices[i]]);
+                    scale = this.entries[i].div(b.entries[this.indices[i]]);
                     break;
                 }
             }
@@ -1393,7 +1394,7 @@ public class CooCVector
         int[] rowIndices = indices.clone();
         int[] colIndices = new int[entries.length];
 
-        return new CooCMatrix(this.size, 1, ArrayUtils.copyOf(entries), rowIndices, colIndices);
+        return new CooCMatrix(this.size, 1, Arrays.copyOf(entries, entries.length), rowIndices, colIndices);
     }
 
 
@@ -1412,13 +1413,13 @@ public class CooCVector
             int[] rowIndices = indices.clone();
             int[] colIndices = new int[entries.length];
 
-            return new CooCMatrix(this.size, 1, ArrayUtils.copyOf(entries), rowIndices, colIndices);
+            return new CooCMatrix(this.size, 1, Arrays.copyOf(entries, entries.length), rowIndices, colIndices);
         } else {
             // Convert to row vector.
             int[] rowIndices = new int[entries.length];
             int[] colIndices = indices.clone();
 
-            return new CooCMatrix(1, this.size, ArrayUtils.copyOf(entries), rowIndices, colIndices);
+            return new CooCMatrix(1, this.size, Arrays.copyOf(entries, entries.length), rowIndices, colIndices);
         }
     }
 
@@ -1495,7 +1496,7 @@ public class CooCVector
             tiledShape = new Shape(n, size);
 
             for(int i=0; i<n; i++) { // Copy values into row and set col indices as vector indices.
-                ArrayUtils.arraycopy(entries, 0, tiledEntries, i*nnz, nnz);
+                System.arraycopy(entries, 0, tiledEntries, i*nnz, nnz);
                 System.arraycopy(indices, 0, tiledCols, i*nnz, indices.length);
                 Arrays.fill(tiledRows, i*nnz, (i+1)*nnz, i);
             }
@@ -1522,10 +1523,10 @@ public class CooCVector
     @Override
     public CVector toDense() {
         CNumber[] entries = new CNumber[size];
-        ArrayUtils.fillZeros(entries);
+        Arrays.fill(entries, CNumber.ZERO);
 
-        for(int i=0; i<nonZeroEntries; i++) {
-            entries[indices[i]] = this.entries[i].copy();
+        for(int i = 0; i< nnz; i++) {
+            entries[indices[i]] = this.entries[i];
         }
 
         return new CVector(entries);
@@ -1544,8 +1545,8 @@ public class CooCVector
         ParameterChecks.assertGreaterEq(1, n, "n");
         ParameterChecks.assertAxis2D(axis);
 
-        int[][] matIndices = new int[2][n*nonZeroEntries];
-        CNumber[] matEntries = new CNumber[n*nonZeroEntries];
+        int[][] matIndices = new int[2][n*nnz];
+        CNumber[] matEntries = new CNumber[n*nnz];
         Shape matShape;
 
         if(axis==0) {
@@ -1554,9 +1555,9 @@ public class CooCVector
 
             for(int i=0; i<n; i++) {
                 Arrays.fill(rowIndices, i);
-                System.arraycopy(entries, 0, matEntries, (n-1)*i, nonZeroEntries);
-                System.arraycopy(rowIndices, 0, matIndices[0], (n-1)*i, nonZeroEntries);
-                System.arraycopy(indices, 0, matIndices[1], (n-1)*i, nonZeroEntries);
+                System.arraycopy(entries, 0, matEntries, (n-1)*i, nnz);
+                System.arraycopy(rowIndices, 0, matIndices[0], (n-1)*i, nnz);
+                System.arraycopy(indices, 0, matIndices[1], (n-1)*i, nnz);
             }
 
         } else {
@@ -1594,7 +1595,7 @@ public class CooCVector
      * @return A human-readable string representing this tensor.
      */
     public String toString() {
-        int size = nonZeroEntries;
+        int size = nnz;
         StringBuilder result = new StringBuilder(String.format("Full Shape: %s\n", shape));
         result.append("Non-zero entries: [");
 

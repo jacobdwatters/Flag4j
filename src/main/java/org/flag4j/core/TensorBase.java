@@ -147,7 +147,7 @@ public abstract class TensorBase<T, U, W, Z, Y, D extends Serializable, X extend
             );
         }
 
-        return A.shape.dims[axis]==B.shape.dims[axis];
+        return A.shape.get(axis)==B.shape.get(axis);
     }
 
 

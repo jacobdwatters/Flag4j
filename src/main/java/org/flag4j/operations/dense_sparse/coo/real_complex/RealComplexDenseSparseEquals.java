@@ -35,7 +35,6 @@ import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.operations.common.complex.ComplexProperties;
 import org.flag4j.operations.common.real.RealProperties;
-import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
@@ -43,7 +42,7 @@ import java.util.Arrays;
 /**
  * This class contains methods for checking the equality of real dense/sparse and complex dense/sparse tensors.
  */
-public class RealComplexDenseSparseEquals {
+public final class RealComplexDenseSparseEquals {
 
     private RealComplexDenseSparseEquals() {
         // Hide default constructor.
@@ -105,7 +104,7 @@ public class RealComplexDenseSparseEquals {
         if(src1.length == sparseSize) {
             int index;
             CNumber[] src1Copy = new CNumber[src1.length];
-            ArrayUtils.copy2CNumber(src1, src1Copy);
+            System.arraycopy(src1, 0, src1Copy, 0, src1.length);
 
             for(int i=0; i<indices.length; i++) {
                 index = indices[i];
@@ -115,7 +114,7 @@ public class RealComplexDenseSparseEquals {
                     break;
 
                 } else {
-                    src1Copy[index] = new CNumber();
+                    src1Copy[index] = CNumber.ZERO;
                 }
             }
 
@@ -199,7 +198,7 @@ public class RealComplexDenseSparseEquals {
                     break;
                 }
 
-                entriesCopy[idx] = new CNumber();
+                entriesCopy[idx] = CNumber.ZERO;
             }
 
             if(equal) {
@@ -264,7 +263,7 @@ public class RealComplexDenseSparseEquals {
 
         if(A.shape.equals(B.shape)) {
             CNumber[] entriesCopy = new CNumber[A.entries.length];
-            ArrayUtils.copy2CNumber(A.entries, entriesCopy);
+            System.arraycopy(A.entries, 0, entriesCopy, 0, A.entries.length);
             int entriesIndex;
 
             // Remove all nonZero entries from the entries of this matrix.
@@ -276,7 +275,7 @@ public class RealComplexDenseSparseEquals {
                     break;
                 }
 
-                entriesCopy[A.shape.entriesIndex(B.indices[i])] = new CNumber();
+                entriesCopy[A.shape.entriesIndex(B.indices[i])] = CNumber.ZERO;
             }
 
             if(equal) {

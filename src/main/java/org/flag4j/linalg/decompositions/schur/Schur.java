@@ -44,7 +44,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  * @param <U> The type for the internal storage datastructure of the matrix to be decomposed.
  */
 public abstract class Schur<
-        T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>,
+        T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>,
         U> implements Decomposition<T> {
 
     /**

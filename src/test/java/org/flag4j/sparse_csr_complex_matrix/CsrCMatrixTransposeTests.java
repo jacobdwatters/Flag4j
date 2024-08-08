@@ -86,9 +86,9 @@ class CsrCMatrixTransposeTests {
 
         // -------------------- Sub-case 4 ---------------------
         aEntries = new CNumber[140][23];
-        ArrayUtils.fillZeros(aEntries);
+        ArrayUtils.fill(aEntries, CNumber.ZERO);
         expEntries = new CNumber[23][140];
-        ArrayUtils.fillZeros(expEntries);
+        ArrayUtils.fill(expEntries, CNumber.ZERO);
         buildFromDense();
 
         assertEquals(exp, A.T());
@@ -153,9 +153,9 @@ class CsrCMatrixTransposeTests {
 
         // -------------------- Sub-case 4 ---------------------
         aEntries = new CNumber[140][23];
-        ArrayUtils.fillZeros(aEntries);
+        ArrayUtils.fill(aEntries, CNumber.ZERO);
         expEntries = new CNumber[23][140];
-        ArrayUtils.fillZeros(expEntries);
+        ArrayUtils.fill(expEntries, CNumber.ZERO);
         buildFromDense();
 
         assertEquals(exp, A.H());
@@ -166,7 +166,7 @@ class CsrCMatrixTransposeTests {
     void isHermitianTests() {
         // -------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[5][5];
-        ArrayUtils.fillZeros(aEntries);
+        ArrayUtils.fill(aEntries, CNumber.ZERO);
         aEntries[0][0] = new CNumber(1.5);
         aEntries[2][1] = new CNumber(2.45, 85.12);
         aEntries[1][2] = new CNumber(2.45, -85.12);
@@ -179,7 +179,7 @@ class CsrCMatrixTransposeTests {
 
         // -------------------- Sub-case 2 ---------------------
         aEntries = new CNumber[5][6];
-        ArrayUtils.fillZeros(aEntries);
+        ArrayUtils.fill(aEntries, CNumber.ZERO);
         aEntries[0][0] = new CNumber(1.5);
         aEntries[2][1] = new CNumber(2.45, 85.12);
         aEntries[1][2] = new CNumber(2.45, -85.12);
@@ -192,7 +192,7 @@ class CsrCMatrixTransposeTests {
 
         // -------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[415][415];
-        ArrayUtils.fillZeros(aEntries);
+        ArrayUtils.fill(aEntries, CNumber.ZERO);
         aEntries[0][0] = new CNumber(87.35);
         aEntries[2][1] = new CNumber(9671.4, -774.1);
         aEntries[1][2] = new CNumber(9671.4, 774.1);

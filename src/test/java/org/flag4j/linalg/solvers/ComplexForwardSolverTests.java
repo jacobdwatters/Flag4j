@@ -24,8 +24,8 @@ class ComplexForwardSolverTests {
 
         // ---------------------- Sub-case 1 ----------------------
         lEntries = new CNumber[][]{
-                {new CNumber(1.25, -9.25), new CNumber(), new CNumber()},
-                {new CNumber(-815.5, 1.444), new CNumber(2.45, 15.5), new CNumber()},
+                {new CNumber(1.25, -9.25), CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(-815.5, 1.444), new CNumber(2.45, 15.5), CNumber.ZERO},
                 {new CNumber(0, -9.256), new CNumber(2.45, -83.2), new CNumber(256.2)}
         };
         L = new CMatrix(lEntries);
@@ -44,8 +44,8 @@ class ComplexForwardSolverTests {
 
         // ---------------------- Sub-case 2 ----------------------
         lEntries = new CNumber[][]{
-                {new CNumber(1.25, -9.25), new CNumber(), new CNumber()},
-                {new CNumber(-815.5, 1.444), new CNumber(), new CNumber()},
+                {new CNumber(1.25, -9.25), CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(-815.5, 1.444), CNumber.ZERO, CNumber.ZERO},
                 {new CNumber(0, -9.256), new CNumber(2.45, -83.2), new CNumber(256.2)}
         };
         L = new CMatrix(lEntries);
@@ -59,8 +59,8 @@ class ComplexForwardSolverTests {
 
         // ---------------------- Sub-case 3 ----------------------
         lEntries = new CNumber[][]{
-                {new CNumber(1.25, -9.25), new CNumber(), new CNumber()},
-                {new CNumber(-815.5, 1.444), new CNumber(), new CNumber()},
+                {new CNumber(1.25, -9.25), CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(-815.5, 1.444), CNumber.ZERO, CNumber.ZERO},
                 {new CNumber(0, -9.256), new CNumber(2.45, -83.2), new CNumber(256.2)}
         };
         L = new CMatrix(lEntries);
@@ -83,8 +83,8 @@ class ComplexForwardSolverTests {
 
         // ---------------------- Sub-case 1 ----------------------
         lEntries = new CNumber[][]{
-                {new CNumber(1.25, -9.25), new CNumber(), new CNumber()},
-                {new CNumber(-815.5, 1.444), new CNumber(2.45, 15.5), new CNumber()},
+                {new CNumber(1.25, -9.25), CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(-815.5, 1.444), new CNumber(2.45, 15.5), CNumber.ZERO},
                 {new CNumber(0, -9.256), new CNumber(2.45, -83.2), new CNumber(256.2)}
         };
         L = new CMatrix(lEntries);
@@ -106,9 +106,9 @@ class ComplexForwardSolverTests {
 
         // ---------------------- Sub-case 2 ----------------------
         lEntries = new CNumber[][]{
-                {new CNumber(1.25, -9.25), new CNumber(), new CNumber()},
-                {new CNumber(-815.5, 1.444), new CNumber(2.45, 15.5), new CNumber()},
-                {new CNumber(0, -9.256), new CNumber(2.45, -83.2), new CNumber()}
+                {new CNumber(1.25, -9.25), CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(-815.5, 1.444), new CNumber(2.45, 15.5), CNumber.ZERO},
+                {new CNumber(0, -9.256), new CNumber(2.45, -83.2), CNumber.ZERO}
         };
         L = new CMatrix(lEntries);
         bEntries = new CNumber[][]{
@@ -123,8 +123,8 @@ class ComplexForwardSolverTests {
 
         // ---------------------- Sub-case 3 ----------------------
         lEntries = new CNumber[][]{
-                {new CNumber(1.25, -9.25), new CNumber(), new CNumber()},
-                {new CNumber(-815.5, 1.444), new CNumber(2.45, 15.5), new CNumber()},
+                {new CNumber(1.25, -9.25), CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(-815.5, 1.444), new CNumber(2.45, 15.5), CNumber.ZERO},
                 {new CNumber(0, -9.256), new CNumber(2.45, -83.2), new CNumber(1)}
         };
         L = new CMatrix(lEntries);
@@ -147,8 +147,8 @@ class ComplexForwardSolverTests {
 
         // ---------------------- Sub-case 1 ----------------------
         lEntries = new CNumber[][]{
-                {new CNumber(1), new CNumber(), new CNumber()},
-                {new CNumber(-815.5, 1.444), new CNumber(1), new CNumber()},
+                {new CNumber(1), CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(-815.5, 1.444), new CNumber(1), CNumber.ZERO},
                 {new CNumber(0, -9.256), new CNumber(2.45, -83.2), new CNumber(1)}
         };
         L = new CMatrix(lEntries);
@@ -167,8 +167,8 @@ class ComplexForwardSolverTests {
 
         // ---------------------- Sub-case 2 ----------------------
         lEntries = new CNumber[][]{
-                {new CNumber(1), new CNumber(), new CNumber()},
-                {new CNumber(-815.5, 1.444), new CNumber(1), new CNumber()},
+                {new CNumber(1), CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(-815.5, 1.444), new CNumber(1), CNumber.ZERO},
                 {new CNumber(0, -9.256), new CNumber(2.45, -83.2), new CNumber(1)}
         };
         L = new CMatrix(lEntries);
@@ -191,8 +191,8 @@ class ComplexForwardSolverTests {
 
         // ---------------------- Sub-case 1 ----------------------
         lEntries = new CNumber[][]{
-                {new CNumber(1), new CNumber(), new CNumber()},
-                {new CNumber(-815.5, 1.444), new CNumber(1), new CNumber()},
+                {new CNumber(1), CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(-815.5, 1.444), new CNumber(1), CNumber.ZERO},
                 {new CNumber(0, -9.256), new CNumber(2.45, -83.2), new CNumber(1)}
         };
         L = new CMatrix(lEntries);
@@ -213,8 +213,8 @@ class ComplexForwardSolverTests {
 
         // ---------------------- Sub-case 2 ----------------------
         lEntries = new CNumber[][]{
-                {new CNumber(1), new CNumber(), new CNumber()},
-                {new CNumber(-815.5, 1.444), new CNumber(1), new CNumber()},
+                {new CNumber(1), CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(-815.5, 1.444), new CNumber(1), CNumber.ZERO},
                 {new CNumber(0, -9.256), new CNumber(2.45, -83.2), new CNumber(1)}
         };
         L = new CMatrix(lEntries);

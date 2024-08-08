@@ -45,6 +45,7 @@ import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseOperatio
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
+import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.StringUtils;
 
 import java.util.Arrays;
@@ -64,7 +65,7 @@ public class CTensor
     public CTensor(Shape shape) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
         shape.makeStridesIfNull();
-        ArrayUtils.fillZeros(super.entries);
+        Arrays.fill(super.entries, CNumber.ZERO);
     }
 
 
@@ -88,7 +89,7 @@ public class CTensor
     public CTensor(Shape shape, CNumber fillValue) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
         shape.makeStridesIfNull();
-        ArrayUtils.fill(super.entries, fillValue);
+        Arrays.fill(super.entries, fillValue);
     }
 
 
@@ -146,7 +147,7 @@ public class CTensor
      * @param A Tensor specifying shape and entries.
      */
     public CTensor(Tensor A) {
-        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);
+        super(A.shape, new CNumber[A.totalEntries().intValue()]);
         shape.makeStridesIfNull();
         ArrayUtils.copy2CNumber(A.entries, super.entries);
     }
@@ -157,9 +158,9 @@ public class CTensor
      * @param A Tensor specifying shape and entries.
      */
     public CTensor(CTensor A) {
-        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);
+        super(A.shape, new CNumber[A.totalEntries().intValue()]);
         shape.makeStridesIfNull();
-        ArrayUtils.copy2CNumber(A.entries, super.entries);
+        System.arraycopy(A.entries, 0, super.entries, 0, A.entries.length);
     }
 
 
@@ -257,7 +258,7 @@ public class CTensor
     @Override
     public CTensor H() {
         return new CTensor(
-                shape.copy().swapAxes(0, getRank()-1),
+                shape.swapAxes(0, getRank()-1),
                 ComplexDenseTranspose.standardConcurrentHerm(
                     entries,
                     shape,
@@ -282,7 +283,7 @@ public class CTensor
     @Override
     public CTensor H(int axis1, int axis2) {
         return new CTensor(
-                shape.copy().swapAxes(axis1, axis2),
+                shape.swapAxes(axis1, axis2),
                 ComplexDenseTranspose.standardConcurrentHerm(
                         entries,
                         shape,
@@ -305,7 +306,7 @@ public class CTensor
     @Override
     public CTensor H(int... axes) {
         return new CTensor(
-                this.shape.copy().swapAxes(axes),
+                this.shape.swapAxes(axes),
                 ComplexDenseTranspose.standardConcurrentHerm(this.entries, this.shape, axes)
         );
     }
@@ -388,7 +389,7 @@ public class CTensor
     public CTensor T(int... axes) {
         // TODO: Add dispatcher for this method to choose between concurrent and sequential implementations.
         return new CTensor(
-                this.shape.copy().swapAxes(axes),
+                this.shape.swapAxes(axes),
                 ComplexDenseTranspose.standardConcurrent(this.entries, this.shape, axes)
         );
     }
@@ -452,7 +453,7 @@ public class CTensor
     @Override
     public CTensor add(Tensor B) {
         return new CTensor(
-                this.shape.copy(),
+                this.shape,
                 RealComplexDenseOperations.add(this.entries, this.shape, B.entries, B.shape)
         );
     }
@@ -467,7 +468,7 @@ public class CTensor
     @Override
     public CTensor sub(Tensor B) {
         return new CTensor(
-                this.shape.copy(),
+                this.shape,
                 RealComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
         );
     }
@@ -529,7 +530,6 @@ public class CTensor
      * @param B Second tensor in the subtraction.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    @Override
     public void addEq(CooTensor B) {
         RealComplexDenseSparseOperations.addEq(this, B);
     }
@@ -541,7 +541,6 @@ public class CTensor
      * @param B Second tensor in the subtraction.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    @Override
     public void subEq(CooTensor B) {
         RealComplexDenseSparseOperations.subEq(this, B);
     }
@@ -557,7 +556,7 @@ public class CTensor
     @Override
     public CTensor elemMult(Tensor B) {
         return new CTensor(
-                this.shape.copy(),
+                this.shape,
                 RealComplexDenseElemMult.dispatch(this.entries, this.shape, B.entries, B.shape)
         );
     }
@@ -599,7 +598,7 @@ public class CTensor
     @Override
     public CTensor elemDiv(Tensor B) {
         return new CTensor(
-                shape.copy(),
+                shape,
                 RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
         );
     }
@@ -640,9 +639,22 @@ public class CTensor
      */
     public CVector toVector() {
         CNumber[] entries = new CNumber[this.entries.length];
-        ArrayUtils.copy2CNumber(this.entries, entries);
+        System.arraycopy(this.entries, 0, entries, 0, entries.length);
 
         return new CVector(entries);
+    }
+
+
+    /**
+     * Converts this tensor to a matrix with the specified shape.
+     * @param matShape Shape of the resulting matrix. Must be broadcastable with the shape of this tensor.
+     * @return A matrix of shape {@code matShape} with the values of this tensor.
+     */
+    public CMatrix toMatrix(Shape matShape) {
+        ParameterChecks.assertBroadcastable(shape, matShape);
+        ParameterChecks.assertRank(2, matShape);
+
+        return new CMatrix(matShape, Arrays.copyOf(entries, entries.length));
     }
 
 
@@ -656,10 +668,10 @@ public class CTensor
         CMatrix mat;
 
         CNumber[] entries = new CNumber[this.entries.length];
-        ArrayUtils.copy2CNumber(this.entries, entries);
+        System.arraycopy(this.entries, 0, entries, 0, entries.length);
 
         if(this.getRank()==2) {
-            mat = new CMatrix(this.shape.copy(), entries);
+            mat = new CMatrix(this.shape, entries);
         } else {
             mat = new CMatrix(1, this.entries.length, entries);
         }

@@ -60,7 +60,7 @@ public final class RealDenseTensorDot {
         if(src1Rank==2 && src2Rank==2) {
             // Product is simply a matrix multiplication problem.
             return new Tensor(
-                    new Shape(src1.shape.dims[0], src2.shape.dims[1]),
+                    new Shape(src1.shape.get(0), src2.shape.get(1)),
                     RealDenseMatrixMultiplyDispatcher.dispatch(src1.entries, src1.shape, src2.entries, src2.shape)
             );
         }
@@ -101,19 +101,19 @@ public final class RealDenseTensorDot {
         int pos;
 
         // ---- Compute new axes and shapes for first tensor. ----
-        notin = ArrayUtils.notinAxes(src1Axes, src1.getRank());
+        notin = ArrayUtils.notInAxes(src1Axes, src1.getRank());
         int[] src1NewAxes = ArrayUtils.join(notin, src1Axes);
 
         n2 = 1;
         for(int axis : src1Axes) {
-            n2 *= src1.shape.dims[axis];
+            n2 *= src1.shape.get(axis);
         }
 
         n1 = 1;
         int[] src1OldDims = new int[notin.length];
         pos = 0;
         for(int axis : notin) {
-            int a = src1.shape.dims[axis];
+            int a = src1.shape.get(axis);
             n1 *= a;
             src1OldDims[pos++] = a;
         }
@@ -122,19 +122,19 @@ public final class RealDenseTensorDot {
         // -----------------------------------------------------
 
         // ---- Compute new axes and shapes for second tensor. ----
-        notin = ArrayUtils.notinAxes(src2Axes, src2.getRank());
+        notin = ArrayUtils.notInAxes(src2Axes, src2.getRank());
         int[] src2NewAxes = ArrayUtils.join(src2Axes, notin);
 
         n2 = 1;
         for(int axis : src2Axes) {
-            n2 *= src2.shape.dims[axis];
+            n2 *= src2.shape.get(axis);
         }
 
         n1 = 1;
         pos = 0;
         int[] src2OldDims = new int[notin.length];
         for(int axis : notin) {
-            int a = src2.shape.dims[axis];
+            int a = src2.shape.get(axis);
             n1 *= a;
             src2OldDims[pos++] = a;
         }
@@ -144,14 +144,14 @@ public final class RealDenseTensorDot {
 
         // Reform tensor dot product problem as a matrix multiplication problem.
         double[] at = TransposeDispatcher.dispatchTensor(src1.entries, src1.shape, src1NewAxes);
-        double[] bt = RealDenseTranspose.standardConcurrent(src2.entries, src2.shape, src2NewAxes);
+        double[] bt = TransposeDispatcher.dispatchTensor(src2.entries, src2.shape, src2NewAxes);
 
         double[] destEntries = RealDenseMatrixMultiplyDispatcher.dispatch(at, src1NewShape, bt, src2NewShape);
 
         // TODO: Should allow for zero dim shape indicating a scalar. Then only the else block would be needed.
         Shape destShape;
         if(src1Axes.length == src1.getRank() && src2Axes.length == src2.getRank()) {
-             destShape = new Shape(1);
+            destShape = new Shape(1);
         } else {
             destShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));
         }
