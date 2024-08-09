@@ -81,8 +81,11 @@ public class ComplexDenseElemDiv {
         ParameterChecks.assertEqualShape(shape1, shape2);
         CNumber[] product = new CNumber[src1.length];
 
-        ThreadManager.concurrentLoop(0, product.length,
-                (i)->product[i] = src1[i].div(src2[i]));
+        ThreadManager.concurrentOperation(product.length, (start, end)->{
+            for(int i=start; i<end; i++) {
+                product[i] = src1[i].div(src2[i]);
+            }
+        });
 
         return product;
     }

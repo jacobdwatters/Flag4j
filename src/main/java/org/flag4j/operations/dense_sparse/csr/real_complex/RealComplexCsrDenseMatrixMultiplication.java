@@ -32,15 +32,16 @@ import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
-import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
+
+import java.util.Arrays;
 
 /**
  * This class contains low-level implementations of real-complex sparse-dense matrix multiplication where the sparse matrix
  * is in CSR format.
  */
-public class RealComplexCsrDenseMatrixMultiplication {
+public final class RealComplexCsrDenseMatrixMultiplication {
 
     private RealComplexCsrDenseMatrixMultiplication() {
         // Hide default constructor for utility method.
@@ -63,7 +64,7 @@ public class RealComplexCsrDenseMatrixMultiplication {
         ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
 
         CNumber[] destEntries = new CNumber[src1.numRows*src2.numCols];
-        ArrayUtils.fillZeros(destEntries);
+        Arrays.fill(destEntries, CNumber.ZERO);
         int rows1 = src1.numRows;
         int cols2 = src2.numCols;
 
@@ -80,7 +81,7 @@ public class RealComplexCsrDenseMatrixMultiplication {
                 int destIdx = rowOffset;
 
                 while(destIdx < innerStop) {
-                    destEntries[destIdx++].addEq(src2.entries[src2Idx++].mult(aVal));
+                    destEntries[destIdx] = destEntries[destIdx++].add(src2.entries[src2Idx++].mult(aVal));
                 }
             }
         }
@@ -103,7 +104,7 @@ public class RealComplexCsrDenseMatrixMultiplication {
         ParameterChecks.assertEquals(src1.numCols, src2.numCols);
 
         CNumber[] destEntries = new CNumber[src1.numRows*src2.numRows];
-        ArrayUtils.fillZeros(destEntries);
+        Arrays.fill(destEntries, CNumber.ZERO);
         int rows1 = src1.numRows;
         int rows2 = src2.numRows;
         int src2RowOffset;
@@ -120,7 +121,7 @@ public class RealComplexCsrDenseMatrixMultiplication {
                 stop = src1.rowPointers[i+1];
 
                 while(start < stop) {
-                    destEntries[destRowOffset].addEq(
+                    destEntries[destRowOffset] = destEntries[destRowOffset].add(
                             src2.entries[src2RowOffset + src1.colIndices[start]].mult(src1.entries[start++])
                     );
                 }
@@ -146,7 +147,7 @@ public class RealComplexCsrDenseMatrixMultiplication {
         ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
 
         CNumber[] destEntries = new CNumber[src1.numRows * src2.numCols];
-        ArrayUtils.fillZeros(destEntries);
+        Arrays.fill(destEntries, CNumber.ZERO);
         int rows1 = src1.numRows;
         int cols1 = src1.numCols;
         int cols2 = src2.numCols;
@@ -163,7 +164,7 @@ public class RealComplexCsrDenseMatrixMultiplication {
                 for(int aIndex=start; aIndex<stop; aIndex++) {
                     int aCol = src2.colIndices[aIndex];
                     CNumber aVal = src2.entries[aIndex];
-                    destEntries[rowOffset + aCol].addEq(aVal.mult(src1Val));
+                    destEntries[rowOffset + aCol] = destEntries[rowOffset + aCol].add(aVal.mult(src1Val));
                 }
             }
         }
@@ -187,7 +188,7 @@ public class RealComplexCsrDenseMatrixMultiplication {
         ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
 
         CNumber[] destEntries = new CNumber[src1.numRows * src2.numCols];
-        ArrayUtils.fillZeros(destEntries);
+        Arrays.fill(destEntries, CNumber.ZERO);
         int rows1 = src1.numRows;
         int cols1 = src1.numCols;
         int cols2 = src2.numCols;
@@ -204,7 +205,7 @@ public class RealComplexCsrDenseMatrixMultiplication {
                 for(int aIndex=start; aIndex<stop; aIndex++) {
                     int aCol = src2.colIndices[aIndex];
                     double aVal = src2.entries[aIndex];
-                    destEntries[rowOffset + aCol].addEq(src1Val.mult(aVal));
+                    destEntries[rowOffset + aCol] = destEntries[rowOffset + aCol].add(src1Val.mult(aVal));
                 }
             }
         }
@@ -226,7 +227,7 @@ public class RealComplexCsrDenseMatrixMultiplication {
         ParameterChecks.assertEquals(src1.numCols, src2.size);
 
         CNumber[] destEntries = new CNumber[src1.numRows];
-        ArrayUtils.fillZeros(destEntries);
+        Arrays.fill(destEntries, CNumber.ZERO);
         int rows1 = src1.numRows;
 
         for (int i = 0; i < rows1; i++) {
@@ -237,7 +238,7 @@ public class RealComplexCsrDenseMatrixMultiplication {
                 int aCol = src1.colIndices[aIndex];
                 double aVal = src1.entries[aIndex];
 
-                destEntries[i].addEq(src2.entries[aCol].mult(aVal));
+                destEntries[i] = destEntries[i].add(src2.entries[aCol].mult(aVal));
             }
         }
 
@@ -260,7 +261,7 @@ public class RealComplexCsrDenseMatrixMultiplication {
         ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
 
         CNumber[] destEntries = new CNumber[src1.numRows*src2.numCols];
-        ArrayUtils.fillZeros(destEntries);
+        Arrays.fill(destEntries, CNumber.ZERO);
         int rows1 = src1.numRows;
         int cols2 = src2.numCols;
 
@@ -277,7 +278,7 @@ public class RealComplexCsrDenseMatrixMultiplication {
                 int destIdx = rowOffset;
 
                 while(destIdx < innerStop) {
-                    destEntries[destIdx++].addEq(aVal.mult(src2.entries[src2Idx++]));
+                    destEntries[destIdx] = destEntries[destIdx++].add(aVal.mult(src2.entries[src2Idx++]));
                 }
             }
         }
@@ -299,7 +300,7 @@ public class RealComplexCsrDenseMatrixMultiplication {
         ParameterChecks.assertEquals(src1.numCols, src2.size);
 
         CNumber[] destEntries = new CNumber[src1.numRows];
-        ArrayUtils.fillZeros(destEntries);
+        Arrays.fill(destEntries, CNumber.ZERO);
         int rows1 = src1.numRows;
 
         for (int i = 0; i < rows1; i++) {
@@ -310,11 +311,10 @@ public class RealComplexCsrDenseMatrixMultiplication {
                 int aCol = src1.colIndices[aIndex];
                 CNumber aVal = src1.entries[aIndex];
 
-                destEntries[i].addEq(aVal.mult(src2.entries[aCol]));
+                destEntries[i] = destEntries[i].add(aVal.mult(src2.entries[aCol]));
             }
         }
 
         return new CVector(destEntries);
-
     }
 }

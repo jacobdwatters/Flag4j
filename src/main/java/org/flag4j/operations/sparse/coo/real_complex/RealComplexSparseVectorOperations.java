@@ -34,13 +34,14 @@ import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
 /**
  * This class contains low level implementations of operations on a real sparse tensor and a complex sparse tensor.
  */
-public class RealComplexSparseVectorOperations {
+public final class RealComplexSparseVectorOperations {
 
     private RealComplexSparseVectorOperations() {
         // Hide default constructor for utility class.
@@ -56,10 +57,11 @@ public class RealComplexSparseVectorOperations {
      */
     public static CVector add(CooVector src, CNumber a) {
         CNumber[] dest = new CNumber[src.size];
-        ArrayUtils.fill(dest, a);
+        Arrays.fill(dest, a);
 
         for(int i=0; i<src.entries.length; i++) {
-            dest[src.indices[i]].addEq(src.entries[i]);
+            int idx = src.indices[i];
+            dest[idx] = dest[idx].add(src.entries[i]);
         }
 
         return new CVector(dest);
@@ -77,7 +79,8 @@ public class RealComplexSparseVectorOperations {
         ArrayUtils.fill(dest, a);
 
         for(int i=0; i<src.entries.length; i++) {
-            dest[src.indices[i]].addEq(src.entries[i]);
+            int idx = src.indices[i];
+            dest[idx] = dest[idx].add(src.entries[i]);
         }
 
         return new CVector(dest);
@@ -92,10 +95,11 @@ public class RealComplexSparseVectorOperations {
      */
     public static CVector sub(CooVector src, CNumber a) {
         CNumber[] dest = new CNumber[src.size];
-        ArrayUtils.fill(dest, a.addInv());
+        Arrays.fill(dest, a.addInv());
 
         for(int i=0; i<src.entries.length; i++) {
-            dest[src.indices[i]].addEq(src.entries[i]);
+            int idx = src.indices[i];
+            dest[idx] = dest[idx].add(src.entries[i]);
         }
 
         return new CVector(dest);
@@ -316,7 +320,7 @@ public class RealComplexSparseVectorOperations {
      */
     public static CNumber inner(CooCVector src1, CooVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
-        CNumber product = new CNumber();
+        CNumber product = CNumber.ZERO;
 
         int src1Counter = 0;
         int src2Counter = 0;
@@ -324,7 +328,7 @@ public class RealComplexSparseVectorOperations {
         while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
             if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
                 // Then indices match, add product of elements.
-                product.addEq(src1.entries[src1Counter].mult(src2.entries[src2Counter]));
+                product = product.add(src1.entries[src1Counter].mult(src2.entries[src2Counter]));
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
                 src1Counter++;
             } else {
@@ -346,7 +350,7 @@ public class RealComplexSparseVectorOperations {
      */
     public static CNumber inner(CooVector src1, CooCVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
-        CNumber product = new CNumber();
+        CNumber product = CNumber.ZERO;
 
         int src1Counter = 0;
         int src2Counter = 0;
@@ -354,7 +358,7 @@ public class RealComplexSparseVectorOperations {
         while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
             if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
                 // Then indices match, add product of elements.
-                product.addEq(src2.entries[src2Counter].conj().mult(src1.entries[src1Counter]));
+                product = product.add(src2.entries[src2Counter].conj().mult(src1.entries[src1Counter]));
                 src1Counter++;
                 src2Counter++;
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
@@ -376,7 +380,7 @@ public class RealComplexSparseVectorOperations {
      */
     public static CMatrix outerProduct(CooCVector src1, CooVector src2) {
         CNumber[] dest = new CNumber[src2.size*src1.size];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
 
         int destRow;
         int index1;
@@ -407,7 +411,7 @@ public class RealComplexSparseVectorOperations {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         CNumber[] dest = new CNumber[src2.size*src1.size];
-        ArrayUtils.fillZeros(dest);
+        Arrays.fill(dest, CNumber.ZERO);
 
         int destRow;
         int index1;

@@ -23,25 +23,25 @@ class CMatrixReshapeTests {
     void reshapeTestCase() {
         // --------------- Sub-case 1 ---------------
         expShape = new Shape(4, 3);
-        B = A.reshape(expShape.copy());
+        B = A.reshape(expShape);
         assertEquals(expShape, B.shape);
         assertArrayEquals(A.entries, B.entries);
 
         // --------------- Sub-case 2 ---------------
         expShape = new Shape(1, 12);
-        B = A.reshape(expShape.copy());
+        B = A.reshape(expShape);
         assertEquals(expShape, B.shape);
         assertArrayEquals(A.entries, B.entries);
 
         // --------------- Sub-case 3 ---------------
         expShape = new Shape(2, 6);
-        B = A.reshape(expShape.copy());
+        B = A.reshape(expShape);
         assertEquals(expShape, B.shape);
         assertArrayEquals(A.entries, B.entries);
 
         // --------------- Sub-case 4 ---------------
         expShape = new Shape(6, 2);
-        B = A.reshape(expShape.copy());
+        B = A.reshape(expShape);
         assertEquals(expShape, B.shape);
         assertArrayEquals(A.entries, B.entries);
 

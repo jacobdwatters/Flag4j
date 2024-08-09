@@ -40,7 +40,7 @@ import java.util.function.UnaryOperator;
 /**
  * This class contains low-level implementations for element-wise operations on real/complex CSR matrices.
  */
-public class RealComplexCsrOperations {
+public final class RealComplexCsrOperations {
 
     private RealComplexCsrOperations() {
         // Hide default constructor for utility class.
@@ -93,8 +93,8 @@ public class RealComplexCsrOperations {
                     colIndices.add(col1);
                     rowPtr1++;
                 } else {
-                    if(uOpp!=null) dest.add(uOpp.apply(src2.entries[rowPtr2].copy()));
-                    else dest.add(src2.entries[rowPtr2].copy());
+                    if(uOpp!=null) dest.add(uOpp.apply(src2.entries[rowPtr2]));
+                    else dest.add(src2.entries[rowPtr2]);
                     colIndices.add(col2);
                     rowPtr2++;
                 }
@@ -110,8 +110,8 @@ public class RealComplexCsrOperations {
             }
 
             while(rowPtr2 < src2.rowPointers[i+1]) {
-                if(uOpp!=null) dest.add(uOpp.apply(src2.entries[rowPtr2].copy()));
-                else dest.add(src2.entries[rowPtr2].copy());
+                if(uOpp!=null) dest.add(uOpp.apply(src2.entries[rowPtr2]));
+                else dest.add(src2.entries[rowPtr2]);
                 colIndices.add(src2.colIndices[rowPtr2]);
                 rowPtr2++;
                 rowPointers[i+1]++;
@@ -123,7 +123,7 @@ public class RealComplexCsrOperations {
             rowPointers[i] += rowPointers[i-1];
         }
 
-        return new CsrCMatrix(src1.shape.copy(),
+        return new CsrCMatrix(src1.shape,
                 dest.toArray(CNumber[]::new),
                 rowPointers,
                 ArrayUtils.fromIntegerList(colIndices)
@@ -173,7 +173,7 @@ public class RealComplexCsrOperations {
                     rowPtr1++;
                     rowPtr2++;
                 } else if(col1 < col2) {
-                    dest.add(src1.entries[rowPtr1].copy());
+                    dest.add(src1.entries[rowPtr1]);
                     colIndices.add(col1);
                     rowPtr1++;
                 } else {
@@ -187,7 +187,7 @@ public class RealComplexCsrOperations {
             }
 
             while(rowPtr1 < src1.rowPointers[i+1]) {
-                dest.add(src1.entries[rowPtr1].copy());
+                dest.add(src1.entries[rowPtr1]);
                 colIndices.add(src1.colIndices[rowPtr1]);
                 rowPtr1++;
                 rowPointers[i+1]++;
@@ -207,7 +207,7 @@ public class RealComplexCsrOperations {
             rowPointers[i] += rowPointers[i-1];
         }
 
-        return new CsrCMatrix(src1.shape.copy(),
+        return new CsrCMatrix(src1.shape,
                 dest.toArray(CNumber[]::new),
                 rowPointers,
                 ArrayUtils.fromIntegerList(colIndices)
@@ -254,7 +254,7 @@ public class RealComplexCsrOperations {
             rowPointers[i] += rowPointers[i-1];
         }
 
-        return new CsrCMatrix(src1.shape.copy(),
+        return new CsrCMatrix(src1.shape,
                 dest.toArray(CNumber[]::new),
                 rowPointers,
                 ArrayUtils.fromIntegerList(colIndices)

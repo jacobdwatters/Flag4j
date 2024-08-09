@@ -82,26 +82,26 @@ public class CMatrixInvertTests {
     void invDiagTests() {
         // --------------------- Sub-case 1 ---------------------
         entries = new CNumber[][]{
-                {new CNumber(-14.43, 95.1), new CNumber()},
-                {new CNumber(), new CNumber(0, 1.45)}};
+                {new CNumber(-14.43, 95.1), CNumber.ZERO},
+                {CNumber.ZERO, new CNumber(0, 1.45)}};
         A = new CMatrix(entries);
         expEntries = new CNumber[][]{
-                {new CNumber(-14.43, 95.1).multInv(), new CNumber()},
-                {new CNumber(), new CNumber(0, 1.45).multInv()}};
+                {new CNumber(-14.43, 95.1).multInv(), CNumber.ZERO},
+                {CNumber.ZERO, new CNumber(0, 1.45).multInv()}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, Invert.invDiag(A));
 
         // --------------------- Sub-case 2 ---------------------
         entries = new CNumber[][]{
-                {new CNumber(-14.43, 95.1), new CNumber(), new CNumber()},
-                {new CNumber(), new CNumber(0, 1.45), new CNumber()},
-                {new CNumber(), new CNumber(), new CNumber(234.156)}};
+                {new CNumber(-14.43, 95.1), CNumber.ZERO, CNumber.ZERO},
+                {CNumber.ZERO, new CNumber(0, 1.45), CNumber.ZERO},
+                {CNumber.ZERO, CNumber.ZERO, new CNumber(234.156)}};
         A = new CMatrix(entries);
         expEntries = new CNumber[][]{
-                {new CNumber(-14.43, 95.1).multInv(), new CNumber(), new CNumber()},
-                {new CNumber(), new CNumber(0, 1.45).multInv(), new CNumber()},
-                {new CNumber(), new CNumber(), new CNumber(234.156).multInv()}};
+                {new CNumber(-14.43, 95.1).multInv(), CNumber.ZERO, CNumber.ZERO},
+                {CNumber.ZERO, new CNumber(0, 1.45).multInv(), CNumber.ZERO},
+                {CNumber.ZERO, CNumber.ZERO, new CNumber(234.156).multInv()}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, Invert.invDiag(A));

@@ -6,10 +6,11 @@ import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
-import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -94,11 +95,11 @@ class CTensorSubTests {
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
-        expEntries = ArrayUtils.copyOf(aEntries);
+        expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expShape = new Shape(true,2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])].subEq(bEntries[0]);
-        expEntries[expShape.entriesIndex(sparseIndices[1])].subEq(bEntries[1]);
-        expEntries[expShape.entriesIndex(sparseIndices[2])].subEq(bEntries[2]);
+        expEntries[expShape.entriesIndex(sparseIndices[0])] = expEntries[expShape.entriesIndex(sparseIndices[0])].sub(bEntries[0]);
+        expEntries[expShape.entriesIndex(sparseIndices[1])] = expEntries[expShape.entriesIndex(sparseIndices[1])].sub(bEntries[1]);
+        expEntries[expShape.entriesIndex(sparseIndices[2])] = expEntries[expShape.entriesIndex(sparseIndices[2])].sub(bEntries[2]);
         exp = new CTensor(expShape, expEntries);
 
         assertEquals(exp, A.sub(B));
@@ -172,10 +173,10 @@ class CTensorSubTests {
                 {0, 2, 1}, {1, 1, 0}
         };
         B = new CooCTensor(bShape, bEntries, sparseIndices);
-        expEntries = ArrayUtils.copyOf(aEntries);
+        expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expShape = new Shape(true, 2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])].subEq(bEntries[0]);
-        expEntries[expShape.entriesIndex(sparseIndices[1])].subEq(bEntries[1]);
+        expEntries[expShape.entriesIndex(sparseIndices[0])] = expEntries[expShape.entriesIndex(sparseIndices[0])].sub(bEntries[0]);
+        expEntries[expShape.entriesIndex(sparseIndices[1])] = expEntries[expShape.entriesIndex(sparseIndices[1])].sub(bEntries[1]);
         exp = new CTensor(expShape, expEntries);
 
         assertEquals(exp, A.sub(B));
@@ -297,11 +298,11 @@ class CTensorSubTests {
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
-        expEntries = ArrayUtils.copyOf(aEntries);
+        expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expShape = new Shape(true,2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])].subEq(bEntries[0]);
-        expEntries[expShape.entriesIndex(sparseIndices[1])].subEq(bEntries[1]);
-        expEntries[expShape.entriesIndex(sparseIndices[2])].subEq(bEntries[2]);
+        expEntries[expShape.entriesIndex(sparseIndices[0])] = expEntries[expShape.entriesIndex(sparseIndices[0])].sub(bEntries[0]);
+        expEntries[expShape.entriesIndex(sparseIndices[1])] = expEntries[expShape.entriesIndex(sparseIndices[1])].sub(bEntries[1]);
+        expEntries[expShape.entriesIndex(sparseIndices[2])] = expEntries[expShape.entriesIndex(sparseIndices[2])].sub(bEntries[2]);
         exp = new CTensor(expShape, expEntries);
 
         A.subEq(B);
@@ -352,7 +353,7 @@ class CTensorSubTests {
                 new CNumber(1.34, -0.324), new CNumber(0.134), new CNumber(0, 2.501),
                 new CNumber(-994.1, 0.0234), new CNumber(9.4, 0.14), new CNumber(5.2, 1104.5),
                 new CNumber(103.45, 6), new CNumber(-23.45, 1.4), new CNumber(-2, -0.4),
-                new CNumber(3.55), new CNumber(), new CNumber(100.2456),
+                new CNumber(3.55), CNumber.ZERO, new CNumber(100.2456),
         };
         bShape = new Shape(2, 3, 2);
         B = new CTensor(bShape, bEntries);
@@ -373,7 +374,7 @@ class CTensorSubTests {
                 new CNumber(1.34, -0.324), new CNumber(0.134), new CNumber(0, 2.501),
                 new CNumber(-994.1, 0.0234), new CNumber(9.4, 0.14), new CNumber(5.2, 1104.5),
                 new CNumber(103.45, 6), new CNumber(-23.45, 1.4), new CNumber(-2, -0.4),
-                new CNumber(3.55), new CNumber(), new CNumber(100.2456),
+                new CNumber(3.55), CNumber.ZERO, new CNumber(100.2456),
         };
         bShape = new Shape(2, 3, 2, 1);
         B = new CTensor(bShape, bEntries);
@@ -386,7 +387,7 @@ class CTensorSubTests {
                 new CNumber(1.34, -0.324), new CNumber(0.134), new CNumber(0, 2.501),
                 new CNumber(-994.1, 0.0234), new CNumber(9.4, 0.14), new CNumber(5.2, 1104.5),
                 new CNumber(103.45, 6), new CNumber(-23.45, 1.4), new CNumber(-2, -0.4),
-                new CNumber(3.55), new CNumber(), new CNumber(100.2456),
+                new CNumber(3.55), CNumber.ZERO, new CNumber(100.2456),
                 new CNumber(1.344), new CNumber(0.924, 55.6)
         };
         bShape = new Shape(7, 2);
@@ -411,11 +412,11 @@ class CTensorSubTests {
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
         B = new CooCTensor(bShape, bEntries, sparseIndices);
-        expEntries = ArrayUtils.copyOf(aEntries);
+        expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expShape = new Shape(true, 2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])].subEq(bEntries[0]);
-        expEntries[expShape.entriesIndex(sparseIndices[1])].subEq(bEntries[1]);
-        expEntries[expShape.entriesIndex(sparseIndices[2])].subEq(bEntries[2]);
+        expEntries[expShape.entriesIndex(sparseIndices[0])] = expEntries[expShape.entriesIndex(sparseIndices[0])].sub(bEntries[0]);
+        expEntries[expShape.entriesIndex(sparseIndices[1])] = expEntries[expShape.entriesIndex(sparseIndices[1])].sub(bEntries[1]);
+        expEntries[expShape.entriesIndex(sparseIndices[2])] = expEntries[expShape.entriesIndex(sparseIndices[2])].sub(bEntries[2]);
         exp = new CTensor(expShape, expEntries);
 
         A.subEq(B);

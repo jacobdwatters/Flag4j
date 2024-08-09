@@ -41,7 +41,7 @@ import java.util.*;
  * This class contains low-level implementations of complex-complex sparse-sparse matrix multiplication where the sparse matrices
  * are in CSR format.
  */
-public class ComplexCsrMatrixMultiplication {
+public final class ComplexCsrMatrixMultiplication {
 
     private ComplexCsrMatrixMultiplication() {
         // Hide default constructor for utility method.
@@ -60,7 +60,7 @@ public class ComplexCsrMatrixMultiplication {
         ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
 
         CNumber[] destEntries = new CNumber[src1.numRows*src2.numCols];
-        ArrayUtils.fillZeros(destEntries);
+        Arrays.fill(destEntries, CNumber.ZERO);
 
         for(int i=0; i<src1.numRows; i++) {
             int rowOffset = i*src2.numCols;
@@ -75,7 +75,7 @@ public class ComplexCsrMatrixMultiplication {
                     int bCol = src2.colIndices[bIndex];
                     CNumber bVal = src2.entries[bIndex];
 
-                    destEntries[rowOffset + bCol].addEq(bVal.mult(aVal));
+                    destEntries[rowOffset + bCol] = destEntries[rowOffset + bCol].add(bVal.mult(aVal));
                 }
             }
         }
@@ -153,7 +153,7 @@ public class ComplexCsrMatrixMultiplication {
         ParameterChecks.assertEquals(src1.numCols, src2.size);
 
         CNumber[] destEntries = new CNumber[src1.numRows];
-        ArrayUtils.fillZeros(destEntries);
+        Arrays.fill(destEntries, CNumber.ZERO);
         int rows1 = src1.numRows;
 
         // Iterate over the non-zero elements of the sparse vector.
@@ -170,7 +170,7 @@ public class ComplexCsrMatrixMultiplication {
                     int aCol = src1.colIndices[aIndex];
                     if (aCol == col) {
                         CNumber aVal = src1.entries[aIndex];
-                        destEntries[i].addEq(val.mult(aVal));
+                        destEntries[i] = destEntries[i].add(val.mult(aVal));
                     }
                 }
             }

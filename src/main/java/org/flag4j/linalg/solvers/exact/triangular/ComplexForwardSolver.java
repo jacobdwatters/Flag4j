@@ -150,14 +150,14 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
         CVector x = new CVector(L.numRows);
         det = new CNumber(L.numRows); // Since it is unit lower, matrix has full rank.
 
-        x.entries[0] = b.entries[0].copy();
+        x.entries[0] = b.entries[0];
 
         for(int i=1; i<L.numRows; i++) {
-            sum = new CNumber();
+            sum = CNumber.ZERO;
             lIndexStart = i*L.numCols;
 
             for(int j=i-1; j>-1; j--) {
-                sum.addEq(L.entries[lIndexStart + j].mult(x.entries[j]));
+                sum = sum.add(L.entries[lIndexStart + j].mult(x.entries[j]));
             }
 
             x.entries[i] = b.entries[i].sub(sum);
@@ -184,7 +184,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
         det = new CNumber(L.numRows); // Since it is unit lower, matrix has full rank.
         xCol = new CNumber[L.numRows];
 
-        X.entries[0] = CNumber.one();
+        X.entries[0] = CNumber.ONE;
 
         for(int j=0; j<L.numCols; j++) {
             // Temporarily store column for better cache performance on innermost loop.
@@ -193,12 +193,12 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
             }
 
             for(int i=1; i<L.numRows; i++) {
-                sum = (i==j) ? CNumber.one() : CNumber.zero();
+                sum = (i==j) ? CNumber.ONE : CNumber.ZERO;
                 lIndexStart = i*L.numCols;
                 xIndex = lIndexStart + j;
 
                 for(int k=0; k<i; k++) {
-                    sum.subEq(L.entries[lIndexStart++].mult(xCol[k]));
+                    sum = sum.sub(L.entries[lIndexStart++].mult(xCol[k]));
                 }
 
                 X.entries[xIndex] = sum;
@@ -225,7 +225,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
         CNumber sum, diag;
         int lIndexStart, xIndex;
         CMatrix X = new CMatrix(L.shape);
-        det = L.entries[0].copy();
+        det = L.entries[0];
         xCol = new CNumber[L.numRows];
 
         X.entries[0] = L.entries[0].multInv();
@@ -237,15 +237,15 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
             }
 
             for(int i=1; i<L.numRows; i++) {
-                if(j==0) det.multEq(L.entries[i*L.numCols + i]);
+                if(j==0) det = det.mult(L.entries[i*L.numCols + i]);
 
-                sum = (i==j) ? CNumber.one() : CNumber.zero();
+                sum = (i==j) ? CNumber.ONE : CNumber.ZERO;
                 lIndexStart = i*L.numCols;
                 xIndex = lIndexStart + j;
                 diag = L.entries[i*(L.numCols + 1)];
 
                 for(int k=0; k<i; k++) {
-                    sum.subEq(L.entries[lIndexStart++].mult(xCol[k]));
+                    sum = sum.sub(L.entries[lIndexStart++].mult(xCol[k]));
                 }
 
                 CNumber value = sum.div(diag);
@@ -274,17 +274,17 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
         CNumber sum, diag;
         int lIndexStart;
         CVector x = new CVector(L.numRows);
-        det = L.entries[0].copy();
+        det = L.entries[0];
         x.entries[0] = b.entries[0].div(L.entries[0]);
 
         for(int i=1; i<L.numRows; i++) {
-            sum = new CNumber();
+            sum = CNumber.ZERO;
             lIndexStart = i*L.numCols;
             diag = L.entries[i*(L.numCols + 1)];
-            det.multEq(diag);
+            det = det.mult(diag);
 
             for(int j=i-1; j>-1; j--) {
-                sum.addEq(L.entries[lIndexStart + j].mult(x.entries[j]));
+                sum = sum.add(L.entries[lIndexStart + j].mult(x.entries[j]));
             }
 
             x.entries[i] = b.entries[i].sub(sum).div(diag);
@@ -312,7 +312,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
         xCol = new CNumber[L.numRows];
 
         for(int j=0; j<B.numCols; j++) {
-            X.entries[j] = B.entries[j].copy();
+            X.entries[j] = B.entries[j];
 
             // Temporarily store column for better cache performance on innermost loop.
             for(int k=0; k<xCol.length; k++) {
@@ -320,12 +320,12 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
             }
 
             for(int i=1; i<L.numRows; i++) {
-                sum = new CNumber();
+                sum = CNumber.ZERO;
                 lIndexStart = i*L.numCols;
                 xIndex = i*X.numCols + j;
 
                 for(int k=0; k<i; k++) {
-                    sum.addEq(L.entries[lIndexStart++].mult(xCol[k]));
+                    sum = sum.add(L.entries[lIndexStart++].mult(xCol[k]));
                 }
 
                 CNumber value = B.entries[xIndex].sub(sum);
@@ -353,7 +353,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
         CNumber diag;
         int lIndexStart, xIndex;
         CMatrix X = new CMatrix(B.shape);
-        det = L.entries[0].copy();
+        det = L.entries[0];
         xCol = new CNumber[L.numRows];
 
         for(int j=0; j<B.numCols; j++) {
@@ -365,15 +365,15 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
             }
 
             for(int i=1; i<L.numRows; i++) {
-                sum = CNumber.zero();
+                sum = CNumber.ZERO;
                 lIndexStart = i*L.numCols;
                 xIndex = i*X.numCols + j;
                 diag = L.entries[i*(L.numCols + 1)];
 
-                if(j==0) det.multEq(diag);
+                if(j==0) det = det.mult(diag);
 
                 for(int k=0; k<i; k++) {
-                    sum.addEq(L.entries[lIndexStart++].mult(xCol[k]));
+                    sum = sum.add(L.entries[lIndexStart++].mult(xCol[k]));
                 }
 
                 CNumber value = B.entries[xIndex].sub(sum).div(diag);

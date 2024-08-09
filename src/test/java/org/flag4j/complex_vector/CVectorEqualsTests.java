@@ -47,7 +47,7 @@ class CVectorEqualsTests {
 
         // ----------------- Sub-case 1 -----------------
         aEntries = new CNumber[]{new CNumber(1, -9.234), new CNumber(0, 8.245),
-                new CNumber(1.3), new CNumber()};
+                new CNumber(1.3), CNumber.ZERO};
         a = new CVector(aEntries);
         bEntries = new double[]{1, 0, 1.3, 0};
         b = new Vector(bEntries);
@@ -99,7 +99,7 @@ class CVectorEqualsTests {
 
         // ----------------- Sub-case 1 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245),
-                new CNumber(1.3), new CNumber()};
+                new CNumber(1.3), CNumber.ZERO};
         a = new CVector(aEntries);
         bEntries = new double[]{8.245, 1.3};
         sparseSize = aEntries.length;
@@ -109,7 +109,7 @@ class CVectorEqualsTests {
 
         // ----------------- Sub-case 2 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245),
-                new CNumber(), new CNumber(-99.1331)};
+                CNumber.ZERO, new CNumber(-99.1331)};
         a = new CVector(aEntries);
         bEntries = new double[]{8.245, -99.1331};
         sparseSize = aEntries.length;
@@ -120,7 +120,7 @@ class CVectorEqualsTests {
 
         // ----------------- Sub-case 3 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245),
-                new CNumber(), new CNumber(-99.1331)};
+                CNumber.ZERO, new CNumber(-99.1331)};
         a = new CVector(aEntries);
         bEntries = new double[]{8.245, -99.1331};
         sparseSize = 612345;
@@ -130,7 +130,7 @@ class CVectorEqualsTests {
 
         // ----------------- Sub-case 4 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245),
-                new CNumber(), new CNumber(-99.1331, 1.23)};
+                CNumber.ZERO, new CNumber(-99.1331, 1.23)};
         a = new CVector(aEntries);
         bEntries = new double[]{8.245, -99.1331};
         sparseSize = aEntries.length;
@@ -140,7 +140,7 @@ class CVectorEqualsTests {
 
         // ----------------- Sub-case 5 -----------------
         aEntries = new CNumber[]{new CNumber(0.1), new CNumber(8.245),
-                new CNumber(), new CNumber(-99.1331)};
+                CNumber.ZERO, new CNumber(-99.1331)};
         a = new CVector(aEntries);
         bEntries = new double[]{8.245, -99.1331};
         sparseSize = aEntries.length;
@@ -149,8 +149,8 @@ class CVectorEqualsTests {
         assertFalse(a.tensorEquals(b));
 
         // ----------------- Sub-case 6 -----------------
-        aEntries = new CNumber[]{new CNumber(), new CNumber(8.245),
-                new CNumber(), new CNumber(-99.1331)};
+        aEntries = new CNumber[]{CNumber.ZERO, new CNumber(8.245),
+                CNumber.ZERO, new CNumber(-99.1331)};
         a = new CVector(aEntries);
         bEntries = new double[]{8.245, -99.1331};
         sparseSize = aEntries.length;
@@ -159,8 +159,8 @@ class CVectorEqualsTests {
         assertFalse(a.tensorEquals(b));
 
         // ----------------- Sub-case 7 -----------------
-        aEntries = new CNumber[]{new CNumber(), new CNumber(8.245),
-                new CNumber(), new CNumber(-3.7)};
+        aEntries = new CNumber[]{CNumber.ZERO, new CNumber(8.245),
+                CNumber.ZERO, new CNumber(-3.7)};
         a = new CVector(aEntries);
         bEntries = new double[]{8.245, -99.1331};
         sparseSize = aEntries.length;
@@ -177,10 +177,10 @@ class CVectorEqualsTests {
 
         // ----------------- Sub-case 1 -----------------
         aEntries = new CNumber[]{new CNumber(1, -9.234), new CNumber(0, 8.245),
-                new CNumber(1.3), new CNumber()};
+                new CNumber(1.3), CNumber.ZERO};
         a = new CVector(aEntries);
         bEntries = new CNumber[]{new CNumber(1, -9.234), new CNumber(0, 8.245),
-                new CNumber(1.3), new CNumber()};
+                new CNumber(1.3), CNumber.ZERO};
         b = new CVector(bEntries);
         assertEquals(a, b);
 
@@ -227,16 +227,16 @@ class CVectorEqualsTests {
 
         // ----------------- Sub-case 8 -----------------
         aEntries = new CNumber[]{new CNumber(1, -9.234), new CNumber(0, 8.245),
-                new CNumber(1.3), new CNumber()};
+                new CNumber(1.3), CNumber.ZERO};
         a = new CVector(aEntries);
         bEntries = new CNumber[]{new CNumber(1, -9.2341), new CNumber(0, 8.245),
-                new CNumber(1.3), new CNumber()};
+                new CNumber(1.3), CNumber.ZERO};
         b = new CVector(bEntries);
         assertNotEquals(a, b);
 
         // ----------------- Sub-case 9 -----------------
         aEntries = new CNumber[]{new CNumber(1, -9.234), new CNumber(0, 8.245),
-                new CNumber(1.3), new CNumber()};
+                new CNumber(1.3), CNumber.ZERO};
         a = new CVector(aEntries);
         bEntries = new CNumber[]{new CNumber(1, -9.234), new CNumber(0, 8.245),
                 new CNumber(1.3), new CNumber(1.2)};
@@ -252,7 +252,7 @@ class CVectorEqualsTests {
 
         // ----------------- Sub-case 1 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
-                new CNumber(1.3, -0.000023465), new CNumber()};
+                new CNumber(1.3, -0.000023465), CNumber.ZERO};
         a = new CVector(aEntries);
         bEntries = new CNumber[]{new CNumber(8.245, 9.2165), new CNumber(1.3, -0.000023465)};
         sparseSize = aEntries.length;
@@ -262,7 +262,7 @@ class CVectorEqualsTests {
 
         // ----------------- Sub-case 2 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
-                new CNumber(1.3, -0.000023465), new CNumber()};
+                new CNumber(1.3, -0.000023465), CNumber.ZERO};
         a = new CVector(aEntries);
         bEntries = new CNumber[]{new CNumber(8.245, 9.2165), new CNumber(1.3, -0.000023465)};
         sparseSize = aEntries.length;
@@ -272,7 +272,7 @@ class CVectorEqualsTests {
 
         // ----------------- Sub-case 3 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
-                new CNumber(1.3, -0.000023465), new CNumber()};
+                new CNumber(1.3, -0.000023465), CNumber.ZERO};
         a = new CVector(aEntries);
         bEntries = new CNumber[]{new CNumber(8.245, 13.65), new CNumber(1.3, -0.000023465)};
         sparseSize = aEntries.length;
@@ -282,7 +282,7 @@ class CVectorEqualsTests {
 
         // ----------------- Sub-case 4 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
-                new CNumber(1.3, -0.000023465), new CNumber()};
+                new CNumber(1.3, -0.000023465), CNumber.ZERO};
         a = new CVector(aEntries);
         bEntries = new CNumber[]{new CNumber(8.245, 9.2165), new CNumber(12.3, -0.000023465)};
         sparseSize = aEntries.length;
@@ -292,7 +292,7 @@ class CVectorEqualsTests {
 
         // ----------------- Sub-case 5 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
-                new CNumber(1.3, -0.000023465), new CNumber()};
+                new CNumber(1.3, -0.000023465), CNumber.ZERO};
         a = new CVector(aEntries);
         bEntries = new CNumber[]{new CNumber(8.245, 9.2165), new CNumber(12.3, -0.000023465)};
         sparseSize = 100234;
@@ -306,24 +306,24 @@ class CVectorEqualsTests {
     void objectTestCase() {
         // ----------------- Sub-case 1 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
-                new CNumber(1.3, -0.000023465), new CNumber()};
+                new CNumber(1.3, -0.000023465), CNumber.ZERO};
         a = new CVector(aEntries);
         String bString = "Hello World!";
         assertNotEquals(a, bString);
 
         // ----------------- Sub-case 2 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
-                new CNumber(1.3, -0.000023465), new CNumber()};
+                new CNumber(1.3, -0.000023465), CNumber.ZERO};
         a = new CVector(aEntries);
         Double num = 123.4;
         assertNotEquals(a, num);
 
         // ----------------- Sub-case 3 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
-                new CNumber(1.3, -0.000023465), new CNumber()};
+                new CNumber(1.3, -0.000023465), CNumber.ZERO};
         a = new CVector(aEntries);
         CNumber[] arr = {new CNumber(0), new CNumber(8.245, 9.2165),
-                new CNumber(1.3, -0.000023465), new CNumber()};
+                new CNumber(1.3, -0.000023465), CNumber.ZERO};
         assertNotEquals(a, num);
     }
 }

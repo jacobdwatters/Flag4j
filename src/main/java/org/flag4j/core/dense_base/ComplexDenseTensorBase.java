@@ -32,7 +32,6 @@ import org.flag4j.operations.common.complex.ComplexOperations;
 import org.flag4j.operations.common.complex.ComplexProperties;
 import org.flag4j.operations.dense.complex.*;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
 
 import java.util.Arrays;
@@ -138,7 +137,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     @Override
     public int hashCode() {
-        return Arrays.hashCode(entries)+Arrays.hashCode(shape.dims);
+        return Arrays.hashCode(entries)+Arrays.hashCode(shape.getDims());
     }
 
 
@@ -216,7 +215,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     @Override
     public Y toReal() {
-        return makeRealTensor(this.shape.copy(), ComplexOperations.toReal(this.entries));
+        return makeRealTensor(this.shape, ComplexOperations.toReal(this.entries));
     }
 
 
@@ -246,7 +245,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     @Override
     public T copy() {
-        return makeTensor(this.shape.copy(), ArrayUtils.copyOf(entries));
+        return makeTensor(this.shape, Arrays.copyOf(entries, entries.length));
     }
 
 
@@ -281,7 +280,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     @Override
     public T sqrt() {
-        return makeTensor(this.shape.copy(), ComplexOperations.sqrt(this.entries));
+        return makeTensor(this.shape, ComplexOperations.sqrt(this.entries));
     }
 
 
@@ -293,7 +292,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     @Override
     public Y abs() {
-        return makeRealTensor(this.shape.copy(), ComplexOperations.abs(this.entries));
+        return makeRealTensor(this.shape, ComplexOperations.abs(this.entries));
     }
 
 
@@ -304,7 +303,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     @Override
     public T conj() {
-        return makeTensor(this.shape.copy(), ComplexOperations.conj(this.entries));
+        return makeTensor(this.shape, ComplexOperations.conj(this.entries));
     }
 
 
@@ -318,7 +317,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
     @Override
     public T add(T B) {
         return makeTensor(
-                this.shape.copy(),
+                this.shape,
                 ComplexDenseOperations.add(this.entries, this.shape, B.entries, B.shape)
         );
     }
@@ -332,7 +331,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     @Override
     public T add(double a) {
-        return makeTensor(this.shape.copy(), RealComplexDenseOperations.add(this.entries, a));
+        return makeTensor(this.shape, RealComplexDenseOperations.add(this.entries, a));
     }
 
 
@@ -344,7 +343,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     @Override
     public T add(CNumber a) {
-        return makeTensor(this.shape.copy(), ComplexDenseOperations.add(this.entries, a));
+        return makeTensor(this.shape, ComplexDenseOperations.add(this.entries, a));
     }
 
 
@@ -358,7 +357,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
     @Override
     public T sub(T B) {
         return makeTensor(
-                this.shape.copy(),
+                this.shape,
                 ComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
         );
     }
@@ -372,7 +371,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     @Override
     public T sub(double a) {
-        return makeTensor(this.shape.copy(),
+        return makeTensor(this.shape,
                 RealComplexDenseOperations.sub(this.entries, a)
         );
     }
@@ -386,7 +385,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     @Override
     public T sub(CNumber a) {
-        return makeTensor(this.shape.copy(),
+        return makeTensor(this.shape,
                 ComplexDenseOperations.sub(this.entries, a)
         );
     }
@@ -400,7 +399,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     @Override
     public T mult(double factor) {
-        return makeTensor(this.shape.copy(),
+        return makeTensor(this.shape,
                 ComplexOperations.scalMult(this.entries, factor)
         );
     }
@@ -414,7 +413,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     @Override
     public T mult(CNumber factor) {
-        return makeTensor(this.shape.copy(),
+        return makeTensor(this.shape,
                 ComplexOperations.scalMult(this.entries, factor)
         );
     }
@@ -429,7 +428,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     @Override
     public T div(double divisor) {
-        return makeTensor(this.shape.copy(),
+        return makeTensor(this.shape,
                 RealComplexDenseOperations.scalDiv(this.entries, divisor)
         );
     }
@@ -444,7 +443,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     @Override
     public T div(CNumber divisor) {
-        return makeTensor(this.shape.copy(),
+        return makeTensor(this.shape,
                 ComplexDenseOperations.scalDiv(this.entries, divisor)
         );
     }
@@ -460,7 +459,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
     @Override
     public T elemMult(T B) {
         return makeTensor(
-                shape.copy(),
+                shape,
                 ComplexDenseElemMult.dispatch(entries, shape, B.entries, B.shape)
         );
     }
@@ -476,7 +475,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
     @Override
     public T elemDiv(T B) {
         return makeTensor(
-                shape.copy(),
+                shape,
                 ComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
         );
     }
@@ -581,13 +580,13 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
 
     @Override
     public T round() {
-        return makeTensor(this.shape.copy(), ComplexOperations.round(this.entries));
+        return makeTensor(this.shape, ComplexOperations.round(this.entries));
     }
 
 
     @Override
     public T round(int precision) {
-        return makeTensor(this.shape.copy(), ComplexOperations.round(this.entries, precision));
+        return makeTensor(this.shape, ComplexOperations.round(this.entries, precision));
     }
 
 

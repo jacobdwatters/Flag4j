@@ -42,7 +42,7 @@ import org.flag4j.util.exceptions.SingularMatrixException;
  * @param <V> Type of the internal storage datastructures in the matrix and vector.
  */
 public abstract class ForwardSolver<
-        T extends MatrixMixin<T, ?, ?, ?, ?, U, ?>,
+        T extends MatrixMixin<T, ?, ?, ?, ?, ?, U, ?>,
         U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>,
         V> implements LinearSolver<T, U> {
 

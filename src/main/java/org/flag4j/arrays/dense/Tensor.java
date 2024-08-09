@@ -43,11 +43,12 @@ import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseTensorOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
 import org.flag4j.util.ErrorMessages;
+import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.StringUtils;
 
 import java.util.Arrays;
 
-
+// TODO: Allow for zero dimension shapes for scalar tensors.
 /**
  * Real Dense Tensor. May have any rank (that is, may have any number of unique axes/dimensions).
  */
@@ -163,7 +164,7 @@ public class Tensor
      * @param A tensor to copy.
      */
     public Tensor(Tensor A) {
-        super(A.shape.copy(), A.entries.clone());
+        super(A.shape, A.entries.clone());
         shape.makeStridesIfNull();
     }
 
@@ -173,7 +174,7 @@ public class Tensor
      * @param A Matrix to copy to tensor.
      */
     public Tensor(Matrix A) {
-        super(A.shape.copy(), A.entries.clone());
+        super(A.shape, A.entries.clone());
         shape.makeStridesIfNull();
     }
 
@@ -183,7 +184,7 @@ public class Tensor
      * @param A Vector to copy to tensor.
      */
     public Tensor(Vector A) {
-        super(A.shape.copy(), A.entries.clone());
+        super(A.shape, A.entries.clone());
         shape.makeStridesIfNull();
     }
 
@@ -303,7 +304,6 @@ public class Tensor
      * @param B Second tensor in the addition.
      * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
      */
-    @Override
     public void addEq(CooTensor B) {
         RealDenseSparseTensorOperations.addEq(this, B);
     }
@@ -386,7 +386,7 @@ public class Tensor
     public Tensor T(int... axes) {
         // TODO: Add dispatcher for this method to choose between concurrent and sequential implementations.
         return new Tensor(
-                shape.copy().swapAxes(axes),
+                shape.swapAxes(axes),
                 RealDenseTranspose.standardConcurrent(this.entries, this.shape, axes)
         );
     }
@@ -415,7 +415,7 @@ public class Tensor
     @Override
     public CTensor add(CTensor B) {
         return new CTensor(
-                shape.copy(),
+                shape,
                 RealComplexDenseOperations.add(B.entries, B.shape, this.entries, this.shape)
         );
     }
@@ -457,7 +457,7 @@ public class Tensor
     @Override
     public CTensor sub(CTensor B) {
         return new CTensor(
-                shape.copy(),
+                shape,
                 RealComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
         );
     }
@@ -482,7 +482,6 @@ public class Tensor
      * @param B Second tensor in the subtraction.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    @Override
     public void subEq(CooTensor B) {
         RealDenseSparseTensorOperations.subEq(this, B);
     }
@@ -509,7 +508,7 @@ public class Tensor
     @Override
     public CTensor elemMult(CTensor B) {
         return new CTensor(
-                this.shape.copy(),
+                this.shape,
                 RealComplexDenseElemMult.dispatch(B.entries, B.shape, this.entries, this.shape)
         );
     }
@@ -536,7 +535,7 @@ public class Tensor
     @Override
     public CTensor elemDiv(CTensor B) {
         return new CTensor(
-                shape.copy(),
+                shape,
                 RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
         );
     }
@@ -568,6 +567,19 @@ public class Tensor
 
 
     /**
+     * Converts this tensor to a matrix with the specified shape.
+     * @param matShape Shape of the resulting matrix. Must be broadcastable with the shape of this tensor.
+     * @return A matrix of shape {@code matShape} with the values of this tensor.
+     */
+    public Matrix toMatrix(Shape matShape) {
+        ParameterChecks.assertBroadcastable(shape, matShape);
+        ParameterChecks.assertRank(2, matShape);
+
+        return new Matrix(matShape, entries.clone());
+    }
+
+
+    /**
      * Converts this tensor to an equivalent matrix.
      * @return If this tensor is rank 2, then the equivalent matrix will be returned.
      * If the tensor is rank 1, then a matrix with a single row will be returned. If the rank is larger than 2, it will
@@ -577,7 +589,7 @@ public class Tensor
         Matrix mat;
 
         if(this.getRank()==2) {
-            mat = new Matrix(this.shape.copy(), this.entries.clone());
+            mat = new Matrix(this.shape, this.entries.clone());
         } else {
             mat = new Matrix(1, this.entries.length, this.entries.clone());
         }

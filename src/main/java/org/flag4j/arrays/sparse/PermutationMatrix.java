@@ -82,7 +82,7 @@ public class PermutationMatrix implements Serializable {
      */
     public PermutationMatrix(Shape shape) {
         ParameterChecks.assertSquareMatrix(shape);
-        this.size = shape.dims[0];
+        this.size = shape.get(0);
         swapPointers = ArrayUtils.intRange(0, size);
     }
 
@@ -190,7 +190,7 @@ public class PermutationMatrix implements Serializable {
             System.arraycopy(src.entries, colIdx*src.numCols, destEntries, rowIdx*src.numCols, src.numCols);
         }
 
-        return new Matrix(src.shape.copy(), destEntries);
+        return new Matrix(src.shape, destEntries);
     }
 
 
@@ -232,10 +232,10 @@ public class PermutationMatrix implements Serializable {
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
             colIdx = swapPointers[rowIdx];
-            ArrayUtils.arraycopy(src.entries, colIdx*src.numCols, destEntries, rowIdx*src.numCols, src.numCols);
+            System.arraycopy(src.entries, colIdx*src.numCols, destEntries, rowIdx*src.numCols, src.numCols);
         }
 
-        return new CMatrix(src.shape.copy(), destEntries);
+        return new CMatrix(src.shape, destEntries);
     }
 
 
@@ -284,7 +284,7 @@ public class PermutationMatrix implements Serializable {
             }
         }
 
-        return new Matrix(src.shape.copy(), destEntries);
+        return new Matrix(src.shape, destEntries);
     }
 
 
@@ -328,7 +328,7 @@ public class PermutationMatrix implements Serializable {
             }
         }
 
-        return new CMatrix(src.shape.copy(), destEntries);
+        return new CMatrix(src.shape, destEntries);
     }
 
 

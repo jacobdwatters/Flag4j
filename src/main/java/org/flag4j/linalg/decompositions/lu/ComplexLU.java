@@ -37,7 +37,7 @@ public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMat
     /**
      * Complex number equal to zero.
      */
-    static final CNumber z = CNumber.zero();
+    static final CNumber z = CNumber.ZERO;
 
     /**
      * Constructs a LU decomposer to decompose the specified matrix using partial pivoting.
@@ -155,12 +155,12 @@ public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMat
         for(int i=j+1; i<LU.numRows; i++) {
             int iRow = i*LU.numCols;
             m = LU.entries[iRow + j];
-            m = LU.entries[pivotRow + j].equals(z) ? m.copy() : m.div(LU.entries[pivotRow + j]);
+            m = LU.entries[pivotRow + j].equals(z) ? m : m.div(LU.entries[pivotRow + j]);
 
             if(!m.equals(z)) {
                 // Compute and set U values.
                 for(int k=j; k<LU.numCols; k++) {
-                    LU.entries[iRow + k].subEq(m.mult(LU.entries[pivotRow + k]));
+                    LU.entries[iRow + k] = LU.entries[iRow + k].sub(m.mult(LU.entries[pivotRow + k]));
                 }
             }
 

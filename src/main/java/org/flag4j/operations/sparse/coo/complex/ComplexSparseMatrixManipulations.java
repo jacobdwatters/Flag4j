@@ -85,7 +85,7 @@ public class ComplexSparseMatrixManipulations {
         for(int i=0; i<src.entries.length; i++) {
             if(!ArrayUtils.contains(rowIdxs, src.rowIndices[i])) {
                 // Then copy the entry over.
-                entries.add(src.entries[i].copy());
+                entries.add(src.entries[i]);
                 rowIndices.add(src.rowIndices[i]);
                 colIndices.add(src.colIndices[i]);
             }
@@ -110,7 +110,7 @@ public class ComplexSparseMatrixManipulations {
         for(int i=0; i<src.entries.length; i++) {
             if(src.colIndices[i] != colIdx) {
                 // Then entry is not in the specified column, so remove it.
-                entries.add(src.entries[i].copy());
+                entries.add(src.entries[i]);
                 rowIndices.add(src.rowIndices[i]);
 
                 if(src.colIndices[i] < colIdx) colIndices.add(src.colIndices[i]);
@@ -139,7 +139,7 @@ public class ComplexSparseMatrixManipulations {
 
             if(idx < 0) {
                 // Then entry is not in the specified column, so copy it with the appropriate column index shift.
-                entries.add(src.entries[i].copy());
+                entries.add(src.entries[i]);
                 rowIndices.add(src.rowIndices[i]);
                 colIndices.add(src.colIndices[i] + (idx+1));
             }
@@ -163,8 +163,8 @@ public class ComplexSparseMatrixManipulations {
             rowIndices, int[] colIndices, int[] startEnd) {
 
         if(startEnd[0] > 0) {
-            ArrayUtils.arraycopy(src.entries, 0, entries, 0, startEnd[0]);
-            ArrayUtils.arraycopy(src.entries, startEnd[1], entries, startEnd[0], entries.length - startEnd[0]);
+            System.arraycopy(src.entries, 0, entries, 0, startEnd[0]);
+            System.arraycopy(src.entries, startEnd[1], entries, startEnd[0], entries.length - startEnd[0]);
 
             System.arraycopy(src.rowIndices, 0, rowIndices, 0, startEnd[0]);
             System.arraycopy(src.rowIndices, startEnd[1], rowIndices, startEnd[0], entries.length - startEnd[0]);
@@ -172,7 +172,7 @@ public class ComplexSparseMatrixManipulations {
             System.arraycopy(src.colIndices, 0, colIndices, 0, startEnd[0]);
             System.arraycopy(src.colIndices, startEnd[1], colIndices, startEnd[0], entries.length - startEnd[0]);
         } else {
-            ArrayUtils.arraycopy(src.entries, 0, entries, 0, entries.length);
+            System.arraycopy(src.entries, 0, entries, 0, entries.length);
             System.arraycopy(src.rowIndices, 0, rowIndices, 0, rowIndices.length);
             System.arraycopy(src.colIndices, 0, colIndices, 0, colIndices.length);
         }

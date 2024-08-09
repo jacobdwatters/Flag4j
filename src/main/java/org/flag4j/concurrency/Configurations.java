@@ -29,7 +29,7 @@ import org.flag4j.util.ErrorMessages;
 /**
  * Configurations for standard and concurrent operations.
  */
-public abstract class Configurations {
+public final class Configurations {
     private Configurations() {
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
@@ -41,21 +41,15 @@ public abstract class Configurations {
     /**
      * The default block size for blocked algorithms.
      */
-    private static final int DEFAULT_BLOCK_SIZE = 64;
+    public static final int DEFAULT_BLOCK_SIZE = 64;
     /**
      * The default minimum recursive size for recursive algorithms.
      */
-    private static final int DEFAULT_MIN_RECURSIVE_SIZE = 128;
-
+    public static final int DEFAULT_MIN_RECURSIVE_SIZE = 128;
     /**
      * The block size to use in blocked algorithms.
      */
     private static int blockSize = DEFAULT_BLOCK_SIZE;
-
-    /**
-     * The minimum size of tensor/matrix/vector to make recursive calls on in recursive algorithms.
-     */
-    private static int minRecursiveSize = DEFAULT_MIN_RECURSIVE_SIZE;
 
 
     /**
@@ -63,7 +57,8 @@ public abstract class Configurations {
      * virtual machine. Note that this value may change during runtime. This method will include logical cores so the value
      * returned may be higher than the number of physical cores on the machine if hyper-threading is enabled.
      * <br><br>
-     * This is implemented as: <code>numThreads = {@link Runtime#availableProcessors() Runtime.getRuntime().availableProcessors()};</code>
+     * @implNote This is implemented as:
+     * <code>numThreads = {@link Runtime#availableProcessors() Runtime.getRuntime().availableProcessors()};</code>
      * @return The new value of numThreads, i.e. the number of available processors.
      */
     public static int setNumThreadsAsAvailableProcessors() {
@@ -109,29 +104,10 @@ public abstract class Configurations {
 
 
     /**
-     * Gets the minimum size of tensor/matrix/vector to make recursive calls on in recursive algorithms.
-     * @return minimum size of tensor/matrix/vector to make recursive calls on in recursive algorithms.
-     */
-    public static int getMinRecursiveSize() {
-        return minRecursiveSize;
-    }
-
-
-    /**
-     * Sets the minimum size of tensor/matrix/vector to make recursive calls on in recursive algorithms.
-     * @param minRecursiveSize New minimum size.
-     */
-    public static void setMinRecursiveSize(int minRecursiveSize) {
-        Configurations.minRecursiveSize = Math.max(1, minRecursiveSize);
-    }
-
-
-    /**
      * Resets all configurations to their default values.
      */
     public static void resetAll() {
         ThreadManager.setParallelismLevel(DEFAULT_NUM_THREADS);
         blockSize = DEFAULT_BLOCK_SIZE;
-        minRecursiveSize = DEFAULT_MIN_RECURSIVE_SIZE;
     }
 }

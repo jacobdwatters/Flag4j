@@ -30,9 +30,10 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
+
+import java.util.Arrays;
 
 
 /**
@@ -41,7 +42,7 @@ import org.flag4j.util.ParameterChecks;
  * a counterclockwise rotation of {@code theta} radians of the vector in the {@code (i, j)} plane. Givens rotators
  * are a unitary transformation.
  */
-public class Givens {
+public final class Givens {
 
     private Givens() {
         // Hide default constructor for utility class.
@@ -305,10 +306,10 @@ public class Givens {
         CNumber[] src1 = G.entries;
         CNumber[] src2 = src.entries;
 
-        int cols2 = src.shape.dims[1];
+        int cols2 = src.shape.get(1);
         int destCols = (cols2 - (row-1));
         if(workArray==null) workArray = new CNumber[2*destCols];
-        ArrayUtils.fillZeros(workArray, 0, 2*destCols);
+        Arrays.fill(workArray, 0, 2*destCols, CNumber.ZERO);
 
         int m = row-1;
         int src2Row1 = m*cols2 + m;
@@ -324,10 +325,10 @@ public class Givens {
             int destIdx1 = j - m;
             int destIdx2 = destCols + destIdx1;
 
-            workArray[destIdx1].addEq(g11.mult(src2[src2Row1]));
-            workArray[destIdx2].addEq(g21.mult(src2[src2Row1++]));
-            workArray[destIdx1].addEq(g12.mult(src2[src2Row2]));
-            workArray[destIdx2].addEq(g22.mult(src2[src2Row2++]));
+            workArray[destIdx1] = workArray[destIdx1].add(g11.mult(src2[src2Row1]));
+            workArray[destIdx2] = workArray[destIdx2].add(g21.mult(src2[src2Row1++]));
+            workArray[destIdx1] = workArray[destIdx1].add(g12.mult(src2[src2Row2]));
+            workArray[destIdx2] = workArray[destIdx2].add(g22.mult(src2[src2Row2++]));
         }
 
         // Copy result back into src matrix.
@@ -361,7 +362,7 @@ public class Givens {
         int cols1 = src.numCols;
         int rows1 = src.numRows;
         if(workArray==null) workArray = new CNumber[2*rows1]; // Has shape (row+1, 2)
-        ArrayUtils.fillZeros(workArray);
+        Arrays.fill(workArray, CNumber.ZERO);
 
         int m = row - 1;
 
@@ -377,10 +378,10 @@ public class Givens {
             int src1Idx1 = i*cols1 + m;
             int src1Idx2 = src1Idx1 + 1;
 
-            workArray[tempIdx1].addEq(src1[src1Idx1].mult(g11));
-            workArray[tempIdx1].addEq(src1[src1Idx2].mult(g12));
-            workArray[tempIdx2].addEq(src1[src1Idx1].mult(g21));
-            workArray[tempIdx2].addEq(src1[src1Idx2].mult(g22));
+            workArray[tempIdx1] = workArray[tempIdx1].add(src1[src1Idx1].mult(g11));
+            workArray[tempIdx1] = workArray[tempIdx1].add(src1[src1Idx2].mult(g12));
+            workArray[tempIdx2] = workArray[tempIdx2].add(src1[src1Idx1].mult(g21));
+            workArray[tempIdx2] = workArray[tempIdx2].add(src1[src1Idx2].mult(g22));
         }
 
         // Copy result back into source matrix.

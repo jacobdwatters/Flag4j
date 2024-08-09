@@ -30,14 +30,15 @@ import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.Axis2D;
 import org.flag4j.util.ErrorMessages;
+
+import java.util.Arrays;
 
 /**
  * This class contains low level methods for computing the matrix multiplication (and matrix vector multiplication) between
  * a real dense/sparse matrix and a real sparse/dense matrix or vector.
  */
-public class RealComplexDenseSparseMatrixMultiplication {
+public final class RealComplexDenseSparseMatrixMultiplication {
 
     private RealComplexDenseSparseMatrixMultiplication() {
         // Hide default constructor.
@@ -57,23 +58,26 @@ public class RealComplexDenseSparseMatrixMultiplication {
      */
     public static CNumber[] standard(double[] src1, Shape shape1, CNumber[] src2,
                                      int[] rowIndices, int[] colIndices, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, CNumber.ZERO);
 
         int row;
-int col;
+        int col;
 
         for(int i=0; i<rows1; i++) {
             // Loop over non-zero entries of sparse matrix.
-            for(int j=0; j<src2.length; j++) {
+            int destRowOffset = i*cols2;
+            int src1RowOffset = i*cols1;
+
+            for(int j=0, len=src2.length; j<len; j++) {
                 row = rowIndices[j];
                 col = colIndices[j];
 
-                dest[i*cols2 + col].addEq(src2[j].mult(src1[i*cols1 + row]));
+                dest[destRowOffset + col] = dest[destRowOffset + col].add(src2[j].mult(src1[src1RowOffset + row]));
             }
         }
 
@@ -94,21 +98,23 @@ int col;
      */
     public static CNumber[] standard(double[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
                                     CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
 
         int row;
-int col;
+        int col;
 
         for(int i=0; i<src1.length; i++) {
             row = rowIndices[i];
             col = colIndices[i];
+            int destRowOffset = row*cols2;
+            int src2RowOffset = col*cols2;
 
             for(int j=0; j<cols2; j++) {
-                dest[row*cols2 + j].addEq(src2[col*cols2 + j].mult(src1[i]));
+                dest[destRowOffset + j] = dest[destRowOffset + j].add(src2[src2RowOffset + j].mult(src1[i]));
             }
         }
 
@@ -128,22 +134,26 @@ int col;
      */
     public static CNumber[] concurrentStandard(double[] src1, Shape shape1, CNumber[] src2,
                                               int[] rowIndices, int[] colIndices, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
 
-        ThreadManager.concurrentLoop(0, rows1, i -> {
-            // Loop over non-zero entries of sparse matrix.
-            for(int j=0; j<src2.length; j++) {
-                int row = rowIndices[j];
-                int col = colIndices[j];
-                CNumber product = src2[j].mult(src1[i*cols1 + row]);
+        ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int rowOffset = i*cols2;
 
-                synchronized (dest) {
-                    dest[i*cols2 + col].addEq(product);
+                // Loop over non-zero entries of sparse matrix.
+                for(int j=0; j<src2.length; j++) {
+                    int row = rowIndices[j];
+                    int col = colIndices[j];
+                    CNumber product = src2[j].mult(src1[i*cols1 + row]);
+
+                    synchronized (dest) {
+                        dest[rowOffset + col] = dest[rowOffset + col].add(product);
+                    }
                 }
             }
         });
@@ -166,21 +176,24 @@ int col;
      */
     public static CNumber[] concurrentStandard(double[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
                                               CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
 
-        ThreadManager.concurrentLoop(0, src1.length, i -> {
-            int row = rowIndices[i];
-            int col = colIndices[i];
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(var i=startIdx; i<endIdx; i++) {
+                int row = rowIndices[i];
+                int col = colIndices[i];
+                int rowOffset = row*cols2;
 
-            for(int j=0; j<cols2; j++) {
-                CNumber product = src2[col*cols2 + j].mult(src1[i]);
+                for(int j=0; j<cols2; j++) {
+                    CNumber product = src2[col*cols2 + j].mult(src1[i]);
 
-                synchronized (dest) {
-                    dest[row*cols2 + j].addEq(product);
+                    synchronized (dest) {
+                        dest[rowOffset + j] = dest[rowOffset + j].add(product);
+                    }
                 }
             }
         });
@@ -201,23 +214,25 @@ int col;
      */
     public static CNumber[] standard(CNumber[] src1, Shape shape1, double[] src2,
                                      int[] rowIndices, int[] colIndices, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
 
         int row;
-int col;
+        int col;
 
         for(int i=0; i<rows1; i++) {
+            int destRowOffset = i*cols2;
+
             // Loop over non-zero entries of sparse matrix.
             for(int j=0; j<src2.length; j++) {
                 row = rowIndices[j];
                 col = colIndices[j];
 
-                dest[i*cols2 + col].addEq(src1[i*cols1 + row].mult(src2[j]));
+                dest[destRowOffset + col] = dest[destRowOffset + col].add(src1[i*cols1 + row].mult(src2[j]));
             }
         }
 
@@ -238,8 +253,8 @@ int col;
      */
     public static CNumber[] standard(CNumber[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
                                      double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
@@ -250,9 +265,11 @@ int col;
         for(int i=0; i<src1.length; i++) {
             row = rowIndices[i];
             col = colIndices[i];
+            int destRowOffset = row*cols2;
+            int src2RowOffset = col*cols2;
 
             for(int j=0; j<cols2; j++) {
-                dest[row*cols2 + j].addEq(src1[i].mult(src2[col*cols2 + j]));
+                dest[destRowOffset + j] = dest[destRowOffset + j].add(src1[i].mult(src2[src2RowOffset + j]));
             }
         }
 
@@ -272,22 +289,27 @@ int col;
      */
     public static CNumber[] concurrentStandard(CNumber[] src1, Shape shape1, double[] src2,
                                                int[] rowIndices, int[] colIndices, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
 
-        ThreadManager.concurrentLoop(0, rows1, i -> {
-            // Loop over non-zero entries of sparse matrix.
-            for(int j=0; j<src2.length; j++) {
-                int row = rowIndices[j];
-                int col = colIndices[j];
-                CNumber product = src1[i*cols1 + row].mult(src2[j]);
+        ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int destRowOffset = i*cols2;
+                int productOffset = i*cols1;
 
-                synchronized (dest) {
-                    dest[i*cols2 + col].addEq(product);
+                // Loop over non-zero entries of sparse matrix.
+                for(int j=0; j<src2.length; j++) {
+                    int row = rowIndices[j];
+                    int col = colIndices[j];
+                    CNumber product = src1[productOffset + row].mult(src2[j]);
+
+                    synchronized (dest) {
+                        dest[destRowOffset + col] = dest[destRowOffset + col].add(product);
+                    }
                 }
             }
         });
@@ -310,21 +332,24 @@ int col;
      */
     public static CNumber[] concurrentStandard(CNumber[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
                                                double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[0];
-        int cols2 = shape2.dims[1];
+        int rows1 = shape1.get(0);
+        int cols2 = shape2.get(1);
 
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
 
-        ThreadManager.concurrentLoop(0, src1.length, i -> {
-            int row = rowIndices[i];
-            int col = colIndices[i];
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int row = rowIndices[i];
+                int col = colIndices[i];
+                int rowOffset = row*cols2;
 
-            for(int j=0; j<cols2; j++) {
-                CNumber product = src1[i].mult(src2[col*cols2 + j]);
+                for(int j=0; j<cols2; j++) {
+                    CNumber product = src1[i].mult(src2[col*cols2 + j]);
 
-                synchronized (dest) {
-                    dest[row*cols2 + j].addEq(product);
+                    synchronized (dest) {
+                        dest[rowOffset + j] = dest[rowOffset + j].add(product);
+                    }
                 }
             }
         });
@@ -344,8 +369,8 @@ int col;
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] standardVector(double[] src1, Shape shape1, CNumber[] src2, int[] indices) {
-        int denseRows = shape1.dims[Axis2D.row()];
-        int denseCols = shape1.dims[Axis2D.col()];
+        int denseRows = shape1.get(0);
+        int denseCols = shape1.get(1);
         int nonZeros = src2.length;
 
         CNumber[] dest = new CNumber[denseRows];
@@ -353,10 +378,15 @@ int col;
         int k;
 
         for(int i=0; i<denseRows; i++) {
+            int src1RowOffset = i*denseCols;
+            CNumber sum = dest[i];
+
             for(int j=0; j<nonZeros; j++) {
                 k = indices[j];
-                dest[i].addEq(src2[j].mult(src1[i*denseCols + k]));
+                sum = sum.add(src2[j].mult(src1[src1RowOffset + k]));
             }
+
+            dest[i] = sum;
         }
 
         return dest;
@@ -375,17 +405,16 @@ int col;
      */
     public static CNumber[] standardVector(double[] src1, int[] rowIndices, int[] colIndices,
                                           Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
+        int rows1 = shape1.get(0);
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
         int row;
-int col;
+        int col;
 
         for(int i=0; i<src1.length; i++) {
             row = rowIndices[i];
             col = colIndices[i];
-
-            dest[row].addEq(src2[col].mult(src1[i]));
+            dest[row] = dest[row].add(src2[col].mult(src1[i]));
         }
 
         return dest;
@@ -401,8 +430,8 @@ int col;
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] blockedVector(double[] src1, Shape shape1, CNumber[] src2, int[] indices) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
         int bsize = Configurations.getBlockSize(); // Get the block size to use.
@@ -410,17 +439,19 @@ int col;
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
 
-        int k;
-
         // Blocked matrix-vector multiply
         for(int ii=0; ii<rows1; ii += bsize) {
             for(int jj=0; jj<rows2; jj += bsize) {
                 // Multiply the current blocks
                 for(int i=ii; i<ii+bsize && i<rows1; i++) {
+                    int src1RowOffset = i*cols1;
+                    CNumber sum = dest[i];
+
                     for(int j=jj; j<jj+bsize && j<rows2; j++) {
-                        k = indices[j];
-                        dest[i].addEq(src2[j].mult(src1[i*cols1 + k]));
+                        sum = sum.add(src2[j].mult(src1[src1RowOffset + indices[j]]));
                     }
+
+                    dest[i] = sum;
                 }
             }
         }
@@ -438,17 +469,23 @@ int col;
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] concurrentStandardVector(double[] src1, Shape shape1, CNumber[] src2, int[] indices) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
 
-        ThreadManager.concurrentLoop(0, rows1, i -> {
-            for(int j=0; j<rows2; j++) {
-                int k = indices[j];
-                dest[i].addEq(src2[j].mult(src1[i*cols1 + k]));
+        ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                CNumber sum = dest[i];
+
+                for(int j=0; j<rows2; j++) {
+                    int k = indices[j];
+                    sum = sum.add(src2[j].mult(src1[i*cols1 + k]));
+                }
+
+                dest[i] = sum;
             }
         });
 
@@ -468,18 +505,19 @@ int col;
      */
     public static CNumber[] concurrentStandardVector(double[] src1, int[] rowIndices, int[] colIndices,
                                                     Shape shape1, CNumber[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
+        int rows1 = shape1.get(0);
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
 
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int row = rowIndices[i];
+                int col = colIndices[i];
+                CNumber product = src2[col].mult(src1[i]);
 
-        ThreadManager.concurrentLoop(0, src1.length, i -> {
-            int row = rowIndices[i];
-            int col = colIndices[i];
-            CNumber product = src2[col].mult(src1[i]);
-
-            synchronized (dest) {
-                dest[row].addEq(product);
+                synchronized (dest) {
+                    dest[row] = dest[row].add(product);
+                }
             }
         });
 
@@ -496,8 +534,8 @@ int col;
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] concurrentBlockedVector(double[] src1, Shape shape1, CNumber[] src2, int[] indices) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
         final int bsize = Configurations.getBlockSize(); // Get the block size to use.
@@ -506,13 +544,19 @@ int col;
         ArrayUtils.fill(dest, 0);
 
         // Blocked matrix-vector multiply
-        ThreadManager.concurrentLoop(0, rows1, bsize, ii -> {
-            for(int jj=0; jj<rows2; jj += bsize) {
-                // Multiply the current blocks
-                for(int i=ii; i<ii+bsize && i<rows1; i++) {
-                    for(int j=jj; j<jj+bsize && j<rows2; j++) {
-                        int k = indices[j];
-                        dest[i].addEq(src2[j].mult(src1[i*cols1 + k]));
+        ThreadManager.concurrentBlockedOperation(rows1, bsize, (startIdx, endIdx) -> {
+            for(int ii=startIdx; ii<endIdx; ii += bsize) {
+                for(int jj=0; jj<rows2; jj += bsize) {
+                    // Multiply the current blocks
+                    for(int i=ii; i<ii+bsize && i<rows1; i++) {
+                        CNumber sum = dest[i];
+
+                        for(int j=jj; j<jj+bsize && j<rows2; j++) {
+                            int k = indices[j];
+                            sum = sum.add(src2[j].mult(src1[i*cols1 + k]));
+                        }
+
+                        dest[i] = sum;
                     }
                 }
             }
@@ -531,8 +575,8 @@ int col;
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] standardVector(CNumber[] src1, Shape shape1, double[] src2, int[] indices) {
-        int denseRows = shape1.dims[Axis2D.row()];
-        int denseCols = shape1.dims[Axis2D.col()];
+        int denseRows = shape1.get(0);
+        int denseCols = shape1.get(1);
         int nonZeros = src2.length;
 
         CNumber[] dest = new CNumber[denseRows];
@@ -540,10 +584,14 @@ int col;
         int k;
 
         for(int i=0; i<denseRows; i++) {
+            CNumber sum = dest[i];
+
             for(int j=0; j<nonZeros; j++) {
                 k = indices[j];
-                dest[i].addEq(src1[i*denseCols + k].mult(src2[j]));
+                sum = sum.add(src1[i*denseCols + k].mult(src2[j]));
             }
+
+            dest[i] = sum;
         }
 
         return dest;
@@ -562,17 +610,16 @@ int col;
      */
     public static CNumber[] standardVector(CNumber[] src1, int[] rowIndices, int[] colIndices,
                                            Shape shape1, double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
+        int rows1 = shape1.get(0);
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
         int row;
-int col;
+        int col;
 
         for(int i=0; i<src1.length; i++) {
             row = rowIndices[i];
             col = colIndices[i];
-
-            dest[row].addEq(src1[i].mult(src2[col]));
+            dest[row] = dest[row].add(src1[i].mult(src2[col]));
         }
 
         return dest;
@@ -588,8 +635,8 @@ int col;
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] blockedVector(CNumber[] src1, Shape shape1, double[] src2, int[] indices) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
         int bsize = Configurations.getBlockSize(); // Get the block size to use.
@@ -603,10 +650,14 @@ int col;
             for(int jj=0; jj<rows2; jj += bsize) {
                 // Multiply the current blocks
                 for(int i=ii; i<ii+bsize && i<rows1; i++) {
+                    CNumber sum = dest[i];
+
                     for(int j=jj; j<jj+bsize && j<rows2; j++) {
                         k = indices[j];
-                        dest[i].addEq(src1[i*cols1 + k].mult(src2[j]));
+                        sum = sum.add(src1[i*cols1 + k].mult(src2[j]));
                     }
+
+                    dest[i] = sum;
                 }
             }
         }
@@ -624,17 +675,23 @@ int col;
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] concurrentStandardVector(CNumber[] src1, Shape shape1, double[] src2, int[] indices) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
 
-        ThreadManager.concurrentLoop(0, rows1, i -> {
-            for(int j=0; j<rows2; j++) {
-                int k = indices[j];
-                dest[i].addEq(src1[i*cols1 + k].mult(src2[j]));
+        ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                CNumber sum = dest[i];
+
+                for(int j=0; j<rows2; j++) {
+                    int k = indices[j];
+                    sum = sum.add(src1[i*cols1 + k].mult(src2[j]));
+                }
+
+                dest[i] = sum;
             }
         });
 
@@ -654,17 +711,19 @@ int col;
      */
     public static CNumber[] concurrentStandardVector(CNumber[] src1, int[] rowIndices, int[] colIndices,
                                                      Shape shape1, double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
+        int rows1 = shape1.get(0);
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
 
-        ThreadManager.concurrentLoop(0, src1.length, i -> {
-            int row = rowIndices[i];
-            int col = colIndices[i];
-            CNumber product = src1[i].mult(src2[col]);
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int row = rowIndices[i];
+                int col = colIndices[i];
+                CNumber product = src1[i].mult(src2[col]);
 
-            synchronized (dest) {
-                dest[row].addEq(product);
+                synchronized (dest) {
+                    dest[row] = dest[row].add(product);
+                }
             }
         });
 
@@ -681,8 +740,8 @@ int col;
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static CNumber[] concurrentBlockedVector(CNumber[] src1, Shape shape1, double[] src2, int[] indices) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
         final int bsize = Configurations.getBlockSize(); // Get the block size to use.
@@ -691,13 +750,19 @@ int col;
         ArrayUtils.fill(dest, 0);
 
         // Blocked matrix-vector multiply
-        ThreadManager.concurrentLoop(0, rows1, bsize, ii -> {
-            for(int jj=0; jj<rows2; jj += bsize) {
-                // Multiply the current blocks
-                for(int i=ii; i<ii+bsize && i<rows1; i++) {
-                    for(int j=jj; j<jj+bsize && j<rows2; j++) {
-                        int k = indices[j];
-                        dest[i].addEq(src1[i*cols1 + k].mult(src2[j]));
+        ThreadManager.concurrentBlockedOperation(rows1, bsize, (startIdx, endIdx) -> {
+            for(int ii=startIdx; ii<endIdx; ii += bsize) {
+                for(int jj=0; jj<rows2; jj += bsize) {
+                    // Multiply the current blocks
+                    for(int i=ii; i<ii+bsize && i<rows1; i++) {
+                        CNumber sum = dest[i];
+
+                        for(int j=jj; j<jj+bsize && j<rows2; j++) {
+                            int k = indices[j];
+                            sum = sum.add(src1[i*cols1 + k].mult(src2[j]));
+                        }
+
+                        dest[i] = sum;
                     }
                 }
             }

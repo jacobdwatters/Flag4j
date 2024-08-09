@@ -20,56 +20,56 @@ class CooCVectorRepeatTests {
     @Test
     void repeatRowTest() {
         // ---------------------- Sub-case 1 ----------------------
-        aEntries = new CNumber[]{new CNumber(0.14, 9.2352), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                new CNumber(), new CNumber(0, -1.445), new CNumber(2.45), new CNumber(),
-                new CNumber(), new CNumber(), new CNumber(), new CNumber()};
+        aEntries = new CNumber[]{new CNumber(0.14, 9.2352), CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                CNumber.ZERO, new CNumber(0, -1.445), new CNumber(2.45), CNumber.ZERO,
+                CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO};
         a = new CVector(aEntries).toCoo();
         expEntries = new CNumber[][]{
-                {new CNumber(0.14, 9.2352), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                        new CNumber(), new CNumber(0, -1.445), new CNumber(2.45), new CNumber(),
-                        new CNumber(), new CNumber(), new CNumber(), new CNumber()},
-                {new CNumber(0.14, 9.2352), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                        new CNumber(), new CNumber(0, -1.445), new CNumber(2.45), new CNumber(),
-                        new CNumber(), new CNumber(), new CNumber(), new CNumber()},
-                {new CNumber(0.14, 9.2352), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                        new CNumber(), new CNumber(0, -1.445), new CNumber(2.45), new CNumber(),
-                        new CNumber(), new CNumber(), new CNumber(), new CNumber()},
-                {new CNumber(0.14, 9.2352), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                        new CNumber(), new CNumber(0, -1.445), new CNumber(2.45), new CNumber(),
-                        new CNumber(), new CNumber(), new CNumber(), new CNumber()},
-                {new CNumber(0.14, 9.2352), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                        new CNumber(), new CNumber(0, -1.445), new CNumber(2.45), new CNumber(),
-                        new CNumber(), new CNumber(), new CNumber(), new CNumber()}
+                {new CNumber(0.14, 9.2352), CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                        CNumber.ZERO, new CNumber(0, -1.445), new CNumber(2.45), CNumber.ZERO,
+                        CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(0.14, 9.2352), CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                        CNumber.ZERO, new CNumber(0, -1.445), new CNumber(2.45), CNumber.ZERO,
+                        CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(0.14, 9.2352), CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                        CNumber.ZERO, new CNumber(0, -1.445), new CNumber(2.45), CNumber.ZERO,
+                        CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(0.14, 9.2352), CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                        CNumber.ZERO, new CNumber(0, -1.445), new CNumber(2.45), CNumber.ZERO,
+                        CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(0.14, 9.2352), CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                        CNumber.ZERO, new CNumber(0, -1.445), new CNumber(2.45), CNumber.ZERO,
+                        CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO}
         };
         exp = new CMatrix(expEntries).toCoo();
 
         assertEquals(exp, a.repeat(5, 0));
 
         // ---------------------- Sub-case 2 ----------------------
-        aEntries = new CNumber[]{new CNumber(), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                new CNumber(), new CNumber(), new CNumber(2.45), new CNumber(),
-                new CNumber(), new CNumber(), new CNumber(), new CNumber(2.45),
-                new CNumber(), new CNumber(2.45)};
+        aEntries = new CNumber[]{CNumber.ZERO, CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                CNumber.ZERO, CNumber.ZERO, new CNumber(2.45), CNumber.ZERO,
+                CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, new CNumber(2.45),
+                CNumber.ZERO, new CNumber(2.45)};
         a = new CVector(aEntries).toCoo();
         expEntries = new CNumber[][]{
-                {new CNumber(), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                        new CNumber(), new CNumber(), new CNumber(2.45), new CNumber(),
-                        new CNumber(), new CNumber(), new CNumber(), new CNumber(2.45),
-                        new CNumber(), new CNumber(2.45)},
-                {new CNumber(), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                        new CNumber(), new CNumber(), new CNumber(2.45), new CNumber(),
-                        new CNumber(), new CNumber(), new CNumber(), new CNumber(2.45),
-                        new CNumber(), new CNumber(2.45)}
+                {CNumber.ZERO, CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                        CNumber.ZERO, CNumber.ZERO, new CNumber(2.45), CNumber.ZERO,
+                        CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, new CNumber(2.45),
+                        CNumber.ZERO, new CNumber(2.45)},
+                {CNumber.ZERO, CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                        CNumber.ZERO, CNumber.ZERO, new CNumber(2.45), CNumber.ZERO,
+                        CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, new CNumber(2.45),
+                        CNumber.ZERO, new CNumber(2.45)}
         };
         exp = new CMatrix(expEntries).toCoo();
 
         assertEquals(exp, a.repeat(2, 0));
 
         // ---------------------- Sub-case 3 ----------------------
-        aEntries = new CNumber[]{new CNumber(), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                new CNumber(), new CNumber(), new CNumber(2.45), new CNumber(),
-                new CNumber(), new CNumber(), new CNumber(), new CNumber(2.45),
-                new CNumber(), new CNumber(2.45)};
+        aEntries = new CNumber[]{CNumber.ZERO, CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                CNumber.ZERO, CNumber.ZERO, new CNumber(2.45), CNumber.ZERO,
+                CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, new CNumber(2.45),
+                CNumber.ZERO, new CNumber(2.45)};
         a = new CVector(aEntries).toCoo();
 
         assertThrows(IllegalArgumentException.class, ()-> a.repeat(-1, 0));
@@ -81,56 +81,56 @@ class CooCVectorRepeatTests {
     @Test
     void repeatColTest() {
         // ---------------------- Sub-case 1 ----------------------
-        aEntries = new CNumber[]{new CNumber(0.14, 9.2352), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                new CNumber(), new CNumber(0, -1.445), new CNumber(2.45), new CNumber(),
-                new CNumber(), new CNumber(), new CNumber(), new CNumber()};
+        aEntries = new CNumber[]{new CNumber(0.14, 9.2352), CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                CNumber.ZERO, new CNumber(0, -1.445), new CNumber(2.45), CNumber.ZERO,
+                CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO};
         a = new CVector(aEntries).toCoo();
         expEntries = new CNumber[][]{
-                {new CNumber(0.14, 9.2352), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                        new CNumber(), new CNumber(0, -1.445), new CNumber(2.45), new CNumber(),
-                        new CNumber(), new CNumber(), new CNumber(), new CNumber()},
-                {new CNumber(0.14, 9.2352), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                        new CNumber(), new CNumber(0, -1.445), new CNumber(2.45), new CNumber(),
-                        new CNumber(), new CNumber(), new CNumber(), new CNumber()},
-                {new CNumber(0.14, 9.2352), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                        new CNumber(), new CNumber(0, -1.445), new CNumber(2.45), new CNumber(),
-                        new CNumber(), new CNumber(), new CNumber(), new CNumber()},
-                {new CNumber(0.14, 9.2352), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                        new CNumber(), new CNumber(0, -1.445), new CNumber(2.45), new CNumber(),
-                        new CNumber(), new CNumber(), new CNumber(), new CNumber()},
-                {new CNumber(0.14, 9.2352), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                        new CNumber(), new CNumber(0, -1.445), new CNumber(2.45), new CNumber(),
-                        new CNumber(), new CNumber(), new CNumber(), new CNumber()}
+                {new CNumber(0.14, 9.2352), CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                        CNumber.ZERO, new CNumber(0, -1.445), new CNumber(2.45), CNumber.ZERO,
+                        CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(0.14, 9.2352), CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                        CNumber.ZERO, new CNumber(0, -1.445), new CNumber(2.45), CNumber.ZERO,
+                        CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(0.14, 9.2352), CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                        CNumber.ZERO, new CNumber(0, -1.445), new CNumber(2.45), CNumber.ZERO,
+                        CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(0.14, 9.2352), CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                        CNumber.ZERO, new CNumber(0, -1.445), new CNumber(2.45), CNumber.ZERO,
+                        CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO},
+                {new CNumber(0.14, 9.2352), CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                        CNumber.ZERO, new CNumber(0, -1.445), new CNumber(2.45), CNumber.ZERO,
+                        CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO}
         };
         exp = new CMatrix(expEntries).T().toCoo();
 
         assertEquals(exp, a.repeat(5, 1));
 
         // ---------------------- Sub-case 2 ----------------------
-        aEntries = new CNumber[]{new CNumber(), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                new CNumber(), new CNumber(), new CNumber(2.45), new CNumber(),
-                new CNumber(), new CNumber(), new CNumber(), new CNumber(2.45),
-                new CNumber(), new CNumber(2.45)};
+        aEntries = new CNumber[]{CNumber.ZERO, CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                CNumber.ZERO, CNumber.ZERO, new CNumber(2.45), CNumber.ZERO,
+                CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, new CNumber(2.45),
+                CNumber.ZERO, new CNumber(2.45)};
         a = new CVector(aEntries).toCoo();
         expEntries = new CNumber[][]{
-                {new CNumber(), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                        new CNumber(), new CNumber(), new CNumber(2.45), new CNumber(),
-                        new CNumber(), new CNumber(), new CNumber(), new CNumber(2.45),
-                        new CNumber(), new CNumber(2.45)},
-                {new CNumber(), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                        new CNumber(), new CNumber(), new CNumber(2.45), new CNumber(),
-                        new CNumber(), new CNumber(), new CNumber(), new CNumber(2.45),
-                        new CNumber(), new CNumber(2.45)}
+                {CNumber.ZERO, CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                        CNumber.ZERO, CNumber.ZERO, new CNumber(2.45), CNumber.ZERO,
+                        CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, new CNumber(2.45),
+                        CNumber.ZERO, new CNumber(2.45)},
+                {CNumber.ZERO, CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                        CNumber.ZERO, CNumber.ZERO, new CNumber(2.45), CNumber.ZERO,
+                        CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, new CNumber(2.45),
+                        CNumber.ZERO, new CNumber(2.45)}
         };
         exp = new CMatrix(expEntries).T().toCoo();
 
         assertEquals(exp, a.repeat(2, 1));
 
         // ---------------------- Sub-case 3 ----------------------
-        aEntries = new CNumber[]{new CNumber(), new CNumber(), new CNumber(134.4, -51.00024), new CNumber(),
-                new CNumber(), new CNumber(), new CNumber(2.45), new CNumber(),
-                new CNumber(), new CNumber(), new CNumber(), new CNumber(2.45),
-                new CNumber(), new CNumber(2.45)};
+        aEntries = new CNumber[]{CNumber.ZERO, CNumber.ZERO, new CNumber(134.4, -51.00024), CNumber.ZERO,
+                CNumber.ZERO, CNumber.ZERO, new CNumber(2.45), CNumber.ZERO,
+                CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, new CNumber(2.45),
+                CNumber.ZERO, new CNumber(2.45)};
         a = new CVector(aEntries).toCoo();
 
         assertThrows(IllegalArgumentException.class, ()-> a.repeat(-1, 1));

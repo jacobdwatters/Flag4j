@@ -117,9 +117,9 @@ class CooVectorInnerProdTests {
         // ----------------------- Sub-case 1 -----------------------
         bEntries = new CNumber[]{
                 new CNumber(24.1, 54.1), new CNumber(-9.245, 3.4), new CNumber(14.5),
-                new CNumber(0, 94.14), new CNumber(), new CNumber(113, 55.62),
+                new CNumber(0, 94.14), CNumber.ZERO, new CNumber(113, 55.62),
                 new CNumber(54.13, 5.1), new CNumber(0.0013), new CNumber(-0.924, -994.15),
-                new CNumber(24.5516, -0.415), new CNumber(0, 13.46), new CNumber(),
+                new CNumber(24.5516, -0.415), new CNumber(0, 13.46), CNumber.ZERO,
                 new CNumber(5.2, 0.924), new CNumber(0.15, .135), new CNumber(25591, 13.5),
                 };
         b = new CVector(bEntries);
@@ -137,9 +137,9 @@ class CooVectorInnerProdTests {
         // ----------------------- Sub-case 2 -----------------------
         bEntries = new CNumber[]{
                 new CNumber(24.1, 54.1), new CNumber(-9.245, 3.4), new CNumber(14.5),
-                new CNumber(0, 94.14), new CNumber(), new CNumber(113, 55.62),
+                new CNumber(0, 94.14), CNumber.ZERO, new CNumber(113, 55.62),
                 new CNumber(54.13, 5.1), new CNumber(0.0013), new CNumber(-0.924, -994.15),
-                new CNumber(24.5516, -0.415), new CNumber(0, 13.46), new CNumber(),
+                new CNumber(24.5516, -0.415), new CNumber(0, 13.46), CNumber.ZERO,
                 new CNumber(5.2, 0.924), new CNumber(0.15, .135), new CNumber(25591, 13.5),
                 new CNumber(1.15, 4.55), new CNumber(91)
         };

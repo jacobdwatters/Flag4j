@@ -80,7 +80,7 @@ class VectorStackJoinTests {
         indices = new int[]{0, 3};
         b = new CooCVector(sparseSize, bEntries, indices);
         expEntries = new CNumber[]{new CNumber(1.5), new CNumber(6.2546), new CNumber(-0.24),
-                new CNumber(1.56, -99345.2), new CNumber(), new CNumber(), new CNumber("i"), new CNumber()};
+                new CNumber(1.56, -99345.2), CNumber.ZERO, CNumber.ZERO, new CNumber("i"), CNumber.ZERO};
         exp = new CVector(expEntries);
 
         assertEquals(exp, a.join(b));
@@ -286,7 +286,7 @@ class VectorStackJoinTests {
         indices = new int[]{2};
         b = new CooCVector(sparseSize, bEntries, indices);
         expEntries = new CNumber[][]{{new CNumber(1.5), new CNumber(6.2546), new CNumber(-0.24)},
-                {new CNumber(), new CNumber(), new CNumber(-0.234242, 8.1)}};
+                {CNumber.ZERO, CNumber.ZERO, new CNumber(-0.234242, 8.1)}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, a.stack(b));
@@ -306,7 +306,7 @@ class VectorStackJoinTests {
         indices = new int[]{2};
         b = new CooCVector(sparseSize, bEntries, indices);
         expEntries = new CNumber[][]{{new CNumber(1.5), new CNumber(6.2546), new CNumber(-0.24)},
-                {new CNumber(), new CNumber(), new CNumber(-0.234242, 8.1)}};
+                {CNumber.ZERO, CNumber.ZERO, new CNumber(-0.234242, 8.1)}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, a.stack(b, 0));
@@ -325,8 +325,8 @@ class VectorStackJoinTests {
         sparseSize = 3;
         indices = new int[]{2};
         b = new CooCVector(sparseSize, bEntries, indices);
-        expEntries = new CNumber[][]{{new CNumber(1.5), new CNumber()},
-                {new CNumber(6.2546), new CNumber()},
+        expEntries = new CNumber[][]{{new CNumber(1.5), CNumber.ZERO},
+                {new CNumber(6.2546), CNumber.ZERO},
                 {new CNumber(-0.24), new CNumber(-0.234242, 8.1)}};
         exp = new CMatrix(expEntries);
 

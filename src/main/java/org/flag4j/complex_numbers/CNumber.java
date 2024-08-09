@@ -30,93 +30,85 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * A complex number stored in rectangular form. The real and imaginary components of the complex number are stored as
- * 64 bit doubles.
+ * <p>A complex number stored in rectangular form with both the real and imaginary components stored as a 64-bit floats.</p>
+ *
+ * <p>A {@link CNumber} is immutable.</p>
  */
 public class CNumber extends Number {
     // Several constants are provided for convenience.
     /**
      * The complex number with zero imaginary and real parts.
      */
-    private static final CNumber ZERO = new CNumber();
+    public static final CNumber ZERO = new CNumber(0);
     /**
      * The complex number with zero imaginary part and one real part.
      */
-    private static final CNumber ONE = new CNumber(1);
+    public static final CNumber ONE = new CNumber(1);
     /**
      * The complex number with zero imaginary part and two real part.
      */
-    private static final CNumber TWO = new CNumber(2);
+    public static final CNumber TWO = new CNumber(2);
     /**
      * The complex number with zero imaginary part and negative one real part.
      */
-    private static final CNumber NEGATIVE_ONE = new CNumber(1);
+    public static final CNumber NEGATIVE_ONE = new CNumber(1);
     /**
      * The real double value closer to pi than any other.
      */
-    private static final CNumber PI = new CNumber(Math.PI);
+    public static final CNumber PI = new CNumber(Math.PI);
     /**
      * The real double value closer to the mathematical constant e than any other.
      */
-    private static final CNumber E = new CNumber(Math.E);
+    public static final CNumber E = new CNumber(Math.E);
     /**
      * The double value closer than any other to the square root of 2
      */
-    private static final CNumber ROOT_TWO = new CNumber(Math.sqrt(2));
+    public static final CNumber ROOT_TWO = new CNumber(Math.sqrt(2));
     /**
      * The double value closer than any other to the square root of 3
      */
-    private static final CNumber ROOT_THREE = new CNumber(Math.sqrt(3));
+    public static final CNumber ROOT_THREE = new CNumber(Math.sqrt(3));
     /**
      * The imaginary unit i.
      */
-    private static final CNumber IMAGINARY_UNIT = new CNumber(0, 1);
+    public static final CNumber IMAGINARY_UNIT = new CNumber(0, 1);
     /**
      * The additive inverse of the imaginary unit, -i.
      */
-    private static final CNumber INV_IMAGINARY_UNIT = new CNumber(0, -1);
+    public static final CNumber INV_IMAGINARY_UNIT = new CNumber(0, -1);
     /**
      * The maximum real double value 1.7976931348623157E308.
      */
-    private static final CNumber MAX_REAL = new CNumber(Double.MAX_VALUE);
+    public static final CNumber MAX_REAL = new CNumber(Double.MAX_VALUE);
     /**
      * The minimum real double value 4.9E-324
      */
-    private static final CNumber MIN_REAL = new CNumber(Double.MIN_VALUE);
+    public static final CNumber MIN_REAL = new CNumber(Double.MIN_VALUE);
     /**
      * The smallest possible real normal double 2.2250738585072014E-308.
      */
-    private static final CNumber MIN_REAL_NORMAL = new CNumber(Double.MIN_NORMAL);
+    public static final CNumber MIN_REAL_NORMAL = new CNumber(Double.MIN_NORMAL);
     /**
      * Complex number with real part equal to {@link Double#POSITIVE_INFINITY}.
      */
-    private static final CNumber POSITIVE_INFINITY = new CNumber(Double.POSITIVE_INFINITY);
+    public static final CNumber POSITIVE_INFINITY = new CNumber(Double.POSITIVE_INFINITY);
     /**
      * Complex number with real part equal to {@link Double#NEGATIVE_INFINITY}.
      */
-    private static final CNumber NEGATIVE_INFINITY = new CNumber(Double.NEGATIVE_INFINITY);
+    public static final CNumber NEGATIVE_INFINITY = new CNumber(Double.NEGATIVE_INFINITY);
     /**
      * Complex number with real and imaginary parts equal to {@link Double#NaN}.
      */
-    private static final CNumber NaN = new CNumber(Double.NaN, Double.NaN);
+    public static final CNumber NaN = new CNumber(Double.NaN, Double.NaN);
 
     /**
      * Real component of the complex number.
      */
-    public double re;
+    public final double re;
     /**
      * Imaginary component of the complex number.
      */
-    public double im;
-
-
-    /**
-     * Constructs a complex number with value and magnitude 0.
-     */
-    public CNumber() {
-        re = 0;
-        im = 0;
-    }
+    public final double im;
 
 
     /**
@@ -141,16 +133,6 @@ public class CNumber extends Number {
 
 
     /**
-     * Creates a new complex number which is the copy of the specified complex number.
-     * @param num The complex number to copy.
-     */
-    public CNumber(CNumber num) {
-        this.re = num.re;
-        this.im = num.im;
-    }
-
-
-    /**
      * Constructs a complex number from a string of the form {@code "a +/- bi"} where {@code a} and {b} are real values and either may be
      * omitted. i.e. {@code "a", "bi", "a +/- i"}, and {@code "i"} are all also valid.
      * @param num The string representation of a complex number.
@@ -159,16 +141,6 @@ public class CNumber extends Number {
         CNumber complexNum = CNumberParser.parseNumber(num);
         this.re = complexNum.re;
         this.im = complexNum.im;
-    }
-    
-
-
-    /**
-     * Creates a copy of this complex number. Same as {@link #CNumber(CNumber)}.
-     * @return A complex number with real and complex components equivalent to this complex number.
-     */
-    public CNumber copy() {
-        return new CNumber(this);
     }
 
 
@@ -203,14 +175,14 @@ public class CNumber extends Number {
 
 
     /**
-     * Checks if a complex number is equal to some double value. That is, if the real component of this complex number
+     * Checks if a complex number is numerically equal to some double value. That is, if the real component of this complex number
      * is zero and the real component is equivalent to the double parameter.
      * @param b The double to compare.
      * @return True if b is a complex number and is equivalent to this complex number in both the real and
      * imaginary components. False, otherwise.
      */
     public boolean equals(double b) {
-        return this.im==0 && this.re==b;
+        return im==0 && re==b;
     }
 
 
@@ -223,8 +195,8 @@ public class CNumber extends Number {
         final int hashPrime1 = 7;
         final int hashPrime2 = 31;
 
-        int hash = hashPrime2*hashPrime1 + Double.hashCode(this.re);
-        hash = hashPrime2*hash + Double.hashCode(this.im);
+        int hash = hashPrime2*hashPrime1 + Double.hashCode(re);
+        hash = hashPrime2*hash + Double.hashCode(im);
         return hash;
     }
 
@@ -325,7 +297,7 @@ public class CNumber extends Number {
      * @return The result of adding this complex number with b.
      */
     public CNumber add(CNumber b) {
-        return new CNumber(this.re + b.re, this.im + b.im);
+        return new CNumber(re + b.re, im + b.im);
     }
 
 
@@ -335,48 +307,7 @@ public class CNumber extends Number {
      * @return The result of adding b to this complex number.
      */
     public CNumber add(double b) {
-        return new CNumber(this.re + b, this.im);
-    }
-
-
-    /**
-     * Adds a specified number to this complex number and stores the result in this complex number.
-     * @param b The value to add to this complex number.
-     * @return A reference to this complex number.
-     */
-    public CNumber addEq(CNumber b) {
-        this.re += b.re;
-        this.im += b.im;
-
-        return this;
-    }
-
-
-    /**
-     * Adds a specified number to this complex number and stores the result in this complex number.
-     * @param b The value to add to this complex number.
-     */
-    public void addEq(double b) {
-        re += b;
-    }
-
-
-    /**
-     * Subtracts a specified number from this complex number and stores the result in this complex number.
-     * @param b The value to add to this complex number.
-     */
-    public void subEq(CNumber b) {
-        re -= b.re;
-        im -= b.im;
-    }
-
-
-    /**
-     * Subtracts a specified number to this complex number and stores the result in this complex number.
-     * @param b The value to add to this complex number.
-     */
-    public void subEq(double b) {
-        re -= b;
+        return new CNumber(re + b, im);
     }
 
 
@@ -386,7 +317,7 @@ public class CNumber extends Number {
      * @return The result of subtracting b from this complex number.
      */
     public CNumber sub(CNumber b) {
-        return new CNumber(this.re - b.re, this.im - b.im);
+        return new CNumber(re - b.re, im - b.im);
     }
 
 
@@ -396,7 +327,7 @@ public class CNumber extends Number {
      * @return The result of subtracting b from this complex number.
      */
     public CNumber sub(double b) {
-        return new CNumber(this.re - b, this.im);
+        return new CNumber(re - b, im);
     }
 
 
@@ -439,32 +370,7 @@ public class CNumber extends Number {
      * @return Product of this complex number with b.
      */
     public CNumber mult(double b) {
-        return new CNumber(this.re*b, this.im*b);
-    }
-
-
-    /**
-     * Multiplies this complex number with another complex number and stores the result in this {@link CNumber}.
-     *
-     * @param b Second complex number in the product.
-     */
-    public void multEq(CNumber b) {
-        double tempRe = re*b.re - im*b.im;
-        double tempIm = re*b.im + im*b.re;
-
-        re = tempRe;
-        im = tempIm;
-    }
-
-
-    /**
-     * Multiplies this complex number with another complex number and stores the result in this {@link CNumber}.
-     *
-     * @param b Second complex number in the product.
-     */
-    public void multEq(double b) {
-        re *= b;
-        im *= b;
+        return new CNumber(re*b, im*b);
     }
 
 
@@ -478,17 +384,17 @@ public class CNumber extends Number {
         CNumber quotient;
 
         if (this.equals(ZERO) && !b.equals(ZERO)) {
-            quotient = new CNumber();
+            quotient = ZERO;
 
         } else if(b.isReal() && !b.equals(ZERO)) {
-            quotient = new CNumber(this.re/b.re, this.im/b.re);
+            quotient = new CNumber(re/b.re, im/b.re);
 
         } else {
             double divisor = b.re*b.re + b.im*b.im;
 
             quotient = new CNumber(
-                    (this.re*b.re + this.im*b.im) / divisor,
-                    (this.im*b.re - this.re*b.im) / divisor);
+                    (re*b.re + im*b.im) / divisor,
+                    (im*b.re - re*b.im) / divisor);
         }
 
         return quotient;
@@ -502,52 +408,8 @@ public class CNumber extends Number {
      *  {@link CNumber#NaN} is returned.
      */
     public CNumber div(double b) {
-        CNumber quotient;
-
-        if (this.equals(ZERO) && b != 0) {
-            quotient = new CNumber();
-        }
-        else {
-            quotient = new CNumber(this.re/b, this.im/b);
-        }
-
-        return quotient;
-    }
-
-
-    /**
-     * Computes the division of a complex numbers with a double value and stores in this complex number.
-     * @param b The divisor for the complex division.
-     */
-    public void divEq(double b) {
-        this.re/=b;
-        this.im/=b;
-    }
-
-
-    /**
-     * Computes the division of a complex numbers with a double value and stores in this complex number.
-     * @param b The divisor for the complex division.
-     */
-    public void divEq(CNumber b) {
-        boolean bIsNotZero = !b.equals(ZERO);
-
-        if(re==0 && im==0 && bIsNotZero) {
-            re = im = 0;
-
-        } else if(im == 0 && bIsNotZero) {
-            re/=b.re;
-            im/=b.re;
-
-        } else {
-            double divisor = b.re*b.re + b.im*b.im;
-
-            double newRe = (re*b.re + im*b.im) / divisor;
-            double newIm = (im*b.re - re*b.im) / divisor;
-
-            re = newRe;
-            im = newIm;
-        }
+        if(this.equals(ZERO) && b != 0) return ZERO;
+        else return new CNumber(re/b, im/b);
     }
 
 
@@ -593,7 +455,7 @@ public class CNumber extends Number {
      * @return The additive inverse of this complex number.
      */
     public CNumber addInv() {
-        return new CNumber(-this.re, -this.im);
+        return new CNumber(-re, -im);
     }
 
 
@@ -611,7 +473,7 @@ public class CNumber extends Number {
      * @return The complex conjugate of this complex number.
      */
     public CNumber conj() {
-        return new CNumber(this.re, -this.im);
+        return new CNumber(re, -im);
     }
 
 
@@ -905,17 +767,13 @@ public class CNumber extends Number {
      * @return If the number is zero then this function returns zero. Otherwise, returns the number divided by its magnitude.
      */
     public static CNumber sgn(CNumber value) {
-        CNumber result;
 
-        if(value.equals(CNumber.ZERO)) {
-            result = new CNumber();
-
+        if(value.equals(ZERO)) {
+            return value;
         } else {
             double magnitude = value.mag();
             return new CNumber(value.re / magnitude, value.im / magnitude);
         }
-
-        return result;
     }
 
 
@@ -1312,9 +1170,9 @@ public class CNumber extends Number {
      */
     public static CNumber roundToZero(CNumber n, double tol) {
         if(nearZero(n, tol)) {
-            return new CNumber();
+            return ZERO;
         } else {
-            return n.copy();
+            return n;
         }
     }
 
@@ -1628,7 +1486,6 @@ public class CNumber extends Number {
     }
 
 
-
     /**
      * Gets the real component of this complex number.
      * @return The real component of this complex number.
@@ -1658,150 +1515,6 @@ public class CNumber extends Number {
 
 
     /**
-     * Gets the complex number equivalent to zero.
-     * @return The complex number which is equivalent to zero.
-     */
-    public static CNumber zero() {
-        return ZERO.copy();
-    }
-
-
-    /**
-     * Gets the complex number equivalent to one.
-     * @return The complex number equivalent to one.
-     */
-    public static CNumber one() {
-        return ONE.copy();
-    }
-
-
-    /**
-     * Gets the complex number equivalent to two.
-     * @return The complex number equivalent to two.
-     */
-    public static CNumber two() {
-        return TWO.copy();
-    }
-
-
-    /**
-     * Gets the complex number equivalent to negative one.
-     * @return The complex number equivalent to negative one.
-     */
-    public static CNumber negOne() {
-        return NEGATIVE_ONE.copy();
-    }
-
-
-    /**
-     * Gets the complex number equivalent to the square root of two.
-     * @return The complex number equivalent to the square root of two.
-     */
-    public static CNumber rootTwo() {
-        return ROOT_TWO.copy();
-    }
-
-
-    /**
-     * Gets the complex number equivalent to the square root of three.
-     * @return The complex number equivalent to the square root of three.
-     */
-    public static CNumber rootThree() {
-        return ROOT_THREE.copy();
-    }
-
-
-    /**
-     * Gets the complex number equivalent to {@link Double#POSITIVE_INFINITY}.
-     * @return The complex number equivalent to {@link Double#POSITIVE_INFINITY}.
-     */
-    public static CNumber posInfinity() {
-        return POSITIVE_INFINITY.copy();
-    }
-
-
-    /**
-     * Gets the complex number equivalent to {@link Double#NEGATIVE_INFINITY}.
-     * @return The complex number equivalent to {@link Double#NEGATIVE_INFINITY}.
-     */
-    public static CNumber negInfinity() {
-        return NEGATIVE_INFINITY.copy();
-    }
-
-
-    /**
-     * Gets the complex number equivalent to {@link Math#PI}.
-     * @return The complex number equivalent to {@link Math#PI}.
-     */
-    public static CNumber pi() {
-        return PI.copy();
-    }
-
-
-    /**
-     * Gets the complex number equivalent to {@link Math#E}.
-     * @return The complex number equivalent to {@link Math#E}.
-     */
-    public static CNumber eulers() {
-        return E.copy();
-    }
-
-
-    /**
-     * Gets the complex number equivalent to {@link Double#NaN}.
-     * @return The complex number equivalent to {@link Double#NaN}.
-     */
-    public static CNumber nan() {
-        return NaN.copy();
-    }
-
-
-    /**
-     * Gets the complex number equivalent to {@code i}.
-     * @return The complex number equivalent to {@code i}.
-     */
-    public static CNumber imagUnit() {
-        return IMAGINARY_UNIT.copy();
-    }
-
-
-    /**
-     * Gets the complex number equivalent to {@code -i}.
-     * @return The complex number equivalent to {@code -i}.
-     */
-    public static CNumber negImagUnit() {
-        return INV_IMAGINARY_UNIT.copy();
-    }
-
-
-    /**
-     * Gets the complex number equivalent to {@link Double#MIN_VALUE}.
-     * @return The complex number equivalent to {@link Double#MIN_VALUE}.
-     */
-    public static CNumber minReal() {
-        return MIN_REAL.copy();
-    }
-
-
-    /**
-     * Gets the complex number equivalent to {@link Double#MIN_NORMAL}.
-     * @return The complex number equivalent to {@link Double#MIN_NORMAL}.
-     */
-    public static CNumber minRealNormal() {
-        return MIN_REAL_NORMAL.copy();
-    }
-
-
-    /**
-     * Gets the complex number equivalent to {@link Double#MAX_VALUE}.
-     * @return The complex number equivalent to {@link Double#MAX_VALUE}.
-     */
-    public static CNumber maxReal() {
-        return MAX_REAL.copy();
-    }
-
-
-    /**
      * Converts the complex number to a string representation.
      * @return A string representation of the complex number.
      */
@@ -1811,7 +1524,7 @@ public class CNumber extends Number {
         double real = re;
         double imaginary = im;
 
-        if (real != 0) {
+        if(real != 0) {
             if (real % 1 == 0) {
                 result += (int) real;
             } else {

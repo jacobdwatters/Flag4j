@@ -100,7 +100,7 @@ class GivensTests {
         // ------------------- Sub-case 1 -------------------
         i = 1;
         vEntriesComplex = new CNumber[]{new CNumber(1.456), new CNumber(-2, 15.6),
-                new CNumber(2.6, -0.2), new CNumber()};
+                new CNumber(2.6, -0.2), CNumber.ZERO};
         vComplex = new CVector(vEntriesComplex);
 
         expEntriesComplex = new CNumber[][]{

@@ -97,12 +97,14 @@ public final class RealDenseVectorOperations {
     public static double[] outerProductConcurrent(double[] src1, double[] src2) {
         double[] dest = new double[src1.length*src2.length];
 
-        ThreadManager.concurrentLoop(0, src1.length, (int i)->{
-            int destIndex = i*src2.length;
-            double v1 = src1[i];
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int destIndex = i*src2.length;
+                double v1 = src1[i];
 
-            for(double v2 : src2) {
-                dest[destIndex++] = v1*v2;
+                for(double v2 : src2) {
+                    dest[destIndex++] = v1*v2;
+                }
             }
         });
 

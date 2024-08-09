@@ -41,7 +41,7 @@ import org.flag4j.util.ParameterChecks;
  */
 public abstract class ExactTensorSolver<
         T extends TensorBase<T, ?, ?, ?, ?, ?, ?>,
-        U extends MatrixMixin<U, ?, ?, ?, ?, V, ?>,
+        U extends MatrixMixin<U, ?, ?, ?, ?, ?, V, ?>,
         V extends VectorMixin<V, ?, ?, ?, ?, U, ?, ?>>
         implements LinearTensorSolver<T> {
 
@@ -77,7 +77,8 @@ public abstract class ExactTensorSolver<
         Shape outputShape = getOutputShape(A, B, rank); // Compute output shape.
 
         int prod = 1;
-        for(int k : outputShape.dims) {
+        int[] dims = outputShape.getDims();
+        for(int k : dims) {
             prod *= k;
         }
 
@@ -102,10 +103,10 @@ public abstract class ExactTensorSolver<
      */
     protected Shape getOutputShape(T A, T B, int aRankOriginal) {
         int start = -(aRankOriginal - B.getRank());
-        int stop = A.shape.dims.length;
+        int stop = A.shape.getRank();
         int[] dims = new int[stop-start];
 
-        System.arraycopy(A.shape.dims, start, dims, 0, dims.length);
+        System.arraycopy(A.shape.getDims(), start, dims, 0, dims.length);
 
         return new Shape(true, dims);
     }

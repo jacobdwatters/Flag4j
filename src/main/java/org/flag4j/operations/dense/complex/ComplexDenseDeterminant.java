@@ -36,7 +36,7 @@ import org.flag4j.util.ParameterChecks;
 /**
  * This class contains methods for computing the determinant of a complex dense matrix.
  */
-public class ComplexDenseDeterminant {
+public final class ComplexDenseDeterminant {
 
     private ComplexDenseDeterminant() {
         // Hide default constructor in utility class.
@@ -99,7 +99,7 @@ public class ComplexDenseDeterminant {
 
         // Compute the determinant of T
         for(int i=0; i<T.numRows; i++) {
-            detU.multEq(T.entries[i*T.numCols + i]);
+            detU = detU.mult(T.entries[i*T.numCols + i]);
         }
 
         return detU;
@@ -114,8 +114,8 @@ public class ComplexDenseDeterminant {
     public static CNumber det3(CMatrix A) {
         ParameterChecks.assertEqualShape(A.shape, new Shape(3, 3));
         CNumber det = A.entries[0].mult(A.entries[4].mult(A.entries[8]).sub(A.entries[5].mult(A.entries[7])));
-        det.subEq(A.entries[1].mult(A.entries[3].mult(A.entries[8]).sub(A.entries[5].mult(A.entries[6]))));
-        det.addEq(A.entries[2].mult(A.entries[3].mult(A.entries[7]).sub(A.entries[4].mult(A.entries[6]))));
+        det = det.sub(A.entries[1].mult(A.entries[3].mult(A.entries[8]).sub(A.entries[5].mult(A.entries[6]))));
+        det = det.add(A.entries[2].mult(A.entries[3].mult(A.entries[7]).sub(A.entries[4].mult(A.entries[6]))));
         return det;
     }
 
@@ -138,6 +138,6 @@ public class ComplexDenseDeterminant {
      */
     public static CNumber det1(CMatrix A) {
         ParameterChecks.assertEqualShape(A.shape, new Shape(1, 1));
-        return A.entries[0].copy();
+        return A.entries[0];
     }
 }

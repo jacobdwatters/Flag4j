@@ -3,9 +3,10 @@ package org.flag4j.complex_tensor;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
-import org.flag4j.util.ArrayUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -33,27 +34,27 @@ class CTensorReshapeTests {
     void reshapeTestCase() {
         // -------------------------- Sub-case 1 --------------------------
         expShape = new Shape(1, 1, 12, 1);
-        exp = new CTensor(expShape, ArrayUtils.copyOf(aEntries));
+        exp = new CTensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
 
-        assertEquals(exp, A.reshape(expShape.copy()));
+        assertEquals(exp, A.reshape(expShape));
 
         // -------------------------- Sub-case 2 --------------------------
         expShape = new Shape(4, 3);
-        exp = new CTensor(expShape, ArrayUtils.copyOf(aEntries));
+        exp = new CTensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
 
-        assertEquals(exp, A.reshape(expShape.copy()));
+        assertEquals(exp, A.reshape(expShape));
 
         // -------------------------- Sub-case 3 --------------------------
         expShape = new Shape(2, 3, 2);
-        exp = new CTensor(expShape, ArrayUtils.copyOf(aEntries));
+        exp = new CTensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
 
-        assertEquals(exp, A.reshape(expShape.copy()));
+        assertEquals(exp, A.reshape(expShape));
 
         // -------------------------- Sub-case 4 --------------------------
         expShape = new Shape(2, 2, 3, 1);
-        exp = new CTensor(expShape, ArrayUtils.copyOf(aEntries));
+        exp = new CTensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
 
-        assertEquals(exp, A.reshape(expShape.copy()));
+        assertEquals(exp, A.reshape(expShape));
     }
 
 
@@ -61,25 +62,25 @@ class CTensorReshapeTests {
     void flattenTestCase() {
         // -------------------------- Sub-case 1 --------------------------
         expShape = new Shape(12);
-        exp = new CTensor(expShape, ArrayUtils.copyOf(aEntries));
+        exp = new CTensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
 
         assertEquals(exp, A.flatten());
 
         // -------------------------- Sub-case 2 --------------------------
         expShape = new Shape(1, 1, 12);
-        exp = new CTensor(expShape, ArrayUtils.copyOf(aEntries));
+        exp = new CTensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
 
         assertEquals(exp, A.flatten(2));
 
         // -------------------------- Sub-case 3 --------------------------
         expShape = new Shape(1, 12, 1);
-        exp = new CTensor(expShape, ArrayUtils.copyOf(aEntries));
+        exp = new CTensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
 
         assertEquals(exp, A.flatten(1));
 
         // -------------------------- Sub-case 4 --------------------------
         expShape = new Shape(12, 1, 1);
-        exp = new CTensor(expShape, ArrayUtils.copyOf(aEntries));
+        exp = new CTensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
 
         assertEquals(exp, A.flatten(0));
 

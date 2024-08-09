@@ -26,7 +26,6 @@ package org.flag4j.operations.dense.complex;
 
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
-import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -106,11 +105,10 @@ public final class ComplexDenseOperations {
      */
     public static CNumber[] sub(double[] src1, CNumber a) {
         CNumber[] sum = new CNumber[src1.length];
-        ArrayUtils.fillZeros(sum);
+        CNumber aNeg = a.addInv();
 
         for(int i=0; i<sum.length; i++) {
-            sum[i].re = src1[i]-a.re;
-            sum[i].im = -a.im;
+            sum[i] = aNeg.add(src1[i]);
         }
 
         return sum;
@@ -167,7 +165,7 @@ public final class ComplexDenseOperations {
         ParameterChecks.assertEqualShape(shape1, shape2);
 
         for(int i=0; i<src1.length; i++) {
-            src1[i].subEq(src2[i]);
+            src1[i] = src1[i].sub(src2[i]);
         }
     }
 
@@ -178,8 +176,8 @@ public final class ComplexDenseOperations {
      * @param b Scalar to subtract.
      */
     public static void subEq(CNumber[] src, CNumber b) {
-        for(CNumber cNumber : src) {
-            cNumber.subEq(b);
+        for(int i=0; i<src.length; i++) {
+            src[i] = src[i].sub(b);
         }
     }
 
@@ -195,7 +193,7 @@ public final class ComplexDenseOperations {
         ParameterChecks.assertEqualShape(shape1, shape2);
 
         for(int i=0; i<src1.length; i++) {
-            src1[i].addEq(src2[i]);
+            src1[i] = src1[i].add(src2[i]);
         }
     }
 
@@ -206,8 +204,8 @@ public final class ComplexDenseOperations {
      * @param b Scalar to add.
      */
     public static void addEq(CNumber[] src, CNumber b) {
-        for (CNumber cNumber : src) {
-            cNumber.addEq(b);
+        for(int i=0; i<src.length; i++) {
+            src[i] = src[i].add(b);
         }
     }
 
@@ -226,7 +224,7 @@ public final class ComplexDenseOperations {
                product = product.mult(value);
             }
         } else {
-            product = new CNumber();
+            product = CNumber.ZERO;
         }
 
         return product;
@@ -274,6 +272,23 @@ public final class ComplexDenseOperations {
      * @return The scalar division of the tensor.
      */
     public static CNumber[] scalDiv(CNumber[] entries, CNumber divisor) {
+        CNumber[] quotient = new CNumber[entries.length];
+
+        for(int i=0; i<quotient.length; i++) {
+            quotient[i] = entries[i].div(divisor);
+        }
+
+        return quotient;
+    }
+
+
+    /**
+     * Computes the scalar division of a tensor.
+     * @param entries Entries of the tensor.
+     * @param divisor Scalar value to divide by.
+     * @return The scalar division of the tensor.
+     */
+    public static CNumber[] scalDiv(CNumber[] entries, double divisor) {
         CNumber[] quotient = new CNumber[entries.length];
 
         for(int i=0; i<quotient.length; i++) {

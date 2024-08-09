@@ -82,10 +82,7 @@ public class RandomCNumber extends Random {
         double theta = 2*Math.PI*nextDouble();
 
         // Convert to rectangular coordinates.
-        double real = mag*Math.cos(theta);
-        double imaginary = mag*Math.sin(theta);
-
-        return new CNumber(real, imaginary);
+        return CNumber.fromPolar(mag, theta);
     }
 
 

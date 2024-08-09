@@ -46,7 +46,7 @@ class ComplexDenseDetTests {
         assertEquals(exp, act);
 
         // -------------- Sub-case 5 --------------
-        entries = new CNumber[][]{{new CNumber(), new CNumber()}, {new CNumber(), new CNumber()}};
+        entries = new CNumber[][]{{CNumber.ZERO, CNumber.ZERO}, {CNumber.ZERO, CNumber.ZERO}};
         A = new CMatrix(entries);
         assertThrows(LinearAlgebraException.class, ()->ComplexDenseDeterminant.det1(A));
     }
@@ -91,15 +91,15 @@ class ComplexDenseDetTests {
         assertEquals(exp, act);
 
         // -------------- Sub-case 5 --------------
-        entries = new CNumber[][]{{new CNumber()}};
+        entries = new CNumber[][]{{CNumber.ZERO}};
         A = new CMatrix(entries);
         assertThrows(LinearAlgebraException.class, ()->ComplexDenseDeterminant.det2(A));
 
         // -------------- Sub-case 6 --------------
         entries = new CNumber[][]{
-                {new CNumber(), new CNumber(), new CNumber()},
-                {new CNumber(), new CNumber(), new CNumber()},
-                {new CNumber(), new CNumber(), new CNumber()}};
+                {CNumber.ZERO, CNumber.ZERO, CNumber.ZERO},
+                {CNumber.ZERO, CNumber.ZERO, CNumber.ZERO},
+                {CNumber.ZERO, CNumber.ZERO, CNumber.ZERO}};
         A = new CMatrix(entries);
         assertThrows(LinearAlgebraException.class, ()->ComplexDenseDeterminant.det2(A));
     }
@@ -113,7 +113,7 @@ class ComplexDenseDetTests {
                 {new CNumber("4"), new CNumber("5"), new CNumber("6")},
                 {new CNumber("7"), new CNumber("8"), new CNumber("9")}};
         A = new CMatrix(entries);
-        exp = new CNumber();
+        exp = CNumber.ZERO;
         act = ComplexDenseDeterminant.det(A);
         assertEquals(exp, act);
 
@@ -138,16 +138,16 @@ class ComplexDenseDetTests {
         assertEquals(exp, act);
 
         // -------------- Sub-case 4 --------------
-        entries = new CNumber[][]{{new CNumber(), new CNumber()}, {new CNumber(), new CNumber()}};
+        entries = new CNumber[][]{{CNumber.ZERO, CNumber.ZERO}, {CNumber.ZERO, CNumber.ZERO}};
         A = new CMatrix(entries);
         assertThrows(LinearAlgebraException.class, ()->ComplexDenseDeterminant.det3(A));
 
         // -------------- Sub-case 5 --------------
         entries = new CNumber[][]{
-                {new CNumber(), new CNumber(), new CNumber(), new CNumber()},
-                {new CNumber(), new CNumber(), new CNumber(), new CNumber()},
-                {new CNumber(), new CNumber(), new CNumber(), new CNumber()},
-                {new CNumber(), new CNumber(), new CNumber(), new CNumber()}};
+                {CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO},
+                {CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO},
+                {CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO},
+                {CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO}};
         A = new CMatrix(entries);
         assertThrows(LinearAlgebraException.class, ()->ComplexDenseDeterminant.det3(A));
     }

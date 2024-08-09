@@ -47,7 +47,7 @@ import java.util.function.UnaryOperator;
 /**
  * This class contains low-level implementations for element-wise operations on complex CSR matrices.
  */
-public class ComplexCsrOperations {
+public final class ComplexCsrOperations {
 
     private ComplexCsrOperations() {
         // Hide default constructor for utility class.
@@ -119,7 +119,7 @@ public class ComplexCsrOperations {
 
                 // Add value if it is within the slice.
                 if(col >= colStart && col < colEnd) {
-                    slice.add(src.entries[j].copy());
+                    slice.add(src.entries[j]);
                     sliceRowIndices.add(i);
                     sliceColIndices.add(col);
                 }
@@ -157,7 +157,7 @@ public class ComplexCsrOperations {
             for (int i = src.rowPointers[row]; i < src.rowPointers[row + 1]; i++) {
                 int col = src.colIndices[i];
                 int pos = tempPos[col];
-                dest[pos] = src.entries[i].copy();
+                dest[pos] = src.entries[i];
                 colIndices[pos] = row;
                 tempPos[col]++;
             }
@@ -208,12 +208,12 @@ public class ComplexCsrOperations {
                     rowPtr1++;
                     rowPtr2++;
                 } else if(col1 < col2) {
-                    dest.add(src1.entries[rowPtr1].copy());
+                    dest.add(src1.entries[rowPtr1]);
                     colIndices.add(col1);
                     rowPtr1++;
                 } else {
                     if(uOpp!=null) dest.add(uOpp.apply(src2.entries[rowPtr2]));
-                    else dest.add(src2.entries[rowPtr2].copy());
+                    else dest.add(src2.entries[rowPtr2]);
                     colIndices.add(col2);
                     rowPtr2++;
                 }
@@ -222,7 +222,7 @@ public class ComplexCsrOperations {
             }
 
             while(rowPtr1 < src1.rowPointers[i+1]) {
-                dest.add(src1.entries[rowPtr1].copy());
+                dest.add(src1.entries[rowPtr1]);
                 colIndices.add(src1.colIndices[rowPtr1]);
                 rowPtr1++;
                 rowPointers[i+1]++;
@@ -230,7 +230,7 @@ public class ComplexCsrOperations {
 
             while(rowPtr2 < src2.rowPointers[i+1]) {
                 if(uOpp!=null) dest.add(uOpp.apply(src2.entries[rowPtr2]));
-                else dest.add(src2.entries[rowPtr2].copy());
+                else dest.add(src2.entries[rowPtr2]);
                 colIndices.add(src2.colIndices[rowPtr2]);
                 rowPtr2++;
                 rowPointers[i+1]++;
@@ -242,7 +242,7 @@ public class ComplexCsrOperations {
             rowPointers[i] += rowPointers[i-1];
         }
 
-        return new CsrCMatrix(src1.shape.copy(),
+        return new CsrCMatrix(src1.shape,
                 ArrayUtils.fromList(dest, new CNumber[dest.size()]),
                 rowPointers,
                 ArrayUtils.fromIntegerList(colIndices)
@@ -268,7 +268,8 @@ public class ComplexCsrOperations {
             int rowOffset = i*sum.numCols;
 
             for(int j=rowStart; j<rowEnd; j++) {
-                sum.entries[rowOffset + src1.colIndices[j]].addEq(src1.entries[j]);
+                int idx = rowOffset + src1.colIndices[j];
+                sum.entries[idx] = sum.entries[idx].add(src1.entries[j]);
             }
         }
 
@@ -294,7 +295,8 @@ public class ComplexCsrOperations {
             int rowOffset = i*sum.numCols;
 
             for(int j=rowStart; j<rowEnd; j++) {
-                sum.entries[rowOffset + src1.colIndices[j]].addEq(src1.entries[j]);
+                int idx = rowOffset + src1.colIndices[j];
+                sum.entries[idx] = sum.entries[idx].add(src1.entries[j]);
             }
         }
 
@@ -320,7 +322,8 @@ public class ComplexCsrOperations {
             int rowOffset = i*sum.numCols;
 
             for(int j=rowStart; j<rowEnd; j++) {
-                sum.entries[rowOffset + src1.colIndices[j]].addEq(src1.entries[j]);
+                int idx = rowOffset + src1.colIndices[j];
+                sum.entries[idx] = sum.entries[idx].add(src1.entries[j]);
             }
         }
 
@@ -346,7 +349,8 @@ public class ComplexCsrOperations {
             int rowOffset = i*sum.numCols;
 
             for(int j=rowStart; j<rowEnd; j++) {
-                sum.entries[rowOffset + src1.colIndices[j]].addEq(src1.entries[j]);
+                int idx = rowOffset + src1.colIndices[j];
+                sum.entries[idx] = sum.entries[idx].add(src1.entries[j]);
             }
         }
 
@@ -371,7 +375,8 @@ public class ComplexCsrOperations {
             int rowEnd = src1.rowPointers[i+1];
 
             for(int j=rowStart; j<rowEnd; j++) {
-                sum.entries[i*sum.numCols + src1.colIndices[j]].addEq(src1.entries[j]);
+                int idx = i*sum.numCols + src1.colIndices[j];
+                sum.entries[idx] = sum.entries[idx].add(src1.entries[j]);
             }
         }
 
@@ -396,7 +401,8 @@ public class ComplexCsrOperations {
             int rowEnd = src1.rowPointers[i+1];
 
             for(int j=rowStart; j<rowEnd; j++) {
-                sum.entries[i*sum.numCols + src1.colIndices[j]].addEq(src1.entries[j]);
+                int idx = i*sum.numCols + src1.colIndices[j];
+                sum.entries[idx] = sum.entries[idx].add(src1.entries[j]);
             }
         }
 
@@ -421,7 +427,8 @@ public class ComplexCsrOperations {
             int rowEnd = src1.rowPointers[i+1];
 
             for(int j=rowStart; j<rowEnd; j++) {
-                sum.entries[i*sum.numCols + src1.colIndices[j]].addEq(src1.entries[j]);
+                int idx = i*sum.numCols + src1.colIndices[j];
+                sum.entries[idx] = sum.entries[idx].add(src1.entries[j]);
             }
         }
 
@@ -446,7 +453,8 @@ public class ComplexCsrOperations {
             int rowEnd = src1.rowPointers[i+1];
 
             for(int j=rowStart; j<rowEnd; j++) {
-                sum.entries[i*sum.numCols + src1.colIndices[j]].addEq(src1.entries[j]);
+                int idx = i*sum.numCols + src1.colIndices[j];
+                sum.entries[idx] = sum.entries[idx].add(src1.entries[j]);
             }
         }
 
