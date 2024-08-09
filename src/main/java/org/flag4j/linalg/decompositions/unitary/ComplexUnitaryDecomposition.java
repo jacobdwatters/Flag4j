@@ -47,7 +47,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
     /**
      * Scalar factor of the currently computed Householder reflector.
      */
-    private CNumber currentFactor;
+    protected CNumber currentFactor;
     /**
      * Stores the shifted value of the first entry in a Householder vector.
      */
