@@ -24,11 +24,9 @@
 
 package org.flag4j.operations.dense.real;
 
-import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.core.Shape;
-import org.flag4j.rng.RandomTensor;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -571,24 +569,5 @@ public class RealDenseMatrixMultiplication {
         });
 
         return dest;
-    }
-
-
-    public static void main(String[] args) {
-        RandomTensor rtg = new RandomTensor();
-        Shape shape = new Shape(8192, 8192);
-        Matrix A = rtg.randomMatrix(shape, -100, 100);
-        Matrix B = rtg.randomMatrix(shape, -100, 100);
-
-        int warmup = 1;
-        for(int i=0; i<warmup; i++) {
-            A.mult(B);
-        }
-
-        long s = System.nanoTime();
-        A.mult(B);
-        double t = (System.nanoTime() - s)*1.0e-6;
-
-        System.out.printf("Time: %.5f ms\n", t);
     }
 }

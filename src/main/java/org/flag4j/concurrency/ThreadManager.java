@@ -154,44 +154,4 @@ public final class ThreadManager {
             }
         }
     }
-
-    // TODO: TEMP FOR TESTING.
-    /**
-     * Executes a concurrent operation on a given range of indices.
-     * The operation is split across multiple threads, each handling a subset of the range.
-     *
-     * @param totalTasks The total number of tasks (e.g., rows in a matrix) to be processed.
-     * @param task A lambda expression or function that takes three arguments: start index, end index, and thread ID.
-     *             This function represents the work to be done by each thread for its assigned range.
-     */
-    public static void concurrentOperation(int totalTasks, TriConsumer<Integer, Integer, Integer> task) {
-        int numThreads = Runtime.getRuntime().availableProcessors();
-        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
-
-        int tasksPerThread = (totalTasks + numThreads - 1) / numThreads;  // Ceiling division
-
-        for (int threadId = 0; threadId < numThreads; threadId++) {
-            int startIdx = threadId * tasksPerThread;
-            int endIdx = Math.min(startIdx + tasksPerThread, totalTasks);
-
-            if (startIdx < endIdx) {
-                final int finalThreadId = threadId;
-                executor.submit(() -> task.accept(startIdx, endIdx, finalThreadId));
-            }
-        }
-
-        executor.shutdown();
-
-        try {
-            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException("Thread execution interrupted", e);
-        }
-    }
-
-    @FunctionalInterface
-    public interface TriConsumer<T, U, V> {
-        void accept(T t, U u, V v);
-    }
 }
