@@ -81,9 +81,11 @@ public class RealComplexDenseElemDiv {
         ParameterChecks.assertEqualShape(shape1, shape2);
         CNumber[] product = new CNumber[src1.length];
 
-        ThreadManager.concurrentLoop(0, product.length,
-                (i)->product[i] = src1[i].div(src2[i])
-        );
+        ThreadManager.concurrentOperation(product.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                product[i] = src1[i].div(src2[i]);
+            }
+        });
 
         return product;
     }
@@ -125,9 +127,11 @@ public class RealComplexDenseElemDiv {
         ParameterChecks.assertEqualShape(shape1, shape2);
         CNumber[] quotient = new CNumber[src1.length];
 
-        ThreadManager.concurrentLoop(0, quotient.length, (i)-> {
-            double divisor = src2[i].re*src2[i].re + src2[i].im*src2[i].im;
-            quotient[i] = new CNumber(src1[i]*src2[i].re / divisor, -src1[i]*src2[i].im / divisor);
+        ThreadManager.concurrentOperation(quotient.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                double divisor = src2[i].re*src2[i].re + src2[i].im*src2[i].im;
+                quotient[i] = new CNumber(src1[i]*src2[i].re / divisor, -src1[i]*src2[i].im / divisor);
+            }
         });
 
         return quotient;

@@ -38,7 +38,7 @@ public class ComplexDenseElemMult {
     /**
      * Minimum number of entries in each tensor to apply concurrent algorithm.
      */
-    private static final int CONCURRENT_THRESHOLD = 50625;
+    private static final int CONCURRENT_THRESHOLD = 50_000;
 
 
     private ComplexDenseElemMult() {
@@ -81,9 +81,11 @@ public class ComplexDenseElemMult {
         ParameterChecks.assertEqualShape(shape1, shape2);
         CNumber[] product = new CNumber[src1.length];
 
-        ThreadManager.concurrentLoop(0, product.length,
-                (i)->product[i] = src1[i].mult(src2[i])
-        );
+        ThreadManager.concurrentOperation(product.length, ((startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                product[i] = src1[i].mult(src2[i]);
+            }
+        }));
 
         return product;
     }

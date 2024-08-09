@@ -120,17 +120,19 @@ public final class ComplexSparseMatrixMultiplication {
         // and value is a list of indices in src2 where this row appears.
         Map<Integer, List<Integer>> map = SparseUtils.createMap(src2.length, rowIndices2);
 
-        ThreadManager.concurrentLoop(0, src1.length, (i)->{
-            int c1 = colIndices1[i]; // = k
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int c1 = colIndices1[i]; // = k
 
-            // Check if any values in src2 have the same row index as the column index of the value in src1.
-            if(map.containsKey(c1)) {
-                int r1 = rowIndices1[i]; // = i
-                int rowIdx = r1*cols2;
+                // Check if any values in src2 have the same row index as the column index of the value in src1.
+                if(map.containsKey(c1)) {
+                    int r1 = rowIndices1[i]; // = i
+                    int rowIdx = r1*cols2;
 
-                for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
-                    int idx = rowIdx + colIndices2[j];
-                    destMap.put(idx, destMap.getOrDefault(idx, CNumber.ZERO).add(src1[i].mult(src2[j])));
+                    for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
+                        int idx = rowIdx + colIndices2[j];
+                        destMap.put(idx, destMap.getOrDefault(idx, CNumber.ZERO).add(src1[i].mult(src2[j])));
+                    }
                 }
             }
         });
@@ -200,18 +202,20 @@ public final class ComplexSparseMatrixMultiplication {
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
 
-        ThreadManager.concurrentLoop(0, src1.length, (i) -> {
-            int r1 = rowIndices1[i]; // = i
-            int c1 = colIndices1[i]; // = k
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int r1 = rowIndices1[i]; // = i
+                int c1 = colIndices1[i]; // = k
 
-            for(int j=0; j<src2.length; j++) {
-                int r2 = indices[j]; // = k
+                for(int j=0; j<src2.length; j++) {
+                    int r2 = indices[j]; // = k
 
-                if(c1==r2) { // Then we multiply and add to sum.
-                    CNumber product = src1[i].mult(src2[j]);
+                    if(c1==r2) { // Then we multiply and add to sum.
+                        CNumber product = src1[i].mult(src2[j]);
 
-                    synchronized (dest) {
-                        dest[r1] = dest[r1].add(product);
+                        synchronized (dest) {
+                            dest[r1] = dest[r1].add(product);
+                        }
                     }
                 }
             }

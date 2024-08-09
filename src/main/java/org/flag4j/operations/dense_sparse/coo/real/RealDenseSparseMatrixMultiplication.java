@@ -29,8 +29,6 @@ import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ErrorMessages;
 
-import java.util.concurrent.atomic.AtomicReferenceArray;
-
 /**
  * This class contains low level methods for computing the matrix multiplication (and matrix vector multiplication) between
  * a real dense/sparse matrix and a real sparse/dense matrix or vector.
@@ -41,7 +39,6 @@ public class RealDenseSparseMatrixMultiplication {
         // Hide default constructor.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
-
 
     // TODO: Investigate if blocked algorithms provide any speedup for multiplying a sparse/dense matrix to a dense/sparse matrix.
 
@@ -136,23 +133,25 @@ public class RealDenseSparseMatrixMultiplication {
 
         double[] dest = new double[rows1*cols2];
 
-        ThreadManager.concurrentLoop(0, rows1, (i) -> {
-            double[] localResult = new double[cols2]; // Store the result for the local thread.
-            int destRow = i*cols2;
-            int src1Row = i*cols1;
+        ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                double[] localResult = new double[cols2]; // Store the result for the local thread.
+                int destRow = i*cols2;
+                int src1Row = i*cols1;
 
-            // Loop over non-zero entries of sparse matrix.
-            for(int j=0; j<src2.length; j++) {
-                int row = rowIndices[j];
-                int col = colIndices[j];
+                // Loop over non-zero entries of sparse matrix.
+                for(int j=0; j<src2.length; j++) {
+                    int row = rowIndices[j];
+                    int col = colIndices[j];
 
-                localResult[col] += src1[src1Row + row]*src2[j];
-            }
+                    localResult[col] += src1[src1Row + row]*src2[j];
+                }
 
-            // Update the shared destination array by accumulating the local result.
-            synchronized(dest) {
-                for (int j=0; j<cols2; j++) {
-                    dest[destRow + j] += localResult[j];
+                // Update the shared destination array by accumulating the local result.
+                synchronized(dest) {
+                    for (int j=0; j<cols2; j++) {
+                        dest[destRow + j] += localResult[j];
+                    }
                 }
             }
         });
@@ -180,58 +179,27 @@ public class RealDenseSparseMatrixMultiplication {
 
         double[] dest = new double[rows1*cols2];
 
-        ThreadManager.concurrentLoop(0, src1.length, (i) -> {
-            int r1 = rowIndices[i];
-            int c1 = colIndices[i];
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int r1 = rowIndices[i];
+                int c1 = colIndices[i];
 
-            int destRowStart = r1 * cols2;
-            int src2RowStart = c1 * cols2;
+                int destRowStart = r1 * cols2;
+                int src2RowStart = c1 * cols2;
 
-            double[] localResult = new double[cols2];
-            for (int j = 0; j < cols2; j++) {
-                localResult[j] = src1[i]*src2[src2RowStart + j];
-            }
-
-            synchronized (dest) {
+                double[] localResult = new double[cols2];
                 for (int j = 0; j < cols2; j++) {
-                    dest[destRowStart + j] += localResult[j];
+                    localResult[j] = src1[i]*src2[src2RowStart + j];
+                }
+
+                synchronized (dest) {
+                    for (int j = 0; j < cols2; j++) {
+                        dest[destRowStart + j] += localResult[j];
+                    }
                 }
             }
         });
 
-
-        return dest;
-    }
-
-
-    public static double[] concurrentAtomicArray(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
-                                                 double[] src2, Shape shape2) {
-        int rows1 = shape1.get(0);
-        int cols2 = shape2.get(1);
-
-        double[] dest = new double[rows1 * cols2];
-        AtomicReferenceArray<Double> destAtomic = new AtomicReferenceArray<>(rows1 * cols2);
-        for(int i=0; i<destAtomic.length(); i++) {
-            destAtomic.set(i, 0d);
-        }
-
-        ThreadManager.concurrentLoop(0, src1.length, (i) -> {
-            int row = rowIndices1[i];
-            int col = colIndices1[i];
-            int destRow = row*cols2;
-            int src2Row = col*cols2;
-
-            for(int j=0; j<cols2; j++) {
-                double prev = destAtomic.get(destRow + j);
-                double update = prev += src1[i]*src2[src2Row + j];
-                destAtomic.compareAndSet(i, prev, update);
-            }
-        });
-
-        // Convert AtomicDoubleArray back to a normal double array for the result.
-        for (int i = 0; i < dest.length; i++) {
-            dest[i] = destAtomic.get(i);
-        }
 
         return dest;
     }
@@ -256,10 +224,14 @@ public class RealDenseSparseMatrixMultiplication {
         int k;
 
         for(int i=0; i<denseRows; i++) {
+            double sum = dest[i];
+
             for(int j=0; j<nonZeros; j++) {
                 k = indices[j];
-                dest[i] += src1[i*denseCols + k]*src2[j];
+                sum += src1[i*denseCols + k]*src2[j];
             }
+
+            dest[i] = sum;
         }
 
         return dest;
@@ -316,10 +288,14 @@ public class RealDenseSparseMatrixMultiplication {
             for(int jj=0; jj<rows2; jj += bsize) {
                 // Multiply the current blocks
                 for(int i=ii; i<ii+bsize && i<rows1; i++) {
+                    double sum = dest[i];
+
                     for(int j=jj; j<jj+bsize && j<rows2; j++) {
                         k = indices[j];
-                        dest[i] += src1[i*cols1 + k]*src2[j];
+                        sum += src1[i*cols1 + k]*src2[j];
                     }
+
+                    dest[i] = sum;
                 }
             }
         }
@@ -343,10 +319,17 @@ public class RealDenseSparseMatrixMultiplication {
 
         double[] dest = new double[rows1];
 
-        ThreadManager.concurrentLoop(0, rows1, (i) -> {
-            for(int j=0; j<rows2; j++) {
-                int k = indices[j];
-                dest[i] += src1[i*cols1 + k]*src2[j];
+        ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int rowOffset = i*cols1;
+                double sum = dest[i];
+
+                for(int j=0; j<rows2; j++) {
+                    int k = indices[j];
+                    sum += src1[rowOffset + k]*src2[j];
+                }
+
+                dest[i] = sum;
             }
         });
 
@@ -369,14 +352,16 @@ public class RealDenseSparseMatrixMultiplication {
         int rows1 = shape1.get(0);
         double[] dest = new double[rows1];
 
-        ThreadManager.concurrentLoop(0, src1.length, (i) -> {
-            int row = rowIndices[i];
-            int col = colIndices[i];
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int row = rowIndices[i];
+                int col = colIndices[i];
 
-            double product = src1[i]*src2[col];
+                double product = src1[i]*src2[col];
 
-            synchronized (dest) {
-                dest[row] += product;
+                synchronized (dest) {
+                    dest[row] += product;
+                }
             }
         });
 
@@ -398,17 +383,22 @@ public class RealDenseSparseMatrixMultiplication {
         int rows2 = src2.length;
 
         final int bsize = Configurations.getBlockSize(); // Get the block size to use.
-
         double[] dest = new double[rows1];
 
-        // Blocked matrix-vector multiply
-        ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -> {
-            for(int jj=0; jj<rows2; jj += bsize) {
-                // Multiply the current blocks
-                for(int i=ii; i<ii+bsize && i<rows1; i++) {
-                    for(int j=jj; j<jj+bsize && j<rows2; j++) {
-                        int k = indices[j];
-                        dest[i] += src1[i*cols1 + k]*src2[j];
+        // Blocked matrix-vector multiply.
+        ThreadManager.concurrentBlockedOperation(rows1, bsize, (startIdx, endIdx) -> {
+            for(int ii=startIdx; ii<endIdx; ii+=bsize) {
+                for(int jj=0; jj<rows2; jj += bsize) {
+                    // Multiply the current blocks
+                    for(int i=ii; i<ii+bsize && i<rows1; i++) {
+                        double sum = dest[i];
+
+                        for(int j=jj; j<jj+bsize && j<rows2; j++) {
+                            int k = indices[j];
+                            sum += src1[i*cols1 + k]*src2[j];
+                        }
+
+                        dest[i] = sum;
                     }
                 }
             }

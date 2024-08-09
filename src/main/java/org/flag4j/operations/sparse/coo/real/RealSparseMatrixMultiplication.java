@@ -72,6 +72,7 @@ public class RealSparseMatrixMultiplication {
 
         for(int i=0; i<src1.length; i++) {
             int c1 = colIndices1[i]; // = k
+            double src1Val = src1[i];
 
             // Check if any values in src2 have the same row index as the column index of the value in src1.
             if(map.containsKey(c1)) {
@@ -80,7 +81,7 @@ public class RealSparseMatrixMultiplication {
 
                 for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
                     int c2 = colIndices2[j]; // = j
-                    dest[rowIdx + c2] += src1[i]*src2[j];
+                    dest[rowIdx + c2] += src1Val*src2[j];
                 }
             }
         }
@@ -117,17 +118,20 @@ public class RealSparseMatrixMultiplication {
         // and value is a list of indices in src2 where this row appears.
         Map<Integer, List<Integer>> map = SparseUtils.createMap(src2.length, rowIndices2);
 
-        ThreadManager.concurrentLoop(0, src1.length, (i)->{
-            int c1 = colIndices1[i]; // = k
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int c1 = colIndices1[i]; // = k
+                double src1Val = src1[i];
 
-            // Check if any values in src2 have the same row index as the column index of the value in src1.
-            if(map.containsKey(c1)) {
-                int r1 = rowIndices1[i]; // = i
-                int rowIdx = r1*cols2;
+                // Check if any values in src2 have the same row index as the column index of the value in src1.
+                if(map.containsKey(c1)) {
+                    int r1 = rowIndices1[i]; // = i
+                    int rowIdx = r1*cols2;
 
-                for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
-                    int idx = rowIdx + colIndices2[j];
-                    destMap.put(idx, destMap.getOrDefault(idx, 0d) + src1[i]*src2[j]);
+                    for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
+                        int idx = rowIdx + colIndices2[j];
+                        destMap.put(idx, destMap.getOrDefault(idx, 0d) + src1Val*src2[j]);
+                    }
                 }
             }
         });
@@ -195,20 +199,23 @@ public class RealSparseMatrixMultiplication {
         int rows1 = shape1.get(0);
         double[] dest = new double[rows1];
 
-        ThreadManager.concurrentLoop(0, src1.length, (i) -> {
-            int r1 = rowIndices1[i]; // = i
-            int c1 = colIndices1[i]; // = k
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int r1 = rowIndices1[i]; // = i
+                int c1 = colIndices1[i]; // = k
+                double src1Val = src1[i];
+                double sum = dest[r1];
 
-            for(int j=0; j<src2.length; j++) {
-                int r2 = indices[j]; // = k
+                for(int j=0; j<src2.length; j++) {
+                    int r2 = indices[j]; // = k
 
-                if(c1==r2) { // Then we multiply and add to sum.
-                    double product = src1[i]*src2[j];
-
-                    synchronized (dest) {
-                        dest[r1] += product;
+                    if(c1==r2) { // Then we multiply and add to sum.
+                        double product = src1Val*src2[j];
+                        sum += product;
                     }
                 }
+
+                dest[r1] = sum;
             }
         });
 

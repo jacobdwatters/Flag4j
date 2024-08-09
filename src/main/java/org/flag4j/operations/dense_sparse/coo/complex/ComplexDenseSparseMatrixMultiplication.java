@@ -135,15 +135,19 @@ public final class ComplexDenseSparseMatrixMultiplication {
         CNumber[] dest = new CNumber[rows1*cols2];
         Arrays.fill(dest, CNumber.ZERO); // Initialize to zeros
 
-        ThreadManager.concurrentLoop(0, rows1, (i) -> {
-            // Loop over non-zero entries of sparse matrix.
-            for(int j=0; j<src2.length; j++) {
-                int row = rowIndices[j];
-                int col = colIndices[j];
-                CNumber product = src1[i*cols1 + row].mult(src2[j]);
+        ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int rowOffset = i*cols2;
 
-                synchronized (dest) {
-                    dest[i*cols2 + col] = dest[i*cols2 + col].add(product);
+                // Loop over non-zero entries of sparse matrix.
+                for(int j=0; j<src2.length; j++) {
+                    int row = rowIndices[j];
+                    int col = colIndices[j];
+                    CNumber product = src1[i*cols1 + row].mult(src2[j]);
+
+                    synchronized (dest) {
+                        dest[rowOffset + col] = dest[rowOffset + col].add(product);
+                    }
                 }
             }
         });
@@ -172,15 +176,18 @@ public final class ComplexDenseSparseMatrixMultiplication {
         CNumber[] dest = new CNumber[rows1*cols2];
         Arrays.fill(dest, CNumber.ZERO); // Initialize to zeros
 
-        ThreadManager.concurrentLoop(0, src1.length, (i) -> {
-            int row = rowIndices[i];
-            int col = colIndices[i];
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int row = rowIndices[i];
+                int col = colIndices[i];
+                int rowOffset = row*cols2;
 
-            for(int j=0; j<cols2; j++) {
-                CNumber product = src1[i].mult(src2[col*cols2 + j]);
+                for(int j=0; j<cols2; j++) {
+                    CNumber product = src1[i].mult(src2[col*cols2 + j]);
 
-                synchronized (dest) {
-                    dest[row*cols2 + j] = dest[row*cols2 + j].add(product);
+                    synchronized (dest) {
+                        dest[rowOffset + j] = dest[rowOffset + j].add(product);
+                    }
                 }
             }
         });
@@ -306,15 +313,17 @@ public final class ComplexDenseSparseMatrixMultiplication {
         CNumber[] dest = new CNumber[rows1];
         Arrays.fill(dest, CNumber.ZERO); // Initialize to zeros
 
-        ThreadManager.concurrentLoop(0, rows1, (i) -> {
-            CNumber val = dest[i];
+        ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                CNumber sum = dest[i];
 
-            for(int j=0; j<rows2; j++) {
-                int k = indices[j];
-                val = val.add(src1[i*cols1 + k].mult(src2[j]));
+                for(int j=0; j<rows2; j++) {
+                    int k = indices[j];
+                    sum = sum.add(src1[i*cols1 + k].mult(src2[j]));
+                }
+
+                dest[i] = sum; // Update destination entry.
             }
-
-            dest[i] = val; // Update destination entry.
         });
 
         return dest;
@@ -337,14 +346,16 @@ public final class ComplexDenseSparseMatrixMultiplication {
         CNumber[] dest = new CNumber[rows1];
         Arrays.fill(dest, CNumber.ZERO); // Initialize to zeros
 
-        ThreadManager.concurrentLoop(0, src1.length, (i) -> {
-            int row = rowIndices[i];
-            int col = colIndices[i];
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int row = rowIndices[i];
+                int col = colIndices[i];
 
-            CNumber product = src1[i].mult(src2[col]);
+                CNumber product = src1[i].mult(src2[col]);
 
-            synchronized (dest) {
-                dest[row] = dest[row].add(product);
+                synchronized (dest) {
+                    dest[row] = dest[row].add(product);
+                }
             }
         });
 
@@ -368,22 +379,24 @@ public final class ComplexDenseSparseMatrixMultiplication {
         final int bsize = Configurations.getBlockSize(); // Get the block size to use.
 
         CNumber[] dest = new CNumber[rows1];
-        Arrays.fill(dest, CNumber.ZERO); // Initialize to zeros
+        Arrays.fill(dest, CNumber.ZERO); // Initialize to zeros.
 
-        // Blocked matrix-vector multiply
-        ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -> {
-            for(int jj=0; jj<rows2; jj += bsize) {
-                // Multiply the current blocks
-                for(int i=ii; i<ii+bsize && i<rows1; i++) {
-                    CNumber val = dest[i];
-                    int src1RowOffset = i*cols1;
+        // Blocked matrix-vector multiply.
+        ThreadManager.concurrentBlockedOperation(rows1, bsize, (startIdx, endIdx) -> {
+            for(int ii=startIdx; ii<endIdx; ii += bsize) {
+                for(int jj=0; jj<rows2; jj += bsize) {
+                    // Multiply the current blocks
+                    for(int i=ii; i<ii+bsize && i<rows1; i++) {
+                        CNumber val = dest[i];
+                        int src1RowOffset = i*cols1;
 
-                    for(int j=jj; j<jj+bsize && j<rows2; j++) {
-                        int k = indices[j];
-                        val = val.add(src1[src1RowOffset + k].mult(src2[j]));
+                        for(int j=jj; j<jj+bsize && j<rows2; j++) {
+                            int k = indices[j];
+                            val = val.add(src1[src1RowOffset + k].mult(src2[j]));
+                        }
+
+                        dest[i] = val; // Update desitination entry.
                     }
-
-                    dest[i] = val; // Update desitination entry.
                 }
             }
         });

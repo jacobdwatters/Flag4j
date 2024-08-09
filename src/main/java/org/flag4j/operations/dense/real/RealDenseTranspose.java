@@ -27,7 +27,6 @@ package org.flag4j.operations.dense.real;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.core.Shape;
-import org.flag4j.rng.RandomArray;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -128,10 +127,12 @@ public final class RealDenseTranspose {
         double[] dest = new double[shape.totalEntries().intValue()];
         Shape destShape = shape.swapAxes(axes);
 
-        ThreadManager.concurrentLoop(0, src.length, (i) -> {
-            int[] destIndices = shape.getIndices(i);
-            ArrayUtils.swap(destIndices, axes); // Compute destination indices.
-            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
+        ThreadManager.concurrentOperation(src.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int[] destIndices = shape.getIndices(i);
+                ArrayUtils.swapUnsafe(destIndices, axes); // Compute destination indices.
+                dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
+            }
         });
 
         return dest;
@@ -157,10 +158,12 @@ public final class RealDenseTranspose {
         Shape destShape = shape.swapAxes(axis1, axis2);
 
         // Compute transpose concurrently
-        ThreadManager.concurrentLoop(0, src.length, (i) -> {
-            int[] destIndices = shape.getIndices(i);
-            ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
-            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
+        ThreadManager.concurrentOperation(src.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int[] destIndices = shape.getIndices(i);
+                ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
+                dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
+            }
         });
 
         return dest;
@@ -248,14 +251,16 @@ public final class RealDenseTranspose {
         double[] dest = new double[src.length];
 
         // Compute transpose concurrently.
-        ThreadManager.concurrentLoop(0, numCols, (i) -> {
-            int srcIndex = i;
-            int destIndex = i*numRows;
-            int end = destIndex + numRows;
+        ThreadManager.concurrentOperation(numCols, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int srcIndex = i;
+                int destIndex = i*numRows;
+                int end = destIndex + numRows;
 
-            while (destIndex < end) {
-                dest[destIndex++] = src[srcIndex];
-                srcIndex += numCols;
+                while (destIndex < end) {
+                    dest[destIndex++] = src[srcIndex];
+                    srcIndex += numCols;
+                }
             }
         });
 
@@ -275,26 +280,28 @@ public final class RealDenseTranspose {
         final int blockSize = Configurations.getBlockSize();
 
         // Compute transpose concurrently.
-        ThreadManager.concurrentLoop(0, numRows, blockSize, (ii)->{
-            int blockHeight = Math.min(ii+blockSize, numRows) - ii;
-            int srcIndexStart = ii*numCols;
-            int destIndexStart = ii;
+        ThreadManager.concurrentBlockedOperation(numRows, blockSize, (startIdx, endIdx) -> {
+            for(int ii=startIdx; ii<endIdx; ii+=blockSize) {
+                int blockHeight = Math.min(ii+blockSize, numRows) - ii;
+                int srcIndexStart = ii*numCols;
+                int destIndexStart = ii;
 
-            for(int jj=0; jj<numCols; jj+=blockSize) {
-                int srcIndexEnd = srcIndexStart + Math.min(numCols-jj, blockSize);
+                for(int jj=0; jj<numCols; jj+=blockSize) {
+                    int srcIndexEnd = srcIndexStart + Math.min(numCols-jj, blockSize);
 
-                while(srcIndexStart<srcIndexEnd) {
-                    int srcIndex = srcIndexStart;
-                    int destIndex = destIndexStart;
-                    int destIndexEnd = destIndex + blockHeight;
+                    while(srcIndexStart<srcIndexEnd) {
+                        int srcIndex = srcIndexStart;
+                        int destIndex = destIndexStart;
+                        int destIndexEnd = destIndex + blockHeight;
 
-                    while(destIndex<destIndexEnd) {
-                        dest[destIndex++] = src[srcIndex];
-                        srcIndex+=numCols;
+                        while(destIndex<destIndexEnd) {
+                            dest[destIndex++] = src[srcIndex];
+                            srcIndex+=numCols;
+                        }
+
+                        destIndexStart += numRows;
+                        srcIndexStart++;
                     }
-
-                    destIndexStart += numRows;
-                    srcIndexStart++;
                 }
             }
         });
@@ -310,7 +317,6 @@ public final class RealDenseTranspose {
      * @return The transpose of the matrix.
      */
     public static int[][] standardIntMatrix(final int[][] src) {
-
         int rows = src.length;
         int cols = src[0].length;
         int[][] dest = new int[cols][rows];
@@ -352,45 +358,5 @@ public final class RealDenseTranspose {
         }
 
         return dest;
-    }
-
-
-    public static void main(String[] args) {
-        RandomArray rag = new RandomArray();
-
-        int warmupRuns = 5;
-        int numRuns = 10;
-
-        int rows = 500;
-        int cols = 500;
-
-        int[][] arr = new int[rows][cols];
-
-        double bTime = 0;
-        double sTime = 0;
-
-        for(int i=0; i<numRuns+warmupRuns; i++) {
-            // Generate random array to transpose.
-            for(int k=0; k<rows; k++) {
-                arr[k] = rag.genUniformRealIntArray(cols, -100, 100);
-            }
-
-            long sStart = System.nanoTime();
-            standardIntMatrix(arr);
-            long sEnd = System.nanoTime();
-
-            long bStart = System.nanoTime();
-            blockedIntMatrix(arr);
-            long bEnd = System.nanoTime();
-
-            if(i >= warmupRuns) {
-                bTime += (bEnd-bStart)*10e-6;
-                sTime += (sEnd-sStart)*10e-6;
-            }
-        }
-
-        System.out.printf("Shape: (%d, %d)\n\n", rows, cols);
-        System.out.printf("Standard Time: %.5f ms\n", sTime/numRuns);
-        System.out.printf("Blocked Time: %.5f ms\n", bTime/numRuns);
     }
 }

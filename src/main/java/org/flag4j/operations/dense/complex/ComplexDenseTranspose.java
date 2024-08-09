@@ -83,18 +83,20 @@ public final class ComplexDenseTranspose {
      */
     public static CNumber[] standardConcurrent(final CNumber[] src, final Shape shape, final int axis1, final int axis2) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
-                    " tensor.");
+            throw new IllegalArgumentException("Tensor transpose not defined for rank "
+                    + shape.getRank() + " tensor.");
         }
 
         CNumber[] dest = new CNumber[shape.totalEntries().intValue()];
         Shape destShape = shape.swapAxes(axis1, axis2);
 
         // Compute transpose concurrently
-        ThreadManager.concurrentLoop(0, src.length, (i) -> {
-            int[] destIndices = shape.getIndices(i);
-            ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
-            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
+        ThreadManager.concurrentOperation(src.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int[] destIndices = shape.getIndices(i);
+                ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
+                dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
+            }
         });
 
         return dest;
@@ -124,7 +126,7 @@ public final class ComplexDenseTranspose {
 
         for(int i=0; i<src.length; i++) {
             destIndices = shape.getIndices(i);
-            ArrayUtils.swap(destIndices, axes); // Compute destination indices.
+            ArrayUtils.swapUnsafe(destIndices, axes); // Compute destination indices.
             dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
         }
 
@@ -152,10 +154,13 @@ public final class ComplexDenseTranspose {
         CNumber[] dest = new CNumber[shape.totalEntries().intValue()];
         Shape destShape = shape.swapAxes(axes);
 
-        ThreadManager.concurrentLoop(0, src.length, (i) -> {
-            int[] destIndices = shape.getIndices(i);
-            ArrayUtils.swap(destIndices, axes); // Compute destination indices.
-            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
+        // Compute transpose concurrently.
+        ThreadManager.concurrentOperation(src.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int[] destIndices = shape.getIndices(i);
+                ArrayUtils.swapUnsafe(destIndices, axes); // Compute destination indices.
+                dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
+            }
         });
 
         return dest;
@@ -239,14 +244,16 @@ public final class ComplexDenseTranspose {
         CNumber[] dest = new CNumber[src.length];
 
         // Compute transpose concurrently.
-        ThreadManager.concurrentLoop(0, numCols, (i) -> {
-            int srcIndex = i;
-            int destIndex = i*numRows;
-            int end = destIndex + numRows;
+        ThreadManager.concurrentOperation(numCols, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int srcIndex = i;
+                int destIndex = i*numRows;
+                int end = destIndex + numRows;
 
-            while (destIndex < end) {
-                dest[destIndex++] = src[srcIndex];
-                srcIndex += numCols;
+                while(destIndex < end) {
+                    dest[destIndex++] = src[srcIndex];
+                    srcIndex += numCols;
+                }
             }
         });
 
@@ -266,20 +273,22 @@ public final class ComplexDenseTranspose {
         final int blockSize = Configurations.getBlockSize();
 
         // Compute transpose concurrently.
-        ThreadManager.concurrentLoop(0, numCols, blockSize, (i) -> {
-            for(int j=0; j<numRows; j+=blockSize) {
-                int blockRowEnd = Math.min(j+blockSize, numRows);
-                int blockColEnd = Math.min(i+blockSize, numCols);
+        ThreadManager.concurrentBlockedOperation(numCols, blockSize, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                for(int j=0; j<numRows; j+=blockSize) {
+                    int blockRowEnd = Math.min(j+blockSize, numRows);
+                    int blockColEnd = Math.min(i+blockSize, numCols);
 
-                // Transpose the block beginning at (i, j)
-                for(int blockI=i; blockI<blockColEnd; blockI++) {
-                    int srcIndex = blockI;
-                    int destIndex = blockI*numRows;
-                    int end = destIndex + blockRowEnd;
+                    // Transpose the block beginning at (i, j)
+                    for(int blockI=i; blockI<blockColEnd; blockI++) {
+                        int srcIndex = blockI;
+                        int destIndex = blockI*numRows;
+                        int end = destIndex + blockRowEnd;
 
-                    while (destIndex < end) {
-                        dest[destIndex++] = src[srcIndex];
-                        srcIndex += numCols;
+                        while(destIndex < end) {
+                            dest[destIndex++] = src[srcIndex];
+                            srcIndex += numCols;
+                        }
                     }
                 }
             }
@@ -338,10 +347,12 @@ public final class ComplexDenseTranspose {
         Shape destShape = shape.swapAxes(axis1, axis2);
 
         // Compute transpose concurrently
-        ThreadManager.concurrentLoop(0, src.length, (i) -> {
-            int[] destIndices = shape.getIndices(i);
-            ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
-            dest[destShape.entriesIndex(destIndices)] = src[i].conj(); // Apply transpose for the element
+        ThreadManager.concurrentOperation(src.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int[] destIndices = shape.getIndices(i);
+                ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
+                dest[destShape.entriesIndex(destIndices)] = src[i].conj(); // Apply transpose for the element
+            }
         });
 
         return dest;
@@ -368,10 +379,12 @@ public final class ComplexDenseTranspose {
         CNumber[] dest = new CNumber[shape.totalEntries().intValue()];
         Shape destShape = shape.swapAxes(axes);
 
-        ThreadManager.concurrentLoop(0, src.length, (i) -> {
-            int[] destIndices = shape.getIndices(i);
-            ArrayUtils.swap(destIndices, axes); // Compute destination indices.
-            dest[destShape.entriesIndex(destIndices)] = src[i].conj(); // Apply conjugate transpose for the element
+        ThreadManager.concurrentOperation(src.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int[] destIndices = shape.getIndices(i);
+                ArrayUtils.swapUnsafe(destIndices, axes); // Compute destination indices.
+                dest[destShape.entriesIndex(destIndices)] = src[i].conj(); // Apply conjugate transpose for the element
+            }
         });
 
         return dest;
@@ -396,7 +409,7 @@ public final class ComplexDenseTranspose {
             destIndex = i*numRows;
             end = destIndex + numRows;
 
-            while (destIndex < end) {
+            while(destIndex < end) {
                 dest[destIndex++] = src[srcIndex].conj();
                 srcIndex += numCols;
             }
@@ -455,14 +468,16 @@ public final class ComplexDenseTranspose {
         CNumber[] dest = new CNumber[src.length];
 
         // Compute transpose concurrently.
-        ThreadManager.concurrentLoop(0, numCols, (i) -> {
-            int srcIndex = i;
-            int destIndex = i*numRows;
-            int end = destIndex + numRows;
+        ThreadManager.concurrentOperation(numCols, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int srcIndex = i;
+                int destIndex = i*numRows;
+                int end = destIndex + numRows;
 
-            while (destIndex < end) {
-                dest[destIndex++] = src[srcIndex].conj();
-                srcIndex += numCols;
+                while (destIndex < end) {
+                    dest[destIndex++] = src[srcIndex].conj();
+                    srcIndex += numCols;
+                }
             }
         });
 
@@ -482,20 +497,22 @@ public final class ComplexDenseTranspose {
         final int blockSize = Configurations.getBlockSize();
 
         // Compute transpose concurrently.
-        ThreadManager.concurrentLoop(0, numCols, blockSize, (i) -> {
-            for(int j=0; j<numRows; j+=blockSize) {
-                int blockRowEnd = Math.min(j+blockSize, numRows);
-                int blockColEnd = Math.min(i+blockSize, numCols);
+        ThreadManager.concurrentBlockedOperation(numCols, blockSize, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                for(int j=0; j<numRows; j+=blockSize) {
+                    int blockRowEnd = Math.min(j+blockSize, numRows);
+                    int blockColEnd = Math.min(i+blockSize, numCols);
 
-                // Transpose the block beginning at (i, j)
-                for(int blockI=i; blockI<blockColEnd; blockI++) {
-                    int srcIndex = blockI;
-                    int destIndex = blockI*numRows;
-                    int end = destIndex + blockRowEnd;
+                    // Transpose the block beginning at (i, j)
+                    for(int blockI=i; blockI<blockColEnd; blockI++) {
+                        int srcIndex = blockI;
+                        int destIndex = blockI*numRows;
+                        int end = destIndex + blockRowEnd;
 
-                    while (destIndex < end) {
-                        dest[destIndex++] = src[srcIndex].conj();
-                        srcIndex += numCols;
+                        while (destIndex < end) {
+                            dest[destIndex++] = src[srcIndex].conj();
+                            srcIndex += numCols;
+                        }
                     }
                 }
             }

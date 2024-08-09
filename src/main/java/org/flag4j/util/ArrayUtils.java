@@ -337,9 +337,8 @@ public final class ArrayUtils {
      */
     public static void fill(final CNumber[] dest, final double fillValue, final int from, final int to) {
         ParameterChecks.assertLessEq(to, from + 1);
-
-        for (int i = from; i < to; i++)
-            dest[i] = new CNumber(fillValue);
+        CNumber complexFillValue = new CNumber(fillValue);
+        Arrays.fill(dest, from, to, complexFillValue);
     }
 
 
@@ -355,8 +354,7 @@ public final class ArrayUtils {
      * @throws ArrayIndexOutOfBoundsException If {@code start} or {@code end} is not within the destination array.
      */
     public static void fill(final CNumber[] dest, final int start, final int end, final CNumber fillValue) {
-        for (int i = start; i < end; i++)
-            dest[i] = fillValue;
+        Arrays.fill(dest, start, end, fillValue);
     }
 
 
@@ -525,6 +523,25 @@ public final class ArrayUtils {
     public static void swap(final int[] src, final int[] indices) {
         ParameterChecks.assertPermutation(indices);
 
+        int[] swapped = new int[src.length];
+        int i = 0;
+
+        for(int value : indices)
+            swapped[i++] = src[value];
+
+        System.arraycopy(swapped, 0, src, 0, swapped.length);
+    }
+
+
+    /**
+     * Swaps elements in an array according to a specified permutation. This method should be used with extreem caution as unlike
+     * {@link #swap(int[], int[])}, this method does <b>not</b> verify that {@code indices} is a permutation.
+     *
+     * @param src     Array to swap elements within.
+     * @param indices Array containing indices of the permutation. If the {@code src} array has length {@code N}, then
+     *                the array must be a permutation of {@code {0, 1, 2, ..., N-1}}.
+     */
+    public static void swapUnsafe(final int[] src, final int[] indices) {
         int[] swapped = new int[src.length];
         int i = 0;
 

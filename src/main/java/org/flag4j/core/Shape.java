@@ -24,7 +24,6 @@
 
 package org.flag4j.core;
 
-import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
 
@@ -310,13 +309,5 @@ public class Shape implements Serializable {
             joiner.add(Integer.toString(d));
 
         return joiner.toString();
-    }
-
-
-    public static void main(String[] args) {
-        Shape s = new Shape();
-        Tensor t = new Tensor(s);
-
-        System.out.println(t.entries.length);
     }
 }

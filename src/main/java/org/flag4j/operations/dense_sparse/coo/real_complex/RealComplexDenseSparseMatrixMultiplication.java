@@ -141,15 +141,19 @@ public final class RealComplexDenseSparseMatrixMultiplication {
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
 
-        ThreadManager.concurrentLoop(0, rows1, i -> {
-            // Loop over non-zero entries of sparse matrix.
-            for(int j=0; j<src2.length; j++) {
-                int row = rowIndices[j];
-                int col = colIndices[j];
-                CNumber product = src2[j].mult(src1[i*cols1 + row]);
+        ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int rowOffset = i*cols2;
 
-                synchronized (dest) {
-                    dest[i*cols2 + col] = dest[i*cols2 + col].add(product);
+                // Loop over non-zero entries of sparse matrix.
+                for(int j=0; j<src2.length; j++) {
+                    int row = rowIndices[j];
+                    int col = colIndices[j];
+                    CNumber product = src2[j].mult(src1[i*cols1 + row]);
+
+                    synchronized (dest) {
+                        dest[rowOffset + col] = dest[rowOffset + col].add(product);
+                    }
                 }
             }
         });
@@ -178,15 +182,18 @@ public final class RealComplexDenseSparseMatrixMultiplication {
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
 
-        ThreadManager.concurrentLoop(0, src1.length, i -> {
-            int row = rowIndices[i];
-            int col = colIndices[i];
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(var i=startIdx; i<endIdx; i++) {
+                int row = rowIndices[i];
+                int col = colIndices[i];
+                int rowOffset = row*cols2;
 
-            for(int j=0; j<cols2; j++) {
-                CNumber product = src2[col*cols2 + j].mult(src1[i]);
+                for(int j=0; j<cols2; j++) {
+                    CNumber product = src2[col*cols2 + j].mult(src1[i]);
 
-                synchronized (dest) {
-                    dest[row*cols2 + j] = dest[row*cols2 + j].add(product);
+                    synchronized (dest) {
+                        dest[rowOffset + j] = dest[rowOffset + j].add(product);
+                    }
                 }
             }
         });
@@ -215,15 +222,17 @@ public final class RealComplexDenseSparseMatrixMultiplication {
         ArrayUtils.fill(dest, 0);
 
         int row;
-int col;
+        int col;
 
         for(int i=0; i<rows1; i++) {
+            int destRowOffset = i*cols2;
+
             // Loop over non-zero entries of sparse matrix.
             for(int j=0; j<src2.length; j++) {
                 row = rowIndices[j];
                 col = colIndices[j];
 
-                dest[i*cols2 + col] = dest[i*cols2 + col].add(src1[i*cols1 + row].mult(src2[j]));
+                dest[destRowOffset + col] = dest[destRowOffset + col].add(src1[i*cols1 + row].mult(src2[j]));
             }
         }
 
@@ -287,15 +296,20 @@ int col;
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
 
-        ThreadManager.concurrentLoop(0, rows1, i -> {
-            // Loop over non-zero entries of sparse matrix.
-            for(int j=0; j<src2.length; j++) {
-                int row = rowIndices[j];
-                int col = colIndices[j];
-                CNumber product = src1[i*cols1 + row].mult(src2[j]);
+        ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int destRowOffset = i*cols2;
+                int productOffset = i*cols1;
 
-                synchronized (dest) {
-                    dest[i*cols2 + col] = dest[i*cols2 + col].add(product);
+                // Loop over non-zero entries of sparse matrix.
+                for(int j=0; j<src2.length; j++) {
+                    int row = rowIndices[j];
+                    int col = colIndices[j];
+                    CNumber product = src1[productOffset + row].mult(src2[j]);
+
+                    synchronized (dest) {
+                        dest[destRowOffset + col] = dest[destRowOffset + col].add(product);
+                    }
                 }
             }
         });
@@ -324,15 +338,18 @@ int col;
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
 
-        ThreadManager.concurrentLoop(0, src1.length, i -> {
-            int row = rowIndices[i];
-            int col = colIndices[i];
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int row = rowIndices[i];
+                int col = colIndices[i];
+                int rowOffset = row*cols2;
 
-            for(int j=0; j<cols2; j++) {
-                CNumber product = src1[i].mult(src2[col*cols2 + j]);
+                for(int j=0; j<cols2; j++) {
+                    CNumber product = src1[i].mult(src2[col*cols2 + j]);
 
-                synchronized (dest) {
-                    dest[row*cols2 + j] = dest[row*cols2 + j].add(product);
+                    synchronized (dest) {
+                        dest[rowOffset + j] = dest[rowOffset + j].add(product);
+                    }
                 }
             }
         });
@@ -362,11 +379,14 @@ int col;
 
         for(int i=0; i<denseRows; i++) {
             int src1RowOffset = i*denseCols;
+            CNumber sum = dest[i];
 
             for(int j=0; j<nonZeros; j++) {
                 k = indices[j];
-                dest[i] = dest[i].add(src2[j].mult(src1[src1RowOffset + k]));
+                sum = sum.add(src2[j].mult(src1[src1RowOffset + k]));
             }
+
+            dest[i] = sum;
         }
 
         return dest;
@@ -394,7 +414,6 @@ int col;
         for(int i=0; i<src1.length; i++) {
             row = rowIndices[i];
             col = colIndices[i];
-
             dest[row] = dest[row].add(src2[col].mult(src1[i]));
         }
 
@@ -420,17 +439,19 @@ int col;
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
 
-
         // Blocked matrix-vector multiply
         for(int ii=0; ii<rows1; ii += bsize) {
             for(int jj=0; jj<rows2; jj += bsize) {
                 // Multiply the current blocks
                 for(int i=ii; i<ii+bsize && i<rows1; i++) {
                     int src1RowOffset = i*cols1;
+                    CNumber sum = dest[i];
 
                     for(int j=jj; j<jj+bsize && j<rows2; j++) {
-                        dest[i] = dest[i].add(src2[j].mult(src1[src1RowOffset + indices[j]]));
+                        sum = sum.add(src2[j].mult(src1[src1RowOffset + indices[j]]));
                     }
+
+                    dest[i] = sum;
                 }
             }
         }
@@ -455,10 +476,16 @@ int col;
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
 
-        ThreadManager.concurrentLoop(0, rows1, i -> {
-            for(int j=0; j<rows2; j++) {
-                int k = indices[j];
-                dest[i] = dest[i].add(src2[j].mult(src1[i*cols1 + k]));
+        ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                CNumber sum = dest[i];
+
+                for(int j=0; j<rows2; j++) {
+                    int k = indices[j];
+                    sum = sum.add(src2[j].mult(src1[i*cols1 + k]));
+                }
+
+                dest[i] = sum;
             }
         });
 
@@ -482,14 +509,15 @@ int col;
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
 
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int row = rowIndices[i];
+                int col = colIndices[i];
+                CNumber product = src2[col].mult(src1[i]);
 
-        ThreadManager.concurrentLoop(0, src1.length, i -> {
-            int row = rowIndices[i];
-            int col = colIndices[i];
-            CNumber product = src2[col].mult(src1[i]);
-
-            synchronized (dest) {
-                dest[row] = dest[row].add(product);
+                synchronized (dest) {
+                    dest[row] = dest[row].add(product);
+                }
             }
         });
 
@@ -516,13 +544,19 @@ int col;
         ArrayUtils.fill(dest, 0);
 
         // Blocked matrix-vector multiply
-        ThreadManager.concurrentLoop(0, rows1, bsize, ii -> {
-            for(int jj=0; jj<rows2; jj += bsize) {
-                // Multiply the current blocks
-                for(int i=ii; i<ii+bsize && i<rows1; i++) {
-                    for(int j=jj; j<jj+bsize && j<rows2; j++) {
-                        int k = indices[j];
-                        dest[i] = dest[i].add(src2[j].mult(src1[i*cols1 + k]));
+        ThreadManager.concurrentBlockedOperation(rows1, bsize, (startIdx, endIdx) -> {
+            for(int ii=startIdx; ii<endIdx; ii += bsize) {
+                for(int jj=0; jj<rows2; jj += bsize) {
+                    // Multiply the current blocks
+                    for(int i=ii; i<ii+bsize && i<rows1; i++) {
+                        CNumber sum = dest[i];
+
+                        for(int j=jj; j<jj+bsize && j<rows2; j++) {
+                            int k = indices[j];
+                            sum = sum.add(src2[j].mult(src1[i*cols1 + k]));
+                        }
+
+                        dest[i] = sum;
                     }
                 }
             }
@@ -550,10 +584,14 @@ int col;
         int k;
 
         for(int i=0; i<denseRows; i++) {
+            CNumber sum = dest[i];
+
             for(int j=0; j<nonZeros; j++) {
                 k = indices[j];
-                dest[i] = dest[i].add(src1[i*denseCols + k].mult(src2[j]));
+                sum = sum.add(src1[i*denseCols + k].mult(src2[j]));
             }
+
+            dest[i] = sum;
         }
 
         return dest;
@@ -581,7 +619,6 @@ int col;
         for(int i=0; i<src1.length; i++) {
             row = rowIndices[i];
             col = colIndices[i];
-
             dest[row] = dest[row].add(src1[i].mult(src2[col]));
         }
 
@@ -613,10 +650,14 @@ int col;
             for(int jj=0; jj<rows2; jj += bsize) {
                 // Multiply the current blocks
                 for(int i=ii; i<ii+bsize && i<rows1; i++) {
+                    CNumber sum = dest[i];
+
                     for(int j=jj; j<jj+bsize && j<rows2; j++) {
                         k = indices[j];
-                        dest[i] = dest[i].add(src1[i*cols1 + k].mult(src2[j]));
+                        sum = sum.add(src1[i*cols1 + k].mult(src2[j]));
                     }
+
+                    dest[i] = sum;
                 }
             }
         }
@@ -641,10 +682,16 @@ int col;
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
 
-        ThreadManager.concurrentLoop(0, rows1, i -> {
-            for(int j=0; j<rows2; j++) {
-                int k = indices[j];
-                dest[i] = dest[i].add(src1[i*cols1 + k].mult(src2[j]));
+        ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                CNumber sum = dest[i];
+
+                for(int j=0; j<rows2; j++) {
+                    int k = indices[j];
+                    sum = sum.add(src1[i*cols1 + k].mult(src2[j]));
+                }
+
+                dest[i] = sum;
             }
         });
 
@@ -668,13 +715,15 @@ int col;
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
 
-        ThreadManager.concurrentLoop(0, src1.length, i -> {
-            int row = rowIndices[i];
-            int col = colIndices[i];
-            CNumber product = src1[i].mult(src2[col]);
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int row = rowIndices[i];
+                int col = colIndices[i];
+                CNumber product = src1[i].mult(src2[col]);
 
-            synchronized (dest) {
-                dest[row] = dest[row].add(product);
+                synchronized (dest) {
+                    dest[row] = dest[row].add(product);
+                }
             }
         });
 
@@ -701,13 +750,19 @@ int col;
         ArrayUtils.fill(dest, 0);
 
         // Blocked matrix-vector multiply
-        ThreadManager.concurrentLoop(0, rows1, bsize, ii -> {
-            for(int jj=0; jj<rows2; jj += bsize) {
-                // Multiply the current blocks
-                for(int i=ii; i<ii+bsize && i<rows1; i++) {
-                    for(int j=jj; j<jj+bsize && j<rows2; j++) {
-                        int k = indices[j];
-                        dest[i] = dest[i].add(src1[i*cols1 + k].mult(src2[j]));
+        ThreadManager.concurrentBlockedOperation(rows1, bsize, (startIdx, endIdx) -> {
+            for(int ii=startIdx; ii<endIdx; ii += bsize) {
+                for(int jj=0; jj<rows2; jj += bsize) {
+                    // Multiply the current blocks
+                    for(int i=ii; i<ii+bsize && i<rows1; i++) {
+                        CNumber sum = dest[i];
+
+                        for(int j=jj; j<jj+bsize && j<rows2; j++) {
+                            int k = indices[j];
+                            sum = sum.add(src1[i*cols1 + k].mult(src2[j]));
+                        }
+
+                        dest[i] = sum;
                     }
                 }
             }

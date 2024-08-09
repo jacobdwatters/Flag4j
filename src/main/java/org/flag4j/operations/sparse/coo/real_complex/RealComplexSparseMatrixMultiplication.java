@@ -76,6 +76,7 @@ public final class RealComplexSparseMatrixMultiplication {
 
         for(int i=0; i<src1.length; i++) {
             int c1 = colIndices1[i]; // = k
+            var src1Value = src1[i];
 
             // Check if any values in src2 have the same row index as the column index of the value in src1.
             if(map.containsKey(c1)) {
@@ -84,7 +85,7 @@ public final class RealComplexSparseMatrixMultiplication {
 
                 for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
                     int c2 = colIndices2[j]; // = j
-                    dest[rowIdx + c2] = dest[rowIdx + c2].add(src1[i].mult(src2[j]));
+                    dest[rowIdx + c2] = dest[rowIdx + c2].add(src1Value.mult(src2[j]));
                 }
             }
         }
@@ -119,17 +120,20 @@ public final class RealComplexSparseMatrixMultiplication {
         // and value is a list of indices in src2 where this row appears.
         Map<Integer, List<Integer>> map = SparseUtils.createMap(src2.length, rowIndices2);
 
-        ThreadManager.concurrentLoop(0, src1.length, (i)->{
-            int c1 = colIndices1[i]; // = k
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int c1 = colIndices1[i]; // = k
+                var src1Value = src1[i];
 
-            // Check if any values in src2 have the same row index as the column index of the value in src1.
-            if(map.containsKey(c1)) {
-                int r1 = rowIndices1[i]; // = i
-                int rowIdx = r1*cols2;
+                // Check if any values in src2 have the same row index as the column index of the value in src1.
+                if(map.containsKey(c1)) {
+                    int r1 = rowIndices1[i]; // = i
+                    int rowIdx = r1*cols2;
 
-                for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
-                    int idx = rowIdx + colIndices2[j];
-                    destMap.put(idx, destMap.getOrDefault(idx, CNumber.ZERO).add(src1[i].mult(src2[j])));
+                    for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
+                        int idx = rowIdx + colIndices2[j];
+                        destMap.put(idx, destMap.getOrDefault(idx, CNumber.ZERO).add(src1Value.mult(src2[j])));
+                    }
                 }
             }
         });
@@ -169,14 +173,18 @@ public final class RealComplexSparseMatrixMultiplication {
         for(int i=0; i<src1.length; i++) {
             r1 = rowIndices1[i]; // = i
             c1 = colIndices1[i]; // = k
+            var sum = dest[r1*cols2];
+            var src1Value = src1[i];
 
             for(int j=0; j<src2.length; j++) {
                 r2 = indices[j]; // = k
 
                 if(c1==r2) { // Then we multiply and add to sum.
-                    dest[r1*cols2] = dest[r1*cols2].add(src1[i].mult(src2[j]));
+                    sum = sum.add(src1Value.mult(src2[j]));
                 }
             }
+
+            dest[r1*cols2] = sum;
         }
 
         return dest;
@@ -204,19 +212,24 @@ public final class RealComplexSparseMatrixMultiplication {
         CNumber[] dest = new CNumber[rows1*cols2];
         Arrays.fill(dest, CNumber.ZERO);
 
-        ThreadManager.concurrentLoop(0, src1.length, (i) -> {
-            int r1 = rowIndices1[i]; // = i
-            int c1 = colIndices1[i]; // = k
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int r1 = rowIndices1[i]; // = i
+                int c1 = colIndices1[i]; // = k
+                CNumber sum = dest[r1*cols2];
+                CNumber src1Value = src1[i];
 
-            for(int j=0; j<src2.length; j++) {
-                int r2 = indices[j]; // = k
+                for(int j=0; j<src2.length; j++) {
+                    int r2 = indices[j]; // = k
 
-                if(c1==r2) { // Then we multiply and add to sum.
-                    CNumber product = src1[i].mult(src2[j]);
-
-                    synchronized (dest) {
-                        dest[r1*cols2] = dest[r1*cols2].add(product);
+                    if(c1==r2) { // Then we multiply and add to sum.
+                        CNumber product = src1Value.mult(src2[j]);
+                        sum = sum.add(product);
                     }
+                }
+
+                synchronized (dest) {
+                    dest[r1*cols2] = sum;
                 }
             }
         });
@@ -251,6 +264,7 @@ public final class RealComplexSparseMatrixMultiplication {
 
         for(int i=0; i<src1.length; i++) {
             int c1 = colIndices1[i]; // = k
+            var src1Value = src1[i];
 
             // Check if any values in src2 have the same row index as the column index of the value in src1.
             if(map.containsKey(c1)) {
@@ -259,7 +273,7 @@ public final class RealComplexSparseMatrixMultiplication {
 
                 for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
                     int c2 = colIndices2[j]; // = j
-                    dest[rowIdx + c2] = dest[rowIdx + c2].add(src2[j].mult(src1[i]));
+                    dest[rowIdx + c2] = dest[rowIdx + c2].add(src2[j].mult(src1Value));
                 }
             }
         }
@@ -294,17 +308,20 @@ public final class RealComplexSparseMatrixMultiplication {
         // and value is a list of indices in src2 where this row appears.
         Map<Integer, List<Integer>> map = SparseUtils.createMap(src2.length, rowIndices2);
 
-        ThreadManager.concurrentLoop(0, src1.length, (i)->{
-            int c1 = colIndices1[i]; // = k
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int c1 = colIndices1[i]; // = k
+                var src1Value = src1[i];
 
-            // Check if any values in src2 have the same row index as the column index of the value in src1.
-            if(map.containsKey(c1)) {
-                int r1 = rowIndices1[i]; // = i
-                int rowIdx = r1*cols2;
+                // Check if any values in src2 have the same row index as the column index of the value in src1.
+                if(map.containsKey(c1)) {
+                    int r1 = rowIndices1[i]; // = i
+                    int rowIdx = r1*cols2;
 
-                for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
-                    int idx = rowIdx + colIndices2[j];
-                    destMap.put(idx, destMap.getOrDefault(idx, CNumber.ZERO).add(src2[j].mult(src1[i])));
+                    for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
+                        int idx = rowIdx + colIndices2[j];
+                        destMap.put(idx, destMap.getOrDefault(idx, CNumber.ZERO).add(src2[j].mult(src1Value)));
+                    }
                 }
             }
         });
@@ -333,9 +350,8 @@ public final class RealComplexSparseMatrixMultiplication {
                                            CNumber[] src2, int[] indices, Shape shape2) {
 
         int rows1 = shape1.get(0);
-        int cols2 = shape2.get(1);
 
-        CNumber[] dest = new CNumber[rows1*cols2];
+        CNumber[] dest = new CNumber[rows1];
         Arrays.fill(dest, CNumber.ZERO);
 
         // r1, c1, r2, and store the indices for non-zero values in src1 and src2.
@@ -344,14 +360,18 @@ public final class RealComplexSparseMatrixMultiplication {
         for(int i=0; i<src1.length; i++) {
             r1 = rowIndices1[i]; // = i
             c1 = colIndices1[i]; // = k
+            var src1Value = src1[i];
+            var sum = dest[r1];
 
             for(int j=0; j<src2.length; j++) {
                 r2 = indices[j]; // = k
 
                 if(c1==r2) { // Then we multiply and add to sum.
-                    dest[r1*cols2] = dest[r1*cols2].add(src2[j].mult(src1[i]));
+                    sum = sum.add(src2[j].mult(src1Value));
                 }
             }
+
+            dest[r1] = sum;
         }
 
         return dest;
@@ -374,24 +394,28 @@ public final class RealComplexSparseMatrixMultiplication {
                                                      CNumber[] src2, int[] indices, Shape shape2) {
 
         int rows1 = shape1.get(0);
-        int cols2 = shape2.get(1);
 
-        CNumber[] dest = new CNumber[rows1*cols2];
+        CNumber[] dest = new CNumber[rows1];
         Arrays.fill(dest, CNumber.ZERO);
 
-        ThreadManager.concurrentLoop(0, src1.length, (i) -> {
-            int r1 = rowIndices1[i]; // = i
-            int c1 = colIndices1[i]; // = k
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int r1 = rowIndices1[i]; // = i
+                int c1 = colIndices1[i]; // = k
+                var sum = dest[r1];
+                var src1Value = src1[i];
 
-            for(int j=0; j<src2.length; j++) {
-                int r2 = indices[j]; // = k
+                for(int j=0; j<src2.length; j++) {
+                    int r2 = indices[j]; // = k
 
-                if(c1==r2) { // Then we multiply and add to sum.
-                    CNumber product = src2[j].mult(src1[i]);
-
-                    synchronized (dest) {
-                        dest[r1*cols2] = dest[r1*cols2].add(product);
+                    if(c1==r2) { // Then we multiply and add to sum.
+                        CNumber product = src2[j].mult(src1Value);
+                        sum = sum.add(product);
                     }
+                }
+
+                synchronized (dest) {
+                    dest[r1] = sum;
                 }
             }
         });

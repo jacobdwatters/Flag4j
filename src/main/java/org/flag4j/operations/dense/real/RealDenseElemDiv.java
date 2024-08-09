@@ -79,9 +79,11 @@ public class RealDenseElemDiv {
         ParameterChecks.assertEqualShape(shape1, shape2);
         double[] product = new double[src1.length];
 
-        ThreadManager.concurrentLoop(0, product.length,
-                (i) -> product[i] = src1[i]/src2[i]
-        );
+        ThreadManager.concurrentOperation(product.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                product[i] = src1[i]/src2[i];
+            }
+        });
 
         return product;
     }

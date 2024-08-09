@@ -33,9 +33,10 @@ import org.flag4j.util.ErrorMessages;
 
 
 /**
- * This class contains several low level methods for computing complex matrix-matrix multiplications. This includes transpose
- * multiplications. <br>
- * <b>WARNING:</b> These methods do not perform any sanity checks.
+ * <p>This class contains several low level methods for computing complex matrix-matrix multiplications. This includes transpose
+ * multiplications.</p>
+ *
+ * <p><b>WARNING:</b> These methods do not perform any sanity checks.</p>
  */
 public final class ComplexDenseMatrixMultiplication {
 
@@ -72,11 +73,14 @@ public final class ComplexDenseMatrixMultiplication {
                 src1Index = src1IndexStart;
                 destIndex = destIndexStart + j;
                 end = src1Index + rows2;
+                CNumber sum = dest[destIndex];
 
                 while(src1Index<end) {
-                    dest[destIndex] = dest[destIndex].add(src1[src1Index++].mult(src2[src2Index]));
+                    sum = sum.add(src1[src1Index++].mult(src2[src2Index]));
                     src2Index += cols2;
                 }
+
+                dest[destIndex] = sum;
             }
         }
 
@@ -163,11 +167,14 @@ public final class ComplexDenseMatrixMultiplication {
                             destIndex = destStart + j;
                             src1Index = src1Start;
                             src2Index = kk*cols2 + j;
+                            CNumber sum = dest[destIndex];
 
                             while(src1Index < stopIndex) {
-                                dest[destIndex] = dest[destIndex].add(src1[src1Index++].mult(src2[src2Index]));
+                                sum = sum.add(src1[src1Index++].mult(src2[src2Index]));
                                 src2Index+=cols2;
                             }
+
+                            dest[destIndex] = sum;
                         }
                     }
                 }
@@ -252,18 +259,23 @@ public final class ComplexDenseMatrixMultiplication {
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
 
-        ThreadManager.concurrentLoop(0, rows1, (i) -> {
-            int src1IndexStart = i*cols1;
-            int destIndexStart = i*cols2;
+        ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int src1IndexStart = i*cols1;
+                int destIndexStart = i*cols2;
 
-            for(int j=0; j<cols2; j++) {
-                int src2Index = j;
-                int src1Index = src1IndexStart;
-                int destIndex = destIndexStart + j;
+                for(int j=0; j<cols2; j++) {
+                    int src2Index = j;
+                    int src1Index = src1IndexStart;
+                    int destIndex = destIndexStart + j;
+                    CNumber sum = dest[destIndex];
 
-                for(int k=0; k<cols1; k++) {
-                    dest[destIndex] = dest[destIndex].add(src1[src1Index++].mult(src2[src2Index]));
-                    src2Index += cols2;
+                    for(int k=0; k<cols1; k++) {
+                        sum = sum.add(src1[src1Index++].mult(src2[src2Index]));
+                        src2Index += cols2;
+                    }
+
+                    dest[destIndex] = sum;
                 }
             }
         });
@@ -289,18 +301,20 @@ public final class ComplexDenseMatrixMultiplication {
         CNumber[] dest = new CNumber[rows1*cols2];
         ArrayUtils.fill(dest, 0);
 
-        ThreadManager.concurrentLoop(0, rows1, (i) -> {
-            int src1IndexStart = i*rows2;
-            int destIndexStart = i*cols2;
+        ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int src1IndexStart = i*rows2;
+                int destIndexStart = i*cols2;
 
-            for(int k=0; k<rows2; k++) {
-                int src2Index = k*cols2;
-                int destIndex = destIndexStart;
-                int end = src2Index + cols2;
+                for(int k=0; k<rows2; k++) {
+                    int src2Index = k*cols2;
+                    int destIndex = destIndexStart;
+                    int end = src2Index + cols2;
 
-                while(src2Index<end) {
-                    dest[destIndex] = dest[destIndex].add(src1[src1IndexStart + k].mult(src2[src2Index++]));
-                    destIndex++;
+                    while(src2Index<end) {
+                        dest[destIndex] = dest[destIndex].add(src1[src1IndexStart + k].mult(src2[src2Index++]));
+                        destIndex++;
+                    }
                 }
             }
         });
@@ -327,29 +341,34 @@ public final class ComplexDenseMatrixMultiplication {
         ArrayUtils.fill(dest, 0);
         int blockSize = Configurations.getBlockSize();
 
-        ThreadManager.concurrentLoop(0, rows1, blockSize, (ii) -> {
-            int iBound = Math.min(ii + blockSize, rows1);
+        ThreadManager.concurrentBlockedOperation(rows1, blockSize, (startIdx, endIdx) -> {
+            for(int ii=startIdx; ii<endIdx; ii+=blockSize) {
+                int iBound = Math.min(ii + blockSize, rows1);
 
-            for(int jj = 0; jj<cols2; jj+=blockSize) {
-                int jBound = Math.min(jj + blockSize, cols2);
+                for(int jj = 0; jj<cols2; jj+=blockSize) {
+                    int jBound = Math.min(jj + blockSize, cols2);
 
-                for(int kk = 0; kk<cols1; kk+=blockSize) {
-                    int kBound = Math.min(kk + blockSize, cols1);
+                    for(int kk = 0; kk<cols1; kk+=blockSize) {
+                        int kBound = Math.min(kk + blockSize, cols1);
 
-                    // Multiply current blocks.
-                    for(int i=ii; i<iBound; i++) {
-                        int src1Start = i*cols1 + kk;
-                        int stopIndex = src1Start+(kBound-kk);
-                        int destStart = i*cols2;
+                        // Multiply current blocks.
+                        for(int i=ii; i<iBound; i++) {
+                            int src1Start = i*cols1 + kk;
+                            int stopIndex = src1Start+(kBound-kk);
+                            int destStart = i*cols2;
 
-                        for (int j=jj; j<jBound; j++) {
-                            int destIndex = destStart + j;
-                            int src1Index = src1Start;
-                            int src2Index = kk*cols2 + j;
+                            for (int j=jj; j<jBound; j++) {
+                                int destIndex = destStart + j;
+                                int src1Index = src1Start;
+                                int src2Index = kk*cols2 + j;
+                                CNumber sum = dest[destIndex];
 
-                            while(src1Index < stopIndex) {
-                                dest[destIndex] = dest[destIndex].add(src1[src1Index++].mult(src2[src2Index]));
-                                src2Index+=cols2;
+                                while(src1Index < stopIndex) {
+                                    sum = sum.add(src1[src1Index++].mult(src2[src2Index]));
+                                    src2Index+=cols2;
+                                }
+
+                                dest[destIndex] = sum;
                             }
                         }
                     }
@@ -379,30 +398,32 @@ public final class ComplexDenseMatrixMultiplication {
         ArrayUtils.fill(dest, 0);
         int blockSize = Configurations.getBlockSize();
 
-        ThreadManager.concurrentLoop(0, rows1, blockSize, (ii) -> {
-            int iBound = Math.min(ii + blockSize, rows1);
+        ThreadManager.concurrentBlockedOperation(rows1, blockSize, (startIdx, endIdx) -> {
+            for(int ii=startIdx; ii<endIdx; ii+=blockSize) {
+                int iBound = Math.min(ii + blockSize, rows1);
 
-            for(int kk = 0; kk<cols1; kk+=blockSize) {
-                int kBound = Math.min(kk + blockSize, cols1);
+                for(int kk = 0; kk<cols1; kk+=blockSize) {
+                    int kBound = Math.min(kk + blockSize, cols1);
 
-                for(int jj = 0; jj<cols2; jj+=blockSize) {
-                    int jBound = Math.min(jj + blockSize, cols2);
+                    for(int jj = 0; jj<cols2; jj+=blockSize) {
+                        int jBound = Math.min(jj + blockSize, cols2);
 
-                    // Multiply current blocks.
-                    for(int i=ii; i<iBound; i++) {
-                        int destStart = i*cols2;
-                        int src1Start = i*cols1;
-                        int stopIndex = destStart+jBound;
+                        // Multiply current blocks.
+                        for(int i=ii; i<iBound; i++) {
+                            int destStart = i*cols2;
+                            int src1Start = i*cols1;
+                            int stopIndex = destStart+jBound;
 
-                        for (int k=kk; k<kBound; k++) {
-                            int destIndex = destStart + jj;
-                            int src1Index = src1Start + k;
-                            int src2Index = k*cols2 + jj;
+                            for (int k=kk; k<kBound; k++) {
+                                int destIndex = destStart + jj;
+                                int src1Index = src1Start + k;
+                                int src2Index = k*cols2 + jj;
 
-                            while(destIndex<stopIndex) {
-                                dest[destIndex] = dest[destIndex].add(src1[src1Index].mult(src2[src2Index]));
-                                destIndex++;
-                                src2Index++;
+                                while(destIndex<stopIndex) {
+                                    dest[destIndex] = dest[destIndex].add(src1[src1Index].mult(src2[src2Index]));
+                                    destIndex++;
+                                    src2Index++;
+                                }
                             }
                         }
                     }
@@ -434,10 +455,13 @@ public final class ComplexDenseMatrixMultiplication {
         for(int i=0; i<rows1; i++) {
             src1Index = i*cols1;
             src2Index = 0;
+            CNumber sum = dest[i];
 
             while(src2Index<rows2) {
-                dest[i] = dest[i].add(src1[src1Index++].mult(src2[src2Index++]));
+                sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));
             }
+
+            dest[i] = sum;
         }
 
         return dest;
@@ -474,10 +498,13 @@ public final class ComplexDenseMatrixMultiplication {
                 for(int i=ii; i<iBound; i++) {
                     src1Index = i*cols1 + kk;
                     src2Index = kk;
+                    CNumber sum = dest[i];
 
                     while(src2Index<kBound) {
-                        dest[i] = dest[i].add(src1[src1Index++].mult(src2[src2Index++]));
+                        sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));
                     }
+
+                    dest[i] = sum;
                 }
             }
         }
@@ -503,12 +530,17 @@ public final class ComplexDenseMatrixMultiplication {
         CNumber[] dest = new CNumber[rows1];
         ArrayUtils.fill(dest, 0);
 
-        ThreadManager.concurrentLoop(0, rows1, (i) -> {
-            int src1Index = i*cols1;
-            int src2Index = 0;
+        ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++) {
+                int src1Index = i*cols1;
+                int src2Index = 0;
+                CNumber sum = dest[i];
 
-            while(src2Index<rows2) {
-                dest[i] = dest[i].add(src1[src1Index++].mult(src2[src2Index++]));
+                while(src2Index<rows2) {
+                    sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));
+                }
+
+                dest[i] = sum;
             }
         });
 
@@ -534,19 +566,24 @@ public final class ComplexDenseMatrixMultiplication {
         ArrayUtils.fill(dest, 0);
         int blockSize = Configurations.getBlockSize();
 
-        ThreadManager.concurrentLoop(0, rows1, blockSize, (ii) -> {
-            int iBound = Math.min(ii+blockSize, rows1);
+        ThreadManager.concurrentBlockedOperation(rows1, blockSize, (startIdx, endIdx) -> {
+            for(int ii=startIdx; ii<endIdx; ii+=blockSize) {
+                int iBound = Math.min(ii+blockSize, rows1);
 
-            for(int kk=0; kk<rows2; kk+=blockSize) {
-                int kBound = Math.min(kk+blockSize, rows2);
+                for(int kk=0; kk<rows2; kk+=blockSize) {
+                    int kBound = Math.min(kk+blockSize, rows2);
 
-                // Multiply the current blocks
-                for(int i=ii; i<iBound; i++) {
-                    int src1Index = i*cols1 + kk;
-                    int src2Index = kk;
+                    // Multiply the current blocks
+                    for(int i=ii; i<iBound; i++) {
+                        int src1Index = i*cols1 + kk;
+                        int src2Index = kk;
+                        CNumber sum = dest[i];
 
-                    while(src2Index<kBound) {
-                        dest[i] = dest[i].add(src1[src1Index++].mult(src2[src2Index++]));
+                        while(src2Index<kBound) {
+                            sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));
+                        }
+
+                        dest[i] = sum;
                     }
                 }
             }
