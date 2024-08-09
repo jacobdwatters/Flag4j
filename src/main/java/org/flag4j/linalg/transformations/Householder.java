@@ -457,4 +457,67 @@ public final class Householder {
                                           int startRow, int endRow) {
         rightMultReflector(src, householderVector.entries, alpha, startCol, startRow, endRow);
     }
+
+
+    /**
+     * <p>Applies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>H</sup>, represented by the vector {@code v} to a
+     * Hermitian matrix {@code A} on both the left and right side. That is, computes {@code H*A*H}.</p>
+     *
+     * <p>Note: no check is made to
+     * explicitly check that the {@code src} matrix is actually Hermitian.</p>
+     *
+     * @param src Matrix to apply the Householder reflector to. Assumed to be square and Hermitian. Upper triangular portion
+     * overwritten with the result.
+     * @param householderVector Householder vector {@code v} from the definition of a Householder reflector matrix.
+     * @param alpha The scalar &alpha value in Householder reflector matrix definition.
+     * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
+     * @param workArray Array for storing temporary values during the computation. Contents will be overwritten.
+     */
+    public static void hermLeftRightMultReflector(CMatrix src,
+                                                  CNumber[] householderVector,
+                                                  CNumber alpha,
+                                                  int startCol,
+                                                  CNumber[] workArray) {
+        int numRows = src.numRows;
+
+        // Computes w = -alpha*A*v (taking conjugate for lower triangular part)
+        for (int i = startCol; i < numRows; i++) {
+            CNumber total = new CNumber(0, 0);
+            int rowOffset = i * numRows;
+
+            for (int j = startCol; j < i; j++) {
+                total = total.add(src.entries[j * numRows + i].conj().mult(householderVector[j]));
+            }
+            for (int j = i; j < src.numRows; j++) {
+                total = total.add(src.entries[rowOffset + j].mult(householderVector[j]));
+            }
+
+            workArray[i] = alpha.mult(total).addInv();
+        }
+
+        // Computes -0.5*alpha*v^T*w (with conjugation in the scalar product)
+        CNumber innerProd = new CNumber(0, 0);
+        for (int i = startCol; i < numRows; i++) {
+            innerProd = innerProd.add(householderVector[i].conj().mult(workArray[i]));
+        }
+        innerProd = innerProd.mult(alpha).mult(new CNumber(-0.5, 0));
+
+        // Computes w + innerProd*v
+        for (int i = startCol; i < numRows; i++) {
+            workArray[i] = workArray[i].add(innerProd.mult(householderVector[i]));
+        }
+
+        // Computes A + w*v^T + v*w^T (ensuring Hermitian property is maintained)
+        for (int i = startCol; i < numRows; i++) {
+            CNumber prod = workArray[i];
+            CNumber h = householderVector[i];
+            int rowOffset = i * numRows;
+
+            for (int j = i; j < src.numRows; j++) {
+                src.entries[rowOffset + j] = src.entries[rowOffset + j]
+                        .add(prod.mult(householderVector[j]))
+                        .add(workArray[j].mult(h.conj()));
+            }
+        }
+    }
 }
