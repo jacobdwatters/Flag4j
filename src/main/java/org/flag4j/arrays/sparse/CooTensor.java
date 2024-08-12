@@ -253,12 +253,13 @@ public class CooTensor
             // Copy old indices and insert new one.
             int[][] newIndices = new int[indices.length + 1][getRank()];
             ArrayUtils.deepCopy(indices, newIndices);
-            newIndices[indices.length + 1] = index;
+            newIndices[indices.length] = index;
 
             // Copy old entries and insert new one.
             double[] newEntries = Arrays.copyOf(entries, entries.length+1);
             newEntries[newEntries.length-1] = value;
 
+            // Ensure indices are sorted.
             dest = new CooTensor(shape, newEntries, newIndices);
             dest.sortIndices();
         }
@@ -658,7 +659,7 @@ public class CooTensor
      */
     @Override
     public Double get(int... indices) {
-        ParameterChecks.assertEquals(indices.length, getRank());
+        ParameterChecks.assertValidIndex(shape, indices);
 
         for(int i = 0; i < nnz; i++) {
             if(Arrays.equals(this.indices[i], indices)) {

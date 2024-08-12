@@ -231,7 +231,7 @@ public class CooCTensor
             // Copy old indices and insert new one.
             int[][] newIndices = new int[indices.length + 1][getRank()];
             ArrayUtils.deepCopy(indices, newIndices);
-            newIndices[indices.length + 1] = index;
+            newIndices[indices.length] = index;
 
             // Copy old entries and insert new one.
             CNumber[] newEntries = Arrays.copyOf(entries, entries.length+1);
@@ -674,7 +674,7 @@ public class CooCTensor
      */
     @Override
     public CNumber get(int... indices) {
-        ParameterChecks.assertEquals(indices.length, getRank());
+        ParameterChecks.assertValidIndex(shape, indices);
 
         for(int i = 0; i < nnz; i++) {
             if(Arrays.equals(this.indices[i], indices)) {
