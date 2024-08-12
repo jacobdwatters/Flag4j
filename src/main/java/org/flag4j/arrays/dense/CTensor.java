@@ -318,7 +318,6 @@ public class CTensor
      * @param B Second tensor in the addition.
      * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
      */
-    @Override
     public void addEq(Tensor B) {
         RealComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);
     }
@@ -330,7 +329,6 @@ public class CTensor
      * @param B Second tensor in the addition.
      * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
      */
-    @Override
     public void addEq(CooCTensor B) {
         ComplexDenseSparseOperations.addEq(this, B);
     }
@@ -342,7 +340,6 @@ public class CTensor
      * @param B Second tensor in the subtraction.
      * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
      */
-    @Override
     public void subEq(Tensor B) {
         RealComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);
     }
@@ -354,7 +351,6 @@ public class CTensor
      * @param B Second tensor in the subtraction.
      * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
      */
-    @Override
     public void subEq(CooCTensor B) {
         ComplexDenseSparseOperations.subEq(this, B);
     }
