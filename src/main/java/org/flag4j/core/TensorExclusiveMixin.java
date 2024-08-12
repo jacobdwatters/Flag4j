@@ -275,7 +275,7 @@ public interface TensorExclusiveMixin<
      * @return The result of the element-wise tensor multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    CTensor elemMult(CTensor B);
+    W elemMult(CTensor B);
 
 
     /**

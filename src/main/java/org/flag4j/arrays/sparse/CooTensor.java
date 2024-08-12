@@ -32,6 +32,8 @@ import org.flag4j.core.Shape;
 import org.flag4j.core.TensorBase;
 import org.flag4j.core.TensorExclusiveMixin;
 import org.flag4j.core.sparse_base.RealSparseTensorBase;
+import org.flag4j.io.PrettyPrint;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.TensorInvert;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseTensorOperations;
@@ -218,16 +220,50 @@ public class CooTensor
 
 
     /**
-     * Sets an index of this tensor to a specified value.
+     * <p>Copies this tensor and sets the specified {@code index} to {@code value}.</p>
      *
-     * @param value   Value to set.
-     * @param indices The indices of this tensor for which to set the value.
-     * @return A reference to this tensor.
+     * <p>Note: unlike with dense tensors, this method returns a copy of this
+     * tensor with the specified value updated and does <b>NOT</b> return a reference to this tensor. Because of this, it may be
+     * expensive to make frequent updates to a sparse tensor.</p>
+     *
+     * @param value Value to set.
+     * @param index The index of this tensor for which to set the value.
+     * @return A copy of this tensor with the specified value set.
      */
     @Override
-    public CooTensor set(double value, int... indices) {
-        // TODO: Implementation.
-        return null;
+    public CooTensor set(double value, int... index) {
+        ParameterChecks.assertValidIndex(shape, index);
+        CooTensor dest;
+
+        // Check if value already exists in tensor.
+        int idx = -1;
+        for(int i=0; i<indices.length; i++) {
+            if(Arrays.equals(indices[i], index)) {
+                idx = i;
+                break; // Found in tensor, no need to continue.
+            }
+        }
+
+        if(idx > -1) {
+            // Copy entries and set new value.
+            dest = new CooTensor(shape, entries.clone(), ArrayUtils.deepCopy(indices, null));
+            dest.entries[idx] = value;
+            dest.indices[idx] = index;
+        } else {
+            // Copy old indices and insert new one.
+            int[][] newIndices = new int[indices.length + 1][getRank()];
+            ArrayUtils.deepCopy(indices, newIndices);
+            newIndices[indices.length + 1] = index;
+
+            // Copy old entries and insert new one.
+            double[] newEntries = Arrays.copyOf(entries, entries.length+1);
+            newEntries[newEntries.length-1] = value;
+
+            dest = new CooTensor(shape, newEntries, newIndices);
+            dest.sortIndices();
+        }
+
+        return dest;
     }
 
 
@@ -269,7 +305,8 @@ public class CooTensor
 
 
     /**
-     * Flattens tensor to single dimension. To flatten tensor along a single axis see {@link #flatten(int)}.
+     * Flattens tensor to single dimension. This method does not preserve rank. To flatten tensor along a single axis (and preserve
+     * the rank) use {@link #flatten(int)}.
      *
      * @return The flattened tensor.
      * @see #flatten(int)
@@ -278,10 +315,33 @@ public class CooTensor
     public CooTensor flatten() {
         int[][] destIndices = new int[entries.length][1];
 
-        for(int i = 0; i < entries.length; i++)
+        for(int i=0, size=entries.length; i<size; i++)
             destIndices[i][0] = shape.entriesIndex(indices[i]);
 
-        return new CooTensor(shape, entries.clone(), destIndices);
+        return new CooTensor(new Shape(shape.totalEntries().intValueExact()), entries.clone(), destIndices);
+    }
+
+
+    /**
+     * Flattens a tensor along the specified axis. Unlike {@link #flatten()}, this method will preserve the rank of the tensor.
+     *
+     * @param axis Axis along which to flatten tensor.
+     * @throws IllegalArgumentException If the axis is negative or larger than <code>this.{@link #getRank()}-1</code>.
+     * @see #flatten()
+     */
+    @Override
+    public CooTensor flatten(int axis) {
+        ParameterChecks.assertIndexInBounds(indices[0].length, axis);
+        int[][] destIndices = new int[indices.length][indices[0].length];
+
+        // Compute new shape.
+        int[] destShape = new int[indices[0].length];
+        destShape[axis] = shape.totalEntries().intValueExact();
+
+        for(int i=0, size=entries.length; i<size; i++)
+            destIndices[i][axis] = shape.entriesIndex(indices[i]);
+
+        return new CooTensor(new Shape(destShape), entries.clone(), destIndices);
     }
 
 
@@ -530,8 +590,7 @@ public class CooTensor
      */
     @Override
     public CooTensor elemMult(Tensor B) {
-        // TODO: Implementation.
-        return null;
+        return RealDenseSparseTensorOperations.elemMult(B, this);
     }
 
 
@@ -543,8 +602,7 @@ public class CooTensor
      */
     @Override
     public Tensor sub(double a) {
-        // TODO: Implementation.
-        return null;
+        return RealDenseSparseTensorOperations.sub(this, a);
     }
 
 
@@ -556,8 +614,7 @@ public class CooTensor
      */
     @Override
     public CTensor sub(CNumber a) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexDenseSparseOperations.sub(this, a);
     }
 
 
@@ -633,8 +690,7 @@ public class CooTensor
      */
     @Override
     public CooTensor elemMult(CooTensor B) {
-        // TODO: Implementation.
-        return null;
+        return RealCooTensorOperations.elemMult(this, B);
     }
 
 
@@ -648,9 +704,8 @@ public class CooTensor
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     @Override
-    public CTensor elemMult(CTensor B) {
-        // TODO: Implementation.
-        return null;
+    public CooCTensor elemMult(CTensor B) {
+        return RealComplexDenseSparseOperations.elemMult(B, this);
     }
 
 
@@ -665,8 +720,7 @@ public class CooTensor
      */
     @Override
     public CooCTensor elemMult(CooCTensor B) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexCooTensorOperations.elemMult(this, B);
     }
 
 
@@ -681,8 +735,7 @@ public class CooTensor
      */
     @Override
     public CooCTensor elemDiv(CTensor B) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexDenseSparseOperations.elemDiv(this, B);
     }
 
 
@@ -695,8 +748,7 @@ public class CooTensor
      */
     @Override
     public CooTensor elemDiv(Tensor B) {
-        // TODO: Implementation.
-        return null;
+        return RealDenseSparseTensorOperations.elemDiv(this, B);
     }
 
 
@@ -716,19 +768,6 @@ public class CooTensor
     @Override
     public Tensor tensorInv(int numIndices) {
         return TensorInvert.inv(toDense(), numIndices);
-    }
-
-
-    /**
-     * Flattens a tensor along the specified axis.
-     *
-     * @param axis Axis along which to flatten tensor.
-     * @throws IllegalArgumentException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
-     */
-    @Override
-    public CooTensor flatten(int axis) {
-        // TODO: Implementation
-        return null;
     }
 
 
@@ -777,5 +816,28 @@ public class CooTensor
         }
 
         return new Tensor(shape, entries);
+    }
+
+
+    /**
+     * <p>Formats this sparse COO tensor as a human-readable string specificing the full shape,
+     * non-zero entries, and non-zero indices.</p>
+     *
+     * @return A human-readable string specificing the full shape, non-zero entries, and non-zero indices of this tensor.
+     */
+    public String toString() {
+        int maxEntries = PrintOptions.getMaxColumns();
+        int padding = PrintOptions.getPadding();
+        int precision = PrintOptions.getPrecision();
+        boolean centring = PrintOptions.useCentering();
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Shape: " + shape + "\n");
+        sb.append("Non-zero Entries: " + PrettyPrint.abrivatedArray(entries, maxEntries, padding, precision, centring) + "\n");
+        sb.append("Non-zero Indices: " +
+                PrettyPrint.abrivatedArray(indices, PrintOptions.getMaxRows(), maxEntries, padding, 20, centring));
+
+        return sb.toString();
     }
 }

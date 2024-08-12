@@ -31,7 +31,8 @@ import org.flag4j.core.ComplexTensorExclusiveMixin;
 import org.flag4j.core.Shape;
 import org.flag4j.core.TensorBase;
 import org.flag4j.core.sparse_base.ComplexSparseTensorBase;
-import org.flag4j.operations.dense.real.RealDenseOperations;
+import org.flag4j.io.PrettyPrint;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
 import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
@@ -197,32 +198,67 @@ public class CooCTensor
 
 
     /**
-     * Sets an index of this tensor to a specified value.
+     * <p>Copies this tensor and sets the specified {@code index} to {@code value}.</p>
      *
-     * @param value   Value to set.
-     * @param indices The indices of this matrix for which to set the value.
-     * @return A reference to this tensor.
-     * @throws IllegalArgumentException  If the number of indices is not equal to the rank of this tensor.
-     * @throws IndexOutOfBoundsException If any of the indices are not within this tensor.
+     * <p>Note: unlike with dense tensors, this method returns a copy of this
+     * tensor with the specified value updated and does <b>NOT</b> return a reference to this tensor. Because of this, it may be
+     * expensive to make frequent updates to a sparse tensor.</p>
+     *
+     * @param value Value to set.
+     * @param index The index of this tensor for which to set the value.
+     * @return A copy of this tensor with the specified value set.
      */
     @Override
-    public CooCTensor set(CNumber value, int... indices) {
-        // TODO: Implementation.
-        return null;
+    public CooCTensor set(CNumber value, int...index) {
+        ParameterChecks.assertValidIndex(shape, index);
+        CooCTensor dest;
+
+        // Check if value already exists in tensor.
+        int idx = -1;
+        for(int i=0; i<indices.length; i++) {
+            if(Arrays.equals(indices[i], index)) {
+                idx = i;
+                break; // Found in tensor, no need to continue.
+            }
+        }
+
+        if(idx > -1) {
+            // Copy entries and set new value.
+            dest = new CooCTensor(shape, entries.clone(), ArrayUtils.deepCopy(indices, null));
+            dest.entries[idx] = value;
+            dest.indices[idx] = index;
+        } else {
+            // Copy old indices and insert new one.
+            int[][] newIndices = new int[indices.length + 1][getRank()];
+            ArrayUtils.deepCopy(indices, newIndices);
+            newIndices[indices.length + 1] = index;
+
+            // Copy old entries and insert new one.
+            CNumber[] newEntries = Arrays.copyOf(entries, entries.length+1);
+            newEntries[newEntries.length-1] = value;
+
+            dest = new CooCTensor(shape, newEntries, newIndices);
+            dest.sortIndices();
+        }
+
+        return dest;
     }
 
 
     /**
-     * Sets an index of this tensor to a specified value.
+     * <p>Copies this tensor and sets the specified {@code index} to {@code value}.</p>
      *
-     * @param value   Value to set.
-     * @param indices The indices of this tensor for which to set the value.
-     * @return A reference to this tensor.
+     * <p>Note: unlike with dense tensors, this method returns a copy of this
+     * tensor with the specified value updated and does <b>NOT</b> return a reference to this tensor. Because of this, it may be
+     * expensive to make frequent updates to a sparse tensor.</p>
+     *
+     * @param value Value to set.
+     * @param index The index of this tensor for which to set the value.
+     * @return A copy of this tensor with the specified value set.
      */
     @Override
     public CooCTensor set(double value, int... indices) {
-        // TODO: Implementation.
-        return null;
+        return set(new CNumber(value), indices);
     }
 
 
@@ -264,18 +300,43 @@ public class CooCTensor
 
 
     /**
-     * Flattens tensor to single dimension. To flatten tensor along a single axis.
+     * Flattens tensor to single dimension. This method does not preserve rank. To flatten tensor along a single axis (and preserve
+     * the rank) use {@link #flatten(int)}.
      *
      * @return The flattened tensor.
+     * @see #flatten(int)
      */
     @Override
     public CooCTensor flatten() {
         int[][] destIndices = new int[entries.length][1];
 
-        for(int i = 0; i < entries.length; i++)
-            destIndices[i][0] = RealDenseOperations.prod(indices[i]);
+        for(int i=0, size=entries.length; i<size; i++)
+            destIndices[i][0] = shape.entriesIndex(indices[i]);
 
-        return new CooCTensor(shape, Arrays.copyOf(entries, entries.length), destIndices);
+        return new CooCTensor(new Shape(shape.totalEntries().intValueExact()), entries.clone(), destIndices);
+    }
+
+
+    /**
+     * Flattens a tensor along the specified axis. Unlike {@link #flatten()}, this method will preserve the rank of the tensor.
+     *
+     * @param axis Axis along which to flatten tensor.
+     * @throws IllegalArgumentException If the axis is negative or larger than <code>this.{@link #getRank()}-1</code>.
+     * @see #flatten()
+     */
+    @Override
+    public CooCTensor flatten(int axis) {
+        ParameterChecks.assertIndexInBounds(indices[0].length, axis);
+        int[][] destIndices = new int[indices.length][indices[0].length];
+
+        // Compute new shape.
+        int[] destShape = new int[indices[0].length];
+        destShape[axis] = shape.totalEntries().intValueExact();
+
+        for(int i=0, size=entries.length; i<size; i++)
+            destIndices[i][axis] = shape.entriesIndex(indices[i]);
+
+        return new CooCTensor(new Shape(destShape), entries.clone(), destIndices);
     }
 
 
@@ -524,8 +585,7 @@ public class CooCTensor
      */
     @Override
     public CooCTensor elemMult(Tensor B) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexDenseSparseOperations.elemMult(B, this);
     }
 
 
@@ -540,8 +600,7 @@ public class CooCTensor
      */
     @Override
     public CooCTensor elemMult(CooTensor B) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexCooTensorOperations.elemMult(this, B);
     }
 
 
@@ -555,9 +614,8 @@ public class CooCTensor
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     @Override
-    public CTensor elemMult(CTensor B) {
-        // TODO: Implementation.
-        return null;
+    public CooCTensor elemMult(CTensor B) {
+        return ComplexDenseSparseOperations.elemMult(B, this);
     }
 
 
@@ -569,8 +627,7 @@ public class CooCTensor
      */
     @Override
     public CTensor sub(double a) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexDenseSparseOperations.sub(this, a);
     }
 
 
@@ -582,8 +639,7 @@ public class CooCTensor
      */
     @Override
     public CTensor sub(CNumber a) {
-        // TODO: Implementation.
-        return null;
+        return ComplexDenseSparseOperations.sub(this, a);
     }
 
 
@@ -650,8 +706,7 @@ public class CooCTensor
      */
     @Override
     public CooCTensor elemMult(CooCTensor B) {
-        // TODO: Implementation.
-        return null;
+        return ComplexCooTensorOperations.elemMult(this, B);
     }
 
 
@@ -664,8 +719,7 @@ public class CooCTensor
      */
     @Override
     public CooCTensor elemDiv(CTensor B) {
-        // TODO: Implementation.
-        return null;
+        return ComplexDenseSparseOperations.elemDiv(this, B);
     }
 
 
@@ -680,8 +734,7 @@ public class CooCTensor
      */
     @Override
     public CooCTensor elemDiv(Tensor B) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexDenseSparseOperations.elemDiv(this, B);
     }
 
 
@@ -701,19 +754,6 @@ public class CooCTensor
     @Override
     public CTensor tensorInv(int numIndices) {
         return toDense().tensorInv(numIndices);
-    }
-
-
-    /**
-     * Flattens a tensor along the specified axis.
-     *
-     * @param axis Axis along which to flatten tensor.
-     * @throws IllegalArgumentException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
-     */
-    @Override
-    public CooCTensor flatten(int axis) {
-        // TODO: Implementation.
-        return null;
     }
 
 
@@ -742,15 +782,6 @@ public class CooCTensor
     @Override
     protected CooTensor makeRealTensor(Shape shape, double[] entries, int[][] indices) {
         return new CooTensor(shape, entries, indices);
-    }
-
-
-    /**
-     * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
-     */
-    @Override
-    public void sortIndices() {
-        // TODO: Implementation
     }
 
 
@@ -885,53 +916,24 @@ public class CooCTensor
 
 
     /**
-     * Computes the element-wise addition of two tensors of the same rank and stores the result in this tensor.
+     * <p>Formats this sparse COO tensor as a human-readable string specificing the full shape,
+     * non-zero entries, and non-zero indices.</p>
      *
-     * @param B Second tensor in the addition.
-     *
-     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
+     * @return A human-readable string specificing the full shape, non-zero entries, and non-zero indices of this tensor.
      */
-    @Override
-    public void addEq(Tensor B) {
-        // TODO: Remove. It does not make sense for this to be in a sparse tensor.
-    }
+    public String toString() {
+        int maxCols = PrintOptions.getMaxColumns();
+        int padding = PrintOptions.getPadding();
+        int precision = PrintOptions.getPrecision();
+        boolean centring = PrintOptions.useCentering();
 
+        StringBuilder sb = new StringBuilder();
 
-    /**
-     * Computes the element-wise addition of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the addition.
-     *
-     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
-     */
-    @Override
-    public void addEq(CooCTensor B) {
-        // TODO: Remove. It does not make sense for this to be in a sparse tensor.
-    }
+        sb.append("Shape: " + shape + "\n");
+        sb.append("Non-zero Entries: " + PrettyPrint.abrivatedArray(entries, maxCols, padding, precision, centring) + "\n");
+        sb.append("Non-zero Indices: " +
+                PrettyPrint.abrivatedArray(indices, PrintOptions.getMaxRows(), maxCols, padding, 20, centring));
 
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     *
-     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
-     */
-    @Override
-    public void subEq(Tensor B) {
-        // TODO: Remove. It does not make sense for this to be in a sparse tensor.
-    }
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     *
-     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
-     */
-    @Override
-    public void subEq(CooCTensor B) {
-        // TODO: Remove. It does not make sense for this to be in a sparse tensor.FEq
+        return sb.toString();
     }
 }

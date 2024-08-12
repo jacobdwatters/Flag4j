@@ -385,6 +385,19 @@ public final class ParameterChecks {
 
 
     /**
+     * Checks if values are all non-negative according to {@link #assertNonNegative(int)}.
+     * @param values Values of interest.
+     * @throws IllegalArgumentException If any element of {@code values} is negative.
+     * @see #assertPositive(int)
+     */
+    public static void assertNonNegative(int... values) {
+        for(int value : values) {
+            assertNonNegative();
+        }
+    }
+
+
+    /**
      * Checks if a shape represents a square matrix.
      * @param shape Shape to check.
      * @throws LinearAlgebraException If the shape is not of rank 2 with equal rows and columns.

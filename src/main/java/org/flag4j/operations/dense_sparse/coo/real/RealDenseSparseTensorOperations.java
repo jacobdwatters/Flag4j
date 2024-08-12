@@ -67,7 +67,7 @@ public class RealDenseSparseTensorOperations {
      * Computes the element-wise multiplication between a real dense tensor and a real sparse tensor.
      * @param src1 Real dense tensor.
      * @param src2 Real sparse tensor.
-     * @return The result ofm element-wise multiplication.
+     * @return The result of element-wise multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CooTensor elemMult(Tensor src1, CooTensor src2) {
@@ -81,6 +81,30 @@ public class RealDenseSparseTensorOperations {
         for(int i=0; i<destEntries.length; i++) {
             index = src2.shape.entriesIndex(src2.indices[i]); // Get index of non-zero entry.
             destEntries[i] = src1.entries[index]*src2.entries[i];
+        }
+
+        return new CooTensor(src2.shape, destEntries, destIndices);
+    }
+
+
+    /**
+     * Computes the element-wise division between a real dense tensor and a real sparse tensor.
+     * @param src1 Real sparse tensor.
+     * @param src2 Real dense tensor.
+     * @return The result of element-wise division.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static CooTensor elemDiv(CooTensor src1, Tensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        int index;
+        double[] destEntries = new double[src1.nonZeroEntries()];
+        int[][] destIndices = new int[src1.indices.length][src1.indices[0].length];
+        ArrayUtils.deepCopy(src1.indices, destIndices);
+
+        for(int i=0; i<destEntries.length; i++) {
+            index = src2.shape.entriesIndex(src1.indices[i]); // Get index of non-zero entry.
+            destEntries[i] = src1.entries[index]/src2.entries[i];
         }
 
         return new CooTensor(src2.shape, destEntries, destIndices);
@@ -169,6 +193,24 @@ public class RealDenseSparseTensorOperations {
 
         for(int i=0; i<src1.nnz; i++) {
             sum.entries[src1.shape.entriesIndex(src1.indices[i])] += src1.entries[i];
+        }
+
+        return sum;
+    }
+
+
+    /**
+     * Subtracts a scalar from each entry of a real sparse COO tensor.
+     * @param src1 Sparse tensor in difference.
+     * @param b Scalar in difference.
+     * @return A dense tensor which is the difference of {@code src1} and {@code b} such that {@code b} is subtracted from each
+     * element of {@code src1}.
+     */
+    public static Tensor sub(CooTensor src1, double b) {
+        Tensor sum = new Tensor(src1.shape, b);
+
+        for(int i=0; i<src1.nnz; i++) {
+            sum.entries[src1.shape.entriesIndex(src1.indices[i])] -= src1.entries[i];
         }
 
         return sum;

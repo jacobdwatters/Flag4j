@@ -69,6 +69,54 @@ public final class RealComplexDenseSparseOperations {
 
 
     /**
+     * Computes the element-wise division between a real dense tensor and a complex sparse tensor.
+     * @param src1 Real sparse tensor.
+     * @param src2 complex dense tensor.
+     * @return The result of element-wise division.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static CooCTensor elemDiv(CooTensor src1, CTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        int index;
+        CNumber[] destEntries = new CNumber[src1.nonZeroEntries()];
+        int[][] destIndices = new int[src1.indices.length][src1.indices[0].length];
+        ArrayUtils.deepCopy(src1.indices, destIndices);
+
+        for(int i=0; i<destEntries.length; i++) {
+            index = src2.shape.entriesIndex(src1.indices[i]); // Get index of non-zero entry.
+            destEntries[i] = new CNumber(src1.entries[index]).div(src2.entries[i]);
+        }
+
+        return new CooCTensor(src2.shape, destEntries, destIndices);
+    }
+
+
+    /**
+     * Computes the element-wise division between a real dense tensor and a real sparse tensor.
+     * @param src1 Real sparse tensor.
+     * @param src2 Real dense tensor.
+     * @return The result of element-wise division.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static CooCTensor elemDiv(CooCTensor src1, Tensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        int index;
+        CNumber[] destEntries = new CNumber[src1.nonZeroEntries()];
+        int[][] destIndices = new int[src1.indices.length][src1.indices[0].length];
+        ArrayUtils.deepCopy(src1.indices, destIndices);
+
+        for(int i=0; i<destEntries.length; i++) {
+            index = src2.shape.entriesIndex(src1.indices[i]); // Get index of non-zero entry.
+            destEntries[i] = src1.entries[index].div(src2.entries[i]);
+        }
+
+        return new CooCTensor(src2.shape, destEntries, destIndices);
+    }
+
+
+    /**
      * Adds a real dense tensor to a sparse complex tensor.
      * @param src1 First tensor in the sum.
      * @param src2 Second tensor in the sum.
@@ -258,6 +306,44 @@ public final class RealComplexDenseSparseOperations {
         for(int i=0; i<src1.nnz; i++) {
             int idx = src1.shape.entriesIndex(src1.indices[i]);
             sum.entries[idx].add(src1.entries[i]);
+        }
+
+        return sum;
+    }
+
+
+    /**
+     * Subtracts a scalar from a real sparse COO tensor.
+     * @param src1 Sparse tensor in sum.
+     * @param b Scalar in sum.
+     * @return A dense tensor which is the sum of {@code src1} and {@code b} such that {@code b} is added to each element of {@code
+     * src1}.
+     */
+    public static CTensor sub(CooTensor src1, CNumber b) {
+        CTensor sum = new CTensor(src1.shape, b);
+
+        for(int i=0; i<src1.nnz; i++) {
+            int idx = src1.shape.entriesIndex(src1.indices[i]);
+            sum.entries[idx].add(src1.entries[i]);
+        }
+
+        return sum;
+    }
+
+
+    /**
+     * Adds a scalar to a real sparse COO tensor.
+     * @param src1 Sparse tensor in sum.
+     * @param b Scalar in sum.
+     * @return A dense tensor which is the sum of {@code src1} and {@code b} such that {@code b} is added to each element of {@code
+     * src1}.
+     */
+    public static CTensor sub(CooCTensor src1, double b) {
+        CTensor sum = new CTensor(src1.shape, b);
+
+        for(int i=0; i<src1.nnz; i++) {
+            int idx = src1.shape.entriesIndex(src1.indices[i]);
+            sum.entries[idx] = sum.entries[idx].sub(src1.entries[i]);
         }
 
         return sum;

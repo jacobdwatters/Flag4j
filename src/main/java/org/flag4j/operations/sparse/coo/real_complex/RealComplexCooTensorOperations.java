@@ -191,4 +191,146 @@ public final class RealComplexCooTensorOperations {
 
         return new CooCTensor(src1.shape, sumEntries, sumIndices);
     }
+
+
+    /**
+     * <p>Computes the element-wise multiplication between two sparse COO tensors.</p>
+     *
+     * <p>Assumes indices of both tensors are sorted lexicographically.</p>
+     *
+     * @param src1 First tensor in the element-wise multiplication.
+     * @param src2 Second tensor in the element-wise multiplication.
+     * @return The element-wise product of {@code src1} and {@code src2}.
+     */
+    public static CooCTensor elemMult(CooCTensor src1, CooTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        CNumber[] productEntries = new CNumber[Math.min(src1.nnz, src2.nnz)];
+        int[][] productIndices = new int[Math.min(src1.nnz, src2.nnz)][src1.indices[0].length];
+        int count = 0;
+
+        int src2Idx = 0;
+        for(int i = 0; i < src1.nnz && src2Idx < src2.nnz; i++) {
+            int cmp = -1;
+
+            while(src2Idx < src2.nnz && (cmp = Arrays.compare(src2.indices[src2Idx], src1.indices[i])) < 0) {
+                src2Idx++;
+            }
+
+            if(src2Idx < src2.nnz && cmp == 0) {
+                productEntries[count] = src1.entries[i].mult(src2.entries[src2Idx]);
+                productIndices[count] = src1.indices[i];
+                count++;
+            }
+        }
+
+        // Truncate arrays if necessary.
+        return new CooCTensor(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
+    }
+
+
+    /**
+     * <p>Computes the element-wise multiplication between two sparse COO tensors.</p>
+     *
+     * <p>Assumes indices of both tensors are sorted lexicographically.</p>
+     *
+     * @param src1 First tensor in the element-wise multiplication.
+     * @param src2 Second tensor in the element-wise multiplication.
+     * @return The element-wise product of {@code src1} and {@code src2}.
+     */
+    public static CooCTensor elemMult(CooTensor src1, CooCTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        CNumber[] productEntries = new CNumber[Math.min(src1.nnz, src2.nnz)];
+        int[][] productIndices = new int[Math.min(src1.nnz, src2.nnz)][src1.indices[0].length];
+        int count = 0;
+
+        int src2Idx = 0;
+        for(int i = 0; i < src1.nnz && src2Idx < src2.nnz; i++) {
+            int cmp = -1;
+
+            while(src2Idx < src2.nnz && (cmp = Arrays.compare(src2.indices[src2Idx], src1.indices[i])) < 0) {
+                src2Idx++;
+            }
+
+            if(src2Idx < src2.nnz && cmp == 0) {
+                productEntries[count] = src2.entries[src2Idx].mult(src1.entries[i]);
+                productIndices[count] = src1.indices[i];
+                count++;
+            }
+        }
+
+        // Truncate arrays if necessary.
+        return new CooCTensor(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
+    }
+
+
+    /**
+     * <p>Computes the element-wise division between two sparse COO tensors.</p>
+     *
+     * <p>Assumes indices of both tensors are sorted lexicographically.</p>
+     *
+     * @param src1 First tensor in the element-wise division.
+     * @param src2 Second tensor in the element-wise division.
+     * @return The element-wise quotient of {@code src1} and {@code src2}.
+     */
+    public static CooCTensor elemdiv(CooCTensor src1, CooTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        CNumber[] productEntries = new CNumber[Math.min(src1.nnz, src2.nnz)];
+        int[][] productIndices = new int[Math.min(src1.nnz, src2.nnz)][src1.indices[0].length];
+        int count = 0;
+
+        int src2Idx = 0;
+        for(int i = 0; i < src1.nnz && src2Idx < src2.nnz; i++) {
+            int cmp = -1;
+
+            while(src2Idx < src2.nnz && (cmp = Arrays.compare(src2.indices[src2Idx], src1.indices[i])) < 0) {
+                src2Idx++;
+            }
+
+            if(src2Idx < src2.nnz && cmp == 0) {
+                productEntries[count] = src1.entries[i].div(src2.entries[src2Idx]);
+                productIndices[count] = src1.indices[i];
+                count++;
+            }
+        }
+
+        // Truncate arrays if necessary.
+        return new CooCTensor(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
+    }
+
+
+    /**
+     * <p>Computes the element-wise division between two sparse COO tensors.</p>
+     *
+     * <p>Assumes indices of both tensors are sorted lexicographically.</p>
+     *
+     * @param src1 First tensor in the element-wise division.
+     * @param src2 Second tensor in the element-wise division.
+     * @return The element-wise quotient of {@code src1} and {@code src2}.
+     */
+    public static CooCTensor elemdiv(CooTensor src1, CooCTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        CNumber[] productEntries = new CNumber[Math.min(src1.nnz, src2.nnz)];
+        int[][] productIndices = new int[Math.min(src1.nnz, src2.nnz)][src1.indices[0].length];
+        int count = 0;
+
+        int src2Idx = 0;
+        for(int i = 0; i < src1.nnz && src2Idx < src2.nnz; i++) {
+            int cmp = -1;
+
+            while(src2Idx < src2.nnz && (cmp = Arrays.compare(src2.indices[src2Idx], src1.indices[i])) < 0) {
+                src2Idx++;
+            }
+
+            if(src2Idx < src2.nnz && cmp == 0) {
+                productEntries[count] = new CNumber(src1.entries[i]).div(src2.entries[src2Idx]);
+                productIndices[count] = src1.indices[i];
+                count++;
+            }
+        }
+
+        // Truncate arrays if necessary.
+        return new CooCTensor(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
+    }
 }
