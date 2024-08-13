@@ -282,12 +282,13 @@ public class CooTensor
         newShape.makeStridesIfNull(); // Ensure this shape object has strides computed.
 
         int rank = indices[0].length;
+        int newRank = newShape.getRank();
         int nnz = entries.length;
 
         int[] oldStrides = shape.getStrides();
         int[] newStrides = newShape.getStrides();
 
-        int[][] newIndices = new int[nnz][rank];
+        int[][] newIndices = new int[nnz][newRank];
 
         for (int i = 0; i < nnz; i++) {
             int flatIndex = 0;
@@ -295,7 +296,11 @@ public class CooTensor
                 flatIndex += indices[i][j] * oldStrides[j];
             }
 
-            for (int j = 0; j < rank; j++) {
+            for (int j = 0; j < newRank; j++) {
+                int[] arr1 = newIndices[i];
+                int v1 = newIndices[i][j];
+                int v2 = newStrides[j];
+
                 newIndices[i][j] = flatIndex / newStrides[j];
                 flatIndex %= newStrides[j];
             }
@@ -337,6 +342,7 @@ public class CooTensor
 
         // Compute new shape.
         int[] destShape = new int[indices[0].length];
+        Arrays.fill(destShape, 1);
         destShape[axis] = shape.totalEntries().intValueExact();
 
         for(int i=0, size=entries.length; i<size; i++)
@@ -395,7 +401,7 @@ public class CooTensor
         }
 
         // Create sparse coo tensor and sort values lexicographically.
-        CooTensor transpose = new CooTensor(shape, transposeEntries, transposeIndices);
+        CooTensor transpose = new CooTensor(shape.swapAxes(axis1, axis2), transposeEntries, transposeIndices);
         transpose.sortIndices();
 
         return transpose;
@@ -423,7 +429,7 @@ public class CooTensor
         double[] transposeEntries = new double[nnz];
 
         // Permute the indices according to the permutation array.
-        for(int i = 0; i < nnz; i++) {
+        for(int i=0; i<nnz; i++) {
             transposeEntries[i] = entries[i];
             transposeIndices[i] = indices[i].clone();
 
@@ -433,7 +439,7 @@ public class CooTensor
         }
 
         // Create sparse coo tensor and sort values lexicographically.
-        CooTensor transpose = new CooTensor(shape, transposeEntries, transposeIndices);
+        CooTensor transpose = new CooTensor(shape.swapAxes(axes), transposeEntries, transposeIndices);
         transpose.sortIndices();
 
         return transpose;
@@ -636,8 +642,12 @@ public class CooTensor
 
 
     /**
-     * Computes the transpose of a tensor. Same as {@link #transpose()}.
-     * In the context of a tensor, this exchanges the first and last axis of the tensor.
+     * <p>Computes the transpose of a tensor. Same as {@link #transpose()}.</p>
+     *
+     * <p>This method transposes the tensor by exchanges the first and last index
+     * of the tensor. Thus, for a rank 2 tensor, this method is equivalent to a matrix transpose.</p>
+     *
+     * <p>{@link #T(int, int)} and {@link #T(int...)} offer more general tensor transposes.</p>
      *
      * @return The transpose of this tensor.
      * @see #transpose()
