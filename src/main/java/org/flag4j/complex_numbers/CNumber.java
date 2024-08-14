@@ -138,7 +138,7 @@ public class CNumber extends Number {
      * @param num The string representation of a complex number.
      */
     public CNumber(String num) {
-        CNumber complexNum = CNumberParser.parseNumber(num);
+        CNumber complexNum = ComplexNumberParser.parseNumber(num);
         this.re = complexNum.re;
         this.im = complexNum.im;
     }

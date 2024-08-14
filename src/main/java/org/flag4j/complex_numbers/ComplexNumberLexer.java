@@ -25,10 +25,12 @@
 package org.flag4j.complex_numbers;
 
 
+import org.flag4j.util.exceptions.ComplexNumberParseingException;
+
 /**
  * A lexer for producing the tokens of a complex number represented as a string.
  */
-class CNumberLexer {
+class ComplexNumberLexer {
     /**
      * Error message for unexpected symbol.
      */
@@ -42,7 +44,7 @@ class CNumberLexer {
     /**
      * @param content - String representation of complex number
      */
-    public CNumberLexer(String content) {
+    public ComplexNumberLexer(String content) {
         this.content = content;
     }
 
@@ -100,17 +102,17 @@ class CNumberLexer {
 
 
     /**
-     * Produces next {@link CNumberToken} from complex number string. Also removes this
-     * CNumberToken from the string. This method implements a finite automata which describes the legal arrangement of
+     * Produces next {@link ComplexNumberToken} from complex number string. Also removes this
+     * ComplexNumberToken from the string. This method implements a finite automata which describes the legal arrangement of
      * tokens within a complex number.
      *
-     * @return Next {@link CNumberToken} in string.
+     * @return Next {@link ComplexNumberToken} in string.
      * @throws RuntimeException If the string is not a valid representation of a complex number.
      */
-    public CNumberToken getNextToken() {
+    public ComplexNumberToken getNextToken() {
         int state = 1;  // State of Finite Automata
         boolean done = false;
-        StringBuilder dataBuilder = new StringBuilder(); // specific info for the CNumberToken
+        StringBuilder dataBuilder = new StringBuilder(); // specific info for the ComplexNumberToken
         int sym;  // holds current symbol
 
 
@@ -199,19 +201,19 @@ class CNumberLexer {
         } while(!done);
 
         if(state == 2 || state == 4) { // we have an operator
-            return new CNumberToken("opp", dataBuilder.toString());
+            return new ComplexNumberToken("opp", dataBuilder.toString());
         }
         else if(state == 3 || state == 8) { // we have a number
-            return new CNumberToken("num", dataBuilder.toString());
+            return new ComplexNumberToken("num", dataBuilder.toString());
         }
         else if(state == 5) { // end of number
-            return new CNumberToken("eof", dataBuilder.toString());
+            return new ComplexNumberToken("eof", dataBuilder.toString());
         }
         else if(state == 6) { // we have the imaginary unit
-            return new CNumberToken("im","i");
+            return new ComplexNumberToken("im","i");
         }
         else {
-            error("somehow Lexer FA halted in bad state " + state);
+            error("Somehow Lexer FA halted in bad state " + state);
             return null;
         }
     }
@@ -222,6 +224,6 @@ class CNumberLexer {
      * @param message - error message to print
      */
     protected static void error( String message ) {
-        throw new RuntimeException(message);
+        throw new ComplexNumberParseingException(message);
     }
 }

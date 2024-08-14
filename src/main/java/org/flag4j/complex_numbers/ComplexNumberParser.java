@@ -24,15 +24,62 @@
 
 package org.flag4j.complex_numbers;
 
+import org.flag4j.core_temp.fields.Complex128;
+import org.flag4j.core_temp.fields.Complex64;
 import org.flag4j.util.ErrorMessages;
 
 /**
- * A parser for complex numbers represented as a string.
+ * A parser for parsing complex numbers represented as a string.
  */
-public class CNumberParser {
+public class ComplexNumberParser {
 
-    private CNumberParser() {
+    private ComplexNumberParser() {
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+    }
+
+
+    /**
+     * Parses a complex number in the form of a string into its real and imaginary parts.
+     * For example, the string <code>"2+3i"</code> would be parsed into real and imaginary parts
+     * <code>2</code> and <code>3</code> respectively.
+     *
+     * @param num - complex number in one of three forms: <code>a + bi, a,</code> or <code>bi</code> where a and b are
+     * 				real numbers and i is the imaginary unit sqrt(-1)
+     * @return The complex number represented by the string {@code num}.
+     */
+    public static CNumber parseNumber(String num) {
+        double[] components = getComponents(num);
+        return new CNumber(components[0], components[1]);
+    }
+
+
+    /**
+     * Parses a complex number in the form of a string into its real and imaginary parts.
+     * For example, the string <code>"2+3i"</code> would be parsed into real and imaginary parts
+     * <code>2</code> and <code>3</code> respectively.
+     *
+     * @param num - complex number in one of three forms: <code>a + bi, a,</code> or <code>bi</code> where a and b are
+     * 				real numbers and i is the imaginary unit sqrt(-1)
+     * @return The complex number represented by the {@code num} as a {@link Complx128}.
+     */
+    public static Complex128 parseNumberToComplex128(String num) {
+        double[] components = getComponents(num);
+        return new Complex128(components[0], components[1]);
+    }
+
+
+    /**
+     * Parses a complex number in the form of a string into its real and imaginary parts.
+     * For example, the string <code>"2+3i"</code> would be parsed into real and imaginary parts
+     * <code>2</code> and <code>3</code> respectively.
+     *
+     * @param num - complex number in one of three forms: <code>a + bi, a,</code> or <code>bi</code> where a and b are
+     * 				real numbers and i is the imaginary unit sqrt(-1)
+     * @return The complex number represented by the {@code num} as a {@link Complx64}.
+     */
+    public static Complex64 parseNumberToComplex64(String num) {
+        double[] components = getComponents(num);
+        return new Complex64(components[0], components[1]);
     }
 
 
@@ -45,15 +92,15 @@ public class CNumberParser {
      * 				real numbers and i is the imaginary unit sqrt(-1)
      * @return The complex number represented by the string num.
      */
-    public static CNumber parseNumber(String num) {
+    private static double[] getComponents(String num) {
         double[] result = new double[2];
 
-        CNumberLexer lex = new CNumberLexer(num);
+        ComplexNumberLexer lex = new ComplexNumberLexer(num);
 
-        CNumberToken token;
-        CNumberToken operator;
-        CNumberToken real;
-        CNumberToken imaginary;
+        ComplexNumberToken token;
+        ComplexNumberToken operator;
+        ComplexNumberToken real;
+        ComplexNumberToken imaginary;
 
         token = lex.getNextToken();
         if(token.matches("im", "i")) { // then we have the imaginary unit
@@ -120,6 +167,6 @@ public class CNumberParser {
             }
         }
 
-        return new CNumber(result[0], result[1]);
+        return result;
     }
 }
