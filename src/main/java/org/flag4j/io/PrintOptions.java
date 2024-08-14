@@ -30,7 +30,7 @@ import org.flag4j.util.ParameterChecks;
 /**
  * Print options for matrices and vectors
  */
-public abstract class PrintOptions {
+public final class PrintOptions {
 
     /**
      * Default padding between elements when printing.

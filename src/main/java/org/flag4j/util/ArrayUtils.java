@@ -54,7 +54,7 @@ public final class ArrayUtils {
     public static int[][] deepCopy(final int[][] src, int[][] dest) {
         if(dest == null) dest = new int[src.length][src[0].length];
         if(src == dest) return dest;
-        else ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+        else ParameterChecks.assertGreaterEq(src.length, dest.length);
 
         for(int i = 0; i < src.length; i++) {
             dest[i] = new int[src[i].length];

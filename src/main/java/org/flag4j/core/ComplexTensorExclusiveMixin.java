@@ -26,7 +26,6 @@ package org.flag4j.core;
 
 
 import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.complex_numbers.CNumber;
 
@@ -89,40 +88,4 @@ public interface ComplexTensorExclusiveMixin<T extends TensorBase<T, CTensor, T,
      * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
      */
     T H(int... axes);
-
-
-    /**
-     * Computes the element-wise addition of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the addition.
-     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
-     */
-    void addEq(Tensor B);
-
-
-    /**
-     * Computes the element-wise addition of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the addition.
-     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
-     */
-    void addEq(CooCTensor B);
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
-     */
-    void subEq(Tensor B);
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
-     */
-    void subEq(CooCTensor B);
 }

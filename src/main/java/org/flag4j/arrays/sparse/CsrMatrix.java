@@ -2447,6 +2447,8 @@ public class CsrMatrix
      */
     @Override
     public CsrMatrix elemMult(CsrMatrix B) {
+        // TODO: While technically correct, this does not take advantage of x*0 = 0*x = 0 for any x and will likely store many
+        //  zeros explicitly.
         return RealCsrOperations.applyBinOpp(this, B, (Double a, Double b) -> a*b, null);
     }
 

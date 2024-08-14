@@ -173,4 +173,47 @@ public class ComplexDenseSparseOperations {
 
         return sum;
     }
+
+
+    /**
+     * Subtracts a scalar from a sparse COO tensor.
+     * @param src1 Sparse tensor in sum.
+     * @param b Scalar in sum.
+     * @return A dense tensor which is the sum of {@code src1} and {@code b} such that {@code b} is added to each element of {@code
+     * src1}.
+     */
+    public static CTensor sub(CooCTensor src1, CNumber b) {
+        CTensor sum = new CTensor(src1.shape, b);
+
+        for(int i=0; i<src1.nnz; i++) {
+            int idx = src1.shape.entriesIndex(src1.indices[i]);
+            sum.entries[idx].add(src1.entries[i]);
+        }
+
+        return sum;
+    }
+
+
+    /**
+     * Computes the element-wise division between a complex dense tensor and a complex sparse tensor.
+     * @param src1 Complex sparse tensor.
+     * @param src2 Complex dense tensor.
+     * @return The result of element-wise division.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static CooCTensor elemDiv(CooCTensor src1, CTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        int index;
+        CNumber[] destEntries = new CNumber[src1.nonZeroEntries()];
+        int[][] destIndices = new int[src1.indices.length][src1.indices[0].length];
+        ArrayUtils.deepCopy(src1.indices, destIndices);
+
+        for(int i=0; i<destEntries.length; i++) {
+            index = src2.shape.entriesIndex(src1.indices[i]); // Get index of non-zero entry.
+            destEntries[i] = src1.entries[index].div(src2.entries[i]);
+        }
+
+        return new CooCTensor(src2.shape, destEntries, destIndices);
+    }
 }
