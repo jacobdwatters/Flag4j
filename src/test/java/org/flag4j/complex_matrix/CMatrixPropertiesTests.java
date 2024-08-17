@@ -1,6 +1,6 @@
 package org.flag4j.complex_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CMatrixPropertiesTests {
 
     CNumber[][] entriesA;
-    CMatrix A;
+    CMatrixOld A;
     boolean expBoolResult;
 
     @Test
@@ -19,7 +19,7 @@ class CMatrixPropertiesTests {
                 {new CNumber(1), new CNumber(2, 123.45), new CNumber(3, -4.551)},
                 {new CNumber(-0.442, 12.34), new CNumber(13.5), new CNumber(35.6)},
                 {new CNumber(0.4441), new CNumber(6), new CNumber(90, -43.18)}};
-        A = new CMatrix(entriesA);
+        A = new CMatrixOld(entriesA);
         expBoolResult = false;
         assertEquals(expBoolResult, A.isI());
 
@@ -27,7 +27,7 @@ class CMatrixPropertiesTests {
         entriesA = new CNumber[][]{
                 {new CNumber(1), new CNumber(2, 123.45), new CNumber(3, -4.551)},
                 {new CNumber(-0.442, 12.34), new CNumber(13.5), new CNumber(35.6)}};
-        A = new CMatrix(entriesA);
+        A = new CMatrixOld(entriesA);
         expBoolResult = false;
         assertEquals(expBoolResult, A.isI());
 
@@ -35,7 +35,7 @@ class CMatrixPropertiesTests {
         entriesA = new CNumber[][]{
                 {new CNumber(1, 3.1335), new CNumber(2, 566.72)},
                 {new CNumber(-0.442, 67.105), new CNumber(13.5, -78.431)}};
-        A = new CMatrix(entriesA);
+        A = new CMatrixOld(entriesA);
         expBoolResult = false;
         assertEquals(expBoolResult, A.isI());
 
@@ -43,7 +43,7 @@ class CMatrixPropertiesTests {
         entriesA = new CNumber[][]{
                 {new CNumber(1), new CNumber(0)},
                 {new CNumber(0), new CNumber(1)}};
-        A = new CMatrix(entriesA);
+        A = new CMatrixOld(entriesA);
         expBoolResult = true;
         assertEquals(expBoolResult, A.isI());
 
@@ -52,7 +52,7 @@ class CMatrixPropertiesTests {
                 {new CNumber(1), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(1), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(1)}};
-        A = new CMatrix(entriesA);
+        A = new CMatrixOld(entriesA);
         expBoolResult = true;
         assertEquals(expBoolResult, A.isI());
 
@@ -62,7 +62,7 @@ class CMatrixPropertiesTests {
                 {new CNumber(0), new CNumber(1), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(1), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(1)}};
-        A = new CMatrix(entriesA);
+        A = new CMatrixOld(entriesA);
         expBoolResult = true;
         assertEquals(expBoolResult, A.isI());
 
@@ -72,7 +72,7 @@ class CMatrixPropertiesTests {
                 {new CNumber(0), new CNumber(1), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(1), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(1)}};
-        A = new CMatrix(entriesA);
+        A = new CMatrixOld(entriesA);
         expBoolResult = true;
         assertEquals(expBoolResult, A.isI());
 
@@ -82,7 +82,7 @@ class CMatrixPropertiesTests {
                 {new CNumber(0), new CNumber(1), new CNumber(0), new CNumber(0)},
                 {new CNumber(1), new CNumber(0), new CNumber(1), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(1)}};
-        A = new CMatrix(entriesA);
+        A = new CMatrixOld(entriesA);
         expBoolResult = false;
         assertEquals(expBoolResult, A.isI());
 
@@ -90,7 +90,7 @@ class CMatrixPropertiesTests {
         entriesA = new CNumber[][]{
                 {new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0)}};
-        A = new CMatrix(entriesA);
+        A = new CMatrixOld(entriesA);
         expBoolResult = false;
         assertEquals(expBoolResult, A.isI());
 
@@ -99,7 +99,7 @@ class CMatrixPropertiesTests {
                 {new CNumber(1), new CNumber(0, 0.3232), new CNumber(0)},
                 {new CNumber(0), new CNumber(1), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(1)}};
-        A = new CMatrix(entriesA);
+        A = new CMatrixOld(entriesA);
         expBoolResult = false;
         assertEquals(expBoolResult, A.isI());
 
@@ -108,7 +108,7 @@ class CMatrixPropertiesTests {
                 {new CNumber(1), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(1, -5), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(1)}};
-        A = new CMatrix(entriesA);
+        A = new CMatrixOld(entriesA);
         expBoolResult = false;
         assertEquals(expBoolResult, A.isI());
     }
@@ -121,7 +121,7 @@ class CMatrixPropertiesTests {
                 {new CNumber(1), new CNumber(2, 123.45), new CNumber(3, -4.551)},
                 {new CNumber(-0.442, 12.34), new CNumber(13.5), new CNumber(35.6)},
                 {new CNumber(0.4441), new CNumber(6), new CNumber(90, -43.18)}};
-        A = new CMatrix(entriesA);
+        A = new CMatrixOld(entriesA);
         expBoolResult = false;
         assertFalse(A.isReal());
 
@@ -131,7 +131,7 @@ class CMatrixPropertiesTests {
                 {new CNumber(1), new CNumber(2), new CNumber(3)},
                 {new CNumber(-0.442), new CNumber(13.5), new CNumber(35.6)},
                 {new CNumber(0.4441), new CNumber(6), new CNumber(90)}};
-        A = new CMatrix(entriesA);
+        A = new CMatrixOld(entriesA);
         expBoolResult = false;
         assertTrue(A.isReal());
 
@@ -140,7 +140,7 @@ class CMatrixPropertiesTests {
                 {new CNumber(1), new CNumber(2), new CNumber(3)},
                 {new CNumber(-0.442), new CNumber(13.5,1.4), new CNumber(35.6)},
                 {new CNumber(0.4441), new CNumber(6), new CNumber(90)}};
-        A = new CMatrix(entriesA);
+        A = new CMatrixOld(entriesA);
         expBoolResult = false;
         assertFalse(A.isReal());
 
@@ -149,7 +149,7 @@ class CMatrixPropertiesTests {
                 {new CNumber(1), new CNumber(2), new CNumber(3)},
                 {new CNumber(-0.442), new CNumber(-13.5), new CNumber(35.6)},
                 {new CNumber(0.4441), new CNumber(6), new CNumber(0, 1.90)}};
-        A = new CMatrix(entriesA);
+        A = new CMatrixOld(entriesA);
         expBoolResult = false;
         assertFalse(A.isReal());
     }
@@ -162,7 +162,7 @@ class CMatrixPropertiesTests {
                 {new CNumber(1), new CNumber(2, 123.45)},
                 {new CNumber(-0.442, 12.34), new CNumber(13.5)},
                 {new CNumber(0.4441), new CNumber(6)}};
-        A = new CMatrix(entriesA);
+        A = new CMatrixOld(entriesA);
         expBoolResult = false;
         assertTrue(A.isComplex());
 
@@ -172,7 +172,7 @@ class CMatrixPropertiesTests {
                 {new CNumber(1), new CNumber(2), new CNumber(3)},
                 {new CNumber(-0.442), new CNumber(13.5), new CNumber(35.6)},
                 {new CNumber(0.4441), new CNumber(6), new CNumber(90)}};
-        A = new CMatrix(entriesA);
+        A = new CMatrixOld(entriesA);
         expBoolResult = false;
         assertFalse(A.isComplex());
 
@@ -180,7 +180,7 @@ class CMatrixPropertiesTests {
         entriesA = new CNumber[][]{
                 {new CNumber(1), new CNumber(2), new CNumber(3)},
                 {new CNumber(-0.442), new CNumber(13.5,1.4), new CNumber(35.6)}};
-        A = new CMatrix(entriesA);
+        A = new CMatrixOld(entriesA);
         expBoolResult = false;
         assertTrue(A.isComplex());
 
@@ -189,7 +189,7 @@ class CMatrixPropertiesTests {
                 {new CNumber(1), new CNumber(2), new CNumber(3)},
                 {new CNumber(-0.442), new CNumber(-13.5), new CNumber(35.6)},
                 {new CNumber(0.4441), new CNumber(6), new CNumber(0, 1.90)}};
-        A = new CMatrix(entriesA);
+        A = new CMatrixOld(entriesA);
         expBoolResult = false;
         assertTrue(A.isComplex());
     }

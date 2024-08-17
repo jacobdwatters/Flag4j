@@ -1,8 +1,8 @@
 package org.flag4j.sparse_csr_complex_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.sparse.CsrCMatrix;
-import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.sparse.CsrMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -15,7 +15,7 @@ class ComplexCsrMatMultTests {
     CsrCMatrix A;
     CsrCMatrix B;
     CsrMatrix BReal;
-    CMatrix exp;
+    CMatrixOld exp;
     CsrCMatrix expCsr;
 
     CNumber[] aEntries;
@@ -73,7 +73,7 @@ class ComplexCsrMatMultTests {
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.016004547700000003+0.019015633900000002i"), new CNumber("0.0")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.mult(B));
 
@@ -119,7 +119,7 @@ class ComplexCsrMatMultTests {
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.032688807717288215+0.010220998168193668i"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.046966666242702036+0.15221097143756965i"), new CNumber("0.03626196332441662+0.18027200096523255i")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.mult(BReal));
 

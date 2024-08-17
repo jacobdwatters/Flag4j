@@ -92,7 +92,7 @@ public abstract class ErrorMessages {
      */
     private static final String SHAPE_ENTRIES_ERR = "The shape %s cannot hold %d entries.";
     /**
-     * Error message for arrays which were expected to be the same length.
+     * Error message for arrays_old which were expected to be the same length.
      */
     private static final String ARRAY_LENGTHS_MISMATCH_ERR = "Arrays lengths must match but got lengths: %s.";
     /**
@@ -106,7 +106,7 @@ public abstract class ErrorMessages {
     private static final String SHAPE_BROADCAST_ERR = "Shapes %s and %s can not be broadcast because they specify " +
             "a different number of total entries.";
     /**
-     * Error message for arrays which do not have the same total number of entries.
+     * Error message for arrays_old which do not have the same total number of entries.
      */
     private static final String TOTAL_ENTRIES_ERR = "Arrays do not have the same total number of entries.";
     /**
@@ -264,9 +264,9 @@ public abstract class ErrorMessages {
 
 
     /**
-     * Gets an error message for arrays which were expected to be the same length.
-     * @param lengths Lengths of arrays.
-     * @return An error message for arrays which were expected to be the same length.
+     * Gets an error message for arrays_old which were expected to be the same length.
+     * @param lengths Lengths of arrays_old.
+     * @return An error message for arrays_old which were expected to be the same length.
      */
     public static String getArrayLengthsMismatchErr(int... lengths) {
         return String.format(ARRAY_LENGTHS_MISMATCH_ERR, Arrays.toString(lengths));
@@ -296,8 +296,8 @@ public abstract class ErrorMessages {
 
 
     /**
-     * Gets an error message for arrays which do not have the same total number of entries.
-     * @return An error message for arrays which do not have the same total number of entries.
+     * Gets an error message for arrays_old which do not have the same total number of entries.
+     * @return An error message for arrays_old which do not have the same total number of entries.
      */
     public static String getTotalEntriesErr() {
         return TOTAL_ENTRIES_ERR;

@@ -1,8 +1,8 @@
 package org.flag4j.sparse_csr_complex_matrix;
 
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CsrCMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -69,7 +69,7 @@ class CsrCMatrixTriDiagTests {
         aRowPointers = new int[]{0, 0, 0, 1, 3, 5, 5};
         aColIndices = new int[]{2, 0, 5, 2, 4};
         A = new CsrCMatrix(aShape, aEntries, aRowPointers, aColIndices);
-        exp = new CVector(new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.16488, 0.46447),
+        exp = new CVectorOld(new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.16488, 0.46447),
                 new CNumber(0.0, 0.0), new CNumber(0.77148, 0.92185), new CNumber(0.0, 0.0)).toCoo();
         assertEquals(exp, A.getDiag());
 
@@ -80,7 +80,7 @@ class CsrCMatrixTriDiagTests {
         aRowPointers = new int[]{0, 1, 3, 4, 4, 4, 5};
         aColIndices = new int[]{4, 0, 3, 5, 2};
         A = new CsrCMatrix(aShape, aEntries, aRowPointers, aColIndices);
-        exp = new CVector(0, 0, 0, 0, 0, 0).toCoo();
+        exp = new CVectorOld(0, 0, 0, 0, 0, 0).toCoo();
         assertEquals(exp, A.getDiag());
 
         // ----------------------- sub-case 3 -----------------------
@@ -93,7 +93,7 @@ class CsrCMatrixTriDiagTests {
         aRowPointers = new int[]{0, 1, 4, 5, 6, 8, 10, 11, 12, 13, 13, 14, 14};
         aColIndices = new int[]{7, 3, 5, 8, 6, 3, 6, 7, 3, 5, 11, 10, 8, 11};
         A = new CsrCMatrix(aShape, aEntries, aRowPointers, aColIndices);
-        exp = new CVector(new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0),
+        exp = new CVectorOld(new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0),
                 new CNumber(0.91248, 0.28304), new CNumber(0.0, 0.0), new CNumber(0.28884, 0.58676),
                 new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.02111, 0.58864),
                 new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0)).toCoo();
@@ -105,7 +105,7 @@ class CsrCMatrixTriDiagTests {
         aRowPointers = new int[]{0, 1, 3, 4};
         aColIndices = new int[]{0, 3, 5, 1};
         A = new CsrCMatrix(aShape, aEntries, aRowPointers, aColIndices);
-        exp = new CVector(new CNumber(0.85218, 0.08775), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0)).toCoo();
+        exp = new CVectorOld(new CNumber(0.85218, 0.08775), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0)).toCoo();
         assertEquals(exp, A.getDiag());
 
         // ----------------------- sub-case 5 -----------------------
@@ -115,7 +115,7 @@ class CsrCMatrixTriDiagTests {
         aRowPointers = new int[]{0, 1, 1, 2, 2, 2, 3, 4};
         aColIndices = new int[]{0, 2, 2, 0};
         A = new CsrCMatrix(aShape, aEntries, aRowPointers, aColIndices);
-        exp = new CVector(new CNumber(0.38881, 0.35982), new CNumber(0.0, 0.0),
+        exp = new CVectorOld(new CNumber(0.38881, 0.35982), new CNumber(0.0, 0.0),
                 new CNumber(0.82873, 0.85744)).toCoo();
         assertEquals(exp, A.getDiag());
     }

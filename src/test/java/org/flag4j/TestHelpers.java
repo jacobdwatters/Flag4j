@@ -1,6 +1,6 @@
 package org.flag4j;
 
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.core.MatrixMixin;
 import org.flag4j.core.dense_base.DenseTensorBase;
 
@@ -39,7 +39,7 @@ public class TestHelpers {
             System.out.print("\t[");
             for(int j=0; j<A.numCols(); j++) {
 
-                if(A instanceof CMatrix B) {
+                if(A instanceof CMatrixOld B) {
                     if(B.get(i, j).im > 0) {
                         System.out.print(B.get(i, j).re + "+" + B.get(i, j).im + "j");
                     } else {
@@ -71,7 +71,7 @@ public class TestHelpers {
         for(int i=0; i<A.numRows(); i++) {
             System.out.print("\t{");
             for(int j=0; j<A.numCols(); j++) {
-                if(A instanceof CMatrix B) {
+                if(A instanceof CMatrixOld B) {
                     System.out.print("new CNumber(" + B.get(i, j).re + ", " + B.get(i, j).im + ")");
                 } else {
                     // Then must be real.

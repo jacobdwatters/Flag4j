@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.decompositions.hess;
 
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.linalg.decompositions.unitary.ComplexUnitaryDecomposition;
 import org.flag4j.util.ParameterChecks;
 
@@ -73,7 +73,7 @@ public class ComplexHess extends ComplexUnitaryDecomposition {
      * @return A reference to this decomposer.
      */
     @Override
-    public ComplexHess decompose(CMatrix src) {
+    public ComplexHess decompose(CMatrixOld src) {
         ParameterChecks.assertSquare(src.shape);
         decomposeBase(src);
         return this;
@@ -86,8 +86,8 @@ public class ComplexHess extends ComplexUnitaryDecomposition {
      * @return An identity matrix with the appropriate size.
      */
     @Override
-    protected CMatrix initQ() {
-        return CMatrix.I(numRows);
+    protected CMatrixOld initQ() {
+        return CMatrixOld.I(numRows);
     }
 
 
@@ -97,7 +97,7 @@ public class ComplexHess extends ComplexUnitaryDecomposition {
      * @return The upper Hessenburg matrix from the last decomposition.
      */
     @Override
-    public CMatrix getUpper() {
+    public CMatrixOld getUpper() {
         return getH();
     }
 
@@ -106,7 +106,7 @@ public class ComplexHess extends ComplexUnitaryDecomposition {
      * Gets the upper Hessenburg matrix {@code H} from the Hessenburg decomposition.
      * @return The upper Hessenburg matrix {@code H} from the Hessenburg decomposition.
      */
-    public CMatrix getH() {
-        return getUpper(new CMatrix(numRows));
+    public CMatrixOld getH() {
+        return getUpper(new CMatrixOld(numRows));
     }
 }

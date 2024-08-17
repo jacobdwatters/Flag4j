@@ -1,7 +1,7 @@
 package org.flag4j.sparse_csr_complex_matrix;
 
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CsrCMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;

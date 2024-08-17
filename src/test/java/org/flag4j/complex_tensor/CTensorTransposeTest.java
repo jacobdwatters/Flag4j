@@ -1,6 +1,6 @@
 package org.flag4j.complex_tensor;
 
-import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.arrays_old.dense.CTensorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +18,8 @@ class CTensorTransposeTest {
     static Shape aShape;
     static Shape expShape;
 
-    static CTensor A;
-    static CTensor exp;
+    static CTensorOld A;
+    static CTensorOld exp;
 
     @BeforeEach
     void setup() {
@@ -29,7 +29,7 @@ class CTensorTransposeTest {
                 new CNumber("0.014+0.01i"), new CNumber("-140.0-0.0235i"), new CNumber("1.5+9.24i"),
                 new CNumber("51.0"), new CNumber("6.1-265.55i"), new CNumber("-0.00014+4.14i")};
         aShape = new Shape(3, 2, 1, 2);
-        A = new CTensor(aShape, aEntries);
+        A = new CTensorOld(aShape, aEntries);
     }
 
 
@@ -42,7 +42,7 @@ class CTensorTransposeTest {
                 new CNumber("235.61-9.865i"), new CNumber("1.345+3.5i"), new CNumber("51.0"),
                 new CNumber("1.0"), new CNumber("-140.0-0.0235i"), new CNumber("-0.00014+4.14i")};
         expShape = new Shape(2, 2, 1, 3);
-        exp = new CTensor(expShape, expEntries);
+        exp = new CTensorOld(expShape, expEntries);
 
         assertEquals(exp, A.transpose());
 
@@ -54,7 +54,7 @@ class CTensorTransposeTest {
                 new CNumber("1.345+3.5i"), new CNumber("-140.0-0.0235i"), new CNumber("1.5+9.24i"),
                 new CNumber("6.1-265.55i"), new CNumber("51.0"), new CNumber("-0.00014+4.14i")};
         expShape = new Shape(3, 1, 2, 2);
-        exp = new CTensor(expShape, expEntries);
+        exp = new CTensorOld(expShape, expEntries);
 
         assertEquals(exp, A.transpose(aAxes));
 
@@ -66,7 +66,7 @@ class CTensorTransposeTest {
                 new CNumber("235.61-9.865i"), new CNumber("1.345+3.5i"), new CNumber("51.0"),
                 new CNumber("1.0"), new CNumber("-140.0-0.0235i"), new CNumber("-0.00014+4.14i")};
         expShape = new Shape(2, 1, 2, 3);
-        exp = new CTensor(expShape, expEntries);
+        exp = new CTensorOld(expShape, expEntries);
 
         assertEquals(exp, A.transpose(aAxes));
 
@@ -77,7 +77,7 @@ class CTensorTransposeTest {
                 new CNumber("1.345+3.5i"), new CNumber("-140.0-0.0235i"), new CNumber("1.5+9.24i"),
                 new CNumber("6.1-265.55i"), new CNumber("51.0"), new CNumber("-0.00014+4.14i")};
         expShape = new Shape(3, 2, 1, 2);
-        exp = new CTensor(expShape, expEntries);
+        exp = new CTensorOld(expShape, expEntries);
 
         assertEquals(exp, A.transpose(3, 1));
 

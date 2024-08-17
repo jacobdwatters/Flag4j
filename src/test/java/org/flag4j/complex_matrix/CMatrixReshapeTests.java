@@ -1,6 +1,6 @@
 package org.flag4j.complex_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -13,8 +13,8 @@ class CMatrixReshapeTests {
             new CNumber(-4), new CNumber(5), new CNumber(-6.44),
             new CNumber(7.77, -72.4667), new CNumber(8.435, 43.1), new CNumber(9),
             new CNumber(10.4, 156), new CNumber(0, 11), new CNumber(12.2344)};
-    CMatrix A = new CMatrix(new Shape(3, 4), entries);
-    CMatrix B;
+    CMatrixOld A = new CMatrixOld(new Shape(3, 4), entries);
+    CMatrixOld B;
     Shape expShape;
     int rows, cols;
 

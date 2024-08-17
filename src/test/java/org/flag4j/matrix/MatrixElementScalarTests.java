@@ -1,7 +1,7 @@
 package org.flag4j.matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -13,27 +13,27 @@ class MatrixElementScalarTests {
     CNumber[][] expEntriesC;
     double scalar;
     CNumber scalarC;
-    Matrix A;
-    Matrix expResult;
-    CMatrix expResultC;
+    MatrixOld A;
+    MatrixOld expResult;
+    CMatrixOld expResultC;
 
 
     @Test
     void scalDivTestCase() {
         // -------------- Sub-case 1 --------------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         scalar = 1.44;
         expEntries = new double[][]{{1.334/1.44, -2.3112/1.44, 334.3/1.44},
                 {4.13/1.44, -35.33/1.44, 6/1.44}};
-        expResult = new Matrix(expEntries);
+        expResult = new MatrixOld(expEntries);
 
         assertArrayEquals(expResult.entries, A.div(scalar).entries);
         assertEquals(expResult.shape, A.div(scalar).shape);
 
         // -------------- Sub-case 2 --------------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         scalarC = new CNumber(1.3245, -42.5);
         expEntriesC = new CNumber[][]{{new CNumber(1.334).div(scalarC),
                 new CNumber(-2.3112).div(scalarC),
@@ -41,7 +41,7 @@ class MatrixElementScalarTests {
                 {new CNumber(4.13).div(scalarC),
                         new CNumber(-35.33).div(scalarC),
                         new CNumber(6).div(scalarC)}};
-        expResultC = new CMatrix(expEntriesC);
+        expResultC = new CMatrixOld(expEntriesC);
 
         assertArrayEquals(expResultC.entries, A.div(scalarC).entries);
         assertEquals(expResultC.shape, A.div(scalarC).shape);
@@ -52,11 +52,11 @@ class MatrixElementScalarTests {
     void recipTestCase() {
         // -------------- Sub-case 1 --------------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         scalar = 1.44;
         expEntries = new double[][]{{1.0/1.334, 1.0/-2.3112, 1.0/334.3},
                 {1.0/4.13, 1.0/-35.33, 1.0/6}};
-        expResult = new Matrix(expEntries);
+        expResult = new MatrixOld(expEntries);
 
         assertArrayEquals(expResult.entries, A.recip().entries);
         assertEquals(expResult.shape, A.recip().shape);

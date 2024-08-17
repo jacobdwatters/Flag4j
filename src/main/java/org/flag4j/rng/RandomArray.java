@@ -33,18 +33,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class contains methods useful for generating arrays filled with random values.
+ * This class contains methods useful for generating arrays_old filled with random values.
  */
 public final class RandomArray {
 
     /**
-     * Random number generator to use when creating random arrays.
+     * Random number generator to use when creating random arrays_old.
      */
     private final RandomCNumber rng;
 
 
     /**
-     * Creates a RandomArray object to generate arrays filled with random values using a default random number generator.
+     * Creates a RandomArray object to generate arrays_old filled with random values using a default random number generator.
      */
     public RandomArray() {
         this.rng = new RandomCNumber();
@@ -52,9 +52,9 @@ public final class RandomArray {
 
 
     /**
-     * Creates a RandomArray object to generate arrays filled with random values using the specified complex
+     * Creates a RandomArray object to generate arrays_old filled with random values using the specified complex
      * random number generator.
-     * @param rng The complex random number generator to use when creating random arrays.
+     * @param rng The complex random number generator to use when creating random arrays_old.
      */
     public RandomArray(RandomCNumber rng) {
         this.rng = rng;

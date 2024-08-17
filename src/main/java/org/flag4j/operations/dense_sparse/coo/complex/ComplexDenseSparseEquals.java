@@ -24,10 +24,10 @@
 
 package org.flag4j.operations.dense_sparse.coo.complex;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooCTensor;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CTensorOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooCTensor;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.operations.common.complex.ComplexProperties;
 import org.flag4j.util.ErrorMessages;
@@ -51,7 +51,7 @@ public final class ComplexDenseSparseEquals {
      * @param B Second matrix.
      * @return True if the two matrices are element-wise equivalent.
      */
-    public static boolean matrixEquals(CMatrix A, CooCMatrix B) {
+    public static boolean matrixEquals(CMatrixOld A, CooCMatrix B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
@@ -133,7 +133,7 @@ public final class ComplexDenseSparseEquals {
      * @param B Complex sparse tensor.
      * @return True if the two tensors are element-wise equivalent.
      */
-    public static boolean tensorEquals(CTensor A, CooCTensor B) {
+    public static boolean tensorEquals(CTensorOld A, CooCTensor B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {

@@ -25,9 +25,9 @@
 package org.flag4j.operations.sparse.coo.real;
 
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * This class contains low level implementations of operations on two real sparse tensors.
+ * This class contains low level implementations of operations_old on two real sparse tensors.
  */
 public class RealSparseVectorOperations {
 
@@ -52,7 +52,7 @@ public class RealSparseVectorOperations {
      * @param a Value to add to the {@code src} sparse vector.
      * @return The result of adding the specified value to the sparse vector.
      */
-    public static Vector add(CooVector src, double a) {
+    public static VectorOld add(CooVector src, double a) {
         double[] dest = new double[src.size];
         Arrays.fill(dest, a);
 
@@ -60,7 +60,7 @@ public class RealSparseVectorOperations {
             dest[src.indices[i]] += src.entries[i];
         }
 
-        return new Vector(dest);
+        return new VectorOld(dest);
     }
 
 
@@ -70,7 +70,7 @@ public class RealSparseVectorOperations {
      * @param a Value to subtract from the {@code src} sparse vector.
      * @return The result of subtracting the specified value from the sparse vector.
      */
-    public static Vector sub(CooVector src, double a) {
+    public static VectorOld sub(CooVector src, double a) {
         double[] dest = new double[src.size];
         Arrays.fill(dest, -a);
 
@@ -78,7 +78,7 @@ public class RealSparseVectorOperations {
             dest[src.indices[i]] += src.entries[i];
         }
 
-        return new Vector(dest);
+        return new VectorOld(dest);
     }
 
 
@@ -274,7 +274,7 @@ public class RealSparseVectorOperations {
      * @param src2 Second sparse vector in the outer product.
      * @return The matrix resulting from the vector outer product.
      */
-    public static Matrix outerProduct(CooVector src1, CooVector src2) {
+    public static MatrixOld outerProduct(CooVector src1, CooVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         double[] dest = new double[src2.size*src1.size];
@@ -293,7 +293,7 @@ public class RealSparseVectorOperations {
             }
         }
 
-        return new Matrix(src1.size, src2.size, dest);
+        return new MatrixOld(src1.size, src2.size, dest);
     }
 }
 

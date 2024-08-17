@@ -1,7 +1,7 @@
 package org.flag4j.tensor;
 
-import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays_old.dense.CTensorOld;
+import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TensorElemDivTests {
     static double[] aEntries;
-    static Tensor A;
+    static TensorOld A;
     static Shape aShape, bShape, expShape;
 
     @BeforeEach
@@ -23,14 +23,14 @@ class TensorElemDivTests {
                 0.001345, 2.677, 8.14, -0.000194, 1, 234
         };
         aShape = new Shape(2, 3, 2);
-        A = new Tensor(aShape, aEntries);
+        A = new TensorOld(aShape, aEntries);
     }
 
 
     @Test
     void realDenseTestCase() {
         double[] bEntries, expEntries;
-        Tensor B, exp;
+        TensorOld B, exp;
 
         // ----------------------- Sub-case 1 -----------------------
         bEntries = new double[]{
@@ -38,7 +38,7 @@ class TensorElemDivTests {
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0
         };
         bShape = new Shape(2, 3, 2);
-        B = new Tensor(bShape, bEntries);
+        B = new TensorOld(bShape, bEntries);
         expEntries = new double[]{
                 aEntries[0]/bEntries[0], aEntries[1]/bEntries[1], aEntries[2]/bEntries[2],
                 aEntries[3]/bEntries[3], aEntries[4]/bEntries[4], aEntries[5]/bEntries[5],
@@ -46,7 +46,7 @@ class TensorElemDivTests {
                 aEntries[9]/bEntries[9], aEntries[10]/bEntries[10], aEntries[11]/bEntries[11]
         };
         expShape = new Shape(2, 3, 2);
-        exp = new Tensor(expShape, expEntries);
+        exp = new TensorOld(expShape, expEntries);
 
         assertEquals(exp, A.elemDiv(B));
 
@@ -56,9 +56,9 @@ class TensorElemDivTests {
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0
         };
         bShape = new Shape(2, 3, 2, 1);
-        B = new Tensor(bShape, bEntries);
+        B = new TensorOld(bShape, bEntries);
 
-        Tensor finalB = B;
+        TensorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.elemDiv(finalB));
 
         // ----------------------- Sub-case 3 -----------------------
@@ -67,9 +67,9 @@ class TensorElemDivTests {
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0, 1.4, 5
         };
         bShape = new Shape(7, 2);
-        B = new Tensor(bShape, bEntries);
+        B = new TensorOld(bShape, bEntries);
 
-        Tensor finalB1 = B;
+        TensorOld finalB1 = B;
         assertThrows(LinearAlgebraException.class, ()->A.elemDiv(finalB1));
     }
 
@@ -77,7 +77,7 @@ class TensorElemDivTests {
     @Test
     void complexDenseTestCase() {
         CNumber[] bEntries, expEntries;
-        CTensor B, exp;
+        CTensorOld B, exp;
 
         // ----------------------- Sub-case 1 -----------------------
         bEntries = new CNumber[]{
@@ -87,7 +87,7 @@ class TensorElemDivTests {
                 new CNumber(14.515), new CNumber(100.135), new CNumber(0, 1)
         };
         bShape = new Shape(2, 3, 2);
-        B = new CTensor(bShape, bEntries);
+        B = new CTensorOld(bShape, bEntries);
         expEntries = new CNumber[]{
                 new CNumber(aEntries[0]).div(bEntries[(0)]), new CNumber(aEntries[1]).div(bEntries[(1)]), new CNumber(aEntries[2]).div(bEntries[(2)]),
                 new CNumber(aEntries[3]).div(bEntries[(3)]), new CNumber(aEntries[4]).div(bEntries[(4)]), new CNumber(aEntries[5]).div(bEntries[(5)]),
@@ -95,7 +95,7 @@ class TensorElemDivTests {
                 new CNumber(aEntries[9]).div(bEntries[(9)]), new CNumber(aEntries[10]).div(bEntries[(10)]), new CNumber(aEntries[11]).div(bEntries[(11)])
         };
         expShape = new Shape(2, 3, 2);
-        exp = new CTensor(expShape, expEntries);
+        exp = new CTensorOld(expShape, expEntries);
         assertEquals(exp, A.elemDiv(B));
 
         // ----------------------- Sub-case 2 -----------------------
@@ -106,9 +106,9 @@ class TensorElemDivTests {
                 new CNumber(14.515), new CNumber(100.135), new CNumber(0, 1)
         };
         bShape = new Shape(12);
-        B = new CTensor(bShape, bEntries);
+        B = new CTensorOld(bShape, bEntries);
 
-        CTensor finalB = B;
+        CTensorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.elemDiv(finalB));
     }
 }

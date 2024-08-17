@@ -24,8 +24,8 @@
 
 package org.flag4j.complex_numbers;
 
-import org.flag4j.core_temp.fields.Complex128;
-import org.flag4j.core_temp.fields.Complex64;
+import org.flag4j.core_temp.structures.fields.Complex128;
+import org.flag4j.core_temp.structures.fields.Complex64;
 import org.flag4j.util.ErrorMessages;
 
 /**

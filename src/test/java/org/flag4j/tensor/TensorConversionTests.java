@@ -1,9 +1,9 @@
 package org.flag4j.tensor;
 
-import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.dense.Tensor;
-import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays_old.dense.CTensorOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.TensorOld;
+import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,8 +15,8 @@ class TensorConversionTests {
 
     static double[] aEntries;
     static Shape shape;
-    static Tensor A;
-    static CTensor exp;
+    static TensorOld A;
+    static CTensorOld exp;
     static CNumber[] expEntries;
 
     @BeforeAll
@@ -24,7 +24,7 @@ class TensorConversionTests {
         aEntries = new double[]{1.23, 2.556, -121.5, 15.61, 14.15, -99.23425,
                 0.001345, 2.677, 8.14, -0.000194, 1, 234};
         shape = new Shape(1, 3, 2, 1, 2);
-        A = new Tensor(shape, aEntries);
+        A = new TensorOld(shape, aEntries);
     }
 
 
@@ -36,7 +36,7 @@ class TensorConversionTests {
                 new CNumber(15.61), new CNumber(14.15), new CNumber(-99.23425),
                 new CNumber(0.001345), new CNumber(2.677), new CNumber(8.14),
                 new CNumber(-0.000194), new CNumber(1), new CNumber(234)};
-        exp = new CTensor(shape, expEntries);
+        exp = new CTensorOld(shape, expEntries);
 
         assertEquals(exp, A.toComplex());
     }
@@ -44,16 +44,16 @@ class TensorConversionTests {
 
     @Test
     void toMatrixTestCase() {
-        Tensor B;
+        TensorOld B;
 
         double[] expEntries;
         Shape expShape;
-        Matrix exp;
+        MatrixOld exp;
 
         // ----------------------- Sub-case 1 -----------------------
         expEntries = aEntries.clone();
         expShape = new Shape(1, aEntries.length);
-        exp = new Matrix(expShape, expEntries);
+        exp = new MatrixOld(expShape, expEntries);
 
         assertEquals(exp, A.toMatrix());
 
@@ -61,7 +61,7 @@ class TensorConversionTests {
         expEntries = aEntries.clone();
         expShape = new Shape(4, 3);
         B = A.reshape(expShape);
-        exp = new Matrix(expShape, expEntries);
+        exp = new MatrixOld(expShape, expEntries);
 
         assertEquals(exp, B.toMatrix());
     }
@@ -70,11 +70,11 @@ class TensorConversionTests {
     @Test
     void toVectorTestCase() {
         double[] expEntries;
-        Vector exp;
+        VectorOld exp;
 
         // ----------------------- Sub-case 1 -----------------------
         expEntries = aEntries.clone();
-        exp = new Vector(expEntries);
+        exp = new VectorOld(expEntries);
 
         assertEquals(exp, A.toVector());
     }

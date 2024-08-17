@@ -1,7 +1,7 @@
 package org.flag4j.sparse_csr_matrix;
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CsrMatrix;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -10,11 +10,11 @@ class CsrMatrixToDenseTests {
     static CsrMatrix A;
     static double[][] aEntries;
 
-    static Matrix exp;
+    static MatrixOld exp;
 
     static void build() {
-        A = new Matrix(aEntries).toCsr();
-        exp = new Matrix(aEntries);
+        A = new MatrixOld(aEntries).toCsr();
+        exp = new MatrixOld(aEntries);
     }
 
 

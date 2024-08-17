@@ -1,6 +1,6 @@
 package org.flag4j.sparse_matrix;
 
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrix;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
 

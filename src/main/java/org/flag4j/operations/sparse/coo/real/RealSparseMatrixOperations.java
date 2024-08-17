@@ -24,9 +24,9 @@
 
 package org.flag4j.operations.sparse.coo.real;
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -36,7 +36,7 @@ import java.util.List;
 
 
 /**
- * This class has low level implementations for operations between two real sparse matrices.
+ * This class has low level implementations for operations_old between two real sparse matrices.
  */
 public class RealSparseMatrixOperations {
 
@@ -125,7 +125,7 @@ public class RealSparseMatrixOperations {
      * @throws ArithmeticException If the {@code src} sparse matrix is too large to be converted to a dense matrix.
      * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
      */
-    public static Matrix add(CooMatrix src, double a) {
+    public static MatrixOld add(CooMatrix src, double a) {
         double[] sum = new double[src.totalEntries().intValueExact()];
         Arrays.fill(sum, a);
 
@@ -138,7 +138,7 @@ public class RealSparseMatrixOperations {
             sum[row*src.numCols + col] += src.entries[i];
         }
 
-        return new Matrix(src.shape, sum);
+        return new MatrixOld(src.shape, sum);
     }
 
 
@@ -221,7 +221,7 @@ public class RealSparseMatrixOperations {
      * @throws ArithmeticException If the {@code src} sparse matrix is too large to be converted to a dense matrix.
      * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
      */
-    public static Matrix sub(CooMatrix src, double a) {
+    public static MatrixOld sub(CooMatrix src, double a) {
         double[] sum = new double[src.totalEntries().intValueExact()];
         Arrays.fill(sum, -a);
 
@@ -234,7 +234,7 @@ public class RealSparseMatrixOperations {
             sum[row*src.numCols + col] += src.entries[i];
         }
 
-        return new Matrix(src.shape, sum);
+        return new MatrixOld(src.shape, sum);
     }
 
 
@@ -299,7 +299,7 @@ public class RealSparseMatrixOperations {
      * @param col Sparse vector to add to each column of the sparse matrix.
      * @return A dense copy of the {@code src} matrix with the {@code col} vector added to each row of the matrix.
      */
-    public static Matrix addToEachCol(CooMatrix src, CooVector col) {
+    public static MatrixOld addToEachCol(CooMatrix src, CooVector col) {
         ParameterChecks.assertEquals(src.numRows, col.size);
         double[] destEntries = new double[src.totalEntries().intValueExact()];
 
@@ -319,7 +319,7 @@ public class RealSparseMatrixOperations {
             }
         }
 
-        return new Matrix(src.shape, destEntries);
+        return new MatrixOld(src.shape, destEntries);
     }
 
 
@@ -329,7 +329,7 @@ public class RealSparseMatrixOperations {
      * @param row Sparse vector to add to each row of the sparse matrix.
      * @return A dense copy of the {@code src} matrix with the {@code row} vector added to each row of the matrix.
      */
-    public static Matrix addToEachRow(CooMatrix src, CooVector row) {
+    public static MatrixOld addToEachRow(CooMatrix src, CooVector row) {
         ParameterChecks.assertEquals(src.numCols, row.size);
         double[] destEntries = new double[src.totalEntries().intValueExact()];
 
@@ -350,6 +350,6 @@ public class RealSparseMatrixOperations {
             }
         }
 
-        return new Matrix(src.shape, destEntries);
+        return new MatrixOld(src.shape, destEntries);
     }
 }

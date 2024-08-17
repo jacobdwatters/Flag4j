@@ -1,11 +1,11 @@
 package org.flag4j.sparse_vector;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeAll;
@@ -34,7 +34,7 @@ class CooVectorOuterProductTest {
         double[] bEntries;
         double[][] expEntries;
         CooVector b;
-        Matrix exp;
+        MatrixOld exp;
 
         // -------------------- Sub-case 1 --------------------
         bEntries = new double[]{1.34, -99.4};
@@ -46,7 +46,7 @@ class CooVectorOuterProductTest {
                 {7.504, 0.0, -556.64, 0.0, 0.0},
                 {0.0, 0.0, 0.0, 0.0, 0.0},
                 {-12.535700000000002, 0.0, 929.8870000000001, 0.0, 0.0}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertEquals(exp, a.outer(b));
 
@@ -65,7 +65,7 @@ class CooVectorOuterProductTest {
         CNumber[] bEntries;
         CNumber[][] expEntries;
         CooCVector b;
-        CMatrix exp;
+        CMatrixOld exp;
 
         // -------------------- Sub-case 1 --------------------
         bEntries = new CNumber[]{new CNumber(1.34, 0.0244), new CNumber(-99, 815.66)};
@@ -77,7 +77,7 @@ class CooVectorOuterProductTest {
                 {new CNumber("7.504+0.13664i"), new CNumber("0.0"), new CNumber("-554.4+4567.696i"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("-12.535700000000002-0.22826200000000002i"), new CNumber("0.0"), new CNumber("926.1450000000001-7630.4993i"), new CNumber("0.0"), new CNumber("0.0")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.outer(b));
 
@@ -95,26 +95,26 @@ class CooVectorOuterProductTest {
     void denseOuterProdTestCase() {
         double[] bEntries;
         double[][] expEntries;
-        Vector b;
-        Matrix exp;
+        VectorOld b;
+        MatrixOld exp;
 
         // -------------------- Sub-case 1 --------------------
         bEntries = new double[]{1.34, -0.0013, 11.56, 0.0, -13.5};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
         expEntries = new double[][]{{0.0, 0.0, 0.0, 0.0, 0.0},
                 {1.34, -0.0013, 11.56, 0.0, -13.5},
                 {7.504, -0.007279999999999999, 64.736, 0.0, -75.6},
                 {0.0, 0.0, 0.0, 0.0, 0.0},
                 {-12.535700000000002, 0.0121615, -108.14380000000001, -0.0, 126.2925}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertEquals(exp, a.outer(b));
 
         // -------------------- Sub-case 2 --------------------
         bEntries = new double[]{1.34, -0.0013, 11.56, 0.0, -13.5, 1.305, 1.556, -1.3413, 772.24};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
-        Vector finalB = b;
+        VectorOld finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.outer(finalB));
     }
 
@@ -123,27 +123,27 @@ class CooVectorOuterProductTest {
     void denseComplexOuterProdTestCase() {
         CNumber[] bEntries;
         CNumber[][] expEntries;
-        CVector b;
-        CMatrix exp;
+        CVectorOld b;
+        CMatrixOld exp;
 
         // -------------------- Sub-case 1 --------------------
         bEntries = new CNumber[]{new CNumber(24.1, 54.1), new CNumber(-9.245, 3.4), new CNumber(14.5),
                 new CNumber(0, 94.14), new CNumber(113, 55.62)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
         expEntries = new CNumber[][]{{new CNumber("0.0"), new CNumber("-0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("24.1+54.1i"), new CNumber("-9.245+3.4i"), new CNumber("14.5"), new CNumber("0.0+94.14i"), new CNumber("113.0+55.62i")},
                 {new CNumber("134.96+302.96i"), new CNumber("-51.77199999999999+19.04i"), new CNumber("81.19999999999999"), new CNumber("0.0+527.184i"), new CNumber("632.8+311.472i")},
                 {new CNumber("0.0"), new CNumber("-0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("-225.45550000000003-506.10550000000006i"), new CNumber("86.486975-31.807000000000002i"), new CNumber("-135.6475"), new CNumber("-0.0-880.6797i"), new CNumber("-1057.115-520.3251i")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.outer(b));
 
         // -------------------- Sub-case 2 --------------------
         bEntries = new CNumber[]{new CNumber(24.1, 54.1), new CNumber(-9.245, 3.4)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
-        CVector finalB = b;
+        CVectorOld finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.outer(finalB));
     }
 }

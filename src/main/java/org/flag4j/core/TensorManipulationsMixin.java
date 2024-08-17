@@ -28,7 +28,7 @@ package org.flag4j.core;
 /**
  * This interface specifies manipulations which all tensors (i.e. matrices and vectors) should implement.
  *
- * @param <T> Tensor type.
+ * @param <T> TensorOld type.
  */
 interface TensorManipulationsMixin<T> {
 

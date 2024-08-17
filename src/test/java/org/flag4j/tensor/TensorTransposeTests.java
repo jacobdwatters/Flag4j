@@ -1,6 +1,6 @@
 package org.flag4j.tensor;
 
-import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,8 +18,8 @@ class TensorTransposeTests {
     static Shape aShape;
     static Shape expShape;
 
-    static Tensor A;
-    static Tensor exp;
+    static TensorOld A;
+    static TensorOld exp;
 
     @BeforeEach
     void setup() {
@@ -27,7 +27,7 @@ class TensorTransposeTests {
                 1.4415, 235.61, -0.00024, 1.0, -85.1, 1.345,
                 0.014, -140.0, 1.5, 51.0, 6.1, -0.00014};
         aShape = new Shape(3, 2, 1, 2);
-        A = new Tensor(aShape, aEntries);
+        A = new TensorOld(aShape, aEntries);
     }
 
 
@@ -38,7 +38,7 @@ class TensorTransposeTests {
                 1.4415, -85.1, 1.5, -0.00024, 0.014, 6.1,
                 235.61, 1.345, 51.0, 1.0, -140.0, -0.00014};
         expShape = new Shape(2, 2, 1, 3);
-        exp = new Tensor(expShape, expEntries);
+        exp = new TensorOld(expShape, expEntries);
 
         assertEquals(exp, A.transpose());
 
@@ -49,7 +49,7 @@ class TensorTransposeTests {
                 1.345, -140.0, 1.5, 6.1, 51.0, -0.00014
         };
         expShape = new Shape(3, 1, 2, 2);
-        exp = new Tensor(expShape, expEntries);
+        exp = new TensorOld(expShape, expEntries);
 
         assertEquals(exp, A.transpose(aAxes));
 
@@ -60,7 +60,7 @@ class TensorTransposeTests {
                 235.61, 1.345, 51.0, 1.0, -140.0, -0.00014
         };
         expShape = new Shape(2, 1, 2, 3);
-        exp = new Tensor(expShape, expEntries);
+        exp = new TensorOld(expShape, expEntries);
 
         assertEquals(exp, A.transpose(aAxes));
 
@@ -70,7 +70,7 @@ class TensorTransposeTests {
                 0.014, 1.345, -140.0, 1.5, 6.1, 51.0, -0.00014
         };
         expShape = new Shape(3, 2, 1, 2);
-        exp = new Tensor(expShape, expEntries);
+        exp = new TensorOld(expShape, expEntries);
 
         assertEquals(exp, A.transpose(3, 1));
 

@@ -1,7 +1,7 @@
 package org.flag4j.sparse_csr_matrix;
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CsrMatrix;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,12 +10,12 @@ class CsrMatrixTransposeTests {
 
     static CsrMatrix A;
     static CsrMatrix exp;
-    static Matrix denseA;
+    static MatrixOld denseA;
     static double[][] aDenseEntries;
 
 
     private static void makeMatrices() {
-        denseA = new Matrix(aDenseEntries);
+        denseA = new MatrixOld(aDenseEntries);
         exp = denseA.T().toCsr();
         A = denseA.toCsr();
     }

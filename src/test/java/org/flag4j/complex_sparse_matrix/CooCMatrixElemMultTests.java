@@ -1,9 +1,9 @@
 package org.flag4j.complex_sparse_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -155,7 +155,7 @@ class CooCMatrixElemMultTests {
     @Test
     void complexSparseRealDenseElemMultTest() {
         double[][] bEntries;
-        Matrix B;
+        MatrixOld B;
         CNumber[] expEntries;
         CooCMatrix exp;
 
@@ -172,7 +172,7 @@ class CooCMatrixElemMultTests {
                 {0.76759, 0.1726, 0.37245, 0.19359, 0.99706},
                 {0.75155, 0.27489, 0.50946, 0.68393, 0.6838},
                 {0.05548, 0.11324, 0.58205, 0.49111, 0.81538}};
-        B = new Matrix(bEntries);
+        B = new MatrixOld(bEntries);
 
         expShape = new Shape(5, 5);
         expEntries = new CNumber[]{new CNumber("0.11696563424932249+0.14250946890984892i"), new CNumber("0.13930874733941193+0.05784773152097952i"), new CNumber("0.0759672695724604+0.08758935013204444i"), new CNumber("0.4095135660146529+0.5941247515517408i"), new CNumber("0.02675640750964229+0.05610333914116271i")};
@@ -193,7 +193,7 @@ class CooCMatrixElemMultTests {
                 {0.37556, 0.13522, 0.92971, 0.71404, 0.25637},
                 {0.8007, 0.72031, 0.51066, 0.35033, 0.33407},
                 {0.69917, 0.74251, 0.88645, 0.77861, 0.59576}};
-        B = new Matrix(bEntries);
+        B = new MatrixOld(bEntries);
 
         expShape = new Shape(3, 5);
         expEntries = new CNumber[]{new CNumber("0.016728707721147876+0.3130100679503549i"), new CNumber("0.4165803716244832+0.42922543471404034i"), new CNumber("0.13415863232753492+0.6380187828539937i")};
@@ -216,9 +216,9 @@ class CooCMatrixElemMultTests {
                 {0.21363, 0.82021, 0.28655},
                 {0.84183, 0.68944, 0.76812},
                 {0.10191, 0.26459, 0.49511}};
-        B = new Matrix(bEntries);
+        B = new MatrixOld(bEntries);
 
-        Matrix finalB = B;
+        MatrixOld finalB = B;
         assertThrows(Exception.class, ()->A.elemMult(finalB));
     }
 
@@ -226,7 +226,7 @@ class CooCMatrixElemMultTests {
     @Test
     void complexSparseComplexDenseElemMultTest() {
         CNumber[][] bEntries;
-        CMatrix B;
+        CMatrixOld B;
         CNumber[] expEntries;
         CooCMatrix exp;
 
@@ -243,7 +243,7 @@ class CooCMatrixElemMultTests {
                 {new CNumber("0.55021+0.12483i"), new CNumber("0.19732+0.55109i"), new CNumber("0.27109+0.93408i"), new CNumber("0.81691+0.69568i"), new CNumber("0.18641+0.16012i")},
                 {new CNumber("0.4177+0.14159i"), new CNumber("0.26966+0.112i"), new CNumber("0.20453+0.53959i"), new CNumber("0.13089+0.65059i"), new CNumber("0.77987+0.76195i")},
                 {new CNumber("0.91098+0.75196i"), new CNumber("0.94837+0.12534i"), new CNumber("0.27312+0.55549i"), new CNumber("0.52679+0.46955i"), new CNumber("0.68254+0.85077i")}};
-        B = new CMatrix(bEntries);
+        B = new CMatrixOld(bEntries);
 
         expShape = new Shape(5, 5);
         expEntries = new CNumber[]{new CNumber("-0.13379024493295444+0.34784005498088616i"), new CNumber("0.3011305758380786+0.2954266450463966i"), new CNumber("-0.04078141939104371+0.3576702204585097i"), new CNumber("-0.31416890209171533+0.4856713400822431i"), new CNumber("0.18438271826453323+0.9432690361065251i")};
@@ -264,7 +264,7 @@ class CooCMatrixElemMultTests {
                 {new CNumber("0.27477+0.16189i"), new CNumber("0.71105+0.53336i"), new CNumber("0.10729+0.75878i"), new CNumber("0.5911+0.20178i"), new CNumber("0.97727+0.15181i")},
                 {new CNumber("0.56431+0.79066i"), new CNumber("0.95967+0.44147i"), new CNumber("0.03733+0.78274i"), new CNumber("0.57901+0.7797i"), new CNumber("0.87872+0.74874i")},
                 {new CNumber("0.65326+0.79008i"), new CNumber("0.72003+0.58285i"), new CNumber("0.36831+0.63813i"), new CNumber("0.41247+0.49563i"), new CNumber("0.85605+0.76946i")}};
-        B = new CMatrix(bEntries);
+        B = new CMatrixOld(bEntries);
 
         expShape = new Shape(3, 5);
         expEntries = new CNumber[]{new CNumber("0.4598897399793568+0.9601642503007695i"), new CNumber("-0.24132471609376682+0.7045118879022092i"), new CNumber("-0.0007782392894262746+0.29077949839391265i")};
@@ -287,9 +287,9 @@ class CooCMatrixElemMultTests {
                 {new CNumber("0.67732+0.66438i"), new CNumber("0.09503+0.15445i"), new CNumber("0.56095+0.55138i")},
                 {new CNumber("0.43417+0.89241i"), new CNumber("0.82971+0.0187i"), new CNumber("0.77379+0.28833i")},
                 {new CNumber("0.09857+0.92289i"), new CNumber("0.48516+0.6224i"), new CNumber("0.28046+0.73755i")}};
-        B = new CMatrix(bEntries);
+        B = new CMatrixOld(bEntries);
 
-        CMatrix finalB = B;
+        CMatrixOld finalB = B;
         assertThrows(Exception.class, ()->A.elemMult(finalB));
     }
 }

@@ -27,12 +27,12 @@ package org.flag4j.core;
 /**
  * This interface specifies methods which provide properties of a vector. All vectors should implement this interface.
  *
- * @param <T> Vector type.
- * @param <U> Dense Vector type.
- * @param <V> Sparse Vector type.
- * @param <W> Complex Vector type.
- * @param <Y> Real Vector type.
- * @param <X> Vector entry type.
+ * @param <T> VectorOld type.
+ * @param <U> Dense VectorOld type.
+ * @param <V> Sparse VectorOld type.
+ * @param <W> Complex VectorOld type.
+ * @param <Y> Real VectorOld type.
+ * @param <X> VectorOld entry type.
  */
 public interface VectorPropertiesMixin {
 

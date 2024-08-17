@@ -31,7 +31,7 @@ import org.flag4j.util.ParameterChecks;
 
 
 /**
- * This class provides low level methods for computing operations with at least one real tensor
+ * This class provides low level methods for computing operations_old with at least one real tensor
  * and at least one complex tensor.
  */
 public final class RealComplexDenseOperations {
@@ -49,7 +49,7 @@ public final class RealComplexDenseOperations {
      * @param src2 Entries of second tensor.
      * @param shape2 Shape of second tensor.
      * @return The element wise addition of two tensors.
-     * @throws IllegalArgumentException If entry arrays are not the same size.
+     * @throws IllegalArgumentException If entry arrays_old are not the same size.
      */
     public static CNumber[] add(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
         ParameterChecks.assertEqualShape(shape1, shape2);
@@ -71,7 +71,7 @@ public final class RealComplexDenseOperations {
      * @param src2 Entries of second tensor.
      * @param shape2 Shape of second tensor.
      * @return The element wise subtraction of two tensors.
-     * @throws IllegalArgumentException If entry arrays are not the same size.
+     * @throws IllegalArgumentException If entry arrays_old are not the same size.
      */
     public static CNumber[] sub(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
         ParameterChecks.assertEqualShape(shape1, shape2);
@@ -93,7 +93,7 @@ public final class RealComplexDenseOperations {
      * @param src2 Entries of second tensor.
      * @param shape2 Shape of second tensor.
      * @return The element wise subtraction of two tensors.
-     * @throws IllegalArgumentException If entry arrays are not the same size.
+     * @throws IllegalArgumentException If entry arrays_old are not the same size.
      */
     public static CNumber[] sub(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
         ParameterChecks.assertEqualShape(shape1, shape2);
@@ -144,7 +144,7 @@ public final class RealComplexDenseOperations {
 
     /**
      * Subtracts a scalar from each entry of this tensor and stores the result in the tensor.
-     * @param src Tensor in subtraction. Also, where the result will be stored.
+     * @param src TensorOld in subtraction. Also, where the result will be stored.
      * @param b Scalar to subtract.
      */
     public static void subEq(CNumber[] src, double b) {
@@ -172,7 +172,7 @@ public final class RealComplexDenseOperations {
 
     /**
      * Adds a scalar from each entry of this tensor and stores the result in the tensor.
-     * @param src Tensor in addition. Also, where the result will be stored.
+     * @param src TensorOld in addition. Also, where the result will be stored.
      * @param b Scalar to add.
      */
     public static void addEq(CNumber[] src, double b) {

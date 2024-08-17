@@ -24,14 +24,14 @@
 
 package org.flag4j.operations.dense.complex;
 
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.core.TensorBase;
 import org.flag4j.util.ErrorMessages;
 
 /**
- * This class contains low-level implementations for operations which check if a complex tensor satisfies some property.
+ * This class contains low-level implementations for operations_old which check if a complex tensor satisfies some property.
  */
 public final class ComplexDenseProperties {
 
@@ -128,10 +128,10 @@ public final class ComplexDenseProperties {
      * Checks if a matrix is the identity matrix approximately. Specifically, if the diagonal entries are no farther than
      * 1.001E-5 in absolute value from 1.0 and the non-diagonal entries are no larger than 1e-08 in absolute value.
      * These tolerances are derived from the {@link TensorBase#allClose(Object)} method.
-     * @param src Matrix of interest to check if it is the identity matrix.
+     * @param src MatrixOld of interest to check if it is the identity matrix.
      * @return True if the {@code src} matrix is exactly the identity matrix.
      */
-    public static boolean isCloseToIdentity(CMatrix src) {
+    public static boolean isCloseToIdentity(CMatrixOld src) {
         boolean isI = src.numRows==src.numCols;
 
         // Tolerances corresponds to the allClose(...) methods.

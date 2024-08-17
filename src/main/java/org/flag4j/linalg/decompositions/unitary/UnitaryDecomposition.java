@@ -184,7 +184,7 @@ public abstract class UnitaryDecomposition<
 
 
     /**
-     * Initialized any work arrays to be used in computing the decomposition with the proper size.
+     * Initialized any work arrays_old to be used in computing the decomposition with the proper size.
      * @param maxAxisSize Length of the largest axis in the matrix to be decomposed. That is, {@code max(numRows, numCols)}
      */
     protected abstract void initWorkArrays(int maxAxisSize);

@@ -1,6 +1,6 @@
 package org.flag4j.matrix;
 
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -8,13 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MatrixTriangularTests {
     double[][] aEntries;
-    Matrix A;
+    MatrixOld A;
 
     @Test
     void triangularTestCase() {
         // ----------------- Sub-case 1 -----------------
         aEntries = new double[][]{{1, 3, 4}, {4, 5, 6}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         assertFalse(A.isTri());
         assertFalse(A.isTriL());
         assertFalse(A.isTriU());
@@ -25,7 +25,7 @@ class MatrixTriangularTests {
                 {1, 3, 4},
                 {4, 5, 6},
                 {9, 13.334, -8.123}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         assertFalse(A.isTri());
         assertFalse(A.isTriL());
         assertFalse(A.isTriU());
@@ -36,7 +36,7 @@ class MatrixTriangularTests {
                 {1, 0, 0},
                 {4, 5, 0},
                 {9, 13.334, -8.123}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         assertTrue(A.isTri());
         assertTrue(A.isTriL());
         assertFalse(A.isTriU());
@@ -47,7 +47,7 @@ class MatrixTriangularTests {
                 {1, 3, 4},
                 {0, 5, 6},
                 {0, 0, -8.123}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         assertTrue(A.isTri());
         assertFalse(A.isTriL());
         assertTrue(A.isTriU());
@@ -58,7 +58,7 @@ class MatrixTriangularTests {
                 {1, 0, 0},
                 {0, 5, 0},
                 {0, 0, -8.123}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         assertTrue(A.isTri());
         assertTrue(A.isTriL());
         assertTrue(A.isTriU());

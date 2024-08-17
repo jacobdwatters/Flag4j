@@ -40,7 +40,7 @@ public interface LinearTensorSolver<T extends TensorBase<T, ?, ?, ?, ?, ?, ?>> {
      * the tensor product with the rightmost indices of {@code A} as if by
      * {@link TensorExclusiveMixin#tensorDot(TensorBase, int)  A.tensorDot(X, X.getRank())}.
      * @param A Coefficient tensor in the linear system.
-     * @param B Tensor of constants in the linear system.
+     * @param B TensorOld of constants in the linear system.
      * @return The solution to {@code x} in the linear system {@code A*X=B}.
      */
     T solve(T A, T B);

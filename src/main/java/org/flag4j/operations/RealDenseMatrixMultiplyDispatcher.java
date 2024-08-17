@@ -24,7 +24,7 @@
 
 package org.flag4j.operations;
 
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.core.Shape;
 import org.flag4j.operations.dense.real.RealDenseMatrixMultTranspose;
 import org.flag4j.operations.dense.real.RealDenseMatrixMultiplication;
@@ -114,7 +114,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * @param B Second matrix in the multiplication.
      * @return The result of the matrix multiplication.
      */
-    public static double[] dispatch(Matrix A, Matrix B) {
+    public static double[] dispatch(MatrixOld A, MatrixOld B) {
         ParameterChecks.assertMatMultShapes(A.shape, B.shape); // Ensure matrix shapes are conducive to matrix multiplication.
 
         RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();
@@ -147,7 +147,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * @param B Second matrix in the multiplication and the matrix to transpose.
      * @return The matrix multiply-transpose result of {@code A} and {@code B}.
      */
-    public static double[] dispatchTranspose(Matrix A, Matrix B) {
+    public static double[] dispatchTranspose(MatrixOld A, MatrixOld B) {
         ParameterChecks.assertArrayLengthsEq(A.numCols, B.numCols);
 
         RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();

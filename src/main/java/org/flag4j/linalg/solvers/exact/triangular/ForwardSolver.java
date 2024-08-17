@@ -38,7 +38,7 @@ import org.flag4j.util.exceptions.SingularMatrixException;
  * matrix {@code X} respectively where {@code L} is a lower triangular matrix.
  *
  * @param <T> Type of coefficient matrix.
- * @param <U> Vector type equivalent to the coefficient matrix.
+ * @param <U> VectorOld type equivalent to the coefficient matrix.
  * @param <V> Type of the internal storage datastructures in the matrix and vector.
  */
 public abstract class ForwardSolver<

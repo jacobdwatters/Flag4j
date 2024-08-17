@@ -1,8 +1,8 @@
 package org.flag4j.sparse_csr_complex_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CsrCMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
@@ -46,8 +46,8 @@ public class CsrCMatrixEqualsTests {
         bEntries[59][2] = new CNumber(-0.0000005, 235.03);
         bEntries[149][1] = new CNumber(15);
 
-        A = new CMatrix(aEntries).toCsr();
-        B = new CMatrix(bEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
+        B = new CMatrixOld(bEntries).toCsr();
 
         assertEquals(A, B);
 

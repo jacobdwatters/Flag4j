@@ -1,11 +1,11 @@
 package org.flag4j.sparse_csr_complex_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CsrCMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -16,14 +16,14 @@ class CsrCMatrixAddToEachRowTest {
     static CsrCMatrix A;
     static CNumber[][] aEntries;
 
-    static Vector bReDe;
-    static CVector bCmDe;
+    static VectorOld bReDe;
+    static CVectorOld bCmDe;
     static CooVector bReSp;
     static CooCVector bCmSp;
     static double[] bRealEntries;
     static CNumber[] bCmpEntries;
 
-    static CMatrix exp;
+    static CMatrixOld exp;
     static CNumber[][] expEntries;
 
 
@@ -47,9 +47,9 @@ class CsrCMatrixAddToEachRowTest {
                         new CNumber(0), new CNumber(0), new CNumber(1.14),
                         new CNumber(1.234, 2055.2), new CNumber(9.435, 16.2)}
         };
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         bRealEntries = new double[]{1.4, -0.2424, 10024, 0, 1.45};
-        bReDe = new Vector(bRealEntries);
+        bReDe = new VectorOld(bRealEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(1.4), new CNumber(1.34+1.4, -9834.1), new CNumber(1.4),
                         new CNumber(1.4), new CNumber(1.4, -0.24), new CNumber(1.4),
@@ -66,7 +66,7 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(1.45), new CNumber(1.45), new CNumber(1.45),
                         new CNumber(1.45), new CNumber(1.45), new CNumber(1.14+1.45),
                         new CNumber(1.234+1.45, 2055.2), new CNumber(9.435+1.45, 16.2)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.addToEachCol(bReDe));
 
@@ -81,9 +81,9 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 456.1), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(145.5, 15.2)},
         };
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         bRealEntries = new double[]{0.234, -0.00204, 100.14, -9345.23, 1, 0.2525, 4356.7, -99999.1};
-        bReDe = new Vector(bRealEntries);
+        bReDe = new VectorOld(bRealEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(0.234), new CNumber(0.234, 3.4), new CNumber(0.234), new CNumber(0.234)},
                 {new CNumber(1.415-0.00204, -2), new CNumber(-0.0024-0.00204, 1.51), new CNumber(105.2-0.00204, 2), new CNumber(-3.14-0.00204)},
@@ -94,7 +94,7 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4+4356.7, 456.1), new CNumber(4356.7), new CNumber(4356.7), new CNumber(4356.7)},
                 {new CNumber(-99999.1), new CNumber(-99999.1), new CNumber(-99999.1), new CNumber(145.5-99999.1, 15.2)},
         };
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.addToEachCol(bReDe));
 
@@ -109,15 +109,15 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 456.1), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(145.5, 15.2)},
         };
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         bRealEntries = new double[]{0.234, -0.00204, 100.14, -9345.23, 1, 0.2525};
-        bReDe = new Vector(bRealEntries);
+        bReDe = new VectorOld(bRealEntries);
 
         assertThrows(IllegalArgumentException.class, ()->A.addToEachCol(bReDe));
 
         // -------------------- Sub-case 4 --------------------
         bRealEntries = new double[]{0.234, -0.00204, 100.14, -9345.23, 1, 0.2525, 1, 3, 4, 5, 6, 7, 8};
-        bReDe = new Vector(bRealEntries);
+        bReDe = new VectorOld(bRealEntries);
         assertThrows(IllegalArgumentException.class, ()->A.addToEachCol(bReDe));
     }
 
@@ -137,9 +137,9 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0),
                         new CNumber(0), new CNumber(1.14, 15.54), new CNumber(2055.2, 1), new CNumber(9.435, 2)}
         };
-        A = new CMatrix(aEntries).T().toCsr();
+        A = new CMatrixOld(aEntries).T().toCsr();
         bRealEntries = new double[]{1.4, -0.2424, 10024, 0, 1.45};
-        bReDe = new Vector(bRealEntries);
+        bReDe = new VectorOld(bRealEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(1.4), new CNumber(1.34+1.4, -9.3), new CNumber(1.4), new CNumber(1.4),
                         new CNumber(-0.24+1.4, 20.3), new CNumber(1.4), new CNumber(1.4), new CNumber(1.4, 2.999184)},
@@ -152,7 +152,7 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(1.45), new CNumber(1.45), new CNumber(1.45), new CNumber(1.45),
                         new CNumber(1.45), new CNumber(1.14+1.45, 15.54), new CNumber(2055.2+1.45, 1), new CNumber(9.435+1.45, 2)}
         };
-        exp = new CMatrix(expEntries).T();
+        exp = new CMatrixOld(expEntries).T();
 
         assertEquals(exp, A.addToEachRow(bReDe));
 
@@ -167,9 +167,9 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 31), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(145.5, 93.1)},
         };
-        A = new CMatrix(aEntries).T().toCsr();
+        A = new CMatrixOld(aEntries).T().toCsr();
         bRealEntries = new double[]{0.234, -0.00204, 100.14, -9345.23, 1, 0.2525, 4356.7, -99999.1};
-        bReDe = new Vector(bRealEntries);
+        bReDe = new VectorOld(bRealEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(0.234), new CNumber(3.4+0.234, 1.345), new CNumber(0.234), new CNumber(0.234)},
                 {new CNumber(1.415-0.00204), new CNumber(-0.0024-0.00204), new CNumber(105.2-0.00204, 70.12), new CNumber(-3.14-0.00204, 0.002)},
@@ -180,7 +180,7 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4+4356.7, 31), new CNumber(4356.7), new CNumber(4356.7), new CNumber(4356.7)},
                 {new CNumber(-99999.1), new CNumber(-99999.1), new CNumber(-99999.1), new CNumber(145.5-99999.1, 93.1)},
         };
-        exp = new CMatrix(expEntries).T();
+        exp = new CMatrixOld(expEntries).T();
 
         assertEquals(exp, A.addToEachRow(bReDe));
 
@@ -195,15 +195,15 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 31), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(145.5, 93.1)},
         };
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         bRealEntries = new double[]{0.234, -0.00204, 100.14};
-        bReDe = new Vector(bRealEntries);
+        bReDe = new VectorOld(bRealEntries);
 
         assertThrows(IllegalArgumentException.class, ()->A.addToEachRow(bReDe));
 
         // -------------------- Sub-case 4 --------------------
         bRealEntries = new double[]{0.234, -0.00204, 100.14, -9345.23, 1, 0.2525, 1, 3, 4, 5, 6, 7, 8};
-        bReDe = new Vector(bRealEntries);
+        bReDe = new VectorOld(bRealEntries);
         assertThrows(IllegalArgumentException.class, ()->A.addToEachRow(bReDe));
     }
 
@@ -223,10 +223,10 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0),
                         new CNumber(0), new CNumber(1.14, 3), new CNumber(0, 2055.2), new CNumber(9.435)}
         };
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         bCmpEntries = new CNumber[]{new CNumber(0.24, 1.235), new CNumber(-100.24),
                 new CNumber(0, 15.2), new CNumber(-943.1, -9242.1), new CNumber(1.52, -75.243)};
-        bCmDe = new CVector(bCmpEntries);
+        bCmDe = new CVectorOld(bCmpEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(0).add(bCmpEntries[0]), new CNumber(1.34, 25.26).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]),
                         new CNumber(-0.24, 2.6).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]), new CNumber(2.999184, -88.4).add(bCmpEntries[0])},
@@ -239,7 +239,7 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(0).add(bCmpEntries[4]), new CNumber(0).add(bCmpEntries[4]), new CNumber(0).add(bCmpEntries[4]), new CNumber(0).add(bCmpEntries[4]),
                         new CNumber(0).add(bCmpEntries[4]), new CNumber(1.14, 3).add(bCmpEntries[4]), new CNumber(0, 2055.2).add(bCmpEntries[4]), new CNumber(9.435).add(bCmpEntries[4])}
         };
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.addToEachCol(bCmDe));
 
@@ -254,11 +254,11 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 1.25), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(145.5, 2.6)},
         };
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         bCmpEntries = new CNumber[]{
                 new CNumber(14, 35.3), new CNumber(-0.452, 25.1), new CNumber(9834), new CNumber(0, 345.1),
                 new CNumber(9.435, 14.3), new CNumber(-0.35345, -92.4), new CNumber(3405.1), new CNumber(0, 7510)};
-        bCmDe = new CVector(bCmpEntries);
+        bCmDe = new CVectorOld(bCmpEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(0).add(bCmpEntries[0]), new CNumber(3.4, -82.1).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0])},
                 {new CNumber(1.415, 16.2).add(bCmpEntries[1]), new CNumber(-0.0024, 2356.12).add(bCmpEntries[1]), new CNumber(105.2, -1).add(bCmpEntries[1]), new CNumber(0, -3.14).add(bCmpEntries[1])},
@@ -269,7 +269,7 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 1.25).add(bCmpEntries[6]), new CNumber(0).add(bCmpEntries[6]), new CNumber(0).add(bCmpEntries[6]), new CNumber(0).add(bCmpEntries[6])},
                 {new CNumber(0).add(bCmpEntries[7]), new CNumber(0).add(bCmpEntries[7]), new CNumber(0).add(bCmpEntries[7]), new CNumber(145.5, 2.6).add(bCmpEntries[7])},
         };
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.addToEachCol(bCmDe));
 
@@ -284,15 +284,15 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 1.25), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(145.5, 2.6)},
         };
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         bRealEntries = new double[]{0.234, -0.00204, 100.14, -9345.23, 1, 0.2525};
-        bReDe = new Vector(bRealEntries);
+        bReDe = new VectorOld(bRealEntries);
 
         assertThrows(IllegalArgumentException.class, ()->A.addToEachCol(bReDe));
 
         // -------------------- Sub-case 4 --------------------
         bRealEntries = new double[]{0.234, -0.00204, 100.14, -9345.23, 1, 0.2525, 1, 3, 4, 5, 6, 7, 8};
-        bReDe = new Vector(bRealEntries);
+        bReDe = new VectorOld(bRealEntries);
         assertThrows(IllegalArgumentException.class, ()->A.addToEachCol(bReDe));
     }
 
@@ -312,10 +312,10 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0),
                         new CNumber(0), new CNumber(1.14), new CNumber(2055.2), new CNumber(9.435)}
         };
-        A = new CMatrix(aEntries).T().toCsr();
+        A = new CMatrixOld(aEntries).T().toCsr();
         bCmpEntries = new CNumber[]{new CNumber(0.24, 1.235), new CNumber(-100.24),
                 new CNumber(0, 15.2), new CNumber(-943.1, -9242.1), new CNumber(1.52, -75.243)};
-        bCmDe = new CVector(bCmpEntries);
+        bCmDe = new CVectorOld(bCmpEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(0).add(bCmpEntries[0]), new CNumber(1.34).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]),
                         new CNumber(-0.24).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]), new CNumber(2.999184).add(bCmpEntries[0])},
@@ -328,7 +328,7 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(0).add(bCmpEntries[4]), new CNumber(0).add(bCmpEntries[4]), new CNumber(0).add(bCmpEntries[4]), new CNumber(0).add(bCmpEntries[4]),
                         new CNumber(0).add(bCmpEntries[4]), new CNumber(1.14).add(bCmpEntries[4]), new CNumber(2055.2).add(bCmpEntries[4]), new CNumber(9.435).add(bCmpEntries[4])}
         };
-        exp = new CMatrix(expEntries).T();
+        exp = new CMatrixOld(expEntries).T();
 
         assertEquals(exp, A.addToEachRow(bCmDe));
 
@@ -343,11 +343,11 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 85781.2), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0, 145.5)},
         };
-        A = new CMatrix(aEntries).T().toCsr();
+        A = new CMatrixOld(aEntries).T().toCsr();
         bCmpEntries = new CNumber[]{
                 new CNumber(14, 35.3), new CNumber(-0.452, 25.1), new CNumber(9834), new CNumber(0, 345.1),
                 new CNumber(9.435, 14.3), new CNumber(-0.35345, -92.4), new CNumber(3405.1), new CNumber(0, 7510)};
-        bCmDe = new CVector(bCmpEntries);
+        bCmDe = new CVectorOld(bCmpEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(0).add(bCmpEntries[0]), new CNumber(3.4, 1.5).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0])},
                 {new CNumber(1.415, 16.1).add(bCmpEntries[1]), new CNumber(-0.0024, 25).add(bCmpEntries[1]), new CNumber(105.2, 0.0015).add(bCmpEntries[1]), new CNumber(-3.14, 801.2).add(bCmpEntries[1])},
@@ -358,7 +358,7 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 85781.2).add(bCmpEntries[6]), new CNumber(0).add(bCmpEntries[6]), new CNumber(0).add(bCmpEntries[6]), new CNumber(0).add(bCmpEntries[6])},
                 {new CNumber(0).add(bCmpEntries[7]), new CNumber(0).add(bCmpEntries[7]), new CNumber(0).add(bCmpEntries[7]), new CNumber(0, 145.5).add(bCmpEntries[7])},
         };
-        exp = new CMatrix(expEntries).T();
+        exp = new CMatrixOld(expEntries).T();
 
         assertEquals(exp, A.addToEachRow(bCmDe));
 
@@ -373,15 +373,15 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 85781.2), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0, 145.5)},
         };
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         bRealEntries = new double[]{0.234, -0.00204, 100.14};
-        bReDe = new Vector(bRealEntries);
+        bReDe = new VectorOld(bRealEntries);
 
         assertThrows(IllegalArgumentException.class, ()->A.addToEachRow(bReDe));
 
         // -------------------- Sub-case 4 --------------------
         bRealEntries = new double[]{0.234, -0.00204, 100.14, -9345.23, 1, 0.2525, 1, 3, 4, 5, 6, 7, 8};
-        bReDe = new Vector(bRealEntries);
+        bReDe = new VectorOld(bRealEntries);
         assertThrows(IllegalArgumentException.class, ()->A.addToEachRow(bReDe));
     }
 
@@ -408,9 +408,9 @@ class CsrCMatrixAddToEachRowTest {
                         new CNumber(0), new CNumber(0), new CNumber(1.14),
                         new CNumber(1.234, 2055.2), new CNumber(9.435, 16.2)}
         };
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         bRealEntries = new double[]{1.4, -0.2424, 10024, 0, 1.45};
-        bReSp = new Vector(bRealEntries).toCoo();
+        bReSp = new VectorOld(bRealEntries).toCoo();
         expEntries = new CNumber[][]{
                 {new CNumber(1.4), new CNumber(1.34+1.4, -9834.1), new CNumber(1.4),
                         new CNumber(1.4), new CNumber(1.4, -0.24), new CNumber(1.4),
@@ -427,7 +427,7 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(1.45), new CNumber(1.45), new CNumber(1.45),
                         new CNumber(1.45), new CNumber(1.45), new CNumber(1.14+1.45),
                         new CNumber(1.234+1.45, 2055.2), new CNumber(9.435+1.45, 16.2)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.addToEachCol(bReSp));
 
@@ -442,9 +442,9 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 456.1), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(145.5, 15.2)},
         };
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         bRealEntries = new double[]{0.234, -0.00204, 100.14, -9345.23, 1, 0.2525, 4356.7, -99999.1};
-        bReSp = new Vector(bRealEntries).toCoo();
+        bReSp = new VectorOld(bRealEntries).toCoo();
         expEntries = new CNumber[][]{
                 {new CNumber(0.234), new CNumber(0.234, 3.4), new CNumber(0.234), new CNumber(0.234)},
                 {new CNumber(1.415-0.00204, -2), new CNumber(-0.0024-0.00204, 1.51), new CNumber(105.2-0.00204, 2), new CNumber(-3.14-0.00204)},
@@ -455,7 +455,7 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4+4356.7, 456.1), new CNumber(4356.7), new CNumber(4356.7), new CNumber(4356.7)},
                 {new CNumber(-99999.1), new CNumber(-99999.1), new CNumber(-99999.1), new CNumber(145.5-99999.1, 15.2)},
         };
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.addToEachCol(bReSp));
 
@@ -470,15 +470,15 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 456.1), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(145.5, 15.2)},
         };
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         bRealEntries = new double[]{0.234, -0.00204, 100.14, -9345.23, 1, 0.2525};
-        bReSp = new Vector(bRealEntries).toCoo();
+        bReSp = new VectorOld(bRealEntries).toCoo();
 
         assertThrows(IllegalArgumentException.class, ()->A.addToEachCol(bReSp));
 
         // -------------------- Sub-case 4 --------------------
         bRealEntries = new double[]{0.234, -0.00204, 100.14, -9345.23, 1, 0.2525, 1, 3, 4, 5, 6, 7, 8};
-        bReSp = new Vector(bRealEntries).toCoo();
+        bReSp = new VectorOld(bRealEntries).toCoo();
         assertThrows(IllegalArgumentException.class, ()->A.addToEachCol(bReSp));
     }
 
@@ -498,9 +498,9 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0),
                         new CNumber(0), new CNumber(1.14, 15.54), new CNumber(2055.2, 1), new CNumber(9.435, 2)}
         };
-        A = new CMatrix(aEntries).T().toCsr();
+        A = new CMatrixOld(aEntries).T().toCsr();
         bRealEntries = new double[]{1.4, -0.2424, 10024, 0, 1.45};
-        bReSp = new Vector(bRealEntries).toCoo();
+        bReSp = new VectorOld(bRealEntries).toCoo();
         expEntries = new CNumber[][]{
                 {new CNumber(1.4), new CNumber(1.34+1.4, -9.3), new CNumber(1.4), new CNumber(1.4),
                         new CNumber(-0.24+1.4, 20.3), new CNumber(1.4), new CNumber(1.4), new CNumber(1.4, 2.999184)},
@@ -513,7 +513,7 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(1.45), new CNumber(1.45), new CNumber(1.45), new CNumber(1.45),
                         new CNumber(1.45), new CNumber(1.14+1.45, 15.54), new CNumber(2055.2+1.45, 1), new CNumber(9.435+1.45, 2)}
         };
-        exp = new CMatrix(expEntries).T();
+        exp = new CMatrixOld(expEntries).T();
 
         assertEquals(exp, A.addToEachRow(bReSp));
 
@@ -528,9 +528,9 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 31), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(145.5, 93.1)},
         };
-        A = new CMatrix(aEntries).T().toCsr();
+        A = new CMatrixOld(aEntries).T().toCsr();
         bRealEntries = new double[]{0.234, -0.00204, 100.14, -9345.23, 1, 0.2525, 4356.7, -99999.1};
-        bReSp = new Vector(bRealEntries).toCoo();
+        bReSp = new VectorOld(bRealEntries).toCoo();
         expEntries = new CNumber[][]{
                 {new CNumber(0.234), new CNumber(3.4+0.234, 1.345), new CNumber(0.234), new CNumber(0.234)},
                 {new CNumber(1.415-0.00204), new CNumber(-0.0024-0.00204), new CNumber(105.2-0.00204, 70.12), new CNumber(-3.14-0.00204, 0.002)},
@@ -541,7 +541,7 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4+4356.7, 31), new CNumber(4356.7), new CNumber(4356.7), new CNumber(4356.7)},
                 {new CNumber(-99999.1), new CNumber(-99999.1), new CNumber(-99999.1), new CNumber(145.5-99999.1, 93.1)},
         };
-        exp = new CMatrix(expEntries).T();
+        exp = new CMatrixOld(expEntries).T();
 
         assertEquals(exp, A.addToEachRow(bReSp));
 
@@ -556,15 +556,15 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 31), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(145.5, 93.1)},
         };
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         bRealEntries = new double[]{0.234, -0.00204, 100.14};
-        bReSp = new Vector(bRealEntries).toCoo();
+        bReSp = new VectorOld(bRealEntries).toCoo();
 
         assertThrows(IllegalArgumentException.class, ()->A.addToEachRow(bReSp));
 
         // -------------------- Sub-case 4 --------------------
         bRealEntries = new double[]{0.234, -0.00204, 100.14, -9345.23, 1, 0.2525, 1, 3, 4, 5, 6, 7, 8};
-        bReSp = new Vector(bRealEntries).toCoo();
+        bReSp = new VectorOld(bRealEntries).toCoo();
         assertThrows(IllegalArgumentException.class, ()->A.addToEachRow(bReSp));
     }
 
@@ -584,10 +584,10 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0),
                         new CNumber(0), new CNumber(1.14, 3), new CNumber(0, 2055.2), new CNumber(9.435)}
         };
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         bCmpEntries = new CNumber[]{new CNumber(0.24, 1.235), new CNumber(-100.24),
                 new CNumber(0, 15.2), new CNumber(-943.1, -9242.1), new CNumber(1.52, -75.243)};
-        bCmSp = new CVector(bCmpEntries).toCoo();
+        bCmSp = new CVectorOld(bCmpEntries).toCoo();
         expEntries = new CNumber[][]{
                 {new CNumber(0).add(bCmpEntries[0]), new CNumber(1.34, 25.26).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]),
                         new CNumber(-0.24, 2.6).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]), new CNumber(2.999184, -88.4).add(bCmpEntries[0])},
@@ -600,7 +600,7 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(0).add(bCmpEntries[4]), new CNumber(0).add(bCmpEntries[4]), new CNumber(0).add(bCmpEntries[4]), new CNumber(0).add(bCmpEntries[4]),
                         new CNumber(0).add(bCmpEntries[4]), new CNumber(1.14, 3).add(bCmpEntries[4]), new CNumber(0, 2055.2).add(bCmpEntries[4]), new CNumber(9.435).add(bCmpEntries[4])}
         };
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.addToEachCol(bCmSp));
 
@@ -615,11 +615,11 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 1.25), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(145.5, 2.6)},
         };
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         bCmpEntries = new CNumber[]{
                 new CNumber(14, 35.3), new CNumber(-0.452, 25.1), new CNumber(9834), new CNumber(0, 345.1),
                 new CNumber(9.435, 14.3), new CNumber(-0.35345, -92.4), new CNumber(3405.1), new CNumber(0, 7510)};
-        bCmSp = new CVector(bCmpEntries).toCoo();
+        bCmSp = new CVectorOld(bCmpEntries).toCoo();
         expEntries = new CNumber[][]{
                 {new CNumber(0).add(bCmpEntries[0]), new CNumber(3.4, -82.1).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0])},
                 {new CNumber(1.415, 16.2).add(bCmpEntries[1]), new CNumber(-0.0024, 2356.12).add(bCmpEntries[1]), new CNumber(105.2, -1).add(bCmpEntries[1]), new CNumber(0, -3.14).add(bCmpEntries[1])},
@@ -630,7 +630,7 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 1.25).add(bCmpEntries[6]), new CNumber(0).add(bCmpEntries[6]), new CNumber(0).add(bCmpEntries[6]), new CNumber(0).add(bCmpEntries[6])},
                 {new CNumber(0).add(bCmpEntries[7]), new CNumber(0).add(bCmpEntries[7]), new CNumber(0).add(bCmpEntries[7]), new CNumber(145.5, 2.6).add(bCmpEntries[7])},
         };
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.addToEachCol(bCmSp));
 
@@ -645,15 +645,15 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 1.25), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(145.5, 2.6)},
         };
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         bRealEntries = new double[]{0.234, -0.00204, 100.14, -9345.23, 1, 0.2525};
-        bReSp = new Vector(bRealEntries).toCoo();
+        bReSp = new VectorOld(bRealEntries).toCoo();
 
         assertThrows(IllegalArgumentException.class, ()->A.addToEachCol(bReSp));
 
         // -------------------- Sub-case 4 --------------------
         bRealEntries = new double[]{0.234, -0.00204, 100.14, -9345.23, 1, 0.2525, 1, 3, 4, 5, 6, 7, 8};
-        bReSp = new Vector(bRealEntries).toCoo();
+        bReSp = new VectorOld(bRealEntries).toCoo();
         assertThrows(IllegalArgumentException.class, ()->A.addToEachCol(bReSp));
     }
 
@@ -673,10 +673,10 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0),
                         new CNumber(0), new CNumber(1.14), new CNumber(2055.2), new CNumber(9.435)}
         };
-        A = new CMatrix(aEntries).T().toCsr();
+        A = new CMatrixOld(aEntries).T().toCsr();
         bCmpEntries = new CNumber[]{new CNumber(0.24, 1.235), new CNumber(-100.24),
                 new CNumber(0, 15.2), new CNumber(-943.1, -9242.1), new CNumber(1.52, -75.243)};
-        bCmSp = new CVector(bCmpEntries).toCoo();
+        bCmSp = new CVectorOld(bCmpEntries).toCoo();
         expEntries = new CNumber[][]{
                 {new CNumber(0).add(bCmpEntries[0]), new CNumber(1.34).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]),
                         new CNumber(-0.24).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]), new CNumber(2.999184).add(bCmpEntries[0])},
@@ -689,7 +689,7 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(0).add(bCmpEntries[4]), new CNumber(0).add(bCmpEntries[4]), new CNumber(0).add(bCmpEntries[4]), new CNumber(0).add(bCmpEntries[4]),
                         new CNumber(0).add(bCmpEntries[4]), new CNumber(1.14).add(bCmpEntries[4]), new CNumber(2055.2).add(bCmpEntries[4]), new CNumber(9.435).add(bCmpEntries[4])}
         };
-        exp = new CMatrix(expEntries).T();
+        exp = new CMatrixOld(expEntries).T();
 
         assertEquals(exp, A.addToEachRow(bCmSp));
 
@@ -704,11 +704,11 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 85781.2), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0, 145.5)},
         };
-        A = new CMatrix(aEntries).T().toCsr();
+        A = new CMatrixOld(aEntries).T().toCsr();
         bCmpEntries = new CNumber[]{
                 new CNumber(14, 35.3), new CNumber(-0.452, 25.1), new CNumber(9834), new CNumber(0, 345.1),
                 new CNumber(9.435, 14.3), new CNumber(-0.35345, -92.4), new CNumber(3405.1), new CNumber(0, 7510)};
-        bCmSp = new CVector(bCmpEntries).toCoo();
+        bCmSp = new CVectorOld(bCmpEntries).toCoo();
         expEntries = new CNumber[][]{
                 {new CNumber(0).add(bCmpEntries[0]), new CNumber(3.4, 1.5).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0]), new CNumber(0).add(bCmpEntries[0])},
                 {new CNumber(1.415, 16.1).add(bCmpEntries[1]), new CNumber(-0.0024, 25).add(bCmpEntries[1]), new CNumber(105.2, 0.0015).add(bCmpEntries[1]), new CNumber(-3.14, 801.2).add(bCmpEntries[1])},
@@ -719,7 +719,7 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 85781.2).add(bCmpEntries[6]), new CNumber(0).add(bCmpEntries[6]), new CNumber(0).add(bCmpEntries[6]), new CNumber(0).add(bCmpEntries[6])},
                 {new CNumber(0).add(bCmpEntries[7]), new CNumber(0).add(bCmpEntries[7]), new CNumber(0).add(bCmpEntries[7]), new CNumber(0, 145.5).add(bCmpEntries[7])},
         };
-        exp = new CMatrix(expEntries).T();
+        exp = new CMatrixOld(expEntries).T();
 
         assertEquals(exp, A.addToEachRow(bCmSp));
 
@@ -734,15 +734,15 @@ class CsrCMatrixAddToEachRowTest {
                 {new CNumber(20.4, 85781.2), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0, 145.5)},
         };
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         bRealEntries = new double[]{0.234, -0.00204, 100.14};
-        bReSp = new Vector(bRealEntries).toCoo();
+        bReSp = new VectorOld(bRealEntries).toCoo();
 
         assertThrows(IllegalArgumentException.class, ()->A.addToEachRow(bReSp));
 
         // -------------------- Sub-case 4 --------------------
         bRealEntries = new double[]{0.234, -0.00204, 100.14, -9345.23, 1, 0.2525, 1, 3, 4, 5, 6, 7, 8};
-        bReSp = new Vector(bRealEntries).toCoo();
+        bReSp = new VectorOld(bRealEntries).toCoo();
         assertThrows(IllegalArgumentException.class, ()->A.addToEachRow(bReSp));
     }
 }

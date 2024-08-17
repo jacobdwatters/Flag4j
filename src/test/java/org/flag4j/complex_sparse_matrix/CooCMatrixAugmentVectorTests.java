@@ -1,10 +1,10 @@
 package org.flag4j.complex_sparse_matrix;
 
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -177,7 +177,7 @@ class CooCMatrixAugmentVectorTests {
         CooCMatrix a;
 
         double[] bEntries;
-        Vector b;
+        VectorOld b;
 
         Shape expShape;
         int[] expRowIndices;
@@ -193,7 +193,7 @@ class CooCMatrixAugmentVectorTests {
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[]{0.3801, 0.0308, 0.63463};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         expShape = new Shape(3, 6);
         expEntries = new CNumber[]{new CNumber("0.86517+0.19989i"), new CNumber("0.94604+0.50339i"), new CNumber("0.04861+0.27545i"), new CNumber("0.3801"), new CNumber("0.0308"), new CNumber("0.91311+0.0688i"), new CNumber("0.60475+0.73845i"), new CNumber("0.63463")};
@@ -211,7 +211,7 @@ class CooCMatrixAugmentVectorTests {
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[]{0.57775, 0.30589};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         expShape = new Shape(2, 2);
         expEntries = new CNumber[]{new CNumber("0.43154+0.26847i"), new CNumber("0.57775"), new CNumber("0.30589")};
@@ -229,10 +229,10 @@ class CooCMatrixAugmentVectorTests {
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[]{0.15209, 0.50914, 0.95345};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         CooCMatrix finala = a;
-        Vector finalb = b;
+        VectorOld finalb = b;
         assertThrows(Exception.class, ()->finala.augment(finalb));
     }
 
@@ -246,7 +246,7 @@ class CooCMatrixAugmentVectorTests {
         CooCMatrix a;
 
         CNumber[] bEntries;
-        CVector b;
+        CVectorOld b;
 
         Shape expShape;
         int[] expRowIndices;
@@ -262,7 +262,7 @@ class CooCMatrixAugmentVectorTests {
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[]{new CNumber("0.28981+0.76417i"), new CNumber("0.23422+0.06788i"), new CNumber("0.52486+0.30123i")};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
         expShape = new Shape(3, 6);
         expEntries = new CNumber[]{new CNumber("0.29218+0.61628i"), new CNumber("0.96492+0.3243i"), new CNumber("0.28981+0.76417i"), new CNumber("0.83591+0.5134i"), new CNumber("0.84686+0.61207i"), new CNumber("0.23422+0.06788i"), new CNumber("0.01161+0.57735i"), new CNumber("0.52486+0.30123i")};
@@ -280,7 +280,7 @@ class CooCMatrixAugmentVectorTests {
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[]{new CNumber("0.11995+0.50415i"), new CNumber("0.71319+0.50435i")};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
         expShape = new Shape(2, 2);
         expEntries = new CNumber[]{new CNumber("0.30256+0.27929i"), new CNumber("0.11995+0.50415i"), new CNumber("0.71319+0.50435i")};
@@ -298,10 +298,10 @@ class CooCMatrixAugmentVectorTests {
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[]{new CNumber("0.42197+0.325i"), new CNumber("0.59146+0.62667i"), new CNumber("0.54031+0.59255i")};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
         CooCMatrix finala = a;
-        CVector finalb = b;
+        CVectorOld finalb = b;
         assertThrows(Exception.class, ()->finala.augment(finalb));
     }
 }

@@ -24,8 +24,8 @@
 
 package org.flag4j.linalg.solvers.lstsq;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.core.MatrixMixin;
 import org.flag4j.core.VectorMixin;
 import org.flag4j.linalg.decompositions.unitary.UnitaryDecomposition;
@@ -41,8 +41,8 @@ import org.flag4j.linalg.solvers.LinearSolver;
  * This is done using a {@link UnitaryDecomposition QR decomposition}.
  */
 public abstract class LstsqSolver<
-        T extends MatrixMixin<T, T, ?, CMatrix, ?, ?, U, U>,
-        U extends VectorMixin<U, U, ?, CVector, ?, T, T, CMatrix>>
+        T extends MatrixMixin<T, T, ?, CMatrixOld, ?, ?, U, U>,
+        U extends VectorMixin<U, U, ?, CVectorOld, ?, T, T, CMatrixOld>>
         implements LinearSolver<T, U> {
 
     /**
@@ -78,7 +78,7 @@ public abstract class LstsqSolver<
      * Solves the linear system given by {@code Ax=b} in the least-squares sense.
      *
      * @param A Coefficient matrix in the linear system.
-     * @param b Vector of constants in the linear system.
+     * @param b VectorOld of constants in the linear system.
      * @return The least squares solution to {@code x} in the linear system {@code Ax=b}.
      */
     @Override
@@ -93,7 +93,7 @@ public abstract class LstsqSolver<
      * {@code A}, {@code B}, and {@code X} are matrices.
      *
      * @param A Coefficient matrix in the linear system.
-     * @param B Matrix of constants in the linear system.
+     * @param B MatrixOld of constants in the linear system.
      * @return The solution to {@code X} in the linear system {@code A*X=B}.
      */
     @Override

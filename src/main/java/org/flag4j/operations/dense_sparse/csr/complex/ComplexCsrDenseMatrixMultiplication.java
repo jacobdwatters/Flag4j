@@ -24,11 +24,11 @@
 
 package org.flag4j.operations.dense_sparse.csr.complex;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CsrCMatrix;
-import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.sparse.CsrMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ErrorMessages;
@@ -52,14 +52,14 @@ public final class ComplexCsrDenseMatrixMultiplication {
     /**
      * Computes the matrix multiplication between a complex sparse CSR matrix and a complex dense matrix.
      * WARNING: If the first matrix is very large but not very sparse, this method may be slower than converting the
-     * first matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link Matrix#mult(CMatrix)}.
+     * first matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link MatrixOld#mult(CMatrixOld)}.
      * @param src1 First matrix in the matrix multiplication.
      * @param src2 Second matrix in the matrix multiplication.
      * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} does not have the same number of columns as {@code src2} has
      * rows.
      */
-    public static CMatrix standard(CsrCMatrix src1, CMatrix src2) {
+    public static CMatrixOld standard(CsrCMatrix src1, CMatrixOld src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
 
@@ -86,21 +86,21 @@ public final class ComplexCsrDenseMatrixMultiplication {
             }
         }
 
-        return new CMatrix(new Shape(src1.numRows, src2.numCols), destEntries);
+        return new CMatrixOld(new Shape(src1.numRows, src2.numCols), destEntries);
     }
 
 
     /**
      * Computes the matrix multiplication between a complex dense matrix and a complex sparse CSR matrix.
      * WARNING: If the second matrix is very large but not very sparse, this method may be slower than converting the
-     * second matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link Matrix#mult(Matrix)}.
+     * second matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link MatrixOld#mult(MatrixOld)}.
      * @param src1 First matrix in the matrix multiplication (dense matrix).
      * @param src2 Second matrix in the matrix multiplication (sparse CSR matrix).
      * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} does not have the same number of columns as {@code src2} has
      * rows.
      */
-    public static CMatrix standard(CMatrix src1, CsrCMatrix src2) {
+    public static CMatrixOld standard(CMatrixOld src1, CsrCMatrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
 
@@ -126,19 +126,19 @@ public final class ComplexCsrDenseMatrixMultiplication {
             }
         }
 
-        return new CMatrix(new Shape(rows1, cols2), destEntries);
+        return new CMatrixOld(new Shape(rows1, cols2), destEntries);
     }
 
 
     /**
      * Computes the matrix-vector multiplication between a real sparse CSR matrix and a complex dense vector.
      * @param src1 The matrix in the multiplication.
-     * @param src2 Vector in multiplication. Treated as a column vector.
+     * @param src2 VectorOld in multiplication. Treated as a column vector.
      * @return The result of the matrix-vector multiplication.
      * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the length of
      * {@code src2}.
      */
-    public static CVector standardVector(CsrCMatrix src1, CVector src2) {
+    public static CVectorOld standardVector(CsrCMatrix src1, CVectorOld src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
         ParameterChecks.assertEquals(src1.numCols, src2.size);
 
@@ -158,6 +158,6 @@ public final class ComplexCsrDenseMatrixMultiplication {
             }
         }
 
-        return new CVector(destEntries);
+        return new CVectorOld(destEntries);
     }
 }

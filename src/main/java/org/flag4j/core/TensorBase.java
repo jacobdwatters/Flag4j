@@ -24,7 +24,7 @@
 
 package org.flag4j.core;
 
-import org.flag4j.operations.common.TensorEquals;
+import org.flag4j.operations_old.common.TensorEquals;
 import org.flag4j.util.ErrorMessages;
 
 import java.io.Serializable;
@@ -35,10 +35,10 @@ import java.math.BigInteger;
  * The base class for all tensors. A tensor is an algebraic object equivalent to a multidimensional array with a single
  * data type.
  * @param <T> Type of this tensor.
- * @param <U> Dense Tensor type.
- * @param <W> Complex Tensor type.
+ * @param <U> Dense TensorOld type.
+ * @param <W> Complex TensorOld type.
  * @param <Z> Dense complex tensor type.
- * @param <Y> Real Tensor type.
+ * @param <Y> Real TensorOld type.
  * @param <D> Type of the storage data structure for the tensor.
  *           This common use case will be an array or list-like data structure.
  * @param <X> The type of individual entry within the {@code D} data structure
@@ -160,7 +160,7 @@ public abstract class TensorBase<T, U, W, Z, Y, D extends Serializable, X extend
 
     /**
      * Checks if all entries of this tensor are close to the entries of the argument {@code tensor}.
-     * @param tensor Tensor to compare this tensor to.
+     * @param tensor TensorOld to compare this tensor to.
      * @return True if the argument {@code tensor} is the same shape as this tensor and all entries are 'close', i.e.
      * elements {@code a} and {@code b} at the same positions in the two tensors respectively satisfy
      * {@code |a-b| <= (1E-05 + 1E-08*|b|)}. Otherwise, returns false.
@@ -173,7 +173,7 @@ public abstract class TensorBase<T, U, W, Z, Y, D extends Serializable, X extend
 
     /**
      * Checks if all entries of this tensor are close to the entries of the argument {@code tensor}.
-     * @param tensor Tensor to compare this tensor to.
+     * @param tensor TensorOld to compare this tensor to.
      * @param absTol Absolute tolerance.
      * @param relTol Relative tolerance.
      * @return True if the argument {@code tensor} is the same shape as this tensor and all entries are 'close', i.e.

@@ -1,9 +1,9 @@
 package org.flag4j.complex_vector;
 
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,9 +16,9 @@ class CVectorSubTests {
     CNumber[] aEntries = new CNumber[]{
             new CNumber(2.566, -9.24), new CNumber(-24.565, 9.3),
             new CNumber(3.54698), new CNumber(0, 8.356)};
-    CVector a = new CVector(aEntries);
+    CVectorOld a = new CVectorOld(aEntries);
     CNumber[] expEntries;
-    CVector exp;
+    CVectorOld exp;
 
     int sparseSize;
     int[] sparseIndices;
@@ -29,7 +29,7 @@ class CVectorSubTests {
         aEntries = new CNumber[]{
                 new CNumber(2.566, -9.24), new CNumber(-24.565, 9.3),
                 new CNumber(3.54698), new CNumber(0, 8.356)};
-        a = new CVector(aEntries);
+        a = new CVectorOld(aEntries);
     }
 
     @Test
@@ -41,7 +41,7 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566-b, -9.24), new CNumber(-24.565-b, 9.3),
                 new CNumber(3.54698-b), new CNumber(0-b, 8.356)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, a.sub(b));
 
@@ -50,7 +50,7 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566-b, -9.24), new CNumber(-24.565-b, 9.3),
                 new CNumber(3.54698-b), new CNumber(0-b, 8.356)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, a.sub(b));
 
@@ -59,7 +59,7 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566-b, -9.24), new CNumber(-24.565-b, 9.3),
                 new CNumber(3.54698-b), new CNumber(0-b, 8.356)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, a.sub(b));
 
@@ -68,9 +68,9 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566-b, -9.24), new CNumber(-24.565-b, 9.3),
                 new CNumber(3.54698-b), new CNumber(0-b, 8.356)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
-        CVector act = a.sub(b);
+        CVectorOld act = a.sub(b);
 
         for(int i=0; i<act.size; i++) {
             assertTrue(Double.isNaN(act.get(i).re));
@@ -88,7 +88,7 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b), new CNumber(-24.565, 9.3).sub(b),
                 new CNumber(3.54698).sub(b), new CNumber(0, 8.356).sub(b)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, a.sub(b));
 
@@ -97,7 +97,7 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b), new CNumber(-24.565, 9.3).sub(b),
                 new CNumber(3.54698).sub(b), new CNumber(0, 8.356).sub(b)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, a.sub(b));
 
@@ -106,7 +106,7 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b), new CNumber(-24.565, 9.3).sub(b),
                 new CNumber(3.54698).sub(b), new CNumber(0, 8.356).sub(b)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, a.sub(b));
 
@@ -115,7 +115,7 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b), new CNumber(-24.565, 9.3).sub(b),
                 new CNumber(3.54698).sub(b), new CNumber(0, 8.356).sub(b)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, a.sub(b));
 
@@ -124,7 +124,7 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b), new CNumber(-24.565, 9.3).sub(b),
                 new CNumber(3.54698).sub(b), new CNumber(0, 8.356).sub(b)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, a.sub(b));
 
@@ -133,9 +133,9 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b), new CNumber(-24.565, 9.3).sub(b),
                 new CNumber(3.54698).sub(b), new CNumber(0, 8.356).sub(b)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
-        CVector act = a.sub(b);
+        CVectorOld act = a.sub(b);
 
         for (int i = 0; i < act.size; i++) {
             assertTrue(Double.isNaN(act.get(i).re));
@@ -147,40 +147,40 @@ class CVectorSubTests {
     @Test
     void realDenseTestCase() {
         double[] bEntries;
-        Vector b;
+        VectorOld b;
 
         // ------------------ Sub-case 1 ------------------
         bEntries = new double[]{54.1354, -99.2344, 0, 0.023};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b.get(0)), new CNumber(-24.565, 9.3).sub(b.get(1)),
                 new CNumber(3.54698).sub(b.get(2)), new CNumber(0, 8.356).sub(b.get(3))};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, a.sub(b));
 
         // ------------------ Sub-case 2 ------------------
         bEntries = new double[]{-54.1354, -99.2344, 0, Double.NEGATIVE_INFINITY};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b.get(0)), new CNumber(-24.565, 9.3).sub(b.get(1)),
                 new CNumber(3.54698).sub(b.get(2)), new CNumber(0, 8.356).sub(b.get(3))};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, a.sub(b));
 
         // ------------------ Sub-case 3 ------------------
         bEntries = new double[]{-54.1354, -99.2344, 0, 14, 1.5};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
-        Vector finalB = b;
+        VectorOld finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.sub(finalB));
 
         // ------------------ Sub-case 4 ------------------
         bEntries = new double[]{-54.1354, -99.2344};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
-        Vector finalB2 = b;
+        VectorOld finalB2 = b;
         assertThrows(LinearAlgebraException.class, ()->a.sub(finalB2));
     }
 
@@ -198,7 +198,7 @@ class CVectorSubTests {
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(54.1354), new CNumber(-24.565, 9.3),
                 new CNumber(3.54698).sub(-1.4), new CNumber(0, 8.356)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, a.sub(b));
 
@@ -210,9 +210,9 @@ class CVectorSubTests {
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24), new CNumber(-24.565, 9.3),
                 new CNumber(3.54698), new CNumber(0, 8.356).sub(-1.4)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
-        CVector act = a.sub(b);
+        CVectorOld act = a.sub(b);
         assertEquals(exp, act);
 
         // ------------------ Sub-case 3 ------------------
@@ -238,27 +238,27 @@ class CVectorSubTests {
     @Test
     void complexDenseTestCase() {
         CNumber[] bEntries;
-        CVector b;
+        CVectorOld b;
 
         // ------------------ Sub-case 1 ------------------
         bEntries = new CNumber[]{new CNumber(2.45, -99.24), new CNumber(9),
                 new CNumber(0, -8.35), new CNumber(-9924.5, 24.656)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b.get(0)), new CNumber(-24.565, 9.3).sub(b.get(1)),
                 new CNumber(3.54698).sub(b.get(2)), new CNumber(0, 8.356).sub(b.get(3))};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, a.sub(b));
 
         // ------------------ Sub-case 2 ------------------
         bEntries = new CNumber[]{new CNumber(2455, 0.0001424), new CNumber(-9),
                 new CNumber(-0.0, Double.NEGATIVE_INFINITY), new CNumber(Double.POSITIVE_INFINITY, 24.656)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b.get(0)), new CNumber(-24.565, 9.3).sub(b.get(1)),
                 new CNumber(3.54698).sub(b.get(2)), new CNumber(0, 8.356).sub(b.get(3))};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, a.sub(b));
 
@@ -266,17 +266,17 @@ class CVectorSubTests {
         bEntries = new CNumber[]{new CNumber(2.45, -99.24), new CNumber(9),
                 new CNumber(0, -8.35), new CNumber(-9924.5, 24.656),
                 new CNumber(9.345, 1344)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
-        CVector finalB = b;
+        CVectorOld finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.sub(finalB));
 
         // ------------------ Sub-case 4 ------------------
         bEntries = new CNumber[]{new CNumber(2.45, -99.24), new CNumber(9),
                 new CNumber(0, -8.35)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
-        CVector finalB2 = b;
+        CVectorOld finalB2 = b;
         assertThrows(LinearAlgebraException.class, ()->a.sub(finalB2));
     }
 
@@ -294,7 +294,7 @@ class CVectorSubTests {
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(bEntries[0]), new CNumber(-24.565, 9.3),
                 new CNumber(3.54698).sub(bEntries[1]), new CNumber(0, 8.356)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, a.sub(b));
 
@@ -306,9 +306,9 @@ class CVectorSubTests {
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24), new CNumber(-24.565, 9.3),
                 new CNumber(3.54698), new CNumber(0, 8.356).sub(bEntries[0])};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
-        CVector act = a.sub(b);
+        CVectorOld act = a.sub(b);
 
         assertEquals(exp, act);
 
@@ -343,7 +343,7 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566-b, -9.24), new CNumber(-24.565-b, 9.3),
                 new CNumber(3.54698-b), new CNumber(0-b, 8.356)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         a.subEq(b);
         assertEquals(exp, a);
@@ -354,7 +354,7 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566-b, -9.24), new CNumber(-24.565-b, 9.3),
                 new CNumber(3.54698-b), new CNumber(0-b, 8.356)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         a.subEq(b);
         assertEquals(exp, a);
@@ -365,7 +365,7 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566-b, -9.24), new CNumber(-24.565-b, 9.3),
                 new CNumber(3.54698-b), new CNumber(0-b, 8.356)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         a.subEq(b);
         assertEquals(exp, a);
@@ -376,7 +376,7 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566-b, -9.24), new CNumber(-24.565-b, 9.3),
                 new CNumber(3.54698-b), new CNumber(0-b, 8.356)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         a.subEq(b);
 
@@ -397,7 +397,7 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b), new CNumber(-24.565, 9.3).sub(b),
                 new CNumber(3.54698).sub(b), new CNumber(0, 8.356).sub(b)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         a.subEq(b);
         assertEquals(exp, a);
@@ -408,7 +408,7 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b), new CNumber(-24.565, 9.3).sub(b),
                 new CNumber(3.54698).sub(b), new CNumber(0, 8.356).sub(b)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         a.subEq(b);
         assertEquals(exp, a);
@@ -419,7 +419,7 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b), new CNumber(-24.565, 9.3).sub(b),
                 new CNumber(3.54698).sub(b), new CNumber(0, 8.356).sub(b)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         a.subEq(b);
         assertEquals(exp, a);
@@ -430,7 +430,7 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b), new CNumber(-24.565, 9.3).sub(b),
                 new CNumber(3.54698).sub(b), new CNumber(0, 8.356).sub(b)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         a.subEq(b);
         assertEquals(exp, a);
@@ -441,7 +441,7 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b), new CNumber(-24.565, 9.3).sub(b),
                 new CNumber(3.54698).sub(b), new CNumber(0, 8.356).sub(b)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         a.subEq(b);
         assertEquals(exp, a);
@@ -452,7 +452,7 @@ class CVectorSubTests {
         expEntries = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b), new CNumber(-24.565, 9.3).sub(b),
                 new CNumber(3.54698).sub(b), new CNumber(0, 8.356).sub(b)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         a.subEq(b);
 
@@ -466,16 +466,16 @@ class CVectorSubTests {
     @Test
     void realDenseEqTestCase() {
         double[] bEntries;
-        Vector b;
+        VectorOld b;
 
         // ------------------ Sub-case 1 ------------------
         setup();
         bEntries = new double[]{54.1354, -99.2344, 0, 0.023};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b.get(0)), new CNumber(-24.565, 9.3).sub(b.get(1)),
                 new CNumber(3.54698).sub(b.get(2)), new CNumber(0, 8.356).sub(b.get(3))};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         a.subEq(b);
         assertEquals(exp, a);
@@ -483,11 +483,11 @@ class CVectorSubTests {
         // ------------------ Sub-case 2 ------------------
         setup();
         bEntries = new double[]{-54.1354, -99.2344, 0, Double.NEGATIVE_INFINITY};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b.get(0)), new CNumber(-24.565, 9.3).sub(b.get(1)),
                 new CNumber(3.54698).sub(b.get(2)), new CNumber(0, 8.356).sub(b.get(3))};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         a.subEq(b);
         assertEquals(exp, a);
@@ -495,17 +495,17 @@ class CVectorSubTests {
         // ------------------ Sub-case 3 ------------------
         setup();
         bEntries = new double[]{-54.1354, -99.2344, 0, 14, 1.5};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
-        Vector finalB = b;
+        VectorOld finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.subEq(finalB));
 
         // ------------------ Sub-case 4 ------------------
         setup();
         bEntries = new double[]{-54.1354, -99.2344};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
-        Vector finalB2 = b;
+        VectorOld finalB2 = b;
         assertThrows(LinearAlgebraException.class, ()->a.subEq(finalB2));
     }
 
@@ -524,7 +524,7 @@ class CVectorSubTests {
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(54.1354), new CNumber(-24.565, 9.3),
                 new CNumber(3.54698).sub(-1.4), new CNumber(0, 8.356)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         a.subEq(b);
         assertEquals(exp, a);
@@ -538,7 +538,7 @@ class CVectorSubTests {
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24), new CNumber(-24.565, 9.3),
                 new CNumber(3.54698), new CNumber(0, 8.356).sub(-1.4)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         a.subEq(b);
         assertEquals(exp, a);
@@ -568,17 +568,17 @@ class CVectorSubTests {
     @Test
     void complexDenseEqTestCase() {
         CNumber[] bEntries;
-        CVector b;
+        CVectorOld b;
 
         // ------------------ Sub-case 1 ------------------
         setup();
         bEntries = new CNumber[]{new CNumber(2.45, -99.24), new CNumber(9),
                 new CNumber(0, -8.35), new CNumber(-9924.5, 24.656)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b.get(0)), new CNumber(-24.565, 9.3).sub(b.get(1)),
                 new CNumber(3.54698).sub(b.get(2)), new CNumber(0, 8.356).sub(b.get(3))};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         a.subEq(b);
         assertEquals(exp, a);
@@ -587,11 +587,11 @@ class CVectorSubTests {
         setup();
         bEntries = new CNumber[]{new CNumber(2455, 0.0001424), new CNumber(-9),
                 new CNumber(-0.0, Double.NEGATIVE_INFINITY), new CNumber(Double.POSITIVE_INFINITY, 24.656)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(b.get(0)), new CNumber(-24.565, 9.3).sub(b.get(1)),
                 new CNumber(3.54698).sub(b.get(2)), new CNumber(0, 8.356).sub(b.get(3))};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         a.subEq(b);
         assertEquals(exp, a);
@@ -601,18 +601,18 @@ class CVectorSubTests {
         bEntries = new CNumber[]{new CNumber(2.45, -99.24), new CNumber(9),
                 new CNumber(0, -8.35), new CNumber(-9924.5, 24.656),
                 new CNumber(9.345, 1344)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
-        CVector finalB = b;
+        CVectorOld finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.subEq(finalB));
 
         // ------------------ Sub-case 4 ------------------
         setup();
         bEntries = new CNumber[]{new CNumber(2.45, -99.24), new CNumber(9),
                 new CNumber(0, -8.35)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
-        CVector finalB2 = b;
+        CVectorOld finalB2 = b;
         assertThrows(LinearAlgebraException.class, ()->a.subEq(finalB2));
     }
 
@@ -631,7 +631,7 @@ class CVectorSubTests {
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24).sub(bEntries[0]), new CNumber(-24.565, 9.3),
                 new CNumber(3.54698).sub(bEntries[1]), new CNumber(0, 8.356)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         a.subEq(b);
         assertEquals(exp, a);
@@ -645,7 +645,7 @@ class CVectorSubTests {
         expEntries  = new CNumber[]{
                 new CNumber(2.566, -9.24), new CNumber(-24.565, 9.3),
                 new CNumber(3.54698), new CNumber(0, 8.356).sub(bEntries[0])};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         a.subEq(b);
         assertEquals(exp, a);

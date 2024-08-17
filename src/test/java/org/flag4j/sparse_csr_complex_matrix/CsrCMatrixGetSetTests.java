@@ -1,7 +1,7 @@
 package org.flag4j.sparse_csr_complex_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.sparse.CsrCMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +27,7 @@ class CsrCMatrixGetSetTests {
                 {new CNumber(0), new CNumber(0, 1.5), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(4, -3), new CNumber(0), new CNumber(801.4, 15),
                         new CNumber(-15, 1)}};
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
 
         assertEquals(new CNumber(0), A.get(0, 0));
         assertEquals(new CNumber(1, -72.1), A.get(0, 1));
@@ -80,7 +80,7 @@ class CsrCMatrixGetSetTests {
                 {new CNumber(0), new CNumber(0, 1.5), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(4, -3), new CNumber(0), new CNumber(801.4, 15),
                         new CNumber(-15, 1)}};
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
 
         // -------------------------- Sub-case 1 --------------------------
         expEntries = new CNumber[][]{
@@ -92,7 +92,7 @@ class CsrCMatrixGetSetTests {
                         new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(4, -3),
                         new CNumber(0), new CNumber(801.4, 15), new CNumber(-15, 1)}};
-        exp = new CMatrix(expEntries).toCsr();
+        exp = new CMatrixOld(expEntries).toCsr();
         assertEquals(exp, A.set(new CNumber(9,-1.25), 1, 4));
 
         // -------------------------- Sub-case 2 --------------------------
@@ -105,7 +105,7 @@ class CsrCMatrixGetSetTests {
                         new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(4, -3),
                         new CNumber(0), new CNumber(801.4, 15), new CNumber(-15, 1)}};
-        exp = new CMatrix(expEntries).toCsr();
+        exp = new CMatrixOld(expEntries).toCsr();
         assertEquals(exp, A.set(new CNumber(6, -2), 0, 0));
 
         // -------------------------- Sub-case 3 --------------------------
@@ -118,7 +118,7 @@ class CsrCMatrixGetSetTests {
                         new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(4, -3),
                         new CNumber(0), new CNumber(801.4, 15), new CNumber(-15, 1)}};
-        exp = new CMatrix(expEntries).toCsr();
+        exp = new CMatrixOld(expEntries).toCsr();
         assertEquals(exp, A.set(5, 0, 6));
 
         // -------------------------- Sub-case 4 --------------------------
@@ -131,7 +131,7 @@ class CsrCMatrixGetSetTests {
                         new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(4, -3),
                         new CNumber(-5900.1, 2352.26221), new CNumber(801.4, 15), new CNumber(-15, 1)}};
-        exp = new CMatrix(expEntries).toCsr();
+        exp = new CMatrixOld(expEntries).toCsr();
         assertEquals(exp, A.set(new CNumber(-5900.1, 2352.26221), 3, 4));
 
         // -------------------------- Sub-case 5 --------------------------

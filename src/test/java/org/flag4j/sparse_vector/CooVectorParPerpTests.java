@@ -1,7 +1,7 @@
 package org.flag4j.sparse_vector;
 
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -17,7 +17,7 @@ class CooVectorParPerpTests {
     @Test
     void denseParallelTestCase() {
         double[] bEntries;
-        Vector b;
+        VectorOld b;
 
         // --------------- Sub-case 1 ---------------
         aEntries = new double[]{1.345, -98.345, 0, 24.5};
@@ -25,13 +25,13 @@ class CooVectorParPerpTests {
         sparseSize = 8;
         a = new CooVector(sparseSize, aEntries, aIndices);
         bEntries = new double[]{1.345, 0, -98.345, 0, 0, 24.5, 0, 0};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         assertTrue(a.isParallel(b));
 
         // --------------- Sub-case 2 ---------------
         bEntries = new double[]{1.345*2, 0, -98.345*2, 0, 0, 24.5*2, 0, 0};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         assertTrue(a.isParallel(b));
 
@@ -41,7 +41,7 @@ class CooVectorParPerpTests {
         sparseSize = 8;
         a = new CooVector(sparseSize, aEntries, aIndices);
         bEntries = new double[]{0, 0, -98.345, 1.345, 0, 24.5, 0, 0};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         assertTrue(a.isParallel(b));
 
@@ -51,7 +51,7 @@ class CooVectorParPerpTests {
         sparseSize = 8;
         a = new CooVector(sparseSize, aEntries, aIndices);
         bEntries = new double[]{0, 0, -98.345/345.965178, 1.345/345.965178, 0, 24.5/345.965178, 0, 0};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         assertTrue(a.isParallel(b));
 
@@ -61,7 +61,7 @@ class CooVectorParPerpTests {
         sparseSize = 81;
         a = new CooVector(sparseSize, aEntries, aIndices);
         bEntries = new double[]{0, 0, -98.345/345.965178, 1.345/345.965178, 0, 24.5/345.965178, 0, 0};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         assertFalse(a.isParallel(b));
 
@@ -71,7 +71,7 @@ class CooVectorParPerpTests {
         sparseSize = 8;
         a = new CooVector(sparseSize, aEntries, aIndices);
         bEntries = new double[]{0, 0, -98.345/345.965178, 1.345/345.965178, 0, 24.5/345.965178, 0};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         assertFalse(a.isParallel(b));
 
@@ -81,7 +81,7 @@ class CooVectorParPerpTests {
         sparseSize = 1;
         a = new CooVector(sparseSize, aEntries, aIndices);
         bEntries = new double[]{23.4};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         assertTrue(a.isParallel(b));
 
@@ -91,7 +91,7 @@ class CooVectorParPerpTests {
         sparseSize = 0;
         a = new CooVector(sparseSize, aEntries, aIndices);
         bEntries = new double[]{};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         assertTrue(a.isParallel(b));
 
@@ -101,7 +101,7 @@ class CooVectorParPerpTests {
         sparseSize = 823;
         a = new CooVector(sparseSize, aEntries, aIndices);
         bEntries = new double[823];
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         assertTrue(a.isParallel(b));
 
@@ -111,7 +111,7 @@ class CooVectorParPerpTests {
         sparseSize = 8;
         a = new CooVector(sparseSize, aEntries, aIndices);
         bEntries = new double[]{0, 0, -98.345/345.965178, 1.345/345.965178, 0, 24.5/345.965178, 0, 1};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         assertFalse(a.isParallel(b));
 
@@ -121,7 +121,7 @@ class CooVectorParPerpTests {
         sparseSize = 8;
         a = new CooVector(sparseSize, aEntries, aIndices);
         bEntries = new double[]{0, 0, -98.345/345.965178, 1.345/345.965178, 0, 24.5/2, 0, 0};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         assertFalse(a.isParallel(b));
     }
@@ -130,7 +130,7 @@ class CooVectorParPerpTests {
     @Test
     void perpTestCase() {
         double[] bEntries;
-        Vector b;
+        VectorOld b;
 
         // --------------- Sub-case 1 ---------------
         aEntries = new double[]{1, 1, 1};
@@ -138,7 +138,7 @@ class CooVectorParPerpTests {
         sparseSize = 8;
         a = new CooVector(sparseSize, aEntries, aIndices);
         bEntries = new double[]{1, 0, 1, 0, 1, 1, 1, 0};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         assertTrue(a.isPerp(b));
 
@@ -148,7 +148,7 @@ class CooVectorParPerpTests {
         sparseSize = 8;
         a = new CooVector(sparseSize, aEntries, aIndices);
         bEntries = new double[]{1, 0, 0, 0, 0, 1, 0, 0};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         assertTrue(a.isPerp(b));
 
@@ -158,7 +158,7 @@ class CooVectorParPerpTests {
         sparseSize = 8;
         a = new CooVector(sparseSize, aEntries, aIndices);
         bEntries = new double[]{1, 1, 0, 0, 0, 1, 0, 0};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         assertFalse(a.isPerp(b));
 
@@ -168,7 +168,7 @@ class CooVectorParPerpTests {
         sparseSize = 1845;
         a = new CooVector(sparseSize, aEntries, aIndices);
         bEntries = new double[]{1, 1, 0, 0, 0, 1, 0, 0};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         assertFalse(a.isPerp(b));
 
@@ -178,7 +178,7 @@ class CooVectorParPerpTests {
         sparseSize = 3;
         a = new CooVector(sparseSize, aEntries, aIndices);
         bEntries = new double[]{5.3, 349.51145, 106.0/827.0};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         assertTrue(a.isPerp(b));
     }

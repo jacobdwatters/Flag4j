@@ -24,8 +24,8 @@
 
 package org.flag4j.operations.dense.real;
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ErrorMessages;
 
@@ -61,7 +61,7 @@ public class RealDenseEquals {
      * @param B Second matrix.
      * @return True if the two matrices are element-wise equivalent.
      */
-    public static boolean matrixEquals(Matrix A, Matrix B) {
+    public static boolean matrixEquals(MatrixOld A, MatrixOld B) {
         return tensorEquals(A.entries, A.shape, B.entries, B.shape);
     }
 
@@ -72,7 +72,7 @@ public class RealDenseEquals {
      * @param B Second tensor in comparison.
      * @return True if the two tensors are numerically element-wise equivalent.
      */
-    public static boolean tensorEquals(Tensor A, Tensor B) {
+    public static boolean tensorEquals(TensorOld A, TensorOld B) {
         return tensorEquals(A.entries, A.shape, B.entries, B.shape);
     }
 

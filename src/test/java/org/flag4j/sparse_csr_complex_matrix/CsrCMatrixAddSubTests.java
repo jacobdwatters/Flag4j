@@ -1,9 +1,9 @@
 package org.flag4j.sparse_csr_complex_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CsrCMatrix;
-import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.sparse.CsrMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
@@ -17,14 +17,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class CsrCMatrixAddSubTests {
     static CsrCMatrix A;
     static CsrMatrix B;
-    static CMatrix denseA;
-    static Matrix denseB;
+    static CMatrixOld denseA;
+    static MatrixOld denseB;
     static CsrCMatrix expAdd;
     static CsrCMatrix expAsubB;
     static CsrCMatrix expBsubA;
-    static CMatrix expAddDense;
-    static CMatrix expAsubBDense;
-    static CMatrix expBsubADense;
+    static CMatrixOld expAddDense;
+    static CMatrixOld expAsubBDense;
+    static CMatrixOld expBsubADense;
     static CNumber[][] aEntries;
     static double[][] bEntries;
 
@@ -32,14 +32,14 @@ class CsrCMatrixAddSubTests {
     static CNumber bCmp;
     static CNumber[][] bEntriesCmp;
     static CsrCMatrix BCmp;
-    static CMatrix denseBCmp;
+    static CMatrixOld denseBCmp;
 
     private static void makeMatrices() {
-        denseA = new CMatrix(aEntries);
+        denseA = new CMatrixOld(aEntries);
         A = denseA.toCsr();
 
         if(bEntries != null) {
-            denseB = new Matrix(bEntries);
+            denseB = new MatrixOld(bEntries);
             B = denseB.toCsr();
             expAddDense = denseA.add(denseB);
             expAsubBDense = denseA.sub(denseB);
@@ -48,7 +48,7 @@ class CsrCMatrixAddSubTests {
             expAsubB = expAsubBDense.toCsr();
             expBsubA = expBsubADense.toCsr();
         } else if(bEntriesCmp != null) {
-            denseBCmp = new CMatrix(bEntriesCmp);
+            denseBCmp = new CMatrixOld(bEntriesCmp);
             BCmp = denseBCmp.toCsr();
             expAddDense = denseA.add(denseBCmp);
             expAsubBDense = denseA.sub(denseBCmp);
@@ -60,14 +60,14 @@ class CsrCMatrixAddSubTests {
     }
 
     private static void makeRealConstMatrices() {
-        denseA = new CMatrix(aEntries);
+        denseA = new CMatrixOld(aEntries);
         A = denseA.toCsr();
         expAddDense = denseA.add(b);
         expAsubBDense = denseA.sub(b);
     }
 
     private static void makeCmpConstMatrices() {
-        denseA = new CMatrix(aEntries);
+        denseA = new CMatrixOld(aEntries);
         A = denseA.toCsr();
         expAddDense = denseA.add(bCmp);
         expAsubBDense = denseA.sub(bCmp);

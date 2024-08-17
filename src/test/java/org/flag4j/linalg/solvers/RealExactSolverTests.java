@@ -1,8 +1,8 @@
 package org.flag4j.linalg.solvers;
 
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.linalg.solvers.exact.RealExactSolver;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.SingularMatrixException;
@@ -17,14 +17,14 @@ class RealExactSolverTests {
     static double[] bEntries;
     static double[] expEntries;
 
-    static Matrix A;
-    static Vector b;
-    static Vector exp;
+    static MatrixOld A;
+    static VectorOld b;
+    static VectorOld exp;
 
     private static void setMatrices() {
-        A = new Matrix(aEntries);
-        b = new Vector(bEntries);
-        exp = new Vector(expEntries);
+        A = new MatrixOld(aEntries);
+        b = new VectorOld(bEntries);
+        exp = new VectorOld(expEntries);
     }
 
 

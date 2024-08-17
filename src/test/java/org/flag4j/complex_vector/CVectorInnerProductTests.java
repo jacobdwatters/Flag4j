@@ -1,9 +1,9 @@
 package org.flag4j.complex_vector;
 
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class CVectorInnerProductTests {
 
     static CNumber[] aEntries;
-    static CVector a;
+    static CVectorOld a;
 
     CNumber exp;
 
@@ -25,27 +25,27 @@ class CVectorInnerProductTests {
     static void setup() {
         aEntries = new CNumber[]{new CNumber(1.455, 6126.347), new CNumber(-9.234, 5.0),
                 new CNumber(9.245, -56.2345), new CNumber(0, 14.5), new CNumber(-0.009257)};
-        a = new CVector(aEntries);
+        a = new CVectorOld(aEntries);
     }
 
 
     @Test()
     void realDenseInnerProdTestCase() {
         double[] bEntries;
-        Vector b;
+        VectorOld b;
 
         // -------------------- Sub-case 1 --------------------
         bEntries = new double[]{1.455, 6.345, -0.00035, 1.56, -8815.56};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
         exp = new CNumber("25.12969816999999 + 8968.199567075002i");
 
         assertEquals(exp, a.inner(b));
 
         // -------------------- Sub-case 2 --------------------
         bEntries = new double[]{1.455, 1.56, -8815.56};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
-        Vector finalB = b;
+        VectorOld finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.inner(finalB));
     }
 
@@ -78,12 +78,12 @@ class CVectorInnerProductTests {
     @Test()
     void complexDenseInnerProdTestCase() {
         CNumber[] bEntries;
-        CVector b;
+        CVectorOld b;
 
         // -------------------- Sub-case 1 --------------------
         bEntries = new CNumber[]{new CNumber(24.5, -6.01), new CNumber(3), new CNumber(0, 824),
             new CNumber(-9, 4.5), new CNumber(-0.00024, -5615.789)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
         exp = new CNumber("-83083.37796777832 + 142318.88069122698j");
 
         assertEquals(exp, a.inner(b));
@@ -91,9 +91,9 @@ class CVectorInnerProductTests {
         // -------------------- Sub-case 2 --------------------
         bEntries = new CNumber[]{new CNumber(24.5, -6.01), new CNumber(3), new CNumber(0, 824),
                 new CNumber(-9, 4.5)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
-        CVector finalB = b;
+        CVectorOld finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.inner(finalB));
     }
 

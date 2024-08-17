@@ -1,9 +1,9 @@
 package org.flag4j.sparse_vector;
 
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -25,13 +25,13 @@ class CooVectorElemDivTests {
 
         double[] bValues;
         int[] expIndices;
-        Vector b;
+        VectorOld b;
         double[] expValues;
         CooVector exp;
 
         // -------------------- Sub-case 1 --------------------
         bValues = new double[]{1.223, -44.51, 3.4, 2.3, 14.5, -14.51};
-        b = new Vector(bValues);
+        b = new VectorOld(bValues);
 
         expValues = new double[]{1.34/1.223, 51.6/3.4, -0.00245/14.5};
         expIndices = new int[]{0, 2, 4};
@@ -40,9 +40,9 @@ class CooVectorElemDivTests {
 
         // -------------------- Sub-case 2 --------------------
         bValues = new double[]{1.223, -44.51, 3.4, 2.3, 14.5, -14.51, 123, 25.2, 155};
-        b = new Vector(bValues);
+        b = new VectorOld(bValues);
 
-        Vector finalB = b;
+        VectorOld finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.elemDiv(finalB));
     }
 
@@ -56,14 +56,14 @@ class CooVectorElemDivTests {
 
         CNumber[] bValues, expValues;
         int[] expIndices;
-        CVector b;
+        CVectorOld b;
         CooCVector exp;
 
         // -------------------- Sub-case 1 --------------------
         bValues = new CNumber[]{new CNumber(24.3, -0.013), new CNumber(0, 13.6),
                 new CNumber(2.4), new CNumber(-994.1 ,1.45), new CNumber(1495, 13.4),
                 new CNumber(9924.515, 51.5)};
-        b = new CVector(bValues);
+        b = new CVectorOld(bValues);
 
         expValues = new CNumber[]{
                 new CNumber(1.34).div(new CNumber(24.3, -0.013)),
@@ -76,9 +76,9 @@ class CooVectorElemDivTests {
 
         // -------------------- Sub-case 2 --------------------
         bValues = new CNumber[]{new CNumber(24.3, -0.013), new CNumber(0, 13.6)};
-        b = new CVector(bValues);
+        b = new CVectorOld(bValues);
 
-        CVector finalB = b;
+        CVectorOld finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.elemDiv(finalB));
     }
 

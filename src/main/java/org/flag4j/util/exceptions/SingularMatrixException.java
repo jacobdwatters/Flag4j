@@ -30,17 +30,17 @@ package org.flag4j.util.exceptions;
  */
 public class SingularMatrixException extends LinearAlgebraException {
 
-    private static final String INFO = "Matrix is singular.";
+    private static final String INFO = "MatrixOld is singular.";
 
     /**
-     * Creates a SingularMatrixException with the simple error message "Matrix is singular."
+     * Creates a SingularMatrixException with the simple error message "MatrixOld is singular."
      */
     public SingularMatrixException() {
         super(INFO);
     }
 
     /**
-     * Creates a SingularMatrixException with a specified error message. Note, the string " Matrix is singular." will
+     * Creates a SingularMatrixException with a specified error message. Note, the string " MatrixOld is singular." will
      * be automatically appended to the error message.
      * @param errMsg Error message to display when this SingularMatrixException is thrown.
      */

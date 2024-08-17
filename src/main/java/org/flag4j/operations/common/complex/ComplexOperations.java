@@ -29,7 +29,7 @@ import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ErrorMessages;
 
 /**
- * This class provides low level methods for computing operations on real tensors. These methods can be applied to
+ * This class provides low level methods for computing operations_old on real tensors. These methods can be applied to
  * either sparse or dense real tensors.
  */
 public class ComplexOperations {

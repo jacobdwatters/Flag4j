@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.decompositions.unitary;
 
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.linalg.decompositions.hess.RealHess;
 import org.flag4j.linalg.decompositions.qr.RealQR;
 import org.flag4j.linalg.transformations.Householder;
@@ -35,7 +35,7 @@ import org.flag4j.util.Flag4jConstants;
  * (specifically Householder reflectors) to bring a matrix into an upper triangular/Hessenburg matrix. Specifically, the
  * {@link RealQR QR} and {@link RealHess Hessenburg} decompositions.
  */
-public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matrix, double[]> {
+public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<MatrixOld, double[]> {
 
     /**
      * To store norms of columns in {@link #transformMatrix}.
@@ -75,7 +75,7 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
      *
      * <p>It should be noted that if performance is improved, it will be a very slight improvement compared
      * to the total time to compute the decomposition. This is because the computation of {@code Q} is only
-     * evaluated lazily once {@link #getQ()} is called, so this will only save on copy operations.</p>
+     * evaluated lazily once {@link #getQ()} is called, so this will only save on copy operations_old.</p>
      *
      * @param subDiagonal Sub-diagonal of the upper triangular/Hessenburg matrix. That is, the sub-diagonal for which all entries
      *                    below will be zero in the final upper quasi-triangular matrix. Must be Zero or one. If zero, it will be
@@ -98,11 +98,11 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
      * then {@code Q} can not be computed and this method will return {@code null}.
      */
     @Override
-    public Matrix getQ() {
+    public MatrixOld getQ() {
         if(!storeReflectors)
             return null;
 
-        Matrix Q = initQ();
+        MatrixOld Q = initQ();
 
         for(int j=minAxisSize - 1; j>=subDiagonal; j--) {
             householderVector[j] = 1; // Ensure first value of reflector is 1.
@@ -125,7 +125,7 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
      * @return The upper triangular/Hessenburg matrix from the last decomposition.
      */
     @Override
-    protected Matrix getUpper(Matrix H) {
+    protected MatrixOld getUpper(MatrixOld H) {
         // Copy top rows.
         for(int i=0; i<subDiagonal; i++) {
             int rowOffset = i*numCols;
@@ -146,7 +146,7 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
 
 
     /**
-     * Initialized any work arrays to be used in computing the decomposition with the proper size.
+     * Initialized any work arrays_old to be used in computing the decomposition with the proper size.
      *
      * @param maxAxisSize Length of the largest axis in the matrix to be decomposed. That is, {@code max(numRows, numCols)}
      */

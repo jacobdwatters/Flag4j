@@ -24,7 +24,7 @@
 
 package org.flag4j.operations.sparse.csr.real;
 
-import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.arrays_old.sparse.CsrMatrix;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 
@@ -32,7 +32,7 @@ import java.util.Arrays;
 
 
 /**
- * Utility class for manipulating {@link org.flag4j.arrays.sparse.CsrMatrix real sparse CSR matrices} (e.g. row swaps, column swaps,
+ * Utility class for manipulating {@link CsrMatrix real sparse CSR matrices} (e.g. row swaps, column swaps,
  * etc.).
  */
 public class RealCsrManipulations {
@@ -92,7 +92,7 @@ public class RealCsrManipulations {
         for(int i=rowIdx1+1; i<=rowIdx2; i++)
             src.rowPointers[i] += diff;
 
-        // Copy updated arrays to this tensors storage.
+        // Copy updated arrays_old to this tensors storage.
         System.arraycopy(updatedEntries, 0, src.entries, start1, updatedEntries.length);
         System.arraycopy(updatedColIndices, 0, src.colIndices, start1, updatedEntries.length);
     }

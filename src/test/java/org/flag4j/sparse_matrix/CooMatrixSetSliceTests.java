@@ -1,7 +1,7 @@
 package org.flag4j.sparse_matrix;
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrix;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
 
@@ -172,7 +172,7 @@ class CooMatrixSetSliceTests {
         CooMatrix a;
 
         double[][] bEntries;
-        Matrix b;
+        MatrixOld b;
 
         Shape expShape;
         int[] expRowIndices;
@@ -190,7 +190,7 @@ class CooMatrixSetSliceTests {
         bEntries = new double[][]{
                 {0.88098, 0.32602, 0.83928},
                 {0.08236, 0.83795, 0.84279}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expShape = new Shape(5, 3);
         expEntries = new double[]{0.27021, 0.88098, 0.32602, 0.83928, 0.08236, 0.83795, 0.84279};
@@ -213,7 +213,7 @@ class CooMatrixSetSliceTests {
                 {0.37356, 0.92958, 0.878, 0.50643, 0.05278, 0.85421, 0.29942, 0.52806, 0.28666},
                 {0.63041, 0.87807, 0.18841, 0.78023, 0.9306, 0.81551, 0.04105, 0.0534, 0.23816},
                 {0.76035, 0.43175, 0.25131, 0.8096, 0.84916, 0.16624, 0.28679, 0.13698, 0.12409}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expShape = new Shape(23, 11);
         expEntries = new double[]{0.64914, 0.66932, 0.40628, 0.37954, 0.58805, 0.25559, 0.41371, 0.98028, 0.63021, 0.31739, 0.53601, 0.31622, 0.79944, 0.47782, 0.07173, 0.48916, 0.19796, 0.33267, 0.11585, 0.55903, 0.85354, 0.76878, 0.37356, 0.92958, 0.878, 0.50643, 0.05278, 0.85421, 0.29942, 0.52806, 0.28666, 0.63041, 0.87807, 0.18841, 0.78023, 0.9306, 0.81551, 0.04105, 0.0534, 0.23816, 0.76035, 0.43175, 0.25131, 0.8096, 0.84916, 0.16624, 0.28679, 0.13698, 0.12409};
@@ -234,7 +234,7 @@ class CooMatrixSetSliceTests {
                 {0.92281, 0.27413},
                 {0.0728, 0.35943},
                 {0.65062, 0.823}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expShape = new Shape(1000, 5);
         expEntries = new double[]{0.92281, 0.27413, 0.0728, 0.35943, 0.65062, 0.823, 0.09033, 0.75299, 0.78946, 0.91141, 0.66149, 0.23721, 0.78215, 0.14658, 0.48493};
@@ -253,10 +253,10 @@ class CooMatrixSetSliceTests {
 
         bEntries = new double[][]{
                 {0.88379, 0.23006, 0.79116}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         CooMatrix final0a = a;
-        Matrix final0b = b;
+        MatrixOld final0b = b;
         assertThrows(Exception.class, ()->final0a.setSlice(final0b, -1, 2));
 
         // ---------------------  Sub-case 5 ---------------------
@@ -270,10 +270,10 @@ class CooMatrixSetSliceTests {
                 {0.37548},
                 {0.90032},
                 {0.54146}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         CooMatrix final1a = a;
-        Matrix final1b = b;
+        MatrixOld final1b = b;
         assertThrows(Exception.class, ()->final1a.setSlice(final1b, 0, 16));
 
         // ---------------------  Sub-case 6 ---------------------
@@ -286,10 +286,10 @@ class CooMatrixSetSliceTests {
         bEntries = new double[][]{
                 {0.77061, 0.2345},
                 {0.34159, 0.25256}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         CooMatrix final2a = a;
-        Matrix final2b = b;
+        MatrixOld final2b = b;
         assertThrows(Exception.class, ()->final2a.setSlice(final2b, 2, 0));
 
         // ---------------------  Sub-case 7 ---------------------
@@ -301,10 +301,10 @@ class CooMatrixSetSliceTests {
 
         bEntries = new double[][]{
                 {0.17845, 0.95046, 0.59089}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         CooMatrix final3a = a;
-        Matrix final3b = b;
+        MatrixOld final3b = b;
         assertThrows(Exception.class, ()->final3a.setSlice(final3b, 0, 4));
     }
 

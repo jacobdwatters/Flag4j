@@ -24,9 +24,9 @@
 
 package org.flag4j.operations.sparse.coo.complex;
 
-import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooCTensor;
+import org.flag4j.arrays_old.dense.CTensorOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooCTensor;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
@@ -57,7 +57,7 @@ public class ComplexCooTensorDot {
      * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
      * are out of bounds for the corresponding tensor.
      */
-    public static CTensor tensorDot(CooCTensor src1, CooCTensor src2, int[] src1Axes, int[] src2Axes) {
+    public static CTensorOld tensorDot(CooCTensor src1, CooCTensor src2, int[] src1Axes, int[] src2Axes) {
         // Each array must specify the same number of axes.
         ParameterChecks.assertEquals(src1Axes.length, src2Axes.length);
 
@@ -118,7 +118,7 @@ public class ComplexCooTensorDot {
         CooCMatrix at = src1.T(src1NewAxes).toMatrix(src1NewShape);
         CooCMatrix bt = src2.T(src2NewAxes).toMatrix(src2NewShape);
 
-        CTensor product = at.mult(bt).toTensor();
+        CTensorOld product = at.mult(bt).toTensor();
 
         // TODO: Should allow for zero dim shape indicating a scalar. Then only the else block would be needed.
         Shape productShape;

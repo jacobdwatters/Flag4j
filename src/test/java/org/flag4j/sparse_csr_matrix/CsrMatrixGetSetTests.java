@@ -1,7 +1,7 @@
 package org.flag4j.sparse_csr_matrix;
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CsrMatrix;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,7 +23,7 @@ class CsrMatrixGetSetTests {
                 {0, 9.1, 0, 0, -1.4, 0, 0},
                 {0, 1.5, 0, 0, 0, 0, 0},
                 {0, 0, 0, 4, 0, 801.4, 15}};
-        A = new Matrix(aEntries).toCsr();
+        A = new MatrixOld(aEntries).toCsr();
 
         assertEquals(0, A.get(0, 0));
         assertEquals(1, A.get(0, 1));
@@ -73,7 +73,7 @@ class CsrMatrixGetSetTests {
                 {0, 9.1, 0, 0, -1.4, 0, 0},
                 {0, 1.5, 0, 0, 0, 0, 0},
                 {0, 0, 0, 4, 0, 801.4, 15}};
-        A = new Matrix(aEntries).toCsr();
+        A = new MatrixOld(aEntries).toCsr();
 
         // -------------------------- Sub-case 1 --------------------------
         expEntries = new double[][]{
@@ -81,7 +81,7 @@ class CsrMatrixGetSetTests {
                 {0, 9.1, 0, 0, 1004.4, 0, 0},
                 {0, 1.5, 0, 0, 0, 0, 0},
                 {0, 0, 0, 4, 0, 801.4, 15}};
-        exp = new Matrix(expEntries).toCsr();
+        exp = new MatrixOld(expEntries).toCsr();
         assertEquals(exp, A.set(1004.4, 1, 4));
 
         // -------------------------- Sub-case 2 --------------------------
@@ -90,7 +90,7 @@ class CsrMatrixGetSetTests {
                 {0, 9.1, 0, 0, -1.4, 0, 0},
                 {0, 1.5, 0, 0, 0, 0, 0},
                 {0, 0, 0, 4, 0, 801.4, 15}};
-        exp = new Matrix(expEntries).toCsr();
+        exp = new MatrixOld(expEntries).toCsr();
         assertEquals(exp, A.set(-2, 0, 0));
 
         // -------------------------- Sub-case 3 --------------------------
@@ -99,7 +99,7 @@ class CsrMatrixGetSetTests {
                 {0, 9.1, 0, 0, -1.4, 0, 0},
                 {0, 1.5, 0, 0, 0, 0, 0},
                 {0, 0, 0, 4, 0, 801.4, 15}};
-        exp = new Matrix(expEntries).toCsr();
+        exp = new MatrixOld(expEntries).toCsr();
         assertEquals(exp, A.set(5, 0, 6));
 
         // -------------------------- Sub-case 4 --------------------------
@@ -108,7 +108,7 @@ class CsrMatrixGetSetTests {
                 {0, 9.1, 0, 0, -1.4, 0, 0},
                 {0, 1.5, 0, 0, 0, 0, 0},
                 {0, 0, 0, 4, -992.5, 801.4, 15}};
-        exp = new Matrix(expEntries).toCsr();
+        exp = new MatrixOld(expEntries).toCsr();
         assertEquals(exp, A.set(-992.5, 3, 4));
 
         // -------------------------- Sub-case 5 --------------------------

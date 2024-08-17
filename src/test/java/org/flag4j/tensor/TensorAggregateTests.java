@@ -1,6 +1,6 @@
 package org.flag4j.tensor;
 
-import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ class TensorAggregateTests {
 
     static Shape shape;
     static double[] entries;
-    static Tensor A;
+    static TensorOld A;
     static Double exp;
     static int[] expIndices;
 
@@ -20,13 +20,13 @@ class TensorAggregateTests {
     static void setup() {
         entries = new double[]{1.234, 25.236, 6466.6, -0.0013, -8983.56, -0.01, 1.5, -99.3556, 12.56, 14.5, 11.6, -0.456};
         shape = new Shape(1, 2, 3, 1, 2);
-        A = new Tensor(shape, entries);
+        A = new TensorOld(shape, entries);
     }
 
 
     @Test
     void minMaxTestCase() {
-        Tensor empty = new Tensor(new Shape(), new double[]{});
+        TensorOld empty = new TensorOld(new Shape(), new double[]{});
 
         // -------------------------- Minimum Tests --------------------------
         exp = -8983.56;

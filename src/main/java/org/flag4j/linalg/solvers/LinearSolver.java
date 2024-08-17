@@ -41,7 +41,7 @@ public interface LinearSolver<
     /**
      * Solves the linear system of equations given by {@code A*x=b} for the vector {@code x}.
      * @param A Coefficient matrix in the linear system.
-     * @param b Vector of constants in the linear system.
+     * @param b VectorOld of constants in the linear system.
      * @return The solution to {@code x} in the linear system {@code A*x=b}.
      */
     U solve(T A, U b);
@@ -51,7 +51,7 @@ public interface LinearSolver<
      * Solves the set of linear system of equations given by {@code A*X=B} for the matrix {@code X} where
      * {@code A}, {@code B}, and {@code X} are matrices.
      * @param A Coefficient matrix in the linear system.
-     * @param B Matrix of constants in the linear system.
+     * @param B MatrixOld of constants in the linear system.
      * @return The solution to {@code X} in the linear system {@code A*X=B}.
      */
    T solve(T A, T B);

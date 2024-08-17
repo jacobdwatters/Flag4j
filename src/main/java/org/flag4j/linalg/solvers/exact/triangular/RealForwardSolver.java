@@ -24,8 +24,8 @@
 
 package org.flag4j.linalg.solvers.exact.triangular;
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
@@ -34,7 +34,7 @@ import org.flag4j.util.exceptions.SingularMatrixException;
  * This solver solves linear systems of equations where the coefficient matrix in a lower triangular real dense matrix
  * and the constant vector is a real dense vector.
  */
-public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
+public class RealForwardSolver extends ForwardSolver<MatrixOld, VectorOld, double[]> {
 
     /**
      * For computing determinant of lower triangular matrix during solve.
@@ -91,7 +91,7 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
      * @throws SingularMatrixException If
      */
     @Override
-    public Vector solve(Matrix L, Vector b) {
+    public VectorOld solve(MatrixOld L, VectorOld b) {
         ParameterChecks.assertSquareMatrix(L.shape);
         ParameterChecks.assertEquals(L.numRows, b.size);
         return isUnit ? solveUnitLower(L, b) : solveLower(L, b);
@@ -103,13 +103,13 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
      * That is, solves the linear system {@code L*X=B} where {@code L} is a lower triangular matrix.
      * @param L Lower triangular coefficient matrix. If {@code L} is not lower triangular, it will be treated
      *          as if it were.
-     * @param B Constant Matrix.
+     * @param B Constant MatrixOld.
      * @return The result of solving the linear system {@code L*X=B} where {@code L} is a lower triangular matrix.
      * @throws SingularMatrixException If the matrix lower triangular {@code L} is singular (i.e. has a zero on
      *      * the principle diagonal).
      */
     @Override
-    public Matrix solve(Matrix L, Matrix B) {
+    public MatrixOld solve(MatrixOld L, MatrixOld B) {
         ParameterChecks.assertSquareMatrix(L.shape);
         ParameterChecks.assertEquals(L.numRows, B.numRows);
         return isUnit ? solveUnitLower(L, B) : solveLower(L, B);
@@ -126,7 +126,7 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
      * @throws SingularMatrixException If the matrix lower triangular {@code L} is singular (i.e. has a zero on
      * the principle diagonal).
      */
-    public Matrix solveIdentity(Matrix L) {
+    public MatrixOld solveIdentity(MatrixOld L) {
         ParameterChecks.assertSquareMatrix(L.shape);
         return isUnit ? solveUnitLowerIdentity(L) : solveLowerIdentity(L);
     }
@@ -135,15 +135,15 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
     /**
      * Solves a linear system where the coefficient matrix is unit lower triangular.
      * @param L Unit lower triangular matrix.
-     * @param b Vector of constants in the linear system.
+     * @param b VectorOld of constants in the linear system.
      * @return The solution of {@code x} for the linear system {@code L*x=b}.
      */
-    private Vector solveUnitLower(Matrix L, Vector b) {
+    private VectorOld solveUnitLower(MatrixOld L, VectorOld b) {
         checkParams(L, b.size);
 
         double sum;
         int lIndexStart;
-        x = new Vector(L.numRows);
+        x = new VectorOld(L.numRows);
         det = L.numRows; // Since it is unit lower, matrix has full rank.
 
         x.entries[0] = b.entries[0];
@@ -167,17 +167,17 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
     /**
      * Solves a linear system where the coefficient matrix is lower triangular.
      * @param L Unit lower triangular matrix.
-     * @param b Vector of constants in the linear system.
+     * @param b VectorOld of constants in the linear system.
      * @return The solution of {@code x} for the linear system {@code L*x=b}.
      * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
      * principle diagonal).
      */
-    private Vector solveLower(Matrix L, Vector b) {
+    private VectorOld solveLower(MatrixOld L, VectorOld b) {
         checkParams(L, b.size);
 
         double sum, diag;
         int lIndexStart;
-        x = new Vector(L.numRows);
+        x = new VectorOld(L.numRows);
         det = L.entries[0];
         x.entries[0] = b.entries[0]/det;
 
@@ -204,15 +204,15 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
     /**
      * Solves a linear system where the coefficient matrix is unit lower triangular.
      * @param L Unit lower triangular matrix.
-     * @param B Matrix of constants in the linear system.
+     * @param B MatrixOld of constants in the linear system.
      * @return The solution of {@code X} for the linear system {@code L*X=b}.
      */
-    private Matrix solveUnitLower(Matrix L, Matrix B) {
+    private MatrixOld solveUnitLower(MatrixOld L, MatrixOld B) {
         checkParams(L, B.numRows);
 
         double sum;
         int lIndexStart, xIndex;
-        X = new Matrix(B.shape);
+        X = new MatrixOld(B.shape);
         xCol = new double[L.numRows];
         det = L.numRows; // Since it is unit lower, matrix has full rank.
 
@@ -246,18 +246,18 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
     /**
      * Solves a linear system where the coefficient matrix is lower triangular.
      * @param L Unit lower triangular matrix.
-     * @param B Matrix of constants in the linear system.
+     * @param B MatrixOld of constants in the linear system.
      * @return The solution of {@code X} for the linear system {@code L*X=b}.
      * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
      * principle diagonal).
      */
-    private Matrix solveLower(Matrix L, Matrix B) {
+    private MatrixOld solveLower(MatrixOld L, MatrixOld B) {
         checkParams(L, B.numRows);
 
         double sum;
         double diag;
         int lIndexStart, xIndex;
-        X = new Matrix(B.shape);
+        X = new MatrixOld(B.shape);
         xCol = new double[L.numRows];
         det = L.entries[0];
 
@@ -300,12 +300,12 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
      * @param L Unit lower triangular matrix.
      * @return The solution of {@code X} for the linear system {@code L*X=I}.
      */
-    private Matrix solveUnitLowerIdentity(Matrix L) {
+    private MatrixOld solveUnitLowerIdentity(MatrixOld L) {
         checkParams(L, L.numRows);
 
         double sum;
         int lIndexStart, xIndex;
-        X = new Matrix(L.shape);
+        X = new MatrixOld(L.shape);
         xCol = new double[L.numRows];
         det = L.numRows; // Since it is unit lower, matrix has full rank.
 
@@ -344,12 +344,12 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
      * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
      * principle diagonal).
      */
-    private Matrix solveLowerIdentity(Matrix L) {
+    private MatrixOld solveLowerIdentity(MatrixOld L) {
         checkParams(L, L.numRows);
 
         double sum, diag;
         int lIndexStart, xIndex;
-        X = new Matrix(L.shape);
+        X = new MatrixOld(L.shape);
         xCol = new double[L.numRows];
         det = L.entries[0];
         X.entries[0] = 1.0/det;

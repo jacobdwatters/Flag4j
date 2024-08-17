@@ -1,6 +1,6 @@
 package org.flag4j.complex_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CMatrixScaleOperationsTests {
 
     CNumber[][] aEntries, expEntries;
-    CMatrix A, exp;
+    CMatrixOld A, exp;
 
     @Test
     void realScaleMultTestCase() {
@@ -20,11 +20,11 @@ class CMatrixScaleOperationsTests {
         aEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1), new CNumber(32.4), new CNumber(394728.1)},
                 {new CNumber(-9841, -85.13), new CNumber(0, 84.1), new CNumber(-5.234, 234)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1).mult(scal), new CNumber(32.4).mult(scal), new CNumber(394728.1).mult(scal)},
                 {new CNumber(-9841, -85.13).mult(scal), new CNumber(0, 84.1).mult(scal), new CNumber(-5.234, 234).mult(scal)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.mult(scal));
 
@@ -33,11 +33,11 @@ class CMatrixScaleOperationsTests {
         aEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1), new CNumber(32.4), new CNumber(394728.1)},
                 {new CNumber(-9841, -85.13), new CNumber(0, 84.1), new CNumber(-5.234, 234)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1).mult(scal), new CNumber(32.4).mult(scal), new CNumber(394728.1).mult(scal)},
                 {new CNumber(-9841, -85.13).mult(scal), new CNumber(0, 84.1).mult(scal), new CNumber(-5.234, 234).mult(scal)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.mult(scal));
     }
@@ -52,11 +52,11 @@ class CMatrixScaleOperationsTests {
         aEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1), new CNumber(32.4), new CNumber(394728.1)},
                 {new CNumber(-9841, -85.13), new CNumber(0, 84.1), new CNumber(-5.234, 234)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1).mult(scal), new CNumber(32.4).mult(scal), new CNumber(394728.1).mult(scal)},
                 {new CNumber(-9841, -85.13).mult(scal), new CNumber(0, 84.1).mult(scal), new CNumber(-5.234, 234).mult(scal)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.mult(scal));
 
@@ -65,11 +65,11 @@ class CMatrixScaleOperationsTests {
         aEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1), new CNumber(32.4), new CNumber(394728.1)},
                 {new CNumber(-9841, -85.13), new CNumber(0, 84.1), new CNumber(-5.234, 234)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1).mult(scal), new CNumber(32.4).mult(scal), new CNumber(394728.1).mult(scal)},
                 {new CNumber(-9841, -85.13).mult(scal), new CNumber(0, 84.1).mult(scal), new CNumber(-5.234, 234).mult(scal)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.mult(scal));
     }
@@ -84,11 +84,11 @@ class CMatrixScaleOperationsTests {
         aEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1), new CNumber(32.4), new CNumber(394728.1)},
                 {new CNumber(-9841, -85.13), new CNumber(0, 84.1), new CNumber(-5.234, 234)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1).div(scal), new CNumber(32.4).div(scal), new CNumber(394728.1).div(scal)},
                 {new CNumber(-9841, -85.13).div(scal), new CNumber(0, 84.1).div(scal), new CNumber(-5.234, 234).div(scal)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.div(scal));
 
@@ -97,11 +97,11 @@ class CMatrixScaleOperationsTests {
         aEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1), new CNumber(32.4), new CNumber(394728.1)},
                 {new CNumber(-9841, -85.13), new CNumber(0, 84.1), new CNumber(-5.234, 234)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1).div(scal), new CNumber(32.4).div(scal), new CNumber(394728.1).div(scal)},
                 {new CNumber(-9841, -85.13).div(scal), new CNumber(0, 84.1).div(scal), new CNumber(-5.234, 234).div(scal)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.div(scal));
     }
@@ -116,11 +116,11 @@ class CMatrixScaleOperationsTests {
         aEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1), new CNumber(32.4), new CNumber(394728.1)},
                 {new CNumber(-9841, -85.13), new CNumber(0, 84.1), new CNumber(-5.234, 234)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1).div(scal), new CNumber(32.4).div(scal), new CNumber(394728.1).div(scal)},
                 {new CNumber(-9841, -85.13).div(scal), new CNumber(0, 84.1).div(scal), new CNumber(-5.234, 234).div(scal)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.div(scal));
 
@@ -129,11 +129,11 @@ class CMatrixScaleOperationsTests {
         aEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1), new CNumber(32.4), new CNumber(394728.1)},
                 {new CNumber(-9841, -85.13), new CNumber(0, 84.1), new CNumber(-5.234, 234)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1).div(scal), new CNumber(32.4).div(scal), new CNumber(394728.1).div(scal)},
                 {new CNumber(-9841, -85.13).div(scal), new CNumber(0, 84.1).div(scal), new CNumber(-5.234, 234).div(scal)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.div(scal));
     }

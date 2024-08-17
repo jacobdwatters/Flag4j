@@ -1,6 +1,6 @@
 package org.flag4j.complex_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +11,7 @@ class CMatrixRemoveRowColTests {
 
     CNumber[][] aEntries, expEntries;
     int index;
-    CMatrix A, exp;
+    CMatrixOld A, exp;
 
     @Test
     void removeRowTestCase() {
@@ -20,12 +20,12 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4)},
                 {new CNumber(85.124, 51), new CNumber(3)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         index = 1;
         expEntries = new CNumber[][]{
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.removeRow(index));
 
@@ -34,12 +34,12 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4)},
                 {new CNumber(85.124, 51), new CNumber(3)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         index = 2;
         expEntries = new CNumber[][]{
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4)},
                 {new CNumber(85.124, 51), new CNumber(3)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.removeRow(index));
 
@@ -48,7 +48,7 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4)},
                 {new CNumber(85.124, 51), new CNumber(3)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         index = -1;
         assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.removeRow(index));
 
@@ -57,7 +57,7 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4)},
                 {new CNumber(85.124, 51), new CNumber(3)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         index = 3;
         assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.removeRow(index));
     }
@@ -70,10 +70,10 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4)},
                 {new CNumber(85.124, 51), new CNumber(3)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.removeRows(0, 1));
 
@@ -82,12 +82,12 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4)},
                 {new CNumber(85.124, 51), new CNumber(3)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         index = 2;
         expEntries = new CNumber[][]{
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4)},
                 {new CNumber(85.124, 51), new CNumber(3)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.removeRows(index));
 
@@ -96,7 +96,7 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4)},
                 {new CNumber(85.124, 51), new CNumber(3)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.removeRows(-1, 1, 0));
 
         // -------------------- Sub-case 4--------------------
@@ -104,7 +104,7 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4)},
                 {new CNumber(85.124, 51), new CNumber(3)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.removeRows(0, 1, 4));
     }
 
@@ -116,13 +116,13 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4)},
                 {new CNumber(85.124, 51), new CNumber(3)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         index = 1;
         expEntries = new CNumber[][]{
                 {new CNumber(1, 34.3)},
                 {new CNumber(85.124, 51)},
                 {new CNumber(26.24, 160.5)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.removeCol(index));
 
@@ -131,13 +131,13 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4)},
                 {new CNumber(85.124, 51), new CNumber(3)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         index = 0;
         expEntries = new CNumber[][]{
                 {new CNumber(0.44, -9.4)},
                 {new CNumber(3)},
                 {new CNumber(0, -34.5)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.removeCol(index));
 
@@ -146,7 +146,7 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4)},
                 {new CNumber(85.124, 51), new CNumber(3)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         index = -1;
         assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.removeCol(index));
 
@@ -155,7 +155,7 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4)},
                 {new CNumber(85.124, 51), new CNumber(3)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         index = 2;
         assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.removeCol(index));
     }
@@ -168,12 +168,12 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4), new CNumber(3.4, 65.34)},
                 {new CNumber(85.124, 51), new CNumber(3), new CNumber(3, 5.56)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5), new CNumber(Double.POSITIVE_INFINITY, 5.2)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(3.4, 65.34)},
                 {new CNumber(3, 5.56)},
                 {new CNumber(Double.POSITIVE_INFINITY, 5.2)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.removeCols(0, 1));
 
@@ -182,13 +182,13 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4), new CNumber(3.4, 65.34)},
                 {new CNumber(85.124, 51), new CNumber(3), new CNumber(3, 5.56)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5), new CNumber(Double.POSITIVE_INFINITY, 5.2)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         index = 2;
         expEntries = new CNumber[][]{
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4)},
                 {new CNumber(85.124, 51), new CNumber(3)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.removeCols(index));
 
@@ -197,7 +197,7 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4), new CNumber(3.4, 65.34)},
                 {new CNumber(85.124, 51), new CNumber(3), new CNumber(3, 5.56)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5), new CNumber(Double.POSITIVE_INFINITY, 5.2)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         assertThrows(IllegalArgumentException.class, ()->A.removeCols(-1, 0, 1, 2));
 
         // -------------------- Sub-case 4--------------------
@@ -205,7 +205,7 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4), new CNumber(3.4, 65.34)},
                 {new CNumber(85.124, 51), new CNumber(3), new CNumber(3, 5.56)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5), new CNumber(Double.POSITIVE_INFINITY, 5.2)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.removeCols(0, 10, 4));
     }
 }

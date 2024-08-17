@@ -25,8 +25,8 @@
 package org.flag4j.operations.dense_sparse.csr.real;
 
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CsrMatrix;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -35,7 +35,7 @@ import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
 
 /**
- * This class contains low-level operations which act on a real dense and a real sparse {@link CsrMatrix CSR matrix}.
+ * This class contains low-level operations_old which act on a real dense and a real sparse {@link CsrMatrix CSR matrix}.
  */
 public class RealCsrDenseOperations {
 
@@ -50,15 +50,15 @@ public class RealCsrDenseOperations {
      * @param src1 First matrix in element-wise binary operation.
      * @param src2 Second matrix in element-wise binary operation.
      * @param opp Binary operator to apply element-wise to the two matrices.
-     * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
+     * @param uOpp Unary operator for use with binary operations_old which are not commutative such as subtraction. If the operation is
      * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
      * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
      * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static Matrix applyBinOpp(CsrMatrix src1, Matrix src2,
-                                     BinaryOperator<Double> opp,
-                                     UnaryOperator<Double> uOpp) {
+    public static MatrixOld applyBinOpp(CsrMatrix src1, MatrixOld src2,
+                                        BinaryOperator<Double> opp,
+                                        UnaryOperator<Double> uOpp) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
         double[] dest = src2.entries.clone();
 
@@ -84,7 +84,7 @@ public class RealCsrDenseOperations {
             }
         }
 
-        return new Matrix(src2.shape, dest);
+        return new MatrixOld(src2.shape, dest);
     }
 
 
@@ -96,8 +96,8 @@ public class RealCsrDenseOperations {
      * @param opp Binary operator to apply element-wise to the two matrices.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static Matrix applyBinOpp(Matrix src1, CsrMatrix src2,
-                                     BinaryOperator<Double> opp) {
+    public static MatrixOld applyBinOpp(MatrixOld src1, CsrMatrix src2,
+                                        BinaryOperator<Double> opp) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
         double[] dest = src1.entries.clone();
@@ -118,7 +118,7 @@ public class RealCsrDenseOperations {
             }
         }
 
-        return new Matrix(src2.shape, dest);
+        return new MatrixOld(src2.shape, dest);
     }
 
 
@@ -131,7 +131,7 @@ public class RealCsrDenseOperations {
 
      * @return The result of applying the operation element-wise to the matrices. Result is a sparse CSR matrix.
      */
-    public static CsrMatrix applyBinOppToSparse(Matrix src1, CsrMatrix src2,
+    public static CsrMatrix applyBinOppToSparse(MatrixOld src1, CsrMatrix src2,
                                                 BinaryOperator<Double> opp) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
@@ -160,15 +160,15 @@ public class RealCsrDenseOperations {
      * @param src1 First matrix in element-wise binary operation.
      * @param b Scalar to apply elementwise using the specified operation.
      * @param opp Binary operator to apply element-wise to the two matrices.
-     * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
+     * @param uOpp Unary operator for use with binary operations_old which are not commutative such as subtraction. If the operation is
      * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
      * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
      * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static Matrix applyBinOpp(CsrMatrix src1, double b,
-                                     BinaryOperator<Double> opp,
-                                     UnaryOperator<Double> uOpp) {
+    public static MatrixOld applyBinOpp(CsrMatrix src1, double b,
+                                        BinaryOperator<Double> opp,
+                                        UnaryOperator<Double> uOpp) {
         double[] dest = new double[src1.totalEntries().intValueExact()];
 
         // Apply unary operator if specified.
@@ -191,6 +191,6 @@ public class RealCsrDenseOperations {
             }
         }
 
-        return new Matrix(src1.shape, dest);
+        return new MatrixOld(src1.shape, dest);
     }
 }

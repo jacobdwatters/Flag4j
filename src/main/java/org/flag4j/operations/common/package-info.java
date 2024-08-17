@@ -23,7 +23,7 @@
  */
 
 /**
- * This package contains operations which can be applied to both dense or sparse tensors.
+ * This package contains operations_old which can be applied to both dense or sparse tensors.
  */
 package org.flag4j.operations.common;
 

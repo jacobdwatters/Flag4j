@@ -1,6 +1,6 @@
 package org.flag4j.sparse_complex_tensor;
 
-import org.flag4j.arrays.sparse.CooCTensor;
+import org.flag4j.arrays_old.sparse.CooCTensor;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;

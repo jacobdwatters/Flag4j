@@ -1,13 +1,13 @@
 package org.flag4j.matrix;
 
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MatrixTransposeTests {
-    Matrix A, expT, AT;
+    MatrixOld A, expT, AT;
     double[][] aEntries, expEntries;
 
 
@@ -21,8 +21,8 @@ class MatrixTransposeTests {
                 {1, 4},
                 {2, 5},
                 {3, 6}};
-        A = new Matrix(aEntries);
-        expT = new Matrix(expEntries);
+        A = new MatrixOld(aEntries);
+        expT = new MatrixOld(expEntries);
         AT = A.T();
         assertArrayEquals(expT.entries, AT.entries);
         assertEquals(expT.numRows(), AT.numRows());

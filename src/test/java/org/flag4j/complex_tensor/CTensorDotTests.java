@@ -1,6 +1,6 @@
 package org.flag4j.complex_tensor;
 
-import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.arrays_old.dense.CTensorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -23,9 +23,9 @@ class CTensorDotTests {
     static Shape bShape;
     static Shape expShape;
 
-    static CTensor A;
-    static CTensor B;
-    static CTensor exp;
+    static CTensorOld A;
+    static CTensorOld B;
+    static CTensorOld exp;
 
     @BeforeEach
     void setup() {
@@ -46,8 +46,8 @@ class CTensorDotTests {
         aShape = new Shape(3, 2, 1, 2);
         bShape = new Shape(4, 3, 2);
 
-        A = new CTensor(aShape, aEntries);
-        B = new CTensor(bShape, bEntries);
+        A = new CTensorOld(aShape, aEntries);
+        B = new CTensorOld(bShape, bEntries);
     }
 
 
@@ -69,7 +69,7 @@ class CTensorDotTests {
                 new CNumber("14.274116000000001 + 9754.5837803925i"), new CNumber("-15.992566700000003 + 1156.3847924999998i"), new CNumber("-2581.4 + 1.8261i"),
                 new CNumber("314.49902 + 28.979999999999997i"), new CNumber("-20798.593702384 + 6.706040499999999i")};
         expShape = new Shape(2, 1, 2, 4, 2);
-        exp = new CTensor(expShape, expEntries);
+        exp = new CTensorOld(expShape, expEntries);
 
         assertEquals(exp, A.tensorDot(B, aAxes, bAxes));
 
@@ -82,7 +82,7 @@ class CTensorDotTests {
                 new CNumber("31413.651525 + 8017.205850000001i"), new CNumber("53657.751297616 - 3095.8364595i")
         };
         expShape = new Shape(1, 2, 4);
-        exp = new CTensor(expShape, expEntries);
+        exp = new CTensorOld(expShape, expEntries);
 
         assertEquals(exp, A.tensorDot(B, aAxes, bAxes));
 
@@ -128,7 +128,7 @@ class CTensorDotTests {
                 new CNumber("14.274116000000001 + 9754.5837803925i"), new CNumber("-15.992566700000003 + 1156.3847924999998i"), new CNumber("-2581.4 + 1.8261i"),
                 new CNumber("314.49902 + 28.979999999999997i"), new CNumber("-20798.593702384 + 6.706040499999999i")};
         expShape = new Shape(2, 1, 2, 4, 2);
-        exp = new CTensor(expShape, expEntries);
+        exp = new CTensorOld(expShape, expEntries);
 
         assertEquals(exp, A.tensorDot(B, 0, 1));
 
@@ -154,7 +154,7 @@ class CTensorDotTests {
                 new CNumber("795.6394204999999 + 471482.10243525i"), new CNumber("5185.6983083000005 + 1652.03195i"), new CNumber("-78770.26000000001 - 1863.0700000000002i"),
                 new CNumber("16039.49902 + 28.979999999999997i"), new CNumber("458.956297616 - 38419.6497095i")};
         expShape = new Shape(2, 2, 4, 2);
-        exp = new CTensor(expShape, expEntries);
+        exp = new CTensorOld(expShape, expEntries);
 
         assertEquals(exp, A.tensorDot(B));
 

@@ -1,10 +1,10 @@
 package org.flag4j.sparse_csr_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.sparse.CsrMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
-import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
+import org.flag4j.operations_old.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,10 +19,10 @@ class RealComplexCsrDenseMatMultTests {
     int[] aRowPointers;
     int[] aColIndices;
 
-    CMatrix B;
+    CMatrixOld B;
     CNumber[][] bEntries;
 
-    CMatrix exp;
+    CMatrixOld exp;
     CNumber[][] expEntries;
 
     @Test
@@ -40,7 +40,7 @@ class RealComplexCsrDenseMatMultTests {
                 {new CNumber("0.46551+0.54915i"), new CNumber("0.95026+0.3433i"), new CNumber("0.93448+0.43158i"), new CNumber("0.8449+0.8074i"), new CNumber("0.07347+0.0873i")},
                 {new CNumber("0.66999+0.13998i"), new CNumber("0.08384+0.55878i"), new CNumber("0.08645+0.38561i"), new CNumber("0.89806+0.23426i"), new CNumber("0.0235+0.29708i")},
                 {new CNumber("0.05227+0.40564i"), new CNumber("0.87567+0.41385i"), new CNumber("0.45123+0.28923i"), new CNumber("0.34363+0.6419i"), new CNumber("0.92574+0.99279i")}};
-        B = new CMatrix(bEntries);
+        B = new CMatrixOld(bEntries);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.3628152961+0.6108569307i"), new CNumber("1.0415995836+0.5246136558000001i"), new CNumber("0.6369292118000001+0.3412717099i"), new CNumber("0.5605710434+0.7666738056000001i"), new CNumber("1.1424389299+1.2835737082i")},
@@ -48,7 +48,7 @@ class RealComplexCsrDenseMatMultTests {
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.2621945891+0.2181690439i"), new CNumber("0.2424458436+0.1409891178i"), new CNumber("0.20758864519999998+0.07760297050000001i"), new CNumber("0.2199549918+0.180219986i"), new CNumber("0.2904092239+0.35947740100000003i")},
                 {new CNumber("0.4169749764+0.0871179528i"), new CNumber("0.0521786624+0.3477623208i"), new CNumber("0.053803022+0.23998823960000001i"), new CNumber("0.5589166216+0.1457940536i"), new CNumber("0.01462546+0.18489070880000003i")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         Assertions.assertEquals(exp, A.mult(B));
 
@@ -75,7 +75,7 @@ class RealComplexCsrDenseMatMultTests {
                 {new CNumber("0.98982+0.49989i"), new CNumber("0.74925+0.81972i")},
                 {new CNumber("0.87877+0.69179i"), new CNumber("0.163+0.06568i")},
                 {new CNumber("0.41477+0.2585i"), new CNumber("0.11814+0.47146i")}};
-        B = new CMatrix(bEntries);
+        B = new CMatrixOld(bEntries);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.6231709578+0.4905759606i"), new CNumber("0.11558982000000001+0.0465763152i")},
@@ -93,13 +93,13 @@ class RealComplexCsrDenseMatMultTests {
                 {new CNumber("0.29608398999999996+0.535009344i"), new CNumber("0.9366610679999999+0.61326649i")},
                 {new CNumber("0.0978523044+0.14411137680000002i"), new CNumber("0.2121227364+0.0064359588i")},
                 {new CNumber("0.9048315761+0.6947962087i"), new CNumber("0.1857741678+0.08094554540000001i")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         Assertions.assertEquals(exp, A.mult(B));
 
         // ------------------------ Sub-case 3 ------------------------
         A = new CsrMatrix(24, 516);
-        B = new CMatrix(15, 12);
+        B = new CMatrixOld(15, 12);
         assertThrows(LinearAlgebraException.class, ()->A.mult(B));
     }
 
@@ -119,7 +119,7 @@ class RealComplexCsrDenseMatMultTests {
                 {new CNumber("0.46551+0.54915i"), new CNumber("0.95026+0.3433i"), new CNumber("0.93448+0.43158i"), new CNumber("0.8449+0.8074i"), new CNumber("0.07347+0.0873i")},
                 {new CNumber("0.66999+0.13998i"), new CNumber("0.08384+0.55878i"), new CNumber("0.08645+0.38561i"), new CNumber("0.89806+0.23426i"), new CNumber("0.0235+0.29708i")},
                 {new CNumber("0.05227+0.40564i"), new CNumber("0.87567+0.41385i"), new CNumber("0.45123+0.28923i"), new CNumber("0.34363+0.6419i"), new CNumber("0.92574+0.99279i")}};
-        B = new CMatrix(bEntries).T();
+        B = new CMatrixOld(bEntries).T();
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.3628152961+0.6108569307i"), new CNumber("1.0415995836+0.5246136558000001i"), new CNumber("0.6369292118000001+0.3412717099i"), new CNumber("0.5605710434+0.7666738056000001i"), new CNumber("1.1424389299+1.2835737082i")},
@@ -127,7 +127,7 @@ class RealComplexCsrDenseMatMultTests {
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.2621945891+0.2181690439i"), new CNumber("0.2424458436+0.1409891178i"), new CNumber("0.20758864519999998+0.07760297050000001i"), new CNumber("0.2199549918+0.180219986i"), new CNumber("0.2904092239+0.35947740100000003i")},
                 {new CNumber("0.4169749764+0.0871179528i"), new CNumber("0.0521786624+0.3477623208i"), new CNumber("0.053803022+0.23998823960000001i"), new CNumber("0.5589166216+0.1457940536i"), new CNumber("0.01462546+0.18489070880000003i")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         Assertions.assertEquals(exp, RealComplexCsrDenseMatrixMultiplication.standardTranspose(A, B));
 
@@ -154,7 +154,7 @@ class RealComplexCsrDenseMatMultTests {
                 {new CNumber("0.98982+0.49989i"), new CNumber("0.74925+0.81972i")},
                 {new CNumber("0.87877+0.69179i"), new CNumber("0.163+0.06568i")},
                 {new CNumber("0.41477+0.2585i"), new CNumber("0.11814+0.47146i")}};
-        B = new CMatrix(bEntries).T();
+        B = new CMatrixOld(bEntries).T();
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.6231709578+0.4905759606i"), new CNumber("0.11558982000000001+0.0465763152i")},
@@ -172,13 +172,13 @@ class RealComplexCsrDenseMatMultTests {
                 {new CNumber("0.29608398999999996+0.535009344i"), new CNumber("0.9366610679999999+0.61326649i")},
                 {new CNumber("0.0978523044+0.14411137680000002i"), new CNumber("0.2121227364+0.0064359588i")},
                 {new CNumber("0.9048315761+0.6947962087i"), new CNumber("0.1857741678+0.08094554540000001i")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         Assertions.assertEquals(exp, RealComplexCsrDenseMatrixMultiplication.standardTranspose(A, B));
 
         // ------------------------ Sub-case 3 ------------------------
         A = new CsrMatrix(24, 516);
-        B = new CMatrix(15, 12).T();
+        B = new CMatrixOld(15, 12).T();
         assertThrows(IllegalArgumentException.class, ()->RealComplexCsrDenseMatrixMultiplication.standardTranspose(A, B));
     }
 }

@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="dc.created" content="2024-08-09">
-<meta name="description" content="declaration: package: org.flag4j.arrays.sparse, class: PermutationMatrix">
+<meta name="description" content="declaration: package: org.flag4j.arrays_old.sparse, class: PermutationMatrix">
 <meta name="generator" content="javadoc/ClassWriter">
 <link rel="stylesheet" type="text/css" href="../../../../resource-files/jquery-ui.min.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../resource-files/stylesheet.css" title="Style">
@@ -80,11 +80,11 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.flag4j.arrays.sparse</a></div>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.flag4j.arrays_old.sparse</a></div>
 <h1 title="Class PermutationMatrix" class="title">Class PermutationMatrix</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">org.flag4j.arrays.sparse.PermutationMatrix</div>
+<div class="inheritance">org.flag4j.arrays_old.sparse.PermutationMatrix</div>
 </div>
 <section class="class-description" id="class-description">
 <div class="horizontal-scroll">
@@ -159,7 +159,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <div class="block">Creates a permutation matrix where the position of its ones are specified by a <a href="#swapPointers"><code>swap pointer</code></a>
  array.</div>
 </div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.flag4j.arrays.sparse.PermutationMatrix)" class="member-name-link">PermutationMatrix</a><wbr>(<a href="PermutationMatrix.html" title="class in org.flag4j.arrays.sparse">PermutationMatrix</a>&nbsp;src)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.flag4j.arrays.sparse.PermutationMatrix)" class="member-name-link">PermutationMatrix</a><wbr>(<a href="PermutationMatrix.html" title="class in org.flag4j.arrays_old.sparse">PermutationMatrix</a>&nbsp;src)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Copy constructor which creates a copy of the <code>src</code> permutation matrix.</div>
 </div>
@@ -186,7 +186,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the number of row/column swaps required for this permutation matrix to be converted to the identity matrix.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PermutationMatrix.html" title="class in org.flag4j.arrays.sparse">PermutationMatrix</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PermutationMatrix.html" title="class in org.flag4j.arrays_old.sparse">PermutationMatrix</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#copy()" class="member-name-link">copy</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Creates a copy of this permutation matrix.</div>
@@ -201,7 +201,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Checks if this permutation matrix is equal to the given object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PermutationMatrix.html" title="class in org.flag4j.arrays.sparse">PermutationMatrix</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PermutationMatrix.html" title="class in org.flag4j.arrays_old.sparse">PermutationMatrix</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fromColSwaps(int%5B%5D)" class="member-name-link">fromColSwaps</a><wbr>(int[]&nbsp;colSwaps)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates a permutation matrix with the specified column swaps.</div>
@@ -211,28 +211,28 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hashcode for this permutation matrix by calling <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/util/Arrays.html#hashCode(int%5B%5D)" title="class or interface in java.util" class="external-link"><code>Arrays.hashCode(swapPointers)</code></a>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PermutationMatrix.html" title="class in org.flag4j.arrays.sparse">PermutationMatrix</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PermutationMatrix.html" title="class in org.flag4j.arrays_old.sparse">PermutationMatrix</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#inv()" class="member-name-link">inv</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the inverse/transpose of this permutation matrix.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#leftMult(org.flag4j.arrays.dense.CMatrix)" class="member-name-link">leftMult</a><wbr>(<a href="../dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;src)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#leftMult(org.flag4j.arrays.dense.CMatrix)" class="member-name-link">leftMult</a><wbr>(<a href="../dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;src)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Left multiplies this permutation matrix to the specified matrix.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dense/CVector.html" title="class in org.flag4j.arrays.dense">CVector</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#leftMult(org.flag4j.arrays.dense.CVector)" class="member-name-link">leftMult</a><wbr>(<a href="../dense/CVector.html" title="class in org.flag4j.arrays.dense">CVector</a>&nbsp;src)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dense/CVector.html" title="class in org.flag4j.arrays_old.dense">CVector</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#leftMult(org.flag4j.arrays.dense.CVector)" class="member-name-link">leftMult</a><wbr>(<a href="../dense/CVector.html" title="class in org.flag4j.arrays_old.dense">CVector</a>&nbsp;src)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Left multiplies this permutation matrix to the specified vector.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#leftMult(org.flag4j.arrays.dense.Matrix)" class="member-name-link">leftMult</a><wbr>(<a href="../dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;src)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#leftMult(org.flag4j.arrays.dense.Matrix)" class="member-name-link">leftMult</a><wbr>(<a href="../dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;src)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Left multiplies this permutation matrix to the specified matrix.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#leftMult(org.flag4j.arrays.dense.Vector)" class="member-name-link">leftMult</a><wbr>(<a href="../dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a>&nbsp;src)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#leftMult(org.flag4j.arrays.dense.Vector)" class="member-name-link">leftMult</a><wbr>(<a href="../dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a>&nbsp;src)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Left multiplies this permutation matrix to the specified vector.</div>
 </div>
@@ -241,23 +241,23 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Permutes rows of this permutation matrix.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rightMult(org.flag4j.arrays.dense.CMatrix)" class="member-name-link">rightMult</a><wbr>(<a href="../dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;src)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rightMult(org.flag4j.arrays.dense.CMatrix)" class="member-name-link">rightMult</a><wbr>(<a href="../dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;src)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Right multiplies this permutation matrix to the specified matrix.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dense/CVector.html" title="class in org.flag4j.arrays.dense">CVector</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rightMult(org.flag4j.arrays.dense.CVector)" class="member-name-link">rightMult</a><wbr>(<a href="../dense/CVector.html" title="class in org.flag4j.arrays.dense">CVector</a>&nbsp;src)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dense/CVector.html" title="class in org.flag4j.arrays_old.dense">CVector</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rightMult(org.flag4j.arrays.dense.CVector)" class="member-name-link">rightMult</a><wbr>(<a href="../dense/CVector.html" title="class in org.flag4j.arrays_old.dense">CVector</a>&nbsp;src)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Right multiplies this permutation matrix to the specified vector.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rightMult(org.flag4j.arrays.dense.Matrix)" class="member-name-link">rightMult</a><wbr>(<a href="../dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;src)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rightMult(org.flag4j.arrays.dense.Matrix)" class="member-name-link">rightMult</a><wbr>(<a href="../dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;src)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Right multiplies this permutation matrix to the specified matrix.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rightMult(org.flag4j.arrays.dense.Vector)" class="member-name-link">rightMult</a><wbr>(<a href="../dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a>&nbsp;src)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rightMult(org.flag4j.arrays.dense.Vector)" class="member-name-link">rightMult</a><wbr>(<a href="../dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a>&nbsp;src)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Right multiplies this permutation matrix to the specified vector.</div>
 </div>
@@ -273,15 +273,15 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Swaps two rows in this permutation matrix.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PermutationMatrix.html" title="class in org.flag4j.arrays.sparse">PermutationMatrix</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PermutationMatrix.html" title="class in org.flag4j.arrays_old.sparse">PermutationMatrix</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#T()" class="member-name-link">T</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the transpose/inverse of this permutation matrix.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toDense()" class="member-name-link">toDense</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Converts this permutation matrix to a <a href="../dense/Matrix.html" title="class in org.flag4j.arrays.dense"><code>real dense matrix</code></a>.</div>
+<div class="block">Converts this permutation matrix to a <a href="../dense/Matrix.html" title="class in org.flag4j.arrays_old.dense"><code>real dense matrix</code></a>.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
@@ -375,7 +375,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="&lt;init&gt;(org.flag4j.arrays.sparse.PermutationMatrix)">
 <h3>PermutationMatrix</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PermutationMatrix</span><wbr><span class="parameters">(<a href="PermutationMatrix.html" title="class in org.flag4j.arrays.sparse">PermutationMatrix</a>&nbsp;src)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PermutationMatrix</span><wbr><span class="parameters">(<a href="PermutationMatrix.html" title="class in org.flag4j.arrays_old.sparse">PermutationMatrix</a>&nbsp;src)</span></div>
 <div class="block">Copy constructor which creates a copy of the <code>src</code> permutation matrix.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -415,7 +415,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="fromColSwaps(int[])">
 <h3>fromColSwaps</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PermutationMatrix.html" title="class in org.flag4j.arrays.sparse">PermutationMatrix</a></span>&nbsp;<span class="element-name">fromColSwaps</span><wbr><span class="parameters">(int[]&nbsp;colSwaps)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PermutationMatrix.html" title="class in org.flag4j.arrays_old.sparse">PermutationMatrix</a></span>&nbsp;<span class="element-name">fromColSwaps</span><wbr><span class="parameters">(int[]&nbsp;colSwaps)</span></div>
 <div class="block">Creates a permutation matrix with the specified column swaps.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -435,7 +435,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="copy()">
 <h3>copy</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PermutationMatrix.html" title="class in org.flag4j.arrays.sparse">PermutationMatrix</a></span>&nbsp;<span class="element-name">copy</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PermutationMatrix.html" title="class in org.flag4j.arrays_old.sparse">PermutationMatrix</a></span>&nbsp;<span class="element-name">copy</span>()</div>
 <div class="block">Creates a copy of this permutation matrix.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -481,7 +481,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="leftMult(org.flag4j.arrays.dense.Matrix)">
 <h3>leftMult</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></span>&nbsp;<span class="element-name">leftMult</span><wbr><span class="parameters">(<a href="../dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;src)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></span>&nbsp;<span class="element-name">leftMult</span><wbr><span class="parameters">(<a href="../dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;src)</span></div>
 <div class="block">Left multiplies this permutation matrix to the specified matrix. This will have the effect of swapping rows in
  the src matrix.</div>
 <dl class="notes">
@@ -506,7 +506,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="leftMult(org.flag4j.arrays.dense.Vector)">
 <h3>leftMult</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a></span>&nbsp;<span class="element-name">leftMult</span><wbr><span class="parameters">(<a href="../dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a>&nbsp;src)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a></span>&nbsp;<span class="element-name">leftMult</span><wbr><span class="parameters">(<a href="../dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a>&nbsp;src)</span></div>
 <div class="block">Left multiplies this permutation matrix to the specified vector. This will have the effect of swapping rows in
  the src vector. The vector will be treated as a column vector.</div>
 <dl class="notes">
@@ -531,7 +531,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="leftMult(org.flag4j.arrays.dense.CMatrix)">
 <h3>leftMult</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></span>&nbsp;<span class="element-name">leftMult</span><wbr><span class="parameters">(<a href="../dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;src)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></span>&nbsp;<span class="element-name">leftMult</span><wbr><span class="parameters">(<a href="../dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;src)</span></div>
 <div class="block">Left multiplies this permutation matrix to the specified matrix. This will have the effect of swapping rows in
  the src matrix.</div>
 <dl class="notes">
@@ -556,7 +556,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="leftMult(org.flag4j.arrays.dense.CVector)">
 <h3>leftMult</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dense/CVector.html" title="class in org.flag4j.arrays.dense">CVector</a></span>&nbsp;<span class="element-name">leftMult</span><wbr><span class="parameters">(<a href="../dense/CVector.html" title="class in org.flag4j.arrays.dense">CVector</a>&nbsp;src)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dense/CVector.html" title="class in org.flag4j.arrays_old.dense">CVector</a></span>&nbsp;<span class="element-name">leftMult</span><wbr><span class="parameters">(<a href="../dense/CVector.html" title="class in org.flag4j.arrays_old.dense">CVector</a>&nbsp;src)</span></div>
 <div class="block">Left multiplies this permutation matrix to the specified vector. This will have the effect of swapping rows in
  the src vector. The vector will be treated as a column vector.</div>
 <dl class="notes">
@@ -581,7 +581,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="rightMult(org.flag4j.arrays.dense.Matrix)">
 <h3>rightMult</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></span>&nbsp;<span class="element-name">rightMult</span><wbr><span class="parameters">(<a href="../dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;src)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></span>&nbsp;<span class="element-name">rightMult</span><wbr><span class="parameters">(<a href="../dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;src)</span></div>
 <div class="block">Right multiplies this permutation matrix to the specified matrix. This is equivalent to swapping columns in the
  <code>src</code> matrix.</div>
 <dl class="notes">
@@ -606,7 +606,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="rightMult(org.flag4j.arrays.dense.Vector)">
 <h3>rightMult</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a></span>&nbsp;<span class="element-name">rightMult</span><wbr><span class="parameters">(<a href="../dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a>&nbsp;src)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a></span>&nbsp;<span class="element-name">rightMult</span><wbr><span class="parameters">(<a href="../dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a>&nbsp;src)</span></div>
 <div class="block">Right multiplies this permutation matrix to the specified vector. This will have the effect of swapping columns in
  the src vector. The vector will be treated as a row vector.</div>
 <dl class="notes">
@@ -631,7 +631,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="rightMult(org.flag4j.arrays.dense.CMatrix)">
 <h3>rightMult</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></span>&nbsp;<span class="element-name">rightMult</span><wbr><span class="parameters">(<a href="../dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;src)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></span>&nbsp;<span class="element-name">rightMult</span><wbr><span class="parameters">(<a href="../dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;src)</span></div>
 <div class="block">Right multiplies this permutation matrix to the specified matrix. This is equivalent to swapping columns in the
  <code>src</code> matrix.</div>
 <dl class="notes">
@@ -656,7 +656,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="rightMult(org.flag4j.arrays.dense.CVector)">
 <h3>rightMult</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dense/CVector.html" title="class in org.flag4j.arrays.dense">CVector</a></span>&nbsp;<span class="element-name">rightMult</span><wbr><span class="parameters">(<a href="../dense/CVector.html" title="class in org.flag4j.arrays.dense">CVector</a>&nbsp;src)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dense/CVector.html" title="class in org.flag4j.arrays_old.dense">CVector</a></span>&nbsp;<span class="element-name">rightMult</span><wbr><span class="parameters">(<a href="../dense/CVector.html" title="class in org.flag4j.arrays_old.dense">CVector</a>&nbsp;src)</span></div>
 <div class="block">Right multiplies this permutation matrix to the specified vector. This will have the effect of swapping columns in
  the src vector. The vector will be treated as a row vector.</div>
 <dl class="notes">
@@ -736,7 +736,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="inv()">
 <h3>inv</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PermutationMatrix.html" title="class in org.flag4j.arrays.sparse">PermutationMatrix</a></span>&nbsp;<span class="element-name">inv</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PermutationMatrix.html" title="class in org.flag4j.arrays_old.sparse">PermutationMatrix</a></span>&nbsp;<span class="element-name">inv</span>()</div>
 <div class="block">Computes the inverse/transpose of this permutation matrix.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -749,7 +749,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="T()">
 <h3>T</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PermutationMatrix.html" title="class in org.flag4j.arrays.sparse">PermutationMatrix</a></span>&nbsp;<span class="element-name">T</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PermutationMatrix.html" title="class in org.flag4j.arrays_old.sparse">PermutationMatrix</a></span>&nbsp;<span class="element-name">T</span>()</div>
 <div class="block">Computes the transpose/inverse of this permutation matrix.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -814,8 +814,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="toDense()">
 <h3>toDense</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></span>&nbsp;<span class="element-name">toDense</span>()</div>
-<div class="block">Converts this permutation matrix to a <a href="../dense/Matrix.html" title="class in org.flag4j.arrays.dense"><code>real dense matrix</code></a>.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></span>&nbsp;<span class="element-name">toDense</span>()</div>
+<div class="block">Converts this permutation matrix to a <a href="../dense/Matrix.html" title="class in org.flag4j.arrays_old.dense"><code>real dense matrix</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>A real dense matrix which is equivalent to this permutation matrix.</dd>

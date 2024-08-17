@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <h1 title="Class RealBackSolver" class="title">Class RealBackSolver</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="BackSolver.html" title="class in org.flag4j.linalg.solvers.exact.triangular">org.flag4j.linalg.solvers.exact.triangular.BackSolver</a>&lt;<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>,<wbr><a href="../../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a>,<wbr>double[]&gt;
+<div class="inheritance"><a href="BackSolver.html" title="class in org.flag4j.linalg.solvers.exact.triangular">org.flag4j.linalg.solvers.exact.triangular.BackSolver</a>&lt;<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>,<wbr><a href="../../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a>,<wbr>double[]&gt;
 <div class="inheritance">org.flag4j.linalg.solvers.exact.triangular.RealBackSolver</div>
 </div>
 </div>
@@ -92,11 +92,11 @@ loadScripts(document, 'script');</script>
 <div class="horizontal-scroll">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../../LinearSolver.html" title="interface in org.flag4j.linalg.solvers">LinearSolver</a>&lt;<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>,<wbr><a href="../../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a>&gt;</code></dd>
+<dd><code><a href="../../LinearSolver.html" title="interface in org.flag4j.linalg.solvers">LinearSolver</a>&lt;<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>,<wbr><a href="../../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a>&gt;</code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">RealBackSolver</span>
-<span class="extends-implements">extends <a href="BackSolver.html" title="class in org.flag4j.linalg.solvers.exact.triangular">BackSolver</a>&lt;<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>,<wbr><a href="../../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a>,<wbr>double[]&gt;</span></div>
+<span class="extends-implements">extends <a href="BackSolver.html" title="class in org.flag4j.linalg.solvers.exact.triangular">BackSolver</a>&lt;<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>,<wbr><a href="../../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a>,<wbr>double[]&gt;</span></div>
 <div class="block">This solver solves linear systems of equations where the coefficient matrix in an <a href="../../../../arrays/dense/Matrix.html#isTriU()"><code>upper triangular</code></a> real dense matrix
  and the constant vector is a real dense vector or matrix. That is, solves a linear system of equations <code>U*x=b</code> or
  <code>U*X=B</code> where <code>U</code> is an upper triangular matrix.</div>
@@ -159,30 +159,30 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the determinant computed during the last solve.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solve(org.flag4j.arrays.dense.Matrix,org.flag4j.arrays.dense.Matrix)" class="member-name-link">solve</a><wbr>(<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;U,
- <a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;B)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solve(org.flag4j.arrays.dense.Matrix,org.flag4j.arrays.dense.Matrix)" class="member-name-link">solve</a><wbr>(<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;U,
+ <a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;B)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Solves the linear system of equations given by <code>U*X=B</code> where the coefficient matrix <code>U</code>
  is an <a href="../../../../arrays/dense/Matrix.html#isTriU()"><code>upper triangular</code></a> matrix.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solve(org.flag4j.arrays.dense.Matrix,org.flag4j.arrays.dense.Vector)" class="member-name-link">solve</a><wbr>(<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;U,
- <a href="../../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a>&nbsp;b)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solve(org.flag4j.arrays.dense.Matrix,org.flag4j.arrays.dense.Vector)" class="member-name-link">solve</a><wbr>(<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;U,
+ <a href="../../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a>&nbsp;b)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Solves the linear system of equations given by <code>U*x=b</code> where the coefficient matrix <code>U</code>
  is an <a href="../../../../arrays/dense/Matrix.html#isTriU()"><code>upper triangular</code></a> matrix.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solveIdentity(org.flag4j.arrays.dense.Matrix)" class="member-name-link">solveIdentity</a><wbr>(<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;U)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solveIdentity(org.flag4j.arrays.dense.Matrix)" class="member-name-link">solveIdentity</a><wbr>(<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;U)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Solves the linear system of equations given by <code>U*X=I</code> where the coefficient matrix <code>U</code>
  is an <a href="../../../../arrays/dense/Matrix.html#isTriU()"><code>upper triangular</code></a> matrix and <code>I</code> is the <a href="../../../../arrays/dense/Matrix.html#isI()"><code>identity</code></a>
  matrix of appropriate size.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solveLower(org.flag4j.arrays.dense.Matrix,org.flag4j.arrays.dense.Matrix)" class="member-name-link">solveLower</a><wbr>(<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;U,
- <a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;L)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solveLower(org.flag4j.arrays.dense.Matrix,org.flag4j.arrays.dense.Matrix)" class="member-name-link">solveLower</a><wbr>(<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;U,
+ <a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;L)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Solves a special case of the linear system <code>U*X=L</code> for <code>X</code> where the coefficient matrix <code>U</code>
  is an <a href="../../../../arrays/dense/Matrix.html#isTriU()"><code>upper triangular</code></a> matrix and the constant matrix <code>L</code> is
@@ -270,8 +270,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="solve(org.flag4j.arrays.dense.Matrix,org.flag4j.arrays.dense.Vector)">
 <h3>solve</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a></span>&nbsp;<span class="element-name">solve</span><wbr><span class="parameters">(<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;U,
- <a href="../../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a></span>&nbsp;<span class="element-name">solve</span><wbr><span class="parameters">(<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;U,
+ <a href="../../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a>&nbsp;b)</span></div>
 <div class="block">Solves the linear system of equations given by <code>U*x=b</code> where the coefficient matrix <code>U</code>
  is an <a href="../../../../arrays/dense/Matrix.html#isTriU()"><code>upper triangular</code></a> matrix.</div>
 <dl class="notes">
@@ -291,8 +291,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="solve(org.flag4j.arrays.dense.Matrix,org.flag4j.arrays.dense.Matrix)">
 <h3>solve</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></span>&nbsp;<span class="element-name">solve</span><wbr><span class="parameters">(<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;U,
- <a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></span>&nbsp;<span class="element-name">solve</span><wbr><span class="parameters">(<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;U,
+ <a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;B)</span></div>
 <div class="block">Solves the linear system of equations given by <code>U*X=B</code> where the coefficient matrix <code>U</code>
  is an <a href="../../../../arrays/dense/Matrix.html#isTriU()"><code>upper triangular</code></a> matrix.</div>
 <dl class="notes">
@@ -312,7 +312,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="solveIdentity(org.flag4j.arrays.dense.Matrix)">
 <h3>solveIdentity</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></span>&nbsp;<span class="element-name">solveIdentity</span><wbr><span class="parameters">(<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;U)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></span>&nbsp;<span class="element-name">solveIdentity</span><wbr><span class="parameters">(<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;U)</span></div>
 <div class="block">Solves the linear system of equations given by <code>U*X=I</code> where the coefficient matrix <code>U</code>
  is an <a href="../../../../arrays/dense/Matrix.html#isTriU()"><code>upper triangular</code></a> matrix and <code>I</code> is the <a href="../../../../arrays/dense/Matrix.html#isI()"><code>identity</code></a>
  matrix of appropriate size. This essentially inverts the upper triangular matrix since <code>U*U</code><sup>-1</sup><code>=I</code>.</div>
@@ -332,8 +332,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="solveLower(org.flag4j.arrays.dense.Matrix,org.flag4j.arrays.dense.Matrix)">
 <h3>solveLower</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></span>&nbsp;<span class="element-name">solveLower</span><wbr><span class="parameters">(<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;U,
- <a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;L)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></span>&nbsp;<span class="element-name">solveLower</span><wbr><span class="parameters">(<a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;U,
+ <a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;L)</span></div>
 <div class="block">Solves a special case of the linear system <code>U*X=L</code> for <code>X</code> where the coefficient matrix <code>U</code>
  is an <a href="../../../../arrays/dense/Matrix.html#isTriU()"><code>upper triangular</code></a> matrix and the constant matrix <code>L</code> is
  <a href="../../../../arrays/dense/Matrix.html#isTriL()"><code>lower triangular</code></a>.</div>

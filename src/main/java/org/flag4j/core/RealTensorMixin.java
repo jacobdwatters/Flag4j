@@ -28,7 +28,7 @@ import org.flag4j.complex_numbers.CNumber;
 
 /**
  * This interface specifies methods which all real tensors should implement.
- * @param <T> Tensor type.
+ * @param <T> TensorOld type.
  * @param <W> Complex tensor type.
  */
 public interface RealTensorMixin<T, W> {

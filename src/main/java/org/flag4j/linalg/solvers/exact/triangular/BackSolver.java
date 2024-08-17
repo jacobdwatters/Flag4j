@@ -35,7 +35,7 @@ import org.flag4j.util.exceptions.SingularMatrixException;
  * Base class for solvers which solve a linear system of equations {@code U*x=b} or {@code U*X=B} where {@code U} is an upper
  * triangular matrix. This is solved in an exact sense.
  * @param <T> Type of matrix to decompose.
- * @param <U> Vector type equivalent of matrix.
+ * @param <U> VectorOld type equivalent of matrix.
  * @param <V> Type of internal storage for the matrix and vector.
  */
 public abstract class BackSolver<

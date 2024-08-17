@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <h1 title="Class ComplexBackSolver" class="title">Class ComplexBackSolver</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="BackSolver.html" title="class in org.flag4j.linalg.solvers.exact.triangular">org.flag4j.linalg.solvers.exact.triangular.BackSolver</a>&lt;<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>,<wbr><a href="../../../../arrays/dense/CVector.html" title="class in org.flag4j.arrays.dense">CVector</a>,<wbr><a href="../../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&gt;
+<div class="inheritance"><a href="BackSolver.html" title="class in org.flag4j.linalg.solvers.exact.triangular">org.flag4j.linalg.solvers.exact.triangular.BackSolver</a>&lt;<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>,<wbr><a href="../../../../arrays/dense/CVector.html" title="class in org.flag4j.arrays_old.dense">CVector</a>,<wbr><a href="../../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&gt;
 <div class="inheritance">org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver</div>
 </div>
 </div>
@@ -92,11 +92,11 @@ loadScripts(document, 'script');</script>
 <div class="horizontal-scroll">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../../LinearSolver.html" title="interface in org.flag4j.linalg.solvers">LinearSolver</a>&lt;<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>,<wbr><a href="../../../../arrays/dense/CVector.html" title="class in org.flag4j.arrays.dense">CVector</a>&gt;</code></dd>
+<dd><code><a href="../../LinearSolver.html" title="interface in org.flag4j.linalg.solvers">LinearSolver</a>&lt;<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>,<wbr><a href="../../../../arrays/dense/CVector.html" title="class in org.flag4j.arrays_old.dense">CVector</a>&gt;</code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ComplexBackSolver</span>
-<span class="extends-implements">extends <a href="BackSolver.html" title="class in org.flag4j.linalg.solvers.exact.triangular">BackSolver</a>&lt;<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>,<wbr><a href="../../../../arrays/dense/CVector.html" title="class in org.flag4j.arrays.dense">CVector</a>,<wbr><a href="../../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&gt;</span></div>
+<span class="extends-implements">extends <a href="BackSolver.html" title="class in org.flag4j.linalg.solvers.exact.triangular">BackSolver</a>&lt;<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>,<wbr><a href="../../../../arrays/dense/CVector.html" title="class in org.flag4j.arrays_old.dense">CVector</a>,<wbr><a href="../../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&gt;</span></div>
 <div class="block">This solver solves linear systems of equations where the coefficient matrix in an upper triangular complex dense matrix
  and the constant vector is a complex dense vector.</div>
 </div>
@@ -158,30 +158,30 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the determinant computed during the last solve.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solve(org.flag4j.arrays.dense.CMatrix,org.flag4j.arrays.dense.CMatrix)" class="member-name-link">solve</a><wbr>(<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;U,
- <a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;B)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solve(org.flag4j.arrays.dense.CMatrix,org.flag4j.arrays.dense.CMatrix)" class="member-name-link">solve</a><wbr>(<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;U,
+ <a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;B)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Solves the linear system of equations given by <code>U*X=B</code> where the coefficient matrix <code>U</code>
  is an upper triangular matrix.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../arrays/dense/CVector.html" title="class in org.flag4j.arrays.dense">CVector</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solve(org.flag4j.arrays.dense.CMatrix,org.flag4j.arrays.dense.CVector)" class="member-name-link">solve</a><wbr>(<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;U,
- <a href="../../../../arrays/dense/CVector.html" title="class in org.flag4j.arrays.dense">CVector</a>&nbsp;b)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../arrays/dense/CVector.html" title="class in org.flag4j.arrays_old.dense">CVector</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solve(org.flag4j.arrays.dense.CMatrix,org.flag4j.arrays.dense.CVector)" class="member-name-link">solve</a><wbr>(<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;U,
+ <a href="../../../../arrays/dense/CVector.html" title="class in org.flag4j.arrays_old.dense">CVector</a>&nbsp;b)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Solves the linear system of equations given by <code>U*x=b</code> where the coefficient matrix <code>U</code>
  is an upper triangular matrix.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solveIdentity(org.flag4j.arrays.dense.CMatrix)" class="member-name-link">solveIdentity</a><wbr>(<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;U)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solveIdentity(org.flag4j.arrays.dense.CMatrix)" class="member-name-link">solveIdentity</a><wbr>(<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;U)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Solves the linear system of equations given by <code>U*X=I</code> where the coefficient matrix <code>U</code>
  is an <a href="../../../../arrays/dense/CMatrix.html#isTriU()"><code>upper triangular</code></a> matrix and <code>I</code> is the <a href="../../../../arrays/dense/Matrix.html#isI()"><code>identity</code></a>
  matrix of appropriate size.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solveLower(org.flag4j.arrays.dense.CMatrix,org.flag4j.arrays.dense.CMatrix)" class="member-name-link">solveLower</a><wbr>(<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;U,
- <a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;L)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solveLower(org.flag4j.arrays.dense.CMatrix,org.flag4j.arrays.dense.CMatrix)" class="member-name-link">solveLower</a><wbr>(<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;U,
+ <a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;L)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Solves a special case of the linear system <code>U*X=L</code> for <code>X</code> where the coefficient matrix <code>U</code>
  is an <a href="../../../../arrays/dense/CMatrix.html#isTriU()"><code>upper triangular</code></a> matrix and the constant matrix <code>L</code> is
@@ -269,8 +269,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="solve(org.flag4j.arrays.dense.CMatrix,org.flag4j.arrays.dense.CVector)">
 <h3>solve</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../arrays/dense/CVector.html" title="class in org.flag4j.arrays.dense">CVector</a></span>&nbsp;<span class="element-name">solve</span><wbr><span class="parameters">(<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;U,
- <a href="../../../../arrays/dense/CVector.html" title="class in org.flag4j.arrays.dense">CVector</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../arrays/dense/CVector.html" title="class in org.flag4j.arrays_old.dense">CVector</a></span>&nbsp;<span class="element-name">solve</span><wbr><span class="parameters">(<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;U,
+ <a href="../../../../arrays/dense/CVector.html" title="class in org.flag4j.arrays_old.dense">CVector</a>&nbsp;b)</span></div>
 <div class="block">Solves the linear system of equations given by <code>U*x=b</code> where the coefficient matrix <code>U</code>
  is an upper triangular matrix.</div>
 <dl class="notes">
@@ -291,8 +291,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="solve(org.flag4j.arrays.dense.CMatrix,org.flag4j.arrays.dense.CMatrix)">
 <h3>solve</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></span>&nbsp;<span class="element-name">solve</span><wbr><span class="parameters">(<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;U,
- <a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></span>&nbsp;<span class="element-name">solve</span><wbr><span class="parameters">(<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;U,
+ <a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;B)</span></div>
 <div class="block">Solves the linear system of equations given by <code>U*X=B</code> where the coefficient matrix <code>U</code>
  is an upper triangular matrix.</div>
 <dl class="notes">
@@ -312,7 +312,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="solveIdentity(org.flag4j.arrays.dense.CMatrix)">
 <h3>solveIdentity</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></span>&nbsp;<span class="element-name">solveIdentity</span><wbr><span class="parameters">(<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;U)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></span>&nbsp;<span class="element-name">solveIdentity</span><wbr><span class="parameters">(<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;U)</span></div>
 <div class="block">Solves the linear system of equations given by <code>U*X=I</code> where the coefficient matrix <code>U</code>
  is an <a href="../../../../arrays/dense/CMatrix.html#isTriU()"><code>upper triangular</code></a> matrix and <code>I</code> is the <a href="../../../../arrays/dense/Matrix.html#isI()"><code>identity</code></a>
  matrix of appropriate size.</div>
@@ -332,8 +332,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="solveLower(org.flag4j.arrays.dense.CMatrix,org.flag4j.arrays.dense.CMatrix)">
 <h3>solveLower</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></span>&nbsp;<span class="element-name">solveLower</span><wbr><span class="parameters">(<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;U,
- <a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;L)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></span>&nbsp;<span class="element-name">solveLower</span><wbr><span class="parameters">(<a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;U,
+ <a href="../../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;L)</span></div>
 <div class="block">Solves a special case of the linear system <code>U*X=L</code> for <code>X</code> where the coefficient matrix <code>U</code>
  is an <a href="../../../../arrays/dense/CMatrix.html#isTriU()"><code>upper triangular</code></a> matrix and the constant matrix <code>L</code> is
  <a href="../../../../arrays/dense/CMatrix.html#isTriL()"><code>lower triangular</code></a>.</div>

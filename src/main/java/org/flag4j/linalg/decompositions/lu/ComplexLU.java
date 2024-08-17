@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.decompositions.lu;
 
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
@@ -33,7 +33,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  * <p>This class provides methods for computing the LU decomposition of a complex dense matrix.</p>
  * <p>The following decompositions are provided: {@code A=LU}, {@code PA=LU}, and {@code PAQ=LU}.</p>
  */
-public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMatrix> {
+public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMatrixOld> {
     /**
      * Complex number equal to zero.
      */
@@ -77,8 +77,8 @@ public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMat
      * @param src Source matrix to decompose.
      */
     @Override
-    protected void initLU(CMatrix src) {
-        LU = new CMatrix(src);
+    protected void initLU(CMatrixOld src) {
+        LU = new CMatrixOld(src);
     }
 
 
@@ -226,8 +226,8 @@ public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMat
      * @return The lower triangular matrix of the decomposition.
      */
     @Override
-    public CMatrix getL() {
-        CMatrix L = new CMatrix(LU.numRows, Math.min(LU.numRows, LU.numCols));
+    public CMatrixOld getL() {
+        CMatrixOld L = new CMatrixOld(LU.numRows, Math.min(LU.numRows, LU.numCols));
 
         // Copy L values from LU matrix.
         for(int i=0; i<LU.numRows; i++) {
@@ -248,8 +248,8 @@ public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMat
      * @return The lower triangular matrix of the decomposition.
      */
     @Override
-    public CMatrix getU() {
-        CMatrix U = new CMatrix(Math.min(LU.numRows, LU.numCols), LU.numCols);
+    public CMatrixOld getU() {
+        CMatrixOld U = new CMatrixOld(Math.min(LU.numRows, LU.numCols), LU.numCols);
 
         int stopIdx = Math.min(LU.numRows, LU.numCols);
 

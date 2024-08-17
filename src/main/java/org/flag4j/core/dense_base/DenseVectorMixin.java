@@ -24,8 +24,8 @@
 
 package org.flag4j.core.dense_base;
 
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooVector;
 
 
 /**
@@ -36,16 +36,16 @@ public interface DenseVectorMixin {
     /**
      * Computes the element-wise addition between this vector and the specified vector and stores the result
      * in this vector.
-     * @param B Vector to add to this vector.
+     * @param B VectorOld to add to this vector.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    void addEq(Vector B);
+    void addEq(VectorOld B);
 
 
     /**
      * Computes the element-wise addition between this vector and the specified vector and stores the result
      * in this vector.
-     * @param B Vector to add to this vector.
+     * @param B VectorOld to add to this vector.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     void addEq(CooVector B);
@@ -54,16 +54,16 @@ public interface DenseVectorMixin {
     /**
      * Computes the element-wise subtraction between this vector and the specified vector and stores the result
      * in this vector.
-     * @param B Vector to subtract this vector.
+     * @param B VectorOld to subtract this vector.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    void subEq(Vector B);
+    void subEq(VectorOld B);
 
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector and stores the result
      * in this vector.
-     * @param B Vector to subtract this vector.
+     * @param B VectorOld to subtract this vector.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     void subEq(CooVector B);

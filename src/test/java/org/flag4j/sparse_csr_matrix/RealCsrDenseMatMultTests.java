@@ -1,7 +1,7 @@
 package org.flag4j.sparse_csr_matrix;
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CsrMatrix;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -10,16 +10,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RealCsrDenseMatMultTests {
     static CsrMatrix A;
-    static Matrix aDense;
+    static MatrixOld aDense;
     static double[][] aEntries;
-    static Matrix B;
+    static MatrixOld B;
     static double[][] bEntries;
-    static Matrix exp;
+    static MatrixOld exp;
 
     private static void build(boolean... args) {
-        aDense = new Matrix(aEntries);
+        aDense = new MatrixOld(aEntries);
         A = aDense.toCsr();
-        B = new Matrix(bEntries);
+        B = new MatrixOld(bEntries);
         if(args.length != 1 || args[0]) exp = aDense.mult(B);
     }
 

@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.transformations;
 
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -53,11 +53,11 @@ public class Projection {
      * @throws IllegalArgumentException If {@code aspectRatio}  is not positive.
      * @throws AssertionError If {@code nearClip!=farClip}.
      */
-    public static Matrix getPerspective(double fov, double aspectRatio, double nearClip, double farClip) {
+    public static MatrixOld getPerspective(double fov, double aspectRatio, double nearClip, double farClip) {
         ParameterChecks.assertGreaterEq(0, aspectRatio);
         assert(nearClip!=farClip) : "nearClip cannot equal farClip.";
 
-        Matrix perspective = new Matrix(4);
+        MatrixOld perspective = new MatrixOld(4);
 
         double cotHalfFov = 1.0/Math.tan(fov/2.0);
 
@@ -84,11 +84,11 @@ public class Projection {
      * @throws IllegalArgumentException If {@code aspectRatio}  is not positive.
      * @throws AssertionError If {@code nearClip!=farClip}.
      */
-    public static Matrix getPerspective(double fovX, double fovY, double aspectRatio, double nearClip, double farClip){
+    public static MatrixOld getPerspective(double fovX, double fovY, double aspectRatio, double nearClip, double farClip){
         ParameterChecks.assertGreaterEq(0, aspectRatio);
         assert(nearClip!=farClip) : "nearClip cannot equal farClip.";
 
-        Matrix perspective = new Matrix(4);
+        MatrixOld perspective = new MatrixOld(4);
 
         // Convert the field of views to radians.
         double fovXRad = Math.toRadians(fovX);
@@ -116,9 +116,9 @@ public class Projection {
      * @param farClip Distance from camera to far clipping plane.
      * @return The orthogonal projection for the specified parameters.
      */
-    public static Matrix getOrthogonal(double xMin, double xMax, double yMin, double yMax,
-                                       double nearClip, double farClip){
-        Matrix ortho = new Matrix(4);
+    public static MatrixOld getOrthogonal(double xMin, double xMax, double yMin, double yMax,
+                                          double nearClip, double farClip){
+        MatrixOld ortho = new MatrixOld(4);
 
         ortho.entries[0] = 2.0/(xMax-xMin);
         ortho.entries[5] = 2.0/(yMax-yMin);
@@ -143,9 +143,9 @@ public class Projection {
      * @param farClip Distance from camera to far clipping plane.
      * @return The orthogonal projection for the specified parameters.
      */
-    public static Matrix getOrthogonal(double xMax, double yMax,
-                                       double nearClip, double farClip){
-        Matrix ortho = new Matrix(4);
+    public static MatrixOld getOrthogonal(double xMax, double yMax,
+                                          double nearClip, double farClip){
+        MatrixOld ortho = new MatrixOld(4);
 
         ortho.entries[0] = 2.0/xMax;
         ortho.entries[5] = 2.0/yMax;
@@ -170,8 +170,8 @@ public class Projection {
      * @param yMax Maximum {@code y} value of image plane to project to.
      * @return The orthogonal projection for the specified parameters.
      */
-    public static Matrix getOrthogonal2D(double xMin, double xMax, double yMin, double yMax){
-        Matrix ortho = new Matrix(4);
+    public static MatrixOld getOrthogonal2D(double xMin, double xMax, double yMin, double yMax){
+        MatrixOld ortho = new MatrixOld(4);
 
         ortho.entries[0] = 2.0/(xMax-xMin);
         ortho.entries[5] = 2.0/(yMax-yMin);
@@ -194,8 +194,8 @@ public class Projection {
      * @param yMax Maximum {@code y} value of image plane to project to.
      * @return The orthogonal projection for the specified parameters.
      */
-    public static Matrix getOrthogonal2D(double xMax, double yMax){
-        Matrix ortho = new Matrix(4);
+    public static MatrixOld getOrthogonal2D(double xMax, double yMax){
+        MatrixOld ortho = new MatrixOld(4);
 
         ortho.entries[0] = 2.0/xMax;
         ortho.entries[5] = 2.0/yMax;

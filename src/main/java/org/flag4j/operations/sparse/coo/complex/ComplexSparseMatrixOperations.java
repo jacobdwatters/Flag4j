@@ -24,9 +24,9 @@
 
 package org.flag4j.operations.sparse.coo.complex;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooCVector;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooCVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * This class has low level implementations for operations between two complex sparse matrices.
+ * This class has low level implementations for operations_old between two complex sparse matrices.
  */
 public final class ComplexSparseMatrixOperations {
 
@@ -125,7 +125,7 @@ public final class ComplexSparseMatrixOperations {
      * @throws ArithmeticException If the {@code src} sparse matrix is too large to be converted to a dense matrix.
      * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
      */
-    public static CMatrix add(CooCMatrix src, CNumber a) {
+    public static CMatrixOld add(CooCMatrix src, CNumber a) {
         CNumber[] sum = new CNumber[src.totalEntries().intValueExact()];
         Arrays.fill(sum, a);
 
@@ -138,7 +138,7 @@ public final class ComplexSparseMatrixOperations {
             sum[row*src.numCols + col] = sum[row*src.numCols + col].add(src.entries[i]);
         }
 
-        return new CMatrix(src.shape, sum);
+        return new CMatrixOld(src.shape, sum);
     }
 
 
@@ -221,7 +221,7 @@ public final class ComplexSparseMatrixOperations {
      * @throws ArithmeticException If the {@code src} sparse matrix is too large to be converted to a dense matrix.
      * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
      */
-    public static CMatrix sub(CooCMatrix src, CNumber a) {
+    public static CMatrixOld sub(CooCMatrix src, CNumber a) {
         return add(src, a.addInv());
     }
 
@@ -286,7 +286,7 @@ public final class ComplexSparseMatrixOperations {
      * @param col Sparse vector to add to each column of the sparse matrix.
      * @return A dense copy of the {@code src} matrix with the {@code col} vector added to each row of the matrix.
      */
-    public static CMatrix addToEachCol(CooCMatrix src, CooCVector col) {
+    public static CMatrixOld addToEachCol(CooCMatrix src, CooCVector col) {
         ParameterChecks.assertEquals(src.numRows, col.size);
         CNumber[] destEntries = new CNumber[src.totalEntries().intValueExact()];
 
@@ -306,7 +306,7 @@ public final class ComplexSparseMatrixOperations {
             }
         }
 
-        return new CMatrix(src.numRows, src.numCols, destEntries);
+        return new CMatrixOld(src.numRows, src.numCols, destEntries);
     }
 
 
@@ -316,7 +316,7 @@ public final class ComplexSparseMatrixOperations {
      * @param row Sparse vector to add to each row of the sparse matrix.
      * @return A dense copy of the {@code src} matrix with the {@code row} vector added to each row of the matrix.
      */
-    public static CMatrix addToEachRow(CooCMatrix src, CooCVector row) {
+    public static CMatrixOld addToEachRow(CooCMatrix src, CooCVector row) {
         ParameterChecks.assertEquals(src.numCols, row.size);
         CNumber[] destEntries = new CNumber[src.totalEntries().intValueExact()];
 
@@ -337,6 +337,6 @@ public final class ComplexSparseMatrixOperations {
             }
         }
 
-        return new CMatrix(src.numRows, src.numCols, destEntries);
+        return new CMatrixOld(src.numRows, src.numCols, destEntries);
     }
 }

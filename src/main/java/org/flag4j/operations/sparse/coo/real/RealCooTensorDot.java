@@ -24,9 +24,9 @@
 
 package org.flag4j.operations.sparse.coo.real;
 
-import org.flag4j.arrays.dense.Tensor;
-import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.arrays.sparse.CooTensor;
+import org.flag4j.arrays_old.dense.TensorOld;
+import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooTensor;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
@@ -57,7 +57,7 @@ public final class RealCooTensorDot {
      * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
      * are out of bounds for the corresponding tensor.
      */
-    public static Tensor tensorDot(CooTensor src1, CooTensor src2, int[] src1Axes, int[] src2Axes) {
+    public static TensorOld tensorDot(CooTensor src1, CooTensor src2, int[] src1Axes, int[] src2Axes) {
         // Each array must specify the same number of axes.
         ParameterChecks.assertEquals(src1Axes.length, src2Axes.length);
 
@@ -118,7 +118,7 @@ public final class RealCooTensorDot {
         CooMatrix at = src1.T(src1NewAxes).toMatrix(src1NewShape);
         CooMatrix bt = src2.T(src2NewAxes).toMatrix(src2NewShape);
 
-        Tensor product = at.mult(bt).toTensor();
+        TensorOld product = at.mult(bt).toTensor();
 
         // TODO: Should allow for zero dim shape indicating a scalar. Then only the else block would be needed.
         Shape productShape;

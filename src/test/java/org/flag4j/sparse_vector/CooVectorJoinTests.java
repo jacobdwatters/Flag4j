@@ -1,11 +1,11 @@
 package org.flag4j.sparse_vector;
 
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -35,13 +35,13 @@ class CooVectorJoinTests {
     @Test
     void denseRealJoinTestCase() {
         double[] bEntries, expEntries;
-        Vector b, exp;
+        VectorOld b, exp;
 
         // ------------------- Sub-case 1 -------------------
         bEntries = new double[]{24.53, 66.1, -234.5, 0.0};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
         expEntries = new double[]{1.34, -8781.5, 0, 0, 0, 0, 145.4, 0, 24.53, 66.1, -234.5, 0.0};
-        exp = new Vector(expEntries);
+        exp = new VectorOld(expEntries);
 
         assertEquals(exp, a.join(b));
     }
@@ -69,13 +69,13 @@ class CooVectorJoinTests {
     @Test
     void denseComplexJoinTestCase() {
         CNumber[] bEntries, expEntries;
-        CVector b, exp;
+        CVectorOld b, exp;
 
         // ------------------- Sub-case 1 -------------------
         bEntries = new CNumber[]{new CNumber(24.53), new CNumber(66.1), new CNumber(-234.5), new CNumber(0.0)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
         expEntries = new CNumber[]{new CNumber(1.34), new CNumber(-8781.5), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(145.4), new CNumber(0), new CNumber(24.53), new CNumber(66.1), new CNumber(-234.5), new CNumber(0.0)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, a.join(b));
     }
@@ -106,12 +106,12 @@ class CooVectorJoinTests {
         double[] bEntries, expEntries;
         int[] rowIndices, colIndices;
         Shape shape;
-        Vector b;
+        VectorOld b;
         CooMatrix exp;
 
         // ------------------- Sub-case 1 -------------------
         bEntries = new double[]{24.53, 66.1, -234.5, 0.0, 1.4, 51.6, -99.345, 16.6};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
         expEntries = new double[]{1.34, -8781.5, 145.4, 24.53, 66.1, -234.5, 0.0, 1.4, 51.6, -99.345, 16.6};
         shape = new Shape(2, 8);
         rowIndices = new int[]{0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1};
@@ -124,9 +124,9 @@ class CooVectorJoinTests {
 
         // ------------------- Sub-case 2 -------------------
         bEntries = new double[]{24.53, 66.1, -234.5, 0.0, 1.4, 51.6};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
-        Vector finalB = b;
+        VectorOld finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.stack(finalB));
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, 3));
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, -2));
@@ -138,7 +138,7 @@ class CooVectorJoinTests {
         CNumber[] bEntries, expEntries;
         int[] rowIndices, colIndices;
         Shape shape;
-        CVector b;
+        CVectorOld b;
         CooCMatrix exp;
 
         // ------------------- Sub-case 1 -------------------
@@ -147,7 +147,7 @@ class CooVectorJoinTests {
                 new CNumber(-0.20015), new CNumber(9825.4, -85.126),
                 new CNumber(56.71, 134.5), new CNumber(0, -924.5), 
                 new CNumber(134), new CNumber(453, 6)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
         expEntries = new CNumber[]{
                 new CNumber(1.34), new CNumber(-8781.5), new CNumber(145.4),
                 new CNumber(24.5, -0.12), new CNumber(24.5, 3.4),
@@ -167,9 +167,9 @@ class CooVectorJoinTests {
         bEntries = new CNumber[]{new CNumber(24.5, -0.12), new CNumber(24.5, 3.4),
                 new CNumber(-0.20015), new CNumber(9825.4, -85.126),
                 new CNumber(56.71, 134.5), new CNumber(0, -924.5)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
-        CVector finalB = b;
+        CVectorOld finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.stack(finalB));
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, 3));
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, -2));

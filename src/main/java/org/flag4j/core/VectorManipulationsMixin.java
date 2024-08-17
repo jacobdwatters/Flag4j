@@ -27,7 +27,7 @@ package org.flag4j.core;
 /**
  * This interface specifies manipulations which all vectors should implement.
  *
- * @param <TT> Matrix type equivalent.
+ * @param <TT> MatrixOld type equivalent.
  */
 public interface VectorManipulationsMixin<TT> {
 

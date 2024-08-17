@@ -24,7 +24,7 @@
 
 package org.flag4j.operations.sparse.coo.real;
 
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrix;
 import org.flag4j.core.Shape;
 import org.flag4j.operations.sparse.coo.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
@@ -58,7 +58,7 @@ public class RealSparseMatrixManipulations {
         int[] startEnd = SparseElementSearch.matrixFindRowStartEnd(src.rowIndices, rowIdx);
         int size = src.entries.length - (startEnd[1]-startEnd[0]);
 
-        // Initialize arrays.
+        // Initialize arrays_old.
         double[] entries = new double[size];
         int[] rowIndices = new int[size];
         int[] colIndices = new int[size];
@@ -74,7 +74,7 @@ public class RealSparseMatrixManipulations {
      * @param src The source sparse matrix to remove rows from.
      * @param rowIdxs Indices of rows to remove from the {@code src} matrix. This array is assumed to be sorted and
      *                contain unique indices (however, this is not checked or enforced).
-     *                If it is not sorted, call {@link java.util.Arrays#sort(int[])}
+     *                If it is not sorted, call {@link Arrays#sort(int[])}
      *                first otherwise the behavior of this method is not defined.
      * @return A copy of the {@code src} matrix with the specified rows removed.
      */
@@ -154,7 +154,7 @@ public class RealSparseMatrixManipulations {
 
 
     /**
-     * A helper method which copies from a sparse matrix to a set of three arrays (non-zero entries, row indices, and
+     * A helper method which copies from a sparse matrix to a set of three arrays_old (non-zero entries, row indices, and
      * column indices) but skips over a specified range.
      * @param src Source sparse matrix to copy from.
      * @param entries Array to copy {@code} src non-zero entries to.

@@ -25,12 +25,12 @@
 package org.flag4j.operations.dense_sparse.coo.real_complex;
 
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.operations.common.complex.ComplexOperations;
 import org.flag4j.operations.common.real.RealOperations;
@@ -38,7 +38,7 @@ import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
 /**
- * This class contains low level implementations of operations between real/complex and dense/sparse matrices.
+ * This class contains low level implementations of operations_old between real/complex and dense/sparse matrices.
  */
 public final class RealComplexDenseSparseMatrixOperations {
 
@@ -55,11 +55,11 @@ public final class RealComplexDenseSparseMatrixOperations {
      * @return The result of the matrix addition.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static CMatrix add(Matrix src1, CooCMatrix src2) {
+    public static CMatrixOld add(MatrixOld src1, CooCMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
-        CMatrix dest = new CMatrix(src1);
+        CMatrixOld dest = new CMatrixOld(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             row = src2.rowIndices[i];
@@ -78,9 +78,9 @@ public final class RealComplexDenseSparseMatrixOperations {
      * @return The result of the matrix addition.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static CMatrix add(CMatrix src1, CooMatrix src2) {
+    public static CMatrixOld add(CMatrixOld src1, CooMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
-        CMatrix dest = new CMatrix(src1);
+        CMatrixOld dest = new CMatrixOld(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
@@ -98,10 +98,10 @@ public final class RealComplexDenseSparseMatrixOperations {
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static CMatrix sub(Matrix src1, CooCMatrix src2) {
+    public static CMatrixOld sub(MatrixOld src1, CooCMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
-        CMatrix dest = new CMatrix(src1);
+        CMatrixOld dest = new CMatrixOld(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
@@ -119,11 +119,11 @@ public final class RealComplexDenseSparseMatrixOperations {
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static CMatrix sub(CMatrix src1, CooMatrix src2) {
+    public static CMatrixOld sub(CMatrixOld src1, CooMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
-        CMatrix dest = new CMatrix(src1);
+        CMatrixOld dest = new CMatrixOld(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
@@ -141,11 +141,11 @@ public final class RealComplexDenseSparseMatrixOperations {
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static CMatrix sub(CooCMatrix src2, Matrix src1) {
+    public static CMatrixOld sub(CooCMatrix src2, MatrixOld src1) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
-        CMatrix dest = new CMatrix(src1.shape, RealOperations.scalMult(src1.entries, -1));
+        CMatrixOld dest = new CMatrixOld(src1.shape, RealOperations.scalMult(src1.entries, -1));
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
@@ -163,11 +163,11 @@ public final class RealComplexDenseSparseMatrixOperations {
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static CMatrix sub(CooMatrix src2, CMatrix src1) {
+    public static CMatrixOld sub(CooMatrix src2, CMatrixOld src1) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
-        CMatrix dest = new CMatrix(src1.shape, ComplexOperations.scalMult(src1.entries, -1));
+        CMatrixOld dest = new CMatrixOld(src1.shape, ComplexOperations.scalMult(src1.entries, -1));
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
@@ -184,7 +184,7 @@ public final class RealComplexDenseSparseMatrixOperations {
      * @param src2 Entries of second matrix in the sum.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static void addEq(CMatrix src1, CooMatrix src2) {
+    public static void addEq(CMatrixOld src1, CooMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
@@ -202,7 +202,7 @@ public final class RealComplexDenseSparseMatrixOperations {
      * @param src2 Entries of second matrix in the sum.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static void subEq(CMatrix src1, CooMatrix src2) {
+    public static void subEq(CMatrixOld src1, CooMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
@@ -221,7 +221,7 @@ public final class RealComplexDenseSparseMatrixOperations {
      * @return The result of element-wise multiplication.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static CooCMatrix elemMult(Matrix src1, CooCMatrix src2) {
+    public static CooCMatrix elemMult(MatrixOld src1, CooCMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
@@ -244,7 +244,7 @@ public final class RealComplexDenseSparseMatrixOperations {
      * @return The result of element-wise multiplication.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static CooCMatrix elemMult(CMatrix src1, CooMatrix src2) {
+    public static CooCMatrix elemMult(CMatrixOld src1, CooMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
@@ -270,7 +270,7 @@ public final class RealComplexDenseSparseMatrixOperations {
      *
      * <p>
      *     If the dense matrix contains a zero at an index for which the sparse matrix is also zero, the result will be
-     *     zero. This is done to realize computational benefits from operations with sparse matrices.
+     *     zero. This is done to realize computational benefits from operations_old with sparse matrices.
      * </p>
      *
      * @param src1 Real sparse matrix and numerator in element-wise quotient.
@@ -278,7 +278,7 @@ public final class RealComplexDenseSparseMatrixOperations {
      * @return The element-wise quotient of {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} and {@code src2} do not have the same shape.
      */
-    public static CooCMatrix elemDiv(CooCMatrix src1, Matrix src2) {
+    public static CooCMatrix elemDiv(CooCMatrix src1, MatrixOld src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         CNumber[] quotient = new CNumber[src1.entries.length];
@@ -306,7 +306,7 @@ public final class RealComplexDenseSparseMatrixOperations {
      *
      * <p>
      *     If the dense matrix contains a zero at an index for which the sparse matrix is also zero, the result will be
-     *     zero. This is done to realize computational benefits from operations with sparse matrices.
+     *     zero. This is done to realize computational benefits from operations_old with sparse matrices.
      * </p>
      *
      * @param src1 Real sparse matrix and numerator in element-wise quotient.
@@ -314,7 +314,7 @@ public final class RealComplexDenseSparseMatrixOperations {
      * @return The element-wise quotient of {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} and {@code src2} do not have the same shape.
      */
-    public static CooCMatrix elemDiv(CooMatrix src1, CMatrix src2) {
+    public static CooCMatrix elemDiv(CooMatrix src1, CMatrixOld src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         CNumber[] quotient = new CNumber[src1.entries.length];
@@ -335,13 +335,13 @@ public final class RealComplexDenseSparseMatrixOperations {
     /**
      * Adds a dense vector to each column as if the vector is a column vector.
      * @param src Source sparse matrix.
-     * @param col Vector to add to each column of the source matrix.
+     * @param col VectorOld to add to each column of the source matrix.
      * @return A dense copy of the {@code src} matrix with the specified vector added to each column.
      * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
      * of rows in the {@code src} matrix.
      */
-    public static CMatrix addToEachCol(CooMatrix src, CVector col) {
-        CMatrix sum = new CMatrix(src.numRows, src.numCols);
+    public static CMatrixOld addToEachCol(CooMatrix src, CVectorOld col) {
+        CMatrixOld sum = new CMatrixOld(src.numRows, src.numCols);
 
         for(int j=0; j<sum.numCols; j++) {
             sum.setCol(col, j);
@@ -359,13 +359,13 @@ public final class RealComplexDenseSparseMatrixOperations {
     /**
      * Adds a dense vector to add to each row as if the vector is a row vector.
      * @param src Source sparse matrix.
-     * @param row Vector to add to each row of the source matrix.
+     * @param row VectorOld to add to each row of the source matrix.
      * @return A dense copy of the {@code src} matrix with the specified vector added to each row.
      * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
      * of columns in the {@code src} matrix.
      */
-    public static CMatrix addToEachRow(CooMatrix src, CVector row) {
-        CMatrix sum = new CMatrix(src.numRows, src.numCols);
+    public static CMatrixOld addToEachRow(CooMatrix src, CVectorOld row) {
+        CMatrixOld sum = new CMatrixOld(src.numRows, src.numCols);
 
         for(int i=0; i<sum.numRows; i++) {
             sum.setRow(row.entries, i);
@@ -383,13 +383,13 @@ public final class RealComplexDenseSparseMatrixOperations {
     /**
      * Adds a dense vector to each column as if the vector is a column vector.
      * @param src Source sparse matrix.
-     * @param col Vector to add to each column of the source matrix.
+     * @param col VectorOld to add to each column of the source matrix.
      * @return A dense copy of the {@code src} matrix with the specified vector added to each column.
      * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
      * of rows in the {@code src} matrix.
      */
-    public static CMatrix addToEachCol(CooCMatrix src, Vector col) {
-        CMatrix sum = new CMatrix(src.numRows, src.numCols);
+    public static CMatrixOld addToEachCol(CooCMatrix src, VectorOld col) {
+        CMatrixOld sum = new CMatrixOld(src.numRows, src.numCols);
 
         for(int j=0; j<sum.numCols; j++) {
             sum.setCol(col.entries, j);
@@ -407,13 +407,13 @@ public final class RealComplexDenseSparseMatrixOperations {
     /**
      * Adds a dense vector to add to each row as if the vector is a row vector.
      * @param src Source sparse matrix.
-     * @param row Vector to add to each row of the source matrix.
+     * @param row VectorOld to add to each row of the source matrix.
      * @return A dense copy of the {@code src} matrix with the specified vector added to each row.
      * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
      * of columns in the {@code src} matrix.
      */
-    public static CMatrix addToEachRow(CooCMatrix src, Vector row) {
-        CMatrix sum = new CMatrix(src.numRows, src.numCols);
+    public static CMatrixOld addToEachRow(CooCMatrix src, VectorOld row) {
+        CMatrixOld sum = new CMatrixOld(src.numRows, src.numCols);
 
         for(int i=0; i<sum.numRows; i++) {
             sum.setRow(row.entries, i);

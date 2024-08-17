@@ -25,7 +25,7 @@
 package org.flag4j.operations.sparse.coo.complex;
 
 
-import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ErrorMessages;
 
@@ -49,7 +49,7 @@ public class ComplexSparseMatrixProperties {
 
     /**
      * Checks if a complex sparse matrix is the identity matrix.
-     * @param src Matrix to check if it is the identity matrix.
+     * @param src MatrixOld to check if it is the identity matrix.
      * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
      */
     public static boolean isIdentity(CooCMatrix src) {
@@ -72,7 +72,7 @@ public class ComplexSparseMatrixProperties {
 
     /**
      * Checks if a complex sparse matrix is hermitian.
-     * @param src Matrix to check if it is the hermitian matrix.
+     * @param src MatrixOld to check if it is the hermitian matrix.
      * @return True if the {@code src} matrix is hermitian. False otherwise.
      */
     public static boolean isHermitian(CooCMatrix src) {
@@ -127,7 +127,7 @@ public class ComplexSparseMatrixProperties {
 
     /**
      * Checks if a real sparse matrix is anti-hermitian.
-     * @param src Matrix to check if it is the anti-hermitian matrix.
+     * @param src MatrixOld to check if it is the anti-hermitian matrix.
      * @return True if the {@code src} matrix is anti-hermitian. False otherwise.
      */
     public static boolean isAntiHermitian(CooCMatrix src) {

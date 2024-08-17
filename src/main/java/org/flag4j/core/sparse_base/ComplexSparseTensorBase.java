@@ -27,13 +27,13 @@ package org.flag4j.core.sparse_base;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.ComplexTensorMixin;
 import org.flag4j.core.Shape;
-import org.flag4j.operations.common.complex.AggregateComplex;
-import org.flag4j.operations.common.complex.ComplexOperations;
-import org.flag4j.operations.common.complex.ComplexProperties;
-import org.flag4j.operations.dense.complex.AggregateDenseComplex;
-import org.flag4j.operations.dense.complex.ComplexDenseOperations;
-import org.flag4j.operations.dense.complex.ComplexDenseProperties;
-import org.flag4j.operations.sparse.coo.SparseDataWrapper;
+import org.flag4j.operations_old.common.complex.AggregateComplex;
+import org.flag4j.operations_old.common.complex.ComplexOperations;
+import org.flag4j.operations_old.common.complex.ComplexProperties;
+import org.flag4j.operations_old.dense.complex.AggregateDenseComplex;
+import org.flag4j.operations_old.dense.complex.ComplexDenseOperations;
+import org.flag4j.operations_old.dense.complex.ComplexDenseProperties;
+import org.flag4j.operations_old.sparse.coo.SparseDataWrapper;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -43,7 +43,7 @@ import java.math.BigInteger;
 /**
  * This abstract class is the base class of all complex sparse tensors.
  * @param <T> Type of this tensor.
- * @param <U> Dense Tensor type.
+ * @param <U> Dense TensorOld type.
  * @param <Y> Real tensor type.
  */
 public abstract class ComplexSparseTensorBase<T, U, Y>
@@ -76,7 +76,7 @@ public abstract class ComplexSparseTensorBase<T, U, Y>
 
     /**
      * Creates a sparse tensor with specified shape. Note, this constructor stores indices for each element in different
-     * arrays. That is, for a shape with rank {@code m} and {@code n} non-zero entries, the indices array will have shape
+     * arrays_old. That is, for a shape with rank {@code m} and {@code n} non-zero entries, the indices array will have shape
      * {@code m-by-n}. This is the opposite of {@link #ComplexSparseTensorBase(Shape, int, CNumber[], int[][])}.
      * @param shape Shape
      * @param nonZeroEntries The number of non-zero entries of the tensor.

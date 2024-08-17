@@ -33,8 +33,8 @@ import java.io.Serializable;
 /**
  * This is the base class for all dense tensors.
  * @param <T> Type of this tensor.
- * @param <W> Complex Tensor type.
- * @param <Y> Real Tensor type.
+ * @param <W> Complex TensorOld type.
+ * @param <Y> Real TensorOld type.
  * @param <D> Type of the storage data structure for the tensor.
  *           The common use case will be an array or list-like data structure.
  * @param <X> The type of individual entry within the {@code D} data structure

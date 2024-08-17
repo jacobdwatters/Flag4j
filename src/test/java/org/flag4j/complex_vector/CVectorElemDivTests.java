@@ -1,7 +1,7 @@
 package org.flag4j.complex_vector;
 
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,16 +11,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CVectorElemDivTests {
     static CNumber[] aEntries;
-    static CVector a;
+    static CVectorOld a;
     CNumber[] expEntries;
-    CVector exp;
+    CVectorOld exp;
 
     @BeforeAll
     static void setup() {
         aEntries = new CNumber[]{
                 new CNumber(4.556, -85.2518), new CNumber(43.1, -99.34551),
                 new CNumber(6915.66), new CNumber(0, 9.345)};
-        a = new CVector(aEntries);
+        a = new CVectorOld(aEntries);
     }
 
 
@@ -29,7 +29,7 @@ class CVectorElemDivTests {
      * @param exp Expected complex vector.
      * @param act Actual complex vector.
      */
-    static void assertEqualsNaN(CVector exp, CVector act) {
+    static void assertEqualsNaN(CVectorOld exp, CVectorOld act) {
         assertEquals(exp.size, act.size);
 
         for(int i=0; i<exp.size; i++) {
@@ -51,22 +51,22 @@ class CVectorElemDivTests {
     @Test
     void realDenseTestCase() {
         double[] bEntries;
-        Vector b;
+        VectorOld b;
 
         // ------------------- Sub-case 1 -------------------
         bEntries = new double[]{2.455, -9.24, 0, 24.50001};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
         expEntries = new CNumber[]{aEntries[0].div(bEntries[0]), aEntries[1].div(bEntries[1]),
                 aEntries[2].div(bEntries[2]), aEntries[3].div(bEntries[3])};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEqualsNaN(exp, a.elemDiv(b));
 
         // ------------------- Sub-case 2 -------------------
         bEntries = new double[]{2.455, -9.24};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
-        Vector finalB = b;
+        VectorOld finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.elemDiv(finalB));
     }
 
@@ -74,24 +74,24 @@ class CVectorElemDivTests {
     @Test
     void complexDenseTestCase() {
         CNumber[] bEntries;
-        CVector b;
+        CVectorOld b;
 
         // ------------------- Sub-case 1 -------------------
         bEntries = new CNumber[]{new CNumber(-0.00024), new CNumber(0, 85.234),
                 new CNumber(0.00234, 15.6), new CNumber(-0.24, 662.115)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
         expEntries = new CNumber[]{aEntries[0].div(bEntries[0]), aEntries[1].div(bEntries[1]),
                 aEntries[2].div(bEntries[2]), aEntries[3].div(bEntries[3])};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEqualsNaN(exp, a.elemDiv(b));
 
         // ------------------- Sub-case 2 -------------------
         bEntries = new CNumber[]{new CNumber(0, 85.234),
                 new CNumber(0.00234, 15.6), new CNumber(-0.24, 662.115)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
-        CVector finalB = b;
+        CVectorOld finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.elemDiv(finalB));
     }
 }

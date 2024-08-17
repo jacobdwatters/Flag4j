@@ -1,11 +1,11 @@
 package org.flag4j.sparse_vector;
 
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.operations.common.complex.AggregateComplex;
+import org.flag4j.operations_old.common.complex.AggregateComplex;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -55,7 +55,7 @@ class CooVectorInnerProdTests {
     @Test
     void denseInnerProdTestCase() {
         double[] bEntries;
-        Vector b;
+        VectorOld b;
         double exp;
 
         // ----------------------- Sub-case 1 -----------------------
@@ -63,7 +63,7 @@ class CooVectorInnerProdTests {
                 1.34, 55.15, -41.13, 1, 3.45,
                 -99.14, 551.15, 51.5, 0, 0.134,
                 0.0245, -0.0, 14.45, 6.133, 4.5};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         exp = 55.15 + 5.6*-41.13 + 215.0*6.133;
 
@@ -74,8 +74,8 @@ class CooVectorInnerProdTests {
                 1.34, 55.15, -41.13, 1, 3.45,
                 -99.14, 551.15, 51.5, 0, 0.134,
                 0.0245, -0.0, 14.45};
-        b = new Vector(bEntries);
-        Vector finalB = b;
+        b = new VectorOld(bEntries);
+        VectorOld finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.inner(finalB));
     }
 
@@ -111,7 +111,7 @@ class CooVectorInnerProdTests {
     @Test
     void denseComplexInnerProdTestCase() {
         CNumber[] bEntries;
-        CVector b;
+        CVectorOld b;
         CNumber exp;
 
         // ----------------------- Sub-case 1 -----------------------
@@ -122,7 +122,7 @@ class CooVectorInnerProdTests {
                 new CNumber(24.5516, -0.415), new CNumber(0, 13.46), CNumber.ZERO,
                 new CNumber(5.2, 0.924), new CNumber(0.15, .135), new CNumber(25591, 13.5),
                 };
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
         exp = AggregateComplex.sum(new CNumber[]{
                 new CNumber(-9.245, 3.4).conj().mult(1.0),
@@ -143,9 +143,9 @@ class CooVectorInnerProdTests {
                 new CNumber(5.2, 0.924), new CNumber(0.15, .135), new CNumber(25591, 13.5),
                 new CNumber(1.15, 4.55), new CNumber(91)
         };
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
-        CVector finalB = b;
+        CVectorOld finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.inner(finalB));
     }
 

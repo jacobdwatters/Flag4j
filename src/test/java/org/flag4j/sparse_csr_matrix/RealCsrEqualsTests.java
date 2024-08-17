@@ -24,9 +24,9 @@
 
 package org.flag4j.sparse_csr_matrix;
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CsrMatrix;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
 
@@ -67,8 +67,8 @@ class RealCsrEqualsTests {
         bEntries[59][2] = -0.0000005;
         bEntries[149][1] = 15;
 
-        A = new Matrix(aEntries).toCsr();
-        B = new Matrix(bEntries).toCsr();
+        A = new MatrixOld(aEntries).toCsr();
+        B = new MatrixOld(bEntries).toCsr();
 
         assertEquals(A, B);
 

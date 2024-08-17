@@ -1,7 +1,7 @@
 package org.flag4j.vector;
 
 
-import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,13 +12,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class VectorToStringTest {
 
     static double[] aEntries;
-    static Vector A;
+    static VectorOld A;
     static String exp;
 
     @BeforeAll
     static void setup() {
         aEntries = new double[]{1, -1.4133, 113.4, 0.4, 11.3, 445, 133.445, 9.8, 13384, -993.44, 11, 12};
-        A = new Vector(aEntries);
+        A = new VectorOld(aEntries);
     }
 
 

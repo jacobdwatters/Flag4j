@@ -1,11 +1,11 @@
 package org.flag4j.matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -21,12 +21,12 @@ class MatrixAddToEachColTests {
     int[] bIndices;
     int bSize;
 
-    Matrix A, exp;
-    CMatrix expComplex;
+    MatrixOld A, exp;
+    CMatrixOld expComplex;
 
-    Vector b;
+    VectorOld b;
     CooVector bSparse;
-    CVector bComplex;
+    CVectorOld bComplex;
     CooCVector bSparseComplex;
 
     @Test
@@ -36,14 +36,14 @@ class MatrixAddToEachColTests {
                 {1, 2.3},
                 {-9, 13.5},
                 {9.4, 0}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bEntries = new double[]{1.7, -8.234, 0.1};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
         expEntries = new double[][]{
                 {1+1.7, 2.3+1.7},
                 {-9-8.234, 13.5-8.234},
                 {9.4+0.1, 0.1}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertEquals(exp, A.addToEachCol(b));
 
@@ -52,9 +52,9 @@ class MatrixAddToEachColTests {
                 {1, 2.3},
                 {-9, 13.5},
                 {9.4, 0}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bEntries = new double[]{1.7, -8.234};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         assertThrows(IllegalArgumentException.class, ()->A.addToEachCol(b));
     }
@@ -67,7 +67,7 @@ class MatrixAddToEachColTests {
                 {1, 2.3},
                 {-9, 13.5},
                 {9.4, 0}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bEntries = new double[]{3.4};
         bIndices = new int[]{1};
         bSize = 3;
@@ -76,7 +76,7 @@ class MatrixAddToEachColTests {
                 {1, 2.3},
                 {-9+3.4, 13.5+3.4},
                 {9.4, 0}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertEquals(exp, A.addToEachCol(bSparse));
 
@@ -85,7 +85,7 @@ class MatrixAddToEachColTests {
                 {1, 2.3},
                 {-9, 13.5},
                 {9.4, 0}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bEntries = new double[]{3.4};
         bIndices = new int[]{1};
         bSize = 56;
@@ -102,14 +102,14 @@ class MatrixAddToEachColTests {
                 {1, 2.3},
                 {-9, 13.5},
                 {9.4, 0}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bComplexEntries = new CNumber[]{new CNumber(9.234, -.13), new CNumber(0, 5.4), new CNumber(10)};
-        bComplex = new CVector(bComplexEntries);
+        bComplex = new CVectorOld(bComplexEntries);
         expComplexEntries = new CNumber[][]{
                 {new CNumber(1).add(bComplexEntries[0]), new CNumber(2.3).add(bComplexEntries[0])},
                 {new CNumber(-9).add(bComplexEntries[1]), new CNumber(13.5).add(bComplexEntries[1])},
                 {new CNumber(9.4).add(bComplexEntries[2]), new CNumber(0).add(bComplexEntries[2])}};
-        expComplex = new CMatrix(expComplexEntries);
+        expComplex = new CMatrixOld(expComplexEntries);
 
         assertEquals(expComplex, A.addToEachCol(bComplex));
 
@@ -118,9 +118,9 @@ class MatrixAddToEachColTests {
                 {1, 2.3},
                 {-9, 13.5},
                 {9.4, 0}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bComplexEntries = new CNumber[]{new CNumber(9123)};
-        bComplex = new CVector(bComplexEntries);
+        bComplex = new CVectorOld(bComplexEntries);
 
         assertThrows(IllegalArgumentException.class, ()->A.addToEachCol(bComplex));
     }
@@ -133,7 +133,7 @@ class MatrixAddToEachColTests {
                 {1, 2.3},
                 {-9, 13.5},
                 {9.4, 0}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bComplexEntries = new CNumber[]{new CNumber(9.234, -.13)};
         bIndices = new int[]{0};
         bSize = 3;
@@ -142,7 +142,7 @@ class MatrixAddToEachColTests {
                 {new CNumber(1).add(bComplexEntries[0]), new CNumber(2.3).add(bComplexEntries[0])},
                 {new CNumber(-9), new CNumber(13.5)},
                 {new CNumber(9.4), new CNumber(0)}};
-        expComplex = new CMatrix(expComplexEntries);
+        expComplex = new CMatrixOld(expComplexEntries);
 
         assertEquals(expComplex, A.addToEachCol(bSparseComplex));
 
@@ -151,7 +151,7 @@ class MatrixAddToEachColTests {
                 {1, 2.3},
                 {-9, 13.5},
                 {9.4, 0}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bComplexEntries = new CNumber[]{new CNumber(9.234, -.13)};
         bIndices = new int[]{0};
         bSize = 8;

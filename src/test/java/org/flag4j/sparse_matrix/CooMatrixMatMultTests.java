@@ -1,9 +1,9 @@
 package org.flag4j.sparse_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ public class CooMatrixMatMultTests {
         CooMatrix b;
 
         double[][] expEntries;
-        Matrix exp;
+        MatrixOld exp;
 
         // ---------------------  Sub-case 1 ---------------------
         aShape = new Shape(3, 5);
@@ -47,7 +47,7 @@ public class CooMatrixMatMultTests {
                 {0.047893645799999995, 0.0, 0.0, 0.0, 0.2191614642, 0.0},
                 {0.35268401820000006, 0.0, 0.5886769494, 0.0, 0.5028452565, 0.0},
                 {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertEquals(exp, a.mult(b));
 
@@ -76,7 +76,7 @@ public class CooMatrixMatMultTests {
                 {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
                 {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
                 {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.27243241560000003, 0.0}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertEquals(exp, a.mult(b));
 
@@ -99,7 +99,7 @@ public class CooMatrixMatMultTests {
                 {0.0},
                 {0.16935666050000003},
                 {0.6508229275}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertEquals(exp, a.mult(b));
 
@@ -122,7 +122,7 @@ public class CooMatrixMatMultTests {
                 {0.329292708, 0.0},
                 {0.2810182704, 0.0},
                 {0.052330272, 0.0}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertEquals(exp, a.mult(b));
 
@@ -177,7 +177,7 @@ public class CooMatrixMatMultTests {
         CooCMatrix b;
 
         CNumber[][] expEntries;
-        CMatrix exp;
+        CMatrixOld exp;
 
         // ---------------------  Sub-case 1 ---------------------
         aShape = new Shape(3, 5);
@@ -196,7 +196,7 @@ public class CooMatrixMatMultTests {
                 {new CNumber("0.1910513735+0.2528286826i"), new CNumber("0.328023163+0.21067179119999999i"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.2656493879+0.2502705062i")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.39695709479999997+0.42233658599999996i"), new CNumber("0.0"), new CNumber("0.417269133+0.22549202340000002i"), new CNumber("0.8195045376+0.847213038i")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.mult(b));
 
@@ -225,7 +225,7 @@ public class CooMatrixMatMultTests {
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.mult(b));
 
@@ -248,7 +248,7 @@ public class CooMatrixMatMultTests {
                 {new CNumber("0.0")},
                 {new CNumber("0.0")},
                 {new CNumber("0.0")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.mult(b));
 
@@ -271,7 +271,7 @@ public class CooMatrixMatMultTests {
                 {new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.251200644+0.1346548215i"), new CNumber("0.077457276+0.24842474280000001i")},
                 {new CNumber("0.28512193500000005+0.3210217556i"), new CNumber("0.0")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.mult(b));
 

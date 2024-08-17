@@ -24,14 +24,14 @@
 
 package org.flag4j.core;
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrix;
 
 /**
  * This interface specifies manipulations which all matrices should implement.
  *
- * @param <T> Matrix type.
- * @param <X> Matrix entry type.
+ * @param <T> MatrixOld type.
+ * @param <X> MatrixOld entry type.
  */
 public interface MatrixManipulationsMixin<
         T,
@@ -181,7 +181,7 @@ public interface MatrixManipulationsMixin<
      * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
      * fit completely within this matrix.
      */
-    T setSlice(Matrix values, int rowStart, int colStart);
+    T setSlice(MatrixOld values, int rowStart, int colStart);
 
 
     /**

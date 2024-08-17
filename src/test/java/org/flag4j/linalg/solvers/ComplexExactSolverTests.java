@@ -1,8 +1,8 @@
 package org.flag4j.linalg.solvers;
 
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.linalg.solvers.exact.ComplexExactSolver;
 import org.junit.jupiter.api.Test;
@@ -16,14 +16,14 @@ class ComplexExactSolverTests {
     static CNumber[] bEntries;
     static CNumber[] expEntries;
 
-    static CMatrix A;
-    static CVector b;
-    static CVector exp;
+    static CMatrixOld A;
+    static CVectorOld b;
+    static CVectorOld exp;
 
     private static void setMatrices() {
-        A = new CMatrix(aEntries);
-        b = new CVector(bEntries);
-        exp = new CVector(expEntries);
+        A = new CMatrixOld(aEntries);
+        b = new CVectorOld(bEntries);
+        exp = new CVectorOld(expEntries);
     }
 
 

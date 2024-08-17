@@ -25,7 +25,7 @@
 package org.flag4j.core.dense_base;
 
 
-import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays_old.dense.TensorOld;
 
 /**
  * This interface specifies methods which should be implemented by all dense tensors.
@@ -38,7 +38,7 @@ public interface DenseTensorMixin {
      * @param B tensor to add to this tensor.
      * @throws IllegalArgumentException If this tensor and the specified tensor have different .
      */
-    void addEq(Tensor B);
+    void addEq(TensorOld B);
 
 
     /**
@@ -47,5 +47,5 @@ public interface DenseTensorMixin {
      * @param B tensor to subtract this tensor.
      * @throws IllegalArgumentException If this tensor and the specified tensor have different shapes.
      */
-    void subEq(Tensor B);
+    void subEq(TensorOld B);
 }

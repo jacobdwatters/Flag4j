@@ -1,10 +1,10 @@
 package org.flag4j.sparse_vector;
 
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.arrays.sparse.CooTensor;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooTensor;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.BeforeAll;
@@ -101,7 +101,7 @@ class CooVectorConversionTests {
     @Test
     void toDenseTestCase() {
         double[] expEntries;
-        Vector exp;
+        VectorOld exp;
 
         // ------------------- Sub-case 1 -------------------
         expEntries = new double[sparseSize];
@@ -109,7 +109,7 @@ class CooVectorConversionTests {
         expEntries[aIndices[1]] = aEntries[1];
         expEntries[aIndices[2]] = aEntries[2];
         expEntries[aIndices[3]] = aEntries[3];
-        exp = new Vector(expEntries);
+        exp = new VectorOld(expEntries);
 
         assertEquals(exp, a.toDense());
     }
@@ -118,7 +118,7 @@ class CooVectorConversionTests {
     @Test
     void fromDenseTestCase() {
         double[] denseEntries;
-        Vector denseVector;
+        VectorOld denseVector;
 
         // ------------------- Sub-case 1 -------------------
         denseEntries = new double[sparseSize];
@@ -126,7 +126,7 @@ class CooVectorConversionTests {
         denseEntries[aIndices[1]] = aEntries[1];
         denseEntries[aIndices[2]] = aEntries[2];
         denseEntries[aIndices[3]] = aEntries[3];
-        denseVector = new Vector(denseEntries);
+        denseVector = new VectorOld(denseEntries);
 
         assertEquals(a, CooVector.fromDense(denseVector));
     }

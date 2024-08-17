@@ -1,8 +1,8 @@
 package org.flag4j.complex_sparse_matrix;
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -327,7 +327,7 @@ class CooCMatrixSetSliceTests {
         CooCMatrix a;
 
         double[][] bEntries;
-        Matrix b;
+        MatrixOld b;
 
         Shape expShape;
         int[] expRowIndices;
@@ -345,7 +345,7 @@ class CooCMatrixSetSliceTests {
         bEntries = new double[][]{
                 {0.20641, 0.00627, 0.74659},
                 {0.32765, 0.21592, 0.62641}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expShape = new Shape(5, 3);
         expEntries = new CNumber[]{new CNumber("0.92932+0.83391i"), new CNumber("0.20641"), new CNumber("0.00627"), new CNumber("0.74659"), new CNumber("0.32765"), new CNumber("0.21592"), new CNumber("0.62641")};
@@ -368,7 +368,7 @@ class CooCMatrixSetSliceTests {
                 {0.17124, 0.48106, 0.81049, 0.98155, 0.92245, 0.22864, 0.24145, 0.44011, 0.50031},
                 {0.73361, 0.23513, 0.61501, 0.95234, 0.48264, 0.74098, 0.69689, 0.41605, 0.41617},
                 {0.58739, 0.71357, 0.91358, 0.35843, 0.94982, 0.39818, 0.24228, 0.26308, 0.30217}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expShape = new Shape(23, 11);
         expEntries = new CNumber[]{new CNumber("0.78261+0.81287i"), new CNumber("0.92047+0.1968i"), new CNumber("0.19346+0.66988i"), new CNumber("0.42509"), new CNumber("0.86635"), new CNumber("0.49669"), new CNumber("0.12935"), new CNumber("0.58896"), new CNumber("0.55769"), new CNumber("0.74153"), new CNumber("0.3902"), new CNumber("0.30427"), new CNumber("0.47135"), new CNumber("0.27404"), new CNumber("0.77679"), new CNumber("0.18645"), new CNumber("0.14262"), new CNumber("0.34505"), new CNumber("0.96778"), new CNumber("0.08602"), new CNumber("0.04046"), new CNumber("0.17124"), new CNumber("0.48106"), new CNumber("0.81049"), new CNumber("0.98155"), new CNumber("0.92245"), new CNumber("0.22864"), new CNumber("0.24145"), new CNumber("0.44011"), new CNumber("0.50031"), new CNumber("0.73361"), new CNumber("0.23513"), new CNumber("0.61501"), new CNumber("0.95234"), new CNumber("0.48264"), new CNumber("0.74098"), new CNumber("0.69689"), new CNumber("0.41605"), new CNumber("0.41617"), new CNumber("0.58739"), new CNumber("0.71357"), new CNumber("0.91358"), new CNumber("0.35843"), new CNumber("0.94982"), new CNumber("0.39818"), new CNumber("0.24228"), new CNumber("0.26308"), new CNumber("0.30217")};
@@ -389,7 +389,7 @@ class CooCMatrixSetSliceTests {
                 {0.37385, 0.16278},
                 {0.16053, 0.78368},
                 {0.81585, 0.09195}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expShape = new Shape(1000, 5);
         expEntries = new CNumber[]{new CNumber("0.37385"), new CNumber("0.16278"), new CNumber("0.16053"), new CNumber("0.78368"), new CNumber("0.81585"), new CNumber("0.09195"), new CNumber("0.47086+0.22829i"), new CNumber("0.3198+0.27911i"), new CNumber("0.15627+0.18005i"), new CNumber("0.8154+0.86608i"), new CNumber("0.29655+0.07095i"), new CNumber("0.82134+0.18228i"), new CNumber("0.35707+0.25355i"), new CNumber("0.66031+0.70124i"), new CNumber("0.97115+0.2385i")};
@@ -408,10 +408,10 @@ class CooCMatrixSetSliceTests {
 
         bEntries = new double[][]{
                 {0.2427, 0.27463, 0.00804}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         CooCMatrix final0a = a;
-        Matrix final0b = b;
+        MatrixOld final0b = b;
         assertThrows(Exception.class, ()->final0a.setSlice(final0b, -1, 2));
 
         // ---------------------  Sub-case 5 ---------------------
@@ -425,10 +425,10 @@ class CooCMatrixSetSliceTests {
                 {0.83141},
                 {0.60989},
                 {0.5986}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         CooCMatrix final1a = a;
-        Matrix final1b = b;
+        MatrixOld final1b = b;
         assertThrows(Exception.class, ()->final1a.setSlice(final1b, 0, 16));
 
         // ---------------------  Sub-case 6 ---------------------
@@ -441,10 +441,10 @@ class CooCMatrixSetSliceTests {
         bEntries = new double[][]{
                 {0.28434, 0.27412},
                 {0.5756, 0.75022}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         CooCMatrix final2a = a;
-        Matrix final2b = b;
+        MatrixOld final2b = b;
         assertThrows(Exception.class, ()->final2a.setSlice(final2b, 2, 0));
 
         // ---------------------  Sub-case 7 ---------------------
@@ -456,10 +456,10 @@ class CooCMatrixSetSliceTests {
 
         bEntries = new double[][]{
                 {0.41028, 0.03141, 0.92985}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         CooCMatrix final3a = a;
-        Matrix final3b = b;
+        MatrixOld final3b = b;
         assertThrows(Exception.class, ()->final3a.setSlice(final3b, 0, 4));
     }
 

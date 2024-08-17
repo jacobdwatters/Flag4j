@@ -24,12 +24,12 @@
 
 package org.flag4j.operations.dense_sparse.csr.real_complex;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CsrCMatrix;
-import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.sparse.CsrMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ErrorMessages;
@@ -52,14 +52,14 @@ public final class RealComplexCsrDenseMatrixMultiplication {
     /**
      * Computes the matrix multiplication between a real sparse CSR matrix and a complex dense matrix.
      * WARNING: If the first matrix is very large but not very sparse, this method may be slower than converting the
-     * first matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link Matrix#mult(CMatrix)}.
+     * first matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link MatrixOld#mult(CMatrixOld)}.
      * @param src1 First matrix in the matrix multiplication.
      * @param src2 Second matrix in the matrix multiplication.
      * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} does not have the same number of columns as {@code src2} has
      * rows.
      */
-    public static CMatrix standard(CsrMatrix src1, CMatrix src2) {
+    public static CMatrixOld standard(CsrMatrix src1, CMatrixOld src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
 
@@ -86,20 +86,20 @@ public final class RealComplexCsrDenseMatrixMultiplication {
             }
         }
 
-        return new CMatrix(new Shape(src1.numRows, src2.numCols), destEntries);
+        return new CMatrixOld(new Shape(src1.numRows, src2.numCols), destEntries);
     }
 
 
     /**
      * Computes the matrix multiplication between a real sparse CSR matrix and the transpose of a complex dense matrix.
-     * WARNING: This method is likely slower than {@link #standard(CsrMatrix, CMatrix) standard(src1, src2.T())} unless
+     * WARNING: This method is likely slower than {@link #standard(CsrMatrix, CMatrixOld) standard(src1, src2.T())} unless
      * {@code src1} has many more columns than rows and is very sparse.
      * @param src1 First matrix in the matrix multiplication.
      * @param src2 Second matrix in the matrix multiplication. Will be implicitly transposed.
      * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} and {@code src2} do not have the same number of rows.
      */
-    public static CMatrix standardTranspose(CsrMatrix src1, CMatrix src2) {
+    public static CMatrixOld standardTranspose(CsrMatrix src1, CMatrixOld src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ParameterChecks.assertEquals(src1.numCols, src2.numCols);
 
@@ -128,21 +128,21 @@ public final class RealComplexCsrDenseMatrixMultiplication {
             }
         }
 
-        return new CMatrix(new Shape(src1.numRows, src2.numRows), destEntries);
+        return new CMatrixOld(new Shape(src1.numRows, src2.numRows), destEntries);
     }
 
 
     /**
      * Computes the matrix multiplication between a real dense matrix and a real sparse CSR matrix.
      * WARNING: If the second matrix is very large but not very sparse, this method may be slower than converting the
-     * second matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link Matrix#mult(Matrix)}.
+     * second matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link MatrixOld#mult(MatrixOld)}.
      * @param src1 First matrix in the matrix multiplication (dense matrix).
      * @param src2 Second matrix in the matrix multiplication (sparse CSR matrix).
      * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} does not have the same number of columns as {@code src2} has
      * rows.
      */
-    public static CMatrix standard(Matrix src1, CsrCMatrix src2) {
+    public static CMatrixOld standard(MatrixOld src1, CsrCMatrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
 
@@ -169,21 +169,21 @@ public final class RealComplexCsrDenseMatrixMultiplication {
             }
         }
 
-        return new CMatrix(new Shape(rows1, cols2), destEntries);
+        return new CMatrixOld(new Shape(rows1, cols2), destEntries);
     }
 
 
     /**
      * Computes the matrix multiplication between a real dense matrix and a real sparse CSR matrix.
      * WARNING: If the second matrix is very large but not very sparse, this method may be slower than converting the
-     * second matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link Matrix#mult(Matrix)}.
+     * second matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link MatrixOld#mult(MatrixOld)}.
      * @param src1 First matrix in the matrix multiplication (dense matrix).
      * @param src2 Second matrix in the matrix multiplication (sparse CSR matrix).
      * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} does not have the same number of columns as {@code src2} has
      * rows.
      */
-    public static CMatrix standard(CMatrix src1, CsrMatrix src2) {
+    public static CMatrixOld standard(CMatrixOld src1, CsrMatrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
 
@@ -210,19 +210,19 @@ public final class RealComplexCsrDenseMatrixMultiplication {
             }
         }
 
-        return new CMatrix(new Shape(rows1, cols2), destEntries);
+        return new CMatrixOld(new Shape(rows1, cols2), destEntries);
     }
 
 
     /**
      * Computes the matrix-vector multiplication between a real sparse CSR matrix and a complex dense vector.
      * @param src1 The matrix in the multiplication.
-     * @param src2 Vector in multiplication. Treated as a column vector.
+     * @param src2 VectorOld in multiplication. Treated as a column vector.
      * @return The result of the matrix-vector multiplication.
      * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the length of
      * {@code src2}.
      */
-    public static CVector standardVector(CsrMatrix src1, CVector src2) {
+    public static CVectorOld standardVector(CsrMatrix src1, CVectorOld src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
         ParameterChecks.assertEquals(src1.numCols, src2.size);
 
@@ -242,21 +242,21 @@ public final class RealComplexCsrDenseMatrixMultiplication {
             }
         }
 
-        return new CVector(destEntries);
+        return new CVectorOld(destEntries);
     }
 
 
     /**
      * Computes the matrix multiplication between a complex sparse CSR matrix and a real dense matrix.
      * WARNING: If the first matrix is very large but not very sparse, this method may be slower than converting the
-     * first matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link Matrix#mult(CMatrix)}.
+     * first matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link MatrixOld#mult(CMatrixOld)}.
      * @param src1 First matrix in the matrix multiplication.
      * @param src2 Second matrix in the matrix multiplication.
      * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} does not have the same number of columns as {@code src2} has
      * rows.
      */
-    public static CMatrix standard(CsrCMatrix src1, Matrix src2) {
+    public static CMatrixOld standard(CsrCMatrix src1, MatrixOld src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
 
@@ -283,19 +283,19 @@ public final class RealComplexCsrDenseMatrixMultiplication {
             }
         }
 
-        return new CMatrix(new Shape(src1.numRows, src2.numCols), destEntries);
+        return new CMatrixOld(new Shape(src1.numRows, src2.numCols), destEntries);
     }
 
 
     /**
      * Computes the matrix-vector multiplication between a real sparse CSR matrix and a complex dense vector.
      * @param src1 The matrix in the multiplication.
-     * @param src2 Vector in multiplication. Treated as a column vector.
+     * @param src2 VectorOld in multiplication. Treated as a column vector.
      * @return The result of the matrix-vector multiplication.
      * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the length of
      * {@code src2}.
      */
-    public static CVector standardVector(CsrCMatrix src1, Vector src2) {
+    public static CVectorOld standardVector(CsrCMatrix src1, VectorOld src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
         ParameterChecks.assertEquals(src1.numCols, src2.size);
 
@@ -315,6 +315,6 @@ public final class RealComplexCsrDenseMatrixMultiplication {
             }
         }
 
-        return new CVector(destEntries);
+        return new CVectorOld(destEntries);
     }
 }

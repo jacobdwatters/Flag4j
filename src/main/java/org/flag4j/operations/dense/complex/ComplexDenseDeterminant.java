@@ -25,7 +25,7 @@
 package org.flag4j.operations.dense.complex;
 
 
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.linalg.decompositions.lu.ComplexLU;
@@ -47,11 +47,11 @@ public final class ComplexDenseDeterminant {
 
     /**
      * Computes the determinant of a square matrix using the LU factorization.
-     * @param A Matrix to compute the determinant of.
+     * @param A MatrixOld to compute the determinant of.
      * @return The determinant of the matrix.
      * @throws IllegalArgumentException If matrix is not square.
      */
-    public static CNumber det(CMatrix A) {
+    public static CNumber det(CMatrixOld A) {
         ParameterChecks.assertSquareMatrix(A.shape);
         CNumber det;
 
@@ -76,13 +76,13 @@ public final class ComplexDenseDeterminant {
 
     /**
      * Computes the determinant of a square matrix using the LU factorization.
-     * @param A Matrix to compute the determinant of.
+     * @param A MatrixOld to compute the determinant of.
      * @return The determinant of the matrix.
      * @throws IllegalArgumentException If matrix is not square.
      */
-    public static CNumber detLU(CMatrix A) {
+    public static CNumber detLU(CMatrixOld A) {
         ParameterChecks.assertSquareMatrix(A.shape);
-        LU<CMatrix> lu = new ComplexLU().decompose(A);
+        LU<CMatrixOld> lu = new ComplexLU().decompose(A);
 
         double detP = (lu.getNumRowSwaps() & 1) == 0 ? 1 : -1;
         return detTri(lu.getU()).mult(detP);
@@ -94,7 +94,7 @@ public final class ComplexDenseDeterminant {
      * @param T Triangular matrix.
      * @return The determinant of the triangular matrix {@code T}.
      */
-    public static CNumber detTri(CMatrix T) {
+    public static CNumber detTri(CMatrixOld T) {
         CNumber detU = new CNumber(1);
 
         // Compute the determinant of T
@@ -108,10 +108,10 @@ public final class ComplexDenseDeterminant {
 
     /**
      * Explicitly computes the determinant of a 3x3 matrix.
-     * @param A Matrix to compute the determinant of.
+     * @param A MatrixOld to compute the determinant of.
      * @return The determinant of the 3x3 matrix.
      */
-    public static CNumber det3(CMatrix A) {
+    public static CNumber det3(CMatrixOld A) {
         ParameterChecks.assertEqualShape(A.shape, new Shape(3, 3));
         CNumber det = A.entries[0].mult(A.entries[4].mult(A.entries[8]).sub(A.entries[5].mult(A.entries[7])));
         det = det.sub(A.entries[1].mult(A.entries[3].mult(A.entries[8]).sub(A.entries[5].mult(A.entries[6]))));
@@ -122,10 +122,10 @@ public final class ComplexDenseDeterminant {
 
     /**
      * Explicitly computes the determinant of a 2x2 matrix.
-     * @param A Matrix to compute the determinant of.
+     * @param A MatrixOld to compute the determinant of.
      * @return The determinant of the 2x2 matrix.
      */
-    public static CNumber det2(CMatrix A) {
+    public static CNumber det2(CMatrixOld A) {
         ParameterChecks.assertEqualShape(A.shape, new Shape(2, 2));
         return A.entries[0].mult(A.entries[3]).sub(A.entries[1].mult(A.entries[2]));
     }
@@ -133,10 +133,10 @@ public final class ComplexDenseDeterminant {
 
     /**
      * Explicitly computes the determinant of a 1x1 matrix.
-     * @param A Matrix to compute the determinant of.
+     * @param A MatrixOld to compute the determinant of.
      * @return The determinant of the 1x1 matrix.
      */
-    public static CNumber det1(CMatrix A) {
+    public static CNumber det1(CMatrixOld A) {
         ParameterChecks.assertEqualShape(A.shape, new Shape(1, 1));
         return A.entries[0];
     }

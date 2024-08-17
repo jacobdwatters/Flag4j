@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.decompositions;
 
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.linalg.decompositions.hess.ComplexHess;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ComplexHessenburgTests {
     String[][] aEntries;
-    CMatrix A, Q, H, A_hat;
+    CMatrixOld A, Q, H, A_hat;
 
     ComplexHess hess;
 
@@ -45,7 +45,7 @@ class ComplexHessenburgTests {
                 {"1.55-2i", "0", "i"},
                 {"25.66-90.25i", "34.5", "3.4+2i"},
                 {"-i", "3.4-2i", "16.67+9.2i"}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         hess = new ComplexHess();
         hess.decompose(A);
 
@@ -53,7 +53,7 @@ class ComplexHessenburgTests {
         Q = hess.getQ();
         A_hat = Q.mult(H).mult(Q.H());
 
-        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrixOld(A.shape), A.sub(A_hat).roundToZero());
 
         // ----------------------- Sub-case 1.1 -----------------------
         hess = new ComplexHess();
@@ -67,7 +67,7 @@ class ComplexHessenburgTests {
                 {"4i", "6", "0", "4+3i"},
                 {"22+9i", "0", "0", "1+i"},
                 {"6+9i", "-25-4i", "1-i", "-1.2+3i"}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         hess = new ComplexHess();
         hess.decompose(A);
 
@@ -75,7 +75,7 @@ class ComplexHessenburgTests {
         Q = hess.getQ();
         A_hat = Q.mult(H).mult(Q.H());
 
-        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrixOld(A.shape), A.sub(A_hat).roundToZero());
 
         // ----------------------- Sub-case 2.1 -----------------------
         hess = new ComplexHess();

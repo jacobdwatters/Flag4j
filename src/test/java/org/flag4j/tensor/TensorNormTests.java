@@ -1,6 +1,6 @@
 package org.flag4j.tensor;
 
-import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.core.Shape;
 import org.flag4j.linalg.TensorNorms;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,14 +12,14 @@ public class TensorNormTests {
 
     static Shape aShape;
     static double[] aEntries;
-    static Tensor A;
+    static TensorOld A;
     static double exp;
 
     @BeforeAll
     static void setup() {
         aShape = new Shape(2, 3, 1, 2);
         aEntries = new double[]{1, -1.4133, 113.4, 0.4, 11.3, 445, 133.445, 9.8, 13384, -993.44, 11, 12};
-        A = new Tensor(aShape, aEntries);
+        A = new TensorOld(aShape, aEntries);
     }
 
 

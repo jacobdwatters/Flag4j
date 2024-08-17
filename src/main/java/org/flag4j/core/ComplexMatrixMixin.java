@@ -24,15 +24,15 @@
 
 package org.flag4j.core;
 
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooCVector;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooCVector;
 import org.flag4j.complex_numbers.CNumber;
 
 
 /**
  * This interface specifies methods which any complex matrix should implement.
- * @param <T> Matrix type.
+ * @param <T> MatrixOld type.
  */
 public interface ComplexMatrixMixin<T> {
 
@@ -130,7 +130,7 @@ public interface ComplexMatrixMixin<T> {
      * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
      * @throws IndexOutOfBoundsException If {@code colIndex} is not within the matrix.
      */
-    T setCol(CVector values, int colIndex);
+    T setCol(CVectorOld values, int colIndex);
 
 
     /**
@@ -152,7 +152,7 @@ public interface ComplexMatrixMixin<T> {
      * @throws IllegalArgumentException If the {@code values} vector has a different length than the number of columns of this matrix.
      * @throws IndexOutOfBoundsException If {@code rowIndex} is not within the matrix.
      */
-    T setRow(CVector values, int rowIndex);
+    T setRow(CVectorOld values, int rowIndex);
 
 
     /**

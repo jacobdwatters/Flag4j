@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.decompositions.svd;
 
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.core.MatrixMixin;
 import org.flag4j.core.Shape;
 import org.flag4j.linalg.decompositions.Decomposition;
@@ -58,7 +58,7 @@ public abstract class SVD<
     /**
      * The rectangular diagonal {@code S} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
      */
-    protected Matrix S;
+    protected MatrixOld S;
     /**
      * The unitary matrix {@code V} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
      */
@@ -99,7 +99,7 @@ public abstract class SVD<
      * Gets the diagonal matrix {@code S} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
      * @return {@code S} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
      */
-    public Matrix getS() {
+    public MatrixOld getS() {
         return S;
     }
 
@@ -149,7 +149,7 @@ public abstract class SVD<
         stopIdx = reduced ? rank : Math.min(src.numRows(), src.numCols());
 
         if(computeUV) initUV(src.shape(), stopIdx); // Initialize the U and V matrices.
-        S = new Matrix(stopIdx); // initialize the S matrix.
+        S = new MatrixOld(stopIdx); // initialize the S matrix.
 
         for(int j=0; j<stopIdx; j++) {
             S.set(singularVals[2*j], j, j);
@@ -166,7 +166,7 @@ public abstract class SVD<
 
     /**
      * Computes the inverse direct sum of a matrix and its hermitian transpose.
-     * @param src Matrix to inverse direct add with its hermitian transpose.
+     * @param src MatrixOld to inverse direct add with its hermitian transpose.
      * @return The inverse direct sum of the {@code src} matrix with its hermitian transpose.
      */
     protected abstract T invDirectSum(T src);

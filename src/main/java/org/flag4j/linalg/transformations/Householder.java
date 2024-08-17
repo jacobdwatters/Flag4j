@@ -24,14 +24,14 @@
 
 package org.flag4j.linalg.transformations;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.operations.common.complex.ComplexOperations;
-import org.flag4j.operations.common.real.RealOperations;
+import org.flag4j.operations_old.common.complex.ComplexOperations;
+import org.flag4j.operations_old.common.real.RealOperations;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -53,15 +53,15 @@ public final class Householder {
      * @return A transformation matrix which describes a reflection through a plane containing the origin with the
      * specified {@code normal} vector, i.e. a Householder reflector.
      */
-    public static Matrix getReflector(Vector normal) {
-        Vector v;
+    public static MatrixOld getReflector(VectorOld normal) {
+        VectorOld v;
 
         double signedNorm = -Math.copySign(VectorNorms.norm(normal), normal.entries[0]);
         v = normal.div(normal.entries[0] - signedNorm);
         v.entries[0] = 1.0;
 
         // Create Householder matrix
-        Matrix H = v.outer(v).mult(-2.0/v.inner(v));
+        MatrixOld H = v.outer(v).mult(-2.0/v.inner(v));
 
         int step = H.numCols+1;
         for(int i=0; i<H.entries.length; i+=step) {
@@ -76,22 +76,22 @@ public final class Householder {
      * Computes the vector {@code v} in of a Householder matrix {@code H=I-2vv}<sup>T</sup> where {@code H} is a
      * transformation matrix which reflects a vector across the plane normal to {@code normal}.
      *
-     * <p>This method may be used in conjunction with {@link #leftMultReflector(Matrix, Vector, double, int, int, int)} and
-     * {@link #rightMultReflector(Matrix, Vector, double, int, int, int)} to efficiently apply reflectors. Doing this is O(n^2)
+     * <p>This method may be used in conjunction with {@link #leftMultReflector(MatrixOld, VectorOld, double, int, int, int)} and
+     * {@link #rightMultReflector(MatrixOld, VectorOld, double, int, int, int)} to efficiently apply reflectors. Doing this is O(n^2)
      * while forming the full Householder matrix and performing matrix multiplication is O(n^3)</p>
      *
-     * @param normal Vector normal to the plane which {@code H} reflects across.
+     * @param normal VectorOld normal to the plane which {@code H} reflects across.
      * @return The vector {@code v} in of a Householder matrix {@code H=I-2vv}<sup>T</sup> which reflects across a plane
      * normal to {@code normal}.
      */
-    public static Vector getVector(Vector normal) {
+    public static VectorOld getVector(VectorOld normal) {
         double normX = VectorNorms.norm(normal);
         double x1 = normal.entries[0];
         normX = (x1 >= 0) ? -normX : normX;
         double v1 = x1 - normX;
 
         // Initialize v with norm and set first element
-        Vector v = normal.copy();
+        VectorOld v = normal.copy();
         v.entries[0] = v1;
 
         // Compute norm of v noting that it only differs from normal by the first element.
@@ -108,16 +108,16 @@ public final class Householder {
      * Computes the Householder reflector which describes a reflection through a hyperplane containing the origin which
      * is normal to the specified {@code normal} vector.
      *
-     * <p>This method may be used in conjunction with {@link #leftMultReflector(CMatrix, CVector, CNumber, int, int, int)} and
-     * {@link #rightMultReflector(CMatrix, CVector, CNumber, int, int, int)} to efficiently apply reflectors. Doing this is O(n^2)
+     * <p>This method may be used in conjunction with {@link #leftMultReflector(CMatrixOld, CVectorOld, CNumber, int, int, int)} and
+     * {@link #rightMultReflector(CMatrixOld, CVectorOld, CNumber, int, int, int)} to efficiently apply reflectors. Doing this is O(n^2)
      * while forming the full Householder matrix and performing matrix multiplication is O(n^3)</p>
      *
      * @param normal The vector normal to the plane the Householder reflector will reflect through\.
      * @return A transformation matrix which describes a reflection through a plane containing the origin with the
      * specified {@code normal} vector, i.e. a Householder reflector.
      */
-    public static CMatrix getReflector(CVector normal) {
-        CVector v;
+    public static CMatrixOld getReflector(CVectorOld normal) {
+        CVectorOld v;
 
         // Compute signed norm using modified sgn function.
         CNumber signedNorm = normal.entries[0].equals(0) ?
@@ -127,7 +127,7 @@ public final class Householder {
         v.entries[0] = new CNumber(1);
 
         // Create projection matrix
-        CMatrix P = v.outer(v).mult(-2.0/v.innerSelf());
+        CMatrixOld P = v.outer(v).mult(-2.0/v.innerSelf());
 
         int step = P.numCols+1;
         for(int i=0; i<P.entries.length; i+=step) {
@@ -151,7 +151,7 @@ public final class Householder {
      * @param workArray An array to store temporary column data. This can help both with cache performance and reducing unneeded
      *                  garbage collection if this method is called repeatedly.
      */
-    public static void leftMultReflector(Matrix src,
+    public static void leftMultReflector(MatrixOld src,
                                          double[] householderVector,
                                          double alpha,
                                          int startCol,
@@ -199,7 +199,7 @@ public final class Householder {
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
      * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
      */
-    public static void rightMultReflector(Matrix src,
+    public static void rightMultReflector(MatrixOld src,
                                           double[] householderVector,
                                           double alpha,
                                           int startCol,
@@ -235,7 +235,7 @@ public final class Householder {
      * @param workArray An array to store temporary column data. This can help both with cache performance and reducing unneeded
      *                  garbage collection if this method is called repeatedly.
      */
-    public static void leftMultReflector(CMatrix src,
+    public static void leftMultReflector(CMatrixOld src,
                                          CNumber[] householderVector,
                                          CNumber alpha,
                                          int startCol,
@@ -281,7 +281,7 @@ public final class Householder {
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
      * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
      */
-    public static void rightMultReflector(CMatrix src,
+    public static void rightMultReflector(CMatrixOld src,
                                           CNumber[] householderVector,
                                           CNumber alpha,
                                           int startCol,
@@ -313,14 +313,14 @@ public final class Householder {
      * <p>Note: no check is made to
      * explicitly check that the {@code src} matrix is actually symmetric.</p>
      *
-     * @param src Matrix to apply the Householder reflector to. Assumed to be square and symmetric. Upper triangular portion
+     * @param src MatrixOld to apply the Householder reflector to. Assumed to be square and symmetric. Upper triangular portion
      * overwritten with the result.
      * @param householderVector Householder vector {@code v} from the definition of a Householder reflector matrix.
      * @param alpha The scalar &alpha value in Householder reflector matrix definition.
      * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
      * @param workArray Array for storing temporary values during the computation. Contents will be overwritten.
      */
-    public static void symmLeftRightMultReflector(Matrix src,
+    public static void symmLeftRightMultReflector(MatrixOld src,
                                                   double[] householderVector,
                                                   double alpha,
                                                   int startCol,
@@ -380,8 +380,8 @@ public final class Householder {
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
      * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
      */
-    public static void leftMultReflector(Matrix src,
-                                         Vector householderVector,
+    public static void leftMultReflector(MatrixOld src,
+                                         VectorOld householderVector,
                                          double alpha,
                                          int startCol,
                                          int startRow, int endRow) {
@@ -403,8 +403,8 @@ public final class Householder {
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
      * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
      */
-    public static void rightMultReflector(Matrix src,
-                                          Vector householderVector,
+    public static void rightMultReflector(MatrixOld src,
+                                          VectorOld householderVector,
                                           double alpha,
                                           int startCol,
                                           int startRow, int endRow) {
@@ -427,8 +427,8 @@ public final class Householder {
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
      * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
      */
-    public static void leftMultReflector(CMatrix src,
-                                         CVector householderVector,
+    public static void leftMultReflector(CMatrixOld src,
+                                         CVectorOld householderVector,
                                          CNumber alpha,
                                          int startCol,
                                          int startRow, int endRow) {
@@ -450,8 +450,8 @@ public final class Householder {
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
      * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
      */
-    public static void rightMultReflector(CMatrix src,
-                                          CVector householderVector,
+    public static void rightMultReflector(CMatrixOld src,
+                                          CVectorOld householderVector,
                                           CNumber alpha,
                                           int startCol,
                                           int startRow, int endRow) {
@@ -466,14 +466,14 @@ public final class Householder {
      * <p>Note: no check is made to
      * explicitly check that the {@code src} matrix is actually Hermitian.</p>
      *
-     * @param src Matrix to apply the Householder reflector to. Assumed to be square and Hermitian. Upper triangular portion
+     * @param src MatrixOld to apply the Householder reflector to. Assumed to be square and Hermitian. Upper triangular portion
      * overwritten with the result.
      * @param householderVector Householder vector {@code v} from the definition of a Householder reflector matrix.
      * @param alpha The scalar &alpha value in Householder reflector matrix definition.
      * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
      * @param workArray Array for storing temporary values during the computation. Contents will be overwritten.
      */
-    public static void hermLeftRightMultReflector(CMatrix src,
+    public static void hermLeftRightMultReflector(CMatrixOld src,
                                                   CNumber[] householderVector,
                                                   CNumber alpha,
                                                   int startCol,

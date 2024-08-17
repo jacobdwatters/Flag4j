@@ -54,7 +54,7 @@ public final class RealDenseTranspose {
      */
     public static double[] standard(final double[] src, final Shape shape, final int axis1, final int axis2) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
@@ -87,7 +87,7 @@ public final class RealDenseTranspose {
         ParameterChecks.assertPermutation(axes);
         ParameterChecks.assertEquals(shape.getRank(), axes.length);
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
@@ -120,7 +120,7 @@ public final class RealDenseTranspose {
         ParameterChecks.assertPermutation(axes);
         ParameterChecks.assertEquals(shape.getRank(), axes.length);
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
@@ -150,7 +150,7 @@ public final class RealDenseTranspose {
      */
     public static double[] standardConcurrent(final double[] src, final Shape shape, final int axis1, final int axis2) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 

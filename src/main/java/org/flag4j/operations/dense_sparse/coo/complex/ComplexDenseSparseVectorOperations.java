@@ -25,8 +25,8 @@
 package org.flag4j.operations.dense_sparse.coo.complex;
 
 
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.sparse.CooCVector;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.sparse.CooCVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.operations.common.complex.ComplexOperations;
 import org.flag4j.util.ErrorMessages;
@@ -35,7 +35,7 @@ import org.flag4j.util.ParameterChecks;
 import java.util.Arrays;
 
 /**
- * This class provides low level methods for computing operations between complex dense/sparse and complex
+ * This class provides low level methods for computing operations_old between complex dense/sparse and complex
  * sparse/dense vectors.
  */
 public final class ComplexDenseSparseVectorOperations {
@@ -146,9 +146,9 @@ public final class ComplexDenseSparseVectorOperations {
      * @param src2 Sparse vector.
      * @return The result of the vector addition.
      */
-    public static CVector add(CVector src1, CooCVector src2) {
+    public static CVectorOld add(CVectorOld src1, CooCVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
-        CVector dest = new CVector(src1);
+        CVectorOld dest = new CVectorOld(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             int idx = src2.indices[i];
@@ -165,7 +165,7 @@ public final class ComplexDenseSparseVectorOperations {
      * @param src1 Dense vector. Modified.
      * @param src2 Sparse vector.
      */
-    public static void addEq(CVector src1, CooCVector src2) {
+    public static void addEq(CVectorOld src1, CooCVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
@@ -183,10 +183,10 @@ public final class ComplexDenseSparseVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static CVector sub(CVector src1, CooCVector src2) {
+    public static CVectorOld sub(CVectorOld src1, CooCVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
-        CVector dest = src1.copy();
+        CVectorOld dest = src1.copy();
         int index;
 
         for(int i=0; i<src2.entries.length; i++) {
@@ -205,9 +205,9 @@ public final class ComplexDenseSparseVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static CVector sub(CooCVector src1, CVector src2) {
+    public static CVectorOld sub(CooCVector src1, CVectorOld src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
-        CVector dest = new CVector(ComplexOperations.scalMult(src2.entries, -1));
+        CVectorOld dest = new CVectorOld(ComplexOperations.scalMult(src2.entries, -1));
 
         for(int i=0; i<src1.nonZeroEntries(); i++) {
             int idx = src1.indices[i];
@@ -224,7 +224,7 @@ public final class ComplexDenseSparseVectorOperations {
      * @param src1 Dense vector. Modified.
      * @param src2 Sparse vector.
      */
-    public static void subEq(CVector src1, CooCVector src2) {
+    public static void subEq(CVectorOld src1, CooCVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
@@ -241,7 +241,7 @@ public final class ComplexDenseSparseVectorOperations {
      * @return The result of the element-wise multiplication.
      * @throws IllegalArgumentException If the two vectors are not the same size.
      */
-    public static CooCVector elemMult(CVector src1, CooCVector src2) {
+    public static CooCVector elemMult(CVectorOld src1, CooCVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         CNumber[] entries = new CNumber[src2.entries.length];
@@ -260,7 +260,7 @@ public final class ComplexDenseSparseVectorOperations {
      * @param src2 Second vector in the element-wise division.
      * @return The result of the element-wise vector division.
      */
-    public static CooCVector elemDiv(CooCVector src1, CVector src2) {
+    public static CooCVector elemDiv(CooCVector src1, CVectorOld src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
         CNumber[] dest = new CNumber[src1.entries.length];
 

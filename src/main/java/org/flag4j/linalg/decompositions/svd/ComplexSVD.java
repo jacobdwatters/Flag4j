@@ -25,7 +25,7 @@
 package org.flag4j.linalg.decompositions.svd;
 
 
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.core.Shape;
 import org.flag4j.linalg.Eigen;
 import org.flag4j.linalg.ops.DirectSum;
@@ -37,7 +37,7 @@ import org.flag4j.linalg.ops.DirectSum;
  * unitary matrices whose columns are the left and right singular vectors of {@code M} and {@code S} is a rectangular
  * diagonal matrix containing the singular values of {@code M}.
  */
-public class ComplexSVD extends SVD<CMatrix> {
+public class ComplexSVD extends SVD<CMatrixOld> {
 
 
     /**
@@ -82,12 +82,12 @@ public class ComplexSVD extends SVD<CMatrix> {
     /**
      * Computes the inverse direct sum of a matrix and its hermitian transpose.
      *
-     * @param src Matrix to inverse direct add with its hermitian transpose.
+     * @param src MatrixOld to inverse direct add with its hermitian transpose.
      *
      * @return The inverse direct sum of the {@code src} matrix with its hermitian transpose.
      */
     @Override
-    protected CMatrix invDirectSum(CMatrix src) {
+    protected CMatrixOld invDirectSum(CMatrixOld src) {
         return DirectSum.directSum(src, src.H());
     }
 
@@ -102,8 +102,8 @@ public class ComplexSVD extends SVD<CMatrix> {
      * to the singular values and vectors of the matrix being decomposed.
      */
     @Override
-    protected CMatrix makeEigenPairs(CMatrix B, double[] eigVals) {
-        CMatrix[] pairs = Eigen.getEigenPairs(B);
+    protected CMatrixOld makeEigenPairs(CMatrixOld B, double[] eigVals) {
+        CMatrixOld[] pairs = Eigen.getEigenPairs(B);
 
         double[] vals = pairs[0].toReal().entries;
         System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
@@ -120,7 +120,7 @@ public class ComplexSVD extends SVD<CMatrix> {
      * @param eigVals Storage for eigenvalues.
      */
     @Override
-    protected void makeEigenVals(CMatrix B, double[] eigVals) {
+    protected void makeEigenVals(CMatrixOld B, double[] eigVals) {
         double[] vals = Eigen.getEigenValues(B).toReal().entries;
         System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
     }
@@ -134,8 +134,8 @@ public class ComplexSVD extends SVD<CMatrix> {
      */
     @Override
     protected void initUV(Shape src, int cols) {
-        U = new CMatrix(src.get(0), cols);
-        V = new CMatrix(src.get(1), cols);
+        U = new CMatrixOld(src.get(0), cols);
+        V = new CMatrixOld(src.get(1), cols);
     }
 
 
@@ -147,7 +147,7 @@ public class ComplexSVD extends SVD<CMatrix> {
      * @param j            Index of the column of {@code U} and {@code V} to set.
      */
     @Override
-    protected void extractNormalizedCols(CMatrix singularVecs, int j) {
+    protected void extractNormalizedCols(CMatrixOld singularVecs, int j) {
         // Extract left and right singular vectors and normalize.
         V.setCol(singularVecs.getCol(2*j, 0, V.numRows()).normalize(), j);
         U.setCol(singularVecs.getCol(2*j, V.numRows(), singularVecs.numRows()).normalize(), j);

@@ -25,8 +25,8 @@
 package org.flag4j.linalg.decompositions.svd;
 
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.core.Shape;
 import org.flag4j.linalg.Eigen;
 import org.flag4j.linalg.ops.DirectSum;
@@ -40,7 +40,7 @@ import java.util.Arrays;
  * orthogonal matrices whose columns are the left and right singular vectors of {@code M} and {@code S} is a rectangular
  * diagonal matrix containing the singular values of {@code M}.
  */
-public class RealSVD extends SVD<Matrix> {
+public class RealSVD extends SVD<MatrixOld> {
 
     /**
      * Creates a decomposer to compute the singular value decomposition of a real matrix. The left and right singular
@@ -83,12 +83,12 @@ public class RealSVD extends SVD<Matrix> {
     /**
      * Computes the inverse direct sum of a matrix and its hermitian transpose.
      *
-     * @param src Matrix to inverse direct add with its hermitian transpose.
+     * @param src MatrixOld to inverse direct add with its hermitian transpose.
      *
      * @return The inverse direct sum of the {@code src} matrix with its hermitian transpose.
      */
     @Override
-    protected Matrix invDirectSum(Matrix src) {
+    protected MatrixOld invDirectSum(MatrixOld src) {
         return DirectSum.invDirectSum(src, src.H());
     }
 
@@ -103,8 +103,8 @@ public class RealSVD extends SVD<Matrix> {
      * to the singular values and vectors of the matrix being decomposed.
      */
     @Override
-    protected Matrix makeEigenPairs(Matrix B, double[] eigVals) {
-        CMatrix[] pairs = Eigen.getEigenPairs(B);
+    protected MatrixOld makeEigenPairs(MatrixOld B, double[] eigVals) {
+        CMatrixOld[] pairs = Eigen.getEigenPairs(B);
 
         double[] vals = pairs[0].toReal().entries;
         System.out.println("vals: " + Arrays.toString(vals));
@@ -122,7 +122,7 @@ public class RealSVD extends SVD<Matrix> {
      * @param eigVals Storage for eigenvalues.
      */
     @Override
-    protected void makeEigenVals(Matrix B, double[] eigVals) {
+    protected void makeEigenVals(MatrixOld B, double[] eigVals) {
         double[] vals = Eigen.getEigenValues(B).toReal().entries;
         System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
     }
@@ -136,8 +136,8 @@ public class RealSVD extends SVD<Matrix> {
      */
     @Override
     protected void initUV(Shape src, int cols) {
-        U = new Matrix(src.get(0), cols);
-        V = new Matrix(src.get(1), cols);
+        U = new MatrixOld(src.get(0), cols);
+        V = new MatrixOld(src.get(1), cols);
     }
 
 
@@ -149,7 +149,7 @@ public class RealSVD extends SVD<Matrix> {
      * @param j            Index of the column of {@code U} and {@code V} to set.
      */
     @Override
-    protected void extractNormalizedCols(Matrix singularVecs, int j) {
+    protected void extractNormalizedCols(MatrixOld singularVecs, int j) {
         // Extract left and right singular vectors and normalize.
         V.setCol(singularVecs.getCol(2*j, 0, V.numRows()).normalize(), j);
         U.setCol(singularVecs.getCol(2*j, V.numRows(), singularVecs.numRows()).normalize(), j);

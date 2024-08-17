@@ -1,7 +1,7 @@
 package org.flag4j.linalg.solvers;
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.linalg.solvers.lstsq.RealLstsqSolver;
 import org.junit.jupiter.api.Test;
 
@@ -11,15 +11,15 @@ class RealLstsqSolverTests {
     static final RealLstsqSolver solver = new RealLstsqSolver();
 
     static double[][] aEntries;
-    static Matrix A;
+    static MatrixOld A;
 
 
     @Test
     void solveTestCase() {
         double[] bEntries;
         double[] expEntries;
-        Vector b;
-        Vector exp;
+        VectorOld b;
+        VectorOld exp;
 
         // ----------------- Sub-case 1 -----------------
         aEntries = new double[][]{
@@ -28,9 +28,9 @@ class RealLstsqSolverTests {
                 {1, 2, -75.1}};
         bEntries = new double[]{1.4, 5.6, -99.35};
         expEntries = new double[]{-54.8730919765167, 27.117873450750196, 1.3144161774298762};
-        A = new Matrix(aEntries);
-        b = new Vector(bEntries);
-        exp = new Vector(expEntries);
+        A = new MatrixOld(aEntries);
+        b = new VectorOld(bEntries);
+        exp = new VectorOld(expEntries);
 
         assertEquals(exp, solver.solve(A, b));
 
@@ -41,9 +41,9 @@ class RealLstsqSolverTests {
                 {1, 2, -75.1}};
         bEntries = new double[]{1.4, 5.6, -99.35};
         expEntries = new double[]{-0.5953239804326492, -3.7452078451800968, 1.215236489070668};
-        A = new Matrix(aEntries);
-        b = new Vector(bEntries);
-        exp = new Vector(expEntries);
+        A = new MatrixOld(aEntries);
+        b = new VectorOld(bEntries);
+        exp = new VectorOld(expEntries);
 
         assertEquals(exp, solver.solve(A, b));
     }
@@ -52,7 +52,7 @@ class RealLstsqSolverTests {
     @Test
     void solveTestMatrix() {
         double[][] bEntries, expEntries;
-        Matrix B, exp;
+        MatrixOld B, exp;
 
         // ----------------- Sub-case 1 -----------------
         aEntries = new double[][]{
@@ -67,9 +67,9 @@ class RealLstsqSolverTests {
                 {-54.8730919765167, 667.0824135681675},
                 {27.117873450750196, -289.32793215916524},
                 {1.3144161774298762, 1.1441617742987609}};
-        B = new Matrix(bEntries);
-        exp = new Matrix(expEntries);
-        A = new Matrix(aEntries);
+        B = new MatrixOld(bEntries);
+        exp = new MatrixOld(expEntries);
+        A = new MatrixOld(aEntries);
 
         assertEquals(exp, solver.solve(A, B));
 
@@ -90,9 +90,9 @@ class RealLstsqSolverTests {
                 {11.236812466218113, -0.025918271804248938, -15.869733971321153},
                 {235.3971728868124, 5.076829738809295, -0.6842081525682757},
                 {-135.59214856020074, -0.9734072210388269, -0.3934543149083675}};
-        A = new Matrix(aEntries);
-        B = new Matrix(bEntries);
-        exp = new Matrix(expEntries);
+        A = new MatrixOld(aEntries);
+        B = new MatrixOld(bEntries);
+        exp = new MatrixOld(expEntries);
 
         assertEquals(exp, solver.solve(A, B));
     }

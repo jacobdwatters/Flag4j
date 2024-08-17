@@ -24,7 +24,7 @@
 
 package org.flag4j.complex_vector;
 
-import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -34,36 +34,36 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CVectorZeroOneTests {
 
     CNumber[] aEntries;
-    CVector a;
+    CVectorOld a;
 
     @Test
     void zerosTestCase() {
         // ------------------ Sub-case 1 ------------------
-        a = new CVector(34);
+        a = new CVectorOld(34);
         assertTrue(a.isZeros());
 
         // ------------------ Sub-case 2 ------------------
-        a = new CVector(0);
+        a = new CVectorOld(0);
         assertTrue(a.isZeros());
 
         // ------------------ Sub-case 3 ------------------
         aEntries = new CNumber[]{CNumber.ZERO, CNumber.ZERO, CNumber.ZERO};
-        a = new CVector(aEntries);
+        a = new CVectorOld(aEntries);
         assertTrue(a.isZeros());
 
         // ------------------ Sub-case 4 ------------------
         aEntries = new CNumber[]{CNumber.ZERO, new CNumber(1), CNumber.ZERO};
-        a = new CVector(aEntries);
+        a = new CVectorOld(aEntries);
         assertFalse(a.isZeros());
 
         // ------------------ Sub-case 5 ------------------
         aEntries = new CNumber[]{CNumber.ZERO, new CNumber(9.4, -6.233), CNumber.ZERO};
-        a = new CVector(aEntries);
+        a = new CVectorOld(aEntries);
         assertFalse(a.isZeros());
 
         // ------------------ Sub-case 6 ------------------
         aEntries = new CNumber[]{CNumber.ZERO, CNumber.ZERO, new CNumber(0, -8.234)};
-        a = new CVector(aEntries);
+        a = new CVectorOld(aEntries);
         assertFalse(a.isZeros());
     }
 
@@ -71,31 +71,31 @@ class CVectorZeroOneTests {
     @Test
     void onesTestCase() {
         // ------------------ Sub-case 1 ------------------
-        a = new CVector(34, 1);
+        a = new CVectorOld(34, 1);
         assertTrue(a.isOnes());
 
         // ------------------ Sub-case 2 ------------------
-        a = new CVector(0, 1);
+        a = new CVectorOld(0, 1);
         assertTrue(a.isOnes());
 
         // ------------------ Sub-case 3 ------------------
         aEntries = new CNumber[]{new CNumber(1), new CNumber(1), new CNumber(1)};
-        a = new CVector(aEntries);
+        a = new CVectorOld(aEntries);
         assertTrue(a.isOnes());
 
         // ------------------ Sub-case 4 ------------------
         aEntries = new CNumber[]{new CNumber(1), new CNumber(1.2), new CNumber(1)};
-        a = new CVector(aEntries);
+        a = new CVectorOld(aEntries);
         assertFalse(a.isOnes());
 
         // ------------------ Sub-case 5 ------------------
         aEntries = new CNumber[]{new CNumber(1), new CNumber(5.3, 91.3), new CNumber(1)};
-        a = new CVector(aEntries);
+        a = new CVectorOld(aEntries);
         assertFalse(a.isOnes());
 
         // ------------------ Sub-case 6 ------------------
         aEntries = new CNumber[]{new CNumber(1), new CNumber(1), new CNumber(1, -1)};
-        a = new CVector(aEntries);
+        a = new CVectorOld(aEntries);
         assertFalse(a.isOnes());
     }
 }

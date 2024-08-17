@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <h1 title="Class SymmHess" class="title">Class SymmHess</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="../unitary/UnitaryDecomposition.html" title="class in org.flag4j.linalg.decompositions.unitary">org.flag4j.linalg.decompositions.unitary.UnitaryDecomposition</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>,<wbr>double[]&gt;
+<div class="inheritance"><a href="../unitary/UnitaryDecomposition.html" title="class in org.flag4j.linalg.decompositions.unitary">org.flag4j.linalg.decompositions.unitary.UnitaryDecomposition</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>,<wbr>double[]&gt;
 <div class="inheritance"><a href="../unitary/RealUnitaryDecomposition.html" title="class in org.flag4j.linalg.decompositions.unitary">org.flag4j.linalg.decompositions.unitary.RealUnitaryDecomposition</a>
 <div class="inheritance"><a href="RealHess.html" title="class in org.flag4j.linalg.decompositions.hess">org.flag4j.linalg.decompositions.hess.RealHess</a>
 <div class="inheritance">org.flag4j.linalg.decompositions.hess.SymmHess</div>
@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <div class="horizontal-scroll">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../Decomposition.html" title="interface in org.flag4j.linalg.decompositions">Decomposition</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&gt;</code></dd>
+<dd><code><a href="../Decomposition.html" title="interface in org.flag4j.linalg.decompositions">Decomposition</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&gt;</code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">SymmHess</span>
@@ -182,12 +182,12 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#copyUpperTri(org.flag4j.arrays.dense.Matrix)" class="member-name-link">copyUpperTri</a><wbr>(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;src)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#copyUpperTri(org.flag4j.arrays.dense.Matrix)" class="member-name-link">copyUpperTri</a><wbr>(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;src)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Copies the upper triangular portion of a matrix to the working matrix <a href="../unitary/UnitaryDecomposition.html#transformMatrix"><code>UnitaryDecomposition.transformMatrix</code></a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SymmHess.html" title="class in org.flag4j.linalg.decompositions.hess">SymmHess</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#decompose(org.flag4j.arrays.dense.Matrix)" class="member-name-link">decompose</a><wbr>(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;src)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#decompose(org.flag4j.arrays.dense.Matrix)" class="member-name-link">decompose</a><wbr>(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;src)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Applies decomposition to the source matrix.</div>
 </div>
@@ -196,13 +196,13 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Finds the maximum value in <a href="../unitary/UnitaryDecomposition.html#transformMatrix"><code>UnitaryDecomposition.transformMatrix</code></a> at column <code>j</code> at or below the <code>j</code>th row.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getH()" class="member-name-link">getH</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the Hessenberg matrix from the decomposition.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setUp(org.flag4j.arrays.dense.Matrix)" class="member-name-link">setUp</a><wbr>(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;src)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setUp(org.flag4j.arrays.dense.Matrix)" class="member-name-link">setUp</a><wbr>(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;src)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Performs basic setup for the decomposition.</div>
 </div>
@@ -309,11 +309,11 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="decompose(org.flag4j.arrays.dense.Matrix)">
 <h3>decompose</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SymmHess.html" title="class in org.flag4j.linalg.decompositions.hess">SymmHess</a></span>&nbsp;<span class="element-name">decompose</span><wbr><span class="parameters">(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;src)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SymmHess.html" title="class in org.flag4j.linalg.decompositions.hess">SymmHess</a></span>&nbsp;<span class="element-name">decompose</span><wbr><span class="parameters">(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;src)</span></div>
 <div class="block">Applies decomposition to the source matrix.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../Decomposition.html#decompose(T)">decompose</a></code>&nbsp;in interface&nbsp;<code><a href="../Decomposition.html" title="interface in org.flag4j.linalg.decompositions">Decomposition</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&gt;</code></dd>
+<dd><code><a href="../Decomposition.html#decompose(T)">decompose</a></code>&nbsp;in interface&nbsp;<code><a href="../Decomposition.html" title="interface in org.flag4j.linalg.decompositions">Decomposition</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&gt;</code></dd>
 <dt>Overrides:</dt>
 <dd><code><a href="RealHess.html#decompose(org.flag4j.arrays.dense.Matrix)">decompose</a></code>&nbsp;in class&nbsp;<code><a href="RealHess.html" title="class in org.flag4j.linalg.decompositions.hess">RealHess</a></code></dd>
 <dt>Parameters:</dt>
@@ -328,7 +328,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getH()">
 <h3>getH</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></span>&nbsp;<span class="element-name">getH</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></span>&nbsp;<span class="element-name">getH</span>()</div>
 <div class="block">Gets the Hessenberg matrix from the decomposition. The matrix will be symmetric tri-diagonal.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
@@ -361,11 +361,11 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="setUp(org.flag4j.arrays.dense.Matrix)">
 <h3>setUp</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setUp</span><wbr><span class="parameters">(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;src)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setUp</span><wbr><span class="parameters">(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;src)</span></div>
 <div class="block">Performs basic setup for the decomposition.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="../unitary/UnitaryDecomposition.html#setUp(T)">setUp</a></code>&nbsp;in class&nbsp;<code><a href="../unitary/UnitaryDecomposition.html" title="class in org.flag4j.linalg.decompositions.unitary">UnitaryDecomposition</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>,<wbr>double[]&gt;</code></dd>
+<dd><code><a href="../unitary/UnitaryDecomposition.html#setUp(T)">setUp</a></code>&nbsp;in class&nbsp;<code><a href="../unitary/UnitaryDecomposition.html" title="class in org.flag4j.linalg.decompositions.unitary">UnitaryDecomposition</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>,<wbr>double[]&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>src</code> - The matrix to be decomposed.</dd>
 <dt>Throws:</dt>
@@ -379,7 +379,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="copyUpperTri(org.flag4j.arrays.dense.Matrix)">
 <h3>copyUpperTri</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">copyUpperTri</span><wbr><span class="parameters">(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;src)</span></div>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">copyUpperTri</span><wbr><span class="parameters">(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;src)</span></div>
 <div class="block">Copies the upper triangular portion of a matrix to the working matrix <a href="../unitary/UnitaryDecomposition.html#transformMatrix"><code>UnitaryDecomposition.transformMatrix</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

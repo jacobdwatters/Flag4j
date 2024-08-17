@@ -1,8 +1,8 @@
 package org.flag4j.complex_sparse_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ class CooCMatrixElemDivTests {
     @Test
     void complexSparseRealDenseElemDivTest() {
         double[][] bEntries;
-        Matrix B;
+        MatrixOld B;
         CNumber[] expEntries;
         CooCMatrix exp;
 
@@ -37,7 +37,7 @@ class CooCMatrixElemDivTests {
                 {0.28246, 0.03969, 0.22864, 0.63789, 0.75131},
                 {0.71335, 0.53126, 0.37861, 0.12162, 0.81109},
                 {0.94294, 0.42372, 0.3333, 0.80281, 0.54418}};
-        B = new Matrix(bEntries);
+        B = new MatrixOld(bEntries);
 
         expShape = new Shape(5, 5);
         expEntries = new CNumber[]{new CNumber("0.08631830868134778 + 1.0691431593387102i"), new CNumber("0.7268038549131725+2.8678642489770794i"), new CNumber("3.9658629331396793+1.3705415443984235i"), new CNumber("0.2914093711869364+0.6858200478773417i"), new CNumber("0.7180522575208248 + 0.4893500782572532i")};
@@ -58,7 +58,7 @@ class CooCMatrixElemDivTests {
                 {0.85568, 0.5295, 0.24867, 0.12305, 0.26644},
                 {0.1553, 0.12725, 0.94087, 0.94976, 0.49794},
                 {0.50322, 0.00905, 0.20847, 0.20631, 0.80573}};
-        B = new Matrix(bEntries);
+        B = new MatrixOld(bEntries);
 
         expShape = new Shape(3, 5);
         expEntries = new CNumber[]{new CNumber("1.033109034427645+0.19584429775594145i"), new CNumber("1.1577498606975491+0.6291397854002764i"), new CNumber("0.9197465058104807+0.14812195241132703i")};
@@ -81,9 +81,9 @@ class CooCMatrixElemDivTests {
                 {0.48371, 0.44386, 0.18931},
                 {0.76458, 0.46405, 0.59421},
                 {0.11186, 0.73465, 0.40008}};
-        B = new Matrix(bEntries);
+        B = new MatrixOld(bEntries);
 
-        Matrix finalB = B;
+        MatrixOld finalB = B;
         assertThrows(Exception.class, ()->A.elemDiv(finalB));
     }
 
@@ -91,7 +91,7 @@ class CooCMatrixElemDivTests {
     @Test
     void complexSparseComplexDenseElemDivTest() {
         CNumber[][] bEntries;
-        CMatrix B;
+        CMatrixOld B;
         CNumber[] expEntries;
         CooCMatrix exp;
 
@@ -108,7 +108,7 @@ class CooCMatrixElemDivTests {
                 {new CNumber("0.61849+0.46678i"), new CNumber("0.01722+0.36464i"), new CNumber("0.24588+0.26521i"), new CNumber("0.6891+0.4162i"), new CNumber("0.34601+0.02556i")},
                 {new CNumber("0.76476+0.60393i"), new CNumber("0.19538+0.9464i"), new CNumber("0.21713+0.11611i"), new CNumber("0.05808+0.43596i"), new CNumber("0.886+0.27363i")},
                 {new CNumber("0.33299+0.75751i"), new CNumber("0.23273+0.95777i"), new CNumber("0.55063+0.04563i"), new CNumber("0.60138+0.57274i"), new CNumber("0.55587+0.06641i")}};
-        B = new CMatrix(bEntries);
+        B = new CMatrixOld(bEntries);
 
         expShape = new Shape(5, 5);
         expEntries = new CNumber[]{new CNumber("0.7623073843560689 - 0.505992197105771i"), new CNumber("1.3070771264452088-0.43364627725214056i"), new CNumber("2.6652516607566423-0.11763548835359462i"), new CNumber("2.0802398157395676+0.09800240914753947i"), new CNumber("2.363824038562478-1.3968522871199343i")};
@@ -129,7 +129,7 @@ class CooCMatrixElemDivTests {
                 {new CNumber("0.5042+0.27989i"), new CNumber("0.00354+0.66911i"), new CNumber("0.60815+0.39143i"), new CNumber("0.22379+0.58241i"), new CNumber("0.32315+0.07285i")},
                 {new CNumber("0.50014+0.2802i"), new CNumber("0.05302+0.58335i"), new CNumber("0.8714+0.1005i"), new CNumber("0.87381+0.91641i"), new CNumber("0.86372+0.90357i")},
                 {new CNumber("0.87835+0.89733i"), new CNumber("0.17624+0.22454i"), new CNumber("0.41889+0.85406i"), new CNumber("0.31796+0.83282i"), new CNumber("0.37757+0.9195i")}};
-        B = new CMatrix(bEntries);
+        B = new CMatrixOld(bEntries);
 
         expShape = new Shape(3, 5);
         expEntries = new CNumber[]{new CNumber("0.6099648314642674+0.9215248481611215i"), new CNumber("0.20683571771116144-0.05879555476353598i"), new CNumber("0.6005271815432809-0.053534349359038766i")};
@@ -152,9 +152,9 @@ class CooCMatrixElemDivTests {
                 {new CNumber("0.53063+0.76949i"), new CNumber("0.79508+0.16329i"), new CNumber("0.62538+0.31855i")},
                 {new CNumber("0.86006+0.83223i"), new CNumber("0.47554+0.06541i"), new CNumber("0.28913+0.16755i")},
                 {new CNumber("0.38596+0.9124i"), new CNumber("0.92621+0.74368i"), new CNumber("0.15599+0.76305i")}};
-        B = new CMatrix(bEntries);
+        B = new CMatrixOld(bEntries);
 
-        CMatrix finalB = B;
+        CMatrixOld finalB = B;
         assertThrows(Exception.class, ()->A.elemDiv(finalB));
     }
 }

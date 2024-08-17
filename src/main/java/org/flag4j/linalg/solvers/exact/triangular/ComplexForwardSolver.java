@@ -25,8 +25,8 @@
 package org.flag4j.linalg.solvers.exact.triangular;
 
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.SingularMatrixException;
@@ -36,7 +36,7 @@ import org.flag4j.util.exceptions.SingularMatrixException;
  * This solver solves linear systems of equations where the coefficient matrix in a lower triangular complex dense matrix
  * and the constant vector is a complex dense vector.
  */
-public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumber[]> {
+public class ComplexForwardSolver extends ForwardSolver<CMatrixOld, CVectorOld, CNumber[]> {
 
 
     /**
@@ -93,7 +93,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
      * @return The result of solving the linear system {@code L*x=b} where {@code L} is a lower triangular matrix.
      */
     @Override
-    public CVector solve(CMatrix L, CVector b) {
+    public CVectorOld solve(CMatrixOld L, CVectorOld b) {
         ParameterChecks.assertSquareMatrix(L.shape);
         ParameterChecks.assertEquals(L.numRows, b.size);
         return isUnit ? solveUnitLower(L, b) : solveLower(L, b);
@@ -105,14 +105,14 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
      * That is, solves the linear system {@code L*X=B} where {@code L} is a lower triangular matrix.
      * @param L Lower triangular coefficient matrix. If {@code L} is not lower triangular, it will be treated
      *          as if it were.
-     * @param B Constant Matrix.
+     * @param B Constant MatrixOld.
      * @return The result of solving the linear system {@code L*X=B} where {@code L} is a lower triangular matrix.
      * If the lower triangular matrix {@code L} is singular (i.e. has a zero on the principle diagonal).
      * @throws SingularMatrixException If the matrix lower triangular {@code L} is singular (i.e. has a zero on
      * the principle diagonal).
      */
     @Override
-    public CMatrix solve(CMatrix L, CMatrix B) {
+    public CMatrixOld solve(CMatrixOld L, CMatrixOld B) {
         ParameterChecks.assertSquareMatrix(L.shape);
         ParameterChecks.assertEquals(L.numRows, B.numRows);
         return isUnit ? solveUnitLower(L, B) : solveLower(L, B);
@@ -129,7 +129,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
      * @throws SingularMatrixException If the matrix lower triangular {@code L} is singular (i.e. has a zero on
      * the principle diagonal).
      */
-    public CMatrix solveIdentity(CMatrix L) {
+    public CMatrixOld solveIdentity(CMatrixOld L) {
         ParameterChecks.assertSquareMatrix(L.shape);
         return isUnit ? solveUnitLowerIdentity(L) : solveLowerIdentity(L);
     }
@@ -139,15 +139,15 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
      * Solves a linear system where the coefficient matrix is unit lower triangular.
      * @param L Lower triangular coefficient matrix. If {@code L} is not lower triangular, it will be treated
      *          as if it were.
-     * @param b Vector of constants in the linear system.
+     * @param b VectorOld of constants in the linear system.
      * @return The solution of {@code x} for the linear system {@code L*x=b}.
      */
-    private CVector solveUnitLower(CMatrix L, CVector b) {
+    private CVectorOld solveUnitLower(CMatrixOld L, CVectorOld b) {
         checkParams(L, b.size);
 
         CNumber sum;
         int lIndexStart;
-        CVector x = new CVector(L.numRows);
+        CVectorOld x = new CVectorOld(L.numRows);
         det = new CNumber(L.numRows); // Since it is unit lower, matrix has full rank.
 
         x.entries[0] = b.entries[0];
@@ -175,12 +175,12 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
      * @throws SingularMatrixException If the matrix lower triangular {@code L} is singular (i.e. has a zero on
      * the principle diagonal).
      */
-    private CMatrix solveUnitLowerIdentity(CMatrix L) {
+    private CMatrixOld solveUnitLowerIdentity(CMatrixOld L) {
         checkParams(L, L.numRows);
 
         CNumber sum;
         int lIndexStart, xIndex;
-        CMatrix X = new CMatrix(L.shape);
+        CMatrixOld X = new CMatrixOld(L.shape);
         det = new CNumber(L.numRows); // Since it is unit lower, matrix has full rank.
         xCol = new CNumber[L.numRows];
 
@@ -219,12 +219,12 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
      * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
      * principle diagonal).
      */
-    private CMatrix solveLowerIdentity(CMatrix L) {
+    private CMatrixOld solveLowerIdentity(CMatrixOld L) {
         checkParams(L, L.numRows);
 
         CNumber sum, diag;
         int lIndexStart, xIndex;
-        CMatrix X = new CMatrix(L.shape);
+        CMatrixOld X = new CMatrixOld(L.shape);
         det = L.entries[0];
         xCol = new CNumber[L.numRows];
 
@@ -263,17 +263,17 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
     /**
      * Solves a linear system where the coefficient matrix is lower triangular.
      * @param L Unit lower triangular matrix.
-     * @param b Vector of constants in the linear system.
+     * @param b VectorOld of constants in the linear system.
      * @return The solution of {@code x} for the linear system {@code L*x=b}.
      * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
      * principle diagonal).
      */
-    private CVector solveLower(CMatrix L, CVector b) {
+    private CVectorOld solveLower(CMatrixOld L, CVectorOld b) {
         checkParams(L, b.size);
 
         CNumber sum, diag;
         int lIndexStart;
-        CVector x = new CVector(L.numRows);
+        CVectorOld x = new CVectorOld(L.numRows);
         det = L.entries[0];
         x.entries[0] = b.entries[0].div(L.entries[0]);
 
@@ -299,15 +299,15 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
     /**
      * Solves a linear system where the coefficient matrix is unit lower triangular.
      * @param L Unit lower triangular matrix.
-     * @param B Matrix of constants in the linear system.
+     * @param B MatrixOld of constants in the linear system.
      * @return The solution of {@code X} for the linear system {@code L*X=b}.
      */
-    private CMatrix solveUnitLower(CMatrix L, CMatrix B) {
+    private CMatrixOld solveUnitLower(CMatrixOld L, CMatrixOld B) {
         checkParams(L, B.numRows);
 
         CNumber sum;
         int lIndexStart, xIndex;
-        CMatrix X = new CMatrix(B.shape);
+        CMatrixOld X = new CMatrixOld(B.shape);
         det = new CNumber(L.numRows); // Since it is unit lower, matrix has full rank.
         xCol = new CNumber[L.numRows];
 
@@ -341,18 +341,18 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, CNumbe
     /**
      * Solves a linear system where the coefficient matrix is lower triangular.
      * @param L Unit lower triangular matrix.
-     * @param B Matrix of constants in the linear system.
+     * @param B MatrixOld of constants in the linear system.
      * @return The solution of {@code X} for the linear system {@code L*X=b}.
      * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
      * principle diagonal).
      */
-    private CMatrix solveLower(CMatrix L, CMatrix B) {
+    private CMatrixOld solveLower(CMatrixOld L, CMatrixOld B) {
         checkParams(L, B.numRows);
 
         CNumber sum;
         CNumber diag;
         int lIndexStart, xIndex;
-        CMatrix X = new CMatrix(B.shape);
+        CMatrixOld X = new CMatrixOld(B.shape);
         det = L.entries[0];
         xCol = new CNumber[L.numRows];
 

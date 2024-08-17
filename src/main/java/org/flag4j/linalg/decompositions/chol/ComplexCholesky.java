@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.decompositions.chol;
 
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.ParameterChecks;
@@ -39,7 +39,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  * {@code A=LL<sup>*</sup>} where {@code L} is a lower triangular matrix and {@code L<sup>*</sup>} is the conjugate
  * transpose of {@code L}.</p>
  */
-public final class ComplexCholesky extends Cholesky<CMatrix> {
+public final class ComplexCholesky extends Cholesky<CMatrixOld> {
 
 
     /**
@@ -76,14 +76,14 @@ public final class ComplexCholesky extends Cholesky<CMatrix> {
      * @throws LinearAlgebraException If {@code src} is not positive-definite.
      */
     @Override
-    public ComplexCholesky decompose(CMatrix src) {
+    public ComplexCholesky decompose(CMatrixOld src) {
         if(enforceHermitian && src.isHermitian()) {
-            throw new IllegalArgumentException("Matrix must be positive-definite.");
+            throw new IllegalArgumentException("MatrixOld must be positive-definite.");
         } else {
             ParameterChecks.assertSquareMatrix(src.shape);
         }
 
-        L = new CMatrix(src.numRows);
+        L = new CMatrixOld(src.numRows);
         double posDefTolerance = Math.max(L.numRows*Flag4jConstants.EPS_F64, DEFAULT_POS_DEF_TOLERANCE);
         CNumber sum;
 
@@ -106,7 +106,7 @@ public final class ComplexCholesky extends Cholesky<CMatrix> {
                 if(i==j) {
                     CNumber diag = src.entries[lIndex3].sub(sum);
                     if(diag.re <= 0 || diag.mag() <= posDefTolerance) {
-                        throw new LinearAlgebraException("Matrix is not symmetric positive-definite.");
+                        throw new LinearAlgebraException("MatrixOld is not symmetric positive-definite.");
                     }
 
                     L.entries[lIndex3] = CNumber.sqrt(diag);

@@ -1,9 +1,9 @@
 package org.flag4j.sparse_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ public class CooMatrixMultTransposeTests {
         CooMatrix b;
 
         double[][] expEntries;
-        Matrix exp;
+        MatrixOld exp;
 
         // ---------------------  Sub-case 1 ---------------------
         aShape = new Shape(3, 5);
@@ -47,7 +47,7 @@ public class CooMatrixMultTransposeTests {
                 {0.0, 0.0, 0.6689528352, 0.0, 0.0, 0.0},
                 {0.0, 0.0, 0.0, 0.003516201, 0.0, 0.0},
                 {0.0, 0.0, 0.678145416, 0.0, 0.0, 0.0}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertTrue(exp.allClose(a.multTranspose(b)));
 
@@ -77,7 +77,7 @@ public class CooMatrixMultTransposeTests {
                 {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
                 {0.0, 0.0, 0.0, 0.7123432880999999, 0.6131799372, 0.0, 0.6841857934, 0.0, 0.2676716479, 0.0, 0.0}
         };
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertTrue(exp.allClose(a.multTranspose(b)));
 
@@ -100,7 +100,7 @@ public class CooMatrixMultTransposeTests {
                 {0.0},
                 {0.0},
                 {0.0}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertTrue(exp.allClose(a.multTranspose(b)));
 
@@ -123,7 +123,7 @@ public class CooMatrixMultTransposeTests {
                 {0.0, 0.0},
                 {0.16903781239999996, 0.0},
                 {0.07011599919999999, 0.0}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertTrue(exp.allClose(a.multTranspose(b)));
 
@@ -178,7 +178,7 @@ public class CooMatrixMultTransposeTests {
         CooCMatrix b;
 
         CNumber[][] expEntries;
-        CMatrix exp;
+        CMatrixOld exp;
 
         // ---------------------  Sub-case 1 ---------------------
         aShape = new Shape(3, 5);
@@ -197,7 +197,7 @@ public class CooMatrixMultTransposeTests {
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.19074048270000002+0.0053923701i"), new CNumber("0.17320432249999998+0.0400781073i"), new CNumber("0.0"), new CNumber("0.1127728635+0.0183245975i"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.050617538+0.0829847433i"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertTrue(exp.allClose(a.multTranspose(b)));
 
@@ -227,7 +227,7 @@ public class CooMatrixMultTransposeTests {
                 {new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.3317199807, 0.27938563020000007), new CNumber(0.27120801540000006, 0.6676571652000001), new CNumber(0.33994794, 0.3071411076), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.19622288070000002, 0.0316977705), new CNumber(0.2714598324, 0.19435369980000003), new CNumber(0.0, 0.0)},
                 {new CNumber(0.0349228704, 0.15902504639999998), new CNumber(0.056889975999999995, 0.2563208384), new CNumber(0.20595980539999997, 0.23971465960000002), new CNumber(1.8643236709000002, 1.3795560758), new CNumber(0.7205606504, 0.5904947412), new CNumber(0.0, 0.0), new CNumber(0.5866294021, 0.2605288112), new CNumber(0.047957131199999996, 0.1263039888), new CNumber(0.27769450110000005, 1.2154639066000001), new CNumber(0.36400412039999996, 0.2606114758), new CNumber(0.9910628585, 0.7385004401999999)}
         };
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertTrue(exp.allClose(a.multTranspose(b)));
 
@@ -250,7 +250,7 @@ public class CooMatrixMultTransposeTests {
                 {new CNumber("0.0")},
                 {new CNumber("0.0")},
                 {new CNumber("0.0092037387+0.006751843799999999i")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertTrue(exp.allClose(a.multTranspose(b)));
 
@@ -273,7 +273,7 @@ public class CooMatrixMultTransposeTests {
                 {new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.48162686450000003+0.3571962838i"), new CNumber("0.3531504745+0.20146055540000002i")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertTrue(exp.allClose(a.multTranspose(b)));
 
@@ -322,10 +322,10 @@ public class CooMatrixMultTransposeTests {
         CooMatrix a;
 
         double[][] bEntries;
-        Matrix b;
+        MatrixOld b;
 
         double[][] expEntries;
-        Matrix exp;
+        MatrixOld exp;
 
         // ---------------------  Sub-case 1 ---------------------
         aShape = new Shape(3, 5);
@@ -341,13 +341,13 @@ public class CooMatrixMultTransposeTests {
                 {0.38596, 0.21208, 0.29123, 0.25912, 0.20182},
                 {0.45528, 0.28327, 0.16233, 0.29626, 0.40903},
                 {0.39479, 0.90299, 0.08433, 0.04361, 0.23269}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expEntries = new double[][]{
                 {0.14780875229999998, 0.2910453381, 0.1289966733, 0.0621383598, 0.1259362467, 0.0716429241},
                 {0.5472845676, 0.2787959472, 0.0482317755, 0.2482188216, 0.2837963418, 0.0417753273},
                 {0.3660961428, 0.1864955216, 0.0322637765, 0.16604150480000002, 0.1898404454, 0.0279448519}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertTrue(exp.allClose(a.multTranspose(b)));
 
@@ -370,7 +370,7 @@ public class CooMatrixMultTransposeTests {
                 {0.61968, 0.54764, 0.04785, 0.33061, 0.15758, 0.203, 0.74066, 0.94795, 0.89656, 0.72529, 0.73731, 0.0558, 0.57096, 0.03074, 0.06991, 0.94417, 0.26127, 0.82386, 0.14188, 0.0189, 0.50469, 0.99271, 0.93772},
                 {0.15675, 0.60504, 0.75993, 0.99299, 0.57526, 0.62887, 0.1566, 0.64087, 0.49058, 0.18572, 0.10225, 0.47503, 0.53209, 0.00315, 0.4836, 0.55549, 0.73618, 0.76576, 0.90988, 0.35149, 0.09802, 0.24656, 0.32974},
                 {0.2077, 0.2479, 0.53347, 0.61707, 0.0117, 0.15356, 0.90437, 0.04979, 0.50255, 0.40148, 0.85757, 0.17181, 0.30977, 0.82067, 0.40583, 0.42557, 0.11336, 0.53485, 0.71662, 0.82648, 0.6274, 0.39931, 0.9612}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expEntries = new double[][]{
                 {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
@@ -385,7 +385,7 @@ public class CooMatrixMultTransposeTests {
                 {0.1174826524, 0.0525602108, 0.3214324216, 0.28694868360000003, 0.2850487432, 0.005281618, 0.23642901600000002, 0.0012365836, 0.2658150012, 0.03686317, 0.30917113640000005},
                 {0.3538944048, 0.2576279376, 0.301792192, 0.83825964, 0.41526380960000003, 0.35936111200000004, 0.6856692392, 0.3393383608, 0.1328110304, 0.8517204704000001, 0.6708136496}
         };
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertTrue(exp.allClose(a.multTranspose(b), 0.0005, 0.0005));
 
@@ -398,7 +398,7 @@ public class CooMatrixMultTransposeTests {
 
         bEntries = new double[][]{
                 {0.40891, 0.04234, 0.12498}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expEntries = new double[][]{
                 {0.0},
@@ -406,7 +406,7 @@ public class CooMatrixMultTransposeTests {
                 {0.0206801262},
                 {0.039197948600000004},
                 {0.138129798}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertTrue(exp.allClose(a.multTranspose(b)));
 
@@ -420,7 +420,7 @@ public class CooMatrixMultTransposeTests {
         bEntries = new double[][]{
                 {0.47401, 0.94996, 0.31452},
                 {0.29343, 0.7498, 0.29617}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expEntries = new double[][]{
                 {0.073660584, 0.069363014},
@@ -428,7 +428,7 @@ public class CooMatrixMultTransposeTests {
                 {0.3526038495, 0.2826264824},
                 {0.0006542016, 0.0006160336},
                 {0.0, 0.0}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertTrue(exp.allClose(a.multTranspose(b)));
 
@@ -445,10 +445,10 @@ public class CooMatrixMultTransposeTests {
                 {0.74276, 0.23795},
                 {0.89888, 0.20426},
                 {0.25745, 0.85686}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         CooMatrix final0a = a;
-        Matrix final0b = b;
+        MatrixOld final0b = b;
         assertThrows(Exception.class, ()->final0a.multTranspose(final0b));
 
         // ---------------------  Sub-case 6 ---------------------
@@ -464,10 +464,10 @@ public class CooMatrixMultTransposeTests {
                 {0.42614, 0.15461, 0.53321, 0.09456, 0.27216},
                 {0.0112, 0.48804, 0.805, 0.81917, 0.20515},
                 {0.61793, 0.68949, 0.87053, 0.57533, 0.1838}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         CooMatrix final1a = a;
-        Matrix final1b = b;
+        MatrixOld final1b = b;
         assertThrows(Exception.class, ()->final1a.multTranspose(final1b));
     }
 
@@ -481,10 +481,10 @@ public class CooMatrixMultTransposeTests {
         CooMatrix a;
 
         CNumber[][] bEntries;
-        CMatrix b;
+        CMatrixOld b;
 
         CNumber[][] expEntries;
-        CMatrix exp;
+        CMatrixOld exp;
 
         // ---------------------  Sub-case 1 ---------------------
         aShape = new Shape(3, 5);
@@ -500,13 +500,13 @@ public class CooMatrixMultTransposeTests {
                 {new CNumber("0.65213+0.93319i"), new CNumber("0.02188+0.83931i"), new CNumber("0.11212+0.40814i"), new CNumber("0.95391+0.53587i"), new CNumber("0.28471+0.77827i")},
                 {new CNumber("0.45394+0.32281i"), new CNumber("0.06687+0.73436i"), new CNumber("0.71263+0.36555i"), new CNumber("0.01161+0.68834i"), new CNumber("0.09807+0.51722i")},
                 {new CNumber("0.59029+0.39906i"), new CNumber("0.97974+0.96233i"), new CNumber("0.9539+0.05767i"), new CNumber("0.5223+0.99463i"), new CNumber("0.89229+0.57119i")}};
-        b = new CMatrix(bEntries);
+        b = new CMatrixOld(bEntries);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.012676478400000002+0.0644345832i"), new CNumber("0.04534542600000001+0.038317993200000004i"), new CNumber("0.037770151200000004+0.0003780528i"), new CNumber("0.0018300432000000002+0.07019988840000001i"), new CNumber("0.0055930068000000005+0.06142187040000001i"), new CNumber("0.08194545360000001+0.08048928120000001i")},
                 {new CNumber("0.0111191165+0.0496238795i"), new CNumber("0.1018803483+0.0167767461i"), new CNumber("0.1365977565+0.0450960372i"), new CNumber("0.0164857882+0.058850080400000004i"), new CNumber("0.0970810693+0.0518997255i"), new CNumber("0.133373684+0.0103909837i")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertTrue(exp.allClose(a.multTranspose(b)));
 
@@ -529,7 +529,7 @@ public class CooMatrixMultTransposeTests {
                 {new CNumber("0.67957+0.41607i"), new CNumber("0.18441+0.66207i"), new CNumber("0.77191+0.61384i"), new CNumber("0.7713+0.50966i"), new CNumber("0.9872+0.34025i"), new CNumber("0.82971+0.65796i"), new CNumber("0.58072+0.53683i"), new CNumber("0.20477+0.92194i"), new CNumber("0.43132+0.23912i"), new CNumber("0.32725+0.19622i"), new CNumber("0.58579+0.98094i"), new CNumber("0.50279+0.36024i"), new CNumber("0.84862+0.02588i"), new CNumber("0.20452+0.05058i"), new CNumber("0.89798+0.72472i"), new CNumber("0.18137+0.4923i"), new CNumber("0.39684+0.72471i"), new CNumber("0.10195+0.27094i"), new CNumber("0.84264+0.68947i"), new CNumber("0.16633+0.03784i"), new CNumber("0.61774+0.23388i"), new CNumber("0.42807+0.38556i"), new CNumber("0.01973+0.41169i")},
                 {new CNumber("0.63038+0.74463i"), new CNumber("0.0808+0.8612i"), new CNumber("0.28521+0.20161i"), new CNumber("0.90848+0.71298i"), new CNumber("0.55713+0.48676i"), new CNumber("0.62231+0.79793i"), new CNumber("0.464+0.50198i"), new CNumber("0.99599+0.56513i"), new CNumber("0.61073+0.6863i"), new CNumber("0.16889+0.44194i"), new CNumber("0.80451+0.10574i"), new CNumber("0.81853+0.18333i"), new CNumber("0.79577+0.12547i"), new CNumber("0.62368+0.68077i"), new CNumber("0.82532+0.74359i"), new CNumber("0.10317+0.83118i"), new CNumber("0.89943+0.8364i"), new CNumber("0.50001+0.21765i"), new CNumber("0.71773+0.09085i"), new CNumber("0.59957+0.6978i"), new CNumber("0.68991+0.47537i"), new CNumber("0.12994+0.50262i"), new CNumber("0.4223+0.58027i")},
                 {new CNumber("0.49892+0.67518i"), new CNumber("0.49323+0.69i"), new CNumber("0.30396+0.88094i"), new CNumber("0.32717+0.76451i"), new CNumber("0.47272+0.58658i"), new CNumber("0.55634+0.0977i"), new CNumber("0.2044+0.99864i"), new CNumber("0.72865+0.05836i"), new CNumber("0.08311+0.82832i"), new CNumber("0.46214+0.58867i"), new CNumber("0.61373+0.98256i"), new CNumber("0.73817+0.23005i"), new CNumber("0.67456+0.54263i"), new CNumber("0.57678+0.12987i"), new CNumber("0.40524+0.20611i"), new CNumber("0.89585+0.36057i"), new CNumber("0.5116+0.69588i"), new CNumber("0.32654+0.18802i"), new CNumber("0.3453+0.83288i"), new CNumber("0.8868+0.08291i"), new CNumber("0.38143+0.0537i"), new CNumber("0.88167+0.74036i"), new CNumber("0.87657+0.64616i")}};
-        b = new CMatrix(bEntries);
+        b = new CMatrixOld(bEntries);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.1651985744+0.2574825083i"), new CNumber("0.1937501934+0.0858084163i"), new CNumber("0.15668254+0.21012638179999998i"), new CNumber("0.1557273491+0.14170139880000002i"), new CNumber("0.2013006261+0.0749525546i"), new CNumber("0.025795359700000003+0.0158998943i"), new CNumber("0.0543912246+0.0243899017i"), new CNumber("0.2482637449+0.1982320428i"), new CNumber("0.0532954879+0.2399533238i"), new CNumber("0.2592263173+0.1470863851i"), new CNumber("0.1896457355+0.015189357200000001i")},
@@ -543,7 +543,7 @@ public class CooMatrixMultTransposeTests {
                 {new CNumber("0.342094523+0.5679985527i"), new CNumber("0.3001019428+0.5753393303000001i"), new CNumber("0.1376240233+0.4412732301i"), new CNumber("0.6308110959+0.3023043986i"), new CNumber("0.6268204039999999+0.224719548i"), new CNumber("0.3259595543+0.21709579659999997i"), new CNumber("0.4552339839+0.2390891698i"), new CNumber("0.215841312+0.298389844i"), new CNumber("0.44761062189999995+0.18186170420000003i"), new CNumber("0.4662145364+0.3770295175i"), new CNumber("0.3209510801+0.1349159749i")},
                 {new CNumber("0.15595753110000002+0.0354188919i"), new CNumber("0.0874513038+0.0708170169i"), new CNumber("0.1760693298+0.1715176029i"), new CNumber("0.0604864281+0.0756689199i"), new CNumber("0.1290927141+0.09166320870000001i"), new CNumber("0.028603572900000002+0.15409228590000001i"), new CNumber("0.18210117030000003+0.0626669526i"), new CNumber("0.05600266560000001+0.1520627934i"), new CNumber("0.14572888890000002+0.11588685360000002i"), new CNumber("0.053844795900000006+0.0380619519i"), new CNumber("0.05738460840000001+0.1663126626i")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertTrue(exp.allClose(a.multTranspose(b)));
 
@@ -556,7 +556,7 @@ public class CooMatrixMultTransposeTests {
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.89404+0.48317i"), new CNumber("0.65646+0.8944i"), new CNumber("0.18768+0.19501i")}};
-        b = new CMatrix(bEntries);
+        b = new CMatrixOld(bEntries);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.22559311319999997+0.1219182861i")},
@@ -564,7 +564,7 @@ public class CooMatrixMultTransposeTests {
                 {new CNumber("0.0")},
                 {new CNumber("0.4147186050000001+0.5650372i")},
                 {new CNumber("0.274104873+0.37345671999999996i")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertTrue(exp.allClose(a.multTranspose(b)));
 
@@ -578,7 +578,7 @@ public class CooMatrixMultTransposeTests {
         bEntries = new CNumber[][]{
                 {new CNumber("0.75998+0.44056i"), new CNumber("0.53545+0.80806i"), new CNumber("0.22607+0.64841i")},
                 {new CNumber("0.37701+0.88098i"), new CNumber("0.28264+0.49592i"), new CNumber("0.33644+0.421i")}};
-        b = new CMatrix(bEntries);
+        b = new CMatrixOld(bEntries);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.0"), new CNumber("0.0")},
@@ -586,7 +586,7 @@ public class CooMatrixMultTransposeTests {
                 {new CNumber("0.2323158376+0.41546132709999994i"), new CNumber("0.16846706439999998+0.25984423160000003i")},
                 {new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.3145087852+0.5825391415i"), new CNumber("0.24226549000000003+0.3656129228i")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertTrue(exp.allClose(a.multTranspose(b)));
 
@@ -603,10 +603,10 @@ public class CooMatrixMultTransposeTests {
                 {new CNumber("0.34628+0.11562i"), new CNumber("0.73608+0.61967i")},
                 {new CNumber("0.70272+0.91647i"), new CNumber("0.51192+0.58706i")},
                 {new CNumber("0.27563+0.15206i"), new CNumber("0.87002+0.98647i")}};
-        b = new CMatrix(bEntries);
+        b = new CMatrixOld(bEntries);
 
         CooMatrix final0a = a;
-        CMatrix final0b = b;
+        CMatrixOld final0b = b;
         assertThrows(Exception.class, ()->final0a.multTranspose(final0b));
 
         // ---------------------  Sub-case 6 ---------------------
@@ -622,10 +622,10 @@ public class CooMatrixMultTransposeTests {
                 {new CNumber("0.00654+0.57839i"), new CNumber("0.36914+0.6587i"), new CNumber("0.18079+0.49582i"), new CNumber("0.0501+0.26054i"), new CNumber("0.20055+0.18699i")},
                 {new CNumber("0.21655+0.57022i"), new CNumber("0.38342+0.44403i"), new CNumber("0.94312+0.93926i"), new CNumber("0.9012+0.53264i"), new CNumber("0.13753+0.49135i")},
                 {new CNumber("0.67475+0.10138i"), new CNumber("0.7811+0.90816i"), new CNumber("0.14068+0.5877i"), new CNumber("0.90754+0.07487i"), new CNumber("0.43711+0.44065i")}};
-        b = new CMatrix(bEntries);
+        b = new CMatrixOld(bEntries);
 
         CooMatrix final1a = a;
-        CMatrix final1b = b;
+        CMatrixOld final1b = b;
         assertThrows(Exception.class, ()->final1a.multTranspose(final1b));
     }
 }

@@ -32,7 +32,7 @@ import java.util.concurrent.*;
 import java.util.logging.Logger;
 
 /**
- * This class contains the base thread pool for all concurrent operations and several methods for managing the
+ * This class contains the base thread pool for all concurrent operations_old and several methods for managing the
  * pool.
  */
 public final class ThreadManager {
@@ -52,7 +52,7 @@ public final class ThreadManager {
 
     /**
      * The parallelism level for the thread manager. That is, the number of threads to be used in the thread pool
-     * when executing concurrent operations.
+     * when executing concurrent operations_old.
      */
     private static int parallelismLevel = Configurations.DEFAULT_NUM_THREADS;
 
@@ -62,7 +62,7 @@ public final class ThreadManager {
     private static final Logger threadLogger = Logger.getLogger(ThreadManager.class.getName());
 
     /**
-     * Thread pool for managing threads executing concurrent operations.
+     * Thread pool for managing threads executing concurrent operations_old.
      */
     private static ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(parallelismLevel, daemonFactory);
 

@@ -54,7 +54,7 @@ public final class ComplexDenseTranspose {
      */
     public static CNumber[] standard(final CNumber[] src, final Shape shape, final int axis1, final int axis2) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
@@ -83,7 +83,7 @@ public final class ComplexDenseTranspose {
      */
     public static CNumber[] standardConcurrent(final CNumber[] src, final Shape shape, final int axis1, final int axis2) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("Tensor transpose not defined for rank "
+            throw new IllegalArgumentException("TensorOld transpose not defined for rank "
                     + shape.getRank() + " tensor.");
         }
 
@@ -116,7 +116,7 @@ public final class ComplexDenseTranspose {
      */
     public static CNumber[] standard(final CNumber[] src, final Shape shape, final int[] axes) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
@@ -147,7 +147,7 @@ public final class ComplexDenseTranspose {
      */
     public static CNumber[] standardConcurrent(final CNumber[] src, final Shape shape, final int[] axes) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
@@ -310,7 +310,7 @@ public final class ComplexDenseTranspose {
      */
     public static CNumber[] standardHerm(final CNumber[] src, final Shape shape, final int axis1, final int axis2) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
@@ -339,7 +339,7 @@ public final class ComplexDenseTranspose {
      */
     public static CNumber[] standardConcurrentHerm(final CNumber[] src, final Shape shape, final int axis1, final int axis2) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
@@ -372,7 +372,7 @@ public final class ComplexDenseTranspose {
      */
     public static CNumber[] standardConcurrentHerm(final CNumber[] src, final Shape shape, final int[] axes) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 

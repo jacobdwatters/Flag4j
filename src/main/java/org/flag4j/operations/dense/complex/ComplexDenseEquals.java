@@ -24,7 +24,7 @@
 
 package org.flag4j.operations.dense.complex;
 
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ErrorMessages;
@@ -49,7 +49,7 @@ public class ComplexDenseEquals {
      * @param B Second matrix.
      * @return True if the two matrices are element-wise equivalent.
      */
-    public static boolean matrixEquals(CMatrix A, CMatrix B) {
+    public static boolean matrixEquals(CMatrixOld A, CMatrixOld B) {
         return tensorEquals(A.entries, A.shape, B.entries, B.shape);
     }
 

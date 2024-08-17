@@ -24,46 +24,46 @@
 
 package org.flag4j.core;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 
 /**
- * This interface specifies operations which should be implemented by any vector.
- * @param <T> Vector type.
- * @param <U> Dense Vector type.
- * @param <V> Sparse Vector type.
- * @param <W> Complex Vector type.
- * @param <X> Vector entry type.
- * @param <TT> Matrix type equivalent.
- * @param <UU> Dense Matrix type equivalent.
- * @param <WW> Complex Matrix type equivalent.
+ * This interface specifies operations_old which should be implemented by any vector.
+ * @param <T> VectorOld type.
+ * @param <U> Dense VectorOld type.
+ * @param <V> Sparse VectorOld type.
+ * @param <W> Complex VectorOld type.
+ * @param <X> VectorOld entry type.
+ * @param <TT> MatrixOld type equivalent.
+ * @param <UU> Dense MatrixOld type equivalent.
+ * @param <WW> Complex MatrixOld type equivalent.
  */
 public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW> {
 
 
     /**
      * Joints specified vector with this vector.
-     * @param b Vector to join with this vector.
+     * @param b VectorOld to join with this vector.
      * @return A vector resulting from joining the specified vector with this vector.
      */
-    U join(Vector b);
+    U join(VectorOld b);
 
 
     /**
      * Joints specified vector with this vector.
-     * @param b Vector to join with this vector.
+     * @param b VectorOld to join with this vector.
      * @return A vector resulting from joining the specified vector with this vector.
      */
-    CVector join(CVector b);
+    CVectorOld join(CVectorOld b);
 
 
     /**
      * Joints specified vector with this vector.
-     * @param b Vector to join with this vector.
+     * @param b VectorOld to join with this vector.
      * @return A vector resulting from joining the specified vector with this vector.
      */
     T join(CooVector b);
@@ -71,7 +71,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
 
     /**
      * Joints specified vector with this vector.
-     * @param b Vector to join with this vector.
+     * @param b VectorOld to join with this vector.
      * @return A vector resulting from joining the specified vector with this vector.
      */
     W join(CooCVector b);
@@ -81,19 +81,19 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
     /**
      * Stacks two vectors along columns as if they were row vectors.
      *
-     * @param b Vector to stack to the bottom of this vector.
+     * @param b VectorOld to stack to the bottom of this vector.
      * @return The result of stacking this vector and vector {@code b}.
      * @throws IllegalArgumentException <br>
      * - If the number of entries in this vector is different from the number of entries in
      * the vector {@code b}.
      */
-    TT stack(Vector b);
+    TT stack(VectorOld b);
 
 
     /**
      * Stacks two vectors along columns as if they were row vectors.
      *
-     * @param b Vector to stack to the bottom of this vector.
+     * @param b VectorOld to stack to the bottom of this vector.
      * @return The result of stacking this vector and vector {@code b}.
      * @throws IllegalArgumentException <br>
      * - If the number of entries in this vector is different from the number of entries in
@@ -105,19 +105,19 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
     /**
      * Stacks two vectors along columns as if they were row vectors.
      *
-     * @param b Vector to stack to the bottom of this vector.
+     * @param b VectorOld to stack to the bottom of this vector.
      * @return The result of stacking this vector and vector {@code b}.
      * @throws IllegalArgumentException <br>
      * - If the number of entries in this vector is different from the number of entries in
      * the vector {@code b}.
      */
-    WW stack(CVector b);
+    WW stack(CVectorOld b);
 
 
     /**
      * Stacks two vectors along columns as if they were row vectors.
      *
-     * @param b Vector to stack to the bottom of this vector.
+     * @param b VectorOld to stack to the bottom of this vector.
      * @return The result of stacking this vector and vector {@code b}.
      * @throws IllegalArgumentException <br>
      * - If the number of entries in this vector is different from the number of entries in
@@ -141,7 +141,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * as if they were column vectors resulting in a {@code n-by-2} matrix.
      * </p>
      *
-     * @param b Vector to stack with this vector.
+     * @param b VectorOld to stack with this vector.
      * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
      *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
      * @return The result of stacking this vector and the vector {@code b}.
@@ -149,7 +149,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * entries in the vector {@code b}.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    TT stack(Vector b, int axis);
+    TT stack(VectorOld b, int axis);
 
 
     /**
@@ -167,7 +167,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * as if they were column vectors resulting in a {@code n-by-2} matrix.
      * </p>
      *
-     * @param b Vector to stack with this vector.
+     * @param b VectorOld to stack with this vector.
      * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
      *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
      * @return The result of stacking this vector and the vector {@code b}.
@@ -193,7 +193,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * as if they were column vectors resulting in a {@code n-by-2} matrix.
      * </p>
      *
-     * @param b Vector to stack with this vector.
+     * @param b VectorOld to stack with this vector.
      * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
      *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
      * @return The result of stacking this vector and the vector {@code b}.
@@ -201,7 +201,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * entries in the vector {@code b}.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    WW stack(CVector b, int axis);
+    WW stack(CVectorOld b, int axis);
 
 
     /**
@@ -219,7 +219,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * as if they were column vectors resulting in a {@code n-by-2} matrix.
      * </p>
      *
-     * @param b Vector to stack with this vector.
+     * @param b VectorOld to stack with this vector.
      * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
      *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
      * @return The result of stacking this vector and the vector {@code b}.
@@ -232,16 +232,16 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
 
     /**
      * Computes the element-wise addition between this vector and the specified vector.
-     * @param B Vector to add to this vector.
+     * @param B VectorOld to add to this vector.
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    U add(Vector B);
+    U add(VectorOld B);
 
 
     /**
      * Computes the element-wise addition between this vector and the specified vector.
-     * @param B Vector to add to this vector.
+     * @param B VectorOld to add to this vector.
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
@@ -250,16 +250,16 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
 
     /**
      * Computes the element-wise addition between this vector and the specified vector.
-     * @param B Vector to add to this vector.
+     * @param B VectorOld to add to this vector.
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    CVector add(CVector B);
+    CVectorOld add(CVectorOld B);
 
 
     /**
      * Computes the element-wise addition between this vector and the specified vector.
-     * @param B Vector to add to this vector.
+     * @param B VectorOld to add to this vector.
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
@@ -268,16 +268,16 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector.
-     * @param B Vector to subtract from this vector.
+     * @param B VectorOld to subtract from this vector.
      * @return The result of the element-wise vector subtraction.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    U sub(Vector B);
+    U sub(VectorOld B);
 
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector.
-     * @param B Vector to subtract from this vector.
+     * @param B VectorOld to subtract from this vector.
      * @return The result of the element-wise vector subtraction.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
@@ -286,16 +286,16 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector.
-     * @param B Vector to subtract from this vector.
+     * @param B VectorOld to subtract from this vector.
      * @return The result of the element-wise vector subtraction.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    CVector sub(CVector B);
+    CVectorOld sub(CVectorOld B);
 
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector.
-     * @param B Vector to subtract from this vector.
+     * @param B VectorOld to subtract from this vector.
      * @return The result of the element-wise vector subtraction.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
@@ -304,16 +304,16 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
 
     /**
      * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
-     * @param B Vector to element-wise multiply to this vector.
+     * @param B VectorOld to element-wise multiply to this vector.
      * @return The vector resulting from the element-wise multiplication.
      * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
      */
-    T elemMult(Vector B);
+    T elemMult(VectorOld B);
 
 
     /**
      * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
-     * @param B Vector to element-wise multiply to this vector.
+     * @param B VectorOld to element-wise multiply to this vector.
      * @return The vector resulting from the element-wise multiplication.
      * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
      */
@@ -322,16 +322,16 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
 
     /**
      * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
-     * @param B Vector to element-wise multiply to this vector.
+     * @param B VectorOld to element-wise multiply to this vector.
      * @return The vector resulting from the element-wise multiplication.
      * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
      */
-    W elemMult(CVector B);
+    W elemMult(CVectorOld B);
 
 
     /**
      * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
-     * @param B Vector to element-wise multiply to this vector.
+     * @param B VectorOld to element-wise multiply to this vector.
      * @return The vector resulting from the element-wise multiplication.
      * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
      */
@@ -340,20 +340,20 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
 
     /**
      * Computes the element-wise division (Hadamard multiplication) between this vector and a specified vector.
-     * @param B Vector to element-wise divide this vector by.
+     * @param B VectorOld to element-wise divide this vector by.
      * @return The vector resulting from the element-wise division.
      * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
      */
-    T elemDiv(Vector B);
+    T elemDiv(VectorOld B);
 
 
     /**
      * Computes the element-wise division (Hadamard multiplication) between this vector and a specified vector.
-     * @param B Vector to element-wise divide this vector by.
+     * @param B VectorOld to element-wise divide this vector by.
      * @return The vector resulting from the element-wise division.
      * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
      */
-    W elemDiv(CVector B);
+    W elemDiv(CVectorOld B);
 
 
     /**
@@ -362,7 +362,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
-    X inner(Vector b);
+    X inner(VectorOld b);
 
 
     /**
@@ -389,7 +389,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
-    CNumber inner(CVector b);
+    CNumber inner(CVectorOld b);
 
 
     /**
@@ -407,7 +407,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the vector outer product between this vector and b.
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
-    UU outer(Vector b);
+    UU outer(VectorOld b);
 
 
     /**
@@ -425,7 +425,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the vector outer product between this vector and b.
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
-    CMatrix outer(CVector b);
+    CMatrixOld outer(CVectorOld b);
 
 
     /**
@@ -434,27 +434,27 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the vector outer product between this vector and b.
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
-    CMatrix outer(CooCVector b);
+    CMatrixOld outer(CooCVector b);
 
 
-    // TODO: ADD isParallel(CVector b), isParallel(CooVector b), and isParallel(sparseCVector)
+    // TODO: ADD isParallel(CVectorOld b), isParallel(CooVector b), and isParallel(sparseCVector)
     /**
      * Checks if a vector is parallel to this vector.
      *
-     * @param b Vector to compare to this vector.
+     * @param b VectorOld to compare to this vector.
      * @return True if the vector {@code b} is parallel to this vector and the same size. Otherwise, returns false.
      */
-    boolean isParallel(Vector b);
+    boolean isParallel(VectorOld b);
 
 
-    // TODO: Add isPerp(CVector b), isPerp(CooVector b), and isPerp(sparseCVector)
+    // TODO: Add isPerp(CVectorOld b), isPerp(CooVector b), and isPerp(sparseCVector)
     /**
      * Checks if a vector is perpendicular to this vector.
      *
-     * @param b Vector to compare to this vector.
+     * @param b VectorOld to compare to this vector.
      * @return True if the vector {@code b} is perpendicular to this vector and the same size. Otherwise, returns false.
      */
-    boolean isPerp(Vector b);
+    boolean isPerp(VectorOld b);
 
 
     // TODO: Add toTensor methods.

@@ -144,7 +144,7 @@ public class RealSparseMatrixMultiplication {
         return dest;
     }
 
-    // ----------------------------------- Matrix-Vector Multiplication -----------------------------------
+    // ----------------------------------- MatrixOld-VectorOld Multiplication -----------------------------------
 
 
     /**

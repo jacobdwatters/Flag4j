@@ -1,9 +1,9 @@
 package org.flag4j.tensor;
 
-import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.dense.Tensor;
-import org.flag4j.arrays.sparse.CooCTensor;
-import org.flag4j.arrays.sparse.CooTensor;
+import org.flag4j.arrays_old.dense.CTensorOld;
+import org.flag4j.arrays_old.dense.TensorOld;
+import org.flag4j.arrays_old.sparse.CooCTensor;
+import org.flag4j.arrays_old.sparse.CooTensor;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TensorAddTests {
     static double[] aEntries;
-    static Tensor A;
+    static TensorOld A;
     static Shape aShape, bShape, expShape;
 
     int[][] sparseIndices;
@@ -27,13 +27,13 @@ class TensorAddTests {
                 0.001345, 2.677, 8.14, -0.000194, 1, 234
         };
         aShape = new Shape(2, 3, 2);
-        A = new Tensor(aShape, aEntries);
+        A = new TensorOld(aShape, aEntries);
     }
 
     @Test
     void realDenseTestCase() {
         double[] bEntries, expEntries;
-        Tensor B, exp;
+        TensorOld B, exp;
 
         // ----------------------- Sub-case 1 -----------------------
         bEntries = new double[]{
@@ -41,7 +41,7 @@ class TensorAddTests {
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0
         };
         bShape = new Shape(2, 3, 2);
-        B = new Tensor(bShape, bEntries);
+        B = new TensorOld(bShape, bEntries);
         expEntries = new double[]{
             aEntries[0]+bEntries[0], aEntries[1]+bEntries[1], aEntries[2]+bEntries[2],
             aEntries[3]+bEntries[3], aEntries[4]+bEntries[4], aEntries[5]+bEntries[5],
@@ -49,7 +49,7 @@ class TensorAddTests {
             aEntries[9]+bEntries[9], aEntries[10]+bEntries[10], aEntries[11]+bEntries[11]
         };
         expShape = new Shape(2, 3, 2);
-        exp = new Tensor(expShape, expEntries);
+        exp = new TensorOld(expShape, expEntries);
 
         assertEquals(exp, A.add(B));
 
@@ -59,9 +59,9 @@ class TensorAddTests {
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0
         };
         bShape = new Shape(2, 3, 2, 1);
-        B = new Tensor(bShape, bEntries);
+        B = new TensorOld(bShape, bEntries);
 
-        Tensor finalB = B;
+        TensorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.add(finalB));
 
         // ----------------------- Sub-case 3 -----------------------
@@ -70,9 +70,9 @@ class TensorAddTests {
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0, 1.4, 5
         };
         bShape = new Shape(7, 2);
-        B = new Tensor(bShape, bEntries);
+        B = new TensorOld(bShape, bEntries);
 
-        Tensor finalB1 = B;
+        TensorOld finalB1 = B;
         assertThrows(LinearAlgebraException.class, ()->A.add(finalB1));
     }
 
@@ -81,7 +81,7 @@ class TensorAddTests {
     void realSparseTestCase() {
         double[] bEntries, expEntries;
         CooTensor B;
-        Tensor exp;
+        TensorOld exp;
 
         // ------------------------- Sub-case 1 -------------------------
         bEntries = new double[]{
@@ -100,7 +100,7 @@ class TensorAddTests {
         expEntries[expShape.entriesIndex(sparseIndices[0])] += bEntries[0];
         expEntries[expShape.entriesIndex(sparseIndices[1])] += bEntries[1];
         expEntries[expShape.entriesIndex(sparseIndices[2])] += bEntries[2];
-        exp = new Tensor(expShape, expEntries);
+        exp = new TensorOld(expShape, expEntries);
 
         assertEquals(exp, A.add(B));
 
@@ -122,7 +122,7 @@ class TensorAddTests {
     @Test
     void complexDenseTestCase() {
         CNumber[] bEntries, expEntries;
-        CTensor B, exp;
+        CTensorOld B, exp;
 
         // ----------------------- Sub-case 1 -----------------------
         bEntries = new CNumber[]{
@@ -132,7 +132,7 @@ class TensorAddTests {
                 new CNumber(14.515), new CNumber(100.135), new CNumber(0, 1)
         };
         bShape = new Shape(2, 3, 2);
-        B = new CTensor(bShape, bEntries);
+        B = new CTensorOld(bShape, bEntries);
         expEntries = new CNumber[]{
                 bEntries[0].add(aEntries[0]), bEntries[1].add(aEntries[1]), bEntries[2].add(aEntries[2]),
                 bEntries[3].add(aEntries[3]), bEntries[4].add(aEntries[4]), bEntries[5].add(aEntries[5]),
@@ -140,7 +140,7 @@ class TensorAddTests {
                 bEntries[9].add(aEntries[9]), bEntries[10].add(aEntries[10]), bEntries[11].add(aEntries[11])
         };
         expShape = new Shape(2, 3, 2);
-        exp = new CTensor(expShape, expEntries);
+        exp = new CTensorOld(expShape, expEntries);
 
         assertEquals(exp, A.add(B));
 
@@ -152,9 +152,9 @@ class TensorAddTests {
                 new CNumber(14.515), new CNumber(100.135), new CNumber(0, 1)
         };
         bShape = new Shape(12);
-        B = new CTensor(bShape, bEntries);
+        B = new CTensorOld(bShape, bEntries);
 
-        CTensor finalB = B;
+        CTensorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.add(finalB));
     }
 
@@ -163,7 +163,7 @@ class TensorAddTests {
     void complexSparseTestCase() {
         CNumber[] bEntries, expEntries;
         CooCTensor B;
-        CTensor exp;
+        CTensorOld exp;
 
         // ------------------------- Sub-case 1 -------------------------
         bEntries = new CNumber[]{
@@ -181,7 +181,7 @@ class TensorAddTests {
         expShape = new Shape(true,2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] = expEntries[expShape.entriesIndex(sparseIndices[0])].add(bEntries[0]);
         expEntries[expShape.entriesIndex(sparseIndices[1])] = expEntries[expShape.entriesIndex(sparseIndices[1])].add(bEntries[1]);
-        exp = new CTensor(expShape, expEntries);
+        exp = new CTensorOld(expShape, expEntries);
 
         assertEquals(exp, A.add(B));
 
@@ -203,7 +203,7 @@ class TensorAddTests {
     @Test
     void addRealScalarTestCase() {
         double[] expEntries;
-        Tensor exp;
+        TensorOld exp;
         double b;
 
         // ----------------------- Sub-case 1 -----------------------
@@ -215,7 +215,7 @@ class TensorAddTests {
                 aEntries[9]+b, aEntries[10]+b, aEntries[11]+b
         };
         expShape = new Shape(2, 3, 2);
-        exp = new Tensor(expShape, expEntries);
+        exp = new TensorOld(expShape, expEntries);
 
         assertEquals(exp, A.add(b));
     }
@@ -224,7 +224,7 @@ class TensorAddTests {
     @Test
     void addComplexScalar() {
         CNumber[] expEntries;
-        CTensor exp;
+        CTensorOld exp;
         CNumber b;
 
         // ----------------------- Sub-case 1 -----------------------
@@ -236,7 +236,7 @@ class TensorAddTests {
                 b.add(aEntries[9]), b.add(aEntries[10]), b.add(aEntries[11])
         };
         expShape = new Shape(2, 3, 2);
-        exp = new CTensor(expShape, expEntries);
+        exp = new CTensorOld(expShape, expEntries);
 
         assertEquals(exp, A.add(b));
     }
@@ -245,7 +245,7 @@ class TensorAddTests {
     @Test
     void realDenseAddEqTestCase() {
         double[] bEntries, expEntries;
-        Tensor B, exp;
+        TensorOld B, exp;
 
         // ----------------------- Sub-case 1 -----------------------
         bEntries = new double[]{
@@ -253,7 +253,7 @@ class TensorAddTests {
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0
         };
         bShape = new Shape(2, 3, 2);
-        B = new Tensor(bShape, bEntries);
+        B = new TensorOld(bShape, bEntries);
         expEntries = new double[]{
                 aEntries[0]+bEntries[0], aEntries[1]+bEntries[1], aEntries[2]+bEntries[2],
                 aEntries[3]+bEntries[3], aEntries[4]+bEntries[4], aEntries[5]+bEntries[5],
@@ -261,7 +261,7 @@ class TensorAddTests {
                 aEntries[9]+bEntries[9], aEntries[10]+bEntries[10], aEntries[11]+bEntries[11]
         };
         expShape = new Shape(2, 3, 2);
-        exp = new Tensor(expShape, expEntries);
+        exp = new TensorOld(expShape, expEntries);
 
         A.addEq(B);
         assertEquals(exp, A);
@@ -272,9 +272,9 @@ class TensorAddTests {
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0
         };
         bShape = new Shape(2, 3, 2, 1);
-        B = new Tensor(bShape, bEntries);
+        B = new TensorOld(bShape, bEntries);
 
-        Tensor finalB = B;
+        TensorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.addEq(finalB));
 
         // ----------------------- Sub-case 3 -----------------------
@@ -283,9 +283,9 @@ class TensorAddTests {
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0, 1.4, 5
         };
         bShape = new Shape(7, 2);
-        B = new Tensor(bShape, bEntries);
+        B = new TensorOld(bShape, bEntries);
 
-        Tensor finalB1 = B;
+        TensorOld finalB1 = B;
         assertThrows(LinearAlgebraException.class, ()->A.addEq(finalB1));
     }
 
@@ -294,7 +294,7 @@ class TensorAddTests {
     void realSparseAddEqTestCase() {
         double[] bEntries, expEntries;
         CooTensor B;
-        Tensor exp;
+        TensorOld exp;
 
         // ------------------------- Sub-case 1 -------------------------
         bEntries = new double[]{
@@ -313,7 +313,7 @@ class TensorAddTests {
         expEntries[expShape.entriesIndex(sparseIndices[0])] += bEntries[0];
         expEntries[expShape.entriesIndex(sparseIndices[1])] += bEntries[1];
         expEntries[expShape.entriesIndex(sparseIndices[2])] += bEntries[2];
-        exp = new Tensor(expShape, expEntries);
+        exp = new TensorOld(expShape, expEntries);
 
         A.addEq(B);
         assertEquals(exp, A);
@@ -336,7 +336,7 @@ class TensorAddTests {
     @Test
     void addEqRealScalarTestCase() {
         double[] expEntries;
-        Tensor exp;
+        TensorOld exp;
         double b;
 
         // ----------------------- Sub-case 1 -----------------------
@@ -348,7 +348,7 @@ class TensorAddTests {
                 aEntries[9]+b, aEntries[10]+b, aEntries[11]+b
         };
         expShape = new Shape(2, 3, 2);
-        exp = new Tensor(expShape, expEntries);
+        exp = new TensorOld(expShape, expEntries);
 
         A.addEq(b);
         assertEquals(exp, A);

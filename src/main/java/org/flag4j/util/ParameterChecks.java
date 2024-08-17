@@ -32,7 +32,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 /**
- * This class contains several methods for checking properties of shapes and arrays.
+ * This class contains several methods for checking properties of shapes and arrays_old.
  */
 public final class ParameterChecks {
 
@@ -109,10 +109,10 @@ public final class ParameterChecks {
 
 
     /**
-     * Checks if arrays have the same number of total entries.
+     * Checks if arrays_old have the same number of total entries.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays do not have the same number of total entries.
+     * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
      */
     public static void assertTotalEntriesEq(Object[][] arr1, double[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length) {
@@ -122,10 +122,10 @@ public final class ParameterChecks {
 
 
     /**
-     * Checks if arrays have the same number of total entries.
+     * Checks if arrays_old have the same number of total entries.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays do not have the same number of total entries.
+     * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
      */
     public static void assertTotalEntriesEq(double[][] arr1, double[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length) {
@@ -135,10 +135,10 @@ public final class ParameterChecks {
 
 
     /**
-     * Checks if arrays have the same number of total entries.
+     * Checks if arrays_old have the same number of total entries.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays do not have the same number of total entries.
+     * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
      */
     public static void assertTotalEntriesEq(int[][] arr1, double[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length) {
@@ -148,10 +148,10 @@ public final class ParameterChecks {
 
 
     /**
-     * Checks if arrays have the same number of total entries.
+     * Checks if arrays_old have the same number of total entries.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays do not have the same number of total entries.
+     * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
      */
     public static void assertTotalEntriesEq(Object[][] arr1, CNumber[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length) {
@@ -161,10 +161,10 @@ public final class ParameterChecks {
 
 
     /**
-     * Checks if arrays have the same number of total entries.
+     * Checks if arrays_old have the same number of total entries.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays do not have the same number of total entries.
+     * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
      */
     public static void assertTotalEntriesEq(double[][] arr1, CNumber[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length) {
@@ -174,10 +174,10 @@ public final class ParameterChecks {
 
 
     /**
-     * Checks if arrays have the same number of total entries.
+     * Checks if arrays_old have the same number of total entries.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays do not have the same number of total entries.
+     * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
      */
     public static void assertTotalEntriesEq(int[][] arr1, CNumber[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length) {

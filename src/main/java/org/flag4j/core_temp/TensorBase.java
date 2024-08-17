@@ -28,20 +28,27 @@ package org.flag4j.core_temp;
 import org.flag4j.core.MatrixPropertiesMixin;
 import org.flag4j.core.Shape;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 
 /**
  * The base class of all tensors. A tensor is a multi-dimensional array.
  *
- * @param <X> Storage for entries of this tensor.
+ * @param <T> Type of this tensor.
+ * @param <U> Storage for entries of this tensor.
+ * @param <V> Type (or wrapper) of an element of this tensor.
  */
-public abstract class TensorBase<D> {
+public abstract class TensorBase<T extends TensorBase<T, U, V>, U, V>
+        implements Serializable,
+        TensorBinaryOpsMixin<T, T>,
+        TensorUnaryOpsMixin<T>,
+        TensorPropertiesMixin<V> {
 
     /**
      * Entry data of this tensor. If this tensor is dense, then this specifies all entris within this tensor. If this tensor is
      * sparse, this specifies only the non-zero entries of this tensor.
      */
-    public final D entries;
+    public final U entries;
     /**
      * The shape of this tensor.
      */
@@ -54,9 +61,10 @@ public abstract class TensorBase<D> {
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
      *                If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-    protected TensorBase(Shape shape, D entries) {
+    protected TensorBase(Shape shape, U entries) {
         this.shape = shape;
         this.entries = entries;
+        shape.makeStridesIfNull();  // TODO: investigate ways only compute strides if needed (e.g. matrices likly dont need strides).
     }
 
 
@@ -64,9 +72,19 @@ public abstract class TensorBase<D> {
      * Gets the shape of this tensor.
      * @return The shape of this tensor.
      */
+    @Override
     public Shape getShape() {
         return this.shape;
     }
+
+    /**
+     * Gets the element of this tensor at the specified indices.
+     * @param indices Indices of the element to get.
+     * @return The element of this tensor at the specified indices.
+     * @throws IllegalArgumentException If {@code indices} is not of length 2.
+     * @throws ArrayIndexOutOfBoundsException If any indices are not within this tensor.
+     */
+    public abstract V get(int... indices);
 
 
     /**
@@ -91,7 +109,7 @@ public abstract class TensorBase<D> {
      * Gets the entry data of this tensor as a 1D array.
      * @return The entries of this tensor.
      */
-    public D getEntries() {
+    public U getEntries() {
         return this.entries;
     }
 
@@ -110,7 +128,26 @@ public abstract class TensorBase<D> {
      * @param B Second tensor.
      * @return True if this tensor and B have the same shape. False otherwise.
      */
-    public boolean sameShape(TensorBase<?> B) {
+    public boolean sameShape(TensorBase<?, ?, ?> B) {
         return this.shape.equals(B.shape);
     }
+
+
+    /**
+     * Flattens tensor to single dimension while preserving order of entries.
+     *
+     * @return The flattened tensor.
+     * @see #flatten(int)
+     */
+    public abstract T flatten();
+
+
+    /**
+     * Flattens a tensor along the specified axis.
+     *
+     * @param axis Axis along which to flatten tensor.
+     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     * @see #flatten()
+     */
+    public abstract T flatten(int axis);
 }

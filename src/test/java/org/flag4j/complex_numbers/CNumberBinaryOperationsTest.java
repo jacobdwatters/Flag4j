@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
- * This class contains various tests for operations with complex numbers.
+ * This class contains various tests for operations_old with complex numbers.
  */
 class CNumberBinaryOperationsTest {
     CNumber a;

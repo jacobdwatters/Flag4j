@@ -1,9 +1,9 @@
 package org.flag4j.complex_tensor;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CTensorOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CTensorConversionTests {
     static CNumber[] aEntries;
     static Shape shape;
-    static CTensor A;
+    static CTensorOld A;
 
     @BeforeAll
     static void setup() {
@@ -26,18 +26,18 @@ class CTensorConversionTests {
                 new CNumber(0.014, -2.45),  new CNumber(-140.0),  new CNumber(0, 1.5),
                 new CNumber(51.0, 24.56),  new CNumber(6.1, -0.03),  new CNumber(-0.00014, 1.34),};
         shape = new Shape(1, 3, 2, 1, 2);
-        A = new CTensor(shape, aEntries);
+        A = new CTensorOld(shape, aEntries);
     }
 
 
     @Test
     void toRealTestCase() {
         double[] expEntries;
-        Tensor exp;
+        TensorOld exp;
 
         // --------------------- Sub-case 1 ---------------------
         expEntries = new double[]{1.4415, 235.61, 0, 1.0, -85.1, 1.345, 0.014, -140.0, 0, 51.0, 6.1, -0.00014};
-        exp = new Tensor(shape, expEntries);
+        exp = new TensorOld(shape, expEntries);
 
         assertEquals(exp, A.toReal());
     }
@@ -45,16 +45,16 @@ class CTensorConversionTests {
 
     @Test
     void toMatrixTestCase() {
-        CTensor B;
+        CTensorOld B;
 
         CNumber[] expEntries;
         Shape expShape;
-        CMatrix exp;
+        CMatrixOld exp;
 
         // ----------------------- Sub-case 1 -----------------------
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expShape = new Shape(1, aEntries.length);
-        exp = new CMatrix(expShape, expEntries);
+        exp = new CMatrixOld(expShape, expEntries);
 
         assertEquals(exp, A.toMatrix());
 
@@ -62,7 +62,7 @@ class CTensorConversionTests {
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expShape = new Shape(4, 3);
         B = A.reshape(expShape);
-        exp = new CMatrix(expShape, expEntries);
+        exp = new CMatrixOld(expShape, expEntries);
 
         assertEquals(exp, B.toMatrix());
     }
@@ -71,11 +71,11 @@ class CTensorConversionTests {
     @Test
     void toVectorTestCase() {
         CNumber[] expEntries;
-        CVector exp;
+        CVectorOld exp;
 
         // ----------------------- Sub-case 1 -----------------------
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, A.toVector());
     }

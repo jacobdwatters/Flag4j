@@ -30,7 +30,7 @@ import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
 /**
- * This class provides low level methods for computing operations on real dense tensors.
+ * This class provides low level methods for computing operations_old on real dense tensors.
  */
 public final class RealDenseOperations {
 
@@ -42,12 +42,12 @@ public final class RealDenseOperations {
 
     /**
      * Computes the element-wise addition of two tensors.
-     * @param src1 Entries of first Tensor of the addition.
+     * @param src1 Entries of first TensorOld of the addition.
      * @param shape1 Shape of first tensor.
-     * @param src2 Entries of second Tensor of the addition.
+     * @param src2 Entries of second TensorOld of the addition.
      * @param shape2 Shape of second tensor.
      * @return The element wise addition of two tensors.
-     * @throws IllegalArgumentException If entry arrays are not the same size.
+     * @throws IllegalArgumentException If entry arrays_old are not the same size.
      */
     public static double[] add(final double[] src1, final Shape shape1,
                                final double[] src2, final Shape shape2) {
@@ -70,7 +70,7 @@ public final class RealDenseOperations {
      * @param src2 Entries of second tensor.
      * @param shape2 Shape of second tensor.
      * @return The element wise subtraction of two tensors.
-     * @throws IllegalArgumentException If entry arrays are not the same size.
+     * @throws IllegalArgumentException If entry arrays_old are not the same size.
      */
     public static double[] sub(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         ParameterChecks.assertEqualShape(shape1, shape2);
@@ -123,7 +123,7 @@ public final class RealDenseOperations {
 
     /**
      * Subtracts a scalar from each entry of this tensor and stores the result in the tensor.
-     * @param src Tensor in subtraction. Also, where the result will be stored.
+     * @param src TensorOld in subtraction. Also, where the result will be stored.
      * @param b Scalar to subtract.
      */
     public static void subEq(double[] src, double b) {
@@ -153,7 +153,7 @@ public final class RealDenseOperations {
 
     /**
      * Adds a scalar from each entry of this tensor and stores the result in the tensor.
-     * @param src Tensor in addition. Also, where the result will be stored.
+     * @param src TensorOld in addition. Also, where the result will be stored.
      * @param b Scalar to add.
      */
     public static void addEq(double[] src, double b) {

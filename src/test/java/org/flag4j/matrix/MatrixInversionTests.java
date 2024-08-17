@@ -1,6 +1,6 @@
 package org.flag4j.matrix;
 
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.linalg.Invert;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class MatrixInversionTests {
 
     double[][] aEntries, expEntries;
-    Matrix A, exp;
+    MatrixOld A, exp;
 
 
     @Test
@@ -22,13 +22,13 @@ class MatrixInversionTests {
                 {3, 1, 1},
                 {5, 4, 4}
         };
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         expEntries = new double[][]{
                 {0.0, 0.5714285714285714, -0.14285714285714285},
                 {0.02127659574468085, 0.09726443768996962, -0.06686930091185411},
                 {-0.02127659574468085, -0.8115501519756839, 0.49544072948328266}
         };
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertEquals(exp, Invert.inv(A));
 
@@ -38,7 +38,7 @@ class MatrixInversionTests {
                 {1, 2},
                 {-2, -4}
         }; // This matrix is singular
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
 
         assertThrows(RuntimeException.class, ()->Invert.inv(A));
 
@@ -48,7 +48,7 @@ class MatrixInversionTests {
                 {2, 55, 8},
                 {3, 1, 1}
         };
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
 
         assertThrows(LinearAlgebraException.class, ()->Invert.inv(A));
         assertThrows(LinearAlgebraException.class, ()->Invert.inv(A.T()));

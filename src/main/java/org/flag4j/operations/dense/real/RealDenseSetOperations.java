@@ -29,7 +29,7 @@ import org.flag4j.core.Shape;
 import org.flag4j.util.ParameterChecks;
 
 /**
- * This class contains low-level implementations of setting operations for real dense tensors.
+ * This class contains low-level implementations of setting operations_old for real dense tensors.
  */
 public class RealDenseSetOperations {
 
@@ -39,7 +39,7 @@ public class RealDenseSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(Double[] src, final double[] dest) {
         ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
@@ -55,7 +55,7 @@ public class RealDenseSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(Integer[] src, final double[] dest) {
         ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
@@ -71,7 +71,7 @@ public class RealDenseSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(double[] src, final double[] dest) {
         ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
@@ -84,7 +84,7 @@ public class RealDenseSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(int[] src, final double[] dest) {
         ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
@@ -100,7 +100,7 @@ public class RealDenseSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(Double[][] src, final double[] dest) {
         ParameterChecks.assertTotalEntriesEq(src, dest);
@@ -119,7 +119,7 @@ public class RealDenseSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(Integer[][] src, final double[] dest) {
         ParameterChecks.assertTotalEntriesEq(src, dest);
@@ -138,7 +138,7 @@ public class RealDenseSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(double[][] src, final double[] dest) {
         ParameterChecks.assertTotalEntriesEq(src, dest);
@@ -157,7 +157,7 @@ public class RealDenseSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(int[][] src, final double[] dest) {
         ParameterChecks.assertTotalEntriesEq(src, dest);

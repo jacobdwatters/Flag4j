@@ -25,16 +25,16 @@
 package org.flag4j.core;
 
 
-import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.sparse.CooCTensor;
+import org.flag4j.arrays_old.dense.CTensorOld;
+import org.flag4j.arrays_old.sparse.CooCTensor;
 import org.flag4j.complex_numbers.CNumber;
 
 /**
  * This class specifies methods which any complex tensor that is <b>NOT</b> a matrix or vector should implement.
- * @param <T> Tensor type.
+ * @param <T> TensorOld type.
  */
-public interface ComplexTensorExclusiveMixin<T extends TensorBase<T, CTensor, T, ?, ?, ?, CNumber>>
-        extends TensorExclusiveMixin<T, CTensor, CooCTensor, T> {
+public interface ComplexTensorExclusiveMixin<T extends TensorBase<T, CTensorOld, T, ?, ?, ?, CNumber>>
+        extends TensorExclusiveMixin<T, CTensorOld, CooCTensor, T> {
 
     /**
      * Computes the conjugate transpose of a tensor. Same as {@link #H(int, int)}.

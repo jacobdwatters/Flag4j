@@ -25,7 +25,7 @@
 package org.flag4j.linalg.decompositions.hess;
 
 
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.linalg.transformations.Householder;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -81,7 +81,7 @@ public class SymmHess extends RealHess {
      * @param computeQ Flag indicating if the orthogonal {@code Q} matrix from the Hessenberg decomposition should be explicitly computed.
      * If true, then the {@code Q} matrix will be computed explicitly.
      * @param enforceSymmetric Flag indicating if an explicit check should be made to ensure any matrix passed to
-     * {@link #decompose(Matrix)} is truly symmetric. If true, an exception will be thrown if the matrix is not symmetric. If false,
+     * {@link #decompose(MatrixOld)} is truly symmetric. If true, an exception will be thrown if the matrix is not symmetric. If false,
      * the decomposition will proceed under the assumption that the matrix is symmetric whether it actually is or not. If the
      * matrix is not symmetric, then the values in the upper triangular portion of the matrix are taken to be the values.
      */
@@ -98,7 +98,7 @@ public class SymmHess extends RealHess {
      * @return A reference to this decomposer.
      */
     @Override
-    public SymmHess decompose(Matrix src) {
+    public SymmHess decompose(MatrixOld src) {
         super.decompose(src);
         return this;
     }
@@ -109,8 +109,8 @@ public class SymmHess extends RealHess {
      * @return The symmetric tri-diagonal (Hessenberg) matrix from this decomposition.
      */
     @Override
-    public Matrix getH() {
-        Matrix H = new Matrix(numRows);
+    public MatrixOld getH() {
+        MatrixOld H = new MatrixOld(numRows);
         H.entries[0] = transformMatrix.entries[0];
 
         int idx1;
@@ -170,7 +170,7 @@ public class SymmHess extends RealHess {
      * square regardless of the value of {@link #enforceSymmetric}.
      */
     @Override
-    protected void setUp(Matrix src) {
+    protected void setUp(MatrixOld src) {
         if(enforceSymmetric && !src.isSymmetric()) // If requested, check the matrix is symmetric.
             throw new LinearAlgebraException("Decomposition only supports symmetric matrices.");
         else
@@ -186,8 +186,8 @@ public class SymmHess extends RealHess {
      * Copies the upper triangular portion of a matrix to the working matrix {@link #transformMatrix}.
      * @param src The source matrix to decompose of.
      */
-    private void copyUpperTri(Matrix src) {
-        transformMatrix = new Matrix(numRows);
+    private void copyUpperTri(MatrixOld src) {
+        transformMatrix = new MatrixOld(numRows);
 
         // Copy upper triangular portion.
         for(int i=0; i<numRows; i++) {

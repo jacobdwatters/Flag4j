@@ -27,13 +27,13 @@ package org.flag4j.core.dense_base;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.RealTensorMixin;
 import org.flag4j.core.Shape;
-import org.flag4j.operations.common.complex.ComplexOperations;
-import org.flag4j.operations.common.real.AggregateReal;
-import org.flag4j.operations.common.real.RealOperations;
-import org.flag4j.operations.common.real.RealProperties;
-import org.flag4j.operations.dense.complex.ComplexDenseOperations;
-import org.flag4j.operations.dense.real.*;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
+import org.flag4j.operations_old.common.complex.ComplexOperations;
+import org.flag4j.operations_old.common.real.AggregateReal;
+import org.flag4j.operations_old.common.real.RealOperations;
+import org.flag4j.operations_old.common.real.RealProperties;
+import org.flag4j.operations_old.dense.complex.ComplexDenseOperations;
+import org.flag4j.operations_old.dense.real.*;
+import org.flag4j.operations_old.dense.real_complex.RealComplexDenseOperations;
 import org.flag4j.util.ParameterChecks;
 
 import java.util.Arrays;
@@ -41,7 +41,7 @@ import java.util.Arrays;
 /**
  * The base class for all real dense tensors. This includes real dense matrices and vectors.
  * @param <T> Type of this tensor.
- * @param <W> Complex Tensor type.
+ * @param <W> Complex TensorOld type.
  */
 public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W extends ComplexDenseTensorBase<W, T>>
         extends DenseTensorBase<T, W, T, double[], Double>

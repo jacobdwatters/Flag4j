@@ -24,9 +24,9 @@
 
 package org.flag4j.operations.sparse.coo.real;
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.core.Shape;
 import org.flag4j.operations.sparse.coo.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
@@ -202,7 +202,7 @@ public class RealSparseMatrixGetSet {
         Integer[] colIndices = new Integer[col.length];
         Arrays.fill(colIndices, colIdx);
 
-        // Initialize destination arrays with the new column and the appropriate indices.
+        // Initialize destination arrays_old with the new column and the appropriate indices.
         List<Double> destEntries = DoubleStream.of(col).boxed().collect(Collectors.toList());
         List<Integer> destRowIndices = IntStream.of(
                 ArrayUtils.intRange(0, col.length)
@@ -226,7 +226,7 @@ public class RealSparseMatrixGetSet {
         ParameterChecks.assertIndexInBounds(src.numCols, colIdx);
         ParameterChecks.assertEquals(src.numRows, col.size);
 
-        // Initialize destination arrays with the new column and the appropriate indices.
+        // Initialize destination arrays_old with the new column and the appropriate indices.
         List<Double> destEntries = ArrayUtils.toArrayList(col.entries);
         List<Integer> destRowIndices = ArrayUtils.toArrayList(col.indices);
         List<Integer> destColIndices = ArrayUtils.toArrayList(ArrayUtils.filledArray(col.nonZeroEntries(), colIdx));
@@ -340,7 +340,7 @@ public class RealSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
      * given the row and column index.
      */
-    public static CooMatrix setSlice(CooMatrix src, Matrix values, int row, int col) {
+    public static CooMatrix setSlice(CooMatrix src, MatrixOld values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
         ParameterChecks.assertLessEq(src.numRows, values.numRows + row);
         ParameterChecks.assertLessEq(src.numCols, values.numCols + col);

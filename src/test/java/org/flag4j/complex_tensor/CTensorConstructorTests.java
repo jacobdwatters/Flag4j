@@ -1,7 +1,7 @@
 package org.flag4j.complex_tensor;
 
-import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays_old.dense.CTensorOld;
+import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -17,8 +17,8 @@ public class CTensorConstructorTests {
     CNumber[] expEntries;
     int expRank;
     Shape expShape;
-    Tensor C;
-    CTensor A, B;
+    TensorOld C;
+    CTensorOld A, B;
 
 
     @Test
@@ -30,7 +30,7 @@ public class CTensorConstructorTests {
             expEntries[i] = CNumber.ZERO;
         }
         expRank = expShape.getRank();
-        A = new CTensor(expShape);
+        A = new CTensorOld(expShape);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.entries);
@@ -42,7 +42,7 @@ public class CTensorConstructorTests {
             expEntries[i] = CNumber.ZERO;
         }
         expRank = expShape.getRank();
-        A = new CTensor(expShape);
+        A = new CTensorOld(expShape);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.entries);
@@ -54,7 +54,7 @@ public class CTensorConstructorTests {
             expEntries[i] = CNumber.ZERO;
         }
         expRank = expShape.getRank();
-        A = new CTensor(expShape);
+        A = new CTensorOld(expShape);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.entries);
@@ -71,7 +71,7 @@ public class CTensorConstructorTests {
             expEntries[i] = new CNumber(value);
         }
         expRank = expShape.getRank();
-        A = new CTensor(expShape, value);
+        A = new CTensorOld(expShape, value);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.entries);
@@ -84,7 +84,7 @@ public class CTensorConstructorTests {
             expEntries[i] = new CNumber(value);
         }
         expRank = expShape.getRank();
-        A = new CTensor(expShape, value);
+        A = new CTensorOld(expShape, value);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.entries);
@@ -97,7 +97,7 @@ public class CTensorConstructorTests {
             expEntries[i] = new CNumber(value);
         }
         expRank = expShape.getRank();
-        A = new CTensor(expShape, value);
+        A = new CTensorOld(expShape, value);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.entries);
@@ -115,7 +115,7 @@ public class CTensorConstructorTests {
         }
 
         expRank = expShape.getRank();
-        A = new CTensor(expShape, valueC);
+        A = new CTensorOld(expShape, valueC);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.entries);
@@ -128,7 +128,7 @@ public class CTensorConstructorTests {
             expEntries[i] = valueC;
         }
         expRank = expShape.getRank();
-        A = new CTensor(expShape, valueC);
+        A = new CTensorOld(expShape, valueC);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.entries);
@@ -141,7 +141,7 @@ public class CTensorConstructorTests {
             expEntries[i] = valueC;
         }
         expRank = expShape.getRank();
-        A = new CTensor(expShape, valueC);
+        A = new CTensorOld(expShape, valueC);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.entries);
@@ -160,7 +160,7 @@ public class CTensorConstructorTests {
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber(entriesD[i]);
         }
-        A = new CTensor(expShape, entriesD);
+        A = new CTensorOld(expShape, entriesD);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -176,7 +176,7 @@ public class CTensorConstructorTests {
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber(entriesD[i]);
         }
-        A = new CTensor(expShape, entriesD);
+        A = new CTensorOld(expShape, entriesD);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -192,7 +192,7 @@ public class CTensorConstructorTests {
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber(entriesD[i]);
         }
-        A = new CTensor(expShape, entriesD);
+        A = new CTensorOld(expShape, entriesD);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -208,7 +208,7 @@ public class CTensorConstructorTests {
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber(entriesD[i]);
         }
-        A = new CTensor(expShape, entriesD);
+        A = new CTensorOld(expShape, entriesD);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -221,7 +221,7 @@ public class CTensorConstructorTests {
                 9.33, 3244, 156.224, 3445, 60.3, 44, 13, };
         expRank = expShape.getRank();
 
-        assertThrows(IllegalArgumentException.class, () -> new CTensor(expShape, entriesD));
+        assertThrows(IllegalArgumentException.class, () -> new CTensorOld(expShape, entriesD));
 
 
         // ---------- Sub-case 6 ----------
@@ -231,7 +231,7 @@ public class CTensorConstructorTests {
                 9.33, 3244, 156.224, 3445, 60.3, 44, 13, 1, 4, 56, 113, 34, 5};
         expRank = expShape.getRank();
 
-        assertThrows(IllegalArgumentException.class, () -> new CTensor(expShape, entriesD));
+        assertThrows(IllegalArgumentException.class, () -> new CTensorOld(expShape, entriesD));
     }
 
 
@@ -247,7 +247,7 @@ public class CTensorConstructorTests {
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber(entriesI[i]);
         }
-        A = new CTensor(expShape, entriesI);
+        A = new CTensorOld(expShape, entriesI);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -263,7 +263,7 @@ public class CTensorConstructorTests {
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber(entriesI[i]);
         }
-        A = new CTensor(expShape, entriesI);
+        A = new CTensorOld(expShape, entriesI);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -279,7 +279,7 @@ public class CTensorConstructorTests {
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber(entriesI[i]);
         }
-        A = new CTensor(expShape, entriesI);
+        A = new CTensorOld(expShape, entriesI);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -295,7 +295,7 @@ public class CTensorConstructorTests {
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber(entriesI[i]);
         }
-        A = new CTensor(expShape, entriesI);
+        A = new CTensorOld(expShape, entriesI);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -308,7 +308,7 @@ public class CTensorConstructorTests {
                 9, 3244, 156, 3445, 60, 44};
         expRank = expShape.getRank();
 
-        assertThrows(IllegalArgumentException.class, () -> new CTensor(expShape, entriesI));
+        assertThrows(IllegalArgumentException.class, () -> new CTensorOld(expShape, entriesI));
 
         // ---------- Sub-case 6 ----------
         expShape = new Shape(5, 6);
@@ -317,7 +317,7 @@ public class CTensorConstructorTests {
                 9, 3244, 156, 3445, 60, 44, 13, 908, 4, 1, 19, 2313, 112, 3};
         expRank = expShape.getRank();
 
-        assertThrows(IllegalArgumentException.class, () -> new CTensor(expShape, entriesI));
+        assertThrows(IllegalArgumentException.class, () -> new CTensorOld(expShape, entriesI));
     }
 
 
@@ -330,7 +330,7 @@ public class CTensorConstructorTests {
                 new CNumber(1, 3), new CNumber(-9, -13.4), new CNumber(34.5, 1), new CNumber(0,-1),
                 new CNumber(0.0000043), new CNumber(0, 0.99810382193), new CNumber(113334, -84334), new CNumber(190, 334.55)};
         expRank = expShape.getRank();
-        A = new CTensor(expShape, expEntries);
+        A = new CTensorOld(expShape, expEntries);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -343,7 +343,7 @@ public class CTensorConstructorTests {
                 new CNumber(1, 3), new CNumber(-9, -13.4), new CNumber(34.5, 1), new CNumber(0,-1),
                 new CNumber(0.0000043), new CNumber(0, 0.99810382193), new CNumber(113334, -84334), new CNumber(190, 334.55)};
         expRank = expShape.getRank();
-        A = new CTensor(expShape, expEntries);
+        A = new CTensorOld(expShape, expEntries);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -356,7 +356,7 @@ public class CTensorConstructorTests {
                 new CNumber(1, 3), new CNumber(-9, -13.4), new CNumber(34.5, 1), new CNumber(0,-1),
                 new CNumber(0.0000043), new CNumber(0, 0.99810382193), new CNumber(113334, -84334), new CNumber(190, 334.55)};
         expRank = expShape.getRank();
-        A = new CTensor(expShape, expEntries);
+        A = new CTensorOld(expShape, expEntries);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -369,7 +369,7 @@ public class CTensorConstructorTests {
                 new CNumber(1, 3), new CNumber(-9, -13.4), new CNumber(34.5, 1), new CNumber(0,-1),
                 new CNumber(0.0000043), new CNumber(0, 0.99810382193), new CNumber(113334, -84334), new CNumber(190, 334.55)};
         expRank = expShape.getRank();
-        A = new CTensor(expShape, expEntries);
+        A = new CTensorOld(expShape, expEntries);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -383,7 +383,7 @@ public class CTensorConstructorTests {
                 new CNumber(0.0000043), new CNumber(0, 0.99810382193)};
         expRank = expShape.getRank();
 
-        assertThrows(IllegalArgumentException.class, () -> new CTensor(expShape, expEntries));
+        assertThrows(IllegalArgumentException.class, () -> new CTensorOld(expShape, expEntries));
 
         // ---------- Sub-case 6 ----------
         expShape = new Shape(1, 3, 2, 2);
@@ -393,7 +393,7 @@ public class CTensorConstructorTests {
                 new CNumber(0.0000043), new CNumber(0, 0.99810382193), new CNumber(113334, -84334), new CNumber(190, 334.55),
                 new CNumber(0, 0)};
         expRank = expShape.getRank();
-        assertThrows(IllegalArgumentException.class, () -> new CTensor(expShape, expEntries));
+        assertThrows(IllegalArgumentException.class, () -> new CTensorOld(expShape, expEntries));
     }
 
 
@@ -405,8 +405,8 @@ public class CTensorConstructorTests {
                 new CNumber(1, 3), new CNumber(-9, -13.4), new CNumber(34.5, 1), new CNumber(0,-1),
                 new CNumber(0.0000043), new CNumber(0, 0.99810382193), new CNumber(113334, -84334), new CNumber(190, 334.55)};
         expRank = expShape.getRank();
-        B = new CTensor(expShape, expEntries);
-        A = new CTensor(B);
+        B = new CTensorOld(expShape, expEntries);
+        A = new CTensorOld(B);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.entries);
@@ -422,8 +422,8 @@ public class CTensorConstructorTests {
             expEntries[i] = new CNumber(entriesD[i]);
         }
         expRank = expShape.getRank();
-        C = new Tensor(expShape, entriesD);
-        A = new CTensor(C);
+        C = new TensorOld(expShape, entriesD);
+        A = new CTensorOld(C);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.entries);

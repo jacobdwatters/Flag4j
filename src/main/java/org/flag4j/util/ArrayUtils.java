@@ -43,13 +43,13 @@ public final class ArrayUtils {
 
 
     /**
-     * Creates a deep copy of a 2D array. Assumes arrays are <i>not</i> jagged.
+     * Creates a deep copy of a 2D array. Assumes arrays_old are <i>not</i> jagged.
      *
      * @param src  Source array to copy.
      * @param dest Destination array of copy. If {@code null}, a new array will be initialized.
      * @return A reference to {@code dest} if it was not {@code null}. In the case where {@code dest} is {@code null}, then a new
      * array will be initialized and returned.
-     * @throws IllegalArgumentException If the two arrays are not the same shape.
+     * @throws IllegalArgumentException If the two arrays_old are not the same shape.
      */
     public static int[][] deepCopy(final int[][] src, int[][] dest) {
         if(dest == null) dest = new int[src.length][src[0].length];
@@ -70,7 +70,7 @@ public final class ArrayUtils {
      *
      * @param src  Array to convert.
      * @param dest Destination array. If the destination array is null, a new array will be created.
-     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     * @throws IllegalArgumentException If source and destination arrays_old do not have the same length.
      * @return A reference to the {@code dest} array.
      */
     public static CNumber[] copy2CNumber(final int[] src, CNumber[] dest) {
@@ -89,7 +89,7 @@ public final class ArrayUtils {
      *
      * @param src  Array to convert.
      * @param dest Destination array. If the destination array is null, a new array will be created.
-     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     * @throws IllegalArgumentException If source and destination arrays_old do not have the same length.
      * @return A reference to the {@code dest} array.
      */
     public static CNumber[] copy2CNumber(final double[] src, CNumber[] dest) {
@@ -108,7 +108,7 @@ public final class ArrayUtils {
      *
      * @param src  Array to convert.
      * @param dest Destination array. If the destination array is null, a new array will be created.
-     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     * @throws IllegalArgumentException If source and destination arrays_old do not have the same length.
      * @return A reference to the {@code dest} array.
      */
     public static CNumber[] copy2CNumber(final Integer[] src, CNumber[] dest) {
@@ -127,7 +127,7 @@ public final class ArrayUtils {
      *
      * @param src  Array to convert.
      * @param dest Destination array. If the destination array is null, a new array will be created.
-     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     * @throws IllegalArgumentException If source and destination arrays_old do not have the same length.
      * @return A reference to the {@code dest} array.
      */
     public static CNumber[] copy2CNumber(final Double[] src, CNumber[] dest) {
@@ -146,7 +146,7 @@ public final class ArrayUtils {
      *
      * @param src  Array to convert.
      * @param dest Destination array. If the destination array is null, a new array will be created.
-     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     * @throws IllegalArgumentException If source and destination arrays_old do not have the same length.
      * @return A reference to the {@code dest} array.
      */
     public static CNumber[] copy2CNumber(final String[] src, CNumber[] dest) {
@@ -828,7 +828,7 @@ public final class ArrayUtils {
 
 
     /**
-     * Joins two arrays together.
+     * Joins two arrays_old together.
      *
      * @param src1 First array to join.
      * @param src2 Second array to join.
@@ -844,7 +844,7 @@ public final class ArrayUtils {
 
 
     /**
-     * Joins two arrays together.
+     * Joins two arrays_old together.
      *
      * @param src1 First array to join.
      * @param src2 Second array to join.
@@ -1029,7 +1029,7 @@ public final class ArrayUtils {
      * @return The number of unique elements in {@code arr}.
      */
     public static int numUnique(final double[] arr) {
-        // For very large arrays, HashMap is quite a bit faster than HashSet.
+        // For very large arrays_old, HashMap is quite a bit faster than HashSet.
         Map<Double, Double> map = new HashMap<>(arr.length);
 
         for(double a : arr)
@@ -1046,7 +1046,7 @@ public final class ArrayUtils {
      * @return The number of unique elements in {@code arr}.
      */
     public static int numUnique(final int[] arr) {
-        // For very large arrays, HashMap is quite a bit faster than HashSet.
+        // For very large arrays_old, HashMap is quite a bit faster than HashSet.
         Map<Integer, Integer> map = new HashMap<>(arr.length);
 
         for(int a : arr)

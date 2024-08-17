@@ -25,7 +25,7 @@
 package org.flag4j.operations.sparse.coo.complex;
 
 
-import org.flag4j.arrays.sparse.CooCTensor;
+import org.flag4j.arrays_old.sparse.CooCTensor;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Utility class for computing operations between two complex sparse COO tensors.
+ * Utility class for computing operations_old between two complex sparse COO tensors.
  */
 public final class ComplexCooTensorOperations {
 
@@ -181,7 +181,7 @@ public final class ComplexCooTensorOperations {
             }
         }
 
-        // Truncate arrays if necessary.
+        // Truncate arrays_old if necessary.
         return new CooCTensor(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
     }
 }

@@ -1,9 +1,9 @@
 package org.flag4j.complex_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -16,12 +16,12 @@ class CMatrixElemMultTests {
     int[] rowIndices, colIndies;
 
     CNumber[][] aEntries, expEntries;
-    CMatrix A, exp;
+    CMatrixOld A, exp;
 
     @Test
     void realTestCase() {
         double[][] bEntries;
-        Matrix B;
+        MatrixOld B;
 
         // ------------------- Sub-case 1 -------------------
         aEntries = new CNumber[][]{
@@ -29,19 +29,19 @@ class CMatrixElemMultTests {
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
                 {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(Math.PI, Math.PI), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[][]{
                 {12.3, 4.45, -878.2},
                 {3.456, 3.45, -65.44},
                 {4.566, 0, 37.45},
                 {-1, -0.0000002, 94.3}};
-        B = new Matrix(bEntries);
+        B = new MatrixOld(bEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(1519.0500000000002,-114.39000000000001), new CNumber(201.14000000000001, -0.148185), new CNumber(-4742.280000000001)},
                 {new CNumber(3.456), new CNumber(0.0, -2563.695), new CNumber(2257.68, 6085.92)},
                 {new CNumber(34781.25387), new CNumber(0.0), new CNumber(0.0)},
                 {new CNumber(-3.141592653589793, -3.141592653589793), new CNumber(-0.0000018429324647, -0.00000302), new CNumber(-377.2)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.elemMult(B));
 
@@ -50,15 +50,15 @@ class CMatrixElemMultTests {
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
                 {new CNumber(7617.445), new CNumber(0), CNumber.ZERO}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[][]{
                 {12.3, 4.45, -878.2},
                 {3.456, 3.45, -65.44},
                 {4.566, 0, 37.45},
                 {-1, -0.0000002, 94.3}};
-        B = new Matrix(bEntries);
+        B = new MatrixOld(bEntries);
 
-        Matrix finalB = B;
+        MatrixOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.elemMult(finalB));
     }
 
@@ -66,7 +66,7 @@ class CMatrixElemMultTests {
     @Test
     void complexTestCase() {
         CNumber[][] bEntries;
-        CMatrix B;
+        CMatrixOld B;
 
         // ------------------- Sub-case 1 -------------------
         aEntries = new CNumber[][]{
@@ -74,18 +74,18 @@ class CMatrixElemMultTests {
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
                 {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(Math.PI, Math.PI), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[][]{
                 {new CNumber(1519.0500000000002,-114.39000000000001), new CNumber(201.14000000000001, -0.148185), new CNumber(-4742.280000000001)},
                 {new CNumber(3.456), new CNumber(0.0, -2563.695), new CNumber(2257.68, 6085.92)},
                 {new CNumber(34781.25387), new CNumber(0.0), new CNumber(0.0)},
                 {new CNumber(-3.141592653589793, -3.141592653589793), new CNumber(-0.0000018429324647, -0.00000302), new CNumber(-377.2)}};
-        B = new CMatrix(bEntries);
+        B = new CMatrixOld(bEntries);
         expEntries = new CNumber[][]{{new CNumber(186538.84800000003,-28254.330000000005), new CNumber(9091.523065439502, -13.395924000000003), new CNumber(-25608.312000000005)},
                 {new CNumber(3.456), new CNumber(-1905081.7545000003), new CNumber(488100.6000000001, -419928.48)},
                 {new CNumber(264944288.38576216), new CNumber(0.0), new CNumber(0.0)},
                 {new CNumber(0.0, -19.739208802178716), new CNumber(2.8619999652773907e-05, -5.565656043394e-05), new CNumber(1508.8)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.elemMult(B));
 
@@ -94,15 +94,15 @@ class CMatrixElemMultTests {
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
                 {new CNumber(7617.445), new CNumber(0), CNumber.ZERO}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[][]{
                 {new CNumber(1519.0500000000002,-114.39000000000001), new CNumber(201.14000000000001, -0.148185)},
                 {new CNumber(3.456), new CNumber(0.0, -2563.695)},
                 {new CNumber(34781.25387), new CNumber(0.0)},
                 {new CNumber(-3.141592653589793, -3.141592653589793), new CNumber(-0.0000018429324647, -0.00000302)}};
-        B = new CMatrix(bEntries);
+        B = new CMatrixOld(bEntries);
 
-        CMatrix finalB = B;
+        CMatrixOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.elemMult(finalB));
     }
 
@@ -118,7 +118,7 @@ class CMatrixElemMultTests {
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.1)},
                 {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(Math.PI, Math.PI), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{1.34, -994.1, 34.5};
         rowIndices = new int[]{0, 2, 3};
         colIndies = new int[]{1, 1, 0};
@@ -128,7 +128,7 @@ class CMatrixElemMultTests {
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("-0.0"), new CNumber("0.0")},
                 {new CNumber("108.38494654884786+108.38494654884786i"), new CNumber("0.0"), new CNumber("-0.0")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertTrue(exp.tensorEquals(A.elemMult(B)));
 
@@ -137,7 +137,7 @@ class CMatrixElemMultTests {
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
                 {new CNumber(7617.445), new CNumber(0), CNumber.ZERO}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{1.34, -994.1, 34.5};
         rowIndices = new int[]{0, 2, 3};
         colIndies = new int[]{1, 1, 0};
@@ -160,7 +160,7 @@ class CMatrixElemMultTests {
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.1)},
                 {new CNumber(7617.445), new CNumber(0), CNumber.ZERO},
                 {new CNumber(Math.PI, Math.PI), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(345.6, 94.1), new CNumber(-9.4, 34), new CNumber(4.4)};
         rowIndices = new int[]{0, 2, 3};
         colIndies = new int[]{1, 1, 0};
@@ -170,7 +170,7 @@ class CMatrixElemMultTests {
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("-0.0"), new CNumber("0.0")},
                 {new CNumber("13.823007675795091+13.823007675795091i"), new CNumber("0.0"), new CNumber("-0.0")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertTrue(exp.tensorEquals(A.elemMult(B)));
 
@@ -179,7 +179,7 @@ class CMatrixElemMultTests {
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
                 {new CNumber(7617.445), new CNumber(0), CNumber.ZERO}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(345.6, 94.1), new CNumber(-9.4, 34), new CNumber(4.4)};
         rowIndices = new int[]{0, 2, 3};
         colIndies = new int[]{1, 1, 0};

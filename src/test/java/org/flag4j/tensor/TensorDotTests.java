@@ -1,6 +1,6 @@
 package org.flag4j.tensor;
 
-import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,9 +21,9 @@ class TensorDotTests {
     static Shape bShape;
     static Shape expShape;
 
-    static Tensor A;
-    static Tensor B;
-    static Tensor exp;
+    static TensorOld A;
+    static TensorOld B;
+    static TensorOld exp;
 
     @BeforeEach
     void setup() {
@@ -38,8 +38,8 @@ class TensorDotTests {
         aShape = new Shape(3, 2, 1, 2);
         bShape = new Shape(4, 3, 2);
 
-        A = new Tensor(aShape, aEntries);
-        B = new Tensor(bShape, bEntries);
+        A = new TensorOld(aShape, aEntries);
+        B = new TensorOld(bShape, bEntries);
     }
 
 
@@ -58,7 +58,7 @@ class TensorDotTests {
                 -1946.5901749999998, -99.27761960000001, 342.0597301436, 14.274116000000001,
                 -15.798691700000012, 509.4000000000001, 314.49902, -20365.845202384};
         expShape = new Shape(2, 1, 2, 4, 2);
-        exp = new Tensor(expShape, expEntries);
+        exp = new TensorOld(expShape, expEntries);
 
         assertEquals(exp, A.tensorDot(B, aAxes, bAxes));
 
@@ -69,7 +69,7 @@ class TensorDotTests {
                 -589.8166663699998, 1663.58202083, 96.57245400000002, 474.70591279999996,
                 3142.8324804000003, 136626.16944920004, 34079.99002500001, 54090.499797616};
         expShape = new Shape(1, 2, 4);
-        exp = new Tensor(expShape, expEntries);
+        exp = new TensorOld(expShape, expEntries);
 
         assertEquals(exp, A.tensorDot(B, aAxes, bAxes));
 
@@ -112,7 +112,7 @@ class TensorDotTests {
                 -1946.5901749999998, -99.27761960000001, 342.0597301436, 14.274116000000001,
                 -15.798691700000012, 509.4000000000001, 314.49902, -20365.845202384};
         expShape = new Shape(2, 1, 2, 4, 2);
-        exp = new Tensor(expShape, expEntries);
+        exp = new TensorOld(expShape, expEntries);
 
         assertEquals(exp, A.tensorDot(B, 0, 1));
 
@@ -136,7 +136,7 @@ class TensorDotTests {
                 769.3098249999999, -5060.7418251, 27854.8631461436, 795.6394204999999,
                 7376.4858083, 78860.54000000001, 16039.49902, 1099.454797616};
         expShape = new Shape(2, 2, 4, 2);
-        exp = new Tensor(expShape, expEntries);
+        exp = new TensorOld(expShape, expEntries);
         B = B.reshape(4, 3, 2);
 
         assertEquals(exp, A.tensorDot(B));

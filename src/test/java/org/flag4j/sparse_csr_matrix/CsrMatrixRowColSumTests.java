@@ -1,8 +1,8 @@
 package org.flag4j.sparse_csr_matrix;
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CsrMatrix;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,13 +11,13 @@ class CsrMatrixRowColSumTests {
 
     static CsrMatrix A;
     static double[][] aEntriesDense;
-    static Vector exp;
+    static VectorOld exp;
     static double[] expEntries;
 
 
     static void makeArrays() {
-        A = new Matrix(aEntriesDense).toCsr();
-        exp = new Vector(expEntries);
+        A = new MatrixOld(aEntriesDense).toCsr();
+        exp = new VectorOld(expEntries);
     }
 
 

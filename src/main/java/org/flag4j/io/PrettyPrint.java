@@ -31,7 +31,7 @@ import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.StringUtils;
 
 /**
- * Utility class for formatting arrays as human-readable strings.
+ * Utility class for formatting arrays_old as human-readable strings.
  */
 public final class PrettyPrint {
 

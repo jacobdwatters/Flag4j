@@ -1,7 +1,7 @@
 package org.flag4j.complex_vector;
 
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ class CVectorConstructorTests {
     CNumber[] expEntries;
     double[] entriesD;
     int[] entriesI;
-    CVector a, b;
+    CVectorOld a, b;
 
     @Test
     void sizeTestCase() {
@@ -29,7 +29,7 @@ class CVectorConstructorTests {
             expEntries[i] = CNumber.ZERO;
         }
 
-        a = new CVector(expSize);
+        a = new CVectorOld(expSize);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -45,7 +45,7 @@ class CVectorConstructorTests {
             expEntries[i] = CNumber.ZERO;
         }
 
-        a = new CVector(expSize);
+        a = new CVectorOld(expSize);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -55,7 +55,7 @@ class CVectorConstructorTests {
 
         // ----------- Sub-case 3 ------------
         expSize = -1;
-        assertThrows(IllegalArgumentException.class, () -> new Vector(expSize));
+        assertThrows(IllegalArgumentException.class, () -> new VectorOld(expSize));
     }
 
     @Test
@@ -69,7 +69,7 @@ class CVectorConstructorTests {
             expEntries[i] = fillValue;
         }
 
-        a = new CVector(expSize, fillValue);
+        a = new CVectorOld(expSize, fillValue);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -86,7 +86,7 @@ class CVectorConstructorTests {
             expEntries[i] = fillValue;
         }
 
-        a = new CVector(expSize,fillValue);
+        a = new CVectorOld(expSize,fillValue);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -97,7 +97,7 @@ class CVectorConstructorTests {
         // ----------- Sub-case 3 ------------
         expSize = -1;
         fillValue = new CNumber(-10.23423, 100.2);
-        assertThrows(IllegalArgumentException.class, () -> new CVector(expSize, fillValue));
+        assertThrows(IllegalArgumentException.class, () -> new CVectorOld(expSize, fillValue));
     }
 
 
@@ -112,7 +112,7 @@ class CVectorConstructorTests {
             expEntries[i] = new CNumber(fillValueD);
         }
 
-        a = new CVector(expSize, fillValueD);
+        a = new CVectorOld(expSize, fillValueD);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -129,7 +129,7 @@ class CVectorConstructorTests {
             expEntries[i] = new CNumber(fillValueD);
         }
 
-        a = new CVector(expSize,fillValueD);
+        a = new CVectorOld(expSize,fillValueD);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -140,7 +140,7 @@ class CVectorConstructorTests {
         // ----------- Sub-case 3 ------------
         expSize = -1;
         fillValueD = -10.234;
-        assertThrows(IllegalArgumentException.class, () -> new CVector(expSize, fillValueD));
+        assertThrows(IllegalArgumentException.class, () -> new CVectorOld(expSize, fillValueD));
     }
 
 
@@ -155,7 +155,7 @@ class CVectorConstructorTests {
             expEntries[i] = new CNumber(entriesD[i]);
         }
 
-        a = new CVector(entriesD);
+        a = new CVectorOld(entriesD);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -172,7 +172,7 @@ class CVectorConstructorTests {
             expEntries[i] = new CNumber(entriesD[i]);
         }
 
-        a = new CVector(entriesD);
+        a = new CVectorOld(entriesD);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -193,7 +193,7 @@ class CVectorConstructorTests {
             expEntries[i] = new CNumber(entriesI[i]);
         }
 
-        a = new CVector(entriesI);
+        a = new CVectorOld(entriesI);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -210,7 +210,7 @@ class CVectorConstructorTests {
             expEntries[i] = new CNumber(entriesI[i]);
         }
 
-        a = new CVector(entriesI);
+        a = new CVectorOld(entriesI);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -228,7 +228,7 @@ class CVectorConstructorTests {
         expSize = expEntries.length;
         expShape = new Shape(expSize);
 
-        a = new CVector(expEntries);
+        a = new CVectorOld(expEntries);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -241,7 +241,7 @@ class CVectorConstructorTests {
         expSize = expEntries.length;
         expShape = new Shape(expSize);
 
-        a = new CVector(expEntries);
+        a = new CVectorOld(expEntries);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -259,8 +259,8 @@ class CVectorConstructorTests {
         expSize = expEntries.length;
         expShape = new Shape(expSize);
 
-        b = new CVector(expEntries);
-        a = new CVector(b);
+        b = new CVectorOld(expEntries);
+        a = new CVectorOld(b);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -277,8 +277,8 @@ class CVectorConstructorTests {
             expEntries[i] = new CNumber(entriesI[i]);
         }
 
-        b = new CVector(entriesI);
-        a = new CVector(b);
+        b = new CVectorOld(entriesI);
+        a = new CVectorOld(b);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -295,8 +295,8 @@ class CVectorConstructorTests {
             expEntries[i] = new CNumber(entriesI[i]);
         }
 
-        b = new CVector(entriesI);
-        a = new CVector(b);
+        b = new CVectorOld(entriesI);
+        a = new CVectorOld(b);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -313,8 +313,8 @@ class CVectorConstructorTests {
             expEntries[i] = new CNumber(entriesI[i]);
         }
 
-        b = new CVector(entriesI);
-        a = new CVector(b);
+        b = new CVectorOld(entriesI);
+        a = new CVectorOld(b);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);

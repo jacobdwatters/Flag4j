@@ -1,6 +1,6 @@
 package org.flag4j.linalg.transformations;
 
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ProjectionTests {
 
     double[][] expEntries;
-    Matrix expProjection;
+    MatrixOld expProjection;
 
 
     @Test
@@ -20,7 +20,7 @@ class ProjectionTests {
                 {0, 0, -1.0066889632107023, -1},
                 {0, 0, -0.20066889632107024, 0}
         };
-        expProjection = new Matrix(expEntries);
+        expProjection = new MatrixOld(expEntries);
 
         assertEquals(expProjection, Projection.getPerspective(55, 1, 0.1, 30));
 
@@ -31,7 +31,7 @@ class ProjectionTests {
                 {0, 0, -1.0001200072004321, -1},
                 {0, 0, -0.6000360021601296, 0}
         };
-        expProjection = new Matrix(expEntries);
+        expProjection = new MatrixOld(expEntries);
 
         assertEquals(expProjection, Projection.getPerspective(90, 1.54, 0.3, 5000));
 
@@ -42,7 +42,7 @@ class ProjectionTests {
                 {0, 0, -1.0001200072004321, -1},
                 {0, 0, -0.6000360021601296, 0}
         };
-        expProjection = new Matrix(expEntries);
+        expProjection = new MatrixOld(expEntries);
 
         assertEquals(expProjection, Projection.getPerspective(90, 65, 1.54, 0.3, 5000));
     }
@@ -57,7 +57,7 @@ class ProjectionTests {
                 {0, 0, -0.020100502512562814, 0},
                 {-0.9607843137254902, -0.42857142857142855, -1.0100502512562815, 1}
         };
-        expProjection = new Matrix(expEntries);
+        expProjection = new MatrixOld(expEntries);
 
         assertEquals(expProjection, Projection.getOrthogonal(-1, 50, -2, 5, 0.5, 100));
 

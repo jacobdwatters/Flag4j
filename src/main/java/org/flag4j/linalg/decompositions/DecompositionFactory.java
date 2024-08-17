@@ -25,8 +25,8 @@
 package org.flag4j.linalg.decompositions;
 
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.linalg.decompositions.chol.Cholesky;
 import org.flag4j.linalg.decompositions.chol.ComplexCholesky;
 import org.flag4j.linalg.decompositions.chol.RealCholesky;
@@ -56,7 +56,7 @@ public class DecompositionFactory {
      * Constructs a decomposer to compute the LU decomposition of a real dense matrix.
      * @return A decomposer to compute the LU decomposition of a real dense matrix.
      */
-    public static LU<Matrix> createRealLU() {
+    public static LU<MatrixOld> createRealLU() {
         return new RealLU();
     }
 
@@ -65,7 +65,7 @@ public class DecompositionFactory {
      * Constructs a decomposer to compute the LU decomposition of a complex dense matrix.
      * @return A decomposer to compute the LU decomposition of a complex dense matrix.
      */
-    public static LU<CMatrix> createComplexLU() {
+    public static LU<CMatrixOld> createComplexLU() {
         return new ComplexLU();
     }
 
@@ -74,7 +74,7 @@ public class DecompositionFactory {
      * Constructs a decomposer to compute the Cholesky decomposition of a real dense matrix.
      * @return A decomposer to compute the Cholesky decomposition of a real dense matrix.
      */
-    public static Cholesky<Matrix> createRealChol() {
+    public static Cholesky<MatrixOld> createRealChol() {
         return new RealCholesky();
     }
 
@@ -83,7 +83,7 @@ public class DecompositionFactory {
      * Constructs a decomposer to compute the Cholesky decomposition of a complex dense matrix.
      * @return A decomposer to compute the Cholesky decomposition of a complex dense matrix.
      */
-    public static Cholesky<CMatrix> createComplexChol() {
+    public static Cholesky<CMatrixOld> createComplexChol() {
         return new ComplexCholesky();
     }
 

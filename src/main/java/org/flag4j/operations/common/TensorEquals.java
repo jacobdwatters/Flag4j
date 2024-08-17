@@ -24,8 +24,8 @@
 
 package org.flag4j.operations.common;
 
-import org.flag4j.arrays.dense.*;
-import org.flag4j.arrays.sparse.*;
+import org.flag4j.arrays_old.dense.*;
+import org.flag4j.arrays_old.sparse.*;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.TensorBase;
 import org.flag4j.core.dense_base.ComplexDenseTensorBase;
@@ -53,11 +53,11 @@ import java.util.function.BiFunction;
 public final class TensorEquals {
 
     private static final HashMap<String,
-            BiFunction<Tensor,
+            BiFunction<TensorOld,
                     SparseTensorBase<?, ?, ?, ?, ?, ?, ?>,
                     Boolean>> realDenseLookUp = new HashMap<>();
     private static final HashMap<String,
-            BiFunction<CTensor,
+            BiFunction<CTensorOld,
                     SparseTensorBase<?, ?, ?, ?, ?, ?, ?>,
                     Boolean>> complexDenseLookUp = new HashMap<>();
     private static final HashMap<String,
@@ -151,32 +151,32 @@ public final class TensorEquals {
                 return generalEquals((DenseTensorBase<?, ?, ?, ?, ?>) A, (CooCTensor) B);
         } else {
             // Then both tensors are dense.
-            if(A instanceof Tensor)
-                return generalEquals((Tensor) A, (DenseTensorBase<?, ?, ?, ?, ?>) B);
+            if(A instanceof TensorOld)
+                return generalEquals((TensorOld) A, (DenseTensorBase<?, ?, ?, ?, ?>) B);
             else
-                return generalEquals((CTensor) A, (DenseTensorBase<?, ?, ?, ?, ?>) B);
+                return generalEquals((CTensorOld) A, (DenseTensorBase<?, ?, ?, ?, ?>) B);
         }
     }
 
     /**
      * Converts a tensor to an explicit tensor if it is a vector or matrix.
-     * @param src Tensor to convert to an explicit tensor.
+     * @param src TensorOld to convert to an explicit tensor.
      * @return Returns {@code src} if it is already a tensor. Otherwise, i.e. {@code src} is a matrix or vector, returns an explicit
      * tensor equivalent to {@code src}.
      */
     private static TensorBase<?, ?, ?, ?, ?, ?, ?> ensureTensor(TensorBase<?, ?, ?, ?, ?, ?, ?> src) {
         // Check for quick return.
-        if(src instanceof Tensor || src instanceof CooTensor || src instanceof CTensor || src instanceof CooCTensor)
+        if(src instanceof TensorOld || src instanceof CooTensor || src instanceof CTensorOld || src instanceof CooCTensor)
             return src;
 
-        if(src instanceof Vector)
-            src = ((Vector) src).toTensor();
-        else if(src instanceof CVector)
-            src = ((CVector) src).toTensor();
-        else if(src instanceof Matrix)
-            src = ((Matrix) src).toTensor();
-        else if(src instanceof CMatrix)
-            src = ((CMatrix) src).toTensor();
+        if(src instanceof VectorOld)
+            src = ((VectorOld) src).toTensor();
+        else if(src instanceof CVectorOld)
+            src = ((CVectorOld) src).toTensor();
+        else if(src instanceof MatrixOld)
+            src = ((MatrixOld) src).toTensor();
+        else if(src instanceof CMatrixOld)
+            src = ((CMatrixOld) src).toTensor();
         else if(src instanceof CooVector)
             src = ((CooVector) src).toTensor();
         else if(src instanceof CooCVector)
@@ -195,12 +195,12 @@ public final class TensorEquals {
 
 
     /**
-     * Checks if a real dense tensor is equal to any dense tensor (including {@link Matrix}, {@link CMatrix}, {@link Vector}, etc.).
+     * Checks if a real dense tensor is equal to any dense tensor (including {@link MatrixOld}, {@link CMatrixOld}, {@link VectorOld}, etc.).
      * @param A Real dense tensor.
      * @param B Sparse tensor.
      * @return True if the two matrices are element-wise equivalent.
      */
-    private static boolean generalEquals(Tensor A, DenseTensorBase<?, ?, ?, ?, ?> B) {
+    private static boolean generalEquals(TensorOld A, DenseTensorBase<?, ?, ?, ?, ?> B) {
         if(B instanceof RealDenseTensorBase) {
             return RealDenseEquals.tensorEquals(A.entries, A.shape, (double[]) B.entries, B.shape);
         } else if(B instanceof ComplexDenseTensorBase) {
@@ -218,7 +218,7 @@ public final class TensorEquals {
      * @param B Sparse tensor.
      * @return True if the two matrices are element-wise equivalent.
      */
-    private static boolean generalEquals(CTensor A, DenseTensorBase<?, ?, ?, ?, ?> B) {
+    private static boolean generalEquals(CTensorOld A, DenseTensorBase<?, ?, ?, ?, ?> B) {
         if(B instanceof RealDenseTensorBase) {
             return RealComplexDenseEquals.tensorEquals((double[]) B.entries, B.shape, A.entries, A.shape);
         } else if(B instanceof ComplexDenseTensorBase) {
@@ -237,10 +237,10 @@ public final class TensorEquals {
      * @return True if the two matrices are element-wise equivalent.
      */
     private static boolean generalEquals(DenseTensorBase<?, ?, ?, ?, ?> A, SparseTensorBase<?, ?, ?, ?, ?, ?, ?> B) {
-        if(A instanceof Tensor)
-            return generalEquals((Tensor) A, B);
-        else if(A instanceof CTensor)
-            return generalEquals((CTensor) A, B);
+        if(A instanceof TensorOld)
+            return generalEquals((TensorOld) A, B);
+        else if(A instanceof CTensorOld)
+            return generalEquals((CTensorOld) A, B);
         else
             throw new IllegalArgumentException("Unsupported tensor type: " + A.getClass());
     }
@@ -253,7 +253,7 @@ public final class TensorEquals {
      * @param B Sparse tensor.
      * @return True if the two matrices are element-wise equivalent.
      */
-    private static boolean generalEquals(Tensor A, SparseTensorBase<?, ?, ?, ?, ?, ?, ?> B) {
+    private static boolean generalEquals(TensorOld A, SparseTensorBase<?, ?, ?, ?, ?, ?, ?> B) {
         String type = B.getClass().getSimpleName();
 
         if(!TensorEquals.realDenseLookUp.containsKey(type))
@@ -271,7 +271,7 @@ public final class TensorEquals {
      * @param B Sparse tensor.
      * @return True if the two matrices are element-wise equivalent.
      */
-    private static boolean generalEquals(CTensor A, SparseTensorBase<?, ?, ?, ?, ?, ?, ?> B) {
+    private static boolean generalEquals(CTensorOld A, SparseTensorBase<?, ?, ?, ?, ?, ?, ?> B) {
         String type = B.getClass().getSimpleName();
 
         if(!TensorEquals.complexDenseLookUp.containsKey(type))

@@ -24,8 +24,8 @@
 
 package org.flag4j.linalg;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.linalg.decompositions.chol.ComplexCholesky;
 import org.flag4j.linalg.decompositions.chol.RealCholesky;
 import org.flag4j.util.ErrorMessages;
@@ -48,11 +48,11 @@ public class PositiveDefiniteness {
      * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if
      * all eigenvalues are strictly greater than zero.
      *
-     * @param src Matrix to check if it is positive definite.
+     * @param src MatrixOld to check if it is positive definite.
      * @return True if the matrix is positive definite. Otherwise, returns false.
-     * @see #isPosSemiDef(Matrix) 
+     * @see #isPosSemiDef(MatrixOld)
      */
-    public static boolean isPosDef(Matrix src) {
+    public static boolean isPosDef(MatrixOld src) {
         boolean result;
         double tol = 1.0E-8; // Tolerance for considering eigenvalues positive.
 
@@ -71,17 +71,17 @@ public class PositiveDefiniteness {
      * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if all eigenvalues are strictly
      * greater than zero.
      *
-     * @param src Matrix to check if it is positive definite.
+     * @param src MatrixOld to check if it is positive definite.
      * @return True if the matrix is positive definite. Otherwise, returns false.
-     * @see #isPosSemiDef(Matrix)
+     * @see #isPosSemiDef(MatrixOld)
      */
-    public static boolean isSymmPosDef(Matrix src) {
+    public static boolean isSymmPosDef(MatrixOld src) {
         boolean result = true;
 
         try {
             new RealCholesky(true).decompose(src);
         } catch(LinearAlgebraException | IllegalArgumentException e) {
-            result = false; // Could not compute Cholesky decomposition. Matrix is not symmetric positive definite.
+            result = false; // Could not compute Cholesky decomposition. MatrixOld is not symmetric positive definite.
         }
 
         return result;
@@ -93,11 +93,11 @@ public class PositiveDefiniteness {
      * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if the matrix is hermitian and
      * all eigenvalues are strictly greater than zero.
      *
-     * @param src Matrix to check if it is positive definite.
+     * @param src MatrixOld to check if it is positive definite.
      * @return True if the matrix is positive definite. Otherwise, returns false.
-     * @see #isPosSemiDef(CMatrix)
+     * @see #isPosSemiDef(CMatrixOld)
      */
-    public static boolean isPosDef(CMatrix src) {
+    public static boolean isPosDef(CMatrixOld src) {
         boolean result;
         double tol = 1.0E-8; // Tolerance for considering eigenvalues positive.
 
@@ -116,17 +116,17 @@ public class PositiveDefiniteness {
      * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if all eigenvalues are strictly
      * greater than zero.
      *
-     * @param src Matrix to check if it is positive definite.
+     * @param src MatrixOld to check if it is positive definite.
      * @return True if the matrix is positive definite. Otherwise, returns false.
-     * @see #isPosSemiDef(Matrix)
+     * @see #isPosSemiDef(MatrixOld)
      */
-    public static boolean isSymmPosDef(CMatrix src) {
+    public static boolean isSymmPosDef(CMatrixOld src) {
         boolean result = true;
 
         try {
             new ComplexCholesky(true).decompose(src);
         } catch(LinearAlgebraException | IllegalArgumentException e) {
-            result = false; // Could not compute Cholesky decomposition. Matrix is not symmetric positive definite.
+            result = false; // Could not compute Cholesky decomposition. MatrixOld is not symmetric positive definite.
         }
 
         return result;
@@ -138,11 +138,11 @@ public class PositiveDefiniteness {
      * {@code x}<sup>T</sup>{@code Mx >= 0} for any vector {@code x}, or equivalently, if the matrix is symmetric and
      * all eigenvalues are greater than or equal to zero.
      *
-     * @param src Matrix to check if it is positive semi-definite.
+     * @param src MatrixOld to check if it is positive semi-definite.
      * @return True if the matrix is positive semi-definite. Otherwise, returns false.
-     * @see #isPosSemiDef(Matrix) 
+     * @see #isPosSemiDef(MatrixOld)
      */
-    public static boolean isPosSemiDef(Matrix src) {
+    public static boolean isPosSemiDef(MatrixOld src) {
         boolean result;
         double tol = -1.0E-8; // Tolerance for considering eigenvalues non-negative.
 
@@ -161,11 +161,11 @@ public class PositiveDefiniteness {
      * {@code x}<sup>T</sup>{@code Mx >= 0} for any vector {@code x}, or equivalently, if the matrix is hermitian and
      * all eigenvalues are greater than or equal to zero.
      *
-     * @param src Matrix to check if it is positive semi-definite.
+     * @param src MatrixOld to check if it is positive semi-definite.
      * @return True if the matrix is positive semi-definite. Otherwise, returns false.
-     * @see #isPosSemiDef(CMatrix)
+     * @see #isPosSemiDef(CMatrixOld)
      */
-    public static boolean isPosSemiDef(CMatrix src) {
+    public static boolean isPosSemiDef(CMatrixOld src) {
         boolean result;
         double tol = -1.0E-8; // Tolerance for considering eigenvalues non-negative.
 

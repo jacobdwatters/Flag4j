@@ -1,9 +1,9 @@
 package org.flag4j.complex_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -17,30 +17,30 @@ class CMatrixSubTests {
     CNumber[][] aEntries, expEntries;
     Shape sparseShape;
     int[] rowIndices, colIndices;
-    CMatrix A, exp;
+    CMatrixOld A, exp;
 
 
     @Test
     void realTestCase() {
         double[][] bEntries;
-        Matrix B;
+        MatrixOld B;
 
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(234.56, -0.23), new CNumber(4)},
                 {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
                 {new CNumber(-723.234, 4), new CNumber(-9.431)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[][]{
                 {123.235235, -0.4334},
                 {0, 234.5},
                 {345, 6.8883}};
-        B = new Matrix(bEntries);
+        B = new MatrixOld(bEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(234.56, -0.23).sub(B.entries[0]), new CNumber(4).sub(B.entries[1])},
                 {new CNumber(67.1, 0.0003443993).sub(B.entries[2]), new CNumber(8.4554, -98.2).sub(B.entries[3])},
                 {new CNumber(-723.234, 4).sub(B.entries[4]), new CNumber(-9.431).sub(B.entries[5])}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.sub(B));
 
@@ -49,13 +49,13 @@ class CMatrixSubTests {
                 {new CNumber(234.56, -0.23), new CNumber(4)},
                 {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
                 {new CNumber(-723.234, 4), new CNumber(-9.431)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[][]{
                 {123.235235, -0.4334},
                 {0, 234.5}};
-        B = new Matrix(bEntries);
+        B = new MatrixOld(bEntries);
 
-        Matrix finalB = B;
+        MatrixOld finalB = B;
         assertThrows(LinearAlgebraException.class,()->A.sub(finalB));
 
 
@@ -64,14 +64,14 @@ class CMatrixSubTests {
                 {new CNumber(234.56, -0.23)},
                 {new CNumber(67.1, 0.0003443993)},
                 {new CNumber(-723.234, 4)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[][]{
                 {123.235235, 234.5},
                 {0, -0.43},
                 {345, 45}};
-        B = new Matrix(bEntries);
+        B = new MatrixOld(bEntries);
 
-        Matrix finalB1 = B;
+        MatrixOld finalB1 = B;
         assertThrows(LinearAlgebraException.class,()->A.sub(finalB1));
     }
 
@@ -79,24 +79,24 @@ class CMatrixSubTests {
     @Test
     void complexTestCase() {
         CNumber[][] bEntries;
-        CMatrix B;
+        CMatrixOld B;
 
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(234.56, -0.23), new CNumber(4)},
                 {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
                 {new CNumber(-723.234, 4), new CNumber(-9.431)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[][]{
                 {new CNumber(234.344, -0.3223), new CNumber(0)},
                 {new CNumber(0, 213.57), new CNumber(-4941.3234)},
                 {new CNumber(994.33134, Double.POSITIVE_INFINITY), new CNumber(445, 6)}};
-        B = new CMatrix(bEntries);
+        B = new CMatrixOld(bEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(234.56, -0.23).sub(B.entries[0]), new CNumber(4).sub(B.entries[1])},
                 {new CNumber(67.1, 0.0003443993).sub(B.entries[2]), new CNumber(8.4554, -98.2).sub(B.entries[3])},
                 {new CNumber(-723.234, 4).sub(B.entries[4]), new CNumber(-9.431).sub(B.entries[5])}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.sub(B));
 
@@ -105,13 +105,13 @@ class CMatrixSubTests {
                 {new CNumber(234.56, -0.23), new CNumber(4)},
                 {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
                 {new CNumber(-723.234, 4), new CNumber(-9.431)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[][]{
                 {new CNumber(234.344, -0.3223), new CNumber(0)},
                 {new CNumber(0, 213.57), new CNumber(-4941.3234)}};
-        B = new CMatrix(bEntries);
+        B = new CMatrixOld(bEntries);
 
-        CMatrix finalB = B;
+        CMatrixOld finalB = B;
         assertThrows(LinearAlgebraException.class,()->A.sub(finalB));
 
         // ---------------------- Sub-case 2 ----------------------
@@ -119,14 +119,14 @@ class CMatrixSubTests {
                 {new CNumber(234.56, -0.23)},
                 {new CNumber(67.1, 0.0003443993)},
                 {new CNumber(-723.234, 4)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[][]{
                 {new CNumber(234.344, -0.3223), new CNumber(0)},
                 {new CNumber(0, 213.57), new CNumber(-4941.3234)},
                 {new CNumber(994.33134, Double.POSITIVE_INFINITY), new CNumber(445, 6)}};
-        B = new CMatrix(bEntries);
+        B = new CMatrixOld(bEntries);
 
-        CMatrix finalB1 = B;
+        CMatrixOld finalB1 = B;
         assertThrows(LinearAlgebraException.class,()->A.sub(finalB1));
     }
 
@@ -141,7 +141,7 @@ class CMatrixSubTests {
                 {new CNumber(234.56, -0.23), new CNumber(4)},
                 {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
                 {new CNumber(-723.234, 4), new CNumber(-9.431)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{23.45, -234.57};
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{0, 1};
@@ -151,7 +151,7 @@ class CMatrixSubTests {
                 {new CNumber(234.56, -0.23).sub(B.entries[0]), new CNumber(4)},
                 {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
                 {new CNumber(-723.234, 4), new CNumber(-9.431).sub(B.entries[1])}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.sub(B));
 
@@ -160,7 +160,7 @@ class CMatrixSubTests {
                 {new CNumber(234.56, -0.23), new CNumber(4)},
                 {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
                 {new CNumber(-723.234, 4), new CNumber(-9.431)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{23.45, -234.57};
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{0, 1};
@@ -175,7 +175,7 @@ class CMatrixSubTests {
                 {new CNumber(234.56, -0.23)},
                 {new CNumber(67.1, 0.0003443993)},
                 {new CNumber(-723.234, 4)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{23.45, -234.57};
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{0, 1};
@@ -197,7 +197,7 @@ class CMatrixSubTests {
                 {new CNumber(234.56, -0.23), new CNumber(4)},
                 {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
                 {new CNumber(-723.234, 4), new CNumber(-9.431)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(234, -0.345), new CNumber(0, 45.6)};
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{0, 1};
@@ -208,7 +208,7 @@ class CMatrixSubTests {
                 {new CNumber(234.56, -0.23).sub(B.entries[0]), new CNumber(4)},
                 {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
                 {new CNumber(-723.234, 4), new CNumber(-9.431).sub(B.entries[1])}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.sub(B));
 
@@ -217,7 +217,7 @@ class CMatrixSubTests {
                 {new CNumber(234.56, -0.23), new CNumber(4)},
                 {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
                 {new CNumber(-723.234, 4), new CNumber(-9.431)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(234, -0.345), new CNumber(0, 45.6)};
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{0, 1};
@@ -232,7 +232,7 @@ class CMatrixSubTests {
                 {new CNumber(234.56, -0.23)},
                 {new CNumber(67.1, 0.0003443993)},
                 {new CNumber(-723.234, 4)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(234, -0.345), new CNumber(0, 45.6)};
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{0, 1};
@@ -253,13 +253,13 @@ class CMatrixSubTests {
                 {new CNumber(234.56, -0.23), new CNumber(4)},
                 {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
                 {new CNumber(-723.234, 4), new CNumber(-9.431)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         b = -0.234;
         expEntries = new CNumber[][]{
                 {new CNumber(234.56, -0.23).sub(b), new CNumber(4).sub(b)},
                 {new CNumber(67.1, 0.0003443993).sub(b), new CNumber(8.4554, -98.2).sub(b)},
                 {new CNumber(-723.234, 4).sub(b), new CNumber(-9.431).sub(b)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.sub(b));
     }
@@ -274,13 +274,13 @@ class CMatrixSubTests {
                 {new CNumber(234.56, -0.23), new CNumber(4)},
                 {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
                 {new CNumber(-723.234, 4), new CNumber(-9.431)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         b = new CNumber(-0.34534, 12.56);
         expEntries = new CNumber[][]{
                 {new CNumber(234.56, -0.23).sub(b), new CNumber(4).sub(b)},
                 {new CNumber(67.1, 0.0003443993).sub(b), new CNumber(8.4554, -98.2).sub(b)},
                 {new CNumber(-723.234, 4).sub(b), new CNumber(-9.431).sub(b)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.sub(b));
     }

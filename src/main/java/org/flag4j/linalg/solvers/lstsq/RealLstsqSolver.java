@@ -25,8 +25,8 @@
 package org.flag4j.linalg.solvers.lstsq;
 
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.linalg.decompositions.qr.RealQR;
 import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
 
@@ -37,7 +37,7 @@ import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
  * {@code A}<sup>T</sup>{@code Ax=A}<sup>T</sup>{@code b}.
  * This is done efficiently using a {@link RealQR QR decomposition}.
  */
-public class RealLstsqSolver extends LstsqSolver<Matrix, Vector> {
+public class RealLstsqSolver extends LstsqSolver<MatrixOld, VectorOld> {
 
 
     /**

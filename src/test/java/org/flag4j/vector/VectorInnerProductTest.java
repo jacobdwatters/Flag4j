@@ -1,9 +1,9 @@
 package org.flag4j.vector;
 
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -14,17 +14,17 @@ class VectorInnerProductTest {
     int[] indices;
     int sparseSize;
     double[] aEntries = {1.0, 5.6, -9.355, 215.0};
-    Vector a = new Vector(aEntries);
+    VectorOld a = new VectorOld(aEntries);
 
     @Test
     void realDenseTestCase() {
         double[] bEntries;
-        Vector b;
+        VectorOld b;
         Double exp;
 
         // ----------------------- Sub-case 1 -----------------------
         bEntries = new double[]{-0.2344, 0.0, 1.4667, 712.45};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
         exp = 153162.7946215;
 
         assertEquals(exp, a.inner(b));
@@ -51,13 +51,13 @@ class VectorInnerProductTest {
     @Test
     void complexDenseTestCase() {
         CNumber[] bEntries;
-        CVector b;
+        CVectorOld b;
         CNumber exp;
 
         // ----------------------- Sub-case 1 -----------------------
         bEntries = new CNumber[]{new CNumber("1.45-9.8i"), new CNumber("0.0+98.234i"),
                 new CNumber("0.134"), new CNumber("-99.24+45.008i")};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
         exp = new CNumber("-21336.40357-10217.030400000001j");
 
         assertEquals(exp, a.inner(b));
@@ -84,11 +84,11 @@ class VectorInnerProductTest {
     @Test
     void normalizeTestCase() {
         double[] expEntries;
-        Vector exp;
+        VectorOld exp;
 
         // ----------------------- Sub-case 1 -----------------------
         expEntries = new double[]{0.0046451435284722955, 0.026012803759444855, -0.043455317708858326, 0.9987058586215436};
-        exp = new Vector(expEntries);
+        exp = new VectorOld(expEntries);
 
         assertEquals(exp, a.normalize());
     }

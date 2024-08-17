@@ -1,9 +1,9 @@
 package org.flag4j.sparse_csr_complex_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CsrCMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -22,11 +22,11 @@ class CsrCMatrixToVectorTests {
         aEntries = new CNumber[][]{{new CNumber(1.23, -9.25), CNumber.ZERO, CNumber.ZERO,
                 CNumber.ZERO, CNumber.ZERO, new CNumber(1.526, -3.1),
                 CNumber.ZERO, CNumber.ZERO, new CNumber(0, 1.2)}};
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         expEntries = new CNumber[]{new CNumber(1.23, -9.25), CNumber.ZERO, CNumber.ZERO,
                 CNumber.ZERO, CNumber.ZERO, new CNumber(1.526, -3.1),
                 CNumber.ZERO, CNumber.ZERO, new CNumber(0, 1.2)};
-        exp = new CVector(expEntries).toCoo();
+        exp = new CVectorOld(expEntries).toCoo();
 
         assertEquals(exp, A.toVector());
 
@@ -34,11 +34,11 @@ class CsrCMatrixToVectorTests {
         aEntries = new CNumber[][]{{new CNumber(1.23, -9.25)}, {CNumber.ZERO}, {CNumber.ZERO},
                 {CNumber.ZERO}, {CNumber.ZERO}, {new CNumber(1.526, -3.1)},
                 {CNumber.ZERO}, {CNumber.ZERO}, {new CNumber(0, 1.2)}};
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         expEntries = new CNumber[]{new CNumber(1.23, -9.25), CNumber.ZERO, CNumber.ZERO,
                 CNumber.ZERO, CNumber.ZERO, new CNumber(1.526, -3.1),
                 CNumber.ZERO, CNumber.ZERO, new CNumber(0, 1.2)};
-        exp = new CVector(expEntries).toCoo();
+        exp = new CVectorOld(expEntries).toCoo();
 
         assertEquals(exp, A.toVector());
 
@@ -49,11 +49,11 @@ class CsrCMatrixToVectorTests {
                 {CNumber.ZERO, new CNumber(1.526, -3.1)},
                 {CNumber.ZERO, CNumber.ZERO},
                 {new CNumber(0, 1.2), CNumber.ZERO}};
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         expEntries = new CNumber[]{new CNumber(1.23, -9.25), CNumber.ZERO, CNumber.ZERO,
                 CNumber.ZERO, CNumber.ZERO, new CNumber(1.526, -3.1),
                 CNumber.ZERO, CNumber.ZERO, new CNumber(0, 1.2), CNumber.ZERO};
-        exp = new CVector(expEntries).toCoo();
+        exp = new CVectorOld(expEntries).toCoo();
 
         assertEquals(exp, A.toVector());
     }

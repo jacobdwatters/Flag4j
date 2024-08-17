@@ -1,9 +1,9 @@
 package org.flag4j.sparse_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -184,10 +184,10 @@ class CooMatrixAugmentTests {
         CooMatrix a;
 
         double[][] bEntries;
-        Matrix b;
+        MatrixOld b;
 
         double[][] expEntries;
-        Matrix exp;
+        MatrixOld exp;
 
         // ---------------------  Sub-case 1 ---------------------
         aShape = new Shape(3, 5);
@@ -200,13 +200,13 @@ class CooMatrixAugmentTests {
                 {0.45827, 0.98222},
                 {0.10505, 0.01145},
                 {0.44006, 0.32708}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expEntries = new double[][]{
                 {0.0, 0.24209, 0.0, 0.0, 0.05396, 0.45827, 0.98222},
                 {0.0, 0.0, 0.0, 0.55784, 0.0, 0.10505, 0.01145},
                 {0.0, 0.0, 0.0, 0.0, 0.0, 0.44006, 0.32708}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertEquals(exp, a.augment(b));
 
@@ -220,12 +220,12 @@ class CooMatrixAugmentTests {
         bEntries = new double[][]{
                 {0.17793, 0.69724, 0.30593},
                 {0.57252, 0.42922, 0.76316}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expEntries = new double[][]{
                 {0.0, 0.17793, 0.69724, 0.30593},
                 {0.0, 0.57252, 0.42922, 0.76316}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertEquals(exp, a.augment(b));
 
@@ -240,10 +240,10 @@ class CooMatrixAugmentTests {
                 {0.76158, 0.77484, 0.16097, 0.03449},
                 {0.63107, 0.56961, 0.68014, 0.78149},
                 {0.83588, 0.67375, 0.36044, 0.12535}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         CooMatrix finala = a;
-        Matrix finalb = b;
+        MatrixOld finalb = b;
         assertThrows(Exception.class, ()->finala.augment(finalb));
     }
 
@@ -257,10 +257,10 @@ class CooMatrixAugmentTests {
         CooMatrix a;
 
         CNumber[][] bEntries;
-        CMatrix b;
+        CMatrixOld b;
 
         CNumber[][] expEntries;
-        CMatrix exp;
+        CMatrixOld exp;
 
         // ---------------------  Sub-case 1 ---------------------
         aShape = new Shape(3, 5);
@@ -273,13 +273,13 @@ class CooMatrixAugmentTests {
                 {new CNumber("0.69748+0.29275i"), new CNumber("0.30393+0.95144i")},
                 {new CNumber("0.62313+0.50274i"), new CNumber("0.89225+0.42919i")},
                 {new CNumber("0.30844+0.64805i"), new CNumber("0.20611+0.94464i")}};
-        b = new CMatrix(bEntries);
+        b = new CMatrixOld(bEntries);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.0"), new CNumber("0.4513"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.69748+0.29275i"), new CNumber("0.30393+0.95144i")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.62313+0.50274i"), new CNumber("0.89225+0.42919i")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.10819"), new CNumber("0.52671"), new CNumber("0.30844+0.64805i"), new CNumber("0.20611+0.94464i")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.augment(b));
 
@@ -293,12 +293,12 @@ class CooMatrixAugmentTests {
         bEntries = new CNumber[][]{
                 {new CNumber("0.58223+0.21348i"), new CNumber("0.53616+0.63303i"), new CNumber("0.5126+0.48521i")},
                 {new CNumber("0.39158+0.05234i"), new CNumber("0.80737+0.00379i"), new CNumber("0.21414+0.55187i")}};
-        b = new CMatrix(bEntries);
+        b = new CMatrixOld(bEntries);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.0"), new CNumber("0.58223+0.21348i"), new CNumber("0.53616+0.63303i"), new CNumber("0.5126+0.48521i")},
                 {new CNumber("0.0"), new CNumber("0.39158+0.05234i"), new CNumber("0.80737+0.00379i"), new CNumber("0.21414+0.55187i")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.augment(b));
 
@@ -313,10 +313,10 @@ class CooMatrixAugmentTests {
                 {new CNumber("0.72123+0.46784i"), new CNumber("0.80452+0.80951i"), new CNumber("0.02527+0.50829i"), new CNumber("0.69448+0.13451i")},
                 {new CNumber("0.99776+0.58328i"), new CNumber("0.84592+0.85895i"), new CNumber("0.16925+0.12029i"), new CNumber("0.04582+0.80704i")},
                 {new CNumber("0.25605+0.00949i"), new CNumber("0.79089+0.73571i"), new CNumber("0.36083+0.2747i"), new CNumber("0.3623+0.57842i")}};
-        b = new CMatrix(bEntries);
+        b = new CMatrixOld(bEntries);
 
         CooMatrix finala = a;
-        CMatrix finalb = b;
+        CMatrixOld finalb = b;
         assertThrows(Exception.class, ()->finala.augment(finalb));
     }
 }

@@ -25,7 +25,7 @@
 package org.flag4j.operations.sparse.coo.real;
 
 
-import org.flag4j.arrays.sparse.CooTensor;
+import org.flag4j.arrays_old.sparse.CooTensor;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -35,7 +35,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Utility class for computing operations between two real sparse COO tensors.
+ * Utility class for computing operations_old between two real sparse COO tensors.
  */
 public final class RealCooTensorOperations {
 
@@ -180,7 +180,7 @@ public final class RealCooTensorOperations {
             }
         }
 
-        // Truncate arrays if necessary.
+        // Truncate arrays_old if necessary.
         return new CooTensor(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
     }
 }

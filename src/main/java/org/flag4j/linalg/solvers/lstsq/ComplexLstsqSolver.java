@@ -24,8 +24,8 @@
 
 package org.flag4j.linalg.solvers.lstsq;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.linalg.decompositions.qr.ComplexQR;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 
@@ -35,7 +35,7 @@ import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
  * {@code A}<sup>T</sup>{@code Ax=A}<sup>T</sup>{@code b}.
  * This is done using efficiently a {@link ComplexQR QR decomposition}.
  */
-public class ComplexLstsqSolver extends LstsqSolver<CMatrix, CVector> {
+public class ComplexLstsqSolver extends LstsqSolver<CMatrixOld, CVectorOld> {
 
 
     /**

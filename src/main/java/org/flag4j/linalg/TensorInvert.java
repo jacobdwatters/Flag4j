@@ -24,10 +24,10 @@
 
 package org.flag4j.linalg;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CTensorOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.core.Shape;
 import org.flag4j.core.TensorBase;
 import org.flag4j.core.TensorExclusiveMixin;
@@ -51,12 +51,13 @@ public final class TensorInvert {
      * {@link TensorExclusiveMixin#tensorDot(TensorBase, int) src.tensorDot(X, numIndices)} is the 'identity' tensor for the tensor
      * dot product operation.</p>
      * <p>A tensor {@code I} is the identity for a tensor dot product if {@code src.tensorDot(I, numIndices).equals(this)}.</p>
-     * @param src Tensor to compute inverse of.
+     * @param src TensorOld to compute inverse of.
      * @param numIndices The number of first numIndices which are involved in the inverse sum.
      * @return The 'inverse' of this tensor as defined in the above sense.
      * @throws IllegalArgumentException If {@code numIndices} is not positive.
      */
-    public static Tensor inv(Tensor src, int numIndices) {
+    @Deprecated
+    public static TensorOld inv(TensorOld src, int numIndices) {
         ParameterChecks.assertPositive(numIndices);
 
         Shape originalShape = src.shape;
@@ -64,9 +65,9 @@ public final class TensorInvert {
         int prod = getProduct(originalShape.getDims(), numIndices);
 
         // Convert to an equivalent matrix inverse problem and solve.
-        Matrix matInverse = Invert.inv(new Matrix(prod, src.entries.length-prod, src.entries));
+        MatrixOld matInverse = Invert.inv(new MatrixOld(prod, src.entries.length-prod, src.entries));
 
-        return new Tensor(invShape, matInverse.entries); // Reshape as tensor.
+        return new TensorOld(invShape, matInverse.entries); // Reshape as tensor.
     }
 
 
@@ -75,12 +76,13 @@ public final class TensorInvert {
      * {@link TensorExclusiveMixin#tensorDot(TensorBase, int) src.tensorDot(X, numIndices)} is the 'identity' tensor for the tensor
      * dot product operation.</p>
      * <p>A tensor {@code I} is the identity for a tensor dot product if {@code src.tensorDot(I, numIndices).equals(this)}.</p>
-     * @param src Tensor to compute inverse of.
+     * @param src TensorOld to compute inverse of.
      * @param numIndices The number of first numIndices which are involved in the inverse sum.
      * @return The 'inverse' of this tensor as defined in the above sense.
      * @throws IllegalArgumentException If {@code numIndices} is not positive.
      */
-    public static CTensor inv(CTensor src, int numIndices) {
+    @Deprecated
+    public static CTensorOld inv(CTensorOld src, int numIndices) {
         ParameterChecks.assertPositive(numIndices);
 
         Shape originalShape = src.shape;
@@ -88,9 +90,9 @@ public final class TensorInvert {
         int prod = getProduct(originalShape.getDims(), numIndices);
 
         // Convert to an equivalent matrix inverse problem.
-        CMatrix matInverse = Invert.inv(new CMatrix(prod, src.entries.length-prod, src.entries));
+        CMatrixOld matInverse = Invert.inv(new CMatrixOld(prod, src.entries.length-prod, src.entries));
 
-        return new CTensor(invShape, matInverse.entries); // Reshape as tensor.
+        return new CTensorOld(invShape, matInverse.entries); // Reshape as tensor.
     }
 
 

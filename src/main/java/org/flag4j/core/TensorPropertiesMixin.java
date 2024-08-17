@@ -30,7 +30,6 @@ package org.flag4j.core;
  */
 interface TensorPropertiesMixin {
 
-
     /**
      * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
      * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.

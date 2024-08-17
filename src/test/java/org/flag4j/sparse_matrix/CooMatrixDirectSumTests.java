@@ -1,9 +1,9 @@
 package org.flag4j.sparse_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.linalg.ops.DirectSum;
@@ -192,7 +192,7 @@ class CooMatrixDirectSumTests {
         CooMatrix a;
 
         double[][] bEntries;
-        Matrix b;
+        MatrixOld b;
 
         Shape expShape;
         int[] expRowIndices;
@@ -212,7 +212,7 @@ class CooMatrixDirectSumTests {
                 {0.29046, 0.90379, 0.19881},
                 {0.60646, 0.17191, 0.80605},
                 {0.35467, 0.82455, 0.66883}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expShape = new Shape(6, 6);
         expEntries = new double[]{0.9471, 0.78063, 0.14848, 0.84453, 0.29046, 0.90379, 0.19881, 0.60646, 0.17191, 0.80605, 0.35467, 0.82455, 0.66883};
@@ -235,7 +235,7 @@ class CooMatrixDirectSumTests {
                 {0.46751, 0.28133},
                 {0.40378, 0.34267},
                 {0.68666, 0.04621}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expShape = new Shape(6, 4);
         expEntries = new double[]{0.95946, 0.46849, 0.1267, 0.1966, 0.46751, 0.28133, 0.40378, 0.34267, 0.68666, 0.04621};
@@ -267,7 +267,7 @@ class CooMatrixDirectSumTests {
                 {0.83611, 0.39451, 0.84648, 0.37964, 0.31351, 0.85914},
                 {0.46213, 0.56689, 0.77718, 0.38792, 0.72643, 0.70424},
                 {0.53557, 0.3165, 0.47377, 0.93039, 0.35041, 0.69137}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expShape = new Shape(28, 11);
         expEntries = new double[]{0.53133, 0.69632, 0.10432, 0.45471, 0.8554, 0.70034, 0.00942, 0.82027, 0.03932, 0.47388, 0.97456, 0.33064, 0.24773, 0.19777, 0.65902, 0.35946, 0.78255, 0.78345, 0.0983, 0.38273, 0.28829, 0.48223, 0.38455, 0.50828, 0.86524, 0.7055, 0.44414, 0.73977, 0.90158, 0.99077, 0.24698, 0.44316, 0.48544, 0.22846, 0.72684, 0.38091, 0.12083, 0.8205, 0.0789, 0.35711, 0.19032, 0.47534, 0.73126, 0.82564, 0.30244, 0.43364, 0.74498, 0.48812, 0.64507, 0.91902, 0.86838, 0.02126, 0.49515, 0.61257, 0.92955, 0.92565, 0.20163, 0.40987, 0.18285, 0.49095, 0.16805, 0.62921, 0.15065, 0.07543, 0.32682, 0.73049, 0.58299, 0.16706, 0.22822, 0.4694, 0.19263, 0.99446, 0.27772, 0.86876, 0.58823, 0.84645, 0.60044, 0.41445, 0.08495, 0.3587, 0.83611, 0.39451, 0.84648, 0.37964, 0.31351, 0.85914, 0.46213, 0.56689, 0.77718, 0.38792, 0.72643, 0.70424, 0.53557, 0.3165, 0.47377, 0.93039, 0.35041, 0.69137};
@@ -288,7 +288,7 @@ class CooMatrixDirectSumTests {
         CooMatrix a;
 
         CNumber[][] bEntries;
-        CMatrix b;
+        CMatrixOld b;
 
         Shape expShape;
         int[] expRowIndices;
@@ -308,7 +308,7 @@ class CooMatrixDirectSumTests {
                 {new CNumber("0.62178+0.95351i"), new CNumber("0.25424+0.19833i"), new CNumber("0.05743+0.75706i")},
                 {new CNumber("0.28481+0.34564i"), new CNumber("0.16388+0.69526i"), new CNumber("0.22402+0.84895i")},
                 {new CNumber("0.53869+0.9115i"), new CNumber("0.75743+0.82263i"), new CNumber("0.84954+0.75556i")}};
-        b = new CMatrix(bEntries);
+        b = new CMatrixOld(bEntries);
 
         expShape = new Shape(6, 6);
         expEntries = new CNumber[]{new CNumber("0.4884"), new CNumber("0.57432+0.16659i"), new CNumber("0.47122+0.62557i"), new CNumber("0.61823+0.61842i"), new CNumber("0.62178+0.95351i"), new CNumber("0.25424+0.19833i"), new CNumber("0.05743+0.75706i"), new CNumber("0.28481+0.34564i"), new CNumber("0.16388+0.69526i"), new CNumber("0.22402+0.84895i"), new CNumber("0.53869+0.9115i"), new CNumber("0.75743+0.82263i"), new CNumber("0.84954+0.75556i")};
@@ -331,7 +331,7 @@ class CooMatrixDirectSumTests {
                 {new CNumber("0.24139+0.51966i"), new CNumber("0.67086+0.96679i")},
                 {new CNumber("0.26419+0.67671i"), new CNumber("0.41824+0.79949i")},
                 {new CNumber("0.42013+0.98147i"), new CNumber("0.82586+0.99174i")}};
-        b = new CMatrix(bEntries);
+        b = new CMatrixOld(bEntries);
 
         expShape = new Shape(6, 4);
         expEntries = new CNumber[]{new CNumber("0.20067+0.76104i"), new CNumber("0.769+0.51839i"), new CNumber("0.37303+0.69709i"), new CNumber("0.76031+0.35138i"), new CNumber("0.24139+0.51966i"), new CNumber("0.67086+0.96679i"), new CNumber("0.26419+0.67671i"), new CNumber("0.41824+0.79949i"), new CNumber("0.42013+0.98147i"), new CNumber("0.82586+0.99174i")};
@@ -363,7 +363,7 @@ class CooMatrixDirectSumTests {
                 {new CNumber("0.0234+0.02001i"), new CNumber("0.52699+0.32663i"), new CNumber("0.89666+0.28074i"), new CNumber("0.48736+0.80453i"), new CNumber("0.46938+0.79886i"), new CNumber("0.29248+0.41249i")},
                 {new CNumber("0.2419+0.84832i"), new CNumber("0.81226+0.54305i"), new CNumber("0.96564+0.82395i"), new CNumber("0.18676+0.93304i"), new CNumber("0.66785+0.29056i"), new CNumber("0.42223+0.83921i")},
                 {new CNumber("0.11808+0.94414i"), new CNumber("0.46313+0.88265i"), new CNumber("0.77841+0.69067i"), new CNumber("0.30383+0.41319i"), new CNumber("0.15568+0.47926i"), new CNumber("0.94116+0.97658i")}};
-        b = new CMatrix(bEntries);
+        b = new CMatrixOld(bEntries);
 
         expShape = new Shape(28, 11);
         expEntries = new CNumber[]{new CNumber("0.18246"), new CNumber("0.62977"), new CNumber("0.54024"), new CNumber("0.1938"), new CNumber("0.72261"), new CNumber("0.03498"), new CNumber("0.10563"), new CNumber("0.66627"), new CNumber("0.25401"), new CNumber("0.49059"), new CNumber("0.54795"), new CNumber("0.89787"), new CNumber("0.79596"), new CNumber("0.56759"), new CNumber("0.46846+0.10833i"), new CNumber("0.14377+0.75617i"), new CNumber("0.07594+0.29978i"), new CNumber("0.56306+0.82182i"), new CNumber("0.19916+0.08544i"), new CNumber("0.39548+0.62883i"), new CNumber("0.67248+0.81796i"), new CNumber("0.35025+0.69244i"), new CNumber("0.61628+0.73238i"), new CNumber("0.5961+0.88939i"), new CNumber("0.21971+0.65859i"), new CNumber("0.8511+0.31135i"), new CNumber("0.0449+0.0442i"), new CNumber("0.11554+0.87542i"), new CNumber("0.56225+0.39056i"), new CNumber("0.85716+0.46189i"), new CNumber("0.60369+0.98709i"), new CNumber("0.56481+0.74681i"), new CNumber("0.17488+0.91857i"), new CNumber("0.63517+0.21242i"), new CNumber("0.7328+0.80571i"), new CNumber("0.32908+0.40579i"), new CNumber("0.55495+0.42956i"), new CNumber("0.06775+0.65319i"), new CNumber("0.24194+0.34182i"), new CNumber("0.75516+0.23242i"), new CNumber("0.30002+0.52049i"), new CNumber("0.0195+0.66491i"), new CNumber("0.11195+0.99746i"), new CNumber("0.06188+0.76093i"), new CNumber("0.02372+0.88658i"), new CNumber("0.80361+0.77282i"), new CNumber("0.62455+0.86084i"), new CNumber("0.48187+0.41808i"), new CNumber("0.53663+0.0254i"), new CNumber("0.45026+0.77011i"), new CNumber("0.16472+0.57632i"), new CNumber("0.36278+0.92842i"), new CNumber("0.2307+0.63646i"), new CNumber("0.49377+0.31166i"), new CNumber("0.63059+0.51516i"), new CNumber("0.00098+0.93881i"), new CNumber("0.96944+0.83608i"), new CNumber("0.07921+0.71263i"), new CNumber("0.46583+0.25113i"), new CNumber("0.99034+0.57762i"), new CNumber("0.90913+0.56968i"), new CNumber("0.51301+0.02804i"), new CNumber("0.94222+0.00757i"), new CNumber("0.27242+0.95991i"), new CNumber("0.74864+0.97997i"), new CNumber("0.87243+0.02436i"), new CNumber("0.68545+0.13708i"), new CNumber("0.73992+0.67858i"), new CNumber("0.46409+0.66538i"), new CNumber("0.29854+0.91704i"), new CNumber("0.75629+0.41053i"), new CNumber("0.51912+0.93605i"), new CNumber("0.66452+0.97836i"), new CNumber("0.78868+0.60342i"), new CNumber("0.80154+0.02122i"), new CNumber("0.05816+0.57239i"), new CNumber("0.23776+0.29626i"), new CNumber("0.55069+0.60787i"), new CNumber("0.6668+0.873i"), new CNumber("0.70669+0.45406i"), new CNumber("0.0234+0.02001i"), new CNumber("0.52699+0.32663i"), new CNumber("0.89666+0.28074i"), new CNumber("0.48736+0.80453i"), new CNumber("0.46938+0.79886i"), new CNumber("0.29248+0.41249i"), new CNumber("0.2419+0.84832i"), new CNumber("0.81226+0.54305i"), new CNumber("0.96564+0.82395i"), new CNumber("0.18676+0.93304i"), new CNumber("0.66785+0.29056i"), new CNumber("0.42223+0.83921i"), new CNumber("0.11808+0.94414i"), new CNumber("0.46313+0.88265i"), new CNumber("0.77841+0.69067i"), new CNumber("0.30383+0.41319i"), new CNumber("0.15568+0.47926i"), new CNumber("0.94116+0.97658i")};
@@ -554,7 +554,7 @@ class CooMatrixDirectSumTests {
         CooMatrix a;
 
         double[][] bEntries;
-        Matrix b;
+        MatrixOld b;
 
         Shape expShape;
         int[] expRowIndices;
@@ -574,7 +574,7 @@ class CooMatrixDirectSumTests {
                 {0.39302, 0.53839, 0.61549},
                 {0.50429, 0.50156, 0.30362},
                 {0.93078, 0.34518, 0.6854}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expShape = new Shape(6, 6);
         expEntries = new double[]{0.76532, 0.51659, 0.54962, 0.39302, 0.53839, 0.61549, 0.50429, 0.50156, 0.30362, 0.93078, 0.34518, 0.6854, 0.0778};
@@ -597,7 +597,7 @@ class CooMatrixDirectSumTests {
                 {0.0436, 0.8439},
                 {0.06687, 0.30178},
                 {0.02106, 0.84792}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expShape = new Shape(6, 4);
         expEntries = new double[]{0.9895, 0.66022, 0.31201, 0.15653, 0.0436, 0.8439, 0.06687, 0.30178, 0.02106, 0.84792};
@@ -629,7 +629,7 @@ class CooMatrixDirectSumTests {
                 {0.73345, 0.21992, 0.18397, 0.13365, 0.32326, 0.38326},
                 {0.34359, 0.40562, 0.8703, 0.65249, 0.37304, 0.94381},
                 {0.847, 0.60078, 0.131, 0.04455, 0.28184, 0.17891}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expShape = new Shape(28, 11);
         expEntries = new double[]{0.26822, 0.37849, 0.35694, 0.10746, 0.00328, 0.3996, 0.24014, 0.12577, 0.31152, 0.40922, 0.02657, 0.57162, 0.47627, 0.18149, 0.01357, 0.11488, 0.88359, 0.27094, 0.52003, 0.95039, 0.24626, 0.55939, 0.68338, 0.90858, 0.56346, 0.18074, 0.99682, 0.44922, 0.91819, 0.41014, 0.87124, 0.55163, 0.954, 0.48999, 0.95899, 0.66659, 0.47058, 0.00265, 0.28464, 0.6164, 0.27142, 0.33421, 0.94399, 0.43872, 0.82363, 0.07901, 0.79046, 0.64227, 0.92647, 0.67403, 0.70681, 0.98536, 0.96611, 0.00183, 0.42248, 0.00074, 0.8854, 0.06665, 0.69193, 0.71229, 0.33101, 0.71886, 0.99038, 0.7506, 0.59483, 0.07408, 0.73345, 0.21992, 0.18397, 0.13365, 0.32326, 0.38326, 0.34359, 0.40562, 0.8703, 0.65249, 0.37304, 0.94381, 0.847, 0.60078, 0.131, 0.04455, 0.28184, 0.17891, 0.75921, 0.23954, 0.45291, 0.30381, 0.14104, 0.99878, 0.34272, 0.06406, 0.14733, 0.75918, 0.79406, 0.68084, 0.10748, 0.19839};
@@ -650,7 +650,7 @@ class CooMatrixDirectSumTests {
         CooMatrix a;
 
         CNumber[][] bEntries;
-        CMatrix b;
+        CMatrixOld b;
 
         Shape expShape;
         int[] expRowIndices;
@@ -670,7 +670,7 @@ class CooMatrixDirectSumTests {
                 {new CNumber("0.40987+0.0367i"), new CNumber("0.67109+0.40036i"), new CNumber("0.07186+0.12732i")},
                 {new CNumber("0.39774+0.05174i"), new CNumber("0.93539+0.47693i"), new CNumber("0.86447+0.59669i")},
                 {new CNumber("0.2025+0.06263i"), new CNumber("0.01157+0.53881i"), new CNumber("0.49949+0.33721i")}};
-        b = new CMatrix(bEntries);
+        b = new CMatrixOld(bEntries);
 
         expShape = new Shape(6, 6);
         expEntries = new CNumber[]{new CNumber("0.24736+0.75522i"), new CNumber("0.67449+0.37946i"), new CNumber("0.80865+0.74668i"), new CNumber("0.40987+0.0367i"), new CNumber("0.67109+0.40036i"), new CNumber("0.07186+0.12732i"), new CNumber("0.39774+0.05174i"), new CNumber("0.93539+0.47693i"), new CNumber("0.86447+0.59669i"), new CNumber("0.2025+0.06263i"), new CNumber("0.01157+0.53881i"), new CNumber("0.49949+0.33721i"), new CNumber("0.24679")};
@@ -693,7 +693,7 @@ class CooMatrixDirectSumTests {
                 {new CNumber("0.31983+0.35642i"), new CNumber("0.17321+0.7033i")},
                 {new CNumber("0.40622+0.18483i"), new CNumber("0.22014+0.08962i")},
                 {new CNumber("0.63706+0.09784i"), new CNumber("0.95532+0.74443i")}};
-        b = new CMatrix(bEntries);
+        b = new CMatrixOld(bEntries);
 
         expShape = new Shape(6, 4);
         expEntries = new CNumber[]{new CNumber("0.95961+0.55012i"), new CNumber("0.07709+0.21971i"), new CNumber("0.79181+0.14924i"), new CNumber("0.28403+0.49931i"), new CNumber("0.31983+0.35642i"), new CNumber("0.17321+0.7033i"), new CNumber("0.40622+0.18483i"), new CNumber("0.22014+0.08962i"), new CNumber("0.63706+0.09784i"), new CNumber("0.95532+0.74443i")};
@@ -725,7 +725,7 @@ class CooMatrixDirectSumTests {
                 {new CNumber("0.79418+0.12344i"), new CNumber("0.38493+0.26857i"), new CNumber("0.8192+0.60589i"), new CNumber("0.89572+0.1365i"), new CNumber("0.40387+0.25125i"), new CNumber("0.89349+0.45239i")},
                 {new CNumber("0.67492+0.40309i"), new CNumber("0.18231+0.28143i"), new CNumber("0.19703+0.35099i"), new CNumber("0.54147+0.4359i"), new CNumber("0.50925+0.76791i"), new CNumber("0.40236+0.67426i")},
                 {new CNumber("0.88436+0.42101i"), new CNumber("0.75941+0.17821i"), new CNumber("0.78757+0.0649i"), new CNumber("0.83376+0.69951i"), new CNumber("0.57271+0.0057i"), new CNumber("0.8819+0.38706i")}};
-        b = new CMatrix(bEntries);
+        b = new CMatrixOld(bEntries);
 
         expShape = new Shape(28, 11);
         expEntries = new CNumber[]{new CNumber("0.09495+0.60496i"), new CNumber("0.91311+0.14609i"), new CNumber("0.22331+0.86692i"), new CNumber("0.34818+0.98298i"), new CNumber("0.38552+0.13002i"), new CNumber("0.24886+0.0809i"), new CNumber("0.46818+0.86879i"), new CNumber("0.76817+0.0027i"), new CNumber("0.89061+0.38355i"), new CNumber("0.49315+0.0735i"), new CNumber("0.01459+0.12956i"), new CNumber("0.93247+0.28149i"), new CNumber("0.90017+0.86808i"), new CNumber("0.71967+0.46991i"), new CNumber("0.68536+0.8864i"), new CNumber("0.25795+0.55715i"), new CNumber("0.89709+0.14283i"), new CNumber("0.70287+0.90793i"), new CNumber("0.26908+0.84306i"), new CNumber("0.78192+0.79156i"), new CNumber("0.27281+0.70007i"), new CNumber("0.72163+0.35773i"), new CNumber("0.82102+0.34788i"), new CNumber("0.60869+0.83386i"), new CNumber("0.03427+0.99641i"), new CNumber("0.21224+0.90445i"), new CNumber("0.3773+0.93432i"), new CNumber("0.27705+0.44558i"), new CNumber("0.65139+0.96358i"), new CNumber("0.56276+0.95405i"), new CNumber("0.79041+0.71642i"), new CNumber("0.93389+0.25596i"), new CNumber("0.47872+0.6751i"), new CNumber("0.94296+0.40684i"), new CNumber("0.4038+0.87913i"), new CNumber("0.22385+0.98267i"), new CNumber("0.70965+0.10326i"), new CNumber("0.48874+0.81958i"), new CNumber("0.14389+0.46799i"), new CNumber("0.3366+0.19123i"), new CNumber("0.65009+0.78853i"), new CNumber("0.28628+0.3122i"), new CNumber("0.25582+0.6892i"), new CNumber("0.81468+0.85371i"), new CNumber("0.49466+0.71942i"), new CNumber("0.92267+0.3747i"), new CNumber("0.09491+0.09278i"), new CNumber("0.10452+0.40149i"), new CNumber("0.73491+0.22062i"), new CNumber("0.46567+0.51446i"), new CNumber("0.80724+0.37621i"), new CNumber("0.09681+0.81967i"), new CNumber("0.73089+0.4304i"), new CNumber("0.75874+0.73927i"), new CNumber("0.40421+0.91567i"), new CNumber("0.79238+0.33504i"), new CNumber("0.49745+0.55204i"), new CNumber("0.96481+0.59047i"), new CNumber("0.2134+0.3848i"), new CNumber("0.87603+0.62491i"), new CNumber("0.82563+0.65723i"), new CNumber("0.64511+0.20912i"), new CNumber("0.79224+0.336i"), new CNumber("0.74347+0.63977i"), new CNumber("0.59219+0.61107i"), new CNumber("0.09252+0.40304i"), new CNumber("0.79418+0.12344i"), new CNumber("0.38493+0.26857i"), new CNumber("0.8192+0.60589i"), new CNumber("0.89572+0.1365i"), new CNumber("0.40387+0.25125i"), new CNumber("0.89349+0.45239i"), new CNumber("0.67492+0.40309i"), new CNumber("0.18231+0.28143i"), new CNumber("0.19703+0.35099i"), new CNumber("0.54147+0.4359i"), new CNumber("0.50925+0.76791i"), new CNumber("0.40236+0.67426i"), new CNumber("0.88436+0.42101i"), new CNumber("0.75941+0.17821i"), new CNumber("0.78757+0.0649i"), new CNumber("0.83376+0.69951i"), new CNumber("0.57271+0.0057i"), new CNumber("0.8819+0.38706i"), new CNumber("0.79976"), new CNumber("0.76613"), new CNumber("0.17925"), new CNumber("0.18628"), new CNumber("0.19477"), new CNumber("0.71918"), new CNumber("0.43503"), new CNumber("0.89331"), new CNumber("0.27575"), new CNumber("0.81762"), new CNumber("0.00097"), new CNumber("0.56518"), new CNumber("0.01486"), new CNumber("0.3944")};

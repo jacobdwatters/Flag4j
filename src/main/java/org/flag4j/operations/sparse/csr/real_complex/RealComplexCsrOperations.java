@@ -24,9 +24,9 @@
 
 package org.flag4j.operations.sparse.csr.real_complex;
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CsrCMatrix;
-import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.sparse.CsrMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
@@ -38,7 +38,7 @@ import java.util.function.BiFunction;
 import java.util.function.UnaryOperator;
 
 /**
- * This class contains low-level implementations for element-wise operations on real/complex CSR matrices.
+ * This class contains low-level implementations for element-wise operations_old on real/complex CSR matrices.
  */
 public final class RealComplexCsrOperations {
 
@@ -53,12 +53,12 @@ public final class RealComplexCsrOperations {
      *
      * Note, this methods efficiency relies heavily on the assumption that both operand matrices are very large and very
      * sparse. If the two matrices are not large and very sparse, this method will likely be
-     * significantly slower than simply converting the matrices to {@link Matrix dense matrices} and using a dense
+     * significantly slower than simply converting the matrices to {@link MatrixOld dense matrices} and using a dense
      * matrix addition algorithm.
      * @param src1 The first matrix in the operation.
      * @param src2 The second matrix in the operation.
      * @param opp Binary operator to apply element-wise to <code>src1</code> and <code>src2</code>.
-     * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
+     * @param uOpp Unary operator for use with binary operations_old which are not commutative such as subtraction. If the operation is
      * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
      * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
      * {@code opp.apply(x, uOpp.apply(y))}.
@@ -136,12 +136,12 @@ public final class RealComplexCsrOperations {
      *
      * Note, this methods efficiency relies heavily on the assumption that both operand matrices are very large and very
      * sparse. If the two matrices are not large and very sparse, this method will likely be
-     * significantly slower than simply converting the matrices to {@link Matrix dense matrices} and using a dense
+     * significantly slower than simply converting the matrices to {@link MatrixOld dense matrices} and using a dense
      * matrix addition algorithm.
      * @param src1 The first matrix in the operation.
      * @param src2 The second matrix in the operation.
      * @param opp Binary operator to apply element-wise to <code>src1</code> and <code>src2</code>.
-     * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
+     * @param uOpp Unary operator for use with binary operations_old which are not commutative such as subtraction. If the operation is
      * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
      * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
      * {@code opp.apply(x, uOpp.apply(y))}.

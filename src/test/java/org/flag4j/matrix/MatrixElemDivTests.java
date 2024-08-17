@@ -1,7 +1,7 @@
 package org.flag4j.matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MatrixElemDivTests {
 
-    Matrix A, B, result, expResult;
-    CMatrix BC, resultC, expResultC;
+    MatrixOld A, B, result, expResult;
+    CMatrixOld BC, resultC, expResultC;
     double[][] entriesA, entriesB;
     CNumber[][] entriesBC;
 
@@ -43,9 +43,9 @@ class MatrixElemDivTests {
         // ----------------- Sub-case 1 -----------------
         entriesA = new double[][]{{1, 2, -3.324, 13.44}, {4, 5, -6, 0}};
         entriesB = new double[][]{{4.344, 555.6, 94, -0.4442}, {0.0000234, 1333.4, 44.5, 134.3}};
-        A = new Matrix(entriesA);
-        B = new Matrix(entriesB);
-        expResult = new Matrix(A.shape, getExp(A.entries, B.entries));
+        A = new MatrixOld(entriesA);
+        B = new MatrixOld(entriesB);
+        expResult = new MatrixOld(A.shape, getExp(A.entries, B.entries));
 
         result = A.elemDiv(B);
 
@@ -55,8 +55,8 @@ class MatrixElemDivTests {
         // ----------------- Sub-case 1 -----------------
         entriesA = new double[][]{{1, 2, -3.324, 13.44}, {4, 5, -6, 0}};
         entriesB = new double[][]{{4.344, 555.6, 94}, {0.0000234, 1333.4, 44.5}};
-        A = new Matrix(entriesA);
-        B = new Matrix(entriesB);
+        A = new MatrixOld(entriesA);
+        B = new MatrixOld(entriesB);
 
         assertThrows(LinearAlgebraException.class, ()->A.elemMult(B));
     }
@@ -68,9 +68,9 @@ class MatrixElemDivTests {
         entriesA = new double[][]{{1, 2, -3.324, 13.44}, {4, 5, -6, 0}};
         entriesBC = new CNumber[][]{{new CNumber(1.4, 5), new CNumber(0, -1), new CNumber(1.3), CNumber.ZERO},
                 {new CNumber(4.55, -93.2), new CNumber(-2, -13), new CNumber(8.9), new CNumber(0, 13)}};
-        A = new Matrix(entriesA);
-        BC = new CMatrix(entriesBC);
-        expResultC = new CMatrix(A.shape, getExp(A.entries, BC.entries));
+        A = new MatrixOld(entriesA);
+        BC = new CMatrixOld(entriesBC);
+        expResultC = new CMatrixOld(A.shape, getExp(A.entries, BC.entries));
 
         resultC = A.elemDiv(BC);
 
@@ -94,8 +94,8 @@ class MatrixElemDivTests {
         entriesA = new double[][]{{1, 2, -3.324, 13.44}, {4, 5, -6, 0}};
         entriesBC = new CNumber[][]{{new CNumber(1.4, 5), new CNumber(0, -1), new CNumber(1.3)},
                 {new CNumber(4.55, -93.2), new CNumber(-2, -13), new CNumber(8.9)}};
-        A = new Matrix(entriesA);
-        BC = new CMatrix(entriesBC);
+        A = new MatrixOld(entriesA);
+        BC = new CMatrixOld(entriesBC);
 
         assertThrows(LinearAlgebraException.class, ()->A.elemMult(BC));
     }

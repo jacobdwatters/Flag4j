@@ -31,7 +31,7 @@ import org.flag4j.util.ParameterChecks;
 
 
 /**
- * This class provides low level methods for computing operations on dense complex tensors.
+ * This class provides low level methods for computing operations_old on dense complex tensors.
  */
 public final class ComplexDenseOperations {
 
@@ -48,7 +48,7 @@ public final class ComplexDenseOperations {
      * @param src2 Entries of second tensor.
      * @param shape2 Shape of second tensor.
      * @return The element wise addition of two tensors.
-     * @throws IllegalArgumentException If entry arrays are not the same size.
+     * @throws IllegalArgumentException If entry arrays_old are not the same size.
      */
     public static CNumber[] add(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
         ParameterChecks.assertEqualShape(shape1, shape2);
@@ -122,7 +122,7 @@ public final class ComplexDenseOperations {
      * @param src2 Entries of second tensor.
      * @param shape2 Shape of second tensor.
      * @return The element wise subtraction of two tensors.
-     * @throws IllegalArgumentException If entry arrays are not the same size.
+     * @throws IllegalArgumentException If entry arrays_old are not the same size.
      */
     public static CNumber[] sub(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
         ParameterChecks.assertEqualShape(shape1, shape2);
@@ -172,7 +172,7 @@ public final class ComplexDenseOperations {
 
     /**
      * Subtracts a scalar from each entry of this tensor and stores the result in the tensor.
-     * @param src Tensor in subtraction. Also, where the result will be stored.
+     * @param src TensorOld in subtraction. Also, where the result will be stored.
      * @param b Scalar to subtract.
      */
     public static void subEq(CNumber[] src, CNumber b) {
@@ -200,7 +200,7 @@ public final class ComplexDenseOperations {
 
     /**
      * Adds a scalar from each entry of this tensor and stores the result in the tensor.
-     * @param src Tensor in addition. Also, where the result will be stored.
+     * @param src TensorOld in addition. Also, where the result will be stored.
      * @param b Scalar to add.
      */
     public static void addEq(CNumber[] src, CNumber b) {

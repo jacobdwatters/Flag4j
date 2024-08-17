@@ -1,7 +1,7 @@
 package org.flag4j.complex_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -21,8 +21,8 @@ class CMatrixConstructorTests {
     CNumber value;
     double valueD;
 
-    CMatrix A, B;
-    Matrix C;
+    CMatrixOld A, B;
+    MatrixOld C;
 
 
     @Test
@@ -37,7 +37,7 @@ class CMatrixConstructorTests {
 
         expNumRows = size;
         expNumCols = size;
-        A = new CMatrix(size);
+        A = new CMatrixOld(size);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -54,7 +54,7 @@ class CMatrixConstructorTests {
 
         expNumRows = size;
         expNumCols = size;
-        A = new CMatrix(size);
+        A = new CMatrixOld(size);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -63,7 +63,7 @@ class CMatrixConstructorTests {
         // -------------- Sub-case 3 --------------
         size = -2;
 
-        assertThrows(IllegalArgumentException.class, () -> new CMatrix(size));
+        assertThrows(IllegalArgumentException.class, () -> new CMatrixOld(size));
     }
 
 
@@ -80,7 +80,7 @@ class CMatrixConstructorTests {
 
         expNumRows = size;
         expNumCols = size;
-        A = new CMatrix(size, value);
+        A = new CMatrixOld(size, value);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -98,7 +98,7 @@ class CMatrixConstructorTests {
 
         expNumRows = size;
         expNumCols = size;
-        A = new CMatrix(size, value);
+        A = new CMatrixOld(size, value);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -109,7 +109,7 @@ class CMatrixConstructorTests {
         value = new CNumber(0, 5);
         size = -2;
 
-        assertThrows(IllegalArgumentException.class, () -> new CMatrix(size, value));
+        assertThrows(IllegalArgumentException.class, () -> new CMatrixOld(size, value));
     }
 
 
@@ -126,7 +126,7 @@ class CMatrixConstructorTests {
 
         expNumRows = size;
         expNumCols = size;
-        A = new CMatrix(size, valueD);
+        A = new CMatrixOld(size, valueD);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -144,7 +144,7 @@ class CMatrixConstructorTests {
 
         expNumRows = size;
         expNumCols = size;
-        A = new CMatrix(size, valueD);
+        A = new CMatrixOld(size, valueD);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -154,7 +154,7 @@ class CMatrixConstructorTests {
         valueD = 5;
         size = -100;
 
-        assertThrows(IllegalArgumentException.class, () -> new CMatrix(size, valueD));
+        assertThrows(IllegalArgumentException.class, () -> new CMatrixOld(size, valueD));
     }
 
 
@@ -169,7 +169,7 @@ class CMatrixConstructorTests {
             expEntries[i] = CNumber.ZERO;
         }
 
-        A = new CMatrix(expNumRows, expNumCols);
+        A = new CMatrixOld(expNumRows, expNumCols);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -185,7 +185,7 @@ class CMatrixConstructorTests {
             expEntries[i] = CNumber.ZERO;
         }
 
-        A = new CMatrix(expNumRows, expNumCols);
+        A = new CMatrixOld(expNumRows, expNumCols);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -196,19 +196,19 @@ class CMatrixConstructorTests {
         expNumRows = -1;
         expNumCols = 2;
 
-        assertThrows(IllegalArgumentException.class, () -> new CMatrix(expNumRows, expNumCols));
+        assertThrows(IllegalArgumentException.class, () -> new CMatrixOld(expNumRows, expNumCols));
 
         // -------------- Sub-case 4 --------------
         expNumRows = 1;
         expNumCols = -2;
 
-        assertThrows(IllegalArgumentException.class, () -> new CMatrix(expNumRows, expNumCols));
+        assertThrows(IllegalArgumentException.class, () -> new CMatrixOld(expNumRows, expNumCols));
 
         // -------------- Sub-case 5 --------------
         expNumRows = -1;
         expNumCols = -2;
 
-        assertThrows(IllegalArgumentException.class, () -> new CMatrix(expNumRows, expNumCols));
+        assertThrows(IllegalArgumentException.class, () -> new CMatrixOld(expNumRows, expNumCols));
     }
 
     @Test
@@ -223,7 +223,7 @@ class CMatrixConstructorTests {
             expEntries[i] = value;
         }
 
-        A = new CMatrix(expNumRows, expNumCols, value);
+        A = new CMatrixOld(expNumRows, expNumCols, value);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -240,7 +240,7 @@ class CMatrixConstructorTests {
             expEntries[i] = value;
         }
 
-        A = new CMatrix(expNumRows, expNumCols, value);
+        A = new CMatrixOld(expNumRows, expNumCols, value);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -252,21 +252,21 @@ class CMatrixConstructorTests {
         expNumCols = 2;
         value = new CNumber(1, 1);
 
-        assertThrows(IllegalArgumentException.class, () -> new CMatrix(expNumRows, expNumCols, value));
+        assertThrows(IllegalArgumentException.class, () -> new CMatrixOld(expNumRows, expNumCols, value));
 
         // -------------- Sub-case 4 --------------
         expNumRows = 1;
         expNumCols = -2;
         value = new CNumber(1, 1);
 
-        assertThrows(IllegalArgumentException.class, () -> new CMatrix(expNumRows, expNumCols, value));
+        assertThrows(IllegalArgumentException.class, () -> new CMatrixOld(expNumRows, expNumCols, value));
 
         // -------------- Sub-case 5 --------------
         expNumRows = -1;
         expNumCols = -2;
         value = new CNumber(1, 1);
 
-        assertThrows(IllegalArgumentException.class, () -> new CMatrix(expNumRows, expNumCols, value));
+        assertThrows(IllegalArgumentException.class, () -> new CMatrixOld(expNumRows, expNumCols, value));
     }
 
     @Test
@@ -281,7 +281,7 @@ class CMatrixConstructorTests {
             expEntries[i] = new CNumber(valueD);
         }
 
-        A = new CMatrix(expNumRows, expNumCols, valueD);
+        A = new CMatrixOld(expNumRows, expNumCols, valueD);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -297,7 +297,7 @@ class CMatrixConstructorTests {
             expEntries[i] = new CNumber(valueD);
         }
 
-        A = new CMatrix(expNumRows, expNumCols, valueD);
+        A = new CMatrixOld(expNumRows, expNumCols, valueD);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -308,21 +308,21 @@ class CMatrixConstructorTests {
         expNumCols = 2;
         valueD = 1;
 
-        assertThrows(IllegalArgumentException.class, () -> new CMatrix(expNumRows, expNumCols, valueD));
+        assertThrows(IllegalArgumentException.class, () -> new CMatrixOld(expNumRows, expNumCols, valueD));
 
         // -------------- Sub-case 4 --------------
         expNumRows = 1;
         expNumCols = -2;
         valueD = 1;
 
-        assertThrows(IllegalArgumentException.class, () -> new CMatrix(expNumRows, expNumCols, valueD));
+        assertThrows(IllegalArgumentException.class, () -> new CMatrixOld(expNumRows, expNumCols, valueD));
 
         // -------------- Sub-case 5 --------------
         expNumRows = -1;
         expNumCols = -2;
         valueD = 1;
 
-        assertThrows(IllegalArgumentException.class, () -> new CMatrix(expNumRows, expNumCols, valueD));
+        assertThrows(IllegalArgumentException.class, () -> new CMatrixOld(expNumRows, expNumCols, valueD));
     }
 
 
@@ -338,7 +338,7 @@ class CMatrixConstructorTests {
             expEntries[i] = CNumber.ZERO;
         }
 
-        A = new CMatrix(shape);
+        A = new CMatrixOld(shape);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -355,7 +355,7 @@ class CMatrixConstructorTests {
             expEntries[i] = CNumber.ZERO;
         }
 
-        A = new CMatrix(shape);
+        A = new CMatrixOld(shape);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -376,7 +376,7 @@ class CMatrixConstructorTests {
             expEntries[i] = value;
         }
 
-        A = new CMatrix(shape, value);
+        A = new CMatrixOld(shape, value);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -394,7 +394,7 @@ class CMatrixConstructorTests {
             expEntries[i] = value;
         }
 
-        A = new CMatrix(shape, value);
+        A = new CMatrixOld(shape, value);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -415,7 +415,7 @@ class CMatrixConstructorTests {
             expEntries[i] = new CNumber(valueD);
         }
 
-        A = new CMatrix(shape, valueD);
+        A = new CMatrixOld(shape, valueD);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -432,7 +432,7 @@ class CMatrixConstructorTests {
             expEntries[i] = new CNumber(valueD);
         }
 
-        A = new CMatrix(shape, valueD);
+        A = new CMatrixOld(shape, valueD);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -455,7 +455,7 @@ class CMatrixConstructorTests {
                 expEntries[count++] = entries[i][j];
             }
         }
-        A = new CMatrix(entries);
+        A = new CMatrixOld(entries);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -475,7 +475,7 @@ class CMatrixConstructorTests {
                 expEntries[count++] = new CNumber(entriesS[i][j]);
             }
         }
-        A = new CMatrix(entriesS);
+        A = new CMatrixOld(entriesS);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -496,7 +496,7 @@ class CMatrixConstructorTests {
                 expEntries[count++] = new CNumber(entriesD[i][j]);
             }
         }
-        A = new CMatrix(entriesD);
+        A = new CMatrixOld(entriesD);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -518,7 +518,7 @@ class CMatrixConstructorTests {
                 expEntries[count++] = new CNumber(entriesI[i][j]);
             }
         }
-        A = new CMatrix(entriesI);
+        A = new CMatrixOld(entriesI);
 
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
@@ -530,7 +530,7 @@ class CMatrixConstructorTests {
     void matTestCase() {
         entriesD = new double[][]{{1, -2, 0.13334, 15.3, Double.NEGATIVE_INFINITY},
                 {133.4, -29.13, 8, 0, Double.POSITIVE_INFINITY}};
-        C = new Matrix(entriesD);
+        C = new MatrixOld(entriesD);
         expNumRows = 2;
         expNumCols = 5;
         expEntries = new CNumber[expNumRows*expNumCols];
@@ -542,7 +542,7 @@ class CMatrixConstructorTests {
             }
         }
 
-        A = new CMatrix(C);
+        A = new CMatrixOld(C);
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
@@ -552,7 +552,7 @@ class CMatrixConstructorTests {
     @Test
     void cmatTestCase() {
         entriesS = new String[][]{{"1", "-2+8.133i", "0.13334-i"}, {"133.4", "-29.13i", "8+9i"}};
-        B = new CMatrix(entriesS);
+        B = new CMatrixOld(entriesS);
         expNumRows = 2;
         expNumCols = 3;
         expEntries = new CNumber[expNumRows*expNumCols];
@@ -564,7 +564,7 @@ class CMatrixConstructorTests {
             }
         }
 
-        A = new CMatrix(B);
+        A = new CMatrixOld(B);
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
@@ -586,7 +586,7 @@ class CMatrixConstructorTests {
                 new CNumber(0.0000000002134), new CNumber(0, -92.2),
                 new CNumber(5, 666666.4545), new CNumber(438905, 13)};
 
-        A = new CMatrix(expNumRows, expNumCols, entriesC1D);
+        A = new CMatrixOld(expNumRows, expNumCols, entriesC1D);
         assertArrayEquals(expEntries, A.entries);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);

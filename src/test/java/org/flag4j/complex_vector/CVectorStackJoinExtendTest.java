@@ -1,10 +1,10 @@
 package org.flag4j.complex_vector;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class CVectorStackJoinExtendTest {
 
     static CNumber[] aEntries;
-    static CVector a;
+    static CVectorOld a;
 
     int[] sparseIndices;
     int sparseSize;
@@ -24,25 +24,25 @@ class CVectorStackJoinExtendTest {
     static void setup() {
         aEntries = new CNumber[]{new CNumber(1.455, 6126.347), new CNumber(-9.234, 5.0),
                 new CNumber(9.245, -56.2345), new CNumber(0, 14.5), new CNumber(-0.009257)};
-        a = new CVector(aEntries);
+        a = new CVectorOld(aEntries);
     }
 
 
     @Test
     void joinRealDenseTestCase() {
         double[] bEntries;
-        Vector b;
+        VectorOld b;
         CNumber[] expEntries;
-        CVector exp;
+        CVectorOld exp;
 
         // ---------------------- Sub-case 1 ----------------------
         bEntries = new double[]{89.24, 5.66};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
         expEntries = new CNumber[]{new CNumber(1.455, 6126.347), new CNumber(-9.234, 5.0),
                 new CNumber(9.245, -56.2345), new CNumber(0, 14.5), new CNumber(-0.009257),
                 new CNumber(89.24), new CNumber(5.66)
         };
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, a.join(b));
     }
@@ -53,7 +53,7 @@ class CVectorStackJoinExtendTest {
         double[] bEntries;
         CooVector b;
         CNumber[] expEntries;
-        CVector exp;
+        CVectorOld exp;
 
         // ---------------------- Sub-case 1 ----------------------
         bEntries = new double[]{89.24, 5.66};
@@ -64,7 +64,7 @@ class CVectorStackJoinExtendTest {
                 new CNumber(9.245, -56.2345), new CNumber(0, 14.5), new CNumber(-0.009257),
                 new CNumber(89.24), CNumber.ZERO, new CNumber( 5.66), CNumber.ZERO
         };
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, a.join(b));
     }
@@ -73,16 +73,16 @@ class CVectorStackJoinExtendTest {
     @Test
     void joinComplexDenseTestCase() {
         CNumber[] bEntries, expEntries;
-        CVector b, exp;
+        CVectorOld b, exp;
 
         // ---------------------- Sub-case 1 ----------------------
         bEntries = new CNumber[]{new CNumber(2.4656, 9.24), new CNumber(-0.9924, -0.01)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
         expEntries = new CNumber[]{new CNumber(1.455, 6126.347), new CNumber(-9.234, 5.0),
                 new CNumber(9.245, -56.2345), new CNumber(0, 14.5), new CNumber(-0.009257),
                 new CNumber(2.4656, 9.24), new CNumber(-0.9924, -0.01)
         };
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, a.join(b));
     }
@@ -91,7 +91,7 @@ class CVectorStackJoinExtendTest {
     @Test
     void joinComplexSparseTestCase() {
         CNumber[] bEntries, expEntries;
-        CVector exp;
+        CVectorOld exp;
         CooCVector b;
 
         // ---------------------- Sub-case 1 ----------------------
@@ -103,7 +103,7 @@ class CVectorStackJoinExtendTest {
                 new CNumber(9.245, -56.2345), new CNumber(0, 14.5), new CNumber(-0.009257),
                 CNumber.ZERO, CNumber.ZERO, new CNumber(2.4656, 9.24)
         };
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, a.join(b));
     }
@@ -112,67 +112,67 @@ class CVectorStackJoinExtendTest {
     @Test
     void stackRealDenseTestCase() {
         double[] bEntries;
-        Vector b;
+        VectorOld b;
 
         CNumber[][] expEntries;
-        CMatrix exp;
+        CMatrixOld exp;
 
         // ---------------------- Sub-case 1 ----------------------
         bEntries = new double[]{5.46, -973.4, 0.0034, 15.6, 0};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(1.455, 6126.347), new CNumber(-9.234, 5.0),
                         new CNumber(9.245, -56.2345), new CNumber(0, 14.5), new CNumber(-0.009257)},
                 {new CNumber(5.46), new CNumber(-973.4), new CNumber(0.0034), new CNumber(15.6), CNumber.ZERO}
         };
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.stack(b));
 
         // ---------------------- Sub-case 2 ----------------------
         bEntries = new double[]{5.46, -973.4, 0.0034, 15.6, 0, 8255.6668, 0.0009245};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
-        Vector finalB = b;
+        VectorOld finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB));
 
         // ---------------------- Sub-case 3 ----------------------
         bEntries = new double[]{5.46, -973.4, 0.0034, 15.6, 0};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(1.455, 6126.347), new CNumber(-9.234, 5.0),
                         new CNumber(9.245, -56.2345), new CNumber(0, 14.5), new CNumber(-0.009257)},
                 {new CNumber(5.46), new CNumber(-973.4), new CNumber(0.0034), new CNumber(15.6), CNumber.ZERO}
         };
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.stack(b, 0));
 
         // ---------------------- Sub-case 4 ----------------------
         bEntries = new double[]{5.46, -973.4, 0.0034, 15.6, 0, 8255.6668, 0.0009245};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
-        Vector finalB2 = b;
+        VectorOld finalB2 = b;
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB2, 0));
 
         // ---------------------- Sub-case 5 ----------------------
         bEntries = new double[]{5.46, -973.4, 0.0034, 15.6, 0};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(1.455, 6126.347), new CNumber(5.46)},
                         {new CNumber(-9.234, 5.0), new CNumber(-973.4)},
                         {new CNumber(9.245, -56.2345), new CNumber(0.0034)},
                         {new CNumber(0, 14.5), new CNumber(15.6)},
                         {new CNumber(-0.009257), CNumber.ZERO}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.stack(b, 1));
 
         // ---------------------- Sub-case 6 ----------------------
         bEntries = new double[]{5.46, -973.4, 0.0034, 15.6, 0, 8255.6668, 0.0009245};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
-        Vector finalB3 = b;
+        VectorOld finalB3 = b;
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB3, 1));
     }
 
@@ -183,7 +183,7 @@ class CVectorStackJoinExtendTest {
         CooVector b;
 
         CNumber[][] expEntries;
-        CMatrix exp;
+        CMatrixOld exp;
 
         // ---------------------- Sub-case 1 ----------------------
         bEntries = new double[]{-78.336, 0.00234};
@@ -195,7 +195,7 @@ class CVectorStackJoinExtendTest {
                         new CNumber(9.245, -56.2345), new CNumber(0, 14.5), new CNumber(-0.009257)},
                 {CNumber.ZERO, new CNumber(-78.336), CNumber.ZERO, CNumber.ZERO, new CNumber(0.00234)}
         };
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.stack(b));
 
@@ -218,7 +218,7 @@ class CVectorStackJoinExtendTest {
                         new CNumber(9.245, -56.2345), new CNumber(0, 14.5), new CNumber(-0.009257)},
                 {CNumber.ZERO, new CNumber(-78.336), CNumber.ZERO, CNumber.ZERO, new CNumber(0.00234)}
         };
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.stack(b, 0));
 
@@ -242,7 +242,7 @@ class CVectorStackJoinExtendTest {
                 {new CNumber(9.245, -56.2345), CNumber.ZERO},
                 {new CNumber(0, 14.5), CNumber.ZERO},
                 {new CNumber(-0.009257), new CNumber(0.00234)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.stack(b, 1));
 
@@ -260,22 +260,22 @@ class CVectorStackJoinExtendTest {
     @Test
     void stackComplexDenseTestCase() {
         CNumber[] bEntries;
-        CVector b;
+        CVectorOld b;
 
         CNumber[][] expEntries;
-        CMatrix exp;
+        CMatrixOld exp;
 
         // ---------------------- Sub-case 1 ----------------------
         bEntries = new CNumber[]{new CNumber(2.4656, 9.24), new CNumber(-0.9924, -0.01),
         new CNumber(0, 1405.24), new CNumber(9.356), new CNumber(0.245, -8824.5)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(1.455, 6126.347), new CNumber(-9.234, 5.0),
                         new CNumber(9.245, -56.2345), new CNumber(0, 14.5), new CNumber(-0.009257)},
                 {new CNumber(2.4656, 9.24), new CNumber(-0.9924, -0.01),
                         new CNumber(0, 1405.24), new CNumber(9.356), new CNumber(0.245, -8824.5)}
         };
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.stack(b));
         assertEquals(exp, a.stack(b, 0));
@@ -283,32 +283,32 @@ class CVectorStackJoinExtendTest {
         // ---------------------- Sub-case 2 ----------------------
         bEntries = new CNumber[]{new CNumber(2.4656, 9.24), new CNumber(-0.9924, -0.01),
                 new CNumber(0, 1405.24)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
-        CVector finalB = b;
+        CVectorOld finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB));
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, 0));
 
         // ---------------------- Sub-case 3 ----------------------
         bEntries = new CNumber[]{new CNumber(2.4656, 9.24), new CNumber(-0.9924, -0.01),
                 new CNumber(0, 1405.24), new CNumber(9.356), new CNumber(0.245, -8824.5)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(1.455, 6126.347), new CNumber(2.4656, 9.24)},
                 {new CNumber(-9.234, 5.0), new CNumber(-0.9924, -0.01)},
                 {new CNumber(9.245, -56.2345), new CNumber(0, 1405.24)},
                 {new CNumber(0, 14.5), new CNumber(9.356)},
                 {new CNumber(-0.009257),new CNumber(0.245, -8824.5) }};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.stack(b, 1));
 
         // ---------------------- Sub-case 4 ----------------------
         bEntries = new CNumber[]{new CNumber(2.4656, 9.24), new CNumber(-0.9924, -0.01),
                 new CNumber(0, 1405.24)};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
-        CVector finalB2 = b;
+        CVectorOld finalB2 = b;
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB2, 1));
     }
 
@@ -319,7 +319,7 @@ class CVectorStackJoinExtendTest {
         CooCVector b;
 
         CNumber[][] expEntries;
-        CMatrix exp;
+        CMatrixOld exp;
 
         // ---------------------- Sub-case 1 ----------------------
         bEntries = new CNumber[]{new CNumber(2.4656, 9.24)};
@@ -331,7 +331,7 @@ class CVectorStackJoinExtendTest {
                         new CNumber(9.245, -56.2345), new CNumber(0, 14.5), new CNumber(-0.009257)},
                 {CNumber.ZERO, CNumber.ZERO, new CNumber(2.4656, 9.24), CNumber.ZERO, CNumber.ZERO}
         };
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.stack(b));
         assertEquals(exp, a.stack(b, 0));
@@ -357,7 +357,7 @@ class CVectorStackJoinExtendTest {
                 {new CNumber(9.245, -56.2345), new CNumber(2.4656, 9.24)},
                 {new CNumber(0, 14.5), CNumber.ZERO},
                 {new CNumber(-0.009257), CNumber.ZERO}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.stack(b, 1));
 
@@ -375,12 +375,12 @@ class CVectorStackJoinExtendTest {
     @Test
     void extendTestCase() {
         CNumber[][] expEntries;
-        CMatrix exp;
+        CMatrixOld exp;
 
         // ---------------------- Sub-case 1 ----------------------
         expEntries = new CNumber[][]{{new CNumber(1.455, 6126.347), new CNumber(-9.234, 5.0),
                 new CNumber(9.245, -56.2345), new CNumber(0, 14.5), new CNumber(-0.009257)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.extend(1, 0));
 
@@ -391,7 +391,7 @@ class CVectorStackJoinExtendTest {
                         new CNumber(9.245, -56.2345), new CNumber(0, 14.5), new CNumber(-0.009257)},
                 {new CNumber(1.455, 6126.347), new CNumber(-9.234, 5.0),
                         new CNumber(9.245, -56.2345), new CNumber(0, 14.5), new CNumber(-0.009257)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.extend(3, 0));
 
@@ -401,7 +401,7 @@ class CVectorStackJoinExtendTest {
                 {new CNumber(9.245, -56.2345), new CNumber(9.245, -56.2345), new CNumber(9.245, -56.2345)},
                 {new CNumber(0, 14.5), new CNumber(0, 14.5), new CNumber(0, 14.5)},
                 {new CNumber(-0.009257), new CNumber(-0.009257), new CNumber(-0.009257)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.extend(3, 1));
     }

@@ -24,15 +24,15 @@
 
 package org.flag4j.linalg.decompositions.schur;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.linalg.Eigen;
 import org.flag4j.linalg.decompositions.hess.RealHess;
 import org.flag4j.linalg.transformations.Givens;
 import org.flag4j.linalg.transformations.Householder;
-import org.flag4j.operations.common.real.AggregateReal;
+import org.flag4j.operations_old.common.real.AggregateReal;
 import org.flag4j.rng.RandomCNumber;
 
 import static org.flag4j.util.Flag4jConstants.EPS_F64;
@@ -48,10 +48,10 @@ import static org.flag4j.util.Flag4jConstants.EPS_F64;
  * <p>This code was adapted from the code found in the <a href="http://ejml.org/wiki/index.php?title=Main_Page">EJML</a>
  * library and the description of
  * the Francis implicit double shifted QR algorithm given in
- * <a href="https://www.math.wsu.edu/faculty/watkins/books.html">Fundamentals of Matrix
+ * <a href="https://www.math.wsu.edu/faculty/watkins/books.html">Fundamentals of MatrixOld
  * Computations 3rd Edition by David S. Watkins</a>.</p>
  */
-public class RealSchur extends Schur<Matrix, double[]> {
+public class RealSchur extends Schur<MatrixOld, double[]> {
 
     /**
      * For computing the norm of a column for use when computing Householder reflectors.
@@ -169,14 +169,14 @@ public class RealSchur extends Schur<Matrix, double[]> {
      * @param src The source matrix to decompose.
      */
     @Override
-    public RealSchur decompose(Matrix src) {
+    public RealSchur decompose(MatrixOld src) {
         decomposeBase(src);
         return this;
     }
 
 
     /**
-     * Initializes temporary work arrays to be used in the decomposition.
+     * Initializes temporary work arrays_old to be used in the decomposition.
      */
     @Override
     protected void setUpArrays() {
@@ -273,7 +273,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
         //  There should be negligible stability difference between the two for a 2x2 rotator, but the givens rotator is more
         //  simple to calculate. However, this seems to be incorrect. Figure out what this should be or if the left/right
         //  multiplication methods are incorrect.
-//        Matrix G = Givens.get2x2Rotator(T.entries[i*numRows + i - 1], T.entries[(i+1)*numRows + i - 1]);
+//        MatrixOld G = Givens.get2x2Rotator(T.entries[i*numRows + i - 1], T.entries[(i+1)*numRows + i - 1]);
 //        Givens.leftMult2x2Rotator(T, G, i+1, givensWorkArray);
 //        Givens.rightMult2x2Rotator(T, G, i+1, givensWorkArray);
 
@@ -516,13 +516,13 @@ public class RealSchur extends Schur<Matrix, double[]> {
      * <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.rsf2csf.html">scipy.linalg.rsf2csf</a> (v1.12.0).</p>
      *
      * @return An array of length 2 containing the complex Schur matrix {@code T} from the last decomposition, and if computed, the
-     * complex unitary transformation matrix {@code U} from the decomposition. If {@code U} was not computed, then the arrays second
+     * complex unitary transformation matrix {@code U} from the decomposition. If {@code U} was not computed, then the arrays_old second
      * value will be null.
      */
-    public CMatrix[] real2ComplexSchur() {
+    public CMatrixOld[] real2ComplexSchur() {
         // Convert matrices to complex matrices.
-        CMatrix tComplex = T.toComplex();
-        CMatrix uComplex = computeU ? U.toComplex() : null;
+        CMatrixOld tComplex = T.toComplex();
+        CMatrixOld uComplex = computeU ? U.toComplex() : null;
         CNumber[] givensWorkComplex = new CNumber[2*numRows];
 
         for(int m=numRows-1; m>0; m--) {
@@ -537,7 +537,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
                 mu[0] = mu[0].sub(a22); // Shift eigenvalue.
 
                 // Construct a givens rotator to bring matrix into properly upper triangular form.
-                CMatrix G = Givens.get2x2Rotator(new CVector(mu[0], a21));
+                CMatrixOld G = Givens.get2x2Rotator(new CVectorOld(mu[0], a21));
                 // Apply rotation to T matrix to bring it into upper triangular form.
                 Givens.leftMult2x2Rotator(tComplex, G, m, givensWorkComplex);
                 // Apply hermitian transpose to keep transformation similar.
@@ -552,6 +552,6 @@ public class RealSchur extends Schur<Matrix, double[]> {
             }
         }
 
-        return new CMatrix[]{tComplex, uComplex};
+        return new CMatrixOld[]{tComplex, uComplex};
     }
 }

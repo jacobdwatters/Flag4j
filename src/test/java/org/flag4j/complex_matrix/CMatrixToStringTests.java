@@ -1,6 +1,6 @@
 package org.flag4j.complex_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CMatrixToStringTests {
 
     CNumber[][] aEntries;
-    CMatrix A;
+    CMatrixOld A;
     String exp;
 
 
@@ -22,7 +22,7 @@ class CMatrixToStringTests {
                         new CNumber(0, 9.4), new CNumber(1.2598)},
                 {new CNumber(56.25, -0.0024), CNumber.ZERO,
                         new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         PrintOptions.setPrecision(50);
         PrintOptions.setPadding(2);
         PrintOptions.setMaxRows(50);
@@ -39,7 +39,7 @@ class CMatrixToStringTests {
                         new CNumber(0, 9.4), new CNumber(1.2598)},
                 {new CNumber(56.25, -0.0024), CNumber.ZERO,
                         new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         PrintOptions.setPrecision(3);
         PrintOptions.setPadding(2);
         PrintOptions.setMaxRows(50);
@@ -56,7 +56,7 @@ class CMatrixToStringTests {
                         new CNumber(0, 9.4), new CNumber(1.2598)},
                 {new CNumber(56.25, -0.0024), CNumber.ZERO,
                         new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         PrintOptions.setPrecision(0);
         PrintOptions.setPadding(4);
         PrintOptions.setMaxRows(50);
@@ -73,7 +73,7 @@ class CMatrixToStringTests {
                         new CNumber(0, 9.4), new CNumber(1.2598)},
                 {new CNumber(56.25, -0.0024), CNumber.ZERO,
                         new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         PrintOptions.setPrecision(2);
         PrintOptions.setPadding(2);
         PrintOptions.setMaxRows(2);
@@ -90,7 +90,7 @@ class CMatrixToStringTests {
                         new CNumber(0, 9.4), new CNumber(1.2598)},
                 {new CNumber(56.25, -0.0024), CNumber.ZERO,
                         new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         PrintOptions.setPrecision(2);
         PrintOptions.setPadding(2);
         PrintOptions.setMaxRows(1);
@@ -108,7 +108,7 @@ class CMatrixToStringTests {
                         new CNumber(0, 9.4), new CNumber(1.2598)},
                 {new CNumber(56.25, -0.0024), CNumber.ZERO,
                         new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         PrintOptions.setPrecision(2);
         PrintOptions.setPadding(2);
         PrintOptions.setMaxRows(2);
@@ -126,7 +126,7 @@ class CMatrixToStringTests {
                         new CNumber(0, 9.4), new CNumber(1.2598)},
                 {new CNumber(56.25, -0.0024), CNumber.ZERO,
                         new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         PrintOptions.setPrecision(2);
         PrintOptions.setPadding(2);
         PrintOptions.setMaxRows(2);
@@ -144,7 +144,7 @@ class CMatrixToStringTests {
                         new CNumber(0, 9.4), new CNumber(1.2598)},
                 {new CNumber(56.25, -0.0024), CNumber.ZERO,
                         new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         PrintOptions.setPrecision(3);
         PrintOptions.setPadding(3);
         PrintOptions.setMaxRows(2);

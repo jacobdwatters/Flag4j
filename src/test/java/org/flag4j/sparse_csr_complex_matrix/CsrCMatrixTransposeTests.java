@@ -1,7 +1,7 @@
 package org.flag4j.sparse_csr_complex_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.sparse.CsrCMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ArrayUtils;
 import org.junit.jupiter.api.Test;
@@ -17,13 +17,13 @@ class CsrCMatrixTransposeTests {
 
 
     private static void buildFromDense() {
-        A = new CMatrix(aEntries).toCsr();
-        exp = new CMatrix(expEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
+        exp = new CMatrixOld(expEntries).toCsr();
     }
 
     private static void buildFromDense(boolean buildExp) {
-        A = new CMatrix(aEntries).toCsr();
-        if(buildExp) exp = new CMatrix(expEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
+        if(buildExp) exp = new CMatrixOld(expEntries).toCsr();
     }
 
 

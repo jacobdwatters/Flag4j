@@ -29,7 +29,7 @@ import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
 /**
- * This class provides low level implementations for vector operations with a real/complex dense vector and a complex/real
+ * This class provides low level implementations for vector operations_old with a real/complex dense vector and a complex/real
  * dense vector.
  */
 public final class RealComplexDenseVectorOperations {

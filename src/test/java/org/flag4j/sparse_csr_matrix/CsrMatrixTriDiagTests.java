@@ -1,8 +1,8 @@
 package org.flag4j.sparse_csr_matrix;
 
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CsrMatrix;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -62,7 +62,7 @@ class CsrMatrixTriDiagTests {
         aRowPointers = new int[]{0, 0, 3, 3, 4, 5, 5};
         aColIndices = new int[]{0, 2, 4, 5, 4};
         A = new CsrMatrix(aShape, aEntries, aRowPointers, aColIndices);
-        exp = new Vector(0.0, 0.0, 0.0, 0.0, 0.7540620527220376, 0.0).toCoo();
+        exp = new VectorOld(0.0, 0.0, 0.0, 0.0, 0.7540620527220376, 0.0).toCoo();
         assertEquals(exp, A.getDiag());
 
         // ----------------------- sub-case 2 -----------------------
@@ -71,7 +71,7 @@ class CsrMatrixTriDiagTests {
         aRowPointers = new int[]{0, 2, 5, 7, 9, 10, 11};
         aColIndices = new int[]{2, 5, 0, 1, 3, 2, 5, 0, 4, 1, 5};
         A = new CsrMatrix(aShape, aEntries, aRowPointers, aColIndices);
-        exp = new Vector(0.0, 0.5149866370978797, 0.18946387228386474, 0.0, 0.0, 0.47997193451501086).toCoo();
+        exp = new VectorOld(0.0, 0.5149866370978797, 0.18946387228386474, 0.0, 0.0, 0.47997193451501086).toCoo();
         assertEquals(exp, A.getDiag());
 
         // ----------------------- sub-case 3 -----------------------
@@ -80,7 +80,7 @@ class CsrMatrixTriDiagTests {
         aRowPointers = new int[]{0, 1, 3, 5, 8, 9, 9, 10, 12, 12, 13, 14, 14};
         aColIndices = new int[]{6, 6, 8, 7, 10, 3, 6, 8, 4, 5, 3, 5, 3, 4};
         A = new CsrMatrix(aShape, aEntries, aRowPointers, aColIndices);
-        exp = new Vector(0.0, 0.0, 0.0, 0.30602701869807314, 0.8160519253929756, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0).toCoo();
+        exp = new VectorOld(0.0, 0.0, 0.0, 0.30602701869807314, 0.8160519253929756, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0).toCoo();
         assertEquals(exp, A.getDiag());
 
         // ----------------------- sub-case 4 -----------------------
@@ -89,7 +89,7 @@ class CsrMatrixTriDiagTests {
         aRowPointers = new int[]{0, 0, 2, 4};
         aColIndices = new int[]{1, 4, 1, 2};
         A = new CsrMatrix(aShape, aEntries, aRowPointers, aColIndices);
-        exp = new Vector(0.0, 0.46451579858863223, 0.8045385713145264).toCoo();
+        exp = new VectorOld(0.0, 0.46451579858863223, 0.8045385713145264).toCoo();
         assertEquals(exp, A.getDiag());
 
         // ----------------------- sub-case 5 -----------------------
@@ -98,7 +98,7 @@ class CsrMatrixTriDiagTests {
         aRowPointers = new int[]{0, 0, 2, 3, 4, 4, 4, 4};
         aColIndices = new int[]{1, 2, 2, 0};
         A = new CsrMatrix(aShape, aEntries, aRowPointers, aColIndices);
-        exp = new Vector(0.0, 0.11343649359086139, 0.8703305006626817).toCoo();
+        exp = new VectorOld(0.0, 0.11343649359086139, 0.8703305006626817).toCoo();
         assertEquals(exp, A.getDiag());
     }
 

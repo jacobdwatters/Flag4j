@@ -25,7 +25,7 @@
 package org.flag4j.operations.sparse.csr.complex;
 
 
-import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.sparse.CsrCMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.operations.common.complex.ComplexProperties;
 import org.flag4j.util.ArrayUtils;

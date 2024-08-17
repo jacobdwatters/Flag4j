@@ -27,7 +27,7 @@ package org.flag4j.core;
 /**
  * This interface specifies comparisons which all matrices should implement.
  *
- * @param <T> Matrix type.
+ * @param <T> MatrixOld type.
  * @param <U> Dense matrix type.
  * @param <V> Sparse matrix type.
  * @param <W> Complex matrix type.

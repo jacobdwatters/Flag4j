@@ -1,8 +1,8 @@
 package org.flag4j.matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CsrCMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -13,10 +13,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MatrixCsrCMatMultTests {
 
-    Matrix A;
+    MatrixOld A;
     double[][] aEntries;
 
-    CMatrix exp;
+    CMatrixOld exp;
     CNumber[][] expEntries;
 
     CsrCMatrix B;
@@ -35,7 +35,7 @@ class MatrixCsrCMatMultTests {
                 {0.98692, 0.34513, 0.82222, 0.05736, 0.3754},
                 {0.36058, 0.74475, 0.05811, 0.62647, 0.37478},
                 {0.54116, 0.91009, 0.26198, 0.77406, 0.89967}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
 
         bShape = new Shape(5, 4);
         bEntries = new CNumber[]{new CNumber(0.21723, 0.346), new CNumber(0.41679, 0.05828)};
@@ -49,7 +49,7 @@ class MatrixCsrCMatMultTests {
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.202517925+0.2878310608i"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.2737296666+0.0566167316i"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.3795303828+0.13575729679999998i"), new CNumber("0.0")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.mult(B));
 
@@ -72,7 +72,7 @@ class MatrixCsrCMatMultTests {
                 {0.29491, 0.50597, 0.51248},
                 {0.59388, 0.09991, 0.27436},
                 {0.93154, 0.0315, 0.94464}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0804590244+0.041665610799999996i"), new CNumber("0.0"),
@@ -108,12 +108,12 @@ class MatrixCsrCMatMultTests {
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.019598355+0.010148985i"), new CNumber("0.0"),
                         new CNumber("0.0"), new CNumber("0.020805435+0.03025449i"), new CNumber("0.0"), new CNumber("0.0"),
                         new CNumber("0.7796058260000001+0.1442582844i"), new CNumber("0.0")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.mult(B));
 
         // ------------------------ Sub-case 3 ------------------------
-        A = new Matrix(24, 516);
+        A = new MatrixOld(24, 516);
         B = new CsrCMatrix(15, 12);
         assertThrows(LinearAlgebraException.class, ()->A.mult(B));
     }

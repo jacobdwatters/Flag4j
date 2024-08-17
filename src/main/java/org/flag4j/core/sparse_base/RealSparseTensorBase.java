@@ -28,14 +28,14 @@ import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.RealTensorMixin;
 import org.flag4j.core.Shape;
 import org.flag4j.core.TensorBase;
-import org.flag4j.operations.common.complex.ComplexOperations;
-import org.flag4j.operations.common.real.AggregateReal;
-import org.flag4j.operations.common.real.RealOperations;
-import org.flag4j.operations.common.real.RealProperties;
-import org.flag4j.operations.dense.real.AggregateDenseReal;
-import org.flag4j.operations.dense.real.RealDenseOperations;
-import org.flag4j.operations.dense.real.RealDenseProperties;
-import org.flag4j.operations.sparse.coo.SparseDataWrapper;
+import org.flag4j.operations_old.common.complex.ComplexOperations;
+import org.flag4j.operations_old.common.real.AggregateReal;
+import org.flag4j.operations_old.common.real.RealOperations;
+import org.flag4j.operations_old.common.real.RealProperties;
+import org.flag4j.operations_old.dense.real.AggregateDenseReal;
+import org.flag4j.operations_old.dense.real.RealDenseOperations;
+import org.flag4j.operations_old.dense.real.RealDenseProperties;
+import org.flag4j.operations_old.sparse.coo.SparseDataWrapper;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -45,8 +45,8 @@ import java.math.BigInteger;
 /**
  * Base class for all sparse tensor.
  * @param <T> Type of this tensor.
- * @param <U> Dense Tensor type.
- * @param <W> Complex Tensor type.
+ * @param <U> Dense TensorOld type.
+ * @param <W> Complex TensorOld type.
  * @param <Z> Dense complex tensor type.
  */
 public abstract class RealSparseTensorBase<
@@ -83,7 +83,7 @@ public abstract class RealSparseTensorBase<
 
     /**
      * Creates a sparse tensor with specified shape. Note, this constructor stores indices for each element in different
-     * arrays. That is, for a shape with rank {@code m} and {@code n} non-zero entries, the indices array will have shape
+     * arrays_old. That is, for a shape with rank {@code m} and {@code n} non-zero entries, the indices array will have shape
      * {@code m-by-n}. This is the opposite of {@link #RealSparseTensorBase(Shape, int, double[], int[][])}.
      * @param shape Shape
      * @param nonZeroEntries The number of non-zero entries of the tensor.

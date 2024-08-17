@@ -24,26 +24,26 @@
 
 package org.flag4j.core;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
 
 /**
  * This interface specified methods which all matrices should implement.
- * @param <T> Matrix type.
+ * @param <T> MatrixOld type.
  * @param <U> Dense matrix type.
  * @param <V> Sparse matrix type.
  * @param <W> Complex matrix type.
  * @param <VV> Complex sparse matrix type.
  * @param <Y> Real matrix type.
- * @param <X> Matrix entry type.
- * @param <TT> Vector type equivalent.
+ * @param <X> MatrixOld entry type.
+ * @param <TT> VectorOld type equivalent.
  * @param <UU> Dense vector type.
  */
 public interface MatrixMixin<
         T,
         U, V, W, VV, X extends Number,
         TT extends VectorMixin<TT, UU, ?, ?, ?, ?, ?, ?>,
-        UU extends VectorMixin<UU, UU, ?, CVector, X, U, U, CMatrix>>
+        UU extends VectorMixin<UU, UU, ?, CVectorOld, X, U, U, CMatrixOld>>
         extends MatrixPropertiesMixin,
         MatrixComparisonsMixin<T>,
         MatrixManipulationsMixin<T, X>,

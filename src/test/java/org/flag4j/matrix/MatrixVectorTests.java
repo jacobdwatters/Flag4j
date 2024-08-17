@@ -1,10 +1,10 @@
 package org.flag4j.matrix;
 
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -18,29 +18,29 @@ class MatrixVectorTests {
     double[] expEntries;
     CNumber[] expCEntries;
 
-    Matrix A;
-    Vector exp;
-    CVector expC;
+    MatrixOld A;
+    VectorOld exp;
+    CVectorOld expC;
 
 
     @Test
     void matVecMultTestCase() {
         double[] bEntries;
-        Vector B;
+        VectorOld B;
 
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
                 {-932.45, 551.35, -0.92342},
                 {123.445, 0.00013, 0.0},
                 {78.234, 12.234, -9923.23}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bEntries = new double[]{1.666, -0.9345341, 0.0};
-        B = new Vector(bEntries);
+        B = new VectorOld(bEntries);
         expEntries = new double[]{-90.8659724794,
                 -2068.717076035,
                 205.65924851056695,
                 118.90475382059999};
-        exp = new Vector(expEntries);
+        exp = new VectorOld(expEntries);
 
         assertEquals(exp, A.mult(B));
 
@@ -50,11 +50,11 @@ class MatrixVectorTests {
                 {-932.45, 551.35, -0.92342},
                 {123.445, 0.00013, 0.0},
                 {78.234, 12.234, -9923.23}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bEntries = new double[]{1.666, -0.9345341, 0.0, 993.3};
-        B = new Vector(bEntries);
+        B = new VectorOld(bEntries);
 
-        Vector finalB = B;
+        VectorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 
@@ -62,23 +62,23 @@ class MatrixVectorTests {
     @Test
     void matVecMultComplexTestCase() {
         CNumber[] bEntries;
-        CVector B;
+        CVectorOld B;
 
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
                 {-932.45, 551.35, -0.92342},
                 {123.445, 0.00013, 0.0},
                 {78.234, 12.234, -9923.23}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber("1.666+1.0i"),
                 new CNumber("-0.0-0.9345341i"),
                 new CNumber("0.0")};
-        B = new CVector(bEntries);
+        B = new CVectorOld(bEntries);
         expCEntries = new CNumber[]{new CNumber("1.8715844-91.6141568794i"),
                 new CNumber("-1553.4617-1447.705376035i"),
                 new CNumber("205.65936999999997+123.444878510567i"),
                 new CNumber("130.337844+66.8009098206i")};
-        expC = new CVector(expCEntries);
+        expC = new CVectorOld(expCEntries);
 
         assertEquals(expC, A.mult(B));
 
@@ -88,12 +88,12 @@ class MatrixVectorTests {
                 {-932.45, 551.35, -0.92342},
                 {123.445, 0.00013, 0.0},
                 {78.234, 12.234, -9923.23}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber("1.666+1.0i"),
                 new CNumber("-0.0-0.9345341i")};
-        B = new CVector(bEntries);
+        B = new CVectorOld(bEntries);
 
-        CVector finalB = B;
+        CVectorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 
@@ -109,7 +109,7 @@ class MatrixVectorTests {
                 {-932.45, 551.35, -0.92342},
                 {123.445, 0.00013, 0.0},
                 {78.234, 12.234, -9923.23}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bEntries = new double[]{-0.9345341};
         indices = new int[]{1};
         B = new CooVector(3, bEntries, indices);
@@ -117,7 +117,7 @@ class MatrixVectorTests {
                 -515.255376035,
                 -0.00012148943299999999,
                 -11.4330901794};
-        exp = new Vector(expEntries);
+        exp = new VectorOld(expEntries);
 
         assertEquals(exp, A.mult(B));
 
@@ -127,7 +127,7 @@ class MatrixVectorTests {
                 {-932.45, 551.35, -0.92342},
                 {123.445, 0.00013, 0.0},
                 {78.234, 12.234, -9923.23}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bEntries = new double[]{-0.9345341};
         indices = new int[]{1};
         B = new CooVector(14, bEntries, indices);
@@ -148,7 +148,7 @@ class MatrixVectorTests {
                 {-932.45, 551.35, -0.92342},
                 {123.445, 0.00013, 0.0},
                 {78.234, 12.234, -9923.23}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i")};
         indices = new int[]{2};
         B = new CooCVector(3, bEntries, indices);
@@ -157,7 +157,7 @@ class MatrixVectorTests {
                 new CNumber("0.8629674786220001-8.633977i"),
                 new CNumber("0.0"),
                 new CNumber("9273.596817143-92782.20049999999i")};
-        expC = new CVector(expCEntries);
+        expC = new CVectorOld(expCEntries);
 
         assertEquals(expC, A.mult(B));
 
@@ -167,7 +167,7 @@ class MatrixVectorTests {
                 {-932.45, 551.35, -0.92342},
                 {123.445, 0.00013, 0.0},
                 {78.234, 12.234, -9923.23}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i")};
         indices = new int[]{2};
         B = new CooCVector(9, bEntries, indices);

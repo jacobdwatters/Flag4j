@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.decompositions.qr;
 
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.linalg.decompositions.unitary.ComplexUnitaryDecomposition;
 
 
@@ -69,7 +69,7 @@ public class ComplexQR extends ComplexUnitaryDecomposition {
      * @return A reference to this decomposer.
      */
     @Override
-    public ComplexQR decompose(CMatrix src) {
+    public ComplexQR decompose(CMatrixOld src) {
         decomposeBase(src);
         return this;
     }
@@ -81,9 +81,9 @@ public class ComplexQR extends ComplexUnitaryDecomposition {
      * @return An identity matrix with the appropriate size.
      */
     @Override
-    protected CMatrix initQ() {
+    protected CMatrixOld initQ() {
         int qCols = reduced ? minAxisSize : numRows; // Get Q in reduced form or not.
-        return CMatrix.I(numRows, qCols);
+        return CMatrixOld.I(numRows, qCols);
     }
 
 
@@ -93,7 +93,7 @@ public class ComplexQR extends ComplexUnitaryDecomposition {
      * @return The upper triangular matrix {@code R} from the last decomposition.
      */
     @Override
-    public CMatrix getUpper() {
+    public CMatrixOld getUpper() {
         return getR();
     }
 
@@ -102,8 +102,8 @@ public class ComplexQR extends ComplexUnitaryDecomposition {
      * Gets the upper triangular matrix {@code R} from the {@code QR} decomposition.
      * @return The upper triangular matrix {@code R} from the {@code QR} decomposition.
      */
-    public CMatrix getR() {
+    public CMatrixOld getR() {
         int rRows = reduced ? minAxisSize : numRows; // Get R in reduced form or not.
-        return getUpper(new CMatrix(rRows, numCols));
+        return getUpper(new CMatrixOld(rRows, numCols));
     }
 }

@@ -1,7 +1,7 @@
 package org.flag4j.sparse_complex_vector;
 
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

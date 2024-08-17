@@ -25,7 +25,7 @@
 package org.flag4j.linalg.decompositions.hess;
 
 
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.linalg.transformations.Householder;
 import org.flag4j.util.ParameterChecks;
@@ -81,7 +81,7 @@ public class HermHess extends ComplexHess {
      * @param computeQ Flag indicating if the unitary {@code Q} matrix from the Hessenberg decomposition should be explicitly computed.
      * If true, then the {@code Q} matrix will be computed explicitly.
      * @param enforceHermitian Flag indicating if an explicit check should be made to ensure any matrix passed to
-     * {@link #decompose(CMatrix)} is truly Hermitian. If true, an exception will be thrown if the matrix is not Hermitian. If false,
+     * {@link #decompose(CMatrixOld)} is truly Hermitian. If true, an exception will be thrown if the matrix is not Hermitian. If false,
      * the decomposition will proceed under the assumption that the matrix is Hermitian whether it actually is or not. If the
      * matrix is not Hermitian, then the values in the upper triangular portion of the matrix are taken to be the values.
      */
@@ -98,7 +98,7 @@ public class HermHess extends ComplexHess {
      * @return A reference to this decomposer.
      */
     @Override
-    public HermHess decompose(CMatrix src) {
+    public HermHess decompose(CMatrixOld src) {
         super.decompose(src);
         return this;
     }
@@ -109,8 +109,8 @@ public class HermHess extends ComplexHess {
      * @return The Hermitian tri-diagonal (Hessenberg) matrix from this decomposition.
      */
     @Override
-    public CMatrix getH() {
-        CMatrix H = new CMatrix(numRows);
+    public CMatrixOld getH() {
+        CMatrixOld H = new CMatrixOld(numRows);
         H.entries[0] = transformMatrix.entries[0];
 
         int idx1;
@@ -170,7 +170,7 @@ public class HermHess extends ComplexHess {
      * square regardless of the value of {@link #enforceHermitian}.
      */
     @Override
-    protected void setUp(CMatrix src) {
+    protected void setUp(CMatrixOld src) {
         if(enforceHermitian && !src.isHermitian()) // If requested, check the matrix is Hermitian.
             throw new LinearAlgebraException("Decomposition only supports Hermitian matrices.");
         else
@@ -186,8 +186,8 @@ public class HermHess extends ComplexHess {
      * Copies the upper triangular portion of a matrix to the working matrix {@link #transformMatrix}.
      * @param src The source matrix to decompose of.
      */
-    private void copyUpperTri(CMatrix src) {
-        transformMatrix = new CMatrix(numRows);
+    private void copyUpperTri(CMatrixOld src) {
+        transformMatrix = new CMatrixOld(numRows);
 
         // Copy upper triangular portion.
         for(int i=0; i<numRows; i++) {

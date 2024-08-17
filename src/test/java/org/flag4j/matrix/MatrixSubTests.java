@@ -1,9 +1,9 @@
 package org.flag4j.matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -15,12 +15,12 @@ public class MatrixSubTests {
     double[][] aEntries, bEntries;
     CNumber[][] bCEntries;
 
-    Matrix A, B;
-    CMatrix BC, expC;
+    MatrixOld A, B;
+    CMatrixOld BC, expC;
     double b;
     CNumber bC;
-    Matrix sum, exp;
-    CMatrix sumC;
+    MatrixOld sum, exp;
+    CMatrixOld sumC;
     Shape expShape;
     double[] expEntries;
     CNumber[] expEntriesC;
@@ -30,11 +30,11 @@ public class MatrixSubTests {
         // --------------- Sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         bEntries = new double[][]{{0.333, 56.4, 13.4}, {-1.44, 5, 85.1}, {1.343, 6.7, -88.4}};
-        A = new Matrix(aEntries);
-        B = new Matrix(bEntries);
+        A = new MatrixOld(aEntries);
+        B = new MatrixOld(bEntries);
         expShape = A.shape;
         expEntries = new double[]{1-0.333, 2-56.4, 3-13.4, 4+1.44, 0, 6-85.1, 7-1.343, 8-6.7, 9+88.4};
-        exp = new Matrix(expShape, expEntries);
+        exp = new MatrixOld(expShape, expEntries);
 
         sum = A.sub(B);
 
@@ -43,11 +43,11 @@ public class MatrixSubTests {
         // --------------- Sub-case 2 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         bEntries = new double[][]{{0.333, 56.4, 13.4}, {-1.44, 5, 85.1}};
-        A = new Matrix(aEntries);
-        B = new Matrix(bEntries);
+        A = new MatrixOld(aEntries);
+        B = new MatrixOld(bEntries);
         expShape = A.shape;
         expEntries = new double[]{1-0.333, 2-56.4, 3-13.4, 4 + 1.44, 0, 6-85.1};
-        exp = new Matrix(expShape, expEntries);
+        exp = new MatrixOld(expShape, expEntries);
 
         sum = A.sub(B);
 
@@ -56,15 +56,15 @@ public class MatrixSubTests {
         // --------------- Sub-case 3 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         bEntries = new double[][]{{0.333, 56.4, 13.4}, {-1.44, 5, 85.1}, {1, 2, 3}};
-        A = new Matrix(aEntries);
-        B = new Matrix(bEntries);
+        A = new MatrixOld(aEntries);
+        B = new MatrixOld(bEntries);
         assertThrows(LinearAlgebraException.class, ()->A.sub(B));
 
         // --------------- Sub-case 4 ---------------
         aEntries = new double[][]{{1, 2}, {4, 5}};
         bEntries = new double[][]{{0.333, 56.4, 13.4}, {-1.44, 5, 85.1}};
-        A = new Matrix(aEntries);
-        B = new Matrix(bEntries);
+        A = new MatrixOld(aEntries);
+        B = new MatrixOld(bEntries);
         assertThrows(LinearAlgebraException.class, ()->A.sub(B));
     }
 
@@ -74,10 +74,10 @@ public class MatrixSubTests {
         // --------------- Sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         b = 2.133;
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         expShape = A.shape;
         expEntries = new double[]{1-2.133, 2-2.133, 3-2.133, 4-2.133, 5-2.133, 6-2.133, 7-2.133, 8-2.133, 9-2.133};
-        exp = new Matrix(expShape, expEntries);
+        exp = new MatrixOld(expShape, expEntries);
 
         sum = A.sub(b);
 
@@ -86,10 +86,10 @@ public class MatrixSubTests {
         // --------------- Sub-case 2 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         b = 2.133;
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         expShape = A.shape;
         expEntries = new double[]{1-2.133, 2-2.133, 3-2.133, 4-2.133, 5-2.133, 6-2.133};
-        exp = new Matrix(expShape, expEntries);
+        exp = new MatrixOld(expShape, expEntries);
 
         sum = A.sub(b);
 
@@ -102,7 +102,7 @@ public class MatrixSubTests {
         // --------------- Sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         bC = new CNumber(33.444, -9.3545);
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         expShape = A.shape;
         expEntriesC = new CNumber[]{
                 new CNumber(1).sub(bC), new CNumber(2).sub(bC), new CNumber(3).sub(bC),
@@ -118,7 +118,7 @@ public class MatrixSubTests {
         // --------------- Sub-case 2 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         bC = new CNumber(33.444, -9.3545);
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         expShape = A.shape;
         expEntriesC = new CNumber[]{
                 new CNumber(1).sub(bC), new CNumber(2).sub(bC), new CNumber(3).sub(bC),
@@ -141,8 +141,8 @@ public class MatrixSubTests {
                 {new CNumber(0, 66.45), new CNumber(33.1334, 5513.5), new CNumber(99.3)},
                 {new CNumber(1.23), new CNumber(8, 3), new CNumber(9, -0.000000001)}
         };
-        A = new Matrix(aEntries);
-        BC = new CMatrix(bCEntries);
+        A = new MatrixOld(aEntries);
+        BC = new CMatrixOld(bCEntries);
         expShape = A.shape;
         expEntriesC = new CNumber[]{
                 new CNumber(1-1.23, 344.5), new CNumber(2-2.33, -5.6), new CNumber(3-3.13, 34),
@@ -162,8 +162,8 @@ public class MatrixSubTests {
                 {new CNumber(1.23, -344.5), new CNumber(2.33, 5.6), new CNumber(3.13, -34)},
                 {new CNumber(0, 66.45), new CNumber(33.1334, 5513.5), new CNumber(99.3)}
         };
-        A = new Matrix(aEntries);
-        BC = new CMatrix(bCEntries);
+        A = new MatrixOld(aEntries);
+        BC = new CMatrixOld(bCEntries);
         expShape = A.shape;
         expEntriesC = new CNumber[]{
                 new CNumber(1-1.23, 344.5), new CNumber(2-2.33, -5.6), new CNumber(3-3.13, 34),
@@ -181,8 +181,8 @@ public class MatrixSubTests {
                 {new CNumber(1.23, -344.5), new CNumber(2.33, 5.6), new CNumber(3.13, -34)},
                 {new CNumber(0, 66.45), new CNumber(33.1334, 5513.5), new CNumber(99.3)}
         };
-        A = new Matrix(aEntries);
-        BC = new CMatrix(bCEntries);
+        A = new MatrixOld(aEntries);
+        BC = new CMatrixOld(bCEntries);
 
         assertThrows(LinearAlgebraException.class, ()->A.sub(BC));
     }
@@ -197,7 +197,7 @@ public class MatrixSubTests {
 
         // --------------- Sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
 
         bEntries = new double[]{-0.99, 1, 14.2, 8.3};
         bRowIndices = new int[]{0, 1, 1, 3};
@@ -207,13 +207,13 @@ public class MatrixSubTests {
 
         expEntries = new double[]{1, 2+0.99, 3, 4-1, 5, 6-14.2, 7, 8, 9, 10-8.3, 11, 12};
         expShape = A.shape;
-        exp = new Matrix(expShape, expEntries);
+        exp = new MatrixOld(expShape, expEntries);
 
         assertEquals(exp, A.sub(B));
 
         // --------------- Sub-case 2 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
 
         bEntries = new double[]{-0.99, 1, 14.2, 8.3};
         bRowIndices = new int[]{0, 1, 1, 3};
@@ -236,7 +236,7 @@ public class MatrixSubTests {
 
         // --------------- Sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
 
         bEntries = new CNumber[]{new CNumber(-0.123, 1), new CNumber(0, 1),
                 new CNumber(8, 3.3), new CNumber(100.23, -1000.2)};
@@ -251,13 +251,13 @@ public class MatrixSubTests {
                 new CNumber(7), new CNumber(8), new CNumber(9),
                 new CNumber(10-100.23, 1000.2), new CNumber(11), new CNumber(12)};
         expShape = A.shape;
-        expC = new CMatrix(expShape, expEntriesC);
+        expC = new CMatrixOld(expShape, expEntriesC);
 
         assertEquals(expC, A.sub(B));
 
         // --------------- Sub-case 2 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
 
         bEntries = new CNumber[]{new CNumber(-0.123, 1), new CNumber(0, 1),
                 new CNumber(8, 3.3), new CNumber(100.23, -1000.2)};

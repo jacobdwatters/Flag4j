@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="dc.created" content="2024-08-09">
-<meta name="description" content="declaration: package: org.flag4j.operations.sparse.coo.complex, class: ComplexSparseMatrixGetSet">
+<meta name="description" content="declaration: package: org.flag4j.operations_old.sparse.coo.complex, class: ComplexSparseMatrixGetSet">
 <meta name="generator" content="javadoc/ClassWriter">
 <link rel="stylesheet" type="text/css" href="../../../../../../resource-files/jquery-ui.min.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../../../resource-files/stylesheet.css" title="Style">
@@ -80,11 +80,11 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.flag4j.operations.sparse.coo.complex</a></div>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.flag4j.operations_old.sparse.coo.complex</a></div>
 <h1 title="Class ComplexSparseMatrixGetSet" class="title">Class ComplexSparseMatrixGetSet</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">org.flag4j.operations.sparse.coo.complex.ComplexSparseMatrixGetSet</div>
+<div class="inheritance">org.flag4j.operations_old.sparse.coo.complex.ComplexSparseMatrixGetSet</div>
 </div>
 <section class="class-description" id="class-description">
 <div class="horizontal-scroll">
@@ -123,7 +123,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>private static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#copyValuesNotInSlice(org.flag4j.arrays.sparse.CooCMatrix,java.util.List,java.util.List,java.util.List,int%5B%5D,int%5B%5D)" class="member-name-link">copyValuesNotInSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#copyValuesNotInSlice(org.flag4j.arrays.sparse.CooCMatrix,java.util.List,java.util.List,java.util.List,int%5B%5D,int%5B%5D)" class="member-name-link">copyValuesNotInSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&gt;&nbsp;entries,
  <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;&nbsp;rowIndices,
  <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;&nbsp;colIndices,
@@ -132,36 +132,36 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Copies values in sparse matrix which do not fall in the specified row and column ranges.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays.sparse">CooCVector</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getCol(org.flag4j.arrays.sparse.CooCMatrix,int)" class="member-name-link">getCol</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays_old.sparse">CooCVector</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getCol(org.flag4j.arrays.sparse.CooCMatrix,int)" class="member-name-link">getCol</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;colIdx)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Gets a specified column from this sparse matrix.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays.sparse">CooCVector</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getCol(org.flag4j.arrays.sparse.CooCMatrix,int,int,int)" class="member-name-link">getCol</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays_old.sparse">CooCVector</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getCol(org.flag4j.arrays.sparse.CooCMatrix,int,int,int)" class="member-name-link">getCol</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;colIdx,
  int&nbsp;start,
  int&nbsp;end)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Gets a specified column range from this sparse matrix.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays.sparse">CooCVector</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getRow(org.flag4j.arrays.sparse.CooCMatrix,int)" class="member-name-link">getRow</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays_old.sparse">CooCVector</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getRow(org.flag4j.arrays.sparse.CooCMatrix,int)" class="member-name-link">getRow</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;rowIdx)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Gets a specified row from this sparse matrix.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays.sparse">CooCVector</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getRow(org.flag4j.arrays.sparse.CooCMatrix,int,int,int)" class="member-name-link">getRow</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays_old.sparse">CooCVector</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getRow(org.flag4j.arrays.sparse.CooCMatrix,int,int,int)" class="member-name-link">getRow</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;rowIdx,
  int&nbsp;start,
  int&nbsp;end)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Gets a specified row range from this sparse matrix.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getSlice(org.flag4j.arrays.sparse.CooCMatrix,int,int,int,int)" class="member-name-link">getSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getSlice(org.flag4j.arrays.sparse.CooCMatrix,int,int,int,int)" class="member-name-link">getSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;rowStart,
  int&nbsp;rowEnd,
  int&nbsp;colStart,
@@ -180,72 +180,72 @@ loadScripts(document, 'script');</script>
 <div class="block">Checks if an index is in the specified slice.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#matrixGet(org.flag4j.arrays.sparse.CooCMatrix,int,int)" class="member-name-link">matrixGet</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#matrixGet(org.flag4j.arrays.sparse.CooCMatrix,int,int)" class="member-name-link">matrixGet</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;row,
  int&nbsp;col)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Gets the specified element from a sparse matrix.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#matrixSet(org.flag4j.arrays.sparse.CooCMatrix,int,int,org.flag4j.complex_numbers.CNumber)" class="member-name-link">matrixSet</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#matrixSet(org.flag4j.arrays.sparse.CooCMatrix,int,int,org.flag4j.complex_numbers.CNumber)" class="member-name-link">matrixSet</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;row,
  int&nbsp;col,
  <a href="../../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Sets the specified element from a sparse matrix.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setCol(org.flag4j.arrays.sparse.CooCMatrix,int,double%5B%5D)" class="member-name-link">setCol</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setCol(org.flag4j.arrays.sparse.CooCMatrix,int,double%5B%5D)" class="member-name-link">setCol</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;colIdx,
  double[]&nbsp;col)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Sets a column of a sparse matrix to the entries of a dense array.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setCol(org.flag4j.arrays.sparse.CooCMatrix,int,org.flag4j.arrays.sparse.CooCVector)" class="member-name-link">setCol</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setCol(org.flag4j.arrays.sparse.CooCMatrix,int,org.flag4j.arrays.sparse.CooCVector)" class="member-name-link">setCol</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;colIdx,
- <a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays.sparse">CooCVector</a>&nbsp;col)</code></div>
+ <a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays_old.sparse">CooCVector</a>&nbsp;col)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Sets a column of a sparse matrix to the entries of a sparse vector.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setCol(org.flag4j.arrays.sparse.CooCMatrix,int,org.flag4j.complex_numbers.CNumber%5B%5D)" class="member-name-link">setCol</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setCol(org.flag4j.arrays.sparse.CooCMatrix,int,org.flag4j.complex_numbers.CNumber%5B%5D)" class="member-name-link">setCol</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;colIdx,
  <a href="../../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;col)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Sets a column of a sparse matrix to the entries of a dense array.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setRow(org.flag4j.arrays.sparse.CooCMatrix,int,double%5B%5D)" class="member-name-link">setRow</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setRow(org.flag4j.arrays.sparse.CooCMatrix,int,double%5B%5D)" class="member-name-link">setRow</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;rowIdx,
  double[]&nbsp;row)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Sets a specified row of a complex sparse matrix to the values of a dense array.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setRow(org.flag4j.arrays.sparse.CooCMatrix,int,org.flag4j.arrays.sparse.CooCVector)" class="member-name-link">setRow</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setRow(org.flag4j.arrays.sparse.CooCMatrix,int,org.flag4j.arrays.sparse.CooCVector)" class="member-name-link">setRow</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;rowIdx,
- <a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays.sparse">CooCVector</a>&nbsp;row)</code></div>
+ <a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays_old.sparse">CooCVector</a>&nbsp;row)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Sets a specified row of a complex sparse matrix to the values of a sparse vector.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setRow(org.flag4j.arrays.sparse.CooCMatrix,int,org.flag4j.complex_numbers.CNumber%5B%5D)" class="member-name-link">setRow</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setRow(org.flag4j.arrays.sparse.CooCMatrix,int,org.flag4j.complex_numbers.CNumber%5B%5D)" class="member-name-link">setRow</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;rowIdx,
  <a href="../../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;row)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Sets a specified row of a complex sparse matrix to the values of a dense array.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,double%5B%5D%5B%5D,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,double%5B%5D%5B%5D,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  double[][]&nbsp;values,
  int&nbsp;row,
  int&nbsp;col)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense array.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>private static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,double%5B%5D,int,int,int%5B%5D,int%5B%5D,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>private static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,double%5B%5D,int,int,int%5B%5D,int%5B%5D,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  double[]&nbsp;values,
  int&nbsp;numRows,
  int&nbsp;numCols,
@@ -256,64 +256,64 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Sets a slice of a sparse matrix to values given in a 1d dense array.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,int%5B%5D%5B%5D,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,int%5B%5D%5B%5D,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int[][]&nbsp;values,
  int&nbsp;row,
  int&nbsp;col)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense array.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,java.lang.Double%5B%5D%5B%5D,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,java.lang.Double%5B%5D%5B%5D,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>[][]&nbsp;values,
  int&nbsp;row,
  int&nbsp;col)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense array.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,java.lang.Integer%5B%5D%5B%5D,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,java.lang.Integer%5B%5D%5B%5D,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>[][]&nbsp;values,
  int&nbsp;row,
  int&nbsp;col)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense array.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,org.flag4j.arrays.dense.Matrix,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
- <a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;values,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,org.flag4j.arrays.dense.Matrix,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
+ <a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;values,
  int&nbsp;row,
  int&nbsp;col)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense matrix.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,org.flag4j.arrays.sparse.CooCMatrix,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
- <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;values,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,org.flag4j.arrays.sparse.CooCMatrix,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
+ <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;values,
  int&nbsp;row,
  int&nbsp;col)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Copies a sparse matrix and sets a slice of the sparse matrix to the entries of another sparse matrix.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,org.flag4j.arrays.sparse.CooMatrix,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
- <a href="../../../../arrays/sparse/CooMatrix.html" title="class in org.flag4j.arrays.sparse">CooMatrix</a>&nbsp;values,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,org.flag4j.arrays.sparse.CooMatrix,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
+ <a href="../../../../arrays/sparse/CooMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooMatrix</a>&nbsp;values,
  int&nbsp;row,
  int&nbsp;col)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Copies a sparse matrix and sets a slice of the sparse matrix to the entries of another sparse matrix.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,org.flag4j.complex_numbers.CNumber%5B%5D%5B%5D,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,org.flag4j.complex_numbers.CNumber%5B%5D%5B%5D,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  <a href="../../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[][]&nbsp;values,
  int&nbsp;row,
  int&nbsp;col)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense array.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>private static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,org.flag4j.complex_numbers.CNumber%5B%5D,int,int,int%5B%5D,int%5B%5D,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>private static <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSlice(org.flag4j.arrays.sparse.CooCMatrix,org.flag4j.complex_numbers.CNumber%5B%5D,int,int,int%5B%5D,int%5B%5D,int,int)" class="member-name-link">setSlice</a><wbr>(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  <a href="../../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;values,
  int&nbsp;numRows,
  int&nbsp;numCols,
@@ -396,7 +396,7 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="matrixGet(org.flag4j.arrays.sparse.CooCMatrix,int,int)">
 <h3>matrixGet</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a></span>&nbsp;<span class="element-name">matrixGet</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a></span>&nbsp;<span class="element-name">matrixGet</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;row,
  int&nbsp;col)</span></div>
 <div class="block">Gets the specified element from a sparse matrix.</div>
@@ -415,7 +415,7 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="matrixSet(org.flag4j.arrays.sparse.CooCMatrix,int,int,org.flag4j.complex_numbers.CNumber)">
 <h3>matrixSet</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">matrixSet</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">matrixSet</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;row,
  int&nbsp;col,
  <a href="../../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&nbsp;value)</span></div>
@@ -436,7 +436,7 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="setRow(org.flag4j.arrays.sparse.CooCMatrix,int,double[])">
 <h3>setRow</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setRow</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setRow</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;rowIdx,
  double[]&nbsp;row)</span></div>
 <div class="block">Sets a specified row of a complex sparse matrix to the values of a dense array.</div>
@@ -455,7 +455,7 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="setRow(org.flag4j.arrays.sparse.CooCMatrix,int,org.flag4j.complex_numbers.CNumber[])">
 <h3>setRow</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setRow</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setRow</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;rowIdx,
  <a href="../../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;row)</span></div>
 <div class="block">Sets a specified row of a complex sparse matrix to the values of a dense array.</div>
@@ -474,9 +474,9 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="setRow(org.flag4j.arrays.sparse.CooCMatrix,int,org.flag4j.arrays.sparse.CooCVector)">
 <h3>setRow</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setRow</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setRow</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;rowIdx,
- <a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays.sparse">CooCVector</a>&nbsp;row)</span></div>
+ <a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays_old.sparse">CooCVector</a>&nbsp;row)</span></div>
 <div class="block">Sets a specified row of a complex sparse matrix to the values of a sparse vector.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -493,7 +493,7 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="setCol(org.flag4j.arrays.sparse.CooCMatrix,int,org.flag4j.complex_numbers.CNumber[])">
 <h3>setCol</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setCol</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setCol</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;colIdx,
  <a href="../../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;col)</span></div>
 <div class="block">Sets a column of a sparse matrix to the entries of a dense array.</div>
@@ -516,9 +516,9 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="setCol(org.flag4j.arrays.sparse.CooCMatrix,int,org.flag4j.arrays.sparse.CooCVector)">
 <h3>setCol</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setCol</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setCol</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;colIdx,
- <a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays.sparse">CooCVector</a>&nbsp;col)</span></div>
+ <a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays_old.sparse">CooCVector</a>&nbsp;col)</span></div>
 <div class="block">Sets a column of a sparse matrix to the entries of a sparse vector.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -539,7 +539,7 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="setCol(org.flag4j.arrays.sparse.CooCMatrix,int,double[])">
 <h3>setCol</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setCol</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setCol</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;colIdx,
  double[]&nbsp;col)</span></div>
 <div class="block">Sets a column of a sparse matrix to the entries of a dense array.</div>
@@ -562,8 +562,8 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="setSlice(org.flag4j.arrays.sparse.CooCMatrix,org.flag4j.arrays.sparse.CooMatrix,int,int)">
 <h3>setSlice</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
- <a href="../../../../arrays/sparse/CooMatrix.html" title="class in org.flag4j.arrays.sparse">CooMatrix</a>&nbsp;values,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
+ <a href="../../../../arrays/sparse/CooMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooMatrix</a>&nbsp;values,
  int&nbsp;row,
  int&nbsp;col)</span></div>
 <div class="block">Copies a sparse matrix and sets a slice of the sparse matrix to the entries of another sparse matrix.</div>
@@ -587,8 +587,8 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="setSlice(org.flag4j.arrays.sparse.CooCMatrix,org.flag4j.arrays.sparse.CooCMatrix,int,int)">
 <h3>setSlice</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
- <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;values,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
+ <a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;values,
  int&nbsp;row,
  int&nbsp;col)</span></div>
 <div class="block">Copies a sparse matrix and sets a slice of the sparse matrix to the entries of another sparse matrix.</div>
@@ -612,7 +612,7 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="setSlice(org.flag4j.arrays.sparse.CooCMatrix,double[][],int,int)">
 <h3>setSlice</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  double[][]&nbsp;values,
  int&nbsp;row,
  int&nbsp;col)</span></div>
@@ -636,7 +636,7 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="setSlice(org.flag4j.arrays.sparse.CooCMatrix,org.flag4j.complex_numbers.CNumber[][],int,int)">
 <h3>setSlice</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  <a href="../../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[][]&nbsp;values,
  int&nbsp;row,
  int&nbsp;col)</span></div>
@@ -660,8 +660,8 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="setSlice(org.flag4j.arrays.sparse.CooCMatrix,org.flag4j.arrays.dense.Matrix,int,int)">
 <h3>setSlice</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
- <a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;values,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
+ <a href="../../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;values,
  int&nbsp;row,
  int&nbsp;col)</span></div>
 <div class="block">Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense matrix.</div>
@@ -684,7 +684,7 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="setSlice(org.flag4j.arrays.sparse.CooCMatrix,double[],int,int,int[],int[],int,int)">
 <h3>setSlice</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  double[]&nbsp;values,
  int&nbsp;numRows,
  int&nbsp;numCols,
@@ -713,7 +713,7 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="setSlice(org.flag4j.arrays.sparse.CooCMatrix,org.flag4j.complex_numbers.CNumber[],int,int,int[],int[],int,int)">
 <h3>setSlice</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  <a href="../../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;values,
  int&nbsp;numRows,
  int&nbsp;numCols,
@@ -742,7 +742,7 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="setSlice(org.flag4j.arrays.sparse.CooCMatrix,java.lang.Double[][],int,int)">
 <h3>setSlice</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>[][]&nbsp;values,
  int&nbsp;row,
  int&nbsp;col)</span></div>
@@ -766,7 +766,7 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="setSlice(org.flag4j.arrays.sparse.CooCMatrix,java.lang.Integer[][],int,int)">
 <h3>setSlice</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>[][]&nbsp;values,
  int&nbsp;row,
  int&nbsp;col)</span></div>
@@ -790,7 +790,7 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="setSlice(org.flag4j.arrays.sparse.CooCMatrix,int[][],int,int)">
 <h3>setSlice</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">setSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int[][]&nbsp;values,
  int&nbsp;row,
  int&nbsp;col)</span></div>
@@ -814,7 +814,7 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="getRow(org.flag4j.arrays.sparse.CooCMatrix,int)">
 <h3>getRow</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays.sparse">CooCVector</a></span>&nbsp;<span class="element-name">getRow</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays_old.sparse">CooCVector</a></span>&nbsp;<span class="element-name">getRow</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;rowIdx)</span></div>
 <div class="block">Gets a specified row from this sparse matrix.</div>
 <dl class="notes">
@@ -831,7 +831,7 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="getRow(org.flag4j.arrays.sparse.CooCMatrix,int,int,int)">
 <h3>getRow</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays.sparse">CooCVector</a></span>&nbsp;<span class="element-name">getRow</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays_old.sparse">CooCVector</a></span>&nbsp;<span class="element-name">getRow</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;rowIdx,
  int&nbsp;start,
  int&nbsp;end)</span></div>
@@ -852,7 +852,7 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="getCol(org.flag4j.arrays.sparse.CooCMatrix,int)">
 <h3>getCol</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays.sparse">CooCVector</a></span>&nbsp;<span class="element-name">getCol</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays_old.sparse">CooCVector</a></span>&nbsp;<span class="element-name">getCol</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;colIdx)</span></div>
 <div class="block">Gets a specified column from this sparse matrix.</div>
 <dl class="notes">
@@ -869,7 +869,7 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="getCol(org.flag4j.arrays.sparse.CooCMatrix,int,int,int)">
 <h3>getCol</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays.sparse">CooCVector</a></span>&nbsp;<span class="element-name">getCol</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCVector.html" title="class in org.flag4j.arrays_old.sparse">CooCVector</a></span>&nbsp;<span class="element-name">getCol</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;colIdx,
  int&nbsp;start,
  int&nbsp;end)</span></div>
@@ -890,7 +890,7 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="getSlice(org.flag4j.arrays.sparse.CooCMatrix,int,int,int,int)">
 <h3>getSlice</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">getSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a></span>&nbsp;<span class="element-name">getSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  int&nbsp;rowStart,
  int&nbsp;rowEnd,
  int&nbsp;colStart,
@@ -938,7 +938,7 @@ U extends <a href="../../../../core/MatrixMixin.html" title="interface in org.fl
 <section class="detail" id="copyValuesNotInSlice(org.flag4j.arrays.sparse.CooCMatrix,java.util.List,java.util.List,java.util.List,int[],int[])">
 <h3>copyValuesNotInSlice</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">copyValuesNotInSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays.sparse">CooCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">copyValuesNotInSlice</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CooCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooCMatrix</a>&nbsp;src,
  <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&gt;&nbsp;entries,
  <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;&nbsp;rowIndices,
  <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;&nbsp;colIndices,

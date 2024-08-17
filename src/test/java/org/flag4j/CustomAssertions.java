@@ -1,9 +1,9 @@
 package org.flag4j;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooVector;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,10 +12,10 @@ public final class CustomAssertions {
 
     /**
      * Checks if matrices are equal counting NaN equal to NaN.
-     * @param exp Expected Matrix.
-     * @param act Actual Matrix.
+     * @param exp Expected MatrixOld.
+     * @param act Actual MatrixOld.
      */
-    public static void assertEqualsNaN(Matrix exp, Matrix act) {
+    public static void assertEqualsNaN(MatrixOld exp, MatrixOld act) {
         assertEquals(exp.shape, act.shape);
         for(int i=0; i<exp.entries.length; i++) {
             if(Double.isNaN(exp.entries[i])) {
@@ -29,10 +29,10 @@ public final class CustomAssertions {
 
     /**
      * Checks if matrices are equal counting NaN equal to NaN.
-     * @param exp Expected Matrix.
-     * @param act Actual Matrix.
+     * @param exp Expected MatrixOld.
+     * @param act Actual MatrixOld.
      */
-    public static void assertEqualsNaN(CMatrix exp, CMatrix act) {
+    public static void assertEqualsNaN(CMatrixOld exp, CMatrixOld act) {
         assertEquals(exp.shape, act.shape);
         for(int i=0; i<exp.entries.length; i++) {
             if(exp.entries[i].isNaN()) {
@@ -56,8 +56,8 @@ public final class CustomAssertions {
 
     /**
      * Checks if sparse matrices are equal counting NaN equal to NaN.
-     * @param exp Expected Matrix.
-     * @param act Actual Matrix.
+     * @param exp Expected MatrixOld.
+     * @param act Actual MatrixOld.
      */
     public static void assertEqualsNaN(CooMatrix exp, CooMatrix act) {
         assertEquals(exp.shape, act.shape);

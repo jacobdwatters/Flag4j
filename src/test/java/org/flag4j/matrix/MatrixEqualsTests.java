@@ -1,9 +1,9 @@
 package org.flag4j.matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -23,8 +23,8 @@ class MatrixEqualsTests {
     int[][] dIndices;
 
     boolean exp;
-    Matrix A;
-    CMatrix B;
+    MatrixOld A;
+    CMatrixOld B;
     CooMatrix C;
     CooCMatrix D;
 
@@ -36,8 +36,8 @@ class MatrixEqualsTests {
                 {{new CNumber(1), new CNumber(2), new CNumber(3), new CNumber(4)},
                 {new CNumber(4), new CNumber(5), new CNumber(6), new CNumber(7)},
                 {new CNumber(7), new CNumber(8), new CNumber(9), new CNumber(10)}};
-        A = new Matrix(aEntries);
-        B = new CMatrix(bEntries);
+        A = new MatrixOld(aEntries);
+        B = new CMatrixOld(bEntries);
         exp = true;
 
         assertEquals(exp, A.tensorEquals(B));
@@ -48,8 +48,8 @@ class MatrixEqualsTests {
                 {{new CNumber(1), new CNumber(2), new CNumber(3), new CNumber(4.12)},
                         {new CNumber(4), new CNumber(5), new CNumber(6), new CNumber(7)},
                         {new CNumber(7), new CNumber(8), new CNumber(9), new CNumber(10)}};
-        A = new Matrix(aEntries);
-        B = new CMatrix(bEntries);
+        A = new MatrixOld(aEntries);
+        B = new CMatrixOld(bEntries);
         exp = false;
 
         assertEquals(exp, A.tensorEquals(B));
@@ -60,8 +60,8 @@ class MatrixEqualsTests {
                 {{new CNumber(1), new CNumber(2)},
                         {new CNumber(4), new CNumber(5)},
                         {new CNumber(7), new CNumber(8)}};
-        A = new Matrix(aEntries);
-        B = new CMatrix(bEntries);
+        A = new MatrixOld(aEntries);
+        B = new CMatrixOld(bEntries);
         exp = true;
 
         assertEquals(exp, A.tensorEquals(B));
@@ -72,8 +72,8 @@ class MatrixEqualsTests {
                 {{new CNumber(1), new CNumber(2, 1)},
                         {new CNumber(4), new CNumber(5)},
                         {new CNumber(7), new CNumber(8)}};
-        A = new Matrix(aEntries);
-        B = new CMatrix(bEntries);
+        A = new MatrixOld(aEntries);
+        B = new CMatrixOld(bEntries);
         exp = false;
 
         assertEquals(exp, A.tensorEquals(B));
@@ -84,7 +84,7 @@ class MatrixEqualsTests {
     void matrixSparseMatrixEqualsTestCase() {
         // -------------- Sub-case 1 --------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 8, 9, 10}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         cShape = new Shape(aEntries.length, aEntries[0].length);
         cEntries = new double[]{1, 6, 8, 9, 10};
         cIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
@@ -96,7 +96,7 @@ class MatrixEqualsTests {
 
         // -------------- Sub-case 2 --------------
         aEntries = new double[][]{{1, 0, 0, 1}, {0, 0, 6, 0}, {0, 8, 9, 10}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         cShape = new Shape(aEntries.length, aEntries[0].length);
         cEntries = new double[]{1, 6, 8, 9, 10};
         cIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
@@ -108,7 +108,7 @@ class MatrixEqualsTests {
 
         // -------------- Sub-case 3 --------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 8, 9, 10}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         cShape = new Shape(aEntries.length, aEntries[0].length);
         cEntries = new double[]{1, -8, 8, 9, 10};
         cIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
@@ -120,7 +120,7 @@ class MatrixEqualsTests {
 
         // -------------- Sub-case 4 --------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 8, 9, 10}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         cShape = new Shape(aEntries.length, aEntries[0].length);
         cEntries = new double[]{1, 4, 6, 8, 9, 10};
         cIndices = new int[][]{{0, 0, 1, 2, 2, 2}, {0, 3, 2, 1, 2, 3}};
@@ -132,7 +132,7 @@ class MatrixEqualsTests {
 
         // -------------- Sub-case 1 --------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 8, 9, 10}, {0, 0, 0, 0}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         cShape = new Shape(3, 4);
         cEntries = new double[]{1, 6, 8, 9, 10};
         cIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
@@ -151,7 +151,7 @@ class MatrixEqualsTests {
                 {1, 0, 0, 0},
                 {0, 0, 6, 0},
                 {0, 8, 9, 10}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         dShape = new Shape(aEntries.length, aEntries[0].length);
         dEntries = new CNumber[]{new CNumber(1), new CNumber(6), new CNumber(8),
                 new CNumber(9), new CNumber(10)};
@@ -164,7 +164,7 @@ class MatrixEqualsTests {
 
         // -------------- Sub-case 2 --------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 8, 9, 10}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         dShape = new Shape(aEntries.length, aEntries[0].length);
         dEntries = new CNumber[]{new CNumber(1), new CNumber(6, 1), new CNumber(8),
                 new CNumber(9), new CNumber(10)};
@@ -177,7 +177,7 @@ class MatrixEqualsTests {
 
         // -------------- Sub-case 3 --------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 8, -9.34, 10}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         dShape = new Shape(aEntries.length, aEntries[0].length);
         dEntries = new CNumber[]{new CNumber(1), new CNumber(6), new CNumber(8),
                 new CNumber(9), new CNumber(10)};
@@ -190,7 +190,7 @@ class MatrixEqualsTests {
 
         // -------------- Sub-case 4 --------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 8, 9, 10}, {0, 0, 0, 0}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         dShape = new Shape(aEntries.length, aEntries[0].length);
         dEntries = new CNumber[]{new CNumber(1), new CNumber(6), new CNumber(8),
                 new CNumber(9), new CNumber(10)};
@@ -203,7 +203,7 @@ class MatrixEqualsTests {
 
         // -------------- Sub-case 5 --------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 0, 0, 0}, {0, 8, 9, 10}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         dShape = new Shape(aEntries.length, aEntries[0].length);
         dEntries = new CNumber[]{new CNumber(1), new CNumber(6), new CNumber(8),
                 new CNumber(9), new CNumber(10)};
@@ -216,7 +216,7 @@ class MatrixEqualsTests {
 
         // ----------------- Sub-case 6 -----------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 8, 9, 10}, {0, 0, 0, 0}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         dShape = new Shape(3, 4);
         dEntries = new CNumber[]{new CNumber(1), new CNumber(6), new CNumber(8),
                 new CNumber(9), new CNumber(10)};

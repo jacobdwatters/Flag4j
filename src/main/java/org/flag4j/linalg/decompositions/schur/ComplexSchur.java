@@ -24,14 +24,14 @@
 
 package org.flag4j.linalg.decompositions.schur;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.linalg.Eigen;
 import org.flag4j.linalg.decompositions.hess.ComplexHess;
 import org.flag4j.linalg.transformations.Givens;
 import org.flag4j.linalg.transformations.Householder;
-import org.flag4j.operations.common.complex.AggregateComplex;
+import org.flag4j.operations_old.common.complex.AggregateComplex;
 import org.flag4j.rng.RandomCNumber;
 import org.flag4j.util.Flag4jConstants;
 
@@ -48,10 +48,10 @@ import static org.flag4j.util.Flag4jConstants.EPS_F64;
  *
  * <p>This code was adapted from the <a href="http://ejml.org/wiki/index.php?title=Main_Page">EJML</a> library and the description of
  * the Francis implicit double shifted QR algorithm given in
- * <a href="https://www.math.wsu.edu/faculty/watkins/books.html">Fundamentals of Matrix
+ * <a href="https://www.math.wsu.edu/faculty/watkins/books.html">Fundamentals of MatrixOld
  * Computations 3rd Edition by David S. Watkins</a>.
  */
-public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
+public class ComplexSchur extends Schur<CMatrixOld, CNumber[]> {
 
     /**
      * The complex number equal to zero.
@@ -174,14 +174,14 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
      * @param src The source matrix to decompose.
      */
     @Override
-    public ComplexSchur decompose(CMatrix src) {
+    public ComplexSchur decompose(CMatrixOld src) {
         decomposeBase(src);
         return this;
     }
 
 
     /**
-     * Initializes temporary work arrays to be used in the decomposition.
+     * Initializes temporary work arrays_old to be used in the decomposition.
      */
     @Override
     protected void setUpArrays() {
@@ -273,7 +273,7 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
         //  There should be negligible stability difference between the two for a 2x2 rotator, but the givens rotator is more
         //  simple to calculate. However, this seems to be incorrect. Figure out what this should be or if the left/right
         //  multiplication methods are incorrect.
-//        Matrix G = Givens.get2x2Rotator(T.entries[i*numRows + i - 1], T.entries[(i+1)*numRows + i - 1]);
+//        MatrixOld G = Givens.get2x2Rotator(T.entries[i*numRows + i - 1], T.entries[(i+1)*numRows + i - 1]);
 //        Givens.leftMult2x2Rotator(T, G, i+1, givensWorkArray);
 //        Givens.rightMult2x2Rotator(T, G, i+1, givensWorkArray);
 
@@ -509,10 +509,10 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
     }
 
 
-    public CMatrix[] real2ComplexSchur() {
+    public CMatrixOld[] real2ComplexSchur() {
         // Convert matrices to complex matrices.
-        CMatrix tComplex = T.copy();
-        CMatrix uComplex = computeU ? U.copy() : null;
+        CMatrixOld tComplex = T.copy();
+        CMatrixOld uComplex = computeU ? U.copy() : null;
         CNumber[] givensWorkComplex = new CNumber[2*numRows];
 
         for(int m=numRows-1; m>0; m--) {
@@ -527,7 +527,7 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
                 mu[0] = mu[0].sub(a22); // Shift eigenvalue.
 
                 // Construct a givens rotator to bring matrix into properly upper triangular form.
-                CMatrix G = Givens.get2x2Rotator(new CVector(mu[0], a21));
+                CMatrixOld G = Givens.get2x2Rotator(new CVectorOld(mu[0], a21));
                 // Apply rotation to T matrix to bring it into upper triangular form.
                 Givens.leftMult2x2Rotator(tComplex, G, m, givensWorkComplex);
                 // Apply hermitian transpose to keep transformation similar.
@@ -542,6 +542,6 @@ public class ComplexSchur extends Schur<CMatrix, CNumber[]> {
             }
         }
 
-        return new CMatrix[]{tComplex, uComplex};
+        return new CMatrixOld[]{tComplex, uComplex};
     }
 }

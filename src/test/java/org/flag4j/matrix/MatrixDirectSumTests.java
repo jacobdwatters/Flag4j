@@ -1,9 +1,9 @@
 package org.flag4j.matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.linalg.ops.DirectSum;
@@ -21,8 +21,8 @@ class MatrixDirectSumTests {
     int[] rowIndices, colIndices;
     Shape sparseShape;
 
-    Matrix A, B, exp;
-    CMatrix BComplex, expComplex;
+    MatrixOld A, B, exp;
+    CMatrixOld BComplex, expComplex;
     CooMatrix BSparse;
     CooCMatrix BSparseComplex;
 
@@ -30,9 +30,9 @@ class MatrixDirectSumTests {
     void matrixTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bEntries = new double[][]{{-9, 1.234}, {89.1, 0}, {0, -4.6}};
-        B = new Matrix(bEntries);
+        B = new MatrixOld(bEntries);
 
         expEntries = new double[][]{
                 {1, 2, 3, 0, 0},
@@ -40,7 +40,7 @@ class MatrixDirectSumTests {
                 {0, 0, 0, -9, 1.234},
                 {0, 0, 0, 89.1, 0},
                 {0, 0, 0, 0, -4.6}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertEquals(exp, DirectSum.directSum(A, B));
     }
@@ -50,7 +50,7 @@ class MatrixDirectSumTests {
     void sparseMatrixTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bSparseEntries = new double[]{9.32, 13.4, -80.1, 1001.0004};
         rowIndices = new int[]{0, 2, 2, 4};
         colIndices = new int[]{0, 0, 1, 1};
@@ -65,7 +65,7 @@ class MatrixDirectSumTests {
                 {0, 0, 0, 13.4, -80.1, 0},
                 {0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 1001.0004, 0}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertEquals(exp, DirectSum.directSum(A, BSparse));
     }
@@ -75,17 +75,17 @@ class MatrixDirectSumTests {
     void complexMatrixTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bComplexEntries = new CNumber[][]{{new CNumber(0, 1), new CNumber(8.13)},
                 {new CNumber(1.44, -9.436), new CNumber(6.71, 8.44)}};
-        BComplex = new CMatrix(bComplexEntries);
+        BComplex = new CMatrixOld(bComplexEntries);
 
         expComplexEntries = new CNumber[][]{
                 {new CNumber(1), new CNumber(2), new CNumber(3), new CNumber(0), new CNumber(0)},
                 {new CNumber(4), new CNumber(5), new CNumber(6), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0, 1), new CNumber(8.13)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(1.44, -9.436), new CNumber(6.71, 8.44)}};
-        expComplex = new CMatrix(expComplexEntries);
+        expComplex = new CMatrixOld(expComplexEntries);
 
         assertEquals(expComplex, DirectSum.directSum(A, BComplex));
     }
@@ -94,7 +94,7 @@ class MatrixDirectSumTests {
     void sparseComplexMatrixTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bSparseComplexEntries = new CNumber[]{new CNumber(0, 1), new CNumber(8.13),
                 new CNumber(1.44, -9.436), new CNumber(6.71, 8.44)};
         rowIndices = new int[]{0, 2, 2, 4};
@@ -110,7 +110,7 @@ class MatrixDirectSumTests {
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(8.13), new CNumber(1.44, -9.436), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(6.71, 8.44), new CNumber(0)}};
-        expComplex = new CMatrix(expComplexEntries);
+        expComplex = new CMatrixOld(expComplexEntries);
 
         assertEquals(expComplex, DirectSum.directSum(A, BSparseComplex));
     }
@@ -121,16 +121,16 @@ class MatrixDirectSumTests {
     void matrixInvTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bEntries = new double[][]{{-9, 1.234}, {89.1, 0}, {0, -4.6}};
-        B = new Matrix(bEntries);
+        B = new MatrixOld(bEntries);
         expEntries = new double[][]{
                 {0, 0, 0, -9, 1.234},
                 {0, 0, 0, 89.1, 0},
                 {0, 0, 0, 0, -4.6},
                 {1, 2, 3, 0, 0},
                 {4, 5, 6, 0, 0}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertEquals(exp, DirectSum.invDirectSum(A, B));
     }
@@ -140,7 +140,7 @@ class MatrixDirectSumTests {
     void sparseMatrixInvTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bSparseEntries = new double[]{9.32, 13.4, -80.1, 1001.0004};
         rowIndices = new int[]{0, 2, 2, 4};
         colIndices = new int[]{0, 0, 1, 1};
@@ -155,7 +155,7 @@ class MatrixDirectSumTests {
                 {0, 0, 0, 0, 1001.0004, 0},
                 {1, 2, 3, 0, 0, 0},
                 {4, 5, 6, 0, 0, 0}};
-        exp = new Matrix(expEntries);
+        exp = new MatrixOld(expEntries);
 
         assertEquals(exp, DirectSum.invDirectSum(A, BSparse));
     }
@@ -165,17 +165,17 @@ class MatrixDirectSumTests {
     void complexMatrixInvTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bComplexEntries = new CNumber[][]{{new CNumber(0, 1), new CNumber(8.13)},
                 {new CNumber(1.44, -9.436), new CNumber(6.71, 8.44)}};
-        BComplex = new CMatrix(bComplexEntries);
+        BComplex = new CMatrixOld(bComplexEntries);
 
         expComplexEntries = new CNumber[][]{
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0, 1), new CNumber(8.13)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(1.44, -9.436), new CNumber(6.71, 8.44)},
                 {new CNumber(1), new CNumber(2), new CNumber(3), new CNumber(0), new CNumber(0)},
                 {new CNumber(4), new CNumber(5), new CNumber(6), new CNumber(0), new CNumber(0)}};
-        expComplex = new CMatrix(expComplexEntries);
+        expComplex = new CMatrixOld(expComplexEntries);
 
         assertEquals(expComplex, DirectSum.invDirectSum(A, BComplex));
     }
@@ -184,7 +184,7 @@ class MatrixDirectSumTests {
     void sparseComplexMatrixInvTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
-        A = new Matrix(aEntries);
+        A = new MatrixOld(aEntries);
         bSparseComplexEntries = new CNumber[]{new CNumber(0, 1), new CNumber(8.13),
                 new CNumber(1.44, -9.436), new CNumber(6.71, 8.44)};
         rowIndices = new int[]{0, 2, 2, 4};
@@ -200,7 +200,7 @@ class MatrixDirectSumTests {
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(6.71, 8.44), new CNumber(0)},
                 {new CNumber(1), new CNumber(2), new CNumber(3), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(4), new CNumber(5), new CNumber(6), new CNumber(0), new CNumber(0), new CNumber(0)}};
-        expComplex = new CMatrix(expComplexEntries);
+        expComplex = new CMatrixOld(expComplexEntries);
 
         assertEquals(expComplex, DirectSum.invDirectSum(A, BSparseComplex));
     }

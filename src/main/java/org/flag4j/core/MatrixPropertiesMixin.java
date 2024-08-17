@@ -27,12 +27,12 @@ package org.flag4j.core;
 /**
  * This interface specifies methods which provide properties of a matrix. All matrices should implement this interface.
  *
- * @param <T> Matrix type.
- * @param <U> Dense Matrix type.
- * @param <V> Sparse Matrix type.
- * @param <W> Complex Matrix type.
- * @param <Y> Real Matrix type.
- * @param <X> Matrix entry type.
+ * @param <T> MatrixOld type.
+ * @param <U> Dense MatrixOld type.
+ * @param <V> Sparse MatrixOld type.
+ * @param <W> Complex MatrixOld type.
+ * @param <Y> Real MatrixOld type.
+ * @param <X> MatrixOld entry type.
  */
 public interface MatrixPropertiesMixin {
 

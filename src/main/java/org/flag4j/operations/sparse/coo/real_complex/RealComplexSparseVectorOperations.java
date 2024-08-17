@@ -24,10 +24,10 @@
 
 package org.flag4j.operations.sparse.coo.real_complex;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
@@ -39,7 +39,7 @@ import java.util.List;
 
 
 /**
- * This class contains low level implementations of operations on a real sparse tensor and a complex sparse tensor.
+ * This class contains low level implementations of operations_old on a real sparse tensor and a complex sparse tensor.
  */
 public final class RealComplexSparseVectorOperations {
 
@@ -55,7 +55,7 @@ public final class RealComplexSparseVectorOperations {
      * @param a Value to add to the {@code src} sparse vector.
      * @return The result of adding the specified value to the sparse vector.
      */
-    public static CVector add(CooVector src, CNumber a) {
+    public static CVectorOld add(CooVector src, CNumber a) {
         CNumber[] dest = new CNumber[src.size];
         Arrays.fill(dest, a);
 
@@ -64,7 +64,7 @@ public final class RealComplexSparseVectorOperations {
             dest[idx] = dest[idx].add(src.entries[i]);
         }
 
-        return new CVector(dest);
+        return new CVectorOld(dest);
     }
 
 
@@ -74,7 +74,7 @@ public final class RealComplexSparseVectorOperations {
      * @param a Value to add to the {@code src} sparse vector.
      * @return The result of adding the specified value to the sparse vector.
      */
-    public static CVector add(CooCVector src, double a) {
+    public static CVectorOld add(CooCVector src, double a) {
         CNumber[] dest = new CNumber[src.size];
         ArrayUtils.fill(dest, a);
 
@@ -83,7 +83,7 @@ public final class RealComplexSparseVectorOperations {
             dest[idx] = dest[idx].add(src.entries[i]);
         }
 
-        return new CVector(dest);
+        return new CVectorOld(dest);
     }
 
 
@@ -93,7 +93,7 @@ public final class RealComplexSparseVectorOperations {
      * @param a Value to subtract from the {@code src} sparse vector.
      * @return The result of subtracting the specified value from the sparse vector.
      */
-    public static CVector sub(CooVector src, CNumber a) {
+    public static CVectorOld sub(CooVector src, CNumber a) {
         CNumber[] dest = new CNumber[src.size];
         Arrays.fill(dest, a.addInv());
 
@@ -102,7 +102,7 @@ public final class RealComplexSparseVectorOperations {
             dest[idx] = dest[idx].add(src.entries[i]);
         }
 
-        return new CVector(dest);
+        return new CVectorOld(dest);
     }
 
 
@@ -378,7 +378,7 @@ public final class RealComplexSparseVectorOperations {
      * @param src2 Second sparse vector in the outer product.
      * @return The matrix resulting from the vector outer product.
      */
-    public static CMatrix outerProduct(CooCVector src1, CooVector src2) {
+    public static CMatrixOld outerProduct(CooCVector src1, CooVector src2) {
         CNumber[] dest = new CNumber[src2.size*src1.size];
         Arrays.fill(dest, CNumber.ZERO);
 
@@ -397,7 +397,7 @@ public final class RealComplexSparseVectorOperations {
             }
         }
 
-        return new CMatrix(src1.size, src2.size, dest);
+        return new CMatrixOld(src1.size, src2.size, dest);
     }
 
 
@@ -407,7 +407,7 @@ public final class RealComplexSparseVectorOperations {
      * @param src2 Second sparse vector in the outer product.
      * @return The matrix resulting from the vector outer product.
      */
-    public static CMatrix outerProduct(CooVector src1, CooCVector src2) {
+    public static CMatrixOld outerProduct(CooVector src1, CooCVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         CNumber[] dest = new CNumber[src2.size*src1.size];
@@ -428,6 +428,6 @@ public final class RealComplexSparseVectorOperations {
             }
         }
 
-        return new CMatrix(src1.size, src2.size, dest);
+        return new CMatrixOld(src1.size, src2.size, dest);
     }
 }

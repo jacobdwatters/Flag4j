@@ -24,10 +24,10 @@
 
 package org.flag4j.operations.dense_sparse.coo.real;
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.dense.Tensor;
-import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.arrays.sparse.CooTensor;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.TensorOld;
+import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooTensor;
 import org.flag4j.operations.common.real.RealProperties;
 import org.flag4j.util.ErrorMessages;
 
@@ -91,7 +91,7 @@ public class RealDenseSparseEquals {
      * @param B Real sparse matrix.
      * @return True if the two matrices are element-wise equivalent (as if both were dense).
      */
-    public static boolean matrixEquals(Matrix A, CooMatrix B) {
+    public static boolean matrixEquals(MatrixOld A, CooMatrix B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
@@ -133,7 +133,7 @@ public class RealDenseSparseEquals {
      * @param B Real sparse tensor.
      * @return True if the two matrices are element-wise equivalent.
      */
-    public static boolean tensorEquals(Tensor A, CooTensor B) {
+    public static boolean tensorEquals(TensorOld A, CooTensor B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {

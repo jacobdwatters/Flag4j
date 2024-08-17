@@ -1,7 +1,7 @@
 package org.flag4j.sparse_csr_complex_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.sparse.CsrCMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -24,14 +24,14 @@ class CsrCMatrixRowColSwapTests {
                 {new CNumber(0), new CNumber(0), new CNumber(50, 56), new CNumber(60.1, -15), new CNumber(70.2, 15.34),
                         new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(80,2.1)}};
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         expEntries = new CNumber[][]{
                 {new CNumber(10, -9.1), new CNumber(20, 1.5), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(50, 56), new CNumber(60.1, -15), new CNumber(70.2, 15.34),
                         new CNumber(0)},
                 {new CNumber(0), new CNumber(30, 7.2), new CNumber(0), new CNumber(40), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(80, 2.1)}};
-        exp = new CMatrix(expEntries).toCsr();
+        exp = new CMatrixOld(expEntries).toCsr();
 
         assertEquals(exp, A.swapRows(1, 2));
 
@@ -41,13 +41,13 @@ class CsrCMatrixRowColSwapTests {
                 {new CNumber(0), new CNumber(30, 7.2), new CNumber(0), new CNumber(40), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(50, 56), new CNumber(60, -15), new CNumber(70, 15.34), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(80, 2.1)}};
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         expEntries = new CNumber[][]{
                 {new CNumber(10, -9.1), new CNumber(20, 1.5), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(50, 56), new CNumber(60, -15), new CNumber(70, 15.34), new CNumber(0)},
                 {new CNumber(0), new CNumber(30, 7.2), new CNumber(0), new CNumber(40), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(80, 2.1)}};
-        exp = new CMatrix(expEntries).toCsr();
+        exp = new CMatrixOld(expEntries).toCsr();
 
         assertEquals(exp, A.swapRows(2, 1));
 
@@ -57,13 +57,13 @@ class CsrCMatrixRowColSwapTests {
                 {new CNumber(0), new CNumber(30, 7.2), new CNumber(0), new CNumber(40), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(50, 56), new CNumber(60, -15), new CNumber(70, 15.34), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(80, 2.1)}};
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         expEntries = new CNumber[][]{
                 {new CNumber(0), new CNumber(0), new CNumber(50, 56), new CNumber(60, -15), new CNumber(70, 15.34), new CNumber(0)},
                 {new CNumber(0), new CNumber(30, 7.2), new CNumber(0), new CNumber(40), new CNumber(0), new CNumber(0)},
                 {new CNumber(10, -9.1), new CNumber(20, 1.5), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(80, 2.1)}};
-        exp = new CMatrix(expEntries).toCsr();
+        exp = new CMatrixOld(expEntries).toCsr();
 
         assertEquals(exp, A.swapRows(2, 0));
 
@@ -73,13 +73,13 @@ class CsrCMatrixRowColSwapTests {
                 {new CNumber(0), new CNumber(30, 7.2), new CNumber(0), new CNumber(40), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(50, 56), new CNumber(60, -15), new CNumber(70, 15.34), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(80, 2.1)}};
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         expEntries = new CNumber[][]{
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(80, 2.1)},
                 {new CNumber(0), new CNumber(30, 7.2), new CNumber(0), new CNumber(40), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(50, 56), new CNumber(60, -15), new CNumber(70, 15.34), new CNumber(0)},
                 {new CNumber(10, -9.1), new CNumber(20, 1.5), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)}};
-        exp = new CMatrix(expEntries).toCsr();
+        exp = new CMatrixOld(expEntries).toCsr();
 
         assertEquals(exp, A.swapRows(0, 3));
 
@@ -89,13 +89,13 @@ class CsrCMatrixRowColSwapTests {
                 {new CNumber(0), new CNumber(30, 7.2), new CNumber(0), new CNumber(40), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(50, 56), new CNumber(60, -15), new CNumber(70, 15.34), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(80, 2.1)}};
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         expEntries = new CNumber[][]{
                 {new CNumber(10, -9.1), new CNumber(20, 1.5), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(30, 7.2), new CNumber(0), new CNumber(40), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(80, 2.1)},
                 {new CNumber(0), new CNumber(0), new CNumber(50, 56), new CNumber(60, -15), new CNumber(70, 15.34), new CNumber(0)}};
-        exp = new CMatrix(expEntries).toCsr();
+        exp = new CMatrixOld(expEntries).toCsr();
 
         assertEquals(exp, A.swapRows(3, 2));
 
@@ -105,7 +105,7 @@ class CsrCMatrixRowColSwapTests {
                 {new CNumber(0), new CNumber(30, 7.2), new CNumber(0), new CNumber(40), new CNumber(0), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(50, 56), new CNumber(60, -15), new CNumber(70, 15.34), new CNumber(0)},
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(80, 2.1)}};
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
 
         assertThrows(IndexOutOfBoundsException.class, ()->A.swapRows(-1, 2));
         assertThrows(IndexOutOfBoundsException.class, ()->A.swapRows(1, 145));
@@ -121,13 +121,13 @@ class CsrCMatrixRowColSwapTests {
                 {new CNumber(0),  new CNumber(30, 7.2), new CNumber(0),  new CNumber(40), new CNumber(0),  new CNumber(0)},
                 {new CNumber(0),  new CNumber(0),  new CNumber(50, 56), new CNumber(60, -15), new CNumber(70, 15.34), new CNumber(0)},
                 {new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(80, 2.1)}};
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         expEntries = new CNumber[][]{
                 {new CNumber(0),  new CNumber(20, 1.5), new CNumber(0),  new CNumber(10, -9.1), new CNumber(0),  new CNumber(0)},
                 {new CNumber(40), new CNumber(30, 7.2), new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0)},
                 {new CNumber(60, -15), new CNumber(0),  new CNumber(50, 56), new CNumber(0),  new CNumber(70, 15.34), new CNumber(0)},
                 {new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(80, 2.1)}};
-        exp = new CMatrix(expEntries).toCsr();
+        exp = new CMatrixOld(expEntries).toCsr();
 
         assertEquals(exp, A.swapCols(0, 3));
 
@@ -137,13 +137,13 @@ class CsrCMatrixRowColSwapTests {
                 {new CNumber(0),  new CNumber(30, 7.2), new CNumber(0),  new CNumber(40), new CNumber(0),  new CNumber(0)},
                 {new CNumber(0),  new CNumber(0),  new CNumber(50, 56), new CNumber(60, -15), new CNumber(70, 15.34), new CNumber(0)},
                 {new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(80, 2.1)}};
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         expEntries = new CNumber[][]{
                 {new CNumber(0),  new CNumber(20, 1.5), new CNumber(0),  new CNumber(10, -9.1), new CNumber(0),  new CNumber(0)},
                 {new CNumber(40), new CNumber(30, 7.2), new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0)},
                 {new CNumber(60, -15), new CNumber(0),  new CNumber(50, 56), new CNumber(0),  new CNumber(70, 15.34), new CNumber(0)},
                 {new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(80, 2.1)}};
-        exp = new CMatrix(expEntries).toCsr();
+        exp = new CMatrixOld(expEntries).toCsr();
 
         assertEquals(exp, A.swapCols(3, 0));
 
@@ -153,13 +153,13 @@ class CsrCMatrixRowColSwapTests {
                 {new CNumber(0),  new CNumber(30, 7.2), new CNumber(0),  new CNumber(40), new CNumber(0),  new CNumber(0)},
                 {new CNumber(0),  new CNumber(0),  new CNumber(50, 56), new CNumber(60, -15), new CNumber(70, 15.34), new CNumber(0)},
                 {new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(80, 2.1)}};
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         expEntries = new CNumber[][]{
                 {new CNumber(10, -9.1), new CNumber(0),  new CNumber(0),  new CNumber(20, 1.5), new CNumber(0),  new CNumber(0)},
                 {new CNumber(0),  new CNumber(40), new CNumber(0),  new CNumber(30, 7.2), new CNumber(0),  new CNumber(0)},
                 {new CNumber(0),  new CNumber(60, -15), new CNumber(50, 56), new CNumber(0),  new CNumber(70, 15.34), new CNumber(0)},
                 {new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(80, 2.1)}};
-        exp = new CMatrix(expEntries).toCsr();
+        exp = new CMatrixOld(expEntries).toCsr();
 
         assertEquals(exp, A.swapCols(1, 3));
 
@@ -169,13 +169,13 @@ class CsrCMatrixRowColSwapTests {
                 {new CNumber(0),  new CNumber(30, 7.2), new CNumber(0),  new CNumber(40), new CNumber(0),  new CNumber(0) },
                 {new CNumber(0),  new CNumber(0),  new CNumber(50, 56), new CNumber(60, -15), new CNumber(70, 15.34), new CNumber(0) },
                 {new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(80, 2.1)}};
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         expEntries = new CNumber[][]{
                 {new CNumber(0),  new CNumber(20, 1.5), new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(10, -9.1)},
                 {new CNumber(0),  new CNumber(30, 7.2), new CNumber(0),  new CNumber(40), new CNumber(0),  new CNumber(0) },
                 {new CNumber(0),  new CNumber(0),  new CNumber(50, 56), new CNumber(60, -15), new CNumber(70, 15.34), new CNumber(0) },
                 {new CNumber(80, 2.1), new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0) }};
-        exp = new CMatrix(expEntries).toCsr();
+        exp = new CMatrixOld(expEntries).toCsr();
 
         assertEquals(exp, A.swapCols(0, 5));
 
@@ -185,13 +185,13 @@ class CsrCMatrixRowColSwapTests {
                 {new CNumber(0),  new CNumber(30, 7.2), new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0) },
                 {new CNumber(0),  new CNumber(40), new CNumber(50, 56), new CNumber(60, -15), new CNumber(70, 15.34), new CNumber(0) },
                 {new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(80, 2.1),  new CNumber(0), new CNumber(90)}};
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         expEntries = new CNumber[][]{
                 {new CNumber(10, -9.1), new CNumber(0),  new CNumber(0),  new CNumber(20, 1.5), new CNumber(0),  new CNumber(0) },
                 {new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(30, 7.2), new CNumber(0),  new CNumber(0) },
                 {new CNumber(0),  new CNumber(60, -15), new CNumber(50, 56), new CNumber(40), new CNumber(70, 15.34), new CNumber(0) },
                 {new CNumber(0),  new CNumber(80, 2.1), new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(90)}};
-        exp = new CMatrix(expEntries).toCsr();
+        exp = new CMatrixOld(expEntries).toCsr();
 
         assertEquals(exp, A.swapCols(1, 3));
 
@@ -201,13 +201,13 @@ class CsrCMatrixRowColSwapTests {
                 {new CNumber(0),  new CNumber(30, 7.2), new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0) },
                 {new CNumber(0),  new CNumber(40), new CNumber(50, 56), new CNumber(60, -15), new CNumber(70, 15.34), new CNumber(0) },
                 {new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(80, 2.1),  new CNumber(0), new CNumber(90)}};
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         expEntries = new CNumber[][]{
                 {new CNumber(10, -9.1), new CNumber(20, 1.5), new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0) },
                 {new CNumber(0),  new CNumber(30, 7.2), new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0) },
                 {new CNumber(0),  new CNumber(40), new CNumber(50, 56), new CNumber(0),  new CNumber(70, 15.34), new CNumber(60, -15) },
                 {new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(90), new CNumber(0), new CNumber(80, 2.1)}};
-        exp = new CMatrix(expEntries).toCsr();
+        exp = new CMatrixOld(expEntries).toCsr();
 
         assertEquals(exp, A.swapCols(3, 5));
 
@@ -217,13 +217,13 @@ class CsrCMatrixRowColSwapTests {
                 {new CNumber(0),  new CNumber(30, 7.2), new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0) },
                 {new CNumber(0),  new CNumber(40), new CNumber(50, 56), new CNumber(60, -15), new CNumber(70, 15.34), new CNumber(0) },
                 {new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(80, 2.1),  new CNumber(0), new CNumber(90)}};
-        A = new CMatrix(aEntries).toCsr();
+        A = new CMatrixOld(aEntries).toCsr();
         expEntries = new CNumber[][]{
                 {new CNumber(20, 1.5), new CNumber(10, -9.1), new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0) },
                 {new CNumber(30, 7.2), new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(0) },
                 {new CNumber(40), new CNumber(0),  new CNumber(50, 56), new CNumber(60, -15), new CNumber(70, 15.34), new CNumber(0) },
                 {new CNumber(0),  new CNumber(0),  new CNumber(0),  new CNumber(80, 2.1),  new CNumber(0), new CNumber(90)}};
-        exp = new CMatrix(expEntries).toCsr();
+        exp = new CMatrixOld(expEntries).toCsr();
 
         assertEquals(exp, A.swapCols(0, 1));
     }

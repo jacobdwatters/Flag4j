@@ -25,9 +25,9 @@
 package org.flag4j.operations.sparse.coo.real;
 
 
-import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.arrays.sparse.CooTensor;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooTensor;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.operations.common.real.RealProperties;
 import org.flag4j.util.ErrorMessages;
 

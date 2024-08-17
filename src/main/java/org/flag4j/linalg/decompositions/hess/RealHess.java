@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.decompositions.hess;
 
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.linalg.decompositions.unitary.RealUnitaryDecomposition;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -76,7 +76,7 @@ public class RealHess extends RealUnitaryDecomposition {
      * @throws LinearAlgebraException If {@code src} is not a square matrix.
      */
     @Override
-    public RealHess decompose(Matrix src) {
+    public RealHess decompose(MatrixOld src) {
         ParameterChecks.assertSquare(src.shape);
         decomposeBase(src);
         return this;
@@ -89,8 +89,8 @@ public class RealHess extends RealUnitaryDecomposition {
      * @return An identity matrix with the appropriate size.
      */
     @Override
-    protected Matrix initQ() {
-        return Matrix.I(numRows);
+    protected MatrixOld initQ() {
+        return MatrixOld.I(numRows);
     }
 
 
@@ -100,7 +100,7 @@ public class RealHess extends RealUnitaryDecomposition {
      * @return The upper Hessenburg matrix from the last decomposition.
      */
     @Override
-    public Matrix getUpper() {
+    public MatrixOld getUpper() {
         return getH();
     }
 
@@ -109,7 +109,7 @@ public class RealHess extends RealUnitaryDecomposition {
      * Gets the upper Hessenburg matrix {@code H} from the Hessenburg decomposition.
      * @return The upper Hessenburg matrix {@code H} from the Hessenburg decomposition.
      */
-    public Matrix getH() {
-        return getUpper(new Matrix(numRows));
+    public MatrixOld getH() {
+        return getUpper(new MatrixOld(numRows));
     }
 }

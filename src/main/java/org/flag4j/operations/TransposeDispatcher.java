@@ -24,13 +24,18 @@
 
 package org.flag4j.operations;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
+import org.flag4j.core_temp.arrays.dense.ComplexFieldTensor;
+import org.flag4j.core_temp.arrays.dense.FieldTensor;
+import org.flag4j.core_temp.arrays.dense.Tensor;
+import org.flag4j.core_temp.structures.fields.ComplexField;
+import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.operations.dense.complex.ComplexDenseTranspose;
+import org.flag4j.operations.dense.field_ops.DenseComplexFieldTranspose;
+import org.flag4j.operations.dense.field_ops.DenseFieldTranspose;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
 import org.flag4j.util.ErrorMessages;
 
@@ -68,10 +73,10 @@ public final class TransposeDispatcher {
 
     /**
      * Dispatches a matrix transpose problem to the appropriate algorithm based on its shape and size.
-     * @param src Matrix to transpose.
+     * @param src MatrixOld to transpose.
      * @return The transpose of the source matrix.
      */
-    public static Matrix dispatch(Matrix src) {
+    public static MatrixOld dispatch(MatrixOld src) {
 
         double[] dest;
 
@@ -92,16 +97,16 @@ public final class TransposeDispatcher {
                 break;
         }
 
-        return new Matrix(src.numCols, src.numRows, dest);
+        return new MatrixOld(src.numCols, src.numRows, dest);
     }
 
 
     /**
      * Dispatches a matrix transpose problem to the appropriate algorithm based in its shape and size.
-     * @param src Matrix to transpose.
+     * @param src MatrixOld to transpose.
      * @return The transpose of the source matrix.
      */
-    public static CMatrix dispatch(CMatrix src) {
+    public static CMatrixOld dispatch(CMatrixOld src) {
         CNumber[] dest;
 
         Algorithm algorithm = chooseAlgorithm(src.shape);
@@ -112,16 +117,16 @@ public final class TransposeDispatcher {
             dest = ComplexDenseTranspose.blockedMatrixConcurrent(src.entries, src.numRows, src.numCols);
         }
 
-        return new CMatrix(src.numCols, src.numRows, dest);
+        return new CMatrixOld(src.numCols, src.numRows, dest);
     }
 
 
     /**
      * Dispatches a matrix hermitian transpose problem to the appropriate algorithm based on its shape and size.
-     * @param src Matrix to transpose.
+     * @param src MatrixOld to transpose.
      * @return The transpose of the source matrix.
      */
-    public static CMatrix dispatchHermitian(CMatrix src) {
+    public static CMatrixOld dispatchHermitian(CMatrixOld src) {
         CNumber[] dest;
 
         Algorithm algorithm = chooseAlgorithmHermitian(src.shape);
@@ -132,7 +137,7 @@ public final class TransposeDispatcher {
             dest = ComplexDenseTranspose.blockedMatrixConcurrentHerm(src.entries, src.numRows, src.numCols);
         }
 
-        return new CMatrix(src.numCols, src.numRows, dest);
+        return new CMatrixOld(src.numCols, src.numRows, dest);
     }
 
 
@@ -158,40 +163,97 @@ public final class TransposeDispatcher {
 
     /**
      * Dispatches a tensor transpose problem to the appropriate algorithm based on its shape and size.
-     * @param src Entries of tensor to transpose.
-     * @param shape Shape of the tensor to transpose.
+     * @param src Tensor to transpose.
      * @param axes Permutation of axes in the tensor transpose.
      * @return The result of the tensor transpose.
      * @throws ArrayIndexOutOfBoundsException If either axis is not within the {@code src} tensor.
      */
-    public static double[] dispatchTensor(double[] src, Shape shape, int[] axes) {
+    public static Tensor dispatchTensor(Tensor src, int[] axes) {
         double[] dest;
-        Algorithm algorithm = chooseAlgorithmTensor(src.length);
+        Algorithm algorithm = chooseAlgorithmTensor(src.entries.length);
 
         dest = algorithm == Algorithm.STANDARD ?
-                RealDenseTranspose.standard(src, shape, axes):
-                RealDenseTranspose.standardConcurrent(src, shape, axes);
+                RealDenseTranspose.standard(src.entries, src.shape, axes):
+                RealDenseTranspose.standardConcurrent(src.entries, src.shape, axes);
 
-        return dest;
+        return new Tensor(src.shape.swapAxes(axes), dest);
     }
 
 
     /**
      * Dispatches a tensor transpose problem to the appropriate algorithm based on its shape and size.
-     * @param src Tensor to transpose.
+     * @param src TensorOld to transpose.
      * @param axis1 First axis in tensor transpose.
      * @param axis2 Second axis in tensor transpose.
      * @return
      */
-    public static CTensor dispatchTensor(CTensor src, int axis1, int axis2) {
-        CNumber[] dest;
+    public static <T extends Field<T>> FieldTensor<T> dispatchTensor(FieldTensor<T> src, int axis1, int axis2) {
+        Field<T>[] dest;
         Algorithm algorithm = chooseAlgorithmTensor(src.shape.get(axis1), src.shape.get(axis2));
 
         dest = algorithm == Algorithm.STANDARD ?
-                ComplexDenseTranspose.standard(src.entries, src.shape, axis1, axis2):
-                ComplexDenseTranspose.standardConcurrent(src.entries, src.shape, axis1, axis2);
+                DenseFieldTranspose.standard(src.entries, src.shape, axis1, axis2):
+                DenseFieldTranspose.standardConcurrent(src.entries, src.shape, axis1, axis2);
 
-        return new CTensor(src.shape.swapAxes(axis1, axis2), dest);
+        return new FieldTensor(src.shape.swapAxes(axis1, axis2), dest);
+    }
+
+
+    /**
+     * Dispatches a tensor transpose problem to the appropriate algorithm based on its shape and size.
+     * @param src Entries of tensor to transpose.
+     * @param axes Permutation of axes in the tensor transpose.
+     * @return The result of the tensor transpose.
+     * @throws ArrayIndexOutOfBoundsException If either axis is not within the {@code src} tensor.
+     */
+    public static <T extends Field<T>> FieldTensor<T> dispatchTensor(FieldTensor<T> src, int[] axes) {
+        Field<T>[] dest;
+        Algorithm algorithm = chooseAlgorithmTensor(src.entries.length);
+
+        dest = algorithm == Algorithm.STANDARD ?
+                DenseFieldTranspose.standard(src.entries, src.shape, axes):
+                DenseFieldTranspose.standardConcurrent(src.entries, src.shape, axes);
+
+        return new FieldTensor(src.shape.swapAxes(axes), dest);
+    }
+
+
+    /**
+     * Dispatches a tensor Hermitian transpose problem to the appropriate algorithm based on its shape and size.
+     * @param src TensorOld to transpose.
+     * @param axis1 First axis in tensor transpose.
+     * @param axis2 Second axis in tensor transpose.
+     * @return
+     */
+    public static <T extends ComplexField<T>> ComplexFieldTensor<T> dispatchTensorHermitian(ComplexFieldTensor<T> src, int axis1,
+                                                                                            int axis2) {
+        ComplexField<T>[] dest;
+        Algorithm algorithm = chooseAlgorithmTensor(src.shape.get(axis1), src.shape.get(axis2));
+
+        dest = algorithm == Algorithm.STANDARD ?
+                DenseComplexFieldTranspose.standardHerm(src.entries, src.shape, axis1, axis2):
+                DenseComplexFieldTranspose.standardConcurrentHerm(src.entries, src.shape, axis1, axis2);
+
+        return new ComplexFieldTensor(src.shape.swapAxes(axis1, axis2), dest);
+    }
+
+
+    /**
+     * Dispatches a tensor Hermitian transpose problem to the appropriate algorithm based on its shape and size.
+     * @param src Entries of tensor to transpose.
+     * @param axes Permutation of axes in the tensor transpose.
+     * @return The result of the tensor transpose.
+     * @throws ArrayIndexOutOfBoundsException If either axis is not within the {@code src} tensor.
+     */
+    public static <T extends ComplexField<T>> ComplexFieldTensor<T> dispatchTensorHermitian(ComplexFieldTensor<T> src, int[] axes) {
+        ComplexField<T>[] dest;
+        Algorithm algorithm = chooseAlgorithmTensor(src.entries.length);
+
+        dest = algorithm == Algorithm.STANDARD ?
+                DenseComplexFieldTranspose.standardHerm(src.entries, src.shape, axes):
+                DenseComplexFieldTranspose.standardConcurrentHerm(src.entries, src.shape, axes);
+
+        return new ComplexFieldTensor(src.shape.swapAxes(axes), dest);
     }
 
 

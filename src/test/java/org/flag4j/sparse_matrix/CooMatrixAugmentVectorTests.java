@@ -1,11 +1,11 @@
 package org.flag4j.sparse_matrix;
 
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -178,7 +178,7 @@ class CooMatrixAugmentVectorTests {
         CooMatrix a;
 
         double[] bEntries;
-        Vector b;
+        VectorOld b;
 
         Shape expShape;
         int[] expRowIndices;
@@ -194,7 +194,7 @@ class CooMatrixAugmentVectorTests {
         a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[]{0.96807, 0.03181, 0.52901};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         expShape = new Shape(3, 6);
         expEntries = new double[]{0.33461, 0.2762, 0.96807, 0.03181, 0.18055, 0.15661, 0.99496, 0.52901};
@@ -212,7 +212,7 @@ class CooMatrixAugmentVectorTests {
         a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[]{0.94279, 0.34055};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         expShape = new Shape(2, 2);
         expEntries = new double[]{0.94279, 0.27644, 0.34055};
@@ -230,10 +230,10 @@ class CooMatrixAugmentVectorTests {
         a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[]{0.169, 0.67177, 0.25641};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         CooMatrix finala = a;
-        Vector finalb = b;
+        VectorOld finalb = b;
         assertThrows(Exception.class, ()->finala.augment(finalb));
     }
 
@@ -247,7 +247,7 @@ class CooMatrixAugmentVectorTests {
         CooMatrix a;
 
         CNumber[] bEntries;
-        CVector b;
+        CVectorOld b;
 
         Shape expShape;
         int[] expRowIndices;
@@ -263,7 +263,7 @@ class CooMatrixAugmentVectorTests {
         a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[]{new CNumber("0.80314+0.76471i"), new CNumber("0.61237+0.67766i"), new CNumber("0.43664+0.52055i")};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
         expShape = new Shape(3, 6);
         expEntries = new CNumber[]{new CNumber("0.3522"), new CNumber("0.06776"), new CNumber("0.80314+0.76471i"), new CNumber("0.05492"), new CNumber("0.19119"), new CNumber("0.61237+0.67766i"), new CNumber("0.87698"), new CNumber("0.43664+0.52055i")};
@@ -281,7 +281,7 @@ class CooMatrixAugmentVectorTests {
         a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[]{new CNumber("0.84346+0.39347i"), new CNumber("0.67741+0.3733i")};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
         expShape = new Shape(2, 2);
         expEntries = new CNumber[]{new CNumber("0.84346+0.39347i"), new CNumber("0.46871"), new CNumber("0.67741+0.3733i")};
@@ -299,10 +299,10 @@ class CooMatrixAugmentVectorTests {
         a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[]{new CNumber("0.42232+0.32179i"), new CNumber("0.06046+0.8805i"), new CNumber("0.59928+0.29377i")};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
         CooMatrix finala = a;
-        CVector finalb = b;
+        CVectorOld finalb = b;
         assertThrows(Exception.class, ()->finala.augment(finalb));
     }
 }

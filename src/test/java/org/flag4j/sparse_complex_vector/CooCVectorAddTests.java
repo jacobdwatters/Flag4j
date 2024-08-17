@@ -1,9 +1,9 @@
 package org.flag4j.sparse_complex_vector;
 
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -83,8 +83,8 @@ class CooCVectorAddTests {
 
     @Test
     void denseTestCase() {
-        Vector b;
-        CVector exp;
+        VectorOld b;
+        CVectorOld exp;
 
         CNumber[] aValues = {new CNumber(32.5, 98), new CNumber(-8.2, 55.1), new CNumber(0, 14.5)};
         int[] aIndices = {0, 2, 5};
@@ -92,7 +92,7 @@ class CooCVectorAddTests {
         a = new CooCVector(size, aValues, aIndices);
 
         double[] bValues = {1, 5, -0.0024, 1, 2001.256, 61, -99.24, 1.5};
-        b = new Vector(bValues);
+        b = new VectorOld(bValues);
 
         // --------------------- Sub-case 1 ---------------------
         CNumber[] expValues = {
@@ -100,22 +100,22 @@ class CooCVectorAddTests {
                 new CNumber(-0.0024).add(aValues[1]), new CNumber(1),
                 new CNumber(2001.256), new CNumber(61).add(aValues[2]),
                 new CNumber(-99.24), new CNumber(1.5)};
-        exp = new CVector(expValues);
+        exp = new CVectorOld(expValues);
 
         assertEquals(exp, a.add(b));
 
         // --------------------- Sub-case 2 ---------------------
         bValues = new double[]{1, 5, -0.0024, 1, 2001.256, 61};
-        b = new Vector(bValues);
+        b = new VectorOld(bValues);
 
-        Vector finalB = b;
+        VectorOld finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.add(finalB));
     }
 
 
     @Test
     void denseComplexTestCase() {
-        CVector b, exp;
+        CVectorOld b, exp;
 
         CNumber[] aValues = {new CNumber(32.5, 98), new CNumber(-8.2, 55.1)};
         int[] aIndices = {0, 2};
@@ -124,12 +124,12 @@ class CooCVectorAddTests {
 
         CNumber[] bValues = {new CNumber(1.445, -9.24), new CNumber(1.45),
                 new CNumber(0, -99.145), new CNumber(4.51, 8.456), new CNumber(11.34, -0.00245)};
-        b = new CVector(bValues);
+        b = new CVectorOld(bValues);
 
         // --------------------- Sub-case 1 ---------------------
         CNumber[] expValues = {new CNumber(1.445, -9.24).add(new CNumber(32.5, 98)), new CNumber(1.45),
                 new CNumber(0, -99.145).add(new CNumber(-8.2, 55.1)), new CNumber(4.51, 8.456), new CNumber(11.34, -0.00245)};
-        exp = new CVector(expValues);
+        exp = new CVectorOld(expValues);
 
         assertEquals(exp, a.add(b));
 
@@ -137,9 +137,9 @@ class CooCVectorAddTests {
         bValues = new CNumber[]{new CNumber(1.445, -9.24), new CNumber(1.45),
                 new CNumber(0, -99.145), new CNumber(4.51, 8.456),
                 new CNumber(11.34, -0.00245), new CNumber(34.5, 0.0014)};
-        b = new CVector(bValues);
+        b = new CVectorOld(bValues);
 
-        CVector finalB = b;
+        CVectorOld finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.add(finalB));
     }
 
@@ -147,7 +147,7 @@ class CooCVectorAddTests {
     @Test
     void scalarTestCase() {
         double b;
-        CVector exp;
+        CVectorOld exp;
 
         CNumber[] aValues = {new CNumber(32.5, 98), new CNumber(-8.2, 55.1), new CNumber(0, 14.5)};
         int[] aIndices = {0, 2, 5};
@@ -159,7 +159,7 @@ class CooCVectorAddTests {
         // --------------------- Sub-case 1 ---------------------
         CNumber[] expValues = {aValues[0].add(new CNumber(b)), new CNumber(b), aValues[1].add(new CNumber(b)), new CNumber(b),
                 new CNumber(b), aValues[2].add(new CNumber(b)), new CNumber(b), new CNumber(b)};
-        exp = new CVector(expValues);
+        exp = new CVectorOld(expValues);
 
         assertEquals(exp, a.add(b));
     }
@@ -168,7 +168,7 @@ class CooCVectorAddTests {
     @Test
     void complexScalarTestCase() {
         CNumber b;
-        CVector exp;
+        CVectorOld exp;
 
         CNumber[] aValues = {new CNumber(32.5, 98), new CNumber(-8.2, 55.1), new CNumber(0, 14.5)};
         int[] aIndices = {0, 2, 3};
@@ -180,7 +180,7 @@ class CooCVectorAddTests {
         // --------------------- Sub-case 1 ---------------------
         CNumber[] expValues = {new CNumber(32.5, 98).add(b), b, new CNumber(-8.2, 55.1).add(b),
                 new CNumber(0, 14.5).add(b), b};
-        exp = new CVector(expValues);
+        exp = new CVectorOld(expValues);
 
         assertEquals(exp, a.add(b));
     }

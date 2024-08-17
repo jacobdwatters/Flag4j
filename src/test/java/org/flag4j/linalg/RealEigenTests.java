@@ -1,8 +1,8 @@
 package org.flag4j.linalg;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -11,11 +11,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RealEigenTests {
     static final long seed = 0xC0DE;
-    Matrix A;
+    MatrixOld A;
     double[][] entries;
-    CVector exp;
+    CVectorOld exp;
     CNumber[] expEntries;
-    CMatrix expV;
+    CMatrixOld expV;
     CNumber[][] expVEntries;
 
     @Test
@@ -23,36 +23,36 @@ class RealEigenTests {
         // ------------------- Sub-case 1 -------------------
         entries = new double[][]{
                 {1, 2}, {3, 4}};
-        A = new Matrix(entries);
+        A = new MatrixOld(entries);
         expEntries = new CNumber[]{new CNumber("-0.3722813232690143"), new CNumber("5.372281323269013")};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
         assertEquals(exp, Eigen.get2x2EigenValues(A));
 
         // ------------------- Sub-case 2 -------------------
         entries = new double[][]{
                 {10.5, 2.4},
                 {-0.0024, 215.66}};
-        A = new Matrix(entries);
+        A = new MatrixOld(entries);
         expEntries = new CNumber[]{new CNumber("10.500028075652104"), new CNumber("215.65997192434787")};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
         assertEquals(exp, Eigen.get2x2EigenValues(A));
 
         // ------------------- Sub-case 3 -------------------
         entries = new double[][]{
                 {0, 1},
                 {-1, 0}};
-        A = new Matrix(entries);
+        A = new MatrixOld(entries);
         expEntries = new CNumber[]{new CNumber("0.9999999999999998i"), new CNumber("-0.9999999999999998i")};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
         assertEquals(exp, Eigen.get2x2EigenValues(A));
 
         // ------------------- Sub-case 4 -------------------
         entries = new double[][]{
                 {0, 0},
                 {0, 0}};
-        A = new Matrix(entries);
+        A = new MatrixOld(entries);
         expEntries = new CNumber[]{CNumber.ZERO, CNumber.ZERO};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
         assertEquals(exp, Eigen.get2x2EigenValues(A));
     }
 
@@ -62,18 +62,18 @@ class RealEigenTests {
         // ------------------- Sub-case 1 -------------------
         entries = new double[][]{
                 {1, 2}, {3, 4}};
-        A = new Matrix(entries);
+        A = new MatrixOld(entries);
         expEntries = new CNumber[]{new CNumber("-0.3722813232690143"), new CNumber("5.372281323269013")};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
         assertEquals(exp, Eigen.getEigenValues(A, seed));
 
         // ------------------- Sub-case 2 -------------------
         entries = new double[][]{
                 {0, 1},
                 {-1, 0}};
-        A = new Matrix(entries);
+        A = new MatrixOld(entries);
         expEntries = new CNumber[]{new CNumber("0.9999999999999998i"), new CNumber("-0.9999999999999998i")};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
         assertEquals(exp, Eigen.getEigenValues(A, seed));
 
         // ------------------- Sub-case 3 -------------------
@@ -81,11 +81,11 @@ class RealEigenTests {
                 {0.4864, 0.85113, 0.96095},
                 {0.87509, 0.41948, 0.73852},
                 {0.47208, 0.79501, 0.41394}};
-        A = new Matrix(entries);
+        A = new MatrixOld(entries);
         expEntries = new CNumber[]{new CNumber("1.9923303019116854"),
                 new CNumber("-0.33625515095584274+0.14219266015547333i"),
                 new CNumber("-0.33625515095584274-0.14219266015547333i")};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
         assertEquals(exp, Eigen.getEigenValues(A, seed));
 
         // ------------------- Sub-case 4 -------------------
@@ -93,11 +93,11 @@ class RealEigenTests {
                 {1, 0, 0},
                 {0, 2, 0},
                 {0, 0, 3}};
-        A = new Matrix(entries);
+        A = new MatrixOld(entries);
         expEntries = new CNumber[]{new CNumber(1),
                 new CNumber(2),
                 new CNumber(3)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
         assertEquals(exp, Eigen.getEigenValues(A, seed));
 
         // ------------------- Sub-case 5 -------------------
@@ -105,12 +105,12 @@ class RealEigenTests {
                 {2, -3, 0},
                 {3,  2, 0},
                 {0,  0, 4}};
-        A = new Matrix(entries);
+        A = new MatrixOld(entries);
         expEntries = new CNumber[]{
                 new CNumber("1.999999999999999 + 2.999999999999998i"),
                 new CNumber("1.999999999999999 - 2.999999999999998i"),
                 new CNumber(4)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
         assertEquals(exp, Eigen.getEigenValues(A, seed));
 
         // ------------------- Sub-case 6 -------------------
@@ -127,7 +127,7 @@ class RealEigenTests {
                 {0.04512, 0.12456, 0.47719, 0.66192, 0.18928, 0.38026, 0.5962, 0.93584, 0.23512, 0.27215, 0.71346, 0.2241},
                 {0.98206, 0.79166, 0.34167, 0.83044, 0.94746, 0.0393, 0.16674, 0.05952, 0.33419, 0.32641, 0.35915, 0.03885},
                 {0.32974, 0.25636, 0.11247, 0.0328, 0.62604, 0.6062, 0.42941, 0.63618, 0.39747, 0.08202, 0.16033, 0.26547}};
-        A = new Matrix(entries);
+        A = new MatrixOld(entries);
         expEntries = new CNumber[]{
                 new CNumber(-1.2286261410556234), new CNumber(5.918529433580702),
                 new CNumber("-0.3714369468278178 + 1.0811961967602406i"), new CNumber("-0.3714369468278178 - 1.0811961967602406i"),
@@ -135,7 +135,7 @@ class RealEigenTests {
                 new CNumber("0.22177258075901635 - 0.6185897919333341i"), new CNumber("0.2910077285360231 + 0.45339806202918165i"),
                 new CNumber("0.2910077285360231 - 0.45339806202918165i"), new CNumber("-0.3413607889178575 + 0.17801686614592319i"),
                 new CNumber("-0.3413607889178575 - 0.17801686614592319i"), new CNumber(0.34002072146321344)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
 
         assertEquals(exp, Eigen.getEigenValues(A, seed));
 
@@ -145,13 +145,13 @@ class RealEigenTests {
                 {0, 0, -1, 0},
                 {0, 1, 0, 0},
                 {-1, 0, 0, 0}};
-        A = new Matrix(entries);
+        A = new MatrixOld(entries);
         expEntries = new CNumber[]{
                 new CNumber(5.5511151231257815E-17,0.9999999999999982),
                 new CNumber(5.5511151231257815E-17, -0.9999999999999982),
                 new CNumber(0, 0.9999999999999998),
                 new CNumber(0, -0.9999999999999998)};
-        exp = new CVector(expEntries);
+        exp = new CVectorOld(expEntries);
         assertEquals(exp, Eigen.getEigenValues(A, seed, 40));
 
         // ------------------- Sub-case 8 -------------------
@@ -159,7 +159,7 @@ class RealEigenTests {
                 {0, 0, 0, 1},
                 {0, 0, -1, 0},
                 {0, 1, 0, 0}};
-        A = new Matrix(entries);
+        A = new MatrixOld(entries);
         assertThrows(IllegalArgumentException.class, ()->Eigen.getEigenValues(A));
 
         // ------------------- Sub-case 9 -------------------
@@ -167,7 +167,7 @@ class RealEigenTests {
                 {0, 0},
                 {0, 0},
                 {0, 1}};
-        A = new Matrix(entries);
+        A = new MatrixOld(entries);
         assertThrows(IllegalArgumentException.class, ()->Eigen.getEigenValues(A));
     }
 
@@ -177,23 +177,23 @@ class RealEigenTests {
         // ------------------- Sub-case 1 -------------------
         entries = new double[][]{
                 {1, 2}, {3, 4}};
-        A = new Matrix(entries);
+        A = new MatrixOld(entries);
         expVEntries = new CNumber[][]{
                 {new CNumber("0.41597355791928425"), new CNumber("-0.8245648401323938")},
                 {new CNumber("0.9093767091321241"), new CNumber("0.5657674649689923")}};
-        expV = new CMatrix(expVEntries);
+        expV = new CMatrixOld(expVEntries);
         assertEquals(expV, Eigen.getEigenVectors(A, seed));
 
         // ------------------- Sub-case 2 -------------------
         entries = new double[][]{
                 {0, 1},
                 {-1, 0}};
-        A = new Matrix(entries);
+        A = new MatrixOld(entries);
         expVEntries = new CNumber[][]{
                 {new CNumber(0.0, 0.7071067811865475), new CNumber(0.7071067811865475)},
                 {new CNumber(-0.7071067811865475), new CNumber(0.0, -0.7071067811865475)}
         };
-        expV = new CMatrix(expVEntries);
+        expV = new CMatrixOld(expVEntries);
         assertEquals(expV, Eigen.getEigenVectors(A, seed));
 
         // ------------------- Sub-case 3 -------------------
@@ -201,13 +201,13 @@ class RealEigenTests {
                 {0.4864, 0.85113, 0.96095},
                 {0.87509, 0.41948, 0.73852},
                 {0.47208, 0.79501, 0.41394}};
-        A = new Matrix(entries);
+        A = new MatrixOld(entries);
         expVEntries = new CNumber[][]{
                 {new CNumber(0.6443341561451386), new CNumber(-0.3314770517125463, -0.24793593934966027), new CNumber(0.24793593934966016, 0.3314770517125463)},
                 {new CNumber(0.5880515587233901), new CNumber(-0.27126365550635384, 0.5694436225180889), new CNumber(-0.5694436225180888, 0.27126365550635384)},
                 {new CNumber(0.4889057777401735), new CNumber(0.5607228366620323, -0.3411607019972403), new CNumber(0.3411607019972402, -0.5607228366620323)}
         };
-        expV = new CMatrix(expVEntries);
+        expV = new CMatrixOld(expVEntries);
 
         assertEquals(expV, Eigen.getEigenVectors(A, seed));
 
@@ -217,14 +217,14 @@ class RealEigenTests {
                 {0, 0, -1, 0},
                 {0, 1, 0, 0},
                 {-1, 0, 0, 0}};
-        A = new Matrix(entries);
+        A = new MatrixOld(entries);
         expVEntries = new CNumber[][]{
                 {new CNumber(0.707106781186547, 7.850462293418876E-17), new CNumber(7.850462293418876E-17, 0.707106781186547), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0)},
                 {new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(-0.7071067811865475, 0.0), new CNumber(0.0, -0.7071067811865475)},
                 {new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.7071067811865475), new CNumber(0.7071067811865475, 0.0)},
                 {new CNumber(1.962615573354719E-16, 0.7071067811865469), new CNumber(0.7071067811865469, 1.962615573354719E-16), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0)}
         };
-        expV = new CMatrix(expVEntries);
+        expV = new CMatrixOld(expVEntries);
 
         assertEquals(expV, Eigen.getEigenVectors(A, seed, 40));
     }

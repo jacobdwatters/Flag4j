@@ -24,10 +24,10 @@
 
 package org.flag4j.core;
 
-import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.dense.Tensor;
-import org.flag4j.arrays.sparse.CooCTensor;
-import org.flag4j.arrays.sparse.CooTensor;
+import org.flag4j.arrays_old.dense.CTensorOld;
+import org.flag4j.arrays_old.dense.TensorOld;
+import org.flag4j.arrays_old.sparse.CooCTensor;
+import org.flag4j.arrays_old.sparse.CooTensor;
 import org.flag4j.util.ArrayUtils;
 
 
@@ -35,7 +35,7 @@ import org.flag4j.util.ArrayUtils;
  * This interface contains several methods which should be implemented by all tensors which are <b>NOT</b> a matrix or
  * vector.
  *
- * @param <T> Tensor type.
+ * @param <T> TensorOld type.
  * @param <U> Dense tensor type.
  * @param <V> Sparse tensor type.
  * @param <W> Complex tensor type.
@@ -50,7 +50,7 @@ public interface TensorExclusiveMixin<
      * Computes the tensor contraction of this tensor with a specified tensor over the specified axes. If {@code axes=N}, then
      * the product sums will be computed along the last {@code N} dimensions of this tensor and the first {@code N} dimensions of
      * the {@code src2} tensor.
-     * @param src2 Tensor to contract with this tensor.
+     * @param src2 TensorOld to contract with this tensor.
      * @param axes Axes specifying the number of axes to compute the tensor dot product over. If {@code axes=N}, then
      *             the product sums will be computed along the last {@code N} dimensions of this tensor and the first {@code N}
      *             dimensions of.
@@ -71,7 +71,7 @@ public interface TensorExclusiveMixin<
     /**
      * Computes the tensor contraction of this tensor with a specified tensor over the specified axes. That is,
      * computes the sum of products between the two tensors along the specified axes.
-     * @param src2 Tensor to contract with this tensor.
+     * @param src2 TensorOld to contract with this tensor.
      * @param aAxis Axis along which to compute products for this tensor.
      * @param bAxis Axis along which to compute products for {@code src2} tensor.
      * @return The tensor dot product over the specified axes.
@@ -87,7 +87,7 @@ public interface TensorExclusiveMixin<
     /**
      * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
      * computes the sum of products between the two tensors along the specified set of axes.
-     * @param src2 Tensor to contract with this tensor.
+     * @param src2 TensorOld to contract with this tensor.
      * @param aAxes Axes along which to compute products for this tensor.
      * @param bAxes Axes along which to compute products for {@code src2} tensor.
      * @return The tensor dot product over the specified axes.
@@ -103,7 +103,7 @@ public interface TensorExclusiveMixin<
      * Computes the tensor dot product of this tensor with a second tensor. That is, sums the product of two tensor
      * elements over the last axis of this tensor and the second-to-last axis of {@code src2}. If both tensors are
      * rank 2, this is equivalent to matrix multiplication.
-     * @param src2 Tensor to compute dot product with this tensor.
+     * @param src2 TensorOld to compute dot product with this tensor.
      * @return The tensor dot product over the last axis of this tensor and the second to last axis of {@code src2}.
      * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
      * along the second-to-last axis.
@@ -188,7 +188,7 @@ public interface TensorExclusiveMixin<
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    U add(Tensor B);
+    U add(TensorOld B);
 
 
     /**
@@ -198,7 +198,7 @@ public interface TensorExclusiveMixin<
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    U sub(Tensor B);
+    U sub(TensorOld B);
 
 
     /**
@@ -208,7 +208,7 @@ public interface TensorExclusiveMixin<
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    CTensor add(CTensor B);
+    CTensorOld add(CTensorOld B);
 
 
     /**
@@ -238,7 +238,7 @@ public interface TensorExclusiveMixin<
      * @return The result of subtracting the tensor B from this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    CTensor sub(CTensor B);
+    CTensorOld sub(CTensorOld B);
 
 
     /**
@@ -253,16 +253,16 @@ public interface TensorExclusiveMixin<
 
     /**
      * Computes the element-wise multiplication between two tensors.
-     * @param B Tensor to element-wise multiply to this tensor.
+     * @param B TensorOld to element-wise multiply to this tensor.
      * @return The result of the element-wise tensor multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    T elemMult(Tensor B);
+    T elemMult(TensorOld B);
 
 
     /**
      * Computes the element-wise multiplication between two tensors.
-     * @param B Tensor to element-wise multiply to this tensor.
+     * @param B TensorOld to element-wise multiply to this tensor.
      * @return The result of the element-wise tensor multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
@@ -271,16 +271,16 @@ public interface TensorExclusiveMixin<
 
     /**
      * Computes the element-wise multiplication between two tensors.
-     * @param B Tensor to element-wise multiply to this tensor.
+     * @param B TensorOld to element-wise multiply to this tensor.
      * @return The result of the element-wise tensor multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    W elemMult(CTensor B);
+    W elemMult(CTensorOld B);
 
 
     /**
      * Computes the element-wise multiplication between two tensors.
-     * @param B Tensor to element-wise multiply to this tensor.
+     * @param B TensorOld to element-wise multiply to this tensor.
      * @return The result of the element-wise tensor multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
@@ -289,20 +289,20 @@ public interface TensorExclusiveMixin<
 
     /**
      * Computes the element-wise division between two tensors.
-     * @param B Tensor to element-wise divide with this tensor.
+     * @param B TensorOld to element-wise divide with this tensor.
      * @return The result of the element-wise tensor division.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    W elemDiv(CTensor B);
+    W elemDiv(CTensorOld B);
 
 
     /**
      * Computes the element-wise division between two tensors.
-     * @param B Tensor to element-wise divide from this tensor.
+     * @param B TensorOld to element-wise divide from this tensor.
      * @return The result of the element-wise tensor division.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    T elemDiv(Tensor B);
+    T elemDiv(TensorOld B);
 
 
     /**

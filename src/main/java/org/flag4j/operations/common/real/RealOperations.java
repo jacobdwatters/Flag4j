@@ -30,7 +30,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * This class provides low level methods for computing operations on real tensors. These methods can be applied to
+ * This class provides low level methods for computing operations_old on real tensors. These methods can be applied to
  * either sparse or dense real tensors.
  */
 public class RealOperations {

@@ -36,10 +36,10 @@ import java.math.RoundingMode;
 /**
  * The base class for all sparse tensors. This includes sparse matrices and vectors.
  * @param <T> Type of this tensor.
- * @param <U> Dense Tensor type.
- * @param <W> Complex Tensor type.
+ * @param <U> Dense TensorOld type.
+ * @param <W> Complex TensorOld type.
  * @param <Z> Dense complex tensor type.
- * @param <Y> Real Tensor type.
+ * @param <Y> Real TensorOld type.
  * @param <D> Type of the storage data structure for the tensor.
  *           This common use case will be an array or list-like data structure.
  * @param <X> The type of individual entry within the {@code D} data structure

@@ -1,8 +1,8 @@
 package org.flag4j.complex_sparse_matrix;
 
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooCVector;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooCVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -166,7 +166,7 @@ class CooCMatrixSetRowTests {
         CooCMatrix a;
 
         CNumber[] bEntries;
-        CVector b;
+        CVectorOld b;
 
         Shape expShape;
         int[] expRowIndices;
@@ -182,7 +182,7 @@ class CooCMatrixSetRowTests {
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[]{new CNumber("0.18274+0.25077i"), new CNumber("0.66126+0.89279i"), new CNumber("0.20345+0.58184i")};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
         expShape = new Shape(5, 3);
         expEntries = new CNumber[]{new CNumber("0.18274+0.25077i"), new CNumber("0.66126+0.89279i"), new CNumber("0.20345+0.58184i"), new CNumber("0.04226+0.54054i"), new CNumber("0.37425+0.2214i")};
@@ -200,7 +200,7 @@ class CooCMatrixSetRowTests {
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[]{new CNumber("0.07138+0.45167i"), new CNumber("0.93062+0.14177i"), new CNumber("0.70112+0.41051i"), new CNumber("0.69003+0.96802i"), new CNumber("0.72455+0.53894i"), new CNumber("0.34266+0.33402i"), new CNumber("0.33053+0.27074i"), new CNumber("0.33903+0.43509i"), new CNumber("0.31602+0.3136i"), new CNumber("0.54317+0.89294i"), new CNumber("0.4619+0.62924i")};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
         expShape = new Shape(23, 11);
         expEntries = new CNumber[]{new CNumber("0.07138+0.45167i"), new CNumber("0.93062+0.14177i"), new CNumber("0.70112+0.41051i"), new CNumber("0.69003+0.96802i"), new CNumber("0.72455+0.53894i"), new CNumber("0.34266+0.33402i"), new CNumber("0.33053+0.27074i"), new CNumber("0.33903+0.43509i"), new CNumber("0.31602+0.3136i"), new CNumber("0.54317+0.89294i"), new CNumber("0.4619+0.62924i"), new CNumber("0.24012+0.25408i"), new CNumber("0.94941+0.42439i"), new CNumber("0.60769+0.43935i"), new CNumber("0.17206+0.29554i"), new CNumber("0.63172+0.69064i")};
@@ -218,7 +218,7 @@ class CooCMatrixSetRowTests {
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[]{new CNumber("0.80144+0.96716i"), new CNumber("0.03844+0.93879i"), new CNumber("0.30832+0.87148i"), new CNumber("0.01687+0.61229i"), new CNumber("0.13748+0.15688i")};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
         expShape = new Shape(1000, 5);
         expEntries = new CNumber[]{new CNumber("0.50868+0.78206i"), new CNumber("0.76839+0.55265i"), new CNumber("0.23793+0.45364i"), new CNumber("0.6038+0.00136i"), new CNumber("0.92526+0.6271i"), new CNumber("0.85971+0.35043i"), new CNumber("0.4214+0.88768i"), new CNumber("0.4893+0.68112i"), new CNumber("0.23015+0.89139i"), new CNumber("0.80144+0.96716i"), new CNumber("0.03844+0.93879i"), new CNumber("0.30832+0.87148i"), new CNumber("0.01687+0.61229i"), new CNumber("0.13748+0.15688i")};
@@ -236,10 +236,10 @@ class CooCMatrixSetRowTests {
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[]{new CNumber("0.95282+0.52857i"), new CNumber("0.36597+0.81948i"), new CNumber("0.88462+0.30582i"), new CNumber("0.52975+0.47877i")};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
         CooCMatrix final0a = a;
-        CVector final0b = b;
+        CVectorOld final0b = b;
         assertThrows(Exception.class, ()->final0a.setRow(final0b, 2));
 
         // ---------------------  Sub-case 5 ---------------------
@@ -250,10 +250,10 @@ class CooCMatrixSetRowTests {
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[]{new CNumber("0.33926+0.68357i"), new CNumber("0.458+0.41036i"), new CNumber("0.77024+0.46695i"), new CNumber("0.37632+0.2523i"), new CNumber("0.05953+0.70822i"), new CNumber("0.83693+0.9951i")};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
         CooCMatrix final1a = a;
-        CVector final1b = b;
+        CVectorOld final1b = b;
         assertThrows(Exception.class, ()->final1a.setRow(final1b, 1));
 
         // ---------------------  Sub-case 6 ---------------------
@@ -264,10 +264,10 @@ class CooCMatrixSetRowTests {
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[]{new CNumber("0.67277+0.3974i"), new CNumber("0.3877+0.35631i"), new CNumber("0.03545+0.36513i"), new CNumber("0.43889+0.47356i"), new CNumber("0.99912+0.69817i")};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
         CooCMatrix final2a = a;
-        CVector final2b = b;
+        CVectorOld final2b = b;
         assertThrows(Exception.class, ()->final2a.setRow(final2b, -1));
 
         // ---------------------  Sub-case 7 ---------------------
@@ -278,10 +278,10 @@ class CooCMatrixSetRowTests {
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[]{new CNumber("0.50239+0.50692i"), new CNumber("0.21647+0.90742i"), new CNumber("0.71632+0.59001i"), new CNumber("0.96968+0.70681i"), new CNumber("0.8206+0.57191i")};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
         CooCMatrix final3a = a;
-        CVector final3b = b;
+        CVectorOld final3b = b;
         assertThrows(Exception.class, ()->final3a.setRow(final3b, 5));
     }
 

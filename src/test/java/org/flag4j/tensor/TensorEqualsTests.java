@@ -1,10 +1,10 @@
 package org.flag4j.tensor;
 
 
-import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.dense.Tensor;
-import org.flag4j.arrays.sparse.CooCTensor;
-import org.flag4j.arrays.sparse.CooTensor;
+import org.flag4j.arrays_old.dense.CTensorOld;
+import org.flag4j.arrays_old.dense.TensorOld;
+import org.flag4j.arrays_old.sparse.CooCTensor;
+import org.flag4j.arrays_old.sparse.CooTensor;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 class TensorEqualsTests {
 
     static double[] aEntries;
-    static Tensor A;
+    static TensorOld A;
     static Shape aShape, bShape;
 
     int[][] sparseIndices;
@@ -26,7 +26,7 @@ class TensorEqualsTests {
                 0.001345, 2.677, 8.14, -0.000194, 1, 234
         };
         aShape = new Shape(2, 3, 2);
-        A = new Tensor(aShape, aEntries);
+        A = new TensorOld(aShape, aEntries);
     }
 
 
@@ -36,7 +36,7 @@ class TensorEqualsTests {
                 0, 2.677, 0, -0.000194, 0, 0
         };
         aShape = new Shape(2, 3, 2);
-        A = new Tensor(aShape, aEntries);
+        A = new TensorOld(aShape, aEntries);
     }
 
 
@@ -45,7 +45,7 @@ class TensorEqualsTests {
         denseSetup();
 
         double[] bEntries;
-        Tensor B;
+        TensorOld B;
 
         // ---------------------- Sub-case 1 ----------------------
         bEntries = new double[]{
@@ -53,7 +53,7 @@ class TensorEqualsTests {
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0
         };
         bShape = new Shape(2, 3, 2);
-        B = new Tensor(bShape, bEntries);
+        B = new TensorOld(bShape, bEntries);
 
         assertNotEquals(A, B);
 
@@ -63,7 +63,7 @@ class TensorEqualsTests {
                 0.001345, 2.677, 8.14, -0.000194, 1, 234
         };
         bShape = new Shape(2, 3, 2);
-        B = new Tensor(bShape, bEntries);
+        B = new TensorOld(bShape, bEntries);
 
         assertEquals(A, B);
 
@@ -73,7 +73,7 @@ class TensorEqualsTests {
                 0.001345, 2.677, 8.14, -0.000194, 1, 234
         };
         bShape = new Shape(4, 3);
-        B = new Tensor(bShape, bEntries);
+        B = new TensorOld(bShape, bEntries);
 
         assertNotEquals(A, B);
 
@@ -83,7 +83,7 @@ class TensorEqualsTests {
                 0.001345, 2.677, 8.14, -0.000194, 1, 234
         };
         bShape = new Shape(2, 1, 3, 2);
-        B = new Tensor(bShape, bEntries);
+        B = new TensorOld(bShape, bEntries);
 
         assertNotEquals(A, B);
     }
@@ -155,7 +155,7 @@ class TensorEqualsTests {
         denseSetup();
 
         CNumber[] bEntries;
-        CTensor B;
+        CTensorOld B;
 
         // ----------------------- Sub-case 1 -----------------------
         bEntries = new CNumber[]{
@@ -165,7 +165,7 @@ class TensorEqualsTests {
                 new CNumber(-0.000194), new CNumber(1), new CNumber(234)
         };
         bShape = new Shape(2, 3, 2);
-        B = new CTensor(bShape, bEntries);
+        B = new CTensorOld(bShape, bEntries);
 
         assertEquals(A.toComplex(), B);
 
@@ -177,7 +177,7 @@ class TensorEqualsTests {
                 new CNumber(-0.000194), new CNumber(1), new CNumber(234)
         };
         bShape = new Shape(2, 3, 2);
-        B = new CTensor(bShape, bEntries);
+        B = new CTensorOld(bShape, bEntries);
 
         assertNotEquals(A.toComplex(), B);
 
@@ -189,7 +189,7 @@ class TensorEqualsTests {
                 new CNumber(-0.000194), new CNumber(1), new CNumber(234)
         };
         bShape = new Shape(4, 3);
-        B = new CTensor(bShape, bEntries);
+        B = new CTensorOld(bShape, bEntries);
 
         assertNotEquals(A.toComplex(), B);
 
@@ -201,7 +201,7 @@ class TensorEqualsTests {
                 new CNumber(-0.000194), new CNumber(1), new CNumber(234)
         };
         bShape = new Shape(2, 3, 2);
-        B = new CTensor(bShape, bEntries);
+        B = new CTensorOld(bShape, bEntries);
 
         assertNotEquals(A.toComplex(), B);
     }

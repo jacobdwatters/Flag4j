@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.decompositions.qr;
 
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.linalg.decompositions.unitary.RealUnitaryDecomposition;
 
 
@@ -70,7 +70,7 @@ public class RealQR extends RealUnitaryDecomposition {
      * @return A reference to this decomposer.
      */
     @Override
-    public RealQR decompose(Matrix src) {
+    public RealQR decompose(MatrixOld src) {
         decomposeBase(src);
         return this;
     }
@@ -82,9 +82,9 @@ public class RealQR extends RealUnitaryDecomposition {
      * @return An identity matrix with the appropriate size.
      */
     @Override
-    protected Matrix initQ() {
+    protected MatrixOld initQ() {
         int qCols = reduced ? minAxisSize : numRows; // Get Q in reduced form or not.
-        return Matrix.I(numRows, qCols);
+        return MatrixOld.I(numRows, qCols);
     }
 
 
@@ -94,7 +94,7 @@ public class RealQR extends RealUnitaryDecomposition {
      * @return The upper triangular matrix from the last decomposition.
      */
     @Override
-    public Matrix getUpper() {
+    public MatrixOld getUpper() {
         return getR();
     }
 
@@ -103,8 +103,8 @@ public class RealQR extends RealUnitaryDecomposition {
      * Gets the upper triangular matrix {@code R} from the {@code QR} decomposition.
      * @return The upper triangular matrix {@code R} from the {@code QR} decomposition.
      */
-    public Matrix getR() {
+    public MatrixOld getR() {
         int rRows = reduced ? minAxisSize : numRows; // Get R in reduced form or not.
-        return getUpper(new Matrix(rRows, numCols));
+        return getUpper(new MatrixOld(rRows, numCols));
     }
 }

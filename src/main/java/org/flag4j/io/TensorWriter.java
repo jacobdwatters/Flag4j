@@ -74,7 +74,7 @@ public class TensorWriter {
     /**
      * Writes the specified matrix to a csv file.
      * @param fileName File path to write matrix to.
-     * @param src Matrix to write to csv file.
+     * @param src MatrixOld to write to csv file.
      * @param delimiter Delimiter to use in csv file.
      * @return True if the write was successful. False if the write failed.
      */
@@ -104,7 +104,7 @@ public class TensorWriter {
     /**
      * Writes the specified matrix to a csv file.
      * @param fileName File path to write matrix to.
-     * @param src Matrix to write to csv file.
+     * @param src MatrixOld to write to csv file.
      * @return True if the write was successful. False if the write failed.
      */
     public static boolean toCsv(String fileName, MatrixMixin<?, ?, ?, ?, ?, ?, ?, ?> src) {

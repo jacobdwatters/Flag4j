@@ -28,7 +28,7 @@ import org.flag4j.core.MatrixMixin;
 
 /**
  * This interface specifies methods which should be implemented in all decompositions.
- * @param <T> Matrix type to decompose.
+ * @param <T> MatrixOld type to decompose.
  */
 public interface Decomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> {
 

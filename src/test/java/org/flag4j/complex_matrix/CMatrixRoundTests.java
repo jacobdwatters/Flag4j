@@ -1,6 +1,6 @@
 package org.flag4j.complex_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +11,7 @@ class CMatrixRoundTests {
 
     int tol;
     CNumber[][] aEntries, expEntries;
-    CMatrix A, exp;
+    CMatrixOld A, exp;
 
     @Test
     void simpleRoundTestCase() {
@@ -19,13 +19,13 @@ class CMatrixRoundTests {
         aEntries = new CNumber[][]{
                 {new CNumber(23.5, Double.NEGATIVE_INFINITY), new CNumber(56, -93.1), new CNumber(3.455, 1.54)},
                 {new CNumber(5, Double.NaN), new CNumber(-9854.333, 0.000003), new CNumber(Double.POSITIVE_INFINITY, 9.99)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(24, Double.NEGATIVE_INFINITY), new CNumber(56, -93), new CNumber(3, 2)},
                 {new CNumber(5, Double.NaN), new CNumber(-9854, 00), new CNumber(Double.POSITIVE_INFINITY, 10)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
-        CMatrix B = A.round();
+        CMatrixOld B = A.round();
 
         assertEquals(exp.shape, B.shape);
 
@@ -58,13 +58,13 @@ class CMatrixRoundTests {
         aEntries = new CNumber[][]{
                 {new CNumber(23.5884, Double.NEGATIVE_INFINITY), new CNumber(56, -93.134), new CNumber(3.4557734, 1.54)},
                 {new CNumber(5.0043, Double.NaN), new CNumber(-9854.333, 0.000003), new CNumber(Double.POSITIVE_INFINITY, 9.7999)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(23.588, Double.NEGATIVE_INFINITY), new CNumber(56, -93.134), new CNumber(3.456, 1.54)},
                 {new CNumber(5.004, Double.NaN), new CNumber(-9854.333, 0), new CNumber(Double.POSITIVE_INFINITY, 9.8)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
         int tol = 3;
-        CMatrix B = A.round(tol);
+        CMatrixOld B = A.round(tol);
 
         assertEquals(exp.shape, B.shape);
 
@@ -97,13 +97,13 @@ class CMatrixRoundTests {
         aEntries = new CNumber[][]{
                 {new CNumber(23.5, Double.NEGATIVE_INFINITY), new CNumber(0, -0.5e-12), new CNumber(3.455, 1.54)},
                 {new CNumber(5, Double.NaN), new CNumber(-34.5e-14, 34.5e-14), new CNumber(Double.POSITIVE_INFINITY, 9.99)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(23.5, Double.NEGATIVE_INFINITY), new CNumber(0), new CNumber(3.455, 1.54)},
                 {new CNumber(5, Double.NaN), new CNumber(0), new CNumber(Double.POSITIVE_INFINITY, 9.99)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
-        CMatrix B = A.roundToZero();
+        CMatrixOld B = A.roundToZero();
 
         assertEquals(exp.shape, B.shape);
 
@@ -136,14 +136,14 @@ class CMatrixRoundTests {
         aEntries = new CNumber[][]{
                 {new CNumber(23.5, Double.NEGATIVE_INFINITY), new CNumber(0, -0.5e-12), new CNumber(1, 1.54)},
                 {new CNumber(5, Double.NaN), new CNumber(-34.5e-14, 34.5e-14), new CNumber(Double.POSITIVE_INFINITY, 9.99)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(23.5, Double.NEGATIVE_INFINITY), new CNumber(0), new CNumber(0)},
                 {new CNumber(5, Double.NaN), new CNumber(0), new CNumber(Double.POSITIVE_INFINITY, 9.99)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
         double tol = 4.3;
 
-        CMatrix B = A.roundToZero(tol);
+        CMatrixOld B = A.roundToZero(tol);
 
         assertEquals(exp.shape, B.shape);
 

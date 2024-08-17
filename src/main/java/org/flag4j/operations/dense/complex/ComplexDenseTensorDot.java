@@ -25,8 +25,8 @@
 package org.flag4j.operations.dense.complex;
 
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CTensorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.operations.MatrixMultiplyDispatcher;
@@ -53,13 +53,13 @@ public class ComplexDenseTensorDot {
      * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
      * along the second-to-last axis.
      */
-    public static CTensor dot(CTensor src1, CTensor src2) {
+    public static CTensorOld dot(CTensorOld src1, CTensorOld src2) {
         int src1Rank = src1.getRank();
         int src2Rank = src2.getRank();
 
         if(src1Rank==2 && src2Rank==2) {
             // Product is simply a matrix multiplication problem.
-            return new CTensor(
+            return new CTensorOld(
                     new Shape(src1.shape.get(0), src2.shape.get(1)),
                     MatrixMultiplyDispatcher.dispatch(src1.entries, src1.shape, src2.entries, src2.shape)
             );
@@ -85,7 +85,7 @@ public class ComplexDenseTensorDot {
      * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
      * are out of bounds for the corresponding tensor.
      */
-    public static CTensor tensorDot(CTensor src1, CTensor src2, int[] src1Axes, int[] src2Axes) {
+    public static CTensorOld tensorDot(CTensorOld src1, CTensorOld src2, int[] src1Axes, int[] src2Axes) {
         // Each array must specify the same number of axes.
         ParameterChecks.assertEquals(src1Axes.length, src2Axes.length);
 
@@ -141,11 +141,11 @@ public class ComplexDenseTensorDot {
         // -----------------------------------------------------
 
         // Reform problem as a matrix multiplication problem.
-        CMatrix at = new CMatrix(
+        CMatrixOld at = new CMatrixOld(
                 src1NewShape,
                 ComplexDenseTranspose.standardConcurrent(src1.entries, src1.shape, src1NewAxes)
         );
-        CMatrix bt = new CMatrix(
+        CMatrixOld bt = new CMatrixOld(
                 src2NewShape,
                 ComplexDenseTranspose.standardConcurrent(src2.entries, src2.shape, src2NewAxes)
         );
@@ -153,6 +153,6 @@ public class ComplexDenseTensorDot {
         CNumber[] destEntries = MatrixMultiplyDispatcher.dispatch(at, bt);
         Shape destShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));
 
-        return new CTensor(destShape, destEntries);
+        return new CTensorOld(destShape, destEntries);
     }
 }

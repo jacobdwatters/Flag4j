@@ -26,7 +26,7 @@ package org.flag4j.core;
 
 /**
  * This interface specifies methods which all real matrices should implement.
- * @param <T> Matrix type.
+ * @param <T> MatrixOld type.
  * @param <W> Complex matrix type.
  */
 public interface RealMatrixMixin<T, W> {

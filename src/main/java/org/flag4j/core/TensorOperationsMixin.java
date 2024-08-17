@@ -26,14 +26,14 @@ package org.flag4j.core;
 import org.flag4j.complex_numbers.CNumber;
 
 /**
- * This interface specifies operations which all tensors (i.e. matrices and vectors) should implement.
+ * This interface specifies operations_old which all tensors (i.e. matrices and vectors) should implement.
  *
- * @param <T> Tensor type.
+ * @param <T> TensorOld type.
  * @param <U> Dense tensor type.
  * @param <W> Complex tensor type.
  * @param <Z> Dense complex tensor type.
  * @param <Y> Real tensor type.
- * @param <X> Tensor entry type.
+ * @param <X> TensorOld entry type.
  */
 interface TensorOperationsMixin<T, U, W, Z, Y, X extends Number> {
 
@@ -186,7 +186,7 @@ interface TensorOperationsMixin<T, U, W, Z, Y, X extends Number> {
 
     /**
      * Computes the element-wise multiplication between two tensors.
-     * @param B Tensor to element-wise multiply to this tensor.
+     * @param B TensorOld to element-wise multiply to this tensor.
      * @return The result of the element-wise tensor multiplication.
      * @throws IllegalArgumentException If this tensor and {@code B} do not have the same shape.
      */
@@ -195,7 +195,7 @@ interface TensorOperationsMixin<T, U, W, Z, Y, X extends Number> {
 
     /**
      * Computes the element-wise division between two tensors.
-     * @param B Tensor to element-wise divide with this tensor.
+     * @param B TensorOld to element-wise divide with this tensor.
      * @return The result of the element-wise tensor multiplication.
      * @throws IllegalArgumentException If this tensor and {@code B} do not have the same shape.
      */

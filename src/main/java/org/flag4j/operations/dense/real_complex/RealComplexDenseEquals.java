@@ -24,10 +24,10 @@
 
 package org.flag4j.operations.dense.real_complex;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CTensorOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
@@ -50,7 +50,7 @@ public class RealComplexDenseEquals {
      * @param B Second matrix.
      * @return True if the two matrices are element-wise equivalent.
      */
-    public static boolean matrixEquals(Matrix A, CMatrix B) {
+    public static boolean matrixEquals(MatrixOld A, CMatrixOld B) {
         return tensorEquals(A.entries, A.shape, B.entries, B.shape);
     }
 
@@ -61,7 +61,7 @@ public class RealComplexDenseEquals {
      * @param B Second tensor in comparison.
      * @return True if the two tensors are numerically element-wise equivalent.
      */
-    public static boolean tensorEquals(Tensor A, CTensor B) {
+    public static boolean tensorEquals(TensorOld A, CTensorOld B) {
         return tensorEquals(A.entries, A.shape, B.entries, B.shape);
     }
 

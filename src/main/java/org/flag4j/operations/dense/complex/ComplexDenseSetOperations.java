@@ -30,7 +30,7 @@ import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
 /**
- * This class contains low-level implementations of setting operations for complex dense tensors.
+ * This class contains low-level implementations of setting operations_old for complex dense tensors.
  */
 public final class ComplexDenseSetOperations {
 
@@ -44,7 +44,7 @@ public final class ComplexDenseSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(CNumber[] src, final CNumber[] dest) {
         ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
@@ -58,7 +58,7 @@ public final class ComplexDenseSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(Double[] src, final CNumber[] dest) {
         ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
@@ -74,7 +74,7 @@ public final class ComplexDenseSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(Integer[] src, final CNumber[] dest) {
         ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
@@ -90,7 +90,7 @@ public final class ComplexDenseSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(double[] src, final CNumber[] dest) {
         ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
@@ -106,7 +106,7 @@ public final class ComplexDenseSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(int[] src, final CNumber[] dest) {
         ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
@@ -122,7 +122,7 @@ public final class ComplexDenseSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(CNumber[][] src, final CNumber[] dest) {
         ParameterChecks.assertTotalEntriesEq(src, dest);
@@ -142,7 +142,7 @@ public final class ComplexDenseSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(Double[][] src, final CNumber[] dest) {
         ParameterChecks.assertTotalEntriesEq(src, dest);
@@ -161,7 +161,7 @@ public final class ComplexDenseSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(Integer[][] src, final CNumber[] dest) {
         ParameterChecks.assertTotalEntriesEq(src, dest);
@@ -180,7 +180,7 @@ public final class ComplexDenseSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(double[][] src, final CNumber[] dest) {
         ParameterChecks.assertTotalEntriesEq(src, dest);
@@ -199,7 +199,7 @@ public final class ComplexDenseSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(int[][] src, final CNumber[] dest) {
         ParameterChecks.assertTotalEntriesEq(src, dest);

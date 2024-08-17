@@ -1,7 +1,7 @@
 package org.flag4j.vector;
 
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -14,20 +14,20 @@ class VectorAddSubEqTests {
     int size;
 
     double[] aEntries;
-    Vector A;
+    VectorOld A;
 
     @Test
     void realDenseAddEqTestCase() {
         double[] bEntries, expEntries;
-        Vector B, exp;
+        VectorOld B, exp;
 
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
-        A = new Vector(aEntries);
+        A = new VectorOld(aEntries);
         bEntries = new double[]{34.677, -8.51, 56.7};
-        B = new Vector(bEntries);
+        B = new VectorOld(bEntries);
         expEntries = new double[]{aEntries[0]+bEntries[0], aEntries[1]+bEntries[1], aEntries[2]+bEntries[2]};
-        exp = new Vector(expEntries);
+        exp = new VectorOld(expEntries);
 
         A.addEq(B);
 
@@ -35,11 +35,11 @@ class VectorAddSubEqTests {
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
-        A = new Vector(aEntries);
+        A = new VectorOld(aEntries);
         bEntries = new double[]{34.677, -8.51, 56.7, 1.34};
-        B = new Vector(bEntries);
+        B = new VectorOld(bEntries);
 
-        Vector finalB = B;
+        VectorOld finalB = B;
         assertThrows(LinearAlgebraException.class, () -> A.addEq(finalB));
     }
 
@@ -48,24 +48,24 @@ class VectorAddSubEqTests {
     void realSparseAddEqTestCase() {
         double[] bEntries, expEntries;
         CooVector B;
-        Vector exp;
+        VectorOld exp;
 
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
-        A = new Vector(aEntries);
+        A = new VectorOld(aEntries);
         bEntries = new double[]{34.677};
         indices = new int[]{0};
         size = 3;
         B = new CooVector(size, bEntries, indices);
         expEntries = new double[]{1.34+34.677, 6.266, -90.45};
-        exp = new Vector(expEntries);
+        exp = new VectorOld(expEntries);
 
         A.addEq(B);
         assertEquals(exp, A);
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
-        A = new Vector(aEntries);
+        A = new VectorOld(aEntries);
         bEntries = new double[]{34.677};
         indices = new int[]{0};
         size = 201;
@@ -80,13 +80,13 @@ class VectorAddSubEqTests {
     void doubleAddEqTestCase() {
         double[] expEntries;
         double B = 1.5;
-        Vector exp;
+        VectorOld exp;
 
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
-        A = new Vector(aEntries);
+        A = new VectorOld(aEntries);
         expEntries = new double[]{1.34+B, 6.266+B, -90.45+B};
-        exp = new Vector(expEntries);
+        exp = new VectorOld(expEntries);
 
         A.addEq(B);
         assertEquals(exp, A);
@@ -98,26 +98,26 @@ class VectorAddSubEqTests {
     @Test
     void realDenseSubTestCase() {
         double[] bEntries, expEntries;
-        Vector B, exp;
+        VectorOld B, exp;
 
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
-        A = new Vector(aEntries);
+        A = new VectorOld(aEntries);
         bEntries = new double[]{34.677, -8.51, 56.7};
-        B = new Vector(bEntries);
+        B = new VectorOld(bEntries);
         expEntries = new double[]{aEntries[0]-bEntries[0], aEntries[1]-bEntries[1], aEntries[2]-bEntries[2]};
-        exp = new Vector(expEntries);
+        exp = new VectorOld(expEntries);
 
         A.subEq(B);
         assertEquals(exp, A);
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
-        A = new Vector(aEntries);
+        A = new VectorOld(aEntries);
         bEntries = new double[]{34.677, -8.51, 56.7, 1.34};
-        B = new Vector(bEntries);
+        B = new VectorOld(bEntries);
 
-        Vector finalB = B;
+        VectorOld finalB = B;
         assertThrows(LinearAlgebraException.class, () -> A.subEq(finalB));
     }
 
@@ -126,24 +126,24 @@ class VectorAddSubEqTests {
     void realSparseSubTestCase() {
         double[] bEntries, expEntries;
         CooVector B;
-        Vector exp;
+        VectorOld exp;
 
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
-        A = new Vector(aEntries);
+        A = new VectorOld(aEntries);
         bEntries = new double[]{34.677};
         indices = new int[]{0};
         size = 3;
         B = new CooVector(size, bEntries, indices);
         expEntries = new double[]{1.34-34.677, 6.266, -90.45};
-        exp = new Vector(expEntries);
+        exp = new VectorOld(expEntries);
 
         A.subEq(B);
         assertEquals(exp, A);
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
-        A = new Vector(aEntries);
+        A = new VectorOld(aEntries);
         bEntries = new double[]{34.677};
         indices = new int[]{0};
         size = 201;
@@ -158,13 +158,13 @@ class VectorAddSubEqTests {
     void doubleSubTestCase() {
         double[] expEntries;
         double B = 1.5;
-        Vector exp;
+        VectorOld exp;
 
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
-        A = new Vector(aEntries);
+        A = new VectorOld(aEntries);
         expEntries = new double[]{1.34-B, 6.266-B, -90.45-B};
-        exp = new Vector(expEntries);
+        exp = new VectorOld(expEntries);
 
         A.subEq(B);
         assertEquals(exp, A);

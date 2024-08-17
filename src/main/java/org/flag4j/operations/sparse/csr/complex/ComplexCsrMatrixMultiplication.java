@@ -25,10 +25,10 @@
 package org.flag4j.operations.sparse.csr.complex;
 
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CsrCMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
@@ -55,7 +55,7 @@ public final class ComplexCsrMatrixMultiplication {
      * @param src2 Second CSR matrix in the multiplication.
      * @return Entries of the dense matrix resulting from the matrix multiplication of the two sparse CSR matrices.
      */
-    public static CMatrix standard(CsrCMatrix src1, CsrCMatrix src2) {
+    public static CMatrixOld standard(CsrCMatrix src1, CsrCMatrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
 
@@ -80,7 +80,7 @@ public final class ComplexCsrMatrixMultiplication {
             }
         }
 
-        return new CMatrix(new Shape(src1.numRows, src2.numCols), destEntries);
+        return new CMatrixOld(new Shape(src1.numRows, src2.numCols), destEntries);
     }
 
 
@@ -144,11 +144,11 @@ public final class ComplexCsrMatrixMultiplication {
     /**
      * Computes the matrix-vector multiplication between a real sparse CSR matrix and a complex sparse COO vector.
      * @param src1 The matrix in the multiplication.
-     * @param src2 Vector in multiplication. Treated as a column vector in COO format.
+     * @param src2 VectorOld in multiplication. Treated as a column vector in COO format.
      * @return The result of the matrix-vector multiplication.
      * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the number of columns in {@code src2}.
      */
-    public static CVector standardVector(CsrCMatrix src1, CooCVector src2) {
+    public static CVectorOld standardVector(CsrCMatrix src1, CooCVector src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
         ParameterChecks.assertEquals(src1.numCols, src2.size);
 
@@ -176,6 +176,6 @@ public final class ComplexCsrMatrixMultiplication {
             }
         }
 
-        return new CVector(destEntries);
+        return new CVectorOld(destEntries);
     }
 }

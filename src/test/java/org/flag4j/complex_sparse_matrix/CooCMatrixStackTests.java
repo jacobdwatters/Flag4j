@@ -1,9 +1,9 @@
 package org.flag4j.complex_sparse_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -184,10 +184,10 @@ class CooCMatrixStackTests {
         CooCMatrix a;
 
         double[][] bEntries;
-        Matrix b;
+        MatrixOld b;
 
         CNumber[][] expEntries;
-        CMatrix exp;
+        CMatrixOld exp;
 
         // ---------------------  Sub-case 1 ---------------------
         aShape = new Shape(2, 3);
@@ -201,7 +201,7 @@ class CooCMatrixStackTests {
                 {0.1186, 0.37476, 0.16975},
                 {0.76593, 0.75605, 0.36715},
                 {0.94251, 0.73827, 0.94622}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.36404+0.33988i"), new CNumber("0.0"), new CNumber("0.0")},
@@ -210,7 +210,7 @@ class CooCMatrixStackTests {
                 {new CNumber("0.1186"), new CNumber("0.37476"), new CNumber("0.16975")},
                 {new CNumber("0.76593"), new CNumber("0.75605"), new CNumber("0.36715")},
                 {new CNumber("0.94251"), new CNumber("0.73827"), new CNumber("0.94622")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.stack(b));
 
@@ -227,7 +227,7 @@ class CooCMatrixStackTests {
                 {0.93038, 0.71823},
                 {0.58386, 0.41477},
                 {0.63463, 0.94818}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.0"), new CNumber("0.0")},
@@ -236,7 +236,7 @@ class CooCMatrixStackTests {
                 {new CNumber("0.93038"), new CNumber("0.71823")},
                 {new CNumber("0.58386"), new CNumber("0.41477")},
                 {new CNumber("0.63463"), new CNumber("0.94818")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.stack(b));
 
@@ -262,10 +262,10 @@ class CooCMatrixStackTests {
                 {0.61932, 0.04938, 0.47473, 0.63277, 0.60448, 0.33821},
                 {0.38477, 0.28532, 0.73475, 0.44512, 0.14746, 0.99019},
                 {0.34598, 0.91827, 0.63773, 0.76461, 0.66024, 0.31418}};
-        b = new Matrix(bEntries);
+        b = new MatrixOld(bEntries);
 
         CooCMatrix finala = a;
-        Matrix finalb = b;
+        MatrixOld finalb = b;
         assertThrows(Exception.class, ()->finala.stack(finalb));
     }
 
@@ -279,10 +279,10 @@ class CooCMatrixStackTests {
         CooCMatrix a;
 
         CNumber[][] bEntries;
-        CMatrix b;
+        CMatrixOld b;
 
         CNumber[][] expEntries;
-        CMatrix exp;
+        CMatrixOld exp;
 
         // ---------------------  Sub-case 1 ---------------------
         aShape = new Shape(2, 3);
@@ -296,7 +296,7 @@ class CooCMatrixStackTests {
                 {new CNumber("0.63929+0.17997i"), new CNumber("0.9858+0.31447i"), new CNumber("0.86033+0.26543i")},
                 {new CNumber("0.03155+0.57001i"), new CNumber("0.70789+0.81428i"), new CNumber("0.22397+0.82456i")},
                 {new CNumber("0.23551+0.25312i"), new CNumber("0.96902+0.93182i"), new CNumber("0.33595+0.11643i")}};
-        b = new CMatrix(bEntries);
+        b = new CMatrixOld(bEntries);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
@@ -305,7 +305,7 @@ class CooCMatrixStackTests {
                 {new CNumber("0.63929+0.17997i"), new CNumber("0.9858+0.31447i"), new CNumber("0.86033+0.26543i")},
                 {new CNumber("0.03155+0.57001i"), new CNumber("0.70789+0.81428i"), new CNumber("0.22397+0.82456i")},
                 {new CNumber("0.23551+0.25312i"), new CNumber("0.96902+0.93182i"), new CNumber("0.33595+0.11643i")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.stack(b));
 
@@ -322,7 +322,7 @@ class CooCMatrixStackTests {
                 {new CNumber("0.57404+0.24268i"), new CNumber("0.68701+0.69182i")},
                 {new CNumber("0.75695+0.82641i"), new CNumber("0.91012+0.62214i")},
                 {new CNumber("0.04513+0.61241i"), new CNumber("0.7108+0.09859i")}};
-        b = new CMatrix(bEntries);
+        b = new CMatrixOld(bEntries);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.0"), new CNumber("0.0")},
@@ -331,7 +331,7 @@ class CooCMatrixStackTests {
                 {new CNumber("0.57404+0.24268i"), new CNumber("0.68701+0.69182i")},
                 {new CNumber("0.75695+0.82641i"), new CNumber("0.91012+0.62214i")},
                 {new CNumber("0.04513+0.61241i"), new CNumber("0.7108+0.09859i")}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, a.stack(b));
 
@@ -357,10 +357,10 @@ class CooCMatrixStackTests {
                 {new CNumber("0.5352+0.07752i"), new CNumber("0.32892+0.35908i"), new CNumber("0.43592+0.20698i"), new CNumber("0.78715+0.83124i"), new CNumber("0.76193+0.85584i"), new CNumber("0.63135+0.59955i")},
                 {new CNumber("0.47471+0.18006i"), new CNumber("0.74822+0.37998i"), new CNumber("0.08842+0.42187i"), new CNumber("0.27885+0.63167i"), new CNumber("0.49626+0.67038i"), new CNumber("0.72836+0.48923i")},
                 {new CNumber("0.85682+0.02004i"), new CNumber("0.984+0.06694i"), new CNumber("0.31869+0.16227i"), new CNumber("0.58742+0.18035i"), new CNumber("0.25985+0.30886i"), new CNumber("0.37326+0.45303i")}};
-        b = new CMatrix(bEntries);
+        b = new CMatrixOld(bEntries);
 
         CooCMatrix finala = a;
-        CMatrix finalb = b;
+        CMatrixOld finalb = b;
         assertThrows(Exception.class, ()->finala.stack(finalb));
     }
 }

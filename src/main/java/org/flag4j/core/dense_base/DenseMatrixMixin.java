@@ -24,8 +24,8 @@
 
 package org.flag4j.core.dense_base;
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrix;
 
 /**
  * This interface specifies methods which all dense matrices should implement.
@@ -75,14 +75,14 @@ public interface DenseMatrixMixin<T, X> {
      * Computes the element-wise addition of a matrix with a real dense matrix. The result is stored in this matrix.
      * @param B The matrix to add to this matrix.
      */
-    void addEq(Matrix B);
+    void addEq(MatrixOld B);
 
 
     /**
      * Computes the element-wise subtraction of this matrix with a real dense matrix. The result is stored in this matrix.
      * @param B The matrix to subtract from this matrix.
      */
-    void subEq(Matrix B);
+    void subEq(MatrixOld B);
 
 
     /**
@@ -194,7 +194,7 @@ public interface DenseMatrixMixin<T, X> {
      * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
      * fit completely within this matrix.
      */
-    T setSliceCopy(Matrix values, int rowStart, int colStart);
+    T setSliceCopy(MatrixOld values, int rowStart, int colStart);
 
 
     /**

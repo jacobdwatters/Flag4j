@@ -1,7 +1,7 @@
 package org.flag4j.tensor;
 
-import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays_old.dense.CTensorOld;
+import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TensorScalMultDivTests {
 
     static double[] aEntries;
-    static Tensor A;
+    static TensorOld A;
     static Shape aShape, expShape;
 
     @BeforeEach
@@ -22,14 +22,14 @@ class TensorScalMultDivTests {
                 0.001345, 2.677, 8.14, -0.000194, 1, 234
         };
         aShape = new Shape(2, 3, 2);
-        A = new Tensor(aShape, aEntries);
+        A = new TensorOld(aShape, aEntries);
     }
 
 
     @Test
     void realScalMultTestCase() {
         double[] expEntries;
-        Tensor exp;
+        TensorOld exp;
         double b = -1.4115;
 
         // ------------------------ Sub-case 1 ------------------------
@@ -38,7 +38,7 @@ class TensorScalMultDivTests {
                 0.001345*-1.4115, 2.677*-1.4115, 8.14*-1.4115, -0.000194*-1.4115, 1*-1.4115, 234*-1.4115
         };
         expShape = new Shape(2, 3, 2);
-        exp = new Tensor(expShape, expEntries);
+        exp = new TensorOld(expShape, expEntries);
 
         assertEquals(exp, A.mult(b));
     }
@@ -47,7 +47,7 @@ class TensorScalMultDivTests {
     @Test
     void complexScalMultTestCase() {
         CNumber[] expEntries;
-        CTensor exp;
+        CTensorOld exp;
         CNumber b = new CNumber(0.2425, -0.00295);
 
         // ------------------------ Sub-case 1 ------------------------
@@ -56,7 +56,7 @@ class TensorScalMultDivTests {
                 b.mult(0.001345), b.mult(2.677), b.mult(8.14), b.mult(-0.000194), b.mult(1), b.mult(234)
         };
         expShape = new Shape(2, 3, 2);
-        exp = new CTensor(expShape, expEntries);
+        exp = new CTensorOld(expShape, expEntries);
 
         assertEquals(exp, A.mult(b));
     }
@@ -65,7 +65,7 @@ class TensorScalMultDivTests {
     @Test
     void realScalDivTestCase() {
         double[] expEntries;
-        Tensor exp;
+        TensorOld exp;
         double b = -1.4115;
 
         // ------------------------ Sub-case 1 ------------------------
@@ -74,7 +74,7 @@ class TensorScalMultDivTests {
                 0.001345/-1.4115, 2.677/-1.4115, 8.14/-1.4115, -0.000194/-1.4115, 1/-1.4115, 234/-1.4115
         };
         expShape = new Shape(2, 3, 2);
-        exp = new Tensor(expShape, expEntries);
+        exp = new TensorOld(expShape, expEntries);
 
         assertEquals(exp, A.div(b));
     }
@@ -83,7 +83,7 @@ class TensorScalMultDivTests {
     @Test
     void complexScalDivTestCase() {
         CNumber[] expEntries;
-        CTensor exp;
+        CTensorOld exp;
         CNumber b = new CNumber(0.2425, -0.00295);
         CNumber bInv = b.multInv();
 
@@ -103,7 +103,7 @@ class TensorScalMultDivTests {
                 bInv.mult(234)
         };
         expShape = new Shape(2, 3, 2);
-        exp = new CTensor(expShape, expEntries);
+        exp = new CTensorOld(expShape, expEntries);
 
         assertEquals(exp, A.div(b));
     }

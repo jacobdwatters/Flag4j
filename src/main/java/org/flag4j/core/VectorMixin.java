@@ -29,11 +29,11 @@ package org.flag4j.core;
  * This interface specifies methods which all vectors should implement.
  * @param <T> Type of this vector.
  * @param <U> Dense vector type.
- * @param <V> Sparse Vector type.
+ * @param <V> Sparse VectorOld type.
  * @param <W> Complex vector type.
  * @param <X> The type of individual entry within the vector.
  * @param <TT> The matrix type equivalent to this vector.
- * @param <UU> Dense Matrix type equivalent.
+ * @param <UU> Dense MatrixOld type equivalent.
  * @param <WW> Complex matrix type equivalent.
  */
 public interface VectorMixin<T, U, V, W, X extends Number, TT, UU, WW>

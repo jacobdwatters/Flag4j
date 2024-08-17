@@ -28,7 +28,7 @@ import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ErrorMessages;
 
 /**
- * This class contains several low-level methods useful for computing aggregation operations on dense tensors.
+ * This class contains several low-level methods useful for computing aggregation operations_old on dense tensors.
  */
 public class AggregateDenseComplex {
 

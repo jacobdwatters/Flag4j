@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.decompositions.unitary;
 
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.linalg.transformations.Householder;
 import org.flag4j.util.Flag4jConstants;
@@ -34,7 +34,7 @@ import org.flag4j.util.Flag4jConstants;
  * (specifically Householder reflectors) to bring a matrix into an upper triangular/Hessenburg matrix. Specifically, the {@code QR} and
  * Hessenburg decompositions.
  */
-public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<CMatrix, CNumber[]> {
+public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<CMatrixOld, CNumber[]> {
 
     /**
      * To store norms of columns in {@link #transformMatrix}. Will be real.
@@ -77,7 +77,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
      *
      * <p>It should be noted that if performance is improved, it will be a very slight improvement compared
      * to the total time to compute the decomposition. This is because the computation of {@code Q} is only
-     * evaluated lazily once {@link #getQ()} is called, so this will only save on copy operations.</p>
+     * evaluated lazily once {@link #getQ()} is called, so this will only save on copy operations_old.</p>
      *
      * @param subDiagonal Sub-diagonal of the upper triangular/Hessenburg matrix. That is, the sub-diagonal for which all entries
      *                    below will be zero in the final upper quasi-triangular matrix. Must be Zero or one. If zero, it will be
@@ -100,11 +100,11 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
      * then {@code Q} can not be computed and this method will return {@code null}.
      */
     @Override
-    public CMatrix getQ() {
+    public CMatrixOld getQ() {
         if(!storeReflectors)
             return null;
 
-        CMatrix Q = initQ();
+        CMatrixOld Q = initQ();
 
         for(int j=minAxisSize - 1; j>=subDiagonal; j--) {
             householderVector[j] = CNumber.ONE; // Ensure first value of reflector is 1.
@@ -127,7 +127,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
      * @return The upper triangular/Hessenburg matrix from the last decomposition.
      */
     @Override
-    protected CMatrix getUpper(CMatrix H) {
+    protected CMatrixOld getUpper(CMatrixOld H) {
         // Copy top rows.
         for(int i=0; i<subDiagonal; i++) {
             int rowOffset = i*numCols;
@@ -148,7 +148,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
 
 
     /**
-     * Initialized any work arrays to be used in computing the decomposition with the proper size.
+     * Initialized any work arrays_old to be used in computing the decomposition with the proper size.
      *
      * @param maxAxisSize Length of the largest axis in the matrix to be decomposed. That is, {@code max(numRows, numCols)}
      */

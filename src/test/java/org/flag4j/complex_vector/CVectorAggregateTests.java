@@ -1,6 +1,6 @@
 package org.flag4j.complex_vector;
 
-import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CVectorAggregateTests {
 
     static CNumber[] aEntries;
-    static CVector a;
+    static CVectorOld a;
     CNumber expComplex;
     double exp;
     int[] expIndices;
@@ -20,7 +20,7 @@ class CVectorAggregateTests {
     static void setup() {
         aEntries = new CNumber[]{new CNumber(1.455, 6126.347), new CNumber(-9.234, 5.0),
         new CNumber(9.245, -56.2345), new CNumber(0, 14.5), new CNumber(-0.009257)};
-        a = new CVector(aEntries);
+        a = new CVectorOld(aEntries);
     }
 
 

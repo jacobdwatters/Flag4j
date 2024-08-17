@@ -1,6 +1,6 @@
 package org.flag4j.complex_tensor;
 
-import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.arrays_old.dense.CTensorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.io.PrintOptions;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CTensorToStringTests {
     static Shape aShape;
     static CNumber[] aEntries;
-    static CTensor A;
+    static CTensorOld A;
     static String exp;
 
     @BeforeAll
@@ -24,7 +24,7 @@ class CTensorToStringTests {
                 new CNumber(1.0), new CNumber(-85.1, 9.234), new CNumber(1.345, -781.2),
                 new CNumber(0.014, -2.45),  new CNumber(-140.0),  new CNumber(0, 1.5),
                 new CNumber(51.0, 24.56),  new CNumber(6.1, -0.03),  new CNumber(-0.00014, 1.34),};
-        A = new CTensor(aShape, aEntries);
+        A = new CTensorOld(aShape, aEntries);
     }
 
 

@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.decompositions.chol;
 
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -32,13 +32,13 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 
 /**
  * <p>An instance of this class allows for the computation of a Cholesky decomposition for a
- * real dense {@link Matrix matrix}.</p>
+ * real dense {@link MatrixOld matrix}.</p>
  *
  * <p>Given a symmetric positive-definite matrix {@code A}, the Cholesky decomposition will decompose it into
  * {@code A=LL<sup>T</sup>} where {@code L} is a lower triangular matrix and {@code L<sup>T</sup>} is the
  * transpose of {@code L}.</p>
  */
-public final class RealCholesky extends Cholesky<Matrix> {
+public final class RealCholesky extends Cholesky<MatrixOld> {
 
 
     /**
@@ -75,14 +75,14 @@ public final class RealCholesky extends Cholesky<Matrix> {
      * @throws LinearAlgebraException If this matrix is not positive-definite.
      */
     @Override
-    public RealCholesky decompose(Matrix src) {
+    public RealCholesky decompose(MatrixOld src) {
         if(enforceHermitian && src.isSymmetric()) {
-            throw new LinearAlgebraException("Matrix must be symmetric positive-definite.");
+            throw new LinearAlgebraException("MatrixOld must be symmetric positive-definite.");
         } else {
             ParameterChecks.assertSquareMatrix(src.shape);
         }
 
-        L = new Matrix(src.numRows);
+        L = new MatrixOld(src.numRows);
         double posDefTolerance = Math.max(L.numRows*Flag4jConstants.EPS_F64, DEFAULT_POS_DEF_TOLERANCE);
         double sum;
 
@@ -106,7 +106,7 @@ public final class RealCholesky extends Cholesky<Matrix> {
                     double diag = src.entries[lIndex3]-sum;
                     if(diag <= posDefTolerance) {
                         // Diagonal entries of L must be positive (non-zero) for original matrix to be positive-definite.
-                        throw new LinearAlgebraException("Matrix is not symmetric positive-definite.");
+                        throw new LinearAlgebraException("MatrixOld is not symmetric positive-definite.");
                     }
 
                     L.entries[lIndex3] = Math.sqrt(diag);

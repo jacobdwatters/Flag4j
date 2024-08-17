@@ -27,11 +27,11 @@ package org.flag4j.core.dense_base;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.ComplexTensorMixin;
 import org.flag4j.core.Shape;
-import org.flag4j.operations.common.complex.AggregateComplex;
-import org.flag4j.operations.common.complex.ComplexOperations;
-import org.flag4j.operations.common.complex.ComplexProperties;
-import org.flag4j.operations.dense.complex.*;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
+import org.flag4j.operations_old.common.complex.AggregateComplex;
+import org.flag4j.operations_old.common.complex.ComplexOperations;
+import org.flag4j.operations_old.common.complex.ComplexProperties;
+import org.flag4j.operations_old.dense.complex.*;
+import org.flag4j.operations_old.dense.real_complex.RealComplexDenseOperations;
 import org.flag4j.util.ParameterChecks;
 
 import java.util.Arrays;
@@ -39,7 +39,7 @@ import java.util.Arrays;
 /**
  * The base class for all complex dense tensors. This includes complex dense matrices and vectors.
  * @param <T> Type of this tensor.
- * @param <Y> Real Tensor type.
+ * @param <Y> Real TensorOld type.
  */
 public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T, Y>, Y extends RealDenseTensorBase<Y, T>>
         extends DenseTensorBase<T, T, Y, CNumber[], CNumber>
@@ -452,7 +452,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
     /**
      * Computes the element-wise multiplication between two tensors.
      *
-     * @param B Tensor to element-wise multiply to this tensor.
+     * @param B TensorOld to element-wise multiply to this tensor.
      * @return The result of the element-wise tensor multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
@@ -468,7 +468,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
     /**
      * Computes the element-wise division between two tensors.
      *
-     * @param B Tensor to element-wise divide with this tensor.
+     * @param B TensorOld to element-wise divide with this tensor.
      * @return The result of the element-wise tensor division.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */

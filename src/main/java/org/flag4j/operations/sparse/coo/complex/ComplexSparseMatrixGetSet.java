@@ -25,10 +25,10 @@
 package org.flag4j.operations.sparse.coo.complex;
 
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.MatrixMixin;
 import org.flag4j.core.Shape;
@@ -363,7 +363,7 @@ public class ComplexSparseMatrixGetSet {
         Integer[] colIndices = new Integer[col.length];
         Arrays.fill(colIndices, colIdx);
 
-        // Initialize destination arrays with the new column and the appropriate indices.
+        // Initialize destination arrays_old with the new column and the appropriate indices.
         List<CNumber> destEntries = new ArrayList<>(Arrays.asList(col));
         List<Integer> destRowIndices = IntStream.of(
                 ArrayUtils.intRange(0, col.length)
@@ -409,7 +409,7 @@ public class ComplexSparseMatrixGetSet {
         int[] colIndices = new int[col.entries.length];
         Arrays.fill(colIndices, colIdx);
 
-        // Initialize destination arrays with the new column and the appropriate indices.
+        // Initialize destination arrays_old with the new column and the appropriate indices.
         List<CNumber> destEntries = ArrayUtils.toArrayList(col.entries);
         List<Integer> destRowIndices = ArrayUtils.toArrayList(col.indices);
         List<Integer> destColIndices = ArrayUtils.toArrayList(colIndices);
@@ -450,7 +450,7 @@ public class ComplexSparseMatrixGetSet {
         ParameterChecks.assertIndexInBounds(src.numCols, colIdx);
         ParameterChecks.assertEquals(src.numRows, col.length);
 
-        // Initialize destination arrays with the new column and the appropriate indices.
+        // Initialize destination arrays_old with the new column and the appropriate indices.
         List<CNumber> destEntries = new ArrayList<>(src.entries.length);
         List<Integer> destRowIndices = new ArrayList<>(src.entries.length);
         List<Integer> destColIndices = new ArrayList<>(src.entries.length);
@@ -606,7 +606,7 @@ public class ComplexSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
      * given the row and column index.
      */
-    public static CooCMatrix setSlice(CooCMatrix src, Matrix values, int row, int col) {
+    public static CooCMatrix setSlice(CooCMatrix src, MatrixOld values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
         setSliceParamCheck(src, values, row, col);
 

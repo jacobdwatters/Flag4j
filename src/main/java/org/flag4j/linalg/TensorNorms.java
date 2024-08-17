@@ -24,14 +24,14 @@
 
 package org.flag4j.linalg;
 
-import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.dense.Tensor;
-import org.flag4j.arrays.sparse.CooCTensor;
-import org.flag4j.arrays.sparse.CooTensor;
+import org.flag4j.arrays_old.dense.CTensorOld;
+import org.flag4j.arrays_old.dense.TensorOld;
+import org.flag4j.arrays_old.sparse.CooCTensor;
+import org.flag4j.arrays_old.sparse.CooTensor;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.dense_base.ComplexDenseTensorBase;
 import org.flag4j.core.dense_base.RealDenseTensorBase;
-import org.flag4j.operations.common.complex.AggregateComplex;
+import org.flag4j.operations_old.common.complex.AggregateComplex;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -68,13 +68,13 @@ public class TensorNorms {
 
 
     /**
-     * Computes the 2-norm of this tensor as if the tensor was a vector (i.e. as if by {@code VectorNorm(Tensor.toVector())}).
-     * This is equivalent to {@link #norm(Tensor, double) norm(src, 2)}.
+     * Computes the 2-norm of this tensor as if the tensor was a vector (i.e. as if by {@code VectorNorm(TensorOld.toVector())}).
+     * This is equivalent to {@link #norm(TensorOld, double) norm(src, 2)}.
      *
-     * @param src Tensor to compute norm of.
+     * @param src TensorOld to compute norm of.
      * @return the 2-norm of this tensor.
      */
-    public static double norm(Tensor src) {
+    public static double norm(TensorOld src) {
         return tensorNormL2(src.entries);
     }
 
@@ -82,23 +82,23 @@ public class TensorNorms {
     /**
      * Computes the p-norm of this tensor.
      *
-     * @param src Tensor to compute norm of.
+     * @param src TensorOld to compute norm of.
      * @param p The {@code p} value in the p-norm. <br>
      *          - If {@code p} is inf, then this method computes the maximum/infinite norm.
      * @return The p-norm of this tensor.
      * @throws IllegalArgumentException If p is less than 1.
      */
-    public static double norm(Tensor src, double p) {
+    public static double norm(TensorOld src, double p) {
         return tensorNormLp(src.entries, p);
     }
 
 
     /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(CTensor, double) norm(src, 2)}.
+     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(CTensorOld, double) norm(src, 2)}.
      *
      * @return the 2-norm of this tensor.
      */
-    public double norm(CTensor src) {
+    public double norm(CTensorOld src) {
         return tensorNormL2(src.entries);
     }
 
@@ -106,13 +106,13 @@ public class TensorNorms {
     /**
      * Computes the p-norm of this tensor.
      *
-     * @param src Tensor to compute norm of.
+     * @param src TensorOld to compute norm of.
      * @param p The p value in the p-norm. <br>
      *          - If p is inf, then this method computes the maximum/infinite norm.
      * @return The p-norm of this tensor.
      * @throws IllegalArgumentException If p is less than 1.
      */
-    public double norm(CTensor src, double p) {
+    public double norm(CTensorOld src, double p) {
         return tensorNormLp(src.entries, p);
     }
 
@@ -120,10 +120,10 @@ public class TensorNorms {
     /**
      * Computes the maximum/infinite norm of this tensor.
      *
-     * @param src Tensor to compute norm of.
+     * @param src TensorOld to compute norm of.
      * @return The maximum/infinite norm of this tensor.
      */
-    public double infNorm(CTensor src) {
+    public double infNorm(CTensorOld src) {
         return AggregateComplex.maxAbs(src.entries);
     }
 
@@ -131,7 +131,7 @@ public class TensorNorms {
     /**
      * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(CooTensor, double) norm(src, 2)}.
      *
-     * @param src Tensor to compute norm of.
+     * @param src TensorOld to compute norm of.
      * @return the 2-norm of this tensor.
      */
     public static double norm(CooTensor src) {
@@ -142,7 +142,7 @@ public class TensorNorms {
     /**
      * Computes the p-norm of this tensor.
      *
-     * @param src Tensor to compute norm of.
+     * @param src TensorOld to compute norm of.
      * @param p The p value in the p-norm. <br>
      *          - If p is inf, then this method computes the maximum/infinite norm.
      * @return The p-norm of this tensor.
@@ -156,7 +156,7 @@ public class TensorNorms {
     /**
      * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(CooTensor, double) norm(src, 2)}.
      *
-     * @param src Tensor to compute norm of.
+     * @param src TensorOld to compute norm of.
      * @return the 2-norm of this tensor.
      */
     public static double norm(CooCTensor src) {
@@ -167,7 +167,7 @@ public class TensorNorms {
     /**
      * Computes the p-norm of this tensor.
      *
-     * @param src Tensor to compute norm of.
+     * @param src TensorOld to compute norm of.
      * @param p The p value in the p-norm. <br>
      *          - If p is inf, then this method computes the maximum/infinite norm.
      * @return The p-norm of this tensor.

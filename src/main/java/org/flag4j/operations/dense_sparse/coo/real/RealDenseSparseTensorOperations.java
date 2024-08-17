@@ -24,14 +24,14 @@
 
 package org.flag4j.operations.dense_sparse.coo.real;
 
-import org.flag4j.arrays.dense.Tensor;
-import org.flag4j.arrays.sparse.CooTensor;
+import org.flag4j.arrays_old.dense.TensorOld;
+import org.flag4j.arrays_old.sparse.CooTensor;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
 /**
- * This class contains methods to apply common binary operations to a real dense matrix and to a real sparse matrix.
+ * This class contains methods to apply common binary operations_old to a real dense matrix and to a real sparse matrix.
  */
 public class RealDenseSparseTensorOperations {
 
@@ -48,11 +48,11 @@ public class RealDenseSparseTensorOperations {
      * @return The result of the tensor addition.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static Tensor add(Tensor src1, CooTensor src2) {
+    public static TensorOld add(TensorOld src1, CooTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int[] indices;
-        Tensor dest = new Tensor(src1);
+        TensorOld dest = new TensorOld(src1);
 
         for(int i=0; i<src2.entries.length; i++) {
             indices = src2.indices[i];
@@ -70,7 +70,7 @@ public class RealDenseSparseTensorOperations {
      * @return The result of element-wise multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static CooTensor elemMult(Tensor src1, CooTensor src2) {
+    public static CooTensor elemMult(TensorOld src1, CooTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int index;
@@ -94,7 +94,7 @@ public class RealDenseSparseTensorOperations {
      * @return The result of element-wise division.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static CooTensor elemDiv(CooTensor src1, Tensor src2) {
+    public static CooTensor elemDiv(CooTensor src1, TensorOld src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int index;
@@ -118,10 +118,10 @@ public class RealDenseSparseTensorOperations {
      * @return The result of the tensor addition.
      * @throws IllegalArgumentException If the tensors do not have the same shape.t
      */
-    public static Tensor sub(Tensor src1, CooTensor src2) {
+    public static TensorOld sub(TensorOld src1, CooTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
-        Tensor dest = new Tensor(src1);
+        TensorOld dest = new TensorOld(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             dest.entries[dest.shape.entriesIndex(src2.indices[i])] -= src2.entries[i];
@@ -138,10 +138,10 @@ public class RealDenseSparseTensorOperations {
      * @return The result of the tensor addition.
      * @throws IllegalArgumentException If the tensors do not have the same shape.t
      */
-    public static Tensor sub(CooTensor src1, Tensor src2) {
+    public static TensorOld sub(CooTensor src1, TensorOld src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
-        Tensor dest = src2.mult(-1);
+        TensorOld dest = src2.mult(-1);
 
         for(int i=0; i<src1.nnz; i++) {
             dest.entries[src1.shape.entriesIndex(src1.indices[i])] += src1.entries[i];
@@ -157,7 +157,7 @@ public class RealDenseSparseTensorOperations {
      * @param src2 Second tensor in sum.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static void addEq(Tensor src1, CooTensor src2) {
+    public static void addEq(TensorOld src1, CooTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
@@ -172,7 +172,7 @@ public class RealDenseSparseTensorOperations {
      * @param src2 Second tensor in difference.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static void subEq(Tensor src1, CooTensor src2) {
+    public static void subEq(TensorOld src1, CooTensor src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
@@ -188,8 +188,8 @@ public class RealDenseSparseTensorOperations {
      * @return A dense tensor which is the sum of {@code src1} and {@code b} such that {@code b} is added to each element of {@code
      * src1}.
      */
-    public static Tensor add(CooTensor src1, double b) {
-        Tensor sum = new Tensor(src1.shape, b);
+    public static TensorOld add(CooTensor src1, double b) {
+        TensorOld sum = new TensorOld(src1.shape, b);
 
         for(int i=0; i<src1.nnz; i++) {
             sum.entries[src1.shape.entriesIndex(src1.indices[i])] += src1.entries[i];
@@ -206,8 +206,8 @@ public class RealDenseSparseTensorOperations {
      * @return A dense tensor which is the difference of {@code src1} and {@code b} such that {@code b} is subtracted from each
      * element of {@code src1}.
      */
-    public static Tensor sub(CooTensor src1, double b) {
-        Tensor sum = new Tensor(src1.shape, b);
+    public static TensorOld sub(CooTensor src1, double b) {
+        TensorOld sum = new TensorOld(src1.shape, b);
 
         for(int i=0; i<src1.nnz; i++) {
             sum.entries[src1.shape.entriesIndex(src1.indices[i])] -= src1.entries[i];

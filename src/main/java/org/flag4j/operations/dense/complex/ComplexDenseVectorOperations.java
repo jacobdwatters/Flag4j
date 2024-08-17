@@ -30,7 +30,7 @@ import org.flag4j.util.ParameterChecks;
 
 
 /**
- * This class provides low level implementations for vector operations with two complex dense vectors.
+ * This class provides low level implementations for vector operations_old with two complex dense vectors.
  */
 public class ComplexDenseVectorOperations {
 

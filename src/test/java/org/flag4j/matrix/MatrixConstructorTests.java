@@ -1,6 +1,6 @@
 package org.flag4j.matrix;
 
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,7 @@ class MatrixConstructorTests {
     double[][] expEntriesA2d;
     int[][] expEntriesAint2d;
     int expNumColsA, expNumRowsA;
-    Matrix A, B;
+    MatrixOld A, B;
     Shape shape;
 
     /**
@@ -26,7 +26,7 @@ class MatrixConstructorTests {
         expEntriesA = new double[size*size];
         expNumColsA = expNumRowsA = size;
 
-        A = new Matrix(size);
+        A = new MatrixOld(size);
 
         assertArrayEquals(expEntriesA, A.entries);
         assertEquals(expNumRowsA, A.numRows());
@@ -37,7 +37,7 @@ class MatrixConstructorTests {
         expEntriesA = new double[size*size];
         expNumColsA = expNumRowsA = size;
 
-        A = new Matrix(size);
+        A = new MatrixOld(size);
 
         assertArrayEquals(expEntriesA, A.entries);
         assertEquals(expNumRowsA, A.numRows());
@@ -48,17 +48,17 @@ class MatrixConstructorTests {
         expEntriesA = new double[size*size];
         expNumColsA = expNumRowsA = size;
 
-        A = new Matrix(size);
+        A = new MatrixOld(size);
 
         assertArrayEquals(expEntriesA, A.entries);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
         // ------------ Sub-case 4 ------------
-        assertThrows(IllegalArgumentException.class, () -> new Matrix(-1));
+        assertThrows(IllegalArgumentException.class, () -> new MatrixOld(-1));
 
         // ------------ Sub-case 5 ------------
-        assertThrows(IllegalArgumentException.class, () -> new Matrix(-5));
+        assertThrows(IllegalArgumentException.class, () -> new MatrixOld(-5));
     }
 
 
@@ -73,7 +73,7 @@ class MatrixConstructorTests {
         expEntriesA = new double[size*size];
         expNumColsA = expNumRowsA = size;
 
-        A = new Matrix(size, fillValue);
+        A = new MatrixOld(size, fillValue);
         Arrays.fill(expEntriesA, fillValue);
 
         assertArrayEquals(expEntriesA, A.entries);
@@ -86,7 +86,7 @@ class MatrixConstructorTests {
         expEntriesA = new double[size*size];
         expNumColsA = expNumRowsA = size;
 
-        A = new Matrix(size, fillValue);
+        A = new MatrixOld(size, fillValue);
         Arrays.fill(expEntriesA, fillValue);
 
         assertArrayEquals(expEntriesA, A.entries);
@@ -99,7 +99,7 @@ class MatrixConstructorTests {
         expEntriesA = new double[size*size];
         expNumColsA = expNumRowsA = size;
 
-        A = new Matrix(size, fillValue);
+        A = new MatrixOld(size, fillValue);
         Arrays.fill(expEntriesA, fillValue);
 
         assertArrayEquals(expEntriesA, A.entries);
@@ -112,7 +112,7 @@ class MatrixConstructorTests {
         expEntriesA = new double[size*size];
         expNumColsA = expNumRowsA = size;
 
-        A = new Matrix(size, fillValue);
+        A = new MatrixOld(size, fillValue);
         Arrays.fill(expEntriesA, fillValue);
 
         assertArrayEquals(expEntriesA, A.entries);
@@ -120,10 +120,10 @@ class MatrixConstructorTests {
         assertEquals(expNumColsA, A.numCols());
 
         // ------------ Sub-case 5 ------------
-        assertThrows(IllegalArgumentException.class, () -> new Matrix(-1));
+        assertThrows(IllegalArgumentException.class, () -> new MatrixOld(-1));
 
         // ------------ Sub-case 6 ------------
-        assertThrows(IllegalArgumentException.class, () -> new Matrix(-5));
+        assertThrows(IllegalArgumentException.class, () -> new MatrixOld(-5));
     }
 
 
@@ -137,7 +137,7 @@ class MatrixConstructorTests {
         expNumColsA = 0;
         expEntriesA = new double[expNumRowsA*expNumColsA];
 
-        A = new Matrix(expNumRowsA, expNumRowsA);
+        A = new MatrixOld(expNumRowsA, expNumRowsA);
 
         assertArrayEquals(expEntriesA, A.entries);
         assertEquals(expNumRowsA, A.numRows());
@@ -148,7 +148,7 @@ class MatrixConstructorTests {
         expNumColsA = 0;
         expEntriesA = new double[expNumRowsA*expNumColsA];
 
-        A = new Matrix(expNumRowsA, expNumColsA);
+        A = new MatrixOld(expNumRowsA, expNumColsA);
 
         assertArrayEquals(expEntriesA, A.entries);
         assertEquals(expNumRowsA, A.numRows());
@@ -159,7 +159,7 @@ class MatrixConstructorTests {
         expNumColsA = 1;
         expEntriesA = new double[expNumRowsA*expNumColsA];
 
-        A = new Matrix(expNumRowsA, expNumColsA);
+        A = new MatrixOld(expNumRowsA, expNumColsA);
 
         assertArrayEquals(expEntriesA, A.entries);
         assertEquals(expNumRowsA, A.numRows());
@@ -170,7 +170,7 @@ class MatrixConstructorTests {
         expNumColsA = 51;
         expEntriesA = new double[expNumRowsA*expNumColsA];
 
-        A = new Matrix(expNumRowsA, expNumColsA);
+        A = new MatrixOld(expNumRowsA, expNumColsA);
 
         assertArrayEquals(expEntriesA, A.entries);
         assertEquals(expNumRowsA, A.numRows());
@@ -181,7 +181,7 @@ class MatrixConstructorTests {
         expNumColsA = 1;
         expEntriesA = new double[expNumRowsA*expNumColsA];
 
-        A = new Matrix(expNumRowsA, expNumColsA);
+        A = new MatrixOld(expNumRowsA, expNumColsA);
 
         assertArrayEquals(expEntriesA, A.entries);
         assertEquals(expNumRowsA, A.numRows());
@@ -189,13 +189,13 @@ class MatrixConstructorTests {
 
 
         // ------------ Sub-case 6 ------------
-        assertThrows(IllegalArgumentException.class, () -> new Matrix(-2, 2));
+        assertThrows(IllegalArgumentException.class, () -> new MatrixOld(-2, 2));
 
         // ------------ Sub-case 7 ------------
-        assertThrows(IllegalArgumentException.class, () -> new Matrix(2, -2));
+        assertThrows(IllegalArgumentException.class, () -> new MatrixOld(2, -2));
 
         // ------------ Sub-case 8 ------------
-        assertThrows(IllegalArgumentException.class, () -> new Matrix(-2, -2));
+        assertThrows(IllegalArgumentException.class, () -> new MatrixOld(-2, -2));
     }
 
 
@@ -207,7 +207,7 @@ class MatrixConstructorTests {
         double fillValue = -1231.012;
         expEntriesA = new double[expNumRowsA*expNumColsA];
 
-        A = new Matrix(expNumRowsA, expNumColsA, fillValue);
+        A = new MatrixOld(expNumRowsA, expNumColsA, fillValue);
         Arrays.fill(expEntriesA, fillValue);
 
         assertArrayEquals(expEntriesA, A.entries);
@@ -220,7 +220,7 @@ class MatrixConstructorTests {
         fillValue = 13231.12321;
         expEntriesA = new double[expNumRowsA*expNumColsA];
 
-        A = new Matrix(expNumRowsA, expNumColsA, fillValue);
+        A = new MatrixOld(expNumRowsA, expNumColsA, fillValue);
         Arrays.fill(expEntriesA, fillValue);
 
         assertArrayEquals(expEntriesA, A.entries);
@@ -233,7 +233,7 @@ class MatrixConstructorTests {
         fillValue = 0;
         expEntriesA = new double[expNumRowsA*expNumColsA];
 
-        A = new Matrix(expNumRowsA, expNumColsA, fillValue);
+        A = new MatrixOld(expNumRowsA, expNumColsA, fillValue);
         Arrays.fill(expEntriesA, fillValue);
 
         assertArrayEquals(expEntriesA, A.entries);
@@ -246,7 +246,7 @@ class MatrixConstructorTests {
         fillValue = -144;
         expEntriesA = new double[expNumRowsA*expNumColsA];
 
-        A = new Matrix(expNumRowsA, expNumColsA, fillValue);
+        A = new MatrixOld(expNumRowsA, expNumColsA, fillValue);
         Arrays.fill(expEntriesA, fillValue);
 
         assertArrayEquals(expEntriesA, A.entries);
@@ -254,13 +254,13 @@ class MatrixConstructorTests {
         assertEquals(expNumColsA, A.numCols());
 
         // ------------ Sub-case 5 ------------
-        assertThrows(IllegalArgumentException.class, () -> new Matrix(-2, 2, 45));
+        assertThrows(IllegalArgumentException.class, () -> new MatrixOld(-2, 2, 45));
 
         // ------------ Sub-case 6 ------------
-        assertThrows(IllegalArgumentException.class, () -> new Matrix(2, -2, 45));
+        assertThrows(IllegalArgumentException.class, () -> new MatrixOld(2, -2, 45));
 
         // ------------ Sub-case 7 ------------
-        assertThrows(IllegalArgumentException.class, () -> new Matrix(-2, -2, 45));
+        assertThrows(IllegalArgumentException.class, () -> new MatrixOld(-2, -2, 45));
     }
 
 
@@ -277,7 +277,7 @@ class MatrixConstructorTests {
         expNumColsA = expEntriesA2d[0].length;
         double[] row = new double[expNumColsA];
 
-        A = new Matrix(expEntriesA2d);
+        A = new MatrixOld(expEntriesA2d);
 
         assertArrayEquals(expEntriesA, A.entries);
         assertEquals(expNumRowsA, A.numRows());
@@ -303,7 +303,7 @@ class MatrixConstructorTests {
         expNumColsA = expEntriesAint2d[0].length;
         double[] row = new double[expNumColsA];
 
-        A = new Matrix(expEntriesAint2d);
+        A = new MatrixOld(expEntriesAint2d);
 
         assertArrayEquals(expEntriesA, A.entries);
         assertEquals(expNumRowsA, A.numRows());
@@ -323,8 +323,8 @@ class MatrixConstructorTests {
         expNumColsA = expEntriesA2d[0].length;
         double[] row = new double[expNumColsA];
 
-        A = new Matrix(expEntriesA2d);
-        B = new Matrix(A);
+        A = new MatrixOld(expEntriesA2d);
+        B = new MatrixOld(A);
 
         assertArrayEquals(A.entries, B.entries);
         assertEquals(A.numRows(), B.numRows());
@@ -335,7 +335,7 @@ class MatrixConstructorTests {
     @Test
     void shapeConstructorsTestCase() {
         shape = new Shape(6, 3);
-        Matrix A = new Matrix(shape);
+        MatrixOld A = new MatrixOld(shape);
         expEntriesA2d = new double[6][3];
         expEntriesA = Arrays.stream(expEntriesA2d)
                 .flatMapToDouble(Arrays::stream)
@@ -352,7 +352,7 @@ class MatrixConstructorTests {
     @Test
     void shapeValueConstructorsTestCase() {
         shape = new Shape(5, 9);
-        Matrix A = new Matrix(shape, -834.34);
+        MatrixOld A = new MatrixOld(shape, -834.34);
         expEntriesA2d = new double[][]
                 {{-834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34},
                 {-834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34},

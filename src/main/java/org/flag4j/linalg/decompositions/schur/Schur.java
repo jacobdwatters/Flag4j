@@ -280,7 +280,7 @@ public abstract class Schur<
 
 
     /**
-     * Initializes temporary work arrays to be used in the decomposition.
+     * Initializes temporary work arrays_old to be used in the decomposition.
      */
     protected abstract void setUpArrays();
 

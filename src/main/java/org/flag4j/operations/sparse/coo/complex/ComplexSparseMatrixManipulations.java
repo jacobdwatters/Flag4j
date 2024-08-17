@@ -24,7 +24,7 @@
 
 package org.flag4j.operations.sparse.coo.complex;
 
-import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.operations.sparse.coo.SparseElementSearch;
@@ -59,7 +59,7 @@ public class ComplexSparseMatrixManipulations {
         int[] startEnd = SparseElementSearch.matrixFindRowStartEnd(src.rowIndices, rowIdx);
         int size = src.entries.length - (startEnd[1]-startEnd[0]);
 
-        // Initialize arrays.
+        // Initialize arrays_old.
         CNumber[] entries = new CNumber[size];
         int[] rowIndices = new int[size];
         int[] colIndices = new int[size];
@@ -150,7 +150,7 @@ public class ComplexSparseMatrixManipulations {
 
 
     /**
-     * A helper method which copies from a sparse matrix to a set of three arrays (non-zero entries, row indices, and
+     * A helper method which copies from a sparse matrix to a set of three arrays_old (non-zero entries, row indices, and
      * column indices) but skips over a specified range.
      * @param src Source sparse matrix to copy from.
      * @param entries Array to copy {@code} src non-zero entries to.

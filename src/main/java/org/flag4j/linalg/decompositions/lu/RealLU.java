@@ -24,14 +24,14 @@
 
 package org.flag4j.linalg.decompositions.lu;
 
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 /**
  * <p>This class provides methods for computing the LU decomposition of a real dense matrix.</p>
  * <p>The following decompositions are provided: {@code A=LU}, {@code PA=LU}, and {@code PAQ=LU}.</p>
  */
-public final class RealLU extends org.flag4j.linalg.decompositions.lu.LU<Matrix> {
+public final class RealLU extends org.flag4j.linalg.decompositions.lu.LU<MatrixOld> {
 
     /**
      * Constructs a LU decomposer to decompose the specified matrix using partial pivoting.
@@ -71,8 +71,8 @@ public final class RealLU extends org.flag4j.linalg.decompositions.lu.LU<Matrix>
      * @param src Source matrix to decompose.
      */
     @Override
-    protected void initLU(Matrix src) {
-        LU = new Matrix(src);
+    protected void initLU(MatrixOld src) {
+        LU = new MatrixOld(src);
     }
 
 
@@ -227,8 +227,8 @@ public final class RealLU extends org.flag4j.linalg.decompositions.lu.LU<Matrix>
      * @return The lower triangular matrix of the decomposition.
      */
     @Override
-    public Matrix getL() {
-        Matrix L = new Matrix(LU.numRows, Math.min(LU.numRows, LU.numCols));
+    public MatrixOld getL() {
+        MatrixOld L = new MatrixOld(LU.numRows, Math.min(LU.numRows, LU.numCols));
 
         // Copy L values from LU matrix.
         for(int i=0; i<LU.numRows; i++) {
@@ -248,8 +248,8 @@ public final class RealLU extends org.flag4j.linalg.decompositions.lu.LU<Matrix>
      * @return The lower triangular matrix of the decomposition.
      */
     @Override
-    public Matrix getU() {
-        Matrix U = new Matrix(Math.min(LU.numRows, LU.numCols), LU.numCols);
+    public MatrixOld getU() {
+        MatrixOld U = new MatrixOld(Math.min(LU.numRows, LU.numCols), LU.numCols);
 
         int stopIdx = Math.min(LU.numRows, LU.numCols);
 

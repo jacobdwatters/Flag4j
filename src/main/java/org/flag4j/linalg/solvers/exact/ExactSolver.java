@@ -25,7 +25,7 @@
 package org.flag4j.linalg.solvers.exact;
 
 
-import org.flag4j.arrays.sparse.PermutationMatrix;
+import org.flag4j.arrays_old.sparse.PermutationMatrix;
 import org.flag4j.core.MatrixMixin;
 import org.flag4j.core.VectorMixin;
 import org.flag4j.linalg.solvers.LinearSolver;
@@ -84,7 +84,7 @@ public abstract class ExactSolver<
 
     /**
      * Decomposes A using an {@link org.flag4j.linalg.decompositions.lu.LU LU decomposition}.
-     * @param A Matrix to decompose.
+     * @param A MatrixOld to decompose.
      */
     protected void decompose(T A) {
         lu.decompose(A);
@@ -99,7 +99,7 @@ public abstract class ExactSolver<
      *
      * @param A Coefficient matrix in the linear system. Must be square and have full rank
      *          (i.e. all rows, or equivalently columns, must be linearly independent).
-     * @param b Vector of constants in the linear system.
+     * @param b VectorOld of constants in the linear system.
      * @return The solution to {@code x} in the linear system {@code A*x=b}.
      * @throws IllegalArgumentException If the number of columns in {@code A} is not equal to the number of entries in
      * {@code b}.
@@ -122,7 +122,7 @@ public abstract class ExactSolver<
      * Solves the set of linear system of equations given by {@code A*X=B} for the matrix {@code X}.
      *
      * @param A Coefficient matrix in the linear system.
-     * @param B Matrix of constants in the linear system.
+     * @param B MatrixOld of constants in the linear system.
      * @return The solution to {@code X} in the linear system {@code A*X=B}.
      * @throws IllegalArgumentException If the number of columns in {@code A} is not equal to the number of rows in
      * {@code B}.
@@ -143,7 +143,7 @@ public abstract class ExactSolver<
 
     /**
      * Permute the rows of a vector using the row permutation matrix from the LU decomposition.
-     * @param b Vector to permute the rows of.
+     * @param b VectorOld to permute the rows of.
      * @return A vector which is the result of applying the row permutation from the LU decomposition
      * to the vector {@code b}.
      */

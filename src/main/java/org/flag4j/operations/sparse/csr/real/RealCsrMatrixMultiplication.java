@@ -24,8 +24,8 @@
 
 package org.flag4j.operations.sparse.csr.real;
 
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.sparse.CsrMatrix;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
@@ -50,7 +50,7 @@ public final class RealCsrMatrixMultiplication {
      * @param src2 Second CSR matrix in the multiplication.
      * @return Entries of the dense matrix resulting from the matrix multiplication of the two sparse CSR matrices.
      */
-    public static Matrix standard(CsrMatrix src1, CsrMatrix src2) {
+    public static MatrixOld standard(CsrMatrix src1, CsrMatrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
 
@@ -72,7 +72,7 @@ public final class RealCsrMatrixMultiplication {
             }
         }
 
-        return new Matrix(new Shape(src1.numRows, src2.numCols), destEntries);
+        return new MatrixOld(new Shape(src1.numRows, src2.numCols), destEntries);
     }
 
 

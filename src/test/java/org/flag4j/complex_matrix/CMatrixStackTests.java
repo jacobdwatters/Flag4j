@@ -1,13 +1,13 @@
 package org.flag4j.complex_matrix;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -19,24 +19,24 @@ class CMatrixStackTests {
     Shape sparseShape;
     int[] rowIndices, colIndices;
     CNumber[][] aEntries, expEntries;
-    CMatrix A, exp;
+    CMatrixOld A, exp;
 
     @Test
     void realMatrixTestCase() {
         double[][] bEntries;
-        Matrix B;
+        MatrixOld B;
 
         // ----------------------- Sub-case 1 -----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[][]{{13.45, 5.5}, {-94.3345, 435.6}};
-        B = new Matrix(bEntries);
+        B = new MatrixOld(bEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3), new CNumber(13.45), new CNumber(5.5)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3), new CNumber(-94.3345), new CNumber(435.6)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.stack(B, 0));
 
@@ -44,26 +44,26 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[][]{{13.45, 5.5, 23.45}, {-94.3345, 435.6, -8234.2}, {3.67, -798.41, 45.6}};
-        B = new Matrix(bEntries);
+        B = new MatrixOld(bEntries);
 
-        Matrix finalB = B;
+        MatrixOld finalB = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB, 0));
 
         // ----------------------- Sub-case 3 -----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[][]{{13.45, 5.5, 4.5}, {-94.3345, 435.6, 94.}};
-        B = new Matrix(bEntries);
+        B = new MatrixOld(bEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)},
                 {new CNumber(13.45), new CNumber(5.5), new CNumber(4.5)},
                 {new CNumber(-94.3345), new CNumber(435.6), new CNumber(94.)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.stack(B, 1));
 
@@ -71,22 +71,22 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[][]{{13.45, 5.5}, {-94.3345, 435.6}};
-        B = new Matrix(bEntries);
+        B = new MatrixOld(bEntries);
 
-        Matrix finalB1 = B;
+        MatrixOld finalB1 = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB1, 1));
 
         // ----------------------- Sub-case 5 -----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[][]{{13.45, 5.5}, {-94.3345, 435.6}};
-        B = new Matrix(bEntries);
+        B = new MatrixOld(bEntries);
 
-        Matrix finalB2 = B;
+        MatrixOld finalB2 = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB1, 2));
     }
 
@@ -100,7 +100,7 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{1.234};
         rowIndices = new int[]{0};
         colIndices = new int[]{1};
@@ -109,7 +109,7 @@ class CMatrixStackTests {
         expEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3), CNumber.ZERO, new CNumber(1.234), CNumber.ZERO},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3), CNumber.ZERO, CNumber.ZERO, CNumber.ZERO}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.stack(B, 0));
 
@@ -117,7 +117,7 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{1.234};
         rowIndices = new int[]{0};
         colIndices = new int[]{1};
@@ -131,7 +131,7 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{1.234};
         rowIndices = new int[]{0};
         colIndices = new int[]{1};
@@ -142,7 +142,7 @@ class CMatrixStackTests {
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)},
                 {CNumber.ZERO, new CNumber(1.234), CNumber.ZERO},
                 {CNumber.ZERO, CNumber.ZERO, CNumber.ZERO}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.stack(B, 1));
 
@@ -150,7 +150,7 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{1.234};
         rowIndices = new int[]{0};
         colIndices = new int[]{1};
@@ -164,7 +164,7 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{1.234};
         rowIndices = new int[]{0};
         colIndices = new int[]{1};
@@ -179,19 +179,19 @@ class CMatrixStackTests {
     @Test
     void complexMatrixTestCase() {
         CNumber[][] bEntries;
-        CMatrix B;
+        CMatrixOld B;
 
         // ----------------------- Sub-case 1 -----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[][]{{new CNumber(234.5, -87.234)}, {new CNumber(-1867.4, 77.51)}};
-        B = new CMatrix(bEntries);
+        B = new CMatrixOld(bEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3), new CNumber(234.5, -87.234)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3), new CNumber(-1867.4, 77.51)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.stack(B, 0));
 
@@ -199,25 +199,25 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[][]{{new CNumber(43.566920234, 234.5)}};
-        B = new CMatrix(bEntries);
+        B = new CMatrixOld(bEntries);
 
-        CMatrix finalB = B;
+        CMatrixOld finalB = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB, 0));
 
         // ----------------------- Sub-case 3 -----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[][]{{new CNumber(234.5, -87.234), new CNumber(-1867.4, 77.51), new CNumber(9, -987.43)}};
-        B = new CMatrix(bEntries);
+        B = new CMatrixOld(bEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)},
                 {new CNumber(234.5, -87.234), new CNumber(-1867.4, 77.51), new CNumber(9, -987.43)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.stack(B, 1));
 
@@ -225,22 +225,22 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[][]{{new CNumber(234.5, -87.234), new CNumber(-1867.4, 77.51)}};
-        B = new CMatrix(bEntries);
+        B = new CMatrixOld(bEntries);
 
-        CMatrix finalB1 = B;
+        CMatrixOld finalB1 = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB1, 1));
 
         // ----------------------- Sub-case 5 -----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[][]{{new CNumber(234.5, -87.234), new CNumber(-1867.4, 77.51)}};
-        B = new CMatrix(bEntries);
+        B = new CMatrixOld(bEntries);
 
-        CMatrix finalB2 = B;
+        CMatrixOld finalB2 = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB1, 2));
     }
 
@@ -254,7 +254,7 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(-8324.324, 234.25)};
         rowIndices = new int[]{0};
         colIndices = new int[]{1};
@@ -263,7 +263,7 @@ class CMatrixStackTests {
         expEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3), CNumber.ZERO, new CNumber(-8324.324, 234.25), CNumber.ZERO},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3), CNumber.ZERO, CNumber.ZERO, CNumber.ZERO}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.stack(B, 0));
 
@@ -271,7 +271,7 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(-8324.324, 234.25)};
         rowIndices = new int[]{0};
         colIndices = new int[]{1};
@@ -285,7 +285,7 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(-8324.324, 234.25)};
         rowIndices = new int[]{0};
         colIndices = new int[]{1};
@@ -296,7 +296,7 @@ class CMatrixStackTests {
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)},
                 {CNumber.ZERO, new CNumber(-8324.324, 234.25), CNumber.ZERO},
                 {CNumber.ZERO, CNumber.ZERO, CNumber.ZERO}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.stack(B, 1));
 
@@ -304,7 +304,7 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(-8324.324, 234.25)};
         rowIndices = new int[]{0};
         colIndices = new int[]{1};
@@ -318,7 +318,7 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(-8324.324, 234.25)};
         rowIndices = new int[]{0};
         colIndices = new int[]{1};
@@ -333,19 +333,19 @@ class CMatrixStackTests {
     @Test
     void realVectorTestCase() {
         double[] bEntries;
-        Vector B;
+        VectorOld B;
 
         // ----------------------- Sub-case 1 -----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{12.34, -89345.5};
-        B = new Vector(bEntries);
+        B = new VectorOld(bEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3), new CNumber(12.34)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3), new CNumber(-89345.5)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.stack(B, 0));
 
@@ -353,25 +353,25 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{12.34, -89345.5, 3.4};
-        B = new Vector(bEntries);
+        B = new VectorOld(bEntries);
 
-        Vector finalB = B;
+        VectorOld finalB = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB, 0));
 
         // ----------------------- Sub-case 3 -----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{12.34, -89345.5, 234.56};
-        B = new Vector(bEntries);
+        B = new VectorOld(bEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)},
                 {new CNumber(12.34), new CNumber(-89345.5), new CNumber(234.56)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.stack(B, 1));
 
@@ -379,22 +379,22 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{12.34, -89345.5};
-        B = new Vector(bEntries);
+        B = new VectorOld(bEntries);
 
-        Vector finalB1 = B;
+        VectorOld finalB1 = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB1, 1));
 
         // ----------------------- Sub-case 5 -----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{12.34, -89345.5};
-        B = new Vector(bEntries);
+        B = new VectorOld(bEntries);
 
-        Vector finalB2 = B;
+        VectorOld finalB2 = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB1, 2));
     }
 
@@ -402,19 +402,19 @@ class CMatrixStackTests {
     @Test
     void complexVectorTestCase() {
         CNumber[] bEntries;
-        CVector B;
+        CVectorOld B;
 
         // ----------------------- Sub-case 1 -----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(943.5, -85.4), new CNumber(-4.3, 50.123)};
-        B = new CVector(bEntries);
+        B = new CVectorOld(bEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3), new CNumber(943.5, -85.4)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3), new CNumber(-4.3, 50.123)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.stack(B, 0));
 
@@ -422,25 +422,25 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(943.5, -85.4), new CNumber(-4.3, 50.123), new CNumber(985.355, 634634.202)};
-        B = new CVector(bEntries);
+        B = new CVectorOld(bEntries);
 
-        CVector finalB = B;
+        CVectorOld finalB = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB, 0));
 
         // ----------------------- Sub-case 3 -----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(943.5, -85.4), new CNumber(-4.3, 50.123), new CNumber(985.355, 634634.202)};
-        B = new CVector(bEntries);
+        B = new CVectorOld(bEntries);
         expEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)},
                 {new CNumber(943.5, -85.4), new CNumber(-4.3, 50.123), new CNumber(985.355, 634634.202)}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.stack(B, 1));
 
@@ -448,22 +448,22 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(943.5, -85.4), new CNumber(-4.3, 50.123)};
-        B = new CVector(bEntries);
+        B = new CVectorOld(bEntries);
 
-        CVector finalB1 = B;
+        CVectorOld finalB1 = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB1, 1));
 
         // ----------------------- Sub-case 5 -----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(943.5, -85.4), new CNumber(-4.3, 50.123)};
-        B = new CVector(bEntries);
+        B = new CVectorOld(bEntries);
 
-        CVector finalB2 = B;
+        CVectorOld finalB2 = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB1, 2));
     }
 
@@ -477,14 +477,14 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{1.234};
         rowIndices = new int[]{0};
         B = new CooVector(2, bEntries, rowIndices);
         expEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3), new CNumber(1.234)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3), CNumber.ZERO}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.stack(B, 0));
 
@@ -492,7 +492,7 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{1.234};
         rowIndices = new int[]{0};
         B = new CooVector(24, bEntries, rowIndices);
@@ -504,7 +504,7 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{1.234};
         rowIndices = new int[]{0};
         B = new CooVector(3, bEntries, rowIndices);
@@ -512,7 +512,7 @@ class CMatrixStackTests {
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)},
                 {new CNumber(1.234), CNumber.ZERO, CNumber.ZERO}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.stack(B, 1));
 
@@ -520,7 +520,7 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{1.234};
         rowIndices = new int[]{0};
         B = new CooVector(3546, bEntries, rowIndices);
@@ -532,7 +532,7 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new double[]{1.234};
         rowIndices = new int[]{0};
         B = new CooVector(3, bEntries, rowIndices);
@@ -551,14 +551,14 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(23.45, -732.4)};
         rowIndices = new int[]{0};
         B = new CooCVector(2, bEntries, rowIndices);
         expEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3), new CNumber(23.45, -732.4)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3), CNumber.ZERO}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.stack(B, 0));
 
@@ -566,7 +566,7 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(23.45, -732.4)};
         rowIndices = new int[]{0};
         B = new CooCVector(24, bEntries, rowIndices);
@@ -578,7 +578,7 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(23.45, -732.4)};
         rowIndices = new int[]{0};
         B = new CooCVector(3, bEntries, rowIndices);
@@ -586,7 +586,7 @@ class CMatrixStackTests {
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)},
                 {new CNumber(23.45, -732.4), CNumber.ZERO, CNumber.ZERO}};
-        exp = new CMatrix(expEntries);
+        exp = new CMatrixOld(expEntries);
 
         assertEquals(exp, A.stack(B, 1));
 
@@ -594,7 +594,7 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(23.45, -732.4)};
         rowIndices = new int[]{0};
         B = new CooCVector(3546, bEntries, rowIndices);
@@ -606,7 +606,7 @@ class CMatrixStackTests {
         aEntries = new CNumber[][]{
                 {new CNumber(9.234, -0.864), new CNumber(58.1, 3), new CNumber(-984, -72.3)},
                 {new CNumber(1), CNumber.ZERO, new CNumber(0, 87.3)}};
-        A = new CMatrix(aEntries);
+        A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(23.45, -732.4)};
         rowIndices = new int[]{0};
         B = new CooCVector(3, bEntries, rowIndices);

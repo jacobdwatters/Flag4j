@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <h1 title="Class ComplexSVD" class="title">Class ComplexSVD</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="SVD.html" title="class in org.flag4j.linalg.decompositions.svd">org.flag4j.linalg.decompositions.svd.SVD</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;
+<div class="inheritance"><a href="SVD.html" title="class in org.flag4j.linalg.decompositions.svd">org.flag4j.linalg.decompositions.svd.SVD</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;
 <div class="inheritance">org.flag4j.linalg.decompositions.svd.ComplexSVD</div>
 </div>
 </div>
@@ -92,11 +92,11 @@ loadScripts(document, 'script');</script>
 <div class="horizontal-scroll">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../Decomposition.html" title="interface in org.flag4j.linalg.decompositions">Decomposition</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;</code></dd>
+<dd><code><a href="../Decomposition.html" title="interface in org.flag4j.linalg.decompositions">Decomposition</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;</code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ComplexSVD</span>
-<span class="extends-implements">extends <a href="SVD.html" title="class in org.flag4j.linalg.decompositions.svd">SVD</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;</span></div>
+<span class="extends-implements">extends <a href="SVD.html" title="class in org.flag4j.linalg.decompositions.svd">SVD</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;</span></div>
 <div class="block">Instances of this class can be used to compute the singular value decomposition (SVD) of a real dense matrix.
  That is, decompose a rectangular matrix <code>M</code> as <code>M=USV&lt;sup&gt;H&lt;/sup&gt;</code> where <code>U</code> and <code>V</code> are
  unitary matrices whose columns are the left and right singular vectors of <code>M</code> and <code>S</code> is a rectangular
@@ -150,7 +150,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#extractNormalizedCols(org.flag4j.arrays.dense.CMatrix,int)" class="member-name-link">extractNormalizedCols</a><wbr>(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;singularVecs,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#extractNormalizedCols(org.flag4j.arrays.dense.CMatrix,int)" class="member-name-link">extractNormalizedCols</a><wbr>(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;singularVecs,
  int&nbsp;j)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Extracts the singular vectors, normalizes them and sets the columns of <code>U</code>
@@ -162,20 +162,20 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Initializes the unitary <code>U</code> and <code>V</code> matrices for the SVD.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invDirectSum(org.flag4j.arrays.dense.CMatrix)" class="member-name-link">invDirectSum</a><wbr>(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;src)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invDirectSum(org.flag4j.arrays.dense.CMatrix)" class="member-name-link">invDirectSum</a><wbr>(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;src)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the inverse direct sum of a matrix and its hermitian transpose.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#makeEigenPairs(org.flag4j.arrays.dense.CMatrix,double%5B%5D)" class="member-name-link">makeEigenPairs</a><wbr>(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;B,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#makeEigenPairs(org.flag4j.arrays.dense.CMatrix,double%5B%5D)" class="member-name-link">makeEigenPairs</a><wbr>(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;B,
  double[]&nbsp;eigVals)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the eigen values and vectors of symmetric the block matrix which corresponds
  to the singular values and vectors of the matrix being decomposed.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#makeEigenVals(org.flag4j.arrays.dense.CMatrix,double%5B%5D)" class="member-name-link">makeEigenVals</a><wbr>(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;B,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#makeEigenVals(org.flag4j.arrays.dense.CMatrix,double%5B%5D)" class="member-name-link">makeEigenVals</a><wbr>(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;B,
  double[]&nbsp;eigVals)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the eigen values of the symmetric block matrix which corresponds
@@ -261,11 +261,11 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="invDirectSum(org.flag4j.arrays.dense.CMatrix)">
 <h3>invDirectSum</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></span>&nbsp;<span class="element-name">invDirectSum</span><wbr><span class="parameters">(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;src)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></span>&nbsp;<span class="element-name">invDirectSum</span><wbr><span class="parameters">(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;src)</span></div>
 <div class="block">Computes the inverse direct sum of a matrix and its hermitian transpose.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="SVD.html#invDirectSum(T)">invDirectSum</a></code>&nbsp;in class&nbsp;<code><a href="SVD.html" title="class in org.flag4j.linalg.decompositions.svd">SVD</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;</code></dd>
+<dd><code><a href="SVD.html#invDirectSum(T)">invDirectSum</a></code>&nbsp;in class&nbsp;<code><a href="SVD.html" title="class in org.flag4j.linalg.decompositions.svd">SVD</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>src</code> - Matrix to inverse direct add with its hermitian transpose.</dd>
 <dt>Returns:</dt>
@@ -278,13 +278,13 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="makeEigenPairs(org.flag4j.arrays.dense.CMatrix,double[])">
 <h3>makeEigenPairs</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></span>&nbsp;<span class="element-name">makeEigenPairs</span><wbr><span class="parameters">(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;B,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></span>&nbsp;<span class="element-name">makeEigenPairs</span><wbr><span class="parameters">(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;B,
  double[]&nbsp;eigVals)</span></div>
 <div class="block">Gets the eigen values and vectors of symmetric the block matrix which corresponds
  to the singular values and vectors of the matrix being decomposed.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="SVD.html#makeEigenPairs(T,double%5B%5D)">makeEigenPairs</a></code>&nbsp;in class&nbsp;<code><a href="SVD.html" title="class in org.flag4j.linalg.decompositions.svd">SVD</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;</code></dd>
+<dd><code><a href="SVD.html#makeEigenPairs(T,double%5B%5D)">makeEigenPairs</a></code>&nbsp;in class&nbsp;<code><a href="SVD.html" title="class in org.flag4j.linalg.decompositions.svd">SVD</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - Symmetric block matrix to compute the eigenvalues of.</dd>
 <dd><code>eigVals</code> - Storage for eigenvalues.</dd>
@@ -299,13 +299,13 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="makeEigenVals(org.flag4j.arrays.dense.CMatrix,double[])">
 <h3>makeEigenVals</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">makeEigenVals</span><wbr><span class="parameters">(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;B,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">makeEigenVals</span><wbr><span class="parameters">(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;B,
  double[]&nbsp;eigVals)</span></div>
 <div class="block">Gets the eigen values of the symmetric block matrix which corresponds
  to the singular values of the matrix being decomposed.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="SVD.html#makeEigenVals(T,double%5B%5D)">makeEigenVals</a></code>&nbsp;in class&nbsp;<code><a href="SVD.html" title="class in org.flag4j.linalg.decompositions.svd">SVD</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;</code></dd>
+<dd><code><a href="SVD.html#makeEigenVals(T,double%5B%5D)">makeEigenVals</a></code>&nbsp;in class&nbsp;<code><a href="SVD.html" title="class in org.flag4j.linalg.decompositions.svd">SVD</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - Symmetric block matrix to compute the eigenvalues of.</dd>
 <dd><code>eigVals</code> - Storage for eigenvalues.</dd>
@@ -322,7 +322,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Initializes the unitary <code>U</code> and <code>V</code> matrices for the SVD.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="SVD.html#initUV(org.flag4j.core.Shape,int)">initUV</a></code>&nbsp;in class&nbsp;<code><a href="SVD.html" title="class in org.flag4j.linalg.decompositions.svd">SVD</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;</code></dd>
+<dd><code><a href="SVD.html#initUV(org.flag4j.core.Shape,int)">initUV</a></code>&nbsp;in class&nbsp;<code><a href="SVD.html" title="class in org.flag4j.linalg.decompositions.svd">SVD</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>src</code> - Shape of the source matrix being decomposed.</dd>
 <dd><code>cols</code> - The number of columns for <code>U</code> and <code>V</code>.</dd>
@@ -334,13 +334,13 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="extractNormalizedCols(org.flag4j.arrays.dense.CMatrix,int)">
 <h3>extractNormalizedCols</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">extractNormalizedCols</span><wbr><span class="parameters">(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;singularVecs,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">extractNormalizedCols</span><wbr><span class="parameters">(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;singularVecs,
  int&nbsp;j)</span></div>
 <div class="block">Extracts the singular vectors, normalizes them and sets the columns of <code>U</code>
  and <code>V</code> to be the left/right singular vectors.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="SVD.html#extractNormalizedCols(T,int)">extractNormalizedCols</a></code>&nbsp;in class&nbsp;<code><a href="SVD.html" title="class in org.flag4j.linalg.decompositions.svd">SVD</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;</code></dd>
+<dd><code><a href="SVD.html#extractNormalizedCols(T,int)">extractNormalizedCols</a></code>&nbsp;in class&nbsp;<code><a href="SVD.html" title="class in org.flag4j.linalg.decompositions.svd">SVD</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>singularVecs</code> - Computed left and right singular vectors.</dd>
 <dd><code>j</code> - Index of the column of <code>U</code> and <code>V</code> to set.</dd>

@@ -1,10 +1,10 @@
 package org.flag4j.complex_sparse_matrix;
 
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooVector;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -177,7 +177,7 @@ class CooCMatrixStackVectorsTests {
         CooCMatrix a;
 
         double[] bEntries;
-        Vector b;
+        VectorOld b;
 
         Shape expShape;
         int[] expRowIndices;
@@ -193,7 +193,7 @@ class CooCMatrixStackVectorsTests {
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[]{0.05556, 0.67678, 0.9478, 0.41292, 0.67343};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         expShape = new Shape(4, 5);
         expEntries = new CNumber[]{new CNumber("0.82346+0.5447i"), new CNumber("0.98536+0.00179i"), new CNumber("0.24957+0.43968i"), new CNumber("0.06434+0.2831i"), new CNumber("0.60887+0.53339i"), new CNumber("0.05556"), new CNumber("0.67678"), new CNumber("0.9478"), new CNumber("0.41292"), new CNumber("0.67343")};
@@ -211,7 +211,7 @@ class CooCMatrixStackVectorsTests {
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[]{0.59072, 0.60299};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         expShape = new Shape(2, 2);
         expEntries = new CNumber[]{new CNumber("0.22002+0.05773i"), new CNumber("0.59072"), new CNumber("0.60299")};
@@ -229,10 +229,10 @@ class CooCMatrixStackVectorsTests {
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[]{0.90256, 0.08861, 0.49854};
-        b = new Vector(bEntries);
+        b = new VectorOld(bEntries);
 
         CooCMatrix finala = a;
-        Vector finalb = b;
+        VectorOld finalb = b;
         assertThrows(Exception.class, ()->finala.stack(finalb));
     }
 
@@ -246,7 +246,7 @@ class CooCMatrixStackVectorsTests {
         CooCMatrix a;
 
         CNumber[] bEntries;
-        CVector b;
+        CVectorOld b;
 
         Shape expShape;
         int[] expRowIndices;
@@ -262,7 +262,7 @@ class CooCMatrixStackVectorsTests {
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[]{new CNumber("0.33633+0.96882i"), new CNumber("0.66443+0.10543i"), new CNumber("0.0555+0.19518i"), new CNumber("0.63482+0.63059i"), new CNumber("0.25934+0.31857i")};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
         expShape = new Shape(4, 5);
         expEntries = new CNumber[]{new CNumber("0.70739+0.52162i"), new CNumber("0.73024+0.28129i"), new CNumber("0.22347+0.6196i"), new CNumber("0.07587+0.34439i"), new CNumber("0.31589+0.36087i"), new CNumber("0.33633+0.96882i"), new CNumber("0.66443+0.10543i"), new CNumber("0.0555+0.19518i"), new CNumber("0.63482+0.63059i"), new CNumber("0.25934+0.31857i")};
@@ -280,7 +280,7 @@ class CooCMatrixStackVectorsTests {
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[]{new CNumber("0.66459+0.41638i"), new CNumber("0.26529+0.30038i")};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
         expShape = new Shape(2, 2);
         expEntries = new CNumber[]{new CNumber("0.93373+0.35044i"), new CNumber("0.66459+0.41638i"), new CNumber("0.26529+0.30038i")};
@@ -298,10 +298,10 @@ class CooCMatrixStackVectorsTests {
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[]{new CNumber("0.15167+0.14269i"), new CNumber("0.04675+0.07281i"), new CNumber("0.10411+0.4936i")};
-        b = new CVector(bEntries);
+        b = new CVectorOld(bEntries);
 
         CooCMatrix finala = a;
-        CVector finalb = b;
+        CVectorOld finalb = b;
         assertThrows(Exception.class, ()->finala.stack(finalb));
     }
 }
