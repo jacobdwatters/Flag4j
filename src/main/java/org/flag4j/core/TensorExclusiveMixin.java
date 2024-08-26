@@ -26,8 +26,8 @@ package org.flag4j.core;
 
 import org.flag4j.arrays_old.dense.CTensorOld;
 import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.arrays_old.sparse.CooCTensor;
-import org.flag4j.arrays_old.sparse.CooTensor;
+import org.flag4j.arrays_old.sparse.CooCTensorOld;
+import org.flag4j.arrays_old.sparse.CooTensorOld;
 import org.flag4j.util.ArrayUtils;
 
 
@@ -178,7 +178,7 @@ public interface TensorExclusiveMixin<
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    T add(CooTensor B);
+    T add(CooTensorOld B);
 
 
     /**
@@ -218,7 +218,7 @@ public interface TensorExclusiveMixin<
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    W add(CooCTensor B);
+    W add(CooCTensorOld B);
 
 
     /**
@@ -228,7 +228,7 @@ public interface TensorExclusiveMixin<
      * @return The result of subtracting the tensor B from this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    T sub(CooTensor B);
+    T sub(CooTensorOld B);
 
 
     /**
@@ -248,7 +248,7 @@ public interface TensorExclusiveMixin<
      * @return The result of subtracting the tensor B from this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    W sub(CooCTensor B);
+    W sub(CooCTensorOld B);
 
 
     /**
@@ -266,7 +266,7 @@ public interface TensorExclusiveMixin<
      * @return The result of the element-wise tensor multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    V elemMult(CooTensor B);
+    V elemMult(CooTensorOld B);
 
 
     /**
@@ -284,7 +284,7 @@ public interface TensorExclusiveMixin<
      * @return The result of the element-wise tensor multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    CooCTensor elemMult(CooCTensor B);
+    CooCTensorOld elemMult(CooCTensorOld B);
 
 
     /**

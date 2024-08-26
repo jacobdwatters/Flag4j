@@ -2,17 +2,17 @@ package org.flag4j.sparse_csr_matrix;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooVector;
-import org.flag4j.arrays_old.sparse.CsrMatrix;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
+import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CsrMatrixToVectorTests {
-    CsrMatrix A;
+    CsrMatrixOld A;
     double[][] aEntries;
 
-    CooVector exp;
+    CooVectorOld exp;
     double[] expEntries;
 
     @Test

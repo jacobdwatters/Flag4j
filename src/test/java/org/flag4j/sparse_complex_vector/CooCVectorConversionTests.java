@@ -2,10 +2,10 @@ package org.flag4j.sparse_complex_vector;
 
 
 import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooCTensor;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooCTensorOld;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,7 +21,7 @@ class CooCVectorConversionTests {
     static int[] aIndices;
     static CNumber[] aEntries;
     static int sparseSize;
-    static CooCVector a;
+    static CooCVectorOld a;
 
 
     @BeforeAll
@@ -32,7 +32,7 @@ class CooCVectorConversionTests {
         };
         aIndices = new int[]{4, 56, 9903, 14643};
         sparseSize = 24_023;
-        a = new CooCVector(sparseSize, aEntries, aIndices);
+        a = new CooCVectorOld(sparseSize, aEntries, aIndices);
     }
 
 
@@ -41,7 +41,7 @@ class CooCVectorConversionTests {
         CNumber[] expEntries;
         int[][] expIndices;
         Shape expShape;
-        CooCMatrix exp;
+        CooCMatrixOld exp;
 
         // ------------------- Sub-case 1 -------------------
         expEntries = new CNumber[]{
@@ -50,7 +50,7 @@ class CooCVectorConversionTests {
         };
         expIndices = new int[][]{{4, 56, 9903, 14643}, {0, 0, 0, 0}};
         expShape = new Shape(sparseSize, 1);
-        exp = new CooCMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
+        exp = new CooCMatrixOld(expShape, expEntries, expIndices[0], expIndices[1]);
 
         assertEquals(exp, a.toMatrix());
 
@@ -61,7 +61,7 @@ class CooCVectorConversionTests {
         };
         expIndices = new int[][]{{4, 56, 9903, 14643}, {0, 0, 0, 0}};
         expShape = new Shape(sparseSize, 1);
-        exp = new CooCMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
+        exp = new CooCMatrixOld(expShape, expEntries, expIndices[0], expIndices[1]);
 
         assertEquals(exp, a.toMatrix(true));
 
@@ -72,7 +72,7 @@ class CooCVectorConversionTests {
         };
         expIndices = new int[][]{{0, 0, 0, 0}, {4, 56, 9903, 14643}};
         expShape = new Shape(1, sparseSize);
-        exp = new CooCMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
+        exp = new CooCMatrixOld(expShape, expEntries, expIndices[0], expIndices[1]);
 
         assertEquals(exp, a.toMatrix(false));
     }
@@ -83,13 +83,13 @@ class CooCVectorConversionTests {
         double[] expEntries;
         int[] expIndices;
         int expSize;
-        CooVector exp;
+        CooVectorOld exp;
 
         // ------------------- Sub-case 1 -------------------
         expEntries = new double[]{2.455, 0, 24.56, -9356.1};
         expIndices = new int[]{4, 56, 9903, 14643};
         expSize = sparseSize;
-        exp = new CooVector(expSize, expEntries, expIndices);
+        exp = new CooVectorOld(expSize, expEntries, expIndices);
 
         assertEquals(exp, a.toReal());
     }
@@ -100,7 +100,7 @@ class CooCVectorConversionTests {
         CNumber[] expEntries;
         int[][] expIndices;
         Shape expShape;
-        CooCTensor exp;
+        CooCTensorOld exp;
 
         // ------------------- Sub-case 1 -------------------
         expEntries = new CNumber[]{
@@ -109,7 +109,7 @@ class CooCVectorConversionTests {
         };
         expIndices = new int[][]{{4}, {56}, {9903}, {14643}};
         expShape = new Shape(sparseSize);
-        exp = new CooCTensor(expShape, expEntries, expIndices);
+        exp = new CooCTensorOld(expShape, expEntries, expIndices);
 
         assertEquals(exp, a.toTensor());
     }
@@ -147,6 +147,6 @@ class CooCVectorConversionTests {
         denseEntries[aIndices[3]] = aEntries[3];
         denseVector = new CVectorOld(denseEntries);
 
-        assertEquals(a, CooCVector.fromDense(denseVector));
+        assertEquals(a, CooCVectorOld.fromDense(denseVector));
     }
 }

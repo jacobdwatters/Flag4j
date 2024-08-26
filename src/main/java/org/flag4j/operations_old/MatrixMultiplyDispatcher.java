@@ -42,11 +42,12 @@ import org.flag4j.util.ParameterChecks;
 /**
  * Dispatches matrix multiplication to the appropriate algorithm based on the size of the matrices to be multiplied.
  */
+@Deprecated
 public final class MatrixMultiplyDispatcher {
 
     private MatrixMultiplyDispatcher() {
         // Hide constructor of utility class
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -77,7 +78,7 @@ public final class MatrixMultiplyDispatcher {
      */
     public static double[] dispatch(MatrixOld A, VectorOld b) {
         Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
-        ParameterChecks.assertMatMultShapes(A.shape, bMatShape);
+        ParameterChecks.ensureMatMultShapes(A.shape, bMatShape);
 
         AlgorithmName algorithm;
         double[] dest;
@@ -111,7 +112,7 @@ public final class MatrixMultiplyDispatcher {
      */
     public static CNumber[] dispatch(MatrixOld A, CVectorOld b) {
         Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
-        ParameterChecks.assertMatMultShapes(A.shape, bMatShape);
+        ParameterChecks.ensureMatMultShapes(A.shape, bMatShape);
 
         AlgorithmName algorithm;
         CNumber[] dest;
@@ -145,7 +146,7 @@ public final class MatrixMultiplyDispatcher {
      */
     public static CNumber[] dispatch(CMatrixOld A, VectorOld b) {
         Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
-        ParameterChecks.assertMatMultShapes(A.shape, bMatShape);
+        ParameterChecks.ensureMatMultShapes(A.shape, bMatShape);
 
         AlgorithmName algorithm;
         CNumber[] dest;
@@ -179,7 +180,7 @@ public final class MatrixMultiplyDispatcher {
      */
     public static CNumber[] dispatch(CMatrixOld A, CVectorOld b) {
         Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
-        ParameterChecks.assertMatMultShapes(A.shape, bMatShape);
+        ParameterChecks.ensureMatMultShapes(A.shape, bMatShape);
 
         AlgorithmName algorithm;
         CNumber[] dest;
@@ -226,7 +227,7 @@ public final class MatrixMultiplyDispatcher {
      * @return The result of the matrix multiplication between the two matrices.
      */
     public static CNumber[] dispatch(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        ParameterChecks.assertMatMultShapes(shape1, shape2);
+        ParameterChecks.ensureMatMultShapes(shape1, shape2);
 
         AlgorithmName algorithm;
         CNumber[] dest;
@@ -289,7 +290,7 @@ public final class MatrixMultiplyDispatcher {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static CNumber[] dispatch(MatrixOld A, CMatrixOld B) {
-        ParameterChecks.assertMatMultShapes(A.shape, B.shape);
+        ParameterChecks.ensureMatMultShapes(A.shape, B.shape);
 
         AlgorithmName algorithm;
         CNumber[] dest;
@@ -351,7 +352,7 @@ public final class MatrixMultiplyDispatcher {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static CNumber[] dispatch(CMatrixOld A, MatrixOld B) {
-        ParameterChecks.assertMatMultShapes(A.shape, B.shape);
+        ParameterChecks.ensureMatMultShapes(A.shape, B.shape);
 
         AlgorithmName algorithm;
         CNumber[] dest;
@@ -413,7 +414,7 @@ public final class MatrixMultiplyDispatcher {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
      */
     public static CNumber[] dispatchTranspose(CMatrixOld A, MatrixOld B) {
-        ParameterChecks.assertEquals(A.numCols, B.numCols);
+        ParameterChecks.ensureEquals(A.numCols, B.numCols);
         AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);
         CNumber[] dest;
 
@@ -447,7 +448,7 @@ public final class MatrixMultiplyDispatcher {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
      */
     public static CNumber[] dispatchTranspose(MatrixOld A, CMatrixOld B) {
-        ParameterChecks.assertEquals(A.numCols, B.numCols);
+        ParameterChecks.ensureEquals(A.numCols, B.numCols);
         AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);
         CNumber[] dest;
 
@@ -481,7 +482,7 @@ public final class MatrixMultiplyDispatcher {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
      */
     public static CNumber[] dispatchTranspose(CMatrixOld A, CMatrixOld B) {
-        ParameterChecks.assertEquals(A.numCols, B.numCols);
+        ParameterChecks.ensureEquals(A.numCols, B.numCols);
         AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);
         CNumber[] dest;
 

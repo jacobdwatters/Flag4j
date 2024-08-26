@@ -23,23 +23,17 @@
  */
 
 package org.flag4j.core_temp;
-
-
-import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.util.ErrorMessages;
 
 /**
  * This interface defines operations that all matrices should implement.
  * @param <T> Type of this matrix.
- * @param <U> Tensor super-type of this matrix.
+ * @param <U> Type of dense matrix which is equivalent to {@code T}. If {@code T} is dense, then this should be the same type as
+ * {@code T}. This type parameter is required because some operations (even between two sparse matrices) may result in a dense
+ * matrix (e.g. matrixmultiplicaiton).
  * @param <V> Type (or wrapper) of an element of this matrix.
  */
-public interface MatrixMixin<T extends U, U extends TensorBase<U, ?, V>, V>
-        extends TensorBinaryOpsMixin<U, U>,
-        TensorUnaryOpsMixin<U>,
-        TensorPropertiesMixin<V> {
-
-    // TODO: Create seperate interface MatrixVectorOps mixin for operations between a matrix and a vector.
+public interface MatrixMixin<T extends TensorBase<T, ?, V>, U extends TensorBase<U, ?, V>, V> extends TensorPropertiesMixin<V> {
 
     /**
      * Gets the number of rows in this matrix.
@@ -64,7 +58,7 @@ public interface MatrixMixin<T extends U, U extends TensorBase<U, ?, V>, V>
      * @return The trace of this matrix.
      * @throws IllegalArgumentException If this matrix is not square.
      */
-    public default Double trace() {return tr();}
+    public default V trace() {return tr();}
 
 
     /**
@@ -75,7 +69,7 @@ public interface MatrixMixin<T extends U, U extends TensorBase<U, ?, V>, V>
      * @return The trace of this matrix.
      * @throws IllegalArgumentException If this matrix is not square.
      */
-    public Double tr();
+    public V tr();
 
 
     /**
@@ -111,22 +105,15 @@ public interface MatrixMixin<T extends U, U extends TensorBase<U, ?, V>, V>
      */
     public default int vectorType() {
         int type;
-
         int rows = numRows();
         int cols = numCols();
 
         if(rows==1 || cols==1) {
-            if(rows==1 && cols==1) {
-                type = 0;
-            } else if(rows==1) {
-                type = 1;
-            } else {
-                // Then this matrix is equivalent to a column vector.
-                type = 2;
-            }
+            if(rows==1 && cols==1) type = 0;
+            else if(rows==1) type = 1;
+            else type = 2; // Then this matrix is equivalent to a column vector.
         } else {
-            // Then this matrix is not equivalent to any vector.
-            type = -1;
+            type = -1; // Then this matrix is not equivalent to any vector.
         }
 
         return type;
@@ -174,32 +161,21 @@ public interface MatrixMixin<T extends U, U extends TensorBase<U, ?, V>, V>
 
 
     /**
-     * Checks if a matrix has full rank. That is, if a matrices rank is equal to the number of rows in the matrix.
+     * Checks if this matrix is the identity matrix. That is, checks if this matrix is square and contains
+     * only ones along the principle diagonal and zeros everywhere else.
      *
-     * @return True if this matrix has full rank. Otherwise, returns false.
+     * @return True if this matrix is the identity matrix. Otherwise, returns false.
+     * @see #isCloseToI()
      */
-    public default boolean isFullRank() {
-        return matrixRank() == Math.min(numRows(), numCols());
-    }
+    public boolean isI();
 
 
     /**
-     * Checks if a matrix is singular. That is, if the matrix is <b>NOT</b> invertible.
-     *
-     * @return True if this matrix is singular or non-square. Otherwise, returns false.
-     * @see #isInvertible()
+     * Checks that this matrix is close to the identity matrix.
+     * @return True if this matrix is approximately the identity matrix.
+     * @see #isI()
      */
-    public boolean isSingular();
-
-
-    /**
-     * Checks if a matrix is invertible.
-     * @return True if this matrix is invertible.
-     * @see #isSingular()
-     */
-    default boolean isInvertible() {
-        return !isSingular();
-    }
+    public boolean isCloseToI();
 
 
     /**
@@ -212,24 +188,14 @@ public interface MatrixMixin<T extends U, U extends TensorBase<U, ?, V>, V>
 
 
     /**
-     * <p>Computes the rank of this matrix (i.e. the number of linearly independent rows/columns in this matrix).</p>
-     *
-     * <p>Note that here, rank is <b>NOT</b> the same as a tensor rank (i.e. number of indices needed to specify an entry in
-     * the tensor).</p>
-     *
-     * @return The matrix rank of this matrix.
-     */
-    public int matrixRank();
-
-
-    /**
      * Computes the matrix multiplication between two matrices.
      *
      * @param b Second matrix in the matrix multiplication.
-     * @return The result of matrix multiplying this matrix with matrix b.
-     * @throws org.flag4j.util.exceptions.LinearAlgebraException If the number of columns in this matrix do not equal the number of rows in matrix b.
+     * @return The result of matrix multiplying this matrix with matrix {@code b}.
+     * @throws org.flag4j.util.exceptions.LinearAlgebraException If the number of columns in this matrix do not equal the number
+     * of rows in matrix {@code b}.
      */
-    public T mult(T b);
+    public U mult(T b);
 
 
     /**
@@ -239,10 +205,10 @@ public interface MatrixMixin<T extends U, U extends TensorBase<U, ?, V>, V>
      * be significantly faster than directly computing the transpose followed by the multiplication as
      * {@code this.mult(b.T())}.
      *
-     * @param b The second matrix in the multiplication and the matrix to transpose/
+     * @param b The second matrix in the multiplication and the matrix to transpose.
      * @return The result of multiplying this matrix with the transpose of {@code b}.
      */
-    public T multTranspose(T b);
+    public U multTranspose(T b);
 
 
     /**
@@ -256,17 +222,9 @@ public interface MatrixMixin<T extends U, U extends TensorBase<U, ?, V>, V>
 
 
     /**
-     * The transpose of this matrix.
-     * @return The transpose of this matrix.
-     */
-    @Override
-    public T T();
-
-
-    /**
      * Stacks matrices along columns. <br>
      *
-     * @param b MatrixOld to stack to this matrix.
+     * @param b Matrix to stack to this matrix.
      * @return The result of stacking this matrix on top of the matrix {@code b}.
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of columns.
      * @see #stack(T, int)
@@ -278,7 +236,7 @@ public interface MatrixMixin<T extends U, U extends TensorBase<U, ?, V>, V>
     /**
      * Stacks matrices along rows.
      *
-     * @param b MatrixOld to stack to this matrix.
+     * @param b Matrix to stack to this matrix.
      * @return The result of stacking {@code b} to the right of this matrix.
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of rows.
      * @see #stack(T)
@@ -343,6 +301,13 @@ public interface MatrixMixin<T extends U, U extends TensorBase<U, ?, V>, V>
 
 
     /**
+     * Checks if a marix is Hermitian. That is, if the matrix is square and equal to its conjugate transpose.
+     * @return True if this matrix is Hermitian. Otherwise, returns false.
+     */
+    public boolean isHermitian();
+
+
+    /**
      * Checks if a matrix is anti-symmetric. That is, if the matrix is equal to the negative of its transpose.
      *
      * @return True if this matrix is anti-symmetric. Otherwise, returns false.
@@ -362,7 +327,7 @@ public interface MatrixMixin<T extends U, U extends TensorBase<U, ?, V>, V>
     /**
      * Removes a specified row from this matrix.
      * @param rowIndex Index of the row to remove from this matrix.
-     * @return A copy of this matrix with the specified column removed.
+     * @return A copy of this matrix with the specified row removed.
      */
     public T removeRow(int rowIndex);
 
@@ -410,21 +375,6 @@ public interface MatrixMixin<T extends U, U extends TensorBase<U, ?, V>, V>
 
 
     /**
-     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
-     * left index location of the slice to set within this matrix.
-     *
-     * @param values   New values for the specified slice.
-     * @param rowStart Starting row index for the slice (inclusive).
-     * @param colStart Starting column index for the slice (inclusive).
-     * @return A reference to this matrix.
-     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
-     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
-     *                                   fit completely within this matrix.
-     */
-    public T setSlice(T values, int rowStart, int colStart);
-
-
-    /**
      * Gets a specified slice of this matrix.
      *
      * @param rowStart Starting row index of slice (inclusive).
@@ -435,7 +385,7 @@ public interface MatrixMixin<T extends U, U extends TensorBase<U, ?, V>, V>
      * @throws ArrayIndexOutOfBoundsException If any of the indices are out of bounds of this matrix.
      * @throws IllegalArgumentException If {@code rowEnd} is not greater than {@code rowStart} or if {@code colEnd} is not greater than {@code colStart}.
      */
-    public MatrixOld getSlice(int rowStart, int rowEnd, int colStart, int colEnd);
+    public T getSlice(int rowStart, int rowEnd, int colStart, int colEnd);
 
 
     /**
@@ -447,4 +397,54 @@ public interface MatrixMixin<T extends U, U extends TensorBase<U, ?, V>, V>
      * @return A reference to this matrix.
      */
     public T set(V value, int row, int col);
+
+
+    /**
+     * Extracts the upper-triangular portion of this matrix with a specified diagonal offset. All other entries of the resulting
+     * matrix will be zero.
+     * @param diagOffset Diagonal offset for upper-triangular portion to extract:
+     * <ul>
+     *     <li>If zero, then all entries at and above the principle diagonal of this matrix are extracted.</li>
+     *     <li>If positive, then all entries at and above the equivalent super-diagonal are extracted.</li>
+     *     <li>If negative, then all entries at and above the equivalent sub-diagonal are extracted.</li>
+     * </ul>
+     * @return The upper-triangular portion of this matrix with a specified diagonal offset. All other entries of the returned
+     * matrix will be zero.
+     * @throws IllegalArgumentException If {@code diagOffset} is not in the range (-numRows, numCols).
+     */
+    public T getTriU(int diagOffset);
+
+
+    /**
+     * Extracts the upper-triangular portion of this matrix. All other entries in the resulting matrix will be zero.
+     * @return The upper-triangular portion of this matrix. with all other entries in the resulting matrix will be zero.
+     */
+    public default T getTriU() {
+        return getTriU(0);
+    }
+
+
+    /**
+     * Extracts the lower-triangular portion of this matrix with a specified diagonal offset. All other entries of the resulting
+     * matrix will be zero.
+     * @param diagOffset Diagonal offset for lower-triangular portion to extract:
+     * <ul>
+     *     <li>If zero, then all entries at and above the principle diagonal of this matrix are extracted.</li>
+     *     <li>If positive, then all entries at and above the equivalent super-diagonal are extracted.</li>
+     *     <li>If negative, then all entries at and above the equivalent sub-diagonal are extracted.</li>
+     * </ul>
+     * @return The lower-triangular portion of this matrix with a specified diagonal offset. All other entries of the returned
+     * matrix will be zero.
+     * @throws IllegalArgumentException If {@code diagOffset} is not in the range (-numRows, numCols).
+     */
+    public T getTriL(int diagOffset);
+
+
+    /**
+     * Extracts the lower-triangular portion of this matrix. All other entries in the resulting matrix will be zero.
+     * @return The lower-triangular portion of this matrix. with all other entries in the resulting matrix will be zero.
+     */
+    public default T getTriL() {
+        return getTriU(0);
+    }
 }

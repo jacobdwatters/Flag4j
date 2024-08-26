@@ -42,7 +42,7 @@ public final class Householder {
 
     private Householder() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -56,7 +56,7 @@ public final class Householder {
     public static MatrixOld getReflector(VectorOld normal) {
         VectorOld v;
 
-        double signedNorm = -Math.copySign(VectorNorms.norm(normal), normal.entries[0]);
+        double signedNorm = -Math.copySign(VectorNorms.norm(normal.entries), normal.entries[0]);
         v = normal.div(normal.entries[0] - signedNorm);
         v.entries[0] = 1.0;
 
@@ -85,7 +85,7 @@ public final class Householder {
      * normal to {@code normal}.
      */
     public static VectorOld getVector(VectorOld normal) {
-        double normX = VectorNorms.norm(normal);
+        double normX = VectorNorms.norm(normal.entries);
         double x1 = normal.entries[0];
         normX = (x1 >= 0) ? -normX : normX;
         double v1 = x1 - normX;

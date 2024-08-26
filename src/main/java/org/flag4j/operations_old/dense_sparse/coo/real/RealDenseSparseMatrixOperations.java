@@ -27,7 +27,7 @@ package org.flag4j.operations_old.dense_sparse.coo.real;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.operations_old.common.real.RealOperations;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -39,7 +39,7 @@ public class RealDenseSparseMatrixOperations {
 
     private RealDenseSparseMatrixOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -50,8 +50,8 @@ public class RealDenseSparseMatrixOperations {
      * @return The result of the matrix addition.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static MatrixOld add(MatrixOld src1, CooMatrix src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static MatrixOld add(MatrixOld src1, CooMatrixOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int row, col;
         MatrixOld dest = new MatrixOld(src1);
@@ -73,8 +73,8 @@ public class RealDenseSparseMatrixOperations {
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static MatrixOld sub(MatrixOld src1, CooMatrix src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static MatrixOld sub(MatrixOld src1, CooMatrixOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int row, col;
         MatrixOld dest = new MatrixOld(src1);
@@ -96,8 +96,8 @@ public class RealDenseSparseMatrixOperations {
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static MatrixOld sub(CooMatrix src2, MatrixOld src1) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static MatrixOld sub(CooMatrixOld src2, MatrixOld src1) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int row, col;
         MatrixOld dest = new MatrixOld(src1.shape, RealOperations.scalMult(src1.entries, -1));
@@ -118,8 +118,8 @@ public class RealDenseSparseMatrixOperations {
      * @param src2 Entries of second matrix in the sum.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static void addEq(MatrixOld src1, CooMatrix src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static void addEq(MatrixOld src1, CooMatrixOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int row, col;
 
@@ -137,8 +137,8 @@ public class RealDenseSparseMatrixOperations {
      * @param src2 Entries of second matrix in difference.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static void subEq(MatrixOld src1, CooMatrix src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static void subEq(MatrixOld src1, CooMatrixOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int row, col;
 
@@ -157,8 +157,8 @@ public class RealDenseSparseMatrixOperations {
      * @param src2 Entries of second matrix in element-wise product.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static CooMatrix elemMult(MatrixOld src1, CooMatrix src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooMatrixOld elemMult(MatrixOld src1, CooMatrixOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int row, col;
         double[] product = new double[src2.nonZeroEntries()];
@@ -169,7 +169,7 @@ public class RealDenseSparseMatrixOperations {
             product[i] = src1.entries[row*src1.numCols + col]*src2.entries[i];
         }
 
-        return new CooMatrix(src2.shape, product, src2.rowIndices.clone(), src2.colIndices.clone());
+        return new CooMatrixOld(src2.shape, product, src2.rowIndices.clone(), src2.colIndices.clone());
     }
 
 
@@ -191,8 +191,8 @@ public class RealDenseSparseMatrixOperations {
      * @return The element-wise quotient of {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} and {@code src2} do not have the same shape.
      */
-    public static CooMatrix elemDiv(CooMatrix src1, MatrixOld src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooMatrixOld elemDiv(CooMatrixOld src1, MatrixOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         double[] quotient = new double[src1.entries.length];
 
@@ -205,7 +205,7 @@ public class RealDenseSparseMatrixOperations {
             quotient[i] = src1.entries[i] / src2.entries[row*src2.numCols + col];
         }
 
-        return new CooMatrix(src1.shape, quotient, src1.rowIndices.clone(), src1.colIndices.clone());
+        return new CooMatrixOld(src1.shape, quotient, src1.rowIndices.clone(), src1.colIndices.clone());
     }
 
 
@@ -217,7 +217,7 @@ public class RealDenseSparseMatrixOperations {
      * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
      * of rows in the {@code src} matrix.
      */
-    public static MatrixOld addToEachCol(CooMatrix src, VectorOld col) {
+    public static MatrixOld addToEachCol(CooMatrixOld src, VectorOld col) {
         MatrixOld sum = new MatrixOld(src.numRows, src.numCols);
 
         for(int j=0; j<sum.numCols; j++) {
@@ -240,7 +240,7 @@ public class RealDenseSparseMatrixOperations {
      * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
      * of columns in the {@code src} matrix.
      */
-    public static MatrixOld addToEachRow(CooMatrix src, VectorOld row) {
+    public static MatrixOld addToEachRow(CooMatrixOld src, VectorOld row) {
         MatrixOld sum = new MatrixOld(src.numRows, src.numCols);
 
         for(int i=0; i<sum.numRows; i++) {

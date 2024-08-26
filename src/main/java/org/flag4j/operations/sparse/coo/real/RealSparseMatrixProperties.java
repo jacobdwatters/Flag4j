@@ -24,7 +24,7 @@
 
 package org.flag4j.operations.sparse.coo.real;
 
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.core_temp.arrays.sparse.CooMatrix;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.List;
@@ -40,7 +40,7 @@ public class RealSparseMatrixProperties {
 
     private RealSparseMatrixProperties() {
         // Hide public constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -64,6 +64,32 @@ public class RealSparseMatrixProperties {
         }
 
         return result;
+    }
+
+
+    /**
+     * Checks if a real sparse matrix is close to the identity matrix.
+     * @param src MatrixOld to check if it is the identity matrix.
+     * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
+     */
+    public static boolean isCloseToIdentity(CooMatrix src) {
+        // Ensure the matrix is square and there are the same number of non-zero entries as entries on the diagonal.
+        boolean result = src.isSquare() && src.entries.length==src.numRows;
+
+        // Tolerances corresponds to the allClose(...) methods.
+        double diagTol = 1.001E-5;
+        double nonDiagTol = 1e-08;
+
+        for(int i=0; i<src.entries.length; i++) {
+            if(src.rowIndices[i] == i && src.colIndices[i] == i && Math.abs(src.entries[i]-1) > diagTol ) {
+                return false; // Diagonal value is not close to one.
+            } else if((src.rowIndices[i] != i && src.colIndices[i] != i) && Math.abs(src.entries[i]) > nonDiagTol) {
+                return false; // Non-diagonal value is not close to zero.
+            }
+        }
+
+
+        return true;
     }
 
 

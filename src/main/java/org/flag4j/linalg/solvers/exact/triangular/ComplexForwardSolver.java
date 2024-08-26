@@ -94,8 +94,8 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrixOld, CVectorOld, 
      */
     @Override
     public CVectorOld solve(CMatrixOld L, CVectorOld b) {
-        ParameterChecks.assertSquareMatrix(L.shape);
-        ParameterChecks.assertEquals(L.numRows, b.size);
+        ParameterChecks.ensureSquareMatrix(L.shape);
+        ParameterChecks.ensureEquals(L.numRows, b.size);
         return isUnit ? solveUnitLower(L, b) : solveLower(L, b);
     }
 
@@ -113,8 +113,8 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrixOld, CVectorOld, 
      */
     @Override
     public CMatrixOld solve(CMatrixOld L, CMatrixOld B) {
-        ParameterChecks.assertSquareMatrix(L.shape);
-        ParameterChecks.assertEquals(L.numRows, B.numRows);
+        ParameterChecks.ensureSquareMatrix(L.shape);
+        ParameterChecks.ensureEquals(L.numRows, B.numRows);
         return isUnit ? solveUnitLower(L, B) : solveLower(L, B);
     }
 
@@ -130,7 +130,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrixOld, CVectorOld, 
      * the principle diagonal).
      */
     public CMatrixOld solveIdentity(CMatrixOld L) {
-        ParameterChecks.assertSquareMatrix(L.shape);
+        ParameterChecks.ensureSquareMatrix(L.shape);
         return isUnit ? solveUnitLowerIdentity(L) : solveLowerIdentity(L);
     }
 

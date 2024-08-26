@@ -87,13 +87,13 @@ public class ComplexDenseTensorDot {
      */
     public static CTensorOld tensorDot(CTensorOld src1, CTensorOld src2, int[] src1Axes, int[] src2Axes) {
         // Each array must specify the same number of axes.
-        ParameterChecks.assertEquals(src1Axes.length, src2Axes.length);
+        ParameterChecks.ensureEquals(src1Axes.length, src2Axes.length);
 
         // Axis values must be less than the rank of the tensor and non-negative
-        ParameterChecks.assertLessEq(src1.getRank()-1, src1Axes);
-        ParameterChecks.assertGreaterEq(0, src1Axes);
-        ParameterChecks.assertLessEq(src2.getRank()-1, src2Axes);
-        ParameterChecks.assertGreaterEq(0, src2Axes);
+        ParameterChecks.ensureLessEq(src1.getRank()-1, src1Axes);
+        ParameterChecks.ensureGreaterEq(0, src1Axes);
+        ParameterChecks.ensureLessEq(src2.getRank()-1, src2Axes);
+        ParameterChecks.ensureGreaterEq(0, src2Axes);
 
         int[] notin;
         int n1;

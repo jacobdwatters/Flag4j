@@ -2,8 +2,8 @@ package org.flag4j.sparse_matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -19,38 +19,38 @@ class CooMatrixStackTests {
         int[] aRowIndices;
         int[] aColIndices;
         double[] aEntries;
-        CooMatrix a;
+        CooMatrixOld a;
 
         Shape bShape;
         int[] bRowIndices;
         int[] bColIndices;
         double[] bEntries;
-        CooMatrix b;
+        CooMatrixOld b;
 
         Shape expShape;
         int[] expRowIndices;
         int[] expColIndices;
         double[] expEntries;
-        CooMatrix exp;
+        CooMatrixOld exp;
 
         // ---------------------  Sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new double[]{0.6994};
         aRowIndices = new int[]{0};
         aColIndices = new int[]{2};
-        a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(4, 3);
         bEntries = new double[]{0.53334, 0.36866};
         bRowIndices = new int[]{1, 3};
         bColIndices = new int[]{1, 1};
-        b = new CooMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        b = new CooMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expShape = new Shape(6, 3);
         expEntries = new double[]{0.6994, 0.53334, 0.36866};
         expRowIndices = new int[]{0, 3, 5};
         expColIndices = new int[]{2, 1, 1};
-        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooMatrixOld(expShape, expEntries, expRowIndices, expColIndices);
 
         assertEquals(exp, a.stack(b));
 
@@ -59,19 +59,19 @@ class CooMatrixStackTests {
         aEntries = new double[]{};
         aRowIndices = new int[]{};
         aColIndices = new int[]{};
-        a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(5, 2);
         bEntries = new double[]{0.54824, 0.3091};
         bRowIndices = new int[]{2, 4};
         bColIndices = new int[]{0, 1};
-        b = new CooMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        b = new CooMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expShape = new Shape(6, 2);
         expEntries = new double[]{0.54824, 0.3091};
         expRowIndices = new int[]{3, 5};
         expColIndices = new int[]{0, 1};
-        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooMatrixOld(expShape, expEntries, expRowIndices, expColIndices);
 
         assertEquals(exp, a.stack(b));
 
@@ -80,16 +80,16 @@ class CooMatrixStackTests {
         aEntries = new double[]{0.95223, 0.17095, 0.32156, 0.9396, 0.3762, 0.10813, 0.08055, 0.31545, 0.15498, 0.91676, 0.83886, 0.94144, 0.30784, 0.49851};
         aRowIndices = new int[]{0, 0, 1, 4, 4, 4, 5, 5, 6, 6, 6, 9, 10, 11};
         aColIndices = new int[]{0, 2, 0, 2, 3, 4, 1, 3, 0, 2, 4, 3, 0, 0};
-        a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(14, 6);
         bEntries = new double[]{0.05335, 0.11684, 0.88899, 0.80113, 0.27065, 0.60548, 0.61726, 0.29856, 0.96785, 0.66154, 0.07842, 0.44824, 0.06887, 0.53813, 0.72747, 0.93312, 0.04432};
         bRowIndices = new int[]{0, 0, 0, 0, 2, 2, 2, 4, 4, 6, 7, 7, 8, 9, 9, 10, 13};
         bColIndices = new int[]{1, 2, 4, 5, 1, 3, 5, 4, 5, 1, 1, 5, 2, 4, 5, 5, 2};
-        b = new CooMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        b = new CooMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
-        CooMatrix finala = a;
-        CooMatrix finalb = b;
+        CooMatrixOld finala = a;
+        CooMatrixOld finalb = b;
         assertThrows(Exception.class, ()->finala.stack(finalb));
     }
 
@@ -100,38 +100,38 @@ class CooMatrixStackTests {
         int[] aRowIndices;
         int[] aColIndices;
         double[] aEntries;
-        CooMatrix a;
+        CooMatrixOld a;
 
         Shape bShape;
         int[] bRowIndices;
         int[] bColIndices;
         CNumber[] bEntries;
-        CooCMatrix b;
+        CooCMatrixOld b;
 
         Shape expShape;
         int[] expRowIndices;
         int[] expColIndices;
         CNumber[] expEntries;
-        CooCMatrix exp;
+        CooCMatrixOld exp;
 
         // ---------------------  Sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new double[]{0.71486};
         aRowIndices = new int[]{1};
         aColIndices = new int[]{0};
-        a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(4, 3);
         bEntries = new CNumber[]{new CNumber("0.41503+0.75531i"), new CNumber("0.71333+0.30431i")};
         bRowIndices = new int[]{1, 2};
         bColIndices = new int[]{0, 2};
-        b = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        b = new CooCMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expShape = new Shape(6, 3);
         expEntries = new CNumber[]{new CNumber("0.71486"), new CNumber("0.41503+0.75531i"), new CNumber("0.71333+0.30431i")};
         expRowIndices = new int[]{1, 3, 4};
         expColIndices = new int[]{0, 0, 2};
-        exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooCMatrixOld(expShape, expEntries, expRowIndices, expColIndices);
 
         assertEquals(exp, a.stack(b));
 
@@ -140,19 +140,19 @@ class CooMatrixStackTests {
         aEntries = new double[]{};
         aRowIndices = new int[]{};
         aColIndices = new int[]{};
-        a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(5, 2);
         bEntries = new CNumber[]{new CNumber("0.35649+0.27366i"), new CNumber("0.71799+0.64388i")};
         bRowIndices = new int[]{0, 2};
         bColIndices = new int[]{1, 0};
-        b = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        b = new CooCMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expShape = new Shape(6, 2);
         expEntries = new CNumber[]{new CNumber("0.35649+0.27366i"), new CNumber("0.71799+0.64388i")};
         expRowIndices = new int[]{1, 3};
         expColIndices = new int[]{1, 0};
-        exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooCMatrixOld(expShape, expEntries, expRowIndices, expColIndices);
 
         assertEquals(exp, a.stack(b));
 
@@ -161,16 +161,16 @@ class CooMatrixStackTests {
         aEntries = new double[]{0.72813, 0.9915, 0.03256, 0.96153, 0.82032, 0.27925, 0.59001, 0.5632, 0.83047, 0.80622, 0.74926, 0.53789, 0.89853, 0.87996};
         aRowIndices = new int[]{0, 0, 1, 2, 2, 2, 3, 3, 4, 5, 6, 8, 12, 13};
         aColIndices = new int[]{0, 4, 0, 0, 1, 3, 0, 4, 4, 4, 0, 0, 4, 1};
-        a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(14, 6);
         bEntries = new CNumber[]{new CNumber("0.21418+0.77678i"), new CNumber("0.33767+0.04435i"), new CNumber("0.19049+0.17144i"), new CNumber("0.57794+0.43139i"), new CNumber("0.90346+0.20636i"), new CNumber("0.50151+0.63914i"), new CNumber("0.15893+0.10915i"), new CNumber("0.71894+0.00546i"), new CNumber("0.75743+0.09909i"), new CNumber("0.59119+0.38895i"), new CNumber("0.06088+0.00477i"), new CNumber("0.63655+0.63256i"), new CNumber("0.09156+0.54102i"), new CNumber("0.73534+0.75135i"), new CNumber("0.30838+0.43967i"), new CNumber("0.03917+0.93622i"), new CNumber("0.07129+0.87944i")};
         bRowIndices = new int[]{2, 2, 3, 5, 6, 6, 6, 9, 9, 10, 10, 11, 11, 11, 12, 12, 12};
         bColIndices = new int[]{4, 5, 5, 3, 2, 3, 5, 0, 1, 2, 4, 2, 3, 5, 2, 3, 4};
-        b = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        b = new CooCMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
-        CooMatrix finala = a;
-        CooCMatrix finalb = b;
+        CooMatrixOld finala = a;
+        CooCMatrixOld finalb = b;
         assertThrows(Exception.class, ()->finala.stack(finalb));
     }
 
@@ -181,7 +181,7 @@ class CooMatrixStackTests {
         int[] aRowIndices;
         int[] aColIndices;
         double[] aEntries;
-        CooMatrix a;
+        CooMatrixOld a;
 
         double[][] bEntries;
         MatrixOld b;
@@ -194,7 +194,7 @@ class CooMatrixStackTests {
         aEntries = new double[]{0.42414};
         aRowIndices = new int[]{0};
         aColIndices = new int[]{0};
-        a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[][]{
                 {0.42346, 0.45166, 0.29951},
@@ -219,7 +219,7 @@ class CooMatrixStackTests {
         aEntries = new double[]{};
         aRowIndices = new int[]{};
         aColIndices = new int[]{};
-        a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[][]{
                 {0.03722, 0.0959},
@@ -245,7 +245,7 @@ class CooMatrixStackTests {
         aEntries = new double[]{0.29338, 0.93129, 0.40606, 0.13409, 0.83574, 0.6591, 0.09212, 0.87431, 0.70901, 0.42248, 0.77734, 0.32068, 0.8386, 0.87708};
         aRowIndices = new int[]{0, 0, 1, 1, 2, 4, 4, 5, 5, 5, 9, 10, 11, 13};
         aColIndices = new int[]{0, 1, 0, 1, 3, 2, 4, 0, 1, 3, 1, 1, 3, 0};
-        a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[][]{
                 {0.75836, 0.00024, 0.25097, 0.06717, 0.87113, 0.20188},
@@ -264,7 +264,7 @@ class CooMatrixStackTests {
                 {0.97607, 0.5196, 0.44965, 0.89517, 0.93744, 0.03956}};
         b = new MatrixOld(bEntries);
 
-        CooMatrix finala = a;
+        CooMatrixOld finala = a;
         MatrixOld finalb = b;
         assertThrows(Exception.class, ()->finala.stack(finalb));
     }
@@ -276,7 +276,7 @@ class CooMatrixStackTests {
         int[] aRowIndices;
         int[] aColIndices;
         double[] aEntries;
-        CooMatrix a;
+        CooMatrixOld a;
 
         CNumber[][] bEntries;
         CMatrixOld b;
@@ -289,7 +289,7 @@ class CooMatrixStackTests {
         aEntries = new double[]{0.08155};
         aRowIndices = new int[]{0};
         aColIndices = new int[]{0};
-        a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.84939+0.31005i"), new CNumber("0.62801+0.8259i"), new CNumber("0.05949+0.72899i")},
@@ -314,7 +314,7 @@ class CooMatrixStackTests {
         aEntries = new double[]{};
         aRowIndices = new int[]{};
         aColIndices = new int[]{};
-        a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.73431+0.59055i"), new CNumber("0.7604+0.03804i")},
@@ -340,7 +340,7 @@ class CooMatrixStackTests {
         aEntries = new double[]{0.22748, 0.15823, 0.01155, 0.72994, 0.42505, 0.6026, 0.46703, 0.823, 0.1616, 0.8939, 0.16783, 0.06605, 0.21062, 0.72352};
         aRowIndices = new int[]{1, 2, 4, 5, 5, 6, 7, 8, 9, 9, 11, 11, 12, 13};
         aColIndices = new int[]{0, 4, 0, 2, 4, 4, 0, 1, 2, 3, 0, 4, 2, 2};
-        a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.1484+0.81772i"), new CNumber("0.42885+0.60199i"), new CNumber("0.80477+0.62236i"), new CNumber("0.79025+0.12373i"), new CNumber("0.92617+0.74118i"), new CNumber("0.30808+0.61041i")},
@@ -359,7 +359,7 @@ class CooMatrixStackTests {
                 {new CNumber("0.89991+0.27551i"), new CNumber("0.26809+0.75698i"), new CNumber("0.34166+0.10185i"), new CNumber("0.06181+0.35822i"), new CNumber("0.38711+0.73425i"), new CNumber("0.74133+0.29344i")}};
         b = new CMatrixOld(bEntries);
 
-        CooMatrix finala = a;
+        CooMatrixOld finala = a;
         CMatrixOld finalb = b;
         assertThrows(Exception.class, ()->finala.stack(finalb));
     }

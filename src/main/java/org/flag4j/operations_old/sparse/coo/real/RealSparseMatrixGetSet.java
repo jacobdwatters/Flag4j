@@ -25,8 +25,8 @@
 package org.flag4j.operations_old.sparse.coo.real;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooMatrix;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.core.Shape;
 import org.flag4j.operations_old.sparse.coo.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
@@ -47,7 +47,7 @@ public class RealSparseMatrixGetSet {
 
     private RealSparseMatrixGetSet() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -58,7 +58,7 @@ public class RealSparseMatrixGetSet {
      * @param col Column index of the value to get from the sparse matrix.
      * @return The value in the sparse matrix at the specified indices.
      */
-    public static double matrixGet(CooMatrix src, int row, int col) {
+    public static double matrixGet(CooMatrixOld src, int row, int col) {
         int idx = SparseElementSearch.matrixBinarySearch(src.rowIndices, src.colIndices, row, col);
         return idx<0 ? 0 : src.entries[idx];
     }
@@ -72,7 +72,7 @@ public class RealSparseMatrixGetSet {
      * @param value Value to set.
      * @return The
      */
-    public static CooMatrix matrixSet(CooMatrix src, int row, int col, double value) {
+    public static CooMatrixOld matrixSet(CooMatrixOld src, int row, int col, double value) {
         // Find position of row index within the row indices if it exits.
         int idx = SparseElementSearch.matrixBinarySearch(src.rowIndices, src.colIndices, row, col);
         double[] destEntries;
@@ -103,7 +103,7 @@ public class RealSparseMatrixGetSet {
             destColIndices = src.colIndices.clone();
         }
 
-        return new CooMatrix(src.shape, destEntries, destRowIndices, destColIndices);
+        return new CooMatrixOld(src.shape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -114,9 +114,9 @@ public class RealSparseMatrixGetSet {
      * @param row Dense array containing the entries of the row to set.
      * @return A copy of the {@code src} matrix with the specified row set to the dense {@code row} array.
      */
-    public static CooMatrix setRow(CooMatrix src, int rowIdx, double[] row) {
-        ParameterChecks.assertIndexInBounds(src.numRows, rowIdx);
-        ParameterChecks.assertEquals(src.numCols, row.length);
+    public static CooMatrixOld setRow(CooMatrixOld src, int rowIdx, double[] row) {
+        ParameterChecks.ensureIndexInBounds(src.numRows, rowIdx);
+        ParameterChecks.ensureEquals(src.numCols, row.length);
 
         int[] startEnd = SparseElementSearch.matrixFindRowStartEnd(src.rowIndices, rowIdx);
         int start = startEnd[0];
@@ -181,7 +181,7 @@ public class RealSparseMatrixGetSet {
             );
         }
 
-        return new CooMatrix(src.shape, destEntries, destRowIndices, destColIndices);
+        return new CooMatrixOld(src.shape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -195,9 +195,9 @@ public class RealSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code col} array does not have the same length as the number of
      * rows in {@code src} matrix.
      */
-    public static CooMatrix setCol(CooMatrix src, int colIdx, double[] col) {
-        ParameterChecks.assertIndexInBounds(src.numCols, colIdx);
-        ParameterChecks.assertEquals(src.numRows, col.length);
+    public static CooMatrixOld setCol(CooMatrixOld src, int colIdx, double[] col) {
+        ParameterChecks.ensureIndexInBounds(src.numCols, colIdx);
+        ParameterChecks.ensureEquals(src.numRows, col.length);
 
         Integer[] colIndices = new Integer[col.length];
         Arrays.fill(colIndices, colIdx);
@@ -222,9 +222,9 @@ public class RealSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code src} matrix does not have the same number of rows as total entries
      * in the {@code col} vector.
      */
-    public static CooMatrix setCol(CooMatrix src, int colIdx, CooVector col) {
-        ParameterChecks.assertIndexInBounds(src.numCols, colIdx);
-        ParameterChecks.assertEquals(src.numRows, col.size);
+    public static CooMatrixOld setCol(CooMatrixOld src, int colIdx, CooVectorOld col) {
+        ParameterChecks.ensureIndexInBounds(src.numCols, colIdx);
+        ParameterChecks.ensureEquals(src.numRows, col.size);
 
         // Initialize destination arrays_old with the new column and the appropriate indices.
         List<Double> destEntries = ArrayUtils.toArrayList(col.entries);
@@ -245,8 +245,8 @@ public class RealSparseMatrixGetSet {
      * @return A sparse matrix made from the resulting {@code destEntries, destRowIndices} and {@code destColIndices}
      * lists.
      */
-    private static CooMatrix addNotInCol(List<Double> destEntries, List<Integer> destRowIndices,
-                                         List<Integer> destColIndices, CooMatrix src, int colIdx) {
+    private static CooMatrixOld addNotInCol(List<Double> destEntries, List<Integer> destRowIndices,
+                                            List<Integer> destColIndices, CooMatrixOld src, int colIdx) {
         for(int i=0; i<src.entries.length; i++) {
             // Add all entries which are not in the specified column.
             if(src.colIndices[i]!=colIdx) {
@@ -256,7 +256,7 @@ public class RealSparseMatrixGetSet {
             }
         }
 
-        CooMatrix dest = new CooMatrix(
+        CooMatrixOld dest = new CooMatrixOld(
                 src.shape,
                 destEntries,
                 destRowIndices,
@@ -280,13 +280,13 @@ public class RealSparseMatrixGetSet {
      * matrix given the row and
      * column index.
      */
-    public static CooMatrix setSlice(CooMatrix src, CooMatrix values, int row, int col) {
+    public static CooMatrixOld setSlice(CooMatrixOld src, CooMatrixOld values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.assertIndexInBounds(src.numRows, row);
-        ParameterChecks.assertIndexInBounds(src.numCols, col);
+        ParameterChecks.ensureIndexInBounds(src.numRows, row);
+        ParameterChecks.ensureIndexInBounds(src.numCols, col);
 
-        ParameterChecks.assertLessEq(src.numRows, values.numRows + row);
-        ParameterChecks.assertLessEq(src.numCols, values.numCols + col);
+        ParameterChecks.ensureLessEq(src.numRows, values.numRows + row);
+        ParameterChecks.ensureLessEq(src.numCols, values.numCols + col);
 
         // Initialize lists to new values for the specified slice.
         List<Double> entries = ArrayUtils.toArrayList(values.entries);
@@ -299,7 +299,7 @@ public class RealSparseMatrixGetSet {
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
         // Create matrix and ensure entries are properly sorted.
-        CooMatrix mat = new CooMatrix(src.shape, entries, rowIndices, colIndices);
+        CooMatrixOld mat = new CooMatrixOld(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
         return mat;
@@ -316,10 +316,10 @@ public class RealSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
      * given the row and column index.
      */
-    public static CooMatrix setSlice(CooMatrix src, double[][] values, int row, int col) {
+    public static CooMatrixOld setSlice(CooMatrixOld src, double[][] values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.assertLessEq(src.numRows, values.length + row);
-        ParameterChecks.assertLessEq(src.numCols, values[0].length + col);
+        ParameterChecks.ensureLessEq(src.numRows, values.length + row);
+        ParameterChecks.ensureLessEq(src.numCols, values[0].length + col);
 
         // Flatten values.
         double[] flatValues = ArrayUtils.flatten(values);
@@ -340,10 +340,10 @@ public class RealSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
      * given the row and column index.
      */
-    public static CooMatrix setSlice(CooMatrix src, MatrixOld values, int row, int col) {
+    public static CooMatrixOld setSlice(CooMatrixOld src, MatrixOld values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.assertLessEq(src.numRows, values.numRows + row);
-        ParameterChecks.assertLessEq(src.numCols, values.numCols + col);
+        ParameterChecks.ensureLessEq(src.numRows, values.numRows + row);
+        ParameterChecks.ensureLessEq(src.numCols, values.numCols + col);
 
         int[] sliceRows = ArrayUtils.intRange(row, values.numRows + row, values.numCols);
         int[] sliceCols = ArrayUtils.repeat(values.numRows, ArrayUtils.intRange(col, values.numCols + col));
@@ -362,10 +362,10 @@ public class RealSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
      * given the row and column index.
      */
-    public static CooMatrix setSlice(CooMatrix src, int[][] values, int row, int col) {
+    public static CooMatrixOld setSlice(CooMatrixOld src, int[][] values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.assertLessEq(src.numRows, values.length + row);
-        ParameterChecks.assertLessEq(src.numCols, values[0].length + col);
+        ParameterChecks.ensureLessEq(src.numRows, values.length + row);
+        ParameterChecks.ensureLessEq(src.numCols, values[0].length + col);
 
         // Flatten values.
         double[] flatValues = new double[values.length*values[0].length];
@@ -392,10 +392,10 @@ public class RealSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
      * given the row and column index.
      */
-    public static CooMatrix setSlice(CooMatrix src, Double[][] values, int row, int col) {
+    public static CooMatrixOld setSlice(CooMatrixOld src, Double[][] values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.assertLessEq(src.numRows, values.length + row);
-        ParameterChecks.assertLessEq(src.numCols, values[0].length + col);
+        ParameterChecks.ensureLessEq(src.numRows, values.length + row);
+        ParameterChecks.ensureLessEq(src.numCols, values[0].length + col);
 
         // Flatten values.
         double[] flatValues = ArrayUtils.unboxFlatten(values);
@@ -417,10 +417,10 @@ public class RealSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
      * given the row and column index.
      */
-    public static CooMatrix setSlice(CooMatrix src, Integer[][] values, int row, int col) {
+    public static CooMatrixOld setSlice(CooMatrixOld src, Integer[][] values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.assertLessEq(src.numRows, values.length + row);
-        ParameterChecks.assertLessEq(src.numCols, values[0].length + col);
+        ParameterChecks.ensureLessEq(src.numRows, values.length + row);
+        ParameterChecks.ensureLessEq(src.numCols, values[0].length + col);
 
         // Flatten values.
         double[] flatValues = new double[values.length*values[0].length];
@@ -450,8 +450,8 @@ public class RealSparseMatrixGetSet {
      * @param col Starting column index of slice.
      * @return A copy of the {@code src} matrix with the specified slice set to the specified values.
      */
-    private static CooMatrix setSlice(CooMatrix src, double[] values, int numRows, int numCols,
-                                      int[] sliceRows, int[] sliceCols, int row, int col) {
+    private static CooMatrixOld setSlice(CooMatrixOld src, double[] values, int numRows, int numCols,
+                                         int[] sliceRows, int[] sliceCols, int row, int col) {
         // Copy vales and row/column indices (with appropriate shifting) to destination lists.
         List<Double> entries = ArrayUtils.toArrayList(values);
         List<Integer> rowIndices = ArrayUtils.toArrayList(sliceRows);
@@ -463,7 +463,7 @@ public class RealSparseMatrixGetSet {
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
         // Create matrix and ensure entries are properly sorted.
-        CooMatrix mat = new CooMatrix(src.shape, entries, rowIndices, colIndices);
+        CooMatrixOld mat = new CooMatrixOld(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
         return mat;
@@ -476,8 +476,8 @@ public class RealSparseMatrixGetSet {
      * @param rowIdx Index of the row to extract from the {@code src} matrix.
      * @return Returns the specified row from this sparse matrix.
      */
-    public static CooVector getRow(CooMatrix src, int rowIdx) {
-        ParameterChecks.assertIndexInBounds(src.numRows, rowIdx);
+    public static CooVectorOld getRow(CooMatrixOld src, int rowIdx) {
+        ParameterChecks.ensureIndexInBounds(src.numRows, rowIdx);
 
         List<Double> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
@@ -489,7 +489,7 @@ public class RealSparseMatrixGetSet {
             }
         }
 
-        return new CooVector(src.numCols, entries, indices);
+        return new CooVectorOld(src.numCols, entries, indices);
     }
 
 
@@ -501,10 +501,10 @@ public class RealSparseMatrixGetSet {
      * @param end Ending column index of the column to be extracted (exclusive)
      * @return Returns the specified column range from this sparse matrix.
      */
-    public static CooVector getRow(CooMatrix src, int rowIdx, int start, int end) {
-        ParameterChecks.assertIndexInBounds(src.numRows, rowIdx);
-        ParameterChecks.assertIndexInBounds(src.numCols, start, end-1);
-        ParameterChecks.assertLessEq(end-1, start);
+    public static CooVectorOld getRow(CooMatrixOld src, int rowIdx, int start, int end) {
+        ParameterChecks.ensureIndexInBounds(src.numRows, rowIdx);
+        ParameterChecks.ensureIndexInBounds(src.numCols, start, end-1);
+        ParameterChecks.ensureLessEq(end-1, start);
 
         List<Double> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
@@ -516,7 +516,7 @@ public class RealSparseMatrixGetSet {
             }
         }
 
-        return new CooVector(end-start, entries, indices);
+        return new CooVectorOld(end-start, entries, indices);
     }
 
 
@@ -526,8 +526,8 @@ public class RealSparseMatrixGetSet {
      * @param colIdx Index of the column to extract from the {@code src} matrix.
      * @return Returns the specified column from this sparse matrix.
      */
-    public static CooVector getCol(CooMatrix src, int colIdx) {
-        ParameterChecks.assertIndexInBounds(src.numCols, colIdx);
+    public static CooVectorOld getCol(CooMatrixOld src, int colIdx) {
+        ParameterChecks.ensureIndexInBounds(src.numCols, colIdx);
 
         List<Double> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
@@ -539,7 +539,7 @@ public class RealSparseMatrixGetSet {
             }
         }
 
-        return new CooVector(src.numRows, entries, indices);
+        return new CooVectorOld(src.numRows, entries, indices);
     }
 
 
@@ -551,10 +551,10 @@ public class RealSparseMatrixGetSet {
      * @param end Ending row index of the column to be extracted (exclusive)
      * @return Returns the specified column range from this sparse matrix.
      */
-    public static CooVector getCol(CooMatrix src, int colIdx, int start, int end) {
-        ParameterChecks.assertIndexInBounds(src.numCols, colIdx);
-        ParameterChecks.assertIndexInBounds(src.numRows, start, end);
-        ParameterChecks.assertLessEq(end, start);
+    public static CooVectorOld getCol(CooMatrixOld src, int colIdx, int start, int end) {
+        ParameterChecks.ensureIndexInBounds(src.numCols, colIdx);
+        ParameterChecks.ensureIndexInBounds(src.numRows, start, end);
+        ParameterChecks.ensureLessEq(end, start);
 
         List<Double> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
@@ -566,7 +566,7 @@ public class RealSparseMatrixGetSet {
             }
         }
 
-        return new CooVector(end-start, entries, indices);
+        return new CooVectorOld(end-start, entries, indices);
     }
 
 
@@ -579,9 +579,9 @@ public class RealSparseMatrixGetSet {
      * @param colEnd Ending column index of the slice (exclusive).
      * @return The specified slice of the sparse matrix.
      */
-    public static CooMatrix getSlice(CooMatrix src, int rowStart, int rowEnd, int colStart, int colEnd) {
-        ParameterChecks.assertIndexInBounds(src.numRows, rowStart, rowEnd-1);
-        ParameterChecks.assertIndexInBounds(src.numCols, colStart, colEnd-1);
+    public static CooMatrixOld getSlice(CooMatrixOld src, int rowStart, int rowEnd, int colStart, int colEnd) {
+        ParameterChecks.ensureIndexInBounds(src.numRows, rowStart, rowEnd-1);
+        ParameterChecks.ensureIndexInBounds(src.numCols, colStart, colEnd-1);
 
         Shape shape = new Shape(rowEnd-rowStart, colEnd-colStart);
         List<Double> entries = new ArrayList<>();
@@ -604,7 +604,7 @@ public class RealSparseMatrixGetSet {
             }
         }
 
-        return new CooMatrix(shape, entries, rowIndices, colIndices);
+        return new CooMatrixOld(shape, entries, rowIndices, colIndices);
     }
 
 
@@ -632,7 +632,7 @@ public class RealSparseMatrixGetSet {
      * @param rowRange List of row indices to NOT copy from.
      * @param colRange List of column indices to NOT copy from.
      */
-    private static void copyValuesNotInSlice(CooMatrix src, List<Double> entries, List<Integer> rowIndices,
+    private static void copyValuesNotInSlice(CooMatrixOld src, List<Double> entries, List<Integer> rowIndices,
                                              List<Integer> colIndices, int[] rowRange, int[] colRange) {
         // Copy values not in slice.
         for(int i=0; i<src.entries.length; i++) {

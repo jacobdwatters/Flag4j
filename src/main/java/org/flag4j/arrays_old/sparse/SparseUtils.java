@@ -34,12 +34,12 @@ final class SparseUtils {
 
     private SparseUtils() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
     /**
-     * <p>Checks if two {@link CsrMatrix CSR Matrices} are equal considering the fact that one may explicitly store zeros at some
+     * <p>Checks if two {@link CsrMatrixOld CSR Matrices} are equal considering the fact that one may explicitly store zeros at some
      * position that the other does not store.</p>
      *
      * <p>
@@ -53,7 +53,7 @@ final class SparseUtils {
      * @param src2 Second CSR matrix in the equality comparison.
      * @return True if all non-zero values stored in the two matrices are equal and occur at the same indices.
      */
-    static boolean CSREquals(CsrMatrix src1, CsrMatrix src2) {
+    static boolean CSREquals(CsrMatrixOld src1, CsrMatrixOld src2) {
         if(!src1.shape.equals(src2.shape)) return false;
 
         // Compare row by row
@@ -105,7 +105,7 @@ final class SparseUtils {
 
 
     /**
-     * <p>Checks if two {@link CsrCMatrix Complex CSR Matrices} are equal considering the fact that one may explicitly store zeros at
+     * <p>Checks if two {@link CsrCMatrixOld Complex CSR Matrices} are equal considering the fact that one may explicitly store zeros at
      * some
      * position that the other does not store.</p>
      *
@@ -120,7 +120,7 @@ final class SparseUtils {
      * @param src2 Second CSR matrix in the equality comparison.
      * @return True if all non-zero values stored in the two matrices are equal and occur at the same indices.
      */
-    static boolean CSREquals(CsrCMatrix src1, CsrCMatrix src2) {
+    static boolean CSREquals(CsrCMatrixOld src1, CsrCMatrixOld src2) {
         if(!src1.shape.equals(src2.shape)) return false;
 
         final CNumber ZERO = CNumber.ZERO;

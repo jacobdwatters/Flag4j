@@ -42,6 +42,7 @@ import java.util.Map;
  * Singleton class which stores a map of all viable real dense matrix multiply algorithms and uses that map to dispatch
  * a real dense matrix multiply problem to the appropriate algorithm.
  */
+@Deprecated
 public final class RealDenseMatrixMultiplyDispatcher {
 
     /**
@@ -115,7 +116,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * @return The result of the matrix multiplication.
      */
     public static double[] dispatch(MatrixOld A, MatrixOld B) {
-        ParameterChecks.assertMatMultShapes(A.shape, B.shape); // Ensure matrix shapes are conducive to matrix multiplication.
+        ParameterChecks.ensureMatMultShapes(A.shape, B.shape); // Ensure matrix shapes are conducive to matrix multiplication.
 
         RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();
         AlgorithmNames name = selectAlgorithm(A.shape, B.shape);
@@ -132,7 +133,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * @return The result of the matrix multiplication.
      */
     public static double[] dispatch(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.assertMatMultShapes(shape1, shape2); // Ensure matrix shapes are conducive to matrix multiplication.
+        ParameterChecks.ensureMatMultShapes(shape1, shape2); // Ensure matrix shapes are conducive to matrix multiplication.
 
         RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();
         AlgorithmNames name = selectAlgorithm(shape1, shape2);
@@ -148,7 +149,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * @return The matrix multiply-transpose result of {@code A} and {@code B}.
      */
     public static double[] dispatchTranspose(MatrixOld A, MatrixOld B) {
-        ParameterChecks.assertArrayLengthsEq(A.numCols, B.numCols);
+        ParameterChecks.ensureArrayLengthsEq(A.numCols, B.numCols);
 
         RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();
         AlgorithmNames name = selectAlgorithmTranspose(A.shape);

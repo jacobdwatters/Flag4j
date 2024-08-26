@@ -92,33 +92,33 @@ class MatrixAggregationTests {
 
 
     @Test
-    void argMinTestCase() {
+    void argminTestCase() {
         // ----------- Sub-case 1 -----------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new MatrixOld(aEntries);
         expIndices = new int[]{1, 1};
-        Assertions.assertArrayEquals(expIndices, A.argMin());
+        Assertions.assertArrayEquals(expIndices, A.argmin());
 
         // ----------- Sub-case 2 -----------
         aEntries = new double[][]{{}};
         A = new MatrixOld(aEntries);
         expIndices = new int[]{};
-        Assertions.assertArrayEquals(expIndices, A.argMin());
+        Assertions.assertArrayEquals(expIndices, A.argmin());
     }
 
 
     @Test
-    void argMaxTestCase() {
+    void argmaxTestCase() {
         // ----------- Sub-case 1 -----------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new MatrixOld(aEntries);
         expIndices = new int[]{0, 2};
-        Assertions.assertArrayEquals(expIndices, A.argMax());
+        Assertions.assertArrayEquals(expIndices, A.argmax());
 
         // ----------- Sub-case 2 -----------
         aEntries = new double[][]{{}};
         A = new MatrixOld(aEntries);
         expIndices = new int[]{};
-        Assertions.assertArrayEquals(expIndices, A.argMax());
+        Assertions.assertArrayEquals(expIndices, A.argmax());
     }
 }

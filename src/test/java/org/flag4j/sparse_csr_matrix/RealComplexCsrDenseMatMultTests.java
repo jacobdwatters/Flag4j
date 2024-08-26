@@ -1,7 +1,7 @@
 package org.flag4j.sparse_csr_matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.sparse.CsrMatrix;
+import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.operations_old.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RealComplexCsrDenseMatMultTests {
 
-    CsrMatrix A;
+    CsrMatrixOld A;
     Shape aShape;
     double[] aEntries;
     int[] aRowPointers;
@@ -32,7 +32,7 @@ class RealComplexCsrDenseMatMultTests {
         aEntries = new double[]{0.40775, 0.00066, 0.90251, 0.83958, 0.50831, 0.33647, 0.04011, 0.62236};
         aRowPointers = new int[]{0, 3, 5, 5, 7, 8};
         aColIndices = new int[]{1, 3, 4, 0, 4, 1, 4, 3};
-        A = new CsrMatrix(aShape, aEntries, aRowPointers, aColIndices);
+        A = new CsrMatrixOld(aShape, aEntries, aRowPointers, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.48204+0.59198i"), new CNumber("0.66808+0.35812i"), new CNumber("0.28052+0.3799i"), new CNumber("0.59171+0.66545i"), new CNumber("0.57884+0.73151i")},
@@ -57,7 +57,7 @@ class RealComplexCsrDenseMatMultTests {
         aEntries = new double[]{0.70914, 0.90578, 0.75517, 0.20707, 0.85522, 0.70478, 0.77122, 0.4555, 0.84988, 0.98193, 0.96398, 0.28262, 0.51808, 0.07491, 0.34441, 0.65752, 0.12087, 0.75863, 0.9398, 0.32988, 0.03278, 0.99643};
         aRowPointers = new int[]{0, 1, 3, 3, 3, 3, 6, 9, 12, 14, 15, 17, 18, 19, 20, 22};
         aColIndices = new int[]{13, 4, 10, 4, 6, 7, 7, 9, 13, 0, 1, 8, 3, 14, 7, 8, 10, 13, 7, 8, 1, 13};
-        A = new CsrMatrix(aShape, aEntries, aRowPointers, aColIndices);
+        A = new CsrMatrixOld(aShape, aEntries, aRowPointers, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.80679+0.72595i"), new CNumber("0.64631+0.11629i")},
@@ -98,7 +98,7 @@ class RealComplexCsrDenseMatMultTests {
         Assertions.assertEquals(exp, A.mult(B));
 
         // ------------------------ Sub-case 3 ------------------------
-        A = new CsrMatrix(24, 516);
+        A = new CsrMatrixOld(24, 516);
         B = new CMatrixOld(15, 12);
         assertThrows(LinearAlgebraException.class, ()->A.mult(B));
     }
@@ -111,7 +111,7 @@ class RealComplexCsrDenseMatMultTests {
         aEntries = new double[]{0.40775, 0.00066, 0.90251, 0.83958, 0.50831, 0.33647, 0.04011, 0.62236};
         aRowPointers = new int[]{0, 3, 5, 5, 7, 8};
         aColIndices = new int[]{1, 3, 4, 0, 4, 1, 4, 3};
-        A = new CsrMatrix(aShape, aEntries, aRowPointers, aColIndices);
+        A = new CsrMatrixOld(aShape, aEntries, aRowPointers, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.48204+0.59198i"), new CNumber("0.66808+0.35812i"), new CNumber("0.28052+0.3799i"), new CNumber("0.59171+0.66545i"), new CNumber("0.57884+0.73151i")},
@@ -136,7 +136,7 @@ class RealComplexCsrDenseMatMultTests {
         aEntries = new double[]{0.70914, 0.90578, 0.75517, 0.20707, 0.85522, 0.70478, 0.77122, 0.4555, 0.84988, 0.98193, 0.96398, 0.28262, 0.51808, 0.07491, 0.34441, 0.65752, 0.12087, 0.75863, 0.9398, 0.32988, 0.03278, 0.99643};
         aRowPointers = new int[]{0, 1, 3, 3, 3, 3, 6, 9, 12, 14, 15, 17, 18, 19, 20, 22};
         aColIndices = new int[]{13, 4, 10, 4, 6, 7, 7, 9, 13, 0, 1, 8, 3, 14, 7, 8, 10, 13, 7, 8, 1, 13};
-        A = new CsrMatrix(aShape, aEntries, aRowPointers, aColIndices);
+        A = new CsrMatrixOld(aShape, aEntries, aRowPointers, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.80679+0.72595i"), new CNumber("0.64631+0.11629i")},
@@ -177,7 +177,7 @@ class RealComplexCsrDenseMatMultTests {
         Assertions.assertEquals(exp, RealComplexCsrDenseMatrixMultiplication.standardTranspose(A, B));
 
         // ------------------------ Sub-case 3 ------------------------
-        A = new CsrMatrix(24, 516);
+        A = new CsrMatrixOld(24, 516);
         B = new CMatrixOld(15, 12).T();
         assertThrows(IllegalArgumentException.class, ()->RealComplexCsrDenseMatrixMultiplication.standardTranspose(A, B));
     }

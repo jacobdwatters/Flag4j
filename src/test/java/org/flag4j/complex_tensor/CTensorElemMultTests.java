@@ -2,8 +2,8 @@ package org.flag4j.complex_tensor;
 
 import org.flag4j.arrays_old.dense.CTensorOld;
 import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.arrays_old.sparse.CooCTensor;
-import org.flag4j.arrays_old.sparse.CooTensor;
+import org.flag4j.arrays_old.sparse.CooCTensorOld;
+import org.flag4j.arrays_old.sparse.CooTensorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -82,20 +82,20 @@ class CTensorElemMultTests {
     @Test
     void realSparseTestCase() {
         double[] bEntries;
-        CooTensor B;
+        CooTensorOld B;
 
         // ------------------------- Sub-case 1 -------------------------
         bEntries = new double[]{
                 1.34, -0.0245, 8001.1
         };
-        bShape = new Shape(true, 2, 3, 2);
+        bShape = new Shape( 2, 3, 2);
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new CooTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensorOld(bShape, bEntries, sparseIndices);
         expEntries = new CNumber[aEntries.length];
         Arrays.fill(expEntries, CNumber.ZERO);
-        expShape = new Shape(true, 2, 3, 2);
+        expShape = new Shape( 2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] = aEntries[expShape.entriesIndex(sparseIndices[0])].mult(bEntries[0]);
         expEntries[expShape.entriesIndex(sparseIndices[1])] = aEntries[expShape.entriesIndex(sparseIndices[1])].mult(bEntries[1]);
         expEntries[expShape.entriesIndex(sparseIndices[2])] = aEntries[expShape.entriesIndex(sparseIndices[2])].mult(bEntries[2]);
@@ -111,9 +111,9 @@ class CTensorElemMultTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new CooTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensorOld(bShape, bEntries, sparseIndices);
 
-        CooTensor finalB = B;
+        CooTensorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.elemMult(finalB));
     }
 
@@ -161,7 +161,7 @@ class CTensorElemMultTests {
     @Test
     void complexSparseTestCase() {
         CNumber[] bEntries;
-        CooCTensor B;
+        CooCTensorOld B;
 
         // ------------------------- Sub-case 1 -------------------------
         bEntries = new CNumber[]{
@@ -171,12 +171,12 @@ class CTensorElemMultTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}
         };
-        B = new CooCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensorOld(bShape, bEntries, sparseIndices);
         expEntries = new CNumber[]{
                 CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO,
                 CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO
         };
-        expShape = new Shape(true, 2, 3, 2);
+        expShape = new Shape( 2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] = aEntries[expShape.entriesIndex(sparseIndices[0])].mult(bEntries[0]);
         expEntries[expShape.entriesIndex(sparseIndices[1])] = aEntries[expShape.entriesIndex(sparseIndices[1])].mult(bEntries[1]);
         exp = new CTensorOld(expShape, expEntries);
@@ -191,9 +191,9 @@ class CTensorElemMultTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}
         };
-        B = new CooCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensorOld(bShape, bEntries, sparseIndices);
 
-        CooCTensor finalB = B;
+        CooCTensorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.elemMult(finalB));
     }
 }

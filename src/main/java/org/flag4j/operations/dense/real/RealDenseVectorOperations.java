@@ -24,9 +24,9 @@
 
 package org.flag4j.operations.dense.real;
 
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.concurrency.ThreadManager;
+import org.flag4j.core_temp.arrays.dense.Matrix;
+import org.flag4j.core_temp.arrays.dense.Vector;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -43,7 +43,7 @@ public final class RealDenseVectorOperations {
 
     private RealDenseVectorOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -54,7 +54,7 @@ public final class RealDenseVectorOperations {
      * @return The inner product of the two vectors.
      */
     public static double innerProduct(double[] src1, double[] src2) {
-        ParameterChecks.assertArrayLengthsEq(src1.length, src2.length);
+        ParameterChecks.ensureArrayLengthsEq(src1.length, src2.length);
         double innerProd=0;
 
         for(int i=0; i<src1.length; i++) {
@@ -118,11 +118,11 @@ public final class RealDenseVectorOperations {
      * @param src2 Second vector in outer product.
      * @return The outer product of the two vectors {@code src1} and {@code src2}.
      */
-    public static MatrixOld dispatchOuter(VectorOld src1, VectorOld src2) {
+    public static Matrix dispatchOuter(Vector src1, Vector src2) {
         int totalEntries = src1.size*src2.size;
         if(totalEntries < OUTER_CONCURRENT_THRESHOLD)
-            return new MatrixOld(src1.size, src2.size, outerProduct(src1.entries, src2.entries));
+            return new Matrix(src1.size, src2.size, outerProduct(src1.entries, src2.entries));
         else
-            return new MatrixOld(src1.size, src2.size, outerProductConcurrent(src1.entries, src2.entries));
+            return new Matrix(src1.size, src2.size, outerProductConcurrent(src1.entries, src2.entries));
     }
 }

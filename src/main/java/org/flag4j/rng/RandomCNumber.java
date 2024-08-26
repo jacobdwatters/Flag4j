@@ -130,7 +130,7 @@ public class RandomCNumber extends Random {
      * @throws IllegalArgumentException If standard deviation is negative.
      */
     public CNumber randn(double mean, double std) {
-        ParameterChecks.assertGreaterEq(std, 0);
+        ParameterChecks.ensureGreaterEq(std, 0);
         return random(nextGaussian()*std + mean);
     }
 }

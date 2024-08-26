@@ -92,8 +92,8 @@ public class RealForwardSolver extends ForwardSolver<MatrixOld, VectorOld, doubl
      */
     @Override
     public VectorOld solve(MatrixOld L, VectorOld b) {
-        ParameterChecks.assertSquareMatrix(L.shape);
-        ParameterChecks.assertEquals(L.numRows, b.size);
+        ParameterChecks.ensureSquareMatrix(L.shape);
+        ParameterChecks.ensureEquals(L.numRows, b.size);
         return isUnit ? solveUnitLower(L, b) : solveLower(L, b);
     }
 
@@ -110,8 +110,8 @@ public class RealForwardSolver extends ForwardSolver<MatrixOld, VectorOld, doubl
      */
     @Override
     public MatrixOld solve(MatrixOld L, MatrixOld B) {
-        ParameterChecks.assertSquareMatrix(L.shape);
-        ParameterChecks.assertEquals(L.numRows, B.numRows);
+        ParameterChecks.ensureSquareMatrix(L.shape);
+        ParameterChecks.ensureEquals(L.numRows, B.numRows);
         return isUnit ? solveUnitLower(L, B) : solveLower(L, B);
     }
 
@@ -127,7 +127,7 @@ public class RealForwardSolver extends ForwardSolver<MatrixOld, VectorOld, doubl
      * the principle diagonal).
      */
     public MatrixOld solveIdentity(MatrixOld L) {
-        ParameterChecks.assertSquareMatrix(L.shape);
+        ParameterChecks.ensureSquareMatrix(L.shape);
         return isUnit ? solveUnitLowerIdentity(L) : solveLowerIdentity(L);
     }
 

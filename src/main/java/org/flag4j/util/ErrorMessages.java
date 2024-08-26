@@ -66,19 +66,23 @@ public abstract class ErrorMessages {
     /**
      * Error message for attempted instantiation of a utility class.
      */
-    private static final String UTILITY_CLASS_ERR = "Utility class cannot be instantiated";
+    private static final String UTILITY_CLASS_ERR = "Utility class cannot be instantiated.";
+    /**
+     * Error message for attempted instantiation of a utility class.
+     */
+    private static final String NAMED_UTILITY_CLASS_ERR = "Class %s is a Utility class and cannot be instantiated.";
     /**
      * Error message for a negative value when a non-negative was expected.
      */
-    private static final String NEG_VALUE_ERR = "Expecting value to be non-negative but got %s";
+    private static final String NEG_VALUE_ERR = "Expecting value to be non-negative but got %s.";
     /**
      * Error message for a non-positive value when a positive non-zero value is expected.
      */
-    private static final String NON_POS_ERR = "Expecting value to be positive but got %s";
+    private static final String NON_POS_ERR = "Expecting value to be positive but got %s.";
     /**
      * Error message for disallowed axis.
      */
-    private static final String AXIS_ERR_RANGE = "Got an axis of %s but was expecting one of %s";
+    private static final String AXIS_ERR_RANGE = "Got an axis of %s but was expecting one of %s.";
     /**
      * Error message for disallowed axis.
      */
@@ -86,7 +90,7 @@ public abstract class ErrorMessages {
     /**
      * Error message wrong shape.
      */
-    private static final String SHAPE_RANK_ERR = "Got a shape of rank %d but was expecting a shape of rank %d";
+    private static final String SHAPE_RANK_ERR = "Got a shape of rank %d but was expecting a shape of rank %d.";
     /**
      * Error message for a shape size which cannot contain a specified number of entries.
      */
@@ -194,9 +198,19 @@ public abstract class ErrorMessages {
 
     /**
      * Gets an error message for an attempted instantiation of a utility class.
-     * @return An error message for the attempted instantiation of a utility class;
+     * @return An error message for the attempted instantiation of a utility class.
      */
     public static String getUtilityClassErrMsg() {return UTILITY_CLASS_ERR;}
+
+
+    /**
+     * Gets an error message for an attempted instantiation of a utility class.
+     * @param cls Class which was attempted to be instanciated.
+     * @return An error message for the attempted instantiation of a utility class.
+     */
+    public static String getUtilityClassErrMsg(Class cls) {
+        return String.format(UTILITY_CLASS_ERR, cls);
+    }
 
 
     /**

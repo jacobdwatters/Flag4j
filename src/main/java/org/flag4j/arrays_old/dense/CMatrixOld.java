@@ -71,7 +71,7 @@ import java.util.List;
 @Deprecated
 public class CMatrixOld
         extends ComplexDenseTensorBase<CMatrixOld, MatrixOld>
-        implements MatrixMixin<CMatrixOld, CMatrixOld, CooCMatrix, CMatrixOld, CooCMatrix, CNumber, CVectorOld, CVectorOld>,
+        implements MatrixMixin<CMatrixOld, CMatrixOld, CooCMatrixOld, CMatrixOld, CooCMatrixOld, CNumber, CVectorOld, CVectorOld>,
         ComplexMatrixMixin<CMatrixOld>,
         DenseMatrixMixin<CMatrixOld, CNumber> {
 
@@ -465,14 +465,14 @@ public class CMatrixOld
 
 
     /**
-     * Converts this dense matrix to an equivalent {@link CooCMatrix}. Note, this is likely only worthwhile for <i>very</i> sparse
+     * Converts this dense matrix to an equivalent {@link CooCMatrixOld}. Note, this is likely only worthwhile for <i>very</i> sparse
      * matrices.
-     * @return A {@link CooCMatrix} that is equivalent to this dense matrix.
+     * @return A {@link CooCMatrixOld} that is equivalent to this dense matrix.
      * @see #toCsr()
      */
     @Override
-    public CooCMatrix toCoo() {
-        return CooCMatrix.fromDense(this);
+    public CooCMatrixOld toCoo() {
+        return CooCMatrixOld.fromDense(this);
     }
 
 
@@ -481,7 +481,7 @@ public class CMatrixOld
      * @return A sparse coo matrix equivalent to this matrix.
      * @see #toCoo()
      */
-    public CsrCMatrix toCsr() {
+    public CsrCMatrixOld toCsr() {
         return toCoo().toCsr();
     }
 
@@ -586,7 +586,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setValues(CNumber[][] values) {
-        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
+        ParameterChecks.ensureEqualShape(shape, new Shape(values.length, values[0].length));
         ComplexDenseSetOperations.setValues(values, this.entries);
         return this;
     }
@@ -601,7 +601,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setValues(Double[][] values) {
-        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
+        ParameterChecks.ensureEqualShape(shape, new Shape(values.length, values[0].length));
         ComplexDenseSetOperations.setValues(values, this.entries);
         return this;
     }
@@ -616,7 +616,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setValues(double[][] values) {
-        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
+        ParameterChecks.ensureEqualShape(shape, new Shape(values.length, values[0].length));
         ComplexDenseSetOperations.setValues(values, this.entries);
         return this;
     }
@@ -631,7 +631,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setValues(int[][] values) {
-        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
+        ParameterChecks.ensureEqualShape(shape, new Shape(values.length, values[0].length));
         ComplexDenseSetOperations.setValues(values, this.entries);
         return this;
     }
@@ -660,7 +660,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setCol(CNumber[] values, int colIndex) {
-        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
+        ParameterChecks.ensureArrayLengthsEq(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[i*numCols + colIndex] = values[i];
@@ -679,7 +679,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setCol(Double[] values, int colIndex) {
-        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
+        ParameterChecks.ensureArrayLengthsEq(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[i*numCols + colIndex] = new CNumber(values[i]);
@@ -699,7 +699,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setCol(Integer[] values, int colIndex) {
-        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
+        ParameterChecks.ensureArrayLengthsEq(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[i*numCols + colIndex] = new CNumber(values[i]);
@@ -719,7 +719,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setCol(double[] values, int colIndex) {
-        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
+        ParameterChecks.ensureArrayLengthsEq(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[i*numCols + colIndex] = new CNumber(values[i]);
@@ -739,7 +739,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setCol(int[] values, int colIndex) {
-        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
+        ParameterChecks.ensureArrayLengthsEq(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[i*numCols + colIndex] = new CNumber(values[i]);
@@ -759,7 +759,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setRow(CNumber[] values, int rowIndex) {
-        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);
+        ParameterChecks.ensureArrayLengthsEq(values.length, this.numCols);
 
         System.arraycopy(values, 0, super.entries, rowIndex*numCols, values.length);
 
@@ -776,7 +776,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setRow(Double[] values, int rowIndex) {
-        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);
+        ParameterChecks.ensureArrayLengthsEq(values.length, this.numCols);
 
         for(int i=0; i<values.length; i++) {
             super.entries[rowIndex*numCols + i] = new CNumber(values[i]);
@@ -796,7 +796,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setCol(CVectorOld values, int colIndex) {
-        ParameterChecks.assertArrayLengthsEq(values.size, this.numRows);
+        ParameterChecks.ensureArrayLengthsEq(values.size, this.numRows);
 
         for(int i=0; i<values.size; i++) {
             super.entries[i*numCols + colIndex] = values.entries[i];
@@ -815,7 +815,7 @@ public class CMatrixOld
      * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
      */
     public CMatrixOld setCol(VectorOld values, int colIndex) {
-        ParameterChecks.assertArrayLengthsEq(values.size, this.numRows);
+        ParameterChecks.ensureArrayLengthsEq(values.size, this.numRows);
 
         for(int i=0; i<values.size; i++) {
             super.entries[i*numCols + colIndex] = new CNumber(values.entries[i]);
@@ -834,8 +834,8 @@ public class CMatrixOld
      * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
      */
     @Override
-    public CMatrixOld setCol(CooCVector values, int colIndex) {
-        ParameterChecks.assertArrayLengthsEq(values.size, numRows);
+    public CMatrixOld setCol(CooCVectorOld values, int colIndex) {
+        ParameterChecks.ensureArrayLengthsEq(values.size, numRows);
 
         // Zero-out column
         ArrayUtils.stridedFillZeros(this.entries, colIndex, 1, this.numCols-1);
@@ -861,7 +861,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setRow(CVectorOld values, int rowIndex) {
-        ParameterChecks.assertArrayLengthsEq(values.size, numCols);
+        ParameterChecks.ensureArrayLengthsEq(values.size, numCols);
         System.arraycopy(values.entries, 0, super.entries, rowIndex*numCols, this.numCols);
         return this;
     }
@@ -876,8 +876,8 @@ public class CMatrixOld
      * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
      */
     @Override
-    public CMatrixOld setRow(CooCVector values, int rowIndex) {
-        ParameterChecks.assertArrayLengthsEq(values.size, numCols);
+    public CMatrixOld setRow(CooCVectorOld values, int rowIndex) {
+        ParameterChecks.ensureArrayLengthsEq(values.size, numCols);
         int rowOffset = rowIndex*numCols;
 
         // Fill row with zeros
@@ -903,10 +903,10 @@ public class CMatrixOld
      *                                   fit completely within this matrix.
      */
     @Override
-    public CMatrixOld setSlice(CooCMatrix values, int rowStart, int colStart) {
-        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
-        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
-        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+    public CMatrixOld setSlice(CooCMatrixOld values, int rowStart, int colStart) {
+        ParameterChecks.ensureLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.ensureLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.ensureGreaterEq(0, rowStart, colStart);
 
         // Fill slice with zeros
         ArrayUtils.stridedFillZeros(
@@ -942,10 +942,10 @@ public class CMatrixOld
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
-    public CMatrixOld setSliceCopy(CooCMatrix values, int rowStart, int colStart) {
-        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
-        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
-        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+    public CMatrixOld setSliceCopy(CooCMatrixOld values, int rowStart, int colStart) {
+        ParameterChecks.ensureLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.ensureLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.ensureGreaterEq(0, rowStart, colStart);
 
         CMatrixOld copy = this.copy();
 
@@ -985,9 +985,9 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setSlice(MatrixOld values, int rowStart, int colStart) {
-        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
-        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
-        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+        ParameterChecks.ensureLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.ensureLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.ensureGreaterEq(0, rowStart, colStart);
 
         for(int i=0; i<values.numRows; i++) {
             for(int j=0; j<values.numCols; j++) {
@@ -1013,10 +1013,10 @@ public class CMatrixOld
      *                                   fit completely within this matrix.
      */
     @Override
-    public CMatrixOld setSlice(CooMatrix values, int rowStart, int colStart) {
-        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
-        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
-        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+    public CMatrixOld setSlice(CooMatrixOld values, int rowStart, int colStart) {
+        ParameterChecks.ensureLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.ensureLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.ensureGreaterEq(0, rowStart, colStart);
 
         // Fill slice with zeros
         ArrayUtils.stridedFillZeros(
@@ -1050,7 +1050,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setRow(Integer[] values, int rowIndex) {
-        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);
+        ParameterChecks.ensureArrayLengthsEq(values.length, this.numCols);
 
         for(int i=0; i<values.length; i++) {
             super.entries[rowIndex*numCols + i] = new CNumber(values[i]);
@@ -1070,7 +1070,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setRow(double[] values, int rowIndex) {
-        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);
+        ParameterChecks.ensureArrayLengthsEq(values.length, this.numCols);
 
         for(int i=0; i<values.length; i++) {
             super.entries[rowIndex*numCols + i] = new CNumber(values[i]);
@@ -1090,7 +1090,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setRow(int[] values, int rowIndex) {
-        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);
+        ParameterChecks.ensureArrayLengthsEq(values.length, this.numCols);
 
         for(int i=0; i<values.length; i++) {
             super.entries[rowIndex*numCols + i] = new CNumber(values[i]);
@@ -1114,9 +1114,9 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setSlice(CMatrixOld values, int rowStart, int colStart) {
-        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
-        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
-        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+        ParameterChecks.ensureLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.ensureLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.ensureGreaterEq(0, rowStart, colStart);
 
         for(int i=0; i<values.numRows; i++) {
             int src1RowOffset = (i+rowStart)*numCols;
@@ -1145,9 +1145,9 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setSlice(CNumber[][] values, int rowStart, int colStart) {
-        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
-        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
-        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+        ParameterChecks.ensureLessEq(numRows, rowStart+values.length);
+        ParameterChecks.ensureLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.ensureGreaterEq(0, rowStart, colStart);
 
         for(int i=0; i<values.length; i++) {
             int src1RowOffset = (i+rowStart)*numCols;
@@ -1174,9 +1174,9 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setSlice(Double[][] values, int rowStart, int colStart) {
-        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
-        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
-        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+        ParameterChecks.ensureLessEq(numRows, rowStart+values.length);
+        ParameterChecks.ensureLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.ensureGreaterEq(0, rowStart, colStart);
 
         for(int i=0; i<values.length; i++) {
             int src1RowOffset = (i+rowStart)*numCols;
@@ -1204,9 +1204,9 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setSlice(Integer[][] values, int rowStart, int colStart) {
-        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
-        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
-        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+        ParameterChecks.ensureLessEq(numRows, rowStart+values.length);
+        ParameterChecks.ensureLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.ensureGreaterEq(0, rowStart, colStart);
 
         for(int i=0; i<values.length; i++) {
             int src1RowOffset = (i+rowStart)*numCols;
@@ -1234,9 +1234,9 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setSlice(double[][] values, int rowStart, int colStart) {
-        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
-        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
-        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+        ParameterChecks.ensureLessEq(numRows, rowStart+values.length);
+        ParameterChecks.ensureLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.ensureGreaterEq(0, rowStart, colStart);
 
         for(int i=0; i<values.length; i++) {
             int src1RowOffset = (i+rowStart)*numCols;
@@ -1264,9 +1264,9 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setSlice(int[][] values, int rowStart, int colStart) {
-        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
-        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
-        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+        ParameterChecks.ensureLessEq(numRows, rowStart+values.length);
+        ParameterChecks.ensureLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.ensureGreaterEq(0, rowStart, colStart);
 
         for(int i=0; i<values.length; i++) {
             int src1RowOffset = (i+rowStart)*numCols;
@@ -1294,9 +1294,9 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setSliceCopy(CMatrixOld values, int rowStart, int colStart) {
-        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
-        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
-        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+        ParameterChecks.ensureLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.ensureLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.ensureGreaterEq(0, rowStart, colStart);
 
         CMatrixOld copy = new CMatrixOld(this);
 
@@ -1327,9 +1327,9 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setSliceCopy(CNumber[][] values, int rowStart, int colStart) {
-        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
-        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
-        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+        ParameterChecks.ensureLessEq(numRows, rowStart+values.length);
+        ParameterChecks.ensureLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.ensureGreaterEq(0, rowStart, colStart);
 
         CMatrixOld copy = new CMatrixOld(this);
 
@@ -1358,9 +1358,9 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setSliceCopy(Double[][] values, int rowStart, int colStart) {
-        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
-        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
-        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+        ParameterChecks.ensureLessEq(numRows, rowStart+values.length);
+        ParameterChecks.ensureLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.ensureGreaterEq(0, rowStart, colStart);
 
         CMatrixOld copy = new CMatrixOld(this);
 
@@ -1389,9 +1389,9 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setSliceCopy(Integer[][] values, int rowStart, int colStart) {
-        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
-        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
-        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+        ParameterChecks.ensureLessEq(numRows, rowStart+values.length);
+        ParameterChecks.ensureLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.ensureGreaterEq(0, rowStart, colStart);
 
         CMatrixOld copy = new CMatrixOld(this);
 
@@ -1420,9 +1420,9 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setSliceCopy(double[][] values, int rowStart, int colStart) {
-        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
-        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
-        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+        ParameterChecks.ensureLessEq(numRows, rowStart+values.length);
+        ParameterChecks.ensureLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.ensureGreaterEq(0, rowStart, colStart);
 
         CMatrixOld copy = new CMatrixOld(this);
 
@@ -1451,9 +1451,9 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setSliceCopy(int[][] values, int rowStart, int colStart) {
-        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
-        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
-        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+        ParameterChecks.ensureLessEq(numRows, rowStart+values.length);
+        ParameterChecks.ensureLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.ensureGreaterEq(0, rowStart, colStart);
 
         CMatrixOld copy = new CMatrixOld(this);
 
@@ -1482,9 +1482,9 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld setSliceCopy(MatrixOld values, int rowStart, int colStart) {
-        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
-        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
-        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+        ParameterChecks.ensureLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.ensureLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.ensureGreaterEq(0, rowStart, colStart);
 
         CMatrixOld copy = new CMatrixOld(this);
 
@@ -1514,10 +1514,10 @@ public class CMatrixOld
      *                                   fit completely within this matrix.
      */
     @Override
-    public CMatrixOld setSliceCopy(CooMatrix values, int rowStart, int colStart) {
-        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
-        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
-        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+    public CMatrixOld setSliceCopy(CooMatrixOld values, int rowStart, int colStart) {
+        ParameterChecks.ensureLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.ensureLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.ensureGreaterEq(0, rowStart, colStart);
 
         CMatrixOld copy = this.copy();
 
@@ -1717,7 +1717,7 @@ public class CMatrixOld
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public CMatrixOld add(CooMatrix B) {
+    public CMatrixOld add(CooMatrixOld B) {
         return RealComplexDenseSparseMatrixOperations.add(this, B);
     }
 
@@ -1732,7 +1732,7 @@ public class CMatrixOld
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public CMatrixOld add(CsrMatrix B) {
+    public CMatrixOld add(CsrMatrixOld B) {
         return RealComplexCsrDenseOperations.applyBinOpp(this, B, CNumber::add);
     }
 
@@ -1747,7 +1747,7 @@ public class CMatrixOld
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public CMatrixOld add(CsrCMatrix B) {
+    public CMatrixOld add(CsrCMatrixOld B) {
         return ComplexCsrDenseOperations.applyBinOpp(this, B, CNumber::sub);
     }
 
@@ -1760,7 +1760,7 @@ public class CMatrixOld
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public CMatrixOld add(CooCMatrix B) {
+    public CMatrixOld add(CooCMatrixOld B) {
         return ComplexDenseSparseMatrixOperations.add(this, B);
     }
 
@@ -1788,7 +1788,7 @@ public class CMatrixOld
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public CMatrixOld sub(CooMatrix B) {
+    public CMatrixOld sub(CooMatrixOld B) {
         return RealComplexDenseSparseMatrixOperations.sub(this, B);
     }
 
@@ -1803,7 +1803,7 @@ public class CMatrixOld
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public CMatrixOld sub(CsrMatrix B) {
+    public CMatrixOld sub(CsrMatrixOld B) {
         return RealComplexCsrDenseOperations.applyBinOpp(this, B, CNumber::sub);
     }
 
@@ -1818,7 +1818,7 @@ public class CMatrixOld
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public CMatrixOld sub(CsrCMatrix B) {
+    public CMatrixOld sub(CsrCMatrixOld B) {
         return ComplexCsrDenseOperations.applyBinOpp(this, B, CNumber::sub);
     }
 
@@ -1893,7 +1893,7 @@ public class CMatrixOld
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public CMatrixOld sub(CooCMatrix B) {
+    public CMatrixOld sub(CooCMatrixOld B) {
         return ComplexDenseSparseMatrixOperations.sub(this, B);
     }
 
@@ -1926,7 +1926,7 @@ public class CMatrixOld
      * @param B The sparse matrix to add to this matrix.
      */
     @Override
-    public void addEq(CooMatrix B) {
+    public void addEq(CooMatrixOld B) {
         RealComplexDenseSparseMatrixOperations.addEq(this, B);
     }
 
@@ -1937,7 +1937,7 @@ public class CMatrixOld
      * @param B The sparse matrix to subtract from this matrix.
      */
     @Override
-    public void subEq(CooMatrix B) {
+    public void subEq(CooMatrixOld B) {
         RealComplexDenseSparseMatrixOperations.subEq(this, B);
     }
 
@@ -1966,8 +1966,8 @@ public class CMatrixOld
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
     @Override
-    public CMatrixOld mult(CooMatrix B) {
-        ParameterChecks.assertMatMultShapes(this.shape, B.shape);
+    public CMatrixOld mult(CooMatrixOld B) {
+        ParameterChecks.ensureMatMultShapes(this.shape, B.shape);
         CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standard(
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
         );
@@ -1987,7 +1987,7 @@ public class CMatrixOld
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
     @Override
-    public CMatrixOld mult(CsrMatrix B) {
+    public CMatrixOld mult(CsrMatrixOld B) {
         return RealComplexCsrDenseMatrixMultiplication.standard(this, B);
     }
 
@@ -2016,8 +2016,8 @@ public class CMatrixOld
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
     @Override
-    public CMatrixOld mult(CooCMatrix B) {
-        ParameterChecks.assertMatMultShapes(this.shape, B.shape);
+    public CMatrixOld mult(CooCMatrixOld B) {
+        ParameterChecks.ensureMatMultShapes(this.shape, B.shape);
         CNumber[] entries = ComplexDenseSparseMatrixMultiplication.standard(
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
         );
@@ -2037,7 +2037,7 @@ public class CMatrixOld
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
     @Override
-    public CMatrixOld mult(CsrCMatrix B) {
+    public CMatrixOld mult(CsrCMatrixOld B) {
         return ComplexCsrDenseMatrixMultiplication.standard(this, B);
     }
 
@@ -2064,8 +2064,8 @@ public class CMatrixOld
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public CVectorOld mult(CooVector b) {
-        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
+    public CVectorOld mult(CooVectorOld b) {
+        ParameterChecks.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
         CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.blockedVector(this.entries, this.shape, b.entries, b.indices);
         return new CVectorOld(entries);
     }
@@ -2093,8 +2093,8 @@ public class CMatrixOld
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public CVectorOld mult(CooCVector b) {
-        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
+    public CVectorOld mult(CooCVectorOld b) {
+        ParameterChecks.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
         CNumber[] entries = ComplexDenseSparseMatrixMultiplication.blockedVector(this.entries, this.shape, b.entries, b.indices);
         return new CVectorOld(entries);
     }
@@ -2113,7 +2113,7 @@ public class CMatrixOld
     @Override
     public CMatrixOld multTranspose(MatrixOld B) {
         // Ensure this matrix can be multiplied to the transpose of B.
-        ParameterChecks.assertEquals(this.numCols, B.numCols);
+        ParameterChecks.ensureEquals(this.numCols, B.numCols);
 
         return new CMatrixOld(
                 new Shape(this.numRows, B.numRows),
@@ -2124,7 +2124,7 @@ public class CMatrixOld
 
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
-     * {@code this.}{@link #mult(CooMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * {@code this.}{@link #mult(CooMatrixOld) mult}{@code (B.}{@link #T() T}{@code ())}.
      * For large matrices, this method may
      * be significantly faster than directly computing the transpose followed by the multiplication as
      * {@code this.mult(B.T())}.
@@ -2133,9 +2133,9 @@ public class CMatrixOld
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
     @Override
-    public CMatrixOld multTranspose(CooMatrix B) {
+    public CMatrixOld multTranspose(CooMatrixOld B) {
         // Ensure this matrix can be multiplied to the transpose of B.
-        ParameterChecks.assertEquals(this.numCols, B.numCols);
+        ParameterChecks.ensureEquals(this.numCols, B.numCols);
 
         return new CMatrixOld(
                 new Shape(this.numRows, B.numRows),
@@ -2159,7 +2159,7 @@ public class CMatrixOld
     @Override
     public CMatrixOld multTranspose(CMatrixOld B) {
         // Ensure this matrix can be multiplied to the transpose of B.
-        ParameterChecks.assertEquals(this.numCols, B.numCols);
+        ParameterChecks.ensureEquals(this.numCols, B.numCols);
 
         return new CMatrixOld(
                 new Shape(this.numRows, B.numRows),
@@ -2170,7 +2170,7 @@ public class CMatrixOld
 
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
-     * {@code this.}{@link #mult(CooCMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * {@code this.}{@link #mult(CooCMatrixOld) mult}{@code (B.}{@link #T() T}{@code ())}.
      * For large matrices, this method may
      * be significantly faster than directly computing the transpose followed by the multiplication as
      * {@code this.mult(B.T())}.
@@ -2179,9 +2179,9 @@ public class CMatrixOld
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
     @Override
-    public CMatrixOld multTranspose(CooCMatrix B) {
+    public CMatrixOld multTranspose(CooCMatrixOld B) {
         // Ensure this matrix can be multiplied to the transpose of B.
-        ParameterChecks.assertEquals(this.numCols, B.numCols);
+        ParameterChecks.ensureEquals(this.numCols, B.numCols);
 
         return new CMatrixOld(
                 new Shape(this.numRows, B.numRows),
@@ -2202,8 +2202,8 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld pow(int exponent) {
-        ParameterChecks.assertGreaterEq(0, exponent);
-        ParameterChecks.assertSquareMatrix(this.shape);
+        ParameterChecks.ensureGreaterEq(0, exponent);
+        ParameterChecks.ensureSquareMatrix(this.shape);
         CMatrixOld result;
 
         if(exponent==0) {
@@ -2244,7 +2244,7 @@ public class CMatrixOld
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public CooCMatrix elemMult(CooMatrix B) {
+    public CooCMatrixOld elemMult(CooMatrixOld B) {
         return RealComplexDenseSparseMatrixOperations.elemMult(this, B);
     }
 
@@ -2257,7 +2257,7 @@ public class CMatrixOld
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public CooCMatrix elemMult(CooCMatrix B) {
+    public CooCMatrixOld elemMult(CooCMatrixOld B) {
         return ComplexDenseSparseMatrixOperations.elemMult(this, B);
     }
 
@@ -2300,7 +2300,7 @@ public class CMatrixOld
      */
     @Override
     public CNumber fib(MatrixOld B) {
-        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        ParameterChecks.ensureEqualShape(this.shape, B.shape);
         return this.H().mult(B).trace();
     }
 
@@ -2313,8 +2313,8 @@ public class CMatrixOld
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public CNumber fib(CooMatrix B) {
-        ParameterChecks.assertEqualShape(this.shape, B.shape);
+    public CNumber fib(CooMatrixOld B) {
+        ParameterChecks.ensureEqualShape(this.shape, B.shape);
         return this.H().mult(B).trace();
     }
 
@@ -2328,7 +2328,7 @@ public class CMatrixOld
      */
     @Override
     public CNumber fib(CMatrixOld B) {
-        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        ParameterChecks.ensureEqualShape(this.shape, B.shape);
         return this.H().mult(B).trace();
     }
 
@@ -2341,8 +2341,8 @@ public class CMatrixOld
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public CNumber fib(CooCMatrix B) {
-        ParameterChecks.assertEqualShape(this.shape, B.shape);
+    public CNumber fib(CooCMatrixOld B) {
+        ParameterChecks.ensureEqualShape(this.shape, B.shape);
         return this.H().mult(B).trace();
     }
 
@@ -2396,7 +2396,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld addToEachCol(VectorOld b) {
-        ParameterChecks.assertArrayLengthsEq(numRows, b.size);
+        ParameterChecks.ensureArrayLengthsEq(numRows, b.size);
         CMatrixOld sum = new CMatrixOld(this);
 
         for(int i=0; i<sum.numRows; i++) {
@@ -2419,8 +2419,8 @@ public class CMatrixOld
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public CMatrixOld addToEachCol(CooVector b) {
-        ParameterChecks.assertArrayLengthsEq(numRows, b.size);
+    public CMatrixOld addToEachCol(CooVectorOld b) {
+        ParameterChecks.ensureArrayLengthsEq(numRows, b.size);
         CMatrixOld sum = new CMatrixOld(this);
 
         int index;
@@ -2446,7 +2446,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld addToEachCol(CVectorOld b) {
-        ParameterChecks.assertArrayLengthsEq(numRows, b.size);
+        ParameterChecks.ensureArrayLengthsEq(numRows, b.size);
         CMatrixOld sum = new CMatrixOld(this);
 
         for(int i=0; i<sum.numRows; i++) {
@@ -2469,8 +2469,8 @@ public class CMatrixOld
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public CMatrixOld addToEachCol(CooCVector b) {
-        ParameterChecks.assertArrayLengthsEq(numRows, b.size);
+    public CMatrixOld addToEachCol(CooCVectorOld b) {
+        ParameterChecks.ensureArrayLengthsEq(numRows, b.size);
         CMatrixOld sum = new CMatrixOld(this);
 
         int index;
@@ -2496,7 +2496,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld addToEachRow(VectorOld b) {
-        ParameterChecks.assertArrayLengthsEq(numCols, b.size);
+        ParameterChecks.ensureArrayLengthsEq(numCols, b.size);
         CMatrixOld sum = new CMatrixOld(this);
 
         for(int i=0; i<sum.numRows; i++) {
@@ -2519,8 +2519,8 @@ public class CMatrixOld
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public CMatrixOld addToEachRow(CooVector b) {
-        ParameterChecks.assertArrayLengthsEq(numCols, b.size);
+    public CMatrixOld addToEachRow(CooVectorOld b) {
+        ParameterChecks.ensureArrayLengthsEq(numCols, b.size);
         CMatrixOld sum = new CMatrixOld(this);
 
         for(int i=0; i<sum.numRows; i++) {
@@ -2544,7 +2544,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld addToEachRow(CVectorOld b) {
-        ParameterChecks.assertArrayLengthsEq(numCols, b.size);
+        ParameterChecks.ensureArrayLengthsEq(numCols, b.size);
         CMatrixOld sum = new CMatrixOld(this);
 
         for(int i=0; i<sum.numRows; i++) {
@@ -2567,8 +2567,8 @@ public class CMatrixOld
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public CMatrixOld addToEachRow(CooCVector b) {
-        ParameterChecks.assertArrayLengthsEq(numCols, b.size);
+    public CMatrixOld addToEachRow(CooCVectorOld b) {
+        ParameterChecks.ensureArrayLengthsEq(numCols, b.size);
         CMatrixOld sum = new CMatrixOld(this);
 
         for(int i=0; i<sum.numRows; i++) {
@@ -2585,8 +2585,7 @@ public class CMatrixOld
 
 
     /**
-     * Stacks matrices along columns. <br>
-     * Also see {@link #stack(MatrixOld, int)} and {@link #augment(MatrixOld)}.
+     * Stacks matrices along columns.
      *
      * @param B MatrixOld to stack to this matrix.
      * @return The result of stacking this matrix on top of the matrix B.
@@ -2594,7 +2593,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld stack(MatrixOld B) {
-        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);
+        ParameterChecks.ensureArrayLengthsEq(this.numCols, B.numCols);
         CMatrixOld stacked = new CMatrixOld(new Shape(this.numRows + B.numRows, this.numCols));
 
         System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
@@ -2613,8 +2612,8 @@ public class CMatrixOld
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
     @Override
-    public CMatrixOld stack(CooMatrix B) {
-        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);
+    public CMatrixOld stack(CooMatrixOld B) {
+        ParameterChecks.ensureArrayLengthsEq(this.numCols, B.numCols);
         CMatrixOld stacked = new CMatrixOld(new Shape(this.numRows + B.numRows, this.numCols));
 
         System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
@@ -2643,7 +2642,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld stack(CMatrixOld B) {
-        ParameterChecks.assertArrayLengthsEq(numCols, B.numCols);
+        ParameterChecks.ensureArrayLengthsEq(numCols, B.numCols);
         CMatrixOld stacked = new CMatrixOld(new Shape(numRows+B.numRows, numCols));
 
         for(int i=0; i<numRows; i++) {
@@ -2667,8 +2666,8 @@ public class CMatrixOld
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
     @Override
-    public CMatrixOld stack(CooCMatrix B) {
-        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);
+    public CMatrixOld stack(CooCMatrixOld B) {
+        ParameterChecks.ensureArrayLengthsEq(this.numCols, B.numCols);
         CMatrixOld stacked = new CMatrixOld(new Shape(this.numRows + B.numRows, this.numCols));
 
         for(int i=0; i<numRows; i++) {
@@ -2698,7 +2697,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld augment(MatrixOld B) {
-        ParameterChecks.assertArrayLengthsEq(numRows, B.numRows);
+        ParameterChecks.ensureArrayLengthsEq(numRows, B.numRows);
         CMatrixOld augmented = new CMatrixOld(new Shape(numRows, numCols+B.numCols));
 
         // Copy entries from this matrix.
@@ -2729,8 +2728,8 @@ public class CMatrixOld
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
     @Override
-    public CMatrixOld augment(CooMatrix B) {
-        ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);
+    public CMatrixOld augment(CooMatrixOld B) {
+        ParameterChecks.ensureArrayLengthsEq(this.numRows, B.numRows);
         CMatrixOld augmented = new CMatrixOld(new Shape(this.numRows, this.numCols+B.numCols));
 
         // Copy entries from this matrix.
@@ -2761,7 +2760,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld augment(CMatrixOld B) {
-        ParameterChecks.assertArrayLengthsEq(numRows, B.numRows);
+        ParameterChecks.ensureArrayLengthsEq(numRows, B.numRows);
         CMatrixOld augmented = new CMatrixOld(new Shape(numRows, numCols+B.numCols));
 
         // Copy entries from this matrix.
@@ -2789,8 +2788,8 @@ public class CMatrixOld
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
     @Override
-    public CMatrixOld augment(CooCMatrix B) {
-        ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);
+    public CMatrixOld augment(CooCMatrixOld B) {
+        ParameterChecks.ensureArrayLengthsEq(this.numRows, B.numRows);
         CMatrixOld augmented = new CMatrixOld(new Shape(this.numRows, this.numCols+B.numCols));
 
         // Copy entries from this matrix.
@@ -2823,7 +2822,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld stack(VectorOld b) {
-        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);
+        ParameterChecks.ensureArrayLengthsEq(this.numCols, b.entries.length);
         CMatrixOld stacked = new CMatrixOld(this.numRows+1, this.numCols);
 
         System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
@@ -2836,7 +2835,7 @@ public class CMatrixOld
     /**
      * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
      * does not affect the output of this function. All vectors will be treated as row vectors.<br>
-     * Also see {@link #stack(CooVector, int)} and {@link #augment(CooVector)}.
+     * Also see {@link #stack(CooVectorOld, int)} and {@link #augment(CooVectorOld)}.
      *
      * @param b VectorOld to stack to this matrix.
      * @return The result of stacking this matrix on top of the vector b.
@@ -2844,8 +2843,8 @@ public class CMatrixOld
      *                                  the vector b.
      */
     @Override
-    public CMatrixOld stack(CooVector b) {
-        ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());
+    public CMatrixOld stack(CooVectorOld b) {
+        ParameterChecks.ensureArrayLengthsEq(this.numCols, b.totalEntries().intValue());
         CMatrixOld stacked = new CMatrixOld(this.numRows+1, this.numCols);
 
         System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
@@ -2873,7 +2872,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld stack(CVectorOld b) {
-        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);
+        ParameterChecks.ensureArrayLengthsEq(this.numCols, b.entries.length);
         CMatrixOld stacked = new CMatrixOld(this.numRows+1, this.numCols);
 
         for(int i=0; i<numRows; i++) {
@@ -2889,7 +2888,7 @@ public class CMatrixOld
     /**
      * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
      * does not affect the output of this function. All vectors will be treated as row vectors.<br>
-     * Also see {@link #stack(CooCVector, int)} and {@link #augment(CooCVector)}.
+     * Also see {@link #stack(CooCVectorOld, int)} and {@link #augment(CooCVectorOld)}.
      *
      * @param b VectorOld to stack to this matrix.
      * @return The result of stacking this matrix on top of the vector b.
@@ -2897,8 +2896,8 @@ public class CMatrixOld
      *                                  the vector b.
      */
     @Override
-    public CMatrixOld stack(CooCVector b) {
-        ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());
+    public CMatrixOld stack(CooCVectorOld b) {
+        ParameterChecks.ensureArrayLengthsEq(this.numCols, b.totalEntries().intValue());
         CMatrixOld stacked = new CMatrixOld(this.numRows+1, this.numCols);
 
         for(int i=0; i<numRows; i++) {
@@ -2927,7 +2926,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld augment(VectorOld b) {
-        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);
+        ParameterChecks.ensureArrayLengthsEq(numRows, b.entries.length);
         CMatrixOld stacked = new CMatrixOld(numRows, numCols+1);
 
         // Copy elements of this matrix.
@@ -2948,15 +2947,15 @@ public class CMatrixOld
      * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
      * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
      * treated as a column vector regardless of the true orientation.<br>
-     * Also see {@link #stack(CooVector)} and {@link #stack(CooVector, int)}.
+     * Also see {@link #stack(CooVectorOld)} and {@link #stack(CooVectorOld, int)}.
      *
      * @param b vector to augment to this matrix.
      * @return The result of augmenting b to the right of this matrix.
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public CMatrixOld augment(CooVector b) {
-        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());
+    public CMatrixOld augment(CooVectorOld b) {
+        ParameterChecks.ensureArrayLengthsEq(numRows, b.totalEntries().intValue());
         CMatrixOld stacked = new CMatrixOld(numRows, numCols+1);
 
         // Copy elements of this matrix.
@@ -2986,7 +2985,7 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld augment(CVectorOld b) {
-        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);
+        ParameterChecks.ensureArrayLengthsEq(numRows, b.entries.length);
         CMatrixOld stacked = new CMatrixOld(numRows, numCols+1);
 
         // Copy elements of this matrix.
@@ -3007,15 +3006,15 @@ public class CMatrixOld
      * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
      * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
      * treated as a column vector regardless of the true orientation.<br>
-     * Also see {@link #stack(CooCVector)} and {@link #stack(CooCVector, int)}.
+     * Also see {@link #stack(CooCVectorOld)} and {@link #stack(CooCVectorOld, int)}.
      *
      * @param b vector to augment to this matrix.
      * @return The result of augmenting b to the right of this matrix.
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public CMatrixOld augment(CooCVector b) {
-        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());
+    public CMatrixOld augment(CooCVectorOld b) {
+        ParameterChecks.ensureArrayLengthsEq(numRows, b.totalEntries().intValue());
         CMatrixOld stacked = new CMatrixOld(numRows, numCols+1);
 
         // Copy elements of this matrix.
@@ -3166,7 +3165,7 @@ public class CMatrixOld
      * @throws NegativeArraySizeException If {@code rowEnd} is less than {@code rowStart}.
      */
     public CVectorOld getCol(int colIdx, int rowStart, int rowEnd) {
-        ParameterChecks.assertGreaterEq(0, rowStart);
+        ParameterChecks.ensureGreaterEq(0, rowStart);
         CNumber[] col = new CNumber[rowEnd-rowStart];
 
         for(int i=rowStart; i<rowEnd; i++) {
@@ -3206,7 +3205,7 @@ public class CMatrixOld
      */
     @Override
     public CNumber trace() {
-        ParameterChecks.assertSquareMatrix(this.shape);
+        ParameterChecks.ensureSquareMatrix(this.shape);
         CNumber sum = CNumber.ZERO;
         int colsOffset = this.numCols+1;
 
@@ -3272,7 +3271,7 @@ public class CMatrixOld
      * @throws IllegalArgumentException If the specified number of rows or columns is less than 1.
      */
     public static CMatrixOld I(int numRows, int numCols) {
-        ParameterChecks.assertGreaterEq(1, numRows, numCols);
+        ParameterChecks.ensureGreaterEq(1, numRows, numCols);
         CMatrixOld I = new CMatrixOld(numRows, numCols);
         int stop = Math.min(numRows, numCols);
 
@@ -3293,7 +3292,7 @@ public class CMatrixOld
      * @throws IllegalArgumentException If the specified shape is not rank 2.
      */
     public static CMatrixOld I(Shape shape) {
-        ParameterChecks.assertRank(2, shape);
+        ParameterChecks.ensureRank(2, shape);
         return I(shape.get(0), shape.get(1));
     }
 
@@ -3459,7 +3458,7 @@ public class CMatrixOld
      * @param B Complex sparse matrix to add to this matrix,
      */
     // TODO: Pull up to a ComplexDenseTensorMixin
-    public void addEq(CooCMatrix B) {
+    public void addEq(CooCMatrixOld B) {
         ComplexDenseSparseMatrixOperations.addEq(this, B);
     }
 
@@ -3470,7 +3469,7 @@ public class CMatrixOld
      * @param B Complex sparse matrix to subtract from this matrix,
      */
     // TODO: Pull up to a ComplexDenseTensorMixin
-    public void subEq(CooCMatrix B) {
+    public void subEq(CooCMatrixOld B) {
         ComplexDenseSparseMatrixOperations.subEq(this, B);
     }
 
@@ -3484,9 +3483,9 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld swapRows(int rowIndex1, int rowIndex2) {
-        ParameterChecks.assertGreaterEq(0, rowIndex1, rowIndex2);
-        ParameterChecks.assertGreaterEq(rowIndex1, this.numRows-1);
-        ParameterChecks.assertGreaterEq(rowIndex2, this.numRows-1);
+        ParameterChecks.ensureGreaterEq(0, rowIndex1, rowIndex2);
+        ParameterChecks.ensureGreaterEq(rowIndex1, this.numRows-1);
+        ParameterChecks.ensureGreaterEq(rowIndex2, this.numRows-1);
 
         CNumber temp;
         for(int j=0; j<numCols; j++) {
@@ -3508,9 +3507,9 @@ public class CMatrixOld
      */
     @Override
     public CMatrixOld swapCols(int colIndex1, int colIndex2) {
-        ParameterChecks.assertGreaterEq(0, colIndex1, colIndex2);
-        ParameterChecks.assertGreaterEq(colIndex1, this.numCols-1);
-        ParameterChecks.assertGreaterEq(colIndex2, this.numCols-1);
+        ParameterChecks.ensureGreaterEq(0, colIndex1, colIndex2);
+        ParameterChecks.ensureGreaterEq(colIndex1, this.numCols-1);
+        ParameterChecks.ensureGreaterEq(colIndex2, this.numCols-1);
 
         CNumber temp;
         for(int i=0; i<numRows; i++) {
@@ -3526,7 +3525,7 @@ public class CMatrixOld
 
     @Override
     public CNumber get(int... indices) {
-        ParameterChecks.assertValidIndex(shape, indices);
+        ParameterChecks.ensureValidIndex(shape, indices);
         return entries[indices[0]*numCols + indices[1]];
     }
 

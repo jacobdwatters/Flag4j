@@ -36,7 +36,7 @@ public class ComplexDenseVectorOperations {
 
     private ComplexDenseVectorOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -47,7 +47,7 @@ public class ComplexDenseVectorOperations {
      * @return The inner product of the two vectors.
      */
     public static CNumber innerProduct(CNumber[] src1, CNumber[] src2) {
-        ParameterChecks.assertArrayLengthsEq(src1.length, src2.length);
+        ParameterChecks.ensureArrayLengthsEq(src1.length, src2.length);
         CNumber innerProd = CNumber.ZERO;
 
         for(int i=0; i<src1.length; i++) {
@@ -79,7 +79,4 @@ public class ComplexDenseVectorOperations {
 
         return dest;
     }
-
-
-
 }

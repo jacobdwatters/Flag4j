@@ -38,7 +38,7 @@ public final class RealComplexDenseOperations {
 
     private RealComplexDenseOperations() {
         // Hide constructor
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -52,7 +52,7 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If entry arrays_old are not the same size.
      */
     public static CNumber[] add(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
+        ParameterChecks.ensureEqualShape(shape1, shape2);
 
         CNumber[] sum = new CNumber[src1.length];
 
@@ -74,7 +74,7 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If entry arrays_old are not the same size.
      */
     public static CNumber[] sub(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
+        ParameterChecks.ensureEqualShape(shape1, shape2);
 
         CNumber[] diff = new CNumber[src1.length];
 
@@ -96,7 +96,7 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If entry arrays_old are not the same size.
      */
     public static CNumber[] sub(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
+        ParameterChecks.ensureEqualShape(shape1, shape2);
 
         CNumber[] diff = new CNumber[src1.length];
 
@@ -134,7 +134,7 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If tensors are not the same shape.
      */
     public static void subEq(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
+        ParameterChecks.ensureEqualShape(shape1, shape2);
 
         for(int i=0; i<src1.length; i++) {
             src1[i] = src1[i].sub(src2[i]);
@@ -162,7 +162,7 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If tensors are not the same shape.
      */
     public static void addEq(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
+        ParameterChecks.ensureEqualShape(shape1, shape2);
 
         for(int i=0; i<src1.length; i++) {
             src1[i] = src1[i].add(src2[i]);

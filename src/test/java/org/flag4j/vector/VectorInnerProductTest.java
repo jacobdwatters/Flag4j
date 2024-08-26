@@ -2,8 +2,8 @@ package org.flag4j.vector;
 
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -34,14 +34,14 @@ class VectorInnerProductTest {
     @Test
     void realSparseTestCase() {
         double[] bEntries;
-        CooVector b;
+        CooVectorOld b;
         Double exp;
 
         // ----------------------- Sub-case 1 -----------------------
         bEntries = new double[]{1.4667};
         indices = new int[]{2};
         sparseSize = 4;
-        b = new CooVector(sparseSize, bEntries, indices);
+        b = new CooVectorOld(sparseSize, bEntries, indices);
         exp = -13.7209785;
 
         assertEquals(exp, a.inner(b));
@@ -67,14 +67,14 @@ class VectorInnerProductTest {
     @Test
     void complexSparseTestCase() {
         CNumber[] bEntries;
-        CooCVector b;
+        CooCVectorOld b;
         CNumber exp;
 
         // ----------------------- Sub-case 1 -----------------------
         bEntries = new CNumber[]{new CNumber("1.45-9.8i"), new CNumber("-99.24+45.008i")};
         indices = new int[]{0, 3};
         sparseSize = 4;
-        b = new CooCVector(sparseSize, bEntries, indices);
+        b = new CooCVectorOld(sparseSize, bEntries, indices);
         exp = new CNumber("-21335.149999999998-9666.920000000002j");
 
         assertEquals(exp, a.inner(b));

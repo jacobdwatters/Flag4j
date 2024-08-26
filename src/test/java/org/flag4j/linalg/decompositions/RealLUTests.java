@@ -1,7 +1,8 @@
 package org.flag4j.linalg.decompositions;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.linalg.decompositions.lu.RealLU;
+import org.flag4j.linalg.decompositions.lu.LUOld;
+import org.flag4j.linalg.decompositions.lu.RealLUOLd;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,7 +15,7 @@ class RealLUTests {
 
     @Test
     void noPivotTestCase() {
-        RealLU LU = new RealLU(org.flag4j.linalg.decompositions.lu.LU.Pivoting.NONE.ordinal());
+        RealLUOLd LU = new RealLUOLd(LUOld.Pivoting.NONE.ordinal());
 
         // -------------------------- Sub-case 1 --------------------------
         aEntries = new double[][]
@@ -91,7 +92,7 @@ class RealLUTests {
 
     @Test
     void partialPivotTestCase() {
-        RealLU LU = new RealLU(org.flag4j.linalg.decompositions.lu.LU.Pivoting.PARTIAL.ordinal());
+        RealLUOLd LU = new RealLUOLd(LUOld.Pivoting.PARTIAL.ordinal());
 
         // -------------------------- Sub-case 1 --------------------------
         aEntries = new double[][]
@@ -189,7 +190,7 @@ class RealLUTests {
 
     @Test
     void completePivotTestCase() {
-        RealLU LU = new RealLU(org.flag4j.linalg.decompositions.lu.LU.Pivoting.FULL.ordinal());
+        RealLUOLd LU = new RealLUOLd(LUOld.Pivoting.FULL.ordinal());
 
         // -------------------------- Sub-case 1 --------------------------
         aEntries = new double[][]

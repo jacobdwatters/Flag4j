@@ -25,7 +25,7 @@
 package org.flag4j.core;
 
 import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.arrays_old.sparse.CsrMatrix;
+import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 
 /**
  * This interface specifies comparisons which all tensors (i.e. matrices and vectors) should implement.
@@ -65,7 +65,7 @@ public interface TensorComparisonsMixin {
      *
      * <p>xFor Example, a {@link TensorOld Dense TensorOld} of rank 2 with the same values as a</p>
      *
-     * {@link CsrMatrix Sparse CSR MatrixOld} will be considered equal.
+     * {@link CsrMatrixOld Sparse CSR MatrixOld} will be considered equal.
      * @param B TensorOld, matrix, or vector to compare to this tensor.
      * @return True if both tensors (or matrix/vector) have the same shape and all entries are numerically equivalent by index. This
      * accounts for possible zero values in sparse objects. Returns false if the tensors do not have the same shape or if the

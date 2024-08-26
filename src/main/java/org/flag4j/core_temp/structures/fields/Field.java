@@ -52,10 +52,8 @@ import org.flag4j.core_temp.structures.rings.SemiRing;
  * @param <T> Type of the field element.
  * @see Ring
  * @see SemiRing
- * @see GeneralizedRealField
  */
 public interface Field<T extends Field<T>> extends Ring<T> {
-
 
     /**
      * Multiplies two elements of this field (associative and commutative).
@@ -74,6 +72,38 @@ public interface Field<T extends Field<T>> extends Ring<T> {
 
 
     /**
+     * Sums an element of this field with a real number (associative and commutative).
+     * @param b Real element in sum.
+     * @return The sum of this element and {@code b}.
+     */
+    public T add(double b);
+
+
+    /**
+     * Computes difference of an element of this field and a real number.
+     * @param b Real value in difference.
+     * @return The difference of this ring element and {@code b}.
+     */
+    public T sub(double b);
+
+
+    /**
+     * Multiplies an element of this field with a real number (associative and commutative).
+     * @param b Real number in product.
+     * @return The product of this field element and {@code b}.
+     */
+    public T mult(double b);
+
+
+    /**
+     * Computes the quotient of an element of this field and a real number.
+     * @param b Real number in quotient.
+     * @return The quotient of this field element and {@code b}.
+     */
+    public T div(double b);
+
+
+    /**
      * <p>Computes the multiplicitive inverse for an element of this field.</p>
      *
      * <p>An element x<sup>-1</sup> is a multaplicitive inverse for a filed element x if x<sup>-1</sup>*x = 1 where 1 is the
@@ -84,6 +114,8 @@ public interface Field<T extends Field<T>> extends Ring<T> {
     public T multInv();
 
 
+    // TODO: It likely does not make sense to define sqrt for a feild. Some finite fields (e.g. integers mod a prime) will not
+    //  have a square root for every element. This is even true for real numbers.
     /**
      * Computes the square root of this field element.
      * @return The square root of this field element.
@@ -126,4 +158,5 @@ public interface Field<T extends Field<T>> extends Ring<T> {
      * @return True if this field element is NaN in magnitude. False otherwise (i.e. finite, NaN, etc.).
      */
     public boolean isNaN();
+
 }

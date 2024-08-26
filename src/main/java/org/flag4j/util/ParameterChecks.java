@@ -27,18 +27,19 @@ package org.flag4j.util;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
+import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.math.BigInteger;
 import java.util.Arrays;
 
 /**
- * This class contains several methods for checking properties of shapes and arrays_old.
+ * This utility class contains several methods for ensuring a parmaeter has certain properties.
  */
 public final class ParameterChecks {
 
     // Hide constructor
     private ParameterChecks() {
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -46,11 +47,11 @@ public final class ParameterChecks {
      * Checks if two {@link Shape} objects are equivalent.
      * @param shape1 First shape.
      * @param shape2 Second shape.
-     * @throws LinearAlgebraException If shapes are not equivalent.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If shapes are not equivalent.
      */
-    public static void assertEqualShape(Shape shape1, Shape shape2) {
+    public static void ensureEqualShape(Shape shape1, Shape shape2) {
         if(!shape1.equals(shape2)) {
-            throw new LinearAlgebraException(
+            throw new TensorShapeException(
                     ErrorMessages.equalShapeErrMsg(shape1, shape2)
             );
         }
@@ -61,13 +62,13 @@ public final class ParameterChecks {
      * Checks if two {@link Shape} objects satisfy the requirements of matrix multiplication.
      * @param shape1 First shape.
      * @param shape2 Second shape.
-     * @throws LinearAlgebraException If shapes do not satisfy the requirements of matrix multiplication.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If shapes do not satisfy the requirements of matrix multiplication.
      */
-    public static void assertMatMultShapes(Shape shape1, Shape shape2) {
+    public static void ensureMatMultShapes(Shape shape1, Shape shape2) {
         if(shape1.getRank() != 2
                 || shape2.getRank() != 2
                 || shape1.get(1) != shape2.get(0)) {
-            throw new LinearAlgebraException(
+            throw new TensorShapeException(
                     ErrorMessages.matMultShapeErrMsg(shape1, shape2)
             );
         }
@@ -79,18 +80,11 @@ public final class ParameterChecks {
      * @param lengths An array of array lengths.
      * @throws IllegalArgumentException If all lengths are not equal.
      */
-    public static void assertArrayLengthsEq(int... lengths) {
-        boolean allEqual = true;
-
+    public static void ensureArrayLengthsEq(int... lengths) {
         for(int i=0; i<lengths.length-1; i++) {
             if(lengths[i]!=lengths[i+1]) {
-                allEqual=false;
-                break;
+                throw new IllegalArgumentException(ErrorMessages.getArrayLengthsMismatchErr(lengths));
             }
-        }
-
-        if(!allEqual) {
-            throw new IllegalArgumentException(ErrorMessages.getArrayLengthsMismatchErr(lengths));
         }
     }
 
@@ -99,11 +93,11 @@ public final class ParameterChecks {
      * Checks that two shapes can be broadcast, i.e. have the same total number of entries.
      * @param shape1 First shape to compare.
      * @param shape2 Second shape to compare.
-     * @throws IllegalArgumentException If the two shapes do not have the same total number of entries.
+     * @throws TensorShapeException If the two shapes do not have the same total number of entries.
      */
-    public static void assertBroadcastable(Shape shape1, Shape shape2) {
+    public static void ensureBroadcastable(Shape shape1, Shape shape2) {
         if(!shape1.totalEntries().equals(shape2.totalEntries())) {
-            throw new IllegalArgumentException(ErrorMessages.getShapeBroadcastErr(shape1, shape2));
+            throw new TensorShapeException(ErrorMessages.getShapeBroadcastErr(shape1, shape2));
         }
     }
 
@@ -114,7 +108,7 @@ public final class ParameterChecks {
      * @param arr2 Second array.
      * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
      */
-    public static void assertTotalEntriesEq(Object[][] arr1, double[] arr2) {
+    public static void ensureTotalEntriesEq(Object[][] arr1, double[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length) {
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
         }
@@ -127,7 +121,7 @@ public final class ParameterChecks {
      * @param arr2 Second array.
      * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
      */
-    public static void assertTotalEntriesEq(double[][] arr1, double[] arr2) {
+    public static void ensureTotalEntriesEq(double[][] arr1, double[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length) {
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
         }
@@ -140,7 +134,7 @@ public final class ParameterChecks {
      * @param arr2 Second array.
      * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
      */
-    public static void assertTotalEntriesEq(int[][] arr1, double[] arr2) {
+    public static void ensureTotalEntriesEq(int[][] arr1, double[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length) {
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
         }
@@ -153,7 +147,7 @@ public final class ParameterChecks {
      * @param arr2 Second array.
      * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
      */
-    public static void assertTotalEntriesEq(Object[][] arr1, CNumber[] arr2) {
+    public static void ensureTotalEntriesEq(Object[][] arr1, CNumber[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length) {
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
         }
@@ -166,7 +160,7 @@ public final class ParameterChecks {
      * @param arr2 Second array.
      * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
      */
-    public static void assertTotalEntriesEq(double[][] arr1, CNumber[] arr2) {
+    public static void ensureTotalEntriesEq(double[][] arr1, CNumber[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length) {
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
         }
@@ -179,7 +173,7 @@ public final class ParameterChecks {
      * @param arr2 Second array.
      * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
      */
-    public static void assertTotalEntriesEq(int[][] arr1, CNumber[] arr2) {
+    public static void ensureTotalEntriesEq(int[][] arr1, CNumber[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length) {
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
         }
@@ -191,7 +185,7 @@ public final class ParameterChecks {
      * @param values Values to check if they are equal.
      * @throws IllegalArgumentException If any of the specified values are not equal.
      */
-    public static void assertEquals(double... values) {
+    public static void ensureEquals(double... values) {
         if(values.length > 0) {
             boolean equal = true;
             double base = values[0];
@@ -215,7 +209,7 @@ public final class ParameterChecks {
      * @param values Values to check if they are equal.
      * @throws IllegalArgumentException If any of the specified values are not equal.
      */
-    public static void assertEquals(int... values) {
+    public static void ensureEquals(int... values) {
         if(values.length > 0) {
             boolean equal = true;
             double base = values[0];
@@ -240,7 +234,7 @@ public final class ParameterChecks {
      * @param b Second value.
      * @throws IllegalArgumentException If {@code a==b}.
      */
-    public static void assertNotEquals(double a, double b) {
+    public static void ensureNotEquals(double a, double b) {
         if(a==b) {
             throw new IllegalArgumentException("Expecting values to not be equal but got: " + a + ", " + b + ".");
         }
@@ -253,7 +247,7 @@ public final class ParameterChecks {
      * @param values Values to compare against threshold.
      * @throws IllegalArgumentException If any of the values are less than the threshold.
      */
-    public static void assertGreaterEq(double threshold, double... values) {
+    public static void ensureGreaterEq(double threshold, double... values) {
         for(double value : values) {
             if(value<threshold) {
                 throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(threshold, value));
@@ -268,7 +262,7 @@ public final class ParameterChecks {
      * @param values Values to compare against threshold.
      * @throws IllegalArgumentException If any of the values are less than the threshold.
      */
-    public static void assertGreaterEq(int threshold, int... values) {
+    public static void ensureGreaterEq(int threshold, int... values) {
         for(double value : values) {
             if(value<threshold) {
                 throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(threshold, value));
@@ -283,7 +277,7 @@ public final class ParameterChecks {
      * @param value Value to compare against threshold.
      * @throws IllegalArgumentException If the values is less than the threshold.
      */
-    public static void assertGreaterEq(int threshold, int value) {
+    public static void ensureGreaterEq(int threshold, int value) {
         if(value<threshold) {
             throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(threshold, value));
         }
@@ -297,7 +291,7 @@ public final class ParameterChecks {
      * @param name Name of parameter.
      * @throws IllegalArgumentException If any of the values are less than the threshold.
      */
-    public static void assertGreaterEq(double threshold, double value, String name) {
+    public static void ensureGreaterEq(double threshold, double value, String name) {
         if(value<threshold) {
             throw new IllegalArgumentException(ErrorMessages.getNamedGreaterEqErr(threshold, value, name));
         }
@@ -310,7 +304,7 @@ public final class ParameterChecks {
      * @param values Values to compare against threshold.
      * @throws IllegalArgumentException If any of the values are greater than the threshold.
      */
-    public static void assertLessEq(double threshold, double... values) {
+    public static void ensureLessEq(double threshold, double... values) {
         for(double value : values) {
             if(value>threshold) {
                 throw new IllegalArgumentException(ErrorMessages.getLessEqErr(threshold, value));
@@ -325,7 +319,7 @@ public final class ParameterChecks {
      * @param values Values to compare against threshold.
      * @throws IllegalArgumentException If any of the values are greater than the threshold.
      */
-    public static void assertLessEq(int threshold, int... values) {
+    public static void ensureLessEq(int threshold, int... values) {
         for(double value : values) {
             if(value>threshold) {
                 throw new IllegalArgumentException(ErrorMessages.getLessEqErr(threshold, value));
@@ -341,7 +335,7 @@ public final class ParameterChecks {
      * @param name Name of parameter.
      * @throws IllegalArgumentException If the value is greater than the threshold.
      */
-    public static void assertLessEq(double threshold, double value, String name) {
+    public static void ensureLessEq(double threshold, double value, String name) {
         if(value>threshold) throw new IllegalArgumentException(ErrorMessages.getNamedLessEqErr(threshold, value, name));
     }
 
@@ -353,7 +347,7 @@ public final class ParameterChecks {
      * @param name Name of parameter.
      * @throws IllegalArgumentException If the value is greater than the threshold.
      */
-    public static void assertLessEq(BigInteger threshold, int value, String name) {
+    public static void ensureLessEq(BigInteger threshold, int value, String name) {
         if(threshold.compareTo(BigInteger.valueOf(value)) < 0) {
             throw new IllegalArgumentException(ErrorMessages.getNamedLessEqErr(threshold, value, name));
         }
@@ -364,35 +358,35 @@ public final class ParameterChecks {
      * Checks if a value is positive.
      * @param value Value of interest.
      * @throws IllegalArgumentException If {@code value} is not positive.
-     * @see #assertNonNegative(int)
+     * @see #ensureNonNegative(int)
      */
-    public static void assertPositive(int value) {
+    public static void ensurePositive(int value) {
         if(value <= 0) throw new IllegalArgumentException(ErrorMessages.getNonPosErr(value));
     }
 
 
     /**
-     * Checks if a value is non-negative. Note, this method differs from {@link #assertPositive(int)} as it
-     * allows zero values where {@link #assertPositive(int)} does not.
+     * Checks if a value is non-negative. Note, this method differs from {@link #ensurePositive(int)} as it
+     * allows zero values where {@link #ensurePositive(int)} does not.
      * value
      * @param value Value of interest.
      * @throws IllegalArgumentException If {@code value} is negative.
-     * @see #assertPositive(int) 
+     * @see #ensurePositive(int)
      */
-    public static void assertNonNegative(int value) {
+    public static void ensureNonNegative(int value) {
         if(value < 0) throw new IllegalArgumentException(ErrorMessages.getNegValueErr(value));
     }
 
 
     /**
-     * Checks if values are all non-negative according to {@link #assertNonNegative(int)}.
+     * Checks if values are all non-negative according to {@link #ensureNonNegative(int)}.
      * @param values Values of interest.
      * @throws IllegalArgumentException If any element of {@code values} is negative.
-     * @see #assertPositive(int)
+     * @see #ensurePositive(int)
      */
-    public static void assertNonNegative(int... values) {
+    public static void ensureNonNegative(int... values) {
         for(int value : values) {
-            assertNonNegative();
+            ensureNonNegative();
         }
     }
 
@@ -402,7 +396,7 @@ public final class ParameterChecks {
      * @param shape Shape to check.
      * @throws LinearAlgebraException If the shape is not of rank 2 with equal rows and columns.
      */
-    public static void assertSquareMatrix(Shape shape) {
+    public static void ensureSquareMatrix(Shape shape) {
         if(shape.getRank()!=2 || shape.get(0)!=shape.get(1)) {
             throw new LinearAlgebraException(ErrorMessages.getSquareShapeErr(shape));
         }
@@ -414,8 +408,8 @@ public final class ParameterChecks {
      * @param shape Shape to check.
      * @throws IllegalArgumentException If all axis of the shape are not the same length.
      */
-    public static void assertSquare(Shape shape) {
-        ParameterChecks.assertEquals(shape.getDims());
+    public static void ensureSquare(Shape shape) {
+        ParameterChecks.ensureEquals(shape.getDims());
     }
 
 
@@ -425,7 +419,7 @@ public final class ParameterChecks {
      * @param numCols Number of columns in the matrix.
      * @throws LinearAlgebraException If the shape is not of rank 2 with equal rows and columns.
      */
-    public static void assertSquareMatrix(int numRows, int numCols) {
+    public static void ensureSquareMatrix(int numRows, int numCols) {
         if(numRows!=numCols) {
             throw new LinearAlgebraException(ErrorMessages.getSquareShapeErr(new Shape(numRows, numCols)));
         }
@@ -438,7 +432,7 @@ public final class ParameterChecks {
      * @param shape Shape to check.
      * @throws LinearAlgebraException If the specified shape does not have the expected rank.
      */
-    public static void assertRank(int expRank, Shape shape) {
+    public static void ensureRank(int expRank, Shape shape) {
         if(shape.getRank() != expRank) {
             throw new LinearAlgebraException(ErrorMessages.shapeRankErr(shape.getRank(), expRank));
         }
@@ -450,7 +444,7 @@ public final class ParameterChecks {
      * @param axis Axis to check.
      * @throws IllegalArgumentException If the axis is not a valid 2D axis.
      */
-    public static void assertAxis2D(int axis) {
+    public static void ensureAxis2D(int axis) {
         if(!(axis == 0 || axis==1)) {
             throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));
         }
@@ -462,7 +456,7 @@ public final class ParameterChecks {
      * @param axes List of axes of interest.
      * @throws IllegalArgumentException If {@code axis} is not a permutation of {@code {0, 1, 2, ..., N-1}}.
      */
-    public static void assertPermutation(int... axes) {
+    public static void ensurePermutation(int... axes) {
         int[] axesCopy = axes.clone();
 
         Arrays.sort(axesCopy);
@@ -484,7 +478,7 @@ public final class ParameterChecks {
      * @param paramName Name of the parameter.
      * @throws IllegalArgumentException If {@code value} is not within the range {@code [lowerBound, upperBound]}
      */
-    public static void assertInRange(double value, double lowerBound, double upperBound, String paramName) {
+    public static void ensureInRange(double value, double lowerBound, double upperBound, String paramName) {
         if(value < lowerBound || value > upperBound) {
             String name = paramName==null ? "Value" : paramName + " = ";
             String errMsg = String.format("%s %f not in range [%f, %f]", name, value, lowerBound, upperBound);
@@ -500,7 +494,7 @@ public final class ParameterChecks {
      * @param indices Array if indices to check.
      * @throws IndexOutOfBoundsException If any {@code indices} or not within {@code [0, upperBound)}.
      */
-    public static void assertIndexInBounds(int upperBound, int... indices) {
+    public static void ensureIndexInBounds(int upperBound, int... indices) {
         for(int i : indices) {
             if(i < 0 || i >= upperBound) {
                 String errMsg = i<0 ?
@@ -520,7 +514,7 @@ public final class ParameterChecks {
      * @throws IndexOutOfBoundsException If {@code indices} is not a valid index into a tensor
      * of the specified {@code shape}.
      */
-    public static void assertValidIndex(Shape shape, int... indices) {
+    public static void ensureValidIndex(Shape shape, int... indices) {
         if(shape.getRank() != indices.length) {
             throw new IndexOutOfBoundsException("Expected " + shape.getRank()
                     + " indices but got " + indices.length + ".");
@@ -545,9 +539,8 @@ public final class ParameterChecks {
      * @throws IndexOutOfBoundsException If {@code indices} is not a valid index into an iterable
      * of the specified {@code length}.
      */
-    public static void assertValidIndices(int length, int... indices) {
-
-        for(int i=0; i<indices.length; i++) {
+    public static void ensureValidIndices(int length, int... indices) {
+        for(int i=0, size=indices.length; i<size; i++) {
             if(indices[i] < 0 || indices[i] >= length) {
                 String errMsg = indices[i]<0 ?
                         "Index " + i + " is out of bounds for lower bound of 0" :
@@ -556,5 +549,37 @@ public final class ParameterChecks {
                 throw new IndexOutOfBoundsException(errMsg);
             }
         }
+    }
+
+
+    /**
+     * <p>Checks if all provided {@code axes} are valid with respect to the rank of the given {@code shape}.</p>
+     * <p>Specifically, an axis is valid if {@code axis >= 0 && axis < shape.getRank()}.</p>
+     * @param shape Shape of interest.
+     * @param axes Axes to validate.
+     * @throws LinearAlgebraException If {@code axis < 0 || axis >= shape.getRank()} for any axis in {@code axes}.
+     */
+    public static void ensureValidAxes(Shape shape, int... axes) {
+        int rank = shape.getRank();
+
+        for(int axis : axes) {
+            if(axis < 0 || axis >= rank) {
+                throw new LinearAlgebraException(
+                        String.format("Axis %d is out of bounds for shape %s with rank %d.", axis, shape, rank)
+                );
+            }
+        }
+    }
+
+
+    /**
+     * Checks if an array's length is equal to the rank of a {@code shape}.
+     * @param shape Shape of interest.
+     * @param size Size of the array.
+     * @throws LinearAlgebraException If {@code size != shape.getShape()}.
+     */
+    public static void ensureLengthEqualsRank(Shape shape, int size) {
+        if(shape.getRank() != size)
+            throw new LinearAlgebraException("Array length of " + size + " does not match rank of " + shape.getRank());
     }
 }

@@ -1,6 +1,6 @@
 package org.flag4j.sparse_complex_tensor;
 
-import org.flag4j.arrays_old.sparse.CooCTensor;
+import org.flag4j.arrays_old.sparse.CooCTensorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.io.PrintOptions;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CooCTensorToStringTests {
 
-    static CooCTensor A;
+    static CooCTensorOld A;
     static Shape aShape;
     static CNumber[] aEntries;
     static int[][] aIndices;
@@ -47,7 +47,7 @@ class CooCTensorToStringTests {
                 {4, 2, 1, 1, 8},
                 {4, 3, 0, 0, 6},
                 {4, 3, 1, 2, 13}};
-        A = new CooCTensor(aShape, aEntries, aIndices);
+        A = new CooCTensorOld(aShape, aEntries, aIndices);
 
         exp = "Shape: (5, 4, 2, 3, 15)\n" +
                 "Non-zero Entries: [ 0.8103 + 0.0203i  0.5684 + 0.4151i  0.9044 + 0.8734i  0.201 + 0.7032i  0.9682 + 0.2723i  0.4699 + 0.8203i  0.3871 + 0.3395i  0.7851 + 0.3768i  0.2315 + 0.7695i  ...  0.8007 + 0.4023i ]\n" +

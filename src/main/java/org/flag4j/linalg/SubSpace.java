@@ -42,7 +42,7 @@ import org.flag4j.util.ErrorMessages;
 public class SubSpace {
     private SubSpace() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -172,10 +172,10 @@ public class SubSpace {
 
         // Check that each column of src2 is a linear combination of the columns in src1.
         for(int j=0; j<src2.numCols; j++) {
-            col = src2.getColAsVector(j);
+            col = src2.getCol(j);
             solution = lstsq.solve(src1, col);
 
-            double norm = VectorNorms.norm(src1.mult(solution).sub(col));
+            double norm = VectorNorms.norm(src1.mult(solution).sub(col).entries);
             if(norm > tol) {
                 // Then the least squares solution does not provide an "exact" solution.
                 // Hence, the column of src2 cannot be expressed as a linear combination of the columns of src1

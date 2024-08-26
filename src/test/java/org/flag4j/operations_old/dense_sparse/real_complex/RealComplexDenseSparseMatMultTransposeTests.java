@@ -2,8 +2,8 @@ package org.flag4j.operations_old.dense_sparse.real_complex;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.BeforeAll;
@@ -26,8 +26,8 @@ class RealComplexDenseSparseMatMultTransposeTests {
 
     static MatrixOld realDense;
     static CMatrixOld complexDense;
-    static CooMatrix realSp;
-    static CooCMatrix complexSp;
+    static CooMatrixOld realSp;
+    static CooCMatrixOld complexSp;
 
     static CMatrixOld exp;
 
@@ -57,15 +57,15 @@ class RealComplexDenseSparseMatMultTransposeTests {
 
         realDense = new MatrixOld(rdEntries);
         complexDense = new CMatrixOld(cdEntries);
-        realSp = new CooMatrix(rspShape, rspEntries, rindices[0], rindices[1]);
-        complexSp = new CooCMatrix(cspShape, cspEntries, cindices[0], cindices[1]);
+        realSp = new CooMatrixOld(rspShape, rspEntries, rindices[0], rindices[1]);
+        complexSp = new CooCMatrixOld(cspShape, cspEntries, cindices[0], cindices[1]);
     }
 
 
     @Test
     void realDenseComplexSpTestCase() {
         // ---------------------- sub-case 1 ----------------------
-        exp = realDense.mult(new CooCMatrix(complexSp.shape.swapAxes(0, 1),
+        exp = realDense.mult(new CooCMatrixOld(complexSp.shape.swapAxes(0, 1),
                 complexSp.entries, complexSp.colIndices, complexSp.rowIndices));
         assertEquals(exp, realDense.multTranspose(complexSp));
     }
@@ -74,7 +74,7 @@ class RealComplexDenseSparseMatMultTransposeTests {
     @Test
     void complexDenseRealSpTestCase() {
         // ---------------------- sub-case 1 ----------------------
-        exp = complexDense.mult(new CooMatrix(realSp.shape.swapAxes(0, 1),
+        exp = complexDense.mult(new CooMatrixOld(realSp.shape.swapAxes(0, 1),
                 realSp.entries, realSp.colIndices, realSp.rowIndices));
         assertEquals(exp, complexDense.multTranspose(realSp));
     }

@@ -39,7 +39,7 @@ public final class RealDenseTranspose {
 
     private RealDenseTranspose() {
         // Hide constructor
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -52,7 +52,7 @@ public final class RealDenseTranspose {
      * @param axis2 Second axis to swap in transpose.
      * @return The transpose of the tensor along the specified axes.
      */
-    public static double[] standard(final double[] src, final Shape shape, final int axis1, final int axis2) {
+    public static double[] standard(double[] src, Shape shape, int axis1, int axis2) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
             throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
                     " tensor.");
@@ -83,9 +83,9 @@ public final class RealDenseTranspose {
      * @throws IllegalArgumentException If the {@code axes} array is not a permutation of {@code {0, 1, 2, ..., N-1}}.
      * @throws IllegalArgumentException If the {@code shape} rank is less than 2.
      */
-    public static double[] standard(final double[] src, final Shape shape, final int[] axes) {
-        ParameterChecks.assertPermutation(axes);
-        ParameterChecks.assertEquals(shape.getRank(), axes.length);
+    public static double[] standard(double[] src, Shape shape, int[] axes) {
+        ParameterChecks.ensurePermutation(axes);
+        ParameterChecks.ensureEquals(shape.getRank(), axes.length);
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
             throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
                     " tensor.");
@@ -116,9 +116,9 @@ public final class RealDenseTranspose {
      * @throws IllegalArgumentException If the {@code axes} array is not a permutation of {@code {0, 1, 2, ..., N-1}}.
      * @throws IllegalArgumentException If the {@code shape} rank is less than 2.
      */
-    public static double[] standardConcurrent(final double[] src, final Shape shape, final int[] axes) {
-        ParameterChecks.assertPermutation(axes);
-        ParameterChecks.assertEquals(shape.getRank(), axes.length);
+    public static double[] standardConcurrent(double[] src, Shape shape, int[] axes) {
+        ParameterChecks.ensurePermutation(axes);
+        ParameterChecks.ensureEquals(shape.getRank(), axes.length);
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
             throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
                     " tensor.");
@@ -148,7 +148,7 @@ public final class RealDenseTranspose {
      * @param axis2 Second axis to swap in transpose.
      * @return The transpose of the tensor along the specified axes.
      */
-    public static double[] standardConcurrent(final double[] src, final Shape shape, final int axis1, final int axis2) {
+    public static double[] standardConcurrent(double[] src, Shape shape, int axis1, int axis2) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
             throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
                     " tensor.");
@@ -177,7 +177,7 @@ public final class RealDenseTranspose {
      * @param numCols Number of columns in the matrix.
      * @return The transpose of the matrix.
      */
-    public static double[] standardMatrix(final double[] src, final int numRows, final int numCols) {
+    public static double[] standardMatrix(double[] src, int numRows, int numCols) {
         double[] dest = new double[numRows*numCols];
 
         int destIndex, srcIndex, end;
@@ -205,9 +205,9 @@ public final class RealDenseTranspose {
      * @param numCols Number of columns in the matrix.
      * @return The transpose of this tensor along specified axes
      */
-    public static double[] blockedMatrix(final double[] src, final int numRows, final int numCols) {
+    public static double[] blockedMatrix(double[] src, int numRows, int numCols) {
         double[] dest = new double[numRows*numCols];
-        final int blockSize = Configurations.getBlockSize();
+        int blockSize = Configurations.getBlockSize();
         int srcIndexStart, destIndexStart;
         int srcIndex, destIndex, srcIndexEnd, destIndexEnd;
         int blockHeight;
@@ -247,7 +247,7 @@ public final class RealDenseTranspose {
      * @param numCols Number of columns in source matrix.
      * @return The transpose of the source matrix.
      */
-    public static double[] standardMatrixConcurrent(final double[] src, final int numRows, final int numCols) {
+    public static double[] standardMatrixConcurrent(double[] src, int numRows, int numCols) {
         double[] dest = new double[src.length];
 
         // Compute transpose concurrently.
@@ -275,9 +275,9 @@ public final class RealDenseTranspose {
      * @param numCols Number of columns in source matrix.
      * @return The transpose of the source matrix.
      */
-    public static double[] blockedMatrixConcurrent(final double[] src, final int numRows, final int numCols) {
+    public static double[] blockedMatrixConcurrent(double[] src, int numRows, int numCols) {
         double[] dest = new double[src.length];
-        final int blockSize = Configurations.getBlockSize();
+        int blockSize = Configurations.getBlockSize();
 
         // Compute transpose concurrently.
         ThreadManager.concurrentBlockedOperation(numRows, blockSize, (startIdx, endIdx) -> {
@@ -316,7 +316,7 @@ public final class RealDenseTranspose {
      * @param src Entries of the matrix to transpose.
      * @return The transpose of the matrix.
      */
-    public static int[][] standardIntMatrix(final int[][] src) {
+    public static int[][] standardIntMatrix(int[][] src) {
         int rows = src.length;
         int cols = src[0].length;
         int[][] dest = new int[cols][rows];
@@ -336,7 +336,7 @@ public final class RealDenseTranspose {
      * @param src Entries of the matrix to transpose.
      * @return The transpose of the matrix.
      */
-    public static int[][] blockedIntMatrix(final int[][] src) {
+    public static int[][] blockedIntMatrix(int[][] src) {
         int[][] dest = new int[src[0].length][src.length];
         int blockSize = Configurations.getBlockSize();
 

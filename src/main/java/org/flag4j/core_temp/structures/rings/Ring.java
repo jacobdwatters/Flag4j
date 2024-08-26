@@ -42,13 +42,12 @@ package org.flag4j.core_temp.structures.rings;
  *  </ul>
  * </p>
  *
- * <p>Rings generalize {@link org.flag4j.core_temp.structures.fields.Field feilds} in that multiplication need not be
- * commutative and multiplicitive inverses need not exists.</p>
+ * <p>Rings generalize {@link org.flag4j.core_temp.structures.fields.Field fields} in that multiplication need not be
+ * commutative and multiplicitive inverses need not exists. As a result, division is not defined for a ring.</p>
  *
  * @param <T> Type of the ring element.
  * @see org.flag4j.core_temp.structures.fields.Field
  * @see SemiRing
- * @see org.flag4j.core_temp.structures.fields.GeneralizedRealField
  */
 public interface Ring<T extends Ring<T>> extends SemiRing<T> {
 
@@ -72,9 +71,9 @@ public interface Ring<T extends Ring<T>> extends SemiRing<T> {
 
     /**
      * <p>Computes the absolute value of this ring element.</p>
-     * <p>By default, this is implemented as {@code return }{@link #mag()}{@code ;}</p>
      *
      * @return The absolute value of this ring element.
+     * @implNote By default, this is implemented as {@code return }{@link #mag()}{@code ;}
      */
     default double abs() {
         return mag();
@@ -86,4 +85,14 @@ public interface Ring<T extends Ring<T>> extends SemiRing<T> {
      * @return The magniitude of this ring element.
      */
     public double mag();
+
+
+    /**
+     * Computs the conjugation of this ring element.
+     * @return The conjugation of this ring element.
+     * @implNote The default implementation of this method simply returns this ring element.
+     */
+    public default T conj() {
+        return (T) this;
+    }
 }

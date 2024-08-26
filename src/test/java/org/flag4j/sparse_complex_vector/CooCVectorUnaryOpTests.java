@@ -1,7 +1,7 @@
 package org.flag4j.sparse_complex_vector;
 
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,8 +15,8 @@ class CooCVectorUnaryOpTests {
     static CNumber[] aEntries, expEntries;
     double[] expEntriesRe;
     static int sparseSize;
-    static CooCVector a, exp;
-    CooVector expRe;
+    static CooCVectorOld a, exp;
+    CooVectorOld expRe;
 
 
     @BeforeAll
@@ -27,7 +27,7 @@ class CooCVectorUnaryOpTests {
         };
         aIndices = new int[]{4, 56, 9903, 14643};
         sparseSize = 24_023;
-        a = new CooCVector(sparseSize, aEntries, aIndices);
+        a = new CooCVectorOld(sparseSize, aEntries, aIndices);
     }
 
 
@@ -39,7 +39,7 @@ class CooCVectorUnaryOpTests {
                 new CNumber(24.56), new CNumber(-9356.1, -35)
         };
         expIndices = new int[]{4, 56, 9903, 14643};
-        exp = new CooCVector(sparseSize, expEntries, expIndices);
+        exp = new CooCVectorOld(sparseSize, expEntries, expIndices);
 
         assertEquals(exp, a.H());
         Assertions.assertEquals(exp, a.hermTranspose());
@@ -55,7 +55,7 @@ class CooCVectorUnaryOpTests {
                 new CNumber(24.56), new CNumber(-9356.1, 35)
         };
         expIndices = new int[]{4, 56, 9903, 14643};
-        exp = new CooCVector(sparseSize, expEntries, expIndices);
+        exp = new CooCVectorOld(sparseSize, expEntries, expIndices);
 
         assertEquals(exp, a.T());
         assertEquals(exp, a.transpose());
@@ -71,7 +71,7 @@ class CooCVectorUnaryOpTests {
                 new CNumber(24.56).multInv(), new CNumber(-9356.1, 35).multInv()
         };
         expIndices = new int[]{4, 56, 9903, 14643};
-        exp = new CooCVector(sparseSize, expEntries, expIndices);
+        exp = new CooCVectorOld(sparseSize, expEntries, expIndices);
 
         assertEquals(exp, a.recip());
     }
@@ -85,7 +85,7 @@ class CooCVectorUnaryOpTests {
                 new CNumber(24.56).mag(), new CNumber(-9356.1, 35).mag()
         };
         expIndices = new int[]{4, 56, 9903, 14643};
-        expRe = new CooVector(sparseSize, expEntriesRe, expIndices);
+        expRe = new CooVectorOld(sparseSize, expEntriesRe, expIndices);
 
         assertEquals(expRe, a.abs());
     }
@@ -99,7 +99,7 @@ class CooCVectorUnaryOpTests {
                 CNumber.sqrt(new CNumber(24.56)), CNumber.sqrt(new CNumber(-9356.1, 35))
         };
         expIndices = new int[]{4, 56, 9903, 14643};
-        exp = new CooCVector(sparseSize, expEntries, expIndices);
+        exp = new CooCVectorOld(sparseSize, expEntries, expIndices);
 
         assertEquals(exp, a.sqrt());
     }

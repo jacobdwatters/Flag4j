@@ -58,7 +58,7 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
      */
     protected RealDenseTensorBase(Shape shape, double[] entries) {
         super(shape, entries);
-        ParameterChecks.assertEquals(shape.totalEntries().intValueExact(), entries.length);
+        ParameterChecks.ensureEquals(shape.totalEntries().intValueExact(), entries.length);
     }
 
 
@@ -111,11 +111,11 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
      * entry (in row-major ordering) are returned.
      */
     @Override
-    public int[] argMin() {
+    public int[] argmin() {
         if(this.entries.length==0) {
             return new int[]{};
         } else {
-            return shape.getIndices(AggregateDenseReal.argMin(entries));
+            return shape.getIndices(AggregateDenseReal.argmin(entries));
         }
     }
 
@@ -127,11 +127,11 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
      * entry (in row-major ordering) are returned.
      */
     @Override
-    public int[] argMax() {
+    public int[] argmax() {
         if(this.entries.length==0) {
             return new int[]{};
         } else {
-            return shape.getIndices(AggregateDenseReal.argMax(entries));
+            return shape.getIndices(AggregateDenseReal.argmax(entries));
         }
     }
 
@@ -266,7 +266,7 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
      */
     @Override
     public T set(double value, int... indices) {
-        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
+        ParameterChecks.ensureArrayLengthsEq(indices.length, shape.getRank());
         RealDenseSetOperations.set(entries, shape, value, indices);
         return getSelf();
     }
@@ -282,7 +282,7 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
      */
     @Override
     public T reshape(Shape shape) {
-        ParameterChecks.assertBroadcastable(this.shape, shape);
+        ParameterChecks.ensureBroadcastable(this.shape, shape);
         return makeTensor(shape, this.entries.clone());
     }
 
@@ -325,7 +325,7 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
      */
     @Override
     public Double get(int... indices) {
-        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
+        ParameterChecks.ensureArrayLengthsEq(indices.length, shape.getRank());
         return entries[shape.entriesIndex(indices)];
     }
 

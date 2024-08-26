@@ -108,7 +108,7 @@ public abstract class ExactTensorSolver<
 
         System.arraycopy(A.shape.getDims(), start, dims, 0, dims.length);
 
-        return new Shape(true, dims);
+        return new Shape(dims);
     }
 
 
@@ -118,7 +118,7 @@ public abstract class ExactTensorSolver<
      * @param prod Product of all axis lengths in the output shape.
      */
     protected void checkSize(int aNumEntries, int prod) {
-        ParameterChecks.assertEquals(aNumEntries, prod);
+        ParameterChecks.ensureEquals(aNumEntries, prod);
     }
 
 

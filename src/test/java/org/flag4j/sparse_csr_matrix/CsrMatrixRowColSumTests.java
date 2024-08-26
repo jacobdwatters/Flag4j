@@ -2,14 +2,14 @@ package org.flag4j.sparse_csr_matrix;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CsrMatrix;
+import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CsrMatrixRowColSumTests {
 
-    static CsrMatrix A;
+    static CsrMatrixOld A;
     static double[][] aEntriesDense;
     static VectorOld exp;
     static double[] expEntries;

@@ -34,9 +34,9 @@ class TensorAggregateTests {
         exp = 0.0013;
         assertEquals(exp, A.minAbs());
         expIndices = shape.getIndices(4);
-        assertArrayEquals(expIndices, A.argMin());
+        assertArrayEquals(expIndices, A.argmin());
 
-        assertArrayEquals(new int[]{}, empty.argMin());
+        assertArrayEquals(new int[]{}, empty.argmin());
 
         // -------------------------- Maximum Tests --------------------------
         exp = 6466.6;
@@ -44,9 +44,9 @@ class TensorAggregateTests {
         exp = 8983.56;
         assertEquals(exp, A.maxAbs());
         expIndices = shape.getIndices(2);
-        assertArrayEquals(expIndices, A.argMax());
+        assertArrayEquals(expIndices, A.argmax());
 
-        assertArrayEquals(new int[]{}, empty.argMax());
+        assertArrayEquals(new int[]{}, empty.argmax());
     }
 
 

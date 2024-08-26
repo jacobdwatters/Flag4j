@@ -39,7 +39,7 @@ public final class DenseFieldTranspose {
 
     private DenseFieldTranspose() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

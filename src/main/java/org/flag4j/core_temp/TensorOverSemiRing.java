@@ -33,7 +33,7 @@ import org.flag4j.util.ArrayUtils;
  * <p>This abstract class defines a tensor whose elements satisfy the axioms of a semi-ring.</p>
  *
  * <p>To allow for primitive types, the elements of this tensor do not neccesarily have to implement
- * {@link org.flag4j.core_temp.structures.rings.SemiRing}</p>.
+ * {@link org.flag4j.core_temp.structures.rings.SemiRing}.</p>
  *
  * <p>Formally, an semi-ring is a set <b>R</b> with the binary operations_old addition (+) and multiplication (*)
  * defined such that for elements a, b, c in <b>R</b> the following are satisfied:
@@ -47,10 +47,15 @@ import org.flag4j.util.ArrayUtils;
  * </p>
  *
  * @param <T> Type of this tensor.
- * @param <U> Storage for entries of this tensor.
- * @param <V> Type (or wrapper) of an element of this tensor. Should satisfy the axioms of a semi-ring as stated.
+ * @param <U> Type of a dense tensor equivalent to {@code T}. If {@code T} is dense, then this should be the same type as {@code T}.
+ * This parameter required because some operations (e.g. {@link #tensorDot(TensorOverSemiRing, int)}) between two sparse tensors
+ * result in
+ * a dense tensor.
+ * @param <V> Storage for entries of this tensor.
+ * @param <W> Type (or wrapper) of an element of this tensor. Should satisfy the axioms of a semi-ring as stated.
  */
-public abstract class TensorOverSemiRing<T extends TensorOverSemiRing<T, U, V>, U, V> extends TensorBase<T, U, V> {
+public abstract class TensorOverSemiRing<T extends TensorOverSemiRing<T, U, V, W>,
+        U extends TensorOverSemiRing<U, U, V, W>, V, W> extends TensorBase<T, V, W> {
 
 
     /**
@@ -60,7 +65,7 @@ public abstract class TensorOverSemiRing<T extends TensorOverSemiRing<T, U, V>, 
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-    protected TensorOverSemiRing(Shape shape, U entries) {
+    protected TensorOverSemiRing(Shape shape, V entries) {
         super(shape, entries);
     }
 
@@ -72,14 +77,22 @@ public abstract class TensorOverSemiRing<T extends TensorOverSemiRing<T, U, V>, 
      *
      * @return The sum of this tensor with the scalar {@code b}.
      */
-    public abstract TensorOverSemiRing<T, U, V> add(V b);
+    public abstract T add(W b);
+
+
+    /**
+     * Adds a sclar value to each entry of this tensor and stores the result in this tensor.
+     *
+     * @param b Scalar field value in sum.
+     */
+    public abstract void addEq(W b);
 
 
     /**
      * Computes the element-wise sum between two tensors of the same shape.
      * @param b Second tensor in the element-wise sum.
      * @return The sum of this tensor with {@code b}.
-     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If this tensor and {@code b} do not have the same shape.
      */
     public abstract T add(T b);
 
@@ -91,7 +104,15 @@ public abstract class TensorOverSemiRing<T extends TensorOverSemiRing<T, U, V>, 
      *
      * @return The product of this tensor with {@code b}.
      */
-    public abstract T mult(V b);
+    public abstract T mult(W b);
+
+
+    /**
+     * Multiplies a sclar value to each entry of this tensor and stores the result in this tensor.
+     *
+     * @param b Scalar value in product.
+     */
+    public abstract void multEq(W b);
 
 
     /**
@@ -116,7 +137,7 @@ public abstract class TensorOverSemiRing<T extends TensorOverSemiRing<T, U, V>, 
      * and {@code bAxis}.
      * @throws IllegalArgumentException If either axis is out of bounds of the corresponding tensor.
      */
-    public T tensorDot(T src2, int axes){
+    public U tensorDot(T src2, int axes){
         int rank2 = src2.getRank();
         int[] src1Axes = ArrayUtils.intRange(0, axes);
         int[] src2Axes = ArrayUtils.intRange(rank2-axes, rank2);
@@ -136,7 +157,7 @@ public abstract class TensorOverSemiRing<T extends TensorOverSemiRing<T, U, V>, 
      * and {@code bAxis}.
      * @throws IllegalArgumentException If either axis is out of bounds of the corresponding tensor.
      */
-    public T tensorDot(T src2, int aAxis, int bAxis) {
+    public U tensorDot(T src2, int aAxis, int bAxis) {
         return tensorDot(src2, new int[]{aAxis}, new int[]{bAxis});
     }
 
@@ -153,7 +174,7 @@ public abstract class TensorOverSemiRing<T extends TensorOverSemiRing<T, U, V>, 
      * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
      * are out of bounds for the corresponding tensor.
      */
-    public abstract T tensorDot(T src2, int[] aAxes, int[] bAxes);
+    public abstract U tensorDot(T src2, int[] aAxes, int[] bAxes);
 
 
     /**
@@ -165,7 +186,9 @@ public abstract class TensorOverSemiRing<T extends TensorOverSemiRing<T, U, V>, 
      * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
      * along the second-to-last axis.
      */
-    public abstract T tensorDot(T src2);
+    public U tensorDot(T src2) {
+        return tensorDot(src2, getRank()-1, getRank()-2);
+    }
 
 
     /**
@@ -189,7 +212,34 @@ public abstract class TensorOverSemiRing<T extends TensorOverSemiRing<T, U, V>, 
      * {@code axis1} and {@code axis2}. The shape of the resulting tensor is equal to this tensor with the
      * {@code axis1} and {@code axis2} removed.</p>
      *
-     * @return The generalized trace of this tensor along @link axis1} and {@code axis2}.
+     * @param axis1 First axis for 2D sub-array.
+     * @param axis2 Second axis for 2D sub-array.
+     *
+     * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}.
+     * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
+     * @throws IllegalArgumentException If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * (i.e. the axes are equal or the tesnor does not have the same length along the two axes.)
      */
     public abstract T tensorTr(int axis1, int axis2);
+
+
+    /**
+     * Checks if this tensor only contains zeros.
+     * @return True if this tensor only contains zeros. Otherwise, returns false.
+     */
+    public abstract boolean isZeros();
+
+
+    /**
+     * Computes the sum of all values in this tensor.
+     * @return The sum of all values in this tensor.
+     */
+    public abstract W sum();
+
+
+    /**
+     * Computes the product of all values in this tensor.
+     * @return The product of all values in this tensor.
+     */
+    public abstract W prod();
 }

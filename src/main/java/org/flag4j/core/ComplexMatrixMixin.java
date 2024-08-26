@@ -25,8 +25,8 @@
 package org.flag4j.core;
 
 import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 
 
@@ -141,7 +141,7 @@ public interface ComplexMatrixMixin<T> {
      * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
      * @throws IndexOutOfBoundsException If {@code colIndex} is not within the matrix.
      */
-    T setCol(CooCVector values, int colIndex);
+    T setCol(CooCVectorOld values, int colIndex);
 
 
     /**
@@ -163,7 +163,7 @@ public interface ComplexMatrixMixin<T> {
      * @throws IllegalArgumentException If the {@code values} vector has a different length than the number of columns of this matrix.
      * @throws IndexOutOfBoundsException If {@code rowIndex} is not within the matrix.
      */
-    T setRow(CooCVector values, int rowIndex);
+    T setRow(CooCVectorOld values, int rowIndex);
 
 
     /**
@@ -177,5 +177,5 @@ public interface ComplexMatrixMixin<T> {
      * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
      * fit completely within this matrix.
      */
-    T setSlice(CooCMatrix values, int rowStart, int colStart);
+    T setSlice(CooCMatrixOld values, int rowStart, int colStart);
 }

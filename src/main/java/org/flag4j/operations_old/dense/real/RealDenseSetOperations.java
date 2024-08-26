@@ -42,7 +42,7 @@ public class RealDenseSetOperations {
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(Double[] src, final double[] dest) {
-        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+        ParameterChecks.ensureArrayLengthsEq(src.length, dest.length);
 
         for(int i=0; i<src.length; i++) {
             dest[i] = src[i];
@@ -58,7 +58,7 @@ public class RealDenseSetOperations {
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(Integer[] src, final double[] dest) {
-        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+        ParameterChecks.ensureArrayLengthsEq(src.length, dest.length);
 
         for(int i=0; i<src.length; i++) {
             dest[i] = src[i];
@@ -74,7 +74,7 @@ public class RealDenseSetOperations {
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(double[] src, final double[] dest) {
-        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+        ParameterChecks.ensureArrayLengthsEq(src.length, dest.length);
         System.arraycopy(src, 0, dest, 0, src.length);
     }
 
@@ -87,7 +87,7 @@ public class RealDenseSetOperations {
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(int[] src, final double[] dest) {
-        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+        ParameterChecks.ensureArrayLengthsEq(src.length, dest.length);
 
         for(int i=0; i<src.length; i++) {
             dest[i] = src[i];
@@ -103,7 +103,7 @@ public class RealDenseSetOperations {
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(Double[][] src, final double[] dest) {
-        ParameterChecks.assertTotalEntriesEq(src, dest);
+        ParameterChecks.ensureTotalEntriesEq(src, dest);
         int count = 0;
 
         for(Double[] doubles : src) {
@@ -122,7 +122,7 @@ public class RealDenseSetOperations {
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(Integer[][] src, final double[] dest) {
-        ParameterChecks.assertTotalEntriesEq(src, dest);
+        ParameterChecks.ensureTotalEntriesEq(src, dest);
         int count = 0;
 
         for(Integer[] integers : src) {
@@ -141,7 +141,7 @@ public class RealDenseSetOperations {
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(double[][] src, final double[] dest) {
-        ParameterChecks.assertTotalEntriesEq(src, dest);
+        ParameterChecks.ensureTotalEntriesEq(src, dest);
         int count = 0;
 
         for(double[] doubles : src) {
@@ -160,7 +160,7 @@ public class RealDenseSetOperations {
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(int[][] src, final double[] dest) {
-        ParameterChecks.assertTotalEntriesEq(src, dest);
+        ParameterChecks.ensureTotalEntriesEq(src, dest);
         int count = 0;
 
         for(int[] ints : src) {

@@ -28,13 +28,14 @@ package org.flag4j.linalg.solvers.exact;
 import org.flag4j.arrays_old.sparse.PermutationMatrix;
 import org.flag4j.core.MatrixMixin;
 import org.flag4j.core.VectorMixin;
+import org.flag4j.linalg.decompositions.lu.LUOld;
 import org.flag4j.linalg.solvers.LinearSolver;
 import org.flag4j.linalg.solvers.lstsq.LstsqSolver;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
 /**
- * <p>Solves a well determined system of equations {@code Ax=b} in an exact sense by using a {@code LU} decomposition.</p>
+ * <p>Solves a well determined system of equations {@code Ax=b} in an exact sense by using a {@code LUOld} decomposition.</p>
  * <p>If the system is not well determined, i.e. {@code A} is square and full rank, then use a
  * {@link LstsqSolver least-squares solver}.</p>
  */
@@ -53,26 +54,26 @@ public abstract class ExactSolver<
     protected final LinearSolver<T, U> backSolver;
 
     /**
-     * Decomposer to compute {@code LU} decomposition.
+     * Decomposer to compute {@code LUOld} decomposition.
      */
-    protected final org.flag4j.linalg.decompositions.lu.LU<T> lu;
+    protected final LUOld<T> lu;
     /**
-     * The unit-lower and upper triangular matrices from the {@code LU} decomposition stored in a single matrix.
+     * The unit-lower and upper triangular matrices from the {@code LUOld} decomposition stored in a single matrix.
      */
     protected T LU;
     /**
-     * Row permutation matrix for {@code LU} decomposition.
+     * Row permutation matrix for {@code LUOld} decomposition.
      */
     protected PermutationMatrix rowPermute;
 
     /**
-     * Constructs an exact LU solver with a specified {@code LU} decomposer.
-     * @param lu {@code LU} decomposer to employ in solving the linear system.
-     * @throws IllegalArgumentException If the {@code LU} decomposer does not use partial pivoting.
+     * Constructs an exact LUOld solver with a specified {@code LUOld} decomposer.
+     * @param lu {@code LUOld} decomposer to employ in solving the linear system.
+     * @throws IllegalArgumentException If the {@code LUOld} decomposer does not use partial pivoting.
      */
-    protected ExactSolver(org.flag4j.linalg.decompositions.lu.LU<T> lu, LinearSolver<T, U> forwardSolver, LinearSolver<T, U> backSolver) {
-        if(lu.pivotFlag!= org.flag4j.linalg.decompositions.lu.LU.Pivoting.PARTIAL) {
-            throw new IllegalArgumentException("LU solver must use partial pivoting but got " +
+    protected ExactSolver(LUOld<T> lu, LinearSolver<T, U> forwardSolver, LinearSolver<T, U> backSolver) {
+        if(lu.pivotFlag!= LUOld.Pivoting.PARTIAL) {
+            throw new IllegalArgumentException("LUOld solver must use partial pivoting but got " +
                     lu.pivotFlag.name() + ".");
         }
 
@@ -83,7 +84,7 @@ public abstract class ExactSolver<
 
 
     /**
-     * Decomposes A using an {@link org.flag4j.linalg.decompositions.lu.LU LU decomposition}.
+     * Decomposes A using an {@link LUOld LUOld decomposition}.
      * @param A MatrixOld to decompose.
      */
     protected void decompose(T A) {
@@ -108,10 +109,10 @@ public abstract class ExactSolver<
      */
     @Override
     public U solve(T A, U b) {
-        ParameterChecks.assertSquareMatrix(A.shape()); // Ensure A is square.
-        ParameterChecks.assertEquals(A.numCols(), b.size()); // b must have the same number of entries as columns in A.
+        ParameterChecks.ensureSquareMatrix(A.shape()); // Ensure A is square.
+        ParameterChecks.ensureEquals(A.numCols(), b.size()); // b must have the same number of entries as columns in A.
 
-        decompose(A); // Compute LU decomposition.
+        decompose(A); // Compute LUOld decomposition.
 
         U y = forwardSolver.solve(LU, permuteRows(b));
         return backSolver.solve(LU, y); // If A is singular, then U will be singular, and it will be discovered here.
@@ -131,10 +132,10 @@ public abstract class ExactSolver<
      */
     @Override
     public T solve(T A, T B) {
-        ParameterChecks.assertSquareMatrix(A.shape()); // Ensure A is square.
-        ParameterChecks.assertEquals(A.numCols(), B.numRows()); // b must have the same number of entries as columns in A.
+        ParameterChecks.ensureSquareMatrix(A.shape()); // Ensure A is square.
+        ParameterChecks.ensureEquals(A.numCols(), B.numRows()); // b must have the same number of entries as columns in A.
 
-        decompose(A); // Compute LU decomposition.
+        decompose(A); // Compute LUOld decomposition.
 
         T Y = forwardSolver.solve(LU, permuteRows(B));
         return backSolver.solve(LU, Y); // If A is singular, it will be discovered in the back solve.
@@ -142,18 +143,18 @@ public abstract class ExactSolver<
 
 
     /**
-     * Permute the rows of a vector using the row permutation matrix from the LU decomposition.
+     * Permute the rows of a vector using the row permutation matrix from the LUOld decomposition.
      * @param b VectorOld to permute the rows of.
-     * @return A vector which is the result of applying the row permutation from the LU decomposition
+     * @return A vector which is the result of applying the row permutation from the LUOld decomposition
      * to the vector {@code b}.
      */
     protected abstract U permuteRows(U b);
 
 
     /**
-     * Permute the rows of a matrix using the row permutation matrix from the LU decomposition.
+     * Permute the rows of a matrix using the row permutation matrix from the LUOld decomposition.
      * @param B matrix to permute the rows of.
-     * @return A matrix which is the result of applying the row permutation from the LU decomposition
+     * @return A matrix which is the result of applying the row permutation from the LUOld decomposition
      * to the matrix {@code B}.
      */
     protected abstract T permuteRows(T B);

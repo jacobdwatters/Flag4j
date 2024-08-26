@@ -27,8 +27,8 @@ package org.flag4j.core;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 
 /**
@@ -66,7 +66,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @param b VectorOld to join with this vector.
      * @return A vector resulting from joining the specified vector with this vector.
      */
-    T join(CooVector b);
+    T join(CooVectorOld b);
 
 
     /**
@@ -74,7 +74,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @param b VectorOld to join with this vector.
      * @return A vector resulting from joining the specified vector with this vector.
      */
-    W join(CooCVector b);
+    W join(CooCVectorOld b);
 
     // TODO: Add stack(vec, axis) methods so vectors can be stacked as if column vectors.
 
@@ -99,7 +99,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * - If the number of entries in this vector is different from the number of entries in
      * the vector {@code b}.
      */
-    TT stack(CooVector b);
+    TT stack(CooVectorOld b);
 
 
     /**
@@ -123,7 +123,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * - If the number of entries in this vector is different from the number of entries in
      * the vector {@code b}.
      */
-    WW stack(CooCVector b);
+    WW stack(CooCVectorOld b);
 
 
     /**
@@ -175,7 +175,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * entries in the vector {@code b}.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    TT stack(CooVector b, int axis);
+    TT stack(CooVectorOld b, int axis);
 
 
     /**
@@ -227,7 +227,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * entries in the vector {@code b}.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    WW stack(CooCVector b, int axis);
+    WW stack(CooCVectorOld b, int axis);
 
 
     /**
@@ -245,7 +245,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    T add(CooVector B);
+    T add(CooVectorOld B);
 
 
     /**
@@ -263,7 +263,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    W add(CooCVector B);
+    W add(CooCVectorOld B);
 
 
     /**
@@ -281,7 +281,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the element-wise vector subtraction.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    T sub(CooVector B);
+    T sub(CooVectorOld B);
 
 
     /**
@@ -299,7 +299,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the element-wise vector subtraction.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    W sub(CooCVector B);
+    W sub(CooCVectorOld B);
 
 
     /**
@@ -317,7 +317,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The vector resulting from the element-wise multiplication.
      * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
      */
-    V elemMult(CooVector B);
+    V elemMult(CooVectorOld B);
 
 
     /**
@@ -335,7 +335,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The vector resulting from the element-wise multiplication.
      * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
      */
-    CooCVector elemMult(CooCVector B);
+    CooCVectorOld elemMult(CooCVectorOld B);
 
 
     /**
@@ -371,7 +371,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
-    X inner(CooVector b);
+    X inner(CooVectorOld b);
 
 
     /**
@@ -398,7 +398,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
-    CNumber inner(CooCVector b);
+    CNumber inner(CooCVectorOld b);
 
 
     /**
@@ -416,7 +416,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the vector outer product between this vector and b.
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
-    UU outer(CooVector b);
+    UU outer(CooVectorOld b);
 
 
     /**
@@ -434,10 +434,10 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the vector outer product between this vector and b.
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
-    CMatrixOld outer(CooCVector b);
+    CMatrixOld outer(CooCVectorOld b);
 
 
-    // TODO: ADD isParallel(CVectorOld b), isParallel(CooVector b), and isParallel(sparseCVector)
+    // TODO: ADD isParallel(CVectorOld b), isParallel(CooVectorOld b), and isParallel(sparseCVector)
     /**
      * Checks if a vector is parallel to this vector.
      *
@@ -447,7 +447,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
     boolean isParallel(VectorOld b);
 
 
-    // TODO: Add isPerp(CVectorOld b), isPerp(CooVector b), and isPerp(sparseCVector)
+    // TODO: Add isPerp(CVectorOld b), isPerp(CooVectorOld b), and isPerp(sparseCVector)
     /**
      * Checks if a vector is perpendicular to this vector.
      *

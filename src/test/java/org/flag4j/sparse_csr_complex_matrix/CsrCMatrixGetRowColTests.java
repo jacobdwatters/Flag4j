@@ -1,7 +1,7 @@
 package org.flag4j.sparse_csr_complex_matrix;
 
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -11,13 +11,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CsrCMatrixGetRowColTests {
 
-    CsrCMatrix A;
+    CsrCMatrixOld A;
     Shape aShape;
     CNumber[] aEntries;
     int[] aRowPointers;
     int[] aColIndices;
 
-    CooCVector exp;
+    CooCVectorOld exp;
     int expSize;
     CNumber[] expEntries;
     int[] expIndices;
@@ -35,13 +35,13 @@ class CsrCMatrixGetRowColTests {
                 new CNumber(0.61427, 0.52308)};
         aRowPointers = new int[]{0, 1, 4, 4, 7, 7, 8, 11, 12, 13, 15, 16, 18};
         aColIndices = new int[]{14, 4, 7, 9, 8, 9, 11, 11, 2, 9, 10, 12, 9, 3, 9, 11, 2, 6};
-        A = new CsrCMatrix(aShape, aEntries, aRowPointers, aColIndices);
+        A = new CsrCMatrixOld(aShape, aEntries, aRowPointers, aColIndices);
 
         expSize = 15;
         expEntries = new CNumber[]{new CNumber(0.96814, 0.41204), new CNumber(0.50047, 0.17891),
                 new CNumber(0.78237, 0.33373)};
         expIndices = new int[]{4, 7, 9};
-        exp = new CooCVector(expSize, expEntries, expIndices);
+        exp = new CooCVectorOld(expSize, expEntries, expIndices);
 
         assertEquals(exp, A.getRow(1));
 
@@ -76,12 +76,12 @@ class CsrCMatrixGetRowColTests {
         aColIndices = new int[]{8644, 13316, 2475, 4742, 8613, 5339, 13064, 3856, 10265, 4381, 14646, 1492, 3871, 4174, 12022, 938,
                 4211, 11533, 11423, 7119, 9759, 5107, 9, 9304, 15087, 8113, 8874, 8709, 10168, 1440, 2783, 7482, 1489, 3721, 11915,
                 10588, 4684, 4947, 5088, 7959, 6683, 3493, 6879, 13401, 3782};
-        A = new CsrCMatrix(aShape, aEntries, aRowPointers, aColIndices);
+        A = new CsrCMatrixOld(aShape, aEntries, aRowPointers, aColIndices);
 
         expSize = 15166;
         expEntries = new CNumber[]{};
         expIndices = new int[]{};
-        exp = new CooCVector(expSize, expEntries, expIndices);
+        exp = new CooCVectorOld(expSize, expEntries, expIndices);
 
         assertEquals(exp, A.getRow(1));
 
@@ -190,18 +190,18 @@ class CsrCMatrixGetRowColTests {
                 13511, 7287, 86, 1028, 13812, 3358, 13245, 9521, 11240, 1192, 6935, 13412, 10208, 14909, 8296, 13444, 4531, 9687,
                 10261, 8491, 14865, 1128, 6940, 41, 7431, 5395, 10194, 11774, 4126, 2777, 1447, 3493, 8081, 10003, 14514, 1622, 13315,
                 11606, 12628, 9514, 889, 10978, 4847, 12431, 10487};
-        A = new CsrCMatrix(aShape, aEntries, aRowPointers, aColIndices);
+        A = new CsrCMatrixOld(aShape, aEntries, aRowPointers, aColIndices);
 
         expSize = 15166;
         expEntries = new CNumber[]{new CNumber(325.1, -5235.0), new CNumber(0.0, 15.0), new CNumber(200.25, 0.0),
                 new CNumber(0.0025, 23.56), new CNumber(0.17583, 0.80122)};
         expIndices = new int[]{14, 152, 256, 299, 2051};
-        exp = new CooCVector(expSize, expEntries, expIndices);
+        exp = new CooCVectorOld(expSize, expEntries, expIndices);
 
         assertEquals(exp, A.getRow(66));
 
         // --------------------- sub-case 4 ---------------------
-        A = new CsrCMatrix(1000, 15235);
+        A = new CsrCMatrixOld(1000, 15235);
         assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(-1));
         assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(1001));
         assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(-4));
@@ -222,13 +222,13 @@ class CsrCMatrixGetRowColTests {
                 new CNumber(0.61427, 0.52308)};
         aRowPointers = new int[]{0, 1, 4, 4, 7, 7, 8, 11, 12, 13, 15, 16, 18};
         aColIndices = new int[]{14, 4, 7, 9, 8, 9, 11, 11, 2, 9, 10, 12, 9, 3, 9, 11, 2, 6};
-        A = new CsrCMatrix(aShape, aEntries, aRowPointers, aColIndices);
+        A = new CsrCMatrixOld(aShape, aEntries, aRowPointers, aColIndices);
 
         expSize = 10;
         expEntries = new CNumber[]{new CNumber(0.50047, 0.17891),
                 new CNumber(0.78237, 0.33373)};
         expIndices = new int[]{7-5, 9-5};
-        exp = new CooCVector(expSize, expEntries, expIndices);
+        exp = new CooCVectorOld(expSize, expEntries, expIndices);
 
         assertEquals(exp, A.getRowAfter(5, 1));
 
@@ -263,12 +263,12 @@ class CsrCMatrixGetRowColTests {
         aColIndices = new int[]{8644, 13316, 2475, 4742, 8613, 5339, 13064, 3856, 10265, 4381, 14646, 1492, 3871, 4174, 12022, 938,
                 4211, 11533, 11423, 7119, 9759, 5107, 9, 9304, 15087, 8113, 8874, 8709, 10168, 1440, 2783, 7482, 1489, 3721, 11915,
                 10588, 4684, 4947, 5088, 7959, 6683, 3493, 6879, 13401, 3782};
-        A = new CsrCMatrix(aShape, aEntries, aRowPointers, aColIndices);
+        A = new CsrCMatrixOld(aShape, aEntries, aRowPointers, aColIndices);
 
         expSize = 15166-67;
         expEntries = new CNumber[]{};
         expIndices = new int[]{};
-        exp = new CooCVector(expSize, expEntries, expIndices);
+        exp = new CooCVectorOld(expSize, expEntries, expIndices);
 
         assertEquals(exp, A.getRowAfter(67, 1));
 
@@ -377,17 +377,17 @@ class CsrCMatrixGetRowColTests {
                 13511, 7287, 86, 1028, 13812, 3358, 13245, 9521, 11240, 1192, 6935, 13412, 10208, 14909, 8296, 13444, 4531, 9687,
                 10261, 8491, 14865, 1128, 6940, 41, 7431, 5395, 10194, 11774, 4126, 2777, 1447, 3493, 8081, 10003, 14514, 1622, 13315,
                 11606, 12628, 9514, 889, 10978, 4847, 12431, 10487};
-        A = new CsrCMatrix(aShape, aEntries, aRowPointers, aColIndices);
+        A = new CsrCMatrixOld(aShape, aEntries, aRowPointers, aColIndices);
 
         expSize = 15166-180;
         expEntries = new CNumber[]{new CNumber(200.25, 0.0), new CNumber(0.0025, 23.56), new CNumber(0.17583, 0.80122)};
         expIndices = new int[]{256-180, 299-180, 2051-180};
-        exp = new CooCVector(expSize, expEntries, expIndices);
+        exp = new CooCVectorOld(expSize, expEntries, expIndices);
 
         assertEquals(exp, A.getRowAfter(180, 66));
 
         // --------------------- sub-case 4 ---------------------
-        A = new CsrCMatrix(1000, 15235);
+        A = new CsrCMatrixOld(1000, 15235);
         assertThrows(IndexOutOfBoundsException.class, ()->A.getRowAfter(34, -1));
         assertThrows(IndexOutOfBoundsException.class, ()->A.getRowAfter(2, 1001));
         assertThrows(IndexOutOfBoundsException.class, ()->A.getRowAfter(-1, -4));
@@ -402,12 +402,12 @@ class CsrCMatrixGetRowColTests {
         aEntries = new CNumber[]{new CNumber(0.55665, 0.29606), new CNumber(0.21818, 0.9712), new CNumber(0.65279, 0.31613), new CNumber(0.86714, 0.28674), new CNumber(0.50446, 0.76213), new CNumber(0.8378, 0.74914), new CNumber(0.32969, 0.9887), new CNumber(0.72675, 0.56593), new CNumber(0.74808, 0.42695), new CNumber(0.34951, 0.81078), new CNumber(0.42019, 0.15711), new CNumber(0.5746, 0.56468), new CNumber(0.7098, 0.22421), new CNumber(0.16338, 0.84483), new CNumber(0.7074, 0.46212), new CNumber(0.06522, 0.53442), new CNumber(0.24251, 0.22357), new CNumber(0.1591, 0.83203), new CNumber(0.68286, 0.08171), new CNumber(0.49218, 0.00795), new CNumber(0.77747, 0.88406), new CNumber(0.21185, 0.52285), new CNumber(0.18112, 0.7577), new CNumber(0.92702, 0.05993), new CNumber(0.33354, 0.22838), new CNumber(0.28677, 0.89053), new CNumber(0.67063, 0.97222), new CNumber(0.45945, 0.2992), new CNumber(0.34819, 0.80283), new CNumber(0.57362, 0.37478), new CNumber(0.88969, 0.69861), new CNumber(0.47338, 0.92047), new CNumber(0.59016, 0.75278), new CNumber(0.59822, 0.25406), new CNumber(0.88912, 0.33943), new CNumber(0.80134, 0.68503), new CNumber(0.47818, 0.03871), new CNumber(0.59592, 0.04876), new CNumber(0.49683, 0.62696), new CNumber(0.82016, 0.33223), new CNumber(0.22196, 0.16496), new CNumber(0.99328, 0.70379), new CNumber(0.09211, 0.98179), new CNumber(0.7068, 0.32362), new CNumber(0.02528, 0.23349), new CNumber(0.05837, 0.01675), new CNumber(0.50625, 0.24137), new CNumber(0.84099, 0.82527), new CNumber(0.52687, 0.67906), new CNumber(0.27742, 0.53553), new CNumber(0.40925, 0.95997), new CNumber(0.43899, 0.37746), new CNumber(0.8819, 0.30187), new CNumber(0.87222, 0.76276), new CNumber(0.68874, 0.00434), new CNumber(0.28473, 0.60034)};
         aRowPointers = new int[]{0, 5, 8, 9, 14, 16, 18, 22, 26, 32, 36, 41, 46, 49, 51, 56};
         aColIndices = new int[]{5, 7, 8, 9, 12, 6, 9, 13, 14, 2, 7, 10, 11, 12, 8, 9, 3, 4, 5, 11, 12, 14, 0, 1, 5, 11, 1, 4, 6, 8, 9, 12, 4, 5, 6, 8, 0, 8, 11, 12, 13, 2, 3, 6, 9, 13, 7, 11, 12, 3, 13, 1, 2, 4, 9, 14};
-        A = new CsrCMatrix(aShape, aEntries, aRowPointers, aColIndices);
+        A = new CsrCMatrixOld(aShape, aEntries, aRowPointers, aColIndices);
 
         expSize = 15;
         expEntries = new CNumber[]{new CNumber(0.24251, 0.22357), new CNumber(0.09211, 0.98179), new CNumber(0.27742, 0.53553)};
         expIndices = new int[]{5, 11, 13};
-        exp = new CooCVector(expSize, expEntries, expIndices);
+        exp = new CooCVectorOld(expSize, expEntries, expIndices);
 
         assertEquals(exp, A.getCol(3));
 
@@ -416,17 +416,17 @@ class CsrCMatrixGetRowColTests {
         aEntries = new CNumber[]{new CNumber(0.99107, 0.03301), new CNumber(0.29454, 0.07323), new CNumber(0.62045, 0.18456), new CNumber(0.93435, 0.60405), new CNumber(0.7067, 0.43003), new CNumber(15.6, -9.3), new CNumber(0.83198, 0.09194), new CNumber(0.65607, 0.04688), new CNumber(0.98788, 0.58681), new CNumber(0.36453, 0.77038), new CNumber(0.44178, 0.48798), new CNumber(0.59911, 0.50006), new CNumber(0.80486, 0.42829), new CNumber(0.9365, 0.85784), new CNumber(0.54784, 0.89768), new CNumber(0.78264, 0.7762), new CNumber(0.66632, 0.04367), new CNumber(325.6, -0.0015), new CNumber(0.59403, 0.56382), new CNumber(0.62668, 0.24169), new CNumber(0.92688, 0.03511), new CNumber(0.8457, 0.13989), new CNumber(0.1006, 0.97042), new CNumber(0.02962, 0.54478), new CNumber(0.18817, 0.34006), new CNumber(0.9392, 0.5656), new CNumber(0.65649, 0.42331), new CNumber(0.99858, 0.3669), new CNumber(0.94221, 0.31404), new CNumber(0.05941, 0.33145), new CNumber(0.85704, 0.0076), new CNumber(0.94471, 0.01803), new CNumber(0.84173, 0.84047), new CNumber(0.56608, 0.57495), new CNumber(0.74177, 0.53429), new CNumber(0.29672, 0.57347), new CNumber(0.2044, 0.73664), new CNumber(0.7223, 0.02033), new CNumber(0.43509, 0.80003), new CNumber(0.38461, 0.87307), new CNumber(0.84572, 0.61301), new CNumber(0.33431, 0.82291), new CNumber(0.44181, 0.60089), new CNumber(0.45548, 0.51822), new CNumber(0.87477, 0.80462), new CNumber(0.59899, 0.586), new CNumber(0.74317, 0.3269), new CNumber(0.1467, 0.18467), new CNumber(0.44001, 0.43861), new CNumber(0.91416, 0.35709), new CNumber(0.76048, 0.56933), new CNumber(0.59212, 0.89603), new CNumber(0.88027, 0.62336), new CNumber(0.00661, 0.70341), new CNumber(0.66716, 0.86243), new CNumber(0.22113, 0.70094), new CNumber(0.52961, 0.16805), new CNumber(0.5109, 0.21496), new CNumber(0.0108, 0.83879), new CNumber(0.73692, 0.35065), new CNumber(0.75467, 0.67288), new CNumber(0.28416, 0.5289), new CNumber(0.56294, 0.46089), new CNumber(0.30522, 0.94562), new CNumber(0.19369, 0.22727), new CNumber(0.93765, 0.57145), new CNumber(0.80042, 0.34577), new CNumber(0.12658, 0.22209), new CNumber(0.79551, 0.95095), new CNumber(0.34824, 0.21561), new CNumber(0.03, 0.42283), new CNumber(0.66772, 0.17177), new CNumber(0.62885, 0.37655), new CNumber(0.86843, 0.00222), new CNumber(0.3272, 0.01863), new CNumber(0.48101, 0.13229), new CNumber(0.52672, 0.10127), new CNumber(0.09069, 0.66551), new CNumber(0.85574, 0.22091), new CNumber(0.2036, 0.26362), new CNumber(0.45319, 0.70855), new CNumber(0.8619, 0.32881), new CNumber(0.87954, 0.40211), new CNumber(0.72609, 0.54926), new CNumber(0.06173, 0.70943), new CNumber(0.249, 0.15949), new CNumber(0.34828, 0.86934), new CNumber(0.26575, 0.40123), new CNumber(0.64924, 0.59451), new CNumber(0.08251, 0.07417), new CNumber(0.44442, 0.40053), new CNumber(0.03482, 0.47076), new CNumber(0.53107, 0.28036), new CNumber(0.97127, 0.25901), new CNumber(0.8559, 0.83469), new CNumber(0.21252, 0.46033), new CNumber(0.61507, 0.92657), new CNumber(0.4268, 0.43197), new CNumber(0.44359, 0.18648), new CNumber(0.52549, 0.21405), new CNumber(0.1256, 0.7557), new CNumber(-0.0, -1.0), new CNumber(0.87474, 0.59101), new CNumber(0.95181, 0.77451)};
         aRowPointers = new int[]{0, 2, 2, 6, 7, 9, 11, 12, 13, 13, 14, 15, 17, 17, 17, 17, 19, 20, 20, 22, 23, 23, 23, 24, 25, 25, 25, 25, 26, 27, 27, 27, 28, 30, 31, 33, 36, 38, 38, 39, 40, 40, 40, 40, 41, 42, 43, 43, 44, 46, 46, 46, 46, 48, 48, 50, 51, 52, 53, 53, 54, 56, 56, 57, 57, 57, 58, 59, 60, 62, 63, 63, 63, 66, 67, 68, 69, 70, 70, 72, 75, 75, 75, 76, 78, 79, 79, 79, 80, 82, 83, 84, 85, 86, 87, 87, 88, 88, 90, 92, 92, 92, 93, 93, 93, 93, 94, 95, 95, 95, 96, 96, 96, 97, 98, 98, 99, 99, 99, 99, 100, 100, 100, 102, 102, 103, 103, 104, 104, 104, 104};
         aColIndices = new int[]{23, 115, 49, 86, 105, 125, 138, 9, 29, 1, 41, 51, 106, 138, 69, 66, 87, 125, 135, 120, 58, 123, 29, 109, 136, 148, 90, 46, 8, 61, 67, 3, 14, 59, 87, 112, 92, 97, 97, 85, 54, 45, 119, 134, 5, 126, 19, 114, 101, 128, 0, 76, 47, 110, 76, 81, 61, 142, 53, 55, 5, 63, 8, 56, 63, 66, 8, 11, 21, 44, 45, 116, 7, 17, 91, 47, 2, 125, 26, 22, 14, 109, 58, 82, 57, 117, 37, 107, 4, 27, 58, 106, 24, 93, 1, 144, 102, 144, 18, 44, 41, 125, 11, 117};
-        A = new CsrCMatrix(aShape, aEntries, aRowPointers, aColIndices);
+        A = new CsrCMatrixOld(aShape, aEntries, aRowPointers, aColIndices);
 
         expSize = 130;
         expEntries = new CNumber[]{new CNumber(15.6, -9.3), new CNumber(325.6, -0.0015), new CNumber(0.09069, 0.66551), new CNumber(-0.0, -1.0)};
         expIndices = new int[]{2, 15, 83, 122};
-        exp = new CooCVector(expSize, expEntries, expIndices);
+        exp = new CooCVectorOld(expSize, expEntries, expIndices);
 
         assertEquals(exp, A.getCol(125));
 
         // --------------------- sub-case 3 ---------------------
-        A = new CsrCMatrix(100235, 15235);
+        A = new CsrCMatrixOld(100235, 15235);
         assertThrows(IndexOutOfBoundsException.class, ()->A.getCol(-1));
         assertThrows(IndexOutOfBoundsException.class, ()->A.getCol(15235));
         assertThrows(IndexOutOfBoundsException.class, ()->A.getCol(-4));

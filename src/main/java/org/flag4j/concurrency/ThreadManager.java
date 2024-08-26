@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 public final class ThreadManager {
     private ThreadManager() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
     /**

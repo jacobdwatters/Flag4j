@@ -39,7 +39,7 @@ public class RealDenseEquals {
 
     private RealDenseEquals() {
         // Hide constructor.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

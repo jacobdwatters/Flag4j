@@ -25,14 +25,12 @@
 package org.flag4j.core_temp;
 
 
-import org.flag4j.core_temp.arrays.dense.FieldTensor;
-
 /**
  * This interface defines operations_old that complex-valued matrices should implement.
  * @param <T> Type of the tensor returned by the operation.
  * @see TensorPrimitiveOpsMixin
  */
-public interface ComplexOpsMixin<T extends FieldTensor<?>> {
+public interface ComplexOpsMixin<T extends FieldTensorBase<T, ?, ?>> {
 
     /**
      * Computes the Hermitian transpose of a tensor by exchanging and conjugating the first and last axes of this tensor.

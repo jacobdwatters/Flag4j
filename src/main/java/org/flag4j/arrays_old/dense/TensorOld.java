@@ -24,8 +24,8 @@
 
 package org.flag4j.arrays_old.dense;
 
-import org.flag4j.arrays_old.sparse.CooCTensor;
-import org.flag4j.arrays_old.sparse.CooTensor;
+import org.flag4j.arrays_old.sparse.CooCTensorOld;
+import org.flag4j.arrays_old.sparse.CooTensorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.core.TensorBase;
@@ -55,7 +55,7 @@ import java.util.Arrays;
 @Deprecated
 public class TensorOld
         extends RealDenseTensorBase<TensorOld, CTensorOld>
-        implements TensorExclusiveMixin<TensorOld, TensorOld, CooTensor, CTensorOld> {
+        implements TensorExclusiveMixin<TensorOld, TensorOld, CooTensorOld, CTensorOld> {
 
 
     /**
@@ -64,7 +64,6 @@ public class TensorOld
      */
     public TensorOld(Shape shape) {
         super(shape, new double[shape.totalEntries().intValueExact()]);
-        shape.makeStridesIfNull();
     }
 
 
@@ -80,7 +79,7 @@ public class TensorOld
             super.entries[i] = fillValue;
         }
 
-        shape.makeStridesIfNull();
+        
     }
 
 
@@ -92,7 +91,7 @@ public class TensorOld
      */
     public TensorOld(Shape shape, double[] entries) {
         super(shape, entries);
-        shape.makeStridesIfNull();
+        
 
         if(entries.length != super.totalEntries().intValueExact()) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));
@@ -108,7 +107,7 @@ public class TensorOld
      */
     public TensorOld(Shape shape, int[] entries) {
         super(shape, Arrays.stream(entries).asDoubleStream().toArray());
-        shape.makeStridesIfNull();
+        
 
         if(entries.length != super.totalEntries().intValueExact()) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));
@@ -124,7 +123,7 @@ public class TensorOld
      */
     public TensorOld(Shape shape, Double[] entries) {
         super(shape, new double[entries.length]);
-        shape.makeStridesIfNull();
+        
 
         if(entries.length != super.totalEntries().intValueExact()) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));
@@ -146,7 +145,7 @@ public class TensorOld
      */
     public TensorOld(Shape shape, Integer[] entries) {
         super(shape, new double[entries.length]);
-        shape.makeStridesIfNull();
+        
 
         if(entries.length != super.totalEntries().intValueExact()) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));
@@ -166,7 +165,7 @@ public class TensorOld
      */
     public TensorOld(TensorOld A) {
         super(A.shape, A.entries.clone());
-        shape.makeStridesIfNull();
+        
     }
 
 
@@ -176,7 +175,7 @@ public class TensorOld
      */
     public TensorOld(MatrixOld A) {
         super(A.shape, A.entries.clone());
-        shape.makeStridesIfNull();
+        
     }
 
 
@@ -186,7 +185,7 @@ public class TensorOld
      */
     public TensorOld(VectorOld A) {
         super(A.shape, A.entries.clone());
-        shape.makeStridesIfNull();
+        
     }
 
 
@@ -199,7 +198,7 @@ public class TensorOld
      */
     @Override
     protected TensorOld makeTensor(Shape shape, double[] entries) {
-        shape.makeStridesIfNull();
+        
         return new TensorOld(shape, entries);
     }
 
@@ -213,7 +212,7 @@ public class TensorOld
      */
     @Override
     protected CTensorOld makeComplexTensor(Shape shape, double[] entries) {
-        shape.makeStridesIfNull();
+        
         return new CTensorOld(shape, entries);
     }
 
@@ -227,7 +226,7 @@ public class TensorOld
      */
     @Override
     protected CTensorOld makeComplexTensor(Shape shape, CNumber[] entries) {
-        shape.makeStridesIfNull();
+        
         return new CTensorOld(shape, entries);
     }
 
@@ -254,7 +253,7 @@ public class TensorOld
         int[] dims = new int[this.getRank()];
         Arrays.fill(dims, 1);
         dims[axis] = shape.totalEntries().intValueExact();
-        Shape flatShape = new Shape(true, dims);
+        Shape flatShape = new Shape(dims);
 
         return new TensorOld(flatShape, entries.clone());
     }
@@ -283,8 +282,8 @@ public class TensorOld
      * @return A sparse COO tensor which is equivalent to this dense tensor.
      */
     @Override
-    public CooTensor toCoo() {
-        return CooTensor.fromDense(this);
+    public CooTensorOld toCoo() {
+        return CooTensorOld.fromDense(this);
     }
 
 
@@ -295,7 +294,7 @@ public class TensorOld
      */
     @Override
     public TensorOld flatten() {
-        return new TensorOld(new Shape(true, entries.length), this.entries.clone());
+        return new TensorOld(new Shape(entries.length), this.entries.clone());
     }
 
 
@@ -305,7 +304,7 @@ public class TensorOld
      * @param B Second tensor in the addition.
      * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
      */
-    public void addEq(CooTensor B) {
+    public void addEq(CooTensorOld B) {
         RealDenseSparseTensorOperations.addEq(this, B);
     }
 
@@ -402,7 +401,7 @@ public class TensorOld
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public TensorOld add(CooTensor B) {
+    public TensorOld add(CooTensorOld B) {
         return RealDenseSparseTensorOperations.add(this, B);
     }
 
@@ -431,7 +430,7 @@ public class TensorOld
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CTensorOld add(CooCTensor B) {
+    public CTensorOld add(CooCTensorOld B) {
         return RealComplexDenseSparseOperations.add(this, B);
     }
 
@@ -444,7 +443,7 @@ public class TensorOld
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public TensorOld sub(CooTensor B) {
+    public TensorOld sub(CooTensorOld B) {
         return RealDenseSparseTensorOperations.sub(this, B);
     }
 
@@ -473,7 +472,7 @@ public class TensorOld
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CTensorOld sub(CooCTensor B) {
+    public CTensorOld sub(CooCTensorOld B) {
         return RealComplexDenseSparseOperations.sub(this, B);
     }
 
@@ -484,7 +483,7 @@ public class TensorOld
      * @param B Second tensor in the subtraction.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    public void subEq(CooTensor B) {
+    public void subEq(CooTensorOld B) {
         RealDenseSparseTensorOperations.subEq(this, B);
     }
 
@@ -496,7 +495,7 @@ public class TensorOld
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     @Override
-    public CooTensor elemMult(CooTensor B) {
+    public CooTensorOld elemMult(CooTensorOld B) {
         return RealDenseSparseTensorOperations.elemMult(this, B);
     }
 
@@ -523,7 +522,7 @@ public class TensorOld
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     @Override
-    public CooCTensor elemMult(CooCTensor B) {
+    public CooCTensorOld elemMult(CooCTensorOld B) {
         return RealComplexDenseSparseOperations.elemMult(this, B);
     }
 
@@ -574,8 +573,8 @@ public class TensorOld
      * @return A matrix of shape {@code matShape} with the values of this tensor.
      */
     public MatrixOld toMatrix(Shape matShape) {
-        ParameterChecks.assertBroadcastable(shape, matShape);
-        ParameterChecks.assertRank(2, matShape);
+        ParameterChecks.ensureBroadcastable(shape, matShape);
+        ParameterChecks.ensureRank(2, matShape);
 
         return new MatrixOld(matShape, entries.clone());
     }

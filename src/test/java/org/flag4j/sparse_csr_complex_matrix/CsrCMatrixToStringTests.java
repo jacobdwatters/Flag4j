@@ -1,7 +1,7 @@
 package org.flag4j.sparse_csr_complex_matrix;
 
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CsrCMatrixToStringTests {
-    static CsrCMatrix A;
+    static CsrCMatrixOld A;
     static Shape aShape;
     static CNumber[] nnz;
     static int[] colIndices;
@@ -17,7 +17,7 @@ public class CsrCMatrixToStringTests {
     String exp = "";
 
     static void build() {
-        A = new CooCMatrix(aShape, nnz, rowIndices, colIndices).toCsr();
+        A = new CooCMatrixOld(aShape, nnz, rowIndices, colIndices).toCsr();
     }
 
 

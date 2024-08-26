@@ -25,8 +25,8 @@
 package org.flag4j.operations_old.sparse.coo.real;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooMatrix;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -42,7 +42,7 @@ public class RealSparseMatrixOperations {
 
     private RealSparseMatrixOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -54,8 +54,8 @@ public class RealSparseMatrixOperations {
      * @return The sum of the two matrices {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
-    public static CooMatrix add(CooMatrix src1, CooMatrix src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooMatrixOld add(CooMatrixOld src1, CooMatrixOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
 
@@ -108,7 +108,7 @@ public class RealSparseMatrixOperations {
             }
         }
 
-        return new CooMatrix(
+        return new CooMatrixOld(
                 src1.shape,
                 sum,
                 rowIndices,
@@ -125,7 +125,7 @@ public class RealSparseMatrixOperations {
      * @throws ArithmeticException If the {@code src} sparse matrix is too large to be converted to a dense matrix.
      * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
      */
-    public static MatrixOld add(CooMatrix src, double a) {
+    public static MatrixOld add(CooMatrixOld src, double a) {
         double[] sum = new double[src.totalEntries().intValueExact()];
         Arrays.fill(sum, a);
 
@@ -150,8 +150,8 @@ public class RealSparseMatrixOperations {
      * @return The difference of the two matrices {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
-    public static CooMatrix sub(CooMatrix src1, CooMatrix src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooMatrixOld sub(CooMatrixOld src1, CooMatrixOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
 
@@ -204,7 +204,7 @@ public class RealSparseMatrixOperations {
             }
         }
 
-        return new CooMatrix(
+        return new CooMatrixOld(
                 src1.shape,
                 sum,
                 rowIndices,
@@ -221,7 +221,7 @@ public class RealSparseMatrixOperations {
      * @throws ArithmeticException If the {@code src} sparse matrix is too large to be converted to a dense matrix.
      * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
      */
-    public static MatrixOld sub(CooMatrix src, double a) {
+    public static MatrixOld sub(CooMatrixOld src, double a) {
         double[] sum = new double[src.totalEntries().intValueExact()];
         Arrays.fill(sum, -a);
 
@@ -247,8 +247,8 @@ public class RealSparseMatrixOperations {
      * @return The element-wise product of the two matrices {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
-    public static CooMatrix elemMult(CooMatrix src1, CooMatrix src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooMatrixOld elemMult(CooMatrixOld src1, CooMatrixOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
 
@@ -284,7 +284,7 @@ public class RealSparseMatrixOperations {
             }
         }
 
-        return new CooMatrix(
+        return new CooMatrixOld(
                 src1.shape,
                 product,
                 rowIndices,
@@ -299,8 +299,8 @@ public class RealSparseMatrixOperations {
      * @param col Sparse vector to add to each column of the sparse matrix.
      * @return A dense copy of the {@code src} matrix with the {@code col} vector added to each row of the matrix.
      */
-    public static MatrixOld addToEachCol(CooMatrix src, CooVector col) {
-        ParameterChecks.assertEquals(src.numRows, col.size);
+    public static MatrixOld addToEachCol(CooMatrixOld src, CooVectorOld col) {
+        ParameterChecks.ensureEquals(src.numRows, col.size);
         double[] destEntries = new double[src.totalEntries().intValueExact()];
 
         // Add values from sparse matrix.
@@ -329,8 +329,8 @@ public class RealSparseMatrixOperations {
      * @param row Sparse vector to add to each row of the sparse matrix.
      * @return A dense copy of the {@code src} matrix with the {@code row} vector added to each row of the matrix.
      */
-    public static MatrixOld addToEachRow(CooMatrix src, CooVector row) {
-        ParameterChecks.assertEquals(src.numCols, row.size);
+    public static MatrixOld addToEachRow(CooMatrixOld src, CooVectorOld row) {
+        ParameterChecks.ensureEquals(src.numCols, row.size);
         double[] destEntries = new double[src.totalEntries().intValueExact()];
 
         // Add values from sparse matrix.

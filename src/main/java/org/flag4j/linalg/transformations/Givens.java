@@ -46,7 +46,7 @@ public final class Givens {
 
     private Givens() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -63,7 +63,7 @@ public final class Givens {
      * @throws IndexOutOfBoundsException If {@code i} or {@code j} is greater than or equal to {@code size}.
      */
     public static MatrixOld getGeneralRotator(int size, int i, int j, double theta) {
-        ParameterChecks.assertIndexInBounds(size, i, j);
+        ParameterChecks.ensureIndexInBounds(size, i, j);
         if(i==j) throw new IllegalArgumentException("The indices i and j cannot be equal.");
 
         // Initialize rotator as identity matrix.
@@ -109,7 +109,7 @@ public final class Givens {
      * @throws IndexOutOfBoundsException If {@code i} is not in the range {@code [0, v.size)}.
      */
     public static MatrixOld getRotator(double[] v, int i) {
-        ParameterChecks.assertIndexInBounds(v.length, i);
+        ParameterChecks.ensureIndexInBounds(v.length, i);
 
         double[] cs = stableTrigVals(v[0], v[i]);
 
@@ -136,7 +136,7 @@ public final class Givens {
      * @throws IndexOutOfBoundsException If {@code i} is not in the range {@code [0, v.size)}.
      */
     public static CMatrixOld getRotator(CVectorOld v, int i) {
-        ParameterChecks.assertIndexInBounds(v.size, i);
+        ParameterChecks.ensureIndexInBounds(v.size, i);
 
         double r = VectorNorms.norm(v);
         CNumber c = v.entries[0].div(r);
@@ -162,7 +162,7 @@ public final class Givens {
      * @throws IllegalArgumentException If the vector {@code v} is not of size 2.
      */
     public static MatrixOld get2x2Rotator(VectorOld v) {
-        ParameterChecks.assertArrayLengthsEq(2, v.size);
+        ParameterChecks.ensureArrayLengthsEq(2, v.size);
         return get2x2Rotator(v.entries[0], v.entries[1]);
     }
 
@@ -401,7 +401,7 @@ public final class Givens {
      * @throws IllegalArgumentException If the vector {@code v} is not of size 2.
      */
     public static CMatrixOld get2x2Rotator(CVectorOld v) {
-        ParameterChecks.assertArrayLengthsEq(2, v.size);
+        ParameterChecks.ensureArrayLengthsEq(2, v.size);
 
         return get2x2Rotator(v.entries[0], v.entries[1]);
     }

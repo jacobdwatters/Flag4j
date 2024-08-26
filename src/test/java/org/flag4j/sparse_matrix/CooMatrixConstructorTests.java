@@ -1,6 +1,6 @@
 package org.flag4j.sparse_matrix;
 
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,7 @@ class CooMatrixConstructorTests {
     int[] expNonZeroI, expRowIndices, expColIndices;
     int size, rows, cols;
     Shape expShape;
-    CooMatrix A, B;
+    CooMatrixOld A, B;
 
     @Test
     void sizeTestCase() {
@@ -23,7 +23,7 @@ class CooMatrixConstructorTests {
         expNonZero = new double[0];
         expRowIndices = new int[0];
         expColIndices = new int[0];
-        A = new CooMatrix(size);
+        A = new CooMatrixOld(size);
 
         assertEquals(expShape, A.shape);
         assertArrayEquals(expNonZero, A.entries);
@@ -32,7 +32,7 @@ class CooMatrixConstructorTests {
 
         // --------------- Sub-case 2 ---------------
         size = -1;
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(size));
+        assertThrows(IllegalArgumentException.class, () -> new CooMatrixOld(size));
     }
 
 
@@ -45,7 +45,7 @@ class CooMatrixConstructorTests {
         expNonZero = new double[0];
         expRowIndices = new int[0];
         expColIndices = new int[0];
-        A = new CooMatrix(rows, cols);
+        A = new CooMatrixOld(rows, cols);
 
         assertEquals(expShape, A.shape);
         assertArrayEquals(expNonZero, A.entries);
@@ -59,7 +59,7 @@ class CooMatrixConstructorTests {
         expNonZero = new double[0];
         expRowIndices = new int[0];
         expColIndices = new int[0];
-        A = new CooMatrix(rows, cols);
+        A = new CooMatrixOld(rows, cols);
 
         assertEquals(expShape, A.shape);
         assertArrayEquals(expNonZero, A.entries);
@@ -69,17 +69,17 @@ class CooMatrixConstructorTests {
         // --------------- Sub-case 2 ---------------
         rows = -1;
         cols = 12;
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(rows, cols));
+        assertThrows(IllegalArgumentException.class, () -> new CooMatrixOld(rows, cols));
 
         // --------------- Sub-case 3 ---------------
         rows = 1;
         cols = -12;
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(rows, cols));
+        assertThrows(IllegalArgumentException.class, () -> new CooMatrixOld(rows, cols));
 
         // --------------- Sub-case 4 ---------------
         rows = -1;
         cols = -2;
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(rows, cols));
+        assertThrows(IllegalArgumentException.class, () -> new CooMatrixOld(rows, cols));
     }
 
 
@@ -92,7 +92,7 @@ class CooMatrixConstructorTests {
         expNonZero = new double[0];
         expRowIndices = new int[0];
         expColIndices = new int[0];
-        A = new CooMatrix(expShape);
+        A = new CooMatrixOld(expShape);
 
         assertEquals(expShape, A.shape);
         assertArrayEquals(expNonZero, A.entries);
@@ -106,7 +106,7 @@ class CooMatrixConstructorTests {
         expNonZero = new double[0];
         expRowIndices = new int[0];
         expColIndices = new int[0];
-        A = new CooMatrix(expShape);
+        A = new CooMatrixOld(expShape);
 
         assertEquals(expShape, A.shape);
         assertArrayEquals(expNonZero, A.entries);
@@ -123,7 +123,7 @@ class CooMatrixConstructorTests {
         expNonZero = new double[]{1, 2, 5, 6};
         expRowIndices = new int[]{0, 0, 1, 3};
         expColIndices = new int[]{0, 4, 1, 4};
-        A = new CooMatrix(size, expNonZero, expRowIndices, expColIndices);
+        A = new CooMatrixOld(size, expNonZero, expRowIndices, expColIndices);
 
         assertEquals(expShape, A.shape);
         assertArrayEquals(expNonZero, A.entries);
@@ -132,7 +132,7 @@ class CooMatrixConstructorTests {
 
         // --------------- Sub-case 2 ---------------
         size = -1;
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(size, expNonZero, expRowIndices, expColIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooMatrixOld(size, expNonZero, expRowIndices, expColIndices));
 
         // --------------- Sub-case 3 ---------------
         size = 2;
@@ -141,7 +141,7 @@ class CooMatrixConstructorTests {
         expRowIndices = new int[]{0, 0, 1, 3, 4};
         expColIndices = new int[]{0, 4, 1, 3, 4};
 
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(size, expNonZero, expRowIndices, expColIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooMatrixOld(size, expNonZero, expRowIndices, expColIndices));
 
         // --------------- Sub-case 4 ---------------
         size = 5;
@@ -150,7 +150,7 @@ class CooMatrixConstructorTests {
         expRowIndices = new int[]{0, 0, 1, 3};
         expColIndices = new int[]{0, 4, 1, 4};
 
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(size, expNonZero, expRowIndices, expColIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooMatrixOld(size, expNonZero, expRowIndices, expColIndices));
 
         // --------------- Sub-case 4 ---------------
         size = 5;
@@ -159,7 +159,7 @@ class CooMatrixConstructorTests {
         expRowIndices = new int[]{0, 0, 1, 3};
         expColIndices = new int[]{0, 4, 1};
 
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(size, expNonZero, expRowIndices, expColIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooMatrixOld(size, expNonZero, expRowIndices, expColIndices));
     }
 
 
@@ -172,7 +172,7 @@ class CooMatrixConstructorTests {
         expNonZero = new double[]{-1, 0.234345, 133.1, 24.5, -933.1};
         expRowIndices = new int[]{0, 4, 5, 5, 10};
         expColIndices = new int[]{0, 1, 2, 3, 4};
-        A = new CooMatrix(rows, cols, expNonZero, expRowIndices, expColIndices);
+        A = new CooMatrixOld(rows, cols, expNonZero, expRowIndices, expColIndices);
 
         assertEquals(expShape, A.shape);
         assertArrayEquals(expNonZero, A.entries);
@@ -186,7 +186,7 @@ class CooMatrixConstructorTests {
         expNonZero = new double[]{-1, 0.234345, 133.1, 24.5, -933.1};
         expRowIndices = new int[]{0, 4, 5, 5, 10};
         expColIndices = new int[]{0, 0, 0, 1, 0};
-        A = new CooMatrix(rows, cols, expNonZero, expRowIndices, expColIndices);
+        A = new CooMatrixOld(rows, cols, expNonZero, expRowIndices, expColIndices);
 
         assertEquals(expShape, A.shape);
         assertArrayEquals(expNonZero, A.entries);
@@ -196,17 +196,17 @@ class CooMatrixConstructorTests {
         // --------------- Sub-case 2 ---------------
         rows = -1;
         cols = 12;
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(rows, cols, expNonZero, expRowIndices, expColIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooMatrixOld(rows, cols, expNonZero, expRowIndices, expColIndices));
 
         // --------------- Sub-case 3 ---------------
         rows = 1;
         cols = -12;
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(rows, cols, expNonZero, expRowIndices, expColIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooMatrixOld(rows, cols, expNonZero, expRowIndices, expColIndices));
 
         // --------------- Sub-case 4 ---------------
         rows = -1;
         cols = -2;
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(rows, cols, expNonZero, expRowIndices, expColIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooMatrixOld(rows, cols, expNonZero, expRowIndices, expColIndices));
     }
 
 
@@ -219,7 +219,7 @@ class CooMatrixConstructorTests {
         expNonZero = new double[]{-1, 0.234345, 133.1, 24.5, -933.1};
         expRowIndices = new int[]{0, 4, 5, 5, 10};
         expColIndices = new int[]{0, 1, 2, 3, 4};
-        A = new CooMatrix(expShape, expNonZero, expRowIndices, expColIndices);
+        A = new CooMatrixOld(expShape, expNonZero, expRowIndices, expColIndices);
 
         assertEquals(expShape, A.shape);
         assertArrayEquals(expNonZero, A.entries);
@@ -233,7 +233,7 @@ class CooMatrixConstructorTests {
         expNonZero = new double[]{-1, 0.234345, 133.1, 24.5, -933.1};
         expRowIndices = new int[]{0, 4, 5, 5, 10};
         expColIndices = new int[]{0, 0, 0, 1, 0};
-        A = new CooMatrix(expShape, expNonZero, expRowIndices, expColIndices);
+        A = new CooMatrixOld(expShape, expNonZero, expRowIndices, expColIndices);
 
         assertEquals(expShape, A.shape);
         assertArrayEquals(expNonZero, A.entries);
@@ -251,7 +251,7 @@ class CooMatrixConstructorTests {
         expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();
         expRowIndices = new int[]{0, 0, 1, 3};
         expColIndices = new int[]{0, 4, 1, 4};
-        A = new CooMatrix(size, expNonZeroI, expRowIndices, expColIndices);
+        A = new CooMatrixOld(size, expNonZeroI, expRowIndices, expColIndices);
 
         assertEquals(expShape, A.shape);
         assertArrayEquals(expNonZero, A.entries);
@@ -260,7 +260,7 @@ class CooMatrixConstructorTests {
 
         // --------------- Sub-case 2 ---------------
         size = -1;
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(size, expNonZeroI, expRowIndices, expColIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooMatrixOld(size, expNonZeroI, expRowIndices, expColIndices));
 
         // --------------- Sub-case 3 ---------------
         size = 2;
@@ -269,7 +269,7 @@ class CooMatrixConstructorTests {
         expRowIndices = new int[]{0, 0, 1, 3, 4};
         expColIndices = new int[]{0, 4, 1, 3, 4};
 
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(size, expNonZeroI, expRowIndices, expColIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooMatrixOld(size, expNonZeroI, expRowIndices, expColIndices));
 
         // --------------- Sub-case 4 ---------------
         size = 5;
@@ -278,7 +278,7 @@ class CooMatrixConstructorTests {
         expRowIndices = new int[]{0, 0, 1, 3};
         expColIndices = new int[]{0, 4, 1, 4};
 
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(size, expNonZeroI, expRowIndices, expColIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooMatrixOld(size, expNonZeroI, expRowIndices, expColIndices));
 
         // --------------- Sub-case 4 ---------------
         size = 5;
@@ -287,7 +287,7 @@ class CooMatrixConstructorTests {
         expRowIndices = new int[]{0, 0, 1, 3};
         expColIndices = new int[]{0, 4, 1};
 
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(size, expNonZeroI, expRowIndices, expColIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooMatrixOld(size, expNonZeroI, expRowIndices, expColIndices));
     }
 
 
@@ -301,7 +301,7 @@ class CooMatrixConstructorTests {
         expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();
         expRowIndices = new int[]{0, 4, 5, 5, 10};
         expColIndices = new int[]{0, 1, 2, 3, 4};
-        A = new CooMatrix(rows, cols, expNonZeroI, expRowIndices, expColIndices);
+        A = new CooMatrixOld(rows, cols, expNonZeroI, expRowIndices, expColIndices);
 
         assertEquals(expShape, A.shape);
         assertArrayEquals(expNonZero, A.entries);
@@ -316,7 +316,7 @@ class CooMatrixConstructorTests {
         expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();
         expRowIndices = new int[]{0, 4, 5, 5, 10};
         expColIndices = new int[]{0, 0, 0, 1, 0};
-        A = new CooMatrix(rows, cols, expNonZeroI, expRowIndices, expColIndices);
+        A = new CooMatrixOld(rows, cols, expNonZeroI, expRowIndices, expColIndices);
 
         assertEquals(expShape, A.shape);
         assertArrayEquals(expNonZero, A.entries);
@@ -326,17 +326,17 @@ class CooMatrixConstructorTests {
         // --------------- Sub-case 2 ---------------
         rows = -1;
         cols = 12;
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(rows, cols, expNonZeroI, expRowIndices, expColIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooMatrixOld(rows, cols, expNonZeroI, expRowIndices, expColIndices));
 
         // --------------- Sub-case 3 ---------------
         rows = 1;
         cols = -12;
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(rows, cols, expNonZeroI, expRowIndices, expColIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooMatrixOld(rows, cols, expNonZeroI, expRowIndices, expColIndices));
 
         // --------------- Sub-case 4 ---------------
         rows = -1;
         cols = -2;
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(rows, cols, expNonZeroI, expRowIndices, expColIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooMatrixOld(rows, cols, expNonZeroI, expRowIndices, expColIndices));
     }
 
     @Test
@@ -349,7 +349,7 @@ class CooMatrixConstructorTests {
         expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();
         expRowIndices = new int[]{0, 4, 5, 5, 10};
         expColIndices = new int[]{0, 1, 2, 3, 4};
-        A = new CooMatrix(expShape, expNonZeroI, expRowIndices, expColIndices);
+        A = new CooMatrixOld(expShape, expNonZeroI, expRowIndices, expColIndices);
 
         assertEquals(expShape, A.shape);
         assertArrayEquals(expNonZero, A.entries);
@@ -364,7 +364,7 @@ class CooMatrixConstructorTests {
         expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();
         expRowIndices = new int[]{0, 4, 5, 5, 10};
         expColIndices = new int[]{0, 0, 0, 1, 0};
-        A = new CooMatrix(expShape, expNonZeroI, expRowIndices, expColIndices);
+        A = new CooMatrixOld(expShape, expNonZeroI, expRowIndices, expColIndices);
 
         assertEquals(expShape, A.shape);
         assertArrayEquals(expNonZero, A.entries);
@@ -383,8 +383,8 @@ class CooMatrixConstructorTests {
         expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();
         expRowIndices = new int[]{0, 4, 5, 5, 10};
         expColIndices = new int[]{0, 1, 2, 3, 4};
-        B = new CooMatrix(expShape, expNonZeroI, expRowIndices, expColIndices);
-        A = new CooMatrix(B);
+        B = new CooMatrixOld(expShape, expNonZeroI, expRowIndices, expColIndices);
+        A = new CooMatrixOld(B);
 
         assertEquals(expShape, A.shape);
         assertArrayEquals(expNonZero, A.entries);
@@ -399,8 +399,8 @@ class CooMatrixConstructorTests {
         expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();
         expRowIndices = new int[]{0, 4, 5, 5, 10};
         expColIndices = new int[]{0, 0, 0, 1, 0};
-        B = new CooMatrix(expShape, expNonZeroI, expRowIndices, expColIndices);
-        A = new CooMatrix(B);
+        B = new CooMatrixOld(expShape, expNonZeroI, expRowIndices, expColIndices);
+        A = new CooMatrixOld(B);
 
         assertEquals(expShape, A.shape);
         assertArrayEquals(expNonZero, A.entries);

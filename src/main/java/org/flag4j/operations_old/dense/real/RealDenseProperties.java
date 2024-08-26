@@ -36,7 +36,7 @@ public class RealDenseProperties {
 
     private RealDenseProperties() {
         // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -127,6 +127,7 @@ public class RealDenseProperties {
      * @param src MatrixOld of interest to check if it is the identity matrix.
      * @return True if the {@code src} matrix is exactly the identity matrix.
      */
+    @Deprecated
     public boolean isIdentity(MatrixOld src) {
         boolean isI = src.numRows==src.numCols;
 
@@ -155,6 +156,7 @@ public class RealDenseProperties {
      * @param src MatrixOld of interest to check if it is the identity matrix.
      * @return True if the {@code src} matrix is exactly the identity matrix.
      */
+    @Deprecated
     public static boolean isCloseToIdentity(MatrixOld src) {
         boolean isI = src.numRows==src.numCols;
 

@@ -26,7 +26,7 @@ package org.flag4j.core;
 
 
 import org.flag4j.arrays_old.dense.CTensorOld;
-import org.flag4j.arrays_old.sparse.CooCTensor;
+import org.flag4j.arrays_old.sparse.CooCTensorOld;
 import org.flag4j.complex_numbers.CNumber;
 
 /**
@@ -34,7 +34,7 @@ import org.flag4j.complex_numbers.CNumber;
  * @param <T> TensorOld type.
  */
 public interface ComplexTensorExclusiveMixin<T extends TensorBase<T, CTensorOld, T, ?, ?, ?, CNumber>>
-        extends TensorExclusiveMixin<T, CTensorOld, CooCTensor, T> {
+        extends TensorExclusiveMixin<T, CTensorOld, CooCTensorOld, T> {
 
     /**
      * Computes the conjugate transpose of a tensor. Same as {@link #H(int, int)}.

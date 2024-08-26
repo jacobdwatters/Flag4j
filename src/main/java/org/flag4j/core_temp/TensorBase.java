@@ -32,7 +32,15 @@ import java.io.Serializable;
 import java.math.BigInteger;
 
 /**
- * The base class of all tensors. A tensor is a multi-dimensional array.
+ * <p>The base class of all tensors. A tensor is a multi-dimensional array which consists of:
+ * <ul>
+ *     <li>The {@link #shape} of the tensor. This specified the dimension of the tensor along each axes.
+ *     The number of axes in this tensor is refered to as the "{@link #rank}" of the tensor and corresponds to the number of
+ *     indices required to uniquely identify an element within the </li>
+ *     <li>A one-dimensional container for the {@link #entries} of the tensor. If the tesnor is dense, this will contain all
+ *     entries of the tensor. If the tesnor is sparse this will only conatins the non-zero elements of the tesnor.</li>
+ * </ul>
+ * </p>
  *
  * @param <T> Type of this tensor.
  * @param <U> Storage for entries of this tensor.
@@ -45,7 +53,7 @@ public abstract class TensorBase<T extends TensorBase<T, U, V>, U, V>
         TensorPropertiesMixin<V> {
 
     /**
-     * Entry data of this tensor. If this tensor is dense, then this specifies all entris within this tensor. If this tensor is
+     * Entry data of this tensor. If this tensor is dense, then this specifies all entries within this tensor. If this tensor is
      * sparse, this specifies only the non-zero entries of this tensor.
      */
     public final U entries;
@@ -53,6 +61,11 @@ public abstract class TensorBase<T extends TensorBase<T, U, V>, U, V>
      * The shape of this tensor.
      */
     public final Shape shape;
+    /**
+     * The rank of this tensor. That is, the number of indices required to uniquely specify an element in the tensor (the number of
+     * axes within this tensor).
+     */
+    public final int rank;
 
 
     /**
@@ -64,7 +77,7 @@ public abstract class TensorBase<T extends TensorBase<T, U, V>, U, V>
     protected TensorBase(Shape shape, U entries) {
         this.shape = shape;
         this.entries = entries;
-        shape.makeStridesIfNull();  // TODO: investigate ways only compute strides if needed (e.g. matrices likly dont need strides).
+        rank = shape.getRank();
     }
 
 
@@ -81,7 +94,6 @@ public abstract class TensorBase<T extends TensorBase<T, U, V>, U, V>
      * Gets the element of this tensor at the specified indices.
      * @param indices Indices of the element to get.
      * @return The element of this tensor at the specified indices.
-     * @throws IllegalArgumentException If {@code indices} is not of length 2.
      * @throws ArrayIndexOutOfBoundsException If any indices are not within this tensor.
      */
     public abstract V get(int... indices);
@@ -89,19 +101,18 @@ public abstract class TensorBase<T extends TensorBase<T, U, V>, U, V>
 
     /**
      * <p>
-     * Gets the rank of this tensor. That is, number of indices needed to uniquely select an element of the tensor.
+     * Gets the rank of this tensor. That is, number of indices needed to uniquely select an element of the tensor. This is also te
+     * number of dimensions (i.e. order/degree) of the tensor.
      * </p>
      *
      * <p>
      * Note, this method is distinct from the {@link MatrixPropertiesMixin#matrixRank()} method.
-     * This returns the number of dimensions (i.e. order or degree) of the tensor and indicates the number of indices
-     * needed to uniquely select an element of the tensor.
      * </p>
      *
      * @return The rank of this tensor.
      */
     public int getRank() {
-        return this.shape.getRank();
+        return rank;
     }
 
 
@@ -128,7 +139,7 @@ public abstract class TensorBase<T extends TensorBase<T, U, V>, U, V>
      * @param B Second tensor.
      * @return True if this tensor and B have the same shape. False otherwise.
      */
-    public boolean sameShape(TensorBase<?, ?, ?> B) {
+    public boolean sameShape(TensorBase B) {
         return this.shape.equals(B.shape);
     }
 
@@ -150,4 +161,22 @@ public abstract class TensorBase<T extends TensorBase<T, U, V>, U, V>
      * @see #flatten()
      */
     public abstract T flatten(int axis);
+
+
+    /**
+     * Copies and reshapes this tensor.
+     * @param newShape New shape for the tensor.
+     * @return A copy of this tensor with the new shape.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code newShape} is not broadcastable to {@link #shape this.shape}.
+     */
+    public abstract T reshape(Shape newShape);
+
+
+    /**
+     * Constructs a tensor of the same type as this tensor with the given the shape and entries.
+     * @param shape Shape of the tensor to construct.
+     * @param entries Entires of the tensor to construct.
+     * @return A tensor of the same type as this tensor with the given the shape and entries.
+     */
+    public abstract T makeLikeTensor(Shape shape, U entries);
 }

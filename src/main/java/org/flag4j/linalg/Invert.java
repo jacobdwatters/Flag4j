@@ -31,8 +31,8 @@ import org.flag4j.linalg.decompositions.chol.Cholesky;
 import org.flag4j.linalg.decompositions.chol.ComplexCholesky;
 import org.flag4j.linalg.decompositions.chol.RealCholesky;
 import org.flag4j.linalg.decompositions.lu.ComplexLU;
-import org.flag4j.linalg.decompositions.lu.LU;
-import org.flag4j.linalg.decompositions.lu.RealLU;
+import org.flag4j.linalg.decompositions.lu.LUOld;
+import org.flag4j.linalg.decompositions.lu.RealLUOLd;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
 import org.flag4j.linalg.decompositions.svd.SVD;
@@ -54,12 +54,12 @@ public class Invert {
 
     private Invert() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
     /**
-     * Computes the inverse of this matrix. This is done by computing the {@link LU LU decomposition} of
+     * Computes the inverse of this matrix. This is done by computing the {@link LUOld LUOld decomposition} of
      * this matrix, inverting {@code L} using a back-solve algorithm, then solving {@code U*inv(src)=inv(L)}
      * for {@code inv(src)}.
      *
@@ -68,9 +68,10 @@ public class Invert {
      * @throws IllegalArgumentException If the {@code src} matrix is not square.
      * @throws SingularMatrixException If the {@code src} matrix is singular (i.e. not invertible).
      */
+    @Deprecated
     public static MatrixOld inv(MatrixOld src) {
-        ParameterChecks.assertSquareMatrix(src.shape);
-        LU<MatrixOld> lu = new RealLU().decompose(src);
+        ParameterChecks.ensureSquareMatrix(src.shape);
+        LUOld<MatrixOld> lu = new RealLUOLd().decompose(src);
 
         // Solve U*inv(A) = inv(L) for inv(A)
         RealBackSolver backSolver = new RealBackSolver();
@@ -80,12 +81,12 @@ public class Invert {
         MatrixOld Linv = forwardSolver.solveIdentity(lu.getL());
         MatrixOld inverse = backSolver.solveLower(lu.getU(), Linv); // Compute inverse of row permuted A.
 
-        return lu.getP().rightMult(inverse); // Finally, apply permutation matrix from LU decomposition.
+        return lu.getP().rightMult(inverse); // Finally, apply permutation matrix from LUOld decomposition.
     }
 
 
     /**
-     * Computes the inverse of this matrix. This is done by computing the {@link LU LU decomposition} of
+     * Computes the inverse of this matrix. This is done by computing the {@link LUOld LUOld decomposition} of
      * this matrix, inverting {@code L} using a back-solve algorithm, then solving {@code U*inv(src)=inv(L)}
      * for {@code inv(src)}.
      *
@@ -94,9 +95,10 @@ public class Invert {
      * @throws IllegalArgumentException If the {@code src} matrix is not square.
      * @throws SingularMatrixException If the {@code src} matrix is singular (i.e. not invertible).
      */
+    @Deprecated
     public static CMatrixOld inv(CMatrixOld src) {
-        ParameterChecks.assertSquareMatrix(src.shape);
-        LU<CMatrixOld> lu = new ComplexLU().decompose(src);
+        ParameterChecks.ensureSquareMatrix(src.shape);
+        LUOld<CMatrixOld> lu = new ComplexLU().decompose(src);
 
         // Solve U*inv(A) = inv(L) for inv(A)
         ComplexBackSolver backSolver = new ComplexBackSolver();
@@ -106,7 +108,7 @@ public class Invert {
         CMatrixOld Linv = forwardSolver.solveIdentity(lu.getL());
         CMatrixOld inverse = backSolver.solveLower(lu.getU(), Linv); // Compute inverse of row permuted A.
 
-        return lu.getP().rightMult(inverse); // Finally, apply permutation matrix from LU decomposition.
+        return lu.getP().rightMult(inverse); // Finally, apply permutation matrix from LUOld decomposition.
     }
 
 
@@ -118,6 +120,7 @@ public class Invert {
      * @throws SingularMatrixException If the matrix is singular (i.e. has at least one zero along the diagonal).
      * @throws IllegalArgumentException If the matrix is not square.
      */
+    @Deprecated
     public static MatrixOld invTriU(MatrixOld src) {
         return new RealBackSolver().solveIdentity(src); // If the matrix is singular, it will be caught here.
     }
@@ -131,6 +134,7 @@ public class Invert {
      * @throws SingularMatrixException If the matrix is singular (i.e. has at least one zero along the diagonal).
      * @throws IllegalArgumentException If the matrix is not square.
      */
+    @Deprecated
     public static MatrixOld invTriL(MatrixOld src) {
         return new RealForwardSolver().solveIdentity(src); // If the matrix is singular, it will be caught here.
     }
@@ -144,8 +148,9 @@ public class Invert {
      * @throws SingularMatrixException If the matrix is singular (i.e. has at least one zero along the diagonal).
      * @throws IllegalArgumentException If the matrix is not square.
      */
+    @Deprecated
     public static MatrixOld invDiag(MatrixOld src) {
-        ParameterChecks.assertSquareMatrix(src.shape);
+        ParameterChecks.ensureSquareMatrix(src.shape);
         MatrixOld inverse = new MatrixOld(src.shape);
 
         double value;
@@ -174,6 +179,7 @@ public class Invert {
      * @throws SingularMatrixException If the matrix is singular (i.e. has at least one zero along the diagonal).
      * @throws IllegalArgumentException If the matrix is not square.
      */
+    @Deprecated
     public static CMatrixOld invTriU(CMatrixOld src) {
         return new ComplexBackSolver().solveIdentity(src); // If matrix is singular, it will be caught here.
     }
@@ -187,6 +193,7 @@ public class Invert {
      * @throws SingularMatrixException If the matrix is singular (i.e. has at least one zero along the diagonal).
      * @throws IllegalArgumentException If the matrix is not square.
      */
+    @Deprecated
     public static CMatrixOld invTriL(CMatrixOld src) {
         return new ComplexForwardSolver().solveIdentity(src); // If matrix is singular, it will be caught here.
     }
@@ -200,8 +207,9 @@ public class Invert {
      * @throws SingularMatrixException If the matrix is singular (i.e. has at least one zero along the diagonal).
      * @throws IllegalArgumentException If the matrix is not square.
      */
+    @Deprecated
     public static CMatrixOld invDiag(CMatrixOld src) {
-        ParameterChecks.assertSquareMatrix(src.shape);
+        ParameterChecks.ensureSquareMatrix(src.shape);
 
         CMatrixOld inverse = new CMatrixOld(src.shape);
 
@@ -231,6 +239,7 @@ public class Invert {
      * @throws SingularMatrixException If the {@code src} matrix is singular.
      * @see #invSymPosDef(MatrixOld, boolean)
      */
+    @Deprecated
     public static MatrixOld invSymPosDef(MatrixOld src) {
         return invSymPosDef(src, false);
     }
@@ -246,6 +255,7 @@ public class Invert {
      * @throws IllegalArgumentException If the matrix is not square.
      * @throws SingularMatrixException If the {@code src} matrix is singular.
      */
+    @Deprecated
     public static MatrixOld invSymPosDef(MatrixOld src, boolean checkPosDef) {
         Cholesky<MatrixOld> chol = new RealCholesky(checkPosDef).decompose(src);
         RealBackSolver backSolver = new RealBackSolver();
@@ -266,6 +276,7 @@ public class Invert {
      * @throws SingularMatrixException If the {@code src} matrix is singular.
      * @see #invSymPosDef(MatrixOld, boolean)
      */
+    @Deprecated
     public static CMatrixOld invHermPosDef(CMatrixOld src) {
         return invHermPosDef(src, false);
     }
@@ -281,6 +292,7 @@ public class Invert {
      * @throws IllegalArgumentException If the matrix is not square.
      * @throws SingularMatrixException If the {@code src} matrix is singular.
      */
+    @Deprecated
     public static CMatrixOld invHermPosDef(CMatrixOld src, boolean checkPosDef) {
         Cholesky<CMatrixOld> chol = new ComplexCholesky(checkPosDef).decompose(src);
         ComplexBackSolver backSolver = new ComplexBackSolver();
@@ -307,6 +319,7 @@ public class Invert {
      *
      * @return The Moore–Penrose pseudo-inverse of this matrix.
      */
+    @Deprecated
     public static MatrixOld pInv(MatrixOld src) {
         SVD<MatrixOld> svd = new RealSVD().decompose(src);
         MatrixOld sInv = Invert.invDiag(svd.getS());
@@ -327,6 +340,7 @@ public class Invert {
      *
      * @return The Moore–Penrose pseudo-inverse of this matrix.
      */
+    @Deprecated
     public static CMatrixOld pInv(CMatrixOld src) {
         SVD<CMatrixOld> svd = new ComplexSVD().decompose(src);
         MatrixOld sInv = Invert.invDiag(svd.getS());
@@ -344,6 +358,7 @@ public class Invert {
      * @param src2 Second matrix.
      * @return True if matrix src2 is an inverse of this matrix. Otherwise, returns false. Otherwise, returns false.
      */
+    @Deprecated
     public static boolean isInv(MatrixOld src1, MatrixOld src2) {
         boolean result;
 
@@ -364,6 +379,7 @@ public class Invert {
      * @param src2 Second matrix.
      * @return True if matrix src2 is an inverse (approximately) of this matrix. Otherwise, returns false. Otherwise, returns false.
      */
+    @Deprecated
     public static boolean isInv(CMatrixOld src1, CMatrixOld src2) {
         boolean result;
 

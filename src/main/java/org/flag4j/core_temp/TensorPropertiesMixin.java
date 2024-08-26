@@ -67,7 +67,7 @@ public interface TensorPropertiesMixin<T> {
      * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
      * entry (in row-major ordering) are returned.
      */
-    int[] argMin();
+    int[] argmin();
 
 
     /**
@@ -75,15 +75,15 @@ public interface TensorPropertiesMixin<T> {
      * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
      * entry (in row-major ordering) are returned.
      */
-    int[] argMax();
+    int[] argmax();
 
 
     /**
-     * Finds the indices of the minimum absollte value in this tensor.
+     * Finds the indices of the minimum absolute value in this tensor.
      * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
      * entry (in row-major ordering) are returned.
      */
-    int[] argMinAbs();
+    int[] argminAbs();
 
 
     /**
@@ -91,7 +91,7 @@ public interface TensorPropertiesMixin<T> {
      * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
      * entry (in row-major ordering) are returned.
      */
-    int[] argMaxAbs();
+    int[] argmaxAbs();
 
 
     /**

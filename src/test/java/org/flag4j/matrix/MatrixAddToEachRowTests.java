@@ -4,8 +4,8 @@ import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -25,9 +25,9 @@ class MatrixAddToEachRowTests {
     CMatrixOld expComplex;
 
     VectorOld b;
-    CooVector bSparse;
+    CooVectorOld bSparse;
     CVectorOld bComplex;
-    CooCVector bSparseComplex;
+    CooCVectorOld bSparseComplex;
 
     @Test
     void vectorTestCase() {
@@ -71,7 +71,7 @@ class MatrixAddToEachRowTests {
         bEntries = new double[]{3.4};
         bIndices = new int[]{1};
         bSize = 2;
-        bSparse = new CooVector(bSize, bEntries, bIndices);
+        bSparse = new CooVectorOld(bSize, bEntries, bIndices);
         expEntries = new double[][]{
                 {1, 2.3+3.4},
                 {-9, 13.5+3.4},
@@ -89,7 +89,7 @@ class MatrixAddToEachRowTests {
         bEntries = new double[]{3.4};
         bIndices = new int[]{1};
         bSize = 56;
-        bSparse = new CooVector(bSize, bEntries, bIndices);
+        bSparse = new CooVectorOld(bSize, bEntries, bIndices);
 
         assertThrows(IllegalArgumentException.class, ()->A.addToEachRow(bSparse));
     }
@@ -137,7 +137,7 @@ class MatrixAddToEachRowTests {
         bComplexEntries = new CNumber[]{new CNumber(9.234, -.13)};
         bIndices = new int[]{0};
         bSize = 2;
-        bSparseComplex = new CooCVector(bSize, bComplexEntries, bIndices);
+        bSparseComplex = new CooCVectorOld(bSize, bComplexEntries, bIndices);
         expComplexEntries = new CNumber[][]{
                 {new CNumber(1).add(bComplexEntries[0]), new CNumber(2.3)},
                 {new CNumber(-9).add(bComplexEntries[0]), new CNumber(13.5)},
@@ -155,7 +155,7 @@ class MatrixAddToEachRowTests {
         bComplexEntries = new CNumber[]{new CNumber(9.234, -.13)};
         bIndices = new int[]{0};
         bSize = 8;
-        bSparseComplex = new CooCVector(bSize, bComplexEntries, bIndices);
+        bSparseComplex = new CooCVectorOld(bSize, bComplexEntries, bIndices);
 
         assertThrows(IllegalArgumentException.class, ()->A.addToEachRow(bSparseComplex));
     }

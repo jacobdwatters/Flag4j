@@ -2,8 +2,8 @@ package org.flag4j.sparse_vector;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooMatrix;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,9 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CooVectorRepeatTests {
 
-    static CooVector a;
+    static CooVectorOld a;
     static double[] aEntries;
-    static CooMatrix exp;
+    static CooMatrixOld exp;
     static double[][] expEntries;
 
     @Test

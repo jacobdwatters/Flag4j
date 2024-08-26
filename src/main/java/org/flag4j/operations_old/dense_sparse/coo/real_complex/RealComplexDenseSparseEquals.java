@@ -28,10 +28,10 @@ import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CTensorOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooCTensor;
-import org.flag4j.arrays_old.sparse.CooMatrix;
-import org.flag4j.arrays_old.sparse.CooTensor;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooCTensorOld;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
+import org.flag4j.arrays_old.sparse.CooTensorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.operations_old.common.complex.ComplexProperties;
 import org.flag4j.operations_old.common.real.RealProperties;
@@ -46,7 +46,7 @@ public final class RealComplexDenseSparseEquals {
 
     private RealComplexDenseSparseEquals() {
         // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -137,7 +137,7 @@ public final class RealComplexDenseSparseEquals {
      * @param B Second matrix.
      * @return True if the two matrices are element-wise equivalent.
      */
-    public static boolean matrixEquals(MatrixOld A, CooCMatrix B) {
+    public static boolean matrixEquals(MatrixOld A, CooCMatrixOld B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
@@ -179,7 +179,7 @@ public final class RealComplexDenseSparseEquals {
      * @param B Second matrix.
      * @return True if the two matrices are element-wise equivalent.
      */
-    public static boolean matrixEquals(CMatrixOld A, CooMatrix B) {
+    public static boolean matrixEquals(CMatrixOld A, CooMatrixOld B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
@@ -220,7 +220,7 @@ public final class RealComplexDenseSparseEquals {
      * @param B Complex sparse tensor.
      * @return True if the two tensors are element-wise equivalent.
      */
-    public static boolean tensorEquals(TensorOld A, CooCTensor B) {
+    public static boolean tensorEquals(TensorOld A, CooCTensorOld B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
@@ -258,7 +258,7 @@ public final class RealComplexDenseSparseEquals {
      * @param B Real sparse tensor.
      * @return True if the two tensors are element-wise equivalent.
      */
-    public static boolean tensorEquals(CTensorOld A, CooTensor B) {
+    public static boolean tensorEquals(CTensorOld A, CooTensorOld B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {

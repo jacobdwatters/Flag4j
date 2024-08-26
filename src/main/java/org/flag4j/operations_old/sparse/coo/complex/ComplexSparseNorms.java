@@ -24,7 +24,7 @@
 
 package org.flag4j.operations_old.sparse.coo.complex;
 
-import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -38,7 +38,7 @@ public class ComplexSparseNorms {
 
     private ComplexSparseNorms() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -47,7 +47,7 @@ public class ComplexSparseNorms {
      * @param src Source matrix to compute norm of.
      * @return The L<sub>2</sub> of the {@code src} matrix.
      */
-    public static double matrixNormL2(CooCMatrix src) {
+    public static double matrixNormL2(CooCMatrixOld src) {
         double norm = 0;
         double[] colSums = new double[ArrayUtils.numUnique(src.colIndices)];
 
@@ -75,8 +75,8 @@ public class ComplexSparseNorms {
      * @param p Parameter for L<sub>p</sub> norm
      * @return The L<sub>p</sub> of the {@code src} matrix.
      */
-    public static double matrixNormLp(CooCMatrix src, double p) {
-        ParameterChecks.assertGreaterEq(1, p);
+    public static double matrixNormLp(CooCMatrixOld src, double p) {
+        ParameterChecks.ensureGreaterEq(1, p);
 
         double norm = 0;
         double[] colSums = new double[ArrayUtils.numUnique(src.colIndices)];
@@ -104,8 +104,8 @@ public class ComplexSparseNorms {
      * @param p First parameter for L<sub>p, q</sub> norm
      * @return The L<sub>p, q</sub> of the {@code src} matrix.
      */
-    public static double matrixNormLpq(CooCMatrix src, double p, double q) {
-        ParameterChecks.assertGreaterEq(1, p, q);
+    public static double matrixNormLpq(CooCMatrixOld src, double p, double q) {
+        ParameterChecks.ensureGreaterEq(1, p, q);
 
         double norm = 0;
         double[] colSums = new double[ArrayUtils.numUnique(src.colIndices)];

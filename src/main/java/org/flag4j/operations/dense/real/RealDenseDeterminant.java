@@ -24,8 +24,8 @@
 
 package org.flag4j.operations.dense.real;
 
-import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.core.Shape;
+import org.flag4j.core_temp.arrays.dense.Matrix;
 import org.flag4j.linalg.decompositions.lu.LU;
 import org.flag4j.linalg.decompositions.lu.RealLU;
 import org.flag4j.util.ErrorMessages;
@@ -38,20 +38,20 @@ public class RealDenseDeterminant {
 
     private RealDenseDeterminant() {
         // Hide default constructor in utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
     /**
-     * Computes the determinant of a square matrix using the LU factorization.
+     * Computes the determinant of a square matrix using the LUOld factorization.
      *
-     * @param A MatrixOld to compute the determinant of.
+     * @param A Matrix to compute the determinant of.
      * @return The determinant of the matrix.
      * @throws IllegalArgumentException If matrix is not square.
      */
-    public static double det(MatrixOld A) {
+    public static double det(Matrix A) {
         int rows = A.numRows;
-        ParameterChecks.assertSquareMatrix(rows, A.numCols);
+        ParameterChecks.ensureSquareMatrix(rows, A.numCols);
 
         switch(rows) {
             case 1: // 1x1 determinant
@@ -68,7 +68,7 @@ public class RealDenseDeterminant {
 
                 return A.entries[0]*(a4*a8 - a5*a7) - A.entries[1]*(a3*a8 - a5*a6) + A.entries[2]*(a3*a7 - a4*a6);
             default:
-                LU<MatrixOld> lu = new RealLU().decompose(A);
+                LU<Matrix> lu = new RealLU().decompose(A);
                 // Compute the determinant of P. (Check if lowest bit is zero to determine parity)
                 double detP = (lu.getNumRowSwaps() & 1) == 0 ? 1 : -1;
                 return detP * detTri(lu.getLU());
@@ -77,14 +77,14 @@ public class RealDenseDeterminant {
 
 
     /**
-     * Computes the determinant of a square matrix using the LU factorization.
+     * Computes the determinant of a square matrix using the LUOld factorization.
      *
-     * @param A MatrixOld to compute the determinant of.
+     * @param A Matrix to compute the determinant of.
      * @return The determinant of the matrix.
      * @throws IllegalArgumentException If matrix is not square.
      */
-    public static double detLU(MatrixOld A) {
-        ParameterChecks.assertSquareMatrix(A.numRows, A.numCols);
+    public static double detLU(Matrix A) {
+        ParameterChecks.ensureSquareMatrix(A.numRows, A.numCols);
 
         RealLU lu = new RealLU();
         lu.decompose(A);
@@ -97,11 +97,11 @@ public class RealDenseDeterminant {
     /**
      * Explicitly computes the determinant of a 3x3 matrix.
      *
-     * @param A MatrixOld to compute the determinant of.
+     * @param A Matrix to compute the determinant of.
      * @return The determinant of the 3x3 matrix.
      */
-    public static double det3(MatrixOld A) {
-        ParameterChecks.assertEqualShape(A.shape, new Shape(3, 3));
+    public static double det3(Matrix A) {
+        ParameterChecks.ensureEqualShape(A.shape, new Shape(3, 3));
         double det = A.entries[0] * (A.entries[4] * A.entries[8] - A.entries[5] * A.entries[7]);
         det -= A.entries[1] * (A.entries[3] * A.entries[8] - A.entries[5] * A.entries[6]);
         det += A.entries[2] * (A.entries[3] * A.entries[7] - A.entries[4] * A.entries[6]);
@@ -112,11 +112,11 @@ public class RealDenseDeterminant {
     /**
      * Explicitly computes the determinant of a 2x2 matrix.
      *
-     * @param A MatrixOld to compute the determinant of.
+     * @param A Matrix to compute the determinant of.
      * @return The determinant of the 2x2 matrix.
      */
-    public static double det2(MatrixOld A) {
-        ParameterChecks.assertEqualShape(A.shape, new Shape(2, 2));
+    public static double det2(Matrix A) {
+        ParameterChecks.ensureEqualShape(A.shape, new Shape(2, 2));
         return A.entries[0] * A.entries[3] - A.entries[1] * A.entries[2];
     }
 
@@ -124,11 +124,11 @@ public class RealDenseDeterminant {
     /**
      * Explicitly computes the determinant of a 1x1 matrix.
      *
-     * @param A MatrixOld to compute the determinant of.
+     * @param A Matrix to compute the determinant of.
      * @return The determinant of the 1x1 matrix.
      */
-    public static double det1(MatrixOld A) {
-        ParameterChecks.assertEqualShape(A.shape, new Shape(1, 1));
+    public static double det1(Matrix A) {
+        ParameterChecks.ensureEqualShape(A.shape, new Shape(1, 1));
         return A.entries[0];
     }
 
@@ -140,7 +140,7 @@ public class RealDenseDeterminant {
      * @param A Triangular matrix.
      * @return The determinant of the triangular matrix.
      */
-    public static double detTri(MatrixOld A) {
+    public static double detTri(Matrix A) {
         double det = 1;
         int step = A.numCols + 1;
         int size =  A.entries.length;

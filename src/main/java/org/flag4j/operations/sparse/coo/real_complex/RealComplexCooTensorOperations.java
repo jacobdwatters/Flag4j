@@ -24,8 +24,8 @@
 
 package org.flag4j.operations.sparse.coo.real_complex;
 
-import org.flag4j.arrays_old.sparse.CooCTensor;
-import org.flag4j.arrays_old.sparse.CooTensor;
+import org.flag4j.arrays_old.sparse.CooCTensorOld;
+import org.flag4j.arrays_old.sparse.CooTensorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
@@ -53,8 +53,8 @@ public final class RealComplexCooTensorOperations {
      * @return The element-wise tensor sum of {@code src1} and {@code src2}.
      * @throws LinearAlgebraException If the tensors {@code src1} and {@code src2} do not have the same shape.
      */
-    public static CooCTensor add(CooCTensor src1, CooTensor src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooCTensorOld add(CooCTensorOld src1, CooTensorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         // Create deep copies of indices.
         int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
@@ -91,7 +91,7 @@ public final class RealComplexCooTensorOperations {
             sumIndices.add(src2Indices[src2Pos++]);
         }
 
-        return new CooCTensor(src1.shape, sumEntries, sumIndices);
+        return new CooCTensorOld(src1.shape, sumEntries, sumIndices);
     }
 
 
@@ -102,8 +102,8 @@ public final class RealComplexCooTensorOperations {
      * @return The element-wise tensor difference of {@code src1} and {@code src2}.
      * @throws LinearAlgebraException If the tensors {@code src1} and {@code src2} do not have the same shape.
      */
-    public static CooCTensor sub(CooCTensor src1, CooTensor src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooCTensorOld sub(CooCTensorOld src1, CooTensorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         // Create deep copies of indices.
         int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
@@ -140,7 +140,7 @@ public final class RealComplexCooTensorOperations {
             sumIndices.add(src2Indices[src2Pos++]);
         }
 
-        return new CooCTensor(src1.shape, sumEntries, sumIndices);
+        return new CooCTensorOld(src1.shape, sumEntries, sumIndices);
     }
 
 
@@ -151,8 +151,8 @@ public final class RealComplexCooTensorOperations {
      * @return The element-wise tensor difference of {@code src1} and {@code src2}.
      * @throws LinearAlgebraException If the tensors {@code src1} and {@code src2} do not have the same shape.
      */
-    public static CooCTensor sub(CooTensor src1, CooCTensor src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooCTensorOld sub(CooTensorOld src1, CooCTensorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         // Create deep copies of indices.
         int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
@@ -189,7 +189,7 @@ public final class RealComplexCooTensorOperations {
             sumIndices.add(src2Indices[src2Pos++]);
         }
 
-        return new CooCTensor(src1.shape, sumEntries, sumIndices);
+        return new CooCTensorOld(src1.shape, sumEntries, sumIndices);
     }
 
 
@@ -202,8 +202,8 @@ public final class RealComplexCooTensorOperations {
      * @param src2 Second tensor in the element-wise multiplication.
      * @return The element-wise product of {@code src1} and {@code src2}.
      */
-    public static CooCTensor elemMult(CooCTensor src1, CooTensor src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooCTensorOld elemMult(CooCTensorOld src1, CooTensorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
         CNumber[] productEntries = new CNumber[Math.min(src1.nnz, src2.nnz)];
         int[][] productIndices = new int[Math.min(src1.nnz, src2.nnz)][src1.indices[0].length];
         int count = 0;
@@ -224,7 +224,7 @@ public final class RealComplexCooTensorOperations {
         }
 
         // Truncate arrays_old if necessary.
-        return new CooCTensor(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
+        return new CooCTensorOld(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
     }
 
 
@@ -237,8 +237,8 @@ public final class RealComplexCooTensorOperations {
      * @param src2 Second tensor in the element-wise multiplication.
      * @return The element-wise product of {@code src1} and {@code src2}.
      */
-    public static CooCTensor elemMult(CooTensor src1, CooCTensor src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooCTensorOld elemMult(CooTensorOld src1, CooCTensorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
         CNumber[] productEntries = new CNumber[Math.min(src1.nnz, src2.nnz)];
         int[][] productIndices = new int[Math.min(src1.nnz, src2.nnz)][src1.indices[0].length];
         int count = 0;
@@ -259,6 +259,6 @@ public final class RealComplexCooTensorOperations {
         }
 
         // Truncate arrays_old if necessary.
-        return new CooCTensor(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
+        return new CooCTensorOld(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
     }
 }

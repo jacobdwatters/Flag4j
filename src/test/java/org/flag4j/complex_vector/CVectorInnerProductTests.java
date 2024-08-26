@@ -2,8 +2,8 @@ package org.flag4j.complex_vector;
 
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -53,13 +53,13 @@ class CVectorInnerProductTests {
     @Test()
     void realSparseInnerProdTestCase() {
         double[] bEntries;
-        CooVector b;
+        CooVectorOld b;
 
         // -------------------- Sub-case 1 --------------------
         bEntries = new double[]{1.455, -0.00035};
         sparseIndices = new int[]{1, 2};
         sparseSize = 5;
-        b = new CooVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVectorOld(sparseSize, bEntries, sparseIndices);
         exp = new CNumber("-13.43870575+7.294682075000001j");
 
         assertEquals(exp, a.inner(b));
@@ -68,9 +68,9 @@ class CVectorInnerProductTests {
         bEntries = new double[]{1.455, -0.00035};
         sparseIndices = new int[]{1, 2};
         sparseSize = 2;
-        b = new CooVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVectorOld(sparseSize, bEntries, sparseIndices);
 
-        CooVector finalB = b;
+        CooVectorOld finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.inner(finalB));
     }
 
@@ -101,13 +101,13 @@ class CVectorInnerProductTests {
     @Test()
     void complexSparseInnerProdTestCase() {
         CNumber[] bEntries;
-        CooCVector b;
+        CooCVectorOld b;
 
         // -------------------- Sub-case 1 --------------------
         bEntries = new CNumber[]{new CNumber(24.5, -6.01), new CNumber(3)};
         sparseSize = 5;
         sparseIndices = new int[]{0, 4};
-        b = new CooCVector(sparseSize, bEntries, sparseIndices);
+        b = new CooCVectorOld(sparseSize, bEntries, sparseIndices);
         exp = new CNumber("-36783.725741 + 150104.24605j");
 
         assertEquals(exp, a.inner(b));
@@ -116,9 +116,9 @@ class CVectorInnerProductTests {
         bEntries = new CNumber[]{new CNumber(24.5, -6.01), new CNumber(3)};
         sparseSize = 1145;
         sparseIndices = new int[]{0, 4};
-        b = new CooCVector(sparseSize, bEntries, sparseIndices);
+        b = new CooCVectorOld(sparseSize, bEntries, sparseIndices);
 
-        CooCVector finalB = b;
+        CooCVectorOld finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.inner(finalB));
     }
 }

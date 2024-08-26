@@ -4,7 +4,7 @@ import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.linalg.decompositions.lu.ComplexLU;
-import org.flag4j.linalg.decompositions.lu.LU;
+import org.flag4j.linalg.decompositions.lu.LUOld;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -129,7 +129,7 @@ public class ComplexLUTests {
 
     @Test
     void partialFullTestCase() {
-        lu = new ComplexLU(LU.Pivoting.FULL.ordinal());
+        lu = new ComplexLU(LUOld.Pivoting.FULL.ordinal());
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{

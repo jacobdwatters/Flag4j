@@ -4,9 +4,9 @@ import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooVector;
-import org.flag4j.arrays_old.sparse.CsrMatrix;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
+import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -14,13 +14,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CsrMatrixAddToEachRowColTest {
-    static CsrMatrix A;
+    static CsrMatrixOld A;
     static double[][] aEntries;
 
     static VectorOld bReDe;
     static CVectorOld bCmDe;
-    static CooVector bReSp;
-    static CooCVector bCmSp;
+    static CooVectorOld bReSp;
+    static CooCVectorOld bCmSp;
     static double[] bRealEntries;
     static CNumber[] bCmpEntries;
 

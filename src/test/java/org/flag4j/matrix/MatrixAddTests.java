@@ -2,8 +2,8 @@ package org.flag4j.matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -194,7 +194,7 @@ class MatrixAddTests {
         int[] bRowIndices;
         int[] bColIndices;
         Shape bShape;
-        CooMatrix B;
+        CooMatrixOld B;
 
         // --------------- Sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
@@ -204,7 +204,7 @@ class MatrixAddTests {
         bRowIndices = new int[]{0, 1, 1, 3};
         bColIndices = new int[]{1, 0, 2, 0};
         bShape = A.shape;
-        B = new CooMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        B = new CooMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expEntries = new double[]{1, 2-0.99, 3, 4+1, 5, 6+14.2, 7, 8, 9, 10+8.3, 11, 12};
         expShape = A.shape;
@@ -220,9 +220,9 @@ class MatrixAddTests {
         bRowIndices = new int[]{0, 1, 1, 3};
         bColIndices = new int[]{1, 0, 2, 0};
         bShape = new Shape(4, 3);
-        B = new CooMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        B = new CooMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
-        CooMatrix finalB = B;
+        CooMatrixOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.add(finalB));
     }
 
@@ -233,7 +233,7 @@ class MatrixAddTests {
         int[] bRowIndices;
         int[] bColIndices;
         Shape bShape;
-        CooCMatrix B;
+        CooCMatrixOld B;
 
         // --------------- Sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
@@ -244,7 +244,7 @@ class MatrixAddTests {
         bRowIndices = new int[]{0, 1, 1, 3};
         bColIndices = new int[]{1, 0, 2, 0};
         bShape = A.shape;
-        B = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        B = new CooCMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expEntriesC = new CNumber[]{
                 new CNumber(1), new CNumber(2-0.123, 1), new CNumber(3),
@@ -265,9 +265,9 @@ class MatrixAddTests {
         bRowIndices = new int[]{0, 1, 1, 3};
         bColIndices = new int[]{1, 0, 2, 0};
         bShape = new Shape(4, 3);
-        B = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        B = new CooCMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
-        CooCMatrix finalB = B;
+        CooCMatrixOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.add(finalB));
     }
 }

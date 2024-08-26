@@ -24,10 +24,10 @@
 
 package org.flag4j.operations.sparse.coo.real;
 
-import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.arrays_old.sparse.CooMatrix;
-import org.flag4j.arrays_old.sparse.CooTensor;
 import org.flag4j.core.Shape;
+import org.flag4j.core_temp.arrays.dense.Tensor;
+import org.flag4j.core_temp.arrays.sparse.CooTensor;
+import org.flag4j.operations.dense.real.RealDenseTranspose;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -40,7 +40,7 @@ public final class RealCooTensorDot {
 
     private RealCooTensorDot() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -57,15 +57,16 @@ public final class RealCooTensorDot {
      * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
      * are out of bounds for the corresponding tensor.
      */
-    public static TensorOld tensorDot(CooTensor src1, CooTensor src2, int[] src1Axes, int[] src2Axes) {
+    public static Tensor tensorDot(CooTensor src1, CooTensor src2,
+                                   int[] src1Axes, int[] src2Axes) {
         // Each array must specify the same number of axes.
-        ParameterChecks.assertEquals(src1Axes.length, src2Axes.length);
+        ParameterChecks.ensureEquals(src1Axes.length, src2Axes.length);
 
         // Axis values must be less than the rank of the tensor and non-negative
-        ParameterChecks.assertLessEq(src1.getRank()-1, src1Axes);
-        ParameterChecks.assertGreaterEq(0, src1Axes);
-        ParameterChecks.assertLessEq(src2.getRank()-1, src2Axes);
-        ParameterChecks.assertGreaterEq(0, src2Axes);
+        ParameterChecks.ensureLessEq(src1.getRank()-1, src1Axes);
+        ParameterChecks.ensureGreaterEq(0, src1Axes);
+        ParameterChecks.ensureLessEq(src2.getRank()-1, src2Axes);
+        ParameterChecks.ensureGreaterEq(0, src2Axes);
 
         int[] notin;
         int n1;
@@ -115,19 +116,21 @@ public final class RealCooTensorDot {
         // -----------------------------------------------------
 
         // Reform tensor dot product problem as a matrix multiplication problem.
-        CooMatrix at = src1.T(src1NewAxes).toMatrix(src1NewShape);
-        CooMatrix bt = src2.T(src2NewAxes).toMatrix(src2NewShape);
+        CooTensor at = src1.T(src1NewAxes).reshape(src1NewShape);
+        CooTensor bt = src2.T(src2NewAxes).reshape(src2NewShape);
 
-        TensorOld product = at.mult(bt).toTensor();
+        // Get row and column indices for COO matrices.
+        int[][] atMatIndices = RealDenseTranspose.blockedIntMatrix(at.indices);
+        int[][] btMatIndices = RealDenseTranspose.blockedIntMatrix(bt.indices);
 
-        // TODO: Should allow for zero dim shape indicating a scalar. Then only the else block would be needed.
-        Shape productShape;
-        if(src1Axes.length == src1.getRank() && src2Axes.length == src2.getRank()) {
-            productShape = new Shape(1);
-        } else {
-            productShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));
-        }
+        // Compute equivalent matrix multiplication problem.
+        double[] productEntries = RealSparseMatrixMultiplication.standard(
+                at.entries, atMatIndices[0], atMatIndices[1], at.shape,
+                bt.entries, btMatIndices[0], btMatIndices[1], bt.shape
+        );
 
-        return product.reshape(productShape);
+        // Reshape to proper N-dimensional shape.
+        Shape productShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));
+        return at.makeDenseTensor(productShape, productEntries);
     }
 }

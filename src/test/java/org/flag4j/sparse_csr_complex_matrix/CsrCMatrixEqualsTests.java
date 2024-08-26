@@ -1,8 +1,8 @@
 package org.flag4j.sparse_csr_complex_matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
@@ -12,8 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class CsrCMatrixEqualsTests {
-    CsrCMatrix A;
-    CsrCMatrix B;
+    CsrCMatrixOld A;
+    CsrCMatrixOld B;
 
     CNumber[][] aEntries;
     CNumber[][] bEntries;
@@ -64,8 +64,8 @@ public class CsrCMatrixEqualsTests {
                 {4, 5, 14, 5002, 142, 15, 60001}};
         aShape = new Shape(900, 450000);
         bShape = new Shape(900, 450000);
-        A = new CooCMatrix(aShape, aNnz, aIndices[0], aIndices[1]).toCsr();
-        B = new CooCMatrix(bShape, bNnz, bIndices[0], bIndices[1]).toCsr();
+        A = new CooCMatrixOld(aShape, aNnz, aIndices[0], aIndices[1]).toCsr();
+        B = new CooCMatrixOld(bShape, bNnz, bIndices[0], bIndices[1]).toCsr();
 
         assertEquals(A, B);
 
@@ -85,8 +85,8 @@ public class CsrCMatrixEqualsTests {
                 {0, 1, 2, 3, 5, 14, 45, 5002, 142, 15, 60001}};
         aShape = new Shape(900, 450000);
         bShape = new Shape(900, 450000);
-        A = new CooCMatrix(aShape, aNnz, aIndices[0], aIndices[1]).toCsr();
-        B = new CooCMatrix(bShape, bNnz, bIndices[0], bIndices[1]).toCsr();
+        A = new CooCMatrixOld(aShape, aNnz, aIndices[0], aIndices[1]).toCsr();
+        B = new CooCMatrixOld(bShape, bNnz, bIndices[0], bIndices[1]).toCsr();
 
         assertEquals(A, B);
 
@@ -106,8 +106,8 @@ public class CsrCMatrixEqualsTests {
                 {0, 1, 2, 3, 5, 14, 45, 5002, 142, 15, 60001}};
         aShape = new Shape(900, 450000);
         bShape = new Shape(900, 450000);
-        A = new CooCMatrix(aShape, aNnz, aIndices[0], aIndices[1]).toCsr();
-        B = new CooCMatrix(bShape, bNnz, bIndices[0], bIndices[1]).toCsr();
+        A = new CooCMatrixOld(aShape, aNnz, aIndices[0], aIndices[1]).toCsr();
+        B = new CooCMatrixOld(bShape, bNnz, bIndices[0], bIndices[1]).toCsr();
 
         assertNotEquals(A, B);
 
@@ -127,8 +127,8 @@ public class CsrCMatrixEqualsTests {
                 {0, 1, 2, 3, 5, 14, 45, 5002, 142, 15, 60001}};
         aShape = new Shape(900, 450000);
         bShape = new Shape(900, 450000);
-        A = new CooCMatrix(aShape, aNnz, aIndices[0], aIndices[1]).toCsr();
-        B = new CooCMatrix(bShape, bNnz, bIndices[0], bIndices[1]).toCsr();
+        A = new CooCMatrixOld(aShape, aNnz, aIndices[0], aIndices[1]).toCsr();
+        B = new CooCMatrixOld(bShape, bNnz, bIndices[0], bIndices[1]).toCsr();
 
         assertNotEquals(A, B);
 
@@ -148,8 +148,8 @@ public class CsrCMatrixEqualsTests {
                 {0, 1, 2, 3, 5, 14, 22, 5008, 142, 15, 60001}};
         aShape = new Shape(900, 450000);
         bShape = new Shape(900, 450000);
-        A = new CooCMatrix(aShape, aNnz, aIndices[0], aIndices[1]).toCsr();
-        B = new CooCMatrix(bShape, bNnz, bIndices[0], bIndices[1]).toCsr();
+        A = new CooCMatrixOld(aShape, aNnz, aIndices[0], aIndices[1]).toCsr();
+        B = new CooCMatrixOld(bShape, bNnz, bIndices[0], bIndices[1]).toCsr();
 
         assertNotEquals(A, B);
 
@@ -166,8 +166,8 @@ public class CsrCMatrixEqualsTests {
                 {4, 5, 14, 5002, 142, 15, 60001}};
         aShape = new Shape(900, 60002);
         bShape = new Shape(900, 450000);
-        A = new CooCMatrix(aShape, aNnz, aIndices[0], aIndices[1]).toCsr();
-        B = new CooCMatrix(bShape, bNnz, bIndices[0], bIndices[1]).toCsr();
+        A = new CooCMatrixOld(aShape, aNnz, aIndices[0], aIndices[1]).toCsr();
+        B = new CooCMatrixOld(bShape, bNnz, bIndices[0], bIndices[1]).toCsr();
 
         assertNotEquals(A, B);
     }

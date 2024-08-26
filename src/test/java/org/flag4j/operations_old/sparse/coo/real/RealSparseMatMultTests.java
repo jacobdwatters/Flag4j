@@ -1,8 +1,8 @@
 package org.flag4j.operations_old.sparse.coo.real;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooMatrix;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
 
@@ -17,8 +17,8 @@ class RealSparseMatMultTests {
 
     Shape aShape, bShape;
 
-    CooMatrix A, B;
-    CooVector bVector;
+    CooMatrixOld A, B;
+    CooVectorOld bVector;
     MatrixOld exp;
 
     @Test
@@ -28,13 +28,13 @@ class RealSparseMatMultTests {
         aRowIndices = new int[]{0, 2};
         aColIndices = new int[]{2, 1};
         aShape = new Shape(4, 3);
-        A = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[]{1.34, 9234};
         bRowIndices = new int[]{0, 2};
         bColIndices = new int[]{0, 1};
         bShape = new Shape(3, 2);
-        B = new CooMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        B = new CooMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expEntries = new double[][]{
                 {0, 9234},
@@ -57,11 +57,11 @@ class RealSparseMatMultTests {
         aRowIndices = new int[]{0, 1, 2};
         aColIndices = new int[]{2, 0, 1};
         aShape = new Shape(4, 3);
-        A = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[]{1.34};
         indices = new int[]{1};
-        bVector = new CooVector(3, bEntries, indices);
+        bVector = new CooVectorOld(3, bEntries, indices);
 
         expEntries = new double[][]{{0}, {0}, {12.6362}, {0}};
         exp = new MatrixOld(expEntries);

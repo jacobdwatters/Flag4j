@@ -26,7 +26,7 @@ package org.flag4j.operations_old.dense_sparse.csr.complex;
 
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
@@ -37,13 +37,13 @@ import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
 
 /**
- * This class contains low-level operations_old which act on a complex dense and a complex sparse {@link CsrCMatrix CSR matrix}.
+ * This class contains low-level operations_old which act on a complex dense and a complex sparse {@link CsrCMatrixOld CSR matrix}.
  */
 public final class ComplexCsrDenseOperations {
 
     private ComplexCsrDenseOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -58,10 +58,10 @@ public final class ComplexCsrDenseOperations {
      * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static CMatrixOld applyBinOpp(CsrCMatrix src1, CMatrixOld src2,
+    public static CMatrixOld applyBinOpp(CsrCMatrixOld src1, CMatrixOld src2,
                                          BinaryOperator<CNumber> opp,
                                          UnaryOperator<CNumber> uOpp) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
         CNumber[] dest;
         if(uOpp == null) dest = Arrays.copyOf(src2.entries, src2.entries.length);
@@ -95,8 +95,8 @@ public final class ComplexCsrDenseOperations {
      * @param opp Binary operator to apply element-wise to the two matrices.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static CMatrixOld applyBinOpp(CMatrixOld src1, CsrCMatrix src2, BinaryOperator<CNumber> opp) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
+    public static CMatrixOld applyBinOpp(CMatrixOld src1, CsrCMatrixOld src2, BinaryOperator<CNumber> opp) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
         // TODO: Subtracting a sparse matrix from a dense matrix does not require a unary operator.
         //  Ensure that no method of this form requires this.
@@ -134,7 +134,7 @@ public final class ComplexCsrDenseOperations {
      * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static CMatrixOld applyBinOpp(CsrCMatrix src1, double b,
+    public static CMatrixOld applyBinOpp(CsrCMatrixOld src1, double b,
                                          BinaryOperator<CNumber> opp,
                                          UnaryOperator<Double> uOpp) {
         CNumber[] dest = new CNumber[src1.totalEntries().intValueExact()];
@@ -174,7 +174,7 @@ public final class ComplexCsrDenseOperations {
      * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static CMatrixOld applyBinOpp(CsrCMatrix src1, CNumber b,
+    public static CMatrixOld applyBinOpp(CsrCMatrixOld src1, CNumber b,
                                          BinaryOperator<CNumber> opp,
                                          UnaryOperator<CNumber> uOpp) {
         CNumber[] dest = new CNumber[src1.totalEntries().intValueExact()];
@@ -211,8 +211,8 @@ public final class ComplexCsrDenseOperations {
      * @param opp Operation to apply to the matrices.
      * @return The result of applying the operation element-wise to the matrices. Result is a sparse CSR matrix.
      */
-    public static CsrCMatrix applyBinOppToSparse(CMatrixOld src1, CsrCMatrix src2, BinaryOperator<CNumber> opp) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
+    public static CsrCMatrixOld applyBinOppToSparse(CMatrixOld src1, CsrCMatrixOld src2, BinaryOperator<CNumber> opp) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
         int[] rowPointers = src2.rowPointers.clone();
         int[] colIndices = src2.colIndices.clone();
@@ -230,6 +230,6 @@ public final class ComplexCsrDenseOperations {
             }
         }
 
-        return new CsrCMatrix(src1.shape, entries, rowPointers, colIndices);
+        return new CsrCMatrixOld(src1.shape, entries, rowPointers, colIndices);
     }
 }

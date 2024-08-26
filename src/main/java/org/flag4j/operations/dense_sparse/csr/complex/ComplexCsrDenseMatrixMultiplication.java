@@ -27,8 +27,8 @@ package org.flag4j.operations.dense_sparse.csr.complex;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CsrCMatrix;
-import org.flag4j.arrays_old.sparse.CsrMatrix;
+import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
+import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ErrorMessages;
@@ -45,23 +45,23 @@ public final class ComplexCsrDenseMatrixMultiplication {
 
     private ComplexCsrDenseMatrixMultiplication() {
         // Hide default constructor for utility method.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
     /**
      * Computes the matrix multiplication between a complex sparse CSR matrix and a complex dense matrix.
      * WARNING: If the first matrix is very large but not very sparse, this method may be slower than converting the
-     * first matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link MatrixOld#mult(CMatrixOld)}.
+     * first matrix to a {@link CsrMatrixOld#toDense() dense} matrix and calling {@link MatrixOld#mult(CMatrixOld)}.
      * @param src1 First matrix in the matrix multiplication.
      * @param src2 Second matrix in the matrix multiplication.
      * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} does not have the same number of columns as {@code src2} has
      * rows.
      */
-    public static CMatrixOld standard(CsrCMatrix src1, CMatrixOld src2) {
+    public static CMatrixOld standard(CsrCMatrixOld src1, CMatrixOld src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
+        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
 
         CNumber[] destEntries = new CNumber[src1.numRows*src2.numCols];
         Arrays.fill(destEntries, CNumber.ZERO);
@@ -93,16 +93,16 @@ public final class ComplexCsrDenseMatrixMultiplication {
     /**
      * Computes the matrix multiplication between a complex dense matrix and a complex sparse CSR matrix.
      * WARNING: If the second matrix is very large but not very sparse, this method may be slower than converting the
-     * second matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link MatrixOld#mult(MatrixOld)}.
+     * second matrix to a {@link CsrMatrixOld#toDense() dense} matrix and calling {@link MatrixOld#mult(MatrixOld)}.
      * @param src1 First matrix in the matrix multiplication (dense matrix).
      * @param src2 Second matrix in the matrix multiplication (sparse CSR matrix).
      * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} does not have the same number of columns as {@code src2} has
      * rows.
      */
-    public static CMatrixOld standard(CMatrixOld src1, CsrCMatrix src2) {
+    public static CMatrixOld standard(CMatrixOld src1, CsrCMatrixOld src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
+        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
 
         CNumber[] destEntries = new CNumber[src1.numRows * src2.numCols];
         int rows1 = src1.numRows;
@@ -138,9 +138,9 @@ public final class ComplexCsrDenseMatrixMultiplication {
      * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the length of
      * {@code src2}.
      */
-    public static CVectorOld standardVector(CsrCMatrix src1, CVectorOld src2) {
+    public static CVectorOld standardVector(CsrCMatrixOld src1, CVectorOld src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
-        ParameterChecks.assertEquals(src1.numCols, src2.size);
+        ParameterChecks.ensureEquals(src1.numCols, src2.size);
 
         CNumber[] destEntries = new CNumber[src1.numRows];
         Arrays.fill(destEntries, CNumber.ZERO);

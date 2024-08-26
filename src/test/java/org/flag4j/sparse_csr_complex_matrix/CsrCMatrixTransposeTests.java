@@ -1,7 +1,7 @@
 package org.flag4j.sparse_csr_complex_matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ArrayUtils;
 import org.junit.jupiter.api.Test;
@@ -10,9 +10,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CsrCMatrixTransposeTests {
 
-    static CsrCMatrix A;
+    static CsrCMatrixOld A;
     static CNumber[][] aEntries;
-    static CsrCMatrix exp;
+    static CsrCMatrixOld exp;
     static CNumber[][] expEntries;
 
 

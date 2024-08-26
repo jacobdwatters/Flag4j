@@ -26,8 +26,8 @@ package org.flag4j.linalg;
 
 import org.flag4j.arrays_old.dense.CTensorOld;
 import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.arrays_old.sparse.CooCTensor;
-import org.flag4j.arrays_old.sparse.CooTensor;
+import org.flag4j.arrays_old.sparse.CooCTensorOld;
+import org.flag4j.arrays_old.sparse.CooTensorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.dense_base.ComplexDenseTensorBase;
 import org.flag4j.core.dense_base.RealDenseTensorBase;
@@ -43,7 +43,7 @@ public class TensorNorms {
 
     private TensorNorms() {
         // Hide default constructor for utility class
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -129,12 +129,12 @@ public class TensorNorms {
 
 
     /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(CooTensor, double) norm(src, 2)}.
+     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(CooTensorOld, double) norm(src, 2)}.
      *
      * @param src TensorOld to compute norm of.
      * @return the 2-norm of this tensor.
      */
-    public static double norm(CooTensor src) {
+    public static double norm(CooTensorOld src) {
         return tensorNormL2(src.entries);
     }
 
@@ -148,18 +148,18 @@ public class TensorNorms {
      * @return The p-norm of this tensor.
      * @throws IllegalArgumentException If p is less than 1.
      */
-    public double norm(CooTensor src, double p) {
+    public double norm(CooTensorOld src, double p) {
         return tensorNormLp(src.entries, p);
     }
 
 
     /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(CooTensor, double) norm(src, 2)}.
+     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(CooTensorOld, double) norm(src, 2)}.
      *
      * @param src TensorOld to compute norm of.
      * @return the 2-norm of this tensor.
      */
-    public static double norm(CooCTensor src) {
+    public static double norm(CooCTensorOld src) {
         return tensorNormL2(src.entries);
     }
 
@@ -173,7 +173,7 @@ public class TensorNorms {
      * @return The p-norm of this tensor.
      * @throws IllegalArgumentException If p is less than 1.
      */
-    public double norm(CooCTensor src, double p) {
+    public double norm(CooCTensorOld src, double p) {
         return tensorNormLp(src.entries, p);
     }
 
@@ -203,7 +203,7 @@ public class TensorNorms {
      * @return The L<sub>p</sub> norm of the tensor.
      */
     protected static double tensorNormLp(double[] src, double p) {
-        ParameterChecks.assertNotEquals(0, p);
+        ParameterChecks.ensureNotEquals(0, p);
         double norm = 0;
 
         for(double value : src) {

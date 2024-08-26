@@ -57,7 +57,7 @@ public final class PrintOptions {
      * Hide default constructor.
      */
     private PrintOptions() {
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
     /**
@@ -214,7 +214,7 @@ public final class PrintOptions {
      * @param maxCols The maximum number of columns to print.
      */
     public static void setMaxRowsCols(int maxRows, int maxCols) {
-        ParameterChecks.assertGreaterEq(1, maxRows, maxCols);
+        ParameterChecks.ensureGreaterEq(1, maxRows, maxCols);
 
         PrintOptions.maxRows = maxRows;
         PrintOptions.maxColumns = maxCols;
@@ -226,7 +226,7 @@ public final class PrintOptions {
      * @param maxRowCols The new maximum number of rows and columns to print.
      */
     public static void setMaxRowsCols(int maxRowCols) {
-        ParameterChecks.assertGreaterEq(1, maxRowCols);
+        ParameterChecks.ensureGreaterEq(1, maxRowCols);
 
         PrintOptions.maxRows = maxRowCols;
         PrintOptions.maxColumns = maxRowCols;

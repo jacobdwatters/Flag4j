@@ -24,24 +24,29 @@
 
 package org.flag4j.core_temp.arrays.dense;
 
+import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
-import org.flag4j.core_temp.TensorOverField;
+import org.flag4j.core_temp.arrays.sparse.CooFieldTensor;
 import org.flag4j.core_temp.structures.fields.Field;
-import org.flag4j.core_temp.structures.fields.RealFloat64;
-import org.flag4j.core_temp.structures.fields.utils.CompareField;
+import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.dense.field_ops.DenseFieldEquals;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.operations.dense.field_ops.DenseFieldTensorDot;
 import org.flag4j.util.ParameterChecks;
-import org.flag4j.util.exceptions.LinearAlgebraException;
+import org.flag4j.util.exceptions.TensorShapeException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 /**
- * A tensor whose entries are field elements.
+ * <p>A dense tensor whose entries are {@code Field} elements.</p>
+ *
+ * <p>The {@link #entries} of a field tensor are mutable but the {@link #shape} is fixed.</p>
+ *
  * @param <T> Type of the field element for the tensor.
  */
-public class FieldTensor<T extends Field<T>> extends TensorOverField<FieldTensor<T>, T[], T> {
+public class FieldTensor<T extends Field<T>> extends DenseFieldTensorBase<FieldTensor<T>, CooFieldTensor<T>, T> {
 
     /**
      * Creates a tensor with the specified entries and shape.
@@ -52,138 +57,6 @@ public class FieldTensor<T extends Field<T>> extends TensorOverField<FieldTensor
      */
     public FieldTensor(Shape shape, T[] entries) {
         super(shape, entries);
-    }
-
-
-    /**
-     * Gets the element of this tensor at the specified indices.
-     *
-     * @param indices Indices of the element to get.
-     *
-     * @return The element of this tensor at the specified indices.
-     *
-     * @throws IllegalArgumentException       If {@code indices} is not of length 2.
-     * @throws ArrayIndexOutOfBoundsException If any indices are not within this matrix.
-     */
-    @Override
-    public T get(int... indices) {
-        ParameterChecks.assertValidIndex(shape, indices);
-        return entries[shape.entriesIndex(indices)];
-    }
-
-
-    /**
-     * Flattens tensor to single dimension while preserving order of entries.
-     *
-     * @return The flattened tensor.
-     *
-     * @see #flatten(int)
-     */
-    @Override
-    public FieldTensor<T> flatten() {
-        return new FieldTensor(new Shape(entries.length), entries.clone());
-    }
-
-
-    /**
-     * Flattens a tensor along the specified axis.
-     *
-     * @param axis Axis along which to flatten tensor.
-     *
-     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
-     * @see #flatten()
-     */
-    @Override
-    public FieldTensor<T> flatten(int axis) {
-        int[] dims = new int[this.getRank()];
-        Arrays.fill(dims, 1);
-        dims[axis] = shape.totalEntries().intValueExact();
-        Shape flatShape = new Shape(true, dims);
-
-        return new FieldTensor(flatShape, entries.clone());
-    }
-
-
-    /**
-     * Computes the element-wise sum between two tensors of the same shape.
-     *
-     * @param b Second tensor in the element-wise sum.
-     *
-     * @return The sum of this tensor with {@code b}.
-     *
-     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
-     */
-    @Override
-    public FieldTensor<T> add(FieldTensor<T> b) {
-        ParameterChecks.assertEqualShape(shape, b.shape);
-        Field<T>[] sum = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++) {
-            sum[i] = entries[i].add(b.entries[i]);
-        }
-
-        return new FieldTensor(shape, sum);
-    }
-
-
-    /**
-     * Computes the element-wise difference between two tensors of the same shape.
-     *
-     * @param b Second tensor in the element-wise difference.
-     *
-     * @return The difference of this tensor with the scalar {@code b}.
-     *
-     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
-     */
-    @Override
-    public FieldTensor<T> sub(FieldTensor<T> b) {
-        ParameterChecks.assertEqualShape(shape, b.shape);
-        Field<T>[] diff = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++) {
-            diff[i] = entries[i].sub(b.entries[i]);
-        }
-
-        return new FieldTensor(shape, diff);
-    }
-
-
-    /**
-     * Computes the element-wise absolute value of this tensor.
-     *
-     * @return The element-wise absolute value of this tensor.
-     */
-    @Override
-    public FieldTensor<RealFloat64> abs() {
-        Field<RealFloat64>[] conj = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++) {
-            conj[i] = new RealFloat64(entries[i].abs());
-        }
-
-        return new FieldTensor(shape, conj);
-    }
-
-
-    /**
-     * Computes the element-wise multiplication of two tensors of the same shape.
-     *
-     * @param b Second tensor in the element-wise product.
-     *
-     * @return The element-wise product between this tensor and {@code b}.
-     *
-     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
-     */
-    @Override
-    public FieldTensor<T> elemMult(FieldTensor<T> b) {
-        ParameterChecks.assertEqualShape(shape, b.shape);
-        Field<T>[] diff = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++) {
-            diff[i] = entries[i].sub(b.entries[i]);
-        }
-
-        return new FieldTensor(shape, diff);
     }
 
 
@@ -204,7 +77,7 @@ public class FieldTensor<T extends Field<T>> extends TensorOverField<FieldTensor
      */
     @Override
     public FieldTensor<T> tensorDot(FieldTensor<T> src2, int[] aAxes, int[] bAxes) {
-        return null;
+        return DenseFieldTensorDot.tensorDot(this, src2, aAxes, bAxes);
     }
 
 
@@ -222,227 +95,88 @@ public class FieldTensor<T extends Field<T>> extends TensorOverField<FieldTensor
      */
     @Override
     public FieldTensor<T> tensorDot(FieldTensor<T> src2) {
-        return null;
+        return DenseFieldTensorDot.tensorDot(this, src2);
     }
 
 
     /**
-     * <p>Computes the generalized trace of this tensor along the specified axes.</p>
+     * Computes the conjugate transpose of a tensor by conjugating and exchanging {@code axis1} and {@code axis2}.
      *
-     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays_old of this tensor specifieed by
-     * {@code axis1} and {@code axis2}. The shape of the resulting tensor is equal to this tensor with the
-     * {@code axis1} and {@code axis2} removed.</p>
+     * @param axis1 First axis to exchange and conjugate.
+     * @param axis2 Second axis to exchange and conjugate.
      *
-     * @param axis1
-     * @param axis2
+     * @return The conjugate transpose of this tensor acording to the specified axes.
      *
-     * @return The generalized trace of this tensor along @link axis1} and {@code axis2}.
+     * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
+     * @see #H()
+     * @see #H(int...)
      */
     @Override
-    public FieldTensor<T> tensorTr(int axis1, int axis2) {
-        return null;
+    public FieldTensor<T> H(int axis1, int axis2) {
+        return TransposeDispatcher.dispatchTensorHermitian(this, axis1, axis2);
     }
 
 
     /**
-     * Adds a sclar field value to each entry of this tensor.
+     * Computes the conjugate transpose of this tensor. That is, conjugates and permutes the axes of this tensor so that it matches
+     * the permutation specified by {@code axes}.
      *
-     * @param b Scalar field value in sum.
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     * {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
      *
-     * @return The sum of this tensor with the scalar {@code b}.
+     * @return The conjugate transpose of this tensor with its axes permuted by the {@code axes} array.
+     *
+     * @throws IndexOutOfBoundsException If any element of {@code axes} is out of bounds for the rank of this tensor.
+     * @throws IllegalArgumentException  If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     * @see #H(int, int)
+     * @see #H()
      */
     @Override
-    public FieldTensor<T> add(T b) {
-        Field<T>[] sum = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++) {
-            sum[i] = entries[i].add(b);
-        }
-
-        return new FieldTensor(shape, sum);
+    public FieldTensor<T> H(int... axes) {
+        return TransposeDispatcher.dispatchTensorHermitian(this, axes);
     }
 
 
     /**
-     * Subtracts a sclar field value from each entry of this tensor.
+     * Constructs a tensor of the same type as this tensor with the given the shape and entries.
      *
-     * @param b Scalar field value in differencce.
+     * @param shape Shape of the tensor to construct.
+     * @param entries Entires of the tensor to construct.
      *
-     * @return The difference of this tensor and the scalar {@code b}.
+     * @return A tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public FieldTensor<T> sub(T b) {
-        Field<T>[] diff = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++) {
-            diff[i] = entries[i].sub(b);
-        }
-
-        return new FieldTensor(shape, diff);
+    public FieldTensor<T> makeLikeTensor(Shape shape, T[] entries) {
+        return new FieldTensor<>(shape, entries);
     }
 
 
     /**
-     * Multiplies a sclar field value to each entry of this tensor.
+     * Creates a tensor with the specified shape filled with {@code fillValue}.
      *
-     * @param b Scalar field value in product.
-     *
-     * @return The product of this tensor with {@code b}.
+     * @param shape Shape of this tensor.
+     * @param fillValue Value to fill tesnor with.
      */
-    @Override
-    public FieldTensor<T> mult(T b) {
-        Field<T>[] product = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++) {
-            product[i] = entries[i].mult(b);
-        }
-
-        return new FieldTensor(shape, product);
+    public FieldTensor(Shape shape, T fillValue) {
+        super(shape, (T[]) new Field[shape.totalEntries().intValueExact()]);
+        Arrays.fill(entries, fillValue);
     }
 
 
     /**
-     * Divides each entry of this tensor by s scalar field element.
-     *
-     * @param b Scalar field value in quotient.
-     *
-     * @return The quotient of this tensor with {@code b}.
+     * Checks if an object is equal to this tensor object.
+     * @param object Object to check equality with this tensor.
+     * @return True if the two tensors have the same shape, are numerically equivalent, and are of type {@link FieldTensor}.
+     * False otherwise.
      */
     @Override
-    public FieldTensor<T> div(T b) {
-        Field<T>[] product = new Field[entries.length];
+    public boolean equals(Object object) {
+        if(this == object) return true;
+        if(object == null || object.getClass() != getClass()) return false;
 
-        for(int i=0, size=entries.length; i<size; i++) {
-            product[i] = entries[i].div(b);
-        }
+        FieldTensor<T> src2 = (FieldTensor<T>) object;
 
-        return new FieldTensor(shape, product);
-    }
-
-
-    /**
-     * Finds the minimum value in this tensor.
-     *
-     * @return The minimum value in this tensor.
-     */
-    @Override
-    public T min() {
-        return CompareField.min(entries);
-    }
-
-
-    /**
-     * Finds the maximum value in this tensor.
-     *
-     * @return The maximum value in this tensor.
-     */
-    @Override
-    public T max() {
-        return CompareField.max(entries);
-    }
-
-
-    /**
-     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #min()}.
-     *
-     * @return The minimum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double minAbs() {
-        return CompareField.minAbs(entries);
-    }
-
-
-    /**
-     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #max()}.
-     *
-     * @return The maximum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double maxAbs() {
-        return CompareField.maxAbs(entries);
-    }
-
-
-    /**
-     * Finds the indices of the minimum value in this tensor.
-     *
-     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argMin() {
-        return new int[0];
-    }
-
-
-    /**
-     * Finds the indices of the maximum value in this tensor.
-     *
-     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argMax() {
-        return new int[0];
-    }
-
-
-    /**
-     * Finds the indices of the minimum absollte value in this tensor.
-     *
-     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argMinAbs() {
-        return new int[0];
-    }
-
-
-    /**
-     * Finds the indices of the maximum absolute value in this tensor.
-     *
-     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argMaxAbs() {
-        return new int[0];
-    }
-
-
-    /**
-     * Computes the element-wise square root of a tensor.
-     *
-     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
-     * the principle square root i.e. the square root with positive real part.
-     */
-    @Override
-    public FieldTensor<T> sqrt() {
-        Field<T>[] sqrt = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++) {
-            sqrt[i] = entries[i].sqrt();
-        }
-
-        return new FieldTensor(shape, sqrt);
-    }
-
-
-    /**
-     * Computes the transpose of a tensor by exchanging the first and last axes of this tensor.
-     *
-     * @return The transpose of this tensor.
-     *
-     * @see #T(int, int)
-     * @see #T(int...)
-     */
-    @Override
-    public FieldTensor<T> T() {
-        return T(0, getRank()-1);
+        return DenseFieldEquals.tensorEquals(this.entries, this.shape, src2.entries, src2.shape);
     }
 
 
@@ -460,22 +194,7 @@ public class FieldTensor<T extends Field<T>> extends TensorOverField<FieldTensor
      */
     @Override
     public FieldTensor<T> T(int axis1, int axis2) {
-        // TODO: Need dispatcher.
-        if(getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new LinearAlgebraException("TensorOld transpose not defined for rank " + getRank() + " tensor.");
-        }
-
-        Field<T>[] dest = new Field[shape.totalEntries().intValue()];
-        Shape destShape = shape.swapAxes(axis1, axis2);
-        int[] destIndices;
-
-        for(int i=0, size=entries.length; i<size; i++) {
-            destIndices = shape.getIndices(i);
-            ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
-            dest[destShape.entriesIndex(destIndices)] = entries[i]; // Apply transpose for the element.
-        }
-
-        return new FieldTensor(destShape, dest);
+        return TransposeDispatcher.dispatchTensor(this, axis1, axis2);
     }
 
 
@@ -495,68 +214,161 @@ public class FieldTensor<T extends Field<T>> extends TensorOverField<FieldTensor
      */
     @Override
     public FieldTensor<T> T(int... axes) {
-        // TODO: Need dispatcher.
-        ParameterChecks.assertPermutation(axes);
-        ParameterChecks.assertEquals(shape.getRank(), axes.length);
-        if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new LinearAlgebraException("TensorOld transpose not defined for rank " + shape.getRank() + " tensor.");
-        }
-
-        Field<T>[] dest = new Field[shape.totalEntries().intValue()];
-        Shape destShape = shape.swapAxes(axes);
-        int[] destIndices;
-
-        for(int i=0, size=entries.length; i<entries.length; i++) {
-            destIndices = shape.getIndices(i);
-            ArrayUtils.swap(destIndices, axes); // Compute destination indices.
-            dest[destShape.entriesIndex(destIndices)] = entries[i]; // Apply transpose for the element.
-        }
-
-        return new FieldTensor(destShape, dest);
+        return TransposeDispatcher.dispatchTensor(this, axes);
     }
 
 
     /**
-     * Computes the element-wise reciprocals of this tensor.
+     * Converts this dense tesnor to an equivalent sparse tensor.
      *
-     * @return A tensor containing the reciprocal elements of this tensor.
+     * @return A sparse tesnor equivalent to this dense tensor.
      */
     @Override
-    public FieldTensor<T> recip() {
-        Field<T>[] recip = new Field[entries.length];
+    public CooFieldTensor<T> toCoo() {
+        List<Field<T>> spEntries = new ArrayList<>();
+        List<int[]> indices = new ArrayList<>();
 
-        for(int i=0, size=entries.length; i<size; i++) {
-            recip[i] = entries[i].multInv();
+        int size = entries.length;
+        T value;
+
+        for(int i=0; i<size; i++) {
+            value = entries[i];
+
+            if(value.equals(CNumber.ZERO)) {
+                spEntries.add(value);
+                indices.add(shape.getIndices(i));
+            }
         }
 
-        return new FieldTensor(shape, recip);
+        return new CooFieldTensor(shape, spEntries.toArray(new Field[0]), indices.toArray(new int[0][]));
     }
 
 
     /**
-     * Creates a copy of this tensor.
+     * Computes the element-wise multiplication of two tensors and stores the result in this tensor.
      *
-     * @return A copy of this tensor.
+     * @param b Second tensor in the element-wise product.
+     *
+     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
      */
     @Override
-    public FieldTensor<T> copy() {
-        return new FieldTensor(shape, entries.clone());
+    public void elemMultEq(FieldTensor<T> b) {
+        ParameterChecks.ensureEqualShape(shape, b.shape);
+
+        for(int i=0, size=entries.length; i<size; i++)
+            entries[i] = entries[i].mult(b.entries[i]);
     }
 
 
     /**
-     * Checks if an object is equal to this tensor object.
-     * @param object Object to check equality with this tensor.
-     * @return True if the two tensors have the same shape, are numerically equivalent, and are of type {@link Tensor}.
-     * False otherwise.
+     * Computes the element-wise sum between two tensors and stores the result in this tensors.
+     *
+     * @param b Second tensor in the element-wise sum.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
      */
     @Override
-    public boolean equals(Object object) {
-        if(this == object) return true;
-        if(object == null || object.getClass() != getClass()) return false;
+    public void addEq(FieldTensor<T> b) {
+        ParameterChecks.ensureEqualShape(shape, b.shape);
 
-        FieldTensor<T> src2 = (FieldTensor<T>) object;
+        for(int i=0, size=entries.length; i<size; i++)
+            entries[i] = entries[i].add(b.entries[i]);
+    }
 
-        return DenseFieldEquals.tensorEquals(this.entries, this.shape, src2.entries, src2.shape);
+
+    /**
+     * Computes the element-wise difference between two tensors and stores the result in this tensor.
+     *
+     * @param b Second tensor in the element-wise difference.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
+     */
+    @Override
+    public void subEq(FieldTensor<T> b) {
+        ParameterChecks.ensureEqualShape(shape, b.shape);
+
+        for(int i=0, size=entries.length; i<size; i++)
+            entries[i] = entries[i].sub(b.entries[i]);
+    }
+
+
+    /**
+     * Computes the element-wise division between two tensors and stores the result in this tensor.
+     *
+     * @param b The denominator tensor in the element-wise quotient.
+     *
+     * @throws TensorShapeException If this tensor and {@code b}'s shape are not equal.
+     */
+    @Override
+    public void divEq(FieldTensor<T> b) {
+        ParameterChecks.ensureEqualShape(shape, b.shape);
+
+        for(int i=0, size=entries.length; i<size; i++)
+            entries[i] = entries[i].div(b.entries[i]);
+    }
+
+
+    /**
+     * Computes the element-wise division between two tensors.
+     *
+     * @param b The denominator tensor in the element-wise quotient.
+     *
+     * @return The element-wise quotient of this tensor and {@code b}.
+     *
+     * @throws TensorShapeException If this tensor and {@code b}'s shape are not equal.
+     */
+    @Override
+    public FieldTensor<T> div(FieldTensor<T> b) {
+        ParameterChecks.ensureEqualShape(this.shape, b.shape);
+
+        Field<T>[] diff = new Field[entries.length];
+
+        for(int i=0, size=entries.length; i<size; i++)
+            diff[i] = entries[i].div(b.entries[i]);
+
+        return makeLikeTensor(shape, (T[]) diff);
+    }
+
+
+    /**
+     * Converts this tensor to an equivalent vector. If this tensor is not rank 1, then it will be flattened.
+     * @return A vector equivalent of this tensor.
+     */
+    public FieldVector<T> toVector() {
+        return new FieldVector<T>(this.entries.clone());
+    }
+
+
+    /**
+     * Converts this tensor to a matrix with the specified shape.
+     * @param matShape Shape of the resulting matrix. Must be {@link ParameterChecks#ensureBroadcastable(Shape, Shape) broadcastable}
+     * with the shape of this tensor.
+     * @return A matrix of shape {@code matShape} with the values of this tensor.
+     * @throws org.flag4j.util.exceptions.LinearAlgebraException If {@code matShpae} is not of rank 2.
+     */
+    public FieldMatrix<T> toMatrix(Shape matShape) {
+        ParameterChecks.ensureBroadcastable(shape, matShape);
+        ParameterChecks.ensureRank(2, matShape);
+
+        return new FieldMatrix<T>(matShape, entries.clone());
+    }
+
+
+    /**
+     * Converts this tensor to an equivalent matrix.
+     * @return If this tensor is rank 2, then the equivalent matrix will be returned.
+     * If the tensor is rank 1, then a matrix with a single row will be returned. If the rank of this tensor is larger than 2, it will
+     * be flattened to a single row.
+     */
+    public FieldMatrix<T> toMatrix() {
+        FieldMatrix<T> mat;
+
+        if(this.getRank()==2) {
+            mat = new FieldMatrix<T>(this.shape, this.entries.clone());
+        } else {
+            mat = new FieldMatrix<T>(1, this.entries.length, this.entries.clone());
+        }
+
+        return mat;
     }
 }

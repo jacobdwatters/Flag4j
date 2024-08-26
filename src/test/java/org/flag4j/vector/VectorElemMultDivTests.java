@@ -2,8 +2,8 @@ package org.flag4j.vector;
 
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -73,19 +73,19 @@ class VectorElemMultDivTests {
     void realSparseMultTestCase() {
         int[] expIndices;
         double[] bEntries, expEntries;
-        CooVector b, exp;
+        CooVectorOld b, exp;
 
         // ------------------------ Sub-case 1 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new VectorOld(aEntries);
         bEntries = new double[]{8.55};
         indices = new int[]{2};
-        b = new CooVector(3, bEntries, indices);
+        b = new CooVectorOld(3, bEntries, indices);
         expEntries = new double[]{aEntries[2]*bEntries[0]};
         expIndices = new int[]{2};
-        exp = new CooVector(3, expEntries, expIndices);
+        exp = new CooVectorOld(3, expEntries, expIndices);
 
-        CooVector act = a.elemMult(b);
+        CooVectorOld act = a.elemMult(b);
 
         assertEquals(exp.size, act.size);
         assertArrayEquals(exp.entries, act.entries);
@@ -96,9 +96,9 @@ class VectorElemMultDivTests {
         a = new VectorOld(aEntries);
         bEntries = new double[]{8.55};
         indices = new int[]{2};
-        b = new CooVector(402, bEntries, indices);
+        b = new CooVectorOld(402, bEntries, indices);
 
-        CooVector finalB = b;
+        CooVectorOld finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.elemMult(finalB));
     }
 
@@ -107,19 +107,19 @@ class VectorElemMultDivTests {
     void complexSparseMultTestCase() {
         int[] expIndices;
         CNumber[] bEntries, expEntries;
-        CooCVector b, exp;
+        CooCVectorOld b, exp;
 
         // ------------------------ Sub-case 1 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new VectorOld(aEntries);
         bEntries = new CNumber[]{new CNumber(-9.234, 1.5)};
         indices = new int[]{2};
-        b = new CooCVector(3, bEntries, indices);
+        b = new CooCVectorOld(3, bEntries, indices);
         expEntries = new CNumber[]{bEntries[0].mult(aEntries[2])};
         expIndices = new int[]{2};
-        exp = new CooCVector(3, expEntries, expIndices);
+        exp = new CooCVectorOld(3, expEntries, expIndices);
 
-        CooCVector act = a.elemMult(b);
+        CooCVectorOld act = a.elemMult(b);
 
         assertEquals(exp.size, act.size);
         assertArrayEquals(exp.entries, act.entries);
@@ -130,9 +130,9 @@ class VectorElemMultDivTests {
         a = new VectorOld(aEntries);
         bEntries = new CNumber[]{new CNumber(-9.234, 1.5)};
         indices = new int[]{2};
-        b = new CooCVector(31, bEntries, indices);
+        b = new CooCVectorOld(31, bEntries, indices);
 
-        CooCVector finalB = b;
+        CooCVectorOld finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.elemMult(finalB));
     }
 

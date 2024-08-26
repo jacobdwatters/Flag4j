@@ -1,8 +1,8 @@
 package org.flag4j.sparse_csr_complex_matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.sparse.CsrCMatrix;
-import org.flag4j.arrays_old.sparse.CsrMatrix;
+import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
+import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -12,11 +12,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ComplexCsrMatMultTests {
-    CsrCMatrix A;
-    CsrCMatrix B;
-    CsrMatrix BReal;
+    CsrCMatrixOld A;
+    CsrCMatrixOld B;
+    CsrMatrixOld BReal;
     CMatrixOld exp;
-    CsrCMatrix expCsr;
+    CsrCMatrixOld expCsr;
 
     CNumber[] aEntries;
     CNumber[] bEntries;
@@ -46,7 +46,7 @@ class ComplexCsrMatMultTests {
                 new CNumber(0.45451, 0.6559), new CNumber(0.16631, 0.00017)};
         aRowPointers = new int[]{0, 1, 4, 4, 4, 7, 9, 12, 14, 16, 16, 17, 18};
         aColIndices = new int[]{6, 1, 6, 7, 2, 3, 5, 5, 8, 5, 7, 11, 3, 11, 4, 11, 2, 10};
-        A = new CsrCMatrix(aShape, aEntries, aRowPointers, aColIndices);
+        A = new CsrCMatrixOld(aShape, aEntries, aRowPointers, aColIndices);
 
         bShape = new Shape(15, 3);
         bEntries = new CNumber[]{new CNumber(0.03912, 0.1528), new CNumber(0.94468, 0.17732),
@@ -55,7 +55,7 @@ class ComplexCsrMatMultTests {
                 new CNumber(0.84046, 0.46896)};
         bRowPointers = new int[]{0, 0, 0, 0, 3, 5, 5, 5, 5, 5, 5, 6, 7, 7, 9, 9};
         bColIndices = new int[]{0, 1, 2, 1, 2, 1, 0, 0, 1};
-        B = new CsrCMatrix(bShape, bEntries, bRowPointers, bColIndices);
+        B = new CsrCMatrixOld(bShape, bEntries, bRowPointers, bColIndices);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
@@ -78,12 +78,12 @@ class ComplexCsrMatMultTests {
         assertEquals(exp, A.mult(B));
 
         // ---------------------- Sub-case 2 ----------------------
-        A = new CsrCMatrix(10, 15);
-        B = new CsrCMatrix(11, 124);
+        A = new CsrCMatrixOld(10, 15);
+        B = new CsrCMatrixOld(11, 124);
         assertThrows(LinearAlgebraException.class, ()->A.mult(B));
 
-        A = new CsrCMatrix(156, 9);
-        B = new CsrCMatrix(11, 156);
+        A = new CsrCMatrixOld(156, 9);
+        B = new CsrCMatrixOld(11, 156);
         assertThrows(LinearAlgebraException.class, ()->A.mult(B));
 
         // ---------------------- Sub-case 3 ----------------------
@@ -97,14 +97,14 @@ class ComplexCsrMatMultTests {
                 new CNumber(0.15898, 0.79035)};
         aRowPointers = new int[]{0, 2, 3, 3, 4, 4, 8, 8, 8, 12, 12, 14, 18};
         aColIndices = new int[]{4, 9, 0, 0, 3, 9, 12, 14, 1, 2, 5, 14, 0, 2, 1, 4, 10, 12};
-        A = new CsrCMatrix(aShape, aEntries, aRowPointers, aColIndices);
+        A = new CsrCMatrixOld(aShape, aEntries, aRowPointers, aColIndices);
 
         bShape = new Shape(15, 3);
         bRealEntries = new double[]{0.03306910239482874, 0.8636901552440979, 0.49589707896846047, 0.06465028630912939,
                 0.6291181046483528, 0.44287285471666227, 0.6325469257819518, 0.22809135315396034, 0.5262606791808147};
         bRowPointers = new int[]{0, 0, 0, 1, 1, 1, 2, 2, 4, 5, 5, 6, 7, 8, 8, 9};
         bColIndices = new int[]{1, 2, 0, 1, 0, 1, 1, 2, 0};
-        BReal = new CsrMatrix(bShape, bRealEntries, bRowPointers, bColIndices);
+        BReal = new CsrMatrixOld(bShape, bRealEntries, bRowPointers, bColIndices);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
@@ -124,12 +124,12 @@ class ComplexCsrMatMultTests {
         assertEquals(exp, A.mult(BReal));
 
         // ---------------------- Sub-case 4 ----------------------
-        A = new CsrCMatrix(10, 15);
-        BReal = new CsrMatrix(11, 124);
+        A = new CsrCMatrixOld(10, 15);
+        BReal = new CsrMatrixOld(11, 124);
         assertThrows(LinearAlgebraException.class, ()->A.mult(BReal));
 
-        A = new CsrCMatrix(156, 9);
-        BReal = new CsrMatrix(11, 156);
+        A = new CsrCMatrixOld(156, 9);
+        BReal = new CsrMatrixOld(11, 156);
         assertThrows(LinearAlgebraException.class, ()->A.mult(BReal));
     }
 
@@ -148,7 +148,7 @@ class ComplexCsrMatMultTests {
                 new CNumber(0.34214, 0.18124), new CNumber(0.97286, 0.60256)};
         aRowPointers = new int[]{0, 3, 6, 7, 9, 11, 12, 15, 18, 18, 18, 19, 20, 20, 22, 22};
         aColIndices = new int[]{10, 11, 14, 8, 11, 13, 2, 2, 9, 1, 12, 8, 0, 2, 5, 0, 7, 12, 12, 4, 3, 6};
-        A = new CsrCMatrix(aShape, aEntries, aRowPointers, aColIndices);
+        A = new CsrCMatrixOld(aShape, aEntries, aRowPointers, aColIndices);
 
         bShape = new Shape(15, 15);
         bEntries = new CNumber[]{new CNumber(0.74105, 0.24133), new CNumber(0.94406, 0.25212),
@@ -161,7 +161,7 @@ class ComplexCsrMatMultTests {
                 new CNumber(0.30708, 0.06817), new CNumber(0.03297, 0.88127)};
         bRowPointers = new int[]{0, 4, 5, 6, 9, 9, 10, 12, 13, 15, 15, 15, 18, 18, 19, 22};
         bColIndices = new int[]{1, 2, 3, 8, 2, 7, 6, 8, 9, 12, 9, 12, 9, 6, 14, 1, 10, 12, 10, 4, 12, 13};
-        B = new CsrCMatrix(bShape, bEntries, bRowPointers, bColIndices);
+        B = new CsrCMatrixOld(bShape, bEntries, bRowPointers, bColIndices);
 
         expCsrShape = new Shape(15, 15);
         expCsrEntries = new CNumber[]{new CNumber(0.0836145865, 0.1596856129),
@@ -183,7 +183,7 @@ class ComplexCsrMatMultTests {
                 new CNumber(-0.09341247159999999, 0.1723341326)};
         expCsrRowPointers = new int[]{0, 5, 10, 11, 12, 13, 15, 21, 26, 26, 26, 26, 26, 26, 30, 30};
         expCsrColIndices = new int[]{1, 4, 10, 12, 13, 1, 6, 10, 12, 14, 7, 7, 2, 6, 14, 1, 2, 3, 7, 8, 12, 1, 2, 3, 8, 9, 6, 8, 9, 12};
-        expCsr = new CsrCMatrix(expCsrShape, expCsrEntries, expCsrRowPointers, expCsrColIndices);
+        expCsr = new CsrCMatrixOld(expCsrShape, expCsrEntries, expCsrRowPointers, expCsrColIndices);
 
         assertEquals(expCsr, A.mult2CSR(B));
 
@@ -192,19 +192,19 @@ class ComplexCsrMatMultTests {
         aEntries = new CNumber[]{new CNumber(0.80192, 0.00457), new CNumber(0.75879, 0.96137), new CNumber(0.7197, 0.79965), new CNumber(0.27629, 0.72594), new CNumber(0.49392, 0.66413), new CNumber(0.4067, 0.26811), new CNumber(0.10677, 0.6162), new CNumber(0.07077, 0.41851), new CNumber(0.50209, 0.29478), new CNumber(0.40524, 0.70039), new CNumber(0.30549, 0.65839), new CNumber(0.60399, 0.91417), new CNumber(0.3789, 0.59518), new CNumber(0.28813, 0.22652), new CNumber(0.95052, 0.01256), new CNumber(0.30087, 0.23646), new CNumber(0.92451, 0.7899), new CNumber(0.7624, 0.63808), new CNumber(0.79608, 0.04811), new CNumber(0.1743, 0.94944), new CNumber(0.00145, 0.56106), new CNumber(0.25729, 0.03609), new CNumber(0.72895, 0.64931), new CNumber(0.47464, 0.41308), new CNumber(0.71833, 0.15304), new CNumber(0.98708, 0.98231), new CNumber(0.64243, 0.95304), new CNumber(0.90844, 0.90654), new CNumber(0.11218, 0.33391), new CNumber(0.4905, 0.98171), new CNumber(0.81564, 0.68582), new CNumber(0.1198, 0.38116), new CNumber(0.33929, 0.50226), new CNumber(0.54688, 0.69092), new CNumber(0.94487, 0.4582), new CNumber(0.4023, 0.02026), new CNumber(0.2841, 0.29161), new CNumber(0.40666, 0.46315), new CNumber(0.47243, 0.5369), new CNumber(0.46895, 0.87651), new CNumber(0.17839, 0.12726), new CNumber(0.3982, 0.43276), new CNumber(0.94624, 0.59931), new CNumber(0.55679, 0.95208), new CNumber(0.30977, 0.8028), new CNumber(0.31346, 0.2119), new CNumber(0.56704, 0.88278), new CNumber(0.94851, 0.51192), new CNumber(0.13748, 0.13437), new CNumber(0.03488, 0.6052), new CNumber(0.15132, 0.81863), new CNumber(0.09701, 0.64024), new CNumber(0.63921, 0.09402), new CNumber(0.14725, 0.86802), new CNumber(0.74567, 0.92625), new CNumber(0.71516, 0.17888), new CNumber(0.76541, 0.02061), new CNumber(0.90628, 0.80481), new CNumber(0.40745, 0.41716), new CNumber(0.97685, 0.29665)};
         aRowPointers = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11, 11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 13, 13, 13, 13, 13, 13, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 15, 15, 15, 15, 15, 15, 15, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 18, 18, 18, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 21, 21, 21, 22, 22, 22, 22, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 27, 27, 27, 27, 27, 27, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 30, 30, 30, 30, 31, 31, 31, 31, 31, 31, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 36, 36, 36, 36, 36, 36, 36, 36, 36, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 39, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 43, 43, 43, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 46, 46, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 52, 52, 52, 53, 53, 53, 53, 53, 53, 53, 53, 53, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 55, 55, 55, 55, 55, 55, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 57, 57, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 59, 59, 59, 59, 59, 59, 59, 59, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60};
         aColIndices = new int[]{95, 341, 430, 239, 207, 33, 32, 126, 129, 381, 229, 441, 23, 170, 183, 494, 133, 85, 451, 449, 310, 326, 213, 332, 91, 154, 365, 470, 425, 469, 122, 404, 356, 143, 373, 199, 497, 192, 307, 82, 166, 460, 310, 58, 436, 316, 379, 210, 384, 70, 94, 282, 184, 322, 392, 327, 66, 333, 221, 455};
-        A = new CsrCMatrix(aShape, aEntries, aRowPointers, aColIndices);
+        A = new CsrCMatrixOld(aShape, aEntries, aRowPointers, aColIndices);
 
         bShape = new Shape(502, 1562);
         bEntries = new CNumber[]{new CNumber(0.87381, 0.58498), new CNumber(0.35145, 0.67192), new CNumber(0.4689, 0.68118), new CNumber(0.10492, 0.13955), new CNumber(0.63021, 0.1941), new CNumber(0.41652, 0.0193), new CNumber(0.21681, 0.47653), new CNumber(0.28913, 0.87367), new CNumber(0.56016, 0.89715), new CNumber(0.78732, 0.71132), new CNumber(0.42402, 0.06502), new CNumber(0.50521, 0.03191), new CNumber(0.96191, 0.06612), new CNumber(0.02487, 0.29677), new CNumber(0.64649, 0.73785), new CNumber(0.06305, 0.12956), new CNumber(0.50408, 0.93089), new CNumber(0.29309, 0.76607), new CNumber(0.2266, 0.41987), new CNumber(0.3, 0.3807), new CNumber(0.92043, 0.15509), new CNumber(0.14899, 0.07406), new CNumber(0.63368, 0.24698), new CNumber(0.75273, 0.00524), new CNumber(0.14398, 0.1582), new CNumber(0.6959, 0.74272), new CNumber(0.10484, 0.54408), new CNumber(0.0121, 0.85685), new CNumber(0.55037, 0.34922), new CNumber(0.90439, 0.36893), new CNumber(0.59893, 0.12205), new CNumber(0.17189, 0.60215), new CNumber(0.39049, 0.35365), new CNumber(0.06375, 0.83679), new CNumber(0.534, 0.78719), new CNumber(0.97489, 0.44991), new CNumber(0.34922, 0.0231), new CNumber(0.34234, 0.86789), new CNumber(0.53787, 0.67613), new CNumber(0.79089, 0.97324), new CNumber(0.53436, 0.56956), new CNumber(0.39044, 0.79148), new CNumber(0.40245, 0.58767), new CNumber(0.52231, 0.40833), new CNumber(0.84053, 0.87318), new CNumber(0.75298, 0.63637), new CNumber(0.0142, 0.94239), new CNumber(0.32972, 0.15121), new CNumber(0.12827, 0.99429), new CNumber(0.23446, 0.94056), new CNumber(0.83445, 0.51429), new CNumber(0.38824, 0.60358), new CNumber(0.61625, 0.18771), new CNumber(0.26599, 0.72239), new CNumber(0.58243, 0.70938), new CNumber(0.18207, 0.97884), new CNumber(0.94311, 0.69332), new CNumber(0.0318, 0.24647), new CNumber(0.58024, 0.34611), new CNumber(0.27172, 0.70768), new CNumber(0.70786, 0.41123), new CNumber(0.53742, 0.63946), new CNumber(0.66246, 0.60684), new CNumber(0.40153, 0.15107), new CNumber(0.2691, 0.32465), new CNumber(0.39626, 0.33517), new CNumber(0.67378, 0.37866), new CNumber(0.11977, 0.09945), new CNumber(0.43525, 0.39079), new CNumber(0.24332, 0.39348), new CNumber(0.96248, 0.57729), new CNumber(0.34665, 0.45364), new CNumber(0.89361, 0.77448), new CNumber(0.08791, 0.19295), new CNumber(0.4271, 0.6714), new CNumber(0.63674, 0.3468), new CNumber(0.8728, 0.29522), new CNumber(0.48813, 0.63073)};
         bRowPointers = new int[]{0, 0, 0, 1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 12, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 14, 14, 14, 14, 14, 15, 15, 15, 15, 15, 15, 15, 16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 18, 18, 18, 18, 19, 19, 19, 20, 20, 20, 20, 20, 20, 20, 20, 22, 22, 23, 23, 23, 23, 23, 24, 24, 24, 24, 24, 24, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 26, 26, 27, 27, 27, 27, 27, 28, 28, 28, 28, 28, 29, 29, 29, 29, 29, 29, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 31, 31, 31, 31, 31, 31, 31, 31, 31, 32, 33, 33, 33, 34, 34, 35, 35, 35, 35, 35, 35, 35, 35, 36, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 38, 38, 38, 39, 39, 40, 40, 40, 40, 40, 41, 42, 42, 43, 43, 43, 43, 44, 44, 44, 44, 45, 45, 45, 45, 45, 45, 45, 46, 46, 46, 47, 47, 47, 47, 47, 47, 47, 47, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 50, 50, 50, 50, 50, 50, 51, 52, 52, 52, 52, 52, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 54, 54, 54, 56, 56, 56, 56, 57, 57, 57, 57, 58, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 60, 60, 60, 61, 61, 61, 62, 62, 62, 63, 63, 63, 63, 63, 63, 63, 63, 63, 64, 64, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 66, 67, 67, 67, 67, 67, 67, 67, 67, 69, 69, 69, 69, 70, 70, 70, 70, 70, 70, 70, 70, 70, 71, 71, 72, 72, 72, 72, 72, 72, 72, 73, 73, 74, 75, 75, 75, 76, 76, 76, 77, 77, 77, 77, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78};
         bColIndices = new int[]{731, 743, 558, 79, 1072, 1089, 498, 165, 775, 1365, 1062, 1138, 469, 571, 721, 1390, 1053, 298, 320, 502, 491, 1128, 716, 438, 1514, 17, 378, 343, 490, 1249, 656, 624, 722, 819, 1081, 1485, 197, 271, 353, 886, 1305, 1143, 1285, 1476, 920, 202, 645, 600, 612, 246, 636, 230, 1453, 651, 89, 466, 910, 1523, 580, 113, 241, 1007, 12, 1517, 1231, 702, 1103, 691, 1278, 1110, 129, 190, 1349, 821, 169, 423, 173, 955};
-        B = new CsrCMatrix(bShape, bEntries, bRowPointers, bColIndices);
+        B = new CsrCMatrixOld(bShape, bEntries, bRowPointers, bColIndices);
 
         expCsrShape = new Shape(1201, 1562);
         expCsrEntries = new CNumber[]{new CNumber(-0.31500597069999997, 0.4115712337), new CNumber(-0.03958583130000001, 0.2519336801), new CNumber(-0.190607289, 0.24962508249999998), new CNumber(0.008148769799999997, 0.25998728400000004), new CNumber(0.07810706740000001, 0.1693066798), new CNumber(-0.1218710389, 0.9205536905), new CNumber(-0.09505593260000002, 0.2549774294), new CNumber(0.3474709316, 0.6360371848), new CNumber(-0.27257985430000004, 0.3786958405), new CNumber(0.25091500310000003, 0.49876750570000006), new CNumber(0.20953447490000005, 0.5900009419)};
         expCsrRowPointers = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11};
         expCsrColIndices = new int[]{624, 498, 343, 1514, 230, 1081, 821, 716, 651, 1138, 1485};
-        expCsr = new CsrCMatrix(expCsrShape, expCsrEntries, expCsrRowPointers, expCsrColIndices);
+        expCsr = new CsrCMatrixOld(expCsrShape, expCsrEntries, expCsrRowPointers, expCsrColIndices);
 
         assertEquals(expCsr, A.mult2CSR(B));
 
@@ -213,39 +213,39 @@ class ComplexCsrMatMultTests {
         aEntries = new CNumber[]{new CNumber(0.22316, 0.35562), new CNumber(0.94242, 0.37764), new CNumber(0.6349, 0.4183), new CNumber(0.98095, 0.96738), new CNumber(0.79842, 0.03641), new CNumber(0.49714, 0.20468), new CNumber(0.44936, 0.37731), new CNumber(0.82674, 0.72264), new CNumber(0.29454, 0.8007), new CNumber(0.64223, 0.46247), new CNumber(0.24694, 0.87524), new CNumber(0.0005, 0.42085), new CNumber(0.2366, 0.44245), new CNumber(0.9721, 0.0875), new CNumber(0.55155, 0.62224), new CNumber(0.76339, 0.05573), new CNumber(0.57728, 0.45146), new CNumber(0.87833, 0.75748)};
         aRowPointers = new int[]{0, 2, 3, 4, 5, 8, 9, 10, 12, 14, 16, 17, 18};
         aColIndices = new int[]{5, 11, 11, 7, 4, 2, 7, 13, 7, 2, 3, 7, 4, 7, 3, 10, 7, 14};
-        A = new CsrCMatrix(aShape, aEntries, aRowPointers, aColIndices);
+        A = new CsrCMatrixOld(aShape, aEntries, aRowPointers, aColIndices);
 
         bShape = new Shape(15, 3);
         bRealEntries = new double[]{0.8897510865291638, 0.02884886126710373, 0.9073269737206647, 0.9197691430889076, 0.6633399541563916
                 , 0.7645310847724797, 0.6949989054896308, 0.04413656628380547, 0.13411817488702715};
         bRowPointers = new int[]{0, 1, 1, 1, 3, 3, 3, 4, 6, 8, 8, 8, 8, 8, 8, 9};
         bColIndices = new int[]{0, 0, 2, 2, 1, 2, 0, 2, 0};
-        BReal = new CsrMatrix(bShape, bRealEntries, bRowPointers, bColIndices);
+        BReal = new CsrMatrixOld(bShape, bRealEntries, bRowPointers, bColIndices);
 
         expCsrShape = new Shape(12, 3);
         expCsrEntries = new CNumber[]{new CNumber(0.6507033280297123, 0.64170180485181), new CNumber(0.7499667676075639, 0.7395920807872014), new CNumber(0.2980784417997161, 0.2502847981027481), new CNumber(0.34354968825336146, 0.2884652235955043), new CNumber(0.1953801500972236, 0.5311363012930227), new CNumber(0.22518498570888618, 0.6121600395773245), new CNumber(0.0071239378012985955, 0.02524967733541987), new CNumber(0.0003316699770781958, 0.2791666197067174), new CNumber(0.22443758843296718, 1.1158817675057726), new CNumber(0.6448327694354282, 0.05804224598868426), new CNumber(0.7432006675073275, 0.06689646991759196), new CNumber(0.015911589431871064, 0.017950915434842625), new CNumber(0.5004361923556326, 0.5645751361279464), new CNumber(0.38293288873540177, 0.2994714557034445), new CNumber(0.44134850461745706, 0.3451552035313836), new CNumber(0.11780001654852257, 0.10159183511342533)};
         expCsrRowPointers = new int[]{0, 0, 0, 2, 2, 4, 6, 6, 9, 11, 13, 15, 16};
         expCsrColIndices = new int[]{1, 2, 1, 2, 1, 2, 0, 1, 2, 1, 2, 0, 2, 1, 2, 0};
-        expCsr = new CsrCMatrix(expCsrShape, expCsrEntries, expCsrRowPointers, expCsrColIndices);
+        expCsr = new CsrCMatrixOld(expCsrShape, expCsrEntries, expCsrRowPointers, expCsrColIndices);
 
         assertEquals(expCsr, A.mult2CSR(BReal));
 
         // ---------------------- Sub-case 4 ----------------------
-        A = new CsrCMatrix(10, 15);
-        B = new CsrCMatrix(11, 124);
+        A = new CsrCMatrixOld(10, 15);
+        B = new CsrCMatrixOld(11, 124);
         assertThrows(LinearAlgebraException.class, ()->A.mult2CSR(B));
 
-        A = new CsrCMatrix(156, 9);
-        B = new CsrCMatrix(11, 156);
+        A = new CsrCMatrixOld(156, 9);
+        B = new CsrCMatrixOld(11, 156);
         assertThrows(LinearAlgebraException.class, ()->A.mult2CSR(B));
 
         // ---------------------- Sub-case 5 ----------------------
-        A = new CsrCMatrix(10, 15);
-        BReal = new CsrMatrix(11, 124);
+        A = new CsrCMatrixOld(10, 15);
+        BReal = new CsrMatrixOld(11, 124);
         assertThrows(LinearAlgebraException.class, ()->A.mult2CSR(BReal));
 
-        A = new CsrCMatrix(156, 9);
-        BReal = new CsrMatrix(11, 156);
+        A = new CsrCMatrixOld(156, 9);
+        BReal = new CsrMatrixOld(11, 156);
         assertThrows(LinearAlgebraException.class, ()->A.mult2CSR(BReal));
     }
 }

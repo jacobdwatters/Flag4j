@@ -33,9 +33,16 @@ import java.util.Arrays;
 import java.util.StringJoiner;
 
 /**
- * An object to store the shape of a tensor. Shapes are immutable.
+ * <p>An object to store the shape of a tensor. Shapes are immutable.</p>
+ *
+ * <p>Multi-dimensional indices can be efficiently computed from a flat 1D array index using a shape object as it internaly
+ * maintains strides (see {@link #getIndices(int)}). Strides are the step size needed to move from one element to another along each axis in the
+ * tensor.</p>
  */
 public class Shape implements Serializable {
+    // TODO: Strides are now computed on demand only when needed in the getStrides() and entriesIndex(int... indices) methods.
+    //  As such, can remove the Shape(boolean computeStrides, int... dims) constructor and make makeStridesIfNull() private.
+
     /**
      * An array containing the size of each dimension of this shape.
      */
@@ -57,22 +64,8 @@ public class Shape implements Serializable {
      */
     public Shape(int... dims) {
         // Ensure all dimensions for the shape object are non-negative.
-        ParameterChecks.assertGreaterEq(0, dims);
+        ParameterChecks.ensureGreaterEq(0, dims);
         this.dims = dims;
-    }
-
-
-    /**
-     * Constructs a shape object from specified dimension measurements.
-     * @param dims A list of the dimension measurements for this shape object. All entries must be non-negative.
-     * @param computeStrides Flag indicating if shape strides should be computed.
-     * @throws IllegalArgumentException If any dimension is negative.
-     */
-    public Shape(boolean computeStrides, int... dims) {
-        // Ensure all dimensions for the shape object are non-negative.
-        ParameterChecks.assertGreaterEq(0, dims);
-        this.dims = dims;
-        if(computeStrides) this.strides = this.createNewStrides();
     }
 
 
@@ -86,7 +79,7 @@ public class Shape implements Serializable {
 
 
     /**
-     * Gets the shape of a tensor as an array.
+     * Gets the shape of a tensor as an array of dimensions.
      * @return Shape of a tensor as an integer array.
      */
     public int[] getDims() {
@@ -99,6 +92,7 @@ public class Shape implements Serializable {
      * @return Shape of a tensor as an integer array.
      */
     public int[] getStrides() {
+        makeStridesIfNull();
         return this.strides.clone();
     }
 
@@ -137,7 +131,7 @@ public class Shape implements Serializable {
     /**
      * If strides are null, create them. Otherwise, do nothing.
      */
-    public void makeStridesIfNull() {
+    private void makeStridesIfNull() {
         if(strides==null) strides = createNewStrides();
     }
 
@@ -170,10 +164,10 @@ public class Shape implements Serializable {
 
 
     /**
-     * Computes the ND tensor indices based on an index from the internal 1D data array.
+     * Efficiently computes the ND tensor indices based on an index from the internal 1D data array.
      * @param index Index of internal 1D data array.
      * @return The multidimensional indices corresponding to the 1D data array index. This will be an array of integers
-     * with size equal to the rank of this shape.
+     * with length equal to the {@link #getRank() rank} of this shape.
      */
     public int[] getIndices(int index) {
         int[] indices = new int[this.getRank()];
@@ -215,8 +209,8 @@ public class Shape implements Serializable {
      * @throws ArrayIndexOutOfBoundsException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N}}.
      */
     public Shape swapAxes(int... axes) {
-        ParameterChecks.assertEquals(getRank(), axes.length);
-        ParameterChecks.assertPermutation(axes);
+        ParameterChecks.ensureEquals(getRank(), axes.length);
+        ParameterChecks.ensurePermutation(axes);
 
         int[] tempDims = new int[dims.length];
 
@@ -252,6 +246,35 @@ public class Shape implements Serializable {
         }
 
         totalEntries = product;
+
+        if(product.equals(BigInteger.ZERO)) return BigInteger.ONE; // Shape represents a scalar value.
+        else return product;
+    }
+
+
+    /**
+     * <p>Gets the total number of entries for a tensor with this shape.
+     * If the total number of entries exceeds Integer.MAX_VALUE, an exception is thrown.</p>
+     *
+     * <p>This method is likely to be more efficent than {@link #totalEntries()} if a primitive int value is desired.</p>
+     *
+     * @return The total number of entries for a tensor with this shape.
+     * @throws ArithmeticException If the total number of entries overflows a primitive int.
+     */
+    public int totalEntriesIntValueExact() {
+        if (dims.length == 0) {
+            return 0;
+        }
+
+        int product = 1;
+
+        for (int dim : dims) {
+            // Check for overflow before multiplying
+            if (dim > 0 && product > Integer.MAX_VALUE / dim) {
+                throw new ArithmeticException("Integer overflow while computing total entries.");
+            }
+            product *= dim;
+        }
 
         return product;
     }

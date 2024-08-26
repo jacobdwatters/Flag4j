@@ -61,56 +61,56 @@ public final class TensorEquals {
                     SparseTensorBase<?, ?, ?, ?, ?, ?, ?>,
                     Boolean>> complexDenseLookUp = new HashMap<>();
     private static final HashMap<String,
-            BiFunction<CooTensor,
+            BiFunction<CooTensorOld,
                     SparseTensorBase<?, ?, ?, ?, ?, ?, ?>,
                     Boolean>> realSparseLookUp = new HashMap<>();
     private static final HashMap<String,
-            BiFunction<CooCTensor,
+            BiFunction<CooCTensorOld,
                     SparseTensorBase<?, ?, ?, ?, ?, ?, ?>,
                     Boolean>> complexSparseLookUp = new HashMap<>();
 
     // Initialize algorithm lookup tables for the class.
     static {
-        realDenseLookUp.put("CooTensor", (A, B) -> RealDenseSparseEquals.tensorEquals(A, (CooTensor) B));
-        realDenseLookUp.put("CooCTensor", (A, B) -> RealComplexDenseSparseEquals.tensorEquals(A, (CooCTensor) B));
-//        realDenseLookUp.put("CooMatrix", (A, B) -> RealDenseSparseEquals.tensorEquals(A, ((CooMatrix) B).toTensor()));
-//        realDenseLookUp.put("CooCMatrix", (A, B) -> RealComplexDenseSparseEquals.tensorEquals(A, ((CooCMatrix) B).toTensor()));
-//        realDenseLookUp.put("CsrMatrix", (A, B) -> RealDenseSparseEquals.tensorEquals(A, ((CsrMatrix) B).toTensor()));
-//        realDenseLookUp.put("CsrCMatrix", (A, B) -> RealComplexDenseSparseEquals.tensorEquals(A, ((CsrCMatrix) B).toTensor()));
-//        realDenseLookUp.put("CooVector", (A, B) -> RealDenseSparseEquals.tensorEquals(A, ((CooVector) B).toTensor()));
-//        realDenseLookUp.put("CooCVector", (A, B) -> RealComplexDenseSparseEquals.tensorEquals(A, ((CooCVector) B).toTensor()));
+        realDenseLookUp.put("CooTensorOld", (A, B) -> RealDenseSparseEquals.tensorEquals(A, (CooTensorOld) B));
+        realDenseLookUp.put("CooCTensorOld", (A, B) -> RealComplexDenseSparseEquals.tensorEquals(A, (CooCTensorOld) B));
+//        realDenseLookUp.put("CooMatrixOld", (A, B) -> RealDenseSparseEquals.tensorEquals(A, ((CooMatrixOld) B).toTensor()));
+//        realDenseLookUp.put("CooCMatrixOld", (A, B) -> RealComplexDenseSparseEquals.tensorEquals(A, ((CooCMatrixOld) B).toTensor()));
+//        realDenseLookUp.put("CsrMatrixOld", (A, B) -> RealDenseSparseEquals.tensorEquals(A, ((CsrMatrixOld) B).toTensor()));
+//        realDenseLookUp.put("CsrCMatrixOld", (A, B) -> RealComplexDenseSparseEquals.tensorEquals(A, ((CsrCMatrixOld) B).toTensor()));
+//        realDenseLookUp.put("CooVectorOld", (A, B) -> RealDenseSparseEquals.tensorEquals(A, ((CooVectorOld) B).toTensor()));
+//        realDenseLookUp.put("CooCVectorOld", (A, B) -> RealComplexDenseSparseEquals.tensorEquals(A, ((CooCVectorOld) B).toTensor()));
 
-        complexDenseLookUp.put("CooTensor", (A, B) -> RealComplexDenseSparseEquals.tensorEquals(A, (CooTensor) B));
-        complexDenseLookUp.put("CooCTensor", (A, B) -> ComplexDenseSparseEquals.tensorEquals(A, (CooCTensor) B));
-//        complexDenseLookUp.put("CooMatrix", (A, B) -> RealComplexDenseSparseEquals.tensorEquals(A, ((CooMatrix) B).toTensor()));
-//        complexDenseLookUp.put("CooCMatrix", (A, B) -> ComplexDenseSparseEquals.tensorEquals(A, ((CooCMatrix) B).toTensor()));
-//        complexDenseLookUp.put("CsrMatrix", (A, B) -> RealComplexDenseSparseEquals.tensorEquals(A, ((CsrMatrix) B).toTensor()));
-//        complexDenseLookUp.put("CsrCMatrix", (A, B) -> ComplexDenseSparseEquals.tensorEquals(A, ((CsrCMatrix) B).toTensor()));
-//        complexDenseLookUp.put("CooVector", (A, B) -> RealComplexDenseSparseEquals.tensorEquals(A, ((CooVector) B).toTensor()));
-//        complexDenseLookUp.put("CooCVector", (A, B) -> ComplexDenseSparseEquals.tensorEquals(A, ((CooCVector) B).toTensor()));
+        complexDenseLookUp.put("CooTensorOld", (A, B) -> RealComplexDenseSparseEquals.tensorEquals(A, (CooTensorOld) B));
+        complexDenseLookUp.put("CooCTensorOld", (A, B) -> ComplexDenseSparseEquals.tensorEquals(A, (CooCTensorOld) B));
+//        complexDenseLookUp.put("CooMatrixOld", (A, B) -> RealComplexDenseSparseEquals.tensorEquals(A, ((CooMatrixOld) B).toTensor()));
+//        complexDenseLookUp.put("CooCMatrixOld", (A, B) -> ComplexDenseSparseEquals.tensorEquals(A, ((CooCMatrixOld) B).toTensor()));
+//        complexDenseLookUp.put("CsrMatrixOld", (A, B) -> RealComplexDenseSparseEquals.tensorEquals(A, ((CsrMatrixOld) B).toTensor()));
+//        complexDenseLookUp.put("CsrCMatrixOld", (A, B) -> ComplexDenseSparseEquals.tensorEquals(A, ((CsrCMatrixOld) B).toTensor()));
+//        complexDenseLookUp.put("CooVectorOld", (A, B) -> RealComplexDenseSparseEquals.tensorEquals(A, ((CooVectorOld) B).toTensor()));
+//        complexDenseLookUp.put("CooCVectorOld", (A, B) -> ComplexDenseSparseEquals.tensorEquals(A, ((CooCVectorOld) B).toTensor()));
 
-        realSparseLookUp.put("CooTensor", (A, B) -> RealSparseEquals.tensorEquals(A, (CooTensor) B));
-        realSparseLookUp.put("CooCTensor", (A, B) -> RealComplexSparseEquals.tensorEquals(A, (CooCTensor) B));
-//        realSparseLookUp.put("CooMatrix", (A, B) -> RealSparseEquals.tensorEquals(A, ((CooMatrix) B).toTensor()));
-//        realSparseLookUp.put("CooCMatrix", (A, B) -> RealComplexSparseEquals.tensorEquals(A, ((CooCMatrix) B).toTensor()));
-//        realSparseLookUp.put("CsrMatrix", (A, B) -> RealSparseEquals.tensorEquals(A, ((CsrMatrix) B).toTensor()));
-//        realSparseLookUp.put("CsrCMatrix", (A, B) -> RealComplexSparseEquals.tensorEquals(A, ((CsrCMatrix) B).toTensor()));
-//        realSparseLookUp.put("CooVector", (A, B) -> RealSparseEquals.tensorEquals(A, ((CooVector) B).toTensor()));
-//        realSparseLookUp.put("CooCVector", (A, B) -> RealComplexSparseEquals.tensorEquals(A, ((CooCVector) B).toTensor()));
+        realSparseLookUp.put("CooTensorOld", (A, B) -> RealSparseEquals.tensorEquals(A, (CooTensorOld) B));
+        realSparseLookUp.put("CooCTensorOld", (A, B) -> RealComplexSparseEquals.tensorEquals(A, (CooCTensorOld) B));
+//        realSparseLookUp.put("CooMatrixOld", (A, B) -> RealSparseEquals.tensorEquals(A, ((CooMatrixOld) B).toTensor()));
+//        realSparseLookUp.put("CooCMatrixOld", (A, B) -> RealComplexSparseEquals.tensorEquals(A, ((CooCMatrixOld) B).toTensor()));
+//        realSparseLookUp.put("CsrMatrixOld", (A, B) -> RealSparseEquals.tensorEquals(A, ((CsrMatrixOld) B).toTensor()));
+//        realSparseLookUp.put("CsrCMatrixOld", (A, B) -> RealComplexSparseEquals.tensorEquals(A, ((CsrCMatrixOld) B).toTensor()));
+//        realSparseLookUp.put("CooVectorOld", (A, B) -> RealSparseEquals.tensorEquals(A, ((CooVectorOld) B).toTensor()));
+//        realSparseLookUp.put("CooCVectorOld", (A, B) -> RealComplexSparseEquals.tensorEquals(A, ((CooCVectorOld) B).toTensor()));
 
-        complexSparseLookUp.put("CooTensor", (A, B) -> RealComplexSparseEquals.tensorEquals((CooTensor) B, A));
-        complexSparseLookUp.put("CooCTensor", (A, B) -> ComplexSparseEquals.tensorEquals(A, (CooCTensor) B));
-//        complexSparseLookUp.put("CooMatrix", (A, B) -> RealComplexSparseEquals.tensorEquals(((CooMatrix) B).toTensor(), A));
-//        complexSparseLookUp.put("CooCMatrix", (A, B) -> ComplexSparseEquals.tensorEquals(A, ((CooCMatrix) B).toTensor()));
-//        complexSparseLookUp.put("CsrMatrix", (A, B) -> RealComplexSparseEquals.tensorEquals(((CsrMatrix) B).toTensor(), A));
-//        complexSparseLookUp.put("CsrCMatrix", (A, B) -> ComplexSparseEquals.tensorEquals(A, ((CsrCMatrix) B).toTensor()));
-//        complexSparseLookUp.put("CooVector", (A, B) -> RealComplexSparseEquals.tensorEquals(((CooVector) B).toTensor(), A));
-//        complexSparseLookUp.put("CooCVector", (A, B) -> ComplexSparseEquals.tensorEquals(A, ((CooCVector) B).toTensor()));
+        complexSparseLookUp.put("CooTensorOld", (A, B) -> RealComplexSparseEquals.tensorEquals((CooTensorOld) B, A));
+        complexSparseLookUp.put("CooCTensorOld", (A, B) -> ComplexSparseEquals.tensorEquals(A, (CooCTensorOld) B));
+//        complexSparseLookUp.put("CooMatrixOld", (A, B) -> RealComplexSparseEquals.tensorEquals(((CooMatrixOld) B).toTensor(), A));
+//        complexSparseLookUp.put("CooCMatrixOld", (A, B) -> ComplexSparseEquals.tensorEquals(A, ((CooCMatrixOld) B).toTensor()));
+//        complexSparseLookUp.put("CsrMatrixOld", (A, B) -> RealComplexSparseEquals.tensorEquals(((CsrMatrixOld) B).toTensor(), A));
+//        complexSparseLookUp.put("CsrCMatrixOld", (A, B) -> ComplexSparseEquals.tensorEquals(A, ((CsrCMatrixOld) B).toTensor()));
+//        complexSparseLookUp.put("CooVectorOld", (A, B) -> RealComplexSparseEquals.tensorEquals(((CooVectorOld) B).toTensor(), A));
+//        complexSparseLookUp.put("CooCVectorOld", (A, B) -> ComplexSparseEquals.tensorEquals(A, ((CooCVectorOld) B).toTensor()));
     }
 
     private TensorEquals() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -133,22 +133,22 @@ public final class TensorEquals {
         B = ensureTensor(B);
 
         if(A instanceof SparseTensorBase && B instanceof SparseTensorBase) {
-            if(A instanceof CooTensor)
-                return generalEquals((CooTensor) A, (SparseTensorBase<?, ?, ?, ?, ?, ?, ?>) B);
+            if(A instanceof CooTensorOld)
+                return generalEquals((CooTensorOld) A, (SparseTensorBase<?, ?, ?, ?, ?, ?, ?>) B);
             else
-                return generalEquals((CooCTensor) A, (SparseTensorBase<?, ?, ?, ?, ?, ?, ?>) B);
+                return generalEquals((CooCTensorOld) A, (SparseTensorBase<?, ?, ?, ?, ?, ?, ?>) B);
 
         } else if(A instanceof SparseTensorBase) {
-            if(A instanceof CooTensor)
-                return generalEquals((DenseTensorBase<?, ?, ?, ?, ?>) B, (CooTensor) A);
+            if(A instanceof CooTensorOld)
+                return generalEquals((DenseTensorBase<?, ?, ?, ?, ?>) B, (CooTensorOld) A);
             else
-                return generalEquals((DenseTensorBase<?, ?, ?, ?, ?>) B, (CooCTensor) A);
+                return generalEquals((DenseTensorBase<?, ?, ?, ?, ?>) B, (CooCTensorOld) A);
 
         } else if(B instanceof SparseTensorBase) {
-            if(B instanceof CooTensor)
-                return generalEquals((DenseTensorBase<?, ?, ?, ?, ?>) A, (CooTensor) B);
+            if(B instanceof CooTensorOld)
+                return generalEquals((DenseTensorBase<?, ?, ?, ?, ?>) A, (CooTensorOld) B);
             else
-                return generalEquals((DenseTensorBase<?, ?, ?, ?, ?>) A, (CooCTensor) B);
+                return generalEquals((DenseTensorBase<?, ?, ?, ?, ?>) A, (CooCTensorOld) B);
         } else {
             // Then both tensors are dense.
             if(A instanceof TensorOld)
@@ -166,7 +166,7 @@ public final class TensorEquals {
      */
     private static TensorBase<?, ?, ?, ?, ?, ?, ?> ensureTensor(TensorBase<?, ?, ?, ?, ?, ?, ?> src) {
         // Check for quick return.
-        if(src instanceof TensorOld || src instanceof CooTensor || src instanceof CTensorOld || src instanceof CooCTensor)
+        if(src instanceof TensorOld || src instanceof CooTensorOld || src instanceof CTensorOld || src instanceof CooCTensorOld)
             return src;
 
         if(src instanceof VectorOld)
@@ -177,18 +177,18 @@ public final class TensorEquals {
             src = ((MatrixOld) src).toTensor();
         else if(src instanceof CMatrixOld)
             src = ((CMatrixOld) src).toTensor();
-        else if(src instanceof CooVector)
-            src = ((CooVector) src).toTensor();
-        else if(src instanceof CooCVector)
-            src = ((CooCVector) src).toTensor();
-        else if(src instanceof CooMatrix)
-            src = ((CooMatrix) src).toTensor();
-        else if(src instanceof CooCMatrix)
-            src = ((CooCMatrix) src).toTensor();
-        else if(src instanceof CsrMatrix)
-            src = ((CsrMatrix) src).toTensor();
-        else if(src instanceof CsrCMatrix)
-            src = ((CsrCMatrix) src).toTensor();
+        else if(src instanceof CooVectorOld)
+            src = ((CooVectorOld) src).toTensor();
+        else if(src instanceof CooCVectorOld)
+            src = ((CooCVectorOld) src).toTensor();
+        else if(src instanceof CooMatrixOld)
+            src = ((CooMatrixOld) src).toTensor();
+        else if(src instanceof CooCMatrixOld)
+            src = ((CooCMatrixOld) src).toTensor();
+        else if(src instanceof CsrMatrixOld)
+            src = ((CsrMatrixOld) src).toTensor();
+        else if(src instanceof CsrCMatrixOld)
+            src = ((CsrCMatrixOld) src).toTensor();
 
         return src;
     }
@@ -212,8 +212,8 @@ public final class TensorEquals {
 
 
     /**
-     * Checks if a real dense tensor is equal to any sparse tensor (including {@link CooMatrix}, {@link CsrMatrix},
-     * {@link CooCMatrix}, {@link CsrCMatrix}, {@link CooVector}, etc.).
+     * Checks if a real dense tensor is equal to any sparse tensor (including {@link CooMatrixOld}, {@link CsrMatrixOld},
+     * {@link CooCMatrixOld}, {@link CsrCMatrixOld}, {@link CooVectorOld}, etc.).
      * @param A Real dense tensor.
      * @param B Sparse tensor.
      * @return True if the two matrices are element-wise equivalent.
@@ -230,8 +230,8 @@ public final class TensorEquals {
 
 
     /**
-     * Checks if a dense tensor is equal to any sparse tensor (including {@link CooMatrix}, {@link CsrMatrix},
-     * {@link CooCMatrix}, {@link CsrCMatrix}, {@link CooVector}, etc.).
+     * Checks if a dense tensor is equal to any sparse tensor (including {@link CooMatrixOld}, {@link CsrMatrixOld},
+     * {@link CooCMatrixOld}, {@link CsrCMatrixOld}, {@link CooVectorOld}, etc.).
      * @param A Real dense tensor.
      * @param B Sparse tensor.
      * @return True if the two matrices are element-wise equivalent.
@@ -247,8 +247,8 @@ public final class TensorEquals {
 
 
     /**
-     * Checks if a real dense tensor is equal to any sparse tensor (including {@link CooMatrix}, {@link CsrMatrix},
-     * {@link CooCMatrix}, {@link CsrCMatrix}, {@link CooVector}, etc.).
+     * Checks if a real dense tensor is equal to any sparse tensor (including {@link CooMatrixOld}, {@link CsrMatrixOld},
+     * {@link CooCMatrixOld}, {@link CsrCMatrixOld}, {@link CooVectorOld}, etc.).
      * @param A Real dense tensor.
      * @param B Sparse tensor.
      * @return True if the two matrices are element-wise equivalent.
@@ -265,8 +265,8 @@ public final class TensorEquals {
 
 
     /**
-     * Checks if a complex dense tensor is equal to any sparse tensor (including {@link CooMatrix}, {@link CsrMatrix},
-     * {@link CooCMatrix}, {@link CsrCMatrix}, {@link CooVector}, etc.).
+     * Checks if a complex dense tensor is equal to any sparse tensor (including {@link CooMatrixOld}, {@link CsrMatrixOld},
+     * {@link CooCMatrixOld}, {@link CsrCMatrixOld}, {@link CooVectorOld}, etc.).
      * @param A Real dense tensor.
      * @param B Sparse tensor.
      * @return True if the two matrices are element-wise equivalent.
@@ -283,13 +283,13 @@ public final class TensorEquals {
 
 
     /**
-     * Checks if a real dense tensor is equal to any sparse tensor (including {@link CooMatrix}, {@link CsrMatrix},
-     * {@link CooCMatrix}, {@link CsrCMatrix}, {@link CooVector}, etc.).
+     * Checks if a real dense tensor is equal to any sparse tensor (including {@link CooMatrixOld}, {@link CsrMatrixOld},
+     * {@link CooCMatrixOld}, {@link CsrCMatrixOld}, {@link CooVectorOld}, etc.).
      * @param A Real dense tensor.
      * @param B Sparse tensor.
      * @return True if the two matrices are element-wise equivalent.
      */
-    private static boolean generalEquals(CooTensor A, SparseTensorBase<?, ?, ?, ?, ?, ?, ?> B) {
+    private static boolean generalEquals(CooTensorOld A, SparseTensorBase<?, ?, ?, ?, ?, ?, ?> B) {
         String type = B.getClass().getSimpleName();
 
         if(!TensorEquals.realSparseLookUp.containsKey(type))
@@ -300,13 +300,13 @@ public final class TensorEquals {
 
 
     /**
-     * Checks if a real dense tensor is equal to any sparse tensor (including {@link CooMatrix}, {@link CsrMatrix},
-     * {@link CooCMatrix}, {@link CsrCMatrix}, {@link CooVector}, etc.).
+     * Checks if a real dense tensor is equal to any sparse tensor (including {@link CooMatrixOld}, {@link CsrMatrixOld},
+     * {@link CooCMatrixOld}, {@link CsrCMatrixOld}, {@link CooVectorOld}, etc.).
      * @param A Real dense tensor.
      * @param B Sparse tensor.
      * @return True if the two matrices are element-wise equivalent.
      */
-    private static boolean generalEquals(CooCTensor A, SparseTensorBase<?, ?, ?, ?, ?, ?, ?> B) {
+    private static boolean generalEquals(CooCTensorOld A, SparseTensorBase<?, ?, ?, ?, ?, ?, ?> B) {
         String type = B.getClass().getSimpleName();
 
         if(!TensorEquals.complexSparseLookUp.containsKey(type))

@@ -1,15 +1,15 @@
 package org.flag4j.sparse_csr_matrix;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CsrMatrix;
+import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CsrMatrixTransposeTests {
 
-    static CsrMatrix A;
-    static CsrMatrix exp;
+    static CsrMatrixOld A;
+    static CsrMatrixOld exp;
     static MatrixOld denseA;
     static double[][] aDenseEntries;
 

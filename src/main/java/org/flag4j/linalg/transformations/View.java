@@ -37,7 +37,7 @@ public final class View {
 
     private View() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -52,7 +52,7 @@ public final class View {
      * @throws IllegalArgumentException If any of the argument vectors do not have length 3.
      */
     public static MatrixOld lookAt(VectorOld cameraPos, VectorOld center, VectorOld up) {
-        ParameterChecks.assertEquals(3, cameraPos.size, center.size, up.size);
+        ParameterChecks.ensureEquals(3, cameraPos.size, center.size, up.size);
 
         VectorOld f = center.sub(cameraPos).normalize();
         VectorOld u = up.normalize();

@@ -34,7 +34,7 @@ public class AggregateDenseComplex {
 
     private AggregateDenseComplex() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -44,7 +44,7 @@ public class AggregateDenseComplex {
      * @param entries Entries of the tensor.
      * @return The index of the minimum value by magnitude in this tensor. If there are zero entries in the array, -1 is returned.
      */
-    public static int argMin(CNumber[] entries) {
+    public static int argmin(CNumber[] entries) {
         double currMin = Double.MAX_VALUE;
         int currMinIndex = -1;
 
@@ -65,7 +65,7 @@ public class AggregateDenseComplex {
      * @param entries Entries of the tensor.
      * @return The index of the maximum value by magnitude in this tensor. If there are zero entries in the array, -1 is returned.
      */
-    public static int argMax(CNumber[] entries) {
+    public static int argmax(CNumber[] entries) {
         double currMax = Double.MIN_VALUE;
         int currMaxIndex = -1;
 

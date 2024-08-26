@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,13 +24,14 @@
 
 package org.flag4j.linalg.decompositions;
 
-import org.flag4j.core.MatrixMixin;
+import org.flag4j.core_temp.MatrixMixin;
+
 
 /**
  * This interface specifies methods which should be implemented in all decompositions.
  * @param <T> MatrixOld type to decompose.
  */
-public interface Decomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> {
+public interface Decomposition<T extends MatrixMixin> {
 
     /**
      * Applies decomposition to the source matrix.

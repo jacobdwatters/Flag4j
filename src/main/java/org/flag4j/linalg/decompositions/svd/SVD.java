@@ -27,7 +27,7 @@ package org.flag4j.linalg.decompositions.svd;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.core.MatrixMixin;
 import org.flag4j.core.Shape;
-import org.flag4j.linalg.decompositions.Decomposition;
+import org.flag4j.linalg.decompositions.DecompositionOld;
 import org.flag4j.util.Flag4jConstants;
 
 import java.util.Arrays;
@@ -41,7 +41,7 @@ import java.util.Arrays;
  */
 public abstract class SVD<
         T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>>
-        implements Decomposition<T> {
+        implements DecompositionOld<T> {
 
     /**
      * Flag which indicates if the singular vectors should be computed in addition to the singular values.

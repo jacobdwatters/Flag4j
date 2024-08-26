@@ -31,11 +31,12 @@ import org.flag4j.util.ErrorMessages;
 /**
  * This class contains several low-level methods useful for computing aggregation operations_old on dense/sparse complex tensors.
  */
+@Deprecated
 public final class AggregateComplex {
 
     private AggregateComplex() {
         // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

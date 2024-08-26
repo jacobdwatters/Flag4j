@@ -2,8 +2,8 @@ package org.flag4j.sparse_complex_vector;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -12,9 +12,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CooCVectorRepeatTests {
 
-    static CooCVector a;
+    static CooCVectorOld a;
     static CNumber[] aEntries;
-    static CooCMatrix exp;
+    static CooCMatrixOld exp;
     static CNumber[][] expEntries;
 
     @Test

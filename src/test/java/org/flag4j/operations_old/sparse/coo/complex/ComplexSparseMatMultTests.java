@@ -1,8 +1,8 @@
 package org.flag4j.operations_old.sparse.coo.complex;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -19,8 +19,8 @@ class ComplexSparseMatMultTests {
 
     Shape aShape, bShape;
 
-    CooCMatrix A, B;
-    CooCVector bVector;
+    CooCMatrixOld A, B;
+    CooCVectorOld bVector;
     CMatrixOld exp;
 
     @Test
@@ -30,13 +30,13 @@ class ComplexSparseMatMultTests {
         aRowIndices = new int[]{0, 2};
         aColIndices = new int[]{2, 1};
         aShape = new Shape(4, 3);
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[]{new CNumber("1.34+13.4i"), new CNumber("9234")};
         bRowIndices = new int[]{0, 2};
         bColIndices = new int[]{0, 1};
         bShape = new Shape(3, 2);
-        B = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        B = new CooCMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expEntries = new CNumber[][]{{new CNumber("0.0"), new CNumber("9234.0+31857.300000000003i")},
                 {new CNumber("0.0"), new CNumber("0.0")},
@@ -58,11 +58,11 @@ class ComplexSparseMatMultTests {
         aRowIndices = new int[]{0, 1, 2};
         aColIndices = new int[]{2, 0, 1};
         aShape = new Shape(4, 3);
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[]{new CNumber("1.34+13.4i")};
         indices = new int[]{1};
-        bVector = new CooCVector(3, bEntries, indices);
+        bVector = new CooCVectorOld(3, bEntries, indices);
 
         expEntries = new CNumber[][]{{new CNumber("0.0")},
                 {new CNumber("0.0")},

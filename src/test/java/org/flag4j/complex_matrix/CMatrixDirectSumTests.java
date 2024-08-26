@@ -2,8 +2,8 @@ package org.flag4j.complex_matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.linalg.ops.DirectSum;
@@ -49,7 +49,7 @@ class CMatrixDirectSumTests {
     @Test
     void realSparseDirectSumTestCase() {
         double[] bEntries;
-        CooMatrix B;
+        CooMatrixOld B;
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{
@@ -61,7 +61,7 @@ class CMatrixDirectSumTests {
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{1, 0};
         sparseShape = new Shape(3, 2);
-        B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrixOld(sparseShape, bEntries, rowIndices, colIndices);
         expEntries = new CNumber[][]{{new CNumber("9.234-0.864i"), new CNumber("58.1+3.0i"), new CNumber("-984.0-72.3i"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("1.0"), new CNumber("0.0"), new CNumber("0.0+87.3i"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("2.456")},
@@ -102,7 +102,7 @@ class CMatrixDirectSumTests {
     @Test
     void complexSparseDirectSumTestCase() {
         CNumber[] bEntries;
-        CooCMatrix B;
+        CooCMatrixOld B;
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{
@@ -114,7 +114,7 @@ class CMatrixDirectSumTests {
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{1, 0};
         sparseShape = new Shape(3, 2);
-        B = new CooCMatrix(sparseShape, bEntries, rowIndices, colIndices);
+        B = new CooCMatrixOld(sparseShape, bEntries, rowIndices, colIndices);
         expEntries = new CNumber[][]{{new CNumber("9.234-0.864i"), new CNumber("58.1+3.0i"), new CNumber("-984.0-72.3i"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("1.0"), new CNumber("0.0"), new CNumber("0.0+87.3i"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber(234.6567, -6344.256)},
@@ -157,7 +157,7 @@ class CMatrixDirectSumTests {
     @Test
     void realInvSparseDirectSumTestCase() {
         double[] bEntries;
-        CooMatrix B;
+        CooMatrixOld B;
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{
@@ -169,7 +169,7 @@ class CMatrixDirectSumTests {
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{1, 0};
         sparseShape = new Shape(3, 2);
-        B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrixOld(sparseShape, bEntries, rowIndices, colIndices);
         expEntries = new CNumber[][]{
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("2.456")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
@@ -213,7 +213,7 @@ class CMatrixDirectSumTests {
     @Test
     void complexInvSparseDirectSumTestCase() {
         CNumber[] bEntries;
-        CooCMatrix B;
+        CooCMatrixOld B;
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{
@@ -225,7 +225,7 @@ class CMatrixDirectSumTests {
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{1, 0};
         sparseShape = new Shape(3, 2);
-        B = new CooCMatrix(sparseShape, bEntries, rowIndices, colIndices);
+        B = new CooCMatrixOld(sparseShape, bEntries, rowIndices, colIndices);
         expEntries = new CNumber[][]{
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber(234.6567, -6344.256)},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},

@@ -1,7 +1,7 @@
 package org.flag4j.operations_old.dense_sparse.real;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 class RealDenseSparseMatMultTransposeTests {
     double[] bEntries;
     int[] rowIndices, colIndices;
-    CooMatrix B;
+    CooMatrixOld B;
     Shape bShape;
 
     double[][] aEntries;
@@ -30,8 +30,8 @@ class RealDenseSparseMatMultTransposeTests {
         rowIndices = new int[]{0, 1};
         colIndices = new int[]{1, 2};
         bShape = new Shape(2, 3);
-        B = new CooMatrix(bShape, bEntries, rowIndices, colIndices);
-        exp = A.mult(new CooMatrix(bShape.swapAxes(0, 1), bEntries, colIndices, rowIndices));
+        B = new CooMatrixOld(bShape, bEntries, rowIndices, colIndices);
+        exp = A.mult(new CooMatrixOld(bShape.swapAxes(0, 1), bEntries, colIndices, rowIndices));
 
         assertArrayEquals(exp.entries, multTranspose(A.entries, A.shape, B.entries, B.rowIndices, B.colIndices, B.shape));
     }

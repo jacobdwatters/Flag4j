@@ -36,7 +36,7 @@ import java.math.RoundingMode;
  *
  * <p>Complex128 numbers are Immutable.</p>
  */
-public class Complex128 implements ComplexField<Complex128> {
+public class Complex128 implements Field<Complex128> {
     // Several constants are provided for convenience.
     /**
      * The complex number with zero imaginary and real parts.
@@ -127,6 +127,16 @@ public class Complex128 implements ComplexField<Complex128> {
         Complex128 complexNum = ComplexNumberParser.parseNumberToComplex128(num);
         this.re = complexNum.re;
         this.im = complexNum.im;
+    }
+
+
+    /**
+     * Constructs a 128-bit complex number from a 64-bit complex number.
+     * @param num The 64-bit complex number.
+     */
+    public Complex128(Complex64 num) {
+        this.re = num.re;
+        this.im = num.im;
     }
 
 
@@ -266,6 +276,58 @@ public class Complex128 implements ComplexField<Complex128> {
                 this.re*b.re - this.im*b.im,
                 this.re*b.im + this.im*b.re
         );
+    }
+
+
+    /**
+     * <p>Checks if this value is an additive identity for this semi-ring.</p>
+     *
+     * <p>An element 0 is an additive identity if a + 0 = a for any a in the semi-ring.</p>
+     *
+     * @return True if this value is an additive identity for this semi-ring. Otherwise, false.
+     */
+    @Override
+    public boolean isZero() {
+        return equals(ZERO);
+    }
+
+
+    /**
+     * <p>Checks if this value is a multiplicitive identity for this semi-ring.</p>
+     *
+     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     *
+     * @return True if this value is a multiplicitive identity for this semi-ring. Otherwise, false.
+     */
+    @Override
+    public boolean isOne() {
+        return equals(ONE);
+    }
+
+
+    /**
+     * <p>Gets the additive identity for this semi-ring.</p>
+     *
+     * <p>An element 0 is an additive identity if a + 0 = a for any a in the semi-ring.</p>
+     *
+     * @return The additive identity for this semi-ring.
+     */
+    @Override
+    public Complex128 getZero() {
+        return ZERO;
+    }
+
+
+    /**
+     * <p>Gets the multiplicitive identity for this semi-ring.</p>
+     *
+     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     *
+     * @return The multiplicitive identity for this semi-ring.
+     */
+    @Override
+    public Complex128 getOne() {
+        return ONE;
     }
 
 
@@ -1073,7 +1135,7 @@ public class Complex128 implements ComplexField<Complex128> {
      * @param values Array of values to compute the index of the minimum magnitude from.
      * @return The index of the minimum magnitude from the {@code values array}. If the array has zero length, then -1 is returned.
      */
-    public static int argMin(Complex128... values) {
+    public static int argmin(Complex128... values) {
         double min = -1;
         double currMag;
         int arg = -1;
@@ -1099,7 +1161,7 @@ public class Complex128 implements ComplexField<Complex128> {
      * @param values Array of values to compute the index of the minimum real component from.
      * @return The index of the minimum magnitude from the {@code values array}. If the array has zero length, -1 is returned.
      */
-    public static int argMinReal(Complex128... values) {
+    public static int argminReal(Complex128... values) {
         double min = Double.MAX_VALUE;
         double currMin;
         int arg = -1;
@@ -1125,7 +1187,7 @@ public class Complex128 implements ComplexField<Complex128> {
      * @param values Array of values to compute the index of the maximum magnitude from.
      * @return The index of the minimum magnitude from the {@code values array}. If the array has zero length, then -1 is returned.
      */
-    public static int argMax(Complex128... values) {
+    public static int argmax(Complex128... values) {
         double max = -1;
         double currMag;
         int arg = -1;
@@ -1152,7 +1214,7 @@ public class Complex128 implements ComplexField<Complex128> {
      * @return The index of the minimum magnitude from the {@code values array}. If the array has zero length, -1 is
      * returned.
      */
-    public static int argMaxReal(Complex128... values) {
+    public static int argmaxReal(Complex128... values) {
         double max = Double.MIN_NORMAL;
         double currMax;
         int arg = -1;

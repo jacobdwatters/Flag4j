@@ -25,9 +25,9 @@
 package org.flag4j.operations.sparse.coo.real;
 
 
-import org.flag4j.arrays_old.sparse.CooMatrix;
-import org.flag4j.arrays_old.sparse.CooTensor;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
+import org.flag4j.arrays_old.sparse.CooTensorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.operations.common.real.RealProperties;
 import org.flag4j.util.ErrorMessages;
 
@@ -40,7 +40,7 @@ public class RealSparseEquals {
 
     private RealSparseEquals(){
         // Hide default constructor for base class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -50,7 +50,7 @@ public class RealSparseEquals {
      * @param b Second tensor in the equality check.
      * @return True if the tensors are equal. False otherwise.
      */
-    public static boolean tensorEquals(CooTensor a, CooTensor b) {
+    public static boolean tensorEquals(CooTensorOld a, CooTensorOld b) {
         // Check indices first to avoid checking entries if possible.
         return a.shape.equals(b.shape)
                 // TODO: Investigate if a self implemented 2d array equals would be significantly faster than the Arrays.deepEquals method.
@@ -65,7 +65,7 @@ public class RealSparseEquals {
      * @param b Second matrix in the equality check.
      * @return True if the matrices are equal. False otherwise.
      */
-    public static boolean matrixEquals(CooMatrix a, CooMatrix b) {
+    public static boolean matrixEquals(CooMatrixOld a, CooMatrixOld b) {
         // Check indices first to avoid checking entries if possible.
         return a.shape.equals(b.shape)
                 && Arrays.equals(a.rowIndices, b.rowIndices)
@@ -80,7 +80,7 @@ public class RealSparseEquals {
      * @param b Second vector in the equality check.
      * @return True if the vectors are equal. False otherwise.
      */
-    public static boolean vectorEquals(CooVector a, CooVector b) {
+    public static boolean vectorEquals(CooVectorOld a, CooVectorOld b) {
         // Check indices first to avoid checking entries if possible.
         return a.size == b.size
                 && Arrays.equals(a.indices, b.indices)
@@ -97,7 +97,7 @@ public class RealSparseEquals {
      * @param absTol Absolute tolerance.
      * @return True if all entries are "close". Otherwise, false.
      */
-    public static boolean allCloseMatrix(CooMatrix src1, CooMatrix src2, double relTol, double absTol) {
+    public static boolean allCloseMatrix(CooMatrixOld src1, CooMatrixOld src2, double relTol, double absTol) {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.equals(src1.rowIndices, src2.rowIndices)
@@ -115,7 +115,7 @@ public class RealSparseEquals {
      * @param absTol Absolute tolerance.
      * @return True if all entries are "close". Otherwise, false.
      */
-    public static boolean allCloseTensor(CooTensor src1, CooTensor src2, double relTol, double absTol) {
+    public static boolean allCloseTensor(CooTensorOld src1, CooTensorOld src2, double relTol, double absTol) {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.deepEquals(src1.indices, src2.indices)
@@ -132,7 +132,7 @@ public class RealSparseEquals {
      * @param absTol Absolute tolerance.
      * @return True if all entries are "close". Otherwise, false.
      */
-    public static boolean allCloseVector(CooVector src1, CooVector src2, double relTol, double absTol) {
+    public static boolean allCloseVector(CooVectorOld src1, CooVectorOld src2, double relTol, double absTol) {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.equals(src1.indices, src2.indices)

@@ -25,7 +25,7 @@
 package org.flag4j.operations.dense_sparse.coo.real;
 
 import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.arrays_old.sparse.CooTensor;
+import org.flag4j.arrays_old.sparse.CooTensorOld;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -37,7 +37,7 @@ public class RealDenseSparseTensorOperations {
 
     private RealDenseSparseTensorOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -48,8 +48,8 @@ public class RealDenseSparseTensorOperations {
      * @return The result of the tensor addition.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static TensorOld add(TensorOld src1, CooTensor src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static TensorOld add(TensorOld src1, CooTensorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int[] indices;
         TensorOld dest = new TensorOld(src1);
@@ -70,8 +70,8 @@ public class RealDenseSparseTensorOperations {
      * @return The result of element-wise multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static CooTensor elemMult(TensorOld src1, CooTensor src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooTensorOld elemMult(TensorOld src1, CooTensorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int index;
         double[] destEntries = new double[src2.nonZeroEntries()];
@@ -83,7 +83,7 @@ public class RealDenseSparseTensorOperations {
             destEntries[i] = src1.entries[index]*src2.entries[i];
         }
 
-        return new CooTensor(src2.shape, destEntries, destIndices);
+        return new CooTensorOld(src2.shape, destEntries, destIndices);
     }
 
 
@@ -94,8 +94,8 @@ public class RealDenseSparseTensorOperations {
      * @return The result of element-wise division.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static CooTensor elemDiv(CooTensor src1, TensorOld src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooTensorOld elemDiv(CooTensorOld src1, TensorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int index;
         double[] destEntries = new double[src1.nonZeroEntries()];
@@ -107,7 +107,7 @@ public class RealDenseSparseTensorOperations {
             destEntries[i] = src1.entries[index]/src2.entries[i];
         }
 
-        return new CooTensor(src2.shape, destEntries, destIndices);
+        return new CooTensorOld(src2.shape, destEntries, destIndices);
     }
 
 
@@ -118,8 +118,8 @@ public class RealDenseSparseTensorOperations {
      * @return The result of the tensor addition.
      * @throws IllegalArgumentException If the tensors do not have the same shape.t
      */
-    public static TensorOld sub(TensorOld src1, CooTensor src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static TensorOld sub(TensorOld src1, CooTensorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         TensorOld dest = new TensorOld(src1);
 
@@ -138,8 +138,8 @@ public class RealDenseSparseTensorOperations {
      * @return The result of the tensor addition.
      * @throws IllegalArgumentException If the tensors do not have the same shape.t
      */
-    public static TensorOld sub(CooTensor src1, TensorOld src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static TensorOld sub(CooTensorOld src1, TensorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         TensorOld dest = src2.mult(-1);
 
@@ -157,8 +157,8 @@ public class RealDenseSparseTensorOperations {
      * @param src2 Second tensor in sum.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static void addEq(TensorOld src1, CooTensor src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static void addEq(TensorOld src1, CooTensorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             src1.entries[src1.shape.entriesIndex(src2.indices[i])] += src2.entries[i];
@@ -172,8 +172,8 @@ public class RealDenseSparseTensorOperations {
      * @param src2 Second tensor in difference.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static void subEq(TensorOld src1, CooTensor src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static void subEq(TensorOld src1, CooTensorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             src1.entries[src1.shape.entriesIndex(src2.indices[i])] -= src2.entries[i];
@@ -188,7 +188,7 @@ public class RealDenseSparseTensorOperations {
      * @return A dense tensor which is the sum of {@code src1} and {@code b} such that {@code b} is added to each element of {@code
      * src1}.
      */
-    public static TensorOld add(CooTensor src1, double b) {
+    public static TensorOld add(CooTensorOld src1, double b) {
         TensorOld sum = new TensorOld(src1.shape, b);
 
         for(int i=0; i<src1.nnz; i++) {
@@ -206,7 +206,7 @@ public class RealDenseSparseTensorOperations {
      * @return A dense tensor which is the difference of {@code src1} and {@code b} such that {@code b} is subtracted from each
      * element of {@code src1}.
      */
-    public static TensorOld sub(CooTensor src1, double b) {
+    public static TensorOld sub(CooTensorOld src1, double b) {
         TensorOld sum = new TensorOld(src1.shape, b);
 
         for(int i=0; i<src1.nnz; i++) {

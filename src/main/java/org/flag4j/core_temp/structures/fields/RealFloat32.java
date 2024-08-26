@@ -27,9 +27,19 @@ package org.flag4j.core_temp.structures.fields;
 /**
  * <p>A real number backed by a 32-bit floating point number. Immutable</p>
  *
- * <p>This class wraps the primative float type.</p>
+ * <p>This class wraps the primitive float type.</p>
  */
 public class RealFloat32 implements Field<RealFloat32> {
+
+    /**
+     * The numerical value 1.0.
+     */
+    public final static RealFloat32 ONE = new RealFloat32(1);
+    /**
+     * The numerical value 0.0.
+     */
+    public final static RealFloat32 ZERO = new RealFloat32(0);
+
 
     /**
      * Numerical value of field element.
@@ -105,6 +115,58 @@ public class RealFloat32 implements Field<RealFloat32> {
 
 
     /**
+     * <p>Checks if this value is an additive identity for this semi-ring.</p>
+     *
+     * <p>An element 0 is an additive identity if a + 0 = a for any a in the semi-ring.</p>
+     *
+     * @return True if this value is an additive identity for this semi-ring. Otherwise, false.
+     */
+    @Override
+    public boolean isZero() {
+        return equals(ZERO);
+    }
+
+
+    /**
+     * <p>Checks if this value is a multiplicitive identity for this semi-ring.</p>
+     *
+     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     *
+     * @return True if this value is a multiplicitive identity for this semi-ring. Otherwise, false.
+     */
+    @Override
+    public boolean isOne() {
+        return equals(ONE);
+    }
+
+
+    /**
+     * <p>Gets the additive identity for this semi-ring.</p>
+     *
+     * <p>An element 0 is an additive identity if a + 0 = a for any a in the semi-ring.</p>
+     *
+     * @return The additive identity for this semi-ring.
+     */
+    @Override
+    public RealFloat32 getZero() {
+        return ZERO;
+    }
+
+
+    /**
+     * <p>Gets the multiplicitive identity for this semi-ring.</p>
+     *
+     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     *
+     * @return The multiplicitive identity for this semi-ring.
+     */
+    @Override
+    public RealFloat32 getOne() {
+        return ONE;
+    }
+
+
+    /**
      * Computes the quotient of two elements of this field.
      * @param b Second field element in quotient.
      * @return The quotient of this field element and {@code b}.
@@ -112,6 +174,58 @@ public class RealFloat32 implements Field<RealFloat32> {
     @Override
     public RealFloat32 div(RealFloat32 b) {
         return new RealFloat32(this.value / b.value);
+    }
+
+
+    /**
+     * Sums an element of this field with a real number (associative and commutative).
+     *
+     * @param b Real element in sum.
+     *
+     * @return The sum of this element and {@code b}.
+     */
+    @Override
+    public RealFloat32 add(double b) {
+        return new RealFloat32((float) (value + b));
+    }
+
+
+    /**
+     * Computes difference of an element of this field and a real number.
+     *
+     * @param b Real value in difference.
+     *
+     * @return The difference of this ring element and {@code b}.
+     */
+    @Override
+    public RealFloat32 sub(double b) {
+        return new RealFloat32((float) (value - b));
+    }
+
+
+    /**
+     * Multiplies an element of this field with a real number (associative and commutative).
+     *
+     * @param b Real number in product.
+     *
+     * @return The product of this field element and {@code b}.
+     */
+    @Override
+    public RealFloat32 mult(double b) {
+        return new RealFloat32((float) (value * b));
+    }
+
+
+    /**
+     * Computes the quotient of an element of this field and a real number.
+     *
+     * @param b Real number in quotient.
+     *
+     * @return The quotient of this field element and {@code b}.
+     */
+    @Override
+    public RealFloat32 div(double b) {
+        return new RealFloat32((float) (value / b));
     }
 
 
@@ -266,6 +380,40 @@ public class RealFloat32 implements Field<RealFloat32> {
         }
 
         return new RealFloat32(prod);
+    }
+
+
+    /**
+     * Wraps a primitive float array as a {@link RealFloat32} array.
+     * @param arr Array to wrap.
+     * @return A {@link RealFloat32} array containing the values of {@code arr}. If {@code arr==null} then {@code null} will be
+     * returned.
+     */
+    public static RealFloat32[] wrapArray(float... arr) {
+        if(arr == null) return null;
+
+        RealFloat32[] wrapped = new RealFloat32[arr.length];
+        for(int i=0, size=arr.length; i<size; i++)
+            wrapped[i] = new RealFloat32(arr[i]);
+
+        return wrapped;
+    }
+
+
+    /**
+     * Wraps a {@link Float} array as a {@link RealFloat32} array.
+     * @param arr Array to wrap.
+     * @return A {@link RealFloat32} array containing the values of {@code arr}. If {@code arr==null} then {@code null} will be
+     * returned.
+     */
+    public static RealFloat32[] wrapArray(Float[] arr) {
+        if(arr == null) return null;
+
+        RealFloat32[] wrapped = new RealFloat32[arr.length];
+        for(int i=0, size=arr.length; i<size; i++)
+            wrapped[i] = new RealFloat32(arr[i]);
+
+        return wrapped;
     }
 
 

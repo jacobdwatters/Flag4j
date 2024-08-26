@@ -24,7 +24,7 @@
 
 package org.flag4j.operations_old.sparse.csr.real;
 
-import org.flag4j.arrays_old.sparse.CsrMatrix;
+import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 
@@ -32,14 +32,14 @@ import java.util.Arrays;
 
 
 /**
- * Utility class for manipulating {@link org.flag4j.arrays_old.sparse.CsrMatrix real sparse CSR matrices} (e.g. row swaps, column swaps,
+ * Utility class for manipulating {@link CsrMatrixOld real sparse CSR matrices} (e.g. row swaps, column swaps,
  * etc.).
  */
 public class RealCsrManipulations {
 
     private RealCsrManipulations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -50,7 +50,7 @@ public class RealCsrManipulations {
      * @param rowIdx2 Index of the second row to swap.
      * @throws IndexOutOfBoundsException If either {@code rowIdx1} or {@code rowIdx2} is out of bounds of the rows of this matrix.
      */
-    public static void swapRows(CsrMatrix src, int rowIdx1, int rowIdx2) {
+    public static void swapRows(CsrMatrixOld src, int rowIdx1, int rowIdx2) {
         if(rowIdx1 == rowIdx2) return;
         else if(rowIdx1 > rowIdx2) {
             // ensure the second index is larger than the first.
@@ -106,7 +106,7 @@ public class RealCsrManipulations {
      * @throws IndexOutOfBoundsException If either {@code colIndex1} or {@code colIndex2} is out of bounds of the columns of this
      * matrix.
      */
-    public static void swapCols(CsrMatrix src, int colIdx1, int colIdx2) {
+    public static void swapCols(CsrMatrixOld src, int colIdx1, int colIdx2) {
         if(colIdx1 == colIdx2) return;
 
         // Ensure colIndex1 < colIndex2 for simplicity
@@ -155,7 +155,7 @@ public class RealCsrManipulations {
      * @param newPos New index for the value to be moved to within the non-zero entries of {@code src} (assumed to be in the same
      * row as {@code currPos}).
      */
-    private static void moveAndShiftRight(CsrMatrix src, int newColIdx, int currPos, int newPos) {
+    private static void moveAndShiftRight(CsrMatrixOld src, int newColIdx, int currPos, int newPos) {
         double value = src.entries[currPos];  // Extract the non-zero value.
 
         // Shift entries in row to right.
@@ -179,7 +179,7 @@ public class RealCsrManipulations {
      * @param newPos New index for the value to be moved to within the non-zero entries of {@code src} (assumed to be in the same
      * row as {@code currPos}).
      */
-    private static void moveAndShiftLeft(CsrMatrix src, int newColIdx, int currPos, int newPos) {
+    private static void moveAndShiftLeft(CsrMatrixOld src, int newColIdx, int currPos, int newPos) {
         double value = src.entries[currPos];  // Extract the non-zero value.
 
         // Shift entries in row to left.

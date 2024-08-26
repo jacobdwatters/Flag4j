@@ -39,7 +39,7 @@ import java.math.RoundingMode;
  *
  * <p>Complex64 numbers are Immutable.</p>
  */
-public class Complex64 implements ComplexField<Complex64> {
+public class Complex64 implements Field<Complex64> {
     // Several constants are provided for convenience.
     /**
      * The complex number with zero imaginary and real parts.
@@ -294,6 +294,58 @@ public class Complex64 implements ComplexField<Complex64> {
 
 
     /**
+     * <p>Checks if this value is an additive identity for this semi-ring.</p>
+     *
+     * <p>An element 0 is an additive identity if a + 0 = a for any a in the semi-ring.</p>
+     *
+     * @return True if this value is an additive identity for this semi-ring. Otherwise, false.
+     */
+    @Override
+    public boolean isZero() {
+        return equals(ZERO);
+    }
+
+
+    /**
+     * <p>Checks if this value is a multiplicitive identity for this semi-ring.</p>
+     *
+     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     *
+     * @return True if this value is a multiplicitive identity for this semi-ring. Otherwise, false.
+     */
+    @Override
+    public boolean isOne() {
+        return equals(ONE);
+    }
+
+
+    /**
+     * <p>Gets the additive identity for this semi-ring.</p>
+     *
+     * <p>An element 0 is an additive identity if a + 0 = a for any a in the semi-ring.</p>
+     *
+     * @return The additive identity for this semi-ring.
+     */
+    @Override
+    public Complex64 getZero() {
+        return ZERO;
+    }
+
+
+    /**
+     * <p>Gets the multiplicitive identity for this semi-ring.</p>
+     *
+     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     *
+     * @return The multiplicitive identity for this semi-ring.
+     */
+    @Override
+    public Complex64 getOne() {
+        return ONE;
+    }
+
+
+    /**
      * Multiplies an element of this field with a real number.
      * @param b Second element in product.
      * @return The product of this field element and {@code b}.
@@ -310,7 +362,6 @@ public class Complex64 implements ComplexField<Complex64> {
      *
      * @return The sum of this element and {@code b}.
      */
-    @Override
     public Complex64 add(double b) {
         return new Complex64(re + b, im);
     }
@@ -323,7 +374,6 @@ public class Complex64 implements ComplexField<Complex64> {
      *
      * @return The difference of this field element and {@code b}.
      */
-    @Override
     public Complex64 sub(double b) {
         return new Complex64(re - b, im);
     }
@@ -336,9 +386,20 @@ public class Complex64 implements ComplexField<Complex64> {
      *
      * @return The product of this field element and {@code b}.
      */
-    @Override
     public Complex64 mult(double b) {
         return new Complex64(re*b, im*b);
+    }
+
+
+    /**
+     * Computes the quotient of a element of this field and a real number.
+     *
+     * @param b Real number quotient.
+     *
+     * @return The quotient of this field element and {@code b}.
+     */
+    public Complex64 div(double b) {
+        return new Complex64(re/b, im/b);
     }
 
 
@@ -1137,7 +1198,7 @@ public class Complex64 implements ComplexField<Complex64> {
      * @param values Array of values to compute the index of the minimum magnitude from.
      * @return The index of the minimum magnitude from the {@code values array}. If the array has zero length, then -1 is returned.
      */
-    public static int argMin(Complex64... values) {
+    public static int argmin(Complex64... values) {
         double min = -1;
         double currMag;
         int arg = -1;
@@ -1163,7 +1224,7 @@ public class Complex64 implements ComplexField<Complex64> {
      * @param values Array of values to compute the index of the minimum real component from.
      * @return The index of the minimum magnitude from the {@code values array}. If the array has zero length, -1 is returned.
      */
-    public static int argMinReal(Complex64... values) {
+    public static int argminReal(Complex64... values) {
         float min = Float.MAX_VALUE;
         float currMin;
         int arg = -1;
@@ -1189,7 +1250,7 @@ public class Complex64 implements ComplexField<Complex64> {
      * @param values Array of values to compute the index of the maximum magnitude from.
      * @return The index of the minimum magnitude from the {@code values array}. If the array has zero length, then -1 is returned.
      */
-    public static int argMax(Complex64... values) {
+    public static int argmax(Complex64... values) {
         double max = -1;
         double currMag;
         int arg = -1;
@@ -1216,7 +1277,7 @@ public class Complex64 implements ComplexField<Complex64> {
      * @return The index of the minimum magnitude from the {@code values array}. If the array has zero length, -1 is
      * returned.
      */
-    public static int argMaxReal(Complex64... values) {
+    public static int argmaxReal(Complex64... values) {
         float max = Float.MIN_NORMAL;
         float currMax;
         int arg = -1;

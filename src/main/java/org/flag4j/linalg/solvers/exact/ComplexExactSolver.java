@@ -27,18 +27,19 @@ package org.flag4j.linalg.solvers.exact;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.linalg.decompositions.lu.ComplexLU;
+import org.flag4j.linalg.decompositions.lu.LUOld;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolver;
 
 
 /**
  * Solver for solving a well determined system of linear equations in an exact sense using the
- * {@link org.flag4j.linalg.decompositions.lu.LU LU decomposition.}
+ * {@link LUOld LUOld decomposition.}
  */
 public class ComplexExactSolver extends ExactSolver<CMatrixOld, CVectorOld> {
 
     /**
-     * Constructs an exact LU solver where the coefficient matrix is real dense.
+     * Constructs an exact LUOld solver where the coefficient matrix is real dense.
      */
     public ComplexExactSolver() {
         super(new ComplexLU(),
@@ -49,10 +50,10 @@ public class ComplexExactSolver extends ExactSolver<CMatrixOld, CVectorOld> {
 
 
     /**
-     * Permute the rows of a vector using the row permutation matrix from the LU decomposition.
+     * Permute the rows of a vector using the row permutation matrix from the LUOld decomposition.
      *
      * @param b VectorOld to permute the rows of.
-     * @return A vector which is the result of applying the row permutation from the LU decomposition
+     * @return A vector which is the result of applying the row permutation from the LUOld decomposition
      * to the vector {@code b}.
      */
     @Override
@@ -62,10 +63,10 @@ public class ComplexExactSolver extends ExactSolver<CMatrixOld, CVectorOld> {
 
 
     /**
-     * Permute the rows of a matrix using the row permutation matrix from the LU decomposition.
+     * Permute the rows of a matrix using the row permutation matrix from the LUOld decomposition.
      *
      * @param B matrix to permute the rows of.
-     * @return A matrix which is the result of applying the row permutation from the LU decomposition
+     * @return A matrix which is the result of applying the row permutation from the LUOld decomposition
      * to the matrix {@code B}.
      */
     @Override

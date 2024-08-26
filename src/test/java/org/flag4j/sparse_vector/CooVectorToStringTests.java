@@ -1,6 +1,6 @@
 package org.flag4j.sparse_vector;
 
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CooVectorToStringTests {
 
     String exp;
-    static CooVector a;
+    static CooVectorOld a;
 
     @BeforeAll
     static void setup() {
@@ -19,7 +19,7 @@ class CooVectorToStringTests {
         int size = 3056;
         int[] indices = {1, 567, 1567, 2506};
 
-        a = new CooVector(size, nze, indices);
+        a = new CooVectorOld(size, nze, indices);
     }
 
 

@@ -2,8 +2,8 @@ package org.flag4j.matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.linalg.ops.DirectSum;
@@ -23,8 +23,8 @@ class MatrixDirectSumTests {
 
     MatrixOld A, B, exp;
     CMatrixOld BComplex, expComplex;
-    CooMatrix BSparse;
-    CooCMatrix BSparseComplex;
+    CooMatrixOld BSparse;
+    CooCMatrixOld BSparseComplex;
 
     @Test
     void matrixTestCase() {
@@ -55,7 +55,7 @@ class MatrixDirectSumTests {
         rowIndices = new int[]{0, 2, 2, 4};
         colIndices = new int[]{0, 0, 1, 1};
         sparseShape = new Shape(5, 3);
-        BSparse = new CooMatrix(sparseShape, bSparseEntries, rowIndices, colIndices);
+        BSparse = new CooMatrixOld(sparseShape, bSparseEntries, rowIndices, colIndices);
 
         expEntries = new double[][]{
                 {1, 2, 3, 0, 0, 0},
@@ -100,7 +100,7 @@ class MatrixDirectSumTests {
         rowIndices = new int[]{0, 2, 2, 4};
         colIndices = new int[]{0, 0, 1, 1};
         sparseShape = new Shape(5, 3);
-        BSparseComplex = new CooCMatrix(sparseShape, bSparseComplexEntries, rowIndices, colIndices);
+        BSparseComplex = new CooCMatrixOld(sparseShape, bSparseComplexEntries, rowIndices, colIndices);
 
         expComplexEntries = new CNumber[][]{
                 {new CNumber(1), new CNumber(2), new CNumber(3), new CNumber(0), new CNumber(0), new CNumber(0)},
@@ -145,7 +145,7 @@ class MatrixDirectSumTests {
         rowIndices = new int[]{0, 2, 2, 4};
         colIndices = new int[]{0, 0, 1, 1};
         sparseShape = new Shape(5, 3);
-        BSparse = new CooMatrix(sparseShape, bSparseEntries, rowIndices, colIndices);
+        BSparse = new CooMatrixOld(sparseShape, bSparseEntries, rowIndices, colIndices);
 
         expEntries = new double[][]{
                 {0, 0, 0, 9.32, 0, 0},
@@ -190,7 +190,7 @@ class MatrixDirectSumTests {
         rowIndices = new int[]{0, 2, 2, 4};
         colIndices = new int[]{0, 0, 1, 1};
         sparseShape = new Shape(5, 3);
-        BSparseComplex = new CooCMatrix(sparseShape, bSparseComplexEntries, rowIndices, colIndices);
+        BSparseComplex = new CooCMatrixOld(sparseShape, bSparseComplexEntries, rowIndices, colIndices);
 
         expComplexEntries = new CNumber[][]{
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0, 1), new CNumber(0), new CNumber(0)},

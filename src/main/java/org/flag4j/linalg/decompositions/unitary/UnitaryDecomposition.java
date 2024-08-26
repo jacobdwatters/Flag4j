@@ -25,7 +25,7 @@
 package org.flag4j.linalg.decompositions.unitary;
 
 import org.flag4j.core.MatrixMixin;
-import org.flag4j.linalg.decompositions.Decomposition;
+import org.flag4j.linalg.decompositions.DecompositionOld;
 import org.flag4j.util.ParameterChecks;
 
 
@@ -37,7 +37,7 @@ import org.flag4j.util.ParameterChecks;
  * @param <U> Internal storage datatype of the matrix.
  */
 public abstract class UnitaryDecomposition<
-        T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>, U> implements Decomposition<T> {
+        T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>, U> implements DecompositionOld<T> {
 
     /**
      * <p>
@@ -115,7 +115,7 @@ public abstract class UnitaryDecomposition<
      * @throws IllegalArgumentException If {@code 1 < subDiagonal < 0}.
      */
     public UnitaryDecomposition(int subDiagonal, boolean storeReflectors) {
-        ParameterChecks.assertInRange(subDiagonal, 0, 1, "subDiagonal");
+        ParameterChecks.ensureInRange(subDiagonal, 0, 1, "subDiagonal");
         this.subDiagonal = subDiagonal;
         this.storeReflectors = storeReflectors;
     }

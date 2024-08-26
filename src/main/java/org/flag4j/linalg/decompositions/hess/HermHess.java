@@ -172,9 +172,9 @@ public class HermHess extends ComplexHess {
     @Override
     protected void setUp(CMatrixOld src) {
         if(enforceHermitian && !src.isHermitian()) // If requested, check the matrix is Hermitian.
-            throw new LinearAlgebraException("Decomposition only supports Hermitian matrices.");
+            throw new LinearAlgebraException("DecompositionOld only supports Hermitian matrices.");
         else
-            ParameterChecks.assertSquareMatrix(src.shape); // Otherwise, Just ensure the matrix is square.
+            ParameterChecks.ensureSquareMatrix(src.shape); // Otherwise, Just ensure the matrix is square.
 
         numRows = numCols = minAxisSize = src.numRows;
         copyUpperTri(src);  // Initializes transform matrix.

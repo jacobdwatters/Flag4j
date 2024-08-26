@@ -31,7 +31,7 @@ import org.flag4j.util.ErrorMessages;
  */
 public final class Configurations {
     private Configurations() {
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
     /**

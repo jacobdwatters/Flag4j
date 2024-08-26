@@ -32,8 +32,8 @@ import org.flag4j.linalg.decompositions.chol.ComplexCholesky;
 import org.flag4j.linalg.decompositions.chol.RealCholesky;
 import org.flag4j.linalg.decompositions.hess.RealHess;
 import org.flag4j.linalg.decompositions.lu.ComplexLU;
-import org.flag4j.linalg.decompositions.lu.LU;
-import org.flag4j.linalg.decompositions.lu.RealLU;
+import org.flag4j.linalg.decompositions.lu.LUOld;
+import org.flag4j.linalg.decompositions.lu.RealLUOLd;
 import org.flag4j.linalg.decompositions.qr.ComplexQR;
 import org.flag4j.linalg.decompositions.qr.RealQR;
 import org.flag4j.linalg.decompositions.schur.RealSchur;
@@ -48,24 +48,24 @@ public class DecompositionFactory {
 
     private DecompositionFactory() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
     /**
-     * Constructs a decomposer to compute the LU decomposition of a real dense matrix.
-     * @return A decomposer to compute the LU decomposition of a real dense matrix.
+     * Constructs a decomposer to compute the LUOld decomposition of a real dense matrix.
+     * @return A decomposer to compute the LUOld decomposition of a real dense matrix.
      */
-    public static LU<MatrixOld> createRealLU() {
-        return new RealLU();
+    public static LUOld<MatrixOld> createRealLU() {
+        return new RealLUOLd();
     }
 
 
     /**
-     * Constructs a decomposer to compute the LU decomposition of a complex dense matrix.
-     * @return A decomposer to compute the LU decomposition of a complex dense matrix.
+     * Constructs a decomposer to compute the LUOld decomposition of a complex dense matrix.
+     * @return A decomposer to compute the LUOld decomposition of a complex dense matrix.
      */
-    public static LU<CMatrixOld> createComplexLU() {
+    public static LUOld<CMatrixOld> createComplexLU() {
         return new ComplexLU();
     }
 

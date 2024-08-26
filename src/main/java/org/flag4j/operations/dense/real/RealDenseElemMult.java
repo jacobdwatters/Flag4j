@@ -42,7 +42,7 @@ public class RealDenseElemMult {
 
     private RealDenseElemMult() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -56,7 +56,7 @@ public class RealDenseElemMult {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static double[] elemMult(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
+        ParameterChecks.ensureEqualShape(shape1, shape2);
         double[] product = new double[src1.length];
 
         for(int i=0; i<product.length; i++) {
@@ -77,7 +77,7 @@ public class RealDenseElemMult {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static double[] elemMultConcurrent(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
+        ParameterChecks.ensureEqualShape(shape1, shape2);
         double[] product = new double[src1.length];
 
         ThreadManager.concurrentOperation(product.length, (startIdx, endIdx) -> {

@@ -24,7 +24,7 @@
 
 package org.flag4j.operations_old.sparse.coo.real;
 
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.core.Shape;
 import org.flag4j.operations_old.sparse.coo.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
@@ -41,7 +41,7 @@ public class RealSparseMatrixManipulations {
 
     private RealSparseMatrixManipulations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -51,7 +51,7 @@ public class RealSparseMatrixManipulations {
      * @param rowIdx Row to remove from the {@code src} matrix.
      * @return A sparse matrix which has one less row than the {@code src} matrix with the specified row removed.
      */
-    public static CooMatrix removeRow(CooMatrix src, int rowIdx) {
+    public static CooMatrixOld removeRow(CooMatrixOld src, int rowIdx) {
         Shape shape = new Shape(src.numRows-1, src.numCols);
 
         // Find the start and end index within the entries array which have the given row index.
@@ -65,7 +65,7 @@ public class RealSparseMatrixManipulations {
 
         copyRanges(src, entries, rowIndices, colIndices, startEnd);
 
-        return new CooMatrix(shape, entries, rowIndices, colIndices);
+        return new CooMatrixOld(shape, entries, rowIndices, colIndices);
     }
 
 
@@ -78,7 +78,7 @@ public class RealSparseMatrixManipulations {
      *                first otherwise the behavior of this method is not defined.
      * @return A copy of the {@code src} matrix with the specified rows removed.
      */
-    public static CooMatrix removeRows(CooMatrix src, int... rowIdxs) {
+    public static CooMatrixOld removeRows(CooMatrixOld src, int... rowIdxs) {
         Shape shape = new Shape(src.numRows-rowIdxs.length, src.numCols);
         List<Double> entries = new ArrayList<>(src.entries.length);
         List<Integer> rowIndices = new ArrayList<>(src.entries.length);
@@ -95,7 +95,7 @@ public class RealSparseMatrixManipulations {
             }
         }
 
-        return new CooMatrix(shape, entries, rowIndices, colIndices);
+        return new CooMatrixOld(shape, entries, rowIndices, colIndices);
     }
 
 
@@ -105,7 +105,7 @@ public class RealSparseMatrixManipulations {
      * @param colIdx Column to remove from the {@code src} matrix.
      * @return A sparse matrix which has one less column than the {@code src} matrix with the specified column removed.
      */
-    public static CooMatrix removeCol(CooMatrix src, int colIdx) {
+    public static CooMatrixOld removeCol(CooMatrixOld src, int colIdx) {
         Shape shape = new Shape(src.numRows, src.numCols-1);
         List<Double> entries = new ArrayList<>(src.entries.length);
         List<Integer> rowIndices = new ArrayList<>(src.entries.length);
@@ -122,7 +122,7 @@ public class RealSparseMatrixManipulations {
             }
         }
 
-        return new CooMatrix(shape, entries, rowIndices, colIndices);
+        return new CooMatrixOld(shape, entries, rowIndices, colIndices);
     }
 
 
@@ -132,7 +132,7 @@ public class RealSparseMatrixManipulations {
      * @param colIdxs Columns to remove from the {@code src} matrix.
      * @return A copy of the {@code src} sparse matrix with the specified columns removed.
      */
-    public static CooMatrix removeCols(CooMatrix src, int... colIdxs) {
+    public static CooMatrixOld removeCols(CooMatrixOld src, int... colIdxs) {
         Shape shape = new Shape(src.numRows, src.numCols-1);
         List<Double> entries = new ArrayList<>(src.entries.length);
         List<Integer> rowIndices = new ArrayList<>(src.entries.length);
@@ -149,7 +149,7 @@ public class RealSparseMatrixManipulations {
             }
         }
 
-        return new CooMatrix(shape, entries, rowIndices, colIndices);
+        return new CooMatrixOld(shape, entries, rowIndices, colIndices);
     }
 
 
@@ -163,7 +163,7 @@ public class RealSparseMatrixManipulations {
      * @param startEnd An array of length two specifying the {@code start} (inclusive) and {@code end} (exclusive)
      *                 indices of the range to skip during the copy.
      */
-    private static void copyRanges(CooMatrix src, double[] entries,
+    private static void copyRanges(CooMatrixOld src, double[] entries,
                                    int[] rowIndices, int[] colIndices, int[] startEnd) {
         if(startEnd[0] >= 0) {
             System.arraycopy(src.entries, 0, entries, 0, startEnd[0]);
@@ -192,7 +192,7 @@ public class RealSparseMatrixManipulations {
      * @param rowIdx2 Index of the second row in the swap.
      * @return A reference to the {@code src} sparse matrix.
      */
-    public static CooMatrix swapRows(CooMatrix src, int rowIdx1, int rowIdx2) {
+    public static CooMatrixOld swapRows(CooMatrixOld src, int rowIdx1, int rowIdx2) {
         for(int i=0; i<src.entries.length; i++) {
             // Swap row indices.
             if(src.rowIndices[i]==rowIdx1) src.rowIndices[i] = rowIdx2;
@@ -213,7 +213,7 @@ public class RealSparseMatrixManipulations {
      * @param colIdx2 Index of the second row in the swap.
      * @return A reference to the {@code src} sparse matrix.
      */
-    public static CooMatrix swapCols(CooMatrix src, int colIdx1, int colIdx2) {
+    public static CooMatrixOld swapCols(CooMatrixOld src, int colIdx1, int colIdx2) {
         for(int i=0; i<src.entries.length; i++) {
             // Swap row indices.
             if(src.colIndices[i]==colIdx1) src.colIndices[i] = colIdx2;

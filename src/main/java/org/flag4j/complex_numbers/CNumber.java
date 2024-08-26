@@ -1341,7 +1341,7 @@ public class CNumber extends Number {
      * @param values Array of values to compute the index of the minimum magnitude from.
      * @return The index of the minimum magnitude from the {@code values array}. If the array has zero length, then -1 is returned.
      */
-    public static int argMin(CNumber... values) {
+    public static int argmin(CNumber... values) {
         double min = -1;
         double currMag;
         int arg = -1;
@@ -1367,7 +1367,7 @@ public class CNumber extends Number {
      * @param values Array of values to compute the index of the minimum real component from.
      * @return The index of the minimum magnitude from the {@code values array}. If the array has zero length, -1 is returned.
      */
-    public static int argMinReal(CNumber... values) {
+    public static int argminReal(CNumber... values) {
         double min = Double.MAX_VALUE;
         double currMin;
         int arg = -1;
@@ -1393,7 +1393,7 @@ public class CNumber extends Number {
      * @param values Array of values to compute the index of the maximum magnitude from.
      * @return The index of the minimum magnitude from the {@code values array}. If the array has zero length, then -1 is returned.
      */
-    public static int argMax(CNumber... values) {
+    public static int argmax(CNumber... values) {
         double max = -1;
         double currMag;
         int arg = -1;
@@ -1420,7 +1420,7 @@ public class CNumber extends Number {
      * @return The index of the minimum magnitude from the {@code values array}. If the array has zero length, -1 is
      * returned.
      */
-    public static int argMaxReal(CNumber... values) {
+    public static int argmaxReal(CNumber... values) {
         double max = Double.MIN_NORMAL;
         double currMax;
         int arg = -1;

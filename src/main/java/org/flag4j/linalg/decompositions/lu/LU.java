@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,33 +25,39 @@
 package org.flag4j.linalg.decompositions.lu;
 
 import org.flag4j.arrays_old.sparse.PermutationMatrix;
-import org.flag4j.core.MatrixMixin;
+import org.flag4j.core_temp.MatrixMixin;
 import org.flag4j.linalg.decompositions.Decomposition;
 import org.flag4j.util.ArrayUtils;
 
+
 /**
  * <p>This abstract class specifies methods for computing the LU decomposition of a matrix.</p>
+ *
  * <p>The {@code LU} decomposition, decomposes a matrix {@code A} into a unit lower triangular matrix {@code L}
  * and an upper triangular matrix {@code U} such that {@code A=LU}.</p>
+ *
  * <p>If partial pivoting is used, the decomposition will also yield a permutation matrix {@code P} such that
  * {@code PA=LU}.</p>
+ *
  * <p>If full pivoting is used, the decomposition will yield an additional permutation matrix {@code Q} such that
  *  {@code PAQ=LU}.</p>
+ *
+ * @param <T> Type of the matrix to decompose.
  */
-public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> implements Decomposition<T> {
+public abstract class LU<T extends MatrixMixin> implements Decomposition<T> {
 
     /**
      * Flag indicating what pivoting to use.
      */
     public final Pivoting pivotFlag;
     /**
-     * for determining if pivot value is to be considered zero in LU decomposition with no pivoting.
+     * for determining if pivot value is to be considered zero in LUOld decomposition with no pivoting.
      */
     final double DEFAULT_ZERO_PIVOT_TOLERANCE = 0.5e-14;
     /**
-     * Tolerance for determining if pivot value is to be considered zero in LU decomposition with no pivoting.
+     * Tolerance for determining if pivot value is to be considered zero in LUOld decomposition with no pivoting.
      */
-    final double zeroPivotTol;
+    protected final double zeroPivotTol;
     /**
      * Storage for L and U matrices. Stored in a single matrix
      */
@@ -72,7 +78,7 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> implemen
 
 
     /**
-     * Constructs a LU decomposer to decompose the specified matrix.
+     * Constructs a LUOld decomposer to decompose the specified matrix.
      * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
      *                 will be used. If pivoting is any other value, no pivoting will be used.
      */
@@ -83,7 +89,7 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> implemen
 
 
     /**
-     * Constructs a LU decomposer to decompose the specified matrix.
+     * Constructs a LUOld decomposer to decompose the specified matrix.
      * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
      *                 will be used. If pivoting is any other value, no pivoting will be used.
      * @param zeroPivotTol Tolerance for considering a pivot to be zero. If a pivot is less than the tolerance in absolute value,
@@ -96,21 +102,21 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> implemen
 
 
     /**
-     * Applies {@code LU} decomposition to the source matrix using the pivoting specified in the constructor.
+     * Applies {@code LUOld} decomposition to the source matrix using the pivoting specified in the constructor.
      *
      * @param src The source matrix to decompose. Not modified.
      * @return A reference to this decomposer.
      */
     @Override
-    public org.flag4j.linalg.decompositions.lu.LU<T> decompose(T src) {
+    public LU<T> decompose(T src) {
         initLU(src);
         numRowSwaps = 0; // Set the number of row swaps to zero.
         numColSwaps = 0; // Set the number of row swaps to zero.
 
-        if(pivotFlag==Pivoting.NONE) {
+        if(pivotFlag == Pivoting.NONE) {
             rowSwaps = colSwaps = null;
             noPivot(); // Compute with no pivoting.
-        } else if(pivotFlag==Pivoting.PARTIAL) {
+        } else if(pivotFlag == Pivoting.PARTIAL) {
             rowSwaps = ArrayUtils.intRange(0, LU.numRows());
             partialPivot();
         } else {
@@ -124,26 +130,26 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> implemen
 
 
     /**
-     * Initializes the {@code LU} matrix by copying the source matrix to decompose.
+     * Initializes the {@code LUOld} matrix by copying the source matrix to decompose.
      * @param src Source matrix to decompose.
      */
     protected abstract void initLU(T src);
 
 
     /**
-     * Computes the LU decomposition using no pivoting (i.e. rows and columns are not swapped).
+     * Computes the LUOld decomposition using no pivoting (i.e. rows and columns are not swapped).
      */
     protected abstract void noPivot();
 
 
     /**
-     * Computes the LU decomposition using partial pivoting (i.e. row swapping).
+     * Computes the LUOld decomposition using partial pivoting (i.e. row swapping).
      */
     protected abstract void partialPivot();
 
 
     /**
-     * Computes the LU decomposition using full/rook pivoting (i.e. row and column swapping).
+     * Computes the LUOld decomposition using full/rook pivoting (i.e. row and column swapping).
      */
     protected abstract void fullPivot();
 
@@ -253,7 +259,7 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> implemen
 
 
     /**
-     * Simple enum containing pivoting options for pivoting in LU decomposition.
+     * Simple enum containing pivoting options for pivoting in LUOld decomposition.
      */
     public enum Pivoting {
         NONE, PARTIAL, FULL;
@@ -265,9 +271,9 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> implemen
          * {@link #PARTIAL} is returned.
          */
         private static Pivoting get(int ordinal) {
-            if(ordinal==Pivoting.FULL.ordinal()) {
+            if(ordinal== Pivoting.FULL.ordinal()) {
                 return Pivoting.FULL;
-            } else if(ordinal==Pivoting.NONE.ordinal()) {
+            } else if(ordinal== Pivoting.NONE.ordinal()) {
                 return Pivoting.NONE;
             } else {
                 return Pivoting.PARTIAL;

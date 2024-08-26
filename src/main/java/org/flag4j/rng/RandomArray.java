@@ -262,7 +262,7 @@ public final class RandomArray {
      * @throws IllegalArgumentException If {@code start} is not in {@code [0, end)}
      */
     public int[] randomUniqueIndices(int numIndices, int start, int end) {
-        ParameterChecks.assertIndexInBounds(end, start);
+        ParameterChecks.ensureIndexInBounds(end, start);
 
         int[] indices = ArrayUtils.intRange(start, end);
         shuffle(indices); // Shuffle indices.
@@ -286,8 +286,8 @@ public final class RandomArray {
      * @see #randomUniqueIndices(int, int, int)
      */
     public int[][] randomUniqueIndices2D(int numIndices, int rowStart, int rowEnd, int colStart, int colEnd) {
-        ParameterChecks.assertGreaterEq(0, numIndices);
-        ParameterChecks.assertLessEq((rowEnd-rowStart)*(colEnd-colStart), numIndices);
+        ParameterChecks.ensureGreaterEq(0, numIndices);
+        ParameterChecks.ensureLessEq((rowEnd-rowStart)*(colEnd-colStart), numIndices);
 
         int[] colIndices = new int[numIndices];
 //        int[] rowIndices = genUniformRealIntArray(numIndices, rowStart, rowEnd); // Get random row indices.

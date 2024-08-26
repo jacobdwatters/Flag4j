@@ -2,7 +2,7 @@ package org.flag4j.matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -19,7 +19,7 @@ class MatrixCsrCMatMultTests {
     CMatrixOld exp;
     CNumber[][] expEntries;
 
-    CsrCMatrix B;
+    CsrCMatrixOld B;
     Shape bShape;
     CNumber[] bEntries;
     int[] bRowPointers;
@@ -41,7 +41,7 @@ class MatrixCsrCMatMultTests {
         bEntries = new CNumber[]{new CNumber(0.21723, 0.346), new CNumber(0.41679, 0.05828)};
         bRowPointers = new int[]{0, 0, 0, 1, 2, 2};
         bColIndices = new int[]{2, 2};
-        B = new CsrCMatrix(bShape, bEntries, bRowPointers, bColIndices);
+        B = new CsrCMatrixOld(bShape, bEntries, bRowPointers, bColIndices);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.4705549629+0.26178508079999996i"), new CNumber("0.0")},
@@ -58,7 +58,7 @@ class MatrixCsrCMatMultTests {
         bEntries = new CNumber[]{new CNumber(0.8369, 0.15486), new CNumber(0.62217, 0.32219), new CNumber(0.66049, 0.96046)};
         bRowPointers = new int[]{0, 1, 3, 3};
         bColIndices = new int[]{8, 2, 5};
-        B = new CsrCMatrix(bShape, bEntries, bRowPointers, bColIndices);
+        B = new CsrCMatrixOld(bShape, bEntries, bRowPointers, bColIndices);
 
         aEntries = new double[][]{
                 {0.02829, 0.12932, 0.0628},
@@ -114,7 +114,7 @@ class MatrixCsrCMatMultTests {
 
         // ------------------------ Sub-case 3 ------------------------
         A = new MatrixOld(24, 516);
-        B = new CsrCMatrix(15, 12);
+        B = new CsrCMatrixOld(15, 12);
         assertThrows(LinearAlgebraException.class, ()->A.mult(B));
     }
 }

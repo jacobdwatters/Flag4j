@@ -2,8 +2,8 @@ package org.flag4j.sparse_matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
@@ -21,7 +21,7 @@ class CooMatrixEqualsTest {
     static Shape aShape;
     static double[] aEntries;
     static int[][] aIndices;
-    static CooMatrix A;
+    static CooMatrixOld A;
 
 
     @BeforeAll
@@ -33,7 +33,7 @@ class CooMatrixEqualsTest {
                 {1_002, 5, 41, 12_234, 9_013}
         };
 
-        A = new CooMatrix(aShape, aEntries, aIndices[0], aIndices[1]);
+        A = new CooMatrixOld(aShape, aEntries, aIndices[0], aIndices[1]);
     }
 
 
@@ -119,7 +119,7 @@ class CooMatrixEqualsTest {
     void sparseEqualsTest() {
         double[] bEntries;
         int[][] bIndices;
-        CooMatrix B;
+        CooMatrixOld B;
 
         // --------------------- Sub-case 1 ---------------------
         B = A.copy();
@@ -131,7 +131,7 @@ class CooMatrixEqualsTest {
                 {9, 13, 141, 141, 398, 400},
                 {1_002, 5, 41, 12_234, 9_013, 27}
         };
-        B = new CooMatrix(A.shape, bEntries, bIndices[0], bIndices[1]);
+        B = new CooMatrixOld(A.shape, bEntries, bIndices[0], bIndices[1]);
         assertNotEquals(A, B);
 
         // --------------------- Sub-case 3 ---------------------
@@ -140,7 +140,7 @@ class CooMatrixEqualsTest {
                 {9, 13, 141, 141, 398},
                 {1_002, 5, 41, 12_234, 9_013}
         };
-        B = new CooMatrix(new Shape(2451, 134415), bEntries, bIndices[0], bIndices[1]);
+        B = new CooMatrixOld(new Shape(2451, 134415), bEntries, bIndices[0], bIndices[1]);
         assertNotEquals(A, B);
     }
 
@@ -149,7 +149,7 @@ class CooMatrixEqualsTest {
     void sparseComplexEqualsTest() {
         double[] bEntries;
         int[][] bIndices;
-        CooCMatrix B;
+        CooCMatrixOld B;
 
         // --------------------- Sub-case 1 ---------------------
         B = A.toComplex();
@@ -161,7 +161,7 @@ class CooMatrixEqualsTest {
                 {9, 13, 141, 141, 398, 400},
                 {1_002, 5, 41, 12_234, 9_013, 27}
         };
-        B = new CooCMatrix(A.shape, bEntries, bIndices[0], bIndices[1]);
+        B = new CooCMatrixOld(A.shape, bEntries, bIndices[0], bIndices[1]);
         assertFalse(A.tensorEquals(B));
 
         // --------------------- Sub-case 3 ---------------------
@@ -170,7 +170,7 @@ class CooMatrixEqualsTest {
                 {9, 13, 141, 141, 398},
                 {1_002, 5, 41, 12_234, 9_013}
         };
-        B = new CooCMatrix(new Shape(2451, 134415), bEntries, bIndices[0], bIndices[1]);
+        B = new CooCMatrixOld(new Shape(2451, 134415), bEntries, bIndices[0], bIndices[1]);
         assertFalse(A.tensorEquals(B));
     }
 

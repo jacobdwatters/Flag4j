@@ -31,7 +31,7 @@ import org.flag4j.core.Shape;
  * <p>This abstract class defines a tensor whose elements satisfy the axioms of a field.</p>
  *
  * <p>To allow for primitive types, the elements of this tensor do not neccesarily have to implement
- * {@link org.flag4j.core_temp.structures.rings.SemiRing}</p>.
+ * {@link org.flag4j.core_temp.structures.fields.Field}.</p>
  *
  * <p>Formally, an ring is a set <b>R</b> with the binary operations_old addition (+) and multiplication (*)
  * defined such that for elements a, b, c in <b>R</b> the following are satisfied:
@@ -46,10 +46,14 @@ import org.flag4j.core.Shape;
  * </p>
  *
  * @param <T> Type of this tensor.
- * @param <U> Storage for entries of this tensor.
- * @param <V> Type (or wrapper) of an element of this tensor. Should satisfy the axioms of a ring as stated.
+ * @param <U> Type of a dense tensor equivalent to {@code T}. If {@code T} is dense, then this should be the same type as {@code T}.
+ * This parameter is required because some operations (e.g. {@link #tensorDot(TensorOverSemiRing, int)}) between two sparse tensors
+ * result in a dense tensor.
+ * @param <V> Storage for entries of this tensor.
+ * @param <W> Type (or wrapper) of an element of this tensor. Should satisfy the axioms of a ring as stated.
  */
-public abstract class TensorOverField<T extends TensorOverField<T, U, V>, U, V> extends TensorOverRing<T, U, V> {
+public abstract class TensorOverField<T extends TensorOverField<T, U, V, W>,
+        U extends TensorOverField<U, U, V, W>, V, W> extends TensorOverRing<T, U, V, W> {
 
     /**
      * Creates a tensor with the specified entries and shape.
@@ -58,7 +62,7 @@ public abstract class TensorOverField<T extends TensorOverField<T, U, V>, U, V> 
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-    protected TensorOverField(Shape shape, U entries) {
+    protected TensorOverField(Shape shape, V entries) {
         super(shape, entries);
     }
 
@@ -79,11 +83,52 @@ public abstract class TensorOverField<T extends TensorOverField<T, U, V>, U, V> 
 
 
     /**
-     * Divides each entry of this tensor by s scalar field element.
+     * Divides each entry of this tensor by a scalar field element.
      *
      * @param b Scalar field value in quotient.
      *
      * @return The quotient of this tensor with {@code b}.
      */
-    public abstract T div(V b);
+    public abstract T div(W b);
+
+
+    /**
+     * Divides each entry of this tensor by a scalar field element and stores the result in this tensor.
+     *
+     * @param b Scalar field value in quotient.
+     *
+     */
+    public abstract void divEq(W b);
+
+
+    /**
+     * Adds a real value to each entry of this tensor.
+     * @param b Value to add to each value of this tensor.
+     * @return Sum of this tensor with {@code b}.
+     */
+    public abstract T add(double b);
+
+
+    /**
+     * Subtracts a real value from each entry of this tensor.
+     * @param b Value to subtract from each value of this tensor.
+     * @return Difference of this tensor with {@code b}.
+     */
+    public abstract T sub(double b);
+
+
+    /**
+     * Multiplies a real value to each entry of this tensor.
+     * @param b Value to multiply to each value of this tensor.
+     * @return Product of this tensor with {@code b}.
+     */
+    public abstract T mult(double b);
+
+
+    /**
+     * Divieds each entry of this tensor by a real value.
+     * @param b Value to divied each value of this tensor by.
+     * @return Quotient of this tensor with {@code b}.
+     */
+    public abstract T div(double b);
 }

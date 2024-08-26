@@ -30,17 +30,18 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 
 
 /**
- * <p>This class provides methods for computing the LU decomposition of a complex dense matrix.</p>
- * <p>The following decompositions are provided: {@code A=LU}, {@code PA=LU}, and {@code PAQ=LU}.</p>
+ * <p>This class provides methods for computing the LUOld decomposition of a complex dense matrix.</p>
+ * <p>The following decompositions are provided: {@code A=LUOld}, {@code PA=LUOld}, and {@code PAQ=LUOld}.</p>
  */
-public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMatrixOld> {
+@Deprecated
+public final class ComplexLU extends LUOld<CMatrixOld> {
     /**
      * Complex number equal to zero.
      */
     static final CNumber z = CNumber.ZERO;
 
     /**
-     * Constructs a LU decomposer to decompose the specified matrix using partial pivoting.
+     * Constructs a LUOld decomposer to decompose the specified matrix using partial pivoting.
      */
     public ComplexLU() {
         super(Pivoting.PARTIAL.ordinal());
@@ -48,7 +49,7 @@ public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMat
 
 
     /**
-     * Constructs a LU decomposer to decompose the specified matrix.
+     * Constructs a LUOld decomposer to decompose the specified matrix.
      *
      * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
      *                 will be used. If pivoting is any other value, no pivoting will be used.
@@ -59,11 +60,11 @@ public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMat
 
 
     /**
-     * Constructs a LU decomposer to decompose the specified matrix.
+     * Constructs a LUOld decomposer to decompose the specified matrix.
      *
      * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
      *                 will be used. If pivoting is any other value, no pivoting will be used.
-     * @param zeroPivotTol Value for determining if a zero pivot value is detected when computing the LU decomposition with
+     * @param zeroPivotTol Value for determining if a zero pivot value is detected when computing the LUOld decomposition with
      *                     no pivoting. If a pivot value (value along the principle diagonal of U) is within this tolerance
      *                     from zero, then an exception will be thrown if solving with no pivoting.
      */
@@ -73,7 +74,7 @@ public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMat
 
 
     /**
-     * Initializes the {@code LU} matrix by copying the source matrix to decompose.
+     * Initializes the {@code LUOld} matrix by copying the source matrix to decompose.
      * @param src Source matrix to decompose.
      */
     @Override
@@ -83,7 +84,7 @@ public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMat
 
 
     /**
-     * Computes the LU decomposition using no pivoting (i.e. rows and columns are not swapped).
+     * Computes the LUOld decomposition using no pivoting (i.e. rows and columns are not swapped).
      */
     @Override
     protected void noPivot() {
@@ -91,7 +92,7 @@ public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMat
         for(int j=0; j<LU.numCols; j++) {
             if(j<LU.numRows && (LU.entries[j*LU.numCols + j]).mag() < zeroPivotTol) {
                 throw new LinearAlgebraException("Zero pivot encountered in decomposition." +
-                        " Consider using LU decomposition with partial pivoting.");
+                        " Consider using LUOld decomposition with partial pivoting.");
             }
 
             computeRows(j);
@@ -100,7 +101,7 @@ public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMat
 
 
     /**
-     * Computes the LU decomposition using partial pivoting (i.e. row swapping).
+     * Computes the LUOld decomposition using partial pivoting (i.e. row swapping).
      */
     @Override
     protected void partialPivot() {
@@ -110,7 +111,7 @@ public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMat
         for(int j=0; j<LU.numCols; j++) {
             maxIndex = maxColIndex(j); // Find row index of max value (in absolute value) in column j so that the index >= j.
 
-            // Make the appropriate swaps in LU and P (This is the partial pivoting step).
+            // Make the appropriate swaps in LUOld and P (This is the partial pivoting step).
             if(j!=maxIndex && maxIndex>=0) {
                 swapRows(j, maxIndex);
             }
@@ -121,7 +122,7 @@ public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMat
 
 
     /**
-     * Computes the LU decomposition using full/rook pivoting (i.e. row and column swapping).
+     * Computes the LUOld decomposition using full/rook pivoting (i.e. row and column swapping).
      */
     @Override
     protected void fullPivot() {
@@ -131,7 +132,7 @@ public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMat
         for(int j=0; j<LU.numCols; j++) {
             maxIndex = maxIndex(j);
 
-            // Make the appropriate swaps in LU, P and Q (This is the full pivoting step).
+            // Make the appropriate swaps in LUOld, P and Q (This is the full pivoting step).
             if(j!=maxIndex[0] && maxIndex[0]!=-1) {
                 swapRows(j, maxIndex[0]);
             }
@@ -193,7 +194,7 @@ public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMat
 
 
     /**
-     * Computes maximum absolute value in sub portion of LU matrix below and right of {@code startIndex, startIndex}.
+     * Computes maximum absolute value in sub portion of LUOld matrix below and right of {@code startIndex, startIndex}.
      * @param startIndex Top left index of row and column of sub matrix.
      * @return Index of maximum absolute value in specified sub matrix.
      */
@@ -229,7 +230,7 @@ public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMat
     public CMatrixOld getL() {
         CMatrixOld L = new CMatrixOld(LU.numRows, Math.min(LU.numRows, LU.numCols));
 
-        // Copy L values from LU matrix.
+        // Copy L values from LUOld matrix.
         for(int i=0; i<LU.numRows; i++) {
             if(i<LU.numCols) {
                 L.entries[i*L.numCols+i] = new CNumber(1); // Set principle diagonal to be ones.
@@ -253,7 +254,7 @@ public final class ComplexLU extends org.flag4j.linalg.decompositions.lu.LU<CMat
 
         int stopIdx = Math.min(LU.numRows, LU.numCols);
 
-        // Copy U values from LU matrix.
+        // Copy U values from LUOld matrix.
         for(int i=0; i<stopIdx; i++) {
             System.arraycopy(LU.entries, i*(LU.numCols+1),
                     U.entries, i*(LU.numCols+1), LU.numCols-i);

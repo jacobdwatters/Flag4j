@@ -32,11 +32,12 @@ import org.flag4j.util.ErrorMessages;
  * This class provides low level methods for computing operations_old on real tensors. These methods can be applied to
  * either sparse or dense real tensors.
  */
+@Deprecated
 public class ComplexOperations {
 
     private ComplexOperations() {
         // Hide constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

@@ -1,6 +1,6 @@
 package org.flag4j.sparse_tensor;
 
-import org.flag4j.arrays_old.sparse.CooTensor;
+import org.flag4j.arrays_old.sparse.CooTensorOld;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
 
@@ -8,12 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CooTensorGetSetTests {
-    static CooTensor A;
+    static CooTensorOld A;
     static Shape aShape;
     static double[] aEntries;
     static int[][] aIndices;
 
-    static CooTensor exp;
+    static CooTensorOld exp;
     static Shape expShape;
     static double[] expEntries;
     static int[][] expIndices;
@@ -26,13 +26,13 @@ class CooTensorGetSetTests {
         aShape = new Shape(3, 4, 5, 1);
         aEntries = new double[]{1, 223.1333, -0.991233, 100.1234};
         aIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
-        A = new CooTensor(aShape, aEntries, aIndices);
+        A = new CooTensorOld(aShape, aEntries, aIndices);
 
         // --------------- Sub-case 1 ---------------
         expShape = new Shape(3, 4, 5, 1);
         expEntries = new double[]{1, -451.2, -0.991233, 100.1234};
         expIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
-        exp = new CooTensor(expShape, expEntries, expIndices);
+        exp = new CooTensorOld(expShape, expEntries, expIndices);
 
         assertEquals(exp, A.set(-451.2, 1, 2, 0, 0));
 
@@ -40,7 +40,7 @@ class CooTensorGetSetTests {
         expShape = new Shape(3, 4, 5, 1);
         expEntries = new double[]{1, 223.1333, 32.1, -0.991233, 100.1234};
         expIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {1, 2, 4, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
-        exp = new CooTensor(expShape, expEntries, expIndices);
+        exp = new CooTensorOld(expShape, expEntries, expIndices);
 
         assertEquals(exp, A.set(32.1, 1, 2, 4, 0));
 
@@ -48,7 +48,7 @@ class CooTensorGetSetTests {
         expShape = new Shape(3, 4, 5, 1);
         expEntries = new double[]{0.001, 1, 223.1333, -0.991233, 100.1234};
         expIndices = new int[][]{{0, 0, 0, 0}, {0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
-        exp = new CooTensor(expShape, expEntries, expIndices);
+        exp = new CooTensorOld(expShape, expEntries, expIndices);
 
         assertEquals(exp, A.set(0.001, 0, 0, 0, 0));
 
@@ -65,7 +65,7 @@ class CooTensorGetSetTests {
         aShape = new Shape(3, 4, 5, 1);
         aEntries = new double[]{1, 223.1333, -0.991233, 100.1234};
         aIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
-        A = new CooTensor(aShape, aEntries, aIndices);
+        A = new CooTensorOld(aShape, aEntries, aIndices);
 
         // --------------- Sub-case 1 ---------------
         assertEquals(223.1333, A.get(1, 2, 0, 0));

@@ -30,9 +30,19 @@ import org.flag4j.core_temp.structures.fields.RealFloat64;
 /**
  * <p>A real number backed by a 32-bit integer number. Immutable</p>
  *
- * <p>This class wraps the primative int type.</p>
+ * <p>This class wraps the primitive int type.</p>
  */
 public class RealInt32 implements Ring<RealInt32> {
+
+    /**
+     * The numerical value 1.
+     */
+    public final static RealInt32 ONE = new RealInt32(1);
+    /**
+     * The numerical value 0.
+     */
+    public final static RealInt32 ZERO = new RealInt32(0);
+
 
     /**
      * Numerical value of field element.
@@ -121,6 +131,58 @@ public class RealInt32 implements Ring<RealInt32> {
     @Override
     public RealInt32 mult(RealInt32 b) {
         return new RealInt32(this.value * b.value);
+    }
+
+
+    /**
+     * <p>Checks if this value is an additive identity for this semi-ring.</p>
+     *
+     * <p>An element 0 is an additive identity if a + 0 = a for any a in the semi-ring.</p>
+     *
+     * @return True if this value is an additive identity for this semi-ring. Otherwise, false.
+     */
+    @Override
+    public boolean isZero() {
+        return equals(ZERO);
+    }
+
+
+    /**
+     * <p>Checks if this value is a multiplicitive identity for this semi-ring.</p>
+     *
+     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     *
+     * @return True if this value is a multiplicitive identity for this semi-ring. Otherwise, false.
+     */
+    @Override
+    public boolean isOne() {
+        return equals(ONE);
+    }
+
+
+    /**
+     * <p>Gets the additive identity for this semi-ring.</p>
+     *
+     * <p>An element 0 is an additive identity if a + 0 = a for any a in the semi-ring.</p>
+     *
+     * @return The additive identity for this semi-ring.
+     */
+    @Override
+    public RealInt32 getZero() {
+        return ZERO;
+    }
+
+
+    /**
+     * <p>Gets the multiplicitive identity for this semi-ring.</p>
+     *
+     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     *
+     * @return The multiplicitive identity for this semi-ring.
+     */
+    @Override
+    public RealInt32 getOne() {
+        return ONE;
     }
 
 

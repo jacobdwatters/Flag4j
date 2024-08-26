@@ -25,8 +25,9 @@
 package org.flag4j.operations.sparse.coo.real;
 
 
-import org.flag4j.arrays_old.sparse.CooTensor;
+import org.flag4j.core_temp.arrays.sparse.CooTensor;
 import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
@@ -35,12 +36,13 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Utility class for computing operations_old between two real sparse COO tensors.
+ * Utility class for computing operations between two real sparse COO tensors backed by a primitive double array.
  */
 public final class RealCooTensorOperations {
 
     private RealCooTensorOperations() {
         // Hide default constructor for utility class.
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -52,7 +54,7 @@ public final class RealCooTensorOperations {
      * @throws LinearAlgebraException If the tensors {@code src1} and {@code src2} do not have the same shape.
      */
     public static CooTensor add(CooTensor src1, CooTensor src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         // Create deep copies of indices.
         int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
@@ -80,6 +82,7 @@ public final class RealCooTensorOperations {
             } else {
                 sumEntries.add(val1);
             }
+
             sumIndices.add(src1Idx);
         }
 
@@ -89,7 +92,7 @@ public final class RealCooTensorOperations {
             sumIndices.add(src2Indices[src2Pos++]);
         }
 
-        return new CooTensor(src1.shape, sumEntries, sumIndices);
+        return src1.makeLikeTensor(src1.shape, sumEntries, sumIndices);
     }
 
 
@@ -101,7 +104,7 @@ public final class RealCooTensorOperations {
      * @throws LinearAlgebraException If the tensors {@code src1} and {@code src2} do not have the same shape.
      */
     public static CooTensor sub(CooTensor src1, CooTensor src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         // Create deep copies of indices.
         int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
@@ -138,7 +141,7 @@ public final class RealCooTensorOperations {
             sumIndices.add(src2Indices[src2Pos++]);
         }
 
-        return new CooTensor(src1.shape, sumEntries, sumIndices);
+        return src1.makeLikeTensor(src1.shape, sumEntries, sumIndices);
     }
 
 
@@ -152,7 +155,7 @@ public final class RealCooTensorOperations {
      * @return The element-wise product of {@code src1} and {@code src2}.
      */
     public static CooTensor elemMult(CooTensor src1, CooTensor src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         // Swap src1 and src2 if src2 has fewer non-zero entries for possibly better performance.
         if (src2.nnz < src1.nnz) {
@@ -181,6 +184,6 @@ public final class RealCooTensorOperations {
         }
 
         // Truncate arrays_old if necessary.
-        return new CooTensor(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
+        return src1.makeLikeTensor(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
     }
 }

@@ -2,8 +2,8 @@ package org.flag4j.matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -25,8 +25,8 @@ class MatrixEqualsTests {
     boolean exp;
     MatrixOld A;
     CMatrixOld B;
-    CooMatrix C;
-    CooCMatrix D;
+    CooMatrixOld C;
+    CooCMatrixOld D;
 
     @Test
     void matrixCMatrixEqualsTestCase() {
@@ -88,7 +88,7 @@ class MatrixEqualsTests {
         cShape = new Shape(aEntries.length, aEntries[0].length);
         cEntries = new double[]{1, 6, 8, 9, 10};
         cIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        C = new CooMatrix(cShape, cEntries, cIndices[0], cIndices[1]);
+        C = new CooMatrixOld(cShape, cEntries, cIndices[0], cIndices[1]);
 
         exp = true;
 
@@ -100,7 +100,7 @@ class MatrixEqualsTests {
         cShape = new Shape(aEntries.length, aEntries[0].length);
         cEntries = new double[]{1, 6, 8, 9, 10};
         cIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        C = new CooMatrix(cShape, cEntries, cIndices[0], cIndices[1]);
+        C = new CooMatrixOld(cShape, cEntries, cIndices[0], cIndices[1]);
 
         exp = false;
 
@@ -112,7 +112,7 @@ class MatrixEqualsTests {
         cShape = new Shape(aEntries.length, aEntries[0].length);
         cEntries = new double[]{1, -8, 8, 9, 10};
         cIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        C = new CooMatrix(cShape, cEntries, cIndices[0], cIndices[1]);
+        C = new CooMatrixOld(cShape, cEntries, cIndices[0], cIndices[1]);
 
         exp = false;
 
@@ -124,7 +124,7 @@ class MatrixEqualsTests {
         cShape = new Shape(aEntries.length, aEntries[0].length);
         cEntries = new double[]{1, 4, 6, 8, 9, 10};
         cIndices = new int[][]{{0, 0, 1, 2, 2, 2}, {0, 3, 2, 1, 2, 3}};
-        C = new CooMatrix(cShape, cEntries, cIndices[0], cIndices[1]);
+        C = new CooMatrixOld(cShape, cEntries, cIndices[0], cIndices[1]);
 
         exp = false;
 
@@ -136,7 +136,7 @@ class MatrixEqualsTests {
         cShape = new Shape(3, 4);
         cEntries = new double[]{1, 6, 8, 9, 10};
         cIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        C = new CooMatrix(cShape, cEntries, cIndices[0], cIndices[1]);
+        C = new CooMatrixOld(cShape, cEntries, cIndices[0], cIndices[1]);
 
         exp = false;
 
@@ -156,7 +156,7 @@ class MatrixEqualsTests {
         dEntries = new CNumber[]{new CNumber(1), new CNumber(6), new CNumber(8),
                 new CNumber(9), new CNumber(10)};
         dIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        D = new CooCMatrix(dShape, dEntries, dIndices[0], dIndices[1]);
+        D = new CooCMatrixOld(dShape, dEntries, dIndices[0], dIndices[1]);
 
         exp = true;
 
@@ -169,7 +169,7 @@ class MatrixEqualsTests {
         dEntries = new CNumber[]{new CNumber(1), new CNumber(6, 1), new CNumber(8),
                 new CNumber(9), new CNumber(10)};
         dIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        D = new CooCMatrix(dShape, dEntries, dIndices[0], dIndices[1]);
+        D = new CooCMatrixOld(dShape, dEntries, dIndices[0], dIndices[1]);
 
         exp = false;
 
@@ -182,7 +182,7 @@ class MatrixEqualsTests {
         dEntries = new CNumber[]{new CNumber(1), new CNumber(6), new CNumber(8),
                 new CNumber(9), new CNumber(10)};
         dIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        D = new CooCMatrix(dShape, dEntries, dIndices[0], dIndices[1]);
+        D = new CooCMatrixOld(dShape, dEntries, dIndices[0], dIndices[1]);
 
         exp = false;
 
@@ -195,7 +195,7 @@ class MatrixEqualsTests {
         dEntries = new CNumber[]{new CNumber(1), new CNumber(6), new CNumber(8),
                 new CNumber(9), new CNumber(10)};
         dIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        D = new CooCMatrix(dShape, dEntries, dIndices[0], dIndices[1]);
+        D = new CooCMatrixOld(dShape, dEntries, dIndices[0], dIndices[1]);
 
         exp = true;
 
@@ -208,7 +208,7 @@ class MatrixEqualsTests {
         dEntries = new CNumber[]{new CNumber(1), new CNumber(6), new CNumber(8),
                 new CNumber(9), new CNumber(10)};
         dIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        D = new CooCMatrix(dShape, dEntries, dIndices[0], dIndices[1]);
+        D = new CooCMatrixOld(dShape, dEntries, dIndices[0], dIndices[1]);
 
         exp = false;
 
@@ -221,7 +221,7 @@ class MatrixEqualsTests {
         dEntries = new CNumber[]{new CNumber(1), new CNumber(6), new CNumber(8),
                 new CNumber(9), new CNumber(10)};
         dIndices = new int[][]{{0, 1, 2, 2, 2}, {0, 2, 1, 2, 3}};
-        D = new CooCMatrix(dShape, dEntries, dIndices[0], dIndices[1]);
+        D = new CooCMatrixOld(dShape, dEntries, dIndices[0], dIndices[1]);
 
         exp = false;
 

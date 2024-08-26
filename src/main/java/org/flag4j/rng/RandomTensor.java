@@ -25,9 +25,9 @@
 package org.flag4j.rng;
 
 import org.flag4j.arrays_old.dense.*;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooMatrix;
-import org.flag4j.arrays_old.sparse.CsrMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
+import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.linalg.decompositions.qr.ComplexQR;
@@ -298,7 +298,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
      */
     public MatrixOld randomMatrix(Shape shape) {
-        ParameterChecks.assertRank(2, shape);
+        ParameterChecks.ensureRank(2, shape);
         return randomMatrix(shape.get(0), shape.get(1));
     }
 
@@ -327,7 +327,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If {@code shape} is not of rank 2.
      */
     public MatrixOld randomMatrix(Shape shape, double min, double max) {
-        ParameterChecks.assertRank(2, shape);
+        ParameterChecks.ensureRank(2, shape);
         return randomMatrix(shape.get(0), shape.get(1), min, max);
     }
 
@@ -344,7 +344,7 @@ public class RandomTensor {
      * @return A sparse matrix with sparsity approximately equal to {@code sparsity} filled with random values uniformly
      * distributed in {@code [min, max)}.
      */
-    public CooMatrix randomCooMatrix(int rows, int cols, double min, double max, double sparsity) {
+    public CooMatrixOld randomCooMatrix(int rows, int cols, double min, double max, double sparsity) {
         return randomCooMatrix(new Shape(rows, cols), min, max, sparsity);
     }
 
@@ -360,8 +360,8 @@ public class RandomTensor {
      * @return A sparse matrix with sparsity approximately equal to {@code sparsity} filled with random values uniformly
      * distributed in {@code [min, max)}.
      */
-    public CooMatrix randomCooMatrix(Shape shape, double min, double max, double sparsity) {
-        ParameterChecks.assertRank(2, shape);
+    public CooMatrixOld randomCooMatrix(Shape shape, double min, double max, double sparsity) {
+        ParameterChecks.ensureRank(2, shape);
 
         int numEntries = new BigDecimal(shape.totalEntries()).multiply(BigDecimal.valueOf(1.0-sparsity))
                 .setScale(0, RoundingMode.HALF_UP).intValueExact();
@@ -381,7 +381,7 @@ public class RandomTensor {
      * @return A sparse matrix filled with the specified number of non-zero entries uniformly
      * distributed in {@code [min, max)}.
      */
-    public CooMatrix randomCooMatrix(int rows, int cols, double min, double max, int numNonZeroEntries) {
+    public CooMatrixOld randomCooMatrix(int rows, int cols, double min, double max, int numNonZeroEntries) {
         return randomCooMatrix(new Shape(rows, cols), min, max, numNonZeroEntries);
     }
 
@@ -396,14 +396,14 @@ public class RandomTensor {
      * @return A sparse matrix filled with the specified number of non-zero entries uniformly
      * distributed in {@code [min, max)}.
      */
-    public CooMatrix randomCooMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
-        ParameterChecks.assertGreaterEq(0, numNonZeroEntries);
-        ParameterChecks.assertLessEq(shape.totalEntries(), numNonZeroEntries, "numNonZeroEntries");
+    public CooMatrixOld randomCooMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
+        ParameterChecks.ensureGreaterEq(0, numNonZeroEntries);
+        ParameterChecks.ensureLessEq(shape.totalEntries(), numNonZeroEntries, "numNonZeroEntries");
 
         double[] entries = RAND_ARRAY.genUniformRealArray(numNonZeroEntries, min, max);
         int[][] indices = RAND_ARRAY.randomUniqueIndices2D(numNonZeroEntries, 0, shape.get(0), 0, shape.get(1));
 
-        return new CooMatrix(shape, entries, indices[0], indices[1]);
+        return new CooMatrixOld(shape, entries, indices[0], indices[1]);
     }
 
 
@@ -419,7 +419,7 @@ public class RandomTensor {
      * @return A sparse matrix with sparsity approximately equal to {@code sparsity} filled with random values uniformly
      * distributed in {@code [min, max)}.
      */
-    public CsrMatrix randomCsrMatrix(int rows, int cols, double min, double max, double sparsity) {
+    public CsrMatrixOld randomCsrMatrix(int rows, int cols, double min, double max, double sparsity) {
         return randomCooMatrix(new Shape(rows, cols), min, max, sparsity).toCsr();
     }
 
@@ -435,8 +435,8 @@ public class RandomTensor {
      * @return A sparse matrix with sparsity approximately equal to {@code sparsity} filled with random values uniformly
      * distributed in {@code [min, max)}.
      */
-    public CsrMatrix randomCsrMatrix(Shape shape, double min, double max, double sparsity) {
-        ParameterChecks.assertRank(2, shape);
+    public CsrMatrixOld randomCsrMatrix(Shape shape, double min, double max, double sparsity) {
+        ParameterChecks.ensureRank(2, shape);
 
         int numEntries = new BigDecimal(shape.totalEntries()).multiply(BigDecimal.valueOf(1.0-sparsity))
                 .setScale(0, RoundingMode.HALF_UP).intValueExact();
@@ -456,7 +456,7 @@ public class RandomTensor {
      * @return A sparse matrix filled with the specified number of non-zero entries uniformly
      * distributed in {@code [min, max)}.
      */
-    public CsrMatrix randomCsrMatrix(int rows, int cols, double min, double max, int numNonZeroEntries) {
+    public CsrMatrixOld randomCsrMatrix(int rows, int cols, double min, double max, int numNonZeroEntries) {
         return randomCooMatrix(new Shape(rows, cols), min, max, numNonZeroEntries).toCsr();
     }
 
@@ -471,14 +471,14 @@ public class RandomTensor {
      * @return A sparse matrix filled with the specified number of non-zero entries uniformly
      * distributed in {@code [min, max)}.
      */
-    public CsrMatrix randomCsrMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
-        ParameterChecks.assertGreaterEq(0, numNonZeroEntries);
-        ParameterChecks.assertLessEq(shape.totalEntries(), numNonZeroEntries, "numNonZeroEntries");
+    public CsrMatrixOld randomCsrMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
+        ParameterChecks.ensureGreaterEq(0, numNonZeroEntries);
+        ParameterChecks.ensureLessEq(shape.totalEntries(), numNonZeroEntries, "numNonZeroEntries");
 
         double[] entries = RAND_ARRAY.genUniformRealArray(numNonZeroEntries, min, max);
         int[][] indices = RAND_ARRAY.randomUniqueIndices2D(numNonZeroEntries, 0, shape.get(0), 0, shape.get(1));
 
-        return new CooMatrix(shape, entries, indices[0], indices[1]).toCsr();
+        return new CooMatrixOld(shape, entries, indices[0], indices[1]).toCsr();
     }
 
 
@@ -503,7 +503,7 @@ public class RandomTensor {
      * a standard deviation of 1.0.
      */
     public MatrixOld randnMatrix(Shape shape) {
-        ParameterChecks.assertRank(2, shape);
+        ParameterChecks.ensureRank(2, shape);
         return randnMatrix(shape.get(0), shape.get(1));
     }
 
@@ -535,7 +535,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the standard deviation is negative.
      */
     public MatrixOld randnMatrix(Shape shape, double mean, double std) {
-        ParameterChecks.assertRank(2, shape);
+        ParameterChecks.ensureRank(2, shape);
         return randnMatrix(shape.get(0), shape.get(1), mean, std);
     }
 
@@ -562,7 +562,7 @@ public class RandomTensor {
 
 
     /**
-     * Generates a symmetric {@link CooMatrix COO matrix} filled with pseudorandom values uniformly distributed in {@code [min, max)}.
+     * Generates a symmetric {@link CooMatrixOld COO matrix} filled with pseudorandom values uniformly distributed in {@code [min, max)}.
      * @param size Number of rows and columns in the resulting matrix (the result will be a square matrix).
      * @param min Minimum value in uniform distribution.
      * @param max Maximum value in uniform distribution.
@@ -571,8 +571,8 @@ public class RandomTensor {
      * @return A symmetric matrix filled with pseudorandom values uniformly distributed in {@code [min, max)}.
      * @throws IllegalArgumentException If {@code sparsity} is not in the range {@code [0.0, 1.0]}.
      */
-    public CooMatrix randomSymmetricCooMatrix(int size, int min, int max, double sparsity) {
-        ParameterChecks.assertInRange(sparsity, 0, 1, "sparsity");
+    public CooMatrixOld randomSymmetricCooMatrix(int size, int min, int max, double sparsity) {
+        ParameterChecks.ensureInRange(sparsity, 0, 1, "sparsity");
         Shape shape = new Shape(size, size);
 
         int numEntries = new BigDecimal(size).pow(2).multiply(BigDecimal.valueOf(1.0-sparsity))
@@ -590,15 +590,15 @@ public class RandomTensor {
                 ArrayUtils.join(indices[1], indices[0])
         };
 
-        CooMatrix randMat = new CooMatrix(shape, entries, indices[0], indices[1]);
+        CooMatrixOld randMat = new CooMatrixOld(shape, entries, indices[0], indices[1]);
         randMat.sortIndices();
 
-        return new CooMatrix(shape, entries, indices[0], indices[1]);
+        return new CooMatrixOld(shape, entries, indices[0], indices[1]);
     }
 
 
     /**
-     * Generates a symmetric {@link CsrMatrix CSR matrix} filled with pseudorandom values uniformly distributed in {@code [min, max)}.
+     * Generates a symmetric {@link CsrMatrixOld CSR matrix} filled with pseudorandom values uniformly distributed in {@code [min, max)}.
      * @param size Number of rows and columns in the resulting matrix (the result will be a square matrix).
      * @param min Minimum value in uniform distribution.
      * @param max Maximum value in uniform distribution.
@@ -607,7 +607,7 @@ public class RandomTensor {
      * @return A symmetric matrix filled with pseudorandom values uniformly distributed in {@code [min, max)}.
      * @throws IllegalArgumentException If {@code sparsity} is not in the range {@code [0.0, 1.0]}.
      */
-    public CsrMatrix randomSymmetricCsrMatrix(int size, int min, int max, double sparsity) {
+    public CsrMatrixOld randomSymmetricCsrMatrix(int size, int min, int max, double sparsity) {
         return randomSymmetricCooMatrix(size, min, max, sparsity).toCsr();
     }
 
@@ -647,7 +647,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
      */
     public CMatrixOld randomCMatrix(Shape shape) {
-        ParameterChecks.assertRank(2, shape);
+        ParameterChecks.ensureRank(2, shape);
         return randomCMatrix(shape.get(0), shape.get(1));
     }
 
@@ -680,7 +680,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If {@code shape} is not of rank 2.
      */
     public CMatrixOld randomCMatrix(Shape shape, double min, double max) {
-        ParameterChecks.assertRank(2, shape);
+        ParameterChecks.ensureRank(2, shape);
         return randomCMatrix(shape.get(0), shape.get(1), min, max);
     }
 
@@ -706,7 +706,7 @@ public class RandomTensor {
      * a standard deviation of 1.0.
      */
     public CMatrixOld randnCMatrix(Shape shape) {
-        ParameterChecks.assertRank(2, shape);
+        ParameterChecks.ensureRank(2, shape);
         return randnCMatrix(shape.get(0), shape.get(1));
     }
 
@@ -738,7 +738,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the standard deviation is negative.
      */
     public CMatrixOld randnCMatrix(Shape shape, double mean, double std) {
-        ParameterChecks.assertRank(2, shape);
+        ParameterChecks.ensureRank(2, shape);
         return randnCMatrix(shape.get(0), shape.get(1), mean, std);
     }
 
@@ -755,7 +755,7 @@ public class RandomTensor {
      * @return A sparse matrix with sparsity approximately equal to {@code sparsity} filled with random values uniformly
      * distributed in {@code [min, max)}.
      */
-    public CooCMatrix randomSparseCMatrix(int rows, int cols, double min, double max, double sparsity) {
+    public CooCMatrixOld randomSparseCMatrix(int rows, int cols, double min, double max, double sparsity) {
         return randomSparseCMatrix(new Shape(rows, cols), min, max, sparsity);
     }
 
@@ -771,8 +771,8 @@ public class RandomTensor {
      * @return A sparse matrix with sparsity approximately equal to {@code sparsity} filled with random values uniformly
      * distributed in {@code [min, max)}.
      */
-    public CooCMatrix randomSparseCMatrix(Shape shape, double min, double max, double sparsity) {
-        ParameterChecks.assertInRange(sparsity, 0, 1, "sparsity");
+    public CooCMatrixOld randomSparseCMatrix(Shape shape, double min, double max, double sparsity) {
+        ParameterChecks.ensureInRange(sparsity, 0, 1, "sparsity");
         int numEntries = new BigDecimal(shape.totalEntries()).multiply(BigDecimal.valueOf(1.0-sparsity))
                 .setScale(0, RoundingMode.HALF_UP).intValueExact();
 
@@ -791,7 +791,7 @@ public class RandomTensor {
      * @return A sparse matrix filled with the specified number of non-zero entries uniformly
      * distributed in {@code [min, max)}.
      */
-    public CooCMatrix randomSparseCMatrix(int rows, int cols, double min, double max, int numNonZeroEntries) {
+    public CooCMatrixOld randomSparseCMatrix(int rows, int cols, double min, double max, int numNonZeroEntries) {
         return randomSparseCMatrix(new Shape(rows, cols), min, max, numNonZeroEntries);
     }
 
@@ -806,13 +806,13 @@ public class RandomTensor {
      * @return A sparse matrix filled with the specified number of non-zero entries uniformly
      * distributed in {@code [min, max)}.
      */
-    public CooCMatrix randomSparseCMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
-        ParameterChecks.assertGreaterEq(0, numNonZeroEntries);
+    public CooCMatrixOld randomSparseCMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
+        ParameterChecks.ensureGreaterEq(0, numNonZeroEntries);
 
         CNumber[] entries = RAND_ARRAY.genUniformComplexArray(numNonZeroEntries, min, max);
         int[][] indices = RAND_ARRAY.randomUniqueIndices2D(numNonZeroEntries, 0, shape.get(0), 0, shape.get(1));
 
-        return new CooCMatrix(shape, entries, indices[0], indices[1]);
+        return new CooCMatrixOld(shape, entries, indices[0], indices[1]);
     }
 
 

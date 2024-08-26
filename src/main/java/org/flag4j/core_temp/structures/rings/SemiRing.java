@@ -29,7 +29,7 @@ package org.flag4j.core_temp.structures.rings;
  *
  * <p>SemiRing elements should be immutable.</p>
  *
- * <p>Formally, an semi-ring is a set <b>R</b> with the binary operations_old addition (+) and multiplication (*)
+ * <p>Formally, an semi-ring is a set <b>R</b> with the binary operations addition (+) and multiplication (*)
  * defined such that for elements a, b, c in <b>R</b> the following are satisfied:
  *  <ul>
  *      <li>Addition and multiplication are associative: a + (b + c) = (a + b) + c and a * (b * c) = (a * b) * c.</li>
@@ -40,11 +40,11 @@ package org.flag4j.core_temp.structures.rings;
  *  </ul>
  * </p>
  *
- * <p>Semi-rings generalize {@link Ring rings} in that additive inverses need not exists.</p>
+ * <p>Semi-rings generalize {@link Ring rings} in that additive inverses need not exists. As a result, subtraction is not defined
+ * for a semi-ring.</p>
  *
  * @param <T> Type of the field element.
  * @see org.flag4j.core_temp.structures.fields.Field
- * @see org.flag4j.core_temp.structures.fields.GeneralizedRealField
  * @see Ring
  */
 public interface SemiRing<T extends SemiRing<T>> {
@@ -62,6 +62,46 @@ public interface SemiRing<T extends SemiRing<T>> {
      * @return The product of this semi-ring element and {@code b}.
      */
     public T mult(T b);
+
+
+    /**
+     * <p>Checks if this value is an additive identity for this semi-ring.</p>
+     *
+     * <p>An element 0 is an additive identity if a + 0 = a for any a in the semi-ring.</p>
+     *
+     * @return True if this value is an additive identity for this semi-ring. Otherwise, false.
+     */
+    public boolean isZero();
+
+
+    /**
+     * <p>Checks if this value is a multiplicitive identity for this semi-ring.</p>
+     *
+     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     *
+     * @return True if this value is a multiplicitive identity for this semi-ring. Otherwise, false.
+     */
+    public boolean isOne();
+
+
+    /**
+     * <p>Gets the additive identity for this semi-ring.</p>
+     *
+     * <p>An element 0 is an additive identity if a + 0 = a for any a in the semi-ring.</p>
+     *
+     * @return The additive identity for this semi-ring.
+     */
+    public T getZero();
+
+
+    /**
+     * <p>Gets the multiplicitive identity for this semi-ring.</p>
+     *
+     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     *
+     * @return The multiplicitive identity for this semi-ring.
+     */
+    public T getOne();
 
 
     /**

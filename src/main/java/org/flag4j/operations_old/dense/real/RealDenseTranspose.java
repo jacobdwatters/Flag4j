@@ -39,7 +39,7 @@ public final class RealDenseTranspose {
 
     private RealDenseTranspose() {
         // Hide constructor
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -84,8 +84,8 @@ public final class RealDenseTranspose {
      * @throws IllegalArgumentException If the {@code shape} rank is less than 2.
      */
     public static double[] standard(final double[] src, final Shape shape, final int[] axes) {
-        ParameterChecks.assertPermutation(axes);
-        ParameterChecks.assertEquals(shape.getRank(), axes.length);
+        ParameterChecks.ensurePermutation(axes);
+        ParameterChecks.ensureEquals(shape.getRank(), axes.length);
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
             throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
                     " tensor.");
@@ -117,8 +117,8 @@ public final class RealDenseTranspose {
      * @throws IllegalArgumentException If the {@code shape} rank is less than 2.
      */
     public static double[] standardConcurrent(final double[] src, final Shape shape, final int[] axes) {
-        ParameterChecks.assertPermutation(axes);
-        ParameterChecks.assertEquals(shape.getRank(), axes.length);
+        ParameterChecks.ensurePermutation(axes);
+        ParameterChecks.ensureEquals(shape.getRank(), axes.length);
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
             throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
                     " tensor.");

@@ -25,8 +25,8 @@
 package org.flag4j.operations_old.sparse.coo.real;
 
 import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.arrays_old.sparse.CooMatrix;
-import org.flag4j.arrays_old.sparse.CooTensor;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
+import org.flag4j.arrays_old.sparse.CooTensorOld;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
@@ -34,13 +34,13 @@ import org.flag4j.util.ParameterChecks;
 
 
 /**
- * <p>Utility class for computing tensor dot products between two {@link CooTensor real sparse COO tensors}.</p>
+ * <p>Utility class for computing tensor dot products between two {@link CooTensorOld real sparse COO tensors}.</p>
  */
 public final class RealCooTensorDot {
 
     private RealCooTensorDot() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -57,15 +57,15 @@ public final class RealCooTensorDot {
      * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
      * are out of bounds for the corresponding tensor.
      */
-    public static TensorOld tensorDot(CooTensor src1, CooTensor src2, int[] src1Axes, int[] src2Axes) {
+    public static TensorOld tensorDot(CooTensorOld src1, CooTensorOld src2, int[] src1Axes, int[] src2Axes) {
         // Each array must specify the same number of axes.
-        ParameterChecks.assertEquals(src1Axes.length, src2Axes.length);
+        ParameterChecks.ensureEquals(src1Axes.length, src2Axes.length);
 
         // Axis values must be less than the rank of the tensor and non-negative
-        ParameterChecks.assertLessEq(src1.getRank()-1, src1Axes);
-        ParameterChecks.assertGreaterEq(0, src1Axes);
-        ParameterChecks.assertLessEq(src2.getRank()-1, src2Axes);
-        ParameterChecks.assertGreaterEq(0, src2Axes);
+        ParameterChecks.ensureLessEq(src1.getRank()-1, src1Axes);
+        ParameterChecks.ensureGreaterEq(0, src1Axes);
+        ParameterChecks.ensureLessEq(src2.getRank()-1, src2Axes);
+        ParameterChecks.ensureGreaterEq(0, src2Axes);
 
         int[] notin;
         int n1;
@@ -115,8 +115,8 @@ public final class RealCooTensorDot {
         // -----------------------------------------------------
 
         // Reform tensor dot product problem as a matrix multiplication problem.
-        CooMatrix at = src1.T(src1NewAxes).toMatrix(src1NewShape);
-        CooMatrix bt = src2.T(src2NewAxes).toMatrix(src2NewShape);
+        CooMatrixOld at = src1.T(src1NewAxes).toMatrix(src1NewShape);
+        CooMatrixOld bt = src2.T(src2NewAxes).toMatrix(src2NewShape);
 
         TensorOld product = at.mult(bt).toTensor();
 

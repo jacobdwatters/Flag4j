@@ -32,11 +32,12 @@ import org.flag4j.util.ErrorMessages;
  * This class contains low-level implementations for operations_old which check if a complex tensor satisfies some property.
  * Implementations are agnostic to whether the tensor is sparse or dense.
  */
+@Deprecated
 public final class ComplexProperties {
 
     private ComplexProperties() {
         // Hide default constructor in utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

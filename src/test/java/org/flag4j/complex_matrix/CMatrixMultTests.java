@@ -2,8 +2,8 @@ package org.flag4j.complex_matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -106,7 +106,7 @@ class CMatrixMultTests {
     void matMultSparseTestCase() {
         double[] bEntries;
         int[] rowIndices, colIndices;
-        CooMatrix B;
+        CooMatrixOld B;
         Shape bShape;
 
         // ---------------------- Sub-case 1 ----------------------
@@ -120,7 +120,7 @@ class CMatrixMultTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         bShape = new Shape(3, 2);
-        B = new CooMatrix(bShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrixOld(bShape, bEntries, rowIndices, colIndices);
         expEntries = new CNumber[][]{{new CNumber("-42.240941320000005+0.031119985530000005i"), new CNumber("63.018")},
                 {new CNumber("0.0+694.4522897100001i"), new CNumber("-402.615-1085.31i")},
                 {new CNumber("0.0"), new CNumber("0.0")},
@@ -141,9 +141,9 @@ class CMatrixMultTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         bShape = new Shape(31, 2);
-        B = new CooMatrix(bShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrixOld(bShape, bEntries, rowIndices, colIndices);
 
-        CooMatrix finalB = B;
+        CooMatrixOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 
@@ -152,7 +152,7 @@ class CMatrixMultTests {
     void matMultSparseComplexTestCase() {
         CNumber[] bEntries;
         int[] rowIndices, colIndices;
-        CooCMatrix B;
+        CooCMatrixOld B;
         Shape bShape;
 
         // ---------------------- Sub-case 1 ----------------------
@@ -166,7 +166,7 @@ class CMatrixMultTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         bShape = new Shape(3, 2);
-        B = new CooCMatrix(bShape, bEntries, rowIndices, colIndices);
+        B = new CooCMatrixOld(bShape, bEntries, rowIndices, colIndices);
         expEntries = new CNumber[][]{{new CNumber("-41.929586320000006+422.65111998553i"), new CNumber("63.018-10.8i")},
                 {new CNumber("6947.985+694.4522897100001i"), new CNumber("-588.615-1016.31i")},
                 {new CNumber("0.0"), new CNumber("0.0")},
@@ -187,9 +187,9 @@ class CMatrixMultTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         bShape = new Shape(31, 2);
-        B = new CooCMatrix(bShape, bEntries, rowIndices, colIndices);
+        B = new CooCMatrixOld(bShape, bEntries, rowIndices, colIndices);
 
-        CooCMatrix finalB = B;
+        CooCMatrixOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 

@@ -70,7 +70,7 @@ public abstract class ComplexSparseTensorBase<T, U, Y>
         if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) < 0) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));
         }
-        ParameterChecks.assertArrayLengthsEq(nonZeroEntries, indices.length);
+        ParameterChecks.ensureArrayLengthsEq(nonZeroEntries, indices.length);
     }
 
 
@@ -263,15 +263,15 @@ public abstract class ComplexSparseTensorBase<T, U, Y>
 
 
     @Override
-    public int[] argMax() {
-        int idx = AggregateDenseComplex.argMax(entries);
+    public int[] argmax() {
+        int idx = AggregateDenseComplex.argmax(entries);
         return indices[idx].clone();
     }
 
 
     @Override
-    public int[] argMin() {
-        int idx = AggregateDenseComplex.argMin(entries);
+    public int[] argmin() {
+        int idx = AggregateDenseComplex.argmin(entries);
         return indices[idx].clone();
     }
 

@@ -2,8 +2,8 @@ package org.flag4j.sparse_csr_complex_matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CsrCMatrix;
-import org.flag4j.arrays_old.sparse.CsrMatrix;
+import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
+import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
@@ -15,13 +15,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 class CsrCMatrixAddSubTests {
-    static CsrCMatrix A;
-    static CsrMatrix B;
+    static CsrCMatrixOld A;
+    static CsrMatrixOld B;
     static CMatrixOld denseA;
     static MatrixOld denseB;
-    static CsrCMatrix expAdd;
-    static CsrCMatrix expAsubB;
-    static CsrCMatrix expBsubA;
+    static CsrCMatrixOld expAdd;
+    static CsrCMatrixOld expAsubB;
+    static CsrCMatrixOld expBsubA;
     static CMatrixOld expAddDense;
     static CMatrixOld expAsubBDense;
     static CMatrixOld expBsubADense;
@@ -31,7 +31,7 @@ class CsrCMatrixAddSubTests {
     static double b;
     static CNumber bCmp;
     static CNumber[][] bEntriesCmp;
-    static CsrCMatrix BCmp;
+    static CsrCMatrixOld BCmp;
     static CMatrixOld denseBCmp;
 
     private static void makeMatrices() {
@@ -120,8 +120,8 @@ class CsrCMatrixAddSubTests {
         assertEquals(expBsubA, B.sub(A.toCoo()));
 
         // ---------------------- Sub-case 2 ----------------------
-        A = new CsrCMatrix(new Shape(2, 3), new double[0], new int[3], new int[0]);
-        B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
+        A = new CsrCMatrixOld(new Shape(2, 3), new double[0], new int[3], new int[0]);
+        B = new CsrMatrixOld(new Shape(5, 1), new double[0], new int[6], new int[0]);
         assertThrows(LinearAlgebraException.class, ()->A.add(B));
         assertThrows(LinearAlgebraException.class, ()->A.sub(B));
         assertThrows(LinearAlgebraException.class, ()->B.add(A));
@@ -158,8 +158,8 @@ class CsrCMatrixAddSubTests {
         assertEquals(expBsubADense, B.sub(denseA));
 
         // ---------------------- Sub-case 2 ----------------------
-        A = new CsrCMatrix(new Shape(2, 3), new double[0], new int[3], new int[0]);
-        B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
+        A = new CsrCMatrixOld(new Shape(2, 3), new double[0], new int[3], new int[0]);
+        B = new CsrMatrixOld(new Shape(5, 1), new double[0], new int[6], new int[0]);
         assertThrows(LinearAlgebraException.class, ()->A.add(B));
         assertThrows(LinearAlgebraException.class, ()->A.sub(B));
         assertThrows(LinearAlgebraException.class, ()->B.add(A));
@@ -194,8 +194,8 @@ class CsrCMatrixAddSubTests {
         assertEquals(expAsubB, A.sub(BCmp.toCoo()));
 
         // ---------------------- Sub-case 2 ----------------------
-        A = new CsrCMatrix(new Shape(2, 3), new double[0], new int[3], new int[0]);
-        B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
+        A = new CsrCMatrixOld(new Shape(2, 3), new double[0], new int[3], new int[0]);
+        B = new CsrMatrixOld(new Shape(5, 1), new double[0], new int[6], new int[0]);
         assertThrows(LinearAlgebraException.class, ()->A.add(BCmp));
         assertThrows(LinearAlgebraException.class, ()->A.sub(BCmp));
         assertThrows(LinearAlgebraException.class, ()->A.add(BCmp.toCoo()));
@@ -227,8 +227,8 @@ class CsrCMatrixAddSubTests {
         assertEquals(expAsubBDense, A.sub(denseBCmp));
 
         // ---------------------- Sub-case 2 ----------------------
-        A = new CsrCMatrix(new Shape(2, 3), new double[0], new int[3], new int[0]);
-        B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
+        A = new CsrCMatrixOld(new Shape(2, 3), new double[0], new int[3], new int[0]);
+        B = new CsrMatrixOld(new Shape(5, 1), new double[0], new int[6], new int[0]);
         assertThrows(LinearAlgebraException.class, ()->A.add(denseBCmp));
         assertThrows(LinearAlgebraException.class, ()->A.sub(denseBCmp));
 

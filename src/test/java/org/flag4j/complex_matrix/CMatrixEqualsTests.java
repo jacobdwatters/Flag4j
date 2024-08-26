@@ -2,8 +2,8 @@ package org.flag4j.complex_matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -20,8 +20,8 @@ class CMatrixEqualsTests {
     int[] rowIndices, colIndices;
     Shape sparseShape;
 
-    CooMatrix BRealSparse;
-    CooCMatrix BComplexSparse;
+    CooMatrixOld BRealSparse;
+    CooCMatrixOld BComplexSparse;
     MatrixOld BReal;
     CMatrixOld A, B;
 
@@ -142,7 +142,7 @@ class CMatrixEqualsTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols);
-        BRealSparse = new CooMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
+        BRealSparse = new CooMatrixOld(sparseShape, bRealSparseEntries, rowIndices, colIndices);
 
         assertTrue(A.tensorEquals(BRealSparse));
 
@@ -156,7 +156,7 @@ class CMatrixEqualsTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols);
-        BRealSparse = new CooMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
+        BRealSparse = new CooMatrixOld(sparseShape, bRealSparseEntries, rowIndices, colIndices);
 
         assertFalse(A.tensorEquals(BRealSparse));
 
@@ -170,7 +170,7 @@ class CMatrixEqualsTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows+1, A.numCols);
-        BRealSparse = new CooMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
+        BRealSparse = new CooMatrixOld(sparseShape, bRealSparseEntries, rowIndices, colIndices);
 
         assertFalse(A.tensorEquals(BRealSparse));
 
@@ -184,7 +184,7 @@ class CMatrixEqualsTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols);
-        BRealSparse = new CooMatrix(sparseShape, bRealSparseEntries, rowIndices, colIndices);
+        BRealSparse = new CooMatrixOld(sparseShape, bRealSparseEntries, rowIndices, colIndices);
 
         assertFalse(A.tensorEquals(BRealSparse));
     }
@@ -202,7 +202,7 @@ class CMatrixEqualsTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols);
-        BComplexSparse = new CooCMatrix(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
+        BComplexSparse = new CooCMatrixOld(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
 
         assertTrue(A.tensorEquals(BComplexSparse));
 
@@ -216,7 +216,7 @@ class CMatrixEqualsTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols);
-        BComplexSparse = new CooCMatrix(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
+        BComplexSparse = new CooCMatrixOld(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
 
         assertNotEquals(A, BComplexSparse);
 
@@ -230,7 +230,7 @@ class CMatrixEqualsTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols+3);
-        BComplexSparse = new CooCMatrix(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
+        BComplexSparse = new CooCMatrixOld(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
 
         assertNotEquals(A, BComplexSparse);
 
@@ -244,7 +244,7 @@ class CMatrixEqualsTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols);
-        BComplexSparse = new CooCMatrix(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
+        BComplexSparse = new CooCMatrixOld(sparseShape, bComplexSparseEntries, rowIndices, colIndices);
 
         assertNotEquals(A, BComplexSparse);
     }

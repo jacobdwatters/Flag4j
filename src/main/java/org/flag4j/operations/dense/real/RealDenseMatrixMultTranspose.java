@@ -38,7 +38,7 @@ public class RealDenseMatrixMultTranspose {
 
     private RealDenseMatrixMultTranspose() {
         // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -136,8 +136,6 @@ public class RealDenseMatrixMultTranspose {
 
         return dest;
     }
-
-
 
 
     /**

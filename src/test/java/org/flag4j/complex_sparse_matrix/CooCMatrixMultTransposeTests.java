@@ -2,8 +2,8 @@ package org.flag4j.complex_sparse_matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -18,13 +18,13 @@ public class CooCMatrixMultTransposeTests {
         int[] aRowIndices;
         int[] aColIndices;
         CNumber[] aEntries;
-        CooCMatrix a;
+        CooCMatrixOld a;
 
         Shape bShape;
         int[] bRowIndices;
         int[] bColIndices;
         double[] bEntries;
-        CooMatrix b;
+        CooMatrixOld b;
 
         CNumber[][] expEntries;
         CMatrixOld exp;
@@ -34,13 +34,13 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.18007+0.47235i"), new CNumber("0.00031+0.04818i"), new CNumber("0.16436+0.3724i")};
         aRowIndices = new int[]{0, 1, 2};
         aColIndices = new int[]{0, 0, 3};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(6, 5);
         bEntries = new double[]{0.23308, 0.46654, 0.34077, 0.45768, 0.76329, 0.19749, 0.91107, 0.22286, 0.8972, 0.95443};
         bRowIndices = new int[]{0, 1, 1, 1, 2, 2, 2, 3, 4, 5};
         bColIndices = new int[]{3, 0, 1, 2, 2, 3, 4, 1, 3, 1};
-        b = new CooMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        b = new CooMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.0"), new CNumber("0.0840098578+0.220370169i"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
@@ -55,13 +55,13 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.13719+0.26853i"), new CNumber("0.84603+0.45432i"), new CNumber("0.35231+0.6201i"), new CNumber("0.7042+0.79757i"), new CNumber("0.3678+0.11384i"), new CNumber("0.57107+0.78701i"), new CNumber("0.96628+0.95622i"), new CNumber("0.1145+0.88233i"), new CNumber("0.13592+0.51696i"), new CNumber("0.46483+0.8233i"), new CNumber("0.16055+0.09932i"), new CNumber("0.37551+0.79906i"), new CNumber("0.37508+0.67118i"), new CNumber("0.12633+0.87638i"), new CNumber("0.60608+0.37761i")};
         aRowIndices = new int[]{0, 1, 2, 3, 3, 3, 4, 7, 7, 7, 8, 8, 9, 9, 9};
         aColIndices = new int[]{19, 22, 8, 1, 12, 20, 1, 0, 9, 12, 17, 18, 1, 13, 14};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(11, 23);
         bEntries = new double[]{0.56718, 0.61277, 0.98931, 0.27197, 0.42635, 0.604, 0.43965, 0.73371, 0.0552, 0.30879, 0.07427, 0.88552, 0.06859, 0.82031, 0.78877, 0.72343, 0.39534, 0.26539, 0.60927, 0.48236, 0.50133, 0.79897, 0.4143, 0.82129, 0.96133, 0.49847, 0.36263, 0.75414, 0.79191, 0.30996, 0.39423, 0.59391, 0.12437, 0.81227, 0.46678, 0.69816, 0.23565, 0.26345, 0.14353, 0.51491, 0.42769, 0.26879, 0.05645, 0.81837, 0.75161, 0.84688, 0.07325, 0.26145, 0.99592, 0.60897, 0.17337, 0.52817, 0.21395, 0.19048, 0.40601, 0.0891, 0.05531, 0.98314, 0.04684, 0.6489, 0.30786, 0.66835, 0.30513, 0.30018, 0.87291, 0.33619, 0.24299, 0.67784, 0.13326, 0.36638, 0.74839, 0.65227, 0.79829, 0.26297, 0.90328, 0.68587, 0.65314, 0.27191, 0.78316, 0.90408, 0.79376, 0.64697, 0.97064, 0.53179, 0.7723, 0.04114, 0.09927, 0.82622, 0.24713};
         bRowIndices = new int[]{0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10};
         bColIndices = new int[]{2, 4, 7, 11, 15, 18, 22, 1, 2, 4, 11, 16, 19, 21, 1, 2, 3, 4, 6, 8, 10, 19, 20, 22, 3, 10, 13, 15, 18, 20, 22, 0, 2, 3, 4, 12, 13, 17, 19, 21, 22, 3, 4, 5, 8, 9, 11, 14, 17, 20, 22, 3, 6, 9, 10, 11, 0, 3, 4, 9, 12, 15, 17, 0, 1, 2, 7, 8, 9, 10, 11, 0, 4, 5, 8, 9, 15, 17, 20, 21, 22, 0, 1, 3, 6, 7, 9, 10, 12};
-        b = new CooMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        b = new CooMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expEntries = new CNumber[][]{
                 {new CNumber(0.0, 0.0), new CNumber(0.0094098621, 0.018418472699999997), new CNumber(0.1096106943, 0.21454741409999997), new CNumber(0.0, 0.0), new CNumber(0.0196908807, 0.038542110899999996), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0)},
@@ -86,13 +86,13 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.50232+0.68872i"), new CNumber("0.78106+0.68678i"), new CNumber("0.48471+0.12952i"), new CNumber("0.22888+0.15437i")};
         aRowIndices = new int[]{0, 1, 4, 4};
         aColIndices = new int[]{2, 1, 0, 1};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(1, 3);
         bEntries = new double[]{0.05099};
         bRowIndices = new int[]{0};
         bColIndices = new int[]{0};
-        b = new CooMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        b = new CooMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.0")},
@@ -109,13 +109,13 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.10097+0.56982i"), new CNumber("0.58427+0.12349i"), new CNumber("0.56427+0.85603i"), new CNumber("0.43605+0.51715i")};
         aRowIndices = new int[]{0, 2, 3, 4};
         aColIndices = new int[]{0, 1, 0, 0};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(2, 3);
         bEntries = new double[]{0.41193, 0.15502};
         bRowIndices = new int[]{0, 1};
         bColIndices = new int[]{0, 1};
-        b = new CooMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        b = new CooMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.0415925721+0.2347259526i"), new CNumber("0.0")},
@@ -132,16 +132,16 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.69801+0.91492i"), new CNumber("0.32724+0.32501i"), new CNumber("0.28081+0.8828i"), new CNumber("0.64801+0.49649i")};
         aRowIndices = new int[]{1, 1, 3, 4};
         aColIndices = new int[]{0, 1, 2, 0};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(5, 2);
         bEntries = new double[]{0.84814, 0.0606, 0.27968, 0.31826};
         bRowIndices = new int[]{0, 1, 2, 4};
         bColIndices = new int[]{0, 1, 0, 0};
-        b = new CooMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        b = new CooMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
-        CooCMatrix final0a = a;
-        CooMatrix final0b = b;
+        CooCMatrixOld final0a = a;
+        CooMatrixOld final0b = b;
         assertThrows(Exception.class, ()->final0a.multTranspose(final0b));
 
         // ---------------------  Sub-case 6 ---------------------
@@ -149,16 +149,16 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.68571+0.35483i"), new CNumber("0.92183+0.80883i"), new CNumber("0.58557+0.25692i"), new CNumber("0.79019+0.75866i")};
         aRowIndices = new int[]{0, 1, 3, 4};
         aColIndices = new int[]{0, 0, 2, 0};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(5, 5);
         bEntries = new double[]{0.38021, 0.2587, 0.1574, 0.11695, 0.46968, 0.20872, 0.1969, 0.2504, 0.33862};
         bRowIndices = new int[]{0, 0, 0, 1, 1, 3, 3, 4, 4};
         bColIndices = new int[]{1, 2, 3, 0, 1, 2, 4, 2, 3};
-        b = new CooMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        b = new CooMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
-        CooCMatrix final1a = a;
-        CooMatrix final1b = b;
+        CooCMatrixOld final1a = a;
+        CooMatrixOld final1b = b;
         assertThrows(Exception.class, ()->final1a.multTranspose(final1b));
     }
 
@@ -169,13 +169,13 @@ public class CooCMatrixMultTransposeTests {
         int[] aRowIndices;
         int[] aColIndices;
         CNumber[] aEntries;
-        CooCMatrix a;
+        CooCMatrixOld a;
 
         Shape bShape;
         int[] bRowIndices;
         int[] bColIndices;
         CNumber[] bEntries;
-        CooCMatrix b;
+        CooCMatrixOld b;
 
         CNumber[][] expEntries;
         CMatrixOld exp;
@@ -185,13 +185,13 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.13333+0.54407i"), new CNumber("0.28186+0.80017i"), new CNumber("0.27979+0.90149i")};
         aRowIndices = new int[]{0, 0, 1};
         aColIndices = new int[]{2, 4, 0};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(6, 5);
         bEntries = new CNumber[]{new CNumber("0.7783+0.53458i"), new CNumber("0.90399+0.64094i"), new CNumber("0.51196+0.51884i"), new CNumber("0.46424+0.32518i"), new CNumber("0.69994+0.96631i"), new CNumber("0.89585+0.321i"), new CNumber("0.29658+0.1626i"), new CNumber("0.70076+0.3312i"), new CNumber("0.35692+0.11799i"), new CNumber("0.83837+0.80204i")};
         bRowIndices = new int[]{0, 1, 2, 3, 4, 4, 4, 4, 5, 5};
         bColIndices = new int[]{4, 0, 2, 1, 0, 1, 3, 4, 0, 3};
-        b = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        b = new CooCMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expEntries = new CNumber[][]{
                 {new CNumber("-0.20838324060000005+0.7734490298000001i"), new CNumber("0.0"), new CNumber("-0.21402565199999998+0.3477190144i"), new CNumber("0.0"), new CNumber("-0.06750009040000002+0.6540791612000001i"), new CNumber("0.0")},
@@ -206,13 +206,13 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.1091+0.67734i"), new CNumber("0.86221+0.18731i"), new CNumber("0.86577+0.3935i"), new CNumber("0.79207+0.16091i"), new CNumber("0.15273+0.23584i"), new CNumber("0.40546+0.55037i"), new CNumber("0.06335+0.55614i"), new CNumber("0.45687+0.32064i"), new CNumber("0.84184+0.56079i"), new CNumber("0.53839+0.56551i"), new CNumber("0.82059+0.48871i"), new CNumber("0.19813+0.82157i"), new CNumber("0.23558+0.75971i"), new CNumber("0.89675+0.70556i"), new CNumber("0.30268+0.21512i")};
         aRowIndices = new int[]{0, 0, 0, 1, 1, 2, 2, 2, 4, 5, 6, 7, 8, 10, 10};
         aColIndices = new int[]{2, 7, 8, 0, 10, 3, 14, 17, 2, 22, 13, 14, 0, 4, 20};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(11, 23);
         bEntries = new CNumber[]{new CNumber("0.09315+0.56922i"), new CNumber("0.11107+0.98862i"), new CNumber("0.32474+0.35843i"), new CNumber("0.79492+0.42901i"), new CNumber("0.82111+0.21961i"), new CNumber("0.58618+0.95779i"), new CNumber("0.05473+0.03025i"), new CNumber("0.97621+0.86671i"), new CNumber("0.80408+0.59324i"), new CNumber("0.03767+0.67623i"), new CNumber("0.61841+0.27712i"), new CNumber("0.88397+0.64611i"), new CNumber("0.56549+0.54455i"), new CNumber("0.09233+0.22337i"), new CNumber("0.41633+0.25273i"), new CNumber("0.56249+0.55354i"), new CNumber("0.62517+0.56234i"), new CNumber("0.69762+0.90077i"), new CNumber("0.89853+0.70042i"), new CNumber("0.79632+0.18535i"), new CNumber("0.22337+0.65651i"), new CNumber("0.98515+0.5477i"), new CNumber("0.23836+0.22636i"), new CNumber("0.37038+0.87641i"), new CNumber("0.49897+0.72714i"), new CNumber("0.38397+0.13316i"), new CNumber("0.05107+0.31637i"), new CNumber("0.26104+0.52205i"), new CNumber("0.30751+0.82356i"), new CNumber("0.43528+0.9727i"), new CNumber("0.29987+0.92454i"), new CNumber("0.42656+0.15536i"), new CNumber("0.76042+0.01935i"), new CNumber("0.46552+0.85124i"), new CNumber("0.52773+0.92759i"), new CNumber("0.11239+0.98725i"), new CNumber("0.3875+0.27288i"), new CNumber("0.52375+0.34944i"), new CNumber("0.49127+0.69019i"), new CNumber("0.45659+0.25621i"), new CNumber("0.18231+0.12218i"), new CNumber("0.22033+0.51241i"), new CNumber("0.83535+0.08698i"), new CNumber("0.12028+0.55878i"), new CNumber("0.06383+0.67314i"), new CNumber("0.70707+0.31567i"), new CNumber("0.70939+0.15072i"), new CNumber("0.16456+0.52904i"), new CNumber("0.98872+0.05189i"), new CNumber("0.71359+0.01168i"), new CNumber("0.88549+0.86375i"), new CNumber("0.09344+0.08053i"), new CNumber("0.72458+0.6146i"), new CNumber("0.69591+0.15405i"), new CNumber("0.08155+0.51061i"), new CNumber("0.09773+0.01328i"), new CNumber("0.51441+0.35341i"), new CNumber("0.88777+0.58754i"), new CNumber("0.35335+0.27309i"), new CNumber("0.40736+0.04797i"), new CNumber("0.21963+0.78092i"), new CNumber("0.5233+0.52295i"), new CNumber("0.4413+0.23607i"), new CNumber("0.41783+0.78562i"), new CNumber("0.69526+0.53609i"), new CNumber("0.81308+0.77482i"), new CNumber("0.08673+0.26201i"), new CNumber("0.6984+0.37514i"), new CNumber("0.17061+0.67571i"), new CNumber("0.28942+0.7071i"), new CNumber("0.83855+0.65238i"), new CNumber("0.49973+0.6632i"), new CNumber("0.45344+0.4296i"), new CNumber("0.54924+0.01977i"), new CNumber("0.86923+0.24688i"), new CNumber("0.82967+0.21481i"), new CNumber("0.16618+0.51186i"), new CNumber("0.03249+0.94928i"), new CNumber("0.11377+0.88986i"), new CNumber("0.47167+0.20325i"), new CNumber("0.34062+0.91378i"), new CNumber("0.60451+0.33083i"), new CNumber("0.09217+0.30043i"), new CNumber("0.24986+0.79771i"), new CNumber("0.73108+0.74435i"), new CNumber("0.01894+0.89016i"), new CNumber("0.21863+0.62992i"), new CNumber("0.8874+0.15921i"), new CNumber("0.34217+0.47171i")};
         bRowIndices = new int[]{0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10};
         bColIndices = new int[]{4, 5, 11, 21, 22, 3, 4, 8, 9, 11, 12, 14, 19, 20, 3, 5, 6, 8, 9, 12, 14, 16, 17, 19, 22, 3, 7, 18, 22, 0, 4, 5, 6, 10, 14, 15, 17, 21, 22, 4, 5, 10, 11, 12, 16, 17, 19, 20, 2, 6, 7, 9, 12, 14, 15, 17, 19, 2, 5, 7, 8, 9, 10, 12, 16, 19, 20, 22, 2, 10, 15, 18, 20, 2, 3, 5, 6, 14, 16, 17, 18, 21, 6, 8, 15, 16, 19, 21, 22};
-        b = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        b = new CooCMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expEntries = new CNumber[][]{
                 {new CNumber(0.0, 0.0), new CNumber(0.5041229467000001, 1.1345101517), new CNumber(0.24952547240000006, 1.0543731129), new CNumber(-0.015226200000000002, 0.28234329939999997), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.6744114998, 1.5859558232000002), new CNumber(-0.07600698659999994, 1.5456070745000001), new CNumber(-0.43907186040000007, 0.18928093840000002), new CNumber(0.046531072199999995, 0.37417912859999997), new CNumber(-0.0975775928, 0.7889532967000001)},
@@ -238,13 +238,13 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.84627+0.52397i"), new CNumber("0.65009+0.84477i"), new CNumber("0.66607+0.81437i"), new CNumber("0.1052+0.24359i")};
         aRowIndices = new int[]{0, 2, 3, 3};
         aColIndices = new int[]{0, 1, 0, 1};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(1, 3);
         bEntries = new CNumber[]{new CNumber("0.78083+0.73775i")};
         bRowIndices = new int[]{0};
         bColIndices = new int[]{2};
-        b = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        b = new CooCMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.0")},
@@ -261,13 +261,13 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.02414+0.82288i"), new CNumber("0.94529+0.19391i"), new CNumber("0.1772+0.50064i"), new CNumber("0.09017+0.45946i")};
         aRowIndices = new int[]{2, 3, 3, 3};
         aColIndices = new int[]{0, 0, 1, 2};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(2, 3);
         bEntries = new CNumber[]{new CNumber("0.65184+0.97107i"), new CNumber("0.70615+0.94007i")};
         bRowIndices = new int[]{1, 1};
         bColIndices = new int[]{0, 1};
-        b = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        b = new CooCMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expEntries = new CNumber[][]{
                 {new CNumber("0.0"), new CNumber("0.0")},
@@ -284,16 +284,16 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.43846+0.30964i"), new CNumber("0.76753+0.33258i"), new CNumber("0.92751+0.69248i"), new CNumber("0.18901+0.72498i")};
         aRowIndices = new int[]{0, 1, 1, 4};
         aColIndices = new int[]{1, 1, 2, 2};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(5, 2);
         bEntries = new CNumber[]{new CNumber("0.18351+0.73322i"), new CNumber("0.59183+0.61502i"), new CNumber("0.1071+0.90921i"), new CNumber("0.34189+0.85244i")};
         bRowIndices = new int[]{0, 2, 3, 4};
         bColIndices = new int[]{1, 1, 1, 0};
-        b = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        b = new CooCMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
-        CooCMatrix final0a = a;
-        CooCMatrix final0b = b;
+        CooCMatrixOld final0a = a;
+        CooCMatrixOld final0b = b;
         assertThrows(Exception.class, ()->final0a.multTranspose(final0b));
 
         // ---------------------  Sub-case 6 ---------------------
@@ -301,16 +301,16 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.65534+0.28091i"), new CNumber("0.29233+0.20161i"), new CNumber("0.10737+0.28494i"), new CNumber("0.24774+0.02259i")};
         aRowIndices = new int[]{1, 3, 3, 4};
         aColIndices = new int[]{0, 0, 1, 0};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(5, 5);
         bEntries = new CNumber[]{new CNumber("0.27254+0.44057i"), new CNumber("0.49021+0.16341i"), new CNumber("0.14641+0.73422i"), new CNumber("0.90959+0.99102i"), new CNumber("0.46919+0.61656i"), new CNumber("0.79621+0.30459i"), new CNumber("0.36651+0.7489i"), new CNumber("0.01621+0.51064i"), new CNumber("0.3416+0.99506i")};
         bRowIndices = new int[]{0, 0, 1, 2, 2, 2, 2, 3, 3};
         bColIndices = new int[]{3, 4, 0, 1, 2, 3, 4, 2, 4};
-        b = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        b = new CooCMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
-        CooCMatrix final1a = a;
-        CooCMatrix final1b = b;
+        CooCMatrixOld final1a = a;
+        CooCMatrixOld final1b = b;
         assertThrows(Exception.class, ()->final1a.multTranspose(final1b));
     }
 
@@ -321,7 +321,7 @@ public class CooCMatrixMultTransposeTests {
         int[] aRowIndices;
         int[] aColIndices;
         CNumber[] aEntries;
-        CooCMatrix a;
+        CooCMatrixOld a;
 
         double[][] bEntries;
         MatrixOld b;
@@ -334,7 +334,7 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.69195+0.39492i"), new CNumber("0.5457+0.81949i"), new CNumber("0.03667+0.05843i")};
         aRowIndices = new int[]{0, 1, 2};
         aColIndices = new int[]{0, 1, 3};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[][]{
                 {0.75059, 0.33636, 0.1625, 0.15499, 0.65849},
@@ -358,7 +358,7 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.38493+0.69137i"), new CNumber("0.0823+0.96975i"), new CNumber("0.52345+0.70595i"), new CNumber("0.74239+0.36901i"), new CNumber("0.1443+0.56394i"), new CNumber("0.91757+0.50549i"), new CNumber("0.27492+0.17729i"), new CNumber("0.04249+0.03255i"), new CNumber("0.05289+0.44651i"), new CNumber("0.0021+0.26898i"), new CNumber("0.86822+0.58018i"), new CNumber("0.60689+0.55886i"), new CNumber("0.26975+0.33019i"), new CNumber("0.94561+0.18236i"), new CNumber("0.49722+0.7081i")};
         aRowIndices = new int[]{0, 0, 1, 1, 2, 2, 3, 4, 4, 6, 6, 7, 7, 8, 8};
         aColIndices = new int[]{0, 2, 7, 21, 7, 15, 14, 0, 7, 11, 22, 6, 12, 4, 12};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[][]{
                 {0.39875, 0.2222, 0.87044, 0.79841, 0.05193, 0.87607, 0.97317, 0.3794, 0.64869, 0.47226, 0.84398, 0.31248, 0.77409, 0.94563, 0.55833, 0.86353, 0.47604, 0.39289, 0.02278, 0.53816, 0.37658, 0.46545, 0.20555},
@@ -395,7 +395,7 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.78326+0.38303i"), new CNumber("0.91661+0.74583i"), new CNumber("0.66673+0.6148i"), new CNumber("0.12376+0.32819i")};
         aRowIndices = new int[]{0, 1, 1, 3};
         aColIndices = new int[]{2, 0, 1, 1};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[][]{
                 {0.22966, 0.86485, 0.33411}};
@@ -416,7 +416,7 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.11009+0.86316i"), new CNumber("0.51338+0.73432i"), new CNumber("0.36883+0.97426i"), new CNumber("0.15692+0.24652i")};
         aRowIndices = new int[]{0, 1, 1, 2};
         aColIndices = new int[]{0, 0, 1, 2};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[][]{
                 {0.76359, 0.30769, 0.53053},
@@ -438,7 +438,7 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.77528+0.60978i"), new CNumber("0.10935+0.98871i"), new CNumber("0.62819+0.1926i"), new CNumber("0.46678+0.6006i")};
         aRowIndices = new int[]{2, 2, 3, 4};
         aColIndices = new int[]{1, 2, 2, 0};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[][]{
                 {0.14513, 0.63269},
@@ -448,7 +448,7 @@ public class CooCMatrixMultTransposeTests {
                 {0.67877, 0.48217}};
         b = new MatrixOld(bEntries);
 
-        CooCMatrix final0a = a;
+        CooCMatrixOld final0a = a;
         MatrixOld final0b = b;
         assertThrows(Exception.class, ()->final0a.multTranspose(final0b));
 
@@ -457,7 +457,7 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.11764+0.52728i"), new CNumber("0.23086+0.21765i"), new CNumber("0.55925+0.12422i"), new CNumber("0.75233+0.19753i")};
         aRowIndices = new int[]{0, 0, 1, 2};
         aColIndices = new int[]{0, 2, 1, 1};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[][]{
                 {0.99268, 0.70715, 0.89663, 0.20563, 0.02976},
@@ -467,7 +467,7 @@ public class CooCMatrixMultTransposeTests {
                 {0.71075, 0.12146, 0.43615, 0.12831, 0.47346}};
         b = new MatrixOld(bEntries);
 
-        CooCMatrix final1a = a;
+        CooCMatrixOld final1a = a;
         MatrixOld final1b = b;
         assertThrows(Exception.class, ()->final1a.multTranspose(final1b));
     }
@@ -479,7 +479,7 @@ public class CooCMatrixMultTransposeTests {
         int[] aRowIndices;
         int[] aColIndices;
         CNumber[] aEntries;
-        CooCMatrix a;
+        CooCMatrixOld a;
 
         CNumber[][] bEntries;
         CMatrixOld b;
@@ -492,7 +492,7 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.87979+0.41297i"), new CNumber("0.36913+0.04991i"), new CNumber("0.84641+0.37285i")};
         aRowIndices = new int[]{0, 1, 2};
         aColIndices = new int[]{2, 1, 0};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.24929+0.36257i"), new CNumber("0.25118+0.1858i"), new CNumber("0.51754+0.5778i"), new CNumber("0.33593+0.47237i"), new CNumber("0.48676+0.53026i")},
@@ -516,7 +516,7 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.41912+0.76956i"), new CNumber("0.51999+0.28967i"), new CNumber("0.8994+0.36263i"), new CNumber("0.62029+0.46259i"), new CNumber("0.96098+0.81581i"), new CNumber("0.18664+0.74075i"), new CNumber("0.07323+0.92791i"), new CNumber("0.41331+0.20244i"), new CNumber("0.01758+0.41576i"), new CNumber("0.4204+0.69024i"), new CNumber("0.12449+0.51214i"), new CNumber("0.72566+0.75397i"), new CNumber("0.96453+0.83956i"), new CNumber("0.12497+0.42527i"), new CNumber("0.51741+0.38359i")};
         aRowIndices = new int[]{0, 1, 2, 3, 4, 4, 6, 6, 7, 7, 8, 8, 8, 9, 9};
         aColIndices = new int[]{16, 19, 1, 7, 2, 16, 4, 22, 4, 17, 4, 15, 20, 13, 17};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.8322+0.35878i"), new CNumber("0.47371+0.35255i"), new CNumber("0.16613+0.13004i"), new CNumber("0.58945+0.91065i"), new CNumber("0.10399+0.16885i"), new CNumber("0.35431+0.01901i"), new CNumber("0.61456+0.1471i"), new CNumber("0.48457+0.43136i"), new CNumber("0.42392+0.65523i"), new CNumber("0.87141+0.31108i"), new CNumber("0.12679+0.57543i"), new CNumber("0.33716+0.92421i"), new CNumber("0.32441+0.02666i"), new CNumber("0.16055+0.24761i"), new CNumber("0.79206+0.09369i"), new CNumber("0.26826+0.48842i"), new CNumber("0.16527+0.48773i"), new CNumber("0.69281+0.55448i"), new CNumber("0.81442+0.54125i"), new CNumber("0.42845+0.17077i"), new CNumber("0.24495+0.16031i"), new CNumber("0.36959+0.42914i"), new CNumber("0.61635+0.37016i")},
@@ -554,7 +554,7 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.50758+0.81099i"), new CNumber("0.88299+0.28232i"), new CNumber("0.47478+0.65168i"), new CNumber("0.43933+0.06796i")};
         aRowIndices = new int[]{2, 2, 3, 3};
         aColIndices = new int[]{1, 2, 0, 1};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.63493+0.59114i"), new CNumber("0.71629+0.05757i"), new CNumber("0.54928+0.58241i")}};
@@ -575,7 +575,7 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.81281+0.18058i"), new CNumber("0.89609+0.98022i"), new CNumber("0.31595+0.02977i"), new CNumber("0.91545+0.12474i")};
         aRowIndices = new int[]{0, 1, 1, 2};
         aColIndices = new int[]{0, 0, 1, 2};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.63272+0.54877i"), new CNumber("0.98762+0.16713i"), new CNumber("0.86487+0.39664i")},
@@ -597,7 +597,7 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.55235+0.26182i"), new CNumber("0.58564+0.70848i"), new CNumber("0.9946+0.60902i"), new CNumber("0.06743+0.94976i")};
         aRowIndices = new int[]{1, 1, 2, 3};
         aColIndices = new int[]{1, 2, 1, 0};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber(0.66261, 6e-05), new CNumber("0.71057+0.4734i")},
@@ -607,7 +607,7 @@ public class CooCMatrixMultTransposeTests {
                 {new CNumber("0.36097+0.25905i"), new CNumber("0.35992+0.86852i")}};
         b = new CMatrixOld(bEntries);
 
-        CooCMatrix final0a = a;
+        CooCMatrixOld final0a = a;
         CMatrixOld final0b = b;
         assertThrows(Exception.class, ()->final0a.multTranspose(final0b));
 
@@ -616,7 +616,7 @@ public class CooCMatrixMultTransposeTests {
         aEntries = new CNumber[]{new CNumber("0.07076+0.6121i"), new CNumber("0.97426+0.34129i"), new CNumber("0.8445+0.7417i"), new CNumber("0.00984+0.91537i")};
         aRowIndices = new int[]{0, 0, 3, 4};
         aColIndices = new int[]{0, 1, 0, 0};
-        a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        a = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.38125+0.24542i"), new CNumber("0.41152+0.75363i"), new CNumber("0.36885+0.89808i"), new CNumber("0.26772+0.45414i"), new CNumber("0.94109+0.27041i")},
@@ -626,7 +626,7 @@ public class CooCMatrixMultTransposeTests {
                 {new CNumber("0.29733+0.71067i"), new CNumber("0.75773+0.5138i"), new CNumber("0.41635+0.36381i"), new CNumber("0.21207+0.03446i"), new CNumber("0.59491+0.14205i")}};
         b = new CMatrixOld(bEntries);
 
-        CooCMatrix final1a = a;
+        CooCMatrixOld final1a = a;
         CMatrixOld final1b = b;
         assertThrows(Exception.class, ()->final1a.multTranspose(final1b));
     }

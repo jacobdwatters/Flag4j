@@ -1,6 +1,6 @@
 package org.flag4j.sparse_complex_tensor;
 
-import org.flag4j.arrays_old.sparse.CooCTensor;
+import org.flag4j.arrays_old.sparse.CooCTensorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
@@ -16,7 +16,7 @@ class CooCTensorConstructorTests {
     double[] expNonZeroD;
     int[] expNonZeroI;
     int[][] expIndices;
-    CooCTensor A, B;
+    CooCTensorOld A, B;
 
 
     @Test
@@ -25,7 +25,7 @@ class CooCTensorConstructorTests {
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZero = new CNumber[0];
         expIndices = new int[0][0];
-        A = new CooCTensor(expShape);
+        A = new CooCTensorOld(expShape);
 
         Assertions.assertEquals(expShape, A.getShape());
         Assertions.assertArrayEquals(expIndices, A.indices);
@@ -38,7 +38,7 @@ class CooCTensorConstructorTests {
         expShape = new Shape(12);
         expNonZero = new CNumber[0];
         expIndices = new int[0][0];
-        A = new CooCTensor(expShape);
+        A = new CooCTensorOld(expShape);
 
         Assertions.assertEquals(expShape, A.getShape());
         Assertions.assertArrayEquals(expIndices, A.indices);
@@ -55,7 +55,7 @@ class CooCTensorConstructorTests {
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZero = new CNumber[]{new CNumber(1, -0.92342), new CNumber(-100, 123.44)};
         expIndices = new int[][]{{0, 0, 10, 1, 0, 9}, {0, 1, 22, 2, 0, 10}};
-        A = new CooCTensor(expShape, expNonZero, expIndices);
+        A = new CooCTensorOld(expShape, expNonZero, expIndices);
 
         Assertions.assertEquals(expShape, A.getShape());
         Assertions.assertArrayEquals(expIndices, A.indices);
@@ -68,19 +68,19 @@ class CooCTensorConstructorTests {
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZero = new CNumber[]{new CNumber(1, -0.92342), new CNumber(-100, 123.44)};
         expIndices = new int[][]{{0, 0, 10, 1, 0, 9}, {0, 1, 22, 2, 0, 10}, {0, 1, 22, 3, 0, 10}};
-        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZero, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCTensorOld(expShape, expNonZero, expIndices));
 
         // ------------ Sub-case 3 ------------
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZero = new CNumber[]{new CNumber(1, -0.92342), new CNumber(-100, 123.44)};
         expIndices = new int[][]{{0, 0, 10, 1, 0}, {0, 1, 22, 2, 0}};
-        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZero, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCTensorOld(expShape, expNonZero, expIndices));
 
         // ------------ Sub-case 4 ------------
         expShape = new Shape(2);
         expNonZero = new CNumber[]{new CNumber(1, -0.92342), new CNumber(-100, 123.44), new CNumber(0, 1)};
         expIndices = new int[][]{{0, 0, 10, 1, 0, 9}, {0, 1, 22, 2, 0, 10}};
-        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZero, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCTensorOld(expShape, expNonZero, expIndices));
     }
 
 
@@ -93,7 +93,7 @@ class CooCTensorConstructorTests {
         ArrayUtils.copy2CNumber(expNonZeroD, expNonZero);
         expIndices = new int[][]{{0, 0, 10, 1, 0, 9}, {0, 1, 22, 2, 0, 10}, {0, 1, 24, 2, 0, 10},
                 {0, 1, 26, 2, 0, 10}, {0, 1, 28, 3, 0, 10}};
-        A = new CooCTensor(expShape, expNonZeroD, expIndices);
+        A = new CooCTensorOld(expShape, expNonZeroD, expIndices);
 
         Assertions.assertEquals(expShape, A.getShape());
         Assertions.assertArrayEquals(expIndices, A.indices);
@@ -108,7 +108,7 @@ class CooCTensorConstructorTests {
         expNonZero = new CNumber[expNonZeroD.length];
         ArrayUtils.copy2CNumber(expNonZeroD, expNonZero);
         expIndices = new int[][]{{0, 0}, {1, 1}, {2, 2}};
-        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZeroD, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCTensorOld(expShape, expNonZeroD, expIndices));
 
         // ------------ Sub-case 3 ------------
         expShape = new Shape(5, 3);
@@ -116,7 +116,7 @@ class CooCTensorConstructorTests {
         expNonZero = new CNumber[expNonZeroD.length];
         ArrayUtils.copy2CNumber(expNonZeroD, expNonZero);
         expIndices = new int[][]{{0, 0, 10, 1, 0}, {0, 1, 22, 2, 0}};
-        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZeroD, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCTensorOld(expShape, expNonZeroD, expIndices));
 
         // ------------ Sub-case 4 ------------
         expShape = new Shape(2);
@@ -124,7 +124,7 @@ class CooCTensorConstructorTests {
         expNonZero = new CNumber[expNonZeroD.length];
         ArrayUtils.copy2CNumber(expNonZeroD, expNonZero);
         expIndices = new int[][]{{0}, {1}};
-        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZeroD, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCTensorOld(expShape, expNonZeroD, expIndices));
     }
 
 
@@ -137,7 +137,7 @@ class CooCTensorConstructorTests {
         ArrayUtils.copy2CNumber(expNonZeroI, expNonZero);
         expIndices = new int[][]{{0, 0, 10, 1, 0, 9}, {0, 1, 22, 2, 0, 10}, {0, 1, 24, 2, 0, 10},
                 {0, 1, 26, 2, 0, 10}, {0, 1, 28, 3, 0, 10}};
-        A = new CooCTensor(expShape, expNonZeroI, expIndices);
+        A = new CooCTensorOld(expShape, expNonZeroI, expIndices);
 
         Assertions.assertEquals(expShape, A.getShape());
         Assertions.assertArrayEquals(expIndices, A.indices);
@@ -152,7 +152,7 @@ class CooCTensorConstructorTests {
         expNonZero = new CNumber[expNonZeroI.length];
         ArrayUtils.copy2CNumber(expNonZeroI, expNonZero);
         expIndices = new int[][]{{0, 0}, {1, 1}, {2, 2}};
-        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZeroI, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCTensorOld(expShape, expNonZeroI, expIndices));
 
         // ------------ Sub-case 3 ------------
         expShape = new Shape(5, 3);
@@ -160,7 +160,7 @@ class CooCTensorConstructorTests {
         expNonZero = new CNumber[expNonZeroI.length];
         ArrayUtils.copy2CNumber(expNonZeroI, expNonZero);
         expIndices = new int[][]{{0, 0, 10, 1, 0}, {0, 1, 22, 2, 0}};
-        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZeroI, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCTensorOld(expShape, expNonZeroI, expIndices));
 
         // ------------ Sub-case 4 ------------
         expShape = new Shape(2);
@@ -168,7 +168,7 @@ class CooCTensorConstructorTests {
         expNonZero = new CNumber[expNonZeroI.length];
         ArrayUtils.copy2CNumber(expNonZeroI, expNonZero);
         expIndices = new int[][]{{0}, {1}};
-        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZeroI, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCTensorOld(expShape, expNonZeroI, expIndices));
     }
 
 
@@ -178,8 +178,8 @@ class CooCTensorConstructorTests {
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZero = new CNumber[]{new CNumber(1, -0.92342), new CNumber(-100, 123.44)};
         expIndices = new int[][]{{0, 0, 10, 1, 0, 9}, {0, 1, 22, 2, 0, 10}};
-        B = new CooCTensor(expShape, expNonZero, expIndices);
-        A = new CooCTensor(B);
+        B = new CooCTensorOld(expShape, expNonZero, expIndices);
+        A = new CooCTensorOld(B);
 
         Assertions.assertEquals(expShape, A.getShape());
         Assertions.assertArrayEquals(expIndices, A.indices);

@@ -40,7 +40,7 @@ public final class ComplexDenseSparseMatrixMultiplication {
 
     private ComplexDenseSparseMatrixMultiplication() {
         // Hide default constructor in utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

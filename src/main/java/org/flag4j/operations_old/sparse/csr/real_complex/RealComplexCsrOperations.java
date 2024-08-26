@@ -25,8 +25,8 @@
 package org.flag4j.operations_old.sparse.csr.real_complex;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CsrCMatrix;
-import org.flag4j.arrays_old.sparse.CsrMatrix;
+import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
+import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
@@ -44,12 +44,12 @@ public final class RealComplexCsrOperations {
 
     private RealComplexCsrOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
     /**
-     * Applies an element-wise binary operation to two {@link CsrMatrix CSR Matrices}. <br><br>
+     * Applies an element-wise binary operation to two {@link CsrMatrixOld CSR Matrices}. <br><br>
      *
      * Note, this methods efficiency relies heavily on the assumption that both operand matrices are very large and very
      * sparse. If the two matrices are not large and very sparse, this method will likely be
@@ -66,10 +66,10 @@ public final class RealComplexCsrOperations {
      * element-wise.
      * @throws IllegalArgumentException If <code>src1</code> and <code>src2</code> do not have the same shape.
      */
-    public static CsrCMatrix applyBinOpp(CsrMatrix src1, CsrCMatrix src2,
-                                         BiFunction<Double, CNumber, CNumber> opp,
-                                         UnaryOperator<CNumber> uOpp) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CsrCMatrixOld applyBinOpp(CsrMatrixOld src1, CsrCMatrixOld src2,
+                                            BiFunction<Double, CNumber, CNumber> opp,
+                                            UnaryOperator<CNumber> uOpp) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         List<CNumber> dest = new ArrayList<>();
         int[] rowPointers = new int[src1.rowPointers.length];
@@ -123,7 +123,7 @@ public final class RealComplexCsrOperations {
             rowPointers[i] += rowPointers[i-1];
         }
 
-        return new CsrCMatrix(src1.shape,
+        return new CsrCMatrixOld(src1.shape,
                 dest.toArray(CNumber[]::new),
                 rowPointers,
                 ArrayUtils.fromIntegerList(colIndices)
@@ -132,7 +132,7 @@ public final class RealComplexCsrOperations {
 
 
     /**
-     * Applies an element-wise binary operation to two {@link CsrMatrix CSR Matrices}. <br><br>
+     * Applies an element-wise binary operation to two {@link CsrMatrixOld CSR Matrices}. <br><br>
      *
      * Note, this methods efficiency relies heavily on the assumption that both operand matrices are very large and very
      * sparse. If the two matrices are not large and very sparse, this method will likely be
@@ -149,10 +149,10 @@ public final class RealComplexCsrOperations {
      * element-wise.
      * @throws IllegalArgumentException If <code>src1</code> and <code>src2</code> do not have the same shape.
      */
-    public static CsrCMatrix applyBinOpp(CsrCMatrix src1, CsrMatrix src2,
-                                         BiFunction<CNumber, Double, CNumber> opp,
-                                         UnaryOperator<Double> uOpp) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CsrCMatrixOld applyBinOpp(CsrCMatrixOld src1, CsrMatrixOld src2,
+                                            BiFunction<CNumber, Double, CNumber> opp,
+                                            UnaryOperator<Double> uOpp) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         List<CNumber> dest = new ArrayList<>();
         int[] rowPointers = new int[src1.rowPointers.length];
@@ -207,7 +207,7 @@ public final class RealComplexCsrOperations {
             rowPointers[i] += rowPointers[i-1];
         }
 
-        return new CsrCMatrix(src1.shape,
+        return new CsrCMatrixOld(src1.shape,
                 dest.toArray(CNumber[]::new),
                 rowPointers,
                 ArrayUtils.fromIntegerList(colIndices)
@@ -223,8 +223,8 @@ public final class RealComplexCsrOperations {
      * @return The result of the element-wise multiplication between <code>src1</code> and <code>src2</code>.
      * @throws IllegalArgumentException If <code>src1</code> and <code>src2</code> do not have the same shape.
      */
-    public static CsrCMatrix elemMult(CsrCMatrix src1, CsrMatrix src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CsrCMatrixOld elemMult(CsrCMatrixOld src1, CsrMatrixOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         List<CNumber> dest = new ArrayList<>();
         int[] rowPointers = new int[src1.rowPointers.length];
@@ -254,7 +254,7 @@ public final class RealComplexCsrOperations {
             rowPointers[i] += rowPointers[i-1];
         }
 
-        return new CsrCMatrix(src1.shape,
+        return new CsrCMatrixOld(src1.shape,
                 dest.toArray(CNumber[]::new),
                 rowPointers,
                 ArrayUtils.fromIntegerList(colIndices)

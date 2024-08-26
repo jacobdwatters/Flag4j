@@ -43,7 +43,7 @@ public class RealSparseMatrixMultiplication {
 
     private RealSparseMatrixMultiplication() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

@@ -25,8 +25,8 @@
 package org.flag4j.operations_old.sparse.coo.complex;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -42,7 +42,7 @@ public final class ComplexSparseMatrixOperations {
 
     private ComplexSparseMatrixOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -54,8 +54,8 @@ public final class ComplexSparseMatrixOperations {
      * @return The sum of the two matrices {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
-    public static CooCMatrix add(CooCMatrix src1, CooCMatrix src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooCMatrixOld add(CooCMatrixOld src1, CooCMatrixOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
 
@@ -108,7 +108,7 @@ public final class ComplexSparseMatrixOperations {
             }
         }
 
-        return new CooCMatrix(
+        return new CooCMatrixOld(
                 src1.shape,
                 values.toArray(CNumber[]::new),
                 rowIndices.stream().mapToInt(Integer::intValue).toArray(),
@@ -125,7 +125,7 @@ public final class ComplexSparseMatrixOperations {
      * @throws ArithmeticException If the {@code src} sparse matrix is too large to be converted to a dense matrix.
      * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
      */
-    public static CMatrixOld add(CooCMatrix src, CNumber a) {
+    public static CMatrixOld add(CooCMatrixOld src, CNumber a) {
         CNumber[] sum = new CNumber[src.totalEntries().intValueExact()];
         Arrays.fill(sum, a);
 
@@ -150,8 +150,8 @@ public final class ComplexSparseMatrixOperations {
      * @return The difference of the two matrices {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
-    public static CooCMatrix sub(CooCMatrix src1, CooCMatrix src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooCMatrixOld sub(CooCMatrixOld src1, CooCMatrixOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
 
@@ -204,7 +204,7 @@ public final class ComplexSparseMatrixOperations {
             }
         }
 
-        return new CooCMatrix(
+        return new CooCMatrixOld(
                 src1.shape,
                 values.toArray(CNumber[]::new),
                 rowIndices.stream().mapToInt(Integer::intValue).toArray(),
@@ -221,7 +221,7 @@ public final class ComplexSparseMatrixOperations {
      * @throws ArithmeticException If the {@code src} sparse matrix is too large to be converted to a dense matrix.
      * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
      */
-    public static CMatrixOld sub(CooCMatrix src, CNumber a) {
+    public static CMatrixOld sub(CooCMatrixOld src, CNumber a) {
         return add(src, a.addInv());
     }
 
@@ -234,8 +234,8 @@ public final class ComplexSparseMatrixOperations {
      * @return The element-wise product of the two matrices {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
-    public static CooCMatrix elemMult(CooCMatrix src1, CooCMatrix src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooCMatrixOld elemMult(CooCMatrixOld src1, CooCMatrixOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
 
@@ -271,7 +271,7 @@ public final class ComplexSparseMatrixOperations {
             }
         }
 
-        return new CooCMatrix(
+        return new CooCMatrixOld(
                 src1.shape,
                 product.toArray(CNumber[]::new),
                 rowIndices.stream().mapToInt(Integer::intValue).toArray(),
@@ -286,8 +286,8 @@ public final class ComplexSparseMatrixOperations {
      * @param col Sparse vector to add to each column of the sparse matrix.
      * @return A dense copy of the {@code src} matrix with the {@code col} vector added to each row of the matrix.
      */
-    public static CMatrixOld addToEachCol(CooCMatrix src, CooCVector col) {
-        ParameterChecks.assertEquals(src.numRows, col.size);
+    public static CMatrixOld addToEachCol(CooCMatrixOld src, CooCVectorOld col) {
+        ParameterChecks.ensureEquals(src.numRows, col.size);
         CNumber[] destEntries = new CNumber[src.totalEntries().intValueExact()];
 
         // Add values from sparse matrix.
@@ -316,8 +316,8 @@ public final class ComplexSparseMatrixOperations {
      * @param row Sparse vector to add to each row of the sparse matrix.
      * @return A dense copy of the {@code src} matrix with the {@code row} vector added to each row of the matrix.
      */
-    public static CMatrixOld addToEachRow(CooCMatrix src, CooCVector row) {
-        ParameterChecks.assertEquals(src.numCols, row.size);
+    public static CMatrixOld addToEachRow(CooCMatrixOld src, CooCVectorOld row) {
+        ParameterChecks.ensureEquals(src.numCols, row.size);
         CNumber[] destEntries = new CNumber[src.totalEntries().intValueExact()];
 
         // Add values from sparse matrix.

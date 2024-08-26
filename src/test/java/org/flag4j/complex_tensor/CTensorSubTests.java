@@ -2,8 +2,8 @@ package org.flag4j.complex_tensor;
 
 import org.flag4j.arrays_old.dense.CTensorOld;
 import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.arrays_old.sparse.CooCTensor;
-import org.flag4j.arrays_old.sparse.CooTensor;
+import org.flag4j.arrays_old.sparse.CooCTensorOld;
+import org.flag4j.arrays_old.sparse.CooTensorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -84,7 +84,7 @@ class CTensorSubTests {
     @Test
     void realSparseTestCase() {
         double[] bEntries;
-        CooTensor B;
+        CooTensorOld B;
 
         // ------------------------- Sub-case 1 -------------------------
         bEntries = new double[]{
@@ -94,9 +94,9 @@ class CTensorSubTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new CooTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensorOld(bShape, bEntries, sparseIndices);
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
-        expShape = new Shape(true,2, 3, 2);
+        expShape = new Shape(2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] = expEntries[expShape.entriesIndex(sparseIndices[0])].sub(bEntries[0]);
         expEntries[expShape.entriesIndex(sparseIndices[1])] = expEntries[expShape.entriesIndex(sparseIndices[1])].sub(bEntries[1]);
         expEntries[expShape.entriesIndex(sparseIndices[2])] = expEntries[expShape.entriesIndex(sparseIndices[2])].sub(bEntries[2]);
@@ -112,9 +112,9 @@ class CTensorSubTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new CooTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensorOld(bShape, bEntries, sparseIndices);
 
-        CooTensor finalB = B;
+        CooTensorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.sub(finalB));
     }
 
@@ -162,19 +162,19 @@ class CTensorSubTests {
     @Test
     void complexSparseTestCase() {
         CNumber[] bEntries;
-        CooCTensor B;
+        CooCTensorOld B;
 
         // ------------------------- Sub-case 1 -------------------------
         bEntries = new CNumber[]{
                 new CNumber(1, -0.2045), new CNumber(-800.145, 3204.5)
         };
-        bShape = new Shape(true, 2, 3, 2);
+        bShape = new Shape( 2, 3, 2);
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}
         };
-        B = new CooCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensorOld(bShape, bEntries, sparseIndices);
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
-        expShape = new Shape(true, 2, 3, 2);
+        expShape = new Shape( 2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] = expEntries[expShape.entriesIndex(sparseIndices[0])].sub(bEntries[0]);
         expEntries[expShape.entriesIndex(sparseIndices[1])] = expEntries[expShape.entriesIndex(sparseIndices[1])].sub(bEntries[1]);
         exp = new CTensorOld(expShape, expEntries);
@@ -189,9 +189,9 @@ class CTensorSubTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}
         };
-        B = new CooCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensorOld(bShape, bEntries, sparseIndices);
 
-        CooCTensor finalB = B;
+        CooCTensorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.sub(finalB));
     }
 
@@ -287,19 +287,19 @@ class CTensorSubTests {
     @Test
     void realSparseSubEqTestCase() {
         double[] bEntries;
-        CooTensor B;
+        CooTensorOld B;
 
         // ------------------------- Sub-case 1 -------------------------
         bEntries = new double[]{
                 1.34, -0.0245, 8001.1
         };
-        bShape = new Shape(true,2, 3, 2);
+        bShape = new Shape(2, 3, 2);
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new CooTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensorOld(bShape, bEntries, sparseIndices);
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
-        expShape = new Shape(true,2, 3, 2);
+        expShape = new Shape(2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] = expEntries[expShape.entriesIndex(sparseIndices[0])].sub(bEntries[0]);
         expEntries[expShape.entriesIndex(sparseIndices[1])] = expEntries[expShape.entriesIndex(sparseIndices[1])].sub(bEntries[1]);
         expEntries[expShape.entriesIndex(sparseIndices[2])] = expEntries[expShape.entriesIndex(sparseIndices[2])].sub(bEntries[2]);
@@ -316,9 +316,9 @@ class CTensorSubTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new CooTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensorOld(bShape, bEntries, sparseIndices);
 
-        CooTensor finalB = B;
+        CooTensorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.subEq(finalB));
     }
 
@@ -401,7 +401,7 @@ class CTensorSubTests {
     @Test
     void complexSparseSubEqTestCase() {
         CNumber[] bEntries;
-        CooCTensor B;
+        CooCTensorOld B;
 
         // ------------------------- Sub-case 1 -------------------------
         bEntries = new CNumber[]{
@@ -411,9 +411,9 @@ class CTensorSubTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new CooCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensorOld(bShape, bEntries, sparseIndices);
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
-        expShape = new Shape(true, 2, 3, 2);
+        expShape = new Shape( 2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] = expEntries[expShape.entriesIndex(sparseIndices[0])].sub(bEntries[0]);
         expEntries[expShape.entriesIndex(sparseIndices[1])] = expEntries[expShape.entriesIndex(sparseIndices[1])].sub(bEntries[1]);
         expEntries[expShape.entriesIndex(sparseIndices[2])] = expEntries[expShape.entriesIndex(sparseIndices[2])].sub(bEntries[2]);
@@ -430,9 +430,9 @@ class CTensorSubTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new CooCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensorOld(bShape, bEntries, sparseIndices);
 
-        CooCTensor finalB = B;
+        CooCTensorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.subEq(finalB));
     }
 

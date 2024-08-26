@@ -28,10 +28,10 @@ import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooVector;
-import org.flag4j.arrays_old.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
+import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
@@ -51,7 +51,7 @@ public final class ComplexCsrOperations {
 
     private ComplexCsrOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -60,7 +60,7 @@ public final class ComplexCsrOperations {
      * @param src The matrix to transpose.
      * @return The transpose of the {@code src} matrix.
      */
-    public static CsrCMatrix hermTranspose(CsrCMatrix src) {
+    public static CsrCMatrixOld hermTranspose(CsrCMatrixOld src) {
         CNumber[] dest = new CNumber[src.entries.length];
         int[] rowPtrs = new int[src.numCols+1];
         int[] colIndices = new int[src.entries.length];
@@ -86,7 +86,7 @@ public final class ComplexCsrOperations {
             }
         }
 
-        return new CsrCMatrix(src.numCols, src.numRows, dest, rowPtrs, colIndices);
+        return new CsrCMatrixOld(src.numCols, src.numRows, dest, rowPtrs, colIndices);
     }
 
 
@@ -102,7 +102,7 @@ public final class ComplexCsrOperations {
      * @throws ArrayIndexOutOfBoundsException If any of the indices are out of bounds of this matrix.
      * @throws IllegalArgumentException       If {@code rowEnd} is not greater than {@code rowStart} or if {@code colEnd} is not greater than {@code colStart}.
      */
-    public static CsrCMatrix getSlice(CsrCMatrix src, int rowStart, int rowEnd, int colStart, int colEnd) {
+    public static CsrCMatrixOld getSlice(CsrCMatrixOld src, int rowStart, int rowEnd, int colStart, int colEnd) {
         List<CNumber> slice = new ArrayList<>();
         List<Integer> sliceRowIndices = new ArrayList<>();
         List<Integer> sliceColIndices = new ArrayList<>();
@@ -126,7 +126,7 @@ public final class ComplexCsrOperations {
             }
         }
 
-        return new CooCMatrix(
+        return new CooCMatrixOld(
                 new Shape(rowEnd-rowStart, colEnd-colStart),
                 slice, sliceRowIndices, sliceColIndices).toCsr();
     }
@@ -137,7 +137,7 @@ public final class ComplexCsrOperations {
      * @param src The matrix to transpose.
      * @return The transpose of the {@code src} matrix.
      */
-    public static CsrCMatrix transpose(CsrCMatrix src) {
+    public static CsrCMatrixOld transpose(CsrCMatrixOld src) {
         CNumber[] dest = new CNumber[src.entries.length];
         int[] rowPtrs = new int[src.numCols+1];
         int[] colIndices = new int[src.entries.length];
@@ -163,12 +163,12 @@ public final class ComplexCsrOperations {
             }
         }
 
-        return new CsrCMatrix(src.numCols, src.numRows, dest, rowPtrs, colIndices);
+        return new CsrCMatrixOld(src.numCols, src.numRows, dest, rowPtrs, colIndices);
     }
 
 
     /**
-     * Applies an element-wise binary operation to two {@link CsrCMatrix complex CSR matrices}. <br><br>
+     * Applies an element-wise binary operation to two {@link CsrCMatrixOld complex CSR matrices}. <br><br>
      *
      * Note, this methods efficiency relies heavily on the assumption that both operand matrices are very large and very
      * sparse. If the two matrices are not large and very sparse, this method will likely be
@@ -185,10 +185,10 @@ public final class ComplexCsrOperations {
      * element-wise.
      * @throws IllegalArgumentException If <code>src1</code> and <code>src2</code> do not have the same shape.
      */
-    public static CsrCMatrix applyBinOpp(CsrCMatrix src1, CsrCMatrix src2,
-                                         BinaryOperator<CNumber> opp,
-                                         UnaryOperator<CNumber> uOpp) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CsrCMatrixOld applyBinOpp(CsrCMatrixOld src1, CsrCMatrixOld src2,
+                                            BinaryOperator<CNumber> opp,
+                                            UnaryOperator<CNumber> uOpp) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         List<CNumber> dest = new ArrayList<>();
         int[] rowPointers = new int[src1.rowPointers.length];
@@ -242,7 +242,7 @@ public final class ComplexCsrOperations {
             rowPointers[i] += rowPointers[i-1];
         }
 
-        return new CsrCMatrix(src1.shape,
+        return new CsrCMatrixOld(src1.shape,
                 ArrayUtils.fromList(dest, new CNumber[dest.size()]),
                 rowPointers,
                 ArrayUtils.fromIntegerList(colIndices)
@@ -258,8 +258,8 @@ public final class ComplexCsrOperations {
      * @param src2 VectorOld to add to each column of this matrix.
      * @return The result of adding the vector src2 to each column of this matrix.
      */
-    public static CMatrixOld addToEachCol(CsrCMatrix src1, VectorOld src2) {
-        ParameterChecks.assertEquals(src1.numRows, src2.size);
+    public static CMatrixOld addToEachCol(CsrCMatrixOld src1, VectorOld src2) {
+        ParameterChecks.ensureEquals(src1.numRows, src2.size);
         CMatrixOld sum = src2.repeat(src1.numCols, 1).toComplex();
 
         for(int i=0; i<src1.numRows; i++) {
@@ -285,8 +285,8 @@ public final class ComplexCsrOperations {
      * @param src2 VectorOld to add to each column of this matrix.
      * @return The result of adding the vector src2 to each column of this matrix.
      */
-    public static CMatrixOld addToEachCol(CsrCMatrix src1, CooVector src2) {
-        ParameterChecks.assertEquals(src1.numRows, src2.size);
+    public static CMatrixOld addToEachCol(CsrCMatrixOld src1, CooVectorOld src2) {
+        ParameterChecks.ensureEquals(src1.numRows, src2.size);
         CMatrixOld sum = src2.repeat(src1.numCols, 1).toComplex().toDense();
 
         for(int i=0; i<src1.numRows; i++) {
@@ -312,8 +312,8 @@ public final class ComplexCsrOperations {
      * @param src2 VectorOld to add to each column of this matrix.
      * @return The result of adding the vector src2 to each column of this matrix.
      */
-    public static CMatrixOld addToEachCol(CsrCMatrix src1, CVectorOld src2) {
-        ParameterChecks.assertEquals(src1.numRows, src2.size);
+    public static CMatrixOld addToEachCol(CsrCMatrixOld src1, CVectorOld src2) {
+        ParameterChecks.ensureEquals(src1.numRows, src2.size);
         CMatrixOld sum = src2.repeat(src1.numCols, 1);
 
         for(int i=0; i<src1.numRows; i++) {
@@ -339,8 +339,8 @@ public final class ComplexCsrOperations {
      * @param src2 VectorOld to add to each column of this matrix.
      * @return The result of adding the vector src2 to each column of this matrix.
      */
-    public static CMatrixOld addToEachCol(CsrCMatrix src1, CooCVector src2) {
-        ParameterChecks.assertEquals(src1.numRows, src2.size);
+    public static CMatrixOld addToEachCol(CsrCMatrixOld src1, CooCVectorOld src2) {
+        ParameterChecks.ensureEquals(src1.numRows, src2.size);
         CMatrixOld sum = src2.repeat(src1.numCols, 1).toDense();
 
         for(int i=0; i<src1.numRows; i++) {
@@ -366,8 +366,8 @@ public final class ComplexCsrOperations {
      * @param src2 VectorOld to add to each row of this matrix.
      * @return The result of adding the vector src2 to each row of this matrix.
      */
-    public static CMatrixOld addToEachRow(CsrCMatrix src1, VectorOld src2) {
-        ParameterChecks.assertEquals(src1.numCols, src2.size);
+    public static CMatrixOld addToEachRow(CsrCMatrixOld src1, VectorOld src2) {
+        ParameterChecks.ensureEquals(src1.numCols, src2.size);
         CMatrixOld sum = src2.repeat(src1.numRows, 0).toComplex();
 
         for(int i=0; i<src1.numRows; i++) {
@@ -392,8 +392,8 @@ public final class ComplexCsrOperations {
      * @param src2 VectorOld to add to each row of this matrix.
      * @return The result of adding the vector src2 to each row of this matrix.
      */
-    public static CMatrixOld addToEachRow(CsrCMatrix src1, CooVector src2) {
-        ParameterChecks.assertEquals(src1.numCols, src2.size);
+    public static CMatrixOld addToEachRow(CsrCMatrixOld src1, CooVectorOld src2) {
+        ParameterChecks.ensureEquals(src1.numCols, src2.size);
         CMatrixOld sum = src2.repeat(src1.numRows, 0).toComplex().toDense();
 
         for(int i=0; i<src1.numRows; i++) {
@@ -418,8 +418,8 @@ public final class ComplexCsrOperations {
      * @param src2 VectorOld to add to each row of this matrix.
      * @return The result of adding the vector src2 to each row of this matrix.
      */
-    public static CMatrixOld addToEachRow(CsrCMatrix src1, CVectorOld src2) {
-        ParameterChecks.assertEquals(src1.numCols, src2.size);
+    public static CMatrixOld addToEachRow(CsrCMatrixOld src1, CVectorOld src2) {
+        ParameterChecks.ensureEquals(src1.numCols, src2.size);
         CMatrixOld sum = src2.repeat(src1.numRows, 0);
 
         for(int i=0; i<src1.numRows; i++) {
@@ -444,8 +444,8 @@ public final class ComplexCsrOperations {
      * @param src2 VectorOld to add to each row of this matrix.
      * @return The result of adding the vector src2 to each row of this matrix.
      */
-    public static CMatrixOld addToEachRow(CsrCMatrix src1, CooCVector src2) {
-        ParameterChecks.assertEquals(src1.numCols, src2.size);
+    public static CMatrixOld addToEachRow(CsrCMatrixOld src1, CooCVectorOld src2) {
+        ParameterChecks.ensureEquals(src1.numCols, src2.size);
         CMatrixOld sum = src2.repeat(src1.numRows, 0).toDense();
 
         for(int i=0; i<src1.numRows; i++) {

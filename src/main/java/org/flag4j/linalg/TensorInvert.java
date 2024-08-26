@@ -31,23 +31,24 @@ import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.core.Shape;
 import org.flag4j.core.TensorBase;
 import org.flag4j.core.TensorExclusiveMixin;
+import org.flag4j.core_temp.PrimitiveDoubleTensorBase;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
 
 /**
- * This class provides methods for computing the 'inverse' of a tensor with respect to some tensor dot product operation.
+ * This utility class provides methods for computing the 'inverse' of a tensor with respect to some tensor dot product operation.
  */
 public final class TensorInvert {
 
     private TensorInvert() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
     /**
-     * <p>Computes the 'inverse' of this tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
+     * <p>Computes the 'inverse' of a tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
      * {@link TensorExclusiveMixin#tensorDot(TensorBase, int) src.tensorDot(X, numIndices)} is the 'identity' tensor for the tensor
      * dot product operation.</p>
      * <p>A tensor {@code I} is the identity for a tensor dot product if {@code src.tensorDot(I, numIndices).equals(this)}.</p>
@@ -58,7 +59,7 @@ public final class TensorInvert {
      */
     @Deprecated
     public static TensorOld inv(TensorOld src, int numIndices) {
-        ParameterChecks.assertPositive(numIndices);
+        ParameterChecks.ensurePositive(numIndices);
 
         Shape originalShape = src.shape;
         Shape invShape = getInvShape(originalShape, numIndices);
@@ -72,7 +73,33 @@ public final class TensorInvert {
 
 
     /**
-     * <p>Computes the 'inverse' of this tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
+     * <p>Computes the 'inverse' of a tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
+     * {@link TensorExclusiveMixin#tensorDot(TensorBase, int) src.tensorDot(X, numIndices)} is the 'identity' tensor for the tensor
+     * dot product operation.</p>
+     *
+     * <p>A tensor {@code I} is the identity for a tensor dot product if {@code src.tensorDot(I, numIndices).equals(this)}.</p>
+     *
+     * @param src TensorOld to compute inverse of.
+     * @param numIndices The number of first numIndices which are involved in the inverse sum.
+     * @return The 'inverse' of this tensor as defined in the above sense.
+     * @throws IllegalArgumentException If {@code numIndices} is not positive.
+     */
+    public static <T extends PrimitiveDoubleTensorBase<T, T>> T inv(PrimitiveDoubleTensorBase<T, T> src, int numIndices) {
+        ParameterChecks.ensurePositive(numIndices);
+
+        Shape originalShape = src.shape;
+        Shape invShape = getInvShape(originalShape, numIndices);
+        int prod = getProduct(originalShape.getDims(), numIndices);
+
+        // Convert to an equivalent matrix inverse problem and solve.
+        MatrixOld matInverse = Invert.inv(new MatrixOld(prod, src.entries.length-prod, src.entries));
+
+        return src.makeLikeTensor(invShape, matInverse.entries); // Reshape as tensor.
+    }
+
+
+    /**
+     * <p>Computes the 'inverse' of a tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
      * {@link TensorExclusiveMixin#tensorDot(TensorBase, int) src.tensorDot(X, numIndices)} is the 'identity' tensor for the tensor
      * dot product operation.</p>
      * <p>A tensor {@code I} is the identity for a tensor dot product if {@code src.tensorDot(I, numIndices).equals(this)}.</p>
@@ -83,7 +110,7 @@ public final class TensorInvert {
      */
     @Deprecated
     public static CTensorOld inv(CTensorOld src, int numIndices) {
-        ParameterChecks.assertPositive(numIndices);
+        ParameterChecks.ensurePositive(numIndices);
 
         Shape originalShape = src.shape;
         Shape invShape = getInvShape(originalShape, numIndices);
@@ -107,7 +134,7 @@ public final class TensorInvert {
         int[] origDims = originalShape.getDims();
         System.arraycopy(origDims, numIndices, invDims, 0, numIndices);
         System.arraycopy(origDims, 0, invDims, numIndices, 2 * numIndices - numIndices);
-        return new Shape(true, invDims);
+        return new Shape(invDims);
     }
 
 

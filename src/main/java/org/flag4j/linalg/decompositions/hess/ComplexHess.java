@@ -74,7 +74,7 @@ public class ComplexHess extends ComplexUnitaryDecomposition {
      */
     @Override
     public ComplexHess decompose(CMatrixOld src) {
-        ParameterChecks.assertSquare(src.shape);
+        ParameterChecks.ensureSquare(src.shape);
         decomposeBase(src);
         return this;
     }

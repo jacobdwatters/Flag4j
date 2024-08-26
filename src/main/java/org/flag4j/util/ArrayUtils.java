@@ -25,6 +25,7 @@
 package org.flag4j.util;
 
 import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.core_temp.structures.fields.Field;
 
 import java.util.*;
 import java.util.function.Function;
@@ -38,7 +39,7 @@ public final class ArrayUtils {
 
     private ArrayUtils() {
         // Hide Constructor
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -54,7 +55,7 @@ public final class ArrayUtils {
     public static int[][] deepCopy(final int[][] src, int[][] dest) {
         if(dest == null) dest = new int[src.length][src[0].length];
         if(src == dest) return dest;
-        else ParameterChecks.assertGreaterEq(src.length, dest.length);
+        else ParameterChecks.ensureGreaterEq(src.length, dest.length);
 
         for(int i = 0; i < src.length; i++) {
             dest[i] = new int[src[i].length];
@@ -75,7 +76,7 @@ public final class ArrayUtils {
      */
     public static CNumber[] copy2CNumber(final int[] src, CNumber[] dest) {
         if(dest == null) dest = new CNumber[src.length];
-        else ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+        else ParameterChecks.ensureArrayLengthsEq(src.length, dest.length);
 
         for (int i = 0; i < dest.length; i++)
             dest[i] = new CNumber(src[i]);
@@ -94,7 +95,7 @@ public final class ArrayUtils {
      */
     public static CNumber[] copy2CNumber(final double[] src, CNumber[] dest) {
         if(dest == null) dest = new CNumber[src.length];
-        else ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+        else ParameterChecks.ensureArrayLengthsEq(src.length, dest.length);
 
         for(int i=0; i<dest.length; i++)
             dest[i] = new CNumber(src[i]);
@@ -113,7 +114,7 @@ public final class ArrayUtils {
      */
     public static CNumber[] copy2CNumber(final Integer[] src, CNumber[] dest) {
         if(dest == null) dest = new CNumber[src.length];
-        else ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+        else ParameterChecks.ensureArrayLengthsEq(src.length, dest.length);
 
         for (int i=0; i<dest.length; i++)
             dest[i] = new CNumber(src[i]);
@@ -132,7 +133,7 @@ public final class ArrayUtils {
      */
     public static CNumber[] copy2CNumber(final Double[] src, CNumber[] dest) {
         if(dest == null) dest = new CNumber[src.length];
-        else ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+        else ParameterChecks.ensureArrayLengthsEq(src.length, dest.length);
 
         for(int i=0; i<dest.length; i++)
             dest[i] = new CNumber(src[i]);
@@ -153,7 +154,7 @@ public final class ArrayUtils {
         if(dest == null) {
             dest = new CNumber[src.length];
         }
-        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+        ParameterChecks.ensureArrayLengthsEq(src.length, dest.length);
 
         for (int i = 0; i < dest.length; i++) {
             dest[i] = new CNumber(src[i]);
@@ -209,8 +210,8 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If start is less than 0.
      */
     public static void stridedFillZeros(final double[] dest, final int start, final int stride) {
-        ParameterChecks.assertGreaterEq(1, stride);
-        ParameterChecks.assertGreaterEq(0, start);
+        ParameterChecks.ensureGreaterEq(1, stride);
+        ParameterChecks.ensureGreaterEq(0, start);
 
         for(int i = start; i < dest.length; i += stride)
             dest[i] = 0;
@@ -233,8 +234,8 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If start is less than 0.
      */
     public static void stridedFillZeros(final CNumber[] dest, final int start, final int stride) {
-        ParameterChecks.assertGreaterEq(1, stride);
-        ParameterChecks.assertGreaterEq(0, start);
+        ParameterChecks.ensureGreaterEq(1, stride);
+        ParameterChecks.ensureGreaterEq(0, start);
 
         for(int i = start; i < dest.length; i += stride)
             dest[i] = CNumber.ZERO;
@@ -261,8 +262,8 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If start is less than zero.
      */
     public static void stridedFillZeros(final CNumber[] dest, final int start, final int length, final int stride) {
-        ParameterChecks.assertGreaterEq(1, stride, length);
-        ParameterChecks.assertGreaterEq(0, start);
+        ParameterChecks.ensureGreaterEq(1, stride, length);
+        ParameterChecks.ensureGreaterEq(0, start);
 
         for (int i = start; i < dest.length; i += stride + length) {
             for (int j = 0; j < length; j++) {
@@ -292,8 +293,8 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If start is less than zero.
      */
     public static void stridedFillZeros(final double[] dest, final int start, final int length, final int stride) {
-        ParameterChecks.assertGreaterEq(1, stride, length);
-        ParameterChecks.assertGreaterEq(0, start);
+        ParameterChecks.ensureGreaterEq(1, stride, length);
+        ParameterChecks.ensureGreaterEq(0, start);
 
         for (int i = start; i < dest.length; i += stride + length) {
             for (int j = 0; j < length; j++) {
@@ -336,7 +337,7 @@ public final class ArrayUtils {
      * @param to        Ending index of range (exclusive).
      */
     public static void fill(final CNumber[] dest, final double fillValue, final int from, final int to) {
-        ParameterChecks.assertLessEq(to, from + 1);
+        ParameterChecks.ensureLessEq(to, from + 1);
         CNumber complexFillValue = new CNumber(fillValue);
         Arrays.fill(dest, from, to, complexFillValue);
     }
@@ -473,7 +474,7 @@ public final class ArrayUtils {
      * @return A reference to the {@code dest} array.
      */
     public static int[] fromIntegerList(final List<Integer> src, final int[] dest) {
-        ParameterChecks.assertGreaterEq(src.size(), dest.length);
+        ParameterChecks.ensureGreaterEq(src.size(), dest.length);
 
         for (int i = 0; i < dest.length; i++)
             dest[i] = src.get(i);
@@ -492,7 +493,7 @@ public final class ArrayUtils {
      *                                  list.
      */
     public static <T> T[] fromList(final List<T> src, final T[] dest) {
-        ParameterChecks.assertGreaterEq(src.size(), dest.length);
+        ParameterChecks.ensureGreaterEq(src.size(), dest.length);
         return src.toArray(dest);
     }
 
@@ -521,7 +522,7 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If {@code indices} is not a permutation of {@code {0, 1, 2, ..., N-1}}.
      */
     public static void swap(final int[] src, final int[] indices) {
-        ParameterChecks.assertPermutation(indices);
+        ParameterChecks.ensurePermutation(indices);
 
         int[] swapped = new int[src.length];
         int i = 0;
@@ -631,7 +632,7 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException   If {@code start} is not in {@code [0, end)}
      */
     public static int[] intRange(final int start, final int end, final int stride) {
-        ParameterChecks.assertInRange(start, 0, end, "start");
+        ParameterChecks.ensureInRange(start, 0, end, "start");
         int[] rangeArr = new int[(end - start) * stride];
 
         int k = 0;
@@ -824,6 +825,25 @@ public final class ArrayUtils {
                 flat[flatIdx++] = value;
 
         return flat;
+    }
+
+
+    /**
+     * Flattens a two-dimensional array.
+     *
+     * @param src Array to flatten.
+     * @return The flattened array.
+     */
+    public static <T extends Field<T>> T[] flatten(final T[][] src) {
+        Field<T>[] flat = new Field[src.length * src[0].length];
+
+        // Copy 2D array to 1D array.
+        int flatIdx = 0;
+        for (Field<T>[] row : src)
+            for (Field<T> value : row)
+                flat[flatIdx++] = value;
+
+        return (T[]) flat;
     }
 
 
@@ -1198,7 +1218,7 @@ public final class ArrayUtils {
      * @return The result of splicing {@code arr2} into {@code arr1} at the index {@code spliceIdx}.
      */
     public static CNumber[] splice(final CNumber[] arr1, final CNumber[] arr2, final int spliceIdx) {
-        ParameterChecks.assertIndexInBounds(arr1.length + 1, spliceIdx);
+        ParameterChecks.ensureIndexInBounds(arr1.length + 1, spliceIdx);
         CNumber[] spliced = new CNumber[arr1.length + arr2.length];
 
         System.arraycopy(arr1, 0, spliced, 0, spliceIdx);
@@ -1218,7 +1238,7 @@ public final class ArrayUtils {
      * @return The result of splicing {@code arr2} into {@code arr1} at the index {@code spliceIdx}.
      */
     public static CNumber[] splice(final CNumber[] arr1, final double[] arr2, final int spliceIdx) {
-        ParameterChecks.assertIndexInBounds(arr1.length + 1, spliceIdx);
+        ParameterChecks.ensureIndexInBounds(arr1.length + 1, spliceIdx);
         CNumber[] spliced = new CNumber[arr1.length + arr2.length];
 
         System.arraycopy(arr1, 0, spliced, 0, spliceIdx);
@@ -1238,7 +1258,7 @@ public final class ArrayUtils {
      * @return The result of splicing {@code arr2} into {@code arr1} at the index {@code spliceIdx}.
      */
     public static CNumber[] splice(final double[] arr1, final CNumber[] arr2, final int spliceIdx) {
-        ParameterChecks.assertIndexInBounds(arr1.length + 1, spliceIdx);
+        ParameterChecks.ensureIndexInBounds(arr1.length + 1, spliceIdx);
         CNumber[] spliced = new CNumber[arr1.length + arr2.length];
 
         arraycopy(arr1, 0, spliced, 0, spliceIdx);
@@ -1258,7 +1278,7 @@ public final class ArrayUtils {
      * @return The result of splicing {@code arr2} into {@code arr1} at the index {@code spliceIdx}.
      */
     public static double[] splice(final double[] arr1, final double[] arr2, final int spliceIdx) {
-        ParameterChecks.assertIndexInBounds(arr1.length + 1, spliceIdx);
+        ParameterChecks.ensureIndexInBounds(arr1.length + 1, spliceIdx);
         double[] spliced = new double[arr1.length + arr2.length];
 
         System.arraycopy(arr1, 0, spliced, 0, spliceIdx);
@@ -1278,7 +1298,7 @@ public final class ArrayUtils {
      * @return The result of splicing {@code arr2} into {@code arr1} at the index {@code spliceIdx}.
      */
     public static int[] splice(final int[] arr1, final int[] arr2, final int spliceIdx) {
-        ParameterChecks.assertIndexInBounds(arr1.length + 1, spliceIdx);
+        ParameterChecks.ensureIndexInBounds(arr1.length + 1, spliceIdx);
         int[] spliced = new int[arr1.length + arr2.length];
 
         System.arraycopy(arr1, 0, spliced, 0, spliceIdx);
@@ -1298,7 +1318,7 @@ public final class ArrayUtils {
      * @return The result of splicing {@code arr} into {@code list} at the index {@code spliceIdx}.
      */
     public static double[] splice(final List<Double> list,final  double[] arr, final int spliceIdx) {
-        ParameterChecks.assertIndexInBounds(list.size() + 1, spliceIdx);
+        ParameterChecks.ensureIndexInBounds(list.size() + 1, spliceIdx);
         double[] spliced = new double[list.size() + arr.length];
 
         for(int i = 0; i < spliceIdx; i++)
@@ -1322,7 +1342,7 @@ public final class ArrayUtils {
      * @return The result of splicing {@code arr} into {@code list} at the index {@code spliceIdx}.
      */
     public static CNumber[] spliceDouble(final List<CNumber> list, final double[] arr, final int spliceIdx) {
-        ParameterChecks.assertIndexInBounds(list.size() + 1, spliceIdx);
+        ParameterChecks.ensureIndexInBounds(list.size() + 1, spliceIdx);
         CNumber[] spliced = new CNumber[list.size() + arr.length];
 
         for (int i = 0; i < spliceIdx; i++)
@@ -1346,7 +1366,7 @@ public final class ArrayUtils {
      * @return The result of splicing {@code arr} into {@code list} at the index {@code spliceIdx}.
      */
     public static CNumber[] splice(final List<CNumber> list, final CNumber[] arr, final int spliceIdx) {
-        ParameterChecks.assertIndexInBounds(list.size() + 1, spliceIdx);
+        ParameterChecks.ensureIndexInBounds(list.size() + 1, spliceIdx);
         CNumber[] spliced = new CNumber[list.size() + arr.length];
 
         for (int i = 0; i < spliceIdx; i++)
@@ -1370,7 +1390,7 @@ public final class ArrayUtils {
      * @return The result of splicing {@code arr} into {@code list} at the index {@code spliceIdx}.
      */
     public static int[] splice(final List<Integer> list, final int[] arr, final int spliceIdx) {
-        ParameterChecks.assertIndexInBounds(list.size() + 1, spliceIdx);
+        ParameterChecks.ensureIndexInBounds(list.size() + 1, spliceIdx);
         int[] spliced = new int[list.size() + arr.length];
 
         for (int i = 0; i < spliceIdx; i++)

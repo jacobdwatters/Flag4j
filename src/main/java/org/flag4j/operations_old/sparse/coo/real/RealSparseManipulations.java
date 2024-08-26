@@ -34,6 +34,6 @@ public final class RealSparseManipulations {
 
     private RealSparseManipulations() {
         // Hide default constructor in utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 }

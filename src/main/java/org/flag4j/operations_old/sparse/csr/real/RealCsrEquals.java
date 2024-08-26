@@ -24,7 +24,7 @@
 
 package org.flag4j.operations_old.sparse.csr.real;
 
-import org.flag4j.arrays_old.sparse.CsrMatrix;
+import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.operations_old.common.real.RealProperties;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
@@ -40,7 +40,7 @@ public final class RealCsrEquals {
 
     private RealCsrEquals() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -54,7 +54,7 @@ public final class RealCsrEquals {
      * are 'close', i.e. elements {@code a} and {@code b} at the same positions in the two matrices respectively
      * satisfy {@code |a-b| <= (absTol + relTol*|b|)}. Otherwise, returns false.
      */
-    public static boolean allClose(CsrMatrix src1, CsrMatrix src2, double relTol, double absTol) {
+    public static boolean allClose(CsrMatrixOld src1, CsrMatrixOld src2, double relTol, double absTol) {
         boolean close = src1.shape.equals(src2.shape);
 
         if(close) {
@@ -90,7 +90,7 @@ public final class RealCsrEquals {
      * @param rowPointers Row pointers for entries.
      * @param aTol Absolute tolerance for value to be considered close to zero.
      */
-    private static void removeCloseToZero(CsrMatrix src, List<Double> entries, int[] rowPointers,
+    private static void removeCloseToZero(CsrMatrixOld src, List<Double> entries, int[] rowPointers,
                                           List<Integer> colIndices, double aTol) {
         for(int i=0; i<src.numRows; i++) {
             int start = src.rowPointers[i];

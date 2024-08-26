@@ -28,13 +28,13 @@ package org.flag4j.operations.common.real;
 import org.flag4j.util.ErrorMessages;
 
 /**
- * This class contains several low-level methods useful for computing aggregation operations_old on dense/sparse tensors.
+ * This utility class contains several low-level methods useful for computing aggregation operations on dense/sparse tensors.
  */
-public class AggregateReal {
+public final class AggregateReal {
 
     private AggregateReal() {
         // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -43,11 +43,25 @@ public class AggregateReal {
      * @param entries Entries of the tensor.
      * @return The sum of all entries in this tensor.
      */
-    public static double sum(final double[] entries) {
+    public static double sum(double... entries) {
         double sum = 0;
-        for(double value : entries) {
+        for(double value : entries)
             sum += value;
-        }
+
+        return sum;
+    }
+
+
+    /**
+     * Computes the sum of all entries in this tensor. This can be applied to either real dense or spase tensors.
+     * @param entries Entries of the tensor.
+     * @return The sum of all entries in this tensor.
+     */
+    public static double prod(double... entries) {
+        double sum = 0;
+        for(double value : entries)
+            sum *= value;
+
         return sum;
     }
 
@@ -58,12 +72,11 @@ public class AggregateReal {
      * @param entries Entries of the tensor.
      * @return The minimum value in the tensor.
      */
-    public static double min(final double[] entries) {
+    public static double min(double... entries) {
         double currMin = (entries.length==0) ? 0 : Double.MAX_VALUE;
 
-        for(double value : entries) {
+        for(double value : entries)
             currMin = Math.min(value, currMin);
-        }
 
         return currMin;
     }
@@ -75,12 +88,11 @@ public class AggregateReal {
      * @param entries Entries of the tensor.
      * @return The maximum value in the tensor.
      */
-    public static double max(final double[] entries) {
+    public static double max(double... entries) {
         double currMax = (entries.length==0) ? 0 : Double.MIN_NORMAL;
 
-        for(double value : entries) {
+        for(double value : entries)
             currMax = Math.max(value, currMax);
-        }
 
         return currMax;
     }
@@ -92,12 +104,11 @@ public class AggregateReal {
      * @param entries Entries of the tensor.
      * @return The minimum absolute value in the tensor.
      */
-    public static double minAbs(final double[] entries) {
+    public static double minAbs(double... entries) {
         double currMin = (entries.length==0) ? 0 : Double.MAX_VALUE;
 
-        for(double value : entries) {
+        for(double value : entries)
             currMin = Math.min(Math.abs(value), currMin);
-        }
 
         return currMin;
     }
@@ -109,12 +120,11 @@ public class AggregateReal {
      * @param entries Entries of the tensor.
      * @return The maximum absolute value in the tensor.
      */
-    public static double maxAbs(final double... entries) {
+    public static double maxAbs(double... entries) {
         double currMax = 0;
 
-        for(double value : entries) {
+        for(double value : entries)
             currMax = Math.max(Math.abs(value), currMax);
-        }
 
         return currMax;
     }

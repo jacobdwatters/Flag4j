@@ -2,8 +2,8 @@ package org.flag4j.sparse_csr_complex_matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CsrCMatrix;
-import org.flag4j.arrays_old.sparse.CsrMatrix;
+import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
+import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -12,14 +12,14 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ComplexRealCsrCsrMatMultTests {
-    static CsrCMatrix A;
+    static CsrCMatrixOld A;
     static CMatrixOld aDense;
     static CNumber[][] aEntries;
-    static CsrMatrix B;
+    static CsrMatrixOld B;
     static MatrixOld bDense;
     static double[][] bEntries;
     static CMatrixOld exp;
-    static CsrCMatrix expCsr;
+    static CsrCMatrixOld expCsr;
 
     private static void build(boolean... args) {
         aDense = new CMatrixOld(aEntries);

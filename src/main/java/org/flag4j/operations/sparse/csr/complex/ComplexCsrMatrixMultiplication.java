@@ -27,8 +27,8 @@ package org.flag4j.operations.sparse.csr.complex;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
@@ -45,7 +45,7 @@ public final class ComplexCsrMatrixMultiplication {
 
     private ComplexCsrMatrixMultiplication() {
         // Hide default constructor for utility method.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -55,9 +55,9 @@ public final class ComplexCsrMatrixMultiplication {
      * @param src2 Second CSR matrix in the multiplication.
      * @return Entries of the dense matrix resulting from the matrix multiplication of the two sparse CSR matrices.
      */
-    public static CMatrixOld standard(CsrCMatrix src1, CsrCMatrix src2) {
+    public static CMatrixOld standard(CsrCMatrixOld src1, CsrCMatrixOld src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
+        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
 
         CNumber[] destEntries = new CNumber[src1.numRows*src2.numCols];
         Arrays.fill(destEntries, CNumber.ZERO);
@@ -87,7 +87,7 @@ public final class ComplexCsrMatrixMultiplication {
     /**
      * Computes the matrix multiplication between two sparse CSR matrices and returns the result as a sparse matrix. <br>
      *
-     * Warning: This method may be slower than {@link #standard(CsrCMatrix, CsrCMatrix)}
+     * Warning: This method may be slower than {@link #standard(CsrCMatrixOld, CsrCMatrixOld)}
      * if the result of multiplying this matrix with {@code src2} is not very sparse. Further, multiplying two
      * sparse matrices (even very sparse matrices) may result in a dense matrix so this method should be used with
      * caution.
@@ -95,9 +95,9 @@ public final class ComplexCsrMatrixMultiplication {
      * @param src2 Second CSR matrix in the multiplication.
      * @return Sparse CSR matrix resulting from the matrix multiplication of the two sparse CSR matrices.
      */
-    public static CsrCMatrix standardAsSparse(CsrCMatrix src1, CsrCMatrix src2) {
+    public static CsrCMatrixOld standardAsSparse(CsrCMatrixOld src1, CsrCMatrixOld src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
+        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
 
         int[] resultRowPtr = new int[src1.numRows + 1];
         List<CNumber> resultList = new ArrayList<>();
@@ -137,7 +137,7 @@ public final class ComplexCsrMatrixMultiplication {
         CNumber[] resultValues = resultList.toArray(new CNumber[0]);
         int[] resultColIndices = ArrayUtils.fromIntegerList(resultColIndexList);
 
-        return new CsrCMatrix(new Shape(src1.numRows, src2.numCols), resultValues, resultRowPtr, resultColIndices);
+        return new CsrCMatrixOld(new Shape(src1.numRows, src2.numCols), resultValues, resultRowPtr, resultColIndices);
     }
 
 
@@ -148,9 +148,9 @@ public final class ComplexCsrMatrixMultiplication {
      * @return The result of the matrix-vector multiplication.
      * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the number of columns in {@code src2}.
      */
-    public static CVectorOld standardVector(CsrCMatrix src1, CooCVector src2) {
+    public static CVectorOld standardVector(CsrCMatrixOld src1, CooCVectorOld src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
-        ParameterChecks.assertEquals(src1.numCols, src2.size);
+        ParameterChecks.ensureEquals(src1.numCols, src2.size);
 
         CNumber[] destEntries = new CNumber[src1.numRows];
         Arrays.fill(destEntries, CNumber.ZERO);

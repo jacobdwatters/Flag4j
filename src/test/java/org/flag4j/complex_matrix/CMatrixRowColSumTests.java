@@ -3,8 +3,8 @@ package org.flag4j.complex_matrix;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -119,7 +119,7 @@ class CMatrixRowColSumTests {
     @Test
     void addToEachRowComplexSparseTestCase() {
         CNumber[] bEntries;
-        CooCVector b;
+        CooCVectorOld b;
 
         // ------------------------ Sub-case 1 ------------------------
         aEntries = new CNumber[][]{
@@ -130,7 +130,7 @@ class CMatrixRowColSumTests {
         A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(32.56, -8.4)};
         indices = new int[]{1};
-        b = new CooCVector(3, bEntries, indices);
+        b = new CooCVectorOld(3, bEntries, indices);
         expEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333).add(bEntries[0]), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1).add(bEntries[0]), new CNumber(-34.5, -93.)},
@@ -149,9 +149,9 @@ class CMatrixRowColSumTests {
         A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(32.56, -8.4)};
         indices = new int[]{1};
-        b = new CooCVector(234, bEntries, indices);
+        b = new CooCVectorOld(234, bEntries, indices);
 
-        CooCVector finalB = b;
+        CooCVectorOld finalB = b;
         assertThrows(IllegalArgumentException.class, ()->A.addToEachRow(finalB));
     }
 
@@ -159,7 +159,7 @@ class CMatrixRowColSumTests {
     @Test
     void addToEachRowRealSparseTestCase() {
         double[] bEntries;
-        CooVector b;
+        CooVectorOld b;
 
         // ------------------------ Sub-case 1 ------------------------
         aEntries = new CNumber[][]{
@@ -170,7 +170,7 @@ class CMatrixRowColSumTests {
         A = new CMatrixOld(aEntries);
         bEntries = new double[]{3.46567};
         indices = new int[]{1};
-        b = new CooVector(3, bEntries, indices);
+        b = new CooVectorOld(3, bEntries, indices);
         expEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333).add(bEntries[0]), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1).add(bEntries[0]), new CNumber(-34.5, -93.)},
@@ -189,9 +189,9 @@ class CMatrixRowColSumTests {
         A = new CMatrixOld(aEntries);
         bEntries = new double[]{-9899234.2};
         indices = new int[]{1};
-        b = new CooVector(234, bEntries, indices);
+        b = new CooVectorOld(234, bEntries, indices);
 
-        CooVector finalB = b;
+        CooVectorOld finalB = b;
         assertThrows(IllegalArgumentException.class, ()->A.addToEachRow(finalB));
     }
 
@@ -295,7 +295,7 @@ class CMatrixRowColSumTests {
     @Test
     void addToEachColRealSparseTestCase() {
         double[] bEntries;
-        CooVector b;
+        CooVectorOld b;
 
         // ------------------------ Sub-case 1 ------------------------
         aEntries = new CNumber[][]{
@@ -306,7 +306,7 @@ class CMatrixRowColSumTests {
         A = new CMatrixOld(aEntries);
         bEntries = new double[]{234.66};
         indices = new int[]{2};
-        b = new CooVector(4, bEntries, indices);
+        b = new CooVectorOld(4, bEntries, indices);
         expEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
@@ -325,9 +325,9 @@ class CMatrixRowColSumTests {
         A = new CMatrixOld(aEntries);
         bEntries = new double[]{234.66};
         indices = new int[]{2};
-        b = new CooVector(234, bEntries, indices);
+        b = new CooVectorOld(234, bEntries, indices);
 
-        CooVector finalB = b;
+        CooVectorOld finalB = b;
         assertThrows(IllegalArgumentException.class, ()->A.addToEachCol(finalB));
     }
 
@@ -335,7 +335,7 @@ class CMatrixRowColSumTests {
     @Test
     void addToEachColComplexSparseTestCase() {
         CNumber[] bEntries;
-        CooCVector b;
+        CooCVectorOld b;
 
         // ------------------------ Sub-case 1 ------------------------
         aEntries = new CNumber[][]{
@@ -346,7 +346,7 @@ class CMatrixRowColSumTests {
         A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(3.678, -8.4322)};
         indices = new int[]{1};
-        b = new CooCVector(4, bEntries, indices);
+        b = new CooCVectorOld(4, bEntries, indices);
         expEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
                 {new CNumber(1).add(bEntries[0]), new CNumber(0, -743.1).add(bEntries[0]), new CNumber(-34.5, -93.).add(bEntries[0])},
@@ -365,9 +365,9 @@ class CMatrixRowColSumTests {
         A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber(3.678, -8.4322)};
         indices = new int[]{1};
-        b = new CooCVector(234, bEntries, indices);
+        b = new CooCVectorOld(234, bEntries, indices);
 
-        CooCVector finalB = b;
+        CooCVectorOld finalB = b;
         assertThrows(IllegalArgumentException.class, ()->A.addToEachCol(finalB));
     }
 }

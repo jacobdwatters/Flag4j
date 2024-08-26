@@ -34,7 +34,7 @@ public class AggregateDenseReal {
 
     private AggregateDenseReal() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -44,7 +44,7 @@ public class AggregateDenseReal {
      * @param entries Entries of the tensor.
      * @return The index of the minimum value in this tensor. If there are zero entries in the array, -1 is returned.
      */
-    public static int argMin(double[] entries) {
+    public static int argmin(double[] entries) {
         double currMin = Double.MAX_VALUE;
         int currMinIndex = -1;
 
@@ -60,16 +60,39 @@ public class AggregateDenseReal {
 
 
     /**
+     * Computes the index of the minimum absolute value in this tensor. If the minimum absolute value occurs at more than one index,
+     * the index of the first occurrence is taken.
+     * @param entries Entries of the tensor.
+     * @return The index of the minimum absolute value in this tensor. If there are zero entries in the array, -1 is returned.
+     */
+    public static int argminAbs(double[] entries) {
+        double currMin = Double.MAX_VALUE;
+        int currMinIndex = -1;
+
+        for(int i=0; i<entries.length; i++) {
+            double abs = Math.abs(entries[i]);
+
+            if(abs < currMin) {
+                currMin = abs; // Update current minimum.
+                currMinIndex = i;
+            }
+        }
+
+        return currMinIndex;
+    }
+
+
+    /**
      * Computes the index of the maximum value in this tensor. If the maximum value occurs at more than one index,
      * the index of the first occurrence is taken.
      * @param entries Entries of the tensor.
      * @return The index of the maximum value in this tensor. If there are zero entries in the array, -1 is returned.
      */
-    public static int argMax(double[] entries) {
+    public static int argmax(double[] entries) {
         double currMax = Double.MIN_VALUE;
         int currMaxIndex = -1;
 
-        for(int i=0; i<entries.length; i++) {
+        for(int i=0, size=entries.length; i<size; i++) {
             if(entries[i] > currMax) {
                 currMax = entries[i]; // Update current minimum.
                 currMaxIndex = i;
@@ -78,6 +101,29 @@ public class AggregateDenseReal {
 
         return currMaxIndex;
     }
+
+
+    /**
+     * Computes the index of the maximum absolute value in this tensor. If the maximum absolute value occurs at more than one index,
+     * the index of the first occurrence is taken.
+     * @param entries Entries of the tensor.
+     * @return The index of the maximum absolute value in this tensor. If there are zero entries in the array, -1 is returned.
+     */
+    public static int argmaxAbs(double[] entries) {
+        double currMax = 0;
+        int currMaxIndex = -1;
+
+        for(int i=0, size=entries.length; i<size; i++) {
+            double abs = Math.abs(entries[i]);
+            if(abs > currMax) {
+                currMax = abs; // Update current minimum.
+                currMaxIndex = i;
+            }
+        }
+
+        return currMaxIndex;
+    }
+
 
 
     /**

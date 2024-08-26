@@ -52,7 +52,7 @@ public class Eigen {
      * @return A complex vector containing the eigenvalues of the 2x2 {@code src} matrix.
      */
     public static CVectorOld get2x2EigenValues(MatrixOld src) {
-        ParameterChecks.assertEquals(2, src.numRows, src.numCols);
+        ParameterChecks.ensureEquals(2, src.numRows, src.numCols);
         return new CVectorOld(get2x2EigenValues(src.entries[0], src.entries[1], src.entries[2], src.entries[3]));
     }
 
@@ -139,7 +139,7 @@ public class Eigen {
      * @return A complex vector containing the eigenvalues of the 2x2 {@code src} matrix.
      */
     public static CVectorOld get2x2EigenValues(CMatrixOld src) {
-        ParameterChecks.assertEquals(2, src.numRows, src.numCols);
+        ParameterChecks.ensureEquals(2, src.numRows, src.numCols);
         return new CVectorOld(get2x2EigenValues(src.entries[0], src.entries[1], src.entries[2], src.entries[3]));
     }
 

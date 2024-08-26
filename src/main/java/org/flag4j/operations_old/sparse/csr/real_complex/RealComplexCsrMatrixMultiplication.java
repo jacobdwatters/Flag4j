@@ -27,10 +27,10 @@ package org.flag4j.operations_old.sparse.csr.real_complex;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooVector;
-import org.flag4j.arrays_old.sparse.CsrCMatrix;
-import org.flag4j.arrays_old.sparse.CsrMatrix;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
+import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
+import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
@@ -47,7 +47,7 @@ public final class RealComplexCsrMatrixMultiplication {
 
     private RealComplexCsrMatrixMultiplication() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -57,9 +57,9 @@ public final class RealComplexCsrMatrixMultiplication {
      * @param src2 Second CSR matrix in the multiplication.
      * @return Entries of the dense matrix resulting from the matrix multiplication of the two sparse CSR matrices.
      */
-    public static CMatrixOld standard(CsrMatrix src1, CsrCMatrix src2) {
+    public static CMatrixOld standard(CsrMatrixOld src1, CsrCMatrixOld src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
+        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
 
         CNumber[] destEntries = new CNumber[src1.numRows*src2.numCols];
         Arrays.fill(destEntries, CNumber.ZERO);
@@ -92,9 +92,9 @@ public final class RealComplexCsrMatrixMultiplication {
      * @param src2 Second CSR matrix in the multiplication.
      * @return Entries of the dense matrix resulting from the matrix multiplication of the two sparse CSR matrices.
      */
-    public static CMatrixOld standard(CsrCMatrix src1, CsrMatrix src2) {
+    public static CMatrixOld standard(CsrCMatrixOld src1, CsrMatrixOld src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
+        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
 
         CNumber[] destEntries = new CNumber[src1.numRows*src2.numCols];
         Arrays.fill(destEntries, CNumber.ZERO);
@@ -124,7 +124,7 @@ public final class RealComplexCsrMatrixMultiplication {
     /**
      * Computes the matrix multiplication between two sparse CSR matrices and returns the result as a sparse matrix. <br>
      *
-     * Warning: This method may be slower than {@link #standard(CsrMatrix, CsrCMatrix)}
+     * Warning: This method may be slower than {@link #standard(CsrMatrixOld, CsrCMatrixOld)}
      * if the result of multiplying this matrix with {@code src2} is not very sparse. Further, multiplying two
      * sparse matrices (even very sparse matrices) may result in a dense matrix so this method should be used with
      * caution.
@@ -132,9 +132,9 @@ public final class RealComplexCsrMatrixMultiplication {
      * @param src2 Second CSR matrix in the multiplication.
      * @return Sparse CSR matrix resulting from the matrix multiplication of the two sparse CSR matrices.
      */
-    public static CsrCMatrix standardAsSparse(CsrMatrix src1, CsrCMatrix src2) {
+    public static CsrCMatrixOld standardAsSparse(CsrMatrixOld src1, CsrCMatrixOld src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
+        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
 
         int[] resultRowPtr = new int[src1.numRows + 1];
         List<CNumber> resultList = new ArrayList<>();
@@ -174,14 +174,14 @@ public final class RealComplexCsrMatrixMultiplication {
         CNumber[] resultValues = resultList.toArray(new CNumber[0]);
         int[] resultColIndices = ArrayUtils.fromIntegerList(resultColIndexList);
 
-        return new CsrCMatrix(new Shape(src1.numRows, src2.numCols), resultValues, resultRowPtr, resultColIndices);
+        return new CsrCMatrixOld(new Shape(src1.numRows, src2.numCols), resultValues, resultRowPtr, resultColIndices);
     }
 
 
     /**
      * Computes the matrix multiplication between two sparse CSR matrices and returns the result as a sparse matrix. <br>
      *
-     * Warning: This method may be slower than {@link #standard(CsrCMatrix, CsrMatrix)}
+     * Warning: This method may be slower than {@link #standard(CsrCMatrixOld, CsrMatrixOld)}
      * if the result of multiplying this matrix with {@code src2} is not very sparse. Further, multiplying two
      * sparse matrices (even very sparse matrices) may result in a dense matrix so this method should be used with
      * caution.
@@ -189,9 +189,9 @@ public final class RealComplexCsrMatrixMultiplication {
      * @param src2 Second CSR matrix in the multiplication.
      * @return Sparse CSR matrix resulting from the matrix multiplication of the two sparse CSR matrices.
      */
-    public static CsrCMatrix standardAsSparse(CsrCMatrix src1, CsrMatrix src2) {
+    public static CsrCMatrixOld standardAsSparse(CsrCMatrixOld src1, CsrMatrixOld src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
+        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
 
         int[] resultRowPtr = new int[src1.numRows + 1];
         List<CNumber> resultList = new ArrayList<>();
@@ -231,7 +231,7 @@ public final class RealComplexCsrMatrixMultiplication {
         CNumber[] resultValues = resultList.toArray(new CNumber[0]);
         int[] resultColIndices = ArrayUtils.fromIntegerList(resultColIndexList);
 
-        return new CsrCMatrix(new Shape(src1.numRows, src2.numCols), resultValues, resultRowPtr, resultColIndices);
+        return new CsrCMatrixOld(new Shape(src1.numRows, src2.numCols), resultValues, resultRowPtr, resultColIndices);
     }
 
 
@@ -242,9 +242,9 @@ public final class RealComplexCsrMatrixMultiplication {
      * @return The result of the matrix-vector multiplication.
      * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the number of columns in {@code src2}.
      */
-    public static CVectorOld standardVector(CsrMatrix src1, CooCVector src2) {
+    public static CVectorOld standardVector(CsrMatrixOld src1, CooCVectorOld src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
-        ParameterChecks.assertEquals(src1.numCols, src2.size);
+        ParameterChecks.ensureEquals(src1.numCols, src2.size);
 
         CNumber[] destEntries = new CNumber[src1.numRows];
         Arrays.fill(destEntries, CNumber.ZERO);
@@ -282,9 +282,9 @@ public final class RealComplexCsrMatrixMultiplication {
      * @return The result of the matrix-vector multiplication.
      * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the number of columns in {@code src2}.
      */
-    public static CVectorOld standardVector(CsrCMatrix src1, CooVector src2) {
+    public static CVectorOld standardVector(CsrCMatrixOld src1, CooVectorOld src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
-        ParameterChecks.assertEquals(src1.numCols, src2.size);
+        ParameterChecks.ensureEquals(src1.numCols, src2.size);
 
         CNumber[] destEntries = new CNumber[src1.numRows];
         Arrays.fill(destEntries, CNumber.ZERO);

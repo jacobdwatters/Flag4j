@@ -2,8 +2,8 @@ package org.flag4j.sparse_complex_vector;
 
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CooCVectorElemMultTests {
 
-    CooCVector a;
+    CooCVectorOld a;
     int size;
 
     @Test
@@ -23,13 +23,13 @@ class CooCVectorElemMultTests {
                 new CNumber(25.612, 0.0245)};
         int[] aIndices = {0, 2, 5};
         size = 7;
-        a = new CooCVector(size, aValues, aIndices);
+        a = new CooCVectorOld(size, aValues, aIndices);
 
         double[] bValues;
         int[] expIndices;
         VectorOld b;
         CNumber[] expValues;
-        CooCVector exp;
+        CooCVectorOld exp;
 
         // -------------------- Sub-case 1 --------------------
         bValues = new double[]{1.223, -44.51, 3.4, 2.3, 14.5, -14.51, 0.14};
@@ -38,7 +38,7 @@ class CooCVectorElemMultTests {
         expValues = new CNumber[]{new CNumber(1.3345, -9.25).mult(1.223), new CNumber(0, -45.62).mult(3.4),
                 new CNumber(25.612, 0.0245).mult(-14.51)};
         expIndices = new int[]{0, 2, 5};
-        exp = new CooCVector(size, expValues, expIndices);
+        exp = new CooCVectorOld(size, expValues, expIndices);
         assertEquals(exp, a.elemMult(b));
 
         // -------------------- Sub-case 2 --------------------
@@ -57,30 +57,30 @@ class CooCVectorElemMultTests {
                 new CNumber(25.612, 0.0245)};
         int[] aIndices = {0, 2, 5};
         size = 7;
-        a = new CooCVector(size, aValues, aIndices);
+        a = new CooCVectorOld(size, aValues, aIndices);
 
         double[] bValues;
         int[] expIndices, bIndices;
-        CooVector b;
+        CooVectorOld b;
         CNumber[] expValues;
-        CooCVector exp;
+        CooCVectorOld exp;
 
         // -------------------- Sub-case 1 --------------------
         bValues = new double[]{1.223, -44.51, 3.4, 2.3};
         bIndices = new int[]{1, 2, 3, 5};
-        b = new CooVector(size, bValues, bIndices);
+        b = new CooVectorOld(size, bValues, bIndices);
 
         expValues = new CNumber[]{aValues[1].mult(bValues[1]), aValues[2].mult(bValues[3])};
         expIndices = new int[]{2, 5};
-        exp = new CooCVector(size, expValues, expIndices);
+        exp = new CooCVectorOld(size, expValues, expIndices);
         assertEquals(exp, a.elemMult(b));
 
         // -------------------- Sub-case 2 --------------------
         bValues = new double[]{1.223, -44.51, 3.4, 2.3, 14.5, -14.51};
         bIndices = new int[]{1, 2, 5, 6, 105, 132};
-        b = new CooVector(140, bValues, bIndices);
+        b = new CooVectorOld(140, bValues, bIndices);
 
-        CooVector finalB = b;
+        CooVectorOld finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.elemMult(finalB));
     }
 
@@ -92,12 +92,12 @@ class CooCVectorElemMultTests {
                 new CNumber(25.612, 0.0245)};
         int[] aIndices = {0, 2, 5};
         size = 7;
-        a = new CooCVector(size, aValues, aIndices);
+        a = new CooCVectorOld(size, aValues, aIndices);
 
         CNumber[] bValues, expValues;
         int[] expIndices;
         CVectorOld b;
-        CooCVector exp;
+        CooCVectorOld exp;
 
         // -------------------- Sub-case 1 --------------------
         bValues = new CNumber[]{new CNumber(24.3, -0.013), new CNumber(0, 13.6),
@@ -110,7 +110,7 @@ class CooCVectorElemMultTests {
                 new CNumber(0, -45.62).mult(new CNumber(2.4)),
                 new CNumber(25.612, 0.0245).mult(new CNumber(9924.515, 51.5))};
         expIndices = new int[]{0, 2, 5};
-        exp = new CooCVector(size, expValues, expIndices);
+        exp = new CooCVectorOld(size, expValues, expIndices);
         assertEquals(exp, a.elemMult(b));
 
         // -------------------- Sub-case 2 --------------------
@@ -130,13 +130,13 @@ class CooCVectorElemMultTests {
                 new CNumber(25.612, 0.0245)};
         int[] aIndices = {0, 2, 5};
         size = 7;
-        a = new CooCVector(size, aValues, aIndices);
+        a = new CooCVectorOld(size, aValues, aIndices);
 
         CNumber[] bValues;
         int[] expIndices, bIndices;
-        CooCVector b;
+        CooCVectorOld b;
         CNumber[] expValues;
-        CooCVector exp;
+        CooCVectorOld exp;
 
         // -------------------- Sub-case 1 --------------------
         bValues = new CNumber[]{
@@ -144,11 +144,11 @@ class CooCVectorElemMultTests {
                 new CNumber(2.4), new CNumber(-994.1 ,1.45)
         };
         bIndices = new int[]{1, 2, 3, 5};
-        b = new CooCVector(size, bValues, bIndices);
+        b = new CooCVectorOld(size, bValues, bIndices);
 
         expValues = new CNumber[]{aValues[1].mult(bValues[1]), aValues[2].mult(bValues[3])};
         expIndices = new int[]{2, 5};
-        exp = new CooCVector(size, expValues, expIndices);
+        exp = new CooCVectorOld(size, expValues, expIndices);
         assertEquals(exp, a.elemMult(b));
 
         // -------------------- Sub-case 2 --------------------
@@ -158,9 +158,9 @@ class CooCVectorElemMultTests {
                 new CNumber(3249.56, 2122.2), new CNumber(-926.6, 324.67)
         };
         bIndices = new int[]{1, 2, 5, 6, 105, 132};
-        b = new CooCVector(140, bValues, bIndices);
+        b = new CooCVectorOld(140, bValues, bIndices);
 
-        CooCVector finalB = b;
+        CooCVectorOld finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.elemMult(finalB));
     }
 
@@ -172,12 +172,12 @@ class CooCVectorElemMultTests {
                 new CNumber(25.612, 0.0245)};
         int[] aIndices = {0, 2, 5};
         size = 7;
-        a = new CooCVector(size, aValues, aIndices);
+        a = new CooCVectorOld(size, aValues, aIndices);
 
         CNumber[] expValues;
         int[] expIndices;
         CNumber b;
-        CooCVector exp;
+        CooCVectorOld exp;
 
         // -------------------- Sub-case 1 --------------------
         b = new CNumber(23.55, -984.2);
@@ -187,7 +187,7 @@ class CooCVectorElemMultTests {
                 new CNumber(0, -45.62).mult(b),
                 new CNumber(25.612, 0.0245).mult(b)};
         expIndices = new int[]{0, 2, 5};
-        exp = new CooCVector(size, expValues, expIndices);
+        exp = new CooCVectorOld(size, expValues, expIndices);
         assertEquals(exp, a.mult(b));
     }
 
@@ -199,12 +199,12 @@ class CooCVectorElemMultTests {
                 new CNumber(25.612, 0.0245)};
         int[] aIndices = {0, 2, 5};
         size = 7;
-        a = new CooCVector(size, aValues, aIndices);
+        a = new CooCVectorOld(size, aValues, aIndices);
 
         CNumber[] expValues;
         int[] expIndices;
         double b;
-        CooCVector exp;
+        CooCVectorOld exp;
 
         // -------------------- Sub-case 1 --------------------
         b = 24.5;
@@ -214,7 +214,7 @@ class CooCVectorElemMultTests {
                 new CNumber(0, -45.62).mult(b),
                 new CNumber(25.612, 0.0245).mult(b)};
         expIndices = new int[]{0, 2, 5};
-        exp = new CooCVector(size, expValues, expIndices);
+        exp = new CooCVectorOld(size, expValues, expIndices);
         assertEquals(exp, a.mult(b));
     }
 }

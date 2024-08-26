@@ -51,17 +51,17 @@ class CVectorAggregateTests {
 
 
     @Test
-    void argMinTestCase() {
+    void argminTestCase() {
         // ------------------ Sub-case 1 ------------------
         expIndices = new int[]{4};
-        assertArrayEquals(expIndices, a.argMin());
+        assertArrayEquals(expIndices, a.argmin());
     }
 
 
     @Test
-    void argMaxTestCase() {
+    void argmaxTestCase() {
         // ------------------ Sub-case 1 ------------------
         expIndices = new int[]{0};
-        assertArrayEquals(expIndices, a.argMax());
+        assertArrayEquals(expIndices, a.argmax());
     }
 }

@@ -4,8 +4,8 @@ import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +43,7 @@ class VectorOuterProductTests {
     @Test
     void realSparseOuterTestCase() {
         double[] bEntries;
-        CooVector b;
+        CooVectorOld b;
         double[][] expEntries;
         MatrixOld exp;
 
@@ -53,7 +53,7 @@ class VectorOuterProductTests {
         bEntries = new double[]{16.345};
         sparseIndices = new int[]{1};
         sparseSize = 3;
-        b = new CooVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVectorOld(sparseSize, bEntries, sparseIndices);
         expEntries = new double[][]{{0.0, 16.345, 0.0},
                 {0.0, 91.53199999999998, 0.0},
                 {0.0, -152.907475, 0.0}};
@@ -86,7 +86,7 @@ class VectorOuterProductTests {
     @Test
     void complexSparseOuterTestCase() {
         CNumber[] bEntries;
-        CooCVector b;
+        CooCVectorOld b;
         CNumber[][] expEntries;
         CMatrixOld exp;
 
@@ -96,7 +96,7 @@ class VectorOuterProductTests {
         bEntries = new CNumber[]{new CNumber("71.5-8.0i")};
         sparseIndices = new int[]{2};
         sparseSize = 3;
-        b = new CooCVector(sparseSize, bEntries, sparseIndices);
+        b = new CooCVectorOld(sparseSize, bEntries, sparseIndices);
         expEntries = new CNumber[][]{{new CNumber("0.0"), new CNumber("0.0"), new CNumber("71.5+8.0i")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("400.4+44.8i")},
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("-668.8825-74.84i")}};

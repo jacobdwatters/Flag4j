@@ -47,13 +47,13 @@ class VectorAggregateTests {
 
 
     @Test
-    void argMinTestCase() {
+    void argminTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new double[]{1.45, -194.5666, 430.5, 563.3};
         a = new VectorOld(aEntries);
         expArg = new int[]{1};
 
-        assertArrayEquals(expArg, a.argMin());
+        assertArrayEquals(expArg, a.argmin());
     }
 
 
@@ -80,19 +80,19 @@ class VectorAggregateTests {
 
 
     @Test
-    void argMaxTestCase() {
+    void argmaxTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new double[]{1.45, -194.5666, 430.5, 563.3};
         a = new VectorOld(aEntries);
         expArg = new int[]{3};
 
-        assertArrayEquals(expArg, a.argMax());
+        assertArrayEquals(expArg, a.argmax());
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new double[]{1.45, -194.5666, 4301.5, 563.3};
         a = new VectorOld(aEntries);
         expArg = new int[]{2};
 
-        assertArrayEquals(expArg, a.argMax());
+        assertArrayEquals(expArg, a.argmax());
     }
 }

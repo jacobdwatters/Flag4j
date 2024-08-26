@@ -172,9 +172,9 @@ public class SymmHess extends RealHess {
     @Override
     protected void setUp(MatrixOld src) {
         if(enforceSymmetric && !src.isSymmetric()) // If requested, check the matrix is symmetric.
-            throw new LinearAlgebraException("Decomposition only supports symmetric matrices.");
+            throw new LinearAlgebraException("DecompositionOld only supports symmetric matrices.");
         else
-            ParameterChecks.assertSquareMatrix(src.shape); // Otherwise, Just ensure the matrix is square.
+            ParameterChecks.ensureSquareMatrix(src.shape); // Otherwise, Just ensure the matrix is square.
 
         numRows = numCols = minAxisSize = src.numRows;
         copyUpperTri(src);  // Initializes transform matrix.

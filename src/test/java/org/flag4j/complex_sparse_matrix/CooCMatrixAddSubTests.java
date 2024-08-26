@@ -2,8 +2,8 @@ package org.flag4j.complex_sparse_matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -15,35 +15,35 @@ class CooCMatrixAddSubTests {
     Shape aShape;
     CNumber[] aEntries;
     int[] aRowIndices, aColIndices;
-    CooCMatrix A;
+    CooCMatrixOld A;
     Shape bShape, expShape;
     int[] bRowIndices, bColIndices, expRowIndices, expColIndices;
 
     @Test
     void complexSparseRealSparseSubTest() {
         double[] bEntries;
-        CooMatrix B;
+        CooMatrixOld B;
         CNumber[] expEntries;
-        CooCMatrix exp;
+        CooCMatrixOld exp;
 
         // ------------------- Sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new CNumber[]{new CNumber("0.16907660311363415+0.6444051570772598i"), new CNumber("0.2685636944700537+0.277720286141387i"), new CNumber("0.5371330041634212+0.8363534476695493i"), new CNumber("0.7584479587013249+0.1811320912553298i"), new CNumber("0.24728154455051643+0.8252113996910411i")};
         aRowIndices = new int[]{0, 1, 2, 3, 4};
         aColIndices = new int[]{2, 0, 2, 1, 1};
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(5, 5);
         bEntries = new double[]{0.19188475719480103, 0.4647475368649855, 0.29775891146914446, 0.3211976671246123, 0.17140653454433696};
         bRowIndices = new int[]{0, 2, 2, 2, 4};
         bColIndices = new int[]{3, 1, 2, 4, 0};
-        B = new CooMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        B = new CooMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expShape = new Shape(5, 5);
         expEntries = new CNumber[]{new CNumber("0.16907660311363415+0.6444051570772598i"), new CNumber("-0.19188475719480103"), new CNumber("0.2685636944700537+0.277720286141387i"), new CNumber("-0.4647475368649855"), new CNumber("0.23937409269427679+0.8363534476695493i"), new CNumber("-0.3211976671246123"), new CNumber("0.7584479587013249+0.1811320912553298i"), new CNumber("-0.17140653454433696"), new CNumber("0.24728154455051643+0.8252113996910411i")};
         expRowIndices = new int[]{0, 0, 1, 2, 2, 2, 3, 4, 4};
         expColIndices = new int[]{2, 3, 0, 1, 2, 4, 1, 0, 1};
-        exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooCMatrixOld(expShape, expEntries, expRowIndices, expColIndices);
 
         assertEquals(exp, A.sub(B));
 
@@ -52,19 +52,19 @@ class CooCMatrixAddSubTests {
         aEntries = new CNumber[]{new CNumber("0.04597036221184858+0.27569095742387373i"), new CNumber("0.5253705770713939+0.8652830858877205i"), new CNumber("0.22466851327235537+0.48755081428740665i")};
         aRowIndices = new int[]{1, 1, 2};
         aColIndices = new int[]{0, 3, 4};
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(3, 5);
         bEntries = new double[]{0.672094469418651, 0.004058773106305424, 0.8859863043452371};
         bRowIndices = new int[]{0, 1, 2};
         bColIndices = new int[]{0, 3, 0};
-        B = new CooMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        B = new CooMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expShape = new Shape(3, 5);
         expEntries = new CNumber[]{new CNumber("-0.672094469418651"), new CNumber("0.04597036221184858+0.27569095742387373i"), new CNumber("0.5213118039650885+0.8652830858877205i"), new CNumber("-0.8859863043452371"), new CNumber("0.22466851327235537+0.48755081428740665i")};
         expRowIndices = new int[]{0, 1, 1, 2, 2};
         expColIndices = new int[]{0, 0, 3, 0, 4};
-        exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooCMatrixOld(expShape, expEntries, expRowIndices, expColIndices);
 
         assertEquals(exp, A.sub(B));
 
@@ -73,15 +73,15 @@ class CooCMatrixAddSubTests {
         aEntries = new CNumber[]{new CNumber("0.7773495524901912+0.9670609434569698i"), new CNumber("0.8143837489702114+0.6264702725849607i"), new CNumber("0.8703120541209147+0.3764970320612634i"), new CNumber("0.10844960651850521+0.10089333349129115i"), new CNumber("0.030157519141515654+0.049893464833488554i"), new CNumber("0.9105679984224888+0.8197605473728841i"), new CNumber("0.4716928344990372+0.14839364769347763i"), new CNumber("0.060272082265836135+0.6869053336232293i"), new CNumber("0.8562050927896339+0.9202699550583396i")};
         aRowIndices = new int[]{0, 1, 3, 3, 3, 4, 6, 7, 8};
         aColIndices = new int[]{2, 1, 1, 3, 4, 4, 0, 1, 3};
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(3, 5);
         bEntries = new double[]{0.536356449591203, 0.30915669933809475, 0.8877352025892702};
         bRowIndices = new int[]{0, 1, 2};
         bColIndices = new int[]{2, 3, 1};
-        B = new CooMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        B = new CooMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
-        CooMatrix finalB = B;
+        CooMatrixOld finalB = B;
         assertThrows(Exception.class, ()->A.sub(finalB));
     }
 
@@ -89,28 +89,28 @@ class CooCMatrixAddSubTests {
     @Test
     void complexSparseComplexSparseSubTest() {
         CNumber[] bEntries;
-        CooCMatrix B;
+        CooCMatrixOld B;
         CNumber[] expEntries;
-        CooCMatrix exp;
+        CooCMatrixOld exp;
 
         // ------------------- Sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new CNumber[]{new CNumber("0.6910245510195184+0.9077474303843585i"), new CNumber("0.6823193196673835+0.9686934950350857i"), new CNumber("0.7016095528990995+0.003958926929736095i"), new CNumber("0.7245077304133463+0.5737158012835359i"), new CNumber("0.2691984171075853+0.67074179839617i")};
         aRowIndices = new int[]{1, 1, 4, 4, 4};
         aColIndices = new int[]{3, 4, 0, 1, 2};
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(5, 5);
         bEntries = new CNumber[]{new CNumber("0.750831194736842+0.014946996944480873i"), new CNumber("0.4056010561730603+0.8747315110548242i"), new CNumber("0.36210393820761777+0.3658252932429157i"), new CNumber("0.6939774995467313+0.8474628180314803i"), new CNumber("0.7736819449768878+0.549693340140008i")};
         bRowIndices = new int[]{0, 0, 1, 3, 4};
         bColIndices = new int[]{1, 4, 0, 0, 4};
-        B = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        B = new CooCMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expShape = new Shape(5, 5);
         expEntries = new CNumber[]{new CNumber("-0.750831194736842-0.014946996944480873i"), new CNumber("-0.4056010561730603-0.8747315110548242i"), new CNumber("-0.36210393820761777-0.3658252932429157i"), new CNumber("0.6910245510195184+0.9077474303843585i"), new CNumber("0.6823193196673835+0.9686934950350857i"), new CNumber("-0.6939774995467313-0.8474628180314803i"), new CNumber("0.7016095528990995+0.003958926929736095i"), new CNumber("0.7245077304133463+0.5737158012835359i"), new CNumber("0.2691984171075853+0.67074179839617i"), new CNumber("-0.7736819449768878-0.549693340140008i")};
         expRowIndices = new int[]{0, 0, 1, 1, 1, 3, 4, 4, 4, 4};
         expColIndices = new int[]{1, 4, 0, 3, 4, 0, 0, 1, 2, 4};
-        exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooCMatrixOld(expShape, expEntries, expRowIndices, expColIndices);
 
         assertEquals(exp, A.sub(B));
 
@@ -119,19 +119,19 @@ class CooCMatrixAddSubTests {
         aEntries = new CNumber[]{new CNumber("0.16309615141403278+0.2516389353539852i"), new CNumber("0.5450934022190043+0.8214327358769891i"), new CNumber("0.9755707249007003+0.24732294705340552i")};
         aRowIndices = new int[]{0, 0, 1};
         aColIndices = new int[]{2, 3, 0};
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(3, 5);
         bEntries = new CNumber[]{new CNumber("0.5974064951428303+0.25567994696631857i"), new CNumber("0.09729813080087268+0.25124075582765404i"), new CNumber("0.5183760577380403+0.015612286010666998i")};
         bRowIndices = new int[]{0, 2, 2};
         bColIndices = new int[]{2, 0, 3};
-        B = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        B = new CooCMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
         expShape = new Shape(3, 5);
         expEntries = new CNumber[]{new CNumber("-0.4343103437287975-0.0040410116123333895i"), new CNumber("0.5450934022190043+0.8214327358769891i"), new CNumber("0.9755707249007003+0.24732294705340552i"), new CNumber("-0.09729813080087268-0.25124075582765404i"), new CNumber("-0.5183760577380403-0.015612286010666998i")};
         expRowIndices = new int[]{0, 0, 1, 2, 2};
         expColIndices = new int[]{2, 3, 0, 0, 3};
-        exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooCMatrixOld(expShape, expEntries, expRowIndices, expColIndices);
 
         assertEquals(exp, A.sub(B));
 
@@ -140,15 +140,15 @@ class CooCMatrixAddSubTests {
         aEntries = new CNumber[]{new CNumber("0.37615963269009955+0.46648638371680784i"), new CNumber("0.4389228048293522+0.49919855367244914i"), new CNumber("0.3641970005860071+0.21364944579375622i"), new CNumber("0.6768728860174499+0.11293844550895626i"), new CNumber("0.10555547511624319+0.9974250471254223i"), new CNumber("0.48695465079671685+0.22713039083257602i"), new CNumber("0.24233326574055303+0.6509670389804286i"), new CNumber("0.8285754970538919+0.6734183712117148i"), new CNumber("0.9793874081511778+0.9016976212187522i")};
         aRowIndices = new int[]{0, 1, 2, 3, 5, 5, 8, 8, 8};
         aColIndices = new int[]{0, 1, 1, 4, 0, 2, 2, 3, 4};
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(3, 5);
         bEntries = new CNumber[]{new CNumber("0.49283950580425695+0.5978997646247968i"), new CNumber("0.4798061204000892+0.6805791759797895i"), new CNumber("0.3296042362931275+0.40587377179411577i")};
         bRowIndices = new int[]{0, 1, 2};
         bColIndices = new int[]{0, 3, 4};
-        B = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
+        B = new CooCMatrixOld(bShape, bEntries, bRowIndices, bColIndices);
 
-        CooCMatrix finalB = B;
+        CooCMatrixOld finalB = B;
         assertThrows(Exception.class, ()->A.sub(finalB));
     }
 
@@ -165,7 +165,7 @@ class CooCMatrixAddSubTests {
         aEntries = new CNumber[]{new CNumber("0.8424268253354057+0.21146667805661112i"), new CNumber("0.2304861070248274+0.10979159677958883i"), new CNumber("0.3056659052818361+0.6921336614085905i"), new CNumber("0.5195959873475188+0.41206170034352796i"), new CNumber("0.03582224948045554+0.17683330297161015i")};
         aRowIndices = new int[]{0, 0, 0, 2, 4};
         aColIndices = new int[]{0, 1, 3, 4, 0};
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[][]{
                 {0.4769, 0.55535, 0.74008, 0.4981, 0.60883},
@@ -190,7 +190,7 @@ class CooCMatrixAddSubTests {
         aEntries = new CNumber[]{new CNumber("0.3159084198324813+0.7906484152681891i"), new CNumber("0.942719674202597+0.961516632226317i"), new CNumber("0.39271189079390745+0.011647415847762632i")};
         aRowIndices = new int[]{0, 1, 2};
         aColIndices = new int[]{3, 2, 2};
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[][]{
                 {0.88463, 0.00213, 0.95681, 0.10726, 0.57349},
@@ -211,7 +211,7 @@ class CooCMatrixAddSubTests {
         aEntries = new CNumber[]{new CNumber("0.9952829598305839+0.8050493064451766i"), new CNumber("0.709025797231945+0.5951590091259715i"), new CNumber("0.06758149251369971+0.08300547071660325i"), new CNumber("0.7448367789778203+0.9129414768429843i"), new CNumber("0.8328088447829204+0.17370844362000515i"), new CNumber("0.7298735049313018+0.5143837509697955i"), new CNumber("0.9841202093082072+0.8351781796300937i"), new CNumber("0.8865663154413503+0.40606422345406057i"), new CNumber("0.9921185011384177+0.332737970659427i")};
         aRowIndices = new int[]{2, 3, 4, 5, 5, 5, 6, 8, 8};
         aColIndices = new int[]{1, 3, 4, 0, 2, 3, 1, 1, 3};
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[][]{
                 {0.22054, 0.57962, 0.11093, 0.97711, 0.05861},
@@ -236,7 +236,7 @@ class CooCMatrixAddSubTests {
         aEntries = new CNumber[]{new CNumber("0.21432657368028107+0.02285719095217109i"), new CNumber("0.5121521258714489+0.06946412645312638i"), new CNumber("0.7335832759673879+0.8072923006459559i"), new CNumber("0.9995745132631427+0.8601025880139203i"), new CNumber("0.7433339540509724+0.991526108868919i")};
         aRowIndices = new int[]{0, 1, 2, 2, 2};
         aColIndices = new int[]{4, 4, 1, 2, 3};
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.15344+0.85327i"), new CNumber("0.15998+0.24614i"), new CNumber("0.02935+0.61796i"), new CNumber("0.34734+0.34036i"), new CNumber("0.72925+0.62188i")},
@@ -261,7 +261,7 @@ class CooCMatrixAddSubTests {
         aEntries = new CNumber[]{new CNumber("0.8641201436785124+0.464077542772543i"), new CNumber("0.051767898713606764+0.8739906137569583i"), new CNumber("0.3479464354902717+0.5164113253872332i")};
         aRowIndices = new int[]{0, 1, 2};
         aColIndices = new int[]{3, 3, 4};
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.64542+0.78504i"), new CNumber("0.78863+0.16445i"), new CNumber("0.81881+0.55626i"), new CNumber("0.76823+0.46202i"), new CNumber("0.56919+0.58119i")},
@@ -282,7 +282,7 @@ class CooCMatrixAddSubTests {
         aEntries = new CNumber[]{new CNumber("0.6907434894473184+0.5031295442002623i"), new CNumber("0.03229906329481269+0.17744734837949105i"), new CNumber("0.628911680222165+0.6716533189511541i"), new CNumber("0.8176512894236148+0.06108845413688435i"), new CNumber("0.3694547169018447+0.08400778038547219i"), new CNumber("0.34659776908318607+0.13962028870070875i"), new CNumber("0.7411889157136219+0.6236878630390096i"), new CNumber("0.6082841811530453+0.7702079661274945i"), new CNumber("0.9176201416728813+0.7402652203934886i")};
         aRowIndices = new int[]{0, 0, 2, 4, 5, 5, 6, 7, 7};
         aColIndices = new int[]{2, 3, 4, 4, 1, 2, 2, 0, 3};
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.71274+0.45198i"), new CNumber("0.40301+0.44065i"), new CNumber("0.0448+0.16388i"), new CNumber("0.68599+0.92123i"), new CNumber("0.44005+0.67785i")},

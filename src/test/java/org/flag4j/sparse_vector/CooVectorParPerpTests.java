@@ -1,7 +1,7 @@
 package org.flag4j.sparse_vector;
 
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -12,7 +12,7 @@ class CooVectorParPerpTests {
     static double[] aEntries;
     static int[] aIndices;
     static int sparseSize;
-    static CooVector a;
+    static CooVectorOld a;
 
     @Test
     void denseParallelTestCase() {
@@ -23,7 +23,7 @@ class CooVectorParPerpTests {
         aEntries = new double[]{1.345, -98.345, 0, 24.5};
         aIndices = new int[]{0, 2, 3, 5};
         sparseSize = 8;
-        a = new CooVector(sparseSize, aEntries, aIndices);
+        a = new CooVectorOld(sparseSize, aEntries, aIndices);
         bEntries = new double[]{1.345, 0, -98.345, 0, 0, 24.5, 0, 0};
         b = new VectorOld(bEntries);
 
@@ -39,7 +39,7 @@ class CooVectorParPerpTests {
         aEntries = new double[]{0, -98.345, 1.345, 24.5};
         aIndices = new int[]{0, 2, 3, 5};
         sparseSize = 8;
-        a = new CooVector(sparseSize, aEntries, aIndices);
+        a = new CooVectorOld(sparseSize, aEntries, aIndices);
         bEntries = new double[]{0, 0, -98.345, 1.345, 0, 24.5, 0, 0};
         b = new VectorOld(bEntries);
 
@@ -49,7 +49,7 @@ class CooVectorParPerpTests {
         aEntries = new double[]{0, -98.345, 1.345, 24.5};
         aIndices = new int[]{0, 2, 3, 5};
         sparseSize = 8;
-        a = new CooVector(sparseSize, aEntries, aIndices);
+        a = new CooVectorOld(sparseSize, aEntries, aIndices);
         bEntries = new double[]{0, 0, -98.345/345.965178, 1.345/345.965178, 0, 24.5/345.965178, 0, 0};
         b = new VectorOld(bEntries);
 
@@ -59,7 +59,7 @@ class CooVectorParPerpTests {
         aEntries = new double[]{0, -98.345, 1.345, 24.5};
         aIndices = new int[]{0, 2, 3, 5};
         sparseSize = 81;
-        a = new CooVector(sparseSize, aEntries, aIndices);
+        a = new CooVectorOld(sparseSize, aEntries, aIndices);
         bEntries = new double[]{0, 0, -98.345/345.965178, 1.345/345.965178, 0, 24.5/345.965178, 0, 0};
         b = new VectorOld(bEntries);
 
@@ -69,7 +69,7 @@ class CooVectorParPerpTests {
         aEntries = new double[]{0, -98.345, 1.345, 24.5};
         aIndices = new int[]{0, 2, 3, 5};
         sparseSize = 8;
-        a = new CooVector(sparseSize, aEntries, aIndices);
+        a = new CooVectorOld(sparseSize, aEntries, aIndices);
         bEntries = new double[]{0, 0, -98.345/345.965178, 1.345/345.965178, 0, 24.5/345.965178, 0};
         b = new VectorOld(bEntries);
 
@@ -79,7 +79,7 @@ class CooVectorParPerpTests {
         aEntries = new double[]{-98.345};
         aIndices = new int[]{0};
         sparseSize = 1;
-        a = new CooVector(sparseSize, aEntries, aIndices);
+        a = new CooVectorOld(sparseSize, aEntries, aIndices);
         bEntries = new double[]{23.4};
         b = new VectorOld(bEntries);
 
@@ -89,7 +89,7 @@ class CooVectorParPerpTests {
         aEntries = new double[]{};
         aIndices = new int[]{};
         sparseSize = 0;
-        a = new CooVector(sparseSize, aEntries, aIndices);
+        a = new CooVectorOld(sparseSize, aEntries, aIndices);
         bEntries = new double[]{};
         b = new VectorOld(bEntries);
 
@@ -99,7 +99,7 @@ class CooVectorParPerpTests {
         aEntries = new double[]{};
         aIndices = new int[]{};
         sparseSize = 823;
-        a = new CooVector(sparseSize, aEntries, aIndices);
+        a = new CooVectorOld(sparseSize, aEntries, aIndices);
         bEntries = new double[823];
         b = new VectorOld(bEntries);
 
@@ -109,7 +109,7 @@ class CooVectorParPerpTests {
         aEntries = new double[]{0, -98.345, 1.345, 24.5};
         aIndices = new int[]{0, 2, 3, 5};
         sparseSize = 8;
-        a = new CooVector(sparseSize, aEntries, aIndices);
+        a = new CooVectorOld(sparseSize, aEntries, aIndices);
         bEntries = new double[]{0, 0, -98.345/345.965178, 1.345/345.965178, 0, 24.5/345.965178, 0, 1};
         b = new VectorOld(bEntries);
 
@@ -119,7 +119,7 @@ class CooVectorParPerpTests {
         aEntries = new double[]{0, -98.345, 1.345, 24.5};
         aIndices = new int[]{0, 2, 3, 5};
         sparseSize = 8;
-        a = new CooVector(sparseSize, aEntries, aIndices);
+        a = new CooVectorOld(sparseSize, aEntries, aIndices);
         bEntries = new double[]{0, 0, -98.345/345.965178, 1.345/345.965178, 0, 24.5/2, 0, 0};
         b = new VectorOld(bEntries);
 
@@ -136,7 +136,7 @@ class CooVectorParPerpTests {
         aEntries = new double[]{1, 1, 1};
         aIndices = new int[]{1, 3, 7};
         sparseSize = 8;
-        a = new CooVector(sparseSize, aEntries, aIndices);
+        a = new CooVectorOld(sparseSize, aEntries, aIndices);
         bEntries = new double[]{1, 0, 1, 0, 1, 1, 1, 0};
         b = new VectorOld(bEntries);
 
@@ -146,7 +146,7 @@ class CooVectorParPerpTests {
         aEntries = new double[]{1, 1, 1};
         aIndices = new int[]{1, 3, 7};
         sparseSize = 8;
-        a = new CooVector(sparseSize, aEntries, aIndices);
+        a = new CooVectorOld(sparseSize, aEntries, aIndices);
         bEntries = new double[]{1, 0, 0, 0, 0, 1, 0, 0};
         b = new VectorOld(bEntries);
 
@@ -156,7 +156,7 @@ class CooVectorParPerpTests {
         aEntries = new double[]{1, 1, 1};
         aIndices = new int[]{1, 3, 7};
         sparseSize = 8;
-        a = new CooVector(sparseSize, aEntries, aIndices);
+        a = new CooVectorOld(sparseSize, aEntries, aIndices);
         bEntries = new double[]{1, 1, 0, 0, 0, 1, 0, 0};
         b = new VectorOld(bEntries);
 
@@ -166,7 +166,7 @@ class CooVectorParPerpTests {
         aEntries = new double[]{1, 1, 1};
         aIndices = new int[]{1, 3, 7};
         sparseSize = 1845;
-        a = new CooVector(sparseSize, aEntries, aIndices);
+        a = new CooVectorOld(sparseSize, aEntries, aIndices);
         bEntries = new double[]{1, 1, 0, 0, 0, 1, 0, 0};
         b = new VectorOld(bEntries);
 
@@ -176,7 +176,7 @@ class CooVectorParPerpTests {
         aEntries = new double[]{2.4, -99.24};
         aIndices = new int[]{0, 2};
         sparseSize = 3;
-        a = new CooVector(sparseSize, aEntries, aIndices);
+        a = new CooVectorOld(sparseSize, aEntries, aIndices);
         bEntries = new double[]{5.3, 349.51145, 106.0/827.0};
         b = new VectorOld(bEntries);
 

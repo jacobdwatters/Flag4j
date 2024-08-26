@@ -81,7 +81,7 @@ public class PermutationMatrix implements Serializable {
      * @throws LinearAlgebraException If {@code shape} is not square.
      */
     public PermutationMatrix(Shape shape) {
-        ParameterChecks.assertSquareMatrix(shape);
+        ParameterChecks.ensureSquareMatrix(shape);
         this.size = shape.get(0);
         swapPointers = ArrayUtils.intRange(0, size);
     }
@@ -117,10 +117,10 @@ public class PermutationMatrix implements Serializable {
      * Creates a permutation matrix with the specified column swaps.
      * @param colSwaps Array specifying column swaps. The entry {@code x} at index {@code i} indicates that column
      * {@code i} has been swapped with column {@code x}. Must be a
-     * {@link ParameterChecks#assertPermutation(int...) permutation array}.
+     * {@link ParameterChecks#ensurePermutation(int...) permutation array}.
      * @return A permutation matrix with the specified column swaps.
      * @throws IllegalArgumentException If {@code colSwaps} is not a
-     * {@link ParameterChecks#assertPermutation(int...) permutation array}.
+     * {@link ParameterChecks#ensurePermutation(int...) permutation array}.
      */
     public static PermutationMatrix fromColSwaps(int[] colSwaps) {
         int[] rowPerm = new int[colSwaps.length];
@@ -180,7 +180,7 @@ public class PermutationMatrix implements Serializable {
      * matrix.
      */
     public MatrixOld leftMult(MatrixOld src) {
-        ParameterChecks.assertEquals(size, src.numRows);
+        ParameterChecks.ensureEquals(size, src.numRows);
         double[] destEntries = new double[src.entries.length];
 
         int colIdx;
@@ -204,7 +204,7 @@ public class PermutationMatrix implements Serializable {
      * matrix.
      */
     public VectorOld leftMult(VectorOld src) {
-        ParameterChecks.assertEquals(size, src.size);
+        ParameterChecks.ensureEquals(size, src.size);
         double[] destEntries = new double[src.entries.length];
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
@@ -225,7 +225,7 @@ public class PermutationMatrix implements Serializable {
      * matrix.
      */
     public CMatrixOld leftMult(CMatrixOld src) {
-        ParameterChecks.assertEquals(size, src.numRows);
+        ParameterChecks.ensureEquals(size, src.numRows);
         CNumber[] destEntries = new CNumber[src.entries.length];
 
         int colIdx;
@@ -249,7 +249,7 @@ public class PermutationMatrix implements Serializable {
      * matrix.
      */
     public CVectorOld leftMult(CVectorOld src) {
-        ParameterChecks.assertEquals(size, src.size);
+        ParameterChecks.ensureEquals(size, src.size);
         CNumber[] destEntries = new CNumber[src.entries.length];
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
@@ -270,7 +270,7 @@ public class PermutationMatrix implements Serializable {
      * @see #leftMult(MatrixOld)
      */
     public MatrixOld rightMult(MatrixOld src) {
-        ParameterChecks.assertEquals(size, src.numCols);
+        ParameterChecks.ensureEquals(size, src.numCols);
         double[] destEntries = new double[src.entries.length];
 
         int colIdx;
@@ -314,7 +314,7 @@ public class PermutationMatrix implements Serializable {
      * @see #leftMult(MatrixOld)
      */
     public CMatrixOld rightMult(CMatrixOld src) {
-        ParameterChecks.assertEquals(size, src.numCols);
+        ParameterChecks.ensureEquals(size, src.numCols);
         CNumber[] destEntries = new CNumber[src.entries.length];
 
         int colIdx;
@@ -368,7 +368,7 @@ public class PermutationMatrix implements Serializable {
      * matrix.
      */
     public void swapCols(int col1, int col2) {
-        ParameterChecks.assertValidIndices(size, col1, col2);
+        ParameterChecks.ensureValidIndices(size, col1, col2);
         // Find locations of entries with the given columns.
         int idx1 = ArrayUtils.indexOf(swapPointers, col1);
         int idx2 = ArrayUtils.indexOf(swapPointers, col2);
@@ -380,14 +380,14 @@ public class PermutationMatrix implements Serializable {
      * Permutes rows of this permutation matrix.
      * @param swaps Defines row swaps of this permutation matrix. The entry {@code x} at index {@code i}
      *              represents row {@code i} has been swapped with row {@code x}. This must be a
-     *              {@link ParameterChecks#assertPermutation(int...)  permutation} array.
+     *              {@link ParameterChecks#ensurePermutation(int...)  permutation} array.
      * @throws IllegalArgumentException If {@code swaps} is not the same length as the number of rows/columns in this
      * permutation matrix. Or, if {@code swaps} is not a
-     * {@link ParameterChecks#assertPermutation(int...)  permutation} array.
+     * {@link ParameterChecks#ensurePermutation(int...)  permutation} array.
      */
     public void permuteRows(int[] swaps) {
-        ParameterChecks.assertPermutation(swaps);
-        ParameterChecks.assertArrayLengthsEq(swaps.length, swapPointers.length);
+        ParameterChecks.ensurePermutation(swaps);
+        ParameterChecks.ensureArrayLengthsEq(swaps.length, swapPointers.length);
         System.arraycopy(swaps, 0, swapPointers, 0, swaps.length);
     }
 

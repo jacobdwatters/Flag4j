@@ -24,7 +24,7 @@
 
 package org.flag4j.operations.sparse.coo;
 
-import org.flag4j.operations.dense.real.RealDenseTranspose;
+import org.flag4j.operations_old.dense.real.RealDenseTranspose;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -57,7 +57,7 @@ public final class SparseDataWrapper<T> {
     /**
      * Non-zero values of the sparse tensor to wrap.
      */
-    private final List<T> values;
+    private final List<Object> values;
     /**
      * Stores wrapped indices. Each list is a single index for the {@code values} data. If the tensor is of rank {@code N}, then
      * each List in {@code keys} will have {@code N} entries. If there are {@code M} non-zero entries in the
@@ -73,7 +73,7 @@ public final class SparseDataWrapper<T> {
      * @param transpose Indicates if a transpose should be applied to the indices array.
      */
     @SuppressWarnings("unchecked")
-    private SparseDataWrapper(T[] values, int[][] indices, boolean transpose) {
+    private SparseDataWrapper(Object[] values, int[][] indices, boolean transpose) {
         this.values = Arrays.asList(values);
         this.keys = transpose ? new List[indices[0].length] : new List[indices.length];
 
@@ -96,8 +96,8 @@ public final class SparseDataWrapper<T> {
      * @param <T> Type of the individual entry within {@code values}.
      * @return A new instance of {@link SparseDataWrapper} which wraps the specified {@code values} and {@code indices}.
      */
-    public static <T extends Number> SparseDataWrapper<T> wrap(T[] values, int[][] indices) {
-        return new SparseDataWrapper<>(values, indices, true);
+    public static SparseDataWrapper wrap(Object[] values, int[][] indices) {
+        return new SparseDataWrapper(values, indices, true);
     }
 
 
@@ -108,8 +108,8 @@ public final class SparseDataWrapper<T> {
      * @param <T> Type of the individual entry within {@code values}.
      * @return A new instance of {@link SparseDataWrapper} which wraps the specified {@code values} and {@code indices}.
      */
-    public static <T extends Number> SparseDataWrapper<T> wrap(T[] values, int[] indices) {
-        return new SparseDataWrapper<>(values, new int[][]{indices}, false);
+    public static SparseDataWrapper wrap(Object[] values, int[] indices) {
+        return new SparseDataWrapper(values, new int[][]{indices}, false);
     }
 
 
@@ -119,9 +119,9 @@ public final class SparseDataWrapper<T> {
      * @param indices Indices of non-zero values in the sparse tensor.
      * @return A new instance of {@link SparseDataWrapper} which wraps the specified {@code values} and {@code indices}.
      */
-    public static SparseDataWrapper<Double> wrap(double[] values, int[][] indices) {
+    public static SparseDataWrapper wrap(double[] values, int[][] indices) {
         // Wrap the primitive array.
-        return new SparseDataWrapper<>(Arrays.stream(values).boxed().toArray(Double[]::new), indices, true);
+        return new SparseDataWrapper(Arrays.stream(values).boxed().toArray(Double[]::new), indices, true);
     }
 
 
@@ -131,9 +131,9 @@ public final class SparseDataWrapper<T> {
      * @param indices Indices of non-zero values in the sparse tensor.
      * @return A new instance of {@link SparseDataWrapper} which wraps the specified {@code values} and {@code indices}.
      */
-    public static SparseDataWrapper<Double> wrap(double[] values, int[] indices) {
+    public static SparseDataWrapper wrap(double[] values, int[] indices) {
         // Wrap the primitive array.
-        return new SparseDataWrapper<>(Arrays.stream(values).boxed().toArray(Double[]::new), new int[][]{indices}, false);
+        return new SparseDataWrapper(Arrays.stream(values).boxed().toArray(Double[]::new), new int[][]{indices}, false);
     }
 
 
@@ -144,9 +144,9 @@ public final class SparseDataWrapper<T> {
      * @param colIndices Column indices of non-zero entries of the sparse tensor.
      * @return A new instance of {@link SparseDataWrapper} which wraps the specified {@code values} and {@code indices}.
      */
-    public static SparseDataWrapper<Double> wrap(double[] values, int[] rowIndices, int[] colIndices) {
+    public static SparseDataWrapper wrap(double[] values, int[] rowIndices, int[] colIndices) {
         // Wrap the primitive array.
-        return new SparseDataWrapper<>(Arrays.stream(values).boxed().toArray(Double[]::new), new int[][]{rowIndices, colIndices}, false);
+        return new SparseDataWrapper(Arrays.stream(values).boxed().toArray(Double[]::new), new int[][]{rowIndices, colIndices}, false);
     }
 
 
@@ -157,9 +157,9 @@ public final class SparseDataWrapper<T> {
      * @param colIndices Column indices of non-zero entries of the sparse tensor.
      * @return A new instance of {@link SparseDataWrapper} which wraps the specified {@code values} and {@code indices}.
      */
-    public static <T extends Number> SparseDataWrapper<T> wrap(T[] values, int[] rowIndices, int[] colIndices) {
+    public static SparseDataWrapper wrap(Object[] values, int[] rowIndices, int[] colIndices) {
         // Wrap the primitive array.
-        return new SparseDataWrapper<>(values, new int[][]{rowIndices, colIndices}, false);
+        return new SparseDataWrapper(values, new int[][]{rowIndices, colIndices}, false);
     }
 
 
@@ -168,7 +168,7 @@ public final class SparseDataWrapper<T> {
      * their order matches the order of the indices.
      * @return A reference to this sparse data wrapper.
      */
-    public SparseDataWrapper<T> sparseSort() {
+    public SparseDataWrapper sparseSort() {
         if(values.size() >= 2) {
             // Only need to sort list with more than 1 entry.
             sparseSortHelper(0, 0, values.size());
@@ -219,7 +219,7 @@ public final class SparseDataWrapper<T> {
         }
 
         // Use map to reorder values sub-list.
-        List<T> valuesSubList = values.subList(start, stop);
+        List<Object> valuesSubList = values.subList(start, stop);
         for(int i=0; i<key.size(); i++) {
             Collections.swap(valuesSubList, swapFrom.get(i), swapTo.get(i));
         }
@@ -262,7 +262,7 @@ public final class SparseDataWrapper<T> {
      * @param values Storage for unwrapped values. Must have the same length as that passed to the constructor. Modified.
      * @param indices Storage for unwrapped indices. Must have the same shape as that passed to the constructor. Modified.
      */
-    public void unwrap(T[] values, int[][] indices) {
+    public void unwrap(Object[] values, int[][] indices) {
         // Copy over data values.
         for(int i=0; i<this.values.size(); i++) {
             values[i] = this.values.get(i);
@@ -283,7 +283,7 @@ public final class SparseDataWrapper<T> {
      * @param indices Storage for unwrapped indices. Must have the same shape as that passed to the constructor. Modified.
      */
     @SuppressWarnings("unused")
-    public void unwrap(T[] values, int[] indices) {
+    public void unwrap(Object[] values, int[] indices) {
         // Copy over data values.
         for(int i=0; i<this.values.size(); i++) {
             values[i] = this.values.get(i);
@@ -338,7 +338,7 @@ public final class SparseDataWrapper<T> {
      * @param rowIndices Storage for unwrapped row indices. Must have the same shape as that passed to the constructor. Modified.
      * @param colIndices Storage for unwrapped column indices. Must have the same shape as that passed to the constructor. Modified.
      */
-    public void unwrap(T[] values, int[] rowIndices, int[] colIndices) {
+    public void unwrap(Object[] values, int[] rowIndices, int[] colIndices) {
         // Copy over data values and indices.
         for(int i=0; i<this.values.size(); i++) {
             values[i] = this.values.get(i);

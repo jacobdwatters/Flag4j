@@ -24,8 +24,8 @@
 
 package org.flag4j.arrays_old.dense;
 
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.core.VectorMixin;
@@ -52,7 +52,7 @@ import java.util.Arrays;
 @Deprecated
 public class VectorOld
         extends RealDenseTensorBase<VectorOld, CVectorOld>
-        implements VectorMixin<VectorOld, VectorOld, CooVector, CVectorOld, Double, MatrixOld, MatrixOld, CMatrixOld>,
+        implements VectorMixin<VectorOld, VectorOld, CooVectorOld, CVectorOld, Double, MatrixOld, MatrixOld, CMatrixOld>,
         DenseVectorMixin {
 
     /**
@@ -164,7 +164,7 @@ public class VectorOld
      */
     @Override
     public VectorOld flatten() {
-        ParameterChecks.assertBroadcastable(this.shape, shape);
+        ParameterChecks.ensureBroadcastable(this.shape, shape);
         return this.copy();
     }
 
@@ -215,7 +215,7 @@ public class VectorOld
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public VectorOld add(CooVector B) {
+    public VectorOld add(CooVectorOld B) {
         return RealDenseSparseVectorOperations.add(this, B);
     }
 
@@ -241,7 +241,7 @@ public class VectorOld
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public CVectorOld add(CooCVector B) {
+    public CVectorOld add(CooCVectorOld B) {
         return RealComplexDenseSparseVectorOperations.add(this, B);
     }
 
@@ -254,7 +254,7 @@ public class VectorOld
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public VectorOld sub(CooVector B) {
+    public VectorOld sub(CooVectorOld B) {
         return RealDenseSparseVectorOperations.sub(this, B);
     }
 
@@ -280,7 +280,7 @@ public class VectorOld
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public CVectorOld sub(CooCVector B) {
+    public CVectorOld sub(CooCVectorOld B) {
         return RealComplexDenseSparseVectorOperations.sub(this, B);
     }
 
@@ -293,7 +293,7 @@ public class VectorOld
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public void addEq(CooVector B) {
+    public void addEq(CooVectorOld B) {
         RealDenseSparseVectorOperations.addEq(this, B);
     }
 
@@ -305,7 +305,7 @@ public class VectorOld
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public void subEq(CooVector B) {
+    public void subEq(CooVectorOld B) {
         RealDenseSparseVectorOperations.subEq(this, B);
     }
 
@@ -318,7 +318,7 @@ public class VectorOld
      * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
      */
     @Override
-    public CooVector elemMult(CooVector B) {
+    public CooVectorOld elemMult(CooVectorOld B) {
         return RealDenseSparseVectorOperations.elemMult(this, B);
     }
 
@@ -344,7 +344,7 @@ public class VectorOld
      * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
      */
     @Override
-    public CooCVector elemMult(CooCVector B) {
+    public CooCVectorOld elemMult(CooCVectorOld B) {
         return RealComplexDenseSparseVectorOperations.elemMult(this, B);
     }
 
@@ -424,7 +424,7 @@ public class VectorOld
      * @return A vector resulting from joining the specified vector with this vector.
      */
     @Override
-    public VectorOld join(CooVector b) {
+    public VectorOld join(CooVectorOld b) {
         VectorOld joined = new VectorOld(this.size+b.size);
         System.arraycopy(this.entries, 0, joined.entries, 0, this.size);
 
@@ -446,7 +446,7 @@ public class VectorOld
      * @return A vector resulting from joining the specified vector with this vector.
      */
     @Override
-    public CVectorOld join(CooCVector b) {
+    public CVectorOld join(CooCVectorOld b) {
         CVectorOld joined = new CVectorOld(this.size+b.size);
         ArrayUtils.arraycopy(this.entries, 0, joined.entries, 0, this.size);
 
@@ -471,7 +471,7 @@ public class VectorOld
      */
     @Override
     public MatrixOld stack(VectorOld b) {
-        ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+        ParameterChecks.ensureArrayLengthsEq(this.size, b.size);
         MatrixOld stacked = new MatrixOld(2, this.size);
 
         // Copy entries from each vector to the matrix.
@@ -491,8 +491,8 @@ public class VectorOld
      *                                  the vector b.
      */
     @Override
-    public MatrixOld stack(CooVector b) {
-        ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+    public MatrixOld stack(CooVectorOld b) {
+        ParameterChecks.ensureArrayLengthsEq(this.size, b.size);
         MatrixOld stacked = new MatrixOld(2, this.size);
 
         // Copy entries from dense vector to the matrix.
@@ -519,7 +519,7 @@ public class VectorOld
      */
     @Override
     public CMatrixOld stack(CVectorOld b) {
-        ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+        ParameterChecks.ensureArrayLengthsEq(this.size, b.size);
         CNumber[] entries = new CNumber[this.size+b.size];
 
         // Copy entries from each vector to the matrix.
@@ -539,8 +539,8 @@ public class VectorOld
      *                                  the vector b.
      */
     @Override
-    public CMatrixOld stack(CooCVector b) {
-        ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+    public CMatrixOld stack(CooCVectorOld b) {
+        ParameterChecks.ensureArrayLengthsEq(this.size, b.size);
         CMatrixOld stacked = new CMatrixOld(2, this.size);
 
         // Copy entries from dense vector to the matrix.
@@ -582,13 +582,13 @@ public class VectorOld
      */
     @Override
     public MatrixOld stack(VectorOld b, int axis) {
-        ParameterChecks.assertAxis2D(axis);
+        ParameterChecks.ensureAxis2D(axis);
         MatrixOld stacked;
 
         if(axis==0) {
             stacked = stack(b);
         } else {
-            ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+            ParameterChecks.ensureArrayLengthsEq(this.size, b.size);
             double[] stackedEntries = new double[2*this.size];
 
             int count = 0;
@@ -628,14 +628,14 @@ public class VectorOld
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public MatrixOld stack(CooVector b, int axis) {
-        ParameterChecks.assertAxis2D(axis);
+    public MatrixOld stack(CooVectorOld b, int axis) {
+        ParameterChecks.ensureAxis2D(axis);
         MatrixOld stacked;
 
         if(axis==0) {
             stacked = stack(b);
         } else {
-            ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+            ParameterChecks.ensureArrayLengthsEq(this.size, b.size);
             double[] stackedEntries = new double[2*this.size];
 
             // Copy dense values.
@@ -682,13 +682,13 @@ public class VectorOld
      */
     @Override
     public CMatrixOld stack(CVectorOld b, int axis) {
-        ParameterChecks.assertAxis2D(axis);
+        ParameterChecks.ensureAxis2D(axis);
         CMatrixOld stacked;
 
         if(axis==0) {
             stacked = stack(b);
         } else {
-            ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+            ParameterChecks.ensureArrayLengthsEq(this.size, b.size);
             CNumber[] stackedEntries = new CNumber[2*this.size];
 
             int count = 0;
@@ -729,14 +729,14 @@ public class VectorOld
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public CMatrixOld stack(CooCVector b, int axis) {
-        ParameterChecks.assertAxis2D(axis);
+    public CMatrixOld stack(CooCVectorOld b, int axis) {
+        ParameterChecks.ensureAxis2D(axis);
         CMatrixOld stacked;
 
         if(axis==0) {
             stacked = stack(b);
         } else {
-            ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+            ParameterChecks.ensureArrayLengthsEq(this.size, b.size);
             CNumber[] stackedEntries = new CNumber[2*this.size];
             Arrays.fill(stackedEntries, CNumber.ZERO);
 
@@ -780,7 +780,7 @@ public class VectorOld
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
     @Override
-    public Double inner(CooVector b) {
+    public Double inner(CooVectorOld b) {
         return RealDenseSparseVectorOperations.inner(this.entries, b.entries, b.indices, b.size);
     }
 
@@ -793,7 +793,7 @@ public class VectorOld
      */
     @Override
     public VectorOld normalize() {
-        double norm = VectorNorms.norm(this);
+        double norm = VectorNorms.norm(this.entries);
         return norm==0 ? new VectorOld(size) : this.div(norm);
     }
 
@@ -819,7 +819,7 @@ public class VectorOld
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
     @Override
-    public CNumber inner(CooCVector b) {
+    public CNumber inner(CooCVectorOld b) {
         return RealComplexDenseSparseVectorOperations.inner(this.entries, b.entries, b.indices, b.size);
     }
 
@@ -832,7 +832,7 @@ public class VectorOld
      * @throws IllegalArgumentException If either this vector or b do not have exactly 3 entries.
      */
     public VectorOld cross(VectorOld b) {
-        ParameterChecks.assertEquals(3, b.size, this.size);
+        ParameterChecks.ensureEquals(3, b.size, this.size);
         double[] entries = new double[3];
 
         entries[0] = this.entries[1]*b.entries[2]-this.entries[2]*b.entries[1];
@@ -851,8 +851,8 @@ public class VectorOld
      * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
      */
     public CVectorOld cross(CVectorOld b) {
-        ParameterChecks.assertArrayLengthsEq(3, b.size);
-        ParameterChecks.assertArrayLengthsEq(3, this.size);
+        ParameterChecks.ensureArrayLengthsEq(3, b.size);
+        ParameterChecks.ensureArrayLengthsEq(3, this.size);
         CNumber[] entries = new CNumber[3];
 
         entries[0] = b.entries[2].mult(this.entries[1]).sub(b.entries[1].mult(this.entries[2]));
@@ -884,7 +884,7 @@ public class VectorOld
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
     @Override
-    public MatrixOld outer(CooVector b) {
+    public MatrixOld outer(CooVectorOld b) {
         return new MatrixOld(this.size, b.size,
                 RealDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));
     }
@@ -912,7 +912,7 @@ public class VectorOld
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
     @Override
-    public CMatrixOld outer(CooCVector b) {
+    public CMatrixOld outer(CooCVectorOld b) {
         return new CMatrixOld(this.size, b.size,
                 RealComplexDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));
     }
@@ -1063,13 +1063,13 @@ public class VectorOld
 
 
     /**
-     * Converts this dense vector to an equivalent {@link CooVector}. Note, this is likely only worthwhile for <i>very</i> sparse
+     * Converts this dense vector to an equivalent {@link CooVectorOld}. Note, this is likely only worthwhile for <i>very</i> sparse
      * vectors.
-     * @return A {@link CooVector} that is equivalent to this dense vector.
+     * @return A {@link CooVectorOld} that is equivalent to this dense vector.
      */
     @Override
-    public CooVector toCoo() {
-        return CooVector.fromDense(this);
+    public CooVectorOld toCoo() {
+        return CooVectorOld.fromDense(this);
     }
 
 
@@ -1117,8 +1117,8 @@ public class VectorOld
      */
     @Override
     public MatrixOld repeat(int n, int axis) {
-        ParameterChecks.assertInRange(axis, 0, 1, "axis");
-        ParameterChecks.assertGreaterEq(0, n, "n");
+        ParameterChecks.ensureInRange(axis, 0, 1, "axis");
+        ParameterChecks.ensureGreaterEq(0, n, "n");
         MatrixOld tiled;
 
         if(axis==0) {

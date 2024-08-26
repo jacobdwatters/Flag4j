@@ -77,7 +77,7 @@ public class RealHess extends RealUnitaryDecomposition {
      */
     @Override
     public RealHess decompose(MatrixOld src) {
-        ParameterChecks.assertSquare(src.shape);
+        ParameterChecks.ensureSquare(src.shape);
         decomposeBase(src);
         return this;
     }

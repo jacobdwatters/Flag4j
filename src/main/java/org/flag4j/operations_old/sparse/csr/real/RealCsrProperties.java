@@ -24,7 +24,7 @@
 
 package org.flag4j.operations_old.sparse.csr.real;
 
-import org.flag4j.arrays_old.sparse.CsrMatrix;
+import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -34,7 +34,7 @@ public final class RealCsrProperties {
 
     private RealCsrProperties() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -43,7 +43,7 @@ public final class RealCsrProperties {
      * @param src The matrix to check if it is the identity matrix.
      * @return True if the {@code src} matrix is the identity matrix. False otherwise.
      */
-    public static boolean isIdentity(CsrMatrix src) {
+    public static boolean isIdentity(CsrMatrixOld src) {
         if(src.isSquare() && src.colIndices.length >= src.numCols) {
             int diagCount = 0;
 
@@ -70,7 +70,7 @@ public final class RealCsrProperties {
      * @param src Source matrix to check symmetry of.
      * @return True if {@code src} is symmetric. Otherwise, returns false.
      */
-    public static boolean isSymmetric(CsrMatrix src) {
+    public static boolean isSymmetric(CsrMatrixOld src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
         if(src.entries.length == 0) return true;
@@ -84,7 +84,7 @@ public final class RealCsrProperties {
      * @param src Source matrix to check symmetry of.
      * @return True if {@code src} is symmetric. Otherwise, returns false.
      */
-    public static boolean isAntiSymmetric(CsrMatrix src) {
+    public static boolean isAntiSymmetric(CsrMatrixOld src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
         if(src.entries.length == 0) return true;

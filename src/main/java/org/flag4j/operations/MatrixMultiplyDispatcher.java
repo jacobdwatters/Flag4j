@@ -24,17 +24,14 @@
 
 package org.flag4j.operations;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
-import org.flag4j.operations.dense.complex.ComplexDenseMatrixMultTranspose;
-import org.flag4j.operations.dense.complex.ComplexDenseMatrixMultiplication;
+import org.flag4j.core_temp.arrays.dense.FieldMatrix;
+import org.flag4j.core_temp.arrays.dense.FieldVector;
+import org.flag4j.core_temp.arrays.dense.Matrix;
+import org.flag4j.core_temp.arrays.dense.Vector;
+import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.operations.dense.field_ops.DenseFieldMatrixMultiplication;
 import org.flag4j.operations.dense.real.RealDenseMatrixMultiplication;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultTranspose;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
 import org.flag4j.util.Axis2D;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -46,7 +43,7 @@ public final class MatrixMultiplyDispatcher {
 
     private MatrixMultiplyDispatcher() {
         // Hide constructor of utility class
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -71,13 +68,13 @@ public final class MatrixMultiplyDispatcher {
 
     /**
      * Dynamically chooses the appropriate matrix-vector multiplication algorithm based on the shapes of the matrix and vector.
-     * @param A MatrixOld to multiply.
-     * @param b VectorOld to multiply.
+     * @param A Matrix to multiply.
+     * @param b Vector to multiply.
      * @return The result of the matrix-vector multiplication.
      */
-    public static double[] dispatch(MatrixOld A, VectorOld b) {
+    public static double[] dispatch(Matrix A, Vector b) {
         Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
-        ParameterChecks.assertMatMultShapes(A.shape, bMatShape);
+        ParameterChecks.ensureMatMultShapes(A.shape, bMatShape);
 
         AlgorithmName algorithm;
         double[] dest;
@@ -103,101 +100,101 @@ public final class MatrixMultiplyDispatcher {
     }
 
 
+//    /**
+//     * Dynamically chooses the appropriate matrix-vector multiplication algorithm based on the shapes of the matrix and vector.
+//     * @param A Matrix to multiply.
+//     * @param b Vector to multiply.
+//     * @return The result of the matrix-vector multiplication.
+//     */
+//    public static CNumber[] dispatch(Matrix A, CVector b) {
+//        Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
+//        ParameterChecks.assertMatMultShapes(A.shape, bMatShape);
+//
+//        AlgorithmName algorithm;
+//        CNumber[] dest;
+//
+//        algorithm = chooseAlgorithmRealComplexVector(A.shape);
+//
+//        switch(algorithm) {
+//            case STANDARD_VECTOR:
+//                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);
+//                break;
+//            case BLOCKED_VECTOR:
+//                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);
+//                break;
+//            case CONCURRENT_STANDARD_VECTOR:
+//                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
+//                break;
+//            default:
+//                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);
+//                break;
+//        }
+//
+//        return dest;
+//    }
+//
+//
+//    /**
+//     * Dynamically chooses the appropriate matrix-vector multiplication algorithm based on the shapes of the matrix and vector.
+//     * @param A Matrix to multiply.
+//     * @param b Vector to multiply.
+//     * @return The result of the matrix-vector multiplication.
+//     */
+//    public static CNumber[] dispatch(CMatrix A, Vector b) {
+//        Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
+//        ParameterChecks.assertMatMultShapes(A.shape, bMatShape);
+//
+//        AlgorithmName algorithm;
+//        CNumber[] dest;
+//
+//        algorithm = chooseAlgorithmRealComplexVector(A.shape);
+//
+//        switch(algorithm) {
+//            case STANDARD_VECTOR:
+//                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);
+//                break;
+//            case BLOCKED_VECTOR:
+//                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);
+//                break;
+//            case CONCURRENT_STANDARD_VECTOR:
+//                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
+//                break;
+//            default:
+//                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);
+//                break;
+//        }
+//
+//        return dest;
+//    }
+
+
     /**
      * Dynamically chooses the appropriate matrix-vector multiplication algorithm based on the shapes of the matrix and vector.
-     * @param A MatrixOld to multiply.
-     * @param b VectorOld to multiply.
+     * @param A Matrix to multiply.
+     * @param b Vector to multiply.
      * @return The result of the matrix-vector multiplication.
      */
-    public static CNumber[] dispatch(MatrixOld A, CVectorOld b) {
+    public static <T extends Field<T>> Field<T>[] dispatch(FieldMatrix<T> A, FieldVector<T> b) {
         Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
-        ParameterChecks.assertMatMultShapes(A.shape, bMatShape);
+        ParameterChecks.ensureMatMultShapes(A.shape, bMatShape);
 
         AlgorithmName algorithm;
-        CNumber[] dest;
+        Field<T>[] dest;
 
         algorithm = chooseAlgorithmRealComplexVector(A.shape);
 
         switch(algorithm) {
             case STANDARD_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = DenseFieldMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);
                 break;
             case BLOCKED_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = DenseFieldMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);
                 break;
             case CONCURRENT_STANDARD_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = DenseFieldMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
                 break;
             default:
-                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);
-                break;
-        }
-
-        return dest;
-    }
-
-
-    /**
-     * Dynamically chooses the appropriate matrix-vector multiplication algorithm based on the shapes of the matrix and vector.
-     * @param A MatrixOld to multiply.
-     * @param b VectorOld to multiply.
-     * @return The result of the matrix-vector multiplication.
-     */
-    public static CNumber[] dispatch(CMatrixOld A, VectorOld b) {
-        Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
-        ParameterChecks.assertMatMultShapes(A.shape, bMatShape);
-
-        AlgorithmName algorithm;
-        CNumber[] dest;
-
-        algorithm = chooseAlgorithmRealComplexVector(A.shape);
-
-        switch(algorithm) {
-            case STANDARD_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);
-                break;
-            case BLOCKED_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);
-                break;
-            case CONCURRENT_STANDARD_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
-                break;
-            default:
-                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);
-                break;
-        }
-
-        return dest;
-    }
-
-
-    /**
-     * Dynamically chooses the appropriate matrix-vector multiplication algorithm based on the shapes of the matrix and vector.
-     * @param A MatrixOld to multiply.
-     * @param b VectorOld to multiply.
-     * @return The result of the matrix-vector multiplication.
-     */
-    public static CNumber[] dispatch(CMatrixOld A, CVectorOld b) {
-        Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
-        ParameterChecks.assertMatMultShapes(A.shape, bMatShape);
-
-        AlgorithmName algorithm;
-        CNumber[] dest;
-
-        algorithm = chooseAlgorithmRealComplexVector(A.shape);
-
-        switch(algorithm) {
-            case STANDARD_VECTOR:
-                dest = ComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);
-                break;
-            case BLOCKED_VECTOR:
-                dest = ComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);
-                break;
-            case CONCURRENT_STANDARD_VECTOR:
-                dest = ComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
-                break;
-            default:
-                dest = ComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = DenseFieldMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);
                 break;
         }
 
@@ -212,7 +209,7 @@ public final class MatrixMultiplyDispatcher {
      * @return The result of the matrix multiplication.
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
-    public static CNumber[] dispatch(CMatrixOld A, CMatrixOld B) {
+    public static <T extends Field<T>> Field<T>[] dispatch(FieldMatrix<T> A, FieldMatrix<T> B) {
         return dispatch(A.entries, A.shape, B.entries, B.shape);
     }
 
@@ -225,11 +222,11 @@ public final class MatrixMultiplyDispatcher {
      * @param shape2 Shape of the second matrix.
      * @return The result of the matrix multiplication between the two matrices.
      */
-    public static CNumber[] dispatch(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        ParameterChecks.assertMatMultShapes(shape1, shape2);
+    public static <T extends Field<T>> Field<T>[] dispatch(T[] src1, Shape shape1, T[] src2, Shape shape2) {
+        ParameterChecks.ensureMatMultShapes(shape1, shape2);
 
         AlgorithmName algorithm;
-        CNumber[] dest;
+        Field<T>[] dest;
 
         if(shape2.get(1)==1) {
             // Then B is a column vector.
@@ -240,40 +237,40 @@ public final class MatrixMultiplyDispatcher {
 
         switch(algorithm) {
             case STANDARD:
-                dest = ComplexDenseMatrixMultiplication.standard(src1, shape1, src2, shape2);
+                dest = DenseFieldMatrixMultiplication.standard(src1, shape1, src2, shape2);
                 break;
             case REORDERED:
-                dest = ComplexDenseMatrixMultiplication.reordered(src1, shape1, src2, shape2);
+                dest = DenseFieldMatrixMultiplication.reordered(src1, shape1, src2, shape2);
                 break;
             case BLOCKED:
-                dest = ComplexDenseMatrixMultiplication.blocked(src1, shape1, src2, shape2);
+                dest = DenseFieldMatrixMultiplication.blocked(src1, shape1, src2, shape2);
                 break;
             case BLOCKED_REORDERED:
-                dest = ComplexDenseMatrixMultiplication.blockedReordered(src1, shape1, src2, shape2);
+                dest = DenseFieldMatrixMultiplication.blockedReordered(src1, shape1, src2, shape2);
                 break;
             case CONCURRENT_STANDARD:
-                dest = ComplexDenseMatrixMultiplication.concurrentStandard(src1, shape1, src2, shape2);
+                dest = DenseFieldMatrixMultiplication.concurrentStandard(src1, shape1, src2, shape2);
                 break;
             case CONCURRENT_REORDERED:
-                dest = ComplexDenseMatrixMultiplication.concurrentReordered(src1, shape1, src2, shape2);
+                dest = DenseFieldMatrixMultiplication.concurrentReordered(src1, shape1, src2, shape2);
                 break;
             case CONCURRENT_BLOCKED:
-                dest = ComplexDenseMatrixMultiplication.concurrentBlocked(src1, shape1, src2, shape2);
+                dest = DenseFieldMatrixMultiplication.concurrentBlocked(src1, shape1, src2, shape2);
                 break;
             case CONCURRENT_BLOCKED_REORDERED:
-                dest = ComplexDenseMatrixMultiplication.concurrentBlockedReordered(src1, shape1, src2, shape2);
+                dest = DenseFieldMatrixMultiplication.concurrentBlockedReordered(src1, shape1, src2, shape2);
                 break;
             case STANDARD_VECTOR:
-                dest = ComplexDenseMatrixMultiplication.standardVector(src1, shape1, src2, shape2);
+                dest = DenseFieldMatrixMultiplication.standardVector(src1, shape1, src2, shape2);
                 break;
             case BLOCKED_VECTOR:
-                dest = ComplexDenseMatrixMultiplication.blockedVector(src1, shape1, src2, shape2);
+                dest = DenseFieldMatrixMultiplication.blockedVector(src1, shape1, src2, shape2);
                 break;
             case CONCURRENT_STANDARD_VECTOR:
-                dest = ComplexDenseMatrixMultiplication.concurrentStandardVector(src1, shape1, src2, shape2);
+                dest = DenseFieldMatrixMultiplication.concurrentStandardVector(src1, shape1, src2, shape2);
                 break;
             default:
-                dest = ComplexDenseMatrixMultiplication.concurrentBlockedVector(src1, shape1, src2, shape2);
+                dest = DenseFieldMatrixMultiplication.concurrentBlockedVector(src1, shape1, src2, shape2);
                 break;
         }
 
@@ -281,226 +278,226 @@ public final class MatrixMultiplyDispatcher {
     }
 
 
-    /**
-     * Dispatches a matrix multiplication problem to the appropriate algorithm based on the size.
-     * @param A First matrix in matrix multiplication.
-     * @param B Second matrix in matrix multiplication.
-     * @return The result of the matrix multiplication.
-     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
-     */
-    public static CNumber[] dispatch(MatrixOld A, CMatrixOld B) {
-        ParameterChecks.assertMatMultShapes(A.shape, B.shape);
-
-        AlgorithmName algorithm;
-        CNumber[] dest;
-
-        if(B.numCols==1) {
-            algorithm = chooseAlgorithmRealComplexVector(A.shape);
-        } else {
-            algorithm = chooseAlgorithmRealComplex(A.shape, B.shape);
-        }
-
-        switch(algorithm) {
-            case STANDARD:
-                dest = RealComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case REORDERED:
-                dest = RealComplexDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case BLOCKED:
-                dest = RealComplexDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case BLOCKED_REORDERED:
-                dest = RealComplexDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case CONCURRENT_STANDARD:
-                dest = RealComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case CONCURRENT_REORDERED:
-                dest = RealComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case CONCURRENT_BLOCKED:
-                dest = RealComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case CONCURRENT_BLOCKED_REORDERED:
-                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case STANDARD_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case BLOCKED_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case CONCURRENT_STANDARD_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
-                break;
-            default:
-                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
-                break;
-        }
-
-        return dest;
-    }
-
-
-    /**
-     * Dispatches a matrix multiplication problem to the appropriate algorithm based on the size.
-     * @param A First matrix in matrix multiplication.
-     * @param B Second matrix in matrix multiplication.
-     * @return The result of the matrix multiplication.
-     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
-     */
-    public static CNumber[] dispatch(CMatrixOld A, MatrixOld B) {
-        ParameterChecks.assertMatMultShapes(A.shape, B.shape);
-
-        AlgorithmName algorithm;
-        CNumber[] dest;
-
-        if(B.numCols==1) {
-            algorithm = chooseAlgorithmRealComplexVector(A.shape);
-        } else {
-            algorithm = chooseAlgorithmRealComplex(A.shape, B.shape);
-        }
-
-        switch(algorithm) {
-            case STANDARD:
-                dest = RealComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case REORDERED:
-                dest = RealComplexDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case BLOCKED:
-                dest = RealComplexDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case BLOCKED_REORDERED:
-                dest = RealComplexDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case CONCURRENT_STANDARD:
-                dest = RealComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case CONCURRENT_REORDERED:
-                dest = RealComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case CONCURRENT_BLOCKED:
-                dest = RealComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case CONCURRENT_BLOCKED_REORDERED:
-                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case STANDARD_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case BLOCKED_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);
-                break;
-            case CONCURRENT_STANDARD_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
-                break;
-            default:
-                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
-                break;
-        }
-
-        return dest;
-    }
-
-
-    /**
-     * Dispatches a matrix multiplication-transpose problem to the appropriate algorithm based on the size.
-     * @param A First matrix in matrix multiplication.
-     * @param B Second matrix in matrix multiplication and the matrix to transpose.
-     * @return The result of the matrix multiplication-transpose.
-     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
-     */
-    public static CNumber[] dispatchTranspose(CMatrixOld A, MatrixOld B) {
-        ParameterChecks.assertEquals(A.numCols, B.numCols);
-        AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);
-        CNumber[] dest;
-
-        switch(algorithm) {
-            case MULT_T:
-                dest = RealComplexDenseMatrixMultTranspose.multTranspose(
-                        A.entries, A.shape, B.entries, B.shape);
-                break;
-            case MULT_T_BLOCKED:
-                dest = RealComplexDenseMatrixMultTranspose.multTransposeBlocked(
-                        A.entries, A.shape, B.entries, B.shape);
-                break;
-            case MULT_T_CONCURRENT:
-                dest = RealComplexDenseMatrixMultTranspose.multTransposeConcurrent(
-                        A.entries, A.shape, B.entries, B.shape);
-                break;
-            default:
-                dest = RealComplexDenseMatrixMultTranspose.multTransposeBlockedConcurrent(
-                        A.entries, A.shape, B.entries, B.shape);
-        }
-
-        return dest;
-    }
-
-
-    /**
-     * Dispatches a matrix multiplication-transpose problem to the appropriate algorithm based on the size.
-     * @param A First matrix in matrix multiplication.
-     * @param B Second matrix in matrix multiplication and the matrix to transpose.
-     * @return The result of the matrix multiplication-transpose.
-     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
-     */
-    public static CNumber[] dispatchTranspose(MatrixOld A, CMatrixOld B) {
-        ParameterChecks.assertEquals(A.numCols, B.numCols);
-        AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);
-        CNumber[] dest;
-
-        switch(algorithm) {
-            case MULT_T:
-                dest = RealComplexDenseMatrixMultTranspose.multTranspose(
-                        A.entries, A.shape, B.entries, B.shape);
-                break;
-            case MULT_T_BLOCKED:
-                dest = RealComplexDenseMatrixMultTranspose.multTransposeBlocked(
-                        A.entries, A.shape, B.entries, B.shape);
-                break;
-            case MULT_T_CONCURRENT:
-                dest = RealComplexDenseMatrixMultTranspose.multTransposeConcurrent(
-                        A.entries, A.shape, B.entries, B.shape);
-                break;
-            default:
-                dest = RealComplexDenseMatrixMultTranspose.multTransposeBlockedConcurrent(
-                        A.entries, A.shape, B.entries, B.shape);
-        }
-
-        return dest;
-    }
-
-
-    /**
-     * Dispatches a matrix multiplication-transpose problem to the appropriate algorithm based on the size.
-     * @param A First matrix in matrix multiplication.
-     * @param B Second matrix in matrix multiplication and the matrix to transpose.
-     * @return The result of the matrix multiplication-transpose.
-     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
-     */
-    public static CNumber[] dispatchTranspose(CMatrixOld A, CMatrixOld B) {
-        ParameterChecks.assertEquals(A.numCols, B.numCols);
-        AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);
-        CNumber[] dest;
-
-        switch(algorithm) {
-            case MULT_T:
-                dest = ComplexDenseMatrixMultTranspose.multTranspose(
-                        A.entries, A.shape, B.entries, B.shape);
-                break;
-            case MULT_T_CONCURRENT:
-                dest = ComplexDenseMatrixMultTranspose.multTransposeConcurrent(
-                        A.entries, A.shape, B.entries, B.shape);
-                break;
-            default:
-                dest = ComplexDenseMatrixMultTranspose.multTransposeBlockedConcurrent(
-                        A.entries, A.shape, B.entries, B.shape);
-        }
-
-        return dest;
-    }
+//    /**
+//     * Dispatches a matrix multiplication problem to the appropriate algorithm based on the size.
+//     * @param A First matrix in matrix multiplication.
+//     * @param B Second matrix in matrix multiplication.
+//     * @return The result of the matrix multiplication.
+//     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
+//     */
+//    public static CNumber[] dispatch(Matrix A, CMatrix B) {
+//        ParameterChecks.assertMatMultShapes(A.shape, B.shape);
+//
+//        AlgorithmName algorithm;
+//        CNumber[] dest;
+//
+//        if(B.numCols==1) {
+//            algorithm = chooseAlgorithmRealComplexVector(A.shape);
+//        } else {
+//            algorithm = chooseAlgorithmRealComplex(A.shape, B.shape);
+//        }
+//
+//        switch(algorithm) {
+//            case STANDARD:
+//                dest = RealComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case REORDERED:
+//                dest = RealComplexDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case BLOCKED:
+//                dest = RealComplexDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case BLOCKED_REORDERED:
+//                dest = RealComplexDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case CONCURRENT_STANDARD:
+//                dest = RealComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case CONCURRENT_REORDERED:
+//                dest = RealComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case CONCURRENT_BLOCKED:
+//                dest = RealComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case CONCURRENT_BLOCKED_REORDERED:
+//                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case STANDARD_VECTOR:
+//                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case BLOCKED_VECTOR:
+//                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case CONCURRENT_STANDARD_VECTOR:
+//                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            default:
+//                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//        }
+//
+//        return dest;
+//    }
+//
+//
+//    /**
+//     * Dispatches a matrix multiplication problem to the appropriate algorithm based on the size.
+//     * @param A First matrix in matrix multiplication.
+//     * @param B Second matrix in matrix multiplication.
+//     * @return The result of the matrix multiplication.
+//     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
+//     */
+//    public static CNumber[] dispatch(CMatrix A, Matrix B) {
+//        ParameterChecks.assertMatMultShapes(A.shape, B.shape);
+//
+//        AlgorithmName algorithm;
+//        CNumber[] dest;
+//
+//        if(B.numCols==1) {
+//            algorithm = chooseAlgorithmRealComplexVector(A.shape);
+//        } else {
+//            algorithm = chooseAlgorithmRealComplex(A.shape, B.shape);
+//        }
+//
+//        switch(algorithm) {
+//            case STANDARD:
+//                dest = RealComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case REORDERED:
+//                dest = RealComplexDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case BLOCKED:
+//                dest = RealComplexDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case BLOCKED_REORDERED:
+//                dest = RealComplexDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case CONCURRENT_STANDARD:
+//                dest = RealComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case CONCURRENT_REORDERED:
+//                dest = RealComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case CONCURRENT_BLOCKED:
+//                dest = RealComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case CONCURRENT_BLOCKED_REORDERED:
+//                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case STANDARD_VECTOR:
+//                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case BLOCKED_VECTOR:
+//                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case CONCURRENT_STANDARD_VECTOR:
+//                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            default:
+//                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
+//                break;
+//        }
+//
+//        return dest;
+//    }
+//
+//
+//    /**
+//     * Dispatches a matrix multiplication-transpose problem to the appropriate algorithm based on the size.
+//     * @param A First matrix in matrix multiplication.
+//     * @param B Second matrix in matrix multiplication and the matrix to transpose.
+//     * @return The result of the matrix multiplication-transpose.
+//     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
+//     */
+//    public static CNumber[] dispatchTranspose(CMatrix A, Matrix B) {
+//        ParameterChecks.assertEquals(A.numCols, B.numCols);
+//        AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);
+//        CNumber[] dest;
+//
+//        switch(algorithm) {
+//            case MULT_T:
+//                dest = RealComplexDenseMatrixMultTranspose.multTranspose(
+//                        A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case MULT_T_BLOCKED:
+//                dest = RealComplexDenseMatrixMultTranspose.multTransposeBlocked(
+//                        A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case MULT_T_CONCURRENT:
+//                dest = RealComplexDenseMatrixMultTranspose.multTransposeConcurrent(
+//                        A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            default:
+//                dest = RealComplexDenseMatrixMultTranspose.multTransposeBlockedConcurrent(
+//                        A.entries, A.shape, B.entries, B.shape);
+//        }
+//
+//        return dest;
+//    }
+//
+//
+//    /**
+//     * Dispatches a matrix multiplication-transpose problem to the appropriate algorithm based on the size.
+//     * @param A First matrix in matrix multiplication.
+//     * @param B Second matrix in matrix multiplication and the matrix to transpose.
+//     * @return The result of the matrix multiplication-transpose.
+//     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
+//     */
+//    public static CNumber[] dispatchTranspose(Matrix A, CMatrix B) {
+//        ParameterChecks.assertEquals(A.numCols, B.numCols);
+//        AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);
+//        CNumber[] dest;
+//
+//        switch(algorithm) {
+//            case MULT_T:
+//                dest = RealComplexDenseMatrixMultTranspose.multTranspose(
+//                        A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case MULT_T_BLOCKED:
+//                dest = RealComplexDenseMatrixMultTranspose.multTransposeBlocked(
+//                        A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case MULT_T_CONCURRENT:
+//                dest = RealComplexDenseMatrixMultTranspose.multTransposeConcurrent(
+//                        A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            default:
+//                dest = RealComplexDenseMatrixMultTranspose.multTransposeBlockedConcurrent(
+//                        A.entries, A.shape, B.entries, B.shape);
+//        }
+//
+//        return dest;
+//    }
+//
+//
+//    /**
+//     * Dispatches a matrix multiplication-transpose problem to the appropriate algorithm based on the size.
+//     * @param A First matrix in matrix multiplication.
+//     * @param B Second matrix in matrix multiplication and the matrix to transpose.
+//     * @return The result of the matrix multiplication-transpose.
+//     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
+//     */
+//    public static CNumber[] dispatchTranspose(CMatrix A, CMatrix B) {
+//        ParameterChecks.assertEquals(A.numCols, B.numCols);
+//        AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);
+//        CNumber[] dest;
+//
+//        switch(algorithm) {
+//            case MULT_T:
+//                dest = ComplexDenseMatrixMultTranspose.multTranspose(
+//                        A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            case MULT_T_CONCURRENT:
+//                dest = ComplexDenseMatrixMultTranspose.multTransposeConcurrent(
+//                        A.entries, A.shape, B.entries, B.shape);
+//                break;
+//            default:
+//                dest = ComplexDenseMatrixMultTranspose.multTransposeBlockedConcurrent(
+//                        A.entries, A.shape, B.entries, B.shape);
+//        }
+//
+//        return dest;
+//    }
 
 
     /**

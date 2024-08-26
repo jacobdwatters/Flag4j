@@ -25,7 +25,7 @@
 package org.flag4j.operations.dense.real;
 
 import org.flag4j.core.Shape;
-import org.flag4j.core_temp.arrays.dense.Tensor;
+import org.flag4j.core_temp.PrimitiveDoubleTensorBase;
 import org.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.util.ArrayUtils;
@@ -53,13 +53,14 @@ public final class RealDenseTensorDot {
      * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
      * along the second-to-last axis.
      */
-    public static Tensor tensorDot(Tensor src1, Tensor src2) {
+    public static <T extends PrimitiveDoubleTensorBase<T, T>> T tensorDot(PrimitiveDoubleTensorBase<T, T> src1,
+                                                                          PrimitiveDoubleTensorBase<T, T> src2) {
         int src1Rank = src1.getRank();
         int src2Rank = src2.getRank();
 
         if(src1Rank==2 && src2Rank==2) {
             // Product is simply a matrix multiplication problem.
-            return new Tensor(
+            return src1.makeLikeTensor(
                     new Shape(src1.shape.get(0), src2.shape.get(1)),
                     RealDenseMatrixMultiplyDispatcher.dispatch(src1.entries, src1.shape, src2.entries, src2.shape)
             );
@@ -85,15 +86,17 @@ public final class RealDenseTensorDot {
      * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
      * are out of bounds for the corresponding tensor.
      */
-    public static Tensor tensorDot(Tensor src1, Tensor src2, int[] src1Axes, int[] src2Axes) {
+    public static <T extends PrimitiveDoubleTensorBase<T, T>> T tensorDot(PrimitiveDoubleTensorBase<T, T> src1,
+                                                                          PrimitiveDoubleTensorBase<T, T> src2,
+                                                                          int[] src1Axes, int[] src2Axes) {
         // Each array must specify the same number of axes.
-        ParameterChecks.assertEquals(src1Axes.length, src2Axes.length);
+        ParameterChecks.ensureEquals(src1Axes.length, src2Axes.length);
 
         // Axis values must be less than the rank of the tensor and non-negative
-        ParameterChecks.assertLessEq(src1.getRank()-1, src1Axes);
-        ParameterChecks.assertGreaterEq(0, src1Axes);
-        ParameterChecks.assertLessEq(src2.getRank()-1, src2Axes);
-        ParameterChecks.assertGreaterEq(0, src2Axes);
+        ParameterChecks.ensureLessEq(src1.getRank()-1, src1Axes);
+        ParameterChecks.ensureGreaterEq(0, src1Axes);
+        ParameterChecks.ensureLessEq(src2.getRank()-1, src2Axes);
+        ParameterChecks.ensureGreaterEq(0, src2Axes);
 
         int[] notin;
         int n1;
@@ -143,19 +146,13 @@ public final class RealDenseTensorDot {
         // -----------------------------------------------------
 
         // Reform tensor dot product problem as a matrix multiplication problem.
-        double[] at = TransposeDispatcher.dispatchTensor(src1.entries, src1.shape, src1NewAxes);
-        double[] bt = TransposeDispatcher.dispatchTensor(src2.entries, src2.shape, src2NewAxes);
+        double[] at = TransposeDispatcher.dispatchTensor(src1, src1NewAxes).entries;
+        double[] bt = TransposeDispatcher.dispatchTensor(src2, src2NewAxes).entries;
 
         double[] destEntries = RealDenseMatrixMultiplyDispatcher.dispatch(at, src1NewShape, bt, src2NewShape);
 
-        // TODO: Should allow for zero dim shape indicating a scalar. Then only the else block would be needed.
-        Shape destShape;
-        if(src1Axes.length == src1.getRank() && src2Axes.length == src2.getRank()) {
-            destShape = new Shape(1);
-        } else {
-            destShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));
-        }
+        Shape destShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));
 
-        return new Tensor(destShape, destEntries);
+        return src1.makeLikeTensor(destShape, destEntries);
     }
 }

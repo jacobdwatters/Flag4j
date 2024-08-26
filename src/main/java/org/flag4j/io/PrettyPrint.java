@@ -38,7 +38,7 @@ public final class PrettyPrint {
 
     private PrettyPrint() {
         // Hide default constructor in utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -52,7 +52,7 @@ public final class PrettyPrint {
      * @return A string representing the abriviated and formatted array.
      */
     public static String abrivatedArray(double[] arr, int maxEntries, int padding, int precision, boolean centring) {
-        ParameterChecks.assertNonNegative(maxEntries, padding, precision);
+        ParameterChecks.ensureNonNegative(maxEntries, padding, precision);
 
         StringBuilder result = new StringBuilder("[");
         String value;
@@ -93,7 +93,7 @@ public final class PrettyPrint {
      * @return A string representing the abriviated and formatted array.
      */
     public static String abrivatedArray(CNumber[] arr, int maxEntries, int padding, int precision, boolean centring) {
-        ParameterChecks.assertNonNegative(maxEntries, padding, precision);
+        ParameterChecks.ensureNonNegative(maxEntries, padding, precision);
 
         StringBuilder result = new StringBuilder("[");
         String value;
@@ -136,7 +136,7 @@ public final class PrettyPrint {
      * @return A string representing the abriviated and formatted array.
      */
     public static String abrivatedArray(int[][] arr, int maxRows, int maxCols, int padding, int offset, boolean centering) {
-        ParameterChecks.assertNonNegative(maxRows, maxCols, padding);
+        ParameterChecks.ensureNonNegative(maxRows, maxCols, padding);
 
         StringBuilder result = new StringBuilder("[ ");
         String offsetPad = " ".repeat(offset);
@@ -176,7 +176,7 @@ public final class PrettyPrint {
      * @return A string representing the abriviated and formatted array.
      */
     public static String abrivatedArray(int[] arr, int maxEntries, int padding, boolean centring) {
-        ParameterChecks.assertNonNegative(maxEntries, padding);
+        ParameterChecks.ensureNonNegative(maxEntries, padding);
 
         StringBuilder result = new StringBuilder("[");
         String value;

@@ -79,7 +79,7 @@ public final class RealCholesky extends Cholesky<MatrixOld> {
         if(enforceHermitian && src.isSymmetric()) {
             throw new LinearAlgebraException("MatrixOld must be symmetric positive-definite.");
         } else {
-            ParameterChecks.assertSquareMatrix(src.shape);
+            ParameterChecks.ensureSquareMatrix(src.shape);
         }
 
         L = new MatrixOld(src.numRows);

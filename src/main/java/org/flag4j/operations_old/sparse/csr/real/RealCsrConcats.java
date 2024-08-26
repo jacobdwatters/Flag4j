@@ -25,16 +25,17 @@
 package org.flag4j.operations_old.sparse.csr.real;
 
 
+import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.util.ErrorMessages;
 
 /**
- * Utility class for concatenating {@link org.flag4j.arrays_old.sparse.CsrMatrix real CSR matrices}
+ * Utility class for concatenating {@link CsrMatrixOld real CSR matrices}
  */
 public class RealCsrConcats {
 
     private RealCsrConcats() {
         // Hide default constructor for utility class Concats.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

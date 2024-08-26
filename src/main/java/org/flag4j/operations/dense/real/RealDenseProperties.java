@@ -24,9 +24,9 @@
 
 package org.flag4j.operations.dense.real;
 
-import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.core.Shape;
 import org.flag4j.core.TensorBase;
+import org.flag4j.core_temp.arrays.dense.Matrix;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -36,7 +36,7 @@ public class RealDenseProperties {
 
     private RealDenseProperties() {
         // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -127,24 +127,22 @@ public class RealDenseProperties {
      * @param src MatrixOld of interest to check if it is the identity matrix.
      * @return True if the {@code src} matrix is exactly the identity matrix.
      */
-    public boolean isIdentity(MatrixOld src) {
-        boolean isI = src.numRows==src.numCols;
+    public static boolean isIdentity(Matrix src) {
+        if(src == null || src.numRows!=src.numCols) return false;
 
-        if(isI) {
-            int rows = src.numRows;
-            int cols = src.numCols;
-            for(int i=0; i<rows; i++) {
-                for(int j=0; j<cols; j++) {
-                    if(i==j && src.entries[i]!=1) {
-                        return false;
-                    } else if(src.entries[i]!=0) {
-                       return false;
-                    }
+        int rows = src.numRows;
+        int cols = src.numCols;
+        for(int i=0; i<rows; i++) {
+            for(int j=0; j<cols; j++) {
+                if(i==j && src.entries[i]!=1) {
+                    return false;
+                } else if(src.entries[i]!=0) {
+                   return false;
                 }
             }
         }
 
-        return isI;
+        return true;
     }
 
 
@@ -155,29 +153,27 @@ public class RealDenseProperties {
      * @param src MatrixOld of interest to check if it is the identity matrix.
      * @return True if the {@code src} matrix is exactly the identity matrix.
      */
-    public static boolean isCloseToIdentity(MatrixOld src) {
-        boolean isI = src.numRows==src.numCols;
+    public static boolean isCloseToIdentity(Matrix src) {
+        if(src == null || src.numRows!=src.numCols) return false;
 
         // Tolerances corresponds to the allClose(...) methods.
         double diagTol = 1.001E-5;
         double nonDiagTol = 1e-08;
 
-        if(isI) {
-            int rows = src.numRows;
-            int cols = src.numCols;
-            int pos = 0;
-            for(int i=0; i<rows; i++) {
-                for(int j=0; j<cols; j++) {
-                    if((i==j && Math.abs(src.entries[pos]-1) > diagTol)
-                            || (i!=j && Math.abs(src.entries[pos]) > nonDiagTol)) {
-                        return false;
-                    }
-
-                    pos++;
+        int rows = src.numRows;
+        int cols = src.numCols;
+        int pos = 0;
+        for(int i=0; i<rows; i++) {
+            for(int j=0; j<cols; j++) {
+                if((i==j && Math.abs(src.entries[pos]-1) > diagTol)
+                        || (i!=j && Math.abs(src.entries[pos]) > nonDiagTol)) {
+                    return false;
                 }
+
+                pos++;
             }
         }
 
-        return isI;
+        return true;
     }
 }

@@ -1,7 +1,7 @@
 package org.flag4j.vector;
 
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -47,7 +47,7 @@ class VectorAddSubEqTests {
     @Test
     void realSparseAddEqTestCase() {
         double[] bEntries, expEntries;
-        CooVector B;
+        CooVectorOld B;
         VectorOld exp;
 
         // -------------------- Sub-case 1 --------------------
@@ -56,7 +56,7 @@ class VectorAddSubEqTests {
         bEntries = new double[]{34.677};
         indices = new int[]{0};
         size = 3;
-        B = new CooVector(size, bEntries, indices);
+        B = new CooVectorOld(size, bEntries, indices);
         expEntries = new double[]{1.34+34.677, 6.266, -90.45};
         exp = new VectorOld(expEntries);
 
@@ -69,9 +69,9 @@ class VectorAddSubEqTests {
         bEntries = new double[]{34.677};
         indices = new int[]{0};
         size = 201;
-        B = new CooVector(size, bEntries, indices);
+        B = new CooVectorOld(size, bEntries, indices);
 
-        CooVector finalB = B;
+        CooVectorOld finalB = B;
         assertThrows(LinearAlgebraException.class, () -> A.addEq(finalB));
     }
 
@@ -125,7 +125,7 @@ class VectorAddSubEqTests {
     @Test
     void realSparseSubTestCase() {
         double[] bEntries, expEntries;
-        CooVector B;
+        CooVectorOld B;
         VectorOld exp;
 
         // -------------------- Sub-case 1 --------------------
@@ -134,7 +134,7 @@ class VectorAddSubEqTests {
         bEntries = new double[]{34.677};
         indices = new int[]{0};
         size = 3;
-        B = new CooVector(size, bEntries, indices);
+        B = new CooVectorOld(size, bEntries, indices);
         expEntries = new double[]{1.34-34.677, 6.266, -90.45};
         exp = new VectorOld(expEntries);
 
@@ -147,9 +147,9 @@ class VectorAddSubEqTests {
         bEntries = new double[]{34.677};
         indices = new int[]{0};
         size = 201;
-        B = new CooVector(size, bEntries, indices);
+        B = new CooVectorOld(size, bEntries, indices);
 
-        CooVector finalB = B;
+        CooVectorOld finalB = B;
         assertThrows(LinearAlgebraException.class, () -> A.subEq(finalB));
     }
 

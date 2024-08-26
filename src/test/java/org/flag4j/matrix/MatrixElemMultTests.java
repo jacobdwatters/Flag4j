@@ -2,8 +2,8 @@ package org.flag4j.matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -18,8 +18,8 @@ class MatrixElemMultTests {
     double[][] entriesA, entriesB, expEntries;
     CNumber[][] entriesBC;
 
-    CooMatrix BSparse, expSparse, sparseResult;
-    CooCMatrix BSparseComplex, expSparseComplex, sparseComplexResult;
+    CooMatrixOld BSparse, expSparse, sparseResult;
+    CooCMatrixOld BSparseComplex, expSparseComplex, sparseComplexResult;
     CNumber[] bEntriesSparseComplex, expEntriesSparseComplex;
     double[] bEntriesSparse, expEntriesSparse;
     Shape shape;
@@ -107,10 +107,10 @@ class MatrixElemMultTests {
         rowIndices = new int[]{0, 1, 1};
         colIndices = new int[]{1, 2, 3};
         shape = new Shape(entriesA.length, entriesA[0].length);
-        BSparse = new CooMatrix(shape, bEntriesSparse, rowIndices, colIndices);
+        BSparse = new CooMatrixOld(shape, bEntriesSparse, rowIndices, colIndices);
 
         expEntriesSparse = new double[]{2*1.45, -6*31.13, 0};
-        expSparse = new CooMatrix(shape, expEntriesSparse, rowIndices.clone(), colIndices.clone());
+        expSparse = new CooMatrixOld(shape, expEntriesSparse, rowIndices.clone(), colIndices.clone());
 
         sparseResult = A.elemMult(BSparse);
 
@@ -124,7 +124,7 @@ class MatrixElemMultTests {
         rowIndices = new int[]{0, 1, 1};
         colIndices = new int[]{1, 2, 3};
         shape = new Shape(3, 4);
-        BSparse = new CooMatrix(shape, bEntriesSparse, rowIndices, colIndices);
+        BSparse = new CooMatrixOld(shape, bEntriesSparse, rowIndices, colIndices);
 
         assertThrows(LinearAlgebraException.class, ()->A.elemMult(BSparse));
     }
@@ -139,10 +139,10 @@ class MatrixElemMultTests {
         rowIndices = new int[]{0, 1, 1};
         colIndices = new int[]{1, 2, 3};
         shape = new Shape(entriesA.length, entriesA[0].length);
-        BSparseComplex = new CooCMatrix(shape, bEntriesSparseComplex, rowIndices, colIndices);
+        BSparseComplex = new CooCMatrixOld(shape, bEntriesSparseComplex, rowIndices, colIndices);
 
         expEntriesSparseComplex = new CNumber[]{bEntriesSparseComplex[0].mult(2), bEntriesSparseComplex[1].mult(-6), CNumber.ZERO};
-        expSparseComplex = new CooCMatrix(shape, expEntriesSparseComplex, rowIndices.clone(), colIndices.clone());
+        expSparseComplex = new CooCMatrixOld(shape, expEntriesSparseComplex, rowIndices.clone(), colIndices.clone());
 
         sparseComplexResult = A.elemMult(BSparseComplex);
 
@@ -156,7 +156,7 @@ class MatrixElemMultTests {
         rowIndices = new int[]{0, 1, 1};
         colIndices = new int[]{1, 2, 3};
         shape = new Shape(15, 500);
-        BSparseComplex = new CooCMatrix(shape, bEntriesSparseComplex, rowIndices, colIndices);
+        BSparseComplex = new CooCMatrixOld(shape, bEntriesSparseComplex, rowIndices, colIndices);
 
         assertThrows(LinearAlgebraException.class, ()->A.elemMult(BSparseComplex));
     }

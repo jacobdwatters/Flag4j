@@ -1,6 +1,6 @@
 package org.flag4j.sparse_vector;
 
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +14,7 @@ class CooVectorConstructorTests {
     double[] expEntries;
     int[] expEntriesI;
     int[] expIndices;
-    CooVector a, b;
+    CooVectorOld a, b;
 
 
     @Test
@@ -24,7 +24,7 @@ class CooVectorConstructorTests {
         expShape = new Shape(expSize);
         expEntries = new double[0];
         expIndices = new int[0];
-        a = new CooVector(expSize);
+        a = new CooVectorOld(expSize);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -33,7 +33,7 @@ class CooVectorConstructorTests {
 
         // ------------- Sub-case 2 -------------
         expSize = -1;
-        assertThrows(IllegalArgumentException.class, () -> new CooVector(expSize));
+        assertThrows(IllegalArgumentException.class, () -> new CooVectorOld(expSize));
     }
 
 
@@ -44,7 +44,7 @@ class CooVectorConstructorTests {
         expShape = new Shape(expSize);
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        a = new CooVector(expSize, expEntries, expIndices);
+        a = new CooVectorOld(expSize, expEntries, expIndices);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -52,7 +52,7 @@ class CooVectorConstructorTests {
 
         // ------------- Sub-case 2 -------------
         expSize = -1;
-        assertThrows(IllegalArgumentException.class, () -> new CooVector(expSize, expEntries, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooVectorOld(expSize, expEntries, expIndices));
 
         // ------------- Sub-case 3 -------------
         expSize = 1001234;
@@ -60,7 +60,7 @@ class CooVectorConstructorTests {
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new CooVector(expSize, expEntries, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooVectorOld(expSize, expEntries, expIndices));
 
 
         // ------------- Sub-case 4 -------------
@@ -69,7 +69,7 @@ class CooVectorConstructorTests {
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new CooVector(expSize, expEntries, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooVectorOld(expSize, expEntries, expIndices));
     }
 
 
@@ -81,7 +81,7 @@ class CooVectorConstructorTests {
         expEntriesI = new int[]{1, 4, 5, 1001, -11};
         expEntries = Arrays.stream(expEntriesI).asDoubleStream().toArray();
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        a = new CooVector(expSize, expEntriesI, expIndices);
+        a = new CooVectorOld(expSize, expEntriesI, expIndices);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
@@ -91,7 +91,7 @@ class CooVectorConstructorTests {
         expSize = -1;
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034};
-        assertThrows(IllegalArgumentException.class, () -> new CooVector(expSize, expEntriesI, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooVectorOld(expSize, expEntriesI, expIndices));
 
         // ------------- Sub-case 3 -------------
         expSize = 1001234;
@@ -100,7 +100,7 @@ class CooVectorConstructorTests {
         expEntries = Arrays.stream(expEntriesI).asDoubleStream().toArray();
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new CooVector(expSize, expEntriesI, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooVectorOld(expSize, expEntriesI, expIndices));
 
 
         // ------------- Sub-case 4 -------------
@@ -110,7 +110,7 @@ class CooVectorConstructorTests {
         expEntries = Arrays.stream(expEntriesI).asDoubleStream().toArray();
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new CooVector(expSize, expEntriesI, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooVectorOld(expSize, expEntriesI, expIndices));
     }
 
 
@@ -121,8 +121,8 @@ class CooVectorConstructorTests {
         expShape = new Shape(expSize);
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        b = new CooVector(expSize, expEntries, expIndices);
-        a = new CooVector(b);
+        b = new CooVectorOld(expSize, expEntries, expIndices);
+        a = new CooVectorOld(b);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);

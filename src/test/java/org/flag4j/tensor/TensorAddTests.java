@@ -2,8 +2,8 @@ package org.flag4j.tensor;
 
 import org.flag4j.arrays_old.dense.CTensorOld;
 import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.arrays_old.sparse.CooCTensor;
-import org.flag4j.arrays_old.sparse.CooTensor;
+import org.flag4j.arrays_old.sparse.CooCTensorOld;
+import org.flag4j.arrays_old.sparse.CooTensorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -80,23 +80,23 @@ class TensorAddTests {
     @Test
     void realSparseTestCase() {
         double[] bEntries, expEntries;
-        CooTensor B;
+        CooTensorOld B;
         TensorOld exp;
 
         // ------------------------- Sub-case 1 -------------------------
         bEntries = new double[]{
                 1.34, -0.0245, 8001.1
         };
-        bShape = new Shape(true, 2, 3, 2);
+        bShape = new Shape( 2, 3, 2);
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new CooTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensorOld(bShape, bEntries, sparseIndices);
         expEntries = new double[]{
                 1.23, 2.556, -121.5, 15.61, 14.15, -99.23425,
                 0.001345, 2.677, 8.14, -0.000194, 1, 234
         };
-        expShape = new Shape(true,2, 3, 2);
+        expShape = new Shape(2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] += bEntries[0];
         expEntries[expShape.entriesIndex(sparseIndices[1])] += bEntries[1];
         expEntries[expShape.entriesIndex(sparseIndices[2])] += bEntries[2];
@@ -112,9 +112,9 @@ class TensorAddTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new CooTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensorOld(bShape, bEntries, sparseIndices);
 
-        CooTensor finalB = B;
+        CooTensorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.add(finalB));
     }
 
@@ -162,23 +162,23 @@ class TensorAddTests {
     @Test
     void complexSparseTestCase() {
         CNumber[] bEntries, expEntries;
-        CooCTensor B;
+        CooCTensorOld B;
         CTensorOld exp;
 
         // ------------------------- Sub-case 1 -------------------------
         bEntries = new CNumber[]{
                 new CNumber(1, -0.2045), new CNumber(-800.145, 3204.5)
         };
-        bShape = new Shape(true,2, 3, 2);
+        bShape = new Shape(2, 3, 2);
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}
         };
-        B = new CooCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensorOld(bShape, bEntries, sparseIndices);
         expEntries = new CNumber[]{
                 new CNumber(1.23), new CNumber(2.556), new CNumber(-121.5), new CNumber(15.61), new CNumber(14.15), new CNumber(-99.23425),
                 new CNumber(0.001345), new CNumber(2.677), new CNumber(8.14), new CNumber(-0.000194), new CNumber(1), new CNumber(234)
         };
-        expShape = new Shape(true,2, 3, 2);
+        expShape = new Shape(2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] = expEntries[expShape.entriesIndex(sparseIndices[0])].add(bEntries[0]);
         expEntries[expShape.entriesIndex(sparseIndices[1])] = expEntries[expShape.entriesIndex(sparseIndices[1])].add(bEntries[1]);
         exp = new CTensorOld(expShape, expEntries);
@@ -189,13 +189,13 @@ class TensorAddTests {
         bEntries = new CNumber[]{
                 new CNumber(1, -0.2045), new CNumber(-800.145, 3204.5)
         };
-        bShape = new Shape(true,13, 89, 14576);
+        bShape = new Shape(13, 89, 14576);
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}
         };
-        B = new CooCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensorOld(bShape, bEntries, sparseIndices);
 
-        CooCTensor finalB = B;
+        CooCTensorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.add(finalB));
     }
 
@@ -293,23 +293,23 @@ class TensorAddTests {
     @Test
     void realSparseAddEqTestCase() {
         double[] bEntries, expEntries;
-        CooTensor B;
+        CooTensorOld B;
         TensorOld exp;
 
         // ------------------------- Sub-case 1 -------------------------
         bEntries = new double[]{
                 1.34, -0.0245, 8001.1
         };
-        bShape = new Shape(true,2, 3, 2);
+        bShape = new Shape(2, 3, 2);
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new CooTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensorOld(bShape, bEntries, sparseIndices);
         expEntries = new double[]{
                 1.23, 2.556, -121.5, 15.61, 14.15, -99.23425,
                 0.001345, 2.677, 8.14, -0.000194, 1, 234
         };
-        expShape = new Shape(true,2, 3, 2);
+        expShape = new Shape(2, 3, 2);
         expEntries[expShape.entriesIndex(sparseIndices[0])] += bEntries[0];
         expEntries[expShape.entriesIndex(sparseIndices[1])] += bEntries[1];
         expEntries[expShape.entriesIndex(sparseIndices[2])] += bEntries[2];
@@ -326,9 +326,9 @@ class TensorAddTests {
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
-        B = new CooTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensorOld(bShape, bEntries, sparseIndices);
 
-        CooTensor finalB = B;
+        CooTensorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.addEq(finalB));
     }
 

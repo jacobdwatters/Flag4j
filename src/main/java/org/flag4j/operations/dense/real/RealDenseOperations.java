@@ -36,7 +36,7 @@ public final class RealDenseOperations {
 
     private RealDenseOperations() {
         // Hide constructor
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -51,7 +51,7 @@ public final class RealDenseOperations {
      */
     public static double[] add(final double[] src1, final Shape shape1,
                                final double[] src2, final Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
+        ParameterChecks.ensureEqualShape(shape1, shape2);
         int length = src1.length;
         double[] sum = new double[length];
 
@@ -73,7 +73,7 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If entry arrays_old are not the same size.
      */
     public static double[] sub(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
+        ParameterChecks.ensureEqualShape(shape1, shape2);
         double[] sum = new double[src1.length];
         int length = sum.length;
 
@@ -112,7 +112,7 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If tensors are not the same shape.
      */
     public static void subEq(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
+        ParameterChecks.ensureEqualShape(shape1, shape2);
         int length = src1.length;
 
         for(int i=0; i<length; i++) {
@@ -143,7 +143,7 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If tensors are not the same shape.
      */
     public static void addEq(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
+        ParameterChecks.ensureEqualShape(shape1, shape2);
         int length = src1.length;
         for(int i=0; i<length; i++) {
             src1[i] += src2[i];

@@ -80,7 +80,7 @@ public final class ComplexCholesky extends Cholesky<CMatrixOld> {
         if(enforceHermitian && src.isHermitian()) {
             throw new IllegalArgumentException("MatrixOld must be positive-definite.");
         } else {
-            ParameterChecks.assertSquareMatrix(src.shape);
+            ParameterChecks.ensureSquareMatrix(src.shape);
         }
 
         L = new CMatrixOld(src.numRows);

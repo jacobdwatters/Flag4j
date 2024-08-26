@@ -26,12 +26,12 @@ package org.flag4j.core_temp;
 
 
 /**
- * This tensor specified operations_old between tensors and primitive values.
+ * This tensor specified operations between tensors and primitive values.
  *
- * @param <T> TensorOld type that the operation returns.
+ * @param <T> Tensor type that the operation returns.
  * @see TensorPrimitiveOpsMixin
  */
-public interface TensorPrimitiveOpsMixin<T extends TensorOverField<T, ?, ?>> {
+public interface TensorPrimitiveOpsMixin<T extends TensorOverField<T, ?, ?, ?>> {
 
     /**
      * Adds a scalar value to each element of this tensor.
@@ -58,7 +58,7 @@ public interface TensorPrimitiveOpsMixin<T extends TensorOverField<T, ?, ?>> {
 
 
     /**
-     * Computes the scalar division of this tensor and the specified scalar {@code factor}.
+     * Computes the scalar division of this tensor and the specified scalar {@code divisor}.
      * @param divisor The scalar value to divide this tensor by.
      * @return The result of dividing this tensor by the specified scalar.
      */

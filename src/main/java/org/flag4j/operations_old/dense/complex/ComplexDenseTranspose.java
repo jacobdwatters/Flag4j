@@ -39,7 +39,7 @@ public final class ComplexDenseTranspose {
 
     private ComplexDenseTranspose() {
         // Hide constructor
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

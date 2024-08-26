@@ -3,8 +3,8 @@ package org.flag4j.matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -105,7 +105,7 @@ class MatrixMultTests {
     void matMultSparseTestCase() {
         double[] bEntries;
         int[] rowIndices, colIndices;
-        CooMatrix B;
+        CooMatrixOld B;
         Shape bShape;
 
         // ---------------------- Sub-case 1 ----------------------
@@ -118,7 +118,7 @@ class MatrixMultTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         bShape = new Shape(3, 2);
-        B = new CooMatrix(bShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrixOld(bShape, bEntries, rowIndices, colIndices);
         expEntries = new double[][]{{-92.7375568794, 0.00143541},
                 {-515.255376035, -10.7763114},
                 {-0.00012148943299999999, 0.0},
@@ -138,9 +138,9 @@ class MatrixMultTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         bShape = new Shape(31, 2);
-        B = new CooMatrix(bShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrixOld(bShape, bEntries, rowIndices, colIndices);
 
-        CooMatrix finalB = B;
+        CooMatrixOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 
@@ -149,7 +149,7 @@ class MatrixMultTests {
     void matMultSparseComplexTestCase() {
         CNumber[] bEntries;
         int[] rowIndices, colIndices;
-        CooCMatrix B;
+        CooCMatrixOld B;
         Shape bShape;
 
         // ---------------------- Sub-case 1 ----------------------
@@ -162,7 +162,7 @@ class MatrixMultTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         bShape = new Shape(3, 2);
-        B = new CooCMatrix(bShape, bEntries, rowIndices, colIndices);
+        B = new CooCMatrixOld(bShape, bEntries, rowIndices, colIndices);
         expCEntries = new CNumber[][]{{new CNumber("-92.7375568794+927.8378999999999i"), new CNumber("0.00143541-0.000246i")},
                 {new CNumber("-515.255376035+5155.1225i"), new CNumber("-10.7763114+1.84684i")},
                 {new CNumber("-0.00012148943299999999+0.0012154999999999998i"), new CNumber("0.0")},
@@ -181,9 +181,9 @@ class MatrixMultTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         bShape = new Shape(31, 2);
-        B = new CooCMatrix(bShape, bEntries, rowIndices, colIndices);
+        B = new CooCMatrixOld(bShape, bEntries, rowIndices, colIndices);
 
-        CooCMatrix finalB = B;
+        CooCMatrixOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 
@@ -320,7 +320,7 @@ class MatrixMultTests {
     void multTransposeSparseTestCase() {
         double[] bEntries;
         int[] rowIndices, colIndices;
-        CooMatrix B;
+        CooMatrixOld B;
         Shape bShape;
 
         // ---------------------- Sub-case 1 ----------------------
@@ -333,7 +333,7 @@ class MatrixMultTests {
         rowIndices = new int[]{0, 1};
         colIndices = new int[]{1, 2};
         bShape = new Shape(2, 3);
-        B = new CooMatrix(bShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrixOld(bShape, bEntries, rowIndices, colIndices);
         expEntries = new double[][]{{-92.7375568794, 0.00143541},
                 {-515.255376035, -10.7763114},
                 {-0.00012148943299999999, 0.0},
@@ -353,9 +353,9 @@ class MatrixMultTests {
         rowIndices = new int[]{0, 1};
         colIndices = new int[]{1, 2};
         bShape = new Shape(2, 31);
-        B = new CooMatrix(bShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrixOld(bShape, bEntries, rowIndices, colIndices);
 
-        CooMatrix finalB = B;
+        CooMatrixOld finalB = B;
         assertThrows(IllegalArgumentException.class, ()->A.multTranspose(finalB));
     }
 }

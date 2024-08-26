@@ -2,8 +2,8 @@ package org.flag4j.matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -16,7 +16,7 @@ class MatrixFibTests {
     double[][] aEntries, bEntries;
     double[] bSparseEntries;
     MatrixOld A, B;
-    CooMatrix BSparse;
+    CooMatrixOld BSparse;
     Shape sparseShape;
     int[] rowIndices, colIndices;
     Double exp;
@@ -80,7 +80,7 @@ class MatrixFibTests {
         rowIndices = new int[]{0, 1, 3};
         colIndices = new int[]{2, 0, 1};
         sparseShape = A.shape;
-        BSparse = new CooMatrix(sparseShape, bSparseEntries, rowIndices, colIndices);
+        BSparse = new CooMatrixOld(sparseShape, bSparseEntries, rowIndices, colIndices);
         exp = 8910.767650000002;
 
         assertEquals(exp, A.fib(BSparse));
@@ -95,7 +95,7 @@ class MatrixFibTests {
         rowIndices = new int[]{0, 1, 3};
         colIndices = new int[]{2, 0, 1};
         sparseShape = new Shape(5, 600);
-        BSparse = new CooMatrix(sparseShape, bSparseEntries, rowIndices, colIndices);
+        BSparse = new CooMatrixOld(sparseShape, bSparseEntries, rowIndices, colIndices);
 
         assertThrows(LinearAlgebraException.class, ()->A.fib(BSparse));
     }
@@ -159,7 +159,7 @@ class MatrixFibTests {
 
     @Test
     void complexSparseMatrixFibTestCase() {
-        CooCMatrix BSparse;
+        CooCMatrixOld BSparse;
         CNumber exp;
 
         // ------------------------- Sub-case 1 -------------------------
@@ -172,7 +172,7 @@ class MatrixFibTests {
         rowIndices = new int[]{0, 1, 3};
         colIndices = new int[]{2, 0, 1};
         sparseShape = A.shape;
-        BSparse = new CooCMatrix(sparseShape, bSparseEntries, rowIndices, colIndices);
+        BSparse = new CooCMatrixOld(sparseShape, bSparseEntries, rowIndices, colIndices);
         exp = new CNumber(8910.767650000002);
 
         assertEquals(exp, A.fib(BSparse));
@@ -187,9 +187,9 @@ class MatrixFibTests {
         rowIndices = new int[]{0, 1, 3};
         colIndices = new int[]{2, 0, 1};
         sparseShape = new Shape(5, 600);
-        BSparse = new CooCMatrix(sparseShape, bSparseEntries, rowIndices, colIndices);
+        BSparse = new CooCMatrixOld(sparseShape, bSparseEntries, rowIndices, colIndices);
 
-        CooCMatrix finalBSparse = BSparse;
+        CooCMatrixOld finalBSparse = BSparse;
         assertThrows(LinearAlgebraException.class, ()->A.fib(finalBSparse));
     }
 }

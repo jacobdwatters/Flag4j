@@ -27,37 +27,37 @@ package org.flag4j.operations.dense_sparse.csr.real;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooVector;
-import org.flag4j.arrays_old.sparse.CsrMatrix;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
+import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
 /**
  * This class contains low-level implementations of real sparse-dense matrix multiplication where the sparse matrix
- * is in {@link CsrMatrix CSR} format.
+ * is in {@link CsrMatrixOld CSR} format.
  */
 public class RealCsrDenseMatrixMultiplication {
 
     private RealCsrDenseMatrixMultiplication() {
         // Hide default constructor for utility method.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
     /**
      * Computes the matrix multiplication between a real sparse CSR matrix and a real dense matrix.
      * WARNING: If the first matrix is very large but not very sparse, this method may be slower than converting the
-     * first matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link MatrixOld#mult(MatrixOld)}.
+     * first matrix to a {@link CsrMatrixOld#toDense() dense} matrix and calling {@link MatrixOld#mult(MatrixOld)}.
      * @param src1 First matrix in the matrix multiplication.
      * @param src2 Second matrix in the matrix multiplication.
      * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} does not have the same number of columns as {@code src2} has
      * rows.
      */
-    public static MatrixOld standard(CsrMatrix src1, MatrixOld src2) {
+    public static MatrixOld standard(CsrMatrixOld src1, MatrixOld src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
+        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
 
         double[] destEntries = new double[src1.numRows*src2.numCols];
         int rows1 = src1.numRows;
@@ -88,16 +88,16 @@ public class RealCsrDenseMatrixMultiplication {
     /**
      * Computes the matrix multiplication between a real dense matrix and a real sparse CSR matrix.
      * WARNING: If the second matrix is very large but not very sparse, this method may be slower than converting the
-     * second matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link MatrixOld#mult(MatrixOld)}.
+     * second matrix to a {@link CsrMatrixOld#toDense() dense} matrix and calling {@link MatrixOld#mult(MatrixOld)}.
      * @param src1 First matrix in the matrix multiplication (dense matrix).
      * @param src2 Second matrix in the matrix multiplication (sparse CSR matrix).
      * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} does not have the same number of columns as {@code src2} has
      * rows.
      */
-    public static MatrixOld standard(MatrixOld src1, CsrMatrix src2) {
+    public static MatrixOld standard(MatrixOld src1, CsrMatrixOld src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.assertMatMultShapes(src1.shape, src2.shape);
+        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
 
         double[] destEntries = new double[src1.numRows * src2.numCols];
         int rows1 = src1.numRows;
@@ -127,16 +127,16 @@ public class RealCsrDenseMatrixMultiplication {
 
     /**
      * Computes the matrix multiplication between a real sparse CSR matrix and the transpose of a real dense matrix.
-     * WARNING: This method is likely slower than {@link #standard(CsrMatrix, MatrixOld) standard(src1, src2.T())} unless
+     * WARNING: This method is likely slower than {@link #standard(CsrMatrixOld, MatrixOld) standard(src1, src2.T())} unless
      * {@code src1} has many more columns than rows and is very sparse.
      * @param src1 First matrix in the matrix multiplication.
      * @param src2 Second matrix in the matrix multiplication. Will be implicitly transposed.
      * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} and {@code src2} do not have the same number of rows.
      */
-    public static MatrixOld standardTranspose(CsrMatrix src1, MatrixOld src2) {
+    public static MatrixOld standardTranspose(CsrMatrixOld src1, MatrixOld src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.assertEquals(src1.numCols, src2.numCols);
+        ParameterChecks.ensureEquals(src1.numCols, src2.numCols);
 
         double[] destEntries = new double[src1.numRows*src2.numRows];
         int rows1 = src1.numRows;
@@ -172,9 +172,9 @@ public class RealCsrDenseMatrixMultiplication {
      * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the length of
      * {@code src2}.
      */
-    public static VectorOld standardVector(CsrMatrix src1, VectorOld src2) {
+    public static VectorOld standardVector(CsrMatrixOld src1, VectorOld src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
-        ParameterChecks.assertEquals(src1.numCols, src2.size);
+        ParameterChecks.ensureEquals(src1.numCols, src2.size);
 
         double[] destEntries = new double[src1.numRows];
         int rows1 = src1.numRows;
@@ -202,9 +202,9 @@ public class RealCsrDenseMatrixMultiplication {
      * @return The result of the matrix-vector multiplication.
      * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the number of columns in {@code src2}.
      */
-    public static VectorOld standardVector(CsrMatrix src1, CooVector src2) {
+    public static VectorOld standardVector(CsrMatrixOld src1, CooVectorOld src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
-        ParameterChecks.assertEquals(src1.numCols, src2.size);
+        ParameterChecks.ensureEquals(src1.numCols, src2.size);
 
         double[] destEntries = new double[src1.numRows];
         int rows1 = src1.numRows;

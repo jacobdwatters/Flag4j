@@ -3,8 +3,8 @@ package org.flag4j.complex_vector;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,13 +64,13 @@ class CVectorOuterProductTests {
     @Test
     void sparseRealDenseTestCase() {
         double[] bEntries;
-        CooVector b;
+        CooVectorOld b;
 
         // ----------------------- Sub-case 1 -----------------------
         bEntries = new double[]{245.6};
         sparseSize = 2;
         sparseIndices = new int[]{0};
-        b = new CooVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVectorOld(sparseSize, bEntries, sparseIndices);
         expEntries = new CNumber[][]{
                 {new CNumber("357.348+1504630.8232i"), new CNumber("0.0")},
                 {new CNumber("-2267.8704+1228.0i"), new CNumber("-0.0")},
@@ -83,7 +83,7 @@ class CVectorOuterProductTests {
         bEntries = new double[]{245.6, -99.35};
         sparseSize = 4;
         sparseIndices = new int[]{0, 2};
-        b = new CooVector(sparseSize, bEntries, sparseIndices);
+        b = new CooVectorOld(sparseSize, bEntries, sparseIndices);
         expEntries = new CNumber[][]{
                 {new CNumber("357.348+1504630.8232i"), new CNumber("0.0"), new CNumber("-144.55425-608652.57445i"), new CNumber("0.0")},
                 {new CNumber("-2267.8704+1228.0i"), new CNumber("-0.0"), new CNumber("917.3978999999999-496.75i"), new CNumber("-0.0")},
@@ -126,13 +126,13 @@ class CVectorOuterProductTests {
     @Test
     void complexSparseTestCase() {
         CNumber[] bEntries;
-        CooCVector b;
+        CooCVectorOld b;
 
         // ----------------------- Sub-case 1 -----------------------
         bEntries = new CNumber[]{new CNumber("993.356 + 1.6i")};
         sparseSize = 2;
         sparseIndices = new int[]{0};
-        b = new CooCVector(sparseSize, bEntries, sparseIndices);
+        b = new CooCVectorOld(sparseSize, bEntries, sparseIndices);
         expEntries = new CNumber[][]{
                 {new CNumber("11247.48818+6085641.222532i"), new CNumber("0.0")},
                 {new CNumber("-9164.649304+4981.5544i"), new CNumber("0.0")},
@@ -145,7 +145,7 @@ class CVectorOuterProductTests {
         bEntries = new CNumber[]{new CNumber("993.356+1.6i"), new CNumber("0.0+8.35i")};
         sparseSize = 4;
         sparseIndices = new int[]{0, 2};
-        b = new CooCVector(sparseSize, bEntries, sparseIndices);
+        b = new CooCVectorOld(sparseSize, bEntries, sparseIndices);
         expEntries = new CNumber[][]{
                 {new CNumber("11247.48818+6085641.222532i"), new CNumber("0.0"), new CNumber("51154.997449999995-12.14925i"), new CNumber("0.0")},
                 {new CNumber("-9164.649304+4981.5544i"), new CNumber("0.0"), new CNumber("41.75+77.1039i"), new CNumber("0.0")},

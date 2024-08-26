@@ -31,7 +31,7 @@ import org.flag4j.core.Shape;
  * <p>This abstract class defines a tensor whose elements satisfy the axioms of a ring.</p>
  *
  * <p>To allow for primitive types, the elements of this tensor do not neccesarily have to implement
- * {@link org.flag4j.core_temp.structures.rings.SemiRing}.</p>
+ * {@link org.flag4j.core_temp.structures.rings.Ring}.</p>
  *
  * <p>Formally, an ring is a set <b>R</b> with the binary operations_old addition (+) and multiplication (*)
  * defined such that for elements a, b, c in <b>R</b> the following are satisfied:
@@ -46,10 +46,14 @@ import org.flag4j.core.Shape;
  * </p>
  *
  * @param <T> Type of this tensor.
- * @param <U> Storage for entries of this tensor.
- * @param <V> Type (or wrapper) of an element of this tensor. Should satisfy the axioms of a ring as stated.
+ * @param <U> Type of a dense tensor equivalent to {@code T}. If {@code T} is dense, then this should be the same type as {@code T}.
+ * This parameter is required because some operations (e.g. {@link #tensorDot(TensorOverRing, int)}) between two sparse tensors
+ * result in a dense tensor.
+ * @param <V> Storage for entries of this tensor.
+ * @param <W> Type (or wrapper) of an element of this tensor. Should satisfy the axioms of a ring as stated.
  */
-public abstract class TensorOverRing<T extends TensorOverRing<T, U, V>, U, V> extends TensorOverSemiRing<T, U, V> {
+public abstract class TensorOverRing<T extends TensorOverRing<T, U, V, W>,
+        U extends TensorOverRing<U, U, V, W>, V, W> extends TensorOverSemiRing<T, U, V, W> {
 
     /**
      * Creates a tensor with the specified entries and shape.
@@ -58,7 +62,7 @@ public abstract class TensorOverRing<T extends TensorOverRing<T, U, V>, U, V> ex
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-    protected TensorOverRing(Shape shape, U entries) {
+    protected TensorOverRing(Shape shape, V entries) {
         super(shape, entries);
     }
 
@@ -70,7 +74,15 @@ public abstract class TensorOverRing<T extends TensorOverRing<T, U, V>, U, V> ex
      *
      * @return The difference of this tensor and the scalar {@code b}.
      */
-    public abstract T sub(V b);
+    public abstract T sub(W b);
+
+
+    /**
+     * Subtracts a sclar value from each entry of this tensor and stores the result in this tensor.
+     *
+     * @param b Scalar value in differencce.
+     */
+    public abstract void subEq(W b);
 
 
     /**
@@ -80,7 +92,7 @@ public abstract class TensorOverRing<T extends TensorOverRing<T, U, V>, U, V> ex
      *
      * @return The difference of this tensor with {@code b}.
      *
-     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If this tensor and {@code b} do not have the same shape.
      */
     public abstract T sub(T b);
 
@@ -89,5 +101,50 @@ public abstract class TensorOverRing<T extends TensorOverRing<T, U, V>, U, V> ex
      * Computes the element-wise absolute value of this tensor.
      * @return The element-wise absolute value of this tensor.
      */
-    public abstract TensorOverRing<?, ?, ?> abs();
+    public abstract TensorOverRing abs();
+
+
+    /**
+     * Computes the element-wise conjugation of this tensor.
+     * @return The element-wise conjugation of this tensor.
+     */
+    public abstract T conj();
+
+
+    /**
+     * Computes the conjugate transpose of a tensor by exchanging the first and last axes of this tensor and conjugating the
+     * exchanged values.
+     * @return The conjugate transpose of this tensor.
+     * @see #H(int, int)
+     * @see #H(int...)
+     */
+    public abstract T H();
+
+
+    /**
+     * Computes the conjugate transpose of a tensor by conjugating and exchanging {@code axis1} and {@code axis2}.
+     *
+     * @param axis1 First axis to exchange and conjugate.
+     * @param axis2 Second axis to exchange and conjugate.
+     * @return The conjugate transpose of this tensor acording to the specified axes.
+     * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
+     * @see #H()
+     * @see #H(int...)
+     */
+    public abstract T H(int axis1, int axis2);
+
+
+    /**
+     * Computes the conjugate transpose of this tensor. That is, conjugates and permutes the axes of this tensor so that it matches
+     * the permutation specified by {@code axes}.
+     *
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     * @return The conjugate transpose of this tensor with its axes permuted by the {@code axes} array.
+     * @throws IndexOutOfBoundsException If any element of {@code axes} is out of bounds for the rank of this tensor.
+     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     * @see #H(int, int)
+     * @see #H()
+     */
+    public abstract T H(int... axes);
 }

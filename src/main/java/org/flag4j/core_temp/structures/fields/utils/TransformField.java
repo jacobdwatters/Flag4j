@@ -59,17 +59,15 @@ public final class TransformField {
      */
     @SuppressWarnings("unchecked")
     public static <T extends Field<T>> T[] map(T[] values, Function<T, T> mapper) {
-        if (values == null || mapper == null) {
+        if (values == null || mapper == null)
             throw new NullPointerException("Values and mapper must not be null.");
-        }
-        if (values.length == 0) {
+        if (values.length == 0)
             throw new IllegalArgumentException("Cannot map array with length zero.");
-        }
 
         T[] result = (T[]) java.lang.reflect.Array.newInstance(values.getClass().getComponentType(), values.length);
-        for (int i = 0; i < values.length; i++) {
+
+        for (int i = 0; i < values.length; i++)
             result[i] = mapper.apply(values[i]);
-        }
 
         return result;
     }
@@ -101,9 +99,9 @@ public final class TransformField {
             throw new IllegalArgumentException("Cannot reduce array with length zero.");
 
         T result = values[0];
-        for (int i = 1; i < values.length; i++) {
+
+        for (int i = 1; i < values.length; i++)
             result = accumulator.apply(result, values[i]);
-        }
 
         return result;
     }

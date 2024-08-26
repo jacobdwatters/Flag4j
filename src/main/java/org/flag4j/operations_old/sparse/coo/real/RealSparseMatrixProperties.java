@@ -24,7 +24,7 @@
 
 package org.flag4j.operations_old.sparse.coo.real;
 
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.List;
@@ -40,7 +40,7 @@ public class RealSparseMatrixProperties {
 
     private RealSparseMatrixProperties() {
         // Hide public constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -49,7 +49,7 @@ public class RealSparseMatrixProperties {
      * @param src MatrixOld to check if it is the identity matrix.
      * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
      */
-    public static boolean isIdentity(CooMatrix src) {
+    public static boolean isIdentity(CooMatrixOld src) {
         // Ensure the matrix is square and there are the same number of non-zero entries as entries on the diagonal.
         boolean result = src.isSquare() && src.entries.length==src.numRows;
 
@@ -72,7 +72,7 @@ public class RealSparseMatrixProperties {
      * @param src MatrixOld to check if it is the symmetric matrix.
      * @return True if the {@code src} matrix is symmetric. False otherwise.
      */
-    public static boolean isSymmetric(CooMatrix src) {
+    public static boolean isSymmetric(CooMatrixOld src) {
         boolean result = src.isSquare();
 
         List<Double> entries = DoubleStream.of(src.entries).boxed().collect(Collectors.toList());
@@ -127,7 +127,7 @@ public class RealSparseMatrixProperties {
      * @param src MatrixOld to check if it is the anti-symmetric matrix.
      * @return True if the {@code src} matrix is anti-symmetric. False otherwise.
      */
-    public static boolean isAntiSymmetric(CooMatrix src) {
+    public static boolean isAntiSymmetric(CooMatrixOld src) {
         boolean result = src.isSquare();
 
         List<Double> entries = DoubleStream.of(src.entries).boxed().collect(Collectors.toList());

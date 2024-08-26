@@ -57,7 +57,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     protected ComplexDenseTensorBase(Shape shape, CNumber[] entries) {
         super(shape, entries);
-        ParameterChecks.assertEquals(shape.totalEntries().intValueExact(), entries.length);
+        ParameterChecks.ensureEquals(shape.totalEntries().intValueExact(), entries.length);
     }
 
 
@@ -101,8 +101,8 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      * entry (in row-major ordering) are returned.
      */
     @Override
-    public int[] argMin() {
-        return shape.getIndices(AggregateDenseComplex.argMin(entries));
+    public int[] argmin() {
+        return shape.getIndices(AggregateDenseComplex.argmin(entries));
     }
 
 
@@ -113,8 +113,8 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      * entry (in row-major ordering) are returned.
      */
     @Override
-    public int[] argMax() {
-        return shape.getIndices(AggregateDenseComplex.argMax(entries));
+    public int[] argmax() {
+        return shape.getIndices(AggregateDenseComplex.argmax(entries));
     }
 
 
@@ -172,7 +172,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     @Override
     public T set(double value, int... indices) {
-        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
+        ParameterChecks.ensureArrayLengthsEq(indices.length, shape.getRank());
         ComplexDenseSetOperations.set(entries, shape, value, indices);
         return getSelf();
     }
@@ -186,7 +186,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     @Override
     public T set(CNumber value, int... indices) {
-        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
+        ParameterChecks.ensureArrayLengthsEq(indices.length, shape.getRank());
         ComplexDenseSetOperations.set(entries, shape, value, indices);
 
         return getSelf();
@@ -202,7 +202,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     @Override
     public CNumber get(int... indices) {
-        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
+        ParameterChecks.ensureArrayLengthsEq(indices.length, shape.getRank());
         return entries[shape.entriesIndex(indices)];
     }
 
@@ -573,7 +573,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      */
     @Override
     public T reshape(Shape shape) {
-        ParameterChecks.assertBroadcastable(this.shape, shape);
+        ParameterChecks.ensureBroadcastable(this.shape, shape);
         return makeTensor(shape, this.entries.clone());
     }
 

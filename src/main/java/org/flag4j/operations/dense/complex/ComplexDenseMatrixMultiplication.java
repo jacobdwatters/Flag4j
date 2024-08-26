@@ -42,7 +42,7 @@ public final class ComplexDenseMatrixMultiplication {
 
     private ComplexDenseMatrixMultiplication() {
         // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

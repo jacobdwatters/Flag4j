@@ -26,7 +26,7 @@ package org.flag4j.operations_old.dense_sparse.coo.real;
 
 
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.operations_old.common.real.RealOperations;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -40,7 +40,7 @@ public class RealDenseSparseVectorOperations {
 
     private RealDenseSparseVectorOperations() {
         // Hide default constructor in utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -54,7 +54,7 @@ public class RealDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
      */
     public static double inner(double[] src1, double[] src2, int[] indices, int sparseSize) {
-        ParameterChecks.assertArrayLengthsEq(src1.length, sparseSize);
+        ParameterChecks.ensureArrayLengthsEq(src1.length, sparseSize);
         double innerProd = 0;
         int index;
 
@@ -100,7 +100,7 @@ public class RealDenseSparseVectorOperations {
      * @return The matrix resulting from the vector outer product.
      */
     public static double[] outerProduct(double[] src1, int[] indices, int sparseSize, double[] src2) {
-        ParameterChecks.assertEquals(sparseSize, src2.length);
+        ParameterChecks.ensureEquals(sparseSize, src2.length);
 
         double[] dest = new double[src2.length*sparseSize];
         int destIndex;
@@ -124,8 +124,8 @@ public class RealDenseSparseVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static VectorOld sub(VectorOld src1, CooVector src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static VectorOld sub(VectorOld src1, CooVectorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
         VectorOld dest = new VectorOld(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
@@ -143,8 +143,8 @@ public class RealDenseSparseVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static VectorOld sub(CooVector src1, VectorOld src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static VectorOld sub(CooVectorOld src1, VectorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
         VectorOld dest = new VectorOld(RealOperations.scalMult(src2.entries, -1));
 
         for(int i=0; i<src1.nonZeroEntries(); i++) {
@@ -161,8 +161,8 @@ public class RealDenseSparseVectorOperations {
      * @param src2 Sparse vector.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static void addEq(VectorOld src1, CooVector src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static void addEq(VectorOld src1, CooVectorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             src1.entries[src2.indices[i]] += src2.entries[i];
@@ -176,8 +176,8 @@ public class RealDenseSparseVectorOperations {
      * @param src2 Sparse vector.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static void subEq(VectorOld src1, CooVector src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static void subEq(VectorOld src1, CooVectorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             src1.entries[src2.indices[i]] -= src2.entries[i];
@@ -192,8 +192,8 @@ public class RealDenseSparseVectorOperations {
      * @return The result of the element-wise multiplication.
      * @throws IllegalArgumentException If the two vectors are not the same size.
      */
-    public static CooVector elemMult(VectorOld src1, CooVector src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooVectorOld elemMult(VectorOld src1, CooVectorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         double[] entries = new double[src2.entries.length];
 
@@ -201,7 +201,7 @@ public class RealDenseSparseVectorOperations {
             entries[i] = src1.entries[src2.indices[i]]*src2.entries[i];
         }
 
-        return new CooVector(src1.size, entries, src2.indices.clone());
+        return new CooVectorOld(src1.size, entries, src2.indices.clone());
     }
 
 
@@ -212,8 +212,8 @@ public class RealDenseSparseVectorOperations {
      * @param src2 Entries of second vector in the sum.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static VectorOld add(VectorOld src1, CooVector src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static VectorOld add(VectorOld src1, CooVectorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
         VectorOld dest = new VectorOld(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
@@ -230,14 +230,14 @@ public class RealDenseSparseVectorOperations {
      * @param src2 Second vector in the element-wise division.
      * @return The result of the element-wise vector division.
      */
-    public static CooVector elemDiv(CooVector src1, VectorOld src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooVectorOld elemDiv(CooVectorOld src1, VectorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
         double[] dest = new double[src1.entries.length];
 
         for(int i=0; i<src1.entries.length; i++) {
             dest[i] = src1.entries[i]/src2.entries[src1.indices[i]];
         }
 
-        return new CooVector(src1.size, dest, src1.indices.clone());
+        return new CooVectorOld(src1.size, dest, src1.indices.clone());
     }
 }

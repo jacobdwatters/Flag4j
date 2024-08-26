@@ -2,8 +2,8 @@ package org.flag4j.vector;
 
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -74,7 +74,7 @@ public class VectorAddSubTests {
     @Test
     void realSparseAddTestCase() {
         double[] bEntries, expEntries;
-        CooVector B;
+        CooVectorOld B;
         VectorOld exp;
 
         // -------------------- Sub-case 1 --------------------
@@ -83,7 +83,7 @@ public class VectorAddSubTests {
         bEntries = new double[]{34.677};
         indices = new int[]{0};
         size = 3;
-        B = new CooVector(size, bEntries, indices);
+        B = new CooVectorOld(size, bEntries, indices);
         expEntries = new double[]{1.34+34.677, 6.266, -90.45};
         exp = new VectorOld(expEntries);
 
@@ -95,9 +95,9 @@ public class VectorAddSubTests {
         bEntries = new double[]{34.677};
         indices = new int[]{0};
         size = 201;
-        B = new CooVector(size, bEntries, indices);
+        B = new CooVectorOld(size, bEntries, indices);
 
-        CooVector finalB = B;
+        CooVectorOld finalB = B;
         assertThrows(LinearAlgebraException.class, () -> A.add(finalB));
     }
 
@@ -105,7 +105,7 @@ public class VectorAddSubTests {
     @Test
     void complexSparseAddTestCase() {
         CNumber[] bEntries, expEntries;
-        CooCVector B;
+        CooCVectorOld B;
         CVectorOld exp;
 
         // -------------------- Sub-case 1 --------------------
@@ -114,7 +114,7 @@ public class VectorAddSubTests {
         bEntries = new CNumber[]{new CNumber(345.66, -1.44559)};
         indices = new int[]{0};
         size = 3;
-        B = new CooCVector(size, bEntries, indices);
+        B = new CooCVectorOld(size, bEntries, indices);
         expEntries = new CNumber[]{bEntries[0].add(1.34), new CNumber(6.266), new CNumber(-90.45)};
         exp = new CVectorOld(expEntries);
 
@@ -126,9 +126,9 @@ public class VectorAddSubTests {
         bEntries = new CNumber[]{new CNumber(345.66, -1.44559)};
         indices = new int[]{0};
         size = 201;
-        B = new CooCVector(size, bEntries, indices);
+        B = new CooCVectorOld(size, bEntries, indices);
 
-        CooCVector finalB = B;
+        CooCVectorOld finalB = B;
         assertThrows(LinearAlgebraException.class, () -> A.add(finalB));
     }
 
@@ -220,7 +220,7 @@ public class VectorAddSubTests {
     @Test
     void realSparseSubTestCase() {
         double[] bEntries, expEntries;
-        CooVector B;
+        CooVectorOld B;
         VectorOld exp;
 
         // -------------------- Sub-case 1 --------------------
@@ -229,7 +229,7 @@ public class VectorAddSubTests {
         bEntries = new double[]{34.677};
         indices = new int[]{0};
         size = 3;
-        B = new CooVector(size, bEntries, indices);
+        B = new CooVectorOld(size, bEntries, indices);
         expEntries = new double[]{1.34-34.677, 6.266, -90.45};
         exp = new VectorOld(expEntries);
 
@@ -241,9 +241,9 @@ public class VectorAddSubTests {
         bEntries = new double[]{34.677};
         indices = new int[]{0};
         size = 201;
-        B = new CooVector(size, bEntries, indices);
+        B = new CooVectorOld(size, bEntries, indices);
 
-        CooVector finalB = B;
+        CooVectorOld finalB = B;
         assertThrows(LinearAlgebraException.class, () -> A.sub(finalB));
     }
 
@@ -251,7 +251,7 @@ public class VectorAddSubTests {
     @Test
     void complexSparseSubTestCase() {
         CNumber[] bEntries, expEntries;
-        CooCVector B;
+        CooCVectorOld B;
         CVectorOld exp;
 
         // -------------------- Sub-case 1 --------------------
@@ -260,7 +260,7 @@ public class VectorAddSubTests {
         bEntries = new CNumber[]{new CNumber(345.66, -1.44559)};
         indices = new int[]{0};
         size = 3;
-        B = new CooCVector(size, bEntries, indices);
+        B = new CooCVectorOld(size, bEntries, indices);
         expEntries = new CNumber[]{new CNumber(1.34).sub(bEntries[0]), new CNumber(6.266), new CNumber(-90.45)};
         exp = new CVectorOld(expEntries);
 
@@ -272,9 +272,9 @@ public class VectorAddSubTests {
         bEntries = new CNumber[]{new CNumber(345.66, -1.44559)};
         indices = new int[]{0};
         size = 201;
-        B = new CooCVector(size, bEntries, indices);
+        B = new CooCVectorOld(size, bEntries, indices);
 
-        CooCVector finalB = B;
+        CooCVectorOld finalB = B;
         assertThrows(LinearAlgebraException.class, () -> A.sub(finalB));
     }
 

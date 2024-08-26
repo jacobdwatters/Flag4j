@@ -1,7 +1,7 @@
 package org.flag4j.matrix;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -48,7 +48,7 @@ class MatrixAddSubEqTests {
     @Test
     void addEqSparseTestCase() {
         double[] bEntries;
-        CooMatrix B;
+        CooMatrixOld B;
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new double[][]{{1, 2.435, -843.5}, {34.56, 8.52, 0.000345}};
@@ -57,7 +57,7 @@ class MatrixAddSubEqTests {
         rowIndices = new int[]{0, 1};
         colIndices = new int[]{2, 1};
         sparseShape = A.shape;
-        B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrixOld(sparseShape, bEntries, rowIndices, colIndices);
         exp = A.add(B);
 
         A.addEq(B);
@@ -71,9 +71,9 @@ class MatrixAddSubEqTests {
         rowIndices = new int[]{0, 1};
         colIndices = new int[]{2, 1};
         sparseShape = new Shape(5, 3);
-        B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrixOld(sparseShape, bEntries, rowIndices, colIndices);
 
-        CooMatrix finalB = B;
+        CooMatrixOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.addEq(finalB));
     }
 
@@ -124,7 +124,7 @@ class MatrixAddSubEqTests {
     @Test
     void subEqSparseTestCase() {
         double[] bEntries;
-        CooMatrix B;
+        CooMatrixOld B;
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new double[][]{{1, 2.435, -843.5}, {34.56, 8.52, 0.000345}};
@@ -133,7 +133,7 @@ class MatrixAddSubEqTests {
         rowIndices = new int[]{0, 1};
         colIndices = new int[]{2, 1};
         sparseShape = A.shape;
-        B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrixOld(sparseShape, bEntries, rowIndices, colIndices);
         exp = A.sub(B);
 
         A.subEq(B);
@@ -147,9 +147,9 @@ class MatrixAddSubEqTests {
         rowIndices = new int[]{0, 1};
         colIndices = new int[]{2, 1};
         sparseShape = new Shape(5, 3);
-        B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrixOld(sparseShape, bEntries, rowIndices, colIndices);
 
-        CooMatrix finalB = B;
+        CooMatrixOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.subEq(finalB));
     }
 

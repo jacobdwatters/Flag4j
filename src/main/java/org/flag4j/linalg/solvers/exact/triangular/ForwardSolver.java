@@ -96,8 +96,8 @@ public abstract class ForwardSolver<
      * true and {@code coeff} is not upper triangular.
      */
     protected void checkParams(T coeff, int constantRows) {
-        ParameterChecks.assertSquare(coeff.shape());
-        ParameterChecks.assertEquals(coeff.numRows(), constantRows);
+        ParameterChecks.ensureSquare(coeff.shape());
+        ParameterChecks.ensureEquals(coeff.numRows(), constantRows);
 
         if(enforceLower && !coeff.isTriL()) {
             throw new IllegalArgumentException("Expecting matrix L to be lower triangular.");

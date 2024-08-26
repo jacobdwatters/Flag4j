@@ -34,7 +34,7 @@ import org.flag4j.util.ErrorMessages;
 public class ComplexNumberParser {
 
     private ComplexNumberParser() {
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

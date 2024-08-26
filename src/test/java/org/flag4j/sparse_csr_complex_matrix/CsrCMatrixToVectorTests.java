@@ -2,18 +2,18 @@ package org.flag4j.sparse_csr_complex_matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CsrCMatrix;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CsrCMatrixToVectorTests {
-    CsrCMatrix A;
+    CsrCMatrixOld A;
     CNumber[][] aEntries;
 
-    CooCVector exp;
+    CooCVectorOld exp;
     CNumber[] expEntries;
 
     @Test

@@ -43,7 +43,7 @@ public final class RealDenseVectorOperations {
 
     private RealDenseVectorOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -54,7 +54,7 @@ public final class RealDenseVectorOperations {
      * @return The inner product of the two vectors.
      */
     public static double innerProduct(double[] src1, double[] src2) {
-        ParameterChecks.assertArrayLengthsEq(src1.length, src2.length);
+        ParameterChecks.ensureArrayLengthsEq(src1.length, src2.length);
         double innerProd=0;
 
         for(int i=0; i<src1.length; i++) {

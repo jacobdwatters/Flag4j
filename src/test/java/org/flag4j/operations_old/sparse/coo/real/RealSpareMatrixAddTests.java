@@ -1,6 +1,6 @@
 package org.flag4j.operations_old.sparse.coo.real;
 
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +10,7 @@ class RealSpareMatrixAddTests {
 
     int[][] aIndices, bIndices, expIndices;
     double[] aEntries, bEntries, expEntries;
-    CooMatrix A, B, exp;
+    CooMatrixOld A, B, exp;
     Shape aShape, bShape, expShape;
 
 
@@ -23,7 +23,7 @@ class RealSpareMatrixAddTests {
                 {0, 25, 502, 502, 789, 1003, 2008},
                 {9892, 0, 9, 608, 92, 608, 26}
         };
-        A = new CooMatrix(aShape, aEntries, aIndices[0], aIndices[1]);
+        A = new CooMatrixOld(aShape, aEntries, aIndices[0], aIndices[1]);
 
         bShape = new Shape(2025, 10005);
         bEntries = new double[]{-9.456, 234.6, -22.0044, 88.3216};
@@ -31,7 +31,7 @@ class RealSpareMatrixAddTests {
                 {0, 25, 502, 2014},
                 {9892, 902, 3, 14}
         };
-        B = new CooMatrix(bShape, bEntries, bIndices[0], bIndices[1]);
+        B = new CooMatrixOld(bShape, bEntries, bIndices[0], bIndices[1]);
 
         expShape = new Shape(2025, 10005);
         expEntries = new double[]{1.144-9.456, -99.25, 234.6, -22.0044,
@@ -40,7 +40,7 @@ class RealSpareMatrixAddTests {
                 {0, 25, 25, 502, 502, 502, 789, 1003, 2008, 2014},
                 {9892, 0, 902, 3, 9, 608, 92, 608, 26, 14}
         };
-        exp = new CooMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
+        exp = new CooMatrixOld(expShape, expEntries, expIndices[0], expIndices[1]);
 
 
         assertEquals(exp, RealSparseMatrixOperations.add(A, B));

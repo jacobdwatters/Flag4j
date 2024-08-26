@@ -28,9 +28,20 @@ package org.flag4j.core_temp.structures.rings;
 /**
  * <p>A semi-ring element backed by a boolean. Immutable</p>
  *
- * <p>This class wraps the primative boolean type.</p>
+ * <p>This class wraps the primitive boolean type.</p>
  */
 public class BooleanRing implements SemiRing<BooleanRing> {
+    // Constants provided for convienience.
+
+    /**
+     * The boolean value true.
+     */
+    final public static BooleanRing ONE = new BooleanRing(true);
+    /**
+     * The boolean value false.
+     */
+    final public static BooleanRing ZERO = new BooleanRing(false);
+
 
     /**
      * Boolean value of field element.
@@ -89,6 +100,58 @@ public class BooleanRing implements SemiRing<BooleanRing> {
 
 
     /**
+     * <p>Checks if this value is an additive identity for this semi-ring.</p>
+     *
+     * <p>An element 0 is an additive identity if a + 0 = a for any a in the semi-ring.</p>
+     *
+     * @return True if this value is an additive identity for this semi-ring. Otherwise, false.
+     */
+    @Override
+    public boolean isZero() {
+        return equals(ZERO);
+    }
+
+
+    /**
+     * <p>Checks if this value is a multiplicitive identity for this semi-ring.</p>
+     *
+     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     *
+     * @return True if this value is a multiplicitive identity for this semi-ring. Otherwise, false.
+     */
+    @Override
+    public boolean isOne() {
+        return equals(ONE);
+    }
+
+
+    /**
+     * <p>Gets the additive identity for this semi-ring.</p>
+     *
+     * <p>An element 0 is an additive identity if a + 0 = a for any a in the semi-ring.</p>
+     *
+     * @return The additive identity for this semi-ring.
+     */
+    @Override
+    public BooleanRing getZero() {
+        return ZERO;
+    }
+
+
+    /**
+     * <p>Gets the multiplicitive identity for this semi-ring.</p>
+     *
+     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     *
+     * @return The multiplicitive identity for this semi-ring.
+     */
+    @Override
+    public BooleanRing getOne() {
+        return ONE;
+    }
+
+
+    /**
      * Compares this element of the semi-ring with {@code b}.
      *
      * @param b Second element of the semi-ring.
@@ -107,4 +170,21 @@ public class BooleanRing implements SemiRing<BooleanRing> {
     public int compareTo(BooleanRing b) {
         return Boolean.compare(value, b.value);
     }
+
+
+    /**
+     * Checks if an object is equal to this semi-ring element.
+     * @param b Object to compare to this semi-ring element.
+     * @return True if the objects are the same or are both {@link BooleanRing}'s and have equal values.
+     */
+    @Override
+    public boolean equals(Object b) {
+        // Check for quick returns.
+        if(this == b) return true;
+        if(b == null) return false;
+        if(b.getClass() != this.getClass()) return false;
+
+        return this.value == ((BooleanRing) b).value;
+    }
+
 }

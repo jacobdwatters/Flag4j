@@ -3,8 +3,8 @@ package org.flag4j.complex_matrix;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
@@ -110,7 +110,7 @@ class CMatrixMatVecMultTests {
     void matMultSparseTestCase() {
         double[] bEntries;
         int[] rowIndices;
-        CooVector B;
+        CooVectorOld B;
 
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new CNumber[][]{
@@ -121,7 +121,7 @@ class CMatrixMatVecMultTests {
         A = new CMatrixOld(aEntries);
         bEntries = new double[]{-0.9345341};
         rowIndices = new int[]{1};
-        B = new CooVector(3, bEntries, rowIndices);
+        B = new CooVectorOld(3, bEntries, rowIndices);
         expEntries = new CNumber[]{
                 new CNumber("-42.240941320000005+0.031119985530000005i"),
                 new CNumber("0.0+694.4522897100001i"),
@@ -140,9 +140,9 @@ class CMatrixMatVecMultTests {
         A = new CMatrixOld(aEntries);
         bEntries = new double[]{-0.9345341};
         rowIndices = new int[]{1};
-        B = new CooVector(14, bEntries, rowIndices);
+        B = new CooVectorOld(14, bEntries, rowIndices);
 
-        CooVector finalB = B;
+        CooVectorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 
@@ -151,7 +151,7 @@ class CMatrixMatVecMultTests {
     void matMultSparseComplexTestCase() {
         CNumber[] bEntries;
         int[] rowIndices, colIndices;
-        CooCVector B;
+        CooCVectorOld B;
         Shape bShape;
 
         // ---------------------- Sub-case 1 ----------------------
@@ -163,7 +163,7 @@ class CMatrixMatVecMultTests {
         A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i")};
         rowIndices = new int[]{1};
-        B = new CooCVector(3, bEntries, rowIndices);
+        B = new CooCVectorOld(3, bEntries, rowIndices);
         expEntries = new CNumber[]{
                 new CNumber("-41.929586320000006+422.65111998553i"),
                 new CNumber("6947.985+694.4522897100001i"),
@@ -183,9 +183,9 @@ class CMatrixMatVecMultTests {
         A = new CMatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i"), new CNumber("11.67-2.0i")};
         rowIndices = new int[]{1687, 2569070};
-        B = new CooCVector(3450941, bEntries, rowIndices);
+        B = new CooCVectorOld(3450941, bEntries, rowIndices);
 
-        CooCVector finalB = B;
+        CooCVectorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 

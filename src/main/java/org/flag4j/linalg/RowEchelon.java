@@ -28,7 +28,7 @@ import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.linalg.decompositions.lu.ComplexLU;
-import org.flag4j.linalg.decompositions.lu.RealLU;
+import org.flag4j.linalg.decompositions.lu.RealLUOLd;
 
 /**
  * This class contains several methods for computing row echelon, reduced row echelon, and extended reduced row echelon
@@ -42,7 +42,7 @@ public class RowEchelon {
      * @return A matrix in row echelon form which is row-equivalent to the matrix {@code A}.
      */
     public static MatrixOld ref(MatrixOld A) {
-        return new RealLU().decompose(A).getU();
+        return new RealLUOLd().decompose(A).getU();
     }
 
 
@@ -63,8 +63,8 @@ public class RowEchelon {
      * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
      */
     public static MatrixOld rref(MatrixOld A) {
-        // Compute the LU decomposition.
-        MatrixOld U = new RealLU().decompose(A).getU();
+        // Compute the LUOld decomposition.
+        MatrixOld U = new RealLUOLd().decompose(A).getU();
 
         int colStop = Math.min(U.numCols, U.numRows);
         int pivotRow;
@@ -104,7 +104,7 @@ public class RowEchelon {
      * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
      */
     public static CMatrixOld rref(CMatrixOld A) {
-        // Compute the LU decomposition.
+        // Compute the LUOld decomposition.
         CMatrixOld U = new ComplexLU().decompose(A).getU();
 
         int colStop = Math.min(U.numCols, U.numRows);

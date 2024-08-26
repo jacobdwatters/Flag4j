@@ -71,7 +71,7 @@ public class SymmTriDiagonal implements Serializable {
      * @param offDiag Sub/super diagonal entries of the symmetric tri-diagonal matrix.
      */
     public SymmTriDiagonal(double[] diag, double[] offDiag) {
-        ParameterChecks.assertArrayLengthsEq(diag.length-1, offDiag.length);
+        ParameterChecks.ensureArrayLengthsEq(diag.length-1, offDiag.length);
 
         this.size = diag.length;
         this.diag = diag;
@@ -88,7 +88,7 @@ public class SymmTriDiagonal implements Serializable {
      */
     public double get(int rowIdx, int colIdx) {
         // Ensure indices are in range for this matrix.
-        ParameterChecks.assertValidIndices(size, rowIdx, colIdx);
+        ParameterChecks.ensureValidIndices(size, rowIdx, colIdx);
         int absDiff = Math.abs(rowIdx-colIdx);
 
         if(absDiff == 0) {

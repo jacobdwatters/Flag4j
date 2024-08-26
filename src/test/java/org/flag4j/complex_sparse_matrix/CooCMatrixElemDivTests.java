@@ -2,7 +2,7 @@ package org.flag4j.complex_sparse_matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ class CooCMatrixElemDivTests {
 
     Shape aShape, expShape;
     CNumber[] aEntries;
-    CooCMatrix A;
+    CooCMatrixOld A;
     int[] aRowIndices, aColIndices, expRowIndices, expColIndices;
 
     @Test
@@ -22,14 +22,14 @@ class CooCMatrixElemDivTests {
         double[][] bEntries;
         MatrixOld B;
         CNumber[] expEntries;
-        CooCMatrix exp;
+        CooCMatrixOld exp;
 
         // ------------------- Sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new CNumber[]{new CNumber("0.0766368471796478+0.9492280625872803i"), new CNumber("0.1930391038649386+0.7617047445283123i"), new CNumber("0.9067549010330563+0.31336061871125553i"), new CNumber("0.21893877466645717+0.5152634601707257i"), new CNumber("0.5764595328602934+0.39285513632570546i")};
         aRowIndices = new int[]{1, 1, 2, 2, 4};
         aColIndices = new int[]{3, 4, 2, 4, 3};
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[][]{
                 {0.23814, 0.33623, 0.01234, 0.0361, 0.69305},
@@ -43,7 +43,7 @@ class CooCMatrixElemDivTests {
         expEntries = new CNumber[]{new CNumber("0.08631830868134778 + 1.0691431593387102i"), new CNumber("0.7268038549131725+2.8678642489770794i"), new CNumber("3.9658629331396793+1.3705415443984235i"), new CNumber("0.2914093711869364+0.6858200478773417i"), new CNumber("0.7180522575208248 + 0.4893500782572532i")};
         expRowIndices = new int[]{1, 1, 2, 2, 4};
         expColIndices = new int[]{3, 4, 2, 4, 3};
-        exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooCMatrixOld(expShape, expEntries, expRowIndices, expColIndices);
 
         assertEquals(exp, A.elemDiv(B));
 
@@ -52,7 +52,7 @@ class CooCMatrixElemDivTests {
         aEntries = new CNumber[]{new CNumber("0.9720212972219383+0.18426402442963263i"), new CNumber("0.5764899656357376+0.31327386474221364i"), new CNumber("0.7410673521266785+0.11934630071637853i")};
         aRowIndices = new int[]{1, 1, 2};
         aColIndices = new int[]{2, 4, 4};
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[][]{
                 {0.85568, 0.5295, 0.24867, 0.12305, 0.26644},
@@ -64,7 +64,7 @@ class CooCMatrixElemDivTests {
         expEntries = new CNumber[]{new CNumber("1.033109034427645+0.19584429775594145i"), new CNumber("1.1577498606975491+0.6291397854002764i"), new CNumber("0.9197465058104807+0.14812195241132703i")};
         expRowIndices = new int[]{1, 1, 2};
         expColIndices = new int[]{2, 4, 4};
-        exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooCMatrixOld(expShape, expEntries, expRowIndices, expColIndices);
 
         assertEquals(exp, A.elemDiv(B));
 
@@ -73,7 +73,7 @@ class CooCMatrixElemDivTests {
         aEntries = new CNumber[]{new CNumber("0.2167893175598996+0.2996212001672518i"), new CNumber("0.1511818245619858+0.20927498440208603i"), new CNumber("0.20209823912923397+0.8997366291135686i")};
         aRowIndices = new int[]{0, 1, 1};
         aColIndices = new int[]{3, 0, 3};
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[][]{
                 {0.49778, 0.77635, 0.99512},
@@ -93,14 +93,14 @@ class CooCMatrixElemDivTests {
         CNumber[][] bEntries;
         CMatrixOld B;
         CNumber[] expEntries;
-        CooCMatrix exp;
+        CooCMatrixOld exp;
 
         // ------------------- Sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new CNumber[]{new CNumber("0.3713399183921321+0.2732583086126841i"), new CNumber("0.8097640641001572+0.47645109131560925i"), new CNumber("0.08879023807148412+0.9698316824688531i"), new CNumber("0.7172788370662367+0.08708074327944348i"), new CNumber("0.7462626232525152+0.9494035470157722i")};
         aRowIndices = new int[]{0, 0, 2, 2, 3};
         aColIndices = new int[]{3, 4, 1, 4, 3};
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.35248+0.5024i"), new CNumber("0.02582+0.58262i"), new CNumber("0.59393+0.23783i"), new CNumber("0.17298+0.47328i"), new CNumber("0.44915+0.51353i")},
@@ -114,7 +114,7 @@ class CooCMatrixElemDivTests {
         expEntries = new CNumber[]{new CNumber("0.7623073843560689 - 0.505992197105771i"), new CNumber("1.3070771264452088-0.43364627725214056i"), new CNumber("2.6652516607566423-0.11763548835359462i"), new CNumber("2.0802398157395676+0.09800240914753947i"), new CNumber("2.363824038562478-1.3968522871199343i")};
         expRowIndices = new int[]{0, 0, 2, 2, 3};
         expColIndices = new int[]{3, 4, 1, 4, 3};
-        exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooCMatrixOld(expShape, expEntries, expRowIndices, expColIndices);
 
         assertEquals(exp, A.elemDiv(B));
 
@@ -123,7 +123,7 @@ class CooCMatrixElemDivTests {
         aEntries = new CNumber[]{new CNumber("0.43891010689776977+0.8643182182497601i"), new CNumber("0.2344331678075624+0.1339568190472047i"), new CNumber("0.2972763774902456+0.49046124106584676i")};
         aRowIndices = new int[]{1, 2, 2};
         aColIndices = new int[]{2, 0, 2};
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.5042+0.27989i"), new CNumber("0.00354+0.66911i"), new CNumber("0.60815+0.39143i"), new CNumber("0.22379+0.58241i"), new CNumber("0.32315+0.07285i")},
@@ -135,7 +135,7 @@ class CooCMatrixElemDivTests {
         expEntries = new CNumber[]{new CNumber("0.6099648314642674+0.9215248481611215i"), new CNumber("0.20683571771116144-0.05879555476353598i"), new CNumber("0.6005271815432809-0.053534349359038766i")};
         expRowIndices = new int[]{1, 2, 2};
         expColIndices = new int[]{2, 0, 2};
-        exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooCMatrixOld(expShape, expEntries, expRowIndices, expColIndices);
 
         assertEquals(exp, A.elemDiv(B));
 
@@ -144,7 +144,7 @@ class CooCMatrixElemDivTests {
         aEntries = new CNumber[]{new CNumber("0.5864427355413825+0.6325572833610345i"), new CNumber("0.015557949933594273+0.3938021787260496i"), new CNumber("0.04797168412999786+0.8363898618137131i")};
         aRowIndices = new int[]{0, 0, 1};
         aColIndices = new int[]{1, 3, 0};
-        A = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooCMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.15042+0.26227i"), new CNumber("0.6688+0.97353i"), new CNumber("0.63097+0.51755i")},

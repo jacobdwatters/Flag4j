@@ -2,8 +2,8 @@ package org.flag4j.operations_old.dense_sparse.complex;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.operations_old.dense_sparse.coo.complex.ComplexDenseSparseMatrixMultTranspose;
@@ -22,9 +22,9 @@ class ComplexDenseSparseMatMultTransposeTests {
     static CNumber[] bEntries, bVecEntries, bVecSparseEntries, expEntries;
 
     static CMatrixOld A;
-    static CooCMatrix B;
+    static CooCMatrixOld B;
     static CVectorOld bvec;
-    static CooCVector bSparse;
+    static CooCVectorOld bSparse;
 
     @BeforeAll
     static void setup() {
@@ -38,7 +38,7 @@ class ComplexDenseSparseMatMultTransposeTests {
 
     static void createMatrices() {
         A = new CMatrixOld(aEntries);
-        B = new CooCMatrix(sparseShape.swapAxes(0, 1), bEntries, sparseIndices[1], sparseIndices[0]);
+        B = new CooCMatrixOld(sparseShape.swapAxes(0, 1), bEntries, sparseIndices[1], sparseIndices[0]);
     }
 
     static void createDenseVector() {
@@ -46,7 +46,7 @@ class ComplexDenseSparseMatMultTransposeTests {
     }
 
     static void createSparseVector() {
-        bSparse = new CooCVector(sparseSize, bVecSparseEntries, sparseVecIndices);
+        bSparse = new CooCVectorOld(sparseSize, bVecSparseEntries, sparseVecIndices);
     }
 
     @Test
@@ -57,7 +57,7 @@ class ComplexDenseSparseMatMultTransposeTests {
                 {0, 1},
                 {1, 4}};
         createMatrices();
-        expEntries = A.mult(new CooCMatrix(sparseShape, bEntries, sparseIndices[0], sparseIndices[1])).entries;
+        expEntries = A.mult(new CooCMatrixOld(sparseShape, bEntries, sparseIndices[0], sparseIndices[1])).entries;
 
 
         Assertions.assertArrayEquals(expEntries,

@@ -75,28 +75,28 @@ class CNumberMinMaxSumTest {
 
 
     @Test
-    void argMinTestCase() {
+    void argminTestCase() {
         // ------------ Sub-case 1 ------------
         n1 = new CNumber(93.13, -6456.331);
         n2 = new CNumber(1.3, 7.5);
         n3 = new CNumber(-4.2e-8);
         n4 = new CNumber(0, -2);
 
-        arg = CNumber.argMin(n1, n2, n3, n4);
+        arg = CNumber.argmin(n1, n2, n3, n4);
 
         expArg = 2;
 
         Assertions.assertEquals(expMin, min);
 
         // ------------ Sub-case 2 ------------
-        arg = CNumber.argMin();
+        arg = CNumber.argmin();
         expArg = -1;
         Assertions.assertEquals(expMin, min);
     }
 
 
     @Test
-    void argMinRealTestCase() {
+    void argminRealTestCase() {
         // ------------ Sub-case 1 ------------
         n1 = new CNumber(93.13, -6456.331);
         n2 = new CNumber(1.3, 7.5);
@@ -104,14 +104,14 @@ class CNumberMinMaxSumTest {
         n4 = new CNumber(-122, -2);
         n5 = new CNumber(0, -2);
 
-        arg = CNumber.argMinReal(n1, n2, n3, n4);
+        arg = CNumber.argminReal(n1, n2, n3, n4);
 
         expArg = 3;
 
         Assertions.assertEquals(expMin, min);
 
         // ------------ Sub-case 2 ------------
-        arg = CNumber.argMinReal();
+        arg = CNumber.argminReal();
         expArg = -1;
         Assertions.assertEquals(expMin, min);
     }
@@ -160,28 +160,28 @@ class CNumberMinMaxSumTest {
 
 
     @Test
-    void argMaxTestCase() {
+    void argmaxTestCase() {
         // ------------ Sub-case 1 ------------
         n1 = new CNumber(1.3, 7.5);
         n2 = new CNumber(93.13, -6456.331);
         n3 = new CNumber(-4.2e-8);
         n4 = new CNumber(0, -2);
 
-        arg = CNumber.argMax(n1, n2, n3, n4);
+        arg = CNumber.argmax(n1, n2, n3, n4);
 
         expArg = 1;
 
         Assertions.assertEquals(expMin, min);
 
         // ------------ Sub-case 2 ------------
-        arg = CNumber.argMax();
+        arg = CNumber.argmax();
         expArg = -1;
         Assertions.assertEquals(expMin, min);
     }
 
 
     @Test
-    void argMaxRealTestCase() {
+    void argmaxRealTestCase() {
         // ------------ Sub-case 1 ------------
         n1 = new CNumber(93.13, -6456.331);
         n2 = new CNumber(1e10, 7.5);
@@ -189,14 +189,14 @@ class CNumberMinMaxSumTest {
         n4 = new CNumber(-122, -2);
         n5 = new CNumber(0, -2);
 
-        arg = CNumber.argMaxReal(n1, n2, n3, n4);
+        arg = CNumber.argmaxReal(n1, n2, n3, n4);
 
         expArg = 1;
 
         Assertions.assertEquals(expMin, min);
 
         // ------------ Sub-case 2 ------------
-        arg = CNumber.argMaxReal();
+        arg = CNumber.argmaxReal();
         expArg = -1;
         Assertions.assertEquals(expMin, min);
     }

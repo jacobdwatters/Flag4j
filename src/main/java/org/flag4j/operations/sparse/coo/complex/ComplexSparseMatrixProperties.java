@@ -25,7 +25,7 @@
 package org.flag4j.operations.sparse.coo.complex;
 
 
-import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ErrorMessages;
 
@@ -38,12 +38,12 @@ import java.util.stream.IntStream;
  * This class contains low level implementations for methods to evaluate certain properties of a complex sparse matrix.
  * (i.e. if the matrix is symmetric).
  */
-public class ComplexSparseMatrixProperties {
+public final class ComplexSparseMatrixProperties {
 
 
     private ComplexSparseMatrixProperties() {
         // Hide public constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -52,7 +52,7 @@ public class ComplexSparseMatrixProperties {
      * @param src MatrixOld to check if it is the identity matrix.
      * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
      */
-    public static boolean isIdentity(CooCMatrix src) {
+    public static boolean isIdentity(CooCMatrixOld src) {
         // Ensure the matrix is square and there are the same number of non-zero entries as entries on the diagonal.
         boolean result = src.isSquare() && src.entries.length==src.numRows;
 
@@ -75,7 +75,7 @@ public class ComplexSparseMatrixProperties {
      * @param src MatrixOld to check if it is the hermitian matrix.
      * @return True if the {@code src} matrix is hermitian. False otherwise.
      */
-    public static boolean isHermitian(CooCMatrix src) {
+    public static boolean isHermitian(CooCMatrixOld src) {
         boolean result = src.isSquare();
 
         List<CNumber> entries = Arrays.asList(src.entries);
@@ -130,7 +130,7 @@ public class ComplexSparseMatrixProperties {
      * @param src MatrixOld to check if it is the anti-hermitian matrix.
      * @return True if the {@code src} matrix is anti-hermitian. False otherwise.
      */
-    public static boolean isAntiHermitian(CooCMatrix src) {
+    public static boolean isAntiHermitian(CooCMatrixOld src) {
         boolean result = src.isSquare();
 
         List<CNumber> entries = Arrays.asList(src.entries);

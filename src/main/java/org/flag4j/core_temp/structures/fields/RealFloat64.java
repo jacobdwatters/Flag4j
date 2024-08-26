@@ -28,9 +28,20 @@ package org.flag4j.core_temp.structures.fields;
 /**
  * <p>A real number backed by a 64-bit floating point number. Immutable</p>
  *
- * <p>This class wraps the primative double type.</p>
+ * <p>This class wraps the primitive double type.</p>
  */
 public class RealFloat64 implements Field<RealFloat64> {
+
+
+    /**
+     * The numerical value 1.0.
+     */
+    public final static RealFloat64 ONE = new RealFloat64(1);
+    /**
+     * The numerical value 0.0.
+     */
+    public final static RealFloat64 ZERO = new RealFloat64(0);
+
 
     /**
      * Numerical value of field element.
@@ -105,6 +116,58 @@ public class RealFloat64 implements Field<RealFloat64> {
 
 
     /**
+     * <p>Checks if this value is an additive identity for this semi-ring.</p>
+     *
+     * <p>An element 0 is an additive identity if a + 0 = a for any a in the semi-ring.</p>
+     *
+     * @return True if this value is an additive identity for this semi-ring. Otherwise, false.
+     */
+    @Override
+    public boolean isZero() {
+        return equals(ZERO);
+    }
+
+
+    /**
+     * <p>Checks if this value is a multiplicitive identity for this semi-ring.</p>
+     *
+     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     *
+     * @return True if this value is a multiplicitive identity for this semi-ring. Otherwise, false.
+     */
+    @Override
+    public boolean isOne() {
+        return equals(ONE);
+    }
+
+
+    /**
+     * <p>Gets the additive identity for this semi-ring.</p>
+     *
+     * <p>An element 0 is an additive identity if a + 0 = a for any a in the semi-ring.</p>
+     *
+     * @return The additive identity for this semi-ring.
+     */
+    @Override
+    public RealFloat64 getZero() {
+        return ZERO;
+    }
+
+
+    /**
+     * <p>Gets the multiplicitive identity for this semi-ring.</p>
+     *
+     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     *
+     * @return The multiplicitive identity for this semi-ring.
+     */
+    @Override
+    public RealFloat64 getOne() {
+        return ONE;
+    }
+
+
+    /**
      * Computes the quotient of two elements of this field.
      * @param b Second field element in quotient.
      * @return The quotient of this field element and {@code b}.
@@ -112,6 +175,58 @@ public class RealFloat64 implements Field<RealFloat64> {
     @Override
     public RealFloat64 div(RealFloat64 b) {
         return new RealFloat64(this.value / b.value);
+    }
+
+
+    /**
+     * Sums an element of this field with a real number (associative and commutative).
+     *
+     * @param b Real element in sum.
+     *
+     * @return The sum of this element and {@code b}.
+     */
+    @Override
+    public RealFloat64 add(double b) {
+        return new RealFloat64(value + b);
+    }
+
+
+    /**
+     * Computes difference of an element of this field and a real number.
+     *
+     * @param b Real value in difference.
+     *
+     * @return The difference of this ring element and {@code b}.
+     */
+    @Override
+    public RealFloat64 sub(double b) {
+        return new RealFloat64(value - b);
+    }
+
+
+    /**
+     * Multiplies an element of this field with a real number (associative and commutative).
+     *
+     * @param b Real number in product.
+     *
+     * @return The product of this field element and {@code b}.
+     */
+    @Override
+    public RealFloat64 mult(double b) {
+        return new RealFloat64(value * b);
+    }
+
+
+    /**
+     * Computes the quotient of an element of this field and a real number.
+     *
+     * @param b Real number in quotient.
+     *
+     * @return The quotient of this field element and {@code b}.
+     */
+    @Override
+    public RealFloat64 div(double b) {
+        return new RealFloat64(value / b);
     }
 
 
@@ -266,6 +381,40 @@ public class RealFloat64 implements Field<RealFloat64> {
         }
 
         return new RealFloat64(prod);
+    }
+
+
+    /**
+     * Wraps a primitive double array as a {@link RealFloat64} array.
+     * @param arr Array to wrap.
+     * @return A {@link RealFloat64} array containing the values of {@code arr}. If {@code arr==null} then {@code null} will be
+     * returned.
+     */
+    public static RealFloat64[] wrapArray(double... arr) {
+        if(arr == null) return null;
+
+        RealFloat64[] wrapped = new RealFloat64[arr.length];
+        for(int i=0, size=arr.length; i<size; i++)
+            wrapped[i] = new RealFloat64(arr[i]);
+
+        return wrapped;
+    }
+
+
+    /**
+     * Wraps a {@link Double} array as a {@link RealFloat64} array.
+     * @param arr Array to wrap.
+     * @return A {@link RealFloat64} array containing the values of {@code arr}. If {@code arr==null} then {@code null} will be
+     * returned.
+     */
+    public static RealFloat64[] wrapArray(Double[] arr) {
+        if(arr == null) return null;
+
+        RealFloat64[] wrapped = new RealFloat64[arr.length];
+        for(int i=0, size=arr.length; i<size; i++)
+            wrapped[i] = new RealFloat64(arr[i]);
+
+        return wrapped;
     }
 
 

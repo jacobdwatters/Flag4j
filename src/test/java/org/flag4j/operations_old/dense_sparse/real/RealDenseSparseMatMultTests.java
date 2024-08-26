@@ -1,7 +1,7 @@
 package org.flag4j.operations_old.dense_sparse.real;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 class RealDenseSparseMatMultTests {
     double[] bEntries;
     int[] rowIndices, colIndices;
-    CooMatrix B;
+    CooMatrixOld B;
     Shape bShape;
 
     double[][] aEntries, expEntries;
@@ -29,7 +29,7 @@ class RealDenseSparseMatMultTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         bShape = new Shape(3, 2);
-        B = new CooMatrix(bShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrixOld(bShape, bEntries, rowIndices, colIndices);
         expEntries = new double[][]{{-92.7375568794, 0.00143541},
                 {-515.255376035, -10.7763114},
                 {-0.00012148943299999999, 0.0},
@@ -49,7 +49,7 @@ class RealDenseSparseMatMultTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         bShape = new Shape(5, 3);
-        B = new CooMatrix(bShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrixOld(bShape, bEntries, rowIndices, colIndices);
         expEntries = new double[][]{{0.0, 0.0, 0.0},
                 {-1.04985560794, -92.7375568794, -0.00011494769430000002},
                 {-10881.6915, 6434.2545, -10.7763114},
@@ -73,7 +73,7 @@ class RealDenseSparseMatMultTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 0};
         bShape = new Shape(3, 1);
-        B = new CooMatrix(bShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrixOld(bShape, bEntries, rowIndices, colIndices);
         expEntries = new double[][]{{-92.7361214694},
                 {-526.0316874350001},
                 {-0.00012148943299999999},
@@ -95,7 +95,7 @@ class RealDenseSparseMatMultTests {
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
         bShape = new Shape(5, 4);
-        B = new CooMatrix(bShape, bEntries, rowIndices, colIndices);
+        B = new CooMatrixOld(bShape, bEntries, rowIndices, colIndices);
         expEntries = new double[][]{{0.0},
                 {-1.04985560794},
                 {-10881.6915},

@@ -25,14 +25,20 @@
 package org.flag4j.core_temp.arrays.dense;
 
 import org.flag4j.core.Shape;
+import org.flag4j.core_temp.FieldTensorBase;
 import org.flag4j.core_temp.TensorPrimitiveOpsMixin;
 import org.flag4j.core_temp.structures.fields.Complex128;
+import org.flag4j.core_temp.structures.fields.Complex64;
+import org.flag4j.operations.TransposeDispatcher;
+import org.flag4j.operations.dense.field_ops.DenseFieldTensorDot;
 
+import java.util.Arrays;
 
+// TODO: Needs to implement DenseTensorMixin.
 /**
  * Complex dense tensor backed by an array of {@link Complex128}'s.
  */
-public class CTensor extends ComplexFieldTensor<Complex128> implements TensorPrimitiveOpsMixin<FieldTensor<Complex128>> {
+public class CTensor extends FieldTensorBase<CTensor, CTensor, Complex128> implements TensorPrimitiveOpsMixin<CTensor> {
 
     /**
      * Creates a tensor with the specified entries and shape.
@@ -43,6 +49,142 @@ public class CTensor extends ComplexFieldTensor<Complex128> implements TensorPri
      */
     public CTensor(Shape shape, Complex128[] entries) {
         super(shape, entries);
+    }
+
+
+    /**
+     * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
+     * computes the sum of products between the two tensors along the specified set of axes.
+     *
+     * @param src2 TensorOld to contract with this tensor.
+     * @param aAxes Axes along which to compute products for this tensor.
+     * @param bAxes Axes along which to compute products for {@code src2} tensor.
+     *
+     * @return The tensor dot product over the specified axes.
+     *
+     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes pairwise in
+     *                                  {@code aAxes} and {@code bAxes}.
+     * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
+     *                                  are out of bounds for the corresponding tensor.
+     */
+    @Override
+    public CTensor tensorDot(CTensor src2, int[] aAxes, int[] bAxes) {
+        return DenseFieldTensorDot.tensorDot(this, src2, aAxes, bAxes);
+    }
+
+
+    /**
+     * Computes the tensor dot product of this tensor with a second tensor. That is, sums the product of two tensor
+     * elements over the last axis of this tensor and the second-to-last axis of {@code src2}. If both tensors are
+     * rank 2, this is equivalent to matrix multiplication.
+     *
+     * @param src2 TensorOld to compute dot product with this tensor.
+     *
+     * @return The tensor dot product over the last axis of this tensor and the second to last axis of {@code src2}.
+     *
+     * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
+     *                                  along the second-to-last axis.
+     */
+    @Override
+    public CTensor tensorDot(CTensor src2) {
+        return DenseFieldTensorDot.tensorDot(this, src2);
+    }
+
+
+    /**
+     * Computes the conjugate transpose of a tensor by conjugating and exchanging {@code axis1} and {@code axis2}.
+     *
+     * @param axis1 First axis to exchange and conjugate.
+     * @param axis2 Second axis to exchange and conjugate.
+     *
+     * @return The conjugate transpose of this tensor acording to the specified axes.
+     *
+     * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
+     * @see #H()
+     * @see #H(int...)
+     */
+    @Override
+    public CTensor H(int axis1, int axis2) {
+        return TransposeDispatcher.dispatchTensorHermitian(this, axis1, axis2);
+    }
+
+
+    /**
+     * Computes the conjugate transpose of this tensor. That is, conjugates and permutes the axes of this tensor so that it matches
+     * the permutation specified by {@code axes}.
+     *
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     * {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     *
+     * @return The conjugate transpose of this tensor with its axes permuted by the {@code axes} array.
+     *
+     * @throws IndexOutOfBoundsException If any element of {@code axes} is out of bounds for the rank of this tensor.
+     * @throws IllegalArgumentException  If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     * @see #H(int, int)
+     * @see #H()
+     */
+    @Override
+    public CTensor H(int... axes) {
+        return TransposeDispatcher.dispatchTensorHermitian(this, axes);
+    }
+
+
+    /**
+     * Creates a zero tensor with the specified shape.
+     *
+     * @param shape Shape of this tensor.
+     */
+    public CTensor(Shape shape) {
+        super(shape, new Complex128[shape.totalEntries().intValueExact()]);
+        Arrays.fill(entries, Complex128.ZERO);
+    }
+
+
+    /**
+     * Creates a tensor with the specified shape and filled with {@code fillValue}.
+     *
+     * @param shape Shape of this tensor.
+     * @param fillValue Value to fill this tensor with.
+     */
+    public CTensor(Shape shape, Complex128 fillValue) {
+        super(shape, new Complex128[shape.totalEntries().intValueExact()]);
+        Arrays.fill(entries, fillValue);
+    }
+
+
+    /**
+     * Creates a tensor with the specified shape and filled with {@code fillValue}.
+     *
+     * @param shape Shape of this tensor.
+     * @param fillValue Value to fill this tensor with.
+     */
+    public CTensor(Shape shape, Complex64 fillValue) {
+        super(shape, new Complex128[shape.totalEntries().intValueExact()]);
+        Arrays.fill(entries, new Complex128(fillValue));
+    }
+
+
+    /**
+     * Creates a tensor with the specified shape and filled with {@code fillValue}.
+     *
+     * @param shape Shape of this tensor.
+     * @param fillValue Value to fill this tensor with.
+     */
+    public CTensor(Shape shape, double fillValue) {
+        super(shape, new Complex128[shape.totalEntries().intValueExact()]);
+        Arrays.fill(entries, new Complex128(fillValue));
+    }
+
+
+    /**
+     * Creates a tensor with the specified shape and filled with {@code fillValue}.
+     *
+     * @param shape Shape of this tensor.
+     * @param fillValue Value to fill this tensor with. Must be a string representation of a complex number.
+     */
+    public CTensor(Shape shape, String fillValue) {
+        super(shape, new Complex128[shape.totalEntries().intValueExact()]);
+        Arrays.fill(entries, new Complex128(fillValue));
     }
 
 
@@ -59,10 +201,9 @@ public class CTensor extends ComplexFieldTensor<Complex128> implements TensorPri
     public CTensor(Shape shape, String[] entries) {
         super(shape, new Complex128[entries.length]);
 
-        // Parse string values as .
-        for(int i=0, size=entries.length; i<size; i++) {
+        // Parse string values.
+        for(int i=0, size=entries.length; i<size; i++)
             super.entries[i] = new Complex128(entries[i]);
-        }
     }
 
 
@@ -77,9 +218,22 @@ public class CTensor extends ComplexFieldTensor<Complex128> implements TensorPri
         super(shape, new Complex128[entries.length]);
 
         // Wrap values as complex values.
-        for(int i=0, size=entries.length; i<size; i++) {
+        for(int i=0, size=entries.length; i<size; i++)
             super.entries[i] = new Complex128(entries[i]);
-        }
+    }
+
+
+    /**
+     * Constructs a tensor of the same type as this tensor with the given the shape and entries.
+     *
+     * @param shape Shape of the tensor to construct.
+     * @param entries Entires of the tensor to construct.
+     *
+     * @return A tensor of the same type as this tensor with the given the shape and entries.
+     */
+    @Override
+    public CTensor makeLikeTensor(Shape shape, Complex128[] entries) {
+        return new CTensor(shape, entries);
     }
 
 
@@ -94,9 +248,8 @@ public class CTensor extends ComplexFieldTensor<Complex128> implements TensorPri
     public CTensor add(double b) {
         Complex128[] sum = new Complex128[entries.length];
 
-        for(int i=0, size=entries.length; i<size; i++) {
+        for(int i=0, size=entries.length; i<size; i++)
             sum[i] = entries[i].add(b);
-        }
 
         return new CTensor(shape, sum);
     }
@@ -113,9 +266,8 @@ public class CTensor extends ComplexFieldTensor<Complex128> implements TensorPri
     public CTensor sub(double b) {
         Complex128[] diff = new Complex128[entries.length];
 
-        for(int i=0, size=entries.length; i<size; i++) {
+        for(int i=0, size=entries.length; i<size; i++)
             diff[i] = entries[i].sub(b);
-        }
 
         return new CTensor(shape, diff);
     }
@@ -132,9 +284,8 @@ public class CTensor extends ComplexFieldTensor<Complex128> implements TensorPri
     public CTensor mult(double factor) {
         Complex128[] product = new Complex128[entries.length];
 
-        for(int i=0, size=entries.length; i<size; i++) {
+        for(int i=0, size=entries.length; i<size; i++)
             product[i] = entries[i].mult(factor);
-        }
 
         return new CTensor(shape, product);
     }
@@ -151,10 +302,64 @@ public class CTensor extends ComplexFieldTensor<Complex128> implements TensorPri
     public CTensor div(double divisor) {
         Complex128[] quotient = new Complex128[entries.length];
 
-        for(int i=0, size=entries.length; i<size; i++) {
+        for(int i=0, size=entries.length; i<size; i++)
             quotient[i] = entries[i].div(divisor);
-        }
 
         return new CTensor(shape, quotient);
+    }
+
+
+    /**
+     * Checks if an object is equal to this tesnor object.
+     * @param object Object to check equality with this tensor.
+     * @return True if the two tensors have the same shape, are numerically equivalent, and are of type {@link CTensor}.
+     * False otherwise.
+     */
+    @Override
+    public boolean equals(Object object) {
+        if(this == object) return true;
+        if(object == null || object.getClass() != getClass()) return false;
+
+        CTensor src2 = (CTensor) object;
+
+        return shape.equals(src2.shape) && Arrays.equals(entries, src2.entries);
+    }
+
+
+    /**
+     * Computes the transpose of a tensor by exchanging {@code axis1} and {@code axis2}.
+     *
+     * @param axis1 First axis to exchange.
+     * @param axis2 Second axis to exchange.
+     *
+     * @return The transpose of this tensor acording to the specified axes.
+     *
+     * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
+     * @see #T()
+     * @see #T(int...)
+     */
+    @Override
+    public CTensor T(int axis1, int axis2) {
+        return TransposeDispatcher.dispatchTensor(this, axis1, axis2);
+    }
+
+
+    /**
+     * Computes the transpose of this tensor. That is, permutes the axes of this tensor so that it matches
+     * the permutation specified by {@code axes}.
+     *
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     * {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     *
+     * @return The transpose of this tensor with its axes permuted by the {@code axes} array.
+     *
+     * @throws IndexOutOfBoundsException If any element of {@code axes} is out of bounds for the rank of this tensor.
+     * @throws IllegalArgumentException  If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     * @see #T(int, int)
+     * @see #T()
+     */
+    @Override
+    public CTensor T(int... axes) {
+        return TransposeDispatcher.dispatchTensor(this, axes);
     }
 }

@@ -4,10 +4,10 @@ import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooMatrix;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
@@ -36,13 +36,13 @@ class MatrixStackTests {
 
     MatrixOld realDense;
     MatrixOld realDense2;
-    CooMatrix realSparse;
+    CooMatrixOld realSparse;
     CMatrixOld complexDense;
-    CooCMatrix complexSparse;
+    CooCMatrixOld complexSparse;
     VectorOld realDenseVector;
-    CooVector realCooVector;
+    CooVectorOld realCooVector;
     CVectorOld complexDenseVector;
-    CooCVector complexSparseVector;
+    CooCVectorOld complexSparseVector;
 
     MatrixOld exp;
     CMatrixOld expC;
@@ -174,7 +174,7 @@ class MatrixStackTests {
         exp = new MatrixOld(expEntries);
 
         realDense = new MatrixOld(entries);
-        realSparse = new CooMatrix(sparseShape, sparseEntries, rowIndices, colIndices);
+        realSparse = new CooMatrixOld(sparseShape, sparseEntries, rowIndices, colIndices);
 
         assertEquals(exp, realDense.stack(realSparse, 0));
 
@@ -189,7 +189,7 @@ class MatrixStackTests {
         sparseShape = new Shape(5, 2);
 
         realDense = new MatrixOld(entries);
-        realSparse = new CooMatrix(sparseShape, sparseEntries, rowIndices, colIndices);
+        realSparse = new CooMatrixOld(sparseShape, sparseEntries, rowIndices, colIndices);
 
         assertThrows(IllegalArgumentException.class, ()->realDense.stack(realSparse, 0));
 
@@ -216,7 +216,7 @@ class MatrixStackTests {
         exp = new MatrixOld(expEntries);
 
         realDense = new MatrixOld(entries);
-        realSparse = new CooMatrix(sparseShape, sparseEntries, rowIndices, colIndices);
+        realSparse = new CooMatrixOld(sparseShape, sparseEntries, rowIndices, colIndices);
 
         assertEquals(exp, realDense.stack(realSparse, 1));
 
@@ -231,7 +231,7 @@ class MatrixStackTests {
         sparseShape = new Shape(5, 144);
 
         realDense = new MatrixOld(entries);
-        realSparse = new CooMatrix(sparseShape, sparseEntries, rowIndices, colIndices);
+        realSparse = new CooMatrixOld(sparseShape, sparseEntries, rowIndices, colIndices);
 
         assertThrows(IllegalArgumentException.class, ()->realDense.stack(realSparse, 1));
 
@@ -259,7 +259,7 @@ class MatrixStackTests {
         expC = new CMatrixOld(expCEntries);
 
         realDense = new MatrixOld(entries);
-        complexSparse = new CooCMatrix(sparseShape, sparseCEntries, rowIndices, colIndices);
+        complexSparse = new CooCMatrixOld(sparseShape, sparseCEntries, rowIndices, colIndices);
 
         assertEquals(expC, realDense.stack(complexSparse, 0));
 
@@ -274,7 +274,7 @@ class MatrixStackTests {
         sparseShape = new Shape(5, 2);
 
         realDense = new MatrixOld(entries);
-        complexSparse = new CooCMatrix(sparseShape, sparseCEntries, rowIndices, colIndices);
+        complexSparse = new CooCMatrixOld(sparseShape, sparseCEntries, rowIndices, colIndices);
 
         assertThrows(IllegalArgumentException.class, ()->realDense.stack(complexSparse, 0));
 
@@ -301,7 +301,7 @@ class MatrixStackTests {
         expC = new CMatrixOld(expCEntries);
 
         realDense = new MatrixOld(entries);
-        complexSparse = new CooCMatrix(sparseShape, sparseCEntries, rowIndices, colIndices);
+        complexSparse = new CooCMatrixOld(sparseShape, sparseCEntries, rowIndices, colIndices);
 
         assertEquals(expC, realDense.stack(complexSparse, 1));
 
@@ -316,7 +316,7 @@ class MatrixStackTests {
         sparseShape = new Shape(5, 144);
 
         realDense = new MatrixOld(entries);
-        complexSparse = new CooCMatrix(sparseShape, sparseCEntries, rowIndices, colIndices);
+        complexSparse = new CooCMatrixOld(sparseShape, sparseCEntries, rowIndices, colIndices);
 
         assertThrows(IllegalArgumentException.class, ()->realDense.stack(complexSparse, 1));
 
@@ -450,7 +450,7 @@ class MatrixStackTests {
         exp = new MatrixOld(expEntries);
 
         realDense = new MatrixOld(entries);
-        realCooVector = new CooVector(3, sparseEntries, indices);
+        realCooVector = new CooVectorOld(3, sparseEntries, indices);
 
         assertEquals(exp, realDense.stack(realCooVector, 0));
 
@@ -463,7 +463,7 @@ class MatrixStackTests {
         indices = new int[]{1};
 
         realDense = new MatrixOld(entries);
-        realCooVector = new CooVector(15, sparseEntries, indices);
+        realCooVector = new CooVectorOld(15, sparseEntries, indices);
 
         assertThrows(IllegalArgumentException.class, ()->realDense.stack(realCooVector, 0));
 
@@ -483,7 +483,7 @@ class MatrixStackTests {
         exp = new MatrixOld(expEntries);
 
         realDense = new MatrixOld(entries);
-        realCooVector = new CooVector(3, sparseEntries, indices);
+        realCooVector = new CooVectorOld(3, sparseEntries, indices);
 
         assertEquals(exp, realDense.stack(realCooVector, 1));
 
@@ -496,7 +496,7 @@ class MatrixStackTests {
         indices = new int[]{2};
 
         realDense = new MatrixOld(entries);
-        realCooVector = new CooVector(22, sparseEntries, indices);
+        realCooVector = new CooVectorOld(22, sparseEntries, indices);
 
         assertThrows(IllegalArgumentException.class, ()->realDense.stack(realCooVector, 1));
 
@@ -522,7 +522,7 @@ class MatrixStackTests {
         expC = new CMatrixOld(expCEntries);
 
         realDense = new MatrixOld(entries);
-        complexSparseVector = new CooCVector(3, sparseCEntries, indices);
+        complexSparseVector = new CooCVectorOld(3, sparseCEntries, indices);
 
         assertEquals(expC, realDense.stack(complexSparseVector, 0));
 
@@ -535,7 +535,7 @@ class MatrixStackTests {
         indices = new int[]{0};
 
         realDense = new MatrixOld(entries);
-        complexSparseVector = new CooCVector(3011, sparseCEntries, indices);
+        complexSparseVector = new CooCVectorOld(3011, sparseCEntries, indices);
 
         assertThrows(IllegalArgumentException.class, ()->realDense.stack(complexSparseVector, 0));
 
@@ -555,7 +555,7 @@ class MatrixStackTests {
         expC = new CMatrixOld(expCEntries);
 
         realDense = new MatrixOld(entries);
-        complexSparseVector = new CooCVector(3, sparseCEntries, indices);
+        complexSparseVector = new CooCVectorOld(3, sparseCEntries, indices);
 
         assertEquals(expC, realDense.stack(complexSparseVector, 1));
 
@@ -568,7 +568,7 @@ class MatrixStackTests {
         indices = new int[]{1};
 
         realDense = new MatrixOld(entries);
-        complexSparseVector = new CooCVector(2, sparseCEntries, indices);
+        complexSparseVector = new CooCVectorOld(2, sparseCEntries, indices);
 
         assertThrows(IllegalArgumentException.class, ()->realDense.stack(complexSparseVector, 1));
 

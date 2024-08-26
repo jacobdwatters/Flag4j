@@ -1,6 +1,6 @@
 package org.flag4j.sparse_vector;
 
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.linalg.VectorNorms;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ class CooVectorAggregateTests {
     static double[] aValues;
     static int[] aIndices;
     static int size;
-    static CooVector a;
+    static CooVectorOld a;
 
 
     @BeforeAll
@@ -21,7 +21,7 @@ class CooVectorAggregateTests {
         aValues = new double[]{1.34, 51.6, -0.00245};
         aIndices = new int[]{0, 5, 103};
         size = 304;
-        a = new CooVector(size, aValues, aIndices);
+        a = new CooVectorOld(size, aValues, aIndices);
     }
 
 
@@ -36,15 +36,15 @@ class CooVectorAggregateTests {
 
 
     @Test
-    void argMinMaxTestCase() {
+    void argminMaxTestCase() {
         int[] exp;
 
         // --------------------- Sub-case 1 ---------------------
         exp = new int[]{5};
-        assertArrayEquals(exp, a.argMax());
+        assertArrayEquals(exp, a.argmax());
 
         exp = new int[]{103};
-        assertArrayEquals(exp, a.argMin());
+        assertArrayEquals(exp, a.argmin());
     }
 
 

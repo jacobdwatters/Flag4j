@@ -40,6 +40,6 @@ public final class Flag4jConstants {
 
     private Flag4jConstants() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 }

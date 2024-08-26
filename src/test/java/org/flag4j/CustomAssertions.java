@@ -2,8 +2,8 @@ package org.flag4j;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooMatrix;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -59,7 +59,7 @@ public final class CustomAssertions {
      * @param exp Expected MatrixOld.
      * @param act Actual MatrixOld.
      */
-    public static void assertEqualsNaN(CooMatrix exp, CooMatrix act) {
+    public static void assertEqualsNaN(CooMatrixOld exp, CooMatrixOld act) {
         assertEquals(exp.shape, act.shape);
         assertArrayEquals(exp.rowIndices, act.colIndices);
         for(int i=0; i<exp.entries.length; i++) {
@@ -77,7 +77,7 @@ public final class CustomAssertions {
      * @param exp Expected vector.
      * @param act Actual vector.
      */
-    public static void assertEqualsNaN(CooVector exp, CooVector act) {
+    public static void assertEqualsNaN(CooVectorOld exp, CooVectorOld act) {
         assertEquals(exp.shape, act.shape);
         assertArrayEquals(exp.indices, act.indices);
         for(int i=0; i<exp.entries.length; i++) {

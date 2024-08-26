@@ -24,7 +24,7 @@
 
 package org.flag4j.operations_old.sparse.coo.complex;
 
-import org.flag4j.arrays_old.sparse.CooCMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
@@ -33,7 +33,7 @@ public class ComplexSparseElementSearch {
 
     private ComplexSparseElementSearch() {
         // Hide default constructor in utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
     /**
@@ -52,7 +52,7 @@ public class ComplexSparseElementSearch {
      *         that this guarantees that the return value will be &gt;= 0 if
      *         and only if the key is found.
      */
-    public static int matrixBinarySearch(CooCMatrix src, int rowKey, int colKey) {
+    public static int matrixBinarySearch(CooCMatrixOld src, int rowKey, int colKey) {
         int rowIdx = Arrays.binarySearch(src.rowIndices, rowKey);
 
         if(rowIdx<0) return rowIdx;
@@ -92,7 +92,7 @@ public class ComplexSparseElementSearch {
      * @return If it exists, the first and last index of the non-zero element in the sparse matrix which has the specified
      * {@code rowKey} as its row index.
      */
-    public static int[] matrixFindRowStartEnd(CooCMatrix src, int rowKey) {
+    public static int[] matrixFindRowStartEnd(CooCMatrixOld src, int rowKey) {
         int rowIdx = Arrays.binarySearch(src.rowIndices, rowKey);
 
         if(rowIdx < 0) return new int[]{rowIdx, rowIdx}; // Row not found.

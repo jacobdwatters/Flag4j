@@ -54,7 +54,7 @@ public class Projection {
      * @throws AssertionError If {@code nearClip!=farClip}.
      */
     public static MatrixOld getPerspective(double fov, double aspectRatio, double nearClip, double farClip) {
-        ParameterChecks.assertGreaterEq(0, aspectRatio);
+        ParameterChecks.ensureGreaterEq(0, aspectRatio);
         assert(nearClip!=farClip) : "nearClip cannot equal farClip.";
 
         MatrixOld perspective = new MatrixOld(4);
@@ -85,7 +85,7 @@ public class Projection {
      * @throws AssertionError If {@code nearClip!=farClip}.
      */
     public static MatrixOld getPerspective(double fovX, double fovY, double aspectRatio, double nearClip, double farClip){
-        ParameterChecks.assertGreaterEq(0, aspectRatio);
+        ParameterChecks.ensureGreaterEq(0, aspectRatio);
         assert(nearClip!=farClip) : "nearClip cannot equal farClip.";
 
         MatrixOld perspective = new MatrixOld(4);

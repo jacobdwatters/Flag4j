@@ -25,7 +25,7 @@
 package org.flag4j.linalg.decompositions.schur;
 
 import org.flag4j.core.MatrixMixin;
-import org.flag4j.linalg.decompositions.Decomposition;
+import org.flag4j.linalg.decompositions.DecompositionOld;
 import org.flag4j.linalg.decompositions.unitary.UnitaryDecomposition;
 import org.flag4j.rng.RandomCNumber;
 import org.flag4j.util.ParameterChecks;
@@ -45,7 +45,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  */
 public abstract class Schur<
         T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>,
-        U> implements Decomposition<T> {
+        U> implements DecompositionOld<T> {
 
     /**
      * Random number generator to be used when computing a random exceptional shift.
@@ -164,7 +164,7 @@ public abstract class Schur<
      * @throws IllegalArgumentException If {@code exceptionalThreshold} is not positive.
      */
     public Schur<T, U> setExceptionalThreshold(int exceptionalThreshold) {
-        ParameterChecks.assertPositive(exceptionalThreshold);
+        ParameterChecks.ensurePositive(exceptionalThreshold);
         this.exceptionalThreshold = exceptionalThreshold;
         return this;
     }
@@ -189,7 +189,7 @@ public abstract class Schur<
      * @throws IllegalArgumentException If {@code maxIterationFactor} is not positive.
      */
     public Schur<T, U> setMaxIterationFactor(int maxIterationFactor) {
-        ParameterChecks.assertPositive(maxIterationFactor);
+        ParameterChecks.ensurePositive(maxIterationFactor);
         this.maxIterationsFactor = maxIterationFactor;
         return this;
     }
@@ -263,7 +263,7 @@ public abstract class Schur<
      * @param src The matrix to be decomposed.
      */
     protected void setUp(T src) {
-        ParameterChecks.assertSquare(src.shape());
+        ParameterChecks.ensureSquare(src.shape());
 
         sinceLastExceptional = 0;
         numExceptional = 0;

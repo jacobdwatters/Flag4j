@@ -65,7 +65,7 @@ interface TensorPropertiesMixin {
      * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
      * entry (in row-major ordering) are returned.
      */
-    int[] argMin();
+    int[] argmin();
 
 
     /**
@@ -73,5 +73,5 @@ interface TensorPropertiesMixin {
      * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
      * entry (in row-major ordering) are returned.
      */
-    int[] argMax();
+    int[] argmax();
 }

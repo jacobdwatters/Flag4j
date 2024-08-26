@@ -2,8 +2,8 @@ package org.flag4j.sparse_vector;
 
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.operations_old.common.complex.AggregateComplex;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -16,27 +16,27 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class CooVectorInnerProdTests {
     int[] bIndices;
     static int sparseSize;
-    static CooVector a;
+    static CooVectorOld a;
 
     @BeforeAll
     static void setup() {
         double[] aEntries = {1.0, 5.6, -9.355, 215.0};
         int[] aIndices = {1, 2, 8, 13};
         sparseSize = 15;
-        a = new CooVector(sparseSize, aEntries, aIndices);
+        a = new CooVectorOld(sparseSize, aEntries, aIndices);
     }
 
 
     @Test
     void sparseInnerProdTestCase() {
         double[] bEntries;
-        CooVector b;
+        CooVectorOld b;
         double exp;
 
         // ----------------------- Sub-case 1 -----------------------
         bEntries = new double[]{1.34, 55.15, -41.13};
         bIndices = new int[]{0, 2, 8};
-        b = new CooVector(sparseSize, bEntries, bIndices);
+        b = new CooVectorOld(sparseSize, bEntries, bIndices);
 
         exp = 55.15*5.6 + -9.355*-41.13;
 
@@ -45,9 +45,9 @@ class CooVectorInnerProdTests {
         // ----------------------- Sub-case 2 -----------------------
         bEntries = new double[]{1.34, 55.15, -41.13};
         bIndices = new int[]{0, 2, 8};
-        b = new CooVector(sparseSize+23, bEntries, bIndices);
+        b = new CooVectorOld(sparseSize+23, bEntries, bIndices);
 
-        CooVector finalB = b;
+        CooVectorOld finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.inner(finalB));
     }
 
@@ -83,13 +83,13 @@ class CooVectorInnerProdTests {
     @Test
     void sparseComplexInnerProdTestCase() {
         CNumber[] bEntries;
-        CooCVector b;
+        CooCVectorOld b;
         CNumber exp;
 
         // ----------------------- Sub-case 1 -----------------------
         bEntries = new CNumber[]{new CNumber(1.334, 9.4), new CNumber(-67,14), new CNumber(24,-56.134)};
         bIndices = new int[]{0, 2, 8};
-        b = new CooCVector(sparseSize, bEntries, bIndices);
+        b = new CooCVectorOld(sparseSize, bEntries, bIndices);
 
         exp = AggregateComplex.sum(new CNumber[]{
                 new CNumber(-67,14).conj().mult(5.6), new CNumber(24,-56.134).conj().mult(-9.355)
@@ -101,9 +101,9 @@ class CooVectorInnerProdTests {
         // ----------------------- Sub-case 2 -----------------------
         bEntries = new CNumber[]{new CNumber(1.334, 9.4), new CNumber(-67,14), new CNumber(24,-56.134)};
         bIndices = new int[]{0, 2, 8};
-        b = new CooCVector(sparseSize-1, bEntries, bIndices);
+        b = new CooCVectorOld(sparseSize-1, bEntries, bIndices);
 
-        CooCVector finalB = b;
+        CooCVectorOld finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.inner(finalB));
     }
 
@@ -155,7 +155,7 @@ class CooVectorInnerProdTests {
         // ----------------------- Sub-case 1 -----------------------
         double[] expEntries = {0.0046451435284722955, 0.026012803759444855, -0.043455317708858326, 0.9987058586215436};
         int[] expIndices = {1, 2, 8, 13};
-        CooVector exp = new CooVector(sparseSize, expEntries, expIndices);
+        CooVectorOld exp = new CooVectorOld(sparseSize, expEntries, expIndices);
 
         assertEquals(exp, a.normalize());
     }

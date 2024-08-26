@@ -24,8 +24,8 @@
 
 package org.flag4j.operations;
 
-import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.core.Shape;
+import org.flag4j.core_temp.arrays.dense.Matrix;
 import org.flag4j.operations.dense.real.RealDenseMatrixMultTranspose;
 import org.flag4j.operations.dense.real.RealDenseMatrixMultiplication;
 import org.flag4j.util.Axis2D;
@@ -114,8 +114,8 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * @param B Second matrix in the multiplication.
      * @return The result of the matrix multiplication.
      */
-    public static double[] dispatch(MatrixOld A, MatrixOld B) {
-        ParameterChecks.assertMatMultShapes(A.shape, B.shape); // Ensure matrix shapes are conducive to matrix multiplication.
+    public static double[] dispatch(Matrix A, Matrix B) {
+        ParameterChecks.ensureMatMultShapes(A.shape, B.shape); // Ensure matrix shapes are conducive to matrix multiplication.
 
         RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();
         AlgorithmNames name = selectAlgorithm(A.shape, B.shape);
@@ -132,7 +132,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * @return The result of the matrix multiplication.
      */
     public static double[] dispatch(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.assertMatMultShapes(shape1, shape2); // Ensure matrix shapes are conducive to matrix multiplication.
+        ParameterChecks.ensureMatMultShapes(shape1, shape2); // Ensure matrix shapes are conducive to matrix multiplication.
 
         RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();
         AlgorithmNames name = selectAlgorithm(shape1, shape2);
@@ -147,8 +147,8 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * @param B Second matrix in the multiplication and the matrix to transpose.
      * @return The matrix multiply-transpose result of {@code A} and {@code B}.
      */
-    public static double[] dispatchTranspose(MatrixOld A, MatrixOld B) {
-        ParameterChecks.assertArrayLengthsEq(A.numCols, B.numCols);
+    public static double[] dispatchTranspose(Matrix A, Matrix B) {
+        ParameterChecks.ensureArrayLengthsEq(A.numCols, B.numCols);
 
         RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();
         AlgorithmNames name = selectAlgorithmTranspose(A.shape);

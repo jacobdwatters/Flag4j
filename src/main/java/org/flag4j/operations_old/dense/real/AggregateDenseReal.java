@@ -34,7 +34,7 @@ public class AggregateDenseReal {
 
     private AggregateDenseReal() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -44,7 +44,7 @@ public class AggregateDenseReal {
      * @param entries Entries of the tensor.
      * @return The index of the minimum value in this tensor. If there are zero entries in the array, -1 is returned.
      */
-    public static int argMin(double[] entries) {
+    public static int argmin(double[] entries) {
         double currMin = Double.MAX_VALUE;
         int currMinIndex = -1;
 
@@ -65,7 +65,7 @@ public class AggregateDenseReal {
      * @param entries Entries of the tensor.
      * @return The index of the maximum value in this tensor. If there are zero entries in the array, -1 is returned.
      */
-    public static int argMax(double[] entries) {
+    public static int argmax(double[] entries) {
         double currMax = Double.MIN_VALUE;
         int currMaxIndex = -1;
 

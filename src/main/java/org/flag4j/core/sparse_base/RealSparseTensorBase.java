@@ -77,7 +77,7 @@ public abstract class RealSparseTensorBase<
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));
         }
 
-        ParameterChecks.assertArrayLengthsEq(nonZeroEntries, indices.length);
+        ParameterChecks.ensureArrayLengthsEq(nonZeroEntries, indices.length);
     }
 
 
@@ -260,15 +260,15 @@ public abstract class RealSparseTensorBase<
 
 
     @Override
-    public int[] argMax() {
-        int idx = AggregateDenseReal.argMax(entries);
+    public int[] argmax() {
+        int idx = AggregateDenseReal.argmax(entries);
         return indices[idx].clone();
     }
 
 
     @Override
-    public int[] argMin() {
-        int idx = AggregateDenseReal.argMin(entries);
+    public int[] argmin() {
+        int idx = AggregateDenseReal.argmin(entries);
         return indices[idx].clone();
     }
 

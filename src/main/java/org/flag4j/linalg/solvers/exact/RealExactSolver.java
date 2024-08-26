@@ -26,22 +26,23 @@ package org.flag4j.linalg.solvers.exact;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.linalg.decompositions.lu.RealLU;
+import org.flag4j.linalg.decompositions.lu.LUOld;
+import org.flag4j.linalg.decompositions.lu.RealLUOLd;
 import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
 
 
 /**
  * Solver for solving a well determined system of linear equations in an exact sense using the
- * {@link org.flag4j.linalg.decompositions.lu.LU LU decomposition.}
+ * {@link LUOld LUOld decomposition.}
  */
 public class RealExactSolver extends ExactSolver<MatrixOld, VectorOld> {
 
     /**
-     * Constructs an exact LU solver where the coefficient matrix is real dense.
+     * Constructs an exact LUOld solver where the coefficient matrix is real dense.
      */
     public RealExactSolver() {
-        super(new RealLU(),
+        super(new RealLUOLd(),
                 new RealForwardSolver(true),
                 new RealBackSolver()
         );
@@ -49,10 +50,10 @@ public class RealExactSolver extends ExactSolver<MatrixOld, VectorOld> {
 
 
     /**
-     * Permute the rows of a vector using the row permutation matrix from the LU decomposition.
+     * Permute the rows of a vector using the row permutation matrix from the LUOld decomposition.
      *
      * @param b VectorOld to permute the rows of.
-     * @return A vector which is the result of applying the row permutation from the LU decomposition
+     * @return A vector which is the result of applying the row permutation from the LUOld decomposition
      * to the vector {@code b}.
      */
     @Override
@@ -62,10 +63,10 @@ public class RealExactSolver extends ExactSolver<MatrixOld, VectorOld> {
 
 
     /**
-     * Permute the rows of a matrix using the row permutation matrix from the LU decomposition.
+     * Permute the rows of a matrix using the row permutation matrix from the LUOld decomposition.
      *
      * @param B matrix to permute the rows of.
-     * @return A matrix which is the result of applying the row permutation from the LU decomposition
+     * @return A matrix which is the result of applying the row permutation from the LUOld decomposition
      * to the matrix {@code B}.
      */
     @Override

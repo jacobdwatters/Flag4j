@@ -24,8 +24,8 @@
 
 package org.flag4j.operations.sparse.coo.real;
 
-import org.flag4j.arrays_old.sparse.CooMatrix;
 import org.flag4j.core.Shape;
+import org.flag4j.core_temp.arrays.sparse.CooMatrix;
 import org.flag4j.operations.sparse.coo.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
@@ -35,13 +35,13 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * This class contains implementations for real sparse matrix manipulations.
+ * This utility class contains implementations for real sparse COO matrix manipulations.
  */
-public class RealSparseMatrixManipulations {
+public final class RealSparseMatrixManipulations {
 
     private RealSparseMatrixManipulations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

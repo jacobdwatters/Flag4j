@@ -43,7 +43,7 @@ public class RealComplexDenseElemDiv {
 
     private RealComplexDenseElemDiv() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -57,7 +57,7 @@ public class RealComplexDenseElemDiv {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemDiv(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
+        ParameterChecks.ensureEqualShape(shape1, shape2);
         CNumber[] product = new CNumber[src1.length];
 
         for(int i=0; i<product.length; i++) {
@@ -78,7 +78,7 @@ public class RealComplexDenseElemDiv {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemDivConcurrent(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
+        ParameterChecks.ensureEqualShape(shape1, shape2);
         CNumber[] product = new CNumber[src1.length];
 
         ThreadManager.concurrentOperation(product.length, (startIdx, endIdx) -> {
@@ -101,7 +101,7 @@ public class RealComplexDenseElemDiv {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemDiv(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
+        ParameterChecks.ensureEqualShape(shape1, shape2);
         CNumber[] quotient = new CNumber[src1.length];
         double divisor;
 
@@ -124,7 +124,7 @@ public class RealComplexDenseElemDiv {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemDivConcurrent(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
+        ParameterChecks.ensureEqualShape(shape1, shape2);
         CNumber[] quotient = new CNumber[src1.length];
 
         ThreadManager.concurrentOperation(quotient.length, (startIdx, endIdx) -> {

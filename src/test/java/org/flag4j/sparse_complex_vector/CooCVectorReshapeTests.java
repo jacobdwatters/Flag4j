@@ -1,6 +1,6 @@
 package org.flag4j.sparse_complex_vector;
 
-import org.flag4j.arrays_old.sparse.CooCVector;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,7 +13,7 @@ class CooCVectorReshapeTests {
     static int[] aIndices, expIndices;
     static CNumber[] aEntries, expEntries;
     static int sparseSize;
-    static CooCVector a, exp;
+    static CooCVectorOld a, exp;
 
 
     @BeforeAll
@@ -24,7 +24,7 @@ class CooCVectorReshapeTests {
         };
         aIndices = new int[]{4, 56, 9903, 14643};
         sparseSize = 24_023;
-        a = new CooCVector(sparseSize, aEntries, aIndices);
+        a = new CooCVectorOld(sparseSize, aEntries, aIndices);
     }
 
 
@@ -36,7 +36,7 @@ class CooCVectorReshapeTests {
                 new CNumber(24.56), new CNumber(-9356.1, 35)
         };
         expIndices = new int[]{4, 56, 9903, 14643};
-        exp = new CooCVector(sparseSize, expEntries, expIndices);
+        exp = new CooCVectorOld(sparseSize, expEntries, expIndices);
 
         assertEquals(exp, a.reshape(new Shape(sparseSize)));
         assertEquals(exp, a.reshape(sparseSize));

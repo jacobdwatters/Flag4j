@@ -1,10 +1,10 @@
 package org.flag4j.sparse_vector;
 
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooMatrix;
-import org.flag4j.arrays_old.sparse.CooTensor;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
+import org.flag4j.arrays_old.sparse.CooTensorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,7 +17,7 @@ class CooVectorConversionTests {
     static int[] aIndices;
     static double[] aEntries;
     static int sparseSize;
-    static CooVector a;
+    static CooVectorOld a;
 
 
     @BeforeAll
@@ -25,7 +25,7 @@ class CooVectorConversionTests {
         aEntries = new double[]{1.345, -989.234, 5.15, 617.4};
         aIndices = new int[]{4, 56, 9903, 14643};
         sparseSize = 24023;
-        a = new CooVector(sparseSize, aEntries, aIndices);
+        a = new CooVectorOld(sparseSize, aEntries, aIndices);
     }
 
 
@@ -34,13 +34,13 @@ class CooVectorConversionTests {
         double[] expEntries;
         int[][] expIndices;
         Shape expShape;
-        CooMatrix exp;
+        CooMatrixOld exp;
 
         // ------------------- Sub-case 1 -------------------
         expEntries = new double[]{1.345, -989.234, 5.15, 617.4};
         expIndices = new int[][]{{4, 56, 9903, 14643}, {0, 0, 0, 0}};
         expShape = new Shape(sparseSize, 1);
-        exp = new CooMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
+        exp = new CooMatrixOld(expShape, expEntries, expIndices[0], expIndices[1]);
 
         assertEquals(exp, a.toMatrix());
 
@@ -48,7 +48,7 @@ class CooVectorConversionTests {
         expEntries = new double[]{1.345, -989.234, 5.15, 617.4};
         expIndices = new int[][]{{4, 56, 9903, 14643}, {0, 0, 0, 0}};
         expShape = new Shape(sparseSize, 1);
-        exp = new CooMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
+        exp = new CooMatrixOld(expShape, expEntries, expIndices[0], expIndices[1]);
 
         assertEquals(exp, a.toMatrix(true));
 
@@ -56,7 +56,7 @@ class CooVectorConversionTests {
         expEntries = new double[]{1.345, -989.234, 5.15, 617.4};
         expIndices = new int[][]{{0, 0, 0, 0}, {4, 56, 9903, 14643}};
         expShape = new Shape(1, sparseSize);
-        exp = new CooMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
+        exp = new CooMatrixOld(expShape, expEntries, expIndices[0], expIndices[1]);
 
         assertEquals(exp, a.toMatrix(false));
     }
@@ -67,7 +67,7 @@ class CooVectorConversionTests {
         CNumber[] expEntries;
         int[] expIndices;
         int expSize;
-        CooCVector exp;
+        CooCVectorOld exp;
 
         // ------------------- Sub-case 1 -------------------
         expEntries = new CNumber[]{
@@ -75,7 +75,7 @@ class CooVectorConversionTests {
                 new CNumber(5.15), new CNumber(617.4)};
         expIndices = new int[]{4, 56, 9903, 14643};
         expSize = sparseSize;
-        exp = new CooCVector(expSize, expEntries, expIndices);
+        exp = new CooCVectorOld(expSize, expEntries, expIndices);
 
         assertEquals(exp, a.toComplex());
     }
@@ -86,13 +86,13 @@ class CooVectorConversionTests {
         double[] expEntries;
         int[][] expIndices;
         Shape expShape;
-        CooTensor exp;
+        CooTensorOld exp;
 
         // ------------------- Sub-case 1 -------------------
         expEntries = new double[]{1.345, -989.234, 5.15, 617.4};
         expIndices = new int[][]{{4}, {56}, {9903}, {14643}};
         expShape = new Shape(sparseSize);
-        exp = new CooTensor(expShape, expEntries, expIndices);
+        exp = new CooTensorOld(expShape, expEntries, expIndices);
 
         assertEquals(exp, a.toTensor());
     }
@@ -128,6 +128,6 @@ class CooVectorConversionTests {
         denseEntries[aIndices[3]] = aEntries[3];
         denseVector = new VectorOld(denseEntries);
 
-        assertEquals(a, CooVector.fromDense(denseVector));
+        assertEquals(a, CooVectorOld.fromDense(denseVector));
     }
 }

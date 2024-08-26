@@ -26,7 +26,7 @@ package org.flag4j.operations_old.dense_sparse.csr.real;
 
 
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CsrMatrix;
+import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -35,13 +35,13 @@ import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
 
 /**
- * This class contains low-level operations_old which act on a real dense and a real sparse {@link CsrMatrix CSR matrix}.
+ * This class contains low-level operations_old which act on a real dense and a real sparse {@link CsrMatrixOld CSR matrix}.
  */
 public class RealCsrDenseOperations {
 
     private RealCsrDenseOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -56,10 +56,10 @@ public class RealCsrDenseOperations {
      * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static MatrixOld applyBinOpp(CsrMatrix src1, MatrixOld src2,
+    public static MatrixOld applyBinOpp(CsrMatrixOld src1, MatrixOld src2,
                                         BinaryOperator<Double> opp,
                                         UnaryOperator<Double> uOpp) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
         double[] dest = src2.entries.clone();
 
         if(uOpp != null) {
@@ -96,9 +96,9 @@ public class RealCsrDenseOperations {
      * @param opp Binary operator to apply element-wise to the two matrices.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static MatrixOld applyBinOpp(MatrixOld src1, CsrMatrix src2,
+    public static MatrixOld applyBinOpp(MatrixOld src1, CsrMatrixOld src2,
                                         BinaryOperator<Double> opp) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
         double[] dest = src1.entries.clone();
 
@@ -131,9 +131,9 @@ public class RealCsrDenseOperations {
 
      * @return The result of applying the operation element-wise to the matrices. Result is a sparse CSR matrix.
      */
-    public static CsrMatrix applyBinOppToSparse(MatrixOld src1, CsrMatrix src2,
-                                                BinaryOperator<Double> opp) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
+    public static CsrMatrixOld applyBinOppToSparse(MatrixOld src1, CsrMatrixOld src2,
+                                                   BinaryOperator<Double> opp) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
         int[] rowPointers = src2.rowPointers.clone();
         int[] colIndices = src2.colIndices.clone();
@@ -151,7 +151,7 @@ public class RealCsrDenseOperations {
             }
         }
 
-        return new CsrMatrix(src1.shape, entries, rowPointers, colIndices);
+        return new CsrMatrixOld(src1.shape, entries, rowPointers, colIndices);
     }
 
 
@@ -166,7 +166,7 @@ public class RealCsrDenseOperations {
      * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static MatrixOld applyBinOpp(CsrMatrix src1, double b,
+    public static MatrixOld applyBinOpp(CsrMatrixOld src1, double b,
                                         BinaryOperator<Double> opp,
                                         UnaryOperator<Double> uOpp) {
         double[] dest = new double[src1.totalEntries().intValueExact()];

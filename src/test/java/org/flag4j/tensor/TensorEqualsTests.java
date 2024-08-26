@@ -3,8 +3,8 @@ package org.flag4j.tensor;
 
 import org.flag4j.arrays_old.dense.CTensorOld;
 import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.arrays_old.sparse.CooCTensor;
-import org.flag4j.arrays_old.sparse.CooTensor;
+import org.flag4j.arrays_old.sparse.CooCTensorOld;
+import org.flag4j.arrays_old.sparse.CooTensorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -94,7 +94,7 @@ class TensorEqualsTests {
         sparseSetup();
 
         double[] bEntries;
-        CooTensor B;
+        CooTensorOld B;
 
         // ---------------------- Sub-case 1 ----------------------
         bEntries = new double[]{1.23, -99.23425, 2.677, -0.000194};
@@ -105,7 +105,7 @@ class TensorEqualsTests {
                 aShape.getIndices(7),
                 aShape.getIndices(9)
         };
-        B = new CooTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensorOld(bShape, bEntries, sparseIndices);
 
         assertEquals(A.toCoo(), B);
 
@@ -118,7 +118,7 @@ class TensorEqualsTests {
                 aShape.getIndices(7),
                 aShape.getIndices(9)
         };
-        B = new CooTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensorOld(bShape, bEntries, sparseIndices);
 
         assertNotEquals(A.toCoo(), B);
 
@@ -131,7 +131,7 @@ class TensorEqualsTests {
                 bShape.getIndices(7),
                 bShape.getIndices(9)
         };
-        B = new CooTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensorOld(bShape, bEntries, sparseIndices);
 
         assertNotEquals(A.toCoo(), B);
 
@@ -144,7 +144,7 @@ class TensorEqualsTests {
                 aShape.getIndices(7),
                 aShape.getIndices(9)
         };
-        B = new CooTensor(bShape, bEntries, sparseIndices);
+        B = new CooTensorOld(bShape, bEntries, sparseIndices);
 
         assertNotEquals(A.toCoo(), B);
     }
@@ -212,7 +212,7 @@ class TensorEqualsTests {
         sparseSetup();
 
         CNumber[] bEntries;
-        CooCTensor B;
+        CooCTensorOld B;
 
         // ---------------------- Sub-case 1 ----------------------
         bEntries = new CNumber[]{
@@ -225,7 +225,7 @@ class TensorEqualsTests {
                 aShape.getIndices(7),
                 aShape.getIndices(9)
         };
-        B = new CooCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensorOld(bShape, bEntries, sparseIndices);
 
         assertEquals(A.toCoo().toComplex(), B);
 
@@ -240,7 +240,7 @@ class TensorEqualsTests {
                 aShape.getIndices(7),
                 aShape.getIndices(9)
         };
-        B = new CooCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensorOld(bShape, bEntries, sparseIndices);
 
         assertNotEquals(A.toCoo().toComplex(), B);
 
@@ -255,7 +255,7 @@ class TensorEqualsTests {
                 bShape.getIndices(7),
                 bShape.getIndices(9)
         };
-        B = new CooCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensorOld(bShape, bEntries, sparseIndices);
 
         assertNotEquals(A.toCoo().toComplex(), B);
 
@@ -270,7 +270,7 @@ class TensorEqualsTests {
                 aShape.getIndices(7),
                 aShape.getIndices(9)
         };
-        B = new CooCTensor(bShape, bEntries, sparseIndices);
+        B = new CooCTensorOld(bShape, bEntries, sparseIndices);
 
         assertNotEquals(A.toCoo().toComplex(), B);
     }

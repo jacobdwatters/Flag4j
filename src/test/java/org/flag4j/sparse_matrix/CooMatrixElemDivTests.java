@@ -2,8 +2,8 @@ package org.flag4j.sparse_matrix;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrix;
-import org.flag4j.arrays_old.sparse.CooMatrix;
+import org.flag4j.arrays_old.sparse.CooCMatrixOld;
+import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class CooMatrixElemDivTests {
     Shape aShape, expShape;
     double[] aEntries;
-    CooMatrix A;
+    CooMatrixOld A;
     int[] aRowIndices, aColIndices, expRowIndices, expColIndices;
 
     @Test
@@ -22,14 +22,14 @@ class CooMatrixElemDivTests {
         double[][] bEntries;
         MatrixOld B;
         double[] expEntries;
-        CooMatrix exp;
+        CooMatrixOld exp;
 
         // ------------------- Sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new double[]{0.4438057635382914, 0.1584073685290338, 0.6422718458358927, 0.7588801607997614, 0.21918998350329344};
         aRowIndices = new int[]{0, 1, 2, 3, 4};
         aColIndices = new int[]{3, 1, 1, 0, 0};
-        A = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[][]{
                 {0.66839, 0.35581, 0.69694, 0.95199, 0.46608},
@@ -43,7 +43,7 @@ class CooMatrixElemDivTests {
         expEntries = new double[]{0.466187421651794, 0.18740889503582825, 1.196326570372516, 0.785151324104291, 0.6674888345919162};
         expRowIndices = new int[]{0, 1, 2, 3, 4};
         expColIndices = new int[]{3, 1, 1, 0, 0};
-        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooMatrixOld(expShape, expEntries, expRowIndices, expColIndices);
 
         assertEquals(exp, A.elemDiv(B));
 
@@ -52,7 +52,7 @@ class CooMatrixElemDivTests {
         aEntries = new double[]{0.022415659127439036, 0.4427456213990437, 0.5909502892607543};
         aRowIndices = new int[]{0, 1, 1};
         aColIndices = new int[]{3, 1, 3};
-        A = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[][]{
                 {0.49565, 0.99507, 0.70204, 0.32258, 0.96505},
@@ -64,7 +64,7 @@ class CooMatrixElemDivTests {
         expEntries = new double[]{0.06948868227242556, 0.45424249904999925, 3.9375685585071585};
         expRowIndices = new int[]{0, 1, 1};
         expColIndices = new int[]{3, 1, 3};
-        exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooMatrixOld(expShape, expEntries, expRowIndices, expColIndices);
 
         assertEquals(exp, A.elemDiv(B));
 
@@ -73,7 +73,7 @@ class CooMatrixElemDivTests {
         aEntries = new double[]{0.2628603919772923, 0.4832584151042525, 0.09732142956805734};
         aRowIndices = new int[]{0, 1, 1};
         aColIndices = new int[]{3, 2, 3};
-        A = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new double[][]{
                 {0.84134, 0.19162, 0.82944},
@@ -93,14 +93,14 @@ class CooMatrixElemDivTests {
         CNumber[][] bEntries;
         CMatrixOld B;
         CNumber[] expEntries;
-        CooCMatrix exp;
+        CooCMatrixOld exp;
 
         // ------------------- Sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new double[]{0.8290713116268288, 0.40772922471694184, 0.5345871783654969, 0.11148753066679329, 0.5148538501414794};
         aRowIndices = new int[]{2, 3, 3, 4, 4};
         aColIndices = new int[]{3, 1, 2, 0, 2};
-        A = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.07522+0.44582i"), new CNumber("0.11863+0.44475i"), new CNumber("0.76382+0.99673i"), new CNumber("0.25827+0.27253i"), new CNumber("0.27447+0.86933i")},
@@ -114,7 +114,7 @@ class CooMatrixElemDivTests {
         expEntries = new CNumber[]{new CNumber("2.0026125615957087-3.2134141466309516i"), new CNumber("0.5347454659906242-0.9110022174333338i"), new CNumber("0.6618212614627141-0.9910582112582911i"), new CNumber("0.1296581033313363-0.1373272081724273i"), new CNumber("0.7557564604588403-0.2922205603977849i")};
         expRowIndices = new int[]{2, 3, 3, 4, 4};
         expColIndices = new int[]{3, 1, 2, 0, 2};
-        exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooCMatrixOld(expShape, expEntries, expRowIndices, expColIndices);
 
         assertEquals(exp, A.elemDiv(B));
 
@@ -123,7 +123,7 @@ class CooMatrixElemDivTests {
         aEntries = new double[]{0.41089341705897764, 0.11457154954599069, 0.28303647128436815};
         aRowIndices = new int[]{1, 2, 2};
         aColIndices = new int[]{3, 0, 4};
-        A = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.98548+0.48213i"), new CNumber("0.83127+0.64831i"), new CNumber("0.82835+0.40503i"), new CNumber("0.28981+0.60902i"), new CNumber("0.95984+0.08349i")},
@@ -135,7 +135,7 @@ class CooMatrixElemDivTests {
         expEntries = new CNumber[]{new CNumber("0.30963978929385033 - 0.4912011529175791i"), new CNumber("0.17321860123092025-0.1561397749887617i"), new CNumber("0.20032133981018468-0.1313706535457621i")};
         expRowIndices = new int[]{1, 2, 2};
         expColIndices = new int[]{3, 0, 4};
-        exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+        exp = new CooCMatrixOld(expShape, expEntries, expRowIndices, expColIndices);
 
         assertEquals(exp, A.elemDiv(B));
 
@@ -144,7 +144,7 @@ class CooMatrixElemDivTests {
         aEntries = new double[]{0.12160331491060905, 0.6189704537780147, 0.641396804512954};
         aRowIndices = new int[]{0, 0, 2};
         aColIndices = new int[]{0, 4, 2};
-        A = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
+        A = new CooMatrixOld(aShape, aEntries, aRowIndices, aColIndices);
 
         bEntries = new CNumber[][]{
                 {new CNumber("0.95006+0.77287i"), new CNumber("0.08063+0.53201i"), new CNumber("0.18516+0.10631i")},

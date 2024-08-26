@@ -69,7 +69,7 @@ public abstract class SparseTensorBase<T, U, W, Z, Y, D extends Serializable, X 
         super(shape, entries);
 
         if(indices.length > 0) {
-            ParameterChecks.assertEquals(indices[0].length, shape.getRank());
+            ParameterChecks.ensureEquals(indices[0].length, shape.getRank());
         }
 
         this.indices = indices;
@@ -90,7 +90,7 @@ public abstract class SparseTensorBase<T, U, W, Z, Y, D extends Serializable, X 
         super(shape, entries);
 
         int totalIndices = restIndices.length + 1;
-        ParameterChecks.assertEquals(totalIndices, shape.getRank());
+        ParameterChecks.ensureEquals(totalIndices, shape.getRank());
 
         this.indices = new int[totalIndices][];
         this.indices[0] = initIndices;

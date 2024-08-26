@@ -3,8 +3,8 @@ package org.flag4j.matrix;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooCVector;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -102,7 +102,7 @@ class MatrixVectorTests {
     void matVecMultSparseTestCase() {
         double[] bEntries;
         int[] indices;
-        CooVector B;
+        CooVectorOld B;
 
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
@@ -112,7 +112,7 @@ class MatrixVectorTests {
         A = new MatrixOld(aEntries);
         bEntries = new double[]{-0.9345341};
         indices = new int[]{1};
-        B = new CooVector(3, bEntries, indices);
+        B = new CooVectorOld(3, bEntries, indices);
         expEntries = new double[]{-92.7375568794,
                 -515.255376035,
                 -0.00012148943299999999,
@@ -130,9 +130,9 @@ class MatrixVectorTests {
         A = new MatrixOld(aEntries);
         bEntries = new double[]{-0.9345341};
         indices = new int[]{1};
-        B = new CooVector(14, bEntries, indices);
+        B = new CooVectorOld(14, bEntries, indices);
 
-        CooVector finalB = B;
+        CooVectorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 
@@ -141,7 +141,7 @@ class MatrixVectorTests {
     void matVecMultSparseComplexTestCase() {
         CNumber[] bEntries;
         int[] indices;
-        CooCVector B;
+        CooCVectorOld B;
 
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
@@ -151,7 +151,7 @@ class MatrixVectorTests {
         A = new MatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i")};
         indices = new int[]{2};
-        B = new CooCVector(3, bEntries, indices);
+        B = new CooCVectorOld(3, bEntries, indices);
         expCEntries = new CNumber[]{
                 new CNumber("-0.00011494769430000002+0.0011500500000000001i"),
                 new CNumber("0.8629674786220001-8.633977i"),
@@ -170,9 +170,9 @@ class MatrixVectorTests {
         A = new MatrixOld(aEntries);
         bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i")};
         indices = new int[]{2};
-        B = new CooCVector(9, bEntries, indices);
+        B = new CooCVectorOld(9, bEntries, indices);
 
-        CooCVector finalB = B;
+        CooCVectorOld finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 }

@@ -85,8 +85,8 @@ public abstract class BackSolver<
      * true and {@code coeff} is not upper triangular.
      */
     protected void checkParams(T coeff, int constantRows) {
-        ParameterChecks.assertSquare(coeff.shape());
-        ParameterChecks.assertEquals(coeff.numRows(), constantRows);
+        ParameterChecks.ensureSquare(coeff.shape());
+        ParameterChecks.ensureEquals(coeff.numRows(), constantRows);
 
         if(enforceTriU && !coeff.isTriU()) {
             throw new IllegalArgumentException("Expecting matrix U to be upper triangular.");

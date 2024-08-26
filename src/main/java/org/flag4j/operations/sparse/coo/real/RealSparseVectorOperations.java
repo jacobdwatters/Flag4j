@@ -27,7 +27,7 @@ package org.flag4j.operations.sparse.coo.real;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooVector;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -42,7 +42,7 @@ public class RealSparseVectorOperations {
 
     private RealSparseVectorOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -52,7 +52,7 @@ public class RealSparseVectorOperations {
      * @param a Value to add to the {@code src} sparse vector.
      * @return The result of adding the specified value to the sparse vector.
      */
-    public static VectorOld add(CooVector src, double a) {
+    public static VectorOld add(CooVectorOld src, double a) {
         double[] dest = new double[src.size];
         Arrays.fill(dest, a);
 
@@ -70,7 +70,7 @@ public class RealSparseVectorOperations {
      * @param a Value to subtract from the {@code src} sparse vector.
      * @return The result of subtracting the specified value from the sparse vector.
      */
-    public static VectorOld sub(CooVector src, double a) {
+    public static VectorOld sub(CooVectorOld src, double a) {
         double[] dest = new double[src.size];
         Arrays.fill(dest, -a);
 
@@ -90,8 +90,8 @@ public class RealSparseVectorOperations {
      * @return The result of the vector addition.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static CooVector add(CooVector src1, CooVector src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooVectorOld add(CooVectorOld src1, CooVectorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
         List<Double> values = new ArrayList<>(initCapacity);
@@ -131,7 +131,7 @@ public class RealSparseVectorOperations {
             }
         }
 
-        return new CooVector(
+        return new CooVectorOld(
                 src1.size,
                 values.stream().mapToDouble(Double::doubleValue).toArray(),
                 indices.stream().mapToInt(Integer::intValue).toArray()
@@ -147,8 +147,8 @@ public class RealSparseVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static CooVector sub(CooVector src1, CooVector src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooVectorOld sub(CooVectorOld src1, CooVectorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
         List<Double> values = new ArrayList<>(initCapacity);
@@ -188,7 +188,7 @@ public class RealSparseVectorOperations {
             }
         }
 
-        return new CooVector(
+        return new CooVectorOld(
                 src1.size,
                 values.stream().mapToDouble(Double::doubleValue).toArray(),
                 indices.stream().mapToInt(Integer::intValue).toArray()
@@ -204,8 +204,8 @@ public class RealSparseVectorOperations {
      * @return The result of the vector multiplication.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static CooVector elemMult(CooVector src1, CooVector src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static CooVectorOld elemMult(CooVectorOld src1, CooVectorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
         List<Double> values = new ArrayList<>(initCapacity);
@@ -228,7 +228,7 @@ public class RealSparseVectorOperations {
             }
         }
 
-        return new CooVector(
+        return new CooVectorOld(
                 src1.size,
                 values.stream().mapToDouble(Double::doubleValue).toArray(),
                 indices.stream().mapToInt(Integer::intValue).toArray()
@@ -244,8 +244,8 @@ public class RealSparseVectorOperations {
      * @return The result of the vector inner product.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static double inner(CooVector src1, CooVector src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static double inner(CooVectorOld src1, CooVectorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
         double product = 0;
 
         int src1Counter = 0;
@@ -274,8 +274,8 @@ public class RealSparseVectorOperations {
      * @param src2 Second sparse vector in the outer product.
      * @return The matrix resulting from the vector outer product.
      */
-    public static MatrixOld outerProduct(CooVector src1, CooVector src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+    public static MatrixOld outerProduct(CooVectorOld src1, CooVectorOld src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         double[] dest = new double[src2.size*src1.size];
         int destRow;
