@@ -29,7 +29,7 @@ import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.core_temp.FieldTensorBase;
 import org.flag4j.core_temp.PrimitiveDoubleTensorBase;
-import org.flag4j.core_temp.arrays.dense.FieldMatrix;
+import org.flag4j.core_temp.arrays.dense.DenseFieldMatrixBase;
 import org.flag4j.core_temp.arrays.dense.Matrix;
 import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.operations.dense.complex.ComplexDenseTranspose;
@@ -136,7 +136,7 @@ public final class TransposeDispatcher {
      * @param src MatrixOld to transpose.
      * @return The transpose of the source matrix.
      */
-    public static <T extends Field<T>> FieldMatrix<T> dispatch(FieldMatrix<T> src) {
+    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, T> dispatch(DenseFieldMatrixBase<?, ?, T> src) {
 
         Field<T>[] dest;
 
@@ -240,7 +240,7 @@ public final class TransposeDispatcher {
      * @param src MatrixOld to transpose.
      * @return The transpose of the source matrix.
      */
-    public static <T extends Field<T>> FieldMatrix<T> dispatchHermitian(FieldMatrix<T> src) {
+    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, T> dispatchHermitian(DenseFieldMatrixBase<?, ?, T> src) {
         Field<T>[] dest;
 
         Algorithm algorithm = chooseAlgorithmHermitian(src.shape);

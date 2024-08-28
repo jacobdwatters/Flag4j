@@ -29,7 +29,7 @@ package org.flag4j.core_temp;
  * @param <T> Type of the vector.
  * @param <V> Type (or wrapper of) an element of the vector.
  */
-public interface VectorMixin<T extends TensorBase<?, ?, V>, V> extends TensorPropertiesMixin<V> {
+public interface VectorMixin<T extends VectorMixin<T, V>, V> extends TensorPropertiesMixin<V> {
 
     /**
      * Joints specified vector with this vector. That is, creates a vector of length {@code this.length() + b.length()} containing
@@ -42,18 +42,38 @@ public interface VectorMixin<T extends TensorBase<?, ?, V>, V> extends TensorPro
 
 
     /**
-     * Computes the inner product between two vectors.
+     * <p>Computes the inner product between two vectors.</p>
+     *
+     * <p>Note: this method is distinct from {@link #dot(VectorMixin)}. The inner product is equivalent to the dot product
+     * of this tensor with the conjugation of {@code b}.</p>
      *
      * @param b Second vector in the inner product.
      * @return The inner product between this vector and the vector {@code b}.
      * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of entries.
+     * @see #dot(VectorMixin)
      */
     public V inner(T b);
 
 
     /**
-     * Computes the euclidian norm of this vector.
-     * @return The euclidian norm of this vector.
+     * <p>Computes the dot product between two vectors.</p>
+     *
+     * <p>Note: this method is distinct from {@link #inner(VectorMixin)}. The inner product is equivalent to the dot product
+     * of this tensor with the conjugation of {@code b}.</p>
+     *
+     * @param b Second vector in the dot product.
+     *
+     * @return The dot product between this vector and the vector {@code b}.
+     *
+     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of entries.
+     * @see #inner(VectorMixin)
+     */
+    public V dot(T b);
+
+
+    /**
+     * Computes the Euclidean norm of this vector.
+     * @return The Euclidean norm of this vector.
      */
     public double norm();
 
@@ -61,7 +81,7 @@ public interface VectorMixin<T extends TensorBase<?, ?, V>, V> extends TensorPro
     /**
      * Computes the p-norm of this vector.
      * @param p {@code p} value in the p-norm.
-     * @return The euclidian norm of this vector.
+     * @return The Euclidean norm of this vector.
      */
     public double norm(int p);
 
@@ -76,21 +96,11 @@ public interface VectorMixin<T extends TensorBase<?, ?, V>, V> extends TensorPro
 
 
     /**
-     * Computes the vector cross product between two vectors.
-     *
-     * @param b Second vector in the cross product.
-     * @return The result of the vector cross product between this vector and {@code b}.
-     * @throws IllegalArgumentException If either this vector or {@code b} do not have exactly 3 entries.
-     */
-    public T cross(T b);
-
-
-    /**
      * Checks if a vector is parallel to this vector.
      *
      * @param b Vector to compare to this vector.
      * @return True if the vector {@code b} is parallel to this vector and the same size. Otherwise, returns false.
-     * @see #isPerp(TensorBase) 
+     * @see #isPerp(VectorMixin)
      */
     public boolean isParallel(T b);
 
@@ -100,7 +110,7 @@ public interface VectorMixin<T extends TensorBase<?, ?, V>, V> extends TensorPro
      *
      * @param b Vector to compare to this vector.
      * @return True if the vector {@code b} is perpendicular to this vector and the same size. Otherwise, returns false.
-     * @see #isParallel(TensorBase) 
+     * @see #isParallel(VectorMixin)
      */
     public boolean isPerp(T b);
 

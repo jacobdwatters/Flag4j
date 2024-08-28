@@ -105,7 +105,7 @@ public class FieldTensor<T extends Field<T>> extends DenseFieldTensorBase<FieldT
      * @param axis1 First axis to exchange and conjugate.
      * @param axis2 Second axis to exchange and conjugate.
      *
-     * @return The conjugate transpose of this tensor acording to the specified axes.
+     * @return The conjugate transpose of this tensor according to the specified axes.
      *
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
      * @see #H()
@@ -141,7 +141,7 @@ public class FieldTensor<T extends Field<T>> extends DenseFieldTensorBase<FieldT
      * Constructs a tensor of the same type as this tensor with the given the shape and entries.
      *
      * @param shape Shape of the tensor to construct.
-     * @param entries Entires of the tensor to construct.
+     * @param entries Entries of the tensor to construct.
      *
      * @return A tensor of the same type as this tensor with the given the shape and entries.
      */
@@ -155,7 +155,7 @@ public class FieldTensor<T extends Field<T>> extends DenseFieldTensorBase<FieldT
      * Creates a tensor with the specified shape filled with {@code fillValue}.
      *
      * @param shape Shape of this tensor.
-     * @param fillValue Value to fill tesnor with.
+     * @param fillValue Value to fill tensor with.
      */
     public FieldTensor(Shape shape, T fillValue) {
         super(shape, (T[]) new Field[shape.totalEntries().intValueExact()]);
@@ -186,7 +186,7 @@ public class FieldTensor<T extends Field<T>> extends DenseFieldTensorBase<FieldT
      * @param axis1 First axis to exchange.
      * @param axis2 Second axis to exchange.
      *
-     * @return The transpose of this tensor acording to the specified axes.
+     * @return The transpose of this tensor according to the specified axes.
      *
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
      * @see #T()
@@ -219,9 +219,9 @@ public class FieldTensor<T extends Field<T>> extends DenseFieldTensorBase<FieldT
 
 
     /**
-     * Converts this dense tesnor to an equivalent sparse tensor.
+     * Converts this dense tensor to an equivalent sparse tensor.
      *
-     * @return A sparse tesnor equivalent to this dense tensor.
+     * @return A sparse tensor equivalent to this dense tensor.
      */
     @Override
     public CooFieldTensor<T> toCoo() {
@@ -261,7 +261,7 @@ public class FieldTensor<T extends Field<T>> extends DenseFieldTensorBase<FieldT
 
 
     /**
-     * Computes the element-wise sum between two tensors and stores the result in this tensors.
+     * Computes the element-wise sum between two tensors and stores the result in this tensor.
      *
      * @param b Second tensor in the element-wise sum.
      *
@@ -344,11 +344,11 @@ public class FieldTensor<T extends Field<T>> extends DenseFieldTensorBase<FieldT
      * @param matShape Shape of the resulting matrix. Must be {@link ParameterChecks#ensureBroadcastable(Shape, Shape) broadcastable}
      * with the shape of this tensor.
      * @return A matrix of shape {@code matShape} with the values of this tensor.
-     * @throws org.flag4j.util.exceptions.LinearAlgebraException If {@code matShpae} is not of rank 2.
+     * @throws org.flag4j.util.exceptions.LinearAlgebraException If {@code matShape} is not of rank 2.
      */
     public FieldMatrix<T> toMatrix(Shape matShape) {
         ParameterChecks.ensureBroadcastable(shape, matShape);
-        ParameterChecks.ensureRank(2, matShape);
+        ParameterChecks.ensureRank(matShape, 2);
 
         return new FieldMatrix<T>(matShape, entries.clone());
     }

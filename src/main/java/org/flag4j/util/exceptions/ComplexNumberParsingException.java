@@ -27,13 +27,13 @@ package org.flag4j.util.exceptions;
 /**
  * An exception which is thrown when a string representation of a complex number cannot be parsed.
  */
-public class ComplexNumberParseingException extends RuntimeException {
+public class ComplexNumberParsingException extends RuntimeException {
 
     /**
      * Creates a {@link LinearAlgebraException} to be thrown for a complex number parsing related error.
      * @param errMsg Error message for the exception.
      */
-    public ComplexNumberParseingException(String errMsg) {
+    public ComplexNumberParsingException(String errMsg) {
         super(errMsg);
     }
 }

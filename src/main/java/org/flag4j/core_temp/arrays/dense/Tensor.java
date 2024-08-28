@@ -83,7 +83,7 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
      * Constructs a tensor of the same type as this tensor with the given the shape and entries.
      *
      * @param shape Shape of the tensor to construct.
-     * @param entries Entires of the tensor to construct.
+     * @param entries Entries of the tensor to construct.
      *
      * @return A tensor of the same type as this tensor with the given the shape and entries.
      */
@@ -184,11 +184,11 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
      * @param matShape Shape of the resulting matrix. Must be {@link ParameterChecks#ensureBroadcastable(Shape, Shape) broadcastable}
      * with the shape of this tensor.
      * @return A matrix of shape {@code matShape} with the values of this tensor.
-     * @throws org.flag4j.util.exceptions.LinearAlgebraException If {@code matShpae} is not of rank 2.
+     * @throws org.flag4j.util.exceptions.LinearAlgebraException If {@code matShape} is not of rank 2.
      */
     public Matrix toMatrix(Shape matShape) {
         ParameterChecks.ensureBroadcastable(shape, matShape);
-        ParameterChecks.ensureRank(2, matShape);
+        ParameterChecks.ensureRank(matShape, 2);
 
         return new Matrix(matShape, entries.clone());
     }

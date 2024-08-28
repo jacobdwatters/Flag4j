@@ -30,6 +30,7 @@ import org.flag4j.core_temp.arrays.dense.FieldMatrix;
 import org.flag4j.core_temp.arrays.dense.FieldTensor;
 import org.flag4j.core_temp.arrays.dense.FieldVector;
 import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.operations.sparse.coo.field_ops.SparseFieldEquals;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
 
@@ -45,7 +46,7 @@ import java.util.List;
  * <p>The non-zero entries and non-zero indices of a COO tensor are mutable but the shape and total number of non-zero entries is
  * fixed.</p>
  *
- * <p>Sparse tensors allow for the efficient storage of and operations on tensors that contain many zero vlues.</p>
+ * <p>Sparse tensors allow for the efficient storage of and operations on tensors that contain many zero values.</p>
  *
  * <p>COO tensors are optimized for hyper-sparse tensors (i.e. tensors which contain almost all zeros relative to the size of the
  * tensor).</p>
@@ -54,9 +55,9 @@ import java.util.List;
  * <ul>
  *     <li>The full {@link #shape shape} of the tensor.</li>
  *     <li>The non-zero {@link #entries} of the tensor. All other entries in the tensor are
- *     assumed to be zero. Zero value can also explicity be stored in {@link #entries}.</li>
+ *     assumed to be zero. Zero value can also explicitly be stored in {@link #entries}.</li>
  *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many operations assume indices to be sorted in a
- *     row-major format (i.e. last index increased fastest) but often this is not explicity verified.</p>
+ *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.</p>
  *
  *     <p>The {@link #indices} array has shape {@code (nnz, rank)} where {@link #nnz} is the number of non-zero entries in this
  *     sparse tensor and {@code rank} is the {@link #getRank() tensor rank} of the tensor. This means {@code indices[i]} is the ND
@@ -74,7 +75,7 @@ public class CooFieldTensor<T extends Field<T>>
      * creates a tensor with the specified entries and shape.
      *
      * @param shape shape of this tensor.
-     * @param entries non-zero entreis of this tensor of this tensor. if this tensor is dense, this specifies all entries within the
+     * @param entries non-zero entries of this tensor of this tensor. if this tensor is dense, this specifies all entries within the
      * tensor.
      * if this tensor is sparse, this specifies only the non-zero entries of the tensor.
      * @param indices
@@ -88,7 +89,7 @@ public class CooFieldTensor<T extends Field<T>>
      * Creates a tensor with the specified entries and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Non-zero entreis of this tensor of this tensor. If this tensor is dense, this specifies all entries within the
+     * @param entries Non-zero entries of this tensor of this tensor. If this tensor is dense, this specifies all entries within the
      * tensor.
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      * @param indices
@@ -103,7 +104,7 @@ public class CooFieldTensor<T extends Field<T>>
      * the shape and entries.
      *
      * @param shape Shape of the sparse tensor to construct.
-     * @param entries Entires of the spares tensor to construct.
+     * @param entries Entries of the spares tensor to construct.
      *
      * @return A sparse tensor of the same type as this tensor with the same indices as this sparse tensor and with the provided
      * the shape and entries.
@@ -118,7 +119,7 @@ public class CooFieldTensor<T extends Field<T>>
      * Constructs a sparse tensor of the same type as this tensor with the given the shape, non-zero entries, and non-zero indices.
      *
      * @param shape Shape of the sparse tensor to construct.
-     * @param entries Non-zero entires of the sparse tensor to construct.
+     * @param entries Non-zero entries of the sparse tensor to construct.
      * @param indices Non-zero indices of the sparse tensor to construct.
      *
      * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
@@ -133,7 +134,7 @@ public class CooFieldTensor<T extends Field<T>>
      * Constructs a sparse tensor of the same type as this tensor with the given the shape, non-zero entries, and non-zero indices.
      *
      * @param shape Shape of the sparse tensor to construct.
-     * @param entries Non-zero entires of the sparse tensor to construct.
+     * @param entries Non-zero entries of the sparse tensor to construct.
      * @param indices Non-zero indices of the sparse tensor to construct.
      *
      * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
@@ -148,7 +149,7 @@ public class CooFieldTensor<T extends Field<T>>
      * Makes a dense tensor with the specified shape and entries which is a similar type to this sparse tensor.
      *
      * @param shape Shape of the dense tensor.
-     * @param entries Entries of the dense tesnor.
+     * @param entries Entries of the dense tensor.
      *
      * @return A dense tensor with the specified shape and entries which is a similar type to this sparse tensor.
      */
@@ -159,7 +160,7 @@ public class CooFieldTensor<T extends Field<T>>
 
 
     /**
-     * The sparsity of this sparse tensor. That is, the precentage of elements in this tensor which are zero as a decimal.
+     * The sparsity of this sparse tensor. That is, the percentage of elements in this tensor which are zero as a decimal.
      *
      * @return The density of this sparse tensor.
      */
@@ -174,9 +175,9 @@ public class CooFieldTensor<T extends Field<T>>
 
 
     /**
-     * Converts this sparse tesnor to an equivalent dense tensor.
+     * Converts this sparse tensor to an equivalent dense tensor.
      *
-     * @return A dense tesnor equivalent to this sparse tensor.
+     * @return A dense tensor equivalent to this sparse tensor.
      */
     @Override
     public FieldTensor<T> toDense() {
@@ -203,11 +204,11 @@ public class CooFieldTensor<T extends Field<T>>
      * @param matShape Shape of the resulting matrix. Must be {@link ParameterChecks#ensureBroadcastable(Shape, Shape) broadcastable}
      * with the shape of this tensor.
      * @return A matrix of shape {@code matShape} with the values of this tensor.
-     * @throws org.flag4j.util.exceptions.LinearAlgebraException If {@code matShpae} is not of rank 2.
+     * @throws org.flag4j.util.exceptions.LinearAlgebraException If {@code matShape} is not of rank 2.
      */
     public FieldMatrix<T> toMatrix(Shape matShape) {
         ParameterChecks.ensureBroadcastable(shape, matShape);
-        ParameterChecks.ensureRank(2, matShape);
+        ParameterChecks.ensureRank(matShape, 2);
 
         return new FieldMatrix<T>(matShape, entries.clone());
     }
@@ -229,5 +230,22 @@ public class CooFieldTensor<T extends Field<T>>
         }
 
         return mat;
+    }
+
+
+    /**
+     * Checks if an object is equal to this tensor object.
+     * @param object Object to check equality with this tensor.
+     * @return True if the two tensors have the same shape, are numerically equivalent, and are of type {@link CooFieldTensor}.
+     * False otherwise.
+     */
+    @Override
+    public boolean equals(Object object) {
+        if(this == object) return true;
+        if(object == null || object.getClass() != getClass()) return false;
+
+        CooFieldTensor<T> src2 = (CooFieldTensor<T>) object;
+
+        return SparseFieldEquals.tensorEquals(this, src2);
     }
 }

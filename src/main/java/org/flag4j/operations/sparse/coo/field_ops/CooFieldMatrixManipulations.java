@@ -25,7 +25,7 @@
 package org.flag4j.operations.sparse.coo.field_ops;
 
 import org.flag4j.core.Shape;
-import org.flag4j.core_temp.arrays.sparse.CooFieldMatrix;
+import org.flag4j.core_temp.arrays.sparse.CooFieldMatrixBase;
 import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.operations.sparse.coo.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
@@ -52,7 +52,8 @@ public final class CooFieldMatrixManipulations {
      * @param rowIdx Row to remove from the {@code src} matrix.
      * @return A sparse matrix which has one less row than the {@code src} matrix with the specified row removed.
      */
-    public static <T extends Field<T>> CooFieldMatrix<T> removeRow(CooFieldMatrix<T> src, int rowIdx) {
+    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, V>
+    removeRow(CooFieldMatrixBase<?, ?, V> src, int rowIdx) {
         Shape shape = new Shape(src.numRows-1, src.numCols);
 
         // Find the start and end index within the entries array which have the given row index.
@@ -60,13 +61,13 @@ public final class CooFieldMatrixManipulations {
         int size = src.entries.length - (startEnd[1]-startEnd[0]);
 
         // Initialize arrays_old.
-        Field<T>[] entries = new Field[size];
+        Field<V>[] entries = new Field[size];
         int[] rowIndices = new int[size];
         int[] colIndices = new int[size];
 
         copyRanges(src, entries, rowIndices, colIndices, startEnd);
 
-        return new CooFieldMatrix(shape, entries, rowIndices, colIndices);
+        return src.makeLikeTensor(shape, (V[]) entries, rowIndices, colIndices);
     }
 
 
@@ -76,9 +77,10 @@ public final class CooFieldMatrixManipulations {
      * @param rowIdxs Indices of rows to remove from the {@code src} matrix.
      * @return A copy of the {@code src} matrix with the specified rows removed.
      */
-    public static <T extends Field<T>> CooFieldMatrix<T> removeRows(CooFieldMatrix<T> src, int... rowIdxs) {
+    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, V>
+    removeRows(CooFieldMatrixBase<?, ?, V> src, int... rowIdxs) {
         Shape shape = new Shape(src.numRows-rowIdxs.length, src.numCols);
-        List<T> entries = new ArrayList<>(src.entries.length);
+        List<V> entries = new ArrayList<>(src.entries.length);
         List<Integer> rowIndices = new ArrayList<>(src.entries.length);
         List<Integer> colIndices = new ArrayList<>(src.entries.length);
 
@@ -91,7 +93,7 @@ public final class CooFieldMatrixManipulations {
             }
         }
 
-        return new CooFieldMatrix(shape, entries, rowIndices, colIndices);
+        return src.makeLikeTensor(shape, entries, rowIndices, colIndices);
     }
 
 
@@ -101,9 +103,10 @@ public final class CooFieldMatrixManipulations {
      * @param colIdx Column to remove from the {@code src} matrix.
      * @return A sparse matrix which has one less column than the {@code src} matrix with the specified column removed.
      */
-    public static <T extends Field<T>> CooFieldMatrix<T> removeCol(CooFieldMatrix<T> src, int colIdx) {
+    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, V>
+    removeCol(CooFieldMatrixBase<?, ?, V> src, int colIdx) {
         Shape shape = new Shape(src.numRows, src.numCols-1);
-        List<T> entries = new ArrayList<>(src.entries.length);
+        List<V> entries = new ArrayList<>(src.entries.length);
         List<Integer> rowIndices = new ArrayList<>(src.entries.length);
         List<Integer> colIndices = new ArrayList<>(src.entries.length);
 
@@ -118,7 +121,7 @@ public final class CooFieldMatrixManipulations {
             }
         }
 
-        return new CooFieldMatrix(shape, entries, rowIndices, colIndices);
+        return src.makeLikeTensor(shape, entries, rowIndices, colIndices);
     }
 
 
@@ -128,9 +131,10 @@ public final class CooFieldMatrixManipulations {
      * @param colIdxs Columns to remove from the {@code src} matrix.
      * @return A copy of the {@code src} sparse matrix with the specified columns removed.
      */
-    public static <T extends Field<T>> CooFieldMatrix<T> removeCols(CooFieldMatrix<T> src, int... colIdxs) {
+    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, V>
+    removeCols(CooFieldMatrixBase<?, ?, V> src, int... colIdxs) {
         Shape shape = new Shape(src.numRows, src.numCols-1);
-        List<T> entries = new ArrayList<>(src.entries.length);
+        List<V> entries = new ArrayList<>(src.entries.length);
         List<Integer> rowIndices = new ArrayList<>(src.entries.length);
         List<Integer> colIndices = new ArrayList<>(src.entries.length);
 
@@ -145,7 +149,7 @@ public final class CooFieldMatrixManipulations {
             }
         }
 
-        return new CooFieldMatrix(shape, entries, rowIndices, colIndices);
+        return src.makeLikeTensor(shape, entries, rowIndices, colIndices);
     }
 
 
@@ -159,8 +163,8 @@ public final class CooFieldMatrixManipulations {
      * @param startEnd An array of length two specifying the {@code start} (inclusive) and {@code end} (exclusive)
      *                 indices of the range to skip during the copy.
      */
-    private static <T extends Field<T>> void copyRanges(CooFieldMatrix<T> src, Field<T>[] entries, int[]
-            rowIndices, int[] colIndices, int[] startEnd) {
+    private static <V extends Field<V>> void
+    copyRanges(CooFieldMatrixBase<?, ?, V> src, Field<V>[] entries, int[] rowIndices, int[] colIndices, int[] startEnd) {
 
         if(startEnd[0] > 0) {
             System.arraycopy(src.entries, 0, entries, 0, startEnd[0]);
@@ -186,7 +190,8 @@ public final class CooFieldMatrixManipulations {
      * @param rowIdx2 Index of the second row in the swap.
      * @return A reference to the {@code src} sparse matrix.
      */
-    public static <T extends Field<T>> CooFieldMatrix<T> swapRows(CooFieldMatrix<T> src, int rowIdx1, int rowIdx2) {
+    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, V>
+    swapRows(CooFieldMatrixBase<?, ?, V> src, int rowIdx1, int rowIdx2) {
         for(int i=0; i<src.entries.length; i++) {
             // Swap row indices.
             if(src.rowIndices[i]==rowIdx1) src.rowIndices[i] = rowIdx2;
@@ -206,7 +211,8 @@ public final class CooFieldMatrixManipulations {
      * @param colIdx2 Index of the second row in the swap.
      * @return A reference to the {@code src} sparse matrix.
      */
-    public static <T extends Field<T>> CooFieldMatrix<T> swapCols(CooFieldMatrix<T> src, int colIdx1, int colIdx2) {
+    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, V>
+    swapCols(CooFieldMatrixBase<?, ?, V> src, int colIdx1, int colIdx2) {
         for(int i=0; i<src.entries.length; i++) {
             // Swap row indices.
             if(src.colIndices[i]==colIdx1) src.colIndices[i] = colIdx2;

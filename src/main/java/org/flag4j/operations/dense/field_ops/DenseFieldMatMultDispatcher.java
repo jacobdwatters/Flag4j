@@ -31,7 +31,7 @@ package org.flag4j.operations.dense.field_ops;
 
 import org.flag4j.core.Shape;
 import org.flag4j.core_temp.DenseFieldTensorBinaryOperation;
-import org.flag4j.core_temp.arrays.dense.FieldMatrix;
+import org.flag4j.core_temp.arrays.dense.DenseFieldMatrixBase;
 import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.util.Axis2D;
 import org.flag4j.util.ParameterChecks;
@@ -117,7 +117,7 @@ public final class DenseFieldMatMultDispatcher {
      * @param B Second matrix in the multiplication.
      * @return The result of the matrix multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] dispatch(FieldMatrix<T> A, FieldMatrix<T> B) {
+    public static <T extends Field<T>> Field<T>[] dispatch(DenseFieldMatrixBase<?, ?, T> A, DenseFieldMatrixBase<?, ?, T> B) {
         ParameterChecks.ensureMatMultShapes(A.shape, B.shape); // Ensure matrix shapes are conducive to matrix multiplication.
 
         DenseFieldMatMultDispatcher dispatcher = getInstance();
@@ -150,7 +150,7 @@ public final class DenseFieldMatMultDispatcher {
      * @param B Second matrix in the multiplication and the matrix to transpose.
      * @return The matrix multiply-transpose result of {@code A} and {@code B}.
      */
-    public static <T extends Field<T>> Field<T>[] dispatchTranspose(FieldMatrix<T> A, FieldMatrix<T> B) {
+    public static <T extends Field<T>> Field<T>[] dispatchTranspose(DenseFieldMatrixBase<?, ?, T> A, DenseFieldMatrixBase<?, ?, T> B) {
         ParameterChecks.ensureArrayLengthsEq(A.numCols, B.numCols);
 
         DenseFieldMatMultDispatcher dispatcher = getInstance();

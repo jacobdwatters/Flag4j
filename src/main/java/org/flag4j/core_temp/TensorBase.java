@@ -35,10 +35,10 @@ import java.math.BigInteger;
  * <p>The base class of all tensors. A tensor is a multi-dimensional array which consists of:
  * <ul>
  *     <li>The {@link #shape} of the tensor. This specified the dimension of the tensor along each axes.
- *     The number of axes in this tensor is refered to as the "{@link #rank}" of the tensor and corresponds to the number of
+ *     The number of axes in this tensor is referred to as the "{@link #rank}" of the tensor and corresponds to the number of
  *     indices required to uniquely identify an element within the </li>
- *     <li>A one-dimensional container for the {@link #entries} of the tensor. If the tesnor is dense, this will contain all
- *     entries of the tensor. If the tesnor is sparse this will only conatins the non-zero elements of the tesnor.</li>
+ *     <li>A one-dimensional container for the {@link #entries} of the tensor. If the tensor is dense, this will contain all
+ *     entries of the tensor. If the tensor is sparse this will only contains the non-zero elements of the tensor.</li>
  * </ul>
  * </p>
  *
@@ -175,7 +175,7 @@ public abstract class TensorBase<T extends TensorBase<T, U, V>, U, V>
     /**
      * Constructs a tensor of the same type as this tensor with the given the shape and entries.
      * @param shape Shape of the tensor to construct.
-     * @param entries Entires of the tensor to construct.
+     * @param entries Entries of the tensor to construct.
      * @return A tensor of the same type as this tensor with the given the shape and entries.
      */
     public abstract T makeLikeTensor(Shape shape, U entries);

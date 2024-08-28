@@ -26,7 +26,7 @@ package org.flag4j.operations.dense.field_ops;
 
 
 import org.flag4j.core.TensorBase;
-import org.flag4j.core_temp.arrays.dense.FieldMatrix;
+import org.flag4j.core_temp.arrays.dense.DenseFieldMatrixBase;
 import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.util.ErrorMessages;
 
@@ -48,7 +48,7 @@ public final class DenseFieldProperties {
      * @param src MatrixOld of interest to check if it is the identity matrix.
      * @return True if the {@code src} matrix is exactly the identity matrix.
      */
-    public static <T extends Field<T>> boolean isCloseToIdentity(FieldMatrix<T> src) {
+    public static <T extends Field<T>> boolean isCloseToIdentity(DenseFieldMatrixBase<?, ?, T> src) {
         if(src == null || src.numRows!=src.numCols) return false;
 
         // Tolerances corresponds to the allClose(...) methods.

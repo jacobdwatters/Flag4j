@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,14 +22,14 @@
  * SOFTWARE.
  */
 
-package org.flag4j.operations.sparse.coo.real;
+package org.flag4j.operations.sparse.coo.field_ops;
 
-
-import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooVectorOld;
-import org.flag4j.core_temp.arrays.dense.Matrix;
-import org.flag4j.core_temp.arrays.dense.Vector;
-import org.flag4j.core_temp.arrays.sparse.CooVector;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.sparse.CooCVectorOld;
+import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.core_temp.arrays.dense.DenseFieldVectorBase;
+import org.flag4j.core_temp.arrays.sparse.CooFieldVectorBase;
+import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -37,13 +37,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * This class contains low level implementations of operations_old on two real sparse tensors.
- */
-public class RealSparseVectorOperations {
 
-    private RealSparseVectorOperations() {
-        // Hide default constructor for utility class.
+/**
+ * This utility class contains methods for computing operations between two sparse coo
+ * {@link org.flag4j.core_temp.structures.fields.Field} vectors.
+ */
+public final class CooFieldVectorOperations {
+
+    private CooFieldVectorOperations() {
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
@@ -54,15 +55,16 @@ public class RealSparseVectorOperations {
      * @param a Value to add to the {@code src} sparse vector.
      * @return The result of adding the specified value to the sparse vector.
      */
-    public static VectorOld add(CooVectorOld src, double a) {
-        double[] dest = new double[src.size];
+    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> add(CooFieldVectorBase<?, ?, T> src, T a) {
+        Field<T>[] dest = new Field[src.size];
         Arrays.fill(dest, a);
 
         for(int i=0; i<src.entries.length; i++) {
-            dest[src.indices[i]] += src.entries[i];
+            int idx = src.indices[i];
+            dest[src.indices[i]] = dest[src.indices[i]].add(src.entries[i]);
         }
 
-        return new VectorOld(dest);
+        return src.makeDenseTensor((T[]) dest);
     }
 
 
@@ -72,15 +74,16 @@ public class RealSparseVectorOperations {
      * @param a Value to subtract from the {@code src} sparse vector.
      * @return The result of subtracting the specified value from the sparse vector.
      */
-    public static Vector sub(CooVector src, double a) {
-        double[] dest = new double[src.size];
-        Arrays.fill(dest, -a);
+    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> sub(CooFieldVectorBase<?, ?, T> src, T a) {
+        Field<T>[] dest = new Field[src.size];
+        Arrays.fill(dest, a.addInv());
 
         for(int i=0; i<src.entries.length; i++) {
-            dest[src.indices[i]] += src.entries[i];
+            int idx = src.indices[i];
+            dest[idx] = dest[idx].add(src.entries[i]);
         }
 
-        return new Vector(dest);
+        return src.makeDenseTensor((T[]) dest);
     }
 
 
@@ -92,19 +95,18 @@ public class RealSparseVectorOperations {
      * @return The result of the vector addition.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static CooVector add(CooVector src1, CooVector src2) {
+    public static <T extends Field<T>> CooFieldVectorBase<?, ?, T> add(CooFieldVectorBase<?, ?, T> src1,
+                                                                       CooFieldVectorBase<?, ?, T> src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-
-        int initCapacity = Math.max(src1.entries.length, src2.entries.length);
-        List<Double> values = new ArrayList<>(initCapacity);
-        List<Integer> indices = new ArrayList<>(initCapacity);
+        List<T> values = new ArrayList<>(src1.entries.length);
+        List<Integer> indices = new ArrayList<>(src1.entries.length);
 
         int src1Counter = 0;
         int src2Counter = 0;
 
         while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
             if(src1.indices[src1Counter] == src2.indices[src2Counter]) {
-                values.add(src1.entries[src1Counter] + src2.entries[src2Counter]);
+                values.add(src1.entries[src1Counter].add(src2.entries[src2Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
@@ -133,11 +135,7 @@ public class RealSparseVectorOperations {
             }
         }
 
-        return new CooVector(
-                src1.size,
-                values.stream().mapToDouble(Double::doubleValue).toArray(),
-                indices.stream().mapToInt(Integer::intValue).toArray()
-        );
+        return src1.makeLikeTensor(src1.size, values, indices);
     }
 
 
@@ -149,19 +147,18 @@ public class RealSparseVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static CooVector sub(CooVector src1, CooVector src2) {
+    public static <T extends Field<T>> CooFieldVectorBase<?, ?, T> sub(CooFieldVectorBase<?, ?, T> src1,
+                                                                       CooFieldVectorBase<?, ?, T> src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-
-        int initCapacity = Math.max(src1.entries.length, src2.entries.length);
-        List<Double> values = new ArrayList<>(initCapacity);
-        List<Integer> indices = new ArrayList<>(initCapacity);
+        List<T> values = new ArrayList<>(src1.entries.length);
+        List<Integer> indices = new ArrayList<>(src1.entries.length);
 
         int src1Counter = 0;
         int src2Counter = 0;
 
         while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
             if(src1.indices[src1Counter] == src2.indices[src2Counter]) {
-                values.add(src1.entries[src1Counter] - src2.entries[src2Counter]);
+                values.add(src1.entries[src1Counter].sub(src2.entries[src2Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
@@ -171,7 +168,7 @@ public class RealSparseVectorOperations {
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
             } else {
-                values.add(-src2.entries[src2Counter]);
+                values.add(src2.entries[src2Counter].addInv());
                 indices.add(src2.indices[src2Counter]);
                 src2Counter++;
             }
@@ -185,16 +182,12 @@ public class RealSparseVectorOperations {
             }
         } else if(src2Counter < src2.entries.length) {
             for(int i=src2Counter; i<src2.entries.length; i++) {
-                values.add(-src2.entries[i]);
+                values.add(src2.entries[i].addInv());
                 indices.add(src2.indices[i]);
             }
         }
 
-        return new CooVector(
-                src1.size,
-                values.stream().mapToDouble(Double::doubleValue).toArray(),
-                indices.stream().mapToInt(Integer::intValue).toArray()
-        );
+        return src2.makeLikeTensor(src1.size, values, indices);
     }
 
 
@@ -206,12 +199,11 @@ public class RealSparseVectorOperations {
      * @return The result of the vector multiplication.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static CooVector elemMult(CooVector src1, CooVector src2) {
+    public static <T extends Field<T>> CooFieldVectorBase<?, ?, T> elemMult(CooFieldVectorBase<?, ?, T> src1,
+                                                                            CooFieldVectorBase<?, ?, T> src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-
-        int initCapacity = Math.max(src1.entries.length, src2.entries.length);
-        List<Double> values = new ArrayList<>(initCapacity);
-        List<Integer> indices = new ArrayList<>(initCapacity);
+        List<T> values = new ArrayList<>(src1.entries.length);
+        List<Integer> indices = new ArrayList<>(src1.entries.length);
 
         int src1Counter = 0;
         int src2Counter = 0;
@@ -219,7 +211,7 @@ public class RealSparseVectorOperations {
         while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
             if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
                 // Then indices match, add product of elements.
-                values.add(src1.entries[src1Counter]*src2.entries[src2Counter]);
+                values.add(src1.entries[src1Counter].mult(src2.entries[src2Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
@@ -230,34 +222,32 @@ public class RealSparseVectorOperations {
             }
         }
 
-        return new CooVector(
-                src1.size,
-                values.stream().mapToDouble(Double::doubleValue).toArray(),
-                indices.stream().mapToInt(Integer::intValue).toArray()
-        );
+        return src2.makeLikeTensor(src1.size, values, indices);
     }
 
 
     /**
-     * Computes the inner product of two real sparse vectors. Both sparse vectors are assumed
+     * Computes the inner product of two complex sparse vectors. Both sparse vectors are assumed
      * to have their indices sorted lexicographically.
      * @param src1 First sparse vector in the inner product. Indices assumed to be sorted lexicographically.
      * @param src2 Second sparse vector in the inner product. Indices assumed to be sorted lexicographically.
      * @return The result of the vector inner product.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static double inner(CooVector src1, CooVector src2) {
+    public static <T extends Field<T>> T inner(CooFieldVectorBase<?, ?, T> src1, CooFieldVectorBase<?, ?, T> src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-        double product = 0;
+
+        T product = null;
+        if(src1.nnz > 0) product = src1.entries[0].getZero();
+        else if(src2.nnz > 0) product = src2.entries[0].getZero();
+
         int src1Counter = 0;
         int src2Counter = 0;
 
         while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
             if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
                 // Then indices match, add product of elements.
-                product += src1.entries[src1Counter]*src2.entries[src2Counter];
-                src1Counter++;
-                src2Counter++;
+                product = product.add(src1.entries[src1Counter].mult(src2.entries[src2Counter].conj()));
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
                 src1Counter++;
             } else {
@@ -270,31 +260,63 @@ public class RealSparseVectorOperations {
 
 
     /**
-     * Computes the vector outer product between two real sparse vectors.
+     * Computes the dot product of two complex sparse vectors. Both sparse vectors are assumed
+     * to have their indices sorted lexicographically.
+     * @param src1 First sparse vector in the dot product. Indices assumed to be sorted lexicographically.
+     * @param src2 Second sparse vector in the dot product. Indices assumed to be sorted lexicographically.
+     * @return The result of the vector dot product.
+     * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
+     */
+    public static <T extends Field<T>> T dot(CooFieldVectorBase<?, ?, T> src1, CooFieldVectorBase<?, ?, T> src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+
+        T product = null;
+        if(src1.nnz > 0) product = src1.entries[0].getZero();
+        else if(src2.nnz > 0) product = src2.entries[0].getZero();
+
+        int src1Counter = 0;
+        int src2Counter = 0;
+
+        while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
+            if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
+                // Then indices match, add product of elements.
+                product = product.add(src1.entries[src1Counter].mult(src2.entries[src2Counter]));
+            } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
+                src1Counter++;
+            } else {
+                src2Counter++;
+            }
+        }
+
+        return product;
+    }
+
+
+    /**
+     * Computes the vector outer product between two complex sparse vectors.
      * @param src1 Entries of the first sparse vector in the outer product.
      * @param src2 Second sparse vector in the outer product.
      * @return The matrix resulting from the vector outer product.
      */
-    public static Matrix outerProduct(CooVector src1, CooVector src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static CMatrixOld outerProduct(CooCVectorOld src1, CooCVectorOld src2) {
+        CNumber[] dest = new CNumber[src2.size*src1.size];
+        Arrays.fill(dest, CNumber.ZERO);
 
-        double[] dest = new double[src2.size*src1.size];
         int destRow;
         int index1;
         int index2;
-        int src2Size = src2.entries.length;
 
-        for(int i=0, size=src1.entries.length; i<size; i++) {
+        for(int i=0; i<src1.entries.length; i++) {
             index1 = src1.indices[i];
             destRow = index1*src1.size;
-            double v1 = src1.entries[i];
 
-            for(int j=0; j<src2Size; j++) {
-                dest[destRow + src2.indices[j]] = v1*src2.entries[j];
+            for(int j=0; j<src2.entries.length; j++) {
+                index2 = src2.indices[j];
+
+                dest[destRow + index2] = src1.entries[i].mult(src2.entries[j]);
             }
         }
 
-        return new Matrix(src1.size, src2.size, dest);
+        return new CMatrixOld(src1.size, src2.size, dest);
     }
 }
-

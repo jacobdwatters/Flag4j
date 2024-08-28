@@ -30,16 +30,16 @@ import org.flag4j.util.ErrorMessages;
 /**
  * A utility class for aggregating arrays_old of {@link Field} elements.
  */
-public final class AggregateFeild {
+public final class AggregateField {
 
-    private AggregateFeild() {
+    private AggregateField() {
         // Hide constructor for utility class.
         throw new IllegalAccessError(ErrorMessages.getUtilityClassErrMsg());
     }
 
 
     /**
-     * Computes the product of all entires of specified array.
+     * Computes the product of all entries of specified array.
      * @param values Values to compute product of.
      * @return The product of all values in {@code values}.
      */

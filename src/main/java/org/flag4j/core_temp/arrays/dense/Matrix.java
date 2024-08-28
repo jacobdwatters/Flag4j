@@ -25,7 +25,6 @@
 package org.flag4j.core_temp.arrays.dense;
 
 import org.flag4j.core.Shape;
-import org.flag4j.core_temp.DenseMatrixMixin;
 import org.flag4j.core_temp.MatrixVectorOpsMixin;
 import org.flag4j.core_temp.TensorBase;
 import org.flag4j.core_temp.arrays.sparse.CooMatrix;
@@ -50,7 +49,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
         implements DenseMatrixMixin<Matrix, Double>,
         MatrixVectorOpsMixin<Matrix, Vector> {
 
-    // TODO: Add dense/sparse and real/complex operaitons for selected operations.
+    // TODO: Add dense/sparse and real/complex operations for selected operations.
 
     /**
      * The number of rows in this matrix.
@@ -70,7 +69,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     public Matrix(Shape shape, double[] entries) {
         super(shape, entries);
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
 
         numRows = shape.get(0);
         numCols = shape.get(1);
@@ -225,7 +224,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     public Matrix(Shape shape) {
         super(shape, new double[shape.totalEntries().intValue()]);
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
     }
@@ -240,7 +239,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
     public Matrix(Shape shape, double value) {
         super(shape, new double[shape.totalEntries().intValue()]);
         Arrays.fill(super.entries, value);
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
     }
@@ -313,7 +312,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @param axis1 First axis to exchange and conjugate.
      * @param axis2 Second axis to exchange and conjugate.
      *
-     * @return The conjugate transpose of this tensor acording to the specified axes.
+     * @return The conjugate transpose of this tensor according to the specified axes.
      *
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
      * @see #H()
@@ -349,7 +348,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * Constructs a tensor of the same type as this tensor with the given the shape and entries.
      *
      * @param shape Shape of the tensor to construct.
-     * @param entries Entires of the tensor to construct.
+     * @param entries Entries of the tensor to construct.
      *
      * @return A tensor of the same type as this tensor with the given the shape and entries.
      */
@@ -408,7 +407,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @see #I(int, int)
      */
     public static Matrix I(Shape shape) {
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
         return I(shape.get(0), shape.get(1));
     }
 
@@ -575,10 +574,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * <p>Computes the rank of this matrix (i.e. the number of linearly independent rows/columns in this matrix).</p>
      *
      * <p>Note the "matrix rank" is <b>NOT</b> related to the "{@link TensorBase#getRank() tensor rank}" which is number of indices
-     * needed to
-     * uniquely
-     * specify an
-     * entry in the tensor.</p>
+     * needed to uniquely specify an entry in the tensor.</p>
      *
      * @return The matrix rank of this matrix.
      */
@@ -776,7 +772,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
 
 
     /**
-     * Checks if a marix is Hermitian. That is, if the matrix is square and equal to its conjugate transpose.
+     * Checks if a matrix is Hermitian. That is, if the matrix is square and equal to its conjugate transpose.
      *
      * @return True if this matrix is Hermitian. Otherwise, returns false.
      */
@@ -1322,7 +1318,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @param axis1 First axis to exchange.
      * @param axis2 Second axis to exchange.
      *
-     * @return The transpose of this tensor acording to the specified axes.
+     * @return The transpose of this tensor according to the specified axes.
      *
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
      * @see #T()

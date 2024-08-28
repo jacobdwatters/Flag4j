@@ -51,7 +51,7 @@ import java.util.Map;
  * <p>The non-zero entries and non-zero indices of a COO tensor are mutable but the shape and total number of non-zero entries is
  * fixed.</p>
  *
- * <p>Sparse tensors allow for the efficient storage of and operations on tensors that contain many zero vlues.</p>
+ * <p>Sparse tensors allow for the efficient storage of and operations on tensors that contain many zero values.</p>
  *
  * <p>COO tensors are optimized for hyper-sparse tensors (i.e. tensors which contain almost all zeros relative to the size of the
  * tensor).</p>
@@ -60,9 +60,9 @@ import java.util.Map;
  * <ul>
  *     <li>The full {@link #shape shape} of the tensor.</li>
  *     <li>The non-zero {@link #entries} of the tensor. All other entries in the tensor are
- *     assumed to be zero. Zero value can also explicity be stored in {@link #entries}.</li>
+ *     assumed to be zero. Zero value can also explicitly be stored in {@link #entries}.</li>
  *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many operations assume indices to be sorted in a
- *     row-major format (i.e. last index increased fastest) but often this is not explicity verified.</p>
+ *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.</p>
  *
  *     <p>The {@link #indices} array has shape {@code (nnz, rank)} where {@link #nnz} is the number of non-zero entries in this
  *     sparse tensor and {@code rank} is the {@link #getRank() tensor rank} of the tensor. This means {@code indices[i]} is the ND
@@ -71,13 +71,13 @@ import java.util.Map;
  * </ul>
  *
  * @param <T> Type of this sparse COO tensor.
- * @param <U> Type of a dense tensor equivalent to {@code T}. This type parameter is required because some operations (e.g.
+ * @param <U> Type of dense tensor equivalent to {@code T}. This type parameter is required because some operations (e.g.
  * {@link #tensorDot(TensorOverSemiRing, int)}) between two sparse tensors result in a dense tensor.
  * @param <V> Type of the {@link Field field} which the entries of this tensor belong to.
  */
 public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
         U extends DenseFieldTensorBase<U, T, V>, V extends Field<V>>
-        extends FieldTensorBase<T, U, V> implements SparseTesnorMixin<U, T> {
+        extends FieldTensorBase<T, U, V> implements SparseTensorMixin<U, T> {
 
     /**
      * <p>The non-zero indices of this sparse tensor.</p>
@@ -95,7 +95,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      * Creates a tensor with the specified entries and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Non-zero entreis of this tensor of this tensor. If this tensor is dense, this specifies all entries within the
+     * @param entries Non-zero entries of this tensor of this tensor. If this tensor is dense, this specifies all entries within the
      * tensor.
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
@@ -112,14 +112,14 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
     /**
      * <p>Computes the element-wise reciprocals of the non-zero elements of this sparse tensor.</p>
      *
-     * <p>Note: This method <b>only</b> computes the recipricals of the non-zero elements.</p>
+     * <p>Note: This method <b>only</b> computes the reciprocals of the non-zero elements.</p>
      *
      * @return A tensor containing the reciprocal non-zero elements of this tensor.
      */
     @Override
     public T recip() {
-        /* This method is overided from FieldTensorBase to make clear it is only computing the
-            multiplicitive inverse for the non-zero elements of the tensor */
+        /* This method overrides from FieldTensorBase to make clear it is only computing the
+            multiplicative inverse for the non-zero elements of the tensor */
 
         Field<V>[] recip = new Field[entries.length];
 
@@ -177,9 +177,9 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
 
 
     /**
-     * Subtracts a sclar value from each non-zero entry of this tensor.
+     * Subtracts a scalar value from each non-zero entry of this tensor.
      *
-     * @param b Scalar value in differencce.
+     * @param b Scalar value in difference.
      *
      * @return The difference of this tensor and the scalar {@code b}.
      */
@@ -190,11 +190,11 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
 
 
     /**
-     * <p>Subtracts a sclar value from each non-zero entry of this tensor and stores the result in this tensor.</p>
+     * <p>Subtracts a scalar value from each non-zero entry of this tensor and stores the result in this tensor.</p>
      *
      * <p>Note: this method <b>only</b> operates on the non-zero entries of this tensor.</p>
      *
-     * @param b Scalar value in differencce.
+     * @param b Scalar value in difference.
      */
     @Override
     public void subEq(V b) {
@@ -223,7 +223,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      * @param axis1 First axis to exchange and conjugate.
      * @param axis2 Second axis to exchange and conjugate.
      *
-     * @return The conjugate transpose of this tensor acording to the specified axes.
+     * @return The conjugate transpose of this tensor according to the specified axes.
      *
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
      * @see #H()
@@ -295,7 +295,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
 
 
     /**
-     * <p>Adds a sclar value to each non-zero entry of this tensor.</p>
+     * <p>Adds a scalar value to each non-zero entry of this tensor.</p>
      *
      * <p>Note: this method <b>only</b> operates on the non-zero entries of this tensor.</p>
      *
@@ -310,7 +310,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
 
 
     /**
-     * <p>Adds a sclar value to each non-zero entry of this tensor and stores the result in this tensor.</p>
+     * <p>Adds a scalar value to each non-zero entry of this tensor and stores the result in this tensor.</p>
      *
      * <p>Note: this method <b>only</b> operates on the non-zero entries of this tensor.</p>
      *
@@ -355,7 +355,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
     /**
      * <p>Computes the generalized trace of this tensor along the specified axes.</p>
      *
-     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays_old of this tensor specifieed by
+     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays_old of this tensor specified by
      * {@code axis1} and {@code axis2}. The shape of the resulting tensor is equal to this tensor with the
      * {@code axis1} and {@code axis2} removed.</p>
      *
@@ -366,7 +366,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
      * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
-     *                                   (i.e. the axes are equal or the tesnor does not have the same length along the two axes.)
+     *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override
     public T tensorTr(int axis1, int axis2) {
@@ -453,7 +453,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      */
     @Override
     public V prod() {
-        // Overided from FieldTensorBase to emphizize that the product is only for non-zero entries.
+        // Overrides from FieldTensorBase to emphasize that the product is only for non-zero entries.
         return super.prod();
     }
 
@@ -499,7 +499,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
 
 
     /**
-     * Flattens a tensor along the specified axis. This perserves the rank of the tensor.
+     * Flattens a tensor along the specified axis. This preserves the rank of the tensor.
      *
      * @param axis Axis along which to flatten tensor.
      *
@@ -569,7 +569,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      * the shape and entries.
      *
      * @param shape Shape of the sparse tensor to construct.
-     * @param entries Entires of the spares tensor to construct.
+     * @param entries Entries of the spares tensor to construct.
      *
      * @return A sparse tensor of the same type as this tensor with the same indices as this sparse tensor and with the provided
      * the shape and entries.
@@ -582,7 +582,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      * Constructs a sparse tensor of the same type as this tensor with the given the shape, non-zero entries, and non-zero indices.
      *
      * @param shape Shape of the sparse tensor to construct.
-     * @param entries Non-zero entires of the sparse tensor to construct.
+     * @param entries Non-zero entries of the sparse tensor to construct.
      * @param indices Non-zero indices of the sparse tensor to construct.
      *
      * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
@@ -594,7 +594,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      * Constructs a sparse tensor of the same type as this tensor with the given the shape, non-zero entries, and non-zero indices.
      *
      * @param shape Shape of the sparse tensor to construct.
-     * @param entries Non-zero entires of the sparse tensor to construct.
+     * @param entries Non-zero entries of the sparse tensor to construct.
      * @param indices Non-zero indices of the sparse tensor to construct.
      *
      * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
@@ -611,7 +611,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      */
     @Override
     public V min() {
-        // Overrides method in FieldTensorBase to emphisize that the method works on the non-zero elemetns only.
+        // Overrides method in FieldTensorBase to emphasize that the method works on the non-zero elements only.
         return super.min();
     }
 
@@ -625,7 +625,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      */
     @Override
     public V max() {
-        // Overrides method in FieldTensorBase to emphisize that the method works on the non-zero elemetns only.
+        // Overrides method in FieldTensorBase to emphasize that the method works on the non-zero elements only.
         return super.max();
     }
 
@@ -638,7 +638,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      */
     @Override
     public double minAbs() {
-        // Overrides method in FieldTensorBase to emphisize that the method works on the non-zero elemetns only.
+        // Overrides method in FieldTensorBase to emphasize that the method works on the non-zero elements only.
         return super.minAbs();
     }
 
@@ -651,7 +651,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      */
     @Override
     public double maxAbs() {
-        // Overrides method in FieldTensorBase to emphisize that the method works on the non-zero elemetns only.
+        // Overrides method in FieldTensorBase to emphasize that the method works on the non-zero elements only.
         return super.maxAbs();
     }
 
@@ -660,7 +660,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      * Finds the indices of the minimum non-zero value in this tensor.
      *
      * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned. If this tesnor has no non-zero values then an empty is returned.
+     * entry (in row-major ordering) are returned. If this tensor has no non-zero values then an empty is returned.
      */
     @Override
     public int[] argmin() {
@@ -673,7 +673,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      * Finds the indices of the maximum non-zero value in this tensor.
      *
      * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned. If this tesnor has no non-zero values then an empty array is returned.
+     * entry (in row-major ordering) are returned. If this tensor has no non-zero values then an empty array is returned.
      */
     @Override
     public int[] argmax() {
@@ -687,7 +687,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      *
      * @return The indices of the minimum absolute non-zero value in this tensor. If this value occurs multiple times, the indices of
      * the first
-     * entry (in row-major ordering) are returned. If this tesnor has no non-zero values then an empty array is returned.
+     * entry (in row-major ordering) are returned. If this tensor has no non-zero values then an empty array is returned.
      */
     @Override
     public int[] argminAbs() {
@@ -702,7 +702,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      * @return The indices of the maximum absolute non-zero value in this tensor. If this value occurs multiple times, the indices of
      * the
      * first
-     * entry (in row-major ordering) are returned. If this tesnor has no non-zero values then an empty array is returned.
+     * entry (in row-major ordering) are returned. If this tensor has no non-zero values then an empty array is returned.
      */
     @Override
     public int[] argmaxAbs() {
@@ -728,7 +728,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      */
     @Override
     public U tensorDot(T src2, int[] aAxes, int[] bAxes) {
-        // This cast shoud be safe because FieldTensor<T> extends FieldTensorBase<FieldTensor<T>, FieldTensor<T>, T>
+        // This cast should be safe because FieldTensor<T> extends FieldTensorBase<FieldTensor<T>, FieldTensor<T>, T>
         //  and tensorDot(...) returns FieldTensorBase<U, U, V>.
         return (U) CooFieldTensorDot.tensorDot(this, src2, aAxes, bAxes);
     }
@@ -740,7 +740,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      * @param axis1 First axis to exchange.
      * @param axis2 Second axis to exchange.
      *
-     * @return The transpose of this tensor acording to the specified axes.
+     * @return The transpose of this tensor according to the specified axes.
      *
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
      * @see #T()
@@ -833,7 +833,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
     /**
      * Makes a dense tensor with the specified shape and entries which is a similar type to this sparse tensor.
      * @param shape Shape of the dense tensor.
-     * @param entries Entries of the dense tesnor.
+     * @param entries Entries of the dense tensor.
      * @return A dense tensor with the specified shape and entries which is a similar type to this sparse tensor.
      */
     public abstract U makeDenseTensor(Shape shape, V[] entries);

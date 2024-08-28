@@ -26,7 +26,7 @@ package org.flag4j.core_temp;
 
 
 /**
- * This interface defines operations_old that complex-valued matrices should implement.
+ * This interface defines operations that complex-valued matrices should implement.
  * @param <T> Type of the tensor returned by the operation.
  * @see TensorPrimitiveOpsMixin
  */
@@ -46,7 +46,7 @@ public interface ComplexOpsMixin<T extends FieldTensorBase<T, ?, ?>> {
      *
      * @param axis1 First axis to exchange.
      * @param axis2 Second axis to exchange.
-     * @return The transpose of this tensor acording to the specified axes.
+     * @return The transpose of this tensor according to the specified axes.
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
      * @see #H()
      * @see #H(int...)
@@ -70,7 +70,7 @@ public interface ComplexOpsMixin<T extends FieldTensorBase<T, ?, ?>> {
 
 
     /**
-     * Comuputes the element-wise conjugation of this tensor.
+     * Computes the element-wise conjugation of this tensor.
      * @return The element-wise conjugation of this tensor.
      */
     T conj();

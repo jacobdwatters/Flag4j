@@ -25,7 +25,7 @@
 package org.flag4j.operations.sparse.coo.field_ops;
 
 
-import org.flag4j.core_temp.arrays.sparse.CooFieldMatrix;
+import org.flag4j.core_temp.arrays.sparse.CooFieldMatrixBase;
 import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.util.ErrorMessages;
 
@@ -51,21 +51,47 @@ public final class CooFieldMatrixProperties {
      * @param src MatrixOld to check if it is the identity matrix.
      * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
      */
-    public static <T extends Field<T>> boolean isIdentity(CooFieldMatrix<T> src) {
-        // Ensure the matrix is square and there are the same number of non-zero entries as entries on the diagonal.
-        if(!src.isSquare() || src.entries.length!=src.numRows) return false;
-
-        final T ONE = src.entries[0].getOne();
+    public static <V extends Field<V>> boolean isIdentity(CooFieldMatrixBase<?, ?, V> src) {
+        // Ensure the matrix is square and there are at least the same number of non-zero entries as entries on the diagonal.
+        if(!src.isSquare() || src.entries.length<src.numRows) return false;
 
         for(int i=0, size=src.entries.length; i<size; i++) {
             // Ensure value is 1 and on the diagonal.
-            if(src.entries[i].equals(ONE) || src.rowIndices[i] != i || src.colIndices[i] != i) {
+            if(src.rowIndices[i] != i && src.rowIndices[i] != i && !src.entries[i].isOne()) {
+                return false;
+            } else if((src.rowIndices[i] != i || src.rowIndices[i] != i) && !src.entries[i].isZero()) {
                 return false;
             }
         }
 
-
         return true; // If we make it to this point the matrix must be an identity matrix.
+    }
+
+
+    /**
+     * Checks if a real sparse matrix is close to the identity matrix.
+     * @param src MatrixOld to check if it is the identity matrix.
+     * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
+     */
+    public static <V extends Field<V>> boolean isCloseToIdentity(CooFieldMatrixBase<?, ?, V> src) {
+        // Ensure the matrix is square and there are the same number of non-zero entries as entries on the diagonal.
+        boolean result = src.isSquare() && src.entries.length==src.numRows;
+
+        // Tolerances corresponds to the allClose(...) methods.
+        double diagTol = 1.001E-5;
+        double nonDiagTol = 1e-08;
+
+        final V ONE = src.entries.length > 0 ? src.entries[0].getOne() : null;
+
+        for(int i=0; i<src.entries.length; i++) {
+            if(src.rowIndices[i] == i && src.colIndices[i] == i && src.entries[i].sub(ONE).abs() > diagTol ) {
+                return false; // Diagonal value is not close to one.
+            } else if((src.rowIndices[i] != i && src.colIndices[i] != i) && src.entries[i].mag() > nonDiagTol) {
+                return false; // Non-diagonal value is not close to zero.
+            }
+        }
+
+        return true;
     }
 
 
@@ -74,14 +100,13 @@ public final class CooFieldMatrixProperties {
      * @param src Matrix to check if it is the hermitian matrix.
      * @return True if the {@code src} matrix is hermitian. False otherwise.
      */
-    public static <T extends Field<T>> boolean isHermitian(CooFieldMatrix<T> src) {
+    public static <V extends Field<V>> boolean isHermitian(CooFieldMatrixBase<?, ?, V> src) {
         boolean result = src.isSquare();
-
-        List<T> entries = Arrays.asList(src.entries);
+        List<V> entries = Arrays.asList(src.entries);
         List<Integer> rowIndices = IntStream.of(src.rowIndices).boxed().collect(Collectors.toList());
         List<Integer> colIndices = IntStream.of(src.colIndices).boxed().collect(Collectors.toList());
 
-        T value;
+        V value;
         int row;
         int col;
 
@@ -129,14 +154,14 @@ public final class CooFieldMatrixProperties {
      * @param src Matrix to check if it is the hermitian matrix.
      * @return True if the {@code src} matrix is hermitian. False otherwise.
      */
-    public static <T extends Field<T>> boolean isSymmetric(CooFieldMatrix<T> src) {
+    public static <V extends Field<V>> boolean isSymmetric(CooFieldMatrixBase<?, ?, V> src) {
         boolean result = src.isSquare();
 
-        List<T> entries = Arrays.asList(src.entries);
+        List<V> entries = Arrays.asList(src.entries);
         List<Integer> rowIndices = IntStream.of(src.rowIndices).boxed().collect(Collectors.toList());
         List<Integer> colIndices = IntStream.of(src.colIndices).boxed().collect(Collectors.toList());
 
-        T value;
+        V value;
         int row;
         int col;
 
@@ -184,14 +209,14 @@ public final class CooFieldMatrixProperties {
      * @param src Matrix to check if it is the anti-hermitian matrix.
      * @return True if the {@code src} matrix is anti-hermitian. False otherwise.
      */
-    public static <T extends Field<T>> boolean isAntiHermitian(CooFieldMatrix<T> src) {
+    public static <V extends Field<V>> boolean isAntiHermitian(CooFieldMatrixBase<?, ?, V> src) {
         boolean result = src.isSquare();
 
-        List<T> entries = Arrays.asList(src.entries);
+        List<V> entries = Arrays.asList(src.entries);
         List<Integer> rowIndices = IntStream.of(src.rowIndices).boxed().collect(Collectors.toList());
         List<Integer> colIndices = IntStream.of(src.colIndices).boxed().collect(Collectors.toList());
 
-        T value;
+        V value;
         int row;
         int col;
 

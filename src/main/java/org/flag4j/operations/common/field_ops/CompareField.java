@@ -209,10 +209,51 @@ public final class CompareField {
      * @return True if the {@code src} array contains only zeros.
      */
     public static boolean isZeros(Field[] src) {
-        for(Field value : src) {
+        for(Field value : src)
             if(!value.isZero()) return false;
-        }
 
         return true;
+    }
+
+
+    /**
+     * Checks if all entries of two arrays_old are 'close'.
+     * @param src1 First array in comparison.
+     * @param src2 Second array in comparison.
+     * @return True if both arrays_old have the same length and all entries are 'close' element-wise, i.e.
+     * elements {@code a} and {@code b} at the same positions in the two arrays_old respectively and satisfy
+     * {@code |a-b| <= (1E-05 + 1E-08*|b|)}. Otherwise, returns false.
+     * @see #allClose(double[], double[], double, double)
+     */
+    public static <T extends Field<T>> boolean allClose(T[] src1, T[] src2) {
+        return allClose(src1, src2, 1e-05, 1e-08);
+    }
+
+
+
+    /**
+     * Checks if all entries of two arrays_old are 'close'.
+     * @param src1 First array in comparison.
+     * @param src2 Second array in comparison.
+     * @return True if both arrays_old have the same length and all entries are 'close' element-wise, i.e.
+     * elements {@code a} and {@code b} at the same positions in the two arrays_old respectively and satisfy
+     * {@code |a-b| <= (absTol + relTol*|b|)}. Otherwise, returns false.
+     * @see #allClose(double[], double[])
+     */
+    public static <T extends Field<T>> boolean allClose(T[] src1, T[] src2, double relTol, double absTol) {
+        boolean close = src1.length==src2.length;
+
+        if(close) {
+            for(int i=0; i<src1.length; i++) {
+                double tol = absTol + relTol*src2[i].abs();
+
+                if(src1[i].sub(src2[i]).abs() > tol) {
+                    close = false;
+                    break;
+                }
+            }
+        }
+
+        return close;
     }
 }

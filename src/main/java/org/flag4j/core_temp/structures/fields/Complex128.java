@@ -248,7 +248,7 @@ public class Complex128 implements Field<Complex128> {
 
 
     /**
-     * Computes the sum of all entires of specified array.
+     * Computes the sum of all entries of specified array.
      * @param values Values to compute product of.
      * @return The sum of all values in {@code values}.
      */
@@ -293,11 +293,11 @@ public class Complex128 implements Field<Complex128> {
 
 
     /**
-     * <p>Checks if this value is a multiplicitive identity for this semi-ring.</p>
+     * <p>Checks if this value is a multiplicative identity for this semi-ring.</p>
      *
-     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     * <p>An element 1 is a multiplicative identity if a * 1 = a for any a in the semi-ring.</p>
      *
-     * @return True if this value is a multiplicitive identity for this semi-ring. Otherwise, false.
+     * @return True if this value is a multiplicative identity for this semi-ring. Otherwise, false.
      */
     @Override
     public boolean isOne() {
@@ -319,11 +319,11 @@ public class Complex128 implements Field<Complex128> {
 
 
     /**
-     * <p>Gets the multiplicitive identity for this semi-ring.</p>
+     * <p>Gets the multiplicative identity for this semi-ring.</p>
      *
-     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     * <p>An element 1 is a multiplicative identity if a * 1 = a for any a in the semi-ring.</p>
      *
-     * @return The multiplicitive identity for this semi-ring.
+     * @return The multiplicative identity for this semi-ring.
      */
     @Override
     public Complex128 getOne() {
@@ -381,7 +381,7 @@ public class Complex128 implements Field<Complex128> {
 
     /**
      * Computes the magnitude of this field element.
-     * @return The magniitude of this field element.
+     * @return The magnitude of this field element.
      */
     @Override
     public double mag() {
@@ -426,10 +426,10 @@ public class Complex128 implements Field<Complex128> {
             double mag = mag();
             double factor = im / Math.abs(im);
 
-            double sqrtrRe = Math.sqrt((mag + this.re)/2);
+            double sqrtRe = Math.sqrt((mag + this.re)/2);
             double sqrtIm = factor*Math.sqrt((mag - this.re)/2);
 
-            result = new Complex128(sqrtrRe, sqrtIm);
+            result = new Complex128(sqrtRe, sqrtIm);
         }
 
         return result;
@@ -447,9 +447,9 @@ public class Complex128 implements Field<Complex128> {
 
 
     /**
-     * <p>Computes the addative inverse for an element of this field.</p>
+     * <p>Computes the additive inverse for an element of this field.</p>
      *
-     * <p>An element -x is an addative inverse for a filed element x if -x + x = 0 where 0 is the addative identity..</p>
+     * <p>An element -x is an additive inverse for a filed element x if -x + x = 0 where 0 is the additive identity..</p>
      *
      * @return The additive inverse for this field element.
      */
@@ -1016,13 +1016,13 @@ public class Complex128 implements Field<Complex128> {
 
     /**
      * Compares this element of the field with {@code b}.
-     * @param b Second elemetn of the field.
+     * @param b Second element of the field.
      * @return An int value:
      * <ul>
      *     <li>0 if this field element is equal to {@code b} in magnitude.</li>
      *     <li>< 0 if this field element is less than {@code b} in magnitude.</li>
      *     <li>> 0 if this field element is greater than {@code b} in magnitude.</li>
-     *     Hence, this method returns zero if and only if the two field elemetns are equal in magnitude, a negative value if and
+     *     Hence, this method returns zero if and only if the two field elements are equal in magnitude, a negative value if and
      *     only the field element it was called on is less than {@code b} in magnitude and positive if and only if the field
      *     element it was called on is greater than {@code b} in magnitude.
      * </ul>

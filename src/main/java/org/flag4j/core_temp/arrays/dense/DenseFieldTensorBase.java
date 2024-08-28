@@ -26,7 +26,7 @@ package org.flag4j.core_temp.arrays.dense;
 
 import org.flag4j.core.Shape;
 import org.flag4j.core_temp.FieldTensorBase;
-import org.flag4j.core_temp.arrays.sparse.SparseTesnorMixin;
+import org.flag4j.core_temp.arrays.sparse.SparseTensorMixin;
 import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.dense.field_ops.DenseFieldTensorDot;
@@ -37,13 +37,13 @@ import org.flag4j.util.ParameterChecks;
  * <p>The base class for all dense {@link Field} tensors.</p>
  * <p>Then {@link #entries} of a DenseFieldTensor are mutable but the {@link #shape} is fixed.</p>
  *
- * @param <T> The type of this desne field tensor.
- * @param <U> Type of a sparse tensor equivalent to {@code T}. This type parameter is required because some operations (e.g.
+ * @param <T> The type of this dense field tensor.
+ * @param <U> Type of sparse tensor equivalent to {@code T}. This type parameter is required because some operations (e.g.
  * {@link #toCoo()}) may result in a sparse tensor.
- * @param <V> The type of the {@link Field field} which this tensors entries belong to.
+ * @param <V> The type of the {@link Field field} which this tensor's entries belong to.
  */
 public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, V>,
-        U extends SparseTesnorMixin<T, U>, V extends Field<V>>
+        U extends SparseTensorMixin<T, U>, V extends Field<V>>
         extends FieldTensorBase<T, T, V>
         implements DenseTensorMixin<T, U> {
 
@@ -65,7 +65,7 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
      * @param axis1 First axis to exchange and conjugate.
      * @param axis2 Second axis to exchange and conjugate.
      *
-     * @return The conjugate transpose of this tensor acording to the specified axes.
+     * @return The conjugate transpose of this tensor according to the specified axes.
      *
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
      * @see #H()
@@ -124,7 +124,7 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
      * @param axis1 First axis to exchange.
      * @param axis2 Second axis to exchange.
      *
-     * @return The transpose of this tensor acording to the specified axes.
+     * @return The transpose of this tensor according to the specified axes.
      *
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
      * @see #T()

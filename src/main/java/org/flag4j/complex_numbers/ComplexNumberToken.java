@@ -25,7 +25,7 @@
 package org.flag4j.complex_numbers;
 
 
-import org.flag4j.util.exceptions.ComplexNumberParseingException;
+import org.flag4j.util.exceptions.ComplexNumberParsingException;
 
 /**
  * A ComplexNumberToken is the smallest unit of a string which is being parsed to a complex number.
@@ -96,7 +96,7 @@ class ComplexNumberToken {
      */
     protected void errorCheck(String k, String d) {
         if(!this.matches(k, d)) {
-            throw new ComplexNumberParseingException("Expecting token [" + k + "," + d + "] but got " + this);
+            throw new ComplexNumberParsingException("Expecting token [" + k + "," + d + "] but got " + this);
         }
     }
 
@@ -108,7 +108,7 @@ class ComplexNumberToken {
      */
     protected void errorCheck(String k) {
         if(!this.kind.equals(k)) {
-            throw new ComplexNumberParseingException("Expecting token of kind " + k + " but got " + this);
+            throw new ComplexNumberParsingException("Expecting token of kind " + k + " but got " + this);
         }
     }
 

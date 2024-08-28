@@ -27,7 +27,7 @@ package org.flag4j.core_temp.arrays.dense;
 
 import org.flag4j.core.Shape;
 import org.flag4j.core_temp.PrimitiveDoubleTensorBase;
-import org.flag4j.core_temp.arrays.sparse.SparseTesnorMixin;
+import org.flag4j.core_temp.arrays.sparse.SparseTensorMixin;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.dense.real.RealDenseTensorDot;
 import org.flag4j.util.ParameterChecks;
@@ -39,11 +39,11 @@ import org.flag4j.util.exceptions.TensorShapeException;
  * <p>The entries of DensePrimitiveDoubleTensorBase's are mutable but the tensor has a fixed shape.</p>
  *
  * @param <T> Type of this tensor.
- * @param <U> Type of a sparse tensor equivalent to {@code T}.
- * This type parameter is required becase some operations (e.g. {@link #toCoo()}) result in a sparse tensor.
+ * @param <U> Type of sparse tensor equivalent to {@code T}.
+ * This type parameter is required because some operations (e.g. {@link #toCoo()}) result in a sparse tensor.
  */
 public abstract class DensePrimitiveDoubleTensorBase <T extends DensePrimitiveDoubleTensorBase<T, U>,
-        U extends SparseTesnorMixin<T, U>>
+        U extends SparseTensorMixin<T, U>>
         extends PrimitiveDoubleTensorBase<T, T>
         implements DenseTensorMixin<T, U> {
 
@@ -86,7 +86,7 @@ public abstract class DensePrimitiveDoubleTensorBase <T extends DensePrimitiveDo
      * @param axis1 First axis to exchange.
      * @param axis2 Second axis to exchange.
      *
-     * @return The transpose of this tensor acording to the specified axes.
+     * @return The transpose of this tensor according to the specified axes.
      *
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
      * @see #T()
@@ -135,7 +135,7 @@ public abstract class DensePrimitiveDoubleTensorBase <T extends DensePrimitiveDo
 
 
     /**
-     * Computes the element-wise sum between two tensors and stores the result in this tensors.
+     * Computes the element-wise sum between two tensors and stores the result in this tensor.
      *
      * @param b Second tensor in the element-wise sum.
      *

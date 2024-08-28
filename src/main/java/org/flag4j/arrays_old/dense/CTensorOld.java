@@ -644,7 +644,7 @@ public class CTensorOld
      */
     public CMatrixOld toMatrix(Shape matShape) {
         ParameterChecks.ensureBroadcastable(shape, matShape);
-        ParameterChecks.ensureRank(2, matShape);
+        ParameterChecks.ensureRank(matShape, 2);
 
         return new CMatrixOld(matShape, Arrays.copyOf(entries, entries.length));
     }

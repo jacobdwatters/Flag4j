@@ -30,6 +30,7 @@ import org.flag4j.core_temp.PrimitiveDoubleTensorBase;
 import org.flag4j.core_temp.arrays.dense.Tensor;
 import org.flag4j.operations.dense.real.AggregateDenseReal;
 import org.flag4j.operations.sparse.coo.SparseDataWrapper;
+import org.flag4j.operations.sparse.coo.field_ops.SparseFieldEquals;
 import org.flag4j.operations.sparse.coo.real.RealCooTensorDot;
 import org.flag4j.operations.sparse.coo.real.RealCooTensorOperations;
 import org.flag4j.util.ArrayUtils;
@@ -52,7 +53,7 @@ import java.util.Map;
  * <p>The {@link #entries non-zero entries} and {@link #indices non-zero indices} of a COO tensor are mutable but the {@link #shape}
  * and total number of non-zero entries is fixed.</p>
  *
- * <p>Sparse tensors allow for the efficient storage of and operations on tensors that contain many zero vlues.</p>
+ * <p>Sparse tensors allow for the efficient storage of and operations on tensors that contain many zero values.</p>
  *
  * <p>COO tensors are optimized for hyper-sparse tensors (i.e. tensors which contain almost all zeros relative to the size of the
  * tensor).</p>
@@ -61,9 +62,9 @@ import java.util.Map;
  * <ul>
  *     <li>The full {@link #shape shape} of the tensor.</li>
  *     <li>The non-zero {@link #entries} of the tensor. All other entries in the tensor are
- *     assumed to be zero. Zero value can also explicity be stored in {@link #entries}.</li>
+ *     assumed to be zero. Zero value can also explicitly be stored in {@link #entries}.</li>
  *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many operations assume indices to be sorted in a
- *     row-major format (i.e. last index increased fastest) but often this is not explicity verified.</p>
+ *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.</p>
  *
  *     <p>The {@link #indices} array has shape {@code (nnz, rank)} where {@link #nnz} is the number of non-zero entries in this
  *     sparse tensor and {@code rank} is the {@link #getRank() tensor rank} of the tensor. This means {@code indices[i]} is the ND
@@ -72,7 +73,7 @@ import java.util.Map;
  * </ul>
  */
 public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
-        implements SparseTesnorMixin<Tensor, CooTensor> {
+        implements SparseTensorMixin<Tensor, CooTensor> {
 
     /**
      * The non-zero indices of this tensor. Must have shape {@code (nnz, rank)}.
@@ -91,7 +92,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      * Creates a tensor with the specified entries and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Non-zero entreis of this tensor of this tensor. If this tensor is dense, this specifies all entries within the
+     * @param entries Non-zero entries of this tensor of this tensor. If this tensor is dense, this specifies all entries within the
      * tensor.
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      * @param indices
@@ -107,7 +108,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      * Creates a tensor with the specified entries and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Non-zero entreis of this tensor of this tensor. If this tensor is dense, this specifies all entries within the
+     * @param entries Non-zero entries of this tensor of this tensor. If this tensor is dense, this specifies all entries within the
      * tensor.
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      * @param indices
@@ -124,7 +125,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      * the shape and entries.
      *
      * @param shape Shape of the sparse tensor to construct.
-     * @param entries Entires of the spares tensor to construct.
+     * @param entries Entries of the spares tensor to construct.
      *
      * @return A sparse tensor of the same type as this tensor with the same indices as this sparse tensor and with the provided
      * the shape and entries.
@@ -139,7 +140,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      * Constructs a sparse tensor of the same type as this tensor with the given the shape, non-zero entries, and non-zero indices.
      *
      * @param shape Shape of the sparse tensor to construct.
-     * @param entries Non-zero entires of the sparse tensor to construct.
+     * @param entries Non-zero entries of the sparse tensor to construct.
      * @param indices Non-zero indices of the sparse tensor to construct.
      *
      * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
@@ -153,7 +154,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      * Constructs a sparse tensor of the same type as this tensor with the given the shape, non-zero entries, and non-zero indices.
      *
      * @param shape Shape of the sparse tensor to construct.
-     * @param entries Non-zero entires of the sparse tensor to construct.
+     * @param entries Non-zero entries of the sparse tensor to construct.
      * @param indices Non-zero indices of the sparse tensor to construct.
      *
      * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
@@ -167,7 +168,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      * Makes a dense tensor with the specified shape and entries which is a similar type to this sparse tensor.
      *
      * @param shape Shape of the dense tensor.
-     * @param entries Entries of the dense tesnor.
+     * @param entries Entries of the dense tensor.
      *
      * @return A dense tensor with the specified shape and entries which is a similar type to this sparse tensor.
      */
@@ -177,7 +178,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
 
 
     /**
-     * The sparsity of this sparse tensor. That is, the precentage of elements in this tensor which are zero as a decimal.
+     * The sparsity of this sparse tensor. That is, the percentage of elements in this tensor which are zero as a decimal.
      *
      * @return The density of this sparse tensor.
      */
@@ -198,9 +199,9 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
 
 
     /**
-     * Converts this sparse tesnor to an equivalent dense tensor.
+     * Converts this sparse tensor to an equivalent dense tensor.
      *
-     * @return A dense tesnor equivalent to this sparse tensor.
+     * @return A dense tensor equivalent to this sparse tensor.
      */
     @Override
     public Tensor toDense() {
@@ -319,31 +320,31 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
 
 
     /**
-     * Subtracts a sclar value from each non-zero entry of this tensor.
+     * Subtracts a scalar value from each non-zero entry of this tensor.
      *
-     * @param b Scalar value in differencce.
+     * @param b Scalar value in difference.
      *
      * @return The difference of this tensor and the scalar {@code b}.
      */
     @Override
     public CooTensor sub(Double b) {
-        return super.sub(b);  // Overrides superclass to emphisize this method only acts on non-zero entries of the tensor.
+        return super.sub(b);  // Overrides superclass to emphasize this method only acts on non-zero entries of the tensor.
     }
 
 
     /**
-     * Subtracts a sclar value from each non-zero entry of this tensor and stores the result in this tensor.
+     * Subtracts a scalar value from each non-zero entry of this tensor and stores the result in this tensor.
      *
-     * @param b Scalar value in differencce.
+     * @param b Scalar value in difference.
      */
     @Override
     public void subEq(Double b) {
-        super.subEq(b); // Overrides superclass to emphisize this method only acts on non-zero entries of the tensor.
+        super.subEq(b); // Overrides superclass to emphasize this method only acts on non-zero entries of the tensor.
     }
 
 
     /**
-     * Adds a sclar field value to each non-zero entry of this tensor.
+     * Adds a scalar field value to each non-zero entry of this tensor.
      *
      * @param b Scalar field value in sum.
      *
@@ -351,18 +352,18 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      */
     @Override
     public CooTensor add(Double b) {
-        return super.add(b); // Overrides superclass to emphisize this method only acts on non-zero entries of the tensor.
+        return super.add(b); // Overrides superclass to emphasize this method only acts on non-zero entries of the tensor.
     }
 
 
     /**
-     * Adds a sclar value to each non-zero entry of this tensor and stores the result in this tensor.
+     * Adds a scalar value to each non-zero entry of this tensor and stores the result in this tensor.
      *
      * @param b Scalar field value in sum.
      */
     @Override
     public void addEq(Double b) {
-        super.addEq(b); // Overrides superclass to emphisize this method only acts on non-zero entries of the tensor.
+        super.addEq(b); // Overrides superclass to emphasize this method only acts on non-zero entries of the tensor.
     }
 
 
@@ -435,7 +436,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
     /**
      * <p>Computes the generalized trace of this tensor along the specified axes.</p>
      *
-     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays_old of this tensor specifieed by
+     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays_old of this tensor specified by
      * {@code axis1} and {@code axis2}. The shape of the resulting tensor is equal to this tensor with the
      * {@code axis1} and {@code axis2} removed.</p>
      *
@@ -447,7 +448,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
      * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
-     *                                   (i.e. the axes are equal or the tesnor does not have the same length along the two axes.)
+     *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override
     public CooTensor tensorTr(int axis1, int axis2) {
@@ -533,7 +534,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      */
     @Override
     public Double prod() {
-        // Overided from FieldTensorBase to emphizize that the product is only for non-zero entries.
+        // Override from FieldTensorBase to emphasize that the product is only for non-zero entries.
         return super.prod();
     }
 
@@ -544,7 +545,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      * @param axis1 First axis to exchange.
      * @param axis2 Second axis to exchange.
      *
-     * @return The transpose of this tensor acording to the specified axes.
+     * @return The transpose of this tensor according to the specified axes.
      *
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
      * @see #T()
@@ -618,14 +619,14 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
     /**
      * <p>Computes the element-wise reciprocals of the non-zero elements of this sparse tensor.</p>
      *
-     * <p>Note: This method <b>only</b> computes the recipricals of the non-zero elements.</p>
+     * <p>Note: This method <b>only</b> computes the reciprocals of the non-zero elements.</p>
      *
      * @return A tensor containing the reciprocal non-zero elements of this tensor.
      */
     @Override
     public CooTensor recip() {
-        /* This method is overided from FieldTensorBase to make clear it is only computing the
-            multiplicitive inverse for the non-zero elements of the tensor */
+        /* This method is override from FieldTensorBase to make clear it is only computing the
+            multiplicative inverse for the non-zero elements of the tensor */
         double[] recip = new double[entries.length];
 
         for(int i=0, size=entries.length; i<size; i++)
@@ -655,7 +656,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      */
     @Override
     public Double min() {
-        // Overrides method in super class to emphisize that the method works on the non-zero elemetns only.
+        // Overrides method in super class to emphasize that the method works on the non-zero elements only.
         return super.min();
     }
 
@@ -669,7 +670,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      */
     @Override
     public Double max() {
-        // Overrides method in super class to emphisize that the method works on the non-zero elemetns only.
+        // Overrides method in super class to emphasize that the method works on the non-zero elements only.
         return super.max();
     }
 
@@ -681,7 +682,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      */
     @Override
     public double minAbs() {
-        // Overrides method in super class to emphisize that the method works on the non-zero elemetns only.
+        // Overrides method in super class to emphasize that the method works on the non-zero elements only.
         return super.minAbs();
     }
 
@@ -694,7 +695,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      */
     @Override
     public double maxAbs() {
-        // Overrides method in super class to emphisize that the method works on the non-zero elemetns only.
+        // Overrides method in super class to emphasize that the method works on the non-zero elements only.
         return super.maxAbs();
     }
 
@@ -760,7 +761,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      */
     @Override
     public CooTensor add(double b) {
-        // Overrides method in super class to emphisize that the method works on the non-zero elemetns only.
+        // Overrides method in super class to emphasize that the method works on the non-zero elements only.
         return super.add(b);
     }
 
@@ -774,7 +775,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      */
     @Override
     public CooTensor sub(double b) {
-        // Overrides method in super class to emphisize that the method works on the non-zero elemetns only.
+        // Overrides method in super class to emphasize that the method works on the non-zero elements only.
         return super.sub(b);
     }
 
@@ -784,5 +785,22 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      */
     public void sortIndices() {
         SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);
+    }
+
+
+    /**
+     * Checks if an object is equal to this tensor object.
+     * @param object Object to check equality with this tensor.
+     * @return True if the two tensors have the same shape, are numerically equivalent, and are of type {@link CooTensor}.
+     * False otherwise.
+     */
+    @Override
+    public boolean equals(Object object) {
+        if(this == object) return true;
+        if(object == null || object.getClass() != getClass()) return false;
+
+        CooTensor src2 = (CooTensor) object;
+
+        return SparseFieldEquals.tensorEquals(this, src2);
     }
 }

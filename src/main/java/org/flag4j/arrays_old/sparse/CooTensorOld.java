@@ -804,7 +804,7 @@ public class CooTensorOld
      * @return A matrix of shape {@code matShape} with the values of this tensor.
      */
     public CooMatrixOld toMatrix(Shape matShape) {
-        ParameterChecks.ensureRank(2, matShape);
+        ParameterChecks.ensureRank(matShape, 2);
         CooTensorOld t = reshape(matShape); // Reshape as rank 2 tensor. Broadcastable check made here.
         int[][] tIndices = RealDenseTranspose.standardIntMatrix(t.indices);
 

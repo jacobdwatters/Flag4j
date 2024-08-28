@@ -32,6 +32,7 @@ import org.flag4j.operations.dense.real.AggregateDenseReal;
 import org.flag4j.operations.dense.real.RealDenseElemMult;
 import org.flag4j.operations.dense.real.RealDenseOperations;
 import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.util.Arrays;
@@ -43,8 +44,8 @@ import java.util.Arrays;
  * <p>The entries of PrimitiveDoubleTensorBase's are mutable but the tensor has a fixed shape.</p>
  *
  * @param <T> Type of this tensor.
- * @param <U> Type of a dense tensor equivalent to {@code T}. If {@code T} is dense, then this should be the same type as {@code T}.
- * This type parameter is required becase some operations (e.g. {@link #tensorDot(TensorOverSemiRing)}) between two sparse
+ * @param <U> Type of dense tensor equivalent to {@code T}. If {@code T} is dense, then this should be the same type as {@code T}.
+ * This type parameter is required because some operations (e.g. {@link #tensorDot(TensorOverSemiRing)}) between two sparse
  * tensors result in a dense tensor.
  */
 public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorBase<T, U>,
@@ -131,9 +132,9 @@ public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorB
 
 
     /**
-     * Subtracts a sclar value from each entry of this tensor.
+     * Subtracts a scalar value from each entry of this tensor.
      *
-     * @param b Scalar value in differencce.
+     * @param b Scalar value in difference.
      *
      * @return The difference of this tensor and the scalar {@code b}.
      */
@@ -144,9 +145,9 @@ public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorB
 
 
     /**
-     * Subtracts a sclar value from each entry of this tensor and stores the result in this tensor.
+     * Subtracts a scalar value from each entry of this tensor and stores the result in this tensor.
      *
-     * @param b Scalar value in differencce.
+     * @param b Scalar value in difference.
      */
     @Override
     public void subEq(Double b) {
@@ -156,7 +157,7 @@ public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorB
 
 
     /**
-     * Adds a sclar field value to each entry of this tensor.
+     * Adds a scalar field value to each entry of this tensor.
      *
      * @param b Scalar field value in sum.
      *
@@ -169,7 +170,7 @@ public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorB
 
 
     /**
-     * Adds a sclar value to each entry of this tensor and stores the result in this tensor.
+     * Adds a scalar value to each entry of this tensor and stores the result in this tensor.
      *
      * @param b Scalar field value in sum.
      */
@@ -198,7 +199,7 @@ public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorB
 
 
     /**
-     * Multiplies a sclar value to each entry of this tensor.
+     * Multiplies a scalar value to each entry of this tensor.
      *
      * @param b Scalar value in product.
      *
@@ -211,7 +212,7 @@ public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorB
 
 
     /**
-     * Multiplies a sclar value to each entry of this tensor and stores the result in this tensor.
+     * Multiplies a scalar value to each entry of this tensor and stores the result in this tensor.
      *
      * @param b Scalar value in product.
      */
@@ -266,51 +267,9 @@ public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorB
 
 
     /**
-     * Computes the tensor contraction of this tensor with a specified tensor over the specified axes. If {@code axes=N}, then
-     * the product sums will be computed along the last {@code N} dimensions of this tensor and the first {@code N} dimensions of
-     * the {@code src2} tensor.
-     *
-     * @param src2 TensorOld to contract with this tensor.
-     * @param axes Axes specifying the number of axes to compute the tensor dot product over. If {@code axes=N}, then
-     * the product sums will be computed along the last {@code N} dimensions of this tensor and the first {@code N}
-     * dimensions of.
-     *
-     * @return The tensor dot product over the specified axes.
-     *
-     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes {@code aAxis}
-     *                                  and {@code bAxis}.
-     * @throws IllegalArgumentException If either axis is out of bounds of the corresponding tensor.
-     */
-    @Override
-    public U tensorDot(T src2, int axes) {
-        return super.tensorDot(src2, axes);
-    }
-
-
-    /**
-     * Computes the tensor contraction of this tensor with a specified tensor over the specified axes. That is,
-     * computes the sum of products between the two tensors along the specified axes.
-     *
-     * @param src2 TensorOld to contract with this tensor.
-     * @param aAxis Axis along which to compute products for this tensor.
-     * @param bAxis Axis along which to compute products for {@code src2} tensor.
-     *
-     * @return The tensor dot product over the specified axes.
-     *
-     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes {@code aAxis}
-     *                                  and {@code bAxis}.
-     * @throws IllegalArgumentException If either axis is out of bounds of the corresponding tensor.
-     */
-    @Override
-    public U tensorDot(T src2, int aAxis, int bAxis) {
-        return super.tensorDot(src2, aAxis, bAxis);
-    }
-
-
-    /**
      * <p>Computes the generalized trace of this tensor along the specified axes.</p>
      *
-     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays_old of this tensor specifieed by
+     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays_old of this tensor specified by
      * {@code axis1} and {@code axis2}. The shape of the resulting tensor is equal to this tensor with the
      * {@code axis1} and {@code axis2} removed.</p>
      *
@@ -321,10 +280,12 @@ public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorB
      * {@code this.getRank() - 2} with the same shape as this tensor but with {@code axis1} and {@code axis2} removed.
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
      * @throws IllegalArgumentException If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
-     * (i.e. the axes are equal or the tesnor does not have the same length along the two axes.)
+     * (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override
     public T tensorTr(int axis1, int axis2) {
+        if(rank == 1) throw new LinearAlgebraException("Tensor trace cannot be computed for a rank 1 tensor " +
+                "(must be rank 2 or " + "greater).");
         ParameterChecks.ensureNotEquals(axis1, axis2);
         ParameterChecks.ensureValidIndices(getRank(), axis1, axis2);
         ParameterChecks.ensureEquals(shape.get(axis1), shape.get(axis2));
@@ -422,7 +383,7 @@ public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorB
 
 
     /**
-     * Computes the transpose of a tensor by exchanging the first and last axes of this tensor..
+     * Computes the transpose of a tensor by exchanging the first and last axes of this tensor.
      *
      * @return The transpose of this tensor.
      *
@@ -467,7 +428,7 @@ public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorB
      * @param axis1 First axis to exchange and conjugate.
      * @param axis2 Second axis to exchange and conjugate.
      *
-     * @return The conjugate transpose of this tensor acording to the specified axes.
+     * @return The conjugate transpose of this tensor according to the specified axes.
      *
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
      * @see #H()
@@ -672,11 +633,11 @@ public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorB
 
 
     /**
-     * Computes the sclar multiplication between this tensor and the specified scalar {@code factor}.
+     * Computes the scalar multiplication between this tensor and the specified scalar {@code factor}.
      *
      * @param factor Scalar factor to apply to this tensor.
      *
-     * @return The sclar product of this tensor and {@code factor}.
+     * @return The scalar product of this tensor and {@code factor}.
      */
     @Override
     public T mult(double factor) {

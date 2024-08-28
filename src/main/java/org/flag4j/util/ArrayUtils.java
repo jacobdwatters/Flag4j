@@ -165,6 +165,24 @@ public final class ArrayUtils {
 
 
     /**
+     * Checks if two primitive 2D integer arrays are element-wise equal.
+     * @param src1 First array in comparison.
+     * @param src2 Second array in comparison.
+     * @return The
+     */
+    public static boolean deepEquals(int[][] src1, int[][] src2) {
+        if(src1 == src2) return true;
+        if(src1 == null || src2 == null) return false;
+        if(src1.length != src2.length) return false;
+
+        for(int i = 0; i < src1.length; i++)
+            if(!Arrays.equals(src1[i], src2[i])) return false;
+
+        return true;
+    }
+
+
+    /**
      * Performs an array copy similar to {@link System#arraycopy(Object, int, Object, int, int)} but creates a deep copy
      * of each element in the source array.
      *

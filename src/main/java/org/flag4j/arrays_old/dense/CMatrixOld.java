@@ -3292,7 +3292,7 @@ public class CMatrixOld
      * @throws IllegalArgumentException If the specified shape is not rank 2.
      */
     public static CMatrixOld I(Shape shape) {
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
         return I(shape.get(0), shape.get(1));
     }
 

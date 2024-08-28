@@ -35,7 +35,7 @@ import java.math.RoundingMode;
  * <p>A complex number stored in rectangular form and backed by two 32-bit floating point number (one for the real and one for the
  * imaginary component).</p>
  *
- * <p>Some computations are carried out in 64-bit floating point arithmitic (e.g. magnitude computation).</p>
+ * <p>Some computations are carried out in 64-bit floating point arithmetic (e.g. magnitude computation).</p>
  *
  * <p>Complex64 numbers are Immutable.</p>
  */
@@ -262,7 +262,7 @@ public class Complex64 implements Field<Complex64> {
 
 
     /**
-     * Computes the sum of all entires of specified array.
+     * Computes the sum of all entries of specified array.
      * @param values Values to compute product of.
      * @return The sum of all values in {@code values}.
      */
@@ -307,11 +307,11 @@ public class Complex64 implements Field<Complex64> {
 
 
     /**
-     * <p>Checks if this value is a multiplicitive identity for this semi-ring.</p>
+     * <p>Checks if this value is a multiplicative identity for this semi-ring.</p>
      *
-     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     * <p>An element 1 is a multiplicative identity if a * 1 = a for any a in the semi-ring.</p>
      *
-     * @return True if this value is a multiplicitive identity for this semi-ring. Otherwise, false.
+     * @return True if this value is a multiplicative identity for this semi-ring. Otherwise, false.
      */
     @Override
     public boolean isOne() {
@@ -333,11 +333,11 @@ public class Complex64 implements Field<Complex64> {
 
 
     /**
-     * <p>Gets the multiplicitive identity for this semi-ring.</p>
+     * <p>Gets the multiplicative identity for this semi-ring.</p>
      *
-     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     * <p>An element 1 is a multiplicative identity if a * 1 = a for any a in the semi-ring.</p>
      *
-     * @return The multiplicitive identity for this semi-ring.
+     * @return The multiplicative identity for this semi-ring.
      */
     @Override
     public Complex64 getOne() {
@@ -392,7 +392,7 @@ public class Complex64 implements Field<Complex64> {
 
 
     /**
-     * Computes the quotient of a element of this field and a real number.
+     * Computes the quotient of an element of this field and a real number.
      *
      * @param b Real number quotient.
      *
@@ -443,7 +443,7 @@ public class Complex64 implements Field<Complex64> {
 
     /**
      * Computes the magnitude of this field element.
-     * @return The magniitude of this field element.
+     * @return The magnitude of this field element.
      */
     @Override
     public double mag() {
@@ -488,10 +488,10 @@ public class Complex64 implements Field<Complex64> {
             float mag = (float) mag();
             float factor = im / Math.abs(im);
 
-            float sqrtrRe = (float) Math.sqrt((mag + this.re)/2);
+            float sqrtRe = (float) Math.sqrt((mag + this.re)/2);
             float sqrtIm = factor*((float) Math.sqrt((mag - this.re)/2));
 
-            result = new Complex64(sqrtrRe, sqrtIm);
+            result = new Complex64(sqrtRe, sqrtIm);
         }
 
         return result;
@@ -509,9 +509,9 @@ public class Complex64 implements Field<Complex64> {
 
 
     /**
-     * <p>Computes the addative inverse for an element of this field.</p>
+     * <p>Computes the additive inverse for an element of this field.</p>
      *
-     * <p>An element -x is an addative inverse for a filed element x if -x + x = 0 where 0 is the addative identity..</p>
+     * <p>An element -x is an additive inverse for a filed element x if -x + x = 0 where 0 is the additive identity..</p>
      *
      * @return The additive inverse for this field element.
      */
@@ -1079,13 +1079,13 @@ public class Complex64 implements Field<Complex64> {
 
     /**
      * Compares this element of the field with {@code b}.
-     * @param b Second elemetn of the field.
+     * @param b Second element of the field.
      * @return An int value:
      * <ul>
      *     <li>0 if this field element is equal to {@code b} in magnitude.</li>
      *     <li>< 0 if this field element is less than {@code b} in magnitude.</li>
      *     <li>> 0 if this field element is greater than {@code b} in magnitude.</li>
-     *     Hence, this method returns zero if and only if the two field elemetns are equal in magnitude, a negative value if and
+     *     Hence, this method returns zero if and only if the two field elements are equal in magnitude, a negative value if and
      *     only the field element it was called on is less than {@code b} in magnitude and positive if and only if the field
      *     element it was called on is greater than {@code b} in magnitude.
      * </ul>

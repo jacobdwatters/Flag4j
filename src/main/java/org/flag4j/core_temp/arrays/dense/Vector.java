@@ -27,25 +27,29 @@ package org.flag4j.core_temp.arrays.dense;
 import org.flag4j.core.Shape;
 import org.flag4j.core_temp.PrimitiveDoubleTensorBase;
 import org.flag4j.core_temp.VectorMatrixOpsMixin;
-import org.flag4j.core_temp.VectorMixin;
+import org.flag4j.core_temp.arrays.sparse.CooVector;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.operations.dense.real.RealDenseTensorDot;
 import org.flag4j.operations.dense.real.RealDenseVectorOperations;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.LinearAlgebraException;
+import org.flag4j.util.exceptions.TensorShapeException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * <p>A dense vector backed by a primitive double array.</p>
  *
  * <p>Vectors are 1D tensors (i.e. rank 1 tensor).</p>
  *
- * <p>Vectors have mutable entries but a fixed size.</p>
+ * <p>Vectors have mutable entries but are fixed in size.</p>
  */
 public class Vector extends PrimitiveDoubleTensorBase<Vector, Vector>
-        implements VectorMixin<Vector, Double>,
+        implements DenseVectorMixin<Vector, CooVector, Double>,
         VectorMatrixOpsMixin<Vector, Matrix> {
+    // TODO: Add equals(), hashcode(), and toString() methods for all tensor objects.
 
     /**
      * The size of this vector. That is, the number of entries in this vector.
@@ -60,10 +64,92 @@ public class Vector extends PrimitiveDoubleTensorBase<Vector, Vector>
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-    protected Vector(Shape shape, double[] entries) {
+    public Vector(Shape shape, double[] entries) {
         super(shape, entries);
-        ParameterChecks.ensureRank(1, shape);
+        ParameterChecks.ensureRank(shape, 1);
         size = shape.get(0);
+    }
+
+
+    /**
+     * Creates a vector of specified size filled with zeros.
+     * @param size Size of the vector.
+     */
+    public Vector(int size) {
+        super(new Shape(size), new double[size]);
+        this.size = shape.get(0);
+    }
+
+
+    /**
+     * Creates a vector of specified size filled with a specified value.
+     * @param size Size of the vector.
+     * @param fillValue Value to fill vector with.
+     */
+    public Vector(int size, double fillValue) {
+        super(new Shape(size), new double[size]);
+        Arrays.fill(super.entries, fillValue);
+        this.size = shape.get(0);
+    }
+
+
+    /**
+     * Creates a vector of the specified shape filled with zeros.
+     * @param shape Shape of this vector.
+     * @throws IllegalArgumentException If the shapes is not rank 1.
+     */
+    public Vector(Shape shape) {
+        super(shape, new double[shape.get(0)]);
+        ParameterChecks.ensureRank(shape, 1);
+        this.size = shape.get(0);
+    }
+
+
+    /**
+     * Creates a vector of specified size filled with a specified value.
+     * @param shape Shape of the vector.
+     * @param fillValue Value to fill vector with.
+     * @throws IllegalArgumentException If the shapes is not rank 1.
+     */
+    public Vector(Shape shape, double fillValue) {
+        super(shape, new double[shape.get(0)]);
+        ParameterChecks.ensureRank(shape, 1);
+        Arrays.fill(super.entries, fillValue);
+        this.size = shape.get(0);
+    }
+
+
+    /**
+     * Creates a vector with specified entries.
+     * @param entries Entries for this column vector.
+     */
+    public Vector(double... entries) {
+        super(new Shape(entries.length), entries.clone());
+        this.size = shape.get(0);
+    }
+
+
+    /**
+     * Creates a vector with specified entries.
+     * @param entries Entries for this column vector.
+     */
+    public Vector(int... entries) {
+        super(new Shape(entries.length), new double[entries.length]);
+        this.size = shape.get(0);
+
+        for(int i=0; i<entries.length; i++) {
+            super.entries[i] = entries[i];
+        }
+    }
+
+
+    /**
+     * Creates a vector from another vector. This essentially copies the vector.
+     * @param a Vector to make copy of.
+     */
+    public Vector(Vector a) {
+        super(a.shape, a.entries.clone());
+        this.size = shape.get(0);
     }
 
 
@@ -120,7 +206,7 @@ public class Vector extends PrimitiveDoubleTensorBase<Vector, Vector>
      * @param axis1 First axis to exchange and conjugate.
      * @param axis2 Second axis to exchange and conjugate.
      *
-     * @return The conjugate transpose of this tensor acording to the specified axes.
+     * @return The conjugate transpose of this tensor according to the specified axes.
      *
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
      * @see #H()
@@ -156,7 +242,7 @@ public class Vector extends PrimitiveDoubleTensorBase<Vector, Vector>
      * Constructs a tensor of the same type as this tensor with the given the shape and entries.
      *
      * @param shape Shape of the tensor to construct.
-     * @param entries Entires of the tensor to construct.
+     * @param entries Entries of the tensor to construct.
      *
      * @return A tensor of the same type as this tensor with the given the shape and entries.
      */
@@ -167,95 +253,13 @@ public class Vector extends PrimitiveDoubleTensorBase<Vector, Vector>
 
 
     /**
-     * Creates a vector of specified size filled with zeros.
-     * @param size Size of the vector.
-     */
-    public Vector(int size) {
-        super(new Shape(size), new double[size]);
-        this.size = shape.get(0);
-    }
-
-
-    /**
-     * Creates a vector of specified size filled with a specified value.
-     * @param size Size of the vector.
-     * @param fillValue Value to fill vector with.
-     */
-    public Vector(int size, double fillValue) {
-        super(new Shape(size), new double[size]);
-        Arrays.fill(super.entries, fillValue);
-        this.size = shape.get(0);
-    }
-
-
-    /**
-     * Creates a vector of the specified shape filled with zeros.
-     * @param shape Shape of this vector.
-     * @throws IllegalArgumentException If the shapes is not rank 1.
-     */
-    public Vector(Shape shape) {
-        super(shape, new double[shape.get(0)]);
-        ParameterChecks.ensureRank(1, shape);
-        this.size = shape.get(0);
-    }
-
-
-    /**
-     * Creates a vector of specified size filled with a specified value.
-     * @param shape Shape of the vector.
-     * @param fillValue Value to fill vector with.
-     * @throws IllegalArgumentException If the shapes is not rank 1.
-     */
-    public Vector(Shape shape, double fillValue) {
-        super(shape, new double[shape.get(0)]);
-        ParameterChecks.ensureRank(1, shape);
-        Arrays.fill(super.entries, fillValue);
-        this.size = shape.get(0);
-    }
-
-
-    /**
-     * Creates a vector with specified entries.
-     * @param entries Entries for this column vector.
-     */
-    public Vector(double... entries) {
-        super(new Shape(entries.length), entries.clone());
-        this.size = shape.get(0);
-    }
-
-
-    /**
-     * Creates a vector with specified entries.
-     * @param entries Entries for this column vector.
-     */
-    public Vector(int... entries) {
-        super(new Shape(entries.length), new double[entries.length]);
-        this.size = shape.get(0);
-
-        for(int i=0; i<entries.length; i++) {
-            super.entries[i] = entries[i];
-        }
-    }
-
-
-    /**
-     * Creates a vector from another vector. This essentially copies the vector.
-     * @param a Vector to make copy of.
-     */
-    public Vector(Vector a) {
-        super(a.shape, a.entries.clone());
-        this.size = shape.get(0);
-    }
-
-
-    /**
      * Repeats a vector {@code n} times along a certain axis to create a matrix.
      *
      * @param n Number of times to repeat vector.
      * @param axis Axis along which to repeat vector:
      * <ul>
      *     <li>If {@code axis=0}, then the vector will be treated as a row vector and stacked vertically {@code n} times.</li>
-     *     <li>If {@code axis=1} then the vector will be treated as a column vector and stacked horizontaly {@code n} times.</li>
+     *     <li>If {@code axis=1} then the vector will be treated as a column vector and stacked horizontally {@code n} times.</li>
      * </ul>
      *
      * @return A matrix whose rows/columns are this vector repeated.
@@ -422,9 +426,25 @@ public class Vector extends PrimitiveDoubleTensorBase<Vector, Vector>
 
 
     /**
-     * Computes the euclidian norm of this vector.
+     * <p>Computes the dot product between two vectors.</p>
      *
-     * @return The euclidian norm of this vector.
+     * @param b Second vector in the dot product.
+     *
+     * @return The dot product between this vector and the vector {@code b}.
+     *
+     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of entries.
+     * @see #inner(Vector) 
+     */
+    @Override
+    public Double dot(Vector b) {
+        return inner(b);
+    }
+
+
+    /**
+     * Computes the Euclidean norm of this vector.
+     *
+     * @return The Euclidean norm of this vector.
      */
     @Override
     public double norm() {
@@ -437,7 +457,7 @@ public class Vector extends PrimitiveDoubleTensorBase<Vector, Vector>
      *
      * @param p {@code p} value in the p-norm.
      *
-     * @return The euclidian norm of this vector.
+     * @return The Euclidean norm of this vector.
      */
     @Override
     public double norm(int p) {
@@ -557,7 +577,7 @@ public class Vector extends PrimitiveDoubleTensorBase<Vector, Vector>
      * @param axis1 First axis to exchange.
      * @param axis2 Second axis to exchange.
      *
-     * @return The transpose of this tensor acording to the specified axes.
+     * @return The transpose of this tensor according to the specified axes.
      *
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
      * @see #T()
@@ -588,5 +608,121 @@ public class Vector extends PrimitiveDoubleTensorBase<Vector, Vector>
     public Vector T(int... axes) {
         if(axes.length == 1 && axes[0] == 0) return copy();
         else throw new LinearAlgebraException(String.format("Cannot transpose axes %s of tensor with rank 1.", Arrays.toString(axes)));
+    }
+
+
+    /**
+     * Converts this dense tensor to an equivalent sparse COO tensor.
+     *
+     * @return A sparse COO tensor equivalent to this dense tensor.
+     */
+    @Override
+    public CooVector toCoo() {
+        // Estimate sparsity.
+        List<Double> nonZeroEntries = new ArrayList<>((int) (entries.length*0.5));
+        List<Integer> indices = new ArrayList<>((int) (entries.length*0.5));
+
+        // Fill entries with non-zero values.
+        for(int i=0; i<entries.length; i++) {
+            if(entries[i] != 0d) {
+                nonZeroEntries.add(entries[i]);
+                indices.add(i);
+            }
+        }
+
+        return new CooVector(size, nonZeroEntries, indices);
+    }
+
+
+    /**
+     * Computes the element-wise multiplication of two tensors and stores the result in this tensor.
+     *
+     * @param b Second tensor in the element-wise product.
+     *
+     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     */
+    @Override
+    public void elemMultEq(Vector b) {
+        for(int i=0; i<size; i++)
+            entries[i] *= b.entries[i];
+    }
+
+
+    /**
+     * Computes the element-wise sum between two tensors and stores the result in this tensor.
+     *
+     * @param b Second tensor in the element-wise sum.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
+     */
+    @Override
+    public void addEq(Vector b) {
+        for(int i=0; i<size; i++)
+            entries[i] += b.entries[i];
+    }
+
+
+    /**
+     * Computes the element-wise difference between two tensors and stores the result in this tensor.
+     *
+     * @param b Second tensor in the element-wise difference.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
+     */
+    @Override
+    public void subEq(Vector b) {
+        for(int i=0; i<size; i++)
+            entries[i] -= b.entries[i];
+    }
+
+
+    /**
+     * Computes the element-wise division between two tensors and stores the result in this tensor.
+     *
+     * @param b The denominator tensor in the element-wise quotient.
+     *
+     * @throws TensorShapeException If this tensor and {@code b}'s shape are not equal.
+     */
+    @Override
+    public void divEq(Vector b) {
+        for(int i=0; i<size; i++)
+            entries[i] /= b.entries[i];
+    }
+
+
+    /**
+     * Computes the element-wise division between two tensors.
+     *
+     * @param b The denominator tensor in the element-wise quotient.
+     *
+     * @return The element-wise quotient of this tensor and {@code b}.
+     *
+     * @throws TensorShapeException If this tensor and {@code b}'s shape are not equal.
+     */
+    @Override
+    public Vector div(Vector b) {
+        double[] quotient = new double[size];
+
+        for(int i=0; i<size; i++)
+            quotient[i] = this.entries[i] / b.entries[i];
+
+        return new Vector(quotient);
+    }
+
+
+    /**
+     * Checks if an object is equal to this vector object.
+     * @param object Object to check equality with this vector.
+     * @return True if the two vectors have the same shape, are numerically equivalent, and are of type {@link Vector}.
+     * False otherwise.
+     */
+    @Override
+    public boolean equals(Object object) {
+        if(this == object) return true;
+        if(object == null || object.getClass() != getClass()) return false;
+
+        Vector src2 = (Vector) object;
+
+        return shape.equals(src2.shape) && Arrays.equals(entries, src2.entries);
     }
 }

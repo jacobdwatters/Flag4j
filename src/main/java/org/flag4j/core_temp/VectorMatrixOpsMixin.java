@@ -40,7 +40,7 @@ public interface VectorMatrixOpsMixin<T extends VectorMixin, U extends MatrixMix
      * @param axis Axis along which to repeat vector:
      * <ul>
      *     <li>If {@code axis=0}, then the vector will be treated as a row vector and stacked vertically {@code n} times.</li>
-     *     <li>If {@code axis=1} then the vector will be treated as a column vector and stacked horizontaly {@code n} times.</li>
+     *     <li>If {@code axis=1} then the vector will be treated as a column vector and stacked horizontally {@code n} times.</li>
      * </ul>
      *
      * @return A matrix whose rows/columns are this vector repeated.

@@ -86,7 +86,7 @@ public final class TransformField {
      * <p>For example, if the array contains elements [a, b, c, d] and the accumulator is a function
      * which adds elements, the method would compute (((a + b) + c) + d).</p>
      *
-     * @param values The array of field elements to reduce. Cannot be not be empty or null.
+     * @param values The array of field elements to reduce. Cannot be empty or null.
      * @param accumulator The binary operator to combine elements.
      * @return the result of lef-reducing all elements {@code values} using the specified {@code accumulator}.
      * @throws IllegalArgumentException if {@code values} is empty

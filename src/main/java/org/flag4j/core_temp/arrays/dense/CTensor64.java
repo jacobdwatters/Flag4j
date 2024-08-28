@@ -32,6 +32,7 @@ import org.flag4j.core_temp.structures.fields.Complex128;
 import org.flag4j.core_temp.structures.fields.Complex64;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.dense.field_ops.DenseFieldTensorDot;
+import org.flag4j.util.exceptions.ComplexNumberParsingException;
 
 import java.util.Arrays;
 
@@ -98,7 +99,7 @@ public class CTensor64 extends FieldTensorBase<CTensor64, CTensor64, Complex64> 
      * @param axis1 First axis to exchange and conjugate.
      * @param axis2 Second axis to exchange and conjugate.
      *
-     * @return The conjugate transpose of this tensor acording to the specified axes.
+     * @return The conjugate transpose of this tensor according to the specified axes.
      *
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
      * @see #H()
@@ -184,7 +185,7 @@ public class CTensor64 extends FieldTensorBase<CTensor64, CTensor64, Complex64> 
      * @param shape Shape of this tensor.
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
-     * @throws org.flag4j.util.exceptions.ComplexNumberParseingException If any entry in {@code entries} is not a properly formatted
+     * @throws ComplexNumberParsingException If any entry in {@code entries} is not a properly formatted
      * string representation of complex number.
      */
     public CTensor64(Shape shape, String[] entries) {
@@ -216,7 +217,7 @@ public class CTensor64 extends FieldTensorBase<CTensor64, CTensor64, Complex64> 
      * Constructs a tensor of the same type as this tensor with the given the shape and entries.
      *
      * @param shape Shape of the tensor to construct.
-     * @param entries Entires of the tensor to construct.
+     * @param entries Entries of the tensor to construct.
      *
      * @return A tensor of the same type as this tensor with the given the shape and entries.
      */
@@ -263,11 +264,11 @@ public class CTensor64 extends FieldTensorBase<CTensor64, CTensor64, Complex64> 
 
 
     /**
-     * Computes the sclar multiplication between this tensor and the specified scalar {@code factor}.
+     * Computes the scalar multiplication between this tensor and the specified scalar {@code factor}.
      *
      * @param factor Scalar factor to apply to this tensor.
      *
-     * @return The sclar product of this tensor and {@code factor}.
+     * @return The scalar product of this tensor and {@code factor}.
      */
     @Override
     public CTensor64 mult(double factor) {
@@ -304,7 +305,7 @@ public class CTensor64 extends FieldTensorBase<CTensor64, CTensor64, Complex64> 
      * @param axis1 First axis to exchange.
      * @param axis2 Second axis to exchange.
      *
-     * @return The transpose of this tensor acording to the specified axes.
+     * @return The transpose of this tensor according to the specified axes.
      *
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
      * @see #T()

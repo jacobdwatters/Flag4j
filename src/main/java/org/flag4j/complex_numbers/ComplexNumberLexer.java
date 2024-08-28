@@ -25,7 +25,7 @@
 package org.flag4j.complex_numbers;
 
 
-import org.flag4j.util.exceptions.ComplexNumberParseingException;
+import org.flag4j.util.exceptions.ComplexNumberParsingException;
 
 /**
  * A lexer for producing the tokens of a complex number represented as a string.
@@ -224,6 +224,6 @@ class ComplexNumberLexer {
      * @param message - error message to print
      */
     protected static void error( String message ) {
-        throw new ComplexNumberParseingException(message);
+        throw new ComplexNumberParsingException(message);
     }
 }

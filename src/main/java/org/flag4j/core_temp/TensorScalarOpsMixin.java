@@ -52,9 +52,9 @@ public interface TensorScalarOpsMixin<T extends TensorBase<T, ?, ?>, U extends F
 
 
     /**
-     * Computes the sclar multiplication between this tensor and the specified scalar {@code factor}.
+     * Computes the scalar multiplication between this tensor and the specified scalar {@code factor}.
      * @param factor Scalar factor to apply to this tensor.
-     * @return The sclar product of this tensor and {@code factor}.
+     * @return The scalar product of this tensor and {@code factor}.
      */
     public T mult(U factor);
 

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,12 +22,13 @@
  * SOFTWARE.
  */
 
-package org.flag4j.operations.sparse.coo.real;
+package org.flag4j.operations.sparse.coo.field_ops;
 
-
-import org.flag4j.core_temp.arrays.sparse.CooMatrix;
-import org.flag4j.core_temp.arrays.sparse.CooTensor;
-import org.flag4j.core_temp.arrays.sparse.CooVector;
+import org.flag4j.core_temp.arrays.sparse.CooFieldMatrix;
+import org.flag4j.core_temp.arrays.sparse.CooFieldTensor;
+import org.flag4j.core_temp.arrays.sparse.CooFieldVector;
+import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.operations.common.field_ops.CompareField;
 import org.flag4j.operations.common.real.RealProperties;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
@@ -35,12 +36,12 @@ import org.flag4j.util.ErrorMessages;
 import java.util.Arrays;
 
 /**
- * This class contains methods for checking the equality of real sparse tensors.
+ * This utility class contains methods for checking the equality of sparse tensors whose entries are {@link Field field} elements.
  */
-public class RealSparseEquals {
+public final class SparseFieldEquals {
 
-    private RealSparseEquals(){
-        // Hide default constructor for base class.
+    private SparseFieldEquals() {
+        // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
@@ -51,7 +52,7 @@ public class RealSparseEquals {
      * @param b Second tensor in the equality check.
      * @return True if the tensors are equal. False otherwise.
      */
-    public static boolean tensorEquals(CooTensor a, CooTensor b) {
+    public static <T extends Field<T>> boolean tensorEquals(CooFieldTensor<T> a, CooFieldTensor<T> b) {
         // Check indices first to avoid checking entries if possible.
         return a.shape.equals(b.shape)
                 && ArrayUtils.deepEquals(a.indices, b.indices)
@@ -65,7 +66,7 @@ public class RealSparseEquals {
      * @param b Second matrix in the equality check.
      * @return True if the matrices are equal. False otherwise.
      */
-    public static boolean matrixEquals(CooMatrix a, CooMatrix b) {
+    public static <T extends Field<T>> boolean matrixEquals(CooFieldMatrix<T> a, CooFieldMatrix<T> b) {
         // Check indices first to avoid checking entries if possible.
         return a.shape.equals(b.shape)
                 && Arrays.equals(a.rowIndices, b.rowIndices)
@@ -80,7 +81,7 @@ public class RealSparseEquals {
      * @param b Second vector in the equality check.
      * @return True if the vectors are equal. False otherwise.
      */
-    public static boolean vectorEquals(CooVector a, CooVector b) {
+    public static <T extends Field<T>> boolean vectorEquals(CooFieldVector<T> a, CooFieldVector<T> b) {
         // Check indices first to avoid checking entries if possible.
         return a.size == b.size
                 && Arrays.equals(a.indices, b.indices)
@@ -97,12 +98,13 @@ public class RealSparseEquals {
      * @param absTol Absolute tolerance.
      * @return True if all entries are "close". Otherwise, false.
      */
-    public static boolean allCloseMatrix(CooMatrix src1, CooMatrix src2, double relTol, double absTol) {
+    public static <T extends Field<T>> boolean allCloseMatrix(CooFieldMatrix<T> src1, CooFieldMatrix<T> src2,
+                                                              double relTol, double absTol) {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.equals(src1.rowIndices, src2.rowIndices)
                 && Arrays.equals(src1.colIndices, src2.colIndices)
-                && RealProperties.allClose(src1.entries, src2.entries, relTol, absTol);
+                && CompareField.allClose(src1.entries, src2.entries, relTol, absTol);
     }
 
 
@@ -115,11 +117,12 @@ public class RealSparseEquals {
      * @param absTol Absolute tolerance.
      * @return True if all entries are "close". Otherwise, false.
      */
-    public static boolean allCloseTensor(CooTensor src1, CooTensor src2, double relTol, double absTol) {
+    public static <T extends Field<T>> boolean allCloseTensor(CooFieldTensor<T> src1, CooFieldTensor<T> src2,
+                                                              double relTol, double absTol) {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.deepEquals(src1.indices, src2.indices)
-                && RealProperties.allClose(src1.entries, src2.entries, relTol, absTol);
+                && CompareField.allClose(src1.entries, src2.entries, relTol, absTol);
     }
 
 
@@ -132,10 +135,11 @@ public class RealSparseEquals {
      * @param absTol Absolute tolerance.
      * @return True if all entries are "close". Otherwise, false.
      */
-    public static boolean allCloseVector(CooVector src1, CooVector src2, double relTol, double absTol) {
+    public static <T extends Field<T>> boolean allCloseVector(CooFieldVector<T> src1, CooFieldVector<T> src2,
+                                                              double relTol, double absTol) {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.equals(src1.indices, src2.indices)
-                && RealProperties.allClose(src1.entries, src2.entries, relTol, absTol);
+                && CompareField.allClose(src1.entries, src2.entries, relTol, absTol);
     }
 }

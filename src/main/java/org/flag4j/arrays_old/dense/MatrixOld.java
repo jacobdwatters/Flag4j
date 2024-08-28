@@ -234,7 +234,7 @@ public class MatrixOld
      */
     public MatrixOld(Shape shape) {
         super(shape, new double[shape.totalEntries().intValue()]);
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
     }
@@ -249,7 +249,7 @@ public class MatrixOld
     public MatrixOld(Shape shape, double value) {
         super(shape, new double[shape.totalEntries().intValue()]);
         Arrays.fill(super.entries, value);
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
     }
@@ -264,7 +264,7 @@ public class MatrixOld
      */
     public MatrixOld(Shape shape, double[] entries) {
         super(shape, entries);
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
     }
@@ -2783,7 +2783,7 @@ public class MatrixOld
      * @see #I(int, int)
      */
     public static MatrixOld I(Shape shape) {
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
         return I(shape.get(0), shape.get(1));
     }
 

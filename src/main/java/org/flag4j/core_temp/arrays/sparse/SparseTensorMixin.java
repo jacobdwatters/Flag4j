@@ -31,11 +31,11 @@ import org.flag4j.core_temp.arrays.dense.DenseTensorMixin;
  * @param <T> The equivalent dense tensor type.
  * @param <U> The type of this sparse tensor.
  */
-public interface SparseTesnorMixin<T extends DenseTensorMixin<T, U>, U extends SparseTesnorMixin<T, U>> {
+public interface SparseTensorMixin<T extends DenseTensorMixin<T, U>, U extends SparseTensorMixin<T, U>> {
 
 
     /**
-     * The density of this sparse tensor. That is, the precentage of elements in this tensor which are non-zero as a decimal.
+     * The density of this sparse tensor. That is, the percentage of elements in this tensor which are non-zero as a decimal.
      * @return The density of this sparse tensor.
      */
     public default double density() {
@@ -44,15 +44,15 @@ public interface SparseTesnorMixin<T extends DenseTensorMixin<T, U>, U extends S
 
 
     /**
-     * The sparsity of this sparse tensor. That is, the precentage of elements in this tensor which are zero as a decimal.
+     * The sparsity of this sparse tensor. That is, the percentage of elements in this tensor which are zero as a decimal.
      * @return The density of this sparse tensor.
      */
     public double sparsity();
 
 
     /**
-     * Converts this sparse tesnor to an equivalent dense tensor.
-     * @return A dense tesnor equivalent to this sparse tensor.
+     * Converts this sparse tensor to an equivalent dense tensor.
+     * @return A dense tensor equivalent to this sparse tensor.
      */
     public T toDense();
 

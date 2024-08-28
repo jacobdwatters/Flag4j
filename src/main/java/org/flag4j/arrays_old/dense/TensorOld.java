@@ -574,7 +574,7 @@ public class TensorOld
      */
     public MatrixOld toMatrix(Shape matShape) {
         ParameterChecks.ensureBroadcastable(shape, matShape);
-        ParameterChecks.ensureRank(2, matShape);
+        ParameterChecks.ensureRank(matShape, 2);
 
         return new MatrixOld(matShape, entries.clone());
     }

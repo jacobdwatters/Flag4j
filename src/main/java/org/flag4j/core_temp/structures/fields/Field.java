@@ -38,16 +38,16 @@ import org.flag4j.core_temp.structures.rings.SemiRing;
  *  <ul>
  *      <li>Addition and multiplication are associative: a + (b + c) = (a + b) + c and a * (b * c) = (a * b) * c.</li>
  *      <li>Addition and multiplication are commutative: a + b = b + a and a * b = b * a</li>
- *      <li>Existince of additive and multiplicitive identities: There exisits two distinct elements 0 and 1 in <b>F</b> sucht that a + 0 = 0
- *      and a * 1 = 1 (called the addative and multiplicitive identities respectively).</li>
- *      <li>Existince of addative inverse: There exists an element -a in <b>F</b> such that a + (-a) = 0.</li>
- *      <li>Existince of multiplicitive inverse: There exists an element a<sup>-1</sup> in <b>F</b> such that a * a<sup>-1</sup> = 1.</li>
+ *      <li>Existence of additive and multiplicative identities: There exists two distinct elements 0 and 1 in <b>F</b> such that a + 0 = 0
+ *      and a * 1 = 1 (called the additive and multiplicative identities respectively).</li>
+ *      <li>Existence of additive inverse: There exists an element -a in <b>F</b> such that a + (-a) = 0.</li>
+ *      <li>Existence of multiplicative inverse: There exists an element a<sup>-1</sup> in <b>F</b> such that a * a<sup>-1</sup> = 1.</li>
  *      <li>Distributivity of multiplication over addition: a * (b + c) = (a * b) + (a * c).</li>
  *  </ul>
  * </p>
  *
  * <p>Fields are a type of {@link Ring Ring} where multiplication must be
- * commutative and multiplicitive inverses must exists.</p>
+ * commutative and multiplicative inverses must exists.</p>
  *
  * @param <T> Type of the field element.
  * @see Ring
@@ -104,17 +104,17 @@ public interface Field<T extends Field<T>> extends Ring<T> {
 
 
     /**
-     * <p>Computes the multiplicitive inverse for an element of this field.</p>
+     * <p>Computes the multiplicative inverse for an element of this field.</p>
      *
-     * <p>An element x<sup>-1</sup> is a multaplicitive inverse for a filed element x if x<sup>-1</sup>*x = 1 where 1 is the
-     * multiplicitive identity.</p>
+     * <p>An element x<sup>-1</sup> is a multiplicative inverse for a filed element x if x<sup>-1</sup>*x = 1 where 1 is the
+     * multiplicative identity.</p>
      *
-     * @return The multiplicitive inverse for this field element.
+     * @return The multiplicative inverse for this field element.
      */
     public T multInv();
 
 
-    // TODO: It likely does not make sense to define sqrt for a feild. Some finite fields (e.g. integers mod a prime) will not
+    // TODO: It likely does not make sense to define sqrt for a field. Some finite fields (e.g. integers mod a prime) will not
     //  have a square root for every element. This is even true for real numbers.
     /**
      * Computes the square root of this field element.
@@ -131,7 +131,7 @@ public interface Field<T extends Field<T>> extends Ring<T> {
      *     <li>0 if this field element is equal to {@code b}.</li>
      *     <li>< 0 if this field element is less than {@code b}.</li>
      *     <li>> 0 if this field element is greater than {@code b}.</li>
-     *     Hence, this method returns zero if and only if the two field elemetns are equal, a negative value if and only the field
+     *     Hence, this method returns zero if and only if the two field elements are equal, a negative value if and only the field
      *     element it was called on is less than {@code b} and positive if and only if the field element it was called on is greater
      *     than {@code b}.
      * </ul>

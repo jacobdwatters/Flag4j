@@ -50,20 +50,19 @@ public class RealSparseMatrixProperties {
      * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
      */
     public static boolean isIdentity(CooMatrix src) {
-        // Ensure the matrix is square and there are the same number of non-zero entries as entries on the diagonal.
-        boolean result = src.isSquare() && src.entries.length==src.numRows;
+        // Ensure the matrix is square and there are at least the same number of non-zero entries as entries on the diagonal.
+        if(!src.isSquare() || src.entries.length<src.numRows) return false;
 
-        if(result) {
-            for(int i=0; i<src.entries.length; i++) {
-                // Ensure value is 1 and on the diagonal.
-                if(src.entries[i] != 1 || src.rowIndices[i] != i || src.colIndices[i] != i) {
-                    result = false;
-                    break;
-                }
+        for(int i=0, size=src.entries.length; i<size; i++) {
+            // Ensure value is 1 and on the diagonal.
+            if(src.rowIndices[i] != i && src.rowIndices[i] != i && src.entries[i] != 1) {
+                return false;
+            } else if((src.rowIndices[i] != i || src.rowIndices[i] != i) && src.entries[i] != 0) {
+                return false;
             }
         }
 
-        return result;
+        return true; // If we make it to this point the matrix must be an identity matrix.
     }
 
 

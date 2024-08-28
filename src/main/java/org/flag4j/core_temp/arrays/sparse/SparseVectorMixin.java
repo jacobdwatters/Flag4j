@@ -22,24 +22,17 @@
  * SOFTWARE.
  */
 
-package org.flag4j.core_temp;
+package org.flag4j.core_temp.arrays.sparse;
 
-import org.flag4j.core.Shape;
-import org.flag4j.core_temp.structures.fields.Field;
-
+import org.flag4j.core_temp.VectorMixin;
+import org.flag4j.core_temp.arrays.dense.DenseVectorMixin;
 
 /**
- * This interface specifies a binary operation on two dense {@link Field} tensors.
+ * This interface specifies methods which all sparse vectors should implement.
+ * @param <T> Type of this sparse vector.
+ * @param <U> Type of equivalent dense vector.
+ * @param <V> Type (or wrapper of) an individual element in this vector.
  */
-public interface DenseFieldTensorBinaryOperation {
-
-    /**
-     * Applies the specified binary operation on the two dense tensors.
-     * @param src1 Entries of the first tensor.
-     * @param shape1 Shape of the first tensor.
-     * @param src2 Entries of the second tensor.
-     * @param shape2 Shape of the second tensor.
-     * @return The result of applying the specified binary operation to the two tensors.
-     */
-     public <T extends Field<T>> Field<T>[] apply(T[] src1, Shape shape1, T[] src2, Shape shape2);
+public interface SparseVectorMixin<T extends SparseVectorMixin<T, U, V>, U extends DenseVectorMixin<U, T, V>, V>
+        extends VectorMixin<T, V>, SparseTensorMixin<U, T> {
 }

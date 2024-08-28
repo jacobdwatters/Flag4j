@@ -30,7 +30,7 @@ import org.flag4j.core.Shape;
 /**
  * <p>This abstract class defines a tensor whose elements satisfy the axioms of a ring.</p>
  *
- * <p>To allow for primitive types, the elements of this tensor do not neccesarily have to implement
+ * <p>To allow for primitive types, the elements of this tensor do not necessarily have to implement
  * {@link org.flag4j.core_temp.structures.rings.Ring}.</p>
  *
  * <p>Formally, an ring is a set <b>R</b> with the binary operations_old addition (+) and multiplication (*)
@@ -38,15 +38,15 @@ import org.flag4j.core.Shape;
  *  <ul>
  *      <li>Addition and multiplication are associative: a + (b + c) = (a + b) + c and a * (b * c) = (a * b) * c.</li>
  *      <li>Addition is commutative: a + b = b + a</li>
- *      <li>Existince of additive and multiplicitive identities: There exisits two distinct elements 0 and 1 in <b>R</b> sucht that a + 0 = 0
- *      and a * 1 = 1 (called the addative and multiplicitive identities respectively).</li>
- *      <li>Existince of addative inverse: There exists an element -a in <b>R</b> such that a + (-a) = 0.</li>
+ *      <li>Existence of additive and multiplicative identities: There exists two distinct elements 0 and 1 in <b>R</b> such that a + 0 = 0
+ *      and a * 1 = 1 (called the additive and multiplicative identities respectively).</li>
+ *      <li>Existence of additive inverse: There exists an element -a in <b>R</b> such that a + (-a) = 0.</li>
  *      <li>Distributivity of multiplication over addition: a * (b + c) = (a * b) + (a * c).</li>
  *  </ul>
  * </p>
  *
  * @param <T> Type of this tensor.
- * @param <U> Type of a dense tensor equivalent to {@code T}. If {@code T} is dense, then this should be the same type as {@code T}.
+ * @param <U> Type of dense tensor equivalent to {@code T}. If {@code T} is dense, then this should be the same type as {@code T}.
  * This parameter is required because some operations (e.g. {@link #tensorDot(TensorOverRing, int)}) between two sparse tensors
  * result in a dense tensor.
  * @param <V> Storage for entries of this tensor.
@@ -68,9 +68,9 @@ public abstract class TensorOverRing<T extends TensorOverRing<T, U, V, W>,
 
 
     /**
-     * Subtracts a sclar value from each entry of this tensor.
+     * Subtracts a scalar value from each entry of this tensor.
      *
-     * @param b Scalar value in differencce.
+     * @param b Scalar value in difference.
      *
      * @return The difference of this tensor and the scalar {@code b}.
      */
@@ -78,9 +78,9 @@ public abstract class TensorOverRing<T extends TensorOverRing<T, U, V, W>,
 
 
     /**
-     * Subtracts a sclar value from each entry of this tensor and stores the result in this tensor.
+     * Subtracts a scalar value from each entry of this tensor and stores the result in this tensor.
      *
-     * @param b Scalar value in differencce.
+     * @param b Scalar value in difference.
      */
     public abstract void subEq(W b);
 
@@ -126,7 +126,7 @@ public abstract class TensorOverRing<T extends TensorOverRing<T, U, V, W>,
      *
      * @param axis1 First axis to exchange and conjugate.
      * @param axis2 Second axis to exchange and conjugate.
-     * @return The conjugate transpose of this tensor acording to the specified axes.
+     * @return The conjugate transpose of this tensor according to the specified axes.
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
      * @see #H()
      * @see #H(int...)

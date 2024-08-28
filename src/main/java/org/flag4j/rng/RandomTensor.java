@@ -298,7 +298,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
      */
     public MatrixOld randomMatrix(Shape shape) {
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
         return randomMatrix(shape.get(0), shape.get(1));
     }
 
@@ -327,7 +327,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If {@code shape} is not of rank 2.
      */
     public MatrixOld randomMatrix(Shape shape, double min, double max) {
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
         return randomMatrix(shape.get(0), shape.get(1), min, max);
     }
 
@@ -361,7 +361,7 @@ public class RandomTensor {
      * distributed in {@code [min, max)}.
      */
     public CooMatrixOld randomCooMatrix(Shape shape, double min, double max, double sparsity) {
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
 
         int numEntries = new BigDecimal(shape.totalEntries()).multiply(BigDecimal.valueOf(1.0-sparsity))
                 .setScale(0, RoundingMode.HALF_UP).intValueExact();
@@ -436,7 +436,7 @@ public class RandomTensor {
      * distributed in {@code [min, max)}.
      */
     public CsrMatrixOld randomCsrMatrix(Shape shape, double min, double max, double sparsity) {
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
 
         int numEntries = new BigDecimal(shape.totalEntries()).multiply(BigDecimal.valueOf(1.0-sparsity))
                 .setScale(0, RoundingMode.HALF_UP).intValueExact();
@@ -503,7 +503,7 @@ public class RandomTensor {
      * a standard deviation of 1.0.
      */
     public MatrixOld randnMatrix(Shape shape) {
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
         return randnMatrix(shape.get(0), shape.get(1));
     }
 
@@ -535,7 +535,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the standard deviation is negative.
      */
     public MatrixOld randnMatrix(Shape shape, double mean, double std) {
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
         return randnMatrix(shape.get(0), shape.get(1), mean, std);
     }
 
@@ -647,7 +647,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
      */
     public CMatrixOld randomCMatrix(Shape shape) {
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
         return randomCMatrix(shape.get(0), shape.get(1));
     }
 
@@ -680,7 +680,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If {@code shape} is not of rank 2.
      */
     public CMatrixOld randomCMatrix(Shape shape, double min, double max) {
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
         return randomCMatrix(shape.get(0), shape.get(1), min, max);
     }
 
@@ -706,7 +706,7 @@ public class RandomTensor {
      * a standard deviation of 1.0.
      */
     public CMatrixOld randnCMatrix(Shape shape) {
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
         return randnCMatrix(shape.get(0), shape.get(1));
     }
 
@@ -738,7 +738,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the standard deviation is negative.
      */
     public CMatrixOld randnCMatrix(Shape shape, double mean, double std) {
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
         return randnCMatrix(shape.get(0), shape.get(1), mean, std);
     }
 

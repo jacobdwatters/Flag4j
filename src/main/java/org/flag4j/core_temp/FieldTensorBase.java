@@ -39,10 +39,10 @@ import java.util.Arrays;
  * The base class for all tensors whose entries are elements of a {@link Field}.
  *
  * @param <T> The type of this tensor.
- * @param <U> Type of a dense tensor equivalent to {@code T}. If {@code T} is dense, then this should be the same type as {@code T}.
- * This parameter is required becase some operations (e.g. {@link #tensorDot(TensorOverSemiRing, int)}) between two sparse tensors
+ * @param <U> Type of dense tensor equivalent to {@code T}. If {@code T} is dense, then this should be the same type as {@code T}.
+ * This parameter is required because some operations (e.g. {@link #tensorDot(TensorOverSemiRing, int)}) between two sparse tensors
  * result in a dense tensor.
- * @param <V> The type of the {@link Field} for this tensors entries.
+ * @param <V> The type of the {@link Field} for this tensor's entries.
  */
 public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
         U extends FieldTensorBase<U, U, V>, V extends Field<V>> extends TensorOverField<T, U, V[], V> {
@@ -242,9 +242,9 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
 
 
     /**
-     * Divieds each entry of this tensor by a real value.
+     * Divides each entry of this tensor by a real value.
      *
-     * @param b Value to divied each value of this tensor by.
+     * @param b Value to divide each value of this tensor by.
      *
      * @return Quotient of this tensor with {@code b}.
      */
@@ -266,7 +266,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public FieldTensorBase<?, ?, RealFloat64> abs() {
-        // TODO: This return type does not work with sparse tensors.
+        // TODO: This return type does not work with sparse tensors. Need a makeRealTensor method.
         Field<RealFloat64>[] abs = new Field[entries.length];
 
         for(int i=0, size=entries.length; i<size; i++)
@@ -316,7 +316,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
     /**
      * <p>Computes the generalized trace of this tensor along the specified axes.</p>
      *
-     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays_old of this tensor specifieed by
+     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays_old of this tensor specified by
      * {@code axis1} and {@code axis2}. The shape of the resulting tensor is equal to this tensor with the
      * {@code axis1} and {@code axis2} removed.</p>
      *
@@ -326,7 +326,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}.
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
      * @throws IllegalArgumentException If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
-     * (i.e. the axes are equal or the tesnor does not have the same length along the two axes.)
+     * (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override
     public T tensorTr(int axis1, int axis2) {
@@ -394,7 +394,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
 
 
     /**
-     * Adds a sclar field value to each entry of this tensor.
+     * Adds a scalar field value to each entry of this tensor.
      *
      * @param b Scalar field value in sum.
      *
@@ -412,7 +412,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
 
 
     /**
-     * Adds a sclar value to each entry of this tensor and stores the result in this tensor.
+     * Adds a scalar value to each entry of this tensor and stores the result in this tensor.
      *
      * @param b Scalar field value in sum.
      */
@@ -424,9 +424,9 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
 
 
     /**
-     * Subtracts a sclar field value from each entry of this tensor.
+     * Subtracts a scalar field value from each entry of this tensor.
      *
-     * @param b Scalar field value in differencce.
+     * @param b Scalar field value in difference.
      *
      * @return The difference of this tensor and the scalar {@code b}.
      */
@@ -442,9 +442,9 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
 
 
     /**
-     * Subtracts a sclar value from each entry of this tensor and stores the result in this tensor.
+     * Subtracts a scalar value from each entry of this tensor and stores the result in this tensor.
      *
-     * @param b Scalar value in differencce.
+     * @param b Scalar value in difference.
      */
     @Override
     public void subEq(V b) {
@@ -454,7 +454,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
 
 
     /**
-     * Multiplies a sclar field value to each entry of this tensor.
+     * Multiplies a scalar field value to each entry of this tensor.
      *
      * @param b Scalar field value in product.
      *
@@ -472,7 +472,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
 
 
     /**
-     * Multiplies a sclar value to each entry of this tensor and stores the result in this tensor.
+     * Multiplies a scalar value to each entry of this tensor and stores the result in this tensor.
      *
      * @param b Scalar value in product.
      */

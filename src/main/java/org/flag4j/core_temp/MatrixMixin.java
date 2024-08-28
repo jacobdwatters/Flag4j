@@ -30,7 +30,7 @@ import org.flag4j.util.ErrorMessages;
  * @param <T> Type of this matrix.
  * @param <U> Type of dense matrix which is equivalent to {@code T}. If {@code T} is dense, then this should be the same type as
  * {@code T}. This type parameter is required because some operations (even between two sparse matrices) may result in a dense
- * matrix (e.g. matrixmultiplicaiton).
+ * matrix (e.g. matrix multiplication).
  * @param <V> Type (or wrapper) of an element of this matrix.
  */
 public interface MatrixMixin<T extends TensorBase<T, ?, V>, U extends TensorBase<U, ?, V>, V> extends TensorPropertiesMixin<V> {
@@ -301,7 +301,7 @@ public interface MatrixMixin<T extends TensorBase<T, ?, V>, U extends TensorBase
 
 
     /**
-     * Checks if a marix is Hermitian. That is, if the matrix is square and equal to its conjugate transpose.
+     * Checks if a matrix is Hermitian. That is, if the matrix is square and equal to its conjugate transpose.
      * @return True if this matrix is Hermitian. Otherwise, returns false.
      */
     public boolean isHermitian();

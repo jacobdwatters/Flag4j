@@ -25,14 +25,14 @@
 package org.flag4j.core_temp.arrays.dense;
 
 
-import org.flag4j.core_temp.arrays.sparse.SparseTesnorMixin;
+import org.flag4j.core_temp.arrays.sparse.SparseTensorMixin;
 
 /**
  * This interface specifies methods which sparse tensors should implement.
  * @param <T> The equivalent dense tensor type.
  * @param <U> The type of this sparse tensor.
  */
-public interface DenseTensorMixin<T extends DenseTensorMixin<T, U>, U extends SparseTesnorMixin<T, U>> {
+public interface DenseTensorMixin<T extends DenseTensorMixin<T, U>, U extends SparseTensorMixin<T, U>> {
 
 
     /**
@@ -51,7 +51,7 @@ public interface DenseTensorMixin<T extends DenseTensorMixin<T, U>, U extends Sp
 
 
     /**
-     * Computes the element-wise sum between two tensors and stores the result in this tensors.
+     * Computes the element-wise sum between two tensors and stores the result in this tensor.
      * @param b Second tensor in the element-wise sum.
      * @throws org.flag4j.util.exceptions.TensorShapeException If this tensor and {@code b} do not have the same shape.
      */

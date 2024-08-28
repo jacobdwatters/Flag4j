@@ -42,7 +42,7 @@ public final class DenseFieldVectorOperations {
 
 
     /**
-     * Computes the vector inner product for two complex vectors.
+     * Computes the vector inner product for twovectors.
      * @param src1 Entries of the first vector.
      * @param src2 Entries of the second vector.
      * @return The inner product of the two vectors.
@@ -53,6 +53,23 @@ public final class DenseFieldVectorOperations {
 
         for(int i=0, size=src1.length; i<size; i++)
             innerProd = innerProd.add(src1[i].mult(src2[i].conj()));
+
+        return innerProd;
+    }
+
+
+    /**
+     * Computes the vector dot product for two vectors.
+     * @param src1 Entries of the first vector.
+     * @param src2 Entries of the second vector.
+     * @return The dot product of the two vectors.
+     */
+    public static <T extends Field<T>> T dotProduct(T[] src1, T[] src2) {
+        ParameterChecks.ensureArrayLengthsEq(src1.length, src2.length);
+        T innerProd = src1[0].getZero();
+
+        for(int i=0, size=src1.length; i<size; i++)
+            innerProd = innerProd.add(src1[i].mult(src2[i]));
 
         return innerProd;
     }

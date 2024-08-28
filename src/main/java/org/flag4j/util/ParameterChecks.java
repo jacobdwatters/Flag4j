@@ -428,11 +428,13 @@ public final class ParameterChecks {
 
     /**
      * Checks that a shape has the specified rank.
-     * @param expRank Expected rank.
+     *
      * @param shape Shape to check.
+     * @param expRank Expected rank.
+     *
      * @throws LinearAlgebraException If the specified shape does not have the expected rank.
      */
-    public static void ensureRank(int expRank, Shape shape) {
+    public static void ensureRank(Shape shape, int expRank) {
         if(shape.getRank() != expRank) {
             throw new LinearAlgebraException(ErrorMessages.shapeRankErr(shape.getRank(), expRank));
         }

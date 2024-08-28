@@ -129,11 +129,11 @@ public class RealFloat64 implements Field<RealFloat64> {
 
 
     /**
-     * <p>Checks if this value is a multiplicitive identity for this semi-ring.</p>
+     * <p>Checks if this value is a multiplicative identity for this semi-ring.</p>
      *
-     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     * <p>An element 1 is a multiplicative identity if a * 1 = a for any a in the semi-ring.</p>
      *
-     * @return True if this value is a multiplicitive identity for this semi-ring. Otherwise, false.
+     * @return True if this value is a multiplicative identity for this semi-ring. Otherwise, false.
      */
     @Override
     public boolean isOne() {
@@ -155,11 +155,11 @@ public class RealFloat64 implements Field<RealFloat64> {
 
 
     /**
-     * <p>Gets the multiplicitive identity for this semi-ring.</p>
+     * <p>Gets the multiplicative identity for this semi-ring.</p>
      *
-     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     * <p>An element 1 is a multiplicative identity if a * 1 = a for any a in the semi-ring.</p>
      *
-     * @return The multiplicitive identity for this semi-ring.
+     * @return The multiplicative identity for this semi-ring.
      */
     @Override
     public RealFloat64 getOne() {
@@ -231,12 +231,12 @@ public class RealFloat64 implements Field<RealFloat64> {
 
 
     /**
-     * <p>Computes the multiplicitive inverse for an element of this field.</p>
+     * <p>Computes the multiplicative inverse for an element of this field.</p>
      *
-     * <p>An element x<sup>-1</sup> is a multaplicitive inverse for a filed element x if x<sup>-1</sup>*x = 1 where 1 is the
-     * multiplicitive identity.</p>
+     * <p>An element x<sup>-1</sup> is a multiplicative inverse for a filed element x if x<sup>-1</sup>*x = 1 where 1 is the
+     * multiplicative identity.</p>
      *
-     * @return The multiplicitive inverse for this field element.
+     * @return The multiplicative inverse for this field element.
      */
     @Override
     public RealFloat64 multInv() {
@@ -245,9 +245,9 @@ public class RealFloat64 implements Field<RealFloat64> {
 
 
     /**
-     * <p>Computes the addative inverse for an element of this field.</p>
+     * <p>Computes the additive inverse for an element of this field.</p>
      *
-     * <p>An element -x is an addative inverse for a filed element x if -x + x = 0 where 0 is the addative identity..</p>
+     * <p>An element -x is an additive inverse for a filed element x if -x + x = 0 where 0 is the additive identity..</p>
      *
      * @return The additive inverse for this field element.
      */
@@ -260,7 +260,7 @@ public class RealFloat64 implements Field<RealFloat64> {
     /**
      * Computes the magnitude of this field element.
      *
-     * @return The magniitude of this field element.
+     * @return The magnitude of this field element.
      */
     @Override
     public double mag() {
@@ -282,7 +282,7 @@ public class RealFloat64 implements Field<RealFloat64> {
     /**
      * Evaluates the signum or sign function on a field element.
      *
-     * @param a Value to evalute signum funciton on.
+     * @param a Value to evaluate signum function on.
      * @return The output of the signum function evaluated on {@code a}.
      */
     public static RealFloat64 sgn(RealFloat64 a) {
@@ -293,14 +293,14 @@ public class RealFloat64 implements Field<RealFloat64> {
     /**
      * Compares this element of the ordered field with {@code b}.
      *
-     * @param b Second elemetn of the ordered field.
+     * @param b Second element of the ordered field.
      *
      * @return An int value:
      * <ul>
      *     <li>0 if this field element is equal to {@code b}.</li>
      *     <li>< 0 if this field element is less than {@code b}.</li>
      *     <li>> 0 if this field element is greater than {@code b}.</li>
-     *     Hence, this method returns zero if and only if the two field elemetns are equal, a negative value if and only the field
+     *     Hence, this method returns zero if and only if the two field elements are equal, a negative value if and only the field
      *     element it was called on is less than {@code b} and positive if and only if the field element it was called on is greater
      *     than {@code b}.
      * </ul>
@@ -345,7 +345,7 @@ public class RealFloat64 implements Field<RealFloat64> {
 
 
     /**
-     * Computes the product of all entires of specified array.
+     * Computes the product of all entries of specified array.
      * @param values Values to compute product of.
      * @return The product of all values in {@code values}.
      */
@@ -365,7 +365,7 @@ public class RealFloat64 implements Field<RealFloat64> {
 
 
     /**
-     * Computes the sum of all entires of specified array.
+     * Computes the sum of all entries of specified array.
      * @param values Values to compute product of.
      * @return The sum of all values in {@code values}.
      */

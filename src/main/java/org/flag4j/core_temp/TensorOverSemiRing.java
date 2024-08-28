@@ -32,7 +32,7 @@ import org.flag4j.util.ArrayUtils;
 /**
  * <p>This abstract class defines a tensor whose elements satisfy the axioms of a semi-ring.</p>
  *
- * <p>To allow for primitive types, the elements of this tensor do not neccesarily have to implement
+ * <p>To allow for primitive types, the elements of this tensor do not necessarily have to implement
  * {@link org.flag4j.core_temp.structures.rings.SemiRing}.</p>
  *
  * <p>Formally, an semi-ring is a set <b>R</b> with the binary operations_old addition (+) and multiplication (*)
@@ -40,14 +40,14 @@ import org.flag4j.util.ArrayUtils;
  *  <ul>
  *      <li>Addition and multiplication are associative: a + (b + c) = (a + b) + c and a * (b * c) = (a * b) * c.</li>
  *      <li>Addition is commutative: a + b = b + a</li>
- *      <li>Existince of additive and multiplicitive identities: There exisits two distinct elements 0 and 1 in <b>R</b> sucht that a + 0 = 0
- *      and a * 1 = 1 (called the addative and multiplicitive identities respectively).</li>
+ *      <li>Existence of additive and multiplicative identities: There exists two distinct elements 0 and 1 in <b>R</b> such that a + 0 = 0
+ *      and a * 1 = 1 (called the additive and multiplicative identities respectively).</li>
  *      <li>Distributivity of multiplication over addition: a * (b + c) = (a * b) + (a * c).</li>
  *  </ul>
  * </p>
  *
  * @param <T> Type of this tensor.
- * @param <U> Type of a dense tensor equivalent to {@code T}. If {@code T} is dense, then this should be the same type as {@code T}.
+ * @param <U> Type of dense tensor equivalent to {@code T}. If {@code T} is dense, then this should be the same type as {@code T}.
  * This parameter required because some operations (e.g. {@link #tensorDot(TensorOverSemiRing, int)}) between two sparse tensors
  * result in
  * a dense tensor.
@@ -71,7 +71,7 @@ public abstract class TensorOverSemiRing<T extends TensorOverSemiRing<T, U, V, W
 
 
     /**
-     * Adds a sclar value to each entry of this tensor.
+     * Adds a scalar value to each entry of this tensor.
      *
      * @param b Scalar field value in sum.
      *
@@ -81,7 +81,7 @@ public abstract class TensorOverSemiRing<T extends TensorOverSemiRing<T, U, V, W
 
 
     /**
-     * Adds a sclar value to each entry of this tensor and stores the result in this tensor.
+     * Adds a scalar value to each entry of this tensor and stores the result in this tensor.
      *
      * @param b Scalar field value in sum.
      */
@@ -98,7 +98,7 @@ public abstract class TensorOverSemiRing<T extends TensorOverSemiRing<T, U, V, W
 
 
     /**
-     * Multiplies a sclar value to each entry of this tensor.
+     * Multiplies a scalar value to each entry of this tensor.
      *
      * @param b Scalar value in product.
      *
@@ -108,7 +108,7 @@ public abstract class TensorOverSemiRing<T extends TensorOverSemiRing<T, U, V, W
 
 
     /**
-     * Multiplies a sclar value to each entry of this tensor and stores the result in this tensor.
+     * Multiplies a scalar value to each entry of this tensor and stores the result in this tensor.
      *
      * @param b Scalar value in product.
      */
@@ -194,7 +194,7 @@ public abstract class TensorOverSemiRing<T extends TensorOverSemiRing<T, U, V, W
     /**
      * <p>Computes the generalized tensor trace of this tensor along first and second axes.</p>
      *
-     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays_old of this tensor specifieed by the
+     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays_old of this tensor specified by the
      * first and
      * second axes. The shape of the resulting tensor is equal to this tensor with the first and second axes removed.</p>
      *
@@ -208,7 +208,7 @@ public abstract class TensorOverSemiRing<T extends TensorOverSemiRing<T, U, V, W
     /**
      * <p>Computes the generalized trace of this tensor along the specified axes.</p>
      *
-     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays_old of this tensor specifieed by
+     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays_old of this tensor specified by
      * {@code axis1} and {@code axis2}. The shape of the resulting tensor is equal to this tensor with the
      * {@code axis1} and {@code axis2} removed.</p>
      *
@@ -218,7 +218,7 @@ public abstract class TensorOverSemiRing<T extends TensorOverSemiRing<T, U, V, W
      * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}.
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
      * @throws IllegalArgumentException If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
-     * (i.e. the axes are equal or the tesnor does not have the same length along the two axes.)
+     * (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     public abstract T tensorTr(int axis1, int axis2);
 

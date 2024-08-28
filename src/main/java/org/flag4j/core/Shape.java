@@ -262,16 +262,14 @@ public class Shape implements Serializable {
      * @throws ArithmeticException If the total number of entries overflows a primitive int.
      */
     public int totalEntriesIntValueExact() {
-        if (dims.length == 0) {
-            return 0;
-        }
+        if(dims.length == 0) return 0;
 
         int product = 1;
 
         for (int dim : dims) {
             // Check for overflow before multiplying
             if (dim > 0 && product > Integer.MAX_VALUE / dim) {
-                throw new ArithmeticException("Integer overflow while computing total entries.");
+                throw new ArithmeticException("Integer overflow while computing total entries in the shape.");
             }
             product *= dim;
         }

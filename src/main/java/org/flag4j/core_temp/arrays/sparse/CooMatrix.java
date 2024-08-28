@@ -51,7 +51,7 @@ import java.util.List;
  * <p>The {@link #entries non-zero entries} and non-zero indices of a COO matrix are mutable but the {@link #shape}
  * and total number of non-zero entries is fixed.</p>
  *
- * <p>Sparse matrices allow for the efficient storage of and operations on matrices that contain many zero vlues.</p>
+ * <p>Sparse matrices allow for the efficient storage of and operations on matrices that contain many zero values.</p>
  *
  * <p>COO matrices are optimized for hyper-sparse matrices (i.e. matrices which contain almost all zeros relative to the size of the
  * matrix).</p>
@@ -60,20 +60,22 @@ import java.util.List;
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
  *     <li>The non-zero {@link #entries} of the matrix. All other entries in the matrix are
- *     assumed to be zero. Zero values can also explicity be stored in {@link #entries}.</li>
- *     <li>The {@link #rowIndices row indices} of the non-zero values in the sparse matirx.</li>
- *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matirx.</li>
+ *     assumed to be zero. Zero values can also explicitly be stored in {@link #entries}.</li>
+ *     <li>The {@link #rowIndices row indices} of the non-zero values in the sparse matrix.</li>
+ *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
  *
  * <p>Note: many operations assume that the entries of the COO matrix are sorted lexicographically by the row and column indices.
- * (i.e.) by row indices first then column indices. However, this is not explicity verified but any operations implemented in this
+ * (i.e.) by row indices first then column indices. However, this is not explicitly verified but any operations implemented in this
  * class will preserve the lexicographical sorting.</p>
  *
  * <p>If indices need to be sorted, call {@link #sortIndices()}.</p>
  */
 public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
-        implements SparseTesnorMixin<Matrix, CooMatrix>, 
+        implements SparseTensorMixin<Matrix, CooMatrix>,
         MatrixMixin<CooMatrix, Matrix, Double> {
+
+    // TODO: implement MatrixVectorOpsMixin once CooVector is implemented.
 
     /**
      * Row indices for non-zero value of this sparse COO matrix.
@@ -107,11 +109,11 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      * @param shape Shape of this tensor.
      * @param entries Non-zero entries of this sparse matrix.
      * @param rowIndices Non-zero row indices of this sparse matrix.
-     * @param colIndices Non-zero column indies of this sparse mattrix.
+     * @param colIndices Non-zero column indies of this sparse matrix.
      */
     public CooMatrix(Shape shape, double[] entries, int[] rowIndices, int[] colIndices) {
         super(shape, entries);
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
         ParameterChecks.ensureArrayLengthsEq(entries.length, rowIndices.length, colIndices.length);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
@@ -127,11 +129,11 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      * @param shape Shape of this tensor.
      * @param entries Non-zero entries of this sparse matrix.
      * @param rowIndices Non-zero row indices of this sparse matrix.
-     * @param colIndices Non-zero column indies of this sparse mattrix.
+     * @param colIndices Non-zero column indies of this sparse matrix.
      */
     public CooMatrix(Shape shape, List<Double> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(shape, ArrayUtils.fromDoubleList(entries));
-        ParameterChecks.ensureRank(2, shape);
+        ParameterChecks.ensureRank(shape, 2);
         this.rowIndices = ArrayUtils.fromIntegerList(rowIndices);
         this.colIndices = ArrayUtils.fromIntegerList(colIndices);
         ParameterChecks.ensureArrayLengthsEq(super.entries.length, this.rowIndices.length, this.colIndices.length);
@@ -175,7 +177,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      * this matrix.
      *
      * @param shape Shape of the matrix to construct.
-     * @param entries Entires of the matrix to construct.
+     * @param entries Entries of the matrix to construct.
      *
      * @return A matrix of the same type as this matrix with the given the shape and entries.
      */
@@ -191,7 +193,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      * @param axis1 First axis to exchange.
      * @param axis2 Second axis to exchange.
      *
-     * @return The transpose of this tensor acording to the specified axes.
+     * @return The transpose of this tensor according to the specified axes.
      *
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
      * @see #T()
@@ -228,7 +230,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
 
 
     /**
-     * The sparsity of this sparse tensor. That is, the precentage of elements in this tensor which are zero as a decimal.
+     * The sparsity of this sparse tensor. That is, the percentage of elements in this tensor which are zero as a decimal.
      *
      * @return The density of this sparse tensor.
      */
@@ -248,9 +250,9 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
 
 
     /**
-     * Converts this sparse tesnor to an equivalent dense tensor.
+     * Converts this sparse tensor to an equivalent dense tensor.
      *
-     * @return A dense tesnor equivalent to this sparse tensor.
+     * @return A dense tensor equivalent to this sparse tensor.
      * @throws ArithmeticException If the total number of entries in this sparse matrix does not fit into an int.
      */
     @Override
@@ -355,7 +357,6 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
         // Initialize new COO structures with the same size as the original.
         int[] newRowIndices = new int[rowIndices.length];
         int[] newColIndices = new int[colIndices.length];
-        double[] newEntries = new double[entries.length];
 
         for (int i = 0; i < rowIndices.length; i++) {
             int flatIndex = rowIndices[i]*oldColCount + colIndices[i];
@@ -415,9 +416,9 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
     /**
      * <p>Computes the generalized trace of this tensor along the specified axes.</p>
      *
-     * <p>Note: for a matrix, the {@link #tr()} method is prefered.</p>
+     * <p>Note: for a matrix, the {@link #tr()} method is preferred.</p>
      *
-     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays_old of this tensor specifieed by
+     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays_old of this tensor specified by
      * {@code axis1} and {@code axis2}. The shape of the resulting tensor is equal to this tensor with the
      * {@code axis1} and {@code axis2} removed.</p>
      *
@@ -429,7 +430,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
      * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
-     *                                   (i.e. the axes are equal or the tesnor does not have the same length along the two axes.)
+     *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override
     public CooMatrix tensorTr(int axis1, int axis2) {
@@ -447,12 +448,12 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public Double prod() {
-        return super.prod(); // Overides method from super class to emphisize it operates only on the non-zero values.
+        return super.prod(); // Overrides method from super class to emphasize it operates only on the non-zero values.
     }
 
 
     /**
-     * Computes the transpose of a tensor by exchanging the first and last axes of this tensor..
+     * Computes the transpose of a tensor by exchanging the first and last axes of this tensor.
      *
      * @return The transpose of this tensor.
      *
@@ -481,7 +482,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public CooMatrix recip() {
-        return super.recip(); // Overides method from super class to emphisize it operates on the non-zero values in the tensor.
+        return super.recip(); // Overrides method from super class to emphasize it operates on the non-zero values in the tensor.
     }
 
 
@@ -491,7 +492,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public Double min() {
-        return super.min(); // Overides method from super class to emphisize it operates only on the non-zero values.
+        return super.min(); // Overrides method from super class to emphasize it operates only on the non-zero values.
     }
 
 
@@ -502,7 +503,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public Double max() {
-        return super.max(); // Overides method from super class to emphisize it operates only on the non-zero values.
+        return super.max(); // Overrides method from super class to emphasize it operates only on the non-zero values.
     }
 
 
@@ -514,7 +515,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public double minAbs() {
-        return super.minAbs(); // Overides method from super class to emphisize it operates only on the non-zero values.
+        return super.minAbs(); // Overrides method from super class to emphasize it operates only on the non-zero values.
     }
 
 
@@ -526,7 +527,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public double maxAbs() {
-        return super.maxAbs(); // Overides method from super class to emphisize it operates only on the non-zero values.
+        return super.maxAbs(); // Overrides method from super class to emphasize it operates only on the non-zero values.
     }
 
 
@@ -572,7 +573,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
     /**
      * Finds the indices of the maximum absolute non-zero value in this tensor.
      *
-     * @return The indices of the maximum absoulte non-zero value in this tensor. If this value occurs multiple times, the indices of
+     * @return The indices of the maximum absolute non-zero value in this tensor. If this value occurs multiple times, the indices of
      * the first entry (in row-major ordering) are returned.
      */
     @Override
@@ -591,7 +592,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public CooMatrix add(double b) {
-        return super.add(b); // Overides method from super class to emphisize it operates only on the non-zero values.
+        return super.add(b); // Overrides method from super class to emphasize it operates only on the non-zero values.
     }
 
 
@@ -604,7 +605,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public CooMatrix sub(double b) {
-        return super.sub(b); // Overides method from super class to emphisize it operates only on the non-zero values.
+        return super.sub(b); // Overrides method from super class to emphasize it operates only on the non-zero values.
     }
 
 
@@ -662,7 +663,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
     @Override
     public boolean isTriU() {
         for(int i=0; i<entries.length; i++)
-            if(rowIndices[i] > colIndices[i]) return false; // Then entry is not in upper triangle.
+            if(rowIndices[i] > colIndices[i] && entries[i] != 0) return false; // Then entry is not in upper triangle.
 
         return true;
     }
@@ -680,7 +681,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
     @Override
     public boolean isTriL() {
         for(int i=0; i<entries.length; i++)
-            if(rowIndices[i] < colIndices[i]) return false; // Then entry is not in lower triangle.
+            if(rowIndices[i] < colIndices[i]&& entries[i] != 0) return false; // Then entry is not in lower triangle.
 
         return true;
     }
@@ -905,7 +906,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
 
 
     /**
-     * Checks if a marix is Hermitian. That is, if the matrix is square and equal to its conjugate transpose.
+     * Checks if a matrix is Hermitian. That is, if the matrix is square and equal to its conjugate transpose.
      *
      * @return True if this matrix is Hermitian. Otherwise, returns false.
      */
@@ -1066,7 +1067,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public CooMatrix getTriU(int diagOffset) {
-        int sizeEst = nnz / 2; // Esitimate the number of non-zero entries.
+        int sizeEst = nnz / 2; // Estimate the number of non-zero entries.
         List<Double> triuEntries = new ArrayList<>(sizeEst);
         List<Integer> triuRowIndices = new ArrayList<>(sizeEst);
         List<Integer> triuColIndices = new ArrayList<>(sizeEst);
@@ -1104,7 +1105,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public CooMatrix getTriL(int diagOffset) {
-        int sizeEst = nnz / 2; // Esitimate the number of non-zero entries.
+        int sizeEst = nnz / 2; // Estimate the number of non-zero entries.
         List<Double> trilEntries = new ArrayList<>(sizeEst);
         List<Integer> trilRowIndices = new ArrayList<>(sizeEst);
         List<Integer> trilColIndices = new ArrayList<>(sizeEst);
@@ -1121,5 +1122,22 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
         }
 
         return new CooMatrix(shape, trilEntries, trilRowIndices, trilColIndices);
+    }
+
+
+    /**
+     * Checks if an object is equal to this matrix object.
+     * @param object Object to check equality with this matrix.
+     * @return True if the two matrices have the same shape, are numerically equivalent, and are of type {@link CooMatrix}.
+     * False otherwise.
+     */
+    @Override
+    public boolean equals(Object object) {
+        if(this == object) return true;
+        if(object == null || object.getClass() != getClass()) return false;
+
+        CooMatrix src2 = (CooMatrix) object;
+
+        return RealSparseEquals.matrixEquals(this, src2);
     }
 }

@@ -22,8 +22,11 @@
  * SOFTWARE.
  */
 
-package org.flag4j.core_temp;
+package org.flag4j.core_temp.arrays.dense;
 
+
+import org.flag4j.core_temp.MatrixMixin;
+import org.flag4j.core_temp.TensorBase;
 
 /**
  * This interface defines operations that all dense matrices should implement.

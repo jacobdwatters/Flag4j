@@ -375,7 +375,7 @@ public class CooCVectorOld
      */
     @Override
     public CooCVectorOld reshape(Shape shape) {
-        ParameterChecks.ensureRank(1, shape);
+        ParameterChecks.ensureRank(shape, 1);
         ParameterChecks.ensureBroadcastable(this.shape, shape);
         return copy();
     }
@@ -1586,6 +1586,7 @@ public class CooCVectorOld
      */
     @Override
     public int length() {
+        sortIndices();
         return size;
     }
 

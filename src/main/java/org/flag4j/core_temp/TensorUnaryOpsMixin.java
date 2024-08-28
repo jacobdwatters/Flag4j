@@ -32,7 +32,7 @@ package org.flag4j.core_temp;
 public interface TensorUnaryOpsMixin<T extends TensorBase<T, ?, ?>> {
 
     /**
-     * Computes the transpose of a tensor by exchanging the first and last axes of this tensor..
+     * Computes the transpose of a tensor by exchanging the first and last axes of this tensor.
      * @return The transpose of this tensor.
      * @see #T(int, int)
      * @see #T(int...)
@@ -45,7 +45,7 @@ public interface TensorUnaryOpsMixin<T extends TensorBase<T, ?, ?>> {
      *
      * @param axis1 First axis to exchange.
      * @param axis2 Second axis to exchange.
-     * @return The transpose of this tensor acording to the specified axes.
+     * @return The transpose of this tensor according to the specified axes.
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
      * @see #T()
      * @see #T(int...)

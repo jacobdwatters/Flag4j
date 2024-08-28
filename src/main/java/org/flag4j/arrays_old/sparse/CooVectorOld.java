@@ -228,7 +228,7 @@ public class CooVectorOld
     @Override
     public CooVectorOld reshape(Shape shape) {
         // TODO: This should return a tensor. This would allow for a matrix or vector to be reshaped to any rank.
-        ParameterChecks.ensureRank(1, shape);
+        ParameterChecks.ensureRank(shape, 1);
         ParameterChecks.ensureBroadcastable(this.shape, shape);
         return copy();
     }
@@ -1366,10 +1366,8 @@ public class CooVectorOld
     @Override
     public VectorOld toDense() {
         double[] entries = new double[size];
-
-        for(int i = 0; i< nnz; i++) {
+        for(int i = 0; i< nnz; i++)
             entries[indices[i]] = this.entries[i];
-        }
 
         return new VectorOld(entries);
     }

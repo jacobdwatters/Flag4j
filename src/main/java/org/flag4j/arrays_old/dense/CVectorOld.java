@@ -1236,7 +1236,7 @@ public class CVectorOld extends ComplexDenseTensorBase<CVectorOld, VectorOld>
     @Override
     public CVectorOld reshape(Shape shape) {
         ParameterChecks.ensureBroadcastable(this.shape, shape);
-        ParameterChecks.ensureRank(1, shape);
+        ParameterChecks.ensureRank(shape, 1);
         return this.copy();
     }
 
