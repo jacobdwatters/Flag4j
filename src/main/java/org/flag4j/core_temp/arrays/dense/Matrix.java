@@ -28,6 +28,7 @@ import org.flag4j.core.Shape;
 import org.flag4j.core_temp.MatrixVectorOpsMixin;
 import org.flag4j.core_temp.TensorBase;
 import org.flag4j.core_temp.arrays.sparse.CooMatrix;
+import org.flag4j.core_temp.arrays.sparse.CsrMatrix;
 import org.flag4j.operations.MatrixMultiplyDispatcher;
 import org.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import org.flag4j.operations.TransposeDispatcher;
@@ -46,8 +47,8 @@ import java.util.List;
  * <p>The {@link #entries} of a matrix are mutable but the {@link #shape} is fixed.</p>
  */
 public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
-        implements DenseMatrixMixin<Matrix, Double>,
-        MatrixVectorOpsMixin<Matrix, Vector> {
+        implements DenseMatrixMixin<Matrix, CooMatrix, CsrMatrix, Double>,
+        MatrixVectorOpsMixin<Matrix, Vector, Vector> {
 
     // TODO: Add dense/sparse and real/complex operations for selected operations.
 
@@ -1239,9 +1240,8 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
         ParameterChecks.ensureValidIndices(numCols, colIdx);
         double[] col = new double[numRows];
 
-        for(int i=0; i<numRows; i++) {
+        for(int i=0; i<numRows; i++)
             col[i] = entries[i*numCols + colIdx];
-        }
 
         return new Vector(col);
     }
@@ -1267,9 +1267,8 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
         ParameterChecks.ensureGreaterEq(rowEnd, rowStart);
         double[] col = new double[numRows];
 
-        for(int i=rowStart; i<rowEnd; i++) {
+        for(int i=rowStart; i<rowEnd; i++)
             col[i] = entries[i*numCols + colIdx];
-        }
 
         return new Vector(col);
     }

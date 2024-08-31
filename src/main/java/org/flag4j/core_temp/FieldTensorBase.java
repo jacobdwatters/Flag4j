@@ -25,9 +25,7 @@
 package org.flag4j.core_temp;
 
 import org.flag4j.core.Shape;
-import org.flag4j.core_temp.arrays.dense.FieldTensor;
 import org.flag4j.core_temp.structures.fields.Field;
-import org.flag4j.core_temp.structures.fields.RealFloat64;
 import org.flag4j.operations.common.field_ops.AggregateField;
 import org.flag4j.operations.common.field_ops.CompareField;
 import org.flag4j.util.ParameterChecks;
@@ -48,6 +46,12 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
         U extends FieldTensorBase<U, U, V>, V extends Field<V>> extends TensorOverField<T, U, V[], V> {
 
     /**
+     * Stores the zero element of the field for this tensor.
+     */
+    private V zeroElement = null;
+
+
+    /**
      * Creates a tensor with the specified entries and shape.
      *
      * @param shape Shape of this tensor.
@@ -56,6 +60,31 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     protected FieldTensorBase(Shape shape, V[] entries) {
         super(shape, entries);
+        if(entries.length > 0 && entries[0] != null) zeroElement = entries[0].getZero();
+    }
+
+
+    /**
+     * Sets the zero element for the field of this tensor. This is useful in some operations for cases where the total number of
+     * entries or total number of non-zero entries is zero. In such cases, the zero element cannot be determined for a generic field so
+     * {@code null} is used. When
+     * @param zeroElement Zero element for the field of this tensor.
+     */
+    protected void setZeroElement(V zeroElement) {
+        if(!this.zeroElement.isZero())
+            throw new IllegalArgumentException("zeroElement is not an additive identity for the Field of this tensor.");
+
+        this.zeroElement = zeroElement;
+    }
+
+
+    /**
+     * Gets the zero element for the field of this tensor.
+     * @return The zero element for the field of this tensor. If it could not be determined during construction of this object
+     * and has not been set explicitly by {@link #setZeroElement(Field)} then {@code null} will be returned.
+     */
+    protected V getZeroElement() {
+        return zeroElement;
     }
 
 
@@ -130,6 +159,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public V sum() {
+        if(entries.length==0) return zeroElement;
         return AggregateField.sum(entries);
     }
 
@@ -141,6 +171,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public V prod() {
+        if(entries.length==0) return zeroElement;
         return AggregateField.prod(entries);
     }
 
@@ -260,23 +291,6 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
 
 
     /**
-     * Computes the element-wise absolute value of this tensor.
-     *
-     * @return The element-wise absolute value of this tensor.
-     */
-    @Override
-    public FieldTensorBase<?, ?, RealFloat64> abs() {
-        // TODO: This return type does not work with sparse tensors. Need a makeRealTensor method.
-        Field<RealFloat64>[] abs = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++)
-            abs[i] = new RealFloat64(entries[i].abs());
-
-        return new FieldTensor<RealFloat64>(shape, (RealFloat64[]) abs);
-    }
-
-
-    /**
      * Computes the element-wise conjugation of this tensor.
      *
      * @return The element-wise conjugation of this tensor.
@@ -339,7 +353,6 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
         int[] newDims = new int[rank - 2];
 
         int idx = 0;
-        final V ZERO = entries[0].getZero();
 
         // Compute shape for resulting tensor.
         for(int i=0; i<rank; i++) {
@@ -368,7 +381,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
             }
 
             // Sum over diagonal elements of the 2D sub-array.
-            V sum = ZERO;
+            V sum = zeroElement;
             int offset = baseOffset;
             for(int diag=0; diag<traceLength; diag++) {
                 sum = sum.add(entries[offset]);

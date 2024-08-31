@@ -24,11 +24,11 @@
 
 package org.flag4j.operations.sparse.csr.real;
 
-import org.flag4j.arrays_old.sparse.CsrMatrixOld;
+import org.flag4j.core_temp.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ErrorMessages;
 
 /**
- * This class contains low-level implementations for determining certain properties of real sparse CSR matrices.
+ * This class contains low-level implementations for evaluating properties of real sparse CSR matrices.
  */
 public final class RealCsrProperties {
 
@@ -43,7 +43,7 @@ public final class RealCsrProperties {
      * @param src The matrix to check if it is the identity matrix.
      * @return True if the {@code src} matrix is the identity matrix. False otherwise.
      */
-    public static boolean isIdentity(CsrMatrixOld src) {
+    public static boolean isIdentity(CsrMatrix src) {
         if(src.isSquare() && src.colIndices.length >= src.numCols) {
             int diagCount = 0;
 
@@ -66,11 +66,42 @@ public final class RealCsrProperties {
 
 
     /**
+     * Checks if the {@code src} matrix is close to the identity matrix.
+     * @param src The matrix to check.
+     * @return True if the {@code src} matrix is close to identity matrix. False otherwise.
+     */
+    public static boolean isCloseToIdentity(CsrMatrix src) {
+        if(src.isSquare() && src.colIndices.length >= src.numCols) {
+            // Tolerances corresponds to the allClose(...) methods.
+            double diagTol = 1.001E-5;
+            double nonDiagTol = 1e-08;
+            int diagCount = 0;
+
+            for(int i=0; i<src.rowPointers.length-1; i++) {
+                for(int j=src.rowPointers[i]; j<src.rowPointers[i+1]; j++) {
+                    if(Math.abs(src.entries[j]-1) > diagTol) {
+                        if(src.colIndices[j] != i)
+                            return false; // Diagonal value not close to one.
+                        diagCount++;
+                    } else if(Math.abs(src.entries[i]) > nonDiagTol) {
+                        return false; // Non-diagonal value is not close to one.
+                    }
+                }
+            }
+
+            return diagCount == src.numCols;
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
      * Checks if the {@code src} matrix is symmetric.
      * @param src Source matrix to check symmetry of.
      * @return True if {@code src} is symmetric. Otherwise, returns false.
      */
-    public static boolean isSymmetric(CsrMatrixOld src) {
+    public static boolean isSymmetric(CsrMatrix src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
         if(src.entries.length == 0) return true;
@@ -84,7 +115,7 @@ public final class RealCsrProperties {
      * @param src Source matrix to check symmetry of.
      * @return True if {@code src} is symmetric. Otherwise, returns false.
      */
-    public static boolean isAntiSymmetric(CsrMatrixOld src) {
+    public static boolean isAntiSymmetric(CsrMatrix src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
         if(src.entries.length == 0) return true;

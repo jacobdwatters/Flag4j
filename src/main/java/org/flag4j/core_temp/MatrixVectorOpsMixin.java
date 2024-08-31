@@ -24,13 +24,15 @@
 
 package org.flag4j.core_temp;
 
+import org.flag4j.core_temp.arrays.dense.DenseVectorMixin;
 
 /**
  * This interface specifies operations between a matrix and a vector that a matrix should implement.
  * @param <T> Type of the matrix.
  * @param <U> Type of the vector.
+ * @param <V> Type of dense vector equivalent to {@code U}. If {@code U} is dense, than {@code V} should be the same type as {@code U}.
  */
-public interface MatrixVectorOpsMixin<T extends MatrixMixin, U extends VectorMixin> {
+public interface MatrixVectorOpsMixin<T extends MatrixMixin, U extends VectorMixin, V extends DenseVectorMixin> {
 
     /**
      * Computes matrix-vector multiplication.
@@ -40,7 +42,7 @@ public interface MatrixVectorOpsMixin<T extends MatrixMixin, U extends VectorMix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the
      * number of entries in the vector {@code b}.
      */
-    public U mult(U b);
+    public V mult(U b);
 
 
     /**

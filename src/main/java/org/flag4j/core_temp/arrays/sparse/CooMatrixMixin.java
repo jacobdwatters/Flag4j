@@ -24,41 +24,19 @@
 
 package org.flag4j.core_temp.arrays.sparse;
 
-import org.flag4j.core_temp.arrays.dense.DenseTensorMixin;
+
+import org.flag4j.core_temp.MatrixMixin;
+import org.flag4j.core_temp.arrays.dense.DenseMatrixMixin;
 
 /**
- * This interface specifies methods which sparse tensors should implement.
- * @param <T> The equivalent dense tensor type.
- * @param <U> The type of this sparse tensor.
+ * This interface specifies methods which all sparse COO matrices should implement.
+ * @param <T> Type of this sparse matrix.
+ * @param <V> Type of dense matrix which is equivalent to {@code T}.
+ * @param <W> Type (or wrapper of) an individual element in the matrix.
  */
-public interface SparseTensorMixin<T extends DenseTensorMixin<T, U>, U extends SparseTensorMixin<T, U>> {
+public interface CooMatrixMixin<T extends CooMatrixMixin<T, V, W>,
+        V extends DenseMatrixMixin<V, T, ?, W>, W>
+        extends MatrixMixin<T, V, W>, SparseTensorMixin<V, T> {
 
-
-    /**
-     * The density of this sparse tensor. That is, the percentage of elements in this tensor which are non-zero as a decimal.
-     * @return The density of this sparse tensor.
-     */
-    public default double density() {
-        return 1.0 - sparsity();
-    }
-
-
-    /**
-     * The sparsity of this sparse tensor. That is, the percentage of elements in this tensor which are zero as a decimal.
-     * @return The density of this sparse tensor.
-     */
-    public double sparsity();
-
-
-    /**
-     * Converts this sparse tensor to an equivalent dense tensor.
-     * @return A dense tensor equivalent to this sparse tensor.
-     */
-    public T toDense();
-
-
-    /**
-     * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
-     */
-    public void sortIndices();
+    // TODO: consider adding toCsr() here.
 }

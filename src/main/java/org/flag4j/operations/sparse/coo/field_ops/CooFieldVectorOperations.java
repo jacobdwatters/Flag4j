@@ -24,12 +24,14 @@
 
 package org.flag4j.operations.sparse.coo.field_ops;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.sparse.CooCVectorOld;
 import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.core.Shape;
+import org.flag4j.core_temp.arrays.dense.DenseFieldMatrixBase;
 import org.flag4j.core_temp.arrays.dense.DenseFieldVectorBase;
+import org.flag4j.core_temp.arrays.sparse.CooFieldMatrixBase;
 import org.flag4j.core_temp.arrays.sparse.CooFieldVectorBase;
 import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -55,7 +57,7 @@ public final class CooFieldVectorOperations {
      * @param a Value to add to the {@code src} sparse vector.
      * @return The result of adding the specified value to the sparse vector.
      */
-    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> add(CooFieldVectorBase<?, ?, T> src, T a) {
+    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> add(CooFieldVectorBase<?, ?, ?, ?, T> src, T a) {
         Field<T>[] dest = new Field[src.size];
         Arrays.fill(dest, a);
 
@@ -64,7 +66,7 @@ public final class CooFieldVectorOperations {
             dest[src.indices[i]] = dest[src.indices[i]].add(src.entries[i]);
         }
 
-        return src.makeDenseTensor((T[]) dest);
+        return src.makeLikeDenseTensor((T[]) dest);
     }
 
 
@@ -74,7 +76,7 @@ public final class CooFieldVectorOperations {
      * @param a Value to subtract from the {@code src} sparse vector.
      * @return The result of subtracting the specified value from the sparse vector.
      */
-    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> sub(CooFieldVectorBase<?, ?, T> src, T a) {
+    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> sub(CooFieldVectorBase<?, ?, ?, ?, T> src, T a) {
         Field<T>[] dest = new Field[src.size];
         Arrays.fill(dest, a.addInv());
 
@@ -83,7 +85,7 @@ public final class CooFieldVectorOperations {
             dest[idx] = dest[idx].add(src.entries[i]);
         }
 
-        return src.makeDenseTensor((T[]) dest);
+        return src.makeLikeDenseTensor((T[]) dest);
     }
 
 
@@ -95,10 +97,9 @@ public final class CooFieldVectorOperations {
      * @return The result of the vector addition.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static <T extends Field<T>> CooFieldVectorBase<?, ?, T> add(CooFieldVectorBase<?, ?, T> src1,
-                                                                       CooFieldVectorBase<?, ?, T> src2) {
+    public static <T extends CooFieldVectorBase<T, ?, ?, ?, U>, U extends Field<U>> T add(T src1, T src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-        List<T> values = new ArrayList<>(src1.entries.length);
+        List<U> values = new ArrayList<>(src1.entries.length);
         List<Integer> indices = new ArrayList<>(src1.entries.length);
 
         int src1Counter = 0;
@@ -147,8 +148,8 @@ public final class CooFieldVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static <T extends Field<T>> CooFieldVectorBase<?, ?, T> sub(CooFieldVectorBase<?, ?, T> src1,
-                                                                       CooFieldVectorBase<?, ?, T> src2) {
+    public static <T extends Field<T>> CooFieldVectorBase<?, ?, ?, ?, T> sub(CooFieldVectorBase<?, ?, ?, ?, T> src1,
+                                                                       CooFieldVectorBase<?, ?, ?, ?, T> src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
         List<T> values = new ArrayList<>(src1.entries.length);
         List<Integer> indices = new ArrayList<>(src1.entries.length);
@@ -199,8 +200,8 @@ public final class CooFieldVectorOperations {
      * @return The result of the vector multiplication.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static <T extends Field<T>> CooFieldVectorBase<?, ?, T> elemMult(CooFieldVectorBase<?, ?, T> src1,
-                                                                            CooFieldVectorBase<?, ?, T> src2) {
+    public static <T extends Field<T>> CooFieldVectorBase<?, ?, ?, ?, T> elemMult(CooFieldVectorBase<?, ?, ?, ?, T> src1,
+                                                                            CooFieldVectorBase<?, ?, ?, ?, T> src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
         List<T> values = new ArrayList<>(src1.entries.length);
         List<Integer> indices = new ArrayList<>(src1.entries.length);
@@ -234,7 +235,7 @@ public final class CooFieldVectorOperations {
      * @return The result of the vector inner product.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static <T extends Field<T>> T inner(CooFieldVectorBase<?, ?, T> src1, CooFieldVectorBase<?, ?, T> src2) {
+    public static <T extends Field<T>> T inner(CooFieldVectorBase<?, ?, ?, ?, T> src1, CooFieldVectorBase<?, ?, ?, ?, T> src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         T product = null;
@@ -267,7 +268,7 @@ public final class CooFieldVectorOperations {
      * @return The result of the vector dot product.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static <T extends Field<T>> T dot(CooFieldVectorBase<?, ?, T> src1, CooFieldVectorBase<?, ?, T> src2) {
+    public static <T extends Field<T>> T dot(CooFieldVectorBase<?, ?, ?, ?, T> src1, CooFieldVectorBase<?, ?, ?, ?, T> src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         T product = null;
@@ -298,25 +299,104 @@ public final class CooFieldVectorOperations {
      * @param src2 Second sparse vector in the outer product.
      * @return The matrix resulting from the vector outer product.
      */
-    public static CMatrixOld outerProduct(CooCVectorOld src1, CooCVectorOld src2) {
-        CNumber[] dest = new CNumber[src2.size*src1.size];
+    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> outerProduct(
+            CooFieldVectorBase<?, ?, ?, ?, T> src1, CooFieldVectorBase<?, ?, ?, ?, T> src2) {
+        Field<T>[] dest = new Field[src2.size*src1.size];
         Arrays.fill(dest, CNumber.ZERO);
 
         int destRow;
         int index1;
         int index2;
 
-        for(int i=0; i<src1.entries.length; i++) {
+        for(int i=0; i<src1.nnz; i++) {
             index1 = src1.indices[i];
             destRow = index1*src1.size;
+            T src1Val = src1.entries[i];
 
-            for(int j=0; j<src2.entries.length; j++) {
+            for(int j=0; j<src2.nnz; j++) {
                 index2 = src2.indices[j];
-
-                dest[destRow + index2] = src1.entries[i].mult(src2.entries[j]);
+                dest[destRow + index2] = src1Val.mult(src2.entries[j]);
             }
         }
 
-        return new CMatrixOld(src1.size, src2.size, dest);
+        return src1.makeLikeDenseMatrix(new Shape(src1.size, src2.size), (T[]) dest);
     }
+
+
+
+    /**
+     * Stacks two vectors along columns as if they were row vectors.
+     *
+     * @param src1 First vector in the stack.
+     * @param src2 Vector to stack to the bottom of the {@code src2} vector.
+     * @return The result of stacking this vector and vector {@code src2}.
+     * @throws IllegalArgumentException If the number of entries in the {@code src1} vector is different from the number of entries in
+     *                                  the vector {@code src2}.
+     */
+    public static <T extends Field<T>> CooFieldMatrixBase<?, ?, ?, T> stack(CooFieldVectorBase<?, ?, ?, ?, T> src1,
+                                                                            CooFieldVectorBase<?, ?, ?, ?, T> src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+
+        Field<T>[] entries = new Field[src1.entries.length + src2.entries.length];
+        int[][] indices = new int[2][src1.indices.length + src2.indices.length]; // Row and column indices.
+
+        // Copy values from vector src1.
+        System.arraycopy(src1.entries, 0, entries, 0, src1.entries.length);
+        // Copy values from vector src2.
+        System.arraycopy(src2.entries, 0, entries, src1.entries.length, src2.entries.length);
+
+        // Set row indices to 1 for src2 values (this vectors row indices are 0 which was implicitly set already).
+        Arrays.fill(indices[0], src1.indices.length, entries.length, 1);
+
+        // Copy indices from src1 vector to the column indices.
+        System.arraycopy(src1.indices, 0, indices[1], 0, src1.entries.length);
+        // Copy indices from src2 vector to the column indices.
+        System.arraycopy(src2.indices, 0, indices[1], src1.entries.length, src2.entries.length);
+
+        return src1.makeLikeMatrix(new Shape(2, src1.size), (T[]) entries, indices[0], indices[1]);
+    }
+
+
+    /**
+     * Repeats a vector {@code n} times along a certain axis to create a matrix.
+     *
+     * @param src The vector to repeat.
+     * @param n Number of times to repeat vector.
+     * @param axis Axis along which to repeat vector. If {@code axis=0} then each row of the resulting matrix will be equivalent to
+     * this vector. If {@code axis=1} then each column of the resulting matrix will be equivalent to this vector.
+     *
+     * @return A matrix whose rows/columns are this vector repeated.
+     */
+    public static <T extends Field<T>> CooFieldMatrixBase<?, ?, ?, T> repeat(CooFieldVectorBase<?, ?, ?, ?, T> src, int n, int axis) {
+        ParameterChecks.ensureInRange(axis, 0, 1, "axis");
+        ParameterChecks.ensureGreaterEq(0, n, "n");
+
+        Shape tiledShape;
+        Field<T>[] tiledEntries = new Field[n*src.entries.length];
+        int[] tiledRows = new int[tiledEntries.length];
+        int[] tiledCols = new int[tiledEntries.length];
+        int nnz = src.nnz;
+
+        if(axis==0) {
+            tiledShape = new Shape(n, src.size);
+
+            for(int i=0; i<n; i++) { // Copy values into row and set col indices as vector indices.
+                System.arraycopy(src.entries, 0, tiledEntries, i*nnz, nnz);
+                System.arraycopy(src.indices, 0, tiledCols, i*nnz, src.indices.length);
+                Arrays.fill(tiledRows, i*nnz, (i+1)*nnz, i);
+            }
+        } else {
+            int[] colIndices = ArrayUtils.intRange(0, n);
+            tiledShape = new Shape(src.size, n);
+
+            for(int i=0; i<nnz; i++) {
+                Arrays.fill(tiledEntries, i*n, (i+1)*n, src.entries[i]);
+                Arrays.fill(tiledRows, i*n, (i+1)*n, src.indices[i]);
+                System.arraycopy(colIndices, 0, tiledCols, i*n, n);
+            }
+        }
+
+        return src.makeLikeMatrix(tiledShape, (T[]) tiledEntries, tiledRows, tiledCols);
+    }
+
 }

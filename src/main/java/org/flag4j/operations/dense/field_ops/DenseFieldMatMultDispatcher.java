@@ -32,6 +32,7 @@ package org.flag4j.operations.dense.field_ops;
 import org.flag4j.core.Shape;
 import org.flag4j.core_temp.DenseFieldTensorBinaryOperation;
 import org.flag4j.core_temp.arrays.dense.DenseFieldMatrixBase;
+import org.flag4j.core_temp.arrays.dense.DenseFieldVectorBase;
 import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.util.Axis2D;
 import org.flag4j.util.ParameterChecks;
@@ -45,7 +46,6 @@ import java.util.Map;
  * multiply problem to the appropriate algorithm.
  */
 public final class DenseFieldMatMultDispatcher {
-
 
     /**
      * Singleton instance of this class.
@@ -117,12 +117,45 @@ public final class DenseFieldMatMultDispatcher {
      * @param B Second matrix in the multiplication.
      * @return The result of the matrix multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] dispatch(DenseFieldMatrixBase<?, ?, T> A, DenseFieldMatrixBase<?, ?, T> B) {
+    public static <T extends Field<T>> Field<T>[] dispatch(DenseFieldMatrixBase<?, ?, ?, ?, T> A, DenseFieldMatrixBase<?, ?, ?, ?, T> B) {
         ParameterChecks.ensureMatMultShapes(A.shape, B.shape); // Ensure matrix shapes are conducive to matrix multiplication.
 
         DenseFieldMatMultDispatcher dispatcher = getInstance();
         AlgorithmNames name = selectAlgorithm(A.shape, B.shape);
         return dispatcher.algorithmMap.get(name).apply(A.entries, A.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Dispatches a matrix-vector multiplication problem to the appropriate algorithm based on the size of the matrix and vector.
+     * @param src1 Matrix in the matrix-vector multiplication problem.
+     * @param src2 Vector in the matrix-vector multiplication problem.
+     * @return The result of the matrix-vector multiplication.
+     */
+    public static <T extends Field<T>> Field<T>[] dispatch(DenseFieldMatrixBase<?, ?, ?, ?, T> src1,
+                                                           DenseFieldVectorBase<?, ?, ?, T> src2) {
+        Shape bMatShape = new Shape(src2.size, 1);
+        ParameterChecks.ensureMatMultShapes(src1.shape, bMatShape);
+
+        AlgorithmNames algorithm = selectAlgorithmVector(src1.shape);
+        Field<T>[] dest;
+
+        switch(algorithm) {
+            case STANDARD_VECTOR:
+                dest = DenseFieldMatrixMultiplication.standardVector(src1.entries, src1.shape, src2.entries, bMatShape);
+                break;
+            case BLOCKED_VECTOR:
+                dest = DenseFieldMatrixMultiplication.blockedVector(src1.entries, src1.shape, src2.entries, bMatShape);
+                break;
+            case CONCURRENT_STANDARD_VECTOR:
+                dest = DenseFieldMatrixMultiplication.concurrentStandardVector(src1.entries, src1.shape, src2.entries, bMatShape);
+                break;
+            default:
+                dest = DenseFieldMatrixMultiplication.concurrentBlockedVector(src1.entries, src1.shape, src2.entries, bMatShape);
+                break;
+        }
+
+        return dest;
     }
 
 
@@ -150,7 +183,7 @@ public final class DenseFieldMatMultDispatcher {
      * @param B Second matrix in the multiplication and the matrix to transpose.
      * @return The matrix multiply-transpose result of {@code A} and {@code B}.
      */
-    public static <T extends Field<T>> Field<T>[] dispatchTranspose(DenseFieldMatrixBase<?, ?, T> A, DenseFieldMatrixBase<?, ?, T> B) {
+    public static <T extends Field<T>> Field<T>[] dispatchTranspose(DenseFieldMatrixBase<?, ?, ?, ?, T> A, DenseFieldMatrixBase<?, ?, ?, ?, T> B) {
         ParameterChecks.ensureArrayLengthsEq(A.numCols, B.numCols);
 
         DenseFieldMatMultDispatcher dispatcher = getInstance();
@@ -247,6 +280,17 @@ public final class DenseFieldMatMultDispatcher {
         }
 
         return name;
+    }
+
+
+    /**
+     * Dynamically chooses matrix-vector multiply algorithm based on the shapes of the matrix to multiply.
+     * @param shape The shape of the matrix.
+     * @return The algorithm to use in the matrix multiplication.
+     */
+    public static AlgorithmNames selectAlgorithmVector(Shape shape) {
+        if(shape.get(0) <=600) return AlgorithmNames.STANDARD_VECTOR;
+        else return AlgorithmNames.CONCURRENT_BLOCKED_VECTOR;
     }
 
 

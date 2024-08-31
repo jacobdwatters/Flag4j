@@ -25,10 +25,11 @@
 package org.flag4j.core_temp.arrays.sparse;
 
 import org.flag4j.core.Shape;
-import org.flag4j.core_temp.MatrixMixin;
+import org.flag4j.core_temp.MatrixVectorOpsMixin;
 import org.flag4j.core_temp.PrimitiveDoubleTensorBase;
 import org.flag4j.core_temp.TensorBase;
 import org.flag4j.core_temp.arrays.dense.Matrix;
+import org.flag4j.core_temp.arrays.dense.Vector;
 import org.flag4j.operations.dense.real.AggregateDenseReal;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
 import org.flag4j.operations.sparse.coo.SparseDataWrapper;
@@ -51,10 +52,11 @@ import java.util.List;
  * <p>The {@link #entries non-zero entries} and non-zero indices of a COO matrix are mutable but the {@link #shape}
  * and total number of non-zero entries is fixed.</p>
  *
- * <p>Sparse matrices allow for the efficient storage of and operations on matrices that contain many zero values.</p>
- *
- * <p>COO matrices are optimized for hyper-sparse matrices (i.e. matrices which contain almost all zeros relative to the size of the
- * matrix).</p>
+ * <p>COO matrices are well-suited for incremental matrix construction and modification but may not have ideal efficiency for matrix
+ * operations like matrix multiplication. For heavy computations, it may be better to construct a matrix as a {@code CooMatrix} then
+ * convert to a {@link CsrMatrix} (using {@link #toCsr()}) as CSR (compressed sparse row) matrices are generally better suited for
+ * efficient
+ * matrix operations.</p>
  *
  * <p>A sparse COO matrix is stored as:</p>
  * <ul>
@@ -66,16 +68,13 @@ import java.util.List;
  * </ul>
  *
  * <p>Note: many operations assume that the entries of the COO matrix are sorted lexicographically by the row and column indices.
- * (i.e.) by row indices first then column indices. However, this is not explicitly verified but any operations implemented in this
+ * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any operations implemented in this
  * class will preserve the lexicographical sorting.</p>
  *
  * <p>If indices need to be sorted, call {@link #sortIndices()}.</p>
  */
 public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
-        implements SparseTensorMixin<Matrix, CooMatrix>,
-        MatrixMixin<CooMatrix, Matrix, Double> {
-
-    // TODO: implement MatrixVectorOpsMixin once CooVector is implemented.
+        implements CooMatrixMixin<CooMatrix, Matrix, Double>, MatrixVectorOpsMixin<CooMatrix, CooVector, Vector> {
 
     /**
      * Row indices for non-zero value of this sparse COO matrix.
@@ -120,6 +119,27 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
         nnz = entries.length;
         numRows = shape.get(0);
         numCols = shape.get(1);
+    }
+
+
+    /**
+     * Creates a sparse coo matrix with the specified non-zero entries, non-zero indices, and shape.
+     *
+     * @param numRows Number of rows in the matrix.
+     * @param numCols Number of columns in the matrix.
+     * @param entries Non-zero entries of this sparse matrix.
+     * @param rowIndices Non-zero row indices of this sparse matrix.
+     * @param colIndices Non-zero column indies of this sparse matrix.
+     */
+    public CooMatrix(int numRows, int numCols, double[] entries, int[] rowIndices, int[] colIndices) {
+        super(new Shape(numRows, numCols), entries);
+        ParameterChecks.ensureRank(shape, 2);
+        ParameterChecks.ensureArrayLengthsEq(entries.length, rowIndices.length, colIndices.length);
+        this.rowIndices = rowIndices;
+        this.colIndices = colIndices;
+        nnz = entries.length;
+        this.numRows = numRows;
+        this.numCols = numCols;
     }
 
 
@@ -269,6 +289,25 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
         }
 
         return new Matrix(shape, entries);
+    }
+
+
+    /**
+     * Converts this COO matrix to an equivalent CSR matrix.
+     * @return A CSR matrix equivalent to this matrix.
+     */
+    public CsrMatrix toCsr() {
+        int[] csrRowPointers = new int[numRows + 1];
+
+        // Copy the non-zero entries anc column indices. Count number of entries per row.
+        for(int i=0; i<entries.length; i++)
+            csrRowPointers[rowIndices[i] + 1]++;
+
+        // Shift each row count to be greater than or equal to the previous.
+        for(int i=0; i<numRows; i++)
+            csrRowPointers[i+1] += csrRowPointers[i];
+
+        return new CsrMatrix(shape, entries.clone(), csrRowPointers, colIndices.clone());
     }
 
 
@@ -1139,5 +1178,173 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
         CooMatrix src2 = (CooMatrix) object;
 
         return RealSparseEquals.matrixEquals(this, src2);
+    }
+
+
+    /**
+     * Computes matrix-vector multiplication.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with vector {@code b}.
+     *
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the
+     *                                  number of entries in the vector {@code b}.
+     */
+    @Override
+    public Vector mult(CooVector b) {
+        double[] dest = RealSparseMatrixMultiplication.standardVector(
+                entries, rowIndices, colIndices, shape,
+                b.entries, b.indices
+        );
+        return new Vector(dest);
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent vector. If this matrix is not shaped as a row/column vector,
+     * it will first be flattened then converted to a vector.
+     *
+     * @return A vector equivalent to this matrix.
+     */
+    @Override
+    public CooVector toVector() {
+        int[] destIndices = new int[nnz];
+
+        for(int i=0; i<nnz; i++)
+            destIndices[i] = rowIndices[i]*colIndices[i];
+
+        return new CooVector(shape.totalEntriesIntValueExact(), entries.clone(), destIndices);
+    }
+
+
+    /**
+     * Get the row of this matrix at the specified index.
+     *
+     * @param rowIdx Index of row to get.
+     *
+     * @return The specified row of this matrix.
+     *
+     * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} is less than zero or greater than/equal to
+     *                                        the number of rows in this matrix.
+     */
+    @Override
+    public CooVector getRow(int rowIdx) {
+        return RealSparseMatrixGetSet.getRow(this, rowIdx);
+    }
+
+
+    /**
+     * Gets a specified row of this matrix between {@code colStart} (inclusive) and {@code colEnd} (exclusive).
+     *
+     * @param rowIdx Index of the row of this matrix to get.
+     * @param colStart Starting column of the row (inclusive).
+     * @param colEnd Ending column of the row (exclusive).
+     *
+     * @return The row at index {@code rowIdx} of this matrix between the {@code colStart} and {@code colEnd}
+     * indices.
+     *
+     * @throws IndexOutOfBoundsException If either {@code colEnd} are {@code colStart} out of bounds for the shape of this matrix.
+     * @throws IllegalArgumentException  If {@code colEnd} is less than {@code colStart}.
+     */
+    @Override
+    public CooVector getRow(int rowIdx, int colStart, int colEnd) {
+        return RealSparseMatrixGetSet.getRow(this, rowIdx, colStart, colEnd);
+    }
+
+
+    /**
+     * Get the column of this matrix at the specified index.
+     *
+     * @param colIdx Index of column to get.
+     *
+     * @return The specified column of this matrix.
+     *
+     * @throws ArrayIndexOutOfBoundsException If {@code colIdx} is less than zero or greater than/equal to
+     *                                        the number of columns in this matrix.
+     */
+    @Override
+    public CooVector getCol(int colIdx) {
+        return RealSparseMatrixGetSet.getCol(this, colIdx);
+    }
+
+
+    /**
+     * Gets a specified column of this matrix between {@code rowStart} (inclusive) and {@code rowEnd} (exclusive).
+     *
+     * @param colIdx Index of the column of this matrix to get.
+     * @param rowStart Starting row of the column (inclusive).
+     * @param rowEnd Ending row of the column (exclusive).
+     *
+     * @return The column at index {@code colIdx} of this matrix between the {@code rowStart} and {@code rowEnd}
+     * indices.
+     *
+     * @throws @throws                  IndexOutOfBoundsException If either {@code colEnd} are {@code colStart} out of bounds for the
+     *                                  shape of this matrix.
+     * @throws IllegalArgumentException If {@code rowEnd} is less than {@code rowStart}.
+     */
+    @Override
+    public CooVector getCol(int colIdx, int rowStart, int rowEnd) {
+        return RealSparseMatrixGetSet.getCol(this, colIdx, rowStart, rowEnd);
+    }
+
+
+    /**
+     * Extracts the diagonal elements of this matrix and returns them as a vector.
+     *
+     * @return A vector containing the diagonal entries of this matrix.
+     */
+    @Override
+    public CooVector getDiag() {
+        List<Double> destEntries = new ArrayList<>();
+        List<Integer> destIndices = new ArrayList<>();
+
+        for(int i=0; i<nnz; i++) {
+            if(rowIndices[i]==colIndices[i]) {
+                // Then entry on the diagonal.
+                destEntries.add(entries[i]);
+                destIndices.add(rowIndices[i]);
+            }
+        }
+
+        return new CooVector(
+                Math.min(numRows, numCols),
+                ArrayUtils.fromDoubleList(destEntries),
+                ArrayUtils.fromIntegerList(destIndices)
+        );
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     *
+     * @return A copy of this matrix with the specified column set to {@code values}.
+     *
+     * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
+     * @throws IndexOutOfBoundsException If {@code colIndex < 0 || colIndex >= this.numCols}.
+     */
+    @Override
+    public CooMatrix setCol(CooVector values, int colIndex) {
+        return RealSparseMatrixGetSet.setCol(this, colIndex, values);
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values New values for the row.
+     * @param rowIndex The index of the row which is to be set.
+     *
+     * @return A copy of this matrix with the specified row set to {@code values}.
+     *
+     * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
+     * @throws
+     */
+    @Override
+    public CooMatrix setRow(CooVector values, int rowIndex) {
+        return RealSparseMatrixGetSet.setCol(this, rowIndex, values);
     }
 }

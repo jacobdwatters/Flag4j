@@ -156,7 +156,7 @@ public final class CooFieldMatMult {
      * <p>Computes the multiplication between a sparse matrix and a sparse vector using a standard algorithm.</p>
      *
      * <p>NOTE: Caution should be exercised when using this method.
-     * It is rarely faster than {@link #standard(Field[], int[], int[], Shape, Field[], int[])}</p>
+     * It is rarely faster than {@link #standard(Field[], int[], int[], Shape, Field[], int[], int[], Shape)}</p>
      *
      * @param src1 Non-zero entries of the first sparse matrix.
      * @param rowIndices1 Row indices of non-zero entries for the first sparse matrix.

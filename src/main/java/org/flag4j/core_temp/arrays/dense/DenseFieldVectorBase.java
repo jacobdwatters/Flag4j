@@ -26,9 +26,9 @@ package org.flag4j.core_temp.arrays.dense;
 
 import org.flag4j.core.Shape;
 import org.flag4j.core_temp.FieldTensorBase;
-import org.flag4j.core_temp.VectorMatrixOpsMixin;
 import org.flag4j.core_temp.arrays.sparse.CooFieldVectorBase;
 import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.core_temp.structures.fields.RealFloat64;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.operations.dense.field_ops.DenseFieldEquals;
 import org.flag4j.operations.dense.field_ops.DenseFieldTensorDot;
@@ -53,12 +53,12 @@ import java.util.List;
  * @param <V> Type of sparse vector equivalent to this vector.
  * @param <W> Type of the {@link Field field} element of this vector.
  */
-public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, V, W>, U extends DenseFieldMatrixBase<U, ?, W>,
-        V extends CooFieldVectorBase<V, T, W>, W extends Field<W>>
+public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, V, W>, U extends DenseFieldMatrixBase<U, ?, ?, T, W>,
+        V extends CooFieldVectorBase<V, ?, T, U, W>, W extends Field<W>>
         extends FieldTensorBase<T, T, W>
-        implements DenseVectorMixin<T, V, W>, VectorMatrixOpsMixin<T, U> {
+        implements DenseVectorMixin<T, V, U, W> {
 
-    // TODO: Needs to implement dense tensor mixin.
+
     /**
      * The size of this vector.
      */
@@ -670,5 +670,20 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
             quotient[i] = entries[i].div(b.entries[i]);
 
         return makeLikeTensor(shape, entries);
+    }
+
+
+    /**
+     * Computes the element-wise absolute value of this matrix.
+     *
+     * @return The element-wise absolute value of this matrix.
+     */
+    @Override
+    public FieldVector<RealFloat64> abs() {
+        RealFloat64[] abs = new RealFloat64[entries.length];
+        for(int i = 0, size=entries.length; i<size; ++i)
+            abs[i] = new RealFloat64(entries[i].abs());
+
+        return new FieldVector<RealFloat64>(abs);
     }
 }

@@ -24,41 +24,23 @@
 
 package org.flag4j.core_temp.arrays.sparse;
 
-import org.flag4j.core_temp.arrays.dense.DenseTensorMixin;
+import org.flag4j.core.Shape;
+import org.flag4j.core_temp.arrays.dense.FieldMatrix;
+import org.flag4j.core_temp.structures.fields.Field;
 
-/**
- * This interface specifies methods which sparse tensors should implement.
- * @param <T> The equivalent dense tensor type.
- * @param <U> The type of this sparse tensor.
- */
-public interface SparseTensorMixin<T extends DenseTensorMixin<T, U>, U extends SparseTensorMixin<T, U>> {
+
+// TODO: Javadoc.
+public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFieldMatrix<T>, FieldMatrix<T>, CooFieldVector<T>, T> {
 
 
     /**
-     * The density of this sparse tensor. That is, the percentage of elements in this tensor which are non-zero as a decimal.
-     * @return The density of this sparse tensor.
+     * Creates a tensor with the specified entries and shape.
+     *
+     * @param shape Shape of this tensor.
+     * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
+     * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-    public default double density() {
-        return 1.0 - sparsity();
+    protected CsrFieldMatrix(Shape shape, T[] entries) {
+        super(shape, entries);
     }
-
-
-    /**
-     * The sparsity of this sparse tensor. That is, the percentage of elements in this tensor which are zero as a decimal.
-     * @return The density of this sparse tensor.
-     */
-    public double sparsity();
-
-
-    /**
-     * Converts this sparse tensor to an equivalent dense tensor.
-     * @return A dense tensor equivalent to this sparse tensor.
-     */
-    public T toDense();
-
-
-    /**
-     * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
-     */
-    public void sortIndices();
 }

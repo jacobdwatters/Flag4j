@@ -23,6 +23,7 @@
  */
 
 package org.flag4j.core_temp;
+import org.flag4j.core_temp.arrays.dense.DenseMatrixMixin;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -33,7 +34,7 @@ import org.flag4j.util.ErrorMessages;
  * matrix (e.g. matrix multiplication).
  * @param <V> Type (or wrapper) of an element of this matrix.
  */
-public interface MatrixMixin<T extends TensorBase<T, ?, V>, U extends TensorBase<U, ?, V>, V> extends TensorPropertiesMixin<V> {
+public interface MatrixMixin<T extends MatrixMixin<T, U, V>, U extends DenseMatrixMixin<U, ?, ?, V>, V> extends TensorPropertiesMixin<V> {
 
     /**
      * Gets the number of rows in this matrix.

@@ -27,9 +27,13 @@ package org.flag4j.core_temp;
 /**
  * This interface specifies operations that a vector should implement.
  * @param <T> Type of the vector.
- * @param <V> Type (or wrapper of) an element of the vector.
+ * @param <U> Type of matrix equivalent to {@code T}.
+ * @param <V> Type of dense matrix equivalent to {@code U}.
+ * @param <W> Type (or wrapper of) an element of the vector.
  */
-public interface VectorMixin<T extends VectorMixin<T, V>, V> extends TensorPropertiesMixin<V> {
+public interface VectorMixin<T extends VectorMixin<T, U, V, W>, U extends MatrixMixin<U, ?, W>,
+        V extends MatrixMixin<V, ?, W>, W>
+        extends TensorPropertiesMixin<W>, VectorMatrixOpsMixin<T, U, V> {
 
     /**
      * Joints specified vector with this vector. That is, creates a vector of length {@code this.length() + b.length()} containing
@@ -52,7 +56,7 @@ public interface VectorMixin<T extends VectorMixin<T, V>, V> extends TensorPrope
      * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of entries.
      * @see #dot(VectorMixin)
      */
-    public V inner(T b);
+    public W inner(T b);
 
 
     /**
@@ -68,7 +72,7 @@ public interface VectorMixin<T extends VectorMixin<T, V>, V> extends TensorPrope
      * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of entries.
      * @see #inner(VectorMixin)
      */
-    public V dot(T b);
+    public W dot(T b);
 
 
     /**

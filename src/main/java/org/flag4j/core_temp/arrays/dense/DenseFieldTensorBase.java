@@ -28,9 +28,11 @@ import org.flag4j.core.Shape;
 import org.flag4j.core_temp.FieldTensorBase;
 import org.flag4j.core_temp.arrays.sparse.SparseTensorMixin;
 import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.core_temp.structures.fields.RealFloat64;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.dense.field_ops.DenseFieldTensorDot;
 import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.exceptions.TensorShapeException;
 
 
 /**
@@ -56,6 +58,21 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
      */
     protected DenseFieldTensorBase(Shape shape, V[] entries) {
         super(shape, entries);
+    }
+
+
+    /**
+     * Computes the element-wise absolute value of this tensor.
+     *
+     * @return The element-wise absolute value of this tensor.
+     */
+    @Override
+    public FieldTensor<RealFloat64> abs() {
+        RealFloat64[] abs = new RealFloat64[entries.length];
+        for(int i = 0, size=entries.length; i<size; ++i)
+            abs[i] = new RealFloat64(entries[i].abs());
+
+        return new FieldTensor<RealFloat64>(shape, abs);
     }
 
 
@@ -155,5 +172,90 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
     public T T(int... axes) {
         ParameterChecks.ensurePermutation(axes);
         return TransposeDispatcher.dispatchTensor(this, axes);
+    }
+
+
+    /**
+     * Computes the element-wise multiplication of two tensors and stores the result in this tensor.
+     *
+     * @param b Second tensor in the element-wise product.
+     *
+     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     */
+    @Override
+    public void elemMultEq(T b) {
+        ParameterChecks.ensureEqualShape(shape, b.shape);
+
+        for(int i=0, size=entries.length; i<size; i++)
+            entries[i] = entries[i].mult(b.entries[i]);
+    }
+
+
+    /**
+     * Computes the element-wise sum between two tensors and stores the result in this tensor.
+     *
+     * @param b Second tensor in the element-wise sum.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
+     */
+    @Override
+    public void addEq(T b) {
+        ParameterChecks.ensureEqualShape(shape, b.shape);
+
+        for(int i=0, size=entries.length; i<size; i++)
+            entries[i] = entries[i].add(b.entries[i]);
+    }
+
+
+    /**
+     * Computes the element-wise difference between two tensors and stores the result in this tensor.
+     *
+     * @param b Second tensor in the element-wise difference.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
+     */
+    @Override
+    public void subEq(T b) {
+        ParameterChecks.ensureEqualShape(shape, b.shape);
+
+        for(int i=0, size=entries.length; i<size; i++)
+            entries[i] = entries[i].sub(b.entries[i]);
+    }
+
+
+    /**
+     * Computes the element-wise division between two tensors and stores the result in this tensor.
+     *
+     * @param b The denominator tensor in the element-wise quotient.
+     *
+     * @throws TensorShapeException If this tensor and {@code b}'s shape are not equal.
+     */
+    @Override
+    public void divEq(T b) {
+        ParameterChecks.ensureEqualShape(shape, b.shape);
+
+        for(int i=0, size=entries.length; i<size; i++)
+            entries[i] = entries[i].div(b.entries[i]);
+    }
+
+
+    /**
+     * Computes the element-wise division between two tensors.
+     *
+     * @param b The denominator tensor in the element-wise quotient.
+     *
+     * @return The element-wise quotient of this tensor and {@code b}.
+     *
+     * @throws TensorShapeException If this tensor and {@code b}'s shape are not equal.
+     */
+    @Override
+    public T div(T b) {
+        ParameterChecks.ensureEqualShape(this.shape, b.shape);
+        Field<V>[] quotient = new Field[entries.length];
+
+        for(int i=0, size=entries.length; i<size; i++)
+            quotient[i] = entries[i].div(b.entries[i]);
+
+        return makeLikeTensor(shape, (V[]) quotient);
     }
 }

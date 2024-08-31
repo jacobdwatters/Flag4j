@@ -24,15 +24,11 @@
 
 package org.flag4j.core_temp.arrays.sparse;
 
-
 import org.flag4j.core.Shape;
-import org.flag4j.core_temp.arrays.dense.FieldMatrix;
-import org.flag4j.core_temp.arrays.dense.FieldTensor;
-import org.flag4j.core_temp.arrays.dense.FieldVector;
+import org.flag4j.core_temp.arrays.dense.CTensor;
+import org.flag4j.core_temp.structures.fields.Complex128;
+import org.flag4j.core_temp.structures.fields.Complex64;
 import org.flag4j.core_temp.structures.fields.Field;
-import org.flag4j.operations.sparse.coo.field_ops.SparseFieldEquals;
-import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -41,10 +37,10 @@ import java.util.List;
 
 
 /**
- * <p>Sparse tensor stored in coordinate list (COO) format. The entries of this COO tensor are elements of a {@link Field}</p>
+ * <p>Sparse complex tensor stored in coordinate list (COO) format. The entries of this COO tensor are of type {@link Complex128}</p>
  *
- * <p>The non-zero entries and non-zero indices of a COO tensor are mutable but the shape and total number of non-zero entries is
- * fixed.</p>
+ * <p>The non-zero entries and non-zero indices of a COO tensor are mutable but the {@link #shape} and total number of
+ * {@link #entries non-zero entries} is fixed.</p>
  *
  * <p>Sparse tensors allow for the efficient storage of and operations on tensors that contain many zero values.</p>
  *
@@ -64,24 +60,21 @@ import java.util.List;
  *     index of {@code entries[i]}.</p>
  *     </li>
  * </ul>
- *
- * @param <T> Type of the {@link #entries} of this tensor.
  */
-public class CooFieldTensor<T extends Field<T>>
-        extends CooFieldTensorBase<CooFieldTensor<T>, FieldTensor<T>, T> {
-
+public class CooCTensor extends CooFieldTensorBase<CooCTensor, CTensor, Complex128> {
 
     /**
-     * creates a tensor with the specified entries and shape.
+     * Creates a tensor with the specified entries and shape.
      *
-     * @param shape shape of this tensor.
-     * @param entries non-zero entries of this tensor of this tensor. if this tensor is dense, this specifies all entries within the
+     * @param shape Shape of this tensor.
+     * @param entries Non-zero entries of this tensor of this tensor. If this tensor is dense, this specifies all entries within the
      * tensor.
-     * if this tensor is sparse, this specifies only the non-zero entries of the tensor.
+     * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      * @param indices
      */
-    public CooFieldTensor(Shape shape, T[] entries, int[][] indices) {
+    public CooCTensor(Shape shape, Complex128[] entries, int[][] indices) {
         super(shape, entries, indices);
+        if(entries.length == 0 || entries[0] == null) setZeroElement(Complex128.ZERO);
     }
 
 
@@ -94,8 +87,42 @@ public class CooFieldTensor<T extends Field<T>>
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      * @param indices
      */
-    public CooFieldTensor(Shape shape, List<Field<T>> entries, List<int[]> indices) {
-        super(shape, (T[]) entries.toArray(new Field[0]), indices.toArray(new int[0][]));
+    public CooCTensor(Shape shape, List<Complex128> entries, List<int[]> indices) {
+        super(shape, entries.toArray(new Complex128[0]), indices.toArray(new int[0][]));
+        if(super.entries.length == 0 || super.entries[0] == null) setZeroElement(Complex128.ZERO);
+    }
+
+
+    /**
+     * Creates a tensor with the specified entries and shape.
+     *
+     * @param shape Shape of this tensor.
+     * @param entries Non-zero entries of this tensor of this tensor. If this tensor is dense, this specifies all entries within the
+     * tensor.
+     * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
+     * @param indices
+     */
+    public CooCTensor(Shape shape, Complex64[] entries, int[][] indices) {
+        super(shape, new Complex128[entries.length], indices);
+        setZeroElement(Complex128.ZERO);
+
+        for(int i=0, size=entries.length; i<size; i++)
+            this.entries[i] = new Complex128(entries[i]);
+    }
+
+
+    /**
+     * Creates a tensor with the specified entries and shape.
+     *
+     * @param shape Shape of this tensor.
+     * @param entries Non-zero entries of this tensor of this tensor. If this tensor is dense, this specifies all entries within the
+     * tensor.
+     * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
+     * @param indices
+     */
+    public CooCTensor(Shape shape) {
+        super(shape, new Complex128[0], new int[shape.getRank()][0]);
+        super.setZeroElement(Complex128.ZERO);
     }
 
 
@@ -110,8 +137,8 @@ public class CooFieldTensor<T extends Field<T>>
      * the shape and entries.
      */
     @Override
-    public CooFieldTensor<T> makeLikeTensor(Shape shape, T[] entries) {
-        return new CooFieldTensor(shape, entries, ArrayUtils.deepCopy(indices, null));
+    public CooCTensor makeLikeTensor(Shape shape, Complex128[] entries) {
+        return new CooCTensor(shape, entries, indices.clone());
     }
 
 
@@ -125,8 +152,8 @@ public class CooFieldTensor<T extends Field<T>>
      * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public CooFieldTensor<T> makeLikeTensor(Shape shape, T[] entries, int[][] indices) {
-        return new CooFieldTensor(shape, entries, indices);
+    public CooCTensor makeLikeTensor(Shape shape, Complex128[] entries, int[][] indices) {
+        return new CooCTensor(shape, entries, indices);
     }
 
 
@@ -140,8 +167,8 @@ public class CooFieldTensor<T extends Field<T>>
      * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public CooFieldTensor<T> makeLikeTensor(Shape shape, List<Field<T>> entries, List<int[]> indices) {
-        return new CooFieldTensor(shape, entries, indices);
+    public CooCTensor makeLikeTensor(Shape shape, List<Field<Complex128>> entries, List<int[]> indices) {
+        return new CooCTensor(shape, entries.toArray(new Complex128[0]), indices.toArray(new int[0][]));
     }
 
 
@@ -154,8 +181,8 @@ public class CooFieldTensor<T extends Field<T>>
      * @return A dense tensor with the specified shape and entries which is a similar type to this sparse tensor.
      */
     @Override
-    public FieldTensor<T> makeDenseTensor(Shape shape, T[] entries) {
-        return new FieldTensor(shape, entries);
+    public CTensor makeDenseTensor(Shape shape, Complex128[] entries) {
+        return new CTensor(shape, entries);
     }
 
 
@@ -166,8 +193,6 @@ public class CooFieldTensor<T extends Field<T>>
      */
     @Override
     public double sparsity() {
-        if(nnz == 0) return 1.0;
-
         BigInteger totalEntries = totalEntries();
         BigDecimal sparsity = new BigDecimal(totalEntries).subtract(BigDecimal.valueOf(nnz));
         sparsity = sparsity.divide(new BigDecimal(totalEntries), 50, RoundingMode.HALF_UP);
@@ -182,72 +207,11 @@ public class CooFieldTensor<T extends Field<T>>
      * @return A dense tensor equivalent to this sparse tensor.
      */
     @Override
-    public FieldTensor<T> toDense() {
-        Field<T>[] entries = new Field[totalEntries().intValueExact()];
-
-        for(int i = 0; i< nnz; i++)
+    public CTensor toDense() {
+        Complex128[] entries = new Complex128[totalEntries().intValueExact()];
+        for(int i=0; i<nnz; i++)
             entries[shape.entriesIndex(indices[i])] = this.entries[i];
 
-        return new FieldTensor<T>(shape, (T[]) entries);
-    }
-
-
-    /**
-     * Converts this tensor to an equivalent vector. If this tensor is not rank 1, then it will be flattened.
-     * @return A vector equivalent of this tensor.
-     */
-    public FieldVector<T> toVector() {
-        return new FieldVector<T>(this.entries.clone());
-    }
-
-
-    /**
-     * Converts this tensor to a matrix with the specified shape.
-     * @param matShape Shape of the resulting matrix. Must be {@link ParameterChecks#ensureBroadcastable(Shape, Shape) broadcastable}
-     * with the shape of this tensor.
-     * @return A matrix of shape {@code matShape} with the values of this tensor.
-     * @throws org.flag4j.util.exceptions.LinearAlgebraException If {@code matShape} is not of rank 2.
-     */
-    public FieldMatrix<T> toMatrix(Shape matShape) {
-        ParameterChecks.ensureBroadcastable(shape, matShape);
-        ParameterChecks.ensureRank(matShape, 2);
-
-        return new FieldMatrix<T>(matShape, entries.clone());
-    }
-
-
-    /**
-     * Converts this tensor to an equivalent matrix.
-     * @return If this tensor is rank 2, then the equivalent matrix will be returned.
-     * If the tensor is rank 1, then a matrix with a single row will be returned. If the rank of this tensor is larger than 2, it will
-     * be flattened to a single row.
-     */
-    public FieldMatrix<T> toMatrix() {
-        FieldMatrix<T> mat;
-
-        if(this.getRank()==2) {
-            mat = new FieldMatrix<T>(this.shape, this.entries.clone());
-        } else {
-            mat = new FieldMatrix<T>(1, this.entries.length, this.entries.clone());
-        }
-
-        return mat;
-    }
-
-
-    /**
-     * Checks if an object is equal to this tensor object.
-     * @param object Object to check equality with this tensor.
-     * @return True if the two tensors have the same shape, are numerically equivalent, and are of type {@link CooFieldTensor}.
-     * False otherwise.
-     */
-    @Override
-    public boolean equals(Object object) {
-        if(this == object) return true;
-        if(object == null || object.getClass() != getClass()) return false;
-
-        CooFieldTensor<T> src2 = (CooFieldTensor<T>) object;
-
-        return SparseFieldEquals.tensorEquals(this, src2);
+        return new CTensor(shape, entries);
     }
 }

@@ -52,7 +52,7 @@ public final class DenseFieldDeterminant {
      * @return The determinant of the matrix.
      * @throws IllegalArgumentException If matrix is not square.
      */
-    public static <T extends Field<T>> T det(DenseFieldMatrixBase<?, ?, T> A) {
+    public static <T extends Field<T>> T det(DenseFieldMatrixBase<?, ?, ?, ?, T> A) {
         ParameterChecks.ensureSquareMatrix(A.shape);
         T det;
 
@@ -81,7 +81,7 @@ public final class DenseFieldDeterminant {
      * @return The determinant of the matrix.
      * @throws IllegalArgumentException If matrix is not square.
      */
-    public static <T extends Field<T>> T detLU(DenseFieldMatrixBase<?, ?, T> mat) {
+    public static <T extends Field<T>> T detLU(DenseFieldMatrixBase<?, ?, ?, ?, T> mat) {
         ParameterChecks.ensureSquareMatrix(mat.shape);
         LU<FieldMatrix<T>> lu = new FieldLU().decompose(mat);
 
@@ -95,7 +95,7 @@ public final class DenseFieldDeterminant {
      * @param tri Triangular matrix.
      * @return The determinant of the triangular matrix {@code T}.
      */
-    public static <T extends Field<T>> T detTri(DenseFieldMatrixBase<?, ?, T> tri) {
+    public static <T extends Field<T>> T detTri(DenseFieldMatrixBase<?, ?, ?, ?, T> tri) {
         T detU = tri.entries[0];
 
         // Compute the determinant of tri
@@ -111,7 +111,7 @@ public final class DenseFieldDeterminant {
      * @param A Matrix to compute the determinant of.
      * @return The determinant of the 3x3 matrix.
      */
-    public static <T extends Field<T>> T det3(DenseFieldMatrixBase<?, ?, T> A) {
+    public static <T extends Field<T>> T det3(DenseFieldMatrixBase<?, ?, ?, ?, T> A) {
         ParameterChecks.ensureEqualShape(A.shape, new Shape(3, 3));
         T det = A.entries[0].mult(A.entries[4].mult(A.entries[8]).sub(A.entries[5].mult(A.entries[7])));
         det = det.sub(A.entries[1].mult(A.entries[3].mult(A.entries[8]).sub(A.entries[5].mult(A.entries[6]))));
@@ -125,7 +125,7 @@ public final class DenseFieldDeterminant {
      * @param A Matrix to compute the determinant of.
      * @return The determinant of the 2x2 matrix.
      */
-    public static <T extends Field<T>> T det2(DenseFieldMatrixBase<?, ?, T> A) {
+    public static <T extends Field<T>> T det2(DenseFieldMatrixBase<?, ?, ?, ?, T> A) {
         ParameterChecks.ensureEqualShape(A.shape, new Shape(2, 2));
         return A.entries[0].mult(A.entries[3]).sub(A.entries[1].mult(A.entries[2]));
     }
@@ -136,7 +136,7 @@ public final class DenseFieldDeterminant {
      * @param A Matrix to compute the determinant of.
      * @return The determinant of the 1x1 matrix.
      */
-    public static <T extends Field<T>> T det1(DenseFieldMatrixBase<?, ?, T> A) {
+    public static <T extends Field<T>> T det1(DenseFieldMatrixBase<?, ?, ?, ?, T> A) {
         ParameterChecks.ensureEqualShape(A.shape, new Shape(1, 1));
         return A.entries[0];
     }

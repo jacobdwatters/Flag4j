@@ -26,14 +26,20 @@ package org.flag4j.core_temp.arrays.dense;
 
 
 import org.flag4j.core_temp.MatrixMixin;
-import org.flag4j.core_temp.TensorBase;
+import org.flag4j.core_temp.arrays.sparse.CooMatrixMixin;
+import org.flag4j.core_temp.arrays.sparse.CsrMatrixMixin;
 
 /**
  * This interface defines operations that all dense matrices should implement.
- * @param <T> Type of this matrix.
- * @param <V> Type (or wrapper) of an element of this matrix.
+ * @param <T> Type of this dense matrix.
+ * @param <U> Type of sparse COO matrix which is equivalent to {@code T} and {@code V}.
+ * @param <U> Type of sparse CSR matrix which is equivalent to {@code T} and {@code U}.
+ * @param <W> Type (or wrapper) of an element of this matrix.
  */
-public interface DenseMatrixMixin<T extends TensorBase<T, ?, V>, V> extends MatrixMixin<T, T, V> {
+public interface DenseMatrixMixin<T extends DenseMatrixMixin<T, U, V, W>,
+        U extends CooMatrixMixin<U, T, W>,
+        V extends CsrMatrixMixin<V, T, W>, W>
+        extends MatrixMixin<T, T, W>, DenseTensorMixin<T, U> {
 
     /**
      * Checks if a matrix is singular. That is, if the matrix is <b>NOT</b> invertible.
@@ -76,7 +82,7 @@ public interface DenseMatrixMixin<T extends TensorBase<T, ?, V>, V> extends Matr
      * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
-    public T setValues(V[][] values);
+    public T setValues(W[][] values);
 
 
     /**
@@ -98,4 +104,8 @@ public interface DenseMatrixMixin<T extends TensorBase<T, ?, V>, V> extends Matr
     public default boolean isFullRank() {
         return matrixRank() == Math.min(numRows(), numCols());
     }
+
+
+    // TODO: It would be nice to define this here.
+//    public V toCsr();
 }

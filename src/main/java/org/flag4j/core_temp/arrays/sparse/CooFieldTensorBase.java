@@ -120,9 +120,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
     public T recip() {
         /* This method overrides from FieldTensorBase to make clear it is only computing the
             multiplicative inverse for the non-zero elements of the tensor */
-
         Field<V>[] recip = new Field[entries.length];
-
         for(int i=0, size=entries.length; i<size; i++)
             recip[i] = entries[i].multInv();
 
@@ -157,22 +155,6 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
     @Override
     public T sub(double b) {
         return super.sub(b);
-    }
-
-
-    /**
-     * Computes the element-wise absolute value of this tensor.
-     *
-     * @return The element-wise absolute value of this tensor.
-     */
-    @Override
-    public CooFieldTensorBase<?, ?, RealFloat64> abs() {
-        Field<RealFloat64>[] abs = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++)
-            abs[i] = new RealFloat64(entries[i].abs());
-
-        return new CooFieldTensor<RealFloat64>(shape, (RealFloat64[]) abs, ArrayUtils.deepCopy(indices, null));
     }
 
 
@@ -375,7 +357,6 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
         ParameterChecks.ensureValidIndices(getRank(), axis1, axis2);
         ParameterChecks.ensureEquals(shape.get(axis1), shape.get(axis2));
 
-        final V ZERO = nnz > 0 ? entries[0].getZero() : null;
         int rank = getRank();
         int[] dims = shape.getDims();
 
@@ -411,7 +392,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
                 }
 
                 // Accumulate the value in the result map.
-                resultMap.put(linearIndex, resultMap.getOrDefault(linearIndex, ZERO).add(value));
+                resultMap.put(linearIndex, resultMap.getOrDefault(linearIndex, getZeroElement()).add(value));
             }
         }
 
@@ -837,4 +818,20 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      * @return A dense tensor with the specified shape and entries which is a similar type to this sparse tensor.
      */
     public abstract U makeDenseTensor(Shape shape, V[] entries);
+
+
+    /**
+     * Computes the element-wise absolute value of this tensor.
+     *
+     * @return The element-wise absolute value of this tensor.
+     */
+    @Override
+    public CooFieldTensor<RealFloat64> abs() {
+        RealFloat64[] abs = new RealFloat64[entries.length];
+
+        for(int i=0, size=entries.length; i<size; i++)
+            abs[i] = new RealFloat64(entries[i].abs());
+
+        return new CooFieldTensor<RealFloat64>(shape, abs, ArrayUtils.deepCopy(indices, null));
+    }
 }

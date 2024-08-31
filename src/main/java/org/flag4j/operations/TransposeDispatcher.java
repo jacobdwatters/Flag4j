@@ -136,7 +136,7 @@ public final class TransposeDispatcher {
      * @param src MatrixOld to transpose.
      * @return The transpose of the source matrix.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, T> dispatch(DenseFieldMatrixBase<?, ?, T> src) {
+    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> dispatch(DenseFieldMatrixBase<?, ?, ?, ?, T> src) {
 
         Field<T>[] dest;
 
@@ -240,7 +240,7 @@ public final class TransposeDispatcher {
      * @param src MatrixOld to transpose.
      * @return The transpose of the source matrix.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, T> dispatchHermitian(DenseFieldMatrixBase<?, ?, T> src) {
+    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> dispatchHermitian(DenseFieldMatrixBase<?, ?, ?, ?, T> src) {
         Field<T>[] dest;
 
         Algorithm algorithm = chooseAlgorithmHermitian(src.shape);

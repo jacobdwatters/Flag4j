@@ -29,7 +29,7 @@ import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.util.ErrorMessages;
 
 /**
- * A utility class for making coparisions between {@link Field} elements.
+ * A utility class for making comparisons between {@link Field} elements.
  */
 public final class CompareField {
 
@@ -42,7 +42,7 @@ public final class CompareField {
     /**
      * Computes the maximum value in the specified array. This is done according to the ordering imposed by
      * {@link Field#compareTo(Field)}.
-     * @param values Values to copmute maximum of.
+     * @param values Values to commute maximum of.
      * @return The maximum value in {@code values}. If {@code values.length} equals zero, then {@code null} is returned.
      */
     public static <T extends Field<T>> T max(T... values) {
@@ -59,7 +59,7 @@ public final class CompareField {
     /**
      * Computes the minimum value in the specified array. This is done according to the ordering imposed by
      * {@link Field#compareTo(Field)}.
-     * @param values Values to copmute minimum of.
+     * @param values Values to commute minimum of.
      * @return The minimum value in {@code values}. If {@code values.length} equals zero, then {@code null} is returned.
      */
     public static <T extends Field<T>> T min(T... values) {
@@ -74,9 +74,9 @@ public final class CompareField {
 
 
     /**
-     * Computes the maxcimum absolute value in the specified array. This is done according to the ordering imposed by
+     * Computes the maximum absolute value in the specified array. This is done according to the ordering imposed by
      * {@link Double#compareTo(Double) Double.compareTo(x.mag(), y.mag())} where x and y are elements of {@code values}.
-     * @param values Values to copmute maximum of.
+     * @param values Values to commute maximum of.
      * @return The maximum value in {@code values}. If {@code values.length} equals zero, then {@link Double#NaN} is returned.
      */
     public static <T extends Field<T>> double maxAbs(T... values) {
@@ -95,7 +95,7 @@ public final class CompareField {
     /**
      * Computes the minimum absolute value in the specified array. This is done according to the ordering imposed by
      * {@link Double#compareTo(Double) Double.compareTo(x.mag(), y.mag())} where x and y are elements of {@code values}.
-     * @param values Values to copmute minimum of.
+     * @param values Values to compute minimum of.
      * @return The minimum value in {@code values}. If {@code values.length} equals zero, then {@link Double#NaN} is returned.
      */
     public static <T extends Field<T>> double minAbs(T... values) {
@@ -114,9 +114,9 @@ public final class CompareField {
     /**
      * Computes the index of the maximum value in the specified array. This is done according to the ordering imposed by
      * {@link Field#compareTo(Field)}.
-     * @param values Values for which copmute index of maximum value.
+     * @param values Values for which compute index of maximum value.
      * @return The index of the maximum value in {@code values}. If the maximum value occurs more than once, the index of the first
-     * occuracne is returned. If {@code values.length} equals zero, then {@code -1} is returned.
+     * occurrence is returned. If {@code values.length} equals zero, then {@code -1} is returned.
      */
     public static <T extends Field<T>> int argmax(T... values) {
         if(values.length == 0) return -1;
@@ -137,9 +137,9 @@ public final class CompareField {
     /**
      * Computes the index of the minimum value in the specified array. This is done according to the ordering imposed by
      * {@link Field#compareTo(Field)}.
-     * @param values Values for which copmute index of the minimum value.
+     * @param values Values for which compute index of the minimum value.
      * @return The index of the minimum value in {@code values}. If the minimum value occurs more than once, the index of the first
-     * occuracne is returned. If {@code values.length} equals zero, then {@code -1} is returned.
+     * occurrence is returned. If {@code values.length} equals zero, then {@code -1} is returned.
      */
     public static <T extends Field<T>> int argmin(T... values) {
         if(values.length == 0) return -1;
@@ -159,9 +159,9 @@ public final class CompareField {
 
     /**
      * Computes the index of the maximum absolute value in the specified array.
-     * @param values Values for which copmute index of maximum absolute value.
-     * @return The index of the maximum absolute value in {@code values}. If the maximum absollute value occurs more than once, the
-     * index of the first occuracne is returned. If {@code values.length} equals zero, then {@code -1} is returned.
+     * @param values Values for which compute index of maximum absolute value.
+     * @return The index of the maximum absolute value in {@code values}. If the maximum absolute value occurs more than once, the
+     * index of the first occurrence is returned. If {@code values.length} equals zero, then {@code -1} is returned.
      */
     public static <T extends Field<T>> int argmaxAbs(T... values) {
         if(values.length == 0) return -1;
@@ -182,9 +182,9 @@ public final class CompareField {
 
     /**
      * Computes the index of the minimum absolute value in the specified array.
-     * @param values Values for which copmute index of the minimum absolute value.
+     * @param values Values for which compute index of the minimum absolute value.
      * @return The index of the minimum absolute value in {@code values}. If the minimum absolute value occurs more than once,
-     * the index of the first occuracne is returned. If {@code values.length} equals zero, then {@code -1} is returned.
+     * the index of the first occurrence is returned. If {@code values.length} equals zero, then {@code -1} is returned.
      */
     public static <T extends Field<T>> int argminAbs(T... values) {
         if(values.length == 0) return -1;

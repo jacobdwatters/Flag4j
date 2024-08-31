@@ -30,9 +30,9 @@ import org.flag4j.core_temp.PrimitiveDoubleTensorBase;
 import org.flag4j.core_temp.arrays.dense.Tensor;
 import org.flag4j.operations.dense.real.AggregateDenseReal;
 import org.flag4j.operations.sparse.coo.SparseDataWrapper;
-import org.flag4j.operations.sparse.coo.field_ops.SparseFieldEquals;
 import org.flag4j.operations.sparse.coo.real.RealCooTensorDot;
 import org.flag4j.operations.sparse.coo.real.RealCooTensorOperations;
+import org.flag4j.operations.sparse.coo.real.RealSparseEquals;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -801,6 +801,6 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
 
         CooTensor src2 = (CooTensor) object;
 
-        return SparseFieldEquals.tensorEquals(this, src2);
+        return RealSparseEquals.tensorEquals(this, src2);
     }
 }

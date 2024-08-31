@@ -26,12 +26,13 @@ package org.flag4j.core_temp.arrays.sparse;
 
 import org.flag4j.core.Shape;
 import org.flag4j.core_temp.PrimitiveDoubleTensorBase;
+import org.flag4j.core_temp.arrays.dense.Matrix;
 import org.flag4j.core_temp.arrays.dense.Vector;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.operations.dense.real.AggregateDenseReal;
 import org.flag4j.operations.sparse.coo.SparseDataWrapper;
+import org.flag4j.operations.sparse.coo.real.RealCooVectorOperations;
 import org.flag4j.operations.sparse.coo.real.RealSparseEquals;
-import org.flag4j.operations.sparse.coo.real.RealSparseVectorOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -66,7 +67,7 @@ import java.util.List;
  * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.</p>
  */
 public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
-        implements SparseVectorMixin<CooVector, Vector, Double> {
+        implements SparseVectorMixin<CooVector, Vector, CooMatrix, Matrix, Double> {
 
     /**
      * The indices of the non-zero entries in this sparse COO vector.
@@ -80,6 +81,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      * The number of non-zero values in this sparse COO vector.
      */
     public final int nnz;
+
 
     /**
      * Creates sparse COO vector with the specified {@code size}, non-zero entries, and non-zero indices.
@@ -282,7 +284,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     @Override
     public Double inner(CooVector b) {
-        return RealSparseVectorOperations.inner(this, b);
+        return RealCooVectorOperations.inner(this, b);
     }
 
 
@@ -579,7 +581,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     @Override
     public CooVector add(CooVector b) {
-        return RealSparseVectorOperations.add(this, b);
+        return RealCooVectorOperations.add(this, b);
     }
 
 
@@ -594,7 +596,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     @Override
     public CooVector sub(CooVector b) {
-        return RealSparseVectorOperations.sub(this, b);
+        return RealCooVectorOperations.sub(this, b);
     }
 
 
@@ -609,7 +611,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     @Override
     public CooVector elemMult(CooVector b) {
-        return RealSparseVectorOperations.elemMult(this, b);
+        return RealCooVectorOperations.elemMult(this, b);
     }
 
 
@@ -860,5 +862,113 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
         CooVector src2 = (CooVector) object;
 
         return RealSparseEquals.vectorEquals(this, src2);
+    }
+
+
+    /**
+     * Repeats a vector {@code n} times along a certain axis to create a matrix.
+     *
+     * @param n Number of times to repeat vector.
+     * @param axis Axis along which to repeat vector:
+     * <ul>
+     *     <li>If {@code axis=0}, then the vector will be treated as a row vector and stacked vertically {@code n} times.</li>
+     *     <li>If {@code axis=1} then the vector will be treated as a column vector and stacked horizontally {@code n} times.</li>
+     * </ul>
+     *
+     * @return A matrix whose rows/columns are this vector repeated.
+     */
+    @Override
+    public CooMatrix repeat(int n, int axis) {
+        return RealCooVectorOperations.repeat(this, n, axis);
+    }
+
+
+    /**
+     * Stacks two vectors vertically as if they were row vectors to form a matrix with two rows.
+     *
+     * @param b Vector to stack below this vector.
+     *
+     * @return The result of stacking this vector and vector {@code b}.
+     *
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of entries in
+     *                                  the vector {@code b}.
+     */
+    @Override
+    public CooMatrix stack(CooVector b) {
+        return RealCooVectorOperations.stack(this, b);
+    }
+
+
+    /**
+     * <p>
+     * Stacks two vectors along specified axis.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
+     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
+     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * </p>
+     *
+     * @param b VectorOld to stack with this vector.
+     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
+     * vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
+     *
+     * @return The result of stacking this vector and the vector {@code b}.
+     *
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
+     *                                  entries in the vector {@code b}.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public CooMatrix stack(CooVector b, int axis) {
+        ParameterChecks.ensureAxis2D(axis);
+        return axis==0 ? stack(b) : stack(b).T();
+    }
+
+
+    /**
+     * Computes the outer product of two vectors.
+     *
+     * @param b Second vector in the outer product.
+     *
+     * @return The result of the vector outer product between this vector and {@code b}.
+     *
+     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
+     */
+    @Override
+    public Matrix outer(CooVector b) {
+        return RealCooVectorOperations.outerProduct(this, b);
+    }
+
+
+    /**
+     * Converts a vector to an equivalent matrix representing either a row or column vector.
+     *
+     * @param columVector Flag indicating whether to convert this vector to a matrix representing a row or column vector:
+     * <p>If {@code true}, the vector will be converted to a matrix representing a column vector.</p>
+     * <p>If {@code false}, The vector will be converted to a matrix representing a row vector.</p>
+     *
+     * @return A matrix equivalent to this vector.
+     */
+    @Override
+    public CooMatrix toMatrix(boolean columVector) {
+        if(columVector) {
+            // Convert to column vector
+            int[] rowIndices = indices.clone();
+            int[] colIndices = new int[entries.length];
+
+            return new CooMatrix(this.size, 1, entries.clone(), rowIndices, colIndices);
+        } else {
+            // Convert to row vector.
+            int[] rowIndices = new int[entries.length];
+            int[] colIndices = indices.clone();
+
+            return new CooMatrix(1, this.size, entries.clone(), rowIndices, colIndices);
+        }
     }
 }

@@ -27,8 +27,10 @@ package org.flag4j.core_temp.arrays.sparse;
 
 import org.flag4j.core.Shape;
 import org.flag4j.core_temp.FieldTensorBase;
+import org.flag4j.core_temp.arrays.dense.DenseFieldMatrixBase;
 import org.flag4j.core_temp.arrays.dense.DenseFieldVectorBase;
 import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.core_temp.structures.fields.RealFloat64;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.operations.common.field_ops.CompareField;
 import org.flag4j.operations.sparse.coo.field_ops.CooFieldVectorOperations;
@@ -66,13 +68,15 @@ import java.util.List;
  * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.</p>
  *
  * @param <T> Type of this vector.
- * @param <U> Type of equivalent dense vector.
- * @param <V> Type of the field element in this vector.
+ * @param <U> Type of matrix equivalent to {@code T}.
+ * @param <V> Type of equivalent dense vector.
+ * @param <W> Type of dense matrix equivalent to {@code U}.
+ * @param <Y> Type of the field element in this vector.
  */
-public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, U extends DenseFieldVectorBase<U, ?, T, V>,
-        V extends Field<V>>
-        extends FieldTensorBase<T, U, V>
-        implements SparseVectorMixin<T, U, V> {
+public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W, Y>, U extends CooFieldMatrixBase<U, W, T, Y>,
+        V extends DenseFieldVectorBase<V, W, T, Y>, W extends DenseFieldMatrixBase<W, U, ?, V, Y>, Y extends Field<Y>>
+        extends FieldTensorBase<T, V, Y>
+        implements SparseVectorMixin<T, V, U, W, Y> {
 
     /**
      * Indices of the non-zero values of this sparse COO vector.
@@ -95,8 +99,13 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-    protected CooFieldVectorBase(int size, V[] entries, int[] indices) {
+    protected CooFieldVectorBase(int size, Y[] entries, int[] indices) {
         super(new Shape(size), entries);
+        if(entries.length != indices.length) {
+            throw new IllegalArgumentException("entries and indices arrays of a COO vector must have the same length but got " +
+                    "lengths" + entries.length + " and " + indices.length + ".");
+        }
+
         this.indices = indices;
         this.size = size;
         this.nnz = entries.length;
@@ -111,7 +120,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      * @return A sparse COO vector of the same type as this vector with the specified {@code size}, non-zero entries,
      * and non-zero indices.
      */
-    public abstract T makeLikeTensor(int size, V[] entries, int[] indices);
+    public abstract T makeLikeTensor(int size, Y[] entries, int[] indices);
 
 
     /**
@@ -122,7 +131,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      * @return A sparse COO vector of the same type as this tensor with the specified {@code size}, non-zero entries, and the same
      * non-zero indices as this vector.
      */
-    public abstract T makeLikeTensor(int size, V[] entries);
+    public abstract T makeLikeTensor(int size, Y[] entries);
 
 
     /**
@@ -133,7 +142,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      * @return A sparse COO vector of the same type as this vector with the specified {@code size}, non-zero entries,
      * and non-zero indices.
      */
-    public abstract T makeLikeTensor(int size, List<V> entries, List<Integer> indices);
+    public abstract T makeLikeTensor(int size, List<Y> entries, List<Integer> indices);
 
 
     /**
@@ -141,7 +150,32 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      * @param entries The entries of the dense vector.
      * @return A dense vector which is of a similar type to this sparse COO vector containing the specified {@code entries}.
      */
-    public abstract U makeDenseTensor(V... entries);
+    public abstract V makeLikeDenseTensor(Y... entries);
+
+
+    /**
+     * Constructs a sparse matrix which is of a similar type to this sparse COO vector with the specified {@code shape}, non-zero
+     * entries, non-zero row indices, and non-zero column indices.
+     * @param shape Shape of the matrix.
+     * @param entries The non-zero indices of the matrix.
+     * @param rowIndices The row indices of the non-zero entries.
+     * @param colIndices The column indices of the non-zero entries.
+     * @return A dense matrix which is of a similar type to this sparse COO vector with the specified {@code shape} and containing
+     * the specified {@code entries}.
+     */
+    public abstract U makeLikeMatrix(Shape shape, Y[] entries, int[] rowIndices, int[] colIndices);
+
+
+    /**
+     * Constructs a dense matrix which is of a similar type to this sparse COO vector with the specified {@code shape} and containing
+     * the specified {@code entries}.
+     * @param shape Shape of the dense matrix.
+     * @param entries The entries of the dense matrix.
+     * @return A dense matrix which is of a similar type to this sparse COO vector with the specified {@code shape} and containing
+     * the specified {@code entries}.
+     */
+    public abstract W makeLikeDenseMatrix(Shape shape, Y... entries);
+
 
 
     /**
@@ -208,7 +242,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      *                                  are out of bounds for the corresponding tensor.
      */
     @Override
-    public U tensorDot(T src2, int[] aAxes, int[] bAxes) {
+    public V tensorDot(T src2, int[] aAxes, int[] bAxes) {
         if(aAxes.length != 1 || bAxes.length != 1) {
             throw new LinearAlgebraException("Vector dot product requires exactly one dimension for each vector but got "
                     + aAxes.length + " and " + bAxes.length + ".");
@@ -218,7 +252,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
                     + aAxes[0] + " and " + bAxes[0] + ".");
         }
 
-        return makeDenseTensor(dot(src2));
+        return makeLikeDenseTensor(dot(src2));
     }
 
 
@@ -272,11 +306,10 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      */
     @Override
     public T join(T b) {
-        V zero = null;
-        if(nnz > 0) zero = entries[0].getZero();
-        else if(b.nnz > 0) zero = b.entries[0].getZero();
+        Y zero = getZeroElement();
+        if(zero == null) zero = b.getZeroElement();
 
-        Field<V>[] newEntries = new Field[this.entries.length + b.entries.length];
+        Field<Y>[] newEntries = new Field[this.entries.length + b.entries.length];
         Arrays.fill(newEntries, zero);
         int[] newIndices = new int[this.indices.length + b.indices.length];
 
@@ -293,7 +326,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
             newIndices[this.indices.length+i] = b.indices[i] + this.size;
         }
 
-        return makeLikeTensor(this.size + b.size, (V[]) newEntries, newIndices);
+        return makeLikeTensor(this.size + b.size, (Y[]) newEntries, newIndices);
     }
 
 
@@ -311,7 +344,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      * @see #dot(CooFieldVectorBase) 
      */
     @Override
-    public V inner(T b) {
+    public Y inner(T b) {
         return CooFieldVectorOperations.inner(this, b);
     }
 
@@ -330,7 +363,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      * @see #inner(CooFieldVectorBase) 
      */
     @Override
-    public V dot(T b) {
+    public Y dot(T b) {
         return CooFieldVectorOperations.dot(this, b);
     }
 
@@ -396,7 +429,8 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
         } else {
             result = true;
             int sparseIndex = 0;
-            V scale = entries[0].getZero();
+            Y scale = getZeroElement();
+            if(scale == null) scale = b.getZeroElement();
 
             // Find first non-zero entry in b and compute the scaling factor (we know there is at least one from else-if).
             for(int i=0; i<b.size; i++) {
@@ -465,14 +499,14 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      * @return A dense tensor equivalent to this sparse tensor.
      */
     @Override
-    public U toDense() {
-        Field<V>[] denseEntries = new Field[size];
+    public V toDense() {
+        Field<Y>[] denseEntries = new Field[size];
         Arrays.fill(denseEntries, nnz > 0 ? denseEntries[0].getZero() : null);
 
         for(int i = 0; i < nnz; i++)
             denseEntries[indices[i]] = entries[i];
 
-        return makeDenseTensor((V[]) denseEntries);
+        return makeLikeDenseTensor((Y[]) denseEntries);
     }
 
 
@@ -485,9 +519,6 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
     }
 
 
-    // TODO: ------------------- Implementation -------------------
-
-
     /**
      * Gets the element of this tensor at the specified indices.
      *
@@ -498,10 +529,10 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      * @throws ArrayIndexOutOfBoundsException If any indices are not within this matrix.
      */
     @Override
-    public V get(int... indices) {
+    public Y get(int... indices) {
         ParameterChecks.ensureEquals(indices.length, 1);
         ParameterChecks.ensureInRange(indices[0], 0, size, "index");
-        V zero = nnz > 0 ? entries[0].getZero() : null;
+        Y zero = getZeroElement();
 
         int idx = Arrays.binarySearch(this.indices, indices[0]);
         return idx>=0 ? entries[idx] : zero;
@@ -542,7 +573,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      * @return The product of all non-zero values in this tensor.
      */
     @Override
-    public V prod() {
+    public Y prod() {
         return super.prod(); // Overrides method from super class to emphasize it operates on the non-zero values only.
     }
 
@@ -558,7 +589,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      */
     @Override
     public T add(T b) {
-        return (T) CooFieldVectorOperations.add(this, b);
+        return CooFieldVectorOperations.add((T) this, b);
     }
 
 
@@ -649,7 +680,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      * @return The sum of this tensor's non-zero with the scalar {@code b}.
      */
     @Override
-    public T add(V b) {
+    public T add(Y b) {
         return super.add(b); // Overrides method from super class to emphasize it operates on the non-zero values only.
     }
 
@@ -660,7 +691,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      * @param b Scalar field value in sum.
      */
     @Override
-    public void addEq(V b) {
+    public void addEq(Y b) {
         super.addEq(b); // Overrides method from super class to emphasize it operates on the non-zero values only.
     }
 
@@ -673,7 +704,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      * @return The difference of this tensor's non-zero values and the scalar {@code b}.
      */
     @Override
-    public T sub(V b) {
+    public T sub(Y b) {
         return super.sub(b); // Overrides method from super class to emphasize it operates on the non-zero values only.
     }
 
@@ -684,7 +715,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      * @param b Scalar value in difference.
      */
     @Override
-    public void subEq(V b) {
+    public void subEq(Y b) {
         super.subEq(b); // Overrides method from super class to emphasize it operates on the non-zero values only.
     }
 
@@ -695,7 +726,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      * @return The minimum non-zero value in this tensor.
      */
     @Override
-    public V min() {
+    public Y min() {
         return super.min(); // Overrides method from super class to emphasize it operates on the non-zero values only.
     }
 
@@ -706,7 +737,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      * @return The maximum non-zero value in this tensor.
      */
     @Override
-    public V max() {
+    public Y max() {
         return super.max(); // Overrides method from super class to emphasize it operates on the non-zero values only.
     }
 
@@ -818,6 +849,103 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V>, 
      */
     @Override
     public T recip() {
-        return super.recip();
+        return super.recip();  // Overrides method from super to emphasize that it works only on the non-zero values of this vector.
+    }
+
+
+    /**
+     * Computes the element-wise absolute value of this tensor.
+     *
+     * @return The element-wise absolute value of this tensor.
+     */
+    @Override
+    public CooFieldVector<RealFloat64> abs() {
+        RealFloat64[] abs = new RealFloat64[entries.length];
+
+        for(int i=0, size=entries.length; i<size; i++)
+            abs[i] = new RealFloat64(entries[i].abs());
+
+        return new CooFieldVector<RealFloat64>(size, abs, indices.clone());
+    }
+
+
+    /**
+     * Stacks two vectors vertically as if they were row vectors to form a matrix with two rows.
+     *
+     * @param b Vector to stack below this vector.
+     *
+     * @return The result of stacking this vector and vector {@code b}.
+     *
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of entries in
+     *                                  the vector {@code b}.
+     */
+    @Override
+    public U stack(T b) {
+        return (U) CooFieldVectorOperations.stack(this, b);
+    }
+
+
+    /**
+     * Repeats a vector {@code n} times along a certain axis to create a matrix.
+     *
+     * @param n Number of times to repeat vector.
+     * @param axis Axis along which to repeat vector:
+     * <ul>
+     *     <li>If {@code axis=0}, then the vector will be treated as a row vector and stacked vertically {@code n} times.</li>
+     *     <li>If {@code axis=1} then the vector will be treated as a column vector and stacked horizontally {@code n} times.</li>
+     * </ul>
+     *
+     * @return A matrix whose rows/columns are this vector repeated.
+     */
+    @Override
+    public U repeat(int n, int axis) {
+        return (U) CooFieldVectorOperations.repeat(this, n, axis);
+    }
+
+
+    /**
+     * <p>
+     * Stacks two vectors along specified axis.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
+     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
+     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * </p>
+     *
+     * @param b VectorOld to stack with this vector.
+     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
+     * vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
+     *
+     * @return The result of stacking this vector and the vector {@code b}.
+     *
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
+     *                                  entries in the vector {@code b}.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public U stack(T b, int axis) {
+        ParameterChecks.ensureAxis2D(axis);
+        return axis==0 ? stack(b) : stack(b).T();
+    }
+
+
+    /**
+     * Computes the outer product of two vectors.
+     *
+     * @param b Second vector in the outer product.
+     *
+     * @return The result of the vector outer product between this vector and {@code b}.
+     *
+     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
+     */
+    @Override
+    public W outer(T b) {
+        return (W) CooFieldVectorOperations.outerProduct(this, b);
     }
 }

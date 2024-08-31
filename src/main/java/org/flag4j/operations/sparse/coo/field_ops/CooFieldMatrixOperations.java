@@ -54,8 +54,8 @@ public final class CooFieldMatrixOperations {
      * @return The sum of the two matrices {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
-    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, V>
-    add(CooFieldMatrixBase<?, ?, V> src1, CooFieldMatrixBase<?, ?, V> src2) {
+    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, V>
+    add(CooFieldMatrixBase<?, ?, ?, V> src1, CooFieldMatrixBase<?, ?, ?, V> src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
@@ -122,7 +122,7 @@ public final class CooFieldMatrixOperations {
      * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
      */
     public static <V extends Field<V>> FieldMatrix<V>
-    add(CooFieldMatrixBase<?, ?, V> src, double a) {
+    add(CooFieldMatrixBase<?, ?, ?, V> src, double a) {
         Field<V>[] sum = new Field[src.totalEntries().intValueExact()];
         Arrays.fill(sum, a);
 
@@ -147,8 +147,8 @@ public final class CooFieldMatrixOperations {
      * @return The difference of the two matrices {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
-    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, V>
-    sub(CooFieldMatrixBase<?, ?, V> src1, CooFieldMatrixBase<?, ?, V> src2) {
+    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, V>
+    sub(CooFieldMatrixBase<?, ?, ?, V> src1, CooFieldMatrixBase<?, ?, ?, V> src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
@@ -215,7 +215,7 @@ public final class CooFieldMatrixOperations {
      * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
      */
     public static <V extends Field<V>> FieldMatrix<V>
-    sub(CooFieldMatrixBase<?, ?, V> src, double a) {
+    sub(CooFieldMatrixBase<?, ?, ?, V> src, double a) {
         Field<V>[] sum = new Field[src.totalEntries().intValueExact()];
         Arrays.fill(sum, -a);
 
@@ -241,8 +241,8 @@ public final class CooFieldMatrixOperations {
      * @return The element-wise product of the two matrices {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
-    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, V>
-    elemMult(CooFieldMatrixBase<?, ?, V> src1, CooFieldMatrixBase<?, ?, V> src2) {
+    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, V>
+    elemMult(CooFieldMatrixBase<?, ?, ?, V> src1, CooFieldMatrixBase<?, ?, ?, V> src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);

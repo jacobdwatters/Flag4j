@@ -61,7 +61,8 @@ import java.util.List;
  *
  * @param <T> Type of the {@link Field field} element in this matrix.
  */
-public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFieldMatrix<T>, FieldMatrix<T>, T> {
+public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFieldMatrix<T>,
+        FieldMatrix<T>, CooFieldVector<T>, T> {
 
     /**
      * Creates a sparse coo matrix with the specified non-zero entries, non-zero indices, and shape.
@@ -174,6 +175,36 @@ public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFi
     @Override
     public FieldMatrix<T> makeDenseTensor(Shape shape, T[] entries) {
         return new FieldMatrix<T>(shape, entries);
+    }
+
+
+    /**
+     * Constructs a vector of similar type to this matrix.
+     *
+     * @param size The size of the vector.
+     * @param entries The non-zero entries of the vector.
+     * @param indices The indices of the non-zero values of the vector.
+     *
+     * @return A vector of similar type to this matrix with the specified size, non-zero entries, and indices.
+     */
+    @Override
+    public CooFieldVector<T> makeLikeVector(int size, T[] entries, int[] indices) {
+        return new CooFieldVector<T>(size, entries, indices);
+    }
+
+
+    /**
+     * Constructs a vector of similar type to this matrix.
+     *
+     * @param size The size of the vector.
+     * @param entries The non-zero entries of the vector.
+     * @param indices The indices of the non-zero values of the vector.
+     *
+     * @return A vector of similar type to this matrix with the specified size, non-zero entries, and indices.
+     */
+    @Override
+    public CooFieldVector<T> makeLikeVector(int size, List<T> entries, List<Integer> indices) {
+        return new CooFieldVector<T>(size, entries, indices);
     }
 
 

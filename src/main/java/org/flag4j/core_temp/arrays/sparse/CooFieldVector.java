@@ -25,6 +25,7 @@
 package org.flag4j.core_temp.arrays.sparse;
 
 import org.flag4j.core.Shape;
+import org.flag4j.core_temp.arrays.dense.FieldMatrix;
 import org.flag4j.core_temp.arrays.dense.FieldVector;
 import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.operations.sparse.coo.field_ops.SparseFieldEquals;
@@ -61,7 +62,9 @@ import java.util.List;
  *
  * @param <T> Type of the field element in this vector.
  */
-public class CooFieldVector<T extends Field<T>> extends CooFieldVectorBase<CooFieldVector<T>, FieldVector<T>, T> {
+public class CooFieldVector<T extends Field<T>> extends CooFieldVectorBase<CooFieldVector<T>, CooFieldMatrix<T>,
+        FieldVector<T>, FieldMatrix<T>, T> {
+
 
     /**
      * Creates sparse COO vector with the specified {@code size}, non-zero entries, and non-zero indices.
@@ -151,8 +154,42 @@ public class CooFieldVector<T extends Field<T>> extends CooFieldVectorBase<CooFi
      * @return A dense vector which is of a similar type to this sparse COO vector containing the specified {@code entries}.
      */
     @Override
-    public FieldVector<T> makeDenseTensor(T... entries) {
+    public FieldVector<T> makeLikeDenseTensor(T... entries) {
         return new FieldVector<T>(entries);
+    }
+
+
+    /**
+     * Constructs a sparse matrix which is of a similar type to this sparse COO vector with the specified {@code shape}, non-zero
+     * entries, non-zero row indices, and non-zero column indices.
+     *
+     * @param shape Shape of the matrix.
+     * @param entries The non-zero indices of the matrix.
+     * @param rowIndices The row indices of the non-zero entries.
+     * @param colIndices The column indices of the non-zero entries.
+     *
+     * @return A dense matrix which is of a similar type to this sparse COO vector with the specified {@code shape} and containing
+     * the specified {@code entries}.
+     */
+    @Override
+    public CooFieldMatrix<T> makeLikeMatrix(Shape shape, T[] entries, int[] rowIndices, int[] colIndices) {
+        return new CooFieldMatrix<T>(shape, entries, rowIndices, colIndices);
+    }
+
+
+    /**
+     * Constructs a dense matrix which is of a similar type to this sparse COO vector with the specified {@code shape} and containing
+     * the specified {@code entries}.
+     *
+     * @param shape Shape of the dense matrix.
+     * @param entries The entries of the dense matrix.
+     *
+     * @return A dense matrix which is of a similar type to this sparse COO vector with the specified {@code shape} and containing
+     * the specified {@code entries}.
+     */
+    @Override
+    public FieldMatrix<T> makeLikeDenseMatrix(Shape shape, T... entries) {
+        return new FieldMatrix<T>(shape, entries);
     }
 
 
@@ -199,5 +236,32 @@ public class CooFieldVector<T extends Field<T>> extends CooFieldVectorBase<CooFi
         CooFieldVector<T> src2 = (CooFieldVector<T>) object;
 
         return SparseFieldEquals.vectorEquals(this, src2);
+    }
+
+
+    /**
+     * Converts a vector to an equivalent matrix representing either a row or column vector.
+     *
+     * @param columVector Flag indicating whether to convert this vector to a matrix representing a row or column vector:
+     * <p>If {@code true}, the vector will be converted to a matrix representing a column vector.</p>
+     * <p>If {@code false}, The vector will be converted to a matrix representing a row vector.</p>
+     *
+     * @return A matrix equivalent to this vector.
+     */
+    @Override
+    public CooFieldMatrix<T> toMatrix(boolean columVector) {
+        if(columVector) {
+            // Convert to column vector
+            int[] rowIndices = indices.clone();
+            int[] colIndices = new int[entries.length];
+
+            return new CooFieldMatrix<T>(this.size, 1, entries.clone(), rowIndices, colIndices);
+        } else {
+            // Convert to row vector.
+            int[] rowIndices = new int[entries.length];
+            int[] colIndices = indices.clone();
+
+            return new CooFieldMatrix<T>(1, this.size, entries.clone(), rowIndices, colIndices);
+        }
     }
 }

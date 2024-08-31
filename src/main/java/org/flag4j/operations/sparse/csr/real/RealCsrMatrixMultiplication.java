@@ -24,9 +24,9 @@
 
 package org.flag4j.operations.sparse.csr.real;
 
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.core.Shape;
+import org.flag4j.core_temp.arrays.dense.Matrix;
+import org.flag4j.core_temp.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -50,7 +50,7 @@ public final class RealCsrMatrixMultiplication {
      * @param src2 Second CSR matrix in the multiplication.
      * @return Entries of the dense matrix resulting from the matrix multiplication of the two sparse CSR matrices.
      */
-    public static MatrixOld standard(CsrMatrixOld src1, CsrMatrixOld src2) {
+    public static Matrix standard(CsrMatrix src1, CsrMatrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
 
@@ -72,14 +72,14 @@ public final class RealCsrMatrixMultiplication {
             }
         }
 
-        return new MatrixOld(new Shape(src1.numRows, src2.numCols), destEntries);
+        return new Matrix(new Shape(src1.numRows, src2.numCols), destEntries);
     }
 
 
     /**
      * Computes the matrix multiplication between two sparse CSR matrices and returns the result as a sparse matrix. <br>
      *
-     * Warning: This method may be slower than {@link #standard(CsrMatrixOld, CsrMatrixOld)}
+     * Warning: This method may be slower than {@link #standard(CsrMatrix, CsrMatrix)}
      * if the result of multiplying this matrix with {@code src2} is not very sparse. Further, multiplying two
      * sparse matrices (even very sparse matrices) may result in a dense matrix so this method should be used with
      * caution.
@@ -87,7 +87,7 @@ public final class RealCsrMatrixMultiplication {
      * @param src2 Second CSR matrix in the multiplication.
      * @return Sparse CSR matrix resulting from the matrix multiplication of the two sparse CSR matrices.
      */
-    public static CsrMatrixOld standardAsSparse(CsrMatrixOld src1, CsrMatrixOld src2) {
+    public static CsrMatrix standardAsSparse(CsrMatrix src1, CsrMatrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
 
@@ -129,6 +129,6 @@ public final class RealCsrMatrixMultiplication {
         double[] resultValues = ArrayUtils.fromDoubleList(resultList);
         int[] resultColIndices = ArrayUtils.fromIntegerList(resultColIndexList);
 
-        return new CsrMatrixOld(new Shape(src1.numRows, src2.numCols), resultValues, resultRowPtr, resultColIndices);
+        return new CsrMatrix(new Shape(src1.numRows, src2.numCols), resultValues, resultRowPtr, resultColIndices);
     }
 }

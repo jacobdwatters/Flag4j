@@ -24,10 +24,10 @@
 
 package org.flag4j.operations.sparse.coo.real;
 
-import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.core.Shape;
 import org.flag4j.core_temp.arrays.dense.Matrix;
 import org.flag4j.core_temp.arrays.sparse.CooMatrix;
+import org.flag4j.core_temp.arrays.sparse.CooVector;
 import org.flag4j.operations.sparse.coo.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
@@ -202,7 +202,7 @@ public class RealSparseMatrixGetSet {
         Integer[] colIndices = new Integer[col.length];
         Arrays.fill(colIndices, colIdx);
 
-        // Initialize destination arrays_old with the new column and the appropriate indices.
+        // Initialize destination arrays with the new column and the appropriate indices.
         List<Double> destEntries = DoubleStream.of(col).boxed().collect(Collectors.toList());
         List<Integer> destRowIndices = IntStream.of(
                 ArrayUtils.intRange(0, col.length)
@@ -222,14 +222,14 @@ public class RealSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code src} matrix does not have the same number of rows as total entries
      * in the {@code col} vector.
      */
-    public static CooMatrix setCol(CooMatrix src, int colIdx, CooVectorOld col) {
+    public static CooMatrix setCol(CooMatrix src, int colIdx, CooVector col) {
         ParameterChecks.ensureIndexInBounds(src.numCols, colIdx);
         ParameterChecks.ensureEquals(src.numRows, col.size);
 
-        // Initialize destination arrays_old with the new column and the appropriate indices.
+        // Initialize destination arrays with the new column and the appropriate indices.
         List<Double> destEntries = ArrayUtils.toArrayList(col.entries);
         List<Integer> destRowIndices = ArrayUtils.toArrayList(col.indices);
-        List<Integer> destColIndices = ArrayUtils.toArrayList(ArrayUtils.filledArray(col.nonZeroEntries(), colIdx));
+        List<Integer> destColIndices = ArrayUtils.toArrayList(ArrayUtils.filledArray(col.nnz, colIdx));
 
         return addNotInCol(destEntries, destRowIndices, destColIndices, src, colIdx);
     }
@@ -476,7 +476,7 @@ public class RealSparseMatrixGetSet {
      * @param rowIdx Index of the row to extract from the {@code src} matrix.
      * @return Returns the specified row from this sparse matrix.
      */
-    public static CooVectorOld getRow(CooMatrix src, int rowIdx) {
+    public static CooVector getRow(CooMatrix src, int rowIdx) {
         ParameterChecks.ensureIndexInBounds(src.numRows, rowIdx);
 
         List<Double> entries = new ArrayList<>();
@@ -489,7 +489,7 @@ public class RealSparseMatrixGetSet {
             }
         }
 
-        return new CooVectorOld(src.numCols, entries, indices);
+        return new CooVector(src.numCols, entries, indices);
     }
 
 
@@ -501,7 +501,7 @@ public class RealSparseMatrixGetSet {
      * @param end Ending column index of the column to be extracted (exclusive)
      * @return Returns the specified column range from this sparse matrix.
      */
-    public static CooVectorOld getRow(CooMatrix src, int rowIdx, int start, int end) {
+    public static CooVector getRow(CooMatrix src, int rowIdx, int start, int end) {
         ParameterChecks.ensureIndexInBounds(src.numRows, rowIdx);
         ParameterChecks.ensureIndexInBounds(src.numCols, start, end-1);
         ParameterChecks.ensureLessEq(end-1, start);
@@ -516,7 +516,7 @@ public class RealSparseMatrixGetSet {
             }
         }
 
-        return new CooVectorOld(end-start, entries, indices);
+        return new CooVector(end-start, entries, indices);
     }
 
 
@@ -526,7 +526,7 @@ public class RealSparseMatrixGetSet {
      * @param colIdx Index of the column to extract from the {@code src} matrix.
      * @return Returns the specified column from this sparse matrix.
      */
-    public static CooVectorOld getCol(CooMatrix src, int colIdx) {
+    public static CooVector getCol(CooMatrix src, int colIdx) {
         ParameterChecks.ensureIndexInBounds(src.numCols, colIdx);
 
         List<Double> entries = new ArrayList<>();
@@ -539,7 +539,7 @@ public class RealSparseMatrixGetSet {
             }
         }
 
-        return new CooVectorOld(src.numRows, entries, indices);
+        return new CooVector(src.numRows, entries, indices);
     }
 
 
@@ -551,7 +551,7 @@ public class RealSparseMatrixGetSet {
      * @param end Ending row index of the column to be extracted (exclusive)
      * @return Returns the specified column range from this sparse matrix.
      */
-    public static CooVectorOld getCol(CooMatrix src, int colIdx, int start, int end) {
+    public static CooVector getCol(CooMatrix src, int colIdx, int start, int end) {
         ParameterChecks.ensureIndexInBounds(src.numCols, colIdx);
         ParameterChecks.ensureIndexInBounds(src.numRows, start, end);
         ParameterChecks.ensureLessEq(end, start);
@@ -566,7 +566,7 @@ public class RealSparseMatrixGetSet {
             }
         }
 
-        return new CooVectorOld(end-start, entries, indices);
+        return new CooVector(end-start, entries, indices);
     }
 
 

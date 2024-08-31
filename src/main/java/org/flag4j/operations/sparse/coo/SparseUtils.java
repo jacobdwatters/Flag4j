@@ -26,10 +26,7 @@ package org.flag4j.operations.sparse.coo;
 
 import org.flag4j.util.ErrorMessages;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Contains common utility functions for working with sparse matrices.
@@ -60,5 +57,42 @@ public final class SparseUtils {
         }
 
         return map;
+    }
+
+
+    /**
+     * Sorts the non-zero entries and column indices of a sparse CSR matrix lexicographically by row and column index. The row
+     * pointers in the CSR matrix are assumed to be correct already.
+     * @param entries Non-zero entries of the CSR matrix.
+     * @param rowPointers Row pointer array of the CSR matrix. Stores the starting index for each row of the CSR matrix in {@code entries}
+     * and
+     * @param colIndices Non-zero column indices of the CSR matrix.
+     */
+    public static void sortCsrMatrix(double[] entries, int[] rowPointers, int[] colIndices) {
+        for (int row = 0; row < rowPointers.length - 1; row++) {
+            int start = rowPointers[row];
+            int end = rowPointers[row + 1];
+
+            // Create an array of indices for sorting
+            Integer[] indices = new Integer[end - start];
+            for (int i = 0; i < indices.length; i++) {
+                indices[i] = start + i;
+            }
+
+            // Sort the indices based on the corresponding colIndices entries
+            Arrays.sort(indices, (i, j) -> Integer.compare(colIndices[i], colIndices[j]));
+
+            // Reorder colIndices and entries based on sorted indices
+            int[] sortedColIndex = new int[end - start];
+            double[] sortedValues = new double[end - start];
+            for (int i = 0; i < indices.length; i++) {
+                sortedColIndex[i] = colIndices[indices[i]];
+                sortedValues[i] = entries[indices[i]];
+            }
+
+            // Copy sorted arrays back to the original colIndices and entries
+            System.arraycopy(sortedColIndex, 0, colIndices, start, sortedColIndex.length);
+            System.arraycopy(sortedValues, 0, entries, start, sortedValues.length);
+        }
     }
 }

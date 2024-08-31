@@ -24,12 +24,12 @@
 
 package org.flag4j.operations.sparse.coo.real;
 
-
-import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooVectorOld;
+import org.flag4j.core.Shape;
 import org.flag4j.core_temp.arrays.dense.Matrix;
 import org.flag4j.core_temp.arrays.dense.Vector;
+import org.flag4j.core_temp.arrays.sparse.CooMatrix;
 import org.flag4j.core_temp.arrays.sparse.CooVector;
+import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -38,11 +38,11 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * This class contains low level implementations of operations_old on two real sparse tensors.
+ * This class contains low level implementations for operations on a real sparse COO vector.
  */
-public class RealSparseVectorOperations {
+public class RealCooVectorOperations {
 
-    private RealSparseVectorOperations() {
+    private RealCooVectorOperations() {
         // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
@@ -54,15 +54,14 @@ public class RealSparseVectorOperations {
      * @param a Value to add to the {@code src} sparse vector.
      * @return The result of adding the specified value to the sparse vector.
      */
-    public static VectorOld add(CooVectorOld src, double a) {
+    public static Vector add(CooVector src, double a) {
         double[] dest = new double[src.size];
         Arrays.fill(dest, a);
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i=0; i<src.entries.length; i++)
             dest[src.indices[i]] += src.entries[i];
-        }
 
-        return new VectorOld(dest);
+        return new Vector(dest);
     }
 
 
@@ -76,9 +75,8 @@ public class RealSparseVectorOperations {
         double[] dest = new double[src.size];
         Arrays.fill(dest, -a);
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i=0; i<src.entries.length; i++)
             dest[src.indices[i]] += src.entries[i];
-        }
 
         return new Vector(dest);
     }
@@ -295,6 +293,82 @@ public class RealSparseVectorOperations {
         }
 
         return new Matrix(src1.size, src2.size, dest);
+    }
+
+
+    /**
+     * Repeats a vector {@code n} times along a certain axis to create a matrix.
+     *
+     * @param src The vector to repeat.
+     * @param n Number of times to repeat vector.
+     * @param axis Axis along which to repeat vector. If {@code axis=0} then each row of the resulting matrix will be equivalent to
+     * this vector. If {@code axis=1} then each column of the resulting matrix will be equivalent to this vector.
+     *
+     * @return A matrix whose rows/columns are this vector repeated.
+     */
+    public static CooMatrix repeat(CooVector src, int n, int axis) {
+        ParameterChecks.ensureInRange(axis, 0, 1, "axis");
+        ParameterChecks.ensureGreaterEq(0, n, "n");
+
+        Shape tiledShape;
+        double[] tiledEntries = new double[n*src.entries.length];
+        int[] tiledRows = new int[tiledEntries.length];
+        int[] tiledCols = new int[tiledEntries.length];
+        int nnz = src.nnz;
+
+        if(axis==0) {
+            tiledShape = new Shape(n, src.size);
+
+            for(int i=0; i<n; i++) { // Copy values into row and set col indices as vector indices.
+                System.arraycopy(src.entries, 0, tiledEntries, i*nnz, nnz);
+                System.arraycopy(src.indices, 0, tiledCols, i*nnz, src.indices.length);
+                Arrays.fill(tiledRows, i*nnz, (i+1)*nnz, i);
+            }
+        } else {
+            int[] colIndices = ArrayUtils.intRange(0, n);
+            tiledShape = new Shape(src.size, n);
+
+            for(int i=0; i<nnz; i++) {
+                Arrays.fill(tiledEntries, i*n, (i+1)*n, src.entries[i]);
+                Arrays.fill(tiledRows, i*n, (i+1)*n, src.indices[i]);
+                System.arraycopy(colIndices, 0, tiledCols, i*n, n);
+            }
+        }
+
+        return new CooMatrix(tiledShape, tiledEntries, tiledRows, tiledCols);
+    }
+
+
+
+    /**
+     * Stacks two vectors along columns as if they were row vectors.
+     *
+     * @param src1 First vector in the stack.
+     * @param src2 Vector to stack to the bottom of the {@code src2} vector.
+     * @return The result of stacking this vector and vector {@code src2}.
+     * @throws IllegalArgumentException If the number of entries in the {@code src1} vector is different from the number of entries in
+     *                                  the vector {@code src2}.
+     */
+    public static CooMatrix stack(CooVector src1, CooVector src2) {
+        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+
+        double[] entries = new double[src1.entries.length + src2.entries.length];
+        int[][] indices = new int[2][src1.indices.length + src2.indices.length]; // Row and column indices.
+
+        // Copy values from vector src1.
+        System.arraycopy(src1.entries, 0, entries, 0, src1.entries.length);
+        // Copy values from vector src2.
+        System.arraycopy(src2.entries, 0, entries, src1.entries.length, src2.entries.length);
+
+        // Set row indices to 1 for src2 values (this vectors row indices are 0 which was implicitly set already).
+        Arrays.fill(indices[0], src1.indices.length, entries.length, 1);
+
+        // Copy indices from src1 vector to the column indices.
+        System.arraycopy(src1.indices, 0, indices[1], 0, src1.entries.length);
+        // Copy indices from src2 vector to the column indices.
+        System.arraycopy(src2.indices, 0, indices[1], src1.entries.length, src2.entries.length);
+
+        return new CooMatrix(new Shape(2, src1.size), entries, indices[0], indices[1]);
     }
 }
 

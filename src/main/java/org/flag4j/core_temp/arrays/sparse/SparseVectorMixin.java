@@ -24,6 +24,7 @@
 
 package org.flag4j.core_temp.arrays.sparse;
 
+import org.flag4j.core_temp.MatrixMixin;
 import org.flag4j.core_temp.VectorMixin;
 import org.flag4j.core_temp.arrays.dense.DenseVectorMixin;
 
@@ -31,8 +32,11 @@ import org.flag4j.core_temp.arrays.dense.DenseVectorMixin;
  * This interface specifies methods which all sparse vectors should implement.
  * @param <T> Type of this sparse vector.
  * @param <U> Type of equivalent dense vector.
- * @param <V> Type (or wrapper of) an individual element in this vector.
+ * @param <V> Type of matrix equivalent to {@code T}.
+ * @param <W> Type of dense matrix equivalent to {@code V}.
+ * @param <Y> Type (or wrapper of) an individual element in this vector.
  */
-public interface SparseVectorMixin<T extends SparseVectorMixin<T, U, V>, U extends DenseVectorMixin<U, T, V>, V>
-        extends VectorMixin<T, V>, SparseTensorMixin<U, T> {
+public interface SparseVectorMixin<T extends SparseVectorMixin<T, U, V, W, Y>, U extends DenseVectorMixin<U, T, ?, Y>,
+        V extends MatrixMixin<V, ?, Y>, W extends MatrixMixin<W, ?, Y>, Y>
+        extends VectorMixin<T, V, W, Y>, SparseTensorMixin<U, T> {
 }

@@ -24,19 +24,22 @@
 
 package org.flag4j.core_temp.arrays.sparse;
 
-import org.flag4j.core_temp.arrays.dense.DenseTensorMixin;
+import org.flag4j.core_temp.MatrixMixin;
+import org.flag4j.core_temp.arrays.dense.DenseMatrixMixin;
 
 /**
- * This interface specifies methods which sparse tensors should implement.
- * @param <T> The equivalent dense tensor type.
- * @param <U> The type of this sparse tensor.
+ * This interface specifies methods which all sparse CSR matrices should implement.
+ * @param <T>
+ * @param <V>
+ * @param <W>
  */
-public interface SparseTensorMixin<T extends DenseTensorMixin<T, U>, U extends SparseTensorMixin<T, U>> {
-
+public interface CsrMatrixMixin<T extends CsrMatrixMixin<T, V, W>,
+        V extends DenseMatrixMixin<V, ?, T, W>, W>
+        extends MatrixMixin<T, V, W> {
 
     /**
-     * The density of this sparse tensor. That is, the percentage of elements in this tensor which are non-zero as a decimal.
-     * @return The density of this sparse tensor.
+     * The density of this sparse CSR matrix. That is, the decimal percentage of elements in this matrix which are non-zero.
+     * @return The density of this sparse matrix.
      */
     public default double density() {
         return 1.0 - sparsity();
@@ -44,17 +47,17 @@ public interface SparseTensorMixin<T extends DenseTensorMixin<T, U>, U extends S
 
 
     /**
-     * The sparsity of this sparse tensor. That is, the percentage of elements in this tensor which are zero as a decimal.
-     * @return The density of this sparse tensor.
+     * The sparsity of this sparse CSR matrix. That is, the decimal percentage of elements in this matrix which are zero.
+     * @return The density of this sparse matrix.
      */
     public double sparsity();
 
 
     /**
-     * Converts this sparse tensor to an equivalent dense tensor.
-     * @return A dense tensor equivalent to this sparse tensor.
+     * Converts this sparse matrix to an equivalent dense matrix.
+     * @return A dense matrix equivalent to this sparse CSR matrix.
      */
-    public T toDense();
+    public V toDense();
 
 
     /**

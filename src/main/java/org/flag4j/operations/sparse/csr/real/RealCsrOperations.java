@@ -27,12 +27,14 @@ package org.flag4j.operations.sparse.csr.real;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.arrays_old.sparse.CooCVectorOld;
-import org.flag4j.arrays_old.sparse.CooMatrixOld;
-import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.core.Shape;
+import org.flag4j.core_temp.arrays.dense.Matrix;
+import org.flag4j.core_temp.arrays.dense.Vector;
+import org.flag4j.core_temp.arrays.sparse.CooMatrix;
+import org.flag4j.core_temp.arrays.sparse.CooVector;
+import org.flag4j.core_temp.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -44,7 +46,7 @@ import java.util.function.UnaryOperator;
 
 
 /**
- * This class contains low-level implementations for element-wise operations_old on CSR matrices.
+ * This class contains low-level implementations for operations on CSR matrices.
  */
 public final class RealCsrOperations {
 
@@ -72,9 +74,9 @@ public final class RealCsrOperations {
      * element-wise.
      * @throws IllegalArgumentException If <code>src1</code> and <code>src2</code> do not have the same shape.
      */
-    public static CsrMatrixOld applyBinOpp(CsrMatrixOld src1, CsrMatrixOld src2,
-                                           BinaryOperator<Double> opp,
-                                           UnaryOperator<Double> uOpp) {
+    public static CsrMatrix applyBinOpp(CsrMatrix src1, CsrMatrix src2,
+                                        BinaryOperator<Double> opp,
+                                        UnaryOperator<Double> uOpp) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         List<Double> dest = new ArrayList<>();
@@ -129,7 +131,7 @@ public final class RealCsrOperations {
             rowPointers[i] += rowPointers[i-1];
         }
 
-        return new CsrMatrixOld(src1.shape,
+        return new CsrMatrix(src1.shape,
                 ArrayUtils.fromDoubleList(dest),
                 rowPointers,
                 ArrayUtils.fromIntegerList(colIndices)
@@ -145,7 +147,7 @@ public final class RealCsrOperations {
      * @param src The matrix to transpose.
      * @return The transpose of the {@code src} matrix.
      */
-    public static CsrMatrixOld transpose(CsrMatrixOld src) {
+    public static CsrMatrix transpose(CsrMatrix src) {
 
         double[] dest = new double[src.entries.length];
         int[] rowPtrs = new int[src.numCols+1];
@@ -174,7 +176,7 @@ public final class RealCsrOperations {
             }
         }
 
-        return new CsrMatrixOld(src.numCols, src.numRows, dest, rowPtrs, colIndices);
+        return new CsrMatrix(src.numCols, src.numRows, dest, rowPtrs, colIndices);
     }
 
 
@@ -190,7 +192,7 @@ public final class RealCsrOperations {
      * @throws ArrayIndexOutOfBoundsException If any of the indices are out of bounds of this matrix.
      * @throws IllegalArgumentException       If {@code rowEnd} is not greater than {@code rowStart} or if {@code colEnd} is not greater than {@code colStart}.
      */
-    public static CsrMatrixOld getSlice(CsrMatrixOld src, int rowStart, int rowEnd, int colStart, int colEnd) {
+    public static CsrMatrix getSlice(CsrMatrix src, int rowStart, int rowEnd, int colStart, int colEnd) {
         List<Double> slice = new ArrayList<>();
         List<Integer> sliceRowIndices = new ArrayList<>();
         List<Integer> sliceColIndices = new ArrayList<>();
@@ -214,7 +216,7 @@ public final class RealCsrOperations {
             }
         }
 
-        return new CooMatrixOld(
+        return new CooMatrix(
                 new Shape(rowEnd-rowStart, colEnd-colStart),
                 slice, sliceRowIndices, sliceColIndices).toCsr();
     }
@@ -228,9 +230,9 @@ public final class RealCsrOperations {
      * @param src2 VectorOld to add to each column of this matrix.
      * @return The result of adding the vector src2 to each column of this matrix.
      */
-    public static MatrixOld addToEachCol(CsrMatrixOld src1, VectorOld src2) {
+    public static Matrix addToEachCol(CsrMatrix src1, Vector src2) {
         ParameterChecks.ensureEquals(src1.numRows, src2.size);
-        MatrixOld sum = src2.repeat(src1.numCols, 1);
+        Matrix sum = src2.repeat(src1.numCols, 1);
 
         for(int i=0; i<src1.numRows; i++) {
             int rowStart = src1.rowPointers[i];
@@ -254,9 +256,9 @@ public final class RealCsrOperations {
      * @param src2 VectorOld to add to each column of this matrix.
      * @return The result of adding the vector src2 to each column of this matrix.
      */
-    public static MatrixOld addToEachCol(CsrMatrixOld src1, CooVectorOld src2) {
+    public static Matrix addToEachCol(CsrMatrix src1, CooVector src2) {
         ParameterChecks.ensureEquals(src1.numRows, src2.size);
-        MatrixOld sum = src2.repeat(src1.numCols, 1).toDense();
+        Matrix sum = src2.repeat(src1.numCols, 1).toDense();
 
         for(int i=0; i<src1.numRows; i++) {
             int rowStart = src1.rowPointers[i];
@@ -280,7 +282,7 @@ public final class RealCsrOperations {
      * @param src2 VectorOld to add to each column of this matrix.
      * @return The result of adding the vector src2 to each column of this matrix.
      */
-    public static CMatrixOld addToEachCol(CsrMatrixOld src1, CVectorOld src2) {
+    public static CMatrixOld addToEachCol(CsrMatrix src1, CVectorOld src2) {
         ParameterChecks.ensureEquals(src1.numRows, src2.size);
         CMatrixOld sum = src2.repeat(src1.numCols, 1);
 
@@ -307,7 +309,7 @@ public final class RealCsrOperations {
      * @param src2 VectorOld to add to each column of this matrix.
      * @return The result of adding the vector src2 to each column of this matrix.
      */
-    public static CMatrixOld addToEachCol(CsrMatrixOld src1, CooCVectorOld src2) {
+    public static CMatrixOld addToEachCol(CsrMatrix src1, CooCVectorOld src2) {
         ParameterChecks.ensureEquals(src1.numRows, src2.size);
         CMatrixOld sum = src2.repeat(src1.numCols, 1).toDense();
 
@@ -334,9 +336,9 @@ public final class RealCsrOperations {
      * @param src2 VectorOld to add to each row of this matrix.
      * @return The result of adding the vector src2 to each row of this matrix.
      */
-    public static MatrixOld addToEachRow(CsrMatrixOld src1, VectorOld src2) {
+    public static Matrix addToEachRow(CsrMatrix src1, Vector src2) {
         ParameterChecks.ensureEquals(src1.numCols, src2.size);
-        MatrixOld sum = src2.repeat(src1.numRows, 0);
+        Matrix sum = src2.repeat(src1.numRows, 0);
 
         for(int i=0; i<src1.numRows; i++) {
             int rowStart = src1.rowPointers[i];
@@ -359,9 +361,9 @@ public final class RealCsrOperations {
      * @param src2 VectorOld to add to each row of this matrix.
      * @return The result of adding the vector src2 to each row of this matrix.
      */
-    public static MatrixOld addToEachRow(CsrMatrixOld src1, CooVectorOld src2) {
+    public static Matrix addToEachRow(CsrMatrix src1, CooVector src2) {
         ParameterChecks.ensureEquals(src1.numCols, src2.size);
-        MatrixOld sum = src2.repeat(src1.numRows, 0).toDense();
+        Matrix sum = src2.repeat(src1.numRows, 0).toDense();
 
         for(int i=0; i<src1.numRows; i++) {
             int rowStart = src1.rowPointers[i];
@@ -384,7 +386,7 @@ public final class RealCsrOperations {
      * @param src2 VectorOld to add to each row of this matrix.
      * @return The result of adding the vector src2 to each row of this matrix.
      */
-    public static CMatrixOld addToEachRow(CsrMatrixOld src1, CVectorOld src2) {
+    public static CMatrixOld addToEachRow(CsrMatrix src1, CVectorOld src2) {
         ParameterChecks.ensureEquals(src1.numCols, src2.size);
         CMatrixOld sum = src2.repeat(src1.numRows, 0);
 

@@ -27,11 +27,11 @@ package org.flag4j.core_temp.arrays.sparse;
 
 import org.flag4j.core.Shape;
 import org.flag4j.core_temp.FieldTensorBase;
-import org.flag4j.core_temp.MatrixMixin;
 import org.flag4j.core_temp.TensorBase;
 import org.flag4j.core_temp.arrays.dense.DenseFieldMatrixBase;
 import org.flag4j.core_temp.arrays.dense.FieldMatrix;
 import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.core_temp.structures.fields.RealFloat64;
 import org.flag4j.operations.common.field_ops.CompareField;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
 import org.flag4j.operations.sparse.coo.SparseDataWrapper;
@@ -73,16 +73,15 @@ import java.util.List;
  *
  * <p>If indices need to be sorted, call {@link #sortIndices()}.</p>
  *
- * @param <T> Type of this matrix.
- * @param <V> Type of the field element in this matrix.
+ * @param <T> Type of this sparse COO matrix.
+ * @param <U> Type of dense matrix which is similar to {@code T}.
+ * @param <V> Type of sparse COO vector which is similar to {@code T}.
+ * @param <W> Type of the field element in this matrix.
  */
-public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, U extends DenseFieldMatrixBase<U, T, V>,
-        V extends Field<V>>
-        extends FieldTensorBase<T, U, V>
-        implements SparseTensorMixin<U, T>, MatrixMixin<T, U, V> {
-    // TODO: implement MatrixVectorOpsMixin once CooFieldVector<T> is implemented.
-    // TODO: consider adding private final V ZERO; and a setZeroElement() method so that a zero can be returned instead of null
-    //      when the matrix contains NO non-zero values (i.e. nnz = entries.length = 0).
+public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V, W>, U extends DenseFieldMatrixBase<U, T, ?, ?, W>,
+        V extends CooFieldVectorBase<V, T, ?, U, W>, W extends Field<W>>
+        extends FieldTensorBase<T, U, W>
+        implements CooMatrixMixin<T, U, W> {
 
     /**
      * Row indices for non-zero value of this sparse COO matrix.
@@ -118,7 +117,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
-    protected CooFieldMatrixBase(Shape shape, V[] entries, int[] rowIndices, int[] colIndices) {
+    protected CooFieldMatrixBase(Shape shape, W[] entries, int[] rowIndices, int[] colIndices) {
         super(shape, entries);
         ParameterChecks.ensureRank(shape, 2);
         ParameterChecks.ensureArrayLengthsEq(entries.length, rowIndices.length, colIndices.length);
@@ -138,8 +137,8 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
-    protected CooFieldMatrixBase(Shape shape, List<V> entries, List<Integer> rowIndices, List<Integer> colIndices) {
-        super(shape, (V[]) entries.toArray(new Field[0]));
+    protected CooFieldMatrixBase(Shape shape, List<W> entries, List<Integer> rowIndices, List<Integer> colIndices) {
+        super(shape, (W[]) entries.toArray(new Field[0]));
         ParameterChecks.ensureRank(shape, 2);
         this.rowIndices = ArrayUtils.fromIntegerList(rowIndices);
         this.colIndices = ArrayUtils.fromIntegerList(colIndices);
@@ -160,7 +159,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      * @return A tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public abstract T makeLikeTensor(Shape shape, V[] entries);
+    public abstract T makeLikeTensor(Shape shape, W[] entries);
 
 
     /**
@@ -171,7 +170,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      * @param colIndices Column indices of the non-zero values in the matrix.
      * @return A COO field matrix with the specified shape, non-zero entries, and non-zero indices.
      */
-    public abstract T makeLikeTensor(Shape shape, V[] entries, int[] rowIndices, int[] colIndices);
+    public abstract T makeLikeTensor(Shape shape, W[] entries, int[] rowIndices, int[] colIndices);
 
 
     /**
@@ -182,7 +181,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      * @param colIndices Column indices of the non-zero values in the matrix.
      * @return A COO field matrix with the specified shape, non-zero entries, and non-zero indices.
      */
-    public abstract T makeLikeTensor(Shape shape, List<V> entries, List<Integer> rowIndices, List<Integer> colIndices);
+    public abstract T makeLikeTensor(Shape shape, List<W> entries, List<Integer> rowIndices, List<Integer> colIndices);
 
 
     /**
@@ -191,7 +190,27 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      * @param entries Entries of the dense matrix/.
      * @return A dense field matrix with the specified {@code shape} and {@code entries}.
      */
-    public abstract U makeDenseTensor(Shape shape, V[] entries);
+    public abstract U makeDenseTensor(Shape shape, W[] entries);
+
+
+    /**
+     * Constructs a vector of similar type to this matrix.
+     * @param size The size of the vector.
+     * @param entries The non-zero entries of the vector.
+     * @param indices The indices of the non-zero values of the vector.
+     * @return A vector of similar type to this matrix with the specified size, non-zero entries, and indices.
+     */
+    public abstract V makeLikeVector(int size, W[] entries, int[] indices);
+
+
+    /**
+     * Constructs a vector of similar type to this matrix.
+     * @param size The size of the vector.
+     * @param entries The non-zero entries of the vector.
+     * @param indices The indices of the non-zero values of the vector.
+     * @return A vector of similar type to this matrix with the specified size, non-zero entries, and indices.
+     */
+    public abstract V makeLikeVector(int size, List<W> entries, List<Integer> indices);
 
 
     /**
@@ -226,8 +245,8 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      * @throws IllegalArgumentException If this matrix is not square.
      */
     @Override
-    public V tr() {
-        V trace = nnz > 0 ? entries[0].getZero() : null;
+    public W tr() {
+        W trace = getZeroElement();
 
         for(int i=0; i<entries.length; i++)
             if(rowIndices[i]==colIndices[i]) trace = trace.add(entries[i]); // Then entry on the diagonal.
@@ -307,7 +326,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      * @throws LinearAlgebraException If this matrix is not square.
      */
     @Override
-    public V det() {
+    public W det() {
         return toDense().det();
     }
 
@@ -327,7 +346,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
         ParameterChecks.ensureMatMultShapes(shape, b.shape);
 
         return makeDenseTensor(new Shape(numRows, b.numCols),
-                (V[]) CooFieldMatMult.standard(
+                (W[]) CooFieldMatMult.standard(
                         entries, rowIndices, colIndices, shape,
                         b.entries, b.rowIndices, b.colIndices, b.shape));
     }
@@ -335,10 +354,10 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
 
     /**
      * Multiplies this matrix with the transpose of the {@code b} tensor as if by
-     * {@code this.mult(b.V())}.
+     * {@code this.mult(b.W())}.
      * For large matrices, this method may
      * be significantly faster than directly computing the transpose followed by the multiplication as
-     * {@code this.mult(b.V())}.
+     * {@code this.mult(b.W())}.
      *
      * @param b The second matrix in the multiplication and the matrix to transpose.
      *
@@ -361,7 +380,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      * @throws IllegalArgumentException If this matrix and b have different shapes.
      */
     @Override
-    public V fib(T b) {
+    public W fib(T b) {
         return this.T().mult(b).tr();
     }
 
@@ -382,7 +401,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
         ParameterChecks.ensureEquals(numCols, b.numCols);
 
         Shape destShape = new Shape(numRows+b.numRows, numCols);
-        Field<V>[] destEntries = new Field[entries.length + b.entries.length];
+        Field<W>[] destEntries = new Field[entries.length + b.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -399,7 +418,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
         System.arraycopy(colIndices, 0, destColIndices, 0, colIndices.length);
         System.arraycopy(b.colIndices, 0, destColIndices, colIndices.length, b.colIndices.length);
 
-        return makeLikeTensor(destShape, (V[]) destEntries, destRowIndices, destColIndices);
+        return makeLikeTensor(destShape, (W[]) destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -419,7 +438,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
         ParameterChecks.ensureEquals(numRows, b.numRows);
 
         Shape destShape = new Shape(numRows, numCols + b.numCols);
-        Field<V>[] destEntries = new Field[entries.length + b.entries.length];
+        Field<W>[] destEntries = new Field[entries.length + b.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -437,7 +456,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
         System.arraycopy(ArrayUtils.shift(numCols, shifted), 0,
                 destColIndices, colIndices.length, b.colIndices.length);
 
-        T dest = makeLikeTensor(destShape, (V[]) destEntries, destRowIndices, destColIndices);
+        T dest = makeLikeTensor(destShape, (W[]) destEntries, destRowIndices, destColIndices);
         dest.sortIndices(); // Ensure indices are sorted properly.
 
         return dest;
@@ -626,7 +645,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      * @return A reference to this matrix.
      */
     @Override
-    public T set(V value, int row, int col) {
+    public T set(W value, int row, int col) {
         ParameterChecks.ensureValidIndex(shape, row, col);
         return (T) CooFieldMatrixGetSet.matrixSet(this, row, col, value);
     }
@@ -651,7 +670,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
     @Override
     public T getTriU(int diagOffset) {
         int sizeEst = nnz / 2; // Estimate the number of non-zero entries.
-        List<V> triuEntries = new ArrayList<>(sizeEst);
+        List<W> triuEntries = new ArrayList<>(sizeEst);
         List<Integer> triuRowIndices = new ArrayList<>(sizeEst);
         List<Integer> triuColIndices = new ArrayList<>(sizeEst);
 
@@ -689,7 +708,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
     @Override
     public T getTriL(int diagOffset) {
         int sizeEst = nnz / 2; // Estimate the number of non-zero entries.
-        List<V> trilEntries = new ArrayList<>(sizeEst);
+        List<W> trilEntries = new ArrayList<>(sizeEst);
         List<Integer> trilRowIndices = new ArrayList<>(sizeEst);
         List<Integer> trilColIndices = new ArrayList<>(sizeEst);
 
@@ -767,15 +786,15 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      */
     @Override
     public U tensorDot(T src2, int[] aAxes, int[] bAxes) {
-        CooFieldTensor<V> t1 = new CooFieldTensor<V>(
+        CooFieldTensor<W> t1 = new CooFieldTensor<W>(
                 shape, entries, RealDenseTranspose.blockedIntMatrix(
                 new int[][]{rowIndices, colIndices}));
-        CooFieldTensor<V> t2 = new CooFieldTensor<V>(
+        CooFieldTensor<W> t2 = new CooFieldTensor<W>(
                 src2.shape, src2.entries, RealDenseTranspose.blockedIntMatrix(
                 new int[][]{src2.rowIndices, src2.colIndices}));
-        FieldMatrix<V> mat = CooFieldTensorDot.tensorDot(t1, t2, aAxes, bAxes).toMatrix();
+        FieldMatrix<W> mat = CooFieldTensorDot.tensorDot(t1, t2, aAxes, bAxes).toMatrix();
 
-        return makeDenseTensor(mat.shape, mat.entries);
+        return makeDenseTensor(mat.shape, (W[]) mat.entries);
     }
 
 
@@ -848,7 +867,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      */
     @Override
     public U toDense() {
-        Field<V>[] entries = new Field[totalEntries().intValueExact()];
+        Field<W>[] entries = new Field[totalEntries().intValueExact()];
         int row;
         int col;
 
@@ -858,7 +877,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
             entries[row*numCols + col] = this.entries[i];
         }
 
-        return makeDenseTensor(shape, (V[]) entries);
+        return makeDenseTensor(shape, (W[]) entries);
     }
 
 
@@ -881,7 +900,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      * @throws ArrayIndexOutOfBoundsException If any indices are not within this matrix.
      */
     @Override
-    public V get(int... indices) {
+    public W get(int... indices) {
         ParameterChecks.ensureEquals(indices.length, 2);
         ParameterChecks.ensureValidIndex(shape, indices[0], indices[1]);
         ParameterChecks.ensureIndexInBounds(numRows, indices[0]);
@@ -965,7 +984,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      * @return The product of all non-zero values in this tensor.
      */
     @Override
-    public V prod() {
+    public W prod() {
         return super.prod(); // Overrides method from super class to emphasize it operates only on the non-zero values.
     }
 
@@ -1062,7 +1081,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
         ParameterChecks.ensureNotEquals(axis1, axis2);
         ParameterChecks.ensureValidAxes(shape, axis1, axis2);
 
-        return makeLikeTensor(new Shape(1, 1), (V[]) new Field[]{tr()}, new int[]{0}, new int[]{0});
+        return makeLikeTensor(new Shape(1, 1), (W[]) new Field[]{tr()}, new int[]{0}, new int[]{0});
     }
 
 
@@ -1074,7 +1093,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      * @return The sum of this tensor's non-zero values with the scalar {@code b}.
      */
     @Override
-    public T add(V b) {
+    public T add(W b) {
         return super.add(b); // Overrides method from super class to emphasize it operates only on the non-zero values.
     }
 
@@ -1085,7 +1104,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      * @param b Scalar field value in sum.
      */
     @Override
-    public void addEq(V b) {
+    public void addEq(W b) {
         super.addEq(b); // Overrides method from super class to emphasize it operates only on the non-zero values.
     }
 
@@ -1098,7 +1117,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      * @return The difference of this tensor's non-zero value and the scalar {@code b}.
      */
     @Override
-    public T sub(V b) {
+    public T sub(W b) {
         return super.sub(b); // Overrides method from super class to emphasize it operates only on the non-zero values.
     }
 
@@ -1109,7 +1128,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      * @param b Scalar value in difference.
      */
     @Override
-    public void subEq(V b) {
+    public void subEq(W b) {
         super.subEq(b); // Overrides method from super class to emphasize it operates only on the non-zero values.
     }
 
@@ -1120,7 +1139,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      * @return The minimum non-zero value in this tensor.
      */
     @Override
-    public V min() {
+    public W min() {
         return super.min(); // Overrides method from super class to emphasize it operates only on the non-zero values.
     }
 
@@ -1131,7 +1150,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
      * @return The maximum non-zero value in this tensor.
      */
     @Override
-    public V max() {
+    public W max() {
         return super.max(); // Overrides method from super class to emphasize it operates only on the non-zero values.
     }
 
@@ -1252,5 +1271,154 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V>, 
     @Override
     public T recip() {
         return super.recip(); // Overrides method from super class to emphasize it operates only on the non-zero values.
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent vector. If this matrix is not shaped as a row/column vector,
+     * it will first be flattened then converted to a vector.
+     *
+     * @return A vector equivalent to this matrix.
+     */
+    public V toVector() {
+        int[] destIndices = new int[entries.length];
+        for(int i=0; i<entries.length; i++)
+            destIndices[i] = rowIndices[i]*colIndices[i];
+
+        return makeLikeVector(numRows*numCols, entries.clone(), destIndices);
+    }
+
+
+    /**
+     * Get the row of this matrix at the specified index.
+     *
+     * @param rowIdx Index of row to get.
+     *
+     * @return The specified row of this matrix.
+     *
+     * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} is less than zero or greater than/equal to
+     *                                        the number of rows in this matrix.
+     */
+    public V getRow(int rowIdx) {
+        return (V) CooFieldMatrixGetSet.getRow(this, rowIdx);
+    }
+
+
+    /**
+     * Gets a specified row of this matrix between {@code colStart} (inclusive) and {@code colEnd} (exclusive).
+     *
+     * @param rowIdx Index of the row of this matrix to get.
+     * @param colStart Starting column of the row (inclusive).
+     * @param colEnd Ending column of the row (exclusive).
+     *
+     * @return The row at index {@code rowIdx} of this matrix between the {@code colStart} and {@code colEnd}
+     * indices.
+     *
+     * @throws IndexOutOfBoundsException If either {@code colEnd} are {@code colStart} out of bounds for the shape of this matrix.
+     * @throws IllegalArgumentException  If {@code colEnd} is less than {@code colStart}.
+     */
+    public V getRow(int rowIdx, int colStart, int colEnd) {
+        return (V) CooFieldMatrixGetSet.getRow(this, rowIdx, colStart, colEnd);
+    }
+
+
+    /**
+     * Get the column of this matrix at the specified index.
+     *
+     * @param colIdx Index of column to get.
+     *
+     * @return The specified column of this matrix.
+     *
+     * @throws ArrayIndexOutOfBoundsException If {@code colIdx} is less than zero or greater than/equal to
+     *                                        the number of columns in this matrix.
+     */
+    public V getCol(int colIdx) {
+        return (V) CooFieldMatrixGetSet.getCol(this, colIdx);
+    }
+
+
+    /**
+     * Gets a specified column of this matrix between {@code rowStart} (inclusive) and {@code rowEnd} (exclusive).
+     *
+     * @param colIdx Index of the column of this matrix to get.
+     * @param rowStart Starting row of the column (inclusive).
+     * @param rowEnd Ending row of the column (exclusive).
+     *
+     * @return The column at index {@code colIdx} of this matrix between the {@code rowStart} and {@code rowEnd}
+     * indices.
+     *
+     * @throws @throws                  IndexOutOfBoundsException If either {@code colEnd} are {@code colStart} out of bounds for the
+     *                                  shape of this matrix.
+     * @throws IllegalArgumentException If {@code rowEnd} is less than {@code rowStart}.
+     */
+    public V getCol(int colIdx, int rowStart, int rowEnd) {
+        return (V) CooFieldMatrixGetSet.getCol(this, colIdx, rowStart, rowEnd);
+    }
+
+
+    /**
+     * Extracts the diagonal elements of this matrix and returns them as a vector.
+     *
+     * @return A vector containing the diagonal entries of this matrix.
+     */
+    public V getDiag() {
+        List<W> destEntries = new ArrayList<>();
+        List<Integer> destIndices = new ArrayList<>();
+
+        for(int i=0; i<entries.length; i++) {
+            if(rowIndices[i]==colIndices[i]) {
+                // Then entry on the diagonal.
+                destEntries.add(entries[i]);
+                destIndices.add(rowIndices[i]);
+            }
+        }
+
+        return makeLikeVector(numRows, destEntries, destIndices);
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     *
+     * @return A copy of this matrix with the specified column altered.
+     *
+     * @throws IndexOutOfBoundsException If the values vector has a different length than the number of rows of this matrix.
+     */
+    public T setCol(V values, int colIndex) {
+        return (T) CooFieldMatrixGetSet.setCol(this, colIndex, values);
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values New values for the row.
+     * @param rowIndex The index of the row which is to be set.
+     *
+     * @return A copy of this matrix with the specified rows altered.
+     *
+     * @throws IndexOutOfBoundsException If the values vector has a different length than the number of rows of this matrix.
+     */
+    public T setRow(V values, int rowIndex) {
+        return (T) CooFieldMatrixGetSet.setRow(this, rowIndex, values);
+    }
+
+
+    /**
+     * Computes the element-wise absolute value of this matrix.
+     *
+     * @return The element-wise absolute value of this matrix.
+     */
+    @Override
+    public CooFieldMatrix<RealFloat64> abs() {
+        RealFloat64[] abs = new RealFloat64[entries.length];
+
+        for(int i=0, size=entries.length; i<size; i++)
+            abs[i] = new RealFloat64(entries[i].abs());
+
+        return new CooFieldMatrix<RealFloat64>(shape, abs, rowIndices.clone(), colIndices.clone());
     }
 }

@@ -46,10 +46,11 @@ public final class DenseFieldProperties {
      * 1.001E-5 in absolute value from 1.0 and the non-diagonal entries are no larger than 1e-08 in absolute value.
      * These tolerances are derived from the {@link TensorBase#allClose(Object)} method.
      * @param src MatrixOld of interest to check if it is the identity matrix.
-     * @return True if the {@code src} matrix is exactly the identity matrix.
+     * @return True if the {@code src} matrix is close the identity matrix or if the matrix has zero entries.
      */
-    public static <T extends Field<T>> boolean isCloseToIdentity(DenseFieldMatrixBase<?, ?, T> src) {
+    public static <T extends Field<T>> boolean isCloseToIdentity(DenseFieldMatrixBase<?, ?, ?, ?, T> src) {
         if(src == null || src.numRows!=src.numCols) return false;
+        if(src.entries.length == 0) return true;
 
         // Tolerances corresponds to the allClose(...) methods.
         double diagTol = 1.001E-5;

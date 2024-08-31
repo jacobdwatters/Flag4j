@@ -26,6 +26,7 @@ package org.flag4j.core_temp.arrays.dense;
 
 import org.flag4j.core.Shape;
 import org.flag4j.core_temp.arrays.sparse.CooFieldMatrix;
+import org.flag4j.core_temp.arrays.sparse.CsrFieldMatrix;
 import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.util.ArrayUtils;
 
@@ -44,7 +45,8 @@ import java.util.List;
  *
  * @param <T> Type of the {@link Field field} element for the matrix.
  */
-public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldMatrix<T>, CooFieldMatrix<T>, T> {
+public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldMatrix<T>, CooFieldMatrix<T>,
+        CsrFieldMatrix<T>, FieldVector<T>, T> {
 
 
     /**
@@ -145,6 +147,19 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
     @Override
     public FieldMatrix<T> makeLikeTensor(Shape shape, T fillValue) {
         return new FieldMatrix<T>(shape, fillValue);
+    }
+
+
+    /**
+     * Constructs a vector of similar type to this matrix with the given {@code entries}.
+     *
+     * @param entries Entries of the vector.
+     *
+     * @return A vector of similar type to this matrix with the given {@code entries}.
+     */
+    @Override
+    public FieldVector<T> makeLikeVector(T... entries) {
+        return new FieldVector<T>(entries);
     }
 
 

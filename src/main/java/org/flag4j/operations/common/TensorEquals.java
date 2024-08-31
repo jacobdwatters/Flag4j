@@ -39,7 +39,6 @@ import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseEquals;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseEquals;
 import org.flag4j.operations.sparse.coo.complex.ComplexSparseEquals;
-import org.flag4j.operations.sparse.coo.real.RealSparseEquals;
 import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseEquals;
 import org.flag4j.util.ErrorMessages;
 
@@ -89,7 +88,7 @@ public final class TensorEquals {
 //        complexDenseLookUp.put("CooVectorOld", (A, B) -> RealComplexDenseSparseEquals.tensorEquals(A, ((CooVectorOld) B).toTensor()));
 //        complexDenseLookUp.put("CooCVectorOld", (A, B) -> ComplexDenseSparseEquals.tensorEquals(A, ((CooCVectorOld) B).toTensor()));
 
-        realSparseLookUp.put("CooTensorOld", (A, B) -> RealSparseEquals.tensorEquals(A, (CooTensorOld) B));
+//        realSparseLookUp.put("CooTensorOld", (A, B) -> RealSparseEquals.tensorEquals(A, (CooTensorOld) B));
         realSparseLookUp.put("CooCTensorOld", (A, B) -> RealComplexSparseEquals.tensorEquals(A, (CooCTensorOld) B));
 //        realSparseLookUp.put("CooMatrixOld", (A, B) -> RealSparseEquals.tensorEquals(A, ((CooMatrixOld) B).toTensor()));
 //        realSparseLookUp.put("CooCMatrixOld", (A, B) -> RealComplexSparseEquals.tensorEquals(A, ((CooCMatrixOld) B).toTensor()));

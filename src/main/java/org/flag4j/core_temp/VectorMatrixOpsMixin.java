@@ -24,13 +24,13 @@
 
 package org.flag4j.core_temp;
 
-
 /**
  * This interface specifies operations between a vector and a matrix that a vector should implement.
  * @param <T> Type of the vector.
  * @param <U> Type of the matrix.
+ * @param <V> Type of dense matrix equivalent to {@code U}.
  */
-public interface VectorMatrixOpsMixin<T extends VectorMixin, U extends MatrixMixin> {
+public interface VectorMatrixOpsMixin<T extends VectorMixin, U extends MatrixMixin, V extends MatrixMixin> {
 
 
     /**
@@ -92,7 +92,7 @@ public interface VectorMatrixOpsMixin<T extends VectorMixin, U extends MatrixMix
      * @return The result of the vector outer product between this vector and {@code b}.
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
-    public U outer(T b);
+    public V outer(T b);
 
 
     /**

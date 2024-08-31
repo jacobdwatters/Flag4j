@@ -60,7 +60,7 @@ public class ComplexNumberParser {
      *
      * @param num - complex number in one of three forms: <code>a + bi, a,</code> or <code>bi</code> where a and b are
      * 				real numbers and i is the imaginary unit sqrt(-1)
-     * @return The complex number represented by the {@code num} as a {@link Complx128}.
+     * @return The complex number represented by the {@code num} as a {@link Complex128}.
      */
     public static Complex128 parseNumberToComplex128(String num) {
         double[] components = getComponents(num);
@@ -75,7 +75,7 @@ public class ComplexNumberParser {
      *
      * @param num - complex number in one of three forms: <code>a + bi, a,</code> or <code>bi</code> where a and b are
      * 				real numbers and i is the imaginary unit sqrt(-1)
-     * @return The complex number represented by the {@code num} as a {@link Complx64}.
+     * @return The complex number represented by the {@code num} as a {@link Complex64}.
      */
     public static Complex64 parseNumberToComplex64(String num) {
         double[] components = getComponents(num);

@@ -26,9 +26,12 @@ package org.flag4j.core_temp.arrays.dense;
 
 import org.flag4j.core.Shape;
 import org.flag4j.core_temp.FieldTensorBase;
+import org.flag4j.core_temp.MatrixVectorOpsMixin;
 import org.flag4j.core_temp.TensorBase;
-import org.flag4j.core_temp.arrays.sparse.SparseTensorMixin;
+import org.flag4j.core_temp.arrays.sparse.CooMatrixMixin;
+import org.flag4j.core_temp.arrays.sparse.CsrMatrixMixin;
 import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.core_temp.structures.fields.RealFloat64;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.dense.field_ops.DenseFieldDeterminant;
 import org.flag4j.operations.dense.field_ops.DenseFieldMatMultDispatcher;
@@ -42,9 +45,23 @@ import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.util.Arrays;
 
-public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, V>, U extends SparseTensorMixin<T, U>,
-        V extends Field<V>> extends FieldTensorBase<T, T, V>
-        implements DenseMatrixMixin<T, V>, DenseTensorMixin<T, U> {
+
+/**
+ * <p>The base class for all dense {@link Field} matrices.</p>
+ * <p>The {@link #entries} of a dense field matrix are mutable but the {@link #shape} is fixed.</p>
+ *
+ * @param <T> The type of this dense field matrix.
+ * @param <U> Type of sparse COO matrix equivalent to {@code T}. This type parameter is required because some operations (e.g.
+ * {@link #toCoo()}) may result in a sparse COO matrix.
+ * @param <V> Type of sparse CSR matrix equivalent to {@code T}. This type parameter is required because some operations (e.g.
+ * {@link #toCoo()}) may result in a sparse CSR matrix.
+ * @param <W> The type of the dense vector similar to {@code T}.
+ * @param <Y> The type (or wrapper of) an individual element of the matrix.
+ */
+public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, V, W, Y>, U extends CooMatrixMixin<U, T, Y>,
+        V extends CsrMatrixMixin<V, T, Y>, W extends DenseFieldVectorBase<W, T, ?, Y>, Y extends Field<Y>>
+        extends FieldTensorBase<T, T, Y>
+        implements DenseMatrixMixin<T, U, V, Y>, MatrixVectorOpsMixin<T, W, W> {
 
     /**
      * The number of rows in this matrix.
@@ -63,7 +80,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-    protected DenseFieldMatrixBase(Shape shape, V[] entries) {
+    protected DenseFieldMatrixBase(Shape shape, Y[] entries) {
         super(shape, entries);
         ParameterChecks.ensureRank(shape, 2);
         ParameterChecks.ensureEquals(entries.length, shape.totalEntriesIntValueExact());
@@ -81,7 +98,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * @return A tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public abstract T makeLikeTensor(Shape shape, V[] entries);
+    public abstract T makeLikeTensor(Shape shape, Y[] entries);
 
 
     /**
@@ -92,7 +109,15 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      *
      * @return A matrix of the same type as this tensor with the given the shape and entries.
      */
-    public abstract T makeLikeTensor(Shape shape, V fillValue);
+    public abstract T makeLikeTensor(Shape shape, Y fillValue);
+
+
+    /**
+     * Constructs a vector of similar type to this matrix with the given {@code entries}.
+     * @param entries Entries of the vector.
+     * @return A vector of similar type to this matrix with the given {@code entries}.
+     */
+    public abstract W makeLikeVector(Y... entries);
     
 
     /**
@@ -149,7 +174,6 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
     @Override
     public T H(int axis1, int axis2) {
         ParameterChecks.ensureValidIndices(2, axis1, axis2);
-        // TODO: Im not sure if this cast is safe?
         return (T) TransposeDispatcher.dispatchHermitian(this);
     }
 
@@ -181,7 +205,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * @param value Elements of field to get zero value from.
      * @return The zero matrix with specified shape and zero value defined with respect to a field element.
      */
-    public T getZeroMatrix(int rows, int cols, V fieldValue) {
+    public T getZeroMatrix(int rows, int cols, Y fieldValue) {
         return makeLikeTensor(new Shape(rows, cols), fieldValue.getZero());
     }
 
@@ -218,9 +242,9 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * @throws IllegalArgumentException If this matrix is not square.
      */
     @Override
-    public V tr() {
+    public Y tr() {
         ParameterChecks.ensureSquareMatrix(this.shape);
-        V sum = entries[0];
+        Y sum = entries[0];
         int colsOffset = this.numCols+1;
 
         for(int i=1; i<this.numRows; i++) {
@@ -347,7 +371,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * @throws LinearAlgebraException If this matrix is not square.
      */
     @Override
-    public V det() {
+    public Y det() {
         return DenseFieldDeterminant.det(this);
     }
 
@@ -380,7 +404,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T mult(T b) {
-        return makeLikeTensor(new Shape(numRows, b.numCols), (V[]) DenseFieldMatMultDispatcher.dispatch(this, b));
+        return makeLikeTensor(new Shape(numRows, b.numCols), (Y[]) DenseFieldMatMultDispatcher.dispatch(this, b));
     }
 
 
@@ -397,7 +421,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T multTranspose(T b) {
-        return makeLikeTensor(new Shape(numRows, b.numCols), (V[]) DenseFieldMatMultDispatcher.dispatchTranspose(this, b));
+        return makeLikeTensor(new Shape(numRows, b.numCols), (Y[]) DenseFieldMatMultDispatcher.dispatchTranspose(this, b));
     }
 
 
@@ -411,7 +435,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * @throws IllegalArgumentException If this matrix and b have different shapes.
      */
     @Override
-    public V fib(T b) {
+    public Y fib(T b) {
         ParameterChecks.ensureEqualShape(this.shape, b.shape);
         return this.H().mult(b).trace();
     }
@@ -486,12 +510,12 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
     public T stack(T b) {
         ParameterChecks.ensureArrayLengthsEq(this.numCols, b.numCols);
         Shape stackedShape = new Shape(this.numRows + b.numRows, this.numCols);
-        Field<V>[] stackedEntries = new Field[stackedShape.totalEntries().intValueExact()];
+        Field<Y>[] stackedEntries = new Field[stackedShape.totalEntries().intValueExact()];
 
         System.arraycopy(this.entries, 0, stackedEntries, 0, this.entries.length);
         System.arraycopy(b.entries, 0, stackedEntries, this.entries.length, b.entries.length);
 
-        return makeLikeTensor(stackedShape, (V[]) stackedEntries);
+        return makeLikeTensor(stackedShape, (Y[]) stackedEntries);
     }
 
 
@@ -512,7 +536,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
 
         int augNumCols = numCols + b.numCols;
         Shape augShape = new Shape(numRows, augNumCols);
-        Field<V>[] augEntries = new Field[numRows*augNumCols];
+        Field<Y>[] augEntries = new Field[numRows*augNumCols];
 
         // Copy entries from this matrix.
         for(int i=0; i<numRows; i++) {
@@ -529,7 +553,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
             }
         }
 
-        return makeLikeTensor(augShape, (V[]) augEntries);
+        return makeLikeTensor(augShape, (Y[]) augEntries);
     }
 
 
@@ -551,7 +575,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
         int row2Offset = rowIndex2*numCols;
 
         if(rowIndex1 != rowIndex2) {
-            V temp;
+            Y temp;
 
             for(int j=0; j<numCols; j++) {
                 // Swap elements.
@@ -580,7 +604,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
         ParameterChecks.ensureValidIndices(numCols, colIndex1, colIndex2);
 
         if(colIndex1 != colIndex2) {
-            V temp;
+            Y temp;
 
             for(int i=0; i<numRows; i++) {
                 // Swap elements.
@@ -661,7 +685,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
     @Override
     public T removeRow(int rowIndex) {
         Shape copyShape = new Shape(numRows-1, numCols);
-        Field<V>[] copyEntries = new Field[(numRows-1)*numCols];
+        Field<Y>[] copyEntries = new Field[(numRows-1)*numCols];
 
         int row = 0;
 
@@ -672,7 +696,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
             }
         }
 
-        return makeLikeTensor(shape, (V[]) copyEntries);
+        return makeLikeTensor(shape, (Y[]) copyEntries);
     }
 
 
@@ -686,7 +710,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
     @Override
     public T removeRows(int... rowIndices) {
         Shape copyShape = new Shape(numRows-rowIndices.length, numCols);
-        Field<V>[] copyEntries = new Field[(numRows-rowIndices.length)*numCols];
+        Field<Y>[] copyEntries = new Field[(numRows-rowIndices.length)*numCols];
 
         int row = 0;
 
@@ -697,7 +721,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
             }
         }
 
-        return makeLikeTensor(shape, (V[]) copyEntries);
+        return makeLikeTensor(shape, (Y[]) copyEntries);
     }
 
 
@@ -712,7 +736,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
     public T removeCol(int colIndex) {
         int copyNumCols = numCols-1;
         Shape copyShape = new Shape(numRows, copyNumCols);
-        Field<V>[] copyEntries = new Field[numRows*copyNumCols];
+        Field<Y>[] copyEntries = new Field[numRows*copyNumCols];
 
         int col;
 
@@ -729,7 +753,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
             }
         }
 
-        return makeLikeTensor(shape, (V[]) copyEntries);
+        return makeLikeTensor(shape, (Y[]) copyEntries);
     }
 
 
@@ -744,7 +768,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
     public T removeCols(int... colIndices) {
         int copyNumCols = this.numCols-colIndices.length;
         Shape copyShape = new Shape(numRows, copyNumCols);
-        Field<V>[] copyEntries = new Field[numRows*copyNumCols];
+        Field<Y>[] copyEntries = new Field[numRows*copyNumCols];
 
         int col;
 
@@ -761,7 +785,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
             }
         }
 
-        return makeLikeTensor(shape, (V[]) copyEntries);
+        return makeLikeTensor(shape, (Y[]) copyEntries);
     }
 
 
@@ -854,7 +878,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
         int destPos = 0;
         int srcPos;
         int end;
-        Field<V>[] slice = new Field[sliceRows*sliceCols];
+        Field<Y>[] slice = new Field[sliceRows*sliceCols];
 
         for(int i=rowStart; i<rowEnd; i++) {
             srcPos = i*numCols + colStart;
@@ -865,7 +889,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
             }
         }
 
-        return makeLikeTensor(new Shape(sliceRows, sliceCols), (V[]) slice);
+        return makeLikeTensor(new Shape(sliceRows, sliceCols), (Y[]) slice);
     }
 
 
@@ -879,7 +903,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * @return A reference to this matrix.
      */
     @Override
-    public T set(V value, int row, int col) {
+    public T set(Y value, int row, int col) {
         this.entries[row*numCols + col] = value;
         return (T) this;
     }
@@ -895,7 +919,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
     @Override
-    public T setValues(V[][] values) {
+    public T setValues(Y[][] values) {
         ParameterChecks.ensureEquals(numRows, values.length);
         ParameterChecks.ensureEquals(numCols, values[0].length);
 
@@ -922,7 +946,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
 //     * @throws IndexOutOfBoundsException If the values array has a different length than the number of rows of this matrix.
 //     */
 //    @Override
-//    public T setCol(FieldVector<V> values, int colIndex) {
+//    public T setCol(FieldVector<Y> values, int colIndex) {
 //        ParameterChecks.ensureValidIndices(values.size, this.numRows);
 //
 //        for(int i=0; i<values.size; i++) {
@@ -944,7 +968,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
 //     * @throws IndexOutOfBoundsException If the values vector has a different length than the number of rows of this matrix.
 //     */
 //    @Override
-//    public T setRow(FieldVector<V> values, int rowIndex) {
+//    public T setRow(FieldVector<Y> values, int rowIndex) {
 //        ParameterChecks.ensureValidIndices(values.size, numCols);
 //        System.arraycopy(values.entries, 0, super.entries, rowIndex*numCols, this.numCols);
 //        return (T) this;
@@ -1021,157 +1045,6 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
 
         return result;
     }
-
-
-//    /**
-//     * Computes matrix-vector multiplication.
-//     *
-//     * @param b Vector in the matrix-vector multiplication.
-//     *
-//     * @return The result of matrix multiplying this matrix with vector {@code b}.
-//     *
-//     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the
-//     *                                  number of entries in the vector {@code b}.
-//     */
-//    @Override
-//    public FieldVector<V> mult(FieldVector<V> b) {
-//        ParameterChecks.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
-//        Field<V>[] entries = MatrixMultiplyDispatcher.dispatch(this, b);
-//        return new FieldVector<V>((V[]) entries);
-//    }
-//
-//
-//    /**
-//     * Converts this matrix to an equivalent vector. If this matrix is not shaped as a row/column vector,
-//     * it will first be flattened then converted to a vector.
-//     *
-//     * @return A vector equivalent to this matrix.
-//     */
-//    @Override
-//    public FieldVector<V> toVector() {
-//        return new FieldVector<V>(entries.clone());
-//    }
-//
-//
-//    /**
-//     * Get the row of this matrix at the specified index.
-//     *
-//     * @param rowIdx Index of row to get.
-//     *
-//     * @return The specified row of this matrix.
-//     *
-//     * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} is less than zero or greater than/equal to
-//     *                                        the number of rows in this matrix.
-//     */
-//    @Override
-//    public FieldVector<V> getRow(int rowIdx) {
-//        ParameterChecks.ensureValidIndices(numRows, rowIdx);
-//        int start = rowIdx*numCols;
-//        int stop = start+numCols;
-//
-//        V[] row = Arrays.copyOfRange(this.entries, start, stop);
-//
-//        return new FieldVector<>(row);
-//    }
-//
-//
-//    /**
-//     * Gets a specified row of this matrix between {@code colStart} (inclusive) and {@code colEnd} (exclusive).
-//     *
-//     * @param rowIdx Index of the row of this matrix to get.
-//     * @param colStart Starting column of the row (inclusive).
-//     * @param colEnd Ending column of the row (exclusive).
-//     *
-//     * @return The row at index {@code rowIdx} of this matrix between the {@code colStart} and {@code colEnd}
-//     * indices.
-//     *
-//     * @throws IndexOutOfBoundsException If either {@code colEnd} are {@code colStart} out of bounds for the shape of this matrix.
-//     * @throws IllegalArgumentException  If {@code colEnd} is less than {@code colStart}.
-//     */
-//    @Override
-//    public FieldVector<V> getRow(int rowIdx, int colStart, int colEnd) {
-//        ParameterChecks.ensureValidIndices(numRows, rowIdx);
-//        ParameterChecks.ensureValidIndices(numCols, colStart, colEnd);
-//
-//        int start = rowIdx*numCols + colStart;
-//        int stop = start+numCols - colEnd;
-//
-//        V[] row = Arrays.copyOfRange(this.entries, start, stop);
-//
-//        return new FieldVector<V>(row);
-//    }
-//
-//
-//    /**
-//     * Get the column of this matrix at the specified index.
-//     *
-//     * @param colIdx Index of column to get.
-//     *
-//     * @return The specified column of this matrix.
-//     *
-//     * @throws ArrayIndexOutOfBoundsException If {@code colIdx} is less than zero or greater than/equal to
-//     *                                        the number of columns in this matrix.
-//     */
-//    @Override
-//    public FieldVector<V> getCol(int colIdx) {
-//        ParameterChecks.ensureValidIndices(numCols, colIdx);
-//        Field<V>[] col = new Field[numRows];
-//
-//        for(int i=0; i<numRows; i++) {
-//            col[i] = entries[i*numCols + colIdx];
-//        }
-//
-//        return new FieldVector<V>((V[]) col);
-//    }
-//
-//
-//    /**
-//     * Gets a specified column of this matrix between {@code rowStart} (inclusive) and {@code rowEnd} (exclusive).
-//     *
-//     * @param colIdx Index of the column of this matrix to get.
-//     * @param rowStart Starting row of the column (inclusive).
-//     * @param rowEnd Ending row of the column (exclusive).
-//     *
-//     * @return The column at index {@code colIdx} of this matrix between the {@code rowStart} and {@code rowEnd}
-//     * indices.
-//     *
-//     * @throws                  IndexOutOfBoundsException If either {@code colEnd} are {@code colStart} out of bounds for the
-//     *                                  shape of this matrix.
-//     * @throws IllegalArgumentException If {@code rowEnd} is less than {@code rowStart}.
-//     */
-//    @Override
-//    public FieldVector<V> getCol(int colIdx, int rowStart, int rowEnd) {
-//        ParameterChecks.ensureValidIndices(numCols, colIdx);
-//        ParameterChecks.ensureValidIndices(numRows, rowStart, rowEnd);
-//
-//        Field<V>[] col = new Field[numRows];
-//
-//        for(int i=rowStart; i<rowEnd; i++) {
-//            col[i] = entries[i*numCols + colIdx];
-//        }
-//
-//        return new FieldVector<V>((V[]) col);
-//    }
-//
-//
-//    /**
-//     * Extracts the diagonal elements of this matrix and returns them as a vector.
-//     *
-//     * @return A vector containing the diagonal entries of this matrix.
-//     */
-//    @Override
-//    public FieldVector<V> getDiag() {
-//        int newSize = Math.min(numRows, numCols);
-//        Field<V>[] diag = new Field[newSize];
-//
-//        int idx = 0;
-//        for(int i=0; i<newSize; i++) {
-//            diag[i] = this.entries[idx];
-//            idx += numCols + 1;
-//        }
-//
-//        return new FieldVector<V>((V[]) diag);
-//    }
 
 
     /**
@@ -1267,11 +1140,214 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
     @Override
     public T div(T b) {
         ParameterChecks.ensureEqualShape(shape, b.shape);
-        Field<V>[] quotient = new Field[entries.length];
+        Field<Y>[] quotient = new Field[entries.length];
 
         for(int i=0, size=entries.length; i<size; i++)
             quotient[i] = entries[i].div(b.entries[i]);
 
-        return makeLikeTensor(shape, (V[]) quotient);
+        return makeLikeTensor(shape, (Y[]) quotient);
+    }
+
+
+    /**
+     * Computes matrix-vector multiplication.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with vector {@code b}.
+     *
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the
+     *                                  number of entries in the vector {@code b}.
+     */
+    @Override
+    public W mult(W b) {
+        Field<Y>[] dest = DenseFieldMatMultDispatcher.dispatch(this, b);
+        return makeLikeVector((Y[]) dest);
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent vector. If this matrix is not shaped as a row/column vector,
+     * it will first be flattened then converted to a vector.
+     *
+     * @return A vector equivalent to this matrix.
+     */
+    @Override
+    public W toVector() {
+        return makeLikeVector(entries.clone());
+    }
+
+
+    /**
+     * Get the row of this matrix at the specified index.
+     *
+     * @param rowIdx Index of row to get.
+     *
+     * @return The specified row of this matrix.
+     *
+     * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} is less than zero or greater than/equal to
+     *                                        the number of rows in this matrix.
+     */
+    @Override
+    public W getRow(int rowIdx) {
+        ParameterChecks.ensureIndexInBounds(numRows, rowIdx);
+        int start = rowIdx*numCols;
+        int stop = start+numCols;
+
+        return makeLikeVector(Arrays.copyOfRange(this.entries, start, stop));
+    }
+
+
+    /**
+     * Gets a specified row of this matrix between {@code colStart} (inclusive) and {@code colEnd} (exclusive).
+     *
+     * @param rowIdx Index of the row of this matrix to get.
+     * @param colStart Starting column of the row (inclusive).
+     * @param colEnd Ending column of the row (exclusive).
+     *
+     * @return The row at index {@code rowIdx} of this matrix between the {@code colStart} and {@code colEnd}
+     * indices.
+     *
+     * @throws IndexOutOfBoundsException If either {@code colEnd} are {@code colStart} out of bounds for the shape of this matrix.
+     * @throws IllegalArgumentException  If {@code colEnd} is less than {@code colStart}.
+     */
+    @Override
+    public W getRow(int rowIdx, int colStart, int colEnd) {
+        ParameterChecks.ensureIndexInBounds(numCols, colStart, colEnd);
+        ParameterChecks.ensureGreaterEq(colStart, colEnd);
+        int start = rowIdx*numCols+colStart;
+        int stop = start+colEnd;
+
+        return makeLikeVector(Arrays.copyOfRange(this.entries, start, stop));
+    }
+
+
+    /**
+     * Get the column of this matrix at the specified index.
+     *
+     * @param colIdx Index of column to get.
+     *
+     * @return The specified column of this matrix.
+     *
+     * @throws ArrayIndexOutOfBoundsException If {@code colIdx} is less than zero or greater than/equal to
+     *                                        the number of columns in this matrix.
+     */
+    @Override
+    public W getCol(int colIdx) {
+        ParameterChecks.ensureValidIndices(numCols, colIdx);
+        Field<Y>[] col = new Field[numRows];
+
+        for(int i=0; i<numRows; i++)
+            col[i] = entries[i*numCols + colIdx];
+
+        return makeLikeVector((Y[]) col);
+    }
+
+
+    /**
+     * Gets a specified column of this matrix between {@code rowStart} (inclusive) and {@code rowEnd} (exclusive).
+     *
+     * @param colIdx Index of the column of this matrix to get.
+     * @param rowStart Starting row of the column (inclusive).
+     * @param rowEnd Ending row of the column (exclusive).
+     *
+     * @return The column at index {@code colIdx} of this matrix between the {@code rowStart} and {@code rowEnd}
+     * indices.
+     *
+     * @throws @throws                  IndexOutOfBoundsException If either {@code colEnd} are {@code colStart} out of bounds for the
+     *                                  shape of this matrix.
+     * @throws IllegalArgumentException If {@code rowEnd} is less than {@code rowStart}.
+     */
+    @Override
+    public W getCol(int colIdx, int rowStart, int rowEnd) {
+        ParameterChecks.ensureValidIndices(numRows, rowStart, rowEnd);
+        ParameterChecks.ensureGreaterEq(rowEnd, rowStart);
+        Field<Y>[] col = new Field[numRows];
+
+        for(int i=rowStart; i<rowEnd; i++)
+            col[i] = entries[i*numCols + colIdx];
+
+        return makeLikeVector((Y[]) col);
+    }
+
+
+    /**
+     * Extracts the diagonal elements of this matrix and returns them as a vector.
+     *
+     * @return A vector containing the diagonal entries of this matrix.
+     */
+    @Override
+    public W getDiag() {
+        int newSize = Math.min(numRows, numCols);
+        Field<Y>[] diag = new Field[newSize];
+
+        int idx = 0;
+        for(int i=0; i<newSize; i++) {
+            diag[i] = this.entries[idx];
+            idx += numCols + 1;
+        }
+
+        return makeLikeVector((Y[]) diag);
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     *
+     * @return A reference to this matrix.
+     *
+     * @throws IndexOutOfBoundsException If the values vector has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public T setCol(W values, int colIndex) {
+        ParameterChecks.ensureArrayLengthsEq(values.size, this.numRows);
+
+        int rowOffset = 0;
+        for(int i=0; i<values.size; i++) {
+            entries[rowOffset + colIndex] = values.entries[i];
+            rowOffset += numCols;
+        }
+
+        return (T) this;
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values New values for the row.
+     * @param rowIndex The index of the row which is to be set.
+     *
+     * @return A reference to this matrix.
+     *
+     * @throws IndexOutOfBoundsException If the values vector has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public T setRow(W values, int rowIndex) {
+        ParameterChecks.ensureArrayLengthsEq(values.size, this.numCols);
+        int rowOffset = rowIndex*numCols;
+
+        for(int i=0; i<values.size; i++)
+            super.entries[rowOffset + i] = values.entries[i];
+
+        return (T) this;
+    }
+
+
+    /**
+     * Computes the element-wise absolute value of this matrix.
+     *
+     * @return The element-wise absolute value of this matrix.
+     */
+    @Override
+    public FieldMatrix<RealFloat64> abs() {
+        RealFloat64[] abs = new RealFloat64[entries.length];
+        for(int i = 0, size=entries.length; i<size; ++i)
+            abs[i] = new RealFloat64(entries[i].abs());
+
+        return new FieldMatrix<RealFloat64>(shape, abs);
     }
 }

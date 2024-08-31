@@ -24,7 +24,6 @@
 
 package org.flag4j.core_temp.arrays.dense;
 
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.Shape;
 import org.flag4j.core_temp.arrays.sparse.CooFieldTensor;
 import org.flag4j.core_temp.structures.fields.Field;
@@ -32,7 +31,6 @@ import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.dense.field_ops.DenseFieldEquals;
 import org.flag4j.operations.dense.field_ops.DenseFieldTensorDot;
 import org.flag4j.util.ParameterChecks;
-import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -234,99 +232,13 @@ public class FieldTensor<T extends Field<T>> extends DenseFieldTensorBase<FieldT
         for(int i=0; i<size; i++) {
             value = entries[i];
 
-            if(value.equals(CNumber.ZERO)) {
+            if(value.isZero()) {
                 spEntries.add(value);
                 indices.add(shape.getIndices(i));
             }
         }
 
         return new CooFieldTensor(shape, spEntries.toArray(new Field[0]), indices.toArray(new int[0][]));
-    }
-
-
-    /**
-     * Computes the element-wise multiplication of two tensors and stores the result in this tensor.
-     *
-     * @param b Second tensor in the element-wise product.
-     *
-     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
-     */
-    @Override
-    public void elemMultEq(FieldTensor<T> b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
-
-        for(int i=0, size=entries.length; i<size; i++)
-            entries[i] = entries[i].mult(b.entries[i]);
-    }
-
-
-    /**
-     * Computes the element-wise sum between two tensors and stores the result in this tensor.
-     *
-     * @param b Second tensor in the element-wise sum.
-     *
-     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
-     */
-    @Override
-    public void addEq(FieldTensor<T> b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
-
-        for(int i=0, size=entries.length; i<size; i++)
-            entries[i] = entries[i].add(b.entries[i]);
-    }
-
-
-    /**
-     * Computes the element-wise difference between two tensors and stores the result in this tensor.
-     *
-     * @param b Second tensor in the element-wise difference.
-     *
-     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
-     */
-    @Override
-    public void subEq(FieldTensor<T> b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
-
-        for(int i=0, size=entries.length; i<size; i++)
-            entries[i] = entries[i].sub(b.entries[i]);
-    }
-
-
-    /**
-     * Computes the element-wise division between two tensors and stores the result in this tensor.
-     *
-     * @param b The denominator tensor in the element-wise quotient.
-     *
-     * @throws TensorShapeException If this tensor and {@code b}'s shape are not equal.
-     */
-    @Override
-    public void divEq(FieldTensor<T> b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
-
-        for(int i=0, size=entries.length; i<size; i++)
-            entries[i] = entries[i].div(b.entries[i]);
-    }
-
-
-    /**
-     * Computes the element-wise division between two tensors.
-     *
-     * @param b The denominator tensor in the element-wise quotient.
-     *
-     * @return The element-wise quotient of this tensor and {@code b}.
-     *
-     * @throws TensorShapeException If this tensor and {@code b}'s shape are not equal.
-     */
-    @Override
-    public FieldTensor<T> div(FieldTensor<T> b) {
-        ParameterChecks.ensureEqualShape(this.shape, b.shape);
-
-        Field<T>[] diff = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++)
-            diff[i] = entries[i].div(b.entries[i]);
-
-        return makeLikeTensor(shape, (T[]) diff);
     }
 
 
