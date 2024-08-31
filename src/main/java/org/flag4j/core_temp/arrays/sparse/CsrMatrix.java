@@ -554,8 +554,8 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      */
     @Override
     public CsrMatrix swapCols(int colIndex1, int colIndex2) {
-        // TODO: Implementation.
-        return null;
+        RealCsrManipulations.swapRows(this, colIndex1, colIndex2);
+        return this;
     }
 
 
