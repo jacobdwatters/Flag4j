@@ -25,7 +25,6 @@
 package org.flag4j.core_temp.arrays.dense;
 
 import org.flag4j.core.Shape;
-import org.flag4j.core_temp.PrimitiveDoubleTensorBase;
 import org.flag4j.core_temp.arrays.sparse.CooVector;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.operations.dense.real.RealDenseTensorDot;
@@ -45,7 +44,7 @@ import java.util.List;
  *
  * <p>Vectors have mutable entries but are fixed in size.</p>
  */
-public class Vector extends PrimitiveDoubleTensorBase<Vector, Vector>
+public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
         implements DenseVectorMixin<Vector, CooVector, Matrix, Double>{
     // TODO: Add equals(), hashcode(), and toString() methods for all tensor objects.
 
@@ -706,7 +705,6 @@ public class Vector extends PrimitiveDoubleTensorBase<Vector, Vector>
 
         return new Vector(quotient);
     }
-
 
     /**
      * Checks if an object is equal to this vector object.

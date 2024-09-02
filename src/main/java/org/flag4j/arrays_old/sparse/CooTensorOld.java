@@ -844,9 +844,9 @@ public class CooTensorOld
         StringBuilder sb = new StringBuilder();
 
         sb.append("Shape: " + shape + "\n");
-        sb.append("Non-zero Entries: " + PrettyPrint.abrivatedArray(entries, maxEntries, padding, precision, centring) + "\n");
+        sb.append("Non-zero Entries: " + PrettyPrint.abbreviatedArray(entries, maxEntries, padding, precision, centring) + "\n");
         sb.append("Non-zero Indices: " +
-                PrettyPrint.abrivatedArray(indices, PrintOptions.getMaxRows(), maxEntries, padding, 20, centring));
+                PrettyPrint.abbreviatedArray(indices, PrintOptions.getMaxRows(), maxEntries, padding, 20, centring));
 
         return sb.toString();
     }

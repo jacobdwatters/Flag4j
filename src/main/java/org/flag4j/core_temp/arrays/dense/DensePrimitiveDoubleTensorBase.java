@@ -30,6 +30,7 @@ import org.flag4j.core_temp.PrimitiveDoubleTensorBase;
 import org.flag4j.core_temp.arrays.sparse.SparseTensorMixin;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.dense.real.RealDenseTensorDot;
+import org.flag4j.operations_old.common.real.RealProperties;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -200,5 +201,21 @@ public abstract class DensePrimitiveDoubleTensorBase <T extends DensePrimitiveDo
             quotient[i] = entries[i]/b.entries[i];
 
         return makeLikeTensor(shape, quotient);
+    }
+
+
+    /**
+     * Checks if all entries of this tensor are close to the entries of {@code b}.
+     * @param b Tensor to compare this tensor to.
+     * @param absTol Absolute tolerance.
+     * @param relTol Relative tolerance.
+     * @return True if {@code b} is the same shape as this tensor and all entries are 'close', i.e.
+     * elements {@code x} and {@code y} at the same positions in the two tensors respectively satisfy
+     * {@code |x-y| <= (atol + rtol*|y|)}. Otherwise, returns false.
+     * @see #allClose(DenseTensorMixin)
+     */
+    @Override
+    public boolean allClose(T tensor, double relTol, double absTol) {
+        return shape.equals(tensor.shape) && RealProperties.allClose(entries, tensor.entries, relTol, absTol);
     }
 }

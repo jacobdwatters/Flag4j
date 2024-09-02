@@ -223,4 +223,26 @@ public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFi
 
         return SparseFieldEquals.matrixEquals(this, src2);
     }
+
+
+    /**
+     * <p>Converts this sparse COO matrix to an equivalent compressed sparse row (CSR) matrix.</p>
+     * <p>It is often easier and more efficient to construct a matrix in COO format first then convert to a CSR matrix for efficient
+     * computations.</p>
+     *
+     * @return A CSR matrix equivalent to this COO matrix.
+     */
+    public CsrFieldMatrix<T> toCsr() {
+        int[] rowPointers = new int[numRows + 1];
+
+        // Count number of entries per row.
+        for(int i=0; i<nnz; i++)
+            rowPointers[rowIndices[i] + 1]++;
+
+        // Shift each row count to be greater than or equal to the previous.
+        for(int i=0; i<numRows; i++)
+            rowPointers[i+1] += rowPointers[i];
+
+        return new CsrFieldMatrix<T>(shape, entries.clone(), rowPointers, colIndices.clone());
+    }
 }

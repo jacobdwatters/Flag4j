@@ -27,7 +27,6 @@ package org.flag4j.core_temp.arrays.dense;
 
 import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.core.Shape;
-import org.flag4j.core_temp.PrimitiveDoubleTensorBase;
 import org.flag4j.core_temp.TensorOverSemiRing;
 import org.flag4j.core_temp.arrays.sparse.CooTensor;
 import org.flag4j.linalg.TensorInvert;
@@ -112,7 +111,7 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
 
     /**
      * <p>Computes the 'inverse' of this tensor. That is, computes the tensor {@code X=this.inv(numIndices)} such that
-     * {@link #tensorDot(PrimitiveDoubleTensorBase, int)} this.tensorDot(X, numIndices)} is the 'identity' tensor for the tensor dot product
+     * {@link #tensorDot(TensorOverSemiRing, int)} this.tensorDot(X, numIndices)} is the 'identity' tensor for the tensor dot product
      * operation.</p>
      *
      * <p>A tensor {@code I} is the identity for a tensor dot product if {@code this.tensorDot(I, numIndices).equals(this)}.</p>

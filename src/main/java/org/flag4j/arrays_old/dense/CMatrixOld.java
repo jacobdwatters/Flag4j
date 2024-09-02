@@ -95,6 +95,7 @@ public class CMatrixOld
         Arrays.fill(super.entries, CNumber.ZERO);
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
+        allClose(this, 1, 1);
     }
 
 

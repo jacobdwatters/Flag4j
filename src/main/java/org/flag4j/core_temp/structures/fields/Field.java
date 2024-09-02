@@ -158,5 +158,4 @@ public interface Field<T extends Field<T>> extends Ring<T> {
      * @return True if this field element is NaN in magnitude. False otherwise (i.e. finite, NaN, etc.).
      */
     public boolean isNaN();
-
 }

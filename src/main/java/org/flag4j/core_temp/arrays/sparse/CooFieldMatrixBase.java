@@ -27,7 +27,7 @@ package org.flag4j.core_temp.arrays.sparse;
 
 import org.flag4j.core.Shape;
 import org.flag4j.core_temp.FieldTensorBase;
-import org.flag4j.core_temp.TensorBase;
+import org.flag4j.core_temp.MatrixMixin;
 import org.flag4j.core_temp.arrays.dense.DenseFieldMatrixBase;
 import org.flag4j.core_temp.arrays.dense.FieldMatrix;
 import org.flag4j.core_temp.structures.fields.Field;
@@ -120,7 +120,10 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V, W
     protected CooFieldMatrixBase(Shape shape, W[] entries, int[] rowIndices, int[] colIndices) {
         super(shape, entries);
         ParameterChecks.ensureRank(shape, 2);
+        ParameterChecks.ensureIndexInBounds(shape.get(0), rowIndices);
+        ParameterChecks.ensureIndexInBounds(shape.get(1), colIndices);
         ParameterChecks.ensureArrayLengthsEq(entries.length, rowIndices.length, colIndices.length);
+
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
         nnz = entries.length;
@@ -381,7 +384,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V, W
      */
     @Override
     public W fib(T b) {
-        return this.T().mult(b).tr();
+        return this.H().mult(b).tr();
     }
 
 
@@ -393,8 +396,8 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V, W
      * @return The result of stacking this matrix on top of the matrix {@code b}.
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of columns.
-     * @see #stack(TensorBase, int)
-     * @see #augment(CooFieldMatrix)
+     * @see #stack(MatrixMixin, int) 
+     * @see #augment(CooFieldMatrixBase) 
      */
     @Override
     public T stack(T b) {
@@ -430,7 +433,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V, W
      * @return The result of stacking {@code b} to the right of this matrix.
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of rows.
-     * @see #stack(TensorBase, int)
+     * @see #stack(MatrixMixin, int) 
      * @see #stack(CooFieldMatrixBase) 
      */
     @Override
@@ -868,17 +871,19 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V, W
     @Override
     public U toDense() {
         Field<W>[] entries = new Field[totalEntries().intValueExact()];
-        int row;
-        int col;
 
-        for(int i = 0; i< nnz; i++) {
-            row = rowIndices[i];
-            col = colIndices[i];
-            entries[row*numCols + col] = this.entries[i];
-        }
+        for(int i = 0; i< nnz; i++)
+            entries[rowIndices[i]*numCols + colIndices[i]] = this.entries[i];
 
         return makeDenseTensor(shape, (W[]) entries);
     }
+
+
+    /**
+     * Converts this sparse COO matrix to an equivalent sparse CSR matrix.
+     * @return A sparse CSR matrix equivalent to this sparse COO matrix.
+     */
+    public abstract CsrFieldMatrixBase toCsr();
 
 
     /**

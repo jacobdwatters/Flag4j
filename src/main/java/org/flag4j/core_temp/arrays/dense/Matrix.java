@@ -1178,6 +1178,15 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
 
 
     /**
+     * Converts this matrix to an equivalent {@link Tensor}.
+     * @return A {@link Tensor} which is equivalent to this matrix.
+     */
+    public Tensor toTensor() {
+        return new Tensor(shape, entries.clone());
+    }
+
+
+    /**
      * Get the row of this matrix at the specified index.
      *
      * @param rowIdx Index of row to get.

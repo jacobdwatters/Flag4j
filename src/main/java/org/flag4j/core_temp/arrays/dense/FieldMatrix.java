@@ -195,6 +195,17 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
 
 
     /**
+     * Converts this matrix to an equivalent sparse CSR matrix.
+     * @return A sparse coo matrix equivalent to this matrix.
+     * @see #toCoo()
+     */
+    public CsrFieldMatrix<T> toCsr() {
+        // For simplicity convert to a COO matrix as an intermediate.
+        return toCoo().toCsr();
+    }
+
+
+    /**
      * Checks if an object is equal to this matrix object.
      * @param object Object to check equality with this matrix.
      * @return True if the two matrices have the same shape, are numerically equivalent, and are of type {@link Matrix}.

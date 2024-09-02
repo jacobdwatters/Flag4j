@@ -33,10 +33,7 @@ import org.flag4j.core_temp.arrays.sparse.CsrMatrixMixin;
 import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.core_temp.structures.fields.RealFloat64;
 import org.flag4j.operations.TransposeDispatcher;
-import org.flag4j.operations.dense.field_ops.DenseFieldDeterminant;
-import org.flag4j.operations.dense.field_ops.DenseFieldMatMultDispatcher;
-import org.flag4j.operations.dense.field_ops.DenseFieldProperties;
-import org.flag4j.operations.dense.field_ops.DenseFieldTensorDot;
+import org.flag4j.operations.dense.field_ops.*;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.ParameterChecks;
@@ -71,6 +68,25 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * The number of columns in this matrix.
      */
     public final int numCols;
+
+
+    /**
+     * Checks if all entries of this tensor are close to the entries of the argument {@code tensor}.
+     *
+     * @param b TensorOld to compare this tensor to.
+     * @param relTol Relative tolerance.
+     * @param absTol Absolute tolerance.
+     *
+     * @return True if the argument {@code tensor} is the same shape as this tensor and all entries are 'close', i.e.
+     * elements {@code x} and {@code y} at the same positions in the two tensors respectively satisfy
+     * {@code |x-y| <= (atol + rtol*|y|)}. Otherwise, returns false.
+     *
+     * @see #allClose(DenseTensorMixin)
+     */
+    @Override
+    public boolean allClose(T b, double relTol, double absTol) {
+        return DenseFieldEquals.allClose(entries, shape, b.entries, b.shape, relTol, absTol);
+    }
 
 
     /**

@@ -83,7 +83,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      * @return The zero element for the field of this tensor. If it could not be determined during construction of this object
      * and has not been set explicitly by {@link #setZeroElement(Field)} then {@code null} will be returned.
      */
-    protected V getZeroElement() {
+    public V getZeroElement() {
         return zeroElement;
     }
 
@@ -147,8 +147,8 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T reshape(Shape newShape) {
-        ParameterChecks.ensureBroadcastable(this.shape, shape);
-        return makeLikeTensor(shape, this.entries.clone());
+        ParameterChecks.ensureBroadcastable(this.shape, newShape);
+        return makeLikeTensor(newShape, this.entries.clone());
     }
 
 

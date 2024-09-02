@@ -686,4 +686,23 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
 
         return new FieldVector<RealFloat64>(abs);
     }
+
+
+    /**
+     * Checks if all entries of this vector are close to the entries of {@code b}.
+     *
+     * @param b Vector to compare this tensor to.
+     * @param relTol Relative tolerance.
+     * @param absTol Absolute tolerance.
+     *
+     * @return True if {@code b} is the same shape as this tensor and all entries are 'close', i.e.
+     * elements {@code x} and {@code y} at the same positions in the two vectors respectively satisfy
+     * {@code |x-y| <= (atol + rtol*|y|)}. Otherwise, returns false.
+     *
+     * @see #allClose(DenseTensorMixin)
+     */
+    @Override
+    public boolean allClose(T b, double relTol, double absTol) {
+        return DenseFieldEquals.allClose(entries, shape, b.entries, b.shape, relTol, absTol);
+    }
 }

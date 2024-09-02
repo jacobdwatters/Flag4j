@@ -938,9 +938,9 @@ public class CooCTensorOld
         StringBuilder sb = new StringBuilder();
 
         sb.append("Shape: " + shape + "\n");
-        sb.append("Non-zero Entries: " + PrettyPrint.abrivatedArray(entries, maxCols, padding, precision, centring) + "\n");
+        sb.append("Non-zero Entries: " + PrettyPrint.abbreviatedArray(entries, maxCols, padding, precision, centring) + "\n");
         sb.append("Non-zero Indices: " +
-                PrettyPrint.abrivatedArray(indices, PrintOptions.getMaxRows(), maxCols, padding, 20, centring));
+                PrettyPrint.abbreviatedArray(indices, PrintOptions.getMaxRows(), maxCols, padding, 20, centring));
 
         return sb.toString();
     }

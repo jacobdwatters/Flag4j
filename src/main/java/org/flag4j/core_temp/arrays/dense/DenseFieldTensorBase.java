@@ -30,6 +30,7 @@ import org.flag4j.core_temp.arrays.sparse.SparseTensorMixin;
 import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.core_temp.structures.fields.RealFloat64;
 import org.flag4j.operations.TransposeDispatcher;
+import org.flag4j.operations.dense.field_ops.DenseFieldEquals;
 import org.flag4j.operations.dense.field_ops.DenseFieldTensorDot;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -257,5 +258,24 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
             quotient[i] = entries[i].div(b.entries[i]);
 
         return makeLikeTensor(shape, (V[]) quotient);
+    }
+
+
+    /**
+     * Checks if all entries of this matrix are close to the entries of {@code b}.
+     *
+     * @param b Matrix to compare this tensor to.
+     * @param relTol Relative tolerance.
+     * @param absTol Absolute tolerance.
+     *
+     * @return True if {@code b} is the same shape as this matrix and all entries are 'close', i.e.
+     * elements {@code x} and {@code y} at the same positions in the two matrices respectively satisfy
+     * {@code |ax-y| <= (atol + rtol*|y|)}. Otherwise, returns false.
+     *
+     * @see #allClose(DenseTensorMixin)
+     */
+    @Override
+    public boolean allClose(T b, double relTol, double absTol) {
+        return DenseFieldEquals.allClose(entries, shape, b.entries, b.shape, relTol, absTol);
     }
 }

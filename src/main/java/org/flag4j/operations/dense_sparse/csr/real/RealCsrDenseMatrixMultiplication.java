@@ -26,10 +26,12 @@ package org.flag4j.operations.dense_sparse.csr.real;
 
 
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.core.Shape;
+import org.flag4j.core_temp.arrays.dense.Matrix;
+import org.flag4j.core_temp.arrays.dense.Vector;
+import org.flag4j.core_temp.arrays.sparse.CooVector;
+import org.flag4j.core_temp.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -37,7 +39,7 @@ import org.flag4j.util.ParameterChecks;
  * This class contains low-level implementations of real sparse-dense matrix multiplication where the sparse matrix
  * is in {@link CsrMatrixOld CSR} format.
  */
-public class RealCsrDenseMatrixMultiplication {
+public final class RealCsrDenseMatrixMultiplication {
 
     private RealCsrDenseMatrixMultiplication() {
         // Hide default constructor for utility method.
@@ -55,7 +57,7 @@ public class RealCsrDenseMatrixMultiplication {
      * @throws IllegalArgumentException If {@code src1} does not have the same number of columns as {@code src2} has
      * rows.
      */
-    public static MatrixOld standard(CsrMatrixOld src1, MatrixOld src2) {
+    public static Matrix standard(CsrMatrix src1, Matrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
 
@@ -81,7 +83,7 @@ public class RealCsrDenseMatrixMultiplication {
             }
         }
 
-        return new MatrixOld(new Shape(src1.numRows, src2.numCols), destEntries);
+        return new Matrix(new Shape(src1.numRows, src2.numCols), destEntries);
     }
 
 
@@ -95,7 +97,7 @@ public class RealCsrDenseMatrixMultiplication {
      * @throws IllegalArgumentException If {@code src1} does not have the same number of columns as {@code src2} has
      * rows.
      */
-    public static MatrixOld standard(MatrixOld src1, CsrMatrixOld src2) {
+    public static Matrix standard(Matrix src1, CsrMatrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
 
@@ -121,7 +123,7 @@ public class RealCsrDenseMatrixMultiplication {
             }
         }
 
-        return new MatrixOld(new Shape(rows1, cols2), destEntries);
+        return new Matrix(new Shape(rows1, cols2), destEntries);
     }
 
 
@@ -134,7 +136,7 @@ public class RealCsrDenseMatrixMultiplication {
      * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} and {@code src2} do not have the same number of rows.
      */
-    public static MatrixOld standardTranspose(CsrMatrixOld src1, MatrixOld src2) {
+    public static Matrix standardTranspose(CsrMatrix src1, Matrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ParameterChecks.ensureEquals(src1.numCols, src2.numCols);
 
@@ -160,7 +162,7 @@ public class RealCsrDenseMatrixMultiplication {
             }
         }
 
-        return new MatrixOld(new Shape(src1.numRows, src2.numRows), destEntries);
+        return new Matrix(new Shape(src1.numRows, src2.numRows), destEntries);
     }
 
 
@@ -172,7 +174,7 @@ public class RealCsrDenseMatrixMultiplication {
      * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the length of
      * {@code src2}.
      */
-    public static VectorOld standardVector(CsrMatrixOld src1, VectorOld src2) {
+    public static Vector standardVector(CsrMatrix src1, Vector src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
         ParameterChecks.ensureEquals(src1.numCols, src2.size);
 
@@ -191,7 +193,7 @@ public class RealCsrDenseMatrixMultiplication {
             }
         }
 
-        return new VectorOld(destEntries);
+        return new Vector(destEntries);
     }
 
 
@@ -202,7 +204,7 @@ public class RealCsrDenseMatrixMultiplication {
      * @return The result of the matrix-vector multiplication.
      * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the number of columns in {@code src2}.
      */
-    public static VectorOld standardVector(CsrMatrixOld src1, CooVectorOld src2) {
+    public static Vector standardVector(CsrMatrix src1, CooVector src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
         ParameterChecks.ensureEquals(src1.numCols, src2.size);
 
@@ -229,6 +231,6 @@ public class RealCsrDenseMatrixMultiplication {
             }
         }
 
-        return new VectorOld(destEntries);
+        return new Vector(destEntries);
     }
 }

@@ -25,9 +25,9 @@
 package org.flag4j.core_temp.arrays.sparse;
 
 import org.flag4j.core.Shape;
+import org.flag4j.core_temp.MatrixMixin;
 import org.flag4j.core_temp.MatrixVectorOpsMixin;
 import org.flag4j.core_temp.PrimitiveDoubleTensorBase;
-import org.flag4j.core_temp.TensorBase;
 import org.flag4j.core_temp.arrays.dense.Matrix;
 import org.flag4j.core_temp.arrays.dense.Vector;
 import org.flag4j.operations.dense.real.AggregateDenseReal;
@@ -829,7 +829,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      * @return The result of stacking this matrix on top of the matrix {@code b}.
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of columns.
-     * @see #stack(TensorBase, int) 
+     * @see #stack(MatrixMixin, int)
      * @see #augment(CooMatrix)
      */
     @Override
@@ -867,7 +867,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of rows.
      * @see #stack(CooMatrix) 
-     * @see #stack(TensorBase, int) 
+     * @see #stack(MatrixMixin, int)
      */
     @Override
     public CooMatrix augment(CooMatrix b) {
@@ -1215,6 +1215,16 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
             destIndices[i] = rowIndices[i]*colIndices[i];
 
         return new CooVector(shape.totalEntriesIntValueExact(), entries.clone(), destIndices);
+    }
+
+
+    /**
+     * Converts this sparse COO matrix to an equivalent {@link CooTensor sparse COO tensor}.
+     * @return A {@link CooTensor sparse COO tensor} equivalent to this sparse COO matrix.
+     */
+    public CooTensor toTensor() {
+        int[][] tensorIndices = {rowIndices.clone(),  colIndices.clone()};
+        return new CooTensor(shape, entries, RealDenseTranspose.blockedIntMatrix(tensorIndices));
     }
 
 

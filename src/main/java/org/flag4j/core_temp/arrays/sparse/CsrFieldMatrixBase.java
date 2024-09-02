@@ -26,42 +26,176 @@ package org.flag4j.core_temp.arrays.sparse;
 
 import org.flag4j.core.Shape;
 import org.flag4j.core_temp.FieldTensorBase;
-import org.flag4j.core_temp.TensorOverRing;
+import org.flag4j.core_temp.MatrixMixin;
 import org.flag4j.core_temp.arrays.dense.DenseFieldMatrixBase;
 import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.core_temp.structures.fields.RealFloat64;
+import org.flag4j.operations.sparse.csr.field_ops.*;
+import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Arrays;
+import java.util.List;
 
-// TODO: Javadoc.
+import static org.flag4j.operations.sparse.SparseUtils.sortCsrMatrix;
+
+
+/**
+ * <p>A real sparse matrix stored in compressed sparse row (CSR) format. The {@link #entries} of this CSR matrix are
+ * elements of a {@link Field}.</p>
+ *
+ * <p>The {@link #entries non-zero entries} and non-zero indices of a CSR matrix are mutable but the {@link #shape}
+ * and {@link #nnz total number of non-zero entries} is fixed.</p>
+ *
+ * <p>Sparse matrices allow for the efficient storage of and operations on matrices that contain many zero values.</p>
+ *
+ * <p>A sparse CSR matrix is stored as:</p>
+ * <ul>
+ *     <li>The full {@link #shape shape} of the matrix.</li>
+ *     <li>The non-zero {@link #entries} of the matrix. All other entries in the matrix are
+ *     assumed to be zero. Zero values can also explicitly be stored in {@link #entries}.</li>
+ *     <li>The {@link #rowPointers row pointers} of the non-zero values in the CSR matrix. Has size {@link #numRows numRows + 1}</li>
+ *     <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all values in row
+ *     {@code i}.</p>
+ *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
+ * </ul>
+ *
+ * <p>Note: many operations assume that the entries of the CSR matrix are sorted lexicographically by the row and column indices.
+ * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any operations implemented in this
+ * class will preserve the lexicographical sorting.</p>
+ *
+ * <p>If indices need to be sorted, call {@link #sortIndices()}.</p>
+ */
 public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W>, U extends DenseFieldMatrixBase<U, ?, T, ?, W>,
         V extends CooFieldVectorBase<V, ?, ?, U, W>, W extends Field<W>>
         extends FieldTensorBase<T, U, W>
         implements CsrMatrixMixin<T, U, W> {
 
+
     /**
-     * Creates a tensor with the specified entries and shape.
+     * <p>Pointers indicating starting index of each row within the {@link #colIndices} and {@link #entries} arrays.
+     * Has length {@link #numRows numRows + 1}.</p>
+     *
+     * <p>The range {@code [entries[rowPointers[i]], entries[rowPointers[i+1]])} contains all {@link #entries non-zero entries} within
+     * row {@code i}.</p>
+     *
+     * <p>Similarly, {@code [colIndices[rowPointers[i]], colIndices[rowPointers[i+1]])} contains all {@link #colIndices column indices}
+     * for the entries in row {@code i}.
+     * </p>
+     */
+    public final int[] rowPointers;
+    /**
+     * Column indices for non-zero values of this sparse CSR matrix.
+     */
+    public final int[] colIndices;
+    /**
+     * Number of non-zero entries in this CSR matrix.
+     */
+    public final int nnz;
+    /**
+     * The number of rows in this matrix.
+     */
+    public final int numRows;
+    /**
+     * The number of columns in this matrix.
+     */
+    public final int numCols;
+    /**
+     * The sparsity of this matrix.
+     */
+    private double sparsity = -1;
+
+
+    /**
+     * Creates a sparse CSR matrix with the specified {@code shape}, non-zero entries, row pointers, and non-zero column indices.
      *
      * @param shape Shape of this tensor.
-     * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
-     * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
+     * @param entries The non-zero entries of this CSR matrix.
+     * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
+     * <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all
+     * values in row {@code i}.</p>
+     * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
+     * {@code entries.length == colIndices.length}.
      */
-    protected CsrFieldMatrixBase(Shape shape, W[] entries) {
+    protected CsrFieldMatrixBase(Shape shape, W[] entries, int[] rowPointers, int[] colIndices) {
         super(shape, entries);
+        ParameterChecks.ensureRank(shape, 2);
+
+        this.rowPointers = rowPointers;
+        this.colIndices = colIndices;
+        this.nnz = entries.length;
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 
     /**
-     * Constructs a tensor of the same type as this tensor with the given the shape and entries.
+     * Constructs a CSR matrix of the same type as this matrix with the given the {@code shape}, {@code entries} and the same non-zero
+     * indices.
      *
-     * @param shape Shape of the tensor to construct.
-     * @param entries Entries of the tensor to construct.
+     * @param shape Shape of the matrix to construct.
+     * @param entries Entries of the matrix to construct.
      *
-     * @return A tensor of the same type as this tensor with the given the shape and entries.
+     * @return A matrix of the same type as this matrix with the given the {@code shape}, {@code entries} and the same non-zero
+     * indices.
      */
     @Override
-    public T makeLikeTensor(Shape shape, W[] entries) {
-        // TODO: Implement this method
-        return null;
+    public abstract T makeLikeTensor(Shape shape, W[] entries);
+
+
+    /**
+     * Constructs a CSR matrix of the same type as this matrix with the given the {@code shape}, {@code entries} and non-zero
+     * indices.
+     *
+     * @param shape Shape of the matrix to construct.
+     * @param entries Entries of the matrix to construct.
+     * @param rowPointers Row pointers for the CSR matrix.
+     * @param colIndices Column indices of the CSR matrix.
+     *
+     * @return A matrix of the same type as this matrix with the given the {@code shape}, {@code entries} and non-zero
+     * indices.
+     */
+    public abstract T makeLikeTensor(Shape shape, W[] entries, int[] rowPointers, int[] colIndices);
+
+
+    /**
+     * Constructs a dense matrix of similar type as this matrix with the given the {@code shape} and {@code entries}.
+     *
+     * @param shape Shape of the dense matrix to construct.
+     * @param entries Entries of the dense matrix to construct.
+     *
+     * @return A dense matrix of similar type as this sparse CSR matrix with the given the {@code shape} and {@code entries}.
+     */
+    public abstract U makeLikeDenseTensor(Shape shape, W[] entries);
+
+
+    /**
+     * <p>Converts a sparse COO matrix to a CSR matrix of the same type as this matrix.</p>
+     * <p>The COO matrix is specified by it's shape, non-zero entries, row indices, and column indices.</p>
+     *
+     * @param shape Shape of the COO matrix.
+     * @param entries Non-zero entries of the COO matrix.
+     * @param rowIndices The row indices of the non-zero values in the COO matrix.
+     * @param colIndices The column indices of the non-zero values in the COO matrix.
+     *
+     * @return A CSR matrix equivalent to the specified COO matrix.
+     */
+    public T fromCoo(Shape shape, List<W> entries, List<Integer> rowIndices, List<Integer> colIndices) {
+        int csrRows = shape.get(0);
+        int[] csrRowPointers = new int[csrRows + 1];
+
+        // Copy the non-zero entries anc column indices. Count number of entries per row.
+        for(int i=0; i<entries.size(); i++)
+            csrRowPointers[rowIndices.get(i) + 1]++;
+
+        // Shift each row count to be greater than or equal to the previous.
+        for(int i=0; i<csrRows; i++)
+            csrRowPointers[i+1] += csrRowPointers[i];
+
+        return makeLikeTensor(shape, (W[]) entries.toArray(new Field[0]), csrRowPointers, ArrayUtils.fromIntegerList(colIndices));
     }
 
 
@@ -82,20 +216,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public U tensorDot(T src2, int[] aAxes, int[] bAxes) {
-        // TODO: Implement this method
-        return null;
-    }
-
-
-    /**
-     * Computes the element-wise absolute value of this tensor.
-     *
-     * @return The element-wise absolute value of this tensor.
-     */
-    @Override
-    public TensorOverRing abs() {
-        // TODO: Implement this method
-        return null;
+        return (U) CsrFieldMatrixTensorDot.tensorDot(this, src2, aAxes, bAxes);
     }
 
 
@@ -113,8 +234,10 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public T H(int axis1, int axis2) {
-        // TODO: Implement this method
-        return null;
+        ParameterChecks.ensureValidAxes(shape, axis1, axis2);
+        if(axis1 == axis2) return copy();
+
+        return CsrFieldMatrixOperations.hermTranspose((T) this);
     }
 
 
@@ -134,8 +257,11 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public T H(int... axes) {
-        // TODO: Implement this method
-        return null;
+        if(axes.length != 2 || !((axes[0] == 0 && axes[1] == 1) || (axes[0] == 1 && axes[1] == 0))) {
+            throw new LinearAlgebraException("Cannot transpose axes: "  + Arrays.toString(axes) + " for tensor of rank 2.");
+        }
+
+        return CsrFieldMatrixOperations.hermTranspose((T) this);
     }
 
 
@@ -146,8 +272,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public int numRows() {
-        // TODO: Implement this method
-        return 0;
+        return numRows;
     }
 
 
@@ -158,8 +283,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public int numCols() {
-        // TODO: Implement this method
-        return 0;
+        return numCols;
     }
 
 
@@ -174,8 +298,33 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public W tr() {
-        // TODO: Implement this method
-        return null;
+        ParameterChecks.ensureSquareMatrix(shape);
+        W trace = getZeroElement();
+
+        for(int i=0; i<numRows; i++) {
+            int rowPtr = rowPointers[i];
+            int stop = rowPointers[i+1];
+
+            for(int j=rowPtr; j<stop; j++)
+                if(i==colIndices[j]) trace = trace.add(entries[j]);
+        }
+
+        return trace;
+    }
+
+
+    /**
+     * Computes the element-wise absolute value of this tensor.
+     *
+     * @return The element-wise absolute value of this tensor.
+     */
+    @Override
+    public CsrFieldMatrix<RealFloat64> abs() {
+        RealFloat64[] absValues = new RealFloat64[nnz];
+        for(int i=0; i<nnz; i++)
+            absValues[i] = new RealFloat64(entries[i].abs());
+
+        return new CsrFieldMatrix<RealFloat64>(shape, absValues, rowPointers.clone(), colIndices.clone());
     }
 
 
@@ -190,8 +339,19 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public boolean isTriU() {
-        // TODO: Implement this method
-        return false;
+        if(!isSquare()) return false;
+
+        for(int i=1; i<numRows; i++) {
+            int rowStart = rowPointers[i];
+            int stop = rowPointers[i+1];
+
+            for(int j=rowStart; j<stop; j++) {
+                if(colIndices[j] >= i) break; // Have reached the diagonal. No need to continue for this row.
+                else if(!entries[j].isZero()) return false; // Non-zero entry found. No need to continue.
+            }
+        }
+
+        return true; // If we reach this point then the matrix must be upper triangular.
     }
 
 
@@ -206,8 +366,19 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public boolean isTriL() {
-        // TODO: Implement this method
-        return false;
+        if(!isSquare()) return false;
+
+        for(int i=0; i<numRows; i++) {
+            int rowStart = rowPointers[i];
+            int rowStop = rowPointers[i+1];
+
+            for(int j=rowStop-1; j>=rowStart; j--) {
+                if(colIndices[j] <= i) break; // Have reached the diagonal. No need to continue for this row.
+                else if(!entries[j].isZero()) return false; // Non-zero entry found. No need to continue.
+            }
+        }
+
+        return true; // If we reach this point then the matrix must be lower-triangular.
     }
 
 
@@ -221,8 +392,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public boolean isI() {
-        // TODO: Implement this method
-        return false;
+        return CsrFieldMatrixProperties.isIdentity(this);
     }
 
 
@@ -235,13 +405,15 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public boolean isCloseToI() {
-        // TODO: Implement this method
-        return false;
+        return CsrFieldMatrixProperties.isCloseToIdentity(this);
     }
 
 
     /**
-     * Computes the determinant of a square matrix.
+     * <p>Computes the determinant of a square matrix.</p>
+     *
+     * <p><b>Warning:</b> This method will convert this matrix to a dense matrix before computing the determinant. As such, it is
+     * not advisable to call this method on large matrices.</p>
      *
      * @return The determinant of this matrix.
      *
@@ -249,8 +421,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public W det() {
-        // TODO: Implement this method
-        return null;
+        return toDense().det();
     }
 
 
@@ -266,8 +437,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public U mult(T b) {
-        // TODO: Implement this method
-        return null;
+        return (U) CsrFieldMatMult.standard(this, b);
     }
 
 
@@ -284,8 +454,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public U multTranspose(T b) {
-        // TODO: Implement this method
-        return null;
+        return mult(b.T());
     }
 
 
@@ -300,8 +469,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public W fib(T b) {
-        // TODO: Implement this method
-        return null;
+        return this.H().mult(b).tr();
     }
 
 
@@ -313,13 +481,12 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      * @return The result of stacking this matrix on top of the matrix {@code b}.
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of columns.
-     * @see #stack(T, int)
+     * @see #stack(MatrixMixin, int) 
      * @see #augment(T)
      */
     @Override
     public T stack(T b) {
-        // TODO: Implement this method
-        return null;
+        return (T) toCoo().stack(b.toCoo()).toCsr();
     }
 
 
@@ -332,12 +499,11 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of rows.
      * @see #stack(T)
-     * @see #stack(T, int)
+     * @see #stack(MatrixMixin, int) 
      */
     @Override
     public T augment(T b) {
-        // TODO: Implement this method
-        return null;
+        return (T) toCoo().augment(b.toCoo()).toCsr();
     }
 
 
@@ -353,8 +519,8 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public T swapRows(int rowIndex1, int rowIndex2) {
-        // TODO: Implement this method
-        return null;
+        CsrFieldMatrixManipulations.swapRows(this, rowIndex1, rowIndex2);
+        return (T) this;
     }
 
 
@@ -370,8 +536,8 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public T swapCols(int colIndex1, int colIndex2) {
-        // TODO: Implement this method
-        return null;
+        CsrFieldMatrixManipulations.swapCols(this, colIndex1, colIndex2);
+        return (T) this;
     }
 
 
@@ -384,8 +550,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public boolean isSymmetric() {
-        // TODO: Implement this method
-        return false;
+        return CsrFieldMatrixProperties.isSymmetric(this);
     }
 
 
@@ -396,8 +561,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public boolean isHermitian() {
-        // TODO: Implement this method
-        return false;
+        return CsrFieldMatrixProperties.isHermitian(this);
     }
 
 
@@ -410,8 +574,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public boolean isAntiSymmetric() {
-        // TODO: Implement this method
-        return false;
+        return CsrFieldMatrixProperties.isAntiSymmetric(this);
     }
 
 
@@ -422,8 +585,17 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public boolean isOrthogonal() {
-        // TODO: Implement this method
-        return false;
+        return isSquare() && this.mult(this.T()).isCloseToI();
+    }
+
+
+    /**
+     * Checks if this matrix is orthogonal. That is, if the inverse of this matrix is equal to its hermitian transpose.
+     *
+     * @return True if this matrix it is unitary. Otherwise, returns false.
+     */
+    public boolean isUnitary() {
+        return isSquare() && this.mult(this.H()).isCloseToI();
     }
 
 
@@ -436,8 +608,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public T removeRow(int rowIndex) {
-        // TODO: Implement this method
-        return null;
+        return (T) toCoo().removeRow(rowIndex).toCsr();
     }
 
 
@@ -446,12 +617,11 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      *
      * @param rowIndices The indices of the rows to remove from this matrix. Assumed to contain unique values.
      *
-     * @return a copy of this matrix with the specified column removed.
+     * @return A copy of this matrix with the specified column removed.
      */
     @Override
     public T removeRows(int... rowIndices) {
-        // TODO: Implement this method
-        return null;
+        return (T) toCoo().removeRows(rowIndices).toCsr();
     }
 
 
@@ -464,8 +634,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public T removeCol(int colIndex) {
-        // TODO: Implement this method
-        return null;
+        return (T) toCoo().removeCol(colIndex).toCsr();
     }
 
 
@@ -478,8 +647,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public T removeCols(int... colIndices) {
-        // TODO: Implement this method
-        return null;
+        return (T) toCoo().removeCols(colIndices).toCsr();
     }
 
 
@@ -499,8 +667,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public T setSliceCopy(T values, int rowStart, int colStart) {
-        // TODO: Implement this method
-        return null;
+        return (T) toCoo().setSliceCopy(values.toCoo(), rowStart, colStart).toCsr();
     }
 
 
@@ -519,8 +686,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public T getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
-        // TODO: Implement this method
-        return null;
+        return CsrFieldMatrixOperations.getSlice((T) this, rowStart, rowEnd, colStart, colEnd);
     }
 
 
@@ -535,8 +701,49 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public T set(W value, int row, int col) {
-        // TODO: Implement this method
-        return null;
+        // Ensure indices are in bounds.
+        ParameterChecks.ensureValidIndex(shape, row, col);
+        Field<W>[] newEntries;
+        int[] newRowPointers = rowPointers.clone();
+        int[] newColIndices;
+        boolean found = false; // Flag indicating an element already exists in this matrix at the specified row and col.
+        int loc = -1;
+
+        if(rowPointers[row] < rowPointers[row+1]) {
+            int start = rowPointers[row];
+            int stop = rowPointers[row+1];
+
+            loc = Arrays.binarySearch(colIndices, start, stop, col);
+            found = loc >= 0;
+        }
+
+        if(found) {
+            newEntries = entries.clone();
+            newEntries[loc] = value;
+            newRowPointers = rowPointers.clone();
+            newColIndices = colIndices.clone();
+        } else {
+            loc = -loc - 1; // Compute insertion index as specified by Arrays.binarySearch
+            newEntries = new Field[entries.length + 1];
+            newColIndices = new int[entries.length + 1];
+
+            // Copy old entries and insert new one.
+            System.arraycopy(entries, 0, newEntries, 0, loc);
+            newEntries[loc] = value;
+            System.arraycopy(entries, loc, newEntries, loc+1, entries.length-loc);
+
+            // Copy old column indices and insert new one.
+            System.arraycopy(colIndices, 0, newColIndices, 0, loc);
+            newColIndices[loc] = col;
+            System.arraycopy(colIndices, loc, newColIndices, loc+1, entries.length-loc);
+
+            // Increment row pointers.
+            for(int i=row+1; i<rowPointers.length; i++) {
+                newRowPointers[i]++;
+            }
+        }
+
+        return makeLikeTensor(shape, (W[]) newEntries, newRowPointers, newColIndices);
     }
 
 
@@ -558,8 +765,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public T getTriU(int diagOffset) {
-        // TODO: Implement this method
-        return null;
+        return (T) toCoo().getTriU(diagOffset).toCsr();
     }
 
 
@@ -581,8 +787,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public T getTriL(int diagOffset) {
-        // TODO: Implement this method
-        return null;
+        return (T) toCoo().getTriL(diagOffset).toCsr();
     }
 
 
@@ -600,8 +805,10 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public T T(int axis1, int axis2) {
-        // TODO: Implement this method
-        return null;
+        ParameterChecks.ensureValidAxes(shape, axis1, axis2);
+        if(axis1 == axis2) return copy();
+
+        return CsrFieldMatrixOperations.transpose((T) this);
     }
 
 
@@ -621,8 +828,11 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public T T(int... axes) {
-        // TODO: Implement this method
-        return null;
+        if(axes.length != 2 || !((axes[0] == 0 && axes[1] == 1) || (axes[0] == 1 && axes[1] == 0))) {
+            throw new LinearAlgebraException("Cannot transpose axes: "  + Arrays.toString(axes) + " for tensor of rank 2.");
+        }
+
+        return CsrFieldMatrixOperations.transpose((T) this);
     }
 
 
@@ -633,8 +843,14 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public double sparsity() {
-        // TODO: Implement this method
-        return 0;
+        // Compute sparsity if needed.
+        if(this.sparsity == -1) {
+            BigDecimal sparsity = new BigDecimal(this.totalEntries()).subtract(BigDecimal.valueOf(this.nnz));
+            sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);
+            this.sparsity = sparsity.doubleValue();
+        }
+
+        return sparsity;
     }
 
 
@@ -645,9 +861,25 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public U toDense() {
-        // TODO: Implement this method
-        return null;
+        Field<W>[] dest = new Field[shape.totalEntriesIntValueExact()];
+
+        for(int i=0; i<rowPointers.length-1; i++) {
+            int rowOffset = i*numCols;
+
+            for(int j=rowPointers[i], rowEnd=rowPointers[i+1]; j<rowEnd; j++) {
+                dest[rowOffset + colIndices[j]] = entries[j];
+            }
+        }
+
+        return makeLikeDenseTensor(shape, (W[]) dest);
     }
+
+
+    /**
+     * Converts this sparse CSR matrix to an equivalent sparse COO matrix.
+     * @return A sparse COO matrix equivalent to this sparse CSR matrix.
+     */
+    public abstract CooFieldMatrixBase toCoo();
 
 
     /**
@@ -655,7 +887,6 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public void sortIndices() {
-        // TODO: Implement this method
-
+        sortCsrMatrix(entries, rowPointers, colIndices);
     }
 }

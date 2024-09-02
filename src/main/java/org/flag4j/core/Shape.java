@@ -256,7 +256,7 @@ public class Shape implements Serializable {
      * <p>Gets the total number of entries for a tensor with this shape.
      * If the total number of entries exceeds Integer.MAX_VALUE, an exception is thrown.</p>
      *
-     * <p>This method is likely to be more efficent than {@link #totalEntries()} if a primitive int value is desired.</p>
+     * <p>This method is likely to be more efficient than {@link #totalEntries()} if a primitive int value is desired.</p>
      *
      * @return The total number of entries for a tensor with this shape.
      * @throws ArithmeticException If the total number of entries overflows a primitive int.

@@ -83,4 +83,30 @@ public interface DenseTensorMixin<T extends DenseTensorMixin<T, U>, U extends Sp
      * @throws org.flag4j.util.exceptions.TensorShapeException If this tensor and {@code b}'s shape are not equal.
      */
     public T div(T b);
+
+
+    /**
+     * Checks if all entries of this tensor are close to the entries of {@code b}.
+     * @param b Tensor to compare this tensor to.
+     * @return True if {@code b} is the same shape as this tensor and all entries are 'close', i.e.
+     * elements {@code x} and {@code y} at the same positions in the two tensors respectively satisfy
+     * {@code |x-y| <= (1E-05 + 1E-08*|y|)}. Otherwise, returns false.
+     * @see #allClose(DenseTensorMixin, double, double)
+     */
+    public default boolean allClose(T b) {
+        return allClose(b, 1e-05, 1e-08);
+    }
+
+
+    /**
+     * Checks if all entries of this tensor are close to the entries of {@code b}.
+     * @param b Tensor to compare this tensor to.
+     * @param absTol Absolute tolerance.
+     * @param relTol Relative tolerance.
+     * @return True if {@code b} is the same shape as this tensor and all entries are 'close', i.e.
+     * elements {@code x} and {@code y} at the same positions in the two tensors respectively satisfy
+     * {@code |x-y| <= (atol + rtol*|y|)}. Otherwise, returns false.
+     * @see #allClose(DenseTensorMixin)
+     */
+    public abstract boolean allClose(T b, double relTol, double absTol);
 }
