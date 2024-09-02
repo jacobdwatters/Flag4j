@@ -24,8 +24,8 @@
 
 package org.flag4j.linalg.solvers;
 
-import org.flag4j.core.TensorBase;
-import org.flag4j.core.TensorExclusiveMixin;
+import org.flag4j.core_old.TensorBase;
+import org.flag4j.core_old.TensorExclusiveMixin;
 
 /**
  * This interface specifies methods which all linear tensor system solvers should implement. Solvers

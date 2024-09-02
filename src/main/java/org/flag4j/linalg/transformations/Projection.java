@@ -31,7 +31,7 @@ import org.flag4j.util.ParameterChecks;
 /**
  * This class contains methods usefully for computing projection transformation matrices.
  */
-public class Projection {
+public final class Projection {
 
 
     private Projection() {

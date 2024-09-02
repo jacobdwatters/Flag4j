@@ -31,7 +31,7 @@ import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.linalg.Eigen;
 import org.flag4j.linalg.decompositions.hess.RealHess;
 import org.flag4j.linalg.transformations.Givens;
-import org.flag4j.linalg.transformations.Householder;
+import org.flag4j.linalg.transformations.HouseholderOld;
 import org.flag4j.operations_old.common.real.AggregateReal;
 import org.flag4j.rng.RandomCNumber;
 
@@ -54,11 +54,11 @@ import static org.flag4j.util.Flag4jConstants.EPS_F64;
 public class RealSchur extends Schur<MatrixOld, double[]> {
 
     /**
-     * For computing the norm of a column for use when computing Householder reflectors.
+     * For computing the norm of a column for use when computing HouseholderOld reflectors.
      */
     protected double norm;
     /**
-     * Stores the scalar factor &alpha for use in computation of the Householder reflector {@code P = I - }&alpha{@code vv}<sup>T
+     * Stores the scalar factor &alpha for use in computation of the HouseholderOld reflector {@code P = I - }&alpha{@code vv}<sup>T
      * </sup>.
      */
     protected double currentFactor;
@@ -301,7 +301,7 @@ public class RealSchur extends Schur<MatrixOld, double[]> {
 
         // Apply shift and chase bulge.
         for(int i=0; i<=workingSize-2; i++) {
-            if(makeReflector(i, p1, p2, p3)) // Construct Householder reflector.
+            if(makeReflector(i, p1, p2, p3)) // Construct HouseholderOld reflector.
                 applyDoubleShiftReflector(i, i>0); // Apply the reflector if needed.
 
             // Set values to be used in computing the next bulge chasing reflector.
@@ -311,7 +311,7 @@ public class RealSchur extends Schur<MatrixOld, double[]> {
         }
 
         // The last reflector in the bulge chase only acts on last two rows of the working matrix.
-        if(makeReflector(workingSize-1, p1, p2)) // Construct Householder reflector.
+        if(makeReflector(workingSize-1, p1, p2)) // Construct HouseholderOld reflector.
             applySingleShiftReflector(workingSize-1, true); // Apply the reflector if needed.
     }
 
@@ -379,7 +379,7 @@ public class RealSchur extends Schur<MatrixOld, double[]> {
 
 
     /**
-     * Applies the constructed Householder reflector which has been constructed for the given shift size.
+     * Applies the constructed HouseholderOld reflector which has been constructed for the given shift size.
      * @param i The stating row the reflector is being applied to.
      * @param shiftSize The size of the shift the reflector was constructed for.
      */
@@ -387,13 +387,13 @@ public class RealSchur extends Schur<MatrixOld, double[]> {
         int endRow = i + shiftSize + 1;
 
         // Apply reflector to left (Assumes T is upper hessenburg except for possibly a bulge of size shiftSize).
-        Householder.leftMultReflector(T, householderVector, currentFactor, i, i, endRow, workArray);
+        HouseholderOld.leftMultReflector(T, householderVector, currentFactor, i, i, endRow, workArray);
         // Apply reflector to right (Assumes T is upper hessenburg except for possibly a bulge of size shiftSize).
-        Householder.rightMultReflector(T, householderVector, currentFactor, 0, i, endRow);
+        HouseholderOld.rightMultReflector(T, householderVector, currentFactor, 0, i, endRow);
 
         if(computeU) {
             // Accumulate the reflector in U if it is being computed.
-            Householder.rightMultReflector(U, householderVector, currentFactor, 0, i, endRow);
+            HouseholderOld.rightMultReflector(U, householderVector, currentFactor, 0, i, endRow);
         }
     }
 
@@ -422,7 +422,7 @@ public class RealSchur extends Schur<MatrixOld, double[]> {
 
         norm = Math.sqrt(p1*p1 + p2*p2 + p3*p3); // Compute scaled 2-norm.
 
-        // Change sign of norm depending on first entry in column for stability purposes in Householder vector.
+        // Change sign of norm depending on first entry in column for stability purposes in HouseholderOld vector.
         if(p1 < 0) norm = -norm;
 
         double div = p1 + norm;
@@ -457,7 +457,7 @@ public class RealSchur extends Schur<MatrixOld, double[]> {
         p2 /= maxAbs;
 
         norm = Math.sqrt(p1*p1 + p2*p2); // Compute scaled norm.
-        // Change sign of norm depending on first entry in column for stability purposes in Householder vector.
+        // Change sign of norm depending on first entry in column for stability purposes in HouseholderOld vector.
         if(p1 < 0) norm = -norm;
 
         double div = p1 + norm;

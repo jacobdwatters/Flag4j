@@ -25,7 +25,7 @@
 package org.flag4j.arrays.backend;
 
 
-import org.flag4j.algebraic_structures.rings.SemiRing;
+import org.flag4j.algebraic_structures.semi_rings.SemiRing;
 import org.flag4j.arrays.Shape;
 import org.flag4j.util.ArrayUtils;
 

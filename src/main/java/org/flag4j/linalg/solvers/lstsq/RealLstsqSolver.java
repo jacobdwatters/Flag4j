@@ -27,7 +27,7 @@ package org.flag4j.linalg.solvers.lstsq;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.linalg.decompositions.qr.RealQR;
+import org.flag4j.linalg.decompositions.qr.RealQROld;
 import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
 
 
@@ -35,7 +35,7 @@ import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
  * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,
  * minimizes {@code ||Ax-b||}<sub>2</sub> which is equivalent to solving the normal equations
  * {@code A}<sup>T</sup>{@code Ax=A}<sup>T</sup>{@code b}.
- * This is done efficiently using a {@link RealQR QR decomposition}.
+ * This is done efficiently using a {@link RealQROld QR decomposition}.
  */
 public class RealLstsqSolver extends LstsqSolver<MatrixOld, VectorOld> {
 
@@ -46,6 +46,6 @@ public class RealLstsqSolver extends LstsqSolver<MatrixOld, VectorOld> {
      * {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
      */
     public RealLstsqSolver() {
-        super(new RealQR(), new RealBackSolver());
+        super(new RealQROld(), new RealBackSolver());
     }
 }

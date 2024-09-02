@@ -25,8 +25,8 @@
 package org.flag4j.arrays.backend;
 
 
-import org.flag4j.core.MatrixPropertiesMixin;
 import org.flag4j.arrays.Shape;
+import org.flag4j.core_old.MatrixPropertiesMixin;
 
 import java.io.Serializable;
 import java.math.BigInteger;

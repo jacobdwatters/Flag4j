@@ -47,7 +47,7 @@ import java.util.List;
  *
  * <p>Field vectors have mutable entries but a fixed size.</p>
  *
- * @param <T> Type of the field element for the vector.
+ * @param <T> Type of the vector.
  * @param <U> Type of matrix equivalent to this vector.
  * @param <V> Type of sparse vector equivalent to this vector.
  * @param <W> Type of the {@link Field field} element of this vector.
@@ -224,9 +224,17 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
 
 
     /**
+     * Computes the inner product between this vector and itself.
+     *
+     * @return The inner product between this vector and itself.
+     */
+    public abstract double innerSelf();
+
+
+    /**
      * <p>Computes the dot product between two vectors.</p>
      *
-     * <p>Note: this method is distinct from {@link #inner(TensorBase)}. The inner product is equivalent to the dot product
+     * <p>Note: this method is distinct from {@link #inner(DenseFieldVectorBase)}. The inner product is equivalent to the dot product
      * of this tensor with the conjugation of {@code b}.</p>
      *
      * @param b Second vector in the dot product.
@@ -234,7 +242,7 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
      * @return The dot product between this vector and the vector {@code b}.
      *
      * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of entries.
-     * @see #inner(TensorBase)
+     * @see #inner(DenseFieldVectorBase) 
      */
     @Override
     public W dot(T b) {

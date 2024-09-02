@@ -1,7 +1,7 @@
 package org.flag4j.linalg.decompositions;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.linalg.decompositions.qr.ComplexQR;
+import org.flag4j.linalg.decompositions.qr.ComplexQROld;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,12 +11,12 @@ class ComplexQRTests {
     double[][] aEntriesReal;
     String[][] aEntries;
     CMatrixOld A, Q, R, A_hat;
-    ComplexQR qr;
+    ComplexQROld qr;
 
     @Test
     void fullTestCase() {
         // Tests account for numerical loss of precision.
-        qr = new ComplexQR();
+        qr = new ComplexQROld();
 
         // --------------------------- Sub-case 1 ---------------------------
         aEntriesReal = new double[][]
@@ -94,7 +94,7 @@ class ComplexQRTests {
     @Test
     void reducedTestCase() {
         // Tests account for numerical loss of precision.
-        qr = new ComplexQR(false);
+        qr = new ComplexQROld(false);
 
         // --------------------------- Sub-case 1 ---------------------------
         aEntriesReal = new double[][]

@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="dc.created" content="2024-08-09">
-<meta name="description" content="declaration: package: org.flag4j.core, class: TensorBase">
+<meta name="description" content="declaration: package: org.flag4j.core_old, class: TensorBase">
 <meta name="generator" content="javadoc/ClassWriter">
 <link rel="stylesheet" type="text/css" href="../../../resource-files/jquery-ui.min.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../resource-files/stylesheet.css" title="Style">
@@ -80,11 +80,11 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.flag4j.core</a></div>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.flag4j.core_old</a></div>
 <h1 title="Class TensorBase" class="title">Class TensorBase&lt;T,<wbr>U,<wbr>W,<wbr>Z,<wbr>Y,<wbr>D extends <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>,<wbr>X extends <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&gt;</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">org.flag4j.core.TensorBase&lt;T,<wbr>U,<wbr>W,<wbr>Z,<wbr>Y,<wbr>D,<wbr>X&gt;</div>
+<div class="inheritance">org.flag4j.core_old.TensorBase&lt;T,<wbr>U,<wbr>W,<wbr>Z,<wbr>Y,<wbr>D,<wbr>X&gt;</div>
 </div>
 <section class="class-description" id="class-description">
 <div class="horizontal-scroll">
@@ -101,16 +101,16 @@ loadScripts(document, 'script');</script>
 </dl>
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="TensorComparisonsMixin.html" title="interface in org.flag4j.core">TensorComparisonsMixin</a></code>, <code><a href="TensorManipulationsMixin.html" title="interface in org.flag4j.core">TensorManipulationsMixin</a>&lt;T&gt;</code>, <code><a href="TensorOperationsMixin.html" title="interface in org.flag4j.core">TensorOperationsMixin</a>&lt;T,<wbr>U,<wbr>W,<wbr>Z,<wbr>Y,<wbr>X&gt;</code>, <code><a href="TensorPropertiesMixin.html" title="interface in org.flag4j.core">TensorPropertiesMixin</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="TensorComparisonsMixin.html" title="interface in org.flag4j.core_old">TensorComparisonsMixin</a></code>, <code><a href="TensorManipulationsMixin.html" title="interface in org.flag4j.core_old">TensorManipulationsMixin</a>&lt;T&gt;</code>, <code><a href="TensorOperationsMixin.html" title="interface in org.flag4j.core_old">TensorOperationsMixin</a>&lt;T,<wbr>U,<wbr>W,<wbr>Z,<wbr>Y,<wbr>X&gt;</code>, <code><a href="TensorPropertiesMixin.html" title="interface in org.flag4j.core_old">TensorPropertiesMixin</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
-<dd><code><a href="dense_base/DenseTensorBase.html" title="class in org.flag4j.core.dense_base">DenseTensorBase</a></code>, <code><a href="sparse_base/SparseTensorBase.html" title="class in org.flag4j.core.sparse_base">SparseTensorBase</a></code></dd>
+<dd><code><a href="dense_base/DenseTensorBase.html" title="class in org.flag4j.core_old.dense_base">DenseTensorBase</a></code>, <code><a href="sparse_base/SparseTensorBase.html" title="class in org.flag4j.core_old.sparse_base">SparseTensorBase</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">TensorBase&lt;T,<wbr>U,<wbr>W,<wbr>Z,<wbr>Y,<wbr>D extends <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>,<wbr>X extends <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>, <a href="TensorComparisonsMixin.html" title="interface in org.flag4j.core">TensorComparisonsMixin</a>, <a href="TensorPropertiesMixin.html" title="interface in org.flag4j.core">TensorPropertiesMixin</a>, <a href="TensorManipulationsMixin.html" title="interface in org.flag4j.core">TensorManipulationsMixin</a>&lt;T&gt;, <a href="TensorOperationsMixin.html" title="interface in org.flag4j.core">TensorOperationsMixin</a>&lt;T,<wbr>U,<wbr>W,<wbr>Z,<wbr>Y,<wbr>X&gt;</span></div>
+implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>, <a href="TensorComparisonsMixin.html" title="interface in org.flag4j.core_old">TensorComparisonsMixin</a>, <a href="TensorPropertiesMixin.html" title="interface in org.flag4j.core_old">TensorPropertiesMixin</a>, <a href="TensorManipulationsMixin.html" title="interface in org.flag4j.core_old">TensorManipulationsMixin</a>&lt;T&gt;, <a href="TensorOperationsMixin.html" title="interface in org.flag4j.core_old">TensorOperationsMixin</a>&lt;T,<wbr>U,<wbr>W,<wbr>Z,<wbr>Y,<wbr>X&gt;</span></div>
 <div class="block">The base class for all tensors. A tensor is an algebraic object equivalent to a multidimensional array with a single
  data type.</div>
 <dl class="notes">
@@ -144,7 +144,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <div class="col-last odd-row-color">
 <div class="block">Entry data for this tensor.</div>
 </div>
-<div class="col-first even-row-color"><code>final <a href="Shape.html" title="class in org.flag4j.core">Shape</a></code></div>
+<div class="col-first even-row-color"><code>final <a href="Shape.html" title="class in org.flag4j.core_old">Shape</a></code></div>
 <div class="col-second even-row-color"><code><a href="#shape" class="member-name-link">shape</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">The shape of this tensor</div>
@@ -162,7 +162,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <div class="table-header col-second">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected </code></div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.flag4j.core.Shape,D)" class="member-name-link">TensorBase</a><wbr>(<a href="Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.flag4j.core.Shape,D)" class="member-name-link">TensorBase</a><wbr>(<a href="Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  <a href="TensorBase.html" title="type parameter in TensorBase">D</a>&nbsp;entries)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates a tensor with specified entries and shape.</div>
@@ -209,25 +209,25 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Simply returns a reference of this tensor.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Shape.html" title="class in org.flag4j.core">Shape</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Shape.html" title="class in org.flag4j.core_old">Shape</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getShape()" class="member-name-link">getShape</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the shape of this tensor.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sameLength(org.flag4j.core.TensorBase,org.flag4j.core.TensorBase,int)" class="member-name-link">sameLength</a><wbr>(<a href="TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&nbsp;A,
- <a href="TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&nbsp;B,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sameLength(org.flag4j.core.TensorBase,org.flag4j.core.TensorBase,int)" class="member-name-link">sameLength</a><wbr>(<a href="TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&nbsp;A,
+ <a href="TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&nbsp;B,
  int&nbsp;axis)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Checks if two matrices have the same length along a specified axis.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sameShape(org.flag4j.core.TensorBase)" class="member-name-link">sameShape</a><wbr>(<a href="TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&nbsp;B)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sameShape(org.flag4j.core.TensorBase)" class="member-name-link">sameShape</a><wbr>(<a href="TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&nbsp;B)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Checks if a tensor has the same shape as this tensor.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tensorEquals(org.flag4j.core.TensorBase)" class="member-name-link">tensorEquals</a><wbr>(<a href="TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&nbsp;src2)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tensorEquals(org.flag4j.core.TensorBase)" class="member-name-link">tensorEquals</a><wbr>(<a href="TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&nbsp;src2)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Checks if two tensors are equal.</div>
 </div>
@@ -243,16 +243,16 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.flag4j.core.TensorComparisonsMixin">Methods inherited from interface&nbsp;org.flag4j.core.<a href="TensorComparisonsMixin.html" title="interface in org.flag4j.core">TensorComparisonsMixin</a></h3>
+<h3 id="methods-inherited-from-class-org.flag4j.core.TensorComparisonsMixin">Methods inherited from interface&nbsp;org.flag4j.core_old.<a href="TensorComparisonsMixin.html" title="interface in org.flag4j.core_old">TensorComparisonsMixin</a></h3>
 <code><a href="TensorComparisonsMixin.html#equals(java.lang.Object)">equals</a>, <a href="TensorComparisonsMixin.html#isOnes()">isOnes</a>, <a href="TensorComparisonsMixin.html#isZeros()">isZeros</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.flag4j.core.TensorManipulationsMixin">Methods inherited from interface&nbsp;org.flag4j.core.<a href="TensorManipulationsMixin.html" title="interface in org.flag4j.core">TensorManipulationsMixin</a></h3>
+<h3 id="methods-inherited-from-class-org.flag4j.core.TensorManipulationsMixin">Methods inherited from interface&nbsp;org.flag4j.core_old.<a href="TensorManipulationsMixin.html" title="interface in org.flag4j.core_old">TensorManipulationsMixin</a></h3>
 <code><a href="TensorManipulationsMixin.html#flatten()">flatten</a>, <a href="TensorManipulationsMixin.html#flatten(int)">flatten</a>, <a href="TensorManipulationsMixin.html#reshape(int...)">reshape</a>, <a href="TensorManipulationsMixin.html#reshape(org.flag4j.core.Shape)">reshape</a>, <a href="TensorManipulationsMixin.html#round()">round</a>, <a href="TensorManipulationsMixin.html#round(int)">round</a>, <a href="TensorManipulationsMixin.html#roundToZero()">roundToZero</a>, <a href="TensorManipulationsMixin.html#roundToZero(double)">roundToZero</a>, <a href="TensorManipulationsMixin.html#set(double,int...)">set</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.flag4j.core.TensorOperationsMixin">Methods inherited from interface&nbsp;org.flag4j.core.<a href="TensorOperationsMixin.html" title="interface in org.flag4j.core">TensorOperationsMixin</a></h3>
+<h3 id="methods-inherited-from-class-org.flag4j.core.TensorOperationsMixin">Methods inherited from interface&nbsp;org.flag4j.core_old.<a href="TensorOperationsMixin.html" title="interface in org.flag4j.core_old">TensorOperationsMixin</a></h3>
 <code><a href="TensorOperationsMixin.html#abs()">abs</a>, <a href="TensorOperationsMixin.html#add(double)">add</a>, <a href="TensorOperationsMixin.html#add(org.flag4j.complex_numbers.CNumber)">add</a>, <a href="TensorOperationsMixin.html#add(T)">add</a>, <a href="TensorOperationsMixin.html#copy()">copy</a>, <a href="TensorOperationsMixin.html#div(double)">div</a>, <a href="TensorOperationsMixin.html#div(org.flag4j.complex_numbers.CNumber)">div</a>, <a href="TensorOperationsMixin.html#elemDiv(U)">elemDiv</a>, <a href="TensorOperationsMixin.html#elemMult(T)">elemMult</a>, <a href="TensorOperationsMixin.html#get(int...)">get</a>, <a href="TensorOperationsMixin.html#mult(double)">mult</a>, <a href="TensorOperationsMixin.html#mult(org.flag4j.complex_numbers.CNumber)">mult</a>, <a href="TensorOperationsMixin.html#recip()">recip</a>, <a href="TensorOperationsMixin.html#sqrt()">sqrt</a>, <a href="TensorOperationsMixin.html#sub(double)">sub</a>, <a href="TensorOperationsMixin.html#sub(org.flag4j.complex_numbers.CNumber)">sub</a>, <a href="TensorOperationsMixin.html#sub(T)">sub</a>, <a href="TensorOperationsMixin.html#sum()">sum</a>, <a href="TensorOperationsMixin.html#T()">T</a>, <a href="TensorOperationsMixin.html#transpose()">transpose</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.flag4j.core.TensorPropertiesMixin">Methods inherited from interface&nbsp;org.flag4j.core.<a href="TensorPropertiesMixin.html" title="interface in org.flag4j.core">TensorPropertiesMixin</a></h3>
+<h3 id="methods-inherited-from-class-org.flag4j.core.TensorPropertiesMixin">Methods inherited from interface&nbsp;org.flag4j.core_old.<a href="TensorPropertiesMixin.html" title="interface in org.flag4j.core_old">TensorPropertiesMixin</a></h3>
 <code><a href="TensorPropertiesMixin.html#argMax()">argMax</a>, <a href="TensorPropertiesMixin.html#argMin()">argMin</a>, <a href="TensorPropertiesMixin.html#max()">max</a>, <a href="TensorPropertiesMixin.html#maxAbs()">maxAbs</a>, <a href="TensorPropertiesMixin.html#min()">min</a>, <a href="TensorPropertiesMixin.html#minAbs()">minAbs</a></code></div>
 </section>
 </li>
@@ -295,7 +295,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="shape">
 <h3>shape</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="Shape.html" title="class in org.flag4j.core">Shape</a></span>&nbsp;<span class="element-name">shape</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="Shape.html" title="class in org.flag4j.core_old">Shape</a></span>&nbsp;<span class="element-name">shape</span></div>
 <div class="block">The shape of this tensor</div>
 </div>
 </section>
@@ -312,7 +312,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="&lt;init&gt;(org.flag4j.core.Shape,D)">
 <h3 id="&lt;init&gt;(org.flag4j.core.Shape,java.io.Serializable)">TensorBase</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name">TensorBase</span><wbr><span class="parameters">(<a href="Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name">TensorBase</span><wbr><span class="parameters">(<a href="Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  <a href="TensorBase.html" title="type parameter in TensorBase">D</a>&nbsp;entries)</span></div>
 <div class="block">Creates a tensor with specified entries and shape.</div>
 <dl class="notes">
@@ -336,7 +336,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="getShape()">
 <h3>getShape</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Shape.html" title="class in org.flag4j.core">Shape</a></span>&nbsp;<span class="element-name">getShape</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Shape.html" title="class in org.flag4j.core_old">Shape</a></span>&nbsp;<span class="element-name">getShape</span>()</div>
 <div class="block">Gets the shape of this tensor.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -396,7 +396,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="sameShape(org.flag4j.core.TensorBase)">
 <h3>sameShape</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">sameShape</span><wbr><span class="parameters">(<a href="TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">sameShape</span><wbr><span class="parameters">(<a href="TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&nbsp;B)</span></div>
 <div class="block">Checks if a tensor has the same shape as this tensor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -411,8 +411,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="sameLength(org.flag4j.core.TensorBase,org.flag4j.core.TensorBase,int)">
 <h3>sameLength</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">sameLength</span><wbr><span class="parameters">(<a href="TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&nbsp;A,
- <a href="TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&nbsp;B,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">sameLength</span><wbr><span class="parameters">(<a href="TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&nbsp;A,
+ <a href="TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&nbsp;B,
  int&nbsp;axis)</span></div>
 <div class="block">Checks if two matrices have the same length along a specified axis.</div>
 <dl class="notes">
@@ -495,7 +495,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
 <section class="detail" id="tensorEquals(org.flag4j.core.TensorBase)">
 <h3>tensorEquals</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">tensorEquals</span><wbr><span class="parameters">(<a href="TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&nbsp;src2)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">tensorEquals</span><wbr><span class="parameters">(<a href="TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&nbsp;src2)</span></div>
 <div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="TensorComparisonsMixin.html#tensorEquals(org.flag4j.core.TensorBase)">TensorComparisonsMixin</a></code></span></div>
 <div class="block"><p>Checks if two tensors are equal. Note, this method is much more permissive than <a href="TensorComparisonsMixin.html#equals(java.lang.Object)"><code>TensorComparisonsMixin.equals(Object)</code></a> as it allows for
  comparisons with any tensor, matrix, or vector. If the shapes are equal and entries are element-wise equivalent then this
@@ -506,7 +506,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base
  <a href="../arrays/sparse/CsrMatrix.html" title="class in org.flag4j.arrays_old.sparse"><code>Sparse CSR Matrix</code></a> will be considered equal.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="TensorComparisonsMixin.html#tensorEquals(org.flag4j.core.TensorBase)">tensorEquals</a></code>&nbsp;in interface&nbsp;<code><a href="TensorComparisonsMixin.html" title="interface in org.flag4j.core">TensorComparisonsMixin</a></code></dd>
+<dd><code><a href="TensorComparisonsMixin.html#tensorEquals(org.flag4j.core.TensorBase)">tensorEquals</a></code>&nbsp;in interface&nbsp;<code><a href="TensorComparisonsMixin.html" title="interface in org.flag4j.core_old">TensorComparisonsMixin</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>src2</code> - Tensor, matrix, or vector to compare to this tensor.</dd>
 <dt>Returns:</dt>

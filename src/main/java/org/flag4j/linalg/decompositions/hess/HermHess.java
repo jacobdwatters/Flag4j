@@ -27,7 +27,7 @@ package org.flag4j.linalg.decompositions.hess;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.linalg.transformations.Householder;
+import org.flag4j.linalg.transformations.HouseholderOld;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
@@ -58,7 +58,7 @@ public class HermHess extends ComplexHess {
     protected boolean enforceHermitian;
 
     /**
-     * Constructs a Hessenberg decomposer for Hermitian matrices. By default, the Householder vectors used in the decomposition will be
+     * Constructs a Hessenberg decomposer for Hermitian matrices. By default, the HouseholderOld vectors used in the decomposition will be
      * stored so that the full unitary {@code Q} matrix can be formed by calling {@link #getQ()}.
      */
     public HermHess() {
@@ -198,12 +198,12 @@ public class HermHess extends ComplexHess {
 
 
     /**
-     * Updates the {@link #transformMatrix} matrix using the computed Householder vector from {@link #computeHouseholder(int)}.
-     * @param j Index of sub-matrix for which the Householder reflector was computed for.
+     * Updates the {@link #transformMatrix} matrix using the computed HouseholderOld vector from {@link #computeHouseholder(int)}.
+     * @param j Index of sub-matrix for which the HouseholderOld reflector was computed for.
      */
     @Override
     protected void updateData(int j) {
-        Householder.hermLeftRightMultReflector(transformMatrix, householderVector, currentFactor, j, workArray);
+        HouseholderOld.hermLeftRightMultReflector(transformMatrix, householderVector, currentFactor, j, workArray);
 
         if(j < numRows) transformMatrix.entries[(j-1)*numRows + j] = norm.addInv();
         if(storeReflectors) {

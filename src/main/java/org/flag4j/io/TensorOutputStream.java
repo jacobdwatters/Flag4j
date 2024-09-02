@@ -24,7 +24,7 @@
 
 package org.flag4j.io;
 
-import org.flag4j.core.TensorBase;
+import org.flag4j.core_old.TensorBase;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

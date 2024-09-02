@@ -25,7 +25,10 @@
 package org.flag4j.linalg.solvers.exact;
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.core.*;
+import org.flag4j.core_old.MatrixMixin;
+import org.flag4j.core_old.TensorBase;
+import org.flag4j.core_old.TensorExclusiveMixin;
+import org.flag4j.core_old.VectorMixin;
 import org.flag4j.linalg.solvers.LinearSolver;
 import org.flag4j.linalg.solvers.LinearTensorSolver;
 import org.flag4j.util.ParameterChecks;

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +24,12 @@
 
 package org.flag4j.linalg.decompositions.qr;
 
-import org.flag4j.arrays_old.dense.MatrixOld;
+
+import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.decompositions.unitary.RealUnitaryDecomposition;
 
-
 /**
- * <p>Instances of this class compute the {@code QR} decomposition of a real dense matrix.</p>
+ * <p>Instances of this class compute the {@code QR} decomposition of a {@link Matrix real dense matrix}.</p>
  * <p>The {@code QR} decomposition, decomposes a matrix {@code A} into an orthogonal matrix {@code Q}
  * and an upper triangular matrix {@code R} such that {@code A=QR}.</p>
  *
@@ -70,7 +70,7 @@ public class RealQR extends RealUnitaryDecomposition {
      * @return A reference to this decomposer.
      */
     @Override
-    public RealQR decompose(MatrixOld src) {
+    public RealQR decompose(Matrix src) {
         decomposeBase(src);
         return this;
     }
@@ -82,9 +82,9 @@ public class RealQR extends RealUnitaryDecomposition {
      * @return An identity matrix with the appropriate size.
      */
     @Override
-    protected MatrixOld initQ() {
+    protected Matrix initQ() {
         int qCols = reduced ? minAxisSize : numRows; // Get Q in reduced form or not.
-        return MatrixOld.I(numRows, qCols);
+        return Matrix.I(numRows, qCols);
     }
 
 
@@ -94,7 +94,7 @@ public class RealQR extends RealUnitaryDecomposition {
      * @return The upper triangular matrix from the last decomposition.
      */
     @Override
-    public MatrixOld getUpper() {
+    public Matrix getUpper() {
         return getR();
     }
 
@@ -103,8 +103,8 @@ public class RealQR extends RealUnitaryDecomposition {
      * Gets the upper triangular matrix {@code R} from the {@code QR} decomposition.
      * @return The upper triangular matrix {@code R} from the {@code QR} decomposition.
      */
-    public MatrixOld getR() {
+    public Matrix getR() {
         int rRows = reduced ? minAxisSize : numRows; // Get R in reduced form or not.
-        return getUpper(new MatrixOld(rRows, numCols));
+        return getUpper(new Matrix(rRows, numCols));
     }
 }

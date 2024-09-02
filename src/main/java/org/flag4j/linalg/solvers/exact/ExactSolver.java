@@ -26,8 +26,8 @@ package org.flag4j.linalg.solvers.exact;
 
 
 import org.flag4j.arrays_old.sparse.PermutationMatrix;
-import org.flag4j.core.MatrixMixin;
-import org.flag4j.core.VectorMixin;
+import org.flag4j.core_old.MatrixMixin;
+import org.flag4j.core_old.VectorMixin;
 import org.flag4j.linalg.decompositions.lu.LUOld;
 import org.flag4j.linalg.solvers.LinearSolver;
 import org.flag4j.linalg.solvers.lstsq.LstsqSolver;

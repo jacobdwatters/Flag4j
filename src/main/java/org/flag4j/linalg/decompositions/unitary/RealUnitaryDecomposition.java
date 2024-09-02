@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,29 +24,28 @@
 
 package org.flag4j.linalg.decompositions.unitary;
 
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.linalg.decompositions.hess.RealHess;
-import org.flag4j.linalg.decompositions.qr.RealQR;
+
+import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.transformations.Householder;
 import org.flag4j.util.Flag4jConstants;
 
 /**
  * This class is the base class for real matrix decompositions which proceed by using unitary/orthogonal transformations
- * (specifically Householder reflectors) to bring a matrix into an upper triangular/Hessenburg matrix. Specifically, the
- * {@link RealQR QR} and {@link RealHess Hessenburg} decompositions.
+ * (specifically HouseholderOld reflectors) to bring a matrix into an upper triangular/Hessenburg matrix. Specifically, the
+ * QR and Hessenburg decompositions.
  */
-public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<MatrixOld, double[]> {
+public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matrix, double[]> {
 
     /**
      * To store norms of columns in {@link #transformMatrix}.
      */
     protected double norm;
     /**
-     * Scalar factor of the currently computed Householder reflector.
+     * Scalar factor of the currently computed HouseholderOld reflector.
      */
     protected double currentFactor;
     /**
-     * Stores the shifted value of the first entry in a Householder vector.
+     * Stores the shifted value of the first entry in a HouseholderOld vector.
      */
     protected double shift;
 
@@ -98,11 +97,11 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
      * then {@code Q} can not be computed and this method will return {@code null}.
      */
     @Override
-    public MatrixOld getQ() {
+    public Matrix getQ() {
         if(!storeReflectors)
             return null;
 
-        MatrixOld Q = initQ();
+        Matrix Q = initQ();
 
         for(int j=minAxisSize - 1; j>=subDiagonal; j--) {
             householderVector[j] = 1; // Ensure first value of reflector is 1.
@@ -125,7 +124,7 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
      * @return The upper triangular/Hessenburg matrix from the last decomposition.
      */
     @Override
-    protected MatrixOld getUpper(MatrixOld H) {
+    protected Matrix getUpper(Matrix H) {
         // Copy top rows.
         for(int i=0; i<subDiagonal; i++) {
             int rowOffset = i*numCols;
@@ -153,20 +152,20 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
     @Override
     protected void initWorkArrays(int maxAxisSize) {
         transformData = transformMatrix.entries;
-        qFactors = new double[minAxisSize]; // Stores scaler factors for the Householder vectors.
+        qFactors = new double[minAxisSize]; // Stores scaler factors for the HouseholderOld vectors.
         householderVector = new double[maxAxisSize];
         workArray = new double[maxAxisSize];
     }
 
 
     /**
-     * Computes the Householder vector for the first column of the sub-matrix with upper left corner at {@code (j, j)}.
+     * Computes the HouseholderOld vector for the first column of the sub-matrix with upper left corner at {@code (j, j)}.
      *
-     * @param j Index of the upper left corner of the sub-matrix for which to compute the Householder vector for the first column.
-     *          That is, a Householder vector will be computed for the portion of column {@code j} below row {@code j}.
+     * @param j Index of the upper left corner of the sub-matrix for which to compute the HouseholderOld vector for the first column.
+     *          That is, a HouseholderOld vector will be computed for the portion of column {@code j} below row {@code j}.
      */
     protected void computeHouseholder(int j) {
-        // Initialize storage array for Householder vector and compute maximum absolute value in jth column at or below jth row.
+        // Initialize storage array for HouseholderOld vector and compute maximum absolute value in jth column at or below jth row.
         double maxAbs = findMaxAndInit(j);
         norm = 0; // Ensure norm is reset.
 
@@ -177,13 +176,13 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
         } else {
             computePhasedNorm(j, maxAbs);
 
-            householderVector[j] = 1.0; // Ensure first value in Householder vector is one.
+            householderVector[j] = 1.0; // Ensure first value in HouseholderOld vector is one.
             for(int i=j+1; i<numRows; i++) {
-                householderVector[i] /= shift; // Scale all but first entry of the Householder vector.
+                householderVector[i] /= shift; // Scale all but first entry of the HouseholderOld vector.
             }
         }
 
-        qFactors[j] = currentFactor; // Store the factor for the Householder vector.
+        qFactors[j] = currentFactor; // Store the factor for the HouseholderOld vector.
     }
 
 
@@ -202,7 +201,7 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
         }
         norm = Math.sqrt(norm); // Finish 2-norm computation for the column.
 
-        // Change sign of norm depending on first entry in column for stability purposes in Householder vector.
+        // Change sign of norm depending on first entry in column for stability purposes in HouseholderOld vector.
         if(householderVector[j] < 0) norm = -norm;
 
         shift = householderVector[j] + norm;
@@ -232,8 +231,8 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
 
 
     /**
-     * Updates the {@link #transformMatrix} matrix using the computed Householder vector from {@link #computeHouseholder(int)}.
-     * @param j Index of sub-matrix for which the Householder reflector was computed for.
+     * Updates the {@link #transformMatrix} matrix using the computed HouseholderOld vector from {@link #computeHouseholder(int)}.
+     * @param j Index of sub-matrix for which the HouseholderOld reflector was computed for.
      */
     @Override
     protected void updateData(int j) {

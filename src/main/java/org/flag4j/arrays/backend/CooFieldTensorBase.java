@@ -37,6 +37,9 @@ import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.TensorShapeException;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -87,6 +90,10 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      * The number of non-zero entries in this sparse tensor.
      */
     public final int nnz;
+    /**
+     * Stores the sparsity of this matrix.
+     */
+    private double sparsity = -1.0;
 
 
     /**
@@ -578,7 +585,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      *
      * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
      */
-    public abstract T makeLikeTensor(Shape shape, List<Field<V>> entries, List<int[]> indices);
+    public abstract T makeLikeTensor(Shape shape, List<V> entries, List<int[]> indices);
 
 
     /**
@@ -831,5 +838,23 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
             abs[i] = new RealFloat64(entries[i].abs());
 
         return new CooFieldTensor<RealFloat64>(shape, abs, ArrayUtils.deepCopy(indices, null));
+    }
+
+
+    /**
+     * The sparsity of this sparse tensor. That is, the percentage of elements in this tensor which are zero as a decimal.
+     *
+     * @return The density of this sparse tensor.
+     */
+    @Override
+    public double sparsity() {
+        if(sparsity == -1) { // Compute sparsity if needed.
+            BigInteger totalEntries = totalEntries();
+            BigDecimal sparsity = new BigDecimal(totalEntries).subtract(BigDecimal.valueOf(nnz));
+            sparsity = sparsity.divide(new BigDecimal(totalEntries), 50, RoundingMode.HALF_UP);
+            this.sparsity = sparsity.doubleValue();
+        }
+
+        return sparsity;
     }
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,13 +24,14 @@
 
 package org.flag4j.linalg.transformations;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.complex_numbers.CNumber;
+
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.operations_old.common.complex.ComplexOperations;
+import org.flag4j.operations.common.field_ops.FieldOperations;
 import org.flag4j.operations_old.common.real.RealOperations;
 import org.flag4j.util.ErrorMessages;
 
@@ -38,7 +39,7 @@ import org.flag4j.util.ErrorMessages;
  * This class contains methods for computing real or complex Householder reflectors (also known as elementary reflectors).
  * A Householder reflector is a transformation matrix which reflects a vector about a hyperplane containing the origin.
  */
-public final class Householder {
+public class Householder {
 
     private Householder() {
         // Hide default constructor for utility class.
@@ -53,15 +54,15 @@ public final class Householder {
      * @return A transformation matrix which describes a reflection through a plane containing the origin with the
      * specified {@code normal} vector, i.e. a Householder reflector.
      */
-    public static MatrixOld getReflector(VectorOld normal) {
-        VectorOld v;
+    public static Matrix getReflector(Vector normal) {
+        Vector v;
 
         double signedNorm = -Math.copySign(VectorNorms.norm(normal.entries), normal.entries[0]);
         v = normal.div(normal.entries[0] - signedNorm);
         v.entries[0] = 1.0;
 
         // Create Householder matrix
-        MatrixOld H = v.outer(v).mult(-2.0/v.inner(v));
+        Matrix H = v.outer(v).mult(-2.0/v.inner(v));
 
         int step = H.numCols+1;
         for(int i=0; i<H.entries.length; i+=step) {
@@ -76,22 +77,22 @@ public final class Householder {
      * Computes the vector {@code v} in of a Householder matrix {@code H=I-2vv}<sup>T</sup> where {@code H} is a
      * transformation matrix which reflects a vector across the plane normal to {@code normal}.
      *
-     * <p>This method may be used in conjunction with {@link #leftMultReflector(MatrixOld, VectorOld, double, int, int, int)} and
-     * {@link #rightMultReflector(MatrixOld, VectorOld, double, int, int, int)} to efficiently apply reflectors. Doing this is O(n^2)
+     * <p>This method may be used in conjunction with {@link #leftMultReflector(Matrix, Vector, double, int, int, int)} and
+     * {@link #rightMultReflector(Matrix, Vector, double, int, int, int)} to efficiently apply reflectors. Doing this is O(n^2)
      * while forming the full Householder matrix and performing matrix multiplication is O(n^3)</p>
      *
-     * @param normal VectorOld normal to the plane which {@code H} reflects across.
+     * @param normal Vector normal to the plane which {@code H} reflects across.
      * @return The vector {@code v} in of a Householder matrix {@code H=I-2vv}<sup>T</sup> which reflects across a plane
      * normal to {@code normal}.
      */
-    public static VectorOld getVector(VectorOld normal) {
+    public static Vector getVector(Vector normal) {
         double normX = VectorNorms.norm(normal.entries);
         double x1 = normal.entries[0];
         normX = (x1 >= 0) ? -normX : normX;
         double v1 = x1 - normX;
 
         // Initialize v with norm and set first element
-        VectorOld v = normal.copy();
+        Vector v = normal.copy();
         v.entries[0] = v1;
 
         // Compute norm of v noting that it only differs from normal by the first element.
@@ -108,26 +109,27 @@ public final class Householder {
      * Computes the Householder reflector which describes a reflection through a hyperplane containing the origin which
      * is normal to the specified {@code normal} vector.
      *
-     * <p>This method may be used in conjunction with {@link #leftMultReflector(CMatrixOld, CVectorOld, CNumber, int, int, int)} and
-     * {@link #rightMultReflector(CMatrixOld, CVectorOld, CNumber, int, int, int)} to efficiently apply reflectors. Doing this is O(n^2)
+     * <p>This method may be used in conjunction with {@link #leftMultReflector(CMatrix, CVector, Complex128, int, int, int)} and
+     * {@link #rightMultReflector(CMatrix, CVector, Complex128, int, int, int)} to efficiently apply reflectors. Doing this is O(n^2)
      * while forming the full Householder matrix and performing matrix multiplication is O(n^3)</p>
      *
      * @param normal The vector normal to the plane the Householder reflector will reflect through\.
      * @return A transformation matrix which describes a reflection through a plane containing the origin with the
      * specified {@code normal} vector, i.e. a Householder reflector.
      */
-    public static CMatrixOld getReflector(CVectorOld normal) {
-        CVectorOld v;
+    public static CMatrix getReflector(CVector normal) {
+        CVector v;
 
         // Compute signed norm using modified sgn function.
-        CNumber signedNorm = normal.entries[0].equals(0) ?
-                new CNumber(-VectorNorms.norm(normal)) : CNumber.sgn(normal.entries[0]).mult(-VectorNorms.norm(normal));
+        Complex128 signedNorm = normal.entries[0].equals(0) ?
+                new Complex128(-VectorNorms.norm(normal.entries)) :
+                Complex128.sgn(normal.entries[0]).mult(-VectorNorms.norm(normal.entries));
 
         v = normal.div(normal.entries[0].sub(signedNorm));
-        v.entries[0] = new CNumber(1);
+        v.entries[0] = new Complex128(1);
 
         // Create projection matrix
-        CMatrixOld P = v.outer(v).mult(-2.0/v.innerSelf());
+        CMatrix P = v.outer(v).mult(-2.0/v.innerSelf());
 
         int step = P.numCols+1;
         for(int i=0; i<P.entries.length; i+=step) {
@@ -151,7 +153,7 @@ public final class Householder {
      * @param workArray An array to store temporary column data. This can help both with cache performance and reducing unneeded
      *                  garbage collection if this method is called repeatedly.
      */
-    public static void leftMultReflector(MatrixOld src,
+    public static void leftMultReflector(Matrix src,
                                          double[] householderVector,
                                          double alpha,
                                          int startCol,
@@ -199,7 +201,7 @@ public final class Householder {
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
      * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
      */
-    public static void rightMultReflector(MatrixOld src,
+    public static void rightMultReflector(Matrix src,
                                           double[] householderVector,
                                           double alpha,
                                           int startCol,
@@ -235,15 +237,15 @@ public final class Householder {
      * @param workArray An array to store temporary column data. This can help both with cache performance and reducing unneeded
      *                  garbage collection if this method is called repeatedly.
      */
-    public static void leftMultReflector(CMatrixOld src,
-                                         CNumber[] householderVector,
-                                         CNumber alpha,
+    public static void leftMultReflector(CMatrix src,
+                                         Complex128[] householderVector,
+                                         Complex128 alpha,
                                          int startCol,
                                          int startRow, int endRow,
-                                         CNumber[] workArray) {
+                                         Complex128[] workArray) {
         int numCols = src.numCols;
         int srcRowOffset = startRow*numCols;
-        CNumber v0 = householderVector[startRow].conj();
+        Complex128 v0 = householderVector[startRow].conj();
 
         for(int i=startCol; i<numCols; i++) {
             workArray[i] = v0.mult(src.entries[srcRowOffset + i]);
@@ -251,17 +253,16 @@ public final class Householder {
 
         for(int k=startRow + 1; k<endRow; k++) {
             int srcIdx = k*numCols + startCol;
-            CNumber reflectorValue = householderVector[k].conj();
+            Complex128 reflectorValue = householderVector[k].conj();
 
-            for(int i=startCol; i<numCols; i++) {
+            for(int i=startCol; i<numCols; i++)
                 workArray[i] = workArray[i].add(reflectorValue.mult(src.entries[srcIdx++]));
-            }
         }
 
-        ComplexOperations.scalMult(workArray, workArray, alpha, startCol, numCols);
+        FieldOperations.scalMult(workArray, workArray, alpha, startCol, numCols);
 
         for(int i=startRow; i<endRow; i++) {
-            CNumber reflectorValue = householderVector[i];
+            Complex128 reflectorValue = householderVector[i];
             int indexA = i*numCols + startCol;
 
             for(int j=startCol; j<numCols; j++) {
@@ -281,16 +282,16 @@ public final class Householder {
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
      * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
      */
-    public static void rightMultReflector(CMatrixOld src,
-                                          CNumber[] householderVector,
-                                          CNumber alpha,
+    public static void rightMultReflector(CMatrix src,
+                                          Complex128[] householderVector,
+                                          Complex128 alpha,
                                           int startCol,
                                           int startRow, int endRow) {
-        CNumber negAlpha = alpha.addInv();
+        Complex128 negAlpha = alpha.addInv();
 
         for(int i=startCol; i<src.numRows; i++) {
             int startIndex = i*src.numCols + startRow;
-            CNumber sum = CNumber.ZERO;
+            Complex128 sum = Complex128.ZERO;
             int rowIndex = startIndex;
 
             for(int j = startRow; j < endRow; j++) {
@@ -313,14 +314,14 @@ public final class Householder {
      * <p>Note: no check is made to
      * explicitly check that the {@code src} matrix is actually symmetric.</p>
      *
-     * @param src MatrixOld to apply the Householder reflector to. Assumed to be square and symmetric. Upper triangular portion
+     * @param src Matrix to apply the Householder reflector to. Assumed to be square and symmetric. Upper triangular portion
      * overwritten with the result.
      * @param householderVector Householder vector {@code v} from the definition of a Householder reflector matrix.
      * @param alpha The scalar &alpha value in Householder reflector matrix definition.
      * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
      * @param workArray Array for storing temporary values during the computation. Contents will be overwritten.
      */
-    public static void symmLeftRightMultReflector(MatrixOld src,
+    public static void symmLeftRightMultReflector(Matrix src,
                                                   double[] householderVector,
                                                   double alpha,
                                                   int startCol,
@@ -380,8 +381,8 @@ public final class Householder {
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
      * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
      */
-    public static void leftMultReflector(MatrixOld src,
-                                         VectorOld householderVector,
+    public static void leftMultReflector(Matrix src,
+                                         Vector householderVector,
                                          double alpha,
                                          int startCol,
                                          int startRow, int endRow) {
@@ -403,8 +404,8 @@ public final class Householder {
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
      * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
      */
-    public static void rightMultReflector(MatrixOld src,
-                                          VectorOld householderVector,
+    public static void rightMultReflector(Matrix src,
+                                          Vector householderVector,
                                           double alpha,
                                           int startCol,
                                           int startRow, int endRow) {
@@ -427,12 +428,12 @@ public final class Householder {
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
      * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
      */
-    public static void leftMultReflector(CMatrixOld src,
-                                         CVectorOld householderVector,
-                                         CNumber alpha,
+    public static void leftMultReflector(CMatrix src,
+                                         CVector householderVector,
+                                         Complex128 alpha,
                                          int startCol,
                                          int startRow, int endRow) {
-        leftMultReflector(src, householderVector.entries, alpha, startCol, startRow, endRow, new CNumber[src.numCols-startCol]);
+        leftMultReflector(src, householderVector.entries, alpha, startCol, startRow, endRow, new Complex128[src.numCols-startCol]);
     }
 
 
@@ -450,9 +451,9 @@ public final class Householder {
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
      * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
      */
-    public static void rightMultReflector(CMatrixOld src,
-                                          CVectorOld householderVector,
-                                          CNumber alpha,
+    public static void rightMultReflector(CMatrix src,
+                                          CVector householderVector,
+                                          Complex128 alpha,
                                           int startCol,
                                           int startRow, int endRow) {
         rightMultReflector(src, householderVector.entries, alpha, startCol, startRow, endRow);
@@ -466,27 +467,27 @@ public final class Householder {
      * <p>Note: no check is made to
      * explicitly check that the {@code src} matrix is actually Hermitian.</p>
      *
-     * @param src MatrixOld to apply the Householder reflector to. Assumed to be square and Hermitian. Upper triangular portion
+     * @param src Matrix to apply the Householder reflector to. Assumed to be square and Hermitian. Upper triangular portion
      * overwritten with the result.
      * @param householderVector Householder vector {@code v} from the definition of a Householder reflector matrix.
      * @param alpha The scalar &alpha value in Householder reflector matrix definition.
      * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
      * @param workArray Array for storing temporary values during the computation. Contents will be overwritten.
      */
-    public static void hermLeftRightMultReflector(CMatrixOld src,
-                                                  CNumber[] householderVector,
-                                                  CNumber alpha,
+    public static void hermLeftRightMultReflector(CMatrix src,
+                                                  Complex128[] householderVector,
+                                                  Complex128 alpha,
                                                   int startCol,
-                                                  CNumber[] workArray) {
+                                                  Complex128[] workArray) {
         int numRows = src.numRows;
 
         // Computes w = -alpha*A*v (taking conjugate for lower triangular part)
         for (int i = startCol; i < numRows; i++) {
-            CNumber total = new CNumber(0, 0);
+            Complex128 total = new Complex128(0, 0);
             int rowOffset = i * numRows;
 
             for (int j = startCol; j < i; j++) {
-                total = total.add(src.entries[j * numRows + i].conj().mult(householderVector[j]));
+                total = total.add(src.entries[j*numRows + i].conj().mult(householderVector[j]));
             }
             for (int j = i; j < src.numRows; j++) {
                 total = total.add(src.entries[rowOffset + j].mult(householderVector[j]));
@@ -496,11 +497,11 @@ public final class Householder {
         }
 
         // Computes -0.5*alpha*v^T*w (with conjugation in the scalar product)
-        CNumber innerProd = new CNumber(0, 0);
+        Complex128 innerProd = new Complex128(0, 0);
         for (int i = startCol; i < numRows; i++) {
             innerProd = innerProd.add(householderVector[i].conj().mult(workArray[i]));
         }
-        innerProd = innerProd.mult(alpha).mult(new CNumber(-0.5, 0));
+        innerProd = innerProd.mult(alpha).mult(new Complex128(-0.5, 0));
 
         // Computes w + innerProd*v
         for (int i = startCol; i < numRows; i++) {
@@ -509,14 +510,14 @@ public final class Householder {
 
         // Computes A + w*v^T + v*w^T (ensuring Hermitian property is maintained)
         for (int i = startCol; i < numRows; i++) {
-            CNumber prod = workArray[i];
-            CNumber h = householderVector[i];
+            Complex128 prod = workArray[i];
+            Complex128 h = householderVector[i].conj();
             int rowOffset = i * numRows;
 
             for (int j = i; j < src.numRows; j++) {
                 src.entries[rowOffset + j] = src.entries[rowOffset + j]
                         .add(prod.mult(householderVector[j]))
-                        .add(workArray[j].mult(h.conj()));
+                        .add(workArray[j].mult(h));
             }
         }
     }

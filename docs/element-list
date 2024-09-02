@@ -2,9 +2,9 @@ org.flag4j.arrays_old.dense
 org.flag4j.arrays_old.sparse
 org.flag4j.complex_numbers
 org.flag4j.concurrency
-org.flag4j.core
-org.flag4j.core.dense_base
-org.flag4j.core.sparse_base
+org.flag4j.core_old
+org.flag4j.core_old.dense_base
+org.flag4j.core_old.sparse_base
 org.flag4j.io
 org.flag4j.linalg
 org.flag4j.linalg.decompositions

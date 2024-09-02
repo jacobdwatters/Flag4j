@@ -25,7 +25,7 @@
 package org.flag4j.linalg.decompositions.hess;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.linalg.decompositions.unitary.RealUnitaryDecomposition;
+import org.flag4j.linalg.decompositions.unitary.RealUnitaryDecompositionOld;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
@@ -47,7 +47,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  *      [ 0 0 0 x x ]]</pre>
  * </p>
  */
-public class RealHess extends RealUnitaryDecomposition {
+public class RealHess extends RealUnitaryDecompositionOld {
 
     /**
      * Creates a real unitary decomposer which will reduce the matrix to an upper quasi-triangular matrix which is has zeros below

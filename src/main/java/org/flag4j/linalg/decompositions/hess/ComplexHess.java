@@ -25,7 +25,7 @@
 package org.flag4j.linalg.decompositions.hess;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.linalg.decompositions.unitary.ComplexUnitaryDecomposition;
+import org.flag4j.linalg.decompositions.unitary.ComplexUnitaryDecompositionOld;
 import org.flag4j.util.ParameterChecks;
 
 
@@ -47,7 +47,7 @@ import org.flag4j.util.ParameterChecks;
  *      [ 0 0 0 x x ]]</pre>
  * </p>
  */
-public class ComplexHess extends ComplexUnitaryDecomposition {
+public class ComplexHess extends ComplexUnitaryDecompositionOld {
 
 
     /**

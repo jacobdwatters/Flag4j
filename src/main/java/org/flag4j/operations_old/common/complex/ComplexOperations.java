@@ -227,6 +227,7 @@ public class ComplexOperations {
      * @return A reference to the {@code dest} array if it was not null. Otherwise, a new array will be formed.
      * @throws ArrayIndexOutOfBoundsException If {@code dest} is not the size of {@code src}.
      */
+    @Deprecated
     public static CNumber[] scalMult(CNumber[] src, CNumber[] dest, CNumber factor, int start, int stop) {
         if(dest==null) dest = new CNumber[src.length];
 

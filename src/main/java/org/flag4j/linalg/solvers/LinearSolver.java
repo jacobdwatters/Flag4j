@@ -24,8 +24,8 @@
 
 package org.flag4j.linalg.solvers;
 
-import org.flag4j.core.MatrixMixin;
-import org.flag4j.core.VectorMixin;
+import org.flag4j.core_old.MatrixMixin;
+import org.flag4j.core_old.VectorMixin;
 
 /**
  * This interface specifies methods which all linear system solvers should implement. Solvers

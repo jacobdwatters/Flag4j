@@ -25,6 +25,8 @@
 package org.flag4j.operations.common.complex;
 
 
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Complex64;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ErrorMessages;
 
@@ -32,7 +34,7 @@ import org.flag4j.util.ErrorMessages;
  * This class provides low level methods for computing operations_old on real tensors. These methods can be applied to
  * either sparse or dense real tensors.
  */
-public class ComplexOperations {
+public final class ComplexOperations {
 
     private ComplexOperations() {
         // Hide constructor for utility class.
@@ -45,6 +47,7 @@ public class ComplexOperations {
      * @param src Elements of the tensor.
      * @return The element-wise square root of the tensor.
      */
+    @Deprecated
     public static CNumber[] sqrt(CNumber[] src) {
         CNumber[] roots = new CNumber[src.length];
 
@@ -62,6 +65,7 @@ public class ComplexOperations {
      * @param src Elements of the tensor.
      * @return The element-wise square root of the tensor.
      */
+    @Deprecated
     public static CNumber[] sqrt(double[] src) {
         CNumber[] roots = new CNumber[src.length];
 
@@ -78,6 +82,7 @@ public class ComplexOperations {
      * @param src Elements of the tensor.
      * @return The element-wise absolute value of the tensor.
      */
+    @Deprecated
     public static double[] abs(CNumber[] src) {
         double[] abs = new double[src.length];
 
@@ -95,6 +100,7 @@ public class ComplexOperations {
      * @return The result of rounding all entries of the source tensor to the nearest integer.
      * @throws IllegalArgumentException If {@code precision} is negative.
      */
+    @Deprecated
     public static CNumber[] round(CNumber[] src) {
         CNumber[] dest = new CNumber[src.length];
 
@@ -114,6 +120,7 @@ public class ComplexOperations {
      * @return The result of rounding all entries of the source tensor with the specified precision.
      * @throws IllegalArgumentException If {@code precision} is negative.
      */
+    @Deprecated
     public static CNumber[] round(CNumber[] src, int precision) {
         if(precision<0) {
             throw new IllegalArgumentException(ErrorMessages.getNegValueErr(precision));
@@ -137,6 +144,7 @@ public class ComplexOperations {
      * @return A copy of this matrix with rounded values.
      * @throws IllegalArgumentException If {@code threshold} is negative.
      */
+    @Deprecated
     public static CNumber[] roundToZero(CNumber[] src, double threshold) {
         if(threshold<0) {
             throw new IllegalArgumentException(ErrorMessages.getNegValueErr(threshold));
@@ -158,6 +166,7 @@ public class ComplexOperations {
      * @param factor Scalar value.
      * @return The result of the scalar multiplication of a tensor.
      */
+    @Deprecated
     public static CNumber[] scalMult(CNumber[] src, double factor) {
         CNumber[] dest = new CNumber[src.length];
 
@@ -175,6 +184,7 @@ public class ComplexOperations {
      * @param factor Scalar value.
      * @return The result of the scalar multiplication of a tensor.
      */
+    @Deprecated
     public static CNumber[] scalMult(CNumber[] src, CNumber factor) {
         return scalMult(src, null, factor);
     }
@@ -186,6 +196,7 @@ public class ComplexOperations {
      * @param factor Scalar value to multiply.
      * @return The scalar multiplication of the tensor.
      */
+    @Deprecated
     public static CNumber[] scalMult(double[] entries, CNumber factor) {
         CNumber[] product = new CNumber[entries.length];
 
@@ -205,6 +216,7 @@ public class ComplexOperations {
      * @return A reference to the {@code dest} array if it was not null. Otherwise, a new array will be formed.
      * @throws ArrayIndexOutOfBoundsException If {@code dest} is not at least the size of {@code src}.
      */
+    @Deprecated
     public static CNumber[] scalMult(CNumber[] src, CNumber[] dest, CNumber factor) {
         int size = src.length;
         if(dest==null) dest = new CNumber[size];
@@ -226,6 +238,7 @@ public class ComplexOperations {
      * @return A reference to the {@code dest} array if it was not null. Otherwise, a new array will be formed.
      * @throws ArrayIndexOutOfBoundsException If {@code dest} is not the size of {@code src}.
      */
+    @Deprecated
     public static CNumber[] scalMult(CNumber[] src, CNumber[] dest, CNumber factor, int start, int stop) {
         if(dest==null) dest = new CNumber[src.length];
 
@@ -242,6 +255,7 @@ public class ComplexOperations {
      * @param divisor Scalar value to divide each element ot the tensor by.
      * @return The scalar division of the tensor.
      */
+    @Deprecated
     public static CNumber[] scalDiv(double[] entries, CNumber divisor) {
         CNumber[] quotient = new CNumber[entries.length];
 
@@ -264,6 +278,7 @@ public class ComplexOperations {
      * @param src Entries of the tensor.
      * @return The element-wise complex conjugate of the tensor
      */
+    @Deprecated
     public static CNumber[] conj(CNumber[] src) {
         CNumber[] conjugate = new CNumber[src.length];
 
@@ -280,6 +295,7 @@ public class ComplexOperations {
      * @param src Entries of complex tensor.
      * @return Equivalent real entries for complex tensor.
      */
+    @Deprecated
     public static double[] toReal(CNumber[] src) {
         double[] real = new double[src.length];
 
@@ -288,5 +304,51 @@ public class ComplexOperations {
         }
 
         return real;
+    }
+
+
+    /**
+     * Computes the scalar division of a tensor.
+     * @param entries Entries of the tensor.
+     * @param divisor Scalar value to divide each element ot the tensor by.
+     * @return The scalar division of the tensor.
+     */
+    public static Complex128[] scalDiv(double[] entries, Complex128 divisor) {
+        Complex128[] quotient = new Complex128[entries.length];
+
+        double denom = divisor.re*divisor.re + divisor.im*divisor.im;
+
+        for(int i=0; i<quotient.length; i++) {
+            double a = entries[i];
+
+            quotient[i] = new Complex128(
+                    a*divisor.re / denom,
+                    -a*divisor.im / denom);
+        }
+
+        return quotient;
+    }
+
+
+    /**
+     * Computes the scalar division of a tensor.
+     * @param entries Entries of the tensor.
+     * @param divisor Scalar value to divide each element ot the tensor by.
+     * @return The scalar division of the tensor.
+     */
+    public static Complex64[] scalDiv(float[] entries, Complex64 divisor) {
+        Complex64[] quotient = new Complex64[entries.length];
+
+        float denom = divisor.re*divisor.re + divisor.im*divisor.im;
+
+        for(int i=0; i<quotient.length; i++) {
+            float a = entries[i];
+
+            quotient[i] = new Complex64(
+                    a*divisor.re / denom,
+                    -a*divisor.im / denom);
+        }
+
+        return quotient;
     }
 }

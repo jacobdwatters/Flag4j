@@ -24,9 +24,9 @@
 
 package org.flag4j.linalg.decompositions.schur;
 
-import org.flag4j.core.MatrixMixin;
+import org.flag4j.core_old.MatrixMixin;
 import org.flag4j.linalg.decompositions.DecompositionOld;
-import org.flag4j.linalg.decompositions.unitary.UnitaryDecomposition;
+import org.flag4j.linalg.decompositions.unitary.UnitaryDecompositionOld;
 import org.flag4j.rng.RandomCNumber;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -70,13 +70,13 @@ public abstract class Schur<
     /**
      *Decomposer to compute the Hessenburg decomposition as a setup step for the implicit double step QR algorithm.
      */
-    protected UnitaryDecomposition<T, U> hess;
+    protected UnitaryDecompositionOld<T, U> hess;
     /**
      *Stores the number of rows in the matrix being decomposed.
      */
     protected int numRows;
     /**
-     * Stores the vector {@code v} in the Householder reflector {@code P = I - }&alpha{@code vv}<sup>T</sup>.
+     * Stores the vector {@code v} in the HouseholderOld reflector {@code P = I - }&alpha{@code vv}<sup>T</sup>.
      */
     protected U householderVector;
     /**
@@ -87,7 +87,7 @@ public abstract class Schur<
      */
     protected U shiftCol;
     /**
-     * An array for storing temporary values along the colum of a matrix when applying Householder reflectors.
+     * An array for storing temporary values along the colum of a matrix when applying HouseholderOld reflectors.
      * This can help improve cache performance when applying the reflector.
      */
     protected U workArray;
@@ -140,7 +140,7 @@ public abstract class Schur<
      * @param rng Random number generator to use when performing random exceptional shifts.
      * @param hess Decomposer to compute the Hessenburg decomposition as a setup step for the {@code QR} algorithm.
      */
-    public Schur(boolean computeU, RandomCNumber rng, UnitaryDecomposition<T, U> hess) {
+    public Schur(boolean computeU, RandomCNumber rng, UnitaryDecompositionOld<T, U> hess) {
         maxIterationsFactor = DEFAULT_MAX_ITERS_FACTOR;
         exceptionalThreshold = DEFAULT_EXCEPTIONAL_ITERS;
         this.rng = rng;

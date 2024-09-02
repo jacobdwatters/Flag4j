@@ -103,6 +103,10 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
             throw new IllegalArgumentException("entries and indices arrays of a COO vector must have the same length but got " +
                     "lengths" + entries.length + " and " + indices.length + ".");
         }
+        if(entries.length > size) {
+            throw new IllegalArgumentException("The number of entries cannot be greater than the size of the vector but but got " +
+                    "entries.length=" + entries.length + " and size=" + size + ".");
+        }
 
         this.indices = indices;
         this.size = size;

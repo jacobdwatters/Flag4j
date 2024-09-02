@@ -26,14 +26,14 @@ package org.flag4j.linalg.solvers.lstsq;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.linalg.decompositions.qr.ComplexQR;
+import org.flag4j.linalg.decompositions.qr.ComplexQROld;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 
 /**
  * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,
  * minimizes {@code ||Ax-b||}<sub>2</sub> which is equivalent to solving the normal equations
  * {@code A}<sup>T</sup>{@code Ax=A}<sup>T</sup>{@code b}.
- * This is done using efficiently a {@link ComplexQR QR decomposition}.
+ * This is done using efficiently a {@link ComplexQROld QR decomposition}.
  */
 public class ComplexLstsqSolver extends LstsqSolver<CMatrixOld, CVectorOld> {
 
@@ -44,6 +44,6 @@ public class ComplexLstsqSolver extends LstsqSolver<CMatrixOld, CVectorOld> {
      * {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
      */
     public ComplexLstsqSolver() {
-        super(new ComplexQR(), new ComplexBackSolver());
+        super(new ComplexQROld(), new ComplexBackSolver());
     }
 }

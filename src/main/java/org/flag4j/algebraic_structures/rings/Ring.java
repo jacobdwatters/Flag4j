@@ -25,6 +25,7 @@
 package org.flag4j.algebraic_structures.rings;
 
 import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.semi_rings.SemiRing;
 
 /**
  * <p>This interface specifies a mathematical ring. This interface not only meets the basic definition of a ring,

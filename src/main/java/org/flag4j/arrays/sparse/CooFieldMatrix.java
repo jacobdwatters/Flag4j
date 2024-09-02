@@ -34,7 +34,7 @@ import java.util.List;
 
 
 /**
- * <p>A real sparse matrix stored in coordinate list (COO) format. The {@link #entries} of this COO tensor are
+ * <p>A sparse matrix stored in coordinate list (COO) format. The {@link #entries} of this COO tensor are
  * elements of a {@link Field}.</p>
  *
  * <p>The {@link #entries non-zero entries} and non-zero indices of a COO matrix are mutable but the {@link #shape}

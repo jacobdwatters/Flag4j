@@ -64,7 +64,7 @@ public class Shape implements Serializable {
      */
     public Shape(int... dims) {
         // Ensure all dimensions for the shape object are non-negative.
-        ParameterChecks.ensureGreaterEq(0, dims);
+        ParameterChecks.ensureNonNegative(dims);
         this.dims = dims;
     }
 

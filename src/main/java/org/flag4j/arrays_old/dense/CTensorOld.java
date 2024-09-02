@@ -24,14 +24,14 @@
 
 package org.flag4j.arrays_old.dense;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays_old.sparse.CooCTensorOld;
 import org.flag4j.arrays_old.sparse.CooTensorOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.ComplexTensorExclusiveMixin;
-import org.flag4j.arrays.Shape;
-import org.flag4j.core.TensorBase;
-import org.flag4j.core.TensorExclusiveMixin;
-import org.flag4j.core.dense_base.ComplexDenseTensorBase;
+import org.flag4j.core_old.ComplexTensorExclusiveMixin;
+import org.flag4j.core_old.TensorBase;
+import org.flag4j.core_old.TensorExclusiveMixin;
+import org.flag4j.core_old.dense_base.ComplexDenseTensorBase;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.TensorInvert;
 import org.flag4j.operations_old.TransposeDispatcher;

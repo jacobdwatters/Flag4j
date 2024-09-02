@@ -28,7 +28,7 @@ package org.flag4j.operations.dense.field_ops;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.backend.DenseFieldMatrixBase;
 import org.flag4j.arrays.dense.FieldTensor;
-import org.flag4j.core.TensorBase;
+import org.flag4j.core_old.TensorBase;
 import org.flag4j.util.ErrorMessages;
 
 /**

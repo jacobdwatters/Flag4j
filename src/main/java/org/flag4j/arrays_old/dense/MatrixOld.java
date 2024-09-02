@@ -24,14 +24,14 @@
 
 package org.flag4j.arrays_old.dense;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays_old.sparse.*;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.complex_numbers.CNumberUtils;
-import org.flag4j.core.MatrixMixin;
-import org.flag4j.core.RealMatrixMixin;
-import org.flag4j.arrays.Shape;
-import org.flag4j.core.dense_base.DenseMatrixMixin;
-import org.flag4j.core.dense_base.RealDenseTensorBase;
+import org.flag4j.core_old.MatrixMixin;
+import org.flag4j.core_old.RealMatrixMixin;
+import org.flag4j.core_old.dense_base.DenseMatrixMixin;
+import org.flag4j.core_old.dense_base.RealDenseTensorBase;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
 import org.flag4j.operations_old.MatrixMultiplyDispatcher;

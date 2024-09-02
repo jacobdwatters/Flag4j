@@ -47,7 +47,7 @@ import java.util.Arrays;
  * @param <U> Type of sparse COO matrix equivalent to {@code T}. This type parameter is required because some operations (e.g.
  * {@link #toCoo()}) may result in a sparse COO matrix.
  * @param <V> Type of sparse CSR matrix equivalent to {@code T}. This type parameter is required because some operations (e.g.
- * {@link #toCoo()}) may result in a sparse CSR matrix.
+ * {@link #toCsr()}) may result in a sparse CSR matrix.
  * @param <W> The type of the dense vector similar to {@code T}.
  * @param <Y> The type (or wrapper of) an individual element of the matrix.
  */
@@ -947,46 +947,6 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
     }
 
 
-//    /**
-//     * Sets a column of this matrix at the given index to the specified values.
-//     *
-//     * @param values New values for the column.
-//     * @param colIndex The index of the column which is to be set.
-//     *
-//     * @return A reference to this matrix.
-//     *
-//     * @throws IndexOutOfBoundsException If the values array has a different length than the number of rows of this matrix.
-//     */
-//    @Override
-//    public T setCol(FieldVector<Y> values, int colIndex) {
-//        ParameterChecks.ensureValidIndices(values.size, this.numRows);
-//
-//        for(int i=0; i<values.size; i++) {
-//            super.entries[i*numCols + colIndex] = values.entries[i];
-//        }
-//
-//        return (T) this;
-//    }
-
-
-//    /**
-//     * Sets a row of this matrix at the given index to the specified values.
-//     *
-//     * @param values New values for the row.
-//     * @param rowIndex The index of the row which is to be set.
-//     *
-//     * @return A reference to this matrix.
-//     *
-//     * @throws IndexOutOfBoundsException If the values vector has a different length than the number of rows of this matrix.
-//     */
-//    @Override
-//    public T setRow(FieldVector<Y> values, int rowIndex) {
-//        ParameterChecks.ensureValidIndices(values.size, numCols);
-//        System.arraycopy(values.entries, 0, super.entries, rowIndex*numCols, this.numCols);
-//        return (T) this;
-//    }
-
-
     /**
      * Extracts the upper-triangular portion of this matrix with a specified diagonal offset. All other entries of the resulting
      * matrix will be zero.
@@ -1362,4 +1322,11 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
 
         return new FieldMatrix<RealFloat64>(shape, abs);
     }
+
+
+    /**
+     * Converts this dense matrix to an equivalent compressed sparse row (CSR) matrix.
+     * @return A CSR matrix equivalent to this matrix.
+     */
+    public abstract V toCsr();
 }

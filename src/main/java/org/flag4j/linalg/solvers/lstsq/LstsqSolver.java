@@ -26,9 +26,9 @@ package org.flag4j.linalg.solvers.lstsq;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.core.MatrixMixin;
-import org.flag4j.core.VectorMixin;
-import org.flag4j.linalg.decompositions.unitary.UnitaryDecomposition;
+import org.flag4j.core_old.MatrixMixin;
+import org.flag4j.core_old.VectorMixin;
+import org.flag4j.linalg.decompositions.unitary.UnitaryDecompositionOld;
 import org.flag4j.linalg.solvers.LinearSolver;
 
 
@@ -38,7 +38,7 @@ import org.flag4j.linalg.solvers.LinearSolver;
  * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,
  * minimizes {@code ||Ax-b||}<sub>2</sub> which is equivalent to solving the normal equations {@code A}<sup>T</sup>{@code Ax=A}<sup>T
  * </sup>{@code b}.
- * This is done using a {@link UnitaryDecomposition QR decomposition}.
+ * This is done using a {@link UnitaryDecompositionOld QR decomposition}.
  */
 public abstract class LstsqSolver<
         T extends MatrixMixin<T, T, ?, CMatrixOld, ?, ?, U, U>,
@@ -52,7 +52,7 @@ public abstract class LstsqSolver<
     /**
      * Decomposer to compute the {@code QR} decomposition for using the least-squares solver.
      */
-    protected final UnitaryDecomposition<T, ?> qr;
+    protected final UnitaryDecompositionOld<T, ?> qr;
     /**
      * {@code Q} The hermitian transpose of the orthonormal matrix from the {@code QR} decomposition.
      */
@@ -68,7 +68,7 @@ public abstract class LstsqSolver<
      * @param backSolver The solver to solve the upper triangular system resulting from the {@code QR} decomposition
      *                   which is equivalent to solving the normal equations
      */
-    protected LstsqSolver(UnitaryDecomposition<T, ?> qr, LinearSolver<T, U> backSolver) {
+    protected LstsqSolver(UnitaryDecompositionOld<T, ?> qr, LinearSolver<T, U> backSolver) {
         this.qr = qr;
         this.backSolver = backSolver;
     }

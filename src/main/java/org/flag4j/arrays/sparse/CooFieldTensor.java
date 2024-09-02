@@ -72,7 +72,6 @@ import java.util.List;
 public class CooFieldTensor<T extends Field<T>>
         extends CooFieldTensorBase<CooFieldTensor<T>, FieldTensor<T>, T> {
 
-
     /**
      * creates a tensor with the specified entries and shape.
      *
@@ -142,7 +141,7 @@ public class CooFieldTensor<T extends Field<T>>
      * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public CooFieldTensor<T> makeLikeTensor(Shape shape, List<Field<T>> entries, List<int[]> indices) {
+    public CooFieldTensor<T> makeLikeTensor(Shape shape, List<T> entries, List<int[]> indices) {
         return new CooFieldTensor(shape, entries, indices);
     }
 

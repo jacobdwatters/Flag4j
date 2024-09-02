@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +24,12 @@
 
 package org.flag4j.linalg.decompositions.qr;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.linalg.decompositions.unitary.ComplexUnitaryDecomposition;
 
 
 /**
- * <p>Instances of this class compute the {@code QR} decomposition of a complex dense matrix.</p>
+ * <p>Instances of this class compute the {@code QR} decomposition of a {@link CMatrix complex dense matrix}.</p>
  * <p>The {@code QR} decomposition, decomposes a matrix {@code A} into a unitary matrix {@code Q}
  * and an upper triangular matrix {@code R} such that {@code A=QR}.</p>
  *
@@ -41,6 +41,7 @@ public class ComplexQR extends ComplexUnitaryDecomposition {
      * Flag indicating if the reduced (true) or full (false) {@code QR} decomposition should be computed.
      */
     protected final boolean reduced;
+
 
     /**
      * Creates a {@code QR} decomposer. This decomposer will compute the reduced {@code QR} decomposition.
@@ -69,7 +70,7 @@ public class ComplexQR extends ComplexUnitaryDecomposition {
      * @return A reference to this decomposer.
      */
     @Override
-    public ComplexQR decompose(CMatrixOld src) {
+    public ComplexQR decompose(CMatrix src) {
         decomposeBase(src);
         return this;
     }
@@ -81,9 +82,9 @@ public class ComplexQR extends ComplexUnitaryDecomposition {
      * @return An identity matrix with the appropriate size.
      */
     @Override
-    protected CMatrixOld initQ() {
+    protected CMatrix initQ() {
         int qCols = reduced ? minAxisSize : numRows; // Get Q in reduced form or not.
-        return CMatrixOld.I(numRows, qCols);
+        return CMatrix.I(numRows, qCols);
     }
 
 
@@ -93,7 +94,7 @@ public class ComplexQR extends ComplexUnitaryDecomposition {
      * @return The upper triangular matrix {@code R} from the last decomposition.
      */
     @Override
-    public CMatrixOld getUpper() {
+    public CMatrix getUpper() {
         return getR();
     }
 
@@ -102,8 +103,8 @@ public class ComplexQR extends ComplexUnitaryDecomposition {
      * Gets the upper triangular matrix {@code R} from the {@code QR} decomposition.
      * @return The upper triangular matrix {@code R} from the {@code QR} decomposition.
      */
-    public CMatrixOld getR() {
+    public CMatrix getR() {
         int rRows = reduced ? minAxisSize : numRows; // Get R in reduced form or not.
-        return getUpper(new CMatrixOld(rRows, numCols));
+        return getUpper(new CMatrix(rRows, numCols));
     }
 }

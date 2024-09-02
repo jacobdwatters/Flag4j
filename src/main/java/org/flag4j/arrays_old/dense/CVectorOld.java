@@ -24,13 +24,13 @@
 
 package org.flag4j.arrays_old.dense;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays_old.sparse.CooCVectorOld;
 import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.arrays.Shape;
-import org.flag4j.core.VectorMixin;
-import org.flag4j.core.dense_base.ComplexDenseTensorBase;
-import org.flag4j.core.dense_base.DenseVectorMixin;
+import org.flag4j.core_old.VectorMixin;
+import org.flag4j.core_old.dense_base.ComplexDenseTensorBase;
+import org.flag4j.core_old.dense_base.DenseVectorMixin;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.operations_old.dense.complex.ComplexDenseEquals;

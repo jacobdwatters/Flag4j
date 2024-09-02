@@ -39,7 +39,8 @@ import org.flag4j.util.ErrorMessages;
 /**
  * This class contains several methods for computing the subspace of a matrix.
  */
-public class SubSpace {
+public final class SubSpace {
+
     private SubSpace() {
         // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));

@@ -25,13 +25,13 @@
 package org.flag4j.arrays_old.sparse;
 
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays_old.dense.CTensorOld;
 import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.arrays.Shape;
-import org.flag4j.core.TensorBase;
-import org.flag4j.core.TensorExclusiveMixin;
-import org.flag4j.core.sparse_base.RealSparseTensorBase;
+import org.flag4j.core_old.TensorBase;
+import org.flag4j.core_old.TensorExclusiveMixin;
+import org.flag4j.core_old.sparse_base.RealSparseTensorBase;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.TensorInvert;

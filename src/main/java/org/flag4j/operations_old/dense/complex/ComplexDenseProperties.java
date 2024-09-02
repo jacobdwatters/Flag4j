@@ -27,7 +27,7 @@ package org.flag4j.operations_old.dense.complex;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.TensorBase;
+import org.flag4j.core_old.TensorBase;
 import org.flag4j.util.ErrorMessages;
 
 /**

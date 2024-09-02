@@ -25,8 +25,8 @@
 package org.flag4j.io;
 
 
-import org.flag4j.core.MatrixMixin;
-import org.flag4j.core.TensorBase;
+import org.flag4j.core_old.MatrixMixin;
+import org.flag4j.core_old.TensorBase;
 import org.flag4j.util.ErrorMessages;
 
 import java.io.BufferedWriter;

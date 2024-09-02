@@ -447,4 +447,11 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V>, U extends DenseMatr
     public default T getTriL() {
         return getTriU(0);
     }
+
+
+    /**
+     * Creates a deep copy of this matrix.
+     * @return A deep copy of this matrix.
+     */
+    public T copy();
 }

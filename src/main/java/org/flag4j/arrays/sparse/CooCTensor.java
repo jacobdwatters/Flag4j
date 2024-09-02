@@ -26,14 +26,10 @@ package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Complex64;
-import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.CooFieldTensorBase;
 import org.flag4j.arrays.dense.CTensor;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.math.RoundingMode;
 import java.util.List;
 
 
@@ -168,7 +164,7 @@ public class CooCTensor extends CooFieldTensorBase<CooCTensor, CTensor, Complex1
      * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public CooCTensor makeLikeTensor(Shape shape, List<Field<Complex128>> entries, List<int[]> indices) {
+    public CooCTensor makeLikeTensor(Shape shape, List<Complex128> entries, List<int[]> indices) {
         return new CooCTensor(shape, entries.toArray(new Complex128[0]), indices.toArray(new int[0][]));
     }
 
@@ -184,21 +180,6 @@ public class CooCTensor extends CooFieldTensorBase<CooCTensor, CTensor, Complex1
     @Override
     public CTensor makeDenseTensor(Shape shape, Complex128[] entries) {
         return new CTensor(shape, entries);
-    }
-
-
-    /**
-     * The sparsity of this sparse tensor. That is, the percentage of elements in this tensor which are zero as a decimal.
-     *
-     * @return The density of this sparse tensor.
-     */
-    @Override
-    public double sparsity() {
-        BigInteger totalEntries = totalEntries();
-        BigDecimal sparsity = new BigDecimal(totalEntries).subtract(BigDecimal.valueOf(nnz));
-        sparsity = sparsity.divide(new BigDecimal(totalEntries), 50, RoundingMode.HALF_UP);
-
-        return sparsity.doubleValue();
     }
 
 

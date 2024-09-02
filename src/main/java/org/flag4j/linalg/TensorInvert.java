@@ -24,14 +24,14 @@
 
 package org.flag4j.linalg;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CTensorOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.arrays.Shape;
-import org.flag4j.core.TensorBase;
-import org.flag4j.core.TensorExclusiveMixin;
+import org.flag4j.core_old.TensorBase;
+import org.flag4j.core_old.TensorExclusiveMixin;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 

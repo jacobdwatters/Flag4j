@@ -32,7 +32,7 @@ import org.flag4j.operations.sparse.SparseUtils;
 
 
 /**
- * <p>A real sparse matrix stored in compressed sparse row (CSR) format. The {@link #entries} of this CSR matrix are
+ * <p>A sparse matrix stored in compressed sparse row (CSR) format. The {@link #entries} of this CSR matrix are
  * elements of a {@link Field}.</p>
  *
  * <p>The {@link #entries non-zero entries} and non-zero indices of a CSR matrix are mutable but the {@link #shape}

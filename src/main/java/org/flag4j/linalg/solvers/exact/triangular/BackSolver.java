@@ -24,8 +24,8 @@
 
 package org.flag4j.linalg.solvers.exact.triangular;
 
-import org.flag4j.core.MatrixMixin;
-import org.flag4j.core.VectorMixin;
+import org.flag4j.core_old.MatrixMixin;
+import org.flag4j.core_old.VectorMixin;
 import org.flag4j.linalg.solvers.LinearSolver;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.ParameterChecks;

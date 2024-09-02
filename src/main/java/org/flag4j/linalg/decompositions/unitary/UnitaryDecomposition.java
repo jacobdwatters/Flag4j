@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,24 +24,27 @@
 
 package org.flag4j.linalg.decompositions.unitary;
 
-import org.flag4j.core.MatrixMixin;
-import org.flag4j.linalg.decompositions.DecompositionOld;
+
+import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.linalg.decompositions.Decomposition;
 import org.flag4j.util.ParameterChecks;
 
-
 /**
- * This class is the base class for all decompositions which proceed by using unitary transformations
- * (specifically Householder reflectors) to bring a matrix into an upper triangular matrix or an upper Hessenburg matrix.
+ * <p>This class is the base class for all decompositions which proceed by using unitary transformations
+ * (specifically HouseholderOld reflectors) to bring a matrix into an upper triangular matrix (QR decomposition) or an upper Hessenburg
+ * matrix (Hessenburg decomposition).</p>
+ *
+ * <p>While the QR and Hessenburg decomposition are distinct, they have similar implementations and so this class provides common
+ * code for the two decompositions.</p>
  *
  * @param <T> Type of the matrix to be decomposed.
  * @param <U> Internal storage datatype of the matrix.
  */
-public abstract class UnitaryDecomposition<
-        T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>, U> implements DecompositionOld<T> {
+public abstract class UnitaryDecomposition<T extends MatrixMixin, U> implements Decomposition<T> {
 
     /**
      * <p>
-     * Storage for the upper triangular/Hessenburg matrix and the vectors of the Householder reflectors used in the decomposition.
+     * Storage for the upper triangular/Hessenburg matrix and the vectors of the HouseholderOld reflectors used in the decomposition.
      * </p>
      *
      * <p>
@@ -52,7 +55,7 @@ public abstract class UnitaryDecomposition<
      * </p>
      *
      * <p>
-     * The Householder reflectors used to bring the original matrix to the upper triangular/Hessenburg
+     * The HouseholderOld reflectors used to bring the original matrix to the upper triangular/Hessenburg
      * form will be stored as the columns below the last non-zero sub-diagonal of the quasi-triangular matrix. The first value of
      * each reflector is not stored but is assumed to be 1.
      * </p>
@@ -74,15 +77,15 @@ public abstract class UnitaryDecomposition<
      */
     protected int numCols;
     /**
-     * Storage of the scalar factors for the Householder reflectors used in the decomposition.
+     * Storage of the scalar factors for the HouseholderOld reflectors used in the decomposition.
      */
     protected U qFactors;
     /**
-     * For storing a Householder vectors.
+     * For storing a HouseholderOld vectors.
      */
     protected U householderVector;
     /**
-     * For temporarily storage when applying Householder vectors. This is useful for
+     * For temporarily storage when applying HouseholderOld vectors. This is useful for
      * avoiding unneeded garbage collection and for improving cache performance when traversing columns.
      */
     protected U workArray;
@@ -97,7 +100,7 @@ public abstract class UnitaryDecomposition<
      */
     protected final int subDiagonal;
     /**
-     * Flag indicating if a Householder reflector was needed for the current column meaning the {@link #transformMatrix} should
+     * Flag indicating if a HouseholderOld reflector was needed for the current column meaning the {@link #transformMatrix} should
      * be updated.
      */
     protected boolean applyUpdate;
@@ -122,7 +125,7 @@ public abstract class UnitaryDecomposition<
 
 
     /**
-     * Applies the unitary decomposition to the matrix. Note, the full computation of Q is deferred until {@link #getQ()} is
+     * Applies the unitary decomposition to the matrix. Note, the full computation of {@code Q} is deferred until {@link #getQ()} is
      * explicitly called.
      * @param src The source matrix to decompose.
      */
@@ -173,7 +176,7 @@ public abstract class UnitaryDecomposition<
      * @param src Source matrix to be decomposed.
      */
     protected void setUp(T src) {
-        transformMatrix = src.copy(); // Initialize QR as the matrix to be decomposed.
+        transformMatrix = (T) src.copy(); // Initialize QR as the matrix to be decomposed.
         numRows = transformMatrix.numRows();
         numCols = transformMatrix.numCols();
         minAxisSize = Math.min(numRows, numCols);
@@ -191,16 +194,16 @@ public abstract class UnitaryDecomposition<
 
 
     /**
-     * Computes the Householder vector for the first column of the sub-matrix with upper left corner at {@code (j, j)}.
-     * @param j Index of the upper left corner of the sub-matrix for which to compute the Householder vector for the first column.
-     *          That is, a Householder vector will be computed for the portion of column {@code j} below row {@code j}.
+     * Computes the HouseholderOld vector for the first column of the sub-matrix with upper left corner at {@code (j, j)}.
+     * @param j Index of the upper left corner of the sub-matrix for which to compute the HouseholderOld vector for the first column.
+     *          That is, a HouseholderOld vector will be computed for the portion of column {@code j} below row {@code j}.
      */
     protected abstract void computeHouseholder(int j);
 
 
     /**
-     * Updates the {@link #transformMatrix} matrix using the computed Householder vector from {@link #computeHouseholder(int)}.
-     * @param j Index of sub-matrix for which the Householder reflector was computed for.
+     * Updates the {@link #transformMatrix} matrix using the computed HouseholderOld vector from {@link #computeHouseholder(int)}.
+     * @param j Index of sub-matrix for which the HouseholderOld reflector was computed for.
      */
     protected abstract void updateData(int j);
 

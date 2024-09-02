@@ -34,8 +34,8 @@ import org.flag4j.linalg.decompositions.hess.RealHess;
 import org.flag4j.linalg.decompositions.lu.ComplexLU;
 import org.flag4j.linalg.decompositions.lu.LUOld;
 import org.flag4j.linalg.decompositions.lu.RealLUOLd;
-import org.flag4j.linalg.decompositions.qr.ComplexQR;
-import org.flag4j.linalg.decompositions.qr.RealQR;
+import org.flag4j.linalg.decompositions.qr.ComplexQROld;
+import org.flag4j.linalg.decompositions.qr.RealQROld;
 import org.flag4j.linalg.decompositions.schur.RealSchur;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
@@ -92,8 +92,8 @@ public class DecompositionFactory {
      * Constructs a decomposer to compute the QR decomposition of a real dense matrix.
      * @return A decomposer to compute the QR decomposition of a real dense matrix.
      */
-    public static RealQR createRealQR() {
-        return new RealQR();
+    public static RealQROld createRealQR() {
+        return new RealQROld();
     }
 
 
@@ -101,8 +101,8 @@ public class DecompositionFactory {
      * Constructs a decomposer to compute the QR decomposition of a complex dense matrix.
      * @return A decomposer to compute the QR decomposition of a complex dense matrix.
      */
-    public static ComplexQR createComplexQR() {
-        return new ComplexQR();
+    public static ComplexQROld createComplexQR() {
+        return new ComplexQROld();
     }
 
 
@@ -119,8 +119,8 @@ public class DecompositionFactory {
      * Constructs a decomposer to compute the Hessenburg decomposition of a complex dense matrix.
      * @return A decomposer to compute the Hessenburg decomposition of a complex dense matrix.
      */
-    public static ComplexQR createComplexHess() {
-        return new ComplexQR();
+    public static ComplexQROld createComplexHess() {
+        return new ComplexQROld();
     }
 
 
@@ -137,8 +137,8 @@ public class DecompositionFactory {
      * Constructs a decomposer to compute the Schur decomposition of a complex dense matrix.
      * @return A decomposer to compute the Schur decomposition of a complex dense matrix.
      */
-    public static ComplexQR createComplexSchur() {
-        return new ComplexQR();
+    public static ComplexQROld createComplexSchur() {
+        return new ComplexQROld();
     }
 
 

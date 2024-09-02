@@ -30,7 +30,7 @@ import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.linalg.Eigen;
 import org.flag4j.linalg.decompositions.hess.ComplexHess;
 import org.flag4j.linalg.transformations.Givens;
-import org.flag4j.linalg.transformations.Householder;
+import org.flag4j.linalg.transformations.HouseholderOld;
 import org.flag4j.operations_old.common.complex.AggregateComplex;
 import org.flag4j.rng.RandomCNumber;
 import org.flag4j.util.Flag4jConstants;
@@ -59,11 +59,11 @@ public class ComplexSchur extends Schur<CMatrixOld, CNumber[]> {
     private final static CNumber ZERO = CNumber.ZERO;
 
     /**
-     * For computing the norm of a column for use when computing Householder reflectors.
+     * For computing the norm of a column for use when computing HouseholderOld reflectors.
      */
     protected CNumber norm;
     /**
-     * Stores the scalar factor &alpha for use in computation of the Householder reflector {@code P = I - }&alpha{@code vv}<sup>H
+     * Stores the scalar factor &alpha for use in computation of the HouseholderOld reflector {@code P = I - }&alpha{@code vv}<sup>H
      * </sup>.
      */
     protected CNumber currentFactor;
@@ -301,7 +301,7 @@ public class ComplexSchur extends Schur<CMatrixOld, CNumber[]> {
 
         // Apply shift and chase bulge.
         for(int i=0; i<=workingSize-2; i++) {
-            if(makeReflector(i, p1, p2, p3)) // Construct Householder reflector.
+            if(makeReflector(i, p1, p2, p3)) // Construct HouseholderOld reflector.
                 applyDoubleShiftReflector(i, i>0); // Apply the reflector if needed.
 
             // Set values to be used in computing the next bulge chasing reflector.
@@ -311,7 +311,7 @@ public class ComplexSchur extends Schur<CMatrixOld, CNumber[]> {
         }
 
         // The last reflector in the bulge chase only acts on last two rows of the working matrix.
-        if(makeReflector(workingSize-1, p1, p2)) // Construct Householder reflector.
+        if(makeReflector(workingSize-1, p1, p2)) // Construct HouseholderOld reflector.
             applySingleShiftReflector(workingSize-1, true); // Apply the reflector if needed.
     }
 
@@ -376,7 +376,7 @@ public class ComplexSchur extends Schur<CMatrixOld, CNumber[]> {
 
 
     /**
-     * Applies the constructed Householder reflector which has been constructed for the given shift size.
+     * Applies the constructed HouseholderOld reflector which has been constructed for the given shift size.
      * @param i The stating row the reflector is being applied to.
      * @param shiftSize The size of the shift the reflector was constructed for.
      */
@@ -384,13 +384,13 @@ public class ComplexSchur extends Schur<CMatrixOld, CNumber[]> {
         int endRow = i + shiftSize + 1;
 
         // Apply reflector to left (Assumes T is upper hessenburg except for possibly a bulge of size shiftSize).
-        Householder.leftMultReflector(T, householderVector, currentFactor, i, i, endRow, workArray);
+        HouseholderOld.leftMultReflector(T, householderVector, currentFactor, i, i, endRow, workArray);
         // Apply reflector to right (Assumes T is upper hessenburg except for possibly a bulge of size shiftSize).
-        Householder.rightMultReflector(T, householderVector, currentFactor, 0, i, endRow);
+        HouseholderOld.rightMultReflector(T, householderVector, currentFactor, 0, i, endRow);
 
         if(computeU) {
             // Accumulate the reflector in U if it is being computed.
-            Householder.rightMultReflector(U, householderVector, currentFactor, 0, i, endRow);
+            HouseholderOld.rightMultReflector(U, householderVector, currentFactor, 0, i, endRow);
         }
     }
 
@@ -423,7 +423,7 @@ public class ComplexSchur extends Schur<CMatrixOld, CNumber[]> {
 
         double normRe = Math.sqrt(m1*m1 + m2*m2 + m3*m3); // Compute scaled 2-norm.
 
-        // Change phase of the norm depending on first entry in column for stability purposes in Householder vector.
+        // Change phase of the norm depending on first entry in column for stability purposes in HouseholderOld vector.
         norm = p1.equals(ZERO) ? new CNumber(normRe) : CNumber.sgn(p1).mult(normRe);
 
         CNumber div = p1.add(norm);
@@ -462,7 +462,7 @@ public class ComplexSchur extends Schur<CMatrixOld, CNumber[]> {
 
         double normRe = Math.sqrt(m1*m1 + m2*m2); // Compute scaled norm.
 
-        // Change phase of the norm depending on first entry in column for stability purposes in Householder vector.
+        // Change phase of the norm depending on first entry in column for stability purposes in HouseholderOld vector.
         norm = p1.equals(ZERO) ? new CNumber(normRe) : CNumber.sgn(p1).mult(normRe);
 
         CNumber divisor = p1.add(norm);

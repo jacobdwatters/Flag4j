@@ -24,14 +24,14 @@
 
 package org.flag4j.rng;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays_old.dense.*;
 import org.flag4j.arrays_old.sparse.CooCMatrixOld;
 import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.arrays.Shape;
-import org.flag4j.linalg.decompositions.qr.ComplexQR;
-import org.flag4j.linalg.decompositions.qr.RealQR;
+import org.flag4j.linalg.decompositions.qr.ComplexQROld;
+import org.flag4j.linalg.decompositions.qr.RealQROld;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
 
@@ -614,14 +614,14 @@ public class RandomTensor {
 
     /**
      * Gets a pseudorandom orthogonal matrix. From an implementation point of view, a pseudorandom matrix is generated
-     * as if by {@link #randomMatrix(int, int) randomMatrix(size, size)}. Then, a {@link RealQR QR}
+     * as if by {@link #randomMatrix(int, int) randomMatrix(size, size)}. Then, a {@link RealQROld QR}
      * decomposition is computed on this pseudorandom matrix and the {@code Q} matrix from this decomposition is returned.
      * @param size Size of the orthogonal matrix (i.e. the number rows and columns for the square matrix).
      * @return A pseudorandom orthogonal matrix.
      */
     public MatrixOld randomOrthogonalMatrix(int size) {
         MatrixOld randMat = new MatrixOld(size, size, RAND_ARRAY.genUniformRealArray(size));
-        return new RealQR().decompose(randMat).getQ();
+        return new RealQROld().decompose(randMat).getQ();
     }
 
 
@@ -818,14 +818,14 @@ public class RandomTensor {
 
     /**
      * Gets a pseudorandom unitary matrix. From an implementation point of view, a pseudorandom complex matrix is generated
-     * as if by {@link #randomCMatrix(int, int) randomCMatrix(size, size)}. Then, a {@link ComplexQR QR}
+     * as if by {@link #randomCMatrix(int, int) randomCMatrix(size, size)}. Then, a {@link ComplexQROld QR}
      * decomposition is computed on this pseudorandom matrix and the {@code Q} matrix from this decomposition is returned.
      * @param size Size of the unitary matrix (i.e. the number rows and columns for the square matrix).
      * @return A pseudorandom unitary matrix.
      */
     public CMatrixOld randomUnitaryMatrix(int size) {
         CMatrixOld randMat = new CMatrixOld(size, size, RAND_ARRAY.genUniformComplexArray(size));
-        return new ComplexQR().decompose(randMat).getQ();
+        return new ComplexQROld().decompose(randMat).getQ();
     }
 
 
