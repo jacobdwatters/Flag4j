@@ -25,11 +25,11 @@
 package org.flag4j.operations.sparse.csr.field_ops;
 
 
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.CsrFieldMatrixBase;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
-import org.flag4j.core.Shape;
-import org.flag4j.core_temp.arrays.sparse.CsrFieldMatrixBase;
-import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -41,7 +41,7 @@ import java.util.function.UnaryOperator;
 
 /**
  * This class contains low-level implementations for element-wise operations on CSR
- * {@link org.flag4j.core_temp.structures.fields.Field} matrices.
+ * {@link Field} matrices.
  */
 public final class CsrFieldMatrixOperations {
 

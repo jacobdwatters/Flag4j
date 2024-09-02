@@ -3,7 +3,7 @@ package org.flag4j.sparse_csr_matrix;
 import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.arrays_old.sparse.CsrMatrixOld;
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 

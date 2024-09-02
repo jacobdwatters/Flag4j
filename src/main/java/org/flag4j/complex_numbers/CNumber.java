@@ -24,6 +24,7 @@
 
 package org.flag4j.complex_numbers;
 
+import org.flag4j.io.parsing.ComplexNumberParser;
 import org.flag4j.util.ErrorMessages;
 
 import java.math.BigDecimal;
@@ -34,6 +35,7 @@ import java.math.RoundingMode;
  *
  * <p>A {@link CNumber} is immutable.</p>
  */
+@Deprecated
 public class CNumber extends Number {
     // Several constants are provided for convenience.
     /**

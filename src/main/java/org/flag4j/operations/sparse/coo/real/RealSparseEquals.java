@@ -25,19 +25,18 @@
 package org.flag4j.operations.sparse.coo.real;
 
 
-import org.flag4j.core_temp.arrays.sparse.CooMatrix;
-import org.flag4j.core_temp.arrays.sparse.CooTensor;
-import org.flag4j.core_temp.arrays.sparse.CooVector;
+import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays.sparse.CooTensor;
+import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.operations.common.real.RealProperties;
-import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * This class contains methods for checking the equality of real sparse tensors.
  */
-public class RealSparseEquals {
+public final class RealSparseEquals {
 
     private RealSparseEquals(){
         // Hide default constructor for base class.
@@ -46,45 +45,127 @@ public class RealSparseEquals {
 
 
     /**
-     * Checks if two real sparse tensors are real. Assumes the indices of each sparse tensor are sorted.
+     * Checks if two real sparse tensors are real. Assumes the indices of each sparse tensor are sorted. Any explicitly stored
+     * zero's will be ignored.
      * @param a First tensor in the equality check.
      * @param b Second tensor in the equality check.
      * @return True if the tensors are equal. False otherwise.
      */
-    public static boolean tensorEquals(CooTensor a, CooTensor b) {
-        // Check indices first to avoid checking entries if possible.
-        return a.shape.equals(b.shape)
-                && ArrayUtils.deepEquals(a.indices, b.indices)
-                && Arrays.equals(a.entries, b.entries);
+    public static boolean cooTensorEquals(CooTensor a, CooTensor b) {
+        // Early returns if possible.
+        if(a == b) return true;
+        if(a==null || b==null || !a.shape.equals(b.shape)) return false;
+
+        List<Double> aEntries = new ArrayList<Double>(a.nnz);
+        List<int[]> aIndices = new ArrayList<>(a.nnz);
+
+        List<Double> bEntries = new ArrayList<Double>(b.nnz);
+        List<int[]> bIndices = new ArrayList<>(b.nnz);
+
+        for(int i=0; i<a.nnz; i++) {
+            if(a.entries[i] != 0) {
+                aEntries.add(a.entries[i]);
+                aIndices.add(a.indices[i]);
+            }
+        }
+
+        for(int i=0; i<b.nnz; i++) {
+            if(b.entries[i] != 0) {
+                bEntries.add(b.entries[i]);
+                bIndices.add(b.indices[i]);
+            }
+        }
+
+        return aEntries.equals(bEntries) && Arrays.deepEquals(aIndices.toArray(new int[0][]), bIndices.toArray(new int[0][]));
     }
 
 
     /**
-     * Checks if two real sparse matrices are real. Assumes the indices of each sparse matrix are sorted.
-     * @param a First matrix in the equality check.
-     * @param b Second matrix in the equality check.
+     * Checks if two real sparse matrices are real. Assumes the indices of each sparse matrix are sorted. Any explicitly stored
+     * zero's will be ignored.
+     * @param src1 First matrix in the equality check.
+     * @param src2 Second matrix in the equality check.
      * @return True if the matrices are equal. False otherwise.
      */
-    public static boolean matrixEquals(CooMatrix a, CooMatrix b) {
-        // Check indices first to avoid checking entries if possible.
-        return a.shape.equals(b.shape)
-                && Arrays.equals(a.rowIndices, b.rowIndices)
-                && Arrays.equals(a.colIndices, b.colIndices)
-                && Arrays.equals(a.entries, b.entries);
+    public static boolean cooMatrixEquals(CooMatrix src1, CooMatrix src2) {
+        // Check if shapes are equal.
+        if (!src1.shape.equals(src2.shape)) return false;
+
+        // Counters for explicitly stored zero values.
+        int aZeroCount = 0;
+        int bZeroCount = 0;
+
+        // Create src1 HashMap ignoring the explicit zeros in first matrix.
+        Map<Integer, Double> nonZeroMapA = new HashMap<>();
+        for (int i=0; i < src1.nnz; i++) {
+            if (src1.entries[i] != 0.0) {
+                nonZeroMapA.put(i-aZeroCount, src1.entries[i]);
+            } else{
+                aZeroCount++;
+            }
+        }
+
+        // Iterate over matrix src2's entries and compare with matrix src1's entries.
+        for (int i=0; i<src2.nnz; i++) {
+            int key = i-bZeroCount;
+            double valueB = src2.entries[i];
+
+            // If valueB is non-zero, check against matrix src1.
+            if(valueB != 0.0) {
+                Double valueA = nonZeroMapA.remove(key);
+
+                // If valueA is null or values differ, matrices are not equal.
+                if (valueA == null || !valueA.equals(valueB)) return false;
+            } else {
+                bZeroCount++;
+
+                // If valueB is zero, ensure matrix first matrix also has zero or does not contain the key.
+                if (nonZeroMapA.containsKey(key)) {
+                    return false;
+                }
+            }
+        }
+
+        if(nonZeroMapA.size() != 0) return false; // Then matrix src1 must have contained src1 non-zero value that src2 did not.
+
+        // All checks passed, matrices are equal.
+        return true;
     }
 
 
     /**
-     * Checks if two real sparse vectors are real. Assumes the indices of each sparse vector are sorted.
+     * Checks if two real sparse vectors are real. Assumes the indices of each sparse vector are sorted. Any explicitly stored
+     * zero's will be ignored.
      * @param a First vector in the equality check.
      * @param b Second vector in the equality check.
      * @return True if the vectors are equal. False otherwise.
      */
-    public static boolean vectorEquals(CooVector a, CooVector b) {
-        // Check indices first to avoid checking entries if possible.
-        return a.size == b.size
-                && Arrays.equals(a.indices, b.indices)
-                && Arrays.equals(a.entries, b.entries);
+    public static boolean cooVectorEquals(CooVector a, CooVector b) {
+        // Early returns if possible.
+        if(a == b) return true;
+        if(a==null || b==null || !a.shape.equals(b.shape)) return false;
+
+        List<Double> aEntries = new ArrayList<Double>(a.nnz);
+        List<Integer> aIndices = new ArrayList<>(a.nnz);
+
+        List<Double> bEntries = new ArrayList<Double>(b.nnz);
+        List<Integer> bIndices = new ArrayList<>(b.nnz);
+
+        for(int i=0; i<a.nnz; i++) {
+            if(a.entries[i] != 0) {
+                aEntries.add(a.entries[i]);
+                aIndices.add(a.indices[i]);
+            }
+        }
+
+        for(int i=0; i<b.nnz; i++) {
+            if(b.entries[i] != 0) {
+                bEntries.add(b.entries[i]);
+                bIndices.add(b.indices[i]);
+            }
+        }
+
+        return aEntries.equals(bEntries) && aIndices.equals(bIndices);
     }
 
 

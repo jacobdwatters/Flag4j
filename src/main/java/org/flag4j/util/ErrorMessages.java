@@ -25,7 +25,7 @@
 package org.flag4j.util;
 
 
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 
 import java.math.BigInteger;
 import java.util.Arrays;

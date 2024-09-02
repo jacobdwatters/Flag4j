@@ -3,7 +3,7 @@ package org.flag4j.operations_old.sparse.coo.real;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.arrays_old.sparse.CooVectorOld;
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 import org.junit.jupiter.api.Test;
 
 import static org.flag4j.operations_old.sparse.coo.real.RealSparseMatrixMultiplication.*;

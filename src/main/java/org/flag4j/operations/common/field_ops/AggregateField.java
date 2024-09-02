@@ -25,12 +25,12 @@
 package org.flag4j.operations.common.field_ops;
 
 
-import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.util.ErrorMessages;
 
 /**
  * This class contains several low-level methods useful for computing aggregation operations on dense/sparse tensors whose elements
- * are members of a {@link org.flag4j.core_temp.structures.fields.Field}.
+ * are members of a {@link Field}.
  */
 public final class AggregateField {
 

@@ -25,8 +25,8 @@
 package org.flag4j.operations.sparse.coo.field_ops;
 
 
-import org.flag4j.core_temp.arrays.sparse.CooFieldMatrixBase;
-import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.backend.CooFieldMatrixBase;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;

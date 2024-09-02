@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.decompositions;
 
-import org.flag4j.core_temp.MatrixMixin;
+import org.flag4j.arrays.backend.MatrixMixin;
 
 
 /**

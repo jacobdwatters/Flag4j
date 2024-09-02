@@ -31,7 +31,7 @@ import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.MatrixMixin;
 import org.flag4j.core.RealMatrixMixin;
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 import org.flag4j.core.TensorBase;
 import org.flag4j.core.sparse_base.RealSparseTensorBase;
 import org.flag4j.io.PrintOptions;

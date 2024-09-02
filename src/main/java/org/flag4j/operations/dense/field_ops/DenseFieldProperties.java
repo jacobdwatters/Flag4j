@@ -25,13 +25,14 @@
 package org.flag4j.operations.dense.field_ops;
 
 
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.backend.DenseFieldMatrixBase;
+import org.flag4j.arrays.dense.FieldTensor;
 import org.flag4j.core.TensorBase;
-import org.flag4j.core_temp.arrays.dense.DenseFieldMatrixBase;
-import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.util.ErrorMessages;
 
 /**
- * This utility class contains methods useful for verifying properties of a {@link org.flag4j.core_temp.arrays.dense.FieldTensor}.
+ * This utility class contains methods useful for verifying properties of a {@link FieldTensor}.
  */
 public final class DenseFieldProperties {
 

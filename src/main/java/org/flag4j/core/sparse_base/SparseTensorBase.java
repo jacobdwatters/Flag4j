@@ -24,7 +24,7 @@
 
 package org.flag4j.core.sparse_base;
 
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 import org.flag4j.core.TensorBase;
 import org.flag4j.util.ParameterChecks;
 

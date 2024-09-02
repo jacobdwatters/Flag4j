@@ -24,9 +24,9 @@
 
 package org.flag4j.operations_old.dense.real;
 
+import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.core.Shape;
-import org.flag4j.core_temp.arrays.dense.Matrix;
+import org.flag4j.arrays.Shape;
 import org.flag4j.linalg.decompositions.lu.LU;
 import org.flag4j.linalg.decompositions.lu.LUOld;
 import org.flag4j.linalg.decompositions.lu.RealLU;

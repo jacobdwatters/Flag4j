@@ -25,10 +25,10 @@
 package org.flag4j.operations.dense.field_ops;
 
 
-import org.flag4j.core.Shape;
-import org.flag4j.core_temp.arrays.dense.DenseFieldMatrixBase;
-import org.flag4j.core_temp.arrays.dense.FieldMatrix;
-import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.DenseFieldMatrixBase;
+import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.linalg.decompositions.lu.FieldLU;
 import org.flag4j.linalg.decompositions.lu.LU;
 import org.flag4j.util.ErrorMessages;
@@ -36,7 +36,7 @@ import org.flag4j.util.ParameterChecks;
 
 /**
  * This utility class contains methods for computing the determinant of a dense matrix whose entries are elemetns of a
- * {@link org.flag4j.core_temp.structures.fields.Field}.
+ * {@link Field}.
  */
 public final class DenseFieldDeterminant {
 

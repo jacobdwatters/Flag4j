@@ -25,17 +25,17 @@
 package org.flag4j.operations.dense.field_ops;
 
 
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
-import org.flag4j.core.Shape;
-import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 
 /**
  * This class contains several low level methods for computing matrix-matrix multiplications with a transpose for two
- * dense {@link org.flag4j.core_temp.structures.fields.Field} matrices.
+ * dense {@link Field} matrices.
  */
 public final class DenseFieldMatrixMultTranspose {
 

@@ -24,14 +24,14 @@
 
 package org.flag4j.operations.dense.field_ops;
 
-import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
 
 /**
  * This class provides low level implementations for vector operations with two dense
- * {@link org.flag4j.core_temp.structures.fields.Field} vectors.
+ * {@link Field} vectors.
  */
 public final class DenseFieldVectorOperations {
 

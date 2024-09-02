@@ -2,7 +2,7 @@ package org.flag4j.vector;
 
 
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

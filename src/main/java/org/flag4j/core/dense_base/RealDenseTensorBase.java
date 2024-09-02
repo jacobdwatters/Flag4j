@@ -26,7 +26,7 @@ package org.flag4j.core.dense_base;
 
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.RealTensorMixin;
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 import org.flag4j.operations_old.common.complex.ComplexOperations;
 import org.flag4j.operations_old.common.real.AggregateReal;
 import org.flag4j.operations_old.common.real.RealOperations;

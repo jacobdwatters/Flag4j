@@ -24,9 +24,9 @@
 
 package org.flag4j.operations.sparse.coo.real;
 
-import org.flag4j.core.Shape;
-import org.flag4j.core_temp.arrays.dense.Tensor;
-import org.flag4j.core_temp.arrays.sparse.CooTensor;
+import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays.sparse.CooTensor;
+import org.flag4j.arrays.Shape;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;

@@ -25,7 +25,7 @@
 package org.flag4j.operations_old;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 import org.flag4j.operations_old.dense.real.RealDenseMatrixMultTranspose;
 import org.flag4j.operations_old.dense.real.RealDenseMatrixMultiplication;
 import org.flag4j.util.Axis2D;

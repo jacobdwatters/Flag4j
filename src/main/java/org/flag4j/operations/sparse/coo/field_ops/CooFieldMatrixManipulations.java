@@ -24,9 +24,9 @@
 
 package org.flag4j.operations.sparse.coo.field_ops;
 
-import org.flag4j.core.Shape;
-import org.flag4j.core_temp.arrays.sparse.CooFieldMatrixBase;
-import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.CooFieldMatrixBase;
 import org.flag4j.operations.sparse.coo.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * This class contains implementations for sparse {@link org.flag4j.core_temp.structures.fields.Field} matrix manipulations.
+ * This class contains implementations for sparse {@link Field} matrix manipulations.
  */
 public final class CooFieldMatrixManipulations {
 

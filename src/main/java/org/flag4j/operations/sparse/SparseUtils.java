@@ -24,11 +24,11 @@
 
 package org.flag4j.operations.sparse;
 
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.sparse.CsrFieldMatrix;
+import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core_temp.arrays.sparse.CsrFieldMatrix;
-import org.flag4j.core_temp.arrays.sparse.CsrMatrix;
-import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.*;

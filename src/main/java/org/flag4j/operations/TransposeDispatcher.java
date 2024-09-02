@@ -24,14 +24,14 @@
 
 package org.flag4j.operations;
 
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.DenseFieldMatrixBase;
+import org.flag4j.arrays.backend.FieldTensorBase;
+import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
+import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
-import org.flag4j.core_temp.FieldTensorBase;
-import org.flag4j.core_temp.PrimitiveDoubleTensorBase;
-import org.flag4j.core_temp.arrays.dense.DenseFieldMatrixBase;
-import org.flag4j.core_temp.arrays.dense.Matrix;
-import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.operations.dense.complex.ComplexDenseTranspose;
 import org.flag4j.operations.dense.field_ops.DenseFieldHermitianTranspose;
 import org.flag4j.operations.dense.field_ops.DenseFieldTranspose;

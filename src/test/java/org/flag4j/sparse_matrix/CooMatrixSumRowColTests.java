@@ -2,7 +2,7 @@ package org.flag4j.sparse_matrix;
 
 import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.arrays_old.sparse.CooMatrixOld;
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

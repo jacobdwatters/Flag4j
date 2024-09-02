@@ -25,8 +25,8 @@
 package org.flag4j.linalg.decompositions.svd;
 
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.core.Shape;
 import org.flag4j.linalg.Eigen;
 import org.flag4j.linalg.ops.DirectSum;
 

@@ -24,6 +24,7 @@
 
 package org.flag4j.arrays_old.sparse;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
@@ -31,7 +32,6 @@ import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.core.ComplexMatrixMixin;
 import org.flag4j.core.MatrixMixin;
-import org.flag4j.core.Shape;
 import org.flag4j.core.sparse_base.ComplexSparseTensorBase;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.operations_old.TransposeDispatcher;

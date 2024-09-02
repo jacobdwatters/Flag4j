@@ -24,13 +24,13 @@
 
 package org.flag4j.operations.sparse.csr.field_ops;
 
-import org.flag4j.core_temp.arrays.sparse.CsrFieldMatrixBase;
-import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.backend.CsrFieldMatrixBase;
 import org.flag4j.util.ErrorMessages;
 
 /**
  * This utility class contains methods usefully for determining properties of a sparse CSR
- * {@link org.flag4j.core_temp.structures.fields.Field} matrix.
+ * {@link Field} matrix.
  */
 public final class CsrFieldMatrixProperties {
 

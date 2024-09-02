@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.decompositions.lu;
 
-import org.flag4j.core_temp.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 public class RealLU extends LU<Matrix> {

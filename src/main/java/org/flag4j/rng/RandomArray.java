@@ -35,7 +35,7 @@ import java.util.Map;
 /**
  * This class contains methods useful for generating arrays_old filled with random values.
  */
-public final class RandomArray {
+public class RandomArray {
 
     /**
      * Random number generator to use when creating random arrays_old.

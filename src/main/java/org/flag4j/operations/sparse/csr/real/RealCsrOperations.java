@@ -24,17 +24,17 @@
 
 package org.flag4j.operations.sparse.csr.real;
 
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.sparse.CooCVectorOld;
 import org.flag4j.arrays_old.sparse.CsrMatrixOld;
-import org.flag4j.core.Shape;
-import org.flag4j.core_temp.arrays.dense.Matrix;
-import org.flag4j.core_temp.arrays.dense.Vector;
-import org.flag4j.core_temp.arrays.sparse.CooMatrix;
-import org.flag4j.core_temp.arrays.sparse.CooVector;
-import org.flag4j.core_temp.arrays.sparse.CsrMatrix;
+import org.flag4j.arrays.Shape;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;

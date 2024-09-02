@@ -25,8 +25,8 @@
 package org.flag4j.io;
 
 
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core_temp.structures.fields.Complex128;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.StringUtils;

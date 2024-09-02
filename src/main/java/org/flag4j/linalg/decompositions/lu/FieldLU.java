@@ -24,8 +24,8 @@
 
 package org.flag4j.linalg.decompositions.lu;
 
-import org.flag4j.core_temp.arrays.dense.FieldMatrix;
-import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 

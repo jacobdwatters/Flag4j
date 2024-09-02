@@ -25,9 +25,9 @@
 package org.flag4j.operations.sparse.coo.field_ops;
 
 
-import org.flag4j.core_temp.arrays.dense.FieldMatrix;
-import org.flag4j.core_temp.arrays.sparse.CooFieldMatrixBase;
-import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.backend.CooFieldMatrixBase;
+import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -37,7 +37,7 @@ import java.util.List;
 
 /**
  * This class has low level implementations for operations between two sparse coo
- * {@link org.flag4j.core_temp.structures.fields.Field} matrices.
+ * {@link Field} matrices.
  */
 public final class CooFieldMatrixOperations {
 

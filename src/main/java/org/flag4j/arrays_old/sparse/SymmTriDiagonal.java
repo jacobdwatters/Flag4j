@@ -26,7 +26,7 @@ package org.flag4j.arrays_old.sparse;
 
 
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 import org.flag4j.util.ParameterChecks;
 
 import java.io.Serializable;

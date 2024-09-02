@@ -25,7 +25,7 @@
 package org.flag4j.operations_old;
 
 
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 
 /**
  * Functional interface for creating a lambda which implements an operation acting on two real dense tensors.

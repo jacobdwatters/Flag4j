@@ -24,8 +24,8 @@
 
 package org.flag4j.util;
 
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core_temp.structures.fields.Field;
 
 import java.util.*;
 import java.util.function.Function;

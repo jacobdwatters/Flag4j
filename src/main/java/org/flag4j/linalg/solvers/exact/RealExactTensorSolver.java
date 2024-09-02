@@ -28,7 +28,7 @@ package org.flag4j.linalg.solvers.exact;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 
 /**
  * Solver for solving a real well determined linear tensor equation {@code A*X=B} in an exact sense.

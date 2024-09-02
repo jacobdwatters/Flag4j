@@ -25,17 +25,17 @@
 package org.flag4j.operations.sparse.csr.field_ops;
 
 
-import org.flag4j.core.Shape;
-import org.flag4j.core_temp.arrays.dense.DenseFieldMatrixBase;
-import org.flag4j.core_temp.arrays.sparse.CsrFieldMatrixBase;
-import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.CsrFieldMatrixBase;
+import org.flag4j.arrays.backend.DenseFieldMatrixBase;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
 /**
  * This utility class provides implementations for tensor dot products on two sparse CSR
- * {@link org.flag4j.core_temp.structures.fields.Field} matrices.
+ * {@link Field} matrices.
  */
 public final class CsrFieldMatrixTensorDot {
 

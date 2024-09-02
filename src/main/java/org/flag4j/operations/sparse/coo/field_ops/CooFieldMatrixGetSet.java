@@ -25,11 +25,11 @@
 package org.flag4j.operations.sparse.coo.field_ops;
 
 
-import org.flag4j.core.Shape;
-import org.flag4j.core_temp.MatrixMixin;
-import org.flag4j.core_temp.arrays.sparse.CooFieldMatrixBase;
-import org.flag4j.core_temp.arrays.sparse.CooFieldVectorBase;
-import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.CooFieldMatrixBase;
+import org.flag4j.arrays.backend.CooFieldVectorBase;
+import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.operations.sparse.coo.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
@@ -43,7 +43,7 @@ import java.util.stream.IntStream;
 
 /**
  * This class contains methods for getting/setting elements and slices from/to a sparse
- * {@link org.flag4j.core_temp.structures.fields.Field} matrix.
+ * {@link Field} matrix.
  */
 public final class CooFieldMatrixGetSet {
 

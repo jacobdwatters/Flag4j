@@ -27,7 +27,7 @@ package org.flag4j.arrays_old.dense;
 import org.flag4j.arrays_old.sparse.CooCTensorOld;
 import org.flag4j.arrays_old.sparse.CooTensorOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 import org.flag4j.core.TensorBase;
 import org.flag4j.core.TensorExclusiveMixin;
 import org.flag4j.core.dense_base.RealDenseTensorBase;

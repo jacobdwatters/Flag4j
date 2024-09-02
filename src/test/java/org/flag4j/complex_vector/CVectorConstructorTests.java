@@ -3,7 +3,7 @@ package org.flag4j.complex_vector;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

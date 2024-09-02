@@ -24,10 +24,10 @@
 
 package org.flag4j.operations.dense_sparse.coo.complex;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
-import org.flag4j.core.Shape;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;

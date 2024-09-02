@@ -24,11 +24,11 @@
 
 package org.flag4j.operations.dense.field_ops;
 
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.FieldTensor;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
-import org.flag4j.core.Shape;
-import org.flag4j.core_temp.arrays.dense.FieldTensor;
-import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 

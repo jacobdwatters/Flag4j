@@ -24,13 +24,13 @@
 
 package org.flag4j.linalg;
 
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.dense.FieldVector;
+import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.sparse.CooCVectorOld;
 import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core_temp.arrays.dense.FieldVector;
-import org.flag4j.core_temp.arrays.dense.Vector;
-import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.operations.common.field_ops.CompareField;
 import org.flag4j.operations_old.common.complex.AggregateComplex;
 import org.flag4j.operations_old.common.real.AggregateReal;

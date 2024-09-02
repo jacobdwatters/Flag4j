@@ -24,13 +24,13 @@
 
 package org.flag4j.operations.sparse.coo.field_ops;
 
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.CooFieldMatrixBase;
+import org.flag4j.arrays.backend.CooFieldVectorBase;
+import org.flag4j.arrays.backend.DenseFieldMatrixBase;
+import org.flag4j.arrays.backend.DenseFieldVectorBase;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
-import org.flag4j.core_temp.arrays.dense.DenseFieldMatrixBase;
-import org.flag4j.core_temp.arrays.dense.DenseFieldVectorBase;
-import org.flag4j.core_temp.arrays.sparse.CooFieldMatrixBase;
-import org.flag4j.core_temp.arrays.sparse.CooFieldVectorBase;
-import org.flag4j.core_temp.structures.fields.Field;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -42,7 +42,7 @@ import java.util.List;
 
 /**
  * This utility class contains methods for computing operations between two sparse coo
- * {@link org.flag4j.core_temp.structures.fields.Field} vectors.
+ * {@link Field} vectors.
  */
 public final class CooFieldVectorOperations {
 

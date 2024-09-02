@@ -24,12 +24,12 @@
 
 package org.flag4j.operations;
 
-import org.flag4j.core.Shape;
-import org.flag4j.core_temp.arrays.dense.FieldMatrix;
-import org.flag4j.core_temp.arrays.dense.FieldVector;
-import org.flag4j.core_temp.arrays.dense.Matrix;
-import org.flag4j.core_temp.arrays.dense.Vector;
-import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.FieldMatrix;
+import org.flag4j.arrays.dense.FieldVector;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
 import org.flag4j.operations.dense.field_ops.DenseFieldMatrixMultiplication;
 import org.flag4j.operations.dense.real.RealDenseMatrixMultiplication;
 import org.flag4j.util.Axis2D;

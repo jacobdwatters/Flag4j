@@ -24,8 +24,8 @@
 
 package org.flag4j.operations.sparse.csr.real;
 
+import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.arrays_old.sparse.CsrMatrixOld;
-import org.flag4j.core_temp.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 

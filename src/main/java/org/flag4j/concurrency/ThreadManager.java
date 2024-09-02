@@ -88,7 +88,7 @@ public final class ThreadManager {
 
 
     /**
-     * Computes a specified tensor operation concurrently by evenly dividing work amoung available threads (specified by
+     * Computes a specified tensor operation concurrently by evenly dividing work among available threads (specified by
      * {@link Configurations#getNumThreads()}).
      * @param totalSize Total size of the outer loop for the operation.
      * @param operation Operation to be computed.
@@ -114,7 +114,7 @@ public final class ThreadManager {
             try {
                 future.get(); // Ensure all tasks are complete.
             } catch (InterruptedException | ExecutionException e) {
-                // An exception occured.
+                // An exception occurred.
                 threadLogger.warning(e.getMessage());
                 Thread.currentThread().interrupt();
             }
@@ -123,10 +123,10 @@ public final class ThreadManager {
 
 
     /**
-     * Computes a specified blocked tensor operation concurrently by evenly dividing work amoung available threads (specified by
+     * Computes a specified blocked tensor operation concurrently by evenly dividing work among available threads (specified by
      * {@link Configurations#getNumThreads()}).
      * @param totalSize Total size of the outer loop for the operation.
-     * @param blockSize Size of the block used in the blocekdOperation.
+     * @param blockSize Size of the block used in the {@code blockedOperation}.
      * @param blockedOperation Operation to be computed.
      */
     public static void concurrentBlockedOperation(final int totalSize, final int blockSize, final TensorOperation blockedOperation) {
@@ -148,7 +148,7 @@ public final class ThreadManager {
             try {
                 future.get(); // Ensure all tasks are complete.
             } catch (InterruptedException | ExecutionException e) {
-                // An exception occured.
+                // An exception occurred.
                 threadLogger.warning(e.getMessage());
                 Thread.currentThread().interrupt();
             }

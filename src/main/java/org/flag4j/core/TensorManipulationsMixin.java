@@ -25,6 +25,8 @@
 package org.flag4j.core;
 
 
+import org.flag4j.arrays.Shape;
+
 /**
  * This interface specifies manipulations which all tensors (i.e. matrices and vectors) should implement.
  *

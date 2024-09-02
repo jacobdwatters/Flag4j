@@ -26,7 +26,7 @@ package org.flag4j.operations_old.dense.real;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;

@@ -1,12 +1,12 @@
 package org.flag4j.sparse_complex_vector;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.arrays_old.sparse.CooCMatrixOld;
 import org.flag4j.arrays_old.sparse.CooCVectorOld;
 import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

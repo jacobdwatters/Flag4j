@@ -27,6 +27,7 @@ package org.flag4j.util;
 /**
  * Simple enum class for two-dimensional axis. The row axis has ordinal 0 and the column axis has ordinal 1.
  */
+@Deprecated
 public enum Axis2D {
     /**
      * Row of 2D tensor.

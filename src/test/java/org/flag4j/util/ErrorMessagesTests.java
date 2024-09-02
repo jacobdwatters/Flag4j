@@ -1,6 +1,6 @@
 package org.flag4j.util;
 
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

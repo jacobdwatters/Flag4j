@@ -24,6 +24,7 @@
 
 package org.flag4j.linalg.solvers.exact;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.core.*;
 import org.flag4j.linalg.solvers.LinearSolver;
 import org.flag4j.linalg.solvers.LinearTensorSolver;

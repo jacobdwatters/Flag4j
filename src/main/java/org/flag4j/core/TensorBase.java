@@ -24,6 +24,7 @@
 
 package org.flag4j.core;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.operations_old.common.TensorEquals;
 import org.flag4j.util.ErrorMessages;
 

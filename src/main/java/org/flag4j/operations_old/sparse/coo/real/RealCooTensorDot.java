@@ -27,7 +27,7 @@ package org.flag4j.operations_old.sparse.coo.real;
 import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.arrays_old.sparse.CooTensorOld;
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;

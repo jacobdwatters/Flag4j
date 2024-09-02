@@ -29,7 +29,7 @@ import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 import org.flag4j.operations_old.dense.complex.ComplexDenseMatrixMultTranspose;
 import org.flag4j.operations_old.dense.complex.ComplexDenseMatrixMultiplication;
 import org.flag4j.operations_old.dense.real.RealDenseMatrixMultiplication;

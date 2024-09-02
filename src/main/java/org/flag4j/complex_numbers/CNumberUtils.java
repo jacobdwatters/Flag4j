@@ -30,6 +30,7 @@ import org.flag4j.util.ErrorMessages;
 /**
  * Contains simple utility functions for the {@link CNumber} object.
  */
+@Deprecated
 public final class CNumberUtils {
 
     private CNumberUtils() {

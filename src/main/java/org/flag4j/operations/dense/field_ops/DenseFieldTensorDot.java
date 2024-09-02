@@ -24,9 +24,9 @@
 
 package org.flag4j.operations.dense.field_ops;
 
-import org.flag4j.core.Shape;
-import org.flag4j.core_temp.FieldTensorBase;
-import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.FieldTensorBase;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
@@ -35,7 +35,7 @@ import org.flag4j.util.ParameterChecks;
 
 /**
  * This class contains methods for computing a tensor dot product, i.e. tensor contraction, between two dense tensors whose elements
- * are members of a {@link org.flag4j.core_temp.structures.fields.Field}.
+ * are members of a {@link Field}.
  */
 public class DenseFieldTensorDot {
 

@@ -6,7 +6,7 @@ import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.arrays_old.sparse.CooTensorOld;
 import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

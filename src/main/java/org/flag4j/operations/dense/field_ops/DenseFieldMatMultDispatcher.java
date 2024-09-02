@@ -29,11 +29,11 @@ package org.flag4j.operations.dense.field_ops;
 // TODO: Investigate the performance of utilizing a selection cache which caches the implementation to be used for recent matrix sizes.
 //  Should probably be implemented as a LRU cache (or similar) by extending LinkedHashMap
 
-import org.flag4j.core.Shape;
-import org.flag4j.core_temp.DenseFieldTensorBinaryOperation;
-import org.flag4j.core_temp.arrays.dense.DenseFieldMatrixBase;
-import org.flag4j.core_temp.arrays.dense.DenseFieldVectorBase;
-import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.DenseFieldMatrixBase;
+import org.flag4j.arrays.backend.DenseFieldTensorBinaryOperation;
+import org.flag4j.arrays.backend.DenseFieldVectorBase;
 import org.flag4j.util.Axis2D;
 import org.flag4j.util.ParameterChecks;
 
@@ -41,8 +41,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Singleton class which stores a map of all viable dense {@link org.flag4j.core_temp.structures.fields.Field}
- * matrix multiply algorithms and uses that map to dispatch a dense {@link org.flag4j.core_temp.structures.fields.Field} matrix
+ * Singleton class which stores a map of all viable dense {@link Field}
+ * matrix multiply algorithms and uses that map to dispatch a dense {@link Field} matrix
  * multiply problem to the appropriate algorithm.
  */
 public final class DenseFieldMatMultDispatcher {

@@ -24,8 +24,8 @@
 
 package org.flag4j.operations.dense.real;
 
-import org.flag4j.core.Shape;
-import org.flag4j.core_temp.PrimitiveDoubleTensorBase;
+import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
+import org.flag4j.arrays.Shape;
 import org.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.util.ArrayUtils;

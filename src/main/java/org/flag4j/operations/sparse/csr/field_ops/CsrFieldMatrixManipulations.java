@@ -24,15 +24,15 @@
 
 package org.flag4j.operations.sparse.csr.field_ops;
 
-import org.flag4j.core_temp.arrays.sparse.CsrFieldMatrixBase;
-import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.backend.CsrFieldMatrixBase;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 
 /**
- * This utility class contains methods for manipulating CSR {@link org.flag4j.core_temp.structures.fields.Field} matrices.
+ * This utility class contains methods for manipulating CSR {@link Field} matrices.
  */
 public final class CsrFieldMatrixManipulations {
 

@@ -29,7 +29,7 @@ import org.flag4j.arrays_old.sparse.CooCMatrixOld;
 import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 import org.flag4j.linalg.decompositions.qr.ComplexQR;
 import org.flag4j.linalg.decompositions.qr.RealQR;
 import org.flag4j.util.ArrayUtils;

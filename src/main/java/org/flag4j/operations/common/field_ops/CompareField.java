@@ -25,7 +25,7 @@
 package org.flag4j.operations.common.field_ops;
 
 
-import org.flag4j.core_temp.structures.fields.Field;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.util.ErrorMessages;
 
 /**

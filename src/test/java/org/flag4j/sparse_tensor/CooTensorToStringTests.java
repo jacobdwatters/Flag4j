@@ -1,7 +1,7 @@
 package org.flag4j.sparse_tensor;
 
 import org.flag4j.arrays_old.sparse.CooTensorOld;
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 import org.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
