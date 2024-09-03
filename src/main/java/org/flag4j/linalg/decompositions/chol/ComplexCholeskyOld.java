@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,67 +24,69 @@
 
 package org.flag4j.linalg.decompositions.chol;
 
-
-import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
+
 /**
- * <p>An instance of this class allows for the computation of a Cholesky decomposition of a complex Hermitian
+ * <p>This abstract class specifies methods for computing the CholeskyOld decomposition of a hermitian
  * positive-definite matrix.</p>
  *
- * <p>Given a complex Hermitian positive-definite matrix A, the Cholesky decomposition will decompose it into
- * A=LL<sup>H</sup> where L is a lower triangular matrix and L<sup>H</sup> is the conjugate
- * transpose of L.</p>
+ * <p>Given a hermitian positive-definite matrix {@code A}, the CholeskyOld decomposition will decompose it into
+ * {@code A=LL<sup>*</sup>} where {@code L} is a lower triangular matrix and {@code L<sup>*</sup>} is the conjugate
+ * transpose of {@code L}.</p>
  */
-public class ComplexCholesky extends Cholesky<CMatrix> {
+@Deprecated
+public final class ComplexCholeskyOld extends CholeskyOld<CMatrixOld> {
+
 
     /**
-     * <p>Constructs a complex Cholesky decomposer.</p>
+     * <p>Constructs a CholeskyOld decomposer.</p>
      *
      * <p>If you would like to enforce a check for hermitian symmetry at the time
-     * of decomposition, see {@link #ComplexCholesky(boolean)}.</p>
+     * of decomposition, see {@link #ComplexCholeskyOld(boolean)}.</p>
      */
-    public ComplexCholesky() {
+    public ComplexCholeskyOld() {
         super(false);
     }
 
 
     /**
-     * Constructs a complex Cholesky decomposer.
+     * Constructs a CholeskyOld decomposer.
      *
-     * @param checkPosDef flag indicating if the matrix to be decomposed should be explicitly checked to be hermitian ({@code true}).
-     * If{@code false}, no check will be made and the matrix will be treated as if it were hermitian and only the lower half of the
-     * matrix will be accessed
+     * @param checkPosDef flag indicating if the matrix to be decomposed should be explicitly checked to be hermitian (true). If
+     *                    false, no check will be made and the matrix will be treated as if it were hermitian and only the lower
+     *                    half of the matrix will be accessed
      */
-    public ComplexCholesky(boolean checkPosDef) {
+    public ComplexCholeskyOld(boolean checkPosDef) {
         super(checkPosDef);
     }
 
 
     /**
-     * Decompose a matrix into A=LL<sup>H</sup> where L is a lower triangular matrix and L<sup>H</sup> is
-     * the conjugate transpose of L.
+     * Decompose a matrix into {@code A=LL}<sup>H</sup> where {@code L} is a lower triangular matrix and {@code L}<sup>H</sup> is
+     * the conjugate transpose of {@code L}.
      *
      * @param src The source matrix to decompose. Must be hermitian positive-definite.
      * @return A reference to this decomposer.
-     * @throws IllegalArgumentException If {@code src} is not symmetric and {@link #ComplexCholesky(boolean)
+     * @throws IllegalArgumentException If {@code src} is not symmetric and {@link #ComplexCholeskyOld(boolean)
      * enforceSymmetric} was set to true when this decomposer was instantiated.
      * @throws LinearAlgebraException If {@code src} is not positive-definite.
      */
     @Override
-    public ComplexCholesky decompose(CMatrix src) {
+    public ComplexCholeskyOld decompose(CMatrixOld src) {
         if(enforceHermitian && src.isHermitian()) {
-            throw new IllegalArgumentException("Matrix is not Hermitian positive-definite.");
+            throw new IllegalArgumentException("MatrixOld must be positive-definite.");
         } else {
             ParameterChecks.ensureSquareMatrix(src.shape);
         }
 
-        L = new CMatrix(src.numRows);
+        L = new CMatrixOld(src.numRows);
         double posDefTolerance = Math.max(L.numRows*Flag4jConstants.EPS_F64, DEFAULT_POS_DEF_TOLERANCE);
-        Complex128 sum;
+        CNumber sum;
 
         int lIndex1;
         int lIndex2;
@@ -94,7 +96,7 @@ public class ComplexCholesky extends Cholesky<CMatrix> {
             lIndex1 = i*L.numCols;
 
             for(int j=0; j<=i; j++) {
-                sum = Complex128.ZERO;
+                sum = CNumber.ZERO;
                 lIndex2 = j*L.numCols;
                 lIndex3 = lIndex1 + j;
 
@@ -103,14 +105,14 @@ public class ComplexCholesky extends Cholesky<CMatrix> {
                 }
 
                 if(i==j) {
-                    Complex128 diag = src.entries[lIndex3].sub(sum);
+                    CNumber diag = src.entries[lIndex3].sub(sum);
                     if(diag.re <= 0 || diag.mag() <= posDefTolerance) {
-                        throw new LinearAlgebraException("Matrix is not Hermitian positive-definite.");
+                        throw new LinearAlgebraException("MatrixOld is not symmetric positive-definite.");
                     }
 
-                    L.entries[lIndex3] = diag.sqrt();
+                    L.entries[lIndex3] = CNumber.sqrt(diag);
                 } else {
-                    if(!L.entries[j*(L.numCols + 1)].isZero()) {
+                    if(!L.entries[j*(L.numCols + 1)].equals(0)) {
                         L.entries[lIndex3] = (src.entries[lIndex3].sub(sum)).div(L.entries[lIndex2 + j]);
                     }
                 }

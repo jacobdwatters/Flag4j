@@ -2,7 +2,7 @@ package org.flag4j.linalg.decompositions;
 
 
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.linalg.decompositions.hess.SymmHess;
+import org.flag4j.linalg.decompositions.hess.SymmHessOld;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ class RealSymmHessTests {
 
     double[][] aEntries;
     MatrixOld A, Q, H, A_hat;
-    SymmHess hess;
+    SymmHessOld hess;
 
     @Test
     void symmHessDecompTestCase() {
@@ -20,7 +20,7 @@ class RealSymmHessTests {
                 {100.2345, -8.1445},
                 {-8.1445, 100.2345}};
         A = new MatrixOld(aEntries);
-        hess = new SymmHess(true).decompose(A);
+        hess = new SymmHessOld(true).decompose(A);
 
         H = hess.getH();
         Q = hess.getQ();
@@ -34,7 +34,7 @@ class RealSymmHessTests {
                 {2, 5, 6},
                 {3, 6, 9}};
         A = new MatrixOld(aEntries);
-        hess = new SymmHess(true).decompose(A);
+        hess = new SymmHessOld(true).decompose(A);
 
         H = hess.getH();
         Q = hess.getQ();
@@ -50,7 +50,7 @@ class RealSymmHessTests {
                 {15,  4,  -9, 10.3, 6   },
                 {0,   1,  8.25, 6, -18.5}};
         A = new MatrixOld(aEntries);
-        hess = new SymmHess(true).decompose(A);
+        hess = new SymmHessOld(true).decompose(A);
 
         H = hess.getH();
         Q = hess.getQ();
@@ -64,7 +64,7 @@ class RealSymmHessTests {
                 {-0.002, 4.501, -9.14},
                 {14.51, -9.14, 16.5}};
         A = new MatrixOld(aEntries);
-        hess = new SymmHess(true).decompose(A);
+        hess = new SymmHessOld(true).decompose(A);
         H = hess.getH();
         Q = hess.getQ();
         A_hat = Q.mult(H).multTranspose(Q);
@@ -77,7 +77,7 @@ class RealSymmHessTests {
                 {-0.002, 4.501, -9.14},
                 {11, -9.14, 16.5}};
         A = new MatrixOld(aEntries);
-        hess = new SymmHess(true, true);
+        hess = new SymmHessOld(true, true);
         Assertions.assertThrows(LinearAlgebraException.class, ()->hess.decompose(A));
     }
 }

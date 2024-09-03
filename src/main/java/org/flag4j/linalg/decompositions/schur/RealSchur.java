@@ -29,7 +29,7 @@ import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.linalg.Eigen;
-import org.flag4j.linalg.decompositions.hess.RealHess;
+import org.flag4j.linalg.decompositions.hess.RealHessOld;
 import org.flag4j.linalg.transformations.Givens;
 import org.flag4j.linalg.transformations.HouseholderOld;
 import org.flag4j.operations_old.common.real.AggregateReal;
@@ -71,7 +71,7 @@ public class RealSchur extends Schur<MatrixOld, double[]> {
      * set the seed for the pseudo-random number generator using {@link #RealSchur(long)}</p>
      */
     public RealSchur() {
-        super(true, new RandomCNumber(), new RealHess());
+        super(true, new RandomCNumber(), new RealHessOld());
     }
 
 
@@ -90,7 +90,7 @@ public class RealSchur extends Schur<MatrixOld, double[]> {
      * {@code U} will be computed. If false, {@code U} will not be computed.
      */
     public RealSchur(boolean computeU) {
-        super(computeU, new RandomCNumber(), new RealHess(computeU));
+        super(computeU, new RandomCNumber(), new RealHessOld(computeU));
     }
 
 
@@ -99,7 +99,7 @@ public class RealSchur extends Schur<MatrixOld, double[]> {
      * @param seed Seed to use for pseudo-random number generator when computing exceptional shifts during the {@code QR} algorithm.
      */
     public RealSchur(long seed) {
-        super(true, new RandomCNumber(seed), new RealHess());
+        super(true, new RandomCNumber(seed), new RealHessOld());
     }
 
 
@@ -108,7 +108,7 @@ public class RealSchur extends Schur<MatrixOld, double[]> {
      * @param seed Seed to use for pseudo-random number generator when computing exceptional shifts during the {@code QR} algorithm.
      */
     public RealSchur(boolean computeU, long seed) {
-        super(computeU, new RandomCNumber(seed), new RealHess(computeU));
+        super(computeU, new RandomCNumber(seed), new RealHessOld(computeU));
     }
 
 

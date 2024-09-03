@@ -26,8 +26,8 @@ package org.flag4j.linalg;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.linalg.decompositions.chol.ComplexCholesky;
-import org.flag4j.linalg.decompositions.chol.RealCholesky;
+import org.flag4j.linalg.decompositions.chol.ComplexCholeskyOld;
+import org.flag4j.linalg.decompositions.chol.RealCholeskyOld;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
@@ -79,9 +79,9 @@ public class PositiveDefiniteness {
         boolean result = true;
 
         try {
-            new RealCholesky(true).decompose(src);
+            new RealCholeskyOld(true).decompose(src);
         } catch(LinearAlgebraException | IllegalArgumentException e) {
-            result = false; // Could not compute Cholesky decomposition. MatrixOld is not symmetric positive definite.
+            result = false; // Could not compute CholeskyOld decomposition. MatrixOld is not symmetric positive definite.
         }
 
         return result;
@@ -124,9 +124,9 @@ public class PositiveDefiniteness {
         boolean result = true;
 
         try {
-            new ComplexCholesky(true).decompose(src);
+            new ComplexCholeskyOld(true).decompose(src);
         } catch(LinearAlgebraException | IllegalArgumentException e) {
-            result = false; // Could not compute Cholesky decomposition. MatrixOld is not symmetric positive definite.
+            result = false; // Could not compute CholeskyOld decomposition. MatrixOld is not symmetric positive definite.
         }
 
         return result;

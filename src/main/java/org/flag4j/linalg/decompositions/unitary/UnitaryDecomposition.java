@@ -117,7 +117,7 @@ public abstract class UnitaryDecomposition<T extends MatrixMixin, U> implements 
      *                   If one, it will be upper Hessenburg.
      * @throws IllegalArgumentException If {@code 1 < subDiagonal < 0}.
      */
-    public UnitaryDecomposition(int subDiagonal, boolean storeReflectors) {
+    protected UnitaryDecomposition(int subDiagonal, boolean storeReflectors) {
         ParameterChecks.ensureInRange(subDiagonal, 0, 1, "subDiagonal");
         this.subDiagonal = subDiagonal;
         this.storeReflectors = storeReflectors;
@@ -129,7 +129,7 @@ public abstract class UnitaryDecomposition<T extends MatrixMixin, U> implements 
      * explicitly called.
      * @param src The source matrix to decompose.
      */
-    public void decomposeBase(T src) {
+    protected void decomposeUnitary(T src) {
         setUp(src); // Initialize datastructures and storage for the decomposition.
         int offSet = (subDiagonal == 0) ? 0 : subDiagonal + 1;
 

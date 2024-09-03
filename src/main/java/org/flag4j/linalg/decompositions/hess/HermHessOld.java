@@ -24,22 +24,23 @@
 
 package org.flag4j.linalg.decompositions.hess;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.linalg.transformations.Householder;
+
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.linalg.transformations.HouseholderOld;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 /**
  * <p>Computes the Hessenburg decomposition of a complex dense Hermitian matrix. That is, for a square, Hermitian matrix
- * A, computes the decomposition A=QHQ<sup>H</sup> where Q is an unitary matrix and
- * H is a Hermitian matrix in tri-diagonal form (special case of Hessenburg form) which is similar to A
+ * {@code A}, computes the decomposition {@code A=QHQ}<sup>H</sup> where {@code Q} is an unitary matrix and
+ * {@code H} is a Hermitian matrix in tri-diagonal form (special case of Hessenburg form) which is similar to {@code A}
  * (i.e. has the same eigenvalues).</p>
  *
- * <p>A matrix H is in tri-diagonal form if it is nearly diagonal except for possibly the first sub/super-diagonal.
- * Specifically, if H has all zeros below the first sub-diagonal and above the first super-diagonal.</p>
+ * <p>A matrix {@code H} is in tri-diagonal form if it is nearly diagonal except for possibly the first sub/super-diagonal.
+ * Specifically, if {@code H} has all zeros below the first sub-diagonal and above the first super-diagonal.</p>
  *
- * <p>For example, the following matrix is in Hermitian tri-diagonal form where each 'x' may hold a different value (provided
+ * <p>For example, the following matrix is in Hermitian tri-diagonal form where each {@code x} may hold a different value (provided
  * the matrix is Hermitian):
  * <pre>
  *     [[ x x 0 0 0 ]
@@ -49,7 +50,8 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  *      [ 0 0 0 x x ]]</pre>
  * </p>
  */
-public class HermHess extends ComplexHess {
+@Deprecated
+public class HermHessOld extends ComplexHessOld {
 
     /**
      * Flag indicating if an explicit check should be made that the matrix to be decomposed is Hermitian.
@@ -57,10 +59,10 @@ public class HermHess extends ComplexHess {
     protected boolean enforceHermitian;
 
     /**
-     * Constructs a Hessenberg decomposer for Hermitian matrices. By default, the Householder vectors used in the decomposition will be
+     * Constructs a Hessenberg decomposer for Hermitian matrices. By default, the HouseholderOld vectors used in the decomposition will be
      * stored so that the full unitary {@code Q} matrix can be formed by calling {@link #getQ()}.
      */
-    public HermHess() {
+    public HermHessOld() {
         super();
     }
 
@@ -70,7 +72,7 @@ public class HermHess extends ComplexHess {
      * @param computeQ Flag indicating if the unitary {@code Q} matrix from the Hessenberg decomposition should be explicitly computed.
      * If true, then the {@code Q} matrix will be computed explicitly.
      */
-    public HermHess(boolean computeQ) {
+    public HermHessOld(boolean computeQ) {
         super(computeQ);
     }
 
@@ -80,11 +82,11 @@ public class HermHess extends ComplexHess {
      * @param computeQ Flag indicating if the unitary {@code Q} matrix from the Hessenberg decomposition should be explicitly computed.
      * If true, then the {@code Q} matrix will be computed explicitly.
      * @param enforceHermitian Flag indicating if an explicit check should be made to ensure any matrix passed to
-     * {@link #decompose(CMatrix)} is truly Hermitian. If true, an exception will be thrown if the matrix is not Hermitian. If false,
+     * {@link #decompose(CMatrixOld)} is truly Hermitian. If true, an exception will be thrown if the matrix is not Hermitian. If false,
      * the decomposition will proceed under the assumption that the matrix is Hermitian whether it actually is or not. If the
      * matrix is not Hermitian, then the values in the upper triangular portion of the matrix are taken to be the values.
      */
-    public HermHess(boolean computeQ, boolean enforceHermitian) {
+    public HermHessOld(boolean computeQ, boolean enforceHermitian) {
         super(computeQ);
         this.enforceHermitian = enforceHermitian;
     }
@@ -97,7 +99,7 @@ public class HermHess extends ComplexHess {
      * @return A reference to this decomposer.
      */
     @Override
-    public HermHess decompose(CMatrix src) {
+    public HermHessOld decompose(CMatrixOld src) {
         super.decompose(src);
         return this;
     }
@@ -108,10 +110,10 @@ public class HermHess extends ComplexHess {
      * @return The Hermitian tri-diagonal (Hessenberg) matrix from this decomposition.
      */
     @Override
-    public CMatrix getH() {
-        CMatrix H = new CMatrix(numRows);
-
+    public CMatrixOld getH() {
+        CMatrixOld H = new CMatrixOld(numRows);
         H.entries[0] = transformMatrix.entries[0];
+
         int idx1;
         int idx0;
         int rowOffset = numRows;
@@ -123,7 +125,7 @@ public class HermHess extends ComplexHess {
             H.entries[idx1] = transformMatrix.entries[idx1]; // extract diagonal value.
 
             // extract off-diagonal values.
-            Complex128 a = transformMatrix.entries[idx0];
+            CNumber a = transformMatrix.entries[idx0];
             H.entries[idx0] = a;
             H.entries[idx1 - 1] = a;
 
@@ -154,7 +156,7 @@ public class HermHess extends ComplexHess {
         // Compute max-abs value in row. (Equivalent to max value in column since matrix is Hermitian.)
         int rowU = (j-1)*numRows;
         for(int i=j; i<numRows; i++) {
-            Complex128 d = householderVector[i] = transformMatrix.entries[rowU + i];
+            CNumber d = householderVector[i] = transformMatrix.entries[rowU + i];
             maxAbs = Math.max(d.abs(), maxAbs);
         }
 
@@ -169,9 +171,9 @@ public class HermHess extends ComplexHess {
      * square regardless of the value of {@link #enforceHermitian}.
      */
     @Override
-    protected void setUp(CMatrix src) {
+    protected void setUp(CMatrixOld src) {
         if(enforceHermitian && !src.isHermitian()) // If requested, check the matrix is Hermitian.
-            throw new LinearAlgebraException(getClass().getSimpleName() + " only supports Hermitian matrices.");
+            throw new LinearAlgebraException("DecompositionOld only supports Hermitian matrices.");
         else
             ParameterChecks.ensureSquareMatrix(src.shape); // Otherwise, Just ensure the matrix is square.
 
@@ -185,8 +187,8 @@ public class HermHess extends ComplexHess {
      * Copies the upper triangular portion of a matrix to the working matrix {@link #transformMatrix}.
      * @param src The source matrix to decompose of.
      */
-    private void copyUpperTri(CMatrix src) {
-        transformMatrix = new CMatrix(numRows);
+    private void copyUpperTri(CMatrixOld src) {
+        transformMatrix = new CMatrixOld(numRows);
 
         // Copy upper triangular portion.
         for(int i=0; i<numRows; i++) {
@@ -197,12 +199,12 @@ public class HermHess extends ComplexHess {
 
 
     /**
-     * Updates the {@link #transformMatrix} matrix using the computed Householder vector from {@link #computeHouseholder(int)}.
-     * @param j Index of sub-matrix for which the Householder reflector was computed for.
+     * Updates the {@link #transformMatrix} matrix using the computed HouseholderOld vector from {@link #computeHouseholder(int)}.
+     * @param j Index of sub-matrix for which the HouseholderOld reflector was computed for.
      */
     @Override
     protected void updateData(int j) {
-        Householder.hermLeftRightMultReflector(transformMatrix, householderVector, currentFactor, j, workArray);
+        HouseholderOld.hermLeftRightMultReflector(transformMatrix, householderVector, currentFactor, j, workArray);
 
         if(j < numRows) transformMatrix.entries[(j-1)*numRows + j] = norm.addInv();
         if(storeReflectors) {

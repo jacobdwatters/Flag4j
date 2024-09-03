@@ -27,9 +27,9 @@ package org.flag4j.linalg;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.linalg.decompositions.chol.Cholesky;
-import org.flag4j.linalg.decompositions.chol.ComplexCholesky;
-import org.flag4j.linalg.decompositions.chol.RealCholesky;
+import org.flag4j.linalg.decompositions.chol.CholeskyOld;
+import org.flag4j.linalg.decompositions.chol.ComplexCholeskyOld;
+import org.flag4j.linalg.decompositions.chol.RealCholeskyOld;
 import org.flag4j.linalg.decompositions.lu.ComplexLU;
 import org.flag4j.linalg.decompositions.lu.LUOld;
 import org.flag4j.linalg.decompositions.lu.RealLUOLd;
@@ -257,7 +257,7 @@ public class Invert {
      */
     @Deprecated
     public static MatrixOld invSymPosDef(MatrixOld src, boolean checkPosDef) {
-        Cholesky<MatrixOld> chol = new RealCholesky(checkPosDef).decompose(src);
+        CholeskyOld<MatrixOld> chol = new RealCholeskyOld(checkPosDef).decompose(src);
         RealBackSolver backSolver = new RealBackSolver();
         RealForwardSolver forwardSolver = new RealForwardSolver();
 
@@ -294,7 +294,7 @@ public class Invert {
      */
     @Deprecated
     public static CMatrixOld invHermPosDef(CMatrixOld src, boolean checkPosDef) {
-        Cholesky<CMatrixOld> chol = new ComplexCholesky(checkPosDef).decompose(src);
+        CholeskyOld<CMatrixOld> chol = new ComplexCholeskyOld(checkPosDef).decompose(src);
         ComplexBackSolver backSolver = new ComplexBackSolver();
         ComplexForwardSolver forwardSolver = new ComplexForwardSolver();
 

@@ -1,7 +1,7 @@
 package org.flag4j.linalg.decompositions;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.linalg.decompositions.chol.ComplexCholesky;
+import org.flag4j.linalg.decompositions.chol.ComplexCholeskyOld;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,7 +18,7 @@ class ComplexCholeskyTests {
 
     @Test
     void testcholeskyTestCase() {
-        ComplexCholesky cholesky = new ComplexCholesky();
+        ComplexCholeskyOld cholesky = new ComplexCholeskyOld();
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new String[][]{

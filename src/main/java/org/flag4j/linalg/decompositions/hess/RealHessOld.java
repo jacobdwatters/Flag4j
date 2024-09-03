@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,21 +24,21 @@
 
 package org.flag4j.linalg.decompositions.hess;
 
-
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.linalg.decompositions.unitary.ComplexUnitaryDecomposition;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.linalg.decompositions.unitary.RealUnitaryDecompositionOld;
 import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.exceptions.LinearAlgebraException;
+
 
 /**
- * <p>Computes the Hessenburg decomposition of a complex dense square matrix. That is, for a square matrix
- * A, computes the decomposition A=QHQ<sup>H</sup> where Q is an unitary matrix and
- * H is a matrix in upper Hessenburg form and is similar to A (i.e. has the same eigenvalues).</p>
+ * <p>Computes the Hessenburg decomposition of a real dense square matrix. That is, for a square matrix
+ * {@code A}, computes the decomposition {@code A=QHQ}<sup>T</sup> where {@code Q} is an orthogonal matrix and
+ * {@code H} is a matrix in upper Hessenburg form which is similar to {@code A} (i.e. has the same eigenvalues).</p>
  *
- * <p>A matrix H is in upper Hessenburg form if it is nearly upper triangular. Specifically, if H has
+ * <p>A matrix {@code H} is in upper Hessenburg form if it is nearly upper triangular. Specifically, if {@code H} has
  * all zeros below the first sub-diagonal.</p>
  *
- * <p>For example, the following matrix is in upper Hessenburg form where each 'x' is a placeholder which may hold a different
- * value:
+ * <p>For example, the following matrix is in upper Hessenburg form where each {@code x} may hold a different value:
  * <pre>
  *     [[ x x x x x ]
  *      [ x x x x x ]
@@ -47,45 +47,39 @@ import org.flag4j.util.ParameterChecks;
  *      [ 0 0 0 x x ]]</pre>
  * </p>
  */
-public class ComplexHess extends ComplexUnitaryDecomposition {
-
+@Deprecated
+public class RealHessOld extends RealUnitaryDecompositionOld {
 
     /**
-     * <p>Creates a complex Hessenburg decomposer. This decomposer will compute the Hessenburg decomposition
-     * for complex dense matrices.</p>
-     *
-     * <p>By default, the unitary matrix <i>will</i> be computed. To specify if the unitary matrix should be computed, use
-     * {@link #ComplexHess(boolean)}.</p>
-     *
-     * @see #ComplexHess(boolean)
+     * Creates a real unitary decomposer which will reduce the matrix to an upper quasi-triangular matrix which is has zeros below
+     * the specified sub-diagonal.
      */
-    public ComplexHess() {
+    public RealHessOld() {
         super(1);
     }
 
 
     /**
-     * <p>Creates a complex Hessenburg decomposer. This decomposer will compute the Hessenburg decomposition
-     * for complex dense matrices.</p>
-     *
-     * @param computeQ Flag indicating if the unitary matrix in the Hessenburg decomposition should be computed. If it is not
-     * needed, setting this to {@code false} <i>may</i> yield a slight increase in efficiency.
-     * @see #ComplexHess()
+     * Creates a real unitary decomposer which will reduce the matrix to an upper quasi-triangular matrix which is has zeros below
+     * the specified sub-diagonal.
      */
-    public ComplexHess(boolean computeQ) {
+    public RealHessOld(boolean computeQ) {
         super(1, computeQ);
     }
 
 
     /**
-     * Computes the {@code QR} decomposition of a real dense matrix.
+     * Applies decomposition to the source matrix. Note, the computation of the unitary matrix {@code Q} in the decomposition is
+     * deferred until {@link #getQ()} is explicitly called. This allows for efficient decompositions when {@code Q} is not needed.
+     *
      * @param src The source matrix to decompose.
      * @return A reference to this decomposer.
+     * @throws LinearAlgebraException If {@code src} is not a square matrix.
      */
     @Override
-    public ComplexHess decompose(CMatrix src) {
+    public RealHessOld decompose(MatrixOld src) {
         ParameterChecks.ensureSquare(src.shape);
-        decomposeUnitary(src);
+        decomposeBase(src);
         return this;
     }
 
@@ -96,8 +90,8 @@ public class ComplexHess extends ComplexUnitaryDecomposition {
      * @return An identity matrix with the appropriate size.
      */
     @Override
-    protected CMatrix initQ() {
-        return CMatrix.I(numRows);
+    protected MatrixOld initQ() {
+        return MatrixOld.I(numRows);
     }
 
 
@@ -107,7 +101,7 @@ public class ComplexHess extends ComplexUnitaryDecomposition {
      * @return The upper Hessenburg matrix from the last decomposition.
      */
     @Override
-    public CMatrix getUpper() {
+    public MatrixOld getUpper() {
         return getH();
     }
 
@@ -116,7 +110,7 @@ public class ComplexHess extends ComplexUnitaryDecomposition {
      * Gets the upper Hessenburg matrix {@code H} from the Hessenburg decomposition.
      * @return The upper Hessenburg matrix {@code H} from the Hessenburg decomposition.
      */
-    public CMatrix getH() {
-        return getUpper(new CMatrix(numRows));
+    public MatrixOld getH() {
+        return getUpper(new MatrixOld(numRows));
     }
 }

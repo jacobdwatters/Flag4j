@@ -27,10 +27,10 @@ package org.flag4j.linalg.decompositions;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.linalg.decompositions.chol.Cholesky;
-import org.flag4j.linalg.decompositions.chol.ComplexCholesky;
-import org.flag4j.linalg.decompositions.chol.RealCholesky;
-import org.flag4j.linalg.decompositions.hess.RealHess;
+import org.flag4j.linalg.decompositions.chol.CholeskyOld;
+import org.flag4j.linalg.decompositions.chol.ComplexCholeskyOld;
+import org.flag4j.linalg.decompositions.chol.RealCholeskyOld;
+import org.flag4j.linalg.decompositions.hess.RealHessOld;
 import org.flag4j.linalg.decompositions.lu.ComplexLU;
 import org.flag4j.linalg.decompositions.lu.LUOld;
 import org.flag4j.linalg.decompositions.lu.RealLUOLd;
@@ -71,20 +71,20 @@ public class DecompositionFactory {
 
 
     /**
-     * Constructs a decomposer to compute the Cholesky decomposition of a real dense matrix.
-     * @return A decomposer to compute the Cholesky decomposition of a real dense matrix.
+     * Constructs a decomposer to compute the CholeskyOld decomposition of a real dense matrix.
+     * @return A decomposer to compute the CholeskyOld decomposition of a real dense matrix.
      */
-    public static Cholesky<MatrixOld> createRealChol() {
-        return new RealCholesky();
+    public static CholeskyOld<MatrixOld> createRealChol() {
+        return new RealCholeskyOld();
     }
 
 
     /**
-     * Constructs a decomposer to compute the Cholesky decomposition of a complex dense matrix.
-     * @return A decomposer to compute the Cholesky decomposition of a complex dense matrix.
+     * Constructs a decomposer to compute the CholeskyOld decomposition of a complex dense matrix.
+     * @return A decomposer to compute the CholeskyOld decomposition of a complex dense matrix.
      */
-    public static Cholesky<CMatrixOld> createComplexChol() {
-        return new ComplexCholesky();
+    public static CholeskyOld<CMatrixOld> createComplexChol() {
+        return new ComplexCholeskyOld();
     }
 
 
@@ -110,8 +110,8 @@ public class DecompositionFactory {
      * Constructs a decomposer to compute the Hessenburg decomposition of a real dense matrix.
      * @return A decomposer to compute the Hessenburg decomposition of a real dense matrix.
      */
-    public static RealHess createRealHess() {
-        return new RealHess();
+    public static RealHessOld createRealHess() {
+        return new RealHessOld();
     }
 
 

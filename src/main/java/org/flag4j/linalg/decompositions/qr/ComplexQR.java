@@ -71,7 +71,7 @@ public class ComplexQR extends ComplexUnitaryDecomposition {
      */
     @Override
     public ComplexQR decompose(CMatrix src) {
-        decomposeBase(src);
+        decomposeUnitary(src);
         return this;
     }
 

@@ -71,7 +71,7 @@ public class RealQR extends RealUnitaryDecomposition {
      */
     @Override
     public RealQR decompose(Matrix src) {
-        decomposeBase(src);
+        decomposeUnitary(src);
         return this;
     }
 

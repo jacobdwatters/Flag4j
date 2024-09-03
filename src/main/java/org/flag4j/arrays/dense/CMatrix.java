@@ -85,6 +85,18 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
 
 
     /**
+     * Creates a square zero matrix with the specified {@code size}.
+     *
+     * @param size Size of the zero matrix to construct. The resulting matrix will have shape {@code (size, size)}
+     */
+    public CMatrix(int size) {
+        super(new Shape(size, size), new Complex128[size*size]);
+        setZeroElement(Complex128.ZERO);
+        Arrays.fill(entries, Complex128.ZERO);
+    }
+
+
+    /**
      * Creates a complex matrix with the specified {@code entries}, and shape.
      *
      * @param rows The number of rows in this matrix.
@@ -240,6 +252,16 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
         }
 
         return new CooCMatrix(shape, sparseEntries, rowIndices, colIndices);
+    }
+
+
+    /**
+     * Constructs an identity matrix of the specified size.
+     * @param size The size of the identity matrix to construct.
+     * @return An identity matrix of shape {@code (size, size)}.
+     */
+    public static CMatrix I(int size) {
+        return I(new Shape(size, size));
     }
 
 

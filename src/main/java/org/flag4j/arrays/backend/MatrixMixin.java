@@ -33,7 +33,8 @@ import org.flag4j.util.ErrorMessages;
  * matrix (e.g. matrix multiplication).
  * @param <V> Type (or wrapper) of an element of this matrix.
  */
-public interface MatrixMixin<T extends MatrixMixin<T, U, V>, U extends DenseMatrixMixin<U, ?, ?, V>, V> extends TensorPropertiesMixin<V> {
+public interface MatrixMixin<T extends MatrixMixin<T, U, V>, U extends DenseMatrixMixin<U, ?, ?, V>, V>
+        extends TensorPropertiesMixin<V>, TensorUnaryOpsMixin<T> {
 
     /**
      * Gets the number of rows in this matrix.
@@ -454,4 +455,11 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V>, U extends DenseMatr
      * @return A deep copy of this matrix.
      */
     public T copy();
+
+
+    /**
+     * Computes the Hermitian transpose of this matrix.
+     * @return The Hermitian transpose of this matrix.
+     */
+    public T H();
 }

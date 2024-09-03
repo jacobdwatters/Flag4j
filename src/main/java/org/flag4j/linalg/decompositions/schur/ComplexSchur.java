@@ -28,7 +28,7 @@ import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.linalg.Eigen;
-import org.flag4j.linalg.decompositions.hess.ComplexHess;
+import org.flag4j.linalg.decompositions.hess.ComplexHessOld;
 import org.flag4j.linalg.transformations.Givens;
 import org.flag4j.linalg.transformations.HouseholderOld;
 import org.flag4j.operations_old.common.complex.AggregateComplex;
@@ -76,7 +76,7 @@ public class ComplexSchur extends Schur<CMatrixOld, CNumber[]> {
      * set the seed for the pseudo-random number generator using {@link #ComplexSchur(long)}</p>
      */
     public ComplexSchur() {
-        super(true, new RandomCNumber(), new ComplexHess());
+        super(true, new RandomCNumber(), new ComplexHessOld());
     }
 
 
@@ -95,7 +95,7 @@ public class ComplexSchur extends Schur<CMatrixOld, CNumber[]> {
      * {@code U} will be computed. If false, {@code U} will not be computed.
      */
     public ComplexSchur(boolean computeU) {
-        super(computeU, new RandomCNumber(), new ComplexHess(computeU));
+        super(computeU, new RandomCNumber(), new ComplexHessOld(computeU));
     }
 
 
@@ -104,7 +104,7 @@ public class ComplexSchur extends Schur<CMatrixOld, CNumber[]> {
      * @param seed Seed to use for pseudo-random number generator when computing exceptional shifts during the {@code QR} algorithm.
      */
     public ComplexSchur(long seed) {
-        super(true, new RandomCNumber(seed), new ComplexHess());
+        super(true, new RandomCNumber(seed), new ComplexHessOld());
     }
 
 
@@ -113,7 +113,7 @@ public class ComplexSchur extends Schur<CMatrixOld, CNumber[]> {
      * @param seed Seed to use for pseudo-random number generator when computing exceptional shifts during the {@code QR} algorithm.
      */
     public ComplexSchur(boolean computeU, long seed) {
-        super(computeU, new RandomCNumber(seed), new ComplexHess(computeU));
+        super(computeU, new RandomCNumber(seed), new ComplexHessOld(computeU));
     }
 
 

@@ -29,7 +29,7 @@ package org.flag4j.arrays.backend;
  *
  * @param <T> TensorOld type that the operation returns.
  */
-public interface TensorUnaryOpsMixin<T extends TensorBase<T, ?, ?>> {
+public interface TensorUnaryOpsMixin<T> {
 
     /**
      * Computes the transpose of a tensor by exchanging the first and last axes of this tensor.

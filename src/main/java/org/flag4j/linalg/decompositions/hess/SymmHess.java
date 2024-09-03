@@ -25,23 +25,22 @@
 package org.flag4j.linalg.decompositions.hess;
 
 
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.linalg.transformations.HouseholderOld;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.linalg.transformations.Householder;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 /**
  * <p>Computes the Hessenburg decomposition of a real dense symmetric matrix. That is, for a square, symmetric matrix
- * {@code A}, computes the decomposition {@code A=QHQ}<sup>T</sup> where {@code Q} is an orthogonal matrix and
- * {@code H} is a symmetric matrix in tri-diagonal form (special case of Hessenburg form) which is similar to {@code A}
+ * A, computes the decomposition A=QHQ<sup>T</sup> where Q is an orthogonal matrix and
+ * H is a symmetric matrix in tri-diagonal form (special case of Hessenburg form) which is similar to A
  * (i.e. has the same eigenvalues).</p>
  *
- * <p>A matrix {@code H} is in tri-diagonal form if it is nearly diagonal except for possibly the first sub/super-diagonal.
- * Specifically, if {@code H} has all zeros below the first sub-diagonal and above the first super-diagonal.</p>
+ * <p>A matrix H is in tri-diagonal form if it is nearly diagonal except for possibly the first sub/super-diagonals.
+ * Specifically, if H has all zeros below the first sub-diagonal and above the first super-diagonal.</p>
  *
- * <p>For example, the following matrix is in symmetric tri-diagonal form where each {@code x} may hold a different value (provided
- * the
- * matrix is symmetric):
+ * <p>For example, the following matrix is in symmetric tri-diagonal form where each 'x' may hold a different value (provided
+ * the matrix is symmetric):
  * <pre>
  *     [[ x x 0 0 0 ]
  *      [ x x x 0 0 ]
@@ -57,8 +56,9 @@ public class SymmHess extends RealHess {
      */
     protected boolean enforceSymmetric;
 
+
     /**
-     * Constructs a Hessenberg decomposer for symmetric matrices. By default, the HouseholderOld vectors used in the decomposition will be
+     * Constructs a Hessenberg decomposer for symmetric matrices. By default, the Householder vectors used in the decomposition will be
      * stored so that the full orthogonal {@code Q} matrix can be formed by calling {@link #getQ()}.
      */
     public SymmHess() {
@@ -68,8 +68,10 @@ public class SymmHess extends RealHess {
 
     /**
      * Constructs a Hessenberg decomposer for symmetric matrices.
+     *
      * @param computeQ Flag indicating if the orthogonal {@code Q} matrix from the Hessenberg decomposition should be explicitly computed.
-     * If true, then the {@code Q} matrix will be computed explicitly.
+     * If true, then the {@code Q} matrix will be computed explicitly. If {@code Q} is not
+     * needed, setting this to {@code false} <i>may</i> yield a slight increase in efficiency.
      */
     public SymmHess(boolean computeQ) {
         super(computeQ);
@@ -79,11 +81,12 @@ public class SymmHess extends RealHess {
     /**
      * Constructs a Hessenberg decomposer for symmetric matrices.
      * @param computeQ Flag indicating if the orthogonal {@code Q} matrix from the Hessenberg decomposition should be explicitly computed.
-     * If true, then the {@code Q} matrix will be computed explicitly.
+     * If true, then the {@code Q} matrix will be computed explicitly. If {@code Q} is not
+     * needed, setting this to {@code false} <i>may</i> yield a slight increase in efficiency.
      * @param enforceSymmetric Flag indicating if an explicit check should be made to ensure any matrix passed to
-     * {@link #decompose(MatrixOld)} is truly symmetric. If true, an exception will be thrown if the matrix is not symmetric. If false,
-     * the decomposition will proceed under the assumption that the matrix is symmetric whether it actually is or not. If the
-     * matrix is not symmetric, then the values in the upper triangular portion of the matrix are taken to be the values.
+     * {@link #decompose(Matrix)} is truly symmetric. If {@code true}, an exception will be thrown if the matrix is not symmetric. If
+     * {@code false}, the decomposition will proceed under the assumption that the matrix is symmetric whether it actually is or not.
+     * If the matrix is not symmetric, then the values in the upper triangular portion of the matrix are taken to be the values.
      */
     public SymmHess(boolean computeQ, boolean enforceSymmetric) {
         super(computeQ);
@@ -98,7 +101,7 @@ public class SymmHess extends RealHess {
      * @return A reference to this decomposer.
      */
     @Override
-    public SymmHess decompose(MatrixOld src) {
+    public SymmHess decompose(Matrix src) {
         super.decompose(src);
         return this;
     }
@@ -109,8 +112,8 @@ public class SymmHess extends RealHess {
      * @return The symmetric tri-diagonal (Hessenberg) matrix from this decomposition.
      */
     @Override
-    public MatrixOld getH() {
-        MatrixOld H = new MatrixOld(numRows);
+    public Matrix getH() {
+        Matrix H = new Matrix(numRows);
         H.entries[0] = transformMatrix.entries[0];
 
         int idx1;
@@ -170,9 +173,9 @@ public class SymmHess extends RealHess {
      * square regardless of the value of {@link #enforceSymmetric}.
      */
     @Override
-    protected void setUp(MatrixOld src) {
+    protected void setUp(Matrix src) {
         if(enforceSymmetric && !src.isSymmetric()) // If requested, check the matrix is symmetric.
-            throw new LinearAlgebraException("DecompositionOld only supports symmetric matrices.");
+            throw new LinearAlgebraException(this.getClass().getSimpleName() + " only supports symmetric matrices.");
         else
             ParameterChecks.ensureSquareMatrix(src.shape); // Otherwise, Just ensure the matrix is square.
 
@@ -186,8 +189,8 @@ public class SymmHess extends RealHess {
      * Copies the upper triangular portion of a matrix to the working matrix {@link #transformMatrix}.
      * @param src The source matrix to decompose of.
      */
-    private void copyUpperTri(MatrixOld src) {
-        transformMatrix = new MatrixOld(numRows);
+    private void copyUpperTri(Matrix src) {
+        transformMatrix = new Matrix(numRows);
 
         // Copy upper triangular portion.
         for(int i=0; i<numRows; i++) {
@@ -198,17 +201,19 @@ public class SymmHess extends RealHess {
 
 
     /**
-     * Updates the {@link #transformMatrix} matrix using the computed HouseholderOld vector from {@link #computeHouseholder(int)}.
-     * @param j Index of sub-matrix for which the HouseholderOld reflector was computed for.
+     * Updates the {@link #transformMatrix} matrix using the computed Householder vector from {@link #computeHouseholder(int)}.
+     * @param j Index of sub-matrix for which the Householder reflector was computed for.
      */
     @Override
     protected void updateData(int j) {
-        HouseholderOld.symmLeftRightMultReflector(transformMatrix, householderVector, currentFactor, j, workArray);
+        Householder.symmLeftRightMultReflector(transformMatrix, householderVector, currentFactor, j, workArray);
 
         if(j < numRows) transformMatrix.entries[(j-1)*numRows + j] = -norm;
+
         if(storeReflectors) {
             // Store the Q matrix in the lower portion of the transformation data matrix.
             int col = j-1;
+
             for(int i=j+1; i<numRows; i++) {
                 transformMatrix.entries[i*numRows + col] = householderVector[i];
             }

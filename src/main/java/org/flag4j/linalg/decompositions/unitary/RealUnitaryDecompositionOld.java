@@ -25,7 +25,7 @@
 package org.flag4j.linalg.decompositions.unitary;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.linalg.decompositions.hess.RealHess;
+import org.flag4j.linalg.decompositions.hess.RealHessOld;
 import org.flag4j.linalg.decompositions.qr.RealQROld;
 import org.flag4j.linalg.transformations.HouseholderOld;
 import org.flag4j.util.Flag4jConstants;
@@ -33,7 +33,7 @@ import org.flag4j.util.Flag4jConstants;
 /**
  * This class is the base class for real matrix decompositions which proceed by using unitary/orthogonal transformations
  * (specifically HouseholderOld reflectors) to bring a matrix into an upper triangular/Hessenburg matrix. Specifically, the
- * {@link RealQROld QR} and {@link RealHess Hessenburg} decompositions.
+ * {@link RealQROld QR} and {@link RealHessOld Hessenburg} decompositions.
  */
 @Deprecated
 public abstract class RealUnitaryDecompositionOld extends UnitaryDecompositionOld<MatrixOld, double[]> {
