@@ -4,7 +4,7 @@ package org.flag4j.linalg.solvers;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.linalg.solvers.exact.ComplexExactSolver;
+import org.flag4j.linalg.solvers.exact.ComplexExactSolverOld;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,7 +29,7 @@ class ComplexExactSolverTests {
 
     @Test
     void solveTestCase() {
-        ComplexExactSolver solver = new ComplexExactSolver();
+        ComplexExactSolverOld solver = new ComplexExactSolverOld();
 
         // ----------------- Sub-case 1 -----------------
         aEntries = new CNumber[][]{

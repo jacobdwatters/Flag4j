@@ -22,29 +22,41 @@
  * SOFTWARE.
  */
 
-package org.flag4j.linalg.solvers;
+package org.flag4j.arrays.backend;
 
-
-import org.flag4j.arrays.backend.TensorMixin;
-import org.flag4j.arrays.backend.TensorOverSemiRing;
-
+import org.flag4j.core_old.MatrixPropertiesMixin;
 
 /**
- * <p>This interface specifies methods which all linear system solvers should implement.</p>
+ * This interface specifies methods which all tensors should implement.
  *
- * <p>Solvers may solve in an exact sense or in a least squares sense.</p>
- *
- * @param <T> Type of the tensor in the linear system.
+ * @param <T> Type of this tensor.
+ * @param <U> Type (or wrapper) of an element of this tensor.
  */
-public interface LinearSolver<T extends TensorMixin> {
+public interface TensorMixin<T extends TensorMixin<T, U>, U>
+        extends TensorBinaryOpsMixin<T, T>,
+        TensorUnaryOpsMixin<T>,
+        TensorPropertiesMixin<U>{
 
     /**
-     * Solves the linear tensor equation given by A*X=B for the tensor X. All indices of X are summed over in
-     * the tensor product with the rightmost indices of A as if by
-     * {@link org.flag4j.arrays.backend.TensorOverSemiRing#tensorDot(TensorOverSemiRing, int) A.tensorDot(X, X.getRank())}.
-     * @param A Coefficient tensor in the linear system.
-     * @param B Tensor of constants in the linear system.
-     * @return The solution to the tensor X in the linear system A*X=B.
+     * Gets the element of this tensor at the specified indices.
+     * @param indices Indices of the element to get.
+     * @return The element of this tensor at the specified indices.
+     * @throws ArrayIndexOutOfBoundsException If any indices are not within this tensor.
      */
-    T solve(T A, T B);
+    public U get(int... indices);
+
+
+    /**
+     * <p>
+     * Gets the rank of this tensor. That is, number of indices needed to uniquely select an element of the tensor. This is also te
+     * number of dimensions (i.e. order/degree) of the tensor.
+     * </p>
+     *
+     * <p>
+     * Note, this method is distinct from the {@link MatrixPropertiesMixin#matrixRank()} method.
+     * </p>
+     *
+     * @return The rank of this tensor.
+     */
+    public int getRank();
 }

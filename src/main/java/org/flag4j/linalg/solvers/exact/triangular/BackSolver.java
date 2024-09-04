@@ -24,26 +24,23 @@
 
 package org.flag4j.linalg.solvers.exact.triangular;
 
-import org.flag4j.core_old.MatrixMixin;
-import org.flag4j.core_old.VectorMixin;
-import org.flag4j.linalg.solvers.LinearSolver;
+
+import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend.VectorMixin;
+import org.flag4j.linalg.solvers.LinearMatrixSolver;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
 /**
- * Base class for solvers which solve a linear system of equations {@code U*x=b} or {@code U*X=B} where {@code U} is an upper
- * triangular matrix. This is solved in an exact sense.
+ * Base class for solvers which solve a linear system of equations U*x=b or U*X=B where U is an upper
+ * triangular matrix. This system is solved in an exact sense.
+ *
  * @param <T> Type of matrix to decompose.
- * @param <U> VectorOld type equivalent of matrix.
+ * @param <U> Vector type equivalent of matrix.
  * @param <V> Type of internal storage for the matrix and vector.
  */
-public abstract class BackSolver<
-        T extends MatrixMixin<T, ?, ?, ?, ?, ?, U, ?>,
-        U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>,
-        V>
-        implements LinearSolver<T, U> {
-
+public abstract class BackSolver<T extends MatrixMixin, U extends VectorMixin, V> implements LinearMatrixSolver<T, U> {
 
     /**
      * For storing matrix results.
@@ -72,7 +69,7 @@ public abstract class BackSolver<
      * Creates a solver for solving linear systems for upper triangular coefficient matrices.
      * @param enforceTriU Flag indicating if an explicit check should be made that the coefficient matrix is upper triangular.
      */
-    public BackSolver(boolean enforceTriU) {
+    protected BackSolver(boolean enforceTriU) {
         this.enforceTriU = enforceTriU;
     }
 
@@ -85,7 +82,7 @@ public abstract class BackSolver<
      * true and {@code coeff} is not upper triangular.
      */
     protected void checkParams(T coeff, int constantRows) {
-        ParameterChecks.ensureSquare(coeff.shape());
+        ParameterChecks.ensureSquare(coeff.getShape());
         ParameterChecks.ensureEquals(coeff.numRows(), constantRows);
 
         if(enforceTriU && !coeff.isTriU()) {
@@ -102,7 +99,7 @@ public abstract class BackSolver<
      */
     protected void checkSingular(double detAbs, int numRows, int numCols) {
         if(detAbs <= RANK_CONDITION*Math.max(numRows, numCols) || Double.isNaN(detAbs)) {
-            throw new SingularMatrixException("Could not solve.");
+            throw new SingularMatrixException("Could not solve system.");
         }
     }
 }

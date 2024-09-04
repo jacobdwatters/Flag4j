@@ -48,9 +48,7 @@ import java.math.BigInteger;
  */
 public abstract class TensorBase<T extends TensorBase<T, U, V>, U, V>
         implements Serializable,
-        TensorBinaryOpsMixin<T, T>,
-        TensorUnaryOpsMixin<T>,
-        TensorPropertiesMixin<V> {
+        TensorMixin<T, V> {
 
     /**
      * Entry data of this tensor. If this tensor is dense, then this specifies all entries within this tensor. If this tensor is
@@ -96,6 +94,7 @@ public abstract class TensorBase<T extends TensorBase<T, U, V>, U, V>
      * @return The element of this tensor at the specified indices.
      * @throws ArrayIndexOutOfBoundsException If any indices are not within this tensor.
      */
+    @Override
     public abstract V get(int... indices);
 
 
@@ -111,6 +110,7 @@ public abstract class TensorBase<T extends TensorBase<T, U, V>, U, V>
      *
      * @return The rank of this tensor.
      */
+    @Override
     public int getRank() {
         return rank;
     }

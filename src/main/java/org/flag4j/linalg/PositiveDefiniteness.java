@@ -57,7 +57,7 @@ public class PositiveDefiniteness {
         double tol = 1.0E-8; // Tolerance for considering eigenvalues positive.
 
         if(src.isSymmetric()) {
-            result = Eigen.getEigenValues(src).min() > tol;
+            result = EigenOld.getEigenValues(src).min() > tol;
         } else {
             result = false;
         }
@@ -102,7 +102,7 @@ public class PositiveDefiniteness {
         double tol = 1.0E-8; // Tolerance for considering eigenvalues positive.
 
         if(src.isHermitian()) {
-            result = Eigen.getEigenValues(src).toReal().min() > tol;
+            result = EigenOld.getEigenValues(src).toReal().min() > tol;
         } else {
             result = false;
         }
@@ -147,7 +147,7 @@ public class PositiveDefiniteness {
         double tol = -1.0E-8; // Tolerance for considering eigenvalues non-negative.
 
         if(src.isSymmetric()) {
-            result = Eigen.getEigenValues(src).toReal().min() > tol;
+            result = EigenOld.getEigenValues(src).toReal().min() > tol;
         } else {
             result = false;
         }
@@ -170,7 +170,7 @@ public class PositiveDefiniteness {
         double tol = -1.0E-8; // Tolerance for considering eigenvalues non-negative.
 
         if(src.isHermitian()) {
-            result = Eigen.getEigenValues(src).toReal().min() > tol;
+            result = EigenOld.getEigenValues(src).toReal().min() > tol;
         } else {
             result = false;
         }

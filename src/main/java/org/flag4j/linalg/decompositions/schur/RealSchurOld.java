@@ -24,59 +24,60 @@
 
 package org.flag4j.linalg.decompositions.schur;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.linalg.Eigen;
-import org.flag4j.linalg.decompositions.hess.RealHess;
-import org.flag4j.linalg.transformations.Givens;
-import org.flag4j.linalg.transformations.Householder;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.linalg.EigenOld;
+import org.flag4j.linalg.decompositions.hess.RealHessOld;
+import org.flag4j.linalg.transformations.GivensOld;
+import org.flag4j.linalg.transformations.HouseholderOld;
 import org.flag4j.operations_old.common.real.AggregateReal;
-import org.flag4j.rng.RandomComplex;
+import org.flag4j.rng.RandomCNumber;
 
 import static org.flag4j.util.Flag4jConstants.EPS_F64;
 
-
 /**
- * <p>This class computes the Schur decomposition of a real dense square matrix.</p>
+ * <p>This class computes the SchurOld decomposition of a real dense square matrix.</p>
  *
- * <p>That is, decompose a square matrix A into A=UTU<sup>T</sup> where U is an orthogonal
- * matrix and  is a block-upper triangular matrix called the real-Schur form of A. T is upper triangular
- * except for possibly 2-by-22 blocks along the diagonal. T is similar to A.
+ * <p>That is, decompose a square matrix {@code A} into {@code A=UTU}<sup>T</sup> where {@code U} is an orthogonal
+ * matrix and {@code T} is a block-upper triangular matrix called the real-SchurOld form of {@code A}. {@code T} is upper triangular
+ * except for possibly 2x2 blocks along the diagonal. {@code T} is similar to {@code A}.
  * </p>
  *
  * <p>This code was adapted from the code found in the <a href="http://ejml.org/wiki/index.php?title=Main_Page">EJML</a>
- * library and the description of the Francis implicit double shifted QR algorithm from
- * <a href="https://www.math.wsu.edu/faculty/watkins/books.html">Fundamentals of Matrix
+ * library and the description of
+ * the Francis implicit double shifted QR algorithm given in
+ * <a href="https://www.math.wsu.edu/faculty/watkins/books.html">Fundamentals of MatrixOld
  * Computations 3rd Edition by David S. Watkins</a>.</p>
  */
-public class RealSchur extends Schur<Matrix, double[]> {
-
+@Deprecated
+public class RealSchurOld extends SchurOld<MatrixOld, double[]> {
 
     /**
-     * For computing the norm of a column for use when computing Householder reflectors.
+     * For computing the norm of a column for use when computing HouseholderOld reflectors.
      */
     protected double norm;
     /**
-     * Stores the scalar factor &alpha for use in computation of the Householder reflector P = I - &alpha vv<sup>T</sup>.
+     * Stores the scalar factor &alpha for use in computation of the HouseholderOld reflector {@code P = I - }&alpha{@code vv}<sup>T
+     * </sup>.
      */
     protected double currentFactor;
 
 
     /**
-     * <p>Creates a decomposer to compute the Schur decomposition for a real dense matrix.</p>
+     * <p>Creates a decomposer to compute the SchurOld decomposition for a real dense matrix.</p>
      *
      * <p>Note: This decomposer <i><b>may</b></i> use random numbers during the decomposition. If reproducible results are needed,
-     * set the seed for the pseudo-random number generator using {@link #RealSchur(long)}</p>
+     * set the seed for the pseudo-random number generator using {@link #RealSchurOld(long)}</p>
      */
-    public RealSchur() {
-        super(true, new RandomComplex(), new RealHess());
+    public RealSchurOld() {
+        super(true, new RandomCNumber(), new RealHessOld());
     }
 
 
     /**
-     * <p>Creates a decomposer to compute the Schur decomposition for a real dense matrix where the {@code U} matrix may or may not
+     * <p>Creates a decomposer to compute the SchurOld decomposition for a real dense matrix where the {@code U} matrix may or may not
      * be computed.</p>
      *
      * <p>If the {@code U} matrix is not needed, passing {@code computeU = false} may provide a performance improvement.</p>
@@ -84,39 +85,39 @@ public class RealSchur extends Schur<Matrix, double[]> {
      * <p>By default if a constructor with no {@code computeU} parameter is called, {@code U} <b>WILL</b> be computed.</p>
      *
      * <p>Note: This decomposer <i><b>may</b></i> use random numbers during the decomposition. If reproducible results are needed,
-     * set the seed for the pseudo-random number generator using {@link #RealSchur(boolean, long)}</p>
+     * set the seed for the pseudo-random number generator using {@link #RealSchurOld(boolean, long)}</p>
      *
-     * @param computeU Flag indicating if the unitary {@code U} matrix should be computed for the Schur decomposition. If true,
+     * @param computeU Flag indicating if the unitary {@code U} matrix should be computed for the SchurOld decomposition. If true,
      * {@code U} will be computed. If false, {@code U} will not be computed.
      */
-    public RealSchur(boolean computeU) {
-        super(computeU, new RandomComplex(), new RealHess(computeU));
+    public RealSchurOld(boolean computeU) {
+        super(computeU, new RandomCNumber(), new RealHessOld(computeU));
     }
 
 
     /**
-     * Creates a decomposer to compute the Schur decomposition for a real dense matrix.
-     * @param seed Seed to use for pseudo-random number generator when computing exceptional shifts during the QR algorithm.
+     * Creates a decomposer to compute the SchurOld decomposition for a real dense matrix.
+     * @param seed Seed to use for pseudo-random number generator when computing exceptional shifts during the {@code QR} algorithm.
      */
-    public RealSchur(long seed) {
-        super(true, new RandomComplex(seed), new RealHess());
+    public RealSchurOld(long seed) {
+        super(true, new RandomCNumber(seed), new RealHessOld());
     }
 
 
     /**
-     * Creates a decomposer to compute the Schur decomposition for a real dense matrix.
-     * @param seed Seed to use for pseudo-random number generator when computing exceptional shifts during the QR algorithm.
+     * Creates a decomposer to compute the SchurOld decomposition for a real dense matrix.
+     * @param seed Seed to use for pseudo-random number generator when computing exceptional shifts during the {@code QR} algorithm.
      */
-    public RealSchur(boolean computeU, long seed) {
-        super(computeU, new RandomComplex(seed), new RealHess(computeU));
+    public RealSchurOld(boolean computeU, long seed) {
+        super(computeU, new RandomCNumber(seed), new RealHessOld(computeU));
     }
 
 
     /**
-     * <p>Sets the number of iterations of the QR algorithm to perform without deflation before performing a random shift.</p>
+     * <p>Sets the number of iterations of the {@code QR} algorithm to perform without deflation before performing a random shift.</p>
      *
-     * <p>That is, if {@code exceptionalThreshold = 10}, then at most 10 iterations QR algorithm iterations will be performed.
-     * If, by the 10th iteration, no convergence has been detected which allows for deflation, then a QR algorithm iteration
+     * <p>That is, if {@code exceptionalThreshold = 10}, then at most 10 iterations {@code QR} algorithm iterations will be performed.
+     * If, by the 10th iteration, no convergence has been detected which allows for deflation, then a {@code QR} algorithm iteration
      * will be performed with a random (i.e. exceptional) shift.</p>
      *
      * <p>By default, the threshold is set to {@link #DEFAULT_EXCEPTIONAL_ITERS}</p>
@@ -126,15 +127,15 @@ public class RealSchur extends Schur<Matrix, double[]> {
      * @return A reference to this decomposer.
      * @throws IllegalArgumentException If {@code exceptionalThreshold} is not positive.
      */
-    public RealSchur setExceptionalThreshold(int exceptionalThreshold) {
+    public RealSchurOld setExceptionalThreshold(int exceptionalThreshold) {
         // Provided so that calls like the following can be made:
-        //    RealSchur schur = new RealSchur().setExceptionalThreshold(x).decompose()
-        return (RealSchur) super.setExceptionalThreshold(exceptionalThreshold);
+        //    RealSchurOld schur = new RealSchurOld().setExceptionalThreshold(x).decompose()
+        return (RealSchurOld) super.setExceptionalThreshold(exceptionalThreshold);
     }
 
 
     /**
-     * <p>Specify maximum iteration factor for computing the total number of iterations to run the QR algorithm
+     * <p>Specify maximum iteration factor for computing the total number of iterations to run the {@code QR} algorithm
      * for when computing the decomposition. The maximum number of iterations is computed as
      * <pre>
      *     {@code maxIteration = maxIterationFactor * src.numRows;} </pre>
@@ -148,28 +149,28 @@ public class RealSchur extends Schur<Matrix, double[]> {
      * being decomposed.</p>
      *
      * @param maxIterationFactor maximum iteration factor for use in computing the total maximum number of iterations to run the
-     * QR algorithm for.
+     * {@code QR} algorithm for.
      * @return A reference to this decomposer.
      * @throws IllegalArgumentException If {@code maxIterationFactor} is not positive.
      */
-    public RealSchur setMaxIterationFactor(int maxIterationFactor) {
+    public RealSchurOld setMaxIterationFactor(int maxIterationFactor) {
         // Provided so calls like the following can be made:
-        //    RealSchur schur = new RealSchur().setMaxIterationFactor(x).decompose()
-        return (RealSchur) super.setMaxIterationFactor(maxIterationFactor);
+        //    RealSchurOld schur = new RealSchurOld().setMaxIterationFactor(x).decompose()
+        return (RealSchurOld) super.setMaxIterationFactor(maxIterationFactor);
     }
 
 
     /**
-     * <p>Computes the Schur decomposition of the input matrix.</p>
+     * <p>Computes the SchurOld decomposition of the input matrix.</p>
      *
-     * @implNote The Schur decomposition is computed using the Francis implicit double shifted QR algorithm.
-     * There are known cases where this variant of the QR algorithm fail to converge. Random shifting is employed when the
+     * @implNote The SchurOld decomposition is computed using the Francis implicit double shifted {@code QR} algorithm.
+     * There are known cases where this variant of the {@code QR} algorithm fail to converge. Random shifting is employed when the
      * matrix is not converging which greatly minimizes this issue. It is unlikely that a general matrix will fail to converge with
      * these random shifts however, no guarantees of convergence can be made.
      * @param src The source matrix to decompose.
      */
     @Override
-    public RealSchur decompose(Matrix src) {
+    public RealSchurOld decompose(MatrixOld src) {
         decomposeBase(src);
         return this;
     }
@@ -188,9 +189,9 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
 
     /**
-     * Performs a full iteration of the single shifted QR algorithm (this includes the bulge chase) where the shift is
+     * Performs a full iteration of the single shifted {@code QR} algorithm (this includes the bulge chase) where the shift is
      * chosen to be a random value with the same magnitude as the lower right element of the working matrix. This can help the
-     * QR converge for certain pathological cases where the double shift algorithm oscillates or fails to converge for
+     * {@code QR} converge for certain pathological cases where the double shift algorithm oscillates or fails to converge for
      * repeated eigenvalues.
      *
      * @param workingSize The current working size for the decomposition. I.e. all entries below this row have converged to an upper
@@ -203,7 +204,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
 
     /**
-     * Computes a random shift to help the QR algorithm converge if it gets stuck.
+     * Computes a random shift to help the {@code QR} algorithm converge if it gets stuck.
      * @param k The current size of the working matrix. Specifically, the index of the lower right value in the working matrix is
      *          {@code (k, k)}.
      * @return A shift in a random direction which has the same magnitude as the elements in the matrix.
@@ -225,7 +226,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
 
     /**
-     * Computes the non-zero entries of the first column for the single shifted QR algorithm.
+     * Computes the non-zero entries of the first column for the single shifted {@code QR} algorithm.
      * @param k Size of current working matrix.
      * @param shift The shift to use.
      */
@@ -237,10 +238,10 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
 
     /**
-     * Performs a full iteration of the implicit single shifted QR algorithm (this includes the bulge chase).
+     * Performs a full iteration of the implicit single shifted {@code QR} algorithm (this includes the bulge chase).
      * @param workingSize The current working size for the decomposition. I.e. all entries below this row have converged to an upper
      *                   or possible 2x2 block upper triangular form.
-     * @param shift The shift to use in the implicit single shifted QR algorithm.
+     * @param shift The shift to use in the implicit single shifted {@code QR} algorithm.
      */
     protected void performSingleShift(int workingSize, double shift) {
         // Compute the non-zero entries of first column for shifted matrix.
@@ -271,11 +272,11 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
         // TODO: Since we only need to zero a single element, consider using a givens rotator here instead.
         //  There should be negligible stability difference between the two for a 2x2 rotator, but the givens rotator is more
-        //  simple to calculate. However, this seems to be incorrect. Need to determine what this should be or if the left/right
+        //  simple to calculate. However, this seems to be incorrect. Figure out what this should be or if the left/right
         //  multiplication methods are incorrect.
-//        Matrix G = Givens.get2x2Rotator(T.entries[i*numRows + i - 1], T.entries[(i+1)*numRows + i - 1]);
-//        Givens.leftMult2x2Rotator(T, G, i+1, givensWorkArray);
-//        Givens.rightMult2x2Rotator(T, G, i+1, givensWorkArray);
+//        MatrixOld G = GivensOld.get2x2Rotator(T.entries[i*numRows + i - 1], T.entries[(i+1)*numRows + i - 1]);
+//        GivensOld.leftMult2x2Rotator(T, G, i+1, givensWorkArray);
+//        GivensOld.rightMult2x2Rotator(T, G, i+1, givensWorkArray);
 
         if(set) {
             // Explicitly zeros out values which should be zeroed by the reflector.
@@ -286,7 +287,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
 
     /**
-     * Performs a full iteration of the Francis implicit double shifted QR algorithm (this includes the bulge chase).
+     * Performs a full iteration of the Francis implicit double shifted {@code QR} algorithm (this includes the bulge chase).
      * @param workingSize The current working size for the decomposition. I.e. all entries below this row have converged to an upper
      *                   or possible 2x2 block upper triangular form.
      */
@@ -301,7 +302,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
         // Apply shift and chase bulge.
         for(int i=0; i<=workingSize-2; i++) {
-            if(makeReflector(i, p1, p2, p3)) // Construct Householder reflector.
+            if(makeReflector(i, p1, p2, p3)) // Construct HouseholderOld reflector.
                 applyDoubleShiftReflector(i, i>0); // Apply the reflector if needed.
 
             // Set values to be used in computing the next bulge chasing reflector.
@@ -311,7 +312,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
         }
 
         // The last reflector in the bulge chase only acts on last two rows of the working matrix.
-        if(makeReflector(workingSize-1, p1, p2)) // Construct Householder reflector.
+        if(makeReflector(workingSize-1, p1, p2)) // Construct HouseholderOld reflector.
             applySingleShiftReflector(workingSize-1, true); // Apply the reflector if needed.
     }
 
@@ -322,7 +323,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
      * @param workingSize Size of current working matrix.
      */
     protected void computeImplicitDoubleShift(int workingSize) {
-        // The shift computed here, p, represents the double shift
+        // The shift computed here, p, represent the double shift
         //  p = (T - rho1*I)(T - rho2*I)*e1 where I is the identity matrix, e1 is the first column of I, and (rho1, rho2)
         //  are taken to be the eigenvalues of the lower 2x2 sub-matrix within the working matrix.
         //  Note: (rho1, rho2) are either both real, or both complex (and specifically complex conjugates). In either case, has
@@ -379,7 +380,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
 
     /**
-     * Applies the constructed Householder reflector which has been constructed for the given shift size.
+     * Applies the constructed HouseholderOld reflector which has been constructed for the given shift size.
      * @param i The stating row the reflector is being applied to.
      * @param shiftSize The size of the shift the reflector was constructed for.
      */
@@ -387,13 +388,13 @@ public class RealSchur extends Schur<Matrix, double[]> {
         int endRow = i + shiftSize + 1;
 
         // Apply reflector to left (Assumes T is upper hessenburg except for possibly a bulge of size shiftSize).
-        Householder.leftMultReflector(T, householderVector, currentFactor, i, i, endRow, workArray);
+        HouseholderOld.leftMultReflector(T, householderVector, currentFactor, i, i, endRow, workArray);
         // Apply reflector to right (Assumes T is upper hessenburg except for possibly a bulge of size shiftSize).
-        Householder.rightMultReflector(T, householderVector, currentFactor, 0, i, endRow);
+        HouseholderOld.rightMultReflector(T, householderVector, currentFactor, 0, i, endRow);
 
         if(computeU) {
             // Accumulate the reflector in U if it is being computed.
-            Householder.rightMultReflector(U, householderVector, currentFactor, 0, i, endRow);
+            HouseholderOld.rightMultReflector(U, householderVector, currentFactor, 0, i, endRow);
         }
     }
 
@@ -422,7 +423,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
         norm = Math.sqrt(p1*p1 + p2*p2 + p3*p3); // Compute scaled 2-norm.
 
-        // Change sign of norm depending on first entry in column for stability purposes in Householder vector.
+        // Change sign of norm depending on first entry in column for stability purposes in HouseholderOld vector.
         if(p1 < 0) norm = -norm;
 
         double div = p1 + norm;
@@ -457,7 +458,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
         p2 /= maxAbs;
 
         norm = Math.sqrt(p1*p1 + p2*p2); // Compute scaled norm.
-        // Change sign of norm depending on first entry in column for stability purposes in Householder vector.
+        // Change sign of norm depending on first entry in column for stability purposes in HouseholderOld vector.
         if(p1 < 0) norm = -norm;
 
         double div = p1 + norm;
@@ -506,52 +507,52 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
 
     /**
-     * <p>Converts the real schur form computed in the last decomposition to the complex Schur form.</p>
+     * <p>Converts the real schur form computed in the last decomposition to the complex SchurOld form.</p>
      *
      * <p>That is, converts the real block
-     * upper triangular Schur matrix to a complex valued properly upper triangular matrix. If the unitary transformation matrix
+     * upper triangular SchurOld matrix to a complex valued properly upper triangular matrix. If the unitary transformation matrix
      * {@code U} was computed, the transformations will also be updated accordingly.</p>
      *
      * <p>This method was adapted from the code given by
      * <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.rsf2csf.html">scipy.linalg.rsf2csf</a> (v1.12.0).</p>
      *
-     * @return An array of length 2 containing the complex Schur matrix {@code T} from the last decomposition, and if computed, the
+     * @return An array of length 2 containing the complex SchurOld matrix {@code T} from the last decomposition, and if computed, the
      * complex unitary transformation matrix {@code U} from the decomposition. If {@code U} was not computed, then the arrays_old second
      * value will be null.
      */
-    public CMatrix[] real2ComplexSchur() {
+    public CMatrixOld[] real2ComplexSchur() {
         // Convert matrices to complex matrices.
-        CMatrix tComplex = T.toComplex();
-        CMatrix uComplex = computeU ? U.toComplex() : null;
-        Complex128[] givensWorkComplex = new Complex128[2*numRows];
+        CMatrixOld tComplex = T.toComplex();
+        CMatrixOld uComplex = computeU ? U.toComplex() : null;
+        CNumber[] givensWorkComplex = new CNumber[2*numRows];
 
         for(int m=numRows-1; m>0; m--) {
-            Complex128 a11 = tComplex.entries[(m - 1)*numRows + m - 1];
-            Complex128 a12 = tComplex.entries[(m - 1)*numRows + m];
-            Complex128 a21 = tComplex.entries[m*numRows + m - 1];
-            Complex128 a22 = tComplex.entries[m*numRows + m];
+            CNumber a11 = tComplex.entries[(m - 1)*numRows + m - 1];
+            CNumber a12 = tComplex.entries[(m - 1)*numRows + m];
+            CNumber a21 = tComplex.entries[m*numRows + m - 1];
+            CNumber a22 = tComplex.entries[m*numRows + m];
 
             if(a21.mag() > EPS_F64*(a11.mag() + a22.mag())) {
                 // non-converged 2x2 block found.
-                Complex128[] mu = Eigen.get2x2EigenValues(a11, a12, a21, a22);
+                CNumber[] mu = EigenOld.get2x2EigenValues(a11, a12, a21, a22);
                 mu[0] = mu[0].sub(a22); // Shift eigenvalue.
 
                 // Construct a givens rotator to bring matrix into properly upper triangular form.
-                CMatrix G = Givens.get2x2Rotator(new CVector(mu[0], a21));
+                CMatrixOld G = GivensOld.get2x2Rotator(new CVectorOld(mu[0], a21));
                 // Apply rotation to T matrix to bring it into upper triangular form.
-                Givens.leftMult2x2Rotator(tComplex, G, m, givensWorkComplex);
+                GivensOld.leftMult2x2Rotator(tComplex, G, m, givensWorkComplex);
                 // Apply hermitian transpose to keep transformation similar.
-                Givens.rightMult2x2Rotator(tComplex, G, m, givensWorkComplex);
+                GivensOld.rightMult2x2Rotator(tComplex, G, m, givensWorkComplex);
 
                 if(uComplex != null) {
                     // Accumulate similarity transforms in the U matrix.
-                    Givens.rightMult2x2Rotator(uComplex, G, m, givensWorkComplex);
+                    GivensOld.rightMult2x2Rotator(uComplex, G, m, givensWorkComplex);
                 }
 
-                tComplex.set(Complex128.ZERO, m, m-1);
+                tComplex.set(0, m, m-1);
             }
         }
 
-        return new CMatrix[]{tComplex, uComplex};
+        return new CMatrixOld[]{tComplex, uComplex};
     }
 }

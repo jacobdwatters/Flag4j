@@ -25,23 +25,23 @@
 package org.flag4j.linalg.solvers.exact;
 
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays.Shape;
 
 /**
  * Solver for solving a real well determined linear tensor equation {@code A*X=B} in an exact sense.
  */
-public class RealExactTensorSolver extends ExactTensorSolver<TensorOld, MatrixOld, VectorOld> {
+public class RealExactTensorSolverOld extends ExactTensorSolverOld<TensorOld, MatrixOld, VectorOld> {
 
 
     /**
      * Creates an exact tensor solver for solving a well determined linear tensor equation {@code A*X=B}
      * for {@code X} in an exact sense.
      */
-    public RealExactTensorSolver() {
-        super(new RealExactSolver());
+    public RealExactTensorSolverOld() {
+        super(new RealExactSolverOld());
     }
 
 

@@ -36,7 +36,7 @@ import org.flag4j.linalg.decompositions.lu.LUOld;
 import org.flag4j.linalg.decompositions.lu.RealLUOLd;
 import org.flag4j.linalg.decompositions.qr.ComplexQROld;
 import org.flag4j.linalg.decompositions.qr.RealQROld;
-import org.flag4j.linalg.decompositions.schur.RealSchur;
+import org.flag4j.linalg.decompositions.schur.RealSchurOld;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
 import org.flag4j.util.ErrorMessages;
@@ -125,17 +125,17 @@ public class DecompositionFactory {
 
 
     /**
-     * Constructs a decomposer to compute the Schur decomposition of a real dense matrix.
-     * @return A decomposer to compute the Schur decomposition of a real dense matrix.
+     * Constructs a decomposer to compute the SchurOld decomposition of a real dense matrix.
+     * @return A decomposer to compute the SchurOld decomposition of a real dense matrix.
      */
-    public static RealSchur createRealSchur() {
-        return new RealSchur();
+    public static RealSchurOld createRealSchur() {
+        return new RealSchurOld();
     }
 
 
     /**
-     * Constructs a decomposer to compute the Schur decomposition of a complex dense matrix.
-     * @return A decomposer to compute the Schur decomposition of a complex dense matrix.
+     * Constructs a decomposer to compute the SchurOld decomposition of a complex dense matrix.
+     * @return A decomposer to compute the SchurOld decomposition of a complex dense matrix.
      */
     public static ComplexQROld createComplexSchur() {
         return new ComplexQROld();

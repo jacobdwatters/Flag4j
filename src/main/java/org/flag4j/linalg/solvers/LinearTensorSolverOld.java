@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,30 +22,27 @@
  * SOFTWARE.
  */
 
-package org.flag4j.linalg.solvers.lstsq;
+package org.flag4j.linalg.solvers;
 
-
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.linalg.decompositions.qr.RealQROld;
-import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
-
+import org.flag4j.core_old.TensorBase;
+import org.flag4j.core_old.TensorExclusiveMixin;
 
 /**
- * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,
- * minimizes {@code ||Ax-b||}<sub>2</sub> which is equivalent to solving the normal equations
- * {@code A}<sup>T</sup>{@code Ax=A}<sup>T</sup>{@code b}.
- * This is done efficiently using a {@link RealQROld QR decomposition}.
+ * This interface specifies methods which all linear tensor system solvers should implement. Solvers
+ * may solve in an exact sense or in a least squares sense.
+ * @param <T> Type of the tensors in the linear system.
  */
-public class RealLstsqSolver extends LstsqSolver<MatrixOld, VectorOld> {
+@Deprecated
+public interface LinearTensorSolverOld<T extends TensorBase<T, ?, ?, ?, ?, ?, ?>> {
 
 
     /**
-     * Constructs a least-squares solver to solve a system {@code Ax=b} in a least square sense. That is,
-     * minimizes {@code ||Ax-b||<sub>2</sub>} which is equivalent to solving the normal equations
-     * {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
+     * Solves the linear tensor equation given by {@code A*X=B} for the tensor {@code X}. All indices of {@code X} are summed over in
+     * the tensor product with the rightmost indices of {@code A} as if by
+     * {@link TensorExclusiveMixin#tensorDot(TensorBase, int)  A.tensorDot(X, X.getRank())}.
+     * @param A Coefficient tensor in the linear system.
+     * @param B TensorOld of constants in the linear system.
+     * @return The solution to {@code x} in the linear system {@code A*X=B}.
      */
-    public RealLstsqSolver() {
-        super(new RealQROld(), new RealBackSolver());
-    }
+    T solve(T A, T B);
 }

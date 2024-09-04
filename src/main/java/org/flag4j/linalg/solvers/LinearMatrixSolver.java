@@ -22,28 +22,38 @@
  * SOFTWARE.
  */
 
-package org.flag4j.linalg.solvers.lstsq;
+package org.flag4j.linalg.solvers;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.linalg.decompositions.qr.ComplexQROld;
-import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
+import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend.VectorMixin;
 
 /**
- * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,
- * minimizes {@code ||Ax-b||}<sub>2</sub> which is equivalent to solving the normal equations
- * {@code A}<sup>T</sup>{@code Ax=A}<sup>T</sup>{@code b}.
- * This is done using efficiently a {@link ComplexQROld QR decomposition}.
+ * This interface specifies methods which all linear matrix system solvers should implement.
+ *
+ * <p>Solvers may solve in an exact sense or in a least squares sense.</p>
+ *
+ * @param <T> Type of the matrices in the linear system.
+ * @param <U> Type of the vectors in the linear system.
  */
-public class ComplexLstsqSolver extends LstsqSolver<CMatrixOld, CVectorOld> {
+public interface LinearMatrixSolver<T extends MatrixMixin, U extends VectorMixin> extends LinearSolver<T> {
 
 
     /**
-     * Constructs a least-squares solver to solve a system {@code Ax=b} in a least square sense. That is,
-     * minimizes {@code ||Ax-b||<sub>2</sub>} which is equivalent to solving the normal equations
-     * {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
+     * Solves the linear system of equations given by A*x=b for the vector x.
+     * @param A Coefficient matrix in the linear system.
+     * @param b Vector of constants in the linear system.
+     * @return The solution to x in the linear system A*x=b.
      */
-    public ComplexLstsqSolver() {
-        super(new ComplexQROld(), new ComplexBackSolver());
-    }
+    U solve(T A, U b);
+
+
+    /**
+     * Solves the set of linear system of equations given by A*X=B for the matrix X where
+     * A, B, and X are matrices.
+     * @param A Coefficient matrix in the linear system.
+     * @param B Matrix of constants in the linear system.
+     * @return The solution to X in the linear system A*X=B.
+     */
+    @Override
+    T solve(T A, T B);
 }

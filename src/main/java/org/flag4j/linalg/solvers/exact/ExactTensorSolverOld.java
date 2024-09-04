@@ -29,8 +29,8 @@ import org.flag4j.core_old.MatrixMixin;
 import org.flag4j.core_old.TensorBase;
 import org.flag4j.core_old.TensorExclusiveMixin;
 import org.flag4j.core_old.VectorMixin;
-import org.flag4j.linalg.solvers.LinearSolver;
-import org.flag4j.linalg.solvers.LinearTensorSolver;
+import org.flag4j.linalg.solvers.LinearSolverOld;
+import org.flag4j.linalg.solvers.LinearTensorSolverOld;
 import org.flag4j.util.ParameterChecks;
 
 
@@ -43,17 +43,17 @@ import org.flag4j.util.ParameterChecks;
  * @param <U> MatrixOld type equivalent of tensor to solve.
  * @param <V> VectorOld type equivalent of tensor to solve.
  */
-public abstract class ExactTensorSolver<
+public abstract class ExactTensorSolverOld<
         T extends TensorBase<T, ?, ?, ?, ?, ?, ?>,
         U extends MatrixMixin<U, ?, ?, ?, ?, ?, V, ?>,
         V extends VectorMixin<V, ?, ?, ?, ?, U, ?, ?>>
-        implements LinearTensorSolver<T> {
+        implements LinearTensorSolverOld<T> {
 
     /**
      * Solver to solve a linear matrix equation {@code C*X=d} for {@code X} where {@code C} and {@code X} are matrices and
      * {@code d} is a vector.
      */
-    private final LinearSolver<U, V> matrixSolver;
+    private final LinearSolverOld<U, V> matrixSolver;
 
 
     /**
@@ -61,7 +61,7 @@ public abstract class ExactTensorSolver<
      * solver to solve the tensor system.
      * @param matrixSolver MatrixOld solver to use as the solver for the equivalent matrix system.
      */
-    protected ExactTensorSolver(LinearSolver<U, V> matrixSolver) {
+    protected ExactTensorSolverOld(LinearSolverOld<U, V> matrixSolver) {
         this.matrixSolver = matrixSolver;
     }
 

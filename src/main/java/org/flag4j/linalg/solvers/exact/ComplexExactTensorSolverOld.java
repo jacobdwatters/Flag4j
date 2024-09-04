@@ -33,15 +33,15 @@ import org.flag4j.arrays_old.dense.CVectorOld;
 /**
  * Solver for solving a complex well determined linear tensor equation {@code A*X=B} in an exact sense.
  */
-public class ComplexExactTensorSolver extends ExactTensorSolver<CTensorOld, CMatrixOld, CVectorOld> {
+public class ComplexExactTensorSolverOld extends ExactTensorSolverOld<CTensorOld, CMatrixOld, CVectorOld> {
 
 
     /**
      * Creates an exact tensor solver for solving a well determined linear tensor equation {@code A*X=B}
      * for {@code X} in an exact sense.
      */
-    public ComplexExactTensorSolver() {
-        super(new ComplexExactSolver());
+    public ComplexExactTensorSolverOld() {
+        super(new ComplexExactSolverOld());
     }
 
 

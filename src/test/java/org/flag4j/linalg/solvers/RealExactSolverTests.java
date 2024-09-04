@@ -3,7 +3,7 @@ package org.flag4j.linalg.solvers;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.linalg.solvers.exact.RealExactSolver;
+import org.flag4j.linalg.solvers.exact.RealExactSolverOld;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.SingularMatrixException;
 import org.junit.jupiter.api.Assertions;
@@ -30,7 +30,7 @@ class RealExactSolverTests {
 
     @Test
     void solveTestCase() {
-        RealExactSolver solver = new RealExactSolver();
+        RealExactSolverOld solver = new RealExactSolverOld();
 
         // ----------------- Sub-case 1 -----------------
         aEntries = new double[][]{

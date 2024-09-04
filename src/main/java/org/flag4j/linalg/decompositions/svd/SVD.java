@@ -70,7 +70,7 @@ public abstract class SVD<
 
 
     /**
-     * Creates a decomposer to compute the Schur decomposition.
+     * Creates a decomposer to compute the SchurOld decomposition.
      * @param computeUV A flag which indicates if the unitary matrices {@code Q} and {@code V} should be computed
      *                  (i.e. the singular vectors).<br>
      *                 - If true, the {@code Q} and {@code V} matrices will be computed.

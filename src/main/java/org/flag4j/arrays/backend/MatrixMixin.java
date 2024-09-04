@@ -34,7 +34,7 @@ import org.flag4j.util.ErrorMessages;
  * @param <V> Type (or wrapper) of an element of this matrix.
  */
 public interface MatrixMixin<T extends MatrixMixin<T, U, V>, U extends DenseMatrixMixin<U, ?, ?, V>, V>
-        extends TensorPropertiesMixin<V>, TensorUnaryOpsMixin<T> {
+        extends TensorMixin<T, V> {
 
     /**
      * Gets the number of rows in this matrix.

@@ -32,8 +32,8 @@ import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
 import org.flag4j.linalg.decompositions.svd.SVD;
-import org.flag4j.linalg.solvers.lstsq.ComplexLstsqSolver;
-import org.flag4j.linalg.solvers.lstsq.RealLstsqSolver;
+import org.flag4j.linalg.solvers.lstsq.ComplexLstsqSolverOld;
+import org.flag4j.linalg.solvers.lstsq.RealLstsqSolverOld;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -166,7 +166,7 @@ public final class SubSpace {
     public static boolean hasEqualSpan(MatrixOld src1, MatrixOld src2) {
         boolean result;
 
-        RealLstsqSolver lstsq = new RealLstsqSolver();
+        RealLstsqSolverOld lstsq = new RealLstsqSolverOld();
         double tol = 1.0E-12; // Tolerance for considering a norm zero.
         VectorOld solution, col;
         result = true;
@@ -199,7 +199,7 @@ public final class SubSpace {
     public static boolean hasEqualSpan(CMatrixOld src1, CMatrixOld src2) {
         boolean result;
 
-        ComplexLstsqSolver lstsq = new ComplexLstsqSolver();
+        ComplexLstsqSolverOld lstsq = new ComplexLstsqSolverOld();
         double tol = 1.0E-12; // Tolerance for considering a norm zero.
         CVectorOld solution, col;
         result = true;

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,29 +22,30 @@
  * SOFTWARE.
  */
 
-package org.flag4j.linalg.solvers;
+package org.flag4j.linalg.solvers.lstsq;
 
 
-import org.flag4j.arrays.backend.TensorMixin;
-import org.flag4j.arrays.backend.TensorOverSemiRing;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.linalg.decompositions.qr.RealQROld;
+import org.flag4j.linalg.solvers.exact.triangular.RealBackSolverOld;
 
 
 /**
- * <p>This interface specifies methods which all linear system solvers should implement.</p>
- *
- * <p>Solvers may solve in an exact sense or in a least squares sense.</p>
- *
- * @param <T> Type of the tensor in the linear system.
+ * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,
+ * minimizes {@code ||Ax-b||}<sub>2</sub> which is equivalent to solving the normal equations
+ * {@code A}<sup>T</sup>{@code Ax=A}<sup>T</sup>{@code b}.
+ * This is done efficiently using a {@link RealQROld QR decomposition}.
  */
-public interface LinearSolver<T extends TensorMixin> {
+public class RealLstsqSolverOld extends LstsqSolverOld<MatrixOld, VectorOld> {
+
 
     /**
-     * Solves the linear tensor equation given by A*X=B for the tensor X. All indices of X are summed over in
-     * the tensor product with the rightmost indices of A as if by
-     * {@link org.flag4j.arrays.backend.TensorOverSemiRing#tensorDot(TensorOverSemiRing, int) A.tensorDot(X, X.getRank())}.
-     * @param A Coefficient tensor in the linear system.
-     * @param B Tensor of constants in the linear system.
-     * @return The solution to the tensor X in the linear system A*X=B.
+     * Constructs a least-squares solver to solve a system {@code Ax=b} in a least square sense. That is,
+     * minimizes {@code ||Ax-b||<sub>2</sub>} which is equivalent to solving the normal equations
+     * {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
      */
-    T solve(T A, T B);
+    public RealLstsqSolverOld() {
+        super(new RealQROld(), new RealBackSolverOld());
+    }
 }

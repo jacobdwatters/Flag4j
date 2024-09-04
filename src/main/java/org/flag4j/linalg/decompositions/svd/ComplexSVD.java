@@ -27,7 +27,7 @@ package org.flag4j.linalg.decompositions.svd;
 
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.linalg.Eigen;
+import org.flag4j.linalg.EigenOld;
 import org.flag4j.linalg.ops.DirectSum;
 
 
@@ -50,7 +50,7 @@ public class ComplexSVD extends SVD<CMatrixOld> {
 
 
     /**
-     * Creates a decomposer to compute the Schur decomposition.
+     * Creates a decomposer to compute the SchurOld decomposition.
      *
      * @param computeUV A flag which indicates if the unitary matrices {@code Q} and {@code V} should be computed
      *                  (i.e. the singular vectors). By default, this is true.<br>
@@ -103,7 +103,7 @@ public class ComplexSVD extends SVD<CMatrixOld> {
      */
     @Override
     protected CMatrixOld makeEigenPairs(CMatrixOld B, double[] eigVals) {
-        CMatrixOld[] pairs = Eigen.getEigenPairs(B);
+        CMatrixOld[] pairs = EigenOld.getEigenPairs(B);
 
         double[] vals = pairs[0].toReal().entries;
         System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
@@ -121,7 +121,7 @@ public class ComplexSVD extends SVD<CMatrixOld> {
      */
     @Override
     protected void makeEigenVals(CMatrixOld B, double[] eigVals) {
-        double[] vals = Eigen.getEigenValues(B).toReal().entries;
+        double[] vals = EigenOld.getEigenValues(B).toReal().entries;
         System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
     }
 

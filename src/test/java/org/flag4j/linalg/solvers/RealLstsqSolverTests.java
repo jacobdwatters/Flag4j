@@ -2,13 +2,13 @@ package org.flag4j.linalg.solvers;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.linalg.solvers.lstsq.RealLstsqSolver;
+import org.flag4j.linalg.solvers.lstsq.RealLstsqSolverOld;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RealLstsqSolverTests {
-    static final RealLstsqSolver solver = new RealLstsqSolver();
+    static final RealLstsqSolverOld solver = new RealLstsqSolverOld();
 
     static double[][] aEntries;
     static MatrixOld A;

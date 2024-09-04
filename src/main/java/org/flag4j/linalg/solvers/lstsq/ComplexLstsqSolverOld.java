@@ -22,26 +22,28 @@
  * SOFTWARE.
  */
 
-package org.flag4j.linalg.solvers;
+package org.flag4j.linalg.solvers.lstsq;
 
-import org.flag4j.core_old.TensorBase;
-import org.flag4j.core_old.TensorExclusiveMixin;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.linalg.decompositions.qr.ComplexQROld;
+import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolverOld;
 
 /**
- * This interface specifies methods which all linear tensor system solvers should implement. Solvers
- * may solve in an exact sense or in a least squares sense.
- * @param <T> Type of the tensors in the linear system.
+ * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,
+ * minimizes {@code ||Ax-b||}<sub>2</sub> which is equivalent to solving the normal equations
+ * {@code A}<sup>T</sup>{@code Ax=A}<sup>T</sup>{@code b}.
+ * This is done using efficiently a {@link ComplexQROld QR decomposition}.
  */
-public interface LinearTensorSolver<T extends TensorBase<T, ?, ?, ?, ?, ?, ?>> {
+public class ComplexLstsqSolverOld extends LstsqSolverOld<CMatrixOld, CVectorOld> {
 
 
     /**
-     * Solves the linear tensor equation given by {@code A*X=B} for the tensor {@code X}. All indices of {@code X} are summed over in
-     * the tensor product with the rightmost indices of {@code A} as if by
-     * {@link TensorExclusiveMixin#tensorDot(TensorBase, int)  A.tensorDot(X, X.getRank())}.
-     * @param A Coefficient tensor in the linear system.
-     * @param B TensorOld of constants in the linear system.
-     * @return The solution to {@code x} in the linear system {@code A*X=B}.
+     * Constructs a least-squares solver to solve a system {@code Ax=b} in a least square sense. That is,
+     * minimizes {@code ||Ax-b||<sub>2</sub>} which is equivalent to solving the normal equations
+     * {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
      */
-    T solve(T A, T B);
+    public ComplexLstsqSolverOld() {
+        super(new ComplexQROld(), new ComplexBackSolverOld());
+    }
 }

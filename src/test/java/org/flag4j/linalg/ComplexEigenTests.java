@@ -29,7 +29,7 @@ class ComplexEigenTests {
         A = new CMatrixOld(entries);
         expEntries = new CNumber[]{new CNumber("0.0+1.0i"), new CNumber("0.0-1.0i")};
         exp = new CVectorOld(expEntries);
-        assertEquals(exp, Eigen.get2x2EigenValues(A));
+        assertEquals(exp, EigenOld.get2x2EigenValues(A));
 
         // --------------------- sub-case 2 ---------------------
         entries = new CNumber[][]{
@@ -38,7 +38,7 @@ class ComplexEigenTests {
         A = new CMatrixOld(entries);
         expEntries = new CNumber[]{new CNumber("1"), new CNumber("-1")};
         exp = new CVectorOld(expEntries);
-        assertEquals(exp, Eigen.get2x2EigenValues(A));
+        assertEquals(exp, EigenOld.get2x2EigenValues(A));
 
         // --------------------- sub-case 3 ---------------------
         entries = new CNumber[][]{
@@ -48,7 +48,7 @@ class ComplexEigenTests {
         expEntries = new CNumber[]{new CNumber("25.91698338059983+170.13738197742643i"),
                 new CNumber("-23.572983380599826-140.5773719774264i")};
         exp = new CVectorOld(expEntries);
-        assertEquals(exp, Eigen.get2x2EigenValues(A));
+        assertEquals(exp, EigenOld.get2x2EigenValues(A));
 
         // --------------------- sub-case 4 ---------------------
         entries = new CNumber[][]{
@@ -57,7 +57,7 @@ class ComplexEigenTests {
         A = new CMatrixOld(entries);
         expEntries = new CNumber[]{CNumber.ZERO, CNumber.ZERO};
         exp = new CVectorOld(expEntries);
-        assertEquals(exp, Eigen.get2x2EigenValues(A));
+        assertEquals(exp, EigenOld.get2x2EigenValues(A));
     }
 
 
@@ -72,7 +72,7 @@ class ComplexEigenTests {
         A = new CMatrixOld(entries);
         expEntries = new CNumber[]{new CNumber("0.0+1.0i"), new CNumber("0.0-1.0i")};
         exp = new CVectorOld(expEntries);
-        assertEquals(exp, Eigen.getEigenValues(A, seed));
+        assertEquals(exp, EigenOld.getEigenValues(A, seed));
 
         // ------------------- Sub-case 2 -------------------
         entries = new CNumber[][]{
@@ -84,7 +84,7 @@ class ComplexEigenTests {
                 new CNumber("-0.11326855369139792 - 0.42446262318817385i"),
                 new CNumber("0.4992743810991004 + 0.3531265384779854i")};
         exp = new CVectorOld(expEntries);
-        assertEquals(exp, Eigen.getEigenValues(A, seed));
+        assertEquals(exp, EigenOld.getEigenValues(A, seed));
 
         // ------------------- Sub-case 3 -------------------
         entries = new CNumber[][]{
@@ -102,7 +102,7 @@ class ComplexEigenTests {
                 new CNumber(0.25958386224131025, 0.48761887206092025)
         };
         exp = new CVectorOld(expEntries);
-        assertEquals(exp, Eigen.getEigenValues(A, seed, 200));
+        assertEquals(exp, EigenOld.getEigenValues(A, seed, 200));
 
         // ------------------- Sub-case 4 -------------------
         double[][] entries1 = new double[][]{
@@ -117,14 +117,14 @@ class ComplexEigenTests {
                 new CNumber(0, 1),
                 new CNumber(0, -1)};
         exp = new CVectorOld(expEntries);
-        assertEquals(exp, Eigen.getEigenValues(A, seed, 40));
+        assertEquals(exp, EigenOld.getEigenValues(A, seed, 40));
 
         // ------------------- Sub-case 5 -------------------
         entries = new CNumber[][]{
                 {new CNumber("0.30339+0.52411i"), new CNumber("0.31941+0.29588i"), new CNumber("0.56224+0.97309i")},
                 {new CNumber("0.08611+0.04236i"), new CNumber("0.98099+0.54528i"), new CNumber("0.4917+0.78095i")}};
         A = new CMatrixOld(entries);
-        assertThrows(IllegalArgumentException.class, ()->Eigen.getEigenValues(A));
+        assertThrows(IllegalArgumentException.class, ()-> EigenOld.getEigenValues(A));
 
         // ------------------- Sub-case 6 -------------------
         entries = new CNumber[][]{
@@ -132,7 +132,7 @@ class ComplexEigenTests {
                 {new CNumber("0.08611+0.04236i"), new CNumber("0.98099+0.54528i")},
                 {new CNumber("0.45323+0.82093i"), new CNumber("0.28344+0.95413i")}};
         A = new CMatrixOld(entries);
-        assertThrows(IllegalArgumentException.class, ()->Eigen.getEigenValues(A));
+        assertThrows(IllegalArgumentException.class, ()-> EigenOld.getEigenValues(A));
     }
 
 
@@ -148,7 +148,7 @@ class ComplexEigenTests {
                 {new CNumber(-0.7071067811865475), new CNumber(0.0, -0.7071067811865475)}
         };
         expV = new CMatrixOld(expVEntries);
-        assertEquals(expV, Eigen.getEigenVectors(A, seed));
+        assertEquals(expV, EigenOld.getEigenVectors(A, seed));
 
         // ------------------- Sub-case 2 -------------------
         entries = new CNumber[][]{
@@ -162,6 +162,6 @@ class ComplexEigenTests {
                 {new CNumber(0.5983605131211007, -0.2576882770014521), new CNumber(0.4990402817482533, 0.45202421866716674), new CNumber(0.017946251980771433, -0.5964453528250859)}
         };
         expV = new CMatrixOld(expVEntries);
-        assertEquals(expV, Eigen.getEigenVectors(A, seed));
+        assertEquals(expV, EigenOld.getEigenVectors(A, seed));
     }
 }

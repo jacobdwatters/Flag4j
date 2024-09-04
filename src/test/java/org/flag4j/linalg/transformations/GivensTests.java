@@ -41,7 +41,7 @@ class GivensTests {
         expReal.set(Math.sin(theta), i, j);
         expReal.set(-Math.sin(theta), j, i);
 
-        assertEquals(expReal, Givens.getGeneralRotator(size, i, j, theta));
+        assertEquals(expReal, GivensOld.getGeneralRotator(size, i, j, theta));
 
         // ------------------- Sub-case 2 -------------------
         size = 3;
@@ -54,14 +54,14 @@ class GivensTests {
         expReal.set(Math.sin(theta), i, j);
         expReal.set(-Math.sin(theta), j, i);
 
-        assertEquals(expReal, Givens.getGeneralRotator(size, i, j, theta));
+        assertEquals(expReal, GivensOld.getGeneralRotator(size, i, j, theta));
 
         // ------------------- Sub-case 3 -------------------
-        assertThrows(IllegalArgumentException.class, ()->Givens.getGeneralRotator(5, 3, 3, 2));
-        assertThrows(IndexOutOfBoundsException.class, ()->Givens.getGeneralRotator(5, 1, 6, 2));
-        assertThrows(IndexOutOfBoundsException.class, ()->Givens.getGeneralRotator(5, 6, 0, 2));
-        assertThrows(IndexOutOfBoundsException.class, ()->Givens.getGeneralRotator(5, -1, 2, 2));
-        assertThrows(IndexOutOfBoundsException.class, ()->Givens.getGeneralRotator(5, 1, -5, 2));
+        assertThrows(IllegalArgumentException.class, ()-> GivensOld.getGeneralRotator(5, 3, 3, 2));
+        assertThrows(IndexOutOfBoundsException.class, ()-> GivensOld.getGeneralRotator(5, 1, 6, 2));
+        assertThrows(IndexOutOfBoundsException.class, ()-> GivensOld.getGeneralRotator(5, 6, 0, 2));
+        assertThrows(IndexOutOfBoundsException.class, ()-> GivensOld.getGeneralRotator(5, -1, 2, 2));
+        assertThrows(IndexOutOfBoundsException.class, ()-> GivensOld.getGeneralRotator(5, 1, -5, 2));
     }
 
 
@@ -84,12 +84,12 @@ class GivensTests {
         };
         expReal = new MatrixOld(expEntriesReal);
 
-        assertEquals(expReal, Givens.getRotator(vReal, i));
+        assertEquals(expReal, GivensOld.getRotator(vReal, i));
 
         // ------------------- Sub-case 2 -------------------
-        assertThrows(IndexOutOfBoundsException.class, ()->Givens.getRotator(vReal, -1));
-        assertThrows(IndexOutOfBoundsException.class, ()->Givens.getRotator(vReal, vReal.size));
-        assertThrows(IndexOutOfBoundsException.class, ()->Givens.getRotator(vReal, vReal.size + 3));
+        assertThrows(IndexOutOfBoundsException.class, ()-> GivensOld.getRotator(vReal, -1));
+        assertThrows(IndexOutOfBoundsException.class, ()-> GivensOld.getRotator(vReal, vReal.size));
+        assertThrows(IndexOutOfBoundsException.class, ()-> GivensOld.getRotator(vReal, vReal.size + 3));
     }
 
 
@@ -111,12 +111,12 @@ class GivensTests {
         };
         expComplex = new CMatrixOld(expEntriesComplex);
 
-        assertEquals(expComplex, Givens.getRotator(vComplex, i));
+        assertEquals(expComplex, GivensOld.getRotator(vComplex, i));
 
         // ------------------- Sub-case 2 -------------------
-        assertThrows(IndexOutOfBoundsException.class, ()->Givens.getRotator(vComplex, -1));
-        assertThrows(IndexOutOfBoundsException.class, ()->Givens.getRotator(vComplex, vComplex.size));
-        assertThrows(IndexOutOfBoundsException.class, ()->Givens.getRotator(vComplex, vComplex.size + 3));
+        assertThrows(IndexOutOfBoundsException.class, ()-> GivensOld.getRotator(vComplex, -1));
+        assertThrows(IndexOutOfBoundsException.class, ()-> GivensOld.getRotator(vComplex, vComplex.size));
+        assertThrows(IndexOutOfBoundsException.class, ()-> GivensOld.getRotator(vComplex, vComplex.size + 3));
     }
 
 
@@ -132,7 +132,7 @@ class GivensTests {
         };
         expReal = new MatrixOld(expEntriesReal);
 
-        assertEquals(expReal, Givens.get2x2Rotator(vReal));
+        assertEquals(expReal, GivensOld.get2x2Rotator(vReal));
 
         // ------------------- Sub-case 2 -------------------
         vEntriesReal = new double[]{1.56, 0};
@@ -144,7 +144,7 @@ class GivensTests {
         };
         expReal = new MatrixOld(expEntriesReal);
         
-        assertEquals(expReal, Givens.get2x2Rotator(vReal));
+        assertEquals(expReal, GivensOld.get2x2Rotator(vReal));
 
         // ------------------- Sub-case 3 -------------------
         vEntriesReal = new double[]{0, -9.3};
@@ -156,7 +156,7 @@ class GivensTests {
         };
         expReal = new MatrixOld(expEntriesReal);
 
-        assertEquals(expReal, Givens.get2x2Rotator(vReal));
+        assertEquals(expReal, GivensOld.get2x2Rotator(vReal));
 
         // ------------------- Sub-case 4 -------------------
         vEntriesReal = new double[]{0, 0};
@@ -168,11 +168,11 @@ class GivensTests {
         };
         expReal = new MatrixOld(expEntriesReal);
 
-        assertEquals(expReal, Givens.get2x2Rotator(vReal));
+        assertEquals(expReal, GivensOld.get2x2Rotator(vReal));
 
         // ------------------- Sub-case 5 -------------------
-        assertThrows(IllegalArgumentException.class, ()->Givens.get2x2Rotator(new VectorOld(1)));
-        assertThrows(IllegalArgumentException.class, ()->Givens.get2x2Rotator(new VectorOld(5)));
+        assertThrows(IllegalArgumentException.class, ()-> GivensOld.get2x2Rotator(new VectorOld(1)));
+        assertThrows(IllegalArgumentException.class, ()-> GivensOld.get2x2Rotator(new VectorOld(5)));
     }
 
 
@@ -188,10 +188,10 @@ class GivensTests {
         };
         expComplex = new CMatrixOld(expEntriesComplex);
 
-        assertEquals(expComplex, Givens.get2x2Rotator(vComplex));
+        assertEquals(expComplex, GivensOld.get2x2Rotator(vComplex));
 
         // ------------------- Sub-case 2 -------------------
-        assertThrows(IllegalArgumentException.class, ()->Givens.get2x2Rotator(new CVectorOld(1)));
-        assertThrows(IllegalArgumentException.class, ()->Givens.get2x2Rotator(new CVectorOld(5)));
+        assertThrows(IllegalArgumentException.class, ()-> GivensOld.get2x2Rotator(new CVectorOld(1)));
+        assertThrows(IllegalArgumentException.class, ()-> GivensOld.get2x2Rotator(new CVectorOld(5)));
     }
 }

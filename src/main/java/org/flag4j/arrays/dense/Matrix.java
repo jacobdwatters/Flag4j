@@ -24,13 +24,14 @@
 
 package org.flag4j.arrays.dense;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.DenseMatrixMixin;
 import org.flag4j.arrays.backend.DensePrimitiveDoubleTensorBase;
 import org.flag4j.arrays.backend.MatrixVectorOpsMixin;
 import org.flag4j.arrays.backend.TensorBase;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
-import org.flag4j.arrays.Shape;
 import org.flag4j.operations.MatrixMultiplyDispatcher;
 import org.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import org.flag4j.operations.TransposeDispatcher;
@@ -46,7 +47,11 @@ import java.util.List;
 
 /**
  * <p>A real dense matrix backed by a primitive double array.</p>
+ *
  * <p>The {@link #entries} of a matrix are mutable but the {@link #shape} is fixed.</p>
+ *
+ *<p>A matrix is essentially equivalent to a rank 2 tensor but has some extended functionality and <i>may</i> have improved
+ * performance for some operations.</p>
  */
 public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
         implements DenseMatrixMixin<Matrix, CooMatrix, CsrMatrix, Double>,
@@ -1405,5 +1410,18 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
         }
 
         return new CooMatrix(shape, sparseEntries, rowIndices, colIndices);
+    }
+
+
+    /**
+     * Converts this real dense matrix to an equivalent {@link CMatrix complex dense matrix}.
+     * @return A complex dense matrix equivalent to this real dense matrix.
+     */
+    public CMatrix toComplex() {
+        Complex128[] cmp = new Complex128[entries.length];
+        for(int i=0, size=cmp.length; i<size; i++)
+            cmp[i] = new Complex128(entries[i]); // Wrap value as complex number.
+
+        return new CMatrix(shape, cmp);
     }
 }

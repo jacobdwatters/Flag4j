@@ -24,27 +24,27 @@
 
 package org.flag4j.linalg.solvers.exact;
 
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.linalg.decompositions.lu.ComplexLU;
 import org.flag4j.linalg.decompositions.lu.LUOld;
-import org.flag4j.linalg.decompositions.lu.RealLUOLd;
-import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
-import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
+import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolverOld;
+import org.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolverOld;
 
 
 /**
  * Solver for solving a well determined system of linear equations in an exact sense using the
  * {@link LUOld LUOld decomposition.}
  */
-public class RealExactSolver extends ExactSolver<MatrixOld, VectorOld> {
+public class ComplexExactSolverOld extends ExactSolverOld<CMatrixOld, CVectorOld> {
 
     /**
      * Constructs an exact LUOld solver where the coefficient matrix is real dense.
      */
-    public RealExactSolver() {
-        super(new RealLUOLd(),
-                new RealForwardSolver(true),
-                new RealBackSolver()
+    public ComplexExactSolverOld() {
+        super(new ComplexLU(),
+                new ComplexForwardSolverOld(true),
+                new ComplexBackSolverOld()
         );
     }
 
@@ -57,7 +57,7 @@ public class RealExactSolver extends ExactSolver<MatrixOld, VectorOld> {
      * to the vector {@code b}.
      */
     @Override
-    protected VectorOld permuteRows(VectorOld b) {
+    protected CVectorOld permuteRows(CVectorOld b) {
         return rowPermute.leftMult(b);
     }
 
@@ -70,7 +70,7 @@ public class RealExactSolver extends ExactSolver<MatrixOld, VectorOld> {
      * to the matrix {@code B}.
      */
     @Override
-    protected MatrixOld permuteRows(MatrixOld B) {
+    protected CMatrixOld permuteRows(CMatrixOld B) {
         return rowPermute.leftMult(B);
     }
 }

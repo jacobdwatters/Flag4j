@@ -2,7 +2,7 @@ package org.flag4j.linalg.solvers;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
+import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolverOld;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.SingularMatrixException;
 import org.junit.jupiter.api.Assertions;
@@ -12,13 +12,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RealForwardSolverTest {
 
-    RealForwardSolver solver;
+    RealForwardSolverOld solver;
     double[][] lEntries;
     MatrixOld L;
 
     @Test
     void solveVectorTestCase() {
-        solver = new RealForwardSolver();
+        solver = new RealForwardSolverOld();
         double[] bEntries, expEntries;
         VectorOld b, exp;
 
@@ -105,7 +105,7 @@ class RealForwardSolverTest {
 
     @Test
     void solveMatrixTestCase() {
-        solver = new RealForwardSolver();
+        solver = new RealForwardSolverOld();
         double[][] bEntries, expEntries;
         MatrixOld B, exp;
 
@@ -144,7 +144,7 @@ class RealForwardSolverTest {
 
     @Test
     void solveUnitVectorTestCase() {
-        solver = new RealForwardSolver(true);
+        solver = new RealForwardSolverOld(true);
         double[] bEntries, expEntries;
         VectorOld b, exp;
 
@@ -215,7 +215,7 @@ class RealForwardSolverTest {
 
     @Test
     void solveUnitMatrixTestCase() {
-        solver = new RealForwardSolver(true);
+        solver = new RealForwardSolverOld(true);
         double[][] bEntries, expEntries;
         MatrixOld B, exp;
 

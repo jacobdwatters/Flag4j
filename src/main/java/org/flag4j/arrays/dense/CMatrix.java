@@ -41,7 +41,7 @@ import java.util.List;
  *
  * <p>A CMatrix has mutable entries but fixed shape.</p>
  *
- * <p>A matrix is essentially equivalent to a rank 2 tensor but has some extended functionality and may have improved performance
+ * <p>A matrix is essentially equivalent to a rank 2 tensor but has some extended functionality and <i>may</i> have improved performance
  * for some operations.</p>
  */
 public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatrix, CVector, Complex128> {
@@ -169,6 +169,17 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
             for(String value : row)
                 super.entries[flatPos++] = new Complex128(value);
         }
+    }
+
+
+    /**
+     * Constructs an empty complex matrix with the specified shape. The entries of this matrix will be {@code null}.
+     * @param numRows The number of rows in the matrix.
+     * @param numCols The number of columns in the matrix.
+     * @return An empty complex matrix with the specified shape.
+     */
+    public static CMatrix getEmpty(int numRows, int numCols) {
+        return new CMatrix(new Shape(numRows, numCols), new Complex128[numRows*numCols]);
     }
 
 

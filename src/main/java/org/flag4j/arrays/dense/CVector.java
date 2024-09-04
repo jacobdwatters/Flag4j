@@ -79,6 +79,16 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
 
 
     /**
+     * Constructs an empty complex vector with the specified {@code size}. The entries of the resulting vector will be {@code null}.
+     * @param size The size of the vector.
+     * @return An empty complex vector with the specified {@code size}.
+     */
+    public static CVector getEmpty(int size) {
+        return new CVector(new Complex128[size]);
+    }
+
+
+    /**
      * Creates a vector with the specified size filled with the {@code fillValue}.
      *
      * @param size

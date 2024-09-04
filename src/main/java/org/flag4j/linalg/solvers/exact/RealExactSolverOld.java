@@ -24,27 +24,27 @@
 
 package org.flag4j.linalg.solvers.exact;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.linalg.decompositions.lu.ComplexLU;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.linalg.decompositions.lu.LUOld;
-import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
-import org.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolver;
+import org.flag4j.linalg.decompositions.lu.RealLUOLd;
+import org.flag4j.linalg.solvers.exact.triangular.RealBackSolverOld;
+import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolverOld;
 
 
 /**
  * Solver for solving a well determined system of linear equations in an exact sense using the
  * {@link LUOld LUOld decomposition.}
  */
-public class ComplexExactSolver extends ExactSolver<CMatrixOld, CVectorOld> {
+public class RealExactSolverOld extends ExactSolverOld<MatrixOld, VectorOld> {
 
     /**
      * Constructs an exact LUOld solver where the coefficient matrix is real dense.
      */
-    public ComplexExactSolver() {
-        super(new ComplexLU(),
-                new ComplexForwardSolver(true),
-                new ComplexBackSolver()
+    public RealExactSolverOld() {
+        super(new RealLUOLd(),
+                new RealForwardSolverOld(true),
+                new RealBackSolverOld()
         );
     }
 
@@ -57,7 +57,7 @@ public class ComplexExactSolver extends ExactSolver<CMatrixOld, CVectorOld> {
      * to the vector {@code b}.
      */
     @Override
-    protected CVectorOld permuteRows(CVectorOld b) {
+    protected VectorOld permuteRows(VectorOld b) {
         return rowPermute.leftMult(b);
     }
 
@@ -70,7 +70,7 @@ public class ComplexExactSolver extends ExactSolver<CMatrixOld, CVectorOld> {
      * to the matrix {@code B}.
      */
     @Override
-    protected CMatrixOld permuteRows(CMatrixOld B) {
+    protected MatrixOld permuteRows(MatrixOld B) {
         return rowPermute.leftMult(B);
     }
 }

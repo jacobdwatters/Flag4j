@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,31 +24,30 @@
 
 package org.flag4j.linalg.solvers.exact.triangular;
 
-
-import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays_old.dense.CMatrixOld;
+import org.flag4j.arrays_old.dense.CVectorOld;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.exceptions.SingularMatrixException;
-
 
 /**
  * This solver solves linear systems of equations where the coefficient matrix in an upper triangular complex dense matrix
  * and the constant vector is a complex dense vector.
  */
-public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]> {
-    
+public class ComplexBackSolverOld extends BackSolverOld<CMatrixOld, CVectorOld, CNumber[]> {
+
     /**
      * For computing determinant of coefficient matrix during solve.
      */
-    protected Complex128 det;
+    protected CNumber det;
 
 
     /**
      * Creates a solver for solving linear systems for upper triangular coefficient matrices. Note, by default no check will
      * be made to ensure the coefficient matrix is upper triangular. If you would like to enforce this, see
-     * {@link #ComplexBackSolver(boolean)}.
+     * {@link #ComplexBackSolverOld(boolean)}.
      */
-    public ComplexBackSolver() {
+    public ComplexBackSolverOld() {
         super(false);
     }
 
@@ -57,7 +56,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
      * Creates a solver for solving linear systems for upper triangular coefficient matrices.
      * @param enforceTriU Flag indicating if an explicit check should be made that the coefficient matrix is upper triangular.
      */
-    public ComplexBackSolver(boolean enforceTriU) {
+    public ComplexBackSolverOld(boolean enforceTriU) {
         super(enforceTriU);
     }
 
@@ -65,39 +64,39 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
     /**
      * Gets the determinant computed during the last solve.
      */
-    public Complex128 getDet() {
+    public CNumber getDet() {
         return det;
     }
 
 
     /**
-     * Solves the linear system of equations given by U*x=b where the coefficient matrix U
+     * Solves the linear system of equations given by {@code U*x=b} where the coefficient matrix {@code U}
      * is an upper triangular matrix.
      *
      * @param U Upper triangular coefficient matrix in the linear system. If {@code U} is not actually
      *          upper triangular, it will be treated as if it were.
-     * @param b Vector of constants in the linear system.
-     * @return The solution to x in the linear system A*x=b.
+     * @param b VectorOld of constants in the linear system.
+     * @return The solution to {@code x} in the linear system {@code A*x=b}.
      * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. if it has a zero along
      * the principle diagonal).
      */
     @Override
-    public CVector solve(CMatrix U, CVector b) {
+    public CVectorOld solve(CMatrixOld U, CVectorOld b) {
         checkParams(U, b.size);
 
-        Complex128 sum;
+        CNumber sum;
         int uIndex;
         int n = b.size;
-        x = new CVector(U.numRows);
+        x = new CVectorOld(U.numRows);
         det = U.entries[n*n-1];
 
         x.entries[n-1] = b.entries[n-1].div(det);
 
         for(int i=n-2; i>-1; i--) {
-            sum = Complex128.ZERO;
+            sum = CNumber.ZERO;
             uIndex = i*U.numCols;
 
-            Complex128 diag = U.entries[i*(n+1)];
+            CNumber diag = U.entries[i*(n+1)];
             det = det.mult(diag);
 
             for(int j=i+1; j<n; j++) {
@@ -114,26 +113,26 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
 
 
     /**
-     * Solves the linear system of equations given by U*X=B where the coefficient matrix U
+     * Solves the linear system of equations given by {@code U*X=B} where the coefficient matrix {@code U}
      * is an upper triangular matrix.
      *
      * @param U Upper triangular coefficient matrix in the linear system. If {@code U} is not actually
      *          upper triangular, it will be treated as if it were.
-     * @param B Matrix of constants in the linear system.
-     * @return The solution to X in the linear system A*X=B.
+     * @param B MatrixOld of constants in the linear system.
+     * @return The solution to {@code X} in the linear system {@code A*X=B}.
      * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. has a zero on the principle diagonal).
      */
     @Override
-    public CMatrix solve(CMatrix U, CMatrix B) {
+    public CMatrixOld solve(CMatrixOld U, CMatrixOld B) {
         checkParams(U, B.numRows);
 
-        Complex128 sum, diag;
+        CNumber sum, diag;
         int uIndex, xIndex;
         int n = B.numRows;
-        X = new CMatrix(B.shape);
+        X = new CMatrixOld(B.shape);
         det = U.entries[U.entries.length-1];
 
-        xCol = new Complex128[n];
+        xCol = new CNumber[n];
 
         for(int j=0; j<B.numCols; j++) {
             X.entries[(n-1)*X.numCols + j] = B.entries[(n-1)*X.numCols + j].div(U.entries[n*n-1]);
@@ -145,7 +144,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
             }
 
             for(int i=n-2; i>-1; i--) {
-                sum = Complex128.ZERO;
+                sum = CNumber.ZERO;
                 uIndex = i*U.numCols;
                 xIndex = i*X.numCols + j;
                 diag = U.entries[i*(n+1)];
@@ -156,7 +155,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
                     sum = sum.add(U.entries[uIndex + k].mult(xCol[k]));
                 }
 
-                Complex128 value = B.entries[xIndex].sub(sum).div(diag);
+                CNumber value = B.entries[xIndex].sub(sum).div(diag);
                 X.entries[xIndex] = value;
                 xCol[i] = value;
             }
@@ -169,25 +168,25 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
 
 
     /**
-     * Solves the linear system of equations given by U*X=I where the coefficient matrix U
-     * is an {@link CMatrix#isTriU() upper triangular} matrix and I is the {@link CMatrix#isI() identity}
+     * Solves the linear system of equations given by {@code U*X=I} where the coefficient matrix {@code U}
+     * is an {@link CMatrixOld#isTriU() upper triangular} matrix and {@code I} is the {@link MatrixOld#isI() identity}
      * matrix of appropriate size.
      *
      * @param U Upper triangular coefficient matrix in the linear system. If {@code U} is not actually
      *          upper triangular, it will be treated as if it were.
-     * @return The solution to X in the linear system U*X=B.
+     * @return The solution to {@code X} in the linear system {@code U*X=B}.
      * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. has a zero on the principle diagonal).
      */
-    public CMatrix solveIdentity(CMatrix U) {
+    public CMatrixOld solveIdentity(CMatrixOld U) {
         checkParams(U, U.numRows);
 
-        Complex128 sum, diag;
+        CNumber sum, diag;
         int uIndex, xIndex;
         int n = U.numRows;
-        X = new CMatrix(U.shape);
+        X = new CMatrixOld(U.shape);
         det = U.entries[U.entries.length-1];
 
-        xCol = new Complex128[n];
+        xCol = new CNumber[n];
         X.entries[X.entries.length-1] = det.multInv();
 
         for(int j=0; j<U.numCols; j++) {
@@ -198,7 +197,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
             }
 
             for(int i=n-2; i>-1; i--) {
-                sum = (i == j) ? Complex128.ONE : Complex128.ZERO;
+                sum = (i == j) ? CNumber.ONE : CNumber.ZERO;
                 uIndex = i*U.numCols;
                 xIndex = uIndex + j;
                 uIndex += i+1;
@@ -210,7 +209,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
                     sum = sum.sub(U.entries[uIndex++].mult(xCol[k]));
                 }
 
-                Complex128 value = sum.div(diag);
+                CNumber value = sum.div(diag);
                 X.entries[xIndex] = value;
                 xCol[i] = value;
             }
@@ -223,26 +222,26 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
 
 
     /**
-     * Solves a special case of the linear system U*X=L for X where the coefficient matrix U
-     * is an {@link CMatrix#isTriU() upper triangular} matrix and the constant matrix L is
-     * {@link CMatrix#isTriL() lower triangular}.
+     * Solves a special case of the linear system {@code U*X=L} for {@code X} where the coefficient matrix {@code U}
+     * is an {@link CMatrixOld#isTriU() upper triangular} matrix and the constant matrix {@code L} is
+     * {@link CMatrixOld#isTriL() lower triangular}.
      *
      * @param U Upper triangular coefficient matrix
      * @param L Lower triangular constant matrix.
-     * @return The result of solving the linear system U*X=L for the matrix X.
+     * @return The result of solving the linear system {@code U*X=L} for the matrix {@code X}.
      */
-    public CMatrix solveLower(CMatrix U, CMatrix L) {
+    public CMatrixOld solveLower(CMatrixOld U, CMatrixOld L) {
         checkParams(U, L.numRows);
 
-        Complex128 sum, diag;
+        CNumber sum, diag;
         int uIndex, xIndex;
         int n = L.numRows;
-        Complex128 uValue = U.entries[n*n-1];
+        CNumber uValue = U.entries[n*n-1];
         int rowOffset = (n-1)*n;
-        X = new CMatrix(L.shape);
+        X = new CMatrixOld(L.shape);
         det = U.entries[U.entries.length-1];
 
-        xCol = new Complex128[n];
+        xCol = new CNumber[n];
 
         for(int j=0; j<n; j++) {
             X.entries[rowOffset] = L.entries[rowOffset++].div(uValue);
@@ -253,7 +252,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
             }
 
             for(int i=L.numCols-2; i>=0; i--) {
-                sum = Complex128.ZERO;
+                sum = CNumber.ZERO;
                 uIndex = i*U.numCols;
                 xIndex = uIndex + j;
                 diag = U.entries[i*(n+1)];
@@ -264,7 +263,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
                     sum = sum.add(U.entries[uIndex + k].mult(xCol[k]));
                 }
 
-                Complex128 value = L.entries[xIndex].sub(sum).div(diag);
+                CNumber value = L.entries[xIndex].sub(sum).div(diag);
                 X.entries[xIndex] = value;
                 xCol[i] = value;
             }

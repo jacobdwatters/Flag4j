@@ -29,29 +29,29 @@ import org.flag4j.arrays_old.sparse.PermutationMatrix;
 import org.flag4j.core_old.MatrixMixin;
 import org.flag4j.core_old.VectorMixin;
 import org.flag4j.linalg.decompositions.lu.LUOld;
-import org.flag4j.linalg.solvers.LinearSolver;
-import org.flag4j.linalg.solvers.lstsq.LstsqSolver;
+import org.flag4j.linalg.solvers.LinearSolverOld;
+import org.flag4j.linalg.solvers.lstsq.LstsqSolverOld;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
 /**
  * <p>Solves a well determined system of equations {@code Ax=b} in an exact sense by using a {@code LUOld} decomposition.</p>
  * <p>If the system is not well determined, i.e. {@code A} is square and full rank, then use a
- * {@link LstsqSolver least-squares solver}.</p>
+ * {@link LstsqSolverOld least-squares solver}.</p>
  */
-public abstract class ExactSolver<
+public abstract class ExactSolverOld<
         T extends MatrixMixin<T, ?, ?, ?, ?, ?, U, ?>,
         U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>>
-        implements LinearSolver<T, U> {
+        implements LinearSolverOld<T, U> {
 
     /**
      * Forward Solver for solving system with lower triangular coefficient matrix.
      */
-    protected final LinearSolver<T, U> forwardSolver;
+    protected final LinearSolverOld<T, U> forwardSolver;
     /**
      * Backwards solver for solving system with upper triangular coefficient matrix.
      */
-    protected final LinearSolver<T, U> backSolver;
+    protected final LinearSolverOld<T, U> backSolver;
 
     /**
      * Decomposer to compute {@code LUOld} decomposition.
@@ -71,7 +71,7 @@ public abstract class ExactSolver<
      * @param lu {@code LUOld} decomposer to employ in solving the linear system.
      * @throws IllegalArgumentException If the {@code LUOld} decomposer does not use partial pivoting.
      */
-    protected ExactSolver(LUOld<T> lu, LinearSolver<T, U> forwardSolver, LinearSolver<T, U> backSolver) {
+    protected ExactSolverOld(LUOld<T> lu, LinearSolverOld<T, U> forwardSolver, LinearSolverOld<T, U> backSolver) {
         if(lu.pivotFlag!= LUOld.Pivoting.PARTIAL) {
             throw new IllegalArgumentException("LUOld solver must use partial pivoting but got " +
                     lu.pivotFlag.name() + ".");

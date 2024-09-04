@@ -26,65 +26,55 @@ package org.flag4j.linalg.solvers.exact.triangular;
 
 import org.flag4j.core_old.MatrixMixin;
 import org.flag4j.core_old.VectorMixin;
-import org.flag4j.linalg.solvers.LinearSolver;
+import org.flag4j.linalg.solvers.LinearSolverOld;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
-
 /**
- * This solver solves linear systems of equations where the coefficient matrix in a lower triangular real dense matrix
- * and the constant vector is a real dense vector. That is, solves, {@code L*x=b} or {@code L*X=B} for the vector {@code x} or the
- * matrix {@code X} respectively where {@code L} is a lower triangular matrix.
- *
- * @param <T> Type of coefficient matrix.
- * @param <U> VectorOld type equivalent to the coefficient matrix.
- * @param <V> Type of the internal storage datastructures in the matrix and vector.
+ * Base class for solvers which solve a linear system of equations {@code U*x=b} or {@code U*X=B} where {@code U} is an upper
+ * triangular matrix. This is solved in an exact sense.
+ * @param <T> Type of matrix to decompose.
+ * @param <U> VectorOld type equivalent of matrix.
+ * @param <V> Type of internal storage for the matrix and vector.
  */
-public abstract class ForwardSolver<
+@Deprecated
+public abstract class BackSolverOld<
         T extends MatrixMixin<T, ?, ?, ?, ?, ?, U, ?>,
         U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>,
-        V> implements LinearSolver<T, U> {
+        V>
+        implements LinearSolverOld<T, U> {
 
+
+    /**
+     * For storing matrix results.
+     */
+    protected T X;
+    /**
+     * For storing vector results.
+     */
+    protected U x;
+    /**
+     * For temporary storage of matrix columns to help improve cache performance.
+     */
+    protected V xCol;
+    /**
+     * Flag indicating if determinant should be computed.
+     */
+    protected final boolean enforceTriU;
     /**
      * Threshold for determining if a determinant is to be considered zero when checking if the coefficient matrix is
      * full rank.
      */
     protected static final double RANK_CONDITION = Flag4jConstants.EPS_F64;
-    /**
-     * Flag indicating if lower-triangular matrices passed to this solver will be unit lower-triangular (true) or simply
-     * lower-triangular (false).
-     */
-    protected final boolean isUnit;
-    /**
-     * Flag indicating if an explicit check should be made that the coefficient matrix is lower triangular. If false, the matrix will
-     * simply be assumed to be lower triangular.
-     */
-    protected final boolean enforceLower;
-    /**
-     * Storage for solution in solves which return a 00000000
-     */
-    T X;
-    /**
-     * Storage for solution in solves which return a vector.
-     */
-    U x;
-    /**
-     * Temporary storage for columns of the solution matrix. This can be used to improve cache performance when columns need to
-     * be traveled.
-     */
-    protected V xCol;
 
 
     /**
-     * Creates a solver for solving a lower-triangular system.
-     * @param isUnit Flag indicating if coefficient matrices passed will be unit lower-triangular or simply lower-triangular in
-     *               general.
-     * @param enforceLower Flag indicating if an explicit check should be made that the coefficient matrix is lower triangular.
+     * Creates a solver for solving linear systems for upper triangular coefficient matrices.
+     * @param enforceTriU Flag indicating if an explicit check should be made that the coefficient matrix is upper triangular.
      */
-    protected ForwardSolver(boolean isUnit, boolean enforceLower) {
-        this.isUnit = isUnit;
-        this.enforceLower = enforceLower;
+    public BackSolverOld(boolean enforceTriU) {
+        this.enforceTriU = enforceTriU;
     }
 
 
@@ -99,8 +89,8 @@ public abstract class ForwardSolver<
         ParameterChecks.ensureSquare(coeff.shape());
         ParameterChecks.ensureEquals(coeff.numRows(), constantRows);
 
-        if(enforceLower && !coeff.isTriL()) {
-            throw new IllegalArgumentException("Expecting matrix L to be lower triangular.");
+        if(enforceTriU && !coeff.isTriU()) {
+            throw new IllegalArgumentException("Expecting matrix U to be upper triangular.");
         }
     }
 

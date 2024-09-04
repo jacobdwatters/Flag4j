@@ -36,10 +36,10 @@ import org.flag4j.linalg.decompositions.lu.RealLUOLd;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
 import org.flag4j.linalg.decompositions.svd.SVD;
-import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
-import org.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolver;
-import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
-import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
+import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolverOld;
+import org.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolverOld;
+import org.flag4j.linalg.solvers.exact.triangular.RealBackSolverOld;
+import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolverOld;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.SingularMatrixException;
@@ -74,8 +74,8 @@ public class Invert {
         LUOld<MatrixOld> lu = new RealLUOLd().decompose(src);
 
         // Solve U*inv(A) = inv(L) for inv(A)
-        RealBackSolver backSolver = new RealBackSolver();
-        RealForwardSolver forwardSolver = new RealForwardSolver(true);
+        RealBackSolverOld backSolver = new RealBackSolverOld();
+        RealForwardSolverOld forwardSolver = new RealForwardSolverOld(true);
 
         // Compute the inverse of unit lower triangular matrix L.
         MatrixOld Linv = forwardSolver.solveIdentity(lu.getL());
@@ -101,8 +101,8 @@ public class Invert {
         LUOld<CMatrixOld> lu = new ComplexLU().decompose(src);
 
         // Solve U*inv(A) = inv(L) for inv(A)
-        ComplexBackSolver backSolver = new ComplexBackSolver();
-        ComplexForwardSolver forwardSolver = new ComplexForwardSolver(true);
+        ComplexBackSolverOld backSolver = new ComplexBackSolverOld();
+        ComplexForwardSolverOld forwardSolver = new ComplexForwardSolverOld(true);
 
         // Compute the inverse of unit lower triangular matrix L.
         CMatrixOld Linv = forwardSolver.solveIdentity(lu.getL());
@@ -122,7 +122,7 @@ public class Invert {
      */
     @Deprecated
     public static MatrixOld invTriU(MatrixOld src) {
-        return new RealBackSolver().solveIdentity(src); // If the matrix is singular, it will be caught here.
+        return new RealBackSolverOld().solveIdentity(src); // If the matrix is singular, it will be caught here.
     }
 
 
@@ -136,7 +136,7 @@ public class Invert {
      */
     @Deprecated
     public static MatrixOld invTriL(MatrixOld src) {
-        return new RealForwardSolver().solveIdentity(src); // If the matrix is singular, it will be caught here.
+        return new RealForwardSolverOld().solveIdentity(src); // If the matrix is singular, it will be caught here.
     }
 
 
@@ -181,7 +181,7 @@ public class Invert {
      */
     @Deprecated
     public static CMatrixOld invTriU(CMatrixOld src) {
-        return new ComplexBackSolver().solveIdentity(src); // If matrix is singular, it will be caught here.
+        return new ComplexBackSolverOld().solveIdentity(src); // If matrix is singular, it will be caught here.
     }
 
 
@@ -195,7 +195,7 @@ public class Invert {
      */
     @Deprecated
     public static CMatrixOld invTriL(CMatrixOld src) {
-        return new ComplexForwardSolver().solveIdentity(src); // If matrix is singular, it will be caught here.
+        return new ComplexForwardSolverOld().solveIdentity(src); // If matrix is singular, it will be caught here.
     }
 
 
@@ -258,8 +258,8 @@ public class Invert {
     @Deprecated
     public static MatrixOld invSymPosDef(MatrixOld src, boolean checkPosDef) {
         CholeskyOld<MatrixOld> chol = new RealCholeskyOld(checkPosDef).decompose(src);
-        RealBackSolver backSolver = new RealBackSolver();
-        RealForwardSolver forwardSolver = new RealForwardSolver();
+        RealBackSolverOld backSolver = new RealBackSolverOld();
+        RealForwardSolverOld forwardSolver = new RealForwardSolverOld();
 
         // Compute the inverse of lower triangular matrix L.
         MatrixOld Linv = forwardSolver.solveIdentity(chol.getL());
@@ -295,8 +295,8 @@ public class Invert {
     @Deprecated
     public static CMatrixOld invHermPosDef(CMatrixOld src, boolean checkPosDef) {
         CholeskyOld<CMatrixOld> chol = new ComplexCholeskyOld(checkPosDef).decompose(src);
-        ComplexBackSolver backSolver = new ComplexBackSolver();
-        ComplexForwardSolver forwardSolver = new ComplexForwardSolver();
+        ComplexBackSolverOld backSolver = new ComplexBackSolverOld();
+        ComplexForwardSolverOld forwardSolver = new ComplexForwardSolverOld();
 
         // Compute the inverse of lower triangular matrix L.
         CMatrixOld Linv = forwardSolver.solveIdentity(chol.getL());

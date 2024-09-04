@@ -3,7 +3,7 @@ package org.flag4j.linalg.solvers;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolver;
+import org.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolverOld;
 import org.flag4j.util.exceptions.SingularMatrixException;
 import org.junit.jupiter.api.Test;
 
@@ -12,13 +12,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ComplexForwardSolverTests {
 
-    ComplexForwardSolver solver;
+    ComplexForwardSolverOld solver;
     CNumber[][] lEntries;
     CMatrixOld L;
 
     @Test
     void solveVectorTestCase() {
-        solver = new ComplexForwardSolver();
+        solver = new ComplexForwardSolverOld();
         CNumber[] bEntries, expEntries;
         CVectorOld b, exp;
 
@@ -77,7 +77,7 @@ class ComplexForwardSolverTests {
 
     @Test
     void solveMatrixTestCase() {
-        solver = new ComplexForwardSolver();
+        solver = new ComplexForwardSolverOld();
         CNumber[][] bEntries, expEntries;
         CMatrixOld b, exp;
 
@@ -141,7 +141,7 @@ class ComplexForwardSolverTests {
 
     @Test
     void solveUnitVectorTestCase() {
-        solver = new ComplexForwardSolver(true);
+        solver = new ComplexForwardSolverOld(true);
         CNumber[] bEntries, expEntries;
         CVectorOld b, exp;
 
@@ -185,7 +185,7 @@ class ComplexForwardSolverTests {
 
     @Test
     void solveUnitMatrixTestCase() {
-        solver = new ComplexForwardSolver(true);
+        solver = new ComplexForwardSolverOld(true);
         CNumber[][] bEntries, expEntries;
         CMatrixOld b, exp;
 

@@ -30,7 +30,7 @@ package org.flag4j.arrays.backend;
  * @param <T> TensorOld type for second operand.
  * @param <U> TensorOld type that operation returns.
  */
-public interface TensorBinaryOpsMixin<T extends TensorBase<T, ?, ?>, U extends TensorBase<U, ?, ?>> {
+public interface TensorBinaryOpsMixin<T extends TensorMixin<T, ?>, U extends TensorMixin<U, ?>> {
 
     // TODO: Add stack(...) methods.
 }

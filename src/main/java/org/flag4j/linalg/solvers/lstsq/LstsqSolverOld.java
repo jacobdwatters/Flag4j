@@ -29,7 +29,7 @@ import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.core_old.MatrixMixin;
 import org.flag4j.core_old.VectorMixin;
 import org.flag4j.linalg.decompositions.unitary.UnitaryDecompositionOld;
-import org.flag4j.linalg.solvers.LinearSolver;
+import org.flag4j.linalg.solvers.LinearSolverOld;
 
 
 // TODO: Add option to use SVD instead of QR (SVD should be default). It will be slower but has better numerical properties.
@@ -40,15 +40,15 @@ import org.flag4j.linalg.solvers.LinearSolver;
  * </sup>{@code b}.
  * This is done using a {@link UnitaryDecompositionOld QR decomposition}.
  */
-public abstract class LstsqSolver<
+public abstract class LstsqSolverOld<
         T extends MatrixMixin<T, T, ?, CMatrixOld, ?, ?, U, U>,
         U extends VectorMixin<U, U, ?, CVectorOld, ?, T, T, CMatrixOld>>
-        implements LinearSolver<T, U> {
+        implements LinearSolverOld<T, U> {
 
     /**
      * Solver for system with an upper triangular coefficient matrix.
      */
-    protected final LinearSolver<T, U> backSolver;
+    protected final LinearSolverOld<T, U> backSolver;
     /**
      * Decomposer to compute the {@code QR} decomposition for using the least-squares solver.
      */
@@ -68,7 +68,7 @@ public abstract class LstsqSolver<
      * @param backSolver The solver to solve the upper triangular system resulting from the {@code QR} decomposition
      *                   which is equivalent to solving the normal equations
      */
-    protected LstsqSolver(UnitaryDecompositionOld<T, ?> qr, LinearSolver<T, U> backSolver) {
+    protected LstsqSolverOld(UnitaryDecompositionOld<T, ?> qr, LinearSolverOld<T, U> backSolver) {
         this.qr = qr;
         this.backSolver = backSolver;
     }
