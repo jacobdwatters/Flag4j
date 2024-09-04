@@ -592,10 +592,10 @@ public final class Eigen {
 
 
     /**
-     * Constructs the matrix {@code (T - lambda*I)[0:j][0:j]} for use in computing the eigenvalue of the upper triangular matrix
-     * {@code T} associated with the j<sup>th</sup> eigenvalue {@code lambda}.
+     * Constructs the matrix (T - &lambda;*I)[0:j][0:j] for use in computing the eigenvalue of the upper triangular matrix
+     * {@code T} associated with the j<sup>th</sup> eigenvalue &lambda;.
      * @param T The upper triangular matrix (Assumed to be square).
-     * @param j The diagonal index of {@code T} where the eigenvalue {@code lambda} appears.
+     * @param j The diagonal index of {@code T} where the eigenvalue &lambda; appears.
      */
     private static void makeSystem(CMatrix T, int j, CMatrix S_hat, CVector r) {
         Complex128 lam = T.entries[j*T.numCols + j];
@@ -612,10 +612,10 @@ public final class Eigen {
 
 
     /**
-     * Constructs the matrix {@code (T - lambda*I)[0:j][0:j]} for use in computing the eigenvalue of the upper triangular matrix
-     * {@code T} associated with the j<sup>th</sup> eigenvalue {@code lambda}.
+     * Constructs the matrix (T - &lambda;*I)[0:j][0:j] for use in computing the eigenvalue of the upper triangular matrix
+     * {@code T} associated with the j<sup>th</sup> eigenvalue &lambda;.
      * @param T The upper triangular matrix (Assumed to be square).
-     * @param j The diagonal index of {@code T} where the eigenvalue {@code lambda} appears.
+     * @param j The diagonal index of {@code T} where the eigenvalue &lambda; appears.
      */
     private static void makeSystem(Matrix T, int j, Matrix S_hat, Vector r) {
         double lam = T.entries[j*T.numCols + j];
@@ -634,8 +634,8 @@ public final class Eigen {
     /**
      * Computes the eigenvalues and eigenvectors of a square real matrix.
      * @param src The matrix to compute the eigenvalues and vectors of.
-     * @return An array containing two matrices. The first matrix has shape {@code 1xsrc.numCols} and contains the eigenvalues
-     * of the {@code src} matrix. The second matrix has shape {@code src.numRowsxsrc.numCols} and contains the
+     * @return An array containing two matrices. The first matrix has shape 1-by-{@code src.numCols} and contains the eigenvalues
+     * of the {@code src} matrix. The second matrix has shape {@code src.numRows}-by-{@code src.numCols} and contains the
      * eigenvectors of the {@code src} matrix as its columns.
      */
     public static CMatrix[] getEigenPairs(Matrix src) {
@@ -664,8 +664,8 @@ public final class Eigen {
     /**
      * Computes the eigenvalues and eigenvectors of a square real matrix.
      * @param src The matrix to compute the eigenvalues and vectors of.
-     * @return An array containing two matrices. The first matrix has shape {@code 1xsrc.numCols} and contains the eigenvalues
-     * of the {@code src} matrix. The second matrix has shape {@code src.numRowsxsrc.numCols} and contains the
+     * @return An array containing two matrices. The first matrix has shape 1-by-{@code src.numCols} and contains the eigenvalues
+     * of the {@code src} matrix. The second matrix has shape {@code src.numRows}-by-{@code src.numCols} and contains the
      * eigenvectors of the {@code src} matrix as its columns.
      */
     public static CMatrix[] getEigenPairs(CMatrix src) {
