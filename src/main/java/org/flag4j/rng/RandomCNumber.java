@@ -34,6 +34,7 @@ import java.util.Random;
  * An instance of this class is used to generate a stream of random {@link CNumber complex numbers}. Extends the
  * {@link Random} class.
  */
+@Deprecated
 public class RandomCNumber extends Random {
 
 
