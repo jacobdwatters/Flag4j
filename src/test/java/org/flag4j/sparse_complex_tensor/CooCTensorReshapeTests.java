@@ -3,6 +3,7 @@ package org.flag4j.sparse_complex_tensor;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays_old.sparse.CooCTensorOld;
 import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertThrows;
@@ -121,7 +122,7 @@ class CooCTensorReshapeTests {
         assertEquals(exp, A.reshape(2, 4, 3, 2));
 
         // ----------------------------- Sub-case 4 -----------------------------
-        assertThrows(IllegalArgumentException.class, ()->A.reshape(150, 12));
+        assertThrows(TensorShapeException.class, ()->A.reshape(150, 12));
     }
 
 

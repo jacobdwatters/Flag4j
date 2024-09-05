@@ -34,6 +34,7 @@ import org.flag4j.util.exceptions.SingularMatrixException;
  * This solver solves linear systems of equations where the coefficient matrix in an upper triangular complex dense matrix
  * and the constant vector is a complex dense vector.
  */
+@Deprecated
 public class ComplexBackSolverOld extends BackSolverOld<CMatrixOld, CVectorOld, CNumber[]> {
 
     /**

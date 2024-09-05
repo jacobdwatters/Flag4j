@@ -27,7 +27,7 @@ package org.flag4j.linalg;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.linalg.decompositions.lu.ComplexLU;
+import org.flag4j.linalg.decompositions.lu.ComplexLUOld;
 import org.flag4j.linalg.decompositions.lu.RealLUOLd;
 
 /**
@@ -52,7 +52,7 @@ public class RowEchelon {
      * @return A matrix in row echelon form which is row-equivalent to the matrix {@code A}.
      */
     public static CMatrixOld ref(CMatrixOld A) {
-        return new ComplexLU().decompose(A).getU();
+        return new ComplexLUOld().decompose(A).getU();
     }
 
 
@@ -105,7 +105,7 @@ public class RowEchelon {
      */
     public static CMatrixOld rref(CMatrixOld A) {
         // Compute the LUOld decomposition.
-        CMatrixOld U = new ComplexLU().decompose(A).getU();
+        CMatrixOld U = new ComplexLUOld().decompose(A).getU();
 
         int colStop = Math.min(U.numCols, U.numRows);
         int pivotRow;

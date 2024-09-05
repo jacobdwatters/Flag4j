@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,19 +26,20 @@ package org.flag4j.linalg.decompositions.svd;
 
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.linalg.EigenOld;
-import org.flag4j.linalg.ops.DirectSum;
-
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.linalg.DirectSum;
+import org.flag4j.linalg.Eigen;
 
 /**
- * Instances of this class can be used to compute the singular value decomposition (SVD) of a real dense matrix.
- * That is, decompose a rectangular matrix {@code M} as {@code M=USV<sup>T</sup>} where {@code U} and {@code V} are
- * orthogonal matrices whose columns are the left and right singular vectors of {@code M} and {@code S} is a rectangular
- * diagonal matrix containing the singular values of {@code M}.
+ * <p>Instances of this class can be used to compute the singular value decomposition (SVD) of a
+ * {@link Matrix real dense matrix}.</p>
+ *
+ * <p>That is, decompose a rectangular matrix M as M=USV<sup>T</sup> where U and V are
+ * orthogonal matrices whose columns are the left and right singular vectors of M and S is a rectangular
+ * diagonal matrix containing the singular values of M.</p>
  */
-public class RealSVD extends SVD<MatrixOld> {
+public class RealSVD extends SVD<Matrix> {
 
     /**
      * Creates a decomposer to compute the singular value decomposition of a real matrix. The left and right singular
@@ -81,12 +82,12 @@ public class RealSVD extends SVD<MatrixOld> {
     /**
      * Computes the inverse direct sum of a matrix and its hermitian transpose.
      *
-     * @param src MatrixOld to inverse direct add with its hermitian transpose.
+     * @param src Matrix to inverse direct add with its hermitian transpose.
      *
      * @return The inverse direct sum of the {@code src} matrix with its hermitian transpose.
      */
     @Override
-    protected MatrixOld invDirectSum(MatrixOld src) {
+    protected Matrix invDirectSum(Matrix src) {
         return DirectSum.invDirectSum(src, src.H());
     }
 
@@ -101,8 +102,8 @@ public class RealSVD extends SVD<MatrixOld> {
      * to the singular values and vectors of the matrix being decomposed.
      */
     @Override
-    protected MatrixOld makeEigenPairs(MatrixOld B, double[] eigVals) {
-        CMatrixOld[] pairs = EigenOld.getEigenPairs(B);
+    protected Matrix makeEigenPairs(Matrix B, double[] eigVals) {
+        CMatrix[] pairs = Eigen.getEigenPairs(B);
 
         double[] vals = pairs[0].toReal().entries;
         System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
@@ -119,8 +120,8 @@ public class RealSVD extends SVD<MatrixOld> {
      * @param eigVals Storage for eigenvalues.
      */
     @Override
-    protected void makeEigenVals(MatrixOld B, double[] eigVals) {
-        double[] vals = EigenOld.getEigenValues(B).toReal().entries;
+    protected void makeEigenVals(Matrix B, double[] eigVals) {
+        double[] vals = Eigen.getEigenValues(B).toReal().entries;
         System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
     }
 
@@ -133,8 +134,8 @@ public class RealSVD extends SVD<MatrixOld> {
      */
     @Override
     protected void initUV(Shape src, int cols) {
-        U = new MatrixOld(src.get(0), cols);
-        V = new MatrixOld(src.get(1), cols);
+        U = new Matrix(src.get(0), cols);
+        V = new Matrix(src.get(1), cols);
     }
 
 
@@ -146,7 +147,7 @@ public class RealSVD extends SVD<MatrixOld> {
      * @param j            Index of the column of {@code U} and {@code V} to set.
      */
     @Override
-    protected void extractNormalizedCols(MatrixOld singularVecs, int j) {
+    protected void extractNormalizedCols(Matrix singularVecs, int j) {
         // Extract left and right singular vectors and normalize.
         V.setCol(singularVecs.getCol(2*j, 0, V.numRows()).normalize(), j);
         U.setCol(singularVecs.getCol(2*j, V.numRows(), singularVecs.numRows()).normalize(), j);

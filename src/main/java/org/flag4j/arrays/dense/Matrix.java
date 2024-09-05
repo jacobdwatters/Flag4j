@@ -32,6 +32,7 @@ import org.flag4j.arrays.backend.MatrixVectorOpsMixin;
 import org.flag4j.arrays.backend.TensorBase;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.linalg.decompositions.svd.RealSVD;
 import org.flag4j.operations.MatrixMultiplyDispatcher;
 import org.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import org.flag4j.operations.TransposeDispatcher;
@@ -581,6 +582,10 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
     /**
      * <p>Computes the rank of this matrix (i.e. the number of linearly independent rows/columns in this matrix).</p>
      *
+     * <p>This is computed as the number of singular values greater than {@code tol} where:
+     * <pre>{@code double tol = 2.0*Math.max(rows, cols)*Flag4jConstants.EPS_F64*Math.min(this.numRows, this.numCols);}</pre>
+     * </p>
+     *
      * <p>Note the "matrix rank" is <b>NOT</b> related to the "{@link TensorBase#getRank() tensor rank}" which is number of indices
      * needed to uniquely specify an entry in the tensor.</p>
      *
@@ -588,8 +593,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public int matrixRank() {
-        // TODO: Implementation. (need to implement SVD for Matrix first.)
-        return 0;
+        return new RealSVD(false).decompose(this).getRank();
     }
 
 

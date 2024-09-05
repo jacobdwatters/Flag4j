@@ -24,17 +24,21 @@
 
 package org.flag4j.operations_old;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.arrays.Shape;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
 import org.flag4j.operations_old.dense.complex.ComplexDenseMatrixMultTranspose;
 import org.flag4j.operations_old.dense.complex.ComplexDenseMatrixMultiplication;
 import org.flag4j.operations_old.dense.real.RealDenseMatrixMultiplication;
 import org.flag4j.operations_old.dense.real_complex.RealComplexDenseMatrixMultTranspose;
-import org.flag4j.operations_old.dense.real_complex.RealComplexDenseMatrixMultiplication;
+import org.flag4j.operations_old.dense.real_complex.RealComplexDenseMatrixMultiplicationOld;
 import org.flag4j.util.Axis2D;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -123,16 +127,16 @@ public final class MatrixMultiplyDispatcher {
 
         switch(algorithm) {
             case STANDARD_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealComplexDenseMatrixMultiplicationOld.standardVector(A.entries, A.shape, b.entries, bMatShape);
                 break;
             case BLOCKED_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealComplexDenseMatrixMultiplicationOld.blockedVector(A.entries, A.shape, b.entries, bMatShape);
                 break;
             case CONCURRENT_STANDARD_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealComplexDenseMatrixMultiplicationOld.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
                 break;
             default:
-                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealComplexDenseMatrixMultiplicationOld.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);
                 break;
         }
 
@@ -158,16 +162,16 @@ public final class MatrixMultiplyDispatcher {
 
         switch(algorithm) {
             case STANDARD_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealComplexDenseMatrixMultiplicationOld.standardVector(A.entries, A.shape, b.entries, bMatShape);
                 break;
             case BLOCKED_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealComplexDenseMatrixMultiplicationOld.blockedVector(A.entries, A.shape, b.entries, bMatShape);
                 break;
             case CONCURRENT_STANDARD_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealComplexDenseMatrixMultiplicationOld.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
                 break;
             default:
-                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealComplexDenseMatrixMultiplicationOld.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);
                 break;
         }
 
@@ -310,40 +314,40 @@ public final class MatrixMultiplyDispatcher {
 
         switch(algorithm) {
             case STANDARD:
-                dest = RealComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
+                dest = RealComplexDenseMatrixMultiplicationOld.standard(A.entries, A.shape, B.entries, B.shape);
                 break;
             case REORDERED:
-                dest = RealComplexDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
+                dest = RealComplexDenseMatrixMultiplicationOld.reordered(A.entries, A.shape, B.entries, B.shape);
                 break;
             case BLOCKED:
-                dest = RealComplexDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
+                dest = RealComplexDenseMatrixMultiplicationOld.blocked(A.entries, A.shape, B.entries, B.shape);
                 break;
             case BLOCKED_REORDERED:
-                dest = RealComplexDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
+                dest = RealComplexDenseMatrixMultiplicationOld.blockedReordered(A.entries, A.shape, B.entries, B.shape);
                 break;
             case CONCURRENT_STANDARD:
-                dest = RealComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
+                dest = RealComplexDenseMatrixMultiplicationOld.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
                 break;
             case CONCURRENT_REORDERED:
-                dest = RealComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+                dest = RealComplexDenseMatrixMultiplicationOld.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
                 break;
             case CONCURRENT_BLOCKED:
-                dest = RealComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
+                dest = RealComplexDenseMatrixMultiplicationOld.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
                 break;
             case CONCURRENT_BLOCKED_REORDERED:
-                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
+                dest = RealComplexDenseMatrixMultiplicationOld.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
                 break;
             case STANDARD_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);
+                dest = RealComplexDenseMatrixMultiplicationOld.standardVector(A.entries, A.shape, B.entries, B.shape);
                 break;
             case BLOCKED_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);
+                dest = RealComplexDenseMatrixMultiplicationOld.blockedVector(A.entries, A.shape, B.entries, B.shape);
                 break;
             case CONCURRENT_STANDARD_VECTOR:
-                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
+                dest = RealComplexDenseMatrixMultiplicationOld.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
                 break;
             default:
-                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
+                dest = RealComplexDenseMatrixMultiplicationOld.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
                 break;
         }
 
@@ -364,6 +368,69 @@ public final class MatrixMultiplyDispatcher {
 
         AlgorithmName algorithm;
         CNumber[] dest;
+
+        if(B.numCols==1) {
+            algorithm = chooseAlgorithmRealComplexVector(A.shape);
+        } else {
+            algorithm = chooseAlgorithmRealComplex(A.shape, B.shape);
+        }
+
+        switch(algorithm) {
+            case STANDARD:
+                dest = RealComplexDenseMatrixMultiplicationOld.standard(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case REORDERED:
+                dest = RealComplexDenseMatrixMultiplicationOld.reordered(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case BLOCKED:
+                dest = RealComplexDenseMatrixMultiplicationOld.blocked(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case BLOCKED_REORDERED:
+                dest = RealComplexDenseMatrixMultiplicationOld.blockedReordered(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_STANDARD:
+                dest = RealComplexDenseMatrixMultiplicationOld.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_REORDERED:
+                dest = RealComplexDenseMatrixMultiplicationOld.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_BLOCKED:
+                dest = RealComplexDenseMatrixMultiplicationOld.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_BLOCKED_REORDERED:
+                dest = RealComplexDenseMatrixMultiplicationOld.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case STANDARD_VECTOR:
+                dest = RealComplexDenseMatrixMultiplicationOld.standardVector(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case BLOCKED_VECTOR:
+                dest = RealComplexDenseMatrixMultiplicationOld.blockedVector(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_STANDARD_VECTOR:
+                dest = RealComplexDenseMatrixMultiplicationOld.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
+                break;
+            default:
+                dest = RealComplexDenseMatrixMultiplicationOld.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
+                break;
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Dispatches a matrix multiplication problem to the appropriate algorithm based on the size.
+     * @param A First matrix in matrix multiplication.
+     * @param B Second matrix in matrix multiplication.
+     * @return The result of the matrix multiplication.
+     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
+     */
+    @Deprecated
+    public static Complex128[] dispatch(CMatrix A, Matrix B) {
+        ParameterChecks.ensureMatMultShapes(A.shape, B.shape);
+
+        AlgorithmName algorithm;
+        Complex128[] dest;
 
         if(B.numCols==1) {
             algorithm = chooseAlgorithmRealComplexVector(A.shape);

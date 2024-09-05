@@ -62,8 +62,7 @@ public class CooCTensorOld
      * @param shape Shape of the tensor.
      */
     public CooCTensorOld(Shape shape) {
-        super(shape, 0, new CNumber[0], new int[0][0]);
-        tensorDot(this);
+        super(shape, 0, new CNumber[0], new int[0][shape.getRank()]);
     }
 
 
@@ -273,7 +272,7 @@ public class CooCTensorOld
     public CooCTensorOld reshape(Shape newShape) {
         ParameterChecks.ensureBroadcastable(shape, newShape);
 
-        int rank = indices[0].length;
+        int rank = indices.length == 0 ? 0 : indices[0].length;
         int newRank = newShape.getRank();
         int nnz = entries.length;
 
@@ -826,7 +825,12 @@ public class CooCTensorOld
     public CooCMatrixOld toMatrix(Shape matShape) {
         ParameterChecks.ensureRank(matShape, 2);
         CooCTensorOld t = reshape(matShape); // Reshape as rank 2 tensor. Broadcastable check made here.
-        int[][] tIndices = RealDenseTranspose.standardIntMatrix(t.indices);
+
+        int[][] tIndices;
+        if(t.indices.length == 0)
+            tIndices = new int[][]{new int[0], new int[0]};
+        else
+            tIndices = RealDenseTranspose.standardIntMatrix(t.indices);
 
         return new CooCMatrixOld(matShape, t.entries.clone(), tIndices[0], tIndices[1]);
     }

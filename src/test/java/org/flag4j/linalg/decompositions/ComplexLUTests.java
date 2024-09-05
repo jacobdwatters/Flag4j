@@ -3,7 +3,7 @@ package org.flag4j.linalg.decompositions;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.linalg.decompositions.lu.ComplexLU;
+import org.flag4j.linalg.decompositions.lu.ComplexLUOld;
 import org.flag4j.linalg.decompositions.lu.LUOld;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +21,7 @@ public class ComplexLUTests {
 
     CMatrixOld A_hat;
 
-    static ComplexLU lu;
+    static ComplexLUOld lu;
 
     static void setMatrices() {
         A = new CMatrixOld(aEntries);
@@ -31,7 +31,7 @@ public class ComplexLUTests {
     @Test
 
     void testnoPivotTestCase() {
-        lu = new ComplexLU(0);
+        lu = new ComplexLUOld(0);
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{
@@ -79,7 +79,7 @@ public class ComplexLUTests {
     @Test
 
     void testpartialPivotTestCase() {
-        lu = new ComplexLU();
+        lu = new ComplexLUOld();
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{
@@ -129,7 +129,7 @@ public class ComplexLUTests {
 
     @Test
     void partialFullTestCase() {
-        lu = new ComplexLU(LUOld.Pivoting.FULL.ordinal());
+        lu = new ComplexLUOld(LUOld.Pivoting.FULL.ordinal());
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{

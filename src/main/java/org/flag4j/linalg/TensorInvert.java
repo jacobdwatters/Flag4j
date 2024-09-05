@@ -66,7 +66,7 @@ public final class TensorInvert {
         int prod = getProduct(originalShape.getDims(), numIndices);
 
         // Convert to an equivalent matrix inverse problem and solve.
-        MatrixOld matInverse = Invert.inv(new MatrixOld(prod, src.entries.length-prod, src.entries));
+        MatrixOld matInverse = InvertOld.inv(new MatrixOld(prod, src.entries.length-prod, src.entries));
 
         return new TensorOld(invShape, matInverse.entries); // Reshape as tensor.
     }
@@ -92,7 +92,7 @@ public final class TensorInvert {
         int prod = getProduct(originalShape.getDims(), numIndices);
 
         // Convert to an equivalent matrix inverse problem and solve.
-        MatrixOld matInverse = Invert.inv(new MatrixOld(prod, src.entries.length-prod, src.entries));
+        MatrixOld matInverse = InvertOld.inv(new MatrixOld(prod, src.entries.length-prod, src.entries));
 
         return src.makeLikeTensor(invShape, matInverse.entries); // Reshape as tensor.
     }
@@ -117,7 +117,7 @@ public final class TensorInvert {
         int prod = getProduct(originalShape.getDims(), numIndices);
 
         // Convert to an equivalent matrix inverse problem.
-        CMatrixOld matInverse = Invert.inv(new CMatrixOld(prod, src.entries.length-prod, src.entries));
+        CMatrixOld matInverse = InvertOld.inv(new CMatrixOld(prod, src.entries.length-prod, src.entries));
 
         return new CTensorOld(invShape, matInverse.entries); // Reshape as tensor.
     }

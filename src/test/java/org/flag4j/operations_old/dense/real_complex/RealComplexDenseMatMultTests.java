@@ -5,7 +5,7 @@ import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
-import static org.flag4j.operations_old.dense.real_complex.RealComplexDenseMatrixMultiplication.*;
+import static org.flag4j.operations_old.dense.real_complex.RealComplexDenseMatrixMultiplicationOld.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class RealComplexDenseMatMultTests {

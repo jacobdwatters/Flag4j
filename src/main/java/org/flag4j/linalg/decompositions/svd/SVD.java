@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,24 +24,25 @@
 
 package org.flag4j.linalg.decompositions.svd;
 
+
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.core_old.MatrixMixin;
-import org.flag4j.linalg.decompositions.DecompositionOld;
+import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.linalg.decompositions.Decomposition;
 import org.flag4j.util.Flag4jConstants;
 
 import java.util.Arrays;
 
 /**
- * This abstract class specifies methods for computing the singular value decomposition (SVD) of a matrix.
- * That is, decompose a rectangular matrix {@code M} as {@code M=USV}<sup>H</sup> where {@code U} and {@code V} are
- * unitary matrices whose columns are the left and right singular vectors of {@code M} and {@code S} is a rectangular
- * diagonal matrix containing the singular values of {@code M}.
+ * <p>This abstract class specifies methods for computing the singular value decomposition (SVD) of a matrix.</p>
+ *
+ * <p>That is, decomposes a rectangular matrix M into M=USV<sup>H</sup> where U and V are
+ * unitary matrices whose columns are the left and right singular vectors of M and S is a rectangular
+ * diagonal matrix containing the singular values of M.
+ *
  * @param <T> The type of the matrix to compute the singular value decomposition of.
  */
-public abstract class SVD<
-        T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>>
-        implements DecompositionOld<T> {
+public abstract class SVD<T extends MatrixMixin> implements Decomposition<T> {
 
     /**
      * Flag which indicates if the singular vectors should be computed in addition to the singular values.
@@ -52,15 +53,15 @@ public abstract class SVD<
      */
     protected boolean reduced;
     /**
-     * The unitary matrix {@code U} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
+     * The unitary matrix U corresponding to M=USV<sup>H</sup> in the SVD.
      */
     protected T U;
     /**
-     * The rectangular diagonal {@code S} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
+     * The rectangular diagonal S corresponding to M=USV<sup>H</sup> in the SVD.
      */
-    protected MatrixOld S;
+    protected Matrix S;
     /**
-     * The unitary matrix {@code V} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
+     * The unitary matrix V corresponding to M=USV<sup>H</sup> in the SVD.
      */
     protected T V;
     /**
@@ -70,11 +71,11 @@ public abstract class SVD<
 
 
     /**
-     * Creates a decomposer to compute the SchurOld decomposition.
-     * @param computeUV A flag which indicates if the unitary matrices {@code Q} and {@code V} should be computed
+     * Creates a decomposer to compute the Schur decomposition.
+     * @param computeUV A flag which indicates if the unitary matrices {@code Q} and V should be computed
      *                  (i.e. the singular vectors).<br>
-     *                 - If true, the {@code Q} and {@code V} matrices will be computed.
-     *                 - If false, the {@code Q} and {@code V} matrices  will <b>not</b> be computed. If it is not needed, this may
+     *                 - If true, the {@code Q} and V matrices will be computed.
+     *                 - If false, the {@code Q} and V matrices  will <b>not</b> be computed. If it is not needed, this may
      *                 provide a performance improvement.
      * @param reduced Flag which indicates if the reduced (or full) SVD should be computed.<br>
      *                 - If true, reduced SVD is computed.
@@ -87,8 +88,8 @@ public abstract class SVD<
 
 
     /**
-     * Gets the unitary matrix {@code U} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
-     * @return {@code U} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
+     * Gets the unitary matrix U corresponding to M=USV<sup>H</sup> in the SVD.
+     * @return U corresponding to M=USV<sup>H</sup> in the SVD.
      */
     public T getU() {
         return U;
@@ -96,17 +97,17 @@ public abstract class SVD<
 
 
     /**
-     * Gets the diagonal matrix {@code S} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
-     * @return {@code S} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
+     * Gets the diagonal matrix S corresponding to M=USV<sup>H</sup> in the SVD.
+     * @return S corresponding to M=USV<sup>H</sup> in the SVD.
      */
-    public MatrixOld getS() {
+    public Matrix getS() {
         return S;
     }
 
 
     /**
-     * Gets the unitary matrix {@code V} corresponding to {@code M=USV}<sup>H</sup> in the SVD.
-     * @return {@code V} corresponding to {@code M=USV}<sup>H</sup> in the SVD. Note that the hermitian transpose has
+     * Gets the unitary matrix V corresponding to M=USV<sup>H</sup> in the SVD.
+     * @return V corresponding to M=USV<sup>H</sup> in the SVD. Note that the hermitian transpose has
      * <b>not</b> been computed.
      */
     public T getV() {
@@ -138,7 +139,7 @@ public abstract class SVD<
         T singularVecs = null;
 
         if(computeUV) {
-            // Compute eigenvalues and vectors of B.
+            // Compute both the eigenvalues and eigenvectors of B.
             singularVecs = makeEigenPairs(B, singularVals);
         } else {
             // Only compute the eigenvalues of B.
@@ -148,8 +149,8 @@ public abstract class SVD<
         computeRank(src.numRows(), src.numCols(), singularVals);
         stopIdx = reduced ? rank : Math.min(src.numRows(), src.numCols());
 
-        if(computeUV) initUV(src.shape(), stopIdx); // Initialize the U and V matrices.
-        S = new MatrixOld(stopIdx); // initialize the S matrix.
+        if(computeUV) initUV(src.getShape(), stopIdx); // Initialize the U and V matrices.
+        S = new Matrix(stopIdx); // initialize the S matrix.
 
         for(int j=0; j<stopIdx; j++) {
             S.set(singularVals[2*j], j, j);
@@ -166,7 +167,7 @@ public abstract class SVD<
 
     /**
      * Computes the inverse direct sum of a matrix and its hermitian transpose.
-     * @param src MatrixOld to inverse direct add with its hermitian transpose.
+     * @param src Matrix to inverse direct add with its hermitian transpose.
      * @return The inverse direct sum of the {@code src} matrix with its hermitian transpose.
      */
     protected abstract T invDirectSum(T src);
@@ -186,13 +187,11 @@ public abstract class SVD<
         Arrays.sort(sorted);
 
         // Tolerance for considering a singular value zero.
+        // TODO: Make tolerance configurable and use this as the default tolerance.
         double tol = 2.0*Math.max(rows, cols)* Flag4jConstants.EPS_F64*sorted[sorted.length-1];
 
-        for(double val : singularValues) {
-            if(val > tol) {
-                rank++;
-            }
-        }
+        for(double val : singularValues)
+            if(val > tol) rank++;
     }
 
 
@@ -217,18 +216,18 @@ public abstract class SVD<
 
 
     /**
-     * Initializes the unitary {@code U} and {@code V} matrices for the SVD.
+     * Initializes the unitary U and V matrices for the SVD.
      * @param src Shape of the source matrix being decomposed.
-     * @param cols The number of columns for {@code U} and {@code V}.
+     * @param cols The number of columns for U and V.
      */
     protected abstract void initUV(Shape src, int cols);
 
 
     /**
-     * Extracts the singular vectors, normalizes them and sets the columns of {@code U}
-     * and {@code V} to be the left/right singular vectors.
+     * Extracts the singular vectors, normalizes them and sets the columns of U
+     * and V to be the left/right singular vectors.
      * @param singularVecs Computed left and right singular vectors.
-     * @param j Index of the column of {@code U} and {@code V} to set.
+     * @param j Index of the column of U and V to set.
      */
     protected abstract void extractNormalizedCols(T singularVecs, int j);
 }

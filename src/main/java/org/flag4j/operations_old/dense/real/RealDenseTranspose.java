@@ -24,9 +24,9 @@
 
 package org.flag4j.operations_old.dense.real;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
-import org.flag4j.arrays.Shape;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -318,7 +318,7 @@ public final class RealDenseTranspose {
      */
     public static int[][] standardIntMatrix(final int[][] src) {
         int rows = src.length;
-        int cols = src[0].length;
+        int cols = rows== 0 ? 0 : src[0].length;
         int[][] dest = new int[cols][rows];
 
         for(int i=0; i<rows; i++) {

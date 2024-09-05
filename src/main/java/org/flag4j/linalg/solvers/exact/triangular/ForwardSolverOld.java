@@ -41,6 +41,7 @@ import org.flag4j.util.exceptions.SingularMatrixException;
  * @param <U> VectorOld type equivalent to the coefficient matrix.
  * @param <V> Type of the internal storage datastructures in the matrix and vector.
  */
+@Deprecated
 public abstract class ForwardSolverOld<
         T extends MatrixMixin<T, ?, ?, ?, ?, ?, U, ?>,
         U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>,

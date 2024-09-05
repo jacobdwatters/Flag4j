@@ -1,7 +1,7 @@
 package org.flag4j.tensor;
 
-import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays_old.dense.TensorOld;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +26,7 @@ class TensorAggregateTests {
 
     @Test
     void minMaxTestCase() {
-        TensorOld empty = new TensorOld(new Shape(), new double[]{});
+        TensorOld empty = new TensorOld(new Shape(0), new double[]{});
 
         // -------------------------- Minimum Tests --------------------------
         exp = -8983.56;

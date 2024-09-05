@@ -182,6 +182,7 @@ class RealEigenTests {
                 {new CNumber("0.41597355791928425"), new CNumber("-0.8245648401323938")},
                 {new CNumber("0.9093767091321241"), new CNumber("0.5657674649689923")}};
         expV = new CMatrixOld(expVEntries);
+
         assertEquals(expV, EigenOld.getEigenVectors(A, seed));
 
         // ------------------- Sub-case 2 -------------------

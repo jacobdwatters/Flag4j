@@ -27,6 +27,11 @@ package org.flag4j.linalg.decompositions.lu;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
+
+/**
+ * <p>This class provides methods for computing the LU decomposition of a real dense matrix.</p>
+ * <p>The following decompositions are provided: A=LU, PA=LU, and PAQ=LU.</p>
+ */
 public class RealLU extends LU<Matrix> {
     
     

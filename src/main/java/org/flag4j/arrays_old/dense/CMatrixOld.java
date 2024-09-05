@@ -33,8 +33,8 @@ import org.flag4j.core_old.MatrixMixin;
 import org.flag4j.core_old.dense_base.ComplexDenseTensorBase;
 import org.flag4j.core_old.dense_base.DenseMatrixMixin;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.MatrixNorms;
-import org.flag4j.linalg.decompositions.svd.ComplexSVD;
+import org.flag4j.linalg.MatrixNormsOld;
+import org.flag4j.linalg.decompositions.svd.ComplexSVDOld;
 import org.flag4j.operations_old.MatrixMultiplyDispatcher;
 import org.flag4j.operations_old.TransposeDispatcher;
 import org.flag4j.operations_old.common.complex.ComplexOperations;
@@ -3435,10 +3435,10 @@ public class CMatrixOld
      */
     @Override
     public int matrixRank() {
-        MatrixOld S = new ComplexSVD(false).decompose(this).getS();
+        MatrixOld S = new ComplexSVDOld(false).decompose(this).getS();
         int stopIdx = Math.min(numRows, numCols);
 
-        double tol = 2.0*Math.max(numRows, numCols)* Flag4jConstants.EPS_F64*MatrixNorms.norm(this); // Tolerance for determining if a
+        double tol = 2.0*Math.max(numRows, numCols)* Flag4jConstants.EPS_F64*MatrixNormsOld.norm(this); // Tolerance for determining if a
         // singular
         // value should be considered zero.
         int rank = 0;

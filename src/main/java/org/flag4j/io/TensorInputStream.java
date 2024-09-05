@@ -24,6 +24,9 @@
 
 package org.flag4j.io;
 
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.arrays_old.dense.VectorOld;
@@ -67,9 +70,9 @@ public class TensorInputStream extends InputStream {
      * Reads a serialized {@link TensorOld tesnor} from a file.
      * @return The deserialized {@link TensorOld tensor object} stored in the specified file.
      */
-    public TensorOld readTensor() throws IOException, ClassNotFoundException {
+    public Tensor readTensor() throws IOException, ClassNotFoundException {
         // Deserialize tensor.
-        return (TensorOld) objectIn.readObject();
+        return (Tensor) objectIn.readObject();
     }
 
 
@@ -77,9 +80,9 @@ public class TensorInputStream extends InputStream {
      * Reads a serialized {@link MatrixOld matrix} from a file.
      * @return The deserialized {@link MatrixOld matrix object} stored in the specified file.
      */
-    public MatrixOld readMatrix() throws IOException, ClassNotFoundException {
+    public Matrix readMatrix() throws IOException, ClassNotFoundException {
         // Deserialize matrix.
-        return (MatrixOld) objectIn.readObject();
+        return (Matrix) objectIn.readObject();
     }
 
 
@@ -87,9 +90,9 @@ public class TensorInputStream extends InputStream {
      * Reads a serialized {@link VectorOld vector} from a file.
      * @return The deserialized {@link VectorOld vector object} stored in the specified file.
      */
-    public VectorOld readVector() throws IOException, ClassNotFoundException {
+    public Vector readVector() throws IOException, ClassNotFoundException {
         // Deserialize vector.
-        return (VectorOld) objectIn.readObject();
+        return (Vector) objectIn.readObject();
     }
 
 

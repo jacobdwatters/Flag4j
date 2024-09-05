@@ -28,7 +28,7 @@ class MatrixInvertTests {
                 {0.0, 2.2215310792197984}};
         exp = new MatrixOld(expEntries);
 
-        assertEquals(exp, Invert.invTriU(A));
+        assertEquals(exp, InvertOld.invTriU(A));
 
         // --------------------- Sub-case 2 ---------------------
         entries = new double[][]{
@@ -42,7 +42,7 @@ class MatrixInvertTests {
                 {0.0, 0.0, 155.27950310559004}};
         exp = new MatrixOld(expEntries);
 
-        assertEquals(exp, Invert.invTriU(A));
+        assertEquals(exp, InvertOld.invTriU(A));
 
         // --------------------- Sub-case 3 ---------------------
         entries = new double[][]{
@@ -58,7 +58,7 @@ class MatrixInvertTests {
                 {0.0, 0.0, 0.0, 8.676036786395974}};
         exp = new MatrixOld(expEntries);
 
-        assertEquals(exp, Invert.invTriU(A));
+        assertEquals(exp, InvertOld.invTriU(A));
 
         // --------------------- Sub-case 4 ---------------------
         entries = new double[][]{
@@ -86,7 +86,7 @@ class MatrixInvertTests {
                 {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4.377517072316582}};
         exp = new MatrixOld(expEntries);
 
-        assertEquals(exp, Invert.invTriU(A));
+        assertEquals(exp, InvertOld.invTriU(A));
 
         // --------------------- Sub-case 5 ---------------------
         entries = new double[][]{
@@ -94,7 +94,7 @@ class MatrixInvertTests {
                 {0.0, 0}};
         A = new MatrixOld(entries);
 
-        assertThrows(SingularMatrixException.class, ()->Invert.invTriU(A));
+        assertThrows(SingularMatrixException.class, ()-> InvertOld.invTriU(A));
 
         // --------------------- Sub-case 6 ---------------------
         entries = new double[][]{
@@ -102,7 +102,7 @@ class MatrixInvertTests {
                 {0.0, 14.5}};
         A = new MatrixOld(entries);
 
-        assertThrows(SingularMatrixException.class, ()->Invert.invTriU(A));
+        assertThrows(SingularMatrixException.class, ()-> InvertOld.invTriU(A));
 
         // --------------------- Sub-case 7 ---------------------
         entries = new double[][]{
@@ -111,7 +111,7 @@ class MatrixInvertTests {
                 {0.0, 0.0, 14587.1}};
         A = new MatrixOld(entries);
 
-        assertThrows(SingularMatrixException.class, ()->Invert.invTriU(A));
+        assertThrows(SingularMatrixException.class, ()-> InvertOld.invTriU(A));
 
         // --------------------- Sub-case 8 ---------------------
         entries = new double[][]{
@@ -119,7 +119,7 @@ class MatrixInvertTests {
                 {0.0, 14.5, 109.1}};
         A = new MatrixOld(entries).T();
 
-        assertThrows(LinearAlgebraException.class, ()->Invert.invTriL(A));
+        assertThrows(LinearAlgebraException.class, ()-> InvertOld.invTriL(A));
 
         // --------------------- Sub-case 9 ---------------------
         entries = new double[][]{
@@ -128,7 +128,7 @@ class MatrixInvertTests {
                 {0.0, 0.0}};
         A = new MatrixOld(entries).T();
 
-        assertThrows(LinearAlgebraException.class, ()->Invert.invTriL(A));
+        assertThrows(LinearAlgebraException.class, ()-> InvertOld.invTriL(A));
     }
 
 
@@ -146,7 +146,7 @@ class MatrixInvertTests {
                 {0.0, 2.2215310792197984}};
         exp = new MatrixOld(expEntries).T();
 
-        assertEquals(exp, Invert.invTriL(A));
+        assertEquals(exp, InvertOld.invTriL(A));
 
         // --------------------- Sub-case 2 ---------------------
         entries = new double[][]{
@@ -160,7 +160,7 @@ class MatrixInvertTests {
                 {0.0, 0.0, 155.27950310559004}};
         exp = new MatrixOld(expEntries).T();
 
-        assertEquals(exp, Invert.invTriL(A));
+        assertEquals(exp, InvertOld.invTriL(A));
 
         // --------------------- Sub-case 3 ---------------------
         entries = new double[][]{
@@ -176,7 +176,7 @@ class MatrixInvertTests {
                 {0.0, 0.0, 0.0, 8.676036786395974}};
         exp = new MatrixOld(expEntries).T();
 
-        assertEquals(exp, Invert.invTriL(A));
+        assertEquals(exp, InvertOld.invTriL(A));
 
         // --------------------- Sub-case 4 ---------------------
         entries = new double[][]{
@@ -204,7 +204,7 @@ class MatrixInvertTests {
                 {7.614045866631427, -1.940204885791414, -1.5018548065037949, -4.359427837733902, 0.552895438987158, -0.40193815973314095, -3.753483966999114, 5.642833341790497, -4.4275123799641944, 4.377517072316582}};
         exp = new MatrixOld(expEntries);
 
-        assertEquals(exp, Invert.invTriL(A));
+        assertEquals(exp, InvertOld.invTriL(A));
 
         // --------------------- Sub-case 5 ---------------------
         entries = new double[][]{
@@ -212,7 +212,7 @@ class MatrixInvertTests {
                 {0.0, 0}};
         A = new MatrixOld(entries).T();
 
-        assertThrows(SingularMatrixException.class, ()->Invert.invTriL(A));
+        assertThrows(SingularMatrixException.class, ()-> InvertOld.invTriL(A));
 
         // --------------------- Sub-case 6 ---------------------
         entries = new double[][]{
@@ -220,7 +220,7 @@ class MatrixInvertTests {
                 {0.0, 14.5}};
         A = new MatrixOld(entries).T();
 
-        assertThrows(SingularMatrixException.class, ()->Invert.invTriL(A));
+        assertThrows(SingularMatrixException.class, ()-> InvertOld.invTriL(A));
 
         // --------------------- Sub-case 7 ---------------------
         entries = new double[][]{
@@ -229,7 +229,7 @@ class MatrixInvertTests {
                 {0.0, 0.0, 14587.1}};
         A = new MatrixOld(entries).T();
 
-        assertThrows(SingularMatrixException.class, ()->Invert.invTriL(A));
+        assertThrows(SingularMatrixException.class, ()-> InvertOld.invTriL(A));
 
         // --------------------- Sub-case 8 ---------------------
         entries = new double[][]{
@@ -237,7 +237,7 @@ class MatrixInvertTests {
                 {0.0, 14.5, 109.1}};
         A = new MatrixOld(entries).T();
 
-        assertThrows(LinearAlgebraException.class, ()->Invert.invTriL(A));
+        assertThrows(LinearAlgebraException.class, ()-> InvertOld.invTriL(A));
 
         // --------------------- Sub-case 9 ---------------------
         entries = new double[][]{
@@ -246,7 +246,7 @@ class MatrixInvertTests {
                 {0.0, 0.0}};
         A = new MatrixOld(entries).T();
 
-        assertThrows(LinearAlgebraException.class, ()->Invert.invTriL(A));
+        assertThrows(LinearAlgebraException.class, ()-> InvertOld.invTriL(A));
     }
 
 
@@ -262,7 +262,7 @@ class MatrixInvertTests {
                 {0.0, 1.0/0.45014}};
         exp = new MatrixOld(expEntries);
 
-        assertEquals(exp, Invert.invDiag(A));
+        assertEquals(exp, InvertOld.invDiag(A));
 
         // --------------------- Sub-case 2 ---------------------
         entries = new double[][]{
@@ -278,7 +278,7 @@ class MatrixInvertTests {
                 {0.0, 0.0, 0.0, 1.0/0.11526}};
         exp = new MatrixOld(expEntries);
 
-        assertEquals(exp, Invert.invDiag(A));
+        assertEquals(exp, InvertOld.invDiag(A));
 
         // --------------------- Sub-case 3 ---------------------
         entries = new double[][]{
@@ -288,7 +288,7 @@ class MatrixInvertTests {
                 {0.0, 0.0, 0.0, 0.11526}};
         A = new MatrixOld(entries);
 
-        assertThrows(SingularMatrixException.class, ()->Invert.invDiag(A));
+        assertThrows(SingularMatrixException.class, ()-> InvertOld.invDiag(A));
 
         // --------------------- Sub-case 4 ---------------------
         entries = new double[][]{
@@ -298,7 +298,7 @@ class MatrixInvertTests {
                 {0.0, 0.0, 0.0, 1.1526E-71}};
         A = new MatrixOld(entries);
 
-        assertThrows(SingularMatrixException.class, ()->Invert.invDiag(A));
+        assertThrows(SingularMatrixException.class, ()-> InvertOld.invDiag(A));
 
         // --------------------- Sub-case 5 ---------------------
         entries = new double[][]{
@@ -307,7 +307,7 @@ class MatrixInvertTests {
                 {0.0, 0.0, -40.0, 0.0}};
         A = new MatrixOld(entries);
 
-        assertThrows(LinearAlgebraException.class, ()->Invert.invDiag(A));
+        assertThrows(LinearAlgebraException.class, ()-> InvertOld.invDiag(A));
 
         // --------------------- Sub-case 6 ---------------------
         entries = new double[][]{
@@ -316,7 +316,7 @@ class MatrixInvertTests {
                 {-24.15}};
         A = new MatrixOld(entries);
 
-        assertThrows(LinearAlgebraException.class, ()->Invert.invDiag(A));
+        assertThrows(LinearAlgebraException.class, ()-> InvertOld.invDiag(A));
     }
 
 
@@ -334,7 +334,7 @@ class MatrixInvertTests {
                 {0.25, 0.5000000000000002, 0.7500000000000001}};
         exp = new MatrixOld(expEntries);
 
-        assertEquals(exp, Invert.invSymPosDef(A));
+        assertEquals(exp, InvertOld.invSymPosDef(A));
 
         // --------------------- Sub-case 2 ---------------------
         entries = new double[][]{
@@ -348,7 +348,7 @@ class MatrixInvertTests {
                 {2.111111111111111, -0.5555555555555556, 0.1111111111111111}};
         exp = new MatrixOld(expEntries);
 
-        assertEquals(exp, Invert.invSymPosDef(A));
+        assertEquals(exp, InvertOld.invSymPosDef(A));
 
         // --------------------- Sub-case 3 ---------------------
         entries = new double[][]{
@@ -362,7 +362,7 @@ class MatrixInvertTests {
                 {2.111111111111111, -0.5555555555555556, 0.1111111111111111}};
         exp = new MatrixOld(expEntries);
 
-        assertEquals(exp, Invert.invSymPosDef(A));
+        assertEquals(exp, InvertOld.invSymPosDef(A));
 
         // --------------------- Sub-case 4 ---------------------
         entries = new double[][]{
@@ -371,7 +371,7 @@ class MatrixInvertTests {
                 {-16, -43, 98}};
         A = new MatrixOld(entries);
 
-        assertThrows(LinearAlgebraException.class, ()->Invert.invSymPosDef(A, true));
+        assertThrows(LinearAlgebraException.class, ()-> InvertOld.invSymPosDef(A, true));
 
         // --------------------- Sub-case 5 ---------------------
         entries = new double[][]{
@@ -380,6 +380,6 @@ class MatrixInvertTests {
                 {1, -43, 98}};
         A = new MatrixOld(entries);
 
-        assertThrows(LinearAlgebraException.class, ()->Invert.invSymPosDef(A, true));
+        assertThrows(LinearAlgebraException.class, ()-> InvertOld.invSymPosDef(A, true));
     }
 }

@@ -1,7 +1,8 @@
 package org.flag4j.matrix;
 
-import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,11 +43,11 @@ class MatrixReshapeTests {
 
         // --------------- Sub-case 5 ---------------
         expShape = new Shape(6, 1);
-        assertThrows(IllegalArgumentException.class, ()->A.reshape(expShape));
+        assertThrows(TensorShapeException.class, ()->A.reshape(expShape));
 
         // --------------- Sub-case 6 ---------------
         expShape = new Shape(12, 2);
-        assertThrows(IllegalArgumentException.class, ()->A.reshape(expShape));
+        assertThrows(TensorShapeException.class, ()->A.reshape(expShape));
     }
 
 
@@ -88,13 +89,13 @@ class MatrixReshapeTests {
         rows = 6;
         cols = 1;
         expShape = new Shape(rows, cols);
-        assertThrows(IllegalArgumentException.class, ()->A.reshape(rows, cols));
+        assertThrows(TensorShapeException.class, ()->A.reshape(rows, cols));
 
         // --------------- Sub-case 6 ---------------
         rows = 12;
         cols = 2;
         expShape = new Shape(12, 2);
-        assertThrows(IllegalArgumentException.class, ()->A.reshape(rows, cols));
+        assertThrows(TensorShapeException.class, ()->A.reshape(rows, cols));
     }
 
 

@@ -22,23 +22,22 @@
  * SOFTWARE.
  */
 
-package org.flag4j.linalg.ops;
+package org.flag4j.linalg;
 
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrixOld;
-import org.flag4j.arrays_old.sparse.CooMatrixOld;
-import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
-import org.flag4j.arrays_old.sparse.CsrMatrixOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 
 /**
  * Utility class for computing the direct sum between two matrices.
  */
+@Deprecated
 public final class DirectSum {
 
     private DirectSum() {
@@ -46,16 +45,16 @@ public final class DirectSum {
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
-    // ------------------------------ Real Dense MatrixOld ------------------------------
+    // ------------------------------ Real Dense Matrix ------------------------------
     /**
      * Computes the direct sum of two matrices.
-     * 
+     *
      * @param A First matrix in the direct sum.
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing {@code A} with {@code B}.
      */
-    public static MatrixOld directSum(MatrixOld A, MatrixOld B) {
-        MatrixOld sum = new MatrixOld(A.numRows+B.numRows, A.numCols+B.numCols);
+    public static Matrix directSum(Matrix A, Matrix B) {
+        Matrix sum = new Matrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
@@ -73,13 +72,13 @@ public final class DirectSum {
 
     /**
      * Computes the direct sum of two matrices.
-     * 
+     *
      * @param A First matrix in the direct sum.
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing {@code A} with {@code B}.
      */
-    public static MatrixOld directSum(MatrixOld A, CooMatrixOld B) {
-        MatrixOld sum = new MatrixOld(A.numRows+B.numRows, A.numCols+B.numCols);
+    public static Matrix directSum(Matrix A, CooMatrix B) {
+        Matrix sum = new Matrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
@@ -88,7 +87,7 @@ public final class DirectSum {
 
         // Copy over second matrix.
         int row, col;
-        for(int i=0; i<B.nonZeroEntries(); i++) {
+        for(int i=0; i<B.nnz; i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
@@ -101,18 +100,21 @@ public final class DirectSum {
 
     /**
      * Computes the direct sum of two matrices.
-     * 
+     *
      * @param A First matrix in the direct sum.
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing {@code A} with {@code B}.
      */
-    public static CMatrixOld directSum(MatrixOld A, CMatrixOld B) {
-        CMatrixOld sum = new CMatrixOld(A.numRows+B.numRows, A.numCols+B.numCols);
+    public static CMatrix directSum(Matrix A, CMatrix B) {
+        CMatrix sum = new CMatrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
+            int rowOffset = i*A.numCols;
+            int sumRowOffset = i*sum.numCols;
+
             for(int j=0; j<A.numCols; j++) {
-                sum.entries[i*sum.numCols + j] = new CNumber(A.entries[i*A.numCols + j]);
+                sum.entries[sumRowOffset + j] = new Complex128(A.entries[rowOffset + j]);
             }
         }
 
@@ -127,24 +129,27 @@ public final class DirectSum {
 
     /**
      * Computes the direct sum of two matrices.
-     * 
+     *
      * @param A First matrix in the direct sum.
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing {@code A} with {@code B}.
      */
-    public static CMatrixOld directSum(MatrixOld A, CooCMatrixOld B) {
-        CMatrixOld sum = new CMatrixOld(A.numRows+B.numRows, A.numCols+B.numCols);
+    public static CMatrix directSum(Matrix A, CooCMatrix B) {
+        CMatrix sum = new CMatrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
+            int rowOffset = i*A.numCols;
+            int sumRowOffset = i*sum.numCols;
+
             for(int j=0; j<A.numCols; j++) {
-                sum.entries[i*sum.numCols + j] = new CNumber(A.entries[i*A.numCols + j]);
+                sum.entries[sumRowOffset + j] = new Complex128(A.entries[rowOffset + j]);
             }
         }
 
         // Copy over second matrix.
         int row, col;
-        for(int i=0; i<B.nonZeroEntries(); i++) {
+        for(int i=0; i<B.nnz; i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
@@ -157,13 +162,13 @@ public final class DirectSum {
 
     /**
      * Computes direct sum from bottom left to top right of two matrices.
-     * 
+     *
      * @param A First matrix in the inverse direct sum.
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing {@code A} with {@code B}.
      */
-    public static MatrixOld invDirectSum(MatrixOld A, MatrixOld B) {
-        MatrixOld sum = new MatrixOld(A.numRows+B.numRows, A.numCols+B.numCols);
+    public static Matrix invDirectSum(Matrix A, Matrix B) {
+        Matrix sum = new Matrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
@@ -181,13 +186,13 @@ public final class DirectSum {
 
     /**
      * Computes direct sum from bottom left to top right of two matrices.
-     * 
+     *
      * @param A First matrix in the inverse direct sum.
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing {@code A} with {@code B}.
      */
-    public static MatrixOld invDirectSum(MatrixOld A, CooMatrixOld B) {
-        MatrixOld sum = new MatrixOld(A.numRows+B.numRows, A.numCols+B.numCols);
+    public static Matrix invDirectSum(Matrix A, CooMatrix B) {
+        Matrix sum = new Matrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
@@ -196,7 +201,7 @@ public final class DirectSum {
 
         // Copy over second matrix.
         int row, col;
-        for(int i=0; i<B.nonZeroEntries(); i++) {
+        for(int i=0; i<B.nnz; i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
@@ -209,18 +214,21 @@ public final class DirectSum {
 
     /**
      * Computes direct sum from bottom left to top right of two matrices.
-     * 
+     *
      * @param A First matrix in the inverse direct sum.
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing {@code A} with {@code B}.
      */
-    public static CMatrixOld invDirectSum(MatrixOld A, CMatrixOld B) {
-        CMatrixOld sum = new CMatrixOld(A.numRows+B.numRows, A.numCols+B.numCols);
+    public static CMatrix invDirectSum(Matrix A, CMatrix B) {
+        CMatrix sum = new CMatrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
+            int aRowOffset = i*A.numCols;
+            int sumRowOffset = (i+B.numRows)*sum.numCols;
+
             for(int j=0; j<A.numCols; j++) {
-                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(A.entries[i*A.numCols + j]);
+                sum.entries[sumRowOffset + j] = new Complex128(A.entries[aRowOffset + j]);
             }
         }
 
@@ -242,19 +250,22 @@ public final class DirectSum {
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing {@code A} with {@code B}.
      */
-    public static CMatrixOld invDirectSum(MatrixOld A, CooCMatrixOld B) {
-        CMatrixOld sum = new CMatrixOld(A.numRows+B.numRows, A.numCols+B.numCols);
+    public static CMatrix invDirectSum(Matrix A, CooCMatrix B) {
+        CMatrix sum = new CMatrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
+            int aRowOffset = i*A.numCols;
+            int sumRowOffset = (i+B.numRows)*sum.numCols;
+
             for(int j=0; j<A.numCols; j++) {
-                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(A.entries[i*A.numCols + j]);
+                sum.entries[sumRowOffset + j] = new Complex128(A.entries[aRowOffset + j]);
             }
         }
 
         // Copy over second matrix.
         int row, col;
-        for(int i=0; i<B.nonZeroEntries(); i++) {
+        for(int i=0; i<B.nnz; i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
@@ -266,7 +277,7 @@ public final class DirectSum {
     // -------------------------------------------------------------------------------
 
 
-    // ---------------------------- Complex Dense MatrixOld -----------------------------
+    // ---------------------------- Complex Dense Matrix -----------------------------
     /**
      * Computes the direct sum of two matrices.
      *
@@ -274,8 +285,8 @@ public final class DirectSum {
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing {@code A} with {@code B}.
      */
-    public static CMatrixOld directSum(CMatrixOld A, MatrixOld B) {
-        CMatrixOld sum = new CMatrixOld(A.numRows+B.numRows, A.numCols+B.numCols);
+    public static CMatrix directSum(CMatrix A, Matrix B) {
+        CMatrix sum = new CMatrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
@@ -284,8 +295,11 @@ public final class DirectSum {
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
+            int bRowOffset = i*B.numCols;
+            int sumRowOffset = (i+A.numRows)*sum.numCols + A.numCols;
+
             for(int j=0; j<B.numCols; j++) {
-                sum.entries[(i+A.numRows)*sum.numCols + j + A.numCols] = new CNumber(B.entries[i*B.numCols + j]);
+                sum.entries[sumRowOffset + j] = new Complex128(B.entries[bRowOffset + j]);
             }
         }
 
@@ -300,8 +314,8 @@ public final class DirectSum {
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing {@code A} with {@code B}.
      */
-    public static CMatrixOld directSum(CMatrixOld A, CooMatrixOld B) {
-        CMatrixOld sum = new CMatrixOld(A.numRows+B.numRows, A.numCols+B.numCols);
+    public static CMatrix directSum(CMatrix A, CooMatrix B) {
+        CMatrix sum = new CMatrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
@@ -311,11 +325,11 @@ public final class DirectSum {
         // Copy over second matrix.
         int row;
         int col;
-        for(int i=0; i<B.nonZeroEntries(); i++) {
+        for(int i=0; i<B.nnz; i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
-            sum.entries[(row+A.numRows)*sum.numCols + (col+A.numCols)] = new CNumber(B.entries[i]);
+            sum.entries[(row+A.numRows)*sum.numCols + (col+A.numCols)] = new Complex128(B.entries[i]);
         }
 
         return sum;
@@ -329,18 +343,16 @@ public final class DirectSum {
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing {@code A} with {@code B}.
      */
-    public static CMatrixOld directSum(CMatrixOld A, CMatrixOld B) {
-        CMatrixOld sum = new CMatrixOld(A.numRows+B.numRows, A.numCols+B.numCols);
+    public static CMatrix directSum(CMatrix A, CMatrix B) {
+        CMatrix sum = new CMatrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
-        for(int i=0; i<A.numRows; i++) {
+        for(int i=0; i<A.numRows; i++)
             System.arraycopy(A.entries, i*A.numCols, sum.entries, i*sum.numCols, A.numCols);
-        }
 
         // Copy over second matrix.
-        for(int i=0; i<B.numRows; i++) {
+        for(int i=0; i<B.numRows; i++)
             System.arraycopy(B.entries, i*B.numCols, sum.entries, (i+A.numRows)*sum.numCols + A.numCols, B.numCols);
-        }
 
         return sum;
     }
@@ -353,8 +365,8 @@ public final class DirectSum {
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing {@code A} with {@code B}.
      */
-    public static CMatrixOld directSum(CMatrixOld A, CooCMatrixOld B) {
-        CMatrixOld sum = new CMatrixOld(A.numRows+B.numRows, A.numCols+B.numCols);
+    public static CMatrix directSum(CMatrix A, CooCMatrix B) {
+        CMatrix sum = new CMatrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
@@ -364,7 +376,7 @@ public final class DirectSum {
         // Copy over second matrix.
         int row;
         int col;
-        for(int i=0; i<B.nonZeroEntries(); i++) {
+        for(int i=0; i<B.nnz; i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
@@ -382,8 +394,8 @@ public final class DirectSum {
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing {@code A} with {@code B}.
      */
-    public static CMatrixOld invDirectSum(CMatrixOld A, MatrixOld B) {
-        CMatrixOld sum = new CMatrixOld(A.numRows+B.numRows, A.numCols+B.numCols);
+    public static CMatrix invDirectSum(CMatrix A, Matrix B) {
+        CMatrix sum = new CMatrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
@@ -396,7 +408,7 @@ public final class DirectSum {
             int bRowOffset = i*B.numCols;
 
             for(int j=0; j<B.numCols; j++) {
-                sum.entries[sumRowOffset + j] = new CNumber(B.entries[bRowOffset + j]);
+                sum.entries[sumRowOffset + j] = new Complex128(B.entries[bRowOffset + j]);
             }
         }
 
@@ -411,22 +423,19 @@ public final class DirectSum {
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing {@code A} with {@code B}.
      */
-    public static CMatrixOld invDirectSum(CMatrixOld A, CooMatrixOld B) {
-        CMatrixOld sum = new CMatrixOld(A.numRows+B.numRows, A.numCols+B.numCols);
+    public static CMatrix invDirectSum(CMatrix A, CooMatrix B) {
+        CMatrix sum = new CMatrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
-        for(int i=0; i<A.numRows; i++) {
+        for(int i=0; i<A.numRows; i++)
             System.arraycopy(A.entries, i*A.numCols, sum.entries, (i+B.numRows)*sum.numCols, A.numCols);
-        }
 
         // Copy over second matrix.
-        int row;
-        int col;
-        for(int i=0; i<B.nonZeroEntries(); i++) {
-            row = B.rowIndices[i];
-            col = B.colIndices[i];
+        for(int i=0; i<B.nnz; i++) {
+            int row = B.rowIndices[i];
+            int col = B.colIndices[i];
 
-            sum.entries[row*sum.numCols + col + A.numCols] = new CNumber(B.entries[i]);
+            sum.entries[row*sum.numCols + col + A.numCols] = new Complex128(B.entries[i]);
         }
 
         return sum;
@@ -440,24 +449,25 @@ public final class DirectSum {
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing {@code A} with {@code B}.
      */
-    public static CMatrixOld invDirectSum(CMatrixOld A, CMatrixOld B) {
-        CMatrixOld sum = new CMatrixOld(A.numRows+B.numRows, A.numCols+B.numCols);
+    public static CMatrix invDirectSum(CMatrix A, CMatrix B) {
+        CMatrix sum = new CMatrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
             int sumRowOffset = (i+B.numRows)*sum.numCols;
             int aRowOffset = i*A.numCols;
 
-            for(int j=0; j<A.numCols; j++) {
+            for(int j=0; j<A.numCols; j++)
                 sum.entries[sumRowOffset + j] = A.entries[aRowOffset + j];
-            }
         }
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
-            for(int j=0; j<B.numCols; j++) {
-                sum.entries[i*sum.numCols + j + A.numCols] = B.entries[i*B.numCols + j];
-            }
+            int bRowOffset = i*B.numCols;
+            int sumRowOffset = i*sum.numCols + A.numCols;
+
+            for(int j=0; j<B.numCols; j++)
+                sum.entries[sumRowOffset + j] = B.entries[bRowOffset + j];
         }
 
         return sum;
@@ -471,25 +481,22 @@ public final class DirectSum {
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing {@code A} with {@code B}.
      */
-    public static CMatrixOld invDirectSum(CMatrixOld A, CooCMatrixOld B) {
-        CMatrixOld sum = new CMatrixOld(A.numRows+B.numRows, A.numCols+B.numCols);
+    public static CMatrix invDirectSum(CMatrix A, CooCMatrix B) {
+        CMatrix sum = new CMatrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
             int sumRowOffset = (i+B.numRows)*sum.numCols;
             int aRowOffset = i*A.numCols;
 
-            for(int j=0; j<A.numCols; j++) {
+            for(int j=0; j<A.numCols; j++)
                 sum.entries[sumRowOffset + j] = A.entries[aRowOffset + j];
-            }
         }
 
         // Copy over second matrix.
-        int row;
-        int col;
-        for(int i=0; i<B.nonZeroEntries(); i++) {
-            row = B.rowIndices[i];
-            col = B.colIndices[i];
+        for(int i=0; i<B.nnz; i++) {
+            int row = B.rowIndices[i];
+            int col = B.colIndices[i];
 
             sum.entries[row*sum.numCols + col + A.numCols] = B.entries[i];
         }
@@ -499,7 +506,7 @@ public final class DirectSum {
     // -------------------------------------------------------------------------------
 
 
-    // ------------------------------- Real COO MatrixOld -------------------------------
+    // ------------------------------- Real COO Matrix -------------------------------
     /**
      * Computes the direct sum of two matrices.
      *
@@ -507,7 +514,7 @@ public final class DirectSum {
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    public static CooMatrixOld directSum(CooMatrixOld A, MatrixOld B) {
+    public static CooMatrix directSum(CooMatrix A, Matrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
         double[] destEntries = new double[A.entries.length + B.entries.length];
         int[] destRowIndices = new int[destEntries.length];
@@ -532,7 +539,7 @@ public final class DirectSum {
             destColIndices[destIdx] = indices[1] + A.numCols;
         }
 
-        return new CooMatrixOld(destShape, destEntries, destRowIndices, destColIndices);
+        return new CooMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -543,7 +550,7 @@ public final class DirectSum {
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    public static CooMatrixOld directSum(CooMatrixOld A, CooMatrixOld B) {
+    public static CooMatrix directSum(CooMatrix A, CooMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
         double[] destEntries = new double[A.entries.length + B.entries.length];
         int[] destRowIndices = new int[destEntries.length];
@@ -566,7 +573,7 @@ public final class DirectSum {
             destColIndices[destIdx] = B.colIndices[i] + A.numCols;
         }
 
-        return new CooMatrixOld(destShape, destEntries, destRowIndices, destColIndices);
+        return new CooMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -577,9 +584,9 @@ public final class DirectSum {
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    public static CooCMatrixOld directSum(CooMatrixOld A, CMatrixOld B) {
+    public static CooCMatrix directSum(CooMatrix A, CMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        CNumber[] destEntries = new CNumber[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -602,7 +609,7 @@ public final class DirectSum {
             destColIndices[destIdx] = indices[1] + A.numCols;
         }
 
-        return new CooCMatrixOld(destShape, destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -613,9 +620,9 @@ public final class DirectSum {
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    public static CooCMatrixOld directSum(CooMatrixOld A, CooCMatrixOld B) {
+    public static CooCMatrix directSum(CooMatrix A, CooCMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        CNumber[] destEntries = new CNumber[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -636,7 +643,7 @@ public final class DirectSum {
             destColIndices[destIdx] = B.colIndices[i] + A.numCols;
         }
 
-        return new CooCMatrixOld(destShape, destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -647,7 +654,7 @@ public final class DirectSum {
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    public static CooMatrixOld invDirectSum(CooMatrixOld A, MatrixOld B) {
+    public static CooMatrix invDirectSum(CooMatrix A, Matrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
         double[] destEntries = new double[A.entries.length + B.entries.length];
         int[] destRowIndices = new int[destEntries.length];
@@ -669,7 +676,7 @@ public final class DirectSum {
         System.arraycopy(shiftedRowIndices, 0, destRowIndices, bRowIndices.length, shiftedRowIndices.length);
         System.arraycopy(A.colIndices, 0, destColIndices, bColIndices.length, A.colIndices.length);
 
-        return new CooMatrixOld(destShape, destEntries, destRowIndices, destColIndices);
+        return new CooMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -680,7 +687,7 @@ public final class DirectSum {
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    public static CooMatrixOld invDirectSum(CooMatrixOld A, CooMatrixOld B) {
+    public static CooMatrix invDirectSum(CooMatrix A, CooMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
         double[] destEntries = new double[A.entries.length + B.entries.length];
         int[] destRowIndices = new int[destEntries.length];
@@ -701,7 +708,7 @@ public final class DirectSum {
         System.arraycopy(shiftedRowIndices, 0, destRowIndices, B.rowIndices.length, shiftedRowIndices.length);
         System.arraycopy(A.colIndices, 0, destColIndices, B.colIndices.length, A.colIndices.length);
 
-        return new CooMatrixOld(destShape, destEntries, destRowIndices, destColIndices);
+        return new CooMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -712,9 +719,9 @@ public final class DirectSum {
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    public static CooCMatrixOld invDirectSum(CooMatrixOld A, CMatrixOld B) {
+    public static CooCMatrix invDirectSum(CooMatrix A, CMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        CNumber[] destEntries = new CNumber[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -734,7 +741,7 @@ public final class DirectSum {
         System.arraycopy(shiftedRowIndices, 0, destRowIndices, bRowIndices.length, shiftedRowIndices.length);
         System.arraycopy(A.colIndices, 0, destColIndices, bColIndices.length, A.colIndices.length);
 
-        return new CooCMatrixOld(destShape, destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -745,9 +752,9 @@ public final class DirectSum {
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    public static CooCMatrixOld invDirectSum(CooMatrixOld A, CooCMatrixOld B) {
+    public static CooCMatrix invDirectSum(CooMatrix A, CooCMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        CNumber[] destEntries = new CNumber[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -766,12 +773,12 @@ public final class DirectSum {
         System.arraycopy(shiftedRowIndices, 0, destRowIndices, B.rowIndices.length, shiftedRowIndices.length);
         System.arraycopy(A.colIndices, 0, destColIndices, B.colIndices.length, A.colIndices.length);
 
-        return new CooCMatrixOld(destShape, destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
     // -------------------------------------------------------------------------------
 
 
-    // ------------------------------ Complex COO MatrixOld -----------------------------
+    // ------------------------------ Complex COO Matrix -----------------------------
     /**
      * Computes the direct sum of two matrices.
      *
@@ -779,9 +786,9 @@ public final class DirectSum {
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    public static CooCMatrixOld directSum(CooCMatrixOld A, MatrixOld B) {
+    public static CooCMatrix directSum(CooCMatrix A, Matrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        CNumber[] destEntries = new CNumber[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -804,7 +811,7 @@ public final class DirectSum {
             destColIndices[destIdx] = indices[1] + A.numCols;
         }
 
-        return new CooCMatrixOld(destShape, destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -815,9 +822,9 @@ public final class DirectSum {
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    public static CooCMatrixOld directSum(CooCMatrixOld A, CooMatrixOld B) {
+    public static CooCMatrix directSum(CooCMatrix A, CooMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        CNumber[] destEntries = new CNumber[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -838,7 +845,7 @@ public final class DirectSum {
             destColIndices[destIdx] = B.colIndices[i] + A.numCols;
         }
 
-        return new CooCMatrixOld(destShape, destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -849,9 +856,9 @@ public final class DirectSum {
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    public static CooCMatrixOld directSum(CooCMatrixOld A, CMatrixOld B) {
+    public static CooCMatrix directSum(CooCMatrix A, CMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        CNumber[] destEntries = new CNumber[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -874,7 +881,7 @@ public final class DirectSum {
             destColIndices[destIdx] = indices[1] + A.numCols;
         }
 
-        return new CooCMatrixOld(destShape, destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -885,9 +892,9 @@ public final class DirectSum {
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    public static CooCMatrixOld directSum(CooCMatrixOld A, CooCMatrixOld B) {
+    public static CooCMatrix directSum(CooCMatrix A, CooCMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        CNumber[] destEntries = new CNumber[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -908,7 +915,7 @@ public final class DirectSum {
             destColIndices[destIdx] = B.colIndices[i] + A.numCols;
         }
 
-        return new CooCMatrixOld(destShape, destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -919,9 +926,9 @@ public final class DirectSum {
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    public static CooCMatrixOld invDirectSum(CooCMatrixOld A, MatrixOld B) {
+    public static CooCMatrix invDirectSum(CooCMatrix A, Matrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        CNumber[] destEntries = new CNumber[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -941,7 +948,7 @@ public final class DirectSum {
         System.arraycopy(shiftedRowIndices, 0, destRowIndices, bRowIndices.length, shiftedRowIndices.length);
         System.arraycopy(A.colIndices, 0, destColIndices, bColIndices.length, A.colIndices.length);
 
-        return new CooCMatrixOld(destShape, destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -952,9 +959,9 @@ public final class DirectSum {
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    public static CooCMatrixOld invDirectSum(CooCMatrixOld A, CooCMatrixOld B) {
+    public static CooCMatrix invDirectSum(CooCMatrix A, CooCMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        CNumber[] destEntries = new CNumber[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -973,7 +980,7 @@ public final class DirectSum {
         System.arraycopy(shiftedRowIndices, 0, destRowIndices, B.rowIndices.length, shiftedRowIndices.length);
         System.arraycopy(A.colIndices, 0, destColIndices, B.colIndices.length, A.colIndices.length);
 
-        return new CooCMatrixOld(destShape, destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -984,9 +991,9 @@ public final class DirectSum {
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    public static CooCMatrixOld invDirectSum(CooCMatrixOld A, CooMatrixOld B) {
+    public static CooCMatrix invDirectSum(CooCMatrix A, CooMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        CNumber[] destEntries = new CNumber[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -1005,7 +1012,7 @@ public final class DirectSum {
         System.arraycopy(shiftedRowIndices, 0, destRowIndices, B.rowIndices.length, shiftedRowIndices.length);
         System.arraycopy(A.colIndices, 0, destColIndices, B.colIndices.length, A.colIndices.length);
 
-        return new CooCMatrixOld(destShape, destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1016,9 +1023,9 @@ public final class DirectSum {
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    public static CooCMatrixOld invDirectSum(CooCMatrixOld A, CMatrixOld B) {
+    public static CooCMatrix invDirectSum(CooCMatrix A, CMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        CNumber[] destEntries = new CNumber[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -1038,243 +1045,6 @@ public final class DirectSum {
         System.arraycopy(shiftedRowIndices, 0, destRowIndices, bRowIndices.length, shiftedRowIndices.length);
         System.arraycopy(A.colIndices, 0, destColIndices, bColIndices.length, A.colIndices.length);
 
-        return new CooCMatrixOld(destShape, destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
-    // -------------------------------------------------------------------------------
-
-
-    // ------------------------------- Real CSR MatrixOld -------------------------------
-    /**
-     * Computes the direct sum of two matrices.
-     *
-     * @param B Second matrix in the direct sum.
-     * @return The result of direct summing {@code A} with {@code B}.
-     */
-    public static CsrMatrixOld directSum(CsrMatrixOld A, MatrixOld B) {
-        // TODO: Implementation
-        return null;
-    }
-
-
-    /**
-     * Computes the direct sum of two matrices.
-     *
-     * @param B Second matrix in the direct sum.
-     * @return The result of direct summing {@code A} with {@code B}.
-     */
-    public static CsrMatrixOld directSum(CsrMatrixOld A, CooMatrixOld B) {
-        // TODO: Implementation
-        return null;
-    }
-
-
-    /**
-     * Computes the direct sum of two matrices.
-     *
-     * @param A First matrix in the direct sum.
-     * @param B Second matrix in the direct sum.
-     * @return The result of direct summing {@code A} with {@code B}.
-     */
-    public static CsrCMatrixOld directSum(CsrMatrixOld A, CMatrixOld B) {
-        // TODO: Implementation
-        return null;
-    }
-
-
-    /**
-     * Computes the direct sum of two matrices.
-     *
-     * @param A First matrix in the direct sum.
-     * @param B Second matrix in the direct sum.
-     * @return The result of direct summing {@code A} with {@code B}.
-     */
-    public static CsrCMatrixOld directSum(CsrMatrixOld A, CooCMatrixOld B) {
-        // TODO: Implementation
-        return null;
-    }
-
-
-    /**
-     * Computes direct sum from bottom left to top right of two matrices.
-     *
-     * @param A First matrix in the inverse direct sum.
-     * @param B Second matrix in inverse direct sum.
-     * @return The result of inverse direct summing {@code A} with {@code B}.
-     */
-    public static CsrMatrixOld invDirectSum(CsrMatrixOld A, MatrixOld B) {
-        // TODO: Implementation
-        return null;
-    }
-
-
-    /**
-     * Computes direct sum from bottom left to top right of two matrices.
-     *
-     * @param A First matrix in the inverse direct sum.
-     * @param B Second matrix in inverse direct sum.
-     * @return The result of inverse direct summing {@code A} with {@code B}.
-     */
-    public static CsrMatrixOld invDirectSum(CsrMatrixOld A, CsrMatrixOld B) {
-        // TODO: Implementation
-        return null;
-    }
-
-
-    /**
-     * Computes direct sum from bottom left to top right of two matrices.
-     *
-     * @param A First matrix in the inverse direct sum.
-     * @param B Second matrix in inverse direct sum.
-     * @return The result of inverse direct summing {@code A} with {@code B}.
-     */
-    public static CsrMatrixOld invDirectSum(CsrMatrixOld A, CooMatrixOld B) {
-        // TODO: Implementation
-        return null;
-    }
-
-
-    /**
-     * Computes direct sum from bottom left to top right of two matrices.
-     *
-     * @param A First matrix in the inverse direct sum.
-     * @param B Second matrix in inverse direct sum.
-     * @return The result of inverse direct summing {@code A} with {@code B}.
-     */
-    public static CsrCMatrixOld invDirectSum(CsrMatrixOld A, CMatrixOld B) {
-        // TODO: Implementation
-        return null;
-    }
-
-
-    /**
-     * Computes direct sum from bottom left to top right of two matrices.
-     *
-     * @param A First matrix in the inverse direct sum.
-     * @param B Second matrix in inverse direct sum.
-     * @return The result of inverse direct summing {@code A} with {@code B}.
-     */
-    public static CsrCMatrixOld invDirectSum(CsrMatrixOld A, CooCMatrixOld B) {
-        // TODO: Implementation
-        return null;
-    }
-    // -------------------------------------------------------------------------------
-
-
-    // ------------------------------ Complex CSR MatrixOld -----------------------------
-    /**
-     * Computes the direct sum of two matrices.
-     *
-     * @param A First matrix in the direct sum.
-     * @param B Second matrix in the direct sum.
-     * @return The result of direct summing this matrix with B.
-     */
-    public CsrMatrixOld directSum(CsrCMatrixOld A, MatrixOld B) {
-        // TODO: Implementation
-        return null;
-    }
-
-
-    /**
-     * Computes the direct sum of two matrices.
-     *
-     * @param A First matrix in the direct sum.
-     * @param B Second matrix in the direct sum.
-     * @return The result of direct summing this matrix with B.
-     */
-    public CsrMatrixOld directSum(CsrCMatrixOld A, CooMatrixOld B) {
-        // TODO: Implementation
-        return null;
-    }
-
-
-    /**
-     * Computes the direct sum of two matrices.
-     *
-     * @param A First matrix in the direct sum.
-     * @param B Second matrix in the direct sum.
-     * @return The result of direct summing this matrix with B.
-     */
-    public CsrCMatrixOld directSum(CsrCMatrixOld A, CMatrixOld B) {
-        // TODO: Implementation
-        return null;
-    }
-
-
-    /**
-     * Computes the direct sum of two matrices.
-     *
-     * @param A First matrix in the direct sum.
-     * @param B Second matrix in the direct sum.
-     * @return The result of direct summing this matrix with B.
-     */
-    public CsrCMatrixOld directSum(CsrCMatrixOld A, CooCMatrixOld B) {
-        // TODO: Implementation
-        return null;
-    }
-
-
-    /**
-     * Computes direct sum from bottom left to top right of two matrices.
-     *
-     * @param A First matrix in the inverse direct sum.
-     * @param B Second matrix in inverse direct sum.
-     * @return The result of inverse direct summing this matrix with B.
-     */
-    public CsrMatrixOld invDirectSum(CsrCMatrixOld A, MatrixOld B) {
-        // TODO: Implementation
-        return null;
-    }
-
-
-    /**
-     * Computes direct sum from bottom left to top right of two matrices.
-     *
-     * @param A First matrix in the inverse direct sum.
-     * @param B Second matrix in inverse direct sum.
-     * @return The result of inverse direct summing this matrix with B.
-     */
-    public CsrMatrixOld invDirectSum(CsrCMatrixOld A, CsrMatrixOld B) {
-        // TODO: Implementation
-        return null;
-    }
-
-
-    /**
-     * Computes direct sum from bottom left to top right of two matrices.
-     *
-     * @param A First matrix in the inverse direct sum.
-     * @param B Second matrix in inverse direct sum.
-     * @return The result of inverse direct summing this matrix with B.
-     */
-    public CsrMatrixOld invDirectSum(CsrCMatrixOld A, CooMatrixOld B) {
-        // TODO: Implementation
-        return null;
-    }
-
-
-    /**
-     * Computes direct sum from bottom left to top right of two matrices.
-     *
-     * @param A First matrix in the inverse direct sum.
-     * @param B Second matrix in inverse direct sum.
-     * @return The result of inverse direct summing this matrix with B.
-     */
-    public CsrCMatrixOld invDirectSum(CsrCMatrixOld A, CMatrixOld B) {
-        // TODO: Implementation
-        return null;
-    }
-
-
-    /**
-     * Computes direct sum from bottom left to top right of two matrices.
-     *
-     * @param A First matrix in the inverse direct sum.
-     * @param B Second matrix in inverse direct sum.
-     * @return The result of inverse direct summing this matrix with B.
-     */
-    public CsrCMatrixOld invDirectSum(CsrCMatrixOld A, CooCMatrixOld B) {
-        // TODO: Implementation
-        return null;
-    }
-    // -------------------------------------------------------------------------------
 }

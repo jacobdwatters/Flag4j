@@ -558,11 +558,11 @@ public final class EigenOld {
         CVectorOld v;
 
         for(int j=0; j<T.numRows; j++) {
-            S_hat = CMatrixOld.getEmpty(j, j);
-            r = CVectorOld.getEmpty(j);
-            makeSystem(T, j, S_hat, r);
+            if(j > 0) {
+                S_hat = CMatrixOld.getEmpty(j, j);
+                r = CVectorOld.getEmpty(j);
+                makeSystem(T, j, S_hat, r);
 
-            if(S_hat.entries.length > 0) {
                 v = backSolver.solve(S_hat, r);
                 v = v.join(new CVectorOld(1.0));
             } else {

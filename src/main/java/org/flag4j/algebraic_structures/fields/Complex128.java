@@ -31,10 +31,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * <p>A complex number stored in rectangular form and backed by two 64-bit floating point number (one for the real and one for the
+ * <p>A complex number stored in rectangular form and backed by two 64-bit floating point numbers (one for the real and one for the
  * imaginary component).</p>
  *
- * <p>Complex128 numbers are Immutable.</p>
+ * <p>Complex128's' are Immutable.</p>
  */
 public class Complex128 implements Field<Complex128> {
     // Several constants are provided for convenience.

@@ -48,6 +48,7 @@ public class ComplexNumberParser {
      * 				real numbers and i is the imaginary unit sqrt(-1)
      * @return The complex number represented by the string {@code num}.
      */
+    @Deprecated
     public static CNumber parseNumber(String num) {
         double[] components = getComponents(num);
         return new CNumber(components[0], components[1]);

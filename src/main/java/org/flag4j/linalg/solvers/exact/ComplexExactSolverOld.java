@@ -26,7 +26,7 @@ package org.flag4j.linalg.solvers.exact;
 
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.linalg.decompositions.lu.ComplexLU;
+import org.flag4j.linalg.decompositions.lu.ComplexLUOld;
 import org.flag4j.linalg.decompositions.lu.LUOld;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolverOld;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolverOld;
@@ -42,7 +42,7 @@ public class ComplexExactSolverOld extends ExactSolverOld<CMatrixOld, CVectorOld
      * Constructs an exact LUOld solver where the coefficient matrix is real dense.
      */
     public ComplexExactSolverOld() {
-        super(new ComplexLU(),
+        super(new ComplexLUOld(),
                 new ComplexForwardSolverOld(true),
                 new ComplexBackSolverOld()
         );

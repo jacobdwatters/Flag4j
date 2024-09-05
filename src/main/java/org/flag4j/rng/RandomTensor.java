@@ -42,11 +42,12 @@ import java.math.RoundingMode;
  * An instance of this class is used for generating streams of pseudorandom tensors, matrices, and vectors.
  */
 public class RandomTensor {
+
     /**
      * Complex pseudorandom number generator.
      */
     private final RandomCNumber COMPLEX_RNG;
-    private final RandomArray RAND_ARRAY;
+    private final RandomArrayOld RAND_ARRAY;
 
     /**
      * Constructs a new pseudorandom tensor generator with a seed which is unlikely to be the same as other
@@ -54,7 +55,7 @@ public class RandomTensor {
      */
     public RandomTensor() {
         COMPLEX_RNG = new RandomCNumber();
-        RAND_ARRAY = new RandomArray(COMPLEX_RNG);
+        RAND_ARRAY = new RandomArrayOld(COMPLEX_RNG);
     }
 
     /**
@@ -63,7 +64,7 @@ public class RandomTensor {
      */
     public RandomTensor(long seed) {
         COMPLEX_RNG = new RandomCNumber(seed);
-        RAND_ARRAY = new RandomArray(COMPLEX_RNG);
+        RAND_ARRAY = new RandomArrayOld(COMPLEX_RNG);
     }
 
 

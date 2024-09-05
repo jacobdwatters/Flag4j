@@ -28,7 +28,7 @@ import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
 /**
- * Print options for matrices and vectors
+ * Printing and formating options for tensors, matrices, and vectors.
  */
 public final class PrintOptions {
 
@@ -53,10 +53,9 @@ public final class PrintOptions {
      */
     public static final boolean DEFAULT_CENTER = true;
 
-    /**
-     * Hide default constructor.
-     */
+
     private PrintOptions() {
+        // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 

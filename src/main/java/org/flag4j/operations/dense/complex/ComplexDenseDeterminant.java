@@ -28,7 +28,7 @@ package org.flag4j.operations.dense.complex;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.linalg.decompositions.lu.ComplexLU;
+import org.flag4j.linalg.decompositions.lu.ComplexLUOld;
 import org.flag4j.linalg.decompositions.lu.LUOld;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -82,7 +82,7 @@ public final class ComplexDenseDeterminant {
      */
     public static CNumber detLU(CMatrixOld A) {
         ParameterChecks.ensureSquareMatrix(A.shape);
-        LUOld<CMatrixOld> lu = new ComplexLU().decompose(A);
+        LUOld<CMatrixOld> lu = new ComplexLUOld().decompose(A);
 
         double detP = (lu.getNumRowSwaps() & 1) == 0 ? 1 : -1;
         return detTri(lu.getU()).mult(detP);

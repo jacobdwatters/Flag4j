@@ -224,14 +224,6 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
 
 
     /**
-     * Computes the inner product between this vector and itself.
-     *
-     * @return The inner product between this vector and itself.
-     */
-    public abstract double innerSelf();
-
-
-    /**
      * <p>Computes the dot product between two vectors.</p>
      *
      * <p>Note: this method is distinct from {@link #inner(DenseFieldVectorBase)}. The inner product is equivalent to the dot product

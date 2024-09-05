@@ -27,8 +27,11 @@ package org.flag4j.arrays.dense;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.DenseFieldMatrixBase;
+import org.flag4j.arrays.backend.TensorBase;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.linalg.decompositions.svd.ComplexSVD;
+import org.flag4j.operations_old.MatrixMultiplyDispatcher;
 import org.flag4j.util.ParameterChecks;
 
 import java.util.ArrayList;
@@ -225,6 +228,19 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
 
 
     /**
+     * Converts this complex matrix to a real matrix. This is done by ignoring the imaginary component of all entries.
+     * @return A real matrix containing the real components of this complex matrices entries.
+     */
+    public Matrix toReal() {
+        double[] real = new double[entries.length];
+        for(int i=0, size=entries.length; i<size; i++)
+            real[i] = entries[i].re;
+
+        return new Matrix(shape, real);
+    }
+
+
+    /**
      * Converts this dense matrix to an equivalent compressed sparse row (CSR) matrix.
      *
      * @return A CSR matrix equivalent to this matrix.
@@ -309,5 +325,36 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
             I.entries[i] = Complex128.ONE;
 
         return I;
+    }
+
+
+    /**
+     * <p>Computes the rank of this matrix (i.e. the number of linearly independent rows/columns in this matrix).</p>
+     *
+     * <p>This is computed as the number of singular values greater than {@code tol} where:
+     * <pre>{@code double tol = 2.0*Math.max(rows, cols)*Flag4jConstants.EPS_F64*Math.min(this.numRows, this.numCols);}</pre>
+     * </p>
+     *
+     * <p>Note the "matrix rank" is <b>NOT</b> related to the "{@link TensorBase#getRank() tensor rank}" which is number of indices
+     * needed to uniquely specify an entry in the tensor.</p>
+     *
+     * @return The matrix rank of this matrix.
+     */
+    public int matrixRank() {
+        return new ComplexSVD(false).decompose(this).getRank();
+    }
+
+
+    /**
+     * Multiplies this complex dense matrix with a real dense matrix.
+     * @param b The second matrix in the matrix multiplication.
+     * @return The matrix product of this matrix and {@code b}.
+     * @throws org.flag4j.util.exceptions.LinearAlgebraException If {@code this.numCols != b.numRows}
+     */
+    public CMatrix mult(Matrix b) {
+        Complex128[] entries = MatrixMultiplyDispatcher.dispatch(this, b);
+        Shape shape = new Shape(this.numRows, b.numCols);
+
+        return new CMatrix(shape, entries);
     }
 }

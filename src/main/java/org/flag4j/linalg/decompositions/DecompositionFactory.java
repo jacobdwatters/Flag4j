@@ -31,14 +31,14 @@ import org.flag4j.linalg.decompositions.chol.CholeskyOld;
 import org.flag4j.linalg.decompositions.chol.ComplexCholeskyOld;
 import org.flag4j.linalg.decompositions.chol.RealCholeskyOld;
 import org.flag4j.linalg.decompositions.hess.RealHessOld;
-import org.flag4j.linalg.decompositions.lu.ComplexLU;
+import org.flag4j.linalg.decompositions.lu.ComplexLUOld;
 import org.flag4j.linalg.decompositions.lu.LUOld;
 import org.flag4j.linalg.decompositions.lu.RealLUOLd;
 import org.flag4j.linalg.decompositions.qr.ComplexQROld;
 import org.flag4j.linalg.decompositions.qr.RealQROld;
 import org.flag4j.linalg.decompositions.schur.RealSchurOld;
-import org.flag4j.linalg.decompositions.svd.ComplexSVD;
-import org.flag4j.linalg.decompositions.svd.RealSVD;
+import org.flag4j.linalg.decompositions.svd.ComplexSVDOld;
+import org.flag4j.linalg.decompositions.svd.RealSVDOld;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -66,7 +66,7 @@ public class DecompositionFactory {
      * @return A decomposer to compute the LUOld decomposition of a complex dense matrix.
      */
     public static LUOld<CMatrixOld> createComplexLU() {
-        return new ComplexLU();
+        return new ComplexLUOld();
     }
 
 
@@ -146,8 +146,8 @@ public class DecompositionFactory {
      * Constructs a decomposer to compute the singular value decomposition of a real dense matrix.
      * @return A decomposer to compute the singular value decomposition of a real dense matrix.
      */
-    public static RealSVD createRealSVD() {
-        return new RealSVD();
+    public static RealSVDOld createRealSVD() {
+        return new RealSVDOld();
     }
 
 
@@ -155,7 +155,7 @@ public class DecompositionFactory {
      * Constructs a decomposer to compute the singular value decomposition of a complex dense matrix.
      * @return A decomposer to compute the singular value decomposition of a complex dense matrix.
      */
-    public static ComplexSVD createComplexSVD() {
-        return new ComplexSVD();
+    public static ComplexSVDOld createComplexSVD() {
+        return new ComplexSVDOld();
     }
 }

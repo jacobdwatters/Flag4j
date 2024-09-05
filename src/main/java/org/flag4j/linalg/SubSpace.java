@@ -29,9 +29,9 @@ import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.linalg.decompositions.svd.ComplexSVD;
-import org.flag4j.linalg.decompositions.svd.RealSVD;
-import org.flag4j.linalg.decompositions.svd.SVD;
+import org.flag4j.linalg.decompositions.svd.ComplexSVDOld;
+import org.flag4j.linalg.decompositions.svd.RealSVDOld;
+import org.flag4j.linalg.decompositions.svd.SVDOld;
 import org.flag4j.linalg.solvers.lstsq.ComplexLstsqSolverOld;
 import org.flag4j.linalg.solvers.lstsq.RealLstsqSolverOld;
 import org.flag4j.util.ErrorMessages;
@@ -53,7 +53,7 @@ public final class SubSpace {
      * @return A matrix containing as its columns, an orthonormal basis for the column space of the {@code src} matrix.
      */
     public static MatrixOld getColSpace(MatrixOld src) {
-        SVD<MatrixOld> svd = new RealSVD().decompose(src);
+        SVDOld<MatrixOld> svd = new RealSVDOld().decompose(src);
         int rank = svd.getRank();
         return svd.getU().getSlice(0, src.numRows, 0, rank);
     }
@@ -65,7 +65,7 @@ public final class SubSpace {
      * @return A matrix containing as its columns, an orthonormal basis for the row space of the {@code src} matrix.
      */
     public static MatrixOld getRowSpace(MatrixOld src) {
-        SVD<MatrixOld> svd = new RealSVD().decompose(src);
+        SVDOld<MatrixOld> svd = new RealSVDOld().decompose(src);
         int rank = svd.getRank();
         return svd.getV().getSlice(0, src.numRows, 0, rank);
     }
@@ -77,7 +77,7 @@ public final class SubSpace {
      * @return A matrix containing as its columns, an orthonormal basis for the null space of the {@code src} matrix.
      */
     public static MatrixOld getNullSpace(MatrixOld src) {
-        SVD<MatrixOld> svd = new RealSVD().decompose(src);
+        SVDOld<MatrixOld> svd = new RealSVDOld().decompose(src);
         int rank = svd.getRank();
         int numCols = Math.min(src.numRows, src.numCols);
 
@@ -93,7 +93,7 @@ public final class SubSpace {
      * @return A matrix containing as its columns, an orthonormal basis for the left null space of the {@code src} matrix.
      */
     public static MatrixOld getLeftNullSpace(MatrixOld src) {
-        SVD<MatrixOld> svd = new RealSVD().decompose(src);
+        SVDOld<MatrixOld> svd = new RealSVDOld().decompose(src);
         int rank = svd.getRank();
         return src.numRows-rank==0 ?
                 new MatrixOld(src.numCols, 1) :
@@ -107,7 +107,7 @@ public final class SubSpace {
      * @return A matrix containing as its columns, an orthonormal basis for the column space of the {@code src} matrix.
      */
     public static CMatrixOld getColSpace(CMatrixOld src) {
-        SVD<CMatrixOld> svd = new ComplexSVD().decompose(src);
+        SVDOld<CMatrixOld> svd = new ComplexSVDOld().decompose(src);
         int rank = svd.getRank();
         return svd.getU().getSlice(0, src.numRows, 0, rank);
     }
@@ -119,7 +119,7 @@ public final class SubSpace {
      * @return A matrix containing as its columns, an orthonormal basis for the row space of the {@code src} matrix.
      */
     public static CMatrixOld getRowSpace(CMatrixOld src) {
-        SVD<CMatrixOld> svd = new ComplexSVD().decompose(src);
+        SVDOld<CMatrixOld> svd = new ComplexSVDOld().decompose(src);
         int rank = svd.getRank();
         return svd.getV().getSlice(0, src.numRows, 0, rank);
     }
@@ -131,7 +131,7 @@ public final class SubSpace {
      * @return A matrix containing as its columns, an orthonormal basis for the null space of the {@code src} matrix.
      */
     public static CMatrixOld getNullSpace(CMatrixOld src) {
-        SVD<CMatrixOld> svd = new ComplexSVD().decompose(src);
+        SVDOld<CMatrixOld> svd = new ComplexSVDOld().decompose(src);
         int rank = svd.getRank();
         int numCols = Math.min(src.numRows, src.numCols);
 
@@ -147,7 +147,7 @@ public final class SubSpace {
      * @return A matrix containing as its columns, an orthonormal basis for the left null space of the {@code src} matrix.
      */
     public static CMatrixOld getLeftNullSpace(CMatrixOld src) {
-        SVD<CMatrixOld> svd = new ComplexSVD().decompose(src);
+        SVDOld<CMatrixOld> svd = new ComplexSVDOld().decompose(src);
         int rank = svd.getRank();
 
         return src.numRows-rank==0 ?

@@ -1,7 +1,8 @@
 package org.flag4j.sparse_tensor;
 
-import org.flag4j.arrays_old.sparse.CooTensorOld;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays_old.sparse.CooTensorOld;
+import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertThrows;
@@ -115,7 +116,7 @@ class CooTensorReshapeTests {
                 {0, 15},
                 {1, 7}};
         A = new CooTensorOld(aShape, aEntries, aIndices);
-        assertThrows(IllegalArgumentException.class, ()->A.reshape(150, 12));
+        assertThrows(TensorShapeException.class, ()->A.reshape(150, 12));
     }
 
 

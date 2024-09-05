@@ -76,8 +76,8 @@ class ShapeTests {
 
         // ----------- Sub-case 3 -----------
         expDims1 = new int[]{};
-        shape1 = new Shape(expDims1);
-        assertEquals(0, shape1.totalEntries().intValue());
+        shape1 = new Shape(expDims1); // Represents a scalar value.
+        assertEquals(1, shape1.totalEntries().intValue());
     }
 
 

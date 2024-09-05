@@ -3,6 +3,7 @@ package org.flag4j.sparse_complex_vector;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays_old.sparse.CooCVectorOld;
 import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -44,7 +45,7 @@ class CooCVectorReshapeTests {
         assertEquals(exp, a.flatten(0));
 
         // ------------------ Sub-case 2 ------------------
-        assertThrows(IllegalArgumentException.class, ()->a.reshape(new Shape(sparseSize-2)));
+        assertThrows(TensorShapeException.class, ()->a.reshape(new Shape(sparseSize-2)));
         assertThrows(IllegalArgumentException.class, ()->a.reshape(sparseSize+32));
         assertThrows(IllegalArgumentException.class, ()->a.flatten(-35));
         assertThrows(IllegalArgumentException.class, ()->a.flatten(1));

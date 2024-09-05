@@ -25,10 +25,10 @@
 package org.flag4j.operations_old.dense.real_complex;
 
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
-import org.flag4j.arrays.Shape;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 
@@ -38,10 +38,11 @@ import org.flag4j.util.ErrorMessages;
  * multiplications. <br>
  * <b>WARNING:</b> These methods do not perform any sanity checks.
  */
-public final class RealComplexDenseMatrixMultiplication {
+@Deprecated
+public final class RealComplexDenseMatrixMultiplicationOld {
 
 
-    private RealComplexDenseMatrixMultiplication() {
+    private RealComplexDenseMatrixMultiplicationOld() {
         // Hide default constructor.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }

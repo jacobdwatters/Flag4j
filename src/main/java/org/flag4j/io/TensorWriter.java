@@ -24,9 +24,8 @@
 
 package org.flag4j.io;
 
-
-import org.flag4j.core_old.MatrixMixin;
-import org.flag4j.core_old.TensorBase;
+import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend.TensorBase;
 import org.flag4j.util.ErrorMessages;
 
 import java.io.BufferedWriter;
@@ -39,7 +38,7 @@ import java.util.StringJoiner;
  * The TensorWriter class provides several static methods for writing serialized
  * tensors, matrices, and vectors to a file.
  */
-public class TensorWriter {
+public final class TensorWriter {
 
     // TODO: Add options for matrix market format and csv format.
 
@@ -57,7 +56,7 @@ public class TensorWriter {
      * @param src Source object to write to the specified file.
      * @return True if the write was successful. False if the write failed.
      */
-    public static boolean write(String fileName, TensorBase<?, ?, ?, ?, ?, ?, ?> src) {
+    public static boolean write(String fileName, TensorBase src) {
         boolean successfulWrite = true;
 
         try (TensorOutputStream out = new TensorOutputStream(fileName)) {
@@ -78,7 +77,7 @@ public class TensorWriter {
      * @param delimiter Delimiter to use in csv file.
      * @return True if the write was successful. False if the write failed.
      */
-    public static boolean toCsv(String fileName, MatrixMixin<?, ?, ?, ?, ?, ?, ?, ?> src, String delimiter) {
+    public static boolean toCsv(String fileName, MatrixMixin src, String delimiter) {
         boolean successfulWrite = true;
 
         int numRows = src.numRows();
@@ -107,7 +106,7 @@ public class TensorWriter {
      * @param src MatrixOld to write to csv file.
      * @return True if the write was successful. False if the write failed.
      */
-    public static boolean toCsv(String fileName, MatrixMixin<?, ?, ?, ?, ?, ?, ?, ?> src) {
+    public static boolean toCsv(String fileName, MatrixMixin src) {
         return toCsv(fileName, src, ", ");
     }
 }

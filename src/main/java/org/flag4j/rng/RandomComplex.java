@@ -32,7 +32,7 @@ import java.util.Random;
 
 
 /**
- * An instance of this class is used to generate a stream of random complex numbers (either {@link }).
+ * An instance of this class is used to generate a stream of random complex numbers.
  */
 public class RandomComplex extends Random {
 
@@ -174,7 +174,7 @@ public class RandomComplex extends Random {
      * @return A pseudorandom complex number with magnitude uniformly distributed in {@code [min, max)}.
      * @throws IllegalArgumentException If {@code min} is not positive or if {@code max} is less than {@code min}.
      */
-    public Complex64 randomComplex128(float min, float max) {
+    public Complex64 randomComplex64(float min, float max) {
         if(min < 0) {
             throw new IllegalArgumentException("Min value must be non-negative but got " + min + ".");
         }
@@ -208,8 +208,8 @@ public class RandomComplex extends Random {
      * standard deviation.
      * @throws IllegalArgumentException If standard deviation is negative.
      */
-    public Complex128 randnComplex128(float mean, float std) {
+    public Complex64 randnComplex64(float mean, float std) {
         ParameterChecks.ensureGreaterEq(std, 0);
-        return randomComplex128(nextGaussian()*std + mean);
+        return randomComplex64((float) nextGaussian()*std + mean);
     }
 }

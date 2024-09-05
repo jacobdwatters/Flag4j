@@ -1,19 +1,19 @@
 package org.flag4j.linalg.decompositions;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.linalg.decompositions.svd.RealSVD;
-import org.flag4j.linalg.decompositions.svd.SVD;
+import org.flag4j.linalg.decompositions.svd.RealSVDOld;
+import org.flag4j.linalg.decompositions.svd.SVDOld;
 
 
 class RealSVDTests {
 
-    final SVD<MatrixOld> svd = new RealSVD(true);
+    final SVDOld<MatrixOld> svd = new RealSVDOld(true);
 
     double[][] aEntries, expSEntries, expUEntries, expVEntries;
 
     MatrixOld A, expS, expU, expV;
 
-    // TODO: There seems to be issues with SVD. Bring back tests when issues are fixed.
+    // TODO: There seems to be issues with SVDOld. Bring back tests when issues are fixed.
     //  The issues are likely related to eigenvector computation which is probably incorrect and inefficient.
 
 //    @Test

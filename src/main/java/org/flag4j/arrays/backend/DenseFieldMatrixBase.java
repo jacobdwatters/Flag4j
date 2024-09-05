@@ -399,7 +399,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
     @Override
     public int matrixRank() {
         // TODO: Implementation.
-        //  (This may not make sense to have implemented here as it requires the SVD. May need to implement in
+        //  (This may not make sense to have implemented here as it requires the SVDOld. May need to implement in
         //  the real and complex-valued matrix only and not the general field matrix).
         return 0;
     }

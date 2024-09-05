@@ -75,9 +75,9 @@ public final class SparseDataWrapper {
     @SuppressWarnings("unchecked")
     private SparseDataWrapper(Object[] values, int[][] indices, boolean transpose) {
         this.values = Arrays.asList(values);
-        this.keys = transpose ? new List[indices[0].length] : new List[indices.length];
+        this.keys = transpose ? new List[indices.length > 0 ? indices[0].length : 0] : new List[indices.length];
 
-        int[][] indicesT = transpose ? RealDenseTranspose.blockedIntMatrix(indices) : indices;
+        int[][] indicesT = transpose && indices.length > 0 ? RealDenseTranspose.blockedIntMatrix(indices) : indices;
 
         for(int i=0; i<indicesT.length; i++) {
             if(values.length != indicesT[i].length) {

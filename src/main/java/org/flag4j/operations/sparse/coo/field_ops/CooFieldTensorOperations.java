@@ -66,12 +66,12 @@ public final class CooFieldTensorOperations {
 
         // Roughly estimate the number of non-zero entries in sum.
         int estimatedEntries = src1.nnz + src2.nnz;
-        List<Field<V>> sumEntries = new ArrayList<>(estimatedEntries);
+        List<V> sumEntries = new ArrayList<>(estimatedEntries);
         List<int[]> sumIndices = new ArrayList<>(estimatedEntries);
 
         int src2Pos = 0;
         for(int i = 0; i < src1.nnz; i++) {
-            Field<V> val1 = src1.entries[i];
+            V val1 = src1.entries[i];
             int[] src1Idx = src1Indices[i];
 
             // Insert elements from src2 whose index is less than the current element from src1
@@ -117,12 +117,12 @@ public final class CooFieldTensorOperations {
 
         // Roughly estimate the number of non-zero entries in sum.
         int estimatedEntries = src1.nnz + src2.nnz;
-        List<Field<V>> sumEntries = new ArrayList<>(estimatedEntries);
+        List<V> sumEntries = new ArrayList<>(estimatedEntries);
         List<int[]> sumIndices = new ArrayList<>(estimatedEntries);
 
         int src2Pos = 0;
         for(int i = 0; i < src1.nnz; i++) {
-            Field<V> val1 = src1.entries[i];
+            V val1 = src1.entries[i];
             int[] src1Idx = src1Indices[i];
 
             // Insert elements from src2 whose index is less than the current element from src1.

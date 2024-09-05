@@ -24,9 +24,9 @@
 
 package org.flag4j.linalg;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
 import org.flag4j.util.ErrorMessages;
@@ -48,11 +48,11 @@ public class Condition {
      * Specifically, the condition number is computed as the norm of this matrix multiplied by the norm
      * of the inverse of this matrix.
      *
-     * @param src MatrixOld to compute the condition number of.
+     * @param src Matrix to compute the condition number of.
      * @return The condition number of this matrix (Assuming 2-norm). This value may be
      * {@link Double#POSITIVE_INFINITY infinite}.
      */
-    public static double cond(MatrixOld src) {
+    public static double cond(Matrix src) {
         return cond(src, 2);
     }
 
@@ -60,22 +60,22 @@ public class Condition {
     /**
      * Computes the condition number of this matrix using a specified norm. The condition number of a matrix is defined
      * as the norm of a matrix multiplied by the norm of the inverse of the matrix.
-     * @param src MatrixOld to compute the condition number of.
+     * @param src Matrix to compute the condition number of.
      * @param p Specifies the order of the norm to be used when computing the condition number.
      *          Common {@code p} values include:<br>
-     *          - {@code p} = {@link Double#POSITIVE_INFINITY}, {@link MatrixNorms#infNorm(MatrixOld)}.<br>
+     *          - {@code p} = {@link Double#POSITIVE_INFINITY}, {@link MatrixNorms#infNorm(Matrix)}.<br>
      *          - {@code p} = 2, The standard matrix 2-norm (the largest singular value).<br>
      *          - {@code p} = -2, The Smallest singular value.<br>
      *          - {@code p} = 1, Maximum absolute row sum.<br>
      * @return The condition number of this matrix using the specified norm. This value may be
      * {@link Double#POSITIVE_INFINITY infinite}.
      */
-    public static double cond(MatrixOld src, double p) {
+    public static double cond(Matrix src, double p) {
         double cond;
 
         if(p==2 || p==-2) {
             // Compute the singular value decomposition of the matrix.
-            VectorOld s = new RealSVD(false).decompose(src).getS().getDiag();
+            Vector s = new RealSVD(false).decompose(src).getS().getDiag();
             cond = p==2 ? s.max()/s.min() : s.min()/s.max();
         } else {
             cond = MatrixNorms.norm(src, p)*MatrixNorms.norm(Invert.inv(src), p);
@@ -90,11 +90,11 @@ public class Condition {
      * Specifically, the condition number is computed as the norm of this matrix multiplied by the norm
      * of the inverse of this matrix.
      *
-     * @param src MatrixOld to compute the condition number of.
+     * @param src Matrix to compute the condition number of.
      * @return The condition number of this matrix (Assuming 2-norm). This value may be
      * {@link Double#POSITIVE_INFINITY infinite}.
      */
-    public static double cond(CMatrixOld src) {
+    public static double cond(CMatrix src) {
         return cond(src,2);
     }
 
@@ -102,22 +102,22 @@ public class Condition {
     /**
      * Computes the condition number of this matrix using a specified norm. The condition number of a matrix is defined
      * as the norm of a matrix multiplied by the norm of the inverse of the matrix.
-     * @param src MatrixOld to compute the condition number of.
+     * @param src Matrix to compute the condition number of.
      * @param p Specifies the order of the norm to be used when computing the condition number.
      *          Common {@code p} values include:<br>
-     *          - {@code p} = {@link Double#POSITIVE_INFINITY}, {@link MatrixNorms#infNorm(CMatrixOld)}.<br>
+     *          - {@code p} = {@link Double#POSITIVE_INFINITY}, {@link MatrixNorms#infNorm(CMatrix)}.<br>
      *          - {@code p} = 2, The standard matrix 2-norm (the largest singular value).<br>
      *          - {@code p} = -2, The Smallest singular value.<br>
      *          - {@code p} = 1, Maximum absolute row sum.<br>
      * @return The condition number of this matrix using the specified norm. This value may be
      * {@link Double#POSITIVE_INFINITY infinite}.
      */
-    public static double cond(CMatrixOld src, double p) {
+    public static double cond(CMatrix src, double p) {
         double cond;
 
         if(p==2 || p==-2) {
             // Compute the singular value decomposition of the matrix.
-            VectorOld s = new ComplexSVD(false).decompose(src).getS().getDiag();
+            Vector s = new ComplexSVD(false).decompose(src).getS().getDiag();
             cond = p==2 ? s.max()/s.min() : s.min()/s.max();
         } else {
             cond = MatrixNorms.norm(src, p) * MatrixNorms.norm(Invert.inv(src), p);

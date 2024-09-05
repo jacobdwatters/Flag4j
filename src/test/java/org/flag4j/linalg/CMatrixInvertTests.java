@@ -26,7 +26,7 @@ public class CMatrixInvertTests {
                 {new CNumber(0.0, 0.0), new CNumber(0.07641951197016296, -1.6257357182560666)}};
         exp = new CMatrixOld(expEntries);
 
-        assertEquals(exp, Invert.invTriU(A));
+        assertEquals(exp, InvertOld.invTriU(A));
 
         // --------------------- Sub-case 2 ---------------------
         entries = new CNumber[][]{
@@ -42,7 +42,7 @@ public class CMatrixInvertTests {
                 {new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.0, 0.0), new CNumber(0.7343268609204316, -0.4631744382611417)}};
         exp = new CMatrixOld(expEntries);
 
-        assertEquals(exp, Invert.invTriU(A));
+        assertEquals(exp, InvertOld.invTriU(A));
     }
 
 
@@ -58,7 +58,7 @@ public class CMatrixInvertTests {
                 {new CNumber(0.0, 0.0), new CNumber(0.07641951197016296, -1.6257357182560666)}};
         exp = new CMatrixOld(expEntries).T();
 
-        assertEquals(exp, Invert.invTriL(A));
+        assertEquals(exp, InvertOld.invTriL(A));
 
         // --------------------- Sub-case 2 ---------------------
         entries = new CNumber[][]{
@@ -74,7 +74,7 @@ public class CMatrixInvertTests {
                 {new CNumber(0.39210142039761287, -0.18312414720644984), new CNumber(-0.5481358478041398, 0.10001294703720916), new CNumber(-0.7101078401778858, 0.3701442953886289), new CNumber(0.7343268609204316, -0.4631744382611417)}};
         exp = new CMatrixOld(expEntries);
 
-        assertEquals(exp, Invert.invTriL(A));
+        assertEquals(exp, InvertOld.invTriL(A));
     }
 
 
@@ -90,7 +90,7 @@ public class CMatrixInvertTests {
                 {CNumber.ZERO, new CNumber(0, 1.45).multInv()}};
         exp = new CMatrixOld(expEntries);
 
-        assertEquals(exp, Invert.invDiag(A));
+        assertEquals(exp, InvertOld.invDiag(A));
 
         // --------------------- Sub-case 2 ---------------------
         entries = new CNumber[][]{
@@ -104,6 +104,6 @@ public class CMatrixInvertTests {
                 {CNumber.ZERO, CNumber.ZERO, new CNumber(234.156).multInv()}};
         exp = new CMatrixOld(expEntries);
 
-        assertEquals(exp, Invert.invDiag(A));
+        assertEquals(exp, InvertOld.invDiag(A));
     }
 }

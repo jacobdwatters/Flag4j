@@ -33,7 +33,7 @@ import org.flag4j.core_old.RealMatrixMixin;
 import org.flag4j.core_old.dense_base.DenseMatrixMixin;
 import org.flag4j.core_old.dense_base.RealDenseTensorBase;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.decompositions.svd.RealSVD;
+import org.flag4j.linalg.decompositions.svd.RealSVDOld;
 import org.flag4j.operations_old.MatrixMultiplyDispatcher;
 import org.flag4j.operations_old.RealDenseMatrixMultiplyDispatcher;
 import org.flag4j.operations_old.TransposeDispatcher;
@@ -45,7 +45,7 @@ import org.flag4j.operations_old.dense.real.RealDenseProperties;
 import org.flag4j.operations_old.dense.real.RealDenseSetOperations;
 import org.flag4j.operations_old.dense.real_complex.RealComplexDenseElemDiv;
 import org.flag4j.operations_old.dense.real_complex.RealComplexDenseElemMult;
-import org.flag4j.operations_old.dense.real_complex.RealComplexDenseMatrixMultiplication;
+import org.flag4j.operations_old.dense.real_complex.RealComplexDenseMatrixMultiplicationOld;
 import org.flag4j.operations_old.dense.real_complex.RealComplexDenseOperations;
 import org.flag4j.operations_old.dense_sparse.coo.real.RealDenseSparseMatrixMultTranspose;
 import org.flag4j.operations_old.dense_sparse.coo.real.RealDenseSparseMatrixMultiplication;
@@ -1577,7 +1577,7 @@ public class MatrixOld
     @Override
     public CVectorOld mult(CVectorOld b) {
         ParameterChecks.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
-        CNumber[] entries = RealComplexDenseMatrixMultiplication.standardVector(
+        CNumber[] entries = RealComplexDenseMatrixMultiplicationOld.standardVector(
                 this.entries, this.shape, b.entries, b.shape
         );
 
@@ -2996,7 +2996,7 @@ public class MatrixOld
     @Override
     public int matrixRank() {
         // Compute the (numerical) matrix rank using the singular value decomposition.
-        return new RealSVD(false).decompose(this).getRank();
+        return new RealSVDOld(false).decompose(this).getRank();
     }
 
 

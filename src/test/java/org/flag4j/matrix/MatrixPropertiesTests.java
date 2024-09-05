@@ -1,7 +1,7 @@
 package org.flag4j.matrix;
 
 import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.linalg.Invert;
+import org.flag4j.linalg.InvertOld;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -82,7 +82,7 @@ class MatrixPropertiesTests {
         bEntries = new double[][]{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
         B = new MatrixOld(bEntries);
 
-        assertTrue(Invert.isInv(A, B));
+        assertTrue(InvertOld.isInv(A, B));
 
         // ------------------ Sub-case 2 ------------------
         aEntries = new double[][]{{2, 1}, {7, 4}};
@@ -91,7 +91,7 @@ class MatrixPropertiesTests {
         bEntries = new double[][]{{4, -1}, {-7, 2}};
         B = new MatrixOld(bEntries);
 
-        assertTrue(Invert.isInv(A, B));
+        assertTrue(InvertOld.isInv(A, B));
 
 
         // ------------------ Sub-case 3 ------------------
@@ -100,7 +100,7 @@ class MatrixPropertiesTests {
         bEntries = new double[][]{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
         B = new MatrixOld(bEntries);
 
-        assertTrue(Invert.isInv(A, B));
+        assertTrue(InvertOld.isInv(A, B));
 
         // ------------------ Sub-case 4 ------------------
         aEntries = new double[][]{{2.243, 1}, {7235, 4.44656}};
@@ -109,7 +109,7 @@ class MatrixPropertiesTests {
         bEntries = new double[][]{{4, -1.234432}, {-7, 2}};
         B = new MatrixOld(bEntries);
 
-        assertFalse(Invert.isInv(A, B));
+        assertFalse(InvertOld.isInv(A, B));
 
         // ------------------ Sub-case 5 ------------------
         aEntries = new double[][]{{2.243, 1,23.4}, {7235, 4.44656, -845.5}};
@@ -118,7 +118,7 @@ class MatrixPropertiesTests {
         bEntries = new double[][]{{4, -1.234432, -6}, {-7, 2, 234.5}};
         B = new MatrixOld(bEntries);
 
-        assertFalse(Invert.isInv(A, B));
+        assertFalse(InvertOld.isInv(A, B));
     }
 
 

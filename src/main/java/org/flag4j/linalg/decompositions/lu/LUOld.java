@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.decompositions.lu;
 
-import org.flag4j.arrays_old.sparse.PermutationMatrix;
+import org.flag4j.arrays_old.sparse.PermutationMatrixOld;
 import org.flag4j.core_old.MatrixMixin;
 import org.flag4j.linalg.decompositions.DecompositionOld;
 import org.flag4j.util.ArrayUtils;
@@ -60,11 +60,11 @@ public abstract class LUOld<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> imple
     /**
      * Permutation matrix to store row swaps if partial pivoting is used.
      */
-    protected PermutationMatrix P;
+    protected PermutationMatrixOld P;
     /**
      * Permutation matrix to store column swaps if full pivoting is used.
      */
-    protected PermutationMatrix Q;
+    protected PermutationMatrixOld Q;
 
     protected int numRowSwaps; // Tracks the number of row swaps made during full/partial pivoting.
     protected int numColSwaps; // Tracks the number of column swaps made during full pivoting.
@@ -178,9 +178,9 @@ public abstract class LUOld<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> imple
      * Gets the row permutation matrix of the decomposition.
      * @return The row permutation matrix of the decomposition. If no pivoting was used, null will be returned.
      */
-    public PermutationMatrix getP() {
+    public PermutationMatrixOld getP() {
         if(rowSwaps != null) {
-            P = new PermutationMatrix(rowSwaps.clone());
+            P = new PermutationMatrixOld(rowSwaps.clone());
         } else {
             P = null;
         }
@@ -193,9 +193,9 @@ public abstract class LUOld<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> imple
      * Gets the column permutation matrix of the decomposition.
      * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
      */
-    public PermutationMatrix getQ() {
+    public PermutationMatrixOld getQ() {
         if(colSwaps != null) {
-            Q = new PermutationMatrix(colSwaps.clone()).inv(); // Invert to ensure matrix represents column swaps.
+            Q = new PermutationMatrixOld(colSwaps.clone()).inv(); // InvertOld to ensure matrix represents column swaps.
         } else {
             Q = null;
         }

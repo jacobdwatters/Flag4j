@@ -78,7 +78,7 @@ class ErrorMessagesTests {
 
     @Test
     void utilityClassErrMsgTestCase() {
-        expMsg = "Utility class cannot be instantiated";
+        expMsg = "Utility class cannot be instantiated.";
 
         assertEquals(expMsg, ErrorMessages.getUtilityClassErrMsg());
     }

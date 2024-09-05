@@ -25,7 +25,7 @@
 package org.flag4j.linalg.solvers.exact;
 
 
-import org.flag4j.arrays_old.sparse.PermutationMatrix;
+import org.flag4j.arrays_old.sparse.PermutationMatrixOld;
 import org.flag4j.core_old.MatrixMixin;
 import org.flag4j.core_old.VectorMixin;
 import org.flag4j.linalg.decompositions.lu.LUOld;
@@ -64,7 +64,7 @@ public abstract class ExactSolverOld<
     /**
      * Row permutation matrix for {@code LUOld} decomposition.
      */
-    protected PermutationMatrix rowPermute;
+    protected PermutationMatrixOld rowPermute;
 
     /**
      * Constructs an exact LUOld solver with a specified {@code LUOld} decomposer.

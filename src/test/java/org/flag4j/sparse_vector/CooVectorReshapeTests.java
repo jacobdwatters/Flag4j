@@ -1,7 +1,8 @@
 package org.flag4j.sparse_vector;
 
-import org.flag4j.arrays_old.sparse.CooVectorOld;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays_old.sparse.CooVectorOld;
+import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -44,10 +45,10 @@ public class CooVectorReshapeTests {
         assertEquals(exp, a.flatten(0));
 
         // -------------------- Sub-case 5 --------------------
-        assertThrows(IllegalArgumentException.class, ()->a.reshape(new Shape(size-3)));
+        assertThrows(TensorShapeException.class, ()->a.reshape(new Shape(size-3)));
 
         // -------------------- Sub-case 6 --------------------
-        assertThrows(IllegalArgumentException.class, ()->a.reshape(size-3));
+        assertThrows(TensorShapeException.class, ()->a.reshape(size-3));
 
         // -------------------- Sub-case 7 --------------------
         assertThrows(AssertionError.class, ()->a.flatten(1));

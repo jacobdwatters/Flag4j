@@ -141,21 +141,6 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
 
 
     /**
-     * Computes the inner product between this vector and itself.
-     *
-     * @return The inner product between this vector and itself.
-     */
-    @Override
-    public double innerSelf() {
-        double inner = 0;
-        for(Complex128 value : entries)
-            inner += (value.re*value.re + value.im*value.im);
-
-        return inner;
-    }
-
-
-    /**
      * Constructs a tensor of the same type as this tensor with the given the shape and entries.
      *
      * @param shape Shape of the tensor to construct.
@@ -168,5 +153,32 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
         ParameterChecks.ensureRank(shape, 1);
         ParameterChecks.ensureEquals(shape.totalEntriesIntValueExact(), entries.length);
         return new CVector(entries);
+    }
+
+
+    /**
+     * Computes the inner product between this vector and itself.
+     *
+     * @return The inner product between this vector and itself.
+     */
+    public double innerSelf() {
+        double inner = 0;
+        for(Complex128 value : entries)
+            inner += (value.re*value.re + value.im*value.im);
+
+        return inner;
+    }
+
+
+    /**
+     * Converts this complex vector to a real vector. This is done by ignoring the imaginary component of all entries.
+     * @return A real vector containing the real components of this complex vectors entries.
+     */
+    public Vector toReal() {
+        double[] real = new double[entries.length];
+        for(int i=0, size=entries.length; i<size; i++)
+            real[i] = entries[i].re;
+
+        return new Vector(shape, real);
     }
 }

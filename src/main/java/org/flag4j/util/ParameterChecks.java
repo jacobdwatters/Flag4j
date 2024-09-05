@@ -24,8 +24,8 @@
 
 package org.flag4j.util;
 
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.arrays.Shape;
+import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -385,9 +385,8 @@ public final class ParameterChecks {
      * @see #ensurePositive(int)
      */
     public static void ensureNonNegative(int... values) {
-        for(int value : values) {
-            ensureNonNegative();
-        }
+        for(int value : values)
+            ensureNonNegative(value);
     }
 
 

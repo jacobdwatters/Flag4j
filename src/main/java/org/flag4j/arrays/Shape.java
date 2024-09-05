@@ -233,22 +233,13 @@ public class Shape implements Serializable {
         // Check if totalEntries has already been computed for this shape.
         if(totalEntries!=null) return totalEntries;
 
-        BigInteger product;
-
-        if(dims.length>0) {
-            product = BigInteger.ONE;
-
-            for(int dim : dims) {
-                product = product.multiply(BigInteger.valueOf(dim));
-            }
-        } else {
-            product = BigInteger.ZERO;
-        }
-
+        // Otherwise the total entries needs to be computed.
+        BigInteger product = BigInteger.ONE;
+        for(int dim : dims)
+            product = product.multiply(BigInteger.valueOf(dim));
         totalEntries = product;
 
-        if(product.equals(BigInteger.ZERO)) return BigInteger.ONE; // Shape represents a scalar value.
-        else return product;
+        return product;
     }
 
 

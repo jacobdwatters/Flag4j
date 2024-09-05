@@ -32,7 +32,7 @@ import org.flag4j.linalg.decompositions.unitary.UnitaryDecompositionOld;
 import org.flag4j.linalg.solvers.LinearSolverOld;
 
 
-// TODO: Add option to use SVD instead of QR (SVD should be default). It will be slower but has better numerical properties.
+// TODO: Add option to use SVDOld instead of QR (SVDOld should be default). It will be slower but has better numerical properties.
 
 /**
  * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,

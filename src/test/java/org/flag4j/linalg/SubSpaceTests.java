@@ -31,7 +31,7 @@ class SubSpaceTests {
     }
 
 
-    // TODO: There are some issues with SVD. Bring back these tests once the SVD has been fixed.
+    // TODO: There are some issues with SVDOld. Bring back these tests once the SVDOld has been fixed.
 //    @Test
 //    void colSpaceTestCase() {
 //        // -------------------- Sub-case 1 --------------------

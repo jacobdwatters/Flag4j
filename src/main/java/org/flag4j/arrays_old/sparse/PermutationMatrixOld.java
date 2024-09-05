@@ -24,12 +24,12 @@
 
 package org.flag4j.arrays_old.sparse;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.CVectorOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.arrays.Shape;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -51,7 +51,8 @@ import java.util.Arrays;
  * Similarly, when a permutation matrix is right multiplied to another matrix, it has the result of swapping columns in
  * the other matrix.
  */
-public class PermutationMatrix implements Serializable {
+@Deprecated
+public class PermutationMatrixOld implements Serializable {
 
     /**
      * Tracks row/column swaps within the permutation matrix. For an {@code n-by-n} permutation matrix, this array will
@@ -69,7 +70,7 @@ public class PermutationMatrix implements Serializable {
      * Creates a permutation matrix which is equivalent to the identity matrix of the specified size.
      * @param size Size of the permutation matrix. That is, the number of rows and columns
      */
-    public PermutationMatrix(int size) {
+    public PermutationMatrixOld(int size) {
         this.size = size;
         swapPointers = ArrayUtils.intRange(0, size);
     }
@@ -80,7 +81,7 @@ public class PermutationMatrix implements Serializable {
      * @param shape Shape of the permutation matrix. That is, the number of rows and columns. Must be a square shape.
      * @throws LinearAlgebraException If {@code shape} is not square.
      */
-    public PermutationMatrix(Shape shape) {
+    public PermutationMatrixOld(Shape shape) {
         ParameterChecks.ensureSquareMatrix(shape);
         this.size = shape.get(0);
         swapPointers = ArrayUtils.intRange(0, size);
@@ -91,7 +92,7 @@ public class PermutationMatrix implements Serializable {
      * Copy constructor which creates a copy of the {@code src} permutation matrix.
      * @param src The permutation matrix to copy.
      */
-    public PermutationMatrix(PermutationMatrix src) {
+    public PermutationMatrixOld(PermutationMatrixOld src) {
         this.size = src.size;
         this.swapPointers = src.swapPointers.clone();
     }
@@ -107,7 +108,7 @@ public class PermutationMatrix implements Serializable {
      *                     the column index of the 1. This must be a permutation matrix. However, the validity of this
      *                     is not enforced by this constructor.
      */
-    public PermutationMatrix(int[] swapPointers) {
+    public PermutationMatrixOld(int[] swapPointers) {
         this.size = swapPointers.length;
         this.swapPointers = swapPointers.clone();
     }
@@ -122,14 +123,14 @@ public class PermutationMatrix implements Serializable {
      * @throws IllegalArgumentException If {@code colSwaps} is not a
      * {@link ParameterChecks#ensurePermutation(int...) permutation array}.
      */
-    public static PermutationMatrix fromColSwaps(int[] colSwaps) {
+    public static PermutationMatrixOld fromColSwaps(int[] colSwaps) {
         int[] rowPerm = new int[colSwaps.length];
 
         for (int i=0; i<colSwaps.length; i++) {
             rowPerm[colSwaps[i]] = i;
         }
 
-        return new PermutationMatrix(rowPerm);
+        return new PermutationMatrixOld(rowPerm);
     }
 
 
@@ -137,8 +138,8 @@ public class PermutationMatrix implements Serializable {
      * Creates a copy of this permutation matrix.
      * @return A copy of this permutation matrix.
      */
-    public PermutationMatrix copy() {
-        return new PermutationMatrix(this);
+    public PermutationMatrixOld copy() {
+        return new PermutationMatrixOld(this);
     }
 
 
@@ -154,7 +155,7 @@ public class PermutationMatrix implements Serializable {
         if(this == object) return true;
         if(object == null || object.getClass() != getClass()) return false;
 
-        PermutationMatrix src2 = (PermutationMatrix) object;
+        PermutationMatrixOld src2 = (PermutationMatrixOld) object;
 
         return Arrays.equals(swapPointers, src2.swapPointers);
     }
@@ -396,7 +397,7 @@ public class PermutationMatrix implements Serializable {
      * Computes the inverse/transpose of this permutation matrix.
      * @return The inverse/transpose of this permutation matrix.
      */
-    public PermutationMatrix inv() {
+    public PermutationMatrixOld inv() {
         return T();
     }
 
@@ -405,14 +406,14 @@ public class PermutationMatrix implements Serializable {
      * Computes the transpose/inverse of this permutation matrix.
      * @return The transpose/inverse of this permutation matrix.
      */
-    public PermutationMatrix T() {
+    public PermutationMatrixOld T() {
         int[] transpose = new int[size];
 
         for(int i=0; i<size; i++) {
             transpose[swapPointers[i]] = i;
         }
 
-        return new PermutationMatrix(transpose);
+        return new PermutationMatrixOld(transpose);
     }
 
 

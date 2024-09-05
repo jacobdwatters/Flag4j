@@ -6,7 +6,7 @@ import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.sparse.CooCMatrixOld;
 import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.linalg.ops.DirectSum;
+import org.flag4j.linalg.DirectSumOld;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,7 +42,7 @@ class CMatrixDirectSumTests {
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("-74.13"), new CNumber("44.5")}};
         exp = new CMatrixOld(expEntries);
 
-        assertEquals(exp, DirectSum.directSum(A, B));
+        assertEquals(exp, DirectSumOld.directSum(A, B));
     }
 
 
@@ -69,7 +69,7 @@ class CMatrixDirectSumTests {
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("-7.41"), new CNumber("0.0")}};
         exp = new CMatrixOld(expEntries);
 
-        assertEquals(exp, DirectSum.directSum(A, B));
+        assertEquals(exp, DirectSumOld.directSum(A, B));
     }
 
 
@@ -95,7 +95,7 @@ class CMatrixDirectSumTests {
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("-74.13+475.145i"), new CNumber("44.5+8.345i")}};
         exp = new CMatrixOld(expEntries);
 
-        assertEquals(exp, DirectSum.directSum(A, B));
+        assertEquals(exp, DirectSumOld.directSum(A, B));
     }
 
 
@@ -122,7 +122,7 @@ class CMatrixDirectSumTests {
                 {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber(Double.NEGATIVE_INFINITY, 234.56), new CNumber("0.0")}};
         exp = new CMatrixOld(expEntries);
 
-        assertEquals(exp, DirectSum.directSum(A, B));
+        assertEquals(exp, DirectSumOld.directSum(A, B));
     }
 
 
@@ -150,7 +150,7 @@ class CMatrixDirectSumTests {
                 {new CNumber("1.0"), new CNumber("0.0"), new CNumber("0.0+87.3i"), new CNumber("0.0"), new CNumber("0.0")}};
         exp = new CMatrixOld(expEntries);
 
-        assertEquals(exp, DirectSum.invDirectSum(A, B));
+        assertEquals(exp, DirectSumOld.invDirectSum(A, B));
     }
 
 
@@ -178,7 +178,7 @@ class CMatrixDirectSumTests {
                 {new CNumber("1.0"), new CNumber("0.0"), new CNumber("0.0+87.3i"), new CNumber("0.0"), new CNumber("0.0")}};
         exp = new CMatrixOld(expEntries);
 
-        assertEquals(exp, DirectSum.invDirectSum(A, B));
+        assertEquals(exp, DirectSumOld.invDirectSum(A, B));
     }
 
 
@@ -206,7 +206,7 @@ class CMatrixDirectSumTests {
                 {new CNumber("1.0"), new CNumber("0.0"), new CNumber("0.0+87.3i"), new CNumber("0.0"), new CNumber("0.0")}};
         exp = new CMatrixOld(expEntries);
 
-        assertEquals(exp, DirectSum.invDirectSum(A, B));
+        assertEquals(exp, DirectSumOld.invDirectSum(A, B));
     }
 
 
@@ -234,6 +234,6 @@ class CMatrixDirectSumTests {
                 {new CNumber("1.0"), new CNumber("0.0"), new CNumber("0.0+87.3i"), new CNumber("0.0"), new CNumber("0.0")}};
         exp = new CMatrixOld(expEntries);
 
-        assertEquals(exp, DirectSum.invDirectSum(A, B));
+        assertEquals(exp, DirectSumOld.invDirectSum(A, B));
     }
 }

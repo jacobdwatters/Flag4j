@@ -25,7 +25,7 @@
 package org.flag4j.linalg.decompositions.lu;
 
 import org.flag4j.arrays.backend.MatrixMixin;
-import org.flag4j.arrays_old.sparse.PermutationMatrix;
+import org.flag4j.arrays.sparse.PermutationMatrix;
 import org.flag4j.linalg.decompositions.Decomposition;
 import org.flag4j.util.ArrayUtils;
 
@@ -200,7 +200,7 @@ public abstract class LU<T extends MatrixMixin> implements Decomposition<T> {
      */
     public PermutationMatrix getQ() {
         if(colSwaps != null) {
-            Q = new PermutationMatrix(colSwaps.clone()).inv(); // Invert to ensure matrix represents column swaps.
+            Q = new PermutationMatrix(colSwaps.clone()).inv(); // InvertOld to ensure matrix represents column swaps.
         } else {
             Q = null;
         }

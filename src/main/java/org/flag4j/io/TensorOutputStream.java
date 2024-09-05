@@ -24,7 +24,7 @@
 
 package org.flag4j.io;
 
-import org.flag4j.core_old.TensorBase;
+import org.flag4j.arrays.backend.TensorBase;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -63,7 +63,7 @@ public class TensorOutputStream extends OutputStream {
      * Writes a {@link TensorBase} object to a file by serializing the object.
      * @param A Object to write to file. This may be a real/complex dense or sparse tensor, matrix, or vector.
      */
-    public void write(TensorBase<?, ?, ?, ?, ?, ?, ?> A) throws IOException {
+    public void write(TensorBase A) throws IOException {
         objectOut.writeObject(A);
     }
 

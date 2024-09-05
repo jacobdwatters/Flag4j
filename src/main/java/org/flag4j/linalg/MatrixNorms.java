@@ -24,15 +24,14 @@
 
 package org.flag4j.linalg;
 
-
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrixOld;
-import org.flag4j.arrays_old.sparse.CooMatrixOld;
-import org.flag4j.arrays_old.sparse.CsrMatrixOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.operations_old.common.complex.AggregateComplex;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.operations.common.field_ops.CompareField;
 import org.flag4j.operations_old.common.real.AggregateReal;
 import org.flag4j.operations_old.sparse.coo.complex.ComplexSparseNorms;
 import org.flag4j.operations_old.sparse.coo.real.RealSparseNorms;
@@ -42,6 +41,7 @@ import org.flag4j.util.ParameterChecks;
 /**
  * Utility class for computing norms of matrices.
  */
+@Deprecated
 public class MatrixNorms {
 
     private MatrixNorms() {
@@ -51,28 +51,28 @@ public class MatrixNorms {
 
 
     /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(MatrixOld, double) norm(2)}.
+     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(Matrix, double) norm(2)}.
      * This will be equal to the largest singular value of the matrix.
      *
-     * @param src MatrixOld to compute norm of.
+     * @param src Matrix to compute norm of.
      *
      * @return the 2-norm of this tensor.
      */
-    public static double norm(MatrixOld src) {
+    public static double norm(Matrix src) {
         return TensorNorms.tensorNormL2(src.entries);
     }
 
 
     /**
-     * Computes the p-norm of this tensor. Equivalent to calling {@link #norm(MatrixOld, double, double) norm(p, p)}
+     * Computes the p-norm of this tensor. Equivalent to calling {@link #norm(Matrix, double, double) norm(p, p)}
      *
-     * @param src MatrixOld to compute norm of.
+     * @param src Matrix to compute norm of.
      * @param p The p value in the p-norm. <br>
      *          - If p is inf, then this method computes the maximum/infinite norm.
      * @return The p-norm of this tensor.
      * @throws IllegalArgumentException If p is less than 1.
      */
-    public static double norm(MatrixOld src, double p) {
+    public static double norm(Matrix src, double p) {
         double norm;
 
         if(Double.isInfinite(p)) {
@@ -92,11 +92,11 @@ public class MatrixNorms {
     /**
      * Computes the maximum norm of this matrix. That is, the maximum value in the matrix.
      *
-     * @param src MatrixOld to compute norm of.
+     * @param src Matrix to compute norm of.
      * @return The maximum norm of this matrix.
-     * @see #infNorm(MatrixOld)
+     * @see #infNorm(Matrix)
      */
-    public static double maxNorm(MatrixOld src) {
+    public static double maxNorm(Matrix src) {
         return matrixMaxNorm(src.entries);
     }
 
@@ -104,11 +104,11 @@ public class MatrixNorms {
     /**
      * Computes the infinite norm of this matrix. that is the maximum row sum in the matrix.
      *
-     * @param src MatrixOld to compute norm of.
+     * @param src Matrix to compute norm of.
      * @return The infinite norm of this matrix.
-     * @see #maxNorm(MatrixOld)
+     * @see #maxNorm(Matrix)
      */
-    public static double infNorm(MatrixOld src) {
+    public static double infNorm(Matrix src) {
         return matrixInfNorm(src.entries, src.shape);
     }
 
@@ -120,7 +120,7 @@ public class MatrixNorms {
      * @param q Q value in the L<sub>p, q</sub> norm.
      * @return The L<sub>p, q</sub> norm of this matrix.
      */
-    public static double norm(MatrixOld src, double p, double q) {
+    public static double norm(Matrix src, double p, double q) {
         return matrixNormLpq(src.entries, src.shape, p, q);
     }
 
@@ -128,12 +128,12 @@ public class MatrixNorms {
     /**
      * Computes the L<sub>p, q</sub> norm of this matrix.
      *
-     * @param src MatrixOld to compute norm of.
+     * @param src Matrix to compute norm of.
      * @param p P value in the L<sub>p, q</sub> norm.
      * @param q Q value in the L<sub>p, q</sub> norm.
      * @return The L<sub>p, q</sub> norm of this matrix.
      */
-    public static double norm(CMatrixOld src, double p, double q) {
+    public static double norm(CMatrix src, double p, double q) {
         return matrixNormLpq(src.entries, src.shape, p, q);
     }
 
@@ -141,21 +141,21 @@ public class MatrixNorms {
     /**
      * Computes the max norm of a matrix.
      *
-     * @param src MatrixOld to compute norm of.
+     * @param src Matrix to compute norm of.
      * @return The max norm of this matrix.
      */
-    public static double maxNorm(CMatrixOld src) {
+    public static double maxNorm(CMatrix src) {
         return matrixMaxNorm(src.entries);
     }
 
 
     /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(CMatrixOld, double) norm(2)}.
+     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(CMatrix, double) norm(2)}.
      *
-     * @param src MatrixOld to compute norm of.
+     * @param src Matrix to compute norm of.
      * @return the 2-norm of this tensor.
      */
-    public static double norm(CMatrixOld src) {
+    public static double norm(CMatrix src) {
         return matrixNormL2(src.entries, src.shape);
     }
 
@@ -163,13 +163,13 @@ public class MatrixNorms {
     /**
      * Computes the p-norm of this tensor.
      *
-     * @param src MatrixOld to compute norm of.
+     * @param src Matrix to compute norm of.
      * @param p The p value in the p-norm. <br>
      *          - If p is inf, then this method computes the maximum/infinite norm.
      * @return The p-norm of this tensor.
      * @throws IllegalArgumentException If p is less than 1.
      */
-    public static double norm(CMatrixOld src, double p) {
+    public static double norm(CMatrix src, double p) {
         double norm;
 
         if(Double.isInfinite(p)) {
@@ -189,10 +189,10 @@ public class MatrixNorms {
     /**
      * Computes the maximum/infinite norm of this tensor.
      *
-     * @param src MatrixOld to compute norm of.
+     * @param src Matrix to compute norm of.
      * @return The maximum/infinite norm of this tensor.
      */
-    public static double infNorm(CMatrixOld src) {
+    public static double infNorm(CMatrix src) {
         return matrixInfNorm(src.entries, src.shape);
     }
 
@@ -201,12 +201,12 @@ public class MatrixNorms {
     /**
      * Computes the L<sub>p, q</sub> norm of this matrix.
      *
-     * @param src MatrixOld to compute norm of.
+     * @param src Matrix to compute norm of.
      * @param p P value in the L<sub>p, q</sub> norm.
      * @param q Q value in the L<sub>p, q</sub> norm.
      * @return The L<sub>p, q</sub> norm of this matrix.
      */
-    public static double norm(CooMatrixOld src, double p, double q) {
+    public static double norm(CooMatrix src, double p, double q) {
         // Sparse implementation is usually only faster for very sparse matrices.
         return src.sparsity()>=0.95 ? RealSparseNorms.matrixNormLpq(src, p, q) :
                 norm(src.toDense(), p, q);
@@ -216,21 +216,21 @@ public class MatrixNorms {
     /**
      * Computes the max norm of a matrix.
      *
-     * @param src MatrixOld to compute norm of.
+     * @param src Matrix to compute norm of.
      * @return The max norm of this matrix.
      */
-    public static double maxNorm(CooMatrixOld src) {
+    public static double maxNorm(CooMatrix src) {
         return matrixMaxNorm(src.entries);
     }
 
 
     /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(CooMatrixOld, double) norm(2)}.
+     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(CooMatrix, double) norm(2)}.
      *
-     * @param src MatrixOld to compute norm of.
+     * @param src Matrix to compute norm of.
      * @return the 2-norm of this tensor.
      */
-    public static double norm(CooMatrixOld src) {
+    public static double norm(CooMatrix src) {
         // Sparse implementation is usually only faster for very sparse matrices.
         return src.sparsity()>=0.95 ? RealSparseNorms.matrixNormL2(src) :
                 norm(src.toDense());
@@ -240,13 +240,13 @@ public class MatrixNorms {
     /**
      * Computes the p-norm of this tensor.
      *
-     * @param src MatrixOld to compute norm of.
+     * @param src Matrix to compute norm of.
      * @param p The p value in the p-norm. <br>
      *          - If p is inf, then this method computes the maximum/infinite norm.
      * @return The p-norm of this tensor.
      * @throws IllegalArgumentException If p is less than 1.
      */
-    public static double norm(CooMatrixOld src, double p) {
+    public static double norm(CooMatrix src, double p) {
         // Sparse implementation is usually only faster for very sparse matrices.
         return src.sparsity()>=0.95 ? RealSparseNorms.matrixNormLp(src, p) :
                 norm(src.toDense(), p);
@@ -256,12 +256,12 @@ public class MatrixNorms {
     /**
      * Computes the L<sub>p, q</sub> norm of this matrix.
      *
-     * @param src MatrixOld to compute norm of.
+     * @param src Matrix to compute norm of.
      * @param p P value in the L<sub>p, q</sub> norm.
      * @param q Q value in the L<sub>p, q</sub> norm.
      * @return The L<sub>p, q</sub> norm of this matrix.
      */
-    public static double norm(CooCMatrixOld src, double p, double q) {
+    public static double norm(CooCMatrix src, double p, double q) {
         // Sparse implementation is usually only faster for very sparse matrices.
         return src.sparsity()>=0.95 ? ComplexSparseNorms.matrixNormLpq(src, p, q) :
                 norm(src.toDense(), p, q);
@@ -271,21 +271,21 @@ public class MatrixNorms {
     /**
      * Computes the max norm of a matrix.
      *
-     * @param src MatrixOld to compute norm of.
+     * @param src Matrix to compute norm of.
      * @return The max norm of this matrix.
      */
-    public static double maxNorm(CooCMatrixOld src) {
+    public static double maxNorm(CooCMatrix src) {
         return matrixMaxNorm(src.entries);
     }
 
 
     /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(CooCMatrixOld, double) norm(2)}.
+     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(CooCMatrix, double) norm(2)}.
      *
-     * @param src MatrixOld to compute the norm.
+     * @param src Matrix to compute the norm.
      * @return the 2-norm of this tensor.
      */
-    public static double norm(CooCMatrixOld src) {
+    public static double norm(CooCMatrix src) {
         // Sparse implementation is usually only faster for very sparse matrices.
         return src.sparsity()>=0.95 ? ComplexSparseNorms.matrixNormL2(src) :
                 norm(src.toDense());
@@ -295,13 +295,13 @@ public class MatrixNorms {
     /**
      * Computes the p-norm of this tensor.
      *
-     * @param src MatrixOld to compute the norm.
+     * @param src Matrix to compute the norm.
      * @param p The p value in the p-norm. <br>
      *          - If p is inf, then this method computes the maximum/infinite norm.
      * @return The p-norm of this tensor.
      * @throws IllegalArgumentException If p is less than 1.
      */
-    public static double norm(CooCMatrixOld src, double p) {
+    public static double norm(CooCMatrix src, double p) {
         // Sparse implementation is usually only faster for very sparse matrices.
         return src.sparsity()>=0.95 ? ComplexSparseNorms.matrixNormLp(src, p) :
                 norm(src.toDense(), p);
@@ -313,12 +313,12 @@ public class MatrixNorms {
     /**
      * Computes the L<sub>p, q</sub> norm of this matrix.
      *
-     * @param src MatrixOld to compute norm of.
+     * @param src Matrix to compute norm of.
      * @param p P value in the L<sub>p, q</sub> norm.
      * @param q Q value in the L<sub>p, q</sub> norm.
      * @return The L<sub>p, q</sub> norm of this matrix.
      */
-    public static double norm(CsrMatrixOld src, double p, double q) {
+    public static double norm(CsrMatrix src, double p, double q) {
         return matrixNormLpq(src, p, q);
     }
 
@@ -326,21 +326,21 @@ public class MatrixNorms {
     /**
      * Computes the max norm of a matrix.
      *
-     * @param src MatrixOld to compute norm of.
+     * @param src Matrix to compute norm of.
      * @return The max norm of this matrix.
      */
-    public static double maxNorm(CsrMatrixOld src) {
+    public static double maxNorm(CsrMatrix src) {
         return matrixMaxNorm(src.entries);
     }
 
 
     /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(CsrMatrixOld, double) norm(2)}.
+     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(CsrMatrix, double) norm(2)}.
      *
-     * @param src MatrixOld to compute the norm of.
+     * @param src Matrix to compute the norm of.
      * @return the 2-norm of this tensor.
      */
-    public double norm(CsrMatrixOld src) {
+    public double norm(CsrMatrix src) {
         return TensorNorms.tensorNormL2(src.entries); // Zeros do not contribute to this norm.
     }
 
@@ -348,13 +348,13 @@ public class MatrixNorms {
     /**
      * Computes the p-norm of this tensor.
      *
-     * @param src MatrixOld to compute norm of.
+     * @param src Matrix to compute norm of.
      * @param p The p value in the p-norm. <br>
      *          - If p is inf, then this method computes the maximum/infinite norm.
      * @return The p-norm of this tensor.
      * @throws IllegalArgumentException If p is less than 1.
      */
-    public double norm(CsrMatrixOld src, double p) {
+    public double norm(CsrMatrix src, double p) {
         return TensorNorms.tensorNormLp(src.entries, p); // Zeros do not contribute to this norm.
     }
 
@@ -399,7 +399,7 @@ public class MatrixNorms {
      * @return The L<sub>p, q</sub> norm of the matrix.
      * @throws IllegalArgumentException If {@code p} or {@code q} is less than 1.
      */
-    private static double matrixNormLpq(CNumber[] src, Shape shape, double p, double q) {
+    private static double matrixNormLpq(Complex128[] src, Shape shape, double p, double q) {
         ParameterChecks.ensureGreaterEq(1, p, q);
 
         double norm = 0;
@@ -421,14 +421,14 @@ public class MatrixNorms {
 
     /**
      * Compute the L<sub>p</sub> norm of a matrix. This is equivalent to passing {@code q=1} to
-     * {@link #matrixNormLpq(CNumber[], Shape, double, double)}
+     * {@link #matrixNormLpq(Complex128[], Shape, double, double)}
      * @param src Entries of the matrix.
      * @param shape Shape of the matrix.
      * @param p Parameter in L<sub>p</sub> norm.
      * @return The L<sub>p</sub> norm of the matrix.
      * @throws IllegalArgumentException If {@code p} is less than 1.
      */
-    private static double matrixNormLp(CNumber[] src, Shape shape, double p) {
+    private static double matrixNormLp(Complex128[] src, Shape shape, double p) {
         ParameterChecks.ensureGreaterEq(1, p);
 
         double norm = 0;
@@ -451,12 +451,12 @@ public class MatrixNorms {
 
     /**
      * Compute the L<sub>2</sub> norm of a matrix. This is equivalent to passing {@code q=1} to
-     * {@link #matrixNormLpq(CNumber[], Shape, double, double)}
+     * {@link #matrixNormLpq(Complex128[], Shape, double, double)}
      * @param src Entries of the matrix.
      * @param shape Shape of the matrix.
      * @return The L<sub>2</sub> norm of the matrix.
      */
-    private static double matrixNormL2(CNumber[] src, Shape shape) {
+    private static double matrixNormL2(Complex128[] src, Shape shape) {
         double norm = 0;
         int rows = shape.get(0);
         int cols = shape.get(1);
@@ -480,8 +480,8 @@ public class MatrixNorms {
      * @param src Entries of the matrix.
      * @return The infinity norm of the matrix.
      */
-    private static double matrixMaxNorm(CNumber[] src) {
-        return AggregateComplex.maxAbs(src);
+    private static double matrixMaxNorm(Complex128[] src) {
+        return CompareField.maxAbs(src);
     }
 
 
@@ -490,7 +490,7 @@ public class MatrixNorms {
      * @param src Entries of the matrix.
      * @return The infinity norm of the matrix.
      */
-    private static double matrixInfNorm(CNumber[] src, Shape shape) {
+    private static double matrixInfNorm(Complex128[] src, Shape shape) {
         int rows = shape.get(0);
         int cols = shape.get(1);
         double[] rowSums = new double[rows];
@@ -510,8 +510,8 @@ public class MatrixNorms {
      * @param src Sparse CSR matrix to compute norm of.
      * @return The L<sub>p,q</sub> norm of the matrix.
      */
-    public static double matrixNormLpq(CsrMatrixOld src, double p, double q) {
-        CsrMatrixOld tSrc = src.transpose();
+    public static double matrixNormLpq(CsrMatrix src, double p, double q) {
+        CsrMatrix tSrc = src.T();
         double norm = 0;
         double pOverQ = p/q;
 

@@ -24,10 +24,9 @@
 
 package org.flag4j.io;
 
-
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays.dense.Vector;
 import org.flag4j.util.ErrorMessages;
 
 import java.io.IOException;
@@ -36,12 +35,12 @@ import java.io.IOException;
  * The TensorReader class provides several static methods for reading serialized
  * tensors, matrices, and vectors from a file.
  */
-public class TensorReader {
+public final class TensorReader {
 
     /*
         TODO:
             - Add options for matrix market format and csv format.
-             TensorOld reader should be instantiable object where the constructor takes an argument for the format,
+             Tensor reader should be instantiable object where the constructor takes an argument for the format,
              i.e. serialized, matrix market, or csv.
             - Make the type to write a generic so only one non-static method is needed for read.
      */
@@ -53,14 +52,14 @@ public class TensorReader {
 
 
     /**
-     * Reads a serialized {@link TensorOld tensor} from a specified file using a {@link TensorInputStream}. If an exception is
+     * Reads a serialized {@link Tensor tensor} from a specified file using a {@link TensorInputStream}. If an exception is
      * thrown while reading, the result will be null.
      * @param fileName File name, including extension, of the file containing the serialized tensor.
      * @return The deserialized tensor from the specified file. If an exception is thrown while reading,
      * the result will be null.
      */
-    public static TensorOld readTensor(String fileName) {
-        TensorOld tensor;
+    public static Tensor readTensor(String fileName) {
+        Tensor tensor;
 
         try (TensorInputStream in = new TensorInputStream(fileName)) {
             tensor = in.readTensor();
@@ -74,14 +73,14 @@ public class TensorReader {
 
 
     /**
-     * Reads a serialized {@link MatrixOld matrix} from a specified file using a {@link TensorInputStream}. If an exception is thrown while reading,
+     * Reads a serialized {@link Matrix matrix} from a specified file using a {@link TensorInputStream}. If an exception is thrown while reading,
      * the result will be null.
      * @param fileName File name, including extension, of the file containing the serialized matrix.
      * @return The deserialized matrix from the specified file. If an exception is thrown while reading,
      * the result will be null.
      */
-    public static MatrixOld readMatrix(String fileName) {
-        MatrixOld matrix;
+    public static Matrix readMatrix(String fileName) {
+        Matrix matrix;
 
         try (TensorInputStream in = new TensorInputStream(fileName)) {
             matrix = in.readMatrix();
@@ -95,14 +94,14 @@ public class TensorReader {
 
 
     /**
-     * Reads a serialized {@link VectorOld vector} from a specified file using a {@link TensorInputStream}. If an exception is
+     * Reads a serialized {@link Vector vector} from a specified file using a {@link TensorInputStream}. If an exception is
      * thrown while reading, the result will be null.
      * @param fileName File name, including extension, of the file containing the serialized vector.
      * @return The deserialized vector from the specified file. If an exception is thrown while reading,
      * the result will be null.
      */
-    public static VectorOld readVector(String fileName) {
-        VectorOld vector;
+    public static Vector readVector(String fileName) {
+        Vector vector;
 
         try (TensorInputStream in = new TensorInputStream(fileName)) {
             vector = in.readVector();

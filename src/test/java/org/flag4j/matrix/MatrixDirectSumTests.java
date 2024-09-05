@@ -1,12 +1,12 @@
 package org.flag4j.matrix;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays_old.dense.CMatrixOld;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.sparse.CooCMatrixOld;
 import org.flag4j.arrays_old.sparse.CooMatrixOld;
 import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.arrays.Shape;
-import org.flag4j.linalg.ops.DirectSum;
+import org.flag4j.linalg.DirectSumOld;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,7 +42,7 @@ class MatrixDirectSumTests {
                 {0, 0, 0, 0, -4.6}};
         exp = new MatrixOld(expEntries);
 
-        assertEquals(exp, DirectSum.directSum(A, B));
+        assertEquals(exp, DirectSumOld.directSum(A, B));
     }
 
 
@@ -67,7 +67,7 @@ class MatrixDirectSumTests {
                 {0, 0, 0, 0, 1001.0004, 0}};
         exp = new MatrixOld(expEntries);
 
-        assertEquals(exp, DirectSum.directSum(A, BSparse));
+        assertEquals(exp, DirectSumOld.directSum(A, BSparse));
     }
 
 
@@ -87,7 +87,7 @@ class MatrixDirectSumTests {
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(1.44, -9.436), new CNumber(6.71, 8.44)}};
         expComplex = new CMatrixOld(expComplexEntries);
 
-        assertEquals(expComplex, DirectSum.directSum(A, BComplex));
+        assertEquals(expComplex, DirectSumOld.directSum(A, BComplex));
     }
 
     @Test
@@ -112,7 +112,7 @@ class MatrixDirectSumTests {
                 {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(6.71, 8.44), new CNumber(0)}};
         expComplex = new CMatrixOld(expComplexEntries);
 
-        assertEquals(expComplex, DirectSum.directSum(A, BSparseComplex));
+        assertEquals(expComplex, DirectSumOld.directSum(A, BSparseComplex));
     }
 
     //--------------------------------------------------------------------------------------------------------------
@@ -132,7 +132,7 @@ class MatrixDirectSumTests {
                 {4, 5, 6, 0, 0}};
         exp = new MatrixOld(expEntries);
 
-        assertEquals(exp, DirectSum.invDirectSum(A, B));
+        assertEquals(exp, DirectSumOld.invDirectSum(A, B));
     }
 
 
@@ -157,7 +157,7 @@ class MatrixDirectSumTests {
                 {4, 5, 6, 0, 0, 0}};
         exp = new MatrixOld(expEntries);
 
-        assertEquals(exp, DirectSum.invDirectSum(A, BSparse));
+        assertEquals(exp, DirectSumOld.invDirectSum(A, BSparse));
     }
 
 
@@ -177,7 +177,7 @@ class MatrixDirectSumTests {
                 {new CNumber(4), new CNumber(5), new CNumber(6), new CNumber(0), new CNumber(0)}};
         expComplex = new CMatrixOld(expComplexEntries);
 
-        assertEquals(expComplex, DirectSum.invDirectSum(A, BComplex));
+        assertEquals(expComplex, DirectSumOld.invDirectSum(A, BComplex));
     }
 
     @Test
@@ -202,6 +202,6 @@ class MatrixDirectSumTests {
                 {new CNumber(4), new CNumber(5), new CNumber(6), new CNumber(0), new CNumber(0), new CNumber(0)}};
         expComplex = new CMatrixOld(expComplexEntries);
 
-        assertEquals(expComplex, DirectSum.invDirectSum(A, BSparseComplex));
+        assertEquals(expComplex, DirectSumOld.invDirectSum(A, BSparseComplex));
     }
 }

@@ -31,6 +31,7 @@ import org.flag4j.util.exceptions.ComplexNumberParsingException;
  * A ComplexNumberToken is the smallest unit of a string which is being parsed to a complex number.
  */
 class ComplexNumberToken {
+
     /**
      * The kind of this token.
      */
