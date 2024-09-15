@@ -31,7 +31,7 @@ import org.flag4j.arrays.backend.MatrixMixin;
  * This interface specifies methods which should be implemented in all decompositions.
  * @param <T> MatrixOld type to decompose.
  */
-public interface Decomposition<T extends MatrixMixin> {
+public interface Decomposition<T extends MatrixMixin<T, ?, ?>> {
 
     /**
      * Applies decomposition to the source matrix.

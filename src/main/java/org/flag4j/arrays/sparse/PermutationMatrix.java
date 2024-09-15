@@ -51,7 +51,6 @@ import java.util.Arrays;
  * Similarly, when a permutation matrix is right multiplied to another matrix, it has the result of swapping columns in
  * the other matrix.
  */
-@Deprecated
 public class PermutationMatrix implements Serializable {
 
     /**
@@ -433,11 +432,8 @@ public class PermutationMatrix implements Serializable {
     public int tr() {
         int trace = 0;
 
-        for(int i=0; i<size; i++) {
-            if(swapPointers[i]==i) {
-                trace += 1;
-            }
-        }
+        for(int i=0; i<size; i++)
+            if(swapPointers[i]==i) trace += 1;
 
         return trace;
     }
@@ -454,9 +450,11 @@ public class PermutationMatrix implements Serializable {
         for (int i = 0; i < swapPointers.length; i++) {
             if (!visited[i]) {
                 visited[i] = true;
-                if (swapPointers[i] != i) { // Adjusted for 0-based indexing
+
+                if (swapPointers[i] != i) {
                     int cycleSize = 1;
                     int next = swapPointers[i];
+
                     while (next != i) {
                         visited[next] = true;
                         next = swapPointers[next];

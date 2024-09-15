@@ -34,7 +34,7 @@ import org.flag4j.core_old.TensorExclusiveMixin;
 import org.flag4j.core_old.sparse_base.RealSparseTensorBase;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.TensorInvert;
+import org.flag4j.linalg.TensorInvertOld;
 import org.flag4j.operations_old.dense.real.RealDenseTranspose;
 import org.flag4j.operations_old.dense_sparse.coo.real.RealDenseSparseTensorOperations;
 import org.flag4j.operations_old.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
@@ -777,7 +777,7 @@ public class CooTensorOld
      */
     @Override
     public TensorOld tensorInv(int numIndices) {
-        return TensorInvert.inv(toDense(), numIndices);
+        return TensorInvertOld.inv(toDense(), numIndices);
     }
 
 

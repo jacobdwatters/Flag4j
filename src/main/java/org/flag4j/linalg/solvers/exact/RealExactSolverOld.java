@@ -27,7 +27,7 @@ package org.flag4j.linalg.solvers.exact;
 import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.linalg.decompositions.lu.LUOld;
-import org.flag4j.linalg.decompositions.lu.RealLUOLd;
+import org.flag4j.linalg.decompositions.lu.RealLUOld;
 import org.flag4j.linalg.solvers.exact.triangular.RealBackSolverOld;
 import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolverOld;
 
@@ -36,13 +36,14 @@ import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolverOld;
  * Solver for solving a well determined system of linear equations in an exact sense using the
  * {@link LUOld LUOld decomposition.}
  */
+@Deprecated
 public class RealExactSolverOld extends ExactSolverOld<MatrixOld, VectorOld> {
 
     /**
      * Constructs an exact LUOld solver where the coefficient matrix is real dense.
      */
     public RealExactSolverOld() {
-        super(new RealLUOLd(),
+        super(new RealLUOld(),
                 new RealForwardSolverOld(true),
                 new RealBackSolverOld()
         );

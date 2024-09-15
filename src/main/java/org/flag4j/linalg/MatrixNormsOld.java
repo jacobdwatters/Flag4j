@@ -60,7 +60,7 @@ public class MatrixNormsOld {
      * @return the 2-norm of this tensor.
      */
     public static double norm(MatrixOld src) {
-        return TensorNorms.tensorNormL2(src.entries);
+        return TensorNormsOld.tensorNormL2(src.entries);
     }
 
 
@@ -83,7 +83,7 @@ public class MatrixNormsOld {
                 norm = src.minAbs();
             }
         } else {
-            norm = TensorNorms.tensorNormLp(src.entries, p);
+            norm = TensorNormsOld.tensorNormLp(src.entries, p);
         }
 
         return norm;
@@ -342,7 +342,7 @@ public class MatrixNormsOld {
      * @return the 2-norm of this tensor.
      */
     public double norm(CsrMatrixOld src) {
-        return TensorNorms.tensorNormL2(src.entries); // Zeros do not contribute to this norm.
+        return TensorNormsOld.tensorNormL2(src.entries); // Zeros do not contribute to this norm.
     }
 
 
@@ -356,7 +356,7 @@ public class MatrixNormsOld {
      * @throws IllegalArgumentException If p is less than 1.
      */
     public double norm(CsrMatrixOld src, double p) {
-        return TensorNorms.tensorNormLp(src.entries, p); // Zeros do not contribute to this norm.
+        return TensorNormsOld.tensorNormLp(src.entries, p); // Zeros do not contribute to this norm.
     }
 
 

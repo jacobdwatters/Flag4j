@@ -39,6 +39,7 @@ import org.flag4j.util.exceptions.SingularMatrixException;
  * <p>If the system is not well determined, i.e. {@code A} is square and full rank, then use a
  * {@link LstsqSolverOld least-squares solver}.</p>
  */
+@Deprecated
 public abstract class ExactSolverOld<
         T extends MatrixMixin<T, ?, ?, ?, ?, ?, U, ?>,
         U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>>

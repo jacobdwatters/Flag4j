@@ -33,7 +33,7 @@ import java.util.function.Function;
 
 
 /**
- * A utility class for computing transformations on Field arrays_old.
+ * A utility class for computing transformations on Field arrays.
  */
 public final class TransformField {
 

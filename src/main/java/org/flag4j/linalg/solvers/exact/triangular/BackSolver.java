@@ -40,7 +40,8 @@ import org.flag4j.util.exceptions.SingularMatrixException;
  * @param <U> Vector type equivalent of matrix.
  * @param <V> Type of internal storage for the matrix and vector.
  */
-public abstract class BackSolver<T extends MatrixMixin, U extends VectorMixin, V> implements LinearMatrixSolver<T, U> {
+public abstract class BackSolver<T extends MatrixMixin<T, ?, ?>, U extends VectorMixin<U, T, ?, ?>, V>
+        implements LinearMatrixSolver<T, U> {
 
     /**
      * For storing matrix results.

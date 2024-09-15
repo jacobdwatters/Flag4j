@@ -55,6 +55,11 @@ public class Shape implements Serializable {
      * Total entries of this shape. This is only computed on demand by {@link #totalEntries()}
      */
     private BigInteger totalEntries = null;
+    /**
+     * Stores the total number of entries as exact integer if possible. This is only computed on demand by
+     * {@link #totalEntriesIntValueExact()}.
+     */
+    private int totalEntriesIntExact = -1;
 
 
     /**
@@ -253,19 +258,23 @@ public class Shape implements Serializable {
      * @throws ArithmeticException If the total number of entries overflows a primitive int.
      */
     public int totalEntriesIntValueExact() {
-        if(dims.length == 0) return 0;
+        if(totalEntriesIntExact >= 0) return totalEntriesIntExact; // Value has already been computed.
 
-        int product = 1;
+        if(dims.length == 0) {
+            totalEntriesIntExact = 0;
+        } else {
+            totalEntriesIntExact = 1;
 
-        for (int dim : dims) {
-            // Check for overflow before multiplying
-            if (dim > 0 && product > Integer.MAX_VALUE / dim) {
-                throw new ArithmeticException("Integer overflow while computing total entries in the shape.");
+            for (int dim : dims) {
+                // Check for overflow before multiplying
+                if (dim > 0 && totalEntriesIntExact > Integer.MAX_VALUE / dim) {
+                    throw new ArithmeticException("Integer overflow while computing total entries in the shape.");
+                }
+                totalEntriesIntExact *= dim;
             }
-            product *= dim;
         }
 
-        return product;
+        return totalEntriesIntExact;
     }
 
 

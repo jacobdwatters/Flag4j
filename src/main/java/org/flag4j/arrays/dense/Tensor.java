@@ -30,7 +30,7 @@ import org.flag4j.arrays.backend.TensorOverSemiRing;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.arrays.Shape;
-import org.flag4j.linalg.TensorInvert;
+import org.flag4j.linalg.TensorInvertOld;
 import org.flag4j.operations.dense.real.RealDenseEquals;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
@@ -132,7 +132,7 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
      * @see #inv()
      */
     public Tensor inv(int numIndices) {
-        return TensorInvert.inv(this, numIndices);
+        return TensorInvertOld.inv(this, numIndices);
     }
 
 

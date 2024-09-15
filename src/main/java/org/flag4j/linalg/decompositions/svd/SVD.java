@@ -42,7 +42,7 @@ import java.util.Arrays;
  *
  * @param <T> The type of the matrix to compute the singular value decomposition of.
  */
-public abstract class SVD<T extends MatrixMixin> implements Decomposition<T> {
+public abstract class SVD<T extends MatrixMixin<T, ?, ?>> implements Decomposition<T> {
 
     /**
      * Flag which indicates if the singular vectors should be computed in addition to the singular values.

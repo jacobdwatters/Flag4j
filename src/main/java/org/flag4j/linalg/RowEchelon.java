@@ -24,47 +24,54 @@
 
 package org.flag4j.linalg;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.linalg.decompositions.lu.ComplexLUOld;
-import org.flag4j.linalg.decompositions.lu.RealLUOLd;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.linalg.decompositions.lu.ComplexLU;
+import org.flag4j.linalg.decompositions.lu.RealLU;
+import org.flag4j.util.ErrorMessages;
 
 /**
- * This class contains several methods for computing row echelon, reduced row echelon, and extended reduced row echelon
+ * This class contains static methods for computing row echelon, reduced row echelon, and extended reduced row echelon
  * forms of a matrix.
  */
-public class RowEchelon {
+public final class RowEchelon {
 
-    /**
-     * Computes a row echelon form of a MatrixOld. For a reduced row echelon form use {@link #rref(MatrixOld)}.
-     * @param A The matrix for which to compute the row echelon form.
-     * @return A matrix in row echelon form which is row-equivalent to the matrix {@code A}.
-     */
-    public static MatrixOld ref(MatrixOld A) {
-        return new RealLUOLd().decompose(A).getU();
+    private RowEchelon() {
+        // Hide default constructor for utility class.
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
     /**
-     * Computes a row echelon form of a MatrixOld. For a reduced row echelon form use {@link #rref(CMatrixOld)}.
+     * Computes a row echelon form of a Matrix. For a reduced row echelon form use {@link #rref(Matrix)}.
      * @param A The matrix for which to compute the row echelon form.
      * @return A matrix in row echelon form which is row-equivalent to the matrix {@code A}.
      */
-    public static CMatrixOld ref(CMatrixOld A) {
-        return new ComplexLUOld().decompose(A).getU();
+    public static Matrix ref(Matrix A) {
+        return new RealLU().decompose(A).getU();
     }
 
 
     /**
-     * Computes the reduced row echelon form of a matrix. For a non-reduced row echelon form see {@link #ref(MatrixOld)}.
+     * Computes a row echelon form of a Matrix. For a reduced row echelon form use {@link #rref(CMatrix)}.
+     * @param A The matrix for which to compute the row echelon form.
+     * @return A matrix in row echelon form which is row-equivalent to the matrix {@code A}.
+     */
+    public static CMatrix ref(CMatrix A) {
+        return new ComplexLU().decompose(A).getU();
+    }
+
+
+    /**
+     * Computes the reduced row echelon form of a matrix. For a non-reduced row echelon form see {@link #ref(Matrix)}.
      * The reduced row echelon form is unique.
      * @param A The matrix for which to compute the reduced row echelon form.
      * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
      */
-    public static MatrixOld rref(MatrixOld A) {
-        // Compute the LUOld decomposition.
-        MatrixOld U = new RealLUOLd().decompose(A).getU();
+    public static Matrix rref(Matrix A) {
+        // Compute the LU decomposition.
+        Matrix U = new RealLU().decompose(A).getU();
 
         int colStop = Math.min(U.numCols, U.numRows);
         int pivotRow;
@@ -98,19 +105,19 @@ public class RowEchelon {
 
 
     /**
-     * Computes the reduced row echelon form of a matrix. For a non-reduced row echelon form see {@link #ref(CMatrixOld)}.
+     * Computes the reduced row echelon form of a matrix. For a non-reduced row echelon form see {@link #ref(CMatrix)}.
      * The reduced row echelon form is unique.
      * @param A The matrix for which to compute the reduced row echelon form.
      * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
      */
-    public static CMatrixOld rref(CMatrixOld A) {
-        // Compute the LUOld decomposition.
-        CMatrixOld U = new ComplexLUOld().decompose(A).getU();
+    public static CMatrix rref(CMatrix A) {
+        // Compute the LU decomposition.
+        CMatrix U = new ComplexLU().decompose(A).getU();
 
         int colStop = Math.min(U.numCols, U.numRows);
         int pivotRow;
         int iRow;
-        CNumber m;
+        Complex128 m;
 
         // Convert U to reduced row echelon form.
         for(int j=0; j<colStop; j++) {
@@ -138,23 +145,25 @@ public class RowEchelon {
 
 
     /**
-     * Computes the extended reduced row echelon form of a matrix. This is equivalent to <code>{@link #rref(MatrixOld) rref(A.augment(MatrixOld.I(A.numRows())))}</code>
-     * @param A MatrixOld for which to compute extended reduced row echelon form of.
+     * Computes the extended reduced row echelon form of a matrix. This is equivalent to
+     * <code>{@link #rref(Matrix) rref(A.augment(Matrix.I(A.numRows())))}</code>
+     * @param A Matrix for which to compute extended reduced row echelon form of.
      * @return A matrix in reduced row echelon form which is row-equivalent to this matrix augmented with the
      * appropriately sized identity matrix.
      */
-    public static MatrixOld erref(MatrixOld A) {
-        return rref(A.augment(MatrixOld.I(A.numRows)));
+    public static Matrix erref(Matrix A) {
+        return rref(A.augment(Matrix.I(A.numRows)));
     }
 
 
     /**
-     * Computes the extended reduced row echelon form of a matrix. This is equivalent to <code>{@link #rref(CMatrixOld) rref(A.augment(MatrixOld.I(A.numRows())))}</code>
-     * @param A MatrixOld for which to compute extended reduced row echelon form of.
+     * Computes the extended reduced row echelon form of a matrix. This is equivalent to
+     * <code>{@link #rref(CMatrix) rref(A.augment(CMatrix.I(A.numRows())))}</code>
+     * @param A Matrix for which to compute extended reduced row echelon form of.
      * @return A matrix in reduced row echelon form which is row-equivalent to this matrix augmented with the
      * appropriately sized identity matrix.
      */
-    public static CMatrixOld erref(CMatrixOld A) {
-        return rref(A.augment(MatrixOld.I(A.numRows)));
+    public static CMatrix erref(CMatrix A) {
+        return rref(A.augment(CMatrix.I(A.numRows)));
     }
 }

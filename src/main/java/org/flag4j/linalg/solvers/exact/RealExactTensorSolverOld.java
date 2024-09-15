@@ -33,6 +33,7 @@ import org.flag4j.arrays_old.dense.VectorOld;
 /**
  * Solver for solving a real well determined linear tensor equation {@code A*X=B} in an exact sense.
  */
+@Deprecated
 public class RealExactTensorSolverOld extends ExactTensorSolverOld<TensorOld, MatrixOld, VectorOld> {
 
 

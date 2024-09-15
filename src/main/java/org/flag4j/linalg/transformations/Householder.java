@@ -39,7 +39,7 @@ import org.flag4j.util.ErrorMessages;
  * This class contains methods for computing real or complex Householder reflectors (also known as elementary reflectors).
  * A Householder reflector is a transformation matrix which reflects a vector about a hyperplane containing the origin.
  */
-public class Householder {
+public final class Householder {
 
     private Householder() {
         // Hide default constructor for utility class.

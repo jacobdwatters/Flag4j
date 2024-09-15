@@ -39,10 +39,9 @@ import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
 /**
- * Utility class for computing norms of matrices.
+ * Utility class containing static methods for computing norms of matrices.
  */
-@Deprecated
-public class MatrixNorms {
+public final class MatrixNorms {
 
     private MatrixNorms() {
         // Hide default constructor for utility class
@@ -59,7 +58,7 @@ public class MatrixNorms {
      * @return the 2-norm of this tensor.
      */
     public static double norm(Matrix src) {
-        return TensorNorms.tensorNormL2(src.entries);
+        return TensorNormsOld.tensorNormL2(src.entries);
     }
 
 
@@ -82,7 +81,7 @@ public class MatrixNorms {
                 norm = src.minAbs();
             }
         } else {
-            norm = TensorNorms.tensorNormLp(src.entries, p);
+            norm = TensorNormsOld.tensorNormLp(src.entries, p);
         }
 
         return norm;
@@ -341,7 +340,7 @@ public class MatrixNorms {
      * @return the 2-norm of this tensor.
      */
     public double norm(CsrMatrix src) {
-        return TensorNorms.tensorNormL2(src.entries); // Zeros do not contribute to this norm.
+        return TensorNormsOld.tensorNormL2(src.entries); // Zeros do not contribute to this norm.
     }
 
 
@@ -355,7 +354,7 @@ public class MatrixNorms {
      * @throws IllegalArgumentException If p is less than 1.
      */
     public double norm(CsrMatrix src, double p) {
-        return TensorNorms.tensorNormLp(src.entries, p); // Zeros do not contribute to this norm.
+        return TensorNormsOld.tensorNormLp(src.entries, p); // Zeros do not contribute to this norm.
     }
 
 

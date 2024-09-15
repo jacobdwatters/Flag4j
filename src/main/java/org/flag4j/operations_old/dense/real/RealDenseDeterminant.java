@@ -30,7 +30,7 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.linalg.decompositions.lu.LU;
 import org.flag4j.linalg.decompositions.lu.LUOld;
 import org.flag4j.linalg.decompositions.lu.RealLU;
-import org.flag4j.linalg.decompositions.lu.RealLUOLd;
+import org.flag4j.linalg.decompositions.lu.RealLUOld;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -106,7 +106,7 @@ public final class RealDenseDeterminant {
 
                 return A.entries[0]*(a4*a8 - a5*a7) - A.entries[1]*(a3*a8 - a5*a6) + A.entries[2]*(a3*a7 - a4*a6);
             default:
-                LUOld<MatrixOld> lu = new RealLUOLd().decompose(A);
+                LUOld<MatrixOld> lu = new RealLUOld().decompose(A);
                 // Compute the determinant of P. (Check if lowest bit is zero to determine parity)
                 double detP = (lu.getNumRowSwaps() & 1) == 0 ? 1 : -1;
                 return detP * detTri(lu.getLU());
@@ -125,7 +125,7 @@ public final class RealDenseDeterminant {
     public static double detLU(MatrixOld A) {
         ParameterChecks.ensureSquareMatrix(A.numRows, A.numCols);
 
-        RealLUOLd lu = new RealLUOLd();
+        RealLUOld lu = new RealLUOld();
         lu.decompose(A);
         double detP = (lu.getNumRowSwaps() & 1) == 0 ? 1 : -1;
 

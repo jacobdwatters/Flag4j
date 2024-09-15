@@ -357,4 +357,18 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
 
         return new CMatrix(shape, entries);
     }
+
+
+    /**
+     * Checks if this matrix is unitary. That is, if this matrices inverse is equal to its Hermitian transpose.
+     *
+     * @return True if this matrix it is unitary. Otherwise, returns false.
+     */
+    public boolean isUnitary() {
+        if(isSquare()) {
+            return mult(H()).isCloseToI();
+        } else {
+            return false;
+        }
+    }
 }

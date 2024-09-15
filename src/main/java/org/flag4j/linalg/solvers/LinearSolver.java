@@ -36,7 +36,7 @@ import org.flag4j.arrays.backend.TensorOverSemiRing;
  *
  * @param <T> Type of the tensor in the linear system.
  */
-public interface LinearSolver<T extends TensorMixin> {
+public interface LinearSolver<T extends TensorMixin<T, ?>> {
 
     /**
      * Solves the linear tensor equation given by A*X=B for the tensor X. All indices of X are summed over in

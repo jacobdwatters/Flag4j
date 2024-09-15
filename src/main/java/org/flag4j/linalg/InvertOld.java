@@ -32,7 +32,7 @@ import org.flag4j.linalg.decompositions.chol.ComplexCholeskyOld;
 import org.flag4j.linalg.decompositions.chol.RealCholeskyOld;
 import org.flag4j.linalg.decompositions.lu.ComplexLUOld;
 import org.flag4j.linalg.decompositions.lu.LUOld;
-import org.flag4j.linalg.decompositions.lu.RealLUOLd;
+import org.flag4j.linalg.decompositions.lu.RealLUOld;
 import org.flag4j.linalg.decompositions.svd.ComplexSVDOld;
 import org.flag4j.linalg.decompositions.svd.RealSVDOld;
 import org.flag4j.linalg.decompositions.svd.SVDOld;
@@ -72,7 +72,7 @@ public class InvertOld {
     @Deprecated
     public static MatrixOld inv(MatrixOld src) {
         ParameterChecks.ensureSquareMatrix(src.shape);
-        LUOld<MatrixOld> lu = new RealLUOLd().decompose(src);
+        LUOld<MatrixOld> lu = new RealLUOld().decompose(src);
 
         // Solve U*inv(A) = inv(L) for inv(A)
         RealBackSolverOld backSolver = new RealBackSolverOld();

@@ -32,12 +32,12 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  * <p>The following decompositions are provided: {@code A=LUOld}, {@code PA=LUOld}, and {@code PAQ=LUOld}.</p>
  */
 @Deprecated
-public final class RealLUOLd extends LUOld<MatrixOld> {
+public final class RealLUOld extends LUOld<MatrixOld> {
 
     /**
      * Constructs a LUOld decomposer to decompose the specified matrix using partial pivoting.
      */
-    public RealLUOLd() {
+    public RealLUOld() {
         super(Pivoting.PARTIAL.ordinal());
     }
 
@@ -48,7 +48,7 @@ public final class RealLUOLd extends LUOld<MatrixOld> {
      * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
      *                 will be used. If pivoting is any other value, no pivoting will be used.
      */
-    public RealLUOLd(int pivoting) {
+    public RealLUOld(int pivoting) {
         super(pivoting);
     }
 
@@ -62,7 +62,7 @@ public final class RealLUOLd extends LUOld<MatrixOld> {
      *                     no pivoting. If a pivot value (value along the principle diagonal of U) is within this tolerance
      *                     from zero, then an exception will be thrown if solving with no pivoting.
      */
-    public RealLUOLd(int pivoting, double zeroPivotTol) {
+    public RealLUOld(int pivoting, double zeroPivotTol) {
         super(pivoting, zeroPivotTol);
     }
 

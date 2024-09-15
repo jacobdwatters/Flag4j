@@ -40,7 +40,7 @@ import org.flag4j.util.ParameterChecks;
  * @param <T> Type of the matrix to be decomposed.
  * @param <U> Internal storage datatype of the matrix.
  */
-public abstract class UnitaryDecomposition<T extends MatrixMixin, U> implements Decomposition<T> {
+public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?>, U> implements Decomposition<T> {
 
     /**
      * <p>

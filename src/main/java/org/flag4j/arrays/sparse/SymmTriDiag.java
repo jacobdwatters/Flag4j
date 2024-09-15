@@ -1,40 +1,16 @@
-/*
- * MIT License
- *
- * Copyright (c) 2024. Jacob Watters
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
+package org.flag4j.arrays.sparse;
 
-package org.flag4j.arrays_old.sparse;
-
-
-import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.util.ParameterChecks;
 
 import java.io.Serializable;
 import java.util.Arrays;
 
+
 /**
- * <p>A real symmetric tri-diagonal matrix. Note, this class simply stores the values of the symmetric tri-diagonal matrix and has
- * limited support for operations_old with such a matrix.</p>
+ * <p>A real symmetric tri-diagonal matrix. This class stores the non-zero values of the symmetric tri-diagonal matrix
+ * and has limited support for operations with such a matrix.</p>
  *
  * <p>A matrix is symmetric tri-diagonal if it is symmetric and all values below the first sub-diagonal and above the first
  * super-diagonal are zero.</p>
@@ -49,7 +25,7 @@ import java.util.Arrays;
  *      [ 0 0 0 X X ]]</pre>
  * </p>
  */
-public class SymmTriDiagonal implements Serializable {
+public class SymmTriDiag implements Serializable {
 
     /**
      * Stores the diagonal entries of this symmetric tri-diagonal matrix.
@@ -70,7 +46,7 @@ public class SymmTriDiagonal implements Serializable {
      * @param diag Diagonal entries of the symmetric tri-diagonal matrix.
      * @param offDiag Sub/super diagonal entries of the symmetric tri-diagonal matrix.
      */
-    public SymmTriDiagonal(double[] diag, double[] offDiag) {
+    public SymmTriDiag(double[] diag, double[] offDiag) {
         ParameterChecks.ensureArrayLengthsEq(diag.length-1, offDiag.length);
 
         this.size = diag.length;
@@ -106,10 +82,10 @@ public class SymmTriDiagonal implements Serializable {
      * Converts this symmetric tri-diagonal matrix to an equivalent dense matrix.
      * @return A dense matrix equivalent to this symmetric tri-diagonal matrix.
      */
-    public MatrixOld toDense() {
+    public Matrix toDense() {
         double[] entries = new double[size*size];
 
-        // Set rest off-diag values.
+        // Set the diagonal and off-diagonal values.
         for(int i=0; i<offDiag.length; i++) {
             int rowOffset = i*size + i;
             entries[rowOffset] = diag[i];
@@ -119,15 +95,15 @@ public class SymmTriDiagonal implements Serializable {
 
         entries[entries.length-1] = diag[diag.length-1];
 
-        return new MatrixOld(size, size, entries);
+        return new Matrix(size, size, entries);
     }
 
 
     /**
      * Checks if an object is equal to this symmetric tri-diagonal matrix. An object is considered equal to this matrix if it is
-     * an instance of {@link SymmTriDiagonal} and all diagonal and off diagonal entries are equal.
+     * an instance of {@link org.flag4j.arrays.sparse.SymmTriDiag} and all diagonal and off diagonal entries are equal.
      * @param object Object to compare to this symmetric tri-diagonal matrix.
-     * @return True if {@code b} is an instance of {@link SymmTriDiagonal} and all diagonal and off diagonal entries are equal to the
+     * @return True if {@code b} is an instance of {@link org.flag4j.arrays.sparse.SymmTriDiag} and all diagonal and off diagonal entries are equal to the
      * corresponding values in this symmetric tri-diagonal matrix.
      */
     public boolean equals(Object object) {
@@ -135,7 +111,7 @@ public class SymmTriDiagonal implements Serializable {
         if(this == object) return true;
         if(object == null || object.getClass() != getClass()) return false;
 
-        SymmTriDiagonal src2 = (SymmTriDiagonal) object;
+        SymmTriDiag src2 = (SymmTriDiag) object;
 
         return Arrays.equals(src2.diag, diag) && Arrays.equals(src2.offDiag, offDiag);
     }
@@ -157,7 +133,7 @@ public class SymmTriDiagonal implements Serializable {
      * Gets the shape of this symmetric tri-diagonal matrix.
      * @return The shape of this symmetric tri-diagonal matrix.
      */
-    public Shape shape() {
+    public Shape getShape() {
         return new Shape(size, size);
     }
 }

@@ -1,16 +1,41 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2023-2024. Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package org.flag4j.linalg.transformations;
 
-
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays_old.dense.MatrixOld;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
 /**
- * This class contains static methods usefully for computing projection transformation matrices.
+ * This class contains methods usefully for computing projection transformation matrices.
  */
-public final class Projection {
+@Deprecated
+public final class ProjectionOld {
 
-    private Projection() {
+
+    private ProjectionOld() {
         // Hide constructor for utility class.
         throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());
     }
@@ -29,20 +54,19 @@ public final class Projection {
      * @throws IllegalArgumentException If {@code aspectRatio}  is not positive.
      * @throws AssertionError If {@code nearClip!=farClip}.
      */
-    public static Matrix getPerspective(double fov, double aspectRatio, double nearClip, double farClip) {
+    public static MatrixOld getPerspective(double fov, double aspectRatio, double nearClip, double farClip) {
         ParameterChecks.ensureGreaterEq(0, aspectRatio);
-        if(nearClip!=farClip)
-            throw new IllegalArgumentException("nearClip cannot equal farClip.");
+        assert(nearClip!=farClip) : "nearClip cannot equal farClip.";
 
-        Matrix perspective = new Matrix(4);
+        MatrixOld perspective = new MatrixOld(4);
 
         double cotHalfFov = 1.0/Math.tan(fov/2.0);
 
         perspective.entries[0] = cotHalfFov/aspectRatio;
         perspective.entries[5] = cotHalfFov;
         perspective.entries[10] = -(farClip + nearClip)/(farClip - nearClip);
-        perspective.entries[11] = -1.0;
-        perspective.entries[14] = -2.0*farClip*nearClip/(farClip - nearClip);
+        perspective.entries[11] = -1;
+        perspective.entries[14] = -2*farClip*nearClip/(farClip - nearClip);
 
         return perspective;
     }
@@ -61,12 +85,11 @@ public final class Projection {
      * @throws IllegalArgumentException If {@code aspectRatio}  is not positive.
      * @throws AssertionError If {@code nearClip!=farClip}.
      */
-    public static Matrix getPerspective(double fovX, double fovY, double aspectRatio, double nearClip, double farClip){
+    public static MatrixOld getPerspective(double fovX, double fovY, double aspectRatio, double nearClip, double farClip){
         ParameterChecks.ensureGreaterEq(0, aspectRatio);
-        if(nearClip!=farClip)
-            throw new IllegalArgumentException("nearClip cannot equal farClip.");
+        assert(nearClip!=farClip) : "nearClip cannot equal farClip.";
 
-        Matrix perspective = new Matrix(4);
+        MatrixOld perspective = new MatrixOld(4);
 
         // Convert the field of views to radians.
         double fovXRad = Math.toRadians(fovX);
@@ -75,8 +98,8 @@ public final class Projection {
         perspective.entries[0] = 1.0/(aspectRatio*Math.tan(fovXRad/2.0));
         perspective.entries[5] = 1.0/(Math.tan(fovYRad/2.0));
         perspective.entries[10] = -(farClip + nearClip)/(farClip - nearClip);
-        perspective.entries[11] = -1.0;
-        perspective.entries[14] = -2.0*farClip*nearClip/(farClip-nearClip);
+        perspective.entries[11] = -1;
+        perspective.entries[14] = -2*farClip*nearClip/(farClip-nearClip);
 
         return perspective;
     }
@@ -94,9 +117,9 @@ public final class Projection {
      * @param farClip Distance from camera to far clipping plane.
      * @return The orthogonal projection for the specified parameters.
      */
-    public static Matrix getOrthogonal(double xMin, double xMax, double yMin, double yMax,
+    public static MatrixOld getOrthogonal(double xMin, double xMax, double yMin, double yMax,
                                           double nearClip, double farClip){
-        Matrix ortho = new Matrix(4);
+        MatrixOld ortho = new MatrixOld(4);
 
         ortho.entries[0] = 2.0/(xMax-xMin);
         ortho.entries[5] = 2.0/(yMax-yMin);
@@ -104,7 +127,7 @@ public final class Projection {
         ortho.entries[12] = -(xMax + xMin)/(xMax - xMin);
         ortho.entries[13] = -(yMax + yMin)/(yMax - yMin);
         ortho.entries[14] = -(farClip + nearClip)/(farClip-nearClip);
-        ortho.entries[15] = 1.0;
+        ortho.entries[15] = 1;
 
         return ortho;
     }
@@ -121,17 +144,17 @@ public final class Projection {
      * @param farClip Distance from camera to far clipping plane.
      * @return The orthogonal projection for the specified parameters.
      */
-    public static Matrix getOrthogonal(double xMax, double yMax,
+    public static MatrixOld getOrthogonal(double xMax, double yMax,
                                           double nearClip, double farClip){
-        Matrix ortho = new Matrix(4);
+        MatrixOld ortho = new MatrixOld(4);
 
         ortho.entries[0] = 2.0/xMax;
         ortho.entries[5] = 2.0/yMax;
         ortho.entries[10] = -2.0/(farClip-nearClip);
-        ortho.entries[12] = -1.0;
-        ortho.entries[13] = -1.0;
+        ortho.entries[12] = -1;
+        ortho.entries[13] = -1;
         ortho.entries[14] = -(farClip + nearClip)/(farClip-nearClip);
-        ortho.entries[15] = 1.0;
+        ortho.entries[15] = 1;
 
         return ortho;
     }
@@ -148,16 +171,16 @@ public final class Projection {
      * @param yMax Maximum {@code y} value of image plane to project to.
      * @return The orthogonal projection for the specified parameters.
      */
-    public static Matrix getOrthogonal2D(double xMin, double xMax, double yMin, double yMax){
-        Matrix ortho = new Matrix(4);
+    public static MatrixOld getOrthogonal2D(double xMin, double xMax, double yMin, double yMax){
+        MatrixOld ortho = new MatrixOld(4);
 
         ortho.entries[0] = 2.0/(xMax-xMin);
         ortho.entries[5] = 2.0/(yMax-yMin);
-        ortho.entries[10] = -1.0;
+        ortho.entries[10] = -1;
         ortho.entries[12] = -(xMax + xMin)/(xMax - xMin);
         ortho.entries[13] = -(yMax + yMin)/(yMax - yMin);
-        ortho.entries[14] = 0.0;
-        ortho.entries[15] = 1.0;
+        ortho.entries[14] = 0;
+        ortho.entries[15] = 1;
 
         return ortho;
     }
@@ -172,16 +195,16 @@ public final class Projection {
      * @param yMax Maximum {@code y} value of image plane to project to.
      * @return The orthogonal projection for the specified parameters.
      */
-    public static Matrix getOrthogonal2D(double xMax, double yMax){
-        Matrix ortho = new Matrix(4);
+    public static MatrixOld getOrthogonal2D(double xMax, double yMax){
+        MatrixOld ortho = new MatrixOld(4);
 
         ortho.entries[0] = 2.0/xMax;
         ortho.entries[5] = 2.0/yMax;
-        ortho.entries[10] = -1.0;
-        ortho.entries[12] = -1.0;
-        ortho.entries[13] = -1.0;
-        ortho.entries[14] = 0.0;
-        ortho.entries[15] = 1.0;
+        ortho.entries[10] = -1;
+        ortho.entries[12] = -1;
+        ortho.entries[13] = -1;
+        ortho.entries[14] = 0;
+        ortho.entries[15] = 1;
 
         return ortho;
     }

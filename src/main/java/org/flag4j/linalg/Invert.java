@@ -50,7 +50,7 @@ import static org.flag4j.util.Flag4jConstants.EPS_F64;
  * This class provides methods for computing the inverse of a matrix. Specialized methods are provided for inverting triangular,
  * diagonal, and symmetric positive definite matrices.
  */
-public class Invert {
+public final class Invert {
 
     private Invert() {
         // Hide default constructor for utility class.

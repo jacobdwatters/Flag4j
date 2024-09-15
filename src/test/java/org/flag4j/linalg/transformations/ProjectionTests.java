@@ -22,7 +22,7 @@ class ProjectionTests {
         };
         expProjection = new MatrixOld(expEntries);
 
-        assertEquals(expProjection, Projection.getPerspective(55, 1, 0.1, 30));
+        assertEquals(expProjection, ProjectionOld.getPerspective(55, 1, 0.1, 30));
 
         // -------------------------- Sub-case 2 --------------------------
         expEntries = new double[][]{
@@ -33,7 +33,7 @@ class ProjectionTests {
         };
         expProjection = new MatrixOld(expEntries);
 
-        assertEquals(expProjection, Projection.getPerspective(90, 1.54, 0.3, 5000));
+        assertEquals(expProjection, ProjectionOld.getPerspective(90, 1.54, 0.3, 5000));
 
         // -------------------------- Sub-case 3 --------------------------
         expEntries = new double[][]{
@@ -44,7 +44,7 @@ class ProjectionTests {
         };
         expProjection = new MatrixOld(expEntries);
 
-        assertEquals(expProjection, Projection.getPerspective(90, 65, 1.54, 0.3, 5000));
+        assertEquals(expProjection, ProjectionOld.getPerspective(90, 65, 1.54, 0.3, 5000));
     }
 
 
@@ -59,18 +59,18 @@ class ProjectionTests {
         };
         expProjection = new MatrixOld(expEntries);
 
-        assertEquals(expProjection, Projection.getOrthogonal(-1, 50, -2, 5, 0.5, 100));
+        assertEquals(expProjection, ProjectionOld.getOrthogonal(-1, 50, -2, 5, 0.5, 100));
 
         // -------------------------- Sub-case 2 --------------------------
-        expProjection = Projection.getOrthogonal(0, 5.4, 0, 80.1, 0.1, 10);
-        assertEquals(expProjection, Projection.getOrthogonal(5.4, 80.1, 0.1, 10));
+        expProjection = ProjectionOld.getOrthogonal(0, 5.4, 0, 80.1, 0.1, 10);
+        assertEquals(expProjection, ProjectionOld.getOrthogonal(5.4, 80.1, 0.1, 10));
 
         // -------------------------- Sub-case 3 --------------------------
-        expProjection = Projection.getOrthogonal(-1, 50, -2, 5, -1, 1).round(10);
-        assertEquals(expProjection, Projection.getOrthogonal2D(-1, 50, -2, 5).round(10));
+        expProjection = ProjectionOld.getOrthogonal(-1, 50, -2, 5, -1, 1).round(10);
+        assertEquals(expProjection, ProjectionOld.getOrthogonal2D(-1, 50, -2, 5).round(10));
 
         // -------------------------- Sub-case 4 --------------------------
-        expProjection = Projection.getOrthogonal(0, 50, 0, 5, -1, 1).round(10);
-        assertEquals(expProjection, Projection.getOrthogonal2D(50, 5).round(10));
+        expProjection = ProjectionOld.getOrthogonal(0, 50, 0, 5, -1, 1).round(10);
+        assertEquals(expProjection, ProjectionOld.getOrthogonal2D(50, 5).round(10));
     }
 }

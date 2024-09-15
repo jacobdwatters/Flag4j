@@ -32,7 +32,7 @@ import org.flag4j.core_old.TensorBase;
 import org.flag4j.core_old.TensorExclusiveMixin;
 import org.flag4j.core_old.dense_base.RealDenseTensorBase;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.TensorInvert;
+import org.flag4j.linalg.TensorInvertOld;
 import org.flag4j.operations_old.TransposeDispatcher;
 import org.flag4j.operations_old.dense.real.RealDenseEquals;
 import org.flag4j.operations_old.dense.real.RealDenseTensorDot;
@@ -554,7 +554,7 @@ public class TensorOld
      */
     @Override
     public TensorOld tensorInv(int numIndices) {
-        return TensorInvert.inv(this, numIndices);
+        return TensorInvertOld.inv(this, numIndices);
     }
 
 

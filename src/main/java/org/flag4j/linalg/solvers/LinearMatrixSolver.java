@@ -35,7 +35,8 @@ import org.flag4j.arrays.backend.VectorMixin;
  * @param <T> Type of the matrices in the linear system.
  * @param <U> Type of the vectors in the linear system.
  */
-public interface LinearMatrixSolver<T extends MatrixMixin, U extends VectorMixin> extends LinearSolver<T> {
+public interface LinearMatrixSolver<T extends MatrixMixin<T, ?, ?>,
+        U extends VectorMixin<U, T, ?, ?>> extends LinearSolver<T> {
 
 
     /**

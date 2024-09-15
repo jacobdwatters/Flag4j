@@ -2,7 +2,7 @@ package org.flag4j.tensor;
 
 import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.arrays.Shape;
-import org.flag4j.linalg.TensorNorms;
+import org.flag4j.linalg.TensorNormsOld;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +27,7 @@ public class TensorNormTests {
     void infNormTestCase() {
         // ------------------------- Sub-case 1 -------------------------
         exp = 13384;
-        assertEquals(exp, TensorNorms.infNorm(A));
+        assertEquals(exp, TensorNormsOld.infNorm(A));
     }
 
 
@@ -35,7 +35,7 @@ public class TensorNormTests {
     void normTestCase() {
         // ------------------------- Sub-case 1 -------------------------
         exp = 13429.354528384523;
-        assertEquals(exp, TensorNorms.norm(A));
+        assertEquals(exp, TensorNormsOld.norm(A));
     }
 
 
@@ -43,10 +43,10 @@ public class TensorNormTests {
     void pnormTestCase() {
         // ------------------------- Sub-case 1 -------------------------
         exp = 13429.354528384523;
-        assertEquals(exp, TensorNorms.norm(A, 2));
+        assertEquals(exp, TensorNormsOld.norm(A, 2));
 
         // ------------------------- Sub-case 2 -------------------------
         exp = 13384.105704217562;
-        assertEquals(exp, TensorNorms.norm(A, 4));
+        assertEquals(exp, TensorNormsOld.norm(A, 4));
     }
 }

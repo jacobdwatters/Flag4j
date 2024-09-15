@@ -41,7 +41,8 @@ import java.math.RoundingMode;
 /**
  * An instance of this class is used for generating streams of pseudorandom tensors, matrices, and vectors.
  */
-public class RandomTensor {
+@Deprecated
+public class RandomTensorOld {
 
     /**
      * Complex pseudorandom number generator.
@@ -53,7 +54,7 @@ public class RandomTensor {
      * Constructs a new pseudorandom tensor generator with a seed which is unlikely to be the same as other
      * from any other invocation of this constructor.
      */
-    public RandomTensor() {
+    public RandomTensorOld() {
         COMPLEX_RNG = new RandomCNumber();
         RAND_ARRAY = new RandomArrayOld(COMPLEX_RNG);
     }
@@ -62,7 +63,7 @@ public class RandomTensor {
      * Constructs a pseudorandom tensor generator with a specified seed. Use this constructor for reproducible results.
      * @param seed Seed of the pseudorandom tensor generator.
      */
-    public RandomTensor(long seed) {
+    public RandomTensorOld(long seed) {
         COMPLEX_RNG = new RandomCNumber(seed);
         RAND_ARRAY = new RandomArrayOld(COMPLEX_RNG);
     }

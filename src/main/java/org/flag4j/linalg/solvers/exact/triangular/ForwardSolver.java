@@ -41,7 +41,8 @@ import org.flag4j.util.exceptions.SingularMatrixException;
  * @param <U> Vector type equivalent to the coefficient matrix.
  * @param <V> Type of the internal storage datastructures in the matrix and vector.
  */
-public abstract class ForwardSolver<T extends MatrixMixin, U extends VectorMixin, V> implements LinearMatrixSolver<T, U> {
+public abstract class ForwardSolver<T extends MatrixMixin<T, ?, ?>, U extends VectorMixin<U, T, ?, ?>, V>
+        implements LinearMatrixSolver<T, U> {
 
     /**
      * Threshold for determining if a determinant is to be considered zero when checking if the coefficient matrix is

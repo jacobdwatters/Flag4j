@@ -33,7 +33,7 @@ import org.flag4j.core_old.TensorBase;
 import org.flag4j.core_old.TensorExclusiveMixin;
 import org.flag4j.core_old.dense_base.ComplexDenseTensorBase;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.TensorInvert;
+import org.flag4j.linalg.TensorInvertOld;
 import org.flag4j.operations_old.TransposeDispatcher;
 import org.flag4j.operations_old.dense.complex.ComplexDenseEquals;
 import org.flag4j.operations_old.dense.complex.ComplexDenseTensorDot;
@@ -610,7 +610,7 @@ public class CTensorOld
      */
     @Override
     public CTensorOld tensorInv(int numIndices) {
-        return TensorInvert.inv(this, numIndices);
+        return TensorInvertOld.inv(this, numIndices);
     }
 
 

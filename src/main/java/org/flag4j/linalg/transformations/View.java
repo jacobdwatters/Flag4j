@@ -24,14 +24,13 @@
 
 package org.flag4j.linalg.transformations;
 
-
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.dense.VectorOld;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
 /**
- * Utility class for generating view matrices.
+ * Utility class containing static for generating view matrices.
  */
 public final class View {
 
@@ -51,15 +50,15 @@ public final class View {
      * is the direction of the upwards vector in world coordinates.
      * @throws IllegalArgumentException If any of the argument vectors do not have length 3.
      */
-    public static MatrixOld lookAt(VectorOld cameraPos, VectorOld center, VectorOld up) {
+    public static Matrix lookAt(Vector cameraPos, Vector center, Vector up) {
         ParameterChecks.ensureEquals(3, cameraPos.size, center.size, up.size);
 
-        VectorOld f = center.sub(cameraPos).normalize();
-        VectorOld u = up.normalize();
-        VectorOld s = f.cross(u).normalize();
+        Vector f = center.sub(cameraPos).normalize();
+        Vector u = up.normalize();
+        Vector s = f.cross(u).normalize();
         u = s.cross(f);
 
-        MatrixOld view = new MatrixOld(4);
+        Matrix view = new Matrix(4);
 
         view.entries[0] = s.entries[0];
         view.entries[4] = s.entries[1];

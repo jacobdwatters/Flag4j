@@ -36,6 +36,7 @@ import org.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolverOld;
  * Solver for solving a well determined system of linear equations in an exact sense using the
  * {@link LUOld LUOld decomposition.}
  */
+@Deprecated
 public class ComplexExactSolverOld extends ExactSolverOld<CMatrixOld, CVectorOld> {
 
     /**
