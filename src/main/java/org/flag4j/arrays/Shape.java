@@ -35,14 +35,11 @@ import java.util.StringJoiner;
 /**
  * <p>An object to store the shape of a tensor. Shapes are immutable.</p>
  *
- * <p>Multi-dimensional indices can be efficiently computed from a flat 1D array index using a shape object as it internaly
- * maintains strides (see {@link #getIndices(int)}). Strides are the step size needed to move from one element to another along each axis in the
- * tensor.</p>
+ * <p>Multi-dimensional indices can be efficiently computed from a flat 1D array index using a shape object as it internally
+ * maintains strides (see {@link #getIndices(int)} and {@link #getStrides()}). Strides are the step size needed to move from one
+ * element to another along each axis in the tensor.</p>
  */
 public class Shape implements Serializable {
-    // TODO: Strides are now computed on demand only when needed in the getStrides() and entriesIndex(int... indices) methods.
-    //  As such, can remove the Shape(boolean computeStrides, int... dims) constructor and make makeStridesIfNull() private.
-
     /**
      * An array containing the size of each dimension of this shape.
      */
@@ -93,8 +90,9 @@ public class Shape implements Serializable {
 
 
     /**
-     * Gets the shape of a tensor as an array.
-     * @return Shape of a tensor as an integer array.
+     * Gets the strides of this shape as an array. Strides are the step sizes needed to move from one
+     * element to another along each axis in the tensor.
+     * @return The strides of this shape as an integer array.
      */
     public int[] getStrides() {
         makeStridesIfNull();

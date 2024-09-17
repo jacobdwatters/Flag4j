@@ -24,8 +24,8 @@
 
 package org.flag4j.operations.dense_sparse.coo.real;
 
-import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.arrays_old.sparse.CooTensorOld;
+import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -48,13 +48,13 @@ public class RealDenseSparseTensorOperations {
      * @return The result of the tensor addition.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static TensorOld add(TensorOld src1, CooTensorOld src2) {
+    public static Tensor add(Tensor src1, CooTensor src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int[] indices;
-        TensorOld dest = new TensorOld(src1);
+        Tensor dest = src1.copy();
 
-        for(int i=0; i<src2.entries.length; i++) {
+        for(int i=0, size=src2.nnz; i<size; i++) {
             indices = src2.indices[i];
             dest.entries[dest.shape.entriesIndex(indices)] += src2.entries[i];
         }
@@ -70,20 +70,20 @@ public class RealDenseSparseTensorOperations {
      * @return The result of element-wise multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static CooTensorOld elemMult(TensorOld src1, CooTensorOld src2) {
+    public static CooTensor elemMult(Tensor src1, CooTensor src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
         int index;
-        double[] destEntries = new double[src2.nonZeroEntries()];
+        double[] destEntries = new double[src2.nnz];
         int[][] destIndices = new int[src2.indices.length][src2.indices[0].length];
         ArrayUtils.deepCopy(src2.indices, destIndices);
 
-        for(int i=0; i<destEntries.length; i++) {
+        for(int i=0, size=destEntries.length; i<size; i++) {
             index = src2.shape.entriesIndex(src2.indices[i]); // Get index of non-zero entry.
             destEntries[i] = src1.entries[index]*src2.entries[i];
         }
 
-        return new CooTensorOld(src2.shape, destEntries, destIndices);
+        return new CooTensor(src2.shape, destEntries, destIndices);
     }
 
 
@@ -94,20 +94,19 @@ public class RealDenseSparseTensorOperations {
      * @return The result of element-wise division.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static CooTensorOld elemDiv(CooTensorOld src1, TensorOld src2) {
+    public static CooTensor elemDiv(CooTensor src1, Tensor src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-
         int index;
-        double[] destEntries = new double[src1.nonZeroEntries()];
+        double[] destEntries = new double[src1.nnz];
         int[][] destIndices = new int[src1.indices.length][src1.indices[0].length];
         ArrayUtils.deepCopy(src1.indices, destIndices);
 
-        for(int i=0; i<destEntries.length; i++) {
+        for(int i=0, size=destEntries.length; i<size; i++) {
             index = src2.shape.entriesIndex(src1.indices[i]); // Get index of non-zero entry.
             destEntries[i] = src1.entries[index]/src2.entries[i];
         }
 
-        return new CooTensorOld(src2.shape, destEntries, destIndices);
+        return new CooTensor(src2.shape, destEntries, destIndices);
     }
 
 
@@ -118,15 +117,13 @@ public class RealDenseSparseTensorOperations {
      * @return The result of the tensor addition.
      * @throws IllegalArgumentException If the tensors do not have the same shape.t
      */
-    public static TensorOld sub(TensorOld src1, CooTensorOld src2) {
+    public static Tensor sub(Tensor src1, CooTensor src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        Tensor dest = src1.copy();
 
-        TensorOld dest = new TensorOld(src1);
-
-        for(int i=0; i<src2.nonZeroEntries(); i++) {
+        for(int i=0, size=src2.nnz; i<size; i++)
             dest.entries[dest.shape.entriesIndex(src2.indices[i])] -= src2.entries[i];
-        }
-
+        
         return dest;
     }
 
@@ -138,14 +135,13 @@ public class RealDenseSparseTensorOperations {
      * @return The result of the tensor addition.
      * @throws IllegalArgumentException If the tensors do not have the same shape.t
      */
-    public static TensorOld sub(CooTensorOld src1, TensorOld src2) {
+    public static Tensor sub(CooTensor src1, Tensor src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        Tensor dest = src2.mult(-1);
 
-        TensorOld dest = src2.mult(-1);
-
-        for(int i=0; i<src1.nnz; i++) {
+        for(int i=0, size=src1.nnz; i<size; i++)
             dest.entries[src1.shape.entriesIndex(src1.indices[i])] += src1.entries[i];
-        }
+        
 
         return dest;
     }
@@ -157,12 +153,11 @@ public class RealDenseSparseTensorOperations {
      * @param src2 Second tensor in sum.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static void addEq(TensorOld src1, CooTensorOld src2) {
+    public static void addEq(Tensor src1, CooTensor src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
-        for(int i=0; i<src2.nonZeroEntries(); i++) {
+        for(int i=0, size=src2.nnz; i<size; i++)
             src1.entries[src1.shape.entriesIndex(src2.indices[i])] += src2.entries[i];
-        }
     }
 
 
@@ -172,12 +167,11 @@ public class RealDenseSparseTensorOperations {
      * @param src2 Second tensor in difference.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static void subEq(TensorOld src1, CooTensorOld src2) {
+    public static void subEq(Tensor src1, CooTensor src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
-        for(int i=0; i<src2.nonZeroEntries(); i++) {
+        for(int i=0, size=src2.nnz; i<size; i++)
             src1.entries[src1.shape.entriesIndex(src2.indices[i])] -= src2.entries[i];
-        }
     }
 
 
@@ -188,12 +182,11 @@ public class RealDenseSparseTensorOperations {
      * @return A dense tensor which is the sum of {@code src1} and {@code b} such that {@code b} is added to each element of {@code
      * src1}.
      */
-    public static TensorOld add(CooTensorOld src1, double b) {
-        TensorOld sum = new TensorOld(src1.shape, b);
+    public static Tensor add(CooTensor src1, double b) {
+        Tensor sum = new Tensor(src1.shape, b);
 
-        for(int i=0; i<src1.nnz; i++) {
+        for(int i=0, size=src1.nnz; i<size; i++)
             sum.entries[src1.shape.entriesIndex(src1.indices[i])] += src1.entries[i];
-        }
 
         return sum;
     }
@@ -206,12 +199,11 @@ public class RealDenseSparseTensorOperations {
      * @return A dense tensor which is the difference of {@code src1} and {@code b} such that {@code b} is subtracted from each
      * element of {@code src1}.
      */
-    public static TensorOld sub(CooTensorOld src1, double b) {
-        TensorOld sum = new TensorOld(src1.shape, b);
+    public static Tensor sub(CooTensor src1, double b) {
+        Tensor sum = new Tensor(src1.shape, b);
 
-        for(int i=0; i<src1.nnz; i++) {
+        for(int i=0, size=src1.nnz; i<size; i++)
             sum.entries[src1.shape.entriesIndex(src1.indices[i])] -= src1.entries[i];
-        }
 
         return sum;
     }

@@ -28,10 +28,20 @@ import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.DenseFieldMatrixBase;
 import org.flag4j.arrays.backend.TensorBase;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.arrays.sparse.*;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;
-import org.flag4j.operations_old.MatrixMultiplyDispatcher;
+import org.flag4j.operations.MatrixMultiplyDispatcher;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
+import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixMultiplication;
+import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixOperations;
+import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
+import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
+import org.flag4j.operations.dense_sparse.csr.complex.ComplexCsrDenseMatrixMultiplication;
+import org.flag4j.operations.dense_sparse.csr.complex.ComplexCsrDenseOperations;
+import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
+import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
+import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
 
 import java.util.ArrayList;
@@ -172,6 +182,19 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
             for(String value : row)
                 super.entries[flatPos++] = new Complex128(value);
         }
+    }
+
+
+    /**
+     * Constructs a complex matrix with specified {@code shape} and {@code entries}.
+     * @param shape Shape of the matrix to construct.
+     * @param entries Entries of the matrix.
+     */
+    public CMatrix(Shape shape, double[] entries) {
+        super(shape, new Complex128[entries.length]);
+        ParameterChecks.ensureRank(shape, 2);
+        setZeroElement(Complex128.ZERO);
+        ArrayUtils.arraycopy(entries, 0, super.entries, 0, entries.length);
     }
 
 
@@ -370,5 +393,199 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
         } else {
             return false;
         }
+    }
+
+
+    /**
+     * Sums this matrix with a real dense matrix.
+     * @param b Real dense matrix in the sum.
+     * @return The element-wise sum of this matrix with {@code b}.
+     */
+    public CMatrix add(Matrix b) {
+        return new CMatrix(this.shape, RealComplexDenseOperations.add(this.entries, this.shape, b.entries, b.shape));
+    }
+
+
+    /**
+     * Sums this matrix with a real sparse CSR matrix.
+     * @param b real sparse CSR matrix in the sum.
+     * @return The element-wise sum of this matrix and {@code b}
+     */
+    public CMatrix add(CsrMatrix b) {
+        return RealComplexCsrDenseOperations.applyBinOpp(this, b, Complex128::add);
+    }
+
+
+    /**
+     * Sums this matrix with a real sparse COO matrix.
+     * @param b real sparse CSR matrix in the sum.
+     * @return The element-wise sum of this matrix and {@code b}
+     */
+    public CMatrix add(CooMatrix b) {
+        return RealComplexDenseSparseMatrixOperations.add(this, b);
+    }
+
+
+    /**
+     * Sums this matrix with a real sparse CSR matrix.
+     * @param b real sparse CSR matrix in the sum.
+     * @return The element-wise sum of this matrix and {@code b}
+     */
+    public CMatrix add(CsrCMatrix b) {
+        return ComplexCsrDenseOperations.applyBinOpp(this, b, (Complex128 x, Complex128 y) -> x.add(y));
+    }
+
+
+    /**
+     * Sums this matrix with a real sparse COO matrix.
+     * @param b real sparse CSR matrix in the sum.
+     * @return The element-wise sum of this matrix and {@code b}
+     */
+    public CMatrix add(CooCMatrix b) {
+        return ComplexDenseSparseMatrixOperations.add(this, b);
+    }
+
+
+    /**
+     * Computes the difference of this matrix with a real dense matrix.
+     * @param b Real dense matrix in the difference.
+     * @return The difference of this matrix with {@code b}.
+     */
+    public CMatrix sub(Matrix b) {
+        return new CMatrix(this.shape,
+                RealComplexDenseOperations.sub(this.entries, this.shape, b.entries, b.shape)
+        );
+    }
+
+
+    /**
+     * Computes the difference of this matrix with a real sparse CSR matrix.
+     * @param b real sparse CSR matrix in the difference.
+     * @return The element-wise difference of this matrix and {@code b}
+     */
+    public CMatrix sub(CsrMatrix b) {
+        return RealComplexCsrDenseOperations.applyBinOpp(this, b, Complex128::sub);
+    }
+
+
+    /**
+     * Computes the difference of this matrix with a real sparse COO matrix.
+     * @param b real sparse CSR matrix in the difference.
+     * @return The element-wise difference of this matrix and {@code b}
+     */
+    public CMatrix sub(CooMatrix b) {
+        return RealComplexDenseSparseMatrixOperations.sub(this, b);
+    }
+
+
+    /**
+     * Computes the difference of this matrix with a real sparse CSR matrix.
+     * @param b real sparse CSR matrix in the difference.
+     * @return The element-wise difference of this matrix and {@code b}
+     */
+    public CMatrix sub(CsrCMatrix b) {
+        return ComplexCsrDenseOperations.applyBinOpp(this, b, Complex128::sub);
+    }
+
+
+    /**
+     * Computes the difference of this matrix with a real sparse COO matrix.
+     * @param b real sparse CSR matrix in the difference.
+     * @return The element-wise difference of this matrix and {@code b}
+     */
+    public CMatrix sub(CooCMatrix b) {
+        return ComplexDenseSparseMatrixOperations.add(this, b);
+    }
+
+
+    /**
+     * Computes the matrix multiplication between this matrix and a real sparse CSR matrix.
+     * @param b The real sparse matrix in the matrix multiplication.
+     * @return The matrix product between this matrix and {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code this.numCols != b.numRows}.
+     */
+    public CMatrix mult(CsrMatrix b) {
+        return RealComplexCsrDenseMatrixMultiplication.standard(this, b);
+    }
+
+
+    /**
+     * Computes the matrix multiplication between this matrix and a complex sparse CSR matrix.
+     * @param b The complex sparse matrix in the matrix multiplication.
+     * @return The matrix product between this matrix and {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code this.numCols != b.numRows}.
+     */
+    public CMatrix mult(CsrCMatrix b) {
+        return ComplexCsrDenseMatrixMultiplication.standard(this, b);
+    }
+
+
+    /**
+     * Computes the matrix multiplication between this matrix and a real sparse COO matrix.
+     * @param b The real sparse matrix in the matrix multiplication.
+     * @return The matrix product between this matrix and {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code this.numCols != b.numRows}.
+     * @implNote This method computes the matrix product as {@code this.mult(b.toCsr());}.
+     */
+    public CMatrix mult(CooMatrix b) {
+        return mult(b.toCsr());
+    }
+
+
+    /**
+     * Computes the matrix multiplication between this matrix and a complex sparse COO matrix.
+     * @param b The complex sparse matrix in the matrix multiplication.
+     * @return The matrix product between this matrix and {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code this.numCols != b.numRows}.
+     * @implNote This method computes the matrix product as {@code this.mult(b.toCsr());}.
+     */
+    public CMatrix mult(CooCMatrix b) {
+        return mult(b.toCsr());
+    }
+
+
+    /**
+     * Computes the matrix-vector product of this matrix and a real dense vector.
+     * @param b Vector in the matrix-vector product.
+     * @return The matrix-vector product of this matrix and the vector {@code b}.
+     */
+    public CVector mult(Vector b) {
+        ParameterChecks.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
+        Complex128[] entries = RealComplexDenseMatrixMultiplication.standardVector(
+                this.entries, this.shape, b.entries, b.shape
+        );
+
+        return new CVector(entries);
+    }
+
+
+    /**
+     * Computes the matrix-vector product of this matrix and a real sparse vector.
+     * @param b Vector in the matrix-vector product.
+     * @return The matrix-vector product of this matrix and the vector {@code b}.
+     */
+    public CVector mult(CooVector b) {
+        ParameterChecks.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
+        Complex128[] entries = RealComplexDenseSparseMatrixMultiplication.standardVector(
+                this.entries, this.shape, b.entries, b.indices
+        );
+
+        return new CVector(entries);
+    }
+
+
+    /**
+     * Computes the matrix-vector product of this matrix and a complex sparse vector.
+     * @param b Vector in the matrix-vector product.
+     * @return The matrix-vector product of this matrix and the vector {@code b}.
+     */
+    public CVector mult(CooCVector b) {
+        ParameterChecks.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
+        Complex128[] entries = ComplexDenseSparseMatrixMultiplication.standardVector(
+                this.entries, this.shape, b.entries, b.indices
+        );
+
+
+        return new CVector(entries);
     }
 }

@@ -24,10 +24,10 @@
 
 package org.flag4j.operations.dense_sparse.coo.complex;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.sparse.CooCMatrixOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.operations.common.complex.ComplexOperations;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -50,13 +50,13 @@ public final class ComplexDenseSparseMatrixOperations {
      * @return The result of the matrix addition.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static CMatrixOld add(CMatrixOld src1, CooCMatrixOld src2) {
+    public static CMatrix add(CMatrix src1, CooCMatrix src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        int row;
+        int col;
+        CMatrix dest = src1.copy();
 
-        int row, col;
-        CMatrixOld dest = new CMatrixOld(src1);
-
-        for(int i=0; i<src2.nonZeroEntries(); i++) {
+        for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
             dest.entries[idx] = dest.entries[idx].add(src2.entries[i]);
         }
@@ -72,13 +72,14 @@ public final class ComplexDenseSparseMatrixOperations {
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static CMatrixOld sub(CMatrixOld src1, CooCMatrixOld src2) {
+    public static CMatrix sub(CMatrix src1, CooCMatrix src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
-        int row, col;
-        CMatrixOld dest = new CMatrixOld(src1);
+        int row;
+        int col;
+        CMatrix dest = src1.copy();
 
-        for(int i=0; i<src2.nonZeroEntries(); i++) {
+        for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
             dest.entries[idx] = dest.entries[idx].sub(src2.entries[i]);
         }
@@ -94,13 +95,13 @@ public final class ComplexDenseSparseMatrixOperations {
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static CMatrixOld sub(CooCMatrixOld src2, CMatrixOld src1) {
+    public static CMatrix sub(CooCMatrix src2, CMatrix src1) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        int row;
+        int col;
+        CMatrix dest = new CMatrix(src1.shape, ComplexOperations.scalMult(src1.entries, -1));
 
-        int row, col;
-        CMatrixOld dest = new CMatrixOld(src1.shape, ComplexOperations.scalMult(src1.entries, -1));
-
-        for(int i=0; i<src2.nonZeroEntries(); i++) {
+        for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
             dest.entries[idx] = dest.entries[idx].add(src2.entries[i]);
         }
@@ -115,12 +116,12 @@ public final class ComplexDenseSparseMatrixOperations {
      * @param src2 Second matrix.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static void addEq(CMatrixOld src1, CooCMatrixOld src2) {
+    public static void addEq(CMatrix src1, CooCMatrix src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        int row;
+        int col;
 
-        int row, col;
-
-        for(int i=0; i<src2.nonZeroEntries(); i++) {
+        for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
             src1.entries[idx] = src1.entries[idx].add(src2.entries[i]);
         }
@@ -133,12 +134,12 @@ public final class ComplexDenseSparseMatrixOperations {
      * @param src2 Second matrix.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static void subEq(CMatrixOld src1, CooCMatrixOld src2) {
+    public static void subEq(CMatrix src1, CooCMatrix src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        int row;
+        int col;
 
-        int row, col;
-
-        for(int i=0; i<src2.nonZeroEntries(); i++) {
+        for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
             src1.entries[idx] = src1.entries[idx].sub(src2.entries[i]);
         }
@@ -150,11 +151,11 @@ public final class ComplexDenseSparseMatrixOperations {
      * @return The result of element-wise multiplication.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static CooCMatrixOld elemMult(CMatrixOld src1, CooCMatrixOld src2) {
+    public static CooCMatrix elemMult(CMatrix src1, CooCMatrix src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-
-        int row, col;
-        CNumber[] destEntries = new CNumber[src2.nonZeroEntries()];
+        int row;
+        int col;
+        Complex128[] destEntries = new Complex128[src2.nnz];
 
         for(int i=0; i<destEntries.length; i++) {
             row = src2.rowIndices[i];
@@ -162,7 +163,7 @@ public final class ComplexDenseSparseMatrixOperations {
             destEntries[i] = src1.entries[row*src1.numCols + col].mult(src2.entries[i]);
         }
 
-        return new CooCMatrixOld(src2.shape, destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
+        return new CooCMatrix(src2.shape, destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
     }
 
 
@@ -184,11 +185,9 @@ public final class ComplexDenseSparseMatrixOperations {
      * @return The element-wise quotient of {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} and {@code src2} do not have the same shape.
      */
-    public static CooCMatrixOld elemDiv(CooCMatrixOld src1, CMatrixOld src2) {
+    public static CooCMatrix elemDiv(CooCMatrix src1, CMatrix src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-
-        CNumber[] quotient = new CNumber[src1.entries.length];
-
+        Complex128[] quotient = new Complex128[src1.entries.length];
         int row;
         int col;
 
@@ -198,24 +197,23 @@ public final class ComplexDenseSparseMatrixOperations {
             quotient[i] = src1.entries[i].div(src2.entries[row*src2.numCols + col]);
         }
 
-        return new CooCMatrixOld(src1.shape, quotient, src1.rowIndices.clone(), src1.colIndices.clone());
+        return new CooCMatrix(src1.shape, quotient, src1.rowIndices.clone(), src1.colIndices.clone());
     }
 
 
     /**
      * Adds a dense vector to each column as if the vector is a column vector.
      * @param src Source sparse matrix.
-     * @param col VectorOld to add to each column of the source matrix.
+     * @param col Vector to add to each column of the source matrix.
      * @return A dense copy of the {@code src} matrix with the specified vector added to each column.
      * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
      * of rows in the {@code src} matrix.
      */
-    public static CMatrixOld addToEachCol(CooCMatrixOld src, CVectorOld col) {
-        CMatrixOld sum = new CMatrixOld(src.numRows, src.numCols);
+    public static CMatrix addToEachCol(CooCMatrix src, CVector col) {
+        CMatrix sum = new CMatrix(src.numRows, src.numCols);
 
-        for(int j=0; j<sum.numCols; j++) {
-            sum.setCol(col.entries, j);
-        }
+        for(int j=0; j<sum.numCols; j++)
+            sum.setCol(col, j);
 
         for(int i=0; i<src.entries.length; i++) {
             int idx = src.rowIndices[i]*src.numCols + src.colIndices[i];
@@ -229,17 +227,16 @@ public final class ComplexDenseSparseMatrixOperations {
     /**
      * Adds a dense vector to add to each row as if the vector is a row vector.
      * @param src Source sparse matrix.
-     * @param row VectorOld to add to each row of the source matrix.
+     * @param row Vector to add to each row of the source matrix.
      * @return A dense copy of the {@code src} matrix with the specified vector added to each row.
      * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
      * of columns in the {@code src} matrix.
      */
-    public static CMatrixOld addToEachRow(CooCMatrixOld src, CVectorOld row) {
-        CMatrixOld sum = new CMatrixOld(src.numRows, src.numCols);
+    public static CMatrix addToEachRow(CooCMatrix src, CVector row) {
+        CMatrix sum = new CMatrix(src.numRows, src.numCols);
 
-        for(int i=0; i<sum.numRows; i++) {
-            sum.setRow(row.entries, i);
-        }
+        for(int i=0; i<sum.numRows; i++)
+            sum.setRow(row, i);
 
         for(int i=0; i<src.entries.length; i++) {
             int idx = src.rowIndices[i]*src.numCols + src.colIndices[i];

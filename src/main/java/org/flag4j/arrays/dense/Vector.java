@@ -24,13 +24,22 @@
 
 package org.flag4j.arrays.dense;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.DensePrimitiveDoubleTensorBase;
 import org.flag4j.arrays.backend.DenseVectorMixin;
+import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.arrays.Shape;
 import org.flag4j.linalg.VectorNorms;
+import org.flag4j.operations.common.complex.ComplexOperations;
 import org.flag4j.operations.dense.real.RealDenseTensorDot;
 import org.flag4j.operations.dense.real.RealDenseVectorOperations;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
+import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
+import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -634,6 +643,15 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
 
 
     /**
+     * Converts this real dense vector to an equivalent complex dense vector.
+     * @return A complex dense vector equivalent to this vector.
+     */
+    public CVector toComplex() {
+        return new CVector(ArrayUtils.copy2Complex128(entries, null));
+    }
+
+
+    /**
      * Computes the element-wise multiplication of two tensors and stores the result in this tensor.
      *
      * @param b Second tensor in the element-wise product.
@@ -733,5 +751,156 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
         hash = 31*hash + Arrays.hashCode(entries);
 
         return hash;
+    }
+
+
+    /**
+     * Adds a complex dense vector to this vector.
+     * @param b Complex dense vector in the sum.
+     * @return The sum of this vector and {@code b}.
+     */
+    public CVector add(CVector b) {
+        return new CVector(RealComplexDenseOperations.add(b.entries, b.shape, entries, shape));
+    }
+
+
+    /**
+     * Adds a real sparse vector to this vector.
+     * @param b The real sparse vector in the sum.
+     * @return The sum of this vector and {@code b}.
+     */
+    public Vector add(CooVector b) {
+        return RealDenseSparseVectorOperations.add(this, b);
+    }
+
+
+    /**
+     * Adds a complex sparse vector to this vector.
+     * @param b The complex sparse vector in the sum.
+     * @return The sum of this vector and {@code b}.
+     */
+    public CVector add(CooCVector b) {
+        return RealComplexDenseSparseVectorOperations.add(this, b);
+    }
+
+
+    /**
+     * Adds a complex-valued scalar to each entry of this vector.
+     * @param b The scalar value in the sum.
+     * @return The sum of this vector's entries with the scalar value {@code b}.
+     */
+    public CVector add(Complex128 b) {
+        Complex128[] sum = new Complex128[size];
+
+        for(int i=0; i<size; i++)
+            sum[i] = b.add(entries[i]);
+
+        return new CVector(sum);
+    }
+
+
+    /**
+     * Subtracts a complex dense vector from this vector.
+     * @param b Complex dense vector in the difference.
+     * @return The difference of this vector and {@code b}.
+     */
+    public CVector sub(CVector b) {
+        return new CVector(RealComplexDenseOperations.sub(b.entries, b.shape, entries, shape));
+    }
+
+
+    /**
+     * Subtracts a real sparse vector from this vector.
+     * @param b The real sparse vector in the difference.
+     * @return The difference of this vector and {@code b}.
+     */
+    public Vector sub(CooVector b) {
+        return RealDenseSparseVectorOperations.sub(this, b);
+    }
+
+
+    /**
+     * Subtracts a complex sparse vector from this vector.
+     * @param b The complex sparse vector in the difference.
+     * @return The difference of this vector and {@code b}.
+     */
+    public CVector sub(CooCVector b) {
+        return RealComplexDenseSparseVectorOperations.add(this, b);
+    }
+
+
+    /**
+     * Subtracts a complex-valued scalar from each entry of this vector.
+     * @param b The scalar value in the difference.
+     * @return The difference of this vector's entries with the scalar value {@code b}.
+     */
+    public CVector sub(Complex128 b) {
+        Complex128 bInv = b.addInv();
+        Complex128[] sum = new Complex128[size];
+
+        for(int i=0; i<size; i++)
+            sum[i] = bInv.add(entries[i]);
+
+        return new CVector(sum);
+    }
+
+
+    /**
+     * Multiplies this vector by a complex-valued scalar.
+     * @param b Scalar to multiply this vector by.
+     * @return The scalar product of this vector with {@code b}.
+     */
+    public CVector mult(Complex128 b) {
+        return new CVector(ComplexOperations.scalMult(entries, b));
+    }
+
+
+    /**
+     * Divides this vector by a complex-valued scalar.
+     * @param b Scalar to divide this vector by.
+     * @return The scalar quotient of this vector with {@code b}.
+     */
+    public CVector div(Complex128 b) {
+        return new CVector(ComplexOperations.scalDiv(entries, b));
+    }
+
+
+    /**
+     * Computes the element-wise product of this vector and a complex dense vector.
+     * @param b The complex dense vector in the element-wise product.
+     * @return The element-wise product of this vector and {@code b}.
+     */
+    public CVector elemMult(CVector b) {
+        return new CVector(RealComplexDenseElemMult.dispatch(b.entries, b.shape, this.entries, this.shape));
+    }
+
+
+    /**
+     * Computes the element-wise product of this vector and a real sparse vector.
+     * @param b The real sparse vector in the element-wise product.
+     * @return The element-wise product of this vector and {@code b}.
+     */
+    public CooVector elemMult(CooVector b) {
+        return RealDenseSparseVectorOperations.elemMult(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise product of this vector and a complex sparse vector.
+     * @param b The complex sparse vector in the element-wise product.
+     * @return The element-wise product of this vector and {@code b}.
+     */
+    public CooCVector elemMult(CooCVector b) {
+        return RealComplexDenseSparseVectorOperations.elemMult(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise quotient of this vector and a complex dense vector.
+     * @param b The complex dense vector in the element-wise quotient.
+     * @return The element-wise quotient of this vector and {@code b}.
+     */
+    public CVector elemDiv(CVector b) {
+        return new CVector(RealComplexDenseElemDiv.dispatch(b.entries, b.shape, this.entries, this.shape));
     }
 }

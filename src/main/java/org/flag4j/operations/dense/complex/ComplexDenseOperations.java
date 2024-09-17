@@ -24,8 +24,8 @@
 
 package org.flag4j.operations.dense.complex;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -50,10 +50,10 @@ public final class ComplexDenseOperations {
      * @return The element wise addition of two tensors.
      * @throws IllegalArgumentException If entry arrays_old are not the same size.
      */
-    public static CNumber[] add(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] add(Complex128[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
         ParameterChecks.ensureEqualShape(shape1, shape2);
 
-        CNumber[] sum = new CNumber[src1.length];
+        Complex128[] sum = new Complex128[src1.length];
 
         for(int i=0; i<sum.length; i++) {
             sum[i] = src1[i].add(src2[i]);
@@ -69,8 +69,8 @@ public final class ComplexDenseOperations {
      * @param a Scalar to add to all entries of this tensor.
      * @return The tensor-scalar addition of the two parameters.
      */
-    public static CNumber[] add(CNumber[] src1, CNumber a) {
-        CNumber[] sum = new CNumber[src1.length];
+    public static Complex128[] add(Complex128[] src1, Complex128 a) {
+        Complex128[] sum = new Complex128[src1.length];
 
         for(int i=0; i<sum.length; i++) {
             sum[i] = src1[i].add(a);
@@ -86,8 +86,8 @@ public final class ComplexDenseOperations {
      * @param a Scalar to add to all entries of this tensor.
      * @return The tensor-scalar addition of the two parameters.
      */
-    public static CNumber[] add(double[] src1, CNumber a) {
-        CNumber[] sum = new CNumber[src1.length];
+    public static Complex128[] add(double[] src1, Complex128 a) {
+        Complex128[] sum = new Complex128[src1.length];
 
         for(int i=0; i<sum.length; i++) {
             sum[i] = a.add(src1[i]);
@@ -103,9 +103,9 @@ public final class ComplexDenseOperations {
      * @param a Scalar to add to all entries of this tensor.
      * @return The tensor-scalar addition of the two parameters.
      */
-    public static CNumber[] sub(double[] src1, CNumber a) {
-        CNumber[] sum = new CNumber[src1.length];
-        CNumber aNeg = a.addInv();
+    public static Complex128[] sub(double[] src1, Complex128 a) {
+        Complex128[] sum = new Complex128[src1.length];
+        Complex128 aNeg = a.addInv();
 
         for(int i=0; i<sum.length; i++) {
             sum[i] = aNeg.add(src1[i]);
@@ -124,10 +124,10 @@ public final class ComplexDenseOperations {
      * @return The element wise subtraction of two tensors.
      * @throws IllegalArgumentException If entry arrays_old are not the same size.
      */
-    public static CNumber[] sub(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] sub(Complex128[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
         ParameterChecks.ensureEqualShape(shape1, shape2);
 
-        CNumber[] diff = new CNumber[src1.length];
+        Complex128[] diff = new Complex128[src1.length];
 
         for(int i=0; i<diff.length; i++) {
             diff[i] = src1[i].sub(src2[i]);
@@ -143,8 +143,8 @@ public final class ComplexDenseOperations {
      * @param a Scalar to add to all entries of this tensor.
      * @return The tensor-scalar subtraction of the two parameters.
      */
-    public static CNumber[] sub(CNumber[] src1, CNumber a) {
-        CNumber[] sum = new CNumber[src1.length];
+    public static Complex128[] sub(Complex128[] src1, Complex128 a) {
+        Complex128[] sum = new Complex128[src1.length];
 
         for(int i=0; i<sum.length; i++) {
             sum[i] = src1[i].sub(a);
@@ -161,7 +161,7 @@ public final class ComplexDenseOperations {
      * @param src2 Second tensor in the subtraction.
      * @param shape2 Shape of second tensor.
      */
-    public static void subEq(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static void subEq(Complex128[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
         ParameterChecks.ensureEqualShape(shape1, shape2);
 
         for(int i=0; i<src1.length; i++) {
@@ -175,7 +175,7 @@ public final class ComplexDenseOperations {
      * @param src TensorOld in subtraction. Also, where the result will be stored.
      * @param b Scalar to subtract.
      */
-    public static void subEq(CNumber[] src, CNumber b) {
+    public static void subEq(Complex128[] src, Complex128 b) {
         for(int i=0; i<src.length; i++) {
             src[i] = src[i].sub(b);
         }
@@ -189,7 +189,7 @@ public final class ComplexDenseOperations {
      * @param src2 Second tensor in the addition.
      * @param shape2 Shape of second tensor.
      */
-    public static void addEq(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static void addEq(Complex128[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
         ParameterChecks.ensureEqualShape(shape1, shape2);
 
         for(int i=0; i<src1.length; i++) {
@@ -203,7 +203,7 @@ public final class ComplexDenseOperations {
      * @param src TensorOld in addition. Also, where the result will be stored.
      * @param b Scalar to add.
      */
-    public static void addEq(CNumber[] src, CNumber b) {
+    public static void addEq(Complex128[] src, Complex128 b) {
         for(int i=0; i<src.length; i++) {
             src[i] = src[i].add(b);
         }
@@ -215,16 +215,16 @@ public final class ComplexDenseOperations {
      * @param src Entries of tensor to compute product of.
      * @return The product of all src in the tensor.
      */
-    public static CNumber prod(CNumber[] src) {
-        CNumber product;
+    public static Complex128 prod(Complex128[] src) {
+        Complex128 product;
 
         if(src.length>0) {
-            product = new CNumber(1);
-            for(CNumber value : src) {
+            product = new Complex128(1);
+            for(Complex128 value : src) {
                product = product.mult(value);
             }
         } else {
-            product = CNumber.ZERO;
+            product = Complex128.ZERO;
         }
 
         return product;
@@ -237,8 +237,8 @@ public final class ComplexDenseOperations {
      * @param a Scalar value to multiply.
      * @return The scalar multiplication of the tensor.
      */
-    public static CNumber[] scalMult(CNumber[] entries, CNumber a) {
-        CNumber[] product = new CNumber[entries.length];
+    public static Complex128[] scalMult(Complex128[] entries, Complex128 a) {
+        Complex128[] product = new Complex128[entries.length];
 
         for(int i=0; i<product.length; i++) {
             product[i] = entries[i].mult(a);
@@ -254,8 +254,8 @@ public final class ComplexDenseOperations {
      * @param a Scalar value to multiply.
      * @return The scalar multiplication of the tensor.
      */
-    public static CNumber[] scalMult(CNumber[] entries, double a) {
-        CNumber[] product = new CNumber[entries.length];
+    public static Complex128[] scalMult(Complex128[] entries, double a) {
+        Complex128[] product = new Complex128[entries.length];
 
         for(int i=0; i<product.length; i++) {
             product[i] = entries[i].mult(a);
@@ -271,8 +271,8 @@ public final class ComplexDenseOperations {
      * @param divisor Scalar value to divide by.
      * @return The scalar division of the tensor.
      */
-    public static CNumber[] scalDiv(CNumber[] entries, CNumber divisor) {
-        CNumber[] quotient = new CNumber[entries.length];
+    public static Complex128[] scalDiv(Complex128[] entries, Complex128 divisor) {
+        Complex128[] quotient = new Complex128[entries.length];
 
         for(int i=0; i<quotient.length; i++) {
             quotient[i] = entries[i].div(divisor);
@@ -288,8 +288,8 @@ public final class ComplexDenseOperations {
      * @param divisor Scalar value to divide by.
      * @return The scalar division of the tensor.
      */
-    public static CNumber[] scalDiv(CNumber[] entries, double divisor) {
-        CNumber[] quotient = new CNumber[entries.length];
+    public static Complex128[] scalDiv(Complex128[] entries, double divisor) {
+        Complex128[] quotient = new Complex128[entries.length];
 
         for(int i=0; i<quotient.length; i++) {
             quotient[i] = entries[i].div(divisor);
@@ -304,8 +304,8 @@ public final class ComplexDenseOperations {
      * @param src Elements of the tensor.
      * @return The element-wise reciprocals of the tensor.
      */
-    public static CNumber[] recip(CNumber[] src) {
-        CNumber[] recips = new CNumber[src.length];
+    public static Complex128[] recip(Complex128[] src) {
+        Complex128[] recips = new Complex128[src.length];
 
         for(int i=0; i<recips.length; i++) {
             recips[i] = src[i].multInv();

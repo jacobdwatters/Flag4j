@@ -27,7 +27,6 @@ package org.flag4j.operations.common.complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Complex64;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -47,13 +46,11 @@ public final class ComplexOperations {
      * @param src Elements of the tensor.
      * @return The element-wise square root of the tensor.
      */
-    @Deprecated
-    public static CNumber[] sqrt(CNumber[] src) {
-        CNumber[] roots = new CNumber[src.length];
+    public static Complex128[] sqrt(Complex128[] src) {
+        Complex128[] roots = new Complex128[src.length];
 
-        for(int i=0; i<roots.length; i++) {
-            roots[i] = CNumber.sqrt(src[i]);
-        }
+        for(int i=0; i<roots.length; i++)
+            roots[i] = src[i].sqrt();
 
         return roots;
     }
@@ -65,13 +62,11 @@ public final class ComplexOperations {
      * @param src Elements of the tensor.
      * @return The element-wise square root of the tensor.
      */
-    @Deprecated
-    public static CNumber[] sqrt(double[] src) {
-        CNumber[] roots = new CNumber[src.length];
+    public static Complex128[] sqrt(double[] src) {
+        Complex128[] roots = new Complex128[src.length];
 
-        for(int i=0; i<roots.length; i++) {
-            roots[i] = CNumber.sqrt(src[i]);
-        }
+        for(int i=0; i<roots.length; i++)
+            roots[i] = Complex128.sqrt(src[i]);
 
         return roots;
     }
@@ -82,55 +77,47 @@ public final class ComplexOperations {
      * @param src Elements of the tensor.
      * @return The element-wise absolute value of the tensor.
      */
-    @Deprecated
-    public static double[] abs(CNumber[] src) {
+    public static double[] abs(Complex128[] src) {
         double[] abs = new double[src.length];
 
-        for(int i=0; i<abs.length; i++) {
+        for(int i=0; i<abs.length; i++)
             abs[i] = src[i].mag();
-        }
 
         return abs;
     }
 
 
     /**
-     * Rounds the values of a tensor to the nearest integer. Also see {@link #round(CNumber[], int)}.
+     * Rounds the values of a tensor to the nearest integer. Also see {@link #round(Complex128[], int)}.
      * @param src Entries of the tensor to round.
      * @return The result of rounding all entries of the source tensor to the nearest integer.
      * @throws IllegalArgumentException If {@code precision} is negative.
      */
-    @Deprecated
-    public static CNumber[] round(CNumber[] src) {
-        CNumber[] dest = new CNumber[src.length];
+    public static Complex128[] round(Complex128[] src) {
+        Complex128[] dest = new Complex128[src.length];
 
-        for(int i=0; i<dest.length; i++) {
-            dest[i] = CNumber.round(src[i]);
-        }
+        for(int i=0; i<dest.length; i++)
+            dest[i] = Complex128.round(src[i]);
 
         return dest;
     }
 
 
     /**
-     * Rounds the values of a tensor with specified precision. Note, if precision is zero, {@link #round(CNumber[])} is
+     * Rounds the values of a tensor with specified precision. Note, if precision is zero, {@link #round(Complex128[])} is
      * preferred.
      * @param src Entries of the tensor to round.
      * @param precision Precision to round to (i.e. the number of decimal places).
      * @return The result of rounding all entries of the source tensor with the specified precision.
      * @throws IllegalArgumentException If {@code precision} is negative.
      */
-    @Deprecated
-    public static CNumber[] round(CNumber[] src, int precision) {
-        if(precision<0) {
+    public static Complex128[] round(Complex128[] src, int precision) {
+        if(precision<0)
             throw new IllegalArgumentException(ErrorMessages.getNegValueErr(precision));
-        }
 
-        CNumber[] dest = new CNumber[src.length];
-
-        for(int i=0; i<dest.length; i++) {
-            dest[i] = CNumber.round(src[i], precision);
-        }
+        Complex128[] dest = new Complex128[src.length];
+        for(int i=0; i<dest.length; i++)
+            dest[i] = Complex128.round(src[i], precision);
 
         return dest;
     }
@@ -144,17 +131,14 @@ public final class ComplexOperations {
      * @return A copy of this matrix with rounded values.
      * @throws IllegalArgumentException If {@code threshold} is negative.
      */
-    @Deprecated
-    public static CNumber[] roundToZero(CNumber[] src, double threshold) {
-        if(threshold<0) {
+    public static Complex128[] roundToZero(Complex128[] src, double threshold) {
+        if(threshold<0)
             throw new IllegalArgumentException(ErrorMessages.getNegValueErr(threshold));
-        }
 
-        CNumber[] dest = new CNumber[src.length];
+        Complex128[] dest = new Complex128[src.length];
 
-        for(int i=0; i<dest.length; i++) {
-            dest[i] = CNumber.roundToZero(src[i], threshold);
-        }
+        for(int i=0; i<dest.length; i++)
+            dest[i] = Complex128.roundToZero(src[i], threshold);
 
         return dest;
     }
@@ -166,13 +150,11 @@ public final class ComplexOperations {
      * @param factor Scalar value.
      * @return The result of the scalar multiplication of a tensor.
      */
-    @Deprecated
-    public static CNumber[] scalMult(CNumber[] src, double factor) {
-        CNumber[] dest = new CNumber[src.length];
+    public static Complex128[] scalMult(Complex128[] src, double factor) {
+        Complex128[] dest = new Complex128[src.length];
 
-        for(int i=0; i<src.length; i++) {
+        for(int i=0, size=src.length; i<size; i++)
             dest[i] = src[i].mult(factor);
-        }
 
         return dest;
     }
@@ -184,8 +166,7 @@ public final class ComplexOperations {
      * @param factor Scalar value.
      * @return The result of the scalar multiplication of a tensor.
      */
-    @Deprecated
-    public static CNumber[] scalMult(CNumber[] src, CNumber factor) {
+    public static Complex128[] scalMult(Complex128[] src, Complex128 factor) {
         return scalMult(src, null, factor);
     }
 
@@ -196,13 +177,11 @@ public final class ComplexOperations {
      * @param factor Scalar value to multiply.
      * @return The scalar multiplication of the tensor.
      */
-    @Deprecated
-    public static CNumber[] scalMult(double[] entries, CNumber factor) {
-        CNumber[] product = new CNumber[entries.length];
+    public static Complex128[] scalMult(double[] entries, Complex128 factor) {
+        Complex128[] product = new Complex128[entries.length];
 
-        for(int i=0; i<product.length; i++) {
+        for(int i=0, size=entries.length; i<size; i++)
             product[i] = factor.mult(entries[i]);
-        }
 
         return product;
     }
@@ -216,10 +195,9 @@ public final class ComplexOperations {
      * @return A reference to the {@code dest} array if it was not null. Otherwise, a new array will be formed.
      * @throws ArrayIndexOutOfBoundsException If {@code dest} is not at least the size of {@code src}.
      */
-    @Deprecated
-    public static CNumber[] scalMult(CNumber[] src, CNumber[] dest, CNumber factor) {
+    public static Complex128[] scalMult(Complex128[] src, Complex128[] dest, Complex128 factor) {
         int size = src.length;
-        if(dest==null) dest = new CNumber[size];
+        if(dest==null) dest = new Complex128[size];
 
         for(int i=0; i<size; i++)
             dest[i] = src[i].mult(factor);
@@ -238,9 +216,8 @@ public final class ComplexOperations {
      * @return A reference to the {@code dest} array if it was not null. Otherwise, a new array will be formed.
      * @throws ArrayIndexOutOfBoundsException If {@code dest} is not the size of {@code src}.
      */
-    @Deprecated
-    public static CNumber[] scalMult(CNumber[] src, CNumber[] dest, CNumber factor, int start, int stop) {
-        if(dest==null) dest = new CNumber[src.length];
+    public static Complex128[] scalMult(Complex128[] src, Complex128[] dest, Complex128 factor, int start, int stop) {
+        if(dest==null) dest = new Complex128[src.length];
 
         for(int i=start; i<stop; i++)
             dest[i] = src[i].mult(factor);
@@ -250,41 +227,15 @@ public final class ComplexOperations {
 
 
     /**
-     * Computes the scalar division of a tensor.
-     * @param entries Entries of the tensor.
-     * @param divisor Scalar value to divide each element ot the tensor by.
-     * @return The scalar division of the tensor.
-     */
-    @Deprecated
-    public static CNumber[] scalDiv(double[] entries, CNumber divisor) {
-        CNumber[] quotient = new CNumber[entries.length];
-
-        double denom = divisor.re*divisor.re + divisor.im*divisor.im;
-
-        for(int i=0; i<quotient.length; i++) {
-            double a = entries[i];
-
-            quotient[i] = new CNumber(
-                    a*divisor.re / denom,
-                    -a*divisor.im / denom);
-        }
-
-        return quotient;
-    }
-
-
-    /**
      * Computes the element-wise complex conjugate of a tensor.
      * @param src Entries of the tensor.
      * @return The element-wise complex conjugate of the tensor
      */
-    @Deprecated
-    public static CNumber[] conj(CNumber[] src) {
-        CNumber[] conjugate = new CNumber[src.length];
+    public static Complex128[] conj(Complex128[] src) {
+        Complex128[] conjugate = new Complex128[src.length];
 
-        for(int i=0; i<src.length; i++) {
+        for(int i=0; i<src.length; i++)
             conjugate[i] = src[i].conj();
-        }
 
         return conjugate;
     }
@@ -295,13 +246,11 @@ public final class ComplexOperations {
      * @param src Entries of complex tensor.
      * @return Equivalent real entries for complex tensor.
      */
-    @Deprecated
-    public static double[] toReal(CNumber[] src) {
+    public static double[] toReal(Complex128[] src) {
         double[] real = new double[src.length];
 
-        for(int i=0; i<src.length; i++) {
+        for(int i=0; i<src.length; i++)
             real[i] = src[i].re;
-        }
 
         return real;
     }
@@ -318,12 +267,9 @@ public final class ComplexOperations {
 
         double denom = divisor.re*divisor.re + divisor.im*divisor.im;
 
-        for(int i=0; i<quotient.length; i++) {
+        for(int i=0, size=entries.length; i<size; i++) {
             double a = entries[i];
-
-            quotient[i] = new Complex128(
-                    a*divisor.re / denom,
-                    -a*divisor.im / denom);
+            quotient[i] = new Complex128(a*divisor.re / denom, -a*divisor.im / denom);
         }
 
         return quotient;
@@ -341,12 +287,9 @@ public final class ComplexOperations {
 
         float denom = divisor.re*divisor.re + divisor.im*divisor.im;
 
-        for(int i=0; i<quotient.length; i++) {
+        for(int i=0, size=entries.length; i<size; i++) {
             float a = entries[i];
-
-            quotient[i] = new Complex64(
-                    a*divisor.re / denom,
-                    -a*divisor.im / denom);
+            quotient[i] = new Complex64(a*divisor.re / denom, -a*divisor.im / denom);
         }
 
         return quotient;

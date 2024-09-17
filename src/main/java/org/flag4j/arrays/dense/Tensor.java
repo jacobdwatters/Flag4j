@@ -25,13 +25,21 @@
 package org.flag4j.arrays.dense;
 
 
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.DensePrimitiveDoubleTensorBase;
 import org.flag4j.arrays.backend.TensorOverSemiRing;
+import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
-import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.arrays.Shape;
-import org.flag4j.linalg.TensorInvertOld;
+import org.flag4j.linalg.TensorInvert;
+import org.flag4j.operations.common.complex.ComplexOperations;
+import org.flag4j.operations.dense.complex.ComplexDenseOperations;
 import org.flag4j.operations.dense.real.RealDenseEquals;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
+import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseTensorOperations;
+import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ParameterChecks;
 
@@ -42,6 +50,10 @@ import java.util.List;
 
 /**
  * <p>A real dense tensor backed by a primitive double array.</p>
+ *
+ * <p>A tensor is a multi-dimensional array. If N indices are required to uniquely identify all elements of a tensor, then the
+ * tensor is considered an N-dimensional tensor/array or a rank-N tensor.</p>
+ *
  * <p>The {@link #entries} of a Tensor are mutable but the {@link #shape} is fixed.</p>
  */
 public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
@@ -104,7 +116,7 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
         if(this == object) return true;
         if(object == null || object.getClass() != getClass()) return false;
 
-        TensorOld src2 = (TensorOld) object;
+        Tensor src2 = (Tensor) object;
 
         return RealDenseEquals.tensorEquals(this.entries, this.shape, src2.entries, src2.shape);
     }
@@ -132,7 +144,7 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
      * @see #inv()
      */
     public Tensor inv(int numIndices) {
-        return TensorInvertOld.inv(this, numIndices);
+        return TensorInvert.inv(this, numIndices);
     }
 
 
@@ -220,5 +232,166 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
         }
 
         return mat;
+    }
+
+
+    /**
+     * Converts this tensor to an equivalent complex tensor.
+     * @return A complex tensor equivalent to this real tensor.
+     */
+    public CTensor toComplex() {
+        return new CTensor(shape, ArrayUtils.copy2Complex128(entries, null));
+    }
+
+
+    /**
+     * Sums this tensor with a dense complex tensor.
+     * @param b Dense complex tensor in sum.
+     * @return The element-wise sum of this tensor with {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
+     */
+    public CTensor add(CTensor b) {
+        return new CTensor(shape, RealComplexDenseOperations.add(b.entries, b.shape, entries, shape));
+    }
+
+
+    /**
+     * Sums this tensor with a real sparse tensor.
+     * @param b Real sparse tensor in sum.
+     * @return The element-wise sum of this tensor with {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
+     */
+    public Tensor add(CooTensor b) {
+        return RealDenseSparseTensorOperations.add(this, b);
+    }
+
+
+    /**
+     * Sums this tensor with a complex sparse tensor.
+     * @param b Complex sparse tensor in sum.
+     * @return The element-wise sum of this tensor with {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
+     */
+    public CTensor add(CooCTensor b) {
+        return RealComplexDenseSparseOperations.add(this, b);
+    }
+
+
+    /**
+     * Adds a complex-valued scalar to each entry of this tensor.
+     * @param b Scalar to add to each entry of this tensor.
+     * @return Tensor containing sum of all entries of this tensor with {@code b}.
+     */
+    public CTensor add(Complex128 b) {
+        return new CTensor(shape, ComplexDenseOperations.add(entries, b));
+    }
+
+
+    /**
+     * Computes difference of this tensor with a dense complex tensor.
+     * @param b Dense complex tensor in difference.
+     * @return The element-wise difference of this tensor with {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
+     */
+    public CTensor sub(CTensor b) {
+        return new CTensor(shape, RealComplexDenseOperations.sub(entries, shape, b.entries, b.shape));
+    }
+
+
+    /**
+     * Computes difference of this tensor with a real sparse tensor.
+     * @param b Real sparse tensor in difference.
+     * @return The element-wise difference of this tensor with {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
+     */
+    public Tensor sub(CooTensor b) {
+        return RealDenseSparseTensorOperations.sub(this, b);
+    }
+
+
+    /**
+     * Computes difference of this tensor with a complex sparse tensor.
+     * @param b Complex sparse tensor in difference.
+     * @return The element-wise difference of this tensor with {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
+     */
+    public CTensor sub(CooCTensor b) {
+        return RealComplexDenseSparseOperations.sub(this, b);
+    }
+
+
+    /**
+     * Subtracts a complex-valued scalar from each entry of this tensor.
+     * @param b Scalar to subtract from each entry of this tensor.
+     * @return A tensor containing the difference of each entry in this tensor with {@code b}.
+     */
+    public CTensor sub(Complex128 b) {
+        return new CTensor(shape, RealComplexDenseOperations.sub(entries, b));
+    }
+
+
+    /**
+     * Computes the element-wise product of this tensor and a complex dense tensor.
+     * @param b Complex dense tensor in the element-wise product.
+     * @return The element-wise product of this tensor and {@code b}.
+     */
+    public CTensor elemMult(CTensor b) {
+        return new CTensor(
+                this.shape,
+                RealComplexDenseElemMult.dispatch(b.entries, b.shape, this.entries, this.shape)
+        );
+    }
+
+
+    /**
+     * Computes the element-wise product of this tensor and a real sparse tensor.
+     * @param b Real sparse tensor in the element-wise product.
+     * @return The element-wise product of this tensor and {@code b}.
+     */
+    public CooTensor elemMult(CooTensor b) {
+        return RealDenseSparseTensorOperations.elemMult(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise product of this tensor and a complex sparse tensor.
+     * @param b Complex sparse tensor in the element-wise product.
+     * @return The element-wise product of this tensor and {@code b}.
+     */
+    public CooCTensor elemMult(CooCTensor b) {
+        return RealComplexDenseSparseOperations.elemMult(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise quotient of this tensor and a complex dense tensor.
+     * @param b Complex dense tensor in the element-wise quotient.
+     * @return The element-wise quotient of this tensor and {@code b}.
+     */
+    public CTensor elemDiv(CTensor b) {
+        return new CTensor(
+                shape,
+                RealComplexDenseElemDiv.dispatch(entries, shape, b.entries, b.shape)
+        );
+    }
+
+
+    /**
+     * Computes the scalar multiplication of this tensor and a complex-valued scalar.
+     * @param b The complex-valued scalar in the tensor-scalar product.
+     * @return The tensor-scalar product of this tensor and {@code b}.
+     */
+    public CTensor mult(Complex128 b) {
+        return new CTensor(shape, ComplexOperations.scalMult(entries, b));
+    }
+
+
+    /**
+     * Computes the scalar division of this tensor and a complex-valued scalar.
+     * @param b The complex-valued scalar in the tensor-scalar quotient.
+     * @return The tensor scalar quotient of this tensor and {@code b}.
+     */
+    public CTensor div(Complex128 b) {
+        return new CTensor(shape, ComplexOperations.scalDiv(entries, b));
     }
 }

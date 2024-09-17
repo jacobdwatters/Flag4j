@@ -24,11 +24,11 @@
 
 package org.flag4j.operations.dense_sparse.csr.real_complex;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
-import org.flag4j.arrays_old.sparse.CsrMatrixOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
@@ -39,7 +39,7 @@ import java.util.function.UnaryOperator;
 
 /**
  * This class contains low-level operations_old which act on a real/complex dense and a complex/real
- * sparse {@link CsrCMatrixOld CSR matrix}.
+ * sparse {@link CsrCMatrix CSR matrix}.
  */
 public final class RealComplexCsrDenseOperations {
 
@@ -60,14 +60,14 @@ public final class RealComplexCsrDenseOperations {
      * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static CMatrixOld applyBinOpp(CsrCMatrixOld src1, MatrixOld src2,
-                                         BiFunction<CNumber, Double, CNumber> opp,
-                                         UnaryOperator<Double> uOpp) {
+    public static CMatrix applyBinOpp(CsrCMatrix src1, Matrix src2,
+                                      BiFunction<Complex128, Double, Complex128> opp,
+                                      UnaryOperator<Double> uOpp) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);  // Ensure both matrices are same shape.
 
-        CNumber[] dest;
-        if(uOpp == null) dest = ArrayUtils.copy2CNumber(src2.entries, null);
-        else dest = ArrayUtils.applyTransform(src2.entries, (Double a)->new CNumber(uOpp.apply(a)));
+        Complex128[] dest;
+        if(uOpp == null) dest = ArrayUtils.copy2Complex128(src2.entries, null);
+        else dest = ArrayUtils.applyTransform(src2.entries, (Double a)->new Complex128(uOpp.apply(a)));
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
             int start = src1.rowPointers[i];
@@ -77,14 +77,11 @@ public final class RealComplexCsrDenseOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-
-                dest[idx] = opp.apply(
-                        src1.entries[j],
-                        dest[idx].re);
+                dest[idx] = opp.apply(src1.entries[j], dest[idx].re);
             }
         }
 
-        return new CMatrixOld(src2.shape, dest);
+        return new CMatrix(src2.shape, dest);
     }
 
 
@@ -95,10 +92,10 @@ public final class RealComplexCsrDenseOperations {
      * @param opp Binary operator to apply element-wise to the two matrices.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static CMatrixOld applyBinOpp(MatrixOld src1, CsrCMatrixOld src2, BiFunction<Double, CNumber, CNumber> opp) {
+    public static CMatrix applyBinOpp(Matrix src1, CsrCMatrix src2, BiFunction<Double, Complex128, Complex128> opp) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
-        CNumber[] dest = ArrayUtils.copy2CNumber(src1.entries, null);
+        Complex128[] dest = ArrayUtils.copy2Complex128(src1.entries, null);
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -109,13 +106,11 @@ public final class RealComplexCsrDenseOperations {
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src2.colIndices[i];
 
-                dest[idx] = opp.apply(
-                        src1.entries[idx],
-                        src2.entries[j]);
+                dest[idx] = opp.apply(src1.entries[idx], src2.entries[j]);
             }
         }
 
-        return new CMatrixOld(src2.shape, dest);
+        return new CMatrix(src2.shape, dest);
     }
 
 
@@ -130,11 +125,11 @@ public final class RealComplexCsrDenseOperations {
      * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static CMatrixOld applyBinOpp(CsrMatrixOld src1, CMatrixOld src2,
-                                         BiFunction<Double, CNumber, CNumber> opp,
-                                         UnaryOperator<CNumber> uOpp) {
+    public static CMatrix applyBinOpp(CsrMatrix src1, CMatrix src2,
+                                      BiFunction<Double, Complex128, Complex128> opp,
+                                      UnaryOperator<Complex128> uOpp) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
-        CNumber[] dest;
+        Complex128[] dest;
 
         if(uOpp == null) dest = Arrays.copyOf(src2.entries, src2.entries.length);
         else dest = ArrayUtils.applyTransform(src2.entries, uOpp);
@@ -147,14 +142,11 @@ public final class RealComplexCsrDenseOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-
-                dest[idx] = opp.apply(
-                        src1.entries[j],
-                        dest[idx]);
+                dest[idx] = opp.apply(src1.entries[j], dest[idx]);
             }
         }
 
-        return new CMatrixOld(src2.shape, dest);
+        return new CMatrix(src2.shape, dest);
     }
 
 
@@ -165,9 +157,9 @@ public final class RealComplexCsrDenseOperations {
      * @param opp Binary operator to apply element-wise to the two matrices.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static CMatrixOld applyBinOpp(CMatrixOld src1, CsrMatrixOld src2, BiFunction<CNumber, Double, CNumber> opp) {
+    public static CMatrix applyBinOpp(CMatrix src1, CsrMatrix src2, BiFunction<Complex128, Double, Complex128> opp) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
-        CNumber[] dest = new CNumber[src2.entries.length];
+        Complex128[] dest = new Complex128[src2.entries.length];
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -177,14 +169,11 @@ public final class RealComplexCsrDenseOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src2.colIndices[i];
-
-                dest[idx] = opp.apply(
-                        src1.entries[idx],
-                        src2.entries[j]);
+                dest[idx] = opp.apply(src1.entries[idx], src2.entries[j]);
             }
         }
 
-        return new CMatrixOld(src2.shape, dest);
+        return new CMatrix(src2.shape, dest);
     }
 
 
@@ -196,12 +185,12 @@ public final class RealComplexCsrDenseOperations {
      * @param opp Operation to apply to the matrices.
      * @return The result of applying the operation element-wise to the matrices. Result is a sparse CSR matrix.
      */
-    public static CsrCMatrixOld applyBinOppToSparse(MatrixOld src1, CsrCMatrixOld src2, BiFunction<Double, CNumber, CNumber> opp) {
+    public static CsrCMatrix applyBinOppToSparse(Matrix src1, CsrCMatrix src2, BiFunction<Double, Complex128, Complex128> opp) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
         int[] rowPointers = src2.rowPointers.clone();
         int[] colIndices = src2.colIndices.clone();
-        CNumber[] entries = new CNumber[src2.entries.length];
+        Complex128[] entries = new Complex128[src2.entries.length];
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -210,12 +199,11 @@ public final class RealComplexCsrDenseOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src2.colIndices[j];
-
                 entries[idx] = opp.apply(src1.entries[idx], src2.entries[j]);
             }
         }
 
-        return new CsrCMatrixOld(src1.shape, entries, rowPointers, colIndices);
+        return new CsrCMatrix(src1.shape, entries, rowPointers, colIndices);
     }
 
 
@@ -227,13 +215,12 @@ public final class RealComplexCsrDenseOperations {
      * @param opp Operation to apply to the matrices.
      * @return The result of applying the operation element-wise to the matrices. Result is a sparse CSR matrix.
      */
-    public static CsrCMatrixOld applyBinOppToSparse(CMatrixOld src1, CsrMatrixOld src2, BiFunction<CNumber, Double, CNumber> opp) {
+    public static CsrCMatrix applyBinOppToSparse(CMatrix src1, CsrMatrix src2, BiFunction<Complex128, Double, Complex128> opp) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
         int[] rowPointers = src2.rowPointers.clone();
         int[] colIndices = src2.colIndices.clone();
-        CNumber[] entries = new CNumber[src2.entries.length];
-
+        Complex128[] entries = new Complex128[src2.entries.length];
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -242,41 +229,39 @@ public final class RealComplexCsrDenseOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src2.colIndices[j];
-
                 entries[idx] = opp.apply(src1.entries[idx], src2.entries[j]);
             }
         }
 
-        return new CsrCMatrixOld(src1.shape, entries, rowPointers, colIndices);
+        return new CsrCMatrix(src1.shape, entries, rowPointers, colIndices);
     }
 
 
     /**
      * Applies an element-wise binary operation to a real sparse and complex dense CSR matrix under the
-     * assumption that {@code opp.apply(0d, x) = 0d} where {@code x} is a {@link CNumber}.
+     * assumption that {@code opp.apply(0d, x) = 0d} where {@code x} is a {@link Complex128}.
      * @param src1 The first matrix in the operation.
      * @param src2 Second matrix in the operation.
      * @param opp Operation to apply to the matrices.
      * @return The result of applying the operation element-wise to the matrices. Result is a sparse CSR matrix.
      */
-    public static CsrCMatrixOld applyBinOppToSparse(CsrMatrixOld src1, CMatrixOld src2, BiFunction<Double, CNumber, CNumber> opp) {
+    public static CsrCMatrix applyBinOppToSparse(CsrMatrix src1, CMatrix src2, BiFunction<Double, Complex128, Complex128> opp) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
         int[] rowPointers = src1.rowPointers.clone();
         int[] colIndices = src1.colIndices.clone();
-        CNumber[] entries = new CNumber[src1.entries.length];
+        Complex128[] entries = new Complex128[src1.entries.length];
 
         for(int i=0; i<src1.numRows; i++) {
             int start = src1.rowPointers[i];
             int stop = src1.rowPointers[i+1];
             int src2RowOffset = i*src2.numCols;
 
-            for(int j=start; j<stop; j++) {
+            for(int j=start; j<stop; j++)
                 entries[j] = opp.apply(src1.entries[j], src2.entries[src2RowOffset + src1.colIndices[j]]);
-            }
         }
 
-        return new CsrCMatrixOld(src1.shape, entries, rowPointers, colIndices);
+        return new CsrCMatrix(src1.shape, entries, rowPointers, colIndices);
     }
 
 
@@ -291,10 +276,10 @@ public final class RealComplexCsrDenseOperations {
      * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static CMatrixOld applyBinOpp(CsrMatrixOld src1, CNumber b,
-                                         BiFunction<Double, CNumber, CNumber> opp,
-                                         UnaryOperator<CNumber> uOpp) {
-        CNumber[] dest = new CNumber[src1.totalEntries().intValueExact()];
+    public static CMatrix applyBinOpp(CsrMatrix src1, Complex128 b,
+                                         BiFunction<Double, Complex128, Complex128> opp,
+                                         UnaryOperator<Complex128> uOpp) {
+        Complex128[] dest = new Complex128[src1.totalEntries().intValueExact()];
         if(uOpp != null) b = uOpp.apply(b);  // Apply unary operator if specified.
         Arrays.fill(dest, b);
 
@@ -307,13 +292,10 @@ public final class RealComplexCsrDenseOperations {
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src1.colIndices[j];
 
-                dest[idx] = opp.apply(
-                        src1.entries[j],
-                        dest[idx]
-                );
+                dest[idx] = opp.apply(src1.entries[j], dest[idx]);
             }
         }
 
-        return new CMatrixOld(src1.shape, dest);
+        return new CMatrix(src1.shape, dest);
     }
 }

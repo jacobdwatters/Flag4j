@@ -24,8 +24,8 @@
 
 package org.flag4j.operations.dense_sparse.coo.complex;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ErrorMessages;
@@ -56,14 +56,14 @@ public final class ComplexDenseSparseMatrixMultiplication {
      * @param shape2 Shape of the sparse matrix.
      * @return The result of the matrix multiplication.
      */
-    public static CNumber[] standard(CNumber[] src1, Shape shape1, CNumber[] src2,
-                                     int[] rowIndices, int[] colIndices, Shape shape2) {
+    public static Complex128[] standard(Complex128[] src1, Shape shape1, Complex128[] src2,
+                                        int[] rowIndices, int[] colIndices, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
 
-        CNumber[] dest = new CNumber[rows1*cols2];
-        Arrays.fill(dest, CNumber.ZERO);
+        Complex128[] dest = new Complex128[rows1*cols2];
+        Arrays.fill(dest, Complex128.ZERO);
 
         int row, col;
 
@@ -95,13 +95,13 @@ public final class ComplexDenseSparseMatrixMultiplication {
      * @param shape2 Shape of the dense matrix.
      * @return The result of the matrix multiplication.
      */
-    public static CNumber[] standard(CNumber[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
-                                     CNumber[] src2, Shape shape2) {
+    public static Complex128[] standard(Complex128[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
+                                     Complex128[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
 
-        CNumber[] dest = new CNumber[rows1*cols2];
-        Arrays.fill(dest, CNumber.ZERO); // Initialize to zeros
+        Complex128[] dest = new Complex128[rows1*cols2];
+        Arrays.fill(dest, Complex128.ZERO); // Initialize to zeros
 
         for(int i=0; i<src1.length; i++) {
             int rowOffset = rowIndices[i]*cols2;
@@ -126,14 +126,14 @@ public final class ComplexDenseSparseMatrixMultiplication {
      * @param shape2 Shape of the sparse matrix.
      * @return The result of the matrix multiplication.
      */
-    public static CNumber[] concurrentStandard(CNumber[] src1, Shape shape1, CNumber[] src2,
+    public static Complex128[] concurrentStandard(Complex128[] src1, Shape shape1, Complex128[] src2,
                                               int[] rowIndices, int[] colIndices, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
 
-        CNumber[] dest = new CNumber[rows1*cols2];
-        Arrays.fill(dest, CNumber.ZERO); // Initialize to zeros
+        Complex128[] dest = new Complex128[rows1*cols2];
+        Arrays.fill(dest, Complex128.ZERO); // Initialize to zeros
 
         ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
@@ -143,7 +143,7 @@ public final class ComplexDenseSparseMatrixMultiplication {
                 for(int j=0; j<src2.length; j++) {
                     int row = rowIndices[j];
                     int col = colIndices[j];
-                    CNumber product = src1[i*cols1 + row].mult(src2[j]);
+                    Complex128 product = src1[i*cols1 + row].mult(src2[j]);
 
                     synchronized (dest) {
                         dest[rowOffset + col] = dest[rowOffset + col].add(product);
@@ -168,13 +168,13 @@ public final class ComplexDenseSparseMatrixMultiplication {
      * @param shape2 Shape of the dense matrix.
      * @return The result of the matrix multiplication.
      */
-    public static CNumber[] concurrentStandard(CNumber[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
-                                              CNumber[] src2, Shape shape2) {
+    public static Complex128[] concurrentStandard(Complex128[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
+                                              Complex128[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
 
-        CNumber[] dest = new CNumber[rows1*cols2];
-        Arrays.fill(dest, CNumber.ZERO); // Initialize to zeros
+        Complex128[] dest = new Complex128[rows1*cols2];
+        Arrays.fill(dest, Complex128.ZERO); // Initialize to zeros
 
         ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
@@ -183,7 +183,7 @@ public final class ComplexDenseSparseMatrixMultiplication {
                 int rowOffset = row*cols2;
 
                 for(int j=0; j<cols2; j++) {
-                    CNumber product = src1[i].mult(src2[col*cols2 + j]);
+                    Complex128 product = src1[i].mult(src2[col*cols2 + j]);
 
                     synchronized (dest) {
                         dest[rowOffset + j] = dest[rowOffset + j].add(product);
@@ -206,17 +206,17 @@ public final class ComplexDenseSparseMatrixMultiplication {
      * @param indices Indices of non-zero entries in sparse vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static CNumber[] standardVector(CNumber[] src1, Shape shape1, CNumber[] src2, int[] indices) {
+    public static Complex128[] standardVector(Complex128[] src1, Shape shape1, Complex128[] src2, int[] indices) {
         int denseRows = shape1.get(0);
         int denseCols = shape1.get(1);
         int nonZeros = src2.length;
 
-        CNumber[] dest = new CNumber[denseRows];
-        Arrays.fill(dest, CNumber.ZERO); // Initialize to zeros
+        Complex128[] dest = new Complex128[denseRows];
+        Arrays.fill(dest, Complex128.ZERO); // Initialize to zeros
 
         for(int i=0; i<denseRows; i++) {
             int rowOffset = i*denseCols;
-            CNumber val = dest[i];
+            Complex128 val = dest[i];
 
             for(int j=0; j<nonZeros; j++) {
                 val = val.add(src1[rowOffset + indices[j]].mult(src2[j]));
@@ -239,11 +239,11 @@ public final class ComplexDenseSparseMatrixMultiplication {
      * @param shape2 Shape of the dense vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static CNumber[] standardVector(CNumber[] src1, int[] rowIndices, int[] colIndices,
-                                          Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] standardVector(Complex128[] src1, int[] rowIndices, int[] colIndices,
+                                          Shape shape1, Complex128[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
-        CNumber[] dest = new CNumber[rows1];
-        Arrays.fill(dest, CNumber.ZERO); // Initialize to zeros
+        Complex128[] dest = new Complex128[rows1];
+        Arrays.fill(dest, Complex128.ZERO); // Initialize to zeros
 
         int row, col;
 
@@ -266,22 +266,22 @@ public final class ComplexDenseSparseMatrixMultiplication {
      * @param indices Indices of non-zero entries in sparse vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static CNumber[] blockedVector(CNumber[] src1, Shape shape1, CNumber[] src2, int[] indices) {
+    public static Complex128[] blockedVector(Complex128[] src1, Shape shape1, Complex128[] src2, int[] indices) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
         int bsize = Configurations.getBlockSize(); // Get the block size to use.
 
-        CNumber[] dest = new CNumber[rows1];
-        Arrays.fill(dest, CNumber.ZERO);
+        Complex128[] dest = new Complex128[rows1];
+        Arrays.fill(dest, Complex128.ZERO);
 
         // Blocked matrix-vector multiply
         for(int ii=0; ii<rows1; ii += bsize) {
             for(int jj=0; jj<rows2; jj += bsize) {
                 // Multiply the current blocks
                 for(int i=ii; i<ii+bsize && i<rows1; i++) {
-                    CNumber val = dest[i];
+                    Complex128 val = dest[i];
                     int src1RowOffset = i*cols1;
 
                     for(int j=jj; j<jj+bsize && j<rows2; j++) {
@@ -305,17 +305,17 @@ public final class ComplexDenseSparseMatrixMultiplication {
      * @param indices Indices of non-zero entries in sparse vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static CNumber[] concurrentStandardVector(CNumber[] src1, Shape shape1, CNumber[] src2, int[] indices) {
+    public static Complex128[] concurrentStandardVector(Complex128[] src1, Shape shape1, Complex128[] src2, int[] indices) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
-        CNumber[] dest = new CNumber[rows1];
-        Arrays.fill(dest, CNumber.ZERO); // Initialize to zeros
+        Complex128[] dest = new Complex128[rows1];
+        Arrays.fill(dest, Complex128.ZERO); // Initialize to zeros
 
         ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
-                CNumber sum = dest[i];
+                Complex128 sum = dest[i];
 
                 for(int j=0; j<rows2; j++) {
                     int k = indices[j];
@@ -340,18 +340,18 @@ public final class ComplexDenseSparseMatrixMultiplication {
      * @param shape2 Shape of the dense vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static CNumber[] concurrentStandardVector(CNumber[] src1, int[] rowIndices, int[] colIndices,
-                                                    Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] concurrentStandardVector(Complex128[] src1, int[] rowIndices, int[] colIndices,
+                                                    Shape shape1, Complex128[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
-        CNumber[] dest = new CNumber[rows1];
-        Arrays.fill(dest, CNumber.ZERO); // Initialize to zeros
+        Complex128[] dest = new Complex128[rows1];
+        Arrays.fill(dest, Complex128.ZERO); // Initialize to zeros
 
         ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
                 int row = rowIndices[i];
                 int col = colIndices[i];
 
-                CNumber product = src1[i].mult(src2[col]);
+                Complex128 product = src1[i].mult(src2[col]);
 
                 synchronized (dest) {
                     dest[row] = dest[row].add(product);
@@ -371,31 +371,30 @@ public final class ComplexDenseSparseMatrixMultiplication {
      * @param indices Indices of non-zero entries in sparse vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static CNumber[] concurrentBlockedVector(CNumber[] src1, Shape shape1, CNumber[] src2, int[] indices) {
+    public static Complex128[] concurrentBlockedVector(Complex128[] src1, Shape shape1, Complex128[] src2, int[] indices) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
         final int bsize = Configurations.getBlockSize(); // Get the block size to use.
 
-        CNumber[] dest = new CNumber[rows1];
-        Arrays.fill(dest, CNumber.ZERO); // Initialize to zeros.
+        Complex128[] dest = new Complex128[rows1];
+        Arrays.fill(dest, Complex128.ZERO); // Initialize to zeros.
 
         // Blocked matrix-vector multiply.
         ThreadManager.concurrentBlockedOperation(rows1, bsize, (startIdx, endIdx) -> {
             for(int ii=startIdx; ii<endIdx; ii += bsize) {
                 for(int jj=0; jj<rows2; jj += bsize) {
+
                     // Multiply the current blocks
                     for(int i=ii; i<ii+bsize && i<rows1; i++) {
-                        CNumber val = dest[i];
+                        Complex128 val = dest[i];
                         int src1RowOffset = i*cols1;
 
-                        for(int j=jj; j<jj+bsize && j<rows2; j++) {
-                            int k = indices[j];
-                            val = val.add(src1[src1RowOffset + k].mult(src2[j]));
-                        }
+                        for(int j=jj; j<jj+bsize && j<rows2; j++)
+                            val = val.add(src1[src1RowOffset + indices[j]].mult(src2[j]));
 
-                        dest[i] = val; // Update desitination entry.
+                        dest[i] = val; // Update destination entry.
                     }
                 }
             }

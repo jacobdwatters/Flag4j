@@ -25,8 +25,8 @@
 package org.flag4j.operations.dense.complex;
 
 
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ErrorMessages;
@@ -56,13 +56,13 @@ public final class ComplexDenseMatrixMultTranspose {
      * @param shape2 Shape of the second matrix.
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
-    public static CNumber[] multTranspose(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] multTranspose(Complex128[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
 
-        CNumber[] dest = new CNumber[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.
-        Arrays.fill(dest, CNumber.ZERO);
+        Complex128[] dest = new Complex128[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.
+        Arrays.fill(dest, Complex128.ZERO);
 
         int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
 
@@ -75,7 +75,7 @@ public final class ComplexDenseMatrixMultTranspose {
                 src1Index = src1IndexStart;
                 src2Index = j*cols2;
                 destIndex = destIndexStart + j;
-                CNumber sum = dest[destIndex];
+                Complex128 sum = dest[destIndex];
 
                 while(src1Index<end) {
                     sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));
@@ -98,13 +98,13 @@ public final class ComplexDenseMatrixMultTranspose {
      * @param shape2 Shape of the second matrix.
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
-    public static CNumber[] multTransposeBlocked(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] multTransposeBlocked(Complex128[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
 
-        CNumber[] dest = new CNumber[rows1*rows2];
-        Arrays.fill(dest, CNumber.ZERO);
+        Complex128[] dest = new Complex128[rows1*rows2];
+        Arrays.fill(dest, Complex128.ZERO);
 
         int blockSize = Configurations.getBlockSize();
         int iBound, jBound, kBound;
@@ -130,7 +130,7 @@ public final class ComplexDenseMatrixMultTranspose {
                             destIndex = destStart + j;
                             src1Index = src1Start;
                             src2Index = j*cols2 + kk;
-                            CNumber sum = dest[destIndex];
+                            Complex128 sum = dest[destIndex];
 
                             while(src1Index<end) {
                                 sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));
@@ -157,13 +157,13 @@ public final class ComplexDenseMatrixMultTranspose {
      * @param shape2 Shape of the second matrix.
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
-    public static CNumber[] multTransposeConcurrent(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] multTransposeConcurrent(Complex128[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
 
-        CNumber[] dest = new CNumber[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.
-        Arrays.fill(dest, CNumber.ZERO);
+        Complex128[] dest = new Complex128[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.
+        Arrays.fill(dest, Complex128.ZERO);
 
         ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
@@ -175,7 +175,7 @@ public final class ComplexDenseMatrixMultTranspose {
                     int src1Index = src1IndexStart;
                     int src2Index = j*cols2;
                     int destIndex = destIndexStart + j;
-                    CNumber sum = dest[destIndex];
+                    Complex128 sum = dest[destIndex];
 
                     while(src1Index<end) {
                         sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));
@@ -199,13 +199,13 @@ public final class ComplexDenseMatrixMultTranspose {
      * @param shape2 Shape of the second matrix.
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
-    public static CNumber[] multTransposeBlockedConcurrent(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] multTransposeBlockedConcurrent(Complex128[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
 
-        CNumber[] dest = new CNumber[rows1*rows2];
-        Arrays.fill(dest, CNumber.ZERO);
+        Complex128[] dest = new Complex128[rows1*rows2];
+        Arrays.fill(dest, Complex128.ZERO);
 
         int blockSize = Configurations.getBlockSize();
 
@@ -229,7 +229,7 @@ public final class ComplexDenseMatrixMultTranspose {
                                 int destIndex = destStart + j;
                                 int src1Index = src1Start;
                                 int src2Index = j*cols2 + kk;
-                                CNumber sum = dest[destIndex];
+                                Complex128 sum = dest[destIndex];
 
                                 while(src1Index<end) {
                                     sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));

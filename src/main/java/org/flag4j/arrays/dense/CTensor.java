@@ -29,7 +29,14 @@ import org.flag4j.algebraic_structures.fields.Complex64;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.DenseFieldTensorBase;
 import org.flag4j.arrays.sparse.CooCTensor;
+import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.io.parsing.ComplexNumberParser;
+import org.flag4j.operations.dense.complex.ComplexDenseElemMult;
+import org.flag4j.operations.dense.complex.ComplexDenseOperations;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
+import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseOperations;
+import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -104,9 +111,21 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
      */
     public CTensor(Shape shape, Complex64 fillValue) {
         super(shape, new Complex128[shape.totalEntries().intValueExact()]);
-        Complex128 wrappedFill = new Complex128(fillValue);
         if(entries.length == 0 || entries[0] == null) setZeroElement(Complex128.ZERO);
-        Arrays.fill(entries, wrappedFill);
+        Arrays.fill(entries, new Complex128(fillValue));
+    }
+
+
+    /**
+     * Creates a tensor with the specified shape and filled with {@code fillValue}.
+     *
+     * @param shape Shape of this tensor.
+     * @param fillValue Value to fill this tensor with.
+     */
+    public CTensor(Shape shape, double fillValue) {
+        super(shape, new Complex128[shape.totalEntries().intValueExact()]);
+        if(entries.length == 0 || entries[0] == null) setZeroElement(Complex128.ZERO);
+        Arrays.fill(entries, new Complex128(fillValue));
     }
 
 
@@ -210,5 +229,127 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
         hash = 31*hash + Arrays.hashCode(entries);
 
         return hash;
+    }
+
+
+    /**
+     * Sums this tensor with a dense real tensor.
+     * @param b Dense real tensor in sum.
+     * @return The element-wise sum of this tensor with {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
+     */
+    public CTensor add(Tensor b) {
+        return new CTensor(shape, RealComplexDenseOperations.add(entries, shape, b.entries, b.shape));
+    }
+
+
+    /**
+     * Sums this tensor with a real sparse tensor.
+     * @param b Real sparse tensor in sum.
+     * @return The element-wise sum of this tensor with {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
+     */
+    public CTensor add(CooTensor b) {
+        return RealComplexDenseSparseOperations.add(this, b);
+    }
+
+
+    /**
+     * Sums this tensor with a complex sparse tensor.
+     * @param b Complex sparse tensor in sum.
+     * @return The element-wise sum of this tensor with {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
+     */
+    public CTensor add(CooCTensor b) {
+        return ComplexDenseSparseOperations.add(this, b);
+    }
+
+
+    /**
+     * Adds a complex-valued scalar to each entry of this tensor.
+     * @param b Scalar to add to each entry of this tensor.
+     * @return Tensor containing sum of all entries of this tensor with {@code b}.
+     */
+    public CTensor add(Complex128 b) {
+        return new CTensor(shape, ComplexDenseOperations.add(entries, b));
+    }
+
+
+    /**
+     * Computes difference of this tensor with a dense real tensor.
+     * @param b Dense real tensor in difference.
+     * @return The element-wise difference of this tensor with {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
+     */
+    public CTensor sub(Tensor b) {
+        return new CTensor(shape, RealComplexDenseOperations.sub(entries, shape, b.entries, b.shape));
+    }
+
+
+    /**
+     * Computes difference of this tensor with a real sparse tensor.
+     * @param b Real sparse tensor in difference.
+     * @return The element-wise difference of this tensor with {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
+     */
+    public CTensor sub(CooTensor b) {
+        return RealComplexDenseSparseOperations.sub(this, b);
+    }
+
+
+    /**
+     * Computes difference of this tensor with a complex sparse tensor.
+     * @param b Complex sparse tensor in difference.
+     * @return The element-wise difference of this tensor with {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
+     */
+    public CTensor sub(CooCTensor b) {
+        return ComplexDenseSparseOperations.sub(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise product of this tensor and a complex dense tensor.
+     * @param b Complex dense tensor in the element-wise product.
+     * @return The element-wise product of this tensor and {@code b}.
+     */
+    public CTensor elemMult(CTensor b) {
+        return new CTensor(
+                shape,
+                ComplexDenseElemMult.dispatch(b.entries, b.shape, entries, shape)
+        );
+    }
+
+
+    /**
+     * Computes the element-wise product of this tensor and a real sparse tensor.
+     * @param b Real sparse tensor in the element-wise product.
+     * @return The element-wise product of this tensor and {@code b}.
+     */
+    public CooCTensor elemMult(CooTensor b) {
+        return RealComplexDenseSparseOperations.elemMult(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise product of this tensor and a complex sparse tensor.
+     * @param b Complex sparse tensor in the element-wise product.
+     * @return The element-wise product of this tensor and {@code b}.
+     */
+    public CooCTensor elemMult(CooCTensor b) {
+        return ComplexDenseSparseOperations.elemMult(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise quotient of this tensor and a complex dense tensor.
+     * @param b Complex dense tensor in the element-wise quotient.
+     * @return The element-wise quotient of this tensor and {@code b}.
+     */
+    public CTensor elemDiv(Tensor b) {
+        return new CTensor(
+                shape,
+                RealComplexDenseElemDiv.dispatch(entries, shape, b.entries, b.shape)
+        );
     }
 }

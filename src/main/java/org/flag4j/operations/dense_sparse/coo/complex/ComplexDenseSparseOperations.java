@@ -25,15 +25,15 @@
 package org.flag4j.operations.dense_sparse.coo.complex;
 
 
-import org.flag4j.arrays_old.dense.CTensorOld;
-import org.flag4j.arrays_old.sparse.CooCTensorOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
 /**
- * This class contains methods to apply common binary operations_old to a complex dense/sparse matrix and to a complex sparse/dense matrix.
+ * This class contains methods to apply common binary operations to a complex dense/sparse matrix and to a complex sparse/dense matrix.
  */
 public class ComplexDenseSparseOperations {
 
@@ -49,12 +49,11 @@ public class ComplexDenseSparseOperations {
      * @param src2 Complex sparse tensor.
      * @return The result of the element-wise subtraction.
      */
-    public static CTensorOld add(CTensorOld src1, CooCTensorOld src2) {
+    public static CTensor add(CTensor src1, CooCTensor src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        CTensor dest = src1.copy();
 
-        CTensorOld dest = new CTensorOld(src1);
-
-        for(int i=0; i<src2.nonZeroEntries(); i++) {
+        for(int i=0, size=src2.nnz; i<size; i++) {
             dest.entries[src2.shape.entriesIndex(src2.indices[i])] =
                     dest.entries[src2.shape.entriesIndex(src2.indices[i])].add(src2.entries[i]);
         }
@@ -69,10 +68,10 @@ public class ComplexDenseSparseOperations {
      * @param src2 Complex sparse tensor.
      * @return The result of the element-wise addition.
      */
-    public static void addEq(CTensorOld src1, CooCTensorOld src2) {
+    public static void addEq(CTensor src1, CooCTensor src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
-        for(int i=0; i<src2.nonZeroEntries(); i++) {
+        for(int i=0, size=src2.nnz; i<size; i++) {
             src1.entries[src2.shape.entriesIndex(src2.indices[i])] =
                     src1.entries[src2.shape.entriesIndex(src2.indices[i])].add(src2.entries[i]);
         }
@@ -85,11 +84,11 @@ public class ComplexDenseSparseOperations {
      * @param src2 Complex sparse tensor.
      * @return The result of the element-wise tensor subtraction.
      */
-    public static CTensorOld sub(CTensorOld src1, CooCTensorOld src2) {
+    public static CTensor sub(CTensor src1, CooCTensor src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-        CTensorOld dest = new CTensorOld(src1);
+        CTensor dest = src1.copy();
 
-        for(int i=0; i<src2.nonZeroEntries(); i++) {
+        for(int i=0, size=src2.nnz; i<size; i++) {
             dest.entries[src2.shape.entriesIndex(src2.indices[i])] =
                     dest.entries[src2.shape.entriesIndex(src2.indices[i])].sub(src2.entries[i]);
         }
@@ -105,12 +104,11 @@ public class ComplexDenseSparseOperations {
      * @return The result of the tensor addition.
      * @throws IllegalArgumentException If the tensors do not have the same shape.t
      */
-    public static CTensorOld sub(CooCTensorOld src1, CTensorOld src2) {
+    public static CTensor sub(CooCTensor src1, CTensor src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        CTensor dest = src2.mult(-1);
 
-        CTensorOld dest = src2.mult(-1);
-
-        for(int i=0; i<src1.nnz; i++) {
+        for(int i=0, size=src1.nnz; i<size; i++) {
             dest.entries[src1.shape.entriesIndex(src1.indices[i])] =
                     dest.entries[src1.shape.entriesIndex(src1.indices[i])].add(src1.entries[i]);
         }
@@ -125,10 +123,10 @@ public class ComplexDenseSparseOperations {
      * @param src2 Complex sparse tensor.
      * @return The result of the element-wise subtraction.
      */
-    public static void subEq(CTensorOld src1, CooCTensorOld src2) {
+    public static void subEq(CTensor src1, CooCTensor src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
 
-        for(int i=0; i<src2.nonZeroEntries(); i++) {
+        for(int i=0, size=src2.nnz; i<size; i++) {
             src1.entries[src2.shape.entriesIndex(src2.indices[i])] =
                     src1.entries[src2.shape.entriesIndex(src2.indices[i])].sub(src2.entries[i]);
         }
@@ -141,18 +139,17 @@ public class ComplexDenseSparseOperations {
      * @param src2 Complex sparse tensor.
      * @return THe result of the element-wise tensor multiplication.
      */
-    public static CooCTensorOld elemMult(CTensorOld src1, CooCTensorOld src2) {
+    public static CooCTensor elemMult(CTensor src1, CooCTensor src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-
-        CNumber[] destEntries = new CNumber[src2.nonZeroEntries()];
+        Complex128[] destEntries = new Complex128[src2.nnz];
         int[][] indices = new int[src2.indices.length][src2.indices[0].length];
         ArrayUtils.deepCopy(src2.indices, indices);
 
-        for(int i=0; i<destEntries.length; i++) {
+        for(int i=0, size=destEntries.length; i<size; i++) {
             destEntries[i] = src1.entries[src2.shape.entriesIndex(src2.indices[i])].mult(src2.entries[i]);
         }
 
-        return new CooCTensorOld(src2.shape, destEntries, indices);
+        return new CooCTensor(src2.shape, destEntries, indices);
     }
 
 
@@ -163,10 +160,10 @@ public class ComplexDenseSparseOperations {
      * @return A dense tensor which is the sum of {@code src1} and {@code b} such that {@code b} is added to each element of {@code
      * src1}.
      */
-    public static CTensorOld add(CooCTensorOld src1, CNumber b) {
-        CTensorOld sum = new CTensorOld(src1.shape, b);
+    public static CTensor add(CooCTensor src1, Complex128 b) {
+        CTensor sum = new CTensor(src1.shape, b);
 
-        for(int i=0; i<src1.nnz; i++) {
+        for(int i=0, size=src1.nnz; i<size; i++) {
             sum.entries[src1.shape.entriesIndex(src1.indices[i])] =
                     sum.entries[src1.shape.entriesIndex(src1.indices[i])].add(src1.entries[i]);
         }
@@ -182,10 +179,10 @@ public class ComplexDenseSparseOperations {
      * @return A dense tensor which is the sum of {@code src1} and {@code b} such that {@code b} is added to each element of {@code
      * src1}.
      */
-    public static CTensorOld sub(CooCTensorOld src1, CNumber b) {
-        CTensorOld sum = new CTensorOld(src1.shape, b);
+    public static CTensor sub(CooCTensor src1, Complex128 b) {
+        CTensor sum = new CTensor(src1.shape, b);
 
-        for(int i=0; i<src1.nnz; i++) {
+        for(int i=0, size=src1.nnz; i<size; i++) {
             int idx = src1.shape.entriesIndex(src1.indices[i]);
             sum.entries[idx].add(src1.entries[i]);
         }
@@ -201,19 +198,17 @@ public class ComplexDenseSparseOperations {
      * @return The result of element-wise division.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static CooCTensorOld elemDiv(CooCTensorOld src1, CTensorOld src2) {
+    public static CooCTensor elemDiv(CooCTensor src1, CTensor src2) {
         ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-
-        int index;
-        CNumber[] destEntries = new CNumber[src1.nonZeroEntries()];
+        Complex128[] destEntries = new Complex128[src1.nnz];
         int[][] destIndices = new int[src1.indices.length][src1.indices[0].length];
         ArrayUtils.deepCopy(src1.indices, destIndices);
 
-        for(int i=0; i<destEntries.length; i++) {
-            index = src2.shape.entriesIndex(src1.indices[i]); // Get index of non-zero entry.
+        for(int i=0, size=destEntries.length; i<size; i++) {
+            int index = src2.shape.entriesIndex(src1.indices[i]); // Get index of non-zero entry.
             destEntries[i] = src1.entries[index].div(src2.entries[i]);
         }
 
-        return new CooCTensorOld(src2.shape, destEntries, destIndices);
+        return new CooCTensor(src2.shape, destEntries, destIndices);
     }
 }

@@ -24,13 +24,11 @@
 
 package org.flag4j.operations.dense_sparse.csr.complex;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
-import org.flag4j.arrays_old.sparse.CsrMatrixOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ParameterChecks;
 
@@ -52,19 +50,19 @@ public final class ComplexCsrDenseMatrixMultiplication {
     /**
      * Computes the matrix multiplication between a complex sparse CSR matrix and a complex dense matrix.
      * WARNING: If the first matrix is very large but not very sparse, this method may be slower than converting the
-     * first matrix to a {@link CsrMatrixOld#toDense() dense} matrix and calling {@link MatrixOld#mult(CMatrixOld)}.
+     * first matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link Matrix#mult(CMatrix)}.
      * @param src1 First matrix in the matrix multiplication.
      * @param src2 Second matrix in the matrix multiplication.
      * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} does not have the same number of columns as {@code src2} has
      * rows.
      */
-    public static CMatrixOld standard(CsrCMatrixOld src1, CMatrixOld src2) {
+    public static CMatrix standard(CsrCMatrix src1, CMatrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
 
-        CNumber[] destEntries = new CNumber[src1.numRows*src2.numCols];
-        Arrays.fill(destEntries, CNumber.ZERO);
+        Complex128[] destEntries = new Complex128[src1.numRows*src2.numCols];
+        Arrays.fill(destEntries, Complex128.ZERO);
         int rows1 = src1.numRows;
         int cols2 = src2.numCols;
 
@@ -76,7 +74,7 @@ public final class ComplexCsrDenseMatrixMultiplication {
 
             for(int aIndex=start; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                CNumber aVal = src1.entries[aIndex];
+                Complex128 aVal = src1.entries[aIndex];
                 int src2Idx = aCol*src2.numCols;
                 int destIdx = rowOffset;
 
@@ -86,25 +84,25 @@ public final class ComplexCsrDenseMatrixMultiplication {
             }
         }
 
-        return new CMatrixOld(new Shape(src1.numRows, src2.numCols), destEntries);
+        return new CMatrix(new Shape(src1.numRows, src2.numCols), destEntries);
     }
 
 
     /**
      * Computes the matrix multiplication between a complex dense matrix and a complex sparse CSR matrix.
      * WARNING: If the second matrix is very large but not very sparse, this method may be slower than converting the
-     * second matrix to a {@link CsrMatrixOld#toDense() dense} matrix and calling {@link MatrixOld#mult(MatrixOld)}.
+     * second matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link Matrix#mult(Matrix)}.
      * @param src1 First matrix in the matrix multiplication (dense matrix).
      * @param src2 Second matrix in the matrix multiplication (sparse CSR matrix).
      * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} does not have the same number of columns as {@code src2} has
      * rows.
      */
-    public static CMatrixOld standard(CMatrixOld src1, CsrCMatrixOld src2) {
+    public static CMatrix standard(CMatrix src1, CsrCMatrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
 
-        CNumber[] destEntries = new CNumber[src1.numRows * src2.numCols];
+        Complex128[] destEntries = new Complex128[src1.numRows * src2.numCols];
         int rows1 = src1.numRows;
         int cols1 = src1.numCols;
         int cols2 = src2.numCols;
@@ -114,36 +112,36 @@ public final class ComplexCsrDenseMatrixMultiplication {
             int src1RowOffset = i*cols1;
 
             for (int j = 0; j < cols1; j++) {
-                CNumber src1Val = src1.entries[src1RowOffset + j];
+                Complex128 src1Val = src1.entries[src1RowOffset + j];
                 int start = src2.rowPointers[j];
                 int stop = src2.rowPointers[j + 1];
 
                 for (int aIndex = start; aIndex < stop; aIndex++) {
                     int aCol = src2.colIndices[aIndex];
-                    CNumber aVal = src2.entries[aIndex];
+                    Complex128 aVal = src2.entries[aIndex];
                     destEntries[rowOffset + aCol] = destEntries[rowOffset + aCol].add(src1Val.mult(aVal));
                 }
             }
         }
 
-        return new CMatrixOld(new Shape(rows1, cols2), destEntries);
+        return new CMatrix(new Shape(rows1, cols2), destEntries);
     }
 
 
     /**
      * Computes the matrix-vector multiplication between a real sparse CSR matrix and a complex dense vector.
      * @param src1 The matrix in the multiplication.
-     * @param src2 VectorOld in multiplication. Treated as a column vector.
+     * @param src2 Vector in multiplication. Treated as a column vector.
      * @return The result of the matrix-vector multiplication.
      * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the length of
      * {@code src2}.
      */
-    public static CVectorOld standardVector(CsrCMatrixOld src1, CVectorOld src2) {
+    public static CVector standardVector(CsrCMatrix src1, CVector src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
         ParameterChecks.ensureEquals(src1.numCols, src2.size);
 
-        CNumber[] destEntries = new CNumber[src1.numRows];
-        Arrays.fill(destEntries, CNumber.ZERO);
+        Complex128[] destEntries = new Complex128[src1.numRows];
+        Arrays.fill(destEntries, Complex128.ZERO);
         int rows1 = src1.numRows;
 
         for (int i = 0; i < rows1; i++) {
@@ -152,12 +150,10 @@ public final class ComplexCsrDenseMatrixMultiplication {
 
             for (int aIndex = start; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                CNumber aVal = src1.entries[aIndex];
-
-                destEntries[i] = destEntries[i].add(src2.entries[aCol].mult(aVal));
+                destEntries[i] = destEntries[i].add(src2.entries[aCol].mult(src1.entries[aIndex]));
             }
         }
 
-        return new CVectorOld(destEntries);
+        return new CVector(destEntries);
     }
 }
