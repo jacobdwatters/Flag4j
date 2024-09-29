@@ -24,16 +24,16 @@
 
 package org.flag4j.linalg;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.sparse.CooCVectorOld;
-import org.flag4j.arrays_old.sparse.CooVectorOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.arrays.sparse.CooCVector;
+import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.operations.common.complex.AggregateComplex;
 import org.flag4j.operations.common.field_ops.CompareField;
-import org.flag4j.operations_old.common.complex.AggregateComplex;
-import org.flag4j.operations_old.common.real.AggregateReal;
+import org.flag4j.operations.common.real.AggregateReal;
 import org.flag4j.util.ErrorMessages;
 
 
@@ -50,7 +50,7 @@ public final class VectorNorms {
     /**
      * Computes the 2-norm of this vector. This is equivalent to {@link #norm(Vector, double) norm(src, 2)}.
      *
-     * @param src VectorOld to compute norm of.
+     * @param src Vector to compute norm of.
      * @return the 2-norm of this vector.
      */
     public static double norm(Vector src) {
@@ -61,7 +61,7 @@ public final class VectorNorms {
     /**
      * Computes the p-norm of this vector.
      *
-     * @param src VectorOld to compute norm of.
+     * @param src Vector to compute norm of.
      * @param p The p value in the p-norm. <br>
      *          - If p is inf, then this method computes the maximum/infinite norm.
      * @return The p-norm of this vector.
@@ -75,10 +75,10 @@ public final class VectorNorms {
     /**
      * Computes the 2-norm of this vector. This is equivalent to {@link #norm(Vector, double) norm(2)}.
      *
-     * @param src VectorOld to compute norm of.
+     * @param src Vector to compute norm of.
      * @return the 2-norm of this vector.
      */
-    public static double norm(CooVectorOld src) {
+    public static double norm(CooVector src) {
         return norm(src.entries);
     }
 
@@ -86,24 +86,24 @@ public final class VectorNorms {
     /**
      * Computes the p-norm of this vector.
      *
-     * @param src VectorOld to compute norm of.
+     * @param src Vector to compute norm of.
      * @param p The p value in the p-norm. <br>
      *          - If p is inf, then this method computes the maximum/infinite norm.
      * @return The p-norm of this vector.
      * @throws IllegalArgumentException If p is less than 1.
      */
-    public static double norm(CooVectorOld src, double p) {
+    public static double norm(CooVector src, double p) {
         return norm(src.entries, p);
     }
 
 
     /**
-     * Computes the 2-norm of this vector. This is equivalent to {@link #norm(CVectorOld, double) norm(2)}.
+     * Computes the 2-norm of this vector. This is equivalent to {@link #norm(CVector, double) norm(2)}.
      *
      * @return the 2-norm of this vector.
      */
     @Deprecated
-    public static double norm(CVectorOld src) {
+    public static double norm(CVector src) {
         return VectorNorms.norm(src.entries);
     }
 
@@ -117,13 +117,13 @@ public final class VectorNorms {
      * @return The p-norm of this vector.
      */
     @Deprecated
-    public static double norm(CVectorOld src, double p) {
+    public static double norm(CVector src, double p) {
         return VectorNorms.norm(src.entries, p);
     }
 
 
     /**
-     * Computes the 2-norm of this vector. This is equivalent to {@link #norm(CVectorOld, double) norm(2)}.
+     * Computes the 2-norm of this vector. This is equivalent to {@link #norm(CVector, double) norm(2)}.
      *
      * @return the 2-norm of this vector.
      */
@@ -149,12 +149,12 @@ public final class VectorNorms {
 
 
     /**
-     * Computes the 2-norm of this vector. This is equivalent to {@link #norm(CooCVectorOld, double) norm(src, 2)}.
+     * Computes the 2-norm of this vector. This is equivalent to {@link #norm(CooCVector, double) norm(src, 2)}.
      *
-     * @param src VectorOld to compute norm of.
+     * @param src Vector to compute norm of.
      * @return the 2-norm of this vector.
      */
-    public static double norm(CooCVectorOld src) {
+    public static double norm(CooCVector src) {
         return VectorNorms.norm(src.entries);
     }
 
@@ -162,13 +162,13 @@ public final class VectorNorms {
     /**
      * Computes the p-norm of this vector.
      *
-     * @param src VectorOld to compute norm of.
+     * @param src Vector to compute norm of.
      * @param p The p value in the p-norm. <br>
      *          - If p is inf, then this method computes the maximum/infinite norm.
      * @return The p-norm of this vector.
      * @throws IllegalArgumentException If p is less than 1.
      */
-    public static double norm(CooCVectorOld src, double p) {
+    public static double norm(CooCVector src, double p) {
         return VectorNorms.norm(src.entries, p);
     }
 
@@ -178,7 +178,7 @@ public final class VectorNorms {
      * @param src The vector to compute the norm of.
      * @return The infinity norm of the source vector.
      */
-    public static double infNorm(CooVectorOld src) {
+    public static double infNorm(CooVector src) {
         return src.maxAbs();
     }
 
@@ -188,7 +188,7 @@ public final class VectorNorms {
      * @param src The vector to compute the norm of.
      * @return The infinity norm of the source vector.
      */
-    public static double infNorm(CooCVectorOld src) {
+    public static double infNorm(CooCVector src) {
         return src.maxAbs();
     }
 
@@ -209,7 +209,7 @@ public final class VectorNorms {
      * @return The infinity norm of the source vector.
      */
     @Deprecated
-    public static double infNorm(CVectorOld src) {
+    public static double infNorm(CVector src) {
         return src.maxAbs();
     }
 
@@ -251,7 +251,7 @@ public final class VectorNorms {
      * @return The 2-norm of the vector.
      */
     @Deprecated
-    public static double norm(CNumber... src) {
+    public static double norm(Complex128... src) {
         double norm = 0;
         double scaledMag;
         double maxAbs = AggregateComplex.maxAbs(src);
@@ -259,8 +259,8 @@ public final class VectorNorms {
         if(maxAbs == 0) return 0; // Early return for zero norm.
 
         // Compute norm as a = |max(src)|, ||src|| = a*||src * (1/a)|| to help protect against overflow.
-        for(CNumber cNumber : src) {
-            scaledMag = cNumber.mag() / maxAbs;
+        for(Complex128 value : src) {
+            scaledMag = value.mag() / maxAbs;
             norm += scaledMag*scaledMag;
         }
 
@@ -327,15 +327,15 @@ public final class VectorNorms {
      * @return The {@code p}-norm of the vector.
      */
     @Deprecated
-    public static double norm(CNumber[] src, double p) {
+    public static double norm(Complex128[] src, double p) {
         if(Double.isInfinite(p)) {
             if(p > 0) return AggregateComplex.maxAbs(src); // Maximum norm.
             else return AggregateComplex.minAbs(src); // Minimum norm.
         } else {
             double norm = 0;
 
-            for(CNumber cNumber : src)
-                norm += Math.pow(cNumber.mag(), p);
+            for(Complex128 Complex128 : src)
+                norm += Math.pow(Complex128.mag(), p);
 
             return Math.pow(norm, 1.0/p);
         }

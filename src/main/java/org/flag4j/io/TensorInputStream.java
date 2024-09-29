@@ -27,9 +27,6 @@ package org.flag4j.io;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.arrays_old.dense.VectorOld;
 
 import java.io.FileInputStream;
 import java.io.IOException;

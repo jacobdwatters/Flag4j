@@ -28,7 +28,10 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.CooFieldMatrixBase;
 import org.flag4j.arrays.dense.FieldMatrix;
+import org.flag4j.arrays.dense.FieldVector;
+import org.flag4j.operations.sparse.coo.field_ops.CooFieldMatrixGetSet;
 import org.flag4j.operations.sparse.coo.field_ops.SparseFieldEquals;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.List;
 
@@ -63,7 +66,7 @@ import java.util.List;
  * @param <T> Type of the {@link Field field} element in this matrix.
  */
 public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFieldMatrix<T>,
-        FieldMatrix<T>, CooFieldVector<T>, T> {
+        FieldMatrix<T>, CooFieldVector<T>, FieldVector<T>, T> {
 
     /**
      * Creates a sparse coo matrix with the specified non-zero entries, non-zero indices, and shape.
@@ -73,7 +76,7 @@ public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFi
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
-    public CooFieldMatrix(Shape shape, T[] entries, int[] rowIndices, int[] colIndices) {
+    public CooFieldMatrix(Shape shape, Field<T>[] entries, int[] rowIndices, int[] colIndices) {
         super(shape, entries, rowIndices, colIndices);
     }
 
@@ -86,7 +89,7 @@ public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFi
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
-    public CooFieldMatrix(Shape shape, List<T> entries, List<Integer> rowIndices, List<Integer> colIndices) {
+    public CooFieldMatrix(Shape shape, List<Field<T>> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(shape, entries, rowIndices, colIndices);
     }
 
@@ -100,7 +103,7 @@ public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFi
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
-    public CooFieldMatrix(int rows, int cols, T[] entries, int[] rowIndices, int[] colIndices) {
+    public CooFieldMatrix(int rows, int cols, Field<T>[] entries, int[] rowIndices, int[] colIndices) {
         super(new Shape(rows, cols), entries, rowIndices, colIndices);
     }
 
@@ -114,8 +117,25 @@ public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFi
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
-    public CooFieldMatrix(int rows, int cols, List<T> entries, List<Integer> rowIndices, List<Integer> colIndices) {
+    public CooFieldMatrix(int rows, int cols, List<Field<T>> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(new Shape(rows, cols), entries, rowIndices, colIndices);
+    }
+
+
+    /**
+     * Sets the element of this tensor at the specified indices.
+     *
+     * @param value New value to set the specified index of this tensor to.
+     * @param indices Indices of the element to set.
+     *
+     * @return A copy of this tensor with the updated value is returned.
+     *
+     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
+     */
+    @Override
+    public CooFieldMatrix<T> set(T value, int... indices) {
+        ValidateParameters.ensureValidIndex(shape, indices);
+        return (CooFieldMatrix<T>) CooFieldMatrixGetSet.matrixSet(this, indices[0], indices[1], value);
     }
 
 
@@ -128,7 +148,7 @@ public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFi
      * @return A tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public CooFieldMatrix<T> makeLikeTensor(Shape shape, T[] entries) {
+    public CooFieldMatrix<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
         return new CooFieldMatrix<T>(shape, entries, rowIndices.clone(), colIndices.clone());
     }
 
@@ -144,7 +164,7 @@ public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFi
      * @return A COO field matrix with the specified shape, non-zero entries, and non-zero indices.
      */
     @Override
-    public CooFieldMatrix<T> makeLikeTensor(Shape shape, T[] entries, int[] rowIndices, int[] colIndices) {
+    public CooFieldMatrix<T> makeLikeTensor(Shape shape, Field<T>[] entries, int[] rowIndices, int[] colIndices) {
         return new CooFieldMatrix<T>(shape, entries, rowIndices, colIndices);
     }
 
@@ -160,7 +180,7 @@ public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFi
      * @return A COO field matrix with the specified shape, non-zero entries, and non-zero indices.
      */
     @Override
-    public CooFieldMatrix<T> makeLikeTensor(Shape shape, List<T> entries, List<Integer> rowIndices, List<Integer> colIndices) {
+    public CooFieldMatrix<T> makeLikeTensor(Shape shape, List<Field<T>> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         return new CooFieldMatrix<T>(shape, entries, rowIndices, colIndices);
     }
 
@@ -174,7 +194,7 @@ public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFi
      * @return A dense field matrix with the specified {@code shape} and {@code entries}.
      */
     @Override
-    public FieldMatrix<T> makeDenseTensor(Shape shape, T[] entries) {
+    public FieldMatrix<T> makeDenseTensor(Shape shape, Field<T>[] entries) {
         return new FieldMatrix<T>(shape, entries);
     }
 
@@ -189,7 +209,7 @@ public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFi
      * @return A vector of similar type to this matrix with the specified size, non-zero entries, and indices.
      */
     @Override
-    public CooFieldVector<T> makeLikeVector(int size, T[] entries, int[] indices) {
+    public CooFieldVector<T> makeLikeVector(int size, Field<T>[] entries, int[] indices) {
         return new CooFieldVector<T>(size, entries, indices);
     }
 
@@ -204,7 +224,7 @@ public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFi
      * @return A vector of similar type to this matrix with the specified size, non-zero entries, and indices.
      */
     @Override
-    public CooFieldVector<T> makeLikeVector(int size, List<T> entries, List<Integer> indices) {
+    public CooFieldVector<T> makeLikeVector(int size, List<Field<T>> entries, List<Integer> indices) {
         return new CooFieldVector<T>(size, entries, indices);
     }
 
@@ -263,5 +283,22 @@ public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFi
             rowPointers[i+1] += rowPointers[i];
 
         return new CsrFieldMatrix<T>(shape, entries.clone(), rowPointers, colIndices.clone());
+    }
+
+
+    /**
+     * Computes matrix-vector multiplication.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with vector {@code b}.
+     *
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the
+     *                                  number of entries in the vector {@code b}.
+     */
+    @Override
+    public FieldVector<T> mult(CooFieldVector<T> b) {
+        // TODO: Implement this method
+        return null;
     }
 }

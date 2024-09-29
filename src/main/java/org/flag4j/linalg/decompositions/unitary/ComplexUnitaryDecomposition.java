@@ -26,8 +26,8 @@ package org.flag4j.linalg.decompositions.unitary;
 
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.linalg.transformations.Householder;
 import org.flag4j.util.Flag4jConstants;
 
@@ -36,7 +36,7 @@ import org.flag4j.util.Flag4jConstants;
  * (specifically Householder reflectors) to bring a matrix into an upper triangular/Hessenburg matrix. Specifically, the QR and
  * Hessenburg decompositions.
  */
-public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<CMatrix, Complex128[]> {
+public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<CMatrix, Field<Complex128>[]> {
 
     /**
      * To store norms of columns in {@link #transformMatrix}. Will be real.
@@ -79,7 +79,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
      *
      * <p>It should be noted that if performance is improved, it will be a very slight improvement compared
      * to the total time to compute the decomposition. This is because the computation of {@code Q} is only
-     * evaluated lazily once {@link #getQ()} is called, so this will only save on copy operations_old.</p>
+     * evaluated lazily once {@link #getQ()} is called, so this will only save on copy operations.</p>
      *
      * @param subDiagonal Sub-diagonal of the upper triangular/Hessenburg matrix. That is, the sub-diagonal for which all entries
      *                    below will be zero in the final upper quasi-triangular matrix. Must be Zero or one. If zero, it will be
@@ -111,12 +111,11 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
         for(int j=minAxisSize - 1; j>=subDiagonal; j--) {
             householderVector[j] = Complex128.ONE; // Ensure first value of reflector is 1.
 
-            for(int i=j + 1; i<numRows; i++) {
+            for(int i=j + 1; i<numRows; i++)
                 householderVector[i] = transformData[i*numCols + j - subDiagonal]; // Extract column containing reflector vector.
-            }
 
-            if(!(qFactors[j]==null || qFactors[j].equals(CNumber.ZERO))) { // Otherwise, no reflector to apply.
-                Householder.leftMultReflector(Q, householderVector, qFactors[j], j, j, numRows, workArray);
+            if(!(qFactors[j]==null || qFactors[j].equals(Complex128.ZERO))) { // Otherwise, no reflector to apply.
+                Householder.leftMultReflector(Q, householderVector, (Complex128) qFactors[j], j, j, numRows, workArray);
             }
         }
 
@@ -202,15 +201,15 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
     protected void computePhasedNorm(int j, double maxAbs) {
         // Computes the 2-norm of the column.
         for(int i=j; i<numRows; i++) {
-            householderVector[i] = householderVector[i].div(maxAbs); // Scale entries of the householder vector to help reduce
-            // potential overflow.
-            Complex128 scaledValue = householderVector[i];
-            normRe += scaledValue.magSquared();
+            // Scale entries of the householder vector to help reduce potential overflow.
+            householderVector[i] = householderVector[i].div(maxAbs);
+            normRe += ((Complex128) householderVector[i]).magSquared();
         }
         normRe = Math.sqrt(normRe); // Finish 2-norm computation for the column.
 
         // Change phase of the norm depending on first entry in column for stability purposes in Householder vector.
-        norm = householderVector[j].equals(CNumber.ZERO) ? new Complex128(normRe) : Complex128.sgn(householderVector[j]).mult(normRe);
+        norm = householderVector[j].equals(Complex128.ZERO) ? new Complex128(normRe)
+                : Complex128.sgn((Complex128) householderVector[j]).mult(normRe);
 
         shift = householderVector[j].add(norm);
         currentFactor = shift.div(norm);
@@ -230,7 +229,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
         int idx = j*numCols + j - subDiagonal;
 
         for(int i=j; i<numRows; i++) {
-            Complex128 d = householderVector[i] = transformData[idx];
+            Field<Complex128> d = householderVector[i] = transformData[idx];
             idx += numCols; // Move index to next row.
             maxAbs = Math.max(d.mag(), maxAbs);
         }
@@ -246,10 +245,10 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
     @Override
     protected void updateData(int j) {
         if(subDiagonal >= 0) // Right multiply transform matrix to reflector. (i.e. left multiply reflector to matrix).
-            Householder.leftMultReflector(transformMatrix, householderVector, qFactors[j], j, j, numRows, workArray);
+            Householder.leftMultReflector(transformMatrix, householderVector, (Complex128) qFactors[j], j, j, numRows, workArray);
 
         if(subDiagonal == 1) // Left multiply transform matrix to reflector. (i.e. right multiply reflector to matrix).
-            Householder.rightMultReflector(transformMatrix, householderVector, qFactors[j], 0, j, numRows);
+            Householder.rightMultReflector(transformMatrix, householderVector, (Complex128) qFactors[j], 0, j, numRows);
 
         if(j < numCols) transformData[j*numCols + j - subDiagonal] = norm.addInv();
 

@@ -28,6 +28,7 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.CsrFieldMatrixBase;
 import org.flag4j.arrays.dense.FieldMatrix;
+import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.operations.sparse.SparseUtils;
 
 
@@ -57,7 +58,8 @@ import org.flag4j.operations.sparse.SparseUtils;
  *
  * <p>If indices need to be sorted explicitly, call {@link #sortIndices()}.</p>
  */
-public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFieldMatrix<T>, FieldMatrix<T>, CooFieldVector<T>, T> {
+public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFieldMatrix<T>, FieldMatrix<T>,
+        CooFieldVector<T>, FieldVector<T>, T> {
 
 
     /**
@@ -71,8 +73,25 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code entries.length == colIndices.length}.
      */
-    public CsrFieldMatrix(Shape shape, T[] entries, int[] rowPointers, int[] colIndices) {
+    public CsrFieldMatrix(Shape shape, Field<T>[] entries, int[] rowPointers, int[] colIndices) {
         super(shape, entries, rowPointers, colIndices);
+    }
+
+
+    /**
+     * Sets the element of this tensor at the specified indices.
+     *
+     * @param value New value to set the specified index of this tensor to.
+     * @param indices Indices of the element to set.
+     *
+     * @return A copy of this tensor with the updated value is returned.
+     *
+     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
+     */
+    @Override
+    public CsrFieldMatrix<T> set(T value, int... indices) {
+        // TODO: Implement this method
+        return null;
     }
 
 
@@ -87,7 +106,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
      * indices.
      */
     @Override
-    public CsrFieldMatrix<T> makeLikeTensor(Shape shape, T[] entries) {
+    public CsrFieldMatrix<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
         return new CsrFieldMatrix<T>(shape, entries, rowPointers.clone(), colIndices.clone());
     }
 
@@ -105,7 +124,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
      * indices.
      */
     @Override
-    public CsrFieldMatrix<T> makeLikeTensor(Shape shape, T[] entries, int[] rowPointers, int[] colIndices) {
+    public CsrFieldMatrix<T> makeLikeTensor(Shape shape, Field<T>[] entries, int[] rowPointers, int[] colIndices) {
         return new CsrFieldMatrix<>(shape, entries, rowPointers, colIndices);
     }
 
@@ -119,7 +138,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
      * @return A dense matrix of similar type as this sparse CSR matrix with the given the {@code shape} and {@code entries}.
      */
     @Override
-    public FieldMatrix<T> makeLikeDenseTensor(Shape shape, T[] entries) {
+    public FieldMatrix<T> makeLikeDenseTensor(Shape shape, Field<T>[] entries) {
         return new FieldMatrix<T>(shape, entries);
     }
 
@@ -179,5 +198,156 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
         }
 
         return result;
+    }
+
+
+    /**
+     * Computes matrix-vector multiplication.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with vector {@code b}.
+     *
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the
+     *                                  number of entries in the vector {@code b}.
+     */
+    @Override
+    public FieldVector<T> mult(CooFieldVector<T> b) {
+        // TODO: Implement this method
+        return null;
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent vector. If this matrix is not shaped as a row/column vector,
+     * it will first be flattened then converted to a vector.
+     *
+     * @return A vector equivalent to this matrix.
+     */
+    @Override
+    public CooFieldVector<T> toVector() {
+        // TODO: Implement this method
+        return null;
+    }
+
+
+    /**
+     * Get the row of this matrix at the specified index.
+     *
+     * @param rowIdx Index of row to get.
+     *
+     * @return The specified row of this matrix.
+     *
+     * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} is less than zero or greater than/equal to
+     *                                        the number of rows in this matrix.
+     */
+    @Override
+    public CooFieldVector<T> getRow(int rowIdx) {
+        // TODO: Implement this method
+        return null;
+    }
+
+
+    /**
+     * Gets a specified row of this matrix between {@code colStart} (inclusive) and {@code colEnd} (exclusive).
+     *
+     * @param rowIdx Index of the row of this matrix to get.
+     * @param colStart Starting column of the row (inclusive).
+     * @param colEnd Ending column of the row (exclusive).
+     *
+     * @return The row at index {@code rowIdx} of this matrix between the {@code colStart} and {@code colEnd}
+     * indices.
+     *
+     * @throws IndexOutOfBoundsException If either {@code colEnd} are {@code colStart} out of bounds for the shape of this matrix.
+     * @throws IllegalArgumentException  If {@code colEnd} is less than {@code colStart}.
+     */
+    @Override
+    public CooFieldVector<T> getRow(int rowIdx, int colStart, int colEnd) {
+        // TODO: Implement this method
+        return null;
+    }
+
+
+    /**
+     * Get the column of this matrix at the specified index.
+     *
+     * @param colIdx Index of column to get.
+     *
+     * @return The specified column of this matrix.
+     *
+     * @throws ArrayIndexOutOfBoundsException If {@code colIdx} is less than zero or greater than/equal to
+     *                                        the number of columns in this matrix.
+     */
+    @Override
+    public CooFieldVector<T> getCol(int colIdx) {
+        // TODO: Implement this method
+        return null;
+    }
+
+
+    /**
+     * Gets a specified column of this matrix between {@code rowStart} (inclusive) and {@code rowEnd} (exclusive).
+     *
+     * @param colIdx Index of the column of this matrix to get.
+     * @param rowStart Starting row of the column (inclusive).
+     * @param rowEnd Ending row of the column (exclusive).
+     *
+     * @return The column at index {@code colIdx} of this matrix between the {@code rowStart} and {@code rowEnd}
+     * indices.
+     *
+     * @throws @throws                  IndexOutOfBoundsException If either {@code colEnd} are {@code colStart} out of bounds for the
+     *                                  shape of this matrix.
+     * @throws IllegalArgumentException If {@code rowEnd} is less than {@code rowStart}.
+     */
+    @Override
+    public CooFieldVector<T> getCol(int colIdx, int rowStart, int rowEnd) {
+        // TODO: Implement this method
+        return null;
+    }
+
+
+    /**
+     * Extracts the diagonal elements of this matrix and returns them as a vector.
+     *
+     * @return A vector containing the diagonal entries of this matrix.
+     */
+    @Override
+    public CooFieldVector<T> getDiag() {
+        // TODO: Implement this method
+        return null;
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     *
+     * @return A reference to this matrix.
+     *
+     * @throws IndexOutOfBoundsException If the values vector has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public CsrFieldMatrix<T> setCol(CooFieldVector<T> values, int colIndex) {
+        // TODO: Implement this method
+        return null;
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values New values for the row.
+     * @param rowIndex The index of the row which is to be set.
+     *
+     * @return A reference to this matrix.
+     *
+     * @throws IndexOutOfBoundsException If the values vector has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public CsrFieldMatrix<T> setRow(CooFieldVector<T> values, int rowIndex) {
+        // TODO: Implement this method
+        return null;
     }
 }

@@ -24,14 +24,14 @@
 
 package org.flag4j.operations.sparse.coo.real;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.arrays.Shape;
 import org.flag4j.operations.sparse.coo.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -115,8 +115,8 @@ public class RealSparseMatrixGetSet {
      * @return A copy of the {@code src} matrix with the specified row set to the dense {@code row} array.
      */
     public static CooMatrix setRow(CooMatrix src, int rowIdx, double[] row) {
-        ParameterChecks.ensureIndexInBounds(src.numRows, rowIdx);
-        ParameterChecks.ensureEquals(src.numCols, row.length);
+        ValidateParameters.ensureIndexInBounds(src.numRows, rowIdx);
+        ValidateParameters.ensureEquals(src.numCols, row.length);
 
         int[] startEnd = SparseElementSearch.matrixFindRowStartEnd(src.rowIndices, rowIdx);
         int start = startEnd[0];
@@ -196,8 +196,8 @@ public class RealSparseMatrixGetSet {
      * rows in {@code src} matrix.
      */
     public static CooMatrix setCol(CooMatrix src, int colIdx, double[] col) {
-        ParameterChecks.ensureIndexInBounds(src.numCols, colIdx);
-        ParameterChecks.ensureEquals(src.numRows, col.length);
+        ValidateParameters.ensureIndexInBounds(src.numCols, colIdx);
+        ValidateParameters.ensureEquals(src.numRows, col.length);
 
         Integer[] colIndices = new Integer[col.length];
         Arrays.fill(colIndices, colIdx);
@@ -223,8 +223,8 @@ public class RealSparseMatrixGetSet {
      * in the {@code col} vector.
      */
     public static CooMatrix setCol(CooMatrix src, int colIdx, CooVector col) {
-        ParameterChecks.ensureIndexInBounds(src.numCols, colIdx);
-        ParameterChecks.ensureEquals(src.numRows, col.size);
+        ValidateParameters.ensureIndexInBounds(src.numCols, colIdx);
+        ValidateParameters.ensureEquals(src.numRows, col.size);
 
         // Initialize destination arrays with the new column and the appropriate indices.
         List<Double> destEntries = ArrayUtils.toArrayList(col.entries);
@@ -282,11 +282,11 @@ public class RealSparseMatrixGetSet {
      */
     public static CooMatrix setSlice(CooMatrix src, CooMatrix values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.ensureIndexInBounds(src.numRows, row);
-        ParameterChecks.ensureIndexInBounds(src.numCols, col);
+        ValidateParameters.ensureIndexInBounds(src.numRows, row);
+        ValidateParameters.ensureIndexInBounds(src.numCols, col);
 
-        ParameterChecks.ensureLessEq(src.numRows, values.numRows + row);
-        ParameterChecks.ensureLessEq(src.numCols, values.numCols + col);
+        ValidateParameters.ensureLessEq(src.numRows, values.numRows + row);
+        ValidateParameters.ensureLessEq(src.numCols, values.numCols + col);
 
         // Initialize lists to new values for the specified slice.
         List<Double> entries = ArrayUtils.toArrayList(values.entries);
@@ -318,8 +318,8 @@ public class RealSparseMatrixGetSet {
      */
     public static CooMatrix setSlice(CooMatrix src, double[][] values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.ensureLessEq(src.numRows, values.length + row);
-        ParameterChecks.ensureLessEq(src.numCols, values[0].length + col);
+        ValidateParameters.ensureLessEq(src.numRows, values.length + row);
+        ValidateParameters.ensureLessEq(src.numCols, values[0].length + col);
 
         // Flatten values.
         double[] flatValues = ArrayUtils.flatten(values);
@@ -342,8 +342,8 @@ public class RealSparseMatrixGetSet {
      */
     public static CooMatrix setSlice(CooMatrix src, Matrix values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.ensureLessEq(src.numRows, values.numRows + row);
-        ParameterChecks.ensureLessEq(src.numCols, values.numCols + col);
+        ValidateParameters.ensureLessEq(src.numRows, values.numRows + row);
+        ValidateParameters.ensureLessEq(src.numCols, values.numCols + col);
 
         int[] sliceRows = ArrayUtils.intRange(row, values.numRows + row, values.numCols);
         int[] sliceCols = ArrayUtils.repeat(values.numRows, ArrayUtils.intRange(col, values.numCols + col));
@@ -364,8 +364,8 @@ public class RealSparseMatrixGetSet {
      */
     public static CooMatrix setSlice(CooMatrix src, int[][] values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.ensureLessEq(src.numRows, values.length + row);
-        ParameterChecks.ensureLessEq(src.numCols, values[0].length + col);
+        ValidateParameters.ensureLessEq(src.numRows, values.length + row);
+        ValidateParameters.ensureLessEq(src.numCols, values[0].length + col);
 
         // Flatten values.
         double[] flatValues = new double[values.length*values[0].length];
@@ -394,8 +394,8 @@ public class RealSparseMatrixGetSet {
      */
     public static CooMatrix setSlice(CooMatrix src, Double[][] values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.ensureLessEq(src.numRows, values.length + row);
-        ParameterChecks.ensureLessEq(src.numCols, values[0].length + col);
+        ValidateParameters.ensureLessEq(src.numRows, values.length + row);
+        ValidateParameters.ensureLessEq(src.numCols, values[0].length + col);
 
         // Flatten values.
         double[] flatValues = ArrayUtils.unboxFlatten(values);
@@ -419,8 +419,8 @@ public class RealSparseMatrixGetSet {
      */
     public static CooMatrix setSlice(CooMatrix src, Integer[][] values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.ensureLessEq(src.numRows, values.length + row);
-        ParameterChecks.ensureLessEq(src.numCols, values[0].length + col);
+        ValidateParameters.ensureLessEq(src.numRows, values.length + row);
+        ValidateParameters.ensureLessEq(src.numCols, values[0].length + col);
 
         // Flatten values.
         double[] flatValues = new double[values.length*values[0].length];
@@ -477,7 +477,7 @@ public class RealSparseMatrixGetSet {
      * @return Returns the specified row from this sparse matrix.
      */
     public static CooVector getRow(CooMatrix src, int rowIdx) {
-        ParameterChecks.ensureIndexInBounds(src.numRows, rowIdx);
+        ValidateParameters.ensureIndexInBounds(src.numRows, rowIdx);
 
         List<Double> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
@@ -502,9 +502,9 @@ public class RealSparseMatrixGetSet {
      * @return Returns the specified column range from this sparse matrix.
      */
     public static CooVector getRow(CooMatrix src, int rowIdx, int start, int end) {
-        ParameterChecks.ensureIndexInBounds(src.numRows, rowIdx);
-        ParameterChecks.ensureIndexInBounds(src.numCols, start, end-1);
-        ParameterChecks.ensureLessEq(end-1, start);
+        ValidateParameters.ensureIndexInBounds(src.numRows, rowIdx);
+        ValidateParameters.ensureIndexInBounds(src.numCols, start, end-1);
+        ValidateParameters.ensureLessEq(end-1, start);
 
         List<Double> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
@@ -527,7 +527,7 @@ public class RealSparseMatrixGetSet {
      * @return Returns the specified column from this sparse matrix.
      */
     public static CooVector getCol(CooMatrix src, int colIdx) {
-        ParameterChecks.ensureIndexInBounds(src.numCols, colIdx);
+        ValidateParameters.ensureIndexInBounds(src.numCols, colIdx);
 
         List<Double> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
@@ -552,9 +552,9 @@ public class RealSparseMatrixGetSet {
      * @return Returns the specified column range from this sparse matrix.
      */
     public static CooVector getCol(CooMatrix src, int colIdx, int start, int end) {
-        ParameterChecks.ensureIndexInBounds(src.numCols, colIdx);
-        ParameterChecks.ensureIndexInBounds(src.numRows, start, end);
-        ParameterChecks.ensureLessEq(end, start);
+        ValidateParameters.ensureIndexInBounds(src.numCols, colIdx);
+        ValidateParameters.ensureIndexInBounds(src.numRows, start, end);
+        ValidateParameters.ensureLessEq(end, start);
 
         List<Double> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
@@ -580,8 +580,8 @@ public class RealSparseMatrixGetSet {
      * @return The specified slice of the sparse matrix.
      */
     public static CooMatrix getSlice(CooMatrix src, int rowStart, int rowEnd, int colStart, int colEnd) {
-        ParameterChecks.ensureIndexInBounds(src.numRows, rowStart, rowEnd-1);
-        ParameterChecks.ensureIndexInBounds(src.numCols, colStart, colEnd-1);
+        ValidateParameters.ensureIndexInBounds(src.numRows, rowStart, rowEnd-1);
+        ValidateParameters.ensureIndexInBounds(src.numCols, colStart, colEnd-1);
 
         Shape shape = new Shape(rowEnd-rowStart, colEnd-colStart);
         List<Double> entries = new ArrayList<>();

@@ -1,8 +1,9 @@
 package org.flag4j;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.core_old.MatrixMixin;
-import org.flag4j.core_old.dense_base.DenseTensorBase;
+import org.flag4j.arrays.backend.DenseTensorMixin;
+import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend.TensorBase;
+import org.flag4j.arrays.dense.CMatrix;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,8 +13,8 @@ public class TestHelpers {
 
     public static void printAsNumpyArray(Object... args) {
         for(Object arg : args) {
-            if(arg instanceof MatrixMixin) {
-                printAsNumpyArray((MatrixMixin<?, ?, ?, ?, ?, ?, ?, ?>) arg);
+            if(arg instanceof MatrixMixin<?,?,?,?,?>) {
+                printAsNumpyArray((MatrixMixin<?,?,?,?,?>) arg);
             } else {
                 System.out.print(arg.toString());
             }
@@ -24,7 +25,7 @@ public class TestHelpers {
     public static void printAsJavaArray(Object... args) {
         for(Object arg : args) {
             if(arg instanceof MatrixMixin) {
-                printAsJavaArray((MatrixMixin<?, ?, ?, ?, ?, ?, ?, ?>) arg);
+                printAsJavaArray((MatrixMixin<?,?,?,?,?>) arg);
             } else {
                 System.out.print(arg.toString());
             }
@@ -32,14 +33,14 @@ public class TestHelpers {
     }
 
 
-    private static <T extends MatrixMixin<?, ?, ?, ?, ?, ?, ?, ?>> void printAsNumpyArray(T A) {
+    private static <T extends MatrixMixin<?,?,?,?,?>> void printAsNumpyArray(T A) {
         System.out.println(" = np.array([");
 
         for(int i=0; i<A.numRows(); i++) {
             System.out.print("\t[");
             for(int j=0; j<A.numCols(); j++) {
 
-                if(A instanceof CMatrixOld B) {
+                if(A instanceof CMatrix B) {
                     if(B.get(i, j).im > 0) {
                         System.out.print(B.get(i, j).re + "+" + B.get(i, j).im + "j");
                     } else {
@@ -65,14 +66,14 @@ public class TestHelpers {
     }
 
 
-    private static <T extends MatrixMixin<?, ?, ?, ?, ?, ?, ?, ?>> void printAsJavaArray(T A) {
+    private static <T extends MatrixMixin<?,?,?,?,?>> void printAsJavaArray(T A) {
         System.out.println("{");
 
         for(int i=0; i<A.numRows(); i++) {
             System.out.print("\t{");
             for(int j=0; j<A.numCols(); j++) {
-                if(A instanceof CMatrixOld B) {
-                    System.out.print("new CNumber(" + B.get(i, j).re + ", " + B.get(i, j).im + ")");
+                if(A instanceof CMatrix B) {
+                    System.out.print("new Complex128(" + B.get(i, j).re + ", " + B.get(i, j).im + ")");
                 } else {
                     // Then must be real.
                     System.out.print(A.get(i, j));
@@ -98,7 +99,10 @@ public class TestHelpers {
      * @param a First tensor to compare.
      * @param b Second tensor to compare.
      */
-    public static <T extends DenseTensorBase<?, ?, ?, ?, ?>> List<int[]> findDiff(T a, T b) {
+    public static <T extends TensorBase<?, ?, ?>> List<int[]> findDiff(T a, T b) {
+        if(!(a instanceof DenseTensorMixin<?,?> && b instanceof DenseTensorMixin<?,?>)) {
+            System.out.println("Tensors are not dense.");
+        }
         if(!a.shape.equals(b.shape)) {
             System.out.printf("Not the same shape: %s and %s\n", a.shape, b.shape);
         }

@@ -26,6 +26,7 @@ package org.flag4j.operations.dense_sparse.coo.real_complex;
 
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
@@ -56,7 +57,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @param shape2 Shape of the sparse matrix.
      * @return The result of the matrix multiplication.
      */
-    public static Complex128[] standard(double[] src1, Shape shape1, Complex128[] src2,
+    public static Complex128[] standard(double[] src1, Shape shape1, Field<Complex128>[] src2,
                                         int[] rowIndices, int[] colIndices, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
@@ -97,7 +98,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @return The result of the matrix multiplication.
      */
     public static Complex128[] standard(double[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
-                                    Complex128[] src2, Shape shape2) {
+                                        Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
 
@@ -131,8 +132,8 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @param shape2 Shape of the sparse matrix.
      * @return The result of the matrix multiplication.
      */
-    public static Complex128[] concurrentStandard(double[] src1, Shape shape1, Complex128[] src2,
-                                              int[] rowIndices, int[] colIndices, Shape shape2) {
+    public static Complex128[] concurrentStandard(double[] src1, Shape shape1, Field<Complex128>[] src2,
+                                                  int[] rowIndices, int[] colIndices, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
@@ -174,7 +175,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @return The result of the matrix multiplication.
      */
     public static Complex128[] concurrentStandard(double[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
-                                              Complex128[] src2, Shape shape2) {
+                                                  Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
 
@@ -211,8 +212,8 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @param shape2 Shape of the sparse matrix.
      * @return The result of the matrix multiplication.
      */
-    public static Complex128[] standard(Complex128[] src1, Shape shape1, double[] src2,
-                                     int[] rowIndices, int[] colIndices, Shape shape2) {
+    public static Complex128[] standard(Field<Complex128>[] src1, Shape shape1, double[] src2,
+                                        int[] rowIndices, int[] colIndices, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
@@ -250,8 +251,8 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @param shape2 Shape of the dense matrix.
      * @return The result of the matrix multiplication.
      */
-    public static Complex128[] standard(Complex128[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
-                                     double[] src2, Shape shape2) {
+    public static Complex128[] standard(Field<Complex128>[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
+                                        double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
 
@@ -286,8 +287,8 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @param shape2 Shape of the sparse matrix.
      * @return The result of the matrix multiplication.
      */
-    public static Complex128[] concurrentStandard(Complex128[] src1, Shape shape1, double[] src2,
-                                               int[] rowIndices, int[] colIndices, Shape shape2) {
+    public static Complex128[] concurrentStandard(Field<Complex128>[] src1, Shape shape1, double[] src2,
+                                                  int[] rowIndices, int[] colIndices, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
@@ -329,8 +330,8 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @param shape2 Shape of the dense matrix.
      * @return The result of the matrix multiplication.
      */
-    public static Complex128[] concurrentStandard(Complex128[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
-                                               double[] src2, Shape shape2) {
+    public static Complex128[] concurrentStandard(Field<Complex128>[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
+                                                  double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
 
@@ -367,7 +368,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @param indices Indices of non-zero entries in sparse vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static Complex128[] standardVector(double[] src1, Shape shape1, Complex128[] src2, int[] indices) {
+    public static Complex128[] standardVector(double[] src1, Shape shape1, Field<Complex128>[] src2, int[] indices) {
         int denseRows = shape1.get(0);
         int denseCols = shape1.get(1);
         int nonZeros = src2.length;
@@ -403,7 +404,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static Complex128[] standardVector(double[] src1, int[] rowIndices, int[] colIndices,
-                                          Shape shape1, Complex128[] src2, Shape shape2) {
+                                              Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         Complex128[] dest = new Complex128[rows1];
         ArrayUtils.fill(dest, 0);
@@ -428,7 +429,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @param indices Indices of non-zero entries in sparse vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static Complex128[] blockedVector(double[] src1, Shape shape1, Complex128[] src2, int[] indices) {
+    public static Complex128[] blockedVector(double[] src1, Shape shape1, Field<Complex128>[] src2, int[] indices) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = src2.length;
@@ -446,9 +447,8 @@ public final class RealComplexDenseSparseMatrixMultiplication {
                     int src1RowOffset = i*cols1;
                     Complex128 sum = dest[i];
 
-                    for(int j=jj; j<jj+bsize && j<rows2; j++) {
+                    for(int j=jj; j<jj+bsize && j<rows2; j++)
                         sum = sum.add(src2[j].mult(src1[src1RowOffset + indices[j]]));
-                    }
 
                     dest[i] = sum;
                 }
@@ -467,7 +467,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @param indices Indices of non-zero entries in sparse vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static Complex128[] concurrentStandardVector(double[] src1, Shape shape1, Complex128[] src2, int[] indices) {
+    public static Complex128[] concurrentStandardVector(double[] src1, Shape shape1, Field<Complex128>[] src2, int[] indices) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = src2.length;
@@ -503,7 +503,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static Complex128[] concurrentStandardVector(double[] src1, int[] rowIndices, int[] colIndices,
-                                                    Shape shape1, Complex128[] src2, Shape shape2) {
+                                                        Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         Complex128[] dest = new Complex128[rows1];
         ArrayUtils.fill(dest, 0);
@@ -532,7 +532,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @param indices Indices of non-zero entries in sparse vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static Complex128[] concurrentBlockedVector(double[] src1, Shape shape1, Complex128[] src2, int[] indices) {
+    public static Complex128[] concurrentBlockedVector(double[] src1, Shape shape1, Field<Complex128>[] src2, int[] indices) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = src2.length;
@@ -573,7 +573,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @param indices Indices of non-zero entries in sparse vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static Complex128[] standardVector(Complex128[] src1, Shape shape1, double[] src2, int[] indices) {
+    public static Complex128[] standardVector(Field<Complex128>[] src1, Shape shape1, double[] src2, int[] indices) {
         int denseRows = shape1.get(0);
         int denseCols = shape1.get(1);
         int nonZeros = src2.length;
@@ -607,8 +607,8 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @param shape2 Shape of the dense vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static Complex128[] standardVector(Complex128[] src1, int[] rowIndices, int[] colIndices,
-                                           Shape shape1, double[] src2, Shape shape2) {
+    public static Complex128[] standardVector(Field<Complex128>[] src1, int[] rowIndices, int[] colIndices,
+                                              Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         Complex128[] dest = new Complex128[rows1];
         ArrayUtils.fill(dest, 0);
@@ -633,7 +633,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @param indices Indices of non-zero entries in sparse vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static Complex128[] blockedVector(Complex128[] src1, Shape shape1, double[] src2, int[] indices) {
+    public static Complex128[] blockedVector(Field<Complex128>[] src1, Shape shape1, double[] src2, int[] indices) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = src2.length;
@@ -673,7 +673,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @param indices Indices of non-zero entries in sparse vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static Complex128[] concurrentStandardVector(Complex128[] src1, Shape shape1, double[] src2, int[] indices) {
+    public static Complex128[] concurrentStandardVector(Field<Complex128>[] src1, Shape shape1, double[] src2, int[] indices) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = src2.length;
@@ -708,8 +708,8 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @param shape2 Shape of the dense vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static Complex128[] concurrentStandardVector(Complex128[] src1, int[] rowIndices, int[] colIndices,
-                                                     Shape shape1, double[] src2, Shape shape2) {
+    public static Complex128[] concurrentStandardVector(Field<Complex128>[] src1, int[] rowIndices, int[] colIndices,
+                                                        Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         Complex128[] dest = new Complex128[rows1];
         ArrayUtils.fill(dest, 0);
@@ -738,7 +738,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
      * @param indices Indices of non-zero entries in sparse vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static Complex128[] concurrentBlockedVector(Complex128[] src1, Shape shape1, double[] src2, int[] indices) {
+    public static Complex128[] concurrentBlockedVector(Field<Complex128>[] src1, Shape shape1, double[] src2, int[] indices) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = src2.length;
@@ -748,17 +748,18 @@ public final class RealComplexDenseSparseMatrixMultiplication {
         Complex128[] dest = new Complex128[rows1];
         ArrayUtils.fill(dest, 0);
 
-        // Blocked matrix-vector multiply
+        // Blocked matrix-vector multiply.
         ThreadManager.concurrentBlockedOperation(rows1, bsize, (startIdx, endIdx) -> {
             for(int ii=startIdx; ii<endIdx; ii += bsize) {
                 for(int jj=0; jj<rows2; jj += bsize) {
                     // Multiply the current blocks
                     for(int i=ii; i<ii+bsize && i<rows1; i++) {
                         Complex128 sum = dest[i];
+                        int row1Offset = i*cols1;
 
                         for(int j=jj; j<jj+bsize && j<rows2; j++) {
                             int k = indices[j];
-                            sum = sum.add(src1[i*cols1 + k].mult(src2[j]));
+                            sum = sum.add(src1[row1Offset + k].mult(src2[j]));
                         }
 
                         dest[i] = sum;

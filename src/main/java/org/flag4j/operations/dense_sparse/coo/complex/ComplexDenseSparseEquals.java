@@ -24,11 +24,12 @@
 
 package org.flag4j.operations.dense_sparse.coo.complex;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.CTensorOld;
-import org.flag4j.arrays_old.sparse.CooCMatrixOld;
-import org.flag4j.arrays_old.sparse.CooCTensorOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.operations.common.complex.ComplexProperties;
 import org.flag4j.util.ErrorMessages;
 
@@ -51,16 +52,16 @@ public final class ComplexDenseSparseEquals {
      * @param B Second matrix.
      * @return True if the two matrices are element-wise equivalent.
      */
-    public static boolean matrixEquals(CMatrixOld A, CooCMatrixOld B) {
+    public static boolean matrixEquals(CMatrix A, CooCMatrix B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
-            CNumber[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);
+            Field<Complex128>[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);
 
             int rowIndex, colIndex;
             
             // Remove all nonZero entries from the entries of this matrix.
-            for(int i=0; i<B.nonZeroEntries(); i++) {
+            for(int i=0; i<B.nnz; i++) {
                 rowIndex = B.rowIndices[i];
                 colIndex = B.colIndices[i];
                 int idx = rowIndex*A.numCols + colIndex;
@@ -70,7 +71,7 @@ public final class ComplexDenseSparseEquals {
                     break;
                 }
 
-                entriesCopy[idx] = CNumber.ZERO;
+                entriesCopy[idx] = Complex128.ZERO;
             }
 
             if(equal) {
@@ -94,12 +95,12 @@ public final class ComplexDenseSparseEquals {
      * @param sparseSize Size of the sparse vector.
      * @return True if the two vectors are equal. Returns false otherwise.
      */
-    public static boolean vectorEquals(CNumber[] src1, CNumber[] src2, int[] indices, int sparseSize) {
+    public static boolean vectorEquals(Complex128[] src1, Complex128[] src2, int[] indices, int sparseSize) {
         boolean equal = true;
 
         if(src1.length==sparseSize) {
             int index;
-            CNumber[] src1Copy = new CNumber[src1.length];
+            Complex128[] src1Copy = new Complex128[src1.length];
             System.arraycopy(src1, 0, src1Copy, 0, src1.length);
 
             for(int i=0; i<src2.length; i++) {
@@ -110,7 +111,7 @@ public final class ComplexDenseSparseEquals {
                     break;
 
                 } else {
-                    src1Copy[index] = CNumber.ZERO;
+                    src1Copy[index] = Complex128.ZERO;
                 }
             }
 
@@ -133,16 +134,16 @@ public final class ComplexDenseSparseEquals {
      * @param B Complex sparse tensor.
      * @return True if the two tensors are element-wise equivalent.
      */
-    public static boolean tensorEquals(CTensorOld A, CooCTensorOld B) {
+    public static boolean tensorEquals(CTensor A, CooCTensor B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
-            CNumber[] entriesCopy = new CNumber[A.entries.length];
+            Complex128[] entriesCopy = new Complex128[A.entries.length];
             System.arraycopy(A.entries, 0, entriesCopy, 0, A.entries.length);
             int entriesIndex;
 
             // Remove all nonZero entries from the entries of this matrix.
-            for(int i=0; i<B.nonZeroEntries(); i++) {
+            for(int i=0; i<B.nnz; i++) {
                 entriesIndex = A.shape.entriesIndex(B.indices[i]);
 
                 if(!entriesCopy[entriesIndex].equals(B.entries[i])) {
@@ -150,7 +151,7 @@ public final class ComplexDenseSparseEquals {
                     break;
                 }
 
-                entriesCopy[A.shape.entriesIndex(B.indices[i])] = CNumber.ZERO;
+                entriesCopy[A.shape.entriesIndex(B.indices[i])] = Complex128.ZERO;
             }
 
             if(equal) {

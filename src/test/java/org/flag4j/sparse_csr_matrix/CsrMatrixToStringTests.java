@@ -1,14 +1,14 @@
 package org.flag4j.sparse_csr_matrix;
 
-import org.flag4j.arrays_old.sparse.CooMatrixOld;
-import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays.sparse.CsrMatrix;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CsrMatrixToStringTests {
-    static CsrMatrixOld A;
+    static CsrMatrix A;
     static Shape aShape;
     static double[] nnz;
     static int[] colIndices;
@@ -16,7 +16,7 @@ class CsrMatrixToStringTests {
     String exp = "";
 
     static void build() {
-        A = new CooMatrixOld(aShape, nnz, rowIndices, colIndices).toCsr();
+        A = new CooMatrix(aShape, nnz, rowIndices, colIndices).toCsr();
     }
 
 

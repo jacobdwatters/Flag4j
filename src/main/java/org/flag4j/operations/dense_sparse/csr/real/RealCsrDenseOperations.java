@@ -28,7 +28,7 @@ package org.flag4j.operations.dense_sparse.csr.real;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
 import java.util.function.BinaryOperator;
@@ -59,7 +59,7 @@ public class RealCsrDenseOperations {
     public static Matrix applyBinOpp(CsrMatrix src1, Matrix src2,
                                      BinaryOperator<Double> opp,
                                      UnaryOperator<Double> uOpp) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
         double[] dest = src2.entries.clone();
 
         if(uOpp != null) {
@@ -94,7 +94,7 @@ public class RealCsrDenseOperations {
      */
     public static Matrix applyBinOpp(Matrix src1, CsrMatrix src2,
                                         BinaryOperator<Double> opp) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
         double[] dest = src1.entries.clone();
 
@@ -125,7 +125,7 @@ public class RealCsrDenseOperations {
      */
     public static CsrMatrix applyBinOppToSparse(Matrix src1, CsrMatrix src2,
                                                    BinaryOperator<Double> opp) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
         int[] rowPointers = src2.rowPointers.clone();
         int[] colIndices = src2.colIndices.clone();
@@ -179,5 +179,27 @@ public class RealCsrDenseOperations {
         }
 
         return new Matrix(src1.shape, dest);
+    }
+
+
+    /**
+     * Computes the element-wise sum of two matrices.
+     * @param a First matrix in sum.
+     * @param b Second matrix in sum.
+     * @return The element-wise sum of {@code a} and {@code b}.
+     */
+    public static Matrix add(CsrMatrix a, Matrix denseB) {
+        return applyBinOpp(a, denseB, Double::sum, null);
+    }
+
+
+    /**
+     * Computes the element-wise difference of two matrices.
+     * @param a First matrix in difference.
+     * @param b Second matrix in difference.
+     * @return The element-wise difference of {@code a} and {@code b}.
+     */
+    public static Matrix sub(CsrMatrix a, Matrix denseB) {
+        return applyBinOpp(a, denseB, Double::sum, (Double x) -> -x);
     }
 }

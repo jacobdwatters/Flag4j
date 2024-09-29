@@ -26,13 +26,14 @@ package org.flag4j.linalg.transformations;
 
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
 
@@ -64,7 +65,7 @@ public final class Givens {
      * @throws IndexOutOfBoundsException If {@code i} or {@code j} is greater than or equal to {@code size}.
      */
     public static Matrix getGeneralRotator(int size, int i, int j, double theta) {
-        ParameterChecks.ensureIndexInBounds(size, i, j);
+        ValidateParameters.ensureIndexInBounds(size, i, j);
         if(i==j) throw new IllegalArgumentException("The indices i and j cannot be equal.");
 
         // Initialize rotator as identity matrix.
@@ -109,7 +110,7 @@ public final class Givens {
      * @throws IndexOutOfBoundsException If {@code i} is not in the range [0, v.size).
      */
     public static Matrix getRotator(double[] v, int i) {
-        ParameterChecks.ensureIndexInBounds(v.length, i);
+        ValidateParameters.ensureIndexInBounds(v.length, i);
 
         double[] cs = stableTrigVals(v[0], v[i]);
 
@@ -136,7 +137,7 @@ public final class Givens {
      * @throws IndexOutOfBoundsException If {@code i} is not in the range [0, v.size).
      */
     public static CMatrix getRotator(CVector v, int i) {
-        ParameterChecks.ensureIndexInBounds(v.size, i);
+        ValidateParameters.ensureIndexInBounds(v.size, i);
 
         double r = VectorNorms.norm(v.entries);
         Complex128 c = v.entries[0].div(r);
@@ -162,7 +163,7 @@ public final class Givens {
      * @throws IllegalArgumentException If the vector {@code v} is not of size 2.
      */
     public static Matrix get2x2Rotator(Vector v) {
-        ParameterChecks.ensureArrayLengthsEq(2, v.size);
+        ValidateParameters.ensureArrayLengthsEq(2, v.size);
         return get2x2Rotator(v.entries[0], v.entries[1]);
     }
 
@@ -301,9 +302,9 @@ public final class Givens {
      * If the {@code workArray} is not at least large enough to store the
      * {@code 2*(A.numCols - i - 1)} entries.
      */
-    public static void leftMult2x2Rotator(CMatrix src, CMatrix G, int row, Complex128[] workArray) {
-        Complex128[] src1 = G.entries;
-        Complex128[] src2 = src.entries;
+    public static void leftMult2x2Rotator(CMatrix src, CMatrix G, int row, Field<Complex128>[] workArray) {
+        Field<Complex128>[] src1 = G.entries;
+        Field<Complex128>[] src2 = src.entries;
 
         int cols2 = src.shape.get(1);
         int destCols = (cols2 - (row-1));
@@ -314,20 +315,20 @@ public final class Givens {
         int src2Row1 = m*cols2 + m;
         int src2Row2 = row*cols2 + m;
 
-        Complex128 g11 = src1[0];
-        Complex128 g12 = src1[1];
-        Complex128 g21 = src1[2];
-        Complex128 g22 = src1[3];
+        Field<Complex128> g11 = src1[0];
+        Field<Complex128> g12 = src1[1];
+        Field<Complex128> g21 = src1[2];
+        Field<Complex128> g22 = src1[3];
 
         // Apply the rotator.
         for(int j=m; j<cols2; j++) {
             int destIdx1 = j - m;
             int destIdx2 = destCols + destIdx1;
 
-            workArray[destIdx1] = workArray[destIdx1].add(g11.mult(src2[src2Row1]));
-            workArray[destIdx2] = workArray[destIdx2].add(g21.mult(src2[src2Row1++]));
-            workArray[destIdx1] = workArray[destIdx1].add(g12.mult(src2[src2Row2]));
-            workArray[destIdx2] = workArray[destIdx2].add(g22.mult(src2[src2Row2++]));
+            workArray[destIdx1] = workArray[destIdx1].add(g11.mult((Complex128) src2[src2Row1]));
+            workArray[destIdx2] = workArray[destIdx2].add(g21.mult((Complex128) src2[src2Row1++]));
+            workArray[destIdx1] = workArray[destIdx1].add(g12.mult((Complex128) src2[src2Row2]));
+            workArray[destIdx2] = workArray[destIdx2].add(g22.mult((Complex128) src2[src2Row2++]));
         }
 
         // Copy result back into src matrix.
@@ -352,9 +353,9 @@ public final class Givens {
      * If the {@code workArray} is not at least large enough to store the 
      * {@code 2*(row+1)} entries.     
      */
-    public static void rightMult2x2Rotator(CMatrix src, CMatrix G, int row, Complex128[] workArray) {
-        Complex128[] src1 = src.entries;
-        Complex128[] src2 = G.entries;
+    public static void rightMult2x2Rotator(CMatrix src, CMatrix G, int row, Field<Complex128>[] workArray) {
+        Field<Complex128>[] src1 = src.entries;
+        Field<Complex128>[] src2 = G.entries;
 
         int cols1 = src.numCols;
         int rows1 = src.numRows;
@@ -396,9 +397,9 @@ public final class Givens {
      * @throws IllegalArgumentException If {@code v.size != 2}.
      */
     public static CMatrix get2x2Rotator(CVector v) {
-        ParameterChecks.ensureArrayLengthsEq(2, v.size);
+        ValidateParameters.ensureArrayLengthsEq(2, v.size);
 
-        return get2x2Rotator(v.entries[0], v.entries[1]);
+        return get2x2Rotator((Complex128) v.entries[0], (Complex128) v.entries[1]);
     }
 
 

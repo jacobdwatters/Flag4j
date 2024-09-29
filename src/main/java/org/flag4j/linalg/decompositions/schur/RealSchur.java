@@ -32,7 +32,7 @@ import org.flag4j.linalg.Eigen;
 import org.flag4j.linalg.decompositions.hess.RealHess;
 import org.flag4j.linalg.transformations.Givens;
 import org.flag4j.linalg.transformations.Householder;
-import org.flag4j.operations_old.common.real.AggregateReal;
+import org.flag4j.operations.common.real.AggregateReal;
 import org.flag4j.rng.RandomComplex;
 
 import static org.flag4j.util.Flag4jConstants.EPS_F64;
@@ -526,10 +526,10 @@ public class RealSchur extends Schur<Matrix, double[]> {
         Complex128[] givensWorkComplex = new Complex128[2*numRows];
 
         for(int m=numRows-1; m>0; m--) {
-            Complex128 a11 = tComplex.entries[(m - 1)*numRows + m - 1];
-            Complex128 a12 = tComplex.entries[(m - 1)*numRows + m];
-            Complex128 a21 = tComplex.entries[m*numRows + m - 1];
-            Complex128 a22 = tComplex.entries[m*numRows + m];
+            Complex128 a11 = (Complex128) tComplex.entries[(m - 1)*numRows + m - 1];
+            Complex128 a12 = (Complex128) tComplex.entries[(m - 1)*numRows + m];
+            Complex128 a21 = (Complex128) tComplex.entries[m*numRows + m - 1];
+            Complex128 a22 = (Complex128) tComplex.entries[m*numRows + m];
 
             if(a21.mag() > EPS_F64*(a11.mag() + a22.mag())) {
                 // non-converged 2x2 block found.

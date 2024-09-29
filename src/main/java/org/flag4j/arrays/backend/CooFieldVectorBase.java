@@ -31,9 +31,9 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooFieldVector;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.operations.common.field_ops.CompareField;
+import org.flag4j.operations.sparse.coo.SparseDataWrapper;
 import org.flag4j.operations.sparse.coo.field_ops.CooFieldVectorOperations;
-import org.flag4j.operations_old.sparse.coo.SparseDataWrapper;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.util.Arrays;
@@ -47,9 +47,9 @@ import java.util.List;
  * <p>The {@link #entries non-zero entries} and {@link #indices non-zero indices} of a COO vector are mutable but the {@link #shape}
  * and total number of non-zero entries is fixed.</p>
  *
- * <p>Sparse vectors allow for the efficient storage of and operations on vectors that contain many zero values.</p>
+ * <p>Sparse vectors allow for the efficient storage of and operations on large vectors that contain many zero values.</p>
  *
- * <p>COO vectors are optimized for hyper-sparse vectors (i.e. vectors which contain almost all zeros relative to the size of the
+ * <p>COO vectors are optimized for large hyper-sparse vectors (i.e. vectors which contain almost all zeros relative to the size of the
  * vector).</p>
  *
  * <p>A sparse COO vector is stored as:</p>
@@ -71,7 +71,7 @@ import java.util.List;
  * @param <W> Type of dense matrix equivalent to {@code U}.
  * @param <Y> Type of the field element in this vector.
  */
-public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W, Y>, U extends CooFieldMatrixBase<U, W, T, Y>,
+public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W, Y>, U extends CooFieldMatrixBase<U, W, T, V, Y>,
         V extends DenseFieldVectorBase<V, W, T, Y>, W extends DenseFieldMatrixBase<W, U, ?, V, Y>, Y extends Field<Y>>
         extends FieldTensorBase<T, V, Y>
         implements SparseVectorMixin<T, V, U, W, Y> {
@@ -97,7 +97,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-    protected CooFieldVectorBase(int size, Y[] entries, int[] indices) {
+    protected CooFieldVectorBase(int size, Field<Y>[] entries, int[] indices) {
         super(new Shape(size), entries);
         if(entries.length != indices.length) {
             throw new IllegalArgumentException("entries and indices arrays of a COO vector must have the same length but got " +
@@ -122,7 +122,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
      * @return A sparse COO vector of the same type as this vector with the specified {@code size}, non-zero entries,
      * and non-zero indices.
      */
-    public abstract T makeLikeTensor(int size, Y[] entries, int[] indices);
+    public abstract T makeLikeTensor(int size, Field<Y>[] entries, int[] indices);
 
 
     /**
@@ -133,7 +133,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
      * @return A sparse COO vector of the same type as this tensor with the specified {@code size}, non-zero entries, and the same
      * non-zero indices as this vector.
      */
-    public abstract T makeLikeTensor(int size, Y[] entries);
+    public abstract T makeLikeTensor(int size, Field<Y>[] entries);
 
 
     /**
@@ -144,7 +144,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
      * @return A sparse COO vector of the same type as this vector with the specified {@code size}, non-zero entries,
      * and non-zero indices.
      */
-    public abstract T makeLikeTensor(int size, List<Y> entries, List<Integer> indices);
+    public abstract T makeLikeTensor(int size, List<Field<Y>> entries, List<Integer> indices);
 
 
     /**
@@ -152,7 +152,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
      * @param entries The entries of the dense vector.
      * @return A dense vector which is of a similar type to this sparse COO vector containing the specified {@code entries}.
      */
-    public abstract V makeLikeDenseTensor(Y... entries);
+    public abstract V makeLikeDenseTensor(Field<Y>... entries);
 
 
     /**
@@ -165,7 +165,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
      * @return A dense matrix which is of a similar type to this sparse COO vector with the specified {@code shape} and containing
      * the specified {@code entries}.
      */
-    public abstract U makeLikeMatrix(Shape shape, Y[] entries, int[] rowIndices, int[] colIndices);
+    public abstract U makeLikeMatrix(Shape shape, Field<Y>[] entries, int[] rowIndices, int[] colIndices);
 
 
     /**
@@ -176,7 +176,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
      * @return A dense matrix which is of a similar type to this sparse COO vector with the specified {@code shape} and containing
      * the specified {@code entries}.
      */
-    public abstract W makeLikeDenseMatrix(Shape shape, Y... entries);
+    public abstract W makeLikeDenseMatrix(Shape shape, Field<Y>... entries);
 
 
 
@@ -202,7 +202,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
      */
     @Override
     public T H(int axis1, int axis2) {
-        ParameterChecks.ensureValidAxes(shape, axis1, axis2);
+        ValidateParameters.ensureValidAxes(shape, axis1, axis2);
         return conj();
     }
 
@@ -223,7 +223,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
      */
     @Override
     public T H(int... axes) {
-        ParameterChecks.ensurePermutation(axes);
+        ValidateParameters.ensurePermutation(axes);
         return conj();
     }
 
@@ -272,7 +272,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
      */
     @Override
     public T T(int axis1, int axis2) {
-        ParameterChecks.ensureValidAxes(shape, axis1, axis2);
+        ValidateParameters.ensureValidAxes(shape, axis1, axis2);
         return copy();
     }
 
@@ -293,7 +293,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
      */
     @Override
     public T T(int... axes) {
-        ParameterChecks.ensurePermutation(axes);
+        ValidateParameters.ensurePermutation(axes);
         return copy();
     }
 
@@ -328,7 +328,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
             newIndices[this.indices.length+i] = b.indices[i] + this.size;
         }
 
-        return makeLikeTensor(this.size + b.size, (Y[]) newEntries, newIndices);
+        return makeLikeTensor(this.size + b.size, newEntries, newIndices);
     }
 
 
@@ -431,13 +431,13 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
         } else {
             result = true;
             int sparseIndex = 0;
-            Y scale = getZeroElement();
+            Field<Y> scale = getZeroElement();
             if(scale == null) scale = b.getZeroElement();
 
             // Find first non-zero entry in b and compute the scaling factor (we know there is at least one from else-if).
             for(int i=0; i<b.size; i++) {
                 if(!b.entries[i].isZero()) {
-                    scale = this.entries[i].div(b.entries[this.indices[i]]);
+                    scale = this.entries[i].div((Y) b.entries[this.indices[i]]);
                     break;
                 }
             }
@@ -448,7 +448,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
                     if(!b.entries[i].isZero()) return false;
                 } else {
                     // Ensure the scaled entry is approximately equal to the entry in this vector.
-                    if(this.entries[sparseIndex].sub(scale.mult(b.entries[i])).mag() > tol) return false;
+                    if(this.entries[sparseIndex].sub(scale.mult((Y) b.entries[i])).mag() > tol) return false;
                     sparseIndex++;
                 }
             }
@@ -503,12 +503,12 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
     @Override
     public V toDense() {
         Field<Y>[] denseEntries = new Field[size];
-        Arrays.fill(denseEntries, nnz > 0 ? denseEntries[0].getZero() : null);
+        Arrays.fill(denseEntries, nnz > 0 ? getZeroElement() : null);
 
         for(int i = 0; i < nnz; i++)
             denseEntries[indices[i]] = entries[i];
 
-        return makeLikeDenseTensor((Y[]) denseEntries);
+        return makeLikeDenseTensor(denseEntries);
     }
 
 
@@ -532,12 +532,11 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
      */
     @Override
     public Y get(int... indices) {
-        ParameterChecks.ensureEquals(indices.length, 1);
-        ParameterChecks.ensureInRange(indices[0], 0, size, "index");
-        Y zero = getZeroElement();
+        ValidateParameters.ensureEquals(indices.length, 1);
+        ValidateParameters.ensureInRange(indices[0], 0, size, "index");
 
         int idx = Arrays.binarySearch(this.indices, indices[0]);
-        return idx>=0 ? entries[idx] : zero;
+        return idx>=0 ? (Y) entries[idx] : getZeroElement();
     }
 
 
@@ -564,7 +563,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
      */
     @Override
     public T flatten(int axis) {
-        ParameterChecks.ensureValidAxes(shape, axis);
+        ValidateParameters.ensureValidAxes(shape, axis);
         return copy();
     }
 
@@ -901,6 +900,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
      */
     @Override
     public U repeat(int n, int axis) {
+        // TODO: Remove extend methods which are the same.
         return (U) CooFieldVectorOperations.repeat(this, n, axis);
     }
 
@@ -932,7 +932,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
      */
     @Override
     public U stack(T b, int axis) {
-        ParameterChecks.ensureAxis2D(axis);
+        ValidateParameters.ensureAxis2D(axis);
         return axis==0 ? stack(b) : stack(b).T();
     }
 

@@ -24,17 +24,21 @@
 
 package org.flag4j.arrays.sparse;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.CsrMatrixMixin;
 import org.flag4j.arrays.backend.MatrixMixin;
-import org.flag4j.arrays.backend.MatrixVectorOpsMixin;
 import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.Shape;
+import org.flag4j.operations.dense.complex.ComplexDenseOperations;
 import org.flag4j.operations.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
+import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
 import org.flag4j.operations.sparse.SparseUtils;
 import org.flag4j.operations.sparse.csr.real.*;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.operations.sparse.csr.real_complex.RealComplexCsrMatrixMultiplication;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.math.BigDecimal;
@@ -73,7 +77,7 @@ import static org.flag4j.operations.sparse.SparseUtils.sortCsrMatrix;
  * <p>If indices need to be sorted explicitly, call {@link #sortIndices()}.</p>
  */
 public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
-        implements CsrMatrixMixin<CsrMatrix, Matrix, Double>, MatrixVectorOpsMixin<CsrMatrix, CooVector, Vector> {
+        implements CsrMatrixMixin<CsrMatrix, Matrix, CooVector, Vector, Double> {
 
 
     /**
@@ -123,7 +127,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      */
     public CsrMatrix(Shape shape, double[] entries, int[] rowPointers, int[] colIndices) {
         super(shape, entries);
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
 
         this.rowPointers = rowPointers;
         this.colIndices = colIndices;
@@ -157,6 +161,21 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
 
 
     /**
+     * Constructs a zero matrix with the specified shape.
+     * @param numRows Number of rows in the zero matrix to construct.
+     * @param numCols Number of columns in the zero matrix to construct.
+     */
+    public CsrMatrix(int numRows, int numCols) {
+        super(new Shape(numRows, numCols), new double[0]);
+        this.rowPointers = new int[0];
+        this.colIndices = new int[0];
+        this.nnz = 0;
+        this.numRows = numRows;
+        this.numCols = numCols;
+    }
+
+
+    /**
      * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
      * computes the sum of products between the two tensors along the specified set of axes.
      *
@@ -174,6 +193,67 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
     @Override
     public Matrix tensorDot(CsrMatrix src2, int[] aAxes, int[] bAxes) {
         return RealCsrMatrixTensorDot.tensorDot(this, src2, aAxes, bAxes);
+    }
+
+
+    /**
+     * Sets the element of this tensor at the specified indices.
+     *
+     * @param value New value to set the specified index of this tensor to.
+     * @param indices Indices of the element to set.
+     *
+     * @return A copy of this tensor with the updated value is returned.
+     *
+     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
+     */
+    @Override
+    public CsrMatrix set(Double value, int... indices) {
+        // Ensure indices are in bounds.
+        ValidateParameters.ensureValidIndex(shape, indices);
+        int row = indices[0];
+        int col = indices[1];
+
+        double[] newEntries;
+        int[] newRowPointers = rowPointers.clone();
+        int[] newColIndices;
+        boolean found = false; // Flag indicating an element already exists in this matrix at the specified row and col.
+        int loc = -1;
+
+        if(rowPointers[row] < rowPointers[row+1]) {
+            int start = rowPointers[row];
+            int stop = rowPointers[row+1];
+
+            loc = Arrays.binarySearch(colIndices, start, stop, col);
+            found = loc >= 0;
+        }
+
+        if(found) {
+            newEntries = entries.clone();
+            newEntries[loc] = value;
+            newRowPointers = rowPointers.clone();
+            newColIndices = colIndices.clone();
+        } else {
+            loc = -loc - 1; // Compute insertion index as specified by Arrays.binarySearch
+            newEntries = new double[entries.length + 1];
+            newColIndices = new int[entries.length + 1];
+
+            // Copy old entries and insert new one.
+            System.arraycopy(entries, 0, newEntries, 0, loc);
+            newEntries[loc] = value;
+            System.arraycopy(entries, loc, newEntries, loc+1, entries.length-loc);
+
+            // Copy old column indices and insert new one.
+            System.arraycopy(colIndices, 0, newColIndices, 0, loc);
+            newColIndices[loc] = col;
+            System.arraycopy(colIndices, loc, newColIndices, loc+1, entries.length-loc);
+
+            // Increment row pointers.
+            for(int i=row+1; i<rowPointers.length; i++) {
+                newRowPointers[i]++;
+            }
+        }
+
+        return new CsrMatrix(shape, newEntries, newRowPointers, newColIndices);
     }
 
 
@@ -207,7 +287,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      */
     @Override
     public CsrMatrix T(int axis1, int axis2) {
-        ParameterChecks.ensureValidAxes(shape, axis1, axis2);
+        ValidateParameters.ensureValidAxes(shape, axis1, axis2);
         if(axis1 == axis2) return copy();
 
         return RealCsrOperations.transpose(this);
@@ -335,7 +415,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      */
     @Override
     public Double tr() {
-        ParameterChecks.ensureSquareMatrix(shape);
+        ValidateParameters.ensureSquareMatrix(shape);
         double trace = 0;
 
         for(int i=0; i<numRows; i++) {
@@ -465,6 +545,51 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
 
 
     /**
+     * <p>Computes the matrix multiplication between two sparse CSR matrices and stores the result in a CSR matrix.</p>
+     *
+     * <p>Warning: This method will likely be slower than {@link #mult(CsrMatrix)} if the result of multiplying this matrix
+     * with {@code b} is not very sparse. Further, multiplying two sparse matrices may result in a dense matrix so this
+     * method should be used with caution.</p>
+     *
+     * @param b Matrix to multiply to this matrix.
+     * @return The result of matrix multiplying this matrix with {@code b} as a sparse CSR matrix.
+     */
+    public CsrCMatrix mult2CSR(CsrCMatrix b) {
+        return RealComplexCsrMatrixMultiplication.standardAsSparse(this, b);
+    }
+
+
+    /**
+     * <p>Computes the matrix multiplication between two sparse CSR matrices and stores the result in a CSR matrix.</p>
+     *
+     * <p>Warning: This method will likely be slower than {@link #mult(CsrMatrix)} if the result of multiplying this matrix
+     * with {@code b} is not very sparse. Further, multiplying two sparse matrices may result in a dense matrix so this
+     * method should be used with caution.</p>
+     *
+     * @param b Matrix to multiply to this matrix.
+     * @return The result of matrix multiplying this matrix with {@code b} as a sparse CSR matrix.
+     */
+    public CsrMatrix mult2CSR(CsrMatrix b) {
+        return RealCsrMatrixMultiplication.standardAsSparse(this, b);
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param b Second matrix in the matrix multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with matrix {@code b}.
+     *
+     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the number
+     *                                of rows in matrix {@code b}.
+     */
+    public CMatrix mult(CsrCMatrix b) {
+        return RealComplexCsrMatrixMultiplication.standard(this, b);
+    }
+
+
+    /**
      * Multiplies this matrix with the transpose of the {@code b} tensor as if by
      * {@code this.mult(b.T())}.
      * For large matrices, this method may
@@ -527,6 +652,19 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
     @Override
     public CsrMatrix augment(CsrMatrix b) {
         return toCoo().augment(b.toCoo()).toCsr();
+    }
+
+
+    /**
+     * Augments a vector to this matrix.
+     *
+     * @param b The vector to augment to this matrix.
+     *
+     * @return The result of augmenting {@code b} to this matrix.
+     */
+    @Override
+    public CsrMatrix augment(CooVector b) {
+        return toCoo().augment(b).toCsr();
     }
 
 
@@ -715,7 +853,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
     @Override
     public CsrMatrix set(Double value, int row, int col) {
         // Ensure indices are in bounds.
-        ParameterChecks.ensureValidIndex(shape, row, col);
+        ValidateParameters.ensureValidIndex(shape, row, col);
         double[] newEntries;
         int[] newRowPointers = rowPointers.clone();
         int[] newColIndices;
@@ -816,7 +954,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      */
     @Override
     public Vector mult(CooVector b) {
-        return RealCsrDenseMatrixMultiplication.standardVector(this, b);
+        return RealCsrMatrixMultiplication.standardVector(this, b);
     }
 
 
@@ -829,8 +967,6 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
     @Override
     public CooVector toVector() {
         int type = vectorType();
-
-        double[] destEntries = this.entries.clone(); // Copy non-zero values.
         int[] indices = new int[entries.length];
 
         if(type == -1) {
@@ -851,16 +987,12 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
         } else {
             // Column vector.
             for(int i=0; i<numRows; i++) {
-                int start = rowPointers[i];
-                int stop = rowPointers[i+1];
-
-                for(int j=start; j<stop; j++) {
+                for(int j=rowPointers[i], stop=rowPointers[i+1]; j<stop; j++)
                     indices[j] = i;
-                }
             }
         }
 
-        return new CooVector(shape.totalEntries().intValueExact(), destEntries, indices);
+        return new CooVector(shape.totalEntries().intValueExact(), entries.clone(), indices);
     }
 
 
@@ -885,7 +1017,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      */
     @Override
     public CooVector getRow(int rowIdx) {
-        ParameterChecks.ensureIndexInBounds(numRows, rowIdx);
+        ValidateParameters.ensureIndexInBounds(numRows, rowIdx);
         int start = rowPointers[rowIdx];
 
         double[] destEntries = new double[rowPointers[rowIdx + 1]-start];
@@ -913,8 +1045,8 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      */
     @Override
     public CooVector getRow(int rowIdx, int colStart, int colEnd) {
-        ParameterChecks.ensureIndexInBounds(numRows, rowIdx);
-        ParameterChecks.ensureIndexInBounds(numCols, colStart, colEnd);
+        ValidateParameters.ensureIndexInBounds(numRows, rowIdx);
+        ValidateParameters.ensureIndexInBounds(numCols, colStart, colEnd-1);
         int start = rowPointers[rowIdx];
         int end = rowPointers[rowIdx+1];
 
@@ -946,7 +1078,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      */
     @Override
     public CooVector getCol(int colIdx) {
-        return getCol(colIdx, 0, numCols);
+        return getCol(colIdx, 0, numRows);
     }
 
 
@@ -966,8 +1098,8 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      */
     @Override
     public CooVector getCol(int colIdx, int rowStart, int rowEnd) {
-        ParameterChecks.ensureIndexInBounds(numCols, colIdx);
-        ParameterChecks.ensureIndexInBounds(numRows, rowStart, rowEnd-1);
+        ValidateParameters.ensureIndexInBounds(numCols, colIdx);
+        ValidateParameters.ensureIndexInBounds(numRows, rowStart, rowEnd-1);
 
         List<Double> destEntries = new ArrayList<>();
         List<Integer> destIndices = new ArrayList<>();
@@ -1085,6 +1217,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
         if(nnz == 0) return 0;
 
         int result = 17;
+        result = 31*result + shape.hashCode();
 
         // Hash calculation ignores explicit zeros in the matrix. This upholds the contract with the equals(Object) method.
         for(int row = 0; row<numRows; row++) {
@@ -1098,5 +1231,48 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
         }
 
         return result;
+    }
+
+
+    /**
+     * Multiplies this sparse CSR matrix with a real dense matrix.
+     * @param b The real dense matrix in the matrix-matrix product.
+     * @return Computes the matrix product of this matrix and {@code b}.
+     * @throws IllegalArgumentException If {@code this.numCols != b.numRows}.
+     */
+    public Matrix mult(Matrix b) {
+        return RealCsrDenseMatrixMultiplication.standard(this, b);
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param B Second matrix in the matrix multiplication.
+     * @return The result of matrix multiplying this matrix with matrix B.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
+    public CMatrix mult(CMatrix B) {
+        return RealComplexCsrDenseMatrixMultiplication.standard(this, B);
+    }
+
+
+    /**
+     * Adds a complex-valued scalar to all non-zero entries of this sparse matrix.
+     * @param b scalar to add.
+     * @return The result of adding this matrix to {@code b}.
+     */
+    public CooCMatrix add(Complex128 b) {
+        return new CooCMatrix(shape, ComplexDenseOperations.add(entries, b), rowPointers.clone(), colIndices.clone());
+    }
+
+
+    /**
+     * Subtracts a complex-valued scalar from all non-zero entries of this sparse matrix.
+     * @param b scalar to subtract.
+     * @return The result of subtracting {@code b} from this matrix's non-zero entries.
+     */
+    public CooCMatrix sub(Complex128 b) {
+        return new CooCMatrix(shape, ComplexDenseOperations.add(entries, b), rowPointers.clone(), colIndices.clone());
     }
 }

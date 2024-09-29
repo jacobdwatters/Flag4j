@@ -25,17 +25,18 @@
 package org.flag4j.arrays.sparse;
 
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
 import org.flag4j.arrays.backend.SparseTensorMixin;
 import org.flag4j.arrays.dense.Tensor;
-import org.flag4j.arrays.Shape;
 import org.flag4j.operations.dense.real.AggregateDenseReal;
 import org.flag4j.operations.sparse.coo.SparseDataWrapper;
 import org.flag4j.operations.sparse.coo.real.RealCooTensorDot;
 import org.flag4j.operations.sparse.coo.real.RealCooTensorOperations;
 import org.flag4j.operations.sparse.coo.real.RealSparseEquals;
+import org.flag4j.operations.sparse.coo.real_complex.RealComplexCooTensorOperations;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.math.BigDecimal;
@@ -118,6 +119,41 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
         super(shape, ArrayUtils.fromDoubleList(entries));
         this.indices = indices.toArray(new int[0][]);
         this.nnz = super.entries.length;
+    }
+
+
+    /**
+     * Creates a zero matrix with the specified shape.
+     * @param shape The shape of the zero matrix to construct.
+     */
+    public CooTensor(Shape shape) {
+        super(shape, new double[0]);
+        this.indices = new int[0][getRank()];
+        this.nnz = super.entries.length;
+    }
+
+
+    /**
+     * Creates a sparse COO matrix with the specified shape, non-zero entries, and indices.
+     * @param shape Shape of the matrix to construct.
+     * @param entries Non-zero entries of the sparse COO matrix.
+     * @param indices Indices of the non-zero entries in the sparse COO matrix.
+     */
+    public CooTensor(Shape shape, int[] entries, int[][] indices) {
+        super(shape, ArrayUtils.asDouble(entries, null));
+        this.indices = indices;
+        this.nnz = entries.length;
+    }
+
+
+    /**
+     * Constructs a copy of the specified matrix.
+     * @param b Matrix to make copy of.
+     */
+    public CooTensor(CooTensor b) {
+        super(b.shape, b.entries.clone());
+        this.indices = ArrayUtils.deepCopy(b.indices, null);
+        this.nnz = b.nnz;
     }
 
 
@@ -226,13 +262,30 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      */
     @Override
     public Double get(int... indices) {
-        ParameterChecks.ensureValidIndex(shape, indices);
+        ValidateParameters.ensureValidIndex(shape, indices);
         if(entries.length == 0) return null; // Can not get reference of field so no way to get zero element.
 
         for(int i=0; i<nnz; i++)
             if(Arrays.equals(this.indices[i], indices)) return entries[i];
 
         return 0.0; // Return zero if the index is not found.
+    }
+
+
+    /**
+     * Sets the element of this tensor at the specified indices.
+     *
+     * @param value New value to set the specified index of this tensor to.
+     * @param indices Indices of the element to set.
+     *
+     * @return A copy of this tensor with the updated value is returned.
+     *
+     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
+     */
+    @Override
+    public CooTensor set(Double value, int... indices) {
+        // TODO: Implement this method
+        return null;
     }
 
 
@@ -264,7 +317,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      */
     @Override
     public CooTensor flatten(int axis) {
-        ParameterChecks.ensureIndexInBounds(indices[0].length, axis);
+        ValidateParameters.ensureIndexInBounds(indices[0].length, axis);
         int[][] destIndices = new int[indices.length][indices[0].length];
 
         // Compute new shape.
@@ -290,7 +343,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      */
     @Override
     public CooTensor reshape(Shape newShape) {
-        ParameterChecks.ensureBroadcastable(shape, newShape);
+        ValidateParameters.ensureBroadcastable(shape, newShape);
 
         int rank = indices[0].length;
         int newRank = newShape.getRank();
@@ -384,6 +437,20 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
 
 
     /**
+     * Computes the element-wise sum between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise sum.
+     *
+     * @return The sum of this tensor with {@code b}.
+     *
+     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     */
+    public CooCTensor add(CooCTensor b) {
+        return RealComplexCooTensorOperations.add(b, this);
+    }
+
+
+    /**
      * Computes the element-wise difference between two tensors of the same shape.
      *
      * @param b Second tensor in the element-wise difference.
@@ -454,9 +521,9 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
     @Override
     public CooTensor tensorTr(int axis1, int axis2) {
         // Validate parameters.
-        ParameterChecks.ensureNotEquals(axis1, axis2);
-        ParameterChecks.ensureValidIndices(getRank(), axis1, axis2);
-        ParameterChecks.ensureEquals(shape.get(axis1), shape.get(axis2));
+        ValidateParameters.ensureNotEquals(axis1, axis2);
+        ValidateParameters.ensureValidIndices(getRank(), axis1, axis2);
+        ValidateParameters.ensureEquals(shape.get(axis1), shape.get(axis2));
 
         int rank = getRank();
         int[] dims = shape.getDims();
@@ -555,7 +622,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
     @Override
     public CooTensor T(int axis1, int axis2) {
         int rank = getRank();
-        ParameterChecks.ensureIndexInBounds(rank, axis1, axis2);
+        ValidateParameters.ensureIndexInBounds(rank, axis1, axis2);
 
         if(axis1 == axis2) return copy(); // Simply return a copy.
 
@@ -593,8 +660,8 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
     @Override
     public CooTensor T(int... axes) {
         int rank = getRank();
-        ParameterChecks.ensureEquals(rank, axes.length);
-        ParameterChecks.ensurePermutation(axes);
+        ValidateParameters.ensureEquals(rank, axes.length);
+        ValidateParameters.ensurePermutation(axes);
 
         int[][] transposeIndices = new int[nnz][rank];
         double[] transposeEntries = new double[nnz];
@@ -821,4 +888,15 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
 
         return result;
     }
+
+
+    /**
+     * Converts this real COO tensor to an equivalent complex COO tensor.
+     * @return A complex COO tensor equivalent to this tensor.
+     */
+    public CooCTensor toComplex() {
+        return new CooCTensor(shape, ArrayUtils.wrapAsComplex128(entries, null), ArrayUtils.deepCopy(indices, null));
+    }
+
+
 }

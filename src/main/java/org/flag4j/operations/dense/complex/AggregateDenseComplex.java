@@ -24,11 +24,11 @@
 
 package org.flag4j.operations.dense.complex;
 
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.util.ErrorMessages;
 
 /**
- * This class contains several low-level methods useful for computing aggregation operations_old on dense tensors.
+ * This class contains several low-level methods useful for computing aggregation operations on dense tensors.
  */
 public class AggregateDenseComplex {
 
@@ -44,7 +44,7 @@ public class AggregateDenseComplex {
      * @param entries Entries of the tensor.
      * @return The index of the minimum value by magnitude in this tensor. If there are zero entries in the array, -1 is returned.
      */
-    public static int argmin(CNumber[] entries) {
+    public static int argmin(Complex128[] entries) {
         double currMin = Double.MAX_VALUE;
         int currMinIndex = -1;
 
@@ -65,7 +65,7 @@ public class AggregateDenseComplex {
      * @param entries Entries of the tensor.
      * @return The index of the maximum value by magnitude in this tensor. If there are zero entries in the array, -1 is returned.
      */
-    public static int argmax(CNumber[] entries) {
+    public static int argmax(Complex128[] entries) {
         double currMax = Double.MIN_VALUE;
         int currMaxIndex = -1;
 

@@ -1,9 +1,9 @@
 package org.flag4j.tensor;
 
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.arrays_old.dense.VectorOld;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays.dense.Vector;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -20,7 +20,7 @@ class TensorConstructorTests {
     double[] expEntries;
     int expRank;
     Shape expShape;
-    TensorOld A, B;
+    Tensor A, B;
 
 
     private double[] toDouble(Integer[] arr) {
@@ -39,7 +39,7 @@ class TensorConstructorTests {
         expShape = new Shape(4, 5, 6, 7, 1, 2, 4);
         expEntries = new double[expShape.totalEntries().intValue()];
         expRank = expShape.getRank();
-        A = new TensorOld(expShape);
+        A = new Tensor(expShape);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.entries);
@@ -48,7 +48,7 @@ class TensorConstructorTests {
         expShape = new Shape();
         expEntries = new double[expShape.totalEntries().intValue()];
         expRank = expShape.getRank();
-        A = new TensorOld(expShape);
+        A = new Tensor(expShape);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.entries);
@@ -57,7 +57,7 @@ class TensorConstructorTests {
         expShape = new Shape(1003);
         expEntries = new double[expShape.totalEntries().intValue()];
         expRank = expShape.getRank();
-        A = new TensorOld(expShape);
+        A = new Tensor(expShape);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.entries);
@@ -72,7 +72,7 @@ class TensorConstructorTests {
         expEntries = new double[expShape.totalEntries().intValue()];
         expRank = expShape.getRank();
         Arrays.fill(expEntries, value);
-        A = new TensorOld(expShape, value);
+        A = new Tensor(expShape, value);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.entries);
@@ -83,7 +83,7 @@ class TensorConstructorTests {
         expEntries = new double[expShape.totalEntries().intValue()];
         expRank = expShape.getRank();
         Arrays.fill(expEntries, value);
-        A = new TensorOld(expShape, value);
+        A = new Tensor(expShape, value);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.entries);
@@ -94,7 +94,7 @@ class TensorConstructorTests {
         expEntries = new double[expShape.totalEntries().intValue()];
         expRank = expShape.getRank();
         Arrays.fill(expEntries, value);
-        A = new TensorOld(expShape, value);
+        A = new Tensor(expShape, value);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.entries);
@@ -110,7 +110,7 @@ class TensorConstructorTests {
                 9.33, 3244, 156.224, 3445, 60.3, 44, 13, 908, 4, 1};
         expRank = expShape.getRank();
         expEntries = entriesD.clone();
-        A = new TensorOld(expShape, entriesD);
+        A = new Tensor(expShape, entriesD);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -123,7 +123,7 @@ class TensorConstructorTests {
                 9.33, 3244, 156.224, 3445, 60.3, 44, 13, 908, 4, 1};
         expRank = expShape.getRank();
         expEntries = entriesD.clone();
-        A = new TensorOld(expShape, entriesD);
+        A = new Tensor(expShape, entriesD);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -136,7 +136,7 @@ class TensorConstructorTests {
                 9.33, 3244, 156.224, 3445, 60.3, 44, 13, 908, 4, 1};
         expRank = expShape.getRank();
         expEntries = entriesD.clone();
-        A = new TensorOld(expShape, entriesD);
+        A = new Tensor(expShape, entriesD);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -149,7 +149,7 @@ class TensorConstructorTests {
                 9.33, 3244, 156.224, 3445, 60.3, 44, 13, 908, 4, 1};
         expRank = expShape.getRank();
         expEntries = entriesD.clone();
-        A = new TensorOld(expShape, entriesD);
+        A = new Tensor(expShape, entriesD);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -163,7 +163,7 @@ class TensorConstructorTests {
         expRank = expShape.getRank();
         expEntries = entriesD.clone();
 
-        assertThrows(IllegalArgumentException.class, () -> new TensorOld(expShape, entriesD));
+        assertThrows(IllegalArgumentException.class, () -> new Tensor(expShape, entriesD));
 
 
         // ---------- Sub-case 6 ----------
@@ -173,7 +173,7 @@ class TensorConstructorTests {
                 9.33, 3244, 156.224, 3445, 60.3, 44, 13, 1, 4, 56, 113, 34, 5};
         expRank = expShape.getRank();
         expEntries = entriesD.clone();
-        assertThrows(IllegalArgumentException.class, () -> new TensorOld(expShape, entriesD));
+        assertThrows(IllegalArgumentException.class, () -> new Tensor(expShape, entriesD));
     }
 
 
@@ -186,7 +186,7 @@ class TensorConstructorTests {
                 9, 3244, 156, 3445, 60, 44, 13, 908, 4, 1};
         expRank = expShape.getRank();
         expEntries = Arrays.stream(entriesI).asDoubleStream().toArray();
-        A = new TensorOld(expShape, entriesI);
+        A = new Tensor(expShape, entriesI);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -199,7 +199,7 @@ class TensorConstructorTests {
                 9, 3244, 156, 3445, 60, 44, 13, 908, 4, 1};
         expRank = expShape.getRank();
         expEntries = Arrays.stream(entriesI).asDoubleStream().toArray();
-        A = new TensorOld(expShape, entriesI);
+        A = new Tensor(expShape, entriesI);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -212,7 +212,7 @@ class TensorConstructorTests {
                 9, 3244, 156, 3445, 60, 44, 13, 908, 4, 1};
         expRank = expShape.getRank();
         expEntries = Arrays.stream(entriesI).asDoubleStream().toArray();
-        A = new TensorOld(expShape, entriesI);
+        A = new Tensor(expShape, entriesI);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -225,7 +225,7 @@ class TensorConstructorTests {
                 9, 3244, 156, 3445, 60, 44, 13, 908, 4, 1};
         expRank = expShape.getRank();
         expEntries = Arrays.stream(entriesI).asDoubleStream().toArray();
-        A = new TensorOld(expShape, entriesI);
+        A = new Tensor(expShape, entriesI);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -239,7 +239,7 @@ class TensorConstructorTests {
         expRank = expShape.getRank();
         expEntries = Arrays.stream(entriesI).asDoubleStream().toArray();
 
-        assertThrows(IllegalArgumentException.class, () -> new TensorOld(expShape, entriesI));
+        assertThrows(IllegalArgumentException.class, () -> new Tensor(expShape, entriesI));
 
         // ---------- Sub-case 6 ----------
         expShape = new Shape(5, 6);
@@ -248,7 +248,7 @@ class TensorConstructorTests {
                 9, 3244, 156, 3445, 60, 44, 13, 908, 4, 1, 19, 2313, 112, 3};
         expRank = expShape.getRank();
         expEntries = Arrays.stream(entriesI).asDoubleStream().toArray();
-        assertThrows(IllegalArgumentException.class, () -> new TensorOld(expShape, entriesI));
+        assertThrows(IllegalArgumentException.class, () -> new Tensor(expShape, entriesI));
     }
 
 
@@ -257,8 +257,8 @@ class TensorConstructorTests {
         expShape = new Shape(2, 3, 1, 2);
         expEntries = new double[]{1, -1.4133, 113.4, 0.4, 11.3, 445, 133.445, 9.8, 13384, -993.44, 11, 12};
         expRank = expShape.getRank();
-        B = new TensorOld(expShape, expEntries);
-        A = new TensorOld(B);
+        B = new Tensor(expShape, expEntries);
+        A = new Tensor(B);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.entries);
@@ -274,7 +274,7 @@ class TensorConstructorTests {
                 9.33, 3244d, 156.224, 3445d, 60.3, 44d, 13d, 1d, 4d, 56d};
         expRank = expShape.getRank();
         expEntries = Stream.of(entriesDObject).mapToDouble(Double::doubleValue).toArray();
-        A = new TensorOld(expShape, entriesDObject);
+        A = new Tensor(expShape, entriesDObject);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -287,7 +287,7 @@ class TensorConstructorTests {
                 9.33, 3244d, 156.224, 3445d, 60.3, 44d, 13d, 1d, 4d, 56d};
         expRank = expShape.getRank();
         expEntries = Stream.of(entriesDObject).mapToDouble(Double::doubleValue).toArray();
-        A = new TensorOld(expShape, entriesDObject);
+        A = new Tensor(expShape, entriesDObject);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -300,7 +300,7 @@ class TensorConstructorTests {
                 9.33, 3244d, 156.224, 3445d, 60.3, 44d, 13d, 1d, 4d, 56d};
         expRank = expShape.getRank();
         expEntries = Stream.of(entriesDObject).mapToDouble(Double::doubleValue).toArray();
-        A = new TensorOld(expShape, entriesDObject);
+        A = new Tensor(expShape, entriesDObject);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -313,7 +313,7 @@ class TensorConstructorTests {
                 9.33, 3244d, 156.224, 3445d, 60.3, 44d, 13d, 1d, 4d, 56d};
         expRank = expShape.getRank();
         expEntries = Stream.of(entriesDObject).mapToDouble(Double::doubleValue).toArray();
-        A = new TensorOld(expShape, entriesDObject);
+        A = new Tensor(expShape, entriesDObject);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -326,7 +326,7 @@ class TensorConstructorTests {
                 9.33, 3244d, 156.224, 3445d, 60.3, 44d, 13d, 1d, 4d, 56d, 113d, 34d, 5d};
         expRank = expShape.getRank();
 
-        assertThrows(IllegalArgumentException.class, () -> new TensorOld(expShape, entriesDObject));
+        assertThrows(IllegalArgumentException.class, () -> new Tensor(expShape, entriesDObject));
 
 
         // ---------- Sub-case 6 ----------
@@ -336,7 +336,7 @@ class TensorConstructorTests {
                 9.33, 3244d, 156.224, 3445d, 60.3, 44d, 13d, 1d, 4d, 56d, 113d, 34d, 5d};
         expRank = expShape.getRank();
 
-        assertThrows(IllegalArgumentException.class, () -> new TensorOld(expShape, entriesDObject));
+        assertThrows(IllegalArgumentException.class, () -> new Tensor(expShape, entriesDObject));
     }
 
 
@@ -349,7 +349,7 @@ class TensorConstructorTests {
                 9, 3244, 156, 3445, 60, 44, 13, 908, 4, 1};
         expRank = expShape.getRank();
         expEntries = toDouble(entriesInteger);
-        A = new TensorOld(expShape, entriesInteger);
+        A = new Tensor(expShape, entriesInteger);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -362,7 +362,7 @@ class TensorConstructorTests {
                 9, 3244, 156, 3445, 60, 44, 13, 908, 4, 1};
         expRank = expShape.getRank();
         expEntries = toDouble(entriesInteger);
-        A = new TensorOld(expShape, entriesInteger);
+        A = new Tensor(expShape, entriesInteger);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -375,7 +375,7 @@ class TensorConstructorTests {
                 9, 3244, 156, 3445, 60, 44, 13, 908, 4, 1};
         expRank = expShape.getRank();
         expEntries = toDouble(entriesInteger);
-        A = new TensorOld(expShape, entriesInteger);
+        A = new Tensor(expShape, entriesInteger);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -388,7 +388,7 @@ class TensorConstructorTests {
                 9, 3244, 156, 3445, 60, 44, 13, 908, 4, 1};
         expRank = expShape.getRank();
         expEntries = toDouble(entriesInteger);
-        A = new TensorOld(expShape, entriesInteger);
+        A = new Tensor(expShape, entriesInteger);
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
@@ -401,7 +401,7 @@ class TensorConstructorTests {
                 9, 3244, 156, 3445, 60, 44};
         expRank = expShape.getRank();
 
-        assertThrows(IllegalArgumentException.class, () -> new TensorOld(expShape, entriesInteger));
+        assertThrows(IllegalArgumentException.class, () -> new Tensor(expShape, entriesInteger));
 
         // ---------- Sub-case 6 ----------
         expShape = new Shape(5, 6);
@@ -409,19 +409,19 @@ class TensorConstructorTests {
                 2, -11334, 11, 0, 0, 3, 4, 8, 100, 2343,
                 9, 3244, 156, 3445, 60, 44, 13, 908, 4, 1, 19, 2313, 112, 3};
         expRank = expShape.getRank();
-        assertThrows(IllegalArgumentException.class, () -> new TensorOld(expShape, entriesInteger));
+        assertThrows(IllegalArgumentException.class, () -> new Tensor(expShape, entriesInteger));
     }
 
 
     @Test
     void matrixTestCase() {
-        MatrixOld mat;
+        Matrix mat;
 
         // ------------------------- Sub-case 1 -------------------------
         expShape = new Shape(6, 2);
         entriesD = new double[]{1.3243, 4, -0.24, 0, 0.234235, -0.0, 234.567, 1.35, 1.45, 1.5, 88834.345, 9141.3335};
-        mat = new MatrixOld(expShape, entriesD);
-        A = new TensorOld(mat);
+        mat = new Matrix(expShape, entriesD);
+        A = new Tensor(mat);
 
         assertEquals(expShape, A.shape);
         assertArrayEquals(mat.entries, A.entries);
@@ -430,12 +430,12 @@ class TensorConstructorTests {
 
     @Test
     void vectorTestCase() {
-        VectorOld vec;
+        Vector vec;
 
         // ------------------------- Sub-case 1 -------------------------
         entriesD = new double[]{1.3243, 4, -0.24, 0, 0.234235};
-        vec = new VectorOld(entriesD);
-        A = new TensorOld(vec);
+        vec = new Vector(entriesD);
+        A = new Tensor(vec);
 
         assertEquals(vec.shape, A.shape);
         assertArrayEquals(vec.entries, A.entries);
@@ -447,7 +447,7 @@ class TensorConstructorTests {
         // -------------- Sub-case 1 --------------
         expShape = new Shape(2, 3, 1, 2);
         expEntries = new double[]{1, -1.4133, 113.4, 0.4, 11.3, 445, 133.445, 9.8, 13384, -993.44, 11, 12};
-        A = new TensorOld(expShape, expEntries);
+        A = new Tensor(expShape, expEntries);
 
         B = A.copy();
 

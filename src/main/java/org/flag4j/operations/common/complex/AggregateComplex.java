@@ -24,12 +24,11 @@
 
 package org.flag4j.operations.common.complex;
 
-
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.util.ErrorMessages;
 
 /**
- * This class contains several low-level methods useful for computing aggregation operations_old on dense/sparse complex tensors.
+ * This class contains several low-level methods useful for computing aggregation operations on dense/sparse complex tensors.
  */
 public final class AggregateComplex {
 
@@ -44,11 +43,12 @@ public final class AggregateComplex {
      * @param entries Entries of the tensor.
      * @return The sum of all entries in this tensor.
      */
-    public static CNumber sum(final CNumber[] entries) {
-        CNumber sum = CNumber.ZERO;
-        for(CNumber value : entries) {
+    public static Complex128 sum(final Complex128[] entries) {
+        Complex128 sum = Complex128.ZERO;
+
+        for(Complex128 value : entries)
             sum = sum.add(value);
-        }
+
         return sum;
     }
 
@@ -59,17 +59,14 @@ public final class AggregateComplex {
      * @param entries Entries of the tensor.
      * @return The minimum absolute value in the tensor.
      */
-    public static double minAbs(final CNumber[] entries) {
+    public static double minAbs(final Complex128[] entries) {
         double currMin;
 
         if(entries.length!=0) {
             currMin = Double.MAX_VALUE;
 
-            for(CNumber value : entries) {
-                if(value.mag() < currMin) {
-                    currMin = value.mag(); // Update current minimum.
-                }
-            }
+            for(Complex128 value : entries)
+                if(value.mag() < currMin) currMin = value.mag(); // Update current minimum.
 
         } else {
             currMin = 0;
@@ -85,12 +82,11 @@ public final class AggregateComplex {
      * @param entries Entries of the tensor.
      * @return The maximum absolute value in the tensor.
      */
-    public static double maxAbs(final CNumber... entries) {
+    public static double maxAbs(final Complex128... entries) {
         double currMax = 0;
 
-        for(CNumber value : entries) {
+        for(Complex128 value : entries)
             currMax = Math.max(currMax, value.mag());
-        }
 
         return currMax;
     }

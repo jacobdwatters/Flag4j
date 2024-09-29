@@ -41,7 +41,7 @@ import org.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolver;
 import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
 import static org.flag4j.util.Flag4jConstants.EPS_F64;
@@ -69,7 +69,7 @@ public final class Invert {
      * @throws SingularMatrixException If the {@code src} matrix is singular (i.e. not invertible).
      */
     public static Matrix inv(Matrix src) {
-        ParameterChecks.ensureSquareMatrix(src.shape);
+        ValidateParameters.ensureSquareMatrix(src.shape);
         LU<Matrix> lu = new RealLU().decompose(src);
 
         // Solve U*inv(A) = inv(L) for inv(A)
@@ -95,7 +95,7 @@ public final class Invert {
      * @throws SingularMatrixException If the {@code src} matrix is singular (i.e. not invertible).
      */
     public static CMatrix inv(CMatrix src) {
-        ParameterChecks.ensureSquareMatrix(src.shape);
+        ValidateParameters.ensureSquareMatrix(src.shape);
         LU<CMatrix> lu = new ComplexLU().decompose(src);
 
         // Solve U*inv(A) = inv(L) for inv(A)
@@ -145,7 +145,7 @@ public final class Invert {
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static Matrix invDiag(Matrix src) {
-        ParameterChecks.ensureSquareMatrix(src.shape);
+        ValidateParameters.ensureSquareMatrix(src.shape);
         Matrix inverse = new Matrix(src.shape);
 
         double value;
@@ -201,7 +201,7 @@ public final class Invert {
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static CMatrix invDiag(CMatrix src) {
-        ParameterChecks.ensureSquareMatrix(src.shape);
+        ValidateParameters.ensureSquareMatrix(src.shape);
 
         CMatrix inverse = new CMatrix(src.shape);
 
@@ -210,14 +210,13 @@ public final class Invert {
         Complex128 det = Complex128.ONE;
 
         for(int i=0; i<src.entries.length; i+=step) {
-            value = src.entries[i];
+            value = (Complex128) src.entries[i];
             det = det.mult(value);
             inverse.entries[i] = value.multInv();
         }
 
-        if(det.mag() <= EPS_F64*Math.max(src.numRows, src.numCols)) {
+        if(det.mag() <= EPS_F64*Math.max(src.numRows, src.numCols))
             throw new SingularMatrixException("Could not invert.");
-        }
 
         return inverse;
     }

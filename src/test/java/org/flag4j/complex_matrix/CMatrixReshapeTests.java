@@ -1,21 +1,21 @@
 package org.flag4j.complex_matrix;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CMatrixReshapeTests {
-    CNumber[] entries = {
-            new CNumber(1, -9.345), new CNumber(2), new CNumber(-3.444, -4371.5),
-            new CNumber(-4), new CNumber(5), new CNumber(-6.44),
-            new CNumber(7.77, -72.4667), new CNumber(8.435, 43.1), new CNumber(9),
-            new CNumber(10.4, 156), new CNumber(0, 11), new CNumber(12.2344)};
-    CMatrixOld A = new CMatrixOld(new Shape(3, 4), entries);
-    CMatrixOld B;
+    Complex128[] entries = {
+            new Complex128(1, -9.345), new Complex128(2), new Complex128(-3.444, -4371.5),
+            new Complex128(-4), new Complex128(5), new Complex128(-6.44),
+            new Complex128(7.77, -72.4667), new Complex128(8.435, 43.1), new Complex128(9),
+            new Complex128(10.4, 156), new Complex128(0, 11), new Complex128(12.2344)};
+    CMatrix A = new CMatrix(new Shape(3, 4), entries);
+    CMatrix B;
     Shape expShape;
     int rows, cols;
 

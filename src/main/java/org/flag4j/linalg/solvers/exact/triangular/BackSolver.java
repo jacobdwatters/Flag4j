@@ -29,7 +29,7 @@ import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.linalg.solvers.LinearMatrixSolver;
 import org.flag4j.util.Flag4jConstants;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
 /**
@@ -40,7 +40,7 @@ import org.flag4j.util.exceptions.SingularMatrixException;
  * @param <U> Vector type equivalent of matrix.
  * @param <V> Type of internal storage for the matrix and vector.
  */
-public abstract class BackSolver<T extends MatrixMixin<T, ?, ?>, U extends VectorMixin<U, T, ?, ?>, V>
+public abstract class BackSolver<T extends MatrixMixin<T, ?, U, ?, ?>, U extends VectorMixin<U, T, ?, ?>, V>
         implements LinearMatrixSolver<T, U> {
 
     /**
@@ -83,8 +83,8 @@ public abstract class BackSolver<T extends MatrixMixin<T, ?, ?>, U extends Vecto
      * true and {@code coeff} is not upper triangular.
      */
     protected void checkParams(T coeff, int constantRows) {
-        ParameterChecks.ensureSquare(coeff.getShape());
-        ParameterChecks.ensureEquals(coeff.numRows(), constantRows);
+        ValidateParameters.ensureSquare(coeff.getShape());
+        ValidateParameters.ensureEquals(coeff.numRows(), constantRows);
 
         if(enforceTriU && !coeff.isTriU()) {
             throw new IllegalArgumentException("Expecting matrix U to be upper triangular.");

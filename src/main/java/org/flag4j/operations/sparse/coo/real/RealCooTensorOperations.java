@@ -28,7 +28,7 @@ package org.flag4j.operations.sparse.coo.real;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public final class RealCooTensorOperations {
      * @throws LinearAlgebraException If the tensors {@code src1} and {@code src2} do not have the same shape.
      */
     public static CooTensor add(CooTensor src1, CooTensor src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         // Create deep copies of indices.
         int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
@@ -104,7 +104,7 @@ public final class RealCooTensorOperations {
      * @throws LinearAlgebraException If the tensors {@code src1} and {@code src2} do not have the same shape.
      */
     public static CooTensor sub(CooTensor src1, CooTensor src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         // Create deep copies of indices.
         int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
@@ -155,7 +155,7 @@ public final class RealCooTensorOperations {
      * @return The element-wise product of {@code src1} and {@code src2}.
      */
     public static CooTensor elemMult(CooTensor src1, CooTensor src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         // Swap src1 and src2 if src2 has fewer non-zero entries for possibly better performance.
         if (src2.nnz < src1.nnz) {

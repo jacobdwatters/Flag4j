@@ -25,15 +25,16 @@
 package org.flag4j.operations.sparse.csr.complex;
 
 
-import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 
 /**
- * Utility class for manipulating {@link CsrCMatrixOld real sparse CSR matrices}
+ * Utility class for manipulating {@link org.flag4j.arrays.sparse.CsrCMatrix real sparse CSR matrices}
  * (e.g. row swaps, column swaps, etc.).
  */
 public class ComplexCsrManipulations {
@@ -51,7 +52,7 @@ public class ComplexCsrManipulations {
      * @param rowIdx2 Index of the second row to swap.
      * @throws IndexOutOfBoundsException If either {@code rowIdx1} or {@code rowIdx2} is out of bounds of the rows of this matrix.
      */
-    public static void swapRows(CsrCMatrixOld src, int rowIdx1, int rowIdx2) {
+    public static void swapRows(CsrCMatrix src, int rowIdx1, int rowIdx2) {
         if(rowIdx1 == rowIdx2) return;
         else if(rowIdx1 > rowIdx2) {
             // ensure the second index is larger than the first.
@@ -71,7 +72,7 @@ public class ComplexCsrManipulations {
 
         int destPos = 0;
 
-        CNumber[] updatedEntries = new CNumber[end2-start1];
+        Complex128[] updatedEntries = new Complex128[end2-start1];
         int[] updatedColIndices = new int[end2-start1];
 
         // Copy entries from second row in swap.
@@ -93,7 +94,7 @@ public class ComplexCsrManipulations {
         for(int i=rowIdx1+1; i<=rowIdx2; i++)
             src.rowPointers[i] += diff;
 
-        // Copy updated arrays_old to this tensors storage.
+        // Copy updated arrays_old to this tensors' storage.
         System.arraycopy(updatedEntries, 0, src.entries, start1, updatedEntries.length);
         System.arraycopy(updatedColIndices, 0, src.colIndices, start1, updatedEntries.length);
     }
@@ -107,7 +108,7 @@ public class ComplexCsrManipulations {
      * @throws IndexOutOfBoundsException If either {@code colIndex1} or {@code colIndex2} is out of bounds of the columns of this
      * matrix.
      */
-    public static void swapCols(CsrCMatrixOld src, int colIdx1, int colIdx2) {
+    public static void swapCols(CsrCMatrix src, int colIdx1, int colIdx2) {
         if(colIdx1 == colIdx2) return;
 
         // Ensure colIndex1 < colIndex2 for simplicity
@@ -156,8 +157,8 @@ public class ComplexCsrManipulations {
      * @param newPos New index for the value to be moved to within the non-zero entries of {@code src} (assumed to be in the same
      * row as {@code currPos}).
      */
-    private static void moveAndShiftRight(CsrCMatrixOld src, int newColIdx, int currPos, int newPos) {
-        CNumber value = src.entries[currPos];  // Extract the non-zero value.
+    private static void moveAndShiftRight(CsrCMatrix src, int newColIdx, int currPos, int newPos) {
+        Field<Complex128> value = src.entries[currPos];  // Extract the non-zero value.
 
         // Shift entries in row to right.
         for(int j=currPos; j>newPos; j--) {
@@ -180,8 +181,8 @@ public class ComplexCsrManipulations {
      * @param newPos New index for the value to be moved to within the non-zero entries of {@code src} (assumed to be in the same
      * row as {@code currPos}).
      */
-    private static void moveAndShiftLeft(CsrCMatrixOld src, int newColIdx, int currPos, int newPos) {
-        CNumber value = src.entries[currPos];  // Extract the non-zero value.
+    private static void moveAndShiftLeft(CsrCMatrix src, int newColIdx, int currPos, int newPos) {
+        Field<Complex128> value = src.entries[currPos];  // Extract the non-zero value.
 
         // Shift entries in row to left.
         for(int j=currPos; j<newPos; j++) {

@@ -28,7 +28,6 @@ package org.flag4j.operations.dense.field_ops;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.backend.DenseFieldMatrixBase;
 import org.flag4j.arrays.dense.FieldTensor;
-import org.flag4j.core_old.TensorBase;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -45,8 +44,7 @@ public final class DenseFieldProperties {
     /**
      * Checks if a matrix is the identity matrix approximately. Specifically, if the diagonal entries are no farther than
      * 1.001E-5 in absolute value from 1.0 and the non-diagonal entries are no larger than 1e-08 in absolute value.
-     * These tolerances are derived from the {@link TensorBase#allClose(Object)} method.
-     * @param src MatrixOld of interest to check if it is the identity matrix.
+     * @param src Matrix of interest to check if it is the identity matrix.
      * @return True if the {@code src} matrix is close the identity matrix or if the matrix has zero entries.
      */
     public static <T extends Field<T>> boolean isCloseToIdentity(DenseFieldMatrixBase<?, ?, ?, ?, T> src) {

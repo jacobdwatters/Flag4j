@@ -25,17 +25,18 @@
 package org.flag4j.operations.sparse.csr.real_complex;
 
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.sparse.CooCVectorOld;
-import org.flag4j.arrays_old.sparse.CooVectorOld;
-import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
-import org.flag4j.arrays_old.sparse.CsrMatrixOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.sparse.CooCVector;
+import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.*;
 
@@ -57,12 +58,12 @@ public final class RealComplexCsrMatrixMultiplication {
      * @param src2 Second CSR matrix in the multiplication.
      * @return Entries of the dense matrix resulting from the matrix multiplication of the two sparse CSR matrices.
      */
-    public static CMatrixOld standard(CsrMatrixOld src1, CsrCMatrixOld src2) {
+    public static CMatrix standard(CsrMatrix src1, CsrCMatrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
+        ValidateParameters.ensureMatMultShapes(src1.shape, src2.shape);
 
-        CNumber[] destEntries = new CNumber[src1.numRows*src2.numCols];
-        Arrays.fill(destEntries, CNumber.ZERO);
+        Complex128[] destEntries = new Complex128[src1.numRows*src2.numCols];
+        Arrays.fill(destEntries, Complex128.ZERO);
 
         for(int i=0; i<src1.numRows; i++) {
             int rowOffset = i*src2.numCols;
@@ -75,14 +76,14 @@ public final class RealComplexCsrMatrixMultiplication {
 
                 for(int bIndex=src2.rowPointers[aCol]; bIndex<innerStop; bIndex++) {
                     int bCol = src2.colIndices[bIndex];
-                    CNumber bVal = src2.entries[bIndex];
+                    Field<Complex128> bVal = src2.entries[bIndex];
 
                     destEntries[rowOffset + bCol] = destEntries[rowOffset + bCol].add(bVal.mult(aVal));
                 }
             }
         }
 
-        return new CMatrixOld(new Shape(src1.numRows, src2.numCols), destEntries);
+        return new CMatrix(new Shape(src1.numRows, src2.numCols), destEntries);
     }
 
 
@@ -92,12 +93,12 @@ public final class RealComplexCsrMatrixMultiplication {
      * @param src2 Second CSR matrix in the multiplication.
      * @return Entries of the dense matrix resulting from the matrix multiplication of the two sparse CSR matrices.
      */
-    public static CMatrixOld standard(CsrCMatrixOld src1, CsrMatrixOld src2) {
+    public static CMatrix standard(CsrCMatrix src1, CsrMatrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
+        ValidateParameters.ensureMatMultShapes(src1.shape, src2.shape);
 
-        CNumber[] destEntries = new CNumber[src1.numRows*src2.numCols];
-        Arrays.fill(destEntries, CNumber.ZERO);
+        Complex128[] destEntries = new Complex128[src1.numRows*src2.numCols];
+        Arrays.fill(destEntries, Complex128.ZERO);
 
         for(int i=0; i<src1.numRows; i++) {
             int rowOffset = i*src2.numCols;
@@ -105,7 +106,7 @@ public final class RealComplexCsrMatrixMultiplication {
 
             for(int aIndex=src1.rowPointers[i]; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                CNumber aVal = src1.entries[aIndex];
+                Field<Complex128> aVal = src1.entries[aIndex];
                 int innerStop = src2.rowPointers[aCol+1];
 
                 for(int bIndex=src2.rowPointers[aCol]; bIndex<innerStop; bIndex++) {
@@ -117,14 +118,14 @@ public final class RealComplexCsrMatrixMultiplication {
             }
         }
 
-        return new CMatrixOld(new Shape(src1.numRows, src2.numCols), destEntries);
+        return new CMatrix(new Shape(src1.numRows, src2.numCols), destEntries);
     }
 
 
     /**
      * Computes the matrix multiplication between two sparse CSR matrices and returns the result as a sparse matrix. <br>
      *
-     * Warning: This method may be slower than {@link #standard(CsrMatrixOld, CsrCMatrixOld)}
+     * Warning: This method may be slower than {@link #standard(CsrMatrix, CsrCMatrix)}
      * if the result of multiplying this matrix with {@code src2} is not very sparse. Further, multiplying two
      * sparse matrices (even very sparse matrices) may result in a dense matrix so this method should be used with
      * caution.
@@ -132,16 +133,16 @@ public final class RealComplexCsrMatrixMultiplication {
      * @param src2 Second CSR matrix in the multiplication.
      * @return Sparse CSR matrix resulting from the matrix multiplication of the two sparse CSR matrices.
      */
-    public static CsrCMatrixOld standardAsSparse(CsrMatrixOld src1, CsrCMatrixOld src2) {
+    public static CsrCMatrix standardAsSparse(CsrMatrix src1, CsrCMatrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
+        ValidateParameters.ensureMatMultShapes(src1.shape, src2.shape);
 
         int[] resultRowPtr = new int[src1.numRows + 1];
-        List<CNumber> resultList = new ArrayList<>();
+        List<Complex128> resultList = new ArrayList<>();
         List<Integer> resultColIndexList = new ArrayList<>();
 
         for (int i=0; i<src1.numRows; i++) {
-            Map<Integer, CNumber> tempMap = new HashMap<>();
+            Map<Integer, Complex128> tempMap = new HashMap<>();
             int start = src1.rowPointers[i];
             int stop = src1.rowPointers[i + 1];
 
@@ -153,9 +154,9 @@ public final class RealComplexCsrMatrixMultiplication {
 
                 for (int bIndex=innerStart; bIndex<innerStop; bIndex++) {
                     int bCol = src2.colIndices[bIndex];
-                    CNumber bVal = src2.entries[bIndex];
+                    Field<Complex128> bVal = src2.entries[bIndex];
 
-                    tempMap.merge(bCol, bVal.mult(aVal), CNumber::add);
+                    tempMap.merge(bCol, bVal.mult(aVal), Complex128::add);
                 }
             }
 
@@ -171,17 +172,17 @@ public final class RealComplexCsrMatrixMultiplication {
             resultRowPtr[i + 1] = resultList.size();
         }
 
-        CNumber[] resultValues = resultList.toArray(new CNumber[0]);
+        Complex128[] resultValues = resultList.toArray(new Complex128[0]);
         int[] resultColIndices = ArrayUtils.fromIntegerList(resultColIndexList);
 
-        return new CsrCMatrixOld(new Shape(src1.numRows, src2.numCols), resultValues, resultRowPtr, resultColIndices);
+        return new CsrCMatrix(new Shape(src1.numRows, src2.numCols), resultValues, resultRowPtr, resultColIndices);
     }
 
 
     /**
      * Computes the matrix multiplication between two sparse CSR matrices and returns the result as a sparse matrix. <br>
      *
-     * Warning: This method may be slower than {@link #standard(CsrCMatrixOld, CsrMatrixOld)}
+     * Warning: This method may be slower than {@link #standard(CsrCMatrix, CsrMatrix)}
      * if the result of multiplying this matrix with {@code src2} is not very sparse. Further, multiplying two
      * sparse matrices (even very sparse matrices) may result in a dense matrix so this method should be used with
      * caution.
@@ -189,22 +190,22 @@ public final class RealComplexCsrMatrixMultiplication {
      * @param src2 Second CSR matrix in the multiplication.
      * @return Sparse CSR matrix resulting from the matrix multiplication of the two sparse CSR matrices.
      */
-    public static CsrCMatrixOld standardAsSparse(CsrCMatrixOld src1, CsrMatrixOld src2) {
+    public static CsrCMatrix standardAsSparse(CsrCMatrix src1, CsrMatrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
+        ValidateParameters.ensureMatMultShapes(src1.shape, src2.shape);
 
         int[] resultRowPtr = new int[src1.numRows + 1];
-        List<CNumber> resultList = new ArrayList<>();
+        List<Complex128> resultList = new ArrayList<>();
         List<Integer> resultColIndexList = new ArrayList<>();
 
         for (int i=0; i<src1.numRows; i++) {
-            Map<Integer, CNumber> tempMap = new HashMap<>();
+            Map<Integer, Complex128> tempMap = new HashMap<>();
             int start = src1.rowPointers[i];
             int stop = src1.rowPointers[i + 1];
 
             for (int aIndex=start; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                CNumber aVal = src1.entries[aIndex];
+                Field<Complex128> aVal = src1.entries[aIndex];
                 int innerStart = src2.rowPointers[aCol];
                 int innerStop = src2.rowPointers[aCol + 1];
 
@@ -212,7 +213,7 @@ public final class RealComplexCsrMatrixMultiplication {
                     int bCol = src2.colIndices[bIndex];
                     double bVal = src2.entries[bIndex];
 
-                    tempMap.merge(bCol, aVal.mult(bVal), CNumber::add);
+                    tempMap.merge(bCol, aVal.mult(bVal), Complex128::add);
                 }
             }
 
@@ -228,38 +229,38 @@ public final class RealComplexCsrMatrixMultiplication {
             resultRowPtr[i + 1] = resultList.size();
         }
 
-        CNumber[] resultValues = resultList.toArray(new CNumber[0]);
+        Complex128[] resultValues = resultList.toArray(new Complex128[0]);
         int[] resultColIndices = ArrayUtils.fromIntegerList(resultColIndexList);
 
-        return new CsrCMatrixOld(new Shape(src1.numRows, src2.numCols), resultValues, resultRowPtr, resultColIndices);
+        return new CsrCMatrix(new Shape(src1.numRows, src2.numCols), resultValues, resultRowPtr, resultColIndices);
     }
 
 
     /**
      * Computes the matrix-vector multiplication between a real sparse CSR matrix and a complex sparse COO vector.
      * @param src1 The matrix in the multiplication.
-     * @param src2 VectorOld in multiplication. Treated as a column vector in COO format.
+     * @param src2 Vector in multiplication. Treated as a column vector in COO format.
      * @return The result of the matrix-vector multiplication.
      * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the number of columns in {@code src2}.
      */
-    public static CVectorOld standardVector(CsrMatrixOld src1, CooCVectorOld src2) {
+    public static CVector standardVector(CsrMatrix src1, CooCVector src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
-        ParameterChecks.ensureEquals(src1.numCols, src2.size);
+        ValidateParameters.ensureEquals(src1.numCols, src2.size);
 
-        CNumber[] destEntries = new CNumber[src1.numRows];
-        Arrays.fill(destEntries, CNumber.ZERO);
+        Complex128[] destEntries = new Complex128[src1.numRows];
+        Arrays.fill(destEntries, Complex128.ZERO);
         int rows1 = src1.numRows;
 
         // Iterate over the non-zero elements of the sparse vector.
         for (int k=0; k < src2.entries.length; k++) {
             int col = src2.indices[k];
-            CNumber val = src2.entries[k];
+            Field<Complex128> val = src2.entries[k];
 
             // Perform multiplication only for the non-zero elements.
             for (int i=0; i<rows1; i++) {
                 int start = src1.rowPointers[i];
                 int stop = src1.rowPointers[i + 1];
-                CNumber destVal = destEntries[col];
+                Complex128 destVal = destEntries[col];
 
                 for (int aIndex=start; aIndex < stop; aIndex++) {
                     int aCol = src1.colIndices[aIndex];
@@ -271,23 +272,23 @@ public final class RealComplexCsrMatrixMultiplication {
             }
         }
 
-        return new CVectorOld(destEntries);
+        return new CVector(destEntries);
     }
 
 
     /**
      * Computes the matrix-vector multiplication between a real sparse CSR matrix and a complex sparse COO vector.
      * @param src1 The matrix in the multiplication.
-     * @param src2 VectorOld in multiplication. Treated as a column vector in COO format.
+     * @param src2 Vector in multiplication. Treated as a column vector in COO format.
      * @return The result of the matrix-vector multiplication.
      * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the number of columns in {@code src2}.
      */
-    public static CVectorOld standardVector(CsrCMatrixOld src1, CooVectorOld src2) {
+    public static CVector standardVector(CsrCMatrix src1, CooVector src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
-        ParameterChecks.ensureEquals(src1.numCols, src2.size);
+        ValidateParameters.ensureEquals(src1.numCols, src2.size);
 
-        CNumber[] destEntries = new CNumber[src1.numRows];
-        Arrays.fill(destEntries, CNumber.ZERO);
+        Complex128[] destEntries = new Complex128[src1.numRows];
+        Arrays.fill(destEntries, Complex128.ZERO);
         int rows1 = src1.numRows;
 
         // Iterate over the non-zero elements of the sparse vector.
@@ -299,18 +300,18 @@ public final class RealComplexCsrMatrixMultiplication {
             for (int i=0; i<rows1; i++) {
                 int start = src1.rowPointers[i];
                 int stop = src1.rowPointers[i + 1];
-                CNumber destVal = destEntries[i];
+                Complex128 destVal = destEntries[i];
 
                 for (int aIndex=start; aIndex < stop; aIndex++) {
                     int aCol = src1.colIndices[aIndex];
                     if (aCol == col) {
-                        CNumber aVal = src1.entries[aIndex];
+                        Field<Complex128> aVal = src1.entries[aIndex];
                         destVal = destVal.add(aVal.mult(val));
                     }
                 }
             }
         }
 
-        return new CVectorOld(destEntries);
+        return new CVector(destEntries);
     }
 }

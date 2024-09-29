@@ -28,12 +28,17 @@ package org.flag4j.arrays.backend;
 /**
  * This interface specifies methods which all sparse COO matrices should implement.
  * @param <T> Type of this sparse matrix.
- * @param <V> Type of dense matrix which is equivalent to {@code T}.
- * @param <W> Type (or wrapper of) an individual element in the matrix.
+ * @param <U> Type of dense matrix which is equivalent to {@code T}.
+ * @param <V> Type of vector similar to {@code T}.
+ * @param <W> Type of dense vector equivalent to {@code V}.
+ * @param <Y> Type (or wrapper of) an individual element in the matrix.
  */
-public interface CooMatrixMixin<T extends CooMatrixMixin<T, V, W>,
-        V extends DenseMatrixMixin<V, T, ?, W>, W>
-        extends MatrixMixin<T, V, W>, SparseTensorMixin<V, T> {
+public interface CooMatrixMixin<T extends CooMatrixMixin<T, U, V, W, Y>,
+        U extends DenseMatrixMixin<U, T, W, Y>,
+        V extends SparseVectorMixin<V, W, T, U, Y>,
+        W extends DenseVectorMixin<W, V, U, Y>, Y>
+        extends MatrixMixin<T, U, V, W, Y>, SparseTensorMixin<U, T> {
 
+    // TODO: Need dense vector type for matrix mixin.
     // TODO: consider adding toCsr() here.
 }

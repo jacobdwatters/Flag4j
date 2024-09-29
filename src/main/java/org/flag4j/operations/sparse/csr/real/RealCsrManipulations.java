@@ -25,7 +25,6 @@
 package org.flag4j.operations.sparse.csr.real;
 
 import org.flag4j.arrays.sparse.CsrMatrix;
-import org.flag4j.arrays_old.sparse.CsrMatrixOld;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 
@@ -33,10 +32,10 @@ import java.util.Arrays;
 
 
 /**
- * Utility class for manipulating {@link CsrMatrixOld real sparse CSR matrices} (e.g. row swaps, column swaps,
+ * Utility class for manipulating {@link CsrMatrix real sparse CSR matrices} (e.g. row swaps, column swaps,
  * etc.).
  */
-public class RealCsrManipulations {
+public final class RealCsrManipulations {
 
     private RealCsrManipulations() {
         // Hide default constructor for utility class.

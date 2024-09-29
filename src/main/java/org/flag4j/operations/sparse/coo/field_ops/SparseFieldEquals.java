@@ -57,17 +57,17 @@ public final class SparseFieldEquals {
         if(a == b) return true;
         if(a==null || b==null || !a.shape.equals(b.shape)) return false;
 
-        List<T> aEntries = new ArrayList(a.nnz);
+        List<Field<T>> aEntries = new ArrayList(a.nnz);
         List<int[]> aIndices = new ArrayList<>(a.nnz);
 
-        List<T> bEntries = new ArrayList(b.nnz);
+        List<Field<T>> bEntries = new ArrayList(b.nnz);
         List<int[]> bIndices = new ArrayList(b.nnz);
 
         for(int i=0; i<a.nnz; i++) {
             if(a.entries[i] == null) return false;
 
             if(!a.entries[i].isZero()) {
-                aEntries.add(a.entries[i]);
+                aEntries.add((T) a.entries[i]);
                 aIndices.add(a.indices[i]);
             }
         }
@@ -76,7 +76,7 @@ public final class SparseFieldEquals {
             if(b.entries[i] == null) return false;
 
             if(!b.entries[i].isZero()) {
-                bEntries.add(b.entries[i]);
+                bEntries.add((T) b.entries[i]);
                 bIndices.add(b.indices[i]);
             }
         }
@@ -106,7 +106,7 @@ public final class SparseFieldEquals {
             if(src1.entries[i] == null) return false;
 
             if (!src1.entries[i].isZero()) {
-                nonZeroMapA.put(i-aZeroCount, src1.entries[i]);
+                nonZeroMapA.put(i-aZeroCount, (T) src1.entries[i]);
             } else{
                 aZeroCount++;
             }
@@ -117,7 +117,7 @@ public final class SparseFieldEquals {
             if(src2.entries[i] == null) return false;
 
             int key = i-bZeroCount;
-            T valueB = src2.entries[i];
+            T valueB = (T) src2.entries[i];
 
             // If valueB is non-zero, check against matrix src1.
             if(!valueB.isZero()) {
@@ -154,10 +154,10 @@ public final class SparseFieldEquals {
         if(a == b) return true;
         if(a==null || b==null || !a.shape.equals(b.shape)) return false;
 
-        List<T> aEntries = new ArrayList<>(a.nnz);
+        List<Field<T>> aEntries = new ArrayList<>(a.nnz);
         List<Integer> aIndices = new ArrayList<>(a.nnz);
 
-        List<T> bEntries = new ArrayList<>(b.nnz);
+        List<Field<T>> bEntries = new ArrayList<>(b.nnz);
         List<Integer> bIndices = new ArrayList<>(b.nnz);
 
         for(int i=0; i<a.nnz; i++) {

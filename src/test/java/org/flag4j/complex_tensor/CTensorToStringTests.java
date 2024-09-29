@@ -1,8 +1,8 @@
 package org.flag4j.complex_tensor;
 
-import org.flag4j.arrays_old.dense.CTensorOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,19 +12,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CTensorToStringTests {
     static Shape aShape;
-    static CNumber[] aEntries;
-    static CTensorOld A;
+    static Complex128[] aEntries;
+    static CTensor A;
     static String exp;
 
     @BeforeAll
     static void setup() {
         aShape = new Shape(2, 3, 1, 2);
-        aEntries = new CNumber[]{
-                new CNumber(1.4415, -0.0245), new CNumber(235.61, 1.45), new CNumber(0, -0.00024),
-                new CNumber(1.0), new CNumber(-85.1, 9.234), new CNumber(1.345, -781.2),
-                new CNumber(0.014, -2.45),  new CNumber(-140.0),  new CNumber(0, 1.5),
-                new CNumber(51.0, 24.56),  new CNumber(6.1, -0.03),  new CNumber(-0.00014, 1.34),};
-        A = new CTensorOld(aShape, aEntries);
+        aEntries = new Complex128[]{
+                new Complex128(1.4415, -0.0245), new Complex128(235.61, 1.45), new Complex128(0, -0.00024),
+                new Complex128(1.0), new Complex128(-85.1, 9.234), new Complex128(1.345, -781.2),
+                new Complex128(0.014, -2.45),  new Complex128(-140.0),  new Complex128(0, 1.5),
+                new Complex128(51.0, 24.56),  new Complex128(6.1, -0.03),  new Complex128(-0.00014, 1.34),};
+        A = new CTensor(aShape, aEntries);
     }
 
 

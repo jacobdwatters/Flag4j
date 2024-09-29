@@ -24,13 +24,13 @@
 
 package org.flag4j.operations.dense.complex;
 
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 
 /**
- * This class provides low level implementations for vector operations_old with two complex dense vectors.
+ * This class provides low level implementations for vector operations with two complex dense vectors.
  */
 public class ComplexDenseVectorOperations {
 
@@ -46,9 +46,9 @@ public class ComplexDenseVectorOperations {
      * @param src2 Entries of the second vector.
      * @return The inner product of the two vectors.
      */
-    public static CNumber innerProduct(CNumber[] src1, CNumber[] src2) {
-        ParameterChecks.ensureArrayLengthsEq(src1.length, src2.length);
-        CNumber innerProd = CNumber.ZERO;
+    public static Complex128 innerProduct(Complex128[] src1, Complex128[] src2) {
+        ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
+        Complex128 innerProd = Complex128.ZERO;
 
         for(int i=0; i<src1.length; i++) {
             innerProd = innerProd.add(src1[i].mult(src2[i].conj()));
@@ -65,14 +65,14 @@ public class ComplexDenseVectorOperations {
      * @param src2 Entries of second vector.
      * @return The matrix resulting from the vector outer product.
      */
-    public static CNumber[] outerProduct(CNumber[] src1, CNumber[] src2) {
+    public static Complex128[] outerProduct(Complex128[] src1, Complex128[] src2) {
         int destIndex;
-        CNumber[] dest = new CNumber[src1.length*src2.length];
+        Complex128[] dest = new Complex128[src1.length*src2.length];
 
         for(int i=0; i<src1.length; i++) {
             destIndex = i*src2.length;
 
-            for(CNumber cNumber : src2) {
+            for(Complex128 cNumber : src2) {
                 dest[destIndex++] = src1[i].mult(cNumber.conj());
             }
         }

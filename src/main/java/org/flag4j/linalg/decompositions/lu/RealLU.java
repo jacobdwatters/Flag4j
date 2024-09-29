@@ -110,9 +110,7 @@ public class RealLU extends LU<Matrix> {
             maxIndex = maxColIndex(j); // Find row index of max value (in absolute value) in column j so that the index >= j.
 
             // Make the appropriate swaps in LU and P (This is the partial pivoting step).
-            if(j!=maxIndex && maxIndex>=0) {
-                swapRows(j, maxIndex);
-            }
+            if(j!=maxIndex && maxIndex>=0) swapRows(j, maxIndex);
 
             computeRows(j);
         }
@@ -204,7 +202,6 @@ public class RealLU extends LU<Matrix> {
         int rowIdx;
         int[] index = {-1, -1};
 
-
         for(int i=startIndex; i<LU.numRows; i++) {
             rowIdx = i*LU.numCols;
 
@@ -234,9 +231,7 @@ public class RealLU extends LU<Matrix> {
 
         // Copy L values from LU matrix.
         for(int i=0; i<LU.numRows; i++) {
-            if(i<LU.numCols) {
-                L.entries[i*L.numCols+i] = 1; // Set principle diagonal to be 1, so it is unit lower-triangular.
-            }
+            if(i<LU.numCols) L.entries[i*L.numCols + i] = 1; // Set principle diagonal to be 1, so it is unit lower-triangular.
             System.arraycopy(LU.entries, i*LU.numCols, L.entries, i*L.numCols, i);
         }
 

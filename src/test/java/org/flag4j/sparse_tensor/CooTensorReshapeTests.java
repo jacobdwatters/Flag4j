@@ -1,7 +1,7 @@
 package org.flag4j.sparse_tensor;
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays_old.sparse.CooTensorOld;
+import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.Test;
 
@@ -9,12 +9,12 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CooTensorReshapeTests {
-    static CooTensorOld A;
+    static CooTensor A;
     static Shape aShape;
     static double[] aEntries;
     static int[][] aIndices;
 
-    static CooTensorOld exp;
+    static CooTensor exp;
     static Shape expShape;
     static double[] expEntries;
     static int[][] expIndices;
@@ -28,7 +28,7 @@ class CooTensorReshapeTests {
                 {2, 2, 0, 0},
                 {2, 3, 0, 0},
                 {4, 1, 1, 0}};
-        A = new CooTensorOld(aShape, aEntries, aIndices);
+        A = new CooTensor(aShape, aEntries, aIndices);
 
         expShape = new Shape(2, 5, 2, 2);
         expEntries = new double[]{-0.2594625644447393, -0.11800739013805872, -1.8499182919471657};
@@ -36,7 +36,7 @@ class CooTensorReshapeTests {
                 {1, 0, 0, 0},
                 {1, 0, 1, 0},
                 {1, 3, 1, 1}};
-        exp = new CooTensorOld(expShape, expEntries, expIndices);
+        exp = new CooTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.reshape(2, 5, 2, 2));
 
         // ----------------------------- Sub-case 2 -----------------------------
@@ -61,7 +61,7 @@ class CooTensorReshapeTests {
                 {4, 2, 0, 0, 8},
                 {4, 3, 0, 2, 6},
                 {4, 3, 1, 2, 12}};
-        A = new CooTensorOld(aShape, aEntries, aIndices);
+        A = new CooTensor(aShape, aEntries, aIndices);
 
         expShape = new Shape(15, 2, 4, 15);
         expEntries = new double[]{-1.1499856217218563, -0.33276615768221923, -1.7712698524382784, 0.45988194186997083, -1.0000258840502727, -1.2896045900552038, -1.0495292341142137, 0.5653540034076624, 0.09844833075965526, 1.389726418783007, -0.03253455760212258, 0.8128434562240154, -0.5805363805458708, -0.9687145707590211, 0.005130776492485523, -1.1693463926292427, -0.18736097719279932, -0.588774063376806};
@@ -84,7 +84,7 @@ class CooTensorReshapeTests {
                 {13, 1, 0, 8},
                 {14, 1, 0, 6},
                 {14, 1, 3, 12}};
-        exp = new CooTensorOld(expShape, expEntries, expIndices);
+        exp = new CooTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.reshape(15, 2, 4, 15));
 
         // ----------------------------- Sub-case 3 -----------------------------
@@ -95,7 +95,7 @@ class CooTensorReshapeTests {
                 {0, 8},
                 {0, 15},
                 {1, 7}};
-        A = new CooTensorOld(aShape, aEntries, aIndices);
+        A = new CooTensor(aShape, aEntries, aIndices);
 
         expShape = new Shape(2, 4, 3, 2);
         expEntries = new double[]{-0.5564583772612858, 1.3880160320768695, -0.041746799108138805, 0.22670438356409295};
@@ -104,7 +104,7 @@ class CooTensorReshapeTests {
                 {0, 1, 1, 0},
                 {0, 2, 1, 1},
                 {0, 3, 2, 1}};
-        exp = new CooTensorOld(expShape, expEntries, expIndices);
+        exp = new CooTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.reshape(2, 4, 3, 2));
 
         // ----------------------------- Sub-case 4 -----------------------------
@@ -115,7 +115,7 @@ class CooTensorReshapeTests {
                 {0, 8},
                 {0, 15},
                 {1, 7}};
-        A = new CooTensorOld(aShape, aEntries, aIndices);
+        A = new CooTensor(aShape, aEntries, aIndices);
         assertThrows(TensorShapeException.class, ()->A.reshape(150, 12));
     }
 
@@ -130,7 +130,7 @@ class CooTensorReshapeTests {
                 {0, 7},
                 {1, 9},
                 {2, 10}};
-        A = new CooTensorOld(aShape, aEntries, aIndices);
+        A = new CooTensor(aShape, aEntries, aIndices);
 
         expShape = new Shape(48);
         expEntries = new double[]{-0.4396095255063526, -0.008544443239199374, 1.6354416874939133, -0.7535470743266395};
@@ -139,7 +139,7 @@ class CooTensorReshapeTests {
                 {7},
                 {25},
                 {42}};
-        exp = new CooTensorOld(expShape, expEntries, expIndices);
+        exp = new CooTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.flatten());
 
         // -------------------------- Sub-case 2 --------------------------
@@ -149,7 +149,7 @@ class CooTensorReshapeTests {
                 {0, 1, 3},
                 {1, 0, 1},
                 {1, 1, 0}};
-        A = new CooTensorOld(aShape, aEntries, aIndices);
+        A = new CooTensor(aShape, aEntries, aIndices);
 
         expShape = new Shape(24);
         expEntries = new double[]{0.8809801303815625, 1.2884192212811383, 0.6540684159095426};
@@ -157,7 +157,7 @@ class CooTensorReshapeTests {
                 {7},
                 {9},
                 {12}};
-        exp = new CooTensorOld(expShape, expEntries, expIndices);
+        exp = new CooTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.flatten());
 
         // -------------------------- Sub-case 3 --------------------------
@@ -167,7 +167,7 @@ class CooTensorReshapeTests {
                 {1, 0, 1},
                 {1, 1, 1},
                 {2, 0, 1}};
-        A = new CooTensorOld(aShape, aEntries, aIndices);
+        A = new CooTensor(aShape, aEntries, aIndices);
 
         expShape = new Shape(1, 24, 1);
         expEntries = new double[]{-0.2100281314624281, 1.4401356481011265, -0.1396976427551165};
@@ -175,7 +175,7 @@ class CooTensorReshapeTests {
                 {0, 9, 0},
                 {0, 13, 0},
                 {0, 17, 0}};
-        exp = new CooTensorOld(expShape, expEntries, expIndices);
+        exp = new CooTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.flatten(1));
 
         // -------------------------- Sub-case 4 --------------------------
@@ -185,7 +185,7 @@ class CooTensorReshapeTests {
                 {1, 0, 1},
                 {1, 1, 1},
                 {2, 0, 1}};
-        A = new CooTensorOld(aShape, aEntries, aIndices);
+        A = new CooTensor(aShape, aEntries, aIndices);
 
         expShape = new Shape(1, 1, 24);
         expEntries = new double[]{-0.2100281314624281, 1.4401356481011265, -0.1396976427551165};
@@ -193,7 +193,7 @@ class CooTensorReshapeTests {
                 {0, 0, 9},
                 {0, 0, 13},
                 {0, 0, 17}};
-        exp = new CooTensorOld(expShape, expEntries, expIndices);
+        exp = new CooTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.flatten(2));
 
         // -------------------------- Sub-case 5 --------------------------
@@ -203,7 +203,7 @@ class CooTensorReshapeTests {
                 {1, 0, 1},
                 {1, 1, 1},
                 {2, 0, 1}};
-        A = new CooTensorOld(aShape, aEntries, aIndices);
+        A = new CooTensor(aShape, aEntries, aIndices);
         assertThrows(IndexOutOfBoundsException.class, ()->A.flatten(5));
         assertThrows(IndexOutOfBoundsException.class, ()->A.flatten(-1));
     }

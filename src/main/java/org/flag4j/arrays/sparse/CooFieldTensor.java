@@ -28,12 +28,12 @@ package org.flag4j.arrays.sparse;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.CooFieldTensorBase;
-import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.FieldTensor;
 import org.flag4j.arrays.dense.FieldVector;
+import org.flag4j.operations.dense.real.RealDenseTranspose;
 import org.flag4j.operations.sparse.coo.field_ops.SparseFieldEquals;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -81,7 +81,7 @@ public class CooFieldTensor<T extends Field<T>>
      * if this tensor is sparse, this specifies only the non-zero entries of the tensor.
      * @param indices
      */
-    public CooFieldTensor(Shape shape, T[] entries, int[][] indices) {
+    public CooFieldTensor(Shape shape, Field<T>[] entries, int[][] indices) {
         super(shape, entries, indices);
     }
 
@@ -101,6 +101,53 @@ public class CooFieldTensor<T extends Field<T>>
 
 
     /**
+     * Sets the element of this tensor at the specified indices.
+     *
+     * @param value New value to set the specified index of this tensor to.
+     * @param index Indices of the element to set.
+     *
+     * @return A copy of this tensor with the updated value is returned.
+     *
+     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
+     */
+    @Override
+    public CooFieldTensor<T> set(T value, int... index) {
+        ValidateParameters.ensureValidIndex(shape, index);
+        CooFieldTensor<T> dest;
+
+        // Check if value already exists in tensor.
+        int idx = -1;
+        for(int i=0; i<indices.length; i++) {
+            if(Arrays.equals(indices[i], index)) {
+                idx = i;
+                break; // Found in tensor, no need to continue.
+            }
+        }
+
+        if(idx > -1) {
+            // Copy entries and set new value.
+            dest = new CooFieldTensor<T>(shape, entries.clone(), ArrayUtils.deepCopy(indices, null));
+            dest.entries[idx] = value;
+            dest.indices[idx] = index;
+        } else {
+            // Copy old indices and insert new one.
+            int[][] newIndices = new int[indices.length + 1][getRank()];
+            ArrayUtils.deepCopy(indices, newIndices);
+            newIndices[indices.length] = index;
+
+            // Copy old entries and insert new one.
+            Field<T>[] newEntries = Arrays.copyOf(entries, entries.length+1);
+            newEntries[newEntries.length-1] = value;
+
+            dest = new CooFieldTensor<T>(shape, newEntries, newIndices);
+            dest.sortIndices();
+        }
+
+        return dest;
+    }
+
+
+    /**
      * Constructs a sparse tensor of the same type as this tensor with the same indices as this sparse tensor and with the provided
      * the shape and entries.
      *
@@ -111,7 +158,7 @@ public class CooFieldTensor<T extends Field<T>>
      * the shape and entries.
      */
     @Override
-    public CooFieldTensor<T> makeLikeTensor(Shape shape, T[] entries) {
+    public CooFieldTensor<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
         return new CooFieldTensor(shape, entries, ArrayUtils.deepCopy(indices, null));
     }
 
@@ -126,7 +173,7 @@ public class CooFieldTensor<T extends Field<T>>
      * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public CooFieldTensor<T> makeLikeTensor(Shape shape, T[] entries, int[][] indices) {
+    public CooFieldTensor<T> makeLikeTensor(Shape shape, Field<T>[] entries, int[][] indices) {
         return new CooFieldTensor(shape, entries, indices);
     }
 
@@ -141,7 +188,7 @@ public class CooFieldTensor<T extends Field<T>>
      * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public CooFieldTensor<T> makeLikeTensor(Shape shape, List<T> entries, List<int[]> indices) {
+    public CooFieldTensor<T> makeLikeTensor(Shape shape, List<Field<T>> entries, List<int[]> indices) {
         return new CooFieldTensor(shape, entries, indices);
     }
 
@@ -155,7 +202,7 @@ public class CooFieldTensor<T extends Field<T>>
      * @return A dense tensor with the specified shape and entries which is a similar type to this sparse tensor.
      */
     @Override
-    public FieldTensor<T> makeDenseTensor(Shape shape, T[] entries) {
+    public FieldTensor<T> makeDenseTensor(Shape shape, Field<T>[] entries) {
         return new FieldTensor(shape, entries);
     }
 
@@ -204,16 +251,18 @@ public class CooFieldTensor<T extends Field<T>>
 
     /**
      * Converts this tensor to a matrix with the specified shape.
-     * @param matShape Shape of the resulting matrix. Must be {@link ParameterChecks#ensureBroadcastable(Shape, Shape) broadcastable}
+     * @param matShape Shape of the resulting matrix. Must be {@link ValidateParameters#ensureBroadcastable(Shape, Shape) broadcastable}
      * with the shape of this tensor.
      * @return A matrix of shape {@code matShape} with the values of this tensor.
      * @throws org.flag4j.util.exceptions.LinearAlgebraException If {@code matShape} is not of rank 2.
      */
-    public FieldMatrix<T> toMatrix(Shape matShape) {
-        ParameterChecks.ensureBroadcastable(shape, matShape);
-        ParameterChecks.ensureRank(matShape, 2);
+    public CooFieldMatrix<T> toMatrix(Shape matShape) {
+        ValidateParameters.ensureRank(matShape, 2);
 
-        return new FieldMatrix<T>(matShape, entries.clone());
+        CooFieldTensor<T> t = reshape(matShape); // Reshape as rank 2 tensor. Broadcastable check is made here.
+        int[][] tIndices = RealDenseTranspose.standardIntMatrix(t.indices);
+
+        return new CooFieldMatrix<T>(matShape, t.entries.clone(), tIndices[0], tIndices[1]);
     }
 
 
@@ -223,13 +272,16 @@ public class CooFieldTensor<T extends Field<T>>
      * If the tensor is rank 1, then a matrix with a single row will be returned. If the rank of this tensor is larger than 2, it will
      * be flattened to a single row.
      */
-    public FieldMatrix<T> toMatrix() {
-        FieldMatrix<T> mat;
+    public CooFieldMatrix<T> toMatrix() {
+        CooFieldMatrix<T> mat;
 
         if(this.getRank()==2) {
-            mat = new FieldMatrix<T>(this.shape, this.entries.clone());
+            int[][] tIndices = RealDenseTranspose.standardIntMatrix(this.indices);
+            mat = new CooFieldMatrix<T>(shape, entries.clone(), tIndices[0], tIndices[1]);
         } else {
-            mat = new FieldMatrix<T>(1, this.entries.length, this.entries.clone());
+            CooFieldTensor<T> flat = reshape(new Shape(1, shape.totalEntriesIntValueExact()));
+            int[][] tIndices = RealDenseTranspose.standardIntMatrix(flat.indices);
+            mat = new CooFieldMatrix<T>(flat.shape, flat.entries.clone(), tIndices[0], tIndices[0]);
         }
 
         return mat;

@@ -25,6 +25,7 @@
 package org.flag4j.operations.dense.real_complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
@@ -54,7 +55,7 @@ public final class RealComplexDenseMatrixMultTranspose {
      * @param shape2 Shape of the second matrix.
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
-    public static Complex128[] multTranspose(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static Complex128[] multTranspose(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
@@ -96,7 +97,7 @@ public final class RealComplexDenseMatrixMultTranspose {
      * @param shape2 Shape of the second matrix.
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
-    public static Complex128[] multTransposeBlocked(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static Complex128[] multTransposeBlocked(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
@@ -155,7 +156,7 @@ public final class RealComplexDenseMatrixMultTranspose {
      * @param shape2 Shape of the second matrix.
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
-    public static Complex128[] multTransposeConcurrent(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static Complex128[] multTransposeConcurrent(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
@@ -197,7 +198,7 @@ public final class RealComplexDenseMatrixMultTranspose {
      * @param shape2 Shape of the second matrix.
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
-    public static Complex128[] multTransposeBlockedConcurrent(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static Complex128[] multTransposeBlockedConcurrent(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
@@ -254,7 +255,7 @@ public final class RealComplexDenseMatrixMultTranspose {
      * @param shape2 Shape of the second matrix.
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
-    public static Complex128[] multTranspose(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+    public static Complex128[] multTranspose(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
@@ -296,7 +297,7 @@ public final class RealComplexDenseMatrixMultTranspose {
      * @param shape2 Shape of the second matrix.
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
-    public static Complex128[] multTransposeBlocked(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+    public static Complex128[] multTransposeBlocked(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
@@ -355,7 +356,7 @@ public final class RealComplexDenseMatrixMultTranspose {
      * @param shape2 Shape of the second matrix.
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
-    public static Complex128[] multTransposeConcurrent(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+    public static Complex128[] multTransposeConcurrent(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
@@ -397,7 +398,7 @@ public final class RealComplexDenseMatrixMultTranspose {
      * @param shape2 Shape of the second matrix.
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
-    public static Complex128[] multTransposeBlockedConcurrent(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+    public static Complex128[] multTransposeBlockedConcurrent(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);

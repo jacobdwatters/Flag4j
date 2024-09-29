@@ -1,7 +1,7 @@
 package org.flag4j.complex_vector;
 
-import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.linalg.VectorNorms;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -10,15 +10,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CVectorNormTests {
 
-    static CNumber[] aEntries;
-    static CVectorOld a;
+    static Complex128[] aEntries;
+    static CVector a;
     double expNorm;
 
     @BeforeAll
     static void setup() {
-        aEntries = new CNumber[]{new CNumber(1.455, 6126.347), new CNumber(-9.234, 5.0),
-                new CNumber(9.245, -56.2345), new CNumber(0, 14.5), new CNumber(-0.009257)};
-        a = new CVectorOld(aEntries);
+        aEntries = new Complex128[]{new Complex128(1.455, 6126.347), new Complex128(-9.234, 5.0),
+                new Complex128(9.245, -56.2345), new Complex128(0, 14.5), new Complex128(-0.009257)};
+        a = new CVector(aEntries);
     }
 
 

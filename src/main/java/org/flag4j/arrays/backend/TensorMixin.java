@@ -24,8 +24,6 @@
 
 package org.flag4j.arrays.backend;
 
-import org.flag4j.core_old.MatrixPropertiesMixin;
-
 /**
  * This interface specifies methods which all tensors should implement.
  *
@@ -53,7 +51,7 @@ public interface TensorMixin<T extends TensorMixin<T, U>, U>
      * </p>
      *
      * <p>
-     * Note, this method is distinct from the {@link MatrixPropertiesMixin#matrixRank()} method.
+     * Note, this method is distinct from the {@link DenseMatrixMixin#matrixRank()} method.
      * </p>
      *
      * @return The rank of this tensor.

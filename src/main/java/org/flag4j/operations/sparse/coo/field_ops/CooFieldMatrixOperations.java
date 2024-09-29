@@ -28,8 +28,10 @@ package org.flag4j.operations.sparse.coo.field_ops;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.backend.CooFieldMatrixBase;
 import org.flag4j.arrays.dense.FieldMatrix;
+import org.flag4j.arrays.sparse.CooFieldMatrix;
+import org.flag4j.arrays.sparse.CooFieldVector;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,13 +56,13 @@ public final class CooFieldMatrixOperations {
      * @return The sum of the two matrices {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
-    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, V>
-    add(CooFieldMatrixBase<?, ?, ?, V> src1, CooFieldMatrixBase<?, ?, ?, V> src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, ?, V>
+    add(CooFieldMatrixBase<?, ?, ?, ?, V> src1, CooFieldMatrixBase<?, ?, ?, ?, V> src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
 
-        List<V> sum = new ArrayList<>(initCapacity);
+        List<Field<V>> sum = new ArrayList<>(initCapacity);
         List<Integer> rowIndices = new ArrayList<>(initCapacity);
         List<Integer> colIndices = new ArrayList<>(initCapacity);
 
@@ -91,7 +93,7 @@ public final class CooFieldMatrixOperations {
             }
 
             if(add1 && add2) {
-                sum.add(src1.entries[src1Counter].add(src2.entries[src2Counter]));
+                sum.add(src1.entries[src1Counter].add((V) src2.entries[src2Counter]));
                 rowIndices.add(src1.rowIndices[src1Counter]);
                 colIndices.add(src1.colIndices[src1Counter]);
                 src1Counter++;
@@ -122,7 +124,7 @@ public final class CooFieldMatrixOperations {
      * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
      */
     public static <V extends Field<V>> FieldMatrix<V>
-    add(CooFieldMatrixBase<?, ?, ?, V> src, double a) {
+    add(CooFieldMatrixBase<?, ?, ?, ?, V> src, double a) {
         Field<V>[] sum = new Field[src.totalEntries().intValueExact()];
         Arrays.fill(sum, a);
 
@@ -132,7 +134,7 @@ public final class CooFieldMatrixOperations {
         for(int i=0; i<src.entries.length; i++) {
             row = src.rowIndices[i];
             col = src.colIndices[i];
-            sum[row*src.numCols + col] = sum[row*src.numCols + col].add(src.entries[i]);
+            sum[row*src.numCols + col] = sum[row*src.numCols + col].add((V) src.entries[i]);
         }
 
         return new FieldMatrix<V>(src.shape, (V[]) sum);
@@ -147,13 +149,13 @@ public final class CooFieldMatrixOperations {
      * @return The difference of the two matrices {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
-    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, V>
-    sub(CooFieldMatrixBase<?, ?, ?, V> src1, CooFieldMatrixBase<?, ?, ?, V> src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, ?, V>
+    sub(CooFieldMatrixBase<?, ?, ?, ?, V> src1, CooFieldMatrixBase<?, ?, ?, ?, V> src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
 
-        List<V> sum = new ArrayList<>(initCapacity);
+        List<Field<V>> sum = new ArrayList<>(initCapacity);
         List<Integer> rowIndices = new ArrayList<>(initCapacity);
         List<Integer> colIndices = new ArrayList<>(initCapacity);
 
@@ -184,7 +186,7 @@ public final class CooFieldMatrixOperations {
             }
 
             if(add1 && add2) {
-                sum.add(src1.entries[src1Counter].sub(src2.entries[src2Counter]));
+                sum.add(src1.entries[src1Counter].sub((V) src2.entries[src2Counter]));
                 rowIndices.add(src1.rowIndices[src1Counter]);
                 colIndices.add(src1.colIndices[src1Counter]);
                 src1Counter++;
@@ -215,7 +217,7 @@ public final class CooFieldMatrixOperations {
      * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
      */
     public static <V extends Field<V>> FieldMatrix<V>
-    sub(CooFieldMatrixBase<?, ?, ?, V> src, double a) {
+    sub(CooFieldMatrixBase<?, ?, ?, ?, V> src, double a) {
         Field<V>[] sum = new Field[src.totalEntries().intValueExact()];
         Arrays.fill(sum, -a);
 
@@ -225,7 +227,7 @@ public final class CooFieldMatrixOperations {
         for(int i=0; i<src.entries.length; i++) {
             row = src.rowIndices[i];
             col = src.colIndices[i];
-            sum[row*src.numCols + col] = sum[row*src.numCols + col].add(src.entries[i]);
+            sum[row*src.numCols + col] = sum[row*src.numCols + col].add((V) src.entries[i]);
         }
 
         return new FieldMatrix<V>(src.shape, (V[]) sum);
@@ -241,13 +243,13 @@ public final class CooFieldMatrixOperations {
      * @return The element-wise product of the two matrices {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
-    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, V>
-    elemMult(CooFieldMatrixBase<?, ?, ?, V> src1, CooFieldMatrixBase<?, ?, ?, V> src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, ?, V>
+    elemMult(CooFieldMatrixBase<?, ?, ?, ?, V> src1, CooFieldMatrixBase<?, ?, ?, ?, V> src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
 
-        List<V> product = new ArrayList<>(initCapacity);
+        List<Field<V>> product = new ArrayList<>(initCapacity);
         List<Integer> rowIndices = new ArrayList<>(initCapacity);
         List<Integer> colIndices = new ArrayList<>(initCapacity);
 
@@ -257,7 +259,7 @@ public final class CooFieldMatrixOperations {
         while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
             if(src1.rowIndices[src1Counter] == src2.rowIndices[src2Counter]
                     && src1.colIndices[src1Counter] == src2.colIndices[src2Counter]) {
-                product.add(src1.entries[src1Counter].mult(src2.entries[src2Counter]));
+                product.add(src1.entries[src1Counter].mult((V) src2.entries[src2Counter]));
                 rowIndices.add(src1.rowIndices[src1Counter]);
                 colIndices.add(src1.colIndices[src1Counter]);
                 src1Counter++;
@@ -282,65 +284,63 @@ public final class CooFieldMatrixOperations {
         return src1.makeLikeTensor(src1.shape, product, rowIndices, colIndices);
     }
 
+    /**
+     * Adds a sparse vector to each column of a sparse matrix as if the vector is a column vector.
+     * @param src The source sparse matrix.
+     * @param col Sparse vector to add to each column of the sparse matrix.
+     * @return A dense copy of the {@code src} matrix with the {@code col} vector added to each row of the matrix.
+     */
+    public static <T extends Field<T>> FieldMatrix<T> addToEachCol(CooFieldMatrix<T> src, CooFieldVector<T> col) {
+        ValidateParameters.ensureEquals(src.numRows, col.size);
+        Field<T>[] destEntries = new Field[src.totalEntries().intValueExact()];
 
-    // TODO: update all methods with CooVectorOld to CooFieldVector<T> once implemented.
-//    /**
-//     * Adds a sparse vector to each column of a sparse matrix as if the vector is a column vector.
-//     * @param src The source sparse matrix.
-//     * @param col Sparse vector to add to each column of the sparse matrix.
-//     * @return A dense copy of the {@code src} matrix with the {@code col} vector added to each row of the matrix.
-//     */
-//    public static <T extends Field<T>> FieldMatrix<T> addToEachCol(CooFieldMatrix<T> src, CooVectorOld col) {
-//        ParameterChecks.ensureEquals(src.numRows, col.size);
-//        double[] destEntries = new double[src.totalEntries().intValueExact()];
-//
-//        // Add values from sparse matrix.
-//        for(int i=0; i<src.entries.length; i++) {
-//            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = src.entries[i];
-//        }
-//
-//        // Add values from sparse column.
-//        for(int i=0; i<col.entries.length; i++) {
-//            int idx = col.indices[i]*src.numCols;
-//            int end = idx + src.numCols;
-//            double value = col.entries[i];
-//
-//            while(idx < end) {
-//                destEntries[idx++] += value;
-//            }
-//        }
-//
-//        return new Matrix(src.shape, destEntries);
-//    }
+        // Add values from sparse matrix.
+        for(int i=0; i<src.entries.length; i++) {
+            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = src.entries[i];
+        }
+
+        // Add values from sparse column.
+        for(int i=0; i<col.entries.length; i++) {
+            int idx = col.indices[i]*src.numCols;
+            int end = idx + src.numCols;
+            T value = (T) col.entries[i];
+
+            while(idx < end) {
+                destEntries[idx] = destEntries[idx++].add(value);
+            }
+        }
+
+        return new FieldMatrix<T>(src.shape, (T[]) destEntries);
+    }
 
 
-//    /**
-//     * Adds a sparse vector to each row of a sparse matrix as if the vector is a row vector.
-//     * @param src The source sparse matrix.
-//     * @param row Sparse vector to add to each row of the sparse matrix.
-//     * @return A dense copy of the {@code src} matrix with the {@code row} vector added to each row of the matrix.
-//     */
-//    public static Matrix addToEachRow(CooFieldMatrix<T> src, CooVectorOld row) {
-//        ParameterChecks.ensureEquals(src.numCols, row.size);
-//        double[] destEntries = new double[src.totalEntries().intValueExact()];
-//
-//        // Add values from sparse matrix.
-//        for(int i=0; i<src.entries.length; i++) {
-//            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = src.entries[i];
-//        }
-//
-//        // Add values from sparse column.
-//        for(int i=0; i<row.entries.length; i++) {
-//            int idx = 0;
-//            int colIdx = row.indices[i];
-//            double value = row.entries[i];
-//
-//            while(idx < destEntries.length) {
-//                destEntries[idx + colIdx] += value;
-//                idx += src.numCols;
-//            }
-//        }
-//
-//        return new Matrix(src.shape, destEntries);
-//    }
+    /**
+     * Adds a sparse vector to each row of a sparse matrix as if the vector is a row vector.
+     * @param src The source sparse matrix.
+     * @param row Sparse vector to add to each row of the sparse matrix.
+     * @return A dense copy of the {@code src} matrix with the {@code row} vector added to each row of the matrix.
+     */
+    public static <T extends Field<T>> FieldMatrix<T> addToEachRow(CooFieldMatrix<T> src, CooFieldVector<T> row) {
+        ValidateParameters.ensureEquals(src.numCols, row.size);
+        Field<T>[] destEntries = new Field[src.totalEntries().intValueExact()];
+
+        // Add values from sparse matrix.
+        for(int i=0; i<src.entries.length; i++) {
+            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = src.entries[i];
+        }
+
+        // Add values from sparse column.
+        for(int i=0; i<row.entries.length; i++) {
+            int colIdx = row.indices[i];
+            int idx = colIdx;
+            T value = (T) row.entries[i];
+
+            while(idx < destEntries.length) {
+                destEntries[idx] = destEntries[idx].add(value);
+                idx += src.numCols;
+            }
+        }
+
+        return new FieldMatrix<T>(src.shape, (T[]) destEntries);
+    }
 }

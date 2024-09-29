@@ -25,9 +25,10 @@
 package org.flag4j.linalg.decompositions.hess;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.linalg.transformations.Householder;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 /**
@@ -123,7 +124,7 @@ public class HermHess extends ComplexHess {
             H.entries[idx1] = transformMatrix.entries[idx1]; // extract diagonal value.
 
             // extract off-diagonal values.
-            Complex128 a = transformMatrix.entries[idx0];
+            Field<Complex128> a = transformMatrix.entries[idx0];
             H.entries[idx0] = a;
             H.entries[idx1 - 1] = a;
 
@@ -154,7 +155,7 @@ public class HermHess extends ComplexHess {
         // Compute max-abs value in row. (Equivalent to max value in column since matrix is Hermitian.)
         int rowU = (j-1)*numRows;
         for(int i=j; i<numRows; i++) {
-            Complex128 d = householderVector[i] = transformMatrix.entries[rowU + i];
+            Field<Complex128> d = householderVector[i] = transformMatrix.entries[rowU + i];
             maxAbs = Math.max(d.abs(), maxAbs);
         }
 
@@ -173,7 +174,7 @@ public class HermHess extends ComplexHess {
         if(enforceHermitian && !src.isHermitian()) // If requested, check the matrix is Hermitian.
             throw new LinearAlgebraException(getClass().getSimpleName() + " only supports Hermitian matrices.");
         else
-            ParameterChecks.ensureSquareMatrix(src.shape); // Otherwise, Just ensure the matrix is square.
+            ValidateParameters.ensureSquareMatrix(src.shape); // Otherwise, Just ensure the matrix is square.
 
         numRows = numCols = minAxisSize = src.numRows;
         copyUpperTri(src);  // Initializes transform matrix.

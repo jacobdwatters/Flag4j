@@ -29,10 +29,11 @@ import org.flag4j.algebraic_structures.fields.RealFloat64;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.linalg.VectorNorms;
+import org.flag4j.operations.common.field_ops.CompareField;
 import org.flag4j.operations.dense.field_ops.DenseFieldEquals;
 import org.flag4j.operations.dense.field_ops.DenseFieldTensorDot;
 import org.flag4j.operations.dense.field_ops.DenseFieldVectorOperations;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -70,7 +71,7 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-    protected DenseFieldVectorBase(Shape shape, W[] entries) {
+    protected DenseFieldVectorBase(Shape shape, Field<W>[] entries) {
         super(shape, entries);
         size = entries.length;
     }
@@ -90,7 +91,7 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
      *
      * @param entries Entries of this vector.
      */
-    public abstract T makeLikeTensor(W... entries);
+    public abstract T makeLikeTensor(Field<W>... entries);
 
 
     /**
@@ -99,7 +100,7 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
      * @param entries Entries of the matrix to construct.
      * @return A matrix of similar type to this vector with the specified {@code shape} and {@code entries}.
      */
-    public abstract U makeLikeMatrix(Shape shape, W[] entries);
+    public abstract U makeLikeMatrix(Shape shape, Field<W>[] entries);
 
 
     /**
@@ -109,7 +110,7 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
      * @param indices The non-zero indices of the sparse vector.
      * @return A sparse vector of similar type to this dense vector with the specified size, entries, and indices.
      */
-    public abstract V makeSparseVector(int size, List<W> entries, List<Integer> indices);
+    public abstract V makeSparseVector(int size, List<Field<W>> entries, List<Integer> indices);
 
 
     /**
@@ -204,7 +205,7 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
         System.arraycopy(entries, 0, joinEntries, 0, size);
         System.arraycopy(b.entries, 0, joinEntries, size, b.size);
 
-        return makeLikeTensor(shape, (W[]) joinEntries);
+        return makeLikeTensor(shape, joinEntries);
     }
 
 
@@ -290,14 +291,14 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
      */
     @Override
     public T cross(T b) {
-        ParameterChecks.ensureArrayLengthsEq(3, b.size, this.size);
+        ValidateParameters.ensureArrayLengthsEq(3, b.size, this.size);
         Field<W>[] entries = new Field[3];
 
-        entries[0] = this.entries[1].mult(b.entries[2]).sub(this.entries[2].mult(b.entries[1]));
-        entries[1] = this.entries[2].mult(b.entries[0]).sub(this.entries[0].mult(b.entries[2]));
-        entries[2] = this.entries[0].mult(b.entries[1]).sub(this.entries[1].mult(b.entries[0]));
+        entries[0] = this.entries[1].mult((W) b.entries[2]).sub(this.entries[2].mult((W) b.entries[1]));
+        entries[1] = this.entries[2].mult((W) b.entries[0]).sub(this.entries[0].mult((W) b.entries[2]));
+        entries[2] = this.entries[0].mult((W) b.entries[1]).sub(this.entries[1].mult((W) b.entries[0]));
 
-        return makeLikeTensor((W[]) entries);
+        return makeLikeTensor(entries);
     }
 
 
@@ -327,14 +328,14 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
             // Find first non-zero entry of b to compute the scaling factor.
             for(int i = 0; i < b.size; i++) {
                 if(!b.entries[i].isZero()) {
-                    scale = this.entries[i].div(b.entries[i]);
+                    scale = this.entries[i].div((W) b.entries[i]);
                     break;
                 }
             }
 
             // Ensure all entries of b are the same scalar multiple of the entries in this vector.
             for(int i = 0; i < this.size; i++) {
-                if(!scale.mult(b.entries[i]).equals(this.entries[i])) {
+                if(!scale.mult((W) b.entries[i]).equals(this.entries[i])) {
                     result = false;
                     break;
                 }
@@ -444,8 +445,8 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
      */
     @Override
     public U repeat(int n, int axis) {
-        ParameterChecks.ensureValidAxes(shape, axis);
-        ParameterChecks.ensureNonNegative(n);
+        ValidateParameters.ensureValidAxes(shape, axis);
+        ValidateParameters.ensureNonNegative(n);
 
         Field<W>[] tiledEntries = new Field[n*size];
         U tiled;
@@ -454,12 +455,12 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
             for(int i=0; i<n; i++) // Set each row of the tiled matrix to be the vector values.
                 System.arraycopy(entries, 0, tiledEntries, i*size, size);
 
-            tiled = makeLikeMatrix(new Shape(n, size), (W[]) tiledEntries);
+            tiled = makeLikeMatrix(new Shape(n, size), tiledEntries);
         } else {
-            for(int i=0; i<size; i++) // Fill each row of the tiled matrix with a single value from the vector.
+            for(int i=0, stop=size; i<stop; i++) // Fill each row of the tiled matrix with a single value from the vector.
                 Arrays.fill(tiledEntries, i*n, (i+1)*n, entries[i]);
 
-            tiled = makeLikeMatrix(new Shape(size, n), (W[]) tiledEntries);
+            tiled = makeLikeMatrix(new Shape(size, n), tiledEntries);
         }
 
         return tiled;
@@ -478,15 +479,14 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
      */
     @Override
     public U stack(T b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
-
+        ValidateParameters.ensureEqualShape(shape, b.shape);
         Field<W>[] tiledEntries = new Field[size];
 
         // Copy entries from each vector to the matrix.
         System.arraycopy(entries, 0, tiledEntries, 0, size);
         System.arraycopy(b.entries, 0, tiledEntries, size, b.size);
 
-        return makeLikeMatrix(new Shape(2, size), (W[]) tiledEntries);
+        return makeLikeMatrix(new Shape(2, size), tiledEntries);
     }
 
 
@@ -517,13 +517,13 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
      */
     @Override
     public U stack(T b, int axis) {
-        ParameterChecks.ensureAxis2D(axis);
+        ValidateParameters.ensureAxis2D(axis);
         U stacked;
 
         if(axis==0) {
             stacked = stack(b);
         } else {
-            ParameterChecks.ensureArrayLengthsEq(size, b.size);
+            ValidateParameters.ensureArrayLengthsEq(size, b.size);
             Field<W>[] stackedEntries = new Field[2*size];
 
             int count = 0;
@@ -532,7 +532,7 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
                 stackedEntries[i+1] = b.entries[count++];
             }
 
-            stacked = makeLikeMatrix(new Shape(size, 2), (W[]) stackedEntries);
+            stacked = makeLikeMatrix(new Shape(size, 2), stackedEntries);
         }
 
         return stacked;
@@ -550,7 +550,7 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
      */
     @Override
     public U outer(T b) {
-        return makeLikeMatrix(new Shape(size, b.size), (W[]) DenseFieldVectorOperations.outerProduct(entries, b.entries));
+        return makeLikeMatrix(new Shape(size, b.size), DenseFieldVectorOperations.outerProduct(entries, b.entries));
     }
 
 
@@ -581,13 +581,13 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
     @Override
     public V toCoo() {
         // Estimate sparsity.
-        List<W> nonZeroEntries = new ArrayList<>((int) (entries.length*0.5));
+        List<Field<W>> nonZeroEntries = new ArrayList<>((int) (entries.length*0.5));
         List<Integer> indices = new ArrayList<>((int) (entries.length*0.5));
 
         // Fill entries with non-zero values.
         for(int i=0; i<entries.length; i++) {
             if(!entries[i].isZero()) {
-                nonZeroEntries.add(entries[i]);
+                nonZeroEntries.add((W) entries[i]);
                 indices.add(i);
             }
         }
@@ -605,8 +605,8 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
      */
     @Override
     public void elemMultEq(T b) {
-        for(int i=0; i<size; i++)
-            entries[i] = entries[i].mult(b.entries[i]);
+        for(int i=0, stop=size; i<stop; i++)
+            entries[i] = entries[i].mult((W) b.entries[i]);
     }
 
 
@@ -619,8 +619,10 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
      */
     @Override
     public void addEq(T b) {
-        for(int i=0; i<size; i++)
-            entries[i] = entries[i].add(b.entries[i]);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
+
+        for(int i=0, stop=size; i<stop; i++)
+            entries[i] = entries[i].add((W) b.entries[i]);
     }
 
 
@@ -633,8 +635,8 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
      */
     @Override
     public void subEq(T b) {
-        for(int i=0; i<size; i++)
-            entries[i] = entries[i].sub(b.entries[i]);
+        for(int i=0, stop=size; i<stop; i++)
+            entries[i] = entries[i].sub((W) b.entries[i]);
     }
 
 
@@ -647,8 +649,8 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
      */
     @Override
     public void divEq(T b) {
-        for(int i=0; i<size; i++)
-            entries[i] = entries[i].div(b.entries[i]);
+        for(int i=0, stop=size; i<stop; i++)
+            entries[i] = entries[i].div((W) b.entries[i]);
     }
 
 
@@ -665,8 +667,8 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
     public T div(T b) {
         Field<W>[] quotient = new Field[size];
 
-        for(int i=0; i<size; i++)
-            quotient[i] = entries[i].div(b.entries[i]);
+        for(int i=0, stop=size; i<stop; i++)
+            quotient[i] = entries[i].div((W) b.entries[i]);
 
         return makeLikeTensor(shape, entries);
     }
@@ -702,6 +704,26 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
      */
     @Override
     public boolean allClose(T b, double relTol, double absTol) {
-        return DenseFieldEquals.allClose(entries, shape, b.entries, b.shape, relTol, absTol);
+        if(!shape.equals(b.shape)) return false;
+        return CompareField.allClose(entries, b.entries, relTol, absTol);
+    }
+
+
+    /**
+     * Sets the element of this tensor at the specified indices.
+     *
+     * @param value New value to set the specified index of this tensor to.
+     * @param indices Indices of the element to set.
+     *
+     * @return If this tensor is dense, a reference to this tensor is returned. If this tensor is sparse, a copy of this tensor with
+     * the updated value is returned.
+     *
+     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
+     */
+    @Override
+    public T set(W value, int... indices) {
+        ValidateParameters.ensureValidIndex(shape, indices);
+        entries[indices[0]] = value;
+        return (T) this;
     }
 }

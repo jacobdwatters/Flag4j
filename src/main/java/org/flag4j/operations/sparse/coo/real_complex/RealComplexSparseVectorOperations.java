@@ -24,14 +24,15 @@
 
 package org.flag4j.operations.sparse.coo.real_complex;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.sparse.CooCVectorOld;
-import org.flag4j.arrays_old.sparse.CooVectorOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.sparse.CooCVector;
+import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +40,7 @@ import java.util.List;
 
 
 /**
- * This class contains low level implementations of operations_old on a real sparse tensor and a complex sparse tensor.
+ * This class contains low level implementations of operations on a real sparse tensor and a complex sparse tensor.
  */
 public final class RealComplexSparseVectorOperations {
 
@@ -55,8 +56,8 @@ public final class RealComplexSparseVectorOperations {
      * @param a Value to add to the {@code src} sparse vector.
      * @return The result of adding the specified value to the sparse vector.
      */
-    public static CVectorOld add(CooVectorOld src, CNumber a) {
-        CNumber[] dest = new CNumber[src.size];
+    public static CVector add(CooVector src, Complex128 a) {
+        Complex128[] dest = new Complex128[src.size];
         Arrays.fill(dest, a);
 
         for(int i=0; i<src.entries.length; i++) {
@@ -64,7 +65,7 @@ public final class RealComplexSparseVectorOperations {
             dest[idx] = dest[idx].add(src.entries[i]);
         }
 
-        return new CVectorOld(dest);
+        return new CVector(dest);
     }
 
 
@@ -74,16 +75,16 @@ public final class RealComplexSparseVectorOperations {
      * @param a Value to add to the {@code src} sparse vector.
      * @return The result of adding the specified value to the sparse vector.
      */
-    public static CVectorOld add(CooCVectorOld src, double a) {
-        CNumber[] dest = new CNumber[src.size];
+    public static CVector add(CooCVector src, double a) {
+        Complex128[] dest = new Complex128[src.size];
         ArrayUtils.fill(dest, a);
 
         for(int i=0; i<src.entries.length; i++) {
             int idx = src.indices[i];
-            dest[idx] = dest[idx].add(src.entries[i]);
+            dest[idx] = dest[idx].add((Complex128) src.entries[i]);
         }
 
-        return new CVectorOld(dest);
+        return new CVector(dest);
     }
 
 
@@ -93,8 +94,8 @@ public final class RealComplexSparseVectorOperations {
      * @param a Value to subtract from the {@code src} sparse vector.
      * @return The result of subtracting the specified value from the sparse vector.
      */
-    public static CVectorOld sub(CooVectorOld src, CNumber a) {
-        CNumber[] dest = new CNumber[src.size];
+    public static CVector sub(CooVector src, Complex128 a) {
+        Complex128[] dest = new Complex128[src.size];
         Arrays.fill(dest, a.addInv());
 
         for(int i=0; i<src.entries.length; i++) {
@@ -102,7 +103,7 @@ public final class RealComplexSparseVectorOperations {
             dest[idx] = dest[idx].add(src.entries[i]);
         }
 
-        return new CVectorOld(dest);
+        return new CVector(dest);
     }
 
 
@@ -114,9 +115,9 @@ public final class RealComplexSparseVectorOperations {
      * @return The result of the vector addition.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static CooCVectorOld add(CooCVectorOld src1, CooVectorOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-        List<CNumber> values = new ArrayList<>(src1.entries.length);
+    public static CooCVector add(CooCVector src1, CooVector src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+        List<Field<Complex128>> values = new ArrayList<>(src1.entries.length);
         List<Integer> indices = new ArrayList<>(src1.entries.length);
 
         int src1Counter = 0;
@@ -134,7 +135,7 @@ public final class RealComplexSparseVectorOperations {
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
             } else {
-                values.add(new CNumber(src2.entries[src2Counter]));
+                values.add(new Complex128(src2.entries[src2Counter]));
                 indices.add(src2.indices[src2Counter]);
                 src2Counter++;
             }
@@ -148,14 +149,14 @@ public final class RealComplexSparseVectorOperations {
             }
         } else if(src2Counter < src2.entries.length) {
             for(int i=src2Counter; i<src2.entries.length; i++) {
-                values.add(new CNumber(src2.entries[i]));
+                values.add(new Complex128(src2.entries[i]));
                 indices.add(src2.indices[i]);
             }
         }
 
-        return new CooCVectorOld(
+        return new CooCVector(
                 src1.size,
-                values.toArray(new CNumber[0]),
+                values.toArray(new Complex128[0]),
                 indices.stream().mapToInt(Integer::intValue).toArray()
         );
     }
@@ -169,9 +170,9 @@ public final class RealComplexSparseVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static CooCVectorOld sub(CooCVectorOld src1, CooVectorOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-        List<CNumber> values = new ArrayList<>(src1.entries.length);
+    public static CooCVector sub(CooCVector src1, CooVector src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+        List<Field<Complex128>> values = new ArrayList<>(src1.entries.length);
         List<Integer> indices = new ArrayList<>(src1.entries.length);
 
         int src1Counter = 0;
@@ -189,7 +190,7 @@ public final class RealComplexSparseVectorOperations {
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
             } else {
-                values.add(new CNumber(-src2.entries[src2Counter]));
+                values.add(new Complex128(-src2.entries[src2Counter]));
                 indices.add(src2.indices[src2Counter]);
                 src2Counter++;
             }
@@ -203,14 +204,14 @@ public final class RealComplexSparseVectorOperations {
             }
         } else if(src2Counter < src2.entries.length) {
             for(int i=src2Counter; i<src2.entries.length; i++) {
-                values.add(new CNumber(-src2.entries[i]));
+                values.add(new Complex128(-src2.entries[i]));
                 indices.add(src2.indices[i]);
             }
         }
 
-        return new CooCVectorOld(
+        return new CooCVector(
                 src1.size,
-                values.toArray(new CNumber[0]),
+                values.toArray(new Complex128[0]),
                 indices.stream().mapToInt(Integer::intValue).toArray()
         );
     }
@@ -224,9 +225,9 @@ public final class RealComplexSparseVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static CooCVectorOld sub(CooVectorOld src1, CooCVectorOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-        List<CNumber> values = new ArrayList<>(src1.entries.length);
+    public static CooCVector sub(CooVector src1, CooCVector src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+        List<Field<Complex128>> values = new ArrayList<>(src1.entries.length);
         List<Integer> indices = new ArrayList<>(src1.entries.length);
 
         int src1Counter = 0;
@@ -234,13 +235,13 @@ public final class RealComplexSparseVectorOperations {
 
         while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
             if(src1.indices[src1Counter] == src2.indices[src2Counter]) {
-                values.add(new CNumber(src1.entries[src1Counter]).sub(src2.entries[src2Counter]));
+                values.add(new Complex128(src1.entries[src1Counter]).sub((Complex128) src2.entries[src2Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
 
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
-                values.add(new CNumber(src1.entries[src1Counter]));
+                values.add(new Complex128(src1.entries[src1Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
             } else {
@@ -253,7 +254,7 @@ public final class RealComplexSparseVectorOperations {
         // Finish inserting the rest of the values.
         if(src1Counter < src1.entries.length) {
             for(int i=src1Counter; i<src1.entries.length; i++) {
-                values.add(new CNumber(src1.entries[i]));
+                values.add(new Complex128(src1.entries[i]));
                 indices.add(src1.indices[i]);
             }
         } else if(src2Counter < src2.entries.length) {
@@ -263,9 +264,9 @@ public final class RealComplexSparseVectorOperations {
             }
         }
 
-        return new CooCVectorOld(
+        return new CooCVector(
                 src1.size,
-                values.toArray(new CNumber[0]),
+                values.toArray(new Complex128[0]),
                 indices.stream().mapToInt(Integer::intValue).toArray()
         );
     }
@@ -279,9 +280,9 @@ public final class RealComplexSparseVectorOperations {
      * @return The result of the vector multiplication.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static CooCVectorOld elemMult(CooCVectorOld src1, CooVectorOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-        List<CNumber> values = new ArrayList<>(src1.entries.length);
+    public static CooCVector elemMult(CooCVector src1, CooVector src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+        List<Field<Complex128>> values = new ArrayList<>(src1.entries.length);
         List<Integer> indices = new ArrayList<>(src1.entries.length);
 
         int src1Counter = 0;
@@ -302,9 +303,9 @@ public final class RealComplexSparseVectorOperations {
             }
         }
 
-        return new CooCVectorOld(
+        return new CooCVector(
                 src1.size,
-                values.toArray(CNumber[]::new),
+                values.toArray(Complex128[]::new),
                 indices.stream().mapToInt(Integer::intValue).toArray()
         );
     }
@@ -318,9 +319,9 @@ public final class RealComplexSparseVectorOperations {
      * @return The result of the vector inner product.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static CNumber inner(CooCVectorOld src1, CooVectorOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-        CNumber product = CNumber.ZERO;
+    public static Complex128 inner(CooCVector src1, CooVector src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+        Complex128 product = Complex128.ZERO;
 
         int src1Counter = 0;
         int src2Counter = 0;
@@ -348,9 +349,9 @@ public final class RealComplexSparseVectorOperations {
      * @return The result of the vector inner product.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static CNumber inner(CooVectorOld src1, CooCVectorOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-        CNumber product = CNumber.ZERO;
+    public static Complex128 inner(CooVector src1, CooCVector src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+        Complex128 product = Complex128.ZERO;
 
         int src1Counter = 0;
         int src2Counter = 0;
@@ -378,9 +379,9 @@ public final class RealComplexSparseVectorOperations {
      * @param src2 Second sparse vector in the outer product.
      * @return The matrix resulting from the vector outer product.
      */
-    public static CMatrixOld outerProduct(CooCVectorOld src1, CooVectorOld src2) {
-        CNumber[] dest = new CNumber[src2.size*src1.size];
-        Arrays.fill(dest, CNumber.ZERO);
+    public static CMatrix outerProduct(CooCVector src1, CooVector src2) {
+        Complex128[] dest = new Complex128[src2.size*src1.size];
+        Arrays.fill(dest, Complex128.ZERO);
 
         int destRow;
         int index1;
@@ -397,7 +398,7 @@ public final class RealComplexSparseVectorOperations {
             }
         }
 
-        return new CMatrixOld(src1.size, src2.size, dest);
+        return new CMatrix(src1.size, src2.size, dest);
     }
 
 
@@ -407,11 +408,11 @@ public final class RealComplexSparseVectorOperations {
      * @param src2 Second sparse vector in the outer product.
      * @return The matrix resulting from the vector outer product.
      */
-    public static CMatrixOld outerProduct(CooVectorOld src1, CooCVectorOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static CMatrix outerProduct(CooVector src1, CooCVector src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
-        CNumber[] dest = new CNumber[src2.size*src1.size];
-        Arrays.fill(dest, CNumber.ZERO);
+        Complex128[] dest = new Complex128[src2.size*src1.size];
+        Arrays.fill(dest, Complex128.ZERO);
 
         int destRow;
         int index1;
@@ -428,6 +429,6 @@ public final class RealComplexSparseVectorOperations {
             }
         }
 
-        return new CMatrixOld(src1.size, src2.size, dest);
+        return new CMatrix(src1.size, src2.size, dest);
     }
 }

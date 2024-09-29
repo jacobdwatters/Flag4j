@@ -30,6 +30,7 @@ import org.flag4j.arrays.backend.DenseFieldMatrixBase;
 import org.flag4j.arrays.sparse.CooFieldMatrix;
 import org.flag4j.arrays.sparse.CsrFieldMatrix;
 import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,7 +57,7 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
      * @param shape Shape of this matrix.
      * @param entries Entries of this matrix.
      */
-    public FieldMatrix(Shape shape, T[] entries) {
+    public FieldMatrix(Shape shape, Field<T>[] entries) {
         super(shape, entries);
     }
 
@@ -68,7 +69,7 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
      * @param cols Number of columns in the matrix.
      * @param entries Entries of this matrix.
      */
-    public FieldMatrix(int rows, int cos, T[] entries) {
+    public FieldMatrix(int rows, int cos, Field<T>[] entries) {
         super(new Shape(rows, cos), entries);
     }
 
@@ -80,7 +81,7 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
      * @param shape Shape of this matrix.
      * @param entries Entries of this matrix.
      */
-    public FieldMatrix(Shape shape, T[][] entries) {
+    public FieldMatrix(Shape shape, Field<T>[][] entries) {
         super(shape, ArrayUtils.flatten(entries));
     }
 
@@ -105,7 +106,7 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
      * @param shape Shape of this matrix.
      * @param entries Entries of this matrix.
      */
-    public FieldMatrix(int rows, int cols, T[][] entries) {
+    public FieldMatrix(int rows, int cols, Field<T>[][] entries) {
         super(new Shape(rows, cols), ArrayUtils.flatten(entries));
     }
 
@@ -132,7 +133,7 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
      * @return A tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public FieldMatrix<T> makeLikeTensor(Shape shape, T[] entries) {
+    public FieldMatrix<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
         return new FieldMatrix<T>(shape, entries);
     }
 
@@ -159,7 +160,7 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
      * @return A vector of similar type to this matrix with the given {@code entries}.
      */
     @Override
-    public FieldVector<T> makeLikeVector(T... entries) {
+    public FieldVector<T> makeLikeVector(Field<T>... entries) {
         return new FieldVector<T>(entries);
     }
 
@@ -173,7 +174,7 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
     public CooFieldMatrix<T> toCoo() {
         int rows = numRows;
         int cols = numCols;
-        List<T> sparseEntries = new ArrayList<>();
+        List<Field<T>> sparseEntries = new ArrayList<>();
         List<Integer> rowIndices = new ArrayList<>();
         List<Integer> colIndices = new ArrayList<>();
 
@@ -181,10 +182,10 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
             int rowOffset = i*cols;
 
             for(int j=0; j<cols; j++) {
-                T val = entries[rowOffset + j];
+                Field<T> val = entries[rowOffset + j];
 
                 if(!val.isZero()) {
-                    sparseEntries.add(val);
+                    sparseEntries.add((T) val);
                     rowIndices.add(i);
                     colIndices.add(j);
                 }
@@ -203,6 +204,97 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
     public CsrFieldMatrix<T> toCsr() {
         // For simplicity convert to a COO matrix as an intermediate.
         return toCoo().toCsr();
+    }
+
+
+    /**
+     * Constructs an identity matrix of the specified size.
+     *
+     * @param size Size of the identity matrix.
+     * @param fieldValue Value of field to create identity matrix for.
+     * @return An identity matrix of specified size.
+     * @throws IllegalArgumentException If the specified size is less than 1.
+     * @see #I(Shape, Field)
+     * @see #I(int, int, Field)
+     */
+    public static FieldMatrix I(int size, Field fieldValue) {
+        return I(size, size, fieldValue);
+    }
+
+
+    /**
+     * Constructs an identity-like matrix of the specified shape. That is, a matrix of zeros with ones along the
+     * principle diagonal.
+     *
+     * @param numRows Number of rows in the identity-like matrix.
+     * @param numCols Number of columns in the identity-like matrix.
+     * @param fieldValue Value of field to create identity matrix for.
+     * @return An identity matrix of specified shape.
+     * @throws IllegalArgumentException If the specified number of rows or columns is less than 1.
+     * @see #I(int, Field)
+     * @see #I(Shape, Field)
+     */
+    public static FieldMatrix I(int numRows, int numCols, Field fieldValue) {
+        return I(new Shape(numRows, numCols), fieldValue);
+    }
+
+
+    /**
+     * Constructs an identity-like matrix of the specified shape. That is, a matrix of zeros with ones along the
+     * principle diagonal.
+     *
+     * @param shape The shape of the identity-like matrix to construct.
+     * @param fieldValue Value of field to create identity matrix for.
+     * @return An identity matrix of specified shape.
+     * @throws IllegalArgumentException If the specified number of rows or columns is less than 1.
+     * @see #I(int, Field)
+     * @see #I(Shape, Field)
+     */
+    public static FieldMatrix I(Shape shape, Field fieldValue) {
+        Field[] identityValues = new Field[shape.totalEntriesIntValueExact()];
+        Arrays.fill(identityValues, (Field) fieldValue.getZero());
+        Field one = (Field) fieldValue.getOne();
+
+        int rows = shape.get(0);
+        int cols = shape.get(1);
+
+        for(int i=0, stop=Math.min(rows, cols); i<stop; i++)
+            identityValues[i*cols + i] = one;
+
+        return new FieldMatrix(shape, identityValues);
+    }
+
+
+    /**
+     * <p>Computes the matrix multiplication of this matrix with itself {@code n} times. This matrix must be square.</p>
+     *
+     * <p>For large {@code n} values, this method <i>may</i> significantly more efficient than calling
+     * {@code #mult(Matrix) this.mult(this)} {@code n} times.</p>
+     * @param n Number of times to multiply this matrix with itself. Must be non-negative.
+     * @return If {@code n=0}, then the identity
+     */
+    public FieldMatrix pow(int n) {
+        ValidateParameters.ensureSquare(shape);
+        ValidateParameters.ensureNonNegative(n);
+
+        // Check for some quick returns.
+        if (n == 0) return I(numRows, entries[0]);
+        if (n == 1) return this;
+        if (n == 2) return this.mult(this);
+
+        FieldMatrix<T> result = I(numRows, entries[0]);  // Start with identity matrix
+        FieldMatrix<T> base = this;
+
+        // Compute the matrix power efficiently using an "exponentiation by squaring" approach.
+        while(n > 0) {
+            if((n & 1) == 1)  // If n is odd.
+                result = result.mult(base);
+
+            base = base.mult(base);  // Square the base.
+            n >>= 1;  // Divide n by 2 (bitwise right shift).
+        }
+
+        return result;
     }
 
 

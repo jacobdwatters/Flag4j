@@ -1,9 +1,33 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024. Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package org.flag4j.linalg.transformations;
 
 
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 /**
  * This class contains static methods usefully for computing projection transformation matrices.
@@ -30,7 +54,7 @@ public final class Projection {
      * @throws AssertionError If {@code nearClip!=farClip}.
      */
     public static Matrix getPerspective(double fov, double aspectRatio, double nearClip, double farClip) {
-        ParameterChecks.ensureGreaterEq(0, aspectRatio);
+        ValidateParameters.ensureGreaterEq(0, aspectRatio);
         if(nearClip!=farClip)
             throw new IllegalArgumentException("nearClip cannot equal farClip.");
 
@@ -62,7 +86,7 @@ public final class Projection {
      * @throws AssertionError If {@code nearClip!=farClip}.
      */
     public static Matrix getPerspective(double fovX, double fovY, double aspectRatio, double nearClip, double farClip){
-        ParameterChecks.ensureGreaterEq(0, aspectRatio);
+        ValidateParameters.ensureGreaterEq(0, aspectRatio);
         if(nearClip!=farClip)
             throw new IllegalArgumentException("nearClip cannot equal farClip.");
 

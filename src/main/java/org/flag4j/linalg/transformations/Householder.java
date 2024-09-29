@@ -26,13 +26,14 @@ package org.flag4j.linalg.transformations;
 
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.operations.common.field_ops.FieldOperations;
-import org.flag4j.operations_old.common.real.RealOperations;
+import org.flag4j.operations.common.real.RealOperations;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -123,7 +124,7 @@ public final class Householder {
         // Compute signed norm using modified sgn function.
         Complex128 signedNorm = normal.entries[0].equals(0) ?
                 new Complex128(-VectorNorms.norm(normal.entries)) :
-                Complex128.sgn(normal.entries[0]).mult(-VectorNorms.norm(normal.entries));
+                Complex128.sgn((Complex128) normal.entries[0]).mult(-VectorNorms.norm(normal.entries));
 
         v = normal.div(normal.entries[0].sub(signedNorm));
         v.entries[0] = new Complex128(1);
@@ -238,17 +239,17 @@ public final class Householder {
      *                  garbage collection if this method is called repeatedly.
      */
     public static void leftMultReflector(CMatrix src,
-                                         Complex128[] householderVector,
+                                         Field<Complex128>[] householderVector,
                                          Complex128 alpha,
                                          int startCol,
                                          int startRow, int endRow,
-                                         Complex128[] workArray) {
+                                         Field<Complex128>[] workArray) {
         int numCols = src.numCols;
         int srcRowOffset = startRow*numCols;
         Complex128 v0 = householderVector[startRow].conj();
 
         for(int i=startCol; i<numCols; i++) {
-            workArray[i] = v0.mult(src.entries[srcRowOffset + i]);
+            workArray[i] = v0.mult((Complex128) src.entries[srcRowOffset + i]);
         }
 
         for(int k=startRow + 1; k<endRow; k++) {
@@ -256,17 +257,17 @@ public final class Householder {
             Complex128 reflectorValue = householderVector[k].conj();
 
             for(int i=startCol; i<numCols; i++)
-                workArray[i] = workArray[i].add(reflectorValue.mult(src.entries[srcIdx++]));
+                workArray[i] = workArray[i].add(reflectorValue.mult((Complex128) src.entries[srcIdx++]));
         }
 
         FieldOperations.scalMult(workArray, workArray, alpha, startCol, numCols);
 
         for(int i=startRow; i<endRow; i++) {
-            Complex128 reflectorValue = householderVector[i];
+            Field<Complex128> reflectorValue = householderVector[i];
             int indexA = i*numCols + startCol;
 
             for(int j=startCol; j<numCols; j++) {
-                src.entries[indexA] = src.entries[indexA++].sub(reflectorValue.mult(workArray[j]));
+                src.entries[indexA] = src.entries[indexA++].sub(reflectorValue.mult((Complex128) workArray[j]));
             }
         }
     }
@@ -283,7 +284,7 @@ public final class Householder {
      * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
      */
     public static void rightMultReflector(CMatrix src,
-                                          Complex128[] householderVector,
+                                          Field<Complex128>[] householderVector,
                                           Complex128 alpha,
                                           int startCol,
                                           int startRow, int endRow) {
@@ -295,7 +296,7 @@ public final class Householder {
             int rowIndex = startIndex;
 
             for(int j = startRow; j < endRow; j++) {
-                sum = sum.add(src.entries[rowIndex++].mult(householderVector[j]));
+                sum = sum.add(src.entries[rowIndex++].mult((Complex128) householderVector[j]));
             }
             sum = sum.mult(negAlpha);
 
@@ -475,10 +476,10 @@ public final class Householder {
      * @param workArray Array for storing temporary values during the computation. Contents will be overwritten.
      */
     public static void hermLeftRightMultReflector(CMatrix src,
-                                                  Complex128[] householderVector,
+                                                  Field<Complex128>[] householderVector,
                                                   Complex128 alpha,
                                                   int startCol,
-                                                  Complex128[] workArray) {
+                                                  Field<Complex128>[] workArray) {
         int numRows = src.numRows;
 
         // Computes w = -alpha*A*v (taking conjugate for lower triangular part)
@@ -487,10 +488,10 @@ public final class Householder {
             int rowOffset = i * numRows;
 
             for (int j = startCol; j < i; j++) {
-                total = total.add(src.entries[j*numRows + i].conj().mult(householderVector[j]));
+                total = total.add(src.entries[j*numRows + i].conj().mult((Complex128) householderVector[j]));
             }
             for (int j = i; j < src.numRows; j++) {
-                total = total.add(src.entries[rowOffset + j].mult(householderVector[j]));
+                total = total.add(src.entries[rowOffset + j].mult((Complex128) householderVector[j]));
             }
 
             workArray[i] = alpha.mult(total).addInv();
@@ -499,24 +500,24 @@ public final class Householder {
         // Computes -0.5*alpha*v^T*w (with conjugation in the scalar product)
         Complex128 innerProd = new Complex128(0, 0);
         for (int i = startCol; i < numRows; i++) {
-            innerProd = innerProd.add(householderVector[i].conj().mult(workArray[i]));
+            innerProd = innerProd.add(householderVector[i].conj().mult((Complex128) workArray[i]));
         }
         innerProd = innerProd.mult(alpha).mult(new Complex128(-0.5, 0));
 
         // Computes w + innerProd*v
         for (int i = startCol; i < numRows; i++) {
-            workArray[i] = workArray[i].add(innerProd.mult(householderVector[i]));
+            workArray[i] = workArray[i].add(innerProd.mult((Complex128) householderVector[i]));
         }
 
         // Computes A + w*v^T + v*w^T (ensuring Hermitian property is maintained)
         for (int i = startCol; i < numRows; i++) {
-            Complex128 prod = workArray[i];
+            Field<Complex128> prod = workArray[i];
             Complex128 h = householderVector[i].conj();
             int rowOffset = i * numRows;
 
             for (int j = i; j < src.numRows; j++) {
                 src.entries[rowOffset + j] = src.entries[rowOffset + j]
-                        .add(prod.mult(householderVector[j]))
+                        .add(prod.mult((Complex128) householderVector[j]))
                         .add(workArray[j].mult(h));
             }
         }

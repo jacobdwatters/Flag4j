@@ -35,7 +35,7 @@ import org.flag4j.arrays.backend.DenseFieldMatrixBase;
 import org.flag4j.arrays.backend.DenseFieldTensorBinaryOperation;
 import org.flag4j.arrays.backend.DenseFieldVectorBase;
 import org.flag4j.util.Axis2D;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -118,7 +118,7 @@ public final class DenseFieldMatMultDispatcher {
      * @return The result of the matrix multiplication.
      */
     public static <T extends Field<T>> Field<T>[] dispatch(DenseFieldMatrixBase<?, ?, ?, ?, T> A, DenseFieldMatrixBase<?, ?, ?, ?, T> B) {
-        ParameterChecks.ensureMatMultShapes(A.shape, B.shape); // Ensure matrix shapes are conducive to matrix multiplication.
+        ValidateParameters.ensureMatMultShapes(A.shape, B.shape); // Ensure matrix shapes are conducive to matrix multiplication.
 
         DenseFieldMatMultDispatcher dispatcher = getInstance();
         AlgorithmNames name = selectAlgorithm(A.shape, B.shape);
@@ -135,7 +135,7 @@ public final class DenseFieldMatMultDispatcher {
     public static <T extends Field<T>> Field<T>[] dispatch(DenseFieldMatrixBase<?, ?, ?, ?, T> src1,
                                                            DenseFieldVectorBase<?, ?, ?, T> src2) {
         Shape bMatShape = new Shape(src2.size, 1);
-        ParameterChecks.ensureMatMultShapes(src1.shape, bMatShape);
+        ValidateParameters.ensureMatMultShapes(src1.shape, bMatShape);
 
         AlgorithmNames algorithm = selectAlgorithmVector(src1.shape);
         Field<T>[] dest;
@@ -167,8 +167,8 @@ public final class DenseFieldMatMultDispatcher {
      * @param shape2 Shape of the second matrix.
      * @return The result of the matrix multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] dispatch(T[] src1, Shape shape1, T[] src2, Shape shape2) {
-        ParameterChecks.ensureMatMultShapes(shape1, shape2); // Ensure matrix shapes are conducive to matrix multiplication.
+    public static <T extends Field<T>> Field<T>[] dispatch(Field<T>[] src1, Shape shape1, Field<T>[] src2, Shape shape2) {
+        ValidateParameters.ensureMatMultShapes(shape1, shape2); // Ensure matrix shapes are conducive to matrix multiplication.
 
         DenseFieldMatMultDispatcher dispatcher = getInstance();
         AlgorithmNames name = selectAlgorithm(shape1, shape2);
@@ -184,7 +184,7 @@ public final class DenseFieldMatMultDispatcher {
      * @return The matrix multiply-transpose result of {@code A} and {@code B}.
      */
     public static <T extends Field<T>> Field<T>[] dispatchTranspose(DenseFieldMatrixBase<?, ?, ?, ?, T> A, DenseFieldMatrixBase<?, ?, ?, ?, T> B) {
-        ParameterChecks.ensureArrayLengthsEq(A.numCols, B.numCols);
+        ValidateParameters.ensureArrayLengthsEq(A.numCols, B.numCols);
 
         DenseFieldMatMultDispatcher dispatcher = getInstance();
         AlgorithmNames name = selectAlgorithmTranspose(A.shape);

@@ -24,12 +24,13 @@
 
 package org.flag4j.operations.common.complex;
 
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.util.ErrorMessages;
 
 
 /**
- * This class contains low-level implementations for operations_old which check if a complex tensor satisfies some property.
+ * This class contains low-level implementations for operations which check if a complex tensor satisfies some property.
  * Implementations are agnostic to whether the tensor is sparse or dense.
  */
 public final class ComplexProperties {
@@ -45,17 +46,13 @@ public final class ComplexProperties {
      * @param entries Entries of dense tensor or non-zero entries of sparse tensor.
      * @return True if the tensor only contains real values. Returns false otherwise.
      */
-    public static boolean isReal(CNumber[] entries) {
-        boolean result = true;
+    public static boolean isReal(Field<Complex128>[] entries) {
+        if(entries == null) return false;
 
-        for(CNumber entry : entries) {
-            if (entry.im != 0) {
-                result = false;
-                break;
-            }
-        }
+        for(Field<Complex128> entry : entries)
+            if(((Complex128) entry).im != 0) return false;
 
-        return result;
+        return true;
     }
 
 
@@ -64,11 +61,11 @@ public final class ComplexProperties {
      * @param entries Entries of dense tensor or non-zero entries of sparse tensor.
      * @return True if the tensor contains at least one non-real value. Returns false otherwise.
      */
-    public static boolean isComplex(CNumber[] entries) {
+    public static boolean isComplex(Field<Complex128>[] entries) {
         boolean result = false;
 
-        for(CNumber entry : entries) {
-            if(entry.im != 0) {
+        for(Field<Complex128> entry : entries) {
+            if(((Complex128) entry).im != 0) {
                 result = true;
                 break;
             }
@@ -83,17 +80,13 @@ public final class ComplexProperties {
      * @param src Array to check if it only contains zeros.
      * @return True if the {@code src} array contains only zeros.
      */
-    public static boolean isZeros(CNumber[] src) {
-        boolean allZeros = true;
-
-        for(CNumber value : src) {
-            if(value.re!=0 || value.im!=0) {
-                allZeros = false;
-                break;
-            }
+    public static boolean isZeros(Field<Complex128>[] src) {
+        for(Field<Complex128> value : src) {
+            if(((Complex128) value).re!=0 || ((Complex128) value).im!=0)
+                return false;
         }
 
-        return allZeros;
+        return true;
     }
 
 
@@ -104,9 +97,9 @@ public final class ComplexProperties {
      * @return True if both arrays_old have the same length and all entries are 'close' element-wise, i.e.
      * elements {@code a} and {@code b} at the same positions in the two arrays_old respectively and satisfy
      * {@code |a-b| <= (1E-05 + 1E-08*|b|)}. Otherwise, returns false.
-     * @see #allClose(CNumber[], CNumber[], double, double)
+     * @see #allClose(Field<Complex128>[], Field<Complex128>[], double, double)
      */
-    public static boolean allClose(CNumber[] src1, CNumber[] src2) {
+    public static boolean allClose(Field<Complex128>[] src1, Field<Complex128>[] src2) {
         return allClose(src1, src2, 1e-05, 1e-08);
     }
 
@@ -119,16 +112,16 @@ public final class ComplexProperties {
      * @return True if both arrays_old have the same length and all entries are 'close' element-wise, i.e.
      * elements {@code a} and {@code b} at the same positions in the two arrays_old respectively and satisfy
      * {@code |a-b| <= (absTol + relTol*|b|)}. Otherwise, returns false.
-     * @see #allClose(CNumber[], CNumber[])
+     * @see #allClose(Field<Complex128>[], Field<Complex128>[])
      */
-    public static boolean allClose(CNumber[] src1, CNumber[] src2, double relTol, double absTol) {
+    public static boolean allClose(Field<Complex128>[] src1, Field<Complex128>[] src2, double relTol, double absTol) {
         boolean close = src1.length==src2.length;
 
         if(close) {
             for(int i=0; i<src1.length; i++) {
                 double tol = absTol + relTol*src2[i].abs();
 
-                if(src1[i].sub(src2[i]).abs() > tol) {
+                if(src1[i].sub((Complex128) src2[i]).abs() > tol) {
                     close = false;
                     break;
                 }

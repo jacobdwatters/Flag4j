@@ -33,7 +33,7 @@ package org.flag4j.arrays.backend;
  * @param <W> Type (or wrapper of) an individual element in this vector.
  */
 public interface DenseVectorMixin<T extends DenseVectorMixin<T, U, V, W>, U extends SparseVectorMixin<U, T, ?, V, W>,
-        V extends MatrixMixin<V, ?, W>, W>
+        V extends DenseMatrixMixin<V, ?, T, W>, W>
         extends VectorMixin<T, V, V, W>, DenseTensorMixin<T, U> {
 
 

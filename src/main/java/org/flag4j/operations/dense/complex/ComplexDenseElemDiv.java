@@ -24,11 +24,11 @@
 
 package org.flag4j.operations.dense.complex;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 /**
  * This class contains low-level implementations of complex element-wise tensor multiplication.
@@ -56,9 +56,9 @@ public class ComplexDenseElemDiv {
      * @return The element-wise division of the two tensors.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static CNumber[] elemDiv(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        ParameterChecks.ensureEqualShape(shape1, shape2);
-        CNumber[] product = new CNumber[src1.length];
+    public static Complex128[] elemDiv(Complex128[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+        ValidateParameters.ensureEqualShape(shape1, shape2);
+        Complex128[] product = new Complex128[src1.length];
 
         for(int i=0; i<product.length; i++) {
             product[i] = src1[i].div(src2[i]);
@@ -77,9 +77,9 @@ public class ComplexDenseElemDiv {
      * @return The element-wise division of the two tensors.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static CNumber[] elemDivConcurrent(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        ParameterChecks.ensureEqualShape(shape1, shape2);
-        CNumber[] product = new CNumber[src1.length];
+    public static Complex128[] elemDivConcurrent(Complex128[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+        ValidateParameters.ensureEqualShape(shape1, shape2);
+        Complex128[] product = new Complex128[src1.length];
 
         ThreadManager.concurrentOperation(product.length, (start, end)->{
             for(int i=start; i<end; i++) {
@@ -99,7 +99,7 @@ public class ComplexDenseElemDiv {
      * @param shape2 Shape of second tensor.
      * @return The element-wise division of the two tensors.
      */
-    public static CNumber[] dispatch(CNumber[] src1, Shape shape1,CNumber[] src2, Shape shape2) {
+    public static Complex128[] dispatch(Complex128[] src1, Shape shape1,Complex128[] src2, Shape shape2) {
         if(src1.length < CONCURRENT_THRESHOLD) {
             return elemDiv(src1, shape1, src2, shape2);
         } else {

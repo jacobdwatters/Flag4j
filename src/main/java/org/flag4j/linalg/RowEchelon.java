@@ -122,7 +122,7 @@ public final class RowEchelon {
         // Convert U to reduced row echelon form.
         for(int j=0; j<colStop; j++) {
             pivotRow = j*U.numCols;
-            m = U.entries[pivotRow + j];
+            m = (Complex128) U.entries[pivotRow + j];
 
             // Scale row so pivot is 1.
             for(int k=j; k<U.numCols; k++) {
@@ -132,10 +132,10 @@ public final class RowEchelon {
             // Zero out column above pivot.
             for(int i=0; i<j; i++) {
                 iRow = i*U.numCols;
-                m = U.entries[iRow + j];
+                m = (Complex128) U.entries[iRow + j];
 
                 for(int k=j; k<U.numCols; k++) {
-                    U.entries[iRow + k] = U.entries[iRow + k].sub(m.mult(U.entries[pivotRow + k]));
+                    U.entries[iRow + k] = U.entries[iRow + k].sub(m.mult((Complex128) U.entries[pivotRow + k]));
                 }
             }
         }

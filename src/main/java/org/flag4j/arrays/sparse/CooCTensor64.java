@@ -26,11 +26,14 @@ package org.flag4j.arrays.sparse;
 
 
 import org.flag4j.algebraic_structures.fields.Complex64;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.CooFieldTensorBase;
 import org.flag4j.arrays.dense.CTensor64;
 import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ValidateParameters;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -69,7 +72,7 @@ public class CooCTensor64 extends CooFieldTensorBase<CooCTensor64, CTensor64, Co
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      * @param indices
      */
-    public CooCTensor64(Shape shape, Complex64[] entries, int[][] indices) {
+    public CooCTensor64(Shape shape, Field<Complex64>[] entries, int[][] indices) {
         super(shape, entries, indices);
         if(entries.length == 0 || entries[0] == null) setZeroElement(Complex64.ZERO);
     }
@@ -84,7 +87,7 @@ public class CooCTensor64 extends CooFieldTensorBase<CooCTensor64, CTensor64, Co
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      * @param indices
      */
-    public CooCTensor64(Shape shape, List<Complex64> entries, List<int[]> indices) {
+    public CooCTensor64(Shape shape, List<Field<Complex64>> entries, List<int[]> indices) {
         super(shape, entries.toArray(new Complex64[0]), indices.toArray(new int[0][]));
         if(super.entries.length == 0 || super.entries[0] == null) setZeroElement(Complex64.ZERO);
     }
@@ -106,6 +109,53 @@ public class CooCTensor64 extends CooFieldTensorBase<CooCTensor64, CTensor64, Co
 
 
     /**
+     * Sets the element of this tensor at the specified indices.
+     *
+     * @param value New value to set the specified index of this tensor to.
+     * @param index Indices of the element to set.
+     *
+     * @return A copy of this tensor with the updated value is returned.
+     *
+     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
+     */
+    @Override
+    public CooCTensor64 set(Complex64 value, int... index) {
+        ValidateParameters.ensureValidIndex(shape, index);
+        CooCTensor64 dest;
+
+        // Check if value already exists in tensor.
+        int idx = -1;
+        for(int i=0; i<indices.length; i++) {
+            if(Arrays.equals(indices[i], index)) {
+                idx = i;
+                break; // Found in tensor, no need to continue.
+            }
+        }
+
+        if(idx > -1) {
+            // Copy entries and set new value.
+            dest = new CooCTensor64(shape, entries.clone(), ArrayUtils.deepCopy(indices, null));
+            dest.entries[idx] = value;
+            dest.indices[idx] = index;
+        } else {
+            // Copy old indices and insert new one.
+            int[][] newIndices = new int[indices.length + 1][getRank()];
+            ArrayUtils.deepCopy(indices, newIndices);
+            newIndices[indices.length] = index;
+
+            // Copy old entries and insert new one.
+            Field<Complex64>[] newEntries = Arrays.copyOf(entries, entries.length+1);
+            newEntries[newEntries.length-1] = value;
+
+            dest = new CooCTensor64(shape, newEntries, newIndices);
+            dest.sortIndices();
+        }
+
+        return dest;
+    }
+
+
+    /**
      * Constructs a sparse tensor of the same type as this tensor with the same indices as this sparse tensor and with the provided
      * the shape and entries.
      *
@@ -116,7 +166,7 @@ public class CooCTensor64 extends CooFieldTensorBase<CooCTensor64, CTensor64, Co
      * the shape and entries.
      */
     @Override
-    public CooCTensor64 makeLikeTensor(Shape shape, Complex64[] entries) {
+    public CooCTensor64 makeLikeTensor(Shape shape, Field<Complex64>[] entries) {
         return new CooCTensor64(shape, entries, ArrayUtils.deepCopy(indices, null));
     }
 
@@ -131,7 +181,7 @@ public class CooCTensor64 extends CooFieldTensorBase<CooCTensor64, CTensor64, Co
      * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public CooCTensor64 makeLikeTensor(Shape shape, Complex64[] entries, int[][] indices) {
+    public CooCTensor64 makeLikeTensor(Shape shape, Field<Complex64>[] entries, int[][] indices) {
         return new CooCTensor64(shape, entries, indices);
     }
 
@@ -146,7 +196,7 @@ public class CooCTensor64 extends CooFieldTensorBase<CooCTensor64, CTensor64, Co
      * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public CooCTensor64 makeLikeTensor(Shape shape, List<Complex64> entries, List<int[]> indices) {
+    public CooCTensor64 makeLikeTensor(Shape shape, List<Field<Complex64>> entries, List<int[]> indices) {
         return new CooCTensor64(shape, entries, indices);
     }
 
@@ -160,7 +210,7 @@ public class CooCTensor64 extends CooFieldTensorBase<CooCTensor64, CTensor64, Co
      * @return A dense tensor with the specified shape and entries which is a similar type to this sparse tensor.
      */
     @Override
-    public CTensor64 makeDenseTensor(Shape shape, Complex64[] entries) {
+    public CTensor64 makeDenseTensor(Shape shape, Field<Complex64>[] entries) {
         return new CTensor64(shape, entries);
     }
 
@@ -172,7 +222,7 @@ public class CooCTensor64 extends CooFieldTensorBase<CooCTensor64, CTensor64, Co
      */
     @Override
     public CTensor64 toDense() {
-        Complex64[] entries = new Complex64[totalEntries().intValueExact()];
+        Field<Complex64>[] entries = new Complex64[shape.totalEntriesIntValueExact()];
         for(int i=0; i<nnz; i++)
             entries[shape.entriesIndex(indices[i])] = this.entries[i];
 

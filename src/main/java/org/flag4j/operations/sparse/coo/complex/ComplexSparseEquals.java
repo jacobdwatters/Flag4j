@@ -24,10 +24,9 @@
 
 package org.flag4j.operations.sparse.coo.complex;
 
-import org.flag4j.arrays_old.sparse.CooCMatrixOld;
-import org.flag4j.arrays_old.sparse.CooCTensorOld;
-import org.flag4j.arrays_old.sparse.CooCVectorOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.arrays.sparse.CooCTensor;
+import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.operations.common.complex.ComplexProperties;
 import org.flag4j.util.ErrorMessages;
 
@@ -50,7 +49,7 @@ public class ComplexSparseEquals {
      * @param b First matrix in the equality check.
      * @return True if the matrices are equal. False otherwise.
      */
-    public static boolean tensorEquals(CooCTensorOld a, CooCTensorOld b) {
+    public static boolean cooTensorEquals(CooCTensor a, CooCTensor b) {
         return a.shape.equals(b.shape)
                 && Arrays.equals(a.entries, b.entries)
                 && Arrays.deepEquals(a.indices, b.indices);
@@ -63,7 +62,7 @@ public class ComplexSparseEquals {
      * @param b First matrix in the equality check.
      * @return True if the matrices are equal. False otherwise.
      */
-    public static boolean matrixEquals(CooCMatrixOld a, CooCMatrixOld b) {
+    public static boolean cooMatrixEquals(CooCMatrix a, CooCMatrix b) {
         return a.shape.equals(b.shape) && Arrays.equals(a.entries, b.entries)
                 && Arrays.equals(a.rowIndices, b.rowIndices)
                 && Arrays.equals(a.colIndices, b.colIndices);
@@ -76,21 +75,20 @@ public class ComplexSparseEquals {
      * @param b Second vector in the equality check.
      * @return True if the vectors are equal. False otherwise.
      */
-    public static boolean vectorEquals(CooCVectorOld a, CooCVectorOld b) {
+    public static boolean cooVectorEquals(CooCVector a, CooCVector b) {
         return a.size == b.size && Arrays.equals(a.indices, b.indices) && Arrays.equals(a.entries, b.entries);
     }
 
 
     /**
-     * Checks that all non-zero entries are "close" according to {@link ComplexProperties#allClose(CNumber[], CNumber[])} and
-     *      * all indices are the same.
+     * Checks that all non-zero entries are "close".
      * @param src1 First matrix in comparison.
      * @param src2 Second matrix in comparison.
      * @param relTol Relative tolerance.
      * @param absTol Absolute tolerance.
      * @return True if all entries are "close". Otherwise, false.
      */
-    public static boolean allCloseMatrix(CooCMatrixOld src1, CooCMatrixOld src2, double relTol, double absTol) {
+    public static boolean allCloseMatrix(CooCMatrix src1, CooCMatrix src2, double relTol, double absTol) {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.equals(src1.rowIndices, src2.rowIndices)
@@ -100,15 +98,14 @@ public class ComplexSparseEquals {
 
 
     /**
-     * Checks that all non-zero entries are "close" according to {@link ComplexProperties#allClose(CNumber[], CNumber[])} and
-     * all indices are the same.
+     * Checks that all non-zero entries are "close"
      * @param src1 First tensor in comparison.
      * @param src2 Second tensor in comparison.
      * @param relTol Relative tolerance.
      * @param absTol Absolute tolerance.
      * @return True if all entries are "close". Otherwise, false.
      */
-    public static boolean allCloseTensor(CooCTensorOld src1, CooCTensorOld src2, double relTol, double absTol) {
+    public static boolean allCloseTensor(CooCTensor src1, CooCTensor src2, double relTol, double absTol) {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.deepEquals(src1.indices, src2.indices)
@@ -117,15 +114,14 @@ public class ComplexSparseEquals {
 
 
     /**
-     * Checks that all non-zero entries are "close" according to {@link ComplexProperties#allClose(CNumber[], CNumber[])} and
-     * all indices are the same.
+     * Checks that all non-zero entries are "close".
      * @param src1 First vector in comparison.
      * @param src2 Second vector in comparison.
      * @param relTol Relative tolerance.
      * @param absTol Absolute tolerance.
      * @return True if all entries are "close". Otherwise, false.
      */
-    public static boolean allCloseVector(CooCVectorOld src1, CooCVectorOld src2, double relTol, double absTol) {
+    public static boolean allCloseVector(CooCVector src1, CooCVector src2, double relTol, double absTol) {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.equals(src1.indices, src2.indices)

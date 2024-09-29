@@ -25,13 +25,14 @@
 package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.io.Serializable;
@@ -81,7 +82,7 @@ public class PermutationMatrix implements Serializable {
      * @throws LinearAlgebraException If {@code shape} is not square.
      */
     public PermutationMatrix(Shape shape) {
-        ParameterChecks.ensureSquareMatrix(shape);
+        ValidateParameters.ensureSquareMatrix(shape);
         this.size = shape.get(0);
         swapPointers = ArrayUtils.intRange(0, size);
     }
@@ -117,10 +118,10 @@ public class PermutationMatrix implements Serializable {
      * Creates a permutation matrix with the specified column swaps.
      * @param colSwaps Array specifying column swaps. The entry {@code x} at index {@code i} indicates that column
      * {@code i} has been swapped with column {@code x}. Must be a
-     * {@link ParameterChecks#ensurePermutation(int...) permutation array}.
+     * {@link ValidateParameters#ensurePermutation(int...) permutation array}.
      * @return A permutation matrix with the specified column swaps.
      * @throws IllegalArgumentException If {@code colSwaps} is not a
-     * {@link ParameterChecks#ensurePermutation(int...) permutation array}.
+     * {@link ValidateParameters#ensurePermutation(int...) permutation array}.
      */
     public static PermutationMatrix fromColSwaps(int[] colSwaps) {
         int[] rowPerm = new int[colSwaps.length];
@@ -180,7 +181,7 @@ public class PermutationMatrix implements Serializable {
      * matrix.
      */
     public Matrix leftMult(Matrix src) {
-        ParameterChecks.ensureEquals(size, src.numRows);
+        ValidateParameters.ensureEquals(size, src.numRows);
         double[] destEntries = new double[src.entries.length];
 
         int colIdx;
@@ -204,7 +205,7 @@ public class PermutationMatrix implements Serializable {
      * matrix.
      */
     public Vector leftMult(Vector src) {
-        ParameterChecks.ensureEquals(size, src.size);
+        ValidateParameters.ensureEquals(size, src.size);
         double[] destEntries = new double[src.entries.length];
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
@@ -225,7 +226,7 @@ public class PermutationMatrix implements Serializable {
      * matrix.
      */
     public CMatrix leftMult(CMatrix src) {
-        ParameterChecks.ensureEquals(size, src.numRows);
+        ValidateParameters.ensureEquals(size, src.numRows);
         Complex128[] destEntries = new Complex128[src.entries.length];
 
         int colIdx;
@@ -249,8 +250,8 @@ public class PermutationMatrix implements Serializable {
      * matrix.
      */
     public CVector leftMult(CVector src) {
-        ParameterChecks.ensureEquals(size, src.size);
-        Complex128[] destEntries = new Complex128[src.entries.length];
+        ValidateParameters.ensureEquals(size, src.size);
+        Field<Complex128>[] destEntries = new Complex128[src.entries.length];
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
             destEntries[rowIdx] = src.entries[swapPointers[rowIdx]];
@@ -270,7 +271,7 @@ public class PermutationMatrix implements Serializable {
      * @see #leftMult(Matrix)
      */
     public Matrix rightMult(Matrix src) {
-        ParameterChecks.ensureEquals(size, src.numCols);
+        ValidateParameters.ensureEquals(size, src.numCols);
         double[] destEntries = new double[src.entries.length];
 
         int colIdx;
@@ -314,16 +315,15 @@ public class PermutationMatrix implements Serializable {
      * @see #leftMult(Matrix)
      */
     public CMatrix rightMult(CMatrix src) {
-        ParameterChecks.ensureEquals(size, src.numCols);
-        Complex128[] destEntries = new Complex128[src.entries.length];
-
-        int colIdx;
-        int rowOffset;
+        ValidateParameters.ensureEquals(size, src.numCols);
+        Field<Complex128>[] destEntries = new Complex128[src.entries.length];
+        final int rows = src.numRows;
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
-            colIdx = swapPointers[rowIdx];
+            int colIdx = swapPointers[rowIdx];
+
             for(int j=0; j<src.numRows; j++) {
-                rowOffset = j*src.numCols;
+                int rowOffset = j*src.numCols;
                 destEntries[rowOffset + colIdx] = src.entries[rowOffset + rowIdx];
             }
         }
@@ -368,7 +368,7 @@ public class PermutationMatrix implements Serializable {
      * matrix.
      */
     public void swapCols(int col1, int col2) {
-        ParameterChecks.ensureValidIndices(size, col1, col2);
+        ValidateParameters.ensureValidIndices(size, col1, col2);
         // Find locations of entries with the given columns.
         int idx1 = ArrayUtils.indexOf(swapPointers, col1);
         int idx2 = ArrayUtils.indexOf(swapPointers, col2);
@@ -380,14 +380,14 @@ public class PermutationMatrix implements Serializable {
      * Permutes rows of this permutation matrix.
      * @param swaps Defines row swaps of this permutation matrix. The entry {@code x} at index {@code i}
      *              represents row {@code i} has been swapped with row {@code x}. This must be a
-     *              {@link ParameterChecks#ensurePermutation(int...)  permutation} array.
+     *              {@link ValidateParameters#ensurePermutation(int...)  permutation} array.
      * @throws IllegalArgumentException If {@code swaps} is not the same length as the number of rows/columns in this
      * permutation matrix. Or, if {@code swaps} is not a
-     * {@link ParameterChecks#ensurePermutation(int...)  permutation} array.
+     * {@link ValidateParameters#ensurePermutation(int...)  permutation} array.
      */
     public void permuteRows(int[] swaps) {
-        ParameterChecks.ensurePermutation(swaps);
-        ParameterChecks.ensureArrayLengthsEq(swaps.length, swapPointers.length);
+        ValidateParameters.ensurePermutation(swaps);
+        ValidateParameters.ensureArrayLengthsEq(swaps.length, swapPointers.length);
         System.arraycopy(swaps, 0, swapPointers, 0, swaps.length);
     }
 
@@ -408,9 +408,8 @@ public class PermutationMatrix implements Serializable {
     public PermutationMatrix T() {
         int[] transpose = new int[size];
 
-        for(int i=0; i<size; i++) {
+        for(int i=0; i<size; i++)
             transpose[swapPointers[i]] = i;
-        }
 
         return new PermutationMatrix(transpose);
     }
@@ -460,6 +459,7 @@ public class PermutationMatrix implements Serializable {
                         next = swapPointers[next];
                         cycleSize++;
                     }
+
                     totalSwaps += cycleSize - 1;
                 }
             }

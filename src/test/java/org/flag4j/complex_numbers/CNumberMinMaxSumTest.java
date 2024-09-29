@@ -1,33 +1,34 @@
 package org.flag4j.complex_numbers;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class CNumberMinMaxSumTest {
+class Complex128MinMaxSumTest {
 
-    CNumber n1, n2, n3, n4, n5;
-    CNumber sum, min, max;
-    CNumber expSum, expMin, expMax;
+    Complex128 n1, n2, n3, n4, n5;
+    Complex128 sum, min, max;
+    Complex128 expSum, expMin, expMax;
     int expArg, arg;
 
     @Test
     void sumTestCase() {
         // ------------ Sub-case 1 ------------
-        n1 = new CNumber(93.13, -6456.331);
-        n2 = new CNumber(1.3, 7.5);
-        n3 = new CNumber(-4.2e-8);
-        n4 = new CNumber(0, -2);
+        n1 = new Complex128(93.13, -6456.331);
+        n2 = new Complex128(1.3, 7.5);
+        n3 = new Complex128(-4.2e-8);
+        n4 = new Complex128(0, -2);
 
-        sum = CNumber.sum(n1, n2, n3, n4);
+        sum = Complex128.sum(n1, n2, n3, n4);
 
-        expSum = new CNumber(93.13 + 1.3 + -4.2e-8 + 0,
+        expSum = new Complex128(93.13 + 1.3 + -4.2e-8 + 0,
                 -6456.331 + 7.5 + 0 + -2);
 
         Assertions.assertEquals(sum, expSum);
 
         // ------------ Sub-case 2 ------------
-        sum = CNumber.sum();
-        expSum = CNumber.ZERO;
+        sum = Complex128.sum();
+        expSum = Complex128.ZERO;
         Assertions.assertEquals(sum, expSum);
     }
 
@@ -35,20 +36,20 @@ class CNumberMinMaxSumTest {
     @Test
     void minTestCase() {
         // ------------ Sub-case 1 ------------
-        n1 = new CNumber(93.13, -6456.331);
-        n2 = new CNumber(1.3, 7.5);
-        n3 = new CNumber(-4.2e-8);
-        n4 = new CNumber(0, -2);
+        n1 = new Complex128(93.13, -6456.331);
+        n2 = new Complex128(1.3, 7.5);
+        n3 = new Complex128(-4.2e-8);
+        n4 = new Complex128(0, -2);
 
-        min = CNumber.min(n1, n2, n3, n4);
+        min = Complex128.min(n1, n2, n3, n4);
 
-        expMin = new CNumber(4.2e-8);
+        expMin = new Complex128(4.2e-8);
 
         Assertions.assertEquals(expMin, min);
 
         // ------------ Sub-case 2 ------------
-        min = CNumber.min();
-        expMin = new CNumber(-1);
+        min = Complex128.min();
+        expMin = new Complex128(-1);
         Assertions.assertEquals(expMin, min);
     }
 
@@ -56,20 +57,20 @@ class CNumberMinMaxSumTest {
     @Test
     void minReal() {
         // ------------ Sub-case 1 ------------
-        n1 = new CNumber(93.13, -6456.331);
-        n2 = new CNumber(1.3, 7.5);
-        n3 = new CNumber(-4.2e-8);
-        n4 = new CNumber(0, -2);
-        n5 = new CNumber(-9347, 100);
+        n1 = new Complex128(93.13, -6456.331);
+        n2 = new Complex128(1.3, 7.5);
+        n3 = new Complex128(-4.2e-8);
+        n4 = new Complex128(0, -2);
+        n5 = new Complex128(-9347, 100);
 
-        min = CNumber.minRe(n1, n2, n3, n4, n5);
+        min = Complex128.minRe(n1, n2, n3, n4, n5);
 
-        expMin = new CNumber(-9347);
+        expMin = new Complex128(-9347);
 
         Assertions.assertEquals(expMin, min);
 
         // ------------ Sub-case 2 ------------
-        min = CNumber.minRe();
+        min = Complex128.minRe();
         Assertions.assertTrue(Double.isNaN(min.re));
     }
 
@@ -77,19 +78,19 @@ class CNumberMinMaxSumTest {
     @Test
     void argminTestCase() {
         // ------------ Sub-case 1 ------------
-        n1 = new CNumber(93.13, -6456.331);
-        n2 = new CNumber(1.3, 7.5);
-        n3 = new CNumber(-4.2e-8);
-        n4 = new CNumber(0, -2);
+        n1 = new Complex128(93.13, -6456.331);
+        n2 = new Complex128(1.3, 7.5);
+        n3 = new Complex128(-4.2e-8);
+        n4 = new Complex128(0, -2);
 
-        arg = CNumber.argmin(n1, n2, n3, n4);
+        arg = Complex128.argmin(n1, n2, n3, n4);
 
         expArg = 2;
 
         Assertions.assertEquals(expMin, min);
 
         // ------------ Sub-case 2 ------------
-        arg = CNumber.argmin();
+        arg = Complex128.argmin();
         expArg = -1;
         Assertions.assertEquals(expMin, min);
     }
@@ -98,20 +99,20 @@ class CNumberMinMaxSumTest {
     @Test
     void argminRealTestCase() {
         // ------------ Sub-case 1 ------------
-        n1 = new CNumber(93.13, -6456.331);
-        n2 = new CNumber(1.3, 7.5);
-        n3 = new CNumber(-4.2e-8);
-        n4 = new CNumber(-122, -2);
-        n5 = new CNumber(0, -2);
+        n1 = new Complex128(93.13, -6456.331);
+        n2 = new Complex128(1.3, 7.5);
+        n3 = new Complex128(-4.2e-8);
+        n4 = new Complex128(-122, -2);
+        n5 = new Complex128(0, -2);
 
-        arg = CNumber.argminReal(n1, n2, n3, n4);
+        arg = Complex128.argminReal(n1, n2, n3, n4);
 
         expArg = 3;
 
         Assertions.assertEquals(expMin, min);
 
         // ------------ Sub-case 2 ------------
-        arg = CNumber.argminReal();
+        arg = Complex128.argminReal();
         expArg = -1;
         Assertions.assertEquals(expMin, min);
     }
@@ -120,20 +121,20 @@ class CNumberMinMaxSumTest {
     @Test
     void maxTestCase() {
         // ------------ Sub-case 1 ------------
-        n1 = new CNumber(1.3, 7.5);
-        n2 = new CNumber(93.13, -6456.331);
-        n3 = new CNumber(-4.2e-8);
-        n4 = new CNumber(0, -2);
+        n1 = new Complex128(1.3, 7.5);
+        n2 = new Complex128(93.13, -6456.331);
+        n3 = new Complex128(-4.2e-8);
+        n4 = new Complex128(0, -2);
 
-        max = CNumber.max(n1, n2, n3, n4);
+        max = Complex128.max(n1, n2, n3, n4);
 
-        expMax = new CNumber(6457.002646620257);
+        expMax = new Complex128(6457.002646620257);
 
         Assertions.assertEquals(expMax, max);
 
         // ------------ Sub-case 2 ------------
-        max = CNumber.max();
-        expMax = new CNumber(-1);
+        max = Complex128.max();
+        expMax = new Complex128(-1);
         Assertions.assertEquals(expMax, max);
     }
 
@@ -141,20 +142,20 @@ class CNumberMinMaxSumTest {
     @Test
     void maxReal() {
         // ------------ Sub-case 1 ------------
-        n1 = new CNumber(93.13, -6456.331);
-        n2 = new CNumber(1.3, 7.5);
-        n3 = new CNumber(-4.2e-8);
-        n4 = new CNumber(104.43, -2);
-        n5 = new CNumber(0, 100);
+        n1 = new Complex128(93.13, -6456.331);
+        n2 = new Complex128(1.3, 7.5);
+        n3 = new Complex128(-4.2e-8);
+        n4 = new Complex128(104.43, -2);
+        n5 = new Complex128(0, 100);
 
-        max = CNumber.maxRe(n1, n2, n3, n4, n5);
+        max = Complex128.maxRe(n1, n2, n3, n4, n5);
 
-        expMax = new CNumber(104.43);
+        expMax = new Complex128(104.43);
 
         Assertions.assertEquals(expMax, max);
 
         // ------------ Sub-case 2 ------------
-        max = CNumber.maxRe();
+        max = Complex128.maxRe();
         Assertions.assertTrue(Double.isNaN(max.re));
     }
 
@@ -162,19 +163,19 @@ class CNumberMinMaxSumTest {
     @Test
     void argmaxTestCase() {
         // ------------ Sub-case 1 ------------
-        n1 = new CNumber(1.3, 7.5);
-        n2 = new CNumber(93.13, -6456.331);
-        n3 = new CNumber(-4.2e-8);
-        n4 = new CNumber(0, -2);
+        n1 = new Complex128(1.3, 7.5);
+        n2 = new Complex128(93.13, -6456.331);
+        n3 = new Complex128(-4.2e-8);
+        n4 = new Complex128(0, -2);
 
-        arg = CNumber.argmax(n1, n2, n3, n4);
+        arg = Complex128.argmax(n1, n2, n3, n4);
 
         expArg = 1;
 
         Assertions.assertEquals(expMin, min);
 
         // ------------ Sub-case 2 ------------
-        arg = CNumber.argmax();
+        arg = Complex128.argmax();
         expArg = -1;
         Assertions.assertEquals(expMin, min);
     }
@@ -183,20 +184,20 @@ class CNumberMinMaxSumTest {
     @Test
     void argmaxRealTestCase() {
         // ------------ Sub-case 1 ------------
-        n1 = new CNumber(93.13, -6456.331);
-        n2 = new CNumber(1e10, 7.5);
-        n3 = new CNumber(-4.2e-8);
-        n4 = new CNumber(-122, -2);
-        n5 = new CNumber(0, -2);
+        n1 = new Complex128(93.13, -6456.331);
+        n2 = new Complex128(1e10, 7.5);
+        n3 = new Complex128(-4.2e-8);
+        n4 = new Complex128(-122, -2);
+        n5 = new Complex128(0, -2);
 
-        arg = CNumber.argmaxReal(n1, n2, n3, n4);
+        arg = Complex128.argmaxReal(n1, n2, n3, n4);
 
         expArg = 1;
 
         Assertions.assertEquals(expMin, min);
 
         // ------------ Sub-case 2 ------------
-        arg = CNumber.argmaxReal();
+        arg = Complex128.argmaxReal();
         expArg = -1;
         Assertions.assertEquals(expMin, min);
     }

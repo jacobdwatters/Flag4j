@@ -24,22 +24,23 @@
 
 package org.flag4j.operations.sparse.coo.real_complex;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrixOld;
-import org.flag4j.arrays_old.sparse.CooCVectorOld;
-import org.flag4j.arrays_old.sparse.CooMatrixOld;
-import org.flag4j.arrays_old.sparse.CooVectorOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.arrays.sparse.CooCVector;
+import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * This class has low level implementations for operations_old between a real sparse matrix and a complex sparse matrix.
+ * This class has low level implementations for operations between a real sparse matrix and a complex sparse matrix.
  */
 public final class RealComplexSparseMatrixOperations {
 
@@ -58,12 +59,12 @@ public final class RealComplexSparseMatrixOperations {
      * @return The sum of the two matrices {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
-    public static CooCMatrixOld add(CooCMatrixOld src1, CooMatrixOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static CooCMatrix add(CooCMatrix src1, CooMatrix src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
 
-        List<CNumber> values = new ArrayList<>(initCapacity);
+        List<Field<Complex128>> values = new ArrayList<>(initCapacity);
         List<Integer> rowIndices = new ArrayList<>(initCapacity);
         List<Integer> colIndices = new ArrayList<>(initCapacity);
 
@@ -105,14 +106,14 @@ public final class RealComplexSparseMatrixOperations {
                 colIndices.add(src1.colIndices[src1Counter]);
                 src1Counter++;
             } else {
-                values.add(new CNumber(src2.entries[src2Counter]));
+                values.add(new Complex128(src2.entries[src2Counter]));
                 rowIndices.add(src2.rowIndices[src2Counter]);
                 colIndices.add(src2.colIndices[src2Counter]);
                 src2Counter++;
             }
         }
 
-        return new CooCMatrixOld(
+        return new CooCMatrix(
                 src1.shape,
                 values,
                 rowIndices,
@@ -129,8 +130,8 @@ public final class RealComplexSparseMatrixOperations {
      * @throws ArithmeticException If the {@code src} sparse matrix is too large to be converted to a dense matrix.
      * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
      */
-    public static CMatrixOld add(CooCMatrixOld src, double a) {
-        CNumber[] sum = new CNumber[src.totalEntries().intValueExact()];
+    public static CMatrix add(CooCMatrix src, double a) {
+        Field<Complex128>[] sum = new Complex128[src.totalEntries().intValueExact()];
         ArrayUtils.fill(sum, a);
 
         int row;
@@ -142,7 +143,7 @@ public final class RealComplexSparseMatrixOperations {
             sum[row*src.numCols + col] = src.entries[i];
         }
 
-        return new CMatrixOld(src.shape, sum);
+        return new CMatrix(src.shape, sum);
     }
 
 
@@ -154,8 +155,8 @@ public final class RealComplexSparseMatrixOperations {
      * @throws ArithmeticException If the {@code src} sparse matrix is too large to be converted to a dense matrix.
      * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
      */
-    public static CMatrixOld add(CooMatrixOld src, CNumber a) {
-        CNumber[] sum = new CNumber[src.totalEntries().intValueExact()];
+    public static CMatrix add(CooMatrix src, Complex128 a) {
+        Complex128[] sum = new Complex128[src.totalEntries().intValueExact()];
         Arrays.fill(sum, a);
 
         int row;
@@ -166,7 +167,7 @@ public final class RealComplexSparseMatrixOperations {
             sum[idx] = sum[idx].add(src.entries[i]);
         }
 
-        return new CMatrixOld(src.shape, sum);
+        return new CMatrix(src.shape, sum);
     }
 
 
@@ -178,12 +179,12 @@ public final class RealComplexSparseMatrixOperations {
      * @return The difference of the two matrices {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
-    public static CooCMatrixOld sub(CooCMatrixOld src1, CooMatrixOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static CooCMatrix sub(CooCMatrix src1, CooMatrix src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
 
-        List<CNumber> values = new ArrayList<>(initCapacity);
+        List<Field<Complex128>> values = new ArrayList<>(initCapacity);
         List<Integer> rowIndices = new ArrayList<>(initCapacity);
         List<Integer> colIndices = new ArrayList<>(initCapacity);
 
@@ -225,14 +226,14 @@ public final class RealComplexSparseMatrixOperations {
                 colIndices.add(src1.colIndices[src1Counter]);
                 src1Counter++;
             } else {
-                values.add(new CNumber(-src2.entries[src2Counter]));
+                values.add(new Complex128(-src2.entries[src2Counter]));
                 rowIndices.add(src2.rowIndices[src2Counter]);
                 colIndices.add(src2.colIndices[src2Counter]);
                 src2Counter++;
             }
         }
 
-        return new CooCMatrixOld(
+        return new CooCMatrix(
                 src1.shape,
                 values,
                 rowIndices,
@@ -249,12 +250,12 @@ public final class RealComplexSparseMatrixOperations {
      * @return The difference of the two matrices {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
-    public static CooCMatrixOld sub(CooMatrixOld src1, CooCMatrixOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static CooCMatrix sub(CooMatrix src1, CooCMatrix src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
 
-        List<CNumber> values = new ArrayList<>(initCapacity);
+        List<Field<Complex128>> values = new ArrayList<>(initCapacity);
         List<Integer> rowIndices = new ArrayList<>(initCapacity);
         List<Integer> colIndices = new ArrayList<>(initCapacity);
 
@@ -285,13 +286,13 @@ public final class RealComplexSparseMatrixOperations {
             }
 
             if(add1 && add2) {
-                values.add(new CNumber(src1.entries[src1Counter]).sub(src2.entries[src2Counter]));
+                values.add(new Complex128(src1.entries[src1Counter]).sub((Complex128) src2.entries[src2Counter]));
                 rowIndices.add(src1.rowIndices[src1Counter]);
                 colIndices.add(src1.colIndices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
             } else if(add1) {
-                values.add(new CNumber(src1.entries[src1Counter]));
+                values.add(new Complex128(src1.entries[src1Counter]));
                 rowIndices.add(src1.rowIndices[src1Counter]);
                 colIndices.add(src1.colIndices[src1Counter]);
                 src1Counter++;
@@ -303,7 +304,7 @@ public final class RealComplexSparseMatrixOperations {
             }
         }
 
-        return new CooCMatrixOld(
+        return new CooCMatrix(
                 src1.shape,
                 values,
                 rowIndices,
@@ -320,7 +321,7 @@ public final class RealComplexSparseMatrixOperations {
      * @throws ArithmeticException If the {@code src} sparse matrix is too large to be converted to a dense matrix.
      * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
      */
-    public static CMatrixOld sub(CooCMatrixOld src, double a) {
+    public static CMatrix sub(CooCMatrix src, double a) {
         return add(src, -a);
     }
 
@@ -333,7 +334,7 @@ public final class RealComplexSparseMatrixOperations {
      * @throws ArithmeticException If the {@code src} sparse matrix is too large to be converted to a dense matrix.
      * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
      */
-    public static CMatrixOld sub(CooMatrixOld src, CNumber a) {
+    public static CMatrix sub(CooMatrix src, Complex128 a) {
         return add(src, a.addInv());
     }
 
@@ -346,12 +347,12 @@ public final class RealComplexSparseMatrixOperations {
      * @return The element-wise product of the two matrices {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
-    public static CooCMatrixOld elemMult(CooCMatrixOld src1, CooMatrixOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static CooCMatrix elemMult(CooCMatrix src1, CooMatrix src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
 
-        List<CNumber> product = new ArrayList<>(initCapacity);
+        List<Field<Complex128>> product = new ArrayList<>(initCapacity);
         List<Integer> rowIndices = new ArrayList<>(initCapacity);
         List<Integer> colIndices = new ArrayList<>(initCapacity);
 
@@ -383,7 +384,7 @@ public final class RealComplexSparseMatrixOperations {
             }
         }
 
-        return new CooCMatrixOld(
+        return new CooCMatrix(
                 src1.shape,
                 product,
                 rowIndices,
@@ -398,27 +399,27 @@ public final class RealComplexSparseMatrixOperations {
      * @param col Sparse vector to add to each column of the sparse matrix.
      * @return A dense copy of the {@code src} matrix with the {@code col} vector added to each row of the matrix.
      */
-    public static CMatrixOld addToEachCol(CooMatrixOld src, CooCVectorOld col) {
-        ParameterChecks.ensureEquals(src.numRows, col.size);
-        CNumber[] destEntries = new CNumber[src.totalEntries().intValueExact()];
+    public static CMatrix addToEachCol(CooMatrix src, CooCVector col) {
+        ValidateParameters.ensureEquals(src.numRows, col.size);
+        Complex128[] destEntries = new Complex128[src.totalEntries().intValueExact()];
 
         // Add values from sparse matrix.
         for(int i=0; i<src.entries.length; i++) {
-            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = new CNumber(src.entries[i]);
+            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = new Complex128(src.entries[i]);
         }
 
         // Add values from sparse column.
         for(int i=0; i<col.entries.length; i++) {
             int idx = col.indices[i]*src.numCols;
             int end = idx + src.numCols;
-            CNumber value = col.entries[i];
+            Complex128 value = (Complex128) col.entries[i];
 
             while(idx < end) {
                 destEntries[idx] = destEntries[idx++].add(value);
             }
         }
 
-        return new CMatrixOld(src.shape, destEntries);
+        return new CMatrix(src.shape, destEntries);
     }
 
 
@@ -428,20 +429,20 @@ public final class RealComplexSparseMatrixOperations {
      * @param row Sparse vector to add to each row of the sparse matrix.
      * @return A dense copy of the {@code src} matrix with the {@code row} vector added to each row of the matrix.
      */
-    public static CMatrixOld addToEachRow(CooMatrixOld src, CooCVectorOld row) {
-        ParameterChecks.ensureEquals(src.numCols, row.size);
-        CNumber[] destEntries = new CNumber[src.totalEntries().intValueExact()];
+    public static CMatrix addToEachRow(CooMatrix src, CooCVector row) {
+        ValidateParameters.ensureEquals(src.numCols, row.size);
+        Complex128[] destEntries = new Complex128[src.totalEntries().intValueExact()];
 
         // Add values from sparse matrix.
         for(int i=0; i<src.entries.length; i++) {
-            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = new CNumber(src.entries[i]);
+            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = new Complex128(src.entries[i]);
         }
 
         // Add values from sparse column.
         for(int i=0; i<row.entries.length; i++) {
             int idx = 0;
             int colIdx = row.indices[i];
-            CNumber value = row.entries[i];
+            Complex128 value = (Complex128) row.entries[i];
 
             while(idx < destEntries.length) {
                 destEntries[idx + colIdx] = destEntries[idx + colIdx].add(value);
@@ -449,7 +450,7 @@ public final class RealComplexSparseMatrixOperations {
             }
         }
 
-        return new CMatrixOld(src.shape, destEntries);
+        return new CMatrix(src.shape, destEntries);
     }
 
 
@@ -459,9 +460,9 @@ public final class RealComplexSparseMatrixOperations {
      * @param col Sparse vector to add to each column of the sparse matrix.
      * @return A dense copy of the {@code src} matrix with the {@code col} vector added to each row of the matrix.
      */
-    public static CMatrixOld addToEachCol(CooCMatrixOld src, CooVectorOld col) {
-        ParameterChecks.ensureEquals(src.numRows, col.size);
-        CNumber[] destEntries = new CNumber[src.totalEntries().intValueExact()];
+    public static CMatrix addToEachCol(CooCMatrix src, CooVector col) {
+        ValidateParameters.ensureEquals(src.numRows, col.size);
+        Field<Complex128>[] destEntries = new Complex128[src.totalEntries().intValueExact()];
 
         // Add values from sparse matrix.
         for(int i=0; i<src.entries.length; i++) {
@@ -472,14 +473,14 @@ public final class RealComplexSparseMatrixOperations {
         for(int i=0; i<col.entries.length; i++) {
             int idx = col.indices[i]*src.numCols;
             int end = idx + src.numCols;
-            CNumber value = new CNumber(col.entries[i]);
+            Complex128 value = new Complex128(col.entries[i]);
 
             while(idx < end) {
                 destEntries[idx] = destEntries[idx++].add(value);
             }
         }
 
-        return new CMatrixOld(src.numRows, src.numCols, destEntries);
+        return new CMatrix(src.numRows, src.numCols, destEntries);
     }
 
 
@@ -489,9 +490,9 @@ public final class RealComplexSparseMatrixOperations {
      * @param row Sparse vector to add to each row of the sparse matrix.
      * @return A dense copy of the {@code src} matrix with the {@code row} vector added to each row of the matrix.
      */
-    public static CMatrixOld addToEachRow(CooCMatrixOld src, CooVectorOld row) {
-        ParameterChecks.ensureEquals(src.numCols, row.size);
-        CNumber[] destEntries = new CNumber[src.totalEntries().intValueExact()];
+    public static CMatrix addToEachRow(CooCMatrix src, CooVector row) {
+        ValidateParameters.ensureEquals(src.numCols, row.size);
+        Field<Complex128>[] destEntries = new Complex128[src.totalEntries().intValueExact()];
 
         // Add values from sparse matrix.
         for(int i=0; i<src.entries.length; i++) {
@@ -502,7 +503,7 @@ public final class RealComplexSparseMatrixOperations {
         for(int i=0; i<row.entries.length; i++) {
             int idx = 0;
             int colIdx = row.indices[i];
-            CNumber value = new CNumber(row.entries[i]);
+            Complex128 value = new Complex128(row.entries[i]);
 
             while(idx < destEntries.length) {
                 destEntries[idx + colIdx] = destEntries[idx + colIdx].add(value);
@@ -510,6 +511,6 @@ public final class RealComplexSparseMatrixOperations {
             }
         }
 
-        return new CMatrixOld(src.numRows, src.numCols, destEntries);
+        return new CMatrix(src.numRows, src.numCols, destEntries);
     }
 }

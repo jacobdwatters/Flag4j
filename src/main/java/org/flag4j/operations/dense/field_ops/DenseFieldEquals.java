@@ -51,20 +51,7 @@ public final class DenseFieldEquals {
      * @param shape2 Shape of second tensor.
      * @return True if the two tensors are the same shape and numerically element-wise equivalent.
      */
-    public static <T extends Field<T>> boolean tensorEquals(T[] src1, Shape shape1, T[] src2, Shape shape2) {
+    public static <T extends Field<T>> boolean tensorEquals(Field<T>[] src1, Shape shape1, Field<T>[] src2, Shape shape2) {
         return shape1.equals(shape2) && Arrays.equals(src1, src2);
-    }
-
-
-    public static <T extends Field<T>> boolean allClose(T[] entries1, Shape shape1, T[] entries2, Shape shape2,
-                                                        double relTol, double absTol) {
-        if(!shape1.equals(shape2)) return false;
-
-        for(int i=0, size=entries1.length; i<size; i++) {
-            double tol = absTol + relTol*entries2[i].abs();
-            if(entries1[i].sub(entries2[i]).abs() > tol) return false;
-        }
-
-        return true;
     }
 }

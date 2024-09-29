@@ -27,9 +27,12 @@ package org.flag4j.arrays.backend;
 
 import org.flag4j.arrays.Shape;
 import org.flag4j.operations.TransposeDispatcher;
+import org.flag4j.operations.common.real.RealOperations;
+import org.flag4j.operations.common.real.RealProperties;
+import org.flag4j.operations.dense.real.RealDenseElemDiv;
 import org.flag4j.operations.dense.real.RealDenseTensorDot;
-import org.flag4j.operations_old.common.real.RealProperties;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.Flag4jConstants;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
 /**
@@ -126,7 +129,7 @@ public abstract class DensePrimitiveDoubleTensorBase <T extends DensePrimitiveDo
      */
     @Override
     public void elemMultEq(T b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
 
         for(int i=0, size=entries.length; i<size; i++)
             entries[i] *= b.entries[i];
@@ -142,7 +145,7 @@ public abstract class DensePrimitiveDoubleTensorBase <T extends DensePrimitiveDo
      */
     @Override
     public void addEq(T b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
 
         for(int i=0, size=entries.length; i<size; i++)
             entries[i] += b.entries[i];
@@ -158,7 +161,7 @@ public abstract class DensePrimitiveDoubleTensorBase <T extends DensePrimitiveDo
      */
     @Override
     public void subEq(T b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
 
         for(int i=0, size=entries.length; i<size; i++)
             entries[i] -= b.entries[i];
@@ -174,7 +177,7 @@ public abstract class DensePrimitiveDoubleTensorBase <T extends DensePrimitiveDo
      */
     @Override
     public void divEq(T b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
 
         for(int i=0, size=entries.length; i<size; i++)
             entries[i] /= b.entries[i];
@@ -192,28 +195,134 @@ public abstract class DensePrimitiveDoubleTensorBase <T extends DensePrimitiveDo
      */
     @Override
     public T div(T b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
-        double[] quotient = new double[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++)
-            quotient[i] = entries[i]/b.entries[i];
-
-        return makeLikeTensor(shape, quotient);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
+        return makeLikeTensor(shape, RealDenseElemDiv.dispatch(entries, shape, b.entries, b.shape));
     }
 
 
     /**
-     * Checks if all entries of this tensor are close to the entries of {@code b}.
-     * @param b Tensor to compare this tensor to.
-     * @param absTol Absolute tolerance.
-     * @param relTol Relative tolerance.
-     * @return True if {@code b} is the same shape as this tensor and all entries are 'close', i.e.
-     * elements {@code x} and {@code y} at the same positions in the two tensors respectively satisfy
-     * {@code |x-y| <= (atol + rtol*|y|)}. Otherwise, returns false.
-     * @see #allClose(DenseTensorMixin)
+     * Rounds each entry of this tensor to the nearest whole number.
+     *
+     * @return A copy of this tensor with each entry rounded to the nearest whole number.
+     * @see #round(int)
+     * @see #roundToZero()
+     * @see #roundToZero(double)
+     */
+    public T round() {
+        return makeLikeTensor(this.shape, RealOperations.round(this.entries));
+    }
+
+
+    /**
+     * Rounds each entry in this tensor to the nearest whole number.
+     *
+     * @param precision The number of decimal places to round to. This value must be non-negative.
+     * @return A copy of this matrix with rounded values.
+     * @throws IllegalArgumentException If <code>precision</code> is negative.
+     * @see #round()
+     * @see #roundToZero()
+     * @see #roundToZero(double)
      */
     @Override
+    public T round(int precision) {
+        return makeLikeTensor(this.shape, RealOperations.round(this.entries, precision));
+    }
+
+
+    /**
+     * Rounds values in this tensor which are close to zero in absolute value to zero.
+     * If the matrix is complex, both the real and imaginary components will be rounded
+     * independently. By default, the values must be within {@link Flag4jConstants#EPS_F64} of zero. To specify a threshold value see
+     * {@link #roundToZero(double)}.
+     *
+     * @return A copy of this matrix with rounded values.
+     * @see #roundToZero(double)
+     * @see #round()
+     * @see #round(int)
+     */
+    public T roundToZero() {
+        this.abs();
+        return makeLikeTensor(this.shape, RealOperations.roundToZero(this.entries, Flag4jConstants.EPS_F64));
+    }
+
+
+    /**
+     * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
+     * independently.
+     * @param threshold Threshold for rounding values to zero. That is, if a value in this matrix is less than the threshold in absolute value then it
+     *                  will be rounded to zero. This value must be non-negative.
+     * @return A copy of this matrix with rounded values.
+     * @throws IllegalArgumentException If threshold is negative.
+     * @see #roundToZero()
+     * @see #round()
+     * @see #round(int)
+     */
+    public T roundToZero(double threshold) {
+        return makeLikeTensor(this.shape, RealOperations.roundToZero(this.entries, threshold));
+    }
+    
+
+    /**
+     * Checks if all entries of this tensor are close to the entries of the argument {@code tensor}.
+     * @param tensor Tensor to compare this tensor to.
+     * @return True if the argument {@code tensor} is the same shape as this tensor and all entries are 'close', i.e.
+     * elements {@code a} and {@code b} at the same positions in the two tensors respectively satisfy
+     * {@code |a-b| <= (1E-05 + 1E-08*|b|)}. Otherwise, returns false.
+     * @see #allClose(DensePrimitiveDoubleTensorBase, double, double) 
+     */
+    public boolean allClose(T tensor) {
+        return allClose(tensor, 1e-05, 1e-08);
+    }
+
+
+    /**
+     * Checks if all entries of this tensor are close to the entries of the argument {@code tensor}.
+     * @param tensor Tensor to compare this tensor to.
+     * @param absTol Absolute tolerance.
+     * @param relTol Relative tolerance.
+     * @return True if the argument {@code tensor} is the same shape as this tensor and all entries are 'close', i.e.
+     * elements {@code a} and {@code b} at the same positions in the two tensors respectively satisfy
+     * {@code |a-b| <= (atol + rtol*|b|)}. Otherwise, returns false.
+     * @see #allClose(DensePrimitiveDoubleTensorBase) 
+     */
     public boolean allClose(T tensor, double relTol, double absTol) {
         return shape.equals(tensor.shape) && RealProperties.allClose(entries, tensor.entries, relTol, absTol);
+    }
+
+
+    /**
+     * Sets the element of this tensor at the specified indices.
+     *
+     * @param value New value to set the specified index of this tensor to.
+     * @param indices Indices of the element to set.
+     *
+     * @return If this tensor is dense, a reference to this tensor is returned. If this tensor is sparse, a copy of this tensor with
+     * the updated value is returned.
+     *
+     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
+     */
+    @Override
+    public T set(Double value, int... indices) {
+        ValidateParameters.ensureValidIndex(shape, indices);
+        entries[shape.entriesIndex(indices)] = value;
+        return (T) this;
+    }
+
+
+    /**
+     * Checks if this tensor only contains positive values.
+     * @return Returns {@code true} if this tensor only contains positive values. Otherwise, returns {@code false}.
+     */
+    public boolean isPos() {
+        return RealProperties.isPos(entries);
+    }
+
+
+    /**
+     * Checks if this tensor only contains negative values.
+     * @return Returns {@code true} if this tensor only contains negative values. Otherwise, returns {@code false}.
+     */
+    public boolean isNeg() {
+        return RealProperties.isNeg(entries);
     }
 }

@@ -1,9 +1,9 @@
 package org.flag4j.linalg.solvers;
 
 
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.linalg.solvers.exact.RealExactSolverOld;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
+import org.flag4j.linalg.solvers.exact.RealExactSolver;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.SingularMatrixException;
 import org.junit.jupiter.api.Assertions;
@@ -17,20 +17,20 @@ class RealExactSolverTests {
     static double[] bEntries;
     static double[] expEntries;
 
-    static MatrixOld A;
-    static VectorOld b;
-    static VectorOld exp;
+    static Matrix A;
+    static Vector b;
+    static Vector exp;
 
     private static void setMatrices() {
-        A = new MatrixOld(aEntries);
-        b = new VectorOld(bEntries);
-        exp = new VectorOld(expEntries);
+        A = new Matrix(aEntries);
+        b = new Vector(bEntries);
+        exp = new Vector(expEntries);
     }
 
 
     @Test
     void solveTestCase() {
-        RealExactSolverOld solver = new RealExactSolverOld();
+        RealExactSolver solver = new RealExactSolver();
 
         // ----------------- Sub-case 1 -----------------
         aEntries = new double[][]{

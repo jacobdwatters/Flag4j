@@ -28,11 +28,9 @@ package org.flag4j.operations.sparse.csr.field_ops;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.CsrFieldMatrixBase;
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +55,7 @@ public final class CsrFieldMatrixOperations {
      * @param src The matrix to transpose.
      * @return The hermitian transpose of the {@code src} matrix.
      */
-    public static <T extends CsrFieldMatrixBase<T, ?, ?, U>, U extends Field<U>> T hermTranspose(T src) {
+    public static <T extends CsrFieldMatrixBase<T, ?, ?, ?, U>, U extends Field<U>> T hermTranspose(T src) {
         Field<U>[] dest = new Field[src.entries.length];
         int[] rowPtrs = new int[src.numCols+1];
         int[] colIndices = new int[src.entries.length];
@@ -99,9 +97,10 @@ public final class CsrFieldMatrixOperations {
      * @throws ArrayIndexOutOfBoundsException If any of the indices are out of bounds of this matrix.
      * @throws IllegalArgumentException       If {@code rowEnd} is not greater than {@code rowStart} or if {@code colEnd} is not greater than {@code colStart}.
      */
-    public static <T extends CsrFieldMatrixBase<T, ?, ?, U>, U extends Field<U>> T getSlice(T src, int rowStart, int rowEnd,
-                                                                                            int colStart, int colEnd) {
-        List<U> slice = new ArrayList<>();
+    public static <T extends CsrFieldMatrixBase<T, ?, ?, ?, U>, U extends Field<U>> T getSlice(
+            T src, int rowStart, int rowEnd,
+            int colStart, int colEnd) {
+        List<Field<U>> slice = new ArrayList<>();
         List<Integer> sliceRowIndices = new ArrayList<>();
         List<Integer> sliceColIndices = new ArrayList<>();
 
@@ -133,7 +132,7 @@ public final class CsrFieldMatrixOperations {
      * @param src The matrix to transpose.
      * @return The transpose of the {@code src} matrix.
      */
-    public static <T extends CsrFieldMatrixBase<T, ?, ?, U>, U extends Field<U>> T transpose(T src) {
+    public static <T extends CsrFieldMatrixBase<T, ?, ?, ?, U>, U extends Field<U>> T transpose(T src) {
         Field<U>[] dest = new Field[src.entries.length];
         int[] rowPtrs = new int[src.numCols+1];
         int[] colIndices = new int[src.entries.length];
@@ -164,16 +163,16 @@ public final class CsrFieldMatrixOperations {
 
 
     /**
-     * Applies an element-wise binary operation to two {@link CsrCMatrixOld complex CSR matrices}. <br><br>
+     * Applies an element-wise binary operation to two {@link CsrFieldMatrixBase CSR matrices}. <br><br>
      *
      * Note, this methods efficiency relies heavily on the assumption that both operand matrices are very large and very
      * sparse. If the two matrices are not large and very sparse, this method will likely be
-     * significantly slower than simply converting the matrices to {@link MatrixOld dense matrices} and using a dense
+     * significantly slower than simply converting the matrices to {@link org.flag4j.arrays.dense.FieldMatrix dense matrices} and using a dense
      * matrix addition algorithm.
      * @param src1 The first matrix in the operation.
      * @param src2 The second matrix in the operation.
      * @param opp Binary operator to apply element-wise to <code>src1</code> and <code>src2</code>.
-     * @param uOpp Unary operator for use with binary operations_old which are not commutative such as subtraction. If the operation is
+     * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
      * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
      * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
      * {@code opp.apply(x, uOpp.apply(y))}.
@@ -181,11 +180,11 @@ public final class CsrFieldMatrixOperations {
      * element-wise.
      * @throws IllegalArgumentException If <code>src1</code> and <code>src2</code> do not have the same shape.
      */
-    public static <T extends CsrFieldMatrixBase<T, ?, ?, U>, U extends Field<U>> T applyBinOpp(
-            T src1, T src2, BinaryOperator<U> opp, UnaryOperator<U> uOpp) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static <T extends CsrFieldMatrixBase<T, ?, ?, ?, U>, U extends Field<U>> T applyBinOpp(
+            T src1, T src2, BinaryOperator<Field<U>> opp, UnaryOperator<Field<U>> uOpp) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
-        List<U> dest = new ArrayList<>();
+        List<Field<U>> dest = new ArrayList<>();
         int[] rowPointers = new int[src1.rowPointers.length];
         List<Integer> colIndices = new ArrayList<>();
 

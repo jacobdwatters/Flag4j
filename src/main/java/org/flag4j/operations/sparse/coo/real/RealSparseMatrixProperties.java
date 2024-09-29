@@ -46,7 +46,7 @@ public class RealSparseMatrixProperties {
 
     /**
      * Checks if a real sparse matrix is the identity matrix.
-     * @param src MatrixOld to check if it is the identity matrix.
+     * @param src Matrix to check if it is the identity matrix.
      * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
      */
     public static boolean isIdentity(CooMatrix src) {
@@ -68,7 +68,7 @@ public class RealSparseMatrixProperties {
 
     /**
      * Checks if a real sparse matrix is close to the identity matrix.
-     * @param src MatrixOld to check if it is the identity matrix.
+     * @param src Matrix to check if it is the identity matrix.
      * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
      */
     public static boolean isCloseToIdentity(CooMatrix src) {
@@ -94,7 +94,7 @@ public class RealSparseMatrixProperties {
 
     /**
      * Checks if a real sparse matrix is symmetric.
-     * @param src MatrixOld to check if it is the symmetric matrix.
+     * @param src Matrix to check if it is the symmetric matrix.
      * @return True if the {@code src} matrix is symmetric. False otherwise.
      */
     public static boolean isSymmetric(CooMatrix src) {
@@ -149,7 +149,7 @@ public class RealSparseMatrixProperties {
 
     /**
      * Checks if a real sparse matrix is anti-symmetric.
-     * @param src MatrixOld to check if it is the anti-symmetric matrix.
+     * @param src Matrix to check if it is the anti-symmetric matrix.
      * @return True if the {@code src} matrix is anti-symmetric. False otherwise.
      */
     public static boolean isAntiSymmetric(CooMatrix src) {

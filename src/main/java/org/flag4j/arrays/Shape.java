@@ -25,7 +25,7 @@
 package org.flag4j.arrays;
 
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -66,7 +66,7 @@ public class Shape implements Serializable {
      */
     public Shape(int... dims) {
         // Ensure all dimensions for the shape object are non-negative.
-        ParameterChecks.ensureNonNegative(dims);
+        ValidateParameters.ensureNonNegative(dims);
         this.dims = dims;
     }
 
@@ -153,13 +153,13 @@ public class Shape implements Serializable {
         makeStridesIfNull(); // Computes strides if not previously computed.
 
         int index = 0;
-        for(int i = 0; i < indices.length; i++) {
+        for(int i=0, stop=indices.length; i<stop; i++) {
             int idx = indices[i];
             if(idx < 0 || idx >= dims[i]) {
                 throw new IndexOutOfBoundsException("Index " + idx + " out of bounds for axis " + i +
                         " of tensor with shape " + this);
             }
-            index += idx * strides[i];
+            index += idx*strides[i];
         }
 
         return index;
@@ -212,8 +212,8 @@ public class Shape implements Serializable {
      * @throws ArrayIndexOutOfBoundsException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N}}.
      */
     public Shape swapAxes(int... axes) {
-        ParameterChecks.ensureEquals(getRank(), axes.length);
-        ParameterChecks.ensurePermutation(axes);
+        ValidateParameters.ensureEquals(getRank(), axes.length);
+        ValidateParameters.ensurePermutation(axes);
 
         int[] tempDims = new int[dims.length];
 
@@ -257,19 +257,14 @@ public class Shape implements Serializable {
      */
     public int totalEntriesIntValueExact() {
         if(totalEntriesIntExact >= 0) return totalEntriesIntExact; // Value has already been computed.
+        totalEntriesIntExact = 1;
 
-        if(dims.length == 0) {
-            totalEntriesIntExact = 0;
-        } else {
-            totalEntriesIntExact = 1;
-
-            for (int dim : dims) {
-                // Check for overflow before multiplying
-                if (dim > 0 && totalEntriesIntExact > Integer.MAX_VALUE / dim) {
-                    throw new ArithmeticException("Integer overflow while computing total entries in the shape.");
-                }
-                totalEntriesIntExact *= dim;
+        for (int dim : dims) {
+            // Check for overflow before multiplying
+            if (dim > 0 && totalEntriesIntExact > Integer.MAX_VALUE / dim) {
+                throw new ArithmeticException("Integer overflow while computing total entries in the shape.");
             }
+            totalEntriesIntExact *= dim;
         }
 
         return totalEntriesIntExact;

@@ -106,7 +106,7 @@ public final class CsrFieldMatrixManipulations {
      * @throws IndexOutOfBoundsException If either {@code colIndex1} or {@code colIndex2} is out of bounds of the columns of this
      * matrix.
      */
-    public static <T extends Field<T>> void swapCols(CsrFieldMatrixBase<?, ?, ?, T> src, int colIdx1, int colIdx2) {
+    public static <T extends Field<T>> void swapCols(CsrFieldMatrixBase<?, ?, ?, ?, T> src, int colIdx1, int colIdx2) {
         if(colIdx1 == colIdx2) return;
 
         // Ensure colIndex1 < colIndex2 for simplicity
@@ -155,9 +155,9 @@ public final class CsrFieldMatrixManipulations {
      * @param newPos New index for the value to be moved to within the non-zero entries of {@code src} (assumed to be in the same
      * row as {@code currPos}).
      */
-    private static <T extends Field<T>> void moveAndShiftRight(CsrFieldMatrixBase<?, ?, ?, T> src,
+    private static <T extends Field<T>> void moveAndShiftRight(CsrFieldMatrixBase<?, ?, ?, ?, T> src,
                                                                int newColIdx, int currPos, int newPos) {
-        T value = src.entries[currPos];  // Extract the non-zero value.
+        Field<T> value = src.entries[currPos];  // Extract the non-zero value.
 
         // Shift entries in row to right.
         for(int j=currPos; j>newPos; j--) {
@@ -180,9 +180,9 @@ public final class CsrFieldMatrixManipulations {
      * @param newPos New index for the value to be moved to within the non-zero entries of {@code src} (assumed to be in the same
      * row as {@code currPos}).
      */
-    private static <T extends Field<T>> void moveAndShiftLeft(CsrFieldMatrixBase<?, ?, ?, T> src, int newColIdx, int currPos,
-                                                       int newPos) {
-        T value = src.entries[currPos];  // Extract the non-zero value.
+    private static <T extends Field<T>> void moveAndShiftLeft(CsrFieldMatrixBase<?, ?, ?, ?, T> src,
+                                                              int newColIdx, int currPos, int newPos) {
+        Field<T> value = src.entries[currPos];  // Extract the non-zero value.
 
         // Shift entries in row to left.
         for(int j=currPos; j<newPos; j++) {

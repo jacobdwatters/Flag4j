@@ -31,7 +31,7 @@ import org.flag4j.arrays.sparse.CooFieldTensor;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.dense.field_ops.DenseFieldEquals;
 import org.flag4j.operations.dense.field_ops.DenseFieldTensorDot;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,7 +54,7 @@ public class FieldTensor<T extends Field<T>> extends DenseFieldTensorBase<FieldT
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-    public FieldTensor(Shape shape, T[] entries) {
+    public FieldTensor(Shape shape, Field<T>[] entries) {
         super(shape, entries);
     }
 
@@ -145,8 +145,8 @@ public class FieldTensor<T extends Field<T>> extends DenseFieldTensorBase<FieldT
      * @return A tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public FieldTensor<T> makeLikeTensor(Shape shape, T[] entries) {
-        return new FieldTensor<>(shape, entries);
+    public FieldTensor<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
+        return new FieldTensor<T>(shape, entries);
     }
 
 
@@ -211,7 +211,7 @@ public class FieldTensor<T extends Field<T>> extends DenseFieldTensorBase<FieldT
         List<int[]> indices = new ArrayList<>();
 
         int size = entries.length;
-        T value;
+        Field<T> value;
 
         for(int i=0; i<size; i++) {
             value = entries[i];
@@ -237,14 +237,14 @@ public class FieldTensor<T extends Field<T>> extends DenseFieldTensorBase<FieldT
 
     /**
      * Converts this tensor to a matrix with the specified shape.
-     * @param matShape Shape of the resulting matrix. Must be {@link ParameterChecks#ensureBroadcastable(Shape, Shape) broadcastable}
+     * @param matShape Shape of the resulting matrix. Must be {@link ValidateParameters#ensureBroadcastable(Shape, Shape) broadcastable}
      * with the shape of this tensor.
      * @return A matrix of shape {@code matShape} with the values of this tensor.
      * @throws org.flag4j.util.exceptions.LinearAlgebraException If {@code matShape} is not of rank 2.
      */
     public FieldMatrix<T> toMatrix(Shape matShape) {
-        ParameterChecks.ensureBroadcastable(shape, matShape);
-        ParameterChecks.ensureRank(matShape, 2);
+        ValidateParameters.ensureBroadcastable(shape, matShape);
+        ValidateParameters.ensureRank(matShape, 2);
 
         return new FieldMatrix<T>(matShape, entries.clone());
     }

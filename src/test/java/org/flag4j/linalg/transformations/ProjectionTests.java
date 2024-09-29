@@ -1,6 +1,6 @@
 package org.flag4j.linalg.transformations;
 
-import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays.dense.Matrix;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ProjectionTests {
 
     double[][] expEntries;
-    MatrixOld expProjection;
+    Matrix expProjection;
 
 
     @Test
@@ -20,9 +20,9 @@ class ProjectionTests {
                 {0, 0, -1.0066889632107023, -1},
                 {0, 0, -0.20066889632107024, 0}
         };
-        expProjection = new MatrixOld(expEntries);
+        expProjection = new Matrix(expEntries);
 
-        assertEquals(expProjection, ProjectionOld.getPerspective(55, 1, 0.1, 30));
+        assertEquals(expProjection, Projection.getPerspective(55, 1, 0.1, 30));
 
         // -------------------------- Sub-case 2 --------------------------
         expEntries = new double[][]{
@@ -31,9 +31,9 @@ class ProjectionTests {
                 {0, 0, -1.0001200072004321, -1},
                 {0, 0, -0.6000360021601296, 0}
         };
-        expProjection = new MatrixOld(expEntries);
+        expProjection = new Matrix(expEntries);
 
-        assertEquals(expProjection, ProjectionOld.getPerspective(90, 1.54, 0.3, 5000));
+        assertEquals(expProjection, Projection.getPerspective(90, 1.54, 0.3, 5000));
 
         // -------------------------- Sub-case 3 --------------------------
         expEntries = new double[][]{
@@ -42,9 +42,9 @@ class ProjectionTests {
                 {0, 0, -1.0001200072004321, -1},
                 {0, 0, -0.6000360021601296, 0}
         };
-        expProjection = new MatrixOld(expEntries);
+        expProjection = new Matrix(expEntries);
 
-        assertEquals(expProjection, ProjectionOld.getPerspective(90, 65, 1.54, 0.3, 5000));
+        assertEquals(expProjection, Projection.getPerspective(90, 65, 1.54, 0.3, 5000));
     }
 
 
@@ -57,20 +57,20 @@ class ProjectionTests {
                 {0, 0, -0.020100502512562814, 0},
                 {-0.9607843137254902, -0.42857142857142855, -1.0100502512562815, 1}
         };
-        expProjection = new MatrixOld(expEntries);
+        expProjection = new Matrix(expEntries);
 
-        assertEquals(expProjection, ProjectionOld.getOrthogonal(-1, 50, -2, 5, 0.5, 100));
+        assertEquals(expProjection, Projection.getOrthogonal(-1, 50, -2, 5, 0.5, 100));
 
         // -------------------------- Sub-case 2 --------------------------
-        expProjection = ProjectionOld.getOrthogonal(0, 5.4, 0, 80.1, 0.1, 10);
-        assertEquals(expProjection, ProjectionOld.getOrthogonal(5.4, 80.1, 0.1, 10));
+        expProjection = Projection.getOrthogonal(0, 5.4, 0, 80.1, 0.1, 10);
+        assertEquals(expProjection, Projection.getOrthogonal(5.4, 80.1, 0.1, 10));
 
         // -------------------------- Sub-case 3 --------------------------
-        expProjection = ProjectionOld.getOrthogonal(-1, 50, -2, 5, -1, 1).round(10);
-        assertEquals(expProjection, ProjectionOld.getOrthogonal2D(-1, 50, -2, 5).round(10));
+        expProjection = Projection.getOrthogonal(-1, 50, -2, 5, -1, 1).round(10);
+        assertEquals(expProjection, Projection.getOrthogonal2D(-1, 50, -2, 5).round(10));
 
         // -------------------------- Sub-case 4 --------------------------
-        expProjection = ProjectionOld.getOrthogonal(0, 50, 0, 5, -1, 1).round(10);
-        assertEquals(expProjection, ProjectionOld.getOrthogonal2D(50, 5).round(10));
+        expProjection = Projection.getOrthogonal(0, 50, 0, 5, -1, 1).round(10);
+        assertEquals(expProjection, Projection.getOrthogonal2D(50, 5).round(10));
     }
 }

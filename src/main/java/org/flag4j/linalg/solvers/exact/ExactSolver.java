@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024. Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package org.flag4j.linalg.solvers.exact;
 
 
@@ -6,7 +30,7 @@ import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.arrays.sparse.PermutationMatrix;
 import org.flag4j.linalg.decompositions.lu.LU;
 import org.flag4j.linalg.solvers.LinearMatrixSolver;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
 import static org.flag4j.linalg.decompositions.lu.LU.Pivoting.PARTIAL;
@@ -16,7 +40,7 @@ import static org.flag4j.linalg.decompositions.lu.LU.Pivoting.PARTIAL;
  * <p>If the system is not well determined, i.e. {@code A} is square and full rank, then use a
  * {@link LstsqSolver least-squares solver}.</p>
  */
-public abstract class ExactSolver<T extends MatrixMixin<T, ?, ?>, U extends VectorMixin<U, T, ?, ?>>
+public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?, ?>, U extends VectorMixin<U, T, ?, ?>>
         implements LinearMatrixSolver<T, U> {
 
 
@@ -85,8 +109,8 @@ public abstract class ExactSolver<T extends MatrixMixin<T, ?, ?>, U extends Vect
      */
     @Override
     public U solve(T A, U b) {
-        ParameterChecks.ensureSquareMatrix(A.getShape()); // Ensure A is square.
-        ParameterChecks.ensureEquals(A.numCols(), b.length()); // b must have the same number of entries as columns in A.
+        ValidateParameters.ensureSquareMatrix(A.getShape()); // Ensure A is square.
+        ValidateParameters.ensureEquals(A.numCols(), b.length()); // b must have the same number of entries as columns in A.
 
         decompose(A); // Compute LU decomposition.
 
@@ -108,8 +132,8 @@ public abstract class ExactSolver<T extends MatrixMixin<T, ?, ?>, U extends Vect
      */
     @Override
     public T solve(T A, T B) {
-        ParameterChecks.ensureSquareMatrix(A.getShape()); // Ensure A is square.
-        ParameterChecks.ensureEquals(A.numCols(), B.numRows()); // b must have the same number of entries as columns in A.
+        ValidateParameters.ensureSquareMatrix(A.getShape()); // Ensure A is square.
+        ValidateParameters.ensureEquals(A.numCols(), B.numRows()); // b must have the same number of entries as columns in A.
 
         decompose(A); // Compute LU decomposition.
 

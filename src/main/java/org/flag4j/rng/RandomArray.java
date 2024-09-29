@@ -28,7 +28,7 @@ package org.flag4j.rng;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Complex64;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -330,7 +330,7 @@ public class RandomArray {
      * @throws IllegalArgumentException If {@code start} is not in {@code [0, end)}
      */
     public int[] randomUniqueIndices(int numIndices, int start, int end) {
-        ParameterChecks.ensureIndexInBounds(end, start);
+        ValidateParameters.ensureIndexInBounds(end, start);
 
         int[] indices = ArrayUtils.intRange(start, end);
         shuffle(indices); // Shuffle indices.
@@ -354,8 +354,8 @@ public class RandomArray {
      * @see #randomUniqueIndices(int, int, int)
      */
     public int[][] randomUniqueIndices2D(int numIndices, int rowStart, int rowEnd, int colStart, int colEnd) {
-        ParameterChecks.ensureGreaterEq(0, numIndices);
-        ParameterChecks.ensureLessEq((rowEnd-rowStart)*(colEnd-colStart), numIndices);
+        ValidateParameters.ensureGreaterEq(0, numIndices);
+        ValidateParameters.ensureLessEq((rowEnd-rowStart)*(colEnd-colStart), numIndices);
 
         int[] colIndices = new int[numIndices];
         int[] rowIndices = genRandomRows(numIndices, rowStart, rowEnd, colEnd-colStart);

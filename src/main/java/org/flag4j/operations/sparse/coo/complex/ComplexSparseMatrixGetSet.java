@@ -25,17 +25,18 @@
 package org.flag4j.operations.sparse.coo.complex;
 
 
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCMatrixOld;
-import org.flag4j.arrays_old.sparse.CooCVectorOld;
-import org.flag4j.arrays_old.sparse.CooMatrixOld;
-import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core_old.MatrixMixin;
+import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.arrays.sparse.CooCVector;
+import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.operations.sparse.coo.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,7 +47,7 @@ import java.util.stream.IntStream;
 /**
  * This class contains methods for getting/setting elements and slices from/to a complex sparse matrix.
  */
-public class ComplexSparseMatrixGetSet {
+public final class ComplexSparseMatrixGetSet {
 
     private ComplexSparseMatrixGetSet() {
         // Hide default constructor in utility class.
@@ -61,9 +62,9 @@ public class ComplexSparseMatrixGetSet {
      * @param col Column index of the value to get from the sparse matrix.
      * @return The value in the sparse matrix at the specified indices.
      */
-    public static CNumber matrixGet(CooCMatrixOld src, int row, int col) {
+    public static Complex128 matrixGet(CooCMatrix src, int row, int col) {
         int idx = SparseElementSearch.matrixBinarySearch(src.rowIndices, src.colIndices, row, col);
-        return idx<0 ? CNumber.ZERO : src.entries[idx];
+        return idx<0 ? Complex128.ZERO : (Complex128) src.entries[idx];
     }
 
 
@@ -75,16 +76,16 @@ public class ComplexSparseMatrixGetSet {
      * @param value Value to set.
      * @return The
      */
-    public static CooCMatrixOld matrixSet(CooCMatrixOld src, int row, int col, CNumber value) {
+    public static CooCMatrix matrixSet(CooCMatrix src, int row, int col, Complex128 value) {
         // Find position of row index within the row indices if it exits.
         int idx = SparseElementSearch.matrixBinarySearch(src.rowIndices, src.colIndices, row, col);
-        CNumber[] destEntries;
+        Field<Complex128>[] destEntries;
         int[] destRowIndices;
         int[] destColIndices;
 
         if(idx < 0) {
             // No non-zero element with these indices exists. Insert new value.
-            destEntries = new CNumber[src.entries.length + 1];
+            destEntries = new Complex128[src.entries.length + 1];
             System.arraycopy(src.entries, 0, destEntries, 0, -idx-1);
             destEntries[-idx-1] = value;
             System.arraycopy(src.entries, -idx-1, destEntries, -idx, src.entries.length+idx+1);
@@ -106,7 +107,7 @@ public class ComplexSparseMatrixGetSet {
             destColIndices = src.colIndices.clone();
         }
 
-        return new CooCMatrixOld(src.shape, destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(src.shape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -117,21 +118,21 @@ public class ComplexSparseMatrixGetSet {
      * @param row Dense array containing the entries of the row to set.
      * @return A copy of the {@code src} matrix with the specified row set to the dense {@code row} array.
      */
-    public static CooCMatrixOld setRow(CooCMatrixOld src, int rowIdx, double[] row) {
-        ParameterChecks.ensureIndexInBounds(src.numRows, rowIdx);
-        ParameterChecks.ensureEquals(src.numCols, row.length);
+    public static CooCMatrix setRow(CooCMatrix src, int rowIdx, double[] row) {
+        ValidateParameters.ensureIndexInBounds(src.numRows, rowIdx);
+        ValidateParameters.ensureEquals(src.numCols, row.length);
 
         int[] startEnd = SparseElementSearch.matrixFindRowStartEnd(src.rowIndices, rowIdx);
         int start = startEnd[0];
         int end = startEnd[1];
 
-        CNumber[] destEntries;
+        Complex128[] destEntries;
         int[] destRowIndices ;
         int[] destColIndices;
 
         if(start<0) {
             // No entries with row index found.
-            destEntries = new CNumber[src.entries.length + row.length];
+            destEntries = new Complex128[src.entries.length + row.length];
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
@@ -158,7 +159,7 @@ public class ComplexSparseMatrixGetSet {
 
         } else {
             // Entries with row index found.
-            destEntries = new CNumber[src.entries.length + row.length - (end-start)];
+            destEntries = new Complex128[src.entries.length + row.length - (end-start)];
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
@@ -184,7 +185,7 @@ public class ComplexSparseMatrixGetSet {
             );
         }
 
-        return new CooCMatrixOld(src.shape, destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(src.shape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -195,21 +196,21 @@ public class ComplexSparseMatrixGetSet {
      * @param row Dense array containing the entries of the row to set.
      * @return A copy of the {@code src} matrix with the specified row set to the dense {@code row} array.
      */
-    public static CooCMatrixOld setRow(CooCMatrixOld src, int rowIdx, CNumber[] row) {
-        ParameterChecks.ensureIndexInBounds(src.numRows, rowIdx);
-        ParameterChecks.ensureEquals(src.numCols, row.length);
+    public static CooCMatrix setRow(CooCMatrix src, int rowIdx, Field<Complex128>[] row) {
+        ValidateParameters.ensureIndexInBounds(src.numRows, rowIdx);
+        ValidateParameters.ensureEquals(src.numCols, row.length);
 
         int[] startEnd = SparseElementSearch.matrixFindRowStartEnd(src.rowIndices, rowIdx);
         int start = startEnd[0];
         int end = startEnd[1];
 
-        CNumber[] destEntries;
+        Complex128[] destEntries;
         int[] destRowIndices ;
         int[] destColIndices;
 
         if(start<0) {
             // No entries with row index found.
-            destEntries = new CNumber[src.entries.length + row.length];
+            destEntries = new Complex128[src.entries.length + row.length];
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
@@ -236,7 +237,7 @@ public class ComplexSparseMatrixGetSet {
 
         } else {
             // Entries with row index found.
-            destEntries = new CNumber[src.entries.length + row.length - (end-start)];
+            destEntries = new Complex128[src.entries.length + row.length - (end-start)];
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
@@ -262,7 +263,7 @@ public class ComplexSparseMatrixGetSet {
             );
         }
 
-        return new CooCMatrixOld(src.shape, destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(src.shape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -273,21 +274,21 @@ public class ComplexSparseMatrixGetSet {
      * @param row Dense array containing the entries of the row to set.
      * @return A copy of the {@code src} matrix with the specified row set to the dense {@code row} array.
      */
-    public static CooCMatrixOld setRow(CooCMatrixOld src, int rowIdx, CooCVectorOld row) {
-        ParameterChecks.ensureIndexInBounds(src.numRows, rowIdx);
-        ParameterChecks.ensureEquals(src.numCols, row.size);
+    public static CooCMatrix setRow(CooCMatrix src, int rowIdx, CooCVector row) {
+        ValidateParameters.ensureIndexInBounds(src.numRows, rowIdx);
+        ValidateParameters.ensureEquals(src.numCols, row.size);
 
         int[] startEnd = SparseElementSearch.matrixFindRowStartEnd(src.rowIndices, rowIdx);
         int start = startEnd[0];
         int end = startEnd[1];
 
-        CNumber[] destEntries;
+        Complex128[] destEntries;
         int[] destRowIndices ;
         int[] destColIndices;
 
         if(start<0) {
             // No entries with row index found.
-            destEntries = new CNumber[src.entries.length + row.entries.length];
+            destEntries = new Complex128[src.entries.length + row.entries.length];
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
@@ -314,7 +315,7 @@ public class ComplexSparseMatrixGetSet {
 
         } else {
             // Entries with row index found.
-            destEntries = new CNumber[src.entries.length + row.entries.length - (end-start)];
+            destEntries = new Complex128[src.entries.length + row.entries.length - (end-start)];
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
@@ -342,7 +343,7 @@ public class ComplexSparseMatrixGetSet {
             );
         }
 
-        return new CooCMatrixOld(src.shape, destEntries, destRowIndices, destColIndices);
+        return new CooCMatrix(src.shape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -356,15 +357,15 @@ public class ComplexSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code col} array does not have the same length as the number of
      * rows in {@code src} matrix.
      */
-    public static CooCMatrixOld setCol(CooCMatrixOld src, int colIdx, CNumber[] col) {
-        ParameterChecks.ensureIndexInBounds(src.numCols, colIdx);
-        ParameterChecks.ensureEquals(src.numRows, col.length);
+    public static CooCMatrix setCol(CooCMatrix src, int colIdx, Field<Complex128>[] col) {
+        ValidateParameters.ensureIndexInBounds(src.numCols, colIdx);
+        ValidateParameters.ensureEquals(src.numRows, col.length);
 
         Integer[] colIndices = new Integer[col.length];
         Arrays.fill(colIndices, colIdx);
 
         // Initialize destination arrays_old with the new column and the appropriate indices.
-        List<CNumber> destEntries = new ArrayList<>(Arrays.asList(col));
+        List<Field<Complex128>> destEntries = new ArrayList<>(Arrays.asList(col));
         List<Integer> destRowIndices = IntStream.of(
                 ArrayUtils.intRange(0, col.length)
         ).boxed().collect(Collectors.toList());
@@ -379,9 +380,9 @@ public class ComplexSparseMatrixGetSet {
             }
         }
 
-        CooCMatrixOld dest = new CooCMatrixOld(
+        CooCMatrix dest = new CooCMatrix(
                 src.shape,
-                destEntries.toArray(CNumber[]::new),
+                destEntries.toArray(Complex128[]::new),
                 destRowIndices.stream().mapToInt(Integer::intValue).toArray(),
                 destColIndices.stream().mapToInt(Integer::intValue).toArray()
         );
@@ -402,15 +403,15 @@ public class ComplexSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code col} array does not have the same length as the number of
      * rows in {@code src} matrix.
      */
-    public static CooCMatrixOld setCol(CooCMatrixOld src, int colIdx, CooCVectorOld col) {
-        ParameterChecks.ensureIndexInBounds(src.numCols, colIdx);
-        ParameterChecks.ensureEquals(src.numRows, col.size);
+    public static CooCMatrix setCol(CooCMatrix src, int colIdx, CooCVector col) {
+        ValidateParameters.ensureIndexInBounds(src.numCols, colIdx);
+        ValidateParameters.ensureEquals(src.numRows, col.size);
 
         int[] colIndices = new int[col.entries.length];
         Arrays.fill(colIndices, colIdx);
 
         // Initialize destination arrays_old with the new column and the appropriate indices.
-        List<CNumber> destEntries = ArrayUtils.toArrayList(col.entries);
+        List<Field<Complex128>> destEntries = ArrayUtils.toArrayList(col.entries);
         List<Integer> destRowIndices = ArrayUtils.toArrayList(col.indices);
         List<Integer> destColIndices = ArrayUtils.toArrayList(colIndices);
 
@@ -423,9 +424,9 @@ public class ComplexSparseMatrixGetSet {
             }
         }
 
-        CooCMatrixOld dest = new CooCMatrixOld(
+        CooCMatrix dest = new CooCMatrix(
                 src.shape,
-                destEntries.toArray(CNumber[]::new),
+                destEntries.toArray(Complex128[]::new),
                 destRowIndices.stream().mapToInt(Integer::intValue).toArray(),
                 destColIndices.stream().mapToInt(Integer::intValue).toArray()
         );
@@ -446,12 +447,12 @@ public class ComplexSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code col} array does not have the same length as the number of
      * rows in {@code src} matrix.
      */
-    public static CooCMatrixOld setCol(CooCMatrixOld src, int colIdx, double[] col) {
-        ParameterChecks.ensureIndexInBounds(src.numCols, colIdx);
-        ParameterChecks.ensureEquals(src.numRows, col.length);
+    public static CooCMatrix setCol(CooCMatrix src, int colIdx, double[] col) {
+        ValidateParameters.ensureIndexInBounds(src.numCols, colIdx);
+        ValidateParameters.ensureEquals(src.numRows, col.length);
 
         // Initialize destination arrays_old with the new column and the appropriate indices.
-        List<CNumber> destEntries = new ArrayList<>(src.entries.length);
+        List<Field<Complex128>> destEntries = new ArrayList<>(src.entries.length);
         List<Integer> destRowIndices = new ArrayList<>(src.entries.length);
         List<Integer> destColIndices = new ArrayList<>(src.entries.length);
 
@@ -467,11 +468,11 @@ public class ComplexSparseMatrixGetSet {
         int[] colIndices = new int[col.length];
         Arrays.fill(colIndices, colIdx);
 
-        CNumber[] destEntriesArr = ArrayUtils.spliceDouble(destEntries, col, 0);
+        Complex128[] destEntriesArr = ArrayUtils.spliceDouble(destEntries, col, 0);
         int[] destRowIndicesArr = ArrayUtils.splice(destRowIndices, ArrayUtils.intRange(0, col.length), 0);
         int[] destColIndicesArr = ArrayUtils.splice(destColIndices, colIndices, 0);
 
-        CooCMatrixOld dest = new CooCMatrixOld(
+        CooCMatrix dest = new CooCMatrix(
                 src.shape,
                 destEntriesArr,
                 destRowIndicesArr,
@@ -495,12 +496,12 @@ public class ComplexSparseMatrixGetSet {
      * matrix given the row and
      * column index.
      */
-    public static CooCMatrixOld setSlice(CooCMatrixOld src, CooMatrixOld values, int row, int col) {
+    public static CooCMatrix setSlice(CooCMatrix src, CooMatrix values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
         setSliceParamCheck(src, values, row, col);
 
         // Initialize lists to new values for the specified slice.
-        List<CNumber> entries = ArrayUtils.toComplexArrayList(values.entries);
+        List<Field<Complex128>> entries = ArrayUtils.toComplexArrayList(values.entries);
         List<Integer> rowIndices = ArrayUtils.toArrayList(ArrayUtils.shift(row, values.rowIndices));
         List<Integer> colIndices = ArrayUtils.toArrayList(ArrayUtils.shift(col, values.colIndices));
 
@@ -510,7 +511,7 @@ public class ComplexSparseMatrixGetSet {
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
         // Create matrix and ensure entries are properly sorted.
-        CooCMatrixOld mat = new CooCMatrixOld(src.shape, entries, rowIndices, colIndices);
+        CooCMatrix mat = new CooCMatrix(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
         return mat;
@@ -528,12 +529,12 @@ public class ComplexSparseMatrixGetSet {
      * matrix given the row and
      * column index.
      */
-    public static CooCMatrixOld setSlice(CooCMatrixOld src, CooCMatrixOld values, int row, int col) {
+    public static CooCMatrix setSlice(CooCMatrix src, CooCMatrix values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
         setSliceParamCheck(src, values, row, col);
 
         // Initialize lists to new values for the specified slice.
-        List<CNumber> entries = ArrayUtils.toArrayList(values.entries);
+        List<Field<Complex128>> entries = ArrayUtils.toArrayList(values.entries);
         List<Integer> rowIndices = ArrayUtils.toArrayList(ArrayUtils.shift(row, values.rowIndices));
         List<Integer> colIndices = ArrayUtils.toArrayList(ArrayUtils.shift(col, values.colIndices));
 
@@ -543,7 +544,7 @@ public class ComplexSparseMatrixGetSet {
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
         // Create matrix and ensure entries are properly sorted.
-        CooCMatrixOld mat = new CooCMatrixOld(src.shape, entries, rowIndices, colIndices);
+        CooCMatrix mat = new CooCMatrix(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
         return mat;
@@ -560,7 +561,7 @@ public class ComplexSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
      * given the row and column index.
      */
-    public static CooCMatrixOld setSlice(CooCMatrixOld src, double[][] values, int row, int col) {
+    public static CooCMatrix setSlice(CooCMatrix src, double[][] values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
         setSliceParamCheck(src, values.length, values[0].length, row, col);
 
@@ -583,12 +584,12 @@ public class ComplexSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
      * given the row and column index.
      */
-    public static CooCMatrixOld setSlice(CooCMatrixOld src, CNumber[][] values, int row, int col) {
+    public static CooCMatrix setSlice(CooCMatrix src, Field<Complex128>[][] values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
         setSliceParamCheck(src, values.length, values[0].length, row, col);
 
         // Flatten values.
-        CNumber[] flatValues = ArrayUtils.flatten(values);
+        Field<Complex128>[] flatValues = ArrayUtils.flatten(values);
         int[] sliceRows = ArrayUtils.intRange(row, values.length + row, values[0].length);
         int[] sliceCols = ArrayUtils.repeat(values.length, ArrayUtils.intRange(col, values[0].length + col));
 
@@ -606,7 +607,7 @@ public class ComplexSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
      * given the row and column index.
      */
-    public static CooCMatrixOld setSlice(CooCMatrixOld src, MatrixOld values, int row, int col) {
+    public static CooCMatrix setSlice(CooCMatrix src, Matrix values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
         setSliceParamCheck(src, values, row, col);
 
@@ -630,10 +631,10 @@ public class ComplexSparseMatrixGetSet {
      * @param col Starting column index of slice.
      * @return A copy of the {@code src} matrix with the specified slice set to the specified values.
      */
-    private static CooCMatrixOld setSlice(CooCMatrixOld src, double[] values, int numRows, int numCols,
+    private static CooCMatrix setSlice(CooCMatrix src, double[] values, int numRows, int numCols,
                                           int[] sliceRows, int[] sliceCols, int row, int col) {
         // Copy vales and row/column indices (with appropriate shifting) to destination lists.
-        List<CNumber> entries = ArrayUtils.toComplexArrayList(values);
+        List<Field<Complex128>> entries = ArrayUtils.toComplexArrayList(values);
         List<Integer> rowIndices = ArrayUtils.toArrayList(sliceRows);
         List<Integer> colIndices = ArrayUtils.toArrayList(sliceCols);
 
@@ -643,7 +644,7 @@ public class ComplexSparseMatrixGetSet {
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
         // Create matrix and ensure entries are properly sorted.
-        CooCMatrixOld mat = new CooCMatrixOld(src.shape, entries, rowIndices, colIndices);
+        CooCMatrix mat = new CooCMatrix(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
         return mat;
@@ -662,10 +663,10 @@ public class ComplexSparseMatrixGetSet {
      * @param col Starting column index of slice.
      * @return A copy of the {@code src} matrix with the specified slice set to the specified values.
      */
-    private static CooCMatrixOld setSlice(CooCMatrixOld src, CNumber[] values, int numRows, int numCols,
+    private static CooCMatrix setSlice(CooCMatrix src, Field<Complex128>[] values, int numRows, int numCols,
                                           int[] sliceRows, int[] sliceCols, int row, int col) {
         // Copy vales and row/column indices (with appropriate shifting) to destination lists.
-        List<CNumber> entries = ArrayUtils.toArrayList(values);
+        List<Field<Complex128>> entries = ArrayUtils.toArrayList(values);
         List<Integer> rowIndices = ArrayUtils.toArrayList(sliceRows);
         List<Integer> colIndices = ArrayUtils.toArrayList(sliceCols);
 
@@ -675,7 +676,7 @@ public class ComplexSparseMatrixGetSet {
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
         // Create matrix and ensure entries are properly sorted.
-        CooCMatrixOld mat = new CooCMatrixOld(src.shape, entries, rowIndices, colIndices);
+        CooCMatrix mat = new CooCMatrix(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
         return mat;
@@ -692,7 +693,7 @@ public class ComplexSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
      * given the row and column index.
      */
-    public static CooCMatrixOld setSlice(CooCMatrixOld src, Double[][] values, int row, int col) {
+    public static CooCMatrix setSlice(CooCMatrix src, Double[][] values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
         setSliceParamCheck(src, values.length, values[0].length, row, col);
 
@@ -716,7 +717,7 @@ public class ComplexSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
      * given the row and column index.
      */
-    public static CooCMatrixOld setSlice(CooCMatrixOld src, Integer[][] values, int row, int col) {
+    public static CooCMatrix setSlice(CooCMatrix src, Integer[][] values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
         setSliceParamCheck(src, values.length, values[0].length, row, col);
 
@@ -746,7 +747,7 @@ public class ComplexSparseMatrixGetSet {
      * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
      * given the row and column index.
      */
-    public static CooCMatrixOld setSlice(CooCMatrixOld src, int[][] values, int row, int col) {
+    public static CooCMatrix setSlice(CooCMatrix src, int[][] values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
         setSliceParamCheck(src, values.length, values[0].length, row, col);
 
@@ -771,10 +772,10 @@ public class ComplexSparseMatrixGetSet {
      * @param rowIdx Index of the row to extract from the {@code src} matrix.
      * @return Returns the specified row from this sparse matrix.
      */
-    public static CooCVectorOld getRow(CooCMatrixOld src, int rowIdx) {
-        ParameterChecks.ensureIndexInBounds(src.numRows, rowIdx);
+    public static CooCVector getRow(CooCMatrix src, int rowIdx) {
+        ValidateParameters.ensureIndexInBounds(src.numRows, rowIdx);
 
-        List<CNumber> entries = new ArrayList<>();
+        List<Field<Complex128>> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
 
         for(int i=0; i<src.entries.length; i++) {
@@ -784,7 +785,7 @@ public class ComplexSparseMatrixGetSet {
             }
         }
 
-        return new CooCVectorOld(src.numCols, entries, indices);
+        return new CooCVector(src.numCols, entries, indices);
     }
 
 
@@ -797,12 +798,12 @@ public class ComplexSparseMatrixGetSet {
      * @param end Ending column index of the column to be extracted (exclusive)
      * @return Returns the specified column range from this sparse matrix.
      */
-    public static CooCVectorOld getRow(CooCMatrixOld src, int rowIdx, int start, int end) {
-        ParameterChecks.ensureIndexInBounds(src.numRows, rowIdx);
-        ParameterChecks.ensureIndexInBounds(src.numCols, start, end-1);
-        ParameterChecks.ensureLessEq(end-1, start);
+    public static CooCVector getRow(CooCMatrix src, int rowIdx, int start, int end) {
+        ValidateParameters.ensureIndexInBounds(src.numRows, rowIdx);
+        ValidateParameters.ensureIndexInBounds(src.numCols, start, end-1);
+        ValidateParameters.ensureLessEq(end-1, start);
 
-        List<CNumber> entries = new ArrayList<>();
+        List<Field<Complex128>> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
 
         for(int i=0; i<src.entries.length; i++) {
@@ -812,7 +813,7 @@ public class ComplexSparseMatrixGetSet {
             }
         }
 
-        return new CooCVectorOld(end-start, entries, indices);
+        return new CooCVector(end-start, entries, indices);
     }
 
 
@@ -822,10 +823,10 @@ public class ComplexSparseMatrixGetSet {
      * @param colIdx Index of the column to extract from the {@code src} matrix.
      * @return Returns the specified column from this sparse matrix.
      */
-    public static CooCVectorOld getCol(CooCMatrixOld src, int colIdx) {
-        ParameterChecks.ensureIndexInBounds(src.numCols, colIdx);
+    public static CooCVector getCol(CooCMatrix src, int colIdx) {
+        ValidateParameters.ensureIndexInBounds(src.numCols, colIdx);
 
-        List<CNumber> entries = new ArrayList<>();
+        List<Field<Complex128>> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
 
         for(int i=0; i<src.entries.length; i++) {
@@ -835,7 +836,7 @@ public class ComplexSparseMatrixGetSet {
             }
         }
 
-        return new CooCVectorOld(src.numRows, entries, indices);
+        return new CooCVector(src.numRows, entries, indices);
     }
 
 
@@ -847,12 +848,12 @@ public class ComplexSparseMatrixGetSet {
      * @param end Ending row index of the column to be extracted (exclusive)
      * @return Returns the specified column range from this sparse matrix.
      */
-    public static CooCVectorOld getCol(CooCMatrixOld src, int colIdx, int start, int end) {
-        ParameterChecks.ensureIndexInBounds(src.numCols, colIdx);
-        ParameterChecks.ensureIndexInBounds(src.numRows, start, end);
-        ParameterChecks.ensureLessEq(end, start);
+    public static CooCVector getCol(CooCMatrix src, int colIdx, int start, int end) {
+        ValidateParameters.ensureIndexInBounds(src.numCols, colIdx);
+        ValidateParameters.ensureIndexInBounds(src.numRows, start, end);
+        ValidateParameters.ensureLessEq(end, start);
 
-        List<CNumber> entries = new ArrayList<>();
+        List<Field<Complex128>> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
 
         for(int i=0; i<src.entries.length; i++) {
@@ -862,7 +863,7 @@ public class ComplexSparseMatrixGetSet {
             }
         }
 
-        return new CooCVectorOld(end-start, entries, indices);
+        return new CooCVector(end-start, entries, indices);
     }
 
 
@@ -875,12 +876,12 @@ public class ComplexSparseMatrixGetSet {
      * @param colEnd Ending column index of the slice (exclusive).
      * @return The specified slice of the sparse matrix.
      */
-    public static CooCMatrixOld getSlice(CooCMatrixOld src, int rowStart, int rowEnd, int colStart, int colEnd) {
-        ParameterChecks.ensureIndexInBounds(src.numRows, rowStart, rowEnd-1);
-        ParameterChecks.ensureIndexInBounds(src.numCols, colStart, colEnd-1);
+    public static CooCMatrix getSlice(CooCMatrix src, int rowStart, int rowEnd, int colStart, int colEnd) {
+        ValidateParameters.ensureIndexInBounds(src.numRows, rowStart, rowEnd-1);
+        ValidateParameters.ensureIndexInBounds(src.numCols, colStart, colEnd-1);
 
         Shape shape = new Shape(rowEnd-rowStart, colEnd-colStart);
-        List<CNumber> entries = new ArrayList<>();
+        List<Field<Complex128>> entries = new ArrayList<>();
         List<Integer> rowIndices = new ArrayList<>();
         List<Integer> colIndices = new ArrayList<>();
 
@@ -899,7 +900,7 @@ public class ComplexSparseMatrixGetSet {
             }
         }
 
-        return new CooCMatrixOld(shape, entries, rowIndices, colIndices);
+        return new CooCMatrix(shape, entries, rowIndices, colIndices);
     }
 
 
@@ -927,7 +928,7 @@ public class ComplexSparseMatrixGetSet {
      * @param rowRange List of row indices to NOT copy from.
      * @param colRange List of column indices to NOT copy from.
      */
-    private static void copyValuesNotInSlice(CooCMatrixOld src, List<CNumber> entries, List<Integer> rowIndices,
+    private static void copyValuesNotInSlice(CooCMatrix src, List<Field<Complex128>> entries, List<Integer> rowIndices,
                                              List<Integer> colIndices, int[] rowRange, int[] colRange) {
         // Copy values not in slice.
         for(int i=0; i<src.entries.length; i++) {
@@ -942,20 +943,20 @@ public class ComplexSparseMatrixGetSet {
     }
 
 
-    private static <T extends MatrixMixin<?, ?, ?, ?, ?, ?, ?, ?>, U extends MatrixMixin<?, ?, ?, ?, ?, ?, ?, ?>>
+    private static <T extends MatrixMixin<?, ?, ?, ?, ?>, U extends MatrixMixin<?, ?, ?, ?, ?>>
     void setSliceParamCheck(T src, U values, int row, int col) {
-        ParameterChecks.ensureIndexInBounds(src.numRows(), row);
-        ParameterChecks.ensureIndexInBounds(src.numCols(), col);
-        ParameterChecks.ensureLessEq(src.numRows(), values.numRows() + row);
-        ParameterChecks.ensureLessEq(src.numCols(), values.numCols() + col);
+        ValidateParameters.ensureIndexInBounds(src.numRows(), row);
+        ValidateParameters.ensureIndexInBounds(src.numCols(), col);
+        ValidateParameters.ensureLessEq(src.numRows(), values.numRows() + row);
+        ValidateParameters.ensureLessEq(src.numCols(), values.numCols() + col);
     }
 
 
-    private static <T extends MatrixMixin<?, ?, ?, ?, ?, ?, ?, ?>>
+    private static <T extends MatrixMixin<?, ?, ?, ?, ?>>
     void setSliceParamCheck(T src, int valueRows, int valueCols, int row, int col) {
-        ParameterChecks.ensureIndexInBounds(src.numRows(), row);
-        ParameterChecks.ensureIndexInBounds(src.numCols(), col);
-        ParameterChecks.ensureLessEq(src.numRows(), valueRows + row);
-        ParameterChecks.ensureLessEq(src.numCols(), valueCols + col);
+        ValidateParameters.ensureIndexInBounds(src.numRows(), row);
+        ValidateParameters.ensureIndexInBounds(src.numCols(), col);
+        ValidateParameters.ensureLessEq(src.numRows(), valueRows + row);
+        ValidateParameters.ensureLessEq(src.numCols(), valueCols + col);
     }
 }

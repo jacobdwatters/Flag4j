@@ -25,12 +25,20 @@
 package org.flag4j.arrays.dense;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.DenseFieldMatrixBase;
 import org.flag4j.arrays.backend.TensorBase;
 import org.flag4j.arrays.sparse.*;
+import org.flag4j.io.PrettyPrint;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;
 import org.flag4j.operations.MatrixMultiplyDispatcher;
+import org.flag4j.operations.common.complex.Complex128Operations;
+import org.flag4j.operations.common.complex.ComplexProperties;
+import org.flag4j.operations.dense.complex.ComplexDenseEquals;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixMultiplication;
@@ -42,7 +50,9 @@ import org.flag4j.operations.dense_sparse.csr.complex.ComplexCsrDenseOperations;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.Flag4jConstants;
+import org.flag4j.util.StringUtils;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,9 +75,9 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @param shape Shape of this matrix.
      * @param entries Entries of this matrix.
      */
-    public CMatrix(Shape shape, Complex128[] entries) {
+    public CMatrix(Shape shape, Field<Complex128>[] entries) {
         super(shape, entries);
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
         if(entries.length == 0 || entries[0] == null) setZeroElement(Complex128.ZERO);
     }
 
@@ -116,9 +126,9 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @param cols The number of columns in this matrix.
      * @param entries Entries of this matrix.
      */
-    public CMatrix(int rows, int cols, Complex128[] entries) {
+    public CMatrix(int rows, int cols, Field<Complex128>[] entries) {
         super(new Shape(rows, cols), entries);
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
         if(entries.length == 0 || entries[0] == null) setZeroElement(Complex128.ZERO);
     }
 
@@ -154,13 +164,13 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * Constructs a complex matrix from a 2D array. The matrix will have the same shape as the array.
      * @param entries Entries of the matrix. Assumed to be a square array.
      */
-    public CMatrix(Complex128[][] entries) {
+    public CMatrix(Field<Complex128>[][] entries) {
         super(new Shape(entries.length, entries[0].length), new Complex128[entries.length*entries[0].length]);
         setZeroElement(Complex128.ZERO);
         int flatPos = 0;
 
-        for(Complex128[] row : entries) {
-            for(Complex128 value : row)
+        for(Field<Complex128>[] row : entries) {
+            for(Field<Complex128> value : row)
                 super.entries[flatPos++] = value;
         }
     }
@@ -192,9 +202,83 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      */
     public CMatrix(Shape shape, double[] entries) {
         super(shape, new Complex128[entries.length]);
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
         setZeroElement(Complex128.ZERO);
         ArrayUtils.arraycopy(entries, 0, super.entries, 0, entries.length);
+    }
+
+
+    /**
+     * Constructs a complex matrix from a 2D array of double values.
+     * @param aEntriesReal Entries of the complex matrix to construct. Each value will be wrapped as {@link Complex128 Complex128's}.
+     */
+    public CMatrix(double[][] aEntriesReal) {
+        super(new Shape(aEntriesReal.length, aEntriesReal[0].length), new Complex128[aEntriesReal.length*aEntriesReal[0].length]);
+        setZeroElement(Complex128.ZERO);
+
+        int idx = 0;
+        for(double[] row : aEntriesReal) {
+            for(double value : row)
+                super.entries[idx++] = new Complex128(value);
+        }
+    }
+
+
+    /**
+     * Constructs a matrix with the specified shape filled with {@code fillValue}.
+     * @param numRows The number of rows in the matrix.
+     * @param numCols The number of rows in the matrix.
+     * @param fillValue Value to fill matrix with.
+     */
+    public CMatrix(int numRows, int numCols, double fillValue) {
+        super(new Shape(numRows, numCols), new Complex128[numRows*numCols]);
+        setZeroElement(Complex128.ZERO);
+        Arrays.fill(entries, new Complex128(fillValue));
+    }
+
+
+    /**
+     * Creates a square matrix with the specified {@code size} filled with {@code fillValue}.
+     * @param size Size of the square matrix to construct.
+     * @param fillValue Value to fill matrix with.
+     */
+    public CMatrix(int size, Complex128 fillValue) {
+        super(new Shape(size, size), new Complex128[size*size]);
+        setZeroElement(Complex128.ZERO);
+        Arrays.fill(entries, fillValue);
+    }
+
+
+    /**
+     * Creates a square matrix with the specified {@code size} filled with {@code fillValue}.
+     * @param size Size of the square matrix to construct.
+     * @param fillValue Value to fill matrix with.
+     */
+    public CMatrix(int size, Double fillValue) {
+        super(new Shape(size, size), new Complex128[size*size]);
+        setZeroElement(Complex128.ZERO);
+        Arrays.fill(entries, new Complex128(fillValue));
+    }
+
+
+    /**
+     * Creates matrix with the specified {@code shape} filled with {@code fillValue}.
+     * @param size Size of the square matrix to construct.
+     * @param fillValue Value to fill matrix with.
+     */
+    public CMatrix(Shape shape, Double fillValue) {
+        super(shape, new Complex128[shape.totalEntriesIntValueExact()]);
+        setZeroElement(Complex128.ZERO);
+        Arrays.fill(entries, new Complex128(fillValue));
+    }
+
+
+    /**
+     * Constructs a copy of the specified matrix.
+     * @param mat Matrix to create copy of.
+     */
+    public CMatrix(CMatrix mat) {
+        super(mat.shape, mat.entries.clone());
     }
 
 
@@ -218,7 +302,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @return A tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public CMatrix makeLikeTensor(Shape shape, Complex128[] entries) {
+    public CMatrix makeLikeTensor(Shape shape, Field<Complex128>[] entries) {
         return new CMatrix(shape, entries);
     }
 
@@ -245,7 +329,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @return A vector of similar type to this matrix with the given {@code entries}.
      */
     @Override
-    public CVector makeLikeVector(Complex128... entries) {
+    public CVector makeLikeVector(Field<Complex128>... entries) {
         return new CVector(entries);
     }
 
@@ -257,7 +341,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
     public Matrix toReal() {
         double[] real = new double[entries.length];
         for(int i=0, size=entries.length; i<size; i++)
-            real[i] = entries[i].re;
+            real[i] = ((Complex128) entries[i]).re;
 
         return new Matrix(shape, real);
     }
@@ -283,7 +367,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
     public CooCMatrix toCoo() {
         int rows = numRows;
         int cols = numCols;
-        List<Complex128> sparseEntries = new ArrayList<>();
+        List<Field<Complex128>> sparseEntries = new ArrayList<>();
         List<Integer> rowIndices = new ArrayList<>();
         List<Integer> colIndices = new ArrayList<>();
 
@@ -291,7 +375,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
             int rowOffset = i*cols;
 
             for(int j=0; j<cols; j++) {
-                Complex128 val = entries[rowOffset + j];
+                Field<Complex128> val = entries[rowOffset + j];
 
                 if(!val.isZero()) {
                     sparseEntries.add(val);
@@ -325,7 +409,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @see #I(Shape) 
      */
     public static CMatrix I(int numRows, int numCols) {
-        return new CMatrix(new Shape(numRows, numCols));
+        return I(new Shape(numRows, numCols));
     }
 
 
@@ -339,7 +423,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @see #I(int, int)
      */
     public static CMatrix I(Shape shape) {
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
         CMatrix I = new CMatrix(shape);
         final int stop = I.entries.length;
         final int step = I.numCols + 1;
@@ -550,7 +634,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @return The matrix-vector product of this matrix and the vector {@code b}.
      */
     public CVector mult(Vector b) {
-        ParameterChecks.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
+        ValidateParameters.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
         Complex128[] entries = RealComplexDenseMatrixMultiplication.standardVector(
                 this.entries, this.shape, b.entries, b.shape
         );
@@ -565,7 +649,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @return The matrix-vector product of this matrix and the vector {@code b}.
      */
     public CVector mult(CooVector b) {
-        ParameterChecks.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
+        ValidateParameters.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
         Complex128[] entries = RealComplexDenseSparseMatrixMultiplication.standardVector(
                 this.entries, this.shape, b.entries, b.indices
         );
@@ -580,12 +664,357 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @return The matrix-vector product of this matrix and the vector {@code b}.
      */
     public CVector mult(CooCVector b) {
-        ParameterChecks.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
+        ValidateParameters.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
         Complex128[] entries = ComplexDenseSparseMatrixMultiplication.standardVector(
                 this.entries, this.shape, b.entries, b.indices
         );
 
 
         return new CVector(entries);
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent tensor.
+     * @return A tensor equivalent to this matrix.
+     */
+    public CTensor toTensor() {
+        return new CTensor(shape, entries);
+    }
+
+
+    /**
+     * Rounds this tensor to the nearest whole number. If the tensor is complex, both the real and imaginary component will
+     * be rounded independently.
+     *
+     * @return A copy of this tensor with each entry rounded to the nearest whole number.
+     */
+    public CMatrix round() {
+        return round(0);
+    }
+
+
+    /**
+     * Rounds a matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
+     * be rounded independently.
+     *
+     * @param precision The number of decimal places to round to. This value must be non-negative.
+     * @return A copy of this matrix with rounded values.
+     * @throws IllegalArgumentException If <code>precision</code> is negative.
+     */
+    public CMatrix round(int precision) {
+        return new CMatrix(this.shape, Complex128Operations.round(this.entries, precision));
+    }
+
+
+    /**
+     * Rounds values which are close to zero in absolute value to zero. If the tensor is complex, both the real and imaginary components will be rounded
+     * independently. By default, the values must be within {@link Flag4jConstants#EPS_F64} of zero. To specify a threshold value see
+     * {@link #roundToZero(double)}.
+     *
+     * @return A copy of this tensor with rounded values.
+     */
+    public CMatrix roundToZero() {
+        return roundToZero(Flag4jConstants.EPS_F64);
+    }
+
+
+    /**
+     * Rounds values which are close to zero in absolute value to zero.
+     *
+     * @param threshold Threshold for rounding values to zero. That is, if a value in this matrix is less than the threshold in absolute value then it
+     *                  will be rounded to zero. This value must be non-negative.
+     * @return A copy of this matrix with rounded values.
+     * @throws IllegalArgumentException If threshold is negative.
+     */
+    public CMatrix roundToZero(double threshold) {
+        return new CMatrix(this.shape, Complex128Operations.roundToZero(this.entries, threshold));
+    }
+
+
+    /**
+     * Checks if this complex matrix only contains real values.
+     * @return True if every entry in this matrix has zero imaginary component. False otherwise.
+     */
+    public boolean isReal() {
+        return ComplexProperties.isReal(entries);
+    }
+
+
+    /**
+     * Checks if this complex matrix contains at least one non-real value.
+     * @return True if at least one value in this matrix is non-real. False otherwise.
+     */
+    public boolean isComplex() {
+        return ComplexProperties.isComplex(entries);
+    }
+
+
+    /**
+     * Sets the values of this matrix to {@code values}.
+     * @param values New values of the array. Must have shape {@code new double[this.numRows][this.numCols]}.
+     * @throws IllegalArgumentException If {@code values.length != this.numRows || values[0].length != this.numCols}.
+     */
+    public void setValues(double[][] values) {
+        ValidateParameters.ensureEquals(numRows, values.length);
+        ValidateParameters.ensureEquals(numCols, values.length);
+
+        int idx = 0;
+        for(int i=0; i<numRows; i++) {
+            for(int j=0; j<numCols; j++) {
+                entries[idx++] = new Complex128(values[i][j]);
+            }
+        }
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     *
+     * @return A copy of this matrix with the given slice set to the specified values.
+     *
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    public CMatrix setSlice(Matrix values, int rowStart, int colStart) {
+        ValidateParameters.ensureValidIndices(numRows, rowStart);
+        ValidateParameters.ensureValidIndices(numCols, colStart);
+
+        CMatrix copy = copy();
+
+        for(int i=0, rows=values.numRows; i<rows; i++) {
+            int copyOffset = (i+rowStart)*numCols + colStart;
+            int valuesRowOffset = i*values.numCols;
+
+            for(int j=0, cols=values.numCols; j<cols; j++) {
+                copy.entries[copyOffset + j] = new Complex128(values.entries[valuesRowOffset + j]);
+            }
+        }
+
+        return copy;
+    }
+
+
+    /**
+     * Creates a zero matrix with the specified shape.
+     *
+     * @param rows The number of rows in this matrix.
+     * @param cols The number of columns in this matrix.
+     */
+    public CMatrix div(Matrix b) {
+        return new CMatrix(
+                shape,
+                RealComplexDenseElemDiv.dispatch(entries, shape, b.entries, b.shape)
+        );
+    }
+
+
+    /**
+     * Computes the element-wise product between this matrix and a real dense matrix.
+     * @param b Second matrix in the element-wise product.
+     * @return
+     */
+    public CMatrix elemMult(Matrix b) {
+        return new CMatrix(
+                shape,
+                RealComplexDenseElemMult.dispatch(entries, shape, b.entries, b.shape)
+        );
+    }
+
+
+    /**
+     * Computes the element-wise multiplication of two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise product.
+     *
+     * @return The element-wise product between this tensor and {@code b}.
+     *
+     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     */
+    public CooCMatrix elemMult(CooMatrix b) {
+        return RealComplexDenseSparseMatrixOperations.elemMult(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise multiplication of two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise product.
+     *
+     * @return The element-wise product between this tensor and {@code b}.
+     *
+     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     */
+    public CooCMatrix elemMult(CooCMatrix b) {
+        return ComplexDenseSparseMatrixOperations.elemMult(this, b);
+    }
+
+
+    /**
+     * <p>Computes the matrix multiplication of this matrix with itself {@code n} times. This matrix must be square.</p>
+     *
+     * <p>For large {@code n} values, this method <i>may</i> significantly more efficient than calling
+     * {@link #mult(CMatrix) this.mult(this)} a total of {@code n} times.</p>
+     * @param n Number of times to multiply this matrix with itself. Must be non-negative.
+     * @return If {@code n=0}, then the identity
+     */
+    public CMatrix pow(int n) {
+        ValidateParameters.ensureSquare(shape);
+        ValidateParameters.ensureNonNegative(n);
+
+        // Check for some quick returns.
+        if (n == 0) return CMatrix.I(numRows);
+        if (n == 1) return copy();
+        if (n == 2) return mult(this);
+
+        CMatrix result = CMatrix.I(numRows);  // Start with identity matrix
+        CMatrix base = this;
+
+        // Compute the matrix power efficiently using an "exponentiation by squaring" approach.
+        while(n > 0) {
+            if((n & 1) == 1)  // If n is odd.
+                result = result.mult(base);
+
+            base = base.mult(base);  // Square the base.
+            n >>= 1;  // Divide n by 2 (bitwise right shift).
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Checks if an object is equal to this matrix object.
+     * @param object Object to check equality with this vector.
+     * @return True if the two matrices have the same shape, are numerically equivalent, and are of type {@link Matrix}.
+     * False otherwise.
+     */
+    @Override
+    public boolean equals(Object object) {
+        if(this == object) return true;
+        if(object == null || object.getClass() != getClass()) return false;
+
+        CMatrix src2 = (CMatrix) object;
+
+        return ComplexDenseEquals.tensorEquals(entries, shape, src2.entries, src2.shape);
+    }
+
+
+    @Override
+    public int hashCode() {
+        int hash = 17;
+        hash = 31*hash + shape.hashCode();
+        hash = 31*hash + Arrays.hashCode(entries);
+
+        return hash;
+    }
+
+
+    /**
+     * Gets row of matrix formatted as a human-readable String. Helper method for {@link #toString} method.
+     * @param i Index of row to get.
+     * @param colStopIndex Stopping index for printing columns.
+     * @param maxList List of maximum string representation lengths for each column of this matrix. This
+     *                is used to align columns when printing.
+     * @return A human-readable String representation of the specified row.
+     */
+    private String rowToString(int i, int colStopIndex, List<Integer> maxList) {
+        int width;
+        String value;
+        StringBuilder result = new StringBuilder();
+
+        if(i>0) {
+            result.append(" [");
+        }  else {
+            result.append("[");
+        }
+
+        for(int j=0; j<colStopIndex; j++) {
+            value = StringUtils.ValueOfRound(this.get(i, j), PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + maxList.get(j);
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(PrintOptions.getMaxColumns() < this.numCols) {
+            width = PrintOptions.getPadding() + 3;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry in the column now
+        value = StringUtils.ValueOfRound(this.get(i, this.numCols-1), PrintOptions.getPrecision());
+        width = PrintOptions.getPadding() + maxList.getLast();
+        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s]", value));
+
+        return result.toString();
+    }
+
+
+    /**
+     * Generates a human-readable string representing this matrix.
+     * @return A human-readable string representing this matrix.
+     */
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder("shape: ").append(shape).append("\n");
+
+        result.append("[");
+
+        if(entries.length==0) {
+            result.append("[]"); // No entries in this matrix.
+        } else {
+            int rowStopIndex = Math.min(PrintOptions.getMaxRows() - 1, this.numRows - 1);
+            int colStopIndex = Math.min(PrintOptions.getMaxColumns() - 1, this.numCols - 1);
+            int width;
+            int totalRowLength = 0; // Total string length of each row (not including brackets)
+            String value;
+
+            // Find maximum entry string width in each column so columns can be aligned.
+            List<Integer> maxList = new ArrayList<>(colStopIndex + 1);
+            for (int j = 0; j < colStopIndex; j++) {
+                maxList.add(PrettyPrint.maxStringLength(this.getCol(j).entries, rowStopIndex));
+                totalRowLength += maxList.getLast();
+            }
+
+            if (colStopIndex < this.numCols) {
+                maxList.add(PrettyPrint.maxStringLength(this.getCol(this.numCols - 1).entries));
+                totalRowLength += maxList.getLast();
+            }
+
+            if (colStopIndex < this.numCols - 1) {
+                totalRowLength += 3 + PrintOptions.getPadding(); // Account for '...' element with padding in each column.
+            }
+
+            totalRowLength += maxList.size() * PrintOptions.getPadding(); // Account for column padding
+
+            // Get each row as a string.
+            for (int i = 0; i < rowStopIndex; i++) {
+                result.append(rowToString(i, colStopIndex, maxList));
+                result.append("\n");
+            }
+
+            if (PrintOptions.getMaxRows() < this.numRows) {
+                width = totalRowLength;
+                value = "...";
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format(" [%-" + width + "s]\n", value));
+            }
+
+            // Get Last row as a string.
+            result.append(rowToString(this.numRows - 1, colStopIndex, maxList));
+        }
+
+        result.append("]");
+
+        return result.toString();
     }
 }

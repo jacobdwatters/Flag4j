@@ -25,15 +25,15 @@
 package org.flag4j.linalg;
 
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.linalg.decompositions.svd.ComplexSVDOld;
-import org.flag4j.linalg.decompositions.svd.RealSVDOld;
-import org.flag4j.linalg.decompositions.svd.SVDOld;
-import org.flag4j.linalg.solvers.lstsq.ComplexLstsqSolverOld;
-import org.flag4j.linalg.solvers.lstsq.RealLstsqSolverOld;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
+import org.flag4j.linalg.decompositions.svd.ComplexSVD;
+import org.flag4j.linalg.decompositions.svd.RealSVD;
+import org.flag4j.linalg.decompositions.svd.SVD;
+import org.flag4j.linalg.solvers.lstsq.ComplexLstsqSolver;
+import org.flag4j.linalg.solvers.lstsq.RealLstsqSolver;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -49,11 +49,11 @@ public final class SubSpace {
 
     /**
      * Computes an orthonormal basis of the column space of a specified matrix.
-     * @param src MatrixOld to compute orthonormal basis of the column space.
+     * @param src Matrix to compute orthonormal basis of the column space.
      * @return A matrix containing as its columns, an orthonormal basis for the column space of the {@code src} matrix.
      */
-    public static MatrixOld getColSpace(MatrixOld src) {
-        SVDOld<MatrixOld> svd = new RealSVDOld().decompose(src);
+    public static Matrix getColSpace(Matrix src) {
+        SVD<Matrix> svd = new RealSVD().decompose(src);
         int rank = svd.getRank();
         return svd.getU().getSlice(0, src.numRows, 0, rank);
     }
@@ -61,11 +61,11 @@ public final class SubSpace {
 
     /**
      * Computes an orthonormal basis of the row space of a specified matrix.
-     * @param src MatrixOld to compute orthonormal basis of the row space.
+     * @param src Matrix to compute orthonormal basis of the row space.
      * @return A matrix containing as its columns, an orthonormal basis for the row space of the {@code src} matrix.
      */
-    public static MatrixOld getRowSpace(MatrixOld src) {
-        SVDOld<MatrixOld> svd = new RealSVDOld().decompose(src);
+    public static Matrix getRowSpace(Matrix src) {
+        SVD<Matrix> svd = new RealSVD().decompose(src);
         int rank = svd.getRank();
         return svd.getV().getSlice(0, src.numRows, 0, rank);
     }
@@ -73,41 +73,41 @@ public final class SubSpace {
 
     /**
      * Computes an orthonormal basis of the null space of a specified matrix.
-     * @param src MatrixOld to compute orthonormal basis of the null space.
+     * @param src Matrix to compute orthonormal basis of the null space.
      * @return A matrix containing as its columns, an orthonormal basis for the null space of the {@code src} matrix.
      */
-    public static MatrixOld getNullSpace(MatrixOld src) {
-        SVDOld<MatrixOld> svd = new RealSVDOld().decompose(src);
+    public static Matrix getNullSpace(Matrix src) {
+        SVD<Matrix> svd = new RealSVD().decompose(src);
         int rank = svd.getRank();
         int numCols = Math.min(src.numRows, src.numCols);
 
         return src.numCols-rank==0 ?
-                new MatrixOld(src.numCols, 1) :
+                new Matrix(src.numCols, 1) :
                 svd.getV().getSlice(0, src.numCols, rank, numCols);
     }
 
 
     /**
      * Computes an orthonormal basis of the left null space of a specified matrix.
-     * @param src MatrixOld to compute orthonormal basis of the left null space.
+     * @param src Matrix to compute orthonormal basis of the left null space.
      * @return A matrix containing as its columns, an orthonormal basis for the left null space of the {@code src} matrix.
      */
-    public static MatrixOld getLeftNullSpace(MatrixOld src) {
-        SVDOld<MatrixOld> svd = new RealSVDOld().decompose(src);
+    public static Matrix getLeftNullSpace(Matrix src) {
+        SVD<Matrix> svd = new RealSVD().decompose(src);
         int rank = svd.getRank();
         return src.numRows-rank==0 ?
-                new MatrixOld(src.numCols, 1) :
+                new Matrix(src.numCols, 1) :
                 svd.getU().getSlice(0, src.numRows, rank, src.numRows);
     }
 
 
     /**
      * Computes an orthonormal basis of the column space of a specified matrix.
-     * @param src MatrixOld to compute orthonormal basis of the column space.
+     * @param src Matrix to compute orthonormal basis of the column space.
      * @return A matrix containing as its columns, an orthonormal basis for the column space of the {@code src} matrix.
      */
-    public static CMatrixOld getColSpace(CMatrixOld src) {
-        SVDOld<CMatrixOld> svd = new ComplexSVDOld().decompose(src);
+    public static CMatrix getColSpace(CMatrix src) {
+        SVD<CMatrix> svd = new ComplexSVD().decompose(src);
         int rank = svd.getRank();
         return svd.getU().getSlice(0, src.numRows, 0, rank);
     }
@@ -115,11 +115,11 @@ public final class SubSpace {
 
     /**
      * Computes an orthonormal basis of the row space of a specified matrix.
-     * @param src MatrixOld to compute orthonormal basis of the row space.
+     * @param src Matrix to compute orthonormal basis of the row space.
      * @return A matrix containing as its columns, an orthonormal basis for the row space of the {@code src} matrix.
      */
-    public static CMatrixOld getRowSpace(CMatrixOld src) {
-        SVDOld<CMatrixOld> svd = new ComplexSVDOld().decompose(src);
+    public static CMatrix getRowSpace(CMatrix src) {
+        SVD<CMatrix> svd = new ComplexSVD().decompose(src);
         int rank = svd.getRank();
         return svd.getV().getSlice(0, src.numRows, 0, rank);
     }
@@ -127,31 +127,31 @@ public final class SubSpace {
 
     /**
      * Computes an orthonormal basis of the null space of a specified matrix.
-     * @param src MatrixOld to compute orthonormal basis of the null space.
+     * @param src Matrix to compute orthonormal basis of the null space.
      * @return A matrix containing as its columns, an orthonormal basis for the null space of the {@code src} matrix.
      */
-    public static CMatrixOld getNullSpace(CMatrixOld src) {
-        SVDOld<CMatrixOld> svd = new ComplexSVDOld().decompose(src);
+    public static CMatrix getNullSpace(CMatrix src) {
+        SVD<CMatrix> svd = new ComplexSVD().decompose(src);
         int rank = svd.getRank();
         int numCols = Math.min(src.numRows, src.numCols);
 
         return src.numCols-rank==0 ?
-                new CMatrixOld(src.numCols, 1) :
+                new CMatrix(src.numCols, 1) :
                 svd.getV().getSlice(0, numCols, rank, numCols);
     }
 
 
     /**
      * Computes an orthonormal basis of the left null space of a specified matrix.
-     * @param src MatrixOld to compute orthonormal basis of the left null space.
+     * @param src Matrix to compute orthonormal basis of the left null space.
      * @return A matrix containing as its columns, an orthonormal basis for the left null space of the {@code src} matrix.
      */
-    public static CMatrixOld getLeftNullSpace(CMatrixOld src) {
-        SVDOld<CMatrixOld> svd = new ComplexSVDOld().decompose(src);
+    public static CMatrix getLeftNullSpace(CMatrix src) {
+        SVD<CMatrix> svd = new ComplexSVD().decompose(src);
         int rank = svd.getRank();
 
         return src.numRows-rank==0 ?
-                new CMatrixOld(src.numCols, 1) :
+                new CMatrix(src.numCols, 1) :
                 svd.getU().getSlice(0, src.numRows, rank, src.numRows);
     }
 
@@ -159,16 +159,16 @@ public final class SubSpace {
     /**
      * Checks if two sets of vectors, stored as the columns of matrices, span the same space. That is,
      * if each column of both matrices can be expressed as a linear combination of the columns of the other matrix.
-     * @param src1 MatrixOld containing as its columns the first set of vectors.
-     * @param src2 MatrixOld containing as its columns the second set of vectors.
+     * @param src1 Matrix containing as its columns the first set of vectors.
+     * @param src2 Matrix containing as its columns the second set of vectors.
      * @return True if the column vectors of {@code src1} and {@code src2} span the same space.
      */
-    public static boolean hasEqualSpan(MatrixOld src1, MatrixOld src2) {
+    public static boolean hasEqualSpan(Matrix src1, Matrix src2) {
         boolean result;
 
-        RealLstsqSolverOld lstsq = new RealLstsqSolverOld();
+        RealLstsqSolver lstsq = new RealLstsqSolver();
         double tol = 1.0E-12; // Tolerance for considering a norm zero.
-        VectorOld solution, col;
+        Vector solution, col;
         result = true;
 
         // Check that each column of src2 is a linear combination of the columns in src1.
@@ -192,21 +192,21 @@ public final class SubSpace {
     /**
      * Checks if two sets of vectors, stored as the columns of matrices, span the same space. That is,
      * if each column of both matrices can be expressed as a linear combination of the columns of the other matrix.
-     * @param src1 MatrixOld containing as its columns the first set of vectors.
-     * @param src2 MatrixOld containing as its columns the second set of vectors.
+     * @param src1 Matrix containing as its columns the first set of vectors.
+     * @param src2 Matrix containing as its columns the second set of vectors.
      * @return True if the column vectors of {@code src1} and {@code src2} span the same space.
      */
-    public static boolean hasEqualSpan(CMatrixOld src1, CMatrixOld src2) {
+    public static boolean hasEqualSpan(CMatrix src1, CMatrix src2) {
         boolean result;
 
-        ComplexLstsqSolverOld lstsq = new ComplexLstsqSolverOld();
+        ComplexLstsqSolver lstsq = new ComplexLstsqSolver();
         double tol = 1.0E-12; // Tolerance for considering a norm zero.
-        CVectorOld solution, col;
+        CVector solution, col;
         result = true;
 
         // Check that each column of src2 is a linear combination of the columns in src1.
         for(int j=0; j<src2.numCols; j++) {
-            col = src2.getColAsVector(j);
+            col = src2.getCol(j);
             solution = lstsq.solve(src1, col);
 
             double norm = VectorNorms.norm(src1.mult(solution).sub(col));

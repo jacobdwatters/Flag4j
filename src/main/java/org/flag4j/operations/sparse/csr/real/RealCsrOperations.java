@@ -24,20 +24,18 @@
 
 package org.flag4j.operations.sparse.csr.real;
 
+import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.arrays.sparse.CsrMatrix;
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CooCVectorOld;
-import org.flag4j.arrays_old.sparse.CsrMatrixOld;
-import org.flag4j.arrays.Shape;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,16 +55,16 @@ public final class RealCsrOperations {
 
 
     /**
-     * Applies an element-wise binary operation to two {@link CsrMatrixOld CSR Matrices}. <br><br>
+     * Applies an element-wise binary operation to two {@link CsrMatrix CSR Matrices}. <br><br>
      *
      * Note, this methods efficiency relies heavily on the assumption that both operand matrices are very large and very
      * sparse. If the two matrices are not large and very sparse, this method will likely be
-     * significantly slower than simply converting the matrices to {@link MatrixOld dense matrices} and using a dense
+     * significantly slower than simply converting the matrices to {@link Matrix dense matrices} and using a dense
      * matrix addition algorithm.
      * @param src1 The first matrix in the operation.
      * @param src2 The second matrix in the operation.
      * @param opp Binary operator to apply element-wise to <code>src1</code> and <code>src2</code>.
-     * @param uOpp Unary operator for use with binary operations_old which are not commutative such as subtraction. If the operation is
+     * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
      * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
      * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
      * {@code opp.apply(x, uOpp.apply(y))}.
@@ -77,7 +75,7 @@ public final class RealCsrOperations {
     public static CsrMatrix applyBinOpp(CsrMatrix src1, CsrMatrix src2,
                                         BinaryOperator<Double> opp,
                                         UnaryOperator<Double> uOpp) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         List<Double> dest = new ArrayList<>();
         int[] rowPointers = new int[src1.rowPointers.length];
@@ -227,11 +225,11 @@ public final class RealCsrOperations {
      * treated as if it were a column vector.
      *
      * @param src1 CSR matrix to add vector to each column of.
-     * @param src2 VectorOld to add to each column of this matrix.
+     * @param src2 Vector to add to each column of this matrix.
      * @return The result of adding the vector src2 to each column of this matrix.
      */
     public static Matrix addToEachCol(CsrMatrix src1, Vector src2) {
-        ParameterChecks.ensureEquals(src1.numRows, src2.size);
+        ValidateParameters.ensureEquals(src1.numRows, src2.size);
         Matrix sum = src2.repeat(src1.numCols, 1);
 
         for(int i=0; i<src1.numRows; i++) {
@@ -253,11 +251,11 @@ public final class RealCsrOperations {
      * treated as if it were a column vector.
      *
      * @param src1 CSR matrix to add vector to each column of.
-     * @param src2 VectorOld to add to each column of this matrix.
+     * @param src2 Vector to add to each column of this matrix.
      * @return The result of adding the vector src2 to each column of this matrix.
      */
     public static Matrix addToEachCol(CsrMatrix src1, CooVector src2) {
-        ParameterChecks.ensureEquals(src1.numRows, src2.size);
+        ValidateParameters.ensureEquals(src1.numRows, src2.size);
         Matrix sum = src2.repeat(src1.numCols, 1).toDense();
 
         for(int i=0; i<src1.numRows; i++) {
@@ -279,12 +277,12 @@ public final class RealCsrOperations {
      * treated as if it were a column vector.
      *
      * @param src1 CSR matrix to add vector to each column of.
-     * @param src2 VectorOld to add to each column of this matrix.
+     * @param src2 Vector to add to each column of this matrix.
      * @return The result of adding the vector src2 to each column of this matrix.
      */
-    public static CMatrixOld addToEachCol(CsrMatrix src1, CVectorOld src2) {
-        ParameterChecks.ensureEquals(src1.numRows, src2.size);
-        CMatrixOld sum = src2.repeat(src1.numCols, 1);
+    public static CMatrix addToEachCol(CsrMatrix src1, CVector src2) {
+        ValidateParameters.ensureEquals(src1.numRows, src2.size);
+        CMatrix sum = src2.repeat(src1.numCols, 1);
 
         for(int i=0; i<src1.numRows; i++) {
             int rowStart = src1.rowPointers[i];
@@ -306,12 +304,12 @@ public final class RealCsrOperations {
      * treated as if it were a column vector.
      *
      * @param src1 CSR matrix to add vector to each column of.
-     * @param src2 VectorOld to add to each column of this matrix.
+     * @param src2 Vector to add to each column of this matrix.
      * @return The result of adding the vector src2 to each column of this matrix.
      */
-    public static CMatrixOld addToEachCol(CsrMatrix src1, CooCVectorOld src2) {
-        ParameterChecks.ensureEquals(src1.numRows, src2.size);
-        CMatrixOld sum = src2.repeat(src1.numCols, 1).toDense();
+    public static CMatrix addToEachCol(CsrMatrix src1, CooCVector src2) {
+        ValidateParameters.ensureEquals(src1.numRows, src2.size);
+        CMatrix sum = src2.repeat(src1.numCols, 1).toDense();
 
         for(int i=0; i<src1.numRows; i++) {
             int rowStart = src1.rowPointers[i];
@@ -333,11 +331,11 @@ public final class RealCsrOperations {
      * treated as if it were a row vector for this operation.
      *
      * @param src1 CSR matrix to add vector to each row of.
-     * @param src2 VectorOld to add to each row of this matrix.
+     * @param src2 Vector to add to each row of this matrix.
      * @return The result of adding the vector src2 to each row of this matrix.
      */
     public static Matrix addToEachRow(CsrMatrix src1, Vector src2) {
-        ParameterChecks.ensureEquals(src1.numCols, src2.size);
+        ValidateParameters.ensureEquals(src1.numCols, src2.size);
         Matrix sum = src2.repeat(src1.numRows, 0);
 
         for(int i=0; i<src1.numRows; i++) {
@@ -358,11 +356,11 @@ public final class RealCsrOperations {
      * treated as if it were a row vector for this operation.
      *
      * @param src1 CSR matrix to add vector to each row of.
-     * @param src2 VectorOld to add to each row of this matrix.
+     * @param src2 Vector to add to each row of this matrix.
      * @return The result of adding the vector src2 to each row of this matrix.
      */
     public static Matrix addToEachRow(CsrMatrix src1, CooVector src2) {
-        ParameterChecks.ensureEquals(src1.numCols, src2.size);
+        ValidateParameters.ensureEquals(src1.numCols, src2.size);
         Matrix sum = src2.repeat(src1.numRows, 0).toDense();
 
         for(int i=0; i<src1.numRows; i++) {
@@ -383,12 +381,12 @@ public final class RealCsrOperations {
      * treated as if it were a row vector for this operation.
      *
      * @param src1 CSR matrix to add vector to each row of.
-     * @param src2 VectorOld to add to each row of this matrix.
+     * @param src2 Vector to add to each row of this matrix.
      * @return The result of adding the vector src2 to each row of this matrix.
      */
-    public static CMatrixOld addToEachRow(CsrMatrix src1, CVectorOld src2) {
-        ParameterChecks.ensureEquals(src1.numCols, src2.size);
-        CMatrixOld sum = src2.repeat(src1.numRows, 0);
+    public static CMatrix addToEachRow(CsrMatrix src1, CVector src2) {
+        ValidateParameters.ensureEquals(src1.numCols, src2.size);
+        CMatrix sum = src2.repeat(src1.numRows, 0);
 
         for(int i=0; i<src1.numRows; i++) {
             int rowStart = src1.rowPointers[i];
@@ -410,12 +408,12 @@ public final class RealCsrOperations {
      * treated as if it were a row vector for this operation.
      *
      * @param src1 CSR matrix to add vector to each row of.
-     * @param src2 VectorOld to add to each row of this matrix.
+     * @param src2 Vector to add to each row of this matrix.
      * @return The result of adding the vector src2 to each row of this matrix.
      */
-    public static CMatrixOld addToEachRow(CsrMatrixOld src1, CooCVectorOld src2) {
-        ParameterChecks.ensureEquals(src1.numCols, src2.size);
-        CMatrixOld sum = src2.repeat(src1.numRows, 0).toDense();
+    public static CMatrix addToEachRow(CsrMatrix src1, CooCVector src2) {
+        ValidateParameters.ensureEquals(src1.numCols, src2.size);
+        CMatrix sum = src2.repeat(src1.numRows, 0).toDense();
 
         for(int i=0; i<src1.numRows; i++) {
             int rowStart = src1.rowPointers[i];

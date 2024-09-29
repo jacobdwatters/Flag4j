@@ -28,7 +28,7 @@ package org.flag4j.operations.dense.real;
 import org.flag4j.util.ErrorMessages;
 
 /**
- * This class contains several low-level methods useful for computing aggregation operations_old on dense tensors.
+ * This class contains several low-level methods useful for computing aggregation operations on dense tensors.
  */
 public class AggregateDenseReal {
 

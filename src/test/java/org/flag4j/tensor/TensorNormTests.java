@@ -1,8 +1,8 @@
 package org.flag4j.tensor;
 
-import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.arrays.Shape;
-import org.flag4j.linalg.TensorNormsOld;
+import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.linalg.TensorNorms;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -12,14 +12,14 @@ public class TensorNormTests {
 
     static Shape aShape;
     static double[] aEntries;
-    static TensorOld A;
+    static Tensor A;
     static double exp;
 
     @BeforeAll
     static void setup() {
         aShape = new Shape(2, 3, 1, 2);
         aEntries = new double[]{1, -1.4133, 113.4, 0.4, 11.3, 445, 133.445, 9.8, 13384, -993.44, 11, 12};
-        A = new TensorOld(aShape, aEntries);
+        A = new Tensor(aShape, aEntries);
     }
 
 
@@ -27,7 +27,7 @@ public class TensorNormTests {
     void infNormTestCase() {
         // ------------------------- Sub-case 1 -------------------------
         exp = 13384;
-        assertEquals(exp, TensorNormsOld.infNorm(A));
+        assertEquals(exp, TensorNorms.infNorm(A));
     }
 
 
@@ -35,7 +35,7 @@ public class TensorNormTests {
     void normTestCase() {
         // ------------------------- Sub-case 1 -------------------------
         exp = 13429.354528384523;
-        assertEquals(exp, TensorNormsOld.norm(A));
+        assertEquals(exp, TensorNorms.norm(A));
     }
 
 
@@ -43,10 +43,10 @@ public class TensorNormTests {
     void pnormTestCase() {
         // ------------------------- Sub-case 1 -------------------------
         exp = 13429.354528384523;
-        assertEquals(exp, TensorNormsOld.norm(A, 2));
+        assertEquals(exp, TensorNorms.norm(A, 2));
 
         // ------------------------- Sub-case 2 -------------------------
         exp = 13384.105704217562;
-        assertEquals(exp, TensorNormsOld.norm(A, 4));
+        assertEquals(exp, TensorNorms.norm(A, 4));
     }
 }

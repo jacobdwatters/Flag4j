@@ -26,6 +26,7 @@ package org.flag4j.operations.dense.real_complex;
 
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
@@ -56,7 +57,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] standard(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+    public static Complex128[] standard(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
@@ -99,7 +100,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] reordered(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+    public static Complex128[] reordered(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
@@ -139,7 +140,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] blocked(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+    public static Complex128[] blocked(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
         int cols1 = shape1.get(1);
@@ -196,7 +197,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] blockedReordered(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+    public static Complex128[] blockedReordered(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
         int cols1 = shape1.get(1);
@@ -253,7 +254,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] concurrentStandard(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+    public static Complex128[] concurrentStandard(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
@@ -295,7 +296,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] concurrentReordered(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+    public static Complex128[] concurrentReordered(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
@@ -334,7 +335,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] concurrentBlocked(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+    public static Complex128[] concurrentBlocked(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
@@ -391,7 +392,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] concurrentBlockedReordered(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+    public static Complex128[] concurrentBlockedReordered(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
@@ -445,7 +446,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] standardVector(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+    public static Complex128[] standardVector(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = shape2.get(0);
@@ -478,7 +479,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] blockedVector(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+    public static Complex128[] blockedVector(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = shape2.get(0);
@@ -524,7 +525,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] concurrentStandardVector(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+    public static Complex128[] concurrentStandardVector(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = shape2.get(0);
@@ -559,7 +560,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] concurrentBlockedVector(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+    public static Complex128[] concurrentBlockedVector(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = shape2.get(0);
@@ -603,7 +604,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] standard(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static Complex128[] standard(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
@@ -646,7 +647,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] reordered(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static Complex128[] reordered(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
@@ -686,7 +687,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] blocked(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static Complex128[] blocked(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
         int cols1 = shape1.get(1);
@@ -743,7 +744,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] blockedReordered(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static Complex128[] blockedReordered(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
         int cols1 = shape1.get(1);
@@ -800,7 +801,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] concurrentStandard(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static Complex128[] concurrentStandard(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
@@ -842,7 +843,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] concurrentReordered(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static Complex128[] concurrentReordered(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
@@ -881,7 +882,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] concurrentBlocked(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static Complex128[] concurrentBlocked(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
@@ -938,7 +939,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] concurrentBlockedReordered(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static Complex128[] concurrentBlockedReordered(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
@@ -992,7 +993,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] standardVector(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static Complex128[] standardVector(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = shape2.get(0);
@@ -1025,7 +1026,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] blockedVector(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static Complex128[] blockedVector(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = shape2.get(0);
@@ -1071,7 +1072,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] concurrentStandardVector(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static Complex128[] concurrentStandardVector(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = shape2.get(0);
@@ -1106,7 +1107,7 @@ public final class RealComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static Complex128[] concurrentBlockedVector(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static Complex128[] concurrentBlockedVector(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = shape2.get(0);

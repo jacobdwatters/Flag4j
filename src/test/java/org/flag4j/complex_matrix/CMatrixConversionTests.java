@@ -1,12 +1,12 @@
 package org.flag4j.complex_matrix;
 
 
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.CTensorOld;
-import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.dense.Matrix;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -14,29 +14,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CMatrixConversionTests {
 
-    CNumber[] expEntries;
-    CTensorOld expTensor, tensor;
-    CVectorOld expVector, vector;
+    Complex128[] expEntries;
+    CTensor expTensor, tensor;
+    CVector expVector, vector;
     Shape expTensorShape;
 
-    CNumber[][] aEntries;
+    Complex128[][] aEntries;
     double[][] expRealEntries;
-    CMatrixOld A;
-    MatrixOld expReal, real;
+    CMatrix A;
+    Matrix expReal, real;
 
     @Test
     void toRealTestCase() {
         // -------------------- Sub-case 1 --------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(1, 7.233), new CNumber(-0.34436, 13)},
-                {new CNumber(80.234, -9), new CNumber(Double.POSITIVE_INFINITY, 885.224)},
-                {new CNumber(843.15), new CNumber(99.3434, 146)}};
-        A = new CMatrixOld(aEntries);
+        aEntries = new Complex128[][]{
+                {new Complex128(1, 7.233), new Complex128(-0.34436, 13)},
+                {new Complex128(80.234, -9), new Complex128(Double.POSITIVE_INFINITY, 885.224)},
+                {new Complex128(843.15), new Complex128(99.3434, 146)}};
+        A = new CMatrix(aEntries);
         expRealEntries = new double[][]{
                 {1, -0.34436},
                 {80.234, Double.POSITIVE_INFINITY},
                 {843.15, 99.3434}};
-        expReal = new MatrixOld(expRealEntries);
+        expReal = new Matrix(expRealEntries);
 
         real = A.toReal();
 
@@ -47,17 +47,17 @@ class CMatrixConversionTests {
     @Test
     void toTensorTestCase() {
         // -------------------- Sub-case 1 --------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(1, 7.233), new CNumber(-0.34436, 13)},
-                {new CNumber(80.234, -9), new CNumber(Double.POSITIVE_INFINITY, 885.224)},
-                {new CNumber(843.15), new CNumber(99.3434, 146)}};
-        A = new CMatrixOld(aEntries);
-        expEntries = new CNumber[]{
-                new CNumber(1, 7.233), new CNumber(-0.34436, 13),
-                new CNumber(80.234, -9), new CNumber(Double.POSITIVE_INFINITY, 885.224),
-                new CNumber(843.15), new CNumber(99.3434, 146)};
+        aEntries = new Complex128[][]{
+                {new Complex128(1, 7.233), new Complex128(-0.34436, 13)},
+                {new Complex128(80.234, -9), new Complex128(Double.POSITIVE_INFINITY, 885.224)},
+                {new Complex128(843.15), new Complex128(99.3434, 146)}};
+        A = new CMatrix(aEntries);
+        expEntries = new Complex128[]{
+                new Complex128(1, 7.233), new Complex128(-0.34436, 13),
+                new Complex128(80.234, -9), new Complex128(Double.POSITIVE_INFINITY, 885.224),
+                new Complex128(843.15), new Complex128(99.3434, 146)};
         expTensorShape = new Shape(A.numRows, A.numCols);
-        expTensor = new CTensorOld(expTensorShape, expEntries);
+        expTensor = new CTensor(expTensorShape, expEntries);
 
         tensor = A.toTensor();
         assertArrayEquals(A.entries, tensor.entries);
@@ -69,16 +69,16 @@ class CMatrixConversionTests {
     @Test
     void toVectorTestCase() {
         // -------------------- Sub-case 1 --------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(1, 7.233), new CNumber(-0.34436, 13)},
-                {new CNumber(80.234, -9), new CNumber(Double.POSITIVE_INFINITY, 885.224)},
-                {new CNumber(843.15), new CNumber(99.3434, 146)}};
-        A = new CMatrixOld(aEntries);
-        expEntries = new CNumber[]{
-                new CNumber(1, 7.233), new CNumber(-0.34436, 13),
-                new CNumber(80.234, -9), new CNumber(Double.POSITIVE_INFINITY, 885.224),
-                new CNumber(843.15), new CNumber(99.3434, 146)};
-        expVector = new CVectorOld(expEntries);
+        aEntries = new Complex128[][]{
+                {new Complex128(1, 7.233), new Complex128(-0.34436, 13)},
+                {new Complex128(80.234, -9), new Complex128(Double.POSITIVE_INFINITY, 885.224)},
+                {new Complex128(843.15), new Complex128(99.3434, 146)}};
+        A = new CMatrix(aEntries);
+        expEntries = new Complex128[]{
+                new Complex128(1, 7.233), new Complex128(-0.34436, 13),
+                new Complex128(80.234, -9), new Complex128(Double.POSITIVE_INFINITY, 885.224),
+                new Complex128(843.15), new Complex128(99.3434, 146)};
+        expVector = new CVector(expEntries);
 
         vector = A.toVector();
         assertArrayEquals(expVector.entries, vector.entries);

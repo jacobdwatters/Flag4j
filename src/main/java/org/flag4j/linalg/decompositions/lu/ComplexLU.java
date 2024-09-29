@@ -26,6 +26,7 @@ package org.flag4j.linalg.decompositions.lu;
 
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
@@ -52,6 +53,16 @@ public class ComplexLU extends LU<CMatrix> {
      */
     public ComplexLU(int pivoting) {
         super(pivoting);
+    }
+
+
+    /**
+     * Constructs a LU decomposer to decompose the specified matrix.
+     *
+     * @param pivoting Pivoting to use in the LU decomposition.
+     */
+    public ComplexLU(Pivoting pivoting) {
+        super(pivoting.ordinal());
     }
 
 
@@ -147,19 +158,18 @@ public class ComplexLU extends LU<CMatrix> {
      * @param j Column for which to compute values to the right of.
      */
     private void computeRows(int j) {
-        Complex128 m;
+        Field<Complex128> m;
         int pivotRow = j*LU.numCols;
 
         for(int i=j+1; i<LU.numRows; i++) {
             int iRow = i*LU.numCols;
             m = LU.entries[iRow + j];
-            m = LU.entries[pivotRow + j].isZero() ? m : m.div(LU.entries[pivotRow + j]);
+            m = LU.entries[pivotRow + j].isZero() ? m : m.div((Complex128) LU.entries[pivotRow + j]);
 
             if(!m.isZero()) {
                 // Compute and set U values.
-                for(int k=j; k<LU.numCols; k++) {
-                    LU.entries[iRow + k] = LU.entries[iRow + k].sub(m.mult(LU.entries[pivotRow + k]));
-                }
+                for(int k=j; k<LU.numCols; k++)
+                    LU.entries[iRow + k] = LU.entries[iRow + k].sub(m.mult((Complex128) LU.entries[pivotRow + k]));
             }
 
             // Compute and set L value.
@@ -230,10 +240,7 @@ public class ComplexLU extends LU<CMatrix> {
 
         // Copy L values from LU matrix.
         for(int i=0; i<LU.numRows; i++) {
-            if(i<LU.numCols) {
-                L.entries[i*L.numCols+i] = ONE; // Set principle diagonal to be ones.
-            }
-
+            if(i<LU.numCols) L.entries[i*L.numCols+i] = ONE; // Set principle diagonal to be ones.
             System.arraycopy(LU.entries, i*LU.numCols, L.entries, i*L.numCols, i);
         }
 

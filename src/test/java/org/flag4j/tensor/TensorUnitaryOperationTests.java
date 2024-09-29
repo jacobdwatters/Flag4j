@@ -1,7 +1,7 @@
 package org.flag4j.tensor;
 
-import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.Tensor;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +11,7 @@ class TensorUnitaryOperationTests {
 
     static double[] aEntries, expEntries;
     static Shape aShape, expShape;
-    static TensorOld A, exp;
+    static Tensor A, exp;
 
 
     @BeforeAll
@@ -21,7 +21,7 @@ class TensorUnitaryOperationTests {
                 934, 13.5, -0.0, 0.1,
                 345, 8345.6, 1.00015, Double.POSITIVE_INFINITY};
         aShape = new Shape(3, 2, 2);
-        A = new TensorOld(aShape, aEntries);
+        A = new Tensor(aShape, aEntries);
     }
 
 
@@ -33,7 +33,7 @@ class TensorUnitaryOperationTests {
                 Math.sqrt(934), Math.sqrt(13.5), Math.sqrt(-0.0), Math.sqrt(0.1),
                 Math.sqrt(345), Math.sqrt(8345.6), Math.sqrt(1.00015), Math.sqrt(Double.POSITIVE_INFINITY)};
         expShape = aShape;
-        exp = new TensorOld(expShape, expEntries);
+        exp = new Tensor(expShape, expEntries);
 
         assertEquals(exp, A.sqrt());
     }
@@ -47,7 +47,7 @@ class TensorUnitaryOperationTests {
                 Math.abs(934), Math.abs(13.5), Math.abs(-0.0), Math.abs(0.1),
                 Math.abs(345), Math.abs(8345.6), Math.abs(1.00015), Math.abs(Double.POSITIVE_INFINITY)};
         expShape = aShape;
-        exp = new TensorOld(expShape, expEntries);
+        exp = new Tensor(expShape, expEntries);
 
         assertEquals(exp, A.abs());
     }
@@ -61,7 +61,7 @@ class TensorUnitaryOperationTests {
                 1/(934.0), 1/(13.5), 1/(-0.0), 1/(0.1),
                 1/(345.0), 1/(8345.6), 1/(1.00015), 1/(Double.POSITIVE_INFINITY)};
         expShape = aShape;
-        exp = new TensorOld(expShape, expEntries);
+        exp = new Tensor(expShape, expEntries);
 
         assertEquals(exp, A.recip());
     }

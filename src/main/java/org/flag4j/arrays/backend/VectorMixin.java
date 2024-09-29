@@ -31,8 +31,8 @@ package org.flag4j.arrays.backend;
  * @param <V> Type of dense matrix equivalent to {@code U}.
  * @param <W> Type (or wrapper of) an element of the vector.
  */
-public interface VectorMixin<T extends VectorMixin<T, U, V, W>, U extends MatrixMixin<U, ?, W>,
-        V extends MatrixMixin<V, ?, W>, W>
+public interface VectorMixin<T extends VectorMixin<T, U, V, W>, U extends MatrixMixin<U, ?, T, ?, W>,
+        V extends MatrixMixin<V, ?, ?, ?, W>, W>
         extends VectorMatrixOpsMixin<T, U, V> {
 
     /**
@@ -120,9 +120,18 @@ public interface VectorMixin<T extends VectorMixin<T, U, V, W>, U extends Matrix
 
 
     /**
-     * Gets the length of a vector.
+     * Gets the length of a vector. Same as {@link #size()}.
      *
      * @return The length, i.e. the number of entries, in this vector.
      */
     public int length();
+
+
+    /**
+     * Gets the size/length of a vector. Same as {@link #length()}.
+     * @return The length, i.e. the number of entries, in this vector.
+     */
+    public default int size() {
+        return length();
+    }
 }

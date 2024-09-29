@@ -24,20 +24,20 @@
 
 package org.flag4j.operations.sparse.coo.complex;
 
-
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.sparse.CooCVectorOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * This class contains low level implementations of operations_old on two complex sparse tensors.
+ * This class contains low level implementations of operations on two complex sparse tensors.
  */
 public final class ComplexSparseVectorOperations {
 
@@ -52,16 +52,16 @@ public final class ComplexSparseVectorOperations {
      * @param a Value to add to the {@code src} sparse vector.
      * @return The result of adding the specified value to the sparse vector.
      */
-    public static CVectorOld add(CooCVectorOld src, double a) {
-        CNumber[] dest = new CNumber[src.size];
+    public static CVector add(CooCVector src, double a) {
+        Complex128[] dest = new Complex128[src.size];
         ArrayUtils.fill(dest, a);
 
         for(int i=0; i<src.entries.length; i++) {
             int idx = src.indices[i];
-            dest[src.indices[i]] = dest[src.indices[i]].add(src.entries[i]);
+            dest[src.indices[i]] = dest[src.indices[i]].add((Complex128) src.entries[i]);
         }
 
-        return new CVectorOld(dest);
+        return new CVector(dest);
     }
 
 
@@ -71,16 +71,16 @@ public final class ComplexSparseVectorOperations {
      * @param a Value to add to the {@code src} sparse vector.
      * @return The result of adding the specified value to the sparse vector.
      */
-    public static CVectorOld add(CooCVectorOld src, CNumber a) {
-        CNumber[] dest = new CNumber[src.size];
+    public static CVector add(CooCVector src, Complex128 a) {
+        Complex128[] dest = new Complex128[src.size];
         Arrays.fill(dest, a);
 
         for(int i=0; i<src.entries.length; i++) {
             int idx = src.indices[i];
-            dest[idx] = dest[idx].add(src.entries[i]);
+            dest[idx] = dest[idx].add((Complex128) src.entries[i]);
         }
 
-        return new CVectorOld(dest);
+        return new CVector(dest);
     }
 
 
@@ -90,16 +90,16 @@ public final class ComplexSparseVectorOperations {
      * @param a Value to subtract from the {@code src} sparse vector.
      * @return The result of subtracting the specified value from the sparse vector.
      */
-    public static CVectorOld sub(CooCVectorOld src, double a) {
-        CNumber[] dest = new CNumber[src.size];
+    public static CVector sub(CooCVector src, double a) {
+        Complex128[] dest = new Complex128[src.size];
         ArrayUtils.fill(dest, -a);
 
         for(int i=0; i<src.entries.length; i++) {
             int idx = src.indices[i];
-            dest[idx] = dest[idx].add(src.entries[i]);
+            dest[idx] = dest[idx].add((Complex128) src.entries[i]);
         }
 
-        return new CVectorOld(dest);
+        return new CVector(dest);
     }
 
 
@@ -109,16 +109,16 @@ public final class ComplexSparseVectorOperations {
      * @param a Value to subtract from the {@code src} sparse vector.
      * @return The result of subtracting the specified value from the sparse vector.
      */
-    public static CVectorOld sub(CooCVectorOld src, CNumber a) {
-        CNumber[] dest = new CNumber[src.size];
+    public static CVector sub(CooCVector src, Complex128 a) {
+        Complex128[] dest = new Complex128[src.size];
         Arrays.fill(dest, a.addInv());
 
         for(int i=0; i<src.entries.length; i++) {
             int idx = src.indices[i];
-            dest[idx] = dest[idx].add(src.entries[i]);
+            dest[idx] = dest[idx].add((Complex128) src.entries[i]);
         }
 
-        return new CVectorOld(dest);
+        return new CVector(dest);
     }
 
 
@@ -130,9 +130,9 @@ public final class ComplexSparseVectorOperations {
      * @return The result of the vector addition.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static CooCVectorOld add(CooCVectorOld src1, CooCVectorOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-        List<CNumber> values = new ArrayList<>(src1.entries.length);
+    public static CooCVector add(CooCVector src1, CooCVector src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+        List<Field<Complex128>> values = new ArrayList<>(src1.entries.length);
         List<Integer> indices = new ArrayList<>(src1.entries.length);
 
         int src1Counter = 0;
@@ -140,7 +140,7 @@ public final class ComplexSparseVectorOperations {
 
         while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
             if(src1.indices[src1Counter] == src2.indices[src2Counter]) {
-                values.add(src1.entries[src1Counter].add(src2.entries[src2Counter]));
+                values.add(src1.entries[src1Counter].add((Complex128) src2.entries[src2Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
@@ -169,9 +169,9 @@ public final class ComplexSparseVectorOperations {
             }
         }
 
-        return new CooCVectorOld(
+        return new CooCVector(
                 src1.size,
-                values.toArray(CNumber[]::new),
+                values.toArray(Complex128[]::new),
                 indices.stream().mapToInt(Integer::intValue).toArray()
         );
     }
@@ -185,9 +185,9 @@ public final class ComplexSparseVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static CooCVectorOld sub(CooCVectorOld src1, CooCVectorOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-        List<CNumber> values = new ArrayList<>(src1.entries.length);
+    public static CooCVector sub(CooCVector src1, CooCVector src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+        List<Field<Complex128>> values = new ArrayList<>(src1.entries.length);
         List<Integer> indices = new ArrayList<>(src1.entries.length);
 
         int src1Counter = 0;
@@ -195,7 +195,7 @@ public final class ComplexSparseVectorOperations {
 
         while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
             if(src1.indices[src1Counter] == src2.indices[src2Counter]) {
-                values.add(src1.entries[src1Counter].sub(src2.entries[src2Counter]));
+                values.add(src1.entries[src1Counter].sub((Complex128) src2.entries[src2Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
@@ -224,9 +224,9 @@ public final class ComplexSparseVectorOperations {
             }
         }
 
-        return new CooCVectorOld(
+        return new CooCVector(
                 src1.size,
-                values.toArray(CNumber[]::new),
+                values.toArray(Complex128[]::new),
                 indices.stream().mapToInt(Integer::intValue).toArray()
         );
     }
@@ -240,9 +240,9 @@ public final class ComplexSparseVectorOperations {
      * @return The result of the vector multiplication.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static CooCVectorOld elemMult(CooCVectorOld src1, CooCVectorOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-        List<CNumber> values = new ArrayList<>(src1.entries.length);
+    public static CooCVector elemMult(CooCVector src1, CooCVector src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+        List<Field<Complex128>> values = new ArrayList<>(src1.entries.length);
         List<Integer> indices = new ArrayList<>(src1.entries.length);
 
         int src1Counter = 0;
@@ -251,7 +251,7 @@ public final class ComplexSparseVectorOperations {
         while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
             if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
                 // Then indices match, add product of elements.
-                values.add(src1.entries[src1Counter].mult(src2.entries[src2Counter]));
+                values.add(src1.entries[src1Counter].mult((Complex128) src2.entries[src2Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
@@ -262,9 +262,9 @@ public final class ComplexSparseVectorOperations {
             }
         }
 
-        return new CooCVectorOld(
+        return new CooCVector(
                 src1.size,
-                values.toArray(CNumber[]::new),
+                values.toArray(Complex128[]::new),
                 indices.stream().mapToInt(Integer::intValue).toArray()
         );
     }
@@ -278,9 +278,9 @@ public final class ComplexSparseVectorOperations {
      * @return The result of the vector inner product.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static CNumber inner(CooCVectorOld src1, CooCVectorOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-        CNumber product = CNumber.ZERO;
+    public static Complex128 inner(CooCVector src1, CooCVector src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+        Complex128 product = Complex128.ZERO;
 
         int src1Counter = 0;
         int src2Counter = 0;
@@ -306,9 +306,9 @@ public final class ComplexSparseVectorOperations {
      * @param src2 Second sparse vector in the outer product.
      * @return The matrix resulting from the vector outer product.
      */
-    public static CMatrixOld outerProduct(CooCVectorOld src1, CooCVectorOld src2) {
-        CNumber[] dest = new CNumber[src2.size*src1.size];
-        Arrays.fill(dest, CNumber.ZERO);
+    public static CMatrix outerProduct(CooCVector src1, CooCVector src2) {
+        Complex128[] dest = new Complex128[src2.size*src1.size];
+        Arrays.fill(dest, Complex128.ZERO);
 
         int destRow;
         int index1;
@@ -321,10 +321,10 @@ public final class ComplexSparseVectorOperations {
             for(int j=0; j<src2.entries.length; j++) {
                 index2 = src2.indices[j];
 
-                dest[destRow + index2] = src1.entries[i].mult(src2.entries[j]);
+                dest[destRow + index2] = src1.entries[i].mult((Complex128) src2.entries[j]);
             }
         }
 
-        return new CMatrixOld(src1.size, src2.size, dest);
+        return new CMatrix(src1.size, src2.size, dest);
     }
 }

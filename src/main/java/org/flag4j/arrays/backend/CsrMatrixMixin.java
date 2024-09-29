@@ -26,13 +26,17 @@ package org.flag4j.arrays.backend;
 
 /**
  * This interface specifies methods which all sparse CSR matrices should implement.
- * @param <T>
- * @param <V>
- * @param <W>
+ * @param <T> Type of this sparse CSR matrix.
+ * @param <U> Type of dense matrix equivalent to {@code T}.
+ * @param <V> Type of vector similar to {@code T}.
+ * @param <W> Type of dense vector equivalent to {@code V}.
+ * @param <Y> Type (or wrapper of) of an element of this matrix.
  */
-public interface CsrMatrixMixin<T extends CsrMatrixMixin<T, V, W>,
-        V extends DenseMatrixMixin<V, ?, T, W>, W>
-        extends MatrixMixin<T, V, W> {
+public interface CsrMatrixMixin<T extends CsrMatrixMixin<T, U, V, W, Y>,
+        U extends DenseMatrixMixin<U, ?, W, Y>,
+        V extends SparseVectorMixin<V, W, ?, U, Y>,
+        W extends DenseVectorMixin<W, V, U, Y>, Y>
+        extends MatrixMixin<T, U, V, W, Y> {
 
     /**
      * The density of this sparse CSR matrix. That is, the decimal percentage of elements in this matrix which are non-zero.
@@ -54,7 +58,7 @@ public interface CsrMatrixMixin<T extends CsrMatrixMixin<T, V, W>,
      * Converts this sparse matrix to an equivalent dense matrix.
      * @return A dense matrix equivalent to this sparse CSR matrix.
      */
-    public V toDense();
+    public U toDense();
 
 
     /**

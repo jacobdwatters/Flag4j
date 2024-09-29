@@ -35,6 +35,8 @@ import java.math.RoundingMode;
  * imaginary component).</p>
  *
  * <p>Complex128's' are Immutable.</p>
+ *
+ * @see Complex64
  */
 public class Complex128 implements Field<Complex128> {
     // Several constants are provided for convenience.
@@ -51,9 +53,17 @@ public class Complex128 implements Field<Complex128> {
      */
     public static final Complex128 TWO = new Complex128(2);
     /**
-     * The double value closer than any other to the square root of 3
+     * The complex number with zero imaginary part and three real part.
+     */
+    public static final Complex128 THREE = new Complex128(3);
+    /**
+     * The double value closer than any other to the square root of 3,
      */
     public static final Complex128 ROOT_THREE = new Complex128(Math.sqrt(3));
+    /**
+     * The double value closer than any other to the square root of 2.
+     */
+    public static final Complex128 ROOT_TWO = new Complex128(Math.sqrt(2));;
     /**
      * The imaginary unit i.
      */
@@ -86,7 +96,6 @@ public class Complex128 implements Field<Complex128> {
      * Complex number with real and imaginary parts equal to {@link Double#NaN}.
      */
     public static final Complex128 NaN = new Complex128(Double.NaN, Double.NaN);
-    
     /**
      * Real component of the complex number.
      */
@@ -121,7 +130,9 @@ public class Complex128 implements Field<Complex128> {
     /**
      * Constructs a complex number from a string of the form {@code "a +/- bi"} where {@code a} and {b} are real values and either may be
      * omitted. i.e. {@code "a", "bi", "a +/- i"}, and {@code "i"} are all also valid.
-     * @param num The string representation of a complex number.
+     * @param num The string representation of a complex number. Must be parsable by
+     * {@link ComplexNumberParser#parseNumberToComplex128(String)}.
+     * @throws org.flag4j.util.exceptions.ComplexNumberParsingException If {@code num} cannot be parsed.
      */
     public Complex128(String num) {
         Complex128 complexNum = ComplexNumberParser.parseNumberToComplex128(num);
@@ -385,25 +396,7 @@ public class Complex128 implements Field<Complex128> {
      */
     @Override
     public double mag() {
-        double absRe = Math.abs(this.re);
-        double absIm = Math.abs(this.im);
-        double max;
-        double min;
-
-        if(absRe > absIm) {
-            max = absRe;
-            min = absIm;
-        } else {
-            max = absIm;
-            min = absRe;
-        }
-
-        if(max == 0.0) {
-            return 0.0;
-        }
-
-        double ratio = min / max;
-        return max * Math.sqrt(1 + ratio*ratio);
+        return Math.hypot(re, im);
     }
 
 
@@ -576,15 +569,7 @@ public class Complex128 implements Field<Complex128> {
      * @return The principle value of the complex natural logarithm for the given input.
      */
     public static Complex128 ln(double num) {
-        Complex128 result;
-
-        if(num<0) {
-            result = Complex128.ln(new Complex128(num));
-        } else {
-            result = new Complex128(Math.log(num));
-        }
-
-        return result;
+        return (num < 0) ? Complex128.ln(new Complex128(num)) : new Complex128(Math.log(num));
     }
 
 
@@ -597,7 +582,7 @@ public class Complex128 implements Field<Complex128> {
     public static Complex128 ln(Complex128 num) {
         Complex128 result;
 
-        if(num.isReal() && num.re >=0) {
+        if(num.im == 0 && num.re >= 0) {
             result = new Complex128(Math.log(num.re));
 
         } else {
@@ -1006,9 +991,8 @@ public class Complex128 implements Field<Complex128> {
      * @throws IllegalArgumentException If tol is less than 0.
      */
     public static boolean nearZero(Complex128 n, double tol) {
-        if (tol < 0) {
+        if (tol < 0)
             throw new IllegalArgumentException(ErrorMessages.getNegValueErr(tol));
-        }
 
         return n.mag() <= tol;
     }

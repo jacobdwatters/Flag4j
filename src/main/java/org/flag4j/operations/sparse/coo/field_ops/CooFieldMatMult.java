@@ -27,7 +27,7 @@ package org.flag4j.operations.sparse.coo.field_ops;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.ThreadManager;
-import org.flag4j.operations_old.sparse.coo.SparseUtils;
+import org.flag4j.operations.sparse.SparseUtils;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
@@ -60,8 +60,8 @@ public final class CooFieldMatMult {
      * @param shape2 Shape of the second sparse matrix.
      * @return The result of the matrix multiplication stored in a dense matrix.
      */
-    public static <T extends Field<T>> Field<T>[] standard(T[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
-                                                           T[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] standard(Field<T>[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
+                                                           Field<T>[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
 
@@ -74,7 +74,7 @@ public final class CooFieldMatMult {
 
         for(int i=0; i<src1.length; i++) {
             int c1 = colIndices1[i]; // = k
-            T value = src1[i];
+            Field<T> value = src1[i];
 
             // Check if any values in src2 have the same row index as the column index of the value in src1.
             if(map.containsKey(c1)) {
@@ -83,7 +83,7 @@ public final class CooFieldMatMult {
 
                 for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
                     int c2 = colIndices2[j]; // = j
-                    dest[rowIdx + c2] = dest[rowIdx + c2].add(value.mult(src2[j]));
+                    dest[rowIdx + c2] = dest[rowIdx + c2].add(value.mult((T) src2[j]));
                 }
             }
         }
@@ -110,12 +110,12 @@ public final class CooFieldMatMult {
      * @return The result of the matrix multiplication stored in a dense matrix.
      */
     public static <T extends Field<T>> Field<T>[] concurrentStandard(
-            T[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
-            T[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
+            Field<T>[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
+            Field<T>[] src2, int[] rowIndices2, int[] colIndices2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
 
-        final T ZERO = src1[0].getZero();
+        final Field<T> ZERO = src1[0].getZero();
 
         Field<T>[] dest = new Field[rows1*cols2];
         Arrays.fill(dest, ZERO);
@@ -133,11 +133,11 @@ public final class CooFieldMatMult {
                 if(map.containsKey(c1)) {
                     int r1 = rowIndices1[i]; // = i
                     int rowIdx = r1*cols2;
-                    T value = src1[i];
+                    Field<T> value = src1[i];
 
                     for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
                         int idx = rowIdx + colIndices2[j];
-                        destMap.put(idx, destMap.getOrDefault(idx, ZERO).add(value.mult(src2[j])));
+                        destMap.put(idx, destMap.getOrDefault(idx, ZERO).add(value.mult((T) src2[j])));
                     }
                 }
             }
@@ -167,8 +167,8 @@ public final class CooFieldMatMult {
      * @return The result of the matrix-vector multiplication stored in a dense matrix.
      */
     public static <T extends Field<T>> Field<T>[] standardVector(
-            T[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
-            T[] src2, int[] indices) {
+            Field<T>[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
+            Field<T>[] src2, int[] indices) {
 
         int rows1 = shape1.get(0);
 
@@ -186,7 +186,7 @@ public final class CooFieldMatMult {
                 r2 = indices[j]; // = k
 
                 if(c1==r2) { // Then we multiply and add to sum.
-                    dest[r1] = dest[r1].add(src1[i].mult(src2[j]));
+                    dest[r1] = dest[r1].add(src1[i].mult((T) src2[j]));
                 }
             }
         }
@@ -207,8 +207,8 @@ public final class CooFieldMatMult {
      * @return The result of the matrix-vector multiplication stored in a dense matrix.
      */
     public static <T extends Field<T>> Field<T>[] concurrentStandardVector(
-            T[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
-            T[] src2, int[] indices) {
+            Field<T>[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
+            Field<T>[] src2, int[] indices) {
         int rows1 = shape1.get(0);
 
         Field<T>[] dest = new Field[rows1];
@@ -223,7 +223,7 @@ public final class CooFieldMatMult {
                     int r2 = indices[j]; // = k
 
                     if(c1==r2) { // Then we multiply and add to sum.
-                        T product = src1[i].mult(src2[j]);
+                        T product = src1[i].mult((T) src2[j]);
 
                         synchronized (dest) {
                             dest[r1] = dest[r1].add(product);

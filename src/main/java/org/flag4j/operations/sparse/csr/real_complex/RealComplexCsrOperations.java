@@ -24,13 +24,13 @@
 
 package org.flag4j.operations.sparse.csr.real_complex;
 
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
-import org.flag4j.arrays_old.sparse.CsrMatrixOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ import java.util.function.BiFunction;
 import java.util.function.UnaryOperator;
 
 /**
- * This class contains low-level implementations for element-wise operations_old on real/complex CSR matrices.
+ * This class contains low-level implementations for element-wise operations on real/complex CSR matrices.
  */
 public final class RealComplexCsrOperations {
 
@@ -49,16 +49,16 @@ public final class RealComplexCsrOperations {
 
 
     /**
-     * Applies an element-wise binary operation to two {@link CsrMatrixOld CSR Matrices}. <br><br>
+     * Applies an element-wise binary operation to two {@link CsrMatrix CSR Matrices}. <br><br>
      *
      * Note, this methods efficiency relies heavily on the assumption that both operand matrices are very large and very
      * sparse. If the two matrices are not large and very sparse, this method will likely be
-     * significantly slower than simply converting the matrices to {@link MatrixOld dense matrices} and using a dense
+     * significantly slower than simply converting the matrices to dense matrix and using a dense
      * matrix addition algorithm.
      * @param src1 The first matrix in the operation.
      * @param src2 The second matrix in the operation.
      * @param opp Binary operator to apply element-wise to <code>src1</code> and <code>src2</code>.
-     * @param uOpp Unary operator for use with binary operations_old which are not commutative such as subtraction. If the operation is
+     * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
      * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
      * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
      * {@code opp.apply(x, uOpp.apply(y))}.
@@ -66,12 +66,12 @@ public final class RealComplexCsrOperations {
      * element-wise.
      * @throws IllegalArgumentException If <code>src1</code> and <code>src2</code> do not have the same shape.
      */
-    public static CsrCMatrixOld applyBinOpp(CsrMatrixOld src1, CsrCMatrixOld src2,
-                                            BiFunction<Double, CNumber, CNumber> opp,
-                                            UnaryOperator<CNumber> uOpp) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static CsrCMatrix applyBinOpp(CsrMatrix src1, CsrCMatrix src2,
+                                         BiFunction<Double, Field<Complex128>, Field<Complex128>> opp,
+                                         UnaryOperator<Field<Complex128>> uOpp) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
-        List<CNumber> dest = new ArrayList<>();
+        List<Field<Complex128>> dest = new ArrayList<>();
         int[] rowPointers = new int[src1.rowPointers.length];
         List<Integer> colIndices = new ArrayList<>();
 
@@ -89,7 +89,7 @@ public final class RealComplexCsrOperations {
                     rowPtr1++;
                     rowPtr2++;
                 } else if(col1 < col2) {
-                    dest.add(new CNumber(src1.entries[rowPtr1]));
+                    dest.add(new Complex128(src1.entries[rowPtr1]));
                     colIndices.add(col1);
                     rowPtr1++;
                 } else {
@@ -103,7 +103,7 @@ public final class RealComplexCsrOperations {
             }
 
             while(rowPtr1 < src1.rowPointers[i+1]) {
-                dest.add(new CNumber(src1.entries[rowPtr1]));
+                dest.add(new Complex128(src1.entries[rowPtr1]));
                 colIndices.add(src1.colIndices[rowPtr1]);
                 rowPtr1++;
                 rowPointers[i+1]++;
@@ -123,8 +123,8 @@ public final class RealComplexCsrOperations {
             rowPointers[i] += rowPointers[i-1];
         }
 
-        return new CsrCMatrixOld(src1.shape,
-                dest.toArray(CNumber[]::new),
+        return new CsrCMatrix(src1.shape,
+                dest.toArray(Complex128[]::new),
                 rowPointers,
                 ArrayUtils.fromIntegerList(colIndices)
         );
@@ -132,16 +132,16 @@ public final class RealComplexCsrOperations {
 
 
     /**
-     * Applies an element-wise binary operation to two {@link CsrMatrixOld CSR Matrices}. <br><br>
+     * Applies an element-wise binary operation to two {@link CsrMatrix CSR Matrices}. <br><br>
      *
      * Note, this methods efficiency relies heavily on the assumption that both operand matrices are very large and very
      * sparse. If the two matrices are not large and very sparse, this method will likely be
-     * significantly slower than simply converting the matrices to {@link MatrixOld dense matrices} and using a dense
+     * significantly slower than simply converting the matrices to dense matrices and using a dense
      * matrix addition algorithm.
      * @param src1 The first matrix in the operation.
      * @param src2 The second matrix in the operation.
      * @param opp Binary operator to apply element-wise to <code>src1</code> and <code>src2</code>.
-     * @param uOpp Unary operator for use with binary operations_old which are not commutative such as subtraction. If the operation is
+     * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
      * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
      * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
      * {@code opp.apply(x, uOpp.apply(y))}.
@@ -149,12 +149,12 @@ public final class RealComplexCsrOperations {
      * element-wise.
      * @throws IllegalArgumentException If <code>src1</code> and <code>src2</code> do not have the same shape.
      */
-    public static CsrCMatrixOld applyBinOpp(CsrCMatrixOld src1, CsrMatrixOld src2,
-                                            BiFunction<CNumber, Double, CNumber> opp,
-                                            UnaryOperator<Double> uOpp) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static CsrCMatrix applyBinOpp(CsrCMatrix src1, CsrMatrix src2,
+                                         BiFunction<Field<Complex128>, Double, Field<Complex128>> opp,
+                                         UnaryOperator<Double> uOpp) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
-        List<CNumber> dest = new ArrayList<>();
+        List<Field<Complex128>> dest = new ArrayList<>();
         int[] rowPointers = new int[src1.rowPointers.length];
         List<Integer> colIndices = new ArrayList<>();
 
@@ -177,8 +177,8 @@ public final class RealComplexCsrOperations {
                     colIndices.add(col1);
                     rowPtr1++;
                 } else {
-                    if(uOpp!=null) dest.add(new CNumber(uOpp.apply(src2.entries[rowPtr2])));
-                    else dest.add(new CNumber(src2.entries[rowPtr2]));
+                    if(uOpp!=null) dest.add(new Complex128(uOpp.apply(src2.entries[rowPtr2])));
+                    else dest.add(new Complex128(src2.entries[rowPtr2]));
                     colIndices.add(col2);
                     rowPtr2++;
                 }
@@ -194,8 +194,8 @@ public final class RealComplexCsrOperations {
             }
 
             while(rowPtr2 < src2.rowPointers[i+1]) {
-                if(uOpp!=null) dest.add(new CNumber(uOpp.apply(src2.entries[rowPtr2])));
-                else dest.add(new CNumber(src2.entries[rowPtr2]));
+                if(uOpp!=null) dest.add(new Complex128(uOpp.apply(src2.entries[rowPtr2])));
+                else dest.add(new Complex128(src2.entries[rowPtr2]));
                 colIndices.add(src2.colIndices[rowPtr2]);
                 rowPtr2++;
                 rowPointers[i+1]++;
@@ -207,8 +207,8 @@ public final class RealComplexCsrOperations {
             rowPointers[i] += rowPointers[i-1];
         }
 
-        return new CsrCMatrixOld(src1.shape,
-                dest.toArray(CNumber[]::new),
+        return new CsrCMatrix(src1.shape,
+                dest.toArray(Complex128[]::new),
                 rowPointers,
                 ArrayUtils.fromIntegerList(colIndices)
         );
@@ -223,10 +223,10 @@ public final class RealComplexCsrOperations {
      * @return The result of the element-wise multiplication between <code>src1</code> and <code>src2</code>.
      * @throws IllegalArgumentException If <code>src1</code> and <code>src2</code> do not have the same shape.
      */
-    public static CsrCMatrixOld elemMult(CsrCMatrixOld src1, CsrMatrixOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static CsrCMatrix elemMult(CsrCMatrix src1, CsrMatrix src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
-        List<CNumber> dest = new ArrayList<>();
+        List<Complex128> dest = new ArrayList<>();
         int[] rowPointers = new int[src1.rowPointers.length];
         List<Integer> colIndices = new ArrayList<>();
 
@@ -254,10 +254,46 @@ public final class RealComplexCsrOperations {
             rowPointers[i] += rowPointers[i-1];
         }
 
-        return new CsrCMatrixOld(src1.shape,
-                dest.toArray(CNumber[]::new),
+        return new CsrCMatrix(src1.shape,
+                dest.toArray(Complex128[]::new),
                 rowPointers,
                 ArrayUtils.fromIntegerList(colIndices)
         );
     }
+
+
+    /**
+     * Computes the element-wise sum of two matrices.
+     * @param a First matrix in sum.
+     * @param b Second matrix in sum.
+     * @return The element-wise sum of {@code a} and {@code b}.
+     */
+    public static CsrCMatrix add(CsrCMatrix a, CsrMatrix b) {
+        return applyBinOpp(a, b, (Field<Complex128> x, Double y)->x.add(y), null);
+    }
+
+
+    /**
+     * Computes the element-wise difference of two matrices.
+     * @param a First matrix in difference.
+     * @param b Second matrix in difference.
+     * @return The element-wise difference of {@code a} and {@code b}.
+     */
+    public static CsrCMatrix sub(CsrCMatrix a, CsrMatrix b) {
+        return applyBinOpp(a, b, Field<Complex128>::add, (Double x)->-x);
+    }
+
+
+    /**
+     * Computes the element-wise difference of two matrices.
+     * @param a First matrix in difference.
+     * @param b Second matrix in difference.
+     * @return The element-wise difference of {@code a} and {@code b}.
+     */
+    public static CsrCMatrix sub(CsrMatrix a, CsrCMatrix b) {
+        return applyBinOpp(a, b, (Double x, Field<Complex128> y)->y.add(x), (Field<Complex128> x)->x.addInv());
+    }
+
+
+
 }

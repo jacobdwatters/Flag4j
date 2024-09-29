@@ -29,11 +29,11 @@ import org.flag4j.algebraic_structures.semi_rings.SemiRing;
 
 /**
  * <p>This interface specifies a mathematical field. This interface not only meets the basic definition of a field,
- * but also specifies some additional operations_old which are common and useful.</p>
+ * but also specifies some additional operations which are common and useful.</p>
  *
  * <p>Field elements should be immutable.</p>
  *
- * <p>Formally, an field is a set <b>F</b> with the binary operations_old addition (+) and multiplication (*)
+ * <p>Formally, an field is a set <b>F</b> with the binary operations addition (+) and multiplication (*)
  * defined such that for elements a, b, c in <b>F</b> the following are satisfied:
  *  <ul>
  *      <li>Addition and multiplication are associative: a + (b + c) = (a + b) + c and a * (b * c) = (a * b) * c.</li>

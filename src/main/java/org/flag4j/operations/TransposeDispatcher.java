@@ -24,14 +24,14 @@
 
 package org.flag4j.operations;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.DenseFieldMatrixBase;
 import org.flag4j.arrays.backend.FieldTensorBase;
 import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.operations.dense.complex.ComplexDenseTranspose;
 import org.flag4j.operations.dense.field_ops.DenseFieldHermitianTranspose;
 import org.flag4j.operations.dense.field_ops.DenseFieldTranspose;
@@ -72,7 +72,7 @@ public final class TransposeDispatcher {
 
     /**
      * Dispatches a matrix transpose problem to the appropriate algorithm based on its shape and size.
-     * @param src MatrixOld to transpose.
+     * @param src Matrix to transpose.
      * @return The transpose of the source matrix.
      */
     public static Matrix dispatch(Matrix src) {
@@ -102,7 +102,7 @@ public final class TransposeDispatcher {
 
     /**
      * Dispatches a matrix transpose problem to the appropriate algorithm based on its shape and size.
-     * @param src MatrixOld to transpose.
+     * @param src Matrix to transpose.
      * @return The transpose of the source matrix.
      */
     public static double[] dispatch(double[] src, Shape shape) {
@@ -133,7 +133,7 @@ public final class TransposeDispatcher {
 
     /**
      * Dispatches a matrix transpose problem to the appropriate algorithm based on its shape and size.
-     * @param src MatrixOld to transpose.
+     * @param src Matrix to transpose.
      * @return The transpose of the source matrix.
      */
     public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> dispatch(DenseFieldMatrixBase<?, ?, ?, ?, T> src) {
@@ -157,16 +157,16 @@ public final class TransposeDispatcher {
                 break;
         }
 
-        return src.makeLikeTensor(new Shape(src.numCols, src.numRows), (T[]) dest);
+        return src.makeLikeTensor(new Shape(src.numCols, src.numRows), dest);
     }
 
 
     /**
      * Dispatches a matrix transpose problem to the appropriate algorithm based on its shape and size.
-     * @param src MatrixOld to transpose.
+     * @param src Matrix to transpose.
      * @return The transpose of the source matrix.
      */
-    public static <T extends Field<T>> Field<T>[] dispatch(T[] src, Shape shape) {
+    public static <T extends Field<T>> Field<T>[] dispatch(Field<T>[] src, Shape shape) {
 
         Field<T>[] dest;
 
@@ -195,12 +195,12 @@ public final class TransposeDispatcher {
 
     /**
      * Dispatches a matrix transpose problem to the appropriate algorithm based in its shape and size.
-     * @param src MatrixOld to transpose.
+     * @param src Matrix to transpose.
      * @return The transpose of the source matrix.
      */
     @Deprecated
-    public static CMatrixOld dispatch(CMatrixOld src) {
-        CNumber[] dest;
+    public static CMatrix dispatch(CMatrix src) {
+        Field<Complex128>[] dest;
 
         Algorithm algorithm = chooseAlgorithm(src.shape);
 
@@ -210,18 +210,18 @@ public final class TransposeDispatcher {
             dest = ComplexDenseTranspose.blockedMatrixConcurrent(src.entries, src.numRows, src.numCols);
         }
 
-        return new CMatrixOld(src.numCols, src.numRows, dest);
+        return new CMatrix(src.numCols, src.numRows, dest);
     }
 
 
     /**
      * Dispatches a matrix hermitian transpose problem to the appropriate algorithm based on its shape and size.
-     * @param src MatrixOld to transpose.
+     * @param src Matrix to transpose.
      * @return The transpose of the source matrix.
      */
     @Deprecated
-    public static CMatrixOld dispatchHermitian(CMatrixOld src) {
-        CNumber[] dest;
+    public static CMatrix dispatchHermitian(CMatrix src) {
+        Field<Complex128>[] dest;
 
         Algorithm algorithm = chooseAlgorithmHermitian(src.shape);
 
@@ -231,13 +231,13 @@ public final class TransposeDispatcher {
             dest = ComplexDenseTranspose.blockedMatrixConcurrentHerm(src.entries, src.numRows, src.numCols);
         }
 
-        return new CMatrixOld(src.numCols, src.numRows, dest);
+        return new CMatrix(src.numCols, src.numRows, dest);
     }
 
 
     /**
      * Dispatches a matrix hermitian transpose problem to the appropriate algorithm based on its shape and size.
-     * @param src MatrixOld to transpose.
+     * @param src Matrix to transpose.
      * @return The transpose of the source matrix.
      */
     public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> dispatchHermitian(DenseFieldMatrixBase<?, ?, ?, ?, T> src) {
@@ -251,7 +251,7 @@ public final class TransposeDispatcher {
             dest = DenseFieldHermitianTranspose.blockedMatrixConcurrentHerm(src.entries, src.numRows, src.numCols);
         }
 
-        return src.makeLikeTensor(new Shape(src.numCols, src.numRows), (T[]) dest);
+        return src.makeLikeTensor(new Shape(src.numCols, src.numRows), dest);
     }
 
 
@@ -306,7 +306,7 @@ public final class TransposeDispatcher {
 
     /**
      * Dispatches a tensor transpose problem to the appropriate algorithm based on its shape and size.
-     * @param src TensorOld to transpose.
+     * @param src Tensor to transpose.
      * @param axis1 First axis in tensor transpose.
      * @param axis2 Second axis in tensor transpose.
      * @return The result of the tesnsor transpose.
@@ -318,7 +318,7 @@ public final class TransposeDispatcher {
         if(axis1 == axis2) {
             dest = src.entries.clone();
         } else if(src.getRank() == 2) {
-            dest = dispatch(src.entries, src.shape); // Deligate to matrix transpose.
+            dest = dispatch(src.entries, src.shape); // Delegate to matrix transpose.
         } else {
             Algorithm algorithm = chooseAlgorithmTensor(src.shape.get(axis1), src.shape.get(axis2));
             dest = algorithm == Algorithm.STANDARD ?
@@ -352,7 +352,7 @@ public final class TransposeDispatcher {
 
     /**
      * Dispatches a tensor Hermitian transpose problem to the appropriate algorithm based on its shape and size.
-     * @param src TensorOld to transpose.
+     * @param src Tensor to transpose.
      * @param axis1 First axis in tensor transpose.
      * @param axis2 Second axis in tensor transpose.
      * @return

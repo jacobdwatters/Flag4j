@@ -28,7 +28,7 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 
 /**
@@ -54,7 +54,7 @@ public final class RealDenseVectorOperations {
      * @return The inner product of the two vectors.
      */
     public static double innerProduct(double[] src1, double[] src2) {
-        ParameterChecks.ensureArrayLengthsEq(src1.length, src2.length);
+        ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
         double innerProd=0;
 
         for(int i=0; i<src1.length; i++) {

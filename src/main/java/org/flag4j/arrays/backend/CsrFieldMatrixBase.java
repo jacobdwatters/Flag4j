@@ -30,7 +30,7 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CsrFieldMatrix;
 import org.flag4j.operations.sparse.csr.field_ops.*;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.math.BigDecimal;
@@ -66,21 +66,26 @@ import static org.flag4j.operations.sparse.SparseUtils.sortCsrMatrix;
  * class will preserve the lexicographical sorting.</p>
  *
  * <p>If indices need to be sorted, call {@link #sortIndices()}.</p>
+ *
+ * @param <T> Type of this CSR field matrix.
+ * @param <U> Type of dense field matrix equivalent to {@code T}.
+ * @param <V> Type of vector equivalent to {@code V}.
+ * @param <Y> Type of field element of this matrix.
  */
-public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W>, U extends DenseFieldMatrixBase<U, ?, T, ?, W>,
-        V extends CooFieldVectorBase<V, ?, ?, U, W>, W extends Field<W>>
-        extends FieldTensorBase<T, U, W>
-        implements CsrMatrixMixin<T, U, W> {
-
+public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W, Y>, U extends DenseFieldMatrixBase<U, ?, T, W, Y>,
+        V extends CooFieldVectorBase<V, ?, W, U, Y>,
+        W extends DenseFieldVectorBase<W, U, V, Y>, Y extends Field<Y>>
+        extends FieldTensorBase<T, U, Y>
+        implements CsrMatrixMixin<T, U, V, W, Y> {
 
     /**
      * <p>Pointers indicating starting index of each row within the {@link #colIndices} and {@link #entries} arrays.
      * Has length {@link #numRows numRows + 1}.</p>
      *
-     * <p>The range {@code [entries[rowPointers[i]], entries[rowPointers[i+1]])} contains all {@link #entries non-zero entries} within
+     * <p>The range [{@code entries[rowPointers[i]], entries[rowPointers[i+1]]}) contains all {@link #entries non-zero entries} within
      * row {@code i}.</p>
      *
-     * <p>Similarly, {@code [colIndices[rowPointers[i]], colIndices[rowPointers[i+1]])} contains all {@link #colIndices column indices}
+     * <p>Similarly, [{@code colIndices[rowPointers[i]], colIndices[rowPointers[i+1]]}) contains all {@link #colIndices column indices}
      * for the entries in row {@code i}.
      * </p>
      */
@@ -118,9 +123,9 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code entries.length == colIndices.length}.
      */
-    protected CsrFieldMatrixBase(Shape shape, W[] entries, int[] rowPointers, int[] colIndices) {
+    protected CsrFieldMatrixBase(Shape shape, Field<Y>[] entries, int[] rowPointers, int[] colIndices) {
         super(shape, entries);
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
 
         this.rowPointers = rowPointers;
         this.colIndices = colIndices;
@@ -141,7 +146,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      * indices.
      */
     @Override
-    public abstract T makeLikeTensor(Shape shape, W[] entries);
+    public abstract T makeLikeTensor(Shape shape, Field<Y>[] entries);
 
 
     /**
@@ -156,7 +161,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      * @return A matrix of the same type as this matrix with the given the {@code shape}, {@code entries} and non-zero
      * indices.
      */
-    public abstract T makeLikeTensor(Shape shape, W[] entries, int[] rowPointers, int[] colIndices);
+    public abstract T makeLikeTensor(Shape shape, Field<Y>[] entries, int[] rowPointers, int[] colIndices);
 
 
     /**
@@ -167,7 +172,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      *
      * @return A dense matrix of similar type as this sparse CSR matrix with the given the {@code shape} and {@code entries}.
      */
-    public abstract U makeLikeDenseTensor(Shape shape, W[] entries);
+    public abstract U makeLikeDenseTensor(Shape shape, Field<Y>[] entries);
 
 
     /**
@@ -181,7 +186,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      *
      * @return A CSR matrix equivalent to the specified COO matrix.
      */
-    public T fromCoo(Shape shape, List<W> entries, List<Integer> rowIndices, List<Integer> colIndices) {
+    public T fromCoo(Shape shape, List<Field<Y>> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         int csrRows = shape.get(0);
         int[] csrRowPointers = new int[csrRows + 1];
 
@@ -193,7 +198,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
         for(int i=0; i<csrRows; i++)
             csrRowPointers[i+1] += csrRowPointers[i];
 
-        return makeLikeTensor(shape, (W[]) entries.toArray(new Field[0]), csrRowPointers, ArrayUtils.fromIntegerList(colIndices));
+        return (T) makeLikeTensor(shape, entries.toArray(new Field[0]), csrRowPointers, ArrayUtils.fromIntegerList(colIndices));
     }
 
 
@@ -232,7 +237,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public T H(int axis1, int axis2) {
-        ParameterChecks.ensureValidAxes(shape, axis1, axis2);
+        ValidateParameters.ensureValidAxes(shape, axis1, axis2);
         if(axis1 == axis2) return copy();
 
         return CsrFieldMatrixOperations.hermTranspose((T) this);
@@ -295,16 +300,16 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      * @throws IllegalArgumentException If this matrix is not square.
      */
     @Override
-    public W tr() {
-        ParameterChecks.ensureSquareMatrix(shape);
-        W trace = getZeroElement();
+    public Y tr() {
+        ValidateParameters.ensureSquareMatrix(shape);
+        Y trace = getZeroElement();
 
         for(int i=0; i<numRows; i++) {
             int rowPtr = rowPointers[i];
             int stop = rowPointers[i+1];
 
             for(int j=rowPtr; j<stop; j++)
-                if(i==colIndices[j]) trace = trace.add(entries[j]);
+                if(i==colIndices[j]) trace = trace.add((Y) entries[j]);
         }
 
         return trace;
@@ -319,6 +324,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
     @Override
     public CsrFieldMatrix<RealFloat64> abs() {
         RealFloat64[] absValues = new RealFloat64[nnz];
+
         for(int i=0; i<nnz; i++)
             absValues[i] = new RealFloat64(entries[i].abs());
 
@@ -418,7 +424,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      * @throws LinearAlgebraException If this matrix is not square.
      */
     @Override
-    public W det() {
+    public Y det() {
         return toDense().det();
     }
 
@@ -466,7 +472,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      * @throws IllegalArgumentException If this matrix and b have different shapes.
      */
     @Override
-    public W fib(T b) {
+    public Y fib(T b) {
         return this.H().mult(b).tr();
     }
 
@@ -502,6 +508,19 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
     @Override
     public T augment(T b) {
         return (T) toCoo().augment(b.toCoo()).toCsr();
+    }
+
+
+    /**
+     * Augments a vector to this matrix.
+     *
+     * @param b The vector to augment to this matrix.
+     *
+     * @return The result of augmenting {@code b} to this matrix.
+     */
+    @Override
+    public T augment(V b) {
+        return (T) toCoo().augment(b).toCsr();
     }
 
 
@@ -698,10 +717,10 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      * @return A reference to this matrix.
      */
     @Override
-    public T set(W value, int row, int col) {
+    public T set(Y value, int row, int col) {
         // Ensure indices are in bounds.
-        ParameterChecks.ensureValidIndex(shape, row, col);
-        Field<W>[] newEntries;
+        ValidateParameters.ensureValidIndex(shape, row, col);
+        Field<Y>[] newEntries;
         int[] newRowPointers = rowPointers.clone();
         int[] newColIndices;
         boolean found = false; // Flag indicating an element already exists in this matrix at the specified row and col.
@@ -741,7 +760,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
             }
         }
 
-        return makeLikeTensor(shape, (W[]) newEntries, newRowPointers, newColIndices);
+        return makeLikeTensor(shape, (Y[]) newEntries, newRowPointers, newColIndices);
     }
 
 
@@ -803,7 +822,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public T T(int axis1, int axis2) {
-        ParameterChecks.ensureValidAxes(shape, axis1, axis2);
+        ValidateParameters.ensureValidAxes(shape, axis1, axis2);
         if(axis1 == axis2) return copy();
 
         return CsrFieldMatrixOperations.transpose((T) this);
@@ -859,17 +878,17 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public U toDense() {
-        Field<W>[] dest = new Field[shape.totalEntriesIntValueExact()];
+        Field<Y>[] dest = new Field[shape.totalEntriesIntValueExact()];
+        Arrays.fill(dest, getZeroElement());
 
-        for(int i=0; i<rowPointers.length-1; i++) {
+        for(int i=0; i<numRows; i++) {
             int rowOffset = i*numCols;
 
-            for(int j=rowPointers[i], rowEnd=rowPointers[i+1]; j<rowEnd; j++) {
+            for(int j=rowPointers[i], rowEnd=rowPointers[i+1]; j<rowEnd; j++)
                 dest[rowOffset + colIndices[j]] = entries[j];
-            }
         }
 
-        return makeLikeDenseTensor(shape, (W[]) dest);
+        return makeLikeDenseTensor(shape, dest);
     }
 
 

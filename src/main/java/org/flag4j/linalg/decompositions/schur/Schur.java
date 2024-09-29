@@ -29,7 +29,7 @@ import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.linalg.decompositions.Decomposition;
 import org.flag4j.linalg.decompositions.unitary.UnitaryDecomposition;
 import org.flag4j.rng.RandomComplex;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 
@@ -43,7 +43,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  * @param <T> The type of matrix to be decomposed.
  * @param <U> The type for the internal storage datastructure of the matrix to be decomposed.
  */
-public abstract class Schur<T extends MatrixMixin<T, ?, ?>, U> implements Decomposition<T> {
+public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?, ?>, U> implements Decomposition<T> {
 
     /**
      * Random number generator to be used when computing a random exceptional shift.
@@ -161,7 +161,7 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?>, U> implements Decomp
      * @throws IllegalArgumentException If {@code exceptionalThreshold} is not positive.
      */
     public Schur<T, U> setExceptionalThreshold(int exceptionalThreshold) {
-        ParameterChecks.ensurePositive(exceptionalThreshold);
+        ValidateParameters.ensurePositive(exceptionalThreshold);
         this.exceptionalThreshold = exceptionalThreshold;
         return this;
     }
@@ -181,7 +181,7 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?>, U> implements Decomp
      * @throws IllegalArgumentException If {@code maxIterationFactor} is not positive.
      */
     public Schur<T, U> setMaxIterationFactor(int maxIterationFactor) {
-        ParameterChecks.ensurePositive(maxIterationFactor);
+        ValidateParameters.ensurePositive(maxIterationFactor);
         this.maxIterationsFactor = maxIterationFactor;
         return this;
     }
@@ -255,7 +255,7 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?>, U> implements Decomp
      * @param src The matrix to be decomposed.
      */
     protected void setUp(T src) {
-        ParameterChecks.ensureSquare(src.getShape());
+        ValidateParameters.ensureSquare(src.getShape());
 
         sinceLastExceptional = 0;
         numExceptional = 0;

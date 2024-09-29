@@ -41,5 +41,5 @@ public interface DenseFieldTensorBinaryOperation {
      * @param shape2 Shape of the second tensor.
      * @return The result of applying the specified binary operation to the two tensors.
      */
-     public <T extends Field<T>> Field<T>[] apply(T[] src1, Shape shape1, T[] src2, Shape shape2);
+     public <T extends Field<T>> Field<T>[] apply(Field<T>[] src1, Shape shape1, Field<T>[] src2, Shape shape2);
 }

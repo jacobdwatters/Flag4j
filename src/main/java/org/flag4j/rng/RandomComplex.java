@@ -26,7 +26,7 @@ package org.flag4j.rng;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Complex64;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.Random;
 
@@ -130,7 +130,7 @@ public class RandomComplex extends Random {
      * @throws IllegalArgumentException If standard deviation is negative.
      */
     public Complex128 randnComplex128(double mean, double std) {
-        ParameterChecks.ensureGreaterEq(std, 0);
+        ValidateParameters.ensureGreaterEq(std, 0);
         return randomComplex128(nextGaussian()*std + mean);
     }
 
@@ -209,7 +209,7 @@ public class RandomComplex extends Random {
      * @throws IllegalArgumentException If standard deviation is negative.
      */
     public Complex64 randnComplex64(float mean, float std) {
-        ParameterChecks.ensureGreaterEq(std, 0);
+        ValidateParameters.ensureGreaterEq(std, 0);
         return randomComplex64((float) nextGaussian()*std + mean);
     }
 }

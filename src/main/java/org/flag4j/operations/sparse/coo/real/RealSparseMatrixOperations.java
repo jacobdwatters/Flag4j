@@ -26,9 +26,9 @@ package org.flag4j.operations.sparse.coo.real;
 
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.arrays_old.sparse.CooVectorOld;
+import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,7 +55,7 @@ public class RealSparseMatrixOperations {
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
     public static CooMatrix add(CooMatrix src1, CooMatrix src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
 
@@ -151,7 +151,7 @@ public class RealSparseMatrixOperations {
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
     public static CooMatrix sub(CooMatrix src1, CooMatrix src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
 
@@ -248,7 +248,7 @@ public class RealSparseMatrixOperations {
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
     public static CooMatrix elemMult(CooMatrix src1, CooMatrix src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
 
@@ -299,8 +299,8 @@ public class RealSparseMatrixOperations {
      * @param col Sparse vector to add to each column of the sparse matrix.
      * @return A dense copy of the {@code src} matrix with the {@code col} vector added to each row of the matrix.
      */
-    public static Matrix addToEachCol(CooMatrix src, CooVectorOld col) {
-        ParameterChecks.ensureEquals(src.numRows, col.size);
+    public static Matrix addToEachCol(CooMatrix src, CooVector col) {
+        ValidateParameters.ensureEquals(src.numRows, col.size);
         double[] destEntries = new double[src.totalEntries().intValueExact()];
 
         // Add values from sparse matrix.
@@ -329,8 +329,8 @@ public class RealSparseMatrixOperations {
      * @param row Sparse vector to add to each row of the sparse matrix.
      * @return A dense copy of the {@code src} matrix with the {@code row} vector added to each row of the matrix.
      */
-    public static Matrix addToEachRow(CooMatrix src, CooVectorOld row) {
-        ParameterChecks.ensureEquals(src.numCols, row.size);
+    public static Matrix addToEachRow(CooMatrix src, CooVector row) {
+        ValidateParameters.ensureEquals(src.numCols, row.size);
         double[] destEntries = new double[src.totalEntries().intValueExact()];
 
         // Add values from sparse matrix.

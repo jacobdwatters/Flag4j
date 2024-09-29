@@ -24,17 +24,17 @@
 
 package org.flag4j.operations.sparse.coo.real;
 
-import org.flag4j.arrays_old.sparse.CooMatrixOld;
+import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.HashMap;
 
 /**
  * This class contains low level implementations of norms for tensors, matrices and vector.
  */
-public class RealSparseNorms {
+public final class RealSparseNorms {
 
     private RealSparseNorms() {
         // Hide default constructor for utility class.
@@ -47,7 +47,7 @@ public class RealSparseNorms {
      * @param src Source matrix to compute norm of.
      * @return The L<sub>2</sub> of the {@code src} matrix.
      */
-    public static double matrixNormL2(CooMatrixOld src) {
+    public static double matrixNormL2(CooMatrix src) {
         double norm = 0;
         double[] colSums = new double[ArrayUtils.numUnique(src.colIndices)];
 
@@ -74,8 +74,8 @@ public class RealSparseNorms {
      * @param p Parameter for L<sub>p</sub> norm
      * @return The L<sub>p</sub> of the {@code src} matrix.
      */
-    public static double matrixNormLp(CooMatrixOld src, double p) {
-        ParameterChecks.ensureGreaterEq(1, p);
+    public static double matrixNormLp(CooMatrix src, double p) {
+        ValidateParameters.ensureGreaterEq(1, p);
 
         double norm = 0;
         double[] colSums = new double[ArrayUtils.numUnique(src.colIndices)];
@@ -103,8 +103,8 @@ public class RealSparseNorms {
      * @param p First parameter for L<sub>p, q</sub> norm
      * @return The L<sub>p, q</sub> of the {@code src} matrix.
      */
-    public static double matrixNormLpq(CooMatrixOld src, double p, double q) {
-        ParameterChecks.ensureGreaterEq(1, p, q);
+    public static double matrixNormLpq(CooMatrix src, double p, double q) {
+        ValidateParameters.ensureGreaterEq(1, p, q);
 
         double norm = 0;
         double[] colSums = new double[ArrayUtils.numUnique(src.colIndices)];

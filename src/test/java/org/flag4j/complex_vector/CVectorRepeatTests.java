@@ -1,8 +1,8 @@
 package org.flag4j.complex_vector;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,41 +11,41 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class CVectorRepeatTests {
 
 
-    static CVectorOld a;
-    static CNumber[] aEntries;
-    static CMatrixOld exp;
-    static CNumber[][] expEntries;
+    static CVector a;
+    static Complex128[] aEntries;
+    static CMatrix exp;
+    static Complex128[][] expEntries;
 
     @Test
     void repeatRowTest() {
         // ---------------------- Sub-case 1 ----------------------
-        aEntries = new CNumber[]{new CNumber(20.24, 1), new CNumber(-0.1451), new CNumber(93.1, 515.3),
-                new CNumber(0, -9.245), new CNumber(234.1), new CNumber(1800.24, -9923001.4)};
-        a = new CVectorOld(aEntries);
-        expEntries = new CNumber[][]{
-                {new CNumber(20.24, 1), new CNumber(-0.1451), new CNumber(93.1, 515.3),
-                        new CNumber(0, -9.245), new CNumber(234.1), new CNumber(1800.24, -9923001.4)},
-                {new CNumber(20.24, 1), new CNumber(-0.1451), new CNumber(93.1, 515.3),
-                        new CNumber(0, -9.245), new CNumber(234.1), new CNumber(1800.24, -9923001.4)},
-                {new CNumber(20.24, 1), new CNumber(-0.1451), new CNumber(93.1, 515.3),
-                        new CNumber(0, -9.245), new CNumber(234.1), new CNumber(1800.24, -9923001.4)},
-                {new CNumber(20.24, 1), new CNumber(-0.1451), new CNumber(93.1, 515.3),
-                        new CNumber(0, -9.245), new CNumber(234.1), new CNumber(1800.24, -9923001.4)},
-                {new CNumber(20.24, 1), new CNumber(-0.1451), new CNumber(93.1, 515.3),
-                        new CNumber(0, -9.245), new CNumber(234.1), new CNumber(1800.24, -9923001.4)}
+        aEntries = new Complex128[]{new Complex128(20.24, 1), new Complex128(-0.1451), new Complex128(93.1, 515.3),
+                new Complex128(0, -9.245), new Complex128(234.1), new Complex128(1800.24, -9923001.4)};
+        a = new CVector(aEntries);
+        expEntries = new Complex128[][]{
+                {new Complex128(20.24, 1), new Complex128(-0.1451), new Complex128(93.1, 515.3),
+                        new Complex128(0, -9.245), new Complex128(234.1), new Complex128(1800.24, -9923001.4)},
+                {new Complex128(20.24, 1), new Complex128(-0.1451), new Complex128(93.1, 515.3),
+                        new Complex128(0, -9.245), new Complex128(234.1), new Complex128(1800.24, -9923001.4)},
+                {new Complex128(20.24, 1), new Complex128(-0.1451), new Complex128(93.1, 515.3),
+                        new Complex128(0, -9.245), new Complex128(234.1), new Complex128(1800.24, -9923001.4)},
+                {new Complex128(20.24, 1), new Complex128(-0.1451), new Complex128(93.1, 515.3),
+                        new Complex128(0, -9.245), new Complex128(234.1), new Complex128(1800.24, -9923001.4)},
+                {new Complex128(20.24, 1), new Complex128(-0.1451), new Complex128(93.1, 515.3),
+                        new Complex128(0, -9.245), new Complex128(234.1), new Complex128(1800.24, -9923001.4)}
         };
-        exp = new CMatrixOld(expEntries);
+        exp = new CMatrix(expEntries);
 
         assertEquals(exp, a.repeat(5, 0));
 
         // ---------------------- Sub-case 2 ----------------------
-        aEntries = new CNumber[]{new CNumber(1), new CNumber(0, 1)};
-        a = new CVectorOld(aEntries);
-        expEntries = new CNumber[][]{
-                {new CNumber(1), new CNumber(0, 1)},
-                {new CNumber(1), new CNumber(0, 1)}
+        aEntries = new Complex128[]{new Complex128(1), new Complex128(0, 1)};
+        a = new CVector(aEntries);
+        expEntries = new Complex128[][]{
+                {new Complex128(1), new Complex128(0, 1)},
+                {new Complex128(1), new Complex128(0, 1)}
         };
-        exp = new CMatrixOld(expEntries);
+        exp = new CMatrix(expEntries);
 
         assertEquals(exp, a.repeat(2, 0));
 
@@ -59,33 +59,33 @@ class CVectorRepeatTests {
     @Test
     void repeatColTest() {
         // ---------------------- Sub-case 1 ----------------------
-        aEntries = new CNumber[]{new CNumber(20.24, 1), new CNumber(-0.1451), new CNumber(93.1, 515.3),
-                new CNumber(0, -9.245), new CNumber(234.1), new CNumber(1800.24, -9923001.4)};
-        a = new CVectorOld(aEntries);
-        expEntries = new CNumber[][]{
-                {new CNumber(20.24, 1), new CNumber(-0.1451), new CNumber(93.1, 515.3),
-                        new CNumber(0, -9.245), new CNumber(234.1), new CNumber(1800.24, -9923001.4)},
-                {new CNumber(20.24, 1), new CNumber(-0.1451), new CNumber(93.1, 515.3),
-                        new CNumber(0, -9.245), new CNumber(234.1), new CNumber(1800.24, -9923001.4)},
-                {new CNumber(20.24, 1), new CNumber(-0.1451), new CNumber(93.1, 515.3),
-                        new CNumber(0, -9.245), new CNumber(234.1), new CNumber(1800.24, -9923001.4)},
-                {new CNumber(20.24, 1), new CNumber(-0.1451), new CNumber(93.1, 515.3),
-                        new CNumber(0, -9.245), new CNumber(234.1), new CNumber(1800.24, -9923001.4)},
-                {new CNumber(20.24, 1), new CNumber(-0.1451), new CNumber(93.1, 515.3),
-                        new CNumber(0, -9.245), new CNumber(234.1), new CNumber(1800.24, -9923001.4)}
+        aEntries = new Complex128[]{new Complex128(20.24, 1), new Complex128(-0.1451), new Complex128(93.1, 515.3),
+                new Complex128(0, -9.245), new Complex128(234.1), new Complex128(1800.24, -9923001.4)};
+        a = new CVector(aEntries);
+        expEntries = new Complex128[][]{
+                {new Complex128(20.24, 1), new Complex128(-0.1451), new Complex128(93.1, 515.3),
+                        new Complex128(0, -9.245), new Complex128(234.1), new Complex128(1800.24, -9923001.4)},
+                {new Complex128(20.24, 1), new Complex128(-0.1451), new Complex128(93.1, 515.3),
+                        new Complex128(0, -9.245), new Complex128(234.1), new Complex128(1800.24, -9923001.4)},
+                {new Complex128(20.24, 1), new Complex128(-0.1451), new Complex128(93.1, 515.3),
+                        new Complex128(0, -9.245), new Complex128(234.1), new Complex128(1800.24, -9923001.4)},
+                {new Complex128(20.24, 1), new Complex128(-0.1451), new Complex128(93.1, 515.3),
+                        new Complex128(0, -9.245), new Complex128(234.1), new Complex128(1800.24, -9923001.4)},
+                {new Complex128(20.24, 1), new Complex128(-0.1451), new Complex128(93.1, 515.3),
+                        new Complex128(0, -9.245), new Complex128(234.1), new Complex128(1800.24, -9923001.4)}
         };
-        exp = new CMatrixOld(expEntries).T();
+        exp = new CMatrix(expEntries).T();
 
         assertEquals(exp, a.repeat(5, 1));
 
         // ---------------------- Sub-case 2 ----------------------
-        aEntries = new CNumber[]{new CNumber(1), new CNumber(0, 1)};
-        a = new CVectorOld(aEntries);
-        expEntries = new CNumber[][]{
-                {new CNumber(1), new CNumber(0, 1)},
-                {new CNumber(1), new CNumber(0, 1)}
+        aEntries = new Complex128[]{new Complex128(1), new Complex128(0, 1)};
+        a = new CVector(aEntries);
+        expEntries = new Complex128[][]{
+                {new Complex128(1), new Complex128(0, 1)},
+                {new Complex128(1), new Complex128(0, 1)}
         };
-        exp = new CMatrixOld(expEntries).T();
+        exp = new CMatrix(expEntries).T();
 
         assertEquals(exp, a.repeat(2, 1));
     }

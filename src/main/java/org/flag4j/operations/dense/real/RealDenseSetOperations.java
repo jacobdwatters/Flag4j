@@ -26,10 +26,10 @@ package org.flag4j.operations.dense.real;
 
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 /**
- * This class contains low-level implementations of setting operations_old for real dense tensors.
+ * This class contains low-level implementations of setting operations for real dense tensors.
  */
 public class RealDenseSetOperations {
 
@@ -42,7 +42,7 @@ public class RealDenseSetOperations {
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(Double[] src, final double[] dest) {
-        ParameterChecks.ensureArrayLengthsEq(src.length, dest.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
 
         for(int i=0; i<src.length; i++) {
             dest[i] = src[i];
@@ -58,7 +58,7 @@ public class RealDenseSetOperations {
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(Integer[] src, final double[] dest) {
-        ParameterChecks.ensureArrayLengthsEq(src.length, dest.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
 
         for(int i=0; i<src.length; i++) {
             dest[i] = src[i];
@@ -74,7 +74,7 @@ public class RealDenseSetOperations {
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(double[] src, final double[] dest) {
-        ParameterChecks.ensureArrayLengthsEq(src.length, dest.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
         System.arraycopy(src, 0, dest, 0, src.length);
     }
 
@@ -87,7 +87,7 @@ public class RealDenseSetOperations {
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(int[] src, final double[] dest) {
-        ParameterChecks.ensureArrayLengthsEq(src.length, dest.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
 
         for(int i=0; i<src.length; i++) {
             dest[i] = src[i];
@@ -103,7 +103,7 @@ public class RealDenseSetOperations {
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(Double[][] src, final double[] dest) {
-        ParameterChecks.ensureTotalEntriesEq(src, dest);
+        ValidateParameters.ensureTotalEntriesEq(src, dest);
         int count = 0;
 
         for(Double[] doubles : src) {
@@ -122,7 +122,7 @@ public class RealDenseSetOperations {
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(Integer[][] src, final double[] dest) {
-        ParameterChecks.ensureTotalEntriesEq(src, dest);
+        ValidateParameters.ensureTotalEntriesEq(src, dest);
         int count = 0;
 
         for(Integer[] integers : src) {
@@ -141,13 +141,13 @@ public class RealDenseSetOperations {
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(double[][] src, final double[] dest) {
-        ParameterChecks.ensureTotalEntriesEq(src, dest);
+        ValidateParameters.ensureTotalEntriesEq(src, dest);
         int count = 0;
+        final int cols = src[0].length;
 
         for(double[] doubles : src) {
-            for(int j = 0; j < src[0].length; j++) {
+            for(int j=0; j<cols; j++)
                 dest[count++] = doubles[j];
-            }
         }
     }
 
@@ -160,7 +160,7 @@ public class RealDenseSetOperations {
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
     public static void setValues(int[][] src, final double[] dest) {
-        ParameterChecks.ensureTotalEntriesEq(src, dest);
+        ValidateParameters.ensureTotalEntriesEq(src, dest);
         int count = 0;
 
         for(int[] ints : src) {

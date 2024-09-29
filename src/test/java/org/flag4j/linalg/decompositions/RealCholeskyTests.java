@@ -1,7 +1,7 @@
 package org.flag4j.linalg.decompositions;
 
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.linalg.decompositions.chol.RealCholeskyOld;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.linalg.decompositions.chol.RealCholesky;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -10,19 +10,19 @@ class RealCholeskyTests {
     static double[][] aEntries;
     static double[][] expLEntries;
 
-    static MatrixOld A;
-    static MatrixOld expL;
+    static Matrix A;
+    static Matrix expL;
 
 
     static void setMatrices() {
-        A = new MatrixOld(aEntries);
-        expL = new MatrixOld(expLEntries);
+        A = new Matrix(aEntries);
+        expL = new Matrix(expLEntries);
     }
 
 
     @Test
     void choleskyTestCase() {
-        RealCholeskyOld cholesky = new RealCholeskyOld();
+        RealCholesky cholesky = new RealCholesky();
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new double[][]{

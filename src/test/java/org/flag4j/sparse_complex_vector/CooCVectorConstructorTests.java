@@ -1,9 +1,8 @@
 package org.flag4j.sparse_complex_vector;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays_old.sparse.CooCVectorOld;
-import org.flag4j.complex_numbers.CNumber;
-import org.junit.jupiter.api.Assertions;
+import org.flag4j.arrays.sparse.CooCVector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,11 +10,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class CooCVectorConstructorTests {
     int expSize;
     Shape expShape;
-    CNumber[] expEntries;
+    Complex128[] expEntries;
     double[] expEntriesD;
     int[] expEntriesI;
     int[] expIndices;
-    CooCVectorOld a, b;
+    CooCVector a, b;
 
 
     @Test
@@ -23,18 +22,18 @@ class CooCVectorConstructorTests {
         // ------------- Sub-case 1 -------------
         expSize = 114;
         expShape = new Shape(expSize);
-        expEntries = new CNumber[0];
+        expEntries = new Complex128[0];
         expIndices = new int[0];
-        a = new CooCVectorOld(expSize);
+        a = new CooCVector(expSize);
 
         assertEquals(expSize, a.size());
-        Assertions.assertEquals(expShape, a.shape);
-        Assertions.assertArrayEquals(expEntries, a.entries);
+        assertEquals(expShape, a.shape);
+        assertArrayEquals(expEntries, a.entries);
         assertArrayEquals(expIndices, a.indices);
 
         // ------------- Sub-case 2 -------------
         expSize = -1;
-        assertThrows(IllegalArgumentException.class, () -> new CooCVectorOld(expSize));
+        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize));
     }
 
 
@@ -43,88 +42,37 @@ class CooCVectorConstructorTests {
         // ------------- Sub-case 1 -------------
         expSize = 1001234;
         expShape = new Shape(expSize);
-        expEntries = new CNumber[]{new CNumber(-1233, 1.3314), new CNumber(9034, 10.23445),
-            new CNumber(83.133, -334), new CNumber(-92.133, -9.4), new CNumber(0, 13.435)};
+        expEntries = new Complex128[]{new Complex128(-1233, 1.3314), new Complex128(9034, 10.23445),
+            new Complex128(83.133, -334), new Complex128(-92.133, -9.4), new Complex128(0, 13.435)};
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        a = new CooCVectorOld(expSize, expEntries, expIndices);
+        a = new CooCVector(expSize, expEntries, expIndices);
 
         assertEquals(expSize, a.size());
-        Assertions.assertEquals(expShape, a.shape);
-        Assertions.assertArrayEquals(expEntries, a.entries);
+        assertEquals(expShape, a.shape);
+        assertArrayEquals(expEntries, a.entries);
 
         // ------------- Sub-case 2 -------------
         expSize = -1;
-        assertThrows(IllegalArgumentException.class, () -> new CooCVectorOld(expSize, expEntries, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize, expEntries, expIndices));
 
         // ------------- Sub-case 3 -------------
         expSize = 1001234;
         expShape = new Shape(expSize);
-        expEntries = new CNumber[]{new CNumber(-1233, 1.3314), new CNumber(9034, 10.23445),
-                new CNumber(83.133, -334), new CNumber(-92.133, -9.4), new CNumber(0, 13.435)};
+        expEntries = new Complex128[]{new Complex128(-1233, 1.3314), new Complex128(9034, 10.23445),
+                new Complex128(83.133, -334), new Complex128(-92.133, -9.4), new Complex128(0, 13.435)};
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new CooCVectorOld(expSize, expEntries, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize, expEntries, expIndices));
 
 
         // ------------- Sub-case 4 -------------
         expSize = 3;
         expShape = new Shape(expSize);
-        expEntries = new CNumber[]{new CNumber(-1233, 1.3314), new CNumber(9034, 10.23445),
-                new CNumber(83.133, -334), new CNumber(-92.133, -9.4), new CNumber(0, 13.435)};
+        expEntries = new Complex128[]{new Complex128(-1233, 1.3314), new Complex128(9034, 10.23445),
+                new Complex128(83.133, -334), new Complex128(-92.133, -9.4), new Complex128(0, 13.435)};
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new CooCVectorOld(expSize, expEntries, expIndices));
-    }
-
-
-    @Test
-    void sizeEntriesIntIndicesTestCase() {
-        // ------------- Sub-case 1 -------------
-        expSize = 1001234;
-        expShape = new Shape(expSize);
-        expEntriesI = new int[]{1, 4, 5, 1001, -11};
-        expEntries = new CNumber[expEntriesI.length];
-        for(int i=0; i<expEntriesI.length; i++) {
-            expEntries[i] = new CNumber(expEntriesI[i]);
-        }
-        expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        a = new CooCVectorOld(expSize, expEntriesI, expIndices);
-
-        assertEquals(expSize, a.size());
-        Assertions.assertEquals(expShape, a.shape);
-        Assertions.assertArrayEquals(expEntries, a.entries);
-
-        // ------------- Sub-case 2 -------------
-        expSize = -1;
-        expIndices = new int[]{0, 11, 10003, 20034};
-        assertThrows(IllegalArgumentException.class, () -> new CooCVectorOld(expSize, expEntriesI, expIndices));
-
-        // ------------- Sub-case 3 -------------
-        expSize = 1001234;
-        expShape = new Shape(expSize);
-        expEntriesI = new int[]{1, 4, 5, 1001, -11};
-        expEntriesI = new int[]{1, 4, 5, 1001, -11};
-        expEntries = new CNumber[expEntriesI.length];
-        for(int i=0; i<expEntriesI.length; i++) {
-            expEntries[i] = new CNumber(expEntriesI[i]);
-        }
-        expIndices = new int[]{0, 11, 10003, 20034};
-
-        assertThrows(IllegalArgumentException.class, () -> new CooCVectorOld(expSize, expEntriesI, expIndices));
-
-
-        // ------------- Sub-case 4 -------------
-        expSize = 3;
-        expShape = new Shape(expSize);
-        expEntriesI = new int[]{1, 4, 5, 1001, -11};
-        expEntriesI = new int[]{1, 4, 5, 1001, -11};
-        expEntries = new CNumber[expEntriesI.length];
-        for(int i=0; i<expEntriesI.length; i++) {
-            expEntries[i] = new CNumber(expEntriesI[i]);
-        }
-        expIndices = new int[]{0, 11, 10003, 20034};
-
-        assertThrows(IllegalArgumentException.class, () -> new CooCVectorOld(expSize, expEntriesI, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize, expEntries, expIndices));
     }
 
 
@@ -134,46 +82,46 @@ class CooCVectorConstructorTests {
         expSize = 1001234;
         expShape = new Shape(expSize);
         expEntriesD = new double[]{1, 4, 5, 1001, -11};
-        expEntries = new CNumber[expEntriesD.length];
+        expEntries = new Complex128[expEntriesD.length];
         for(int i=0; i<expEntriesD.length; i++) {
-            expEntries[i] = new CNumber(expEntriesD[i]);
+            expEntries[i] = new Complex128(expEntriesD[i]);
         }
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        a = new CooCVectorOld(expSize, expEntriesD, expIndices);
+        a = new CooCVector(expSize, expEntriesD, expIndices);
 
         assertEquals(expSize, a.size());
-        Assertions.assertEquals(expShape, a.shape);
-        Assertions.assertArrayEquals(expEntries, a.entries);
+        assertEquals(expShape, a.shape);
+        assertArrayEquals(expEntries, a.entries);
 
         // ------------- Sub-case 2 -------------
         expSize = -1;
         expIndices = new int[]{0, 11, 10003, 20034};
-        assertThrows(IllegalArgumentException.class, () -> new CooCVectorOld(expSize, expEntriesD, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize, expEntriesD, expIndices));
 
         // ------------- Sub-case 3 -------------
         expSize = 1001234;
         expShape = new Shape(expSize);
         expEntriesD = new double[]{1, 4, 5, 1001, -11};
-        expEntries = new CNumber[expEntriesD.length];
+        expEntries = new Complex128[expEntriesD.length];
         for(int i=0; i<expEntriesD.length; i++) {
-            expEntries[i] = new CNumber(expEntriesD[i]);
+            expEntries[i] = new Complex128(expEntriesD[i]);
         }
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new CooCVectorOld(expSize, expEntriesD, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize, expEntriesD, expIndices));
 
 
         // ------------- Sub-case 4 -------------
         expSize = 3;
         expShape = new Shape(expSize);
         expEntriesD = new double[]{1, 4, 5, 1001, -11};
-        expEntries = new CNumber[expEntriesD.length];
+        expEntries = new Complex128[expEntriesD.length];
         for(int i=0; i<expEntriesD.length; i++) {
-            expEntries[i] = new CNumber(expEntriesD[i]);
+            expEntries[i] = new Complex128(expEntriesD[i]);
         }
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new CooCVectorOld(expSize, expEntriesD, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize, expEntriesD, expIndices));
     }
 
 
@@ -182,14 +130,14 @@ class CooCVectorConstructorTests {
         // ------------- Sub-case 1 -------------
         expSize = 1001234;
         expShape = new Shape(expSize);
-        expEntries = new CNumber[]{new CNumber(-1233, 1.3314), new CNumber(9034, 10.23445),
-                new CNumber(83.133, -334), new CNumber(-92.133, -9.4), new CNumber(0, 13.435)};
+        expEntries = new Complex128[]{new Complex128(-1233, 1.3314), new Complex128(9034, 10.23445),
+                new Complex128(83.133, -334), new Complex128(-92.133, -9.4), new Complex128(0, 13.435)};
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        b = new CooCVectorOld(expSize, expEntries, expIndices);
-        a = new CooCVectorOld(b);
+        b = new CooCVector(expSize, expEntries, expIndices);
+        a = new CooCVector(b);
 
         assertEquals(expSize, a.size());
-        Assertions.assertEquals(expShape, a.shape);
-        Assertions.assertArrayEquals(expEntries, a.entries);
+        assertEquals(expShape, a.shape);
+        assertArrayEquals(expEntries, a.entries);
     }
 }

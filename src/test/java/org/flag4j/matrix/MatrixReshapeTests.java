@@ -1,7 +1,7 @@
 package org.flag4j.matrix;
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.Test;
 
@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class MatrixReshapeTests {
 
     double[] entries = {1, 2, 3.444, -4, 5, -6.44, 7, 8, 9, 10, 11, 12.2344};
-    MatrixOld A = new MatrixOld(new Shape(3, 4), entries);
-    MatrixOld B;
+    Matrix A = new Matrix(new Shape(3, 4), entries);
+    Matrix B;
     Shape expShape;
     int rows, cols;
 

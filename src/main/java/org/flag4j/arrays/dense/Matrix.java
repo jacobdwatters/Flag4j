@@ -28,16 +28,20 @@ import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.DenseMatrixMixin;
 import org.flag4j.arrays.backend.DensePrimitiveDoubleTensorBase;
-import org.flag4j.arrays.backend.MatrixVectorOpsMixin;
+import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.TensorBase;
 import org.flag4j.arrays.sparse.*;
+import org.flag4j.io.PrettyPrint;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
 import org.flag4j.operations.MatrixMultiplyDispatcher;
 import org.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import org.flag4j.operations.TransposeDispatcher;
-import org.flag4j.operations.common.complex.ComplexOperations;
+import org.flag4j.operations.common.complex.Complex128Operations;
 import org.flag4j.operations.dense.complex.ComplexDenseOperations;
 import org.flag4j.operations.dense.real.*;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixMultiplication;
@@ -49,8 +53,10 @@ import org.flag4j.operations.dense_sparse.csr.real.RealCsrDenseOperations;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.StringUtils;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
+import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,8 +72,7 @@ import java.util.List;
  * performance for some operations.</p>
  */
 public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
-        implements DenseMatrixMixin<Matrix, CooMatrix, CsrMatrix, Double>,
-        MatrixVectorOpsMixin<Matrix, Vector, Vector> {
+        implements DenseMatrixMixin<Matrix, CooMatrix, Vector, Double> {
 
     /**
      * The number of rows in this matrix.
@@ -87,7 +92,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     public Matrix(Shape shape, double[] entries) {
         super(shape, entries);
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
 
         numRows = shape.get(0);
         numCols = shape.get(1);
@@ -238,7 +243,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     public Matrix(Shape shape) {
         super(shape, new double[shape.totalEntries().intValue()]);
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
     }
@@ -253,7 +258,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
     public Matrix(Shape shape, double value) {
         super(shape, new double[shape.totalEntries().intValue()]);
         Arrays.fill(super.entries, value);
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
     }
@@ -398,7 +403,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @see #I(Shape)
      */
     public static Matrix I(int numRows, int numCols) {
-        ParameterChecks.ensureNonNegative(numRows, numCols);
+        ValidateParameters.ensureNonNegative(numRows, numCols);
         Matrix I = new Matrix(numRows, numCols);
         int stop = Math.min(numRows, numCols);
 
@@ -420,7 +425,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @see #I(int, int)
      */
     public static Matrix I(Shape shape) {
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
         return I(shape.get(0), shape.get(1));
     }
 
@@ -458,7 +463,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Double tr() {
-        ParameterChecks.ensureSquareMatrix(this.shape);
+        ValidateParameters.ensureSquareMatrix(this.shape);
         double sum = 0;
         int colsOffset = this.numCols+1;
 
@@ -630,7 +635,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
     @Override
     public Matrix multTranspose(Matrix b) {
         // Ensure this matrix can be multiplied to the transpose of B.
-        ParameterChecks.ensureEquals(this.numCols, b.numCols);
+        ValidateParameters.ensureEquals(this.numCols, b.numCols);
 
         return new Matrix(
                 new Shape(this.numRows, b.numRows),
@@ -650,7 +655,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Double fib(Matrix b) {
-        ParameterChecks.ensureEqualShape(this.shape, b.shape);
+        ValidateParameters.ensureEqualShape(this.shape, b.shape);
         return this.T().mult(b).tr();
     }
 
@@ -668,7 +673,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Matrix stack(Matrix b) {
-        ParameterChecks.ensureArrayLengthsEq(this.numCols, b.numCols);
+        ValidateParameters.ensureArrayLengthsEq(this.numCols, b.numCols);
         Matrix stacked = new Matrix(new Shape(this.numRows + b.numRows, this.numCols));
 
         System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
@@ -687,26 +692,43 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of rows.
      * @see #stack(Matrix)
-     * @see #stack(TensorBase, int)
+     * @see #stack(MatrixMixin, int) 
      */
     @Override
     public Matrix augment(Matrix b) {
-        ParameterChecks.ensureArrayLengthsEq(numRows, b.numRows);
+        ValidateParameters.ensureArrayLengthsEq(numRows, b.numRows);
         Matrix augmented = new Matrix(new Shape(numRows, numCols + b.numCols));
+
+        // Copy entries from two matrices.
+        for(int i=0; i<numRows; i++) {
+            System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);
+
+            int augmentedRowOffset = i*augmented.numCols + numCols;
+            int bRowOffset = i*b.numCols;
+            for(int j=0, cols=b.numCols; j<cols; j++)
+                augmented.entries[augmentedRowOffset + j] = b.entries[bRowOffset + j];
+        }
+
+        return augmented;
+    }
+
+
+    /**
+     * Augments a vector to this matrix.
+     *
+     * @param b The vector to augment to this matrix.
+     *
+     * @return The result of augmenting {@code b} to this matrix.
+     */
+    @Override
+    public Matrix augment(Vector b) {
+        ValidateParameters.ensureArrayLengthsEq(numRows, b.size);
+        Matrix augmented = new Matrix(new Shape(numRows, numCols + 1));
 
         // Copy entries from this matrix.
         for(int i=0; i<numRows; i++) {
             System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);
-        }
-
-        // Copy entries from the B matrix.
-        for(int i=0; i<b.numRows; i++) {
-            int augmentedRowOffset = i*augmented.numCols;
-            int bRowOffset = i*b.numCols;
-
-            for(int j=0; j<b.numCols; j++) {
-                augmented.entries[augmentedRowOffset + j + numCols] = b.entries[bRowOffset + j];
-            }
+            augmented.entries[i*augmented.numCols + numCols] = b.entries[i];
         }
 
         return augmented;
@@ -725,9 +747,9 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Matrix swapRows(int rowIndex1, int rowIndex2) {
-        ParameterChecks.ensureGreaterEq(0, rowIndex1, rowIndex2);
-        ParameterChecks.ensureGreaterEq(rowIndex1, this.numRows-1);
-        ParameterChecks.ensureGreaterEq(rowIndex2, this.numRows-1);
+        ValidateParameters.ensureGreaterEq(0, rowIndex1, rowIndex2);
+        ValidateParameters.ensureGreaterEq(rowIndex1, this.numRows-1);
+        ValidateParameters.ensureGreaterEq(rowIndex2, this.numRows-1);
 
         double temp;
         int row1Start = rowIndex1*numCols;
@@ -735,9 +757,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
         int stop = row1Start + numCols;
 
         while(row1Start < stop) {
-            temp = entries[row1Start];
-            entries[row1Start++] = entries[row2Start];
-            entries[row2Start++] = temp;
+            ArrayUtils.swap(entries, row1Start++, row2Start++);
         }
 
         return this;
@@ -756,15 +776,15 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Matrix swapCols(int colIndex1, int colIndex2) {
-        ParameterChecks.ensureGreaterEq(0, colIndex1, colIndex2);
-        ParameterChecks.ensureGreaterEq(colIndex1, this.numCols-1);
-        ParameterChecks.ensureGreaterEq(colIndex2, this.numCols-1);
+        ValidateParameters.ensureGreaterEq(0, colIndex1, colIndex2);
+        ValidateParameters.ensureGreaterEq(colIndex1, this.numCols-1);
+        ValidateParameters.ensureGreaterEq(colIndex2, this.numCols-1);
 
         double temp;
         for(int i=0; i<numRows; i++) {
             // Swap elements.
             int idx = i*numCols;
-            ArrayUtils.swap(entries, idx + colIndex1, idx + colIndex1);
+            ArrayUtils.swap(entries, idx + colIndex1, idx + colIndex2);
         }
 
         return this;
@@ -919,6 +939,8 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
     }
 
 
+
+
     /**
      * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
      * left index location of the slice to set.
@@ -949,8 +971,8 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
 
 
     /**
-     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
-     * left index location of the slice to set within this matrix.
+     * Sets a slice of this matrix to the specified {@code values}. The {@code rowStart} and {@code colStart} parameters specify the
+     * upper left index location of the slice to set within this matrix.
      *
      * @param values New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
@@ -958,21 +980,84 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      *
      * @return A reference to this matrix.
      *
-     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
-     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+     * @throws IllegalArgumentException If {@code rowStart} or {@code colStart} are not within the matrix.
+     * @throws IllegalArgumentException If the {@code values} slice, with upper left corner at the specified location, does not
      *                                  fit completely within this matrix.
      */
     @Override
     public Matrix setSlice(Matrix values, int rowStart, int colStart) {
-        ParameterChecks.ensureLessEq(numRows, rowStart+values.numRows);
-        ParameterChecks.ensureLessEq(numCols, colStart+values.numCols);
-        ParameterChecks.ensureGreaterEq(0, rowStart, colStart);
+        ValidateParameters.ensureLessEq(numRows, rowStart+values.numRows);
+        ValidateParameters.ensureLessEq(numCols, colStart+values.numCols);
+        ValidateParameters.ensureGreaterEq(0, rowStart, colStart);
 
         for(int i=0; i<values.numRows; i++) {
             System.arraycopy(
                     values.entries, i*values.numCols,
                     this.entries, (i+rowStart)*numCols + colStart, values.numCols
             );
+        }
+
+        return this;
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified {@code values}. The {@code rowStart} and {@code colStart} parameters specify the
+     * upper left index location of the slice to set within this matrix.
+     *
+     * @param values New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     *
+     * @return A reference to this matrix.
+     *
+     * @throws IllegalArgumentException If {@code rowStart} or {@code colStart} are not within the matrix.
+     * @throws IllegalArgumentException If the {@code values} slice, with upper left corner at the specified location, does not
+     *                                  fit completely within this matrix.
+     */
+    public Matrix setSlice(double[][] values, int rowStart, int colStart) {
+        ValidateParameters.ensureLessEq(numRows, rowStart + values.length);
+        ValidateParameters.ensureLessEq(numCols, colStart + values[0].length);
+        ValidateParameters.ensureGreaterEq(0, rowStart, colStart);
+        int cols = values[0].length;
+
+        for(int i=0, size=values.length; i<size; i++) {
+            int rowOffset = (i+rowStart)*numCols + colStart;
+            double[] row = values[i];
+
+            for(int j=0; j<cols; j++)
+                this.entries[rowOffset + j] = row[j];
+        }
+
+        return this;
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified {@code values}. The {@code rowStart} and {@code colStart} parameters specify the
+     * upper left index location of the slice to set within this matrix.
+     *
+     * @param values New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     *
+     * @return A reference to this matrix.
+     *
+     * @throws IllegalArgumentException If {@code rowStart} or {@code colStart} are not within the matrix.
+     * @throws IllegalArgumentException If the {@code values} slice, with upper left corner at the specified location, does not
+     *                                  fit completely within this matrix.
+     */
+    public Matrix setSlice(Double[][] values, int rowStart, int colStart) {
+        ValidateParameters.ensureLessEq(numRows, rowStart + values.length);
+        ValidateParameters.ensureLessEq(numCols, colStart + values[0].length);
+        ValidateParameters.ensureGreaterEq(0, rowStart, colStart);
+
+        for(int i=0, size=values.length; i<size; i++) {
+            int rowOffset = (i+rowStart)*numCols + colStart;
+            Double[] row = values[i];
+
+            for(int j=0; j<values[0].length; j++)
+                this.entries[rowOffset + j] = row[j];
         }
 
         return this;
@@ -1034,8 +1119,72 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Matrix setValues(Double[][] values) {
-        ParameterChecks.ensureEqualShape(shape, new Shape(values.length, values[0].length));
-        RealDenseSetOperations.setValues(values, this.entries);
+        ValidateParameters.ensureEqualShape(shape, new Shape(values.length, values[0].length));
+        RealDenseSetOperations.setValues(values, entries);
+        return this;
+    }
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param values New values of the matrix.
+     *
+     * @return A reference to this matrix.
+     *
+     * @throws IllegalArgumentException If the {@code values} array has a different shape then this matrix.
+     */
+    public Matrix setValues(double[][] values) {
+        ValidateParameters.ensureEqualShape(shape, new Shape(values.length, values[0].length));
+        RealDenseSetOperations.setValues(values, entries);
+        return this;
+    }
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param values New values of the matrix.
+     *
+     * @return A reference to this matrix.
+     *
+     * @throws IllegalArgumentException If the {@code values} array has a different shape then this matrix.
+     */
+    public Matrix setValues(Integer[][] values) {
+        ValidateParameters.ensureEqualShape(shape, new Shape(values.length, values[0].length));
+        RealDenseSetOperations.setValues(values, entries);
+        return this;
+    }
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param values New values of the matrix.
+     *
+     * @return A reference to this matrix.
+     *
+     * @throws IllegalArgumentException If the {@code values} array has a different shape then this matrix.
+     */
+    public Matrix setValues(int[][] values) {
+        ValidateParameters.ensureEqualShape(shape, new Shape(values.length, values[0].length));
+        RealDenseSetOperations.setValues(values, entries);
+        return this;
+    }
+
+
+    /**
+     * Sets the value of this matrix using another matrix.
+     *
+     * @param values New values of the matrix.
+     *
+     * @return A reference to this matrix.
+     *
+     * @throws IllegalArgumentException If the {@code values} matrix has a different shape then this matrix.
+     */
+    public Matrix setValues(Matrix values) {
+        ValidateParameters.ensureEqualShape(shape, values.shape);
+        RealDenseSetOperations.setValues(values.entries, entries);
         return this;
     }
 
@@ -1048,15 +1197,53 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      *
      * @return A reference to this matrix.
      *
-     * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
+     * @throws IllegalArgumentException If the {@code values} vector has a different length than the number of rows of this matrix.
      */
     @Override
     public Matrix setCol(Vector values, int colIndex) {
-        ParameterChecks.ensureArrayLengthsEq(values.size, this.numRows);
+        return setCol(values.entries, colIndex);
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     *
+     * @return A reference to this matrix.
+     *
+     * @throws IllegalArgumentException If the {@code values} array has a different length than the number of rows of this matrix.
+     */
+    public Matrix setCol(Double[] values, int colIndex) {
+        ValidateParameters.ensureArrayLengthsEq(values.length, this.numRows);
 
         int rowOffset = 0;
-        for(int i=0; i<values.size; i++) {
-            super.entries[rowOffset + colIndex] = values.entries[i];
+        for(int i=0; i<values.length; i++) {
+            super.entries[rowOffset + colIndex] = values[i];
+            rowOffset += numCols;
+        }
+
+        return this;
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     *
+     * @return A reference to this matrix.
+     *
+     * @throws IllegalArgumentException If the {@code values} array has a different length than the number of rows of this matrix.
+     */
+    public Matrix setCol(double[] values, int colIndex) {
+        ValidateParameters.ensureArrayLengthsEq(values.length, this.numRows);
+
+        int rowOffset = 0;
+        for(int i=0; i<values.length; i++) {
+            super.entries[rowOffset + colIndex] = values[i];
             rowOffset += numCols;
         }
 
@@ -1072,17 +1259,62 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      *
      * @return A reference to this matrix.
      *
-     * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
+     * @throws IllegalArgumentException If the {@code values} vector has a different length than the number of rows of this matrix.
      */
     @Override
     public Matrix setRow(Vector values, int rowIndex) {
-        ParameterChecks.ensureArrayLengthsEq(values.size, this.numCols);
-        int rowOffset = rowIndex*numCols;
+        return setRow(values.entries, rowIndex);
+    }
 
-        for(int i=0; i<values.size; i++)
-            super.entries[rowOffset + i] = values.entries[i];
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values New values for the row.
+     * @param rowIndex The index of the row which is to be set.
+     *
+     * @return A reference to this matrix.
+     *
+     * @throws IllegalArgumentException If the {@code values} array has a different length than the number of rows of this matrix.
+     */
+    public Matrix setRow(double[] values, int rowIndex) {
+        ValidateParameters.ensureArrayLengthsEq(values.length, this.numCols);
+
+        for(int i=0, size=values.length, rowOffset=rowIndex*numCols; i<size; i++)
+            super.entries[rowOffset + i] = values[i];
 
         return this;
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values New values for the row.
+     * @param rowIndex The index of the row which is to be set.
+     *
+     * @return A reference to this matrix.
+     *
+     * @throws IllegalArgumentException If the {@code values} array has a different length than the number of rows of this matrix.
+     */
+    public Matrix setRow(Double[] values, int rowIndex) {
+        ValidateParameters.ensureArrayLengthsEq(values.length, this.numCols);
+
+        for(int i=0, size=values.length, rowOffset=rowIndex*numCols; i<size; i++)
+            super.entries[rowOffset + i] = values[i];
+
+        return this;
+    }
+
+
+    /**
+     * Computes the element-wise square root of a tensor.
+     *
+     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
+     * the principle square root i.e. the square root with positive real part.
+     */
+    public CMatrix sqrtComplex() {
+        return new CMatrix(shape, Complex128Operations.sqrt(entries));
     }
 
 
@@ -1104,7 +1336,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Matrix getTriU(int diagOffset) {
-        ParameterChecks.ensureInRange(diagOffset, -numRows+1, numCols-1, "diagOffset");
+        ValidateParameters.ensureInRange(diagOffset, -numRows+1, numCols-1, "diagOffset");
         Matrix result = new Matrix(numRows, numCols);
 
         // Extract the upper triangular portion
@@ -1140,7 +1372,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Matrix getTriL(int diagOffset) {
-        ParameterChecks.ensureInRange(diagOffset, -numRows+1, numCols-1, "diagOffset");
+        ValidateParameters.ensureInRange(diagOffset, -numRows+1, numCols-1, "diagOffset");
         Matrix result = new Matrix(numRows, numCols);
 
         // Extract the lower triangular portion
@@ -1170,7 +1402,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Vector mult(Vector b) {
-        ParameterChecks.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
+        ValidateParameters.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
         double[] entries = MatrixMultiplyDispatcher.dispatch(this, b);
         return new Vector(entries);
     }
@@ -1210,7 +1442,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Vector getRow(int rowIdx) {
-        ParameterChecks.ensureIndexInBounds(numRows, rowIdx);
+        ValidateParameters.ensureIndexInBounds(numRows, rowIdx);
         int start = rowIdx*numCols;
         int stop = start+numCols;
 
@@ -1235,8 +1467,8 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Vector getRow(int rowIdx, int colStart, int colEnd) {
-        ParameterChecks.ensureIndexInBounds(numCols, colStart, colEnd);
-        ParameterChecks.ensureGreaterEq(colStart, colEnd);
+        ValidateParameters.ensureIndexInBounds(numCols, colStart, colEnd);
+        ValidateParameters.ensureGreaterEq(colStart, colEnd);
         int start = rowIdx*numCols+colStart;
         int stop = start+colEnd;
 
@@ -1258,7 +1490,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Vector getCol(int colIdx) {
-        ParameterChecks.ensureValidIndices(numCols, colIdx);
+        ValidateParameters.ensureValidIndices(numCols, colIdx);
         double[] col = new double[numRows];
 
         for(int i=0; i<numRows; i++)
@@ -1284,8 +1516,8 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Vector getCol(int colIdx, int rowStart, int rowEnd) {
-        ParameterChecks.ensureValidIndices(numRows, rowStart, rowEnd);
-        ParameterChecks.ensureGreaterEq(rowEnd, rowStart);
+        ValidateParameters.ensureValidIndices(numRows, rowStart, rowEnd);
+        ValidateParameters.ensureGreaterEq(rowEnd, rowStart);
         double[] col = new double[numRows];
 
         for(int i=rowStart; i<rowEnd; i++)
@@ -1328,7 +1560,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
 
         Matrix src2 = (Matrix) object;
 
-        return RealDenseEquals.tensorEquals(this.entries, this.shape, src2.entries, src2.shape);
+        return RealDenseEquals.tensorEquals(entries, shape, src2.entries, src2.shape);
     }
 
 
@@ -1356,7 +1588,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Matrix T(int axis1, int axis2) {
-        ParameterChecks.ensureValidAxes(shape, axis1, axis2);
+        ValidateParameters.ensureValidAxes(shape, axis1, axis2);
 
         if(axis1==axis2) return copy();
         else return TransposeDispatcher.dispatch(this);
@@ -1379,8 +1611,8 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Matrix T(int... axes) {
-        ParameterChecks.ensureArrayLengthsEq(2, axes.length);
-        ParameterChecks.ensureValidAxes(shape, axes[0], axes[1]);
+        ValidateParameters.ensureArrayLengthsEq(2, axes.length);
+        ValidateParameters.ensureValidAxes(shape, axes[0], axes[1]);
 
         if(axes[0]==axes[1]) return copy();
         else return TransposeDispatcher.dispatch(this);
@@ -1391,11 +1623,12 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * Converts this dense tensor to an equivalent sparse COO tensor.
      *
      * @return A sparse COO tensor equivalent to this dense tensor.
+     * @see #toCsr()
      */
     @Override
     public CooMatrix toCoo() {
-        int rows = numRows;
-        int cols = numCols;
+        final int rows = numRows;
+        final int cols = numCols;
         List<Double> sparseEntries = new ArrayList<>();
         List<Integer> rowIndices = new ArrayList<>();
         List<Integer> colIndices = new ArrayList<>();
@@ -1406,7 +1639,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
             for(int j=0; j<cols; j++) {
                 double val = entries[rowOffset + j];
 
-                if(val != 0d) {
+                if(val != 0.0) {
                     sparseEntries.add(val);
                     rowIndices.add(i);
                     colIndices.add(j);
@@ -1415,6 +1648,16 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
         }
 
         return new CooMatrix(shape, sparseEntries, rowIndices, colIndices);
+    }
+
+
+    /**
+     * Converts this dense matrix to sparse CSR matrix.
+     * @return A sparse CSR matrix equivalent to this dense matrix.
+     * @see #toCoo()
+     */
+    public CsrMatrix toCsr() {
+        return toCoo().toCsr();
     }
 
 
@@ -1541,7 +1784,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return The element-wise difference of this matrix and {@code b}
      */
     public CMatrix sub(CooCMatrix b) {
-        return RealComplexDenseSparseMatrixOperations.add(this, b);
+        return RealComplexDenseSparseMatrixOperations.sub(this, b);
     }
 
 
@@ -1621,7 +1864,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return The matrix-vector product of this matrix and the vector {@code b}.
      */
     public CVector mult(CVector b) {
-        ParameterChecks.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
+        ValidateParameters.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
         Complex128[] entries = RealComplexDenseMatrixMultiplication.standardVector(
                 this.entries, this.shape, b.entries, b.shape
         );
@@ -1636,7 +1879,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return The matrix-vector product of this matrix and the vector {@code b}.
      */
     public Vector mult(CooVector b) {
-        ParameterChecks.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
+        ValidateParameters.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
         double[] entries = RealDenseSparseMatrixMultiplication.standardVector(
                 this.entries, this.shape, b.entries, b.indices
         );
@@ -1651,7 +1894,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return The matrix-vector product of this matrix and the vector {@code b}.
      */
     public CVector mult(CooCVector b) {
-        ParameterChecks.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
+        ValidateParameters.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
         Complex128[] entries = RealComplexDenseSparseMatrixMultiplication.standardVector(
                 this.entries, this.shape, b.entries, b.indices
         );
@@ -1666,7 +1909,24 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return The matrix-scalar product of this matrix and {@code b}.
      */
     public CMatrix mult(Complex128 b) {
-        return new CMatrix(shape, ComplexOperations.scalMult(entries, b));
+        return new CMatrix(shape, Complex128Operations.scalMult(entries, b));
+    }
+
+
+    /**
+     * Computes the element-wise division between two tensors.
+     *
+     * @param b The denominator tensor in the element-wise quotient.
+     *
+     * @return The element-wise quotient of this tensor and {@code b}.
+     *
+     * @throws TensorShapeException If this tensor and {@code b}'s shape are not equal.
+     */
+    public CMatrix div(CMatrix b) {
+        return new CMatrix(
+                shape,
+                RealComplexDenseElemDiv.dispatch(entries, shape, b.entries, b.shape)
+        );
     }
 
 
@@ -1676,6 +1936,172 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return The matrix-scalar quotient of this matrix and {@code b}.
      */
     public CMatrix div(Complex128 b) {
-        return new CMatrix(shape, ComplexOperations.scalDiv(entries, b));
+        return new CMatrix(shape, Complex128Operations.scalDiv(entries, b));
+    }
+
+
+    /**
+     * <p>Computes the matrix multiplication of this matrix with itself {@code n} times. This matrix must be square.</p>
+     *
+     * <p>For large {@code n} values, this method <i>may</i> significantly more efficient than calling
+     * {@link #mult(Matrix) this.mult(this)} a total of {@code n} times.</p>
+     * @param n Number of times to multiply this matrix with itself. Must be non-negative.
+     * @return If {@code n=0}, then the identity
+     */
+    public Matrix pow(int n) {
+        ValidateParameters.ensureSquare(shape);
+        ValidateParameters.ensureNonNegative(n);
+
+        // Check for some quick returns.
+        if (n == 0) return Matrix.I(numRows);
+        if (n == 1) return copy();
+        if (n == 2) return mult(this);
+
+        Matrix result = Matrix.I(numRows);  // Start with identity matrix.
+        Matrix base = this;
+
+        // Compute the matrix power efficiently using an "exponentiation by squaring" approach.
+        while(n > 0) {
+            if((n & 1) == 1)  // If n is odd.
+                result = result.mult(base);
+
+            base = base.mult(base);  // Square the base.
+            n >>= 1;  // Divide n by 2 (bitwise right shift).
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Computes the element-wise product of two matrices.
+     * @param b The second matrix in the element-wise product.
+     * @return The element-wise product of this matrix and {@code b}.
+     */
+    public CMatrix elemMult(CMatrix b) {
+        return new CMatrix(shape, RealComplexDenseElemMult.dispatch(b.entries, b.shape, entries, shape));
+    }
+
+
+    /**
+     * Computes the element-wise product of two matrices.
+     * @param b The second matrix in the element-wise product.
+     * @return The element-wise product of this matrix and {@code b}.
+     */
+    public CooMatrix elemMult(CooMatrix b) {
+        return RealDenseSparseMatrixOperations.elemMult(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise product of two matrices.
+     * @param b The second matrix in the element-wise product.
+     * @return The element-wise product of this matrix and {@code b}.
+     */
+    public CooCMatrix elemMult(CooCMatrix b) {
+        return RealComplexDenseSparseMatrixOperations.elemMult(this, b);
+    }
+
+
+    /**
+     * Gets row of matrix formatted as a human-readable String. Helper method for {@link #toString} method.
+     * @param i Index of row to get.
+     * @param colStopIndex Stopping index for printing columns.
+     * @param maxList List of maximum string representation lengths for each column of this matrix. This
+     *                is used to align columns when printing.
+     * @return A human-readable String representation of the specified row.
+     */
+    private String rowToString(int i, int colStopIndex, List<Integer> maxList) {
+        int width;
+        String value;
+        StringBuilder result = new StringBuilder();
+
+        if(i>0) {
+            result.append(" [");
+        }  else {
+            result.append("[");
+        }
+
+        for(int j=0; j<colStopIndex; j++) {
+            value = StringUtils.ValueOfRound(this.get(i, j), PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + maxList.get(j);
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(PrintOptions.getMaxColumns() < this.numCols) {
+            width = PrintOptions.getPadding() + 3;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry in the column now
+        value = StringUtils.ValueOfRound(this.get(i, this.numCols-1), PrintOptions.getPrecision());
+        width = PrintOptions.getPadding() + maxList.getLast();
+        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s]", value));
+
+        return result.toString();
+    }
+
+
+    /**
+     * Generates a human-readable string representing this matrix.
+     * @return A human-readable string representing this matrix.
+     */
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder("shape: ").append(shape).append("\n");
+
+        result.append("[");
+
+        if(entries.length==0) {
+            result.append("[]"); // No entries in this matrix.
+        } else {
+            int rowStopIndex = Math.min(PrintOptions.getMaxRows() - 1, this.numRows - 1);
+            int colStopIndex = Math.min(PrintOptions.getMaxColumns() - 1, this.numCols - 1);
+            int width;
+            int totalRowLength = 0; // Total string length of each row (not including brackets)
+            String value;
+
+            // Find maximum entry string width in each column so columns can be aligned.
+            List<Integer> maxList = new ArrayList<>(colStopIndex + 1);
+            for (int j = 0; j < colStopIndex; j++) {
+                maxList.add(PrettyPrint.maxStringLength(this.getCol(j).entries, rowStopIndex));
+                totalRowLength += maxList.getLast();
+            }
+
+            if (colStopIndex < this.numCols) {
+                maxList.add(PrettyPrint.maxStringLength(this.getCol(this.numCols - 1).entries));
+                totalRowLength += maxList.getLast();
+            }
+
+            if (colStopIndex < this.numCols - 1) {
+                totalRowLength += 3 + PrintOptions.getPadding(); // Account for '...' element with padding in each column.
+            }
+
+            totalRowLength += maxList.size() * PrintOptions.getPadding(); // Account for column padding
+
+            // Get each row as a string.
+            for (int i = 0; i < rowStopIndex; i++) {
+                result.append(rowToString(i, colStopIndex, maxList));
+                result.append("\n");
+            }
+
+            if (PrintOptions.getMaxRows() < this.numRows) {
+                width = totalRowLength;
+                value = "...";
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format(" [%-" + width + "s]\n", value));
+            }
+
+            // Get Last row as a string.
+            result.append(rowToString(this.numRows - 1, colStopIndex, maxList));
+        }
+
+        result.append("]");
+
+        return result.toString();
     }
 }

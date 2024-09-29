@@ -24,25 +24,32 @@
 
 package org.flag4j.arrays.sparse;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.CooMatrixMixin;
 import org.flag4j.arrays.backend.MatrixMixin;
-import org.flag4j.arrays.backend.MatrixVectorOpsMixin;
 import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.operations.dense.real.AggregateDenseReal;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
+import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
+import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
+import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
 import org.flag4j.operations.sparse.coo.SparseDataWrapper;
 import org.flag4j.operations.sparse.coo.real.*;
+import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixMultiplication;
+import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixOperations;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -75,7 +82,7 @@ import java.util.List;
  * <p>If indices need to be sorted, call {@link #sortIndices()}.</p>
  */
 public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
-        implements CooMatrixMixin<CooMatrix, Matrix, Double>, MatrixVectorOpsMixin<CooMatrix, CooVector, Vector> {
+        implements CooMatrixMixin<CooMatrix, Matrix, CooVector, Vector, Double> {
 
     /**
      * Row indices for non-zero value of this sparse COO matrix.
@@ -113,8 +120,8 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     public CooMatrix(Shape shape, double[] entries, int[] rowIndices, int[] colIndices) {
         super(shape, entries);
-        ParameterChecks.ensureRank(shape, 2);
-        ParameterChecks.ensureArrayLengthsEq(entries.length, rowIndices.length, colIndices.length);
+        ValidateParameters.ensureRank(shape, 2);
+        ValidateParameters.ensureArrayLengthsEq(entries.length, rowIndices.length, colIndices.length);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
         nnz = entries.length;
@@ -134,8 +141,8 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     public CooMatrix(int numRows, int numCols, double[] entries, int[] rowIndices, int[] colIndices) {
         super(new Shape(numRows, numCols), entries);
-        ParameterChecks.ensureRank(shape, 2);
-        ParameterChecks.ensureArrayLengthsEq(entries.length, rowIndices.length, colIndices.length);
+        ValidateParameters.ensureRank(shape, 2);
+        ValidateParameters.ensureArrayLengthsEq(entries.length, rowIndices.length, colIndices.length);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
         nnz = entries.length;
@@ -154,14 +161,108 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     public CooMatrix(Shape shape, List<Double> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(shape, ArrayUtils.fromDoubleList(entries));
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
         this.rowIndices = ArrayUtils.fromIntegerList(rowIndices);
         this.colIndices = ArrayUtils.fromIntegerList(colIndices);
-        ParameterChecks.ensureArrayLengthsEq(super.entries.length, this.rowIndices.length, this.colIndices.length);
+        ValidateParameters.ensureArrayLengthsEq(super.entries.length, this.rowIndices.length, this.colIndices.length);
 
         nnz = super.entries.length;
         numRows = shape.get(0);
         numCols = shape.get(1);
+    }
+
+
+    /**
+     * Constructs a square zero matrix with the specified size.
+     * @param size Size of the square zero matrix to construct.
+     */
+    public CooMatrix(int size) {
+        super(new Shape(size, size), new double[0]);
+        numCols = numRows = size;
+        nnz = 0;
+        rowIndices = new int[0];
+        colIndices = new int[0];
+    }
+
+
+    /**
+     * Constructs a zero matrix with the specified shape.
+     * @param rows The number of rows in the zero matrix.
+     * @param cols The number of columns in the zero matrix.
+     */
+    public CooMatrix(int rows, int cols) {
+        super(new Shape(rows, cols), new double[0]);
+        numRows = rows;
+        numCols = cols;
+        nnz = 0;
+        rowIndices = new int[0];
+        colIndices = new int[0];
+    }
+
+
+    /**
+     * Constructs a zero matrix with the specified shape.
+     * @param shape
+     */
+    public CooMatrix(Shape shape) {
+        super(shape, new double[0]);
+        ValidateParameters.ensureRank(shape, 2);
+        numRows = shape.get(0);
+        numCols = shape.get(1);
+        nnz = 0;
+        rowIndices = new int[0];
+        colIndices = new int[0];
+    }
+
+
+    /**
+     * Creates a square sparse COO matrix with the specified size, non-zero entries, and non-zero indices.
+     * @param size Size of the square matrix.
+     * @param entries Non-zero entries of the sparse matrix.
+     * @param rowIndices Row indices of the non-zero entries in the matrix.
+     * @param colIndices Column indices of the non-zero entries in the matrix.
+     */
+    public CooMatrix(int size, double[] entries, int[] rowIndices, int[] colIndices) {
+        super(new Shape(size, size), entries);
+        ValidateParameters.ensureArrayLengthsEq(entries.length, rowIndices.length, colIndices.length);
+        this.nnz = entries.length;
+        this.rowIndices = rowIndices;
+        this.colIndices = colIndices;
+        numRows = numCols = size;
+    }
+
+
+    /**
+     * Creates a sparse coo matrix with the specified non-zero entries, non-zero indices, and shape.
+     *
+     * @param shape Shape of this tensor.
+     * @param entries Non-zero entries of this sparse matrix.
+     * @param rowIndices Non-zero row indices of this sparse matrix.
+     * @param colIndices Non-zero column indies of this sparse matrix.
+     */
+    public CooMatrix(Shape shape, int[] entries, int[] rowIndices, int[] colIndices) {
+        super(shape, new double[entries.length]);
+        ValidateParameters.ensureRank(shape, 2);
+        ArrayUtils.asDouble(entries, super.entries);
+        this.rowIndices = rowIndices;
+        this.colIndices = colIndices;
+        nnz = entries.length;
+        numRows = shape.get(0);
+        numCols = shape.get(1);
+    }
+
+
+    /**
+     * Constructs a copy of a real sparse COO matrix.
+     * @param b
+     */
+    public CooMatrix(CooMatrix b) {
+        super(b.shape, b.entries.clone());
+        rowIndices = b.rowIndices.clone();
+        colIndices = b.colIndices.clone();
+        nnz = b.nnz;
+        numRows = b.numRows;
+        numCols = b.numCols;
     }
 
 
@@ -222,7 +323,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public CooMatrix T(int axis1, int axis2) {
-        ParameterChecks.ensureValidAxes(shape, axis1, axis2);
+        ValidateParameters.ensureValidAxes(shape, axis1, axis2);
         if(axis1 == axis2) return copy();
         return T();
     }
@@ -244,8 +345,8 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public CooMatrix T(int... axes) {
-        ParameterChecks.ensureArrayLengthsEq(2, axes.length);
-        ParameterChecks.ensurePermutation(axes);
+        ValidateParameters.ensureArrayLengthsEq(2, axes.length);
+        ValidateParameters.ensurePermutation(axes);
         return T();
     }
 
@@ -301,11 +402,11 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
         int[] csrRowPointers = new int[numRows + 1];
 
         // Copy the non-zero entries anc column indices. Count number of entries per row.
-        for(int i=0; i<entries.length; i++)
+        for(int i=0, size=entries.length; i<size; i++)
             csrRowPointers[rowIndices[i] + 1]++;
 
         // Shift each row count to be greater than or equal to the previous.
-        for(int i=0; i<numRows; i++)
+        for(int i=0, size=numRows; i<size; i++)
             csrRowPointers[i+1] += csrRowPointers[i];
 
         return new CsrMatrix(shape, entries.clone(), csrRowPointers, colIndices.clone());
@@ -332,11 +433,31 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public Double get(int... indices) {
-        ParameterChecks.ensureEquals(indices.length, 2);
-        ParameterChecks.ensureIndexInBounds(numRows, indices[0]);
-        ParameterChecks.ensureIndexInBounds(numCols, indices[1]);
+        ValidateParameters.ensureEquals(indices.length, 2);
+        ValidateParameters.ensureIndexInBounds(numRows, indices[0]);
+        ValidateParameters.ensureIndexInBounds(numCols, indices[1]);
 
         return RealSparseMatrixGetSet.matrixGet(this, indices[0], indices[1]);
+    }
+
+
+    /**
+     * Sets the element of this tensor at the specified indices.
+     *
+     * @param value New value to set the specified index of this tensor to.
+     * @param indices Indices of the element to set.
+     *
+     * @return A copy of this tensor with the updated value is returned.
+     *
+     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
+     */
+    @Override
+    public CooMatrix set(Double value, int... indices) {
+        ValidateParameters.ensureArrayLengthsEq(2, indices.length);
+        ValidateParameters.ensureIndexInBounds(numRows, indices[0]);
+        ValidateParameters.ensureIndexInBounds(numCols, indices[1]);
+
+        return RealSparseMatrixGetSet.matrixSet(this, indices[0], indices[1], value);
     }
 
 
@@ -368,7 +489,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public CooMatrix flatten(int axis) {
-        ParameterChecks.ensureValidAxes(shape, axis);
+        ValidateParameters.ensureValidAxes(shape, axis);
         int[] dims = {1, 1};
         dims[1-axis] = this.totalEntries().intValueExact();
 
@@ -390,7 +511,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public CooMatrix reshape(Shape newShape) {
-        ParameterChecks.ensureBroadcastable(shape, newShape);
+        ValidateParameters.ensureBroadcastable(shape, newShape);
         int oldColCount = shape.get(1);
         int newColCount = newShape.get(1);
 
@@ -474,8 +595,8 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public CooMatrix tensorTr(int axis1, int axis2) {
-        ParameterChecks.ensureNotEquals(axis1, axis2);
-        ParameterChecks.ensureValidAxes(shape, axis1, axis2);
+        ValidateParameters.ensureNotEquals(axis1, axis2);
+        ValidateParameters.ensureValidAxes(shape, axis1, axis2);
 
         return new CooMatrix(new Shape(1, 1), new double[]{tr()}, new int[]{0}, new int[]{0});
     }
@@ -637,6 +758,19 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
 
 
     /**
+     * Adds a scalar value to each non-zero element of this tensor.
+     *
+     * @param b Value to add to each non-zero entry of this tensor.
+     *
+     * @return The result of adding the specified scalar value to each non-zero entry of this tensor.
+     */
+    public CooCMatrix add(Complex128 b) {
+        // Overrides method from super class to emphasize it only operates on the non-zero values.
+        return new CooCMatrix(shape, RealComplexDenseOperations.add(entries, b), rowIndices.clone(), colIndices.clone());
+    }
+
+
+    /**
      * Subtracts a scalar value from each non-zero element of this tensor.
      *
      * @param b Value to subtract from each non-zero entry of this tensor.
@@ -646,6 +780,19 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
     @Override
     public CooMatrix sub(double b) {
         return super.sub(b); // Overrides method from super class to emphasize it operates only on the non-zero values.
+    }
+
+
+    /**
+     * Subtracts a scalar value from each non-zero element of this tensor.
+     *
+     * @param b Value to subtract from each non-zero entry of this tensor.
+     *
+     * @return The result of subtracting the specified scalar value from each non-zero entry of this tensor.
+     */
+    public CooCMatrix sub(Complex128 b) {
+        // Overrides method from super class to emphasize it operates only on the non-zero values.
+        return new CooCMatrix(shape, RealComplexDenseOperations.sub(entries, b), rowIndices.clone(), colIndices.clone());
     }
 
 
@@ -684,7 +831,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
     public Double tr() {
         double trace = 0;
 
-        for(int i=0; i<entries.length; i++)
+        for(int i=0, size=entries.length; i<size; i++)
             if(rowIndices[i]==colIndices[i]) trace += entries[i]; // Then entry on the diagonal.
 
         return trace;
@@ -702,7 +849,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public boolean isTriU() {
-        for(int i=0; i<entries.length; i++)
+        for(int i=0, size=entries.length; i<size; i++)
             if(rowIndices[i] > colIndices[i] && entries[i] != 0) return false; // Then entry is not in upper triangle.
 
         return true;
@@ -720,7 +867,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public boolean isTriL() {
-        for(int i=0; i<entries.length; i++)
+        for(int i=0, size=entries.length; i<size; i++)
             if(rowIndices[i] < colIndices[i]&& entries[i] != 0) return false; // Then entry is not in lower triangle.
 
         return true;
@@ -778,12 +925,33 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public Matrix mult(CooMatrix b) {
-        ParameterChecks.ensureMatMultShapes(shape, b.shape);
+        ValidateParameters.ensureMatMultShapes(shape, b.shape);
 
         return new Matrix(numRows, b.numCols,
                 RealSparseMatrixMultiplication.standard(
                     entries, rowIndices, colIndices, shape,
                     b.entries, b.rowIndices, b.colIndices, b.shape
+                )
+        );
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param b Second matrix in the matrix multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with matrix {@code b}.
+     *
+     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the number of rows in matrix {@code b}.
+     */
+    public CMatrix mult(CooCMatrix b) {
+        ValidateParameters.ensureMatMultShapes(shape, b.shape);
+
+        return new CMatrix(numRows, b.numCols,
+                RealComplexSparseMatrixMultiplication.standard(
+                        entries, rowIndices, colIndices, shape,
+                        b.entries, b.rowIndices, b.colIndices, b.shape
                 )
         );
     }
@@ -802,7 +970,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public Matrix multTranspose(CooMatrix b) {
-        ParameterChecks.ensureEquals(numCols, b.numCols);
+        ValidateParameters.ensureEquals(numCols, b.numCols);
         return mult(b.T());
     }
 
@@ -835,7 +1003,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public CooMatrix stack(CooMatrix b) {
-        ParameterChecks.ensureEquals(numCols, b.numCols);
+        ValidateParameters.ensureEquals(numCols, b.numCols);
 
         Shape destShape = new Shape(numRows+b.numRows, numCols);
         double[] destEntries = new double[entries.length + b.entries.length];
@@ -872,7 +1040,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public CooMatrix augment(CooMatrix b) {
-        ParameterChecks.ensureEquals(numRows, b.numRows);
+        ValidateParameters.ensureEquals(numRows, b.numRows);
 
         Shape destShape = new Shape(numRows, numCols + b.numCols);
         double[] destEntries = new double[entries.length + b.entries.length];
@@ -897,6 +1065,36 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
         dest.sortIndices(); // Ensure indices are sorted properly.
 
         return dest;
+    }
+
+
+    /**
+     * Augments a vector to this matrix.
+     *
+     * @param b The vector to augment to this matrix.
+     *
+     * @return The result of augmenting {@code b} to this matrix.
+     */
+    @Override
+    public CooMatrix augment(CooVector b) {
+        ValidateParameters.ensureEquals(numCols, b.size);
+
+        Shape destShape = new Shape(numRows + 1, numCols);
+        double[] destEntries = new double[entries.length + b.entries.length];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy values and indices from this matrix.
+        System.arraycopy(entries, 0, destEntries, 0, entries.length);
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, entries.length);
+        System.arraycopy(colIndices, 0, destColIndices, 0, entries.length);
+
+        // Copy values and indices from vector.
+        System.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
+        Arrays.fill(destRowIndices, entries.length, destRowIndices.length, numRows);
+        System.arraycopy(b.indices, 0, destColIndices, entries.length, b.entries.length);
+
+        return new CooMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1083,8 +1281,8 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public CooMatrix set(Double value, int row, int col) {
-        ParameterChecks.ensureValidIndices(numRows, row);
-        ParameterChecks.ensureValidIndices(numCols, col);
+        ValidateParameters.ensureValidIndices(numRows, row);
+        ValidateParameters.ensureValidIndices(numCols, col);
         return RealSparseMatrixGetSet.matrixSet(this, row, col, value);
     }
 
@@ -1112,7 +1310,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
         List<Integer> triuRowIndices = new ArrayList<>(sizeEst);
         List<Integer> triuColIndices = new ArrayList<>(sizeEst);
 
-        for(int i=0; i<nnz; i++) {
+        for(int i=0, size=nnz; i<size; i++) {
             int row = rowIndices[i];
             int col = colIndices[i];
 
@@ -1150,7 +1348,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
         List<Integer> trilRowIndices = new ArrayList<>(sizeEst);
         List<Integer> trilColIndices = new ArrayList<>(sizeEst);
 
-        for(int i=0; i<nnz; i++) {
+        for(int i=0, size=nnz; i<size; i++) {
             int row = rowIndices[i];
             int col = colIndices[i];
 
@@ -1162,41 +1360,6 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
         }
 
         return new CooMatrix(shape, trilEntries, trilRowIndices, trilColIndices);
-    }
-
-
-    /**
-     * Checks if an object is equal to this matrix object.
-     * @param object Object to check equality with this matrix.
-     * @return True if the two matrices have the same shape, are numerically equivalent, and are of type {@link CooMatrix}.
-     * False otherwise.
-     */
-    @Override
-    public boolean equals(Object object) {
-        if(this == object) return true;
-        if(object == null || object.getClass() != getClass()) return false;
-
-        CooMatrix src2 = (CooMatrix) object;
-
-        return RealSparseEquals.cooMatrixEquals(this, src2);
-    }
-
-
-    @Override
-    public int hashCode() {
-        // Ignores explicit zeros to maintain contract with equals method.
-        int result = 17;
-        result = 31*result + shape.hashCode();
-
-        for (int i = 0; i < entries.length; i++) {
-            if (entries[i] != 0.0) {
-                result = 31*result + Double.hashCode(entries[i]);
-                result = 31*result + Integer.hashCode(rowIndices[i]);
-                result = 31*result + Integer.hashCode(colIndices[i]);
-            }
-        }
-
-        return result;
     }
 
 
@@ -1230,7 +1393,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
     public CooVector toVector() {
         int[] destIndices = new int[nnz];
 
-        for(int i=0; i<nnz; i++)
+        for(int i=0, size=nnz; i<size; i++)
             destIndices[i] = rowIndices[i]*colIndices[i];
 
         return new CooVector(shape.totalEntriesIntValueExact(), entries.clone(), destIndices);
@@ -1328,7 +1491,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
         List<Double> destEntries = new ArrayList<>();
         List<Integer> destIndices = new ArrayList<>();
 
-        for(int i=0; i<nnz; i++) {
+        for(int i=0, size=nnz; i<size; i++) {
             if(rowIndices[i]==colIndices[i]) {
                 // Then entry on the diagonal.
                 destEntries.add(entries[i]);
@@ -1375,5 +1538,79 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
     @Override
     public CooMatrix setRow(CooVector values, int rowIndex) {
         return RealSparseMatrixGetSet.setCol(this, rowIndex, values);
+    }
+
+
+    /**
+     *  Converts this real sparse COO matrix to an equivalent complex sparse COO matrix.
+     * @return A complex sparse COO matrix equivalent to this matrix.
+     */
+    public CooCMatrix toComplex() {
+        return new CooCMatrix(shape, entries, rowIndices.clone(), colIndices.clone());
+    }
+
+
+    /**
+     * Computes the element-wise product between two matrices.
+     * @param b Second matrix in the element-wise product.
+     * @return The element-wise product of this matrix and {@code b}.
+     */
+    public CooCMatrix elemMult(CooCMatrix b) {
+        return RealComplexSparseMatrixOperations.elemMult(b, this);
+    }
+
+
+    /**
+     * Computes the element-wise product between two matrices.
+     * @param b Second matrix in the element-wise product.
+     * @return The element-wise product of this matrix and {@code b}.
+     */
+    public CooMatrix elemMult(Matrix b) {
+        return RealDenseSparseMatrixOperations.elemMult(b, this);
+    }
+
+
+    /**
+     * Computes the element-wise product between two matrices.
+     * @param b Second matrix in the element-wise product.
+     * @return The element-wise product of this matrix and {@code b}.
+     */
+    public CooCMatrix elemMult(CMatrix b) {
+        return RealComplexDenseSparseMatrixOperations.elemMult(b, this);
+    }
+
+
+    /**
+     * Checks if an object is equal to this matrix.
+     * @param object Object to check equality with this matrix.
+     * @return True if the two matrices have the same shape, are numerically equivalent, and are of type {@link CooMatrix}.
+     * False otherwise.
+     */
+    @Override
+    public boolean equals(Object object) {
+        if(this == object) return true;
+        if(object == null || object.getClass() != getClass()) return false;
+
+        CooMatrix src2 = (CooMatrix) object;
+
+        return RealSparseEquals.cooMatrixEquals(this, src2);
+    }
+
+
+    @Override
+    public int hashCode() {
+        // Ignores explicit zeros to maintain contract with equals method.
+        int result = 17;
+        result = 31*result + shape.hashCode();
+
+        for (int i = 0; i < entries.length; i++) {
+            if (entries[i] != 0.0) {
+                result = 31*result + Double.hashCode(entries[i]);
+                result = 31*result + Integer.hashCode(rowIndices[i]);
+                result = 31*result + Integer.hashCode(colIndices[i]);
+            }
+        }
+
+        return result;
     }
 }

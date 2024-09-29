@@ -25,13 +25,20 @@
 package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.CooFieldVectorBase;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
+import org.flag4j.operations.common.complex.Complex128Operations;
+import org.flag4j.operations.dense.real.RealDenseTranspose;
+import org.flag4j.operations.sparse.coo.complex.ComplexSparseEquals;
+import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -70,7 +77,7 @@ public class CooCVector extends CooFieldVectorBase<CooCVector, CooCMatrix, CVect
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      * @param indices
      */
-    public CooCVector(int size, Complex128[] entries, int[] indices) {
+    public CooCVector(int size, Field<Complex128>[] entries, int[] indices) {
         super(size, entries, indices);
         setZeroElement(Complex128.ZERO);
     }
@@ -82,7 +89,7 @@ public class CooCVector extends CooFieldVectorBase<CooCVector, CooCMatrix, CVect
      * @param entries The non-zero entries of the vector.
      * @param indices The indices of the non-zero entries.
      */
-    public CooCVector(int size, List<Complex128> entries, List<Integer> indices) {
+    public CooCVector(int size, List<Field<Complex128>> entries, List<Integer> indices) {
         super(size, entries.toArray(new Complex128[0]), ArrayUtils.fromIntegerList(indices));
         setZeroElement(Complex128.ZERO);
     }
@@ -99,6 +106,52 @@ public class CooCVector extends CooFieldVectorBase<CooCVector, CooCMatrix, CVect
 
 
     /**
+     * Constructs a sparse complex COO vector from an array of double values.
+     * @param entries Non-zero entries of the sparse vector.
+     */
+    public CooCVector(int size, double[] entries, int[] indices) {
+        super(size, ArrayUtils.wrapAsComplex128(entries, null), new int[indices.length]);
+        setZeroElement(Complex128.ZERO);
+    }
+
+
+    /**
+     * Constructs a copy of the specified vector.
+     * @param b The vector to create a copy of.
+     */
+    public CooCVector(CooCVector b) {
+        super(b.size, b.entries.clone(), b.indices.clone());
+        setZeroElement(Complex128.ZERO);
+    }
+
+
+    /**
+     * Creates a sparse tensor from a dense tensor.
+     *
+     * @param src Dense tensor to convert to a sparse tensor.
+     * @return A sparse tensor which is equivalent to the {@code src} dense tensor.
+     */
+    public static CooCVector fromDense(CVector src) {
+        List<Complex128> nonZeroEntries = new ArrayList<>((int) (src.entries.length*0.8));
+        List<Integer> indices = new ArrayList<>((int) (src.entries.length*0.8));
+
+        // Fill entries with non-zero values.
+        for(int i=0; i<src.entries.length; i++) {
+            if(!src.entries[i].equals(0)) {
+                nonZeroEntries.add((Complex128) src.entries[i]);
+                indices.add(i);
+            }
+        }
+
+        return new CooCVector(
+                src.size,
+                nonZeroEntries.toArray(Complex128[]::new),
+                ArrayUtils.fromIntegerList(indices)
+        );
+    }
+
+
+    /**
      * Constructs a sparse COO vector of the same type as this tensor with the specified {@code size}, non-zero entries, and non-zero indices.
      *
      * @param size Size of the sparse COO vector.
@@ -109,7 +162,7 @@ public class CooCVector extends CooFieldVectorBase<CooCVector, CooCMatrix, CVect
      * and non-zero indices.
      */
     @Override
-    public CooCVector makeLikeTensor(int size, Complex128[] entries, int[] indices) {
+    public CooCVector makeLikeTensor(int size, Field<Complex128>[] entries, int[] indices) {
         return new CooCVector(size, entries, indices);
     }
 
@@ -125,7 +178,7 @@ public class CooCVector extends CooFieldVectorBase<CooCVector, CooCMatrix, CVect
      * non-zero indices as this vector.
      */
     @Override
-    public CooCVector makeLikeTensor(int size, Complex128[] entries) {
+    public CooCVector makeLikeTensor(int size, Field<Complex128>[] entries) {
         return new CooCVector(size, entries, indices.clone());
     }
 
@@ -141,7 +194,7 @@ public class CooCVector extends CooFieldVectorBase<CooCVector, CooCMatrix, CVect
      * and non-zero indices.
      */
     @Override
-    public CooCVector makeLikeTensor(int size, List<Complex128> entries, List<Integer> indices) {
+    public CooCVector makeLikeTensor(int size, List<Field<Complex128>> entries, List<Integer> indices) {
         return new CooCVector(size, entries, indices);
     }
 
@@ -154,7 +207,7 @@ public class CooCVector extends CooFieldVectorBase<CooCVector, CooCMatrix, CVect
      * @return A dense vector which is of a similar type to this sparse COO vector containing the specified {@code entries}.
      */
     @Override
-    public CVector makeLikeDenseTensor(Complex128... entries) {
+    public CVector makeLikeDenseTensor(Field<Complex128>... entries) {
         return new CVector(entries);
     }
 
@@ -172,7 +225,7 @@ public class CooCVector extends CooFieldVectorBase<CooCVector, CooCMatrix, CVect
      * the specified {@code entries}.
      */
     @Override
-    public CooCMatrix makeLikeMatrix(Shape shape, Complex128[] entries, int[] rowIndices, int[] colIndices) {
+    public CooCMatrix makeLikeMatrix(Shape shape, Field<Complex128>[] entries, int[] rowIndices, int[] colIndices) {
         return new CooCMatrix(shape, entries, rowIndices, colIndices);
     }
 
@@ -188,7 +241,7 @@ public class CooCVector extends CooFieldVectorBase<CooCVector, CooCMatrix, CVect
      * the specified {@code entries}.
      */
     @Override
-    public CMatrix makeLikeDenseMatrix(Shape shape, Complex128... entries) {
+    public CMatrix makeLikeDenseMatrix(Shape shape, Field<Complex128>... entries) {
         return new CMatrix(shape, entries);
     }
 
@@ -207,6 +260,49 @@ public class CooCVector extends CooFieldVectorBase<CooCVector, CooCMatrix, CVect
 
 
     /**
+     * Sets the element of this tensor at the specified indices.
+     *
+     * @param value New value to set the specified index of this tensor to.
+     * @param indices Indices of the element to set.
+     *
+     * @return A copy of this tensor with the updated value is returned.
+     *
+     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
+     */
+    @Override
+    public CooCVector set(Complex128 value, int... indices) {
+        ValidateParameters.ensureValidIndices(size, indices);
+
+        int idx = Arrays.binarySearch(this.indices, indices[0]);
+        Field<Complex128>[] destEntries;
+        int[] destIndices;
+
+        if(idx >= 0) {
+            // Then the index was found in the sparse vector.
+            destIndices = this.indices.clone();
+            destEntries = Arrays.copyOf(entries, entries.length);
+            destEntries[idx] = value;
+
+        } else{
+            // Then the index was Not found int the sparse vector.
+            destIndices = new int[this.indices.length+1];
+            destEntries = new Complex128[this.entries.length+1];
+            idx = -(idx+1);
+
+            System.arraycopy(this.indices, 0, destIndices, 0, idx);
+            destIndices[idx] = indices[0];
+            System.arraycopy(this.indices, idx, destIndices, idx+1, this.indices.length-idx);
+
+            System.arraycopy(entries, 0, destEntries, 0, idx);
+            destEntries[idx] = value;
+            System.arraycopy(entries, idx, destEntries, idx+1, entries.length-idx);
+        }
+
+        return new CooCVector(size, destEntries, destIndices);
+    }
+
+
+    /**
      * Constructs a tensor of the same type as this tensor with the given the shape and entries.
      *
      * @param shape Shape of the tensor to construct.
@@ -215,8 +311,8 @@ public class CooCVector extends CooFieldVectorBase<CooCVector, CooCMatrix, CVect
      * @return A tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public CooCVector makeLikeTensor(Shape shape, Complex128[] entries) {
-        ParameterChecks.ensureRank(shape, 1);
+    public CooCVector makeLikeTensor(Shape shape, Field<Complex128>[] entries) {
+        ValidateParameters.ensureRank(shape, 1);
         return new CooCVector(shape.get(0), entries, indices.clone());
     }
 
@@ -245,5 +341,72 @@ public class CooCVector extends CooFieldVectorBase<CooCVector, CooCMatrix, CVect
 
             return new CooCMatrix(1, this.size, entries.clone(), rowIndices, colIndices);
         }
+    }
+
+
+    /**
+     * Converts this sparse vector to an equivalent sparse tensor.
+     * @return A sparse tensor which is equivalent to this vector.
+     */
+    public CooCTensor toTensor() {
+        return new CooCTensor(
+                this.shape,
+                Arrays.copyOf(entries, entries.length),
+                RealDenseTranspose.blockedIntMatrix(new int[][]{this.indices.clone()})
+        );
+    }
+
+
+    /**
+     * Converts this complex vector to a real vector.
+     * @return A real vector containing the real components of all non-zero values in this vector. The imaginary components are
+     * ignored.
+     */
+    public CooVector toReal() {
+        return new CooVector(size, Complex128Operations.toReal(entries), indices.clone());
+    }
+
+
+    /**
+     * Computes the element-wise sum of two vectors.
+     * @param b Second vector in the sum.
+     * @return The element-wise sum of this vector and {@code b}.
+     */
+    public CooCVector add(CooVector b) {
+        return RealComplexSparseVectorOperations.add(this, b);
+    }
+
+
+    /**
+     * Checks if an object is equal to this vector object.
+     * @param object Object to check equality with this vector.
+     * @return True if the two vectors have the same shape, are numerically equivalent, and are of type {@link CooVector}.
+     * False otherwise.
+     */
+    @Override
+    public boolean equals(Object object) {
+        if(this == object) return true;
+        if(object == null || object.getClass() != getClass()) return false;
+
+        CooCVector src2 = (CooCVector) object;
+
+        return ComplexSparseEquals.cooVectorEquals(this, src2);
+    }
+
+
+    @Override
+    public int hashCode() {
+        // Ignores explicit zeros to maintain contract with equals method.
+        int result = 17;
+        result = 31*result + shape.hashCode();
+
+        for (int i = 0; i < entries.length; i++) {
+            if (!entries[i].isZero()) {
+                result = 31*result + entries[i].hashCode();
+                result = 31*result + Integer.hashCode(indices[i]);
+            }
+        }
+
+        return result;
     }
 }

@@ -1,9 +1,8 @@
 package org.flag4j.sparse_complex_vector;
 
-import org.flag4j.arrays_old.sparse.CooCVectorOld;
-import org.flag4j.arrays_old.sparse.CooVectorOld;
-import org.flag4j.complex_numbers.CNumber;
-import org.junit.jupiter.api.Assertions;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.sparse.CooCVector;
+import org.flag4j.arrays.sparse.CooVector;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -12,37 +11,36 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CooCVectorUnaryOpTests {
 
     static int[] aIndices, expIndices;
-    static CNumber[] aEntries, expEntries;
+    static Complex128[] aEntries, expEntries;
     double[] expEntriesRe;
     static int sparseSize;
-    static CooCVectorOld a, exp;
-    CooVectorOld expRe;
+    static CooCVector a, exp;
+    CooVector expRe;
 
 
     @BeforeAll
     static void setup() {
-        aEntries = new CNumber[]{
-                new CNumber(2.455, -83.6), new CNumber(0, 24.56),
-                new CNumber(24.56), new CNumber(-9356.1, 35)
+        aEntries = new Complex128[]{
+                new Complex128(2.455, -83.6), new Complex128(0, 24.56),
+                new Complex128(24.56), new Complex128(-9356.1, 35)
         };
         aIndices = new int[]{4, 56, 9903, 14643};
         sparseSize = 24_023;
-        a = new CooCVectorOld(sparseSize, aEntries, aIndices);
+        a = new CooCVector(sparseSize, aEntries, aIndices);
     }
 
 
     @Test
     void hermTConjTestCase() {
         // ----------------------- Sub-case 1 -----------------------
-        expEntries = new CNumber[]{
-                new CNumber(2.455, 83.6), new CNumber(0, -24.56),
-                new CNumber(24.56), new CNumber(-9356.1, -35)
+        expEntries = new Complex128[]{
+                new Complex128(2.455, 83.6), new Complex128(0, -24.56),
+                new Complex128(24.56), new Complex128(-9356.1, -35)
         };
         expIndices = new int[]{4, 56, 9903, 14643};
-        exp = new CooCVectorOld(sparseSize, expEntries, expIndices);
+        exp = new CooCVector(sparseSize, expEntries, expIndices);
 
         assertEquals(exp, a.H());
-        Assertions.assertEquals(exp, a.hermTranspose());
         assertEquals(exp, a.conj());
     }
 
@@ -50,15 +48,14 @@ class CooCVectorUnaryOpTests {
     @Test
     void transposeCopyTestCase() {
         // ----------------------- Sub-case 1 -----------------------
-        expEntries = new CNumber[]{
-                new CNumber(2.455, -83.6), new CNumber(0, 24.56),
-                new CNumber(24.56), new CNumber(-9356.1, 35)
+        expEntries = new Complex128[]{
+                new Complex128(2.455, -83.6), new Complex128(0, 24.56),
+                new Complex128(24.56), new Complex128(-9356.1, 35)
         };
         expIndices = new int[]{4, 56, 9903, 14643};
-        exp = new CooCVectorOld(sparseSize, expEntries, expIndices);
+        exp = new CooCVector(sparseSize, expEntries, expIndices);
 
         assertEquals(exp, a.T());
-        assertEquals(exp, a.transpose());
         assertEquals(exp, a.copy());
     }
 
@@ -66,12 +63,12 @@ class CooCVectorUnaryOpTests {
     @Test
     void recipTestCase() {
         // ----------------------- Sub-case 1 -----------------------
-        expEntries = new CNumber[]{
-                new CNumber(2.455, -83.6).multInv(), new CNumber(0, 24.56).multInv(),
-                new CNumber(24.56).multInv(), new CNumber(-9356.1, 35).multInv()
+        expEntries = new Complex128[]{
+                new Complex128(2.455, -83.6).multInv(), new Complex128(0, 24.56).multInv(),
+                new Complex128(24.56).multInv(), new Complex128(-9356.1, 35).multInv()
         };
         expIndices = new int[]{4, 56, 9903, 14643};
-        exp = new CooCVectorOld(sparseSize, expEntries, expIndices);
+        exp = new CooCVector(sparseSize, expEntries, expIndices);
 
         assertEquals(exp, a.recip());
     }
@@ -81,11 +78,11 @@ class CooCVectorUnaryOpTests {
     void absTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         expEntriesRe = new double[]{
-                new CNumber(2.455, -83.6).mag(), new CNumber(0, 24.56).mag(),
-                new CNumber(24.56).mag(), new CNumber(-9356.1, 35).mag()
+                new Complex128(2.455, -83.6).mag(), new Complex128(0, 24.56).mag(),
+                new Complex128(24.56).mag(), new Complex128(-9356.1, 35).mag()
         };
         expIndices = new int[]{4, 56, 9903, 14643};
-        expRe = new CooVectorOld(sparseSize, expEntriesRe, expIndices);
+        expRe = new CooVector(sparseSize, expEntriesRe, expIndices);
 
         assertEquals(expRe, a.abs());
     }
@@ -94,12 +91,12 @@ class CooCVectorUnaryOpTests {
     @Test
     void sqrtTestCase() {
         // ----------------------- Sub-case 1 -----------------------
-        expEntries = new CNumber[]{
-                CNumber.sqrt(new CNumber(2.455, -83.6)), CNumber.sqrt(new CNumber(0, 24.56)),
-                CNumber.sqrt(new CNumber(24.56)), CNumber.sqrt(new CNumber(-9356.1, 35))
+        expEntries = new Complex128[]{
+                new Complex128(2.455, -83.6).sqrt(), new Complex128(0, 24.56).sqrt(),
+                new Complex128(24.56).sqrt(), new Complex128(-9356.1, 35).sqrt()
         };
         expIndices = new int[]{4, 56, 9903, 14643};
-        exp = new CooCVectorOld(sparseSize, expEntries, expIndices);
+        exp = new CooCVector(sparseSize, expEntries, expIndices);
 
         assertEquals(exp, a.sqrt());
     }

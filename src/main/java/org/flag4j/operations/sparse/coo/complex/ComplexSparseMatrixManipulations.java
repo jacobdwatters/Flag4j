@@ -24,9 +24,10 @@
 
 package org.flag4j.operations.sparse.coo.complex;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays_old.sparse.CooCMatrixOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.operations.sparse.coo.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
@@ -52,7 +53,7 @@ public class ComplexSparseMatrixManipulations {
      * @param rowIdx Row to remove from the {@code src} matrix.
      * @return A sparse matrix which has one less row than the {@code src} matrix with the specified row removed.
      */
-    public static CooCMatrixOld removeRow(CooCMatrixOld src, int rowIdx) {
+    public static CooCMatrix removeRow(CooCMatrix src, int rowIdx) {
         Shape shape = new Shape(src.numRows-1, src.numCols);
 
         // Find the start and end index within the entries array which have the given row index.
@@ -60,13 +61,13 @@ public class ComplexSparseMatrixManipulations {
         int size = src.entries.length - (startEnd[1]-startEnd[0]);
 
         // Initialize arrays_old.
-        CNumber[] entries = new CNumber[size];
+        Complex128[] entries = new Complex128[size];
         int[] rowIndices = new int[size];
         int[] colIndices = new int[size];
 
         copyRanges(src, entries, rowIndices, colIndices, startEnd);
 
-        return new CooCMatrixOld(shape, entries, rowIndices, colIndices);
+        return new CooCMatrix(shape, entries, rowIndices, colIndices);
     }
 
 
@@ -76,9 +77,9 @@ public class ComplexSparseMatrixManipulations {
      * @param rowIdxs Indices of rows to remove from the {@code src} matrix.
      * @return A copy of the {@code src} matrix with the specified rows removed.
      */
-    public static CooCMatrixOld removeRows(CooCMatrixOld src, int... rowIdxs) {
+    public static CooCMatrix removeRows(CooCMatrix src, int... rowIdxs) {
         Shape shape = new Shape(src.numRows-rowIdxs.length, src.numCols);
-        List<CNumber> entries = new ArrayList<>(src.entries.length);
+        List<Field<Complex128>> entries = new ArrayList<>(src.entries.length);
         List<Integer> rowIndices = new ArrayList<>(src.entries.length);
         List<Integer> colIndices = new ArrayList<>(src.entries.length);
 
@@ -91,7 +92,7 @@ public class ComplexSparseMatrixManipulations {
             }
         }
 
-        return new CooCMatrixOld(shape, entries, rowIndices, colIndices);
+        return new CooCMatrix(shape, entries, rowIndices, colIndices);
     }
 
 
@@ -101,9 +102,9 @@ public class ComplexSparseMatrixManipulations {
      * @param colIdx Column to remove from the {@code src} matrix.
      * @return A sparse matrix which has one less column than the {@code src} matrix with the specified column removed.
      */
-    public static CooCMatrixOld removeCol(CooCMatrixOld src, int colIdx) {
+    public static CooCMatrix removeCol(CooCMatrix src, int colIdx) {
         Shape shape = new Shape(src.numRows, src.numCols-1);
-        List<CNumber> entries = new ArrayList<>(src.entries.length);
+        List<Field<Complex128>> entries = new ArrayList<>(src.entries.length);
         List<Integer> rowIndices = new ArrayList<>(src.entries.length);
         List<Integer> colIndices = new ArrayList<>(src.entries.length);
 
@@ -118,7 +119,7 @@ public class ComplexSparseMatrixManipulations {
             }
         }
 
-        return new CooCMatrixOld(shape, entries, rowIndices, colIndices);
+        return new CooCMatrix(shape, entries, rowIndices, colIndices);
     }
 
 
@@ -128,9 +129,9 @@ public class ComplexSparseMatrixManipulations {
      * @param colIdxs Columns to remove from the {@code src} matrix.
      * @return A copy of the {@code src} sparse matrix with the specified columns removed.
      */
-    public static CooCMatrixOld removeCols(CooCMatrixOld src, int... colIdxs) {
+    public static CooCMatrix removeCols(CooCMatrix src, int... colIdxs) {
         Shape shape = new Shape(src.numRows, src.numCols-1);
-        List<CNumber> entries = new ArrayList<>(src.entries.length);
+        List<Field<Complex128>> entries = new ArrayList<>(src.entries.length);
         List<Integer> rowIndices = new ArrayList<>(src.entries.length);
         List<Integer> colIndices = new ArrayList<>(src.entries.length);
 
@@ -145,7 +146,7 @@ public class ComplexSparseMatrixManipulations {
             }
         }
 
-        return new CooCMatrixOld(shape, entries, rowIndices, colIndices);
+        return new CooCMatrix(shape, entries, rowIndices, colIndices);
     }
 
 
@@ -159,7 +160,7 @@ public class ComplexSparseMatrixManipulations {
      * @param startEnd An array of length two specifying the {@code start} (inclusive) and {@code end} (exclusive)
      *                 indices of the range to skip during the copy.
      */
-    private static void copyRanges(CooCMatrixOld src, CNumber[] entries, int[]
+    private static void copyRanges(CooCMatrix src, Complex128[] entries, int[]
             rowIndices, int[] colIndices, int[] startEnd) {
 
         if(startEnd[0] > 0) {
@@ -186,7 +187,7 @@ public class ComplexSparseMatrixManipulations {
      * @param rowIdx2 Index of the second row in the swap.
      * @return A reference to the {@code src} sparse matrix.
      */
-    public static CooCMatrixOld swapRows(CooCMatrixOld src, int rowIdx1, int rowIdx2) {
+    public static CooCMatrix swapRows(CooCMatrix src, int rowIdx1, int rowIdx2) {
         for(int i=0; i<src.entries.length; i++) {
             // Swap row indices.
             if(src.rowIndices[i]==rowIdx1) src.rowIndices[i] = rowIdx2;
@@ -207,7 +208,7 @@ public class ComplexSparseMatrixManipulations {
      * @param colIdx2 Index of the second row in the swap.
      * @return A reference to the {@code src} sparse matrix.
      */
-    public static CooCMatrixOld swapCols(CooCMatrixOld src, int colIdx1, int colIdx2) {
+    public static CooCMatrix swapCols(CooCMatrix src, int colIdx1, int colIdx2) {
         for(int i=0; i<src.entries.length; i++) {
             // Swap row indices.
             if(src.colIndices[i]==colIdx1) src.colIndices[i] = colIdx2;

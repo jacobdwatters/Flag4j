@@ -23,6 +23,7 @@
  */
 
 package org.flag4j.arrays.backend;
+
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -31,10 +32,15 @@ import org.flag4j.util.ErrorMessages;
  * @param <U> Type of dense matrix which is equivalent to {@code T}. If {@code T} is dense, then this should be the same type as
  * {@code T}. This type parameter is required because some operations (even between two sparse matrices) may result in a dense
  * matrix (e.g. matrix multiplication).
- * @param <V> Type (or wrapper) of an element of this matrix.
+ * @param <V> Type of vector that is similar to this matrix.
+ * @param <W> Type of dense vector that is similar to {@code V}. If {@code V} is dense, then this should be the same type as {@code V}.
+ * @param <Y> Type (or wrapper) of an element of this matrix.
  */
-public interface MatrixMixin<T extends MatrixMixin<T, U, V>, U extends DenseMatrixMixin<U, ?, ?, V>, V>
-        extends TensorMixin<T, V> {
+public interface MatrixMixin<T extends MatrixMixin<T, U, V, W, Y>,
+        U extends DenseMatrixMixin<U, ?, W, Y>,
+        V extends VectorMixin<V, ?, U, Y>,
+        W extends DenseVectorMixin<W, ?, U, Y>, Y>
+        extends TensorMixin<T, Y>, MatrixVectorOpsMixin<T, V, W> {
 
     /**
      * Gets the number of rows in this matrix.
@@ -59,7 +65,7 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V>, U extends DenseMatr
      * @return The trace of this matrix.
      * @throws IllegalArgumentException If this matrix is not square.
      */
-    public default V trace() {return tr();}
+    public default Y trace() {return tr();}
 
 
     /**
@@ -70,7 +76,7 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V>, U extends DenseMatr
      * @return The trace of this matrix.
      * @throws IllegalArgumentException If this matrix is not square.
      */
-    public V tr();
+    public Y tr();
 
 
     /**
@@ -185,7 +191,7 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V>, U extends DenseMatr
      * @return The determinant of this matrix.
      * @throws org.flag4j.util.exceptions.LinearAlgebraException If this matrix is not square.
      */
-    public V det();
+    public Y det();
 
 
     /**
@@ -219,7 +225,7 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V>, U extends DenseMatr
      * @return The Frobenius inner product of this matrix and matrix b.
      * @throws IllegalArgumentException If this matrix and b have different shapes.
      */
-    public V fib(T b);
+    public Y fib(T b);
 
 
     /**
@@ -244,6 +250,14 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V>, U extends DenseMatr
      * @see #stack(T, int)
      */
     public T augment(T b);
+
+
+    /**
+     * Augments a vector to this matrix.
+     * @param b The vector to augment to this matrix.
+     * @return The result of augmenting {@code b} to this matrix.
+     */
+    public T augment(V b);
 
 
     /**
@@ -397,7 +411,7 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V>, U extends DenseMatr
      * @param col   Column index to set.
      * @return A reference to this matrix.
      */
-    public T set(V value, int row, int col);
+    public T set(Y value, int row, int col);
 
 
     /**

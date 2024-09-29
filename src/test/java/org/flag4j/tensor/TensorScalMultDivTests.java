@@ -1,9 +1,9 @@
 package org.flag4j.tensor;
 
-import org.flag4j.arrays_old.dense.CTensorOld;
-import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.arrays.dense.Tensor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TensorScalMultDivTests {
 
     static double[] aEntries;
-    static TensorOld A;
+    static Tensor A;
     static Shape aShape, expShape;
 
     @BeforeEach
@@ -22,14 +22,14 @@ class TensorScalMultDivTests {
                 0.001345, 2.677, 8.14, -0.000194, 1, 234
         };
         aShape = new Shape(2, 3, 2);
-        A = new TensorOld(aShape, aEntries);
+        A = new Tensor(aShape, aEntries);
     }
 
 
     @Test
     void realScalMultTestCase() {
         double[] expEntries;
-        TensorOld exp;
+        Tensor exp;
         double b = -1.4115;
 
         // ------------------------ Sub-case 1 ------------------------
@@ -38,7 +38,7 @@ class TensorScalMultDivTests {
                 0.001345*-1.4115, 2.677*-1.4115, 8.14*-1.4115, -0.000194*-1.4115, 1*-1.4115, 234*-1.4115
         };
         expShape = new Shape(2, 3, 2);
-        exp = new TensorOld(expShape, expEntries);
+        exp = new Tensor(expShape, expEntries);
 
         assertEquals(exp, A.mult(b));
     }
@@ -46,17 +46,17 @@ class TensorScalMultDivTests {
 
     @Test
     void complexScalMultTestCase() {
-        CNumber[] expEntries;
-        CTensorOld exp;
-        CNumber b = new CNumber(0.2425, -0.00295);
+        Complex128[] expEntries;
+        CTensor exp;
+        Complex128 b = new Complex128(0.2425, -0.00295);
 
         // ------------------------ Sub-case 1 ------------------------
-        expEntries = new CNumber[]{
+        expEntries = new Complex128[]{
                 b.mult(1.23), b.mult(2.556), b.mult(-121.5), b.mult(15.61), b.mult(14.15), b.mult(-99.23425),
                 b.mult(0.001345), b.mult(2.677), b.mult(8.14), b.mult(-0.000194), b.mult(1), b.mult(234)
         };
         expShape = new Shape(2, 3, 2);
-        exp = new CTensorOld(expShape, expEntries);
+        exp = new CTensor(expShape, expEntries);
 
         assertEquals(exp, A.mult(b));
     }
@@ -65,7 +65,7 @@ class TensorScalMultDivTests {
     @Test
     void realScalDivTestCase() {
         double[] expEntries;
-        TensorOld exp;
+        Tensor exp;
         double b = -1.4115;
 
         // ------------------------ Sub-case 1 ------------------------
@@ -74,7 +74,7 @@ class TensorScalMultDivTests {
                 0.001345/-1.4115, 2.677/-1.4115, 8.14/-1.4115, -0.000194/-1.4115, 1/-1.4115, 234/-1.4115
         };
         expShape = new Shape(2, 3, 2);
-        exp = new TensorOld(expShape, expEntries);
+        exp = new Tensor(expShape, expEntries);
 
         assertEquals(exp, A.div(b));
     }
@@ -82,28 +82,28 @@ class TensorScalMultDivTests {
 
     @Test
     void complexScalDivTestCase() {
-        CNumber[] expEntries;
-        CTensorOld exp;
-        CNumber b = new CNumber(0.2425, -0.00295);
-        CNumber bInv = b.multInv();
+        Complex128[] expEntries;
+        CTensor exp;
+        Complex128 b = new Complex128(0.2425, -0.00295);
+        Complex128 bInv = b.multInv();
 
         // ------------------------ Sub-case 1 ------------------------
-        expEntries = new CNumber[]{
-                new CNumber("5.071414450262457 + 0.06169349537432679i"),
-                new CNumber("10.53864661371613 + 0.12820209282664985i"),
+        expEntries = new Complex128[]{
+                new Complex128("5.071414450262457 + 0.06169349537432679i"),
+                new Complex128("10.53864661371613 + 0.12820209282664985i"),
                 bInv.mult(-121.5),
                 bInv.mult(15.61),
-                new CNumber("58.341881683913634 + 0.7097259833713205i"),
-                new CNumber("-409.15285317964 - 4.977323368577064i"),
+                new Complex128("58.341881683913634 + 0.7097259833713205i"),
+                new Complex128("-409.15285317964 - 4.977323368577064i"),
                 bInv.mult(0.001345),
-                new CNumber("11.037541856384227 + 0.13427112773745759i"),
-                new CNumber("33.562043597671874 + 0.408280530363431i"),
+                new Complex128("11.037541856384227 + 0.13427112773745759i"),
+                new Complex128("33.562043597671874 + 0.408280530363431i"),
                 bInv.mult(-0.000194),
                 bInv.mult(1),
                 bInv.mult(234)
         };
         expShape = new Shape(2, 3, 2);
-        exp = new CTensorOld(expShape, expEntries);
+        exp = new CTensor(expShape, expEntries);
 
         assertEquals(exp, A.div(b));
     }

@@ -54,7 +54,7 @@ public final class DenseFieldMatrixMultTranspose {
      * @param shape2 Shape of the second matrix.
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
-    public static <T extends Field<T>> Field<T>[] multTranspose(T[] src1, Shape shape1, T[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] multTranspose(Field<T>[] src1, Shape shape1, Field<T>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
@@ -75,9 +75,8 @@ public final class DenseFieldMatrixMultTranspose {
                 destIndex = destIndexStart + j;
                 Field<T> sum = dest[destIndex];
 
-                while(src1Index<end) {
-                    sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));
-                }
+                while(src1Index<end)
+                    sum = sum.add(src1[src1Index++].mult((T) src2[src2Index++]));
 
                 dest[destIndex] = sum;
             }
@@ -96,7 +95,7 @@ public final class DenseFieldMatrixMultTranspose {
      * @param shape2 Shape of the second matrix.
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
-    public static <T extends Field<T>> Field<T>[] multTransposeBlocked(T[] src1, Shape shape1, T[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] multTransposeBlocked(Field<T>[] src1, Shape shape1, Field<T>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
@@ -130,9 +129,8 @@ public final class DenseFieldMatrixMultTranspose {
                             src2Index = j*cols2 + kk;
                             Field<T> sum = dest[destIndex];
 
-                            while(src1Index<end) {
-                                sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));
-                            }
+                            while(src1Index<end)
+                                sum = sum.add(src1[src1Index++].mult((T) src2[src2Index++]));
 
                             dest[destIndex] = sum;
                         }
@@ -155,7 +153,7 @@ public final class DenseFieldMatrixMultTranspose {
      * @param shape2 Shape of the second matrix.
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
-    public static <T extends Field<T>> Field<T>[] multTransposeConcurrent(T[] src1, Shape shape1, T[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] multTransposeConcurrent(Field<T>[] src1, Shape shape1, Field<T>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
@@ -175,9 +173,8 @@ public final class DenseFieldMatrixMultTranspose {
                     int destIndex = destIndexStart + j;
                     Field<T> sum = dest[destIndex];
 
-                    while(src1Index<end) {
-                        sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));
-                    }
+                    while(src1Index<end)
+                        sum = sum.add(src1[src1Index++].mult((T) src2[src2Index++]));
 
                     dest[destIndex] = sum;
                 }
@@ -197,8 +194,8 @@ public final class DenseFieldMatrixMultTranspose {
      * @param shape2 Shape of the second matrix.
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
-    public static <T extends Field<T>> Field<T>[] multTransposeBlockedConcurrent(T[] src1, Shape shape1, 
-                                                                                 T[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] multTransposeBlockedConcurrent(Field<T>[] src1, Shape shape1,
+                                                                                 Field<T>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
@@ -230,9 +227,8 @@ public final class DenseFieldMatrixMultTranspose {
                                 int src2Index = j*cols2 + kk;
                                 Field<T> sum = dest[destIndex];
 
-                                while(src1Index<end) {
-                                    sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));
-                                }
+                                while(src1Index<end)
+                                    sum = sum.add(src1[src1Index++].mult((T) src2[src2Index++]));
 
                                 dest[destIndex] = sum;
                             }

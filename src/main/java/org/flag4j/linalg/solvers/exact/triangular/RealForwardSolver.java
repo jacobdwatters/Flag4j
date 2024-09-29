@@ -27,7 +27,7 @@ package org.flag4j.linalg.solvers.exact.triangular;
 
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
 /**
@@ -97,8 +97,8 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
      */
     @Override
     public Vector solve(Matrix L, Vector b) {
-        ParameterChecks.ensureSquareMatrix(L.shape);
-        ParameterChecks.ensureEquals(L.numRows, b.size);
+        ValidateParameters.ensureSquareMatrix(L.shape);
+        ValidateParameters.ensureEquals(L.numRows, b.size);
         return isUnit ? solveUnitLower(L, b) : solveLower(L, b);
     }
 
@@ -115,8 +115,8 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
      */
     @Override
     public Matrix solve(Matrix L, Matrix B) {
-        ParameterChecks.ensureSquareMatrix(L.shape);
-        ParameterChecks.ensureEquals(L.numRows, B.numRows);
+        ValidateParameters.ensureSquareMatrix(L.shape);
+        ValidateParameters.ensureEquals(L.numRows, B.numRows);
         return isUnit ? solveUnitLower(L, B) : solveLower(L, B);
     }
 
@@ -132,7 +132,7 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
      * the principle diagonal).
      */
     public Matrix solveIdentity(Matrix L) {
-        ParameterChecks.ensureSquareMatrix(L.shape);
+        ValidateParameters.ensureSquareMatrix(L.shape);
         return isUnit ? solveUnitLowerIdentity(L) : solveLowerIdentity(L);
     }
 

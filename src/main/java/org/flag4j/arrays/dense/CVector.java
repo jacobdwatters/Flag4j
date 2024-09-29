@@ -25,16 +25,22 @@
 package org.flag4j.arrays.dense;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Complex64;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.DenseFieldVectorBase;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.operations.common.complex.Complex128Operations;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseVectorOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.Flag4jConstants;
+import org.flag4j.util.ValidateParameters;
+import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -55,8 +61,41 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      *
      * @param entries Entries of this vector.
      */
-    public CVector(Complex128... entries) {
+    public CVector(Field<Complex128>... entries) {
         super(new Shape(entries.length), entries);
+        setZeroElement(Complex128.ZERO);
+    }
+
+
+    /**
+     * Creates a complex vector with the specified {@code entries}.
+     *
+     * @param entries Entries of this vector.
+     */
+    public CVector(Complex64... entries) {
+        super(new Shape(entries.length), ArrayUtils.wrapAsComplex128(entries, null));
+        setZeroElement(Complex128.ZERO);
+    }
+
+
+    /**
+     * Creates a complex vector with the specified {@code entries}.
+     *
+     * @param entries Entries of this vector.
+     */
+    public CVector(double... entries) {
+        super(new Shape(entries.length), ArrayUtils.wrapAsComplex128(entries, null));
+        setZeroElement(Complex128.ZERO);
+    }
+
+
+    /**
+     * Creates a complex vector with the specified {@code entries}.
+     *
+     * @param entries Entries of this vector.
+     */
+    public CVector(int... entries) {
+        super(new Shape(entries.length), ArrayUtils.wrapAsComplex128(entries, null));
         setZeroElement(Complex128.ZERO);
     }
 
@@ -74,12 +113,46 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
 
 
     /**
+     * Creates a complex vector with the specified {@code size} and filled with {@code fillValue}.
+     * @param size The size of the vector.
+     * @param fillValue The value to fill the vector with.
+     */
+    public CVector(int size, Complex64 fillValue) {
+        super(new Shape(size), new Complex128[size]);
+        Arrays.fill(entries, new Complex128(fillValue));
+        setZeroElement(Complex128.ZERO);
+    }
+
+
+    /**
+     * Creates a complex vector with the specified {@code size} and filled with {@code fillValue}.
+     * @param size The size of the vector.
+     * @param fillValue The value to fill the vector with.
+     */
+    public CVector(int size, double fillValue) {
+        super(new Shape(size), new Complex128[size]);
+        Arrays.fill(entries, new Complex128(fillValue));
+        setZeroElement(Complex128.ZERO);
+    }
+
+
+    /**
      * Creates a complex zero vector with the specified {@code size}.
      * @param size The size of the vector.
      */
     public CVector(int size) {
         super(new Shape(size), new Complex128[size]);
         Arrays.fill(entries, Complex128.ZERO);
+        setZeroElement(Complex128.ZERO);
+    }
+
+
+    /**
+     * Creates a copy of the provided vector.
+     * @param vector Vector to create a copy of.
+     */
+    public CVector(CVector vector) {
+        super(vector.shape, vector.entries.clone());
         setZeroElement(Complex128.ZERO);
     }
 
@@ -112,7 +185,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @param entries Entries of this vector.
      */
     @Override
-    public CVector makeLikeTensor(Complex128... entries) {
+    public CVector makeLikeTensor(Field<Complex128>... entries) {
         return new CVector(entries);
     }
 
@@ -126,7 +199,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @return A matrix of similar type to this vector with the specified {@code shape} and {@code entries}.
      */
     @Override
-    public CMatrix makeLikeMatrix(Shape shape, Complex128[] entries) {
+    public CMatrix makeLikeMatrix(Shape shape, Field<Complex128>[] entries) {
         return new CMatrix(shape, entries);
     }
 
@@ -141,7 +214,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @return A sparse vector of similar type to this dense vector with the specified size, entries, and indices.
      */
     @Override
-    public CooCVector makeSparseVector(int size, List<Complex128> entries, List<Integer> indices) {
+    public CooCVector makeSparseVector(int size, List<Field<Complex128>> entries, List<Integer> indices) {
         return new CooCVector(size, entries, indices);
     }
 
@@ -155,9 +228,9 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @return A tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public CVector makeLikeTensor(Shape shape, Complex128[] entries) {
-        ParameterChecks.ensureRank(shape, 1);
-        ParameterChecks.ensureEquals(shape.totalEntriesIntValueExact(), entries.length);
+    public CVector makeLikeTensor(Shape shape, Field<Complex128>[] entries) {
+        ValidateParameters.ensureRank(shape, 1);
+        ValidateParameters.ensureEquals(shape.totalEntriesIntValueExact(), entries.length);
         return new CVector(entries);
     }
 
@@ -169,8 +242,11 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      */
     public double innerSelf() {
         double inner = 0;
-        for(Complex128 value : entries)
-            inner += (value.re*value.re + value.im*value.im);
+        for(Field<Complex128> value : entries) {
+            Complex128 vCmp = (Complex128) value;
+            inner += (vCmp.re*vCmp.re + vCmp.im*vCmp.im);
+        }
+
 
         return inner;
     }
@@ -183,7 +259,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
     public Vector toReal() {
         double[] real = new double[entries.length];
         for(int i=0, size=entries.length; i<size; i++)
-            real[i] = entries[i].re;
+            real[i] = ((Complex128) entries[i]).re;
 
         return new Vector(shape, real);
     }
@@ -228,7 +304,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
         Complex128[] sum = new Complex128[size];
 
         for(int i=0; i<size; i++)
-            sum[i] = b.add(entries[i]);
+            sum[i] = b.add((Complex128) entries[i]);
 
         return new CVector(sum);
     }
@@ -261,6 +337,15 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      */
     public CVector sub(CooCVector b) {
         return ComplexDenseSparseVectorOperations.add(this, b);
+    }
+
+
+    /**
+     * Subtracts
+     * @param b
+     */
+    public void subEq(double b) {
+        subEq(Complex128.ONE);
     }
 
 
@@ -300,6 +385,101 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @return The element-wise quotient of this vector and {@code b}.
      */
     public CVector elemDiv(Vector b) {
-        return new CVector(RealComplexDenseElemDiv.dispatch(b.entries, b.shape, this.entries, this.shape));
+        return new CVector(RealComplexDenseElemDiv.dispatch(b.entries, b.shape, entries, shape));
+    }
+
+
+    /**
+     * Rounds this tensor to the nearest whole number. If the tensor is complex, both the real and imaginary component will
+     * be rounded independently.
+     *
+     * @return A copy of this tensor with each entry rounded to the nearest whole number.
+     */
+    public CVector round() {
+        return round(0);
+    }
+
+
+    /**
+     * Rounds a matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
+     * be rounded independently.
+     *
+     * @param precision The number of decimal places to round to. This value must be non-negative.
+     * @return A copy of this matrix with rounded values.
+     * @throws IllegalArgumentException If <code>precision</code> is negative.
+     */
+    public CVector round(int precision) {
+        return new CVector(Complex128Operations.round(entries, precision));
+    }
+
+
+    /**
+     * Rounds values which are close to zero in absolute value to zero. If the tensor is complex, both the real and imaginary components will be rounded
+     * independently. By default, the values must be within {@link Flag4jConstants#EPS_F64} of zero. To specify a threshold value see
+     * {@link #roundToZero(double)}.
+     *
+     * @return A copy of this tensor with rounded values.
+     */
+    public CVector roundToZero() {
+        return roundToZero(Flag4jConstants.EPS_F64);
+    }
+
+
+    /**
+     * Rounds values which are close to zero in absolute value to zero.
+     *
+     * @param threshold Threshold for rounding values to zero. That is, if a value in this matrix is less than the threshold in absolute value then it
+     *                  will be rounded to zero. This value must be non-negative.
+     * @return A copy of this matrix with rounded values.
+     * @throws IllegalArgumentException If threshold is negative.
+     */
+    public CVector roundToZero(double threshold) {
+        return new CVector(Complex128Operations.roundToZero(entries, threshold));
+    }
+
+
+    /**
+     * Computes the element-wise difference between two tensors and stores the result in this tensor.
+     *
+     * @param b Second tensor in the element-wise difference.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
+     */
+    public void subEq(Vector b) {
+        RealComplexDenseOperations.subEq(entries, shape, b.entries, b.shape);
+    }
+
+
+    /**
+     * Computes the element-wise sum between two tensors and stores the result in this tensor.
+     *
+     * @param b Second tensor in the element-wise sum.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
+     */
+    public void addEq(Vector b) {
+        RealComplexDenseOperations.subEq(entries, shape, b.entries, b.shape);
+    }
+
+
+    /**
+     * Sets a value of this vector to {@code val}.
+     * @param val Value to set.
+     * @param index Index of this vector to set to {@code val}.
+     * @throws ArrayIndexOutOfBoundsException If {@code index} is not within this vector.
+     */
+    public CVector set(double val, int index) {
+        return set(new Complex128(val), index);
+    }
+
+
+
+    /**
+     * Adds a scalar value to each entry of this tensor and stores the result in this tensor.
+     *
+     * @param b Scalar value in sum.
+     */
+    public void addEq(double b) {
+        RealComplexDenseOperations.addEq(entries, b);
     }
 }

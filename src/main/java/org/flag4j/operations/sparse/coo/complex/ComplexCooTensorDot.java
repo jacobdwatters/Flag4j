@@ -25,16 +25,16 @@
 package org.flag4j.operations.sparse.coo.complex;
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays_old.dense.CTensorOld;
-import org.flag4j.arrays_old.sparse.CooCMatrixOld;
-import org.flag4j.arrays_old.sparse.CooCTensorOld;
+import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 
 /**
- * <p>Utility class for computing tensor dot products between two {@link CooCTensorOld complex sparse COO tensors}.</p>
+ * <p>Utility class for computing tensor dot products between two {@link CooCTensor complex sparse COO tensors}.</p>
  */
 public class ComplexCooTensorDot {
 
@@ -57,15 +57,15 @@ public class ComplexCooTensorDot {
      * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
      * are out of bounds for the corresponding tensor.
      */
-    public static CTensorOld tensorDot(CooCTensorOld src1, CooCTensorOld src2, int[] src1Axes, int[] src2Axes) {
+    public static CTensor tensorDot(CooCTensor src1, CooCTensor src2, int[] src1Axes, int[] src2Axes) {
         // Each array must specify the same number of axes.
-        ParameterChecks.ensureEquals(src1Axes.length, src2Axes.length);
+        ValidateParameters.ensureEquals(src1Axes.length, src2Axes.length);
 
         // Axis values must be less than the rank of the tensor and non-negative
-        ParameterChecks.ensureLessEq(src1.getRank()-1, src1Axes);
-        ParameterChecks.ensureGreaterEq(0, src1Axes);
-        ParameterChecks.ensureLessEq(src2.getRank()-1, src2Axes);
-        ParameterChecks.ensureGreaterEq(0, src2Axes);
+        ValidateParameters.ensureLessEq(src1.getRank()-1, src1Axes);
+        ValidateParameters.ensureGreaterEq(0, src1Axes);
+        ValidateParameters.ensureLessEq(src2.getRank()-1, src2Axes);
+        ValidateParameters.ensureGreaterEq(0, src2Axes);
 
         int[] notin;
         int n1;
@@ -82,12 +82,12 @@ public class ComplexCooTensorDot {
         }
 
         n1 = 1;
-        int[] src1OldDims = new int[notin.length];
+        int[] src1Dims = new int[notin.length];
         pos = 0;
         for(int axis : notin) {
             int a = src1.shape.get(axis);
             n1 *= a;
-            src1OldDims[pos++] = a;
+            src1Dims[pos++] = a;
         }
 
         Shape src1NewShape = new Shape(n1, n2);
@@ -104,29 +104,22 @@ public class ComplexCooTensorDot {
 
         n1 = 1;
         pos = 0;
-        int[] src2OldDims = new int[notin.length];
+        int[] src2Dims = new int[notin.length];
         for(int axis : notin) {
             int a = src2.shape.get(axis);
             n1 *= a;
-            src2OldDims[pos++] = a;
+            src2Dims[pos++] = a;
         }
 
         Shape src2NewShape = new Shape(n2, n1);
         // -----------------------------------------------------
 
         // Reform tensor dot product problem as a matrix multiplication problem.
-        CooCMatrixOld at = src1.T(src1NewAxes).toMatrix(src1NewShape);
-        CooCMatrixOld bt = src2.T(src2NewAxes).toMatrix(src2NewShape);
+        CooCMatrix at = src1.T(src1NewAxes).toMatrix(src1NewShape);
+        CooCMatrix bt = src2.T(src2NewAxes).toMatrix(src2NewShape);
 
-        CTensorOld product = at.mult(bt).toTensor();
-
-        // TODO: Should allow for zero dim shape indicating a scalar. Then only the else block would be needed.
-        Shape productShape;
-        if(src1Axes.length == src1.getRank() && src2Axes.length == src2.getRank()) {
-            productShape = new Shape(1);
-        } else {
-            productShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));
-        }
+        CTensor product = at.mult(bt).toTensor();
+        Shape productShape = new Shape(ArrayUtils.join(src1Dims, src2Dims));
 
         return product.reshape(productShape);
     }

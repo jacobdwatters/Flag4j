@@ -36,7 +36,7 @@ import org.flag4j.util.ArrayUtils;
  * <p>To allow for primitive types, the elements of this tensor do not necessarily have to implement
  * {@link SemiRing}.</p>
  *
- * <p>Formally, an semi-ring is a set <b>R</b> with the binary operations_old addition (+) and multiplication (*)
+ * <p>Formally, an semi-ring is a set <b>R</b> with the binary operations addition (+) and multiplication (*)
  * defined such that for elements a, b, c in <b>R</b> the following are satisfied:
  *  <ul>
  *      <li>Addition and multiplication are associative: a + (b + c) = (a + b) + c and a * (b * c) = (a * b) * c.</li>
@@ -229,6 +229,13 @@ public abstract class TensorOverSemiRing<T extends TensorOverSemiRing<T, U, V, W
      * @return True if this tensor only contains zeros. Otherwise, returns false.
      */
     public abstract boolean isZeros();
+
+
+    /**
+     * Checks if this tensor only contains ones. If this tensor is sparse, only the non-zero entries are considered.
+     * @return True if this tensor only contains ones. Otherwise, returns false.
+     */
+    public abstract boolean isOnes();
 
 
     /**

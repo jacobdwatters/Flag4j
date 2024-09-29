@@ -34,7 +34,7 @@ import org.flag4j.operations.sparse.coo.SparseDataWrapper;
 import org.flag4j.operations.sparse.coo.field_ops.CooFieldTensorDot;
 import org.flag4j.operations.sparse.coo.field_ops.CooFieldTensorOperations;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.math.BigDecimal;
@@ -104,10 +104,10 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      * tensor.
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-    public CooFieldTensorBase(Shape shape, V[] entries, int[][] indices) {
+    public CooFieldTensorBase(Shape shape, Field<V>[] entries, int[][] indices) {
         super(shape, entries);
-        ParameterChecks.ensureLengthEqualsRank(shape, indices[0].length);
-        ParameterChecks.ensureArrayLengthsEq(entries.length, indices.length);
+        ValidateParameters.ensureLengthEqualsRank(shape, indices[0].length);
+        ValidateParameters.ensureArrayLengthsEq(entries.length, indices.length);
 
         this.indices = indices;
         this.nnz = entries.length;
@@ -129,7 +129,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
         for(int i=0, size=entries.length; i<size; i++)
             recip[i] = entries[i].multInv();
 
-        return makeLikeTensor(shape, (V[]) recip);
+        return makeLikeTensor(shape, recip);
     }
 
 
@@ -219,7 +219,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
     @Override
     public T H(int axis1, int axis2) {
         int rank = getRank();
-        ParameterChecks.ensureIndexInBounds(rank, axis1, axis2);
+        ValidateParameters.ensureIndexInBounds(rank, axis1, axis2);
 
         if(axis1 == axis2) return copy(); // Simply return a copy.
 
@@ -233,7 +233,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
         }
 
         // Create sparse coo tensor and sort values lexicographically.
-        T transpose = makeLikeTensor(shape.swapAxes(axis1, axis2), (V[]) transposeEntries, transposeIndices);
+        T transpose = makeLikeTensor(shape.swapAxes(axis1, axis2), transposeEntries, transposeIndices);
         transpose.sortIndices();
 
         return transpose;
@@ -257,8 +257,8 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
     @Override
     public T H(int... axes) {
         int rank = getRank();
-        ParameterChecks.ensureEquals(rank, axes.length);
-        ParameterChecks.ensurePermutation(axes);
+        ValidateParameters.ensureEquals(rank, axes.length);
+        ValidateParameters.ensurePermutation(axes);
 
         int[][] transposeIndices = new int[nnz][rank];
         Field<V>[] transposeEntries = new Field[nnz];
@@ -274,7 +274,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
         }
 
         // Create sparse coo tensor and sort values lexicographically.
-        T transpose = makeLikeTensor(shape.swapAxes(axes), (V[]) transposeEntries, transposeIndices);
+        T transpose = makeLikeTensor(shape.swapAxes(axes), transposeEntries, transposeIndices);
         transpose.sortIndices();
 
         return transpose;
@@ -358,9 +358,9 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
     @Override
     public T tensorTr(int axis1, int axis2) {
         // Validate parameters.
-        ParameterChecks.ensureNotEquals(axis1, axis2);
-        ParameterChecks.ensureValidIndices(getRank(), axis1, axis2);
-        ParameterChecks.ensureEquals(shape.get(axis1), shape.get(axis2));
+        ValidateParameters.ensureNotEquals(axis1, axis2);
+        ValidateParameters.ensureValidIndices(getRank(), axis1, axis2);
+        ValidateParameters.ensureEquals(shape.get(axis1), shape.get(axis2));
 
         int rank = getRank();
         int[] dims = shape.getDims();
@@ -375,13 +375,13 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
         }
 
         // Use a map to accumulate non-zero entries that are on the diagonal.
-        Map<Integer, V> resultMap = new HashMap<>();
+        Map<Integer, Field<V>> resultMap = new HashMap<>();
         int[] strides = shape.getStrides();
 
         // Iterate through the non-zero entries and accumulate trace for those on the diagonal.
         for (int i = 0; i < this.nnz; i++) {
             int[] indices = this.indices[i];
-            V value = this.entries[i];
+            Field<V> value = this.entries[i];
 
             // Check if the current entry is on the diagonal
             if (indices[axis1] == indices[axis2]) {
@@ -397,7 +397,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
                 }
 
                 // Accumulate the value in the result map.
-                resultMap.put(linearIndex, resultMap.getOrDefault(linearIndex, getZeroElement()).add(value));
+                resultMap.put(linearIndex, resultMap.getOrDefault(linearIndex, getZeroElement()).add((V) value));
             }
         }
 
@@ -407,9 +407,9 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
         Field<V>[] resultEntries = new Field[resultNnz];
         int resultIndex = 0;
 
-        for (Map.Entry<Integer, V> entry : resultMap.entrySet()) {
+        for (Map.Entry<Integer, Field<V>> entry : resultMap.entrySet()) {
             int linearIndex = entry.getKey();
-            V entryValue = entry.getValue();
+            Field<V> entryValue = entry.getValue();
 
             // Use the getIndices method to convert the flat index to n-dimensional index.
             int[] multiDimIndices = shape.getIndices(linearIndex);
@@ -426,7 +426,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
             resultIndex++;
         }
 
-        return makeLikeTensor(new Shape(traceShape), (V[]) resultEntries, resultIndices);
+        return makeLikeTensor(new Shape(traceShape), resultEntries, resultIndices);
     }
 
 
@@ -456,11 +456,11 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      */
     @Override
     public V get(int... indices) {
-        ParameterChecks.ensureValidIndex(shape, indices);
+        ValidateParameters.ensureValidIndex(shape, indices);
         if(entries.length == 0) return null; // Can not get reference of field so no way to get zero element.
 
         for(int i=0; i<nnz; i++)
-            if(Arrays.equals(this.indices[i], indices)) return entries[i];
+            if(Arrays.equals(this.indices[i], indices)) return (V) entries[i];
 
         return entries[0].getZero(); // Return zero if the index is not found
     }
@@ -494,7 +494,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      */
     @Override
     public T flatten(int axis) {
-        ParameterChecks.ensureIndexInBounds(indices[0].length, axis);
+        ValidateParameters.ensureIndexInBounds(indices[0].length, axis);
         int[][] destIndices = new int[indices.length][indices[0].length];
 
         // Compute new shape.
@@ -520,7 +520,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      */
     @Override
     public T reshape(Shape newShape) {
-        ParameterChecks.ensureBroadcastable(shape, newShape);
+        ValidateParameters.ensureBroadcastable(shape, newShape);
 
         int rank = indices[0].length;
         int newRank = newShape.getRank();
@@ -561,7 +561,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      * the shape and entries.
      */
     @Override
-    public abstract T makeLikeTensor(Shape shape, V[] entries);
+    public abstract T makeLikeTensor(Shape shape, Field<V>[] entries);
 
 
     /**
@@ -573,7 +573,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      *
      * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
      */
-    public abstract T makeLikeTensor(Shape shape, V[] entries, int[][] indices);
+    public abstract T makeLikeTensor(Shape shape, Field<V>[] entries, int[][] indices);
 
 
     /**
@@ -585,7 +585,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      *
      * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
      */
-    public abstract T makeLikeTensor(Shape shape, List<V> entries, List<int[]> indices);
+    public abstract T makeLikeTensor(Shape shape, List<Field<V>> entries, List<int[]> indices);
 
 
     /**
@@ -735,7 +735,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
     @Override
     public T T(int axis1, int axis2) {
         int rank = getRank();
-        ParameterChecks.ensureIndexInBounds(rank, axis1, axis2);
+        ValidateParameters.ensureIndexInBounds(rank, axis1, axis2);
 
         if(axis1 == axis2) return copy(); // Simply return a copy.
 
@@ -749,7 +749,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
         }
 
         // Create sparse coo tensor and sort values lexicographically by indices.
-        T transpose = makeLikeTensor(shape.swapAxes(axis1, axis2), (V[]) transposeEntries, transposeIndices);
+        T transpose = makeLikeTensor(shape.swapAxes(axis1, axis2), transposeEntries, transposeIndices);
         transpose.sortIndices();
 
         return transpose;
@@ -773,8 +773,8 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
     @Override
     public T T(int... axes) {
         int rank = getRank();
-        ParameterChecks.ensureEquals(rank, axes.length);
-        ParameterChecks.ensurePermutation(axes);
+        ValidateParameters.ensureEquals(rank, axes.length);
+        ValidateParameters.ensurePermutation(axes);
 
         int[][] transposeIndices = new int[nnz][rank];
         Field<V>[] transposeEntries = new Field[nnz];
@@ -790,7 +790,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
         }
 
         // Create sparse COO tensor and sort values lexicographically by indices.
-        T transpose = makeLikeTensor(shape.swapAxes(axes), (V[]) transposeEntries, transposeIndices);
+        T transpose = makeLikeTensor(shape.swapAxes(axes), transposeEntries, transposeIndices);
         transpose.sortIndices();
 
         return transpose;
@@ -822,7 +822,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      * @param entries Entries of the dense tensor.
      * @return A dense tensor with the specified shape and entries which is a similar type to this sparse tensor.
      */
-    public abstract U makeDenseTensor(Shape shape, V[] entries);
+    public abstract U makeDenseTensor(Shape shape, Field<V>[] entries);
 
 
     /**

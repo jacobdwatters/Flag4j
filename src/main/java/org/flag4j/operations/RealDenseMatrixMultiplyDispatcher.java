@@ -24,12 +24,12 @@
 
 package org.flag4j.operations;
 
-import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.operations.dense.real.RealDenseMatrixMultTranspose;
 import org.flag4j.operations.dense.real.RealDenseMatrixMultiplication;
 import org.flag4j.util.Axis2D;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -115,7 +115,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * @return The result of the matrix multiplication.
      */
     public static double[] dispatch(Matrix A, Matrix B) {
-        ParameterChecks.ensureMatMultShapes(A.shape, B.shape); // Ensure matrix shapes are conducive to matrix multiplication.
+        ValidateParameters.ensureMatMultShapes(A.shape, B.shape); // Ensure matrix shapes are conducive to matrix multiplication.
 
         RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();
         AlgorithmNames name = selectAlgorithm(A.shape, B.shape);
@@ -132,7 +132,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * @return The result of the matrix multiplication.
      */
     public static double[] dispatch(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.ensureMatMultShapes(shape1, shape2); // Ensure matrix shapes are conducive to matrix multiplication.
+        ValidateParameters.ensureMatMultShapes(shape1, shape2); // Ensure matrix shapes are conducive to matrix multiplication.
 
         RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();
         AlgorithmNames name = selectAlgorithm(shape1, shape2);
@@ -148,7 +148,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * @return The matrix multiply-transpose result of {@code A} and {@code B}.
      */
     public static double[] dispatchTranspose(Matrix A, Matrix B) {
-        ParameterChecks.ensureArrayLengthsEq(A.numCols, B.numCols);
+        ValidateParameters.ensureArrayLengthsEq(A.numCols, B.numCols);
 
         RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();
         AlgorithmNames name = selectAlgorithmTranspose(A.shape);

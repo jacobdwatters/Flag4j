@@ -1,13 +1,13 @@
 package org.flag4j.sparse_complex_vector;
 
 
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.sparse.CooCMatrixOld;
-import org.flag4j.arrays_old.sparse.CooCTensorOld;
-import org.flag4j.arrays_old.sparse.CooCVectorOld;
-import org.flag4j.arrays_old.sparse.CooVectorOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.arrays.sparse.CooCTensor;
+import org.flag4j.arrays.sparse.CooCVector;
+import org.flag4j.arrays.sparse.CooVector;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -19,60 +19,60 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CooCVectorConversionTests {
 
     static int[] aIndices;
-    static CNumber[] aEntries;
+    static Complex128[] aEntries;
     static int sparseSize;
-    static CooCVectorOld a;
+    static CooCVector a;
 
 
     @BeforeAll
     static void setup() {
-        aEntries = new CNumber[]{
-                new CNumber(2.455, -83.6), new CNumber(0, 24.56),
-                new CNumber(24.56), new CNumber(-9356.1, 35)
+        aEntries = new Complex128[]{
+                new Complex128(2.455, -83.6), new Complex128(0, 24.56),
+                new Complex128(24.56), new Complex128(-9356.1, 35)
         };
         aIndices = new int[]{4, 56, 9903, 14643};
         sparseSize = 24_023;
-        a = new CooCVectorOld(sparseSize, aEntries, aIndices);
+        a = new CooCVector(sparseSize, aEntries, aIndices);
     }
 
 
     @Test
     void toMatrixTestCase() {
-        CNumber[] expEntries;
+        Complex128[] expEntries;
         int[][] expIndices;
         Shape expShape;
-        CooCMatrixOld exp;
+        CooCMatrix exp;
 
         // ------------------- Sub-case 1 -------------------
-        expEntries = new CNumber[]{
-                new CNumber(2.455, -83.6), new CNumber(0, 24.56),
-                new CNumber(24.56), new CNumber(-9356.1, 35)
+        expEntries = new Complex128[]{
+                new Complex128(2.455, -83.6), new Complex128(0, 24.56),
+                new Complex128(24.56), new Complex128(-9356.1, 35)
         };
         expIndices = new int[][]{{4, 56, 9903, 14643}, {0, 0, 0, 0}};
         expShape = new Shape(sparseSize, 1);
-        exp = new CooCMatrixOld(expShape, expEntries, expIndices[0], expIndices[1]);
+        exp = new CooCMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
 
         assertEquals(exp, a.toMatrix());
 
         // ------------------- Sub-case 2 -------------------
-        expEntries = new CNumber[]{
-                new CNumber(2.455, -83.6), new CNumber(0, 24.56),
-                new CNumber(24.56), new CNumber(-9356.1, 35)
+        expEntries = new Complex128[]{
+                new Complex128(2.455, -83.6), new Complex128(0, 24.56),
+                new Complex128(24.56), new Complex128(-9356.1, 35)
         };
         expIndices = new int[][]{{4, 56, 9903, 14643}, {0, 0, 0, 0}};
         expShape = new Shape(sparseSize, 1);
-        exp = new CooCMatrixOld(expShape, expEntries, expIndices[0], expIndices[1]);
+        exp = new CooCMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
 
         assertEquals(exp, a.toMatrix(true));
 
         // ------------------- Sub-case 3 -------------------
-        expEntries = new CNumber[]{
-                new CNumber(2.455, -83.6), new CNumber(0, 24.56),
-                new CNumber(24.56), new CNumber(-9356.1, 35)
+        expEntries = new Complex128[]{
+                new Complex128(2.455, -83.6), new Complex128(0, 24.56),
+                new Complex128(24.56), new Complex128(-9356.1, 35)
         };
         expIndices = new int[][]{{0, 0, 0, 0}, {4, 56, 9903, 14643}};
         expShape = new Shape(1, sparseSize);
-        exp = new CooCMatrixOld(expShape, expEntries, expIndices[0], expIndices[1]);
+        exp = new CooCMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
 
         assertEquals(exp, a.toMatrix(false));
     }
@@ -83,13 +83,13 @@ class CooCVectorConversionTests {
         double[] expEntries;
         int[] expIndices;
         int expSize;
-        CooVectorOld exp;
+        CooVector exp;
 
         // ------------------- Sub-case 1 -------------------
         expEntries = new double[]{2.455, 0, 24.56, -9356.1};
         expIndices = new int[]{4, 56, 9903, 14643};
         expSize = sparseSize;
-        exp = new CooVectorOld(expSize, expEntries, expIndices);
+        exp = new CooVector(expSize, expEntries, expIndices);
 
         assertEquals(exp, a.toReal());
     }
@@ -97,19 +97,19 @@ class CooCVectorConversionTests {
 
     @Test
     void toTensor() {
-        CNumber[] expEntries;
+        Complex128[] expEntries;
         int[][] expIndices;
         Shape expShape;
-        CooCTensorOld exp;
+        CooCTensor exp;
 
         // ------------------- Sub-case 1 -------------------
-        expEntries = new CNumber[]{
-                new CNumber(2.455, -83.6), new CNumber(0, 24.56),
-                new CNumber(24.56), new CNumber(-9356.1, 35)
+        expEntries = new Complex128[]{
+                new Complex128(2.455, -83.6), new Complex128(0, 24.56),
+                new Complex128(24.56), new Complex128(-9356.1, 35)
         };
         expIndices = new int[][]{{4}, {56}, {9903}, {14643}};
         expShape = new Shape(sparseSize);
-        exp = new CooCTensorOld(expShape, expEntries, expIndices);
+        exp = new CooCTensor(expShape, expEntries, expIndices);
 
         assertEquals(exp, a.toTensor());
     }
@@ -117,36 +117,36 @@ class CooCVectorConversionTests {
 
     @Test
     void toDenseTestCase() {
-        CNumber[] expEntries;
-        CVectorOld exp;
+        Complex128[] expEntries;
+        CVector exp;
 
         // ------------------- Sub-case 1 -------------------
-        expEntries = new CNumber[sparseSize];
-        Arrays.fill(expEntries, CNumber.ZERO);       
+        expEntries = new Complex128[sparseSize];
+        Arrays.fill(expEntries, Complex128.ZERO);       
         expEntries[aIndices[0]] = aEntries[0];
         expEntries[aIndices[1]] = aEntries[1];
         expEntries[aIndices[2]] = aEntries[2];
         expEntries[aIndices[3]] = aEntries[3];
-        exp = new CVectorOld(expEntries);
+        exp = new CVector(expEntries);
 
-        assertTrue(exp.tensorEquals(a.toDense()));
+        assertTrue(exp.equals(a.toDense()));
     }
 
 
     @Test
     void fromDenseTestCase() {
-        CNumber[] denseEntries;
-        CVectorOld denseVector;
+        Complex128[] denseEntries;
+        CVector denseVector;
 
         // ------------------- Sub-case 1 -------------------
-        denseEntries = new CNumber[sparseSize];
-        Arrays.fill(denseEntries, CNumber.ZERO);
+        denseEntries = new Complex128[sparseSize];
+        Arrays.fill(denseEntries, Complex128.ZERO);
         denseEntries[aIndices[0]] = aEntries[0];
         denseEntries[aIndices[1]] = aEntries[1];
         denseEntries[aIndices[2]] = aEntries[2];
         denseEntries[aIndices[3]] = aEntries[3];
-        denseVector = new CVectorOld(denseEntries);
+        denseVector = new CVector(denseEntries);
 
-        assertEquals(a, CooCVectorOld.fromDense(denseVector));
+        assertEquals(a, CooCVector.fromDense(denseVector));
     }
 }

@@ -24,12 +24,13 @@
 
 package org.flag4j.operations.dense.real_complex;
 
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 /**
- * This class provides low level implementations for vector operations_old with a real/complex dense vector and a complex/real
+ * This class provides low level implementations for vector operations with a real/complex dense vector and a complex/real
  * dense vector.
  */
 public final class RealComplexDenseVectorOperations {
@@ -47,13 +48,12 @@ public final class RealComplexDenseVectorOperations {
      * @param src2 Entries of the second vector.
      * @return The inner product of the two vectors.
      */
-    public static CNumber innerProduct(double[] src1, CNumber[] src2) {
-        ParameterChecks.ensureArrayLengthsEq(src1.length, src2.length);
-        CNumber innerProd = CNumber.ZERO;
+    public static Complex128 inner(double[] src1, Field<Complex128>[] src2) {
+        ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
+        Complex128 innerProd = Complex128.ZERO;
 
-        for(int i=0; i<src1.length; i++) {
+        for(int i=0; i<src1.length; i++)
             innerProd = innerProd.add(src2[i].conj().mult(src1[i]));
-        }
 
         return innerProd;
     }
@@ -66,13 +66,12 @@ public final class RealComplexDenseVectorOperations {
      * @param src2 Entries of the second vector.
      * @return The inner product of the two vectors.
      */
-    public static CNumber innerProduct(CNumber[] src1, double[] src2) {
-        ParameterChecks.ensureArrayLengthsEq(src1.length, src2.length);
-        CNumber innerProd = CNumber.ZERO;
+    public static Complex128 inner(Field<Complex128>[] src1, double[] src2) {
+        ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
+        Complex128 innerProd = Complex128.ZERO;
 
-        for(int i=0; i<src1.length; i++) {
+        for(int i=0; i<src1.length; i++)
             innerProd = innerProd.add(src1[i].mult(src2[i]));
-        }
 
         return innerProd;
     }
@@ -85,16 +84,16 @@ public final class RealComplexDenseVectorOperations {
      * @param src2 Entries of second vector.
      * @return The matrix resulting from the vector outer product.
      */
-    public static CNumber[] outerProduct(double[] src1, CNumber[] src2) {
+    public static Complex128[] outerProduct(double[] src1, Field<Complex128>[] src2) {
         int destIndex;
-        CNumber[] dest = new CNumber[src1.length*src2.length];
+        Complex128[] dest = new Complex128[src1.length*src2.length];
 
         for(int i=0; i<src1.length; i++) {
             destIndex = i*src2.length;
+            double v = src1[i];
 
-            for(CNumber cNumber : src2) {
-                dest[destIndex++] = cNumber.conj().mult(src1[i]);
-            }
+            for(Field<Complex128> cNumber : src2)
+                dest[destIndex++] = cNumber.conj().mult(v);
         }
 
         return dest;
@@ -107,16 +106,16 @@ public final class RealComplexDenseVectorOperations {
      * @param src2 Entries of second vector.
      * @return The matrix resulting from the vector outer product.
      */
-    public static CNumber[] outerProduct(CNumber[] src1, double[] src2) {
+    public static Complex128[] outerProduct(Field<Complex128>[] src1, double[] src2) {
         int destIndex;
-        CNumber[] dest = new CNumber[src1.length*src2.length];
+        Complex128[] dest = new Complex128[src1.length*src2.length];
 
         for(int i=0; i<src1.length; i++) {
             destIndex = i*src2.length;
+            Field<Complex128> v1 = src1[i];
 
-            for(double v : src2) {
-                dest[destIndex++] = src1[i].mult(v);
-            }
+            for(double v2 : src2)
+                dest[destIndex++] = v1.mult(v2);
         }
 
         return dest;
@@ -128,12 +127,11 @@ public final class RealComplexDenseVectorOperations {
      * @param a Scalar to add to all entries of this tensor.
      * @return The result of adding the scalar to each entry of the tensor.
      */
-    public static CNumber[] add(double[] src1, CNumber a) {
-        CNumber[] sum = new CNumber[src1.length];
+    public static Complex128[] add(double[] src1, Complex128 a) {
+        Complex128[] sum = new Complex128[src1.length];
 
-        for(int i=0; i<sum.length; i++) {
+        for(int i=0; i<sum.length; i++)
             sum[i] = a.add(src1[i]);
-        }
 
         return sum;
     }

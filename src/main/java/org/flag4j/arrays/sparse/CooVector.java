@@ -24,20 +24,28 @@
 
 package org.flag4j.arrays.sparse;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
 import org.flag4j.arrays.backend.SparseVectorMixin;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.Shape;
 import org.flag4j.linalg.VectorNorms;
+import org.flag4j.operations.common.complex.Complex128Operations;
 import org.flag4j.operations.dense.real.AggregateDenseReal;
+import org.flag4j.operations.dense.real.RealDenseTranspose;
+import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import org.flag4j.operations.sparse.coo.SparseDataWrapper;
 import org.flag4j.operations.sparse.coo.real.RealCooVectorOperations;
 import org.flag4j.operations.sparse.coo.real.RealSparseEquals;
+import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -93,7 +101,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     public CooVector(Shape shape, double[] entries, int[] indices) {
         super(shape, entries);
-        ParameterChecks.ensureRank(shape, 1);
+        ValidateParameters.ensureRank(shape, 1);
         this.size = shape.get(0);
         this.indices = indices;
         this.nnz = entries.length;
@@ -138,6 +146,59 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
         indices = new int[0];
         nnz = 0;
         this.size = size;
+    }
+
+
+    /**
+     * Creates sparse COO vector with the specified {@code size}, non-zero entries, and non-zero indices.
+     *
+     * @param size The size of this vector.
+     * @param entries The non-zero entries of this vector.
+     * @param indices The indices of the non-zero values.
+     */
+    public CooVector(int size, int[] entries, int[] indices) {
+        super(new Shape(size), ArrayUtils.asDouble(entries, null));
+        this.indices = indices;
+        this.size = size;
+        nnz = entries.length;
+    }
+
+
+    /**
+     * Constructs a copy of the specified sparse COO vector.
+     * @param b The vector to construct a copy of.
+     */
+    public CooVector(CooVector b) {
+        super(b.shape, b.entries.clone());
+        indices = b.indices.clone();
+        nnz = b.nnz;
+        size = b.size;
+    }
+
+
+    /**
+     * Creates a sparse tensor from a dense tensor.
+     *
+     * @param src Dense tensor to convert to a sparse tensor.
+     * @return A sparse tensor which is equivalent to the {@code src} dense tensor.
+     */
+    public static CooVector fromDense(Vector src) {
+        List<Double> nonZeroEntries = new ArrayList<>((int) (src.entries.length*0.8));
+        List<Integer> indices = new ArrayList<>((int) (src.entries.length*0.8));
+
+        // Fill entries with non-zero values.
+        for(int i=0; i<src.entries.length; i++) {
+            if(src.entries[i] != 0d) {
+                nonZeroEntries.add(src.entries[i]);
+                indices.add(i);
+            }
+        }
+
+        return new CooVector(
+                src.size,
+                ArrayUtils.fromDoubleList(nonZeroEntries),
+                ArrayUtils.fromIntegerList(indices)
+        );
     }
 
 
@@ -213,7 +274,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     @Override
     public CooVector T(int axis1, int axis2) {
-        ParameterChecks.ensureValidAxes(shape, axis1, axis2);
+        ValidateParameters.ensureValidAxes(shape, axis1, axis2);
         return copy();
     }
 
@@ -234,7 +295,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     @Override
     public CooVector T(int... axes) {
-        ParameterChecks.ensurePermutation(axes);
+        ValidateParameters.ensurePermutation(axes);
         return copy();
     }
 
@@ -470,11 +531,53 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     @Override
     public Double get(int... indices) {
-        ParameterChecks.ensureEquals(indices.length, 1);
-        ParameterChecks.ensureInRange(indices[0], 0, size, "index");
+        ValidateParameters.ensureEquals(indices.length, 1);
+        ValidateParameters.ensureInRange(indices[0], 0, size, "index");
 
         int idx = Arrays.binarySearch(this.indices, indices[0]);
         return idx>=0 ? entries[idx] : 0;
+    }
+
+
+    /**
+     * Sets the element of this tensor at the specified indices.
+     *
+     * @param value New value to set the specified index of this tensor to.
+     * @param indices Indices of the element to set.
+     *
+     * @return A copy of this tensor with the updated value is returned.
+     *
+     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
+     */
+    @Override
+    public CooVector set(Double value, int... indices) {
+        ValidateParameters.ensureValidIndex(shape, indices);
+        int idx = Arrays.binarySearch(this.indices, indices[0]);
+        double[] destEntries;
+        int[] destIndices;
+
+        if(idx >= 0) {
+            // Then the index was found in the sparse vector.
+            destIndices = this.indices.clone();
+            destEntries = entries.clone();
+            destEntries[idx] = value;
+
+        } else{
+            // Then the index was not found in the sparse vector.
+            destIndices = new int[this.indices.length+1];
+            destEntries = new double[entries.length+1];
+            idx = -(idx+1);
+
+            System.arraycopy(this.indices, 0, destIndices, 0, idx);
+            destIndices[idx] = indices[0];
+            System.arraycopy(this.indices, idx, destIndices, idx+1, this.indices.length-idx);
+
+            System.arraycopy(entries, 0, destEntries, 0, idx);
+            destEntries[idx] = value;
+            System.arraycopy(entries, idx, destEntries, idx+1, entries.length-idx);
+        }
+
+        return new CooVector(size, destEntries, destIndices);
     }
 
 
@@ -501,7 +604,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     @Override
     public CooVector flatten(int axis) {
-        ParameterChecks.ensureValidAxes(shape, axis);
+        ValidateParameters.ensureValidAxes(shape, axis);
         return copy();
     }
 
@@ -517,8 +620,8 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     @Override
     public CooVector reshape(Shape newShape) {
-        ParameterChecks.ensureRank(newShape, 1);
-        ParameterChecks.ensureBroadcastable(shape, newShape);
+        ValidateParameters.ensureRank(newShape, 1);
+        ValidateParameters.ensureBroadcastable(shape, newShape);
         return copy();
     }
 
@@ -533,6 +636,18 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
     @Override
     public CooVector sub(Double b) {
         return super.sub(b); // Overrides method from super class to emphasize it operates on the non-zero values only.
+    }
+
+
+    /**
+     * Subtracts a scalar value from each non-zero entry of this tensor.
+     *
+     * @param b Scalar value in difference.
+     *
+     * @return The difference of this tensor's non-zero values and the scalar {@code b}.
+     */
+    public CVector sub(Complex128 b) {
+        return new CVector(RealComplexSparseVectorOperations.sub(this, b));
     }
 
 
@@ -561,6 +676,18 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
 
 
     /**
+     * Adds a scalar field value to each entry of this tensor.
+     *
+     * @param b Scalar field value in sum.
+     *
+     * @return The sum of this tensor with the scalar {@code b}.
+     */
+    public CVector add(Complex128 b) {
+        return new CVector(RealComplexSparseVectorOperations.add(this, b));
+    }
+
+
+    /**
      * Adds a scalar value to each entry of this tensor and stores the result in this tensor.
      *
      * @param b Scalar field value in sum.
@@ -583,6 +710,20 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
     @Override
     public CooVector add(CooVector b) {
         return RealCooVectorOperations.add(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise sum between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise sum.
+     *
+     * @return The sum of this tensor with {@code b}.
+     *
+     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     */
+    public CooCVector add(CooCVector b) {
+        return RealComplexSparseVectorOperations.add(b, this);
     }
 
 
@@ -694,7 +835,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     @Override
     public CooVector H(int axis1, int axis2) {
-        ParameterChecks.ensureValidAxes(shape, axis1, axis2);
+        ValidateParameters.ensureValidAxes(shape, axis1, axis2);
         return copy();
     }
 
@@ -715,7 +856,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     @Override
     public CooVector H(int... axes) {
-        ParameterChecks.ensurePermutation(axes);
+        ValidateParameters.ensurePermutation(axes);
         return copy();
     }
 
@@ -944,7 +1085,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     @Override
     public CooMatrix stack(CooVector b, int axis) {
-        ParameterChecks.ensureAxis2D(axis);
+        ValidateParameters.ensureAxis2D(axis);
         return axis==0 ? stack(b) : stack(b).T();
     }
 
@@ -988,5 +1129,78 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
 
             return new CooMatrix(1, this.size, entries.clone(), rowIndices, colIndices);
         }
+    }
+
+
+    /**
+     * Converts this vector to an equivalent sparse vector.
+     * @return A complex COO vector equivalent to this vector.
+     */
+    public CooCVector toComplex() {
+        return new CooCVector(size, entries, indices.clone());
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between this vector and a real dense vector.
+     * @param b The real dense vector in the element-wise product.
+     * @return The element-wise product of this vector and {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If the two vectors are not the same size.
+     */
+    public CooVector elemMult(Vector b) {
+        return RealDenseSparseVectorOperations.elemMult(b, this);
+    }
+
+
+    /**
+     * Multiplies this vector by a complex scalar value.
+     * @param factor Scalar value to multiply this vector by.
+     * @return The result of multiplying this vector by the scalar {@code factor}.
+     */
+    public CooCVector mult(Complex128 factor) {
+        return new CooCVector(size, Complex128Operations.scalMult(entries, factor), indices.clone());
+    }
+
+
+    /**
+     * Converts this sparse vector to an equivalent tensor.
+     * @return A tensor equivalent to this vector.
+     */
+    public CooTensor toTensor() {
+        return new CooTensor(
+                this.shape,
+                this.entries.clone(),
+                RealDenseTranspose.standardIntMatrix(new int[][]{this.indices})
+        );
+    }
+
+
+    /**
+     * Computes the element-wise division of two vectors.
+     * @param b The second vector in the element-wise quotient (denominator).
+     * @return The element-wise quotient of this vector and {@code b}.
+     */
+    public CooVector div(Vector b) {
+        return RealDenseSparseVectorOperations.elemDiv(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise division of two vectors.
+     * @param b The second vector in the element-wise quotient (denominator).
+     * @return The element-wise quotient of this vector and {@code b}.
+     */
+    public CooCVector div(CVector b) {
+        return RealComplexDenseSparseVectorOperations.elemDiv(this, b);
+    }
+
+
+    /**
+     * Divides each element of this sparse COO vector by a complex-valued scalar.
+     * @param divisor Scalar in the vector-scalar quotient.
+     * @return The vector-scalar quotient of this vector and {@code divisor}.
+     */
+    public CooCVector div(Complex128 divisor) {
+        return new CooCVector(size, Complex128Operations.scalDiv(entries, divisor), indices.clone());
     }
 }

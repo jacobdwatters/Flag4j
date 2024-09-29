@@ -30,10 +30,9 @@ import org.flag4j.arrays.backend.CooFieldMatrixBase;
 import org.flag4j.arrays.backend.CooFieldVectorBase;
 import org.flag4j.arrays.backend.DenseFieldMatrixBase;
 import org.flag4j.arrays.backend.DenseFieldVectorBase;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,7 +62,7 @@ public final class CooFieldVectorOperations {
 
         for(int i=0; i<src.entries.length; i++) {
             int idx = src.indices[i];
-            dest[src.indices[i]] = dest[src.indices[i]].add(src.entries[i]);
+            dest[src.indices[i]] = dest[src.indices[i]].add((T) src.entries[i]);
         }
 
         return src.makeLikeDenseTensor((T[]) dest);
@@ -82,7 +81,7 @@ public final class CooFieldVectorOperations {
 
         for(int i=0; i<src.entries.length; i++) {
             int idx = src.indices[i];
-            dest[idx] = dest[idx].add(src.entries[i]);
+            dest[idx] = dest[idx].add((T) src.entries[i]);
         }
 
         return src.makeLikeDenseTensor((T[]) dest);
@@ -98,8 +97,8 @@ public final class CooFieldVectorOperations {
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
     public static <T extends CooFieldVectorBase<T, ?, ?, ?, U>, U extends Field<U>> T add(T src1, T src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-        List<U> values = new ArrayList<>(src1.entries.length);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+        List<Field<U>> values = new ArrayList<>(src1.entries.length);
         List<Integer> indices = new ArrayList<>(src1.entries.length);
 
         int src1Counter = 0;
@@ -107,7 +106,7 @@ public final class CooFieldVectorOperations {
 
         while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
             if(src1.indices[src1Counter] == src2.indices[src2Counter]) {
-                values.add(src1.entries[src1Counter].add(src2.entries[src2Counter]));
+                values.add(src1.entries[src1Counter].add((U) src2.entries[src2Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
@@ -150,8 +149,8 @@ public final class CooFieldVectorOperations {
      */
     public static <T extends Field<T>> CooFieldVectorBase<?, ?, ?, ?, T> sub(CooFieldVectorBase<?, ?, ?, ?, T> src1,
                                                                        CooFieldVectorBase<?, ?, ?, ?, T> src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-        List<T> values = new ArrayList<>(src1.entries.length);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+        List<Field<T>> values = new ArrayList<>(src1.entries.length);
         List<Integer> indices = new ArrayList<>(src1.entries.length);
 
         int src1Counter = 0;
@@ -159,7 +158,7 @@ public final class CooFieldVectorOperations {
 
         while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
             if(src1.indices[src1Counter] == src2.indices[src2Counter]) {
-                values.add(src1.entries[src1Counter].sub(src2.entries[src2Counter]));
+                values.add(src1.entries[src1Counter].sub((T) src2.entries[src2Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
@@ -202,8 +201,8 @@ public final class CooFieldVectorOperations {
      */
     public static <T extends Field<T>> CooFieldVectorBase<?, ?, ?, ?, T> elemMult(CooFieldVectorBase<?, ?, ?, ?, T> src1,
                                                                             CooFieldVectorBase<?, ?, ?, ?, T> src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-        List<T> values = new ArrayList<>(src1.entries.length);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+        List<Field<T>> values = new ArrayList<>(src1.entries.length);
         List<Integer> indices = new ArrayList<>(src1.entries.length);
 
         int src1Counter = 0;
@@ -212,7 +211,7 @@ public final class CooFieldVectorOperations {
         while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
             if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
                 // Then indices match, add product of elements.
-                values.add(src1.entries[src1Counter].mult(src2.entries[src2Counter]));
+                values.add(src1.entries[src1Counter].mult((T) src2.entries[src2Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
@@ -236,7 +235,7 @@ public final class CooFieldVectorOperations {
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
     public static <T extends Field<T>> T inner(CooFieldVectorBase<?, ?, ?, ?, T> src1, CooFieldVectorBase<?, ?, ?, ?, T> src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         T product = null;
         if(src1.nnz > 0) product = src1.entries[0].getZero();
@@ -269,7 +268,7 @@ public final class CooFieldVectorOperations {
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
     public static <T extends Field<T>> T dot(CooFieldVectorBase<?, ?, ?, ?, T> src1, CooFieldVectorBase<?, ?, ?, ?, T> src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         T product = null;
         if(src1.nnz > 0) product = src1.entries[0].getZero();
@@ -281,7 +280,7 @@ public final class CooFieldVectorOperations {
         while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
             if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
                 // Then indices match, add product of elements.
-                product = product.add(src1.entries[src1Counter].mult(src2.entries[src2Counter]));
+                product = product.add(src1.entries[src1Counter].mult((T) src2.entries[src2Counter]));
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
                 src1Counter++;
             } else {
@@ -302,7 +301,7 @@ public final class CooFieldVectorOperations {
     public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> outerProduct(
             CooFieldVectorBase<?, ?, ?, ?, T> src1, CooFieldVectorBase<?, ?, ?, ?, T> src2) {
         Field<T>[] dest = new Field[src2.size*src1.size];
-        Arrays.fill(dest, CNumber.ZERO);
+        Arrays.fill(dest, src1.getZeroElement());
 
         int destRow;
         int index1;
@@ -311,11 +310,11 @@ public final class CooFieldVectorOperations {
         for(int i=0; i<src1.nnz; i++) {
             index1 = src1.indices[i];
             destRow = index1*src1.size;
-            T src1Val = src1.entries[i];
+            Field<T> src1Val = src1.entries[i];
 
             for(int j=0; j<src2.nnz; j++) {
                 index2 = src2.indices[j];
-                dest[destRow + index2] = src1Val.mult(src2.entries[j]);
+                dest[destRow + index2] = src1Val.mult((T) src2.entries[j]);
             }
         }
 
@@ -333,9 +332,9 @@ public final class CooFieldVectorOperations {
      * @throws IllegalArgumentException If the number of entries in the {@code src1} vector is different from the number of entries in
      *                                  the vector {@code src2}.
      */
-    public static <T extends Field<T>> CooFieldMatrixBase<?, ?, ?, T> stack(CooFieldVectorBase<?, ?, ?, ?, T> src1,
-                                                                            CooFieldVectorBase<?, ?, ?, ?, T> src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static <T extends Field<T>> CooFieldMatrixBase<?, ?, ?, ?, T> stack(CooFieldVectorBase<?, ?, ?, ?, T> src1,
+                                                                               CooFieldVectorBase<?, ?, ?, ?, T> src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         Field<T>[] entries = new Field[src1.entries.length + src2.entries.length];
         int[][] indices = new int[2][src1.indices.length + src2.indices.length]; // Row and column indices.
@@ -367,9 +366,11 @@ public final class CooFieldVectorOperations {
      *
      * @return A matrix whose rows/columns are this vector repeated.
      */
-    public static <T extends Field<T>> CooFieldMatrixBase<?, ?, ?, T> repeat(CooFieldVectorBase<?, ?, ?, ?, T> src, int n, int axis) {
-        ParameterChecks.ensureInRange(axis, 0, 1, "axis");
-        ParameterChecks.ensureGreaterEq(0, n, "n");
+    public static <T extends Field<T>> CooFieldMatrixBase<?, ?, ?, ?, T> repeat(CooFieldVectorBase<?, ?, ?, ?, T> src,
+                                                                                int n,
+                                                                                int axis) {
+        ValidateParameters.ensureInRange(axis, 0, 1, "axis");
+        ValidateParameters.ensureGreaterEq(0, n, "n");
 
         Shape tiledShape;
         Field<T>[] tiledEntries = new Field[n*src.entries.length];

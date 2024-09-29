@@ -26,7 +26,7 @@ package org.flag4j.operations.dense.field_ops;
 
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 
 /**
@@ -42,13 +42,13 @@ public final class DenseFieldVectorOperations {
 
 
     /**
-     * Computes the vector inner product for twovectors.
+     * Computes the vector inner product for two vectors.
      * @param src1 Entries of the first vector.
      * @param src2 Entries of the second vector.
      * @return The inner product of the two vectors.
      */
-    public static <T extends Field<T>> T innerProduct(T[] src1, T[] src2) {
-        ParameterChecks.ensureArrayLengthsEq(src1.length, src2.length);
+    public static <T extends Field<T>> T innerProduct(Field<T>[] src1, Field<T>[] src2) {
+        ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
         T innerProd = src1[0].getZero();
 
         for(int i=0, size=src1.length; i<size; i++)
@@ -64,12 +64,12 @@ public final class DenseFieldVectorOperations {
      * @param src2 Entries of the second vector.
      * @return The dot product of the two vectors.
      */
-    public static <T extends Field<T>> T dotProduct(T[] src1, T[] src2) {
-        ParameterChecks.ensureArrayLengthsEq(src1.length, src2.length);
+    public static <T extends Field<T>> T dotProduct(Field<T>[] src1, Field<T>[] src2) {
+        ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
         T innerProd = src1[0].getZero();
 
         for(int i=0, size=src1.length; i<size; i++)
-            innerProd = innerProd.add(src1[i].mult(src2[i]));
+            innerProd = innerProd.add(src1[i].mult((T) src2[i]));
 
         return innerProd;
     }
@@ -81,16 +81,16 @@ public final class DenseFieldVectorOperations {
      * @param src2 Entries of second vector.
      * @return The matrix resulting from the vector outer product.
      */
-    public static <T extends Field<T>> Field<T>[] outerProduct(T[] src1, T[] src2) {
+    public static <T extends Field<T>> Field<T>[] outerProduct(Field<T>[] src1, Field<T>[] src2) {
         int destIndex;
         Field<T>[] dest = new Field[src1.length*src2.length];
 
         for(int i=0, size=src1.length; i<size; i++) {
             destIndex = i*src2.length;
+            Field<T> src1Value = src1[i];
 
-            for(T value : src2) {
-                dest[destIndex++] = src1[i].mult(value.conj());
-            }
+            for(Field<T> value : src2)
+                dest[destIndex++] = src1Value.mult(value.conj());
         }
 
         return dest;

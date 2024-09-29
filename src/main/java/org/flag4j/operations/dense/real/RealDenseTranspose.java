@@ -24,12 +24,12 @@
 
 package org.flag4j.operations.dense.real;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
-import org.flag4j.arrays.Shape;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 
 /**
@@ -54,7 +54,7 @@ public final class RealDenseTranspose {
      */
     public static double[] standard(double[] src, Shape shape, int axis1, int axis2) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
@@ -84,10 +84,10 @@ public final class RealDenseTranspose {
      * @throws IllegalArgumentException If the {@code shape} rank is less than 2.
      */
     public static double[] standard(double[] src, Shape shape, int[] axes) {
-        ParameterChecks.ensurePermutation(axes);
-        ParameterChecks.ensureEquals(shape.getRank(), axes.length);
+        ValidateParameters.ensurePermutation(axes);
+        ValidateParameters.ensureEquals(shape.getRank(), axes.length);
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
@@ -117,10 +117,10 @@ public final class RealDenseTranspose {
      * @throws IllegalArgumentException If the {@code shape} rank is less than 2.
      */
     public static double[] standardConcurrent(double[] src, Shape shape, int[] axes) {
-        ParameterChecks.ensurePermutation(axes);
-        ParameterChecks.ensureEquals(shape.getRank(), axes.length);
+        ValidateParameters.ensurePermutation(axes);
+        ValidateParameters.ensureEquals(shape.getRank(), axes.length);
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
@@ -150,7 +150,7 @@ public final class RealDenseTranspose {
      */
     public static double[] standardConcurrent(double[] src, Shape shape, int axis1, int axis2) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 

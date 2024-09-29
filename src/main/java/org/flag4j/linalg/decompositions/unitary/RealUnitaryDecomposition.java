@@ -74,7 +74,7 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
      *
      * <p>It should be noted that if performance is improved, it will be a very slight improvement compared
      * to the total time to compute the decomposition. This is because the computation of {@code Q} is only
-     * evaluated lazily once {@link #getQ()} is called, so this will only save on copy operations_old.</p>
+     * evaluated lazily once {@link #getQ()} is called, so this will only save on copy operations.</p>
      *
      * @param subDiagonal Sub-diagonal of the upper triangular/Hessenburg matrix. That is, the sub-diagonal for which all entries
      *                    below will be zero in the final upper quasi-triangular matrix. Must be Zero or one. If zero, it will be

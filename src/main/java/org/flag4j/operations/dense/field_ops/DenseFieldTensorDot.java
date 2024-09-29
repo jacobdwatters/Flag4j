@@ -30,7 +30,7 @@ import org.flag4j.arrays.backend.FieldTensorBase;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 
 /**
@@ -91,11 +91,11 @@ public class DenseFieldTensorDot {
                                                                                        FieldTensorBase<T, T, V> src2,
                                                                                        int[] src1Axes, int[] src2Axes) {
         // Each array must specify the same number of axes.
-        ParameterChecks.ensureEquals(src1Axes.length, src2Axes.length);
+        ValidateParameters.ensureEquals(src1Axes.length, src2Axes.length);
 
         // Axis values must be less than the rank of the tensor and non-negative.
-        ParameterChecks.ensureValidAxes(src1.shape, src1Axes);
-        ParameterChecks.ensureValidAxes(src2.shape, src2Axes);
+        ValidateParameters.ensureValidAxes(src1.shape, src1Axes);
+        ValidateParameters.ensureValidAxes(src2.shape, src2Axes);
 
         int[] notin;
         int n1;
@@ -112,12 +112,12 @@ public class DenseFieldTensorDot {
         }
 
         n1 = 1;
-        int[] src1OldDims = new int[notin.length];
+        int[] src1Dims = new int[notin.length];
         pos = 0;
         for(int axis : notin) {
             int a = src1.shape.get(axis);
             n1 *= a;
-            src1OldDims[pos++] = a;
+            src1Dims[pos++] = a;
         }
 
         Shape src1NewShape = new Shape(n1, n2);
@@ -134,22 +134,22 @@ public class DenseFieldTensorDot {
 
         n1 = 1;
         pos = 0;
-        int[] src2OldDims = new int[notin.length];
+        int[] src2Dims = new int[notin.length];
         for(int axis : notin) {
             int a = src2.shape.get(axis);
             n1 *= a;
-            src2OldDims[pos++] = a;
+            src2Dims[pos++] = a;
         }
 
         Shape src2NewShape = new Shape(n2, n1);
         // -----------------------------------------------------
 
         // Reform tensor dot product problem as a matrix multiplication problem.
-        V[] at = TransposeDispatcher.dispatchTensor(src1, src1NewAxes).entries;
-        V[] bt = TransposeDispatcher.dispatchTensor(src2, src2NewAxes).entries;
+        Field<V>[] at = TransposeDispatcher.dispatchTensor(src1, src1NewAxes).entries;
+        Field<V>[] bt = TransposeDispatcher.dispatchTensor(src2, src2NewAxes).entries;
 
         Field<V>[] destEntries = DenseFieldMatMultDispatcher.dispatch(at, src1NewShape, bt, src2NewShape);
-        Shape destShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));
+        Shape destShape = new Shape(ArrayUtils.join(src1Dims, src2Dims));
 
         return src1.makeLikeTensor(destShape, (V[]) destEntries);
     }

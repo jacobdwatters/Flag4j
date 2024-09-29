@@ -24,11 +24,12 @@
 
 package org.flag4j.operations.sparse.coo.real_complex;
 
-import org.flag4j.arrays_old.sparse.CooCTensorOld;
-import org.flag4j.arrays_old.sparse.CooTensorOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.sparse.CooCTensor;
+import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ import java.util.List;
 
 
 /**
- * Utility class for computing operations_old between a complex sparse COO tensor and a real coo tensor.
+ * Utility class for computing operations between a complex sparse COO tensor and a real coo tensor.
  */
 public final class RealComplexCooTensorOperations {
 
@@ -53,8 +54,8 @@ public final class RealComplexCooTensorOperations {
      * @return The element-wise tensor sum of {@code src1} and {@code src2}.
      * @throws LinearAlgebraException If the tensors {@code src1} and {@code src2} do not have the same shape.
      */
-    public static CooCTensorOld add(CooCTensorOld src1, CooTensorOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static CooCTensor add(CooCTensor src1, CooTensor src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         // Create deep copies of indices.
         int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
@@ -62,17 +63,17 @@ public final class RealComplexCooTensorOperations {
 
         // Roughly estimate the number of non-zero entries in sum.
         int estimatedEntries = src1.nnz + src2.nnz;
-        List<CNumber> sumEntries = new ArrayList<>(estimatedEntries);
+        List<Field<Complex128>> sumEntries = new ArrayList<>(estimatedEntries);
         List<int[]> sumIndices = new ArrayList<>(estimatedEntries);
 
         int src2Pos = 0;
         for(int i = 0; i < src1.nnz; i++) {
-            CNumber val1 = src1.entries[i];
+            Field<Complex128> val1 = src1.entries[i];
             int[] src1Idx = src1Indices[i];
 
             // Insert elements from src2 whose index is less than the current element from src1
             while(src2Pos < src2.nnz && Arrays.compare(src2Indices[src2Pos], src1Idx) < 0) {
-                sumEntries.add(new CNumber(src2.entries[src2Pos]));
+                sumEntries.add(new Complex128(src2.entries[src2Pos]));
                 sumIndices.add(src2Indices[src2Pos++]);
             }
 
@@ -87,11 +88,11 @@ public final class RealComplexCooTensorOperations {
 
         // Insert any remaining elements from src2
         while(src2Pos < src2.nnz) {
-            sumEntries.add(new CNumber(src2.entries[src2Pos]));
+            sumEntries.add(new Complex128(src2.entries[src2Pos]));
             sumIndices.add(src2Indices[src2Pos++]);
         }
 
-        return new CooCTensorOld(src1.shape, sumEntries, sumIndices);
+        return new CooCTensor(src1.shape, sumEntries, sumIndices);
     }
 
 
@@ -102,8 +103,8 @@ public final class RealComplexCooTensorOperations {
      * @return The element-wise tensor difference of {@code src1} and {@code src2}.
      * @throws LinearAlgebraException If the tensors {@code src1} and {@code src2} do not have the same shape.
      */
-    public static CooCTensorOld sub(CooCTensorOld src1, CooTensorOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static CooCTensor sub(CooCTensor src1, CooTensor src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         // Create deep copies of indices.
         int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
@@ -111,17 +112,17 @@ public final class RealComplexCooTensorOperations {
 
         // Roughly estimate the number of non-zero entries in sum.
         int estimatedEntries = src1.nnz + src2.nnz;
-        List<CNumber> sumEntries = new ArrayList<>(estimatedEntries);
+        List<Field<Complex128>> sumEntries = new ArrayList<>(estimatedEntries);
         List<int[]> sumIndices = new ArrayList<>(estimatedEntries);
 
         int src2Pos = 0;
         for(int i = 0; i < src1.nnz; i++) {
-            CNumber val1 = src1.entries[i];
+            Field<Complex128> val1 = src1.entries[i];
             int[] src1Idx = src1Indices[i];
 
             // Insert elements from src2 whose index is less than the current element from src1
             while(src2Pos < src2.nnz && Arrays.compare(src2Indices[src2Pos], src1Idx) < 0) {
-                sumEntries.add(new CNumber(-src2.entries[src2Pos]));
+                sumEntries.add(new Complex128(-src2.entries[src2Pos]));
                 sumIndices.add(src2Indices[src2Pos++]);
             }
 
@@ -136,11 +137,11 @@ public final class RealComplexCooTensorOperations {
 
         // Insert any remaining elements from src2
         while(src2Pos < src2.nnz) {
-            sumEntries.add(new CNumber(-src2.entries[src2Pos]));
+            sumEntries.add(new Complex128(-src2.entries[src2Pos]));
             sumIndices.add(src2Indices[src2Pos++]);
         }
 
-        return new CooCTensorOld(src1.shape, sumEntries, sumIndices);
+        return new CooCTensor(src1.shape, sumEntries, sumIndices);
     }
 
 
@@ -151,8 +152,8 @@ public final class RealComplexCooTensorOperations {
      * @return The element-wise tensor difference of {@code src1} and {@code src2}.
      * @throws LinearAlgebraException If the tensors {@code src1} and {@code src2} do not have the same shape.
      */
-    public static CooCTensorOld sub(CooTensorOld src1, CooCTensorOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static CooCTensor sub(CooTensor src1, CooCTensor src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         // Create deep copies of indices.
         int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
@@ -160,7 +161,7 @@ public final class RealComplexCooTensorOperations {
 
         // Roughly estimate the number of non-zero entries in sum.
         int estimatedEntries = src1.nnz + src2.nnz;
-        List<CNumber> sumEntries = new ArrayList<>(estimatedEntries);
+        List<Field<Complex128>> sumEntries = new ArrayList<>(estimatedEntries);
         List<int[]> sumIndices = new ArrayList<>(estimatedEntries);
 
         int src2Pos = 0;
@@ -178,7 +179,7 @@ public final class RealComplexCooTensorOperations {
             if(src2Pos < src2.nnz && Arrays.equals(src1Idx, src2Indices[src2Pos])) {
                 sumEntries.add(src2.entries[src2Pos++].addInv().add(val1));
             } else {
-                sumEntries.add(new CNumber(val1));
+                sumEntries.add(new Complex128(val1));
             }
             sumIndices.add(src1Idx);
         }
@@ -189,7 +190,7 @@ public final class RealComplexCooTensorOperations {
             sumIndices.add(src2Indices[src2Pos++]);
         }
 
-        return new CooCTensorOld(src1.shape, sumEntries, sumIndices);
+        return new CooCTensor(src1.shape, sumEntries, sumIndices);
     }
 
 
@@ -202,9 +203,9 @@ public final class RealComplexCooTensorOperations {
      * @param src2 Second tensor in the element-wise multiplication.
      * @return The element-wise product of {@code src1} and {@code src2}.
      */
-    public static CooCTensorOld elemMult(CooCTensorOld src1, CooTensorOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-        CNumber[] productEntries = new CNumber[Math.min(src1.nnz, src2.nnz)];
+    public static CooCTensor elemMult(CooCTensor src1, CooTensor src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+        Complex128[] productEntries = new Complex128[Math.min(src1.nnz, src2.nnz)];
         int[][] productIndices = new int[Math.min(src1.nnz, src2.nnz)][src1.indices[0].length];
         int count = 0;
 
@@ -224,7 +225,7 @@ public final class RealComplexCooTensorOperations {
         }
 
         // Truncate arrays_old if necessary.
-        return new CooCTensorOld(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
+        return new CooCTensor(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
     }
 
 
@@ -237,9 +238,9 @@ public final class RealComplexCooTensorOperations {
      * @param src2 Second tensor in the element-wise multiplication.
      * @return The element-wise product of {@code src1} and {@code src2}.
      */
-    public static CooCTensorOld elemMult(CooTensorOld src1, CooCTensorOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-        CNumber[] productEntries = new CNumber[Math.min(src1.nnz, src2.nnz)];
+    public static CooCTensor elemMult(CooTensor src1, CooCTensor src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+        Complex128[] productEntries = new Complex128[Math.min(src1.nnz, src2.nnz)];
         int[][] productIndices = new int[Math.min(src1.nnz, src2.nnz)][src1.indices[0].length];
         int count = 0;
 
@@ -259,6 +260,6 @@ public final class RealComplexCooTensorOperations {
         }
 
         // Truncate arrays_old if necessary.
-        return new CooCTensorOld(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
+        return new CooCTensor(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
     }
 }

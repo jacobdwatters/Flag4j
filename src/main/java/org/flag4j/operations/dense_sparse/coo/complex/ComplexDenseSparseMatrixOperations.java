@@ -28,12 +28,12 @@ import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.operations.common.complex.ComplexOperations;
+import org.flag4j.operations.common.complex.Complex128Operations;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 /**
- * This class contains low level implementations for operations_old between a dense and a sparse complex matrix.
+ * This class contains low level implementations for operations between a dense and a sparse complex matrix.
  */
 public final class ComplexDenseSparseMatrixOperations {
 
@@ -51,14 +51,14 @@ public final class ComplexDenseSparseMatrixOperations {
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static CMatrix add(CMatrix src1, CooCMatrix src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         int row;
         int col;
         CMatrix dest = src1.copy();
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            dest.entries[idx] = dest.entries[idx].add(src2.entries[i]);
+            dest.entries[idx] = dest.entries[idx].add((Complex128) src2.entries[i]);
         }
 
         return dest;
@@ -73,7 +73,7 @@ public final class ComplexDenseSparseMatrixOperations {
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static CMatrix sub(CMatrix src1, CooCMatrix src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         int row;
         int col;
@@ -81,7 +81,7 @@ public final class ComplexDenseSparseMatrixOperations {
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            dest.entries[idx] = dest.entries[idx].sub(src2.entries[i]);
+            dest.entries[idx] = dest.entries[idx].sub((Complex128) src2.entries[i]);
         }
 
         return dest;
@@ -96,14 +96,14 @@ public final class ComplexDenseSparseMatrixOperations {
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static CMatrix sub(CooCMatrix src2, CMatrix src1) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         int row;
         int col;
-        CMatrix dest = new CMatrix(src1.shape, ComplexOperations.scalMult(src1.entries, -1));
+        CMatrix dest = new CMatrix(src1.shape, Complex128Operations.scalMult(src1.entries, -1));
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            dest.entries[idx] = dest.entries[idx].add(src2.entries[i]);
+            dest.entries[idx] = dest.entries[idx].add((Complex128) src2.entries[i]);
         }
 
         return dest;
@@ -117,13 +117,13 @@ public final class ComplexDenseSparseMatrixOperations {
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static void addEq(CMatrix src1, CooCMatrix src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         int row;
         int col;
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            src1.entries[idx] = src1.entries[idx].add(src2.entries[i]);
+            src1.entries[idx] = src1.entries[idx].add((Complex128) src2.entries[i]);
         }
     }
 
@@ -135,13 +135,13 @@ public final class ComplexDenseSparseMatrixOperations {
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static void subEq(CMatrix src1, CooCMatrix src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         int row;
         int col;
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            src1.entries[idx] = src1.entries[idx].sub(src2.entries[i]);
+            src1.entries[idx] = src1.entries[idx].sub((Complex128) src2.entries[i]);
         }
     }
 
@@ -152,7 +152,7 @@ public final class ComplexDenseSparseMatrixOperations {
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static CooCMatrix elemMult(CMatrix src1, CooCMatrix src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         int row;
         int col;
         Complex128[] destEntries = new Complex128[src2.nnz];
@@ -160,7 +160,7 @@ public final class ComplexDenseSparseMatrixOperations {
         for(int i=0; i<destEntries.length; i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            destEntries[i] = src1.entries[row*src1.numCols + col].mult(src2.entries[i]);
+            destEntries[i] = src1.entries[row*src1.numCols + col].mult((Complex128) src2.entries[i]);
         }
 
         return new CooCMatrix(src2.shape, destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
@@ -177,7 +177,7 @@ public final class ComplexDenseSparseMatrixOperations {
      *
      * <p>
      *     If the dense matrix contains a zero at an index for which the sparse matrix is also zero, the result will be
-     *     zero. This is done to realize computational benefits from operations_old with sparse matrices.
+     *     zero. This is done to realize computational benefits from operations with sparse matrices.
      * </p>
      *
      * @param src1 Real sparse matrix and numerator in element-wise quotient.
@@ -186,15 +186,13 @@ public final class ComplexDenseSparseMatrixOperations {
      * @throws IllegalArgumentException If {@code src1} and {@code src2} do not have the same shape.
      */
     public static CooCMatrix elemDiv(CooCMatrix src1, CMatrix src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         Complex128[] quotient = new Complex128[src1.entries.length];
-        int row;
-        int col;
 
         for(int i=0; i<src1.entries.length; i++) {
-            row = src1.rowIndices[i];
-            col = src1.colIndices[i];
-            quotient[i] = src1.entries[i].div(src2.entries[row*src2.numCols + col]);
+            int row = src1.rowIndices[i];
+            int col = src1.colIndices[i];
+            quotient[i] = src1.entries[i].div((Complex128) src2.entries[row*src2.numCols + col]);
         }
 
         return new CooCMatrix(src1.shape, quotient, src1.rowIndices.clone(), src1.colIndices.clone());
@@ -217,7 +215,7 @@ public final class ComplexDenseSparseMatrixOperations {
 
         for(int i=0; i<src.entries.length; i++) {
             int idx = src.rowIndices[i]*src.numCols + src.colIndices[i];
-            sum.entries[idx] = sum.entries[idx].add(src.entries[i]);
+            sum.entries[idx] = sum.entries[idx].add((Complex128) src.entries[i]);
         }
 
         return sum;
@@ -240,7 +238,7 @@ public final class ComplexDenseSparseMatrixOperations {
 
         for(int i=0; i<src.entries.length; i++) {
             int idx = src.rowIndices[i]*src.numCols + src.colIndices[i];
-            sum.entries[idx] = sum.entries[idx].add(src.entries[i]);
+            sum.entries[idx] = sum.entries[idx].add((Complex128) src.entries[i]);
         }
 
         return sum;

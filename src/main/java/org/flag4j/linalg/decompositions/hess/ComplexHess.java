@@ -27,7 +27,7 @@ package org.flag4j.linalg.decompositions.hess;
 
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.linalg.decompositions.unitary.ComplexUnitaryDecomposition;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 /**
  * <p>Computes the Hessenburg decomposition of a complex dense square matrix. That is, for a square matrix
@@ -84,7 +84,7 @@ public class ComplexHess extends ComplexUnitaryDecomposition {
      */
     @Override
     public ComplexHess decompose(CMatrix src) {
-        ParameterChecks.ensureSquare(src.shape);
+        ValidateParameters.ensureSquare(src.shape);
         decomposeUnitary(src);
         return this;
     }

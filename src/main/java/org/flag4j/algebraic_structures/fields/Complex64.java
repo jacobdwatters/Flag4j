@@ -447,25 +447,7 @@ public class Complex64 implements Field<Complex64> {
      */
     @Override
     public double mag() {
-        float absRe = Math.abs(this.re);
-        float absIm = Math.abs(this.im);
-        double max;
-        double min;
-
-        if(absRe > absIm) {
-            max = absRe;
-            min = absIm;
-        } else {
-            max = absIm;
-            min = absRe;
-        }
-
-        if(max == 0.0) {
-            return 0.0;
-        }
-
-        double ratio = min / max;
-        return max * Math.sqrt(1 + ratio*ratio);
+        return Math.hypot(re, im);
     }
 
 

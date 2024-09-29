@@ -31,7 +31,7 @@ import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.operations.sparse.coo.field_ops.SparseFieldEquals;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.List;
 
@@ -74,7 +74,7 @@ public class CooFieldVector<T extends Field<T>> extends CooFieldVectorBase<CooFi
      * @param entries The non-zero entries of this vector.
      * @param indices The indices of the non-zero values.
      */
-    public CooFieldVector(int size, T[] entries, int[] indices) {
+    public CooFieldVector(int size, Field<T>[] entries, int[] indices) {
         super(size, entries, indices);
     }
 
@@ -86,7 +86,7 @@ public class CooFieldVector<T extends Field<T>> extends CooFieldVectorBase<CooFi
      * @param entries The non-zero entries of this vector.
      * @param indices The indices of the non-zero values.
      */
-    public CooFieldVector(int size, List<T> entries, List<Integer> indices) {
+    public CooFieldVector(int size, List<Field<T>> entries, List<Integer> indices) {
         super(size, (T[]) entries.toArray(Field[]::new), ArrayUtils.fromIntegerList(indices));
     }
 
@@ -95,7 +95,7 @@ public class CooFieldVector<T extends Field<T>> extends CooFieldVectorBase<CooFi
      * Creates a zero vector of the specified {@code size}.
      */
     public CooFieldVector(int size) {
-        super(size, (T[]) new Field[0], new int[0]);
+        super(size, new Field[0], new int[0]);
     }
 
 
@@ -110,7 +110,7 @@ public class CooFieldVector<T extends Field<T>> extends CooFieldVectorBase<CooFi
      * and non-zero indices.
      */
     @Override
-    public CooFieldVector<T> makeLikeTensor(int size, T[] entries, int[] indices) {
+    public CooFieldVector<T> makeLikeTensor(int size, Field<T>[] entries, int[] indices) {
         return new CooFieldVector<T>(size, entries, indices);
     }
 
@@ -126,7 +126,7 @@ public class CooFieldVector<T extends Field<T>> extends CooFieldVectorBase<CooFi
      * non-zero indices as this vector.
      */
     @Override
-    public CooFieldVector<T> makeLikeTensor(int size, T[] entries) {
+    public CooFieldVector<T> makeLikeTensor(int size, Field<T>[] entries) {
         return new CooFieldVector<T>(size, entries, indices.clone());
     }
 
@@ -142,7 +142,7 @@ public class CooFieldVector<T extends Field<T>> extends CooFieldVectorBase<CooFi
      * and non-zero indices.
      */
     @Override
-    public CooFieldVector<T> makeLikeTensor(int size, List<T> entries, List<Integer> indices) {
+    public CooFieldVector<T> makeLikeTensor(int size, List<Field<T>> entries, List<Integer> indices) {
         return new CooFieldVector<T>(size, entries, indices);
     }
 
@@ -155,7 +155,7 @@ public class CooFieldVector<T extends Field<T>> extends CooFieldVectorBase<CooFi
      * @return A dense vector which is of a similar type to this sparse COO vector containing the specified {@code entries}.
      */
     @Override
-    public FieldVector<T> makeLikeDenseTensor(T... entries) {
+    public FieldVector<T> makeLikeDenseTensor(Field<T>... entries) {
         return new FieldVector<T>(entries);
     }
 
@@ -173,7 +173,7 @@ public class CooFieldVector<T extends Field<T>> extends CooFieldVectorBase<CooFi
      * the specified {@code entries}.
      */
     @Override
-    public CooFieldMatrix<T> makeLikeMatrix(Shape shape, T[] entries, int[] rowIndices, int[] colIndices) {
+    public CooFieldMatrix<T> makeLikeMatrix(Shape shape, Field<T>[] entries, int[] rowIndices, int[] colIndices) {
         return new CooFieldMatrix<T>(shape, entries, rowIndices, colIndices);
     }
 
@@ -189,7 +189,7 @@ public class CooFieldVector<T extends Field<T>> extends CooFieldVectorBase<CooFi
      * the specified {@code entries}.
      */
     @Override
-    public FieldMatrix<T> makeLikeDenseMatrix(Shape shape, T... entries) {
+    public FieldMatrix<T> makeLikeDenseMatrix(Shape shape, Field<T>... entries) {
         return new FieldMatrix<T>(shape, entries);
     }
 
@@ -208,6 +208,23 @@ public class CooFieldVector<T extends Field<T>> extends CooFieldVectorBase<CooFi
 
 
     /**
+     * Sets the element of this tensor at the specified indices.
+     *
+     * @param value New value to set the specified index of this tensor to.
+     * @param indices Indices of the element to set.
+     *
+     * @return A copy of this tensor with the updated value is returned.
+     *
+     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
+     */
+    @Override
+    public CooFieldVector<T> set(T value, int... indices) {
+        // TODO: Implement this method
+        return null;
+    }
+
+
+    /**
      * Constructs a tensor of the same type as this tensor with the given the shape, non-zero entries and the same non-zero indices
      * as this vector.
      *
@@ -217,8 +234,8 @@ public class CooFieldVector<T extends Field<T>> extends CooFieldVectorBase<CooFi
      * @return A tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public CooFieldVector<T> makeLikeTensor(Shape shape, T[] entries) {
-        ParameterChecks.ensureRank(shape, 1);
+    public CooFieldVector<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
+        ValidateParameters.ensureRank(shape, 1);
         return new CooFieldVector<T>(shape.totalEntriesIntValueExact(), entries, indices.clone());
     }
 

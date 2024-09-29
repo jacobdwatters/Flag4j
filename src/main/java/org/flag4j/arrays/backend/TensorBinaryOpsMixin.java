@@ -25,7 +25,7 @@
 package org.flag4j.arrays.backend;
 
 /**
- * This interface specifies Binary operations_old which all tensors should implement.
+ * This interface specifies Binary operations which all tensors should implement.
  *
  * @param <T> TensorOld type for second operand.
  * @param <U> TensorOld type that operation returns.

@@ -34,10 +34,7 @@ import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 
-/**
- * Utility class for computing the direct sum between two matrices.
- */
-@Deprecated
+
 public final class DirectSum {
 
     private DirectSum() {

@@ -28,7 +28,7 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.operations.common.field_ops.AggregateField;
 import org.flag4j.operations.common.field_ops.CompareField;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.util.Arrays;
@@ -43,7 +43,7 @@ import java.util.Arrays;
  * @param <V> The type of the {@link Field} for this tensor's entries.
  */
 public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
-        U extends FieldTensorBase<U, U, V>, V extends Field<V>> extends TensorOverField<T, U, V[], V> {
+        U extends FieldTensorBase<U, U, V>, V extends Field<V>> extends TensorOverField<T, U, Field<V>[], V> {
 
     /**
      * Stores the zero element of the field for this tensor.
@@ -58,7 +58,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-    protected FieldTensorBase(Shape shape, V[] entries) {
+    protected FieldTensorBase(Shape shape, Field<V>[] entries) {
         super(shape, entries);
         if(entries.length > 0 && entries[0] != null) zeroElement = entries[0].getZero();
     }
@@ -71,7 +71,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      * @param zeroElement Zero element for the field of this tensor.
      */
     protected void setZeroElement(V zeroElement) {
-        if(!this.zeroElement.isZero())
+        if(!zeroElement.isZero())
             throw new IllegalArgumentException("zeroElement is not an additive identity for the Field of this tensor.");
 
         this.zeroElement = zeroElement;
@@ -99,8 +99,8 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public V get(int... indices) {
-        ParameterChecks.ensureValidIndex(shape, indices);
-        return entries[shape.entriesIndex(indices)];
+        ValidateParameters.ensureValidIndex(shape, indices);
+        return (V) entries[shape.entriesIndex(indices)];
     }
 
 
@@ -147,7 +147,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T reshape(Shape newShape) {
-        ParameterChecks.ensureBroadcastable(this.shape, newShape);
+        ValidateParameters.ensureBroadcastable(this.shape, newShape);
         return makeLikeTensor(newShape, this.entries.clone());
     }
 
@@ -187,13 +187,13 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T add(T b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
         Field<V>[] sum = new Field[entries.length];
 
         for(int i=0, size=entries.length; i<size; i++)
-            sum[i] = entries[i].add(b.entries[i]);
+            sum[i] = entries[i].add((V) b.entries[i]);
 
-        return makeLikeTensor(shape, (V[]) sum);
+        return makeLikeTensor(shape, sum);
     }
 
 
@@ -208,13 +208,13 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T sub(T b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
         Field<V>[] diff = new Field[entries.length];
 
         for(int i=0, size=entries.length; i<size; i++)
-            diff[i] = entries[i].sub(b.entries[i]);
+            diff[i] = entries[i].sub((V) b.entries[i]);
 
-        return makeLikeTensor(shape, (V[]) diff);
+        return makeLikeTensor(shape, diff);
     }
 
 
@@ -232,7 +232,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
         for(int i=0, size=entries.length; i<size; i++)
             sum[i] = entries[i].add(b);
 
-        return makeLikeTensor(shape, (V[]) sum);
+        return makeLikeTensor(shape, sum);
     }
 
 
@@ -250,7 +250,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
         for(int i=0, size=entries.length; i<size; i++)
             diff[i] = entries[i].sub(b);
 
-        return makeLikeTensor(shape, (V[]) diff);
+        return makeLikeTensor(shape, diff);
     }
 
 
@@ -268,7 +268,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
         for(int i=0, size=entries.length; i<size; i++)
             product[i] = entries[i].mult(b);
 
-        return makeLikeTensor(shape, (V[]) product);
+        return makeLikeTensor(shape, product);
     }
 
 
@@ -286,7 +286,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
         for(int i=0, size=entries.length; i<size; i++)
             quotient[i] = entries[i].div(b);
 
-        return makeLikeTensor(shape, (V[]) quotient);
+        return makeLikeTensor(shape, quotient);
     }
 
 
@@ -302,7 +302,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
         for(int i=0, size=entries.length; i<size; i++)
             conj[i] = entries[i].conj();
 
-        return makeLikeTensor(shape, (V[]) conj);
+        return makeLikeTensor(shape, conj);
     }
 
 
@@ -317,13 +317,13 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T elemMult(T b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
         Field<V>[] prod = new Field[entries.length];
 
         for(int i=0, size=entries.length; i<size; i++)
-            prod[i] = entries[i].mult(b.entries[i]);
+            prod[i] = entries[i].mult((V) b.entries[i]);
 
-        return makeLikeTensor(shape, (V[]) prod);
+        return makeLikeTensor(shape, prod);
     }
 
 
@@ -344,9 +344,9 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T tensorTr(int axis1, int axis2) {
-        ParameterChecks.ensureNotEquals(axis1, axis2);
-        ParameterChecks.ensureValidIndices(getRank(), axis1, axis2);
-        ParameterChecks.ensureEquals(shape.get(axis1), shape.get(axis2));
+        ValidateParameters.ensureNotEquals(axis1, axis2);
+        ValidateParameters.ensureValidIndices(getRank(), axis1, axis2);
+        ValidateParameters.ensureEquals(shape.get(axis1), shape.get(axis2));
 
         int[] strides = shape.getStrides();
         int rank = strides.length;
@@ -384,14 +384,14 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
             V sum = zeroElement;
             int offset = baseOffset;
             for(int diag=0; diag<traceLength; diag++) {
-                sum = sum.add(entries[offset]);
+                sum = sum.add((V) entries[offset]);
                 offset += diagonalStride;
             }
 
             destEntries[i] = sum;
         }
 
-        return makeLikeTensor(destShape, (V[]) destEntries);
+        return makeLikeTensor(destShape, destEntries);
     }
 
 
@@ -403,6 +403,16 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
     @Override
     public boolean isZeros() {
         return entries.length==0 || CompareField.isZeros(entries);
+    }
+
+
+    /**
+     * Checks if this tensor only contains ones. If this tensor is sparse, only the non-zero entries are considered.
+     * @return True if this tensor only contains ones. Otherwise, returns false.
+     */
+    @Override
+    public boolean isOnes() {
+        return entries.length==0 || CompareField.isOnes(entries);
     }
 
 
@@ -420,7 +430,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
         for(int i=0, size=entries.length; i<size; i++)
             sum[i] = entries[i].add(b);
 
-        return makeLikeTensor(shape, (V[]) sum);
+        return makeLikeTensor(shape, sum);
     }
 
 
@@ -450,7 +460,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
         for(int i=0, size=entries.length; i<size; i++)
             diff[i] = entries[i].sub(b);
 
-        return makeLikeTensor(shape, (V[]) diff);
+        return makeLikeTensor(shape, diff);
     }
 
 
@@ -480,7 +490,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
         for(int i=0, size=entries.length; i<size; i++)
             product[i] = entries[i].mult(b);
 
-        return makeLikeTensor(shape, (V[]) product);
+        return makeLikeTensor(shape, product);
     }
 
 
@@ -510,7 +520,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
         for(int i=0, size=entries.length; i<size; i++)
             quotient[i] = entries[i].div(b);
 
-        return makeLikeTensor(shape, (V[]) quotient);
+        return makeLikeTensor(shape, quotient);
     }
 
 
@@ -633,7 +643,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
         for(int i=0, size=entries.length; i<size; i++)
             sqrt[i] = entries[i].sqrt();
 
-        return makeLikeTensor(shape, (V[]) sqrt);
+        return makeLikeTensor(shape, sqrt);
     }
 
 
@@ -677,7 +687,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
         for(int i=0, size=entries.length; i<size; i++)
             recip[i] = entries[i].multInv();
 
-        return makeLikeTensor(shape, (V[]) recip);
+        return makeLikeTensor(shape, recip);
     }
 
 

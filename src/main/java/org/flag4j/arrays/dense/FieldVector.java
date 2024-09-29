@@ -28,7 +28,7 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.DenseFieldVectorBase;
 import org.flag4j.arrays.sparse.CooFieldVector;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
 import java.util.List;
@@ -51,7 +51,7 @@ public class FieldVector<T extends Field<T>>
      *
      * @param entries Entries of this vector.
      */
-    public FieldVector(T... entries) {
+    public FieldVector(Field<T>... entries) {
         super(new Shape(entries.length), entries);
     }
 
@@ -63,7 +63,7 @@ public class FieldVector<T extends Field<T>>
      * @param fillValue Value to fill this vector with.
      */
     public FieldVector(int size, T fillValue) {
-        super(new Shape(size), (T[]) new Field[size]);
+        super(new Shape(size), new Field[size]);
         Arrays.fill(entries, fillValue);
     }
 
@@ -86,7 +86,7 @@ public class FieldVector<T extends Field<T>>
      * @param entries Entries of this vector.
      */
     @Override
-    public FieldVector<T> makeLikeTensor(T... entries) {
+    public FieldVector<T> makeLikeTensor(Field<T>... entries) {
         return new FieldVector<T>(entries);
     }
 
@@ -100,7 +100,7 @@ public class FieldVector<T extends Field<T>>
      * @return A matrix of similar type to this vector with the specified {@code shape} and {@code entries}.
      */
     @Override
-    public FieldMatrix<T> makeLikeMatrix(Shape shape, T[] entries) {
+    public FieldMatrix<T> makeLikeMatrix(Shape shape, Field<T>[] entries) {
         return new FieldMatrix<>(shape, entries);
     }
 
@@ -115,7 +115,7 @@ public class FieldVector<T extends Field<T>>
      * @return A sparse vector of similar type to this dense vector with the specified size, entries, and indices.
      */
     @Override
-    public CooFieldVector<T> makeSparseVector(int size, List<T> entries, List<Integer> indices) {
+    public CooFieldVector<T> makeSparseVector(int size, List<Field<T>> entries, List<Integer> indices) {
         return new CooFieldVector<T>(size, entries, indices);
     }
 
@@ -129,9 +129,9 @@ public class FieldVector<T extends Field<T>>
      * @return A tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public FieldVector<T> makeLikeTensor(Shape shape, T[] entries) {
-        ParameterChecks.ensureEquals(shape.totalEntriesIntValueExact(), entries.length);
-        ParameterChecks.ensureRank(shape, 1);
+    public FieldVector<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
+        ValidateParameters.ensureEquals(shape.totalEntriesIntValueExact(), entries.length);
+        ValidateParameters.ensureRank(shape, 1);
         return new FieldVector<T>(entries);
     }
 

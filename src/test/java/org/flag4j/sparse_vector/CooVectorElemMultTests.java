@@ -1,10 +1,12 @@
 package org.flag4j.sparse_vector;
 
-import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooCVectorOld;
-import org.flag4j.arrays_old.sparse.CooVectorOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays.sparse.CooCVector;
+import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
+import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CooVectorElemMultTests {
 
-    CooVectorOld a;
+    CooVector a;
     int size;
 
     @Test
@@ -21,28 +23,28 @@ class CooVectorElemMultTests {
         double[] aValues = {1.34, 51.6, -0.00245, 99.2456, -1005.6};
         int[] aIndices = {2, 5, 81, 102, 104};
         size = 151;
-        a = new CooVectorOld(size, aValues, aIndices);
+        a = new CooVector(size, aValues, aIndices);
 
         double[] bValues, expValues;
         int[] bIndices, expIndices;
-        CooVectorOld b, exp;
+        CooVector b, exp;
 
         // -------------------- Sub-case 1 --------------------
         bValues = new double[]{1.223, 44.51, 3.4};
         bIndices = new int[]{2, 81, 103};
-        b = new CooVectorOld(size, bValues, bIndices);
+        b = new CooVector(size, bValues, bIndices);
 
         expValues = new double[]{1.223*1.34, 44.51*-0.00245};
         expIndices = new int[]{2, 81};
-        exp = new CooVectorOld(151, expValues, expIndices);
+        exp = new CooVector(151, expValues, expIndices);
         assertEquals(exp, a.elemMult(b));
 
         // -------------------- Sub-case 2 --------------------
         bValues = new double[]{1.223, 44.51, 3.4};
         bIndices = new int[]{2, 81, 103};
-        b = new CooVectorOld(size-23, bValues, bIndices);
+        b = new CooVector(size-23, bValues, bIndices);
 
-        CooVectorOld finalB = b;
+        CooVector finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.elemMult(finalB));
     }
 
@@ -52,27 +54,27 @@ class CooVectorElemMultTests {
         double[] aValues = {1.34, 51.6, -0.00245};
         int[] aIndices = {0, 2, 3};
         size = 7;
-        a = new CooVectorOld(size, aValues, aIndices);
+        a = new CooVector(size, aValues, aIndices);
 
         double[] bValues, expValues;
         int[] expIndices;
-        VectorOld b;
-        CooVectorOld exp;
+        Vector b;
+        CooVector exp;
 
         // -------------------- Sub-case 1 --------------------
         bValues = new double[]{1.223, -44.51, 3.4, 2.3, 14.5, -14.51, 0.14};
-        b = new VectorOld(bValues);
+        b = new Vector(bValues);
 
         expValues = new double[]{1.34*1.223, 51.6*3.4, -0.00245*2.3};
         expIndices = new int[]{0, 2, 3};
-        exp = new CooVectorOld(size, expValues, expIndices);
+        exp = new CooVector(size, expValues, expIndices);
         assertEquals(exp, a.elemMult(b));
 
         // -------------------- Sub-case 2 --------------------
         bValues = new double[]{1.223, -44.51, 3.4, 2.3, 14.5, -14.51};
-        b = new VectorOld(bValues);
+        b = new Vector(bValues);
 
-        VectorOld finalB = b;
+        Vector finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.elemMult(finalB));
     }
 
@@ -82,31 +84,31 @@ class CooVectorElemMultTests {
         double[] aValues = {1.34, 51.6, -0.00245, 99.2456, -1005.6};
         int[] aIndices = {2, 5, 81, 102, 104};
         size = 151;
-        a = new CooVectorOld(size, aValues, aIndices);
+        a = new CooVector(size, aValues, aIndices);
 
-        CNumber[] bValues, expValues;
+        Complex128[] bValues, expValues;
         int[] bIndices, expIndices;
-        CooCVectorOld b, exp;
+        CooCVector b, exp;
 
         // -------------------- Sub-case 1 --------------------
-        bValues = new CNumber[]{new CNumber(2.441, -9.245), new CNumber(0, 4.51), new CNumber(24.5)};
+        bValues = new Complex128[]{new Complex128(2.441, -9.245), new Complex128(0, 4.51), new Complex128(24.5)};
         bIndices = new int[]{2, 81, 103};
-        b = new CooCVectorOld(size, bValues, bIndices);
+        b = new CooCVector(size, bValues, bIndices);
 
-        expValues = new CNumber[]{
-                new CNumber(2.441, -9.245).mult(1.34),
-                new CNumber(0, 4.51).mult(-0.00245)};
+        expValues = new Complex128[]{
+                new Complex128(2.441, -9.245).mult(1.34),
+                new Complex128(0, 4.51).mult(-0.00245)};
         expIndices = new int[]{2, 81};
-        exp = new CooCVectorOld(151, expValues, expIndices);
-        assertEquals(exp, a.elemMult(b));
+        exp = new CooCVector(151, expValues, expIndices);
+        assertEquals(exp, RealComplexSparseVectorOperations.elemMult(b, a));
 
         // -------------------- Sub-case 2 --------------------
-        bValues = new CNumber[]{new CNumber(2.441, -9.245), new CNumber(0, 4.51), new CNumber(24.5)};
+        bValues = new Complex128[]{new Complex128(2.441, -9.245), new Complex128(0, 4.51), new Complex128(24.5)};
         bIndices = new int[]{2, 81, 103};
-        b = new CooCVectorOld(size+134, bValues, bIndices);
+        b = new CooCVector(size+134, bValues, bIndices);
 
-        CooCVectorOld finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->a.elemMult(finalB));
+        CooCVector finalB = b;
+        assertThrows(LinearAlgebraException.class, ()->RealComplexSparseVectorOperations.elemMult(finalB, a));
     }
 
 
@@ -115,31 +117,31 @@ class CooVectorElemMultTests {
         double[] aValues = {1.34, 51.6, -0.00245};
         int[] aIndices = {0, 2, 3};
         size = 5;
-        a = new CooVectorOld(size, aValues, aIndices);
+        a = new CooVector(size, aValues, aIndices);
 
-        CNumber[] bValues, expValues;
+        Complex128[] bValues, expValues;
         int[] expIndices;
-        CVectorOld b;
-        CooCVectorOld exp;
+        CVector b;
+        CooCVector exp;
 
         // -------------------- Sub-case 1 --------------------
-        bValues = new CNumber[]{new CNumber(24.3, -0.013), new CNumber(0, 13.6),
-                new CNumber(2.4), new CNumber(-994.1 ,1.45), new CNumber(1495, 13.4)};
-        b = new CVectorOld(bValues);
+        bValues = new Complex128[]{new Complex128(24.3, -0.013), new Complex128(0, 13.6),
+                new Complex128(2.4), new Complex128(-994.1 ,1.45), new Complex128(1495, 13.4)};
+        b = new CVector(bValues);
 
-        expValues = new CNumber[]{new CNumber(24.3, -0.013).mult(1.34),
-                new CNumber(2.4).mult(51.6), new CNumber(-994.1 ,1.45).mult(-0.00245)};
+        expValues = new Complex128[]{new Complex128(24.3, -0.013).mult(1.34),
+                new Complex128(2.4).mult(51.6), new Complex128(-994.1 ,1.45).mult(-0.00245)};
         expIndices = new int[]{0, 2, 3};
-        exp = new CooCVectorOld(size, expValues, expIndices);
-        assertEquals(exp, a.elemMult(b));
+        exp = new CooCVector(size, expValues, expIndices);
+        assertEquals(exp, RealComplexDenseSparseVectorOperations.elemMult(b, a));
 
         // -------------------- Sub-case 2 --------------------
-        bValues = new CNumber[]{new CNumber(24.3, -0.013), new CNumber(0, 13.6), new CNumber(24),
-                new CNumber(2.4), new CNumber(-994.1 ,1.45), new CNumber(1495, 13.4)};
-        b = new CVectorOld(bValues);
+        bValues = new Complex128[]{new Complex128(24.3, -0.013), new Complex128(0, 13.6), new Complex128(24),
+                new Complex128(2.4), new Complex128(-994.1 ,1.45), new Complex128(1495, 13.4)};
+        b = new CVector(bValues);
 
-        CVectorOld finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->a.elemMult(finalB));
+        CVector finalB = b;
+        assertThrows(LinearAlgebraException.class, ()->RealComplexDenseSparseVectorOperations.elemMult(finalB, a));
     }
 
 
@@ -148,20 +150,20 @@ class CooVectorElemMultTests {
         double[] aValues = {1.34, 51.6, -0.00245, 99.2456, -1005.6};
         int[] aIndices = {2, 5, 81, 102, 104};
         size = 151;
-        a = new CooVectorOld(size, aValues, aIndices);
+        a = new CooVector(size, aValues, aIndices);
 
         double b;
 
         double[] expValues;
         int[] expIndices;
-        CooVectorOld exp;
+        CooVector exp;
 
         // -------------------- Sub-case 1 --------------------
         b = 24.56;
 
         expValues = new double[]{1.34*b, 51.6*b, -0.00245*b, 99.2456*b, -1005.6*b};
         expIndices = new int[]{2, 5, 81, 102, 104};
-        exp = new CooVectorOld(151, expValues, expIndices);
+        exp = new CooVector(151, expValues, expIndices);
         assertEquals(exp, a.mult(b));
     }
 
@@ -171,20 +173,20 @@ class CooVectorElemMultTests {
         double[] aValues = {1.34, 51.6, -0.00245, 99.2456, -1005.6};
         int[] aIndices = {2, 5, 81, 102, 104};
         size = 151;
-        a = new CooVectorOld(size, aValues, aIndices);
+        a = new CooVector(size, aValues, aIndices);
 
-        CNumber b;
+        Complex128 b;
 
-        CNumber[] expValues;
+        Complex128[] expValues;
         int[] expIndices;
-        CooCVectorOld exp;
+        CooCVector exp;
 
         // -------------------- Sub-case 1 --------------------
-        b = new CNumber(234.6677, -9.35);
+        b = new Complex128(234.6677, -9.35);
 
-        expValues = new CNumber[]{b.mult(1.34), b.mult(51.6), b.mult(-0.00245), b.mult(99.2456), b.mult(-1005.6)};
+        expValues = new Complex128[]{b.mult(1.34), b.mult(51.6), b.mult(-0.00245), b.mult(99.2456), b.mult(-1005.6)};
         expIndices = new int[]{2, 5, 81, 102, 104};
-        exp = new CooCVectorOld(151, expValues, expIndices);
+        exp = new CooCVector(151, expValues, expIndices);
         assertEquals(exp, a.mult(b));
     }
 }

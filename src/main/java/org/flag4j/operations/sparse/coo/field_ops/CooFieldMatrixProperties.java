@@ -48,10 +48,10 @@ public final class CooFieldMatrixProperties {
 
     /**
      * Checks if a complex sparse matrix is the identity matrix.
-     * @param src MatrixOld to check if it is the identity matrix.
+     * @param src Matrix to check if it is the identity matrix.
      * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
      */
-    public static <V extends Field<V>> boolean isIdentity(CooFieldMatrixBase<?, ?, ?, V> src) {
+    public static <V extends Field<V>> boolean isIdentity(CooFieldMatrixBase<?, ?, ?, ?, V> src) {
         // Ensure the matrix is square and there are at least the same number of non-zero entries as entries on the diagonal.
         if(!src.isSquare() || src.entries.length<src.numRows) return false;
 
@@ -70,10 +70,10 @@ public final class CooFieldMatrixProperties {
 
     /**
      * Checks if a real sparse matrix is close to the identity matrix.
-     * @param src MatrixOld to check if it is the identity matrix.
+     * @param src Matrix to check if it is the identity matrix.
      * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
      */
-    public static <V extends Field<V>> boolean isCloseToIdentity(CooFieldMatrixBase<?, ?, ?, V> src) {
+    public static <V extends Field<V>> boolean isCloseToIdentity(CooFieldMatrixBase<?, ?, ?, ?, V> src) {
         // Ensure the matrix is square and there are the same number of non-zero entries as entries on the diagonal.
         boolean result = src.isSquare() && src.entries.length==src.numRows;
 
@@ -100,9 +100,9 @@ public final class CooFieldMatrixProperties {
      * @param src Matrix to check if it is the hermitian matrix.
      * @return True if the {@code src} matrix is hermitian. False otherwise.
      */
-    public static <V extends Field<V>> boolean isHermitian(CooFieldMatrixBase<?, ?, ?, V> src) {
+    public static <V extends Field<V>> boolean isHermitian(CooFieldMatrixBase<?, ?, ?, ?, V> src) {
         boolean result = src.isSquare();
-        List<V> entries = Arrays.asList(src.entries);
+        List<Field<V>> entries = Arrays.asList(src.entries);
         List<Integer> rowIndices = IntStream.of(src.rowIndices).boxed().collect(Collectors.toList());
         List<Integer> colIndices = IntStream.of(src.colIndices).boxed().collect(Collectors.toList());
 
@@ -112,7 +112,7 @@ public final class CooFieldMatrixProperties {
 
         while(result && entries.size() > 0) {
             // Extract value of interest.
-            value = entries.remove(0);
+            value = (V) entries.remove(0);
             row = rowIndices.remove(0);
             col = colIndices.remove(0);
 
@@ -154,10 +154,10 @@ public final class CooFieldMatrixProperties {
      * @param src Matrix to check if it is the hermitian matrix.
      * @return True if the {@code src} matrix is hermitian. False otherwise.
      */
-    public static <V extends Field<V>> boolean isSymmetric(CooFieldMatrixBase<?, ?, ?, V> src) {
+    public static <V extends Field<V>> boolean isSymmetric(CooFieldMatrixBase<?, ?, ?, ?, V> src) {
         boolean result = src.isSquare();
 
-        List<V> entries = Arrays.asList(src.entries);
+        List<Field<V>> entries = Arrays.asList(src.entries);
         List<Integer> rowIndices = IntStream.of(src.rowIndices).boxed().collect(Collectors.toList());
         List<Integer> colIndices = IntStream.of(src.colIndices).boxed().collect(Collectors.toList());
 
@@ -167,7 +167,7 @@ public final class CooFieldMatrixProperties {
 
         while(result && entries.size() > 0) {
             // Extract value of interest.
-            value = entries.remove(0);
+            value = (V) entries.remove(0);
             row = rowIndices.remove(0);
             col = colIndices.remove(0);
 
@@ -209,10 +209,10 @@ public final class CooFieldMatrixProperties {
      * @param src Matrix to check if it is the anti-hermitian matrix.
      * @return True if the {@code src} matrix is anti-hermitian. False otherwise.
      */
-    public static <V extends Field<V>> boolean isAntiHermitian(CooFieldMatrixBase<?, ?, ?, V> src) {
+    public static <V extends Field<V>> boolean isAntiHermitian(CooFieldMatrixBase<?, ?, ?, ?, V> src) {
         boolean result = src.isSquare();
 
-        List<V> entries = Arrays.asList(src.entries);
+        List<Field<V>> entries = Arrays.asList(src.entries);
         List<Integer> rowIndices = IntStream.of(src.rowIndices).boxed().collect(Collectors.toList());
         List<Integer> colIndices = IntStream.of(src.colIndices).boxed().collect(Collectors.toList());
 
@@ -222,7 +222,7 @@ public final class CooFieldMatrixProperties {
 
         while(result && entries.size() > 0) {
             // Extract value of interest.
-            value = entries.remove(0);
+            value = (V) entries.remove(0);
             row = rowIndices.remove(0);
             col = colIndices.remove(0);
 

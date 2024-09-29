@@ -25,10 +25,11 @@
 package org.flag4j.operations.dense.complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 /**
  * This class contains low-level implementations of complex element-wise tensor multiplication.
@@ -56,12 +57,12 @@ public class ComplexDenseElemMult {
      * @return The element-wise multiplication of the two tensors.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static Complex128[] elemMult(Complex128[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
-        ParameterChecks.ensureEqualShape(shape1, shape2);
+    public static Complex128[] elemMult(Field<Complex128>[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
+        ValidateParameters.ensureEqualShape(shape1, shape2);
         Complex128[] product = new Complex128[src1.length];
 
         for(int i=0; i<product.length; i++) {
-            product[i] = src1[i].mult(src2[i]);
+            product[i] = src1[i].mult((Complex128) src2[i]);
         }
 
         return product;
@@ -77,14 +78,13 @@ public class ComplexDenseElemMult {
      * @return The element-wise multiplication of the two tensors.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static Complex128[] elemMultConcurrent(Complex128[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
-        ParameterChecks.ensureEqualShape(shape1, shape2);
+    public static Complex128[] elemMultConcurrent(Field<Complex128>[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
+        ValidateParameters.ensureEqualShape(shape1, shape2);
         Complex128[] product = new Complex128[src1.length];
 
         ThreadManager.concurrentOperation(product.length, ((startIdx, endIdx) -> {
-            for(int i=startIdx; i<endIdx; i++) {
-                product[i] = src1[i].mult(src2[i]);
-            }
+            for(int i=startIdx; i<endIdx; i++)
+                product[i] = src1[i].mult((Complex128) src2[i]);
         }));
 
         return product;
@@ -99,7 +99,7 @@ public class ComplexDenseElemMult {
      * @param shape2 Shape of second tensor.
      * @return The element-wise multiplication of the two tensors.
      */
-    public static Complex128[] dispatch(Complex128[] src1, Shape shape1,Complex128[] src2, Shape shape2) {
+    public static Complex128[] dispatch(Field<Complex128>[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         if(src1.length < CONCURRENT_THRESHOLD) {
             return elemMult(src1, shape1, src2, shape2);
         } else {

@@ -25,9 +25,10 @@
 package org.flag4j.operations.dense.real_complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 
 /**
@@ -52,11 +53,11 @@ public final class RealComplexDenseOperations {
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !shape1.equals(shape2)}.
      * @throws ArrayIndexOutOfBoundsException If {@code src1.length != src2.length}
      */
-    public static Complex128[] add(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.ensureEqualShape(shape1, shape2);
+    public static Complex128[] add(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
+        ValidateParameters.ensureEqualShape(shape1, shape2);
         Complex128[] sum = new Complex128[src1.length];
 
-        for(int i=0; i<sum.length; i++)
+        for(int i=0, size=sum.length; i<size; i++)
             sum[i] = src1[i].add(src2[i]);
 
         return sum;
@@ -73,11 +74,11 @@ public final class RealComplexDenseOperations {
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !shape1.equals(shape2)}.
      * @throws ArrayIndexOutOfBoundsException If {@code src1.length != src2.length}
      */
-    public static Complex128[] sub(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.ensureEqualShape(shape1, shape2);
+    public static Complex128[] sub(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
+        ValidateParameters.ensureEqualShape(shape1, shape2);
         Complex128[] diff = new Complex128[src1.length];
 
-        for(int i=0; i<diff.length; i++)
+        for(int i=0, size=diff.length; i<size; i++)
             diff[i] = src1[i].sub(src2[i]);
 
         return diff;
@@ -94,12 +95,12 @@ public final class RealComplexDenseOperations {
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !shape1.equals(shape2)}.
      * @throws ArrayIndexOutOfBoundsException If {@code src1.length != src2.length}
      */
-    public static Complex128[] sub(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
-        ParameterChecks.ensureEqualShape(shape1, shape2);
+    public static Complex128[] sub(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
+        ValidateParameters.ensureEqualShape(shape1, shape2);
         Complex128[] diff = new Complex128[src1.length];
 
-        for(int i=0; i<diff.length; i++)
-            diff[i] = new Complex128(src1[i]-src2[i].re, -src2[i].im);
+        for(int i=0, size=diff.length; i<size; i++)
+            diff[i] = new Complex128(src1[i]-((Complex128) src2[i]).re, -((Complex128) src2[i]).im);
 
         return diff;
     }
@@ -114,21 +115,21 @@ public final class RealComplexDenseOperations {
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !shape1.equals(shape2)}.
      * @throws ArrayIndexOutOfBoundsException If {@code src1.length != src2.length}
      */
-    public static void subEq(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.ensureEqualShape(shape1, shape2);
+    public static void subEq(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
+        ValidateParameters.ensureEqualShape(shape1, shape2);
 
-        for(int i=0; i<src1.length; i++)
+        for(int i=0, size=src1.length; i<size; i++)
             src1[i] = src1[i].sub(src2[i]);
     }
 
 
     /**
      * Subtracts a scalar from each entry of this tensor and stores the result in the tensor.
-     * @param src TensorOld in subtraction. Also, where the result will be stored.
+     * @param src Tensor in subtraction. Also, where the result will be stored.
      * @param b Scalar to subtract.
      */
-    public static void subEq(Complex128[] src, double b) {
-        for(int i=0; i<src.length; i++)
+    public static void subEq(Field<Complex128>[] src, double b) {
+        for(int i=0, size=src.length; i<size; i++)
             src[i] = src[i].sub(b);
     }
 
@@ -142,21 +143,21 @@ public final class RealComplexDenseOperations {
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !shape1.equals(shape2)}.
      * @throws ArrayIndexOutOfBoundsException If {@code src1.length != src2.length}
      */
-    public static void addEq(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.ensureEqualShape(shape1, shape2);
+    public static void addEq(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
+        ValidateParameters.ensureEqualShape(shape1, shape2);
 
-        for(int i=0; i<src1.length; i++)
+        for(int i=0, size=src1.length; i<size; i++)
             src1[i] = src1[i].add(src2[i]);
     }
 
 
     /**
      * Adds a scalar from each entry of this tensor and stores the result in the tensor.
-     * @param src TensorOld in addition. Also, where the result will be stored.
+     * @param src Tensor in addition. Also, where the result will be stored.
      * @param b Scalar to add.
      */
-    public static void addEq(Complex128[] src, double b) {
-        for(int i=0; i<src.length; i++)
+    public static void addEq(Field<Complex128>[] src, double b) {
+        for(int i=0, size=src.length; i<size; i++)
             src[i] = src[i].add(b);
     }
 
@@ -171,7 +172,7 @@ public final class RealComplexDenseOperations {
         Complex128[] quotient = new Complex128[entries.length];
         double denom = divisor.re*divisor.re + divisor.im*divisor.im;
 
-        for(int i=0; i<quotient.length; i++) {
+        for(int i=0, size=quotient.length; i<size; i++) {
             quotient[i] = new Complex128(
                     entries[i]*divisor.re / denom,
                     -entries[i]*divisor.im / denom);
@@ -188,11 +189,27 @@ public final class RealComplexDenseOperations {
      * @param a Scalar to add to all entries of this tensor.
      * @return The result of adding the scalar value to all entries of the source tensor.
      */
-    public static Complex128[] add(Complex128[] src1, double a) {
+    public static Complex128[] add(Field<Complex128>[] src1, double a) {
         Complex128[] sum = new Complex128[src1.length];
 
-        for(int i=0; i<sum.length; i++)
+        for(int i=0, size=sum.length; i<size; i++)
             sum[i] = src1[i].add(a);
+
+        return sum;
+    }
+
+
+    /**
+     * Adds a scalar value to all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     * @return The result of adding the scalar value to all entries of the source tensor.
+     */
+    public static Complex128[] add(double[] src1, Complex128 a) {
+        Complex128[] sum = new Complex128[src1.length];
+
+        for(int i=0, size=sum.length; i<size; i++)
+            sum[i] = a.add(src1[i]);
 
         return sum;
     }
@@ -204,7 +221,7 @@ public final class RealComplexDenseOperations {
      * @param a Scalar to add to all entries of this tensor.
      * @return The tensor-scalar subtraction of the two parameters.
      */
-    public static Complex128[] sub(Complex128[] src1, double a) {
+    public static Complex128[] sub(Field<Complex128>[] src1, double a) {
         Complex128[] diff = new Complex128[src1.length];
 
         for(int i=0, size=diff.length; i<size; i++)
@@ -224,7 +241,7 @@ public final class RealComplexDenseOperations {
         Complex128[] diff = new Complex128[src1.length];
         Complex128 aInv = a.addInv();
 
-        for(int i=0; i<diff.length; i++)
+        for(int i=0, size=diff.length; i<size; i++)
             diff[i] = aInv.add(src1[i]);
 
         return diff;
@@ -237,10 +254,10 @@ public final class RealComplexDenseOperations {
      * @param divisor Scalar value to divide tensor by.
      * @return The scalar division of the tensor.
      */
-    public static Complex128[] scalDiv(Complex128[] entries, double divisor) {
+    public static Complex128[] scalDiv(Field<Complex128>[] entries, double divisor) {
         Complex128[] quotient = new Complex128[entries.length];
 
-        for(int i=0; i<quotient.length; i++)
+        for(int i=0, size=quotient.length; i<size; i++)
             quotient[i] = entries[i].div(divisor);
 
         return quotient;

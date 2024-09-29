@@ -24,9 +24,8 @@
 
 package org.flag4j.operations.sparse.csr.complex;
 
-
-import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.operations.common.complex.ComplexProperties;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
@@ -56,17 +55,17 @@ public class ComplexCsrEquals {
      * are 'close', i.e. elements {@code a} and {@code b} at the same positions in the two matrices respectively
      * satisfy {@code |a-b| <= (absTol + relTol*|b|)}. Otherwise, returns false.
      */
-    public static boolean allClose(CsrCMatrixOld src1, CsrCMatrixOld src2, double relTol, double absTol) {
+    public static boolean allClose(CsrCMatrix src1, CsrCMatrix src2, double relTol, double absTol) {
         boolean close = src1.shape.equals(src2.shape);
 
         if(close) {
             // Remove values which are 'close' to zero.
-            List<CNumber> src1Entries = new ArrayList<>(src1.entries.length);
+            List<Complex128> src1Entries = new ArrayList<>(src1.entries.length);
             List<Integer> src1ColIndices = new ArrayList<>(src1Entries.size());
             int[] src1RowPointers = new int[src1.rowPointers.length];
             removeCloseToZero(src1, src1Entries, src1RowPointers, src1ColIndices, absTol);
 
-            List<CNumber> src2Entries = new ArrayList<>(src2.entries.length);
+            List<Complex128> src2Entries = new ArrayList<>(src2.entries.length);
             List<Integer> src2ColIndices = new ArrayList<>(src2Entries.size());
             int[] src2RowPointers = new int[src2.rowPointers.length];
             removeCloseToZero(src2, src2Entries, src2RowPointers, src2ColIndices, absTol);
@@ -76,8 +75,8 @@ public class ComplexCsrEquals {
                     && Arrays.equals(ArrayUtils.fromIntegerList(src1ColIndices),
                     ArrayUtils.fromIntegerList(src2ColIndices))
 
-                    && ComplexProperties.allClose(ArrayUtils.fromList(src1Entries, new CNumber[src1Entries.size()]),
-                    ArrayUtils.fromList(src2Entries, new CNumber[src2Entries.size()]), relTol, absTol);
+                    && ComplexProperties.allClose(ArrayUtils.fromList(src1Entries, new Complex128[src1Entries.size()]),
+                    ArrayUtils.fromList(src2Entries, new Complex128[src2Entries.size()]), relTol, absTol);
         }
 
         return close;
@@ -92,14 +91,14 @@ public class ComplexCsrEquals {
      * @param rowPointers Row pointers for entries.
      * @param aTol Absolute tolerance for value to be considered close to zero.
      */
-    private static void removeCloseToZero(CsrCMatrixOld src, List<CNumber> entries, int[] rowPointers,
+    private static void removeCloseToZero(CsrCMatrix src, List<Complex128> entries, int[] rowPointers,
                                           List<Integer> colIndices, double aTol) {
         for(int i=0; i<src.numRows; i++) {
             int start = src.rowPointers[i];
             int stop = src.rowPointers[i+1];
 
             for(int j=start; j<stop; j++) {
-                CNumber value = src.entries[j];
+                Complex128 value = (Complex128) src.entries[j];
 
                 if(value.abs() > aTol) {
                     // Then keep value.

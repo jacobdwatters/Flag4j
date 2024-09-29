@@ -32,7 +32,7 @@ import org.flag4j.arrays.backend.TensorOverSemiRing;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.linalg.TensorInvert;
-import org.flag4j.operations.common.complex.ComplexOperations;
+import org.flag4j.operations.common.complex.Complex128Operations;
 import org.flag4j.operations.dense.complex.ComplexDenseOperations;
 import org.flag4j.operations.dense.real.RealDenseEquals;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
@@ -41,7 +41,7 @@ import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseTensorOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -88,6 +88,71 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
      */
     public Tensor(Shape shape, double[] entries) {
         super(shape, entries);
+    }
+
+
+    /**
+     * Creates a tensor with the specified entries and shape.
+     *
+     * @param shape Shape of this tensor.
+     * @param entries Entries of this tensor.
+     */
+    public Tensor(Shape shape, int[] entries) {
+        super(shape, new double[entries.length]);
+        ArrayUtils.asDouble(entries, this.entries);
+    }
+
+
+    /**
+     * Constructs a copy of the specified tensor.
+     * @param src The tensor to make a copy of.
+     */
+    public Tensor(Tensor src) {
+        super(src.shape, src.entries.clone());
+    }
+
+
+    /**
+     * Creates a tensor with the specified entries and shape.
+     *
+     * @param shape Shape of this tensor.
+     * @param entries Entries of this tensor.
+     */
+    public Tensor(Shape shape, Double[] entries) {
+        super(shape, new double[entries.length]);
+        ArrayUtils.unbox(entries, super.entries);
+    }
+
+
+    /**
+     * Creates a tensor with the specified entries and shape.
+     *
+     * @param shape Shape of this tensor.
+     * @param entries Entries of this tensor.
+     */
+    public Tensor(Shape shape, Integer[] entries) {
+        super(shape, new double[entries.length]);
+        ArrayUtils.asDouble(entries, super.entries);
+    }
+
+
+    /**
+     * Converts a matrix to an equivalent tensor.
+     *
+     * @param mat Matrix to convert to a tensor.
+     */
+    public Tensor(Matrix mat) {
+        super(mat.shape, mat.entries.clone());
+    }
+
+
+    /**
+     * Converts a matrix to an equivalent tensor.
+     *
+     * @param mat Matrix to convert to a tensor.
+     */
+    public Tensor(Vector mat) {
+        super(mat.shape, mat.entries.clone());
     }
 
 
@@ -203,14 +268,14 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
 
     /**
      * Converts this tensor to a matrix with the specified shape.
-     * @param matShape Shape of the resulting matrix. Must be {@link ParameterChecks#ensureBroadcastable(Shape, Shape) broadcastable}
+     * @param matShape Shape of the resulting matrix. Must be {@link ValidateParameters#ensureBroadcastable(Shape, Shape) broadcastable}
      * with the shape of this tensor.
      * @return A matrix of shape {@code matShape} with the values of this tensor.
      * @throws org.flag4j.util.exceptions.LinearAlgebraException If {@code matShape} is not of rank 2.
      */
     public Matrix toMatrix(Shape matShape) {
-        ParameterChecks.ensureBroadcastable(shape, matShape);
-        ParameterChecks.ensureRank(matShape, 2);
+        ValidateParameters.ensureBroadcastable(shape, matShape);
+        ValidateParameters.ensureRank(matShape, 2);
 
         return new Matrix(matShape, entries.clone());
     }
@@ -225,10 +290,10 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
     public Matrix toMatrix() {
         Matrix mat;
 
-        if(this.getRank()==2) {
-            mat = new Matrix(this.shape, this.entries.clone());
+        if(getRank()==2) {
+            mat = new Matrix(shape, entries.clone());
         } else {
-            mat = new Matrix(1, this.entries.length, this.entries.clone());
+            mat = new Matrix(1, entries.length, entries.clone());
         }
 
         return mat;
@@ -240,7 +305,7 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
      * @return A complex tensor equivalent to this real tensor.
      */
     public CTensor toComplex() {
-        return new CTensor(shape, ArrayUtils.copy2Complex128(entries, null));
+        return new CTensor(shape, ArrayUtils.wrapAsComplex128(entries, null));
     }
 
 
@@ -382,7 +447,7 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
      * @return The tensor-scalar product of this tensor and {@code b}.
      */
     public CTensor mult(Complex128 b) {
-        return new CTensor(shape, ComplexOperations.scalMult(entries, b));
+        return new CTensor(shape, Complex128Operations.scalMult(entries, b));
     }
 
 
@@ -392,6 +457,6 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
      * @return The tensor scalar quotient of this tensor and {@code b}.
      */
     public CTensor div(Complex128 b) {
-        return new CTensor(shape, ComplexOperations.scalDiv(entries, b));
+        return new CTensor(shape, Complex128Operations.scalDiv(entries, b));
     }
 }

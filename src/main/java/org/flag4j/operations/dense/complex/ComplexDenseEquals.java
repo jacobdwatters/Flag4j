@@ -24,9 +24,10 @@
 
 package org.flag4j.operations.dense.complex;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
@@ -49,7 +50,7 @@ public class ComplexDenseEquals {
      * @param B Second matrix.
      * @return True if the two matrices are element-wise equivalent.
      */
-    public static boolean matrixEquals(CMatrixOld A, CMatrixOld B) {
+    public static boolean matrixEquals(CMatrix A, CMatrix B) {
         return tensorEquals(A.entries, A.shape, B.entries, B.shape);
     }
 
@@ -62,7 +63,7 @@ public class ComplexDenseEquals {
      * @param shape2 Shape of second tensor.
      * @return True if the two tensors are numerically element-wise equivalent.
      */
-    public static boolean tensorEquals(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static boolean tensorEquals(Field<Complex128>[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         return shape1.equals(shape2) && Arrays.equals(src1, src2);
     }
 }

@@ -28,10 +28,10 @@ import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 /**
- * This class contains methods to apply common binary operations_old to a real dense matrix and to a real sparse matrix.
+ * This class contains methods to apply common binary operations to a real dense matrix and to a real sparse matrix.
  */
 public class RealDenseSparseTensorOperations {
 
@@ -49,7 +49,7 @@ public class RealDenseSparseTensorOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static Tensor add(Tensor src1, CooTensor src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         int[] indices;
         Tensor dest = src1.copy();
@@ -71,7 +71,7 @@ public class RealDenseSparseTensorOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CooTensor elemMult(Tensor src1, CooTensor src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         int index;
         double[] destEntries = new double[src2.nnz];
@@ -95,7 +95,7 @@ public class RealDenseSparseTensorOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CooTensor elemDiv(CooTensor src1, Tensor src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         int index;
         double[] destEntries = new double[src1.nnz];
         int[][] destIndices = new int[src1.indices.length][src1.indices[0].length];
@@ -118,7 +118,7 @@ public class RealDenseSparseTensorOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.t
      */
     public static Tensor sub(Tensor src1, CooTensor src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         Tensor dest = src1.copy();
 
         for(int i=0, size=src2.nnz; i<size; i++)
@@ -136,7 +136,7 @@ public class RealDenseSparseTensorOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.t
      */
     public static Tensor sub(CooTensor src1, Tensor src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         Tensor dest = src2.mult(-1);
 
         for(int i=0, size=src1.nnz; i<size; i++)
@@ -154,7 +154,7 @@ public class RealDenseSparseTensorOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static void addEq(Tensor src1, CooTensor src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0, size=src2.nnz; i<size; i++)
             src1.entries[src1.shape.entriesIndex(src2.indices[i])] += src2.entries[i];
@@ -168,7 +168,7 @@ public class RealDenseSparseTensorOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static void subEq(Tensor src1, CooTensor src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0, size=src2.nnz; i<size; i++)
             src1.entries[src1.shape.entriesIndex(src2.indices[i])] -= src2.entries[i];

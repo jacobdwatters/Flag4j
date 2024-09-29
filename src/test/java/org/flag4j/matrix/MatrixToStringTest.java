@@ -1,6 +1,6 @@
 package org.flag4j.matrix;
 
-import org.flag4j.arrays_old.dense.MatrixOld;
+import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class MatrixToStringTest {
 
     double[][] aEntries;
-    MatrixOld A;
+    Matrix A;
     String exp;
 
 
@@ -19,7 +19,7 @@ class MatrixToStringTest {
         aEntries = new double[][]{
                 {1.32239898234, 2.46560324, 1.45, -0.11234},
                 {0.000324, 1.456, -123.4, 2341.56}};
-        A = new MatrixOld(aEntries);
+        A = new Matrix(aEntries);
         PrintOptions.setPrecision(50);
         PrintOptions.setPadding(2);
         PrintOptions.setMaxRows(50);
@@ -34,7 +34,7 @@ class MatrixToStringTest {
         aEntries = new double[][]{
                 {1.32239898234, 2.46560324, 1.45, -0.11234},
                 {0.000324, 1.456, -123.4, 2341.56}};
-        A = new MatrixOld(aEntries);
+        A = new Matrix(aEntries);
         PrintOptions.setPrecision(3);
         PrintOptions.setPadding(2);
         PrintOptions.setMaxRows(50);
@@ -49,7 +49,7 @@ class MatrixToStringTest {
         aEntries = new double[][]{
                 {1.32239898234, 2.46560324, 1.45, -0.11234},
                 {0.000324, 1.456, -123.4, 2341.56}};
-        A = new MatrixOld(aEntries);
+        A = new Matrix(aEntries);
         PrintOptions.setPrecision(0);
         PrintOptions.setPadding(4);
         PrintOptions.setMaxRows(50);
@@ -64,7 +64,7 @@ class MatrixToStringTest {
         aEntries = new double[][]{
                 {1.32239898234, 2.46560324, 1.45, -0.11234},
                 {0.000324, 1.456, -123.4, 2341.56}};
-        A = new MatrixOld(aEntries);
+        A = new Matrix(aEntries);
         PrintOptions.setPrecision(2);
         PrintOptions.setPadding(2);
         PrintOptions.setMaxRows(2);
@@ -79,7 +79,7 @@ class MatrixToStringTest {
         aEntries = new double[][]{
                 {1.32239898234, 2.46560324, 1.45, -0.11234},
                 {0.000324, 1.456, -123.4, 2341.56}};
-        A = new MatrixOld(aEntries);
+        A = new Matrix(aEntries);
         PrintOptions.setPrecision(2);
         PrintOptions.setPadding(2);
         PrintOptions.setMaxRows(1);
@@ -95,7 +95,7 @@ class MatrixToStringTest {
         aEntries = new double[][]{
                 {1.32239898234, 2.46560324, 1.45, -0.11234},
                 {0.000324, 1.456, -123.4, 2341.56}};
-        A = new MatrixOld(aEntries);
+        A = new Matrix(aEntries);
         PrintOptions.setPrecision(2);
         PrintOptions.setPadding(2);
         PrintOptions.setMaxRows(2);
@@ -111,7 +111,7 @@ class MatrixToStringTest {
         aEntries = new double[][]{
                 {1.32239898234, 2.46560324, 1.45, -0.11234},
                 {0.000324, 1.456, -123.4, 2341.56}};
-        A = new MatrixOld(aEntries);
+        A = new Matrix(aEntries);
         PrintOptions.setPrecision(2);
         PrintOptions.setPadding(2);
         PrintOptions.setMaxRows(2);
@@ -127,7 +127,7 @@ class MatrixToStringTest {
         aEntries = new double[][]{
                 {1.32239898234, 2.46560324, 1.45, -0.11234},
                 {0.000324, 1.456, -123.4, 2341.56}};
-        A = new MatrixOld(aEntries);
+        A = new Matrix(aEntries);
         PrintOptions.setPrecision(3);
         PrintOptions.setPadding(3);
         PrintOptions.setMaxRows(2);

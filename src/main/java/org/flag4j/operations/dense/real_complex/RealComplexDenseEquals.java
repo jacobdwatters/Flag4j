@@ -24,12 +24,13 @@
 
 package org.flag4j.operations.dense.real_complex;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.CTensorOld;
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 
@@ -50,7 +51,7 @@ public class RealComplexDenseEquals {
      * @param B Second matrix.
      * @return True if the two matrices are element-wise equivalent.
      */
-    public static boolean matrixEquals(MatrixOld A, CMatrixOld B) {
+    public static boolean matrixEquals(Matrix A, CMatrix B) {
         return tensorEquals(A.entries, A.shape, B.entries, B.shape);
     }
 
@@ -61,7 +62,7 @@ public class RealComplexDenseEquals {
      * @param B Second tensor in comparison.
      * @return True if the two tensors are numerically element-wise equivalent.
      */
-    public static boolean tensorEquals(TensorOld A, CTensorOld B) {
+    public static boolean tensorEquals(Tensor A, CTensor B) {
         return tensorEquals(A.entries, A.shape, B.entries, B.shape);
     }
 
@@ -74,7 +75,7 @@ public class RealComplexDenseEquals {
      * @param shape2 Shape of second tensor.
      * @return True if the two tensors are numerically element-wise equivalent.
      */
-    public static boolean tensorEquals(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static boolean tensorEquals(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         return shape1.equals(shape2) && ArrayUtils.equals(src1, src2);
     }
 }

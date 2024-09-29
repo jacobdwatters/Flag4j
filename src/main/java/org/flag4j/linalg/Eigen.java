@@ -25,6 +25,7 @@
 package org.flag4j.linalg;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
@@ -34,9 +35,9 @@ import org.flag4j.linalg.decompositions.schur.RealSchur;
 import org.flag4j.linalg.decompositions.schur.Schur;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
-import org.flag4j.operations_old.common.real.AggregateReal;
+import org.flag4j.operations.common.real.AggregateReal;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
 
@@ -60,7 +61,7 @@ public final class Eigen {
      * @return A complex vector containing the eigenvalues of the 2x2 {@code src} matrix.
      */
     public static CVector get2x2EigenValues(Matrix src) {
-        ParameterChecks.ensureEquals(2, src.numRows, src.numCols);
+        ValidateParameters.ensureEquals(2, src.numRows, src.numCols);
         return new CVector(get2x2EigenValues(src.entries[0], src.entries[1], src.entries[2], src.entries[3]));
     }
 
@@ -147,7 +148,7 @@ public final class Eigen {
      * @return A complex vector containing the eigenvalues of the 2x2 {@code src} matrix.
      */
     public static CVector get2x2EigenValues(CMatrix src) {
-        ParameterChecks.ensureEquals(2, src.numRows, src.numCols);
+        ValidateParameters.ensureEquals(2, src.numRows, src.numCols);
         return new CVector(get2x2EigenValues(src.entries[0], src.entries[1], src.entries[2], src.entries[3]));
     }
 
@@ -161,7 +162,8 @@ public final class Eigen {
      * @return An array containing the eigenvalues of the specified 2-by-2 complex matrix. Eigenvalues will be repeated per their
      * multiplicity.
      */
-    public static Complex128[] get2x2EigenValues(Complex128 a11, Complex128 a12, Complex128 a21, Complex128 a22) {
+    public static Complex128[] get2x2EigenValues(Field<Complex128> a11, Field<Complex128> a12,
+                                                 Field<Complex128> a21, Field<Complex128> a22) {
         Complex128[] lambda = new Complex128[2];
 
         // Compute maximum magnitude for scaling.
@@ -180,8 +182,8 @@ public final class Eigen {
         a22 = a22.div(maxAbs);
 
         // Trace and determinant for the 2x2 matrix.
-        Complex128 trace = a11.add(a22);
-        Complex128 det = a11.mult(a22).sub(a12.mult(a21));
+        Complex128 trace = a11.add((Complex128) a22);
+        Complex128 det = a11.mult((Complex128) a22).sub(a12.mult((Complex128) a21));
 
         // Compute the middle term of the quadratic equation.
         Complex128 middleTerm = trace.mult(trace).div(4).sub(det);
@@ -344,10 +346,10 @@ public final class Eigen {
             if(m == numRows-1) {
                 lambdas.entries[m] = T.entries[m*numRows + m];
             } else {
-                Complex128 a11 = T.entries[m*numRows + m];
-                Complex128 a12 = T.entries[m*numRows + m + 1];
-                Complex128 a21 = T.entries[(m+1)*numRows + m];
-                Complex128 a22 = T.entries[(m+1)*numRows + m  +1];
+                Complex128 a11 = (Complex128) T.entries[m*numRows + m];
+                Complex128 a12 = (Complex128) T.entries[m*numRows + m + 1];
+                Complex128 a21 = (Complex128) T.entries[(m+1)*numRows + m];
+                Complex128 a22 = (Complex128) T.entries[(m+1)*numRows + m  +1];
 
                 if(a21.mag() > EPS_F64*(a11.mag() + a22.mag())) {
                     // Non-converged 2x2 block found.
@@ -598,7 +600,7 @@ public final class Eigen {
      * @param j The diagonal index of {@code T} where the eigenvalue &lambda; appears.
      */
     private static void makeSystem(CMatrix T, int j, CMatrix S_hat, CVector r) {
-        Complex128 lam = T.entries[j*T.numCols + j];
+        Complex128 lam = (Complex128) T.entries[j*T.numCols + j];
 
         // Copy values from T and subtract eigenvalue from diagonal.
         for(int i=0; i<j; i++) {
@@ -671,7 +673,7 @@ public final class Eigen {
     public static CMatrix[] getEigenPairs(CMatrix src) {
         CMatrix lambdas = new CMatrix(1, src.numRows);
 
-        Schur<CMatrix, Complex128[]> schur = new ComplexSchur(true).decompose(src);
+        Schur<CMatrix, Field<Complex128>[]> schur = new ComplexSchur(true).decompose(src);
         CMatrix T = schur.getT();
         CMatrix U = schur.getU();
         int numRows = src.numRows;

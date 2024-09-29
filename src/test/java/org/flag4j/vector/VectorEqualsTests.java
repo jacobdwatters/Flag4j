@@ -1,10 +1,10 @@
 package org.flag4j.vector;
 
-import org.flag4j.arrays_old.dense.CVectorOld;
-import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooCVectorOld;
-import org.flag4j.arrays_old.sparse.CooVectorOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays.sparse.CooCVector;
+import org.flag4j.arrays.sparse.CooVector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,35 +16,35 @@ class VectorEqualsTests {
     int sparseSize;
 
     double[] aEntries;
-    VectorOld A;
+    Vector A;
 
     @Test
     void realDenseTestCase() {
         double[] bEntries;
-        VectorOld B;
+        Vector B;
 
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[]{1.234, 543.354, -0.3456};
-        A = new VectorOld(aEntries);
+        A = new Vector(aEntries);
         bEntries = new double[]{1.234, 543.354, -0.3456};
-        B = new VectorOld(bEntries);
+        B = new Vector(bEntries);
 
         assertEquals(A, B);
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new double[]{1.234, 543.354, -0.3456};
-        A = new VectorOld(aEntries);
+        A = new Vector(aEntries);
         bEntries = new double[]{1.234, 123.5, -0.3456};
-        B = new VectorOld(bEntries);
+        B = new Vector(bEntries);
 
         assertNotEquals(A, B);
 
 
         // -------------------- Sub-case 3 --------------------
         aEntries = new double[]{1.234, 543.354, -0.3456};
-        A = new VectorOld(aEntries);
+        A = new Vector(aEntries);
         bEntries = new double[]{1.234, 543.354, -0.3456, 0};
-        B = new VectorOld(bEntries);
+        B = new Vector(bEntries);
 
         assertNotEquals(A, B);
     }
@@ -52,31 +52,31 @@ class VectorEqualsTests {
 
     @Test
     void complexDenseTestCase() {
-        CNumber[] bEntries;
-        CVectorOld B;
+        Complex128[] bEntries;
+        CVector B;
 
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[]{1.234, 543.354, -0.3456};
-        A = new VectorOld(aEntries);
-        bEntries = new CNumber[]{new CNumber(1.234), new CNumber(543.354), new CNumber(-0.3456)};
-        B = new CVectorOld(bEntries);
+        A = new Vector(aEntries);
+        bEntries = new Complex128[]{new Complex128(1.234), new Complex128(543.354), new Complex128(-0.3456)};
+        B = new CVector(bEntries);
 
         assertEquals(A.toComplex(), B);
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new double[]{1.234, 543.354, -0.3456};
-        A = new VectorOld(aEntries);
-        bEntries = new CNumber[]{new CNumber(1.234, 13.4), new CNumber(543.354), new CNumber(-0.3456)};
-        B = new CVectorOld(bEntries);
+        A = new Vector(aEntries);
+        bEntries = new Complex128[]{new Complex128(1.234, 13.4), new Complex128(543.354), new Complex128(-0.3456)};
+        B = new CVector(bEntries);
 
         assertNotEquals(A.toComplex(), B);
 
 
         // -------------------- Sub-case 3 --------------------
         aEntries = new double[]{1.234, 543.354, -0.3456};
-        A = new VectorOld(aEntries);
-        bEntries = new CNumber[]{new CNumber(1.234), new CNumber(543.354), new CNumber(-0.3456), new CNumber(0, 123.5)};
-        B = new CVectorOld(bEntries);
+        A = new Vector(aEntries);
+        bEntries = new Complex128[]{new Complex128(1.234), new Complex128(543.354), new Complex128(-0.3456), new Complex128(0, 123.5)};
+        B = new CVector(bEntries);
 
         assertNotEquals(A.toComplex(), B);
     }
@@ -85,35 +85,35 @@ class VectorEqualsTests {
     @Test
     void realSparseTestCase() {
         double[] bEntries;
-        CooVectorOld B;
+        CooVector B;
 
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[]{0, 543.354, 0};
-        A = new VectorOld(aEntries);
+        A = new Vector(aEntries);
         bEntries = new double[]{543.354};
         indices = new int[]{1};
         sparseSize = 3;
-        B = new CooVectorOld(sparseSize, bEntries, indices);
+        B = new CooVector(sparseSize, bEntries, indices);
 
         assertEquals(A.toCoo(), B);
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new double[]{0, 543.354, 0};
-        A = new VectorOld(aEntries);
+        A = new Vector(aEntries);
         bEntries = new double[]{543.354};
         indices = new int[]{2};
         sparseSize = 3;
-        B = new CooVectorOld(sparseSize, bEntries, indices);
+        B = new CooVector(sparseSize, bEntries, indices);
 
         assertNotEquals(A.toCoo(), B);
 
         // -------------------- Sub-case 3 --------------------
         aEntries = new double[]{0, 543.354, 0};
-        A = new VectorOld(aEntries);
+        A = new Vector(aEntries);
         bEntries = new double[]{543.354};
         indices = new int[]{1};
         sparseSize = 4;
-        B = new CooVectorOld(sparseSize, bEntries, indices);
+        B = new CooVector(sparseSize, bEntries, indices);
 
         assertNotEquals(A.toCoo(), B);
     }
@@ -121,36 +121,36 @@ class VectorEqualsTests {
 
     @Test
     void complexSparseTestCase() {
-        CNumber[] bEntries;
-        CooCVectorOld B;
+        Complex128[] bEntries;
+        CooCVector B;
 
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[]{0, 543.354, 0};
-        A = new VectorOld(aEntries);
-        bEntries = new CNumber[]{new CNumber(543.354)};
+        A = new Vector(aEntries);
+        bEntries = new Complex128[]{new Complex128(543.354)};
         indices = new int[]{1};
         sparseSize = 3;
-        B = new CooCVectorOld(sparseSize, bEntries, indices);
+        B = new CooCVector(sparseSize, bEntries, indices);
 
         assertEquals(A.toCoo().toComplex(), B);
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new double[]{0, 543.354, 0};
-        A = new VectorOld(aEntries);
-        bEntries = new CNumber[]{new CNumber(543.354, -9.34)};
+        A = new Vector(aEntries);
+        bEntries = new Complex128[]{new Complex128(543.354, -9.34)};
         indices = new int[]{1};
         sparseSize = 3;
-        B = new CooCVectorOld(sparseSize, bEntries, indices);
+        B = new CooCVector(sparseSize, bEntries, indices);
 
         assertNotEquals(A.toCoo().toComplex(), B);
 
         // -------------------- Sub-case 3 --------------------
         aEntries = new double[]{0, 543.354, 0};
-        A = new VectorOld(aEntries);
-        bEntries = new CNumber[]{new CNumber(543.354)};
+        A = new Vector(aEntries);
+        bEntries = new Complex128[]{new Complex128(543.354)};
         indices = new int[]{1};
         sparseSize = 4;
-        B = new CooCVectorOld(sparseSize, bEntries, indices);
+        B = new CooCVector(sparseSize, bEntries, indices);
 
         assertNotEquals(A.toCoo().toComplex(), B);
     }
@@ -160,14 +160,14 @@ class VectorEqualsTests {
     void objectTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[]{123.4};
-        A = new VectorOld(aEntries);
+        A = new Vector(aEntries);
         Double B = 123.4;
 
         assertNotEquals(A, B);
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new double[]{0, 543.354, 0};
-        A = new VectorOld(aEntries);
+        A = new Vector(aEntries);
         String BString = "hello";
 
         assertNotEquals(A, BString);

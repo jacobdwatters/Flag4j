@@ -28,7 +28,7 @@ package org.flag4j.linalg.decompositions.chol;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.util.Flag4jConstants;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 /**
@@ -79,7 +79,7 @@ public class ComplexCholesky extends Cholesky<CMatrix> {
         if(enforceHermitian && src.isHermitian()) {
             throw new IllegalArgumentException("Matrix is not Hermitian positive-definite.");
         } else {
-            ParameterChecks.ensureSquareMatrix(src.shape);
+            ValidateParameters.ensureSquareMatrix(src.shape);
         }
 
         L = new CMatrix(src.numRows);
@@ -111,7 +111,7 @@ public class ComplexCholesky extends Cholesky<CMatrix> {
                     L.entries[lIndex3] = diag.sqrt();
                 } else {
                     if(!L.entries[j*(L.numCols + 1)].isZero()) {
-                        L.entries[lIndex3] = (src.entries[lIndex3].sub(sum)).div(L.entries[lIndex2 + j]);
+                        L.entries[lIndex3] = (src.entries[lIndex3].sub(sum)).div((Complex128) L.entries[lIndex2 + j]);
                     }
                 }
             }

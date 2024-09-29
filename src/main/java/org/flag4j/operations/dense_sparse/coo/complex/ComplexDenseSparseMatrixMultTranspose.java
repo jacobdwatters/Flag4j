@@ -24,8 +24,9 @@
 
 package org.flag4j.operations.dense_sparse.coo.complex;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
@@ -54,14 +55,14 @@ public final class ComplexDenseSparseMatrixMultTranspose {
      * @param spShape Shape of the sparse matrix.
      * @return The entries of the matrix resulting from multiplying the first matrix by the transpose of the second matrix.
      */
-    public static CNumber[] multTranspose(CNumber[] dSrc, Shape dShape,
-                                          CNumber[] spSrc, int[] rowIndices, int[] colIndices, Shape spShape) {
+    public static Complex128[] multTranspose(Field<Complex128>[] dSrc, Shape dShape,
+                                             Field<Complex128>[] spSrc, int[] rowIndices, int[] colIndices, Shape spShape) {
         int rows1 = dShape.get(0);
         int rows2 = spShape.get(0);
         int cols2 = spShape.get(1);
 
-        CNumber[] dest = new CNumber[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.
-        Arrays.fill(dest, CNumber.ZERO);
+        Complex128[] dest = new Complex128[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.
+        Arrays.fill(dest, Complex128.ZERO);
 
         int row, col;
         int destStart, dSrcStart;
@@ -75,7 +76,7 @@ public final class ComplexDenseSparseMatrixMultTranspose {
                 row = colIndices[j];
                 col = rowIndices[j];
 
-                dest[destStart + col] = dest[destStart + col].add(dSrc[dSrcStart + row].mult(spSrc[j]));
+                dest[destStart + col] = dest[destStart + col].add(dSrc[dSrcStart + row].mult((Complex128) spSrc[j]));
             }
         }
 

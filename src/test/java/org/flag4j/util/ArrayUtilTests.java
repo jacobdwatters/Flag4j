@@ -1,6 +1,6 @@
 package org.flag4j.util;
 
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -10,36 +10,36 @@ class ArrayUtilTests {
     Integer[] srcI;
     Double[] srcD;
     String[] srcS;
-    CNumber[] expArr, actArr;
+    Complex128[] expArr, actArr;
     double[] expRange;
 
     @Test
-    void copy2CNumberTestCase() {
+    void copy2Complex128TestCase() {
         // -------------- Sub-case 1 --------------
         srcI = new Integer[]{1, 2, 3, 4, 5, -1334, 14};
-        expArr = new CNumber[]{
-                new CNumber(1), new CNumber(2), new CNumber(3),
-                new CNumber(4), new CNumber(5), new CNumber(-1334),
-                new CNumber(14)};
-        actArr = new CNumber[srcI.length];
-        ArrayUtils.copy2CNumber(srcI, actArr);
+        expArr = new Complex128[]{
+                new Complex128(1), new Complex128(2), new Complex128(3),
+                new Complex128(4), new Complex128(5), new Complex128(-1334),
+                new Complex128(14)};
+        actArr = new Complex128[srcI.length];
+        ArrayUtils.wrapAsComplex128(srcI, actArr);
         assertArrayEquals(expArr, actArr);
 
         // -------------- Sub-case 2 --------------
         srcD = new Double[]{1.133, 2.445, 3.133, 4.1, 5223.334, -1334.0001, 14.};
-        expArr = new CNumber[]{
-                new CNumber(1.133), new CNumber(2.445), new CNumber(3.133),
-                new CNumber(4.1), new CNumber(5223.334), new CNumber(-1334.0001),
-                new CNumber(14.)};
-        actArr = new CNumber[srcD.length];
-        ArrayUtils.copy2CNumber(srcD, actArr);
+        expArr = new Complex128[]{
+                new Complex128(1.133), new Complex128(2.445), new Complex128(3.133),
+                new Complex128(4.1), new Complex128(5223.334), new Complex128(-1334.0001),
+                new Complex128(14.)};
+        actArr = new Complex128[srcD.length];
+        ArrayUtils.wrapAsComplex128(srcD, actArr);
         assertArrayEquals(expArr, actArr);
 
         // -------------- Sub-case 3 --------------
         srcS = new String[]{"3+1i", "2.01334i", "-44.1-4i"};
-        expArr = new CNumber[]{new CNumber("3+1i"), new CNumber("2.01334i"), new CNumber("-44.1-4i")};
-        actArr = new CNumber[srcS.length];
-        ArrayUtils.copy2CNumber(srcS, actArr);
+        expArr = new Complex128[]{new Complex128("3+1i"), new Complex128("2.01334i"), new Complex128("-44.1-4i")};
+        actArr = new Complex128[srcS.length];
+        ArrayUtils.wrapAsComplex128(srcS, actArr);
         assertArrayEquals(expArr, actArr);
     }
 
@@ -64,12 +64,12 @@ class ArrayUtilTests {
         // -------------- Sub-case 3 --------------
         i = 3;
         j = 1;
-        CNumber[] srcC = new CNumber[]{
-                new CNumber(1.0000001), new CNumber(2),
-                new CNumber(-3), new CNumber(4.133)};
-        CNumber[] expC = new CNumber[]{
-                new CNumber(1.0000001), new CNumber(4.133),
-                new CNumber(-3), new CNumber(2)};
+        Complex128[] srcC = new Complex128[]{
+                new Complex128(1.0000001), new Complex128(2),
+                new Complex128(-3), new Complex128(4.133)};
+        Complex128[] expC = new Complex128[]{
+                new Complex128(1.0000001), new Complex128(4.133),
+                new Complex128(-3), new Complex128(2)};
         ArrayUtils.swap(srcC, i, j);
         assertArrayEquals(expC, srcC);
     }

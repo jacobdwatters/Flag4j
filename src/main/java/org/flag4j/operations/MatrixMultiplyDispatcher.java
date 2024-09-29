@@ -35,7 +35,7 @@ import org.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultTransp
 import org.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
 import org.flag4j.util.Axis2D;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 /**
  * Dispatches matrix multiplication to the appropriate algorithm based on the size of the matrices to be multiplied.
@@ -75,7 +75,7 @@ public final class MatrixMultiplyDispatcher {
      */
     public static double[] dispatch(Matrix A, Vector b) {
         Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
-        ParameterChecks.ensureMatMultShapes(A.shape, bMatShape);
+        ValidateParameters.ensureMatMultShapes(A.shape, bMatShape);
 
         AlgorithmName algorithm;
         double[] dest;
@@ -109,7 +109,7 @@ public final class MatrixMultiplyDispatcher {
      */
     public static Complex128[] dispatch(Matrix A, CVector b) {
         Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
-        ParameterChecks.ensureMatMultShapes(A.shape, bMatShape);
+        ValidateParameters.ensureMatMultShapes(A.shape, bMatShape);
 
         AlgorithmName algorithm;
         Complex128[] dest;
@@ -143,7 +143,7 @@ public final class MatrixMultiplyDispatcher {
      */
     public static Complex128[] dispatch(CMatrix A, Vector b) {
         Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
-        ParameterChecks.ensureMatMultShapes(A.shape, bMatShape);
+        ValidateParameters.ensureMatMultShapes(A.shape, bMatShape);
 
         AlgorithmName algorithm;
         Complex128[] dest;
@@ -177,7 +177,7 @@ public final class MatrixMultiplyDispatcher {
      */
     public static <T extends Field<T>> Field<T>[] dispatch(FieldMatrix<T> A, FieldVector<T> b) {
         Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
-        ParameterChecks.ensureMatMultShapes(A.shape, bMatShape);
+        ValidateParameters.ensureMatMultShapes(A.shape, bMatShape);
 
         AlgorithmName algorithm;
         Field<T>[] dest;
@@ -223,8 +223,8 @@ public final class MatrixMultiplyDispatcher {
      * @param shape2 Shape of the second matrix.
      * @return The result of the matrix multiplication between the two matrices.
      */
-    public static <T extends Field<T>> Field<T>[] dispatch(T[] src1, Shape shape1, T[] src2, Shape shape2) {
-        ParameterChecks.ensureMatMultShapes(shape1, shape2);
+    public static <T extends Field<T>> Field<T>[] dispatch(Field<T>[] src1, Shape shape1, Field<T>[] src2, Shape shape2) {
+        ValidateParameters.ensureMatMultShapes(shape1, shape2);
 
         AlgorithmName algorithm;
         Field<T>[] dest;
@@ -287,7 +287,7 @@ public final class MatrixMultiplyDispatcher {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static Complex128[] dispatch(Matrix A, CMatrix B) {
-        ParameterChecks.ensureMatMultShapes(A.shape, B.shape);
+        ValidateParameters.ensureMatMultShapes(A.shape, B.shape);
 
         AlgorithmName algorithm;
         Complex128[] dest;
@@ -349,7 +349,7 @@ public final class MatrixMultiplyDispatcher {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static Complex128[] dispatch(CMatrix A, Matrix B) {
-        ParameterChecks.ensureMatMultShapes(A.shape, B.shape);
+        ValidateParameters.ensureMatMultShapes(A.shape, B.shape);
 
         AlgorithmName algorithm;
         Complex128[] dest;
@@ -411,7 +411,7 @@ public final class MatrixMultiplyDispatcher {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
      */
     public static Complex128[] dispatchTranspose(CMatrix A, Matrix B) {
-        ParameterChecks.ensureEquals(A.numCols, B.numCols);
+        ValidateParameters.ensureEquals(A.numCols, B.numCols);
         AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);
         Complex128[] dest;
 
@@ -445,7 +445,7 @@ public final class MatrixMultiplyDispatcher {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
      */
     public static Complex128[] dispatchTranspose(Matrix A, CMatrix B) {
-        ParameterChecks.ensureEquals(A.numCols, B.numCols);
+        ValidateParameters.ensureEquals(A.numCols, B.numCols);
         AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);
         Complex128[] dest;
 
@@ -479,7 +479,7 @@ public final class MatrixMultiplyDispatcher {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
      */
     public static Complex128[] dispatchTranspose(CMatrix A, CMatrix B) {
-        ParameterChecks.ensureEquals(A.numCols, B.numCols);
+        ValidateParameters.ensureEquals(A.numCols, B.numCols);
         AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);
         Complex128[] dest;
 

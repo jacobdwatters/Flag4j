@@ -53,7 +53,7 @@ public class DenseFieldHermitianTranspose {
                                                                Shape shape,
                                                                int[] axes) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
@@ -83,7 +83,7 @@ public class DenseFieldHermitianTranspose {
                                                                Shape shape,
                                                                int axis1, int axis2) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
@@ -114,7 +114,7 @@ public class DenseFieldHermitianTranspose {
                                                                          Shape shape,
                                                                          int axis1, int axis2) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() + " tensor.");
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() + " tensor.");
         }
 
         Field<T>[] dest = new Field[shape.totalEntries().intValue()];
@@ -148,7 +148,7 @@ public class DenseFieldHermitianTranspose {
                                                                          Shape shape,
                                                                          int[] axes) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 

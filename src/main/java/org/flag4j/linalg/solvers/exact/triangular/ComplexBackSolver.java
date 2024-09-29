@@ -26,6 +26,7 @@ package org.flag4j.linalg.solvers.exact.triangular;
 
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.util.exceptions.SingularMatrixException;
@@ -35,7 +36,7 @@ import org.flag4j.util.exceptions.SingularMatrixException;
  * This solver solves linear systems of equations where the coefficient matrix in an upper triangular complex dense matrix
  * and the constant vector is a complex dense vector.
  */
-public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]> {
+public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Field<Complex128>[]> {
     
     /**
      * For computing determinant of coefficient matrix during solve.
@@ -89,7 +90,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
         int uIndex;
         int n = b.size;
         x = new CVector(U.numRows);
-        det = U.entries[n*n-1];
+        det = (Complex128) U.entries[n*n-1];
 
         x.entries[n-1] = b.entries[n-1].div(det);
 
@@ -97,11 +98,11 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
             sum = Complex128.ZERO;
             uIndex = i*U.numCols;
 
-            Complex128 diag = U.entries[i*(n+1)];
+            Complex128 diag = (Complex128) U.entries[i*(n+1)];
             det = det.mult(diag);
 
             for(int j=i+1; j<n; j++) {
-                sum = sum.add(U.entries[uIndex + j].mult(x.entries[j]));
+                sum = sum.add(U.entries[uIndex + j].mult((Complex128) x.entries[j]));
             }
 
             x.entries[i] = (b.entries[i].sub(sum)).div(diag);
@@ -131,13 +132,13 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
         int uIndex, xIndex;
         int n = B.numRows;
         X = new CMatrix(B.shape);
-        det = U.entries[U.entries.length-1];
+        det = (Complex128) U.entries[U.entries.length-1];
 
         xCol = new Complex128[n];
 
         for(int j=0; j<B.numCols; j++) {
-            X.entries[(n-1)*X.numCols + j] = B.entries[(n-1)*X.numCols + j].div(U.entries[n*n-1]);
-            det = det.mult(U.entries[j*(n+1)]);
+            X.entries[(n-1)*X.numCols + j] = B.entries[(n-1)*X.numCols + j].div((Complex128) U.entries[n*n-1]);
+            det = det.mult((Complex128) U.entries[j*(n+1)]);
 
             // Store column to improve cache performance on innermost loop.
             for(int k=0; k<n; k++) {
@@ -148,12 +149,12 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
                 sum = Complex128.ZERO;
                 uIndex = i*U.numCols;
                 xIndex = i*X.numCols + j;
-                diag = U.entries[i*(n+1)];
+                diag = (Complex128) U.entries[i*(n+1)];
 
                 if(j==0) det = det.mult(diag);
 
                 for(int k=i+1; k<n; k++) {
-                    sum = sum.add(U.entries[uIndex + k].mult(xCol[k]));
+                    sum = sum.add(U.entries[uIndex + k].mult((Complex128) xCol[k]));
                 }
 
                 Complex128 value = B.entries[xIndex].sub(sum).div(diag);
@@ -185,7 +186,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
         int uIndex, xIndex;
         int n = U.numRows;
         X = new CMatrix(U.shape);
-        det = U.entries[U.entries.length-1];
+        det = (Complex128) U.entries[U.entries.length-1];
 
         xCol = new Complex128[n];
         X.entries[X.entries.length-1] = det.multInv();
@@ -202,12 +203,12 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
                 uIndex = i*U.numCols;
                 xIndex = uIndex + j;
                 uIndex += i+1;
-                diag = U.entries[i*(n+1)];
+                diag = (Complex128) U.entries[i*(n+1)];
 
                 if(j==0) det = det.mult(diag);
 
                 for(int k=i+1; k<n; k++) {
-                    sum = sum.sub(U.entries[uIndex++].mult(xCol[k]));
+                    sum = sum.sub(U.entries[uIndex++].mult((Complex128) xCol[k]));
                 }
 
                 Complex128 value = sum.div(diag);
@@ -237,10 +238,10 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
         Complex128 sum, diag;
         int uIndex, xIndex;
         int n = L.numRows;
-        Complex128 uValue = U.entries[n*n-1];
+        Complex128 uValue = (Complex128) U.entries[n*n-1];
         int rowOffset = (n-1)*n;
         X = new CMatrix(L.shape);
-        det = U.entries[U.entries.length-1];
+        det = (Complex128) U.entries[U.entries.length-1];
 
         xCol = new Complex128[n];
 
@@ -256,12 +257,12 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
                 sum = Complex128.ZERO;
                 uIndex = i*U.numCols;
                 xIndex = uIndex + j;
-                diag = U.entries[i*(n+1)];
+                diag = (Complex128) U.entries[i*(n+1)];
 
                 if(j==0) det = det.mult(diag);
 
                 for(int k=i+1; k<n; k++) {
-                    sum = sum.add(U.entries[uIndex + k].mult(xCol[k]));
+                    sum = sum.add(U.entries[uIndex + k].mult((Complex128) xCol[k]));
                 }
 
                 Complex128 value = L.entries[xIndex].sub(sum).div(diag);

@@ -25,10 +25,11 @@
 package org.flag4j.operations.dense.real_complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 /**
  * This class contains low-level implementations of element-wise tensor division for a real dense and complex dense
@@ -56,13 +57,12 @@ public class RealComplexDenseElemDiv {
      * @return The element-wise division of the two tensors.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static Complex128[] elemDiv(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.ensureEqualShape(shape1, shape2);
+    public static Complex128[] elemDiv(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
+        ValidateParameters.ensureEqualShape(shape1, shape2);
         Complex128[] product = new Complex128[src1.length];
 
-        for(int i=0; i<product.length; i++) {
+        for(int i=0; i<product.length; i++)
             product[i] = src1[i].div(src2[i]);
-        }
 
         return product;
     }
@@ -77,14 +77,13 @@ public class RealComplexDenseElemDiv {
      * @return The element-wise division of the two tensors.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static Complex128[] elemDivConcurrent(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.ensureEqualShape(shape1, shape2);
+    public static Complex128[] elemDivConcurrent(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
+        ValidateParameters.ensureEqualShape(shape1, shape2);
         Complex128[] product = new Complex128[src1.length];
 
         ThreadManager.concurrentOperation(product.length, (startIdx, endIdx) -> {
-            for(int i=startIdx; i<endIdx; i++) {
+            for(int i=startIdx; i<endIdx; i++)
                 product[i] = src1[i].div(src2[i]);
-            }
         });
 
         return product;
@@ -100,14 +99,15 @@ public class RealComplexDenseElemDiv {
      * @return The element-wise division of the two tensors.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static Complex128[] elemDiv(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
-        ParameterChecks.ensureEqualShape(shape1, shape2);
+    public static Complex128[] elemDiv(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
+        ValidateParameters.ensureEqualShape(shape1, shape2);
         Complex128[] quotient = new Complex128[src1.length];
         double divisor;
 
         for(int i=0; i<quotient.length; i++) {
-            divisor = src2[i].re*src2[i].re + src2[i].im*src2[i].im;
-            quotient[i] = new Complex128(src1[i]*src2[i].re / divisor, -src1[i]*src2[i].im / divisor);
+            Complex128 v2 = (Complex128) src2[i];
+            divisor = v2.re*v2.re + v2.im*v2.im;
+            quotient[i] = new Complex128(src1[i]*v2.re / divisor, -src1[i]*v2.im / divisor);
         }
 
         return quotient;
@@ -123,14 +123,15 @@ public class RealComplexDenseElemDiv {
      * @return The element-wise division of the two tensors.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static Complex128[] elemDivConcurrent(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
-        ParameterChecks.ensureEqualShape(shape1, shape2);
+    public static Complex128[] elemDivConcurrent(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
+        ValidateParameters.ensureEqualShape(shape1, shape2);
         Complex128[] quotient = new Complex128[src1.length];
 
         ThreadManager.concurrentOperation(quotient.length, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
-                double divisor = src2[i].re*src2[i].re + src2[i].im*src2[i].im;
-                quotient[i] = new Complex128(src1[i]*src2[i].re / divisor, -src1[i]*src2[i].im / divisor);
+                Complex128 v2 = (Complex128) src2[i];
+                double divisor = v2.re*v2.re + v2.im*v2.im;
+                quotient[i] = new Complex128(src1[i]*v2.re / divisor, -src1[i]*v2.im / divisor);
             }
         });
 
@@ -156,7 +157,7 @@ public class RealComplexDenseElemDiv {
      * @param shape2 Shape of second tensor.
      * @return The result of the element-wise tensor multiplication.
      */
-    public static Complex128[] dispatch(double[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+    public static Complex128[] dispatch(double[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         if(useConcurrent(src1.length)) {
             // Use concurrent algorithm.
             return elemDivConcurrent(src1, shape1, src2, shape2);
@@ -175,7 +176,7 @@ public class RealComplexDenseElemDiv {
      * @param shape2 Shape of second tensor.
      * @return The result of the element-wise tensor multiplication.
      */
-    public static Complex128[] dispatch(Complex128[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static Complex128[] dispatch(Field<Complex128>[] src1, Shape shape1, double[] src2, Shape shape2) {
         if(useConcurrent(src1.length)) {
             // Use concurrent algorithm.
             return elemDivConcurrent(src1, shape1, src2, shape2);

@@ -29,7 +29,7 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.backend.CooFieldTensorBase;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public final class CooFieldTensorOperations {
     public static <T extends CooFieldTensorBase<T, ?, V>, V extends Field<V>> T add(
             CooFieldTensorBase<T, ?, V> src1,
             CooFieldTensorBase<T, ?, V> src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         // Create deep copies of indices.
         int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
@@ -66,12 +66,12 @@ public final class CooFieldTensorOperations {
 
         // Roughly estimate the number of non-zero entries in sum.
         int estimatedEntries = src1.nnz + src2.nnz;
-        List<V> sumEntries = new ArrayList<>(estimatedEntries);
+        List<Field<V>> sumEntries = new ArrayList<>(estimatedEntries);
         List<int[]> sumIndices = new ArrayList<>(estimatedEntries);
 
         int src2Pos = 0;
         for(int i = 0; i < src1.nnz; i++) {
-            V val1 = src1.entries[i];
+            Field<V> val1 = src1.entries[i];
             int[] src1Idx = src1Indices[i];
 
             // Insert elements from src2 whose index is less than the current element from src1
@@ -82,7 +82,7 @@ public final class CooFieldTensorOperations {
 
             // Add the current element from src1 and handle matching indices from src2
             if(src2Pos < src2.nnz && Arrays.equals(src1Idx, src2Indices[src2Pos])) {
-                sumEntries.add(val1.add(src2.entries[src2Pos++]));
+                sumEntries.add(val1.add((V) src2.entries[src2Pos++]));
             } else {
                 sumEntries.add(val1);
             }
@@ -109,7 +109,7 @@ public final class CooFieldTensorOperations {
     public static <T extends CooFieldTensorBase<T, ?, V>, V extends Field<V>> T sub(
             CooFieldTensorBase<T, ?, V> src1,
             CooFieldTensorBase<T, ?, V> src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         // Create deep copies of indices.
         int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
@@ -117,12 +117,12 @@ public final class CooFieldTensorOperations {
 
         // Roughly estimate the number of non-zero entries in sum.
         int estimatedEntries = src1.nnz + src2.nnz;
-        List<V> sumEntries = new ArrayList<>(estimatedEntries);
+        List<Field<V>> sumEntries = new ArrayList<>(estimatedEntries);
         List<int[]> sumIndices = new ArrayList<>(estimatedEntries);
 
         int src2Pos = 0;
         for(int i = 0; i < src1.nnz; i++) {
-            V val1 = src1.entries[i];
+            Field<V> val1 = src1.entries[i];
             int[] src1Idx = src1Indices[i];
 
             // Insert elements from src2 whose index is less than the current element from src1.
@@ -133,7 +133,7 @@ public final class CooFieldTensorOperations {
 
             // Add the current element from src1 and handle matching indices from src2.
             if(src2Pos < src2.nnz && Arrays.equals(src1Idx, src2Indices[src2Pos])) {
-                sumEntries.add(val1.sub(src2.entries[src2Pos++]));
+                sumEntries.add(val1.sub((V) src2.entries[src2Pos++]));
             } else {
                 sumEntries.add(val1);
             }
@@ -162,7 +162,7 @@ public final class CooFieldTensorOperations {
     public static <T extends CooFieldTensorBase<T, ?, V>, V extends Field<V>> T elemMult(
             CooFieldTensorBase<T, ?, V> src1,
             CooFieldTensorBase<T, ?, V> src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         // Swap src1 and src2 if src2 has fewer non-zero entries for possibly better performance.
         if (src2.nnz < src1.nnz) {
@@ -184,13 +184,13 @@ public final class CooFieldTensorOperations {
             }
 
             if(src2Idx < src2.nnz && cmp == 0) {
-                productEntries[count] = src1.entries[i].mult(src2.entries[src2Idx]);
+                productEntries[count] = src1.entries[i].mult((V) src2.entries[src2Idx]);
                 productIndices[count] = src1.indices[i];
                 count++;
             }
         }
 
         // Truncate arrays_old if necessary.
-        return src1.makeLikeTensor(src1.shape, (V[]) Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
+        return src1.makeLikeTensor(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
     }
 }

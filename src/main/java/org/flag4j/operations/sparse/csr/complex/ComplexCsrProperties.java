@@ -24,8 +24,8 @@
 
 package org.flag4j.operations.sparse.csr.complex;
 
-import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.util.ErrorMessages;
 
 
@@ -45,11 +45,11 @@ public final class ComplexCsrProperties {
      * @param src The matrix to check if it is the identity matrix.
      * @return True if the {@code src} matrix is the identity matrix. False otherwise.
      */
-    public static boolean isIdentity(CsrCMatrixOld src) {
+    public static boolean isIdentity(CsrCMatrix src) {
         if(src.isSquare() && src.colIndices.length >= src.numCols) {
             int diagCount = 0;
-            CNumber one = CNumber.ONE;
-            CNumber zero = CNumber.ZERO;
+            Complex128 one = Complex128.ONE;
+            Complex128 zero = Complex128.ZERO;
 
             for(int i=0; i<src.rowPointers.length-1; i++) {
                 for(int j=src.rowPointers[i]; j<src.rowPointers[i+1]; j++) {
@@ -75,7 +75,7 @@ public final class ComplexCsrProperties {
      * @param src Source matrix to check if it is Hermitian.
      * @return True if {@code src} is symmetric. Otherwise, returns false.
      */
-    public static boolean isHermitian(CsrCMatrixOld src) {
+    public static boolean isHermitian(CsrCMatrix src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
         if(src.entries.length == 0) return true;
@@ -89,7 +89,7 @@ public final class ComplexCsrProperties {
      * @param src Source matrix to check symmetry of.
      * @return True if {@code src} is symmetric. Otherwise, returns false.
      */
-    public static boolean isAntiHermitian(CsrCMatrixOld src) {
+    public static boolean isAntiHermitian(CsrCMatrix src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
         if(src.entries.length == 0) return true;

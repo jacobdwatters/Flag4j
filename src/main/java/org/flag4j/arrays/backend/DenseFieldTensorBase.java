@@ -29,9 +29,9 @@ import org.flag4j.algebraic_structures.fields.RealFloat64;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.FieldTensor;
 import org.flag4j.operations.TransposeDispatcher;
-import org.flag4j.operations.dense.field_ops.DenseFieldEquals;
+import org.flag4j.operations.common.field_ops.CompareField;
 import org.flag4j.operations.dense.field_ops.DenseFieldTensorDot;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
 
@@ -56,8 +56,9 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-    protected DenseFieldTensorBase(Shape shape, V[] entries) {
+    protected DenseFieldTensorBase(Shape shape, Field<V>[] entries) {
         super(shape, entries);
+        ValidateParameters.ensureEquals(shape.totalEntriesIntValueExact(), entries.length);
     }
 
 
@@ -149,7 +150,7 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
      */
     @Override
     public T T(int axis1, int axis2) {
-        ParameterChecks.ensureValidAxes(shape, axis1, axis2);
+        ValidateParameters.ensureValidAxes(shape, axis1, axis2);
         return TransposeDispatcher.dispatchTensor(this, axis1, axis2);
     }
 
@@ -170,7 +171,7 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
      */
     @Override
     public T T(int... axes) {
-        ParameterChecks.ensurePermutation(axes);
+        ValidateParameters.ensurePermutation(axes);
         return TransposeDispatcher.dispatchTensor(this, axes);
     }
 
@@ -184,10 +185,10 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
      */
     @Override
     public void elemMultEq(T b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
 
         for(int i=0, size=entries.length; i<size; i++)
-            entries[i] = entries[i].mult(b.entries[i]);
+            entries[i] = entries[i].mult((V) b.entries[i]);
     }
 
 
@@ -200,10 +201,10 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
      */
     @Override
     public void addEq(T b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
 
         for(int i=0, size=entries.length; i<size; i++)
-            entries[i] = entries[i].add(b.entries[i]);
+            entries[i] = entries[i].add((V) b.entries[i]);
     }
 
 
@@ -216,10 +217,10 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
      */
     @Override
     public void subEq(T b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
 
         for(int i=0, size=entries.length; i<size; i++)
-            entries[i] = entries[i].sub(b.entries[i]);
+            entries[i] = entries[i].sub((V) b.entries[i]);
     }
 
 
@@ -232,10 +233,10 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
      */
     @Override
     public void divEq(T b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
 
         for(int i=0, size=entries.length; i<size; i++)
-            entries[i] = entries[i].div(b.entries[i]);
+            entries[i] = entries[i].div((V) b.entries[i]);
     }
 
 
@@ -250,11 +251,11 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
      */
     @Override
     public T div(T b) {
-        ParameterChecks.ensureEqualShape(this.shape, b.shape);
+        ValidateParameters.ensureEqualShape(this.shape, b.shape);
         Field<V>[] quotient = new Field[entries.length];
 
         for(int i=0, size=entries.length; i<size; i++)
-            quotient[i] = entries[i].div(b.entries[i]);
+            quotient[i] = entries[i].div((V) b.entries[i]);
 
         return makeLikeTensor(shape, (V[]) quotient);
     }
@@ -275,6 +276,26 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
      */
     @Override
     public boolean allClose(T b, double relTol, double absTol) {
-        return DenseFieldEquals.allClose(entries, shape, b.entries, b.shape, relTol, absTol);
+        if(!shape.equals(b.shape)) return false;
+        return CompareField.allClose(entries, b.entries, relTol, absTol);
+    }
+
+
+    /**
+     * Sets the element of this tensor at the specified indices.
+     *
+     * @param value New value to set the specified index of this tensor to.
+     * @param indices Indices of the element to set.
+     *
+     * @return If this tensor is dense, a reference to this tensor is returned. If this tensor is sparse, a copy of this tensor with
+     * the updated value is returned.
+     *
+     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
+     */
+    @Override
+    public T set(V value, int... indices) {
+        ValidateParameters.ensureValidIndex(shape, indices);
+        entries[shape.entriesIndex(indices)] = value;
+        return (T) this;
     }
 }

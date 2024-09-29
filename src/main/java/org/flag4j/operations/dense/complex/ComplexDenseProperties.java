@@ -24,14 +24,13 @@
 
 package org.flag4j.operations.dense.complex;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core_old.TensorBase;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.util.ErrorMessages;
 
 /**
- * This class contains low-level implementations for operations_old which check if a complex tensor satisfies some property.
+ * This class contains low-level implementations for operations which check if a complex tensor satisfies some property.
  */
 public final class ComplexDenseProperties {
 
@@ -46,10 +45,10 @@ public final class ComplexDenseProperties {
      * @param src Elements of the tensor.
      * @return True if this tensor only contains ones. Otherwise, returns false.
      */
-    public static boolean isOnes(CNumber[] src) {
+    public static boolean isOnes(Complex128[] src) {
         boolean allZeros = true;
 
-        for(CNumber value : src) {
+        for(Complex128 value : src) {
             if(!value.equals(1)) {
                 allZeros = false;
                 break; // No need to look further.
@@ -61,12 +60,12 @@ public final class ComplexDenseProperties {
 
 
     /**
-     * Checks if a complex dense matrix is hermitian. That is, if the and equal to its conjugate transpose.
+     * Checks if a complex dense matrix is hermitian. That is, if the matrix is equal to its conjugate transpose.
      * @param src Entries of the matrix.
      * @param shape Shape of the matrix.
      * @return True if this matrix is hermitian. Otherwise, returns false.
      */
-    public static boolean isHermitian(CNumber[] src, Shape shape) {
+    public static boolean isHermitian(Complex128[] src, Shape shape) {
         if(shape.get(0)!=shape.get(1)) {
             return false;
         }
@@ -92,12 +91,12 @@ public final class ComplexDenseProperties {
 
 
     /**
-     * Checks if a real dense matrix is anti-hermitian. That is, if the and equal to its negative conjugate transpose.
+     * Checks if a real dense matrix is anti-hermitian. That is, if the matrix is equal to its negative conjugate transpose.
      * @param src Entries of the matrix.
      * @param shape Shape of the matrix.
      * @return True if this matrix is anti-hermitian. Otherwise, returns false.
      */
-    public static boolean isAntiHermitian(CNumber[] src, Shape shape) {
+    public static boolean isAntiHermitian(Complex128[] src, Shape shape) {
         if(shape.get(0)!=shape.get(1)) {
             return false;
         }
@@ -127,11 +126,10 @@ public final class ComplexDenseProperties {
     /**
      * Checks if a matrix is the identity matrix approximately. Specifically, if the diagonal entries are no farther than
      * 1.001E-5 in absolute value from 1.0 and the non-diagonal entries are no larger than 1e-08 in absolute value.
-     * These tolerances are derived from the {@link TensorBase#allClose(Object)} method.
-     * @param src MatrixOld of interest to check if it is the identity matrix.
+     * @param src Matrix of interest to check if it is the identity matrix.
      * @return True if the {@code src} matrix is exactly the identity matrix.
      */
-    public static boolean isCloseToIdentity(CMatrixOld src) {
+    public static boolean isCloseToIdentity(CMatrix src) {
         boolean isI = src.numRows==src.numCols;
 
         // Tolerances corresponds to the allClose(...) methods.
@@ -145,13 +143,9 @@ public final class ComplexDenseProperties {
             for(int i=0; i<rows; i++) {
                 for(int j=0; j<cols; j++) {
                     if(i==j) {
-                        if(src.entries[pos].sub(1).abs() > diagTol) {
-                            return false;
-                        }
+                        if(src.entries[pos].sub(1).abs() > diagTol) return false;
                     } else {
-                        if(src.entries[pos].abs() > nonDiagTol) {
-                            return false;
-                        }
+                        if(src.entries[pos].abs() > nonDiagTol) return false;
                     }
 
                     pos++;

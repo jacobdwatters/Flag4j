@@ -1,8 +1,8 @@
 package org.flag4j.sparse_complex_vector;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays_old.sparse.CooCVectorOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -12,32 +12,32 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CooCVectorReshapeTests {
     static int[] aIndices, expIndices;
-    static CNumber[] aEntries, expEntries;
+    static Complex128[] aEntries, expEntries;
     static int sparseSize;
-    static CooCVectorOld a, exp;
+    static CooCVector a, exp;
 
 
     @BeforeAll
     static void setup() {
-        aEntries = new CNumber[]{
-                new CNumber(2.455, -83.6), new CNumber(0, 24.56),
-                new CNumber(24.56), new CNumber(-9356.1, 35)
+        aEntries = new Complex128[]{
+                new Complex128(2.455, -83.6), new Complex128(0, 24.56),
+                new Complex128(24.56), new Complex128(-9356.1, 35)
         };
         aIndices = new int[]{4, 56, 9903, 14643};
         sparseSize = 24_023;
-        a = new CooCVectorOld(sparseSize, aEntries, aIndices);
+        a = new CooCVector(sparseSize, aEntries, aIndices);
     }
 
 
     @Test
     void reshapeTestCase() {
         // ------------------ Sub-case 1 ------------------
-        expEntries = new CNumber[]{
-                new CNumber(2.455, -83.6), new CNumber(0, 24.56),
-                new CNumber(24.56), new CNumber(-9356.1, 35)
+        expEntries = new Complex128[]{
+                new Complex128(2.455, -83.6), new Complex128(0, 24.56),
+                new Complex128(24.56), new Complex128(-9356.1, 35)
         };
         expIndices = new int[]{4, 56, 9903, 14643};
-        exp = new CooCVectorOld(sparseSize, expEntries, expIndices);
+        exp = new CooCVector(sparseSize, expEntries, expIndices);
 
         assertEquals(exp, a.reshape(new Shape(sparseSize)));
         assertEquals(exp, a.reshape(sparseSize));

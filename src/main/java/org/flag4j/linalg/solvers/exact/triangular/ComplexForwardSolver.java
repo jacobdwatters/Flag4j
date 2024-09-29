@@ -27,16 +27,17 @@ package org.flag4j.linalg.solvers.exact.triangular;
 
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
 /**
  * This solver solves linear systems of equations where the coefficient matrix in a lower triangular complex dense matrix
  * and the constant vector/matrix is complex and dense.
  */
-public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Complex128[]> {
+public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Field<Complex128>[]> {
 
 
     /**
@@ -98,8 +99,8 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
      */
     @Override
     public CVector solve(CMatrix L, CVector b) {
-        ParameterChecks.ensureSquareMatrix(L.shape);
-        ParameterChecks.ensureEquals(L.numRows, b.size);
+        ValidateParameters.ensureSquareMatrix(L.shape);
+        ValidateParameters.ensureEquals(L.numRows, b.size);
         return isUnit ? solveUnitLower(L, b) : solveLower(L, b);
     }
 
@@ -117,8 +118,8 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
      */
     @Override
     public CMatrix solve(CMatrix L, CMatrix B) {
-        ParameterChecks.ensureSquareMatrix(L.shape);
-        ParameterChecks.ensureEquals(L.numRows, B.numRows);
+        ValidateParameters.ensureSquareMatrix(L.shape);
+        ValidateParameters.ensureEquals(L.numRows, B.numRows);
         return isUnit ? solveUnitLower(L, B) : solveLower(L, B);
     }
 
@@ -134,7 +135,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
      * the principle diagonal).
      */
     public CMatrix solveIdentity(CMatrix L) {
-        ParameterChecks.ensureSquareMatrix(L.shape);
+        ValidateParameters.ensureSquareMatrix(L.shape);
         return isUnit ? solveUnitLowerIdentity(L) : solveLowerIdentity(L);
     }
 
@@ -161,7 +162,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
             lIndexStart = i*L.numCols;
 
             for(int j=i-1; j>-1; j--) {
-                sum = sum.add(L.entries[lIndexStart + j].mult(x.entries[j]));
+                sum = sum.add(L.entries[lIndexStart + j].mult((Complex128) x.entries[j]));
             }
 
             x.entries[i] = b.entries[i].sub(sum);
@@ -202,7 +203,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
                 xIndex = lIndexStart + j;
 
                 for(int k=0; k<i; k++) {
-                    sum = sum.sub(L.entries[lIndexStart++].mult(xCol[k]));
+                    sum = sum.sub(L.entries[lIndexStart++].mult((Complex128) xCol[k]));
                 }
 
                 X.entries[xIndex] = sum;
@@ -229,7 +230,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
         Complex128 sum, diag;
         int lIndexStart, xIndex;
         CMatrix X = new CMatrix(L.shape);
-        det = L.entries[0];
+        det = (Complex128) L.entries[0];
         xCol = new Complex128[L.numRows];
 
         X.entries[0] = L.entries[0].multInv();
@@ -241,16 +242,15 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
             }
 
             for(int i=1; i<L.numRows; i++) {
-                if(j==0) det = det.mult(L.entries[i*L.numCols + i]);
+                if(j==0) det = det.mult((Complex128) L.entries[i*L.numCols + i]);
 
                 sum = (i==j) ? Complex128.ONE : Complex128.ZERO;
                 lIndexStart = i*L.numCols;
                 xIndex = lIndexStart + j;
-                diag = L.entries[i*(L.numCols + 1)];
+                diag = (Complex128) L.entries[i*(L.numCols + 1)];
 
-                for(int k=0; k<i; k++) {
-                    sum = sum.sub(L.entries[lIndexStart++].mult(xCol[k]));
-                }
+                for(int k=0; k<i; k++)
+                    sum = sum.sub(L.entries[lIndexStart++].mult((Complex128) xCol[k]));
 
                 Complex128 value = sum.div(diag);
                 X.entries[xIndex] = value;
@@ -278,17 +278,17 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
         Complex128 sum, diag;
         int lIndexStart;
         CVector x = new CVector(L.numRows);
-        det = L.entries[0];
-        x.entries[0] = b.entries[0].div(L.entries[0]);
+        det = (Complex128) L.entries[0];
+        x.entries[0] = b.entries[0].div((Complex128) L.entries[0]);
 
         for(int i=1; i<L.numRows; i++) {
             sum = Complex128.ZERO;
             lIndexStart = i*L.numCols;
-            diag = L.entries[i*(L.numCols + 1)];
+            diag = (Complex128) L.entries[i*(L.numCols + 1)];
             det = det.mult(diag);
 
             for(int j=i-1; j>-1; j--) {
-                sum = sum.add(L.entries[lIndexStart + j].mult(x.entries[j]));
+                sum = sum.add(L.entries[lIndexStart + j].mult((Complex128) x.entries[j]));
             }
 
             x.entries[i] = b.entries[i].sub(sum).div(diag);
@@ -329,7 +329,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
                 xIndex = i*X.numCols + j;
 
                 for(int k=0; k<i; k++) {
-                    sum = sum.add(L.entries[lIndexStart++].mult(xCol[k]));
+                    sum = sum.add(L.entries[lIndexStart++].mult((Complex128) xCol[k]));
                 }
 
                 Complex128 value = B.entries[xIndex].sub(sum);
@@ -357,11 +357,11 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
         Complex128 diag;
         int lIndexStart, xIndex;
         CMatrix X = new CMatrix(B.shape);
-        det = L.entries[0];
+        det = (Complex128) L.entries[0];
         xCol = new Complex128[L.numRows];
 
         for(int j=0; j<B.numCols; j++) {
-            X.entries[j] = B.entries[j].div(L.entries[0]);
+            X.entries[j] = B.entries[j].div((Complex128) L.entries[0]);
 
             // Temporarily store column for better cache performance on innermost loop.
             for(int k=0; k<xCol.length; k++) {
@@ -372,12 +372,12 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
                 sum = Complex128.ZERO;
                 lIndexStart = i*L.numCols;
                 xIndex = i*X.numCols + j;
-                diag = L.entries[i*(L.numCols + 1)];
+                diag = (Complex128) L.entries[i*(L.numCols + 1)];
 
                 if(j==0) det = det.mult(diag);
 
                 for(int k=0; k<i; k++) {
-                    sum = sum.add(L.entries[lIndexStart++].mult(xCol[k]));
+                    sum = sum.add(L.entries[lIndexStart++].mult((Complex128) xCol[k]));
                 }
 
                 Complex128 value = B.entries[xIndex].sub(sum).div(diag);

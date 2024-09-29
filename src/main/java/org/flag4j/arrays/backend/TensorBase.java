@@ -26,7 +26,6 @@ package org.flag4j.arrays.backend;
 
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.core_old.MatrixPropertiesMixin;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -99,13 +98,24 @@ public abstract class TensorBase<T extends TensorBase<T, U, V>, U, V>
 
 
     /**
+     * Sets the element of this tensor at the specified indices.
+     * @param value New value to set the specified index of this tensor to.
+     * @param indices Indices of the element to set.
+     * @return If this tensor is dense, a reference to this tensor is returned. If this tensor is sparse, a copy of this tensor with
+     * the updated value is returned.
+     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
+     */
+    public abstract T set(V value, int... indices);
+
+
+    /**
      * <p>
      * Gets the rank of this tensor. That is, number of indices needed to uniquely select an element of the tensor. This is also te
      * number of dimensions (i.e. order/degree) of the tensor.
      * </p>
      *
      * <p>
-     * Note, this method is distinct from the {@link MatrixPropertiesMixin#matrixRank()} method.
+     * Note, this method is distinct from the {@link DenseMatrixMixin#matrixRank()} method.
      * </p>
      *
      * @return The rank of this tensor.
@@ -170,6 +180,18 @@ public abstract class TensorBase<T extends TensorBase<T, U, V>, U, V>
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code newShape} is not broadcastable to {@link #shape this.shape}.
      */
     public abstract T reshape(Shape newShape);
+
+
+    /**
+     * Copies and reshapes this tensor.
+     * @param dims The dimensions of the new shape.
+     * @return A copy of this tensor with the new shape.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code dims} does not represent a shape broadcastable to
+     * {@link #shape this.shape}.
+     */
+    public T reshape(int... dims) {
+        return reshape(new Shape(dims));
+    }
 
 
     /**

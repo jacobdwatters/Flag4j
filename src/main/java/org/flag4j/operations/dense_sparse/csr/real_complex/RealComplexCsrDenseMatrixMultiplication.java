@@ -25,6 +25,7 @@
 package org.flag4j.operations.dense_sparse.csr.real_complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
@@ -33,7 +34,7 @@ import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
 
@@ -61,7 +62,7 @@ public final class RealComplexCsrDenseMatrixMultiplication {
      */
     public static CMatrix standard(CsrMatrix src1, CMatrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
+        ValidateParameters.ensureMatMultShapes(src1.shape, src2.shape);
 
         Complex128[] destEntries = new Complex128[src1.numRows*src2.numCols];
         Arrays.fill(destEntries, Complex128.ZERO);
@@ -101,7 +102,7 @@ public final class RealComplexCsrDenseMatrixMultiplication {
      */
     public static CMatrix standardTranspose(CsrMatrix src1, CMatrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.ensureEquals(src1.numCols, src2.numCols);
+        ValidateParameters.ensureEquals(src1.numCols, src2.numCols);
 
         Complex128[] destEntries = new Complex128[src1.numRows*src2.numRows];
         Arrays.fill(destEntries, Complex128.ZERO);
@@ -144,7 +145,7 @@ public final class RealComplexCsrDenseMatrixMultiplication {
      */
     public static CMatrix standard(Matrix src1, CsrCMatrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
+        ValidateParameters.ensureMatMultShapes(src1.shape, src2.shape);
 
         Complex128[] destEntries = new Complex128[src1.numRows * src2.numCols];
         Arrays.fill(destEntries, Complex128.ZERO);
@@ -163,7 +164,7 @@ public final class RealComplexCsrDenseMatrixMultiplication {
 
                 for(int aIndex=start; aIndex<stop; aIndex++) {
                     int aCol = src2.colIndices[aIndex];
-                    Complex128 aVal = src2.entries[aIndex];
+                    Field<Complex128> aVal = src2.entries[aIndex];
                     destEntries[rowOffset + aCol] = destEntries[rowOffset + aCol].add(aVal.mult(src1Val));
                 }
             }
@@ -185,7 +186,7 @@ public final class RealComplexCsrDenseMatrixMultiplication {
      */
     public static CMatrix standard(CMatrix src1, CsrMatrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
+        ValidateParameters.ensureMatMultShapes(src1.shape, src2.shape);
 
         Complex128[] destEntries = new Complex128[src1.numRows * src2.numCols];
         Arrays.fill(destEntries, Complex128.ZERO);
@@ -198,7 +199,7 @@ public final class RealComplexCsrDenseMatrixMultiplication {
             int src1RowOffset = i*cols1;
 
             for(int j=0; j<cols1; j++) {
-                Complex128 src1Val = src1.entries[src1RowOffset + j];
+                Field<Complex128> src1Val = src1.entries[src1RowOffset + j];
                 int start = src2.rowPointers[j];
                 int stop = src2.rowPointers[j + 1];
 
@@ -224,7 +225,7 @@ public final class RealComplexCsrDenseMatrixMultiplication {
      */
     public static CVector standardVector(CsrMatrix src1, CVector src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
-        ParameterChecks.ensureEquals(src1.numCols, src2.size);
+        ValidateParameters.ensureEquals(src1.numCols, src2.size);
 
         Complex128[] destEntries = new Complex128[src1.numRows];
         Arrays.fill(destEntries, Complex128.ZERO);
@@ -258,7 +259,7 @@ public final class RealComplexCsrDenseMatrixMultiplication {
      */
     public static CMatrix standard(CsrCMatrix src1, Matrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
+        ValidateParameters.ensureMatMultShapes(src1.shape, src2.shape);
 
         Complex128[] destEntries = new Complex128[src1.numRows*src2.numCols];
         Arrays.fill(destEntries, Complex128.ZERO);
@@ -273,7 +274,7 @@ public final class RealComplexCsrDenseMatrixMultiplication {
 
             for(int aIndex=start; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                Complex128 aVal = src1.entries[aIndex];
+                Field<Complex128> aVal = src1.entries[aIndex];
                 int src2Idx = aCol*src2.numCols;
                 int destIdx = rowOffset;
 
@@ -297,7 +298,7 @@ public final class RealComplexCsrDenseMatrixMultiplication {
      */
     public static CVector standardVector(CsrCMatrix src1, Vector src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
-        ParameterChecks.ensureEquals(src1.numCols, src2.size);
+        ValidateParameters.ensureEquals(src1.numCols, src2.size);
 
         Complex128[] destEntries = new Complex128[src1.numRows];
         Arrays.fill(destEntries, Complex128.ZERO);
@@ -309,7 +310,7 @@ public final class RealComplexCsrDenseMatrixMultiplication {
 
             for (int aIndex = start; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                Complex128 aVal = src1.entries[aIndex];
+                Field<Complex128> aVal = src1.entries[aIndex];
 
                 destEntries[i] = destEntries[i].add(aVal.mult(src2.entries[aCol]));
             }

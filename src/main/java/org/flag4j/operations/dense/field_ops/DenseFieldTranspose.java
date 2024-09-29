@@ -54,7 +54,7 @@ public final class DenseFieldTranspose {
      */
     public static <T extends Field<T>> Field<T>[] standard(Field<T>[] src, Shape shape, int axis1, int axis2) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
@@ -83,7 +83,7 @@ public final class DenseFieldTranspose {
      */
     public static <T extends Field<T>> Field<T>[] standardConcurrent(Field<T>[] src, Shape shape, int axis1, int axis2) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("TensorOld transpose not defined for rank "
+            throw new IllegalArgumentException("Tensor transpose not defined for rank "
                     + shape.getRank() + " tensor.");
         }
 
@@ -116,7 +116,7 @@ public final class DenseFieldTranspose {
      */
     public static <T extends Field<T>> Field<T>[] standard(Field<T>[] src, Shape shape, int[] axes) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
@@ -147,7 +147,7 @@ public final class DenseFieldTranspose {
      */
     public static <T extends Field<T>> Field<T>[] standardConcurrent(Field<T>[] src, Shape shape, int[] axes) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 

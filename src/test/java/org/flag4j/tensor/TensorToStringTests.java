@@ -1,7 +1,7 @@
 package org.flag4j.tensor;
 
-import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,14 +13,14 @@ class TensorToStringTests {
 
     static Shape aShape;
     static double[] aEntries;
-    static TensorOld A;
+    static Tensor A;
     static String exp;
 
     @BeforeAll
     static void setup() {
         aShape = new Shape(2, 3, 1, 2);
         aEntries = new double[]{1, -1.4133, 113.4, 0.4, 11.3, 445, 133.445, 9.8, 13384, -993.44, 11, 12};
-        A = new TensorOld(aShape, aEntries);
+        A = new Tensor(aShape, aEntries);
     }
 
 

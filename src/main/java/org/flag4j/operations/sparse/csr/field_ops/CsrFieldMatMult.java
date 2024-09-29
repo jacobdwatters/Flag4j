@@ -31,10 +31,9 @@ import org.flag4j.arrays.backend.CooFieldVectorBase;
 import org.flag4j.arrays.backend.CsrFieldMatrixBase;
 import org.flag4j.arrays.backend.DenseFieldMatrixBase;
 import org.flag4j.arrays.backend.DenseFieldVectorBase;
-import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.*;
 
@@ -56,10 +55,10 @@ public final class CsrFieldMatMult {
      * @param src2 Second CSR matrix in the multiplication.
      * @return Entries of the dense matrix resulting from the matrix multiplication of the two sparse CSR matrices.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> standard(CsrFieldMatrixBase<?, ?, ?, T> src1,
-                                                                                    CsrFieldMatrixBase<?, ?, ?, T> src2) {
+    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> standard(CsrFieldMatrixBase<?, ?, ?, ?, T> src1,
+                                                                                    CsrFieldMatrixBase<?, ?, ?, ?, T> src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
+        ValidateParameters.ensureMatMultShapes(src1.shape, src2.shape);
 
         Field<T>[] destEntries = new Field[src1.numRows*src2.numCols];
         Arrays.fill(destEntries, src1.getZeroElement());
@@ -70,12 +69,12 @@ public final class CsrFieldMatMult {
 
             for(int aIndex=src1.rowPointers[i]; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                T aVal = src1.entries[aIndex];
+                T aVal = (T) src1.entries[aIndex];
                 int innerStop = src2.rowPointers[aCol+1];
 
                 for(int bIndex=src2.rowPointers[aCol]; bIndex<innerStop; bIndex++) {
                     int bCol = src2.colIndices[bIndex];
-                    T bVal = src2.entries[bIndex];
+                    Field<T> bVal = src2.entries[bIndex];
 
                     destEntries[rowOffset + bCol] = destEntries[rowOffset + bCol].add(bVal.mult(aVal));
                 }
@@ -89,7 +88,7 @@ public final class CsrFieldMatMult {
     /**
      * Computes the matrix multiplication between two sparse CSR matrices and returns the result as a sparse matrix. <br>
      *
-     * Warning: This method may be slower than {@link #standard(CsrCMatrixOld, CsrCMatrixOld)}
+     * Warning: This method may be slower than {@link #standard(CsrCMatrix, CsrCMatrix)}
      * if the result of multiplying this matrix with {@code src2} is not very sparse. Further, multiplying two
      * sparse matrices (even very sparse matrices) may result in a dense matrix so this method should be used with
      * caution.
@@ -97,10 +96,10 @@ public final class CsrFieldMatMult {
      * @param src2 Second CSR matrix in the multiplication.
      * @return Sparse CSR matrix resulting from the matrix multiplication of the two sparse CSR matrices.
      */
-    public static <T extends Field<T>> CsrFieldMatrixBase<?, ?, ?, T> standardAsSparse(CsrFieldMatrixBase<?, ?, ?, T> src1,
-                                                                                       CsrFieldMatrixBase<?, ?, ?, T> src2) {
+    public static <T extends Field<T>> CsrFieldMatrixBase<?, ?, ?, ?, T> standardAsSparse(CsrFieldMatrixBase<?, ?, ?, ?, T> src1,
+                                                                                          CsrFieldMatrixBase<?, ?, ?, ?, T> src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ParameterChecks.ensureMatMultShapes(src1.shape, src2.shape);
+        ValidateParameters.ensureMatMultShapes(src1.shape, src2.shape);
 
         int[] resultRowPtr = new int[src1.numRows + 1];
         List<T> resultList = new ArrayList<>();
@@ -113,13 +112,13 @@ public final class CsrFieldMatMult {
 
             for (int aIndex=start; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                T aVal = src1.entries[aIndex];
+                T aVal = (T) src1.entries[aIndex];
                 int innerStart = src2.rowPointers[aCol];
                 int innerStop = src2.rowPointers[aCol + 1];
 
                 for (int bIndex=innerStart; bIndex<innerStop; bIndex++) {
                     int bCol = src2.colIndices[bIndex];
-                    T bVal = src2.entries[bIndex];
+                    Field<T> bVal = src2.entries[bIndex];
 
                     tempMap.merge(bCol, bVal.mult(aVal), T::add);
                 }
@@ -147,14 +146,14 @@ public final class CsrFieldMatMult {
     /**
      * Computes the matrix-vector multiplication between a real sparse CSR matrix and a sparse COO vector.
      * @param src1 The matrix in the multiplication.
-     * @param src2 VectorOld in multiplication. Treated as a column vector in COO format.
+     * @param src2 Vector in multiplication. Treated as a column vector in COO format.
      * @return The result of the matrix-vector multiplication.
      * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the number of columns in {@code src2}.
      */
-    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> standardVector(CsrFieldMatrixBase<?, ?, ?, T> src1,
+    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> standardVector(CsrFieldMatrixBase<?, ?, ?, ?, T> src1,
                                                                                        CooFieldVectorBase<?, ?, ?, ?, T> src2) {
         // Ensure the matrix and vector have shapes conducive to matrix-vector multiplication.
-        ParameterChecks.ensureEquals(src1.numCols, src2.size);
+        ValidateParameters.ensureEquals(src1.numCols, src2.size);
 
         Field<T>[] destEntries = new Field[src1.numRows];
         Arrays.fill(destEntries, src1.getZeroElement());
@@ -163,7 +162,7 @@ public final class CsrFieldMatMult {
         // Iterate over the non-zero elements of the sparse vector.
         for (int k=0; k < src2.entries.length; k++) {
             int col = src2.indices[k];
-            T val = src2.entries[k];
+            Field<T> val = src2.entries[k];
 
             // Perform multiplication only for the non-zero elements.
             for (int i=0; i<rows1; i++) {
@@ -173,8 +172,7 @@ public final class CsrFieldMatMult {
                 for (int aIndex=start; aIndex < stop; aIndex++) {
                     int aCol = src1.colIndices[aIndex];
                     if (aCol == col) {
-                        T aVal = src1.entries[aIndex];
-                        destEntries[i] = destEntries[i].add(val.mult(aVal));
+                          destEntries[i] = destEntries[i].add(val.mult((T) src1.entries[aIndex]));
                     }
                 }
             }

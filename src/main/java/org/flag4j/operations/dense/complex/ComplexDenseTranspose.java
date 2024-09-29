@@ -24,8 +24,9 @@
 
 package org.flag4j.operations.dense.complex;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ArrayUtils;
@@ -35,7 +36,6 @@ import org.flag4j.util.ErrorMessages;
  * This class contains several algorithms for computing the transpose of a complex dense tensor.
  */
 public final class ComplexDenseTranspose {
-
 
     private ComplexDenseTranspose() {
         // Hide constructor
@@ -52,20 +52,20 @@ public final class ComplexDenseTranspose {
      * @param axis2 Second axis to swap in transpose.
      * @return The transpose of the tensor along the specified axes.
      */
-    public static CNumber[] standard(final CNumber[] src, final Shape shape, final int axis1, final int axis2) {
+    public static Complex128[] standard(Field<Complex128>[] src, Shape shape, int axis1, int axis2) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
-        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];
+        Complex128[] dest = new Complex128[shape.totalEntries().intValue()];
         Shape destShape = shape.swapAxes(axis1, axis2);
         int[] destIndices;
 
         for(int i=0; i<src.length; i++) {
             destIndices = shape.getIndices(i);
             ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
-            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
+            dest[destShape.entriesIndex(destIndices)] = (Complex128) src[i]; // Apply transpose for the element
         }
 
         return dest;
@@ -81,13 +81,13 @@ public final class ComplexDenseTranspose {
      * @param axis2 Second axis to swap in transpose.
      * @return The transpose of the tensor along the specified axes.
      */
-    public static CNumber[] standardConcurrent(final CNumber[] src, final Shape shape, final int axis1, final int axis2) {
+    public static Complex128[] standardConcurrent(Field<Complex128>[] src, Shape shape, int axis1, int axis2) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("TensorOld transpose not defined for rank "
+            throw new IllegalArgumentException("Tensor transpose not defined for rank "
                     + shape.getRank() + " tensor.");
         }
 
-        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];
+        Complex128[] dest = new Complex128[shape.totalEntries().intValue()];
         Shape destShape = shape.swapAxes(axis1, axis2);
 
         // Compute transpose concurrently
@@ -95,7 +95,7 @@ public final class ComplexDenseTranspose {
             for(int i=startIdx; i<endIdx; i++) {
                 int[] destIndices = shape.getIndices(i);
                 ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
-                dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
+                dest[destShape.entriesIndex(destIndices)] = (Complex128) src[i]; // Apply transpose for the element
             }
         });
 
@@ -114,20 +114,20 @@ public final class ComplexDenseTranspose {
      * @throws IllegalArgumentException If the {@code axes} array is not a permutation of {@code {0, 1, 2, ..., N-1}}.
      * @throws IllegalArgumentException If the {@code shape} rank is less than 2.
      */
-    public static CNumber[] standard(final CNumber[] src, final Shape shape, final int[] axes) {
+    public static Complex128[] standard(Field<Complex128>[] src, Shape shape, int[] axes) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
-        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];
+        Complex128[] dest = new Complex128[shape.totalEntries().intValue()];
         Shape destShape = shape.swapAxes(axes);
         int[] destIndices;
 
         for(int i=0; i<src.length; i++) {
             destIndices = shape.getIndices(i);
             ArrayUtils.swapUnsafe(destIndices, axes); // Compute destination indices.
-            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
+            dest[destShape.entriesIndex(destIndices)] = (Complex128) src[i]; // Apply transpose for the element
         }
 
         return dest;
@@ -145,13 +145,13 @@ public final class ComplexDenseTranspose {
      * @throws IllegalArgumentException If the {@code axes} array is not a permutation of {@code {0, 1, 2, ..., N-1}}.
      * @throws IllegalArgumentException If the {@code shape} rank is less than 2.
      */
-    public static CNumber[] standardConcurrent(final CNumber[] src, final Shape shape, final int[] axes) {
+    public static Complex128[] standardConcurrent(Field<Complex128>[] src, Shape shape, int[] axes) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
-        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];
+        Complex128[] dest = new Complex128[shape.totalEntries().intValue()];
         Shape destShape = shape.swapAxes(axes);
 
         // Compute transpose concurrently.
@@ -159,7 +159,7 @@ public final class ComplexDenseTranspose {
             for(int i=startIdx; i<endIdx; i++) {
                 int[] destIndices = shape.getIndices(i);
                 ArrayUtils.swapUnsafe(destIndices, axes); // Compute destination indices.
-                dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
+                dest[destShape.entriesIndex(destIndices)] = (Complex128) src[i]; // Apply transpose for the element
             }
         });
 
@@ -175,9 +175,8 @@ public final class ComplexDenseTranspose {
      * @param numCols Number of columns in the matrix.
      * @return The transpose of the matrix.
      */
-    public static CNumber[] standardMatrix(final CNumber[] src, final int numRows, final int numCols) {
-        CNumber[] dest = new CNumber[numRows*numCols];
-
+    public static Complex128[] standardMatrix(Field<Complex128>[] src, int numRows, int numCols) {
+        Complex128[] dest = new Complex128[numRows*numCols];
         int destIndex, srcIndex, end;
 
         for (int i=0; i<numCols; i++) {
@@ -186,7 +185,7 @@ public final class ComplexDenseTranspose {
             end = destIndex + numRows;
 
             while (destIndex < end) {
-                dest[destIndex++] = src[srcIndex];
+                dest[destIndex++] = (Complex128) src[srcIndex];
                 srcIndex += numCols;
             }
         }
@@ -203,9 +202,9 @@ public final class ComplexDenseTranspose {
      * @param numCols Number of columns in the matrix.
      * @return The transpose of this tensor along specified axes
      */
-    public static CNumber[] blockedMatrix(final CNumber[] src, final int numRows, final int numCols) {
-        CNumber[] dest = new CNumber[numRows*numCols];
-        final int blockSize = Configurations.getBlockSize();
+    public static Complex128[] blockedMatrix(Field<Complex128>[] src, int numRows, int numCols) {
+        Complex128[] dest = new Complex128[numRows*numCols];
+        int blockSize = Configurations.getBlockSize();
         int blockRowEnd;
         int blockColEnd;
         int srcIndex, destIndex, end;
@@ -222,7 +221,7 @@ public final class ComplexDenseTranspose {
                     end = destIndex + blockRowEnd;
 
                     while (destIndex < end) {
-                        dest[destIndex++] = src[srcIndex];
+                        dest[destIndex++] = (Complex128) src[srcIndex];
                         srcIndex += numCols;
                     }
                 }
@@ -240,8 +239,8 @@ public final class ComplexDenseTranspose {
      * @param numCols Number of columns in source matrix.
      * @return The transpose of the source matrix.
      */
-    public static CNumber[] standardMatrixConcurrent(final CNumber[] src, final int numRows, final int numCols) {
-        CNumber[] dest = new CNumber[src.length];
+    public static Complex128[] standardMatrixConcurrent(Field<Complex128>[] src, int numRows, int numCols) {
+        Complex128[] dest = new Complex128[src.length];
 
         // Compute transpose concurrently.
         ThreadManager.concurrentOperation(numCols, (startIdx, endIdx) -> {
@@ -251,7 +250,7 @@ public final class ComplexDenseTranspose {
                 int end = destIndex + numRows;
 
                 while(destIndex < end) {
-                    dest[destIndex++] = src[srcIndex];
+                    dest[destIndex++] = (Complex128) src[srcIndex];
                     srcIndex += numCols;
                 }
             }
@@ -268,9 +267,9 @@ public final class ComplexDenseTranspose {
      * @param numCols Number of columns in source matrix.
      * @return The transpose of the source matrix.
      */
-    public static CNumber[] blockedMatrixConcurrent(final CNumber[] src, final int numRows, final int numCols) {
-        CNumber[] dest = new CNumber[src.length];
-        final int blockSize = Configurations.getBlockSize();
+    public static Complex128[] blockedMatrixConcurrent(Field<Complex128>[] src, int numRows, int numCols) {
+        Complex128[] dest = new Complex128[src.length];
+        int blockSize = Configurations.getBlockSize();
 
         // Compute transpose concurrently.
         ThreadManager.concurrentBlockedOperation(numCols, blockSize, (startIdx, endIdx) -> {
@@ -286,7 +285,7 @@ public final class ComplexDenseTranspose {
                         int end = destIndex + blockRowEnd;
 
                         while(destIndex < end) {
-                            dest[destIndex++] = src[srcIndex];
+                            dest[destIndex++] = (Complex128) src[srcIndex];
                             srcIndex += numCols;
                         }
                     }
@@ -308,13 +307,13 @@ public final class ComplexDenseTranspose {
      * @param axis2 Second axis to swap in transpose.
      * @return The transpose of the tensor along the specified axes.
      */
-    public static CNumber[] standardHerm(final CNumber[] src, final Shape shape, final int axis1, final int axis2) {
+    public static Complex128[] standardHerm(Field<Complex128>[] src, Shape shape, int axis1, int axis2) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
-        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];
+        Complex128[] dest = new Complex128[shape.totalEntries().intValue()];
         Shape destShape = shape.swapAxes(axis1, axis2);
         int[] destIndices;
 
@@ -337,13 +336,13 @@ public final class ComplexDenseTranspose {
      * @param axis2 Second axis to swap in transpose.
      * @return The complex conjugate transpose of the tensor along the specified axes.
      */
-    public static CNumber[] standardConcurrentHerm(final CNumber[] src, final Shape shape, final int axis1, final int axis2) {
+    public static Complex128[] standardConcurrentHerm(Field<Complex128>[] src, Shape shape, int axis1, int axis2) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
-        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];
+        Complex128[] dest = new Complex128[shape.totalEntries().intValue()];
         Shape destShape = shape.swapAxes(axis1, axis2);
 
         // Compute transpose concurrently
@@ -370,13 +369,13 @@ public final class ComplexDenseTranspose {
      * @throws IllegalArgumentException If the {@code axes} array is not a permutation of {@code {0, 1, 2, ..., N-1}}.
      * @throws IllegalArgumentException If the {@code shape} rank is less than 2.
      */
-    public static CNumber[] standardConcurrentHerm(final CNumber[] src, final Shape shape, final int[] axes) {
+    public static Complex128[] standardConcurrentHerm(Field<Complex128>[] src, Shape shape, int[] axes) {
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
-            throw new IllegalArgumentException("TensorOld transpose not defined for rank " + shape.getRank() +
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");
         }
 
-        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];
+        Complex128[] dest = new Complex128[shape.totalEntries().intValue()];
         Shape destShape = shape.swapAxes(axes);
 
         ThreadManager.concurrentOperation(src.length, (startIdx, endIdx) -> {
@@ -399,8 +398,8 @@ public final class ComplexDenseTranspose {
      * @param numCols Number of columns in the matrix.
      * @return The transpose of the matrix.
      */
-    public static CNumber[] standardMatrixHerm(final CNumber[] src, final int numRows, final int numCols) {
-        CNumber[] dest = new CNumber[numRows*numCols];
+    public static Complex128[] standardMatrixHerm(Field<Complex128>[] src, int numRows, int numCols) {
+        Complex128[] dest = new Complex128[numRows*numCols];
 
         int destIndex, srcIndex, end;
 
@@ -427,9 +426,9 @@ public final class ComplexDenseTranspose {
      * @param numCols Number of columns in the matrix.
      * @return The complex conjugate transpose of this matrix.
      */
-    public static CNumber[] blockedMatrixHerm(final CNumber[] src, final int numRows, final int numCols) {
-        CNumber[] dest = new CNumber[numRows*numCols];
-        final int blockSize = Configurations.getBlockSize();
+    public static Complex128[] blockedMatrixHerm(Field<Complex128>[] src, int numRows, int numCols) {
+        Complex128[] dest = new Complex128[numRows*numCols];
+        int blockSize = Configurations.getBlockSize();
         int blockRowEnd;
         int blockColEnd;
         int srcIndex, destIndex, end;
@@ -464,8 +463,8 @@ public final class ComplexDenseTranspose {
      * @param numCols Number of columns in source matrix.
      * @return The complex conjugate transpose of the source matrix.
      */
-    public static CNumber[] standardMatrixConcurrentHerm(final CNumber[] src, final int numRows, final int numCols) {
-        CNumber[] dest = new CNumber[src.length];
+    public static Complex128[] standardMatrixConcurrentHerm(Field<Complex128>[] src, int numRows, int numCols) {
+        Complex128[] dest = new Complex128[src.length];
 
         // Compute transpose concurrently.
         ThreadManager.concurrentOperation(numCols, (startIdx, endIdx) -> {
@@ -492,9 +491,9 @@ public final class ComplexDenseTranspose {
      * @param numCols Number of columns in source matrix.
      * @return The complex conjugate transpose of the source matrix.
      */
-    public static CNumber[] blockedMatrixConcurrentHerm(final CNumber[] src, final int numRows, final int numCols) {
-        CNumber[] dest = new CNumber[src.length];
-        final int blockSize = Configurations.getBlockSize();
+    public static Complex128[] blockedMatrixConcurrentHerm(Field<Complex128>[] src, int numRows, int numCols) {
+        Complex128[] dest = new Complex128[src.length];
+        int blockSize = Configurations.getBlockSize();
 
         // Compute transpose concurrently.
         ThreadManager.concurrentBlockedOperation(numCols, blockSize, (startIdx, endIdx) -> {

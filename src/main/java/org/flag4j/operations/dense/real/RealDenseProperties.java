@@ -26,11 +26,10 @@ package org.flag4j.operations.dense.real;
 
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.core_old.TensorBase;
 import org.flag4j.util.ErrorMessages;
 
 /**
- * This class contains low-level implementations for operations_old which check if a tensor satisfies some property.
+ * This class contains low-level implementations for operations which check if a tensor satisfies some property.
  */
 public class RealDenseProperties {
 
@@ -124,7 +123,7 @@ public class RealDenseProperties {
 
     /**
      * Checks if a matrix is the identity matrix exactly.
-     * @param src MatrixOld of interest to check if it is the identity matrix.
+     * @param src Matrix of interest to check if it is the identity matrix.
      * @return True if the {@code src} matrix is exactly the identity matrix.
      */
     public static boolean isIdentity(Matrix src) {
@@ -133,12 +132,11 @@ public class RealDenseProperties {
         int rows = src.numRows;
         int cols = src.numCols;
         for(int i=0; i<rows; i++) {
+            int rowOffset = i*cols;
+
             for(int j=0; j<cols; j++) {
-                if(i==j && src.entries[i]!=1) {
-                    return false;
-                } else if(src.entries[i]!=0) {
-                   return false;
-                }
+                if(i==j && src.entries[rowOffset + j]!=1) return false;
+                if(i!=j &&src.entries[rowOffset + j]!=0) return false;
             }
         }
 
@@ -150,7 +148,7 @@ public class RealDenseProperties {
      * Checks if a matrix is the identity matrix approximately. Specifically, if the diagonal entries are no farther than
      * 1.001E-5 in absolute value from 1.0 and the non-diagonal entries are no larger than 1e-08 in absolute value.
      * These tolerances are derived from the {@link TensorBase#allClose(Object)} method.
-     * @param src MatrixOld of interest to check if it is the identity matrix.
+     * @param src Matrix of interest to check if it is the identity matrix.
      * @return True if the {@code src} matrix is exactly the identity matrix.
      */
     public static boolean isCloseToIdentity(Matrix src) {

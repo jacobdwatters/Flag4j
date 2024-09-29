@@ -45,14 +45,14 @@ public final class AggregateField {
      * @param entries Entries of the tensor.
      * @return The sum of all entries in this tensor. If {entries.length == 0}, null will be returned.
      */
-    public static <T extends Field<T>> T sum(T... entries) {
+    public static <T extends Field<T>> T sum(Field<T>... entries) {
         if(entries.length == 0) return null;
-        T sum = entries[0];
+        Field<T> sum = entries[0];
 
         for(int i=0, size = entries.length; i<size; i++)
-            sum = sum.add(entries[i]);
+            sum = sum.add((T) entries[i]);
 
-        return sum;
+        return (T) sum;
     }
 
 
@@ -61,13 +61,13 @@ public final class AggregateField {
      * @param entries Entries of the tensor.
      * @return The sum of all entries in this tensor. If {entries.length == 0}, null will be returned.
      */
-    public static <T extends Field<T>> T prod(T... entries) {
+    public static <T extends Field<T>> T prod(Field<T>... entries) {
         if(entries.length == 0) return null;
-        T prod = entries[0];
+        Field<T> prod = entries[0];
 
         for(int i=0, size = entries.length; i<size; i++)
-            prod = prod.mult(entries[i]);
+            prod = prod.mult((T) entries[i]);
 
-        return prod;
+        return (T) prod;
     }
 }

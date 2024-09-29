@@ -27,7 +27,7 @@ package org.flag4j.linalg.transformations;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 /**
  * Utility class containing static for generating view matrices.
@@ -51,7 +51,7 @@ public final class View {
      * @throws IllegalArgumentException If any of the argument vectors do not have length 3.
      */
     public static Matrix lookAt(Vector cameraPos, Vector center, Vector up) {
-        ParameterChecks.ensureEquals(3, cameraPos.size, center.size, up.size);
+        ValidateParameters.ensureEquals(3, cameraPos.size, center.size, up.size);
 
         Vector f = center.sub(cameraPos).normalize();
         Vector u = up.normalize();

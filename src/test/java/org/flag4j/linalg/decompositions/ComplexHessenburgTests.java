@@ -24,42 +24,40 @@
 
 package org.flag4j.linalg.decompositions;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.linalg.decompositions.hess.ComplexHessOld;
-import org.junit.jupiter.api.Assertions;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.linalg.decompositions.hess.ComplexHess;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ComplexHessenburgTests {
     String[][] aEntries;
-    CMatrixOld A, Q, H, A_hat;
+    CMatrix A, Q, H, A_hat;
 
-    ComplexHessOld hess;
+    ComplexHess hess;
 
     @Test
-
-    void testhessDecompTestCase() {
+    void hessDecompTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         aEntries = new String[][]{
                 {"1.55-2i", "0", "i"},
                 {"25.66-90.25i", "34.5", "3.4+2i"},
                 {"-i", "3.4-2i", "16.67+9.2i"}};
-        A = new CMatrixOld(aEntries);
-        hess = new ComplexHessOld();
+        A = new CMatrix(aEntries);
+        hess = new ComplexHess();
         hess.decompose(A);
 
         H = hess.getH();
         Q = hess.getQ();
         A_hat = Q.mult(H).mult(Q.H());
 
-        assertEquals(new CMatrixOld(A.shape), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
 
         // ----------------------- Sub-case 1.1 -----------------------
-        hess = new ComplexHessOld();
+        hess = new ComplexHess();
         hess.decompose(A);
 
-        Assertions.assertEquals(H, hess.getH());
+        assertEquals(H, hess.getH());
 
         // ----------------------- Sub-case 2 -----------------------
         aEntries = new String[][]{
@@ -67,20 +65,20 @@ class ComplexHessenburgTests {
                 {"4i", "6", "0", "4+3i"},
                 {"22+9i", "0", "0", "1+i"},
                 {"6+9i", "-25-4i", "1-i", "-1.2+3i"}};
-        A = new CMatrixOld(aEntries);
-        hess = new ComplexHessOld();
+        A = new CMatrix(aEntries);
+        hess = new ComplexHess();
         hess.decompose(A);
 
         H = hess.getH();
         Q = hess.getQ();
         A_hat = Q.mult(H).mult(Q.H());
 
-        assertEquals(new CMatrixOld(A.shape), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
 
         // ----------------------- Sub-case 2.1 -----------------------
-        hess = new ComplexHessOld();
+        hess = new ComplexHess();
         hess.decompose(A);
 
-        Assertions.assertEquals(H, hess.getH());
+        assertEquals(H, hess.getH());
     }
 }

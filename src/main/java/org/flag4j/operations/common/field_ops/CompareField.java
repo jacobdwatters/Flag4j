@@ -45,15 +45,19 @@ public final class CompareField {
      * @param values Values to commute maximum of.
      * @return The maximum value in {@code values}. If {@code values.length} equals zero, then {@code null} is returned.
      */
-    public static <T extends Field<T>> T max(T... values) {
+    public static <T extends Field<T>> T max(Field<T>... values) {
         if(values.length == 0) return null;
-        T max = values[0];
+        Field<T> max = values[0];
 
-        for (int i=1, length=values.length; i < length; i++)
-            if(max.compareTo(values[i]) < 0) max = values[i];
+        for (int i = 1, size=values.length; i<size; i++) {
+            if (max.compareTo((T) values[i]) < 0) max = values[i];
+        }
 
-        return max;
+        return (T) max;
     }
+
+
+
 
 
     /**
@@ -62,14 +66,14 @@ public final class CompareField {
      * @param values Values to commute minimum of.
      * @return The minimum value in {@code values}. If {@code values.length} equals zero, then {@code null} is returned.
      */
-    public static <T extends Field<T>> T min(T... values) {
+    public static <T extends Field<T>> T min(Field<T>... values) {
         if(values.length == 0) return null;
-        T min = values[0];
+        Field<T> min = values[0];
 
         for (int i=1, length=values.length; i < length; i++)
-            if(values[i].compareTo(min) < 0) min = values[i];
+            if(values[i].compareTo((T) min) < 0) min = values[i];
 
-        return min;
+        return (T) min;
     }
 
 
@@ -79,7 +83,7 @@ public final class CompareField {
      * @param values Values to commute maximum of.
      * @return The maximum value in {@code values}. If {@code values.length} equals zero, then {@link Double#NaN} is returned.
      */
-    public static <T extends Field<T>> double maxAbs(T... values) {
+    public static <T extends Field<T>> double maxAbs(Field<T>... values) {
         if(values.length == 0) return Double.NaN;
         double max = values[0].mag();
 
@@ -98,7 +102,7 @@ public final class CompareField {
      * @param values Values to compute minimum of.
      * @return The minimum value in {@code values}. If {@code values.length} equals zero, then {@link Double#NaN} is returned.
      */
-    public static <T extends Field<T>> double minAbs(T... values) {
+    public static <T extends Field<T>> double minAbs(Field<T>... values) {
         if(values.length == 0) return Double.NaN;
         double min = values[0].mag();
 
@@ -118,13 +122,13 @@ public final class CompareField {
      * @return The index of the maximum value in {@code values}. If the maximum value occurs more than once, the index of the first
      * occurrence is returned. If {@code values.length} equals zero, then {@code -1} is returned.
      */
-    public static <T extends Field<T>> int argmax(T... values) {
+    public static <T extends Field<T>> int argmax(Field<T>... values) {
         if(values.length == 0) return -1;
-        T max = values[0];
+        Field<T> max = values[0];
         int maxdex = 0;
 
         for (int i=1, length=values.length; i < length; i++) {
-            if(max.compareTo(values[i]) < 0) {
+            if(max.compareTo((T) values[i]) < 0) {
                 max = values[i];
                 maxdex = i;
             }
@@ -141,13 +145,13 @@ public final class CompareField {
      * @return The index of the minimum value in {@code values}. If the minimum value occurs more than once, the index of the first
      * occurrence is returned. If {@code values.length} equals zero, then {@code -1} is returned.
      */
-    public static <T extends Field<T>> int argmin(T... values) {
+    public static <T extends Field<T>> int argmin(Field<T>... values) {
         if(values.length == 0) return -1;
-        T min = values[0];
+        Field<T> min = values[0];
         int mindex = 0;
 
         for (int i=1, length=values.length; i < length; i++) {
-            if(values[i].compareTo(min) < 0) {
+            if(values[i].compareTo((T) min) < 0) {
                 min = values[i];
                 mindex = i;
             }
@@ -163,7 +167,7 @@ public final class CompareField {
      * @return The index of the maximum absolute value in {@code values}. If the maximum absolute value occurs more than once, the
      * index of the first occurrence is returned. If {@code values.length} equals zero, then {@code -1} is returned.
      */
-    public static <T extends Field<T>> int argmaxAbs(T... values) {
+    public static <T extends Field<T>> int argmaxAbs(Field<T>... values) {
         if(values.length == 0) return -1;
         double max = values[0].mag();
         int maxdex = 0;
@@ -186,7 +190,7 @@ public final class CompareField {
      * @return The index of the minimum absolute value in {@code values}. If the minimum absolute value occurs more than once,
      * the index of the first occurrence is returned. If {@code values.length} equals zero, then {@code -1} is returned.
      */
-    public static <T extends Field<T>> int argminAbs(T... values) {
+    public static <T extends Field<T>> int argminAbs(Field<T>... values) {
         if(values.length == 0) return -1;
         double min = values[0].mag();
         int mindex = 0;
@@ -217,15 +221,28 @@ public final class CompareField {
 
 
     /**
+     * Checks if an array contains only ones.
+     * @param src Array to check if it only contains ones.
+     * @return True if the {@code src} array contains only ones.
+     */
+    public static boolean isOnes(Field[] src) {
+        for(Field value : src)
+            if(!value.isOne()) return false;
+
+        return true;
+    }
+
+
+    /**
      * Checks if all entries of two arrays_old are 'close'.
      * @param src1 First array in comparison.
      * @param src2 Second array in comparison.
      * @return True if both arrays_old have the same length and all entries are 'close' element-wise, i.e.
      * elements {@code a} and {@code b} at the same positions in the two arrays_old respectively and satisfy
      * {@code |a-b| <= (1E-05 + 1E-08*|b|)}. Otherwise, returns false.
-     * @see #allClose(double[], double[], double, double)
+     * @see #allClose(Field[], Field[], double, double)
      */
-    public static <T extends Field<T>> boolean allClose(T[] src1, T[] src2) {
+    public static <T extends Field<T>> boolean allClose(Field<T>[] src1, Field<T>[] src2) {
         return allClose(src1, src2, 1e-05, 1e-08);
     }
 
@@ -238,22 +255,15 @@ public final class CompareField {
      * @return True if both arrays_old have the same length and all entries are 'close' element-wise, i.e.
      * elements {@code a} and {@code b} at the same positions in the two arrays_old respectively and satisfy
      * {@code |a-b| <= (absTol + relTol*|b|)}. Otherwise, returns false.
-     * @see #allClose(double[], double[])
+     * @see #allClose(Field[], Field[])
      */
-    public static <T extends Field<T>> boolean allClose(T[] src1, T[] src2, double relTol, double absTol) {
-        boolean close = src1.length==src2.length;
-
-        if(close) {
-            for(int i=0; i<src1.length; i++) {
-                double tol = absTol + relTol*src2[i].abs();
-
-                if(src1[i].sub(src2[i]).abs() > tol) {
-                    close = false;
-                    break;
-                }
-            }
+    public static <T extends Field<T>> boolean allClose(Field<T>[] src1, Field<T>[] src2,
+                                                        double relTol, double absTol) {
+        for(int i=0, size=src1.length; i<size; i++) {
+            double tol = absTol + relTol*src2[i].abs();
+            if(src1[i].sub((T) src2[i]).abs() > tol) return false;
         }
 
-        return close;
+        return true;
     }
 }

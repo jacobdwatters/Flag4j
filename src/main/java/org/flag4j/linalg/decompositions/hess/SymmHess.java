@@ -27,7 +27,7 @@ package org.flag4j.linalg.decompositions.hess;
 
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.transformations.Householder;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 /**
@@ -177,7 +177,7 @@ public class SymmHess extends RealHess {
         if(enforceSymmetric && !src.isSymmetric()) // If requested, check the matrix is symmetric.
             throw new LinearAlgebraException(this.getClass().getSimpleName() + " only supports symmetric matrices.");
         else
-            ParameterChecks.ensureSquareMatrix(src.shape); // Otherwise, Just ensure the matrix is square.
+            ValidateParameters.ensureSquareMatrix(src.shape); // Otherwise, Just ensure the matrix is square.
 
         numRows = numCols = minAxisSize = src.numRows;
         copyUpperTri(src);  // Initializes transform matrix.

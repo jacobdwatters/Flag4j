@@ -24,8 +24,9 @@
 
 package org.flag4j.operations.dense.complex;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ArrayUtils;
@@ -54,12 +55,12 @@ public final class ComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static CNumber[] standard(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] standard(Field<Complex128>[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
 
-        CNumber[] dest = new CNumber[rows1*cols2];
+        Complex128[] dest = new Complex128[rows1*cols2];
         ArrayUtils.fill(dest, 0);
 
         int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
@@ -73,10 +74,10 @@ public final class ComplexDenseMatrixMultiplication {
                 src1Index = src1IndexStart;
                 destIndex = destIndexStart + j;
                 end = src1Index + rows2;
-                CNumber sum = dest[destIndex];
+                Complex128 sum = dest[destIndex];
 
                 while(src1Index<end) {
-                    sum = sum.add(src1[src1Index++].mult(src2[src2Index]));
+                    sum = sum.add(src1[src1Index++].mult((Complex128) src2[src2Index]));
                     src2Index += cols2;
                 }
 
@@ -97,12 +98,12 @@ public final class ComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static CNumber[] reordered(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] reordered(Field<Complex128>[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
 
-        CNumber[] dest = new CNumber[rows1*cols2];
+        Complex128[] dest = new Complex128[rows1*cols2];
         ArrayUtils.fill(dest, 0);
 
         int src2Index, destIndex, src1Start, destIndexStart, end;
@@ -119,7 +120,7 @@ public final class ComplexDenseMatrixMultiplication {
                 end = src2Index + cols2;
 
                 while(src2Index<end) {
-                    dest[destIndex] = dest[destIndex].add(src1[src1Index].mult(src2[src2Index++]));
+                    dest[destIndex] = dest[destIndex].add(src1[src1Index].mult((Complex128) src2[src2Index++]));
                     destIndex++;
                 }
             }
@@ -137,12 +138,12 @@ public final class ComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static CNumber[] blocked(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] blocked(Field<Complex128>[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
         int cols1 = shape1.get(1);
 
-        CNumber[] dest = new CNumber[rows1 * cols2];
+        Complex128[] dest = new Complex128[rows1 * cols2];
         ArrayUtils.fill(dest, 0);
 
         int blockSize = Configurations.getBlockSize();
@@ -167,10 +168,10 @@ public final class ComplexDenseMatrixMultiplication {
                             destIndex = destStart + j;
                             src1Index = src1Start;
                             src2Index = kk*cols2 + j;
-                            CNumber sum = dest[destIndex];
+                            Complex128 sum = dest[destIndex];
 
                             while(src1Index < stopIndex) {
-                                sum = sum.add(src1[src1Index++].mult(src2[src2Index]));
+                                sum = sum.add(src1[src1Index++].mult((Complex128) src2[src2Index]));
                                 src2Index+=cols2;
                             }
 
@@ -194,12 +195,12 @@ public final class ComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static CNumber[] blockedReordered(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] blockedReordered(Field<Complex128>[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
         int cols1 = shape1.get(1);
 
-        CNumber[] dest = new CNumber[rows1*cols2];
+        Complex128[] dest = new Complex128[rows1*cols2];
         ArrayUtils.fill(dest, 0);
 
         int blockSize = Configurations.getBlockSize();
@@ -228,7 +229,7 @@ public final class ComplexDenseMatrixMultiplication {
                             src2Index = k*cols2 + jj;
 
                             while(destIndex<stopIndex) {
-                                dest[destIndex] = dest[destIndex].add(src1[src1Index].mult(src2[src2Index]));
+                                dest[destIndex] = dest[destIndex].add(src1[src1Index].mult((Complex128) src2[src2Index]));
                                 destIndex++;
                                 src2Index++;
                             }
@@ -251,12 +252,12 @@ public final class ComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static CNumber[] concurrentStandard(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] concurrentStandard(Field<Complex128>[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
 
-        CNumber[] dest = new CNumber[rows1*cols2];
+        Complex128[] dest = new Complex128[rows1*cols2];
         ArrayUtils.fill(dest, 0);
 
         ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
@@ -268,10 +269,10 @@ public final class ComplexDenseMatrixMultiplication {
                     int src2Index = j;
                     int src1Index = src1IndexStart;
                     int destIndex = destIndexStart + j;
-                    CNumber sum = dest[destIndex];
+                    Complex128 sum = dest[destIndex];
 
                     for(int k=0; k<cols1; k++) {
-                        sum = sum.add(src1[src1Index++].mult(src2[src2Index]));
+                        sum = sum.add(src1[src1Index++].mult((Complex128) src2[src2Index]));
                         src2Index += cols2;
                     }
 
@@ -293,12 +294,12 @@ public final class ComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static CNumber[] concurrentReordered(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] concurrentReordered(Field<Complex128>[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
 
-        CNumber[] dest = new CNumber[rows1*cols2];
+        Complex128[] dest = new Complex128[rows1*cols2];
         ArrayUtils.fill(dest, 0);
 
         ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
@@ -312,7 +313,7 @@ public final class ComplexDenseMatrixMultiplication {
                     int end = src2Index + cols2;
 
                     while(src2Index<end) {
-                        dest[destIndex] = dest[destIndex].add(src1[src1IndexStart + k].mult(src2[src2Index++]));
+                        dest[destIndex] = dest[destIndex].add(src1[src1IndexStart + k].mult((Complex128) src2[src2Index++]));
                         destIndex++;
                     }
                 }
@@ -332,12 +333,12 @@ public final class ComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static CNumber[] concurrentBlocked(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] concurrentBlocked(Field<Complex128>[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
 
-        CNumber[] dest = new CNumber[rows1*cols2];
+        Complex128[] dest = new Complex128[rows1*cols2];
         ArrayUtils.fill(dest, 0);
         int blockSize = Configurations.getBlockSize();
 
@@ -361,10 +362,10 @@ public final class ComplexDenseMatrixMultiplication {
                                 int destIndex = destStart + j;
                                 int src1Index = src1Start;
                                 int src2Index = kk*cols2 + j;
-                                CNumber sum = dest[destIndex];
+                                Complex128 sum = dest[destIndex];
 
                                 while(src1Index < stopIndex) {
-                                    sum = sum.add(src1[src1Index++].mult(src2[src2Index]));
+                                    sum = sum.add(src1[src1Index++].mult((Complex128) src2[src2Index]));
                                     src2Index+=cols2;
                                 }
 
@@ -389,12 +390,12 @@ public final class ComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static CNumber[] concurrentBlockedReordered(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] concurrentBlockedReordered(Field<Complex128>[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
 
-        CNumber[] dest = new CNumber[rows1*cols2];
+        Complex128[] dest = new Complex128[rows1*cols2];
         ArrayUtils.fill(dest, 0);
         int blockSize = Configurations.getBlockSize();
 
@@ -420,7 +421,7 @@ public final class ComplexDenseMatrixMultiplication {
                                 int src2Index = k*cols2 + jj;
 
                                 while(destIndex<stopIndex) {
-                                    dest[destIndex] = dest[destIndex].add(src1[src1Index].mult(src2[src2Index]));
+                                    dest[destIndex] = dest[destIndex].add(src1[src1Index].mult((Complex128) src2[src2Index]));
                                     destIndex++;
                                     src2Index++;
                                 }
@@ -443,22 +444,22 @@ public final class ComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static CNumber[] standardVector(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] standardVector(Field<Complex128>[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = shape2.get(0);
 
-        CNumber[] dest = new CNumber[rows1];
+        Complex128[] dest = new Complex128[rows1];
         ArrayUtils.fill(dest, 0);
         int src1Index, src2Index;
 
         for(int i=0; i<rows1; i++) {
             src1Index = i*cols1;
             src2Index = 0;
-            CNumber sum = dest[i];
+            Complex128 sum = dest[i];
 
             while(src2Index<rows2) {
-                sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));
+                sum = sum.add(src1[src1Index++].mult((Complex128) src2[src2Index++]));
             }
 
             dest[i] = sum;
@@ -476,12 +477,12 @@ public final class ComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static CNumber[] blockedVector(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] blockedVector(Field<Complex128>[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = shape2.get(0);
 
-        CNumber[] dest = new CNumber[rows1];
+        Complex128[] dest = new Complex128[rows1];
         ArrayUtils.fill(dest, 0);
         int blockSize = Configurations.getBlockSize();
         int iBound, kBound;
@@ -498,10 +499,10 @@ public final class ComplexDenseMatrixMultiplication {
                 for(int i=ii; i<iBound; i++) {
                     src1Index = i*cols1 + kk;
                     src2Index = kk;
-                    CNumber sum = dest[i];
+                    Complex128 sum = dest[i];
 
                     while(src2Index<kBound) {
-                        sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));
+                        sum = sum.add(src1[src1Index++].mult((Complex128) src2[src2Index++]));
                     }
 
                     dest[i] = sum;
@@ -522,22 +523,22 @@ public final class ComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static CNumber[] concurrentStandardVector(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] concurrentStandardVector(Field<Complex128>[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = shape2.get(0);
 
-        CNumber[] dest = new CNumber[rows1];
+        Complex128[] dest = new Complex128[rows1];
         ArrayUtils.fill(dest, 0);
 
         ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
                 int src1Index = i*cols1;
                 int src2Index = 0;
-                CNumber sum = dest[i];
+                Complex128 sum = dest[i];
 
                 while(src2Index<rows2) {
-                    sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));
+                    sum = sum.add(src1[src1Index++].mult((Complex128) src2[src2Index++]));
                 }
 
                 dest[i] = sum;
@@ -557,12 +558,12 @@ public final class ComplexDenseMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static CNumber[] concurrentBlockedVector(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+    public static Complex128[] concurrentBlockedVector(Field<Complex128>[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = shape2.get(0);
 
-        CNumber[] dest = new CNumber[rows1];
+        Complex128[] dest = new Complex128[rows1];
         ArrayUtils.fill(dest, 0);
         int blockSize = Configurations.getBlockSize();
 
@@ -577,10 +578,10 @@ public final class ComplexDenseMatrixMultiplication {
                     for(int i=ii; i<iBound; i++) {
                         int src1Index = i*cols1 + kk;
                         int src2Index = kk;
-                        CNumber sum = dest[i];
+                        Complex128 sum = dest[i];
 
                         while(src2Index<kBound) {
-                            sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));
+                            sum = sum.add(src1[src1Index++].mult((Complex128) src2[src2Index++]));
                         }
 
                         dest[i] = sum;

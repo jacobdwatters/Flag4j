@@ -26,7 +26,6 @@ package org.flag4j.util;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Complex64;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.io.PrintOptions;
 
 /**
@@ -79,18 +78,7 @@ public final class StringUtils {
      * @return The string representation of a double rounded to the specified precision.
      */
     public static String ValueOfRound(double value, int precision) {
-        return String.valueOf(CNumber.round(new CNumber(value), PrintOptions.getPrecision()));
-    }
-
-
-    /**
-     * Gets the string representation of a {@link CNumber complex number} rounded to the specified precision.
-     * @param value Value to convert to String.
-     * @param precision Precision to round value to.
-     * @return The string representation of a {@link CNumber complex number} rounded to the specified precision.
-     */
-    public static String ValueOfRound(CNumber value, int precision) {
-        return String.valueOf(CNumber.round(value, PrintOptions.getPrecision()));
+        return String.valueOf(Complex128.round(new Complex128(value), PrintOptions.getPrecision()));
     }
 
 

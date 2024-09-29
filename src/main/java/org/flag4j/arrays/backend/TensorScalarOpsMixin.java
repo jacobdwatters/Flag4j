@@ -28,7 +28,7 @@ import org.flag4j.algebraic_structures.fields.Field;
 
 
 /**
- * This interface defines scalar operations_old between a tensor and a scalar field element.
+ * This interface defines scalar operations between a tensor and a scalar field element.
  * @param <T> Type of the tensor returned by the operation.
  * @param <U> Type of the scalar field element.
  * @see TensorPrimitiveOpsMixin

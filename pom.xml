@@ -6,6 +6,8 @@
     <groupId>org.flag4j</groupId>
     <artifactId>flag4j</artifactId>
     <version>v0.1.0-beta</version>
+
+
     <distributionManagement>
         <repository>
             <id>github</id>
@@ -44,6 +46,12 @@
                 <configuration>
                     <source>22</source>
                     <target>22</target>
+                    <compilerArgs>
+                        <arg>-Xmaxerrs</arg>
+                        <arg>10000</arg>
+                        <arg>-Xmaxwarns</arg>
+                        <arg>20000</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>

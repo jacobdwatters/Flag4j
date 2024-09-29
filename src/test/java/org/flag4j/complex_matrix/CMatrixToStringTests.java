@@ -1,7 +1,7 @@
 package org.flag4j.complex_matrix;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.Test;
 
@@ -9,20 +9,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CMatrixToStringTests {
 
-    CNumber[][] aEntries;
-    CMatrixOld A;
+    Complex128[][] aEntries;
+    CMatrix A;
     String exp;
 
 
     @Test
     void toStringTestCase() {
         // ------------------------ Sub-case 1 ------------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(2, 4.25), new CNumber(-0.0002345),
-                        new CNumber(0, 9.4), new CNumber(1.2598)},
-                {new CNumber(56.25, -0.0024), CNumber.ZERO,
-                        new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
-        A = new CMatrixOld(aEntries);
+        aEntries = new Complex128[][]{
+                {new Complex128(2, 4.25), new Complex128(-0.0002345),
+                        new Complex128(0, 9.4), new Complex128(1.2598)},
+                {new Complex128(56.25, -0.0024), Complex128.ZERO,
+                        new Complex128(0, -1.4545), new Complex128(-3.356, -84.2525)}};
+        A = new CMatrix(aEntries);
         PrintOptions.setPrecision(50);
         PrintOptions.setPadding(2);
         PrintOptions.setMaxRows(50);
@@ -34,12 +34,12 @@ class CMatrixToStringTests {
         assertEquals(exp, A.toString());
 
         // ------------------------ Sub-case 2 ------------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(2, 4.25), new CNumber(-0.0002345),
-                        new CNumber(0, 9.4), new CNumber(1.2598)},
-                {new CNumber(56.25, -0.0024), CNumber.ZERO,
-                        new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
-        A = new CMatrixOld(aEntries);
+        aEntries = new Complex128[][]{
+                {new Complex128(2, 4.25), new Complex128(-0.0002345),
+                        new Complex128(0, 9.4), new Complex128(1.2598)},
+                {new Complex128(56.25, -0.0024), Complex128.ZERO,
+                        new Complex128(0, -1.4545), new Complex128(-3.356, -84.2525)}};
+        A = new CMatrix(aEntries);
         PrintOptions.setPrecision(3);
         PrintOptions.setPadding(2);
         PrintOptions.setMaxRows(50);
@@ -51,12 +51,12 @@ class CMatrixToStringTests {
         assertEquals(exp, A.toString());
 
         // ------------------------ Sub-case 3 ------------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(2, 4.25), new CNumber(-0.0002345),
-                        new CNumber(0, 9.4), new CNumber(1.2598)},
-                {new CNumber(56.25, -0.0024), CNumber.ZERO,
-                        new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
-        A = new CMatrixOld(aEntries);
+        aEntries = new Complex128[][]{
+                {new Complex128(2, 4.25), new Complex128(-0.0002345),
+                        new Complex128(0, 9.4), new Complex128(1.2598)},
+                {new Complex128(56.25, -0.0024), Complex128.ZERO,
+                        new Complex128(0, -1.4545), new Complex128(-3.356, -84.2525)}};
+        A = new CMatrix(aEntries);
         PrintOptions.setPrecision(0);
         PrintOptions.setPadding(4);
         PrintOptions.setMaxRows(50);
@@ -68,12 +68,12 @@ class CMatrixToStringTests {
         assertEquals(exp, A.toString());
 
         // ------------------------ Sub-case 4 ------------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(2, 4.25), new CNumber(-0.0002345),
-                        new CNumber(0, 9.4), new CNumber(1.2598)},
-                {new CNumber(56.25, -0.0024), CNumber.ZERO,
-                        new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
-        A = new CMatrixOld(aEntries);
+        aEntries = new Complex128[][]{
+                {new Complex128(2, 4.25), new Complex128(-0.0002345),
+                        new Complex128(0, 9.4), new Complex128(1.2598)},
+                {new Complex128(56.25, -0.0024), Complex128.ZERO,
+                        new Complex128(0, -1.4545), new Complex128(-3.356, -84.2525)}};
+        A = new CMatrix(aEntries);
         PrintOptions.setPrecision(2);
         PrintOptions.setPadding(2);
         PrintOptions.setMaxRows(2);
@@ -85,12 +85,12 @@ class CMatrixToStringTests {
         assertEquals(exp, A.toString());
 
         // ------------------------ Sub-case 5 ------------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(2, 4.25), new CNumber(-0.0002345),
-                        new CNumber(0, 9.4), new CNumber(1.2598)},
-                {new CNumber(56.25, -0.0024), CNumber.ZERO,
-                        new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
-        A = new CMatrixOld(aEntries);
+        aEntries = new Complex128[][]{
+                {new Complex128(2, 4.25), new Complex128(-0.0002345),
+                        new Complex128(0, 9.4), new Complex128(1.2598)},
+                {new Complex128(56.25, -0.0024), Complex128.ZERO,
+                        new Complex128(0, -1.4545), new Complex128(-3.356, -84.2525)}};
+        A = new CMatrix(aEntries);
         PrintOptions.setPrecision(2);
         PrintOptions.setPadding(2);
         PrintOptions.setMaxRows(1);
@@ -103,12 +103,12 @@ class CMatrixToStringTests {
         assertEquals(exp, A.toString());
 
         // ------------------------ Sub-case 6 ------------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(2, 4.25), new CNumber(-0.0002345),
-                        new CNumber(0, 9.4), new CNumber(1.2598)},
-                {new CNumber(56.25, -0.0024), CNumber.ZERO,
-                        new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
-        A = new CMatrixOld(aEntries);
+        aEntries = new Complex128[][]{
+                {new Complex128(2, 4.25), new Complex128(-0.0002345),
+                        new Complex128(0, 9.4), new Complex128(1.2598)},
+                {new Complex128(56.25, -0.0024), Complex128.ZERO,
+                        new Complex128(0, -1.4545), new Complex128(-3.356, -84.2525)}};
+        A = new CMatrix(aEntries);
         PrintOptions.setPrecision(2);
         PrintOptions.setPadding(2);
         PrintOptions.setMaxRows(2);
@@ -121,12 +121,12 @@ class CMatrixToStringTests {
         assertEquals(exp, A.toString());
 
         // ------------------------ Sub-case 6 ------------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(2, 4.25), new CNumber(-0.0002345),
-                        new CNumber(0, 9.4), new CNumber(1.2598)},
-                {new CNumber(56.25, -0.0024), CNumber.ZERO,
-                        new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
-        A = new CMatrixOld(aEntries);
+        aEntries = new Complex128[][]{
+                {new Complex128(2, 4.25), new Complex128(-0.0002345),
+                        new Complex128(0, 9.4), new Complex128(1.2598)},
+                {new Complex128(56.25, -0.0024), Complex128.ZERO,
+                        new Complex128(0, -1.4545), new Complex128(-3.356, -84.2525)}};
+        A = new CMatrix(aEntries);
         PrintOptions.setPrecision(2);
         PrintOptions.setPadding(2);
         PrintOptions.setMaxRows(2);
@@ -139,12 +139,12 @@ class CMatrixToStringTests {
         assertEquals(exp, A.toString());
 
         // ------------------------ Sub-case 6 ------------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(2, 4.25), new CNumber(-0.0002345),
-                        new CNumber(0, 9.4), new CNumber(1.2598)},
-                {new CNumber(56.25, -0.0024), CNumber.ZERO,
-                        new CNumber(0, -1.4545), new CNumber(-3.356, -84.2525)}};
-        A = new CMatrixOld(aEntries);
+        aEntries = new Complex128[][]{
+                {new Complex128(2, 4.25), new Complex128(-0.0002345),
+                        new Complex128(0, 9.4), new Complex128(1.2598)},
+                {new Complex128(56.25, -0.0024), Complex128.ZERO,
+                        new Complex128(0, -1.4545), new Complex128(-3.356, -84.2525)}};
+        A = new CMatrix(aEntries);
         PrintOptions.setPrecision(3);
         PrintOptions.setPadding(3);
         PrintOptions.setMaxRows(2);

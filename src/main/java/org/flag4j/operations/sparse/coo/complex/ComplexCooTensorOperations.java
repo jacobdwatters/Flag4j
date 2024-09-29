@@ -24,11 +24,11 @@
 
 package org.flag4j.operations.sparse.coo.complex;
 
-
-import org.flag4j.arrays_old.sparse.CooCTensorOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Utility class for computing operations_old between two complex sparse COO tensors.
+ * Utility class for computing operations between two complex sparse COO tensors.
  */
 public final class ComplexCooTensorOperations {
 
@@ -52,8 +52,8 @@ public final class ComplexCooTensorOperations {
      * @return The element-wise tensor sum of {@code src1} and {@code src2}.
      * @throws LinearAlgebraException If the tensors {@code src1} and {@code src2} do not have the same shape.
      */
-    public static CooCTensorOld add(CooCTensorOld src1, CooCTensorOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static CooCTensor add(CooCTensor src1, CooCTensor src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         // Create deep copies of indices.
         int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
@@ -61,12 +61,12 @@ public final class ComplexCooTensorOperations {
 
         // Roughly estimate the number of non-zero entries in sum.
         int estimatedEntries = src1.nnz + src2.nnz;
-        List<CNumber> sumEntries = new ArrayList<>(estimatedEntries);
+        List<Field<Complex128>> sumEntries = new ArrayList<>(estimatedEntries);
         List<int[]> sumIndices = new ArrayList<>(estimatedEntries);
 
         int src2Pos = 0;
         for(int i = 0; i < src1.nnz; i++) {
-            CNumber val1 = src1.entries[i];
+            Complex128 val1 = (Complex128) src1.entries[i];
             int[] src1Idx = src1Indices[i];
 
             // Insert elements from src2 whose index is less than the current element from src1
@@ -77,7 +77,7 @@ public final class ComplexCooTensorOperations {
 
             // Add the current element from src1 and handle matching indices from src2
             if(src2Pos < src2.nnz && Arrays.equals(src1Idx, src2Indices[src2Pos])) {
-                sumEntries.add(val1.add(src2.entries[src2Pos++]));
+                sumEntries.add(val1.add((Complex128) src2.entries[src2Pos++]));
             } else {
                 sumEntries.add(val1);
             }
@@ -90,7 +90,7 @@ public final class ComplexCooTensorOperations {
             sumIndices.add(src2Indices[src2Pos++]);
         }
 
-        return new CooCTensorOld(src1.shape, sumEntries, sumIndices);
+        return new CooCTensor(src1.shape, sumEntries, sumIndices);
     }
 
 
@@ -101,8 +101,8 @@ public final class ComplexCooTensorOperations {
      * @return The element-wise tensor difference of {@code src1} and {@code src2}.
      * @throws LinearAlgebraException If the tensors {@code src1} and {@code src2} do not have the same shape.
      */
-    public static CooCTensorOld sub(CooCTensorOld src1, CooCTensorOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static CooCTensor sub(CooCTensor src1, CooCTensor src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         // Create deep copies of indices.
         int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
@@ -110,12 +110,12 @@ public final class ComplexCooTensorOperations {
 
         // Roughly estimate the number of non-zero entries in sum.
         int estimatedEntries = src1.nnz + src2.nnz;
-        List<CNumber> sumEntries = new ArrayList<>(estimatedEntries);
+        List<Field<Complex128>> sumEntries = new ArrayList<>(estimatedEntries);
         List<int[]> sumIndices = new ArrayList<>(estimatedEntries);
 
         int src2Pos = 0;
         for(int i = 0; i < src1.nnz; i++) {
-            CNumber val1 = src1.entries[i];
+            Complex128 val1 = (Complex128) src1.entries[i];
             int[] src1Idx = src1Indices[i];
 
             // Insert elements from src2 whose index is less than the current element from src1.
@@ -126,7 +126,7 @@ public final class ComplexCooTensorOperations {
 
             // Add the current element from src1 and handle matching indices from src2.
             if(src2Pos < src2.nnz && Arrays.equals(src1Idx, src2Indices[src2Pos])) {
-                sumEntries.add(val1.sub(src2.entries[src2Pos++]));
+                sumEntries.add(val1.sub((Complex128) src2.entries[src2Pos++]));
             } else {
                 sumEntries.add(val1);
             }
@@ -139,7 +139,7 @@ public final class ComplexCooTensorOperations {
             sumIndices.add(src2Indices[src2Pos++]);
         }
 
-        return new CooCTensorOld(src1.shape, sumEntries, sumIndices);
+        return new CooCTensor(src1.shape, sumEntries, sumIndices);
     }
 
 
@@ -152,17 +152,17 @@ public final class ComplexCooTensorOperations {
      * @param src2 Second tensor in the element-wise multiplication.
      * @return The element-wise product of {@code src1} and {@code src2}.
      */
-    public static CooCTensorOld elemMult(CooCTensorOld src1, CooCTensorOld src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+    public static CooCTensor elemMult(CooCTensor src1, CooCTensor src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         // Swap src1 and src2 if src2 has fewer non-zero entries for possibly better performance.
         if (src2.nnz < src1.nnz) {
-            CooCTensorOld temp = src1;
+            CooCTensor temp = src1;
             src1 = src2;
             src2 = temp;
         }
 
-        CNumber[] productEntries = new CNumber[Math.min(src1.nnz, src2.nnz)];
+        Complex128[] productEntries = new Complex128[Math.min(src1.nnz, src2.nnz)];
         int[][] productIndices = new int[Math.min(src1.nnz, src2.nnz)][src1.indices[0].length];
         int count = 0;
 
@@ -175,13 +175,13 @@ public final class ComplexCooTensorOperations {
             }
 
             if(src2Idx < src2.nnz && cmp == 0) {
-                productEntries[count] = src1.entries[i].mult(src2.entries[src2Idx]);
+                productEntries[count] = src1.entries[i].mult((Complex128) src2.entries[src2Idx]);
                 productIndices[count] = src1.indices[i];
                 count++;
             }
         }
 
         // Truncate arrays_old if necessary.
-        return new CooCTensorOld(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
+        return new CooCTensor(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
     }
 }

@@ -27,7 +27,7 @@ package org.flag4j.linalg.decompositions.chol;
 
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.util.Flag4jConstants;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 /**
@@ -78,7 +78,7 @@ public class RealCholesky extends Cholesky<Matrix> {
         if(enforceHermitian && src.isSymmetric()) {
             throw new LinearAlgebraException("Matrix is not symmetric positive-definite.");
         } else {
-            ParameterChecks.ensureSquareMatrix(src.shape);
+            ValidateParameters.ensureSquareMatrix(src.shape);
         }
 
         L = new Matrix(src.numRows);

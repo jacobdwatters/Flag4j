@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024. Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package org.flag4j.rng;
 
 
@@ -7,7 +31,7 @@ import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -81,7 +105,7 @@ public class RandomSparseTensor {
      * distributed in {@code [min, max)}.
      */
     public CooMatrix randomCooMatrix(Shape shape, double min, double max, double sparsity) {
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
 
         int numEntries = new BigDecimal(shape.totalEntries()).multiply(BigDecimal.valueOf(1.0-sparsity))
                 .setScale(0, RoundingMode.HALF_UP).intValueExact();
@@ -117,8 +141,8 @@ public class RandomSparseTensor {
      * distributed in {@code [min, max)}.
      */
     public CooMatrix randomCooMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
-        ParameterChecks.ensureGreaterEq(0, numNonZeroEntries);
-        ParameterChecks.ensureLessEq(shape.totalEntries(), numNonZeroEntries, "numNonZeroEntries");
+        ValidateParameters.ensureGreaterEq(0, numNonZeroEntries);
+        ValidateParameters.ensureLessEq(shape.totalEntries(), numNonZeroEntries, "numNonZeroEntries");
 
         double[] entries = RAND_ARRAY.genUniformRealArray(numNonZeroEntries, min, max);
         int[][] indices = RAND_ARRAY.randomUniqueIndices2D(numNonZeroEntries, 0, shape.get(0), 0, shape.get(1));
@@ -156,7 +180,7 @@ public class RandomSparseTensor {
      * distributed in {@code [min, max)}.
      */
     public CsrMatrix randomCsrMatrix(Shape shape, double min, double max, double sparsity) {
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
 
         int numEntries = new BigDecimal(shape.totalEntries()).multiply(BigDecimal.valueOf(1.0-sparsity))
                 .setScale(0, RoundingMode.HALF_UP).intValueExact();
@@ -192,8 +216,8 @@ public class RandomSparseTensor {
      * distributed in {@code [min, max)}.
      */
     public CsrMatrix randomCsrMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
-        ParameterChecks.ensureGreaterEq(0, numNonZeroEntries);
-        ParameterChecks.ensureLessEq(shape.totalEntries(), numNonZeroEntries, "numNonZeroEntries");
+        ValidateParameters.ensureGreaterEq(0, numNonZeroEntries);
+        ValidateParameters.ensureLessEq(shape.totalEntries(), numNonZeroEntries, "numNonZeroEntries");
 
         double[] entries = RAND_ARRAY.genUniformRealArray(numNonZeroEntries, min, max);
         int[][] indices = RAND_ARRAY.randomUniqueIndices2D(numNonZeroEntries, 0, shape.get(0), 0, shape.get(1));
@@ -213,7 +237,7 @@ public class RandomSparseTensor {
      * @throws IllegalArgumentException If {@code sparsity} is not in the range {@code [0.0, 1.0]}.
      */
     public CooMatrix randomSymmetricCooMatrix(int size, int min, int max, double sparsity) {
-        ParameterChecks.ensureInRange(sparsity, 0, 1, "sparsity");
+        ValidateParameters.ensureInRange(sparsity, 0, 1, "sparsity");
         Shape shape = new Shape(size, size);
 
         int numEntries = new BigDecimal(size).pow(2).multiply(BigDecimal.valueOf(1.0-sparsity))
@@ -282,7 +306,7 @@ public class RandomSparseTensor {
      * distributed in {@code [min, max)}.
      */
     public CooCMatrix randomSparseCMatrix(Shape shape, double min, double max, double sparsity) {
-        ParameterChecks.ensureInRange(sparsity, 0, 1, "sparsity");
+        ValidateParameters.ensureInRange(sparsity, 0, 1, "sparsity");
         int numEntries = new BigDecimal(shape.totalEntries()).multiply(BigDecimal.valueOf(1.0-sparsity))
                 .setScale(0, RoundingMode.HALF_UP).intValueExact();
 
@@ -317,7 +341,7 @@ public class RandomSparseTensor {
      * distributed in {@code [min, max)}.
      */
     public CooCMatrix randomSparseCMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
-        ParameterChecks.ensureGreaterEq(0, numNonZeroEntries);
+        ValidateParameters.ensureGreaterEq(0, numNonZeroEntries);
 
         Complex128[] entries = RAND_ARRAY.genUniformComplex128Array(numNonZeroEntries, min, max);
         int[][] indices = RAND_ARRAY.randomUniqueIndices2D(numNonZeroEntries, 0, shape.get(0), 0, shape.get(1));

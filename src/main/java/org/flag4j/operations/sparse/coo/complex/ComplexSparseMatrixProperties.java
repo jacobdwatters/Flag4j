@@ -24,9 +24,9 @@
 
 package org.flag4j.operations.sparse.coo.complex;
 
-
-import org.flag4j.arrays_old.sparse.CooCMatrixOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
@@ -49,15 +49,15 @@ public final class ComplexSparseMatrixProperties {
 
     /**
      * Checks if a complex sparse matrix is the identity matrix.
-     * @param src MatrixOld to check if it is the identity matrix.
+     * @param src Matrix to check if it is the identity matrix.
      * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
      */
-    public static boolean isIdentity(CooCMatrixOld src) {
+    public static boolean isIdentity(CooCMatrix src) {
         // Ensure the matrix is square and there are the same number of non-zero entries as entries on the diagonal.
         boolean result = src.isSquare() && src.entries.length==src.numRows;
 
         if(result) {
-            for(int i=0; i<src.entries.length; i++) {
+            for(int i=0, stop=src.entries.length; i<stop; i++) {
                 // Ensure value is 1 and on the diagonal.
                 if(src.entries[i].equals(1) || src.rowIndices[i] != i || src.colIndices[i] != i) {
                     result = false;
@@ -72,25 +72,21 @@ public final class ComplexSparseMatrixProperties {
 
     /**
      * Checks if a complex sparse matrix is hermitian.
-     * @param src MatrixOld to check if it is the hermitian matrix.
+     * @param src Matrix to check if it is the hermitian matrix.
      * @return True if the {@code src} matrix is hermitian. False otherwise.
      */
-    public static boolean isHermitian(CooCMatrixOld src) {
+    public static boolean isHermitian(CooCMatrix src) {
         boolean result = src.isSquare();
 
-        List<CNumber> entries = Arrays.asList(src.entries);
+        List<Field<Complex128>> entries = Arrays.asList(src.entries);
         List<Integer> rowIndices = IntStream.of(src.rowIndices).boxed().collect(Collectors.toList());
         List<Integer> colIndices = IntStream.of(src.colIndices).boxed().collect(Collectors.toList());
 
-        CNumber value;
-        int row;
-        int col;
-
         while(result && entries.size() > 0) {
             // Extract value of interest.
-            value = entries.remove(0);
-            row = rowIndices.remove(0);
-            col = colIndices.remove(0);
+            Field<Complex128> value = entries.remove(0);
+            int row = rowIndices.remove(0);
+            int col = colIndices.remove(0);
 
             // Find indices of first and last value whose row index matched the value of interests column index.
             int rowStart = rowIndices.indexOf(col);
@@ -127,25 +123,21 @@ public final class ComplexSparseMatrixProperties {
 
     /**
      * Checks if a real sparse matrix is anti-hermitian.
-     * @param src MatrixOld to check if it is the anti-hermitian matrix.
+     * @param src Matrix to check if it is the anti-hermitian matrix.
      * @return True if the {@code src} matrix is anti-hermitian. False otherwise.
      */
-    public static boolean isAntiHermitian(CooCMatrixOld src) {
+    public static boolean isAntiHermitian(CooCMatrix src) {
         boolean result = src.isSquare();
 
-        List<CNumber> entries = Arrays.asList(src.entries);
+        List<Field<Complex128>> entries = Arrays.asList(src.entries);
         List<Integer> rowIndices = IntStream.of(src.rowIndices).boxed().collect(Collectors.toList());
         List<Integer> colIndices = IntStream.of(src.colIndices).boxed().collect(Collectors.toList());
 
-        CNumber value;
-        int row;
-        int col;
-
         while(result && entries.size() > 0) {
             // Extract value of interest.
-            value = entries.remove(0);
-            row = rowIndices.remove(0);
-            col = colIndices.remove(0);
+            Field<Complex128> value = entries.remove(0);
+            int row = rowIndices.remove(0);
+            int col = colIndices.remove(0);
 
             // Find indices of first and last value whose row index matched the value of interests column index.
             int rowStart = rowIndices.indexOf(col);

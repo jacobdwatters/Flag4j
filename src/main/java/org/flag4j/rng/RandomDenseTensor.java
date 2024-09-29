@@ -1,10 +1,34 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024. Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package org.flag4j.rng;
 
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.*;
 import org.flag4j.linalg.decompositions.qr.ComplexQR;
 import org.flag4j.linalg.decompositions.qr.RealQR;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 
 /**
@@ -277,7 +301,7 @@ public class RandomDenseTensor {
      * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
      */
     public Matrix randomMatrix(Shape shape) {
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
         return randomMatrix(shape.get(0), shape.get(1));
     }
 
@@ -306,7 +330,7 @@ public class RandomDenseTensor {
      * @throws IllegalArgumentException If {@code shape} is not of rank 2.
      */
     public Matrix randomMatrix(Shape shape, double min, double max) {
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
         return randomMatrix(shape.get(0), shape.get(1), min, max);
     }
 
@@ -332,7 +356,7 @@ public class RandomDenseTensor {
      * a standard deviation of 1.0.
      */
     public Matrix randnMatrix(Shape shape) {
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
         return randnMatrix(shape.get(0), shape.get(1));
     }
 
@@ -364,7 +388,7 @@ public class RandomDenseTensor {
      * @throws IllegalArgumentException If the standard deviation is negative.
      */
     public Matrix randnMatrix(Shape shape, double mean, double std) {
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
         return randnMatrix(shape.get(0), shape.get(1), mean, std);
     }
 
@@ -425,7 +449,7 @@ public class RandomDenseTensor {
      * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
      */
     public CMatrix randomCMatrix(Shape shape) {
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
         return randomCMatrix(shape.get(0), shape.get(1));
     }
 
@@ -458,7 +482,7 @@ public class RandomDenseTensor {
      * @throws IllegalArgumentException If {@code shape} is not of rank 2.
      */
     public CMatrix randomCMatrix(Shape shape, double min, double max) {
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
         return randomCMatrix(shape.get(0), shape.get(1), min, max);
     }
 
@@ -484,7 +508,7 @@ public class RandomDenseTensor {
      * a standard deviation of 1.0.
      */
     public CMatrix randnCMatrix(Shape shape) {
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
         return randnCMatrix(shape.get(0), shape.get(1));
     }
 
@@ -516,7 +540,7 @@ public class RandomDenseTensor {
      * @throws IllegalArgumentException If the standard deviation is negative.
      */
     public CMatrix randnCMatrix(Shape shape, double mean, double std) {
-        ParameterChecks.ensureRank(shape, 2);
+        ValidateParameters.ensureRank(shape, 2);
         return randnCMatrix(shape.get(0), shape.get(1), mean, std);
     }
 

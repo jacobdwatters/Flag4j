@@ -25,6 +25,7 @@
 package org.flag4j.linalg;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
@@ -32,11 +33,11 @@ import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.operations.common.field_ops.CompareField;
-import org.flag4j.operations_old.common.real.AggregateReal;
-import org.flag4j.operations_old.sparse.coo.complex.ComplexSparseNorms;
-import org.flag4j.operations_old.sparse.coo.real.RealSparseNorms;
+import org.flag4j.operations.common.real.AggregateReal;
+import org.flag4j.operations.sparse.coo.complex.ComplexSparseNorms;
+import org.flag4j.operations.sparse.coo.real.RealSparseNorms;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 /**
  * Utility class containing static methods for computing norms of matrices.
@@ -58,7 +59,7 @@ public final class MatrixNorms {
      * @return the 2-norm of this tensor.
      */
     public static double norm(Matrix src) {
-        return TensorNormsOld.tensorNormL2(src.entries);
+        return TensorNorms.tensorNormL2(src.entries);
     }
 
 
@@ -81,7 +82,7 @@ public final class MatrixNorms {
                 norm = src.minAbs();
             }
         } else {
-            norm = TensorNormsOld.tensorNormLp(src.entries, p);
+            norm = TensorNorms.tensorNormLp(src.entries, p);
         }
 
         return norm;
@@ -340,7 +341,7 @@ public final class MatrixNorms {
      * @return the 2-norm of this tensor.
      */
     public double norm(CsrMatrix src) {
-        return TensorNormsOld.tensorNormL2(src.entries); // Zeros do not contribute to this norm.
+        return TensorNorms.tensorNormL2(src.entries); // Zeros do not contribute to this norm.
     }
 
 
@@ -354,7 +355,7 @@ public final class MatrixNorms {
      * @throws IllegalArgumentException If p is less than 1.
      */
     public double norm(CsrMatrix src, double p) {
-        return TensorNormsOld.tensorNormLp(src.entries, p); // Zeros do not contribute to this norm.
+        return TensorNorms.tensorNormLp(src.entries, p); // Zeros do not contribute to this norm.
     }
 
 
@@ -398,8 +399,8 @@ public final class MatrixNorms {
      * @return The L<sub>p, q</sub> norm of the matrix.
      * @throws IllegalArgumentException If {@code p} or {@code q} is less than 1.
      */
-    private static double matrixNormLpq(Complex128[] src, Shape shape, double p, double q) {
-        ParameterChecks.ensureGreaterEq(1, p, q);
+    private static double matrixNormLpq(Field<Complex128>[] src, Shape shape, double p, double q) {
+        ValidateParameters.ensureGreaterEq(1, p, q);
 
         double norm = 0;
         double colSum;
@@ -420,15 +421,15 @@ public final class MatrixNorms {
 
     /**
      * Compute the L<sub>p</sub> norm of a matrix. This is equivalent to passing {@code q=1} to
-     * {@link #matrixNormLpq(Complex128[], Shape, double, double)}
+     * {@link #matrixNormLpq(Field<Complex128>[], Shape, double, double)}
      * @param src Entries of the matrix.
      * @param shape Shape of the matrix.
      * @param p Parameter in L<sub>p</sub> norm.
      * @return The L<sub>p</sub> norm of the matrix.
      * @throws IllegalArgumentException If {@code p} is less than 1.
      */
-    private static double matrixNormLp(Complex128[] src, Shape shape, double p) {
-        ParameterChecks.ensureGreaterEq(1, p);
+    private static double matrixNormLp(Field<Complex128>[] src, Shape shape, double p) {
+        ValidateParameters.ensureGreaterEq(1, p);
 
         double norm = 0;
         double colSum;
@@ -450,12 +451,12 @@ public final class MatrixNorms {
 
     /**
      * Compute the L<sub>2</sub> norm of a matrix. This is equivalent to passing {@code q=1} to
-     * {@link #matrixNormLpq(Complex128[], Shape, double, double)}
+     * {@link #matrixNormLpq(Field<Complex128>[], Shape, double, double)}
      * @param src Entries of the matrix.
      * @param shape Shape of the matrix.
      * @return The L<sub>2</sub> norm of the matrix.
      */
-    private static double matrixNormL2(Complex128[] src, Shape shape) {
+    private static double matrixNormL2(Field<Complex128>[] src, Shape shape) {
         double norm = 0;
         int rows = shape.get(0);
         int cols = shape.get(1);
@@ -479,7 +480,7 @@ public final class MatrixNorms {
      * @param src Entries of the matrix.
      * @return The infinity norm of the matrix.
      */
-    private static double matrixMaxNorm(Complex128[] src) {
+    private static double matrixMaxNorm(Field<Complex128>[] src) {
         return CompareField.maxAbs(src);
     }
 
@@ -489,7 +490,7 @@ public final class MatrixNorms {
      * @param src Entries of the matrix.
      * @return The infinity norm of the matrix.
      */
-    private static double matrixInfNorm(Complex128[] src, Shape shape) {
+    private static double matrixInfNorm(Field<Complex128>[] src, Shape shape) {
         int rows = shape.get(0);
         int cols = shape.get(1);
         double[] rowSums = new double[rows];
@@ -540,7 +541,7 @@ public final class MatrixNorms {
      * @throws IllegalArgumentException If {@code p} or {@code q} is less than 1.
      */
     public static double matrixNormLpq(double[] src, Shape shape, double p, double q) {
-        ParameterChecks.ensureGreaterEq(1, p, q);
+        ValidateParameters.ensureGreaterEq(1, p, q);
 
         double norm = 0;
         double colSum;

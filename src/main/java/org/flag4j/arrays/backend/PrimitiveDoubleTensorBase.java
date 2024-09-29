@@ -31,7 +31,8 @@ import org.flag4j.operations.common.real.RealProperties;
 import org.flag4j.operations.dense.real.AggregateDenseReal;
 import org.flag4j.operations.dense.real.RealDenseElemMult;
 import org.flag4j.operations.dense.real.RealDenseOperations;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.operations.dense.real.RealDenseProperties;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -63,7 +64,6 @@ public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorB
      */
     protected PrimitiveDoubleTensorBase(Shape shape, double[] entries) {
         super(shape, entries);
-        ParameterChecks.ensureEquals(shape.totalEntries().intValueExact(), entries.length);
     }
 
 
@@ -78,7 +78,7 @@ public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorB
      */
     @Override
     public Double get(int... indices) {
-        ParameterChecks.ensureValidIndex(shape, indices);
+        ValidateParameters.ensureValidIndex(shape, indices);
         return entries[shape.entriesIndex(indices)];
     }
 
@@ -126,8 +126,8 @@ public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorB
      */
     @Override
     public T reshape(Shape newShape) {
-        ParameterChecks.ensureBroadcastable(this.shape, shape);
-        return makeLikeTensor(shape, this.entries.clone());
+        ValidateParameters.ensureBroadcastable(shape, newShape);
+        return makeLikeTensor(newShape, entries.clone());
     }
 
 
@@ -286,9 +286,9 @@ public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorB
     public T tensorTr(int axis1, int axis2) {
         if(rank == 1) throw new LinearAlgebraException("Tensor trace cannot be computed for a rank 1 tensor " +
                 "(must be rank 2 or " + "greater).");
-        ParameterChecks.ensureNotEquals(axis1, axis2);
-        ParameterChecks.ensureValidIndices(getRank(), axis1, axis2);
-        ParameterChecks.ensureEquals(shape.get(axis1), shape.get(axis2));
+        ValidateParameters.ensureNotEquals(axis1, axis2);
+        ValidateParameters.ensureValidIndices(getRank(), axis1, axis2);
+        ValidateParameters.ensureEquals(shape.get(axis1), shape.get(axis2));
 
         int[] strides = shape.getStrides();
         int rank = strides.length;
@@ -345,6 +345,17 @@ public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorB
     @Override
     public boolean isZeros() {
         return RealProperties.isZeros(entries);
+    }
+
+
+    /**
+     * Checks if this tensor only contains zeros. If this tensor is sparse, then only the non-zero values are considered.
+     *
+     * @return True if this tensor only contains zeros. Otherwise, returns false.
+     */
+    @Override
+    public boolean isOnes() {
+        return RealDenseProperties.isOnes(entries);
     }
 
 

@@ -79,7 +79,6 @@ public final class RealSparseEquals {
         return aEntries.equals(bEntries) && Arrays.deepEquals(aIndices.toArray(new int[0][]), bIndices.toArray(new int[0][]));
     }
 
-
     /**
      * Checks if two real sparse matrices are real. Assumes the indices of each sparse matrix are sorted. Any explicitly stored
      * zero's will be ignored.
@@ -131,6 +130,7 @@ public final class RealSparseEquals {
         // All checks passed, matrices are equal.
         return true;
     }
+
 
 
     /**

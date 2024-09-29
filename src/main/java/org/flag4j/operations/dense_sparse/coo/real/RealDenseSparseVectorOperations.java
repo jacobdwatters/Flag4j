@@ -28,7 +28,7 @@ import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.operations.common.real.RealOperations;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 /**
  * This class provides low level methods for computing operations between a real dense/sparse vector and a
@@ -53,7 +53,7 @@ public class RealDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
      */
     public static double inner(double[] src1, double[] src2, int[] indices, int sparseSize) {
-        ParameterChecks.ensureArrayLengthsEq(src1.length, sparseSize);
+        ValidateParameters.ensureArrayLengthsEq(src1.length, sparseSize);
         double innerProd = 0;
         int index;
 
@@ -99,7 +99,7 @@ public class RealDenseSparseVectorOperations {
      * @return The matrix resulting from the vector outer product.
      */
     public static double[] outerProduct(double[] src1, int[] indices, int sparseSize, double[] src2) {
-        ParameterChecks.ensureEquals(sparseSize, src2.length);
+        ValidateParameters.ensureEquals(sparseSize, src2.length);
 
         double[] dest = new double[src2.length*sparseSize];
         int destIndex;
@@ -124,7 +124,7 @@ public class RealDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static Vector sub(Vector src1, CooVector src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         Vector dest = new Vector(src1);
 
         for(int i=0; i<src2.nnz; i++) {
@@ -143,7 +143,7 @@ public class RealDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static Vector sub(CooVector src1, Vector src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         Vector dest = new Vector(RealOperations.scalMult(src2.entries, -1));
 
         for(int i=0; i<src1.nnz; i++) {
@@ -161,7 +161,7 @@ public class RealDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static void addEq(Vector src1, CooVector src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nnz; i++) {
             src1.entries[src2.indices[i]] += src2.entries[i];
@@ -176,7 +176,7 @@ public class RealDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static void subEq(Vector src1, CooVector src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nnz; i++) {
             src1.entries[src2.indices[i]] -= src2.entries[i];
@@ -189,16 +189,14 @@ public class RealDenseSparseVectorOperations {
      * @param src1 Dense vector.
      * @param src2 Sparse vector.
      * @return The result of the element-wise multiplication.
-     * @throws IllegalArgumentException If the two vectors are not the same size.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If the two vectors are not the same size.
      */
     public static CooVector elemMult(Vector src1, CooVector src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
-
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         double[] entries = new double[src2.entries.length];
 
-        for(int i=0; i<src2.nnz; i++) {
+        for(int i=0; i<src2.nnz; i++)
             entries[i] = src1.entries[src2.indices[i]]*src2.entries[i];
-        }
 
         return new CooVector(src1.size, entries, src2.indices.clone());
     }
@@ -212,7 +210,7 @@ public class RealDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static Vector add(Vector src1, CooVector src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         Vector dest = new Vector(src1);
 
         for(int i=0; i<src2.nnz; i++) {
@@ -230,7 +228,7 @@ public class RealDenseSparseVectorOperations {
      * @return The result of the element-wise vector division.
      */
     public static CooVector elemDiv(CooVector src1, Vector src2) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape);
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         double[] dest = new double[src1.entries.length];
 
         for(int i=0; i<src1.entries.length; i++) {

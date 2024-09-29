@@ -1,8 +1,8 @@
 package org.flag4j.linalg.solvers;
 
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolverOld;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
+import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.SingularMatrixException;
 import org.junit.jupiter.api.Assertions;
@@ -12,15 +12,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RealForwardSolverTest {
 
-    RealForwardSolverOld solver;
+    RealForwardSolver solver;
     double[][] lEntries;
-    MatrixOld L;
+    Matrix L;
 
     @Test
     void solveVectorTestCase() {
-        solver = new RealForwardSolverOld();
+        solver = new RealForwardSolver();
         double[] bEntries, expEntries;
-        VectorOld b, exp;
+        Vector b, exp;
 
         // ---------------------- Sub-case 1 ----------------------
         lEntries = new double[][]{
@@ -31,11 +31,11 @@ class RealForwardSolverTest {
                 {3.45, 1.56, -99.356, 7.125, 1, 0},
                 {-9.412, 3.51, -5.6, 0.0013, 4502, 5.1}
         };
-        L = new MatrixOld(lEntries);
+        L = new Matrix(lEntries);
         bEntries = new double[]{1.34, 5.1, 0.0, -145.1, 1000.24, 795.1};
-        b = new VectorOld(bEntries);
+        b = new Vector(bEntries);
         expEntries = new double[]{0.9571428571428573, 593.3548447619049, -7.221642857142858, 81887.60994670248, -584095.4301186552, 5.156070982220032E8};
-        exp = new VectorOld(expEntries);
+        exp = new Vector(expEntries);
 
         Assertions.assertEquals(exp, solver.solve(L, b));
 
@@ -48,11 +48,11 @@ class RealForwardSolverTest {
                 {3.45, 1.56, -99.356, 7.125, 0, 0},
                 {-9.412, 3.51, -5.6, 0.0013, 4502, 5.1}
         };
-        L = new MatrixOld(lEntries);
+        L = new Matrix(lEntries);
         bEntries = new double[]{1.34, 5.1, 0.0, -145.1, 1000.24, 795.1};
-        b = new VectorOld(bEntries);
+        b = new Vector(bEntries);
 
-        VectorOld finalB = b;
+        Vector finalB = b;
         assertThrows(SingularMatrixException.class, ()->solver.solve(L, finalB));
 
         // ---------------------- Sub-case 3 ----------------------
@@ -64,11 +64,11 @@ class RealForwardSolverTest {
                 {3.45, 1.56, -99.356, 7.125, 1, 0},
                 {-9.412, 3.51, -5.6, 0.0013, 4502, 5.1}
         };
-        L = new MatrixOld(lEntries);
+        L = new Matrix(lEntries);
         bEntries = new double[]{1.34, 5.1, 0.0, -145.1, 1000.24};
-        b = new VectorOld(bEntries);
+        b = new Vector(bEntries);
 
-        VectorOld finalB1 = b;
+        Vector finalB1 = b;
         assertThrows(IllegalArgumentException.class, ()->solver.solve(L, finalB1));
 
         // ---------------------- Sub-case 4 ----------------------
@@ -79,11 +79,11 @@ class RealForwardSolverTest {
                 {14.5, -566.1, 0.00024, 4.1, 0},
                 {3.45, 1.56, -99.356, 7.125, 1}
         };
-        L = new MatrixOld(lEntries);
+        L = new Matrix(lEntries);
         bEntries = new double[]{1.34, 5.1, 0.0, -145.1, 1000.24, 13.4};
-        b = new VectorOld(bEntries);
+        b = new Vector(bEntries);
 
-        VectorOld finalB2 = b;
+        Vector finalB2 = b;
         assertThrows(IllegalArgumentException.class, ()->solver.solve(L, finalB2));
 
 
@@ -94,20 +94,20 @@ class RealForwardSolverTest {
                 {105.63, -0.0, 14, 0, 0},
                 {14.5, -566.1, 0.00024, 4.1, 0}
         };
-        L = new MatrixOld(lEntries);
+        L = new Matrix(lEntries);
         bEntries = new double[]{1.34, 5.1, 0.0, -145.1};
-        b = new VectorOld(bEntries);
+        b = new Vector(bEntries);
 
-        VectorOld finalB3 = b;
+        Vector finalB3 = b;
         assertThrows(LinearAlgebraException.class, ()->solver.solve(L, finalB3));
     }
 
 
     @Test
     void solveMatrixTestCase() {
-        solver = new RealForwardSolverOld();
+        solver = new RealForwardSolver();
         double[][] bEntries, expEntries;
-        MatrixOld B, exp;
+        Matrix B, exp;
 
         // ---------------------- Sub-case 1 ----------------------
         lEntries = new double[][]{
@@ -118,7 +118,7 @@ class RealForwardSolverTest {
                 {3.45, 1.56, -99.356, 7.125, 1, 0},
                 {-9.412, 3.51, -5.6, 0.0013, 4502, 5.1}
         };
-        L = new MatrixOld(lEntries);
+        L = new Matrix(lEntries);
         bEntries = new double[][]{
                 {1.324, -5.345, 1.55},
                 {-0.35, 2.55, 1000345.2},
@@ -127,7 +127,7 @@ class RealForwardSolverTest {
                 {100, 0, 2.5},
                 {1.5, -693.5, 2.1}
         };
-        B = new MatrixOld(bEntries);
+        B = new Matrix(bEntries);
         expEntries = new double[][]{
                 {0.9457142857142858, -3.817857142857143, 1.1071428571428572},
                 {582.6772744761905, -2351.5154069047617, 667579.2104547619},
@@ -136,7 +136,7 @@ class RealForwardSolverTest {
                 {-574777.0750422318, 2319812.2611380727, -6.577871287236996E8},
                 {5.0738121751018417E8, -2.0478013119683797E9, 5.806578804847218E11}
         };
-        exp = new MatrixOld(expEntries);
+        exp = new Matrix(expEntries);
 
         Assertions.assertEquals(exp, solver.solve(L, B));
     }
@@ -144,9 +144,9 @@ class RealForwardSolverTest {
 
     @Test
     void solveUnitVectorTestCase() {
-        solver = new RealForwardSolverOld(true);
+        solver = new RealForwardSolver(true);
         double[] bEntries, expEntries;
-        VectorOld b, exp;
+        Vector b, exp;
 
         // ---------------------- Sub-case 1 ----------------------
         lEntries = new double[][]{
@@ -157,11 +157,11 @@ class RealForwardSolverTest {
                 {3.45, 1.56, -99.356, 7.125, 1, 0},
                 {-9.412, 3.51, -5.6, 0.0013, 4502, 1}
         };
-        L = new MatrixOld(lEntries);
+        L = new Matrix(lEntries);
         bEntries = new double[]{1.34, 5.1, 0.0, -145.1, 1000.24, 795.1};
-        b = new VectorOld(bEntries);
+        b = new Vector(bEntries);
         expEntries = new double[]{1.34, 1244.005174, -141.5442, 704066.8329720079, -5031484.481532196, 2.265173786917746E10};
-        exp = new VectorOld(expEntries);
+        exp = new Vector(expEntries);
 
         Assertions.assertEquals(exp, solver.solve(L, b));
 
@@ -174,11 +174,11 @@ class RealForwardSolverTest {
                 {3.45, 1.56, -99.356, 7.125, 1, 0},
                 {-9.412, 3.51, -5.6, 0.0013, 4502, 1}
         };
-        L = new MatrixOld(lEntries);
+        L = new Matrix(lEntries);
         bEntries = new double[]{1.34, 5.1, 0.0, -145.1, 1000.24};
-        b = new VectorOld(bEntries);
+        b = new Vector(bEntries);
 
-        VectorOld finalB1 = b;
+        Vector finalB1 = b;
         assertThrows(IllegalArgumentException.class, ()->solver.solve(L, finalB1));
 
         // ---------------------- Sub-case 4 ----------------------
@@ -189,11 +189,11 @@ class RealForwardSolverTest {
                 {14.5, -566.1, 0.00024, 1, 0},
                 {3.45, 1.56, -99.356, 7.125, 1}
         };
-        L = new MatrixOld(lEntries);
+        L = new Matrix(lEntries);
         bEntries = new double[]{1.34, 5.1, 0.0, -145.1, 1000.24, 13.4};
-        b = new VectorOld(bEntries);
+        b = new Vector(bEntries);
 
-        VectorOld finalB2 = b;
+        Vector finalB2 = b;
         assertThrows(IllegalArgumentException.class, ()->solver.solve(L, finalB2));
 
 
@@ -204,20 +204,20 @@ class RealForwardSolverTest {
                 {105.63, -0.0, 1, 0, 0},
                 {14.5, -566.1, 0.00024, 1, 0}
         };
-        L = new MatrixOld(lEntries);
+        L = new Matrix(lEntries);
         bEntries = new double[]{1.34, 5.1, 0.0, -145.1};
-        b = new VectorOld(bEntries);
+        b = new Vector(bEntries);
 
-        VectorOld finalB3 = b;
+        Vector finalB3 = b;
         assertThrows(LinearAlgebraException.class, ()->solver.solve(L, finalB3));
     }
 
 
     @Test
     void solveUnitMatrixTestCase() {
-        solver = new RealForwardSolverOld(true);
+        solver = new RealForwardSolver(true);
         double[][] bEntries, expEntries;
-        MatrixOld B, exp;
+        Matrix B, exp;
 
         // ---------------------- Sub-case 1 ----------------------
         lEntries = new double[][]{
@@ -228,7 +228,7 @@ class RealForwardSolverTest {
                 {3.45, 1.56, -99.356, 7.125, 1, 0},
                 {-9.412, 3.51, -5.6, 0.0013, 4502, 1}
         };
-        L = new MatrixOld(lEntries);
+        L = new Matrix(lEntries);
         bEntries = new double[][]{
                 {1.324, -5.345, 1.55},
                 {1223.7622764000002, -4939.202354499999, 1001778.261955},
@@ -237,7 +237,7 @@ class RealForwardSolverTest {
                 {-4952373.673752486, 1.9985549871568494E7, -4.0422083746742477E9},
                 {2.2295580269226757E10, -8.997492212072707E10, 1.8198017848717656E13}
         };
-        B = new MatrixOld(bEntries);
+        B = new Matrix(bEntries);
         expEntries = new double[][]{
                 {1.324, -5.345, 1.55},
                 {2447.8745528000004, -9880.954708999998, 1003211.32391},
@@ -246,7 +246,7 @@ class RealForwardSolverTest {
                 {-1.979392622825704E7, 7.988881452647084E7, -1.2130850349531082E10},
                 {1.1140782325607643E11, -4.4963431324546594E11, 7.281110112399847E13}
         };
-        exp = new MatrixOld(expEntries);
+        exp = new Matrix(expEntries);
 
         Assertions.assertEquals(exp, solver.solve(L, B));
     }

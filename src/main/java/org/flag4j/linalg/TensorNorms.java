@@ -1,6 +1,31 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024. Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package org.flag4j.linalg;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.backend.FieldTensorBase;
 import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
 import org.flag4j.arrays.dense.CTensor;
@@ -9,7 +34,7 @@ import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.operations.common.field_ops.CompareField;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 /**
  * This utility class provides static methods useful for computing norms of a tensor.
@@ -177,7 +202,7 @@ public final class TensorNorms {
      * @return The L<sub>p</sub> norm of the tensor.
      */
     public static double tensorNormLp(double[] src, double p) {
-        ParameterChecks.ensureNotEquals(0, p);
+        ValidateParameters.ensureNotEquals(0, p);
         double norm = 0;
 
         for(double value : src)
@@ -192,11 +217,11 @@ public final class TensorNorms {
      * @param src Entries of the tensor.
      * @return The L<sub>2</sub> norm of the tensor.
      */
-    public static double tensorNormL2(Complex128[] src) {
+    public static double tensorNormL2(Field<Complex128>[] src) {
         double norm = 0;
 
-        for(Complex128 cNumber : src)
-            norm += Complex128.pow(cNumber, 2).mag();
+        for(Field<Complex128> cNumber : src)
+            norm += Complex128.pow((Complex128) cNumber, 2).mag();
 
         return Math.sqrt(norm);
     }
@@ -208,11 +233,11 @@ public final class TensorNorms {
      * @param p The {@code p} parameter of the L<sub>p</sub> norm.
      * @return The L<sub>p</sub> norm of the tensor.
      */
-    public static double tensorNormLp(Complex128[] src, double p) {
+    public static double tensorNormLp(Field<Complex128>[] src, double p) {
         double norm = 0;
 
-        for(Complex128 cNumber : src)
-            norm += Complex128.pow(cNumber, p).mag();
+        for(Field<Complex128> cNumber : src)
+            norm += Complex128.pow((Complex128) cNumber, p).mag();
 
         return Math.pow(norm, 1.0/p);
     }

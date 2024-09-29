@@ -26,9 +26,12 @@ package org.flag4j.arrays.dense;
 
 
 import org.flag4j.algebraic_structures.fields.Complex64;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.DenseFieldTensorBase;
 import org.flag4j.arrays.sparse.CooCTensor64;
+import org.flag4j.operations.common.complex.Complex64Operations;
+import org.flag4j.util.Flag4jConstants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,7 +51,7 @@ public class CTensor64 extends DenseFieldTensorBase<CTensor64, CooCTensor64, Com
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-    public CTensor64(Shape shape, Complex64[] entries) {
+    public CTensor64(Shape shape, Field<Complex64>[] entries) {
         super(shape, entries);
         if(super.entries.length == 0 || super.entries[0] == null) setZeroElement(Complex64.ZERO);
     }
@@ -60,7 +63,7 @@ public class CTensor64 extends DenseFieldTensorBase<CTensor64, CooCTensor64, Com
      * @param shape Shape of this tensor.
      */
     public CTensor64(Shape shape) {
-        super(shape, new Complex64[shape.totalEntries().intValueExact()]);
+        super(shape, new Complex64[shape.totalEntriesIntValueExact()]);
         Arrays.fill(entries, Complex64.ZERO);
         setZeroElement(Complex64.ZERO);
     }
@@ -121,7 +124,7 @@ public class CTensor64 extends DenseFieldTensorBase<CTensor64, CooCTensor64, Com
      * @return A tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public CTensor64 makeLikeTensor(Shape shape, Complex64[] entries) {
+    public CTensor64 makeLikeTensor(Shape shape, Field<Complex64>[] entries) {
         return new CTensor64(shape, entries);
     }
 
@@ -133,11 +136,11 @@ public class CTensor64 extends DenseFieldTensorBase<CTensor64, CooCTensor64, Com
      */
     @Override
     public CooCTensor64 toCoo() {
-        List<Complex64> spEntries = new ArrayList<>();
+        List<Field<Complex64>> spEntries = new ArrayList<>();
         List<int[]> indices = new ArrayList<>();
 
         int size = entries.length;
-        Complex64 value;
+        Field<Complex64> value;
 
         for(int i=0; i<size; i++) {
             value = entries[i];
@@ -149,5 +152,54 @@ public class CTensor64 extends DenseFieldTensorBase<CTensor64, CooCTensor64, Com
         }
 
         return new CooCTensor64(shape, spEntries, indices);
+    }
+
+
+    /**
+     * Rounds this tensor to the nearest whole number. If the tensor is complex, both the real and imaginary component will
+     * be rounded independently.
+     *
+     * @return A copy of this tensor with each entry rounded to the nearest whole number.
+     */
+    public CTensor64 round() {
+        return round(0);
+    }
+
+
+    /**
+     * Rounds a matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
+     * be rounded independently.
+     *
+     * @param precision The number of decimal places to round to. This value must be non-negative.
+     * @return A copy of this matrix with rounded values.
+     * @throws IllegalArgumentException If <code>precision</code> is negative.
+     */
+    public CTensor64 round(int precision) {
+        return new CTensor64(this.shape, Complex64Operations.round(this.entries, precision));
+    }
+
+
+    /**
+     * Rounds values which are close to zero in absolute value to zero. If the tensor is complex, both the real and imaginary components will be rounded
+     * independently. By default, the values must be within {@link Flag4jConstants#EPS_F32} of zero. To specify a threshold value see
+     * {@link #roundToZero(double)}.
+     *
+     * @return A copy of this tensor with rounded values.
+     */
+    public CTensor64 roundToZero() {
+        return roundToZero(Flag4jConstants.EPS_F32);
+    }
+
+
+    /**
+     * Rounds values which are close to zero in absolute value to zero.
+     *
+     * @param threshold Threshold for rounding values to zero. That is, if a value in this matrix is less than the threshold in absolute value then it
+     *                  will be rounded to zero. This value must be non-negative.
+     * @return A copy of this matrix with rounded values.
+     * @throws IllegalArgumentException If threshold is negative.
+     */
+    public CTensor64 roundToZero(double threshold) {
+        return new CTensor64(this.shape, Complex64Operations.roundToZero(this.entries, (float) threshold));
     }
 }

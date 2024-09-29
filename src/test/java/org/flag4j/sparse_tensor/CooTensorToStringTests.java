@@ -1,7 +1,7 @@
 package org.flag4j.sparse_tensor;
 
-import org.flag4j.arrays_old.sparse.CooTensorOld;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CooTensorToStringTests {
 
-    static CooTensorOld A;
+    static CooTensor A;
     static Shape aShape;
     static double[] aEntries;
     static int[][] aIndices;
@@ -46,7 +46,7 @@ class CooTensorToStringTests {
                 {2, 1, 1, 0, 3},
                 {2, 1, 1, 0, 4},
                 {2, 3, 0, 0, 2}};
-        A = new CooTensorOld(aShape, aEntries, aIndices);
+        A = new CooTensor(aShape, aEntries, aIndices);
 
         exp = "Shape: (3, 4, 2, 1, 5)\n" +
                 "Non-zero Entries: [ 0.3369876  -1.27789442  0.30035266  -2.87169837  -0.74763303  5.8627E-4  0.27050784  -0.88040575  0.34337596  ...  0.08353784 ]\n" +

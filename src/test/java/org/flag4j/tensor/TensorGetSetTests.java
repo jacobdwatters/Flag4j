@@ -1,8 +1,8 @@
 package org.flag4j.tensor;
 
 
-import org.flag4j.arrays_old.dense.TensorOld;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.Tensor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,14 +14,14 @@ class TensorGetSetTests {
 
     static double[] aEntries, expEntries;
     static Shape shape;
-    static TensorOld A;
+    static Tensor A;
 
     @BeforeEach
     void setup() {
         aEntries = new double[]{1.23, 2.556, -121.5, 15.61, 14.15, -99.23425,
                 0.001345, 2.677, 8.14, -0.000194, 1, 234};
         shape = new Shape(1, 3, 2, 1, 2);
-        A = new TensorOld(shape, aEntries);
+        A = new Tensor(shape, aEntries);
     }
 
 

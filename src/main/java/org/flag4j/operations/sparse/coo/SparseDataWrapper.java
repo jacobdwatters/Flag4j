@@ -24,7 +24,7 @@
 
 package org.flag4j.operations.sparse.coo;
 
-import org.flag4j.operations_old.dense.real.RealDenseTranspose;
+import org.flag4j.operations.dense.real.RealDenseTranspose;
 
 import java.util.*;
 import java.util.stream.Collectors;

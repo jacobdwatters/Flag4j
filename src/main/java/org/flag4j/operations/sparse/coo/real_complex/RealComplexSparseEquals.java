@@ -24,15 +24,21 @@
 
 package org.flag4j.operations.sparse.coo.real_complex;
 
-import org.flag4j.arrays_old.sparse.*;
+import org.flag4j.arrays.sparse.*;
 import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 
 /**
  * This class contains methods for checking the equality of real/complex sparse tensors.
  */
-public class RealComplexSparseEquals {
+public final class RealComplexSparseEquals {
+
+    private RealComplexSparseEquals() {
+        // Hide default constructor for utility class.
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+    }
 
 
     /**
@@ -41,7 +47,7 @@ public class RealComplexSparseEquals {
      * @param b Second tensor in the equality check.
      * @return True if the tensors are equal. False otherwise.
      */
-    public static boolean tensorEquals(CooTensorOld a, CooCTensorOld b) {
+    public static boolean tensorEquals(CooTensor a, CooCTensor b) {
         return a.shape.equals(b.shape) && ArrayUtils.equals(a.entries, b.entries)
                 && Arrays.deepEquals(a.indices, b.indices);
     }
@@ -53,7 +59,7 @@ public class RealComplexSparseEquals {
      * @param b Second vector in the equality check.
      * @return True if the vectors are equal. False otherwise.
      */
-    public static boolean matrixEquals(CooMatrixOld a, CooCMatrixOld b) {
+    public static boolean matrixEquals(CooMatrix a, CooCMatrix b) {
         return a.shape.equals(b.shape) && ArrayUtils.equals(a.entries, b.entries)
                 && Arrays.equals(a.rowIndices, b.rowIndices)
                 && Arrays.equals(a.colIndices, b.colIndices);
@@ -66,7 +72,7 @@ public class RealComplexSparseEquals {
      * @param b Second vector in the equality check.
      * @return True if the vectors are equal. False otherwise.
      */
-    public static boolean vectorEquals(CooVectorOld a, CooCVectorOld b) {
+    public static boolean vectorEquals(CooVector a, CooCVector b) {
         return a.size==b.size && Arrays.equals(a.indices, b.indices) && ArrayUtils.equals(a.entries, b.entries);
     }
 }

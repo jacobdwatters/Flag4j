@@ -28,14 +28,14 @@ package org.flag4j.arrays.backend;
 /**
  * This interface defines operations that all dense matrices should implement.
  * @param <T> Type of this dense matrix.
- * @param <U> Type of sparse COO matrix which is equivalent to {@code T} and {@code V}.
- * @param <U> Type of sparse CSR matrix which is equivalent to {@code T} and {@code U}.
+ * @param <U> Type of sparse COO matrix which is equivalent to {@code T}.
+ * @param <V> Type of vector which is similar to the type of this dense matrix.
  * @param <W> Type (or wrapper) of an element of this matrix.
  */
 public interface DenseMatrixMixin<T extends DenseMatrixMixin<T, U, V, W>,
-        U extends CooMatrixMixin<U, T, W>,
-        V extends CsrMatrixMixin<V, T, W>, W>
-        extends MatrixMixin<T, T, W>, DenseTensorMixin<T, U> {
+        U extends CooMatrixMixin<U, T, ?, V, W>,
+        V extends DenseVectorMixin<V, ?, T, W>, W>
+        extends MatrixMixin<T, T, V, V, W>, DenseTensorMixin<T, U> {
 
     /**
      * Checks if a matrix is singular. That is, if the matrix is <b>NOT</b> invertible.
@@ -57,16 +57,18 @@ public interface DenseMatrixMixin<T extends DenseMatrixMixin<T, U, V, W>,
 
 
     /**
-     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
-     * left index location of the slice to set within this matrix.
+     * Sets a slice of this matrix to the specified {@code values}. The {@code rowStart} and {@code colStart} parameters specify the
+     * upper left index location of the slice to set within this matrix.
      *
-     * @param values   New values for the specified slice.
+     * @param values New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     *
      * @return A reference to this matrix.
-     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
-     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
-     *                                   fit completely within this matrix.
+     *
+     * @throws IllegalArgumentException If {@code rowStart} or {@code colStart} are not within the matrix.
+     * @throws IllegalArgumentException If the {@code values} slice, with upper left corner at the specified location, does not
+     *                                  fit completely within this matrix.
      */
     public T setSlice(T values, int rowStart, int colStart);
 
@@ -76,7 +78,7 @@ public interface DenseMatrixMixin<T extends DenseMatrixMixin<T, U, V, W>,
      *
      * @param values New values of the matrix.
      * @return A reference to this matrix.
-     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
+     * @throws IllegalArgumentException If the {@code values} array has a different shape then this matrix.
      */
     public T setValues(W[][] values);
 
@@ -100,8 +102,4 @@ public interface DenseMatrixMixin<T extends DenseMatrixMixin<T, U, V, W>,
     public default boolean isFullRank() {
         return matrixRank() == Math.min(numRows(), numCols());
     }
-
-
-    // TODO: It would be nice to define this here.
-//    public V toCsr();
 }

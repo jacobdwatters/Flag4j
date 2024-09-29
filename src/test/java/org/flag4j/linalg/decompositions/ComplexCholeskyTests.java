@@ -1,7 +1,7 @@
 package org.flag4j.linalg.decompositions;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.linalg.decompositions.chol.ComplexCholeskyOld;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.linalg.decompositions.chol.ComplexCholesky;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,16 +9,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ComplexCholeskyTests {
 
     static String[][] aEntries;
-    static CMatrixOld A, L, A_hat;
+    static CMatrix A, L, A_hat;
 
     static void setMatrices() {
-        A = new CMatrixOld(aEntries);
+        A = new CMatrix(aEntries);
     }
 
 
     @Test
-    void testcholeskyTestCase() {
-        ComplexCholeskyOld cholesky = new ComplexCholeskyOld();
+    void choleskyTestCase() {
+        ComplexCholesky cholesky = new ComplexCholesky();
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new String[][]{
@@ -29,7 +29,7 @@ class ComplexCholeskyTests {
         L = cholesky.decompose(A).getL();
         A_hat = L.mult(L.H());
 
-        assertEquals(new CMatrixOld(A.shape), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
 
         // --------------------- Sub-case 2 ---------------------
         aEntries = new String[][]{
@@ -40,6 +40,6 @@ class ComplexCholeskyTests {
         L = cholesky.decompose(A).getL();
         A_hat = L.mult(L.H());
 
-        assertEquals(new CMatrixOld(A.shape), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
     }
 }

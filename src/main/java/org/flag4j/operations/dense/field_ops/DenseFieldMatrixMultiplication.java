@@ -53,7 +53,7 @@ public final class DenseFieldMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static <T extends Field<T>> Field<T>[] standard(T[] src1, Shape shape1, T[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] standard(Field<T>[] src1, Shape shape1, Field<T>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
@@ -75,7 +75,7 @@ public final class DenseFieldMatrixMultiplication {
                 Field<T> sum = dest[destIndex];
 
                 while(src1Index<end) {
-                    sum = sum.add(src1[src1Index++].mult(src2[src2Index]));
+                    sum = sum.add(src1[src1Index++].mult((T) src2[src2Index]));
                     src2Index += cols2;
                 }
 
@@ -96,7 +96,7 @@ public final class DenseFieldMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static <T extends Field<T>> Field<T>[] reordered(T[] src1, Shape shape1, T[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] reordered(Field<T>[] src1, Shape shape1, Field<T>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
@@ -118,7 +118,7 @@ public final class DenseFieldMatrixMultiplication {
                 end = src2Index + cols2;
 
                 while(src2Index<end) {
-                    dest[destIndex] = dest[destIndex].add(src1[src1Index].mult(src2[src2Index++]));
+                    dest[destIndex] = dest[destIndex].add(src1[src1Index].mult((T) src2[src2Index++]));
                     destIndex++;
                 }
             }
@@ -136,7 +136,7 @@ public final class DenseFieldMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static <T extends Field<T>> Field<T>[] blocked(T[] src1, Shape shape1, T[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] blocked(Field<T>[] src1, Shape shape1, Field<T>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
         int cols1 = shape1.get(1);
@@ -169,7 +169,7 @@ public final class DenseFieldMatrixMultiplication {
                             Field<T> sum = dest[destIndex];
 
                             while(src1Index < stopIndex) {
-                                sum = sum.add(src1[src1Index++].mult(src2[src2Index]));
+                                sum = sum.add(src1[src1Index++].mult((T) src2[src2Index]));
                                 src2Index+=cols2;
                             }
 
@@ -193,7 +193,7 @@ public final class DenseFieldMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static <T extends Field<T>> Field<T>[] blockedReordered(T[] src1, Shape shape1, T[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] blockedReordered(Field<T>[] src1, Shape shape1, Field<T>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
         int cols1 = shape1.get(1);
@@ -227,7 +227,7 @@ public final class DenseFieldMatrixMultiplication {
                             src2Index = k*cols2 + jj;
 
                             while(destIndex<stopIndex) {
-                                dest[destIndex] = dest[destIndex].add(src1[src1Index].mult(src2[src2Index]));
+                                dest[destIndex] = dest[destIndex].add(src1[src1Index].mult((T) src2[src2Index]));
                                 destIndex++;
                                 src2Index++;
                             }
@@ -250,7 +250,7 @@ public final class DenseFieldMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static <T extends Field<T>> Field<T>[] concurrentStandard(T[] src1, Shape shape1, T[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] concurrentStandard(Field<T>[] src1, Shape shape1, Field<T>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
@@ -270,7 +270,7 @@ public final class DenseFieldMatrixMultiplication {
                     Field<T> sum = dest[destIndex];
 
                     for(int k=0; k<cols1; k++) {
-                        sum = sum.add(src1[src1Index++].mult(src2[src2Index]));
+                        sum = sum.add(src1[src1Index++].mult((T) src2[src2Index]));
                         src2Index += cols2;
                     }
 
@@ -292,7 +292,7 @@ public final class DenseFieldMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static <T extends Field<T>> Field<T>[] concurrentReordered(T[] src1, Shape shape1,T[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] concurrentReordered(Field<T>[] src1, Shape shape1,Field<T>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int rows2 = shape2.get(0);
         int cols2 = shape2.get(1);
@@ -311,7 +311,7 @@ public final class DenseFieldMatrixMultiplication {
                     int end = src2Index + cols2;
 
                     while(src2Index<end) {
-                        dest[destIndex] = dest[destIndex].add(src1[src1IndexStart + k].mult(src2[src2Index++]));
+                        dest[destIndex] = dest[destIndex].add(src1[src1IndexStart + k].mult((T) src2[src2Index++]));
                         destIndex++;
                     }
                 }
@@ -331,7 +331,7 @@ public final class DenseFieldMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static <T extends Field<T>> Field<T>[] concurrentBlocked(T[] src1, Shape shape1,T[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] concurrentBlocked(Field<T>[] src1, Shape shape1,Field<T>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
@@ -363,7 +363,7 @@ public final class DenseFieldMatrixMultiplication {
                                 Field<T> sum = dest[destIndex];
 
                                 while(src1Index < stopIndex) {
-                                    sum = sum.add(src1[src1Index++].mult(src2[src2Index]));
+                                    sum = sum.add(src1[src1Index++].mult((T) src2[src2Index]));
                                     src2Index+=cols2;
                                 }
 
@@ -388,7 +388,7 @@ public final class DenseFieldMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static <T extends Field<T>> Field<T>[] concurrentBlockedReordered(T[] src1, Shape shape1,T[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] concurrentBlockedReordered(Field<T>[] src1, Shape shape1,Field<T>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
@@ -419,7 +419,7 @@ public final class DenseFieldMatrixMultiplication {
                                 int src2Index = k*cols2 + jj;
 
                                 while(destIndex<stopIndex) {
-                                    dest[destIndex] = dest[destIndex].add(src1[src1Index].mult(src2[src2Index]));
+                                    dest[destIndex] = dest[destIndex].add(src1[src1Index].mult((T) src2[src2Index]));
                                     destIndex++;
                                     src2Index++;
                                 }
@@ -442,7 +442,7 @@ public final class DenseFieldMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static <T extends Field<T>> Field<T>[] standardVector(T[] src1, Shape shape1,T[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] standardVector(Field<T>[] src1, Shape shape1,Field<T>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = shape2.get(0);
@@ -457,7 +457,7 @@ public final class DenseFieldMatrixMultiplication {
             Field<T> sum = dest[i];
 
             while(src2Index<rows2) {
-                sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));
+                sum = sum.add(src1[src1Index++].mult((T) src2[src2Index++]));
             }
 
             dest[i] = sum;
@@ -475,7 +475,7 @@ public final class DenseFieldMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static <T extends Field<T>> Field<T>[] blockedVector(T[] src1, Shape shape1,T[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] blockedVector(Field<T>[] src1, Shape shape1,Field<T>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = shape2.get(0);
@@ -500,7 +500,7 @@ public final class DenseFieldMatrixMultiplication {
                     Field<T> sum = dest[i];
 
                     while(src2Index<kBound) {
-                        sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));
+                        sum = sum.add(src1[src1Index++].mult((T) src2[src2Index++]));
                     }
 
                     dest[i] = sum;
@@ -521,7 +521,7 @@ public final class DenseFieldMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static <T extends Field<T>> Field<T>[] concurrentStandardVector(T[] src1, Shape shape1,T[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] concurrentStandardVector(Field<T>[] src1, Shape shape1,Field<T>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = shape2.get(0);
@@ -536,7 +536,7 @@ public final class DenseFieldMatrixMultiplication {
                 Field<T> sum = dest[i];
 
                 while(src2Index<rows2) {
-                    sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));
+                    sum = sum.add(src1[src1Index++].mult((T) src2[src2Index++]));
                 }
 
                 dest[i] = sum;
@@ -556,7 +556,7 @@ public final class DenseFieldMatrixMultiplication {
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
      */
-    public static <T extends Field<T>> Field<T>[] concurrentBlockedVector(T[] src1, Shape shape1,T[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] concurrentBlockedVector(Field<T>[] src1, Shape shape1,Field<T>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = shape2.get(0);
@@ -579,7 +579,7 @@ public final class DenseFieldMatrixMultiplication {
                         Field<T> sum = dest[i];
 
                         while(src2Index<kBound) {
-                            sum = sum.add(src1[src1Index++].mult(src2[src2Index++]));
+                            sum = sum.add(src1[src1Index++].mult((T) src2[src2Index++]));
                         }
 
                         dest[i] = sum;

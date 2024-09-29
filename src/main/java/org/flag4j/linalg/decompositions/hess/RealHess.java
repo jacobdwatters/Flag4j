@@ -27,7 +27,7 @@ package org.flag4j.linalg.decompositions.hess;
 
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.decompositions.unitary.RealUnitaryDecomposition;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 /**
@@ -86,7 +86,7 @@ public class RealHess extends RealUnitaryDecomposition {
      */
     @Override
     public RealHess decompose(Matrix src) {
-        ParameterChecks.ensureSquare(src.shape);
+        ValidateParameters.ensureSquare(src.shape);
         decomposeUnitary(src); // Compute the decomposition.
         return this;
     }

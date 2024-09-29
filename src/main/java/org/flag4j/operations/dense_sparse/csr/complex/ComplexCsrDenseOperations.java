@@ -26,11 +26,12 @@ package org.flag4j.operations.dense_sparse.csr.complex;
 
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
 import java.util.function.BinaryOperator;
@@ -52,7 +53,7 @@ public final class ComplexCsrDenseOperations {
      * @param src1 First matrix in element-wise binary operation.
      * @param src2 Second matrix in element-wise binary operation.
      * @param opp Binary operator to apply element-wise to the two matrices.
-     * @param uOpp Unary operator for use with binary operations_old which are not commutative such as subtraction. If the operation is
+     * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
      * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
      * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
      * {@code opp.apply(x, uOpp.apply(y))}.
@@ -61,9 +62,9 @@ public final class ComplexCsrDenseOperations {
     public static CMatrix applyBinOpp(CsrCMatrix src1, CMatrix src2,
                                       BinaryOperator<Complex128> opp,
                                       UnaryOperator<Complex128> uOpp) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
-        Complex128[] dest;
+        Field<Complex128>[] dest;
         if(uOpp == null) dest = Arrays.copyOf(src2.entries, src2.entries.length);
         else dest = ArrayUtils.applyTransform(src2.entries, uOpp);
 
@@ -75,7 +76,7 @@ public final class ComplexCsrDenseOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-                dest[idx] = opp.apply(src1.entries[j], dest[idx]);
+                dest[idx] = opp.apply((Complex128) src1.entries[j], (Complex128) dest[idx]);
             }
         }
 
@@ -92,12 +93,12 @@ public final class ComplexCsrDenseOperations {
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
     public static CMatrix applyBinOpp(CMatrix src1, CsrCMatrix src2, BinaryOperator<Complex128> opp) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
         // TODO: Subtracting a sparse matrix from a dense matrix does not require a unary operator.
         //  Ensure that no method of this form requires this.
 
-        Complex128[] dest = Arrays.copyOf(src2.entries, src2.entries.length);
+        Field<Complex128>[] dest = Arrays.copyOf(src2.entries, src2.entries.length);
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -107,7 +108,7 @@ public final class ComplexCsrDenseOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src2.colIndices[i];
-                dest[idx] = opp.apply(src1.entries[idx], src2.entries[j]);
+                dest[idx] = opp.apply((Complex128) src1.entries[idx], (Complex128) src2.entries[j]);
             }
         }
 
@@ -120,7 +121,7 @@ public final class ComplexCsrDenseOperations {
      * @param src1 First matrix in element-wise binary operation.
      * @param b Scalar to apply element-wise using the specified operation.
      * @param opp Binary operator to apply element-wise to the two matrices.
-     * @param uOpp Unary operator for use with binary operations_old which are not commutative such as subtraction. If the operation is
+     * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
      * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
      * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
      * {@code opp.apply(x, uOpp.apply(y))}.
@@ -129,7 +130,7 @@ public final class ComplexCsrDenseOperations {
     public static CMatrix applyBinOpp(CsrCMatrix src1, double b,
                                          BinaryOperator<Complex128> opp,
                                          UnaryOperator<Double> uOpp) {
-        Complex128[] dest = new Complex128[src1.totalEntries().intValueExact()];
+        Field<Complex128>[] dest = new Complex128[src1.totalEntries().intValueExact()];
 
         // Apply unary operator if specified.
         if(uOpp != null) ArrayUtils.fill(dest, uOpp.apply(b));
@@ -144,7 +145,7 @@ public final class ComplexCsrDenseOperations {
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src1.colIndices[j];
 
-                dest[idx] = opp.apply(src1.entries[j], dest[idx]);
+                dest[idx] = opp.apply((Complex128) src1.entries[j], (Complex128) dest[idx]);
             }
         }
 
@@ -157,7 +158,7 @@ public final class ComplexCsrDenseOperations {
      * @param src1 First matrix in element-wise binary operation.
      * @param b Scalar to apply element-wise using the specified operation.
      * @param opp Binary operator to apply element-wise to the two matrices.
-     * @param uOpp Unary operator for use with binary operations_old which are not commutative such as subtraction. If the operation is
+     * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
      * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
      * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
      * {@code opp.apply(x, uOpp.apply(y))}.
@@ -166,7 +167,7 @@ public final class ComplexCsrDenseOperations {
     public static CMatrix applyBinOpp(CsrCMatrix src1, Complex128 b,
                                          BinaryOperator<Complex128> opp,
                                          UnaryOperator<Complex128> uOpp) {
-        Complex128[] dest = new Complex128[src1.totalEntries().intValueExact()];
+        Field<Complex128>[] dest = new Complex128[src1.totalEntries().intValueExact()];
 
         // Apply unary operator if specified.
         if(uOpp != null) Arrays.fill(dest, uOpp.apply(b));
@@ -180,7 +181,7 @@ public final class ComplexCsrDenseOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-                dest[idx] = opp.apply(src1.entries[j], dest[idx]);
+                dest[idx] = opp.apply((Complex128) src1.entries[j], (Complex128) dest[idx]);
             }
         }
 
@@ -197,11 +198,11 @@ public final class ComplexCsrDenseOperations {
      * @return The result of applying the operation element-wise to the matrices. Result is a sparse CSR matrix.
      */
     public static CsrCMatrix applyBinOppToSparse(CMatrix src1, CsrCMatrix src2, BinaryOperator<Complex128> opp) {
-        ParameterChecks.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
         int[] rowPointers = src2.rowPointers.clone();
         int[] colIndices = src2.colIndices.clone();
-        Complex128[] entries = new Complex128[src2.entries.length];
+        Field<Complex128>[] entries = new Complex128[src2.entries.length];
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -210,10 +211,43 @@ public final class ComplexCsrDenseOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src2.colIndices[j];
-                entries[idx] = opp.apply(src1.entries[idx], src2.entries[j]);
+                entries[idx] = opp.apply((Complex128) src1.entries[idx], (Complex128) src2.entries[j]);
             }
         }
 
         return new CsrCMatrix(src1.shape, entries, rowPointers, colIndices);
+    }
+
+
+    /**
+     * Computes the element-wise sum of two matrices.
+     * @param a First matrix in sum.
+     * @param b Second matrix in sum.
+     * @return The element-wise sum of {@code a} and {@code b}.
+     */
+    public static CMatrix add(CsrCMatrix a, CMatrix b) {
+        return applyBinOpp(a, b, (Complex128 x, Complex128 y)->x.add(y), null);
+    }
+
+
+    /**
+     * Computes the element-wise difference of two matrices.
+     * @param a First matrix in difference.
+     * @param b Second matrix in difference.
+     * @return The element-wise difference of {@code a} and {@code b}.
+     */
+    public static CMatrix sub(CsrCMatrix a, CMatrix b) {
+        return applyBinOpp(a, b, (Complex128 x, Complex128 y)->x.add(y), (Complex128 x)->x.addInv());
+    }
+
+
+    /**
+     * Computes the element-wise difference of two matrices.
+     * @param a First matrix in difference.
+     * @param b Second matrix in difference.
+     * @return The element-wise difference of {@code a} and {@code b}.
+     */
+    public static CMatrix sub(CMatrix a, CsrCMatrix b) {
+        return applyBinOpp(a, b, (Complex128 x, Complex128 y)->y.sub(x));
     }
 }

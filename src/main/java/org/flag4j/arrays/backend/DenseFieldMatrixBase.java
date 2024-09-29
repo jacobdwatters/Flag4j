@@ -29,10 +29,14 @@ import org.flag4j.algebraic_structures.fields.RealFloat64;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.operations.TransposeDispatcher;
-import org.flag4j.operations.dense.field_ops.*;
+import org.flag4j.operations.common.field_ops.CompareField;
+import org.flag4j.operations.dense.field_ops.DenseFieldDeterminant;
+import org.flag4j.operations.dense.field_ops.DenseFieldMatMultDispatcher;
+import org.flag4j.operations.dense.field_ops.DenseFieldProperties;
+import org.flag4j.operations.dense.field_ops.DenseFieldTensorDot;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.Flag4jConstants;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -51,10 +55,13 @@ import java.util.Arrays;
  * @param <W> The type of the dense vector similar to {@code T}.
  * @param <Y> The type (or wrapper of) an individual element of the matrix.
  */
-public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, V, W, Y>, U extends CooMatrixMixin<U, T, Y>,
-        V extends CsrMatrixMixin<V, T, Y>, W extends DenseFieldVectorBase<W, T, ?, Y>, Y extends Field<Y>>
+public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, V, W, Y>,
+        U extends CooMatrixMixin<U, T, ?, W, Y>,
+        V extends CsrMatrixMixin<V, T, ?, W, Y>,
+        W extends DenseFieldVectorBase<W, T, ?, Y>,
+        Y extends Field<Y>>
         extends FieldTensorBase<T, T, Y>
-        implements DenseMatrixMixin<T, U, V, Y>, MatrixVectorOpsMixin<T, W, W> {
+        implements DenseMatrixMixin<T, U, W, Y> {
 
     /**
      * The number of rows in this matrix.
@@ -81,7 +88,8 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public boolean allClose(T b, double relTol, double absTol) {
-        return DenseFieldEquals.allClose(entries, shape, b.entries, b.shape, relTol, absTol);
+        if(!shape.equals(b.shape)) return false;
+        return CompareField.allClose(entries, b.entries, relTol, absTol);
     }
 
 
@@ -92,10 +100,10 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
      * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-    protected DenseFieldMatrixBase(Shape shape, Y[] entries) {
+    protected DenseFieldMatrixBase(Shape shape, Field<Y>[] entries) {
         super(shape, entries);
-        ParameterChecks.ensureRank(shape, 2);
-        ParameterChecks.ensureEquals(entries.length, shape.totalEntriesIntValueExact());
+        ValidateParameters.ensureRank(shape, 2);
+        ValidateParameters.ensureEquals(entries.length, shape.totalEntriesIntValueExact());
         numRows = shape.get(0);
         numCols = shape.get(1);
     }
@@ -110,7 +118,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * @return A tensor of the same type as this tensor with the given the shape and entries.
      */
     @Override
-    public abstract T makeLikeTensor(Shape shape, Y[] entries);
+    public abstract T makeLikeTensor(Shape shape, Field<Y>[] entries);
 
 
     /**
@@ -129,7 +137,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * @param entries Entries of the vector.
      * @return A vector of similar type to this matrix with the given {@code entries}.
      */
-    public abstract W makeLikeVector(Y... entries);
+    public abstract W makeLikeVector(Field<Y>... entries);
     
 
     /**
@@ -185,7 +193,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T H(int axis1, int axis2) {
-        ParameterChecks.ensureValidIndices(2, axis1, axis2);
+        ValidateParameters.ensureValidIndices(2, axis1, axis2);
         return (T) TransposeDispatcher.dispatchHermitian(this);
     }
 
@@ -255,15 +263,15 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public Y tr() {
-        ParameterChecks.ensureSquareMatrix(this.shape);
-        Y sum = entries[0];
+        ValidateParameters.ensureSquareMatrix(this.shape);
+        Field<Y> sum = entries[0];
         int colsOffset = this.numCols+1;
 
         for(int i=1; i<this.numRows; i++) {
-            sum = sum.add(this.entries[i*colsOffset]);
+            sum = sum.add((Y) this.entries[i*colsOffset]);
         }
 
-        return sum;
+        return (Y) sum;
     }
 
 
@@ -399,7 +407,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
     @Override
     public int matrixRank() {
         // TODO: Implementation.
-        //  (This may not make sense to have implemented here as it requires the SVDOld. May need to implement in
+        //  (This does not make sense to have implemented here as it requires the SVDOld. Need to implement in
         //  the real and complex-valued matrix only and not the general field matrix).
         return 0;
     }
@@ -416,7 +424,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T mult(T b) {
-        return makeLikeTensor(new Shape(numRows, b.numCols), (Y[]) DenseFieldMatMultDispatcher.dispatch(this, b));
+        return makeLikeTensor(new Shape(numRows, b.numCols), DenseFieldMatMultDispatcher.dispatch(this, b));
     }
 
 
@@ -433,7 +441,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T multTranspose(T b) {
-        return makeLikeTensor(new Shape(numRows, b.numCols), (Y[]) DenseFieldMatMultDispatcher.dispatchTranspose(this, b));
+        return makeLikeTensor(new Shape(numRows, b.numCols), DenseFieldMatMultDispatcher.dispatchTranspose(this, b));
     }
 
 
@@ -448,7 +456,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public Y fib(T b) {
-        ParameterChecks.ensureEqualShape(this.shape, b.shape);
+        ValidateParameters.ensureEqualShape(this.shape, b.shape);
         return this.H().mult(b).trace();
     }
 
@@ -477,7 +485,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T T(int axis1, int axis2) {
-        ParameterChecks.ensureValidIndices(2, axis1, axis2);
+        ValidateParameters.ensureValidIndices(2, axis1, axis2);
         if(axis1==axis2) return copy();
 
         return (T) TransposeDispatcher.dispatch(this);
@@ -500,8 +508,8 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T T(int... axes) {
-        ParameterChecks.ensureArrayLengthsEq(2, axes.length);
-        ParameterChecks.ensureValidIndices(2, axes[0], axes[1]);
+        ValidateParameters.ensureArrayLengthsEq(2, axes.length);
+        ValidateParameters.ensureValidIndices(2, axes[0], axes[1]);
 
         return (T) TransposeDispatcher.dispatch(this);
     }
@@ -520,14 +528,14 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T stack(T b) {
-        ParameterChecks.ensureArrayLengthsEq(this.numCols, b.numCols);
+        ValidateParameters.ensureArrayLengthsEq(this.numCols, b.numCols);
         Shape stackedShape = new Shape(this.numRows + b.numRows, this.numCols);
         Field<Y>[] stackedEntries = new Field[stackedShape.totalEntries().intValueExact()];
 
         System.arraycopy(this.entries, 0, stackedEntries, 0, this.entries.length);
         System.arraycopy(b.entries, 0, stackedEntries, this.entries.length, b.entries.length);
 
-        return makeLikeTensor(stackedShape, (Y[]) stackedEntries);
+        return makeLikeTensor(stackedShape, stackedEntries);
     }
 
 
@@ -539,12 +547,12 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * @return The result of stacking {@code b} to the right of this matrix.
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of rows.
-     * @see #stack(FieldMatrix)
-     * @see #stack(TensorBase, int)
+     * @see #stack(DenseFieldMatrixBase) 
+     * @see #stack(MatrixMixin, int)
      */
     @Override
     public T augment(T b) {
-        ParameterChecks.ensureArrayLengthsEq(numRows, b.numRows);
+        ValidateParameters.ensureArrayLengthsEq(numRows, b.numRows);
 
         int augNumCols = numCols + b.numCols;
         Shape augShape = new Shape(numRows, augNumCols);
@@ -553,19 +561,37 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
         // Copy entries from this matrix.
         for(int i=0; i<numRows; i++) {
             System.arraycopy(entries, i*numCols, augEntries, i*augNumCols, numCols);
-        }
 
-        // Copy entries from the B matrix.
-        for(int i=0; i<b.numRows; i++) {
             int augOffset = i*augNumCols + numCols;
             int bOffset = i*b.numCols;
-
             for(int j=0; j<b.numCols; j++) {
                 augEntries[augOffset + j] = b.entries[bOffset + j];
             }
         }
 
-        return makeLikeTensor(augShape, (Y[]) augEntries);
+        return makeLikeTensor(augShape, augEntries);
+    }
+
+
+    /**
+     * Augments a vector to this matrix.
+     *
+     * @param b The vector to augment to this matrix.
+     *
+     * @return The result of augmenting {@code b} to this matrix.
+     */
+    @Override
+    public T augment(W b) {
+        ValidateParameters.ensureArrayLengthsEq(numRows, b.size);
+        Field<Y>[] augmented = new Field[numRows*(numCols + 1)];
+
+        // Copy entries from this matrix.
+        for(int i=0; i<numRows; i++) {
+            System.arraycopy(entries, i*numCols, augmented, i*(numCols+1), numCols);
+            augmented[i*(numCols+1) + numCols] = b.entries[i];
+        }
+
+        return makeLikeTensor(new Shape(numRows, numCols+1), augmented);
     }
 
 
@@ -581,13 +607,13 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T swapRows(int rowIndex1, int rowIndex2) {
-        ParameterChecks.ensureValidIndices(numRows, rowIndex1, rowIndex2);
+        ValidateParameters.ensureValidIndices(numRows, rowIndex1, rowIndex2);
 
         int row1Offset = rowIndex1*numCols;
         int row2Offset = rowIndex2*numCols;
 
         if(rowIndex1 != rowIndex2) {
-            Y temp;
+            Field<Y> temp;
 
             for(int j=0; j<numCols; j++) {
                 // Swap elements.
@@ -613,16 +639,15 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T swapCols(int colIndex1, int colIndex2) {
-        ParameterChecks.ensureValidIndices(numCols, colIndex1, colIndex2);
+        ValidateParameters.ensureValidIndices(numCols, colIndex1, colIndex2);
 
         if(colIndex1 != colIndex2) {
-            Y temp;
+            Field<Y> temp;
 
             for(int i=0; i<numRows; i++) {
                 // Swap elements.
-                temp = entries[i*numCols + colIndex1];
-                entries[i*numCols + colIndex1] = entries[i*numCols + colIndex2];
-                entries[i*numCols + colIndex2] = temp;
+                int idx = i*numCols;
+                ArrayUtils.swap(entries, idx + colIndex1, idx + colIndex2);
             }
         }
 
@@ -708,7 +733,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
             }
         }
 
-        return makeLikeTensor(shape, (Y[]) copyEntries);
+        return makeLikeTensor(new Shape(numRows-1, numCols), copyEntries);
     }
 
 
@@ -733,7 +758,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
             }
         }
 
-        return makeLikeTensor(shape, (Y[]) copyEntries);
+        return makeLikeTensor(new Shape(numRows-rowIndices.length, numCols), copyEntries);
     }
 
 
@@ -765,7 +790,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
             }
         }
 
-        return makeLikeTensor(shape, (Y[]) copyEntries);
+        return makeLikeTensor(new Shape(numRows, numCols-1), copyEntries);
     }
 
 
@@ -797,41 +822,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
             }
         }
 
-        return makeLikeTensor(shape, (Y[]) copyEntries);
-    }
-
-
-    /**
-     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
-     * left index location of the slice to set.
-     *
-     * @param values New values for the specified slice.
-     * @param rowStart Starting row index for the slice (inclusive).
-     * @param colStart Starting column index for the slice (inclusive).
-     *
-     * @return A copy of this matrix with the given slice set to the specified values.
-     *
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
-     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
-     *                                   fit completely within this matrix.
-     */
-    @Override
-    public T setSliceCopy(T values, int rowStart, int colStart) {
-        ParameterChecks.ensureValidIndices(numRows, rowStart);
-        ParameterChecks.ensureValidIndices(numCols, colStart);
-
-        T copy = copy();
-
-        for(int i=0; i<values.numRows; i++) {
-            int copyOffset = (i+rowStart)*numCols + colStart;
-            int valuesRowOffset = i*values.numCols;
-
-            for(int j=0; j<values.numCols; j++) {
-                copy.entries[copyOffset + j] = values.entries[valuesRowOffset + j];
-            }
-        }
-
-        return copy;
+        return makeLikeTensor(new Shape(numRows, numCols-colIndices.length), copyEntries);
     }
 
 
@@ -851,8 +842,8 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T setSlice(T values, int rowStart, int colStart) {
-        ParameterChecks.ensureValidIndices(numRows, rowStart);
-        ParameterChecks.ensureValidIndices(numCols, colStart);
+        ValidateParameters.ensureValidIndices(numRows, rowStart);
+        ValidateParameters.ensureValidIndices(numCols, colStart);
 
         for(int i=0; i<values.numRows; i++) {
             int src1Offset = (i+rowStart)*numCols + colStart;
@@ -864,6 +855,26 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
         }
 
         return (T) this;
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     *
+     * @return A copy of this matrix with the given slice set to the specified values.
+     *
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public T setSliceCopy(T values, int rowStart, int colStart) {
+        return copy().setSlice(values, rowStart, colStart);
     }
 
 
@@ -882,8 +893,8 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
-        ParameterChecks.ensureValidIndices(numRows, rowStart, rowEnd);
-        ParameterChecks.ensureValidIndices(numCols, colStart, colEnd);
+        ValidateParameters.ensureValidIndices(numRows, rowStart, rowEnd);
+        ValidateParameters.ensureValidIndices(numCols, colStart, colEnd);
 
         int sliceRows = rowEnd-rowStart;
         int sliceCols = colEnd-colStart;
@@ -901,7 +912,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
             }
         }
 
-        return makeLikeTensor(new Shape(sliceRows, sliceCols), (Y[]) slice);
+        return makeLikeTensor(new Shape(sliceRows, sliceCols), slice);
     }
 
 
@@ -916,7 +927,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T set(Y value, int row, int col) {
-        this.entries[row*numCols + col] = value;
+        entries[row*numCols + col] = value;
         return (T) this;
     }
 
@@ -932,8 +943,8 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T setValues(Y[][] values) {
-        ParameterChecks.ensureEquals(numRows, values.length);
-        ParameterChecks.ensureEquals(numCols, values[0].length);
+        ValidateParameters.ensureEquals(numRows, values.length);
+        ValidateParameters.ensureEquals(numCols, values[0].length);
 
         for(int i=0; i<numRows; i++) {
             int rowOffset = i*numCols;
@@ -965,7 +976,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T getTriU(int diagOffset) {
-        ParameterChecks.ensureInRange(diagOffset, -numRows+1, numCols-1, "diagOffset");
+        ValidateParameters.ensureInRange(diagOffset, -numRows+1, numCols-1, "diagOffset");
         T result = makeLikeTensor(shape, entries[0].getZero());
 
         // Extract the upper triangular portion
@@ -1001,7 +1012,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T getTriL(int diagOffset) {
-        ParameterChecks.ensureInRange(diagOffset, -numRows+1, numCols-1, "diagOffset");
+        ValidateParameters.ensureInRange(diagOffset, -numRows+1, numCols-1, "diagOffset");
         T result = makeLikeTensor(shape, entries[0].getZero());
 
         // Extract the lower triangular portion
@@ -1045,10 +1056,10 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public void elemMultEq(T b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
 
         for(int i=0, size=entries.length; i<size; i++)
-            entries[i]  = entries[i].mult(b.entries[i]);
+            entries[i]  = entries[i].mult((Y) b.entries[i]);
     }
 
 
@@ -1061,10 +1072,10 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public void addEq(T b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
 
         for(int i=0, size=entries.length; i<size; i++)
-            entries[i] = entries[i].add(b.entries[i]);
+            entries[i] = entries[i].add((Y) b.entries[i]);
     }
 
 
@@ -1077,10 +1088,10 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public void subEq(T b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
 
         for(int i=0, size=entries.length; i<size; i++)
-            entries[i] = entries[i].sub(b.entries[i]);
+            entries[i] = entries[i].sub((Y) b.entries[i]);
     }
 
 
@@ -1093,10 +1104,10 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public void divEq(T b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
 
         for(int i=0, size=entries.length; i<size; i++)
-            entries[i] = entries[i].div(b.entries[i]);
+            entries[i] = entries[i].div((Y) b.entries[i]);
     }
 
 
@@ -1111,13 +1122,13 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T div(T b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
         Field<Y>[] quotient = new Field[entries.length];
 
         for(int i=0, size=entries.length; i<size; i++)
-            quotient[i] = entries[i].div(b.entries[i]);
+            quotient[i] = entries[i].div((Y) b.entries[i]);
 
-        return makeLikeTensor(shape, (Y[]) quotient);
+        return makeLikeTensor(shape, quotient);
     }
 
 
@@ -1134,7 +1145,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
     @Override
     public W mult(W b) {
         Field<Y>[] dest = DenseFieldMatMultDispatcher.dispatch(this, b);
-        return makeLikeVector((Y[]) dest);
+        return makeLikeVector(dest);
     }
 
 
@@ -1162,7 +1173,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public W getRow(int rowIdx) {
-        ParameterChecks.ensureIndexInBounds(numRows, rowIdx);
+        ValidateParameters.ensureIndexInBounds(numRows, rowIdx);
         int start = rowIdx*numCols;
         int stop = start+numCols;
 
@@ -1185,8 +1196,8 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public W getRow(int rowIdx, int colStart, int colEnd) {
-        ParameterChecks.ensureIndexInBounds(numCols, colStart, colEnd);
-        ParameterChecks.ensureGreaterEq(colStart, colEnd);
+        ValidateParameters.ensureIndexInBounds(numCols, colStart, colEnd);
+        ValidateParameters.ensureGreaterEq(colStart, colEnd);
         int start = rowIdx*numCols+colStart;
         int stop = start+colEnd;
 
@@ -1206,13 +1217,13 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public W getCol(int colIdx) {
-        ParameterChecks.ensureValidIndices(numCols, colIdx);
+        ValidateParameters.ensureValidIndices(numCols, colIdx);
         Field<Y>[] col = new Field[numRows];
 
         for(int i=0; i<numRows; i++)
             col[i] = entries[i*numCols + colIdx];
 
-        return makeLikeVector((Y[]) col);
+        return makeLikeVector(col);
     }
 
 
@@ -1232,14 +1243,14 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public W getCol(int colIdx, int rowStart, int rowEnd) {
-        ParameterChecks.ensureValidIndices(numRows, rowStart, rowEnd);
-        ParameterChecks.ensureGreaterEq(rowEnd, rowStart);
+        ValidateParameters.ensureValidIndices(numRows, rowStart, rowEnd);
+        ValidateParameters.ensureGreaterEq(rowEnd, rowStart);
         Field<Y>[] col = new Field[numRows];
 
         for(int i=rowStart; i<rowEnd; i++)
             col[i] = entries[i*numCols + colIdx];
 
-        return makeLikeVector((Y[]) col);
+        return makeLikeVector(col);
     }
 
 
@@ -1259,7 +1270,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
             idx += numCols + 1;
         }
 
-        return makeLikeVector((Y[]) diag);
+        return makeLikeVector(diag);
     }
 
 
@@ -1275,7 +1286,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T setCol(W values, int colIndex) {
-        ParameterChecks.ensureArrayLengthsEq(values.size, this.numRows);
+        ValidateParameters.ensureArrayLengthsEq(values.size, this.numRows);
 
         int rowOffset = 0;
         for(int i=0; i<values.size; i++) {
@@ -1299,7 +1310,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T setRow(W values, int rowIndex) {
-        ParameterChecks.ensureArrayLengthsEq(values.size, this.numCols);
+        ValidateParameters.ensureArrayLengthsEq(values.size, this.numCols);
         int rowOffset = rowIndex*numCols;
 
         for(int i=0; i<values.size; i++)
@@ -1329,4 +1340,63 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * @return A CSR matrix equivalent to this matrix.
      */
     public abstract V toCsr();
+
+
+    /**
+     * Sets the element of this tensor at the specified indices.
+     *
+     * @param value New value to set the specified index of this tensor to.
+     * @param indices Indices of the element to set.
+     *
+     * @return If this tensor is dense, a reference to this tensor is returned. If this tensor is sparse, a copy of this tensor with
+     * the updated value is returned.
+     *
+     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
+     */
+    @Override
+    public T set(Y value, int... indices) {
+        ValidateParameters.ensureValidIndex(shape, indices);
+        entries[indices[0]*numCols + indices[1]] = value;
+        return (T) this;
+    }
+
+
+    /**
+     * Sets column {@code colIdx} to the specified {@code values}.
+     * @param values New values of the column to be set.
+     * @param colIdx Index of the column to set.
+     * @return A reference to this tensor.
+     * @throws IndexOutOfBoundsException If {@code values.length != this.numRows}.
+     */
+    public T setCol(Field<Y>[] values, int colIdx) {
+        ValidateParameters.ensureArrayLengthsEq(values.length, this.numRows);
+
+        int rowOffset = 0;
+        for(int i=0, size=values.length; i<size; i++) {
+            entries[rowOffset + colIdx] = values[i];
+            rowOffset += numCols;
+        }
+
+        return (T) this;
+    }
+
+
+    /**
+     * Sets row {@code rowIdx} to the specified {@code values}.
+     * @param values New values of the column to be set.
+     * @param rowIdx Index of the row to set.
+     * @return A reference to this tensor.
+     * @throws IndexOutOfBoundsException If {@code values.length != this.numCols}.
+     */
+    public T setRow(Field<Y>[] values, int rowIdx) {
+        ValidateParameters.ensureArrayLengthsEq(values.length, this.numRows);
+
+        int rowOffset = 0;
+        for(int i=0, size=values.length; i<size; i++) {
+            entries[rowOffset + rowIdx] = values[i];
+            rowOffset += numCols;
+        }
+
+        return (T) this;
+    }
 }

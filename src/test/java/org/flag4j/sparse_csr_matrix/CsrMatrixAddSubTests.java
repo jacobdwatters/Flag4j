@@ -1,11 +1,14 @@
 package org.flag4j.sparse_csr_matrix;
 
-import org.flag4j.arrays_old.dense.CMatrixOld;
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.sparse.CsrCMatrixOld;
-import org.flag4j.arrays_old.sparse.CsrMatrixOld;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.operations.dense_sparse.csr.real.RealCsrDenseOperations;
+import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
+import org.flag4j.operations.sparse.csr.real_complex.RealComplexCsrOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -15,32 +18,32 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CsrMatrixAddSubTests {
 
-    static CsrMatrixOld A;
-    static CsrMatrixOld B;
-    static MatrixOld denseA;
-    static MatrixOld denseB;
-    static CsrMatrixOld expAdd;
-    static CsrMatrixOld expAsubB;
-    static CsrMatrixOld expBsubA;
-    static MatrixOld expAddDense;
-    static MatrixOld expAsubBDense;
-    static MatrixOld expBsubADense;
+    static CsrMatrix A;
+    static CsrMatrix B;
+    static Matrix denseA;
+    static Matrix denseB;
+    static CsrMatrix expAdd;
+    static CsrMatrix expAsubB;
+    static CsrMatrix expBsubA;
+    static Matrix expAddDense;
+    static Matrix expAsubBDense;
+    static Matrix expBsubADense;
     static double[][] aEntries;
     static double[][] bEntries;
 
-    static CNumber[][] bCmpEntries;
-    static CsrCMatrixOld BCmp;
-    static CsrCMatrixOld expAddCmp;
-    static CsrCMatrixOld expAsubBCmp;
-    static CMatrixOld expAddDenseCmp;
-    static CMatrixOld expAsubBDenseCmp;
-    static CMatrixOld denseBCmp;
+    static Complex128[][] bCmpEntries;
+    static CsrCMatrix BCmp;
+    static CsrCMatrix expAddCmp;
+    static CsrCMatrix expAsubBCmp;
+    static CMatrix expAddDenseCmp;
+    static CMatrix expAsubBDenseCmp;
+    static CMatrix denseBCmp;
     static double b;
-    static CNumber bCmp;
+    static Complex128 bCmp;
 
     private static void makeRealMatrices() {
-        denseA = new MatrixOld(aEntries);
-        denseB = new MatrixOld(bEntries);
+        denseA = new Matrix(aEntries);
+        denseB = new Matrix(bEntries);
         A = denseA.toCsr();
         B = denseB.toCsr();
         expAddDense = denseA.add(denseB);
@@ -52,15 +55,15 @@ class CsrMatrixAddSubTests {
     }
 
     private static void makeRealConstMatrices() {
-        denseA = new MatrixOld(aEntries);
+        denseA = new Matrix(aEntries);
         A = denseA.toCsr();
         expAddDense = denseA.add(b);
         expAsubBDense = denseA.sub(b);
     }
 
     private static void makeCmpMatrices() {
-        denseA = new MatrixOld(aEntries);
-        denseBCmp = new CMatrixOld(bCmpEntries);
+        denseA = new Matrix(aEntries);
+        denseBCmp = new CMatrix(bCmpEntries);
         A = denseA.toCsr();
         BCmp = denseBCmp.toCsr();
         expAddDenseCmp = denseA.add(denseBCmp);
@@ -70,7 +73,7 @@ class CsrMatrixAddSubTests {
     }
 
     private static void makeCmpConstMatrices() {
-        denseA = new MatrixOld(aEntries);
+        denseA = new Matrix(aEntries);
         A = denseA.toCsr();
         expAddDenseCmp = denseA.add(bCmp);
         expAsubBDenseCmp = denseA.sub(bCmp);
@@ -98,22 +101,13 @@ class CsrMatrixAddSubTests {
         assertEquals(expAsubB, A.sub(B));
         assertEquals(expBsubA, B.sub(A));
 
-        assertEquals(expAdd, A.add(B.toCoo()));
-        assertEquals(expAsubB, A.sub(B.toCoo()));
-        assertEquals(expBsubA, B.sub(A.toCoo()));
-
         // ---------------------- Sub-case 2 ----------------------
-        A = new CsrMatrixOld(new Shape(2, 3), new double[0], new int[3], new int[0]);
-        B = new CsrMatrixOld(new Shape(5, 1), new double[0], new int[6], new int[0]);
+        A = new CsrMatrix(new Shape(2, 3), new double[0], new int[3], new int[0]);
+        B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
         assertThrows(LinearAlgebraException.class, ()->A.add(B));
         assertThrows(LinearAlgebraException.class, ()->A.sub(B));
         assertThrows(LinearAlgebraException.class, ()->B.add(A));
         assertThrows(LinearAlgebraException.class, ()->B.sub(A));
-
-        assertThrows(LinearAlgebraException.class, ()->A.add(B.toCoo()));
-        assertThrows(LinearAlgebraException.class, ()->A.sub(B.toCoo()));
-        assertThrows(LinearAlgebraException.class, ()->B.add(A.toCoo()));
-        assertThrows(LinearAlgebraException.class, ()->B.sub(A.toCoo()));
     }
 
 
@@ -134,13 +128,13 @@ class CsrMatrixAddSubTests {
                 {1.345, 983.3, 0, -9.234, 4.52, 0},
         };
         makeRealMatrices();
-        assertEquals(expAddDense, A.add(denseB));
-        assertEquals(expAsubBDense, A.sub(denseB));
-        assertEquals(expBsubADense, B.sub(denseA));
+        assertEquals(expAddDense, RealCsrDenseOperations.add(A, denseB));
+        assertEquals(expAsubBDense, RealCsrDenseOperations.sub(A, denseB));
+        assertEquals(expBsubADense, RealCsrDenseOperations.sub(B, denseA));
 
         // ---------------------- Sub-case 2 ----------------------
-        A = new CsrMatrixOld(new Shape(2, 3), new double[0], new int[3], new int[0]);
-        B = new CsrMatrixOld(new Shape(5, 1), new double[0], new int[6], new int[0]);
+        A = new CsrMatrix(new Shape(2, 3), new double[0], new int[3], new int[0]);
+        B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
         assertThrows(LinearAlgebraException.class, ()->A.add(B));
         assertThrows(LinearAlgebraException.class, ()->A.sub(B));
         assertThrows(LinearAlgebraException.class, ()->B.add(A));
@@ -157,27 +151,24 @@ class CsrMatrixAddSubTests {
                 {0, 0, 0, -23.5, 0, 0},
                 {0, 14.1, 0, 0, 0, 0},
                 {0, 0, 0, 9.143, 1.4, -2.1}};
-        bCmpEntries = new CNumber[aEntries.length][aEntries[0].length];
-        ArrayUtils.fill(bCmpEntries, CNumber.ZERO);
-        bCmpEntries[0][0] = new CNumber(23, 1.34);
-        bCmpEntries[1][0] = new CNumber(0.133, -41.4);
-        bCmpEntries[1][3] = new CNumber(-4.1, -34.1);
-        bCmpEntries[3][1] = new CNumber(922.1);
-        bCmpEntries[3][5] = new CNumber(34.5, 135);
-        bCmpEntries[4][4] = new CNumber(23.501, 100.23);
+        bCmpEntries = new Complex128[aEntries.length][aEntries[0].length];
+        ArrayUtils.fill(bCmpEntries, Complex128.ZERO);
+        bCmpEntries[0][0] = new Complex128(23, 1.34);
+        bCmpEntries[1][0] = new Complex128(0.133, -41.4);
+        bCmpEntries[1][3] = new Complex128(-4.1, -34.1);
+        bCmpEntries[3][1] = new Complex128(922.1);
+        bCmpEntries[3][5] = new Complex128(34.5, 135);
+        bCmpEntries[4][4] = new Complex128(23.501, 100.23);
         makeCmpMatrices();
-        assertEquals(expAddCmp, A.add(BCmp));
-        assertEquals(expAsubBCmp, A.sub(BCmp));
-        assertEquals(expAddCmp, A.add(BCmp.toCoo()));
-        assertEquals(expAsubBCmp, A.sub(BCmp.toCoo()));
+        assertEquals(expAddCmp, RealComplexCsrOperations.add(BCmp, A));
+        assertEquals(expAsubBCmp, RealComplexCsrOperations.sub(A, BCmp));
 
         // ---------------------- Sub-case 2 ----------------------
-        A = new CsrMatrixOld(new Shape(2, 3), new double[0], new int[3], new int[0]);
-        B = new CsrMatrixOld(new Shape(5, 1), new double[0], new int[6], new int[0]);
-        assertThrows(LinearAlgebraException.class, ()->A.add(BCmp));
-        assertThrows(LinearAlgebraException.class, ()->A.sub(BCmp));
-        assertThrows(LinearAlgebraException.class, ()->A.add(BCmp.toCoo()));
-        assertThrows(LinearAlgebraException.class, ()->A.sub(BCmp.toCoo()));
+        A = new CsrMatrix(new Shape(2, 3), new double[0], new int[3], new int[0]);
+        B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
+        assertThrows(LinearAlgebraException.class, ()->RealComplexCsrOperations.add(BCmp, A));
+
+        assertThrows(LinearAlgebraException.class, ()->RealComplexCsrOperations.sub(A, BCmp));
     }
 
 
@@ -190,23 +181,23 @@ class CsrMatrixAddSubTests {
                 {0, 0, 0, -23.5, 0, 0},
                 {0, 14.1, 0, 0, 0, 0},
                 {0, 0, 0, 9.143, 1.4, -2.1}};
-        bCmpEntries = new CNumber[aEntries.length][aEntries[0].length];
-        ArrayUtils.fill(bCmpEntries, CNumber.ZERO);
-        bCmpEntries[0][0] = new CNumber(23, 1.34);
-        bCmpEntries[1][0] = new CNumber(0.133, -41.4);
-        bCmpEntries[1][3] = new CNumber(-4.1, -34.1);
-        bCmpEntries[3][1] = new CNumber(922.1);
-        bCmpEntries[3][5] = new CNumber(34.5, 135);
-        bCmpEntries[4][4] = new CNumber(23.501, 100.23);
+        bCmpEntries = new Complex128[aEntries.length][aEntries[0].length];
+        ArrayUtils.fill(bCmpEntries, Complex128.ZERO);
+        bCmpEntries[0][0] = new Complex128(23, 1.34);
+        bCmpEntries[1][0] = new Complex128(0.133, -41.4);
+        bCmpEntries[1][3] = new Complex128(-4.1, -34.1);
+        bCmpEntries[3][1] = new Complex128(922.1);
+        bCmpEntries[3][5] = new Complex128(34.5, 135);
+        bCmpEntries[4][4] = new Complex128(23.501, 100.23);
         makeCmpMatrices();
-        assertEquals(expAddDenseCmp, A.add(denseBCmp));
-        assertEquals(expAsubBDenseCmp, A.sub(denseBCmp));
+        assertEquals(expAddDenseCmp, RealComplexCsrDenseOperations.add(A, denseBCmp));
+        assertEquals(expAsubBDenseCmp, RealComplexCsrDenseOperations.sub(A, denseBCmp));
 
         // ---------------------- Sub-case 2 ----------------------
-        A = new CsrMatrixOld(new Shape(2, 3), new double[0], new int[3], new int[0]);
-        B = new CsrMatrixOld(new Shape(5, 1), new double[0], new int[6], new int[0]);
-        assertThrows(LinearAlgebraException.class, ()->A.add(denseBCmp));
-        assertThrows(LinearAlgebraException.class, ()->A.sub(denseBCmp));
+        A = new CsrMatrix(new Shape(2, 3), new double[0], new int[3], new int[0]);
+        B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
+        assertThrows(LinearAlgebraException.class, ()->RealComplexCsrDenseOperations.add(A, denseBCmp));
+        assertThrows(LinearAlgebraException.class, ()->RealComplexCsrDenseOperations.sub(A, denseBCmp));
     }
 
 
@@ -249,10 +240,10 @@ class CsrMatrixAddSubTests {
                 {0, 0, 0, -23.5, 0, 0},
                 {0, 14.1, 0, 0, 0, 0},
                 {0, 0, 0, 9.143, 1.4, -2.1}};
-        bCmp = new CNumber(-0.234, 155.2);
+        bCmp = new Complex128(-0.234, 155.2);
         makeCmpConstMatrices();
 
-        assertEquals(expAddDenseCmp, A.add(bCmp));
+        assertEquals(expAddDenseCmp.toCsr(), A.add(bCmp));
         assertEquals(expAsubBDenseCmp, A.sub(bCmp));
 
         // ---------------------- Sub-case 2 ----------------------
@@ -262,7 +253,7 @@ class CsrMatrixAddSubTests {
                 {0, 0, 0, -23.5, 0, 0},
                 {0, 14.1, 0, 0, 0, 0},
                 {0, 0, 0, 9.143, 1.4, -2.1}};
-        bCmp = new CNumber(-92.14, -7884.7761);
+        bCmp = new Complex128(-92.14, -7884.7761);
         makeCmpConstMatrices();
 
         assertEquals(expAddDenseCmp, A.add(bCmp));

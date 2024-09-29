@@ -31,7 +31,7 @@ import org.flag4j.arrays.backend.CsrFieldMatrixBase;
 import org.flag4j.arrays.backend.DenseFieldMatrixBase;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 /**
  * This utility class provides implementations for tensor dot products on two sparse CSR
@@ -59,16 +59,16 @@ public final class CsrFieldMatrixTensorDot {
      * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
      * are out of bounds for the corresponding tensor.
      */
-    public static <T extends CsrFieldMatrixBase<?, ?, ?, U>, U extends Field<U>> DenseFieldMatrixBase<?, ?, ?, ?, U>
+    public static <T extends CsrFieldMatrixBase<?, ?, ?, ?, U>, U extends Field<U>> DenseFieldMatrixBase<?, ?, ?, ?, U>
     tensorDot(T src1, T src2, int[] src1Axes, int[] src2Axes) {
         // Each array must specify the same number of axes.
-        ParameterChecks.ensureEquals(src1Axes.length, src2Axes.length);
+        ValidateParameters.ensureEquals(src1Axes.length, src2Axes.length);
 
         // Axis values must be less than the rank of the tensor and non-negative
-        ParameterChecks.ensureLessEq(src1.getRank()-1, src1Axes);
-        ParameterChecks.ensureGreaterEq(0, src1Axes);
-        ParameterChecks.ensureLessEq(src2.getRank()-1, src2Axes);
-        ParameterChecks.ensureGreaterEq(0, src2Axes);
+        ValidateParameters.ensureLessEq(src1.getRank()-1, src1Axes);
+        ValidateParameters.ensureGreaterEq(0, src1Axes);
+        ValidateParameters.ensureLessEq(src2.getRank()-1, src2Axes);
+        ValidateParameters.ensureGreaterEq(0, src2Axes);
 
         int[] notin;
         int n1;
@@ -85,12 +85,12 @@ public final class CsrFieldMatrixTensorDot {
         }
 
         n1 = 1;
-        int[] src1OldDims = new int[notin.length];
+        int[] src1Dims = new int[notin.length];
         pos = 0;
         for(int axis : notin) {
             int a = src1.shape.get(axis);
             n1 *= a;
-            src1OldDims[pos++] = a;
+            src1Dims[pos++] = a;
         }
 
         Shape src1NewShape = new Shape(n1, n2);
@@ -107,11 +107,11 @@ public final class CsrFieldMatrixTensorDot {
 
         n1 = 1;
         pos = 0;
-        int[] src2OldDims = new int[notin.length];
+        int[] src2Dims = new int[notin.length];
         for(int axis : notin) {
             int a = src2.shape.get(axis);
             n1 *= a;
-            src2OldDims[pos++] = a;
+            src2Dims[pos++] = a;
         }
 
         Shape src2NewShape = new Shape(n2, n1);
@@ -122,7 +122,7 @@ public final class CsrFieldMatrixTensorDot {
         CsrFieldMatrixBase bt = src2.T(src2NewAxes).reshape(src2NewShape);
         DenseFieldMatrixBase prod = at.mult(bt);
 
-        Shape destShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));
+        Shape destShape = new Shape(ArrayUtils.join(src1Dims, src2Dims));
 
         if(destShape.getRank() == 0) {
             destShape = new Shape(1, 1);

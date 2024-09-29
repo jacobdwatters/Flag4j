@@ -1,18 +1,18 @@
 package org.flag4j.sparse_csr_matrix;
 
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.dense.VectorOld;
-import org.flag4j.arrays_old.sparse.CooVectorOld;
-import org.flag4j.arrays_old.sparse.CsrMatrixOld;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays.sparse.CsrMatrix;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CsrMatrixToVectorTests {
-    CsrMatrixOld A;
+    CsrMatrix A;
     double[][] aEntries;
 
-    CooVectorOld exp;
+    CooVector exp;
     double[] expEntries;
 
     @Test
@@ -21,11 +21,11 @@ class CsrMatrixToVectorTests {
         aEntries = new double[][]{{-9.2512, 0, 0,
                 0, 0, 2.2516,
                 0, 0, 6.2}};
-        A = new MatrixOld(aEntries).toCsr();
+        A = new Matrix(aEntries).toCsr();
         expEntries = new double[]{-9.2512, 0, 0,
                 0, 0, 2.2516,
                 0, 0, 6.2};
-        exp = new VectorOld(expEntries).toCoo();
+        exp = new Vector(expEntries).toCoo();
 
         assertEquals(exp, A.toVector());
 
@@ -33,11 +33,11 @@ class CsrMatrixToVectorTests {
         aEntries = new double[][]{{-9.2512}, {0}, {0},
                 {0}, {0}, {2.2516},
                 {0}, {0}, {6.2}};
-        A = new MatrixOld(aEntries).toCsr();
+        A = new Matrix(aEntries).toCsr();
         expEntries = new double[]{-9.2512, 0, 0,
                 0, 0, 2.2516,
                 0, 0, 6.2};
-        exp = new VectorOld(expEntries).toCoo();
+        exp = new Vector(expEntries).toCoo();
 
         assertEquals(exp, A.toVector());
 
@@ -48,11 +48,11 @@ class CsrMatrixToVectorTests {
                 {0, 2.2516},
                 {0, 0},
                 {6.2, 0}};
-        A = new MatrixOld(aEntries).toCsr();
+        A = new Matrix(aEntries).toCsr();
         expEntries = new double[]{-9.2512, 0, 0,
                 0, 0, 2.2516,
                 0, 0, 6.2, 0};
-        exp = new VectorOld(expEntries).toCoo();
+        exp = new Vector(expEntries).toCoo();
 
         assertEquals(exp, A.toVector());
     }

@@ -25,10 +25,10 @@
 package org.flag4j.operations.dense.real;
 
 
-import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.arrays.Shape;
+import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 /**
  * This class contains low level implementations of element-wise multiplications algorithms for real dense tensors.
@@ -56,7 +56,7 @@ public class RealDenseElemMult {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static double[] elemMult(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.ensureEqualShape(shape1, shape2);
+        ValidateParameters.ensureEqualShape(shape1, shape2);
         double[] product = new double[src1.length];
 
         for(int i=0; i<product.length; i++) {
@@ -77,7 +77,7 @@ public class RealDenseElemMult {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static double[] elemMultConcurrent(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.ensureEqualShape(shape1, shape2);
+        ValidateParameters.ensureEqualShape(shape1, shape2);
         double[] product = new double[src1.length];
 
         ThreadManager.concurrentOperation(product.length, (startIdx, endIdx) -> {

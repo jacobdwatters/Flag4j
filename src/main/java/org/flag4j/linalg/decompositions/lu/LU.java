@@ -16,7 +16,7 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
@@ -44,7 +44,7 @@ import org.flag4j.util.ArrayUtils;
  *
  * @param <T> Type of the matrix to decompose.
  */
-public abstract class LU<T extends MatrixMixin<T, ?, ?>> implements Decomposition<T> {
+public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?>> implements Decomposition<T> {
 
     /**
      * Flag indicating what pivoting to use.
@@ -196,11 +196,9 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?>> implements Decompositio
      * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
      */
     public PermutationMatrix getQ() {
-        if(colSwaps != null) {
-            Q = new PermutationMatrix(colSwaps.clone()).inv(); // Invert to ensure matrix represents column swaps.
-        } else {
-            Q = null;
-        }
+        // Invert to ensure matrix represents column swaps.
+        if(colSwaps != null) Q = new PermutationMatrix(colSwaps.clone()).inv();
+        else Q = null;
 
         return Q;
     }
@@ -252,7 +250,6 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?>> implements Decompositio
 
         LU.swapCols(colIdx1, colIdx2);
     }
-
 
 
     /**

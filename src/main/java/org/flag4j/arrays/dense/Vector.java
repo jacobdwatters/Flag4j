@@ -31,7 +31,7 @@ import org.flag4j.arrays.backend.DenseVectorMixin;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.operations.common.complex.ComplexOperations;
+import org.flag4j.operations.common.complex.Complex128Operations;
 import org.flag4j.operations.dense.real.RealDenseTensorDot;
 import org.flag4j.operations.dense.real.RealDenseVectorOperations;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
@@ -40,7 +40,7 @@ import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -74,7 +74,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      */
     public Vector(Shape shape, double[] entries) {
         super(shape, entries);
-        ParameterChecks.ensureRank(shape, 1);
+        ValidateParameters.ensureRank(shape, 1);
         size = shape.get(0);
     }
 
@@ -108,7 +108,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      */
     public Vector(Shape shape) {
         super(shape, new double[shape.get(0)]);
-        ParameterChecks.ensureRank(shape, 1);
+        ValidateParameters.ensureRank(shape, 1);
         this.size = shape.get(0);
     }
 
@@ -121,7 +121,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      */
     public Vector(Shape shape, double fillValue) {
         super(shape, new double[shape.get(0)]);
-        ParameterChecks.ensureRank(shape, 1);
+        ValidateParameters.ensureRank(shape, 1);
         Arrays.fill(super.entries, fillValue);
         this.size = shape.get(0);
     }
@@ -274,8 +274,8 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      */
     @Override
     public Matrix repeat(int n, int axis) {
-        ParameterChecks.ensureInRange(axis, 0, 1, "axis");
-        ParameterChecks.ensureGreaterEq(0, n, "n");
+        ValidateParameters.ensureInRange(axis, 0, 1, "axis");
+        ValidateParameters.ensureGreaterEq(0, n, "n");
         Matrix tiled;
 
         if(axis==0) {
@@ -306,7 +306,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      */
     @Override
     public Matrix stack(Vector b) {
-        ParameterChecks.ensureEqualShape(shape, b.shape);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
         Matrix stacked = new Matrix(2, size);
 
         // Copy entries from each vector to the matrix.
@@ -344,13 +344,13 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      */
     @Override
     public Matrix stack(Vector b, int axis) {
-        ParameterChecks.ensureAxis2D(axis);
+        ValidateParameters.ensureAxis2D(axis);
         Matrix stacked;
 
         if(axis==0) {
             stacked = stack(b);
         } else {
-            ParameterChecks.ensureArrayLengthsEq(this.size, b.size);
+            ValidateParameters.ensureArrayLengthsEq(this.size, b.size);
             double[] stackedEntries = new double[2*this.size];
 
             int count = 0;
@@ -497,7 +497,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      */
     @Override
     public Vector cross(Vector b) {
-        ParameterChecks.ensureEquals(3, b.size, this.size);
+        ValidateParameters.ensureEquals(3, b.size, this.size);
         double[] entries = new double[3];
 
         entries[0] = this.entries[1]*b.entries[2]-this.entries[2]*b.entries[1];
@@ -647,7 +647,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      * @return A complex dense vector equivalent to this vector.
      */
     public CVector toComplex() {
-        return new CVector(ArrayUtils.copy2Complex128(entries, null));
+        return new CVector(ArrayUtils.wrapAsComplex128(entries, null));
     }
 
 
@@ -851,7 +851,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      * @return The scalar product of this vector with {@code b}.
      */
     public CVector mult(Complex128 b) {
-        return new CVector(ComplexOperations.scalMult(entries, b));
+        return new CVector(Complex128Operations.scalMult(entries, b));
     }
 
 
@@ -861,7 +861,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      * @return The scalar quotient of this vector with {@code b}.
      */
     public CVector div(Complex128 b) {
-        return new CVector(ComplexOperations.scalDiv(entries, b));
+        return new CVector(Complex128Operations.scalDiv(entries, b));
     }
 
 
@@ -902,5 +902,14 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      */
     public CVector elemDiv(CVector b) {
         return new CVector(RealComplexDenseElemDiv.dispatch(b.entries, b.shape, this.entries, this.shape));
+    }
+
+
+    /**
+     * Converts this vector to an equivalent tensor.
+     * @return A tensor equivalent to this vector.
+     */
+    public Tensor toTensor() {
+        return new Tensor(shape, entries.clone());
     }
 }

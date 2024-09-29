@@ -24,10 +24,10 @@
 
 package org.flag4j.operations.dense_sparse.coo.real;
 
-import org.flag4j.arrays_old.dense.MatrixOld;
-import org.flag4j.arrays_old.dense.TensorOld;
-import org.flag4j.arrays_old.sparse.CooMatrixOld;
-import org.flag4j.arrays_old.sparse.CooTensorOld;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.operations.common.real.RealProperties;
 import org.flag4j.util.ErrorMessages;
 
@@ -91,7 +91,7 @@ public class RealDenseSparseEquals {
      * @param B Real sparse matrix.
      * @return True if the two matrices are element-wise equivalent (as if both were dense).
      */
-    public static boolean matrixEquals(MatrixOld A, CooMatrixOld B) {
+    public static boolean matrixEquals(Matrix A, CooMatrix B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
@@ -101,7 +101,7 @@ public class RealDenseSparseEquals {
             int entriesIndex;
 
             // Remove all nonZero entries from the entries of this matrix.
-            for(int i=0; i<B.nonZeroEntries(); i++) {
+            for(int i=0; i<B.nnz; i++) {
                 rowIndex = B.rowIndices[i];
                 colIndex = B.colIndices[i];
                 int idx = rowIndex*A.numCols + colIndex;
@@ -133,7 +133,7 @@ public class RealDenseSparseEquals {
      * @param B Real sparse tensor.
      * @return True if the two matrices are element-wise equivalent.
      */
-    public static boolean tensorEquals(TensorOld A, CooTensorOld B) {
+    public static boolean tensorEquals(Tensor A, CooTensor B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
@@ -142,7 +142,7 @@ public class RealDenseSparseEquals {
             int entriesIndex;
 
             // Remove all nonZero entries from the entries of this matrix.
-            for(int i=0; i<B.nonZeroEntries(); i++) {
+            for(int i=0; i<B.nnz; i++) {
                 entriesIndex = A.shape.entriesIndex(B.indices[i]);
 
                 if(entriesCopy[entriesIndex] != B.entries[i]) {

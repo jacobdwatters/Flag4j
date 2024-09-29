@@ -26,7 +26,6 @@ package org.flag4j.io.parsing;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Complex64;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -44,23 +43,7 @@ public class ComplexNumberParser {
      * For example, the string <code>"2+3i"</code> would be parsed into real and imaginary parts
      * <code>2</code> and <code>3</code> respectively.
      *
-     * @param num - complex number in one of three forms: <code>a + bi, a,</code> or <code>bi</code> where a and b are
-     * 				real numbers and i is the imaginary unit sqrt(-1)
-     * @return The complex number represented by the string {@code num}.
-     */
-    @Deprecated
-    public static CNumber parseNumber(String num) {
-        double[] components = getComponents(num);
-        return new CNumber(components[0], components[1]);
-    }
-
-
-    /**
-     * Parses a complex number in the form of a string into its real and imaginary parts.
-     * For example, the string <code>"2+3i"</code> would be parsed into real and imaginary parts
-     * <code>2</code> and <code>3</code> respectively.
-     *
-     * @param num - complex number in one of three forms: <code>a + bi, a,</code> or <code>bi</code> where a and b are
+     * @param num Complex number in one of three forms: <code>a + bi, a,</code> or <code>bi</code> where a and b are
      * 				real numbers and i is the imaginary unit sqrt(-1)
      * @return The complex number represented by the {@code num} as a {@link Complex128}.
      */
@@ -75,7 +58,7 @@ public class ComplexNumberParser {
      * For example, the string <code>"2+3i"</code> would be parsed into real and imaginary parts
      * <code>2</code> and <code>3</code> respectively.
      *
-     * @param num - complex number in one of three forms: <code>a + bi, a,</code> or <code>bi</code> where a and b are
+     * @param num Complex number in one of three forms: <code>a + bi, a,</code> or <code>bi</code> where a and b are
      * 				real numbers and i is the imaginary unit sqrt(-1)
      * @return The complex number represented by the {@code num} as a {@link Complex64}.
      */
@@ -105,7 +88,7 @@ public class ComplexNumberParser {
         ComplexNumberToken imaginary;
 
         token = lex.getNextToken();
-        if(token.matches("im", "i")) { // then we have the imaginary unit
+        if(token.matches("im", "i")) { // then we have the imaginary unit.
             result[0] = 0;
             result[1] = 1;
         }
@@ -113,11 +96,11 @@ public class ComplexNumberParser {
             real = token;
             token = lex.getNextToken();
 
-            if(token.matches("eof", "")) { // Then we have a real number (a)
+            if(token.matches("eof", "")) { // Then we have a real number (a).
                 result[0] = Double.parseDouble(real.getDetails());
                 result[1] = 0;
             }
-            else if(token.matches("im", "i")) { // Then we have a pure imaginary number (bi)
+            else if(token.matches("im", "i")) { // Then we have a pure imaginary number (bi).
                 imaginary = real;
                 result[0] = 0;
 
@@ -131,7 +114,7 @@ public class ComplexNumberParser {
                     result[1] = Double.parseDouble(imaginary.getDetails());
                 }
             }
-            else { // Then we have a complex number with nonzero real and imaginary parts (a + bi)
+            else { // Then we have a complex number with nonzero real and imaginary parts (a + bi).
                 operator = token;
 
                 if(!operator.isKind("opp") && operator.isKind("num")) {
@@ -142,7 +125,7 @@ public class ComplexNumberParser {
                 }
 
                 // The operator is negative
-                if(imaginary.matches("im", "i")) { // Then we have the unit imaginary number
+                if(imaginary.matches("im", "i")) { // Then we have the unit imaginary number.
                     token = lex.getNextToken();
                     token.errorCheck("eof", "");
 
@@ -150,7 +133,7 @@ public class ComplexNumberParser {
                     result[1] = 1;
 
                 }
-                else { // Then we have a multiple of the unit imaginary number
+                else { // Then we have a multiple of the unit imaginary number.
                     imaginary.errorCheck("num");
 
                     token = lex.getNextToken();
@@ -163,7 +146,7 @@ public class ComplexNumberParser {
                     result[1] = Double.parseDouble(imaginary.getDetails());
 
                 }
-                if(operator.getDetails().equals("-")) { // The operator is negative
+                if(operator.getDetails().equals("-")) { // The operator is negative.
                     result[1] = -result[1];
                 }
             }
