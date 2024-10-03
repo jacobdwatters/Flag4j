@@ -33,8 +33,8 @@ class CooVectorToStringTests {
     @Test
     void toStringTestCase() {
         // --------------------- Sub-case 1 ---------------------
-        exp = "Full Shape: (3056)\n" +
-                "Non-zero entries: [ 1.34  525  63.7  -0.0234 ]\n" +
+        exp = "shape: (3056)\n" +
+                "Non-zero entries: [ 1.34  525.0  63.7  -0.0234 ]\n" +
                 "Indices: [1, 567, 1567, 2506]";
         assertEquals(exp, a.toString());
 
@@ -42,7 +42,7 @@ class CooVectorToStringTests {
         PrintOptions.setCentering(false);
         PrintOptions.setMaxColumns(2);
         PrintOptions.setPrecision(2);
-        exp = "Full Shape: (3056)\n" +
+        exp = "shape: (3056)\n" +
                 "Non-zero entries: [1.34  ...  -0.02  ]\n" +
                 "Indices: [1, 567, 1567, 2506]";
         assertEquals(exp, a.toString());

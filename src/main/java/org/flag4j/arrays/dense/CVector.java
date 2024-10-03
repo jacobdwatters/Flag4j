@@ -31,6 +31,7 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.DenseFieldVectorBase;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.operations.common.complex.Complex128Operations;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
@@ -39,6 +40,7 @@ import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseVectorOp
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.Flag4jConstants;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -316,7 +318,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @return The difference of this vector and {@code b}.
      */
     public CVector sub(Vector b) {
-        return new CVector(RealComplexDenseOperations.sub(b.entries, b.shape, entries, shape));
+        return new CVector(RealComplexDenseOperations.sub(entries, shape, b.entries, b.shape));
     }
 
 
@@ -336,16 +338,16 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @return The difference of this vector and {@code b}.
      */
     public CVector sub(CooCVector b) {
-        return ComplexDenseSparseVectorOperations.add(this, b);
+        return ComplexDenseSparseVectorOperations.sub(this, b);
     }
 
 
     /**
-     * Subtracts
-     * @param b
+     * Subtracts a scalar from each entry of this tensor. The result is stored in this tensor.
+     * @param b The scalar to subtract from each entry of this tensor.
      */
     public void subEq(double b) {
-        subEq(Complex128.ONE);
+        subEq(new Complex128(b));
     }
 
 
@@ -384,8 +386,8 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @param b The complex dense vector in the element-wise quotient.
      * @return The element-wise quotient of this vector and {@code b}.
      */
-    public CVector elemDiv(Vector b) {
-        return new CVector(RealComplexDenseElemDiv.dispatch(b.entries, b.shape, entries, shape));
+    public CVector div(Vector b) {
+        return new CVector(RealComplexDenseElemDiv.dispatch(entries, shape, b.entries, b.shape));
     }
 
 
@@ -458,7 +460,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
      */
     public void addEq(Vector b) {
-        RealComplexDenseOperations.subEq(entries, shape, b.entries, b.shape);
+        RealComplexDenseOperations.addEq(entries, shape, b.entries, b.shape);
     }
 
 
@@ -481,5 +483,45 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      */
     public void addEq(double b) {
         RealComplexDenseOperations.addEq(entries, b);
+    }
+
+
+    /**
+     * Generates a human-readable string representation of this vector.
+     * @return A human-readable string representation of this vector.
+     */
+    public String toString() {
+        StringBuilder result = new StringBuilder("shape: ").append(shape).append("\n");
+
+        result.append("[");
+
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int width;
+        String value;
+
+        // Get entries up until the stopping point.
+        for(int i=0; i<stopIndex; i++) {
+            value = StringUtils.ValueOfRound((Complex128) entries[i], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(stopIndex < size-1) {
+            width = PrintOptions.getPadding() + 3;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry.
+        value = StringUtils.ValueOfRound((Complex128) entries[size-1], PrintOptions.getPrecision());
+        width = PrintOptions.getPadding() + value.length();
+        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s", value));
+
+        result.append("]");
+
+        return result.toString();
     }
 }

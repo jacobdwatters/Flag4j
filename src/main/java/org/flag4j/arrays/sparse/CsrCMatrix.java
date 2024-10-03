@@ -31,12 +31,15 @@ import org.flag4j.arrays.backend.CsrFieldMatrixBase;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
 import org.flag4j.operations.sparse.SparseUtils;
 import org.flag4j.operations.sparse.csr.complex.ComplexCsrMatrixMultiplication;
+import org.flag4j.operations.sparse.csr.complex.ComplexCsrOperations;
 import org.flag4j.operations.sparse.csr.real_complex.RealComplexCsrMatrixMultiplication;
 import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -421,7 +424,7 @@ public class CsrCMatrix extends CsrFieldMatrixBase<CsrCMatrix, CMatrix, CooCVect
             }
         }
 
-        return new CooCVector(this.numCols-colStart, row, indices);
+        return new CooCVector(colEnd-colStart, row, indices);
     }
 
 
@@ -507,6 +510,36 @@ public class CsrCMatrix extends CsrFieldMatrixBase<CsrCMatrix, CMatrix, CooCVect
 
 
     /**
+     * Computes the element-wise sum between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise sum.
+     *
+     * @return The sum of this tensor with {@code b}.
+     *
+     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     */
+    @Override
+    public CsrCMatrix add(CsrCMatrix b) {
+        return ComplexCsrOperations.applyBinOpp(this, b, Complex128::add, null);
+    }
+
+
+    /**
+     * Computes the element-wise sum between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise sum.
+     *
+     * @return The sum of this tensor with {@code b}.
+     *
+     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     */
+    @Override
+    public CsrCMatrix sub(CsrCMatrix b) {
+        return ComplexCsrOperations.applyBinOpp(this, b, Complex128::add, Complex128::addInv);
+    }
+
+
+    /**
      * Sets a column of this matrix at the given index to the specified values.
      *
      * @param values New values for the column.
@@ -549,6 +582,27 @@ public class CsrCMatrix extends CsrFieldMatrixBase<CsrCMatrix, CMatrix, CooCVect
      */
     public CsrCMatrix set(double value, int row, int col) {
         return set(new Complex128(value), row, col);
+    }
+
+
+    /**
+     * Gets the element of this tensor at the specified indices.
+     *
+     * @param indices Indices of the element to get.
+     *
+     * @return The element of this tensor at the specified indices.
+     *
+     * @throws ArrayIndexOutOfBoundsException If any indices are not within this matrix.
+     */
+    @Override
+    public Complex128 get(int... indices) {
+        ValidateParameters.ensureValidIndex(shape, indices);
+        int row = indices[0];
+        int col = indices[1];
+        int loc = Arrays.binarySearch(colIndices, rowPointers[row], rowPointers[row+1], col);
+
+        if(loc >= 0) return (Complex128) entries[loc];
+        else return Complex128.ZERO;
     }
 
 
@@ -659,5 +713,50 @@ public class CsrCMatrix extends CsrFieldMatrixBase<CsrCMatrix, CMatrix, CooCVect
         }
 
         return result;
+    }
+
+
+    /**
+     * Formats this sparse matrix as a human-readable string.
+     * @return A human-readable string representing this sparse matrix.
+     */
+    public String toString() {
+        int size = nnz;
+        StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
+        result.append("Non-zero entries: [");
+
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int width;
+        String value;
+
+        if(entries.length > 0) {
+            // Get entries up until the stopping point.
+            for(int i=0; i<stopIndex; i++) {
+                value = StringUtils.ValueOfRound((Complex128) entries[i], PrintOptions.getPrecision());
+                width = PrintOptions.getPadding() + value.length();
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            if(stopIndex < size-1) {
+                width = PrintOptions.getPadding() + 3;
+                value = "...";
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            // Get last entry now
+            value = StringUtils.ValueOfRound((Complex128) entries[size-1], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        result.append("]\n");
+
+        result.append("Row Pointers: ").append(Arrays.toString(rowPointers)).append("\n");
+        result.append("Col Indices: ").append(Arrays.toString(colIndices));
+
+        return result.toString();
     }
 }

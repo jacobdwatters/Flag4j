@@ -132,7 +132,7 @@ class CMatrixElemMultTests {
                 {new Complex128("108.38494654884786+108.38494654884786i"), new Complex128("0.0"), new Complex128("-0.0")}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, A.elemMult(B));
+        assertEquals(exp.toCoo().set(0, 2, 1), A.elemMult(B));
 
         // ------------------- Sub-case 2 -------------------
         aEntries = new Complex128[][]{
@@ -174,7 +174,7 @@ class CMatrixElemMultTests {
                 {new Complex128("13.823007675795091+13.823007675795091i"), new Complex128("0.0"), new Complex128("-0.0")}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, A.elemMult(B));
+        assertEquals(exp.toCoo().set(Complex128.ZERO, 2, 1), A.elemMult(B));
 
         // ------------------- Sub-case 2 -------------------
         aEntries = new Complex128[][]{

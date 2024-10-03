@@ -4,6 +4,7 @@ import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -74,13 +75,13 @@ class CooCTensorConstructorTests {
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZero = new Complex128[]{new Complex128(1, -0.92342), new Complex128(-100, 123.44)};
         expIndices = new int[][]{{0, 0, 10, 1, 0}, {0, 1, 22, 2, 0}};
-        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZero, expIndices));
+        assertThrows(LinearAlgebraException.class, () -> new CooCTensor(expShape, expNonZero, expIndices));
 
         // ------------ Sub-case 4 ------------
         expShape = new Shape(2);
         expNonZero = new Complex128[]{new Complex128(1, -0.92342), new Complex128(-100, 123.44), new Complex128(0, 1)};
         expIndices = new int[][]{{0, 0, 10, 1, 0, 9}, {0, 1, 22, 2, 0, 10}};
-        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZero, expIndices));
+        assertThrows(LinearAlgebraException.class, () -> new CooCTensor(expShape, expNonZero, expIndices));
     }
 
 
@@ -116,7 +117,7 @@ class CooCTensorConstructorTests {
         expNonZero = new Complex128[expNonZeroD.length];
         ArrayUtils.wrapAsComplex128(expNonZeroD, expNonZero);
         expIndices = new int[][]{{0, 0, 10, 1, 0}, {0, 1, 22, 2, 0}};
-        assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZeroD, expIndices));
+        assertThrows(LinearAlgebraException.class, () -> new CooCTensor(expShape, expNonZeroD, expIndices));
 
         // ------------ Sub-case 4 ------------
         expShape = new Shape(2);

@@ -1,7 +1,9 @@
 package org.flag4j.complex_vector;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.RealFloat64;
 import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.arrays.dense.Vector;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -37,10 +39,11 @@ class CVectorElemOppTests {
     @Test
     void absTestCase() {
         // ---------------------- Sub-case 1 ----------------------
-        expReEntries = new double[]{aEntries[0].mag(), aEntries[1].mag(), aEntries[2].mag(),
-                aEntries[3].mag(), aEntries[4].mag()};
-        expRe = new Vector(expReEntries);
-        assertEquals(expRe, a.abs());
+        assertEquals(new FieldVector<RealFloat64>(
+                new RealFloat64[]{
+                        new RealFloat64(aEntries[0].mag()), new RealFloat64(aEntries[1].mag()), new RealFloat64(aEntries[2].mag()),
+                        new RealFloat64(aEntries[3].mag()), new RealFloat64(aEntries[4].mag())
+                }), a.abs());
     }
 
 

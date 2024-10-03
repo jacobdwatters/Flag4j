@@ -33,7 +33,7 @@ package org.flag4j.arrays.backend;
  */
 public interface VectorMixin<T extends VectorMixin<T, U, V, W>, U extends MatrixMixin<U, ?, T, ?, W>,
         V extends MatrixMixin<V, ?, ?, ?, W>, W>
-        extends VectorMatrixOpsMixin<T, U, V> {
+        extends TensorMixin<T, W>, VectorMatrixOpsMixin<T, U, V> {
 
     /**
      * Joints specified vector with this vector. That is, creates a vector of length {@code this.length() + b.length()} containing
@@ -134,4 +134,6 @@ public interface VectorMixin<T extends VectorMixin<T, U, V, W>, U extends Matrix
     public default int size() {
         return length();
     }
+
+
 }

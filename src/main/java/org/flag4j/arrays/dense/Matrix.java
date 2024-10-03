@@ -100,6 +100,19 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
 
 
     /**
+     * Flattens matrix to a single row.
+     *
+     * @return The flattened matrix.
+     *
+     * @see #flatten(int)
+     */
+    @Override
+    public Matrix flatten() {
+        return flatten(1);
+    }
+
+
+    /**
      * Constructs a square real dense matrix of a specified size. The entries of the matrix will default to zero.
      * @param size Size of the square matrix.
      * @throws IllegalArgumentException if size negative.
@@ -957,6 +970,8 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Matrix setSliceCopy(Matrix values, int rowStart, int colStart) {
+        ValidateParameters.ensureValidIndices(numRows, rowStart);
+        ValidateParameters.ensureValidIndices(numCols, colStart);
         Matrix copy = new Matrix(this);
 
         for(int i=0; i<values.numRows; i++) {
@@ -986,14 +1001,13 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Matrix setSlice(Matrix values, int rowStart, int colStart) {
-        ValidateParameters.ensureLessEq(numRows, rowStart+values.numRows);
-        ValidateParameters.ensureLessEq(numCols, colStart+values.numCols);
-        ValidateParameters.ensureGreaterEq(0, rowStart, colStart);
+        ValidateParameters.ensureValidIndices(numRows, rowStart);
+        ValidateParameters.ensureValidIndices(numCols, colStart);
 
         for(int i=0; i<values.numRows; i++) {
             System.arraycopy(
                     values.entries, i*values.numCols,
-                    this.entries, (i+rowStart)*numCols + colStart, values.numCols
+                    entries, (i+rowStart)*numCols + colStart, values.numCols
             );
         }
 
@@ -1467,10 +1481,10 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Vector getRow(int rowIdx, int colStart, int colEnd) {
-        ValidateParameters.ensureIndexInBounds(numCols, colStart, colEnd);
+        ValidateParameters.ensureIndexInBounds(numCols, colStart, colEnd-1);
         ValidateParameters.ensureGreaterEq(colStart, colEnd);
-        int start = rowIdx*numCols+colStart;
-        int stop = start+colEnd;
+        int start = rowIdx*numCols + colStart;
+        int stop = rowIdx*numCols + colEnd;
 
         double[] row = Arrays.copyOfRange(this.entries, start, stop);
 
@@ -1949,7 +1963,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return If {@code n=0}, then the identity
      */
     public Matrix pow(int n) {
-        ValidateParameters.ensureSquare(shape);
+        ValidateParameters.ensureMatMultShapes(shape, shape);
         ValidateParameters.ensureNonNegative(n);
 
         // Check for some quick returns.

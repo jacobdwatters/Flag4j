@@ -17,7 +17,7 @@ class CooVectorElemDivTests {
     int size;
 
     @Test
-    void denseElemDivTestCase() {
+    void denseDivTestCase() {
         double[] aValues = {1.34, 51.6, -0.00245};
         int[] aIndices = {0, 2, 4};
         size = 6;
@@ -48,7 +48,7 @@ class CooVectorElemDivTests {
 
 
     @Test
-    void denseComplexElemDivTestCase() {
+    void denseComplexDivTestCase() {
         double[] aValues = {1.34, 51.6, -0.00245};
         int[] aIndices = {0, 2, 4};
         size = 6;
@@ -84,7 +84,7 @@ class CooVectorElemDivTests {
 
 
     @Test
-    void doubleScalarElemDivTestCase() {
+    void doubleScalarDivTestCase() {
         double[] aValues = {1.34, 51.6, -0.00245, 99.2456, -1005.6};
         int[] aIndices = {2, 5, 81, 102, 104};
         size = 151;
@@ -107,7 +107,7 @@ class CooVectorElemDivTests {
 
 
     @Test
-    void complexScalarElemDivTestCase() {
+    void complexScalarDivTestCase() {
         double[] aValues = {1.34, 51.6, -0.00245, 99.2456, -1005.6};
         int[] aIndices = {2, 5, 81, 102, 104};
         size = 151;

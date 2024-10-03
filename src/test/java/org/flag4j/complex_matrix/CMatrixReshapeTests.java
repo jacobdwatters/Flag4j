@@ -3,6 +3,7 @@ package org.flag4j.complex_matrix;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.Test;
 
@@ -114,19 +115,19 @@ class CMatrixReshapeTests {
 
         // --------------- Sub-case 2 ---------------
         expShape = new Shape(1, entries.length);
-        B = A.flatten(0);
+        B = A.flatten(1);
         assertEquals(expShape, B.shape);
         assertArrayEquals(A.entries, B.entries);
 
         // --------------- Sub-case 2 ---------------
         expShape = new Shape(entries.length, 1);
-        B = A.flatten(1);
+        B = A.flatten(0);
         assertEquals(expShape, B.shape);
         assertArrayEquals(A.entries, B.entries);
 
         // --------------- Sub-cases 2-4 ---------------
-        assertThrows(IllegalArgumentException.class, ()->A.flatten(-1));
-        assertThrows(IllegalArgumentException.class, ()->A.flatten(4));
-        assertThrows(IllegalArgumentException.class, ()->A.flatten(2));
+        assertThrows(LinearAlgebraException.class, ()->A.flatten(-1));
+        assertThrows(LinearAlgebraException.class, ()->A.flatten(4));
+        assertThrows(LinearAlgebraException.class, ()->A.flatten(2));
     }
 }

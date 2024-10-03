@@ -32,6 +32,7 @@ import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
 import org.flag4j.operations.sparse.coo.complex.ComplexSparseEquals;
@@ -39,6 +40,7 @@ import org.flag4j.operations.sparse.coo.complex.ComplexSparseMatrixGetSet;
 import org.flag4j.operations.sparse.coo.complex.ComplexSparseMatrixMultiplication;
 import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixOperations;
 import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
@@ -383,7 +385,7 @@ public class CooCMatrix extends CooFieldMatrixBase<CooCMatrix, CMatrix, CooCVect
         System.arraycopy(colIndices, 0, destColIndices, 0, entries.length);
 
         // Copy entries and indices from vector.
-        System.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
+        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
         System.arraycopy(b.indices, 0, destRowIndices, entries.length, b.entries.length);
         Arrays.fill(destColIndices, entries.length, destColIndices.length, numCols);
 
@@ -414,7 +416,7 @@ public class CooCMatrix extends CooFieldMatrixBase<CooCMatrix, CMatrix, CooCVect
 
         // Copy non-zero values.
         System.arraycopy(entries, 0, destEntries, 0, entries.length);
-        System.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
+        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
 
         // Copy row indices.
         System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
@@ -515,5 +517,50 @@ public class CooCMatrix extends CooFieldMatrixBase<CooCMatrix, CMatrix, CooCVect
         }
 
         return result;
+    }
+
+
+    /**
+     * Formats this sparse matrix as a human-readable string.
+     * @return A human-readable string representing this sparse matrix.
+     */
+    public String toString() {
+        int size = nnz;
+        StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
+        result.append("Non-zero entries: [");
+
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int width;
+        String value;
+
+        if(entries.length > 0) {
+            // Get entries up until the stopping point.
+            for(int i=0; i<stopIndex; i++) {
+                value = StringUtils.ValueOfRound((Complex128) entries[i], PrintOptions.getPrecision());
+                width = PrintOptions.getPadding() + value.length();
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            if(stopIndex < size-1) {
+                width = PrintOptions.getPadding() + 3;
+                value = "...";
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            // Get last entry now
+            value = StringUtils.ValueOfRound((Complex128) entries[size-1], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        result.append("]\n");
+
+        result.append("Row Indices: ").append(Arrays.toString(rowIndices)).append("\n");
+        result.append("Col Indices: ").append(Arrays.toString(colIndices));
+
+        return result.toString();
     }
 }

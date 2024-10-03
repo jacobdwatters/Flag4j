@@ -79,7 +79,7 @@ class CooVectorInnerProdTests {
                 0.0245, -0.0, 14.45};
         b = new Vector(bEntries);
         Vector finalB = b;
-        assertThrows(LinearAlgebraException.class,
+        assertThrows(IllegalArgumentException.class,
                 ()->RealDenseSparseVectorOperations.inner(finalB.entries, a.entries, a.indices, a.size));
     }
 

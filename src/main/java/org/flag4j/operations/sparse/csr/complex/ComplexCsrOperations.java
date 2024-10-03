@@ -186,11 +186,11 @@ public final class ComplexCsrOperations {
      * @throws IllegalArgumentException If <code>src1</code> and <code>src2</code> do not have the same shape.
      */
     public static CsrCMatrix applyBinOpp(CsrCMatrix src1, CsrCMatrix src2,
-                                         BinaryOperator<Field<Complex128>> opp,
-                                         UnaryOperator<Field<Complex128>> uOpp) {
+                                         BinaryOperator<Complex128> opp,
+                                         UnaryOperator<Complex128> uOpp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
-        List<Field<Complex128>> dest = new ArrayList<>();
+        List<Complex128> dest = new ArrayList<>();
         int[] rowPointers = new int[src1.rowPointers.length];
         List<Integer> colIndices = new ArrayList<>();
 
@@ -203,17 +203,17 @@ public final class ComplexCsrOperations {
                 int col2 = src2.colIndices[rowPtr2];
 
                 if(col1 == col2) {
-                    dest.add(opp.apply(src1.entries[rowPtr1], src2.entries[rowPtr2]));
+                    dest.add(opp.apply((Complex128) src1.entries[rowPtr1], (Complex128) src2.entries[rowPtr2]));
                     colIndices.add(col1);
                     rowPtr1++;
                     rowPtr2++;
                 } else if(col1 < col2) {
-                    dest.add(src1.entries[rowPtr1]);
+                    dest.add((Complex128) src1.entries[rowPtr1]);
                     colIndices.add(col1);
                     rowPtr1++;
                 } else {
-                    if(uOpp!=null) dest.add(uOpp.apply(src2.entries[rowPtr2]));
-                    else dest.add(src2.entries[rowPtr2]);
+                    if(uOpp!=null) dest.add(uOpp.apply((Complex128) src2.entries[rowPtr2]));
+                    else dest.add((Complex128) src2.entries[rowPtr2]);
                     colIndices.add(col2);
                     rowPtr2++;
                 }
@@ -222,15 +222,15 @@ public final class ComplexCsrOperations {
             }
 
             while(rowPtr1 < src1.rowPointers[i+1]) {
-                dest.add(src1.entries[rowPtr1]);
+                dest.add((Complex128) src1.entries[rowPtr1]);
                 colIndices.add(src1.colIndices[rowPtr1]);
                 rowPtr1++;
                 rowPointers[i+1]++;
             }
 
             while(rowPtr2 < src2.rowPointers[i+1]) {
-                if(uOpp!=null) dest.add(uOpp.apply(src2.entries[rowPtr2]));
-                else dest.add(src2.entries[rowPtr2]);
+                if(uOpp!=null) dest.add(uOpp.apply((Complex128) src2.entries[rowPtr2]));
+                else dest.add((Complex128) src2.entries[rowPtr2]);
                 colIndices.add(src2.colIndices[rowPtr2]);
                 rowPtr2++;
                 rowPointers[i+1]++;

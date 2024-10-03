@@ -57,7 +57,7 @@ class Complex128UnaryOperationsTest {
 
         // ----------- Sub-case 5 --------------
         a = new Complex128(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
-        expValueDouble = Double.NaN;
+        expValueDouble = Double.POSITIVE_INFINITY;
 
         valueDouble = a.mag();
 
@@ -108,7 +108,7 @@ class Complex128UnaryOperationsTest {
 
         // ----------- Sub-case 5 --------------
         a = new Complex128(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
-        expValueDouble = Double.NaN;
+        expValueDouble = Double.POSITIVE_INFINITY;
         valueDouble = a.mag();
         Assertions.assertEquals(expValueDouble, valueDouble);
 
@@ -157,7 +157,7 @@ class Complex128UnaryOperationsTest {
 
         // ----------- Sub-case 5 --------------
         a = new Complex128(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
-        expValueDouble = Double.NaN;
+        expValueDouble = Double.POSITIVE_INFINITY;
         valueDouble = a.abs();
         Assertions.assertEquals(expValueDouble, valueDouble);
 

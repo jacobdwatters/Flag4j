@@ -42,10 +42,10 @@ class TensorGetSetTests {
         assertArrayEquals(expEntries, A.entries);
 
         // -------------------- Sub-case 3 --------------------
-        assertThrows(IllegalArgumentException.class, ()->A.set(156.4, 0, 2, 1));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.set(156.4, 0, 2, 1));
 
         // -------------------- Sub-case 4 --------------------
-        assertThrows(IllegalArgumentException.class, ()->A.set(156.4, 0, 1, 0, 0, 1, 0));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.set(156.4, 0, 1, 0, 0, 1, 0));
 
         // -------------------- Sub-case 5 --------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.set(-99.245, 0, 0, 0, 0, 2));
@@ -74,9 +74,9 @@ class TensorGetSetTests {
         assertThrows(IndexOutOfBoundsException.class, ()->A.get(0, -1, 0, 0, 1));
 
         // ------------------- Sub-case 5 -------------------
-        assertThrows(IllegalArgumentException.class, ()->A.get(0, 2, 1, 0));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.get(0, 2, 1, 0));
 
         // ------------------- Sub-case 6 -------------------
-        assertThrows(IllegalArgumentException.class, ()->A.get(0, 2, 1, 0, 1, 0));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.get(0, 2, 1, 0, 1, 0));
     }
 }

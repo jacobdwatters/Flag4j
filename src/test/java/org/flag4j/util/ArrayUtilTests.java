@@ -86,6 +86,6 @@ class ArrayUtilTests {
         assertArrayEquals(expRange, ArrayUtils.range(99, 103));
 
         // -------------- Sub-case 3 --------------
-        assertThrows(NegativeArraySizeException.class, ()->ArrayUtils.range(5, 1));
+        assertThrows(IllegalArgumentException.class, ()->ArrayUtils.range(5, 1));
     }
 }

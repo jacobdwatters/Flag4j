@@ -30,6 +30,7 @@ import org.flag4j.arrays.backend.DensePrimitiveDoubleTensorBase;
 import org.flag4j.arrays.backend.DenseVectorMixin;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.operations.common.complex.Complex128Operations;
 import org.flag4j.operations.dense.real.RealDenseTensorDot;
@@ -40,6 +41,7 @@ import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -274,19 +276,19 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      */
     @Override
     public Matrix repeat(int n, int axis) {
-        ValidateParameters.ensureInRange(axis, 0, 1, "axis");
-        ValidateParameters.ensureGreaterEq(0, n, "n");
+        ValidateParameters.ensureValidAxes(2, axis);
+        ValidateParameters.ensureNonNegative(n);
         Matrix tiled;
 
         if(axis==0) {
             tiled = new Matrix(new Shape(n, size));
 
-            for(int i=0; i<tiled.numRows; i++) // Set each row of the tiled matrix to be the vector values.
+            for(int i=0, stop=tiled.numRows; i<stop; i++) // Set each row of the tiled matrix to be the vector values.
                 System.arraycopy(entries, 0, tiled.entries, i*tiled.numCols, size);
         } else {
             tiled = new Matrix(new Shape(size, n));
 
-            for(int i=0; i<tiled.numRows; i++) // Fill each row of the tiled matrix with a single value from the vector.
+            for(int i=0, stop=tiled.numRows; i<stop; i++) // Fill each row of the tiled matrix with a single value from the vector.
                 Arrays.fill(tiled.entries, i*tiled.numCols, (i+1)*tiled.numCols, entries[i]);
         }
 
@@ -631,8 +633,8 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
         List<Integer> indices = new ArrayList<>((int) (entries.length*0.5));
 
         // Fill entries with non-zero values.
-        for(int i=0; i<entries.length; i++) {
-            if(entries[i] != 0d) {
+        for(int i=0; i<size; i++) {
+            if(entries[i] != 0.0) {
                 nonZeroEntries.add(entries[i]);
                 indices.add(i);
             }
@@ -660,6 +662,8 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      */
     @Override
     public void elemMultEq(Vector b) {
+        ValidateParameters.ensureEqualShape(shape, b.shape);
+
         for(int i=0; i<size; i++)
             entries[i] *= b.entries[i];
     }
@@ -674,6 +678,8 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      */
     @Override
     public void addEq(Vector b) {
+        ValidateParameters.ensureEqualShape(shape, b.shape);
+
         for(int i=0; i<size; i++)
             entries[i] += b.entries[i];
     }
@@ -688,6 +694,8 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      */
     @Override
     public void subEq(Vector b) {
+        ValidateParameters.ensureEqualShape(shape, b.shape);
+
         for(int i=0; i<size; i++)
             entries[i] -= b.entries[i];
     }
@@ -702,6 +710,8 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      */
     @Override
     public void divEq(Vector b) {
+        ValidateParameters.ensureEqualShape(shape, b.shape);
+
         for(int i=0; i<size; i++)
             entries[i] /= b.entries[i];
     }
@@ -718,6 +728,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      */
     @Override
     public Vector div(Vector b) {
+        ValidateParameters.ensureEqualShape(shape, b.shape);
         double[] quotient = new double[size];
 
         for(int i=0; i<size; i++)
@@ -805,7 +816,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      * @return The difference of this vector and {@code b}.
      */
     public CVector sub(CVector b) {
-        return new CVector(RealComplexDenseOperations.sub(b.entries, b.shape, entries, shape));
+        return new CVector(RealComplexDenseOperations.sub(entries, shape, b.entries, b.shape));
     }
 
 
@@ -825,7 +836,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      * @return The difference of this vector and {@code b}.
      */
     public CVector sub(CooCVector b) {
-        return RealComplexDenseSparseVectorOperations.add(this, b);
+        return RealComplexDenseSparseVectorOperations.sub(this, b);
     }
 
 
@@ -900,8 +911,8 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      * @param b The complex dense vector in the element-wise quotient.
      * @return The element-wise quotient of this vector and {@code b}.
      */
-    public CVector elemDiv(CVector b) {
-        return new CVector(RealComplexDenseElemDiv.dispatch(b.entries, b.shape, this.entries, this.shape));
+    public CVector div(CVector b) {
+        return new CVector(RealComplexDenseElemDiv.dispatch(this.entries, this.shape, b.entries, b.shape));
     }
 
 
@@ -911,5 +922,45 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      */
     public Tensor toTensor() {
         return new Tensor(shape, entries.clone());
+    }
+
+
+    /**
+     * Converts this vector to a human-readable string format. To specify the maximum number of entries to print, use
+     * {@link PrintOptions#setMaxColumns(int)}.
+     * @return A human-readable string representation of this vector.
+     */
+    public String toString() {
+        StringBuilder result = new StringBuilder("shape: ").append(shape).append("\n");
+        result.append("[");
+
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int width;
+        String value;
+
+        // Get entries up until the stopping point.
+        for(int i=0; i<stopIndex; i++) {
+            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(stopIndex < size-1) {
+            width = PrintOptions.getPadding() + 3;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry now
+        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+        width = PrintOptions.getPadding() + value.length();
+        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s", value));
+
+        result.append("]");
+
+        return result.toString();
     }
 }

@@ -30,11 +30,13 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.CooFieldVectorBase;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.operations.common.complex.Complex128Operations;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
 import org.flag4j.operations.sparse.coo.complex.ComplexSparseEquals;
 import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -110,7 +112,7 @@ public class CooCVector extends CooFieldVectorBase<CooCVector, CooCMatrix, CVect
      * @param entries Non-zero entries of the sparse vector.
      */
     public CooCVector(int size, double[] entries, int[] indices) {
-        super(size, ArrayUtils.wrapAsComplex128(entries, null), new int[indices.length]);
+        super(size, ArrayUtils.wrapAsComplex128(entries, null), indices);
         setZeroElement(Complex128.ZERO);
     }
 
@@ -137,7 +139,7 @@ public class CooCVector extends CooFieldVectorBase<CooCVector, CooCMatrix, CVect
 
         // Fill entries with non-zero values.
         for(int i=0; i<src.entries.length; i++) {
-            if(!src.entries[i].equals(0)) {
+            if(!src.entries[i].isZero()) {
                 nonZeroEntries.add((Complex128) src.entries[i]);
                 indices.add(i);
             }
@@ -408,5 +410,49 @@ public class CooCVector extends CooFieldVectorBase<CooCVector, CooCMatrix, CVect
         }
 
         return result;
+    }
+
+
+    /**
+     * Formats this tensor as a human-readable string. Specifically, a string containing the
+     * shape and flatten entries of this tensor.
+     * @return A human-readable string representing this tensor.
+     */
+    public String toString() {
+        int size = nnz;
+        StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
+        result.append("Non-zero entries: [");
+
+        if(size > 0) {
+            int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+            int width;
+            String value;
+
+            // Get entries up until the stopping point.
+            for(int i=0; i<stopIndex; i++) {
+                value = StringUtils.ValueOfRound((Complex128) entries[i], PrintOptions.getPrecision());
+                width = PrintOptions.getPadding() + value.length();
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            if(stopIndex < size-1) {
+                width = PrintOptions.getPadding() + 3;
+                value = "...";
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            // Get last entry now
+            value = StringUtils.ValueOfRound((Complex128) entries[size-1], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        result.append("]\n");
+        result.append("Indices: ").append(Arrays.toString(indices));
+
+        return result.toString();
     }
 }

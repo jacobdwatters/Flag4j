@@ -3,6 +3,7 @@ package org.flag4j.complex_vector;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,8 +52,8 @@ class CVectorRepeatTests {
 
         // ---------------------- Sub-case 3 ----------------------
         assertThrows(IllegalArgumentException.class, ()-> a.repeat(-1, 0));
-        assertThrows(IllegalArgumentException.class, ()-> a.repeat(13, -2));
-        assertThrows(IllegalArgumentException.class, ()-> a.repeat(13, 2));
+        assertThrows(LinearAlgebraException.class, ()-> a.repeat(13, -2));
+        assertThrows(LinearAlgebraException.class, ()-> a.repeat(13, 2));
     }
 
 

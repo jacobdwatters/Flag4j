@@ -30,6 +30,8 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.CooFieldTensorBase;
 import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.io.PrettyPrint;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
 import org.flag4j.operations.sparse.coo.complex.ComplexSparseEquals;
 import org.flag4j.util.ArrayUtils;
@@ -116,7 +118,7 @@ public class CooCTensor extends CooFieldTensorBase<CooCTensor, CTensor, Complex1
      * @param indices Indices of the non-zero entries of this tensor.
      */
     public CooCTensor(Shape shape) {
-        super(shape, new Complex128[0], new int[shape.getRank()][0]);
+        super(shape, new Complex128[0], new int[0][shape.getRank()]);
         setZeroElement(Complex128.ZERO);
     }
 
@@ -325,5 +327,28 @@ public class CooCTensor extends CooFieldTensorBase<CooCTensor, CTensor, Complex1
         }
 
         return result;
+    }
+
+
+    /**
+     * <p>Formats this sparse COO tensor as a human-readable string specifying the full shape,
+     * non-zero entries, and non-zero indices.</p>
+     *
+     * @return A human-readable string specifying the full shape, non-zero entries, and non-zero indices of this tensor.
+     */
+    public String toString() {
+        int maxCols = PrintOptions.getMaxColumns();
+        int padding = PrintOptions.getPadding();
+        int precision = PrintOptions.getPrecision();
+        boolean centring = PrintOptions.useCentering();
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Shape: " + shape + "\n");
+        sb.append("Non-zero Entries: " + PrettyPrint.abbreviatedArray(entries, maxCols, padding, precision, centring) + "\n");
+        sb.append("Non-zero Indices: " +
+                PrettyPrint.abbreviatedArray(indices, PrintOptions.getMaxRows(), maxCols, padding, 20, centring));
+
+        return sb.toString();
     }
 }

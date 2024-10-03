@@ -177,7 +177,7 @@ class VectorElemMultDivTests {
                 new Complex128(aEntries[1]).div(bEntries[1]), new Complex128(aEntries[2]).div(bEntries[2])};
         exp = new CVector(expEntries);
 
-        assertEquals(exp, a.elemDiv(b));
+        assertEquals(exp, a.div(b));
 
         // ------------------------ Sub-case 2 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
@@ -186,6 +186,6 @@ class VectorElemMultDivTests {
         b = new CVector(bEntries);
 
         CVector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->a.elemDiv(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.div(finalB));
     }
 }

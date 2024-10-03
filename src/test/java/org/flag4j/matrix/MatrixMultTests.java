@@ -197,9 +197,10 @@ class MatrixMultTests {
                 {-932.45, 551.35, -0.92342},
                 {123.445, 0.00013, 0.0}};
         A = new Matrix(aEntries);
-        expEntries = new double[][]{{-51236033.781278044, 21045223.50308684, -50637.093447080224},
-                {-197813936.21644562, 65454222.93841544, -195326.1504850621},
-                {-11422366.926135933, 6767794.115183196, -11311.889782356784}};
+        expEntries = new double[][]{
+                {-5.1236033781278044E7, 2.1045223503086835E7, -50637.093447080224},
+                {-1.9781393621644562E8, 6.545422293841543E7, -195326.15048506213},
+                {-1.1422366926135931E7, 6767794.115183196, -11311.889782356784}};
         exp = new Matrix(expEntries);
 
         assertEquals(exp, A.pow(3));
@@ -333,7 +334,7 @@ class MatrixMultTests {
                 {-11.4330901794, -115804.09409999999}};
         exp = new Matrix(expEntries);
 
-        CMatrix act = new CMatrix(
+        Matrix act = new Matrix(
                 new Shape(A.numRows, B.numRows),
                 RealDenseSparseMatrixMultTranspose.multTranspose(
                         A.entries, A.shape, B.entries, B.rowIndices, B.colIndices, B.shape

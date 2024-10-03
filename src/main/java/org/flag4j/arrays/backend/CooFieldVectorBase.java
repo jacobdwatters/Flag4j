@@ -26,9 +26,8 @@ package org.flag4j.arrays.backend;
 
 
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.algebraic_structures.fields.RealFloat64;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.sparse.CooFieldVector;
+import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.operations.common.field_ops.CompareField;
 import org.flag4j.operations.sparse.coo.SparseDataWrapper;
@@ -727,7 +726,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
      * @return The minimum non-zero value in this tensor.
      */
     @Override
-    public Y min() {
+    public double min() {
         return super.min(); // Overrides method from super class to emphasize it operates on the non-zero values only.
     }
 
@@ -738,7 +737,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
      * @return The maximum non-zero value in this tensor.
      */
     @Override
-    public Y max() {
+    public double max() {
         return super.max(); // Overrides method from super class to emphasize it operates on the non-zero values only.
     }
 
@@ -839,7 +838,7 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
      */
     @Override
     public T H() {
-        return copy();
+        return conj();
     }
 
 
@@ -860,13 +859,13 @@ public abstract class CooFieldVectorBase<T extends CooFieldVectorBase<T, U, V, W
      * @return The element-wise absolute value of this tensor.
      */
     @Override
-    public CooFieldVector<RealFloat64> abs() {
-        RealFloat64[] abs = new RealFloat64[entries.length];
+    public CooVector abs() {
+        double[] abs = new double[entries.length];
 
         for(int i=0, size=entries.length; i<size; i++)
-            abs[i] = new RealFloat64(entries[i].abs());
+            abs[i] = entries[i].abs();
 
-        return new CooFieldVector<RealFloat64>(size, abs, indices.clone());
+        return new CooVector(size, abs, indices.clone());
     }
 
 

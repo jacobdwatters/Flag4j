@@ -82,7 +82,7 @@ class Complex128ComparisonTest {
     void hashCodeTestCase() {
         a = new Complex128(52344.13, -941.339615);
         int hashPrime = 31;
-        int expHash = 7;
+        int expHash = 17;
         expHash = hashPrime*expHash + java.lang.Double.hashCode(a.re);
         expHash = hashPrime*expHash + java.lang.Double.hashCode(a.im);
 

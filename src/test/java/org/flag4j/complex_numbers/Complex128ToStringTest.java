@@ -30,7 +30,7 @@ class Complex128ToStringTest {
 
         // ---------- Sub-case 4 ------------
         a = Complex128.ZERO;
-        expStr = "0.0";
+        expStr = "0";
         Assertions.assertEquals(expStr, a.toString());
         Assertions.assertEquals(expStr.length(), Complex128.length(a));
     }
@@ -64,13 +64,13 @@ class Complex128ToStringTest {
 
         // ---------- Sub-case 5 ------------
         a = new Complex128(0, 24);
-        expStr = "24i";
+        expStr = "24.0i";
         Assertions.assertEquals(expStr, a.toString());
         Assertions.assertEquals(expStr.length(), Complex128.length(a));
 
         // ---------- Sub-case 6 ------------
         a = new Complex128(0, -56);
-        expStr = "-56i";
+        expStr = "-56.0i";
         Assertions.assertEquals(expStr, a.toString());
         Assertions.assertEquals(expStr.length(), Complex128.length(a));
     }

@@ -25,9 +25,9 @@
 package org.flag4j.arrays.backend;
 
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.algebraic_structures.fields.RealFloat64;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.FieldMatrix;
+import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.common.field_ops.CompareField;
 import org.flag4j.operations.dense.field_ops.DenseFieldDeterminant;
@@ -949,9 +949,8 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
         for(int i=0; i<numRows; i++) {
             int rowOffset = i*numCols;
 
-            for(int j=0; j<numCols; j++) {
+            for(int j=0; j<numCols; j++)
                 entries[rowOffset + j] = values[i][j];
-            }
         }
 
         return (T) this;
@@ -1326,12 +1325,13 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * @return The element-wise absolute value of this matrix.
      */
     @Override
-    public FieldMatrix<RealFloat64> abs() {
-        RealFloat64[] abs = new RealFloat64[entries.length];
-        for(int i = 0, size=entries.length; i<size; ++i)
-            abs[i] = new RealFloat64(entries[i].abs());
+    public Matrix abs() {
+        double[] abs = new double[entries.length];
 
-        return new FieldMatrix<RealFloat64>(shape, abs);
+        for(int i = 0, size=entries.length; i<size; ++i)
+            abs[i] =entries[i].abs();
+
+        return new Matrix(shape, abs);
     }
 
 
@@ -1389,12 +1389,12 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * @throws IndexOutOfBoundsException If {@code values.length != this.numCols}.
      */
     public T setRow(Field<Y>[] values, int rowIdx) {
-        ValidateParameters.ensureArrayLengthsEq(values.length, this.numRows);
+        ValidateParameters.ensureValidIndices(numRows, rowIdx);
+        ValidateParameters.ensureArrayLengthsEq(values.length, numCols);
 
-        int rowOffset = 0;
-        for(int i=0, size=values.length; i<size; i++) {
-            entries[rowOffset + rowIdx] = values[i];
-            rowOffset += numCols;
+        int rowOffset = rowIdx*numCols;
+        for(int i=0, size=numCols; i<size; i++) {
+            entries[rowOffset + i] = values[i];
         }
 
         return (T) this;

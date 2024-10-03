@@ -3,6 +3,7 @@ package org.flag4j.complex_tensor;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -85,9 +86,9 @@ class CTensorReshapeTests {
         assertEquals(exp, A.flatten(0));
 
         // -------------------------- Sub-case 5 --------------------------
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.flatten(-1));
+        assertThrows(LinearAlgebraException.class, ()->A.flatten(-1));
 
         // -------------------------- Sub-case 6 --------------------------
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.flatten(5));
+        assertThrows(LinearAlgebraException.class, ()->A.flatten(5));
     }
 }

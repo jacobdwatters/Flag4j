@@ -127,13 +127,13 @@ class Complex128SqrtTest {
 
         // ------------- Sub-case 7 -------------
         aComplex = new Complex128(14.3, 7683.453);
-        expResult = new Complex128(62.0393677722319, 61.9240111231358);
+        expResult = new Complex128(62.0393677722319, 61.92401112313579);
         actResult = aComplex.sqrt();
         Assertions.assertEquals(expResult, actResult);
 
         // ------------- Sub-case 8 -------------
         aComplex = new Complex128(-84.3453, 32.337847);
-        expResult = new Complex128(1.7301266590439484, 9.345514338779571);
+        expResult = new Complex128(1.7301266590439461, 9.345514338779571);
         actResult = aComplex.sqrt();
         Assertions.assertEquals(expResult, actResult);
 

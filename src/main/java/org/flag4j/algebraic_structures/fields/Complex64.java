@@ -54,6 +54,14 @@ public class Complex64 implements Field<Complex64> {
      */
     public static final Complex64 TWO = new Complex64(2);
     /**
+     * The complex number with zero imaginary part and three real part.
+     */
+    public static final Complex64 Three = new Complex64(3);
+    /**
+     * The float value closer than any other to the square root of 2
+     */
+    public static final Complex64 ROOT_TWO = new Complex64((float) Math.sqrt(2));
+    /**
      * The float value closer than any other to the square root of 3
      */
     public static final Complex64 ROOT_THREE = new Complex64((float) Math.sqrt(3));
@@ -151,6 +159,15 @@ public class Complex64 implements Field<Complex64> {
         Complex64 complexNum = ComplexNumberParser.parseNumberToComplex64(num);
         this.re = complexNum.re;
         this.im = complexNum.im;
+    }
+
+
+    /**
+     * Checks if this complex has zero imaginary part and real part equal to a double.
+     * @return True if {@code this.re == b && this.im == 0}. False otherwise.
+     */
+    public boolean equals(float b) {
+        return this.re == b && this.im == 0;
     }
 
 

@@ -55,9 +55,8 @@ public final class RealDenseOperations {
         int length = src1.length;
         double[] sum = new double[length];
 
-        for(int i=0; i<length; i++) {
+        for(int i=0; i<length; i++)
             sum[i] = src1[i] + src2[i];
-        }
 
         return sum;
     }
@@ -77,9 +76,8 @@ public final class RealDenseOperations {
         double[] sum = new double[src1.length];
         int length = sum.length;
 
-        for(int i=0; i<length; i++) {
+        for(int i=0; i<length; i++)
             sum[i] = src1[i] - src2[i];
-        }
 
         return sum;
     }
@@ -95,9 +93,8 @@ public final class RealDenseOperations {
         double[] sum = new double[src.length];
         int length = sum.length;
 
-        for(int i=0; i<length; i++) {
+        for(int i=0; i<length; i++)
             sum[i] = src[i] - b;
-        }
 
         return sum;
     }
@@ -113,11 +110,9 @@ public final class RealDenseOperations {
      */
     public static void subEq(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         ValidateParameters.ensureEqualShape(shape1, shape2);
-        int length = src1.length;
 
-        for(int i=0; i<length; i++) {
+        for(int i=0, length = src1.length; i<length; i++)
             src1[i] -= src2[i];
-        }
     }
 
 
@@ -127,10 +122,8 @@ public final class RealDenseOperations {
      * @param b Scalar to subtract.
      */
     public static void subEq(double[] src, double b) {
-        int length = src.length;
-        for(int i=0; i<length; i++) {
+        for(int i=0, length=src.length; i<length; i++)
             src[i] -= b;
-        }
     }
 
 
@@ -144,10 +137,9 @@ public final class RealDenseOperations {
      */
     public static void addEq(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         ValidateParameters.ensureEqualShape(shape1, shape2);
-        int length = src1.length;
-        for(int i=0; i<length; i++) {
+
+        for(int i=0, length = src1.length; i<length; i++)
             src1[i] += src2[i];
-        }
     }
 
 
@@ -157,10 +149,8 @@ public final class RealDenseOperations {
      * @param b Scalar to add.
      */
     public static void addEq(double[] src, double b) {
-        int length = src.length;
-        for(int i=0; i<length; i++) {
+        for(int i=0, length = src.length; i<length; i++)
             src[i] += b;
-        }
     }
 
 
@@ -171,8 +161,8 @@ public final class RealDenseOperations {
      */
     public static double prod(double[] src) {
         if(src == null || src.length == 0) return 0;
-
         double product=1;
+
         for(double value : src)
             product *= value;
 
@@ -187,8 +177,8 @@ public final class RealDenseOperations {
      */
     public static int prod(int[] src) {
         if(src == null || src.length == 0) return 0;
-
         int product=1;
+
         for(int value : src)
             product *= value;
 
@@ -215,9 +205,8 @@ public final class RealDenseOperations {
     public static double[] recip(double[] src) {
         double[] receps = new double[src.length];
 
-        for(int i=0; i<receps.length; i++) {
+        for(int i=0; i<receps.length; i++)
             receps[i] = 1/src[i];
-        }
 
         return receps;
     }
@@ -233,9 +222,8 @@ public final class RealDenseOperations {
         int length = src.length;
         double[] sum = new double[length];
 
-        for(int i=0; i<length; i++) {
+        for(int i=0; i<length; i++)
             sum[i] = src[i] + b;
-        }
 
         return sum;
     }

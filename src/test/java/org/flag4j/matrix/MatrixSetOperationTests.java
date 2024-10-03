@@ -385,7 +385,7 @@ class MatrixSetOperationTests {
         exp = new Matrix(entriesExp);
 
         Matrix finalValues = values;
-        assertThrows(IllegalArgumentException.class, ()->A.setSlice(finalValues, 1, 2));
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.setSlice(finalValues, 1, 2));
     }
 
 

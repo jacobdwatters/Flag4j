@@ -230,7 +230,7 @@ class CsrCMatrixGetRowColTests {
         expIndices = new int[]{7-5, 9-5};
         exp = new CooCVector(expSize, expEntries, expIndices);
 
-        assertEquals(exp, A.getRow(5, 1, A.numCols));
+        assertEquals(exp, A.getRow(1, 5, A.numCols));
 
         // --------------------- sub-case 2 ---------------------
         aShape = new Shape(300, 15166);
@@ -270,7 +270,7 @@ class CsrCMatrixGetRowColTests {
         expIndices = new int[]{};
         exp = new CooCVector(expSize, expEntries, expIndices);
 
-        assertEquals(exp, A.getRow(67, 1, A.numCols));
+        assertEquals(exp, A.getRow(1, 67, A.numCols));
 
         // --------------------- sub-case 3 ---------------------
         aShape = new Shape(300, 15166);
@@ -384,7 +384,7 @@ class CsrCMatrixGetRowColTests {
         expIndices = new int[]{256-180, 299-180, 2051-180};
         exp = new CooCVector(expSize, expEntries, expIndices);
 
-        assertEquals(exp, A.getRow(180, 66, A.numCols));
+        assertEquals(exp, A.getRow(66, 180, A.numCols));
 
         // --------------------- sub-case 4 ---------------------
         A = new CsrCMatrix(1000, 15235);

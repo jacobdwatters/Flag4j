@@ -33,7 +33,7 @@ import java.math.RoundingMode;
  * This class provides low level methods for computing operations on real tensors. These methods can be applied to
  * either sparse or dense real tensors.
  */
-public class RealOperations {
+public final class RealOperations {
 
     private RealOperations() {
         // Hide default constructor for utility class.

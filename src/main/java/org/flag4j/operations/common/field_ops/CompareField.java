@@ -45,15 +45,14 @@ public final class CompareField {
      * @param values Values to commute maximum of.
      * @return The maximum value in {@code values}. If {@code values.length} equals zero, then {@code null} is returned.
      */
-    public static <T extends Field<T>> T max(Field<T>... values) {
-        if(values.length == 0) return null;
+    public static <T extends Field<T>> double max(Field<T>... values) {
+        if(values.length == 0) return Double.NaN;
         Field<T> max = values[0];
 
-        for (int i = 1, size=values.length; i<size; i++) {
+        for (int i = 1, size=values.length; i<size; i++)
             if (max.compareTo((T) values[i]) < 0) max = values[i];
-        }
 
-        return (T) max;
+        return max.abs();
     }
 
 
@@ -66,14 +65,14 @@ public final class CompareField {
      * @param values Values to commute minimum of.
      * @return The minimum value in {@code values}. If {@code values.length} equals zero, then {@code null} is returned.
      */
-    public static <T extends Field<T>> T min(Field<T>... values) {
-        if(values.length == 0) return null;
+    public static <T extends Field<T>> double min(Field<T>... values) {
+        if(values.length == 0) return Double.NaN;
         Field<T> min = values[0];
 
         for (int i=1, length=values.length; i < length; i++)
             if(values[i].compareTo((T) min) < 0) min = values[i];
 
-        return (T) min;
+        return min.abs();
     }
 
 

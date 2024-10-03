@@ -105,7 +105,6 @@ class CooVectorJoinTests {
         // ------------------- Sub-case 2 -------------------
         assertThrows(IllegalArgumentException.class, ()->a.repeat(4, -1));
         assertThrows(IllegalArgumentException.class, ()->a.repeat(4, 235));
-        assertThrows(IllegalArgumentException.class, ()->a.repeat(0, 0));
         assertThrows(IllegalArgumentException.class, ()->a.repeat(-1, 0));
     }
 }

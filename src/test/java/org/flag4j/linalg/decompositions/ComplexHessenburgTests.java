@@ -51,7 +51,7 @@ class ComplexHessenburgTests {
         Q = hess.getQ();
         A_hat = Q.mult(H).mult(Q.H());
 
-        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1e-12));
 
         // ----------------------- Sub-case 1.1 -----------------------
         hess = new ComplexHess();
@@ -73,7 +73,7 @@ class ComplexHessenburgTests {
         Q = hess.getQ();
         A_hat = Q.mult(H).mult(Q.H());
 
-        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1e-12));
 
         // ----------------------- Sub-case 2.1 -----------------------
         hess = new ComplexHess();

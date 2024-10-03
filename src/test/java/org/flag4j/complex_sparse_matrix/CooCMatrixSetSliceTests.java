@@ -112,11 +112,12 @@ class CooCMatrixSetSliceTests {
         CooCMatrix final0a = a;
         CooCMatrix final0b = b;
 
-        assertEquals(exp, ComplexSparseMatrixGetSet.setSlice(a, b, -1, 2));
+        assertThrows(IndexOutOfBoundsException.class, ()->ComplexSparseMatrixGetSet.setSlice(final0a, final0b, -1, 2));
 
         // ---------------------  Sub-case 5 ---------------------
         aShape = new Shape(3, 5);
-        aEntries = new Complex128[]{new Complex128("0.53707+0.34618i"), new Complex128("0.75684+0.20186i"), new Complex128("0.33387+0.5436i"), new Complex128("0.35621+0.29147i")};
+        aEntries = new Complex128[]{new Complex128("0.53707+0.34618i"), new Complex128("0.75684+0.20186i"),
+                new Complex128("0.33387+0.5436i"), new Complex128("0.35621+0.29147i")};
         aRowIndices = new int[]{0, 0, 0, 1};
         aColIndices = new int[]{0, 1, 3, 3};
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
@@ -129,12 +130,12 @@ class CooCMatrixSetSliceTests {
 
         CooCMatrix final1a = a;
         CooCMatrix final1b = b;
-
-        assertEquals(exp, ComplexSparseMatrixGetSet.setSlice(a, b, 0, 16));
+        assertThrows(IndexOutOfBoundsException.class, ()->ComplexSparseMatrixGetSet.setSlice(final1a, final1b, 0, 16));
 
         // ---------------------  Sub-case 6 ---------------------
         aShape = new Shape(3, 5);
-        aEntries = new Complex128[]{new Complex128("0.64684+0.98603i"), new Complex128("0.00028+0.59363i"), new Complex128("0.46343+0.5909i"), new Complex128("0.20891+0.6038i")};
+        aEntries = new Complex128[]{new Complex128("0.64684+0.98603i"), new Complex128("0.00028+0.59363i"),
+                new Complex128("0.46343+0.5909i"), new Complex128("0.20891+0.6038i")};
         aRowIndices = new int[]{0, 1, 2, 2};
         aColIndices = new int[]{1, 0, 0, 4};
         a = new CooCMatrix(aShape, aEntries, aRowIndices, aColIndices);
@@ -147,7 +148,7 @@ class CooCMatrixSetSliceTests {
 
         CooCMatrix final2a = a;
         CooCMatrix final2b = b;
-        assertEquals(exp, ComplexSparseMatrixGetSet.setSlice(a, b, 2, 0));
+        assertThrows(IllegalArgumentException.class, ()->ComplexSparseMatrixGetSet.setSlice(final2a, final2b, 2, 0));
 
         // ---------------------  Sub-case 7 ---------------------
         aShape = new Shape(3, 5);
@@ -164,7 +165,7 @@ class CooCMatrixSetSliceTests {
 
         CooCMatrix final3a = a;
         CooCMatrix final3b = b;
-        assertEquals(exp, ComplexSparseMatrixGetSet.setSlice(a, b, 0, 4));
+        assertThrows(IllegalArgumentException.class, ()->ComplexSparseMatrixGetSet.setSlice(final3a, final3b, 0, 4));
     }
 
 
@@ -590,7 +591,7 @@ class CooCMatrixSetSliceTests {
 
         CooCMatrix final2a = a;
         Complex128[][] final2b = b;
-        assertThrows(Exception.class, ()->ComplexSparseMatrixGetSet.setSlice(final0a, final0b, 2, 0));
+        assertThrows(Exception.class, ()->ComplexSparseMatrixGetSet.setSlice(final2a, final2b, 2, 0));
 
         // ---------------------  Sub-case 7 ---------------------
         aShape = new Shape(3, 5);
@@ -605,7 +606,7 @@ class CooCMatrixSetSliceTests {
         CooCMatrix final3a = a;
         Complex128[][] final3b = b;
 
-        assertThrows(Exception.class, ()->ComplexSparseMatrixGetSet.setSlice(final0a, final0b, 0, 4));
+        assertThrows(Exception.class, ()->ComplexSparseMatrixGetSet.setSlice(final3a, final3b, 0, 4));
     }
 
 

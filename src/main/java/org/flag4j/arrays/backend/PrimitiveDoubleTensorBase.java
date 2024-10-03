@@ -108,7 +108,7 @@ public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorB
     public T flatten(int axis) {
         int[] dims = new int[this.getRank()];
         Arrays.fill(dims, 1);
-        dims[axis] = shape.totalEntries().intValueExact();
+        dims[axis] = shape.totalEntriesIntValueExact();
         Shape flatShape = new Shape(dims);
 
         return makeLikeTensor(flatShape, entries.clone());
@@ -526,7 +526,7 @@ public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorB
      * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public Double min() {
+    public double min() {
         return AggregateReal.min(entries);
     }
 
@@ -537,7 +537,7 @@ public abstract class PrimitiveDoubleTensorBase<T extends PrimitiveDoubleTensorB
      * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public Double max() {
+    public double max() {
         return AggregateReal.max(entries);
     }
 

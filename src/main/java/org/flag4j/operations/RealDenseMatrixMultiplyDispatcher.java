@@ -28,7 +28,6 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.operations.dense.real.RealDenseMatrixMultTranspose;
 import org.flag4j.operations.dense.real.RealDenseMatrixMultiplication;
-import org.flag4j.util.Axis2D;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.HashMap;
@@ -254,8 +253,8 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * @return The squareness ratio for the specified shape.
      */
     private static double getRatio(Shape shape) {
-        int numRows = shape.get(Axis2D.row());
-        int numCols = shape.get(Axis2D.col());
+        int numRows = shape.get(0);
+        int numCols = shape.get(1);
 
         double ratio = Math.abs(numRows-numCols);
         return 1-ratio/Math.max(numRows, numCols);

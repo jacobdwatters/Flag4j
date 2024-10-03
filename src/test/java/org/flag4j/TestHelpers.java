@@ -3,7 +3,9 @@ package org.flag4j;
 import org.flag4j.arrays.backend.DenseTensorMixin;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.TensorBase;
+import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,10 +26,12 @@ public class TestHelpers {
 
     public static void printAsJavaArray(Object... args) {
         for(Object arg : args) {
-            if(arg instanceof MatrixMixin) {
-                printAsJavaArray((MatrixMixin<?,?,?,?,?>) arg);
+            if(arg instanceof MatrixMixin<?, ?, ?, ?, ?>) {
+                printAsJavaArray((MatrixMixin<?, ?, ?, ?, ?>) arg);
+            } else if(arg instanceof VectorMixin<?, ?, ?, ?>) {
+                printAsJavaArray((VectorMixin<?, ?, ?, ?>) arg);
             } else {
-                System.out.print(arg.toString());
+                System.out.print(arg.toString()); // Type not found, fall back to toString method.
             }
         }
     }
@@ -57,12 +61,27 @@ public class TestHelpers {
             }
             System.out.print("]");
 
-            if(i < A.numRows()-1) {
-                System.out.println(",");
-            }
+            if(i < A.numRows()-1) System.out.println(",");
         }
 
         System.out.println("\n])");
+    }
+
+
+    private static <T extends VectorMixin<?, ?, ?, ?>> void printAsJavaArray(T A) {
+        System.out.print("{");
+
+        for(int i=0; i<A.length(); i++) {
+            if(A instanceof CVector B) {
+                System.out.print("new Complex128(" + B.get(i).re + ", " + B.get(i).im + ")");
+            } else {
+                // Then must be real.
+                System.out.print(A.get(i));
+            }
+
+            if(i < A.length()-1) System.out.print(", ");
+        }
+        System.out.println("};");
     }
 
 

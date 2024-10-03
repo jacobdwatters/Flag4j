@@ -3,6 +3,7 @@ package org.flag4j.complex_vector;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
+import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -72,8 +73,8 @@ class CVectorStackJoinExtendTest {
         b = new CVector(bEntries);
 
         CVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB));
-        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, 0));
+        assertThrows(TensorShapeException.class, ()->a.stack(finalB));
+        assertThrows(TensorShapeException.class, ()->a.stack(finalB, 0));
 
         // ---------------------- Sub-case 3 ----------------------
         bEntries = new Complex128[]{new Complex128(2.4656, 9.24), new Complex128(-0.9924, -0.01),

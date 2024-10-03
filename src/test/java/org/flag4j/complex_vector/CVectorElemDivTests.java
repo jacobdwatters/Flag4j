@@ -60,14 +60,14 @@ class CVectorElemDivTests {
                 aEntries[2].div(bEntries[2]), aEntries[3].div(bEntries[3])};
         exp = new CVector(expEntries);
 
-        assertEqualsNaN(exp, a.elemDiv(b));
+        assertEqualsNaN(exp, a.div(b));
 
         // ------------------- Sub-case 2 -------------------
         bEntries = new double[]{2.455, -9.24};
         b = new Vector(bEntries);
 
         Vector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->a.elemDiv(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.div(finalB));
     }
 
 

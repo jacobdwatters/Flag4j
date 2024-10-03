@@ -32,12 +32,14 @@ import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.operations.dense.complex.ComplexDenseOperations;
 import org.flag4j.operations.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
 import org.flag4j.operations.sparse.SparseUtils;
 import org.flag4j.operations.sparse.csr.real.*;
 import org.flag4j.operations.sparse.csr.real_complex.RealComplexCsrMatrixMultiplication;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
@@ -254,6 +256,27 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
         }
 
         return new CsrMatrix(shape, newEntries, newRowPointers, newColIndices);
+    }
+
+
+    /**
+     * Gets the element of this tensor at the specified indices.
+     *
+     * @param indices Indices of the element to get.
+     *
+     * @return The element of this tensor at the specified indices.
+     *
+     * @throws ArrayIndexOutOfBoundsException If any indices are not within this matrix.
+     */
+    @Override
+    public Double get(int... indices) {
+        ValidateParameters.ensureValidIndex(shape, indices);
+        int row = indices[0];
+        int col = indices[1];
+        int loc = Arrays.binarySearch(colIndices, rowPointers[row], rowPointers[row+1], col);
+
+        if(loc >= 0) return entries[loc];
+        else return 0.0;
     }
 
 
@@ -697,7 +720,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      */
     @Override
     public CsrMatrix swapCols(int colIndex1, int colIndex2) {
-        RealCsrManipulations.swapRows(this, colIndex1, colIndex2);
+        RealCsrManipulations.swapCols(this, colIndex1, colIndex2);
         return this;
     }
 
@@ -1258,12 +1281,43 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
 
 
     /**
+     * Computes the element-wise sum between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise sum.
+     *
+     * @return The sum of this tensor with {@code b}.
+     *
+     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     */
+    @Override
+    public CsrMatrix add(CsrMatrix b) {
+        return RealCsrOperations.applyBinOpp(this, b, Double::sum, null);
+    }
+
+
+    /**
+     * Computes the element-wise difference between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise difference.
+     *
+     * @return The difference of this tensor with {@code b}.
+     *
+     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     */
+    @Override
+    public CsrMatrix sub(CsrMatrix b) {
+        return RealCsrOperations.applyBinOpp(this, b, (Double x, Double y)->x-y, (Double x) -> -x);
+    }
+
+
+
+    /**
      * Adds a complex-valued scalar to all non-zero entries of this sparse matrix.
      * @param b scalar to add.
      * @return The result of adding this matrix to {@code b}.
      */
-    public CooCMatrix add(Complex128 b) {
-        return new CooCMatrix(shape, ComplexDenseOperations.add(entries, b), rowPointers.clone(), colIndices.clone());
+    public CsrCMatrix add(Complex128 b) {
+        return new CsrCMatrix(shape, ComplexDenseOperations.add(entries, b), rowPointers.clone(), colIndices.clone());
     }
 
 
@@ -1272,7 +1326,52 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      * @param b scalar to subtract.
      * @return The result of subtracting {@code b} from this matrix's non-zero entries.
      */
-    public CooCMatrix sub(Complex128 b) {
-        return new CooCMatrix(shape, ComplexDenseOperations.add(entries, b), rowPointers.clone(), colIndices.clone());
+    public CsrCMatrix sub(Complex128 b) {
+        return new CsrCMatrix(shape, ComplexDenseOperations.sub(entries, b), rowPointers.clone(), colIndices.clone());
+    }
+
+
+    /**
+     * Formats this sparse matrix as a human-readable string.
+     * @return A human-readable string representing this sparse matrix.
+     */
+    public String toString() {
+        int size = nnz;
+        StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
+        result.append("Non-zero entries: [");
+
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int width;
+        String value;
+
+        if(entries.length > 0) {
+            // Get entries up until the stopping point.
+            for(int i=0; i<stopIndex; i++) {
+                value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+                width = PrintOptions.getPadding() + value.length();
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            if(stopIndex < size-1) {
+                width = PrintOptions.getPadding() + 3;
+                value = "...";
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            // Get last entry now
+            value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        result.append("]\n");
+
+        result.append("Row Pointers: ").append(Arrays.toString(rowPointers)).append("\n");
+        result.append("Col Indices: ").append(Arrays.toString(colIndices));
+
+        return result.toString();
     }
 }

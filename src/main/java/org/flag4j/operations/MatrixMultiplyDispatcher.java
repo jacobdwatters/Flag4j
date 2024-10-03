@@ -33,7 +33,6 @@ import org.flag4j.operations.dense.field_ops.DenseFieldMatrixMultiplication;
 import org.flag4j.operations.dense.real.RealDenseMatrixMultiplication;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultTranspose;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
-import org.flag4j.util.Axis2D;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
@@ -508,7 +507,7 @@ public final class MatrixMultiplyDispatcher {
     public static AlgorithmName chooseAlgorithmRealComplexTranspose(Shape shape) {
         AlgorithmName algorithm;
 
-        int rows = shape.get(Axis2D.row());
+        int rows = shape.get(0);
 
         if(rows<50) {
             algorithm = AlgorithmName.MULT_T;
@@ -531,7 +530,7 @@ public final class MatrixMultiplyDispatcher {
     public static AlgorithmName chooseAlgorithmComplexTranspose(Shape shape) {
         AlgorithmName algorithm;
 
-        int rows = shape.get(Axis2D.row());
+        int rows = shape.get(0);
 
         if(rows<25) {
             algorithm = AlgorithmName.MULT_T;
@@ -553,7 +552,7 @@ public final class MatrixMultiplyDispatcher {
     public static AlgorithmName chooseAlgorithmRealVector(Shape shape) {
         AlgorithmName algorithm;
 
-        int rows = shape.get(Axis2D.row());
+        int rows = shape.get(0);
 
         if(rows<=300) {
             algorithm = AlgorithmName.BLOCKED_VECTOR;
@@ -576,8 +575,8 @@ public final class MatrixMultiplyDispatcher {
     public static AlgorithmName chooseAlgorithmComplex(Shape shape1, Shape shape2) {
         AlgorithmName algorithm;
 
-        int rows1 = shape1.get(Axis2D.row());
-        int cols1 = shape1.get(Axis2D.col());
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
 
         // TODO: Extract constants to final variables
         if(getRatio(shape1) >= SQUARENESS_RATIO) {
@@ -640,7 +639,7 @@ public final class MatrixMultiplyDispatcher {
     public static AlgorithmName chooseAlgorithmComplexVector(Shape shape) {
         AlgorithmName algorithm;
 
-        int rows = shape.get(Axis2D.row());
+        int rows = shape.get(0);
 
         if(rows<=250) {
             algorithm = AlgorithmName.STANDARD_VECTOR;
@@ -663,8 +662,8 @@ public final class MatrixMultiplyDispatcher {
     public static AlgorithmName chooseAlgorithmRealComplex(Shape shape1, Shape shape2) {
         AlgorithmName algorithm;
 
-        int rows1 = shape1.get(Axis2D.row());
-        int cols1 = shape1.get(Axis2D.col());
+        int rows1 = shape1.get(0);
+        int cols1 = shape1.get(1);
 
         // TODO: Extract constants to final variables
         if(getRatio(shape1) >= SQUARENESS_RATIO) {
@@ -729,7 +728,7 @@ public final class MatrixMultiplyDispatcher {
     public static AlgorithmName chooseAlgorithmRealComplexVector(Shape shape) {
         AlgorithmName algorithm;
 
-        int rows = shape.get(Axis2D.row());
+        int rows = shape.get(0);
 
         if(rows<=600) {
             algorithm = AlgorithmName.STANDARD_VECTOR;
@@ -748,8 +747,8 @@ public final class MatrixMultiplyDispatcher {
      * @return The squareness ratio for the specified shape.
      */
     private static double getRatio(Shape shape) {
-        int numRows = shape.get(Axis2D.row());
-        int numCols = shape.get(Axis2D.col());
+        int numRows = shape.get(0);
+        int numCols = shape.get(1);
 
         double ratio = Math.abs(numRows-numCols);
         return 1-ratio/Math.max(numRows, numCols);

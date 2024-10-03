@@ -22,7 +22,7 @@ class CooCMatrixSetRowTests {
         CooCMatrix a;
 
         Shape bShape;
-        int[] bindices;
+        int[] bIndices;
         Complex128[] bEntries;
         CooCVector b;
 
@@ -41,8 +41,8 @@ class CooCMatrixSetRowTests {
 
         bShape = new Shape(3);
         bEntries = new Complex128[]{new Complex128("0.18568+0.10002i")};
-        bindices = new int[]{2};
-        b = new CooCVector(bShape.get(0), bEntries, bindices);
+        bIndices = new int[]{2};
+        b = new CooCVector(bShape.get(0), bEntries, bIndices);
 
         expShape = new Shape(5, 3);
         expEntries = new Complex128[]{new Complex128("0.18568+0.10002i"), new Complex128("0.13544+0.86431i"), new Complex128("0.42906+0.88227i")};
@@ -61,8 +61,8 @@ class CooCMatrixSetRowTests {
 
         bShape = new Shape(23);
         bEntries = new Complex128[]{new Complex128("0.09868+0.82283i"), new Complex128("0.5747+0.68314i"), new Complex128("0.97588+0.37176i"), new Complex128("0.01652+0.29332i")};
-        bindices = new int[]{2, 8, 16, 21};
-        b = new CooCVector(bShape.get(0), bEntries, bindices);
+        bIndices = new int[]{2, 8, 16, 21};
+        b = new CooCVector(bShape.get(0), bEntries, bIndices);
 
         expShape = new Shape(11, 23);
         expEntries = new Complex128[]{new Complex128("0.25343+0.33083i"), new Complex128("0.09868+0.82283i"), new Complex128("0.5747+0.68314i"), new Complex128("0.97588+0.37176i"), new Complex128("0.01652+0.29332i"), new Complex128("0.89061+0.1353i"), new Complex128("0.83798+0.5638i"), new Complex128("0.22808+0.99318i"), new Complex128("0.51957+0.88361i")};
@@ -81,8 +81,8 @@ class CooCMatrixSetRowTests {
 
         bShape = new Shape(1000);
         bEntries = new Complex128[]{new Complex128("0.83231+0.0157i"), new Complex128("0.94923+0.26837i"), new Complex128("0.15318+0.79913i"), new Complex128("0.8847+0.9145i"), new Complex128("0.05361+0.50878i")};
-        bindices = new int[]{111, 401, 626, 664, 884};
-        b = new CooCVector(bShape.get(0), bEntries, bindices);
+        bIndices = new int[]{111, 401, 626, 664, 884};
+        b = new CooCVector(bShape.get(0), bEntries, bIndices);
 
         expShape = new Shape(5, 1000);
         expEntries = new Complex128[]{new Complex128("0.63307+0.18148i"), new Complex128("0.89993+0.94657i"), new Complex128("0.01684+0.17543i"), new Complex128("0.29048+0.35145i"), new Complex128("0.03111+0.05317i"), new Complex128("0.3826+0.46659i"), new Complex128("0.83231+0.0157i"), new Complex128("0.94923+0.26837i"), new Complex128("0.15318+0.79913i"), new Complex128("0.8847+0.9145i"), new Complex128("0.05361+0.50878i")};
@@ -101,8 +101,8 @@ class CooCMatrixSetRowTests {
 
         bShape = new Shape(4);
         bEntries = new Complex128[]{new Complex128("0.32913+0.94182i")};
-        bindices = new int[]{1};
-        b = new CooCVector(bShape.get(0), bEntries, bindices);
+        bIndices = new int[]{1};
+        b = new CooCVector(bShape.get(0), bEntries, bIndices);
 
         CooCMatrix final0a = a;
         CooCVector final0b = b;
@@ -117,8 +117,8 @@ class CooCMatrixSetRowTests {
 
         bShape = new Shape(6);
         bEntries = new Complex128[]{new Complex128("0.10412+0.70557i"), new Complex128("0.193+0.2337i")};
-        bindices = new int[]{1, 5};
-        b = new CooCVector(bShape.get(0), bEntries, bindices);
+        bIndices = new int[]{1, 5};
+        b = new CooCVector(bShape.get(0), bEntries, bIndices);
 
         CooCMatrix final1a = a;
         CooCVector final1b = b;
@@ -133,8 +133,8 @@ class CooCMatrixSetRowTests {
 
         bShape = new Shape(5);
         bEntries = new Complex128[]{new Complex128("0.09009+0.73789i"), new Complex128("0.07688+0.38056i")};
-        bindices = new int[]{2, 4};
-        b = new CooCVector(bShape.get(0), bEntries, bindices);
+        bIndices = new int[]{2, 4};
+        b = new CooCVector(bShape.get(0), bEntries, bIndices);
 
         CooCMatrix final2a = a;
         CooCVector final2b = b;
@@ -149,8 +149,8 @@ class CooCMatrixSetRowTests {
 
         bShape = new Shape(5);
         bEntries = new Complex128[]{new Complex128("0.14938+0.44828i"), new Complex128("0.3092+0.80895i")};
-        bindices = new int[]{1, 3};
-        b = new CooCVector(bShape.get(0), bEntries, bindices);
+        bIndices = new int[]{1, 3};
+        b = new CooCVector(bShape.get(0), bEntries, bIndices);
 
         CooCMatrix final3a = a;
         CooCVector final3b = b;
@@ -365,7 +365,7 @@ class CooCMatrixSetRowTests {
 
         CooCMatrix final0a = a;
         Complex128[] final0b = b;
-        assertEquals(exp, ComplexSparseMatrixGetSet.setRow(final0a, 2, final0b));
+        assertThrows(IllegalArgumentException.class, ()->ComplexSparseMatrixGetSet.setRow(final0a, 2, final0b));
 
         // ---------------------  Sub-case 5 ---------------------
         aShape = new Shape(3, 5);
@@ -378,7 +378,7 @@ class CooCMatrixSetRowTests {
 
         CooCMatrix final1a = a;
         Complex128[] final1b = b;
-        assertEquals(exp, ComplexSparseMatrixGetSet.setRow(final1a, 1, final1b));
+        assertThrows(IllegalArgumentException.class, ()->ComplexSparseMatrixGetSet.setRow(final1a, 1, final1b));
 
         // ---------------------  Sub-case 6 ---------------------
         aShape = new Shape(3, 5);
@@ -391,7 +391,7 @@ class CooCMatrixSetRowTests {
 
         CooCMatrix final2a = a;
         Complex128[] final2b = b;
-        assertEquals(exp, ComplexSparseMatrixGetSet.setRow(final2a, -1, final2b));
+        assertThrows(IndexOutOfBoundsException.class, ()->ComplexSparseMatrixGetSet.setRow(final2a, -1, final2b));
 
         // ---------------------  Sub-case 7 ---------------------
         aShape = new Shape(3, 5);
@@ -404,7 +404,7 @@ class CooCMatrixSetRowTests {
 
         CooCMatrix final3a = a;
         Complex128[] final3b = b;
-        assertEquals(exp, ComplexSparseMatrixGetSet.setRow(final3a, 5, final3b));
+        assertThrows(IndexOutOfBoundsException.class, ()->ComplexSparseMatrixGetSet.setRow(final3a, 5, final3b));
     }
 
 
@@ -486,7 +486,7 @@ class CooCMatrixSetRowTests {
 
         CooCMatrix final0a = a;
         double[] final0b = b;
-        assertEquals(exp, ComplexSparseMatrixGetSet.setRow(final0a, 2, final0b));
+        assertThrows(IllegalArgumentException.class, ()->ComplexSparseMatrixGetSet.setRow(final0a, 2, final0b));
 
         // ---------------------  Sub-case 5 ---------------------
         aShape = new Shape(3, 5);
@@ -499,7 +499,7 @@ class CooCMatrixSetRowTests {
 
         CooCMatrix final1a = a;
         double[] final1b = b;
-        assertEquals(exp, ComplexSparseMatrixGetSet.setRow(final1a, 2, final1b));
+        assertThrows(IllegalArgumentException.class, ()->ComplexSparseMatrixGetSet.setRow(final1a, 2, final1b));
 
         // ---------------------  Sub-case 6 ---------------------
         aShape = new Shape(3, 5);
@@ -512,7 +512,7 @@ class CooCMatrixSetRowTests {
 
         CooCMatrix final2a = a;
         double[] final2b = b;
-        assertEquals(exp, ComplexSparseMatrixGetSet.setRow(final2a, -1, final2b));
+        assertThrows(IndexOutOfBoundsException.class, ()->ComplexSparseMatrixGetSet.setRow(final2a, -1, final2b));
 
         // ---------------------  Sub-case 7 ---------------------
         aShape = new Shape(3, 5);
@@ -525,6 +525,6 @@ class CooCMatrixSetRowTests {
 
         CooCMatrix final3a = a;
         double[] final3b = b;
-        assertEquals(exp, ComplexSparseMatrixGetSet.setRow(final3a, 5, final3b));
+        assertThrows(IndexOutOfBoundsException.class, ()->ComplexSparseMatrixGetSet.setRow(final3a, 5, final3b));
     }
 }

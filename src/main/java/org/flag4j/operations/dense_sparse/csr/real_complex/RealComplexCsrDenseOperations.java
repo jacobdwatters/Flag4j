@@ -68,7 +68,7 @@ public final class RealComplexCsrDenseOperations {
 
         Complex128[] dest;
         if(uOpp == null) dest = ArrayUtils.wrapAsComplex128(src2.entries, null);
-        else dest = ArrayUtils.applyTransform(src2.entries, (Double a)->new Complex128(uOpp.apply(a)));
+        else dest = ArrayUtils.applyTransform(src2.entries.clone(), (Double a)->new Complex128(uOpp.apply(a)));
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
             int start = src1.rowPointers[i];
@@ -132,13 +132,12 @@ public final class RealComplexCsrDenseOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
         Field<Complex128>[] dest;
 
-        if(uOpp == null) dest = Arrays.copyOf(src2.entries, src2.entries.length);
-        else dest = ArrayUtils.applyTransform(src2.entries, uOpp);
+        if(uOpp == null) dest = src2.entries.clone();
+        else dest = ArrayUtils.applyTransform(src2.entries.clone(), uOpp);
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
             int start = src1.rowPointers[i];
             int stop = src1.rowPointers[i+1];
-
             int rowOffset = i*src1.numCols;
 
             for(int j=start; j<stop; j++) {
@@ -352,7 +351,7 @@ public final class RealComplexCsrDenseOperations {
      * @return The element-wise difference of {@code a} and {@code b}.
      */
     public static CMatrix sub(CsrMatrix a, CMatrix b) {
-        return applyBinOpp(a, b, (Double x, Complex128 y)->new Complex128(x-y.re, -y.im), null);
+        return applyBinOpp(a, b, (Double x, Complex128 y)->y.add(x), (Complex128 x)->x.addInv());
     }
 
 

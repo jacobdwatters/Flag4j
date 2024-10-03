@@ -29,7 +29,7 @@ class ComplexCholeskyTests {
         L = cholesky.decompose(A).getL();
         A_hat = L.mult(L.H());
 
-        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0e-12));
 
         // --------------------- Sub-case 2 ---------------------
         aEntries = new String[][]{
@@ -39,7 +39,7 @@ class ComplexCholeskyTests {
 
         L = cholesky.decompose(A).getL();
         A_hat = L.mult(L.H());
-
-        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
+        
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0e-12));
     }
 }

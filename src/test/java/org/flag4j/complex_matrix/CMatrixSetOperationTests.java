@@ -5,7 +5,6 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,7 +45,7 @@ class CMatrixSetOperationTests {
         A = new CMatrix(entriesA);
 
         Complex128[][] finalValues = values;
-        assertThrows(LinearAlgebraException.class, () -> A.setValues(finalValues));
+        assertThrows(IllegalArgumentException.class, () -> A.setValues(finalValues));
     }
 
     @Test
@@ -68,7 +67,7 @@ class CMatrixSetOperationTests {
         A = new CMatrix(entriesA);
 
         double[][] finalValues = values;
-        assertThrows(LinearAlgebraException.class, () -> A.setValues(finalValues));
+        assertThrows(IllegalArgumentException.class, () -> A.setValues(finalValues));
     }
 
 
@@ -259,7 +258,7 @@ class CMatrixSetOperationTests {
 
         Complex128[] finalValues1 = values;
         int finalRow1 = row;
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> A.setRow(finalValues1, finalRow1));
+        assertThrows(IndexOutOfBoundsException.class, () -> A.setRow(finalValues1, finalRow1));
 
         // -------------- Sub-case 4 --------------
         values = new Complex128[]{new Complex128(34, -55.6), new Complex128(0.44, -0.23), new Complex128(9.234, -0.2334)};
@@ -269,7 +268,7 @@ class CMatrixSetOperationTests {
 
         Complex128[] finalValues2 = values;
         int finalRow2 = row;
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> A.setRow(finalValues2, finalRow2));
+        assertThrows(IndexOutOfBoundsException.class, () -> A.setRow(finalValues2, finalRow2));
     }
 
 
@@ -298,7 +297,9 @@ class CMatrixSetOperationTests {
         values = new Complex128[]{new Complex128(34, -55.6), new Complex128(0.44, -0.23)};
         valuesVec = new CVector(values);
         row = 0;
-        entriesA = new Complex128[][]{{new Complex128(0), new Complex128(0), new Complex128(1)}, {new Complex128(1), new Complex128(4), new Complex128(2)}};
+        entriesA = new Complex128[][]{
+                {new Complex128(0), new Complex128(0), new Complex128(1)},
+                {new Complex128(1), new Complex128(4), new Complex128(2)}};
         A = new CMatrix(entriesA);
 
         Complex128[] finalValues = values;
@@ -314,7 +315,10 @@ class CMatrixSetOperationTests {
                 {new Complex128(34, -55.6), new Complex128(0.44, -0.23)},
                 {new Complex128(1331.14), new Complex128(-1334.5)}};
         exp = new CMatrix(entriesExp);
-        entriesA = new Complex128[][]{{new Complex128(0), new Complex128(0)}, {new Complex128(1), new Complex128(4)}, {new Complex128(1331.14), new Complex128(-1334.5)}};
+        entriesA = new Complex128[][]{
+                {new Complex128(0), new Complex128(0)},
+                {new Complex128(1), new Complex128(4)},
+                {new Complex128(1331.14), new Complex128(-1334.5)}};
         A = new CMatrix(entriesA);
         A.setRow(values, row);
 
@@ -329,7 +333,7 @@ class CMatrixSetOperationTests {
 
         CVector finalValues1 = valuesVec;
         int finalRow1 = row;
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> A.setRow(finalValues1, finalRow1));
+        assertThrows(IndexOutOfBoundsException.class, () -> A.setRow(finalValues1, finalRow1));
 
         // -------------- Sub-case 4 --------------
         values = new Complex128[]{new Complex128(34, -55.6), new Complex128(0.44, -0.23), new Complex128(9.234, -0.2334)};
@@ -340,7 +344,7 @@ class CMatrixSetOperationTests {
 
         CVector finalValues2 = valuesVec;
         int finalRow2 = row;
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> A.setRow(finalValues2, finalRow2));
+        assertThrows(IndexOutOfBoundsException.class, () -> A.setRow(finalValues2, finalRow2));
     }
 
 
@@ -394,7 +398,7 @@ class CMatrixSetOperationTests {
         exp = new CMatrix(entriesExp);
 
         Matrix finalValues = values;
-        assertThrows(IllegalArgumentException.class, ()->A.setSlice(finalValues, 1, 2));
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.setSlice(finalValues, 1, 2));
     }
 
 
@@ -437,7 +441,7 @@ class CMatrixSetOperationTests {
         exp = new CMatrix(entriesExp);
 
         CMatrix finalValues = values;
-        assertThrows(IllegalArgumentException.class, ()->A.setSliceCopy(finalValues, 1, 2));
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.setSliceCopy(finalValues, 1, 2));
     }
 
 
@@ -497,6 +501,6 @@ class CMatrixSetOperationTests {
         exp = new CMatrix(entriesExp);
 
         CMatrix finalValues = mat;
-        assertThrows(IllegalArgumentException.class, ()->A.setSlice(finalValues, 1, 2));
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.setSlice(finalValues, 1, 2));
     }
 }

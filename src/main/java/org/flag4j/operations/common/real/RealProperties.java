@@ -30,7 +30,7 @@ import org.flag4j.util.ErrorMessages;
  * This class provides low level methods for checking tensor properties. These methods can be applied to
  * either sparse or dense real tensors.
  */
-public class RealProperties {
+public final class RealProperties {
 
     private RealProperties() {
         // Hide default constructor for utility class.

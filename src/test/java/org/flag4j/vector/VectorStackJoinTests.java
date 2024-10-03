@@ -2,6 +2,7 @@ package org.flag4j.vector;
 
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
+import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,7 +50,7 @@ class VectorStackJoinTests {
         b = new Vector(bEntries);
 
         Vector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB));
+        assertThrows(TensorShapeException.class, ()->a.stack(finalB));
 
         // ---------------------- Sub-case 3 ----------------------
         bEntries = new double[]{0.9345, 1.5,-9.234};
@@ -64,7 +65,7 @@ class VectorStackJoinTests {
         b = new Vector(bEntries);
 
         Vector finalB2 = b;
-        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB2, 0));
+        assertThrows(TensorShapeException.class, ()->a.stack(finalB2, 0));
 
         // ---------------------- Sub-case 5 ----------------------
         bEntries = new double[]{0.9345, 1.5,-9.234};

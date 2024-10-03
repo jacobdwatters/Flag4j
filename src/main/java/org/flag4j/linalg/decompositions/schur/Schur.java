@@ -245,7 +245,8 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?, ?>, U> implements 
         }
 
         if(iters == maxIterations) {
-            throw new LinearAlgebraException("Schur decomposition failed to converge in " + maxIterations + " iterations.");
+            throw new LinearAlgebraException("Schur decomposition failed to converge in " + maxIterations + " iterations. " +
+                    "Increasing maxIterationsFactor may allow for the decomposition to converge.");
         }
     }
 

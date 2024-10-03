@@ -49,7 +49,7 @@ public final class AggregateField {
         if(entries.length == 0) return null;
         Field<T> sum = entries[0];
 
-        for(int i=0, size = entries.length; i<size; i++)
+        for(int i=1, size = entries.length; i<size; i++)
             sum = sum.add((T) entries[i]);
 
         return (T) sum;

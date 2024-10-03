@@ -205,7 +205,7 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
         System.arraycopy(entries, 0, joinEntries, 0, size);
         System.arraycopy(b.entries, 0, joinEntries, size, b.size);
 
-        return makeLikeTensor(shape, joinEntries);
+        return makeLikeTensor(new Shape(this.size + b.size), joinEntries);
     }
 
 
@@ -445,7 +445,7 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
      */
     @Override
     public U repeat(int n, int axis) {
-        ValidateParameters.ensureValidAxes(shape, axis);
+        ValidateParameters.ensureValidAxes(2, axis);
         ValidateParameters.ensureNonNegative(n);
 
         Field<W>[] tiledEntries = new Field[n*size];
@@ -480,7 +480,7 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
     @Override
     public U stack(T b) {
         ValidateParameters.ensureEqualShape(shape, b.shape);
-        Field<W>[] tiledEntries = new Field[size];
+        Field<W>[] tiledEntries = new Field[size*2];
 
         // Copy entries from each vector to the matrix.
         System.arraycopy(entries, 0, tiledEntries, 0, size);
@@ -635,6 +635,8 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
      */
     @Override
     public void subEq(T b) {
+        ValidateParameters.ensureEqualShape(shape, b.shape);
+
         for(int i=0, stop=size; i<stop; i++)
             entries[i] = entries[i].sub((W) b.entries[i]);
     }
@@ -649,6 +651,8 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
      */
     @Override
     public void divEq(T b) {
+        ValidateParameters.ensureEqualShape(shape, b.shape);
+
         for(int i=0, stop=size; i<stop; i++)
             entries[i] = entries[i].div((W) b.entries[i]);
     }
@@ -665,12 +669,13 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
      */
     @Override
     public T div(T b) {
+        ValidateParameters.ensureEqualShape(shape, b.shape);
         Field<W>[] quotient = new Field[size];
 
         for(int i=0, stop=size; i<stop; i++)
             quotient[i] = entries[i].div((W) b.entries[i]);
 
-        return makeLikeTensor(shape, entries);
+        return makeLikeTensor(shape, quotient);
     }
 
 
@@ -682,6 +687,7 @@ public abstract class DenseFieldVectorBase<T extends DenseFieldVectorBase<T, U, 
     @Override
     public FieldVector<RealFloat64> abs() {
         RealFloat64[] abs = new RealFloat64[entries.length];
+
         for(int i = 0, size=entries.length; i<size; ++i)
             abs[i] = new RealFloat64(entries[i].abs());
 

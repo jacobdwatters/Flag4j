@@ -151,7 +151,7 @@ class CooVectorAddTests {
         b = 2.345;
 
         // --------------------- Sub-case 1 ---------------------
-        double[] expValues = {1.34+2.345, 2.345, 51.6+2.345, 2.345, 2.345, -0.00245+2.345, 2.345, 2.345};
+        double[] expValues = {1.34+2.345, 0, 51.6+2.345, 0, 0, -0.00245+2.345, 0, 0};
         exp = new Vector(expValues);
 
         assertEquals(exp.toCoo(), a.add(b));

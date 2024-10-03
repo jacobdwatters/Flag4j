@@ -55,8 +55,8 @@ public final class Projection {
      */
     public static Matrix getPerspective(double fov, double aspectRatio, double nearClip, double farClip) {
         ValidateParameters.ensureGreaterEq(0, aspectRatio);
-        if(nearClip!=farClip)
-            throw new IllegalArgumentException("nearClip cannot equal farClip.");
+        if(nearClip>=farClip)
+            throw new IllegalArgumentException("nearClip cannot be equal to or greater than farClip.");
 
         Matrix perspective = new Matrix(4);
 
@@ -87,8 +87,8 @@ public final class Projection {
      */
     public static Matrix getPerspective(double fovX, double fovY, double aspectRatio, double nearClip, double farClip){
         ValidateParameters.ensureGreaterEq(0, aspectRatio);
-        if(nearClip!=farClip)
-            throw new IllegalArgumentException("nearClip cannot equal farClip.");
+        if(nearClip>=farClip)
+            throw new IllegalArgumentException("nearClip cannot be equal to or greater than farClip.");
 
         Matrix perspective = new Matrix(4);
 
@@ -120,6 +120,8 @@ public final class Projection {
      */
     public static Matrix getOrthogonal(double xMin, double xMax, double yMin, double yMax,
                                           double nearClip, double farClip){
+        if(nearClip>=farClip)
+            throw new IllegalArgumentException("nearClip cannot be equal to or greater than farClip.");
         Matrix ortho = new Matrix(4);
 
         ortho.entries[0] = 2.0/(xMax-xMin);
@@ -147,6 +149,8 @@ public final class Projection {
      */
     public static Matrix getOrthogonal(double xMax, double yMax,
                                           double nearClip, double farClip){
+        if(nearClip>=farClip)
+            throw new IllegalArgumentException("nearClip cannot be equal to or greater than farClip.");
         Matrix ortho = new Matrix(4);
 
         ortho.entries[0] = 2.0/xMax;
@@ -173,6 +177,11 @@ public final class Projection {
      * @return The orthogonal projection for the specified parameters.
      */
     public static Matrix getOrthogonal2D(double xMin, double xMax, double yMin, double yMax){
+        if(xMin>=xMax)
+            throw new IllegalArgumentException("xMin cannot be greater than or equal to xMax.");
+        if(yMin>=yMax)
+            throw new IllegalArgumentException("yMin cannot be greater than or equal to yMax.");
+
         Matrix ortho = new Matrix(4);
 
         ortho.entries[0] = 2.0/(xMax-xMin);
@@ -197,6 +206,9 @@ public final class Projection {
      * @return The orthogonal projection for the specified parameters.
      */
     public static Matrix getOrthogonal2D(double xMax, double yMax){
+        if(xMax < 0 || yMax < 0)
+            throw new IllegalArgumentException("xMax and yMax must be non-negative.");
+
         Matrix ortho = new Matrix(4);
 
         ortho.entries[0] = 2.0/xMax;

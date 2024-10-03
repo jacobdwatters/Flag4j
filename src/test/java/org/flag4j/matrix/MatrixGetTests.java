@@ -18,7 +18,11 @@ class MatrixGetTests {
 
     @BeforeAll
     static void setup() {
-        aEntries = new double[][]{{1.123, 5525, 66.74}, {-8234.5, 15.22, -84.12}, {234, 8, 1}, {-9.451, -45.6, 111.345}};
+        aEntries = new double[][]{
+                {1.123, 5525, 66.74},
+                {-8234.5, 15.22, -84.12},
+                {234, 8, 1},
+                {-9.451, -45.6, 111.345}};
         A = new Matrix(aEntries);
     }
 
@@ -40,10 +44,10 @@ class MatrixGetTests {
         assertEquals(exp, A.getRow(3));
 
         // ------------------- Sub-case 4 -------------------
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.getRow(13));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(13));
 
         // ------------------- Sub-case 5 -------------------
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.getRow(-1));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(-1));
     }
 
 
@@ -64,16 +68,16 @@ class MatrixGetTests {
         assertEquals(exp, A.getRow(3, 0, A.numCols));
 
         // ------------------- Sub-case 4 -------------------
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.getRow(13));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(13));
 
         // ------------------- Sub-case 5 -------------------
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.getRow(-1));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(-1));
 
         // ------------------- Sub-case 6 -------------------
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.getRow(1, -1, 2));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(1, -1, 2));
 
         // ------------------- Sub-case 7 -------------------
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.getRow(1, 4, 5));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(1, 4, 5));
     }
 
 
@@ -111,9 +115,9 @@ class MatrixGetTests {
         assertEquals(exp, A.getCol(2));
 
         // ------------------- Sub-case 4 -------------------
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.getCol(13));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.getCol(13));
 
         // ------------------- Sub-case 5 -------------------
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.getCol(-1));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.getCol(-1));
     }
 }

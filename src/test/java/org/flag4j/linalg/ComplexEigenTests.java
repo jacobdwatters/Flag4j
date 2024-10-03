@@ -3,7 +3,6 @@ package org.flag4j.linalg;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
-import org.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -63,7 +62,6 @@ class ComplexEigenTests {
 
     @Test
     void getEigenValuesTests() {
-        PrintOptions.setPrecision(100);
 
         // ------------------- Sub-case 1 -------------------
         entries = new Complex128[][]{
@@ -80,9 +78,9 @@ class ComplexEigenTests {
                 {new Complex128("0.08611+0.04236i"), new Complex128("0.98099+0.54528i"), new Complex128("0.4917+0.78095i")},
                 {new Complex128("0.45323+0.82093i"), new Complex128("0.28344+0.95413i"), new Complex128("0.31625+0.79709i")}};
         A = new CMatrix(entries);
-        expEntries = new Complex128[]{new Complex128("1.2146241725922988 + 1.9378160847101924i"),
-                new Complex128("-0.11326855369139792 - 0.42446262318817385i"),
-                new Complex128("0.4992743810991004 + 0.3531265384779854i")};
+        expEntries = new Complex128[]{new Complex128(1.2146241725922982, 1.937816084710189),
+                new Complex128(-0.11326855369139645, -0.4244626231881721),
+                new Complex128(0.49927438109910044, 0.35312653847798553)};
         exp = new CVector(expEntries);
         assertEquals(exp, Eigen.getEigenValues(A, seed));
 
@@ -94,13 +92,11 @@ class ComplexEigenTests {
                 {new Complex128("0.31664+0.98003i"), new Complex128("0.40312+0.91131i"), new Complex128("0.97575+0.236i"), new Complex128("0.11995+0.50877i"), new Complex128("0.21747+0.83452i")},
                 {new Complex128("0.54424+0.79567i"), new Complex128("0.2451+0.5495i"), new Complex128("0.78562+0.24197i"), new Complex128("0.71864+0.3659i"), new Complex128("0.28414+0.13826i")}};
         A = new CMatrix(entries);
-        expEntries = new Complex128[]{
-                new Complex128(2.7893912122770947, 2.2557188346117036),
-                new Complex128(0.26992265297896606, -0.4597603145339981),
-                new Complex128(-0.6030872920420072, -0.4435375080536591),
-                new Complex128(-0.29662043545535155, 0.6229801159150405),
-                new Complex128(0.25958386224131025, 0.48761887206092025)
-        };
+        expEntries = new Complex128[]{new Complex128(2.789391212277099, 2.2557188346117005),
+                new Complex128(0.2699226529789536, -0.4597603145339834),
+                new Complex128(-0.6030872920420064, -0.4435375080536579),
+                new Complex128(-0.2966204354553508, 0.6229801159150411),
+                new Complex128(0.25958386224130936, 0.4876188720609204)};
         exp = new CVector(expEntries);
         assertEquals(exp, Eigen.getEigenValues(A, seed, 200));
 
@@ -157,11 +153,12 @@ class ComplexEigenTests {
                 {new Complex128("0.06341+0.45141i"), new Complex128("0.96949+0.33225i"), new Complex128("0.34728+0.84965i")}};
         A = new CMatrix(entries);
         expVEntries = new Complex128[][]{
-                {new Complex128(0.39074716924687747, -0.268428344623814), new Complex128(0.2550510725241495, 0.07695739329205784), new Complex128(-0.7273193862283214, 0.25014930427788856)},
-                {new Complex128(0.5819910600892099, -0.11004875164118963), new Complex128(-0.23846899693162998, -0.6471413682151337), new Complex128(-0.10097438362746816, 0.20534576443160502)},
-                {new Complex128(0.5983605131211007, -0.2576882770014521), new Complex128(0.4990402817482533, 0.45202421866716674), new Complex128(0.017946251980771433, -0.5964453528250859)}
+                {new Complex128(0.3907471692470309, -0.26842834462359194), new Complex128(0.25505107252419373, 0.07695739329191334), new Complex128(-0.7273193862283216, 0.25014930427788784)},
+                {new Complex128(0.5819910600892741, -0.11004875164086025), new Complex128(-0.23846899693199913, -0.6471413682149997), new Complex128(-0.10097438362746844, 0.20534576443160524)},
+                {new Complex128(0.5983605131212475, -0.25768827700111113), new Complex128(0.4990402817485113, 0.4520242186668835), new Complex128(0.017946251980771932, -0.5964453528250875)}
         };
         expV = new CMatrix(expVEntries);
+
         assertEquals(expV, Eigen.getEigenVectors(A, seed));
     }
 }

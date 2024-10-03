@@ -51,9 +51,7 @@ public final class ValidateParameters {
      */
     public static void ensureEqualShape(Shape shape1, Shape shape2) {
         if(!shape1.equals(shape2)) {
-            throw new TensorShapeException(
-                    ErrorMessages.equalShapeErrMsg(shape1, shape2)
-            );
+            throw new TensorShapeException(ErrorMessages.equalShapeErrMsg(shape1, shape2));
         }
     }
 
@@ -225,6 +223,16 @@ public final class ValidateParameters {
                 throw new IllegalArgumentException("Expecting values to be equal but got: " + Arrays.toString(values));
             }
         }
+    }
+
+
+    /**
+     * Ensures that a boolean is true.
+     * @param expr Boolean to check the truth of.
+     * @param errMsg Error message in the case where {@code expr == false}.
+     */
+    public static void ensureTrue(boolean expr, String errMsg) {
+        if(!expr) throw new IllegalArgumentException(errMsg);
     }
 
 
@@ -447,7 +455,7 @@ public final class ValidateParameters {
      */
     public static void ensureAxis2D(int axis) {
         if(!(axis == 0 || axis==1)) {
-            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
     }
 
@@ -566,9 +574,23 @@ public final class ValidateParameters {
         for(int axis : axes) {
             if(axis < 0 || axis >= rank) {
                 throw new LinearAlgebraException(
-                        String.format("Axis %d is out of bounds for shape %s with rank %d.", axis, shape, rank)
-                );
+                        String.format("Axis %d is out of bounds for shape %s with rank %d.", axis, shape, rank));
             }
+        }
+    }
+
+
+    /**
+     * <p>Checks if all provided {@code axes} are valid with respect to the rank of the given {@code rank}.</p>
+     * <p>Specifically, an axis is valid if {@code axis >= 0 && axis < rank}.</p>
+     * @param rank Rank of a tensor/shape.
+     * @param axes Axes to validate.
+     * @throws LinearAlgebraException If {@code axis < 0 || axis >= shape.getRank()} for any axis in {@code axes}.
+     */
+    public static void ensureValidAxes(int rank, int... axes) {
+        for(int axis : axes) {
+            if(axis < 0 || axis >= rank)
+                throw new LinearAlgebraException(String.format("Axis %d is out of bounds for rank %d.", axis, rank));
         }
     }
 

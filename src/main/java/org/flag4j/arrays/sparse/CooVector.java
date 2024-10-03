@@ -31,6 +31,7 @@ import org.flag4j.arrays.backend.SparseVectorMixin;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.operations.common.complex.Complex128Operations;
 import org.flag4j.operations.dense.real.AggregateDenseReal;
@@ -42,6 +43,7 @@ import org.flag4j.operations.sparse.coo.real.RealCooVectorOperations;
 import org.flag4j.operations.sparse.coo.real.RealSparseEquals;
 import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
@@ -102,6 +104,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
     public CooVector(Shape shape, double[] entries, int[] indices) {
         super(shape, entries);
         ValidateParameters.ensureRank(shape, 1);
+        ValidateParameters.ensureArrayLengthsEq(entries.length, indices.length);
         this.size = shape.get(0);
         this.indices = indices;
         this.nnz = entries.length;
@@ -117,6 +120,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     public CooVector(int size, double[] entries, int[] indices) {
         super(new Shape(size), entries);
+        ValidateParameters.ensureArrayLengthsEq(entries.length, indices.length);
         this.size = size;
         this.indices = indices;
         this.nnz = entries.length;
@@ -132,6 +136,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     public CooVector(int size, List<Double> entries, List<Integer> indices) {
         super(new Shape(size), ArrayUtils.fromDoubleList(entries));
+        ValidateParameters.ensureArrayLengthsEq(entries.size(), indices.size());
         this.indices = ArrayUtils.fromIntegerList(indices);
         this.size = size;
         this.nnz = this.entries.length;
@@ -158,6 +163,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     public CooVector(int size, int[] entries, int[] indices) {
         super(new Shape(size), ArrayUtils.asDouble(entries, null));
+        ValidateParameters.ensureArrayLengthsEq(entries.length, indices.length);
         this.indices = indices;
         this.size = size;
         nnz = entries.length;
@@ -226,7 +232,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      * @return A vector of the same type as this tensor with the given the shape and entries.
      */
     public CooVector makeLikeTensor(int size, double[] entries, int[] indices) {
-        return new CooVector(shape, entries, indices);
+        return new CooVector(size, entries, indices);
     }
 
 
@@ -311,7 +317,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
     @Override
     public CooVector join(CooVector b) {
         double[] newEntries = new double[this.entries.length + b.entries.length];
-        Arrays.fill(newEntries, 0d);
+        Arrays.fill(newEntries, 0.0);
         int[] newIndices = new int[this.indices.length + b.indices.length];
 
         // Copy values from this vector.
@@ -323,11 +329,10 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
         System.arraycopy(this.indices, 0, newIndices, 0, this.entries.length);
 
         // Copy the indices from vector b with a shift.
-        for(int i=0; i<b.indices.length; i++) {
-            newIndices[this.indices.length+i] = b.indices[i] + this.size;
-        }
+        for(int i=0; i<b.indices.length; i++)
+            newIndices[this.indices.length+i] = b.indices[i] + size;
 
-        return makeLikeTensor(this.size + b.size, newEntries, newIndices);
+        return makeLikeTensor(size + b.size, newEntries, newIndices);
     }
 
 
@@ -878,7 +883,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      * @return The minimum non-zero value in this tensor.
      */
     @Override
-    public Double min() {
+    public double min() {
         return super.min(); // Overrides method from super class to emphasize that this method works on the non-zero values only.
     }
 
@@ -889,7 +894,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      * @return The maximum non-zero value in this tensor.
      */
     @Override
-    public Double max() {
+    public double max() {
         return super.max(); // Overrides method from super class to emphasize that this method works on the non-zero values only.
     }
 
@@ -1202,5 +1207,49 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     public CooCVector div(Complex128 divisor) {
         return new CooCVector(size, Complex128Operations.scalDiv(entries, divisor), indices.clone());
+    }
+
+
+    /**
+     * Formats this tensor as a human-readable string. Specifically, a string containing the
+     * shape and flatten entries of this tensor.
+     * @return A human-readable string representing this tensor.
+     */
+    public String toString() {
+        int size = nnz;
+        StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
+        result.append("Non-zero entries: [");
+
+        if(size > 0) {
+            int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+            int width;
+            String value;
+
+            // Get entries up until the stopping point.
+            for(int i=0; i<stopIndex; i++) {
+                value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+                width = PrintOptions.getPadding() + value.length();
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            if(stopIndex < size-1) {
+                width = PrintOptions.getPadding() + 3;
+                value = "...";
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            // Get last entry now
+            value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        result.append("]\n");
+        result.append("Indices: ").append(Arrays.toString(indices));
+
+        return result.toString();
     }
 }

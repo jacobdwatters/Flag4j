@@ -32,6 +32,7 @@ import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.operations.dense.real.AggregateDenseReal;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
@@ -42,6 +43,7 @@ import org.flag4j.operations.sparse.coo.real.*;
 import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixMultiplication;
 import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixOperations;
 import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
@@ -122,6 +124,10 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
         super(shape, entries);
         ValidateParameters.ensureRank(shape, 2);
         ValidateParameters.ensureArrayLengthsEq(entries.length, rowIndices.length, colIndices.length);
+        ValidateParameters.ensureTrue(
+                shape.totalEntries().compareTo(BigInteger.valueOf(entries.length)) >= 0,
+                "Shape " + shape + " cannot hold " + entries.length + "entries.");
+
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
         nnz = entries.length;
@@ -143,6 +149,10 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
         super(new Shape(numRows, numCols), entries);
         ValidateParameters.ensureRank(shape, 2);
         ValidateParameters.ensureArrayLengthsEq(entries.length, rowIndices.length, colIndices.length);
+        ValidateParameters.ensureTrue(
+                shape.totalEntries().compareTo(BigInteger.valueOf(entries.length)) >= 0,
+                "Shape " + shape + " cannot hold " + entries.length + "entries.");
+
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
         nnz = entries.length;
@@ -161,7 +171,12 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     public CooMatrix(Shape shape, List<Double> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(shape, ArrayUtils.fromDoubleList(entries));
+        ValidateParameters.ensureArrayLengthsEq(entries.size(), rowIndices.size(), colIndices.size());
+        ValidateParameters.ensureTrue(
+                shape.totalEntries().compareTo(BigInteger.valueOf(entries.size())) >= 0,
+                "Shape " + shape + " cannot hold " + entries.size() + "entries.");
         ValidateParameters.ensureRank(shape, 2);
+
         this.rowIndices = ArrayUtils.fromIntegerList(rowIndices);
         this.colIndices = ArrayUtils.fromIntegerList(colIndices);
         ValidateParameters.ensureArrayLengthsEq(super.entries.length, this.rowIndices.length, this.colIndices.length);
@@ -225,6 +240,10 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
     public CooMatrix(int size, double[] entries, int[] rowIndices, int[] colIndices) {
         super(new Shape(size, size), entries);
         ValidateParameters.ensureArrayLengthsEq(entries.length, rowIndices.length, colIndices.length);
+        ValidateParameters.ensureTrue(
+                shape.totalEntries().compareTo(BigInteger.valueOf(entries.length)) >= 0,
+                "Shape " + shape + " cannot hold " + entries.length + "entries.");
+
         this.nnz = entries.length;
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
@@ -242,7 +261,12 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     public CooMatrix(Shape shape, int[] entries, int[] rowIndices, int[] colIndices) {
         super(shape, new double[entries.length]);
+        ValidateParameters.ensureArrayLengthsEq(entries.length, rowIndices.length, colIndices.length);
+        ValidateParameters.ensureTrue(
+                shape.totalEntries().compareTo(BigInteger.valueOf(entries.length)) >= 0,
+                "Shape " + shape + " cannot hold " + entries.length + "entries.");
         ValidateParameters.ensureRank(shape, 2);
+
         ArrayUtils.asDouble(entries, super.entries);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
@@ -652,7 +676,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      * @return The minimum non-zero value in this tensor.
      */
     @Override
-    public Double min() {
+    public double min() {
         return super.min(); // Overrides method from super class to emphasize it operates only on the non-zero values.
     }
 
@@ -663,7 +687,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public Double max() {
+    public double max() {
         return super.max(); // Overrides method from super class to emphasize it operates only on the non-zero values.
     }
 
@@ -1077,9 +1101,9 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public CooMatrix augment(CooVector b) {
-        ValidateParameters.ensureEquals(numCols, b.size);
+        ValidateParameters.ensureEquals(numRows, b.size);
 
-        Shape destShape = new Shape(numRows + 1, numCols);
+        Shape destShape = new Shape(numRows, numCols + 1);
         double[] destEntries = new double[entries.length + b.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
@@ -1612,5 +1636,50 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
         }
 
         return result;
+    }
+
+
+    /**
+     * Formats this sparse matrix as a human-readable string.
+     * @return A human-readable string representing this sparse matrix.
+     */
+    public String toString() {
+        int size = nnz;
+        StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
+        result.append("Non-zero entries: [");
+
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int width;
+        String value;
+
+        if(entries.length > 0) {
+            // Get entries up until the stopping point.
+            for(int i=0; i<stopIndex; i++) {
+                value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+                width = PrintOptions.getPadding() + value.length();
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            if(stopIndex < size-1) {
+                width = PrintOptions.getPadding() + 3;
+                value = "...";
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            // Get last entry now
+            value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        result.append("]\n");
+
+        result.append("Row Indices: ").append(Arrays.toString(rowIndices)).append("\n");
+        result.append("Col Indices: ").append(Arrays.toString(colIndices));
+
+        return result.toString();
     }
 }

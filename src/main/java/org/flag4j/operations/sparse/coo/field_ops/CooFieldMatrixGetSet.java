@@ -413,7 +413,7 @@ public final class CooFieldMatrixGetSet {
         Arrays.fill(colIndices, colIdx);
 
         // Initialize destination arrays with the new column and the appropriate indices.
-        List<Field<T>> destEntries = Arrays.asList(col.entries);
+        List<Field<T>> destEntries = new ArrayList(Arrays.asList(col.entries));
         List<Integer> destRowIndices = ArrayUtils.toArrayList(col.indices);
         List<Integer> destColIndices = ArrayUtils.toArrayList(colIndices);
 

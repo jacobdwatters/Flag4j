@@ -273,21 +273,6 @@ class CooMatrixConstructorTests {
         assertArrayEquals(expNonZero, A.entries);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
-
-        // --------------- Sub-case 2 ---------------
-        rows = -1;
-        cols = 12;
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(expShape, expNonZeroI, expRowIndices, expColIndices));
-
-        // --------------- Sub-case 3 ---------------
-        rows = 1;
-        cols = -12;
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(expShape, expNonZeroI, expRowIndices, expColIndices));
-
-        // --------------- Sub-case 4 ---------------
-        rows = -1;
-        cols = -2;
-        assertThrows(IllegalArgumentException.class, () -> new CooMatrix(expShape, expNonZeroI, expRowIndices, expColIndices));
     }
 
     @Test

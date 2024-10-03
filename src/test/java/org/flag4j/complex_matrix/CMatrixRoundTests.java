@@ -95,8 +95,8 @@ class CMatrixRoundTests {
     void roundToZeroTestCase() {
         // ------------------------ Sub-case 1 ------------------------
         aEntries = new Complex128[][]{
-                {new Complex128(23.5, Double.NEGATIVE_INFINITY), new Complex128(0, -0.5e-12), new Complex128(3.455, 1.54)},
-                {new Complex128(5, Double.NaN), new Complex128(-34.5e-14, 34.5e-14), new Complex128(Double.POSITIVE_INFINITY, 9.99)}};
+                {new Complex128(23.5, Double.NEGATIVE_INFINITY), new Complex128(0, -0.5e-16), new Complex128(3.455, 1.54)},
+                {new Complex128(5, Double.NaN), new Complex128(-34.5e-54, 34.5e-24), new Complex128(Double.POSITIVE_INFINITY, 9.99)}};
         A = new CMatrix(aEntries);
         expEntries = new Complex128[][]{
                 {new Complex128(23.5, Double.NEGATIVE_INFINITY), new Complex128(0), new Complex128(3.455, 1.54)},
@@ -104,7 +104,6 @@ class CMatrixRoundTests {
         exp = new CMatrix(expEntries);
 
         CMatrix B = A.roundToZero();
-
         assertEquals(exp.shape, B.shape);
 
         for(int i=0; i<exp.entries.length; i++) {

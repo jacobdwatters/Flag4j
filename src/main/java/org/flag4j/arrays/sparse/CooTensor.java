@@ -29,6 +29,8 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
 import org.flag4j.arrays.backend.SparseTensorMixin;
 import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.io.PrettyPrint;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.operations.dense.real.AggregateDenseReal;
 import org.flag4j.operations.sparse.coo.SparseDataWrapper;
 import org.flag4j.operations.sparse.coo.real.RealCooTensorDot;
@@ -101,6 +103,10 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      */
     public CooTensor(Shape shape, double[] entries, int[][] indices) {
         super(shape, entries);
+        ValidateParameters.ensureArrayLengthsEq(entries.length, indices.length);
+        if(indices.length != 0) ValidateParameters.ensureArrayLengthsEq(getRank(), indices[0].length);
+        ValidateParameters.ensureTrue(shape.totalEntries().compareTo(BigInteger.valueOf(entries.length)) >= 0,
+                "Tensor with shape " + shape + " cannot store " + entries.length + " entries.");
         this.indices = indices;
         this.nnz = entries.length;
     }
@@ -117,6 +123,10 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      */
     public CooTensor(Shape shape, List<Double> entries, List<int[]> indices) {
         super(shape, ArrayUtils.fromDoubleList(entries));
+        ValidateParameters.ensureArrayLengthsEq(entries.size(), indices.size());
+        if(indices.size() != 0)ValidateParameters.ensureArrayLengthsEq(getRank(), indices.get(0).length);
+        ValidateParameters.ensureTrue(shape.totalEntries().compareTo(BigInteger.valueOf(entries.size())) >= 0,
+                "Tensor with shape " + shape + " cannot store " + entries.size() + " entries.");
         this.indices = indices.toArray(new int[0][]);
         this.nnz = super.entries.length;
     }
@@ -141,6 +151,11 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      */
     public CooTensor(Shape shape, int[] entries, int[][] indices) {
         super(shape, ArrayUtils.asDouble(entries, null));
+        ValidateParameters.ensureArrayLengthsEq(entries.length, indices.length);
+        if(indices.length != 0) ValidateParameters.ensureArrayLengthsEq(getRank(), indices[0].length);
+        ValidateParameters.ensureTrue(shape.totalEntries().compareTo(BigInteger.valueOf(entries.length)) >= 0,
+                "Tensor with shape " + shape + " cannot store " + entries.length + " entries.");
+
         this.indices = indices;
         this.nnz = entries.length;
     }
@@ -276,16 +291,46 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      * Sets the element of this tensor at the specified indices.
      *
      * @param value New value to set the specified index of this tensor to.
-     * @param indices Indices of the element to set.
+     * @param Index Indices of the element to set.
      *
      * @return A copy of this tensor with the updated value is returned.
      *
      * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
      */
     @Override
-    public CooTensor set(Double value, int... indices) {
-        // TODO: Implement this method
-        return null;
+    public CooTensor set(Double value, int... index) {
+        ValidateParameters.ensureValidIndex(shape, index);
+        CooTensor dest;
+
+        // Check if value already exists in tensor.
+        int idx = -1;
+        for(int i=0; i<indices.length; i++) {
+            if(Arrays.equals(indices[i], index)) {
+                idx = i;
+                break; // Found in tensor, no need to continue.
+            }
+        }
+
+        if(idx > -1) {
+            // Copy entries and set new value.
+            dest = new CooTensor(shape, entries.clone(), ArrayUtils.deepCopy(indices, null));
+            dest.entries[idx] = value;
+            dest.indices[idx] = index;
+        } else {
+            // Copy old indices and insert new one.
+            int[][] newIndices = new int[indices.length + 1][getRank()];
+            ArrayUtils.deepCopy(indices, newIndices);
+            newIndices[indices.length] = index;
+
+            // Copy old entries and insert new one.
+            double[] newEntries = Arrays.copyOf(entries, entries.length+1);
+            newEntries[newEntries.length-1] = value;
+
+            dest = new CooTensor(shape, newEntries, newIndices);
+            dest.sortIndices();
+        }
+
+        return dest;
     }
 
 
@@ -723,7 +768,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      * not have any non-zero values, then {@code null} will be returned.
      */
     @Override
-    public Double min() {
+    public double min() {
         // Overrides method in super class to emphasize that the method works on the non-zero elements only.
         return super.min();
     }
@@ -737,7 +782,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      * non-zero values, then {@code null} will be returned.
      */
     @Override
-    public Double max() {
+    public double max() {
         // Overrides method in super class to emphasize that the method works on the non-zero elements only.
         return super.max();
     }
@@ -899,4 +944,25 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
     }
 
 
+    /**
+     * <p>Formats this sparse COO tensor as a human-readable string specifying the full shape,
+     * non-zero entries, and non-zero indices.</p>
+     *
+     * @return A human-readable string specifying the full shape, non-zero entries, and non-zero indices of this tensor.
+     */
+    public String toString() {
+        int maxCols = PrintOptions.getMaxColumns();
+        int padding = PrintOptions.getPadding();
+        int precision = PrintOptions.getPrecision();
+        boolean centring = PrintOptions.useCentering();
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Shape: " + shape + "\n");
+        sb.append("Non-zero Entries: " + PrettyPrint.abbreviatedArray(entries, maxCols, padding, precision, centring) + "\n");
+        sb.append("Non-zero Indices: " +
+                PrettyPrint.abbreviatedArray(indices, PrintOptions.getMaxRows(), maxCols, padding, 20, centring));
+
+        return sb.toString();
+    }
 }

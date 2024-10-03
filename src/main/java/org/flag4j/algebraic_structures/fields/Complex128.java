@@ -152,6 +152,15 @@ public class Complex128 implements Field<Complex128> {
 
 
     /**
+     * Checks if this complex has zero imaginary part and real part equal to a double.
+     * @return True if {@code this.re == b && this.im == 0}. False otherwise.
+     */
+    public boolean equals(double b) {
+        return this.re == b && this.im == 0;
+    }
+
+
+    /**
      * Checks if an object is equal to this Field element.
      * @param b Object to compare to this Field element.
      * @return True if the objects are the same or are both {@link Complex128}'s and have equal real and imaginary parts.
@@ -1025,15 +1034,11 @@ public class Complex128 implements Field<Complex128> {
         double min = -1;
         double currMag;
 
-        if(values.length > 0) {
-            min = values[0].mag();
-        }
+        if(values.length > 0) min = values[0].mag();
 
         for(Complex128 value : values) {
             currMag = value.mag();
-            if(currMag < min) {
-                min = currMag;
-            }
+            if(currMag < min) min = currMag;
         }
 
         return new Complex128(min);
@@ -1050,15 +1055,11 @@ public class Complex128 implements Field<Complex128> {
         double min = Double.MAX_VALUE;
         double currMin;
 
-        if(values.length == 0) {
-            min = Double.NaN;
-        }
+        if(values.length == 0) min = Double.NaN;
 
         for(Complex128 value : values) {
             currMin = value.re;
-            if(currMin < min) {
-                min = currMin;
-            }
+            if(currMin < min) min = currMin;
         }
 
         return new Complex128(min);
@@ -1074,15 +1075,11 @@ public class Complex128 implements Field<Complex128> {
         double max = -1;
         double currMax;
 
-        if(values.length > 0) {
-            max = values[0].mag();
-        }
+        if(values.length > 0) max = values[0].mag();
 
         for(Complex128 value : values) {
             currMax = value.mag();
-            if(currMax > max) {
-                max = currMax;
-            }
+            if(currMax > max) max = currMax;
         }
 
         return new Complex128(max);
@@ -1099,15 +1096,11 @@ public class Complex128 implements Field<Complex128> {
         double max = Double.MIN_NORMAL;
         double currMax;
 
-        if(values.length == 0) {
-            max = Double.NaN;
-        }
+        if(values.length == 0) max = Double.NaN;
 
         for(Complex128 value : values) {
             currMax = value.re;
-            if(currMax > max) {
-                max = currMax;
-            }
+            if(currMax > max) max = currMax;
         }
 
         return new Complex128(max);
@@ -1124,12 +1117,11 @@ public class Complex128 implements Field<Complex128> {
         double currMag;
         int arg = -1;
 
-        if(values.length > 0) {
-            min = values[0].mag();
-        }
+        if(values.length > 0) min = values[0].mag();
 
         for(int i=0; i<values.length; i++) {
             currMag = values[i].mag();
+
             if(currMag < min) {
                 min = currMag;
                 arg = i;
@@ -1150,12 +1142,11 @@ public class Complex128 implements Field<Complex128> {
         double currMin;
         int arg = -1;
 
-        if(values.length == 0) {
-            min = Double.NaN;
-        }
+        if(values.length == 0) min = Double.NaN;
 
         for(int i=0; i<values.length; i++) {
             currMin = values[i].re;
+
             if(currMin < min) {
                 min = currMin;
                 arg = i;
@@ -1176,12 +1167,12 @@ public class Complex128 implements Field<Complex128> {
         double currMag;
         int arg = -1;
 
-        if(values.length > 0) {
+        if(values.length > 0)
             max = values[0].mag();
-        }
 
         for(int i=0; i<values.length; i++) {
             currMag = values[i].mag();
+
             if(currMag > max) {
                 max = currMag;
                 arg = i;
@@ -1203,9 +1194,7 @@ public class Complex128 implements Field<Complex128> {
         double currMax;
         int arg = -1;
 
-        if(values.length == 0) {
-            max = Double.NaN;
-        }
+        if(values.length == 0) max = Double.NaN;
 
         for (Complex128 value : values) {
             currMax = value.re;
@@ -1313,8 +1302,10 @@ public class Complex128 implements Field<Complex128> {
         if (im != 0) {
             if (im > 0 && re != 0) {
                 result.append(" + ");
-            } else if (im < 0) {
+            } else if (im < 0 && re != 0) {
                 result.append(" - ");
+            } else if (im < 0) {
+                result.append("-");
             }
 
             double absIm = Math.abs(im);

@@ -19,7 +19,7 @@ class CooCVectorElemDivTests {
 
 
     @Test
-    void denseElemDivTestCase() {
+    void denseDivTestCase() {
         Complex128[] aValues = {
                 new Complex128(1.3345, -9.25), new Complex128(0, -45.62),
                 new Complex128(25.612, 0.0245)};
@@ -53,7 +53,7 @@ class CooCVectorElemDivTests {
 
 
     @Test
-    void denseComplexElemDivTestCase() {
+    void denseComplexDivTestCase() {
         Complex128[] aValues = {
                 new Complex128(1.3345, -9.25), new Complex128(0, -45.62),
                 new Complex128(25.612, 0.0245)};

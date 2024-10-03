@@ -68,10 +68,11 @@ class RealComplexDenseSparseMatMultTransposeTests {
         // ---------------------- sub-case 1 ----------------------
         exp = realDense.mult(new CooCMatrix(complexSp.shape.swapAxes(0, 1),
                 complexSp.entries, complexSp.colIndices, complexSp.rowIndices));
-        assertEquals(exp,
+        CMatrix act = new CMatrix(realDense.numRows, complexSp.numRows,
                 RealComplexDenseSparseMatrixMultTranspose.multTranspose(
                         realDense.entries, realDense.shape, complexSp.entries,
                         complexSp.rowIndices, complexSp.colIndices, complexSp.shape));
+        assertEquals(exp, act);
     }
 
 
@@ -80,9 +81,9 @@ class RealComplexDenseSparseMatMultTransposeTests {
         // ---------------------- sub-case 1 ----------------------
         exp = complexDense.mult(new CooMatrix(realSp.shape.swapAxes(0, 1),
                 realSp.entries, realSp.colIndices, realSp.rowIndices));
-        assertEquals(exp,
-                RealComplexDenseSparseMatrixMultTranspose.multTranspose(
-                        complexDense.entries, complexDense.shape, realSp.entries,
-                        realSp.rowIndices, realSp.colIndices, realSp.shape));
+        CMatrix act = new CMatrix(complexDense.numRows, realSp.numRows, RealComplexDenseSparseMatrixMultTranspose.multTranspose(
+                complexDense.entries, complexDense.shape, realSp.entries,
+                realSp.rowIndices, realSp.colIndices, realSp.shape));
+        assertEquals(exp, act);
     }
 }

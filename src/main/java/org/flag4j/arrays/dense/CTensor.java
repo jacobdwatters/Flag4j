@@ -31,6 +31,7 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.DenseFieldTensorBase;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.io.parsing.ComplexNumberParser;
 import org.flag4j.operations.common.complex.Complex128Operations;
 import org.flag4j.operations.dense.complex.ComplexDenseElemMult;
@@ -42,6 +43,7 @@ import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseOperatio
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.Flag4jConstants;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -223,7 +225,7 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
         for(int i=0; i<size; i++) {
             value = entries[i];
 
-            if(value.isZero()) {
+            if(!value.isZero()) {
                 spEntries.add(value);
                 indices.add(shape.getIndices(i));
             }
@@ -539,5 +541,46 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
      */
     public void subEq(Tensor b) {
         RealComplexDenseOperations.subEq(this.entries, this.shape, b.entries, b.shape);
+    }
+
+
+    /**
+     * Formats this tensor as a human-readable string. Specifically, a string containing the
+     * shape and flattened entries of this tensor.
+     * @return A human-readable string representing this tensor.
+     */
+    public String toString() {
+        int size = shape.totalEntries().intValueExact();
+        StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
+        result.append("[");
+
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int width;
+        String value;
+
+        // Get entries up until the stopping point.
+        for(int i=0; i<stopIndex; i++) {
+            value = StringUtils.ValueOfRound((Complex128) entries[i], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(stopIndex < size-1) {
+            width = PrintOptions.getPadding() + 3;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry now
+        value = StringUtils.ValueOfRound((Complex128) entries[size-1], PrintOptions.getPrecision());
+        width = PrintOptions.getPadding() + value.length();
+        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s", value));
+
+        result.append("]");
+
+        return result.toString();
     }
 }

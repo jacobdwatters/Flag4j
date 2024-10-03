@@ -128,7 +128,6 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      */
     public CMatrix(int rows, int cols, Field<Complex128>[] entries) {
         super(new Shape(rows, cols), entries);
-        ValidateParameters.ensureRank(shape, 2);
         if(entries.length == 0 || entries[0] == null) setZeroElement(Complex128.ZERO);
     }
 
@@ -578,7 +577,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @return The element-wise difference of this matrix and {@code b}
      */
     public CMatrix sub(CooCMatrix b) {
-        return ComplexDenseSparseMatrixOperations.add(this, b);
+        return ComplexDenseSparseMatrixOperations.sub(this, b);
     }
 
 
@@ -720,6 +719,36 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
 
 
     /**
+     * Computes the element-wise absolute value of this matrix.
+     *
+     * @return The element-wise absolute value of this matrix.
+     */
+    @Override
+    public Matrix abs() {
+        double[] abs = new double[entries.length];
+
+        for(int i = 0, size=entries.length; i<size; ++i)
+            abs[i] = entries[i].abs();
+
+        return new Matrix(shape, abs);
+    }
+
+
+    /**
+     * Flattens matrix to a single row.
+     *
+     * @return The flattened matrix.
+     *
+     * @see #flatten(int)
+     */
+    @Override
+    public CMatrix flatten() {
+        // TODO: Should probably return a rank 1 CTensor.
+        return flatten(1);
+    }
+
+
+    /**
      * Rounds values which are close to zero in absolute value to zero.
      *
      * @param threshold Threshold for rounding values to zero. That is, if a value in this matrix is less than the threshold in absolute value then it
@@ -757,13 +786,12 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      */
     public void setValues(double[][] values) {
         ValidateParameters.ensureEquals(numRows, values.length);
-        ValidateParameters.ensureEquals(numCols, values.length);
+        ValidateParameters.ensureEquals(numCols, values[0].length);
 
         int idx = 0;
         for(int i=0; i<numRows; i++) {
-            for(int j=0; j<numCols; j++) {
+            for(int j=0; j<numCols; j++)
                 entries[idx++] = new Complex128(values[i][j]);
-            }
         }
     }
 
@@ -776,7 +804,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
      *
-     * @return A copy of this matrix with the given slice set to the specified values.
+     * @return A reference to this matrix.
      *
      * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
@@ -786,18 +814,15 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
         ValidateParameters.ensureValidIndices(numRows, rowStart);
         ValidateParameters.ensureValidIndices(numCols, colStart);
 
-        CMatrix copy = copy();
-
         for(int i=0, rows=values.numRows; i<rows; i++) {
             int copyOffset = (i+rowStart)*numCols + colStart;
             int valuesRowOffset = i*values.numCols;
 
-            for(int j=0, cols=values.numCols; j<cols; j++) {
-                copy.entries[copyOffset + j] = new Complex128(values.entries[valuesRowOffset + j]);
-            }
+            for(int j=0, cols=values.numCols; j<cols; j++)
+                entries[copyOffset + j] = new Complex128(values.entries[valuesRowOffset + j]);
         }
 
-        return copy;
+        return this;
     }
 
 

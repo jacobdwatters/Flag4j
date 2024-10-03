@@ -110,8 +110,10 @@ class CooVectorOuterProductTest {
                 {0.0, 0.0, 0.0, 0.0, 0.0},
                 {-12.535700000000002, 0.0121615, -108.14380000000001, -0.0, 126.2925}};
         exp = new Matrix(expEntries);
+        Matrix act = new Matrix(a.size, b.size,
+                RealDenseSparseVectorOperations.outerProduct(a.entries, a.indices, a.size, b.entries));
 
-        assertEquals(exp, RealDenseSparseVectorOperations.outerProduct(a.entries, a.indices, a.size, b.entries));
+        assertEquals(exp, act);
 
         // -------------------- Sub-case 2 --------------------
         bEntries = new double[]{1.34, -0.0013, 11.56, 0.0, -13.5, 1.305, 1.556, -1.3413, 772.24};
@@ -141,7 +143,10 @@ class CooVectorOuterProductTest {
                 {new Complex128("-225.45550000000003-506.10550000000006i"), new Complex128("86.486975-31.807000000000002i"), new Complex128("-135.6475"), new Complex128("-0.0-880.6797i"), new Complex128("-1057.115-520.3251i")}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, RealComplexDenseSparseVectorOperations.outerProduct(a.entries, a.indices, a.size, b.entries));
+        CMatrix act = new CMatrix(a.size, b.size,
+                RealComplexDenseSparseVectorOperations.outerProduct(a.entries, a.indices, a.size, b.entries));
+
+        assertEquals(exp, act);
 
         // -------------------- Sub-case 2 --------------------
         bEntries = new Complex128[]{new Complex128(24.1, 54.1), new Complex128(-9.245, 3.4)};

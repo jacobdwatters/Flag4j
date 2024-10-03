@@ -67,8 +67,10 @@ public final class RealComplexCsrOperations {
      * @throws IllegalArgumentException If <code>src1</code> and <code>src2</code> do not have the same shape.
      */
     public static CsrCMatrix applyBinOpp(CsrMatrix src1, CsrCMatrix src2,
-                                         BiFunction<Double, Field<Complex128>, Field<Complex128>> opp,
-                                         UnaryOperator<Field<Complex128>> uOpp) {
+                                         BiFunction<Double, Complex128, Complex128> opp,
+                                         UnaryOperator<Complex128> uOpp) {
+        // TODO: The JavaDoc is not correct. The uOpp is not applied in that way. Either update the docs or how the binary operation
+        //  is computed. This is an issue in multiple csr operations utility classes.
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         List<Field<Complex128>> dest = new ArrayList<>();
@@ -84,7 +86,7 @@ public final class RealComplexCsrOperations {
                 int col2 = src2.colIndices[rowPtr2];
 
                 if(col1 == col2) {
-                    dest.add(opp.apply(src1.entries[rowPtr1], src2.entries[rowPtr2]));
+                    dest.add(opp.apply(src1.entries[rowPtr1], (Complex128) src2.entries[rowPtr2]));
                     colIndices.add(col1);
                     rowPtr1++;
                     rowPtr2++;
@@ -93,7 +95,7 @@ public final class RealComplexCsrOperations {
                     colIndices.add(col1);
                     rowPtr1++;
                 } else {
-                    if(uOpp!=null) dest.add(uOpp.apply(src2.entries[rowPtr2]));
+                    if(uOpp!=null) dest.add(uOpp.apply((Complex128) src2.entries[rowPtr2]));
                     else dest.add(src2.entries[rowPtr2]);
                     colIndices.add(col2);
                     rowPtr2++;
@@ -110,7 +112,7 @@ public final class RealComplexCsrOperations {
             }
 
             while(rowPtr2 < src2.rowPointers[i+1]) {
-                if(uOpp!=null) dest.add(uOpp.apply(src2.entries[rowPtr2]));
+                if(uOpp!=null) dest.add(uOpp.apply((Complex128) src2.entries[rowPtr2]));
                 else dest.add(src2.entries[rowPtr2]);
                 colIndices.add(src2.colIndices[rowPtr2]);
                 rowPtr2++;
@@ -291,9 +293,6 @@ public final class RealComplexCsrOperations {
      * @return The element-wise difference of {@code a} and {@code b}.
      */
     public static CsrCMatrix sub(CsrMatrix a, CsrCMatrix b) {
-        return applyBinOpp(a, b, (Double x, Field<Complex128> y)->y.add(x), (Field<Complex128> x)->x.addInv());
+        return applyBinOpp(a, b, (Double x, Complex128 y)->new Complex128(x-y.re, -y.im), (Complex128 x)->x.addInv());
     }
-
-
-
 }

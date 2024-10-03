@@ -58,6 +58,7 @@ public abstract class DensePrimitiveDoubleTensorBase <T extends DensePrimitiveDo
      */
     protected DensePrimitiveDoubleTensorBase(Shape shape, double[] entries) {
         super(shape, entries);
+        ValidateParameters.ensureEquals(shape.totalEntriesIntValueExact(), entries.length);
     }
 
 

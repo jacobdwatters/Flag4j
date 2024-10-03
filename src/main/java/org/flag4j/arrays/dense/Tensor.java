@@ -31,6 +31,7 @@ import org.flag4j.arrays.backend.DensePrimitiveDoubleTensorBase;
 import org.flag4j.arrays.backend.TensorOverSemiRing;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.TensorInvert;
 import org.flag4j.operations.common.complex.Complex128Operations;
 import org.flag4j.operations.dense.complex.ComplexDenseOperations;
@@ -41,6 +42,7 @@ import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseTensorOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
 import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -458,5 +460,46 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
      */
     public CTensor div(Complex128 b) {
         return new CTensor(shape, Complex128Operations.scalDiv(entries, b));
+    }
+
+
+    /**
+     * Formats this tensor as a human-readable string. Specifically, a string containing the
+     * shape and flattened entries of this tensor.
+     * @return A human-readable string representing this tensor.
+     */
+    public String toString() {
+        int size = shape.totalEntries().intValueExact();
+        StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
+        result.append("[");
+
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int width;
+        String value;
+
+        // Get entries up until the stopping point.
+        for(int i=0; i<stopIndex; i++) {
+            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(stopIndex < size-1) {
+            width = PrintOptions.getPadding() + 3;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry now
+        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+        width = PrintOptions.getPadding() + value.length();
+        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s", value));
+
+        result.append("]");
+
+        return result.toString();
     }
 }

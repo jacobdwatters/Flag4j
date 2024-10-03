@@ -3,6 +3,7 @@ package org.flag4j.complex_tensor;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -94,9 +95,9 @@ class CTensorTransposeTest {
         assertThrows(IllegalArgumentException.class, ()->A.T(aAxes));
 
         // -------------------- Sub-case 8 --------------------
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.T(-1, 0));
+        assertThrows(LinearAlgebraException.class, ()->A.T(-1, 0));
 
         // -------------------- Sub-case 9 --------------------
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.T(1, 6));
+        assertThrows(LinearAlgebraException.class, ()->A.T(1, 6));
     }
 }

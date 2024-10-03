@@ -1,7 +1,6 @@
 package org.flag4j.linalg;
 
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.io.PrintOptions;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.SingularMatrixException;
 import org.junit.jupiter.api.Test;
@@ -134,8 +133,6 @@ class MatrixInvertTests {
 
     @Test
     void invTriLTest() {
-        PrintOptions.setPrecision(100);
-
         // --------------------- Sub-case 1 ---------------------
         entries = new double[][]{
                 {0.61158, 0.87596},

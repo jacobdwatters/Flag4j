@@ -127,6 +127,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T flatten(int axis) {
+        ValidateParameters.ensureValidAxes(shape, axis);
         int[] dims = new int[this.getRank()];
         Arrays.fill(dims, 1);
         dims[axis] = shape.totalEntries().intValueExact();
@@ -542,7 +543,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      * @return The minimum value in this tensor.
      */
     @Override
-    public V min() {
+    public double min() {
         return CompareField.min(entries);
     }
 
@@ -553,7 +554,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      * @return The maximum value in this tensor.
      */
     @Override
-    public V max() {
+    public double max() {
         return CompareField.max(entries);
     }
 
@@ -590,7 +591,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public int[] argmin() {
-        return shape.getIndices(CompareField.argmin());
+        return shape.getIndices(CompareField.argmin(entries));
     }
 
 
@@ -602,7 +603,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public int[] argmax() {
-        return shape.getIndices(CompareField.argmax());
+        return shape.getIndices(CompareField.argmax(entries));
     }
 
 

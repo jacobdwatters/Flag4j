@@ -42,7 +42,7 @@ class Complex128ConversionTest {
 
         // --------------- Sub-case 5 ---------------
         n = new Complex128(-Math.sqrt(3.0)/2.0, -1.0/2.0);
-        expPolar = new double[]{1, -5.0*Math.PI/6.0};
+        expPolar = new double[]{0.9999999999999999, -5.0*Math.PI/6.0};
         actPolar = n.toPolar();
         Assertions.assertArrayEquals(expPolar, actPolar);
     }

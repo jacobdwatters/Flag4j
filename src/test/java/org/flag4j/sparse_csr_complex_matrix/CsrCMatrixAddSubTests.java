@@ -11,6 +11,7 @@ import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseOp
 import org.flag4j.operations.sparse.csr.real_complex.RealComplexCsrOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.exceptions.LinearAlgebraException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -77,7 +78,8 @@ class CsrCMatrixAddSubTests {
     }
 
 
-    private static void resetAll() {
+    @AfterEach
+    void resetAll() {
         A = null;
         B = null;
         denseA = null;
@@ -101,11 +103,11 @@ class CsrCMatrixAddSubTests {
     void addSubSpTests() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new Complex128[][]{
-                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.0"), new Complex128("0.6947844604184964+0.12617739377846993i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.5801548358148666+0.26523862055012315i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.030397833484514858+0.0339598081443111i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.8303067369813061+0.6672665799918752i"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.0"), new Complex128("0.08364434412041977+0.4996667151892932i"), new Complex128("0.4271149460271625+0.6885614097388274i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")}};
+                {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.5801548358148666+0.26523862055012315i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.030397833484514858+0.0339598081443111i"), Complex128.ZERO, Complex128.ZERO, new Complex128("0.8303067369813061+0.6672665799918752i"), Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.08364434412041977+0.4996667151892932i"), new Complex128("0.4271149460271625+0.6885614097388274i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO}};
         bEntries = new double[][]{
                 {0, 0, 0, 0, 0, 0},
                 {0, 0, 1.34, 0, 1.3, 0},
@@ -124,8 +126,6 @@ class CsrCMatrixAddSubTests {
         assertThrows(LinearAlgebraException.class, ()->RealComplexCsrOperations.add(A, B));
         assertThrows(LinearAlgebraException.class, ()->RealComplexCsrOperations.sub(A, B));
         assertThrows(LinearAlgebraException.class, ()->RealComplexCsrOperations.sub(B, A));
-
-        resetAll();
     }
 
 
@@ -133,11 +133,11 @@ class CsrCMatrixAddSubTests {
     void addSubDeTests() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new Complex128[][]{
-                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.0"), new Complex128("0.6947844604184964+0.12617739377846993i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.5801548358148666+0.26523862055012315i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.030397833484514858+0.0339598081443111i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.8303067369813061+0.6672665799918752i"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.0"), new Complex128("0.08364434412041977+0.4996667151892932i"), new Complex128("0.4271149460271625+0.6885614097388274i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")}};
+                {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.5801548358148666+0.26523862055012315i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.030397833484514858+0.0339598081443111i"), Complex128.ZERO, Complex128.ZERO, new Complex128("0.8303067369813061+0.6672665799918752i"), Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.08364434412041977+0.4996667151892932i"), new Complex128("0.4271149460271625+0.6885614097388274i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO}};
         bEntries = new double[][]{
                 {1, 2, 4, 25.23, 1.5, -0.204},
                 {-99.34, 15.23, 1.34, 0, 1.3, 0},
@@ -157,8 +157,6 @@ class CsrCMatrixAddSubTests {
         assertThrows(LinearAlgebraException.class, ()->RealComplexCsrDenseOperations.sub(A, denseB));
         assertThrows(LinearAlgebraException.class, ()->RealComplexCsrDenseOperations.add(B, denseA));
         assertThrows(LinearAlgebraException.class, ()->RealComplexCsrDenseOperations.sub(B, denseA));
-
-        resetAll();
     }
 
 
@@ -166,11 +164,11 @@ class CsrCMatrixAddSubTests {
     void addSubSpCmpTests() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new Complex128[][]{
-                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.0"), new Complex128("0.6947844604184964+0.12617739377846993i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.5801548358148666+0.26523862055012315i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.030397833484514858+0.0339598081443111i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.8303067369813061+0.6672665799918752i"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.0"), new Complex128("0.08364434412041977+0.4996667151892932i"), new Complex128("0.4271149460271625+0.6885614097388274i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")}};
+                {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.5801548358148666+0.26523862055012315i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.030397833484514858+0.0339598081443111i"), Complex128.ZERO, Complex128.ZERO, new Complex128("0.8303067369813061+0.6672665799918752i"), Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.08364434412041977+0.4996667151892932i"), new Complex128("0.4271149460271625+0.6885614097388274i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO}};
         bEntriesCmp = new Complex128[aEntries.length][aEntries[0].length];
         ArrayUtils.fill(bEntriesCmp, Complex128.ZERO);
         bEntriesCmp[0][0] = new Complex128(23, 1.34);
@@ -189,8 +187,6 @@ class CsrCMatrixAddSubTests {
         B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
         assertThrows(LinearAlgebraException.class, ()->A.add(BCmp));
         assertThrows(LinearAlgebraException.class, ()->A.sub(BCmp));
-
-        resetAll();
     }
 
 
@@ -198,11 +194,11 @@ class CsrCMatrixAddSubTests {
     void addSubDeCmpTests() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new Complex128[][]{
-                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.0"), new Complex128("0.6947844604184964+0.12617739377846993i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.5801548358148666+0.26523862055012315i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.030397833484514858+0.0339598081443111i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.8303067369813061+0.6672665799918752i"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.0"), new Complex128("0.08364434412041977+0.4996667151892932i"), new Complex128("0.4271149460271625+0.6885614097388274i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")}};
+                {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.5801548358148666+0.26523862055012315i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.030397833484514858+0.0339598081443111i"), Complex128.ZERO, Complex128.ZERO, new Complex128("0.8303067369813061+0.6672665799918752i"), Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.08364434412041977+0.4996667151892932i"), new Complex128("0.4271149460271625+0.6885614097388274i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO}};
         bEntriesCmp = new Complex128[aEntries.length][aEntries[0].length];
         ArrayUtils.fill(bEntriesCmp, Complex128.ZERO);
         bEntriesCmp[0][0] = new Complex128(23, 1.34);
@@ -220,67 +216,155 @@ class CsrCMatrixAddSubTests {
         B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
         assertThrows(LinearAlgebraException.class, ()->ComplexCsrDenseOperations.add(A, denseBCmp));
         assertThrows(LinearAlgebraException.class, ()->ComplexCsrDenseOperations.sub(A, denseBCmp));
-
-        resetAll();
     }
 
 
     @Test
     void addSubRealConstTests() {
+        Complex128[][] expAddEntries;
+        Complex128[][] expSubEntries;
+        CsrCMatrix expAdd;
+        CsrCMatrix expSub;
+
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new Complex128[][]{
-                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.0"), new Complex128("0.6947844604184964+0.12617739377846993i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.5801548358148666+0.26523862055012315i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.030397833484514858+0.0339598081443111i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.8303067369813061+0.6672665799918752i"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.0"), new Complex128("0.08364434412041977+0.4996667151892932i"), new Complex128("0.4271149460271625+0.6885614097388274i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")}};
+                {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.5801548358148666+0.26523862055012315i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.030397833484514858+0.0339598081443111i"), Complex128.ZERO, Complex128.ZERO, new Complex128("0.8303067369813061+0.6672665799918752i"), Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.08364434412041977+0.4996667151892932i"), new Complex128("0.4271149460271625+0.6885614097388274i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO}};
         b = 1.2;
+        expAddEntries = new Complex128[][]{
+                {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i").add(b), Complex128.ZERO, Complex128.ZERO,
+                        Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.5801548358148666+0.26523862055012315i").add(b), Complex128.ZERO, Complex128.ZERO,
+                        Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.030397833484514858+0.0339598081443111i").add(b), Complex128.ZERO, Complex128.ZERO,
+                        new Complex128("0.8303067369813061+0.6672665799918752i").add(b), Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.08364434412041977+0.4996667151892932i").add(b),
+                        new Complex128("0.4271149460271625+0.6885614097388274i").add(b), Complex128.ZERO, Complex128.ZERO,
+                        Complex128.ZERO}};
+        expAdd = new CMatrix(expAddEntries).toCsr();
+        expSubEntries = new Complex128[][]{
+                {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i").sub(b), Complex128.ZERO, Complex128.ZERO,
+                        Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.5801548358148666+0.26523862055012315i").sub(b), Complex128.ZERO, Complex128.ZERO,
+                        Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.030397833484514858+0.0339598081443111i").sub(b), Complex128.ZERO, Complex128.ZERO,
+                        new Complex128("0.8303067369813061+0.6672665799918752i").sub(b), Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.08364434412041977+0.4996667151892932i").sub(b),
+                        new Complex128("0.4271149460271625+0.6885614097388274i").sub(b), Complex128.ZERO, Complex128.ZERO,
+                        Complex128.ZERO}};
+        expSub = new CMatrix(expSubEntries).toCsr();
         makeRealConstMatrices();
 
-        assertEquals(expAddDense, A.add(b));
-        assertEquals(expAsubBDense, A.sub(b));
+        assertEquals(expAdd, A.add(b));
+        assertEquals(expSub, A.sub(b));
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new Complex128[][]{
-                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.0"), new Complex128("0.6947844604184964+0.12617739377846993i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.5801548358148666+0.26523862055012315i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.030397833484514858+0.0339598081443111i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.8303067369813061+0.6672665799918752i"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.0"), new Complex128("0.08364434412041977+0.4996667151892932i"), new Complex128("0.4271149460271625+0.6885614097388274i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")}};
+                {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.5801548358148666+0.26523862055012315i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.030397833484514858+0.0339598081443111i"), Complex128.ZERO, Complex128.ZERO, new Complex128("0.8303067369813061+0.6672665799918752i"), Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.08364434412041977+0.4996667151892932i"), new Complex128("0.4271149460271625+0.6885614097388274i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO}};
         b = -2341.200239867181;
+        expAddEntries = new Complex128[][]{
+                {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i").add(b), Complex128.ZERO, Complex128.ZERO,
+                        Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.5801548358148666+0.26523862055012315i").add(b), Complex128.ZERO, Complex128.ZERO,
+                        Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.030397833484514858+0.0339598081443111i").add(b), Complex128.ZERO, Complex128.ZERO,
+                        new Complex128("0.8303067369813061+0.6672665799918752i").add(b), Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.08364434412041977+0.4996667151892932i").add(b),
+                        new Complex128("0.4271149460271625+0.6885614097388274i").add(b), Complex128.ZERO, Complex128.ZERO,
+                        Complex128.ZERO}};
+        expAdd = new CMatrix(expAddEntries).toCsr();
+        expSubEntries = new Complex128[][]{
+                {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i").sub(b), Complex128.ZERO, Complex128.ZERO,
+                        Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.5801548358148666+0.26523862055012315i").sub(b), Complex128.ZERO, Complex128.ZERO,
+                        Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.030397833484514858+0.0339598081443111i").sub(b), Complex128.ZERO, Complex128.ZERO,
+                        new Complex128("0.8303067369813061+0.6672665799918752i").sub(b), Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.08364434412041977+0.4996667151892932i").sub(b),
+                        new Complex128("0.4271149460271625+0.6885614097388274i").sub(b), Complex128.ZERO, Complex128.ZERO,
+                        Complex128.ZERO}};
+        expSub = new CMatrix(expSubEntries).toCsr();
         makeRealConstMatrices();
 
-        assertEquals(expAddDense, A.add(b));
-        assertEquals(expAsubBDense, A.sub(b));
+        assertEquals(expAdd, A.add(b));
+        assertEquals(expSub, A.sub(b));
     }
 
 
     @Test
     void addSubCmpConstTests() {
+        Complex128[][] expAddEntries;
+        Complex128[][] expSubEntries;
+        CsrCMatrix expAdd;
+        CsrCMatrix expSub;
+
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new Complex128[][]{
-                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.0"), new Complex128("0.6947844604184964+0.12617739377846993i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.5801548358148666+0.26523862055012315i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.030397833484514858+0.0339598081443111i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.8303067369813061+0.6672665799918752i"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.0"), new Complex128("0.08364434412041977+0.4996667151892932i"), new Complex128("0.4271149460271625+0.6885614097388274i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")}};
+                {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.5801548358148666+0.26523862055012315i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.030397833484514858+0.0339598081443111i"), Complex128.ZERO, Complex128.ZERO, new Complex128("0.8303067369813061+0.6672665799918752i"), Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.08364434412041977+0.4996667151892932i"), new Complex128("0.4271149460271625+0.6885614097388274i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO}};
         bCmp = new Complex128(-0.234, 155.2);
+        expAddEntries = new Complex128[][]{
+                {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i").add(bCmp), Complex128.ZERO, Complex128.ZERO,
+                        Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.5801548358148666+0.26523862055012315i").add(bCmp), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.030397833484514858+0.0339598081443111i").add(bCmp), Complex128.ZERO, Complex128.ZERO, new Complex128("0.8303067369813061+0.6672665799918752i").add(bCmp), Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.08364434412041977+0.4996667151892932i").add(bCmp), new Complex128("0.4271149460271625+0.6885614097388274i").add(bCmp), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO}};
+        expAdd = new CMatrix(expAddEntries).toCsr();
+        expSubEntries = new Complex128[][]{
+                {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i").sub(bCmp), Complex128.ZERO, Complex128.ZERO,
+                        Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.5801548358148666+0.26523862055012315i").sub(bCmp), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.030397833484514858+0.0339598081443111i").sub(bCmp), Complex128.ZERO, Complex128.ZERO, new Complex128("0.8303067369813061+0.6672665799918752i").sub(bCmp), Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.08364434412041977+0.4996667151892932i").sub(bCmp), new Complex128("0.4271149460271625+0.6885614097388274i").sub(bCmp), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO}};
+        expSub = new CMatrix(expSubEntries).toCsr();
         makeCmpConstMatrices();
 
-        assertEquals(expAddDense, A.add(bCmp));
-        assertEquals(expAsubBDense, A.sub(bCmp));
+        assertEquals(expAdd, A.add(bCmp));
+        assertEquals(expSub, A.sub(bCmp));
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new Complex128[][]{
-                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.0"), new Complex128("0.6947844604184964+0.12617739377846993i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.5801548358148666+0.26523862055012315i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.030397833484514858+0.0339598081443111i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.8303067369813061+0.6672665799918752i"), new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.0"), new Complex128("0.08364434412041977+0.4996667151892932i"), new Complex128("0.4271149460271625+0.6885614097388274i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")}};
+                {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.5801548358148666+0.26523862055012315i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.030397833484514858+0.0339598081443111i"), Complex128.ZERO, Complex128.ZERO, new Complex128("0.8303067369813061+0.6672665799918752i"), Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.08364434412041977+0.4996667151892932i"), new Complex128("0.4271149460271625+0.6885614097388274i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO}};
         bCmp = new Complex128(-92.14, -7884.7761);
+        expAddEntries = new Complex128[][]{
+                {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i").add(bCmp), Complex128.ZERO, Complex128.ZERO,
+                        Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.5801548358148666+0.26523862055012315i").add(bCmp), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.030397833484514858+0.0339598081443111i").add(bCmp), Complex128.ZERO, Complex128.ZERO, new Complex128("0.8303067369813061+0.6672665799918752i").add(bCmp), Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.08364434412041977+0.4996667151892932i").add(bCmp), new Complex128("0.4271149460271625+0.6885614097388274i").add(bCmp), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO}};
+        expAdd = new CMatrix(expAddEntries).toCsr();
+        expSubEntries = new Complex128[][]{
+                {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i").sub(bCmp), Complex128.ZERO, Complex128.ZERO,
+                        Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.5801548358148666+0.26523862055012315i").sub(bCmp), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
+                {new Complex128("0.030397833484514858+0.0339598081443111i").sub(bCmp), Complex128.ZERO, Complex128.ZERO, new Complex128("0.8303067369813061+0.6672665799918752i").sub(bCmp), Complex128.ZERO, Complex128.ZERO},
+                {Complex128.ZERO, new Complex128("0.08364434412041977+0.4996667151892932i").sub(bCmp), new Complex128("0.4271149460271625+0.6885614097388274i").sub(bCmp), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO}};
+        expSub = new CMatrix(expSubEntries).toCsr();
         makeCmpConstMatrices();
 
-        assertEquals(expAddDense, A.add(bCmp));
-        assertEquals(expAsubBDense, A.sub(bCmp));
+        assertEquals(expAdd, A.add(bCmp));
+        assertEquals(expSub, A.sub(bCmp));
     }
 }

@@ -109,19 +109,19 @@ class MatrixReshapeTests {
 
         // --------------- Sub-case 2 ---------------
         expShape = new Shape(1, entries.length);
-        B = A.flatten(0);
+        B = A.flatten(1);
         assertEquals(expShape, B.shape);
         assertArrayEquals(A.entries, B.entries);
 
         // --------------- Sub-case 2 ---------------
         expShape = new Shape(entries.length, 1);
-        B = A.flatten(1);
+        B = A.flatten(0);
         assertEquals(expShape, B.shape);
         assertArrayEquals(A.entries, B.entries);
 
         // --------------- Sub-cases 2-4 ---------------
-        assertThrows(IllegalArgumentException.class, ()->A.flatten(-1));
-        assertThrows(IllegalArgumentException.class, ()->A.flatten(4));
-        assertThrows(IllegalArgumentException.class, ()->A.flatten(2));
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.flatten(-1));
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.flatten(4));
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.flatten(2));
     }
 }

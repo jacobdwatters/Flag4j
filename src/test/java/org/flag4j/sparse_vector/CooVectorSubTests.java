@@ -142,7 +142,7 @@ class CooVectorSubTests {
     @Test
     void scalarTestCase() {
         double b;
-        Vector exp;
+        CooVector exp;
 
         double[] aValues = {1.34, 51.6, -0.00245};
         int[] aIndices = {0, 2, 5};
@@ -152,8 +152,8 @@ class CooVectorSubTests {
         b = 2.345;
 
         // --------------------- Sub-case 1 ---------------------
-        double[] expValues = {1.34-2.345, -2.345, 51.6-2.345, -2.345, -2.345, -0.00245-2.345, -2.345, -2.345};
-        exp = new Vector(expValues);
+        double[] expValues = {1.34-2.345, 51.6-2.345, -0.00245-2.345};
+        exp = new CooVector(8, expValues, aIndices.clone());
 
         assertEquals(exp, a.sub(b));
     }

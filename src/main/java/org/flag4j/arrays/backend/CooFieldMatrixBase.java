@@ -1179,7 +1179,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V, W
      * @return The minimum non-zero value in this tensor.
      */
     @Override
-    public Y min() {
+    public double min() {
         return super.min(); // Overrides method from super class to emphasize it operates only on the non-zero values.
     }
 
@@ -1190,7 +1190,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V, W
      * @return The maximum non-zero value in this tensor.
      */
     @Override
-    public Y max() {
+    public double max() {
         return super.max(); // Overrides method from super class to emphasize it operates only on the non-zero values.
     }
 

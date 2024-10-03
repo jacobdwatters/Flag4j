@@ -202,11 +202,12 @@ class CMatrixMultTests {
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
                 {new Complex128(7617.445), new Complex128(0), Complex128.ZERO}};
         A = new CMatrix(aEntries);
-        expEntries = new Complex128[][]{{new Complex128("120661.30796950031-33236207.159211755i"), new Complex128("-22728032.650843892-4235221.2280359i"), new Complex128("-3050628.73221+644215.430715i")},
-                {new Complex128("-565975794.5347501+110147879.29020001i"), new Complex128("-11896701.7985705+378258502.7781383i"), new Complex128("17630791.944599997+47520631.43985i")},
-                {new Complex128("429206180.168535-17498286.570418503i"), new Complex128("42331247.00392061-259089053.0570348i"), new Complex128("-6822160.1279205-32394488.588211752i")}};
+        expEntries = new Complex128[][]{
+                {new Complex128(120661.30796950031, -3.323620715921176E7), new Complex128(-2.2728032650843892E7, -4235221.228035901), new Complex128(-3050628.7322100005, 644215.430715)},
+                {new Complex128(-5.659757945347501E8, 1.1014787929019998E8), new Complex128(-1.18967017985705E7, 3.7825850277813834E8), new Complex128(1.76307919446E7, 4.752063143985001E7)},
+                {new Complex128(4.29206180168535E8, -1.7498286570418503E7), new Complex128(4.23312470039206E7, -2.5908905305703476E8), new Complex128(-6822160.1279205, -3.2394488588211756E7)}
+        };
         exp = new CMatrix(expEntries);
-
         assertEquals(exp, A.pow(3));
 
         // ---------------------- Sub-case 2 ----------------------
@@ -243,7 +244,7 @@ class CMatrixMultTests {
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)}};
         A = new CMatrix(aEntries);
 
-        assertThrows(LinearAlgebraException.class, ()->A.pow(2));
+        assertThrows(IllegalArgumentException.class, ()->A.pow(2));
 
         // ---------------------- Sub-case 5 ----------------------
         aEntries = new Complex128[][]{

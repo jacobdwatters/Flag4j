@@ -24,6 +24,7 @@
 
 package org.flag4j.operations.sparse.csr.field_ops;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.backend.CsrFieldMatrixBase;
 import org.flag4j.util.ArrayUtils;
@@ -70,7 +71,7 @@ public final class CsrFieldMatrixManipulations {
 
         int destPos = 0;
 
-        double[] updatedEntries = new double[end2-start1];
+        Field<Complex128>[] updatedEntries = new Field[end2-start1];
         int[] updatedColIndices = new int[end2-start1];
 
         // Copy entries from second row in swap.

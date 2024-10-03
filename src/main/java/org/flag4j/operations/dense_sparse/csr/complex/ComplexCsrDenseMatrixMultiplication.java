@@ -103,6 +103,7 @@ public final class ComplexCsrDenseMatrixMultiplication {
         ValidateParameters.ensureMatMultShapes(src1.shape, src2.shape);
 
         Complex128[] destEntries = new Complex128[src1.numRows * src2.numCols];
+        Arrays.fill(destEntries, Complex128.ZERO);
         int rows1 = src1.numRows;
         int cols1 = src1.numCols;
         int cols2 = src2.numCols;

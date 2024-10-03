@@ -2,6 +2,7 @@ package org.flag4j.sparse_vector;
 
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -51,6 +52,6 @@ public class CooVectorReshapeTests {
         assertThrows(TensorShapeException.class, ()->a.reshape(size-3));
 
         // -------------------- Sub-case 7 --------------------
-        assertThrows(AssertionError.class, ()->a.flatten(1));
+        assertThrows(LinearAlgebraException.class, ()->a.flatten(1));
     }
 }

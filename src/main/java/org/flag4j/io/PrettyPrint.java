@@ -92,7 +92,7 @@ public final class PrettyPrint {
      * @param centring Flag indicating if each value should be centered within the padding.
      * @return A string representing the abbreviated and formatted array.
      */
-    public static String abbreviatedArray(Complex128[] arr, int maxEntries, int padding, int precision, boolean centring) {
+    public static String abbreviatedArray(Field<Complex128>[] arr, int maxEntries, int padding, int precision, boolean centring) {
         ValidateParameters.ensureNonNegative(maxEntries, padding, precision);
         StringBuilder result = new StringBuilder("[");
         String value;
@@ -100,7 +100,7 @@ public final class PrettyPrint {
 
         // Get entries up until the stopping point.
         for(int i=0; i<maxEntries-1 && i<arr.length-1; i++) {
-            value = StringUtils.ValueOfRound(arr[i], precision);
+            value = StringUtils.ValueOfRound((Complex128) arr[i], precision);
             width = padding + value.length();
             value = centring ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
@@ -114,7 +114,7 @@ public final class PrettyPrint {
             result.append(String.format("%-" + width + "s", value));
         }
 
-        value = StringUtils.ValueOfRound(arr[arr.length-1], PrintOptions.getPrecision());
+        value = StringUtils.ValueOfRound((Complex128) arr[arr.length-1], PrintOptions.getPrecision());
         width = PrintOptions.getPadding() + value.length();
         value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
         result.append(String.format("%-" + width + "s", value));

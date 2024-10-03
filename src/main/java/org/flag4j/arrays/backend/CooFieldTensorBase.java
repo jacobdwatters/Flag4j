@@ -106,9 +106,8 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      */
     public CooFieldTensorBase(Shape shape, Field<V>[] entries, int[][] indices) {
         super(shape, entries);
-        ValidateParameters.ensureLengthEqualsRank(shape, indices[0].length);
+        if(indices.length != 0) ValidateParameters.ensureLengthEqualsRank(shape, indices[0].length);
         ValidateParameters.ensureArrayLengthsEq(entries.length, indices.length);
-
         this.indices = indices;
         this.nnz = entries.length;
     }
@@ -596,7 +595,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      * not have any non-zero values, then {@code null} will be returned.
      */
     @Override
-    public V min() {
+    public double min() {
         // Overrides method in FieldTensorBase to emphasize that the method works on the non-zero elements only.
         return super.min();
     }
@@ -610,7 +609,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      * non-zero values, then {@code null} will be returned.
      */
     @Override
-    public V max() {
+    public double max() {
         // Overrides method in FieldTensorBase to emphasize that the method works on the non-zero elements only.
         return super.max();
     }

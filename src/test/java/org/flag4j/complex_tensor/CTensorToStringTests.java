@@ -6,6 +6,7 @@ import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,6 +28,10 @@ class CTensorToStringTests {
         A = new CTensor(aShape, aEntries);
     }
 
+    @BeforeEach
+    void init() {
+        PrintOptions.resetAll();
+    }
 
     @AfterAll
     static void cleanup() {
@@ -36,20 +41,20 @@ class CTensorToStringTests {
 
     @Test
     void toStringTestCase() {
-        PrintOptions.resetAll();
+
         // ---------------------- Sub-case 1 ----------------------
-        exp = "Full Shape: (2, 3, 1, 2)\n" +
-                "[ 1.4415 - 0.0245i  235.61 + 1.45i  -2.4E-4i  1  -85.1 + 9.234i  1.345 " +
-                "- 781.2i  0.014 - 2.45i  -140  1.5i  ...  -1.4E-4 + 1.34i ]";
+        exp = "shape: (2, 3, 1, 2)\n" +
+                "[ 1.4415 - 0.0245i  235.61 + 1.45i  -2.4E-4i  1.0  -85.1 + 9.234i  1.345 - 781.2i  " +
+                "0.014 - 2.45i  -140.0  1.5i  ...  -1.4E-4 + 1.34i ]";
         assertEquals(exp, A.toString());
 
         // ---------------------- Sub-case 2 ----------------------
         PrintOptions.setMaxColumns(15);
         PrintOptions.setPrecision(2);
         PrintOptions.setCentering(false);
-        exp = "Full Shape: (2, 3, 1, 2)\n" +
-                "[1.44 - 0.02i  235.61 + 1.45i  0  1  -85.1 + 9.23i  1.35 - 781.2i  0.01 - 2.45i  " +
-                "-140  1.5i  51 + 24.56i  6.1 - 0.03i  1.34i  ]";
+        exp = "shape: (2, 3, 1, 2)\n" +
+                "[1.44 - 0.02i  235.61 + 1.45i  0  1.0  -85.1 + 9.23i  1.35 - 781.2i  0.01 - 2.45i  " +
+                "-140.0  1.5i  51.0 + 24.56i  6.1 - 0.03i  1.34i  ]";
         assertEquals(exp, A.toString());
     }
 }

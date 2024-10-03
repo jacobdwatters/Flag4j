@@ -63,17 +63,17 @@ public final class RealCsrOperations {
      * matrix addition algorithm.
      * @param src1 The first matrix in the operation.
      * @param src2 The second matrix in the operation.
-     * @param opp Binary operator to apply element-wise to <code>src1</code> and <code>src2</code>.
+     * @param bOpp Binary operator to apply element-wise to <code>src1</code> and <code>src2</code>.
      * @param uOpp Unary operator for use with binary operations which are not commutative such as subtraction. If the operation is
      * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
-     * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
-     * {@code opp.apply(x, uOpp.apply(y))}.
+     * commutative binary operation {@code bOpp} and one unary operation {@code uOpp} such that it is equivalent to
+     * {@code bOpp.apply(x, uOpp.apply(y))}.
      * @return The result of applying the specified binary operation to <code>src1</code> and <code>src2</code>
      * element-wise.
      * @throws IllegalArgumentException If <code>src1</code> and <code>src2</code> do not have the same shape.
      */
     public static CsrMatrix applyBinOpp(CsrMatrix src1, CsrMatrix src2,
-                                        BinaryOperator<Double> opp,
+                                        BinaryOperator<Double> bOpp,
                                         UnaryOperator<Double> uOpp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
@@ -90,7 +90,7 @@ public final class RealCsrOperations {
                 int col2 = src2.colIndices[rowPtr2];
 
                 if(col1 == col2) {
-                    dest.add(opp.apply(src1.entries[rowPtr1], src2.entries[rowPtr2]));
+                    dest.add(bOpp.apply(src1.entries[rowPtr1], src2.entries[rowPtr2]));
                     colIndices.add(col1);
                     rowPtr1++;
                     rowPtr2++;
