@@ -30,6 +30,8 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.FieldTensor;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.common.field_ops.CompareField;
+import org.flag4j.operations.dense.field_ops.DenseFieldElemDiv;
+import org.flag4j.operations.dense.field_ops.DenseFieldOperations;
 import org.flag4j.operations.dense.field_ops.DenseFieldTensorDot;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -201,10 +203,7 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
      */
     @Override
     public void addEq(T b) {
-        ValidateParameters.ensureEqualShape(shape, b.shape);
-
-        for(int i=0, size=entries.length; i<size; i++)
-            entries[i] = entries[i].add((V) b.entries[i]);
+        DenseFieldOperations.addEq(entries, shape, b.entries, b.shape);
     }
 
 
@@ -217,10 +216,7 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
      */
     @Override
     public void subEq(T b) {
-        ValidateParameters.ensureEqualShape(shape, b.shape);
-
-        for(int i=0, size=entries.length; i<size; i++)
-            entries[i] = entries[i].sub((V) b.entries[i]);
+        DenseFieldOperations.subEq(entries, shape, b.entries, b.shape);
     }
 
 
@@ -234,6 +230,8 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
     @Override
     public void divEq(T b) {
         ValidateParameters.ensureEqualShape(shape, b.shape);
+        // TODO: Change DenseFieldElemDiv.dispatch to accept optional storage array so
+        //  this method can utilize the concurrent implementation.
 
         for(int i=0, size=entries.length; i<size; i++)
             entries[i] = entries[i].div((V) b.entries[i]);
@@ -251,13 +249,7 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
      */
     @Override
     public T div(T b) {
-        ValidateParameters.ensureEqualShape(this.shape, b.shape);
-        Field<V>[] quotient = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++)
-            quotient[i] = entries[i].div((V) b.entries[i]);
-
-        return makeLikeTensor(shape, (V[]) quotient);
+        return makeLikeTensor(shape, (V[]) DenseFieldElemDiv.dispatch(entries, shape, b.entries, b.shape));
     }
 
 

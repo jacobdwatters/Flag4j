@@ -34,8 +34,6 @@ import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.io.parsing.ComplexNumberParser;
 import org.flag4j.operations.common.complex.Complex128Operations;
-import org.flag4j.operations.dense.complex.ComplexDenseElemMult;
-import org.flag4j.operations.dense.complex.ComplexDenseOperations;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
@@ -296,16 +294,6 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
 
 
     /**
-     * Adds a complex-valued scalar to each entry of this tensor.
-     * @param b Scalar to add to each entry of this tensor.
-     * @return Tensor containing sum of all entries of this tensor with {@code b}.
-     */
-    public CTensor add(Complex128 b) {
-        return new CTensor(shape, ComplexDenseOperations.add(entries, b));
-    }
-
-
-    /**
      * Computes difference of this tensor with a dense real tensor.
      * @param b Dense real tensor in difference.
      * @return The element-wise difference of this tensor with {@code b}.
@@ -345,19 +333,6 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
      */
     public void subEq(Double b) {
         RealComplexDenseOperations.subEq(this.entries, b);
-    }
-
-
-    /**
-     * Computes the element-wise product of this tensor and a complex dense tensor.
-     * @param b Complex dense tensor in the element-wise product.
-     * @return The element-wise product of this tensor and {@code b}.
-     */
-    public CTensor elemMult(CTensor b) {
-        return new CTensor(
-                shape,
-                ComplexDenseElemMult.dispatch(b.entries, b.shape, entries, shape)
-        );
     }
 
 
@@ -472,6 +447,7 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
      */
     public Tensor toReal() {
         double[] real = new double[entries.length];
+
         for(int i=0, size=entries.length; i<size; i++)
             real[i] = ((Complex128) entries[i]).re;
 

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,69 +22,30 @@
  * SOFTWARE.
  */
 
-package org.flag4j.operations.common.complex;
+package org.flag4j.operations.common.field_ops;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.util.ErrorMessages;
 
-
 /**
- * This class contains low-level implementations for operations which check if a complex tensor satisfies some property.
+ * This class contains low-level implementations for operations which check if a field tensor satisfies some property.
  * Implementations are agnostic to whether the tensor is sparse or dense.
  */
-public final class ComplexProperties {
+public final class FieldProperties {
 
-    private ComplexProperties() {
+    private FieldProperties() {
         // Hide default constructor in utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
-
-
-    /**
-     * Checks whether a tensor contains only real values.
-     * @param entries Entries of dense tensor or non-zero entries of sparse tensor.
-     * @return True if the tensor only contains real values. Returns false otherwise.
-     */
-    public static boolean isReal(Field<Complex128>[] entries) {
-        if(entries == null) return false;
-
-        for(Field<Complex128> entry : entries)
-            if(((Complex128) entry).im != 0) return false;
-
-        return true;
-    }
-
-
-    /**
-     * Checks whether a tensor contains at least one non-real value.
-     * @param entries Entries of dense tensor or non-zero entries of sparse tensor.
-     * @return True if the tensor contains at least one non-real value. Returns false otherwise.
-     */
-    public static boolean isComplex(Field<Complex128>[] entries) {
-        boolean result = false;
-
-        for(Field<Complex128> entry : entries) {
-            if(((Complex128) entry).im != 0) {
-                result = true;
-                break;
-            }
-        }
-
-        return result;
-    }
-
 
     /**
      * Checks if an array contains only zeros.
      * @param src Array to check if it only contains zeros.
      * @return True if the {@code src} array contains only zeros.
      */
-    public static boolean isZeros(Field<Complex128>[] src) {
-        for(Field<Complex128> value : src) {
-            if(((Complex128) value).re!=0 || ((Complex128) value).im!=0)
-                return false;
-        }
+    public static <T extends Field<T>> boolean isZeros(Field<T>[] src) {
+        for(Field<T> value: src)
+            if(!value.isZero()) return false;
 
         return true;
     }
@@ -97,9 +58,9 @@ public final class ComplexProperties {
      * @return True if both arrays_old have the same length and all entries are 'close' element-wise, i.e.
      * elements {@code a} and {@code b} at the same positions in the two arrays_old respectively and satisfy
      * {@code |a-b| <= (1E-05 + 1E-08*|b|)}. Otherwise, returns false.
-     * @see #allClose(Field<Complex128>[], Field<Complex128>[], double, double)
+     * @see #allClose(Field[], Field[], double, double)
      */
-    public static boolean allClose(Field<Complex128>[] src1, Field<Complex128>[] src2) {
+    public static <T extends Field<T>> boolean allClose(Field<T>[] src1, Field<T>[] src2) {
         return allClose(src1, src2, 1e-05, 1e-08);
     }
 
@@ -112,16 +73,16 @@ public final class ComplexProperties {
      * @return True if both arrays_old have the same length and all entries are 'close' element-wise, i.e.
      * elements {@code a} and {@code b} at the same positions in the two arrays_old respectively and satisfy
      * {@code |a-b| <= (absTol + relTol*|b|)}. Otherwise, returns false.
-     * @see #allClose(Field<Complex128>[], Field<Complex128>[])
+     * @see #allClose(Field[], Field[])
      */
-    public static boolean allClose(Field<Complex128>[] src1, Field<Complex128>[] src2, double relTol, double absTol) {
+    public static <T extends Field<T>> boolean allClose(Field<T>[] src1, Field<T>[] src2, double relTol, double absTol) {
         boolean close = src1.length==src2.length;
 
         if(close) {
             for(int i=0; i<src1.length; i++) {
                 double tol = absTol + relTol*src2[i].abs();
 
-                if(src1[i].sub((Complex128) src2[i]).abs() > tol) {
+                if(src1[i].sub((T) src2[i]).abs() > tol) {
                     close = false;
                     break;
                 }

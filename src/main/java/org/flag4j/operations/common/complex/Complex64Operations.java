@@ -42,7 +42,7 @@ public final class Complex64Operations {
     }
 
     /**
-     * Rounds the values of a tensor to the nearest integer. Also see {@link #round(Complex64[], int)}.
+     * Rounds the values of a tensor to the nearest integer. Also see {@link #round(Field<Complex64>[], int)}.
      * @param src Entries of the tensor to round.
      * @return The result of rounding all entries of the source tensor to the nearest integer.
      * @throws IllegalArgumentException If {@code precision} is negative.
@@ -58,7 +58,7 @@ public final class Complex64Operations {
 
 
     /**
-     * Rounds the values of a tensor with specified precision. Note, if precision is zero, {@link #round(Complex64[])} is
+     * Rounds the values of a tensor with specified precision. Note, if precision is zero, {@link #round(Field<Complex64>[])} is
      * preferred.
      * @param src Entries of the tensor to round.
      * @param precision Precision to round to (i.e. the number of decimal places).

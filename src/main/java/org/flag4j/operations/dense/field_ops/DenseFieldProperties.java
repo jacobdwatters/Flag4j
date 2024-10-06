@@ -26,6 +26,7 @@ package org.flag4j.operations.dense.field_ops;
 
 
 import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.DenseFieldMatrixBase;
 import org.flag4j.arrays.dense.FieldTensor;
 import org.flag4j.util.ErrorMessages;
@@ -38,6 +39,66 @@ public final class DenseFieldProperties {
     private DenseFieldProperties() {
         // Hide constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+    }
+
+    /**
+     * Checks if this tensor only contains ones.
+     * @param src Elements of the tensor.
+     * @return True if this tensor only contains ones. Otherwise, returns false.
+     */
+    public static <T extends Field<T>> boolean isOnes(Field<T>[] src) {
+        for(Field<T> value : src)
+            if(!value.isOne()) return false;
+
+        return true; // If we make it here, then the array only contains one.
+    }
+
+
+    /**
+     * Checks if a complex dense matrix is hermitian. That is, if the matrix is equal to its conjugate transpose.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return True if this matrix is hermitian. Otherwise, returns false.
+     */
+    public static <T extends Field<T>> boolean isHermitian(Field<T>[] src, Shape shape) {
+        if(shape.get(0)!=shape.get(1)) return false;
+
+        for(int i=0; i<shape.get(0); i++) {
+            int count1 = i*shape.get(1);
+            int count2 = i;
+            int stop = count1 + i;
+
+            while(count1 < stop) {
+                if(src[count1++].equals(src[count2].conj())) return false;
+                count2+=shape.get(1);
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Checks if a real dense matrix is anti-hermitian. That is, if the matrix is equal to its negative conjugate transpose.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return True if this matrix is anti-hermitian. Otherwise, returns false.
+     */
+    public static <T extends Field<T>> boolean isAntiHermitian(Field<T>[] src, Shape shape) {
+        if(shape.get(0)!=shape.get(1)) return false;
+
+        for(int i=0; i<shape.get(0); i++) {
+            int count1 = i*shape.get(1);
+            int count2 = i;
+            int stop = count1 + i;
+
+            while(count1 < stop) {
+                if(src[count1++].equals(src[count2].addInv().conj())) return false;
+                count2 += shape.get(1);
+            }
+        }
+
+        return true;
     }
 
 
@@ -54,12 +115,11 @@ public final class DenseFieldProperties {
         // Tolerances corresponds to the allClose(...) methods.
         double diagTol = 1.001E-5;
         double nonDiagTol = 1e-08;
-
         final T ONE = src.entries[0].getOne();
-
         int rows = src.numRows;
         int cols = src.numCols;
         int pos = 0;
+
         for(int i=0; i<rows; i++) {
             for(int j=0; j<cols; j++) {
                 if((i==j && src.entries[pos].sub(ONE).mag() > diagTol)

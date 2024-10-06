@@ -35,8 +35,8 @@ import org.flag4j.io.PrintOptions;
 import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
 import org.flag4j.operations.sparse.SparseUtils;
-import org.flag4j.operations.sparse.csr.complex.ComplexCsrMatrixMultiplication;
-import org.flag4j.operations.sparse.csr.complex.ComplexCsrOperations;
+import org.flag4j.operations.sparse.csr.field_ops.CsrFieldMatMult;
+import org.flag4j.operations.sparse.csr.field_ops.CsrFieldMatrixOperations;
 import org.flag4j.operations.sparse.csr.real_complex.RealComplexCsrMatrixMultiplication;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
@@ -180,67 +180,6 @@ public class CsrCMatrix extends CsrFieldMatrixBase<CsrCMatrix, CMatrix, CooCVect
 
 
     /**
-     * Sets the element of this tensor at the specified indices.
-     *
-     * @param value New value to set the specified index of this tensor to.
-     * @param indices Indices of the element to set.
-     *
-     * @return A copy of this tensor with the updated value is returned.
-     *
-     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
-     */
-    @Override
-    public CsrCMatrix set(Complex128 value, int... indices) {
-        // Ensure indices are in bounds.
-        ValidateParameters.ensureValidIndex(shape, indices);
-        int row = indices[0];
-        int col = indices[1];
-
-        Field<Complex128>[] newEntries;
-        int[] newRowPointers = rowPointers.clone();
-        int[] newColIndices;
-        boolean found = false; // Flag indicating an element already exists in this matrix at the specified row and col.
-        int loc = -1;
-
-        if(rowPointers[row] < rowPointers[row+1]) {
-            int start = rowPointers[row];
-            int stop = rowPointers[row+1];
-
-            loc = Arrays.binarySearch(colIndices, start, stop, col);
-            found = loc >= 0;
-        }
-
-        if(found) {
-            newEntries = Arrays.copyOf(entries, entries.length);
-            newEntries[loc] = value;
-            newRowPointers = rowPointers.clone();
-            newColIndices = colIndices.clone();
-        } else {
-            loc = -loc - 1; // Compute insertion index as specified by Arrays.binarySearch
-            newEntries = new Complex128[entries.length + 1];
-            newColIndices = new int[entries.length + 1];
-
-            // Copy old entries and insert new one.
-            System.arraycopy(entries, 0, newEntries, 0, loc);
-            newEntries[loc] = value;
-            System.arraycopy(entries, loc, newEntries, loc+1, entries.length-loc);
-
-            // Copy old column indices and insert new one.
-            System.arraycopy(colIndices, 0, newColIndices, 0, loc);
-            newColIndices[loc] = col;
-            System.arraycopy(colIndices, loc, newColIndices, loc+1, entries.length-loc);
-
-            // Increment row pointers.
-            for(int i=row+1; i<rowPointers.length; i++) {
-                newRowPointers[i]++;
-            }
-        }
-
-        return new CsrCMatrix(shape, newEntries, newRowPointers, newColIndices);
-    }
-
-
-    /**
      * Constructs a CSR matrix of the same type as this matrix with the given the {@code shape}, {@code entries} and the same non-zero
      * indices.
      *
@@ -318,11 +257,8 @@ public class CsrCMatrix extends CsrFieldMatrixBase<CsrCMatrix, CMatrix, CooCVect
      */
     @Override
     public CVector mult(CooCVector b) {
-        return ComplexCsrMatrixMultiplication.standardVector(this, b);
+        return (CVector) CsrFieldMatMult.standardVector(this, b);
     }
-
-
-
 
 
     /**
@@ -388,7 +324,7 @@ public class CsrCMatrix extends CsrFieldMatrixBase<CsrCMatrix, CMatrix, CooCVect
         System.arraycopy(entries, start, destEntries, 0, destEntries.length);
         System.arraycopy(colIndices, start, destIndices, 0, destEntries.length);
 
-        return new CooCVector(this.numCols, destEntries, destIndices);
+        return new CooCVector(numCols, destEntries, destIndices);
     }
 
 
@@ -520,7 +456,7 @@ public class CsrCMatrix extends CsrFieldMatrixBase<CsrCMatrix, CMatrix, CooCVect
      */
     @Override
     public CsrCMatrix add(CsrCMatrix b) {
-        return ComplexCsrOperations.applyBinOpp(this, b, Complex128::add, null);
+        return CsrFieldMatrixOperations.applyBinOpp(this, b, Complex128::add, null);
     }
 
 
@@ -535,41 +471,7 @@ public class CsrCMatrix extends CsrFieldMatrixBase<CsrCMatrix, CMatrix, CooCVect
      */
     @Override
     public CsrCMatrix sub(CsrCMatrix b) {
-        return ComplexCsrOperations.applyBinOpp(this, b, Complex128::add, Complex128::addInv);
-    }
-
-
-    /**
-     * Sets a column of this matrix at the given index to the specified values.
-     *
-     * @param values New values for the column.
-     * @param colIndex The index of the column which is to be set.
-     *
-     * @return A copy of this matrix with the column at {@code colIndex} set to {@code values}.
-     *
-     * @throws IndexOutOfBoundsException If the values vector has a different length than the number of rows of this matrix.
-     */
-    @Override
-    public CsrCMatrix setCol(CooCVector values, int colIndex) {
-        // Convert to COO first for more efficient modification.
-        return toCoo().setCol(values, colIndex).toCsr();
-    }
-
-
-    /**
-     * Sets a row of this matrix at the given index to the specified values.
-     *
-     * @param values New values for the row.
-     * @param rowIndex The index of the row which is to be set.
-     *
-     * @return A copy of this matrix with the row at {@code rowIndex} set to {@code values}.
-     *
-     * @throws IndexOutOfBoundsException If the values vector has a different length than the number of columns of this matrix.
-     */
-    @Override
-    public CsrCMatrix setRow(CooCVector values, int rowIndex) {
-        // Convert to COO first for more efficient modification.
-        return toCoo().setRow(values, rowIndex).toCsr();
+        return CsrFieldMatrixOperations.applyBinOpp(this, b, Complex128::add, Complex128::addInv);
     }
 
 
@@ -615,7 +517,7 @@ public class CsrCMatrix extends CsrFieldMatrixBase<CsrCMatrix, CMatrix, CooCVect
      * @return The result of matrix multiplying this matrix with {@code B} as a sparse CSR matrix.
      */
     public CsrCMatrix mult2CSR(CsrCMatrix B) {
-        return ComplexCsrMatrixMultiplication.standardAsSparse(this, B);
+        return (CsrCMatrix) CsrFieldMatMult.standardAsSparse(this, B);
     }
 
 
@@ -659,9 +561,7 @@ public class CsrCMatrix extends CsrFieldMatrixBase<CsrCMatrix, CMatrix, CooCVect
         return new CMatrix(numRows, B.numCols,
                 ComplexDenseSparseMatrixMultiplication.standard(
                         entries, rowPointers, colIndices, shape,
-                        B.entries, B.shape
-                )
-        );
+                        B.entries, B.shape));
     }
 
 

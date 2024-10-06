@@ -33,7 +33,7 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.operations.dense.complex.ComplexDenseOperations;
+import org.flag4j.operations.dense.field_ops.DenseFieldOperations;
 import org.flag4j.operations.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
 import org.flag4j.operations.sparse.SparseUtils;
@@ -1317,7 +1317,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      * @return The result of adding this matrix to {@code b}.
      */
     public CsrCMatrix add(Complex128 b) {
-        return new CsrCMatrix(shape, ComplexDenseOperations.add(entries, b), rowPointers.clone(), colIndices.clone());
+        return new CsrCMatrix(shape, DenseFieldOperations.add(entries, b), rowPointers.clone(), colIndices.clone());
     }
 
 
@@ -1327,7 +1327,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      * @return The result of subtracting {@code b} from this matrix's non-zero entries.
      */
     public CsrCMatrix sub(Complex128 b) {
-        return new CsrCMatrix(shape, ComplexDenseOperations.sub(entries, b), rowPointers.clone(), colIndices.clone());
+        return new CsrCMatrix(shape, DenseFieldOperations.sub(entries, b), rowPointers.clone(), colIndices.clone());
     }
 
 

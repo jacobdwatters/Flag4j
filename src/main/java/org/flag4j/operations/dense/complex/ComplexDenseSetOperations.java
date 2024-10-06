@@ -39,19 +39,6 @@ public final class ComplexDenseSetOperations {
         throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());
     }
 
-    /**
-     * Sets the value of this matrix using a 2D array.
-     *
-     * @param src New values of the matrix.
-     * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
-     */
-    public static void setValues(Complex128[] src, final Complex128[] dest) {
-        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
-        System.arraycopy(src, 0, dest, 0, src.length);
-    }
-
-
 
     /**
      * Sets the value of this matrix using a 2D array.
@@ -60,12 +47,11 @@ public final class ComplexDenseSetOperations {
      * @param dest Destination array for values.
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
-    public static void setValues(Double[] src, final Complex128[] dest) {
+    public static void setValues(Double[] src, Complex128[] dest) {
         ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
 
-        for(int i=0; i<src.length; i++) {
+        for(int i=0; i<src.length; i++)
             dest[i] = new Complex128(src[i]);
-        }
     }
 
 
@@ -76,12 +62,11 @@ public final class ComplexDenseSetOperations {
      * @param dest Destination array for values.
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
-    public static void setValues(Integer[] src, final Complex128[] dest) {
+    public static void setValues(Integer[] src, Complex128[] dest) {
         ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
 
-        for(int i=0; i<src.length; i++) {
+        for(int i=0; i<src.length; i++)
             dest[i] = new Complex128(src[i]);
-        }
     }
 
 
@@ -92,12 +77,11 @@ public final class ComplexDenseSetOperations {
      * @param dest Destination array for values.
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
-    public static void setValues(double[] src, final Complex128[] dest) {
+    public static void setValues(double[] src, Complex128[] dest) {
         ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
 
-        for(int i=0; i<src.length; i++) {
+        for(int i=0; i<src.length; i++)
             dest[i] = new Complex128(src[i]);
-        }
     }
 
 
@@ -108,31 +92,11 @@ public final class ComplexDenseSetOperations {
      * @param dest Destination array for values.
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
-    public static void setValues(int[] src, final Complex128[] dest) {
+    public static void setValues(int[] src, Complex128[] dest) {
         ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
 
-        for(int i=0; i<src.length; i++) {
+        for(int i=0; i<src.length; i++)
             dest[i] = new Complex128(src[i]);
-        }
-    }
-
-
-    /**
-     * Sets the value of this matrix using a 2D array.
-     *
-     * @param src New values of the matrix.
-     * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
-     */
-    public static void setValues(Complex128[][] src, final Complex128[] dest) {
-        ValidateParameters.ensureTotalEntriesEq(src, dest);
-        int count = 0;
-
-        for(Complex128[] cNumbers : src) {
-            for(int j = 0; j < src[0].length; j++) {
-                dest[count++] = cNumbers[j];
-            }
-        }
     }
 
 
@@ -144,14 +108,13 @@ public final class ComplexDenseSetOperations {
      * @param dest Destination array for values.
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
-    public static void setValues(Double[][] src, final Complex128[] dest) {
+    public static void setValues(Double[][] src, Complex128[] dest) {
         ValidateParameters.ensureTotalEntriesEq(src, dest);
         int count = 0;
 
         for(Double[] doubles : src) {
-            for(int j = 0; j < src[0].length; j++) {
+            for(int j = 0; j < src[0].length; j++)
                 dest[count++] = new Complex128(doubles[j]);
-            }
         }
     }
 
@@ -163,14 +126,13 @@ public final class ComplexDenseSetOperations {
      * @param dest Destination array for values.
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
-    public static void setValues(Integer[][] src, final Complex128[] dest) {
+    public static void setValues(Integer[][] src, Complex128[] dest) {
         ValidateParameters.ensureTotalEntriesEq(src, dest);
         int count = 0;
 
         for(Integer[] integers : src) {
-            for(int j = 0; j < src[0].length; j++) {
+            for(int j = 0; j < src[0].length; j++)
                 dest[count++] = new Complex128(integers[j]);
-            }
         }
     }
 
@@ -182,14 +144,13 @@ public final class ComplexDenseSetOperations {
      * @param dest Destination array for values.
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
-    public static void setValues(double[][] src, final Complex128[] dest) {
+    public static void setValues(double[][] src, Complex128[] dest) {
         ValidateParameters.ensureTotalEntriesEq(src, dest);
         int count = 0;
 
         for(double[] doubles : src) {
-            for(int j = 0; j < src[0].length; j++) {
+            for(int j = 0; j < src[0].length; j++)
                 dest[count++] = new Complex128(doubles[j]);
-            }
         }
     }
 
@@ -201,14 +162,13 @@ public final class ComplexDenseSetOperations {
      * @param dest Destination array for values.
      * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
      */
-    public static void setValues(int[][] src, final Complex128[] dest) {
+    public static void setValues(int[][] src, Complex128[] dest) {
         ValidateParameters.ensureTotalEntriesEq(src, dest);
         int count = 0;
 
         for(int[] ints : src) {
-            for(int j = 0; j < src[0].length; j++) {
+            for(int j = 0; j < src[0].length; j++)
                 dest[count++] = new Complex128(ints[j]);
-            }
         }
     }
 
@@ -222,17 +182,5 @@ public final class ComplexDenseSetOperations {
      */
     public static void set(Complex128[] src, Shape shape, double value, int... indices) {
         src[shape.entriesIndex(indices)] = new Complex128(value);
-    }
-
-
-    /**
-     * Sets an element of a tensor to the specified value.
-     * @param src Elements of the tensor. This will be modified.
-     * @param shape Shape of the tensor.
-     * @param value Value to set specified index to.
-     * @param indices Indices of tensor value to be set.
-     */
-    public static void set(Complex128[] src, Shape shape, Complex128 value, int... indices) {
-        src[shape.entriesIndex(indices)] = value;
     }
 }

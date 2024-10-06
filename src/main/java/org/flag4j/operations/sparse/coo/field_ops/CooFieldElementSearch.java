@@ -22,19 +22,23 @@
  * SOFTWARE.
  */
 
-package org.flag4j.operations.sparse.coo.complex;
+package org.flag4j.operations.sparse.coo.field_ops;
 
-import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.arrays.backend.CooFieldMatrixBase;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 
-public class ComplexSparseElementSearch {
+/**
+ * Utility class for searching for specific elements within a sparse COO matrix.
+ */
+public final class CooFieldElementSearch {
 
-    private ComplexSparseElementSearch() {
+    private CooFieldElementSearch() {
         // Hide default constructor in utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
+
 
     /**
      * Preforms a binary search along the row and column indices of the non-zero values of a sparse matrix for the location
@@ -52,7 +56,7 @@ public class ComplexSparseElementSearch {
      *         that this guarantees that the return value will be &gt;= 0 if
      *         and only if the key is found.
      */
-    public static int matrixBinarySearch(CooCMatrix src, int rowKey, int colKey) {
+    public static int matrixBinarySearch(CooFieldMatrixBase<?, ?, ?, ?, ?> src, int rowKey, int colKey) {
         int rowIdx = Arrays.binarySearch(src.rowIndices, rowKey);
 
         if(rowIdx<0) return rowIdx;
@@ -60,20 +64,14 @@ public class ComplexSparseElementSearch {
         // Find range of same valued row indices.
         int lowerBound = rowIdx;
         for(int i=rowIdx; i>=0; i--) {
-            if(src.rowIndices[i] == rowKey) {
-                lowerBound = i;
-            } else {
-                break;
-            }
+            if(src.rowIndices[i] == rowKey) lowerBound = i;
+            else break;
         }
 
         int upperBound = rowIdx + 1;
         for(int i=upperBound; i<src.rowIndices.length; i++) {
-            if(src.rowIndices[i] == rowKey) {
-                upperBound = i;
-            } else {
-                break;
-            }
+            if(src.rowIndices[i] == rowKey) upperBound = i;
+            else break;
         }
 
         int colIdx = Arrays.binarySearch(Arrays.copyOfRange(src.colIndices, lowerBound, upperBound), colKey);
@@ -92,7 +90,7 @@ public class ComplexSparseElementSearch {
      * @return If it exists, the first and last index of the non-zero element in the sparse matrix which has the specified
      * {@code rowKey} as its row index.
      */
-    public static int[] matrixFindRowStartEnd(CooCMatrix src, int rowKey) {
+    public static int[] matrixFindRowStartEnd(CooFieldMatrixBase<?, ?, ?, ?, ?> src, int rowKey) {
         int rowIdx = Arrays.binarySearch(src.rowIndices, rowKey);
 
         if(rowIdx < 0) return new int[]{rowIdx, rowIdx}; // Row not found.
@@ -100,20 +98,14 @@ public class ComplexSparseElementSearch {
         // Find first entry with the specified row key.
         int lowerBound = rowIdx;
         for(int i=rowIdx; i>=0; i--) {
-            if(src.rowIndices[i] == rowKey) {
-                lowerBound = i;
-            } else {
-                break;
-            }
+            if(src.rowIndices[i] == rowKey) lowerBound = i;
+            else break;
         }
 
         int upperBound = rowIdx + 1;
         for(int i=upperBound; i<src.rowIndices.length; i++) {
-            if(src.rowIndices[i] == rowKey) {
-                upperBound = i+1;
-            } else {
-                break;
-            }
+            if(src.rowIndices[i] == rowKey) upperBound = i+1;
+            else break;
         }
 
         return new int[]{lowerBound, upperBound};

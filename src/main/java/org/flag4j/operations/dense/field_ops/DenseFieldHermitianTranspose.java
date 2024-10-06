@@ -33,9 +33,9 @@ import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ArrayUtils;
 
 /**
- * Utility class for computing the hermitain transpose of a dense {@link FieldTensor field tensor}.
+ * Utility class for computing the Hermitian transpose of a dense {@link FieldTensor field tensor}.
  */
-public class DenseFieldHermitianTranspose {
+public final class DenseFieldHermitianTranspose {
 
 
     /**

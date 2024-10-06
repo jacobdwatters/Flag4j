@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +22,10 @@
  * SOFTWARE.
  */
 
-package org.flag4j.operations.dense.complex;
+package org.flag4j.operations.dense.field_ops;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ErrorMessages;
@@ -33,77 +34,77 @@ import org.flag4j.util.ValidateParameters;
 /**
  * This class contains low-level implementations of complex element-wise tensor multiplication.
  */
-public class ComplexDenseElemDiv {
+public final class DenseFieldElemMult {
+    // TODO: The CONCURRENT_THRESHOLD should be configurable. This should serve as a default value and an overloaded method should
+    //  be provided for specifying the threshold so that different Field implementations can specify their own value.
 
     /**
      * Minimum number of entries in each tensor to apply concurrent algorithm.
      */
-    private static final int CONCURRENT_THRESHOLD = 1250;
+    private static final int CONCURRENT_THRESHOLD = 50_000;
 
 
-    private ComplexDenseElemDiv() {
+    private DenseFieldElemMult() {
         // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
     /**
-     * Computes the element-wise division of two tensors.
-     * @param src1 First tensor in element-wise division.
+     * Computes the element-wise multiplication of two tensors. Also called the Hadamard product.
+     * @param src1 First tensor in element-wise multiplication.
      * @param shape1 Shape of the first tensor.
-     * @param src2 Second tensor in element-wise division.
+     * @param src2 Second tensor in element-wise multiplication.
      * @param shape2 Shape of the second tensor.
-     * @return The element-wise division of the two tensors.
+     * @return The element-wise multiplication of the two tensors.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static Complex128[] elemDiv(Complex128[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] elemMult(Field<T>[] src1, Shape shape1, Field<T>[] src2, Shape shape2) {
         ValidateParameters.ensureEqualShape(shape1, shape2);
-        Complex128[] product = new Complex128[src1.length];
+        Field<T>[] product = new Field[src1.length];
 
-        for(int i=0; i<product.length; i++) {
-            product[i] = src1[i].div(src2[i]);
-        }
+        for(int i=0; i<product.length; i++)
+            product[i] = src1[i].mult((T) src2[i]);
 
         return product;
     }
 
 
     /**
-     * Computes the element-wise division of two tensors using a concurrent algorithm.
-     * @param src1 First tensor in element-wise division.
+     * Computes the element-wise multiplication of two tensors using a concurrent algorithm. Also called the Hadamard product.
+     * @param src1 First tensor in element-wise multiplication.
      * @param shape1 Shape of the first tensor.
-     * @param src2 Second tensor in element-wise division.
+     * @param src2 Second tensor in element-wise multiplication.
      * @param shape2 Shape of the second tensor.
-     * @return The element-wise division of the two tensors.
+     * @return The element-wise multiplication of the two tensors.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static Complex128[] elemDivConcurrent(Complex128[] src1, Shape shape1, Complex128[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] elemMultConcurrent(Field<T>[] src1, Shape shape1, Field<T>[] src2, Shape shape2) {
         ValidateParameters.ensureEqualShape(shape1, shape2);
-        Complex128[] product = new Complex128[src1.length];
+        Field<T>[] product = new Field[src1.length];
 
-        ThreadManager.concurrentOperation(product.length, (start, end)->{
-            for(int i=start; i<end; i++) {
-                product[i] = src1[i].div(src2[i]);
-            }
-        });
+        ThreadManager.concurrentOperation(product.length, ((startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++)
+                product[i] = src1[i].mult((T) src2[i]);
+        }));
 
         return product;
     }
 
 
     /**
-     * Dynamically chooses and applies element-wise division algorithm to use based on the number of entries in the tensors.
+     * Dynamically chooses and applies element-wise multiplication algorithm to use based on the number of entries in the tensors.
      * @param src1 Entries of first tensor.
      * @param shape1 Shape of first tensor.
      * @param src2 Entries of second tensor.
      * @param shape2 Shape of second tensor.
-     * @return The element-wise division of the two tensors.
+     * @return The element-wise multiplication of the two tensors.
      */
-    public static Complex128[] dispatch(Complex128[] src1, Shape shape1,Complex128[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] dispatch(Field<T>[] src1, Shape shape1, Field<T>[] src2, Shape shape2) {
         if(src1.length < CONCURRENT_THRESHOLD) {
-            return elemDiv(src1, shape1, src2, shape2);
+            return elemMult(src1, shape1, src2, shape2);
         } else {
-            return elemDivConcurrent(src1, shape1, src2, shape2);
+            return elemMultConcurrent(src1, shape1, src2, shape2);
         }
     }
 }

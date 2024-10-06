@@ -181,7 +181,7 @@ public final class CsrFieldMatrixOperations {
      * @throws IllegalArgumentException If <code>src1</code> and <code>src2</code> do not have the same shape.
      */
     public static <T extends CsrFieldMatrixBase<T, ?, ?, ?, U>, U extends Field<U>> T applyBinOpp(
-            T src1, T src2, BinaryOperator<Field<U>> opp, UnaryOperator<Field<U>> uOpp) {
+            T src1, T src2, BinaryOperator<U> opp, UnaryOperator<U> uOpp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         List<Field<U>> dest = new ArrayList<>();
@@ -197,7 +197,7 @@ public final class CsrFieldMatrixOperations {
                 int col2 = src2.colIndices[rowPtr2];
 
                 if(col1 == col2) {
-                    dest.add(opp.apply(src1.entries[rowPtr1], src2.entries[rowPtr2]));
+                    dest.add(opp.apply((U) src1.entries[rowPtr1], (U) src2.entries[rowPtr2]));
                     colIndices.add(col1);
                     rowPtr1++;
                     rowPtr2++;
@@ -206,7 +206,7 @@ public final class CsrFieldMatrixOperations {
                     colIndices.add(col1);
                     rowPtr1++;
                 } else {
-                    if(uOpp!=null) dest.add(uOpp.apply(src2.entries[rowPtr2]));
+                    if(uOpp!=null) dest.add(uOpp.apply((U) src2.entries[rowPtr2]));
                     else dest.add(src2.entries[rowPtr2]);
                     colIndices.add(col2);
                     rowPtr2++;
@@ -223,7 +223,7 @@ public final class CsrFieldMatrixOperations {
             }
 
             while(rowPtr2 < src2.rowPointers[i+1]) {
-                if(uOpp!=null) dest.add(uOpp.apply(src2.entries[rowPtr2]));
+                if(uOpp!=null) dest.add(uOpp.apply((U) src2.entries[rowPtr2]));
                 else dest.add(src2.entries[rowPtr2]);
                 colIndices.add(src2.colIndices[rowPtr2]);
                 rowPtr2++;
@@ -232,9 +232,8 @@ public final class CsrFieldMatrixOperations {
         }
 
         // Accumulate row pointers.
-        for(int i=1; i<rowPointers.length; i++) {
+        for(int i=1; i<rowPointers.length; i++)
             rowPointers[i] += rowPointers[i-1];
-        }
 
         return (T) src1.makeLikeTensor(src1.shape, (U[]) dest.toArray(new Field[0]), rowPointers, ArrayUtils.fromIntegerList(colIndices));
     }

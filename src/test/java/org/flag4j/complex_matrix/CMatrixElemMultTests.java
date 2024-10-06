@@ -6,6 +6,7 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -174,6 +175,7 @@ class CMatrixElemMultTests {
                 {new Complex128("13.823007675795091+13.823007675795091i"), new Complex128("0.0"), new Complex128("-0.0")}};
         exp = new CMatrix(expEntries);
 
+        PrintOptions.setPrecision(100);
         assertEquals(exp.toCoo().set(Complex128.ZERO, 2, 1), A.elemMult(B));
 
         // ------------------- Sub-case 2 -------------------

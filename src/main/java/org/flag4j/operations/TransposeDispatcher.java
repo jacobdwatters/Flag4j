@@ -32,7 +32,6 @@ import org.flag4j.arrays.backend.FieldTensorBase;
 import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.operations.dense.complex.ComplexDenseTranspose;
 import org.flag4j.operations.dense.field_ops.DenseFieldHermitianTranspose;
 import org.flag4j.operations.dense.field_ops.DenseFieldTranspose;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
@@ -201,14 +200,12 @@ public final class TransposeDispatcher {
     @Deprecated
     public static CMatrix dispatch(CMatrix src) {
         Field<Complex128>[] dest;
-
         Algorithm algorithm = chooseAlgorithm(src.shape);
 
-        if(algorithm==Algorithm.BLOCKED) {
-            dest = ComplexDenseTranspose.blockedMatrix(src.entries, src.numRows, src.numCols);
-        } else {
-            dest = ComplexDenseTranspose.blockedMatrixConcurrent(src.entries, src.numRows, src.numCols);
-        }
+        if(algorithm == Algorithm.BLOCKED)
+            dest = DenseFieldTranspose.blockedMatrix(src.entries, src.numRows, src.numCols);
+        else
+            dest = DenseFieldTranspose.blockedMatrixConcurrent(src.entries, src.numRows, src.numCols);
 
         return new CMatrix(src.numCols, src.numRows, dest);
     }
@@ -226,9 +223,9 @@ public final class TransposeDispatcher {
         Algorithm algorithm = chooseAlgorithmHermitian(src.shape);
 
         if(algorithm==Algorithm.BLOCKED) {
-            dest = ComplexDenseTranspose.blockedMatrixHerm(src.entries, src.numRows, src.numCols);
+            dest = DenseFieldTranspose.blockedMatrixHerm(src.entries, src.numRows, src.numCols);
         } else {
-            dest = ComplexDenseTranspose.blockedMatrixConcurrentHerm(src.entries, src.numRows, src.numCols);
+            dest = DenseFieldTranspose.blockedMatrixConcurrentHerm(src.entries, src.numRows, src.numCols);
         }
 
         return new CMatrix(src.numCols, src.numRows, dest);

@@ -1,6 +1,7 @@
 package org.flag4j.operations.dense.complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.operations.dense.field_ops.DenseFieldSetOperations;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -27,7 +28,7 @@ public class ComplexDenseSetOperationsTests {
         arrC = new Complex128[]{new Complex128(1.233, -0.344), new Complex128(9.34), new Complex128(0, -63.2245)};
         dest = new Complex128[arrC.length];
         expDest = new Complex128[]{new Complex128(1.233, -0.344), new Complex128(9.34), new Complex128(0, -63.2245)};
-        ComplexDenseSetOperations.setValues(arrC, dest);
+        DenseFieldSetOperations.setValues(arrC, dest);
         assertArrayEquals(expDest, dest);
 
         // -------------- Sub-case 1 ---------------
@@ -86,7 +87,7 @@ public class ComplexDenseSetOperationsTests {
         arrC = new Complex128[]{new Complex128(1.233, -0.344), new Complex128(9.34), new Complex128(0, -63.2245)};
         dest = new Complex128[25];
         expDest = new Complex128[]{new Complex128(1.233, -0.344), new Complex128(9.34), new Complex128(0, -63.2245)};
-        assertThrows(IllegalArgumentException.class, ()->ComplexDenseSetOperations.setValues(arrC, dest));
+        assertThrows(IllegalArgumentException.class, ()->DenseFieldSetOperations.setValues(arrC, dest));
     }
 
 
@@ -98,7 +99,7 @@ public class ComplexDenseSetOperationsTests {
         dest = new Complex128[arrCC.length*arrCC[0].length];
         expDest = new Complex128[]{new Complex128(1.233, -0.344), new Complex128(9.34),
                 new Complex128(0, -63.2245), new Complex128(66,445.5)};
-        ComplexDenseSetOperations.setValues(arrCC, dest);
+        DenseFieldSetOperations.setValues(arrCC, dest);
         assertArrayEquals(expDest, dest);
 
         // -------------- Sub-case 1 ---------------
@@ -159,6 +160,6 @@ public class ComplexDenseSetOperationsTests {
         dest = new Complex128[26];
         expDest = new Complex128[]{new Complex128(1.233, -0.344), new Complex128(9.34),
                 new Complex128(0, -63.2245), new Complex128(66,445.5)};
-        assertThrows(IllegalArgumentException.class, ()->ComplexDenseSetOperations.setValues(arrCC, dest));
+        assertThrows(IllegalArgumentException.class, ()->DenseFieldSetOperations.setValues(arrCC, dest));
     }
 }

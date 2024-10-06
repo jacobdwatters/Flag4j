@@ -26,6 +26,9 @@ package org.flag4j.operations.sparse.csr.real_complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ArrayUtils;
@@ -294,5 +297,111 @@ public final class RealComplexCsrOperations {
      */
     public static CsrCMatrix sub(CsrMatrix a, CsrCMatrix b) {
         return applyBinOpp(a, b, (Double x, Complex128 y)->new Complex128(x-y.re, -y.im), (Complex128 x)->x.addInv());
+    }
+
+
+    /**
+     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
+     * treated as if it were a column vector.
+     *
+     * @param src1 CSR matrix to add vector to each column of.
+     * @param src2 Vector to add to each column of this matrix.
+     * @return The result of adding the vector src2 to each column of this matrix.
+     */
+    public static CMatrix addToEachCol(CsrCMatrix src1, Vector src2) {
+        ValidateParameters.ensureEquals(src1.numRows, src2.size);
+        CMatrix sum = src2.repeat(src1.numCols, 1).toComplex();
+
+        for(int i=0; i<src1.numRows; i++) {
+            int rowStart = src1.rowPointers[i];
+            int rowEnd = src1.rowPointers[i+1];
+            int rowOffset = i*sum.numCols;
+
+            for(int j=rowStart; j<rowEnd; j++) {
+                int idx = rowOffset + src1.colIndices[j];
+                sum.entries[idx] = sum.entries[idx].add((Complex128) src1.entries[j]);
+            }
+        }
+
+        return sum;
+    }
+
+
+    /**
+     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
+     * treated as if it were a column vector.
+     *
+     * @param src1 CSR matrix to add vector to each column of.
+     * @param src2 Vector to add to each column of this matrix.
+     * @return The result of adding the vector src2 to each column of this matrix.
+     */
+    public static CMatrix addToEachCol(CsrCMatrix src1, CooVector src2) {
+        ValidateParameters.ensureEquals(src1.numRows, src2.size);
+        CMatrix sum = src2.repeat(src1.numCols, 1).toComplex().toDense();
+
+        for(int i=0; i<src1.numRows; i++) {
+            int rowStart = src1.rowPointers[i];
+            int rowEnd = src1.rowPointers[i+1];
+            int rowOffset = i*sum.numCols;
+
+            for(int j=rowStart; j<rowEnd; j++) {
+                int idx = rowOffset + src1.colIndices[j];
+                sum.entries[idx] = sum.entries[idx].add((Complex128) src1.entries[j]);
+            }
+        }
+
+        return sum;
+    }
+
+
+    /**
+     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
+     * treated as if it were a row vector for this operation.
+     *
+     * @param src1 CSR matrix to add vector to each row of.
+     * @param src2 Vector to add to each row of this matrix.
+     * @return The result of adding the vector src2 to each row of this matrix.
+     */
+    public static CMatrix addToEachRow(CsrCMatrix src1, Vector src2) {
+        ValidateParameters.ensureEquals(src1.numCols, src2.size);
+        CMatrix sum = src2.repeat(src1.numRows, 0).toComplex();
+
+        for(int i=0; i<src1.numRows; i++) {
+            int rowStart = src1.rowPointers[i];
+            int rowEnd = src1.rowPointers[i+1];
+
+            for(int j=rowStart; j<rowEnd; j++) {
+                int idx = i*sum.numCols + src1.colIndices[j];
+                sum.entries[idx] = sum.entries[idx].add((Complex128) src1.entries[j]);
+            }
+        }
+
+        return sum;
+    }
+
+
+    /**
+     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
+     * treated as if it were a row vector for this operation.
+     *
+     * @param src1 CSR matrix to add vector to each row of.
+     * @param src2 Vector to add to each row of this matrix.
+     * @return The result of adding the vector src2 to each row of this matrix.
+     */
+    public static CMatrix addToEachRow(CsrCMatrix src1, CooVector src2) {
+        ValidateParameters.ensureEquals(src1.numCols, src2.size);
+        CMatrix sum = src2.repeat(src1.numRows, 0).toComplex().toDense();
+
+        for(int i=0; i<src1.numRows; i++) {
+            int rowStart = src1.rowPointers[i];
+            int rowEnd = src1.rowPointers[i+1];
+
+            for(int j=rowStart; j<rowEnd; j++) {
+                int idx = i*sum.numCols + src1.colIndices[j];
+                sum.entries[idx] = sum.entries[idx].add((Complex128) src1.entries[j]);
+            }
+        }
+
+        return sum;
     }
 }

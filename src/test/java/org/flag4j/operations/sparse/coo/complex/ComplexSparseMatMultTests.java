@@ -1,13 +1,14 @@
 package org.flag4j.operations.sparse.coo.complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.junit.jupiter.api.Test;
 
-import static org.flag4j.operations.sparse.coo.complex.ComplexSparseMatrixMultiplication.*;
+import static org.flag4j.operations.sparse.coo.field_ops.CooFieldMatMult.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class ComplexSparseMatMultTests {
@@ -70,7 +71,7 @@ class ComplexSparseMatMultTests {
                 {new Complex128("0.0")}};
         exp = new CMatrix(expEntries);
 
-        Complex128[] act = standardVector(A.entries, A.rowIndices, A.colIndices, A.shape,
+        Field<Complex128>[] act = standardVector(A.entries, A.rowIndices, A.colIndices, A.shape,
                 bVector.entries, bVector.indices);
 
         assertArrayEquals(exp.entries, standardVector(A.entries, A.rowIndices, A.colIndices, A.shape,

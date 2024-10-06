@@ -29,8 +29,8 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.CooFieldMatrixBase;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.FieldVector;
+import org.flag4j.operations.sparse.coo.field_ops.CooFieldEquals;
 import org.flag4j.operations.sparse.coo.field_ops.CooFieldMatrixGetSet;
-import org.flag4j.operations.sparse.coo.field_ops.SparseFieldEquals;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.List;
@@ -242,7 +242,7 @@ public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFi
 
         CooFieldMatrix<T> src2 = (CooFieldMatrix<T>) object;
 
-        return SparseFieldEquals.cooMatrixEquals(this, src2);
+        return CooFieldEquals.cooMatrixEquals(this, src2);
     }
 
 

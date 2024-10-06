@@ -31,7 +31,6 @@ import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.operations.common.complex.AggregateComplex;
 import org.flag4j.operations.common.field_ops.CompareField;
 import org.flag4j.operations.common.real.AggregateReal;
 import org.flag4j.util.ErrorMessages;
@@ -254,7 +253,7 @@ public final class VectorNorms {
     public static double norm(Complex128... src) {
         double norm = 0;
         double scaledMag;
-        double maxAbs = AggregateComplex.maxAbs(src);
+        double maxAbs = CompareField.maxAbs(src);
 
         if(maxAbs == 0) return 0; // Early return for zero norm.
 
@@ -329,8 +328,8 @@ public final class VectorNorms {
     @Deprecated
     public static double norm(Complex128[] src, double p) {
         if(Double.isInfinite(p)) {
-            if(p > 0) return AggregateComplex.maxAbs(src); // Maximum norm.
-            else return AggregateComplex.minAbs(src); // Minimum norm.
+            if(p > 0) return CompareField.maxAbs(src); // Maximum norm.
+            else return CompareField.minAbs(src); // Minimum norm.
         } else {
             double norm = 0;
 

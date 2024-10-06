@@ -1,7 +1,9 @@
 package org.flag4j.operations.dense.complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.operations.dense.field_ops.DenseFieldMatrixMultiplication;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -9,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 class ComplexMatrixMultiplyTests {
     Complex128[][] entriesA, entriesB;
     CMatrix A, B;
-    Complex128[] exp, act;
+    Field<Complex128>[] exp, act;
 
     @Test
     void squareTestCase() {
@@ -27,35 +29,35 @@ class ComplexMatrixMultiplyTests {
         B = new CMatrix(entriesB);
 
         // ------------ Sub-case 1 ------------
-        act = ComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 2 ------------
-        act = ComplexDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 3 ------------
-        act = ComplexDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 4 ------------
-        act = ComplexDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 5 ------------
-        act = ComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 6 ------------
-        act = ComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 7 ------------
-        act = ComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 8 ------------
-        act = ComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
     }
 
@@ -76,35 +78,35 @@ class ComplexMatrixMultiplyTests {
         B = new CMatrix(entriesB);
 
         // ------------ Sub-case 1 ------------
-        act = ComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 2 ------------
-        act = ComplexDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 3 ------------
-        act = ComplexDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 4 ------------
-        act = ComplexDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 5 ------------
-        act = ComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 6 ------------
-        act = ComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 7 ------------
-        act = ComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 8 ------------
-        act = ComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
     }
 
@@ -125,19 +127,19 @@ class ComplexMatrixMultiplyTests {
         B = new CMatrix(entriesB);
 
         // ------------ Sub-case 1 ------------
-        act = ComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 2 ------------
-        act = ComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 3 ------------
-        act = ComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 4 ------------
-        act = ComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
     }
 }

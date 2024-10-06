@@ -35,9 +35,9 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
-import org.flag4j.operations.sparse.coo.complex.ComplexSparseEquals;
-import org.flag4j.operations.sparse.coo.complex.ComplexSparseMatrixGetSet;
-import org.flag4j.operations.sparse.coo.complex.ComplexSparseMatrixMultiplication;
+import org.flag4j.operations.sparse.coo.field_ops.CooFieldEquals;
+import org.flag4j.operations.sparse.coo.field_ops.CooFieldMatMult;
+import org.flag4j.operations.sparse.coo.field_ops.CooFieldMatrixGetSet;
 import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
@@ -217,7 +217,7 @@ public class CooCMatrix extends CooFieldMatrixBase<CooCMatrix, CMatrix, CooCVect
     @Override
     public CooCMatrix set(Complex128 value, int... indices) {
         ValidateParameters.ensureValidIndex(shape, indices);
-        return ComplexSparseMatrixGetSet.matrixSet(this, indices[0], indices[1], value);
+        return (CooCMatrix) CooFieldMatrixGetSet.matrixSet(this, indices[0], indices[1], value);
     }
 
 
@@ -359,7 +359,7 @@ public class CooCMatrix extends CooFieldMatrixBase<CooCMatrix, CMatrix, CooCVect
      */
     @Override
     public CVector mult(CooCVector b) {
-        return new CVector(ComplexSparseMatrixMultiplication.standardVector(
+        return new CVector(CooFieldMatMult.standardVector(
                 entries, rowIndices, colIndices, shape, b.entries, b.indices));
     }
 
@@ -493,12 +493,11 @@ public class CooCMatrix extends CooFieldMatrixBase<CooCMatrix, CMatrix, CooCVect
      */
     @Override
     public boolean equals(Object object) {
+        // Quick returns if possible.
         if(this == object) return true;
         if(object == null || object.getClass() != getClass()) return false;
 
-        CooCMatrix src = (CooCMatrix) object;
-
-        return ComplexSparseEquals.cooMatrixEquals(this, src);
+        return CooFieldEquals.cooMatrixEquals(this, (CooCMatrix) object);
     }
 
 

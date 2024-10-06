@@ -30,6 +30,11 @@ import org.flag4j.arrays.backend.CsrFieldMatrixBase;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.operations.sparse.SparseUtils;
+import org.flag4j.util.ValidateParameters;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -57,6 +62,8 @@ import org.flag4j.operations.sparse.SparseUtils;
  * class will preserve the lexicographical sorting.</p>
  *
  * <p>If indices need to be sorted explicitly, call {@link #sortIndices()}.</p>
+ *
+ * @param <T> Type of field element of this matrix.
  */
 public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFieldMatrix<T>, FieldMatrix<T>,
         CooFieldVector<T>, FieldVector<T>, T> {
@@ -75,23 +82,6 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
      */
     public CsrFieldMatrix(Shape shape, Field<T>[] entries, int[] rowPointers, int[] colIndices) {
         super(shape, entries, rowPointers, colIndices);
-    }
-
-
-    /**
-     * Sets the element of this tensor at the specified indices.
-     *
-     * @param value New value to set the specified index of this tensor to.
-     * @param indices Indices of the element to set.
-     *
-     * @return A copy of this tensor with the updated value is returned.
-     *
-     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
-     */
-    @Override
-    public CsrFieldMatrix<T> set(T value, int... indices) {
-        // TODO: Implement this method
-        return null;
     }
 
 
@@ -202,23 +192,6 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
 
 
     /**
-     * Computes matrix-vector multiplication.
-     *
-     * @param b Vector in the matrix-vector multiplication.
-     *
-     * @return The result of matrix multiplying this matrix with vector {@code b}.
-     *
-     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the
-     *                                  number of entries in the vector {@code b}.
-     */
-    @Override
-    public FieldVector<T> mult(CooFieldVector<T> b) {
-        // TODO: Implement this method
-        return null;
-    }
-
-
-    /**
      * Converts this matrix to an equivalent vector. If this matrix is not shaped as a row/column vector,
      * it will first be flattened then converted to a vector.
      *
@@ -226,8 +199,35 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
      */
     @Override
     public CooFieldVector<T> toVector() {
-        // TODO: Implement this method
-        return null;
+        int type = vectorType();
+        int[] indices = new int[entries.length];
+
+        if(type == -1) {
+            // Not a vector.
+            for(int i=0; i<numRows; i++) {
+                int start = rowPointers[i];
+                int stop = rowPointers[i+1];
+                int rowOffset = i*numCols;
+
+                for(int j=start; j<stop; j++)
+                    indices[j] = rowOffset + colIndices[j];
+            }
+
+        } else if(type <= 1) {
+            // Row vector.
+            System.arraycopy(colIndices, 0, indices, 0, colIndices.length);
+        } else {
+            // Column vector.
+            for(int i=0; i<numRows; i++) {
+                int start = rowPointers[i];
+                int stop = rowPointers[i+1];
+
+                for(int j=start; j<stop; j++)
+                    indices[j] = i;
+            }
+        }
+
+        return new CooFieldVector<T>(shape.totalEntriesIntValueExact(), entries.clone(), indices);
     }
 
 
@@ -243,8 +243,16 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
      */
     @Override
     public CooFieldVector<T> getRow(int rowIdx) {
-        // TODO: Implement this method
-        return null;
+        ValidateParameters.ensureIndexInBounds(numRows, rowIdx);
+        int start = rowPointers[rowIdx];
+
+        Field<T>[] destEntries = new Field[rowPointers[rowIdx + 1]-start];
+        int[] destIndices = new int[destEntries.length];
+
+        System.arraycopy(entries, start, destEntries, 0, destEntries.length);
+        System.arraycopy(colIndices, start, destIndices, 0, destEntries.length);
+
+        return new CooFieldVector<T>(numCols, destEntries, destIndices);
     }
 
 
@@ -263,8 +271,24 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
      */
     @Override
     public CooFieldVector<T> getRow(int rowIdx, int colStart, int colEnd) {
-        // TODO: Implement this method
-        return null;
+        ValidateParameters.ensureIndexInBounds(numRows, rowIdx);
+        ValidateParameters.ensureIndexInBounds(numCols, colStart, colEnd-1);
+        int start = rowPointers[rowIdx];
+        int end = rowPointers[rowIdx+1];
+
+        List<Field<T>> row = new ArrayList<>();
+        List<Integer> indices = new ArrayList<>();
+
+        for(int j=start; j<end; j++) {
+            int col = colIndices[j];
+
+            if(col >= colStart && col < colEnd) {
+                row.add(entries[j]);
+                indices.add(col-colStart);
+            }
+        }
+
+        return new CooFieldVector<T>(colEnd-colStart, row, indices);
     }
 
 
@@ -280,8 +304,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
      */
     @Override
     public CooFieldVector<T> getCol(int colIdx) {
-        // TODO: Implement this method
-        return null;
+        return getCol(colIdx, 0, numRows);
     }
 
 
@@ -301,8 +324,29 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
      */
     @Override
     public CooFieldVector<T> getCol(int colIdx, int rowStart, int rowEnd) {
-        // TODO: Implement this method
-        return null;
+        // TODO: This method (and others returning a vector) could easily be used for complex csr matrices as well.
+        //  Just need to pass a factory so the correct type of vector is returned.
+        //  e.g. getCol(CsrFieldMatrixBase<?, ?, ?, ?, T> mat, int colIdx, int rowStart, int rowEnd, CsrVectorFactory factory)
+        ValidateParameters.ensureIndexInBounds(numCols, colIdx);
+        ValidateParameters.ensureIndexInBounds(numRows, rowStart, rowEnd-1);
+
+        List<Field<T>> destEntries = new ArrayList<>();
+        List<Integer> destIndices = new ArrayList<>();
+
+        for(int i=rowStart; i<rowEnd; i++) {
+            int start = rowPointers[i];
+            int stop = rowPointers[i+1];
+
+            for(int j=start; j<stop; j++) {
+                if(colIndices[j]==colIdx) {
+                    destEntries.add(entries[j]);
+                    destIndices.add(i);
+                    break; // Should only be a single entry with this row and column index.
+                }
+            }
+        }
+
+        return new CooFieldVector<T>(numRows, destEntries, destIndices);
     }
 
 
@@ -313,41 +357,20 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
      */
     @Override
     public CooFieldVector<T> getDiag() {
-        // TODO: Implement this method
-        return null;
-    }
+        List<Field<T>> destEntries = new ArrayList<>();
+        List<Integer> destIndices = new ArrayList<>();
 
+        for(int i=0; i<numRows; i++) {
+            int start = rowPointers[i];
+            int stop = rowPointers[i+1];
+            int loc = Arrays.binarySearch(colIndices, start, stop, i); // Search for matching column index within row.
 
-    /**
-     * Sets a column of this matrix at the given index to the specified values.
-     *
-     * @param values New values for the column.
-     * @param colIndex The index of the column which is to be set.
-     *
-     * @return A reference to this matrix.
-     *
-     * @throws IndexOutOfBoundsException If the values vector has a different length than the number of rows of this matrix.
-     */
-    @Override
-    public CsrFieldMatrix<T> setCol(CooFieldVector<T> values, int colIndex) {
-        // TODO: Implement this method
-        return null;
-    }
+            if(loc >= 0) {
+                destEntries.add(entries[loc]);
+                destIndices.add(i);
+            }
+        }
 
-
-    /**
-     * Sets a row of this matrix at the given index to the specified values.
-     *
-     * @param values New values for the row.
-     * @param rowIndex The index of the row which is to be set.
-     *
-     * @return A reference to this matrix.
-     *
-     * @throws IndexOutOfBoundsException If the values vector has a different length than the number of rows of this matrix.
-     */
-    @Override
-    public CsrFieldMatrix<T> setRow(CooFieldVector<T> values, int rowIndex) {
-        // TODO: Implement this method
-        return null;
+        return new CooFieldVector<T>(Math.min(numRows, numCols), destEntries, destIndices);
     }
 }

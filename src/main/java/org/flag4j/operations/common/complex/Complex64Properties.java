@@ -22,52 +22,50 @@
  * SOFTWARE.
  */
 
-package org.flag4j.operations.common.field_ops;
+package org.flag4j.operations.common.complex;
 
-
+import org.flag4j.algebraic_structures.fields.Complex64;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.util.ErrorMessages;
 
 /**
- * This class contains several low-level methods useful for computing aggregation operations on dense/sparse tensors whose elements
- * are members of a {@link Field}.
+ * <p>This class contains low-level implementations for operations which check if a complex tensor satisfies some property.</p>
+ * <p>Implementations are agnostic to whether the tensor is sparse or dense.</p>
  */
-public final class AggregateField {
+public class Complex64Properties {
 
-    private AggregateField() {
-        // Hide default constructor.
+    private Complex64Properties() {
+        // Hide default constructor in utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
     /**
-     * Computes the sum of all entries in this tensor. This can be applied to either real dense or spase tensors.
-     * @param entries Entries of the tensor.
-     * @return The sum of all entries in this tensor. If {entries.length == 0}, null will be returned.
+     * Checks whether a tensor contains only real values.
+     * @param entries Entries of dense tensor or non-zero entries of sparse tensor.
+     * @return True if the tensor only contains real values. Returns false otherwise.
      */
-    public static <T extends Field<T>> T sum(Field<T>... entries) {
-        if(entries.length == 0) return null;
-        Field<T> sum = entries[0];
+    public static boolean isReal(Field<Complex64>[] entries) {
+        if(entries == null) return false;
 
-        for(int i=1, size = entries.length; i<size; i++)
-            sum = sum.add((T) entries[i]);
+        for(Field<Complex64> entry : entries)
+            if(((Complex64) entry).im != 0) return false;
 
-        return (T) sum;
+        return true;
     }
 
 
     /**
-     * Computes the sum of all entries in this tensor. This can be applied to either real dense or spase tensors.
-     * @param entries Entries of the tensor.
-     * @return The sum of all entries in this tensor. If {entries.length == 0}, null will be returned.
+     * Checks whether a tensor contains at least one non-real value.
+     * @param entries Entries of dense tensor or non-zero entries of sparse tensor.
+     * @return True if the tensor contains at least one non-real value. Returns false otherwise.
      */
-    public static <T extends Field<T>> T prod(Field<T>... entries) {
-        if(entries.length == 0) return null;
-        Field<T> prod = entries[0];
+    public static boolean isComplex(Field<Complex64>[] entries) {
+        if(entries == null) return false;
 
-        for(int i=1, size = entries.length; i<size; i++)
-            prod = prod.mult((T) entries[i]);
+        for(Field<Complex64> entry : entries)
+            if(((Complex64) entry).im != 0) return true;
 
-        return (T) prod;
+        return false;
     }
 }

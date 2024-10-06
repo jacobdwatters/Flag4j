@@ -28,6 +28,8 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.operations.common.field_ops.AggregateField;
 import org.flag4j.operations.common.field_ops.CompareField;
+import org.flag4j.operations.dense.field_ops.DenseFieldElemMult;
+import org.flag4j.operations.dense.field_ops.DenseFieldOperations;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -188,13 +190,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T add(T b) {
-        ValidateParameters.ensureEqualShape(shape, b.shape);
-        Field<V>[] sum = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++)
-            sum[i] = entries[i].add((V) b.entries[i]);
-
-        return makeLikeTensor(shape, sum);
+        return makeLikeTensor(shape, DenseFieldOperations.add(entries, shape, b.entries, b.shape));
     }
 
 
@@ -209,13 +205,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T sub(T b) {
-        ValidateParameters.ensureEqualShape(shape, b.shape);
-        Field<V>[] diff = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++)
-            diff[i] = entries[i].sub((V) b.entries[i]);
-
-        return makeLikeTensor(shape, diff);
+        return makeLikeTensor(shape, DenseFieldOperations.sub(entries, shape, b.entries, b.shape));
     }
 
 
@@ -264,12 +254,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T mult(double b) {
-        Field<V>[] product = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++)
-            product[i] = entries[i].mult(b);
-
-        return makeLikeTensor(shape, product);
+        return makeLikeTensor(shape, DenseFieldOperations.scalMult(entries, b));
     }
 
 
@@ -282,12 +267,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T div(double b) {
-        Field<V>[] quotient = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++)
-            quotient[i] = entries[i].div(b);
-
-        return makeLikeTensor(shape, quotient);
+        return makeLikeTensor(shape, DenseFieldOperations.scalDiv(entries, b));
     }
 
 
@@ -298,12 +278,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T conj() {
-        Field<V>[] conj = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++)
-            conj[i] = entries[i].conj();
-
-        return makeLikeTensor(shape, conj);
+        return makeLikeTensor(shape, DenseFieldOperations.conj(entries));
     }
 
 
@@ -318,13 +293,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T elemMult(T b) {
-        ValidateParameters.ensureEqualShape(shape, b.shape);
-        Field<V>[] prod = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++)
-            prod[i] = entries[i].mult((V) b.entries[i]);
-
-        return makeLikeTensor(shape, prod);
+        return makeLikeTensor(shape, DenseFieldElemMult.dispatch(entries, shape, b.entries, b.shape));
     }
 
 
@@ -486,12 +455,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T mult(V b) {
-        Field<V>[] product = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++)
-            product[i] = entries[i].mult(b);
-
-        return makeLikeTensor(shape, product);
+        return makeLikeTensor(shape, DenseFieldOperations.scalMult(entries, b));
     }
 
 
@@ -502,8 +466,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public void multEq(V b) {
-        for(int i=0, size=entries.length; i<size; i++)
-            entries[i] = entries[i].mult(b);
+        DenseFieldOperations.scalMultEq(entries, b);
     }
 
 
@@ -516,12 +479,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T div(V b) {
-        Field<V>[] quotient = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++)
-            quotient[i] = entries[i].div(b);
-
-        return makeLikeTensor(shape, quotient);
+        return makeLikeTensor(shape, DenseFieldOperations.scalDiv(entries, b));
     }
 
 
@@ -532,8 +490,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public void divEq(V b) {
-        for(int i=0, size=entries.length; i<size; i++)
-            entries[i] = entries[i].div(b);
+        DenseFieldOperations.scalDivEq(entries, b);
     }
 
 
@@ -683,12 +640,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T recip() {
-        Field<V>[] recip = new Field[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++)
-            recip[i] = entries[i].multInv();
-
-        return makeLikeTensor(shape, recip);
+        return makeLikeTensor(shape, DenseFieldOperations.recip(entries));
     }
 
 

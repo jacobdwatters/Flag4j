@@ -33,7 +33,7 @@ import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
-import org.flag4j.operations.sparse.coo.complex.ComplexSparseEquals;
+import org.flag4j.operations.sparse.coo.field_ops.CooFieldEquals;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -307,9 +307,7 @@ public class CooCTensor extends CooFieldTensorBase<CooCTensor, CTensor, Complex1
         if(this == object) return true;
         if(object == null || object.getClass() != getClass()) return false;
 
-        CooCTensor src2 = (CooCTensor) object;
-
-        return ComplexSparseEquals.cooTensorEquals(this, src2);
+        return CooFieldEquals.cooTensorEquals(this, (CooCTensor) object);
     }
 
 

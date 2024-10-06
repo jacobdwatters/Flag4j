@@ -34,7 +34,7 @@ import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.TensorInvert;
 import org.flag4j.operations.common.complex.Complex128Operations;
-import org.flag4j.operations.dense.complex.ComplexDenseOperations;
+import org.flag4j.operations.dense.field_ops.DenseFieldOperations;
 import org.flag4j.operations.dense.real.RealDenseEquals;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
@@ -350,7 +350,7 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
      * @return Tensor containing sum of all entries of this tensor with {@code b}.
      */
     public CTensor add(Complex128 b) {
-        return new CTensor(shape, ComplexDenseOperations.add(entries, b));
+        return new CTensor(shape, DenseFieldOperations.add(entries, b));
     }
 
 

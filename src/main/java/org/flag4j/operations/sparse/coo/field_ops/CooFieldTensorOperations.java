@@ -132,11 +132,11 @@ public final class CooFieldTensorOperations {
             }
 
             // Add the current element from src1 and handle matching indices from src2.
-            if(src2Pos < src2.nnz && Arrays.equals(src1Idx, src2Indices[src2Pos])) {
+            if(src2Pos < src2.nnz && Arrays.equals(src1Idx, src2Indices[src2Pos]))
                 sumEntries.add(val1.sub((V) src2.entries[src2Pos++]));
-            } else {
+            else
                 sumEntries.add(val1);
-            }
+
             sumIndices.add(src1Idx);
         }
 
@@ -179,9 +179,8 @@ public final class CooFieldTensorOperations {
         for(int i = 0; i < src1.nnz && src2Idx < src2.nnz; i++) {
             int cmp = -1;
 
-            while(src2Idx < src2.nnz && (cmp = Arrays.compare(src2.indices[src2Idx], src1.indices[i])) < 0) {
+            while(src2Idx < src2.nnz && (cmp = Arrays.compare(src2.indices[src2Idx], src1.indices[i])) < 0)
                 src2Idx++;
-            }
 
             if(src2Idx < src2.nnz && cmp == 0) {
                 productEntries[count] = src1.entries[i].mult((V) src2.entries[src2Idx]);

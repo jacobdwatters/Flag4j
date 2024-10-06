@@ -29,7 +29,7 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.CooFieldVectorBase;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.FieldVector;
-import org.flag4j.operations.sparse.coo.field_ops.SparseFieldEquals;
+import org.flag4j.operations.sparse.coo.field_ops.CooFieldEquals;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -252,7 +252,7 @@ public class CooFieldVector<T extends Field<T>> extends CooFieldVectorBase<CooFi
 
         CooFieldVector<T> src2 = (CooFieldVector<T>) object;
 
-        return SparseFieldEquals.cooVectorEquals(this, src2);
+        return CooFieldEquals.cooVectorEquals(this, src2);
     }
 
 

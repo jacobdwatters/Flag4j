@@ -28,7 +28,7 @@ import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.*;
-import org.flag4j.operations.dense.complex.ComplexDenseMatrixMultTranspose;
+import org.flag4j.operations.dense.field_ops.DenseFieldMatrixMultTranspose;
 import org.flag4j.operations.dense.field_ops.DenseFieldMatrixMultiplication;
 import org.flag4j.operations.dense.real.RealDenseMatrixMultiplication;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultTranspose;
@@ -477,22 +477,22 @@ public final class MatrixMultiplyDispatcher {
      * @return The result of the matrix multiplication-transpose.
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
      */
-    public static Complex128[] dispatchTranspose(CMatrix A, CMatrix B) {
+    public static Field<Complex128>[] dispatchTranspose(CMatrix A, CMatrix B) {
         ValidateParameters.ensureEquals(A.numCols, B.numCols);
         AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);
-        Complex128[] dest;
+        Field<Complex128>[] dest;
 
         switch(algorithm) {
             case MULT_T:
-                dest = ComplexDenseMatrixMultTranspose.multTranspose(
+                dest = DenseFieldMatrixMultTranspose.multTranspose(
                         A.entries, A.shape, B.entries, B.shape);
                 break;
             case MULT_T_CONCURRENT:
-                dest = ComplexDenseMatrixMultTranspose.multTransposeConcurrent(
+                dest = DenseFieldMatrixMultTranspose.multTransposeConcurrent(
                         A.entries, A.shape, B.entries, B.shape);
                 break;
             default:
-                dest = ComplexDenseMatrixMultTranspose.multTransposeBlockedConcurrent(
+                dest = DenseFieldMatrixMultTranspose.multTransposeBlockedConcurrent(
                         A.entries, A.shape, B.entries, B.shape);
         }
 

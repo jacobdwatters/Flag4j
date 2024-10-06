@@ -27,6 +27,7 @@ package org.flag4j.operations.dense.complex;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.operations.dense.field_ops.DenseFieldMatrixMultTranspose;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -49,19 +50,19 @@ class ComplexDenseMatMultTransposeTests {
         exp = A.mult(B.T()).entries;
 
         // ------------ Sub-case 1 ------------
-        act = ComplexDenseMatrixMultTranspose.multTranspose(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultTranspose.multTranspose(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 2 ------------
-        act = ComplexDenseMatrixMultTranspose.multTransposeBlocked(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultTranspose.multTransposeBlocked(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 3 ------------
-        act = ComplexDenseMatrixMultTranspose.multTransposeConcurrent(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultTranspose.multTransposeConcurrent(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 4 ------------
-        act = ComplexDenseMatrixMultTranspose.multTransposeBlockedConcurrent(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultTranspose.multTransposeBlockedConcurrent(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
     }
 
@@ -82,19 +83,19 @@ class ComplexDenseMatMultTransposeTests {
         exp = A.mult(B.T()).entries;
 
         // ------------ Sub-case 1 ------------
-        act = ComplexDenseMatrixMultTranspose.multTranspose(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultTranspose.multTranspose(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 2 ------------
-        act = ComplexDenseMatrixMultTranspose.multTransposeBlocked(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultTranspose.multTransposeBlocked(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 3 ------------
-        act = ComplexDenseMatrixMultTranspose.multTransposeConcurrent(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultTranspose.multTransposeConcurrent(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 4 ------------
-        act = ComplexDenseMatrixMultTranspose.multTransposeBlockedConcurrent(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultTranspose.multTransposeBlockedConcurrent(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
     }
 }

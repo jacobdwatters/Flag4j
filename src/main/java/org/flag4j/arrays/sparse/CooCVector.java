@@ -33,7 +33,7 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.operations.common.complex.Complex128Operations;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
-import org.flag4j.operations.sparse.coo.complex.ComplexSparseEquals;
+import org.flag4j.operations.sparse.coo.field_ops.CooFieldEquals;
 import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
@@ -390,9 +390,7 @@ public class CooCVector extends CooFieldVectorBase<CooCVector, CooCMatrix, CVect
         if(this == object) return true;
         if(object == null || object.getClass() != getClass()) return false;
 
-        CooCVector src2 = (CooCVector) object;
-
-        return ComplexSparseEquals.cooVectorEquals(this, src2);
+        return CooFieldEquals.cooVectorEquals(this, (CooCVector) object);
     }
 
 

@@ -34,7 +34,7 @@ import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooTensor;
-import org.flag4j.operations.common.complex.ComplexProperties;
+import org.flag4j.operations.common.field_ops.FieldProperties;
 import org.flag4j.operations.common.real.RealProperties;
 import org.flag4j.util.ErrorMessages;
 
@@ -121,7 +121,7 @@ public final class RealComplexDenseSparseEquals {
 
             if(equal) {
                 // Now, if this vector is equal to the sparse vector, there should only be zeros left in the entriesStack
-                equal = ComplexProperties.isZeros(src1Copy);
+                equal = FieldProperties.isZeros(src1Copy);
             }
 
         } else {
@@ -204,7 +204,7 @@ public final class RealComplexDenseSparseEquals {
 
             if(equal) {
                 // Now, if this matrix is equal to the sparse matrix, there should only be zeros left in the entriesStack
-                equal = ComplexProperties.isZeros(entriesCopy);
+                equal = FieldProperties.isZeros(entriesCopy);
             }
 
         } else {
@@ -281,7 +281,7 @@ public final class RealComplexDenseSparseEquals {
 
             if(equal) {
                 // Now, if this tensor is equal to the sparse tensor, there should only be zeros left in the entriesStack
-                equal = ComplexProperties.isZeros(entriesCopy);
+                equal = FieldProperties.isZeros(entriesCopy);
             }
 
         } else {

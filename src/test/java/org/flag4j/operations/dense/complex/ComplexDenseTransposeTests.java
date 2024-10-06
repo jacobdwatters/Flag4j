@@ -3,7 +3,7 @@ package org.flag4j.operations.dense.complex;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.junit.jupiter.api.Test;
 
-import static org.flag4j.operations.dense.complex.ComplexDenseTranspose.*;
+import static org.flag4j.operations.dense.field_ops.DenseFieldTranspose.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class ComplexDenseTransposeTests {

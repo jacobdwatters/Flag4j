@@ -35,8 +35,8 @@ import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;
 import org.flag4j.operations.MatrixMultiplyDispatcher;
 import org.flag4j.operations.common.complex.Complex128Operations;
-import org.flag4j.operations.common.complex.ComplexProperties;
-import org.flag4j.operations.dense.complex.ComplexDenseEquals;
+import org.flag4j.operations.common.complex.Complex128Properties;
+import org.flag4j.operations.dense.field_ops.DenseFieldEquals;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
@@ -766,7 +766,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @return True if every entry in this matrix has zero imaginary component. False otherwise.
      */
     public boolean isReal() {
-        return ComplexProperties.isReal(entries);
+        return Complex128Properties.isReal(entries);
     }
 
 
@@ -775,7 +775,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @return True if at least one value in this matrix is non-real. False otherwise.
      */
     public boolean isComplex() {
-        return ComplexProperties.isComplex(entries);
+        return Complex128Properties.isComplex(entries);
     }
 
 
@@ -927,7 +927,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
 
         CMatrix src2 = (CMatrix) object;
 
-        return ComplexDenseEquals.tensorEquals(entries, shape, src2.entries, src2.shape);
+        return DenseFieldEquals.tensorEquals(entries, shape, src2.entries, src2.shape);
     }
 
 

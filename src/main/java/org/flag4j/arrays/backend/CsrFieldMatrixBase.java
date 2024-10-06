@@ -707,6 +707,40 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
     }
 
 
+
+    /**
+     * Computes matrix-vector multiplication.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with vector {@code b}.
+     *
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the
+     *                                  number of entries in the vector {@code b}.
+     */
+    @Override
+    public W mult(V b) {
+        return (W) CsrFieldMatMult.standardVector(this, b);
+    }
+
+
+    /**
+     * Sets the element of this tensor at the specified indices.
+     *
+     * @param value New value to set the specified index of this tensor to.
+     * @param indices Indices of the element to set.
+     *
+     * @return A copy of this tensor with the updated value is returned.
+     *
+     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
+     */
+    @Override
+    public T set(Y value, int... indices) {
+        ValidateParameters.ensureValidIndex(shape, indices);
+        return set(value, indices[0], indices[1]);
+    }
+
+
     /**
      * Sets an index of this matrix to the specified value.
      *
@@ -755,12 +789,44 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
             System.arraycopy(colIndices, loc, newColIndices, loc+1, entries.length-loc);
 
             // Increment row pointers.
-            for(int i=row+1; i<rowPointers.length; i++) {
+            for(int i=row+1; i<rowPointers.length; i++)
                 newRowPointers[i]++;
-            }
         }
 
         return makeLikeTensor(shape, (Y[]) newEntries, newRowPointers, newColIndices);
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     *
+     * @return A reference to this matrix.
+     *
+     * @throws IndexOutOfBoundsException If the values vector has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public T setCol(V values, int colIndex) {
+        return (T) toCoo().setCol(values, colIndex).toCsr();
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values New values for the row.
+     * @param rowIndex The index of the row which is to be set.
+     *
+     * @return A reference to this matrix.
+     *
+     * @throws IndexOutOfBoundsException If the values vector has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public T setRow(V values, int rowIndex) {
+        // Convert to COO first for more efficient modification.
+        return (T) toCoo().setRow(values, rowIndex).toCsr();
     }
 
 

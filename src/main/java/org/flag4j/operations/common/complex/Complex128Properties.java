@@ -22,48 +22,51 @@
  * SOFTWARE.
  */
 
-package org.flag4j.operations.dense.complex;
+package org.flag4j.operations.common.complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.util.ErrorMessages;
 
-import java.util.Arrays;
 
 /**
- * This class provides methods for checking the equality of complex dense tensors.
+ * <p>This class contains low-level implementations for operations which check if a complex tensor satisfies some property.</p>
+ * <p>Implementations are agnostic to whether the tensor is sparse or dense.</p>
  */
-public class ComplexDenseEquals {
+public final class Complex128Properties {
 
-    private ComplexDenseEquals() {
-        // Hide constructor for utility class.
+    private Complex128Properties() {
+        // Hide default constructor in utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
-
     /**
-     * Checks if two real dense matrices are equal.
-     * @param A First matrix.
-     * @param B Second matrix.
-     * @return True if the two matrices are element-wise equivalent.
+     * Checks whether a tensor contains only real values.
+     * @param entries Entries of dense tensor or non-zero entries of sparse tensor.
+     * @return True if the tensor only contains real values. Returns false otherwise.
      */
-    public static boolean matrixEquals(CMatrix A, CMatrix B) {
-        return tensorEquals(A.entries, A.shape, B.entries, B.shape);
+    public static boolean isReal(Field<Complex128>[] entries) {
+        if(entries == null) return false;
+
+        for(Field<Complex128> entry : entries)
+            if(((Complex128) entry).im != 0) return false;
+
+        return true;
     }
 
 
     /**
-     * Checks if two dense tensors are equal.
-     * @param src1 Entries of first tensor.
-     * @param shape1 Shape of first tensor.
-     * @param src2 Entries of second tensor.
-     * @param shape2 Shape of second tensor.
-     * @return True if the two tensors are numerically element-wise equivalent.
+     * Checks whether a tensor contains at least one non-real value.
+     * @param entries Entries of dense tensor or non-zero entries of sparse tensor.
+     * @return True if the tensor contains at least one non-real value. Returns false otherwise.
      */
-    public static boolean tensorEquals(Field<Complex128>[] src1, Shape shape1, Field<Complex128>[] src2, Shape shape2) {
-        return shape1.equals(shape2) && Arrays.equals(src1, src2);
+    public static boolean isComplex(Field<Complex128>[] entries) {
+        if(entries == null) return false;
+
+        for(Field<Complex128> entry : entries)
+            if(((Complex128) entry).im != 0) return true;
+
+        return false;
     }
 }

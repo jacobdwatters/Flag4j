@@ -74,7 +74,6 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
     }
 
 
-
     /**
      * Creates a dense field matrix with the specified entries and shape.
      *
@@ -273,7 +272,7 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
      * @param n Number of times to multiply this matrix with itself. Must be non-negative.
      * @return If {@code n=0}, then the identity
      */
-    public FieldMatrix pow(int n) {
+    public FieldMatrix<T> pow(int n) {
         ValidateParameters.ensureSquare(shape);
         ValidateParameters.ensureNonNegative(n);
 
@@ -282,13 +281,13 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
         if (n == 1) return this;
         if (n == 2) return this.mult(this);
 
-        FieldMatrix<T> result = I(numRows, entries[0]);  // Start with identity matrix
+        FieldMatrix<T> result = I(numRows, entries[0]);  // Start with identity matrix.
         FieldMatrix<T> base = this;
 
         // Compute the matrix power efficiently using an "exponentiation by squaring" approach.
         while(n > 0) {
-            if((n & 1) == 1)  // If n is odd.
-                result = result.mult(base);
+            // If n is odd.
+            if((n & 1) == 1)  result = result.mult(base);
 
             base = base.mult(base);  // Square the base.
             n >>= 1;  // Divide n by 2 (bitwise right shift).

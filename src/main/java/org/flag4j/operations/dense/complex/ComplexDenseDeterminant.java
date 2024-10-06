@@ -26,10 +26,10 @@ package org.flag4j.operations.dense.complex;
 
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.linalg.decompositions.lu.ComplexLU;
 import org.flag4j.linalg.decompositions.lu.LU;
+import org.flag4j.operations.dense.field_ops.DenseFieldDeterminant;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
@@ -44,12 +44,11 @@ public final class ComplexDenseDeterminant {
     }
 
 
-
     /**
      * Computes the determinant of a square matrix using the LU factorization.
      * @param A Matrix to compute the determinant of.
      * @return The determinant of the matrix.
-     * @throws IllegalArgumentException If matrix is not square.
+     * @throws org.flag4j.util.exceptions.LinearAlgebraException If matrix is not square.
      */
     public static Complex128 det(CMatrix A) {
         ValidateParameters.ensureSquareMatrix(A.shape);
@@ -57,13 +56,13 @@ public final class ComplexDenseDeterminant {
 
         switch (A.numRows) {
             case 1:
-                det = det1(A);
+                det = DenseFieldDeterminant.det1(A);
                 break;
             case 2:
-                det = det2(A);
+                det = DenseFieldDeterminant.det2(A);
                 break;
             case 3:
-                det = det3(A);
+                det = DenseFieldDeterminant.det3(A);
                 break;
             default:
                 det = detLU(A);
@@ -78,66 +77,13 @@ public final class ComplexDenseDeterminant {
      * Computes the determinant of a square matrix using the LU factorization.
      * @param A Matrix to compute the determinant of.
      * @return The determinant of the matrix.
-     * @throws IllegalArgumentException If matrix is not square.
+     * @throws org.flag4j.util.exceptions.LinearAlgebraException If matrix is not square.
      */
     public static Complex128 detLU(CMatrix A) {
         ValidateParameters.ensureSquareMatrix(A.shape);
         LU<CMatrix> lu = new ComplexLU().decompose(A);
 
         double detP = (lu.getNumRowSwaps() & 1) == 0 ? 1 : -1;
-        return detTri(lu.getU()).mult(detP);
-    }
-
-
-    /**
-     * Computes the determinant of a triangular matrix.
-     * @param T Triangular matrix.
-     * @return The determinant of the triangular matrix {@code T}.
-     */
-    public static Complex128 detTri(CMatrix T) {
-        Complex128 detU = new Complex128(1);
-
-        // Compute the determinant of T
-        for(int i=0; i<T.numRows; i++) {
-            detU = detU.mult((Complex128) T.entries[i*T.numCols + i]);
-        }
-
-        return detU;
-    }
-
-
-    /**
-     * Explicitly computes the determinant of a 3x3 matrix.
-     * @param A Matrix to compute the determinant of.
-     * @return The determinant of the 3x3 matrix.
-     */
-    public static Complex128 det3(CMatrix A) {
-        ValidateParameters.ensureEqualShape(A.shape, new Shape(3, 3));
-        Complex128 det = A.entries[0].mult(A.entries[4].mult((Complex128) A.entries[8]).sub(A.entries[5].mult((Complex128) A.entries[7])));
-        det = det.sub(A.entries[1].mult(A.entries[3].mult((Complex128) A.entries[8]).sub(A.entries[5].mult((Complex128) A.entries[6]))));
-        det = det.add(A.entries[2].mult(A.entries[3].mult((Complex128) A.entries[7]).sub(A.entries[4].mult((Complex128) A.entries[6]))));
-        return det;
-    }
-
-
-    /**
-     * Explicitly computes the determinant of a 2x2 matrix.
-     * @param A Matrix to compute the determinant of.
-     * @return The determinant of the 2x2 matrix.
-     */
-    public static Complex128 det2(CMatrix A) {
-        ValidateParameters.ensureEqualShape(A.shape, new Shape(2, 2));
-        return A.entries[0].mult((Complex128) A.entries[3]).sub(A.entries[1].mult((Complex128) A.entries[2]));
-    }
-
-
-    /**
-     * Explicitly computes the determinant of a 1x1 matrix.
-     * @param A Matrix to compute the determinant of.
-     * @return The determinant of the 1x1 matrix.
-     */
-    public static Complex128 det1(CMatrix A) {
-        ValidateParameters.ensureEqualShape(A.shape, new Shape(1, 1));
-        return (Complex128) A.entries[0];
+        return DenseFieldDeterminant.detTriUnsafe(lu.getU()).mult(detP);
     }
 }

@@ -107,9 +107,20 @@ public final class ValidateParameters {
      * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
      */
     public static void ensureTotalEntriesEq(Object[][] arr1, double[] arr2) {
-        if(arr1.length*arr1[0].length != arr2.length) {
+        if(arr1.length*arr1[0].length != arr2.length)
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
-        }
+    }
+
+
+    /**
+     * Checks if arrays_old have the same number of total entries.
+     * @param arr1 First array.
+     * @param arr2 Second array.
+     * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
+     */
+    public static void ensureTotalEntriesEq(Object[][] arr1, Object[] arr2) {
+        if(arr1.length*arr1[0].length != arr2.length)
+            throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
     }
 
 
@@ -120,9 +131,8 @@ public final class ValidateParameters {
      * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
      */
     public static void ensureTotalEntriesEq(double[][] arr1, double[] arr2) {
-        if(arr1.length*arr1[0].length != arr2.length) {
+        if(arr1.length*arr1[0].length != arr2.length)
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
-        }
     }
 
 
@@ -133,9 +143,8 @@ public final class ValidateParameters {
      * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
      */
     public static void ensureTotalEntriesEq(int[][] arr1, double[] arr2) {
-        if(arr1.length*arr1[0].length != arr2.length) {
+        if(arr1.length*arr1[0].length != arr2.length)
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
-        }
     }
 
 
@@ -146,9 +155,8 @@ public final class ValidateParameters {
      * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
      */
     public static void ensureTotalEntriesEq(Object[][] arr1, Complex128[] arr2) {
-        if(arr1.length*arr1[0].length != arr2.length) {
+        if(arr1.length*arr1[0].length != arr2.length)
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
-        }
     }
 
 
@@ -159,9 +167,8 @@ public final class ValidateParameters {
      * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
      */
     public static void ensureTotalEntriesEq(double[][] arr1, Complex128[] arr2) {
-        if(arr1.length*arr1[0].length != arr2.length) {
+        if(arr1.length*arr1[0].length != arr2.length)
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
-        }
     }
 
 
@@ -172,9 +179,8 @@ public final class ValidateParameters {
      * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
      */
     public static void ensureTotalEntriesEq(int[][] arr1, Complex128[] arr2) {
-        if(arr1.length*arr1[0].length != arr2.length) {
+        if(arr1.length*arr1[0].length != arr2.length)
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
-        }
     }
 
 
@@ -195,9 +201,8 @@ public final class ValidateParameters {
                 }
             }
 
-            if(!equal) {
+            if(!equal)
                 throw new IllegalArgumentException("Expecting values to be equal but got: " + Arrays.toString(values));
-            }
         }
     }
 
@@ -219,9 +224,8 @@ public final class ValidateParameters {
                 }
             }
 
-            if(!equal) {
+            if(!equal)
                 throw new IllegalArgumentException("Expecting values to be equal but got: " + Arrays.toString(values));
-            }
         }
     }
 
@@ -243,9 +247,8 @@ public final class ValidateParameters {
      * @throws IllegalArgumentException If {@code a==b}.
      */
     public static void ensureNotEquals(double a, double b) {
-        if(a==b) {
+        if(a==b)
             throw new IllegalArgumentException("Expecting values to not be equal but got: " + a + ", " + b + ".");
-        }
     }
 
 
@@ -257,9 +260,8 @@ public final class ValidateParameters {
      */
     public static void ensureGreaterEq(double threshold, double... values) {
         for(double value : values) {
-            if(value<threshold) {
+            if(value<threshold)
                 throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(threshold, value));
-            }
         }
     }
 
@@ -272,9 +274,8 @@ public final class ValidateParameters {
      */
     public static void ensureGreaterEq(int threshold, int... values) {
         for(double value : values) {
-            if(value<threshold) {
+            if(value<threshold)
                 throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(threshold, value));
-            }
         }
     }
 
@@ -286,9 +287,8 @@ public final class ValidateParameters {
      * @throws IllegalArgumentException If the values is less than the threshold.
      */
     public static void ensureGreaterEq(int threshold, int value) {
-        if(value<threshold) {
+        if(value<threshold)
             throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(threshold, value));
-        }
     }
 
 
@@ -300,9 +300,8 @@ public final class ValidateParameters {
      * @throws IllegalArgumentException If any of the values are less than the threshold.
      */
     public static void ensureGreaterEq(double threshold, double value, String name) {
-        if(value<threshold) {
+        if(value<threshold)
             throw new IllegalArgumentException(ErrorMessages.getNamedGreaterEqErr(threshold, value, name));
-        }
     }
 
 
@@ -314,9 +313,8 @@ public final class ValidateParameters {
      */
     public static void ensureLessEq(double threshold, double... values) {
         for(double value : values) {
-            if(value>threshold) {
+            if(value>threshold)
                 throw new IllegalArgumentException(ErrorMessages.getLessEqErr(threshold, value));
-            }
         }
     }
 
@@ -329,9 +327,8 @@ public final class ValidateParameters {
      */
     public static void ensureLessEq(int threshold, int... values) {
         for(double value : values) {
-            if(value>threshold) {
+            if(value>threshold)
                 throw new IllegalArgumentException(ErrorMessages.getLessEqErr(threshold, value));
-            }
         }
     }
 
@@ -356,9 +353,8 @@ public final class ValidateParameters {
      * @throws IllegalArgumentException If the value is greater than the threshold.
      */
     public static void ensureLessEq(BigInteger threshold, int value, String name) {
-        if(threshold.compareTo(BigInteger.valueOf(value)) < 0) {
+        if(threshold.compareTo(BigInteger.valueOf(value)) < 0)
             throw new IllegalArgumentException(ErrorMessages.getNamedLessEqErr(threshold, value, name));
-        }
     }
 
 

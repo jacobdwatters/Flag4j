@@ -37,7 +37,7 @@ import java.util.Arrays;
  * a real/complex sparse/dense  <br>
  * <b>WARNING:</b> These methods do not perform any sanity checks.
  */
-public class RealComplexDenseSparseMatrixMultTranspose {
+public final class RealComplexDenseSparseMatrixMultTranspose {
 
     private RealComplexDenseSparseMatrixMultTranspose() {
         // Hide default constructor.

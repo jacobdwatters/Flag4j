@@ -22,21 +22,23 @@
  * SOFTWARE.
  */
 
-package org.flag4j.operations.sparse.coo.complex;
+package org.flag4j.operations.sparse.coo.field_ops;
 
-import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.backend.CooFieldMatrixBase;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.HashMap;
 
-/**
- * This class contains low level implementations of norms for complex sparse tensors, matrices and vector.
- */
-public class ComplexSparseNorms {
 
-    private ComplexSparseNorms() {
+/**
+ * This utility class contains low level implementations of norms for sparse field coo tensors, matrices and vectors.
+ */
+public final class CooFieldNorms {
+
+    private CooFieldNorms() {
         // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
@@ -47,7 +49,7 @@ public class ComplexSparseNorms {
      * @param src Source matrix to compute norm of.
      * @return The L<sub>2</sub> of the {@code src} matrix.
      */
-    public static double matrixNormL2(CooCMatrix src) {
+    public static <T extends Field<T>> double matrixNormL2(CooFieldMatrixBase<?, ?, ?, ?, T> src) {
         double norm = 0;
         double[] colSums = new double[ArrayUtils.numUnique(src.colIndices)];
 
@@ -61,9 +63,8 @@ public class ComplexSparseNorms {
         }
 
         // Compute the norm from the column sums.
-        for(double colSum : colSums) {
+        for(double colSum : colSums)
             norm += Math.sqrt(colSum);
-        }
 
         return norm;
     }
@@ -75,7 +76,7 @@ public class ComplexSparseNorms {
      * @param p Parameter for L<sub>p</sub> norm
      * @return The L<sub>p</sub> of the {@code src} matrix.
      */
-    public static double matrixNormLp(CooCMatrix src, double p) {
+    public static <T extends Field<T>> double matrixNormLp(CooFieldMatrixBase<?, ?, ?, ?, T> src, double p) {
         ValidateParameters.ensureGreaterEq(1, p);
 
         double norm = 0;
@@ -85,14 +86,12 @@ public class ComplexSparseNorms {
         HashMap<Integer, Integer> columnMap = ArrayUtils.createUniqueMapping(src.colIndices);
 
         // Compute the column sums.
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i=0; i<src.entries.length; i++)
             colSums[columnMap.get(src.colIndices[i])] += Math.pow(src.entries[i].mag(), p);
-        }
 
         // Compute the norm from the column sums.
-        for(double colSum : colSums) {
+        for(double colSum : colSums)
             norm += Math.pow(colSum, 1.0/p);
-        }
 
         return norm;
     }
@@ -104,7 +103,7 @@ public class ComplexSparseNorms {
      * @param p First parameter for L<sub>p, q</sub> norm
      * @return The L<sub>p, q</sub> of the {@code src} matrix.
      */
-    public static double matrixNormLpq(CooCMatrix src, double p, double q) {
+    public static <T extends Field<T>> double matrixNormLpq(CooFieldMatrixBase<?, ?, ?, ?, T> src, double p, double q) {
         ValidateParameters.ensureGreaterEq(1, p, q);
 
         double norm = 0;
@@ -114,14 +113,12 @@ public class ComplexSparseNorms {
         HashMap<Integer, Integer> columnMap = ArrayUtils.createUniqueMapping(src.colIndices);
 
         // Compute the column sums.
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i=0; i<src.entries.length; i++)
             colSums[columnMap.get(src.colIndices[i])] += Math.pow(src.entries[i].mag(), p);
-        }
 
         // Compute the norm from the column sums.
-        for(double colSum : colSums) {
+        for(double colSum : colSums)
             norm += Math.pow(colSum, p/q);
-        }
 
         return Math.pow(norm, 1.0/q);
     }

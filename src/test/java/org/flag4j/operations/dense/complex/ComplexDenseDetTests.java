@@ -2,6 +2,7 @@ package org.flag4j.operations.dense.complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.operations.dense.field_ops.DenseFieldDeterminant;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +49,7 @@ class ComplexDenseDetTests {
         // -------------- Sub-case 5 --------------
         entries = new Complex128[][]{{Complex128.ZERO, Complex128.ZERO}, {Complex128.ZERO, Complex128.ZERO}};
         A = new CMatrix(entries);
-        assertThrows(LinearAlgebraException.class, ()->ComplexDenseDeterminant.det1(A));
+        assertThrows(LinearAlgebraException.class, ()-> DenseFieldDeterminant.det1(A));
     }
 
 
@@ -93,7 +94,7 @@ class ComplexDenseDetTests {
         // -------------- Sub-case 5 --------------
         entries = new Complex128[][]{{Complex128.ZERO}};
         A = new CMatrix(entries);
-        assertThrows(LinearAlgebraException.class, ()->ComplexDenseDeterminant.det2(A));
+        assertThrows(LinearAlgebraException.class, ()->DenseFieldDeterminant.det2(A));
 
         // -------------- Sub-case 6 --------------
         entries = new Complex128[][]{
@@ -101,7 +102,7 @@ class ComplexDenseDetTests {
                 {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
                 {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO}};
         A = new CMatrix(entries);
-        assertThrows(LinearAlgebraException.class, ()->ComplexDenseDeterminant.det2(A));
+        assertThrows(LinearAlgebraException.class, ()->DenseFieldDeterminant.det2(A));
     }
 
 
@@ -140,7 +141,7 @@ class ComplexDenseDetTests {
         // -------------- Sub-case 4 --------------
         entries = new Complex128[][]{{Complex128.ZERO, Complex128.ZERO}, {Complex128.ZERO, Complex128.ZERO}};
         A = new CMatrix(entries);
-        assertThrows(LinearAlgebraException.class, ()->ComplexDenseDeterminant.det3(A));
+        assertThrows(LinearAlgebraException.class, ()->DenseFieldDeterminant.det3(A));
 
         // -------------- Sub-case 5 --------------
         entries = new Complex128[][]{
@@ -149,7 +150,7 @@ class ComplexDenseDetTests {
                 {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
                 {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO}};
         A = new CMatrix(entries);
-        assertThrows(LinearAlgebraException.class, ()->ComplexDenseDeterminant.det3(A));
+        assertThrows(LinearAlgebraException.class, ()->DenseFieldDeterminant.det3(A));
     }
 
     @Test

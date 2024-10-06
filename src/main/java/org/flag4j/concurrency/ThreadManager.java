@@ -87,8 +87,12 @@ public final class ThreadManager {
 
 
     /**
-     * Computes a specified tensor operation concurrently by evenly dividing work among available threads (specified by
-     * {@link Configurations#getNumThreads()}).
+     * <p>Computes a specified tensor operation concurrently by evenly dividing work among available threads (specified by
+     * {@link Configurations#getNumThreads()}).</p>
+     *
+     * <p>WARNING: This method provides <i>no</i> guarantees of thread safety. It is the responsibility of the caller to ensure that
+     * {@code operation} is thread safe.</p>
+     *
      * @param totalSize Total size of the outer loop for the operation.
      * @param operation Operation to be computed.
      */
@@ -122,8 +126,12 @@ public final class ThreadManager {
 
 
     /**
-     * Computes a specified blocked tensor operation concurrently by evenly dividing work among available threads (specified by
-     * {@link Configurations#getNumThreads()}).
+     * <p>Computes a specified blocked tensor operation concurrently by evenly dividing work among available threads (specified by
+     * {@link Configurations#getNumThreads()}).</p>
+     *
+     * <p>WARNING: This method provides <i>no</i> guarantees of thread safety. It is the responsibility of the caller to ensure that
+     * {@code blockedOperation} is thread safe.</p>
+     *
      * @param totalSize Total size of the outer loop for the operation.
      * @param blockSize Size of the block used in the {@code blockedOperation}.
      * @param blockedOperation Operation to be computed.

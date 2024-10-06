@@ -38,7 +38,7 @@ import org.flag4j.operations.MatrixMultiplyDispatcher;
 import org.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import org.flag4j.operations.TransposeDispatcher;
 import org.flag4j.operations.common.complex.Complex128Operations;
-import org.flag4j.operations.dense.complex.ComplexDenseOperations;
+import org.flag4j.operations.dense.field_ops.DenseFieldOperations;
 import org.flag4j.operations.dense.real.*;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
@@ -1746,7 +1746,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return A matrix containing the sum of each entry in this matrix with {@code b}.
      */
     public CMatrix add(Complex128 b) {
-        return new CMatrix(shape, ComplexDenseOperations.add(entries, b));
+        return new CMatrix(shape, DenseFieldOperations.add(entries, b));
     }
 
 
@@ -1808,7 +1808,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return A matrix containing the difference of each entry in this matrix with {@code b}.
      */
     public CMatrix sub(Complex128 b) {
-        return new CMatrix(shape, ComplexDenseOperations.sub(entries, b));
+        return new CMatrix(shape, DenseFieldOperations.sub(entries, b));
     }
 
 

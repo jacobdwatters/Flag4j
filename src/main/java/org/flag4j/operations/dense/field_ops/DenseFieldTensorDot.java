@@ -37,7 +37,7 @@ import org.flag4j.util.ValidateParameters;
  * This class contains methods for computing a tensor dot product, i.e. tensor contraction, between two dense tensors whose elements
  * are members of a {@link Field}.
  */
-public class DenseFieldTensorDot {
+public final class DenseFieldTensorDot {
 
     private DenseFieldTensorDot() {
         // Hide utility class constructor.

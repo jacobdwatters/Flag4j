@@ -6,6 +6,7 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.operations.sparse.coo.complex.ComplexSparseMatrixGetSet;
+import org.flag4j.operations.sparse.coo.field_ops.CooFieldMatrixGetSet;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -191,7 +192,7 @@ class CooCMatrixSetRowTests {
         expColIndices = new int[]{0, 1, 2, 2, 2};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, ComplexSparseMatrixGetSet.setRow(a, 0, b.entries));
+        assertEquals(exp, CooFieldMatrixGetSet.setRow(a, 0, b.entries));
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(23, 11);
@@ -209,7 +210,7 @@ class CooCMatrixSetRowTests {
         expColIndices = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 8, 3, 8};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, ComplexSparseMatrixGetSet.setRow(a, 8, b.entries));
+        assertEquals(exp, CooFieldMatrixGetSet.setRow(a, 8, b.entries));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(1000, 5);
@@ -227,7 +228,7 @@ class CooCMatrixSetRowTests {
         expColIndices = new int[]{2, 2, 2, 2, 1, 4, 1, 3, 1, 0, 1, 2, 3, 4};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, ComplexSparseMatrixGetSet.setRow(a, 999, b.entries));
+        assertEquals(exp, CooFieldMatrixGetSet.setRow(a, 999, b.entries));
 
         // ---------------------  Sub-case 4 ---------------------
         aShape = new Shape(3, 5);
@@ -241,7 +242,7 @@ class CooCMatrixSetRowTests {
 
         CooCMatrix final0a = a;
         CVector final0b = b;
-        assertThrows(Exception.class, ()->ComplexSparseMatrixGetSet.setRow(final0a, 2, final0b.entries));
+        assertThrows(Exception.class, ()->CooFieldMatrixGetSet.setRow(final0a, 2, final0b.entries));
 
         // ---------------------  Sub-case 5 ---------------------
         aShape = new Shape(3, 5);
@@ -255,7 +256,7 @@ class CooCMatrixSetRowTests {
 
         CooCMatrix final1a = a;
         CVector final1b = b;
-        assertThrows(Exception.class, ()->ComplexSparseMatrixGetSet.setRow(final1a, 1, final1b.entries));
+        assertThrows(Exception.class, ()->CooFieldMatrixGetSet.setRow(final1a, 1, final1b.entries));
 
         // ---------------------  Sub-case 6 ---------------------
         aShape = new Shape(3, 5);
@@ -269,7 +270,7 @@ class CooCMatrixSetRowTests {
 
         CooCMatrix final2a = a;
         CVector final2b = b;
-        assertThrows(Exception.class, ()->ComplexSparseMatrixGetSet.setRow(final1a, -1, final1b.entries));
+        assertThrows(Exception.class, ()->CooFieldMatrixGetSet.setRow(final1a, -1, final1b.entries));
 
         // ---------------------  Sub-case 7 ---------------------
         aShape = new Shape(3, 5);
@@ -283,7 +284,7 @@ class CooCMatrixSetRowTests {
 
         CooCMatrix final3a = a;
         CVector final3b = b;
-        assertThrows(Exception.class, ()->ComplexSparseMatrixGetSet.setRow(final1a, 5, final1b.entries));
+        assertThrows(Exception.class, ()->CooFieldMatrixGetSet.setRow(final1a, 5, final1b.entries));
     }
 
 
@@ -318,7 +319,7 @@ class CooCMatrixSetRowTests {
         expColIndices = new int[]{0, 1, 2, 2, 2};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, ComplexSparseMatrixGetSet.setRow(a, 0, b));
+        assertEquals(exp, CooFieldMatrixGetSet.setRow(a, 0, b));
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(23, 11);
@@ -335,7 +336,7 @@ class CooCMatrixSetRowTests {
         expColIndices = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 8, 3, 8};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, ComplexSparseMatrixGetSet.setRow(a, 8, b));
+        assertEquals(exp, CooFieldMatrixGetSet.setRow(a, 8, b));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(1000, 5);
@@ -352,7 +353,7 @@ class CooCMatrixSetRowTests {
         expColIndices = new int[]{2, 2, 2, 2, 1, 4, 1, 3, 1, 0, 1, 2, 3, 4};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, ComplexSparseMatrixGetSet.setRow(a, 999, b));
+        assertEquals(exp, CooFieldMatrixGetSet.setRow(a, 999, b));
 
         // ---------------------  Sub-case 4 ---------------------
         aShape = new Shape(3, 5);
@@ -365,7 +366,7 @@ class CooCMatrixSetRowTests {
 
         CooCMatrix final0a = a;
         Complex128[] final0b = b;
-        assertThrows(IllegalArgumentException.class, ()->ComplexSparseMatrixGetSet.setRow(final0a, 2, final0b));
+        assertThrows(IllegalArgumentException.class, ()->CooFieldMatrixGetSet.setRow(final0a, 2, final0b));
 
         // ---------------------  Sub-case 5 ---------------------
         aShape = new Shape(3, 5);
@@ -378,7 +379,7 @@ class CooCMatrixSetRowTests {
 
         CooCMatrix final1a = a;
         Complex128[] final1b = b;
-        assertThrows(IllegalArgumentException.class, ()->ComplexSparseMatrixGetSet.setRow(final1a, 1, final1b));
+        assertThrows(IllegalArgumentException.class, ()->CooFieldMatrixGetSet.setRow(final1a, 1, final1b));
 
         // ---------------------  Sub-case 6 ---------------------
         aShape = new Shape(3, 5);
@@ -391,7 +392,7 @@ class CooCMatrixSetRowTests {
 
         CooCMatrix final2a = a;
         Complex128[] final2b = b;
-        assertThrows(IndexOutOfBoundsException.class, ()->ComplexSparseMatrixGetSet.setRow(final2a, -1, final2b));
+        assertThrows(IndexOutOfBoundsException.class, ()->CooFieldMatrixGetSet.setRow(final2a, -1, final2b));
 
         // ---------------------  Sub-case 7 ---------------------
         aShape = new Shape(3, 5);
@@ -404,7 +405,7 @@ class CooCMatrixSetRowTests {
 
         CooCMatrix final3a = a;
         Complex128[] final3b = b;
-        assertThrows(IndexOutOfBoundsException.class, ()->ComplexSparseMatrixGetSet.setRow(final3a, 5, final3b));
+        assertThrows(IndexOutOfBoundsException.class, ()->CooFieldMatrixGetSet.setRow(final3a, 5, final3b));
     }
 
 

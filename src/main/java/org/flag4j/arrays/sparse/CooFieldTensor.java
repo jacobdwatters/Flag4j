@@ -31,7 +31,7 @@ import org.flag4j.arrays.backend.CooFieldTensorBase;
 import org.flag4j.arrays.dense.FieldTensor;
 import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.operations.dense.real.RealDenseTranspose;
-import org.flag4j.operations.sparse.coo.field_ops.SparseFieldEquals;
+import org.flag4j.operations.sparse.coo.field_ops.CooFieldEquals;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -301,7 +301,7 @@ public class CooFieldTensor<T extends Field<T>>
 
         CooFieldTensor<T> src2 = (CooFieldTensor<T>) object;
 
-        return SparseFieldEquals.cooTensorEquals(this, src2);
+        return CooFieldEquals.cooTensorEquals(this, src2);
     }
 
 
