@@ -96,7 +96,7 @@ public class Shape implements Serializable {
      */
     public int[] getStrides() {
         makeStridesIfNull();
-        return this.strides.clone();
+        return strides.clone();
     }
 
 
@@ -106,7 +106,7 @@ public class Shape implements Serializable {
      * @return The size of this shape object in the specified dimension.
      */
     public int get(int i) {
-        return this.dims[i];
+        return dims[i];
     }
 
 

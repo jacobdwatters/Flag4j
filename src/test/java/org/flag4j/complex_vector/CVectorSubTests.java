@@ -5,7 +5,7 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseVectorOperations;
+import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
@@ -635,7 +635,7 @@ class CVectorSubTests {
                 new Complex128(3.54698).sub(bEntries[1]), new Complex128(0, 8.356)};
         exp = new CVector(expEntries);
 
-        ComplexDenseSparseVectorOperations.subEq(a, b);
+        DenseCooFieldVectorOperations.subEq(a, b);
         assertEquals(exp, a);
 
         // ------------------ Sub-case 2 ------------------
@@ -649,7 +649,7 @@ class CVectorSubTests {
                 new Complex128(3.54698), new Complex128(0, 8.356).sub(bEntries[0])};
         exp = new CVector(expEntries);
 
-        ComplexDenseSparseVectorOperations.subEq(a, b);
+        DenseCooFieldVectorOperations.subEq(a, b);
         assertEquals(exp, a);
 
         // ------------------ Sub-case 3 ------------------
@@ -660,7 +660,7 @@ class CVectorSubTests {
         b = new CooCVector(sparseSize, bEntries, sparseIndices);
 
         final CooCVector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->ComplexDenseSparseVectorOperations.subEq(a, finalB));
+        assertThrows(LinearAlgebraException.class, ()->DenseCooFieldVectorOperations.subEq(a, finalB));
 
         // ------------------ Sub-case 4 ------------------
         setup();
@@ -670,6 +670,6 @@ class CVectorSubTests {
         b = new CooCVector(sparseSize, bEntries, sparseIndices);
 
         final CooCVector finalB1 = b;
-        assertThrows(LinearAlgebraException.class, ()->ComplexDenseSparseVectorOperations.subEq(a, finalB1));
+        assertThrows(LinearAlgebraException.class, ()->DenseCooFieldVectorOperations.subEq(a, finalB1));
     }
 }

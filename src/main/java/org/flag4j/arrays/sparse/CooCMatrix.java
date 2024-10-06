@@ -33,7 +33,7 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixOperations;
+import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldMatrixOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
 import org.flag4j.operations.sparse.coo.field_ops.CooFieldEquals;
 import org.flag4j.operations.sparse.coo.field_ops.CooFieldMatMult;
@@ -481,7 +481,7 @@ public class CooCMatrix extends CooFieldMatrixBase<CooCMatrix, CMatrix, CooCVect
      * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
      */
     public CooCMatrix elemMult(CMatrix b) {
-        return ComplexDenseSparseMatrixOperations.elemMult(b, this);
+        return (CooCMatrix) DenseCooFieldMatrixOperations.elemMult(b, this);
     }
 
 

@@ -344,7 +344,8 @@ public final class ArrayUtils {
      * Fills an array with specified value.
      *
      * @param dest      Array to fill.
-     * @param fillValue Value to fill array with.
+     * @param fillValue Value to fill array with. This will be converted to a member of the field as if by
+     * {@code dest[0].getZero().add(fillValue)}
      */
     public static void fill(Field<Complex128>[] dest, double fillValue) {
         Complex128 fillValueComplex = new Complex128(fillValue);

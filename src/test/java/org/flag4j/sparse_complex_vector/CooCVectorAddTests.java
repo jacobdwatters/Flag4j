@@ -5,7 +5,7 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseVectorOperations;
+import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -133,7 +133,7 @@ class CooCVectorAddTests {
                 new Complex128(0, -99.145).add(new Complex128(-8.2, 55.1)), new Complex128(4.51, 8.456), new Complex128(11.34, -0.00245)};
         exp = new CVector(expValues);
 
-        assertEquals(exp, ComplexDenseSparseVectorOperations.add(b, a));
+        assertEquals(exp, DenseCooFieldVectorOperations.add(b, a));
 
         // --------------------- Sub-case 2 ---------------------
         bValues = new Complex128[]{new Complex128(1.445, -9.24), new Complex128(1.45),
@@ -142,7 +142,7 @@ class CooCVectorAddTests {
         b = new CVector(bValues);
 
         CVector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->ComplexDenseSparseVectorOperations.add(finalB, a));
+        assertThrows(LinearAlgebraException.class, ()->DenseCooFieldVectorOperations.add(finalB, a));
     }
 
 

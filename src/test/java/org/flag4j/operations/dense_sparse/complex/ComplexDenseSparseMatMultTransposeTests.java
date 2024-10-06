@@ -7,7 +7,7 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixMultTranspose;
+import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldMatMultTranspose;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -62,7 +62,7 @@ class ComplexDenseSparseMatMultTransposeTests {
 
 
         Assertions.assertArrayEquals(expEntries,
-                ComplexDenseSparseMatrixMultTranspose.multTranspose(
+                DenseCooFieldMatMultTranspose.multTranspose(
                         A.entries, A.shape,
                         B.entries, B.rowIndices, B.colIndices, B.shape)
         );

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,25 +22,22 @@
  * SOFTWARE.
  */
 
-package org.flag4j.operations.dense_sparse.coo.complex;
+package org.flag4j.operations.dense_sparse.coo.field_ops;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooCTensor;
+import org.flag4j.arrays.backend.*;
 import org.flag4j.operations.common.field_ops.FieldProperties;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 
 /**
- * This class provides methods for checking the equality of a complex dense tensor with a complex sparse tensor.
+ * This class provides methods for checking the equality of a dense field tensor with a sparse field tensor.
  */
-public final class ComplexDenseSparseEquals {
+public final class DenseCooFieldEquals {
 
-    private ComplexDenseSparseEquals() {
+    private DenseCooFieldEquals() {
         // Hide constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
@@ -52,18 +49,18 @@ public final class ComplexDenseSparseEquals {
      * @param B Second matrix.
      * @return True if the two matrices are element-wise equivalent.
      */
-    public static boolean matrixEquals(CMatrix A, CooCMatrix B) {
+    public static <T extends Field<T>> boolean matrixEquals(
+            DenseFieldMatrixBase<?, ?, ?, ?, T> A,
+            CooFieldMatrixBase<?, ?, ?, ?, T> B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
-            Field<Complex128>[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);
+            Field<T>[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);
 
-            int rowIndex, colIndex;
-            
             // Remove all nonZero entries from the entries of this matrix.
             for(int i=0; i<B.nnz; i++) {
-                rowIndex = B.rowIndices[i];
-                colIndex = B.colIndices[i];
+                int rowIndex = B.rowIndices[i];
+                int colIndex = B.colIndices[i];
                 int idx = rowIndex*A.numCols + colIndex;
 
                 if(!entriesCopy[idx].equals(B.entries[i])) {
@@ -71,7 +68,7 @@ public final class ComplexDenseSparseEquals {
                     break;
                 }
 
-                entriesCopy[idx] = Complex128.ZERO;
+                entriesCopy[idx] = A.getZeroElement();
             }
 
             if(equal) {
@@ -95,23 +92,24 @@ public final class ComplexDenseSparseEquals {
      * @param sparseSize Size of the sparse vector.
      * @return True if the two vectors are equal. Returns false otherwise.
      */
-    public static boolean vectorEquals(Complex128[] src1, Complex128[] src2, int[] indices, int sparseSize) {
+    public static <T extends Field<T>> boolean vectorEquals(
+            DenseFieldVectorBase<?, ?, ?, T> src1, CooFieldVectorBase<?, ?, ?, ?, T> src2) {
         boolean equal = true;
+        final T ZERO = (src1.size > 0) ? src1.entries[0].getZero() : null;
 
-        if(src1.length==sparseSize) {
+        if(src1.size == src2.size) {
             int index;
-            Complex128[] src1Copy = new Complex128[src1.length];
-            System.arraycopy(src1, 0, src1Copy, 0, src1.length);
+            Field<T>[] src1Copy = new Field[src1.size];
+            System.arraycopy(src1.entries, 0, src1Copy, 0, src1.size);
 
-            for(int i=0; i<src2.length; i++) {
-                index = indices[i];
+            for(int i=0; i<src2.size; i++) {
+                index = src2.indices[i];
 
-                if(!src1[index].equals(src2[i])) {
+                if(!src1.entries[index].equals(src2.entries[i])) {
                     equal = false;
                     break;
-
                 } else {
-                    src1Copy[index] = Complex128.ZERO;
+                    src1Copy[index] = ZERO;
                 }
             }
 
@@ -134,7 +132,8 @@ public final class ComplexDenseSparseEquals {
      * @param B Complex sparse tensor.
      * @return True if the two tensors are element-wise equivalent.
      */
-    public static boolean tensorEquals(CTensor A, CooCTensor B) {
+    public static <T extends Field<T>> boolean tensorEquals(
+            DenseFieldTensorBase<?, ?, T> A, CooFieldTensorBase<?, ?, T> B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {

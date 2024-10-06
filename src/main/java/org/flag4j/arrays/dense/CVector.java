@@ -36,7 +36,7 @@ import org.flag4j.operations.common.complex.Complex128Operations;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseVectorOperations;
+import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.Flag4jConstants;
@@ -293,7 +293,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @return The sum of this vector and {@code b}.
      */
     public CVector add(CooCVector b) {
-        return ComplexDenseSparseVectorOperations.add(this, b);
+        return (CVector) DenseCooFieldVectorOperations.add(this, b);
     }
 
 
@@ -338,7 +338,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @return The difference of this vector and {@code b}.
      */
     public CVector sub(CooCVector b) {
-        return ComplexDenseSparseVectorOperations.sub(this, b);
+        return (CVector) DenseCooFieldVectorOperations.sub(this, b);
     }
 
 
@@ -377,7 +377,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @return The element-wise product of this vector and {@code b}.
      */
     public CooCVector elemMult(CooCVector b) {
-        return ComplexDenseSparseVectorOperations.elemMult(this, b);
+        return (CooCVector) DenseCooFieldVectorOperations.elemMult(this, b);
     }
 
 

@@ -37,7 +37,7 @@ import org.flag4j.operations.common.complex.Complex128Operations;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseOperations;
+import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldTensorOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.Flag4jConstants;
@@ -289,7 +289,7 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
      */
     public CTensor add(CooCTensor b) {
-        return ComplexDenseSparseOperations.add(this, b);
+        return (CTensor) DenseCooFieldTensorOperations.add(this, b);
     }
 
 
@@ -322,7 +322,7 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
      */
     public CTensor sub(CooCTensor b) {
-        return ComplexDenseSparseOperations.sub(this, b);
+        return (CTensor) DenseCooFieldTensorOperations.sub(this, b);
     }
 
 
@@ -352,7 +352,7 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
      * @return The element-wise product of this tensor and {@code b}.
      */
     public CooCTensor elemMult(CooCTensor b) {
-        return ComplexDenseSparseOperations.elemMult(this, b);
+        return (CooCTensor) DenseCooFieldTensorOperations.elemMult(this, b);
     }
 
 

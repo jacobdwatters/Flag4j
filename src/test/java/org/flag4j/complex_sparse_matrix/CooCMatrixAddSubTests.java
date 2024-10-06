@@ -6,7 +6,7 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixOperations;
+import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldMatrixOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
 import org.junit.jupiter.api.Test;
 
@@ -256,7 +256,7 @@ class CooCMatrixAddSubTests {
                 {new Complex128("-0.32123-0.17085i"), new Complex128("-0.72278-0.87353i"), new Complex128("-0.85108-0.44586i"), new Complex128("-0.87101-0.73296i"), new Complex128("-0.45473-0.7i")}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, ComplexDenseSparseMatrixOperations.sub(A, B));
+        assertEquals(exp, DenseCooFieldMatrixOperations.sub(A, B));
 
         // ------------------- Sub-case 2 -------------------
         aShape = new Shape(3, 5);
@@ -277,7 +277,7 @@ class CooCMatrixAddSubTests {
                 {new Complex128("-0.16092-0.84309i"), new Complex128("-0.06968-0.77818i"), new Complex128("-0.8741-0.25259i"), new Complex128("-0.55985-0.88026i"), new Complex128("0.24355643549027173-0.4334486746127668i")}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, ComplexDenseSparseMatrixOperations.sub(A, B));
+        assertEquals(exp, DenseCooFieldMatrixOperations.sub(A, B));
 
         // ------------------- Sub-case 3 -------------------
         aShape = new Shape(9, 5);
@@ -293,6 +293,6 @@ class CooCMatrixAddSubTests {
         B = new CMatrix(bEntries);
 
         CMatrix finalB = B;
-        assertThrows(Exception.class, ()->ComplexDenseSparseMatrixOperations.sub(A, finalB));
+        assertThrows(Exception.class, ()->DenseCooFieldMatrixOperations.sub(A, finalB));
     }
 }

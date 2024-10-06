@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,26 +22,23 @@
  * SOFTWARE.
  */
 
-package org.flag4j.operations.dense_sparse.coo.complex;
+package org.flag4j.operations.dense_sparse.coo.field_ops;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 
-
 /**
  * This class contains several low level methods for computing matrix-matrix multiplications with a transpose for
- * a complex dense matrix and a complex sparse matrix. <br>
- * <b>WARNING:</b> These methods do not perform any sanity checks.
+ * a complex dense matrix and a complex sparse matrix.
  */
-public final class ComplexDenseSparseMatrixMultTranspose {
+public final class DenseCooFieldMatMultTranspose {
 
-    private ComplexDenseSparseMatrixMultTranspose() {
+    private DenseCooFieldMatMultTranspose() {
         // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(getClass()));
     }
 
 
@@ -55,28 +52,26 @@ public final class ComplexDenseSparseMatrixMultTranspose {
      * @param spShape Shape of the sparse matrix.
      * @return The entries of the matrix resulting from multiplying the first matrix by the transpose of the second matrix.
      */
-    public static Complex128[] multTranspose(Field<Complex128>[] dSrc, Shape dShape,
-                                             Field<Complex128>[] spSrc, int[] rowIndices, int[] colIndices, Shape spShape) {
+    public static <T extends Field<T>> Field<T>[] multTranspose(
+            Field<T>[] dSrc, Shape dShape,
+            Field<T>[] spSrc, int[] rowIndices, int[] colIndices, Shape spShape) {
         int rows1 = dShape.get(0);
         int rows2 = spShape.get(0);
         int cols2 = spShape.get(1);
 
-        Complex128[] dest = new Complex128[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.
-        Arrays.fill(dest, Complex128.ZERO);
-
-        int row, col;
-        int destStart, dSrcStart;
+        Field<T>[] dest = new Field[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.
+        Arrays.fill(dest, (dSrc.length > 0) ? dSrc[0].getZero() : null);
 
         for(int i=0; i<rows1; i++) {
-            destStart = i*rows2;
-            dSrcStart = i*cols2;
+            int destStart = i*rows2;
+            int dSrcStart = i*cols2;
 
             // Loop over non-zero entries of sparse matrix.
             for(int j=0; j<spSrc.length; j++) {
-                row = colIndices[j];
-                col = rowIndices[j];
+                int row = colIndices[j];
+                int col = rowIndices[j];
 
-                dest[destStart + col] = dest[destStart + col].add(dSrc[dSrcStart + row].mult((Complex128) spSrc[j]));
+                dest[destStart + col] = dest[destStart + col].add(dSrc[dSrcStart + row].mult((T) spSrc[j]));
             }
         }
 

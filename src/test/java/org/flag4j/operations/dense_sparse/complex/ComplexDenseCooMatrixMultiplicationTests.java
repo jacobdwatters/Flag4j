@@ -6,7 +6,7 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixMultiplication;
+import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldMatMult;
 import org.flag4j.util.ArrayUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -66,12 +66,12 @@ class ComplexDenseCooMatrixMultiplicationTests {
         createMatrices();
 
         assertArrayEquals(ArrayUtils.flatten(expEntries),
-                ComplexDenseSparseMatrixMultiplication.standard(
+                DenseCooFieldMatMult.standard(
                         A.entries, A.shape,
                 B.entries, B.rowIndices, B.colIndices, B.shape)
         );
         assertArrayEquals(ArrayUtils.flatten(expEntries),
-                ComplexDenseSparseMatrixMultiplication.concurrentStandard(
+                DenseCooFieldMatMult.concurrentStandard(
                         A.entries, A.shape,
                         B.entries, B.rowIndices, B.colIndices, B.shape)
         );
@@ -87,12 +87,12 @@ class ComplexDenseCooMatrixMultiplicationTests {
         createMatrices();
 
         assertArrayEquals(ArrayUtils.flatten(expEntries),
-                ComplexDenseSparseMatrixMultiplication.standard(
+                DenseCooFieldMatMult.standard(
                         B.entries, B.rowIndices, B.colIndices, B.shape,
                         A.entries, A.shape)
         );
         assertArrayEquals(ArrayUtils.flatten(expEntries),
-                ComplexDenseSparseMatrixMultiplication.concurrentStandard(
+                DenseCooFieldMatMult.concurrentStandard(
                         B.entries, B.rowIndices, B.colIndices, B.shape,
                         A.entries, A.shape)
         );
@@ -114,12 +114,12 @@ class ComplexDenseCooMatrixMultiplicationTests {
         createDenseVector();
 
         assertArrayEquals(ArrayUtils.flatten(expEntries),
-                ComplexDenseSparseMatrixMultiplication.standardVector(
+                DenseCooFieldMatMult.standardVector(
                         B.entries, B.rowIndices, B.colIndices, B.shape,
                         bvec.entries, bvec.shape)
         );
         assertArrayEquals(ArrayUtils.flatten(expEntries),
-                ComplexDenseSparseMatrixMultiplication.concurrentStandardVector(
+                DenseCooFieldMatMult.concurrentStandardVector(
                         B.entries, B.rowIndices, B.colIndices, B.shape,
                         bvec.entries, bvec.shape)
         );
@@ -137,17 +137,17 @@ class ComplexDenseCooMatrixMultiplicationTests {
         createSparseVector();
 
         assertArrayEquals(ArrayUtils.flatten(expEntries),
-                ComplexDenseSparseMatrixMultiplication.standardVector(
+                DenseCooFieldMatMult.standardVector(
                         A.entries, A.shape, bSparse.entries, bSparse.indices
                 )
         );
         assertArrayEquals(ArrayUtils.flatten(expEntries),
-                ComplexDenseSparseMatrixMultiplication.concurrentStandardVector(
+                DenseCooFieldMatMult.concurrentStandardVector(
                         A.entries, A.shape, bSparse.entries, bSparse.indices
                 )
         );
         assertArrayEquals(ArrayUtils.flatten(expEntries),
-                ComplexDenseSparseMatrixMultiplication.concurrentBlockedVector(
+                DenseCooFieldMatMult.concurrentBlockedVector(
                         A.entries, A.shape, bSparse.entries, bSparse.indices
                 )
         );

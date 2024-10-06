@@ -22,13 +22,11 @@
  * SOFTWARE.
  */
 
-package org.flag4j.operations.dense_sparse.csr.complex;
+package org.flag4j.operations.dense_sparse.csr.field_ops;
 
-
-import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.arrays.backend.CsrFieldMatrixBase;
+import org.flag4j.arrays.backend.DenseFieldMatrixBase;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
@@ -37,12 +35,13 @@ import java.util.Arrays;
 import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
 
-/**
- * This class contains low-level operations which act on a complex dense and a complex sparse {@link CsrCMatrix CSR matrix}.
- */
-public final class ComplexCsrDenseOperations {
 
-    private ComplexCsrDenseOperations() {
+/**
+ * This class contains low-level operations which act on a dense and a sparse CSR field matrix.
+ */
+public final class DenseCsrFieldOperations {
+
+    private DenseCsrFieldOperations() {
         // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
@@ -59,28 +58,27 @@ public final class ComplexCsrDenseOperations {
      * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static CMatrix applyBinOpp(CsrCMatrix src1, CMatrix src2,
-                                      BinaryOperator<Complex128> opp,
-                                      UnaryOperator<Complex128> uOpp) {
+    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> applyBinOpp(
+            CsrFieldMatrixBase<?, ?, ?, ?, T> src1, DenseFieldMatrixBase<?, ?, ?, ?, T> src2,
+            BinaryOperator<T> opp, UnaryOperator<T> uOpp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
-        Field<Complex128>[] dest;
+        Field<T>[] dest;
         if(uOpp == null) dest = Arrays.copyOf(src2.entries, src2.entries.length);
         else dest = ArrayUtils.applyTransform(src2.entries, uOpp);
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
             int start = src1.rowPointers[i];
             int stop = src1.rowPointers[i+1];
-
             int rowOffset = i*src1.numCols;
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-                dest[idx] = opp.apply((Complex128) src1.entries[j], (Complex128) dest[idx]);
+                dest[idx] = opp.apply((T) src1.entries[j], (T) dest[idx]);
             }
         }
 
-        return new CMatrix(src2.shape, dest);
+        return src2.makeLikeTensor(src2.shape, dest);
     }
 
 
@@ -92,27 +90,28 @@ public final class ComplexCsrDenseOperations {
      * @param opp Binary operator to apply element-wise to the two matrices.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static CMatrix applyBinOpp(CMatrix src1, CsrCMatrix src2, BinaryOperator<Complex128> opp) {
+    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> applyBinOpp(
+            DenseFieldMatrixBase<?, ?, ?, ?, T> src1, 
+            CsrFieldMatrixBase<?, ?, ?, ?, T> src2, 
+            BinaryOperator<T> opp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
+        Field<T>[] dest = Arrays.copyOf(src2.entries, src2.entries.length);
 
         // TODO: Subtracting a sparse matrix from a dense matrix does not require a unary operator.
         //  Ensure that no method of this form requires this.
 
-        Field<Complex128>[] dest = Arrays.copyOf(src2.entries, src2.entries.length);
-
-        for(int i=0; i<src2.rowPointers.length-1; i++) {
+        for(int i=0; i<src2.nnz; i++) {
             int start = src2.rowPointers[i];
             int stop = src2.rowPointers[i+1];
-
             int rowOffset = i*src1.numCols;
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src2.colIndices[i];
-                dest[idx] = opp.apply((Complex128) src1.entries[idx], (Complex128) src2.entries[j]);
+                dest[idx] = opp.apply((T) src1.entries[idx], (T) src2.entries[j]);
             }
         }
 
-        return new CMatrix(src2.shape, dest);
+        return src1.makeLikeTensor(src2.shape, dest);
     }
 
 
@@ -127,29 +126,29 @@ public final class ComplexCsrDenseOperations {
      * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static CMatrix applyBinOpp(CsrCMatrix src1, double b,
-                                         BinaryOperator<Complex128> opp,
-                                         UnaryOperator<Double> uOpp) {
-        Field<Complex128>[] dest = new Complex128[src1.totalEntries().intValueExact()];
+    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> applyBinOpp(
+            CsrFieldMatrixBase<?, ?, ?, ?, T> src1, double b,
+            BinaryOperator<T> opp,
+            UnaryOperator<Double> uOpp) {
+        Field<T>[] dest = new Field[src1.shape.totalEntriesIntValueExact()];
+        T bWrapped = (src1.getZeroElement() != null) ? src1.getZeroElement().add(b) : null;
 
         // Apply unary operator if specified.
-        if(uOpp != null) ArrayUtils.fill(dest, uOpp.apply(b));
-        else ArrayUtils.fill(dest, b);
+        if(uOpp != null) Arrays.fill(dest, (src1.getZeroElement() != null) ? src1.getZeroElement().add(uOpp.apply(b)) : null);
+        else Arrays.fill(dest, bWrapped);
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
             int start = src1.rowPointers[i];
             int stop = src1.rowPointers[i+1];
-
             int rowOffset = i*src1.numCols;
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-
-                dest[idx] = opp.apply((Complex128) src1.entries[j], (Complex128) dest[idx]);
+                dest[idx] = opp.apply((T) src1.entries[j], (T) dest[idx]);
             }
         }
 
-        return new CMatrix(src1.shape, dest);
+        return src1.makeLikeDenseTensor(src1.shape, dest);
     }
 
 
@@ -164,28 +163,27 @@ public final class ComplexCsrDenseOperations {
      * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static CMatrix applyBinOpp(CsrCMatrix src1, Complex128 b,
-                                         BinaryOperator<Complex128> opp,
-                                         UnaryOperator<Complex128> uOpp) {
-        Field<Complex128>[] dest = new Complex128[src1.totalEntries().intValueExact()];
+    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> applyBinOpp(
+            CsrFieldMatrixBase<?, ?, ?, ?, T> src1, T b,
+            BinaryOperator<T> opp, UnaryOperator<T> uOpp) {
+        Field<T>[] dest = new Field[src1.totalEntries().intValueExact()];
 
         // Apply unary operator if specified.
         if(uOpp != null) Arrays.fill(dest, uOpp.apply(b));
         else Arrays.fill(dest, b);
 
-        for(int i=0; i<src1.rowPointers.length-1; i++) {
+        for(int i=0; i<src1.nnz; i++) {
             int start = src1.rowPointers[i];
             int stop = src1.rowPointers[i+1];
-
             int rowOffset = i*src1.numCols;
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-                dest[idx] = opp.apply((Complex128) src1.entries[j], (Complex128) dest[idx]);
+                dest[idx] = opp.apply((T) src1.entries[j], (T) dest[idx]);
             }
         }
 
-        return new CMatrix(src1.shape, dest);
+        return src1.makeLikeDenseTensor(src1.shape, dest);
     }
 
 
@@ -197,12 +195,13 @@ public final class ComplexCsrDenseOperations {
      * @param opp Operation to apply to the matrices.
      * @return The result of applying the operation element-wise to the matrices. Result is a sparse CSR matrix.
      */
-    public static CsrCMatrix applyBinOppToSparse(CMatrix src1, CsrCMatrix src2, BinaryOperator<Complex128> opp) {
+    public static <T extends Field<T>> CsrFieldMatrixBase<?, ?, ?, ?, T> applyBinOppToSparse(
+            DenseFieldMatrixBase<?, ?, ?, ?, T> src1, CsrFieldMatrixBase<?, ?, ?, ?, T> src2, BinaryOperator<T> opp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
         int[] rowPointers = src2.rowPointers.clone();
         int[] colIndices = src2.colIndices.clone();
-        Field<Complex128>[] entries = new Complex128[src2.entries.length];
+        Field<T>[] entries = new Field[src2.entries.length];
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -211,11 +210,11 @@ public final class ComplexCsrDenseOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src2.colIndices[j];
-                entries[idx] = opp.apply((Complex128) src1.entries[idx], (Complex128) src2.entries[j]);
+                entries[idx] = opp.apply((T) src1.entries[idx], (T) src2.entries[j]);
             }
         }
 
-        return new CsrCMatrix(src1.shape, entries, rowPointers, colIndices);
+        return src2.makeLikeTensor(src1.shape, entries, rowPointers, colIndices);
     }
 
 
@@ -225,8 +224,9 @@ public final class ComplexCsrDenseOperations {
      * @param b Second matrix in sum.
      * @return The element-wise sum of {@code a} and {@code b}.
      */
-    public static CMatrix add(CsrCMatrix a, CMatrix b) {
-        return applyBinOpp(a, b, (Complex128 x, Complex128 y)->x.add(y), null);
+    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> add(
+            CsrFieldMatrixBase<?, ?, ?, ?, T> a, DenseFieldMatrixBase<?, ?, ?, ?, T> b) {
+        return applyBinOpp(a, b, T::add, null);
     }
 
 
@@ -236,8 +236,9 @@ public final class ComplexCsrDenseOperations {
      * @param b Second matrix in difference.
      * @return The element-wise difference of {@code a} and {@code b}.
      */
-    public static CMatrix sub(CsrCMatrix a, CMatrix b) {
-        return applyBinOpp(a, b, (Complex128 x, Complex128 y)->x.add(y), (Complex128 x)->x.addInv());
+    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> sub(
+            CsrFieldMatrixBase<?, ?, ?, ?, T> a, DenseFieldMatrixBase<?, ?, ?, ?, T> b) {
+        return applyBinOpp(a, b, T::add, T::addInv);
     }
 
 
@@ -247,7 +248,8 @@ public final class ComplexCsrDenseOperations {
      * @param b Second matrix in difference.
      * @return The element-wise difference of {@code a} and {@code b}.
      */
-    public static CMatrix sub(CMatrix a, CsrCMatrix b) {
-        return applyBinOpp(a, b, (Complex128 x, Complex128 y)->y.sub(x));
+    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> sub(
+            DenseFieldMatrixBase<?, ?, ?, ?, T> a, CsrFieldMatrixBase<?, ?, ?, ?, T> b) {
+        return applyBinOpp(a, b, (T x, T y)->y.sub(x));
     }
 }

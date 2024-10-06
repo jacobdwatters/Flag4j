@@ -4,7 +4,7 @@ import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseVectorOperations;
+import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -78,7 +78,7 @@ class CooCVectorElemDivTests {
                 new Complex128(25.612, 0.0245).div(new Complex128(9924.515, 51.5))};
         expIndices = new int[]{0, 2, 5};
         exp = new CooCVector(size, expValues, expIndices);
-        assertEquals(exp, ComplexDenseSparseVectorOperations.elemDiv(a, b));
+        assertEquals(exp, DenseCooFieldVectorOperations.elemDiv(a, b));
 
         // -------------------- Sub-case 2 --------------------
         bValues = new Complex128[]{new Complex128(24.3, -0.013), new Complex128(0, 13.6), new Complex128(24),
@@ -86,7 +86,7 @@ class CooCVectorElemDivTests {
         b = new CVector(bValues);
 
         CVector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->ComplexDenseSparseVectorOperations.elemDiv(a, finalB));
+        assertThrows(LinearAlgebraException.class, ()->DenseCooFieldVectorOperations.elemDiv(a, finalB));
     }
 
 

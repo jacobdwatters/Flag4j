@@ -6,7 +6,7 @@ import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseVectorOperations;
+import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -114,7 +114,7 @@ class CVectorInnerProductTests {
         b = new CooCVector(sparseSize, bEntries, sparseIndices);
         exp = new Complex128("-36783.725741 + 150104.24605j");
 
-        assertEquals(exp, ComplexDenseSparseVectorOperations.innerProduct(a.entries, b.entries, b.indices, b.size));
+        assertEquals(exp, DenseCooFieldVectorOperations.innerProduct(a.entries, b.entries, b.indices, b.size));
 
         // -------------------- Sub-case 2 --------------------
         bEntries = new Complex128[]{new Complex128(24.5, -6.01), new Complex128(3)};
@@ -124,6 +124,6 @@ class CVectorInnerProductTests {
 
         CooCVector finalB = b;
         assertThrows(IllegalArgumentException.class,
-                ()->ComplexDenseSparseVectorOperations.innerProduct(a.entries, finalB.entries, finalB.indices, finalB.size));
+                ()->DenseCooFieldVectorOperations.innerProduct(a.entries, finalB.entries, finalB.indices, finalB.size));
     }
 }

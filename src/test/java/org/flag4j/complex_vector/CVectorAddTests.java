@@ -5,7 +5,7 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseVectorOperations;
+import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
@@ -633,7 +633,7 @@ class CVectorAddTests {
                 new Complex128(3.54698).add(bEntries[1]), new Complex128(0, 8.356)};
         exp = new CVector(expEntries);
 
-        ComplexDenseSparseVectorOperations.addEq(a, b);
+        DenseCooFieldVectorOperations.addEq(a, b);
         assertEquals(exp, a);
 
         // ------------------ Sub-case 2 ------------------
@@ -647,7 +647,7 @@ class CVectorAddTests {
                 new Complex128(3.54698), new Complex128(0, 8.356).add(bEntries[0])};
         exp = new CVector(expEntries);
 
-        ComplexDenseSparseVectorOperations.addEq(a, b);
+        DenseCooFieldVectorOperations.addEq(a, b);
         assertEquals(exp, a);
 
         // ------------------ Sub-case 3 ------------------
@@ -658,7 +658,7 @@ class CVectorAddTests {
         b = new CooCVector(sparseSize, bEntries, sparseIndices);
 
         CooCVector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->ComplexDenseSparseVectorOperations.addEq(a, finalB));
+        assertThrows(LinearAlgebraException.class, ()->DenseCooFieldVectorOperations.addEq(a, finalB));
 
         // ------------------ Sub-case 4 ------------------
         setup();
@@ -668,6 +668,6 @@ class CVectorAddTests {
         b = new CooCVector(sparseSize, bEntries, sparseIndices);
 
         CooCVector finalB2 = b;
-        assertThrows(LinearAlgebraException.class, ()->ComplexDenseSparseVectorOperations.addEq(a, finalB2));
+        assertThrows(LinearAlgebraException.class, ()->DenseCooFieldVectorOperations.addEq(a, finalB2));
     }
 }

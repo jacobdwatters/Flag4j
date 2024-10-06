@@ -6,7 +6,7 @@ import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseOperations;
+import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldTensorOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
@@ -421,7 +421,7 @@ class CTensorAddTests {
         expEntries[expShape.entriesIndex(sparseIndices[2])] = expEntries[expShape.entriesIndex(sparseIndices[2])].add(bEntries[2]);
         exp = new CTensor(expShape, expEntries);
 
-        ComplexDenseSparseOperations.addEq(A, B);
+        DenseCooFieldTensorOperations.addEq(A, B);
         assertEquals(exp, A);
 
         // ------------------------- Sub-case 2 -------------------------
@@ -435,7 +435,7 @@ class CTensorAddTests {
         B = new CooCTensor(bShape, bEntries, sparseIndices);
 
         CooCTensor finalB = B;
-        assertThrows(LinearAlgebraException.class, ()->ComplexDenseSparseOperations.addEq(A, finalB));
+        assertThrows(LinearAlgebraException.class, ()-> DenseCooFieldTensorOperations.addEq(A, finalB));
     }
 
 

@@ -6,7 +6,7 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
-import org.flag4j.operations.dense_sparse.csr.complex.ComplexCsrDenseOperations;
+import org.flag4j.operations.dense_sparse.csr.field_ops.DenseCsrFieldOperations;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
 import org.flag4j.operations.sparse.csr.real_complex.RealComplexCsrOperations;
 import org.flag4j.util.ArrayUtils;
@@ -208,14 +208,14 @@ class CsrCMatrixAddSubTests {
         bEntriesCmp[3][5] = new Complex128(34.5, 135);
         bEntriesCmp[4][4] = new Complex128(23.501, 100.23);
         makeMatrices();
-        assertEquals(expAddDense, ComplexCsrDenseOperations.add(A, denseBCmp));
-        assertEquals(expAsubBDense, ComplexCsrDenseOperations.sub(A, denseBCmp));
+        assertEquals(expAddDense, DenseCsrFieldOperations.add(A, denseBCmp));
+        assertEquals(expAsubBDense, DenseCsrFieldOperations.sub(A, denseBCmp));
 
         // ---------------------- Sub-case 2 ----------------------
         A = new CsrCMatrix(new Shape(2, 3), new Complex128[0], new int[3], new int[0]);
         B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
-        assertThrows(LinearAlgebraException.class, ()->ComplexCsrDenseOperations.add(A, denseBCmp));
-        assertThrows(LinearAlgebraException.class, ()->ComplexCsrDenseOperations.sub(A, denseBCmp));
+        assertThrows(LinearAlgebraException.class, ()->DenseCsrFieldOperations.add(A, denseBCmp));
+        assertThrows(LinearAlgebraException.class, ()->DenseCsrFieldOperations.sub(A, denseBCmp));
     }
 
 

@@ -116,9 +116,8 @@ public final class SparseUtils {
 
             // Create an array of indices for sorting
             Integer[] indices = new Integer[end - start];
-            for (int i = 0; i < indices.length; i++) {
+            for (int i = 0; i < indices.length; i++)
                 indices[i] = start + i;
-            }
 
             // Sort the indices based on the corresponding colIndices entries
             Arrays.sort(indices, (i, j) -> Integer.compare(colIndices[i], colIndices[j]));
@@ -222,7 +221,6 @@ public final class SparseUtils {
     public static <T extends Field<T>> boolean CSREquals(CsrFieldMatrixBase<? ,?, ?, ?, T> src1,
                                                          CsrFieldMatrixBase<? ,?, ?, ?, T> src2) {
         if(!src1.shape.equals(src2.shape)) return false;
-
         final Complex128 ZERO = Complex128.ZERO;
 
         // Compare row by row
@@ -267,68 +265,4 @@ public final class SparseUtils {
 
         return true;
     }
-
-
-//    /**
-//     * <p>Checks if two {@link CsrCMatrix complex CSR matrices} are equal considering the fact that one may explicitly store zeros at
-//     * some position that the other does not store.</p>
-//     *
-//     * <p>
-//     * If zeros are explicitly stored at some position in only one matrix, it will be checked that the
-//     * other matrix does not have a non-zero value at the same index. If it does, the matrices will not be equal. If no value is
-//     * stored for that index then it is assumed to be zero by definition of the CSR format and the equality check continues with the
-//     * remaining values.
-//     * </p>
-//     *
-//     * @param src1 First CSR matrix in the equality comparison.
-//     * @param src2 Second CSR matrix in the equality comparison.
-//     * @return True if all non-zero values stored in the two matrices are equal and occur at the same indices.
-//     */
-//    public static boolean CSREquals(CsrCMatrix src1, CsrCMatrix src2) {
-//        if(!src1.shape.equals(src2.shape)) return false;
-//
-//        final Complex128 ZERO = Complex128.ZERO;
-//
-//        // Compare row by row
-//        for (int i=0; i<src1.numRows; i++) {
-//            int src1RowStart = src1.rowPointers[i];
-//            int src1RowEnd = src1.rowPointers[i + 1];
-//            int src2RowStart = src2.rowPointers[i];
-//            int src2RowEnd = src2.rowPointers[i + 1];
-//
-//            int src1Index = src1RowStart;
-//            int src2Index = src2RowStart;
-//
-//            while (src1Index < src1RowEnd || src2Index < src2RowEnd) {
-//                // Skip explicit zeros in both matrices
-//                while (src1Index < src1RowEnd && src1.entries[src1Index].equals(ZERO))
-//                    src1Index++;
-//
-//                while (src2Index < src2RowEnd && src2.entries[src2Index].equals(ZERO))
-//                    src2Index++;
-//
-//                if (src1Index < src1RowEnd && src2Index < src2RowEnd) {
-//                    int src1Col = src1.colIndices[src1Index];
-//                    int src2Col = src2.colIndices[src2Index];
-//
-//                    if(src1Col != src2Col || !src1.entries[src1Index].equals(src2.entries[src2Index])) {
-//                        return false;
-//                    }
-//
-//                    src1Index++;
-//                    src2Index++;
-//                } else if (src1Index < src1RowEnd) {
-//                    // Remaining entries in src1 row
-//                    if (!src1.entries[src1Index].equals(ZERO)) return false;
-//                    src1Index++;
-//                } else if (src2Index < src2RowEnd) {
-//                    // Remaining entries in src2 row
-//                    if (!src2.entries[src2Index].equals(ZERO)) return false;
-//                    src2Index++;
-//                }
-//            }
-//        }
-//
-//        return true;
-//    }
 }

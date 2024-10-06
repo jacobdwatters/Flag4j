@@ -578,7 +578,7 @@ public final class MatrixMultiplyDispatcher {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
 
-        // TODO: Extract constants to final variables
+        // TODO: Extract constants to final variables.
         if(getRatio(shape1) >= SQUARENESS_RATIO) {
             // Then the first matrix is approximately square.
             if(rows1<=30) {
@@ -665,7 +665,7 @@ public final class MatrixMultiplyDispatcher {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
 
-        // TODO: Extract constants to final variables
+        // TODO: Extract constants to final variables.
         if(getRatio(shape1) >= SQUARENESS_RATIO) {
             // Then the first matrix is approximately square.
             if(rows1<=40) {
@@ -726,17 +726,10 @@ public final class MatrixMultiplyDispatcher {
      * @return The algorithm to use in the matrix multiplication.
      */
     public static AlgorithmName chooseAlgorithmRealComplexVector(Shape shape) {
-        AlgorithmName algorithm;
-
         int rows = shape.get(0);
 
-        if(rows<=600) {
-            algorithm = AlgorithmName.STANDARD_VECTOR;
-        } else {
-            algorithm = AlgorithmName.CONCURRENT_BLOCKED_VECTOR;
-        }
-
-        return algorithm;
+        if(rows<=600) return AlgorithmName.STANDARD_VECTOR;
+        else return AlgorithmName.CONCURRENT_BLOCKED_VECTOR;
     }
 
 
@@ -750,8 +743,8 @@ public final class MatrixMultiplyDispatcher {
         int numRows = shape.get(0);
         int numCols = shape.get(1);
 
-        double ratio = Math.abs(numRows-numCols);
-        return 1-ratio/Math.max(numRows, numCols);
+        double ratio = Math.abs(numRows-numCols) / Math.max(numRows, numCols);
+        return 1 - ratio;
     }
 
 

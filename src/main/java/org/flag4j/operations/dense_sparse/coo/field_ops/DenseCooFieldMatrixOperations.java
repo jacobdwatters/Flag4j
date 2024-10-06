@@ -22,43 +22,44 @@
  * SOFTWARE.
  */
 
-package org.flag4j.operations.dense_sparse.coo.complex;
+package org.flag4j.operations.dense_sparse.coo.field_ops;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.operations.common.complex.Complex128Operations;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.backend.CooFieldMatrixBase;
+import org.flag4j.arrays.backend.DenseFieldMatrixBase;
+import org.flag4j.arrays.backend.DenseFieldVectorBase;
+import org.flag4j.operations.common.field_ops.FieldOperations;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
-/**
- * This class contains low level implementations for operations between a dense and a sparse complex matrix.
- */
-public final class ComplexDenseSparseMatrixOperations {
+import java.util.Arrays;
 
-    private ComplexDenseSparseMatrixOperations() {
+/**
+ * This class contains low level implementations for operations between a dense and a sparse field matrix.
+ */
+public final class DenseCooFieldMatrixOperations {
+
+    private DenseCooFieldMatrixOperations() {
         // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
     /**
-     * Adds a real dense matrix to a real sparse matrix.
-     * @param src1 First matrix.
-     * @param src2 Second matrix.
-     * @return The result of the matrix addition.
+     * Computes the element-wise sum of a dense matrix to a sparse COO matrix.
+     * @param src1 Dense matrix in sum.
+     * @param src2 Sparse COO matrix in the sum.
+     * @return The element-wise sum of {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static CMatrix add(CMatrix src1, CooCMatrix src2) {
+    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> add(
+            DenseFieldMatrixBase<?, ?, ?, ?, T> src1, CooFieldMatrixBase<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        int row;
-        int col;
-        CMatrix dest = src1.copy();
+        DenseFieldMatrixBase<?, ?, ?, ?, T> dest = src1.copy();
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            dest.entries[idx] = dest.entries[idx].add((Complex128) src2.entries[i]);
+            dest.entries[idx] = dest.entries[idx].add((T) src2.entries[i]);
         }
 
         return dest;
@@ -72,16 +73,14 @@ public final class ComplexDenseSparseMatrixOperations {
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static CMatrix sub(CMatrix src1, CooCMatrix src2) {
+    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> sub(
+            DenseFieldMatrixBase<?, ?, ?, ?, T> src1, CooFieldMatrixBase<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-
-        int row;
-        int col;
-        CMatrix dest = src1.copy();
+        DenseFieldMatrixBase<?, ?, ?, ?, T> dest = src1.copy();
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            dest.entries[idx] = dest.entries[idx].sub((Complex128) src2.entries[i]);
+            dest.entries[idx] = dest.entries[idx].sub((T) src2.entries[i]);
         }
 
         return dest;
@@ -95,15 +94,15 @@ public final class ComplexDenseSparseMatrixOperations {
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static CMatrix sub(CooCMatrix src2, CMatrix src1) {
+    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> sub(
+            CooFieldMatrixBase<?, ?, ?, ?, T> src2,
+            DenseFieldMatrixBase<?, ?, ?, ?, T> src1) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        int row;
-        int col;
-        CMatrix dest = new CMatrix(src1.shape, Complex128Operations.scalMult(src1.entries, -1));
+        DenseFieldMatrixBase<?, ?, ?, ?, T> dest = src1.makeLikeTensor(src1.shape, FieldOperations.scalMult(src1.entries, -1));
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            dest.entries[idx] = dest.entries[idx].add((Complex128) src2.entries[i]);
+            dest.entries[idx] = dest.entries[idx].add((T) src2.entries[i]);
         }
 
         return dest;
@@ -116,14 +115,12 @@ public final class ComplexDenseSparseMatrixOperations {
      * @param src2 Second matrix.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static void addEq(CMatrix src1, CooCMatrix src2) {
+    public static <T extends Field<T>> void addEq(DenseFieldMatrixBase<?, ?, ?, ?, T> src1, CooFieldMatrixBase<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        int row;
-        int col;
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            src1.entries[idx] = src1.entries[idx].add((Complex128) src2.entries[i]);
+            src1.entries[idx] = src1.entries[idx].add((T) src2.entries[i]);
         }
     }
 
@@ -134,14 +131,12 @@ public final class ComplexDenseSparseMatrixOperations {
      * @param src2 Second matrix.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static void subEq(CMatrix src1, CooCMatrix src2) {
+    public static <T extends Field<T>> void subEq(DenseFieldMatrixBase<?, ?, ?, ?, T> src1, CooFieldMatrixBase<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        int row;
-        int col;
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            src1.entries[idx] = src1.entries[idx].sub((Complex128) src2.entries[i]);
+            src1.entries[idx] = src1.entries[idx].sub((T) src2.entries[i]);
         }
     }
 
@@ -151,19 +146,19 @@ public final class ComplexDenseSparseMatrixOperations {
      * @return The result of element-wise multiplication.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static CooCMatrix elemMult(CMatrix src1, CooCMatrix src2) {
+    public static <T extends Field<T>> CooFieldMatrixBase<?, ?, ?, ?, T> elemMult(
+            DenseFieldMatrixBase<?, ?, ?, ?, T> src1,
+            CooFieldMatrixBase<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        int row;
-        int col;
-        Complex128[] destEntries = new Complex128[src2.nnz];
+        Field<T>[] destEntries = new Field[src2.nnz];
 
         for(int i=0; i<destEntries.length; i++) {
-            row = src2.rowIndices[i];
-            col = src2.colIndices[i];
-            destEntries[i] = src1.entries[row*src1.numCols + col].mult((Complex128) src2.entries[i]);
+            int row = src2.rowIndices[i];
+            int col = src2.colIndices[i];
+            destEntries[i] = src1.entries[row*src1.numCols + col].mult((T) src2.entries[i]);
         }
 
-        return new CooCMatrix(src2.shape, destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
+        return src2.makeLikeTensor(src2.shape, destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
     }
 
 
@@ -185,17 +180,19 @@ public final class ComplexDenseSparseMatrixOperations {
      * @return The element-wise quotient of {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} and {@code src2} do not have the same shape.
      */
-    public static CooCMatrix elemDiv(CooCMatrix src1, CMatrix src2) {
+    public static <T extends Field<T>> CooFieldMatrixBase<?, ?, ?, ?, T> elemDiv(
+            CooFieldMatrixBase<?, ?, ?, ?, T> src1,
+            DenseFieldMatrixBase<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        Complex128[] quotient = new Complex128[src1.entries.length];
+        Field<T>[] quotient = new Field[src1.entries.length];
 
         for(int i=0; i<src1.entries.length; i++) {
             int row = src1.rowIndices[i];
             int col = src1.colIndices[i];
-            quotient[i] = src1.entries[i].div((Complex128) src2.entries[row*src2.numCols + col]);
+            quotient[i] = src1.entries[i].div((T) src2.entries[row*src2.numCols + col]);
         }
 
-        return new CooCMatrix(src1.shape, quotient, src1.rowIndices.clone(), src1.colIndices.clone());
+        return src1.makeLikeTensor(src1.shape, quotient, src1.rowIndices.clone(), src1.colIndices.clone());
     }
 
 
@@ -207,15 +204,19 @@ public final class ComplexDenseSparseMatrixOperations {
      * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
      * of rows in the {@code src} matrix.
      */
-    public static CMatrix addToEachCol(CooCMatrix src, CVector col) {
-        CMatrix sum = new CMatrix(src.numRows, src.numCols);
+    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> addToEachCol(
+            CooFieldMatrixBase<?, ?, ?, ?, T> src,
+            DenseFieldVectorBase<?, ?, ?, T> col) {
+        Field<T>[] sumEntries = new Field[src.shape.totalEntriesIntValueExact()];
+        Arrays.fill(sumEntries, (col.entries.length > 0) ? col.entries[0].getZero() : null);
+        DenseFieldMatrixBase<?, ?, ?, ?, T> sum = src.makeDenseTensor(src.shape, sumEntries);
 
         for(int j=0; j<sum.numCols; j++)
-            sum.setCol(col, j);
+            sum.setCol(col.entries, j);
 
         for(int i=0; i<src.entries.length; i++) {
             int idx = src.rowIndices[i]*src.numCols + src.colIndices[i];
-            sum.entries[idx] = sum.entries[idx].add((Complex128) src.entries[i]);
+            sum.entries[idx] = sum.entries[idx].add((T) src.entries[i]);
         }
 
         return sum;
@@ -230,15 +231,19 @@ public final class ComplexDenseSparseMatrixOperations {
      * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
      * of columns in the {@code src} matrix.
      */
-    public static CMatrix addToEachRow(CooCMatrix src, CVector row) {
-        CMatrix sum = new CMatrix(src.numRows, src.numCols);
+    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> addToEachRow(
+            CooFieldMatrixBase<?, ?, ?, ?, T> src, DenseFieldVectorBase<?, ?, ?, T> row) {
+
+        Field<T>[] sumEntries = new Field[src.shape.totalEntriesIntValueExact()];
+        Arrays.fill(sumEntries, (row.entries.length > 0) ? row.entries[0].getZero() : null);
+        DenseFieldMatrixBase<?, ?, ?, ?, T> sum = src.makeDenseTensor(src.shape, sumEntries);
 
         for(int i=0; i<sum.numRows; i++)
-            sum.setRow(row, i);
+            sum.setRow(row.entries, i);
 
         for(int i=0; i<src.entries.length; i++) {
             int idx = src.rowIndices[i]*src.numCols + src.colIndices[i];
-            sum.entries[idx] = sum.entries[idx].add((Complex128) src.entries[i]);
+            sum.entries[idx] = sum.entries[idx].add((T) src.entries[i]);
         }
 
         return sum;

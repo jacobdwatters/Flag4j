@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,25 +22,25 @@
  * SOFTWARE.
  */
 
-package org.flag4j.operations.dense_sparse.coo.complex;
+package org.flag4j.operations.dense_sparse.coo.field_ops;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.operations.common.complex.Complex128Operations;
+import org.flag4j.arrays.backend.CooFieldVectorBase;
+import org.flag4j.arrays.backend.DenseFieldVectorBase;
+import org.flag4j.operations.common.field_ops.FieldOperations;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
 
 /**
- * This class provides low level methods for computing operations between complex dense/sparse and complex
- * sparse/dense vectors.
+ * This class provides low level methods for computing operations between dense/sparse and
+ * sparse/dense field vectors.
  */
-public final class ComplexDenseSparseVectorOperations {
+public final class DenseCooFieldVectorOperations {
 
-    private ComplexDenseSparseVectorOperations() {
+    private DenseCooFieldVectorOperations() {
         // Hide default constructor in utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
@@ -55,14 +55,14 @@ public final class ComplexDenseSparseVectorOperations {
      * @return The inner product of the two vectors.
      * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
      */
-    public static Complex128 innerProduct(Field<Complex128>[] src1, Field<Complex128>[] src2, int[] indices, int sparseSize) {
+    public static <T extends Field<T>> Field<T> innerProduct(Field<T>[] src1, Field<T>[] src2,
+                                                             int[] indices, int sparseSize) {
         ValidateParameters.ensureArrayLengthsEq(src1.length, sparseSize);
-        Complex128 innerProd = Complex128.ZERO;
-        int index;
+        T innerProd = (src1.length > 0) ? src1[0].getZero() : null;
 
         for(int i=0; i<src2.length; i++) {
-            index = indices[i];
-            innerProd = innerProd.add(src2[i].conj().mult((Complex128) src1[index]));
+            int index = indices[i];
+            innerProd = innerProd.add(src2[i].conj().mult((T) src1[index]));
         }
 
         return innerProd;
@@ -78,13 +78,12 @@ public final class ComplexDenseSparseVectorOperations {
      * @return The inner product of the two vectors.
      * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
      */
-    public static Complex128 innerProduct(Field<Complex128>[] src1, int[] indices, int sparseSize, Field<Complex128>[] src2) {
+    public static <T extends Field<T>> Field<T> innerProduct(Field<T>[] src1, int[] indices, int sparseSize, Field<T>[] src2) {
         ValidateParameters.ensureArrayLengthsEq(src1.length, sparseSize);
-        Complex128 innerProd = Complex128.ZERO;
-        int index;
+        T innerProd = (src1.length > 0) ? src1[0].getZero() : null;
 
         for(int i=0; i<src1.length; i++) {
-            index = indices[i];
+            int index = indices[i];
             innerProd = innerProd.add(src1[i].mult(src2[index].conj()));
         }
 
@@ -99,9 +98,9 @@ public final class ComplexDenseSparseVectorOperations {
      * @param indices Indices of non-zero entries of sparse vector.
      * @return The matrix resulting from the vector outer product.
      */
-    public static Complex128[] outerProduct(Field<Complex128>[] src1, Field<Complex128>[] src2, int[] indices, int sparseSize) {
-        Complex128[] dest = new Complex128[src1.length*sparseSize];
-        Arrays.fill(dest, Complex128.ZERO);
+    public static <T extends Field<T>> Field<T>[] outerProduct(Field<T>[] src1, Field<T>[] src2, int[] indices, int sparseSize) {
+        Field<T>[] dest = new Field[src1.length*sparseSize];
+        Arrays.fill(dest, (src1.length > 0) ? src1[0].getZero() : null);
         int index;
 
         for(int i=0; i<src1.length; i++) {
@@ -122,18 +121,15 @@ public final class ComplexDenseSparseVectorOperations {
      * @param indices Indices of non-zero entries of sparse vector.
      * @return The matrix resulting from the vector outer product.
      */
-    public static Complex128[] outerProduct(Field<Complex128>[] src2, int[] indices, int sparseSize, Field<Complex128>[] src1) {
+    public static <T extends Field<T>> Field<T>[] outerProduct(Field<T>[] src2, int[] indices, int sparseSize, Field<T>[] src1) {
         ValidateParameters.ensureEquals(sparseSize, src2.length);
-
-        Complex128[] dest = new Complex128[src2.length*sparseSize];
-        int destIndex;
+        Field<T>[] dest = new Field[src2.length*sparseSize];
 
         for(int i=0; i<src1.length; i++) {
-            destIndex = indices[i]*src2.length;
+            int destIndex = indices[i]*src2.length;
 
-            for(Field<Complex128> v : src2) {
-                dest[destIndex++] = src1[i].mult((Complex128) v);
-            }
+            for(Field<T> v : src2)
+                dest[destIndex++] = src1[i].mult((T) v);
         }
 
         return dest;
@@ -146,13 +142,13 @@ public final class ComplexDenseSparseVectorOperations {
      * @param src2 Sparse vector.
      * @return The result of the vector addition.
      */
-    public static CVector add(CVector src1, CooCVector src2) {
+    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> add(DenseFieldVectorBase<?, ?, ?, T> src1, CooFieldVectorBase<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        CVector dest = src1.copy();
+        DenseFieldVectorBase<?, ?, ?, T> dest = src1.copy();
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.indices[i];
-            dest.entries[idx] = dest.entries[idx].add((Complex128) src2.entries[i]);
+            dest.entries[idx] = dest.entries[idx].add((T) src2.entries[i]);
         }
 
         return dest;
@@ -165,12 +161,12 @@ public final class ComplexDenseSparseVectorOperations {
      * @param src1 Dense vector. Modified.
      * @param src2 Sparse vector.
      */
-    public static void addEq(CVector src1, CooCVector src2) {
+    public static <T extends Field<T>> void addEq(DenseFieldVectorBase<?, ?, ?, T> src1, CooFieldVectorBase<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.indices[i];
-            src1.entries[idx] = src1.entries[idx].add((Complex128) src2.entries[i]);
+            src1.entries[idx] = src1.entries[idx].add((T) src2.entries[i]);
         }
     }
 
@@ -183,15 +179,14 @@ public final class ComplexDenseSparseVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static CVector sub(CVector src1, CooCVector src2) {
+    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> sub(
+            DenseFieldVectorBase<?, ?, ?, T> src1, CooFieldVectorBase<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-
-        CVector dest = src1.copy();
-        int index;
+        DenseFieldVectorBase<?, ?, ?, T> dest = src1.copy();
 
         for(int i=0; i<src2.entries.length; i++) {
-            index = src2.indices[i];
-            dest.entries[index] = dest.entries[index].sub((Complex128) src2.entries[i]);
+            int index = src2.indices[i];
+            dest.entries[index] = dest.entries[index].sub((T) src2.entries[i]);
         }
 
         return dest;
@@ -205,13 +200,14 @@ public final class ComplexDenseSparseVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static CVector sub(CooCVector src1, CVector src2) {
+    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> sub(
+            CooFieldVectorBase<?, ?, ?, ?, T> src1, DenseFieldVectorBase<?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        CVector dest = new CVector(Complex128Operations.scalMult(src2.entries, -1));
+        DenseFieldVectorBase<?, ?, ?, T> dest = src2.makeLikeTensor(FieldOperations.scalMult(src2.entries, -1));
 
-        for(int i=0; i<src1.nnz; i++) {
+        for(int i=0, size=src1.nnz; i<size; i++) {
             int idx = src1.indices[i];
-            dest.entries[idx] = dest.entries[idx].add((Complex128) src1.entries[i]);
+            dest.entries[idx] = dest.entries[idx].add((T) src1.entries[i]);
         }
 
         return dest;
@@ -224,12 +220,12 @@ public final class ComplexDenseSparseVectorOperations {
      * @param src1 Dense vector. Modified.
      * @param src2 Sparse vector.
      */
-    public static void subEq(CVector src1, CooCVector src2) {
+    public static <T extends Field<T>> void subEq(DenseFieldVectorBase<?, ?, ?, T> src1, CooFieldVectorBase<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.indices[i];
-            src1.entries[idx] = src1.entries[idx].sub((Complex128) src2.entries[i]);
+            src1.entries[idx] = src1.entries[idx].sub((T) src2.entries[i]);
         }
     }
 
@@ -241,14 +237,15 @@ public final class ComplexDenseSparseVectorOperations {
      * @return The result of the element-wise multiplication.
      * @throws IllegalArgumentException If the two vectors are not the same size.
      */
-    public static CooCVector elemMult(CVector src1, CooCVector src2) {
+    public static <T extends Field<T>> CooFieldVectorBase<?, ?, ?, ?, T> elemMult(
+            DenseFieldVectorBase<?, ?, ?, T> src1, CooFieldVectorBase<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        Complex128[] entries = new Complex128[src2.entries.length];
+        Field<T>[] entries = new Field[src2.entries.length];
 
         for(int i=0; i<src2.nnz; i++)
-            entries[i] = src1.entries[src2.indices[i]].mult((Complex128) src2.entries[i]);
+            entries[i] = src1.entries[src2.indices[i]].mult((T) src2.entries[i]);
 
-        return new CooCVector(src1.size, entries, src2.indices.clone());
+        return src2.makeLikeTensor(src1.size, entries, src2.indices.clone());
     }
 
 
@@ -258,13 +255,14 @@ public final class ComplexDenseSparseVectorOperations {
      * @param src2 Second vector in the element-wise division.
      * @return The result of the element-wise vector division.
      */
-    public static CooCVector elemDiv(CooCVector src1, CVector src2) {
+    public static <T extends Field<T>> CooFieldVectorBase<?, ?, ?, ?, T> elemDiv(
+            CooFieldVectorBase<?, ?, ?, ?, T> src1, DenseFieldVectorBase<?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        Complex128[] dest = new Complex128[src1.entries.length];
+        Field<T>[] dest = new Field[src1.entries.length];
 
         for(int i=0; i<src1.nnz; i++)
-            dest[i] = src1.entries[i].div((Complex128) src2.entries[src1.indices[i]]);
+            dest[i] = src1.entries[i].div((T) src2.entries[src1.indices[i]]);
 
-        return new CooCVector(src1.size, dest, src1.indices.clone());
+        return src1.makeLikeTensor(src1.size, dest, src1.indices.clone());
     }
 }

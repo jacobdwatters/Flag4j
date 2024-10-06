@@ -32,7 +32,7 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixMultiplication;
+import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldMatMult;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
 import org.flag4j.operations.sparse.SparseUtils;
 import org.flag4j.operations.sparse.csr.field_ops.CsrFieldMatMult;
@@ -558,10 +558,10 @@ public class CsrCMatrix extends CsrFieldMatrixBase<CsrCMatrix, CMatrix, CooCVect
     public CMatrix mult(CMatrix B) {
         ValidateParameters.ensureMatMultShapes(shape, B.shape);
 
-        return new CMatrix(numRows, B.numCols,
-                ComplexDenseSparseMatrixMultiplication.standard(
-                        entries, rowPointers, colIndices, shape,
-                        B.entries, B.shape));
+        return new CMatrix(numRows, B.numCols, DenseCooFieldMatMult.standard(
+                entries, rowPointers, colIndices, shape,
+                B.entries, B.shape)
+        );
     }
 
 

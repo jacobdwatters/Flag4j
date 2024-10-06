@@ -41,12 +41,12 @@ import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
 import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixMultiplication;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseMatrixOperations;
+import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldMatMult;
+import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldMatrixOperations;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
-import org.flag4j.operations.dense_sparse.csr.complex.ComplexCsrDenseMatrixMultiplication;
-import org.flag4j.operations.dense_sparse.csr.complex.ComplexCsrDenseOperations;
+import org.flag4j.operations.dense_sparse.csr.field_ops.DenseCsrFieldMatMult;
+import org.flag4j.operations.dense_sparse.csr.field_ops.DenseCsrFieldOperations;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
 import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
 import org.flag4j.util.ArrayUtils;
@@ -515,7 +515,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @return The element-wise sum of this matrix and {@code b}
      */
     public CMatrix add(CsrCMatrix b) {
-        return ComplexCsrDenseOperations.applyBinOpp(this, b, (Complex128 x, Complex128 y) -> x.add(y));
+        return (CMatrix) DenseCsrFieldOperations.applyBinOpp(this, b, (Complex128 x, Complex128 y) -> x.add(y));
     }
 
 
@@ -525,7 +525,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @return The element-wise sum of this matrix and {@code b}
      */
     public CMatrix add(CooCMatrix b) {
-        return ComplexDenseSparseMatrixOperations.add(this, b);
+        return (CMatrix) DenseCooFieldMatrixOperations.add(this, b);
     }
 
 
@@ -567,7 +567,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @return The element-wise difference of this matrix and {@code b}
      */
     public CMatrix sub(CsrCMatrix b) {
-        return ComplexCsrDenseOperations.applyBinOpp(this, b, Complex128::sub);
+        return (CMatrix) DenseCsrFieldOperations.applyBinOpp(this, b, Complex128::sub);
     }
 
 
@@ -577,7 +577,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @return The element-wise difference of this matrix and {@code b}
      */
     public CMatrix sub(CooCMatrix b) {
-        return ComplexDenseSparseMatrixOperations.sub(this, b);
+        return (CMatrix) DenseCooFieldMatrixOperations.sub(this, b);
     }
 
 
@@ -599,7 +599,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code this.numCols != b.numRows}.
      */
     public CMatrix mult(CsrCMatrix b) {
-        return ComplexCsrDenseMatrixMultiplication.standard(this, b);
+        return (CMatrix) DenseCsrFieldMatMult.standard(this, b);
     }
 
 
@@ -664,10 +664,8 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      */
     public CVector mult(CooCVector b) {
         ValidateParameters.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
-        Complex128[] entries = ComplexDenseSparseMatrixMultiplication.standardVector(
-                this.entries, this.shape, b.entries, b.indices
-        );
-
+        Field<Complex128>[] entries = DenseCooFieldMatMult.standardVector(
+                this.entries, this.shape, b.entries, b.indices);
 
         return new CVector(entries);
     }
@@ -877,7 +875,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
      */
     public CooCMatrix elemMult(CooCMatrix b) {
-        return ComplexDenseSparseMatrixOperations.elemMult(this, b);
+        return (CooCMatrix) DenseCooFieldMatrixOperations.elemMult(this, b);
     }
 
 

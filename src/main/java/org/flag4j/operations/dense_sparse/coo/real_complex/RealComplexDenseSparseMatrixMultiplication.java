@@ -30,7 +30,6 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
-import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
@@ -103,7 +102,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
         int cols2 = shape2.get(1);
 
         Complex128[] dest = new Complex128[rows1*cols2];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, Complex128.ZERO);
 
         int row;
         int col;
@@ -139,7 +138,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
         int cols2 = shape2.get(1);
 
         Complex128[] dest = new Complex128[rows1*cols2];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, Complex128.ZERO);
 
         ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
@@ -180,7 +179,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
         int cols2 = shape2.get(1);
 
         Complex128[] dest = new Complex128[rows1*cols2];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, Complex128.ZERO);
 
         ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
             for(var i=startIdx; i<endIdx; i++) {
@@ -219,7 +218,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
         int cols2 = shape2.get(1);
 
         Complex128[] dest = new Complex128[rows1*cols2];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, Complex128.ZERO);;
 
         int row;
         int col;
@@ -257,7 +256,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
         int cols2 = shape2.get(1);
 
         Complex128[] dest = new Complex128[rows1*cols2];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, Complex128.ZERO);
 
         int row;
         int col;
@@ -294,7 +293,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
         int cols2 = shape2.get(1);
 
         Complex128[] dest = new Complex128[rows1*cols2];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, Complex128.ZERO);;
 
         ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
@@ -336,7 +335,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
         int cols2 = shape2.get(1);
 
         Complex128[] dest = new Complex128[rows1*cols2];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, Complex128.ZERO);
 
         ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
@@ -374,7 +373,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
         int nonZeros = src2.length;
 
         Complex128[] dest = new Complex128[denseRows];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, Complex128.ZERO);
         int k;
 
         for(int i=0; i<denseRows; i++) {
@@ -407,7 +406,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
                                               Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         Complex128[] dest = new Complex128[rows1];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, Complex128.ZERO);;
         int row;
         int col;
 
@@ -437,7 +436,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
         int bsize = Configurations.getBlockSize(); // Get the block size to use.
 
         Complex128[] dest = new Complex128[rows1];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, Complex128.ZERO);
 
         // Blocked matrix-vector multiply
         for(int ii=0; ii<rows1; ii += bsize) {
@@ -473,7 +472,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
         int rows2 = src2.length;
 
         Complex128[] dest = new Complex128[rows1];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, Complex128.ZERO);
 
         ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
@@ -506,7 +505,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
                                                         Shape shape1, Field<Complex128>[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         Complex128[] dest = new Complex128[rows1];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, Complex128.ZERO);;
 
         ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
@@ -540,7 +539,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
         final int bsize = Configurations.getBlockSize(); // Get the block size to use.
 
         Complex128[] dest = new Complex128[rows1];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, Complex128.ZERO);
 
         // Blocked matrix-vector multiply
         ThreadManager.concurrentBlockedOperation(rows1, bsize, (startIdx, endIdx) -> {
@@ -579,7 +578,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
         int nonZeros = src2.length;
 
         Complex128[] dest = new Complex128[denseRows];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, Complex128.ZERO);
         int k;
 
         for(int i=0; i<denseRows; i++) {
@@ -611,7 +610,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
                                               Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         Complex128[] dest = new Complex128[rows1];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, Complex128.ZERO);;
         int row;
         int col;
 
@@ -641,7 +640,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
         int bsize = Configurations.getBlockSize(); // Get the block size to use.
 
         Complex128[] dest = new Complex128[rows1];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, Complex128.ZERO);;
         int k;
 
         // Blocked matrix-vector multiply
@@ -679,7 +678,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
         int rows2 = src2.length;
 
         Complex128[] dest = new Complex128[rows1];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, Complex128.ZERO);;
 
         ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
@@ -712,7 +711,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
                                                         Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.get(0);
         Complex128[] dest = new Complex128[rows1];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, Complex128.ZERO);;
 
         ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
@@ -746,7 +745,7 @@ public final class RealComplexDenseSparseMatrixMultiplication {
         final int bsize = Configurations.getBlockSize(); // Get the block size to use.
 
         Complex128[] dest = new Complex128[rows1];
-        ArrayUtils.fill(dest, 0);
+        Arrays.fill(dest, Complex128.ZERO);;
 
         // Blocked matrix-vector multiply.
         ThreadManager.concurrentBlockedOperation(rows1, bsize, (startIdx, endIdx) -> {
