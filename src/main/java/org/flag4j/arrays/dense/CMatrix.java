@@ -33,22 +33,23 @@ import org.flag4j.arrays.sparse.*;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;
-import org.flag4j.operations.MatrixMultiplyDispatcher;
-import org.flag4j.operations.common.complex.Complex128Operations;
-import org.flag4j.operations.common.complex.Complex128Properties;
-import org.flag4j.operations.dense.field_ops.DenseFieldEquals;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldMatMult;
-import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldMatrixOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
-import org.flag4j.operations.dense_sparse.csr.field_ops.DenseCsrFieldMatMult;
-import org.flag4j.operations.dense_sparse.csr.field_ops.DenseCsrFieldOperations;
-import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
-import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
+import org.flag4j.linalg.operations.MatrixMultiplyDispatcher;
+import org.flag4j.linalg.operations.common.complex.Complex128Operations;
+import org.flag4j.linalg.operations.common.complex.Complex128Properties;
+import org.flag4j.linalg.operations.dense.field_ops.DenseFieldEquals;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemDiv;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemMult;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseMatMult;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldMatMult;
+import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldMatrixOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatMult;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOperations;
+import org.flag4j.linalg.operations.dense_sparse.csr.field_ops.DenseCsrFieldMatMult;
+import org.flag4j.linalg.operations.dense_sparse.csr.field_ops.DenseCsrFieldOperations;
+import org.flag4j.linalg.operations.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
+import org.flag4j.linalg.operations.dense_sparse.csr.real_field_ops.RealFieldDenseCsrOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.StringUtils;
@@ -334,6 +335,38 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
 
 
     /**
+     * Constructs a sparse CSR matrix of similar type to this dense matrix.
+     *
+     * @param shape Shape of the CSR matrix.
+     * @param entries Non-zero entries of the CSR matrix.
+     * @param rowPointers Row pointers of the CSR matrix.
+     * @param colIndices Column indices of the non-zero entries in the CSR matrix.
+     *
+     * @return A sparse CSR matrix with the specified shape and non-zero entries.
+     */
+    @Override
+    public CsrCMatrix makeLikeCsrMatrix(Shape shape, Field<Complex128>[] entries, int[] rowPointers, int[] colIndices) {
+        return new CsrCMatrix(shape, entries, rowPointers, colIndices);
+    }
+
+
+    /**
+     * Constructs a sparse COO matrix of similar type to this dense matrix.
+     *
+     * @param shape Shape of the COO matrix.
+     * @param entries Non-zero entries of the COO matrix.
+     * @param rowIndices Row indices of the non-zero entries in the COO matrix.
+     * @param colIndices Column indices of the non-zero entries in the COO matrix.
+     *
+     * @return A sparse COO matrix with the specified shape and non-zero entries.
+     */
+    @Override
+    public CooCMatrix makeLikeCooMatrix(Shape shape, Field<Complex128>[] entries, int[] rowIndices, int[] colIndices) {
+        return new CooCMatrix(shape, entries, rowIndices, colIndices);
+    }
+
+
+    /**
      * Converts this complex matrix to a real matrix. This is done by ignoring the imaginary component of all entries.
      * @return A real matrix containing the real components of this complex matrices entries.
      */
@@ -458,8 +491,8 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @throws org.flag4j.util.exceptions.LinearAlgebraException If {@code this.numCols != b.numRows}
      */
     public CMatrix mult(Matrix b) {
-        Complex128[] entries = MatrixMultiplyDispatcher.dispatch(this, b);
-        Shape shape = new Shape(this.numRows, b.numCols);
+        Field<Complex128>[] entries = MatrixMultiplyDispatcher.dispatch(this, b);
+        Shape shape = new Shape(numRows, b.numCols);
 
         return new CMatrix(shape, entries);
     }
@@ -485,7 +518,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @return The element-wise sum of this matrix with {@code b}.
      */
     public CMatrix add(Matrix b) {
-        return new CMatrix(this.shape, RealComplexDenseOperations.add(this.entries, this.shape, b.entries, b.shape));
+        return new CMatrix(this.shape, RealFieldDenseOperations.add(this.entries, this.shape, b.entries, b.shape));
     }
 
 
@@ -495,7 +528,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @return The element-wise sum of this matrix and {@code b}
      */
     public CMatrix add(CsrMatrix b) {
-        return RealComplexCsrDenseOperations.applyBinOpp(this, b, Complex128::add);
+        return (CMatrix) RealFieldDenseCsrOperations.applyBinOpp(this, b, Complex128::add);
     }
 
 
@@ -505,7 +538,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @return The element-wise sum of this matrix and {@code b}
      */
     public CMatrix add(CooMatrix b) {
-        return RealComplexDenseSparseMatrixOperations.add(this, b);
+        return (CMatrix) RealFieldDenseCooMatrixOperations.add(this, b);
     }
 
 
@@ -536,7 +569,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      */
     public CMatrix sub(Matrix b) {
         return new CMatrix(this.shape,
-                RealComplexDenseOperations.sub(this.entries, this.shape, b.entries, b.shape)
+                RealFieldDenseOperations.sub(this.entries, this.shape, b.entries, b.shape)
         );
     }
 
@@ -547,7 +580,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @return The element-wise difference of this matrix and {@code b}
      */
     public CMatrix sub(CsrMatrix b) {
-        return RealComplexCsrDenseOperations.applyBinOpp(this, b, Complex128::sub);
+        return (CMatrix) RealFieldDenseCsrOperations.applyBinOpp(this, b, Complex128::sub);
     }
 
 
@@ -557,7 +590,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @return The element-wise difference of this matrix and {@code b}
      */
     public CMatrix sub(CooMatrix b) {
-        return RealComplexDenseSparseMatrixOperations.sub(this, b);
+        return (CMatrix) RealFieldDenseCooMatrixOperations.sub(this, b);
     }
 
 
@@ -588,7 +621,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code this.numCols != b.numRows}.
      */
     public CMatrix mult(CsrMatrix b) {
-        return RealComplexCsrDenseMatrixMultiplication.standard(this, b);
+        return (CMatrix) RealFieldDenseCsrMatMult.standard(this, b);
     }
 
 
@@ -634,7 +667,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      */
     public CVector mult(Vector b) {
         ValidateParameters.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
-        Complex128[] entries = RealComplexDenseMatrixMultiplication.standardVector(
+        Field<Complex128>[] entries = RealFieldDenseMatMult.standardVector(
                 this.entries, this.shape, b.entries, b.shape
         );
 
@@ -649,9 +682,8 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
      */
     public CVector mult(CooVector b) {
         ValidateParameters.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
-        Complex128[] entries = RealComplexDenseSparseMatrixMultiplication.standardVector(
-                this.entries, this.shape, b.entries, b.indices
-        );
+        Field<Complex128>[] entries = RealFieldDenseCooMatMult.standardVector(
+                this.entries, this.shape, b.entries, b.indices);
 
         return new CVector(entries);
     }
@@ -833,7 +865,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
     public CMatrix div(Matrix b) {
         return new CMatrix(
                 shape,
-                RealComplexDenseElemDiv.dispatch(entries, shape, b.entries, b.shape)
+                RealFieldDenseElemDiv.dispatch(entries, shape, b.entries, b.shape)
         );
     }
 
@@ -846,7 +878,7 @@ public class CMatrix extends DenseFieldMatrixBase<CMatrix, CooCMatrix, CsrCMatri
     public CMatrix elemMult(Matrix b) {
         return new CMatrix(
                 shape,
-                RealComplexDenseElemMult.dispatch(entries, shape, b.entries, b.shape)
+                RealFieldDenseElemMult.dispatch(entries, shape, b.entries, b.shape)
         );
     }
 

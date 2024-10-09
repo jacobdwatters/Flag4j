@@ -32,8 +32,8 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.operations.common.field_ops.FieldOperations;
-import org.flag4j.operations.common.real.RealOperations;
+import org.flag4j.linalg.operations.common.field_ops.FieldOperations;
+import org.flag4j.linalg.operations.common.real.RealOperations;
 import org.flag4j.util.ErrorMessages;
 
 /**

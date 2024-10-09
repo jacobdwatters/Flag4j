@@ -7,9 +7,9 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
-import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOperations;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -84,7 +84,7 @@ class VectorOuterProductTests {
                 {new Complex128("0.0+420.975i"), new Complex128("87.422475+19.749387275i"), new Complex128("-668.8825-74.84i")}};
         exp = new CMatrix(expEntries);
         CMatrix act = new CMatrix(a.size, b.size,
-                RealComplexDenseVectorOperations.outerProduct(a.entries, b.entries));
+                RealFieldDenseVectorOperations.outerProduct(a.entries, b.entries));
 
         assertEquals(exp, act);
     }
@@ -109,7 +109,7 @@ class VectorOuterProductTests {
                 {new Complex128("0.0"), new Complex128("0.0"), new Complex128("-668.8825-74.84i")}};
         exp = new CMatrix(expEntries);
         CMatrix act = new CMatrix(a.size, b.size,
-                RealComplexDenseSparseVectorOperations.outerProduct(a.entries, b.entries, b.indices, b.size));
+                RealFieldDenseCooVectorOperations.outerProduct(a.entries, b.entries, b.indices, b.size));
 
         assertEquals(exp, act);
     }

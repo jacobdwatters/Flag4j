@@ -5,10 +5,10 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.operations.common.field_ops.AggregateField;
-import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
-import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
+import org.flag4j.linalg.operations.common.field_ops.AggregateField;
+import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOperations;
+import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -134,7 +134,7 @@ class CooVectorInnerProdTests {
                 new Complex128(0.15, .135).conj().mult(215.0)
         });
 
-        assertEquals(exp, RealComplexDenseSparseVectorOperations.inner(a.entries, a.indices, a.size, b.entries));
+        assertEquals(exp, RealFieldDenseCooVectorOperations.inner(a.entries, a.indices, a.size, b.entries));
 
         // ----------------------- Sub-case 2 -----------------------
         bEntries = new Complex128[]{
@@ -149,7 +149,7 @@ class CooVectorInnerProdTests {
 
         CVector finalB = b;
         assertThrows(IllegalArgumentException.class,
-                ()->RealComplexDenseSparseVectorOperations.inner(a.entries, a.indices, a.size, finalB.entries));
+                ()->RealFieldDenseCooVectorOperations.inner(a.entries, a.indices, a.size, finalB.entries));
     }
 
 

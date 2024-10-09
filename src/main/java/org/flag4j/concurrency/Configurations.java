@@ -30,9 +30,6 @@ import org.flag4j.util.ErrorMessages;
  * Configurations for standard and concurrent operations.
  */
 public final class Configurations {
-    private Configurations() {
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
-    }
 
     /**
      * The default number of threads to use for concurrent algorithms.
@@ -50,6 +47,11 @@ public final class Configurations {
      * The block size to use in blocked algorithms.
      */
     private static int blockSize = DEFAULT_BLOCK_SIZE;
+
+
+    private Configurations() {
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+    }
 
 
     /**

@@ -29,7 +29,8 @@ import org.flag4j.algebraic_structures.semi_rings.SemiRing;
 
 /**
  * <p>This interface specifies a mathematical field. This interface not only meets the basic definition of a field,
- * but also specifies some additional operations which are common and useful.</p>
+ * but also specifies some additional operations which may not technically be part of the formal definition of a field but are common
+ * and useful.</p>
  *
  * <p>Field elements should be immutable.</p>
  *

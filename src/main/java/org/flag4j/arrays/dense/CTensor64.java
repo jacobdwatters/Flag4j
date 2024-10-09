@@ -30,7 +30,7 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.DenseFieldTensorBase;
 import org.flag4j.arrays.sparse.CooCTensor64;
-import org.flag4j.operations.common.complex.Complex64Operations;
+import org.flag4j.linalg.operations.common.complex.Complex64Operations;
 import org.flag4j.util.Flag4jConstants;
 
 import java.util.ArrayList;

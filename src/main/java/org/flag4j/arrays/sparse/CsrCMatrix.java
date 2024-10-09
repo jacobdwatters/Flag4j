@@ -32,12 +32,12 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldMatMult;
-import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
-import org.flag4j.operations.sparse.SparseUtils;
-import org.flag4j.operations.sparse.csr.field_ops.CsrFieldMatMult;
-import org.flag4j.operations.sparse.csr.field_ops.CsrFieldMatrixOperations;
-import org.flag4j.operations.sparse.csr.real_complex.RealComplexCsrMatrixMultiplication;
+import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldMatMult;
+import org.flag4j.linalg.operations.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
+import org.flag4j.linalg.operations.sparse.SparseUtils;
+import org.flag4j.linalg.operations.sparse.csr.field_ops.CsrFieldMatMult;
+import org.flag4j.linalg.operations.sparse.csr.field_ops.CsrFieldMatrixOperations;
+import org.flag4j.linalg.operations.sparse.csr.real_complex.RealComplexCsrMatrixMultiplication;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -573,7 +573,7 @@ public class CsrCMatrix extends CsrFieldMatrixBase<CsrCMatrix, CMatrix, CooCVect
      * @throws IllegalArgumentException If the number of columns in this matrix does not equal the number of rows in matrix {@code b}.
      */
     public CMatrix mult(Matrix b) {
-        return RealComplexCsrDenseMatrixMultiplication.standard(this, b);
+        return (CMatrix) RealFieldDenseCsrMatMult.standard(this, b);
     }
 
 

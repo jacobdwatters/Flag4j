@@ -25,13 +25,13 @@
 package org.flag4j.arrays.backend;
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.operations.common.real.AggregateReal;
-import org.flag4j.operations.common.real.RealOperations;
-import org.flag4j.operations.common.real.RealProperties;
-import org.flag4j.operations.dense.real.AggregateDenseReal;
-import org.flag4j.operations.dense.real.RealDenseElemMult;
-import org.flag4j.operations.dense.real.RealDenseOperations;
-import org.flag4j.operations.dense.real.RealDenseProperties;
+import org.flag4j.linalg.operations.common.real.AggregateReal;
+import org.flag4j.linalg.operations.common.real.RealOperations;
+import org.flag4j.linalg.operations.common.real.RealProperties;
+import org.flag4j.linalg.operations.dense.real.AggregateDenseReal;
+import org.flag4j.linalg.operations.dense.real.RealDenseElemMult;
+import org.flag4j.linalg.operations.dense.real.RealDenseOperations;
+import org.flag4j.linalg.operations.dense.real.RealDenseProperties;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;

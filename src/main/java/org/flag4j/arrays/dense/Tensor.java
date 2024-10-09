@@ -33,14 +33,16 @@ import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.TensorInvert;
-import org.flag4j.operations.common.complex.Complex128Operations;
-import org.flag4j.operations.dense.field_ops.DenseFieldOperations;
-import org.flag4j.operations.dense.real.RealDenseEquals;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseTensorOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
+import org.flag4j.linalg.operations.common.complex.Complex128Operations;
+import org.flag4j.linalg.operations.common.field_ops.FieldOperations;
+import org.flag4j.linalg.operations.dense.field_ops.DenseFieldOperations;
+import org.flag4j.linalg.operations.dense.real.RealDenseEquals;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemDiv;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemMult;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseTensorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -318,7 +320,7 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
      */
     public CTensor add(CTensor b) {
-        return new CTensor(shape, RealComplexDenseOperations.add(b.entries, b.shape, entries, shape));
+        return new CTensor(shape, RealFieldDenseOperations.add(b.entries, b.shape, entries, shape));
     }
 
 
@@ -361,7 +363,7 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
      */
     public CTensor sub(CTensor b) {
-        return new CTensor(shape, RealComplexDenseOperations.sub(entries, shape, b.entries, b.shape));
+        return new CTensor(shape, RealFieldDenseOperations.sub(entries, shape, b.entries, b.shape));
     }
 
 
@@ -393,7 +395,7 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
      * @return A tensor containing the difference of each entry in this tensor with {@code b}.
      */
     public CTensor sub(Complex128 b) {
-        return new CTensor(shape, RealComplexDenseOperations.sub(entries, b));
+        return new CTensor(shape, RealFieldDenseOperations.sub(entries, b));
     }
 
 
@@ -405,7 +407,7 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
     public CTensor elemMult(CTensor b) {
         return new CTensor(
                 this.shape,
-                RealComplexDenseElemMult.dispatch(b.entries, b.shape, this.entries, this.shape)
+                RealFieldDenseElemMult.dispatch(b.entries, b.shape, this.entries, this.shape)
         );
     }
 
@@ -426,7 +428,7 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
      * @return The element-wise product of this tensor and {@code b}.
      */
     public CooCTensor elemMult(CooCTensor b) {
-        return RealComplexDenseSparseOperations.elemMult(this, b);
+        return (CooCTensor) RealFieldDenseCooOperations.elemMult(this, b);
     }
 
 
@@ -438,7 +440,7 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
     public CTensor elemDiv(CTensor b) {
         return new CTensor(
                 shape,
-                RealComplexDenseElemDiv.dispatch(entries, shape, b.entries, b.shape)
+                RealFieldDenseElemDiv.dispatch(entries, shape, b.entries, b.shape)
         );
     }
 
@@ -449,7 +451,7 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
      * @return The tensor-scalar product of this tensor and {@code b}.
      */
     public CTensor mult(Complex128 b) {
-        return new CTensor(shape, Complex128Operations.scalMult(entries, b));
+        return new CTensor(shape, FieldOperations.scalMult(entries, b));
     }
 
 

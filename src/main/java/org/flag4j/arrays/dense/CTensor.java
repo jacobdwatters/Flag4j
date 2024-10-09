@@ -33,12 +33,13 @@ import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.io.parsing.ComplexNumberParser;
-import org.flag4j.operations.common.complex.Complex128Operations;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldTensorOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
+import org.flag4j.linalg.operations.common.complex.Complex128Operations;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemDiv;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemMult;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldTensorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.StringUtils;
@@ -267,7 +268,7 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
      */
     public CTensor add(Tensor b) {
-        return new CTensor(shape, RealComplexDenseOperations.add(entries, shape, b.entries, b.shape));
+        return new CTensor(shape, RealFieldDenseOperations.add(entries, shape, b.entries, b.shape));
     }
 
 
@@ -278,7 +279,7 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
      */
     public CTensor add(CooTensor b) {
-        return RealComplexDenseSparseOperations.add(this, b);
+        return (CTensor) RealFieldDenseCooOperations.add(this, b);
     }
 
 
@@ -300,7 +301,7 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
      */
     public CTensor sub(Tensor b) {
-        return new CTensor(shape, RealComplexDenseOperations.sub(entries, shape, b.entries, b.shape));
+        return new CTensor(shape, RealFieldDenseOperations.sub(entries, shape, b.entries, b.shape));
     }
 
 
@@ -311,7 +312,7 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
      */
     public CTensor sub(CooTensor b) {
-        return RealComplexDenseSparseOperations.sub(this, b);
+        return (CTensor) RealFieldDenseCooOperations.sub(this, b);
     }
 
 
@@ -332,7 +333,7 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
      * @param b Value to subtract from all entries of this tensor.
      */
     public void subEq(Double b) {
-        RealComplexDenseOperations.subEq(this.entries, b);
+        RealFieldDenseOperations.subEq(this.entries, b);
     }
 
 
@@ -364,7 +365,7 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
     public CTensor elemDiv(Tensor b) {
         return new CTensor(
                 shape,
-                RealComplexDenseElemDiv.dispatch(entries, shape, b.entries, b.shape)
+                RealFieldDenseElemDiv.dispatch(entries, shape, b.entries, b.shape)
         );
     }
 
@@ -426,7 +427,7 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
      * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
      */
     public void addEq(Tensor b) {
-        RealComplexDenseOperations.addEq(this.entries, this.shape, b.entries, b.shape);
+        RealFieldDenseOperations.addEq(this.entries, this.shape, b.entries, b.shape);
     }
 
 
@@ -436,7 +437,7 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
      * @param b Scalar value in sum.
      */
     public void addEq(double b) {
-        RealComplexDenseOperations.addEq(this.entries, b);
+        RealFieldDenseOperations.addEq(this.entries, b);
     }
 
 
@@ -503,7 +504,7 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
     public CTensor elemMult(Tensor b) {
         return new CTensor(
                 this.shape,
-                RealComplexDenseElemMult.dispatch(this.entries, this.shape, b.entries, b.shape)
+                RealFieldDenseElemMult.dispatch(this.entries, this.shape, b.entries, b.shape)
         );
     }
 
@@ -516,7 +517,7 @@ public class CTensor extends DenseFieldTensorBase<CTensor, CooCTensor, Complex12
      * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
      */
     public void subEq(Tensor b) {
-        RealComplexDenseOperations.subEq(this.entries, this.shape, b.entries, b.shape);
+        RealFieldDenseOperations.subEq(this.entries, this.shape, b.entries, b.shape);
     }
 
 

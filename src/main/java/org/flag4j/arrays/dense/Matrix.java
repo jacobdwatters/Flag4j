@@ -25,6 +25,7 @@
 package org.flag4j.arrays.dense;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.DenseMatrixMixin;
 import org.flag4j.arrays.backend.DensePrimitiveDoubleTensorBase;
@@ -34,24 +35,29 @@ import org.flag4j.arrays.sparse.*;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
-import org.flag4j.operations.MatrixMultiplyDispatcher;
-import org.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
-import org.flag4j.operations.TransposeDispatcher;
-import org.flag4j.operations.common.complex.Complex128Operations;
-import org.flag4j.operations.dense.field_ops.DenseFieldOperations;
-import org.flag4j.operations.dense.real.*;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixMultiplication;
-import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixMultiplication;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
-import org.flag4j.operations.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
-import org.flag4j.operations.dense_sparse.csr.real.RealCsrDenseOperations;
-import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
-import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
+import org.flag4j.linalg.operations.MatrixMultiplyDispatcher;
+import org.flag4j.linalg.operations.RealDenseMatrixMultiplyDispatcher;
+import org.flag4j.linalg.operations.TransposeDispatcher;
+import org.flag4j.linalg.operations.common.complex.Complex128Operations;
+import org.flag4j.linalg.operations.common.field_ops.FieldOperations;
+import org.flag4j.linalg.operations.dense.field_ops.DenseFieldOperations;
+import org.flag4j.linalg.operations.dense.real.RealDenseDeterminant;
+import org.flag4j.linalg.operations.dense.real.RealDenseEquals;
+import org.flag4j.linalg.operations.dense.real.RealDenseProperties;
+import org.flag4j.linalg.operations.dense.real.RealDenseSetOperations;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemDiv;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemMult;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseMatMult;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseMatrixMultiplication;
+import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatMult;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOperations;
+import org.flag4j.linalg.operations.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
+import org.flag4j.linalg.operations.dense_sparse.csr.real.RealCsrDenseOperations;
+import org.flag4j.linalg.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
+import org.flag4j.linalg.operations.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -308,7 +314,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Matrix tensorDot(Matrix src2, int[] aAxes, int[] bAxes) {
-        return RealDenseTensorDot.tensorDot(this, src2, aAxes, bAxes);
+        return org.flag4j.linalg.operations.dense.real.RealDenseTensorDot.tensorDot(this, src2, aAxes, bAxes);
     }
 
 
@@ -568,7 +574,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public boolean isI() {
-        return RealDenseProperties.isIdentity(this);
+        return org.flag4j.linalg.operations.dense.real.RealDenseProperties.isIdentity(this);
     }
 
 
@@ -1695,7 +1701,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     public CMatrix add(CMatrix b) {
         return new CMatrix(this.shape,
-                RealComplexDenseOperations.add(b.entries, b.shape, this.entries, this.shape)
+                RealFieldDenseOperations.add(b.entries, b.shape, this.entries, this.shape)
         );
     }
 
@@ -1757,7 +1763,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     public CMatrix sub(CMatrix b) {
         return new CMatrix(this.shape,
-                RealComplexDenseOperations.sub(this.entries, this.shape, b.entries, b.shape)
+                RealFieldDenseOperations.sub(this.entries, this.shape, b.entries, b.shape)
         );
     }
 
@@ -1819,7 +1825,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code this.numCols != b.numRows}.
      */
     public CMatrix mult(CMatrix b) {
-        Complex128[] entries = MatrixMultiplyDispatcher.dispatch(this, b);
+        Field<Complex128>[] entries = MatrixMultiplyDispatcher.dispatch(this, b);
         Shape shape = new Shape(this.numRows, b.numCols);
 
         return new CMatrix(shape, entries);
@@ -1844,7 +1850,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code this.numCols != b.numRows}.
      */
     public CMatrix mult(CsrCMatrix b) {
-        return RealComplexCsrDenseMatrixMultiplication.standard(this, b);
+        return (CMatrix) RealFieldDenseCsrMatMult.standard(this, b);
     }
 
 
@@ -1879,7 +1885,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     public CVector mult(CVector b) {
         ValidateParameters.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
-        Complex128[] entries = RealComplexDenseMatrixMultiplication.standardVector(
+        Field<Complex128>[] entries = RealFieldDenseMatMult.standardVector(
                 this.entries, this.shape, b.entries, b.shape
         );
 
@@ -1909,7 +1915,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     public CVector mult(CooCVector b) {
         ValidateParameters.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
-        Complex128[] entries = RealComplexDenseSparseMatrixMultiplication.standardVector(
+        Field<Complex128>[] entries = RealFieldDenseCooMatMult.standardVector(
                 this.entries, this.shape, b.entries, b.indices
         );
 
@@ -1923,7 +1929,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return The matrix-scalar product of this matrix and {@code b}.
      */
     public CMatrix mult(Complex128 b) {
-        return new CMatrix(shape, Complex128Operations.scalMult(entries, b));
+        return new CMatrix(shape, FieldOperations.scalMult(entries, b));
     }
 
 
@@ -1939,7 +1945,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
     public CMatrix div(CMatrix b) {
         return new CMatrix(
                 shape,
-                RealComplexDenseElemDiv.dispatch(entries, shape, b.entries, b.shape)
+                RealFieldDenseElemDiv.dispatch(entries, shape, b.entries, b.shape)
         );
     }
 
@@ -1993,7 +1999,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return The element-wise product of this matrix and {@code b}.
      */
     public CMatrix elemMult(CMatrix b) {
-        return new CMatrix(shape, RealComplexDenseElemMult.dispatch(b.entries, b.shape, entries, shape));
+        return new CMatrix(shape, RealFieldDenseElemMult.dispatch(b.entries, b.shape, entries, shape));
     }
 
 
@@ -2013,7 +2019,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return The element-wise product of this matrix and {@code b}.
      */
     public CooCMatrix elemMult(CooCMatrix b) {
-        return RealComplexDenseSparseMatrixOperations.elemMult(this, b);
+        return (CooCMatrix) RealFieldDenseCooMatrixOperations.elemMult(this, b);
     }
 
 

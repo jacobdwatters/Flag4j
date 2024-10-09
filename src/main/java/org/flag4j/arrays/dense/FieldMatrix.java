@@ -165,6 +165,38 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
 
 
     /**
+     * Constructs a sparse CSR matrix of similar type to this dense matrix.
+     *
+     * @param shape Shape of the CSR matrix.
+     * @param entries Non-zero entries of the CSR matrix.
+     * @param rowPointers Row pointers of the CSR matrix.
+     * @param colIndices Column indices of the non-zero entries in the CSR matrix.
+     *
+     * @return A sparse CSR matrix with the specified shape and non-zero entries.
+     */
+    @Override
+    public CsrFieldMatrix<T> makeLikeCsrMatrix(Shape shape, Field<T>[] entries, int[] rowPointers, int[] colIndices) {
+        return new CsrFieldMatrix<T>(shape, entries, rowPointers, colIndices);
+    }
+
+
+    /**
+     * Constructs a sparse COO matrix of similar type to this dense matrix.
+     *
+     * @param shape Shape of the COO matrix.
+     * @param entries Non-zero entries of the COO matrix.
+     * @param rowIndices Row indices of the non-zero entries in the COO matrix.
+     * @param colIndices Column indices of the non-zero entries in the COO matrix.
+     *
+     * @return A sparse COO matrix with the specified shape and non-zero entries.
+     */
+    @Override
+    public CooFieldMatrix<T> makeLikeCooMatrix(Shape shape, Field<T>[] entries, int[] rowIndices, int[] colIndices) {
+        return new CooFieldMatrix<T>(shape, entries, rowIndices, colIndices);
+    }
+
+
+    /**
      * Converts this dense tensor to an equivalent sparse COO tensor.
      *
      * @return A sparse COO tensor equivalent to this dense tensor.

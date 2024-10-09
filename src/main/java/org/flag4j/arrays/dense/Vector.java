@@ -32,14 +32,16 @@ import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.operations.common.complex.Complex128Operations;
-import org.flag4j.operations.dense.real.RealDenseTensorDot;
-import org.flag4j.operations.dense.real.RealDenseVectorOperations;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
+import org.flag4j.linalg.operations.common.complex.Complex128Operations;
+import org.flag4j.linalg.operations.common.field_ops.FieldOperations;
+import org.flag4j.linalg.operations.dense.real.RealDenseTensorDot;
+import org.flag4j.linalg.operations.dense.real.RealDenseVectorOperations;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemDiv;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemMult;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -771,7 +773,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      * @return The sum of this vector and {@code b}.
      */
     public CVector add(CVector b) {
-        return new CVector(RealComplexDenseOperations.add(b.entries, b.shape, entries, shape));
+        return new CVector(RealFieldDenseOperations.add(b.entries, b.shape, entries, shape));
     }
 
 
@@ -816,7 +818,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      * @return The difference of this vector and {@code b}.
      */
     public CVector sub(CVector b) {
-        return new CVector(RealComplexDenseOperations.sub(entries, shape, b.entries, b.shape));
+        return new CVector(RealFieldDenseOperations.sub(entries, shape, b.entries, b.shape));
     }
 
 
@@ -862,7 +864,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      * @return The scalar product of this vector with {@code b}.
      */
     public CVector mult(Complex128 b) {
-        return new CVector(Complex128Operations.scalMult(entries, b));
+        return new CVector(FieldOperations.scalMult(entries, b));
     }
 
 
@@ -882,7 +884,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      * @return The element-wise product of this vector and {@code b}.
      */
     public CVector elemMult(CVector b) {
-        return new CVector(RealComplexDenseElemMult.dispatch(b.entries, b.shape, this.entries, this.shape));
+        return new CVector(RealFieldDenseElemMult.dispatch(b.entries, b.shape, this.entries, this.shape));
     }
 
 
@@ -902,7 +904,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      * @return The element-wise product of this vector and {@code b}.
      */
     public CooCVector elemMult(CooCVector b) {
-        return RealComplexDenseSparseVectorOperations.elemMult(this, b);
+        return (CooCVector) RealFieldDenseCooVectorOperations.elemMult(this, b);
     }
 
 
@@ -912,7 +914,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      * @return The element-wise quotient of this vector and {@code b}.
      */
     public CVector div(CVector b) {
-        return new CVector(RealComplexDenseElemDiv.dispatch(this.entries, this.shape, b.entries, b.shape));
+        return new CVector(RealFieldDenseElemDiv.dispatch(this.entries, this.shape, b.entries, b.shape));
     }
 
 

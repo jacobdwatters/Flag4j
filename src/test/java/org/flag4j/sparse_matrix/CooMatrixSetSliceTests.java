@@ -3,7 +3,7 @@ package org.flag4j.sparse_matrix;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.operations.sparse.coo.real.RealSparseMatrixGetSet;
+import org.flag4j.linalg.operations.sparse.coo.real.RealSparseMatrixGetSet;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

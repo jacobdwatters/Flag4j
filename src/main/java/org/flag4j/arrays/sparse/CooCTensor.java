@@ -32,8 +32,8 @@ import org.flag4j.arrays.backend.CooFieldTensorBase;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.operations.dense.real.RealDenseTranspose;
-import org.flag4j.operations.sparse.coo.field_ops.CooFieldEquals;
+import org.flag4j.linalg.operations.dense.real.RealDenseTranspose;
+import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldEquals;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 

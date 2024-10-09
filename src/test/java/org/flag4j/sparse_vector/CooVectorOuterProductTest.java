@@ -7,9 +7,9 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
-import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOperations;
+import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -144,7 +144,7 @@ class CooVectorOuterProductTest {
         exp = new CMatrix(expEntries);
 
         CMatrix act = new CMatrix(a.size, b.size,
-                RealComplexDenseSparseVectorOperations.outerProduct(a.entries, a.indices, a.size, b.entries));
+                RealFieldDenseCooVectorOperations.outerProduct(a.entries, a.indices, a.size, b.entries));
 
         assertEquals(exp, act);
 
@@ -154,6 +154,6 @@ class CooVectorOuterProductTest {
 
         CVector finalB = b;
         assertThrows(IllegalArgumentException.class,
-                ()->RealComplexDenseSparseVectorOperations.outerProduct(a.entries, a.indices, a.size, finalB.entries));
+                ()->RealFieldDenseCooVectorOperations.outerProduct(a.entries, a.indices, a.size, finalB.entries));
     }
 }

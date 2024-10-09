@@ -33,9 +33,9 @@ import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.decompositions.schur.ComplexSchur;
 import org.flag4j.linalg.decompositions.schur.RealSchur;
 import org.flag4j.linalg.decompositions.schur.Schur;
+import org.flag4j.linalg.operations.common.real.AggregateReal;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
-import org.flag4j.operations.common.real.AggregateReal;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 

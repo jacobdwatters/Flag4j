@@ -31,16 +31,24 @@ package org.flag4j.algebraic_structures.semi_rings;
  * <p>This class wraps the primitive boolean type.</p>
  */
 public class BooleanRing implements SemiRing<BooleanRing> {
-    // Constants provided for convienience.
+    // Constants provided for convenience.
 
     /**
      * The boolean value true.
      */
     final public static BooleanRing ONE = new BooleanRing(true);
     /**
+     * The boolean value true.
+     */
+    final public static BooleanRing TRUE = ONE;
+    /**
      * The boolean value false.
      */
     final public static BooleanRing ZERO = new BooleanRing(false);
+    /**
+     * The boolean value false.
+     */
+    final public static BooleanRing FALSE = ZERO;
 
 
     /**

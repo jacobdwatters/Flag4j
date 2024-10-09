@@ -4,7 +4,7 @@ import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.operations.sparse.coo.field_ops.CooFieldMatrixGetSet;
+import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldMatrixGetSet;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -33,15 +33,16 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.operations.common.complex.Complex128Operations;
-import org.flag4j.operations.dense.real.AggregateDenseReal;
-import org.flag4j.operations.dense.real.RealDenseTranspose;
-import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
-import org.flag4j.operations.sparse.coo.SparseDataWrapper;
-import org.flag4j.operations.sparse.coo.real.RealCooVectorOperations;
-import org.flag4j.operations.sparse.coo.real.RealSparseEquals;
-import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
+import org.flag4j.linalg.operations.common.complex.Complex128Operations;
+import org.flag4j.linalg.operations.common.field_ops.FieldOperations;
+import org.flag4j.linalg.operations.dense.real.AggregateDenseReal;
+import org.flag4j.linalg.operations.dense.real.RealDenseTranspose;
+import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
+import org.flag4j.linalg.operations.sparse.coo.SparseDataWrapper;
+import org.flag4j.linalg.operations.sparse.coo.real.RealCooVectorOperations;
+import org.flag4j.linalg.operations.sparse.coo.real.RealSparseEquals;
+import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -1163,7 +1164,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      * @return The result of multiplying this vector by the scalar {@code factor}.
      */
     public CooCVector mult(Complex128 factor) {
-        return new CooCVector(size, Complex128Operations.scalMult(entries, factor), indices.clone());
+        return new CooCVector(size, FieldOperations.scalMult(entries, factor), indices.clone());
     }
 
 

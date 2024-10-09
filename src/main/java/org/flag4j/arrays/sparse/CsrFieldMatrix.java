@@ -29,7 +29,7 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.CsrFieldMatrixBase;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.FieldVector;
-import org.flag4j.operations.sparse.SparseUtils;
+import org.flag4j.linalg.operations.sparse.SparseUtils;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;

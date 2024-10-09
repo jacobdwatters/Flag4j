@@ -31,8 +31,8 @@ import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.operations.common.field_ops.CompareField;
-import org.flag4j.operations.common.real.AggregateReal;
+import org.flag4j.linalg.operations.common.field_ops.CompareField;
+import org.flag4j.linalg.operations.common.real.AggregateReal;
 import org.flag4j.util.ErrorMessages;
 
 

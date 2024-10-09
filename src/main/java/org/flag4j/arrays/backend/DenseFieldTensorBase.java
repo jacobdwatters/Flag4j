@@ -28,11 +28,11 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.algebraic_structures.fields.RealFloat64;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.FieldTensor;
-import org.flag4j.operations.TransposeDispatcher;
-import org.flag4j.operations.common.field_ops.CompareField;
-import org.flag4j.operations.dense.field_ops.DenseFieldElemDiv;
-import org.flag4j.operations.dense.field_ops.DenseFieldOperations;
-import org.flag4j.operations.dense.field_ops.DenseFieldTensorDot;
+import org.flag4j.linalg.operations.TransposeDispatcher;
+import org.flag4j.linalg.operations.common.field_ops.CompareField;
+import org.flag4j.linalg.operations.dense.field_ops.DenseFieldElemDiv;
+import org.flag4j.linalg.operations.dense.field_ops.DenseFieldOperations;
+import org.flag4j.linalg.operations.dense.field_ops.DenseFieldTensorDot;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 

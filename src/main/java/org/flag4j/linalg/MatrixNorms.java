@@ -32,10 +32,10 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
-import org.flag4j.operations.common.field_ops.CompareField;
-import org.flag4j.operations.common.real.AggregateReal;
-import org.flag4j.operations.sparse.coo.field_ops.CooFieldNorms;
-import org.flag4j.operations.sparse.coo.real.RealSparseNorms;
+import org.flag4j.linalg.operations.common.field_ops.CompareField;
+import org.flag4j.linalg.operations.common.real.AggregateReal;
+import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldNorms;
+import org.flag4j.linalg.operations.sparse.coo.real.RealSparseNorms;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 

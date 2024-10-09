@@ -28,9 +28,9 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.DenseFieldTensorBase;
 import org.flag4j.arrays.sparse.CooFieldTensor;
-import org.flag4j.operations.TransposeDispatcher;
-import org.flag4j.operations.dense.field_ops.DenseFieldEquals;
-import org.flag4j.operations.dense.field_ops.DenseFieldTensorDot;
+import org.flag4j.linalg.operations.TransposeDispatcher;
+import org.flag4j.linalg.operations.dense.field_ops.DenseFieldEquals;
+import org.flag4j.linalg.operations.dense.field_ops.DenseFieldTensorDot;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;

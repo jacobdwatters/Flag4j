@@ -694,13 +694,13 @@ public final class ArrayUtils {
      * @return True if all entries in {@code src2} have zero imaginary component and real component equal to the
      * corresponding entry in {@code src1}. Otherwise, returns false.
      */
-    public static boolean equals(double[] src1, Field<Complex128>[] src2) {
+    public static <T extends Field<T>> boolean equals(double[] src1, Field<T>[] src2) {
         boolean equal = true;
 
         if (src1.length != src2.length) {
             equal = false;
         } else {
-            for (int i = 0, size = src1.length; i < size; i++) {
+            for(int i=0, size = src1.length; i < size; i++) {
                 if (src1[i] != ((Complex128) src2[i]).re || ((Complex128) src2[i]).im != 0) {
                     equal = false;
                     break; // No need to continue.

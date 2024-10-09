@@ -29,8 +29,8 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.CooFieldMatrixBase;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.FieldVector;
-import org.flag4j.operations.sparse.coo.field_ops.CooFieldEquals;
-import org.flag4j.operations.sparse.coo.field_ops.CooFieldMatrixGetSet;
+import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldEquals;
+import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldMatrixGetSet;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.List;

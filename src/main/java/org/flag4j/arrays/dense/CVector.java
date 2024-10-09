@@ -32,12 +32,13 @@ import org.flag4j.arrays.backend.DenseFieldVectorBase;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.operations.common.complex.Complex128Operations;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
+import org.flag4j.linalg.operations.common.complex.Complex128Operations;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemDiv;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemMult;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.StringUtils;
@@ -273,7 +274,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @return The sum of this vector and {@code b}.
      */
     public CVector add(Vector b) {
-        return new CVector(RealComplexDenseOperations.add(entries, shape, b.entries, b.shape));
+        return new CVector(RealFieldDenseOperations.add(entries, shape, b.entries, b.shape));
     }
 
 
@@ -283,7 +284,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @return The sum of this vector and {@code b}.
      */
     public CVector add(CooVector b) {
-        return RealComplexDenseSparseVectorOperations.add(this, b);
+        return (CVector) RealFieldDenseCooVectorOperations.add(this, b);
     }
 
 
@@ -318,7 +319,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @return The difference of this vector and {@code b}.
      */
     public CVector sub(Vector b) {
-        return new CVector(RealComplexDenseOperations.sub(entries, shape, b.entries, b.shape));
+        return new CVector(RealFieldDenseOperations.sub(entries, shape, b.entries, b.shape));
     }
 
 
@@ -328,7 +329,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @return The difference of this vector and {@code b}.
      */
     public CVector sub(CooVector b) {
-        return RealComplexDenseSparseVectorOperations.sub(this, b);
+        return (CVector) RealFieldDenseCooVectorOperations.sub(this, b);
     }
 
 
@@ -357,7 +358,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @return The element-wise product of this vector and {@code b}.
      */
     public CVector elemMult(Vector b) {
-        return new CVector(RealComplexDenseElemMult.dispatch(entries, shape, b.entries, b.shape));
+        return new CVector(RealFieldDenseElemMult.dispatch(entries, shape, b.entries, b.shape));
     }
 
 
@@ -387,7 +388,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @return The element-wise quotient of this vector and {@code b}.
      */
     public CVector div(Vector b) {
-        return new CVector(RealComplexDenseElemDiv.dispatch(entries, shape, b.entries, b.shape));
+        return new CVector(RealFieldDenseElemDiv.dispatch(entries, shape, b.entries, b.shape));
     }
 
 
@@ -448,7 +449,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
      */
     public void subEq(Vector b) {
-        RealComplexDenseOperations.subEq(entries, shape, b.entries, b.shape);
+        RealFieldDenseOperations.subEq(entries, shape, b.entries, b.shape);
     }
 
 
@@ -460,7 +461,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
      */
     public void addEq(Vector b) {
-        RealComplexDenseOperations.addEq(entries, shape, b.entries, b.shape);
+        RealFieldDenseOperations.addEq(entries, shape, b.entries, b.shape);
     }
 
 
@@ -482,7 +483,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
      * @param b Scalar value in sum.
      */
     public void addEq(double b) {
-        RealComplexDenseOperations.addEq(entries, b);
+        RealFieldDenseOperations.addEq(entries, b);
     }
 
 

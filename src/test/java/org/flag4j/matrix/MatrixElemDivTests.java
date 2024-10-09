@@ -19,9 +19,8 @@ class MatrixElemDivTests {
     private double[] getExp(double[] src1, double[] src2) {
         double[] result = new double[src1.length];
 
-        for(int i=0; i<result.length; i++) {
+        for(int i=0; i<result.length; i++)
             result[i] = src1[i]/src2[i];
-        }
 
         return result;
     }
@@ -30,11 +29,8 @@ class MatrixElemDivTests {
         Complex128[] result = new Complex128[src1.length];
         double divisor;
 
-        for(int i=0; i<result.length; i++) {
-            Complex128 v2 = (Complex128) src2[i];
-            divisor = v2.re*v2.re + v2.im*v2.im;
-            result[i] = new Complex128(src1[i]*v2.re / divisor, -src1[i]*v2.im / divisor);
-        }
+        for(int i=0; i<result.length; i++)
+            result[i] = src2[i].multInv().mult(src1[i]);
 
         return result;
     }

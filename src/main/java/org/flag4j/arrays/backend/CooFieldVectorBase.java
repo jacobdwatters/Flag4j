@@ -29,9 +29,9 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.operations.common.field_ops.CompareField;
-import org.flag4j.operations.sparse.coo.SparseDataWrapper;
-import org.flag4j.operations.sparse.coo.field_ops.CooFieldVectorOperations;
+import org.flag4j.linalg.operations.common.field_ops.CompareField;
+import org.flag4j.linalg.operations.sparse.coo.SparseDataWrapper;
+import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldVectorOperations;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 

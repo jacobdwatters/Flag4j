@@ -26,11 +26,11 @@ package org.flag4j.arrays.backend;
 
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.operations.TransposeDispatcher;
-import org.flag4j.operations.common.real.RealOperations;
-import org.flag4j.operations.common.real.RealProperties;
-import org.flag4j.operations.dense.real.RealDenseElemDiv;
-import org.flag4j.operations.dense.real.RealDenseTensorDot;
+import org.flag4j.linalg.operations.TransposeDispatcher;
+import org.flag4j.linalg.operations.common.real.RealOperations;
+import org.flag4j.linalg.operations.common.real.RealProperties;
+import org.flag4j.linalg.operations.dense.real.RealDenseElemDiv;
+import org.flag4j.linalg.operations.dense.real.RealDenseTensorDot;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;

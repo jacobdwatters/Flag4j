@@ -5,9 +5,9 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
-import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOperations;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -42,14 +42,14 @@ class CVectorInnerProductTests {
         b = new Vector(bEntries);
         exp = new Complex128("25.12969816999999 + 8968.199567075002i");
 
-        assertEquals(exp, RealComplexDenseVectorOperations.inner(a.entries, b.entries));
+        assertEquals(exp, RealFieldDenseVectorOperations.inner(a.entries, b.entries));
 
         // -------------------- Sub-case 2 --------------------
         bEntries = new double[]{1.455, 1.56, -8815.56};
         b = new Vector(bEntries);
 
         Vector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->RealComplexDenseVectorOperations.inner(a.entries, finalB.entries));
+        assertThrows(IllegalArgumentException.class, ()->RealFieldDenseVectorOperations.inner(a.entries, finalB.entries));
     }
 
 
@@ -65,7 +65,7 @@ class CVectorInnerProductTests {
         b = new CooVector(sparseSize, bEntries, sparseIndices);
         exp = new Complex128("-13.43870575+7.294682075000001j");
 
-        assertEquals(exp, RealComplexDenseSparseVectorOperations.inner(a.entries, b.entries, b.indices, b.size));
+        assertEquals(exp, RealFieldDenseCooVectorOperations.inner(a.entries, b.entries, b.indices, b.size));
 
         // -------------------- Sub-case 2 --------------------
         bEntries = new double[]{1.455, -0.00035};
@@ -75,7 +75,7 @@ class CVectorInnerProductTests {
 
         CooVector finalB = b;
         assertThrows(IllegalArgumentException.class,
-                ()->RealComplexDenseSparseVectorOperations.inner(a.entries, finalB.entries, finalB.indices, finalB.size));
+                ()->RealFieldDenseCooVectorOperations.inner(a.entries, finalB.entries, finalB.indices, finalB.size));
     }
 
 

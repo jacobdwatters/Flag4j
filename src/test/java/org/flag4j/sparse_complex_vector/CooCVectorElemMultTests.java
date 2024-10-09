@@ -5,9 +5,9 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
-import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOperations;
+import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -42,7 +42,7 @@ class CooCVectorElemMultTests {
                 new Complex128(25.612, 0.0245).mult(-14.51)};
         expIndices = new int[]{0, 2, 5};
         exp = new CooCVector(size, expValues, expIndices);
-        assertEquals(exp, RealComplexDenseSparseVectorOperations.elemMult(b, a));
+        assertEquals(exp, RealFieldDenseCooVectorOperations.elemMult(b, a));
 
 
         // -------------------- Sub-case 2 --------------------
@@ -50,7 +50,7 @@ class CooCVectorElemMultTests {
         b = new Vector(bValues);
 
         Vector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->RealComplexDenseSparseVectorOperations.elemMult(finalB, a));
+        assertThrows(LinearAlgebraException.class, ()->RealFieldDenseCooVectorOperations.elemMult(finalB, a));
     }
 
 

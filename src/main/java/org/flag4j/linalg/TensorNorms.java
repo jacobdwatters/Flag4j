@@ -32,7 +32,7 @@ import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
-import org.flag4j.operations.common.field_ops.CompareField;
+import org.flag4j.linalg.operations.common.field_ops.CompareField;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 

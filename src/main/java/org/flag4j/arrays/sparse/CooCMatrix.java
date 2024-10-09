@@ -33,12 +33,12 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.operations.dense_sparse.coo.field_ops.DenseCooFieldMatrixOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
-import org.flag4j.operations.sparse.coo.field_ops.CooFieldEquals;
-import org.flag4j.operations.sparse.coo.field_ops.CooFieldMatMult;
-import org.flag4j.operations.sparse.coo.field_ops.CooFieldMatrixGetSet;
-import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldMatrixOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOperations;
+import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldEquals;
+import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldMatMult;
+import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldMatrixGetSet;
+import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseMatrixOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -469,7 +469,7 @@ public class CooCMatrix extends CooFieldMatrixBase<CooCMatrix, CMatrix, CooCVect
      * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
      */
     public CooCMatrix elemMult(Matrix b) {
-        return RealComplexDenseSparseMatrixOperations.elemMult(b, this);
+        return (CooCMatrix) RealFieldDenseCooMatrixOperations.elemMult(b, this);
     }
 
 

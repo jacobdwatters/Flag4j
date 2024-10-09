@@ -7,8 +7,8 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.operations.MatrixMultiplyDispatcher;
-import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixMultTranspose;
+import org.flag4j.linalg.operations.MatrixMultiplyDispatcher;
+import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseMatrixMultTranspose;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 

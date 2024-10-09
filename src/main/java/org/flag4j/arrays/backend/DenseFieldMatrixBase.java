@@ -28,12 +28,12 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.operations.TransposeDispatcher;
-import org.flag4j.operations.common.field_ops.CompareField;
-import org.flag4j.operations.dense.field_ops.DenseFieldDeterminant;
-import org.flag4j.operations.dense.field_ops.DenseFieldMatMultDispatcher;
-import org.flag4j.operations.dense.field_ops.DenseFieldProperties;
-import org.flag4j.operations.dense.field_ops.DenseFieldTensorDot;
+import org.flag4j.linalg.operations.TransposeDispatcher;
+import org.flag4j.linalg.operations.common.field_ops.CompareField;
+import org.flag4j.linalg.operations.dense.field_ops.DenseFieldDeterminant;
+import org.flag4j.linalg.operations.dense.field_ops.DenseFieldMatMultDispatcher;
+import org.flag4j.linalg.operations.dense.field_ops.DenseFieldProperties;
+import org.flag4j.linalg.operations.dense.field_ops.DenseFieldTensorDot;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.ValidateParameters;
@@ -56,8 +56,8 @@ import java.util.Arrays;
  * @param <Y> The type (or wrapper of) an individual element of the matrix.
  */
 public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, V, W, Y>,
-        U extends CooMatrixMixin<U, T, ?, W, Y>,
-        V extends CsrMatrixMixin<V, T, ?, W, Y>,
+        U extends CooFieldMatrixBase<U, T, ?, W, Y>,
+        V extends CsrFieldMatrixBase<V, T, ?, W, Y>,
         W extends DenseFieldVectorBase<W, T, ?, Y>,
         Y extends Field<Y>>
         extends FieldTensorBase<T, T, Y>
@@ -71,6 +71,22 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * The number of columns in this matrix.
      */
     public final int numCols;
+
+
+    /**
+     * Creates a tensor with the specified entries and shape.
+     *
+     * @param shape Shape of this tensor.
+     * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
+     * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
+     */
+    protected DenseFieldMatrixBase(Shape shape, Field<Y>[] entries) {
+        super(shape, entries);
+        ValidateParameters.ensureRank(shape, 2);
+        ValidateParameters.ensureEquals(entries.length, shape.totalEntriesIntValueExact());
+        numRows = shape.get(0);
+        numCols = shape.get(1);
+    }
 
 
     /**
@@ -90,22 +106,6 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
     public boolean allClose(T b, double relTol, double absTol) {
         if(!shape.equals(b.shape)) return false;
         return CompareField.allClose(entries, b.entries, relTol, absTol);
-    }
-
-
-    /**
-     * Creates a tensor with the specified entries and shape.
-     *
-     * @param shape Shape of this tensor.
-     * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
-     * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
-     */
-    protected DenseFieldMatrixBase(Shape shape, Field<Y>[] entries) {
-        super(shape, entries);
-        ValidateParameters.ensureRank(shape, 2);
-        ValidateParameters.ensureEquals(entries.length, shape.totalEntriesIntValueExact());
-        numRows = shape.get(0);
-        numCols = shape.get(1);
     }
 
 
@@ -138,6 +138,28 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * @return A vector of similar type to this matrix with the given {@code entries}.
      */
     public abstract W makeLikeVector(Field<Y>... entries);
+
+
+    /**
+     * Constructs a sparse CSR matrix of similar type to this dense matrix.
+     * @param shape Shape of the CSR matrix.
+     * @param entries Non-zero entries of the CSR matrix.
+     * @param rowPointers Row pointers of the CSR matrix.
+     * @param colIndices Column indices of the non-zero entries in the CSR matrix.
+     * @return A sparse CSR matrix with the specified shape and non-zero entries.
+     */
+    public abstract V makeLikeCsrMatrix(Shape shape, Field<Y>[] entries, int[] rowPointers, int[] colIndices);
+
+
+    /**
+     * Constructs a sparse COO matrix of similar type to this dense matrix.
+     * @param shape Shape of the COO matrix.
+     * @param entries Non-zero entries of the COO matrix.
+     * @param rowIndices Row indices of the non-zero entries in the COO matrix.
+     * @param colIndices Column indices of the non-zero entries in the COO matrix.
+     * @return A sparse COO matrix with the specified shape and non-zero entries.
+     */
+    public abstract U makeLikeCooMatrix(Shape shape, Field<Y>[] entries, int[] rowIndices, int[] colIndices);
     
 
     /**

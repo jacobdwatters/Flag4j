@@ -6,9 +6,9 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
-import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOperations;
+import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseMatrixOperations;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -258,7 +258,7 @@ class CooMatrixAddSubTests {
                 {new Complex128("0.7430935522873594-0.58718i"), new Complex128("-0.17243740668084973-0.2181i"), new Complex128("-0.61738-0.18952i"), new Complex128("-0.51587-0.89177i"), new Complex128("-0.76042-0.31481i")}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, RealComplexDenseSparseMatrixOperations.sub(A, B));
+        assertEquals(exp, RealFieldDenseCooMatrixOperations.sub(A, B));
 
         // ------------------- Sub-case 2 -------------------
         aShape = new Shape(3, 5);
@@ -279,7 +279,7 @@ class CooMatrixAddSubTests {
                 {new Complex128("-0.53334-0.51873i"), new Complex128("-0.45876-0.354i"), new Complex128("-0.53354-0.6198i"), new Complex128("-0.76748-0.68158i"), new Complex128("-0.87113-0.69653i")}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, RealComplexDenseSparseMatrixOperations.sub(A, B));
+        assertEquals(exp, RealFieldDenseCooMatrixOperations.sub(A, B));
 
         // ------------------- Sub-case 3 -------------------
         aShape = new Shape(9, 5);
@@ -295,7 +295,7 @@ class CooMatrixAddSubTests {
         B = new CMatrix(bEntries);
 
         CMatrix finalB = B;
-        assertThrows(Exception.class, ()->RealComplexDenseSparseMatrixOperations.sub(A, finalB));
+        assertThrows(Exception.class, ()->RealFieldDenseCooMatrixOperations.sub(A, finalB));
     }
 
 

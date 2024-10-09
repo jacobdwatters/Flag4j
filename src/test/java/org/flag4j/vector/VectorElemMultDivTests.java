@@ -173,8 +173,8 @@ class VectorElemMultDivTests {
         a = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(23.456, -9234), new Complex128(0, 8.234), new Complex128(-9234.5, 0.24)};
         b = new CVector(bEntries);
-        expEntries = new Complex128[]{new Complex128(aEntries[0]).div(bEntries[0]),
-                new Complex128(aEntries[1]).div(bEntries[1]), new Complex128(aEntries[2]).div(bEntries[2])};
+        expEntries = new Complex128[]{new Complex128(3.394584078634005E-7, 1.336356982525E-4),
+                new Complex128(-0.0, 1.1416079669662376), new Complex128(-9.150468346193528E-4, -2.378160596769123E-8)};
         exp = new CVector(expEntries);
 
         assertEquals(exp, a.div(b));

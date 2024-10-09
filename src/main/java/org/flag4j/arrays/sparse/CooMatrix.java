@@ -33,15 +33,15 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.operations.dense.real.AggregateDenseReal;
-import org.flag4j.operations.dense.real.RealDenseTranspose;
-import org.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
-import org.flag4j.operations.sparse.coo.SparseDataWrapper;
-import org.flag4j.operations.sparse.coo.real.*;
-import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixMultiplication;
-import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseMatrixOperations;
+import org.flag4j.linalg.operations.dense.real.AggregateDenseReal;
+import org.flag4j.linalg.operations.dense.real.RealDenseTranspose;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
+import org.flag4j.linalg.operations.sparse.coo.SparseDataWrapper;
+import org.flag4j.linalg.operations.sparse.coo.real.*;
+import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseMatrixMultiplication;
+import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseMatrixOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -790,7 +790,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     public CooCMatrix add(Complex128 b) {
         // Overrides method from super class to emphasize it only operates on the non-zero values.
-        return new CooCMatrix(shape, RealComplexDenseOperations.add(entries, b), rowIndices.clone(), colIndices.clone());
+        return new CooCMatrix(shape, RealFieldDenseOperations.add(entries, b), rowIndices.clone(), colIndices.clone());
     }
 
 
@@ -816,7 +816,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     public CooCMatrix sub(Complex128 b) {
         // Overrides method from super class to emphasize it operates only on the non-zero values.
-        return new CooCMatrix(shape, RealComplexDenseOperations.sub(entries, b), rowIndices.clone(), colIndices.clone());
+        return new CooCMatrix(shape, RealFieldDenseOperations.sub(entries, b), rowIndices.clone(), colIndices.clone());
     }
 
 

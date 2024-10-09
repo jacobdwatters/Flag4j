@@ -33,12 +33,12 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.operations.dense.field_ops.DenseFieldOperations;
-import org.flag4j.operations.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
-import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
-import org.flag4j.operations.sparse.SparseUtils;
-import org.flag4j.operations.sparse.csr.real.*;
-import org.flag4j.operations.sparse.csr.real_complex.RealComplexCsrMatrixMultiplication;
+import org.flag4j.linalg.operations.dense.field_ops.DenseFieldOperations;
+import org.flag4j.linalg.operations.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
+import org.flag4j.linalg.operations.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
+import org.flag4j.linalg.operations.sparse.SparseUtils;
+import org.flag4j.linalg.operations.sparse.csr.real.*;
+import org.flag4j.linalg.operations.sparse.csr.real_complex.RealComplexCsrMatrixMultiplication;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -49,7 +49,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.flag4j.operations.sparse.SparseUtils.sortCsrMatrix;
+import static org.flag4j.linalg.operations.sparse.SparseUtils.sortCsrMatrix;
 
 
 /**
@@ -1276,7 +1276,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
     public CMatrix mult(CMatrix B) {
-        return RealComplexCsrDenseMatrixMultiplication.standard(this, B);
+        return (CMatrix) RealFieldDenseCsrMatMult.standard(this, B);
     }
 
 

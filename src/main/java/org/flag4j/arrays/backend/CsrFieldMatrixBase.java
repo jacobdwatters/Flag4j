@@ -28,7 +28,7 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.algebraic_structures.fields.RealFloat64;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CsrFieldMatrix;
-import org.flag4j.operations.sparse.csr.field_ops.*;
+import org.flag4j.linalg.operations.sparse.csr.field_ops.*;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -38,7 +38,7 @@ import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.flag4j.operations.sparse.SparseUtils.sortCsrMatrix;
+import static org.flag4j.linalg.operations.sparse.SparseUtils.sortCsrMatrix;
 
 
 /**

@@ -4,7 +4,7 @@ import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
-import org.flag4j.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseMatrixMultiplication;
+import org.flag4j.linalg.operations.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -129,7 +129,7 @@ class RealComplexCsrDenseMatMultTests {
                 {new Complex128("0.4169749764+0.0871179528i"), new Complex128("0.0521786624+0.3477623208i"), new Complex128("0.053803022+0.23998823960000001i"), new Complex128("0.5589166216+0.1457940536i"), new Complex128("0.01462546+0.18489070880000003i")}};
         exp = new CMatrix(expEntries);
 
-        Assertions.assertEquals(exp, RealComplexCsrDenseMatrixMultiplication.standardTranspose(A, B));
+        Assertions.assertEquals(exp, RealFieldDenseCsrMatMult.standardTranspose(A, B));
 
         // ------------------------ Sub-case 2  ------------------------
         aShape = new Shape(15, 15);
@@ -174,11 +174,11 @@ class RealComplexCsrDenseMatMultTests {
                 {new Complex128("0.9048315761+0.6947962087i"), new Complex128("0.1857741678+0.08094554540000001i")}};
         exp = new CMatrix(expEntries);
 
-        Assertions.assertEquals(exp, RealComplexCsrDenseMatrixMultiplication.standardTranspose(A, B));
+        Assertions.assertEquals(exp, RealFieldDenseCsrMatMult.standardTranspose(A, B));
 
         // ------------------------ Sub-case 3 ------------------------
         A = new CsrMatrix(24, 516);
         B = new CMatrix(15, 12).T();
-        assertThrows(IllegalArgumentException.class, ()->RealComplexCsrDenseMatrixMultiplication.standardTranspose(A, B));
+        assertThrows(IllegalArgumentException.class, ()->RealFieldDenseCsrMatMult.standardTranspose(A, B));
     }
 }

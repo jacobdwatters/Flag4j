@@ -26,10 +26,10 @@ package org.flag4j.arrays.backend;
 
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.operations.common.field_ops.AggregateField;
-import org.flag4j.operations.common.field_ops.CompareField;
-import org.flag4j.operations.dense.field_ops.DenseFieldElemMult;
-import org.flag4j.operations.dense.field_ops.DenseFieldOperations;
+import org.flag4j.linalg.operations.common.field_ops.AggregateField;
+import org.flag4j.linalg.operations.common.field_ops.CompareField;
+import org.flag4j.linalg.operations.dense.field_ops.DenseFieldElemMult;
+import org.flag4j.linalg.operations.dense.field_ops.DenseFieldOperations;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
