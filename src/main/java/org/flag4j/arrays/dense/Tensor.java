@@ -25,24 +25,11 @@
 package org.flag4j.arrays.dense;
 
 
-import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.DensePrimitiveDoubleTensorBase;
-import org.flag4j.arrays.backend.TensorOverSemiRing;
-import org.flag4j.arrays.sparse.CooCTensor;
+import org.flag4j.arrays.backend_new.primitive.AbstractDenseDoubleTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.TensorInvert;
-import org.flag4j.linalg.operations.common.complex.Complex128Operations;
-import org.flag4j.linalg.operations.common.field_ops.FieldOperations;
-import org.flag4j.linalg.operations.dense.field_ops.DenseFieldOperations;
 import org.flag4j.linalg.operations.dense.real.RealDenseEquals;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemDiv;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemMult;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseTensorOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -55,12 +42,12 @@ import java.util.List;
 /**
  * <p>A real dense tensor backed by a primitive double array.</p>
  *
- * <p>A tensor is a multi-dimensional array. If N indices are required to uniquely identify all elements of a tensor, then the
+ * <p>A tensor is a multidimensional array. If N indices are required to uniquely identify all elements of a tensor, then the
  * tensor is considered an N-dimensional tensor/array or a rank-N tensor.</p>
  *
  * <p>The {@link #entries} of a Tensor are mutable but the {@link #shape} is fixed.</p>
  */
-public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
+public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
 
     /**
      * Creates a zero tensor with the shape.
@@ -92,6 +79,37 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
      */
     public Tensor(Shape shape, double[] entries) {
         super(shape, entries);
+    }
+
+
+    /**
+     * Flattens tensor to single dimension while preserving order of entries.
+     *
+     * @return The flattened tensor.
+     *
+     * @see #flatten(int)
+     */
+    @Override
+    public Tensor flatten() {
+        return new Tensor(new Shape(shape.totalEntriesIntValueExact()), entries.clone());
+    }
+
+
+    /**
+     * Flattens a tensor along the specified axis.
+     *
+     * @param axis Axis along which to flatten tensor.
+     *
+     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     * @see #flatten()
+     */
+    @Override
+    public Tensor flatten(int axis) {
+        ValidateParameters.ensureValidAxes(shape, axis);
+        int[] dims = new int[rank];
+        Arrays.fill(dims, 1);
+        dims[axis] = shape.totalEntriesIntValueExact();
+        return new Tensor(new Shape(dims), entries.clone());
     }
 
 
@@ -141,26 +159,6 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
 
 
     /**
-     * Converts a matrix to an equivalent tensor.
-     *
-     * @param mat Matrix to convert to a tensor.
-     */
-    public Tensor(Matrix mat) {
-        super(mat.shape, mat.entries.clone());
-    }
-
-
-    /**
-     * Converts a matrix to an equivalent tensor.
-     *
-     * @param mat Matrix to convert to a tensor.
-     */
-    public Tensor(Vector mat) {
-        super(mat.shape, mat.entries.clone());
-    }
-
-
-    /**
      * Constructs a tensor of the same type as this tensor with the given the shape and entries.
      *
      * @param shape Shape of the tensor to construct.
@@ -173,6 +171,81 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
         return new Tensor(shape, entries);
     }
 
+
+    /**
+     * Converts this tensor to an equivalent vector. If this vector is not rank-1 it will first be flattened then converted to a
+     * vector.
+     * @return A vector with entries equivalent to this vector.
+     */
+    public Vector toVector() {
+        return new Vector(entries.clone());
+    }
+
+
+    /**
+     * Converts this tensor to an equivalent matrix. If this matrix is not rank-2 it will first be flattened to a row vector then
+     * converted to a matrix.
+     * @return A matrix with entries equivalent to this tensor.
+     */
+    public Matrix toMatrix() {
+        if(rank == 2) return new Matrix(shape, entries.clone());
+        else return new Matrix(new Shape(1, entries.length), entries.clone());
+    }
+
+
+    /**
+     * Converts this tensor to an equivalent matrix with the specified shape.
+     * @param shape New shape for the matrix. Must be rank-2 and broadcastable to {@code this.shape}.
+     * @return A matrix with the specified shape and entries equivalent to this tensor.
+     * @throws IllegalArgumentException If {@code shape} is not broadcastable to {@code this.shape}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code shape.getRank() != 2}.
+     */
+    public Matrix toMatrix(Shape shape) {
+        // Matrix constructor checks the rank of the shape and
+        // ensures that shape.totalEntriesIntValueExact() == entries.length.
+        return new Matrix(shape, entries.clone());
+    }
+
+
+    /**
+     * Converts this tensor to an equivalent sparse COO tensor.
+     * @return A sparse COO tensor that is equivalent to this dense tensor.
+     * @see #toCoo(double)
+     */
+    public CooTensor toCoo() {
+        return toCoo(0.9);
+    }
+
+
+    /**
+     * Converts this tensor to an equivalent sparse COO tensor.
+     * @param estimatedSparsity Estimated sparsity of the tensor. Must be between 0 and 1 inclusive. If this is an accurate estimation
+     * it <i>may</i> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
+     * over-estimate the sparsity. If speed is the concern it is better to under-estimate the sparsity.
+     * @return A sparse COO tensor that is equivalent to this dense tensor.
+     * @see #toCoo(double)
+     */
+    public CooTensor toCoo(double estimatedSparsity) {
+        ValidateParameters.ensureInRange(estimatedSparsity, 0.0, 1.0, "estimatedSparsity");
+        int estimatedSize = (int) (entries.length*(1.0-estimatedSparsity));
+        List<Double> cooEntries = new ArrayList<>(estimatedSize);
+        List<int[]> cooIndices = new ArrayList<>(estimatedSize);
+        final Double ZERO = Double.valueOf(0d);
+
+        final int rows = shape.get(0);
+        final int cols = shape.get(1);
+
+        for(int i=0, size=entries.length; i<size; i++) {
+            Double val = entries[i];
+
+            if(val.equals(ZERO)) {
+                cooEntries.add(val);
+                cooIndices.add(shape.getNdIndices(i));
+            }
+        }
+
+        return new CooTensor(shape, cooEntries, cooIndices);
+    }
 
     /**
      * Checks if an object is equal to this tensor object.
@@ -198,270 +271,6 @@ public class Tensor extends DensePrimitiveDoubleTensorBase<Tensor, CooTensor> {
         hash = 31*hash + Arrays.hashCode(entries);
 
         return hash;
-    }
-
-
-    /**
-     * <p>Computes the 'inverse' of this tensor. That is, computes the tensor {@code X=this.inv(numIndices)} such that
-     * {@link #tensorDot(TensorOverSemiRing, int)} this.tensorDot(X, numIndices)} is the 'identity' tensor for the tensor dot product
-     * operation.</p>
-     *
-     * <p>A tensor {@code I} is the identity for a tensor dot product if {@code this.tensorDot(I, numIndices).equals(this)}.</p>
-     *
-     * @param numIndices The number of first numIndices which are involved in the inverse sum.
-     * @return The 'inverse' of this tensor as defined in the above sense.
-     * @see #inv()
-     */
-    public Tensor inv(int numIndices) {
-        return TensorInvert.inv(this, numIndices);
-    }
-
-
-    /**
-     * <p>Computes the 'inverse' of this tensor. That is, computes the tensor {@code X=this.inv()} such that
-     * {@link #tensorDot(TensorOverSemiRing) this.tensorDot(X)} is the 'identity' tensor for the tensor dot product
-     * operation.</p>
-     *
-     * <p>A tensor {@code I} is the identity for a tensor dot product if {@code this.tensorDot(I).equals(this)}.</p>
-     *
-     * <p>Equivalent to {@link #inv(int) inv(2)}.</p>
-     *
-     * @param numIndices The number of first numIndices which are involved in the inverse sum.
-     * @return The 'inverse' of this tensor as defined in the above sense.
-     * @see #inv(int)
-     */
-    public Tensor inv() {
-        return inv(2);
-    }
-
-
-    /**
-     * Converts this dense tensor to an equivalent sparse COO tensor.
-     *
-     * @return A sparse tensor equivalent to this dense tensor.
-     */
-    @Override
-    public CooTensor toCoo() {
-        List<Double> SparseEntries = new ArrayList<>();
-        List<int[]> indices = new ArrayList<>();
-
-        int size = entries.length;
-        double value;
-
-        for(int i=0; i<size; i++) {
-            value = entries[i];
-
-            if(value != 0) {
-                SparseEntries.add(value);
-                indices.add(shape.getIndices(i));
-            }
-        }
-
-        return new CooTensor(shape, ArrayUtils.fromDoubleList(SparseEntries), indices.toArray(new int[0][]));
-    }
-
-
-    /**
-     * Converts this tensor to an equivalent vector. If this tensor is not rank 1, then it will be flattened.
-     * @return A vector equivalent of this tensor.
-     */
-    public Vector toVector() {
-        return new Vector(this.entries.clone());
-    }
-
-
-    /**
-     * Converts this tensor to a matrix with the specified shape.
-     * @param matShape Shape of the resulting matrix. Must be {@link ValidateParameters#ensureBroadcastable(Shape, Shape) broadcastable}
-     * with the shape of this tensor.
-     * @return A matrix of shape {@code matShape} with the values of this tensor.
-     * @throws org.flag4j.util.exceptions.LinearAlgebraException If {@code matShape} is not of rank 2.
-     */
-    public Matrix toMatrix(Shape matShape) {
-        ValidateParameters.ensureBroadcastable(shape, matShape);
-        ValidateParameters.ensureRank(matShape, 2);
-
-        return new Matrix(matShape, entries.clone());
-    }
-
-
-    /**
-     * Converts this tensor to an equivalent matrix.
-     * @return If this tensor is rank 2, then the equivalent matrix will be returned.
-     * If the tensor is rank 1, then a matrix with a single row will be returned. If the rank of this tensor is larger than 2, it will
-     * be flattened to a single row.
-     */
-    public Matrix toMatrix() {
-        Matrix mat;
-
-        if(getRank()==2) {
-            mat = new Matrix(shape, entries.clone());
-        } else {
-            mat = new Matrix(1, entries.length, entries.clone());
-        }
-
-        return mat;
-    }
-
-
-    /**
-     * Converts this tensor to an equivalent complex tensor.
-     * @return A complex tensor equivalent to this real tensor.
-     */
-    public CTensor toComplex() {
-        return new CTensor(shape, ArrayUtils.wrapAsComplex128(entries, null));
-    }
-
-
-    /**
-     * Sums this tensor with a dense complex tensor.
-     * @param b Dense complex tensor in sum.
-     * @return The element-wise sum of this tensor with {@code b}.
-     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
-     */
-    public CTensor add(CTensor b) {
-        return new CTensor(shape, RealFieldDenseOperations.add(b.entries, b.shape, entries, shape));
-    }
-
-
-    /**
-     * Sums this tensor with a real sparse tensor.
-     * @param b Real sparse tensor in sum.
-     * @return The element-wise sum of this tensor with {@code b}.
-     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
-     */
-    public Tensor add(CooTensor b) {
-        return RealDenseSparseTensorOperations.add(this, b);
-    }
-
-
-    /**
-     * Sums this tensor with a complex sparse tensor.
-     * @param b Complex sparse tensor in sum.
-     * @return The element-wise sum of this tensor with {@code b}.
-     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
-     */
-    public CTensor add(CooCTensor b) {
-        return RealComplexDenseSparseOperations.add(this, b);
-    }
-
-
-    /**
-     * Adds a complex-valued scalar to each entry of this tensor.
-     * @param b Scalar to add to each entry of this tensor.
-     * @return Tensor containing sum of all entries of this tensor with {@code b}.
-     */
-    public CTensor add(Complex128 b) {
-        return new CTensor(shape, DenseFieldOperations.add(entries, b));
-    }
-
-
-    /**
-     * Computes difference of this tensor with a dense complex tensor.
-     * @param b Dense complex tensor in difference.
-     * @return The element-wise difference of this tensor with {@code b}.
-     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
-     */
-    public CTensor sub(CTensor b) {
-        return new CTensor(shape, RealFieldDenseOperations.sub(entries, shape, b.entries, b.shape));
-    }
-
-
-    /**
-     * Computes difference of this tensor with a real sparse tensor.
-     * @param b Real sparse tensor in difference.
-     * @return The element-wise difference of this tensor with {@code b}.
-     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
-     */
-    public Tensor sub(CooTensor b) {
-        return RealDenseSparseTensorOperations.sub(this, b);
-    }
-
-
-    /**
-     * Computes difference of this tensor with a complex sparse tensor.
-     * @param b Complex sparse tensor in difference.
-     * @return The element-wise difference of this tensor with {@code b}.
-     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
-     */
-    public CTensor sub(CooCTensor b) {
-        return RealComplexDenseSparseOperations.sub(this, b);
-    }
-
-
-    /**
-     * Subtracts a complex-valued scalar from each entry of this tensor.
-     * @param b Scalar to subtract from each entry of this tensor.
-     * @return A tensor containing the difference of each entry in this tensor with {@code b}.
-     */
-    public CTensor sub(Complex128 b) {
-        return new CTensor(shape, RealFieldDenseOperations.sub(entries, b));
-    }
-
-
-    /**
-     * Computes the element-wise product of this tensor and a complex dense tensor.
-     * @param b Complex dense tensor in the element-wise product.
-     * @return The element-wise product of this tensor and {@code b}.
-     */
-    public CTensor elemMult(CTensor b) {
-        return new CTensor(
-                this.shape,
-                RealFieldDenseElemMult.dispatch(b.entries, b.shape, this.entries, this.shape)
-        );
-    }
-
-
-    /**
-     * Computes the element-wise product of this tensor and a real sparse tensor.
-     * @param b Real sparse tensor in the element-wise product.
-     * @return The element-wise product of this tensor and {@code b}.
-     */
-    public CooTensor elemMult(CooTensor b) {
-        return RealDenseSparseTensorOperations.elemMult(this, b);
-    }
-
-
-    /**
-     * Computes the element-wise product of this tensor and a complex sparse tensor.
-     * @param b Complex sparse tensor in the element-wise product.
-     * @return The element-wise product of this tensor and {@code b}.
-     */
-    public CooCTensor elemMult(CooCTensor b) {
-        return (CooCTensor) RealFieldDenseCooOperations.elemMult(this, b);
-    }
-
-
-    /**
-     * Computes the element-wise quotient of this tensor and a complex dense tensor.
-     * @param b Complex dense tensor in the element-wise quotient.
-     * @return The element-wise quotient of this tensor and {@code b}.
-     */
-    public CTensor elemDiv(CTensor b) {
-        return new CTensor(
-                shape,
-                RealFieldDenseElemDiv.dispatch(entries, shape, b.entries, b.shape)
-        );
-    }
-
-
-    /**
-     * Computes the scalar multiplication of this tensor and a complex-valued scalar.
-     * @param b The complex-valued scalar in the tensor-scalar product.
-     * @return The tensor-scalar product of this tensor and {@code b}.
-     */
-    public CTensor mult(Complex128 b) {
-        return new CTensor(shape, FieldOperations.scalMult(entries, b));
-    }
-
-
-    /**
-     * Computes the scalar division of this tensor and a complex-valued scalar.
-     * @param b The complex-valued scalar in the tensor-scalar quotient.
-     * @return The tensor scalar quotient of this tensor and {@code b}.
-     */
-    public CTensor div(Complex128 b) {
-        return new CTensor(shape, Complex128Operations.scalDiv(entries, b));
     }
 
 

@@ -37,7 +37,7 @@ public final class Complex128Properties {
 
     private Complex128Properties() {
         // Hide default constructor in utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

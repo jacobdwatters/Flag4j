@@ -31,7 +31,7 @@ import org.flag4j.util.ValidateParameters;
 /**
  * This class contains low-level implementations of setting operations for real dense tensors.
  */
-public class RealDenseSetOperations {
+public final class RealDenseSetOperations {
 
 
     /**
@@ -179,6 +179,6 @@ public class RealDenseSetOperations {
      * @param indices Indices of tensor value to be set.
      */
     public static void set(double[] src, Shape shape, double value, int... indices) {
-        src[shape.entriesIndex(indices)] = value;
+        src[shape.getFlatIndex(indices)] = value;
     }
 }

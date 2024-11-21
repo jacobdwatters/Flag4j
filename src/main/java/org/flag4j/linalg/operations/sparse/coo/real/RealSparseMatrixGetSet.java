@@ -28,7 +28,7 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.linalg.operations.sparse.coo.SparseElementSearch;
+import org.flag4j.linalg.operations.sparse.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
@@ -43,11 +43,11 @@ import java.util.stream.IntStream;
 /**
  * This class provides methods for getting and setting elements and slices from/to a real sparse matrix.
  */
-public class RealSparseMatrixGetSet {
+public final class RealSparseMatrixGetSet {
 
     private RealSparseMatrixGetSet() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

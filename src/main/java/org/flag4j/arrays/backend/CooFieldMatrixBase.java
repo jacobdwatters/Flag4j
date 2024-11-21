@@ -29,11 +29,9 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.algebraic_structures.fields.RealFloat64;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.FieldMatrix;
-import org.flag4j.arrays.sparse.CooFieldMatrix;
 import org.flag4j.arrays.sparse.CooFieldTensor;
-import org.flag4j.linalg.operations.common.field_ops.CompareField;
 import org.flag4j.linalg.operations.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.operations.sparse.coo.SparseDataWrapper;
+import org.flag4j.linalg.operations.sparse.coo.CooDataSorter;
 import org.flag4j.linalg.operations.sparse.coo.field_ops.*;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
@@ -83,7 +81,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V, W
         V extends CooFieldVectorBase<V, T, W, U, Y>,
         W extends DenseFieldVectorBase<W, U, V, Y>, Y extends Field<Y>>
         extends FieldTensorBase<T, U, Y>
-        implements CooMatrixMixin<T, U, V, W, Y> {
+        implements CooMatrixMixin<T, U, V, W, Field<Y>[], Y> {
 
     /**
      * Row indices for non-zero value of this sparse COO matrix.
@@ -398,7 +396,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V, W
      * @return The result of stacking this matrix on top of the matrix {@code b}.
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of columns.
-     * @see #stack(MatrixMixin, int) 
+     * @see #stack(MatrixMixinOld, int)
      * @see #augment(CooFieldMatrixBase) 
      */
     @Override
@@ -435,7 +433,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V, W
      * @return The result of stacking {@code b} to the right of this matrix.
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of rows.
-     * @see #stack(MatrixMixin, int) 
+     * @see #stack(MatrixMixinOld, int)
      * @see #stack(CooFieldMatrixBase) 
      */
     @Override
@@ -684,7 +682,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V, W
      */
     @Override
     public T set(Y value, int row, int col) {
-        ValidateParameters.ensureValidIndex(shape, row, col);
+        ValidateParameters.validateTensorIndex(shape, row, col);
         return (T) CooFieldMatrixGetSet.matrixSet(this, row, col, value);
     }
 
@@ -926,7 +924,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V, W
      */
     @Override
     public void sortIndices() {
-        SparseDataWrapper.wrap(entries, rowIndices, colIndices).sparseSort().unwrap(entries, rowIndices, colIndices);
+        CooDataSorter.wrap(entries, rowIndices, colIndices).sparseSort().unwrap(entries, rowIndices, colIndices);
     }
 
 
@@ -941,11 +939,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V, W
      */
     @Override
     public Y get(int... indices) {
-        ValidateParameters.ensureEquals(indices.length, 2);
-        ValidateParameters.ensureValidIndex(shape, indices[0], indices[1]);
-        ValidateParameters.ensureIndexInBounds(numRows, indices[0]);
-        ValidateParameters.ensureIndexInBounds(numCols, indices[1]);
-
+        ValidateParameters.validateTensorIndex(shape, indices);
         return CooFieldMatrixGetSet.matrixGet(this, indices[0], indices[1]);
     }
 
@@ -962,7 +956,7 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V, W
         int[] destIndices = new int[entries.length];
 
         for(int i = 0; i < entries.length; i++)
-            destIndices[i] = shape.entriesIndex(rowIndices[i], colIndices[i]);
+            destIndices[i] = shape.getFlatIndex(rowIndices[i], colIndices[i]);
 
         return makeLikeTensor(shape, entries.clone(), new int[entries.length], destIndices);
     }
@@ -1173,100 +1167,100 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V, W
     }
 
 
-    /**
-     * Finds the minimum non-zero value in this tensor.
-     *
-     * @return The minimum non-zero value in this tensor.
-     */
-    @Override
-    public double min() {
-        return super.min(); // Overrides method from super class to emphasize it operates only on the non-zero values.
-    }
-
-
-    /**
-     * Finds the maximum non-zero value in this tensor.
-     *
-     * @return The maximum non-zero value in this tensor.
-     */
-    @Override
-    public double max() {
-        return super.max(); // Overrides method from super class to emphasize it operates only on the non-zero values.
-    }
-
-
-    /**
-     * Finds the minimum non-zero value, in absolute value, in this tensor.
-     *
-     * @return The minimum non-zero value, in absolute value, in this tensor.
-     */
-    @Override
-    public double minAbs() {
-        return super.minAbs(); // Overrides method from super class to emphasize it operates only on the non-zero values.
-    }
-
-
-    /**
-     * Finds the maximum non-zero value, in absolute value, in this tensor.
-     *
-     * @return The maximum non-zero value, in absolute value, in this tensor.
-     */
-    @Override
-    public double maxAbs() {
-        return super.maxAbs(); // Overrides method from super class to emphasize it operates only on the non-zero values.
-    }
-
-
-    /**
-     * Finds the indices of the minimum non-zero value in this tensor.
-     *
-     * @return The indices of the minimum non-zero value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argmin() {
-        int idx = CompareField.argmin(entries);
-        return new int[]{rowIndices[idx], colIndices[idx]};
-    }
-
-
-    /**
-     * Finds the indices of the maximum non-zero value in this tensor.
-     *
-     * @return The indices of the maximum non-zero value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argmax() {
-        int idx = CompareField.argmax(entries);
-        return new int[]{rowIndices[idx], colIndices[idx]};
-    }
-
-
-    /**
-     * Finds the indices of the minimum non-zero absolute value in this tensor.
-     *
-     * @return The indices of the minimum non-zero absolute value in this tensor. If this value occurs multiple times, the indices of
-     * the first entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argminAbs() {
-        int idx = CompareField.argminAbs(entries);
-        return new int[]{rowIndices[idx], colIndices[idx]};
-    }
-
-
-    /**
-     * Finds the indices of the maximum non-zero absolute value in this tensor.
-     *
-     * @return The indices of the maximum non-zero absolute value in this tensor. If this value occurs multiple times, the indices of
-     * the first entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argmaxAbs() {
-        int idx = CompareField.argmaxAbs(entries);
-        return new int[]{rowIndices[idx], colIndices[idx]};
-    }
+//    /**
+//     * Finds the minimum non-zero value in this tensor.
+//     *
+//     * @return The minimum non-zero value in this tensor.
+//     */
+//    @Override
+//    public Y min() {
+//        return super.min(); // Overrides method from super class to emphasize it operates only on the non-zero values.
+//    }
+//
+//
+//    /**
+//     * Finds the maximum non-zero value in this tensor.
+//     *
+//     * @return The maximum non-zero value in this tensor.
+//     */
+//    @Override
+//    public Y max() {
+//        return super.max(); // Overrides method from super class to emphasize it operates only on the non-zero values.
+//    }
+//
+//
+//    /**
+//     * Finds the minimum non-zero value, in absolute value, in this tensor.
+//     *
+//     * @return The minimum non-zero value, in absolute value, in this tensor.
+//     */
+//    @Override
+//    public double minAbs() {
+//        return super.minAbs(); // Overrides method from super class to emphasize it operates only on the non-zero values.
+//    }
+//
+//
+//    /**
+//     * Finds the maximum non-zero value, in absolute value, in this tensor.
+//     *
+//     * @return The maximum non-zero value, in absolute value, in this tensor.
+//     */
+//    @Override
+//    public double maxAbs() {
+//        return super.maxAbs(); // Overrides method from super class to emphasize it operates only on the non-zero values.
+//    }
+//
+//
+//    /**
+//     * Finds the indices of the minimum non-zero value in this tensor.
+//     *
+//     * @return The indices of the minimum non-zero value in this tensor. If this value occurs multiple times, the indices of the first
+//     * entry (in row-major ordering) are returned.
+//     */
+//    @Override
+//    public int[] argmin() {
+//        int idx = CompareSemiring.argmin(entries);
+//        return new int[]{rowIndices[idx], colIndices[idx]};
+//    }
+//
+//
+//    /**
+//     * Finds the indices of the maximum non-zero value in this tensor.
+//     *
+//     * @return The indices of the maximum non-zero value in this tensor. If this value occurs multiple times, the indices of the first
+//     * entry (in row-major ordering) are returned.
+//     */
+//    @Override
+//    public int[] argmax() {
+//        int idx = CompareSemiring.argmax(entries);
+//        return new int[]{rowIndices[idx], colIndices[idx]};
+//    }
+//
+//
+//    /**
+//     * Finds the indices of the minimum non-zero absolute value in this tensor.
+//     *
+//     * @return The indices of the minimum non-zero absolute value in this tensor. If this value occurs multiple times, the indices of
+//     * the first entry (in row-major ordering) are returned.
+//     */
+//    @Override
+//    public int[] argminAbs() {
+//        int idx = CompareRing.argminAbs(entries);
+//        return new int[]{rowIndices[idx], colIndices[idx]};
+//    }
+//
+//
+//    /**
+//     * Finds the indices of the maximum non-zero absolute value in this tensor.
+//     *
+//     * @return The indices of the maximum non-zero absolute value in this tensor. If this value occurs multiple times, the indices of
+//     * the first entry (in row-major ordering) are returned.
+//     */
+//    @Override
+//    public int[] argmaxAbs() {
+//        int idx = CompareRing.argmaxAbs(entries);
+//        return new int[]{rowIndices[idx], colIndices[idx]};
+//    }
 
 
     /**
@@ -1453,12 +1447,12 @@ public abstract class CooFieldMatrixBase<T extends CooFieldMatrixBase<T, U, V, W
      * @return The element-wise absolute value of this matrix.
      */
     @Override
-    public CooFieldMatrix<RealFloat64> abs() {
+    public CooFieldMatrixBase abs() {
         RealFloat64[] abs = new RealFloat64[entries.length];
 
         for(int i=0, size=entries.length; i<size; i++)
             abs[i] = new RealFloat64(entries[i].abs());
 
-        return new CooFieldMatrix<RealFloat64>(shape, abs, rowIndices.clone(), colIndices.clone());
+        return null;
     }
 }

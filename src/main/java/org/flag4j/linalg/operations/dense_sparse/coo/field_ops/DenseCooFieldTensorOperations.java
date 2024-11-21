@@ -41,7 +41,7 @@ public final class DenseCooFieldTensorOperations {
 
     private DenseCooFieldTensorOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -58,8 +58,8 @@ public final class DenseCooFieldTensorOperations {
         DenseFieldTensorBase<?, ?, T> dest = src1.copy();
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            dest.entries[src2.shape.entriesIndex(src2.indices[i])] =
-                    dest.entries[src2.shape.entriesIndex(src2.indices[i])].add((T) src2.entries[i]);
+            dest.entries[src2.shape.getFlatIndex(src2.indices[i])] =
+                    dest.entries[src2.shape.getFlatIndex(src2.indices[i])].add((T) src2.entries[i]);
         }
 
         return dest;
@@ -78,8 +78,8 @@ public final class DenseCooFieldTensorOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            src1.entries[src2.shape.entriesIndex(src2.indices[i])] =
-                    src1.entries[src2.shape.entriesIndex(src2.indices[i])].add((T) src2.entries[i]);
+            src1.entries[src2.shape.getFlatIndex(src2.indices[i])] =
+                    src1.entries[src2.shape.getFlatIndex(src2.indices[i])].add((T) src2.entries[i]);
         }
     }
 
@@ -97,8 +97,8 @@ public final class DenseCooFieldTensorOperations {
         DenseFieldTensorBase<?, ?, T> dest = src1.copy();
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            dest.entries[src2.shape.entriesIndex(src2.indices[i])] =
-                    dest.entries[src2.shape.entriesIndex(src2.indices[i])].sub((T) src2.entries[i]);
+            dest.entries[src2.shape.getFlatIndex(src2.indices[i])] =
+                    dest.entries[src2.shape.getFlatIndex(src2.indices[i])].sub((T) src2.entries[i]);
         }
 
         return dest;
@@ -118,8 +118,8 @@ public final class DenseCooFieldTensorOperations {
         DenseFieldTensorBase<?, ?, T> dest = src2.mult(-1);
 
         for(int i=0, size=src1.nnz; i<size; i++) {
-            dest.entries[src1.shape.entriesIndex(src1.indices[i])] =
-                    dest.entries[src1.shape.entriesIndex(src1.indices[i])].add((T) src1.entries[i]);
+            dest.entries[src1.shape.getFlatIndex(src1.indices[i])] =
+                    dest.entries[src1.shape.getFlatIndex(src1.indices[i])].add((T) src1.entries[i]);
         }
 
         return dest;
@@ -136,8 +136,8 @@ public final class DenseCooFieldTensorOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            src1.entries[src2.shape.entriesIndex(src2.indices[i])] =
-                    src1.entries[src2.shape.entriesIndex(src2.indices[i])].sub((T) src2.entries[i]);
+            src1.entries[src2.shape.getFlatIndex(src2.indices[i])] =
+                    src1.entries[src2.shape.getFlatIndex(src2.indices[i])].sub((T) src2.entries[i]);
         }
     }
 
@@ -156,7 +156,7 @@ public final class DenseCooFieldTensorOperations {
         ArrayUtils.deepCopy(src2.indices, indices);
 
         for(int i=0, size=destEntries.length; i<size; i++) {
-            destEntries[i] = src1.entries[src2.shape.entriesIndex(src2.indices[i])].mult((T) src2.entries[i]);
+            destEntries[i] = src1.entries[src2.shape.getFlatIndex(src2.indices[i])].mult((T) src2.entries[i]);
         }
 
         return src2.makeLikeTensor(src2.shape, destEntries, indices);
@@ -176,8 +176,8 @@ public final class DenseCooFieldTensorOperations {
         DenseFieldTensorBase<?, ?, T> sum = src1.makeDenseTensor(src1.shape, sumEntries);
 
         for(int i=0, size=src1.nnz; i<size; i++) {
-            sum.entries[src1.shape.entriesIndex(src1.indices[i])] =
-                    sum.entries[src1.shape.entriesIndex(src1.indices[i])].add((T) src1.entries[i]);
+            sum.entries[src1.shape.getFlatIndex(src1.indices[i])] =
+                    sum.entries[src1.shape.getFlatIndex(src1.indices[i])].add((T) src1.entries[i]);
         }
 
         return sum;
@@ -197,7 +197,7 @@ public final class DenseCooFieldTensorOperations {
         DenseFieldTensorBase<?, ?, T> sum = src1.makeDenseTensor(src1.shape, sumEntries);
 
         for(int i=0, size=src1.nnz; i<size; i++) {
-            int idx = src1.shape.entriesIndex(src1.indices[i]);
+            int idx = src1.shape.getFlatIndex(src1.indices[i]);
             sum.entries[idx].add((T) src1.entries[i]);
         }
 
@@ -221,7 +221,7 @@ public final class DenseCooFieldTensorOperations {
         ArrayUtils.deepCopy(src1.indices, destIndices);
 
         for(int i=0, size=destEntries.length; i<size; i++) {
-            int index = src2.shape.entriesIndex(src1.indices[i]); // Get index of non-zero entry.
+            int index = src2.shape.getFlatIndex(src1.indices[i]); // Get index of non-zero entry.
             destEntries[i] = src1.entries[index].div((T) src2.entries[i]);
         }
 

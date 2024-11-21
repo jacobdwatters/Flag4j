@@ -28,9 +28,9 @@ package org.flag4j.linalg.operations.dense_sparse.csr.real_field_ops;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.CsrFieldMatrixBase;
-import org.flag4j.arrays.backend.DenseFieldMatrixBase;
-import org.flag4j.arrays.backend.DenseFieldVectorBase;
+import org.flag4j.arrays.backend_new.field.AbstractCsrFieldMatrix;
+import org.flag4j.arrays.backend_new.field.AbstractDenseFieldMatrix;
+import org.flag4j.arrays.backend_new.field.AbstractDenseFieldVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CsrMatrix;
@@ -47,7 +47,7 @@ public final class RealFieldDenseCsrMatMult {
 
     private RealFieldDenseCsrMatMult() {
         // Hide default constructor for utility method.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -61,8 +61,8 @@ public final class RealFieldDenseCsrMatMult {
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code src1} does not have the same number of columns as {@code src2} has
      * rows.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> standard(
-            CsrMatrix src1, DenseFieldMatrixBase<?, ?, ?, ?, T> src2) {
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> standard(
+            CsrMatrix src1, AbstractDenseFieldMatrix<?, ?, T> src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ValidateParameters.ensureMatMultShapes(src1.shape, src2.shape);
 
@@ -102,8 +102,8 @@ public final class RealFieldDenseCsrMatMult {
      * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} and {@code src2} do not have the same number of rows.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> standardTranspose(
-            CsrMatrix src1, DenseFieldMatrixBase<?, ?, ?, ?, T> src2) {
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> standardTranspose(
+            CsrMatrix src1, AbstractDenseFieldMatrix<?, ?, T> src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ValidateParameters.ensureEquals(src1.numCols, src2.numCols);
 
@@ -145,9 +145,9 @@ public final class RealFieldDenseCsrMatMult {
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code src1} does not have the same number of columns as {@code src2} has
      * rows.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> standard(
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> standard(
             Matrix src1, 
-            CsrFieldMatrixBase<?, ?, ?, ?, T> src2) {
+            AbstractCsrFieldMatrix<?, ?, ?, T> src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ValidateParameters.ensureMatMultShapes(src1.shape, src2.shape);
 
@@ -174,7 +174,7 @@ public final class RealFieldDenseCsrMatMult {
             }
         }
 
-        return src2.makeLikeDenseTensor(new Shape(rows1, cols2), destEntries);
+        return src2.makeLikeDenseTensor(new Shape(rows1, cols2), (T[]) destEntries);
     }
 
 
@@ -188,8 +188,8 @@ public final class RealFieldDenseCsrMatMult {
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code src1} does not have the same number of columns as {@code src2} has
      * rows.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> standard(
-            DenseFieldMatrixBase<?, ?, ?, ?, T> src1, CsrMatrix src2) {
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> standard(
+            AbstractDenseFieldMatrix<?, ?, T> src1, CsrMatrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ValidateParameters.ensureMatMultShapes(src1.shape, src2.shape);
 
@@ -228,8 +228,8 @@ public final class RealFieldDenseCsrMatMult {
      * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the length of
      * {@code src2}.
      */
-    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> standardVector(
-            CsrMatrix src1, DenseFieldVectorBase<?, ?, ?, T> src2) {
+    public static <T extends Field<T>> AbstractDenseFieldVector<?, ?, T> standardVector(
+            CsrMatrix src1, AbstractDenseFieldVector<?, ?, T> src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
         ValidateParameters.ensureEquals(src1.numCols, src2.size);
 
@@ -256,18 +256,18 @@ public final class RealFieldDenseCsrMatMult {
     /**
      * Computes the matrix multiplication between a complex sparse CSR matrix and a real dense matrix.
      * WARNING: If the first matrix is very large but not very sparse, this method may be slower than converting the
-     * first matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link Matrix#mult(DenseFieldMatrixBase<?, ?, ?, ?, T>)}.
+     * first matrix to a {@link CsrMatrix#toDense() dense} matrix and calling {@link Matrix#mult(AbstractDenseFieldMatrix<?, ?, T>)}.
      * @param src1 First matrix in the matrix multiplication.
      * @param src2 Second matrix in the matrix multiplication.
      * @return The result of the matrix multiplication between {@code src1} and {@code src2}.
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code src1} does not have the same number of columns as
      * {@code src2} has rows.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> standard(
-            CsrFieldMatrixBase<?, ?, ?, ?, T> src1, Matrix src2) {
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> standard(
+            AbstractCsrFieldMatrix<?, ?, ?, T> src1, Matrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ValidateParameters.ensureMatMultShapes(src1.shape, src2.shape);
-
+        
         Field<T>[] destEntries = new Field[src1.numRows*src2.numCols];
         Arrays.fill(destEntries, Complex128.ZERO);
         int rows1 = src1.numRows;
@@ -291,7 +291,7 @@ public final class RealFieldDenseCsrMatMult {
             }
         }
 
-        return src1.makeLikeDenseTensor(new Shape(src1.numRows, src2.numCols), destEntries);
+        return src1.makeLikeDenseTensor(new Shape(src1.numRows, src2.numCols), (T[]) destEntries);
     }
 
 
@@ -303,11 +303,11 @@ public final class RealFieldDenseCsrMatMult {
      * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the length of
      * {@code src2}.
      */
-    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> standardVector(
-            CsrFieldMatrixBase<?, ?, ?, ?, T> src1, Vector src2) {
+    public static <T extends Field<T>> AbstractDenseFieldVector<?, ?, T> standardVector(
+            AbstractCsrFieldMatrix<?, ?, ?, T> src1, Vector src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
         ValidateParameters.ensureEquals(src1.numCols, src2.size);
-
+        
         Field<T>[] destEntries = new Field[src1.numRows];
         Arrays.fill(destEntries, Complex128.ZERO);
         int rows1 = src1.numRows;
@@ -324,6 +324,6 @@ public final class RealFieldDenseCsrMatMult {
             }
         }
 
-        return src1.makeLikeDenseTensor(new Shape(1, src1.numRows), destEntries).toVector();
+        return src1.makeLikeDenseTensor(new Shape(1, src1.numRows), (T[]) destEntries).toVector();
     }
 }

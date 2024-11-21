@@ -24,7 +24,6 @@
 
 package org.flag4j.linalg.operations.dense.real;
 
-import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
@@ -32,7 +31,7 @@ import org.flag4j.util.ValidateParameters;
 /**
  * This class contains low level implementations of element-wise division algorithms for real dense tensors.
  */
-public class RealDenseElemDiv {
+public final class RealDenseElemDiv {
 
     /**
      * Minimum number of entries in each tensor to apply concurrent algorithm.
@@ -41,67 +40,72 @@ public class RealDenseElemDiv {
 
     private RealDenseElemDiv() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
     /**
      * Computes the element-wise division of two tensors.
      * @param src1 First tensor in element-wise division.
-     * @param shape1 Shape of the first tensor.
      * @param src2 Second tensor in element-wise division.
-     * @param shape2 Shape of the second tensor.
-     * @return The element-wise division of the two tensors.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     * @param dest Array to store the result in.
+     * @return If {@code dest != null} then a reference to {@code dest} is returned. Otherwise, a new array of appropriate size will
+     * be created and returned.
+     * @throws IllegalArgumentException If {@code src1.length != src2.length}.
+     * @throws ArrayIndexOutOfBoundsException If {@code dest != null && dest.length < src2.length}.
      */
-    public static double[] elemDiv(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ValidateParameters.ensureEqualShape(shape1, shape2);
-        double[] product = new double[src1.length];
+    public static double[] elemDiv(double[] src1, double[] src2, double[] dest) {
+        ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
+        if(dest == null) dest = new double[src1.length];
 
-        for(int i=0; i<product.length; i++) {
-            product[i] = src1[i]/src2[i];
-        }
+        for(int i=0, size= src1.length; i<size; i++)
+            dest[i] = src1[i]/src2[i];
 
-        return product;
+        return dest;
     }
 
 
     /**
      * Computes the element-wise division of two tensors using a concurrent algorithm.
      * @param src1 First tensor in element-wise division.
-     * @param shape1 Shape of the first tensor.
      * @param src2 Second tensor in element-wise division.
-     * @param shape2 Shape of the second tensor.
-     * @return The element-wise division of the two tensors.
+     * @param dest Array to store the result in.
+     * @return If {@code dest != null} then a reference to {@code dest} is returned. Otherwise, a new array of appropriate size will
+     * be created and returned.
+     * @throws IllegalArgumentException If {@code src1.length != src2.length}.
+     * @throws ArrayIndexOutOfBoundsException If {@code dest != null && dest.length < src2.length}.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static double[] elemDivConcurrent(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ValidateParameters.ensureEqualShape(shape1, shape2);
-        double[] product = new double[src1.length];
+    public static double[] elemDivConcurrent(double[] src1, double[] src2, double[] dest) {
+        ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
+        if(dest == null) dest = new double[src1.length];
 
-        ThreadManager.concurrentOperation(product.length, (startIdx, endIdx) -> {
-            for(int i=startIdx; i<endIdx; i++) {
-                product[i] = src1[i]/src2[i];
-            }
+        double[] finalDest = dest;
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++)
+                finalDest[i] = src1[i]/src2[i];
         });
 
-        return product;
+        return dest;
     }
 
 
     /**
      * Dynamically chooses and applies element-wise division algorithm to use based on the number of entries in the tensors.
+     *
      * @param src1 Entries of first tensor.
-     * @param shape1 Shape of first tensor.
      * @param src2 Entries of second tensor.
-     * @param shape2 Shape of second tensor.
-     * @return The element-wise division of the two tensors.
+     * @param dest Array to store the result in.
+     * @return If {@code dest != null} then a reference to {@code dest} is returned. Otherwise, a new array of appropriate size will
+     * be created and returned.
+     * @throws IllegalArgumentException If {@code src1.length != src2.length}.
+     * @throws ArrayIndexOutOfBoundsException If {@code dest != null && dest.length < src2.length}.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static double[] dispatch(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        if(src1.length < CONCURRENT_THRESHOLD) {
-            return elemDiv(src1, shape1, src2, shape2);
-        } else {
-            return elemDivConcurrent(src1, shape1, src2, shape2);
-        }
+    public static double[] dispatch(double[] src1, double[] src2, double[] dest) {
+        if(src1.length < CONCURRENT_THRESHOLD)
+            return elemDiv(src1, src2, dest);
+        else
+            return elemDivConcurrent(src1, src2, dest);
     }
 }

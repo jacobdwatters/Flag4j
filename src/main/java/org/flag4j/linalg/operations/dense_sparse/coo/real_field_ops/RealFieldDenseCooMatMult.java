@@ -41,7 +41,7 @@ public final class RealFieldDenseCooMatMult {
 
     private RealFieldDenseCooMatMult() {
         // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

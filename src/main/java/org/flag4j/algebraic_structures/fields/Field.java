@@ -25,12 +25,12 @@
 package org.flag4j.algebraic_structures.fields;
 
 import org.flag4j.algebraic_structures.rings.Ring;
-import org.flag4j.algebraic_structures.semi_rings.SemiRing;
+import org.flag4j.algebraic_structures.semirings.Semiring;
 
 /**
- * <p>This interface specifies a mathematical field. This interface not only meets the basic definition of a field,
- * but also specifies some additional operations which may not technically be part of the formal definition of a field but are common
- * and useful.</p>
+ * <p>This interface specifies a mathematical field. This interfaces also specifies some methods which are not technically defined
+ * for a general field but are common and useful. Such methods are specified as this interface is intend to be used
+ * to define numerical fields which behave similarly to the real or complex numbers.</p>
  *
  * <p>Field elements should be immutable.</p>
  *
@@ -52,16 +52,9 @@ import org.flag4j.algebraic_structures.semi_rings.SemiRing;
  *
  * @param <T> Type of the field element.
  * @see Ring
- * @see SemiRing
+ * @see Semiring
  */
 public interface Field<T extends Field<T>> extends Ring<T> {
-
-    /**
-     * Multiplies two elements of this field (associative and commutative).
-     * @param b Second field element in product.
-     * @return The product of this field element and {@code b}.
-     */
-    public T mult(T b);
 
 
     /**
@@ -69,7 +62,7 @@ public interface Field<T extends Field<T>> extends Ring<T> {
      * @param b Second field element in quotient.
      * @return The quotient of this field element and {@code b}.
      */
-    public T div(T b);
+    T div(T b);
 
 
     /**
@@ -77,7 +70,7 @@ public interface Field<T extends Field<T>> extends Ring<T> {
      * @param b Real element in sum.
      * @return The sum of this element and {@code b}.
      */
-    public T add(double b);
+    T add(double b);
 
 
     /**
@@ -85,7 +78,7 @@ public interface Field<T extends Field<T>> extends Ring<T> {
      * @param b Real value in difference.
      * @return The difference of this ring element and {@code b}.
      */
-    public T sub(double b);
+    T sub(double b);
 
 
     /**
@@ -93,7 +86,7 @@ public interface Field<T extends Field<T>> extends Ring<T> {
      * @param b Real number in product.
      * @return The product of this field element and {@code b}.
      */
-    public T mult(double b);
+    T mult(double b);
 
 
     /**
@@ -101,7 +94,7 @@ public interface Field<T extends Field<T>> extends Ring<T> {
      * @param b Real number in quotient.
      * @return The quotient of this field element and {@code b}.
      */
-    public T div(double b);
+    T div(double b);
 
 
     /**
@@ -112,16 +105,14 @@ public interface Field<T extends Field<T>> extends Ring<T> {
      *
      * @return The multiplicative inverse for this field element.
      */
-    public T multInv();
+    T multInv();
 
 
-    // TODO: It likely does not make sense to define sqrt for a field. Some finite fields (e.g. integers mod a prime) will not
-    //  have a square root for every element. This is even true for real numbers.
     /**
      * Computes the square root of this field element.
      * @return The square root of this field element.
      */
-    public T sqrt();
+    T sqrt();
 
 
     /**
@@ -137,26 +128,26 @@ public interface Field<T extends Field<T>> extends Ring<T> {
      *     than {@code b}.
      * </ul>
      */
-    public int compareTo(T b);
+    int compareTo(T b);
 
 
     /**
      * Checks if this field element is finite in magnitude.
      * @return True if this field element is finite in magnitude. False otherwise (i.e. infinite, NaN etc.).
      */
-    public boolean isFinite();
+    boolean isFinite();
 
 
     /**
      * Checks if this field element is infinite in magnitude.
      * @return True if this field element is infinite in magnitude. False otherwise (i.e. finite, NaN, etc.).
      */
-    public boolean isInfinite();
+    boolean isInfinite();
 
 
     /**
      * Checks if this field element is NaN in magnitude.
      * @return True if this field element is NaN in magnitude. False otherwise (i.e. finite, NaN, etc.).
      */
-    public boolean isNaN();
+    boolean isNaN();
 }

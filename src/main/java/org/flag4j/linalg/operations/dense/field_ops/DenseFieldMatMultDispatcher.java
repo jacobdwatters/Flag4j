@@ -40,7 +40,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Singleton class which stores a map of all viable dense {@link Field}
+ * Utility class which stores a map of all viable dense {@link Field}
  * matrix multiply algorithms and uses that map to dispatch a dense {@link Field} matrix
  * multiply problem to the appropriate algorithm.
  */

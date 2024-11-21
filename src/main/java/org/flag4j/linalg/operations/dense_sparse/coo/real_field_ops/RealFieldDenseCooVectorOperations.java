@@ -27,11 +27,11 @@ package org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.CooFieldVectorBase;
 import org.flag4j.arrays.backend.DenseFieldVectorBase;
+import org.flag4j.arrays.backend_new.field.AbstractCooFieldVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.linalg.operations.common.field_ops.FieldOperations;
+import org.flag4j.linalg.operations.common.field_ops.FieldOps;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
@@ -45,7 +45,7 @@ public final class RealFieldDenseCooVectorOperations {
 
     private RealFieldDenseCooVectorOperations() {
         // Hide default constructor in utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -239,7 +239,7 @@ public final class RealFieldDenseCooVectorOperations {
      */
     public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> sub(CooVector src1, DenseFieldVectorBase<?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        DenseFieldVectorBase<?, ?, ?, T> dest = src2.makeLikeTensor(FieldOperations.scalMult(src2.entries, -1));
+        DenseFieldVectorBase<?, ?, ?, T> dest = src2.makeLikeTensor(FieldOps.scalMult(src2.entries, -1, null));
 
         for(int i=0; i<src1.nnz; i++) {
             int idx = src1.indices[i];
@@ -257,15 +257,15 @@ public final class RealFieldDenseCooVectorOperations {
      * @return The result of the element-wise multiplication.
      * @throws IllegalArgumentException If the two vectors are not the same size.
      */
-    public static <T extends Field<T>> CooFieldVectorBase<?, ?, ?, ?, T> elemMult(
-            Vector src1, CooFieldVectorBase<?, ?, ?, ?, T> src2) {
+    public static <T extends Field<T>> AbstractCooFieldVector<?, ?, ?, ?, T> elemMult(
+            Vector src1, AbstractCooFieldVector<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         Field<T>[] entries = new Field[src2.entries.length];
 
         for(int i=0, size=src2.nnz; i<size; i++)
             entries[i] = src2.entries[i].mult(src1.entries[src2.indices[i]]);
 
-        return src2.makeLikeTensor(src1.size, entries, src2.indices.clone());
+        return src2.makeLikeTensor(src1.shape, entries, src2.indices.clone());
     }
 
 
@@ -328,13 +328,14 @@ public final class RealFieldDenseCooVectorOperations {
      * @param src2 Second vector in the element-wise division.
      * @return The result of the element-wise vector division.
      */
-    public static <T extends Field<T>> CooFieldVectorBase<?, ?, ?, ?, T> elemDiv(CooFieldVectorBase<?, ?, ?, ?, T> src1, Vector src2) {
+    public static <T extends Field<T>> AbstractCooFieldVector<?, ?, ?, ?, T> elemDiv(
+            AbstractCooFieldVector<?, ?, ?, ?, T> src1, Vector src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         Field<T>[] dest = new Field[src1.entries.length];
 
         for(int i=0, size=src1.entries.length; i<size; i++)
             dest[i] = src1.entries[i].div(src2.entries[src1.indices[i]]);
 
-        return src1.makeLikeTensor(src1.size, dest, src1.indices.clone());
+        return src1.makeLikeTensor(src1.shape, dest, src1.indices.clone());
     }
 }

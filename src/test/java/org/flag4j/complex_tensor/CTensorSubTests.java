@@ -97,9 +97,9 @@ class CTensorSubTests {
         B = new CooTensor(bShape, bEntries, sparseIndices);
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expShape = new Shape(2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])] = expEntries[expShape.entriesIndex(sparseIndices[0])].sub(bEntries[0]);
-        expEntries[expShape.entriesIndex(sparseIndices[1])] = expEntries[expShape.entriesIndex(sparseIndices[1])].sub(bEntries[1]);
-        expEntries[expShape.entriesIndex(sparseIndices[2])] = expEntries[expShape.entriesIndex(sparseIndices[2])].sub(bEntries[2]);
+        expEntries[expShape.getFlatIndex(sparseIndices[0])] = expEntries[expShape.getFlatIndex(sparseIndices[0])].sub(bEntries[0]);
+        expEntries[expShape.getFlatIndex(sparseIndices[1])] = expEntries[expShape.getFlatIndex(sparseIndices[1])].sub(bEntries[1]);
+        expEntries[expShape.getFlatIndex(sparseIndices[2])] = expEntries[expShape.getFlatIndex(sparseIndices[2])].sub(bEntries[2]);
         exp = new CTensor(expShape, expEntries);
 
         assertEquals(exp, A.sub(B));
@@ -175,8 +175,8 @@ class CTensorSubTests {
         B = new CooCTensor(bShape, bEntries, sparseIndices);
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expShape = new Shape( 2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])] = expEntries[expShape.entriesIndex(sparseIndices[0])].sub(bEntries[0]);
-        expEntries[expShape.entriesIndex(sparseIndices[1])] = expEntries[expShape.entriesIndex(sparseIndices[1])].sub(bEntries[1]);
+        expEntries[expShape.getFlatIndex(sparseIndices[0])] = expEntries[expShape.getFlatIndex(sparseIndices[0])].sub(bEntries[0]);
+        expEntries[expShape.getFlatIndex(sparseIndices[1])] = expEntries[expShape.getFlatIndex(sparseIndices[1])].sub(bEntries[1]);
         exp = new CTensor(expShape, expEntries);
 
         assertEquals(exp, A.sub(B));

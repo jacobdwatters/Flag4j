@@ -99,9 +99,9 @@ class CTensorAddTests {
         B = new CooTensor(bShape, bEntries, sparseIndices);
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expShape = new Shape(2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])] = expEntries[expShape.entriesIndex(sparseIndices[0])].add(bEntries[0]);
-        expEntries[expShape.entriesIndex(sparseIndices[1])] = expEntries[expShape.entriesIndex(sparseIndices[1])].add(bEntries[1]);
-        expEntries[expShape.entriesIndex(sparseIndices[2])] = expEntries[expShape.entriesIndex(sparseIndices[2])].add(bEntries[2]);
+        expEntries[expShape.getFlatIndex(sparseIndices[0])] = expEntries[expShape.getFlatIndex(sparseIndices[0])].add(bEntries[0]);
+        expEntries[expShape.getFlatIndex(sparseIndices[1])] = expEntries[expShape.getFlatIndex(sparseIndices[1])].add(bEntries[1]);
+        expEntries[expShape.getFlatIndex(sparseIndices[2])] = expEntries[expShape.getFlatIndex(sparseIndices[2])].add(bEntries[2]);
         exp = new CTensor(expShape, expEntries);
 
         assertEquals(exp, A.add(B));
@@ -177,8 +177,8 @@ class CTensorAddTests {
         B = new CooCTensor(bShape, bEntries, sparseIndices);
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expShape = new Shape(2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])] = expEntries[expShape.entriesIndex(sparseIndices[0])].add(bEntries[0]);
-        expEntries[expShape.entriesIndex(sparseIndices[1])] = expEntries[expShape.entriesIndex(sparseIndices[1])].add(bEntries[1]);
+        expEntries[expShape.getFlatIndex(sparseIndices[0])] = expEntries[expShape.getFlatIndex(sparseIndices[0])].add(bEntries[0]);
+        expEntries[expShape.getFlatIndex(sparseIndices[1])] = expEntries[expShape.getFlatIndex(sparseIndices[1])].add(bEntries[1]);
         exp = new CTensor(expShape, expEntries);
 
         assertEquals(exp, A.add(B));
@@ -302,9 +302,9 @@ class CTensorAddTests {
         B = new CooTensor(bShape, bEntries, sparseIndices);
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expShape = new Shape(2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])] = expEntries[expShape.entriesIndex(sparseIndices[0])].add(bEntries[0]);
-        expEntries[expShape.entriesIndex(sparseIndices[1])] = expEntries[expShape.entriesIndex(sparseIndices[1])].add(bEntries[1]);
-        expEntries[expShape.entriesIndex(sparseIndices[2])] = expEntries[expShape.entriesIndex(sparseIndices[2])].add(bEntries[2]);
+        expEntries[expShape.getFlatIndex(sparseIndices[0])] = expEntries[expShape.getFlatIndex(sparseIndices[0])].add(bEntries[0]);
+        expEntries[expShape.getFlatIndex(sparseIndices[1])] = expEntries[expShape.getFlatIndex(sparseIndices[1])].add(bEntries[1]);
+        expEntries[expShape.getFlatIndex(sparseIndices[2])] = expEntries[expShape.getFlatIndex(sparseIndices[2])].add(bEntries[2]);
         exp = new CTensor(expShape, expEntries);
 
         RealFieldDenseCooOperations.addEq(A, B);
@@ -416,9 +416,9 @@ class CTensorAddTests {
         B = new CooCTensor(bShape, bEntries, sparseIndices);
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expShape = new Shape(2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])] = expEntries[expShape.entriesIndex(sparseIndices[0])].add(bEntries[0]);
-        expEntries[expShape.entriesIndex(sparseIndices[1])] = expEntries[expShape.entriesIndex(sparseIndices[1])].add(bEntries[1]);
-        expEntries[expShape.entriesIndex(sparseIndices[2])] = expEntries[expShape.entriesIndex(sparseIndices[2])].add(bEntries[2]);
+        expEntries[expShape.getFlatIndex(sparseIndices[0])] = expEntries[expShape.getFlatIndex(sparseIndices[0])].add(bEntries[0]);
+        expEntries[expShape.getFlatIndex(sparseIndices[1])] = expEntries[expShape.getFlatIndex(sparseIndices[1])].add(bEntries[1]);
+        expEntries[expShape.getFlatIndex(sparseIndices[2])] = expEntries[expShape.getFlatIndex(sparseIndices[2])].add(bEntries[2]);
         exp = new CTensor(expShape, expEntries);
 
         DenseCooFieldTensorOperations.addEq(A, B);

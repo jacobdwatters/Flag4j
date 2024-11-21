@@ -42,7 +42,7 @@ public final class CooFieldTensorDot {
 
     private CooFieldTensorDot() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -130,7 +130,6 @@ public final class CooFieldTensorDot {
                 bt.entries, btMatIndices[0], btMatIndices[1], bt.shape
         );
 
-        // TODO: Should allow for zero dim shape indicating a scalar. Then only the else block would be needed.
         Shape productShape = new Shape(ArrayUtils.join(src1Dims, src2Dims));
 
         return new FieldTensor<V>(productShape, (V[]) productEntries);

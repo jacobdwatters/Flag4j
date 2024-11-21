@@ -39,11 +39,11 @@ import java.util.concurrent.ConcurrentMap;
  * This class contains low level implementations of matrix multiplication for real sparse matrices.
  * <b>WARNING:</b> This class does not provide sanity checks.
  */
-public class RealSparseMatrixMultiplication {
+public final class RealSparseMatrixMultiplication {
 
     private RealSparseMatrixMultiplication() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

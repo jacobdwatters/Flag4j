@@ -31,7 +31,7 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.linalg.Eigen;
 import org.flag4j.linalg.decompositions.hess.ComplexHess;
-import org.flag4j.linalg.operations.common.field_ops.CompareField;
+import org.flag4j.linalg.operations.common.ring_ops.CompareRing;
 import org.flag4j.linalg.transformations.Givens;
 import org.flag4j.linalg.transformations.Householder;
 import org.flag4j.rng.RandomComplex;
@@ -344,7 +344,7 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
         // Scale values to improve stability and help avoid possible over(under)flow issues.
         temp[0] = a11; temp[1] = a21; temp[2] = a12; temp[3] = a22; temp[4] = a32;
         temp[5] = x11; temp[6] = x22; temp[7] = x12; temp[8] = x21;
-        double maxAbs = CompareField.maxAbs(temp);
+        double maxAbs = CompareRing.maxAbs(temp);
 
         a11 = a11.div(maxAbs); a12 = a12.div(maxAbs); a21 = a21.div(maxAbs); a22 = a22.div(maxAbs); a32 = a32.div(maxAbs);
         x11 = x11.div(maxAbs); x12 = x12.div(maxAbs); x21 = x21.div(maxAbs); x22 = x22.div(maxAbs);

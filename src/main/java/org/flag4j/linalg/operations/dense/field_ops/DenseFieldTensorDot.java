@@ -107,9 +107,8 @@ public final class DenseFieldTensorDot {
         int[] src1NewAxes = ArrayUtils.join(notin, src1Axes);
 
         n2 = 1;
-        for(int axis : src1Axes) {
+        for(int axis : src1Axes)
             n2 *= src1.shape.get(axis);
-        }
 
         n1 = 1;
         int[] src1Dims = new int[notin.length];
@@ -128,9 +127,8 @@ public final class DenseFieldTensorDot {
         int[] src2NewAxes = ArrayUtils.join(src2Axes, notin);
 
         n2 = 1;
-        for(int axis : src2Axes) {
+        for(int axis : src2Axes)
             n2 *= src2.shape.get(axis);
-        }
 
         n1 = 1;
         pos = 0;

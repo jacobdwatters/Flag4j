@@ -26,9 +26,8 @@ package org.flag4j.linalg;
 
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
+import org.flag4j.arrays.backend.DoubleTensorBase;
 import org.flag4j.arrays.backend.TensorOverSemiRing;
-import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Tensor;
@@ -43,7 +42,7 @@ public final class TensorInvert {
 
     private TensorInvert() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -85,8 +84,8 @@ public final class TensorInvert {
      * @return The 'inverse' of this tensor as defined in the above sense.
      * @throws IllegalArgumentException If {@code numIndices} is not positive.
      */
-    public static <T extends PrimitiveDoubleTensorBase<T, T>> T inv(PrimitiveDoubleTensorBase<T, T> src,
-                                                                    int numIndices) {
+    public static <T extends DoubleTensorBase<T, T>> T inv(DoubleTensorBase<T, T> src,
+                                                           int numIndices) {
         ValidateParameters.ensurePositive(numIndices);
 
         Shape originalShape = src.shape;

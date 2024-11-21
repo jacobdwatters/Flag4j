@@ -26,21 +26,19 @@ package org.flag4j.arrays.dense;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.DensePrimitiveDoubleTensorBase;
-import org.flag4j.arrays.backend.DenseVectorMixin;
+import org.flag4j.arrays.backend_new.VectorMixin;
+import org.flag4j.arrays.backend_new.primitive.AbstractDenseDoubleTensor;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.linalg.operations.common.complex.Complex128Operations;
-import org.flag4j.linalg.operations.common.field_ops.FieldOperations;
-import org.flag4j.linalg.operations.dense.real.RealDenseTensorDot;
+import org.flag4j.linalg.operations.common.complex.Complex128Ops;
+import org.flag4j.linalg.operations.common.field_ops.FieldOps;
 import org.flag4j.linalg.operations.dense.real.RealDenseVectorOperations;
 import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemDiv;
 import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemMult;
 import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOperations;
 import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
@@ -59,9 +57,8 @@ import java.util.List;
  *
  * <p>Vectors have mutable entries but are fixed in size.</p>
  */
-public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
-        implements DenseVectorMixin<Vector, CooVector, Matrix, Double> {
-    // TODO: Add equals(), hashcode(), and toString() methods for all tensor objects.
+public class Vector extends AbstractDenseDoubleTensor<Vector>
+        implements VectorMixin<Vector, Matrix, Matrix, Double> {
 
     /**
      * The size of this vector. That is, the number of entries in this vector.
@@ -166,91 +163,6 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
 
 
     /**
-     * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
-     * computes the sum of products between the two tensors along the specified set of axes.
-     *
-     * @param src2 TensorOld to contract with this tensor.
-     * @param aAxes Axes along which to compute products for this tensor.
-     * @param bAxes Axes along which to compute products for {@code src2} tensor.
-     *
-     * @return The tensor dot product over the specified axes.
-     *
-     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes pairwise in
-     *                                  {@code aAxes} and {@code bAxes}.
-     * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
-     *                                  are out of bounds for the corresponding tensor.
-     */
-    @Override
-    public Vector tensorDot(Vector src2, int[] aAxes, int[] bAxes) {
-        return RealDenseTensorDot.tensorDot(this, src2, aAxes, bAxes);
-    }
-
-
-    /**
-     * Computes the element-wise conjugation of this tensor.
-     *
-     * @return The element-wise conjugation of this tensor.
-     */
-    @Override
-    public Vector conj() {
-        return copy();
-    }
-
-
-    /**
-     * Computes the conjugate transpose of a tensor by exchanging the first and last axes of this tensor and conjugating the
-     * exchanged values.
-     *
-     * @return The conjugate transpose of this tensor.
-     *
-     * @see #H(int, int)
-     * @see #H(int...)
-     */
-    @Override
-    public Vector H() {
-        return T();
-    }
-
-
-    /**
-     * Computes the conjugate transpose of a tensor by conjugating and exchanging {@code axis1} and {@code axis2}.
-     *
-     * @param axis1 First axis to exchange and conjugate.
-     * @param axis2 Second axis to exchange and conjugate.
-     *
-     * @return The conjugate transpose of this tensor according to the specified axes.
-     *
-     * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
-     * @see #H()
-     * @see #H(int...)
-     */
-    @Override
-    public Vector H(int axis1, int axis2) {
-        return T(axis1, axis2);
-    }
-
-
-    /**
-     * Computes the conjugate transpose of this tensor. That is, conjugates and permutes the axes of this tensor so that it matches
-     * the permutation specified by {@code axes}.
-     *
-     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
-     * {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
-     *
-     * @return The conjugate transpose of this tensor with its axes permuted by the {@code axes} array.
-     *
-     * @throws IndexOutOfBoundsException If any element of {@code axes} is out of bounds for the rank of this tensor.
-     * @throws IllegalArgumentException  If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
-     * @see #H(int, int)
-     * @see #H()
-     */
-    @Override
-    public Vector H(int... axes) {
-        return T(axes);
-    }
-
-
-    /**
      * Constructs a tensor of the same type as this tensor with the given the shape and entries.
      *
      * @param shape Shape of the tensor to construct.
@@ -261,6 +173,34 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
     @Override
     public Vector makeLikeTensor(Shape shape, double[] entries) {
         return new Vector(shape, entries);
+    }
+
+
+    /**
+     * Flattens tensor to single dimension while preserving order of entries.
+     *
+     * @return The flattened tensor.
+     *
+     * @see #flatten(int)
+     */
+    @Override
+    public Vector flatten() {
+        return copy();
+    }
+
+
+    /**
+     * Flattens a tensor along the specified axis.
+     *
+     * @param axis Axis along which to flatten tensor.
+     *
+     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     * @see #flatten()
+     */
+    @Override
+    public Vector flatten(int axis) {
+        ValidateParameters.ensureValidAxes(shape, axis);
+        return copy();
     }
 
 
@@ -458,7 +398,6 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      *
      * @return The Euclidean norm of this vector.
      */
-    @Override
     public double norm() {
         return VectorNorms.norm(entries);
     }
@@ -471,7 +410,6 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      *
      * @return The Euclidean norm of this vector.
      */
-    @Override
     public double norm(int p) {
         return VectorNorms.norm(entries, p);
     }
@@ -483,7 +421,6 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      * @return A unit vector with the same direction as this vector. If this vector is zeros, then an equivalently sized
      * zero vector will be returned.
      */
-    @Override
     public Vector normalize() {
         double norm = VectorNorms.norm(this);
         return norm==0 ? new Vector(size) : (Vector) this.div(norm);
@@ -499,7 +436,6 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      *
      * @throws IllegalArgumentException If either this vector or {@code b} do not have exactly 3 entries.
      */
-    @Override
     public Vector cross(Vector b) {
         ValidateParameters.ensureEquals(3, b.size, this.size);
         double[] entries = new double[3];
@@ -521,7 +457,6 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      *
      * @see #isPerp(Vector)
      */
-    @Override
     public boolean isParallel(Vector b) {
         if(this.size!=b.size) {
             return false;
@@ -561,7 +496,6 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      *
      * @see #isParallel(Vector)
      */
-    @Override
     public boolean isPerp(Vector b) {
         boolean result;
 
@@ -628,7 +562,6 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      *
      * @return A sparse COO tensor equivalent to this dense tensor.
      */
-    @Override
     public CooVector toCoo() {
         // Estimate sparsity.
         List<Double> nonZeroEntries = new ArrayList<>((int) (entries.length*0.5));
@@ -793,7 +726,8 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      * @return The sum of this vector and {@code b}.
      */
     public CVector add(CooCVector b) {
-        return RealComplexDenseSparseVectorOperations.add(this, b);
+//        return RealComplexDenseSparseVectorOperations.add(this, b);
+        return null;
     }
 
 
@@ -838,7 +772,8 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      * @return The difference of this vector and {@code b}.
      */
     public CVector sub(CooCVector b) {
-        return RealComplexDenseSparseVectorOperations.sub(this, b);
+//        return RealComplexDenseSparseVectorOperations.sub(this, b);
+        return null;
     }
 
 
@@ -864,7 +799,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      * @return The scalar product of this vector with {@code b}.
      */
     public CVector mult(Complex128 b) {
-        return new CVector(FieldOperations.scalMult(entries, b));
+        return new CVector(FieldOps.scalMult(entries, b, null));
     }
 
 
@@ -874,7 +809,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      * @return The scalar quotient of this vector with {@code b}.
      */
     public CVector div(Complex128 b) {
-        return new CVector(Complex128Operations.scalDiv(entries, b));
+        return new CVector(Complex128Ops.scalDiv(entries, b));
     }
 
 
@@ -914,7 +849,7 @@ public class Vector extends DensePrimitiveDoubleTensorBase<Vector, CooVector>
      * @return The element-wise quotient of this vector and {@code b}.
      */
     public CVector div(CVector b) {
-        return new CVector(RealFieldDenseElemDiv.dispatch(this.entries, this.shape, b.entries, b.shape));
+        return new CVector(RealFieldDenseElemDiv.dispatch(this.shape, this.entries, b.shape, b.entries));
     }
 
 

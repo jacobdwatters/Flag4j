@@ -50,14 +50,67 @@ public final class RealCsrOperations {
 
     private RealCsrOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
     /**
-     * Applies an element-wise binary operation to two {@link CsrMatrix CSR Matrices}. <br><br>
+     * Computes the element-wise multiplication between two real CSR matrices.
+     * @param src1 First CSR matrix in the element-wise product.
+     * @param src2 Second CSR matrix in the element-wise product.
+     * @return The element-wise product of {@code src1} and {@code src2}.
+     */
+    public static CsrMatrix elemMult(CsrMatrix src1, CsrMatrix src2) {
+        int numRows = src1.numRows;
+        int[] rowPointers = new int[numRows + 1];
+        List<Integer> colIndices = new ArrayList<>();
+        List<Double> entries = new ArrayList<>();
+
+        rowPointers[0] = 0; // Start of the first row.
+
+        for (int i = 0; i < numRows; i++) {
+            int start1 = src1.rowPointers[i];
+            int end1 = src1.rowPointers[i + 1];
+            int start2 = src2.rowPointers[i];
+            int end2 = src2.rowPointers[i + 1];
+
+            while (start1 < end1 && start2 < end2) {
+                int col1 = src1.colIndices[start1];
+                int col2 = src2.colIndices[start2];
+
+                if (col1 == col2) {
+                    double prod = src1.entries[start1] * src2.entries[start2];
+
+                    if (prod != 0.0) {
+                        colIndices.add(col1);
+                        entries.add(prod);
+                    }
+
+                    start1++;
+                    start2++;
+                } else if (col1 < col2) {
+                    start1++;
+                } else {
+                    start2++;
+                }
+            }
+
+            // Update the row pointer for the next row.
+            rowPointers[i + 1] = entries.size();
+        }
+
+        // Convert lists to arrays.
+        int[] prodColIndices = ArrayUtils.fromIntegerList(colIndices);
+        double[] prodEntries = ArrayUtils.fromDoubleList(entries);
+
+        return new CsrMatrix(src1.shape, prodEntries, rowPointers, prodColIndices);
+    }
+
+
+    /**
+     * <p>Applies an element-wise binary operation to two {@link CsrMatrix CSR Matrices}.
      *
-     * Note, this methods efficiency relies heavily on the assumption that both operand matrices are very large and very
+     * <p>Note, this methods efficiency relies heavily on the assumption that both operand matrices are very large and very
      * sparse. If the two matrices are not large and very sparse, this method will likely be
      * significantly slower than simply converting the matrices to {@link Matrix dense matrices} and using a dense
      * matrix addition algorithm.

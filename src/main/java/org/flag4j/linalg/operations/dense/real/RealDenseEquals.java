@@ -35,11 +35,11 @@ import java.util.Arrays;
 /**
  * This class provides methods for checking the equality of real dense tensors.
  */
-public class RealDenseEquals {
+public final class RealDenseEquals {
 
     private RealDenseEquals() {
         // Hide constructor.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

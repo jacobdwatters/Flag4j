@@ -30,11 +30,11 @@ package org.flag4j.arrays.backend;
  * @param <T> Type of this dense vector.
  * @param <U> Type of equivalent sparse vector.
  * @param <V> Type of matrix equivalent to {@code T}.
- * @param <W> Type (or wrapper of) an individual element in this vector.
+ * @param <Y> Type (or wrapper of) an individual element in this vector.
  */
-public interface DenseVectorMixin<T extends DenseVectorMixin<T, U, V, W>, U extends SparseVectorMixin<U, T, ?, V, W>,
-        V extends DenseMatrixMixin<V, ?, T, W>, W>
-        extends VectorMixin<T, V, V, W>, DenseTensorMixin<T, U> {
+public interface DenseVectorMixin<T extends DenseVectorMixin<T, U, V, W, Y>, U extends SparseVectorMixin<U, T, ?, V, W, Y>,
+        V extends DenseMatrixMixinOld<V, ?, T, W, Y>, W, Y>
+        extends VectorMixinOld<T, V, V, W, Y>, DenseTensorMixin<T, U> {
 
 
     /**

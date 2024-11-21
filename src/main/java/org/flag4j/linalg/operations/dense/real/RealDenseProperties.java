@@ -31,30 +31,11 @@ import org.flag4j.util.ErrorMessages;
 /**
  * This class contains low-level implementations for operations which check if a tensor satisfies some property.
  */
-public class RealDenseProperties {
+public final class RealDenseProperties {
 
     private RealDenseProperties() {
         // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
-    }
-
-
-    /**
-     * Checks if this tensor only contains ones.
-     * @param src Elements of the tensor.
-     * @return True if this tensor only contains ones. Otherwise, returns false.
-     */
-    public static boolean isOnes(double[] src) {
-        boolean allZeros = true;
-
-        for(double value : src) {
-            if(value != 1) {
-                allZeros = false;
-                break; // No need to look further.
-            }
-        }
-
-        return allZeros;
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

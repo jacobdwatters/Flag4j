@@ -27,7 +27,7 @@ package org.flag4j.linalg.operations.dense_sparse.coo.field_ops;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.backend.*;
-import org.flag4j.linalg.operations.common.field_ops.FieldProperties;
+import org.flag4j.linalg.operations.common.semiring_ops.SemiRingProperties;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
@@ -39,7 +39,7 @@ public final class DenseCooFieldEquals {
 
     private DenseCooFieldEquals() {
         // Hide constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -73,7 +73,7 @@ public final class DenseCooFieldEquals {
 
             if(equal) {
                 // Now, if this matrix is equal to the sparse matrix, there should only be zeros left in the entriesStack
-                equal = FieldProperties.isZeros(entriesCopy);
+                equal = SemiRingProperties.isZeros(entriesCopy);
             }
 
         } else {
@@ -115,7 +115,7 @@ public final class DenseCooFieldEquals {
 
             if(equal) {
                 // Now, if this vector is equal to the sparse vector, there should only be zeros left in the copy
-                equal = FieldProperties.isZeros(src1Copy);
+                equal = SemiRingProperties.isZeros(src1Copy);
             }
 
         } else {
@@ -143,19 +143,19 @@ public final class DenseCooFieldEquals {
 
             // Remove all nonZero entries from the entries of this matrix.
             for(int i=0; i<B.nnz; i++) {
-                entriesIndex = A.shape.entriesIndex(B.indices[i]);
+                entriesIndex = A.shape.getFlatIndex(B.indices[i]);
 
                 if(!entriesCopy[entriesIndex].equals(B.entries[i])) {
                     equal = false;
                     break;
                 }
 
-                entriesCopy[A.shape.entriesIndex(B.indices[i])] = Complex128.ZERO;
+                entriesCopy[A.shape.getFlatIndex(B.indices[i])] = Complex128.ZERO;
             }
 
             if(equal) {
                 // Now, if this tensor is equal to the sparse tensor, there should only be zeros left in the entriesStack
-                equal = FieldProperties.isZeros(entriesCopy);
+                equal = SemiRingProperties.isZeros(entriesCopy);
             }
 
         } else {

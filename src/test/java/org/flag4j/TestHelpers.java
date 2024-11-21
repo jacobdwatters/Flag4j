@@ -1,11 +1,9 @@
 package org.flag4j;
 
 import org.flag4j.arrays.backend.DenseTensorMixin;
-import org.flag4j.arrays.backend.MatrixMixin;
-import org.flag4j.arrays.backend.TensorBase;
-import org.flag4j.arrays.backend.VectorMixin;
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.backend.MatrixMixinOld;
+import org.flag4j.arrays.backend.VectorMixinOld;
+import org.flag4j.arrays.backend_new.AbstractTensor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,8 +13,8 @@ public class TestHelpers {
 
     public static void printAsNumpyArray(Object... args) {
         for(Object arg : args) {
-            if(arg instanceof MatrixMixin<?,?,?,?,?>) {
-                printAsNumpyArray((MatrixMixin<?,?,?,?,?>) arg);
+            if(arg instanceof MatrixMixinOld<?,?,?,?,?,?>) {
+                printAsNumpyArray((MatrixMixinOld<?,?,?,?,?,?>) arg);
             } else {
                 System.out.print(arg.toString());
             }
@@ -26,10 +24,10 @@ public class TestHelpers {
 
     public static void printAsJavaArray(Object... args) {
         for(Object arg : args) {
-            if(arg instanceof MatrixMixin<?, ?, ?, ?, ?>) {
-                printAsJavaArray((MatrixMixin<?, ?, ?, ?, ?>) arg);
-            } else if(arg instanceof VectorMixin<?, ?, ?, ?>) {
-                printAsJavaArray((VectorMixin<?, ?, ?, ?>) arg);
+            if(arg instanceof MatrixMixinOld<?,?,?,?,?,?>) {
+                printAsJavaArray((MatrixMixinOld<?,?,?,?,?,?>) arg);
+            } else if(arg instanceof VectorMixinOld<?,?,?,?,?>) {
+                printAsJavaArray((VectorMixinOld<?,?,?,?,?>) arg);
             } else {
                 System.out.print(arg.toString()); // Type not found, fall back to toString method.
             }
@@ -37,7 +35,7 @@ public class TestHelpers {
     }
 
 
-    private static <T extends MatrixMixin<?,?,?,?,?>> void printAsNumpyArray(T A) {
+    private static <T extends MatrixMixinOld<?,?,?,?,?,?>> void printAsNumpyArray(T A) {
         System.out.println(" = np.array([");
 
         for(int i=0; i<A.numRows(); i++) {
@@ -68,7 +66,7 @@ public class TestHelpers {
     }
 
 
-    private static <T extends VectorMixin<?, ?, ?, ?>> void printAsJavaArray(T A) {
+    private static <T extends VectorMixinOld<?,?,?,?,?>> void printAsJavaArray(T A) {
         System.out.print("{");
 
         for(int i=0; i<A.length(); i++) {
@@ -85,7 +83,7 @@ public class TestHelpers {
     }
 
 
-    private static <T extends MatrixMixin<?,?,?,?,?>> void printAsJavaArray(T A) {
+    private static <T extends MatrixMixinOld<?,?,?,?,?,?>> void printAsJavaArray(T A) {
         System.out.println("{");
 
         for(int i=0; i<A.numRows(); i++) {
@@ -118,7 +116,7 @@ public class TestHelpers {
      * @param a First tensor to compare.
      * @param b Second tensor to compare.
      */
-    public static <T extends TensorBase<?, ?, ?>> List<int[]> findDiff(T a, T b) {
+    public static <T extends AbstractTensor<?,?,?>> List<int[]> findDiff(T a, T b) {
         if(!(a instanceof DenseTensorMixin<?,?> && b instanceof DenseTensorMixin<?,?>)) {
             System.out.println("Tensors are not dense.");
         }
@@ -130,11 +128,11 @@ public class TestHelpers {
         List<int[]> diffIndices = new ArrayList<>();
 
         for(int i=0; i<stop; i++) {
-            int[] indices = a.shape.getIndices(i);
+            int[] indices = a.shape.getNdIndices(i);
 
             if(!a.get(indices).equals(b.get(indices))) {
                 System.out.printf("Difference at %s: %s, %s\n",
-                        Arrays.toString(a.shape.getIndices(i)),
+                        Arrays.toString(a.shape.getNdIndices(i)),
                         a.get(indices),
                         b.get(indices));
                 diffIndices.add(indices);

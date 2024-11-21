@@ -33,11 +33,42 @@ import java.util.Arrays;
 import java.util.StringJoiner;
 
 /**
- * <p>An object to store the shape of a tensor. Shapes are immutable.</p>
+ * <p>An object to store the shape of a tensor. Shapes are immutable.
  *
- * <p>Multi-dimensional indices can be efficiently computed from a flat 1D array index using a shape object as it internally
+ * <p>Multidimensional indices can be efficiently computed from a flat 1D array index using a shape object as it internally
  * maintains strides (see {@link #getIndices(int)} and {@link #getStrides()}). Strides are the step size needed to move from one
- * element to another along each axis in the tensor.</p>
+ * element to another along each axis in the tensor.
+ */
+
+/**
+ * Represents the shape of a multidimensional array (e.g. tensor, matrix, vector, etc.), specifying its dimensions and providing
+ * utilities for shape-related operations.
+ *
+ * <p>A shape is defined by an array of dimensions, where each dimension specifies the size of the tensor along a particular axis.
+ * {@link #getStrides() Strides} can also be computed for the shape which specify the number of entries to step in each dimension of
+ * the shape when traversing an array with the given shape. Strides will always be row-major contiguous and allow for efficient
+ * array traversal and mapping of nD indices to 1D contiguous indices.
+ *
+ * <p>This class also supports converting between multidimensional and flat indices, computing the shapes rank (i.e. number of
+ * dimensions), computing the total number of entries of an array with the given shape, and manipulating dimensions through swaps or
+ * permutations.
+ *
+ * <p>The {@code Shape} class is immutable with respect to its dimensions, ensuring thread safety and consistency. Strides
+ * are computed lazily only when needed to minimize overhead.
+ *
+ * <p>This class is a fundamental building block for tensor operations, particularly in contexts where multidimensional
+ * indexing and dimension manipulations are required.
+ *
+ * <p>Example usage:
+ *
+ * <blockquote><pre>
+ * Shape shape = new Shape(); // Creates a shape for a scalar value.
+ * shape = new Shape(3, 4, 5); // Creates a shape for a 3x4x5 tensor.
+ * int rank = shape.getRank(); // Gets the rank (number of dimensions).
+ * int[] strides = shape.getStrides(); // Retrieves the strides for this shape.
+ * int flatIndex = shape.entriesIndex(2, 1, 4); // Converts multidimensional indices to a flat index.
+ * int[] multiDimIndex = shape.
+ * </pre></blockquote>
  */
 public class Shape implements Serializable {
     /**
@@ -49,7 +80,7 @@ public class Shape implements Serializable {
      */
     private int[] strides;
     /**
-     * Total entries of this shape. This is only computed on demand by {@link #totalEntries()}
+     * Total entries of this shape. This is only computed on demand by {@link #totalEntries()}.
      */
     private BigInteger totalEntries = null;
     /**
@@ -60,7 +91,7 @@ public class Shape implements Serializable {
 
 
     /**
-     * Constructs a shape object from specified dimension measurements.
+     * Constructs a shape object from specified dimensions.
      * @param dims A list of the dimension measurements for this shape object. All entries must be non-negative.
      * @throws IllegalArgumentException If any dimension is negative.
      */
@@ -68,6 +99,34 @@ public class Shape implements Serializable {
         // Ensure all dimensions for the shape object are non-negative.
         ValidateParameters.ensureNonNegative(dims);
         this.dims = dims;
+    }
+
+
+    /**
+     * Constructs a shape object from specified dimensions with an optional check for validating the specified dimensions.
+     *
+     * @param dims A list of the dimension measurements for this shape object. Must be non-negative but will <b>NOT</b> be verified if
+     * {@code unsafe == false}.
+     * @param unsafe Flag indicating if an explicit check should be made that all value in {@code dims} are valid. If {@code true},
+     * a check will be made. If {@code false}, no sanity check will be made.
+     */
+    private Shape(int[] dims, boolean validateDims) {
+        if (validateDims) ValidateParameters.ensureNonNegative(dims);
+        this.dims = dims;
+    }
+
+
+    /**
+     * <p>Factory method for constructing a shape object with <i>no</i> sanity checks for the dimensions of the shape.
+     * <p><b>Warning</b>: It is <i>highly</i> recommended to avoid using this method and instead use the provided constructor
+     * {@link #Shape(int...)}. This constructor may yield slight performance benefits but its use is generally discouraged as the
+     * unsafe nature of this method is unlikely a desired trade off.
+     *
+     * @param dims A list of the dimension measurements for this shape object. Must be non-negative but no explicit check is made.
+     * @return A shape object with the specified dimensions.
+     */
+    public static Shape unsafeMakeShape(int... dims) {
+        return new Shape(dims, false);
     }
 
 
@@ -112,19 +171,17 @@ public class Shape implements Serializable {
 
     /**
      * Constructs strides for each dimension of this shape as if for a newly constructed tensor.
-     * i.e. Strides will be a monotonically decreasing sequence with the last stride being 1.
+     * Strides will be a monotonically decreasing sequence with the last stride being 1.
      * @return The strides for all dimensions of a newly constructed tensor with this shape.
      */
-    public int[] createNewStrides() {
+    private int[] createNewStrides() {
         int[] strides = new int[dims.length];
 
         if(strides.length>0) {
-            // Stride along last axis is always one for new strides.
-            strides[strides.length-1] = 1;
+            strides[strides.length-1] = 1; // Set the last stride to 1.
 
-            for(int i=strides.length-2; i>=0; i--) {
+            for(int i=strides.length-2; i>=0; i--)
                 strides[i] = dims[i+1]*strides[i+1];
-            }
         }
 
         return strides;
@@ -140,13 +197,14 @@ public class Shape implements Serializable {
 
 
     /**
-     * Computes the index of the 1D data array for a dense tensor from tensor indices with this shape.
+     * Computes the index of the 1D data array for a dense tensor from nD indices for a tensor with this shape.
      * @param indices Indices of tensor with this shape.
      * @return The index of the element at the specified indices in the 1D data array of a dense tensor.
      * @throws IllegalArgumentException If the number of indices does not match the rank of this shape.
      * @throws IndexOutOfBoundsException If any index does not fit within a tensor with this shape.
+     * @see #unsafeGetFlatIndex(int...)
      */
-    public int entriesIndex(int... indices) {
+    public int getFlatIndex(int... indices) {
         if(indices.length != dims.length)
             throw new IllegalArgumentException("Indices rank " + indices.length + " does not match tensor rank " + dims.length);
 
@@ -167,20 +225,38 @@ public class Shape implements Serializable {
 
 
     /**
-     * Efficiently computes the ND tensor indices based on an index from the internal 1D data array.
+     * <p>Computes the index of the 1D data array for a dense tensor from nD indices for a tensor with this shape.
+     * <p>Warning: Unlike {@link #getFlatIndex(int...)}, this method does not perform bounds checking on indices. This can lead
+     * to exceptions being thrown or possibly no exception but incorrect results if {@code indices} are not valid indices.
+     * @param indices Indices of tensor with this shape.
+     * @return The index of the element at the specified indices in the 1D data array of a dense tensor.
+     * @throws IllegalArgumentException If the number of indices does not match the rank of this shape.
+     * @throws IndexOutOfBoundsException If any index does not fit within a tensor with this shape.
+     * @see #getFlatIndex(int...)
+     */
+    public int unsafeGetFlatIndex(int... indices) {
+        makeStridesIfNull(); // Computes strides if not previously computed.
+
+        int index = 0;
+        for(int i=0, stop=indices.length; i<stop; i++)
+            index += indices[i]*strides[i];
+
+        return index;
+    }
+
+
+    /**
+     * Efficiently computes the nD tensor indices based on an index from the internal 1D data array.
      * @param index Index of internal 1D data array.
      * @return The multidimensional indices corresponding to the 1D data array index. This will be an array of integers
      * with length equal to the {@link #getRank() rank} of this shape.
      */
-    public int[] getIndices(int index) {
-        int[] indices = new int[this.getRank()];
-        indices[indices.length-1] = index % dims[dims.length-1];
-        int upStream = index;
+    public int[] getNdIndices(int index) {
+        makeStridesIfNull(); // Ensure strides are initialized if not already.
+        int[] indices = new int[getRank()];
 
-        for(int i=indices.length-2; i>=0; i--) {
-            upStream = (upStream-indices[i+1]) / dims[i+1];
-            indices[i] = upStream%dims[i];
-        }
+        for (int i = 0; i < strides.length; i++)
+            indices[i] = (index / strides[i]) % dims[i];
 
         return indices;
     }
@@ -192,6 +268,8 @@ public class Shape implements Serializable {
      * @param axis2 Second axis to swap.
      * @return A copy of this shape with the specified axis swapped.
      * @throws ArrayIndexOutOfBoundsException If either axis is not within [0, {@link #getRank() rank}-1].
+     * @see #permuteAxes(int...)
+     * @see #unsafePermuteAxes(int...)
      */
     public Shape swapAxes(int axis1, int axis2) {
         int[] newDims = dims.clone();
@@ -210,11 +288,40 @@ public class Shape implements Serializable {
      *             {@code N} is the rank of this shape.
      * @return Returns this shape.
      * @throws ArrayIndexOutOfBoundsException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N}}.
+     * @see #swapAxes(int, int) (int...) 
+     * @see #unsafePermuteAxes(int...) 
      */
-    public Shape swapAxes(int... axes) {
+    public Shape permuteAxes(int... axes) {
         ValidateParameters.ensureEquals(getRank(), axes.length);
         ValidateParameters.ensurePermutation(axes);
 
+        int[] tempDims = new int[dims.length];
+
+        int i=0;
+        for(int axis : axes)  // Permute axes.
+            tempDims[i++] = dims[axis];
+
+        Shape newShape = new Shape(tempDims);
+        if(strides!=null) newShape.strides = newShape.createNewStrides();
+
+        return newShape;
+    }
+
+
+    /**
+     * <p>Permutes the axes of this shape.
+     * 
+     * <p>Warning: Unlike {@link #permuteAxes(int...)}, this method does not perform bounds checking on {@code axes} or ensure that
+     * {@code axes} is a permutation of {@code {1, 2, 3, ... n}}. This may result in unexpected behavior if {@code tempDims} is 
+     * malformed.
+     * 
+     * @param axes New axes permutation for the shape. This must be a permutation of {@code {1, 2, 3, ... n}} where
+     *             {@code n} is the rank of this shape.
+     * @return Returns this shape.
+     * @see #permuteAxes(int...) 
+     * @see #swapAxes(int, int) 
+     */
+    public Shape unsafePermuteAxes(int... axes) {
         int[] tempDims = new int[dims.length];
 
         int i=0;
@@ -248,9 +355,9 @@ public class Shape implements Serializable {
 
     /**
      * <p>Gets the total number of entries for a tensor with this shape.
-     * If the total number of entries exceeds Integer.MAX_VALUE, an exception is thrown.</p>
+     * If the total number of entries exceeds Integer.MAX_VALUE, an exception is thrown.
      *
-     * <p>This method is likely to be more efficient than {@link #totalEntries()} if a primitive int value is desired.</p>
+     * <p>This method is likely to be more efficient than {@link #totalEntries()} if a primitive int value is desired.
      *
      * @return The total number of entries for a tensor with this shape.
      * @throws ArithmeticException If the total number of entries overflows a primitive int.
@@ -260,10 +367,10 @@ public class Shape implements Serializable {
         totalEntriesIntExact = 1;
 
         for (int dim : dims) {
-            // Check for overflow before multiplying
-            if (dim > 0 && totalEntriesIntExact > Integer.MAX_VALUE / dim) {
+            // Check for overflow before multiplying.
+            if (dim > 0 && totalEntriesIntExact > Integer.MAX_VALUE / dim)
                 throw new ArithmeticException("Integer overflow while computing total entries in the shape.");
-            }
+
             totalEntriesIntExact *= dim;
         }
 
@@ -290,12 +397,17 @@ public class Shape implements Serializable {
     /**
      * Gets the next indices for a tensor with this shape.
      * @param currentIndices Current indices. This array is modified.
-     * @param i Index of 1d data array.
+     * @param i Index of 1D data array.
      */
     public void getNextIndices(int[] currentIndices, int i) {
-        for(int j=0; j<currentIndices.length; j++) {
-            if((i+1)%strides[j]==0) {
-                currentIndices[j] = (currentIndices[j]+1) % dims[j];
+        int next = i + 1;
+
+        for (int j = 0; j < currentIndices.length; j++) {
+            if (next % strides[j] == 0) {
+                currentIndices[j]++;
+                if (currentIndices[j] == dims[j]) {
+                    currentIndices[j] = 0; // Wrap around when the dimension's limit is reached.
+                }
             }
         }
     }
@@ -308,7 +420,7 @@ public class Shape implements Serializable {
      */
     @Override
     public int hashCode() {
-        return Arrays.hashCode(this.dims);
+        return Arrays.hashCode(dims);
     }
 
 

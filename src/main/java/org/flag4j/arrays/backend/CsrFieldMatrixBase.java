@@ -25,9 +25,7 @@
 package org.flag4j.arrays.backend;
 
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.algebraic_structures.fields.RealFloat64;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.sparse.CsrFieldMatrix;
 import org.flag4j.linalg.operations.sparse.csr.field_ops.*;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
@@ -76,7 +74,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
         V extends CooFieldVectorBase<V, ?, W, U, Y>,
         W extends DenseFieldVectorBase<W, U, V, Y>, Y extends Field<Y>>
         extends FieldTensorBase<T, U, Y>
-        implements CsrMatrixMixin<T, U, V, W, Y> {
+        implements CsrMatrixMixin<T, U, V, W, Field<Y>[], Y> {
 
     /**
      * <p>Pointers indicating starting index of each row within the {@link #colIndices} and {@link #entries} arrays.
@@ -317,22 +315,6 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
 
 
     /**
-     * Computes the element-wise absolute value of this tensor.
-     *
-     * @return The element-wise absolute value of this tensor.
-     */
-    @Override
-    public CsrFieldMatrix<RealFloat64> abs() {
-        RealFloat64[] absValues = new RealFloat64[nnz];
-
-        for(int i=0; i<nnz; i++)
-            absValues[i] = new RealFloat64(entries[i].abs());
-
-        return new CsrFieldMatrix<RealFloat64>(shape, absValues, rowPointers.clone(), colIndices.clone());
-    }
-
-
-    /**
      * Checks if this matrix is upper triangular.
      *
      * @return True is this matrix is upper triangular. Otherwise, returns false.
@@ -485,7 +467,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      * @return The result of stacking this matrix on top of the matrix {@code b}.
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of columns.
-     * @see #stack(MatrixMixin, int) 
+     * @see #stack(MatrixMixinOld, int)
      * @see #augment(T)
      */
     @Override
@@ -503,7 +485,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of rows.
      * @see #stack(T)
-     * @see #stack(MatrixMixin, int) 
+     * @see #stack(MatrixMixinOld, int)
      */
     @Override
     public T augment(T b) {
@@ -720,7 +702,9 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public W mult(V b) {
-        return (W) CsrFieldMatMult.standardVector(this, b);
+        Field<T> dest = new
+
+        return (W) CsrFieldMatMult.standardVector(shape, entries, );
     }
 
 
@@ -736,7 +720,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
      */
     @Override
     public T set(Y value, int... indices) {
-        ValidateParameters.ensureValidIndex(shape, indices);
+        ValidateParameters.validateTensorIndex(shape, indices);
         return set(value, indices[0], indices[1]);
     }
 
@@ -753,7 +737,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
     @Override
     public T set(Y value, int row, int col) {
         // Ensure indices are in bounds.
-        ValidateParameters.ensureValidIndex(shape, row, col);
+        ValidateParameters.validateTensorIndex(shape, row, col);
         Field<Y>[] newEntries;
         int[] newRowPointers = rowPointers.clone();
         int[] newColIndices;
@@ -774,7 +758,7 @@ public abstract class CsrFieldMatrixBase<T extends CsrFieldMatrixBase<T, U, V, W
             newRowPointers = rowPointers.clone();
             newColIndices = colIndices.clone();
         } else {
-            loc = -loc - 1; // Compute insertion index as specified by Arrays.binarySearch
+            loc = -loc - 1; // Compute insertion index.
             newEntries = new Field[entries.length + 1];
             newColIndices = new int[entries.length + 1];
 

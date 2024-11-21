@@ -39,8 +39,11 @@ public final class ValidateParameters {
 
     // Hide constructor
     private ValidateParameters() {
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
+
+
+    // TODO: This class could be cleaned up and organized.
 
 
     /**
@@ -94,9 +97,9 @@ public final class ValidateParameters {
      * @throws TensorShapeException If the two shapes do not have the same total number of entries.
      */
     public static void ensureBroadcastable(Shape shape1, Shape shape2) {
-        if(!shape1.totalEntries().equals(shape2.totalEntries())) {
+        // TODO: This isn't really how numpy or PyTorch define broadcastable so it may be confusing. Need a different name for this.
+        if(!shape1.totalEntries().equals(shape2.totalEntries()))
             throw new TensorShapeException(ErrorMessages.getShapeBroadcastErr(shape1, shape2));
-        }
     }
 
 
@@ -485,8 +488,8 @@ public final class ValidateParameters {
      */
     public static void ensureInRange(double value, double lowerBound, double upperBound, String paramName) {
         if(value < lowerBound || value > upperBound) {
-            String name = paramName==null ? "Value" : paramName + " = ";
-            String errMsg = String.format("%s %f not in range [%f, %f]", name, value, lowerBound, upperBound);
+            String name = paramName==null ? "Value" : paramName;
+            String errMsg = String.format("%s = %f must be in range [%f, %f]", name, value, lowerBound, upperBound);
 
             throw new IllegalArgumentException(errMsg);
         }
@@ -513,23 +516,23 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if the provided indices are contained in a tensor defined by the given {@code shape}.
+     * Checks if the provided nD index is contained in a tensor defined by the given {@code shape}.
      * @param shape Shape of the tensor.
-     * @param indices Indices to check. Must be same length as the number of dimensions in {@code shape}.
-     * @throws IndexOutOfBoundsException If {@code indices} is not a valid index into a tensor
+     * @param index nD index to check.
+     * @throws IndexOutOfBoundsException If {@code index} is not a valid nD index into a tensor
      * of the specified {@code shape}.
      */
-    public static void ensureValidIndex(Shape shape, int... indices) {
-        if(shape.getRank() != indices.length) {
-            throw new IndexOutOfBoundsException("Expected " + shape.getRank()
-                    + " indices but got " + indices.length + ".");
+    public static void validateTensorIndex(Shape shape, int... index) {
+        if(shape.getRank() != index.length) {
+            throw new IndexOutOfBoundsException("Expected dimension " + shape.getRank()
+                    + " index but got dimension " + index.length + ".");
         }
 
-        for(int i=0; i<indices.length; i++) {
-            if(indices[i] < 0 || indices[i] >= shape.get(i)) {
-                String errMsg = indices[i]<0 ?
-                        "Index " + i + " is out of bounds for lower bound of 0" :
-                        "Index " + i + " is out of bounds for upper bound of " + shape.get(i) + ".";
+        for(int i=0, size=index.length; i<size; i++) {
+            if(index[i] < 0 || index[i] >= shape.get(i)) {
+                String errMsg = index[i]<0 ?
+                        "dimension " + i + " is out of bounds for lower bound of 0" :
+                        "dimension " + i + " is out of bounds for upper bound of " + shape.get(i) + ".";
 
                 throw new IndexOutOfBoundsException(errMsg);
             }
@@ -544,7 +547,7 @@ public final class ValidateParameters {
      * @throws IndexOutOfBoundsException If {@code indices} is not a valid index into an iterable
      * of the specified {@code length}.
      */
-    public static void ensureValidIndices(int length, int... indices) {
+    public static void ensureValidArrayIndices(int length, int... indices) {
         for(int i=0, size=indices.length; i<size; i++) {
             if(indices[i] < 0 || indices[i] >= length) {
                 String errMsg = indices[i]<0 ?
@@ -553,6 +556,18 @@ public final class ValidateParameters {
 
                 throw new IndexOutOfBoundsException(errMsg);
             }
+        }
+    }
+
+
+    /**
+     * Checks that a set of nD indices are valid indices for a tensor with the specified shape.
+     * @param shape Shape of the tensor.
+     * @param indices Indices to validate.
+     */
+    public static void validateTensorIndices(Shape shape, int[]... indices) {
+        for(int[] index : indices) {
+            validateTensorIndex(shape, index);
         }
     }
 

@@ -30,7 +30,7 @@ package org.flag4j.arrays.backend;
  * @param <U> Type of the vector.
  * @param <V> Type of dense vector equivalent to {@code U}. If {@code U} is dense, than {@code V} should be the same type as {@code U}.
  */
-public interface MatrixVectorOpsMixin<T extends MatrixMixin, U extends VectorMixin, V extends DenseVectorMixin> {
+public interface MatrixVectorOpsMixin<T extends MatrixMixinOld, U extends VectorMixinOld, V extends DenseVectorMixin> {
 
     /**
      * Computes matrix-vector multiplication.

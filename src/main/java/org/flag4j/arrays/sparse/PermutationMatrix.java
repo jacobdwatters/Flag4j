@@ -183,7 +183,6 @@ public class PermutationMatrix implements Serializable {
     public Matrix leftMult(Matrix src) {
         ValidateParameters.ensureEquals(size, src.numRows);
         double[] destEntries = new double[src.entries.length];
-
         int colIdx;
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
@@ -208,9 +207,8 @@ public class PermutationMatrix implements Serializable {
         ValidateParameters.ensureEquals(size, src.size);
         double[] destEntries = new double[src.entries.length];
 
-        for(int rowIdx=0; rowIdx<size; rowIdx++) {
+        for(int rowIdx=0; rowIdx<size; rowIdx++)
             destEntries[rowIdx] = src.entries[swapPointers[rowIdx]];
-        }
 
         return new Vector(destEntries);
     }
@@ -228,7 +226,6 @@ public class PermutationMatrix implements Serializable {
     public CMatrix leftMult(CMatrix src) {
         ValidateParameters.ensureEquals(size, src.numRows);
         Complex128[] destEntries = new Complex128[src.entries.length];
-
         int colIdx;
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
@@ -253,9 +250,8 @@ public class PermutationMatrix implements Serializable {
         ValidateParameters.ensureEquals(size, src.size);
         Field<Complex128>[] destEntries = new Complex128[src.entries.length];
 
-        for(int rowIdx=0; rowIdx<size; rowIdx++) {
+        for(int rowIdx=0; rowIdx<size; rowIdx++)
             destEntries[rowIdx] = src.entries[swapPointers[rowIdx]];
-        }
 
         return new CVector(destEntries);
     }
@@ -279,6 +275,7 @@ public class PermutationMatrix implements Serializable {
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
             colIdx = swapPointers[rowIdx];
+
             for(int j=0; j<src.numRows; j++) {
                 rowOffset = j*src.numCols;
                 destEntries[rowOffset + colIdx] = src.entries[rowOffset + rowIdx];
@@ -368,7 +365,7 @@ public class PermutationMatrix implements Serializable {
      * matrix.
      */
     public void swapCols(int col1, int col2) {
-        ValidateParameters.ensureValidIndices(size, col1, col2);
+        ValidateParameters.ensureValidArrayIndices(size, col1, col2);
         // Find locations of entries with the given columns.
         int idx1 = ArrayUtils.indexOf(swapPointers, col1);
         int idx2 = ArrayUtils.indexOf(swapPointers, col2);

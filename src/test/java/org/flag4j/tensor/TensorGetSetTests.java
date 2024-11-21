@@ -30,14 +30,14 @@ class TensorGetSetTests {
         // -------------------- Sub-case 1 --------------------
         A.set(-99.245, 0, 1, 0, 0, 1);
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
-        expEntries[shape.entriesIndex(0, 1, 0, 0, 1)] = -99.245;
+        expEntries[shape.getFlatIndex(0, 1, 0, 0, 1)] = -99.245;
 
         assertArrayEquals(expEntries, A.entries);
 
         // -------------------- Sub-case 2 --------------------
         A.set(156.4, 0, 2, 1, 0, 0);
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
-        expEntries[shape.entriesIndex(0, 2, 1, 0, 0)] = 156.4;
+        expEntries[shape.getFlatIndex(0, 2, 1, 0, 0)] = 156.4;
 
         assertArrayEquals(expEntries, A.entries);
 

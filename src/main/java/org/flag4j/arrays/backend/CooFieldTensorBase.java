@@ -29,8 +29,7 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.algebraic_structures.fields.RealFloat64;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooFieldTensor;
-import org.flag4j.linalg.operations.common.field_ops.CompareField;
-import org.flag4j.linalg.operations.sparse.coo.SparseDataWrapper;
+import org.flag4j.linalg.operations.sparse.coo.CooDataSorter;
 import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldTensorDot;
 import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldTensorOperations;
 import org.flag4j.util.ArrayUtils;
@@ -273,7 +272,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
         }
 
         // Create sparse coo tensor and sort values lexicographically.
-        T transpose = makeLikeTensor(shape.swapAxes(axes), transposeEntries, transposeIndices);
+        T transpose = makeLikeTensor(shape.permuteAxes(axes), transposeEntries, transposeIndices);
         transpose.sortIndices();
 
         return transpose;
@@ -358,7 +357,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
     public T tensorTr(int axis1, int axis2) {
         // Validate parameters.
         ValidateParameters.ensureNotEquals(axis1, axis2);
-        ValidateParameters.ensureValidIndices(getRank(), axis1, axis2);
+        ValidateParameters.ensureValidArrayIndices(getRank(), axis1, axis2);
         ValidateParameters.ensureEquals(shape.get(axis1), shape.get(axis2));
 
         int rank = getRank();
@@ -411,14 +410,13 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
             Field<V> entryValue = entry.getValue();
 
             // Use the getIndices method to convert the flat index to n-dimensional index.
-            int[] multiDimIndices = shape.getIndices(linearIndex);
+            int[] multiDimIndices = shape.getNdIndices(linearIndex);
 
             // Copy relevant dimensions to resultIndices, excluding axis1 and axis2.
             int resultDimIndex = 0;
             for (int j = 0; j < rank; j++) {
-                if (j != axis1 && j != axis2) {
+                if (j != axis1 && j != axis2)
                     resultIndices[resultIndex][resultDimIndex++] = multiDimIndices[j];
-                }
             }
 
             resultEntries[resultIndex] = entryValue;
@@ -455,7 +453,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      */
     @Override
     public V get(int... indices) {
-        ValidateParameters.ensureValidIndex(shape, indices);
+        ValidateParameters.validateTensorIndex(shape, indices);
         if(entries.length == 0) return null; // Can not get reference of field so no way to get zero element.
 
         for(int i=0; i<nnz; i++)
@@ -477,7 +475,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
         int[][] destIndices = new int[entries.length][1];
 
         for(int i=0, size=entries.length; i<size; i++)
-            destIndices[i][0] = shape.entriesIndex(indices[i]);
+            destIndices[i][0] = shape.getFlatIndex(indices[i]);
 
         return makeLikeTensor(new Shape(shape.totalEntries().intValueExact()), entries.clone(), destIndices);
     }
@@ -502,7 +500,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
         destShape[axis] = shape.totalEntries().intValueExact();
 
         for(int i=0, size=entries.length; i<size; i++)
-            destIndices[i][axis] = shape.entriesIndex(indices[i]);
+            destIndices[i][axis] = shape.getFlatIndex(indices[i]);
 
         return makeLikeTensor(new Shape(destShape), entries.clone(), destIndices);
     }
@@ -523,7 +521,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
 
         int rank = indices[0].length;
         int newRank = newShape.getRank();
-        int nnz = entries.length;
+        final int nnz = entries.length;
 
         int[] oldStrides = shape.getStrides();
         int[] newStrides = newShape.getStrides();
@@ -535,9 +533,8 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
             int[] newIdxRow = newIndices[i];
 
             int flatIndex = 0;
-            for(int j=0; j < rank; j++) {
+            for(int j=0; j < rank; j++)
                 flatIndex += idxRow[j] * oldStrides[j];
-            }
 
             for(int j=0; j<newRank; j++) {
                 newIdxRow[j] = flatIndex / newStrides[j];
@@ -587,113 +584,113 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
     public abstract T makeLikeTensor(Shape shape, List<Field<V>> entries, List<int[]> indices);
 
 
-    /**
-     * Finds the minimum non-zero value in this tensor. If this tensor is complex, then this method finds the smallest value in
-     * magnitude.
-     *
-     * @return The minimum non-zero value (smallest in magnitude for a complex valued tensor) in this tensor. If this tensor does
-     * not have any non-zero values, then {@code null} will be returned.
-     */
-    @Override
-    public double min() {
-        // Overrides method in FieldTensorBase to emphasize that the method works on the non-zero elements only.
-        return super.min();
-    }
-
-
-    /**
-     * Finds the maximum non-zero value in this tensor. If this tensor is complex, then this method finds the largest value in
-     * magnitude.
-     *
-     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor. If this tensor does not have any
-     * non-zero values, then {@code null} will be returned.
-     */
-    @Override
-    public double max() {
-        // Overrides method in FieldTensorBase to emphasize that the method works on the non-zero elements only.
-        return super.max();
-    }
-
-
-    /**
-     * Finds the minimum non-zero value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #min()}.
-     *
-     * @return The minimum non-zero value, in absolute value, in this tensor.
-     */
-    @Override
-    public double minAbs() {
-        // Overrides method in FieldTensorBase to emphasize that the method works on the non-zero elements only.
-        return super.minAbs();
-    }
-
-
-    /**
-     * Finds the maximum non-zero value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #max()}.
-     *
-     * @return The maximum non-zero value, in absolute value, in this tensor.
-     */
-    @Override
-    public double maxAbs() {
-        // Overrides method in FieldTensorBase to emphasize that the method works on the non-zero elements only.
-        return super.maxAbs();
-    }
-
-
-    /**
-     * Finds the indices of the minimum non-zero value in this tensor.
-     *
-     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned. If this tensor has no non-zero values then an empty is returned.
-     */
-    @Override
-    public int[] argmin() {
-        if(nnz > 0) return indices[CompareField.argmin(entries)];
-        else return new int[0];
-    }
-
-
-    /**
-     * Finds the indices of the maximum non-zero value in this tensor.
-     *
-     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned. If this tensor has no non-zero values then an empty array is returned.
-     */
-    @Override
-    public int[] argmax() {
-        if(nnz > 0) return indices[CompareField.argmax(entries)];
-        else return new int[0];
-    }
-
-
-    /**
-     * Finds the indices of the minimum absolute non-zero value in this tensor.
-     *
-     * @return The indices of the minimum absolute non-zero value in this tensor. If this value occurs multiple times, the indices of
-     * the first
-     * entry (in row-major ordering) are returned. If this tensor has no non-zero values then an empty array is returned.
-     */
-    @Override
-    public int[] argminAbs() {
-        if(nnz > 0) return indices[CompareField.argminAbs(entries)];
-        else return new int[0];
-    }
-
-
-    /**
-     * Finds the indices of the maximum absolute non-zero value in this tensor.
-     *
-     * @return The indices of the maximum absolute non-zero value in this tensor. If this value occurs multiple times, the indices of
-     * the
-     * first
-     * entry (in row-major ordering) are returned. If this tensor has no non-zero values then an empty array is returned.
-     */
-    @Override
-    public int[] argmaxAbs() {
-        if(nnz > 0) return indices[CompareField.argmaxAbs(entries)];
-        else return new int[0];
-    }
+//    /**
+//     * Finds the minimum non-zero value in this tensor. If this tensor is complex, then this method finds the smallest value in
+//     * magnitude.
+//     *
+//     * @return The minimum non-zero value (smallest in magnitude for a complex valued tensor) in this tensor. If this tensor does
+//     * not have any non-zero values, then {@code null} will be returned.
+//     */
+//    @Override
+//    public V min() {
+//        // Overrides method in FieldTensorBase to emphasize that the method works on the non-zero elements only.
+//        return super.min();
+//    }
+//
+//
+//    /**
+//     * Finds the maximum non-zero value in this tensor. If this tensor is complex, then this method finds the largest value in
+//     * magnitude.
+//     *
+//     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor. If this tensor does not have any
+//     * non-zero values, then {@code null} will be returned.
+//     */
+//    @Override
+//    public V max() {
+//        // Overrides method in FieldTensorBase to emphasize that the method works on the non-zero elements only.
+//        return super.max();
+//    }
+//
+//
+//    /**
+//     * Finds the minimum non-zero value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
+//     * to {@link #min()}.
+//     *
+//     * @return The minimum non-zero value, in absolute value, in this tensor.
+//     */
+//    @Override
+//    public double minAbs() {
+//        // Overrides method in FieldTensorBase to emphasize that the method works on the non-zero elements only.
+//        return super.minAbs();
+//    }
+//
+//
+//    /**
+//     * Finds the maximum non-zero value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
+//     * to {@link #max()}.
+//     *
+//     * @return The maximum non-zero value, in absolute value, in this tensor.
+//     */
+//    @Override
+//    public double maxAbs() {
+//        // Overrides method in FieldTensorBase to emphasize that the method works on the non-zero elements only.
+//        return super.maxAbs();
+//    }
+//
+//
+//    /**
+//     * Finds the indices of the minimum non-zero value in this tensor.
+//     *
+//     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
+//     * entry (in row-major ordering) are returned. If this tensor has no non-zero values then an empty is returned.
+//     */
+//    @Override
+//    public int[] argmin() {
+//        if(nnz > 0) return indices[CompareSemiring.argmin(entries)];
+//        else return new int[0];
+//    }
+//
+//
+//    /**
+//     * Finds the indices of the maximum non-zero value in this tensor.
+//     *
+//     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
+//     * entry (in row-major ordering) are returned. If this tensor has no non-zero values then an empty array is returned.
+//     */
+//    @Override
+//    public int[] argmax() {
+//        if(nnz > 0) return indices[CompareSemiring.argmax(entries)];
+//        else return new int[0];
+//    }
+//
+//
+//    /**
+//     * Finds the indices of the minimum absolute non-zero value in this tensor.
+//     *
+//     * @return The indices of the minimum absolute non-zero value in this tensor. If this value occurs multiple times, the indices of
+//     * the first
+//     * entry (in row-major ordering) are returned. If this tensor has no non-zero values then an empty array is returned.
+//     */
+//    @Override
+//    public int[] argminAbs() {
+//        if(nnz > 0) return indices[CompareRing.argminAbs(entries)];
+//        else return new int[0];
+//    }
+//
+//
+//    /**
+//     * Finds the indices of the maximum absolute non-zero value in this tensor.
+//     *
+//     * @return The indices of the maximum absolute non-zero value in this tensor. If this value occurs multiple times, the indices of
+//     * the
+//     * first
+//     * entry (in row-major ordering) are returned. If this tensor has no non-zero values then an empty array is returned.
+//     */
+//    @Override
+//    public int[] argmaxAbs() {
+//        if(nnz > 0) return indices[CompareRing.argmaxAbs(entries)];
+//        else return new int[0];
+//    }
 
 
     /**
@@ -789,7 +786,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
         }
 
         // Create sparse COO tensor and sort values lexicographically by indices.
-        T transpose = makeLikeTensor(shape.swapAxes(axes), transposeEntries, transposeIndices);
+        T transpose = makeLikeTensor(shape.permuteAxes(axes), transposeEntries, transposeIndices);
         transpose.sortIndices();
 
         return transpose;
@@ -811,7 +808,7 @@ public abstract class CooFieldTensorBase<T extends CooFieldTensorBase<T, U, V>,
      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
      */
     public void sortIndices() {
-        SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);
+        CooDataSorter.wrap(entries, indices).sparseSort().unwrap(entries, indices);
     }
 
 

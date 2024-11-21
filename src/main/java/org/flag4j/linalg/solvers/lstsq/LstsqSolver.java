@@ -25,8 +25,8 @@
 package org.flag4j.linalg.solvers.lstsq;
 
 
-import org.flag4j.arrays.backend.MatrixMixin;
-import org.flag4j.arrays.backend.VectorMixin;
+import org.flag4j.arrays.backend_new.MatrixMixin;
+import org.flag4j.arrays.backend_new.VectorMixin;
 import org.flag4j.linalg.decompositions.unitary.UnitaryDecomposition;
 import org.flag4j.linalg.solvers.LinearMatrixSolver;
 
@@ -37,7 +37,7 @@ import org.flag4j.linalg.solvers.LinearMatrixSolver;
  *
  * <p>This is done using a QR decomposition.</p>
  */
-public abstract class LstsqSolver<T extends MatrixMixin<T, ?, U, ?, ?>, U extends VectorMixin<U, T, ?, ?>>
+public abstract class LstsqSolver<T extends MatrixMixin<T, ?, U, ?>, U extends VectorMixin<U, T, ?, ?>>
         implements LinearMatrixSolver<T, U> {
 
 

@@ -27,10 +27,9 @@ package org.flag4j.arrays.dense;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.DenseMatrixMixin;
-import org.flag4j.arrays.backend.DensePrimitiveDoubleTensorBase;
-import org.flag4j.arrays.backend.MatrixMixin;
-import org.flag4j.arrays.backend.TensorBase;
+import org.flag4j.arrays.backend_new.AbstractTensor;
+import org.flag4j.arrays.backend_new.MatrixMixin;
+import org.flag4j.arrays.backend_new.primitive.AbstractDenseDoubleTensor;
 import org.flag4j.arrays.sparse.*;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
@@ -38,9 +37,7 @@ import org.flag4j.linalg.decompositions.svd.RealSVD;
 import org.flag4j.linalg.operations.MatrixMultiplyDispatcher;
 import org.flag4j.linalg.operations.RealDenseMatrixMultiplyDispatcher;
 import org.flag4j.linalg.operations.TransposeDispatcher;
-import org.flag4j.linalg.operations.common.complex.Complex128Operations;
-import org.flag4j.linalg.operations.common.field_ops.FieldOperations;
-import org.flag4j.linalg.operations.dense.field_ops.DenseFieldOperations;
+import org.flag4j.linalg.operations.common.complex.Complex128Ops;
 import org.flag4j.linalg.operations.dense.real.RealDenseDeterminant;
 import org.flag4j.linalg.operations.dense.real.RealDenseEquals;
 import org.flag4j.linalg.operations.dense.real.RealDenseProperties;
@@ -51,13 +48,10 @@ import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseMatMult;
 import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOperations;
 import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseMatrixMultiplication;
 import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
 import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatMult;
 import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOperations;
 import org.flag4j.linalg.operations.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
 import org.flag4j.linalg.operations.dense_sparse.csr.real.RealCsrDenseOperations;
-import org.flag4j.linalg.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
-import org.flag4j.linalg.operations.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -70,15 +64,16 @@ import java.util.List;
 
 
 /**
- * <p>A real dense matrix backed by a primitive double array.</p>
+ * <p>A real dense matrix backed by a primitive double array.
+ * <p>A matrix is essentially a rank-2 {@link Tensor} but has some additional
  *
- * <p>The {@link #entries} of a matrix are mutable but the {@link #shape} is fixed.</p>
+ * <p>The {@link #entries} of a matrix are mutable but the {@link #shape} is fixed.
  *
- *<p>A matrix is essentially equivalent to a rank 2 tensor but has some extended functionality and <i>may</i> have improved
- * performance for some operations.</p>
+ * <p>A matrix is essentially equivalent to a rank 2 tensor but has some extended functionality and <i>may</i> have improved
+ * performance for some operations.
  */
-public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
-        implements DenseMatrixMixin<Matrix, CooMatrix, Vector, Double> {
+public class Matrix extends AbstractDenseDoubleTensor<Matrix>
+        implements MatrixMixin<Matrix, Matrix, Vector, Double> {
 
     /**
      * The number of rows in this matrix.
@@ -102,19 +97,6 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
 
         numRows = shape.get(0);
         numCols = shape.get(1);
-    }
-
-
-    /**
-     * Flattens matrix to a single row.
-     *
-     * @return The flattened matrix.
-     *
-     * @see #flatten(int)
-     */
-    @Override
-    public Matrix flatten() {
-        return flatten(1);
     }
 
 
@@ -298,91 +280,6 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
 
 
     /**
-     * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
-     * computes the sum of products between the two tensors along the specified set of axes.
-     *
-     * @param src2 Tensor to contract with this tensor.
-     * @param aAxes Axes along which to compute products for this tensor.
-     * @param bAxes Axes along which to compute products for {@code src2} tensor.
-     *
-     * @return The tensor dot product over the specified axes.
-     *
-     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes pairwise in
-     *                                  {@code aAxes} and {@code bAxes}.
-     * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
-     *                                  are out of bounds for the corresponding tensor.
-     */
-    @Override
-    public Matrix tensorDot(Matrix src2, int[] aAxes, int[] bAxes) {
-        return org.flag4j.linalg.operations.dense.real.RealDenseTensorDot.tensorDot(this, src2, aAxes, bAxes);
-    }
-
-
-    /**
-     * Computes the element-wise conjugation of this tensor.
-     *
-     * @return The element-wise conjugation of this tensor.
-     */
-    @Override
-    public Matrix conj() {
-        return copy();
-    }
-
-
-    /**
-     * Computes the conjugate transpose of a tensor by exchanging the first and last axes of this tensor and conjugating the
-     * exchanged values.
-     *
-     * @return The conjugate transpose of this tensor.
-     *
-     * @see #H(int, int)
-     * @see #H(int...)
-     */
-    @Override
-    public Matrix H() {
-        return T();
-    }
-
-
-    /**
-     * Computes the conjugate transpose of a tensor by conjugating and exchanging {@code axis1} and {@code axis2}.
-     *
-     * @param axis1 First axis to exchange and conjugate.
-     * @param axis2 Second axis to exchange and conjugate.
-     *
-     * @return The conjugate transpose of this tensor according to the specified axes.
-     *
-     * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
-     * @see #H()
-     * @see #H(int...)
-     */
-    @Override
-    public Matrix H(int axis1, int axis2) {
-        return T(axis1, axis2);
-    }
-
-
-    /**
-     * Computes the conjugate transpose of this tensor. That is, conjugates and permutes the axes of this tensor so that it matches
-     * the permutation specified by {@code axes}.
-     *
-     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
-     * {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
-     *
-     * @return The conjugate transpose of this tensor with its axes permuted by the {@code axes} array.
-     *
-     * @throws IndexOutOfBoundsException If any element of {@code axes} is out of bounds for the rank of this tensor.
-     * @throws IllegalArgumentException  If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
-     * @see #H(int, int)
-     * @see #H()
-     */
-    @Override
-    public Matrix H(int... axes) {
-        return T(axes);
-    }
-
-
-    /**
      * Constructs a tensor of the same type as this tensor with the given the shape and entries.
      *
      * @param shape Shape of the tensor to construct.
@@ -393,6 +290,37 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
     @Override
     public Matrix makeLikeTensor(Shape shape, double[] entries) {
         return new Matrix(shape, entries);
+    }
+
+
+    /**
+     * Flattens this matrix to a row vector.
+     *
+     * @return The flattened matrix.
+     *
+     * @see #flatten(int)
+     */
+    @Override
+    public Matrix flatten() {
+        return flatten(0);
+    }
+    
+
+    /**
+     * Flattens this matrix along the specified axis.
+     *
+     * @param axis Axis along which to flatten tensor.
+     * @return If {@code axis == 0} a matrix with the shape {@code (1, this.numRows*this.numCols)} is returned.
+     * If {@code axis == 1} a matrix with the shape {@code (this.numRows*this.numCols, 1)} is returned.
+     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     * @see #flatten()
+     */
+    @Override
+    public Matrix flatten(int axis) {
+        ValidateParameters.ensureValidAxes(shape, axis);
+        return (axis == 0)
+                ? new Matrix(1, entries.length, entries.clone())
+                : new Matrix(entries.length, 1, entries.clone());
     }
 
 
@@ -544,37 +472,14 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
 
 
     /**
-     * Checks if a matrix is singular. That is, if the matrix is <b>NOT</b> invertible.<br>
-     * Also see {@link #isInvertible()}.
-     *
-     * @return True if this matrix is singular or non-square. Otherwise, returns false.
-     */
-    @Override
-    public boolean isSingular() {
-        boolean result = true;
-
-        if(isSquare()) {
-            double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
-            double det = RealDenseDeterminant.det(this);
-
-            result = Math.abs(det) < tol;
-        }
-
-        return result;
-    }
-
-
-    /**
      * Checks if this matrix is the identity matrix. That is, checks if this matrix is square and contains
      * only ones along the principle diagonal and zeros everywhere else.
      *
      * @return True if this matrix is the identity matrix. Otherwise, returns false.
-     *
-     * @see #isCloseToI()
      */
     @Override
     public boolean isI() {
-        return org.flag4j.linalg.operations.dense.real.RealDenseProperties.isIdentity(this);
+        return RealDenseProperties.isIdentity(this);
     }
 
 
@@ -585,7 +490,6 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      *
      * @see #isI()
      */
-    @Override
     public boolean isCloseToI() {
         return RealDenseProperties.isCloseToIdentity(this);
     }
@@ -598,7 +502,6 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      *
      * @throws LinearAlgebraException If this matrix is not square.
      */
-    @Override
     public Double det() {
         return RealDenseDeterminant.det(this);
     }
@@ -611,12 +514,12 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * <pre>{@code double tol = 2.0*Math.max(rows, cols)*Flag4jConstants.EPS_F64*Math.min(this.numRows, this.numCols);}</pre>
      * </p>
      *
-     * <p>Note the "matrix rank" is <b>NOT</b> related to the "{@link TensorBase#getRank() tensor rank}" which is number of indices
+     * <p>Note the "matrix rank" is <b>NOT</b> related to the "{@link AbstractTensor#getRank() tensor rank}" which
+     * is number of indices
      * needed to uniquely specify an entry in the tensor.</p>
      *
      * @return The matrix rank of this matrix.
      */
-    @Override
     public int matrixRank() {
         return new RealSVD(false).decompose(this).getRank();
     }
@@ -687,7 +590,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return The result of stacking this matrix on top of the matrix {@code b}.
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of columns.
-     * @see #stack(TensorBase, int)
+     * @see #stack(MatrixMixin, int) 
      * @see #augment(Matrix)
      */
     @Override
@@ -814,8 +717,6 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * Checks if a matrix is symmetric. That is, if the matrix is square and equal to its transpose.
      *
      * @return True if this matrix is symmetric. Otherwise, returns false.
-     *
-     * @see #isAntiSymmetric()
      */
     @Override
     public boolean isSymmetric() {
@@ -835,26 +736,13 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
 
 
     /**
-     * Checks if a matrix is anti-symmetric. That is, if the matrix is equal to the negative of its transpose.
-     *
-     * @return True if this matrix is anti-symmetric. Otherwise, returns false.
-     *
-     * @see #isSymmetric()
-     */
-    @Override
-    public boolean isAntiSymmetric() {
-        return RealDenseProperties.isAntiSymmetric(entries, shape);
-    }
-
-
-    /**
      * Checks if this matrix is orthogonal. That is, if the inverse of this matrix is equal to its transpose.
      *
      * @return True if this matrix it is orthogonal. Otherwise, returns false.
      */
     @Override
     public boolean isOrthogonal() {
-        return numRows == numCols && RealDenseProperties.isCloseToIdentity(this.mult(this.T()));
+        return numRows == numCols && RealDenseProperties.isCloseToIdentity(this.multTranspose(this));
     }
 
 
@@ -976,8 +864,8 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      */
     @Override
     public Matrix setSliceCopy(Matrix values, int rowStart, int colStart) {
-        ValidateParameters.ensureValidIndices(numRows, rowStart);
-        ValidateParameters.ensureValidIndices(numCols, colStart);
+        ValidateParameters.ensureValidArrayIndices(numRows, rowStart);
+        ValidateParameters.ensureValidArrayIndices(numCols, colStart);
         Matrix copy = new Matrix(this);
 
         for(int i=0; i<values.numRows; i++) {
@@ -1005,10 +893,9 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @throws IllegalArgumentException If the {@code values} slice, with upper left corner at the specified location, does not
      *                                  fit completely within this matrix.
      */
-    @Override
     public Matrix setSlice(Matrix values, int rowStart, int colStart) {
-        ValidateParameters.ensureValidIndices(numRows, rowStart);
-        ValidateParameters.ensureValidIndices(numCols, colStart);
+        ValidateParameters.ensureValidArrayIndices(numRows, rowStart);
+        ValidateParameters.ensureValidArrayIndices(numCols, colStart);
 
         for(int i=0; i<values.numRows; i++) {
             System.arraycopy(
@@ -1104,8 +991,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
         for(int i=0; i<slice.numRows; i++) {
             System.arraycopy(
                     this.entries, (i+rowStart)*this.numCols + colStart,
-                    slice.entries, i*slice.numCols, slice.numCols
-            );
+                    slice.entries, i*slice.numCols, slice.numCols);
         }
 
         return slice;
@@ -1137,7 +1023,6 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      *
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
-    @Override
     public Matrix setValues(Double[][] values) {
         ValidateParameters.ensureEqualShape(shape, new Shape(values.length, values[0].length));
         RealDenseSetOperations.setValues(values, entries);
@@ -1219,7 +1104,6 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      *
      * @throws IllegalArgumentException If the {@code values} vector has a different length than the number of rows of this matrix.
      */
-    @Override
     public Matrix setCol(Vector values, int colIndex) {
         return setCol(values.entries, colIndex);
     }
@@ -1281,7 +1165,6 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      *
      * @throws IllegalArgumentException If the {@code values} vector has a different length than the number of rows of this matrix.
      */
-    @Override
     public Matrix setRow(Vector values, int rowIndex) {
         return setRow(values.entries, rowIndex);
     }
@@ -1334,7 +1217,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * the principle square root i.e. the square root with positive real part.
      */
     public CMatrix sqrtComplex() {
-        return new CMatrix(shape, Complex128Operations.sqrt(entries));
+        return new CMatrix(shape, Complex128Ops.sqrt(entries));
     }
 
 
@@ -1451,28 +1334,6 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
 
 
     /**
-     * Get the row of this matrix at the specified index.
-     *
-     * @param rowIdx Index of row to get.
-     *
-     * @return The specified row of this matrix.
-     *
-     * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} is less than zero or greater than/equal to
-     *                                        the number of rows in this matrix.
-     */
-    @Override
-    public Vector getRow(int rowIdx) {
-        ValidateParameters.ensureIndexInBounds(numRows, rowIdx);
-        int start = rowIdx*numCols;
-        int stop = start+numCols;
-
-        double[] row = Arrays.copyOfRange(this.entries, start, stop);
-
-        return new Vector(row);
-    }
-
-
-    /**
      * Gets a specified row of this matrix between {@code colStart} (inclusive) and {@code colEnd} (exclusive).
      *
      * @param rowIdx Index of the row of this matrix to get.
@@ -1499,28 +1360,6 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
 
 
     /**
-     * Get the column of this matrix at the specified index.
-     *
-     * @param colIdx Index of column to get.
-     *
-     * @return The specified column of this matrix.
-     *
-     * @throws ArrayIndexOutOfBoundsException If {@code colIdx} is less than zero or greater than/equal to
-     *                                        the number of columns in this matrix.
-     */
-    @Override
-    public Vector getCol(int colIdx) {
-        ValidateParameters.ensureValidIndices(numCols, colIdx);
-        double[] col = new double[numRows];
-
-        for(int i=0; i<numRows; i++)
-            col[i] = entries[i*numCols + colIdx];
-
-        return new Vector(col);
-    }
-
-
-    /**
      * Gets a specified column of this matrix between {@code rowStart} (inclusive) and {@code rowEnd} (exclusive).
      *
      * @param colIdx Index of the column of this matrix to get.
@@ -1530,13 +1369,12 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return The column at index {@code colIdx} of this matrix between the {@code rowStart} and {@code rowEnd}
      * indices.
      *
-     * @throws @throws                  IndexOutOfBoundsException If either {@code colEnd} are {@code colStart} out of bounds for the
-     *                                  shape of this matrix.
+     * @throws IndexOutOfBoundsException If either {@code colEnd} are {@code colStart} out of bounds for the  shape of this matrix.
      * @throws IllegalArgumentException If {@code rowEnd} is less than {@code rowStart}.
      */
     @Override
     public Vector getCol(int colIdx, int rowStart, int rowEnd) {
-        ValidateParameters.ensureValidIndices(numRows, rowStart, rowEnd);
+        ValidateParameters.ensureValidArrayIndices(numRows, rowStart, rowEnd);
         ValidateParameters.ensureGreaterEq(rowEnd, rowStart);
         double[] col = new double[numRows];
 
@@ -1568,29 +1406,62 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
 
 
     /**
-     * Checks if an object is equal to this matrix object.
-     * @param object Object to check equality with this vector.
-     * @return True if the two matrices have the same shape, are numerically equivalent, and are of type {@link Matrix}.
-     * False otherwise.
+     * Gets the elements of this matrix along the specified diagonal.
+     *
+     * @param diagOffset The diagonal to get within this matrix.
+     * <ul>
+     *     <li>If {@code diagOffset == 0}: Then the elements of the principle diagonal are collected.</li>
+     *     <li>If {@code diagOffset < 0}: Then the elements of the sub-diagonal {@code diagOffset} below the principle diagonal
+     *     are collected.</li>
+     *     <li>If {@code diagOffset > 0}: Then the elements of the super-diagonal {@code diagOffset} above the principle diagonal
+     *     are collected.</li>
+     * </ul>
+     *
+     * @return The elements of the specified diagonal as a vector.
      */
     @Override
-    public boolean equals(Object object) {
-        if(this == object) return true;
-        if(object == null || object.getClass() != getClass()) return false;
+    public Vector getDiag(int diagOffset) {
+        ValidateParameters.ensureInRange(diagOffset, -(numRows-1), numCols-1, "diagOffset");
 
-        Matrix src2 = (Matrix) object;
+        // Check for some quick returns.
+        if(numRows == 1 && diagOffset > 0) return new Vector(entries[diagOffset]);
+        if(numCols == 1 && diagOffset < 0) return new Vector(entries[-diagOffset]);
 
-        return RealDenseEquals.tensorEquals(entries, shape, src2.entries, src2.shape);
+        // Compute the length of the diagonal.
+        int newSize = Math.min(numRows, numCols);
+        int idx = 0;
+
+        if(diagOffset > 0) {
+            newSize = Math.min(newSize, numCols - diagOffset);
+            idx = diagOffset;
+        }
+        else if(diagOffset < 0) {
+            newSize = Math.min(newSize, numRows + diagOffset);
+            idx = -diagOffset*numCols;
+        }
+
+        double[] diag = new double[newSize];
+
+        for(int i=0; i<newSize; i++) {
+            diag[i] = this.entries[idx];
+            idx += numCols + 1;
+        }
+
+        return new Vector(diag);
     }
 
 
+    /**
+     * Computes the transpose of a tensor by exchanging the first and last axes of this tensor.
+     *
+     * @return The transpose of this tensor.
+     *
+     * @see #T(int, int)
+     * @see #T(int...)
+     */
     @Override
-    public int hashCode() {
-        int hash = 17;
-        hash = 31*hash + shape.hashCode();
-        hash = 31*hash + Arrays.hashCode(entries);
-
-        return hash;
+    public Matrix T() {
+        return super.T();
     }
 
 
@@ -1645,7 +1516,6 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return A sparse COO tensor equivalent to this dense tensor.
      * @see #toCsr()
      */
-    @Override
     public CooMatrix toCoo() {
         final int rows = numRows;
         final int cols = numCols;
@@ -1732,7 +1602,8 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return The element-wise sum of this matrix and {@code b}
      */
     public CMatrix add(CsrCMatrix b) {
-        return RealComplexCsrDenseOperations.applyBinOpp(this, b, (Double x, Complex128 y)->y.add(x));
+//        return RealComplexCsrDenseOperations.applyBinOpp(this, b, (Double x, Complex128 y)->y.add(x));
+        return null;
     }
 
 
@@ -1742,7 +1613,8 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return The element-wise sum of this matrix and {@code b}
      */
     public CMatrix add(CooCMatrix b) {
-        return RealComplexDenseSparseMatrixOperations.add(this, b);
+//        return RealComplexDenseSparseMatrixOperations.add(this, b);
+        return null;
     }
 
 
@@ -1752,7 +1624,8 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return A matrix containing the sum of each entry in this matrix with {@code b}.
      */
     public CMatrix add(Complex128 b) {
-        return new CMatrix(shape, DenseFieldOperations.add(entries, b));
+//        return new CMatrix(shape, DenseFieldOps.add(entries, b));
+        return null;
     }
 
 
@@ -1794,7 +1667,8 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return The element-wise difference of this matrix and {@code b}
      */
     public CMatrix sub(CsrCMatrix b) {
-        return RealComplexCsrDenseOperations.applyBinOpp(this, b, (Double x, Complex128 y)->new Complex128(x-y.re, y.im));
+//        return RealComplexCsrDenseOperations.applyBinOpp(this, b, (Double x, Complex128 y)->new Complex128(x-y.re, y.im));
+        return null;
     }
 
 
@@ -1804,7 +1678,8 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return The element-wise difference of this matrix and {@code b}
      */
     public CMatrix sub(CooCMatrix b) {
-        return RealComplexDenseSparseMatrixOperations.sub(this, b);
+//        return RealComplexDenseSparseMatrixOperations.sub(this, b);
+        return null;
     }
 
 
@@ -1814,7 +1689,8 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return A matrix containing the difference of each entry in this matrix with {@code b}.
      */
     public CMatrix sub(Complex128 b) {
-        return new CMatrix(shape, DenseFieldOperations.sub(entries, b));
+//        return new CMatrix(shape, DenseFieldOps.sub(entries, b));
+        return null;
     }
 
 
@@ -1827,7 +1703,6 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
     public CMatrix mult(CMatrix b) {
         Field<Complex128>[] entries = MatrixMultiplyDispatcher.dispatch(this, b);
         Shape shape = new Shape(this.numRows, b.numCols);
-
         return new CMatrix(shape, entries);
     }
 
@@ -1850,7 +1725,8 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code this.numCols != b.numRows}.
      */
     public CMatrix mult(CsrCMatrix b) {
-        return (CMatrix) RealFieldDenseCsrMatMult.standard(this, b);
+//        return (CMatrix) RealFieldDenseCsrMatMult.standard(this, b);
+        return null;
     }
 
 
@@ -1874,7 +1750,8 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @implNote This method computes the matrix product as {@code this.mult(b.toCsr());}.
      */
     public CMatrix mult(CooCMatrix b) {
-        return mult(b.toCsr());
+//        return mult(b.toCsr());
+        return null;
     }
 
 
@@ -1886,8 +1763,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
     public CVector mult(CVector b) {
         ValidateParameters.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
         Field<Complex128>[] entries = RealFieldDenseMatMult.standardVector(
-                this.entries, this.shape, b.entries, b.shape
-        );
+                this.entries, this.shape, b.entries, b.shape);
 
         return new CVector(entries);
     }
@@ -1901,8 +1777,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
     public Vector mult(CooVector b) {
         ValidateParameters.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
         double[] entries = RealDenseSparseMatrixMultiplication.standardVector(
-                this.entries, this.shape, b.entries, b.indices
-        );
+                this.entries, this.shape, b.entries, b.indices);
 
         return new Vector(entries);
     }
@@ -1916,8 +1791,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
     public CVector mult(CooCVector b) {
         ValidateParameters.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
         Field<Complex128>[] entries = RealFieldDenseCooMatMult.standardVector(
-                this.entries, this.shape, b.entries, b.indices
-        );
+                this.entries, this.shape, b.entries, b.indices);
 
         return new CVector(entries);
     }
@@ -1929,7 +1803,8 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return The matrix-scalar product of this matrix and {@code b}.
      */
     public CMatrix mult(Complex128 b) {
-        return new CMatrix(shape, FieldOperations.scalMult(entries, b));
+//        return new CMatrix(shape, FieldOps.scalMult(entries, b));
+        return null;
     }
 
 
@@ -1945,7 +1820,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
     public CMatrix div(CMatrix b) {
         return new CMatrix(
                 shape,
-                RealFieldDenseElemDiv.dispatch(entries, shape, b.entries, b.shape)
+                RealFieldDenseElemDiv.dispatch(shape, entries, b.shape, b.entries)
         );
     }
 
@@ -1956,7 +1831,7 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
      * @return The matrix-scalar quotient of this matrix and {@code b}.
      */
     public CMatrix div(Complex128 b) {
-        return new CMatrix(shape, Complex128Operations.scalDiv(entries, b));
+        return new CMatrix(shape, Complex128Ops.scalDiv(entries, b));
     }
 
 
@@ -2024,45 +1899,81 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
 
 
     /**
-     * Gets row of matrix formatted as a human-readable String. Helper method for {@link #toString} method.
-     * @param i Index of row to get.
-     * @param colStopIndex Stopping index for printing columns.
-     * @param maxList List of maximum string representation lengths for each column of this matrix. This
-     *                is used to align columns when printing.
-     * @return A human-readable String representation of the specified row.
+     * Computes the conjugate transpose of a tensor by exchanging the first and last axes of this tensor and conjugating the
+     * exchanged values.
+     *
+     * @return The conjugate transpose of this tensor.
+     *
+     * @see #H(int, int)
+     * @see #H(int...)
      */
-    private String rowToString(int i, int colStopIndex, List<Integer> maxList) {
-        int width;
-        String value;
-        StringBuilder result = new StringBuilder();
+    @Override
+    public Matrix H() {
+        return T();
+    }
 
-        if(i>0) {
-            result.append(" [");
-        }  else {
-            result.append("[");
+
+    /**
+     * Checks if an object is equal to this matrix object.
+     * @param object Object to check equality with this vector.
+     * @return True if the two matrices have the same shape, are numerically equivalent, and are of type {@link Matrix}.
+     * False otherwise.
+     */
+    @Override
+    public boolean equals(Object object) {
+        if(this == object) return true;
+        if(object == null || object.getClass() != getClass()) return false;
+
+        Matrix src2 = (Matrix) object;
+
+        return RealDenseEquals.tensorEquals(entries, shape, src2.entries, src2.shape);
+    }
+
+
+    @Override
+    public int hashCode() {
+        int hash = 17;
+        hash = 31*hash + shape.hashCode();
+        hash = 31*hash + Arrays.hashCode(entries);
+
+        return hash;
+    }
+
+
+    /**
+     * Gets a row of the matrix formatted as a human-readable string.
+     * @param rowIndex Index of the row to get.
+     * @param columnsToPrint List of column indices to print.
+     * @param maxWidths List of maximum string lengths for each column.
+     * @return A human-readable string representation of the specified row.
+     */
+    private String rowToString(int rowIndex, List<Integer> columnsToPrint, List<Integer> maxWidths) {
+        StringBuilder sb = new StringBuilder();
+
+        // Start the row with appropriate bracket.
+        sb.append(rowIndex > 0 ? " [" : "[");
+
+        // Loop over the columns to print.
+        for (int i = 0; i < columnsToPrint.size(); i++) {
+            int colIndex = columnsToPrint.get(i);
+            String value;
+            int width = PrintOptions.getPadding() + maxWidths.get(i);
+
+            if (colIndex == -1) // Placeholder for truncated columns.
+                value = "...";
+            else
+                value = StringUtils.ValueOfRound(this.get(rowIndex, colIndex), PrintOptions.getPrecision());
+
+            if (PrintOptions.useCentering())
+                value = StringUtils.center(value, width);
+
+            sb.append(String.format("%-" + width + "s", value));
         }
 
-        for(int j=0; j<colStopIndex; j++) {
-            value = StringUtils.ValueOfRound(this.get(i, j), PrintOptions.getPrecision());
-            width = PrintOptions.getPadding() + maxList.get(j);
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-            result.append(String.format("%-" + width + "s", value));
-        }
+        // Close the row.
+        sb.append("]");
 
-        if(PrintOptions.getMaxColumns() < this.numCols) {
-            width = PrintOptions.getPadding() + 3;
-            value = "...";
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-            result.append(String.format("%-" + width + "s", value));
-        }
-
-        // Get last entry in the column now
-        value = StringUtils.ValueOfRound(this.get(i, this.numCols-1), PrintOptions.getPrecision());
-        width = PrintOptions.getPadding() + maxList.getLast();
-        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-        result.append(String.format("%-" + width + "s]", value));
-
-        return result.toString();
+        return sb.toString();
     }
 
 
@@ -2073,51 +1984,62 @@ public class Matrix extends DensePrimitiveDoubleTensorBase<Matrix, CooMatrix>
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder("shape: ").append(shape).append("\n");
-
         result.append("[");
 
-        if(entries.length==0) {
+        if (entries.length == 0) {
             result.append("[]"); // No entries in this matrix.
         } else {
-            int rowStopIndex = Math.min(PrintOptions.getMaxRows() - 1, this.numRows - 1);
-            int colStopIndex = Math.min(PrintOptions.getMaxColumns() - 1, this.numCols - 1);
-            int width;
-            int totalRowLength = 0; // Total string length of each row (not including brackets)
-            String value;
+            int numRows = this.numRows;
+            int numCols = this.numCols;
 
-            // Find maximum entry string width in each column so columns can be aligned.
-            List<Integer> maxList = new ArrayList<>(colStopIndex + 1);
-            for (int j = 0; j < colStopIndex; j++) {
-                maxList.add(PrettyPrint.maxStringLength(this.getCol(j).entries, rowStopIndex));
-                totalRowLength += maxList.getLast();
+            int maxRows = PrintOptions.getMaxRows();
+            int maxCols = PrintOptions.getMaxColumns();
+
+            int rowStopIndex = Math.min(maxRows - 1, numRows - 1);
+            boolean truncatedRows = maxRows < numRows;
+
+            int colStopIndex = Math.min(maxCols - 1, numCols - 1);
+            boolean truncatedCols = maxCols < numCols;
+
+            // Build list of column indices to print
+            List<Integer> columnsToPrint = new ArrayList<>();
+            for (int j = 0; j < colStopIndex; j++)
+                columnsToPrint.add(j);
+
+            if (truncatedCols) columnsToPrint.add(-1); // Use -1 to indicate '...'.
+            columnsToPrint.add(numCols - 1); // Always include the last column.
+
+            // Compute maximum widths for each column
+            List<Integer> maxWidths = new ArrayList<>();
+            for (Integer colIndex : columnsToPrint) {
+                int maxWidth;
+                if (colIndex == -1)
+                    maxWidth = 3; // Width for '...'.
+                else
+                    maxWidth = PrettyPrint.maxStringLength(this.getCol(colIndex).entries, rowStopIndex + 1);
+
+                maxWidths.add(maxWidth);
             }
 
-            if (colStopIndex < this.numCols) {
-                maxList.add(PrettyPrint.maxStringLength(this.getCol(this.numCols - 1).entries));
-                totalRowLength += maxList.getLast();
-            }
-
-            if (colStopIndex < this.numCols - 1) {
-                totalRowLength += 3 + PrintOptions.getPadding(); // Account for '...' element with padding in each column.
-            }
-
-            totalRowLength += maxList.size() * PrintOptions.getPadding(); // Account for column padding
-
-            // Get each row as a string.
+            // Build the rows up to the stopping index.
             for (int i = 0; i < rowStopIndex; i++) {
-                result.append(rowToString(i, colStopIndex, maxList));
+                result.append(rowToString(i, columnsToPrint, maxWidths));
                 result.append("\n");
             }
 
-            if (PrintOptions.getMaxRows() < this.numRows) {
-                width = totalRowLength;
-                value = "...";
-                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-                result.append(String.format(" [%-" + width + "s]\n", value));
+            if (truncatedRows) {
+                // Print a '...' row to indicate truncated rows.
+                int totalWidth = maxWidths.stream().mapToInt(w -> w + PrintOptions.getPadding()).sum();
+                String value = "...";
+
+                if (PrintOptions.useCentering())
+                    value = StringUtils.center(value, totalWidth);
+
+                result.append(String.format(" [%-" + totalWidth + "s]\n", value));
             }
 
-            // Get Last row as a string.
-            result.append(rowToString(this.numRows - 1, colStopIndex, maxList));
+            // Append the last row.
+            result.append(rowToString(numRows - 1, columnsToPrint, maxWidths));
         }
 
         result.append("]");

@@ -25,7 +25,6 @@
 package org.flag4j.linalg.operations.dense.real;
 
 
-import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
@@ -33,7 +32,7 @@ import org.flag4j.util.ValidateParameters;
 /**
  * This class contains low level implementations of element-wise multiplications algorithms for real dense tensors.
  */
-public class RealDenseElemMult {
+public final class RealDenseElemMult {
 
     /**
      * Minimum number of entries in each tensor to apply concurrent algorithm.
@@ -42,67 +41,71 @@ public class RealDenseElemMult {
 
     private RealDenseElemMult() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
     /**
-     * Computes the element-wise multiplication of two tensors. Also called the Hadamard product.
+     * Computes the element-wise multiplication of two tensors.
+     *
      * @param src1 First tensor in element-wise multiplication.
-     * @param shape1 Shape of the first tensor.
      * @param src2 Second tensor in element-wise multiplication.
-     * @param shape2 Shape of the second tensor.
-     * @return The element-wise multiplication of the two tensors.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     * @param dest Array to store the result in. May be {@code null} or the same array as {@code src1} or {@code src2}.
+     * @return If {@code dest != null} then a reference to {@code dest} is returned. Otherwise, a new array of the appropriate size is
+     * created and returned.
+     * @throws IllegalArgumentException If {@code src1.length != src2.length}.
+     * @throws ArrayIndexOutOfBoundsException If {@code dest.length < src1.length}.
      */
-    public static double[] elemMult(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ValidateParameters.ensureEqualShape(shape1, shape2);
-        double[] product = new double[src1.length];
+    public static double[] elemMult(double[] src1, double[] src2, double[] dest) {
+        ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
+        if(dest == null) dest = new double[src1.length];
 
-        for(int i=0; i<product.length; i++) {
-            product[i] = src1[i]*src2[i];
-        }
+        for(int i=0, size=src1.length; i<size; i++)
+            dest[i] = src1[i]*src2[i];
 
-        return product;
+        return dest;
     }
 
 
     /**
-     * Computes the element-wise multiplication of two tensors using a concurrent algorithm. Also called the Hadamard product.
+     * Computes the element-wise multiplication of two tensors using a concurrent algorithm.
+     *
      * @param src1 First tensor in element-wise multiplication.
-     * @param shape1 Shape of the first tensor.
      * @param src2 Second tensor in element-wise multiplication.
-     * @param shape2 Shape of the second tensor.
-     * @return The element-wise multiplication of the two tensors.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     * @param dest Array to store the result in. May be {@code null} or the same array as {@code src1} or {@code src2}.
+     * @return If {@code dest != null} then a reference to {@code dest} is returned. Otherwise, a new array of the appropriate size is
+     * created and returned.
+     * @throws IllegalArgumentException If {@code src1.length != src2.length}.
+     * @throws ArrayIndexOutOfBoundsException If {@code dest.length < src1.length}.
      */
-    public static double[] elemMultConcurrent(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ValidateParameters.ensureEqualShape(shape1, shape2);
-        double[] product = new double[src1.length];
+    public static double[] elemMultConcurrent(double[] src1, double[] src2, double[] dest) {
+        ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
+        if(dest == null) dest = new double[src1.length];
 
-        ThreadManager.concurrentOperation(product.length, (startIdx, endIdx) -> {
-            for(int i=startIdx; i<endIdx; i++) {
-                product[i] = src1[i]*src2[i];
-            }
+        double[] finalDest = dest;
+        ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
+            for(int i=startIdx; i<endIdx; i++)
+                finalDest[i] = src1[i]*src2[i];
         });
 
-        return product;
+        return dest;
     }
 
 
     /**
-     * Dynamically chooses and applies element-wise multiplication algorithm to use based on the number of entries in the tensors.
+     * <p>Dynamically chooses and applies element-wise multiplication algorithm to use based on the number of entries in the tensors.
+     *
      * @param src1 Entries of first tensor.
-     * @param shape1 Shape of first tensor.
      * @param src2 Entries of second tensor.
-     * @param shape2 Shape of second tensor.
-     * @return The element-wise multiplication of the two tensors.
+     * @param dest Array to store the result in. May be {@code null} or the same array as {@code src1} or {@code src1}.
+     *
+     * @return If {@code dest != null} then a reference to {@code dest} will be returned. Otherwise, a new array of the appropriate
+     * size will be created and returned.
      */
-    public static double[] dispatch(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        if(src1.length < CONCURRENT_THRESHOLD) {
-            return elemMult(src1, shape1, src2, shape2);
-        } else {
-            return elemMultConcurrent(src1, shape1, src2, shape2);
-        }
+    public static double[] dispatch(double[] src1, double[] src2, double[] dest) {
+        if(src1.length < CONCURRENT_THRESHOLD)
+            return elemMult(src1, src2, dest);
+        else
+            return elemMultConcurrent(src1, src2, dest);
     }
 }

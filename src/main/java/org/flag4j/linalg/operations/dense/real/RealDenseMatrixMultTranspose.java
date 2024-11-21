@@ -34,11 +34,11 @@ import org.flag4j.util.ErrorMessages;
  * two real dense matrices. <br>
  * <b>WARNING:</b> These methods do not perform any sanity checks.
  */
-public class RealDenseMatrixMultTranspose {
+public final class RealDenseMatrixMultTranspose {
 
     private RealDenseMatrixMultTranspose() {
         // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

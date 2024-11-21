@@ -25,11 +25,7 @@
 package org.flag4j.complex_vector;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.arrays.dense.CVector;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 class CVectorEqualsTests {
 

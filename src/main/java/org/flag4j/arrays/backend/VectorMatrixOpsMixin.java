@@ -30,7 +30,7 @@ package org.flag4j.arrays.backend;
  * @param <U> Type of the matrix.
  * @param <V> Type of dense matrix equivalent to {@code U}.
  */
-public interface VectorMatrixOpsMixin<T extends VectorMixin, U extends MatrixMixin, V extends MatrixMixin> {
+public interface VectorMatrixOpsMixin<T extends VectorMixinOld, U extends MatrixMixinOld, V extends MatrixMixinOld> {
 
 
     /**

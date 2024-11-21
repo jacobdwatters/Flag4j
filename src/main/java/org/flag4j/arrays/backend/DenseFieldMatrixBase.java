@@ -26,10 +26,11 @@ package org.flag4j.arrays.backend;
 
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend_new.AbstractTensor;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.operations.TransposeDispatcher;
-import org.flag4j.linalg.operations.common.field_ops.CompareField;
+import org.flag4j.linalg.operations.common.ring_ops.RingProperties;
 import org.flag4j.linalg.operations.dense.field_ops.DenseFieldDeterminant;
 import org.flag4j.linalg.operations.dense.field_ops.DenseFieldMatMultDispatcher;
 import org.flag4j.linalg.operations.dense.field_ops.DenseFieldProperties;
@@ -61,7 +62,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
         W extends DenseFieldVectorBase<W, T, ?, Y>,
         Y extends Field<Y>>
         extends FieldTensorBase<T, T, Y>
-        implements DenseMatrixMixin<T, U, W, Y> {
+        implements DenseMatrixMixinOld<T, U, W, Field<Y>[], Y> {
 
     /**
      * The number of rows in this matrix.
@@ -105,7 +106,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
     @Override
     public boolean allClose(T b, double relTol, double absTol) {
         if(!shape.equals(b.shape)) return false;
-        return CompareField.allClose(entries, b.entries, relTol, absTol);
+        return RingProperties.allClose(entries, b.entries, relTol, absTol);
     }
 
 
@@ -215,7 +216,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T H(int axis1, int axis2) {
-        ValidateParameters.ensureValidIndices(2, axis1, axis2);
+        ValidateParameters.ensureValidArrayIndices(2, axis1, axis2);
         return (T) TransposeDispatcher.dispatchHermitian(this);
     }
 
@@ -507,7 +508,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T T(int axis1, int axis2) {
-        ValidateParameters.ensureValidIndices(2, axis1, axis2);
+        ValidateParameters.ensureValidArrayIndices(2, axis1, axis2);
         if(axis1==axis2) return copy();
 
         return (T) TransposeDispatcher.dispatch(this);
@@ -531,7 +532,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
     @Override
     public T T(int... axes) {
         ValidateParameters.ensureArrayLengthsEq(2, axes.length);
-        ValidateParameters.ensureValidIndices(2, axes[0], axes[1]);
+        ValidateParameters.ensureValidArrayIndices(2, axes[0], axes[1]);
 
         return (T) TransposeDispatcher.dispatch(this);
     }
@@ -545,7 +546,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * @return The result of stacking this matrix on top of the matrix {@code b}.
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of columns.
-     * @see #stack(TensorBase, int)
+     * @see #stack(AbstractTensor, int)
      * @see #augment(FieldMatrix)
      */
     @Override
@@ -570,7 +571,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of rows.
      * @see #stack(DenseFieldMatrixBase) 
-     * @see #stack(MatrixMixin, int)
+     * @see #stack(MatrixMixinOld, int)
      */
     @Override
     public T augment(T b) {
@@ -629,7 +630,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T swapRows(int rowIndex1, int rowIndex2) {
-        ValidateParameters.ensureValidIndices(numRows, rowIndex1, rowIndex2);
+        ValidateParameters.ensureValidArrayIndices(numRows, rowIndex1, rowIndex2);
 
         int row1Offset = rowIndex1*numCols;
         int row2Offset = rowIndex2*numCols;
@@ -661,7 +662,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T swapCols(int colIndex1, int colIndex2) {
-        ValidateParameters.ensureValidIndices(numCols, colIndex1, colIndex2);
+        ValidateParameters.ensureValidArrayIndices(numCols, colIndex1, colIndex2);
 
         if(colIndex1 != colIndex2) {
             Field<Y> temp;
@@ -864,8 +865,8 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T setSlice(T values, int rowStart, int colStart) {
-        ValidateParameters.ensureValidIndices(numRows, rowStart);
-        ValidateParameters.ensureValidIndices(numCols, colStart);
+        ValidateParameters.ensureValidArrayIndices(numRows, rowStart);
+        ValidateParameters.ensureValidArrayIndices(numCols, colStart);
 
         for(int i=0; i<values.numRows; i++) {
             int src1Offset = (i+rowStart)*numCols + colStart;
@@ -915,8 +916,8 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
-        ValidateParameters.ensureValidIndices(numRows, rowStart, rowEnd);
-        ValidateParameters.ensureValidIndices(numCols, colStart, colEnd);
+        ValidateParameters.ensureValidArrayIndices(numRows, rowStart, rowEnd);
+        ValidateParameters.ensureValidArrayIndices(numCols, colStart, colEnd);
 
         int sliceRows = rowEnd-rowStart;
         int sliceCols = colEnd-colStart;
@@ -1238,7 +1239,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public W getCol(int colIdx) {
-        ValidateParameters.ensureValidIndices(numCols, colIdx);
+        ValidateParameters.ensureValidArrayIndices(numCols, colIdx);
         Field<Y>[] col = new Field[numRows];
 
         for(int i=0; i<numRows; i++)
@@ -1264,7 +1265,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public W getCol(int colIdx, int rowStart, int rowEnd) {
-        ValidateParameters.ensureValidIndices(numRows, rowStart, rowEnd);
+        ValidateParameters.ensureValidArrayIndices(numRows, rowStart, rowEnd);
         ValidateParameters.ensureGreaterEq(rowEnd, rowStart);
         Field<Y>[] col = new Field[numRows];
 
@@ -1377,7 +1378,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      */
     @Override
     public T set(Y value, int... indices) {
-        ValidateParameters.ensureValidIndex(shape, indices);
+        ValidateParameters.validateTensorIndex(shape, indices);
         entries[indices[0]*numCols + indices[1]] = value;
         return (T) this;
     }
@@ -1411,7 +1412,7 @@ public abstract class DenseFieldMatrixBase<T extends DenseFieldMatrixBase<T, U, 
      * @throws IndexOutOfBoundsException If {@code values.length != this.numCols}.
      */
     public T setRow(Field<Y>[] values, int rowIdx) {
-        ValidateParameters.ensureValidIndices(numRows, rowIdx);
+        ValidateParameters.ensureValidArrayIndices(numRows, rowIdx);
         ValidateParameters.ensureArrayLengthsEq(values.length, numCols);
 
         int rowOffset = rowIdx*numCols;

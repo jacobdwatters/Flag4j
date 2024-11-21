@@ -26,11 +26,18 @@ package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.CsrFieldMatrixBase;
+import org.flag4j.arrays.backend_new.AbstractTensor;
+import org.flag4j.arrays.backend_new.field.AbstractCooFieldTensor;
+import org.flag4j.arrays.backend_new.field.AbstractCsrFieldMatrix;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.FieldVector;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.operations.sparse.SparseUtils;
+import org.flag4j.linalg.operations.sparse.csr.semiring_ops.SemiringCsrMatMult;
+import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,34 +46,34 @@ import java.util.List;
 
 /**
  * <p>A sparse matrix stored in compressed sparse row (CSR) format. The {@link #entries} of this CSR matrix are
- * elements of a {@link Field}.</p>
+ * elements of a {@link Field}.
  *
  * <p>The {@link #entries non-zero entries} and non-zero indices of a CSR matrix are mutable but the {@link #shape}
- * and {@link #nnz total number of non-zero entries} is fixed.</p>
+ * and {@link #nnz total number of non-zero entries} is fixed.
  *
- * <p>Sparse matrices allow for the efficient storage of and operations on matrices that contain many zero values.</p>
+ * <p>Sparse matrices allow for the efficient storage of and operations on matrices that contain many zero values.
  *
- * <p>A sparse CSR matrix is stored as:</p>
+ * <p>A sparse CSR matrix is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
  *     <li>The non-zero {@link #entries} of the matrix. All other entries in the matrix are
  *     assumed to be zero. Zero values can also explicitly be stored in {@link #entries}.</li>
  *     <li>The {@link #rowPointers row pointers} of the non-zero values in the CSR matrix. Has size {@link #numRows numRows + 1}</li>
  *     <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all values in row
- *     {@code i}.</p>
+ *     {@code i}.
  *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
  *
  * <p>Note: many operations assume that the entries of the CSR matrix are sorted lexicographically by the row and column indices.
  * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any operations implemented in this
- * class will preserve the lexicographical sorting.</p>
+ * class will preserve the lexicographical sorting.
  *
- * <p>If indices need to be sorted explicitly, call {@link #sortIndices()}.</p>
+ * <p>If indices need to be sorted explicitly, call {@link #sortIndices()}.
  *
  * @param <T> Type of field element of this matrix.
  */
-public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFieldMatrix<T>, FieldMatrix<T>,
-        CooFieldVector<T>, FieldVector<T>, T> {
+public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<CsrFieldMatrix<T>,
+        FieldMatrix<T>, CooFieldVector<T>, T> {
 
 
     /**
@@ -76,7 +83,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
      * @param entries The non-zero entries of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
      * <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all
-     * values in row {@code i}.</p>
+     * values in row {@code i}.
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code entries.length == colIndices.length}.
      */
@@ -86,50 +93,102 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
 
 
     /**
-     * Constructs a CSR matrix of the same type as this matrix with the given the {@code shape}, {@code entries} and the same non-zero
-     * indices.
+     * Creates a sparse CSR matrix with the specified {@code shape}, non-zero entries, row pointers, and non-zero column indices.
      *
-     * @param shape Shape of the matrix to construct.
-     * @param entries Entries of the matrix to construct.
-     *
-     * @return A matrix of the same type as this matrix with the given the {@code shape}, {@code entries} and the same non-zero
-     * indices.
+     * @param shape Shape of this tensor.
+     * @param entries The non-zero entries of this CSR matrix.
+     * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
+     * <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all
+     * values in row {@code i}.
+     * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
+     * {@code entries.length == colIndices.length}.
      */
-    @Override
-    public CsrFieldMatrix<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
-        return new CsrFieldMatrix<T>(shape, entries, rowPointers.clone(), colIndices.clone());
+    public CsrFieldMatrix(Shape shape, List<Field<T>> entries, List<Integer> rowPointers, List<Integer> colIndices) {
+        super(shape, entries.toArray(new Field[entries.size()]),
+                ArrayUtils.fromIntegerList(rowPointers),
+                ArrayUtils.fromIntegerList(colIndices));
     }
 
 
     /**
-     * Constructs a CSR matrix of the same type as this matrix with the given the {@code shape}, {@code entries} and non-zero
-     * indices.
+     * Constructs a sparse CSR tensor of the same type as this tensor with the specified non-zero entries and indices.
      *
-     * @param shape Shape of the matrix to construct.
-     * @param entries Entries of the matrix to construct.
-     * @param rowPointers Row pointers for the CSR matrix.
-     * @param colIndices Column indices of the CSR matrix.
+     * @param shape Shape of the matrix.
+     * @param entries Non-zero entries of the CSR matrix.
+     * @param rowPointers Row pointers for the non-zero values in the CSR matrix.
+     * @param colIndices Non-zero column indices of the CSR matrix.
      *
-     * @return A matrix of the same type as this matrix with the given the {@code shape}, {@code entries} and non-zero
-     * indices.
+     * @return A sparse CSR tensor of the same type as this tensor with the specified non-zero entries and indices.
      */
     @Override
-    public CsrFieldMatrix<T> makeLikeTensor(Shape shape, Field<T>[] entries, int[] rowPointers, int[] colIndices) {
+    public CsrFieldMatrix<T> makeLikeTensor(Shape shape, T[] entries, int[] rowPointers, int[] colIndices) {
         return new CsrFieldMatrix<>(shape, entries, rowPointers, colIndices);
     }
 
 
     /**
-     * Constructs a dense matrix of similar type as this matrix with the given the {@code shape} and {@code entries}.
+     * Constructs a CSR matrix with the specified shape, non-zero entries, and non-zero indices.
      *
-     * @param shape Shape of the dense matrix to construct.
-     * @param entries Entries of the dense matrix to construct.
+     * @param shape Shape of the matrix.
+     * @param entries Non-zero values of the CSR matrix.
+     * @param rowPointers Row pointers for the non-zero values in the CSR matrix.
+     * @param colIndices Non-zero column indices of the CSR matrix.
      *
-     * @return A dense matrix of similar type as this sparse CSR matrix with the given the {@code shape} and {@code entries}.
+     * @return A CSR matrix with the specified shape, non-zero entries, and non-zero indices.
      */
     @Override
-    public FieldMatrix<T> makeLikeDenseTensor(Shape shape, Field<T>[] entries) {
-        return new FieldMatrix<T>(shape, entries);
+    public CsrFieldMatrix<T> makeLikeTensor(Shape shape, List<T> entries, List<Integer> rowPointers, List<Integer> colIndices) {
+        return new CsrFieldMatrix<>(shape, entries, rowPointers, colIndices);
+    }
+
+
+    /**
+     * Constructs a dense matrix which is of a similar type to this sparse CSR matrix.
+     *
+     * @param shape Shape of the dense matrix.
+     * @param entries Entries of the dense matrix.
+     *
+     * @return A dense matrix which is of a similar type to this sparse CSR matrix with the specified {@code shape}
+     * and {@code entries}.
+     */
+    @Override
+    public FieldMatrix<T> makeLikeDenseTensor(Shape shape, T[] entries) {
+        return new FieldMatrix<>(shape, entries);
+    }
+
+
+    /**
+     * <p>Constructs a sparse COO matrix of a similar type to this sparse CSR matrix.
+     * <p>Note: this method constructs a new COO matrix with the specified entries and indices. It does <i>not</i> convert this matrix
+     * to a CSR matrix. To convert this matrix to a sparse COO matrix use {@link #toCoo()}.
+     *
+     * @param shape Shape of the COO matrix.
+     * @param entries Non-zero entries of the COO matrix.
+     * @param rowIndices Non-zero row indices of the sparse COO matrix.
+     * @param colIndices Non-zero column indices of the Sparse COO matrix.
+     *
+     * @return A sparse COO matrix of a similar type to this sparse CSR matrix.
+     */
+    @Override
+    public CooFieldMatrix<T> makeLikeCooMatrix(Shape shape, Field<T>[] entries, int[] rowIndices, int[] colIndices) {
+        return new CooFieldMatrix<>(shape, entries, rowIndices, colIndices);
+    }
+
+
+    /**
+     * Constructs a tensor of the same type as this tensor with the given the {@code shape} and
+     * {@code entries}. The resulting tensor will also have
+     * the same non-zero indices as this tensor.
+     *
+     * @param shape Shape of the tensor to construct.
+     * @param entries Entries of the tensor to construct.
+     *
+     * @return A tensor of the same type and with the same non-zero indices as this tensor with the given the {@code shape} and
+     * {@code entries}.
+     */
+    @Override
+    public CsrFieldMatrix<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
+        return new CsrFieldMatrix<>(shape, entries, rowPointers.clone(), colIndices.clone());
     }
 
 
@@ -150,6 +209,28 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
         }
 
         return new CooFieldMatrix<T>(shape, entries.clone(), cooRowIdx, colIndices.clone());
+    }
+
+
+    /**
+     * Converts this CSR matrix to an equivalent sparse COO tensor.
+     *
+     * @return An sparse COO tensor equivalent to this CSR matrix.
+     */
+    @Override
+    public CooFieldTensor<T> toTensor() {
+        return toCoo().toTensor();
+    }
+
+
+    /**
+     * Converts this CSR matrix to an equivalent COO tensor with the specified shape.
+     *
+     * @param shape@return A COO tensor equivalent to this CSR matrix which has been reshaped to {@code newShape}
+     */
+    @Override
+    public AbstractCooFieldTensor<?, ?, T> toTensor(Shape shape) {
+        return toCoo().toTensor(shape);
     }
 
 
@@ -188,6 +269,26 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
         }
 
         return result;
+    }
+
+
+    /**
+     * Computes the matrix-vector multiplication of a vector with this matrix.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     *
+     * @return The result of multiplying this matrix with {@code b}.
+     *
+     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the size of
+     *                                {@code b}.
+     */
+    @Override
+    public FieldVector<T> mult(CooFieldVector<T> b) {
+        Field<T>[] dest = new Field[b.size];
+        SemiringCsrMatMult.standardVector(shape, entries, rowPointers, colIndices,
+                b.size, b.entries, b.indices,
+                dest, getZeroElement());
+        return new FieldVector<>(dest);
     }
 
 
@@ -241,7 +342,6 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
      * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} is less than zero or greater than/equal to
      *                                        the number of rows in this matrix.
      */
-    @Override
     public CooFieldVector<T> getRow(int rowIdx) {
         ValidateParameters.ensureIndexInBounds(numRows, rowIdx);
         int start = rowPointers[rowIdx];
@@ -269,7 +369,6 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
      * @throws IndexOutOfBoundsException If either {@code colEnd} are {@code colStart} out of bounds for the shape of this matrix.
      * @throws IllegalArgumentException  If {@code colEnd} is less than {@code colStart}.
      */
-    @Override
     public CooFieldVector<T> getRow(int rowIdx, int colStart, int colEnd) {
         ValidateParameters.ensureIndexInBounds(numRows, rowIdx);
         ValidateParameters.ensureIndexInBounds(numCols, colStart, colEnd-1);
@@ -302,7 +401,6 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
      * @throws ArrayIndexOutOfBoundsException If {@code colIdx} is less than zero or greater than/equal to
      *                                        the number of columns in this matrix.
      */
-    @Override
     public CooFieldVector<T> getCol(int colIdx) {
         return getCol(colIdx, 0, numRows);
     }
@@ -322,11 +420,10 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
      *                                  shape of this matrix.
      * @throws IllegalArgumentException If {@code rowEnd} is less than {@code rowStart}.
      */
-    @Override
     public CooFieldVector<T> getCol(int colIdx, int rowStart, int rowEnd) {
         // TODO: This method (and others returning a vector) could easily be used for complex csr matrices as well.
         //  Just need to pass a factory so the correct type of vector is returned.
-        //  e.g. getCol(CsrFieldMatrixBase<?, ?, ?, ?, T> mat, int colIdx, int rowStart, int rowEnd, CsrVectorFactory factory)
+        //  e.g. getCol(AbstractCsrSemiringMatrix<?, ?, ?, ?, T> mat, int colIdx, int rowStart, int rowEnd, CsrVectorFactory factory)
         ValidateParameters.ensureIndexInBounds(numCols, colIdx);
         ValidateParameters.ensureIndexInBounds(numRows, rowStart, rowEnd-1);
 
@@ -355,7 +452,6 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
      *
      * @return A vector containing the diagonal entries of this matrix.
      */
-    @Override
     public CooFieldVector<T> getDiag() {
         List<Field<T>> destEntries = new ArrayList<>();
         List<Integer> destIndices = new ArrayList<>();
@@ -372,5 +468,90 @@ public class CsrFieldMatrix<T extends Field<T>> extends CsrFieldMatrixBase<CsrFi
         }
 
         return new CooFieldVector<T>(Math.min(numRows, numCols), destEntries, destIndices);
+    }
+
+
+    /**
+     * Gets the elements of this matrix along the specified diagonal.
+     *
+     * @param diagOffset The diagonal to get within this matrix.
+     * <ul>
+     *     <li>If {@code diagOffset == 0}: Then the elements of the principle diagonal are collected.</li>
+     *     <li>If {@code diagOffset < 0}: Then the elements of the sub-diagonal {@code diagOffset} below the principle diagonal
+     *     are collected.</li>
+     *     <li>If {@code diagOffset > 0}: Then the elements of the super-diagonal {@code diagOffset} above the principle diagonal
+     *     are collected.</li>
+     * </ul>
+     *
+     * @return The elements of the specified diagonal as a vector.
+     */
+    @Override
+    public CooFieldVector<T> getDiag(int diagOffset) {
+        return toCoo().getDiag(diagOffset);
+    }
+
+
+    /**
+     * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
+     * computes the sum of products between the two tensors along the specified set of axes.
+     *
+     * @param src2 TensorOld to contract with this tensor.
+     * @param aAxes Axes along which to compute products for this tensor.
+     * @param bAxes Axes along which to compute products for {@code src2} tensor.
+     *
+     * @return The tensor dot product over the specified axes.
+     *
+     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes pairwise in
+     *                                  {@code aAxes} and {@code bAxes}.
+     * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
+     *                                  are out of bounds for the corresponding tensor.
+     */
+    @Override
+    public AbstractTensor<?, Field<T>[], T> tensorDot(CsrFieldMatrix<T> src2, int[] aAxes, int[] bAxes) {
+        return toTensor().tensorDot(src2.toTensor(), aAxes, bAxes);
+    }
+
+
+    /**
+     * Formats this sparse matrix as a human-readable string.
+     * @return A human-readable string representing this sparse matrix.
+     */
+    public String toString() {
+        int size = nnz;
+        StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
+        result.append("Non-zero entries: [");
+
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int width;
+        String value;
+
+        if(entries.length > 0) {
+            // Get entries up until the stopping point.
+            for(int i=0; i<stopIndex; i++) {
+                value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+                width = PrintOptions.getPadding() + value.length();
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            if(stopIndex < size-1) {
+                width = PrintOptions.getPadding() + 3;
+                value = "...";
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            // Get last entry now
+            value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        result.append("]\n");
+        result.append("Row Pointers: ").append(Arrays.toString(rowPointers)).append("\n");
+        result.append("Col Indices: ").append(Arrays.toString(colIndices));
+
+        return result.toString();
     }
 }

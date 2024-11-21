@@ -41,18 +41,7 @@ public class ComplexLU extends LU<CMatrix> {
      * Constructs a LU decomposer to decompose the specified matrix using partial pivoting.
      */
     public ComplexLU() {
-        super(Pivoting.PARTIAL.ordinal());
-    }
-
-
-    /**
-     * Constructs a LU decomposer to decompose the specified matrix.
-     *
-     * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
-     *                 will be used. If pivoting is any other value, no pivoting will be used.
-     */
-    public ComplexLU(int pivoting) {
-        super(pivoting);
+        super(Pivoting.PARTIAL);
     }
 
 
@@ -62,7 +51,7 @@ public class ComplexLU extends LU<CMatrix> {
      * @param pivoting Pivoting to use in the LU decomposition.
      */
     public ComplexLU(Pivoting pivoting) {
-        super(pivoting.ordinal());
+        super(pivoting);
     }
 
 
@@ -71,12 +60,12 @@ public class ComplexLU extends LU<CMatrix> {
      *
      * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
      *                 will be used. If pivoting is any other value, no pivoting will be used.
-     * @param zeroPivotComplex128ol Value for determining if a zero pivot value is detected when computing the LU decomposition with
+     * @param zeroPivotTol Value for determining if a zero pivot value is detected when computing the LU decomposition with
      *                     no pivoting. If a pivot value (value along the principle diagonal of U) is within this tolerance
      *                     from zero, then an exception will be thrown if solving with no pivoting.
      */
-    public ComplexLU(int pivoting, double zeroPivotComplex128ol) {
-        super(pivoting, zeroPivotComplex128ol);
+    public ComplexLU(Pivoting pivoting, double zeroPivotTol) {
+        super(pivoting, zeroPivotTol);
     }
 
 
@@ -86,7 +75,7 @@ public class ComplexLU extends LU<CMatrix> {
      */
     @Override
     protected void initLU(CMatrix src) {
-        // Complex128ODO: Add overloaded constructor in super which has flag specifing if the decomposition should be done in place or copied.
+        // TODO: Add overloaded constructor in super which has flag specifying if the decomposition should be done in place or copied.
         LU = new CMatrix(src.shape, src.entries.clone());
     }
 

@@ -24,14 +24,14 @@
 
 package org.flag4j.linalg.decompositions;
 
-import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend_new.MatrixMixin;
 
 
 /**
  * This interface specifies methods which should be implemented in all decompositions.
  * @param <T> MatrixOld type to decompose.
  */
-public interface Decomposition<T extends MatrixMixin<T, ?, ?, ?, ?>> {
+public interface Decomposition<T extends MatrixMixin<T, ?, ?, ?>> {
 
     /**
      * Applies decomposition to the source matrix.

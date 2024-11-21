@@ -26,16 +26,13 @@ package org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops;
 
 
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.CooFieldMatrixBase;
-import org.flag4j.arrays.backend.DenseFieldMatrixBase;
-import org.flag4j.arrays.backend.DenseFieldVectorBase;
+import org.flag4j.arrays.backend_new.field.AbstractCooFieldMatrix;
+import org.flag4j.arrays.backend_new.field.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.linalg.operations.common.field_ops.FieldOperations;
+import org.flag4j.linalg.operations.common.field_ops.FieldOps;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
-
-import java.util.Arrays;
 
 /**
  * This class contains low level implementations of operations between real/field and dense/sparse matrices.
@@ -44,7 +41,7 @@ public final class RealFieldDenseCooMatrixOperations {
 
     private RealFieldDenseCooMatrixOperations() {
         // Hide private constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -55,10 +52,10 @@ public final class RealFieldDenseCooMatrixOperations {
      * @return The result of the matrix addition.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> add(
-            DenseFieldMatrixBase<?, ?, ?, ?, T> src1, CooMatrix src2) {
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> add(
+            AbstractDenseFieldMatrix<?, ?, T> src1, CooMatrix src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        DenseFieldMatrixBase<?, ?, ?, ?, T> dest = src1.copy();
+        AbstractDenseFieldMatrix<?, ?, T> dest = src1.copy();
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
@@ -76,9 +73,9 @@ public final class RealFieldDenseCooMatrixOperations {
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> sub(DenseFieldMatrixBase<?, ?, ?, ?, T> src1, CooMatrix src2) {
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> sub(AbstractDenseFieldMatrix<?, ?, T> src1, CooMatrix src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        DenseFieldMatrixBase<?, ?, ?, ?, T> dest = src1.copy();
+        AbstractDenseFieldMatrix<?, ?, T> dest = src1.copy();
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
@@ -96,9 +93,9 @@ public final class RealFieldDenseCooMatrixOperations {
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> sub(CooMatrix src2, DenseFieldMatrixBase<?, ?, ?, ?, T> src1) {
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> sub(CooMatrix src2, AbstractDenseFieldMatrix<?, ?, T> src1) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        DenseFieldMatrixBase<?, ?, ?, ?, T> dest = src1.makeLikeTensor(src1.shape, FieldOperations.scalMult(src1.entries, -1));
+        AbstractDenseFieldMatrix<?, ?, T> dest = src1.makeLikeTensor(src1.shape, FieldOps.scalMult(src1.entries, -1, null));
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
@@ -115,7 +112,7 @@ public final class RealFieldDenseCooMatrixOperations {
      * @param src2 Entries of second matrix in the sum.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static <T extends Field<T>> void addEq(DenseFieldMatrixBase<?, ?, ?, ?, T> src1, CooMatrix src2) {
+    public static <T extends Field<T>> void addEq(AbstractDenseFieldMatrix<?, ?, T> src1, CooMatrix src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nnz; i++) {
@@ -131,7 +128,7 @@ public final class RealFieldDenseCooMatrixOperations {
      * @param src2 Entries of second matrix in the sum.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static <T extends Field<T>> void subEq(DenseFieldMatrixBase<?, ?, ?, ?, T> src1, CooMatrix src2) {
+    public static <T extends Field<T>> void subEq(AbstractDenseFieldMatrix<?, ?, T> src1, CooMatrix src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nnz; i++) {
@@ -148,8 +145,8 @@ public final class RealFieldDenseCooMatrixOperations {
      * @return The result of element-wise multiplication.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static <T extends Field<T>> CooFieldMatrixBase<?, ?, ?, ?, T> elemMult(
-            Matrix src1, CooFieldMatrixBase<?, ?, ?, ?, T> src2) {
+    public static <T extends Field<T>> AbstractCooFieldMatrix<?, ?, ?, T> elemMult(
+            Matrix src1, AbstractCooFieldMatrix<?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         Field<T>[] destEntries = new Field[src2.nnz];
 
@@ -159,7 +156,7 @@ public final class RealFieldDenseCooMatrixOperations {
             destEntries[i] = src2.entries[i].mult(src1.entries[row*src1.numCols + col]);
         }
 
-        return src2.makeLikeTensor(src2.shape, destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
+        return src2.makeLikeTensor(src2.shape, (T[]) destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
     }
 
 
@@ -181,7 +178,7 @@ public final class RealFieldDenseCooMatrixOperations {
      * @return The element-wise quotient of {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} and {@code src2} do not have the same shape.
      */
-    public static <T extends Field<T>> CooFieldMatrixBase<?, ?, ?, ?, T> elemDiv(CooFieldMatrixBase<?, ?, ?, ?, T> src1, Matrix src2) {
+    public static <T extends Field<T>> AbstractCooFieldMatrix<?, ?, ?, T> elemDiv(AbstractCooFieldMatrix<?, ?, ?, T> src1, Matrix src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         Field<T>[] quotient = new Field[src1.entries.length];
 
@@ -191,58 +188,6 @@ public final class RealFieldDenseCooMatrixOperations {
             quotient[i] = src1.entries[i].div(src2.entries[row*src2.numCols + col]);
         }
 
-        return src1.makeLikeTensor(src1.shape, quotient, src1.rowIndices.clone(), src1.colIndices.clone());
-    }
-
-
-    /**
-     * Adds a dense vector to each column as if the vector is a column vector.
-     * @param src Source sparse matrix.
-     * @param col Vector to add to each column of the source matrix.
-     * @return A dense copy of the {@code src} matrix with the specified vector added to each column.
-     * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
-     * of rows in the {@code src} matrix.
-     */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> addToEachCol(
-            CooMatrix src, DenseFieldVectorBase<?, ?, ?, T> col) {
-        Field<T>[] sumEntries = new Field[src.shape.totalEntriesIntValueExact()];
-        Arrays.fill(sumEntries, col.getZeroElement());
-        DenseFieldMatrixBase<?, ?, ?, ?, T> sum = col.makeLikeMatrix(src.shape, sumEntries);
-
-        for(int j=0; j<sum.numCols; j++)
-            sum.setCol(col.entries, j);
-
-        for(int i=0; i<src.entries.length; i++) {
-            int idx = src.rowIndices[i]*src.numCols + src.colIndices[i];
-            sum.entries[idx] = sum.entries[idx].add(src.entries[i]);
-        }
-
-        return sum;
-    }
-
-
-    /**
-     * Adds a dense vector to add to each row as if the vector is a row vector.
-     * @param src Source sparse matrix.
-     * @param row Vector to add to each row of the source matrix.
-     * @return A dense copy of the {@code src} matrix with the specified vector added to each row.
-     * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
-     * of columns in the {@code src} matrix.
-     */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> addToEachRow(
-            CooMatrix src, DenseFieldVectorBase<?, ?, ?, T> row) {
-        Field<T>[] sumEntries = new Field[src.shape.totalEntriesIntValueExact()];
-        Arrays.fill(sumEntries, row.getZeroElement());
-        DenseFieldMatrixBase<?, ?, ?, ?, T> sum = row.makeLikeMatrix(src.shape, sumEntries);
-
-        for(int i=0; i<sum.numRows; i++)
-            sum.setRow(row.entries, i);
-
-        for(int i=0; i<src.entries.length; i++) {
-            int idx = src.rowIndices[i]*src.numCols + src.colIndices[i];
-            sum.entries[idx] = sum.entries[idx].add(src.entries[i]);
-        }
-
-        return sum;
+        return src1.makeLikeTensor(src1.shape, (T[]) quotient, src1.rowIndices.clone(), src1.colIndices.clone());
     }
 }

@@ -41,7 +41,7 @@ public final class RealFieldDenseCooOperations {
 
     private RealFieldDenseCooOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -60,7 +60,7 @@ public final class RealFieldDenseCooOperations {
         ArrayUtils.deepCopy(src2.indices, destIndices);
 
         for(int i=0, size=destEntries.length; i<size; i++) {
-            int index = src2.shape.entriesIndex(src2.indices[i]); // Get index of non-zero entry.
+            int index = src2.shape.getFlatIndex(src2.indices[i]); // Get index of non-zero entry.
             destEntries[i] = src2.entries[i].mult(src1.entries[index]);
         }
 
@@ -82,7 +82,7 @@ public final class RealFieldDenseCooOperations {
         ArrayUtils.deepCopy(src1.indices, destIndices);
 
         for(int i=0, size=destEntries.length; i<size; i++) {
-            int index = src2.shape.entriesIndex(src1.indices[i]); // Get index of non-zero entry.
+            int index = src2.shape.getFlatIndex(src1.indices[i]); // Get index of non-zero entry.
             destEntries[i] = src1.entries[index].div(src2.entries[i]);
         }
 
@@ -101,7 +101,7 @@ public final class RealFieldDenseCooOperations {
         DenseFieldTensorBase<?, ?, T> dest = src1.copy();
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            int idx = dest.shape.entriesIndex(src2.indices[i]);
+            int idx = dest.shape.getFlatIndex(src2.indices[i]);
             dest.entries[idx] = dest.entries[idx].add(src2.entries[i]);
         }
 
@@ -120,7 +120,7 @@ public final class RealFieldDenseCooOperations {
         DenseFieldTensorBase<?, ?, T> dest = src1.copy();
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            int idx = dest.shape.entriesIndex(src2.indices[i]);
+            int idx = dest.shape.getFlatIndex(src2.indices[i]);
             dest.entries[idx] = dest.entries[idx].sub(src2.entries[i]);
         }
 
@@ -138,7 +138,7 @@ public final class RealFieldDenseCooOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            int idx = src2.shape.entriesIndex(src2.indices[i]);
+            int idx = src2.shape.getFlatIndex(src2.indices[i]);
             src1.entries[idx] = src1.entries[idx].add(src2.entries[i]);
         }
     }
@@ -154,7 +154,7 @@ public final class RealFieldDenseCooOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            int idx = src2.shape.entriesIndex(src2.indices[i]);
+            int idx = src2.shape.getFlatIndex(src2.indices[i]);
             src1.entries[idx] = src1.entries[idx].sub(src2.entries[i]);
         }
     }
@@ -172,7 +172,7 @@ public final class RealFieldDenseCooOperations {
         DenseFieldTensorBase<?, ?, T> dest = src2.mult(-1);
 
         for(int i=0, size=src1.nnz; i<size; i++) {
-            int idx = src1.shape.entriesIndex(src1.indices[i]);
+            int idx = src1.shape.getFlatIndex(src1.indices[i]);
             dest.entries[idx] = dest.entries[idx].add(src1.entries[i]);
         }
 

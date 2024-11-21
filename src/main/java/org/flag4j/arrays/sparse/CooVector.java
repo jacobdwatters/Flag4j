@@ -26,20 +26,20 @@ package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
-import org.flag4j.arrays.backend.SparseVectorMixin;
+import org.flag4j.arrays.backend_new.VectorMixin;
+import org.flag4j.arrays.backend_new.primitive.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.linalg.operations.common.complex.Complex128Operations;
-import org.flag4j.linalg.operations.common.field_ops.FieldOperations;
-import org.flag4j.linalg.operations.dense.real.AggregateDenseReal;
+import org.flag4j.linalg.operations.common.complex.Complex128Ops;
+import org.flag4j.linalg.operations.common.field_ops.FieldOps;
+import org.flag4j.linalg.operations.common.real.RealProperties;
 import org.flag4j.linalg.operations.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
 import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
-import org.flag4j.linalg.operations.sparse.coo.SparseDataWrapper;
+import org.flag4j.linalg.operations.sparse.coo.CooDataSorter;
 import org.flag4j.linalg.operations.sparse.coo.real.RealCooVectorOperations;
 import org.flag4j.linalg.operations.sparse.coo.real.RealSparseEquals;
 import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
@@ -55,17 +55,17 @@ import java.util.List;
 
 /**
  * <p>A real sparse vector stored in coordinate list (COO) format. The {@link #entries} of this COO vector are
- * primitive doubles.</p>
+ * primitive doubles.
  *
  * <p>The {@link #entries non-zero entries} and {@link #indices non-zero indices} of a COO vector are mutable but the {@link #shape}
- * and total number of non-zero entries is fixed.</p>
+ * and total number of non-zero entries is fixed.
  *
- * <p>Sparse vectors allow for the efficient storage of and operations on vectors that contain many zero values.</p>
+ * <p>Sparse vectors allow for the efficient storage of and operations on vectors that contain many zero values.
  *
  * <p>COO vectors are optimized for hyper-sparse vectors (i.e. vectors which contain almost all zeros relative to the size of the
- * vector).</p>
+ * vector).
  *
- * <p>A sparse COO vector is stored as:</p>
+ * <p>A sparse COO vector is stored as:
  * <ul>
  *     <li>The full {@link #shape}/{@link #size} of the vector.</li>
  *     <li>The non-zero {@link #entries} of the vector. All other entries in the vector are
@@ -73,13 +73,17 @@ import java.util.List;
  *     <li>The {@link #indices} of the non-zero values in the sparse vector.</li>
  * </ul>
  *
- * <p>Note: many operations assume that the entries of the COO vector are sorted lexicographically. However, this is not explicitly
- * verified. Every operation implemented in this class will preserve the lexicographical sorting.</p>
+ * <p>Some operations on sparse tensors behave differently than on dense tensors. For instance, {@link #add(Complex128)} will not
+ * add the scalar to all entries of the tensor since this would cause catastrophic loss of sparsity. Instead, such non-zero preserving
+ * element-wise operations only act on the non-zero entries of the sparse tensor as to not affect the sparsity.
  *
- * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.</p>
+ * <p>Note: many operations assume that the entries of the COO vector are sorted lexicographically. However, this is not explicitly
+ * verified. Every operation implemented in this class will preserve the lexicographical sorting.
+ *
+ * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.
  */
-public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
-        implements SparseVectorMixin<CooVector, Vector, CooMatrix, Matrix, Double> {
+public class CooVector extends AbstractDoubleTensor<CooVector>
+        implements VectorMixin<CooVector, CooMatrix, Matrix, Double> {
 
     /**
      * The indices of the non-zero entries in this sparse COO vector.
@@ -338,17 +342,17 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
 
 
     /**
-     * <p>Computes the inner product between two vectors.</p>
+     * <p>Computes the inner product between two vectors.
      *
      * <p>Note: this method is distinct from {@link #dot(CooVector)}. The inner product is equivalent to the dot product
-     * of this tensor with the conjugation of {@code b}.</p>
+     * of this tensor with the conjugation of {@code b}.
      *
      * @param b Second vector in the inner product.
      *
      * @return The inner product between this vector and the vector {@code b}.
      *
      * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of entries.
-     * @see #dot(VectorMixin)
+     * @see #dot(CooVector)
      */
     @Override
     public Double inner(CooVector b) {
@@ -357,10 +361,10 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
 
 
     /**
-     * <p>Computes the dot product between two vectors.</p>
+     * <p>Computes the dot product between two vectors.
      *
      * <p>Note: this method is distinct from {@link #inner(CooVector)}. The inner product is equivalent to the dot product
-     * of this tensor with the conjugation of {@code b}.</p>
+     * of this tensor with the conjugation of {@code b}.
      *
      * @param b Second vector in the dot product.
      *
@@ -380,7 +384,6 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      *
      * @return The Euclidean norm of this vector.
      */
-    @Override
     public double norm() {
         return VectorNorms.norm(entries);
     }
@@ -393,7 +396,6 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      *
      * @return The Euclidean norm of this vector.
      */
-    @Override
     public double norm(int p) {
         return VectorNorms.norm(entries, p);
     }
@@ -405,7 +407,6 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      * @return A unit vector with the same direction as this vector. If this vector is zeros, then an equivalently sized
      * zero vector will be returned.
      */
-    @Override
     public CooVector normalize() {
         double norm = VectorNorms.norm(entries);
         return norm==0 ? new CooVector(size) : this.div(norm);
@@ -419,9 +420,8 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      *
      * @return True if the vector {@code b} is parallel to this vector and the same size. Otherwise, returns false.
      *
-     * @see #isPerp(CooVector) 
+     * @see #isPerp(CooVector)
      */
-    @Override
     public boolean isParallel(CooVector b) {
         final double tol = 1.0e-12; // Tolerance to accommodate floating point arithmetic error in scaling.
         boolean result;
@@ -473,7 +473,6 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      * @implNote This method checks if the vector is perpendicular by checking if the inner product is essentially zero:
      * {@code Math.abs(this.inner(b)) < TOL} where {@code TOL} is a small non-negative value.
      */
-    @Override
     public boolean isPerp(CooVector b) {
         final double TOL = 1.0e-12; // Tolerance to accommodate floating point arithmetic error in scaling.
         return this.size!=b.size ? false : Math.abs(this.inner(b)) < TOL;
@@ -496,7 +495,6 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      *
      * @return The density of this sparse tensor.
      */
-    @Override
     public double sparsity() {
         return 1.0 - ((double) nnz / (double) size);
     }
@@ -507,7 +505,6 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      *
      * @return A dense tensor equivalent to this sparse tensor.
      */
-    @Override
     public Vector toDense() {
         double[] entries = new double[size];
         for(int i = 0; i<nnz; i++)
@@ -520,9 +517,8 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
     /**
      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
      */
-    @Override
     public void sortIndices() {
-        SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);
+        CooDataSorter.wrap(entries, indices).sparseSort().unwrap(entries, indices);
     }
 
 
@@ -557,7 +553,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     @Override
     public CooVector set(Double value, int... indices) {
-        ValidateParameters.ensureValidIndex(shape, indices);
+        ValidateParameters.validateTensorIndex(shape, indices);
         int idx = Arrays.binarySearch(this.indices, indices[0]);
         double[] destEntries;
         int[] destIndices;
@@ -652,8 +648,10 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      *
      * @return The difference of this tensor's non-zero values and the scalar {@code b}.
      */
-    public CVector sub(Complex128 b) {
-        return new CVector(RealComplexSparseVectorOperations.sub(this, b));
+    public CooCVector sub(Complex128 b) {
+        Complex128[] dest = new Complex128[entries.length];
+        FieldOps.sub(entries, b, dest);
+        return new CooCVector(shape, dest, indices.clone());
     }
 
 
@@ -682,14 +680,16 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
 
 
     /**
-     * Adds a scalar field value to each entry of this tensor.
+     * Adds a scalar field value to each non-zero entry of this tensor.
      *
      * @param b Scalar field value in sum.
      *
-     * @return The sum of this tensor with the scalar {@code b}.
+     * @return The sparse COO vector resulting from adding {@code b} to each non-zero entry of this vector.
      */
-    public CVector add(Complex128 b) {
-        return new CVector(RealComplexSparseVectorOperations.add(this, b));
+    public CooCVector add(Complex128 b) {
+        Complex128[] dest = new Complex128[entries.length];
+        FieldOps.add(entries, b, dest);
+        return new CooCVector(shape, FieldOps.add(entries, b, dest), indices.clone());
     }
 
 
@@ -764,11 +764,11 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
 
 
     /**
-     * <p>Computes the generalized trace of this tensor along the specified axes.</p>
+     * <p>Computes the generalized trace of this tensor along the specified axes.
      *
      * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays_old of this tensor specified by
      * {@code axis1} and {@code axis2}. The shape of the resulting tensor is equal to this tensor with the
-     * {@code axis1} and {@code axis2} removed.</p>
+     * {@code axis1} and {@code axis2} removed.
      *
      * @param axis1 First axis for 2D sub-array.
      * @param axis2 Second axis for 2D sub-array.
@@ -868,68 +868,14 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
 
 
     /**
-     * Computes the element-wise reciprocals of the non-zero values of this tensor.
+     * Finds the indices of the minimum value in this tensor.
      *
-     * @return A tensor containing the reciprocal elements of the non-zero values of this tensor.
-     */
-    @Override
-    public CooVector recip() {
-        return super.recip(); // Overrides method from super class to emphasize that this method works on the non-zero values only.
-    }
-
-
-    /**
-     * Finds the minimum non-zero value in this tensor.
-     *
-     * @return The minimum non-zero value in this tensor.
-     */
-    @Override
-    public double min() {
-        return super.min(); // Overrides method from super class to emphasize that this method works on the non-zero values only.
-    }
-
-
-    /**
-     * Finds the maximum non-zero value in this tensor.
-     *
-     * @return The maximum non-zero value in this tensor.
-     */
-    @Override
-    public double max() {
-        return super.max(); // Overrides method from super class to emphasize that this method works on the non-zero values only.
-    }
-
-
-    /**
-     * Finds the minimum non-zero value, in absolute value, in this tensor.
-     *
-     * @return The minimum non-zero value, in absolute value, in this tensor.
-     */
-    @Override
-    public double minAbs() {
-        return super.minAbs(); // Overrides method from super class to emphasize that this method works on the non-zero values only.
-    }
-
-
-    /**
-     * Finds the maximum non-zero value, in absolute value, in this tensor.
-     *
-     * @return The maximum non-zero value, in absolute value, in this tensor.
-     */
-    @Override
-    public double maxAbs() {
-        return super.maxAbs(); // Overrides method from super class to emphasize that this method works on the non-zero values only.
-    }
-
-
-    /**
-     * Finds the indices of the minimum non-zero value in this tensor.
-     *
-     * @return The indices of the minimum non-zero value in this tensor.
+     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
      */
     @Override
     public int[] argmin() {
-        return new int[]{indices[AggregateDenseReal.argmin(entries)]};
+        return new int[]{indices[RealProperties.argmin(entries)]};
     }
 
 
@@ -941,31 +887,43 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     @Override
     public int[] argmax() {
-        return new int[]{indices[AggregateDenseReal.argmax(entries)]};
+        return new int[]{indices[RealProperties.argmax(entries)]};
     }
 
 
     /**
      * Finds the indices of the minimum absolute value in this tensor.
      *
-     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
+     * @return The indices of the minimum absolute value in this tensor. If this value occurs multiple times, the indices of the first
      * entry (in row-major ordering) are returned.
      */
     @Override
     public int[] argminAbs() {
-        return new int[]{indices[AggregateDenseReal.argminAbs(entries)]};
+        return new int[]{indices[RealProperties.argminAbs(entries)]};
     }
 
 
     /**
      * Finds the indices of the maximum absolute value in this tensor.
      *
-     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
+     * @return The indices of the maximum absolute value in this tensor. If this value occurs multiple times, the indices of the first
      * entry (in row-major ordering) are returned.
      */
     @Override
     public int[] argmaxAbs() {
-        return new int[]{indices[AggregateDenseReal.argmaxAbs(entries)]};
+        return new int[]{indices[RealProperties.argmaxAbs(entries)]};
+    }
+
+
+    /**
+     * Computes the element-wise reciprocals of the non-zero values of this tensor.
+     *
+     * @return A tensor containing the reciprocal elements of the non-zero values of this tensor.
+     */
+    @Override
+    public CooVector recip() {
+        // Overrides method from super class to emphasize that this method works on the non-zero values only.
+        return super.recip();
     }
 
 
@@ -978,7 +936,8 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     @Override
     public CooVector add(double b) {
-        return super.add(b); // Overrides method from super class to emphasize that this method works on the non-zero values only.
+        // Overrides method from super class to emphasize that this method works on the non-zero values only.
+        return super.add(b);
     }
 
 
@@ -991,9 +950,26 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      */
     @Override
     public CooVector sub(double b) {
-        return super.sub(b); // Overrides method from super class to emphasize that this method works on the non-zero values only.
+        // Overrides method from super class to emphasize that this method works on the non-zero values only.
+        return super.sub(b);
     }
 
+
+    /**
+     * <p>Computes the element-wise quotient between two tensors.
+     *
+     * <p><b>WARNING</b>: This method is not supported for sparse vectors. If called on a sparse vector,
+     * an {@link UnsupportedOperationException} will be thrown. Element-wise division is undefined for sparse vectors as it
+     * would almost certainly result in a division by zero.
+     *
+     * @param b Second tensor in the element-wise quotient.
+     *
+     * @return The element-wise quotient of this tensor with {@code b}.
+     */
+    @Override
+    public CooVector div(CooVector b) {
+        throw new UnsupportedOperationException("Cannot compute element-wise division of two sparse vectors.");
+    }
 
 
     /**
@@ -1067,17 +1043,17 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
     /**
      * <p>
      * Stacks two vectors along specified axis.
-     * </p>
+     * 
      *
      * <p>
      * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
      * as if they were row vectors resulting in a {@code 2-by-n} matrix.
-     * </p>
+     * 
      *
      * <p>
      * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
      * as if they were column vectors resulting in a {@code n-by-2} matrix.
-     * </p>
+     * 
      *
      * @param b VectorOld to stack with this vector.
      * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
@@ -1115,8 +1091,8 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      * Converts a vector to an equivalent matrix representing either a row or column vector.
      *
      * @param columVector Flag indicating whether to convert this vector to a matrix representing a row or column vector:
-     * <p>If {@code true}, the vector will be converted to a matrix representing a column vector.</p>
-     * <p>If {@code false}, The vector will be converted to a matrix representing a row vector.</p>
+     * <p>If {@code true}, the vector will be converted to a matrix representing a column vector.
+     * <p>If {@code false}, The vector will be converted to a matrix representing a row vector.
      *
      * @return A matrix equivalent to this vector.
      */
@@ -1164,7 +1140,9 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      * @return The result of multiplying this vector by the scalar {@code factor}.
      */
     public CooCVector mult(Complex128 factor) {
-        return new CooCVector(size, FieldOperations.scalMult(entries, factor), indices.clone());
+        Complex128[] dest = new Complex128[entries.length];
+        FieldOps.mult(entries, factor, dest);
+        return new CooCVector(shape, dest, indices.clone());
     }
 
 
@@ -1207,7 +1185,7 @@ public class CooVector extends PrimitiveDoubleTensorBase<CooVector, Vector>
      * @return The vector-scalar quotient of this vector and {@code divisor}.
      */
     public CooCVector div(Complex128 divisor) {
-        return new CooCVector(size, Complex128Operations.scalDiv(entries, divisor), indices.clone());
+        return new CooCVector(size, Complex128Ops.scalDiv(entries, divisor), indices.clone());
     }
 
 

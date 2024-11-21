@@ -25,7 +25,7 @@
 package org.flag4j.linalg.decompositions.unitary;
 
 
-import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend_new.MatrixMixin;
 import org.flag4j.linalg.decompositions.Decomposition;
 import org.flag4j.util.ValidateParameters;
 
@@ -40,7 +40,7 @@ import org.flag4j.util.ValidateParameters;
  * @param <T> Type of the matrix to be decomposed.
  * @param <U> Internal storage datatype of the matrix.
  */
-public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?>, U> implements Decomposition<T> {
+public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?, ?>, U> implements Decomposition<T> {
 
     /**
      * <p>

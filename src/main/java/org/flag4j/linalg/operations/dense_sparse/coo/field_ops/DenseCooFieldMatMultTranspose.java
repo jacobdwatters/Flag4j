@@ -38,7 +38,7 @@ public final class DenseCooFieldMatMultTranspose {
 
     private DenseCooFieldMatMultTranspose() {
         // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
     }
 
 

@@ -2,13 +2,10 @@ package org.flag4j.complex_vector;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.RealFloat64;
-import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.arrays.dense.Vector;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CVectorElemOppTests {
 

@@ -39,7 +39,7 @@ public final class DenseFieldTranspose {
 
     private DenseFieldTranspose() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -63,9 +63,9 @@ public final class DenseFieldTranspose {
         int[] destIndices;
 
         for(int i=0; i<src.length; i++) {
-            destIndices = shape.getIndices(i);
+            destIndices = shape.getNdIndices(i);
             ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
-            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
+            dest[destShape.getFlatIndex(destIndices)] = src[i]; // Apply transpose for the element
         }
 
         return dest;
@@ -93,9 +93,9 @@ public final class DenseFieldTranspose {
         // Compute transpose concurrently
         ThreadManager.concurrentOperation(src.length, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
-                int[] destIndices = shape.getIndices(i);
+                int[] destIndices = shape.getNdIndices(i);
                 ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
-                dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
+                dest[destShape.getFlatIndex(destIndices)] = src[i]; // Apply transpose for the element
             }
         });
 
@@ -121,13 +121,13 @@ public final class DenseFieldTranspose {
         }
 
         Field<T>[] dest = new Field[shape.totalEntries().intValue()];
-        Shape destShape = shape.swapAxes(axes);
+        Shape destShape = shape.permuteAxes(axes);
         int[] destIndices;
 
         for(int i=0; i<src.length; i++) {
-            destIndices = shape.getIndices(i);
+            destIndices = shape.getNdIndices(i);
             ArrayUtils.swapUnsafe(destIndices, axes); // Compute destination indices.
-            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
+            dest[destShape.getFlatIndex(destIndices)] = src[i]; // Apply transpose for the element
         }
 
         return dest;
@@ -152,14 +152,14 @@ public final class DenseFieldTranspose {
         }
 
         Field<T>[] dest = new Field[shape.totalEntries().intValue()];
-        Shape destShape = shape.swapAxes(axes);
+        Shape destShape = shape.permuteAxes(axes);
 
         // Compute transpose concurrently.
         ThreadManager.concurrentOperation(src.length, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
-                int[] destIndices = shape.getIndices(i);
+                int[] destIndices = shape.getNdIndices(i);
                 ArrayUtils.swapUnsafe(destIndices, axes); // Compute destination indices.
-                dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
+                dest[destShape.getFlatIndex(destIndices)] = src[i]; // Apply transpose for the element
             }
         });
 
@@ -320,9 +320,9 @@ public final class DenseFieldTranspose {
         int[] destIndices;
 
         for(int i=0; i<src.length; i++) {
-            destIndices = shape.getIndices(i);
+            destIndices = shape.getNdIndices(i);
             ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
-            dest[destShape.entriesIndex(destIndices)] = src[i].conj(); // Apply transpose for the element.
+            dest[destShape.getFlatIndex(destIndices)] = src[i].conj(); // Apply transpose for the element.
         }
 
         return dest;
@@ -350,9 +350,9 @@ public final class DenseFieldTranspose {
         // Compute transpose concurrently
         ThreadManager.concurrentOperation(src.length, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
-                int[] destIndices = shape.getIndices(i);
+                int[] destIndices = shape.getNdIndices(i);
                 ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
-                dest[destShape.entriesIndex(destIndices)] = src[i].conj(); // Apply transpose for the element
+                dest[destShape.getFlatIndex(destIndices)] = src[i].conj(); // Apply transpose for the element
             }
         });
 
@@ -378,13 +378,13 @@ public final class DenseFieldTranspose {
         }
 
         Field<T>[] dest = new Field[shape.totalEntries().intValue()];
-        Shape destShape = shape.swapAxes(axes);
+        Shape destShape = shape.permuteAxes(axes);
 
         ThreadManager.concurrentOperation(src.length, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
-                int[] destIndices = shape.getIndices(i);
+                int[] destIndices = shape.getNdIndices(i);
                 ArrayUtils.swapUnsafe(destIndices, axes); // Compute destination indices.
-                dest[destShape.entriesIndex(destIndices)] = src[i].conj(); // Apply conjugate transpose for the element
+                dest[destShape.getFlatIndex(destIndices)] = src[i].conj(); // Apply conjugate transpose for the element
             }
         });
 

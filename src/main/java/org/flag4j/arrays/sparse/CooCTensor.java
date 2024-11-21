@@ -28,7 +28,7 @@ import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Complex64;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.CooFieldTensorBase;
+import org.flag4j.arrays.backend_new.field.AbstractCooFieldTensor;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
@@ -66,7 +66,7 @@ import java.util.List;
  *     </li>
  * </ul>
  */
-public class CooCTensor extends CooFieldTensorBase<CooCTensor, CTensor, Complex128> {
+public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Complex128> {
 
     /**
      * Creates a tensor with the specified entries and shape.
@@ -78,6 +78,50 @@ public class CooCTensor extends CooFieldTensorBase<CooCTensor, CTensor, Complex1
     public CooCTensor(Shape shape, Field<Complex128>[] entries, int[][] indices) {
         super(shape, entries, indices);
         if(entries.length == 0 || entries[0] == null) setZeroElement(Complex128.ZERO);
+    }
+
+
+    /**
+     * Constructs a tensor of the same type as this tensor with the specified shape and non-zero entries.
+     *
+     * @param shape Shape of the tensor to construct.
+     * @param entries Non-zero entries of the tensor to construct.
+     * @param indices Indices of the non-zero entries of the tensor.
+     *
+     * @return A tensor of the same type as this tensor with the specified shape and non-zero entries.
+     */
+    @Override
+    public CooCTensor makeLikeTensor(Shape shape, Complex128[] entries, int[][] indices) {
+        return new CooCTensor(shape, entries, indices);
+    }
+
+
+    /**
+     * Constructs a tensor of the same type as this tensor with the specified shape and non-zero entries.
+     *
+     * @param shape Shape of the tensor to construct.
+     * @param entries Non-zero entries of the tensor to construct.
+     * @param indices Indices of the non-zero entries of the tensor.
+     *
+     * @return A tensor of the same type as this tensor with the specified shape and non-zero entries.
+     */
+    @Override
+    public CooCTensor makeLikeTensor(Shape shape, List<Field<Complex128>> entries, List<int[]> indices) {
+        return new CooCTensor(shape, entries, indices);
+    }
+
+
+    /**
+     * Constructs a dense tensor that is a similar type as this sparse COO tensor.
+     *
+     * @param shape Shape of the tensor to construct.
+     * @param entries The entries of the dense tensor to construct.
+     *
+     * @return A dense tensor that is a similar type as this sparse COO tensor.
+     */
+    @Override
+    public CTensor makeLikeDenseTensor(Shape shape, Field<Complex128>[] entries) {
+        return new CTensor(shape, entries);
     }
 
 
@@ -146,124 +190,19 @@ public class CooCTensor extends CooFieldTensorBase<CooCTensor, CTensor, Complex1
 
 
     /**
-     * Sets the element of this tensor at the specified indices.
+     * Constructs a tensor of the same type as this tensor with the given the {@code shape} and
+     * {@code entries}. The resulting tensor will also have
+     * the same non-zero indices as this tensor.
      *
-     * @param value New value to set the specified index of this tensor to.
-     * @param index Indices of the element to set.
+     * @param shape Shape of the tensor to construct.
+     * @param entries Entries of the tensor to construct.
      *
-     * @return A copy of this tensor with the updated value is returned.
-     *
-     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
-     */
-    @Override
-    public CooCTensor set(Complex128 value, int... index) {
-        ValidateParameters.ensureValidIndex(shape, index);
-        CooCTensor dest;
-
-        // Check if value already exists in tensor.
-        int idx = -1;
-        for(int i=0; i<indices.length; i++) {
-            if(Arrays.equals(indices[i], index)) {
-                idx = i;
-                break; // Found in tensor, no need to continue.
-            }
-        }
-
-        if(idx > -1) {
-            // Copy entries and set new value.
-            dest = new CooCTensor(shape, entries.clone(), ArrayUtils.deepCopy(indices, null));
-            dest.entries[idx] = value;
-            dest.indices[idx] = index;
-        } else {
-            // Copy old indices and insert new one.
-            int[][] newIndices = new int[indices.length + 1][getRank()];
-            ArrayUtils.deepCopy(indices, newIndices);
-            newIndices[indices.length] = index;
-
-            // Copy old entries and insert new one.
-            Field<Complex128>[] newEntries = Arrays.copyOf(entries, entries.length+1);
-            newEntries[newEntries.length-1] = value;
-
-            dest = new CooCTensor(shape, newEntries, newIndices);
-            dest.sortIndices();
-        }
-
-        return dest;
-    }
-
-
-    /**
-     * Constructs a sparse tensor of the same type as this tensor with the same indices as this sparse tensor and with the provided
-     * the shape and entries.
-     *
-     * @param shape Shape of the sparse tensor to construct.
-     * @param entries Entries of the spares tensor to construct.
-     *
-     * @return A sparse tensor of the same type as this tensor with the same indices as this sparse tensor and with the provided
-     * the shape and entries.
+     * @return A tensor of the same type and with the same non-zero indices as this tensor with the given the {@code shape} and
+     * {@code entries}.
      */
     @Override
     public CooCTensor makeLikeTensor(Shape shape, Field<Complex128>[] entries) {
-        return new CooCTensor(shape, entries, indices.clone());
-    }
-
-
-    /**
-     * Constructs a sparse tensor of the same type as this tensor with the given the shape, non-zero entries, and non-zero indices.
-     *
-     * @param shape Shape of the sparse tensor to construct.
-     * @param entries Non-zero entries of the sparse tensor to construct.
-     * @param indices Non-zero indices of the sparse tensor to construct.
-     *
-     * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
-     */
-    @Override
-    public CooCTensor makeLikeTensor(Shape shape, Field<Complex128>[] entries, int[][] indices) {
-        return new CooCTensor(shape, entries, indices);
-    }
-
-
-    /**
-     * Constructs a sparse tensor of the same type as this tensor with the given the shape, non-zero entries, and non-zero indices.
-     *
-     * @param shape Shape of the sparse tensor to construct.
-     * @param entries Non-zero entries of the sparse tensor to construct.
-     * @param indices Non-zero indices of the sparse tensor to construct.
-     *
-     * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
-     */
-    @Override
-    public CooCTensor makeLikeTensor(Shape shape, List<Field<Complex128>> entries, List<int[]> indices) {
-        return new CooCTensor(shape, entries.toArray(new Complex128[0]), indices.toArray(new int[0][]));
-    }
-
-
-    /**
-     * Makes a dense tensor with the specified shape and entries which is a similar type to this sparse tensor.
-     *
-     * @param shape Shape of the dense tensor.
-     * @param entries Entries of the dense tensor.
-     *
-     * @return A dense tensor with the specified shape and entries which is a similar type to this sparse tensor.
-     */
-    @Override
-    public CTensor makeDenseTensor(Shape shape, Field<Complex128>[] entries) {
-        return new CTensor(shape, entries);
-    }
-
-
-    /**
-     * Converts this sparse tensor to an equivalent dense tensor.
-     *
-     * @return A dense tensor equivalent to this sparse tensor.
-     */
-    @Override
-    public CTensor toDense() {
-        Complex128[] entries = new Complex128[totalEntries().intValueExact()];
-        for(int i=0; i<nnz; i++)
-            entries[shape.entriesIndex(indices[i])] = (Complex128) this.entries[i];
-
-        return new CTensor(shape, entries);
+        return new CooCTensor(shape, entries, ArrayUtils.deepCopy(indices, null));
     }
 
 
@@ -282,24 +221,9 @@ public class CooCTensor extends CooFieldTensorBase<CooCTensor, CTensor, Complex1
 
 
     /**
-     * Sets the element of this tensor at the specified indices.
-     *
-     * @param value New value to set the specified index of this tensor to.
-     * @param index Indices of the element to set.
-     *
-     * @return A copy of this tensor with the updated value is returned.
-     *
-     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
-     */
-    public CooCTensor set(double value, int... indices) {
-        return set(new Complex128(value), indices);
-    }
-
-
-    /**
      * Checks if an object is equal to this tensor object.
      * @param object Object to check equality with this tensor.
-     * @return True if the two tensors have the same shape, are numerically equivalent, and are of type {@link CooTensor}.
+     * @return True if the two tensors have the same shape, are numerically equivalent, and are of type {@link CooCTensor}.
      * False otherwise.
      */
     @Override
@@ -317,7 +241,7 @@ public class CooCTensor extends CooFieldTensorBase<CooCTensor, CTensor, Complex1
         int result = 17;
         result = 31*result + shape.hashCode();
 
-        for (int i = 0; i < entries.length; i++) {
+        for(int i=0; i<nnz; i++) {
             if (!entries[i].isZero()) {
                 result = 31*result + entries[i].hashCode();
                 result = 31*result + Arrays.hashCode(indices[i]);

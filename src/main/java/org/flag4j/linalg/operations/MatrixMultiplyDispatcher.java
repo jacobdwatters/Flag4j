@@ -43,7 +43,7 @@ public final class MatrixMultiplyDispatcher {
 
     private MatrixMultiplyDispatcher() {
         // Hide constructor of utility class
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -177,7 +177,6 @@ public final class MatrixMultiplyDispatcher {
     public static <T extends Field<T>> Field<T>[] dispatch(FieldMatrix<T> A, FieldVector<T> b) {
         Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
         ValidateParameters.ensureMatMultShapes(A.shape, bMatShape);
-
         AlgorithmName algorithm;
         Field<T>[] dest;
 

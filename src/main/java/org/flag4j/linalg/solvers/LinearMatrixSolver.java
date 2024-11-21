@@ -24,8 +24,8 @@
 
 package org.flag4j.linalg.solvers;
 
-import org.flag4j.arrays.backend.MatrixMixin;
-import org.flag4j.arrays.backend.VectorMixin;
+import org.flag4j.arrays.backend_new.MatrixMixin;
+import org.flag4j.arrays.backend_new.VectorMixin;
 
 /**
  * This interface specifies methods which all linear matrix system solvers should implement.
@@ -35,7 +35,7 @@ import org.flag4j.arrays.backend.VectorMixin;
  * @param <T> Type of the matrices in the linear system.
  * @param <U> Type of the vectors in the linear system.
  */
-public interface LinearMatrixSolver<T extends MatrixMixin<T, ?, U, ?, ?>,
+public interface LinearMatrixSolver<T extends MatrixMixin<T, ?, U, ?>,
         U extends VectorMixin<U, T, ?, ?>> extends LinearSolver<T> {
 
 

@@ -25,8 +25,9 @@
 package org.flag4j.arrays.backend;
 
 
-import org.flag4j.algebraic_structures.semi_rings.SemiRing;
+import org.flag4j.algebraic_structures.semirings.Semiring;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend_new.AbstractTensor;
 import org.flag4j.util.ArrayUtils;
 
 
@@ -34,7 +35,7 @@ import org.flag4j.util.ArrayUtils;
  * <p>This abstract class defines a tensor whose elements satisfy the axioms of a semi-ring.</p>
  *
  * <p>To allow for primitive types, the elements of this tensor do not necessarily have to implement
- * {@link SemiRing}.</p>
+ * {@link Semiring}.</p>
  *
  * <p>Formally, an semi-ring is a set <b>R</b> with the binary operations addition (+) and multiplication (*)
  * defined such that for elements a, b, c in <b>R</b> the following are satisfied:
@@ -56,7 +57,7 @@ import org.flag4j.util.ArrayUtils;
  * @param <W> Type (or wrapper) of an element of this tensor. Should satisfy the axioms of a semi-ring as stated.
  */
 public abstract class TensorOverSemiRing<T extends TensorOverSemiRing<T, U, V, W>,
-        U extends TensorOverSemiRing<U, U, V, W>, V, W> extends TensorBase<T, V, W> {
+        U extends TensorOverSemiRing<U, U, V, W>, V, W> extends AbstractTensor<T, V, W> {
 
 
     /**

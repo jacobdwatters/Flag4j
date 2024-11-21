@@ -23,12 +23,12 @@ public class TensorNormTests {
     }
 
 
-    @Test
-    void infNormTestCase() {
-        // ------------------------- Sub-case 1 -------------------------
-        exp = 13384;
-        assertEquals(exp, TensorNorms.infNorm(A));
-    }
+//    @Test
+//    void infNormTestCase() {
+//        // ------------------------- Sub-case 1 -------------------------
+//        exp = 13384;
+//        assertEquals(exp, TensorNorms.infNorm(A));
+//    }
 
 
     @Test

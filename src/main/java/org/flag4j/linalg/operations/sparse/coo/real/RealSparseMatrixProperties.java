@@ -36,11 +36,11 @@ import java.util.stream.IntStream;
  * This class contains low level implementations for methods to evaluate certain properties of a real sparse matrix.
  * (i.e. if the matrix is symmetric).
  */
-public class RealSparseMatrixProperties {
+public final class RealSparseMatrixProperties {
 
     private RealSparseMatrixProperties() {
         // Hide public constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

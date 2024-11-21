@@ -58,12 +58,12 @@ public final class DenseFieldHermitianTranspose {
         }
 
         Field<T>[] dest = new Field[shape.totalEntries().intValue()];
-        Shape destShape = shape.swapAxes(axes);
+        Shape destShape = shape.permuteAxes(axes);
 
         for(int i=0, size=src.length; i<size; i++) {
-            int[] destIndices = shape.getIndices(i);
+            int[] destIndices = shape.getNdIndices(i);
             ArrayUtils.swapUnsafe(destIndices, axes); // Compute destination indices.
-            dest[destShape.entriesIndex(destIndices)] = src[i].conj(); // Apply conjugate transpose for the element
+            dest[destShape.getFlatIndex(destIndices)] = src[i].conj(); // Apply conjugate transpose for the element
         }
 
         return dest;
@@ -92,9 +92,9 @@ public final class DenseFieldHermitianTranspose {
         int[] destIndices;
 
         for(int i=0, size=src.length; i<size; i++) {
-            destIndices = shape.getIndices(i);
+            destIndices = shape.getNdIndices(i);
             ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
-            dest[destShape.entriesIndex(destIndices)] = src[i].conj(); // Apply transpose for the element
+            dest[destShape.getFlatIndex(destIndices)] = src[i].conj(); // Apply transpose for the element
         }
 
         return dest;
@@ -123,9 +123,9 @@ public final class DenseFieldHermitianTranspose {
         // Compute transpose concurrently
         ThreadManager.concurrentOperation(src.length, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
-                int[] destIndices = shape.getIndices(i);
+                int[] destIndices = shape.getNdIndices(i);
                 ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
-                dest[destShape.entriesIndex(destIndices)] = src[i].conj(); // Apply transpose for the element
+                dest[destShape.getFlatIndex(destIndices)] = src[i].conj(); // Apply transpose for the element
             }
         });
 
@@ -153,13 +153,13 @@ public final class DenseFieldHermitianTranspose {
         }
 
         Field<T>[] dest = new Field[shape.totalEntries().intValue()];
-        Shape destShape = shape.swapAxes(axes);
+        Shape destShape = shape.permuteAxes(axes);
 
         ThreadManager.concurrentOperation(src.length, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
-                int[] destIndices = shape.getIndices(i);
+                int[] destIndices = shape.getNdIndices(i);
                 ArrayUtils.swapUnsafe(destIndices, axes); // Compute destination indices.
-                dest[destShape.entriesIndex(destIndices)] = src[i].conj(); // Apply conjugate transpose for the element
+                dest[destShape.getFlatIndex(destIndices)] = src[i].conj(); // Apply conjugate transpose for the element
             }
         });
 

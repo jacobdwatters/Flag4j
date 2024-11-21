@@ -29,8 +29,9 @@ import org.flag4j.arrays.Shape;
 
 
 /**
- * This interface specifies a binary operation on two dense {@link Field} tensors.
+ * This functional interface specifies a binary operation on two dense {@link Field} tensors.
  */
+@FunctionalInterface
 public interface DenseFieldTensorBinaryOperation {
 
     /**

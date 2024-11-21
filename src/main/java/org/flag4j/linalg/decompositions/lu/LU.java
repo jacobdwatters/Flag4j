@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.decompositions.lu;
 
-import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend_new.MatrixMixin;
 import org.flag4j.arrays.sparse.PermutationMatrix;
 import org.flag4j.linalg.decompositions.Decomposition;
 import org.flag4j.util.ArrayUtils;
@@ -44,7 +44,7 @@ import org.flag4j.util.ArrayUtils;
  *
  * @param <T> Type of the matrix to decompose.
  */
-public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?>> implements Decomposition<T> {
+public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposition<T> {
 
     /**
      * Flag indicating what pivoting to use.
@@ -82,8 +82,8 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?>> implements Decomp
      * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
      *                 will be used. If pivoting is any other value, no pivoting will be used.
      */
-    public LU(int pivoting) {
-        pivotFlag = Pivoting.get(pivoting);
+    protected LU(Pivoting pivoting) {
+        pivotFlag = pivoting;
         zeroPivotTol = DEFAULT_ZERO_PIVOT_TOLERANCE;
     }
 
@@ -95,8 +95,8 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?>> implements Decomp
      * @param zeroPivotTol Tolerance for considering a pivot to be zero. If a pivot is less than the tolerance in absolute value,
      *                     then it will be considered zero.
      */
-    public LU(int pivoting, double zeroPivotTol) {
-        pivotFlag = Pivoting.get(pivoting);
+    protected LU(Pivoting pivoting, double zeroPivotTol) {
+        pivotFlag = pivoting;
         this.zeroPivotTol = zeroPivotTol;
     }
 
@@ -184,7 +184,7 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?>> implements Decomp
      * @return The row permutation matrix of the decomposition. If no pivoting was used, null will be returned.
      */
     public PermutationMatrix getP() {
-        if(rowSwaps != null) P = new PermutationMatrix(rowSwaps.clone());
+        if(rowSwaps != null) P = new PermutationMatrix(rowSwaps);
         else P = null;
 
         return P;
@@ -197,7 +197,7 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?>> implements Decomp
      */
     public PermutationMatrix getQ() {
         // Invert to ensure matrix represents column swaps.
-        if(colSwaps != null) Q = new PermutationMatrix(colSwaps.clone()).inv();
+        if(colSwaps != null) Q = new PermutationMatrix(colSwaps).inv();
         else Q = null;
 
         return Q;

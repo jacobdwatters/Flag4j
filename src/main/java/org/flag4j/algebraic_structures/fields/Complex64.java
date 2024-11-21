@@ -74,18 +74,6 @@ public class Complex64 implements Field<Complex64> {
      */
     public static final Complex64 INV_IMAGINARY_UNIT = new Complex64(0, -1);
     /**
-     * The maximum real float value 1.7976931348623157E308.
-     */
-    public static final Complex64 MAX_REAL = new Complex64(Float.MAX_VALUE);
-    /**
-     * The minimum real float value 4.9E-324
-     */
-    public static final Complex64 MIN_REAL = new Complex64(Float.MIN_VALUE);
-    /**
-     * The smallest possible real normal float 2.2250738585072014E-308.
-     */
-    public static final Complex64 MIN_REAL_NORMAL = new Complex64(Float.MIN_NORMAL);
-    /**
      * Complex number with real part equal to {@link Float#POSITIVE_INFINITY}.
      */
     public static final Complex64 POSITIVE_INFINITY = new Complex64(Float.POSITIVE_INFINITY);
@@ -804,7 +792,6 @@ public class Complex64 implements Field<Complex64> {
     /**
      * Computes the 2 argument arc-tangent function for a complex number. That is, for a complex number a+bi, atan2(b, a)
      * is computed. This method wraps {@link Math#atan2(double, double)}. <br>
-     * To get the result as an {@link Complex64} see {@link Complex64#atan2AsComplex64(Complex64)}.
      * @param num The input to the atan2 function.
      * @return The output of the atan2 function given the specified input. If the complex number is zero, then {@link Float#NaN}
      * is returned.
@@ -817,39 +804,12 @@ public class Complex64 implements Field<Complex64> {
     /**
      * Computes the complex argument function for a complex number.
      * is computed. This method is equivalent to {@link Complex64#atan2(Complex64)}. <br>
-     * To get the result as an {@link Complex64} see {@link Complex64#argAsComplex64(Complex64)}.
      * @param num The input to the atan2 function.
      * @return The output of the atan2 function given the specified input. If the complex number is zero, then {@link Float#NaN}
      * is returned.
      */
     public static float arg(Complex64 num) {
         return atan2(num);
-    }
-
-
-    /**
-     * Computes the complex argument function for a complex number.
-     * is computed. This method wraps is equivalent to {@link Complex64#atan2AsComplex64(Complex64) Complex64}. <br>
-     * To get the result as a float see {@link Complex64#arg(Complex64)}.
-     * @param num The input to the atan2 function.
-     * @return The output of the atan2 function given the specified input. If the complex number is zero, then {@link Float#NaN}
-     * is returned.
-     */
-    public static Complex64 argAsComplex64(Complex64 num) {
-        return atan2AsComplex64(num);
-    }
-
-
-    /**
-     * Computes the 2 argument arc-tangent function for a complex number. That is, for a complex number a+bi, atan2(b, a)
-     * is computed. This method wraps {@link Math#atan2(double, double)}. <br>
-     * To get the result as a float see {@link Complex64#atan2(Complex64)}.
-     * @param num The input to the atan2 function.
-     * @return The output of the atan2 function given the specified input. If the complex number is zero, then {@link Float#NaN}
-     * is returned.
-     */
-    public static Complex64 atan2AsComplex64(Complex64 num) {
-        return new Complex64(Math.atan2(num.im, num.re));
     }
 
 
@@ -1015,8 +975,6 @@ public class Complex64 implements Field<Complex64> {
      * @return The number <code>n</code> rounded to the specified
      * 		number of decimals.
      * @throws IllegalArgumentException If decimals is less than zero.
-     * @throws NumberFormatException If n is {@link Float#NaN}, {@link Float#POSITIVE_INFINITY} or
-     * {@link Float#NEGATIVE_INFINITY}
      * @see #round(Complex64)
      */
     public static Complex64 round(Complex64 n, int decimals) {
@@ -1382,26 +1340,9 @@ public class Complex64 implements Field<Complex64> {
      */
     @Override
     public String toString() {
-        if(re == 0 && im == 0) return "0";
-
-        StringBuilder result = new StringBuilder();
-
-        if(re != 0) result.append(re % 1 == 0 ? (int) re : re);
-
-        if (im != 0) {
-            if (im > 0 && re != 0) {
-                result.append(" + ");
-            } else if (im < 0) {
-                result.append(" - ");
-            }
-
-            float absIm = Math.abs(im);
-            if (absIm != 1) {
-                result.append(absIm % 1 == 0 ? (int) absIm : absIm);
-            }
-            result.append("i");
-        }
-
-        return result.toString();
+        if (isZero()) return "0";
+        String realPart = re % 1 == 0 ? String.valueOf((int) re) : String.valueOf(re);
+        String imagPart = im == 0 ? "" : (im > 0 ? " + " : " - ") + (Math.abs(im) % 1 == 0 ? (int) Math.abs(im) : Math.abs(im)) + "i";
+        return realPart + imagPart;
     }
 }

@@ -38,20 +38,41 @@ import java.util.function.UnaryOperator;
  */
 public final class ArrayUtils {
 
+    // TODO: Class needs to be cleaned up a bit (a lot).
+
     private ArrayUtils() {
         // Hide Constructor
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
     /**
-     * Creates a deep copy of a 2D array. Assumes arrays_old are <i>not</i> jagged.
+     * Computes the cumulative sum of the elements of  an array.
+     * @param src Source array to compute cumulative sum within.
+     * @param dest Array to store the result of the cumulative sum. May be the same array as {@code src} or {@code null}.
+     * @return If {@code dest != null} then a reference to {@code dest} is returned. If {@code dest == null} then a new array of
+     * appropriate size will be constructed and returned.
+     * @throws IllegalArgumentException If {@code dest != null && dest.length != src.length}.
+     */
+    public static int[] cumSum(int[] src, int[] dest) {
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
+        if(dest == null) dest = new int[src.length];
+
+        for(int i=1, size=src.length; i<size; i++)
+            dest[i] = src[i] + src[i-1];
+
+        return dest;
+    }
+
+
+    /**
+     * Creates a deep copy of a 2D array. Assumes arrays are <i>not</i> jagged.
      *
      * @param src  Source array to copy.
      * @param dest Destination array of copy. If {@code null}, a new array will be initialized.
      * @return A reference to {@code dest} if it was not {@code null}. In the case where {@code dest} is {@code null}, then a new
      * array will be initialized and returned.
-     * @throws IllegalArgumentException If the two arrays_old are not the same shape.
+     * @throws IllegalArgumentException If the two arrays are not the same shape.
      */
     public static int[][] deepCopy(int[][] src, int[][] dest) {
         if(dest == null) dest = new int[src.length][src[0].length];
@@ -72,7 +93,7 @@ public final class ArrayUtils {
      *
      * @param src  Array to convert.
      * @param dest Destination array. If the destination array is null, a new array will be created.
-     * @throws IllegalArgumentException If source and destination arrays_old do not have the same length.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      * @return A reference to the {@code dest} array.
      */
     public static Complex128[] wrapAsComplex128(int[] src, Complex128[] dest) {
@@ -91,7 +112,7 @@ public final class ArrayUtils {
      *
      * @param src  Array to convert.
      * @param dest Destination array. If the destination array is {@code null}, a new array will be created.
-     * @throws IllegalArgumentException If source and destination arrays_old do not have the same length.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      * @return A reference to the {@code dest} array.
      */
     public static Complex128[] wrapAsComplex128(double[] src, Complex128[] dest) {
@@ -110,7 +131,7 @@ public final class ArrayUtils {
      *
      * @param src  Array to convert.
      * @param dest Destination array. If the destination array is null, a new array will be created.
-     * @throws IllegalArgumentException If source and destination arrays_old do not have the same length.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      * @return A reference to the {@code dest} array.
      */
     public static Complex128[] wrapAsComplex128(Integer[] src, Complex128[] dest) {
@@ -129,7 +150,7 @@ public final class ArrayUtils {
      *
      * @param src  Array to convert.
      * @param dest Destination array. If the destination array is null, a new array will be created.
-     * @throws IllegalArgumentException If source and destination arrays_old do not have the same length.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      * @return A reference to the {@code dest} array.
      */
     public static Complex128[] wrapAsComplex128(Double[] src, Complex128[] dest) {
@@ -148,7 +169,7 @@ public final class ArrayUtils {
      *
      * @param src  Array to convert.
      * @param dest Destination array. If the destination array is null, a new array will be created.
-     * @throws IllegalArgumentException If source and destination arrays_old do not have the same length.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      * @return A reference to the {@code dest} array.
      */
     public static Complex128[] wrapAsComplex128(Complex64[] src, Complex128[] dest) {
@@ -167,7 +188,7 @@ public final class ArrayUtils {
      *
      * @param src  Array to convert.
      * @param dest Destination array. If the destination array is null, a new array will be created.
-     * @throws IllegalArgumentException If source and destination arrays_old do not have the same length.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      * @return A reference to the {@code dest} array.
      */
     public static Complex128[] wrapAsComplex128(String[] src, Complex128[] dest) {
@@ -432,9 +453,7 @@ public final class ArrayUtils {
      */
     public static ArrayList<Field<Complex128>> toArrayList(Field<Complex128>[] src) {
         ArrayList<Field<Complex128>> list = new ArrayList<>(src.length);
-
         list.addAll(Arrays.asList(src));
-
         return list;
     }
 
@@ -889,7 +908,7 @@ public final class ArrayUtils {
 
 
     /**
-     * Joins two arrays_old together.
+     * Joins two arrays together.
      *
      * @param src1 First array to join.
      * @param src2 Second array to join.
@@ -905,7 +924,7 @@ public final class ArrayUtils {
 
 
     /**
-     * Joins two arrays_old together.
+     * Joins two arrays together.
      *
      * @param src1 First array to join.
      * @param src2 Second array to join.
@@ -1092,7 +1111,7 @@ public final class ArrayUtils {
      * @return The number of unique elements in {@code arr}.
      */
     public static int numUnique(double[] arr) {
-        // For very large arrays_old, HashMap is quite a bit faster than HashSet.
+        // For very large arrays, HashMap is quite a bit faster than HashSet.
         Map<Double, Double> map = new HashMap<>(arr.length);
 
         for(double a : arr)
@@ -1109,7 +1128,7 @@ public final class ArrayUtils {
      * @return The number of unique elements in {@code arr}.
      */
     public static int numUnique(int[] arr) {
-        // For very large arrays_old, HashMap is quite a bit faster than HashSet.
+        // For very large arrays, HashMap is quite a bit faster than HashSet.
         Map<Integer, Integer> map = new HashMap<>(arr.length);
 
         for(int a : arr)

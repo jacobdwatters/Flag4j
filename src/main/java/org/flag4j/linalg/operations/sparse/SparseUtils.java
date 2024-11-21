@@ -26,21 +26,101 @@ package org.flag4j.linalg.operations.sparse;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.CsrFieldMatrixBase;
+import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend_new.field.AbstractCsrFieldMatrix;
 import org.flag4j.arrays.sparse.CsrFieldMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ErrorMessages;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.*;
 
 /**
- * Contains common utility functions for working with sparse matrices.
+ * <p>Contains common utility functions for working with sparse matrices.</p>
+ *
+ * <p>All methods in this class which accept non-zero entries and non-zero indices, they are assumed to be sorted
+ * lexicographically. Similarly, all operations which store results in user provided destination arrays will also produce in
+ * lexicographically sorted arrays.</p>
  */
 public final class SparseUtils {
 
     public SparseUtils() {
         // Utility class cannot be instanced.
         throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());
+    }
+
+
+    /**
+     * Flattens the non-zero indices of a sparse COO tensor. This reduced the rank of this tensor to rank 1.
+     * @param Shape Shape of the sparse COO tensor.
+     * @param indices Shape of the sparse COO tensor.
+     * @return The flattened indices of the sparse COO tensor.
+     * @see #cooFlattenIndices(Shape, int[][], int)
+     */
+    public static int[][] cooFlattenIndices(Shape shape, int[][] indices) {
+        int[][] destIndices = new int[indices.length][1];
+
+        for(int i=0, size=indices.length; i<size; i++)
+            destIndices[i][0] = shape.getFlatIndex(indices[i]);
+
+        return destIndices;
+    }
+
+
+    /**
+     * Flattens the non-zero indices of a sparse COO tensor along a specified axis. Unlike
+     * {@link #cooFlattenIndices(Shape, int[][])} this method preserves the rank of the tensor.
+     * @param shape Shape of the sparse COO tensor.
+     * @param indices Shape of the sparse COO tensor.
+     * @param axis Axis along which to flatten the tensor.
+     * @return The non-zero indices flattened along the specified {@code axis}.
+     */
+    public static int[][] cooFlattenIndices(Shape shape, int[][] indices, int axis) {
+        ValidateParameters.ensureValidAxes(shape, axis);
+        int[][] destIndices = new int[indices.length][indices[0].length];
+
+        for(int i=0, size=indices.length; i<size; i++)
+            destIndices[i][axis] = shape.getFlatIndex(indices[i]);
+
+        return destIndices;
+    }
+
+
+    /**
+     * Computes new indices for the reshaping of a sparse COO tensor.
+     * @param oldShape Current shape (before reshaping) of the sparse COO tensor.
+     * @param newShape New shape of the tensor.
+     * @param indices The non-zero indices of the tensor to be reshaped.
+     * @return The non-zero indices corresponding to the reshaped tensor.
+     */
+    public static int[][] cooReshape(Shape oldShape, Shape newShape, int[][] indices) {
+        ValidateParameters.ensureBroadcastable(oldShape, newShape);
+
+        int rank = indices[0].length;
+        int newRank = newShape.getRank();
+        int nnz = indices.length;
+
+        int[] oldStrides = oldShape.getStrides();
+        int[] newStrides = newShape.getStrides();
+
+        int[][] newIndices = new int[nnz][newRank];
+
+        for(int i=0; i<nnz; i++) {
+            int[] idxRow = indices[i];
+            int[] newIdxRow = newIndices[i];
+
+            int flatIndex = 0;
+            for(int j=0; j < rank; j++) {
+                flatIndex += idxRow[j] * oldStrides[j];
+            }
+
+            for(int j=0; j<newRank; j++) {
+                newIdxRow[j] = flatIndex / newStrides[j];
+                flatIndex %= newStrides[j];
+            }
+        }
+
+        return newIndices;
     }
 
 
@@ -218,8 +298,9 @@ public final class SparseUtils {
      * @param src2 Second CSR matrix in the equality comparison.
      * @return True if all non-zero values stored in the two matrices are equal and occur at the same indices.
      */
-    public static <T extends Field<T>> boolean CSREquals(CsrFieldMatrixBase<? ,?, ?, ?, T> src1,
-                                                         CsrFieldMatrixBase<? ,?, ?, ?, T> src2) {
+    public static <T extends Field<T>> boolean CSREquals(
+            AbstractCsrFieldMatrix<?, ?, ?, T> src1,
+            AbstractCsrFieldMatrix<?, ?, ?, T> src2) {
         if(!src1.shape.equals(src2.shape)) return false;
         final Complex128 ZERO = Complex128.ZERO;
 
@@ -263,5 +344,38 @@ public final class SparseUtils {
         }
 
         return true;
+    }
+
+
+    /**
+     * A helper method which copies from a sparse COO matrix to a set of three arrays (non-zero entries, row indices, and
+     * column indices) but skips over a specified range.
+     * @param srcEntries Non-zero matrix to copy ranges from.
+     * @param srcRowIndices Row indices of matrix to copy ranges from.
+     * @param srcColIndices Column indices of matrix to copy ranges from.
+     * @param destEntries Array to copy {@code} src non-zero entries to.
+     * @param destRowIndices Array to copy {@code} src row indices entries to.
+     * @param destColIndices Array to copy {@code} src column indices entries to.
+     * @param startEnd An array of length two specifying the {@code start} (inclusive) and {@code end} (exclusive)
+     *                 indices of the range to skip during the copy.
+     */
+    public static <T> void copyRanges(
+            T[] srcEntries, int[] srcRowIndices, int[] srcColIndices,
+            T[] destEntries, int[] destRowIndices, int[] destColIndices, int[] startEnd) {
+
+        if(startEnd[0] > 0) {
+            System.arraycopy(srcEntries, 0, destEntries, 0, startEnd[0]);
+            System.arraycopy(srcEntries, startEnd[1], destEntries, startEnd[0], destEntries.length - startEnd[0]);
+
+            System.arraycopy(srcRowIndices, 0, destRowIndices, 0, startEnd[0]);
+            System.arraycopy(srcRowIndices, startEnd[1], destRowIndices, startEnd[0], destEntries.length - startEnd[0]);
+
+            System.arraycopy(srcColIndices, 0, destColIndices, 0, startEnd[0]);
+            System.arraycopy(srcColIndices, startEnd[1], destColIndices, startEnd[0], destEntries.length - startEnd[0]);
+        } else {
+            System.arraycopy(srcEntries, 0, destEntries, 0, destEntries.length);
+            System.arraycopy(srcRowIndices, 0, destRowIndices, 0, destRowIndices.length);
+            System.arraycopy(srcColIndices, 0, destColIndices, 0, destColIndices.length);
+        }
     }
 }

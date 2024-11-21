@@ -33,7 +33,7 @@ import org.flag4j.util.ValidateParameters;
 
 
 /**
- * This class contains low-level implementations of element-wise tensor division between two field tensors.
+ * This class contains low-level implementations of element-wise tensor division between two {@link Field} tensors.
  */
 public final class DenseFieldElemDiv {
     // TODO: The CONCURRENT_THRESHOLD should be configurable. This should serve as a default value and an overloaded method should
@@ -47,7 +47,7 @@ public final class DenseFieldElemDiv {
 
     private DenseFieldElemDiv() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -57,17 +57,16 @@ public final class DenseFieldElemDiv {
      * @param shape1 Shape of the first tensor.
      * @param src2 Second tensor in element-wise division.
      * @param shape2 Shape of the second tensor.
-     * @return The element-wise division of the two tensors.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     * @param dest Array to store the result of the element-wise division in.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If the tensors do not have the same shape.
      */
-    public static <T extends Field<T>> Field<T>[] elemDiv(Field<T>[] src1, Shape shape1, Field<T>[] src2, Shape shape2) {
+    public static <T extends Field<T>> void elemDiv(Field<T>[] src1, Shape shape1,
+                                                    Field<T>[] src2, Shape shape2,
+                                                    Field<T>[] dest) {
         ValidateParameters.ensureEqualShape(shape1, shape2);
-        Field<T>[] product = new Field[src1.length];
 
-        for(int i=0; i<product.length; i++)
-            product[i] = src1[i].div((T) src2[i]);
-
-        return product;
+        for(int i=0; i<dest.length; i++)
+            dest[i] = src1[i].div((T) src2[i]);
     }
 
 
@@ -77,19 +76,18 @@ public final class DenseFieldElemDiv {
      * @param shape1 Shape of the first tensor.
      * @param src2 Second tensor in element-wise division.
      * @param shape2 Shape of the second tensor.
-     * @return The element-wise division of the two tensors.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     * @param dest Array to store the result of the element-wise division in.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If the tensors do not have the same shape.
      */
-    public static <T extends Field<T>> Field<T>[] elemDivConcurrent(Field<T>[] src1, Shape shape1, Field<T>[] src2, Shape shape2) {
+    public static <T extends Field<T>> void elemDivConcurrent(Field<T>[] src1, Shape shape1,
+                                                                    Field<T>[] src2, Shape shape2,
+                                                                    Field<T>[] dest) {
         ValidateParameters.ensureEqualShape(shape1, shape2);
-        Field<T>[] product = new Field[src1.length];
 
-        ThreadManager.concurrentOperation(product.length, (start, end) -> {
+        ThreadManager.concurrentOperation(dest.length, (start, end) -> {
             for(int i=start; i<end; i++)
-                product[i] = src1[i].div((T) src2[i]);
+                dest[i] = src1[i].div((T) src2[i]);
         });
-
-        return product;
     }
 
 
@@ -99,12 +97,15 @@ public final class DenseFieldElemDiv {
      * @param shape1 Shape of first tensor.
      * @param src2 Entries of second tensor.
      * @param shape2 Shape of second tensor.
-     * @return The element-wise division of the two tensors.
+     * @param dest Array to store the result of the element-wise division in.
+     * @throws org.flag4j.util.exceptions.TensorShapeException
      */
-    public static <T extends Field<T>> Field<T>[] dispatch(Field<T>[] src1, Shape shape1, Field<T>[] src2, Shape shape2) {
+    public static <T extends Field<T>> void dispatch(Field<T>[] src1, Shape shape1,
+                                                     Field<T>[] src2, Shape shape2,
+                                                     Field<T>[] dest) {
         if(src1.length < CONCURRENT_THRESHOLD)
-            return elemDiv(src1, shape1, src2, shape2);
+            elemDiv(src1, shape1, src2, shape2, dest);
         else
-            return elemDivConcurrent(src1, shape1, src2, shape2);
+            elemDivConcurrent(src1, shape1, src2, shape2, dest);
     }
 }

@@ -26,7 +26,6 @@ package org.flag4j.linalg.operations.dense_sparse.coo.real_complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Tensor;
@@ -34,8 +33,8 @@ import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooTensor;
-import org.flag4j.linalg.operations.common.field_ops.FieldProperties;
 import org.flag4j.linalg.operations.common.real.RealProperties;
+import org.flag4j.linalg.operations.common.semiring_ops.SemiRingProperties;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
@@ -47,7 +46,7 @@ public final class RealComplexDenseSparseEquals {
 
     private RealComplexDenseSparseEquals() {
         // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -121,7 +120,7 @@ public final class RealComplexDenseSparseEquals {
 
             if(equal) {
                 // Now, if this vector is equal to the sparse vector, there should only be zeros left in the entriesStack
-                equal = FieldProperties.isZeros(src1Copy);
+                equal = SemiRingProperties.isZeros(src1Copy);
             }
 
         } else {
@@ -204,7 +203,7 @@ public final class RealComplexDenseSparseEquals {
 
             if(equal) {
                 // Now, if this matrix is equal to the sparse matrix, there should only be zeros left in the entriesStack
-                equal = FieldProperties.isZeros(entriesCopy);
+                equal = SemiRingProperties.isZeros(entriesCopy);
             }
 
         } else {
@@ -230,14 +229,14 @@ public final class RealComplexDenseSparseEquals {
 
             // Remove all nonZero entries from the entries of this matrix.
             for(int i=0; i<B.nnz; i++) {
-                entriesIndex = A.shape.entriesIndex(B.indices[i]);
+                entriesIndex = A.shape.getFlatIndex(B.indices[i]);
 
                 if(entriesCopy[entriesIndex] != ((Complex128) B.entries[i]).re || ((Complex128) B.entries[i]).im != 0) {
                     equal = false;
                     break;
                 }
 
-                entriesCopy[A.shape.entriesIndex(B.indices[i])] = 0;
+                entriesCopy[A.shape.getFlatIndex(B.indices[i])] = 0;
             }
 
             if(equal) {
@@ -269,19 +268,19 @@ public final class RealComplexDenseSparseEquals {
 
             // Remove all nonZero entries from the entries of this matrix.
             for(int i=0; i<B.nnz; i++) {
-                entriesIndex = A.shape.entriesIndex(B.indices[i]);
+                entriesIndex = A.shape.getFlatIndex(B.indices[i]);
 
                 if(entriesCopy[entriesIndex].re != B.entries[i] || entriesCopy[entriesIndex].im != 0) {
                     equal = false;
                     break;
                 }
 
-                entriesCopy[A.shape.entriesIndex(B.indices[i])] = Complex128.ZERO;
+                entriesCopy[A.shape.getFlatIndex(B.indices[i])] = Complex128.ZERO;
             }
 
             if(equal) {
                 // Now, if this tensor is equal to the sparse tensor, there should only be zeros left in the entriesStack
-                equal = FieldProperties.isZeros(entriesCopy);
+                equal = SemiRingProperties.isZeros(entriesCopy);
             }
 
         } else {

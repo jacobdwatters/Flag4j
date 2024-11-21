@@ -26,13 +26,11 @@ package org.flag4j.linalg;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.FieldTensorBase;
-import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
-import org.flag4j.linalg.operations.common.field_ops.CompareField;
+import org.flag4j.linalg.operations.common.ring_ops.CompareRing;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
@@ -43,28 +41,28 @@ public final class TensorNorms {
 
     private TensorNorms() {
         // Hide default constructor for utility class
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
     // TODO: Ensure the below infNorm methods correct? These seems to be a max norm. Are the same?
-    /**
-     * Computes the infinity norm of a tensor, matrix, or vector. That is, the largest absolute value.
-     * @param src The tensor, matrix, or vector to compute the norm of.
-     * @return The infinity norm of the source tensor, matrix, or vector.
-     */
-    public static double infNorm(PrimitiveDoubleTensorBase<?, ?> src) {
-        return src.maxAbs();
-    }
+//    /**
+//     * Computes the infinity norm of a tensor, matrix, or vector. That is, the largest absolute value.
+//     * @param src The tensor, matrix, or vector to compute the norm of.
+//     * @return The infinity norm of the source tensor, matrix, or vector.
+//     */
+//    public static double infNorm(DoubleTensorBase<?, ?> src) {
+//        return src.maxAbs();
+//    }
 
 
-    /**
-     * Computes the infinity norm of a tensor, matrix, or vector. That is, the largest value by magnitude.
-     * @param src The tensor, matrix, or vector to compute the norm of.
-     * @return The infinity norm of the source tensor, matrix, or vector.
-     */
-    public static double infNorm(FieldTensorBase<?, ?, ?> src) {
-        return src.maxAbs();
-    }
+//    /**
+//     * Computes the infinity norm of a tensor, matrix, or vector. That is, the largest value by magnitude.
+//     * @param src The tensor, matrix, or vector to compute the norm of.
+//     * @return The infinity norm of the source tensor, matrix, or vector.
+//     */
+//    public static double infNorm(FieldTensorBase<?, ?, ?> src) {
+//        return src.maxAbs();
+//    }
 
 
     /**
@@ -124,7 +122,7 @@ public final class TensorNorms {
      * @return The maximum/infinite norm of this tensor.
      */
     public double infNorm(CTensor src) {
-        return CompareField.maxAbs(src.entries);
+        return CompareRing.maxAbs(src.entries);
     }
 
 

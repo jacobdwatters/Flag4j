@@ -32,11 +32,11 @@ import org.flag4j.util.ErrorMessages;
  * <p>This class contains low-level implementations for operations which check if a complex tensor satisfies some property.</p>
  * <p>Implementations are agnostic to whether the tensor is sparse or dense.</p>
  */
-public class Complex64Properties {
+public final class Complex64Properties {
 
     private Complex64Properties() {
         // Hide default constructor in utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

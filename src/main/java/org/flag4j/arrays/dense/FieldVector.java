@@ -26,12 +26,13 @@ package org.flag4j.arrays.dense;
 
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.DenseFieldVectorBase;
+import org.flag4j.arrays.backend_new.field.AbstractDenseFieldVector;
 import org.flag4j.arrays.sparse.CooFieldVector;
+import org.flag4j.io.PrintOptions;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * <p>A dense vector whose entries are {@link Field field} elements.</p>
@@ -42,8 +43,7 @@ import java.util.List;
  *
  * @param <T> Type of the field element for the vector.
  */
-public class FieldVector<T extends Field<T>>
-        extends DenseFieldVectorBase<FieldVector<T>, FieldMatrix<T>, CooFieldVector<T>, T> {
+public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<FieldVector<T>, FieldMatrix<T>, T> {
 
 
     /**
@@ -65,18 +65,6 @@ public class FieldVector<T extends Field<T>>
     public FieldVector(int size, T fillValue) {
         super(new Shape(size), new Field[size]);
         Arrays.fill(entries, fillValue);
-    }
-
-
-    /**
-     * Creates a vector with the specified size filled with the {@code fillValue}.
-     *
-     * @param size
-     * @param fillValue Value to fill this vector with.
-     */
-    @Override
-    public FieldVector<T> makeLikeTensor(int size, T fillValue) {
-        return new FieldVector<T>(size, fillValue);
     }
 
 
@@ -106,21 +94,6 @@ public class FieldVector<T extends Field<T>>
 
 
     /**
-     * Constructs a sparse vector of similar type to this dense vector.
-     *
-     * @param size The size of the sparse vector.
-     * @param entries The non-zero entries of the sparse vector.
-     * @param indices The non-zero indices of the sparse vector.
-     *
-     * @return A sparse vector of similar type to this dense vector with the specified size, entries, and indices.
-     */
-    @Override
-    public CooFieldVector<T> makeSparseVector(int size, List<Field<T>> entries, List<Integer> indices) {
-        return new CooFieldVector<T>(size, entries, indices);
-    }
-
-
-    /**
      * Constructs a tensor of the same type as this tensor with the given the shape and entries.
      *
      * @param shape Shape of the tensor to construct.
@@ -133,6 +106,21 @@ public class FieldVector<T extends Field<T>>
         ValidateParameters.ensureEquals(shape.totalEntriesIntValueExact(), entries.length);
         ValidateParameters.ensureRank(shape, 1);
         return new FieldVector<T>(entries);
+    }
+
+
+    /**
+     * Constructs a sparse COO tensor which is of a similar type as this dense tensor.
+     *
+     * @param shape Shape of the COO tensor.
+     * @param entries Non-zero entries of the COO tensor.
+     * @param indices
+     *
+     * @return A sparse COO tensor which is of a similar type as this dense tensor.
+     */
+    @Override
+    protected CooFieldVector<T> makeLikeCooTensor(Shape shape, Field<T>[] entries, int[][] indices) {
+        return new CooFieldVector<>(shape.totalEntriesIntValueExact(), entries, indices[0]);
     }
 
 
@@ -160,5 +148,45 @@ public class FieldVector<T extends Field<T>>
         hash = 31*hash + Arrays.hashCode(entries);
 
         return hash;
+    }
+
+
+    /**
+     * Converts this vector to a human-readable string format. To specify the maximum number of entries to print, use
+     * {@link PrintOptions#setMaxColumns(int)}.
+     * @return A human-readable string representation of this vector.
+     */
+    public String toString() {
+        StringBuilder result = new StringBuilder("shape: ").append(shape).append("\n");
+        result.append("[");
+
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int width;
+        String value;
+
+        // Get entries up until the stopping point.
+        for(int i=0; i<stopIndex; i++) {
+            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(stopIndex < size-1) {
+            width = PrintOptions.getPadding() + 3;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry now
+        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+        width = PrintOptions.getPadding() + value.length();
+        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s", value));
+
+        result.append("]");
+
+        return result.toString();
     }
 }

@@ -25,7 +25,7 @@
 package org.flag4j.linalg.operations.sparse.coo.field_ops;
 
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.CooFieldMatrixBase;
+import org.flag4j.arrays.backend_new.field.AbstractCooFieldMatrix;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
@@ -40,7 +40,7 @@ public final class CooFieldNorms {
 
     private CooFieldNorms() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -49,7 +49,7 @@ public final class CooFieldNorms {
      * @param src Source matrix to compute norm of.
      * @return The L<sub>2</sub> of the {@code src} matrix.
      */
-    public static <T extends Field<T>> double matrixNormL2(CooFieldMatrixBase<?, ?, ?, ?, T> src) {
+    public static <T extends Field<T>> double matrixNormL2(AbstractCooFieldMatrix<?, ?, ?, T> src) {
         double norm = 0;
         double[] colSums = new double[ArrayUtils.numUnique(src.colIndices)];
 
@@ -76,7 +76,7 @@ public final class CooFieldNorms {
      * @param p Parameter for L<sub>p</sub> norm
      * @return The L<sub>p</sub> of the {@code src} matrix.
      */
-    public static <T extends Field<T>> double matrixNormLp(CooFieldMatrixBase<?, ?, ?, ?, T> src, double p) {
+    public static <T extends Field<T>> double matrixNormLp(AbstractCooFieldMatrix<?, ?, ?, T> src, double p) {
         ValidateParameters.ensureGreaterEq(1, p);
 
         double norm = 0;
@@ -103,7 +103,7 @@ public final class CooFieldNorms {
      * @param p First parameter for L<sub>p, q</sub> norm
      * @return The L<sub>p, q</sub> of the {@code src} matrix.
      */
-    public static <T extends Field<T>> double matrixNormLpq(CooFieldMatrixBase<?, ?, ?, ?, T> src, double p, double q) {
+    public static <T extends Field<T>> double matrixNormLpq(AbstractCooFieldMatrix<?, ?, ?, T> src, double p, double q) {
         ValidateParameters.ensureGreaterEq(1, p, q);
 
         double norm = 0;

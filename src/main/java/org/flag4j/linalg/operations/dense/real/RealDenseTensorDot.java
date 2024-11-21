@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,134 +25,68 @@
 package org.flag4j.linalg.operations.dense.real;
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
 import org.flag4j.linalg.operations.RealDenseMatrixMultiplyDispatcher;
+import org.flag4j.linalg.operations.TensorDot;
 import org.flag4j.linalg.operations.TransposeDispatcher;
-import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ValidateParameters;
-
 
 /**
- * This class contains methods for computing a tensor dot product, i.e. tensor contraction, between two real dense tensors.
+ * Instances of this class can be used to compute the tensor dot product between two real dense primitive double tensors.
  */
-public final class RealDenseTensorDot {
-
-    private RealDenseTensorDot() {
-        // Hide utility class constructor.
-        throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());
-    }
-
+public class RealDenseTensorDot extends TensorDot<double[]> {
 
     /**
-     * Computes the tensor dot product along the first tensors last axis and the second tensors second-to-last axis. Or, if the second
-     * tensor has rank 1, the last axis of the second tensor.
-     * @param src1 First tensor in the tensor product.
-     * @param src2 Second tensor in the tensor product.
-     * @return The tensor dot product along the first tensors last axis and the second tensors second-to-last axis.
-     * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
-     * along the second-to-last axis.
-     */
-    public static <T extends PrimitiveDoubleTensorBase<T, T>> T tensorDot(PrimitiveDoubleTensorBase<T, T> src1,
-                                                                          PrimitiveDoubleTensorBase<T, T> src2) {
-        int src1Rank = src1.getRank();
-        int src2Rank = src2.getRank();
-
-        if(src1Rank==2 && src2Rank==2) {
-            // Product is simply a matrix multiplication problem.
-            return src1.makeLikeTensor(
-                    new Shape(src1.shape.get(0), src2.shape.get(1)),
-                    RealDenseMatrixMultiplyDispatcher.dispatch(src1.entries, src1.shape, src2.entries, src2.shape)
-            );
-        }
-
-        // If second tensor has rank one, then use zero axis. Otherwise, use second to last axis.
-        src2Rank = (src2Rank==1) ? 0 : src2Rank-2;
-
-        return tensorDot(src1, src2, new int[]{src1Rank - 1}, new int[]{src2Rank});
-    }
-
-
-    /**
-     * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
-     * computes the sum of products between the two tensors along the specified set of axes.
-     * @param src1 First tensor in the contraction.
-     * @param src2 Second tensor in the contraction.
+     * Constructs a tensor dot product problem for computing the tensor contraction of two tensors over the
+     * specified set of axes. That is, computes the sum of products between the two tensors along the specified set of axes.
+     * @param shape1 Shape of the first tensor in the contraction.
+     * @param src1 Entries of the first tensor in the contraction.
+     * @param shape2 Shape of the second tensor in the contraction.
+     * @param src2 Entries of the second tensor in the contraction.
      * @param src1Axes Axes along which to compute products for {@code src1} tensor.
      * @param src2Axes Axes along which to compute products for {@code src2} tensor.
-     * @return The tensor dot product over the specified axes.
-     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes pairwise in
-     * {@code aAxes} and {@code bAxes}.
-     * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
-     * are out of bounds for the corresponding tensor.
+     * @throws IllegalArgumentException If {@code src1Axes} and {@code src2Axes} do not match in length, or if any of the axes
+     * are out of bounds for the corresponding tensor. Or, If the two tensors shapes do not match along the specified axes pairwise
+     * in {@code src1Axes} and {@code src2Axes}.
      */
-    public static <T extends PrimitiveDoubleTensorBase<T, T>> T tensorDot(PrimitiveDoubleTensorBase<T, T> src1,
-                                                                          PrimitiveDoubleTensorBase<T, T> src2,
-                                                                          int[] src1Axes, int[] src2Axes) {
-        // Each array must specify the same number of axes.
-        ValidateParameters.ensureEquals(src1Axes.length, src2Axes.length);
+    public RealDenseTensorDot(Shape shape1, double[] src1,
+                              Shape shape2, double[] src2,
+                              int[] src1Axes, int[] src2Axes) {
+        super(shape1, src1, shape2, src2, src1Axes, src2Axes);
+    }
 
-        // Axis values must be less than the rank of the tensor and non-negative
-        ValidateParameters.ensureLessEq(src1.getRank()-1, src1Axes);
-        ValidateParameters.ensureGreaterEq(0, src1Axes);
-        ValidateParameters.ensureLessEq(src2.getRank()-1, src2Axes);
-        ValidateParameters.ensureGreaterEq(0, src2Axes);
 
-        int[] notin;
-        int n1;
-        int n2;
-        int pos;
-
-        // ---- Compute new axes and shapes for first tensor. ----
-        notin = ArrayUtils.notInAxes(src1Axes, src1.getRank());
-        int[] src1NewAxes = ArrayUtils.join(notin, src1Axes);
-
-        n2 = 1;
-        for(int axis : src1Axes) {
-            n2 *= src1.shape.get(axis);
+    /**
+     * <p>Computes this tensor dot product as specified in the constructor.
+     * <p>It is recommended to use {@link #compute()} over this method as it will reduce excess copying.
+     * @param dest The array to store the entries of the tensor resulting from this tensor dot product. The size of this array
+     * should be computed using {@link #getOutputSize()}.
+     */
+    @Override
+    public void compute(double[] dest) {
+        if(dest.length != destLength) {
+            throw new IllegalArgumentException("dest array is not properly sized to store the result of the tensor dot product." +
+                    " Expecting length " + destLength + " but got " + dest.length +  ". Try using calling" +
+                    "getOutputSize() to determine the required size of the dest array.");
         }
-
-        n1 = 1;
-        int[] src1Dims = new int[notin.length];
-        pos = 0;
-        for(int axis : notin) {
-            int a = src1.shape.get(axis);
-            n1 *= a;
-            src1Dims[pos++] = a;
-        }
-
-        Shape src1NewShape = new Shape(n1, n2);
-        // -----------------------------------------------------
-
-        // ---- Compute new axes and shapes for second tensor. ----
-        notin = ArrayUtils.notInAxes(src2Axes, src2.getRank());
-        int[] src2NewAxes = ArrayUtils.join(src2Axes, notin);
-
-        n2 = 1;
-        for(int axis : src2Axes) {
-            n2 *= src2.shape.get(axis);
-        }
-
-        n1 = 1;
-        pos = 0;
-        int[] src2Dims = new int[notin.length];
-        for(int axis : notin) {
-            int a = src2.shape.get(axis);
-            n1 *= a;
-            src2Dims[pos++] = a;
-        }
-
-        Shape src2NewShape = new Shape(n2, n1);
-        // -----------------------------------------------------
 
         // Reform tensor dot product problem as a matrix multiplication problem.
-        double[] at = TransposeDispatcher.dispatchTensor(src1, src1NewAxes).entries;
-        double[] bt = TransposeDispatcher.dispatchTensor(src2, src2NewAxes).entries;
+        double[] at = TransposeDispatcher.dispatchTensor(src1, shape1, src1NewAxes);
+        double[] bt = TransposeDispatcher.dispatchTensor(src2, shape2, src2NewAxes);
 
-        double[] destEntries = RealDenseMatrixMultiplyDispatcher.dispatch(at, src1NewShape, bt, src2NewShape);
+        double[] destEntries = RealDenseMatrixMultiplyDispatcher.dispatch(at, newShape1, bt, newShape2);
+        // TODO: The RealDenseMatrixMultiplyDispatcher should be refactored to avoid needing to copy the result.
+        System.arraycopy(destEntries, 0, dest, 0, destLength);
+    }
 
-        Shape destShape = new Shape(ArrayUtils.join(src1Dims, src2Dims));
 
-        return src1.makeLikeTensor(destShape, destEntries);
+    /**
+     * Computes this tensor dot product as specified in the constructor.
+     * @return The result of the tensor dot product problem specified in the constructor.
+     */
+    public double[] compute() {
+        // Reform tensor dot product problem as a matrix multiplication problem.
+        double[] at = TransposeDispatcher.dispatchTensor(src1, shape1, src1NewAxes);
+        double[] bt = TransposeDispatcher.dispatchTensor(src2, shape2, src2NewAxes);
+
+        return RealDenseMatrixMultiplyDispatcher.dispatch(at, newShape1, bt, newShape2);
     }
 }

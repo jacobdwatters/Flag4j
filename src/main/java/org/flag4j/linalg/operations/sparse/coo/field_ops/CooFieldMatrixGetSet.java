@@ -29,8 +29,8 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.CooFieldMatrixBase;
 import org.flag4j.arrays.backend.CooFieldVectorBase;
-import org.flag4j.arrays.backend.MatrixMixin;
-import org.flag4j.linalg.operations.sparse.coo.SparseElementSearch;
+import org.flag4j.arrays.backend.MatrixMixinOld;
+import org.flag4j.linalg.operations.sparse.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
@@ -49,7 +49,7 @@ public final class CooFieldMatrixGetSet {
 
     private CooFieldMatrixGetSet() {
         // Hide default constructor in utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -60,7 +60,7 @@ public final class CooFieldMatrixGetSet {
      * @param col Column index of the value to get from the sparse matrix.
      * @return The value in the sparse matrix at the specified indices.
      */
-    public static <V extends Field<V>> V matrixGet(CooFieldMatrixBase<?, ?, ?, ?, V> src, int row, int col) {
+    public static <V extends Field<V>> V matrixGet(CooFieldMatrixBase<?,?,?,?,V> src, int row, int col) {
         V zero = src.entries.length > 0 ? src.entries[0].getZero() : null;
         int idx = SparseElementSearch.matrixBinarySearch(src.rowIndices, src.colIndices, row, col);
 
@@ -76,8 +76,8 @@ public final class CooFieldMatrixGetSet {
      * @param value Value to set.
      * @return The
      */
-    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, ?, V>
-    matrixSet(CooFieldMatrixBase<?, ?, ?, ?, V> src, int row, int col, V value) {
+    public static <V extends Field<V>> CooFieldMatrixBase<?,?,?,?,V>
+    matrixSet(CooFieldMatrixBase<?,?,?,?,V> src, int row, int col, V value) {
         // Find position of row index within the row indices if it exits.
         int idx = SparseElementSearch.matrixBinarySearch(src.rowIndices, src.colIndices, row, col);
         Field<V>[] destEntries;
@@ -85,21 +85,23 @@ public final class CooFieldMatrixGetSet {
         int[] destColIndices;
 
         if(idx < 0) {
+            idx = -idx - 1;
+
             // No non-zero element with these indices exists. Insert new value.
             destEntries = new Field[src.entries.length + 1];
-            System.arraycopy(src.entries, 0, destEntries, 0, -idx-1);
-            destEntries[-idx-1] = value;
-            System.arraycopy(src.entries, -idx-1, destEntries, -idx, src.entries.length+idx+1);
+            System.arraycopy(src.entries, 0, destEntries, 0, idx);
+            destEntries[idx] = value;
+            System.arraycopy(src.entries, idx, destEntries, -idx, src.entries.length - idx);
 
             destRowIndices = new int[src.entries.length + 1];
-            System.arraycopy(src.rowIndices, 0, destRowIndices, 0, -idx-1);
-            destRowIndices[-idx-1] = row;
-            System.arraycopy(src.rowIndices, -idx-1, destRowIndices, -idx, src.rowIndices.length+idx+1);
+            System.arraycopy(src.rowIndices, 0, destRowIndices, 0, idx);
+            destRowIndices[idx] = row;
+            System.arraycopy(src.rowIndices, idx, destRowIndices, -idx, src.rowIndices.length - idx);
 
             destColIndices = new int[src.entries.length + 1];
-            System.arraycopy(src.colIndices, 0, destColIndices, 0, -idx-1);
-            destColIndices[-idx-1] = col;
-            System.arraycopy(src.colIndices, -idx-1, destColIndices, -idx, src.colIndices.length+idx+1);
+            System.arraycopy(src.colIndices, 0, destColIndices, 0, idx);
+            destColIndices[idx] = col;
+            System.arraycopy(src.colIndices, idx, destColIndices, idx+1, src.colIndices.length - idx);
         } else {
             // Value with these indices exists. Simply update value.
             destEntries = Arrays.copyOf(src.entries, src.entries.length);
@@ -119,8 +121,8 @@ public final class CooFieldMatrixGetSet {
      * @param row Dense array containing the entries of the row to set.
      * @return A copy of the {@code src} matrix with the specified row set to the dense {@code row} array.
      */
-    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, ?, V>
-    setRow(CooFieldMatrixBase<?, ?, ?, ?, V> src, int rowIdx, Field<V>[] row) {
+    public static <V extends Field<V>> CooFieldMatrixBase<?,?,?,?,V>
+    setRow(CooFieldMatrixBase<?,?,?,?,V> src, int rowIdx, Field<V>[] row) {
         ValidateParameters.ensureIndexInBounds(src.numRows, rowIdx);
         ValidateParameters.ensureEquals(src.numCols, row.length);
 
@@ -198,8 +200,8 @@ public final class CooFieldMatrixGetSet {
      * @param row Dense array containing the entries of the row to set.
      * @return A copy of the {@code src} matrix with the specified row set to the dense {@code row} array.
      */
-    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, ?, V> setRow(
-            CooFieldMatrixBase<?, ?, ?, ?, V> src, int rowIdx, CooFieldVectorBase<?, ?, ?, ?, V> row) {
+    public static <V extends Field<V>> CooFieldMatrixBase<?,?,?,?,V> setRow(
+            CooFieldMatrixBase<?,?,?,?,V> src, int rowIdx, CooFieldVectorBase<?,?,?,?,V> row) {
         ValidateParameters.ensureIndexInBounds(src.numRows, rowIdx);
         ValidateParameters.ensureEquals(src.numCols, row.size);
 
@@ -282,8 +284,8 @@ public final class CooFieldMatrixGetSet {
      * @throws IllegalArgumentException If the {@code col} array does not have the same length as the number of
      * rows in {@code src} matrix.
      */
-    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, ?, V>
-    setCol(CooFieldMatrixBase<?, ?, ?, ?, V> src, int colIdx, V[] col) {
+    public static <V extends Field<V>> CooFieldMatrixBase<?,?,?,?,V>
+    setCol(CooFieldMatrixBase<?,?,?,?,V> src, int colIdx, V[] col) {
         ValidateParameters.ensureIndexInBounds(src.numCols, colIdx);
         ValidateParameters.ensureEquals(src.numRows, col.length);
 
@@ -306,7 +308,7 @@ public final class CooFieldMatrixGetSet {
             }
         }
 
-        CooFieldMatrixBase<?, ?, ?, ?, V> dest = src.makeLikeTensor(src.shape, destEntries, destRowIndices, destColIndices);
+        CooFieldMatrixBase<?,?,?,?,V> dest = src.makeLikeTensor(src.shape, destEntries, destRowIndices, destColIndices);
         dest.sortIndices(); // Ensure the indices are sorted properly.
 
         return dest;
@@ -323,10 +325,10 @@ public final class CooFieldMatrixGetSet {
      * @throws IllegalArgumentException If the {@code col} array does not have the same length as the number of
      * rows in {@code src} matrix.
      */
-    public static <T extends Field<T>> CooFieldMatrixBase<?, ?, ?, ?, T> setCol(
-            CooFieldMatrixBase<?, ?, ?, ?, T> src,
+    public static <T extends Field<T>> CooFieldMatrixBase<?,?,?,?,T> setCol(
+            CooFieldMatrixBase<?,?,?,?,T> src,
             int colIdx,
-            CooFieldVectorBase<?, ?, ?, ?, T> col) {
+            CooFieldVectorBase<?,?,?,?,T> col) {
         ValidateParameters.ensureIndexInBounds(src.numCols, colIdx);
         ValidateParameters.ensureEquals(src.numRows, col.size);
 
@@ -347,7 +349,7 @@ public final class CooFieldMatrixGetSet {
             }
         }
 
-        CooFieldMatrixBase<?, ?, ?, ?, T> dest = src.makeLikeTensor(
+        CooFieldMatrixBase<?,?,?,?,T> dest = src.makeLikeTensor(
                 src.shape,
                 destEntries,
                 destRowIndices,
@@ -370,9 +372,9 @@ public final class CooFieldMatrixGetSet {
      * matrix given the row and
      * column index.
      */
-    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, ?, V> setSlice(
-            CooFieldMatrixBase<?, ?, ?, ?, V> src,
-            CooFieldMatrixBase<?, ?, ?, ?, V> values,
+    public static <V extends Field<V>> CooFieldMatrixBase<?,?,?,?,V> setSlice(
+            CooFieldMatrixBase<?,?,?,?,V> src,
+            CooFieldMatrixBase<?,?,?,?,V> values,
             int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
         setSliceParamCheck(src, values, row, col);
@@ -388,7 +390,7 @@ public final class CooFieldMatrixGetSet {
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
         // Create matrix and ensure entries are properly sorted.
-        CooFieldMatrixBase<?, ?, ?, ?, V> mat = src.makeLikeTensor(src.shape, entries, rowIndices, colIndices);
+        CooFieldMatrixBase<?,?,?,?,V> mat = src.makeLikeTensor(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
         return mat;
@@ -405,8 +407,8 @@ public final class CooFieldMatrixGetSet {
      * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
      * given the row and column index.
      */
-    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, ?, V> setSlice(
-            CooFieldMatrixBase<?, ?, ?, ?, V> src, V[][] values, int row, int col) {
+    public static <V extends Field<V>> CooFieldMatrixBase<?,?,?,?,V> setSlice(
+            CooFieldMatrixBase<?,?,?,?,V> src, V[][] values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
         setSliceParamCheck(src, values.length, values[0].length, row, col);
 
@@ -431,8 +433,8 @@ public final class CooFieldMatrixGetSet {
      * @param col Starting column index of slice.
      * @return A copy of the {@code src} matrix with the specified slice set to the specified values.
      */
-    private static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, ?, V> setSlice(
-            CooFieldMatrixBase<?, ?, ?, ?, V> src, V[] values,
+    private static <V extends Field<V>> CooFieldMatrixBase<?,?,?,?,V> setSlice(
+            CooFieldMatrixBase<?,?,?,?,V> src, V[] values,
             int numRows, int numCols, int[] sliceRows, int[] sliceCols, int row, int col) {
         // Copy vales and row/column indices (with appropriate shifting) to destination lists.
         List<Field<V>> entries = new ArrayList<>(Arrays.asList(values));
@@ -445,7 +447,7 @@ public final class CooFieldMatrixGetSet {
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
         // Create matrix and ensure entries are properly sorted.
-        CooFieldMatrixBase<?, ?, ?, ?, V> mat = src.makeLikeTensor(src.shape, entries, rowIndices, colIndices);
+        CooFieldMatrixBase<?,?,?,?,V> mat = src.makeLikeTensor(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
         return mat;
@@ -458,7 +460,7 @@ public final class CooFieldMatrixGetSet {
      * @param rowIdx Index of the row to extract from the {@code src} matrix.
      * @return Returns the specified row from this sparse matrix.
      */
-    public static <T extends Field<T>> CooFieldVectorBase<?, ?, ?, ?, T> getRow(CooFieldMatrixBase<?, ?, ?, ?, T> src, int rowIdx) {
+    public static <T extends Field<T>> CooFieldVectorBase<?,?,?,?,T> getRow(CooFieldMatrixBase<?,?,?,?,T> src, int rowIdx) {
         ValidateParameters.ensureIndexInBounds(src.numRows, rowIdx);
 
         List<Field<T>> entries = new ArrayList<>();
@@ -483,8 +485,8 @@ public final class CooFieldMatrixGetSet {
      * @param end Ending column index of the column to be extracted (exclusive)
      * @return Returns the specified column range from this sparse matrix.
      */
-    public static <T extends Field<T>> CooFieldVectorBase<?, ?, ?, ?, T> getRow(
-            CooFieldMatrixBase<?, ?, ?, ?, T> src,
+    public static <T extends Field<T>> CooFieldVectorBase<?,?,?,?,T> getRow(
+            CooFieldMatrixBase<?,?,?,?,T> src,
             int rowIdx, int start, int end) {
         ValidateParameters.ensureIndexInBounds(src.numRows, rowIdx);
         ValidateParameters.ensureIndexInBounds(src.numCols, start, end-1);
@@ -510,7 +512,7 @@ public final class CooFieldMatrixGetSet {
      * @param colIdx Index of the column to extract from the {@code src} matrix.
      * @return Returns the specified column from this sparse matrix.
      */
-    public static <T extends Field<T>> CooFieldVectorBase<?, ?, ?, ?, T> getCol(CooFieldMatrixBase<?, ?, ?, ?, T> src, int colIdx) {
+    public static <T extends Field<T>> CooFieldVectorBase<?,?,?,?,T> getCol(CooFieldMatrixBase<?,?,?,?,T> src, int colIdx) {
         ValidateParameters.ensureIndexInBounds(src.numCols, colIdx);
 
         List<Field<T>> entries = new ArrayList<>();
@@ -535,8 +537,8 @@ public final class CooFieldMatrixGetSet {
      * @param end Ending row index of the column to be extracted (exclusive)
      * @return Returns the specified column range from this sparse matrix.
      */
-    public static <T extends Field<T>> CooFieldVectorBase<?, ?, ?, ?, T> getCol(
-            CooFieldMatrixBase<?, ?, ?, ?, T> src,
+    public static <T extends Field<T>> CooFieldVectorBase<?,?,?,?,T> getCol(
+            CooFieldMatrixBase<?,?,?,?,T> src,
             int colIdx, int start, int end) {
         ValidateParameters.ensureIndexInBounds(src.numCols, colIdx);
         ValidateParameters.ensureIndexInBounds(src.numRows, start, end);
@@ -565,8 +567,8 @@ public final class CooFieldMatrixGetSet {
      * @param colEnd Ending column index of the slice (exclusive).
      * @return The specified slice of the sparse matrix.
      */
-    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, ?, V> getSlice(
-            CooFieldMatrixBase<?, ?, ?, ?, V> src,
+    public static <V extends Field<V>> CooFieldMatrixBase<?,?,?,?,V> getSlice(
+            CooFieldMatrixBase<?,?,?,?,V> src,
             int rowStart, int rowEnd, int colStart, int colEnd) {
         ValidateParameters.ensureIndexInBounds(src.numRows, rowStart, rowEnd-1);
         ValidateParameters.ensureIndexInBounds(src.numCols, colStart, colEnd-1);
@@ -620,7 +622,7 @@ public final class CooFieldMatrixGetSet {
      * @param colRange List of column indices to NOT copy from.
      */
     private static <V extends Field<V>> void copyValuesNotInSlice(
-            CooFieldMatrixBase<?, ?, ?, ?, V> src, List<Field<V>> entries,
+            CooFieldMatrixBase<?,?,?,?,V> src, List<Field<V>> entries,
             List<Integer> rowIndices,
             List<Integer> colIndices, int[] rowRange, int[] colRange) {
         // Copy values not in slice.
@@ -643,7 +645,7 @@ public final class CooFieldMatrixGetSet {
      * @param row Starting row for slice.
      * @param col Ending row for slice.
      */
-    private static <T extends MatrixMixin<?, ?, ?, ?, ?>, U extends MatrixMixin<?, ?, ?, ?, ?>> void setSliceParamCheck(
+    private static <T extends MatrixMixinOld<?,?,?,?,?,?>, U extends MatrixMixinOld<?,?,?,?,?,?>> void setSliceParamCheck(
             T src, U values, int row, int col) {
         ValidateParameters.ensureIndexInBounds(src.numRows(), row);
         ValidateParameters.ensureIndexInBounds(src.numCols(), col);
@@ -660,7 +662,7 @@ public final class CooFieldMatrixGetSet {
      * @param row Starting row for slice.
      * @param col Ending row for slice.
      */
-    private static <T extends MatrixMixin<?, ?, ?, ?, ?>> void setSliceParamCheck(
+    private static <T extends MatrixMixinOld<?,?,?,?,?,?>> void setSliceParamCheck(
             T src, int valueRows, int valueCols, int row, int col) {
         ValidateParameters.ensureIndexInBounds(src.numRows(), row);
         ValidateParameters.ensureIndexInBounds(src.numCols(), col);

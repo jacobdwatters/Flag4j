@@ -37,7 +37,7 @@ public final class RealOperations {
 
     private RealOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
     /**
@@ -47,19 +47,22 @@ public final class RealOperations {
      * @return The scalar multiplication of the tensor.
      */
     public static double[] scalMult(double[] src, double factor) {
-        return scalMult(src, null, factor);
+        return scalMult(src, factor, null);
     }
 
 
     /**
      * Computes the scalar multiplication of a tensor.
+     *
      * @param src Entries of the tensor.
-     * @param dest Array to store result in. May be null.
      * @param factor Scalar value to multiply.
+     * @param dest Array to store result in. May be null.
+     *
      * @return A reference to the {@code dest} array if it was not null. Otherwise, a new array will be formed.
+     *
      * @throws ArrayIndexOutOfBoundsException If {@code dest} is not at least the size of {@code src}.
      */
-    public static double[] scalMult(double[] src, double[] dest, double factor) {
+    public static double[] scalMult(double[] src, double factor, double[] dest) {
         int size = src.length;
         if(dest==null) dest = new double[size];
 
@@ -72,15 +75,18 @@ public final class RealOperations {
 
     /**
      * Computes the scalar multiplication of a tensor.
+     *
      * @param src Entries of the tensor.
-     * @param dest Array to store result in. May be null.
      * @param factor Scalar value to multiply.
      * @param start Starting index of scalar multiplication.
      * @param stop Stopping index of scalar multiplication.
+     * @param dest Array to store result in. May be null.
+     *
      * @return A reference to the {@code dest} array if it was not null. Otherwise, a new array will be formed.
+     *
      * @throws ArrayIndexOutOfBoundsException If {@code dest} is not the size of {@code src}.
      */
-    public static double[] scalMult(double[] src, double[] dest, double factor, int start, int stop) {
+    public static double[] scalMult(double[] src, double factor, int start, int stop, double[] dest) {
         if(dest==null) dest = new double[src.length];
 
         for(int i=start; i<stop; i++)
@@ -94,9 +100,11 @@ public final class RealOperations {
      * Computes the scalar division of a tensor.
      * @param src Entries of the tensor.
      * @param divisor Scalar value to divide.
-     * @return The scalar division of the tensor.
+     * @param dest Array to store result in. May be null.
+     *
+     * @return A reference to the {@code dest} array if it was not null. Otherwise, a new array will be formed.
      */
-    public static double[] scalDiv(double[] src, double divisor) {
+    public static double[] scalDiv(double[] src, double divisor, double[] dest) {
         double[] quotient = new double[src.length];
 
         for(int i=0; i<quotient.length; i++) {

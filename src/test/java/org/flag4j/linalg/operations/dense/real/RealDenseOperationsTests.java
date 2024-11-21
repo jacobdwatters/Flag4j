@@ -5,7 +5,7 @@ import org.flag4j.linalg.operations.common.real.RealOperations;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
-import static org.flag4j.linalg.operations.dense.real.RealDenseOperations.*;
+import static org.flag4j.linalg.operations.dense.real.RealDenseOperations.prod;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RealDenseOperationsTests {
@@ -26,7 +26,7 @@ class RealDenseOperationsTests {
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
 
-        assertArrayEquals(expResult, add(src1, shape1, src2, shape2));
+        assertArrayEquals(expResult, add(shape1, src1, shape2, src2));
 
         // ---------- Sub-case 2 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
@@ -34,7 +34,7 @@ class RealDenseOperationsTests {
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
 
-        assertThrows(LinearAlgebraException.class, () -> add(src1, shape1, src2, shape2));
+        assertThrows(LinearAlgebraException.class, () -> add(shape1, src1, shape2, src2));
 
         // ---------- Sub-case 3 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
@@ -42,7 +42,7 @@ class RealDenseOperationsTests {
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
 
-        assertThrows(LinearAlgebraException.class, () -> add(src1, shape1, src2, shape2));
+        assertThrows(LinearAlgebraException.class, () -> add(shape1, src1, shape2, src2));
     }
 
 

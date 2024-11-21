@@ -35,13 +35,29 @@ import org.flag4j.algebraic_structures.fields.RealFloat64;
 public class RealInt32 implements Ring<RealInt32> {
 
     /**
-     * The numerical value 1.
+     * The numerical value -1.
      */
-    public final static RealInt32 ONE = new RealInt32(1);
+    public final static RealInt32 NEGATIVE_ONE = new RealInt32(-1);
     /**
      * The numerical value 0.
      */
     public final static RealInt32 ZERO = new RealInt32(0);
+    /**
+     * The numerical value 1.
+     */
+    public final static RealInt32 ONE = new RealInt32(1);
+    /**
+     * The numerical value 2.
+     */
+    public final static RealInt32 TWO = new RealInt32(2);
+    /**
+     * The numerical value 4.
+     */
+    public final static RealInt32 THREE = new RealInt32(3);
+    /**
+     * The numerical value 10.
+     */
+    public final static RealInt32 TEN = new RealInt32(10);
 
 
     /**
@@ -56,15 +72,6 @@ public class RealInt32 implements Ring<RealInt32> {
      */
     public RealInt32(int value) {
         this.value = value;
-    }
-
-
-    /**
-     * Constructs a real 32-bit floating point number.
-     * @param value Value of the 32-bit integer number.
-     */
-    public RealInt32(double value) {
-        this.value = (int) value;
     }
 
 
@@ -148,11 +155,11 @@ public class RealInt32 implements Ring<RealInt32> {
 
 
     /**
-     * <p>Checks if this value is a multiplicitive identity for this semi-ring.</p>
+     * <p>Checks if this value is a multiplicative identity for this semi-ring.</p>
      *
-     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     * <p>An element 1 is a multiplicative identity if a * 1 = a for any a in the semi-ring.</p>
      *
-     * @return True if this value is a multiplicitive identity for this semi-ring. Otherwise, false.
+     * @return True if this value is a multiplicative identity for this semi-ring. Otherwise, false.
      */
     @Override
     public boolean isOne() {
@@ -174,11 +181,11 @@ public class RealInt32 implements Ring<RealInt32> {
 
 
     /**
-     * <p>Gets the multiplicitive identity for this semi-ring.</p>
+     * <p>Gets the multiplicative identity for this semi-ring.</p>
      *
-     * <p>An element 1 is a multiplicitive identity if a * 1 = a for any a in the semi-ring.</p>
+     * <p>An element 1 is a multiplicative identity if a * 1 = a for any a in the semi-ring.</p>
      *
-     * @return The multiplicitive identity for this semi-ring.
+     * @return The multiplicative identity for this semi-ring.
      */
     @Override
     public RealInt32 getOne() {
@@ -187,9 +194,9 @@ public class RealInt32 implements Ring<RealInt32> {
 
 
     /**
-     * <p>Computes the addative inverse for an element of this field.</p>
+     * <p>Computes the additive inverse for an element of this field.</p>
      *
-     * <p>An element -x is an addative inverse for a filed element x if -x + x = 0 where 0 is the addative identity..</p>
+     * <p>An element -x is an additive inverse for a filed element x if -x + x = 0 where 0 is the additive identity..</p>
      *
      * @return The additive inverse for this field element.
      */
@@ -202,7 +209,7 @@ public class RealInt32 implements Ring<RealInt32> {
     /**
      * Computes the magnitude of this field element.
      *
-     * @return The magniitude of this field element.
+     * @return The magnitude of this field element.
      */
     @Override
     public double mag() {
@@ -213,25 +220,25 @@ public class RealInt32 implements Ring<RealInt32> {
     /**
      * Evaluates the signum or sign function on a field element.
      *
-     * @param a Value to evalute signum funciton on.
+     * @param a Value to evaluate signum function on.
      * @return The output of the signum function evaluated on {@code a}.
      */
     public static RealInt32 sgn(RealInt32 a) {
-        return new RealInt32(Math.signum(a.value));
+        return new RealInt32((int) Math.signum(a.value));
     }
 
 
     /**
      * Compares this element of the ordered field with {@code b}.
      *
-     * @param b Second elemetn of the ordered field.
+     * @param b Second element of the ordered field.
      *
      * @return An int value:
      * <ul>
      *     <li>0 if this field element is equal to {@code b}.</li>
      *     <li>< 0 if this field element is less than {@code b}.</li>
      *     <li>> 0 if this field element is greater than {@code b}.</li>
-     *     Hence, this method returns zero if and only if the two field elemetns are equal, a negative value if and only the field
+     *     Hence, this method returns zero if and only if the two field elements are equal, a negative value if and only the field
      *     element it was called on is less than {@code b} and positive if and only if the field element it was called on is greater
      *     than {@code b}.
      * </ul>
@@ -243,7 +250,7 @@ public class RealInt32 implements Ring<RealInt32> {
 
 
     /**
-     * Computes the product of all entires of specified array.
+     * Computes the product of all entries of specified array.
      * @param values Values to compute product of.
      * @return The product of all values in {@code values}.
      */
@@ -263,7 +270,7 @@ public class RealInt32 implements Ring<RealInt32> {
 
 
     /**
-     * Computes the sum of all entires of specified array.
+     * Computes the sum of all entries of specified array.
      * @param values Values to compute product of.
      * @return The sum of all values in {@code values}.
      */

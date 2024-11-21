@@ -25,12 +25,10 @@
 package org.flag4j.linalg.operations.dense.real_complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.junit.jupiter.api.Test;
 
 import static org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseMatMultTranspose.*;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class RealComplexDenseMatMultTransposeTests {
     double[][] aEntries;

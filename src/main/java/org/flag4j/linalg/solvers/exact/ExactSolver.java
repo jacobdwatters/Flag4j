@@ -25,8 +25,8 @@
 package org.flag4j.linalg.solvers.exact;
 
 
-import org.flag4j.arrays.backend.MatrixMixin;
-import org.flag4j.arrays.backend.VectorMixin;
+import org.flag4j.arrays.backend_new.MatrixMixin;
+import org.flag4j.arrays.backend_new.VectorMixin;
 import org.flag4j.arrays.sparse.PermutationMatrix;
 import org.flag4j.linalg.decompositions.lu.LU;
 import org.flag4j.linalg.solvers.LinearMatrixSolver;
@@ -40,7 +40,8 @@ import static org.flag4j.linalg.decompositions.lu.LU.Pivoting.PARTIAL;
  * <p>If the system is not well determined, i.e. {@code A} is square and full rank, then use a
  * {@link LstsqSolver least-squares solver}.</p>
  */
-public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?, ?>, U extends VectorMixin<U, T, ?, ?>>
+public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
+        U extends VectorMixin<U, T, ?, ?>>
         implements LinearMatrixSolver<T, U> {
 
 

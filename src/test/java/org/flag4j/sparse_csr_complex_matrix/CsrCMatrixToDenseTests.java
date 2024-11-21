@@ -1,11 +1,8 @@
 package org.flag4j.sparse_csr_complex_matrix;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CsrCMatrixToDenseTests {
     static CsrCMatrix A;

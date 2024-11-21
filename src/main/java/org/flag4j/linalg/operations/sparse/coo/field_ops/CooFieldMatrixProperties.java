@@ -25,12 +25,16 @@
 package org.flag4j.linalg.operations.sparse.coo.field_ops;
 
 
+import org.flag4j.algebraic_structures.Pair;
 import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.CooFieldMatrixBase;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -42,7 +46,7 @@ public final class CooFieldMatrixProperties {
 
     private CooFieldMatrixProperties() {
         // Hide public constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -96,56 +100,57 @@ public final class CooFieldMatrixProperties {
 
 
     /**
-     * Checks if a sparse matrix is hermitian.
-     * @param src Matrix to check if it is the hermitian matrix.
-     * @return True if the {@code src} matrix is hermitian. False otherwise.
+     * Checks if a sparse COO matrix is hermitian. That is, the matrix is equal to its conjugate transpose.
+     * @param shape Shape of the COO matrix.
+     * @param entries Non-zero entries of the COO matrix.
+     * @param rowIndices Non-zero row indices of the COO matrix.
+     * @param colIndices Non-zero column indices of the COO matrix.
+     * @return {@code true} if the {@code src} matrix is hermitian. {@code false} otherwise.
      */
-    public static <V extends Field<V>> boolean isHermitian(CooFieldMatrixBase<?, ?, ?, ?, V> src) {
-        boolean result = src.isSquare();
-        List<Field<V>> entries = Arrays.asList(src.entries);
-        List<Integer> rowIndices = IntStream.of(src.rowIndices).boxed().collect(Collectors.toList());
-        List<Integer> colIndices = IntStream.of(src.colIndices).boxed().collect(Collectors.toList());
+    public static <V extends Field<V>> boolean isHermitian(Shape shape, Field<V>[] entries, int[] rowIndices, int[] colIndices) {
+        // Check if the matrix is square.
+        if (shape.get(0) != shape.get(1))
+            return false;
 
-        V value;
-        int row;
-        int col;
+        // Build a map from (row, col) to value for quick access.
+        Map<Pair<Integer>, Field<V>> matrixMap = new HashMap<>();
+        int nnz = entries.length; // Number of non-zero entries.
 
-        while(result && entries.size() > 0) {
-            // Extract value of interest.
-            value = (V) entries.remove(0);
-            row = rowIndices.remove(0);
-            col = colIndices.remove(0);
+        for (int i = 0; i < nnz; i++) {
+            int row = rowIndices[i];
+            int col = colIndices[i];
+            Field<V> value = entries[i];
 
-            // Find indices of first and last value whose row index matched the value of interests column index.
-            int rowStart = rowIndices.indexOf(col);
-            int rowEnd = rowIndices.lastIndexOf(col);
+            matrixMap.put(new Pair<>(row, col), value);
+        }
 
-            if(rowStart == -1) {
-                // Then no non-zero value was found.
-                result = value.equals(0);
+        // Iterate over the entries to check for Hermitian property.
+        for (Map.Entry<Pair<Integer>, Field<V>> entry : matrixMap.entrySet()) {
+            int row = entry.getKey().first();
+            int col = entry.getKey().second();
+            Field<V> value = entry.getValue();
+
+            // Skip entries where row > col to avoid redundant checks.
+            if (row > col) continue;
+
+            if (row == col) {
+                // Diagonal entries must be real: value == value.conj()
+                if (!value.equals(value.conj())) return false;
+
             } else {
-                // At least one entry has a row-index matching the specified column index.
-                List<Integer> colIdxRange = colIndices.subList(rowStart, rowEnd + 1);
+                // Get the symmetric value at (col, row).
+                Field<V> symValue = matrixMap.get(new Pair<>(col, row));
 
-                // Search for element whose column index matches the specified row index
-                int idx = colIdxRange.indexOf(row);
+                if (symValue == null) // Missing symmetric entry implies zero.
+                    symValue = value.getZero();
 
-                if(idx == -1) {
-                    // Then no non-zero value was found.
-                    result = value.equals(0);
-                } else {
-                    // Check that value with opposite row/column indices is equal.
-                    result = value.equals(entries.get(idx + rowStart).conj());
-
-                    // Remove the value and the indices.
-                    entries.remove(idx + rowStart);
-                    rowIndices.remove(idx + rowStart);
-                    colIndices.remove(idx + rowStart);
-                }
+                // Check if value equals the conjugate of the symmetric value.
+                if (!value.equals(symValue.conj())) return false;
             }
         }
 
-        return result;
+        // If all checks pass, the matrix is Hermitian.
+        return true;
     }
 
 

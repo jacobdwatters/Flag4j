@@ -25,8 +25,7 @@
 package org.flag4j.io;
 
 
-import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.fields.*;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -39,7 +38,7 @@ public final class PrettyPrint {
 
     private PrettyPrint() {
         // Hide default constructor in utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -92,7 +91,8 @@ public final class PrettyPrint {
      * @param centring Flag indicating if each value should be centered within the padding.
      * @return A string representing the abbreviated and formatted array.
      */
-    public static String abbreviatedArray(Field<Complex128>[] arr, int maxEntries, int padding, int precision, boolean centring) {
+    public static <T extends Field<T>> String abbreviatedArray(Field<T>[] arr, int maxEntries, int padding, int precision,
+                                                         boolean centring) {
         ValidateParameters.ensureNonNegative(maxEntries, padding, precision);
         StringBuilder result = new StringBuilder("[");
         String value;
@@ -216,10 +216,8 @@ public final class PrettyPrint {
         for(double value : src) {
             currLength = Complex128.round(new Complex128(value), PrintOptions.getPrecision()).toString().length();
 
-            if(currLength>maxLength) {
-                // Then update the maximum length.
+            if(currLength>maxLength) // Then update the maximum length.
                 maxLength = currLength;
-            }
         }
 
         return maxLength;
@@ -231,17 +229,15 @@ public final class PrettyPrint {
      * @param src Array for which to compute the max string representation length of a double in.
      * @return The maximum length of the string representation of the doubles in the array.
      */
-    public static int maxStringLength(Field<Complex128>[] src) {
+    public static <T extends Field<T>> int maxStringLength(Field<T>[] src) {
         int maxLength = -1;
         int currLength;
 
-        for(Field<Complex128> value : src) {
-            currLength = Complex128.round((Complex128) value, PrintOptions.getPrecision()).toString().length();
+        for(Field<T> value : src) {
+            currLength = lengthRounded(value, PrintOptions.getPrecision());
 
-            if(currLength>maxLength) {
-                // Then update the maximum length.
+            if(currLength>maxLength) // Then update the maximum length.
                 maxLength = currLength;
-            }
         }
 
         return maxLength;
@@ -267,10 +263,8 @@ public final class PrettyPrint {
                     new Complex128(src[i]),
                     PrintOptions.getPrecision()).toString().length();
 
-            if(currLength>maxLength) {
-                // Then update the maximum length.
+            if(currLength>maxLength) // Then update the maximum length.
                 maxLength = currLength;
-            }
         }
 
         // Always get last elements' length.
@@ -279,10 +273,8 @@ public final class PrettyPrint {
                     new Complex128(src[src.length-1]),
                     PrintOptions.getPrecision()).toString().length();
 
-            if(currLength>maxLength) {
-                // Then update the maximum length.
+            if(currLength>maxLength) // Then update the maximum length.
                 maxLength = currLength;
-            }
         }
 
         return maxLength;
@@ -296,7 +288,7 @@ public final class PrettyPrint {
      * @param stopIndex Stopping index for finding max length.
      * @return The maximum length of the string representation of the doubles in the array.
      */
-    public static int maxStringLength(Field<Complex128>[] src, int stopIndex) {
+    public static <T extends Field<T>> int maxStringLength(Field<T>[] src, int stopIndex) {
         int maxLength = -1;
         int currLength;
 
@@ -304,28 +296,44 @@ public final class PrettyPrint {
         stopIndex = Math.min(stopIndex, src.length);
 
         for(int i=0; i<stopIndex; i++) {
-            currLength = Complex128.round(
-                    (Complex128) src[i],
-                    PrintOptions.getPrecision()).toString().length();
+            currLength = lengthRounded(src[i], PrintOptions.getPrecision());
 
-            if(currLength>maxLength) {
-                // Then update the maximum length.
+            if(currLength>maxLength) // Then update the maximum length.
                 maxLength = currLength;
-            }
         }
 
         // Always get last elements' length.
         if(stopIndex < src.length) {
-            currLength = Complex128.round(
-                    (Complex128) src[src.length-1],
-                    PrintOptions.getPrecision()).toString().length();
+            Field<T> value = src[src.length-1];
+            currLength = lengthRounded(value, PrintOptions.getPrecision());
 
-            if(currLength>maxLength) {
-                // Then update the maximum length.
+            if(currLength>maxLength) // Then update the maximum length.
                 maxLength = currLength;
-            }
         }
 
         return maxLength;
+    }
+
+
+    /**
+     * Compute the length of the string representation of the specified field value rounded to {@code precision} if possible.
+     * @param value Field value to round. If the value cannot be rounded the length of the object unchanged will be returned.
+     * @param precision The precision to round {@code value} to.
+     * @return
+     */
+    private static <T extends Field<T>> int lengthRounded(Field<T> value, int precision) {
+        int length;
+        if(value instanceof Complex128)
+            length = Complex128.round((Complex128) value, precision).toString().length();
+        else if(value instanceof Complex64)
+            length = Complex64.round((Complex64) value, precision).toString().length();
+        else if(value instanceof RealFloat64)
+            length = RealFloat64.round((RealFloat64) value, precision).toString().length();
+        else if(value instanceof RealFloat32)
+            length = RealFloat32.round((RealFloat32) value, precision).toString().length();
+        else
+            length = value.toString().length();
+
+        return length;
     }
 }

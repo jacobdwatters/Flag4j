@@ -27,22 +27,19 @@ package org.flag4j.arrays.sparse;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.CsrFieldMatrixBase;
+import org.flag4j.arrays.backend_new.field.AbstractCsrFieldMatrix;
 import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldMatMult;
-import org.flag4j.linalg.operations.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
 import org.flag4j.linalg.operations.sparse.SparseUtils;
-import org.flag4j.linalg.operations.sparse.csr.field_ops.CsrFieldMatMult;
-import org.flag4j.linalg.operations.sparse.csr.field_ops.CsrFieldMatrixOperations;
-import org.flag4j.linalg.operations.sparse.csr.real_complex.RealComplexCsrMatrixMultiplication;
+import org.flag4j.linalg.operations.sparse.csr.CsrConversions;
+import org.flag4j.linalg.operations.sparse.csr.semiring_ops.SemiringCsrMatMult;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -72,7 +69,7 @@ import java.util.List;
  *
  * <p>If indices need to be sorted explicitly, call {@link #sortIndices()}.</p>
  */
-public class CsrCMatrix extends CsrFieldMatrixBase<CsrCMatrix, CMatrix, CooCVector, CVector, Complex128> {
+public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooCVector, Complex128> {
 
     /**
      * Creates a complex sparse CSR matrix with the specified {@code shape}, non-zero entries, row pointers, and non-zero column
@@ -105,7 +102,7 @@ public class CsrCMatrix extends CsrFieldMatrixBase<CsrCMatrix, CMatrix, CooCVect
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code entries.length == colIndices.length}.
      */
-    public CsrCMatrix(Shape shape, List<Field<Complex128>> entries, List<Integer> rowPointers, List<Integer> colIndices) {
+    public CsrCMatrix(Shape shape, List<Complex128> entries, List<Integer> rowPointers, List<Integer> colIndices) {
         super(shape, entries.toArray(new Complex128[0]),
                 ArrayUtils.fromIntegerList(rowPointers),
                 ArrayUtils.fromIntegerList(colIndices));
@@ -180,50 +177,67 @@ public class CsrCMatrix extends CsrFieldMatrixBase<CsrCMatrix, CMatrix, CooCVect
 
 
     /**
-     * Constructs a CSR matrix of the same type as this matrix with the given the {@code shape}, {@code entries} and the same non-zero
-     * indices.
+     * Constructs a sparse CSR tensor of the same type as this tensor with the specified non-zero entries and indices.
      *
-     * @param shape Shape of the matrix to construct.
-     * @param entries Entries of the matrix to construct.
+     * @param shape Shape of the matrix.
+     * @param entries Non-zero entries of the CSR matrix.
+     * @param rowPointers Row pointers for the non-zero values in the CSR matrix.
+     * @param colIndices Non-zero column indices of the CSR matrix.
      *
-     * @return A matrix of the same type as this matrix with the given the {@code shape}, {@code entries} and the same non-zero
-     * indices.
+     * @return A sparse CSR tensor of the same type as this tensor with the specified non-zero entries and indices.
      */
     @Override
-    public CsrCMatrix makeLikeTensor(Shape shape, Field<Complex128>[] entries) {
+    public CsrCMatrix makeLikeTensor(Shape shape, Complex128[] entries, int[] rowPointers, int[] colIndices) {
         return new CsrCMatrix(shape, entries, rowPointers, colIndices);
     }
 
 
     /**
-     * Constructs a CSR matrix of the same type as this matrix with the given the {@code shape}, {@code entries} and non-zero
-     * indices.
+     * Constructs a CSR matrix with the specified shape, non-zero entries, and non-zero indices.
      *
-     * @param shape Shape of the matrix to construct.
-     * @param entries Entries of the matrix to construct.
-     * @param rowPointers Row pointers for the CSR matrix.
-     * @param colIndices Column indices of the CSR matrix.
+     * @param shape Shape of the matrix.
+     * @param entries Non-zero values of the CSR matrix.
+     * @param rowPointers Row pointers for the non-zero values in the CSR matrix.
+     * @param colIndices Non-zero column indices of the CSR matrix.
      *
-     * @return A matrix of the same type as this matrix with the given the {@code shape}, {@code entries} and non-zero
-     * indices.
+     * @return A CSR matrix with the specified shape, non-zero entries, and non-zero indices.
      */
     @Override
-    public CsrCMatrix makeLikeTensor(Shape shape, Field<Complex128>[] entries, int[] rowPointers, int[] colIndices) {
+    public CsrCMatrix makeLikeTensor(Shape shape, List<Complex128> entries, List<Integer> rowPointers, List<Integer> colIndices) {
         return new CsrCMatrix(shape, entries, rowPointers, colIndices);
     }
 
 
     /**
-     * Constructs a dense matrix of similar type as this matrix with the given the {@code shape} and {@code entries}.
+     * Constructs a dense matrix which is of a similar type to this sparse CSR matrix.
      *
-     * @param shape Shape of the dense matrix to construct.
-     * @param entries Entries of the dense matrix to construct.
+     * @param shape Shape of the dense matrix.
+     * @param entries Entries of the dense matrix.
      *
-     * @return A dense matrix of similar type as this sparse CSR matrix with the given the {@code shape} and {@code entries}.
+     * @return A dense matrix which is of a similar type to this sparse CSR matrix with the specified {@code shape}
+     * and {@code entries}.
      */
     @Override
-    public CMatrix makeLikeDenseTensor(Shape shape, Field<Complex128>[] entries) {
+    public CMatrix makeLikeDenseTensor(Shape shape, Complex128[] entries) {
         return new CMatrix(shape, entries);
+    }
+
+
+    /**
+     * <p>Constructs a sparse COO matrix of a similar type to this sparse CSR matrix.
+     * <p>Note: this method constructs a new COO matrix with the specified entries and indices. It does <i>not</i> convert this matrix
+     * to a CSR matrix. To convert this matrix to a sparse COO matrix use {@link #toCoo()}.
+     *
+     * @param shape Shape of the COO matrix.
+     * @param entries Non-zero entries of the COO matrix.
+     * @param rowIndices Non-zero row indices of the sparse COO matrix.
+     * @param colIndices Non-zero column indices of the Sparse COO matrix.
+     *
+     * @return A sparse COO matrix of a similar type to this sparse CSR matrix.
+     */
+    @Override
+    public CooCMatrix makeLikeCooMatrix(Shape shape, Field<Complex128>[] entries, int[] rowIndices, int[] colIndices) {
+        return new CooCMatrix(shape, entries, rowIndices, colIndices);
     }
 
 
@@ -234,346 +248,146 @@ public class CsrCMatrix extends CsrFieldMatrixBase<CsrCMatrix, CMatrix, CooCVect
      */
     @Override
     public CooCMatrix toCoo() {
-        int[] cooRowIdx = new int[entries.length];
-
-        for(int i=0; i<numRows; i++) {
-            for(int j=rowPointers[i], stop=rowPointers[i+1]; j<stop; j++)
-                cooRowIdx[j] = i;
-        }
-
-        return new CooCMatrix(shape, entries.clone(), cooRowIdx, colIndices.clone());
+        Complex128[] cooEntries = new Complex128[nnz];
+        int[] cooRowIndices = new int[nnz];
+        int[] cooColIndices = new int[nnz];
+        CsrConversions.toCoo(shape, entries, rowPointers, colIndices, cooEntries, cooRowIndices, cooColIndices);
+        return new CooCMatrix(shape, cooEntries, cooRowIndices, cooColIndices);
     }
 
 
     /**
-     * Computes matrix-vector multiplication.
+     * Converts this CSR matrix to an equivalent sparse COO tensor.
+     *
+     * @return An sparse COO tensor equivalent to this CSR matrix.
+     */
+    @Override
+    public CooCTensor toTensor() {
+        return toCoo().toTensor();
+    }
+
+
+    /**
+     * Converts this CSR matrix to an equivalent COO tensor with the specified shape.
+     *
+     * @param shape@return A COO tensor equivalent to this CSR matrix which has been reshaped to {@code newShape}
+     */
+    @Override
+    public CooCTensor toTensor(Shape shape) {
+        return toTensor(shape).reshape(shape);
+    }
+
+
+    /**
+     * Constructs a tensor of the same type as this tensor with the given the {@code shape} and
+     * {@code entries}. The resulting tensor will also have
+     * the same non-zero indices as this tensor.
+     *
+     * @param shape Shape of the tensor to construct.
+     * @param entries Entries of the tensor to construct.
+     *
+     * @return A tensor of the same type and with the same non-zero indices as this tensor with the given the {@code shape} and
+     * {@code entries}.
+     */
+    @Override
+    public CsrCMatrix makeLikeTensor(Shape shape, Field<Complex128>[] entries) {
+        return new CsrCMatrix(shape, entries, rowPointers.clone(), colIndices.clone());
+    }
+
+
+    /**
+     * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
+     * computes the sum of products between the two tensors along the specified set of axes.
+     *
+     * @param src2 TensorOld to contract with this tensor.
+     * @param aAxes Axes along which to compute products for this tensor.
+     * @param bAxes Axes along which to compute products for {@code src2} tensor.
+     *
+     * @return The tensor dot product over the specified axes.
+     *
+     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes pairwise in
+     *                                  {@code aAxes} and {@code bAxes}.
+     * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
+     *                                  are out of bounds for the corresponding tensor.
+     */
+    @Override
+    public CTensor tensorDot(CsrCMatrix src2, int[] aAxes, int[] bAxes) {
+        return toTensor().tensorDot(src2.toTensor(), aAxes, bAxes);
+    }
+
+
+    /**
+     * Computes the matrix-vector multiplication of a vector with this matrix.
      *
      * @param b Vector in the matrix-vector multiplication.
      *
-     * @return The result of matrix multiplying this matrix with vector {@code b}.
+     * @return The result of multiplying this matrix with {@code b}.
      *
-     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the
-     *                                  number of entries in the vector {@code b}.
+     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the size of {@code b}.
      */
     @Override
     public CVector mult(CooCVector b) {
-        return (CVector) CsrFieldMatMult.standardVector(this, b);
+        Complex128[] dest = new Complex128[b.size];
+        SemiringCsrMatMult.standardVector(shape, entries, rowPointers, colIndices,
+                b.size, b.entries, b.indices,
+                dest, getZeroElement());
+        return new CVector(dest);
     }
 
 
     /**
-     * Converts this matrix to an equivalent vector. If this matrix is not shaped as a row/column vector,
-     * it will first be flattened then converted to a vector.
+     * Gets a range of a row of this matrix.
      *
-     * @return A vector equivalent to this matrix.
+     * @param rowIdx The index of the row to get.
+     * @param start The staring column of the row range to get (inclusive).
+     * @param stop The ending column of the row range to get (exclusive).
+     *
+     * @return A vector containing the elements of the specified row over the range [start, stop).
+     *
+     * @throws IllegalArgumentException If {@code rowIdx < 0 || rowIdx >= this.numRows()} or {@code start < 0 || start >= numCols} or
+     *                                  {@code stop < start || stop > numCols}.
      */
     @Override
-    public CooCVector toVector() {
-        int type = vectorType();
-        int[] indices = new int[entries.length];
-
-        if(type == -1) {
-            // Not a vector.
-            for(int i=0; i<numRows; i++) {
-                int start = rowPointers[i];
-                int stop = rowPointers[i+1];
-                int rowOffset = i*numCols;
-
-                for(int j=start; j<stop; j++) {
-                    indices[j] = rowOffset + colIndices[j];
-                }
-            }
-
-        } else if(type <= 1) {
-            // Row vector.
-            System.arraycopy(colIndices, 0, indices, 0, colIndices.length);
-        } else {
-            // Column vector.
-            for(int i=0; i<numRows; i++) {
-                int start = rowPointers[i];
-                int stop = rowPointers[i+1];
-
-                for(int j=start; j<stop; j++) {
-                    indices[j] = i;
-                }
-            }
-        }
-
-        return new CooCVector(shape.totalEntries().intValueExact(), entries.clone(), indices);
+    public CooCVector getRow(int rowIdx, int start, int stop) {
+        return toCoo().getRow(rowIdx, start, stop);
     }
 
 
     /**
-     * Get the row of this matrix at the specified index.
+     * Gets a range of a column of this matrix.
      *
-     * @param rowIdx Index of row to get.
+     * @param colIdx The index of the column to get.
+     * @param start The staring row of the column range to get (inclusive).
+     * @param stop The ending row of the column range to get (exclusive).
      *
-     * @return The specified row of this matrix.
+     * @return A vector containing the elements of the specified column over the range [start, stop).
      *
-     * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} is less than zero or greater than/equal to
-     *                                        the number of rows in this matrix.
+     * @throws IllegalArgumentException If {@code colIdx < 0 || colIdx >= this.numCols()} or {@code start < 0 || start >= numRows} or
+     *                                  {@code stop < start || stop > numRows}.
      */
     @Override
-    public CooCVector getRow(int rowIdx) {
-        ValidateParameters.ensureIndexInBounds(numRows, rowIdx);
-        int start = rowPointers[rowIdx];
-
-        Field<Complex128>[] destEntries = new Complex128[rowPointers[rowIdx + 1]-start];
-        int[] destIndices = new int[destEntries.length];
-
-        System.arraycopy(entries, start, destEntries, 0, destEntries.length);
-        System.arraycopy(colIndices, start, destIndices, 0, destEntries.length);
-
-        return new CooCVector(numCols, destEntries, destIndices);
+    public CooCVector getCol(int colIdx, int start, int stop) {
+        return toCoo().getCol(colIdx, start, stop);
     }
 
 
     /**
-     * Gets a specified row of this matrix between {@code colStart} (inclusive) and {@code colEnd} (exclusive).
+     * Gets the elements of this matrix along the specified diagonal.
      *
-     * @param rowIdx Index of the row of this matrix to get.
-     * @param colStart Starting column of the row (inclusive).
-     * @param colEnd Ending column of the row (exclusive).
+     * @param diagOffset The diagonal to get within this matrix.
+     * <ul>
+     *     <li>If {@code diagOffset == 0}: Then the elements of the principle diagonal are collected.</li>
+     *     <li>If {@code diagOffset < 0}: Then the elements of the sub-diagonal {@code diagOffset} below the principle diagonal
+     *     are collected.</li>
+     *     <li>If {@code diagOffset > 0}: Then the elements of the super-diagonal {@code diagOffset} above the principle diagonal
+     *     are collected.</li>
+     * </ul>
      *
-     * @return The row at index {@code rowIdx} of this matrix between the {@code colStart} and {@code colEnd}
-     * indices.
-     *
-     * @throws IndexOutOfBoundsException If either {@code colEnd} are {@code colStart} out of bounds for the shape of this matrix.
-     * @throws IllegalArgumentException  If {@code colEnd} is less than {@code colStart}.
+     * @return The elements of the specified diagonal as a vector.
      */
     @Override
-    public CooCVector getRow(int rowIdx, int colStart, int colEnd) {
-        ValidateParameters.ensureIndexInBounds(numRows, rowIdx);
-        ValidateParameters.ensureIndexInBounds(numCols, colStart, colEnd-1);
-        int start = rowPointers[rowIdx];
-        int end = rowPointers[rowIdx+1];
-
-        List<Field<Complex128>> row = new ArrayList<>();
-        List<Integer> indices = new ArrayList<>();
-
-        for(int j=start; j<end; j++) {
-            int col = colIndices[j];
-
-            if(col >= colStart && col < colEnd) {
-                row.add(entries[j]);
-                indices.add(col-colStart);
-            }
-        }
-
-        return new CooCVector(colEnd-colStart, row, indices);
-    }
-
-
-    /**
-     * Get the column of this matrix at the specified index.
-     *
-     * @param colIdx Index of column to get.
-     *
-     * @return The specified column of this matrix.
-     *
-     * @throws ArrayIndexOutOfBoundsException If {@code colIdx} is less than zero or greater than/equal to
-     *                                        the number of columns in this matrix.
-     */
-    @Override
-    public CooCVector getCol(int colIdx) {
-        return getCol(colIdx, 0, numRows);
-    }
-
-
-    /**
-     * Gets a specified column of this matrix between {@code rowStart} (inclusive) and {@code rowEnd} (exclusive).
-     *
-     * @param colIdx Index of the column of this matrix to get.
-     * @param rowStart Starting row of the column (inclusive).
-     * @param rowEnd Ending row of the column (exclusive).
-     *
-     * @return The column at index {@code colIdx} of this matrix between the {@code rowStart} and {@code rowEnd}
-     * indices.
-     *
-     * @throws @throws                  IndexOutOfBoundsException If either {@code colEnd} are {@code colStart} out of bounds for the
-     *                                  shape of this matrix.
-     * @throws IllegalArgumentException If {@code rowEnd} is less than {@code rowStart}.
-     */
-    @Override
-    public CooCVector getCol(int colIdx, int rowStart, int rowEnd) {
-        ValidateParameters.ensureIndexInBounds(numCols, colIdx);
-        ValidateParameters.ensureIndexInBounds(numRows, rowStart, rowEnd-1);
-
-        List<Field<Complex128>> destEntries = new ArrayList<>();
-        List<Integer> destIndices = new ArrayList<>();
-
-        for(int i=rowStart; i<rowEnd; i++) {
-            int start = rowPointers[i];
-            int stop = rowPointers[i+1];
-
-            for(int j=start; j<stop; j++) {
-                if(colIndices[j]==colIdx) {
-                    destEntries.add(entries[j]);
-                    destIndices.add(i);
-                    break; // Should only be a single entry with this row and column index.
-                }
-            }
-        }
-
-        return new CooCVector(numRows, destEntries, destIndices);
-    }
-
-
-    /**
-     * Extracts the diagonal elements of this matrix and returns them as a vector.
-     *
-     * @return A vector containing the diagonal entries of this matrix.
-     */
-    @Override
-    public CooCVector getDiag() {
-        List<Field<Complex128>> destEntries = new ArrayList<>();
-        List<Integer> destIndices = new ArrayList<>();
-
-        for(int i=0; i<numRows; i++) {
-            int start = rowPointers[i];
-            int stop = rowPointers[i+1];
-
-            int loc = Arrays.binarySearch(colIndices, start, stop, i); // Search for matching column index within row.
-
-            if(loc >= 0) {
-                destEntries.add(entries[loc]);
-                destIndices.add(i);
-            }
-        }
-
-        return new CooCVector(Math.min(numRows, numCols), destEntries, destIndices);
-    }
-
-
-    /**
-     * Computes the element-wise sum between two tensors of the same shape.
-     *
-     * @param b Second tensor in the element-wise sum.
-     *
-     * @return The sum of this tensor with {@code b}.
-     *
-     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
-     */
-    @Override
-    public CsrCMatrix add(CsrCMatrix b) {
-        return CsrFieldMatrixOperations.applyBinOpp(this, b, Complex128::add, null);
-    }
-
-
-    /**
-     * Computes the element-wise sum between two tensors of the same shape.
-     *
-     * @param b Second tensor in the element-wise sum.
-     *
-     * @return The sum of this tensor with {@code b}.
-     *
-     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
-     */
-    @Override
-    public CsrCMatrix sub(CsrCMatrix b) {
-        return CsrFieldMatrixOperations.applyBinOpp(this, b, Complex128::add, Complex128::addInv);
-    }
-
-
-    /**
-     * Copies this matrix and sets the specified index of the copy to {@code value}.
-     * @param value Value to set.
-     * @param row Row index of value to be set.
-     * @param col Column index of value to be set.
-     * @return A copy of this matrix with the specified index set to {@code value}.
-     */
-    public CsrCMatrix set(double value, int row, int col) {
-        return set(new Complex128(value), row, col);
-    }
-
-
-    /**
-     * Gets the element of this tensor at the specified indices.
-     *
-     * @param indices Indices of the element to get.
-     *
-     * @return The element of this tensor at the specified indices.
-     *
-     * @throws ArrayIndexOutOfBoundsException If any indices are not within this matrix.
-     */
-    @Override
-    public Complex128 get(int... indices) {
-        ValidateParameters.ensureValidIndex(shape, indices);
-        int row = indices[0];
-        int col = indices[1];
-        int loc = Arrays.binarySearch(colIndices, rowPointers[row], rowPointers[row+1], col);
-
-        if(loc >= 0) return (Complex128) entries[loc];
-        else return Complex128.ZERO;
-    }
-
-
-    /**
-     * Computes the matrix multiplication between two sparse CSR matrices and stores the result in a CSR matrix.
-     * Warning: This method will likely be slower than {@link #mult(CsrMatrix)} if the result of multiplying this matrix
-     * with {@code B} is not very sparse. Further, multiplying two sparse matrices may result in a dense matrix so this
-     * method should be used with caution.
-     * @param B Matrix to multiply to this matrix.
-     * @return The result of matrix multiplying this matrix with {@code B} as a sparse CSR matrix.
-     */
-    public CsrCMatrix mult2CSR(CsrCMatrix B) {
-        return (CsrCMatrix) CsrFieldMatMult.standardAsSparse(this, B);
-    }
-
-
-    /**
-     * Computes the matrix multiplication between two sparse CSR matrices and stores the result in a CSR matrix.
-     * Warning: This method will likely be slower than {@link #mult(CsrMatrix)} if the result of multiplying this matrix
-     * with {@code b} is not very sparse. Further, multiplying two sparse matrices may result in a dense matrix so this
-     * method should be used with caution.
-     * @param b Matrix to multiply to this matrix.
-     * @return The result of matrix multiplying this matrix with {@code b} as a sparse CSR matrix.
-     */
-    public CsrCMatrix mult2CSR(CsrMatrix b) {
-        return RealComplexCsrMatrixMultiplication.standardAsSparse(this, b);
-    }
-
-
-    /**
-     * Computes the matrix multiplication between two matrices.
-     *
-     * @param B Second matrix in the matrix multiplication.
-     *
-     * @return The result of matrix multiplying this matrix with matrix B.
-     *
-     * @throws IllegalArgumentException If the number of columns in this matrix does not equal the number of rows in matrix {@code b}.
-     */
-    public CMatrix mult(CsrMatrix b) {
-        return RealComplexCsrMatrixMultiplication.standard(this, b);
-    }
-
-
-    /**
-     * Computes the matrix multiplication between two matrices.
-     *
-     * @param B Second matrix in the matrix multiplication.
-     * @return The result of matrix multiplying this matrix with matrix B.
-     * @throws IllegalArgumentException If the number of columns in this matrix does not equal the number of rows in matrix {@code b}.
-     */
-    public CMatrix mult(CMatrix B) {
-        ValidateParameters.ensureMatMultShapes(shape, B.shape);
-
-        return new CMatrix(numRows, B.numCols, DenseCooFieldMatMult.standard(
-                entries, rowPointers, colIndices, shape,
-                B.entries, B.shape)
-        );
-    }
-
-
-    /**
-     * Computes the matrix multiplication between two matrices.
-     *
-     * @param B Second matrix in the matrix multiplication.
-     * @return The result of matrix multiplying this matrix with matrix B.
-     * @throws IllegalArgumentException If the number of columns in this matrix does not equal the number of rows in matrix {@code b}.
-     */
-    public CMatrix mult(Matrix b) {
-        return (CMatrix) RealFieldDenseCsrMatMult.standard(this, b);
+    public CooCVector getDiag(int diagOffset) {
+        return toCoo().getDiag(diagOffset);
     }
 
 
@@ -599,15 +413,14 @@ public class CsrCMatrix extends CsrFieldMatrixBase<CsrCMatrix, CMatrix, CooCVect
         if(nnz == 0) return 0;
 
         int result = 17;
-        result = 31*result + shape.hashCode();
 
         // Hash calculation ignores explicit zeros in the matrix. This upholds the contract with the equals(Object) method.
         for(int row = 0; row<numRows; row++) {
             for(int idx = rowPointers[row], rowStop = rowPointers[row + 1]; idx < rowStop; idx++) {
-                if (!entries[idx].isZero()) {
-                    result = 31 * result + entries[idx].hashCode();
-                    result = 31 * result + Integer.hashCode(colIndices[idx]);
-                    result = 31 * result + Integer.hashCode(row);
+                if(!entries[idx].isZero()) {
+                    result = 31*result + entries[idx].hashCode();
+                    result = 31*result + Integer.hashCode(colIndices[idx]);
+                    result = 31*result + Integer.hashCode(row);
                 }
             }
         }

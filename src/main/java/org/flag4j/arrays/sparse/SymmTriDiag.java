@@ -88,7 +88,7 @@ public class SymmTriDiag implements Serializable {
      */
     public double get(int rowIdx, int colIdx) {
         // Ensure indices are in range for this matrix.
-        ValidateParameters.ensureValidIndices(size, rowIdx, colIdx);
+        ValidateParameters.ensureValidArrayIndices(size, rowIdx, colIdx);
         int absDiff = Math.abs(rowIdx-colIdx);
 
         if(absDiff == 0) {
@@ -147,7 +147,7 @@ public class SymmTriDiag implements Serializable {
      */
     @Override
     public int hashCode() {
-        int hash = 31 + Arrays.hashCode(diag);
+        int hash = 17 + Arrays.hashCode(diag);
         hash = hash*31 + Arrays.hashCode(offDiag);
         return hash;
     }

@@ -98,9 +98,9 @@ class TensorAddTests {
                 0.001345, 2.677, 8.14, -0.000194, 1, 234
         };
         expShape = new Shape(2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])] += bEntries[0];
-        expEntries[expShape.entriesIndex(sparseIndices[1])] += bEntries[1];
-        expEntries[expShape.entriesIndex(sparseIndices[2])] += bEntries[2];
+        expEntries[expShape.getFlatIndex(sparseIndices[0])] += bEntries[0];
+        expEntries[expShape.getFlatIndex(sparseIndices[1])] += bEntries[1];
+        expEntries[expShape.getFlatIndex(sparseIndices[2])] += bEntries[2];
         exp = new Tensor(expShape, expEntries);
 
         assertEquals(exp, A.add(B));
@@ -180,8 +180,8 @@ class TensorAddTests {
                 new Complex128(0.001345), new Complex128(2.677), new Complex128(8.14), new Complex128(-0.000194), new Complex128(1), new Complex128(234)
         };
         expShape = new Shape(2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])] = expEntries[expShape.entriesIndex(sparseIndices[0])].add(bEntries[0]);
-        expEntries[expShape.entriesIndex(sparseIndices[1])] = expEntries[expShape.entriesIndex(sparseIndices[1])].add(bEntries[1]);
+        expEntries[expShape.getFlatIndex(sparseIndices[0])] = expEntries[expShape.getFlatIndex(sparseIndices[0])].add(bEntries[0]);
+        expEntries[expShape.getFlatIndex(sparseIndices[1])] = expEntries[expShape.getFlatIndex(sparseIndices[1])].add(bEntries[1]);
         exp = new CTensor(expShape, expEntries);
 
         assertEquals(exp, A.add(B));
@@ -311,9 +311,9 @@ class TensorAddTests {
                 0.001345, 2.677, 8.14, -0.000194, 1, 234
         };
         expShape = new Shape(2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])] += bEntries[0];
-        expEntries[expShape.entriesIndex(sparseIndices[1])] += bEntries[1];
-        expEntries[expShape.entriesIndex(sparseIndices[2])] += bEntries[2];
+        expEntries[expShape.getFlatIndex(sparseIndices[0])] += bEntries[0];
+        expEntries[expShape.getFlatIndex(sparseIndices[1])] += bEntries[1];
+        expEntries[expShape.getFlatIndex(sparseIndices[2])] += bEntries[2];
         exp = new Tensor(expShape, expEntries);
 
         RealDenseSparseTensorOperations.addEq(A, B);

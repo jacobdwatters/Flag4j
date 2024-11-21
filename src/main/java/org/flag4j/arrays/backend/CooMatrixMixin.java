@@ -31,13 +31,14 @@ package org.flag4j.arrays.backend;
  * @param <U> Type of dense matrix which is equivalent to {@code T}.
  * @param <V> Type of vector similar to {@code T}.
  * @param <W> Type of dense vector equivalent to {@code V}.
+ * @param <X> Storage for entries of this tensor.
  * @param <Y> Type (or wrapper of) an individual element in the matrix.
  */
-public interface CooMatrixMixin<T extends CooMatrixMixin<T, U, V, W, Y>,
-        U extends DenseMatrixMixin<U, T, W, Y>,
-        V extends SparseVectorMixin<V, W, T, U, Y>,
-        W extends DenseVectorMixin<W, V, U, Y>, Y>
-        extends MatrixMixin<T, U, V, W, Y>, SparseTensorMixin<U, T> {
+public interface CooMatrixMixin<T extends CooMatrixMixin<T, U, V, W, X, Y>,
+        U extends DenseMatrixMixinOld<U, T, W, X, Y>,
+        V extends SparseVectorMixin<V, W, T, U, X, Y>,
+        W extends DenseVectorMixin<W, V, U, X, Y>, X, Y>
+        extends MatrixMixinOld<T, U, V, W, X, Y>, SparseTensorMixin<U, T> {
 
     // TODO: Need dense vector type for matrix mixin.
     // TODO: consider adding toCsr() here.

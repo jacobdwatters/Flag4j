@@ -25,7 +25,6 @@
 package org.flag4j.linalg.operations.dense.real;
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.linalg.operations.common.real.RealOperations;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
@@ -36,50 +35,51 @@ public final class RealDenseOperations {
 
     private RealDenseOperations() {
         // Hide constructor
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
     /**
      * Computes the element-wise addition of two tensors.
+     *
      * @param src1 Entries of first Tensor of the addition.
-     * @param shape1 Shape of first tensor.
      * @param src2 Entries of second Tensor of the addition.
-     * @param shape2 Shape of second tensor.
-     * @return The element wise addition of two tensors.
-     * @throws IllegalArgumentException If entry arrays_old are not the same size.
+     * @param dest Array to store the result in. May be {@code null} or the same array as {@code src1} or {@code src2}.
+     *
+     * @return If {@code dest != null} then a reference to {@code dest} is returned. Otherwise, a new array will be created and
+     * returned.
+     * @throws IllegalArgumentException If {@code src1.length != src2.length}.
      */
-    public static double[] add(final double[] src1, final Shape shape1,
-                               final double[] src2, final Shape shape2) {
-        ValidateParameters.ensureEqualShape(shape1, shape2);
+    public static double[] add(double[] src1, double[] src2, double[] dest) {
+        ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
         int length = src1.length;
-        double[] sum = new double[length];
+        if(dest == null) dest = new double[length];
 
         for(int i=0; i<length; i++)
-            sum[i] = src1[i] + src2[i];
+            dest[i] = src1[i] + src2[i];
 
-        return sum;
+        return dest;
     }
 
 
     /**
      * Computes the element-wise subtraction of two tensors.
      * @param src1 Entries of first tensor.
-     * @param shape1 Shape of first tensor.
      * @param src2 Entries of second tensor.
-     * @param shape2 Shape of second tensor.
-     * @return The element wise subtraction of two tensors.
-     * @throws IllegalArgumentException If entry arrays_old are not the same size.
+     * @param dest Array to store the result in. May be {@code null} or the same array as {@code src1} or {@code src2}.
+     * @return If {@code dest != null} then a reference to {@code dest} is returned. Otherwise, a new array will be created and
+     * returned.
+     * @throws IllegalArgumentException If {@code src1.length != src2.length}.
      */
-    public static double[] sub(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ValidateParameters.ensureEqualShape(shape1, shape2);
-        double[] sum = new double[src1.length];
-        int length = sum.length;
+    public static double[] sub(double[] src1, double[] src2, double[] dest) {
+        ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
+        int length = src1.length;
+        if(dest == null) dest = new double[length];
 
         for(int i=0; i<length; i++)
-            sum[i] = src1[i] - src2[i];
+            dest[i] = src1[i] - src2[i];
 
-        return sum;
+        return dest;
     }
 
 
@@ -87,16 +87,18 @@ public final class RealDenseOperations {
      * Subtracts a scalar from every element of a tensor.
      * @param src Entries of tensor to add scalar to.
      * @param b Scalar to subtract from tensor.
-     * @return The tensor scalar subtraction.
+     * @param Array to store the result in. May be {@code null} or the same array as {@code src}.
+     * @return If {@code dest != null} then a reference to {@code dest} is returned.
+     * Otherwise, a new array will be created and returned.
      */
-    public static double[] sub(double[] src, double b) {
-        double[] sum = new double[src.length];
-        int length = sum.length;
+    public static double[] sub(double[] src, double b, double[] dest) {
+        int length = src.length;
+        if(dest == null) dest = new double[length];
 
         for(int i=0; i<length; i++)
-            sum[i] = src[i] - b;
+            dest[i] = src[i] - b;
 
-        return sum;
+        return dest;
     }
 
 
@@ -187,17 +189,6 @@ public final class RealDenseOperations {
 
 
     /**
-     * Computes the scalar division of a tensor.
-     * @param src Entries of the tensor.
-     * @param divisor Scalar to divide by.
-     * @return The scalar division of the tensor.
-     */
-    public static double[] scalDiv(double[] src, double divisor) {
-        return RealOperations.scalDiv(src, divisor);
-    }
-
-
-    /**
      * Computes the reciprocals, element-wise, of a tensor.
      * @param src Elements of the tensor.
      * @return The element-wise reciprocals of the tensor.
@@ -206,7 +197,7 @@ public final class RealDenseOperations {
         double[] receps = new double[src.length];
 
         for(int i=0; i<receps.length; i++)
-            receps[i] = 1/src[i];
+            receps[i] = 1.0/src[i];
 
         return receps;
     }
@@ -216,15 +207,81 @@ public final class RealDenseOperations {
      * Adds a scalar to every element of a tensor.
      * @param src src of tensor to add scalar to.
      * @param b Scalar to add to tensor.
-     * @return The tensor scalar addition.
+     * @param dest Array to store the result in. May be {@code null} or the same array as {@code src}.
+     * @return If {@code dest != null} then a reference to {@code dest} is returned. If {@code dest == null} then a new array
+     * will be created and returned.
      */
-    public static double[] add(double[] src, double b) {
+    public static double[] add(double[] src, double b, double[] dest) {
         int length = src.length;
-        double[] sum = new double[length];
+        if(dest == null) dest = new double[length];
 
         for(int i=0; i<length; i++)
-            sum[i] = src[i] + b;
+            dest[i] = src[i] + b;
 
-        return sum;
+        return dest;
+    }
+
+
+    /**
+     * <p>Computes the generalized trace of this tensor along the specified axes.
+     *
+     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays of this tensor specified by
+     * {@code axis1} and {@code axis2}. The shape of the resulting tensor is equal to this tensor with the
+     * {@code axis1} and {@code axis2} removed.
+     *
+     * @param shape Shape of the tensor to compute the trace of.
+     * @param src Entries of the tensor to compute the trace of.
+     * @param axis1 First axis for 2D sub-array.
+     * @param axis2 Second axis for 2D sub-array.
+     * @param destShape The resulting shape of the tensor trace. Use {@link #getTrShape(Shape, int, int)} to compute this.
+     * @param dest Array to store the result of the generalized tensor trace of. Must satisfy
+     * {@code dest.length == destShape.totalEntriesIntValueExact()}.
+     *
+     * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}.
+     *
+     * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
+     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
+     * @throws IllegalArgumentException If {@code dest.length == destShape.totalEntriesIntValueExact()}.
+     */
+    public static void tensorTr(Shape shape, double[] src,
+                                int axis1, int axis2,
+                                Shape destShape, double[] dest) {
+        ValidateParameters.ensureArrayLengthsEq(destShape.totalEntriesIntValueExact(), dest.length);
+        ValidateParameters.ensureNotEquals(axis1, axis2);
+        ValidateParameters.ensureValidArrayIndices(shape.getRank(), axis1, axis2);
+        ValidateParameters.ensureEquals(shape.get(axis1), shape.get(axis2));
+
+        int[] strides = shape.getStrides();
+        int rank = strides.length;
+
+        // Calculate the offset increment for the diagonal.
+        int traceLength = shape.get(axis1);
+        int diagonalStride = strides[axis1] + strides[axis2];
+
+        int[] destIndices = new int[rank - 2];
+        for(int i=0; i<dest.length; i++) {
+            destIndices = destShape.getNdIndices(i);
+
+            int baseOffset = 0;
+            int idx = 0;
+
+            // Compute offset for mapping destination indices to indices in this tensor.
+            for(int j=0; j<rank; j++) {
+                if(j != axis1 && j != axis2) {
+                    baseOffset += destIndices[idx++]*strides[j];
+                }
+            }
+
+            // Sum over diagonal elements of the 2D sub-array.
+            double sum = src[baseOffset];
+            int offset = baseOffset + diagonalStride;
+            for(int diag=1; diag<traceLength; diag++) {
+                sum += src[offset];
+                offset += diagonalStride;
+            }
+
+            dest[i] = sum;
+        }
     }
 }

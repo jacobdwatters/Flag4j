@@ -100,10 +100,10 @@ class TensorEqualsTests {
         bEntries = new double[]{1.23, -99.23425, 2.677, -0.000194};
         bShape = new Shape(2, 3, 2);
         sparseIndices = new int[][]{
-                aShape.getIndices(0),
-                aShape.getIndices(5),
-                aShape.getIndices(7),
-                aShape.getIndices(9)
+                aShape.getNdIndices(0),
+                aShape.getNdIndices(5),
+                aShape.getNdIndices(7),
+                aShape.getNdIndices(9)
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
 
@@ -113,10 +113,10 @@ class TensorEqualsTests {
         bEntries = new double[]{1.23, -99.25, 2.677, -0.000194};
         bShape = new Shape(2, 3, 2);
         sparseIndices = new int[][]{
-                aShape.getIndices(0),
-                aShape.getIndices(5),
-                aShape.getIndices(7),
-                aShape.getIndices(9)
+                aShape.getNdIndices(0),
+                aShape.getNdIndices(5),
+                aShape.getNdIndices(7),
+                aShape.getNdIndices(9)
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
 
@@ -126,10 +126,10 @@ class TensorEqualsTests {
         bEntries = new double[]{1.23, -99.23425, 2.677, -0.000194};
         bShape = new Shape(21, 31, 2, 10005);
         sparseIndices = new int[][]{
-                bShape.getIndices(0),
-                bShape.getIndices(5),
-                bShape.getIndices(7),
-                bShape.getIndices(9)
+                bShape.getNdIndices(0),
+                bShape.getNdIndices(5),
+                bShape.getNdIndices(7),
+                bShape.getNdIndices(9)
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
 
@@ -139,10 +139,10 @@ class TensorEqualsTests {
         bEntries = new double[]{1.23, -99.25, 2.677, -0.000194};
         bShape = new Shape(21, 3, 24);
         sparseIndices = new int[][]{
-                aShape.getIndices(0),
-                aShape.getIndices(5),
-                aShape.getIndices(7),
-                aShape.getIndices(9)
+                aShape.getNdIndices(0),
+                aShape.getNdIndices(5),
+                aShape.getNdIndices(7),
+                aShape.getNdIndices(9)
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
 
@@ -220,10 +220,10 @@ class TensorEqualsTests {
                 new Complex128(2.677), new Complex128(-0.000194)};
         bShape = new Shape(2, 3, 2);
         sparseIndices = new int[][]{
-                aShape.getIndices(0),
-                aShape.getIndices(5),
-                aShape.getIndices(7),
-                aShape.getIndices(9)
+                aShape.getNdIndices(0),
+                aShape.getNdIndices(5),
+                aShape.getNdIndices(7),
+                aShape.getNdIndices(9)
         };
         B = new CooCTensor(bShape, bEntries, sparseIndices);
 
@@ -235,10 +235,10 @@ class TensorEqualsTests {
                 new Complex128(2.677), new Complex128(-0.000194)};
         bShape = new Shape(2, 3, 2);
         sparseIndices = new int[][]{
-                aShape.getIndices(0),
-                aShape.getIndices(5),
-                aShape.getIndices(7),
-                aShape.getIndices(9)
+                aShape.getNdIndices(0),
+                aShape.getNdIndices(5),
+                aShape.getNdIndices(7),
+                aShape.getNdIndices(9)
         };
         B = new CooCTensor(bShape, bEntries, sparseIndices);
 
@@ -250,10 +250,10 @@ class TensorEqualsTests {
                 new Complex128(2.677), new Complex128(-0.000194)};
         bShape = new Shape(21, 31, 2, 10005);
         sparseIndices = new int[][]{
-                bShape.getIndices(0),
-                bShape.getIndices(5),
-                bShape.getIndices(7),
-                bShape.getIndices(9)
+                bShape.getNdIndices(0),
+                bShape.getNdIndices(5),
+                bShape.getNdIndices(7),
+                bShape.getNdIndices(9)
         };
         B = new CooCTensor(bShape, bEntries, sparseIndices);
 
@@ -265,10 +265,10 @@ class TensorEqualsTests {
                 new Complex128(2.677), new Complex128(-0.000194)};
         bShape = new Shape(21, 3, 24);
         sparseIndices = new int[][]{
-                aShape.getIndices(0),
-                aShape.getIndices(5),
-                aShape.getIndices(7),
-                aShape.getIndices(9)
+                aShape.getNdIndices(0),
+                aShape.getNdIndices(5),
+                aShape.getNdIndices(7),
+                aShape.getNdIndices(9)
         };
         B = new CooCTensor(bShape, bEntries, sparseIndices);
 

@@ -26,7 +26,7 @@ package org.flag4j.linalg.decompositions.svd;
 
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend_new.MatrixMixin;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.decompositions.Decomposition;
 import org.flag4j.util.Flag4jConstants;
@@ -42,7 +42,7 @@ import java.util.Arrays;
  *
  * @param <T> The type of the matrix to compute the singular value decomposition of.
  */
-public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?, ?>> implements Decomposition<T> {
+public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposition<T> {
 
     /**
      * Flag which indicates if the singular vectors should be computed in addition to the singular values.
@@ -153,7 +153,7 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?, ?>> implements Decom
         S = new Matrix(stopIdx); // initialize the S matrix.
 
         for(int j=0; j<stopIdx; j++) {
-            S.set(singularVals[2*j], j, j);
+            S.set(singularVals[j << 1], j, j);
 
             if(computeUV && singularVecs != null) {
                 // Extract left and right singular vectors and normalize.

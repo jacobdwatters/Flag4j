@@ -32,8 +32,8 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
-import org.flag4j.linalg.operations.common.field_ops.CompareField;
-import org.flag4j.linalg.operations.common.real.AggregateReal;
+import org.flag4j.linalg.operations.common.real.RealProperties;
+import org.flag4j.linalg.operations.common.ring_ops.CompareRing;
 import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldNorms;
 import org.flag4j.linalg.operations.sparse.coo.real.RealSparseNorms;
 import org.flag4j.util.ErrorMessages;
@@ -46,7 +46,7 @@ public final class MatrixNorms {
 
     private MatrixNorms() {
         // Hide default constructor for utility class
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -366,7 +366,7 @@ public final class MatrixNorms {
      * @return The infinity norm of the matrix.
      */
     private static double matrixMaxNorm(double[] src) {
-        return AggregateReal.maxAbs(src);
+        return RealProperties.maxAbs(src);
     }
 
 
@@ -387,7 +387,7 @@ public final class MatrixNorms {
             }
         }
 
-        return AggregateReal.maxAbs(rowSums);
+        return RealProperties.maxAbs(rowSums);
     }
 
     /**
@@ -481,7 +481,7 @@ public final class MatrixNorms {
      * @return The infinity norm of the matrix.
      */
     private static double matrixMaxNorm(Field<Complex128>[] src) {
-        return CompareField.maxAbs(src);
+        return CompareRing.maxAbs(src);
     }
 
 
@@ -501,7 +501,7 @@ public final class MatrixNorms {
             }
         }
 
-        return AggregateReal.maxAbs(rowSums);
+        return RealProperties.maxAbs(rowSums);
     }
 
 

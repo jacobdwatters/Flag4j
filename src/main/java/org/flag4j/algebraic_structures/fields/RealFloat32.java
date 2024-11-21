@@ -24,6 +24,11 @@
 
 package org.flag4j.algebraic_structures.fields;
 
+import org.flag4j.util.ErrorMessages;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * <p>A real number backed by a 32-bit floating point number. Immutable</p>
  *
@@ -406,7 +411,7 @@ public class RealFloat32 implements Field<RealFloat32> {
      * @return A {@link RealFloat32} array containing the values of {@code arr}. If {@code arr==null} then {@code null} will be
      * returned.
      */
-    public static RealFloat32[] wrapArray(Float[] arr) {
+    public static RealFloat32[] wrapArray(Float... arr) {
         if(arr == null) return null;
 
         RealFloat32[] wrapped = new RealFloat32[arr.length];
@@ -414,6 +419,27 @@ public class RealFloat32 implements Field<RealFloat32> {
             wrapped[i] = new RealFloat32(arr[i]);
 
         return wrapped;
+    }
+
+
+    /**
+     * Rounds number to specified number of decimal places.
+     *
+     * @param n Number to round.
+     * @param decimals Number of decimals to round to.
+     * @return The number <code>n</code> rounded to the specified
+     * 		number of decimals.
+     * @throws IllegalArgumentException If decimals is less than zero.
+     */
+    public static RealFloat32 round(RealFloat32 n, int decimals) {
+        if (decimals < 0)
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(decimals));
+
+        float value = (Double.isFinite(n.value))
+                ? BigDecimal.valueOf(n.value).setScale(decimals, RoundingMode.HALF_UP).floatValue()
+                : n.value;
+
+        return new RealFloat32(value);
     }
 
 

@@ -40,7 +40,7 @@ public class RealDenseSparseEquals {
 
     private RealDenseSparseEquals() {
         // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -143,14 +143,14 @@ public class RealDenseSparseEquals {
 
             // Remove all nonZero entries from the entries of this matrix.
             for(int i=0; i<B.nnz; i++) {
-                entriesIndex = A.shape.entriesIndex(B.indices[i]);
+                entriesIndex = A.shape.getFlatIndex(B.indices[i]);
 
                 if(entriesCopy[entriesIndex] != B.entries[i]) {
                     equal = false;
                     break;
                 }
 
-                entriesCopy[A.shape.entriesIndex(B.indices[i])] = 0;
+                entriesCopy[A.shape.getFlatIndex(B.indices[i])] = 0;
             }
 
             if(equal) {

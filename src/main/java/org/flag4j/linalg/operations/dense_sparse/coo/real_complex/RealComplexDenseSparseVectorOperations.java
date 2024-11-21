@@ -43,7 +43,7 @@ public final class RealComplexDenseSparseVectorOperations {
 
     private RealComplexDenseSparseVectorOperations() {
         // Hide default constructor in utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -157,9 +157,8 @@ public final class RealComplexDenseSparseVectorOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         Complex128[] dest = new Complex128[src1.entries.length];
 
-        for(int i=0; i<src1.entries.length; i++) {
+        for(int i=0; i<src1.nnz; i++)
             dest[i] = new Complex128(src1.entries[i]).div((Complex128) src2.entries[src1.indices[i]]);
-        }
 
         return new CooCVector(src1.size, dest, src1.indices.clone());
     }

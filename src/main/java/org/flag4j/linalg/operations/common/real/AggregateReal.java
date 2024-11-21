@@ -34,7 +34,7 @@ public final class AggregateReal {
 
     private AggregateReal() {
         // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -63,69 +63,5 @@ public final class AggregateReal {
             sum *= value;
 
         return sum;
-    }
-
-
-    /**
-     * Computes the minimum value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
-     * this method to be used for real sparse or dense tensors.
-     * @param entries Entries of the tensor.
-     * @return The minimum value in the tensor.
-     */
-    public static double min(double... entries) {
-        double currMin = (entries.length==0) ? 0 : Double.MAX_VALUE;
-
-        for(double value : entries)
-            currMin = Math.min(value, currMin);
-
-        return currMin;
-    }
-
-
-    /**
-     * Computes the maximum value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
-     * this method to be used for real sparse or dense tensors.
-     * @param entries Entries of the tensor.
-     * @return The maximum value in the tensor.
-     */
-    public static double max(double... entries) {
-        double currMax = (entries.length==0) ? 0 : Double.MIN_NORMAL;
-
-        for(double value : entries)
-            currMax = Math.max(value, currMax);
-
-        return currMax;
-    }
-
-
-    /**
-     * Computes the minimum absolute value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
-     * this method to be used for real sparse or dense tensors.
-     * @param entries Entries of the tensor.
-     * @return The minimum absolute value in the tensor.
-     */
-    public static double minAbs(double... entries) {
-        double currMin = (entries.length==0) ? 0 : Double.MAX_VALUE;
-
-        for(double value : entries)
-            currMin = Math.min(Math.abs(value), currMin);
-
-        return currMin;
-    }
-
-
-    /**
-     * Computes the maximum absolute value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
-     * this method to be used for real sparse or dense tensors.
-     * @param entries Entries of the tensor.
-     * @return The maximum absolute value in the tensor.
-     */
-    public static double maxAbs(double... entries) {
-        double currMax = 0;
-
-        for(double value : entries)
-            currMax = Math.max(Math.abs(value), currMax);
-
-        return currMax;
     }
 }

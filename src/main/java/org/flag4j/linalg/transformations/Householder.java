@@ -32,8 +32,8 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.linalg.operations.common.field_ops.FieldOperations;
 import org.flag4j.linalg.operations.common.real.RealOperations;
+import org.flag4j.linalg.operations.common.semiring_ops.SemiRingOperations;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -44,7 +44,7 @@ public final class Householder {
 
     private Householder() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -133,9 +133,8 @@ public final class Householder {
         CMatrix P = v.outer(v).mult(-2.0/v.innerSelf());
 
         int step = P.numCols+1;
-        for(int i=0; i<P.entries.length; i+=step) {
+        for(int i=0; i<P.entries.length; i+=step)
             P.entries[i] = P.entries[i].add(1.0);
-        }
 
         return P;
     }
@@ -179,7 +178,7 @@ public final class Householder {
             }
         }
 
-        RealOperations.scalMult(workArray, workArray, alpha, startCol, numCols);
+        RealOperations.scalMult(workArray, alpha, startCol, numCols, workArray);
 
         for(int i=startRow; i<endRow; i++) {
             double reflectorValue = householderVector[i];
@@ -260,7 +259,7 @@ public final class Householder {
                 workArray[i] = workArray[i].add(reflectorValue.mult((Complex128) src.entries[srcIdx++]));
         }
 
-        FieldOperations.scalMult(workArray, workArray, alpha, startCol, numCols);
+        SemiRingOperations.scalMult(workArray, workArray, alpha, startCol, numCols);
 
         for(int i=startRow; i<endRow; i++) {
             Field<Complex128> reflectorValue = householderVector[i];

@@ -26,24 +26,25 @@ package org.flag4j.linalg.operations.sparse.coo.field_ops;
 
 import org.flag4j.algebraic_structures.Pair;
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.CooFieldMatrixBase;
-import org.flag4j.arrays.backend.CooFieldTensorBase;
-import org.flag4j.arrays.backend.CooFieldVectorBase;
-import org.flag4j.linalg.operations.common.field_ops.CompareField;
+import org.flag4j.algebraic_structures.rings.Ring;
+import org.flag4j.arrays.backend_new.field.AbstractCooFieldMatrix;
+import org.flag4j.arrays.backend_new.field.AbstractCooFieldTensor;
+import org.flag4j.arrays.backend_new.field.AbstractCooFieldVector;
 import org.flag4j.linalg.operations.common.real.RealProperties;
+import org.flag4j.linalg.operations.common.ring_ops.RingProperties;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.*;
 
 /**
- * This utility class contains methods for checking the equality, or approximately equal, of sparse tensors whose entries are
+ * <p>This utility class contains methods for checking the equality, or approximately equal, of sparse COO tensors whose entries are
  * {@link Field field} elements.
  */
 public final class CooFieldEquals {
 
     private CooFieldEquals() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -55,8 +56,8 @@ public final class CooFieldEquals {
      * @return True if the tensors are equal. False otherwise.
      */
     public static <T extends Field<T>> boolean cooTensorEquals(
-            CooFieldTensorBase<?, ?, T> a,
-            CooFieldTensorBase<?, ?, T> b) {
+            AbstractCooFieldTensor<?, ?, T> a,
+            AbstractCooFieldTensor<?, ?, T> b) {
         // Early returns if possible.
         if(a == b) return true;
         if(a==null || b==null || !a.shape.equals(b.shape)) return false;
@@ -97,8 +98,8 @@ public final class CooFieldEquals {
      * @return True if the matrices are equal. False otherwise.
      */
     public static <T extends Field<T>> boolean cooMatrixEquals(
-            CooFieldMatrixBase<?, ?, ?, ?, T> a,
-            CooFieldMatrixBase<?, ?, ?, ?, T> b) {
+            AbstractCooFieldMatrix<?, ?, ?, T> a,
+            AbstractCooFieldMatrix<?, ?, ?, T> b) {
         // Early return if possible.
         if (a == b) return true;
         if (a == null || b == null || !a.shape.equals(b.shape)) return false;
@@ -141,8 +142,8 @@ public final class CooFieldEquals {
      * @return True if the vectors are equal. False otherwise.
      */
     public static <T extends Field<T>> boolean cooVectorEquals(
-            CooFieldVectorBase<?, ?, ?, ?, T> a,
-            CooFieldVectorBase<?, ?, ?, ?, T> b) {
+            AbstractCooFieldVector<?, ?, ?, ?, T> a,
+            AbstractCooFieldVector<?, ?, ?, ?, T> b) {
         // Early returns if possible.
         if(a == b) return true;
         if(a==null || b==null || !a.shape.equals(b.shape)) return false;
@@ -184,20 +185,21 @@ public final class CooFieldEquals {
      * @param absTol Absolute tolerance.
      * @return True if all entries are "close". Otherwise, false.
      */
-    public static <T extends Field<T>> boolean allClose(CooFieldMatrixBase<?, ?, ?, ?, T> src1,
-                                                        CooFieldMatrixBase<?, ?, ?, ?, T> src2,
+    public static <T extends Field<T>> boolean allClose(AbstractCooFieldMatrix<?, ?, ?, T> src1,
+                                                        AbstractCooFieldMatrix<?, ?, ?, T> src2,
                                                         double relTol, double absTol) {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.equals(src1.rowIndices, src2.rowIndices)
                 && Arrays.equals(src1.colIndices, src2.colIndices)
-                && CompareField.allClose(src1.entries, src2.entries, relTol, absTol);
+                && RingProperties.allClose(src1.entries, src2.entries, relTol, absTol);
     }
 
 
     /**
      * Checks that all non-zero entries are "close" according to
-     * {@link org.flag4j.linalg.operations.common.field_ops.FieldProperties#allClose(Field[], Field[], double, double)} and all indices
+     * 
+     * {@link RingProperties#allClose(Ring[], Ring[], double, double)} and all indices
      * are the same.
      * @param src1 First tensor in comparison.
      * @param src2 Second tensor in comparison.
@@ -205,31 +207,31 @@ public final class CooFieldEquals {
      * @param absTol Absolute tolerance.
      * @return True if all entries are "close". Otherwise, false.
      */
-    public static <T extends Field<T>> boolean allClose(CooFieldTensorBase<?, ?, T> src1,
-                                                        CooFieldTensorBase<?, ?, T> src2,
+    public static <T extends Field<T>> boolean allClose(AbstractCooFieldTensor<?, ?, T> src1,
+                                                        AbstractCooFieldTensor<?, ?, T> src2,
                                                         double relTol, double absTol) {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.deepEquals(src1.indices, src2.indices)
-                && CompareField.allClose(src1.entries, src2.entries, relTol, absTol);
+                && RingProperties.allClose(src1.entries, src2.entries, relTol, absTol);
     }
 
 
     /**
      * Checks that all non-zero entries are "close" according to
-     * {@link org.flag4j.linalg.operations.common.field_ops.FieldProperties#allClose(Field[], Field[])} and all indices are the same.
+     * {@link RingProperties#allClose(Field[], Field[])} and all indices are the same.
      * @param src1 First vector in comparison.
      * @param src2 Second vector in comparison.
      * @param relTol Relative tolerance.
      * @param absTol Absolute tolerance.
      * @return True if all entries are "close". Otherwise, false.
      */
-    public static <T extends Field<T>> boolean allClose(CooFieldVectorBase<?, ?, ?, ?, T> src1,
-                                                        CooFieldVectorBase<?, ?, ?, ?, T> src2,
+    public static <T extends Field<T>> boolean allClose(AbstractCooFieldVector<?, ?, ?, ?, T> src1,
+                                                        AbstractCooFieldVector<?, ?, ?, ?, T> src2,
                                                         double relTol, double absTol) {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.equals(src1.indices, src2.indices)
-                && CompareField.allClose(src1.entries, src2.entries, relTol, absTol);
+                && RingProperties.allClose(src1.entries, src2.entries, relTol, absTol);
     }
 }

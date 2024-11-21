@@ -94,9 +94,9 @@ class TensorElemMultTests {
         B = new CooTensor(bShape, bEntries, sparseIndices);
         expEntries = new double[aEntries.length];
         expShape = new Shape(2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])] = bEntries[0]*aEntries[expShape.entriesIndex(sparseIndices[0])];
-        expEntries[expShape.entriesIndex(sparseIndices[1])] = bEntries[1]*aEntries[expShape.entriesIndex(sparseIndices[1])];
-        expEntries[expShape.entriesIndex(sparseIndices[2])] = bEntries[2]*aEntries[expShape.entriesIndex(sparseIndices[2])];
+        expEntries[expShape.getFlatIndex(sparseIndices[0])] = bEntries[0]*aEntries[expShape.getFlatIndex(sparseIndices[0])];
+        expEntries[expShape.getFlatIndex(sparseIndices[1])] = bEntries[1]*aEntries[expShape.getFlatIndex(sparseIndices[1])];
+        expEntries[expShape.getFlatIndex(sparseIndices[2])] = bEntries[2]*aEntries[expShape.getFlatIndex(sparseIndices[2])];
         exp = new Tensor(expShape, expEntries);
 
         assertEquals(exp.toCoo(), A.elemMult(B));
@@ -176,8 +176,8 @@ class TensorElemMultTests {
                 Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO
         };
         expShape = new Shape( 2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])] = bEntries[0].mult(aEntries[expShape.entriesIndex(sparseIndices[0])]);
-        expEntries[expShape.entriesIndex(sparseIndices[1])] = bEntries[1].mult(aEntries[expShape.entriesIndex(sparseIndices[1])]);
+        expEntries[expShape.getFlatIndex(sparseIndices[0])] = bEntries[0].mult(aEntries[expShape.getFlatIndex(sparseIndices[0])]);
+        expEntries[expShape.getFlatIndex(sparseIndices[1])] = bEntries[1].mult(aEntries[expShape.getFlatIndex(sparseIndices[1])]);
         exp = new CTensor(expShape, expEntries).toCoo();
 
         assertEquals(exp, A.elemMult(B));

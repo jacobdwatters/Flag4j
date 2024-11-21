@@ -25,34 +25,34 @@
 package org.flag4j.algebraic_structures.rings;
 
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.algebraic_structures.semi_rings.SemiRing;
+import org.flag4j.algebraic_structures.semirings.Semiring;
 
 /**
  * <p>This interface specifies a mathematical ring. This interface not only meets the basic definition of a ring,
- * but also specifies some additional operations which are common and useful.</p>
+ * but also specifies some additional operations which are common and useful.
  *
- * <p>Ring elements should be immutable.</p>
+ * <p>Ring elements should be immutable.
  *
- * <p>Formally, an ring is a set <b>R</b> with the binary operations addition (+) and multiplication (*)
+ * <p>Formally, a ring is a set <b>R</b> with the binary operations addition (+) and multiplication (*)
  * defined such that for elements a, b, c in <b>R</b> the following are satisfied:
  *  <ul>
  *      <li>Addition and multiplication are associative: a + (b + c) = (a + b) + c and a * (b * c) = (a * b) * c.</li>
  *      <li>Addition is commutative: a + b = b + a</li>
- *      <li>Existince of additive and multiplicitive identities: There exisits two distinct elements 0 and 1 in <b>R</b> sucht that a + 0 = 0
- *      and a * 1 = 1 (called the addative and multiplicitive identities respectively).</li>
- *      <li>Existince of addative inverse: There exists an element -a in <b>R</b> such that a + (-a) = 0.</li>
+ *      <li>Existence of additive and multiplicative identities: There exists two distinct elements 0 and 1 in <b>R</b> such that a + 0 = 0
+ *      and a * 1 = 1 (called the additive and multiplicative identities respectively).</li>
+ *      <li>Existence of additive inverse: There exists an element -a in <b>R</b> such that a + (-a) = 0.</li>
  *      <li>Distributivity of multiplication over addition: a * (b + c) = (a * b) + (a * c).</li>
  *  </ul>
- * </p>
+ * 
  *
  * <p>Rings generalize {@link Field fields} in that multiplication need not be
- * commutative and multiplicitive inverses need not exists. As a result, division is not defined for a ring.</p>
+ * commutative and multiplicative inverses need not exists. As a result, division is not defined for a ring.
  *
  * @param <T> Type of the ring element.
  * @see Field
- * @see SemiRing
+ * @see Semiring
  */
-public interface Ring<T extends Ring<T>> extends SemiRing<T> {
+public interface Ring<T extends Ring<T>> extends Semiring<T> {
 
     /**
      * Computes difference of two elements of this ring.
@@ -63,9 +63,9 @@ public interface Ring<T extends Ring<T>> extends SemiRing<T> {
 
 
     /**
-     * <p>Computes the addative inverse for an element of this ring.</p>
+     * <p>Computes the additive inverse for an element of this ring.
      *
-     * <p>An element -x is an addative inverse for a filed element x if -x + x = 0 where 0 is the addative identity..</p>
+     * <p>An element -x is an additive inverse for a filed element x if -x + x = 0 where 0 is the additive identity.
      *
      * @return The additive inverse for this ring element.
      */
@@ -73,7 +73,7 @@ public interface Ring<T extends Ring<T>> extends SemiRing<T> {
 
 
     /**
-     * <p>Computes the absolute value of this ring element.</p>
+     * <p>Computes the absolute value of this ring element.
      *
      * @return The absolute value of this ring element.
      * @implNote By default, this is implemented as {@code return }{@link #mag()}{@code ;}
@@ -85,13 +85,13 @@ public interface Ring<T extends Ring<T>> extends SemiRing<T> {
 
     /**
      * Computes the magnitude of this ring element.
-     * @return The magniitude of this ring element.
+     * @return The magnitude of this ring element.
      */
     public double mag();
 
 
     /**
-     * Computs the conjugation of this ring element.
+     * Computes the conjugation of this ring element.
      * @return The conjugation of this ring element.
      * @implNote The default implementation of this method simply returns this ring element.
      */

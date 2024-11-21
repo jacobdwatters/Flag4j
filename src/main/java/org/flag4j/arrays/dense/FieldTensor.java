@@ -26,16 +26,14 @@ package org.flag4j.arrays.dense;
 
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.DenseFieldTensorBase;
+import org.flag4j.arrays.backend_new.field.AbstractDenseFieldTensor;
 import org.flag4j.arrays.sparse.CooFieldTensor;
-import org.flag4j.linalg.operations.TransposeDispatcher;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.operations.dense.field_ops.DenseFieldEquals;
-import org.flag4j.linalg.operations.dense.field_ops.DenseFieldTensorDot;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 
 /**
@@ -45,7 +43,7 @@ import java.util.List;
  *
  * @param <T> Type of the field element for the tensor.
  */
-public class FieldTensor<T extends Field<T>> extends DenseFieldTensorBase<FieldTensor<T>, CooFieldTensor<T>, T> {
+public class FieldTensor<T extends Field<T>> extends AbstractDenseFieldTensor<FieldTensor<T>, T> {
 
     /**
      * Creates a tensor with the specified entries and shape.
@@ -60,80 +58,31 @@ public class FieldTensor<T extends Field<T>> extends DenseFieldTensorBase<FieldT
 
 
     /**
-     * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
-     * computes the sum of products between the two tensors along the specified set of axes.
+     * Creates a tensor with the specified shape filled with {@code fillValue}.
      *
-     * @param src2 TensorOld to contract with this tensor.
-     * @param aAxes Axes along which to compute products for this tensor.
-     * @param bAxes Axes along which to compute products for {@code src2} tensor.
-     *
-     * @return The tensor dot product over the specified axes.
-     *
-     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes pairwise in
-     *                                  {@code aAxes} and {@code bAxes}.
-     * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
-     *                                  are out of bounds for the corresponding tensor.
+     * @param shape Shape of this tensor.
+     * @param fillValue Value to fill tensor with.
      */
-    @Override
-    public FieldTensor<T> tensorDot(FieldTensor<T> src2, int[] aAxes, int[] bAxes) {
-        return DenseFieldTensorDot.tensorDot(this, src2, aAxes, bAxes);
+    public FieldTensor(Shape shape, T fillValue) {
+        super(shape, new Field[shape.totalEntries().intValueExact()]);
+        Arrays.fill(entries, fillValue);
     }
 
 
     /**
-     * Computes the tensor dot product of this tensor with a second tensor. That is, sums the product of two tensor
-     * elements over the last axis of this tensor and the second-to-last axis of {@code src2}. If both tensors are
-     * rank 2, this is equivalent to matrix multiplication.
+     * Constructs a sparse COO tensor which is of a similar type as this dense tensor.
      *
-     * @param src2 TensorOld to compute dot product with this tensor.
+     * @param shape Shape of the COO tensor.
+     * @param entries Non-zero entries of the COO tensor.
+     * @param indices
      *
-     * @return The tensor dot product over the last axis of this tensor and the second to last axis of {@code src2}.
-     *
-     * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
-     *                                  along the second-to-last axis.
+     * @return A sparse COO tensor which is of a similar type as this dense tensor.
      */
     @Override
-    public FieldTensor<T> tensorDot(FieldTensor<T> src2) {
-        return DenseFieldTensorDot.tensorDot(this, src2);
+    protected CooFieldTensor<T> makeLikeCooTensor(Shape shape, Field<T>[] entries, int[][] indices) {
+        return new CooFieldTensor<>(shape, entries, indices);
     }
 
-
-    /**
-     * Computes the conjugate transpose of a tensor by conjugating and exchanging {@code axis1} and {@code axis2}.
-     *
-     * @param axis1 First axis to exchange and conjugate.
-     * @param axis2 Second axis to exchange and conjugate.
-     *
-     * @return The conjugate transpose of this tensor according to the specified axes.
-     *
-     * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
-     * @see #H()
-     * @see #H(int...)
-     */
-    @Override
-    public FieldTensor<T> H(int axis1, int axis2) {
-        return TransposeDispatcher.dispatchTensorHermitian(this, axis1, axis2);
-    }
-
-
-    /**
-     * Computes the conjugate transpose of this tensor. That is, conjugates and permutes the axes of this tensor so that it matches
-     * the permutation specified by {@code axes}.
-     *
-     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
-     * {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
-     *
-     * @return The conjugate transpose of this tensor with its axes permuted by the {@code axes} array.
-     *
-     * @throws IndexOutOfBoundsException If any element of {@code axes} is out of bounds for the rank of this tensor.
-     * @throws IllegalArgumentException  If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
-     * @see #H(int, int)
-     * @see #H()
-     */
-    @Override
-    public FieldTensor<T> H(int... axes) {
-        return TransposeDispatcher.dispatchTensorHermitian(this, axes);
-    }
 
 
     /**
@@ -147,82 +96,6 @@ public class FieldTensor<T extends Field<T>> extends DenseFieldTensorBase<FieldT
     @Override
     public FieldTensor<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
         return new FieldTensor<T>(shape, entries);
-    }
-
-
-    /**
-     * Creates a tensor with the specified shape filled with {@code fillValue}.
-     *
-     * @param shape Shape of this tensor.
-     * @param fillValue Value to fill tensor with.
-     */
-    public FieldTensor(Shape shape, T fillValue) {
-        super(shape, (T[]) new Field[shape.totalEntries().intValueExact()]);
-        Arrays.fill(entries, fillValue);
-    }
-
-
-    /**
-     * Computes the transpose of a tensor by exchanging {@code axis1} and {@code axis2}.
-     *
-     * @param axis1 First axis to exchange.
-     * @param axis2 Second axis to exchange.
-     *
-     * @return The transpose of this tensor according to the specified axes.
-     *
-     * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
-     * @see #T()
-     * @see #T(int...)
-     */
-    @Override
-    public FieldTensor<T> T(int axis1, int axis2) {
-        return TransposeDispatcher.dispatchTensor(this, axis1, axis2);
-    }
-
-
-    /**
-     * Computes the transpose of this tensor. That is, permutes the axes of this tensor so that it matches
-     * the permutation specified by {@code axes}.
-     *
-     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
-     * {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
-     *
-     * @return The transpose of this tensor with its axes permuted by the {@code axes} array.
-     *
-     * @throws IndexOutOfBoundsException If any element of {@code axes} is out of bounds for the rank of this tensor.
-     * @throws IllegalArgumentException  If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
-     * @see #T(int, int)
-     * @see #T()
-     */
-    @Override
-    public FieldTensor<T> T(int... axes) {
-        return TransposeDispatcher.dispatchTensor(this, axes);
-    }
-
-
-    /**
-     * Converts this dense tensor to an equivalent sparse tensor.
-     *
-     * @return A sparse tensor equivalent to this dense tensor.
-     */
-    @Override
-    public CooFieldTensor<T> toCoo() {
-        List<Field<T>> spEntries = new ArrayList<>();
-        List<int[]> indices = new ArrayList<>();
-
-        int size = entries.length;
-        Field<T> value;
-
-        for(int i=0; i<size; i++) {
-            value = entries[i];
-
-            if(value.isZero()) {
-                spEntries.add(value);
-                indices.add(shape.getIndices(i));
-            }
-        }
-
-        return new CooFieldTensor(shape, spEntries.toArray(new Field[0]), indices.toArray(new int[0][]));
     }
 
 
@@ -293,5 +166,46 @@ public class FieldTensor<T extends Field<T>> extends DenseFieldTensorBase<FieldT
         hash = 31*hash + Arrays.hashCode(entries);
 
         return hash;
+    }
+
+
+    /**
+     * Formats this tensor as a human-readable string. Specifically, a string containing the
+     * shape and flattened entries of this tensor.
+     * @return A human-readable string representing this tensor.
+     */
+    public String toString() {
+        int size = shape.totalEntries().intValueExact();
+        StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
+        result.append("[");
+
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int width;
+        String value;
+
+        // Get entries up until the stopping point.
+        for(int i=0; i<stopIndex; i++) {
+            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(stopIndex < size-1) {
+            width = PrintOptions.getPadding() + 3;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry.
+        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+        width = PrintOptions.getPadding() + value.length();
+        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s", value));
+
+        result.append("]");
+
+        return result.toString();
     }
 }

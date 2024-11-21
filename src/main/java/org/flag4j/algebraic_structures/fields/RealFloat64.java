@@ -25,6 +25,11 @@
 package org.flag4j.algebraic_structures.fields;
 
 
+import org.flag4j.util.ErrorMessages;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * <p>A real number backed by a 64-bit floating point number. Immutable</p>
  *
@@ -64,6 +69,27 @@ public class RealFloat64 implements Field<RealFloat64> {
      */
     public RealFloat64(double value) {
         this.value = value;
+    }
+
+
+    /**
+     * Rounds number to specified number of decimal places.
+     *
+     * @param n Number to round.
+     * @param decimals Number of decimals to round to.
+     * @return The number <code>n</code> rounded to the specified
+     * 		number of decimals.
+     * @throws IllegalArgumentException If decimals is less than zero.
+     */
+    public static RealFloat64 round(RealFloat64 n, int decimals) {
+        if (decimals < 0)
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(decimals));
+
+        double value = (Double.isFinite(n.value))
+                ? BigDecimal.valueOf(n.value).setScale(decimals, RoundingMode.HALF_UP).floatValue()
+                : n.value;
+
+        return new RealFloat64(value);
     }
 
 

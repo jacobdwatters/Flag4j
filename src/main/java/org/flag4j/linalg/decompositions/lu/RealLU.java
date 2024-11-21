@@ -39,7 +39,7 @@ public class RealLU extends LU<Matrix> {
      * Constructs a LU decomposer to decompose the specified matrix using partial pivoting.
      */
     public RealLU() {
-        super(Pivoting.PARTIAL.ordinal());
+        super(Pivoting.PARTIAL);
     }
 
 
@@ -49,7 +49,7 @@ public class RealLU extends LU<Matrix> {
      * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
      *                 will be used. If pivoting is any other value, no pivoting will be used.
      */
-    public RealLU(int pivoting) {
+    public RealLU(Pivoting pivoting) {
         super(pivoting);
     }
 
@@ -63,7 +63,7 @@ public class RealLU extends LU<Matrix> {
      *                     no pivoting. If a pivot value (value along the principle diagonal of U) is within this tolerance
      *                     from zero, then an exception will be thrown if solving with no pivoting.
      */
-    public RealLU(int pivoting, double zeroPivotTol) {
+    public RealLU(Pivoting pivoting, double zeroPivotTol) {
         super(pivoting, zeroPivotTol);
     }
 

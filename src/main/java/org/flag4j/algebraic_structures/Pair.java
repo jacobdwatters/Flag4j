@@ -24,74 +24,12 @@
 
 package org.flag4j.algebraic_structures;
 
-
-import java.util.Objects;
-
 /**
- * <p>Instances of this class can be used to store a pair of values (i.e. a 2-tuple).</p>
+ * <p>Data record to store a pair of values (i.e., a 2-tuple).</p>
  * <p>Pairs are immutable.</p>
  *
- * @param <T> The type of the elements of the pair.
+ * @param <T> The type of the elements in the pair.
+ * @see Tuple
  */
-public class Pair<T> {
-    /**
-     * First value in the pair.
-     */
-    private final T first;
-    /**
-     * Second value in the pair.
-     */
-    private final T second;
-
-
-    /**
-     * Constructs a pair with the specified entries.
-     * @param first First entry in the pair.
-     * @param second Second entry in the pair.
-     */
-    public Pair(T first, T second) {
-        this.first = first;
-        this.second = second;
-    }
-
-
-    /**
-     * Gets the first entry of this pair.
-     * @return The first entry of this pair.
-     */
-    public T getFirst() {
-        return first;
-    }
-
-
-    /**
-     * Gets the second entry of this pair.
-     * @return The second entry of this pair.
-     */
-    public T getSecond() {
-        return second;
-    }
-
-
-    /**
-     * Checks an object is equal to this pair.
-     * @param o Object to check for equality with this pair.
-     * @return True if {@code o} is type {@link Pair} and both the first and second items of this pair and {@code o} are equal as
-     * defined by {@link Objects#equals(Object, Object)}.
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Pair<?> pair = (Pair<?>) o;
-
-        return Objects.equals(first, pair.first) &&
-                Objects.equals(second, pair.second);
-    }
-
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(first, second);
-    }
+public record Pair<T>(T first, T second) {
 }

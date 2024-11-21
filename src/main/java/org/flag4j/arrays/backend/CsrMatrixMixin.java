@@ -32,11 +32,11 @@ package org.flag4j.arrays.backend;
  * @param <W> Type of dense vector equivalent to {@code V}.
  * @param <Y> Type (or wrapper of) of an element of this matrix.
  */
-public interface CsrMatrixMixin<T extends CsrMatrixMixin<T, U, V, W, Y>,
-        U extends DenseMatrixMixin<U, ?, W, Y>,
-        V extends SparseVectorMixin<V, W, ?, U, Y>,
-        W extends DenseVectorMixin<W, V, U, Y>, Y>
-        extends MatrixMixin<T, U, V, W, Y> {
+public interface CsrMatrixMixin<T extends CsrMatrixMixin<T, U, V, W, X, Y>,
+        U extends DenseMatrixMixinOld<U, ?, W, X, Y>,
+        V extends SparseVectorMixin<V, W, ?, U, X, Y>,
+        W extends DenseVectorMixin<W, V, U, X, Y>, X, Y>
+        extends MatrixMixinOld<T, U, V, W, X, Y> {
 
     /**
      * The density of this sparse CSR matrix. That is, the decimal percentage of elements in this matrix which are non-zero.

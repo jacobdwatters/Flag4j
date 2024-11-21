@@ -98,9 +98,9 @@ class CTensorElemMultTests {
         expEntries = new Complex128[aEntries.length];
         Arrays.fill(expEntries, Complex128.ZERO);
         expShape = new Shape( 2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])] = aEntries[expShape.entriesIndex(sparseIndices[0])].mult(bEntries[0]);
-        expEntries[expShape.entriesIndex(sparseIndices[1])] = aEntries[expShape.entriesIndex(sparseIndices[1])].mult(bEntries[1]);
-        expEntries[expShape.entriesIndex(sparseIndices[2])] = aEntries[expShape.entriesIndex(sparseIndices[2])].mult(bEntries[2]);
+        expEntries[expShape.getFlatIndex(sparseIndices[0])] = aEntries[expShape.getFlatIndex(sparseIndices[0])].mult(bEntries[0]);
+        expEntries[expShape.getFlatIndex(sparseIndices[1])] = aEntries[expShape.getFlatIndex(sparseIndices[1])].mult(bEntries[1]);
+        expEntries[expShape.getFlatIndex(sparseIndices[2])] = aEntries[expShape.getFlatIndex(sparseIndices[2])].mult(bEntries[2]);
         exp = new CTensor(expShape, expEntries).toCoo();
 
         assertEquals(exp, A.elemMult(B));
@@ -180,8 +180,8 @@ class CTensorElemMultTests {
                 Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO
         };
         expShape = new Shape( 2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])] = aEntries[expShape.entriesIndex(sparseIndices[0])].mult(bEntries[0]);
-        expEntries[expShape.entriesIndex(sparseIndices[1])] = aEntries[expShape.entriesIndex(sparseIndices[1])].mult(bEntries[1]);
+        expEntries[expShape.getFlatIndex(sparseIndices[0])] = aEntries[expShape.getFlatIndex(sparseIndices[0])].mult(bEntries[0]);
+        expEntries[expShape.getFlatIndex(sparseIndices[1])] = aEntries[expShape.getFlatIndex(sparseIndices[1])].mult(bEntries[1]);
         exp = new CTensor(expShape, expEntries).toCoo();
 
         assertEquals(exp, A.elemMult(B));

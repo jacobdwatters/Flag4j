@@ -24,7 +24,6 @@
 
 package org.flag4j.linalg;
 
-import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.decompositions.chol.ComplexCholesky;
 import org.flag4j.linalg.decompositions.chol.RealCholesky;
@@ -52,18 +51,18 @@ public final class PositiveDefiniteness {
      * @return True if the matrix is positive definite. Otherwise, returns false.
      * @see #isPosSemiDef(Matrix)
      */
-    public static boolean isPosDef(Matrix src) {
-        boolean result;
-        double tol = 1.0E-8; // Tolerance for considering eigenvalues positive.
-
-        if(src.isSymmetric()) {
-            result = Eigen.getEigenValues(src).minAbs() > tol;
-        } else {
-            result = false;
-        }
-
-        return result;
-    }
+//    public static boolean isPosDef(Matrix src) {
+//        boolean result;
+//        double tol = 1.0E-8; // Tolerance for considering eigenvalues positive.
+//
+//        if(src.isSymmetric()) {
+//            result = Eigen.getEigenValues(src).minAbs() > tol;
+//        } else {
+//            result = false;
+//        }
+//
+//        return result;
+//    }
 
 
     /**
@@ -88,27 +87,27 @@ public final class PositiveDefiniteness {
     }
 
 
-    /**
-     * Checks if the matrix is positive definite. A matrix {@code M} is positive definite iff
-     * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if the matrix is hermitian and
-     * all eigenvalues are strictly greater than zero.
-     *
-     * @param src Matrix to check if it is positive definite.
-     * @return True if the matrix is positive definite. Otherwise, returns false.
-     * @see #isPosSemiDef(CMatrix)
-     */
-    public static boolean isPosDef(CMatrix src) {
-        boolean result;
-        double tol = 1.0E-8; // Tolerance for considering eigenvalues positive.
-
-        if(src.isHermitian()) {
-            result = Eigen.getEigenValues(src).toReal().min() > tol;
-        } else {
-            result = false;
-        }
-
-        return result;
-    }
+//    /**
+//     * Checks if the matrix is positive definite. A matrix {@code M} is positive definite iff
+//     * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if the matrix is hermitian and
+//     * all eigenvalues are strictly greater than zero.
+//     *
+//     * @param src Matrix to check if it is positive definite.
+//     * @return True if the matrix is positive definite. Otherwise, returns false.
+//     * @see #isPosSemiDef(CMatrix)
+//     */
+//    public static boolean isPosDef(CMatrix src) {
+//        boolean result;
+//        double tol = 1.0E-8; // Tolerance for considering eigenvalues positive.
+//
+//        if(src.isHermitian()) {
+//            result = Eigen.getEigenValues(src).toReal().min() > tol;
+//        } else {
+//            result = false;
+//        }
+//
+//        return result;
+//    }
 
 
     /**
@@ -133,48 +132,48 @@ public final class PositiveDefiniteness {
     }
 
 
-    /**
-     * Checks if the matrix is positive semi-definite. A matrix {@code M} is positive semi-definite iff
-     * {@code x}<sup>T</sup>{@code Mx >= 0} for any vector {@code x}, or equivalently, if the matrix is symmetric and
-     * all eigenvalues are greater than or equal to zero.
-     *
-     * @param src Matrix to check if it is positive semi-definite.
-     * @return True if the matrix is positive semi-definite. Otherwise, returns false.
-     * @see #isPosSemiDef(Matrix)
-     */
-    public static boolean isPosSemiDef(Matrix src) {
-        boolean result;
-        double tol = -1.0E-8; // Tolerance for considering eigenvalues non-negative.
+//    /**
+//     * Checks if the matrix is positive semi-definite. A matrix {@code M} is positive semi-definite iff
+//     * {@code x}<sup>T</sup>{@code Mx >= 0} for any vector {@code x}, or equivalently, if the matrix is symmetric and
+//     * all eigenvalues are greater than or equal to zero.
+//     *
+//     * @param src Matrix to check if it is positive semi-definite.
+//     * @return True if the matrix is positive semi-definite. Otherwise, returns false.
+//     * @see #isPosSemiDef(Matrix)
+//     */
+//    public static boolean isPosSemiDef(Matrix src) {
+//        boolean result;
+//        double tol = -1.0E-8; // Tolerance for considering eigenvalues non-negative.
+//
+//        if(src.isSymmetric()) {
+//            result = Eigen.getEigenValues(src).toReal().min() > tol;
+//        } else {
+//            result = false;
+//        }
+//
+//        return result;
+//    }
 
-        if(src.isSymmetric()) {
-            result = Eigen.getEigenValues(src).toReal().min() > tol;
-        } else {
-            result = false;
-        }
 
-        return result;
-    }
-
-
-    /**
-     * Checks if the matrix is positive semi-definite. A matrix {@code M} is positive semi-definite iff
-     * {@code x}<sup>T</sup>{@code Mx >= 0} for any vector {@code x}, or equivalently, if the matrix is hermitian and
-     * all eigenvalues are greater than or equal to zero.
-     *
-     * @param src Matrix to check if it is positive semi-definite.
-     * @return True if the matrix is positive semi-definite. Otherwise, returns false.
-     * @see #isPosSemiDef(CMatrix)
-     */
-    public static boolean isPosSemiDef(CMatrix src) {
-        boolean result;
-        double tol = -1.0E-8; // Tolerance for considering eigenvalues non-negative.
-
-        if(src.isHermitian()) {
-            result = Eigen.getEigenValues(src).toReal().min() > tol;
-        } else {
-            result = false;
-        }
-
-        return result;
-    }
+//    /**
+//     * Checks if the matrix is positive semi-definite. A matrix {@code M} is positive semi-definite iff
+//     * {@code x}<sup>T</sup>{@code Mx >= 0} for any vector {@code x}, or equivalently, if the matrix is hermitian and
+//     * all eigenvalues are greater than or equal to zero.
+//     *
+//     * @param src Matrix to check if it is positive semi-definite.
+//     * @return True if the matrix is positive semi-definite. Otherwise, returns false.
+//     * @see #isPosSemiDef(CMatrix)
+//     */
+//    public static boolean isPosSemiDef(CMatrix src) {
+//        boolean result;
+//        double tol = -1.0E-8; // Tolerance for considering eigenvalues non-negative.
+//
+//        if(src.isHermitian()) {
+//            result = Eigen.getEigenValues(src).toReal().min() > tol;
+//        } else {
+//            result = false;
+//        }
+//
+//        return result;
+//    }
 }

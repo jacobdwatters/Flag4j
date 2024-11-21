@@ -1,7 +1,6 @@
 package org.flag4j.complex_vector;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.arrays.dense.CVector;
 import org.flag4j.linalg.VectorNorms;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -58,10 +57,10 @@ class CVectorNormTests {
     }
 
 
-    @Test
-    void infNormTestCase() {
-        // ------------------ Sub-case 1 ------------------
-        expNorm = 6126.347172780367;
-        assertEquals(expNorm, VectorNorms.infNorm(a));
-    }
+//    @Test
+//    void infNormTestCase() {
+//        // ------------------ Sub-case 1 ------------------
+//        expNorm = 6126.347172780367;
+//        assertEquals(expNorm, VectorNorms.infNorm(a));
+//    }
 }

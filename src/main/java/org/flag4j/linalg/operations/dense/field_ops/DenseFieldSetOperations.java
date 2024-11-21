@@ -81,6 +81,6 @@ public final class DenseFieldSetOperations {
      * @param indices Indices of tensor value to be set.
      */
     public static <T extends Field<T>> void set(Field<T>[] src, Shape shape, T value, int... indices) {
-        src[shape.entriesIndex(indices)] = value;
+        src[shape.getFlatIndex(indices)] = value;
     }
 }

@@ -28,7 +28,6 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.backend.CooFieldMatrixBase;
 import org.flag4j.arrays.backend.DenseFieldMatrixBase;
 import org.flag4j.arrays.backend.DenseFieldVectorBase;
-import org.flag4j.linalg.operations.common.field_ops.FieldOperations;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
@@ -41,7 +40,7 @@ public final class DenseCooFieldMatrixOperations {
 
     private DenseCooFieldMatrixOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -98,14 +97,15 @@ public final class DenseCooFieldMatrixOperations {
             CooFieldMatrixBase<?, ?, ?, ?, T> src2,
             DenseFieldMatrixBase<?, ?, ?, ?, T> src1) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        DenseFieldMatrixBase<?, ?, ?, ?, T> dest = src1.makeLikeTensor(src1.shape, FieldOperations.scalMult(src1.entries, -1));
-
-        for(int i=0; i<src2.nnz; i++) {
-            int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            dest.entries[idx] = dest.entries[idx].add((T) src2.entries[i]);
-        }
-
-        return dest;
+//        DenseFieldMatrixBase<?, ?, ?, ?, T> dest = src1.makeLikeTensor(src1.shape, FieldOps.scalMult(src1.entries, -1));
+//
+//        for(int i=0; i<src2.nnz; i++) {
+//            int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
+//            dest.entries[idx] = dest.entries[idx].add((T) src2.entries[i]);
+//        }
+//
+//        return dest;
+        return null;
     }
 
 

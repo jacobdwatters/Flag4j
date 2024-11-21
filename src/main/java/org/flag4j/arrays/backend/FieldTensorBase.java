@@ -26,10 +26,11 @@ package org.flag4j.arrays.backend;
 
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.linalg.operations.common.field_ops.AggregateField;
-import org.flag4j.linalg.operations.common.field_ops.CompareField;
+import org.flag4j.linalg.operations.common.semiring_ops.AggregateSemiRing;
+import org.flag4j.linalg.operations.common.semiring_ops.SemiRingOperations;
+import org.flag4j.linalg.operations.common.semiring_ops.SemiRingProperties;
 import org.flag4j.linalg.operations.dense.field_ops.DenseFieldElemMult;
-import org.flag4j.linalg.operations.dense.field_ops.DenseFieldOperations;
+import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiringOperations;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -101,8 +102,8 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public V get(int... indices) {
-        ValidateParameters.ensureValidIndex(shape, indices);
-        return (V) entries[shape.entriesIndex(indices)];
+        ValidateParameters.validateTensorIndex(shape, indices);
+        return (V) entries[shape.getFlatIndex(indices)];
     }
 
 
@@ -163,7 +164,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
     @Override
     public V sum() {
         if(entries.length==0) return zeroElement;
-        return AggregateField.sum(entries);
+        return AggregateSemiRing.sum(entries);
     }
 
 
@@ -175,7 +176,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
     @Override
     public V prod() {
         if(entries.length==0) return zeroElement;
-        return AggregateField.prod(entries);
+        return AggregateSemiRing.prod(entries);
     }
 
 
@@ -190,7 +191,9 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T add(T b) {
-        return makeLikeTensor(shape, DenseFieldOperations.add(entries, shape, b.entries, b.shape));
+        Field<V>[] sum = new Field[entries.length];
+        DenseSemiringOperations.add(entries, shape, b.entries, b.shape, sum);
+        return makeLikeTensor(shape, sum);
     }
 
 
@@ -205,7 +208,8 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T sub(T b) {
-        return makeLikeTensor(shape, DenseFieldOperations.sub(entries, shape, b.entries, b.shape));
+//        return makeLikeTensor(shape, DenseFieldOps.sub(entries, shape, b.entries, b.shape));
+        return null;
     }
 
 
@@ -254,7 +258,8 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T mult(double b) {
-        return makeLikeTensor(shape, DenseFieldOperations.scalMult(entries, b));
+//        return makeLikeTensor(shape, DenseFieldOps.scalMult(entries, b));
+        return null;
     }
 
 
@@ -267,7 +272,8 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T div(double b) {
-        return makeLikeTensor(shape, DenseFieldOperations.scalDiv(entries, b));
+//        return makeLikeTensor(shape, DenseFieldOps.scalDiv(entries, b));
+        return null;
     }
 
 
@@ -278,7 +284,8 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T conj() {
-        return makeLikeTensor(shape, DenseFieldOperations.conj(entries));
+//        return makeLikeTensor(shape, DenseFieldOps.conj(entries));
+        return null;
     }
 
 
@@ -315,7 +322,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
     @Override
     public T tensorTr(int axis1, int axis2) {
         ValidateParameters.ensureNotEquals(axis1, axis2);
-        ValidateParameters.ensureValidIndices(getRank(), axis1, axis2);
+        ValidateParameters.ensureValidArrayIndices(getRank(), axis1, axis2);
         ValidateParameters.ensureEquals(shape.get(axis1), shape.get(axis2));
 
         int[] strides = shape.getStrides();
@@ -338,7 +345,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
 
         int[] destIndices = new int[rank - 2];
         for(int i=0; i<destEntries.length; i++) {
-            destIndices = destShape.getIndices(i);
+            destIndices = destShape.getNdIndices(i);
 
             int baseOffset = 0;
             idx = 0;
@@ -372,7 +379,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public boolean isZeros() {
-        return entries.length==0 || CompareField.isZeros(entries);
+        return entries.length==0 || SemiRingProperties.isZeros(entries);
     }
 
 
@@ -382,7 +389,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public boolean isOnes() {
-        return entries.length==0 || CompareField.isOnes(entries);
+        return entries.length==0 || SemiRingProperties.isOnes(entries);
     }
 
 
@@ -455,7 +462,9 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T mult(V b) {
-        return makeLikeTensor(shape, DenseFieldOperations.scalMult(entries, b));
+        Field<V>[] prod = new Field[entries.length];
+        SemiRingOperations.scalMult(entries, prod, b);
+        return makeLikeTensor(shape, prod);
     }
 
 
@@ -466,7 +475,7 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public void multEq(V b) {
-        DenseFieldOperations.scalMultEq(entries, b);
+        SemiRingOperations.scalMult(entries, entries, b);
     }
 
 
@@ -479,7 +488,8 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T div(V b) {
-        return makeLikeTensor(shape, DenseFieldOperations.scalDiv(entries, b));
+//        return makeLikeTensor(shape, DenseFieldOps.scalDiv(entries, b));
+        return null;
     }
 
 
@@ -490,102 +500,102 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public void divEq(V b) {
-        DenseFieldOperations.scalDivEq(entries, b);
+//        DenseFieldOps.scalDivEq(entries, b);
     }
 
 
-    /**
-     * Finds the minimum value in this tensor.
-     *
-     * @return The minimum value in this tensor.
-     */
-    @Override
-    public double min() {
-        return CompareField.min(entries);
-    }
-
-
-    /**
-     * Finds the maximum value in this tensor.
-     *
-     * @return The maximum value in this tensor.
-     */
-    @Override
-    public double max() {
-        return CompareField.max(entries);
-    }
-
-
-    /**
-     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #min()}.
-     *
-     * @return The minimum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double minAbs() {
-        return CompareField.minAbs(entries);
-    }
-
-
-    /**
-     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #max()}.
-     *
-     * @return The maximum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double maxAbs() {
-        return CompareField.maxAbs(entries);
-    }
-
-
-    /**
-     * Finds the indices of the minimum value in this tensor.
-     *
-     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argmin() {
-        return shape.getIndices(CompareField.argmin(entries));
-    }
-
-
-    /**
-     * Finds the indices of the maximum value in this tensor.
-     *
-     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argmax() {
-        return shape.getIndices(CompareField.argmax(entries));
-    }
-
-
-    /**
-     * Finds the indices of the minimum absolute value in this tensor.
-     *
-     * @return The indices of the minimum absolute value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argminAbs() {
-        return shape.getIndices(CompareField.argminAbs());
-    }
-
-
-    /**
-     * Finds the indices of the maximum absolute value in this tensor.
-     *
-     * @return The indices of the maximum absolute value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argmaxAbs() {
-        return shape.getIndices(CompareField.argmaxAbs());
-    }
+//    /**
+//     * Finds the minimum value in this tensor.
+//     *
+//     * @return The minimum value in this tensor.
+//     */
+//    @Override
+//    public V min() {
+//        return (V) CompareSemiring.min(entries);
+//    }
+//
+//
+//    /**
+//     * Finds the maximum value in this tensor.
+//     *
+//     * @return The maximum value in this tensor.
+//     */
+//    @Override
+//    public V max() {
+//        return (V) CompareSemiring.max(entries);
+//    }
+//
+//
+//    /**
+//     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
+//     * to {@link #min()}.
+//     *
+//     * @return The minimum value, in absolute value, in this tensor.
+//     */
+//    @Override
+//    public double minAbs() {
+//        return CompareRing.minAbs(entries);
+//    }
+//
+//
+//    /**
+//     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
+//     * to {@link #max()}.
+//     *
+//     * @return The maximum value, in absolute value, in this tensor.
+//     */
+//    @Override
+//    public double maxAbs() {
+//        return CompareRing.maxAbs(entries);
+//    }
+//
+//
+//    /**
+//     * Finds the indices of the minimum value in this tensor.
+//     *
+//     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
+//     * entry (in row-major ordering) are returned.
+//     */
+//    @Override
+//    public int[] argmin() {
+//        return shape.getIndices(CompareSemiring.argmin(entries));
+//    }
+//
+//
+//    /**
+//     * Finds the indices of the maximum value in this tensor.
+//     *
+//     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
+//     * entry (in row-major ordering) are returned.
+//     */
+//    @Override
+//    public int[] argmax() {
+//        return shape.getIndices(CompareSemiring.argmax(entries));
+//    }
+//
+//
+//    /**
+//     * Finds the indices of the minimum absolute value in this tensor.
+//     *
+//     * @return The indices of the minimum absolute value in this tensor. If this value occurs multiple times, the indices of the first
+//     * entry (in row-major ordering) are returned.
+//     */
+//    @Override
+//    public int[] argminAbs() {
+//        return shape.getIndices(CompareRing.argminAbs());
+//    }
+//
+//
+//    /**
+//     * Finds the indices of the maximum absolute value in this tensor.
+//     *
+//     * @return The indices of the maximum absolute value in this tensor. If this value occurs multiple times, the indices of the first
+//     * entry (in row-major ordering) are returned.
+//     */
+//    @Override
+//    public int[] argmaxAbs() {
+//        return shape.getIndices(CompareRing.argmaxAbs());
+//    }
 
 
     /**
@@ -640,7 +650,8 @@ public abstract class FieldTensorBase<T extends FieldTensorBase<T, U, V>,
      */
     @Override
     public T recip() {
-        return makeLikeTensor(shape, DenseFieldOperations.recip(entries));
+//        return makeLikeTensor(shape, DenseFieldOps.recip(entries));
+        return null;
     }
 
 

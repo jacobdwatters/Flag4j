@@ -40,7 +40,7 @@ public final class RealSparseEquals {
 
     private RealSparseEquals(){
         // Hide default constructor for base class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

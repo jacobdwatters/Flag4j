@@ -34,7 +34,7 @@ public final class RealProperties {
 
     private RealProperties() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -133,5 +133,210 @@ public final class RealProperties {
         }
 
         return close;
+    }
+
+
+    /**
+     * Checks if this tensor only contains ones.
+     * @param src Elements of the tensor.
+     * @return True if this tensor only contains ones. Otherwise, returns false.
+     */
+    public static boolean isOnes(double[] src) {
+        boolean allZeros = true;
+
+        for(double value : src) {
+            if(value != 1) {
+                allZeros = false;
+                break; // No need to look further.
+            }
+        }
+
+        return allZeros;
+    }
+
+
+    /**
+     * Checks if <i>any</i> of the elements of a tensor contain a {@link Double#NaN}.
+     * @param src Entries of the tensor.
+     * @return {@code true} is any entry of {@code src} is {@link Double#NaN}. Otherwise, returns {@code false}.
+     */
+    public static boolean isNaN(double[] src) {
+        for(double value : src)
+            if(Double.isNaN(value)) return true;
+
+        return false;
+    }
+
+
+    /**
+     * Checks if <i>all</i> of the elements of a tensor are finite.
+     * @param src Entries of the tensor.
+     * @return {@code false} is any entry of {@code src} is not {@link Double#isFinite(double) finite}. Otherwise, returns {@code
+     * true}.
+     */
+    public static boolean isFinite(double[] src) {
+        for(double value : src)
+            if(!Double.isFinite(value)) return false;
+
+        return true;
+    }
+
+
+    /**
+     * Checks if <i>any</i> of the elements of a tensor is infinite.
+     * @param src Entries of the tensor.
+     * @return {@code true} is any entry of {@code src} is {@link Double#isInfinite(double) infinite}. Otherwise, returns {@code false}.
+     */
+    public static boolean isInfinite(double[] src) {
+        for(double value : src)
+            if(Double.isInfinite(value)) return true;
+
+        return false;
+    }
+
+
+    /**
+     * Computes the minimum value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
+     * this method to be used for real sparse or dense tensors.
+     * @param entries Entries of the tensor.
+     * @return The minimum value in the tensor.
+     */
+    public static double min(double... entries) {
+        double currMin = (entries.length==0) ? 0 : Double.MAX_VALUE;
+
+        for(double value : entries)
+            currMin = Math.min(value, currMin);
+
+        return currMin;
+    }
+
+
+    /**
+     * Computes the maximum value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
+     * this method to be used for real sparse or dense tensors.
+     * @param entries Entries of the tensor.
+     * @return The maximum value in the tensor.
+     */
+    public static double max(double... entries) {
+        double currMax = (entries.length==0) ? 0 : Double.MIN_NORMAL;
+
+        for(double value : entries)
+            currMax = Math.max(value, currMax);
+
+        return currMax;
+    }
+
+
+    /**
+     * Computes the minimum absolute value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
+     * this method to be used for real sparse or dense tensors.
+     * @param entries Entries of the tensor.
+     * @return The minimum absolute value in the tensor.
+     */
+    public static double minAbs(double... entries) {
+        double currMin = (entries.length==0) ? 0 : Double.MAX_VALUE;
+
+        for(double value : entries)
+            currMin = Math.min(Math.abs(value), currMin);
+
+        return currMin;
+    }
+
+
+    /**
+     * Computes the maximum absolute value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
+     * this method to be used for real sparse or dense tensors.
+     * @param entries Entries of the tensor.
+     * @return The maximum absolute value in the tensor.
+     */
+    public static double maxAbs(double... entries) {
+        double currMax = 0;
+
+        for(double value : entries)
+            currMax = Math.max(Math.abs(value), currMax);
+
+        return currMax;
+    }
+
+
+    /**
+     * Finds the index of the minimum value within a tensor.
+     * @param entries The entries of the tensor.
+     * @return The index of the minimum values within {@code entries}. If {@code entries.length == 0} then -1 will be returned.
+     */
+    public static int argmin(double... entries) {
+        double currMin = (entries.length==0) ? 0 : Double.MAX_VALUE;
+        int mindex = -1;
+
+        for(int i=0, size=entries.length; i<size; i++) {
+            if (entries[i] < currMin) {
+                currMin = entries[i];
+                mindex = i;
+            }
+        }
+
+        return mindex;
+    }
+
+
+    /**
+     * Finds the index of the maximum value within a tensor.
+     * @param entries The entries of the tensor.
+     * @return The index of the maximum values within {@code entries}. If {@code entries.length == 0} then -1 will be returned.
+     */
+    public static int argmax(double... entries) {
+        double currMax = (entries.length==0) ? 0 : Double.MIN_NORMAL;
+        int maxdex = -1;
+
+        for(int i=0, size=entries.length; i<size; i++) {
+            if (entries[i] > currMax) {
+                currMax = entries[i];
+                maxdex = i;
+            }
+        }
+
+        return maxdex;
+    }
+
+
+    /**
+     * Finds the index of the minimum absolute value within a tensor.
+     * @param entries The entries of the tensor.
+     * @return The index of the minimum absolute values within {@code entries}. If {@code entries.length == 0} then -1 will be
+     * returned.
+     */
+    public static int argminAbs(double... entries) {
+        double currMin = (entries.length==0) ? 0 : Double.MAX_VALUE;
+        int mindex = -1;
+
+        for(int i=0, size=entries.length; i<size; i++) {
+            if (Math.abs(entries[i]) < currMin) {
+                currMin = entries[i];
+                mindex = i;
+            }
+        }
+
+        return mindex;
+    }
+
+
+    /**
+     * Finds the index of the maximum absolute value within a tensor.
+     * @param entries The entries of the tensor.
+     * @return The index of the maximum absolute values within {@code entries}. If {@code entries.length == 0} then -1 will be
+     * returned.
+     */
+    public static int argmaxAbs(double... entries) {
+        double currMax = (entries.length==0) ? 0 : Double.MIN_NORMAL;
+        int maxdex = -1;
+
+        for(int i=0, size=entries.length; i<size; i++) {
+            if (Math.abs(entries[i]) > currMax) {
+                currMax = entries[i];
+                maxdex = i;
+            }
+        }
+
+        return maxdex;
     }
 }

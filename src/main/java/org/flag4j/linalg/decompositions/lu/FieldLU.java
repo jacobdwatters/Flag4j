@@ -44,7 +44,7 @@ public class FieldLU<T extends Field<T>> extends LU<FieldMatrix<T>> {
      * Constructs a LU decomposer to decompose the specified matrix using partial pivoting.
      */
     public FieldLU() {
-        super(Pivoting.PARTIAL.ordinal());
+        super(Pivoting.PARTIAL);
     }
 
 
@@ -54,7 +54,7 @@ public class FieldLU<T extends Field<T>> extends LU<FieldMatrix<T>> {
      * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
      *                 will be used. If pivoting is any other value, no pivoting will be used.
      */
-    public FieldLU(int pivoting) {
+    public FieldLU(Pivoting pivoting) {
         super(pivoting);
     }
 
@@ -68,7 +68,7 @@ public class FieldLU<T extends Field<T>> extends LU<FieldMatrix<T>> {
      *                     no pivoting. If a pivot value (value along the principle diagonal of U) is within this tolerance
      *                     from zero, then an exception will be thrown if solving with no pivoting.
      */
-    public FieldLU(int pivoting, double zeroPivotTol) {
+    public FieldLU(Pivoting pivoting, double zeroPivotTol) {
         super(pivoting, zeroPivotTol);
     }
 

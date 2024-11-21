@@ -33,11 +33,11 @@ import org.flag4j.util.ErrorMessages;
  * This class contains several low level methods for computing matrix-matrix multiplications. <br>
  * <b>WARNING:</b> These methods do not perform any sanity checks.
  */
-public class RealDenseMatrixMultiplication {
+public final class RealDenseMatrixMultiplication {
 
     private RealDenseMatrixMultiplication() {
         // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

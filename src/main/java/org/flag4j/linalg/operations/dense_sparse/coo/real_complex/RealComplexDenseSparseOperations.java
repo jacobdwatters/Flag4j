@@ -40,7 +40,7 @@ public final class RealComplexDenseSparseOperations {
 
     private RealComplexDenseSparseOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -58,7 +58,7 @@ public final class RealComplexDenseSparseOperations {
         ArrayUtils.deepCopy(src1.indices, destIndices);
 
         for(int i=0, size=destEntries.length; i<size; i++) {
-            int index = src2.shape.entriesIndex(src1.indices[i]); // Get index of non-zero entry.
+            int index = src2.shape.getFlatIndex(src1.indices[i]); // Get index of non-zero entry.
             destEntries[i] = new Complex128(src1.entries[index]).div((Complex128) src2.entries[i]);
         }
 
@@ -78,7 +78,7 @@ public final class RealComplexDenseSparseOperations {
         CTensor dest = src1.toComplex();
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            int idx = dest.shape.entriesIndex(src2.indices[i]);
+            int idx = dest.shape.getFlatIndex(src2.indices[i]);
             dest.entries[idx] = dest.entries[idx].add((Complex128) src2.entries[i]);
         }
 
@@ -98,7 +98,7 @@ public final class RealComplexDenseSparseOperations {
         CTensor dest = src1.toComplex();
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            int idx = dest.shape.entriesIndex(src2.indices[i]);
+            int idx = dest.shape.getFlatIndex(src2.indices[i]);
             dest.entries[idx] = dest.entries[idx].sub((Complex128) src2.entries[i]);
         }
 
@@ -122,7 +122,7 @@ public final class RealComplexDenseSparseOperations {
         ArrayUtils.deepCopy( src2.indices, indices);
 
         for(int i=0, size=destEntries.length; i<size; i++) {
-            destEntries[i] = src1.entries[src2.shape.entriesIndex(src2.indices[i])].mult(src2.entries[i]);
+            destEntries[i] = src1.entries[src2.shape.getFlatIndex(src2.indices[i])].mult(src2.entries[i]);
         }
 
         return new CooCTensor(src2.shape, destEntries, indices);
@@ -142,7 +142,7 @@ public final class RealComplexDenseSparseOperations {
         CTensor dest = src2.mult(-1).toComplex();
 
         for(int i=0, size=src1.nnz; i<size; i++) {
-            int idx = src1.shape.entriesIndex(src1.indices[i]);
+            int idx = src1.shape.getFlatIndex(src1.indices[i]);
             dest.entries[idx] = dest.entries[idx].add((Complex128) src1.entries[i]);
         }
 
@@ -161,7 +161,7 @@ public final class RealComplexDenseSparseOperations {
         CTensor sum = new CTensor(src1.shape, b);
 
         for(int i=0, size=src1.nnz; i<size; i++) {
-            int idx = src1.shape.entriesIndex(src1.indices[i]);
+            int idx = src1.shape.getFlatIndex(src1.indices[i]);
             sum.entries[idx].add(src1.entries[i]);
         }
 
@@ -180,7 +180,7 @@ public final class RealComplexDenseSparseOperations {
         CTensor sum = new CTensor(src1.shape, b);
 
         for(int i=0, size=src1.nnz; i<size; i++) {
-            int idx = src1.shape.entriesIndex(src1.indices[i]);
+            int idx = src1.shape.getFlatIndex(src1.indices[i]);
             sum.entries[idx].add(src1.entries[i]);
         }
 
@@ -199,7 +199,7 @@ public final class RealComplexDenseSparseOperations {
         CTensor sum = new CTensor(src1.shape, b);
 
         for(int i=0, size=src1.nnz; i<size; i++) {
-            int idx = src1.shape.entriesIndex(src1.indices[i]);
+            int idx = src1.shape.getFlatIndex(src1.indices[i]);
             sum.entries[idx] = sum.entries[idx].sub((Complex128) src1.entries[i]);
         }
 
@@ -218,7 +218,7 @@ public final class RealComplexDenseSparseOperations {
         CTensor sum = new CTensor(src1.shape, b);
 
         for(int i=0, size=src1.nnz; i<size; i++) {
-            int idx = src1.shape.entriesIndex(src1.indices[i]);
+            int idx = src1.shape.getFlatIndex(src1.indices[i]);
             sum.entries[idx] = sum.entries[idx].add((Complex128) src1.entries[i]);
         }
 

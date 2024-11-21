@@ -2,16 +2,12 @@ package org.flag4j.complex_tensor;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Tensor;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CTensorConversionTests {
     static Complex128[] aEntries;

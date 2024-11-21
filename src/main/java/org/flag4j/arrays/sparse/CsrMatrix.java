@@ -26,14 +26,13 @@ package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.CsrMatrixMixin;
-import org.flag4j.arrays.backend.MatrixMixin;
-import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
+import org.flag4j.arrays.backend_new.MatrixMixin;
+import org.flag4j.arrays.backend_new.primitive.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.operations.dense.field_ops.DenseFieldOperations;
+import org.flag4j.linalg.operations.common.real.RealProperties;
 import org.flag4j.linalg.operations.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
 import org.flag4j.linalg.operations.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
 import org.flag4j.linalg.operations.sparse.SparseUtils;
@@ -42,6 +41,7 @@ import org.flag4j.linalg.operations.sparse.csr.real_complex.RealComplexCsrMatrix
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
+import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -54,44 +54,43 @@ import static org.flag4j.linalg.operations.sparse.SparseUtils.sortCsrMatrix;
 
 /**
  * <p>A real sparse matrix stored in compressed sparse row (CSR) format. The {@link #entries} of this CSR matrix are
- * primitive doubles.</p>
+ * primitive doubles.
  *
  * <p>The {@link #entries non-zero entries} and non-zero indices of a CSR matrix are mutable but the {@link #shape}
- * and {@link #nnz total number of non-zero entries} is fixed.</p>
+ * and {@link #nnz total number of non-zero entries} is fixed.
  *
- * <p>Sparse matrices allow for the efficient storage of and operations on matrices that contain many zero values.</p>
+ * <p>Sparse matrices allow for the efficient storage of and operations on matrices that contain many zero values.
  *
- * <p>A sparse CSR matrix is stored as:</p>
+ * <p>A sparse CSR matrix is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
  *     <li>The non-zero {@link #entries} of the matrix. All other entries in the matrix are
  *     assumed to be zero. Zero values can also explicitly be stored in {@link #entries}.</li>
  *     <li>The {@link #rowPointers row pointers} of the non-zero values in the CSR matrix. Has size {@link #numRows numRows + 1}</li>
  *     <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all values in row
- *     {@code i}.</p>
+ *     {@code i}.
  *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
  *
  * <p>Note: many operations assume that the entries of the CSR matrix are sorted lexicographically by the row and column indices.
  * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any operations implemented in this
- * class will preserve the lexicographical sorting.</p>
+ * class will preserve the lexicographical sorting.
  *
- * <p>If indices need to be sorted explicitly, call {@link #sortIndices()}.</p>
+ * <p>If indices need to be sorted explicitly, call {@link #sortIndices()}.
  */
-public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
-        implements CsrMatrixMixin<CsrMatrix, Matrix, CooVector, Vector, Double> {
+public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
+        implements MatrixMixin<CsrMatrix, Matrix, CooVector, Double> {
 
 
     /**
      * <p>Pointers indicating starting index of each row within the {@link #colIndices} and {@link #entries} arrays.
-     * Has length {@link #numRows numRows + 1}.</p>
+     * Has length {@link #numRows numRows + 1}.
      *
      * <p>The range {@code [entries[rowPointers[i]], entries[rowPointers[i+1]])} contains all {@link #entries non-zero entries} within
-     * row {@code i}.</p>
+     * row {@code i}.
      *
      * <p>Similarly, {@code [colIndices[rowPointers[i]], colIndices[rowPointers[i+1]])} contains all {@link #colIndices column indices}
      * for the entries in row {@code i}.
-     * </p>
      */
     public final int[] rowPointers;
     /**
@@ -123,7 +122,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      * @param entries The non-zero entries of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
      * <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all
-     * values in row {@code i}.</p>
+     * values in row {@code i}.
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code entries.length == colIndices.length}.
      */
@@ -147,7 +146,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      * @param entries The non-zero entries of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
      * <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all
-     * values in row {@code i}.</p>
+     * values in row {@code i}.
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code entries.length == colIndices.length}.
      */
@@ -199,6 +198,28 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
 
 
     /**
+     * <p>Computes the generalized trace of this tensor along the specified axes.</p>
+     *
+     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays of this tensor specified by
+     * {@code axis1} and {@code axis2}. The shape of the resulting tensor is equal to this tensor with the
+     * {@code axis1} and {@code axis2} removed.</p>
+     *
+     * @param axis1 First axis for 2D sub-array.
+     * @param axis2 Second axis for 2D sub-array.
+     *
+     * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}.
+     *
+     * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
+     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
+     */
+    @Override
+    public CooTensor tensorTr(int axis1, int axis2) {
+        return toTensor().tensorTr(axis1, axis2);
+    }
+
+
+    /**
      * Sets the element of this tensor at the specified indices.
      *
      * @param value New value to set the specified index of this tensor to.
@@ -211,7 +232,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
     @Override
     public CsrMatrix set(Double value, int... indices) {
         // Ensure indices are in bounds.
-        ValidateParameters.ensureValidIndex(shape, indices);
+        ValidateParameters.validateTensorIndex(shape, indices);
         int row = indices[0];
         int col = indices[1];
 
@@ -260,6 +281,48 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
 
 
     /**
+     * Flattens tensor to single dimension while preserving order of entries.
+     *
+     * @return The flattened tensor.
+     *
+     * @see #flatten(int)
+     */
+    @Override
+    public CsrMatrix flatten() {
+        return toCoo().flatten().toCsr();
+    }
+
+
+    /**
+     * Flattens a tensor along the specified axis.
+     *
+     * @param axis Axis along which to flatten tensor.
+     *
+     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     * @see #flatten()
+     */
+    @Override
+    public CsrMatrix flatten(int axis) {
+        return toCoo().flatten(axis).toCsr();
+    }
+
+
+    /**
+     * Copies and reshapes this tensor.
+     *
+     * @param newShape New shape for the tensor.
+     *
+     * @return A copy of this tensor with the new shape.
+     *
+     * @throws TensorShapeException If {@code newShape} is not broadcastable to {@link #shape this.shape}.
+     */
+    @Override
+    public CsrMatrix reshape(Shape newShape) {
+        return toCoo().reshape().toCsr();
+    }
+
+
+    /**
      * Gets the element of this tensor at the specified indices.
      *
      * @param indices Indices of the element to get.
@@ -270,7 +333,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      */
     @Override
     public Double get(int... indices) {
-        ValidateParameters.ensureValidIndex(shape, indices);
+        ValidateParameters.validateTensorIndex(shape, indices);
         int row = indices[0];
         int col = indices[1];
         int loc = Arrays.binarySearch(colIndices, rowPointers[row], rowPointers[row+1], col);
@@ -346,7 +409,6 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      *
      * @return The density of this sparse matrix.
      */
-    @Override
     public double sparsity() {
         // Compute sparsity if needed.
         if(this.sparsity == -1) {
@@ -364,7 +426,6 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      *
      * @return A dense matrix equivalent to this sparse CSR matrix.
      */
-    @Override
     public Matrix toDense() {
         double[] dest = new double[shape.totalEntries().intValueExact()];
 
@@ -399,7 +460,6 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
     /**
      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
      */
-    @Override
     public void sortIndices() {
         sortCsrMatrix(entries, rowPointers, colIndices);
     }
@@ -428,9 +488,9 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
 
 
     /**
-     * <p>Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.</p>
+     * <p>Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
      *
-     * <p>Same as {@link #trace()}.</p>
+     * <p>Same as {@link #trace()}.
      *
      * @return The trace of this matrix.
      *
@@ -531,21 +591,19 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      *
      * @see #isI()
      */
-    @Override
     public boolean isCloseToI() {
         return RealCsrProperties.isCloseToIdentity(this);
     }
 
 
     /**
-     * <p>Computes the determinant of a square matrix.</p>
-     * <p><b>WARNING:</b> This method will convert the matrix to a dense matrix in order to compute the determinant.</p>
+     * <p>Computes the determinant of a square matrix.
+     * <p><b>WARNING:</b> This method will convert the matrix to a dense matrix in order to compute the determinant.
      *
      * @return The determinant of this matrix.
      *
      * @throws LinearAlgebraException If this matrix is not square.
      */
-    @Override
     public Double det() {
         return toDense().det();
     }
@@ -568,31 +626,31 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
 
 
     /**
-     * <p>Computes the matrix multiplication between two sparse CSR matrices and stores the result in a CSR matrix.</p>
+     * <p>Computes the matrix multiplication between two sparse CSR matrices and stores the result in a CSR matrix.
      *
      * <p>Warning: This method will likely be slower than {@link #mult(CsrMatrix)} if the result of multiplying this matrix
      * with {@code b} is not very sparse. Further, multiplying two sparse matrices may result in a dense matrix so this
-     * method should be used with caution.</p>
+     * method should be used with caution.
      *
      * @param b Matrix to multiply to this matrix.
      * @return The result of matrix multiplying this matrix with {@code b} as a sparse CSR matrix.
      */
-    public CsrCMatrix mult2CSR(CsrCMatrix b) {
+    public CsrCMatrix mult2Csr(CsrCMatrix b) {
         return RealComplexCsrMatrixMultiplication.standardAsSparse(this, b);
     }
 
 
     /**
-     * <p>Computes the matrix multiplication between two sparse CSR matrices and stores the result in a CSR matrix.</p>
+     * <p>Computes the matrix multiplication between two sparse CSR matrices and stores the result in a CSR matrix.
      *
      * <p>Warning: This method will likely be slower than {@link #mult(CsrMatrix)} if the result of multiplying this matrix
      * with {@code b} is not very sparse. Further, multiplying two sparse matrices may result in a dense matrix so this
-     * method should be used with caution.</p>
+     * method should be used with caution.
      *
      * @param b Matrix to multiply to this matrix.
      * @return The result of matrix multiplying this matrix with {@code b} as a sparse CSR matrix.
      */
-    public CsrMatrix mult2CSR(CsrMatrix b) {
+    public CsrMatrix mult2Csr(CsrMatrix b) {
         return RealCsrMatrixMultiplication.standardAsSparse(this, b);
     }
 
@@ -652,7 +710,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      * @return The result of stacking this matrix on top of the matrix {@code b}.
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of columns.
-     * @see #stack(MatrixMixin, int) 
+     * @see #stack(MatrixMixin, int)
      * @see #augment(CsrMatrix) 
      */
     @Override
@@ -670,7 +728,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of rows.
      * @see #stack(CsrMatrix) 
-     * @see #stack(MatrixMixin, int) 
+     * @see #stack(MatrixMixin, int)
      */
     @Override
     public CsrMatrix augment(CsrMatrix b) {
@@ -756,7 +814,6 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      *
      * @see #isSymmetric()
      */
-    @Override
     public boolean isAntiSymmetric() {
         return RealCsrProperties.isAntiSymmetric(this);
     }
@@ -769,7 +826,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      */
     @Override
     public boolean isOrthogonal() {
-        return isSquare() && this.mult(this.T()).isCloseToI();
+        return isSquare() && mult(T()).isCloseToI();
     }
 
 
@@ -876,7 +933,7 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
     @Override
     public CsrMatrix set(Double value, int row, int col) {
         // Ensure indices are in bounds.
-        ValidateParameters.ensureValidIndex(shape, row, col);
+        ValidateParameters.validateTensorIndex(shape, row, col);
         double[] newEntries;
         int[] newRowPointers = rowPointers.clone();
         int[] newColIndices;
@@ -1038,7 +1095,6 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} is less than zero or greater than/equal to
      *                                        the number of rows in this matrix.
      */
-    @Override
     public CooVector getRow(int rowIdx) {
         ValidateParameters.ensureIndexInBounds(numRows, rowIdx);
         int start = rowPointers[rowIdx];
@@ -1066,7 +1122,6 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      * @throws IndexOutOfBoundsException If either {@code colEnd} are {@code colStart} out of bounds for the shape of this matrix.
      * @throws IllegalArgumentException  If {@code colEnd} is less than {@code colStart}.
      */
-    @Override
     public CooVector getRow(int rowIdx, int colStart, int colEnd) {
         ValidateParameters.ensureIndexInBounds(numRows, rowIdx);
         ValidateParameters.ensureIndexInBounds(numCols, colStart, colEnd-1);
@@ -1099,7 +1154,6 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      * @throws ArrayIndexOutOfBoundsException If {@code colIdx} is less than zero or greater than/equal to
      *                                        the number of columns in this matrix.
      */
-    @Override
     public CooVector getCol(int colIdx) {
         return getCol(colIdx, 0, numRows);
     }
@@ -1119,7 +1173,6 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      *                                  shape of this matrix.
      * @throws IllegalArgumentException If {@code rowEnd} is less than {@code rowStart}.
      */
-    @Override
     public CooVector getCol(int colIdx, int rowStart, int rowEnd) {
         ValidateParameters.ensureIndexInBounds(numCols, colIdx);
         ValidateParameters.ensureIndexInBounds(numRows, rowStart, rowEnd-1);
@@ -1149,7 +1202,6 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      *
      * @return A vector containing the diagonal entries of this matrix.
      */
-    @Override
     public CooVector getDiag() {
         List<Double> destEntries = new ArrayList<>();
         List<Integer> destIndices = new ArrayList<>();
@@ -1171,6 +1223,26 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
 
 
     /**
+     * Gets the elements of this matrix along the specified diagonal.
+     *
+     * @param diagOffset The diagonal to get within this matrix.
+     * <ul>
+     *     <li>If {@code diagOffset == 0}: Then the elements of the principle diagonal are collected.</li>
+     *     <li>If {@code diagOffset < 0}: Then the elements of the sub-diagonal {@code diagOffset} below the principle diagonal
+     *     are collected.</li>
+     *     <li>If {@code diagOffset > 0}: Then the elements of the super-diagonal {@code diagOffset} above the principle diagonal
+     *     are collected.</li>
+     * </ul>
+     *
+     * @return The elements of the specified diagonal as a vector.
+     */
+    @Override
+    public CooVector getDiag(int diagOffset) {
+        return toCoo().getDiag();
+    }
+
+
+    /**
      * Sets a column of this matrix at the given index to the specified values.
      *
      * @param values New values for the column.
@@ -1180,7 +1252,6 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      *
      * @throws IndexOutOfBoundsException If the values vector has a different length than the number of rows of this matrix.
      */
-    @Override
     public CsrMatrix setCol(CooVector values, int colIndex) {
         // Convert to COO first for more efficient modification.
         return toCoo().setCol(values, colIndex).toCsr();
@@ -1197,7 +1268,6 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      *
      * @throws IndexOutOfBoundsException If the values vector has a different length than the number of rows of this matrix.
      */
-    @Override
     public CsrMatrix setRow(CooVector values, int rowIndex) {
         // Convert to COO first for more efficient modification.
         return toCoo().setRow(values, rowIndex).toCsr();
@@ -1296,6 +1366,21 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
 
 
     /**
+     * Computes the element-wise multiplication of two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise product.
+     *
+     * @return The element-wise product between this tensor and {@code b}.
+     *
+     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     */
+    @Override
+    public CsrMatrix elemMult(CsrMatrix b) {
+        return RealCsrOperations.elemMult(this, b);
+    }
+
+
+    /**
      * Computes the element-wise difference between two tensors of the same shape.
      *
      * @param b Second tensor in the element-wise difference.
@@ -1310,6 +1395,68 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
     }
 
 
+    /**
+     * Computes the conjugate transpose of a tensor by exchanging the first and last axes of this tensor and conjugating the
+     * exchanged values.
+     *
+     * @return The conjugate transpose of this tensor.
+     *
+     * @see #H(int, int)
+     * @see #H(int...)
+     */
+    @Override
+    public CsrMatrix H() {
+        return T();
+    }
+
+
+    /**
+     * Finds the indices of the minimum value in this tensor.
+     *
+     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argmin() {
+        return shape.getNdIndices(RealProperties.argmin(entries));
+    }
+
+
+    /**
+     * Finds the indices of the maximum value in this tensor.
+     *
+     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argmax() {
+        return shape.getNdIndices(RealProperties.argmax(entries));
+    }
+
+
+    /**
+     * Finds the indices of the minimum absolute value in this tensor.
+     *
+     * @return The indices of the minimum absolute value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argminAbs() {
+        return shape.getNdIndices(RealProperties.argminAbs(entries));
+    }
+
+
+    /**
+     * Finds the indices of the maximum absolute value in this tensor.
+     *
+     * @return The indices of the maximum absolute value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argmaxAbs() {
+        return shape.getNdIndices(RealProperties.argmaxAbs(entries));
+    }
+
 
     /**
      * Adds a complex-valued scalar to all non-zero entries of this sparse matrix.
@@ -1317,7 +1464,8 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      * @return The result of adding this matrix to {@code b}.
      */
     public CsrCMatrix add(Complex128 b) {
-        return new CsrCMatrix(shape, DenseFieldOperations.add(entries, b), rowPointers.clone(), colIndices.clone());
+//        return new CsrCMatrix(shape, DenseFieldOps.add(entries, b), rowPointers.clone(), colIndices.clone());
+        return null;
     }
 
 
@@ -1327,7 +1475,25 @@ public class CsrMatrix extends PrimitiveDoubleTensorBase<CsrMatrix, Matrix>
      * @return The result of subtracting {@code b} from this matrix's non-zero entries.
      */
     public CsrCMatrix sub(Complex128 b) {
-        return new CsrCMatrix(shape, DenseFieldOperations.sub(entries, b), rowPointers.clone(), colIndices.clone());
+//        return new CsrCMatrix(shape, DenseFieldOps.sub(entries, b), rowPointers.clone(), colIndices.clone());
+        return null;
+    }
+
+
+    /**
+     * <p>Computes the element-wise quotient between two tensors.
+     *
+     * <p><b>Warning</b>: This method is not supported for sparse matrices. If called on a sparse matrix,
+     * an {@link UnsupportedOperationException} will be thrown as the operation would almost certainly
+     * result in a division by zero.
+     *
+     * @param b Second tensor in the element-wise quotient.
+     *
+     * @return The element-wise quotient of this tensor with {@code b}.
+     */
+    @Override
+    public CsrMatrix div(CsrMatrix b) {
+        throw new UnsupportedOperationException("Cannot compute element-wise division of two sparse matrices.");
     }
 
 

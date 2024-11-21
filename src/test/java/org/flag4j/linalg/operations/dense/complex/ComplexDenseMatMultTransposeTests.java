@@ -26,7 +26,6 @@ package org.flag4j.linalg.operations.dense.complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.linalg.operations.dense.field_ops.DenseFieldMatrixMultTranspose;
 import org.junit.jupiter.api.Test;
 

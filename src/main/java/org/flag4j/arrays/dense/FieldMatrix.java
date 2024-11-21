@@ -26,10 +26,13 @@ package org.flag4j.arrays.dense;
 
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.DenseFieldMatrixBase;
+import org.flag4j.arrays.backend_new.field.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.sparse.CooFieldMatrix;
 import org.flag4j.arrays.sparse.CsrFieldMatrix;
+import org.flag4j.io.PrettyPrint;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -47,8 +50,7 @@ import java.util.List;
  *
  * @param <T> Type of the {@link Field field} element for the matrix.
  */
-public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldMatrix<T>, CooFieldMatrix<T>,
-        CsrFieldMatrix<T>, FieldVector<T>, T> {
+public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<FieldMatrix<T>, FieldVector<T>, T> {
 
 
     /**
@@ -124,6 +126,21 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
 
 
     /**
+     * Constructs a sparse COO tensor which is of a similar type as this dense tensor.
+     *
+     * @param shape Shape of the COO tensor.
+     * @param entries Non-zero entries of the COO tensor.
+     * @param indices
+     *
+     * @return A sparse COO tensor which is of a similar type as this dense tensor.
+     */
+    @Override
+    protected CooFieldMatrix<T> makeLikeCooTensor(Shape shape, Field<T>[] entries, int[][] indices) {
+        return makeLikeCooMatrix(shape, entries, indices[0], indices[1]);
+    }
+
+
+    /**
      * Constructs a tensor of the same type as this tensor with the given the shape and entries.
      *
      * @param shape Shape of the tensor to construct.
@@ -134,20 +151,6 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
     @Override
     public FieldMatrix<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
         return new FieldMatrix<T>(shape, entries);
-    }
-
-
-    /**
-     * Constructs a matrix of the same type as this matrix with the given the shape filled with the specified fill value.
-     *
-     * @param shape Shape of the matrix to construct.
-     * @param fillValue Value to fill this matrix with.
-     *
-     * @return A matrix of the same type as this tensor with the given the shape and entries.
-     */
-    @Override
-    public FieldMatrix<T> makeLikeTensor(Shape shape, T fillValue) {
-        return new FieldMatrix<T>(shape, fillValue);
     }
 
 
@@ -239,6 +242,30 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
 
 
     /**
+     * Converts this matrix to an equivalent tensor.
+     *
+     * @return A tensor with the same shape and entries as this matrix.
+     */
+    @Override
+    public FieldTensor<T> toTensor() {
+        return new FieldTensor<>(new Shape(entries.length), entries.clone());
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent tensor with the specified {@code newShape}.
+     *
+     * @param newShape Shape of the tensor. Can be any rank but must be broadcastable to the shape of this matrix.
+     *
+     * @return A tensor with the specified {@code newShape} and the same entries as this matrix.
+     */
+    @Override
+    public FieldTensor<T> toTensor(Shape newShape) {
+        return new FieldTensor<>(newShape, entries.clone());
+    }
+
+
+    /**
      * Constructs an identity matrix of the specified size.
      *
      * @param size Size of the identity matrix.
@@ -310,7 +337,7 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
 
         // Check for some quick returns.
         if (n == 0) return I(numRows, entries[0]);
-        if (n == 1) return this;
+        if (n == 1) return copy();
         if (n == 2) return this.mult(this);
 
         FieldMatrix<T> result = I(numRows, entries[0]);  // Start with identity matrix.
@@ -353,5 +380,113 @@ public class FieldMatrix<T extends Field<T>> extends DenseFieldMatrixBase<FieldM
         hash = 31*hash + Arrays.hashCode(entries);
 
         return hash;
+    }
+
+
+    /**
+     * Gets a row of the matrix formatted as a human-readable string.
+     * @param rowIndex Index of the row to get.
+     * @param columnsToPrint List of column indices to print.
+     * @param maxWidths List of maximum string lengths for each column.
+     * @return A human-readable string representation of the specified row.
+     */
+    private String rowToString(int rowIndex, List<Integer> columnsToPrint, List<Integer> maxWidths) {
+        StringBuilder sb = new StringBuilder();
+
+        // Start the row with appropriate bracket.
+        sb.append(rowIndex > 0 ? " [" : "[");
+
+        // Loop over the columns to print.
+        for (int i = 0; i < columnsToPrint.size(); i++) {
+            int colIndex = columnsToPrint.get(i);
+            String value;
+            int width = PrintOptions.getPadding() + maxWidths.get(i);
+
+            if (colIndex == -1) // Placeholder for truncated columns.
+                value = "...";
+            else
+                value = StringUtils.ValueOfRound(this.get(rowIndex, colIndex), PrintOptions.getPrecision());
+
+            if (PrintOptions.useCentering())
+                value = StringUtils.center(value, width);
+
+            sb.append(String.format("%-" + width + "s", value));
+        }
+
+        // Close the row.
+        sb.append("]");
+
+        return sb.toString();
+    }
+
+
+    /**
+     * Generates a human-readable string representing this matrix.
+     * @return A human-readable string representing this matrix.
+     */
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder("shape: ").append(shape).append("\n");
+        result.append("[");
+
+        if (entries.length == 0) {
+            result.append("[]"); // No entries in this matrix.
+        } else {
+            int numRows = this.numRows;
+            int numCols = this.numCols;
+
+            int maxRows = PrintOptions.getMaxRows();
+            int maxCols = PrintOptions.getMaxColumns();
+
+            int rowStopIndex = Math.min(maxRows - 1, numRows - 1);
+            boolean truncatedRows = maxRows < numRows;
+
+            int colStopIndex = Math.min(maxCols - 1, numCols - 1);
+            boolean truncatedCols = maxCols < numCols;
+
+            // Build list of column indices to print
+            List<Integer> columnsToPrint = new ArrayList<>();
+            for (int j = 0; j < colStopIndex; j++)
+                columnsToPrint.add(j);
+
+            if (truncatedCols) columnsToPrint.add(-1); // Use -1 to indicate '...'.
+            columnsToPrint.add(numCols - 1); // Always include the last column.
+
+            // Compute maximum widths for each column
+            List<Integer> maxWidths = new ArrayList<>();
+            for (Integer colIndex : columnsToPrint) {
+                int maxWidth;
+                if (colIndex == -1)
+                    maxWidth = 3; // Width for '...'.
+                else
+                    maxWidth = PrettyPrint.maxStringLength(getCol(colIndex).entries, rowStopIndex + 1);
+
+                maxWidths.add(maxWidth);
+            }
+
+            // Build the rows up to the stopping index.
+            for (int i = 0; i < rowStopIndex; i++) {
+                result.append(rowToString(i, columnsToPrint, maxWidths));
+                result.append("\n");
+            }
+
+            if (truncatedRows) {
+                // Print a '...' row to indicate truncated rows.
+                int totalWidth = maxWidths.stream().mapToInt(w -> w + PrintOptions.getPadding()).sum();
+                String value = "...";
+
+                if (PrintOptions.useCentering())
+                    value = StringUtils.center(value, totalWidth);
+
+                result.append(String.format(" [%-" + totalWidth + "s]\n", value));
+            }
+
+            // Append the last row.
+            result.append(rowToString(numRows - 1, columnsToPrint, maxWidths));
+        }
+
+        result.append("]");
+
+        return result.toString();
     }
 }

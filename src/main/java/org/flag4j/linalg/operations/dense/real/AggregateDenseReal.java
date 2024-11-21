@@ -30,11 +30,11 @@ import org.flag4j.util.ErrorMessages;
 /**
  * This class contains several low-level methods useful for computing aggregation operations on dense tensors.
  */
-public class AggregateDenseReal {
+public final class AggregateDenseReal {
 
     private AggregateDenseReal() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

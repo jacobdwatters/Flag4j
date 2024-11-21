@@ -181,6 +181,6 @@ public final class ComplexDenseSetOperations {
      * @param indices Indices of tensor value to be set.
      */
     public static void set(Complex128[] src, Shape shape, double value, int... indices) {
-        src[shape.entriesIndex(indices)] = new Complex128(value);
+        src[shape.getFlatIndex(indices)] = new Complex128(value);
     }
 }

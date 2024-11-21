@@ -33,13 +33,13 @@ import java.util.Arrays;
 /**
  * Contains error messages for common errors which may occur.
  */
-public abstract class ErrorMessages {
+public final class ErrorMessages {
 
     /**
      * Hide default constructor.
      */
     private ErrorMessages() {
-        throw new IllegalStateException(UTILITY_CLASS_ERR);
+        throw new UnsupportedOperationException(UTILITY_CLASS_ERR);
     }
 
     /**
@@ -205,7 +205,7 @@ public abstract class ErrorMessages {
 
     /**
      * Gets an error message for an attempted instantiation of a utility class.
-     * @param cls Class which was attempted to be instanciated.
+     * @param cls Class which was attempted to be instantiated.
      * @return An error message for the attempted instantiation of a utility class.
      */
     public static String getUtilityClassErrMsg(Class cls) {

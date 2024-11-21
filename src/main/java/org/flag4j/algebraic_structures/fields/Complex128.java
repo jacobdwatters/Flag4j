@@ -73,18 +73,6 @@ public class Complex128 implements Field<Complex128> {
      */
     public static final Complex128 INV_IMAGINARY_UNIT = new Complex128(0, -1);
     /**
-     * The maximum real double value 1.7976931348623157E308.
-     */
-    public static final Complex128 MAX_REAL = new Complex128(Double.MAX_VALUE);
-    /**
-     * The minimum real double value 4.9E-324
-     */
-    public static final Complex128 MIN_REAL = new Complex128(Double.MIN_VALUE);
-    /**
-     * The smallest possible real normal double 2.2250738585072014E-308.
-     */
-    public static final Complex128 MIN_REAL_NORMAL = new Complex128(Double.MIN_NORMAL);
-    /**
      * Complex number with real part equal to {@link Double#POSITIVE_INFINITY}.
      */
     public static final Complex128 POSITIVE_INFINITY = new Complex128(Double.POSITIVE_INFINITY);
@@ -183,10 +171,10 @@ public class Complex128 implements Field<Complex128> {
      */
     @Override
     public int hashCode() {
-        final int hashPrime1 = 17;
+        int hash = 17;
         final int hashPrime2 = 31;
 
-        int hash = hashPrime2*hashPrime1 + Double.hashCode(re);
+        hash = 31*hash + Double.hashCode(re);
         hash = hashPrime2*hash + Double.hashCode(im);
         return hash;
     }
@@ -480,18 +468,6 @@ public class Complex128 implements Field<Complex128> {
 
 
     /**
-     * Compute a raised to the power of b. This method wraps {@link Math#pow(double, double)}
-     * and returns a {@link Complex128}.
-     * @param a The base.
-     * @param b The exponent.
-     * @return a raised to the power of b.
-     */
-    public static Complex128 pow(double a, double b) {
-        return new Complex128(Math.pow(a, b));
-    }
-
-
-    /**
      * Compute a raised to the power of b.
      * and returns a {@link Complex128}.
      * @param a The base.
@@ -502,7 +478,7 @@ public class Complex128 implements Field<Complex128> {
         Complex128 result;
 
         if(b.im == 0) {
-            result = Complex128.pow(a, b.re);
+            result = new Complex128(Math.pow(a, b.re));
         } else {
             // Apply a change of base
             double logA = Math.log(a);
@@ -526,7 +502,7 @@ public class Complex128 implements Field<Complex128> {
 
         if(a.im == 0) {
             if(b.im == 0) {
-                result = Complex128.pow(a.re, b.re);
+                result = new Complex128(Math.pow(a.re, b.re));
             } else {
                 result = Complex128.pow(a.re, b);
             }
@@ -548,7 +524,7 @@ public class Complex128 implements Field<Complex128> {
         Complex128 result;
 
         if(a.im == 0) {
-            result = Complex128.pow(a.re, b);
+            result = new Complex128(Math.pow(a.re, b));
         } else {
             result = exp(ln(a).mult(b));
         }
@@ -736,7 +712,6 @@ public class Complex128 implements Field<Complex128> {
     /**
      * Computes the 2 argument arc-tangent function for a complex number. That is, for a complex number a+bi, atan2(b, a)
      * is computed. This method wraps {@link Math#atan2(double, double)}. <br>
-     * To get the result as an {@link Complex128} see {@link Complex128#atan2AsComplex128(Complex128)}.
      * @param num The input to the atan2 function.
      * @return The output of the atan2 function given the specified input. If the complex number is zero, then {@link Double#NaN}
      * is returned.
@@ -749,39 +724,12 @@ public class Complex128 implements Field<Complex128> {
     /**
      * Computes the complex argument function for a complex number.
      * is computed. This method is equivalent to {@link Complex128#atan2(Complex128)}. <br>
-     * To get the result as an {@link Complex128} see {@link Complex128#argAsComplex128(Complex128)}.
      * @param num The input to the atan2 function.
      * @return The output of the atan2 function given the specified input. If the complex number is zero, then {@link Double#NaN}
      * is returned.
      */
     public static double arg(Complex128 num) {
         return atan2(num);
-    }
-
-
-    /**
-     * Computes the complex argument function for a complex number.
-     * is computed. This method wraps is equivalent to {@link Complex128#atan2AsComplex128(Complex128) Complex128}. <br>
-     * To get the result as a double see {@link Complex128#arg(Complex128)}.
-     * @param num The input to the atan2 function.
-     * @return The output of the atan2 function given the specified input. If the complex number is zero, then {@link Double#NaN}
-     * is returned.
-     */
-    public static Complex128 argAsComplex128(Complex128 num) {
-        return atan2AsComplex128(num);
-    }
-
-
-    /**
-     * Computes the 2 argument arc-tangent function for a complex number. That is, for a complex number a+bi, atan2(b, a)
-     * is computed. This method wraps {@link Math#atan2(double, double)}. <br>
-     * To get the result as a double see {@link Complex128#atan2(Complex128)}.
-     * @param num The input to the atan2 function.
-     * @return The output of the atan2 function given the specified input. If the complex number is zero, then {@link Double#NaN}
-     * is returned.
-     */
-    public static Complex128 atan2AsComplex128(Complex128 num) {
-        return new Complex128(Math.atan2(num.im, num.re));
     }
 
 
@@ -1293,32 +1241,9 @@ public class Complex128 implements Field<Complex128> {
      */
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-
-        if (re != 0) {
-            result.append(re % 1 == 0 ? (int) re : re);
-        }
-
-        if (im != 0) {
-            if (im > 0 && re != 0) {
-                result.append(" + ");
-            } else if (im < 0 && re != 0) {
-                result.append(" - ");
-            } else if (im < 0) {
-                result.append("-");
-            }
-
-            double absIm = Math.abs(im);
-            if (absIm != 1) {
-                result.append(absIm % 1 == 0 ? (int) absIm : absIm);
-            }
-            result.append("i");
-        }
-
-        if (re == 0 && im == 0) {
-            return "0";
-        }
-
-        return result.toString();
+        if (isZero()) return "0";
+        String realPart = re % 1 == 0 ? String.valueOf((int) re) : String.valueOf(re);
+        String imagPart = im == 0 ? "" : (im > 0 ? " + " : " - ") + (Math.abs(im) % 1 == 0 ? (int) Math.abs(im) : Math.abs(im)) + "i";
+        return realPart + imagPart;
     }
 }

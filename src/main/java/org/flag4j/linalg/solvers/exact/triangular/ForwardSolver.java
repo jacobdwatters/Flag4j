@@ -25,8 +25,8 @@
 package org.flag4j.linalg.solvers.exact.triangular;
 
 
-import org.flag4j.arrays.backend.MatrixMixin;
-import org.flag4j.arrays.backend.VectorMixin;
+import org.flag4j.arrays.backend_new.MatrixMixin;
+import org.flag4j.arrays.backend_new.VectorMixin;
 import org.flag4j.linalg.solvers.LinearMatrixSolver;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.ValidateParameters;
@@ -41,7 +41,7 @@ import org.flag4j.util.exceptions.SingularMatrixException;
  * @param <U> Vector type equivalent to the coefficient matrix.
  * @param <V> Type of the internal storage datastructures in the matrix and vector.
  */
-public abstract class ForwardSolver<T extends MatrixMixin<T, ?, U, ?, ?>, U extends VectorMixin<U, T, ?, ?>, V>
+public abstract class ForwardSolver<T extends MatrixMixin<T, ?, U, ?>, U extends VectorMixin<U, T, ?, ?>, V>
         implements LinearMatrixSolver<T, U> {
 
     /**
@@ -60,7 +60,7 @@ public abstract class ForwardSolver<T extends MatrixMixin<T, ?, U, ?, ?>, U exte
      */
     protected final boolean enforceLower;
     /**
-     * Storage for solution in solves which return a 00000000
+     * Storage for solution in solves which return a matrix.
      */
     T X;
     /**

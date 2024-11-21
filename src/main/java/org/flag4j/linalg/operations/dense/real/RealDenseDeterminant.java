@@ -34,11 +34,11 @@ import org.flag4j.util.ValidateParameters;
 /**
  * This class contains methods for computing the determinant of a real dense matrix.
  */
-public class RealDenseDeterminant {
+public final class RealDenseDeterminant {
 
     private RealDenseDeterminant() {
         // Hide default constructor in utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

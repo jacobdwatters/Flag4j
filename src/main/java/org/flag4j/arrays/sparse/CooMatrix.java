@@ -26,19 +26,19 @@ package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.CooMatrixMixin;
-import org.flag4j.arrays.backend.MatrixMixin;
-import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
+import org.flag4j.arrays.backend.MatrixMixinOld;
+import org.flag4j.arrays.backend_new.MatrixMixin;
+import org.flag4j.arrays.backend_new.primitive.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.operations.dense.real.AggregateDenseReal;
+import org.flag4j.linalg.operations.common.real.RealProperties;
 import org.flag4j.linalg.operations.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOperations;
 import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
 import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
-import org.flag4j.linalg.operations.sparse.coo.SparseDataWrapper;
+import org.flag4j.linalg.operations.sparse.coo.CooDataSorter;
 import org.flag4j.linalg.operations.sparse.coo.real.*;
 import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseMatrixMultiplication;
 import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseMatrixOperations;
@@ -57,18 +57,18 @@ import java.util.List;
 
 /**
  * <p>A real sparse matrix stored in coordinate list (COO) format. The {@link #entries} of this COO tensor are
- * primitive doubles.</p>
+ * primitive doubles.
  *
  * <p>The {@link #entries non-zero entries} and non-zero indices of a COO matrix are mutable but the {@link #shape}
- * and total number of non-zero entries is fixed.</p>
+ * and total number of non-zero entries is fixed.
  *
  * <p>COO matrices are well-suited for incremental matrix construction and modification but may not have ideal efficiency for matrix
  * operations like matrix multiplication. For heavy computations, it may be better to construct a matrix as a {@code CooMatrix} then
  * convert to a {@link CsrMatrix} (using {@link #toCsr()}) as CSR (compressed sparse row) matrices are generally better suited for
  * efficient
- * matrix operations.</p>
+ * matrix operations.
  *
- * <p>A sparse COO matrix is stored as:</p>
+ * <p>A sparse COO matrix is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
  *     <li>The non-zero {@link #entries} of the matrix. All other entries in the matrix are
@@ -77,14 +77,18 @@ import java.util.List;
  *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
  *
+ * <p>Some operations on sparse tensors behave differently than on dense tensors. For instance, {@link #add(double)} will not
+ * add the scalar to all entries of the tensor since this would cause catastrophic loss of sparsity. Instead, such non-zero preserving
+ * element-wise operations only act on the non-zero entries of the sparse tensor as to not affect the sparsity.
+ *
  * <p>Note: many operations assume that the entries of the COO matrix are sorted lexicographically by the row and column indices.
  * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any operations implemented in this
- * class will preserve the lexicographical sorting.</p>
+ * class will preserve the lexicographical sorting.
  *
- * <p>If indices need to be sorted, call {@link #sortIndices()}.</p>
+ * <p>If indices need to be sorted, call {@link #sortIndices()}.
  */
-public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
-        implements CooMatrixMixin<CooMatrix, Matrix, CooVector, Vector, Double> {
+public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
+        implements MatrixMixin<CooMatrix, Matrix, CooVector, Double> {
 
     /**
      * Row indices for non-zero value of this sparse COO matrix.
@@ -380,7 +384,6 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      *
      * @return The density of this sparse tensor.
      */
-    @Override
     public double sparsity() {
         // Check if the sparsity has already been computed.
         if (this.sparsity < 0) {
@@ -401,7 +404,6 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      * @return A dense tensor equivalent to this sparse tensor.
      * @throws ArithmeticException If the total number of entries in this sparse matrix does not fit into an int.
      */
-    @Override
     public Matrix toDense() {
         double[] entries = new double[totalEntries().intValueExact()];
         int row;
@@ -440,9 +442,8 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
     /**
      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
      */
-    @Override
     public void sortIndices() {
-        SparseDataWrapper.wrap(entries, rowIndices, colIndices).sparseSort().unwrap(entries, rowIndices, colIndices);
+        CooDataSorter.wrap(entries, rowIndices, colIndices).sparseSort().unwrap(entries, rowIndices, colIndices);
     }
 
 
@@ -497,7 +498,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
         int[] destIndices = new int[entries.length];
 
         for(int i = 0; i < entries.length; i++)
-            destIndices[i] = shape.entriesIndex(rowIndices[i], colIndices[i]);
+            destIndices[i] = shape.getFlatIndex(rowIndices[i], colIndices[i]);
 
         return new CooMatrix(shape, entries.clone(), new int[entries.length], destIndices);
     }
@@ -584,6 +585,73 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
 
 
     /**
+     * Computes the conjugate transpose of a tensor by exchanging the first and last axes of this tensor and conjugating the
+     * exchanged values.
+     *
+     * @return The conjugate transpose of this tensor.
+     *
+     * @see #H(int, int)
+     * @see #H(int...)
+     */
+    @Override
+    public CooMatrix H() {
+        return T();
+    }
+
+
+    /**
+     * Finds the indices of the minimum value in this tensor.
+     *
+     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argmin() {
+        int idx = RealProperties.argmin(entries);
+        return new int[]{rowIndices[idx], colIndices[idx]};
+    }
+
+
+    /**
+     * Finds the indices of the maximum value in this tensor.
+     *
+     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argmax() {
+        int idx = RealProperties.argmax(entries);
+        return new int[]{rowIndices[idx], colIndices[idx]};
+    }
+
+
+    /**
+     * Finds the indices of the minimum absolute value in this tensor.
+     *
+     * @return The indices of the minimum absolute value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argminAbs() {
+        int idx = RealProperties.argminAbs(entries);
+        return new int[]{rowIndices[idx], colIndices[idx]};
+    }
+
+
+    /**
+     * Finds the indices of the maximum absolute value in this tensor.
+     *
+     * @return The indices of the maximum absolute value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argmaxAbs() {
+        int idx = RealProperties.argmaxAbs(entries);
+        return new int[]{rowIndices[idx], colIndices[idx]};
+    }
+
+
+    /**
      * Computes the element-wise multiplication of two tensors of the same shape.
      *
      * @param b Second tensor in the element-wise product.
@@ -599,13 +667,13 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
 
 
     /**
-     * <p>Computes the generalized trace of this tensor along the specified axes.</p>
+     * <p>Computes the generalized trace of this tensor along the specified axes.
      *
-     * <p>Note: for a matrix, the {@link #tr()} method is preferred.</p>
+     * <p>Note: for a matrix, the {@link #tr()} method is preferred.
      *
      * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays_old of this tensor specified by
      * {@code axis1} and {@code axis2}. The shape of the resulting tensor is equal to this tensor with the
-     * {@code axis1} and {@code axis2} removed.</p>
+     * {@code axis1} and {@code axis2} removed.
      *
      * @param axis1 First axis for 2D sub-array.
      * @param axis2 Second axis for 2D sub-array.
@@ -672,103 +740,6 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
 
 
     /**
-     * Finds the minimum non-zero value in this tensor.
-     * @return The minimum non-zero value in this tensor.
-     */
-    @Override
-    public double min() {
-        return super.min(); // Overrides method from super class to emphasize it operates only on the non-zero values.
-    }
-
-
-    /**
-     * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
-     *
-     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double max() {
-        return super.max(); // Overrides method from super class to emphasize it operates only on the non-zero values.
-    }
-
-
-    /**
-     * Finds the minimum non-zero value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #min()}.
-     *
-     * @return The minimum non-zero value, in absolute value, in this tensor.
-     */
-    @Override
-    public double minAbs() {
-        return super.minAbs(); // Overrides method from super class to emphasize it operates only on the non-zero values.
-    }
-
-
-    /**
-     * Finds the maximum non-zero value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #max()}.
-     *
-     * @return The maximum non-zero value, in absolute value, in this tensor.
-     */
-    @Override
-    public double maxAbs() {
-        return super.maxAbs(); // Overrides method from super class to emphasize it operates only on the non-zero values.
-    }
-
-
-    /**
-     * Finds the indices of the minimum non-zero value in this tensor.
-     *
-     * @return The indices of the minimum non-zero value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argmin() {
-        int idx = AggregateDenseReal.argmin(entries);
-        return new int[]{rowIndices[idx], colIndices[idx]};
-    }
-
-
-    /**
-     * Finds the indices of the maximum non-zero value in this tensor.
-     *
-     * @return The indices of the maximum non-zero value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argmax() {
-        int idx = AggregateDenseReal.argmax(entries);
-        return new int[]{rowIndices[idx], colIndices[idx]};
-    }
-
-
-    /**
-     * Finds the indices of the minimum absolute non-zero value in this tensor.
-     *
-     * @return The indices of the minimum absolute non-zero value in this tensor. If this value occurs multiple times, the indices of
-     * the first entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argminAbs() {
-        int idx = AggregateDenseReal.argminAbs(entries);
-        return new int[]{rowIndices[idx], colIndices[idx]};
-    }
-
-
-    /**
-     * Finds the indices of the maximum absolute non-zero value in this tensor.
-     *
-     * @return The indices of the maximum absolute non-zero value in this tensor. If this value occurs multiple times, the indices of
-     * the first entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argmaxAbs() {
-        int idx = AggregateDenseReal.argmaxAbs(entries);
-        return new int[]{rowIndices[idx], colIndices[idx]};
-    }
-
-
-    /**
      * Adds a scalar value to each non-zero element of this tensor.
      *
      * @param b Value to add to each non-zero entry of this tensor.
@@ -808,6 +779,21 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
 
 
     /**
+     * <p>Computes the element-wise quotient between two tensors.
+     * <p><b>Warning</b>: This method is not supported for sparse matrices. If called on a sparse matrix,
+     * an {@link UnsupportedOperationException} will be thrown. Element-wise division is undefined for sparse matrices as it
+     * would almost certainly result in a division by zero.
+     * @param b Second tensor in the element-wise quotient.
+     *
+     * @return The element-wise quotient of this tensor with {@code b}.
+     */
+    @Override
+    public CooMatrix div(CooMatrix b) {
+        throw new UnsupportedOperationException("Cannot compute element-wise division of two sparse matrices.");
+    }
+
+
+    /**
      * Subtracts a scalar value from each non-zero element of this tensor.
      *
      * @param b Value to subtract from each non-zero entry of this tensor.
@@ -843,9 +829,9 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
 
 
     /**
-     * <p>Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.</p>
+     * <p>Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
      *
-     * <p>Same as {@link #trace()}.</p>
+     * <p>Same as {@link #trace()}.
      *
      * @return The trace of this matrix.
      *
@@ -919,7 +905,6 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      *
      * @see #isI()
      */
-    @Override
     public boolean isCloseToI() {
         return RealSparseMatrixProperties.isCloseToIdentity(this);
     }
@@ -932,7 +917,6 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      *
      * @throws LinearAlgebraException If this matrix is not square.
      */
-    @Override
     public Double det() {
         return toDense().det();
     }
@@ -992,7 +976,6 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      *
      * @return The result of multiplying this matrix with the transpose of {@code b}.
      */
-    @Override
     public Matrix multTranspose(CooMatrix b) {
         ValidateParameters.ensureEquals(numCols, b.numCols);
         return mult(b.T());
@@ -1008,9 +991,8 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      *
      * @throws IllegalArgumentException If this matrix and b have different shapes.
      */
-    @Override
     public Double fib(CooMatrix b) {
-        return this.T().mult(b).tr();
+        return T().mult(b).tr();
     }
 
 
@@ -1022,10 +1004,9 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      * @return The result of stacking this matrix on top of the matrix {@code b}.
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of columns.
-     * @see #stack(MatrixMixin, int)
+     * @see #stack(MatrixMixinOld, int)
      * @see #augment(CooMatrix)
      */
-    @Override
     public CooMatrix stack(CooMatrix b) {
         ValidateParameters.ensureEquals(numCols, b.numCols);
 
@@ -1060,7 +1041,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of rows.
      * @see #stack(CooMatrix) 
-     * @see #stack(MatrixMixin, int)
+     * @see #stack(MatrixMixinOld, int)
      */
     @Override
     public CooMatrix augment(CooMatrix b) {
@@ -1185,7 +1166,6 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      *
      * @see #isSymmetric()
      */
-    @Override
     public boolean isAntiSymmetric() {
         return RealSparseMatrixProperties.isAntiSymmetric(this);
     }
@@ -1305,8 +1285,8 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      */
     @Override
     public CooMatrix set(Double value, int row, int col) {
-        ValidateParameters.ensureValidIndices(numRows, row);
-        ValidateParameters.ensureValidIndices(numCols, col);
+        ValidateParameters.ensureValidArrayIndices(numRows, row);
+        ValidateParameters.ensureValidArrayIndices(numCols, col);
         return RealSparseMatrixGetSet.matrixSet(this, row, col, value);
     }
 
@@ -1444,7 +1424,6 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} is less than zero or greater than/equal to
      *                                        the number of rows in this matrix.
      */
-    @Override
     public CooVector getRow(int rowIdx) {
         return RealSparseMatrixGetSet.getRow(this, rowIdx);
     }
@@ -1463,7 +1442,6 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      * @throws IndexOutOfBoundsException If either {@code colEnd} are {@code colStart} out of bounds for the shape of this matrix.
      * @throws IllegalArgumentException  If {@code colEnd} is less than {@code colStart}.
      */
-    @Override
     public CooVector getRow(int rowIdx, int colStart, int colEnd) {
         return RealSparseMatrixGetSet.getRow(this, rowIdx, colStart, colEnd);
     }
@@ -1479,7 +1457,6 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      * @throws ArrayIndexOutOfBoundsException If {@code colIdx} is less than zero or greater than/equal to
      *                                        the number of columns in this matrix.
      */
-    @Override
     public CooVector getCol(int colIdx) {
         return RealSparseMatrixGetSet.getCol(this, colIdx);
     }
@@ -1499,7 +1476,6 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      *                                  shape of this matrix.
      * @throws IllegalArgumentException If {@code rowEnd} is less than {@code rowStart}.
      */
-    @Override
     public CooVector getCol(int colIdx, int rowStart, int rowEnd) {
         return RealSparseMatrixGetSet.getCol(this, colIdx, rowStart, rowEnd);
     }
@@ -1510,7 +1486,6 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      *
      * @return A vector containing the diagonal entries of this matrix.
      */
-    @Override
     public CooVector getDiag() {
         List<Double> destEntries = new ArrayList<>();
         List<Integer> destIndices = new ArrayList<>();
@@ -1532,6 +1507,67 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
 
 
     /**
+     * Gets the elements of this matrix along the specified diagonal.
+     *
+     * @param diagOffset The diagonal to get within this matrix.
+     * <ul>
+     *     <li>If {@code diagOffset == 0}: Then the elements of the principle diagonal are collected.</li>
+     *     <li>If {@code diagOffset < 0}: Then the elements of the sub-diagonal {@code diagOffset} below the principle diagonal
+     *     are collected.</li>
+     *     <li>If {@code diagOffset > 0}: Then the elements of the super-diagonal {@code diagOffset} above the principle diagonal
+     *     are collected.</li>
+     * </ul>
+     *
+     * @return The elements of the specified diagonal as a vector.
+     */
+    @Override
+    public CooVector getDiag(int diagOffset) {
+        // Validate diagOffset is within the valid range
+        ValidateParameters.ensureInRange(diagOffset, -(numRows-1),
+                numCols-1, "diagOffset");
+
+        // Calculate the length of the diagonal.
+        int length;
+        if (diagOffset >= 0)
+            length = Math.min(numRows, numCols - diagOffset);
+        else
+            length = Math.min(numRows + diagOffset, numCols);
+
+        // Determine the starting row index based on diagOffset
+        int startRow = diagOffset >= 0 ? 0 : -diagOffset;
+
+        // Lists to store positions and values of non-zero diagonal elements
+        List<Integer> idxList = new ArrayList<>();
+        List<Double> entriesList = new ArrayList<>();
+
+        // Iterate over non-zero entries in the COO matrix
+        for (int i = 0; i < nnz; i++) {
+            int row = rowIndices[i];
+            int col = colIndices[i];
+
+            // Check if the current element is on the specified diagonal
+            if (col - row == diagOffset) {
+                int pos = row - startRow; // Position in the diagonal vector
+                idxList.add(pos);
+                entriesList.add(entries[i]);
+            }
+        }
+
+        // Convert lists to arrays.
+        int nnzDiag = idxList.size();
+        int[] diagIndices = new int[nnzDiag];
+        double[] diagEntries = new double[nnzDiag];
+        for (int i = 0; i < nnzDiag; i++) {
+            diagIndices[i] = idxList.get(i);
+            diagEntries[i] = entriesList.get(i);
+        }
+
+        // Create and return the sparse vector representing the diagonal
+        return new CooVector(length, diagEntries, diagIndices);
+    }
+
+
+    /**
      * Sets a column of this matrix at the given index to the specified values.
      *
      * @param values New values for the column.
@@ -1542,7 +1578,6 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
      * @throws IndexOutOfBoundsException If {@code colIndex < 0 || colIndex >= this.numCols}.
      */
-    @Override
     public CooMatrix setCol(CooVector values, int colIndex) {
         return RealSparseMatrixGetSet.setCol(this, colIndex, values);
     }
@@ -1559,7 +1594,6 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
      * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
      * @throws
      */
-    @Override
     public CooMatrix setRow(CooVector values, int rowIndex) {
         return RealSparseMatrixGetSet.setCol(this, rowIndex, values);
     }
@@ -1678,7 +1712,7 @@ public class CooMatrix extends PrimitiveDoubleTensorBase<CooMatrix, Matrix>
         result.append("]\n");
 
         result.append("Row Indices: ").append(Arrays.toString(rowIndices)).append("\n");
-        result.append("Col Indices: ").append(Arrays.toString(colIndices));
+        result.append("Column Indices: ").append(Arrays.toString(colIndices));
 
         return result.toString();
     }

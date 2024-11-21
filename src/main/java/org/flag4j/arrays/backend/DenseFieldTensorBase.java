@@ -29,9 +29,7 @@ import org.flag4j.algebraic_structures.fields.RealFloat64;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.FieldTensor;
 import org.flag4j.linalg.operations.TransposeDispatcher;
-import org.flag4j.linalg.operations.common.field_ops.CompareField;
-import org.flag4j.linalg.operations.dense.field_ops.DenseFieldElemDiv;
-import org.flag4j.linalg.operations.dense.field_ops.DenseFieldOperations;
+import org.flag4j.linalg.operations.common.ring_ops.RingProperties;
 import org.flag4j.linalg.operations.dense.field_ops.DenseFieldTensorDot;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -203,7 +201,7 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
      */
     @Override
     public void addEq(T b) {
-        DenseFieldOperations.addEq(entries, shape, b.entries, b.shape);
+//        DenseFieldOps.addEq(entries, shape, b.entries, b.shape);
     }
 
 
@@ -216,7 +214,7 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
      */
     @Override
     public void subEq(T b) {
-        DenseFieldOperations.subEq(entries, shape, b.entries, b.shape);
+//        DenseFieldOps.subEq(entries, shape, b.entries, b.shape);
     }
 
 
@@ -249,7 +247,8 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
      */
     @Override
     public T div(T b) {
-        return makeLikeTensor(shape, (V[]) DenseFieldElemDiv.dispatch(entries, shape, b.entries, b.shape));
+//        return makeLikeTensor(shape, (V[]) DenseFieldElemDiv.dispatch(entries, shape, b.entries, b.shape));
+        return null;
     }
 
 
@@ -269,7 +268,7 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
     @Override
     public boolean allClose(T b, double relTol, double absTol) {
         if(!shape.equals(b.shape)) return false;
-        return CompareField.allClose(entries, b.entries, relTol, absTol);
+        return RingProperties.allClose(entries, b.entries, relTol, absTol);
     }
 
 
@@ -286,8 +285,8 @@ public abstract class DenseFieldTensorBase<T extends DenseFieldTensorBase<T, U, 
      */
     @Override
     public T set(V value, int... indices) {
-        ValidateParameters.ensureValidIndex(shape, indices);
-        entries[shape.entriesIndex(indices)] = value;
+        ValidateParameters.validateTensorIndex(shape, indices);
+        entries[shape.getFlatIndex(indices)] = value;
         return (T) this;
     }
 }

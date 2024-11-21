@@ -25,8 +25,8 @@
 package org.flag4j.linalg.solvers.exact.triangular;
 
 
-import org.flag4j.arrays.backend.MatrixMixin;
-import org.flag4j.arrays.backend.VectorMixin;
+import org.flag4j.arrays.backend_new.MatrixMixin;
+import org.flag4j.arrays.backend_new.VectorMixin;
 import org.flag4j.linalg.solvers.LinearMatrixSolver;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.ValidateParameters;
@@ -40,7 +40,7 @@ import org.flag4j.util.exceptions.SingularMatrixException;
  * @param <U> Vector type equivalent of matrix.
  * @param <V> Type of internal storage for the matrix and vector.
  */
-public abstract class BackSolver<T extends MatrixMixin<T, ?, U, ?, ?>, U extends VectorMixin<U, T, ?, ?>, V>
+public abstract class BackSolver<T extends MatrixMixin<T, ?, U, ?>, U extends VectorMixin<U, T, ?, ?>, V>
         implements LinearMatrixSolver<T, U> {
 
     /**

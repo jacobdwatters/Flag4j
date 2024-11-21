@@ -1,7 +1,6 @@
 package org.flag4j.sparse_csr_matrix;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
@@ -115,7 +114,7 @@ class RealComplexCsrCsrMatMultTests {
                 {0.40715, 0, 0, 6.1}};
         build();
 
-        assertEquals(expCsr, A.mult2CSR(B));
+        assertEquals(expCsr, A.mult2Csr(B));
 
         // ---------------------- Sub-case 2 ----------------------
         bEntries = new Complex128[][]{
@@ -137,7 +136,7 @@ class RealComplexCsrCsrMatMultTests {
                 {1, 0, 0, 0, 6.3, 0, 0, 0, 0, 5, 0}};
         build();
 
-        assertEquals(expCsr, A.mult2CSR(B));
+        assertEquals(expCsr, A.mult2Csr(B));
 
         // ---------------------- Sub-case 3 ----------------------
         bEntries = new Complex128[][]{
@@ -158,6 +157,6 @@ class RealComplexCsrCsrMatMultTests {
                 {0.23691, 0, 4.1, 0, 739.15, 0, 0, 0}};
         build(false);
 
-        assertThrows(LinearAlgebraException.class, ()-> A.mult2CSR(B));
+        assertThrows(LinearAlgebraException.class, ()-> A.mult2Csr(B));
     }
 }

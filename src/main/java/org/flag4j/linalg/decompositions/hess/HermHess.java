@@ -26,21 +26,20 @@ package org.flag4j.linalg.decompositions.hess;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.linalg.transformations.Householder;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 /**
- * <p>Computes the Hessenburg decomposition of a complex dense Hermitian matrix. That is, for a square, Hermitian matrix
+ * Computes the Hessenburg decomposition of a complex dense Hermitian matrix. That is, for a square, Hermitian matrix
  * A, computes the decomposition A=QHQ<sup>H</sup> where Q is an unitary matrix and
  * H is a Hermitian matrix in tri-diagonal form (special case of Hessenburg form) which is similar to A
- * (i.e. has the same eigenvalues).</p>
- *
- * <p>A matrix H is in tri-diagonal form if it is nearly diagonal except for possibly the first sub/super-diagonal.
- * Specifically, if H has all zeros below the first sub-diagonal and above the first super-diagonal.</p>
- *
- * <p>For example, the following matrix is in Hermitian tri-diagonal form where each 'x' may hold a different value (provided
+ * (i.e. has the same eigenvalues).
+ * <p>
+ * A matrix H is in tri-diagonal form if it is nearly diagonal except for possibly the first sub/super-diagonal.
+ * Specifically, if H has all zeros below the first sub-diagonal and above the first super-diagonal.
+ * <p>
+ * For example, the following matrix is in Hermitian tri-diagonal form where each 'x' may hold a different value (provided
  * the matrix is Hermitian):
  * <pre>
  *     [[ x x 0 0 0 ]
@@ -48,7 +47,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  *      [ 0 x x x 0 ]
  *      [ 0 0 x x x ]
  *      [ 0 0 0 x x ]]</pre>
- * </p>
+ *
  */
 public class HermHess extends ComplexHess {
 

@@ -45,7 +45,7 @@ public final class RealFieldDenseElemDiv {
 
     private RealFieldDenseElemDiv() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -145,13 +145,15 @@ public final class RealFieldDenseElemDiv {
 
     /**
      * Dynamically chooses and applies the appropriate algorithm for element-wise tensor multiplication.
-     * @param src1 Entries of first tensor.
+     *
      * @param shape1 Shape of first tensor.
-     * @param src2 Entries of second tensor.
+     * @param src1 Entries of first tensor.
      * @param shape2 Shape of second tensor.
+     * @param src2 Entries of second tensor.
+     *
      * @return The result of the element-wise tensor multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] dispatch(double[] src1, Shape shape1, Field<T>[] src2, Shape shape2) {
+    public static <T extends Field<T>> Field<T>[] dispatch(Shape shape1, double[] src1, Shape shape2, Field<T>[] src2) {
         if(useConcurrent(src1.length)) {
             // Use concurrent algorithm.
             return elemDivConcurrent(src1, shape1, src2, shape2);

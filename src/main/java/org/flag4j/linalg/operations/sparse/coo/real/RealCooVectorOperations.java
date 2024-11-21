@@ -40,11 +40,11 @@ import java.util.List;
 /**
  * This class contains low level implementations for operations on a real sparse COO vector.
  */
-public class RealCooVectorOperations {
+public final class RealCooVectorOperations {
 
     private RealCooVectorOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

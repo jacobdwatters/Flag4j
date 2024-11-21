@@ -26,13 +26,12 @@ package org.flag4j.arrays.sparse;
 
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.PrimitiveDoubleTensorBase;
-import org.flag4j.arrays.backend.SparseTensorMixin;
+import org.flag4j.arrays.backend_new.primitive.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.operations.dense.real.AggregateDenseReal;
-import org.flag4j.linalg.operations.sparse.coo.SparseDataWrapper;
+import org.flag4j.linalg.operations.common.real.RealProperties;
+import org.flag4j.linalg.operations.sparse.coo.CooDataSorter;
 import org.flag4j.linalg.operations.sparse.coo.real.RealCooTensorDot;
 import org.flag4j.linalg.operations.sparse.coo.real.RealCooTensorOperations;
 import org.flag4j.linalg.operations.sparse.coo.real.RealSparseEquals;
@@ -75,9 +74,17 @@ import java.util.Map;
  *     index of {@code entries[i]}.</p>
  *     </li>
  * </ul>
+ *
+ * <p>Some operations on sparse tensors behave differently than on dense tensors. For instance, {@link #add(double)} will not
+ * add the scalar to all entries of the tensor since this would cause catastrophic loss of sparsity. Instead, such non-zero preserving
+ * element-wise operations only act on the non-zero entries of the sparse tensor as to not affect the sparsity.
+ *
+ * <p>Note: many operations assume that the entries of the COO tensor are sorted lexicographically. However, this is not explicitly
+ * verified. Every operation implemented in this class will preserve the lexicographical sorting.
+ *
+ * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.
  */
-public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
-        implements SparseTensorMixin<Tensor, CooTensor> {
+public class CooTensor extends AbstractDoubleTensor<CooTensor> {
 
     /**
      * The non-zero indices of this tensor. Must have shape {@code (nnz, rank)}.
@@ -234,7 +241,6 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      *
      * @return The density of this sparse tensor.
      */
-    @Override
     public double sparsity() {
         // Check if the sparsity has already been computed.
         if (this.sparsity < 0) {
@@ -245,7 +251,6 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
             this.sparsity = sparsity.doubleValue();
         }
 
-
         return sparsity;
     }
 
@@ -255,12 +260,11 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      *
      * @return A dense tensor equivalent to this sparse tensor.
      */
-    @Override
     public Tensor toDense() {
         double[] entries = new double[totalEntries().intValueExact()];
 
         for(int i = 0; i< nnz; i++)
-            entries[shape.entriesIndex(indices[i])] = this.entries[i];
+            entries[shape.getFlatIndex(indices[i])] = this.entries[i];
 
         return new Tensor(shape, entries);
     }
@@ -277,7 +281,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      */
     @Override
     public Double get(int... indices) {
-        ValidateParameters.ensureValidIndex(shape, indices);
+        ValidateParameters.validateTensorIndex(shape, indices);
         if(entries.length == 0) return null; // Can not get reference of field so no way to get zero element.
 
         for(int i=0; i<nnz; i++)
@@ -299,7 +303,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
      */
     @Override
     public CooTensor set(Double value, int... index) {
-        ValidateParameters.ensureValidIndex(shape, index);
+        ValidateParameters.validateTensorIndex(shape, index);
         CooTensor dest;
 
         // Check if value already exists in tensor.
@@ -346,7 +350,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
         int[][] destIndices = new int[entries.length][1];
 
         for(int i=0, size=entries.length; i<size; i++)
-            destIndices[i][0] = shape.entriesIndex(indices[i]);
+            destIndices[i][0] = shape.getFlatIndex(indices[i]);
 
         return makeLikeTensor(new Shape(shape.totalEntries().intValueExact()), entries.clone(), destIndices);
     }
@@ -371,7 +375,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
         destShape[axis] = shape.totalEntries().intValueExact();
 
         for(int i=0, size=entries.length; i<size; i++)
-            destIndices[i][axis] = shape.entriesIndex(indices[i]);
+            destIndices[i][axis] = shape.getFlatIndex(indices[i]);
 
         return makeLikeTensor(new Shape(destShape), entries.clone(), destIndices);
     }
@@ -511,6 +515,54 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
 
 
     /**
+     * Finds the indices of the minimum value in this tensor.
+     *
+     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argmin() {
+        return indices[RealProperties.argmin(entries)];
+    }
+
+
+    /**
+     * Finds the indices of the maximum value in this tensor.
+     *
+     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argmax() {
+        return indices[RealProperties.argmax(entries)];
+    }
+
+
+    /**
+     * Finds the indices of the minimum absolute value in this tensor.
+     *
+     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argminAbs() {
+        return indices[RealProperties.argminAbs(entries)];
+    }
+
+
+    /**
+     * Finds the indices of the maximum absolute value in this tensor.
+     *
+     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argmaxAbs() {
+        return indices[RealProperties.argmaxAbs(entries)];
+    }
+
+
+    /**
      * Computes the element-wise multiplication of two tensors of the same shape.
      *
      * @param b Second tensor in the element-wise product.
@@ -567,7 +619,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
     public CooTensor tensorTr(int axis1, int axis2) {
         // Validate parameters.
         ValidateParameters.ensureNotEquals(axis1, axis2);
-        ValidateParameters.ensureValidIndices(getRank(), axis1, axis2);
+        ValidateParameters.ensureValidArrayIndices(getRank(), axis1, axis2);
         ValidateParameters.ensureEquals(shape.get(axis1), shape.get(axis2));
 
         int rank = getRank();
@@ -620,7 +672,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
             double entryValue = entry.getValue();
 
             // Use the getIndices method to convert the flat index to n-dimensional index.
-            int[] multiDimIndices = shape.getIndices(linearIndex);
+            int[] multiDimIndices = shape.getNdIndices(linearIndex);
 
             // Copy relevant dimensions to resultIndices, excluding axis1 and axis2.
             int resultDimIndex = 0;
@@ -722,7 +774,7 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
         }
 
         // Create sparse COO tensor and sort values lexicographically by indices.
-        CooTensor transpose = makeLikeTensor(shape.swapAxes(axes), transposeEntries, transposeIndices);
+        CooTensor transpose = makeLikeTensor(shape.permuteAxes(axes), transposeEntries, transposeIndices);
         transpose.sortIndices();
 
         return transpose;
@@ -761,111 +813,6 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
 
 
     /**
-     * Finds the minimum non-zero value in this tensor. If this tensor is complex, then this method finds the smallest value in
-     * magnitude.
-     *
-     * @return The minimum non-zero value (smallest in magnitude for a complex valued tensor) in this tensor. If this tensor does
-     * not have any non-zero values, then {@code null} will be returned.
-     */
-    @Override
-    public double min() {
-        // Overrides method in super class to emphasize that the method works on the non-zero elements only.
-        return super.min();
-    }
-
-
-    /**
-     * Finds the maximum non-zero value in this tensor. If this tensor is complex, then this method finds the largest value in
-     * magnitude.
-     *
-     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor. If this tensor does not have any
-     * non-zero values, then {@code null} will be returned.
-     */
-    @Override
-    public double max() {
-        // Overrides method in super class to emphasize that the method works on the non-zero elements only.
-        return super.max();
-    }
-
-
-    /**
-     * Finds the minimum non-zero value, in absolute value, in this tensor.
-     *
-     * @return The minimum non-zero value, in absolute value, in this tensor.
-     */
-    @Override
-    public double minAbs() {
-        // Overrides method in super class to emphasize that the method works on the non-zero elements only.
-        return super.minAbs();
-    }
-
-
-    /**
-     * Finds the maximum non-zero value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #max()}.
-     *
-     * @return The maximum non-zero value, in absolute value, in this tensor.
-     */
-    @Override
-    public double maxAbs() {
-        // Overrides method in super class to emphasize that the method works on the non-zero elements only.
-        return super.maxAbs();
-    }
-
-
-    /**
-     * Finds the indices of the minimum non-zero value in this tensor.
-     *
-     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned. If this tensor has no non-zero values, then an empty array is returned.
-     */
-    @Override
-    public int[] argmin() {
-        if(nnz > 0) return indices[AggregateDenseReal.argmin(entries)];
-        else return new int[0];
-    }
-
-
-    /**
-     * Finds the indices of the maximum non-zero value in this tensor.
-     *
-     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned. If this tensor has no non-zero values, then an empty array is returned.
-     */
-    @Override
-    public int[] argmax() {
-        if(nnz > 0) return indices[AggregateDenseReal.argmin(entries)];
-        else return new int[0];
-    }
-
-
-    /**
-     * Finds the indices of the minimum absolute value in this tensor.
-     *
-     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned. If this tensor has no non-zero values, then an empty array is returned.
-     */
-    @Override
-    public int[] argminAbs() {
-        if(nnz > 0) return indices[AggregateDenseReal.argminAbs(entries)];
-        else return new int[0];
-    }
-
-
-    /**
-     * Finds the indices of the maximum absolute value in this tensor.
-     *
-     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned. If this tensor has no non-zero values, then an empty array is returned.
-     */
-    @Override
-    public int[] argmaxAbs() {
-        if(nnz > 0) return indices[AggregateDenseReal.argminAbs(entries)];
-        else return new int[0];
-    }
-
-
-    /**
      * Adds a scalar value to each non-zero value of this tensor.
      *
      * @param b Value to add to each non-zero value of this tensor.
@@ -894,10 +841,25 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
 
 
     /**
+     * <p>Computes the element-wise quotient between two tensors.
+     * <p><b>WARNING</b>: This method is not supported for sparse tensors. If called on a sparse tensor,
+     * an {@link UnsupportedOperationException} will be thrown. Element-wise division is undefined for sparse tensors as it
+     * would almost certainly result in a division by zero.
+     * @param b Second tensor in the element-wise quotient.
+     *
+     * @return The element-wise quotient of this tensor with {@code b}.
+     */
+    @Override
+    public CooTensor div(CooTensor b) {
+        throw new UnsupportedOperationException("Cannot compute element-wise division of two sparse tensors.");
+    }
+
+
+    /**
      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
      */
     public void sortIndices() {
-        SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);
+        CooDataSorter.wrap(entries, indices).sparseSort().unwrap(entries, indices);
     }
 
 
@@ -932,15 +894,6 @@ public class CooTensor extends PrimitiveDoubleTensorBase<CooTensor, Tensor>
         }
 
         return result;
-    }
-
-
-    /**
-     * Converts this real COO tensor to an equivalent complex COO tensor.
-     * @return A complex COO tensor equivalent to this tensor.
-     */
-    public CooCTensor toComplex() {
-        return new CooCTensor(shape, ArrayUtils.wrapAsComplex128(entries, null), ArrayUtils.deepCopy(indices, null));
     }
 
 

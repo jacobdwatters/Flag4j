@@ -25,6 +25,7 @@
 package org.flag4j.arrays.backend;
 
 import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.backend_new.AbstractTensor;
 
 
 /**
@@ -33,7 +34,7 @@ import org.flag4j.algebraic_structures.fields.Field;
  * @param <U> Type of the scalar field element.
  * @see TensorPrimitiveOpsMixin
  */
-public interface TensorScalarOpsMixin<T extends TensorBase<T, ?, ?>, U extends Field<U>> {
+public interface TensorScalarOpsMixin<T extends AbstractTensor<T, ?, ?>, U extends Field<U>> {
 
     /**
      * Adds a scalar value to each element of this tensor.

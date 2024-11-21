@@ -27,7 +27,7 @@ package org.flag4j.linalg.operations.sparse.coo.field_ops;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.CooFieldMatrixBase;
-import org.flag4j.linalg.operations.sparse.coo.SparseElementSearch;
+import org.flag4j.linalg.operations.sparse.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 
@@ -42,7 +42,7 @@ public final class CooFieldMatrixManipulations {
 
     private CooFieldMatrixManipulations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -214,7 +214,7 @@ public final class CooFieldMatrixManipulations {
     public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, ?, V>
     swapCols(CooFieldMatrixBase<?, ?, ?, ?, V> src, int colIdx1, int colIdx2) {
         for(int i=0; i<src.entries.length; i++) {
-            // Swap row indices.
+            // Swap column indices.
             if(src.colIndices[i]==colIdx1) src.colIndices[i] = colIdx2;
             if(src.colIndices[i]==colIdx2) src.colIndices[i] = colIdx1;
         }

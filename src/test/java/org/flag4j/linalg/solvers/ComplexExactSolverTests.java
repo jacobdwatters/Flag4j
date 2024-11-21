@@ -2,12 +2,9 @@ package org.flag4j.linalg.solvers;
 
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
 import org.flag4j.linalg.solvers.exact.ComplexExactSolver;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ComplexExactSolverTests {

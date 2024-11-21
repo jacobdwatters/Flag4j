@@ -28,36 +28,17 @@ import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Complex64;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.DenseFieldVectorBase;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays.backend_new.field.AbstractDenseFieldVector;
+import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.operations.common.complex.Complex128Operations;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemDiv;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemMult;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOperations;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
-import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.util.Arrays;
-import java.util.List;
 
+public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex128> {
 
-/**
- * <p>A complex dense vector whose entries are {@link Complex128}'s.</p>
- *
- * <p>A vector is essentially equivalent to a rank 1 tensor but has some extended functionality and may have improved performance
- * for some operations.</p>
- *
- * <p>CVector's have mutable entries but a fixed size.</p>
- */
-public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, Complex128> {
 
     /**
      * Creates a complex vector with the specified {@code entries}.
@@ -158,37 +139,15 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
         super(vector.shape, vector.entries.clone());
         setZeroElement(Complex128.ZERO);
     }
-
-
+    
+    
     /**
-     * Constructs an empty complex vector with the specified {@code size}. The entries of the resulting vector will be {@code null}.
-     * @param size The size of the vector.
-     * @return An empty complex vector with the specified {@code size}.
-     */
-    public static CVector getEmpty(int size) {
-        return new CVector(new Complex128[size]);
-    }
-
-
-    /**
-     * Creates a vector with the specified size filled with the {@code fillValue}.
+     * Constructs a dense vector with the specified {@code entries} of the same type as the vector.
      *
-     * @param size
-     * @param fillValue Value to fill this vector with.
+     * @param entries Entries of the dense vector to construct.
      */
     @Override
-    public CVector makeLikeTensor(int size, Complex128 fillValue) {
-        return new CVector(size, fillValue);
-    }
-
-
-    /**
-     * Creates a vector with the specified {@code entries}.
-     *
-     * @param entries Entries of this vector.
-     */
-    @Override
-    public CVector makeLikeTensor(Field<Complex128>... entries) {
+    public CVector makeLikeTensor(Field<Complex128>[] entries) {
         return new CVector(entries);
     }
 
@@ -208,27 +167,30 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
 
 
     /**
-     * Constructs a sparse vector of similar type to this dense vector.
+     * Constructs a sparse COO tensor which is of a similar type as this dense tensor.
      *
-     * @param size The size of the sparse vector.
-     * @param entries The non-zero entries of the sparse vector.
-     * @param indices The non-zero indices of the sparse vector.
+     * @param shape Shape of the COO tensor.
+     * @param entries Non-zero entries of the COO tensor.
+     * @param indices
      *
-     * @return A sparse vector of similar type to this dense vector with the specified size, entries, and indices.
+     * @return A sparse COO tensor which is of a similar type as this dense tensor.
      */
     @Override
-    public CooCVector makeSparseVector(int size, List<Field<Complex128>> entries, List<Integer> indices) {
-        return new CooCVector(size, entries, indices);
+    protected CooCTensor makeLikeCooTensor(Shape shape, Field<Complex128>[] entries, int[][] indices) {
+        return new CooCTensor(shape, entries, indices);
     }
 
 
     /**
-     * Constructs a tensor of the same type as this tensor with the given the shape and entries.
+     * Constructs a tensor of the same type as this tensor with the given the {@code shape} and
+     * {@code entries}. The resulting tensor will also have
+     * the same non-zero indices as this tensor.
      *
      * @param shape Shape of the tensor to construct.
      * @param entries Entries of the tensor to construct.
      *
-     * @return A tensor of the same type as this tensor with the given the shape and entries.
+     * @return A tensor of the same type and with the same non-zero indices as this tensor with the given the {@code shape} and
+     * {@code entries}.
      */
     @Override
     public CVector makeLikeTensor(Shape shape, Field<Complex128>[] entries) {
@@ -239,261 +201,54 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
 
 
     /**
-     * Computes the inner product between this vector and itself.
-     *
-     * @return The inner product between this vector and itself.
+     * Converts this complex matrix to a real matrix. This conversion is done by taking the real component of each entry and
+     * ignoring the imaginary component.
+     * @return A real matrix containing the real components of the entries of this matrix.
      */
-    public double innerSelf() {
-        double inner = 0;
-        for(Field<Complex128> value : entries) {
-            Complex128 vCmp = (Complex128) value;
-            inner += (vCmp.re*vCmp.re + vCmp.im*vCmp.im);
-        }
+    public Matrix toReal() {
+        double[] re = new double[entries.length];
 
-
-        return inner;
-    }
-
-
-    /**
-     * Converts this complex vector to a real vector. This is done by ignoring the imaginary component of all entries.
-     * @return A real vector containing the real components of this complex vectors entries.
-     */
-    public Vector toReal() {
-        double[] real = new double[entries.length];
         for(int i=0, size=entries.length; i<size; i++)
-            real[i] = ((Complex128) entries[i]).re;
+            re[i] = ((Complex128) entries[i]).re;
 
-        return new Vector(shape, real);
+        return new Matrix(shape, re);
     }
 
 
     /**
-     * Adds a complex dense vector to this vector.
-     * @param b Complex dense vector in the sum.
-     * @return The sum of this vector and {@code b}.
+     * Checks if an object is equal to this vector object.
+     * @param object Object to check equality with this vector.
+     * @return {@code true} if the two vectors have the same shape, are numerically equivalent, and are of type {@link CVector}.
+     * {@code false} otherwise.
      */
-    public CVector add(Vector b) {
-        return new CVector(RealFieldDenseOperations.add(entries, shape, b.entries, b.shape));
+    @Override
+    public boolean equals(Object object) {
+        if(this == object) return true;
+        if(object == null || object.getClass() != getClass()) return false;
+
+        CVector src2 = (CVector) object;
+
+        return shape.equals(src2.shape) && Arrays.equals(entries, src2.entries);
+    }
+
+
+    @Override
+    public int hashCode() {
+        int hash = 17;
+        hash = 31*hash + shape.hashCode();
+        hash = 31*hash + Arrays.hashCode(entries);
+
+        return hash;
     }
 
 
     /**
-     * Adds a real sparse vector to this vector.
-     * @param b The real sparse vector in the sum.
-     * @return The sum of this vector and {@code b}.
-     */
-    public CVector add(CooVector b) {
-        return (CVector) RealFieldDenseCooVectorOperations.add(this, b);
-    }
-
-
-    /**
-     * Adds a complex sparse vector to this vector.
-     * @param b The complex sparse vector in the sum.
-     * @return The sum of this vector and {@code b}.
-     */
-    public CVector add(CooCVector b) {
-        return (CVector) DenseCooFieldVectorOperations.add(this, b);
-    }
-
-
-    /**
-     * Adds a complex-valued scalar to each entry of this vector.
-     * @param b The scalar value in the sum.
-     * @return The sum of this vector's entries with the scalar value {@code b}.
-     */
-    public CVector add(Complex128 b) {
-        Complex128[] sum = new Complex128[size];
-
-        for(int i=0; i<size; i++)
-            sum[i] = b.add((Complex128) entries[i]);
-
-        return new CVector(sum);
-    }
-
-
-    /**
-     * Subtracts a complex dense vector from this vector.
-     * @param b Complex dense vector in the difference.
-     * @return The difference of this vector and {@code b}.
-     */
-    public CVector sub(Vector b) {
-        return new CVector(RealFieldDenseOperations.sub(entries, shape, b.entries, b.shape));
-    }
-
-
-    /**
-     * Subtracts a real sparse vector from this vector.
-     * @param b The real sparse vector in the difference.
-     * @return The difference of this vector and {@code b}.
-     */
-    public CVector sub(CooVector b) {
-        return (CVector) RealFieldDenseCooVectorOperations.sub(this, b);
-    }
-
-
-    /**
-     * Subtracts a complex sparse vector from this vector.
-     * @param b The complex sparse vector in the difference.
-     * @return The difference of this vector and {@code b}.
-     */
-    public CVector sub(CooCVector b) {
-        return (CVector) DenseCooFieldVectorOperations.sub(this, b);
-    }
-
-
-    /**
-     * Subtracts a scalar from each entry of this tensor. The result is stored in this tensor.
-     * @param b The scalar to subtract from each entry of this tensor.
-     */
-    public void subEq(double b) {
-        subEq(new Complex128(b));
-    }
-
-
-    /**
-     * Computes the element-wise product of this vector and a complex dense vector.
-     * @param b The complex dense vector in the element-wise product.
-     * @return The element-wise product of this vector and {@code b}.
-     */
-    public CVector elemMult(Vector b) {
-        return new CVector(RealFieldDenseElemMult.dispatch(entries, shape, b.entries, b.shape));
-    }
-
-
-    /**
-     * Computes the element-wise product of this vector and a real sparse vector.
-     * @param b The real sparse vector in the element-wise product.
-     * @return The element-wise product of this vector and {@code b}.
-     */
-    public CooCVector elemMult(CooVector b) {
-        return RealComplexDenseSparseVectorOperations.elemMult(this, b);
-    }
-
-
-    /**
-     * Computes the element-wise product of this vector and a complex sparse vector.
-     * @param b The complex sparse vector in the element-wise product.
-     * @return The element-wise product of this vector and {@code b}.
-     */
-    public CooCVector elemMult(CooCVector b) {
-        return (CooCVector) DenseCooFieldVectorOperations.elemMult(this, b);
-    }
-
-
-    /**
-     * Computes the element-wise quotient of this vector and a complex dense vector.
-     * @param b The complex dense vector in the element-wise quotient.
-     * @return The element-wise quotient of this vector and {@code b}.
-     */
-    public CVector div(Vector b) {
-        return new CVector(RealFieldDenseElemDiv.dispatch(entries, shape, b.entries, b.shape));
-    }
-
-
-    /**
-     * Rounds this tensor to the nearest whole number. If the tensor is complex, both the real and imaginary component will
-     * be rounded independently.
-     *
-     * @return A copy of this tensor with each entry rounded to the nearest whole number.
-     */
-    public CVector round() {
-        return round(0);
-    }
-
-
-    /**
-     * Rounds a matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
-     * be rounded independently.
-     *
-     * @param precision The number of decimal places to round to. This value must be non-negative.
-     * @return A copy of this matrix with rounded values.
-     * @throws IllegalArgumentException If <code>precision</code> is negative.
-     */
-    public CVector round(int precision) {
-        return new CVector(Complex128Operations.round(entries, precision));
-    }
-
-
-    /**
-     * Rounds values which are close to zero in absolute value to zero. If the tensor is complex, both the real and imaginary components will be rounded
-     * independently. By default, the values must be within {@link Flag4jConstants#EPS_F64} of zero. To specify a threshold value see
-     * {@link #roundToZero(double)}.
-     *
-     * @return A copy of this tensor with rounded values.
-     */
-    public CVector roundToZero() {
-        return roundToZero(Flag4jConstants.EPS_F64);
-    }
-
-
-    /**
-     * Rounds values which are close to zero in absolute value to zero.
-     *
-     * @param threshold Threshold for rounding values to zero. That is, if a value in this matrix is less than the threshold in absolute value then it
-     *                  will be rounded to zero. This value must be non-negative.
-     * @return A copy of this matrix with rounded values.
-     * @throws IllegalArgumentException If threshold is negative.
-     */
-    public CVector roundToZero(double threshold) {
-        return new CVector(Complex128Operations.roundToZero(entries, threshold));
-    }
-
-
-    /**
-     * Computes the element-wise difference between two tensors and stores the result in this tensor.
-     *
-     * @param b Second tensor in the element-wise difference.
-     *
-     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
-     */
-    public void subEq(Vector b) {
-        RealFieldDenseOperations.subEq(entries, shape, b.entries, b.shape);
-    }
-
-
-    /**
-     * Computes the element-wise sum between two tensors and stores the result in this tensor.
-     *
-     * @param b Second tensor in the element-wise sum.
-     *
-     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
-     */
-    public void addEq(Vector b) {
-        RealFieldDenseOperations.addEq(entries, shape, b.entries, b.shape);
-    }
-
-
-    /**
-     * Sets a value of this vector to {@code val}.
-     * @param val Value to set.
-     * @param index Index of this vector to set to {@code val}.
-     * @throws ArrayIndexOutOfBoundsException If {@code index} is not within this vector.
-     */
-    public CVector set(double val, int index) {
-        return set(new Complex128(val), index);
-    }
-
-
-
-    /**
-     * Adds a scalar value to each entry of this tensor and stores the result in this tensor.
-     *
-     * @param b Scalar value in sum.
-     */
-    public void addEq(double b) {
-        RealFieldDenseOperations.addEq(entries, b);
-    }
-
-
-    /**
-     * Generates a human-readable string representation of this vector.
+     * Converts this vector to a human-readable string format. To specify the maximum number of entries to print, use
+     * {@link PrintOptions#setMaxColumns(int)}.
      * @return A human-readable string representation of this vector.
      */
     public String toString() {
         StringBuilder result = new StringBuilder("shape: ").append(shape).append("\n");
-
         result.append("[");
 
         int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
@@ -502,7 +257,7 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
 
         // Get entries up until the stopping point.
         for(int i=0; i<stopIndex; i++) {
-            value = StringUtils.ValueOfRound((Complex128) entries[i], PrintOptions.getPrecision());
+            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
             width = PrintOptions.getPadding() + value.length();
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
@@ -515,8 +270,8 @@ public class CVector extends DenseFieldVectorBase<CVector, CMatrix, CooCVector, 
             result.append(String.format("%-" + width + "s", value));
         }
 
-        // Get last entry.
-        value = StringUtils.ValueOfRound((Complex128) entries[size-1], PrintOptions.getPrecision());
+        // Get last entry now
+        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
         width = PrintOptions.getPadding() + value.length();
         value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
         result.append(String.format("%-" + width + "s", value));

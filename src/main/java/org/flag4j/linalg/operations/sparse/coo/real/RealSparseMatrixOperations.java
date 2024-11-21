@@ -38,11 +38,11 @@ import java.util.List;
 /**
  * This class has low level implementations for operations between two real sparse matrices.
  */
-public class RealSparseMatrixOperations {
+public final class RealSparseMatrixOperations {
 
     private RealSparseMatrixOperations() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

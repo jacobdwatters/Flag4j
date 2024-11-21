@@ -40,7 +40,7 @@ public final class CsrFieldMatrixManipulations {
 
     private CsrFieldMatrixManipulations() {
         // Hide default constructor for utility method.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

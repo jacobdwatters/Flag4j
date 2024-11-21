@@ -26,13 +26,20 @@ package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.CooFieldMatrixBase;
+import org.flag4j.arrays.backend_new.field.AbstractCooFieldMatrix;
 import org.flag4j.arrays.dense.FieldMatrix;
+import org.flag4j.arrays.dense.FieldTensor;
 import org.flag4j.arrays.dense.FieldVector;
+import org.flag4j.io.PrintOptions;
+import org.flag4j.linalg.operations.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldEquals;
-import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldMatrixGetSet;
+import org.flag4j.linalg.operations.sparse.coo.semiring_ops.CooSemiringMatMult;
+import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -65,8 +72,8 @@ import java.util.List;
  *
  * @param <T> Type of the {@link Field field} element in this matrix.
  */
-public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFieldMatrix<T>,
-        FieldMatrix<T>, CooFieldVector<T>, FieldVector<T>, T> {
+public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<CooFieldMatrix<T>,
+        FieldMatrix<T>, CooFieldVector<T>, T> {
 
     /**
      * Creates a sparse coo matrix with the specified non-zero entries, non-zero indices, and shape.
@@ -90,7 +97,11 @@ public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFi
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
     public CooFieldMatrix(Shape shape, List<Field<T>> entries, List<Integer> rowIndices, List<Integer> colIndices) {
-        super(shape, entries, rowIndices, colIndices);
+        super(shape,
+                entries.toArray(new Field[entries.size()]),
+                ArrayUtils.fromIntegerList(rowIndices),
+                ArrayUtils.fromIntegerList(colIndices));
+        ValidateParameters.ensureRank(shape, 2);
     }
 
 
@@ -118,114 +129,195 @@ public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFi
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
     public CooFieldMatrix(int rows, int cols, List<Field<T>> entries, List<Integer> rowIndices, List<Integer> colIndices) {
-        super(new Shape(rows, cols), entries, rowIndices, colIndices);
+        super(new Shape(rows, cols),
+                entries.toArray(new Field[entries.size()]),
+                ArrayUtils.fromIntegerList(rowIndices),
+                ArrayUtils.fromIntegerList(colIndices));
+        ValidateParameters.ensureRank(shape, 2);
     }
 
 
     /**
-     * Sets the element of this tensor at the specified indices.
+     * Constructs a sparse COO tensor of the same type as this tensor with the specified non-zero entries and indices.
      *
-     * @param value New value to set the specified index of this tensor to.
-     * @param indices Indices of the element to set.
+     * @param shape Shape of the matrix.
+     * @param entries Non-zero entries of the matrix.
+     * @param rowIndices Non-zero row indices of the matrix.
+     * @param colIndices Non-zero column indices of the matrix.
      *
-     * @return A copy of this tensor with the updated value is returned.
-     *
-     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
+     * @return A sparse COO tensor of the same type as this tensor with the specified non-zero entries and indices.
      */
     @Override
-    public CooFieldMatrix<T> set(T value, int... indices) {
-        ValidateParameters.ensureValidIndex(shape, indices);
-        return (CooFieldMatrix<T>) CooFieldMatrixGetSet.matrixSet(this, indices[0], indices[1], value);
+    public CooFieldMatrix<T> makeLikeTensor(Shape shape, T[] entries, int[] rowIndices, int[] colIndices) {
+        return new CooFieldMatrix<T>(shape, entries, rowIndices, colIndices);
     }
 
 
     /**
-     * Constructs a tensor of the same type as this tensor with the given the shape and entries.
+     * Constructs a COO matrix with the specified shape, non-zero entries, and non-zero indices.
+     *
+     * @param shape Shape of the matrix.
+     * @param entries Non-zero values of the matrix.
+     * @param rowIndices Non-zero row indices of the matrix.
+     * @param colIndices Non-zero column indices of the matrix.
+     *
+     * @return A COO matrix with the specified shape, non-zero entries, and non-zero indices.
+     */
+    @Override
+    public CooFieldMatrix<T> makeLikeTensor(Shape shape, List<Field<T>> entries, List<Integer> rowIndices, List<Integer> colIndices) {
+        return new CooFieldMatrix<>(shape, entries, rowIndices, colIndices);
+    }
+
+
+    /**
+     * Constructs a sparse COO vector of a similar type to this COO matrix.
+     *
+     * @param shape Shape of the vector. Must be rank 1.
+     * @param entries Non-zero entries of the COO vector.
+     * @param indices Non-zero indices of the COO vector.
+     *
+     * @return A sparse COO vector of a similar type to this COO matrix.
+     */
+    @Override
+    public CooFieldVector<T> makeLikeVector(Shape shape, Field<T>[] entries, int[] indices) {
+        return new CooFieldVector<>(shape, entries, indices);
+    }
+
+
+    /**
+     * Constructs a dense tensor with the specified {@code shape} and {@code entries} which is a similar type to this sparse tensor.
+     *
+     * @param shape Shape of the dense tensor.
+     * @param entries Entries of the dense tensor.
+     *
+     * @return A dense tensor with the specified {@code shape} and {@code entries} which is a similar type to this sparse tensor.
+     */
+    @Override
+    public FieldMatrix<T> makeLikeDenseTensor(Shape shape, Field<T>[] entries) {
+        return new FieldMatrix<>(shape, entries);
+    }
+
+
+    /**
+     * Constructs a sparse CSR matrix of a similar type to this sparse COO matrix.
+     *
+     * @param shape Shape of the CSR matrix to construct.
+     * @param entries Non-zero entries of the CSR matrix.
+     * @param rowPointers Non-zero row pointers of the CSR matrix.
+     * @param colIndices Non-zero column indices of the CSR matrix.
+     *
+     * @return A CSR matrix of a similar type to this sparse COO matrix.
+     */
+    @Override
+    public CsrFieldMatrix<T> makeLikeCsrMatrix(Shape shape, Field<T>[] entries, int[] rowPointers, int[] colIndices) {
+        return new CsrFieldMatrix<>(shape, entries, rowPointers, colIndices);
+    }
+
+
+    /**
+     * Constructs a tensor of the same type as this tensor with the given the {@code shape} and
+     * {@code entries}. The resulting tensor will also have
+     * the same non-zero indices as this tensor.
      *
      * @param shape Shape of the tensor to construct.
      * @param entries Entries of the tensor to construct.
      *
-     * @return A tensor of the same type as this tensor with the given the shape and entries.
+     * @return A tensor of the same type and with the same non-zero indices as this tensor with the given the {@code shape} and
+     * {@code entries}.
      */
     @Override
     public CooFieldMatrix<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
-        return new CooFieldMatrix<T>(shape, entries, rowIndices.clone(), colIndices.clone());
+        return new CooFieldMatrix<>(shape, entries, rowIndices.clone(), colIndices.clone());
     }
 
 
     /**
-     * Constructs a COO field matrix with the specified shape, non-zero entries, and non-zero indices.
+     * <p>Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
+     * computes the sum of products between the two tensors along the specified set of axes.
      *
-     * @param shape Shape of the matrix.
-     * @param entries Non-zero values of the matrix.
-     * @param rowIndices Row indices of the non-zero values in the matrix.
-     * @param colIndices Column indices of the non-zero values in the matrix.
+     * <p>For matrices, calling {@code this.tensorDot(src2, new int[]{1}, new int[]{0})} is equivalent to matrix multiplication.
+     * However, it is highly recommended to use {@link #mult(CooFieldVector)} instead.
      *
-     * @return A COO field matrix with the specified shape, non-zero entries, and non-zero indices.
+     * @param src2 TensorOld to contract with this tensor.
+     * @param aAxes Axes along which to compute products for this tensor.
+     * @param bAxes Axes along which to compute products for {@code src2} tensor.
+     *
+     * @return The tensor dot product over the specified axes.
+     *
+     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes pairwise in
+     *                                  {@code aAxes} and {@code bAxes}.
+     * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
+     *                                  are out of bounds for the corresponding tensor.
      */
     @Override
-    public CooFieldMatrix<T> makeLikeTensor(Shape shape, Field<T>[] entries, int[] rowIndices, int[] colIndices) {
-        return new CooFieldMatrix<T>(shape, entries, rowIndices, colIndices);
+    public FieldTensor<T> tensorDot(CooFieldMatrix<T> src2, int[] aAxes, int[] bAxes) {
+        return toTensor().tensorDot(src2.toTensor(), aAxes, bAxes);
     }
 
 
     /**
-     * Constructs a COO field matrix with the specified shape, non-zero entries, and non-zero indices.
+     * <p>Converts this sparse COO matrix to an equivalent compressed sparse row (CSR) matrix.</p>
+     * <p>It is often easier and more efficient to construct a matrix in COO format first then convert to a CSR matrix for efficient
+     * computations.</p>
      *
-     * @param shape Shape of the matrix.
-     * @param entries Non-zero values of the matrix.
-     * @param rowIndices Row indices of the non-zero values in the matrix.
-     * @param colIndices Column indices of the non-zero values in the matrix.
-     *
-     * @return A COO field matrix with the specified shape, non-zero entries, and non-zero indices.
+     * @return A CSR matrix equivalent to this COO matrix.
      */
     @Override
-    public CooFieldMatrix<T> makeLikeTensor(Shape shape, List<Field<T>> entries, List<Integer> rowIndices, List<Integer> colIndices) {
-        return new CooFieldMatrix<T>(shape, entries, rowIndices, colIndices);
+    public CsrFieldMatrix<T> toCsr() {
+        int[] rowPointers = new int[numRows + 1];
+
+        // Count number of entries per row.
+        for(int i=0; i<nnz; i++)
+            rowPointers[rowIndices[i] + 1]++;
+
+        // Shift each row count to be greater than or equal to the previous.
+        for(int i=0; i<numRows; i++)
+            rowPointers[i+1] += rowPointers[i];
+
+        return new CsrFieldMatrix<T>(shape, entries.clone(), rowPointers, colIndices.clone());
     }
 
 
     /**
-     * Constructs a dense field matrix which with the specified {@code shape} and {@code entries}.
+     * Converts this matrix to an equivalent tensor.
      *
-     * @param shape Shape of the matrix.
-     * @param entries Entries of the dense matrix/.
-     *
-     * @return A dense field matrix with the specified {@code shape} and {@code entries}.
+     * @return A tensor which is equivalent to this matrix.
      */
     @Override
-    public FieldMatrix<T> makeDenseTensor(Shape shape, Field<T>[] entries) {
-        return new FieldMatrix<T>(shape, entries);
+    public CooFieldTensor<T> toTensor() {
+        int[][] tIndices = RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices});
+        return new CooFieldTensor<>(shape, entries.clone(), tIndices);
     }
 
 
     /**
-     * Constructs a vector of similar type to this matrix.
+     * Converts this matrix to an equivalent tensor with the specified shape.
      *
-     * @param size The size of the vector.
-     * @param entries The non-zero entries of the vector.
-     * @param indices The indices of the non-zero values of the vector.
+     * @param newShape New shape for the tensor. Can be any rank but must be broadcastable to {@link #shape this.shape}.
      *
-     * @return A vector of similar type to this matrix with the specified size, non-zero entries, and indices.
+     * @return A tensor equivalent to this matrix which has been reshaped to {@code newShape}
      */
     @Override
-    public CooFieldVector<T> makeLikeVector(int size, Field<T>[] entries, int[] indices) {
-        return new CooFieldVector<T>(size, entries, indices);
+    public CooFieldTensor<T> toTensor(Shape newShape) {
+        return toTensor().reshape(newShape);
     }
 
 
     /**
-     * Constructs a vector of similar type to this matrix.
+     * Computes the matrix-vector multiplication of a vector with this matrix.
      *
-     * @param size The size of the vector.
-     * @param entries The non-zero entries of the vector.
-     * @param indices The indices of the non-zero values of the vector.
+     * @param b Vector in the matrix-vector multiplication.
      *
-     * @return A vector of similar type to this matrix with the specified size, non-zero entries, and indices.
+     * @return The result of multiplying this matrix with {@code b}.
+     *
+     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the size of
+     *                                {@code b}.
      */
     @Override
-    public CooFieldVector<T> makeLikeVector(int size, List<Field<T>> entries, List<Integer> indices) {
-        return new CooFieldVector<T>(size, entries, indices);
+    public FieldVector<T> mult(CooFieldVector<T> b) {
+        Field<T>[] dest = new Field[b.size];
+        CooSemiringMatMult.standardVector(entries, rowIndices, colIndices, shape, b.entries, b.indices, dest);
+        return new FieldVector<T>(dest);
     }
 
 
@@ -265,40 +357,46 @@ public class CooFieldMatrix<T extends Field<T>> extends CooFieldMatrixBase<CooFi
 
 
     /**
-     * <p>Converts this sparse COO matrix to an equivalent compressed sparse row (CSR) matrix.</p>
-     * <p>It is often easier and more efficient to construct a matrix in COO format first then convert to a CSR matrix for efficient
-     * computations.</p>
-     *
-     * @return A CSR matrix equivalent to this COO matrix.
+     * Formats this sparse matrix as a human-readable string.
+     * @return A human-readable string representing this sparse matrix.
      */
-    public CsrFieldMatrix<T> toCsr() {
-        int[] rowPointers = new int[numRows + 1];
+    public String toString() {
+        int size = nnz;
+        StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
+        result.append("Non-zero entries: [");
 
-        // Count number of entries per row.
-        for(int i=0; i<nnz; i++)
-            rowPointers[rowIndices[i] + 1]++;
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int width;
+        String value;
 
-        // Shift each row count to be greater than or equal to the previous.
-        for(int i=0; i<numRows; i++)
-            rowPointers[i+1] += rowPointers[i];
+        if(entries.length > 0) {
+            // Get entries up until the stopping point.
+            for(int i=0; i<stopIndex; i++) {
+                value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+                width = PrintOptions.getPadding() + value.length();
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
 
-        return new CsrFieldMatrix<T>(shape, entries.clone(), rowPointers, colIndices.clone());
-    }
+            if(stopIndex < size-1) {
+                width = PrintOptions.getPadding() + 3;
+                value = "...";
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
 
+            // Get last entry now
+            value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
 
-    /**
-     * Computes matrix-vector multiplication.
-     *
-     * @param b Vector in the matrix-vector multiplication.
-     *
-     * @return The result of matrix multiplying this matrix with vector {@code b}.
-     *
-     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the
-     *                                  number of entries in the vector {@code b}.
-     */
-    @Override
-    public FieldVector<T> mult(CooFieldVector<T> b) {
-        // TODO: Implement this method
-        return null;
+        result.append("]\n");
+
+        result.append("Row Indices: ").append(Arrays.toString(rowIndices)).append("\n");
+        result.append("Column Indices: ").append(Arrays.toString(colIndices));
+
+        return result.toString();
     }
 }
