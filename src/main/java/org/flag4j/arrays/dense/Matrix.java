@@ -27,9 +27,9 @@ package org.flag4j.arrays.dense;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.AbstractTensor;
-import org.flag4j.arrays.backend_new.MatrixMixin;
-import org.flag4j.arrays.backend_new.primitive.AbstractDenseDoubleTensor;
+import org.flag4j.arrays.backend.AbstractTensor;
+import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend.primitive.AbstractDenseDoubleTensor;
 import org.flag4j.arrays.sparse.*;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
@@ -396,6 +396,20 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
     @Override
     public int numCols() {
         return numCols;
+    }
+
+
+    /**
+     * Gets the element of this matrix at this specified {@code row} and {@code col}.
+     *
+     * @param row Row index of the item to get from this matrix.
+     * @param col Column index of the item to get from this matrix.
+     *
+     * @return The element of this matrix at the specified index.
+     */
+    @Override
+    public Double get(int row, int col) {
+        return entries[row*numCols + col];
     }
 
 
@@ -1104,6 +1118,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      *
      * @throws IllegalArgumentException If the {@code values} vector has a different length than the number of rows of this matrix.
      */
+    @Override
     public Matrix setCol(Vector values, int colIndex) {
         return setCol(values.entries, colIndex);
     }
@@ -1165,6 +1180,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      *
      * @throws IllegalArgumentException If the {@code values} vector has a different length than the number of rows of this matrix.
      */
+    @Override
     public Matrix setRow(Vector values, int rowIndex) {
         return setRow(values.entries, rowIndex);
     }

@@ -26,8 +26,8 @@ package org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops;
 
 
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.CooFieldTensorBase;
-import org.flag4j.arrays.backend.DenseFieldTensorBase;
+import org.flag4j.arrays.backend.field.AbstractCooFieldTensor;
+import org.flag4j.arrays.backend.field.AbstractDenseFieldTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.util.ArrayUtils;
@@ -52,7 +52,7 @@ public final class RealFieldDenseCooOperations {
      * @return The result of element-wise multiplication between the two tensors.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static <T extends Field<T>> CooFieldTensorBase<?, ?, T> elemMult(Tensor src1, CooFieldTensorBase<?, ?, T> src2) {
+    public static <T extends Field<T>> AbstractCooFieldTensor<?, ?, T> elemMult(Tensor src1, AbstractCooFieldTensor<?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         Field<T>[] destEntries = new Field[src2.nnz];
@@ -64,7 +64,7 @@ public final class RealFieldDenseCooOperations {
             destEntries[i] = src2.entries[i].mult(src1.entries[index]);
         }
 
-        return src2.makeLikeTensor(src2.shape, destEntries, destIndices);
+        return src2.makeLikeTensor(src2.shape, (T[]) destEntries, destIndices);
     }
 
 
@@ -75,7 +75,7 @@ public final class RealFieldDenseCooOperations {
      * @return The result of element-wise division.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    public static <T extends Field<T>> CooFieldTensorBase<?, ?, T> elemDiv(CooFieldTensorBase<?, ?, T> src1, Tensor src2) {
+    public static <T extends Field<T>> AbstractCooFieldTensor<?, ?, T> elemDiv(AbstractCooFieldTensor<?, ?, T> src1, Tensor src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         Field<T>[] destEntries = new Field[src1.nnz];
         int[][] destIndices = new int[src1.indices.length][src1.indices[0].length];
@@ -86,7 +86,7 @@ public final class RealFieldDenseCooOperations {
             destEntries[i] = src1.entries[index].div(src2.entries[i]);
         }
 
-        return src1.makeLikeTensor(src2.shape, destEntries, destIndices);
+        return src1.makeLikeTensor(src2.shape, (T[]) destEntries, destIndices);
     }
 
 
@@ -96,9 +96,9 @@ public final class RealFieldDenseCooOperations {
      * @param src2 Real sparse tensor.
      * @return The result of the tensor addition.
      */
-    public static <T extends Field<T>> DenseFieldTensorBase<?, ?, T> add(DenseFieldTensorBase<?, ?, T> src1, CooTensor src2) {
+    public static <T extends Field<T>> AbstractDenseFieldTensor<?, T> add(AbstractDenseFieldTensor<?, T> src1, CooTensor src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        DenseFieldTensorBase<?, ?, T> dest = src1.copy();
+        AbstractDenseFieldTensor<?, T> dest = src1.copy();
 
         for(int i=0, size=src2.nnz; i<size; i++) {
             int idx = dest.shape.getFlatIndex(src2.indices[i]);
@@ -115,9 +115,9 @@ public final class RealFieldDenseCooOperations {
      * @param src2 Real sparse tensor.
      * @return The result of the tensor addition.
      */
-    public static <T extends Field<T>> DenseFieldTensorBase<?, ?, T> sub(DenseFieldTensorBase<?, ?, T> src1, CooTensor src2) {
+    public static <T extends Field<T>> AbstractDenseFieldTensor<?, T> sub(AbstractDenseFieldTensor<?, T> src1, CooTensor src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        DenseFieldTensorBase<?, ?, T> dest = src1.copy();
+        AbstractDenseFieldTensor<?, T> dest = src1.copy();
 
         for(int i=0, size=src2.nnz; i<size; i++) {
             int idx = dest.shape.getFlatIndex(src2.indices[i]);
@@ -134,7 +134,7 @@ public final class RealFieldDenseCooOperations {
      * @param src1 The complex dense tensor. Also, the storage for the computation.
      * @param src2 The real sparse tensor.
      */
-    public static <T extends Field<T>> void addEq(DenseFieldTensorBase<?, ?, T> src1, CooTensor src2) {
+    public static <T extends Field<T>> void addEq(AbstractDenseFieldTensor<?, T> src1, CooTensor src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0, size=src2.nnz; i<size; i++) {
@@ -150,7 +150,7 @@ public final class RealFieldDenseCooOperations {
      * @param src1 The complex dense tensor. Also, the storage for the computation.
      * @param src2 The real sparse tensor.
      */
-    public static <T extends Field<T>> void subEq(DenseFieldTensorBase<?, ?, T> src1, CooTensor src2) {
+    public static <T extends Field<T>> void subEq(AbstractDenseFieldTensor<?, T> src1, CooTensor src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0, size=src2.nnz; i<size; i++) {
@@ -167,9 +167,9 @@ public final class RealFieldDenseCooOperations {
      * @return The result of the tensor addition.
      * @throws IllegalArgumentException If the tensors do not have the same shape.t
      */
-    public static <T extends Field<T>> DenseFieldTensorBase<?, ?, T> sub(CooTensor src1, DenseFieldTensorBase<?, ?, T> src2) {
+    public static <T extends Field<T>> AbstractDenseFieldTensor<?, T> sub(CooTensor src1, AbstractDenseFieldTensor<?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        DenseFieldTensorBase<?, ?, T> dest = src2.mult(-1);
+        AbstractDenseFieldTensor<?, T> dest = src2.mult(-1);
 
         for(int i=0, size=src1.nnz; i<size; i++) {
             int idx = src1.shape.getFlatIndex(src1.indices[i]);

@@ -26,7 +26,7 @@ package org.flag4j.linalg.operations.sparse.coo.ring_ops;
 
 import org.flag4j.algebraic_structures.rings.Ring;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.SparseMatrixData;
+import org.flag4j.arrays.backend.SparseMatrixData;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 

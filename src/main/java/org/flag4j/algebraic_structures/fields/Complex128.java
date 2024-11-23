@@ -974,6 +974,17 @@ public class Complex128 implements Field<Complex128> {
 
 
     /**
+     * Converts this complex number to an equivalent double. This will be the magnitude of the complex number.
+     *
+     * @return A double value equivalent to this complex number. This will be the magnitude of the complex number.
+     */
+    @Override
+    public double doubleValue() {
+        return mag();
+    }
+
+
+    /**
      * Computes the minimum magnitude from an array of complex numbers.
      * @param values Array of values to compute the minimum magnitude from.
      * @return The minimum magnitude from the {@code values array}. If the array has zero length, then -1 is returned.

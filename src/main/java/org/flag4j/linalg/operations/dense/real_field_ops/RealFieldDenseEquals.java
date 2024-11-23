@@ -26,8 +26,8 @@ package org.flag4j.linalg.operations.dense.real_field_ops;
 
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.DenseFieldMatrixBase;
-import org.flag4j.arrays.backend.DenseFieldTensorBase;
+import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
+import org.flag4j.arrays.backend.field.AbstractDenseFieldTensor;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.util.ArrayUtils;
@@ -50,7 +50,7 @@ public final class RealFieldDenseEquals {
      * @param B Second matrix.
      * @return True if the two matrices are element-wise equivalent.
      */
-    public static <T extends Field<T>> boolean matrixEquals(Matrix A, DenseFieldMatrixBase<?, ?, ?, ?, T> B) {
+    public static <T extends Field<T>> boolean matrixEquals(Matrix A, AbstractDenseFieldMatrix<?, ?, T> B) {
         return tensorEquals(A.entries, A.shape, B.entries, B.shape);
     }
 
@@ -61,7 +61,7 @@ public final class RealFieldDenseEquals {
      * @param B Second tensor in comparison.
      * @return True if the two tensors are numerically element-wise equivalent.
      */
-    public static <T extends Field<T>> boolean tensorEquals(Tensor A, DenseFieldTensorBase<?, ?, T> B) {
+    public static <T extends Field<T>> boolean tensorEquals(Tensor A, AbstractDenseFieldTensor<?, T> B) {
         return tensorEquals(A.entries, A.shape, B.entries, B.shape);
     }
 

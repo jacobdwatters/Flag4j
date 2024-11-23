@@ -27,7 +27,7 @@ package org.flag4j.arrays.sparse;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.field.AbstractCsrFieldMatrix;
+import org.flag4j.arrays.backend.field.AbstractCsrFieldMatrix;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.CVector;

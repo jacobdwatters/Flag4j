@@ -28,10 +28,9 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.algebraic_structures.rings.Ring;
 import org.flag4j.algebraic_structures.semirings.Semiring;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.DenseFieldMatrixBase;
-import org.flag4j.arrays.backend.FieldTensorBase;
-import org.flag4j.arrays.backend_new.primitive.AbstractDoubleTensor;
-import org.flag4j.arrays.backend_new.semiring.AbstractDenseSemiringTensor;
+import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
+import org.flag4j.arrays.backend.primitive.AbstractDoubleTensor;
+import org.flag4j.arrays.backend.semiring.AbstractDenseSemiringTensor;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.operations.dense.DenseTranspose;
 import org.flag4j.linalg.operations.dense.field_ops.DenseFieldHermitianTranspose;
@@ -139,7 +138,7 @@ public final class TransposeDispatcher {
      * @param src Matrix to transpose.
      * @return The transpose of the source matrix.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> dispatch(DenseFieldMatrixBase<?, ?, ?, ?, T> src) {
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> dispatch(AbstractDenseFieldMatrix<?, ?, T> src) {
 
         Field<T>[] dest;
 
@@ -294,36 +293,6 @@ public final class TransposeDispatcher {
 
     /**
      * Dispatches a tensor transpose problem to the appropriate algorithm based on its shape and size.
-     * @param src Tensor to transpose.
-     * @param axis1 First axis in tensor transpose.
-     * @param axis2 Second axis in tensor transpose.
-     * @return The result of the tensor transpose.
-     */
-    public static <T extends FieldTensorBase<T, T, V>, V extends Field<V>> T dispatchTensor(
-            FieldTensorBase<T, T, V> src, int axis1, int axis2) {
-        Field<V>[] dest;
-
-        if(axis1 == axis2) {
-            dest = src.entries.clone();
-        } else if(src.getRank() == 2) {
-            dest = new Field[src.entries.length];
-            dispatch(src.entries, src.shape, dest); // Delegate to matrix transpose.
-        } else {
-            dest = new Field[src.entries.length];
-            TransposeAlgorithms algorithm = chooseAlgorithmTensor(src.shape.get(axis1), src.shape.get(axis2));
-
-            if(algorithm == TransposeAlgorithms.STANDARD)
-                DenseTranspose.standard(src.entries, src.shape, axis1, axis2, dest);
-            else
-                DenseTranspose.standardConcurrent(src.entries, src.shape, axis1, axis2, dest);
-        }
-
-        return src.makeLikeTensor(src.shape.swapAxes(axis1, axis2), (V[]) dest);
-    }
-
-
-    /**
-     * Dispatches a tensor transpose problem to the appropriate algorithm based on its shape and size.
      * @param src Entries of the tensor to transpose.
      * @param srcShape Shape of the tensor to transpose.
      * @param axis1 First axis in tensor transpose.
@@ -404,48 +373,6 @@ public final class TransposeDispatcher {
 
 
     /**
-     * Dispatches a tensor transpose problem to the appropriate algorithm based on its shape and size.
-     * @param src Entries of tensor to transpose.
-     * @param axes Permutation of axes in the tensor transpose.
-     * @return The result of the tensor transpose.
-     * @throws ArrayIndexOutOfBoundsException If either axis is not within the {@code src} tensor.
-     */
-    public static <T extends FieldTensorBase<T, T, V>, V extends Field<V>> T dispatchTensor(
-            FieldTensorBase<T, T, V> src, int[] axes) {
-        Field<V>[] dest;
-        TransposeAlgorithms algorithm = chooseAlgorithmTensor(src.entries.length);
-
-        dest = algorithm == TransposeAlgorithms.STANDARD ?
-                DenseFieldTranspose.standard(src.entries, src.shape, axes):
-                DenseFieldTranspose.standardConcurrent(src.entries, src.shape, axes);
-
-        return src.makeLikeTensor(src.shape.permuteAxes(axes), (V[]) dest);
-    }
-
-
-    /**
-     * Dispatches a tensor Hermitian transpose problem to the appropriate algorithm based on its shape and size.
-     * @param src Tensor to transpose.
-     * @param axis1 First axis in tensor transpose.
-     * @param axis2 Second axis in tensor transpose.
-     * @return
-     */
-    public static <T extends FieldTensorBase<T, T, V>, V extends Field<V>> T dispatchTensorHermitian(
-            FieldTensorBase<T, T, V> src,
-            int axis1,
-            int axis2) {
-        Field<V>[] dest;
-        TransposeAlgorithms algorithm = chooseAlgorithmTensor(src.shape.get(axis1), src.shape.get(axis2));
-
-        dest = algorithm == TransposeAlgorithms.STANDARD ?
-                DenseFieldHermitianTranspose.standardHerm(src.entries, src.shape, axis1, axis2):
-                DenseFieldHermitianTranspose.standardConcurrentHerm(src.entries, src.shape, axis1, axis2);
-
-        return src.makeLikeTensor(src.shape.swapAxes(axis1, axis2), (V[]) dest);
-    }
-
-
-    /**
      * Dispatches a tensor Hermitian transpose problem to the appropriate algorithm based on its shape and size.
      * @param shape Shape of the tensor to transpose.
      * @param src Entries of the tensor to transpose.
@@ -485,27 +412,6 @@ public final class TransposeDispatcher {
             DenseRingHermitianTranspose.standardHerm(src, shape, axes, dest);
         else
             DenseRingHermitianTranspose.standardConcurrentHerm(src, shape, axes, dest);
-    }
-
-
-    /**
-     * Dispatches a tensor Hermitian transpose problem to the appropriate algorithm based on its shape and size.
-     * @param src Entries of tensor to transpose.
-     * @param axes Permutation of axes in the tensor transpose.
-     * @return The result of the tensor transpose.
-     * @throws ArrayIndexOutOfBoundsException If either axis is not within the {@code src} tensor.
-     */
-    public static <T extends FieldTensorBase<T, T, V>, V extends Field<V>> T dispatchTensorHermitian(
-            FieldTensorBase<T, T, V> src,
-            int[] axes) {
-        Field<V>[] dest;
-        TransposeAlgorithms algorithm = chooseAlgorithmTensor(src.entries.length);
-
-        dest = algorithm == TransposeAlgorithms.STANDARD ?
-                DenseFieldHermitianTranspose.standardHerm(src.entries, src.shape, axes):
-                DenseFieldHermitianTranspose.standardConcurrentHerm(src.entries, src.shape, axes);
-
-        return src.makeLikeTensor(src.shape.permuteAxes(axes), (V[]) dest);
     }
 
 

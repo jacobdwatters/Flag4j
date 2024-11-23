@@ -26,8 +26,8 @@ package org.flag4j.arrays.dense;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.VectorMixin;
-import org.flag4j.arrays.backend_new.primitive.AbstractDenseDoubleTensor;
+import org.flag4j.arrays.backend.VectorMixin;
+import org.flag4j.arrays.backend.primitive.AbstractDenseDoubleTensor;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.io.PrintOptions;
@@ -422,8 +422,19 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * zero vector will be returned.
      */
     public Vector normalize() {
-        double norm = VectorNorms.norm(this);
+        double norm = VectorNorms.norm(entries);
         return norm==0 ? new Vector(size) : (Vector) this.div(norm);
+    }
+
+
+    /**
+     * Computes the magnitude of this vector.
+     *
+     * @return The magnitude of this vector.
+     */
+    @Override
+    public Double mag() {
+        return VectorNorms.norm(entries);
     }
 
 

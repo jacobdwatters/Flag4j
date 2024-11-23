@@ -25,6 +25,7 @@
 package org.flag4j.linalg;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.decompositions.chol.Cholesky;
 import org.flag4j.linalg.decompositions.chol.ComplexCholesky;
@@ -35,6 +36,7 @@ import org.flag4j.linalg.decompositions.lu.RealLU;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
 import org.flag4j.linalg.decompositions.svd.SVD;
+import org.flag4j.linalg.operations.common.ring_ops.RingProperties;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolver;
 import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
@@ -368,7 +370,9 @@ public final class Invert {
         if(!src1.isSquare() || !src2.isSquare() || !src1.shape.equals(src2.shape)) {
             result = false;
         } else {
-            result = src1.mult(src2).isCloseToI();
+            CMatrix prod = src1.mult(src2);
+            CMatrix I = CMatrix.I(src1.shape);
+            result = RingProperties.allClose(prod.entries, I.entries);
         }
 
         return result;

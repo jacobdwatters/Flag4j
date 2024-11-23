@@ -26,7 +26,7 @@ package org.flag4j.arrays.sparse;
 
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.primitive.AbstractDoubleTensor;
+import org.flag4j.arrays.backend.primitive.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;

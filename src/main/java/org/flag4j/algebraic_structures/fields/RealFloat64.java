@@ -338,6 +338,17 @@ public class RealFloat64 implements Field<RealFloat64> {
 
 
     /**
+     * Converts this semiring value to an equivalent double value.
+     *
+     * @return A double value equivalent to this semiring element.
+     */
+    @Override
+    public double doubleValue() {
+        return value;
+    }
+
+
+    /**
      * Checks if this field element is finite in magnitude.
      *
      * @return True if this field element is finite in magnitude. False otherwise (i.e. infinite, NaN etc.).

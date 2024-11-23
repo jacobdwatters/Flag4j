@@ -25,6 +25,7 @@
 package org.flag4j.linalg.operations.dense_sparse.csr.real_complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
@@ -60,8 +61,8 @@ public final class RealComplexCsrDenseOperations {
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
     public static CMatrix applyBinOpp(CsrCMatrix src1, Matrix src2,
-                                         BiFunction<Complex128, Double, Complex128> opp,
-                                         UnaryOperator<Double> uOpp) {
+                                      BiFunction<Complex128, Double, Complex128> opp,
+                                      UnaryOperator<Double> uOpp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);  // Ensure both matrices are same shape.
 
         Complex128[] dest;

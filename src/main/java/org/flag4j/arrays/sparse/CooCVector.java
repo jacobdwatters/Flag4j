@@ -27,7 +27,7 @@ package org.flag4j.arrays.sparse;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.field.AbstractCooFieldVector;
+import org.flag4j.arrays.backend.field.AbstractCooFieldVector;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.io.PrintOptions;
@@ -286,6 +286,44 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      */
     public CooCVector add(CooVector b) {
         return RealComplexSparseVectorOperations.add(this, b);
+    }
+
+
+    /**
+     * Normalizes this vector to a unit length vector.
+     *
+     * @return This vector normalized to a unit length.
+     */
+    @Override
+    public CooCVector normalize() {
+        return div(magAsDouble());
+    }
+
+
+    /**
+     * Computes the magnitude of this vector.
+     *
+     * @return The magnitude of this vector.
+     */
+    @Override
+    public Complex128 mag() {
+        return new Complex128(magAsDouble());
+    }
+
+
+    /**
+     * Computes the magnitude of this vector as a double value.
+     * @return The magnitude of this vector as a double value.
+     */
+    public double magAsDouble() {
+        double mag = 0;
+
+        for(int i = 0, size=nnz; i < size; i++) {
+            Complex128 v = (Complex128) entries[i];
+            mag += (v.re*v.re + v.im*v.im);
+        }
+
+        return Math.sqrt(mag);
     }
 
 

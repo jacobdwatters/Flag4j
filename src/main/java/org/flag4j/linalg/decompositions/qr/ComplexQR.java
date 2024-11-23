@@ -24,6 +24,7 @@
 
 package org.flag4j.linalg.decompositions.qr;
 
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.linalg.decompositions.unitary.ComplexUnitaryDecomposition;
 
 

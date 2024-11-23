@@ -25,7 +25,7 @@
 package org.flag4j.linalg.operations.sparse.coo.field_ops;
 
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend_new.field.AbstractCooFieldMatrix;
+import org.flag4j.arrays.backend.field.AbstractCooFieldMatrix;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;

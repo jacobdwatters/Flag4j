@@ -27,7 +27,7 @@ package org.flag4j.linalg.operations.sparse.csr.field_ops;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.CsrFieldMatrixBase;
+import org.flag4j.arrays.backend.field.AbstractCsrFieldMatrix;
 import org.flag4j.linalg.operations.common.ring_ops.RingProperties;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
@@ -58,8 +58,8 @@ public final class CsrFieldEquals {
      * satisfy {@code |a-b| <= (absTol + relTol*|b|)}. Otherwise, returns false.
      */
     public static <T extends Field<T>> boolean allClose(
-            CsrFieldMatrixBase<?, ?, ?, ?, T> src1,
-            CsrFieldMatrixBase<?, ?, ?, ?, T> src2,
+            AbstractCsrFieldMatrix<?, ?, ?, T> src1,
+            AbstractCsrFieldMatrix<?, ?, ?, T> src2,
             double relTol, double absTol) {
         boolean close = src1.shape.equals(src2.shape);
 
@@ -97,7 +97,7 @@ public final class CsrFieldEquals {
      * @param aTol Absolute tolerance for value to be considered close to zero.
      */
     private static <T extends Field<T>> void removeCloseToZero(
-            CsrFieldMatrixBase<?, ?, ?, ?, T> src,
+            AbstractCsrFieldMatrix<?, ?, ?, T> src,
             List<T> entries, int[] rowPointers,
             List<Integer> colIndices, double aTol) {
         for(int i=0, size=src.numRows; i<size; i++) {

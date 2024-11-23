@@ -24,8 +24,8 @@
 
 package org.flag4j.io;
 
-import org.flag4j.arrays.backend.MatrixMixinOld;
-import org.flag4j.arrays.backend_new.AbstractTensor;
+import org.flag4j.arrays.backend.AbstractTensor;
+import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.util.ErrorMessages;
 
 import java.io.BufferedWriter;
@@ -77,7 +77,7 @@ public final class TensorWriter {
      * @param delimiter Delimiter to use in csv file.
      * @return True if the write was successful. False if the write failed.
      */
-    public static boolean toCsv(String fileName, MatrixMixinOld src, String delimiter) {
+    public static boolean toCsv(String fileName, MatrixMixin<?, ?, ?, ?> src, String delimiter) {
         boolean successfulWrite = true;
 
         int numRows = src.numRows();
@@ -106,7 +106,7 @@ public final class TensorWriter {
      * @param src MatrixOld to write to csv file.
      * @return True if the write was successful. False if the write failed.
      */
-    public static boolean toCsv(String fileName, MatrixMixinOld src) {
+    public static boolean toCsv(String fileName, MatrixMixin<?, ?, ?, ?> src) {
         return toCsv(fileName, src, ", ");
     }
 }

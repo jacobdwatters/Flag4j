@@ -31,9 +31,9 @@ package org.flag4j.linalg.operations.dense.field_ops;
 
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.DenseFieldMatrixBase;
-import org.flag4j.arrays.backend.DenseFieldTensorBinaryOperation;
-import org.flag4j.arrays.backend.DenseFieldVectorBase;
+import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
+import org.flag4j.arrays.backend.field.AbstractDenseFieldVector;
+import org.flag4j.concurrency.DenseFieldTensorBinaryOperation;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.HashMap;
@@ -116,7 +116,7 @@ public final class DenseFieldMatMultDispatcher {
      * @param B Second matrix in the multiplication.
      * @return The result of the matrix multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] dispatch(DenseFieldMatrixBase<?, ?, ?, ?, T> A, DenseFieldMatrixBase<?, ?, ?, ?, T> B) {
+    public static <T extends Field<T>> Field<T>[] dispatch(AbstractDenseFieldMatrix<?, ?, T> A, AbstractDenseFieldMatrix<?, ?, T> B) {
         ValidateParameters.ensureMatMultShapes(A.shape, B.shape); // Ensure matrix shapes are conducive to matrix multiplication.
 
         DenseFieldMatMultDispatcher dispatcher = getInstance();
@@ -131,8 +131,8 @@ public final class DenseFieldMatMultDispatcher {
      * @param src2 Vector in the matrix-vector multiplication problem.
      * @return The result of the matrix-vector multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] dispatch(DenseFieldMatrixBase<?, ?, ?, ?, T> src1,
-                                                           DenseFieldVectorBase<?, ?, ?, T> src2) {
+    public static <T extends Field<T>> Field<T>[] dispatch(AbstractDenseFieldMatrix<?, ?, T> src1,
+                                                           AbstractDenseFieldVector<?, ?, T> src2) {
         Shape bMatShape = new Shape(src2.size, 1);
         ValidateParameters.ensureMatMultShapes(src1.shape, bMatShape);
 
@@ -182,7 +182,7 @@ public final class DenseFieldMatMultDispatcher {
      * @param B Second matrix in the multiplication and the matrix to transpose.
      * @return The matrix multiply-transpose result of {@code A} and {@code B}.
      */
-    public static <T extends Field<T>> Field<T>[] dispatchTranspose(DenseFieldMatrixBase<?, ?, ?, ?, T> A, DenseFieldMatrixBase<?, ?, ?, ?, T> B) {
+    public static <T extends Field<T>> Field<T>[] dispatchTranspose(AbstractDenseFieldMatrix<?, ?, T> A, AbstractDenseFieldMatrix<?, ?, T> B) {
         ValidateParameters.ensureArrayLengthsEq(A.numCols, B.numCols);
 
         DenseFieldMatMultDispatcher dispatcher = getInstance();

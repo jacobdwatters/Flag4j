@@ -27,7 +27,7 @@ package org.flag4j.linalg.operations.sparse.coo.complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.MatrixMixinOld;
+import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
@@ -392,7 +392,7 @@ public final class ComplexSparseMatrixGetSet {
     }
 
 
-    private static <T extends MatrixMixinOld<?, ?, ?, ?, ?, ?>, U extends MatrixMixinOld<?, ?, ?, ?, ?, ?>>
+    private static <T extends MatrixMixin<?, ?, ?, ?>, U extends MatrixMixin<?, ?, ?, ?>>
     void setSliceParamCheck(T src, U values, int row, int col) {
         ValidateParameters.ensureIndexInBounds(src.numRows(), row);
         ValidateParameters.ensureIndexInBounds(src.numCols(), col);
@@ -401,7 +401,7 @@ public final class ComplexSparseMatrixGetSet {
     }
 
 
-    private static <T extends MatrixMixinOld<?, ?, ?, ?, ?, ?>>
+    private static <T extends MatrixMixin<?, ?, ?, ?>>
     void setSliceParamCheck(T src, int valueRows, int valueCols, int row, int col) {
         ValidateParameters.ensureIndexInBounds(src.numRows(), row);
         ValidateParameters.ensureIndexInBounds(src.numCols(), col);

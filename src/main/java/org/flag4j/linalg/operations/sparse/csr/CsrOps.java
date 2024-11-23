@@ -27,7 +27,7 @@ package org.flag4j.linalg.operations.sparse.csr;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.SparseMatrixData;
+import org.flag4j.arrays.backend.SparseMatrixData;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
@@ -71,6 +71,37 @@ public final class CsrOps {
                 int col = srcColIndices[i];
                 int pos = tempPos[col];
                 destEntries[pos] = srcEntries[i];
+                destColIndices[pos] = row;
+                tempPos[col]++;
+            }
+        }
+    }
+
+
+    /**
+     * Computes herniation transpose of complex CSR matrix.
+     * @param src The matrix to transpose.
+     * @return The transpose of the {@code src} matrix.
+     */
+    public static <T extends Field<T>> void hermTranspose(
+            Field<T>[] srcEntries, int[] srcRowPointers, int[] srcColIndices,
+            Field<T>[] destEntries, int[] destRowPointers, int[] destColIndices) {
+        // Count number of entries in each row.
+        for(int i=0, size=srcColIndices.length; i<size; i++)
+            destRowPointers[srcColIndices[i] + 1]++;
+
+        // Accumulate the row counts.
+        for(int i=1; i<destRowPointers.length; i++)
+            destRowPointers[i] += destRowPointers[i-1];
+
+        int[] tempPos = java.util.Arrays.copyOf(destRowPointers, destRowPointers.length);
+
+        // Fill in the values for the transposed matrix
+        for (int row = 0, size=srcRowPointers.length-1; row < size; row++) {
+            for (int i = srcRowPointers[row], rowLength=srcRowPointers[row+1]; i < rowLength; i++) {
+                int col = srcColIndices[i];
+                int pos = tempPos[col];
+                destEntries[pos] = srcEntries[i].conj();
                 destColIndices[pos] = row;
                 tempPos[col]++;
             }

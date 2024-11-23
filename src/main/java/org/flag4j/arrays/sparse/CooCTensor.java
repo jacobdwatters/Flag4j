@@ -28,7 +28,7 @@ import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Complex64;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.field.AbstractCooFieldTensor;
+import org.flag4j.arrays.backend.field.AbstractCooFieldTensor;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;

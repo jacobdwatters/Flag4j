@@ -259,6 +259,17 @@ public class RealInt16 implements Ring<RealInt16> {
 
 
     /**
+     * Converts this semiring value to an equivalent double value.
+     *
+     * @return A double value equivalent to this semiring element.
+     */
+    @Override
+    public double doubleValue() {
+        return value;
+    }
+
+
+    /**
      * Computes the product of all entire of specified array.
      * @param values Values to compute product of.
      * @return The product of all values in {@code values}.

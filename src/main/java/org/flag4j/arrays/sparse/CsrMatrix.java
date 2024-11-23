@@ -26,8 +26,8 @@ package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.MatrixMixin;
-import org.flag4j.arrays.backend_new.primitive.AbstractDoubleTensor;
+import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend.primitive.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
@@ -336,10 +336,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
         ValidateParameters.validateTensorIndex(shape, indices);
         int row = indices[0];
         int col = indices[1];
-        int loc = Arrays.binarySearch(colIndices, rowPointers[row], rowPointers[row+1], col);
-
-        if(loc >= 0) return entries[loc];
-        else return 0.0;
+        return get(row, col);
     }
 
 
@@ -484,6 +481,24 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
     @Override
     public int numCols() {
         return numCols;
+    }
+
+
+    /**
+     * Gets the element of this matrix at this specified {@code row} and {@code col}.
+     *
+     * @param row Row index of the item to get from this matrix.
+     * @param col Column index of the item to get from this matrix.
+     *
+     * @return The element of this matrix at the specified index.
+     */
+    @Override
+    public Double get(int row, int col) {
+        ValidateParameters.validateTensorIndex(shape, row, col);
+        int loc = Arrays.binarySearch(colIndices, rowPointers[row], rowPointers[row+1], col);
+
+        if(loc >= 0) return entries[loc];
+        else return 0.0;
     }
 
 

@@ -26,7 +26,7 @@ package org.flag4j.linalg.operations.sparse.coo.field_ops;
 
 
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.CooFieldMatrixBase;
+import org.flag4j.arrays.backend.field.AbstractCooFieldMatrix;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.sparse.CooFieldMatrix;
 import org.flag4j.arrays.sparse.CooFieldVector;
@@ -56,8 +56,8 @@ public final class CooFieldMatrixOperations {
      * @return The sum of the two matrices {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
-    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, ?, V>
-    add(CooFieldMatrixBase<?, ?, ?, ?, V> src1, CooFieldMatrixBase<?, ?, ?, ?, V> src2) {
+    public static <V extends Field<V>> AbstractCooFieldMatrix<?, ?, ?, V>
+    add(AbstractCooFieldMatrix<?, ?, ?, V> src1, AbstractCooFieldMatrix<?, ?, ?, V> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
@@ -124,7 +124,7 @@ public final class CooFieldMatrixOperations {
      * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
      */
     public static <V extends Field<V>> FieldMatrix<V>
-    add(CooFieldMatrixBase<?, ?, ?, ?, V> src, double a) {
+    add(AbstractCooFieldMatrix<?, ?, ?, V> src, double a) {
         Field<V>[] sum = new Field[src.totalEntries().intValueExact()];
         Arrays.fill(sum, a);
 
@@ -149,8 +149,8 @@ public final class CooFieldMatrixOperations {
      * @return The difference of the two matrices {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
-    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, ?, V>
-    sub(CooFieldMatrixBase<?, ?, ?, ?, V> src1, CooFieldMatrixBase<?, ?, ?, ?, V> src2) {
+    public static <V extends Field<V>> AbstractCooFieldMatrix<?, ?, ?, V>
+    sub(AbstractCooFieldMatrix<?, ?, ?, V> src1, AbstractCooFieldMatrix<?, ?, ?, V> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);
@@ -217,7 +217,7 @@ public final class CooFieldMatrixOperations {
      * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
      */
     public static <V extends Field<V>> FieldMatrix<V>
-    sub(CooFieldMatrixBase<?, ?, ?, ?, V> src, double a) {
+    sub(AbstractCooFieldMatrix<?, ?, ?, V> src, double a) {
         Field<V>[] sum = new Field[src.totalEntries().intValueExact()];
         Arrays.fill(sum, -a);
 
@@ -243,8 +243,8 @@ public final class CooFieldMatrixOperations {
      * @return The element-wise product of the two matrices {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If the two matrices do not have the same shape.
      */
-    public static <V extends Field<V>> CooFieldMatrixBase<?, ?, ?, ?, V>
-    elemMult(CooFieldMatrixBase<?, ?, ?, ?, V> src1, CooFieldMatrixBase<?, ?, ?, ?, V> src2) {
+    public static <V extends Field<V>> AbstractCooFieldMatrix<?, ?, ?, V>
+    elemMult(AbstractCooFieldMatrix<?, ?, ?, V> src1, AbstractCooFieldMatrix<?, ?, ?, V> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         int initCapacity = Math.max(src1.entries.length, src2.entries.length);

@@ -25,8 +25,8 @@
 package org.flag4j.linalg.operations.dense_sparse.csr.field_ops;
 
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.CsrFieldMatrixBase;
-import org.flag4j.arrays.backend.DenseFieldMatrixBase;
+import org.flag4j.arrays.backend.field.AbstractCsrFieldMatrix;
+import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
@@ -58,8 +58,8 @@ public final class DenseCsrFieldOperations {
      * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> applyBinOpp(
-            CsrFieldMatrixBase<?, ?, ?, ?, T> src1, DenseFieldMatrixBase<?, ?, ?, ?, T> src2,
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> applyBinOpp(
+            AbstractCsrFieldMatrix<?, ?, ?, T> src1, AbstractDenseFieldMatrix<?, ?, T> src2,
             BinaryOperator<T> opp, UnaryOperator<T> uOpp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
@@ -90,9 +90,9 @@ public final class DenseCsrFieldOperations {
      * @param opp Binary operator to apply element-wise to the two matrices.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> applyBinOpp(
-            DenseFieldMatrixBase<?, ?, ?, ?, T> src1, 
-            CsrFieldMatrixBase<?, ?, ?, ?, T> src2, 
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> applyBinOpp(
+            AbstractDenseFieldMatrix<?, ?, T> src1, 
+            AbstractCsrFieldMatrix<?, ?, ?, T> src2, 
             BinaryOperator<T> opp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
         Field<T>[] dest = Arrays.copyOf(src2.entries, src2.entries.length);
@@ -126,8 +126,8 @@ public final class DenseCsrFieldOperations {
      * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> applyBinOpp(
-            CsrFieldMatrixBase<?, ?, ?, ?, T> src1, double b,
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> applyBinOpp(
+            AbstractCsrFieldMatrix<?, ?, ?, T> src1, double b,
             BinaryOperator<T> opp,
             UnaryOperator<Double> uOpp) {
         Field<T>[] dest = new Field[src1.shape.totalEntriesIntValueExact()];
@@ -148,7 +148,7 @@ public final class DenseCsrFieldOperations {
             }
         }
 
-        return src1.makeLikeDenseTensor(src1.shape, dest);
+        return src1.makeLikeDenseTensor(src1.shape, (T[]) dest);
     }
 
 
@@ -163,8 +163,8 @@ public final class DenseCsrFieldOperations {
      * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> applyBinOpp(
-            CsrFieldMatrixBase<?, ?, ?, ?, T> src1, T b,
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> applyBinOpp(
+            AbstractCsrFieldMatrix<?, ?, ?, T> src1, T b,
             BinaryOperator<T> opp, UnaryOperator<T> uOpp) {
         Field<T>[] dest = new Field[src1.totalEntries().intValueExact()];
 
@@ -183,7 +183,7 @@ public final class DenseCsrFieldOperations {
             }
         }
 
-        return src1.makeLikeDenseTensor(src1.shape, dest);
+        return src1.makeLikeDenseTensor(src1.shape, (T[]) dest);
     }
 
 
@@ -195,8 +195,8 @@ public final class DenseCsrFieldOperations {
      * @param opp Operation to apply to the matrices.
      * @return The result of applying the operation element-wise to the matrices. Result is a sparse CSR matrix.
      */
-    public static <T extends Field<T>> CsrFieldMatrixBase<?, ?, ?, ?, T> applyBinOppToSparse(
-            DenseFieldMatrixBase<?, ?, ?, ?, T> src1, CsrFieldMatrixBase<?, ?, ?, ?, T> src2, BinaryOperator<T> opp) {
+    public static <T extends Field<T>> AbstractCsrFieldMatrix<?, ?, ?, T> applyBinOppToSparse(
+            AbstractDenseFieldMatrix<?, ?, T> src1, AbstractCsrFieldMatrix<?, ?, ?, T> src2, BinaryOperator<T> opp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
         int[] rowPointers = src2.rowPointers.clone();
@@ -214,7 +214,7 @@ public final class DenseCsrFieldOperations {
             }
         }
 
-        return src2.makeLikeTensor(src1.shape, entries, rowPointers, colIndices);
+        return src2.makeLikeTensor(src1.shape, (T[]) entries, rowPointers, colIndices);
     }
 
 
@@ -224,8 +224,8 @@ public final class DenseCsrFieldOperations {
      * @param b Second matrix in sum.
      * @return The element-wise sum of {@code a} and {@code b}.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> add(
-            CsrFieldMatrixBase<?, ?, ?, ?, T> a, DenseFieldMatrixBase<?, ?, ?, ?, T> b) {
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> add(
+            AbstractCsrFieldMatrix<?, ?, ?, T> a, AbstractDenseFieldMatrix<?, ?, T> b) {
         return applyBinOpp(a, b, T::add, null);
     }
 
@@ -236,8 +236,8 @@ public final class DenseCsrFieldOperations {
      * @param b Second matrix in difference.
      * @return The element-wise difference of {@code a} and {@code b}.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> sub(
-            CsrFieldMatrixBase<?, ?, ?, ?, T> a, DenseFieldMatrixBase<?, ?, ?, ?, T> b) {
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> sub(
+            AbstractCsrFieldMatrix<?, ?, ?, T> a, AbstractDenseFieldMatrix<?, ?, T> b) {
         return applyBinOpp(a, b, T::add, T::addInv);
     }
 
@@ -248,8 +248,8 @@ public final class DenseCsrFieldOperations {
      * @param b Second matrix in difference.
      * @return The element-wise difference of {@code a} and {@code b}.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> sub(
-            DenseFieldMatrixBase<?, ?, ?, ?, T> a, CsrFieldMatrixBase<?, ?, ?, ?, T> b) {
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> sub(
+            AbstractDenseFieldMatrix<?, ?, T> a, AbstractCsrFieldMatrix<?, ?, ?, T> b) {
         return applyBinOpp(a, b, (T x, T y)->y.sub(x));
     }
 }

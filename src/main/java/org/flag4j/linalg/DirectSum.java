@@ -27,6 +27,7 @@ package org.flag4j.linalg;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
@@ -600,7 +601,7 @@ public final class DirectSum {
         // Copy indices of second matrix with appropriate shifts.
         for(int i=0; i<B.entries.length; i++) {
             destIdx = i+A.entries.length;
-            indices = B.shape.getIndices(i);
+            indices = B.shape.getNdIndices(i);
             destRowIndices[destIdx] = indices[0] + A.numRows;
             destColIndices[destIdx] = indices[1] + A.numCols;
         }
@@ -872,7 +873,7 @@ public final class DirectSum {
         // Copy indices of second matrix with appropriate shifts.
         for(int i=0; i<B.entries.length; i++) {
             destIdx = i+A.entries.length;
-            indices = B.shape.getIndices(i);
+            indices = B.shape.getNdIndices(i);
             destRowIndices[destIdx] = indices[0] + A.numRows;
             destColIndices[destIdx] = indices[1] + A.numCols;
         }

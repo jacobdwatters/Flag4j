@@ -24,7 +24,7 @@
 
 package org.flag4j.io;
 
-import org.flag4j.arrays.backend_new.AbstractTensor;
+import org.flag4j.arrays.backend.AbstractTensor;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

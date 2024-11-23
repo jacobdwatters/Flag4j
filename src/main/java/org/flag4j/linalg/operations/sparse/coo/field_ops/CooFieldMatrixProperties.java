@@ -28,7 +28,7 @@ package org.flag4j.linalg.operations.sparse.coo.field_ops;
 import org.flag4j.algebraic_structures.Pair;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.CooFieldMatrixBase;
+import org.flag4j.arrays.backend.field.AbstractCooFieldMatrix;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
@@ -55,7 +55,7 @@ public final class CooFieldMatrixProperties {
      * @param src Matrix to check if it is the identity matrix.
      * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
      */
-    public static <V extends Field<V>> boolean isIdentity(CooFieldMatrixBase<?, ?, ?, ?, V> src) {
+    public static <V extends Field<V>> boolean isIdentity(AbstractCooFieldMatrix<?, ?, ?, V> src) {
         // Ensure the matrix is square and there are at least the same number of non-zero entries as entries on the diagonal.
         if(!src.isSquare() || src.entries.length<src.numRows) return false;
 
@@ -77,7 +77,7 @@ public final class CooFieldMatrixProperties {
      * @param src Matrix to check if it is the identity matrix.
      * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
      */
-    public static <V extends Field<V>> boolean isCloseToIdentity(CooFieldMatrixBase<?, ?, ?, ?, V> src) {
+    public static <V extends Field<V>> boolean isCloseToIdentity(AbstractCooFieldMatrix<?, ?, ?, V> src) {
         // Ensure the matrix is square and there are the same number of non-zero entries as entries on the diagonal.
         boolean result = src.isSquare() && src.entries.length==src.numRows;
 
@@ -159,7 +159,7 @@ public final class CooFieldMatrixProperties {
      * @param src Matrix to check if it is the hermitian matrix.
      * @return True if the {@code src} matrix is hermitian. False otherwise.
      */
-    public static <V extends Field<V>> boolean isSymmetric(CooFieldMatrixBase<?, ?, ?, ?, V> src) {
+    public static <V extends Field<V>> boolean isSymmetric(AbstractCooFieldMatrix<?, ?, ?, V> src) {
         boolean result = src.isSquare();
 
         List<Field<V>> entries = Arrays.asList(src.entries);
@@ -214,7 +214,7 @@ public final class CooFieldMatrixProperties {
      * @param src Matrix to check if it is the anti-hermitian matrix.
      * @return True if the {@code src} matrix is anti-hermitian. False otherwise.
      */
-    public static <V extends Field<V>> boolean isAntiHermitian(CooFieldMatrixBase<?, ?, ?, ?, V> src) {
+    public static <V extends Field<V>> boolean isAntiHermitian(AbstractCooFieldMatrix<?, ?, ?, V> src) {
         boolean result = src.isSquare();
 
         List<Field<V>> entries = Arrays.asList(src.entries);

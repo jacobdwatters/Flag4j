@@ -24,6 +24,7 @@
 
 package org.flag4j.linalg.operations.dense.field_ops;
 
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
@@ -55,6 +56,24 @@ public final class DenseFieldVectorOperations {
             innerProd = innerProd.add(src1[i].mult(src2[i].conj()));
 
         return innerProd;
+    }
+
+
+    /**
+     * Computes the inner product (dot product) of a vector with itself.
+     * @param vector The input complex vector.
+     * @return The inner product of the vector with itself as a double.
+     */
+    public static double innerSelfProduct(Field<Complex128>[] src1) {
+        double sum = 0.0;
+
+        for (Field<Complex128> c : src1) {
+            double real = ((Complex128) c).re;
+            double imag = ((Complex128) c).im;
+            sum += real * real + imag * imag;
+        }
+
+        return sum;
     }
 
 

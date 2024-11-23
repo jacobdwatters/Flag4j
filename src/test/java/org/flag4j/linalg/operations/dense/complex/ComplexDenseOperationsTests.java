@@ -3,7 +3,7 @@ package org.flag4j.linalg.operations.dense.complex;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.linalg.operations.common.semiring_ops.AggregateSemiRing;
+import org.flag4j.linalg.operations.common.semiring_ops.AggregateSemiring;
 import org.flag4j.linalg.operations.common.semiring_ops.SemiRingOperations;
 import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOperations;
 import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiringOperations;
@@ -140,7 +140,7 @@ class ComplexDenseOperationsTests {
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         expResultC = new Complex128(9-0.99+0.9133, -1+13.445+10.3);
-        assertEquals(expResultC, AggregateSemiRing.sum(src1));
+        assertEquals(expResultC, AggregateSemiring.sum(src1));
     }
 
 
@@ -151,11 +151,11 @@ class ComplexDenseOperationsTests {
                 new Complex128(0.9133), new Complex128(0, 10.3)};
 
         expResultC = new Complex128(-1147.60574505, 42.660699650000005);
-        assertEquals(expResultC, AggregateSemiRing.prod(src1));
+        assertEquals(expResultC, AggregateSemiring.prod(src1));
 
         // ---------- Sub-case 2 -----------------
         src1 = new Complex128[]{};
-        assertNull(AggregateSemiRing.prod(src1));
+        assertNull(AggregateSemiring.prod(src1));
     }
 
 

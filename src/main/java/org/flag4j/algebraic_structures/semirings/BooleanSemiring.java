@@ -212,6 +212,17 @@ public class BooleanSemiring implements Semiring<BooleanSemiring> {
 
 
     /**
+     * Converts this semiring value to an equivalent double value.
+     *
+     * @return A double value equivalent to this semiring element.
+     */
+    @Override
+    public double doubleValue() {
+        return (value) ? 1.0 : 0.0;
+    }
+
+
+    /**
      * Checks if an object is equal to this semiring element.
      * @param b Object to compare to this semiring element.
      * @return True if the objects are the same or are both {@link BooleanSemiring}'s and have equal values.

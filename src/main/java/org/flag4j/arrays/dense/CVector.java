@@ -28,9 +28,10 @@ import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Complex64;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.field.AbstractDenseFieldVector;
+import org.flag4j.arrays.backend.field.AbstractDenseFieldVector;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.io.PrintOptions;
+import org.flag4j.linalg.operations.dense.field_ops.DenseFieldVectorOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -139,8 +140,19 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
         super(vector.shape, vector.entries.clone());
         setZeroElement(Complex128.ZERO);
     }
-    
-    
+
+
+    /**
+     * Constructs an empty vector with the specified size. The entries of the resulting vector will be
+     * all be {@code null}.
+     * @param size The size of the vector to construct.
+     * @return An empty vector (i.e. filled with {@code null} values) with the specified size.
+     */
+    public static CVector getEmpty(int size) {
+        return new CVector(new Complex128[size]);
+    }
+
+
     /**
      * Constructs a dense vector with the specified {@code entries} of the same type as the vector.
      *
@@ -163,6 +175,44 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
     @Override
     public CMatrix makeLikeMatrix(Shape shape, Field<Complex128>[] entries) {
         return new CMatrix(shape, entries);
+    }
+
+
+    /**
+     * Normalizes this vector to a unit length vector.
+     *
+     * @return This vector normalized to a unit length.
+     */
+    @Override
+    public CVector normalize() {
+        return div(magAsDouble());
+    }
+
+
+    /**
+     * Computes the magnitude of this vector.
+     *
+     * @return The magnitude of this vector.
+     */
+    @Override
+    public Complex128 mag() {
+        return new Complex128(magAsDouble());
+    }
+
+
+    /**
+     * Computes the magnitude of this vector as a double value.
+     * @return The magnitude of this vector as a double value.
+     */
+    public double magAsDouble() {
+        double mag = 0;
+
+        for(int i = 0, size=entries.length; i < size; i++) {
+            Complex128 v = (Complex128) entries[i];
+            mag += (v.re*v.re + v.im*v.im);
+        }
+
+        return Math.sqrt(mag);
     }
 
 
@@ -279,5 +329,14 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
         result.append("]");
 
         return result.toString();
+    }
+
+
+    /**
+     * Compute the inner product of this vector with itself.
+     * @return
+     */
+    public double innerSelf() {
+        return DenseFieldVectorOperations.innerSelfProduct(entries);
     }
 }

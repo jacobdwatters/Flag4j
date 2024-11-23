@@ -26,7 +26,7 @@ package org.flag4j.linalg.decompositions.svd;
 
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.MatrixMixin;
+import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.decompositions.Decomposition;
 import org.flag4j.util.Flag4jConstants;

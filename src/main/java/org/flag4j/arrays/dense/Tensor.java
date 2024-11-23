@@ -26,7 +26,7 @@ package org.flag4j.arrays.dense;
 
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.primitive.AbstractDenseDoubleTensor;
+import org.flag4j.arrays.backend.primitive.AbstractDenseDoubleTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.operations.dense.real.RealDenseEquals;

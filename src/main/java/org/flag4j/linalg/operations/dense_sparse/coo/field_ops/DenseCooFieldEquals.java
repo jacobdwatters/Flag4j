@@ -26,7 +26,7 @@ package org.flag4j.linalg.operations.dense_sparse.coo.field_ops;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.*;
+import org.flag4j.arrays.backend.field.*;
 import org.flag4j.linalg.operations.common.semiring_ops.SemiRingProperties;
 import org.flag4j.util.ErrorMessages;
 
@@ -50,8 +50,8 @@ public final class DenseCooFieldEquals {
      * @return True if the two matrices are element-wise equivalent.
      */
     public static <T extends Field<T>> boolean matrixEquals(
-            DenseFieldMatrixBase<?, ?, ?, ?, T> A,
-            CooFieldMatrixBase<?, ?, ?, ?, T> B) {
+            AbstractDenseFieldMatrix<?, ?, T> A,
+            AbstractCooFieldMatrix<?, ?, ?, T> B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
@@ -93,7 +93,7 @@ public final class DenseCooFieldEquals {
      * @return True if the two vectors are equal. Returns false otherwise.
      */
     public static <T extends Field<T>> boolean vectorEquals(
-            DenseFieldVectorBase<?, ?, ?, T> src1, CooFieldVectorBase<?, ?, ?, ?, T> src2) {
+            AbstractDenseFieldVector<?, ?, T> src1, AbstractCooFieldVector<?, ?, ?, ?, T> src2) {
         boolean equal = true;
         final T ZERO = (src1.size > 0) ? src1.entries[0].getZero() : null;
 
@@ -133,7 +133,7 @@ public final class DenseCooFieldEquals {
      * @return True if the two tensors are element-wise equivalent.
      */
     public static <T extends Field<T>> boolean tensorEquals(
-            DenseFieldTensorBase<?, ?, T> A, CooFieldTensorBase<?, ?, T> B) {
+            AbstractDenseFieldTensor<?, T> A, AbstractCooFieldTensor<?, ?, T> B) {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {

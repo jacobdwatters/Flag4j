@@ -27,8 +27,8 @@ package org.flag4j.linalg.operations.dense_sparse.csr.real_field_ops;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.CsrFieldMatrixBase;
-import org.flag4j.arrays.backend.DenseFieldMatrixBase;
+import org.flag4j.arrays.backend.field.AbstractCsrFieldMatrix;
+import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ArrayUtils;
@@ -62,9 +62,9 @@ public final class RealFieldDenseCsrOperations {
      * {@code opp.apply(x, uOpp.apply(y))}.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> applyBinOpp(
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> applyBinOpp(
             CsrMatrix src1,
-            DenseFieldMatrixBase<?, ?, ?, ?, T> src2,
+            AbstractDenseFieldMatrix<?, ?, T> src2,
             BiFunction<Double, T, T> opp,
             UnaryOperator<T> uOpp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
@@ -95,8 +95,8 @@ public final class RealFieldDenseCsrOperations {
      * @param opp Binary operator to apply element-wise to the two matrices.
      * @return A matrix containing the result from applying {@code opp} element-wise to the two matrices.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> applyBinOpp(
-            DenseFieldMatrixBase<?, ?, ?, ?, T> src1,
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> applyBinOpp(
+            AbstractDenseFieldMatrix<?, ?, T> src1,
             CsrMatrix src2,
             BiFunction<T, Double, T> opp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
@@ -125,9 +125,9 @@ public final class RealFieldDenseCsrOperations {
      * @param opp Operation to apply to the matrices.
      * @return The result of applying the operation element-wise to the matrices. Result is a sparse CSR matrix.
      */
-    public static <T extends Field<T>> CsrFieldMatrixBase<?, ?, ?, ?, T> applyBinOppToSparse(
+    public static <T extends Field<T>> AbstractCsrFieldMatrix<?, ?, ?, T> applyBinOppToSparse(
             Matrix src1,
-            CsrFieldMatrixBase<?, ?, ?, ?, T> src2,
+            AbstractCsrFieldMatrix<?, ?, ?, T> src2,
             BiFunction<Double, T, T> opp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
         int[] rowPointers = src2.rowPointers.clone();
@@ -145,7 +145,7 @@ public final class RealFieldDenseCsrOperations {
             }
         }
 
-        return src2.makeLikeTensor(src1.shape, entries, rowPointers, colIndices);
+        return src2.makeLikeTensor(src1.shape, (T[]) entries, rowPointers, colIndices);
     }
 
 
@@ -157,8 +157,8 @@ public final class RealFieldDenseCsrOperations {
      * @param opp Operation to apply to the matrices.
      * @return The result of applying the operation element-wise to the matrices. Result is a sparse CSR matrix.
      */
-    public static <T extends Field<T>> CsrFieldMatrixBase<?, ?, ?, ?, T> applyBinOppToSparse(
-            DenseFieldMatrixBase<?, ?, ?, ?, T> src1,
+    public static <T extends Field<T>> AbstractCsrFieldMatrix<?, ?, ?, T> applyBinOppToSparse(
+            AbstractDenseFieldMatrix<?, ?, T> src1,
             CsrMatrix src2,
             BiFunction<T, Double, T> opp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
@@ -189,9 +189,9 @@ public final class RealFieldDenseCsrOperations {
      * @param opp Operation to apply to the matrices.
      * @return The result of applying the operation element-wise to the matrices. Result is a sparse CSR matrix.
      */
-    public static <T extends Field<T>> CsrFieldMatrixBase<?, ?, ?, ?, T> applyBinOppToSparse(
+    public static <T extends Field<T>> AbstractCsrFieldMatrix<?, ?, ?, T> applyBinOppToSparse(
             CsrMatrix src1,
-            DenseFieldMatrixBase<?, ?, ?, ?, T> src2,
+            AbstractDenseFieldMatrix<?, ?, T> src2,
             BiFunction<Double, T, T> opp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
         int[] rowPointers = src1.rowPointers.clone();
@@ -217,7 +217,7 @@ public final class RealFieldDenseCsrOperations {
      * @param b Second matrix in sum.
      * @return The element-wise sum of {@code a} and {@code b}.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> add(CsrMatrix a, DenseFieldMatrixBase<?, ?, ?, ?, T> b) {
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> add(CsrMatrix a, AbstractDenseFieldMatrix<?, ?, T> b) {
         return applyBinOpp(a, b, (Double x, T y)->y.add(x), null);
     }
 
@@ -228,7 +228,7 @@ public final class RealFieldDenseCsrOperations {
      * @param b Second matrix in difference.
      * @return The element-wise difference of {@code a} and {@code b}.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> sub(CsrMatrix a, DenseFieldMatrixBase<?, ?, ?, ?, T> b) {
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> sub(CsrMatrix a, AbstractDenseFieldMatrix<?, ?, T> b) {
         return applyBinOpp(a, b, (Double x, T y)->y.add(x), (T x)->x.addInv());
     }
 
@@ -239,7 +239,7 @@ public final class RealFieldDenseCsrOperations {
      * @param b Second matrix in difference.
      * @return The element-wise difference of {@code a} and {@code b}.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> sub(DenseFieldMatrixBase<?, ?, ?, ?, T> a, CsrMatrix b) {
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> sub(AbstractDenseFieldMatrix<?, ?, T> a, CsrMatrix b) {
         return applyBinOpp(a, b, (T x, Double y)->x.sub(y));
     }
 }

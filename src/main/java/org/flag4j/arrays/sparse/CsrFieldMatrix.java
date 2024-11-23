@@ -26,9 +26,9 @@ package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.AbstractTensor;
-import org.flag4j.arrays.backend_new.field.AbstractCooFieldTensor;
-import org.flag4j.arrays.backend_new.field.AbstractCsrFieldMatrix;
+import org.flag4j.arrays.backend.AbstractTensor;
+import org.flag4j.arrays.backend.field.AbstractCooFieldTensor;
+import org.flag4j.arrays.backend.field.AbstractCsrFieldMatrix;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.io.PrintOptions;
@@ -138,7 +138,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
      */
     @Override
     public CsrFieldMatrix<T> makeLikeTensor(Shape shape, List<T> entries, List<Integer> rowPointers, List<Integer> colIndices) {
-        return new CsrFieldMatrix<>(shape, entries, rowPointers, colIndices);
+        return new CsrFieldMatrix<T>(shape, (List<Field<T>>) entries, rowPointers, colIndices);
     }
 
 

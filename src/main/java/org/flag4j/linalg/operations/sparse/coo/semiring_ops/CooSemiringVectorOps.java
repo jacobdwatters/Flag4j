@@ -26,7 +26,7 @@ package org.flag4j.linalg.operations.sparse.coo.semiring_ops;
 
 import org.flag4j.algebraic_structures.semirings.Semiring;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.SparseVectorData;
+import org.flag4j.arrays.backend.SparseVectorData;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
@@ -95,7 +95,7 @@ public final class CooSemiringVectorOps {
             }
         }
 
-        return new SparseVectorData<Semiring<T>>(values, indices);
+        return new SparseVectorData<Semiring<T>>(shape1, values, indices);
     }
 
 
@@ -103,8 +103,10 @@ public final class CooSemiringVectorOps {
      * Computes the element-wise vector multiplication between two real sparse vectors. Both sparse vectors are assumed
      * to have their indices sorted lexicographically.
      *
+     * @param shape1 Shape of the first vector.
      * @param src1 Non-zero entries of the first vector in the element-wise product.
      * @param src1Indices Non-zero indices of the first vector in the element-wise product.
+     * @param shape2 Shape of the second vector.
      * @param src2 Non-zero entries of the second vector in the element-wise product.
      * @param src2Indices Non-zero indices of the second vector in the element-wise product.
      *
@@ -113,7 +115,10 @@ public final class CooSemiringVectorOps {
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
     public static <T extends Semiring<T>> SparseVectorData<Semiring<T>> elemMult(
-            Semiring<T>[] src1, int[] src1Indices, Semiring<T>[] src2, int[] src2Indices) {
+            Shape shape1, Semiring<T>[] src1, int[] src1Indices,
+            Shape shape2, Semiring<T>[] src2, int[] src2Indices) {
+        ValidateParameters.ensureEqualShape(shape1, shape2);
+
         List<Semiring<T>> values = new ArrayList<>(src1.length);
         List<Integer> indices = new ArrayList<>(src1.length);
 
@@ -134,7 +139,7 @@ public final class CooSemiringVectorOps {
             }
         }
 
-        return new SparseVectorData<Semiring<T>>(values, indices);
+        return new SparseVectorData<Semiring<T>>(shape1, values, indices);
     }
 
 

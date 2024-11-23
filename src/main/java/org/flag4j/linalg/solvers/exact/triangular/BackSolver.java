@@ -25,8 +25,8 @@
 package org.flag4j.linalg.solvers.exact.triangular;
 
 
-import org.flag4j.arrays.backend_new.MatrixMixin;
-import org.flag4j.arrays.backend_new.VectorMixin;
+import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.linalg.solvers.LinearMatrixSolver;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.ValidateParameters;

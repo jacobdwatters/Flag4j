@@ -26,7 +26,7 @@ package org.flag4j.arrays.dense;
 
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.field.AbstractDenseFieldTensor;
+import org.flag4j.arrays.backend.field.AbstractDenseFieldTensor;
 import org.flag4j.arrays.sparse.CooFieldTensor;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.operations.dense.field_ops.DenseFieldEquals;

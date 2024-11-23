@@ -26,6 +26,7 @@ package org.flag4j.linalg;
 
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.algebraic_structures.rings.Ring;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;

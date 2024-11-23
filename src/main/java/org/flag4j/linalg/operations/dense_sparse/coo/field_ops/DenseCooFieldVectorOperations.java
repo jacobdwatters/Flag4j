@@ -26,8 +26,8 @@ package org.flag4j.linalg.operations.dense_sparse.coo.field_ops;
 
 
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.CooFieldVectorBase;
-import org.flag4j.arrays.backend.DenseFieldVectorBase;
+import org.flag4j.arrays.backend.field.AbstractCooFieldVector;
+import org.flag4j.arrays.backend.field.AbstractDenseFieldVector;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
@@ -141,10 +141,11 @@ public final class DenseCooFieldVectorOperations {
      * @param src2 Sparse vector.
      * @return The result of the vector addition.
      */
-    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> add(DenseFieldVectorBase<?, ?, ?, T> src1, CooFieldVectorBase<?, ?, ?, ?, T> src2) {
+    public static <T extends Field<T>> AbstractDenseFieldVector<?, ?, T> add(AbstractDenseFieldVector<?, ?, T> src1, 
+                                                                             AbstractCooFieldVector<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        DenseFieldVectorBase<?, ?, ?, T> dest = src1.copy();
-
+        AbstractDenseFieldVector<?, ?, T> dest = src1.copy();
+        
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.indices[i];
             dest.entries[idx] = dest.entries[idx].add((T) src2.entries[i]);
@@ -160,7 +161,7 @@ public final class DenseCooFieldVectorOperations {
      * @param src1 Dense vector. Modified.
      * @param src2 Sparse vector.
      */
-    public static <T extends Field<T>> void addEq(DenseFieldVectorBase<?, ?, ?, T> src1, CooFieldVectorBase<?, ?, ?, ?, T> src2) {
+    public static <T extends Field<T>> void addEq(AbstractDenseFieldVector<?, ?, T> src1, AbstractCooFieldVector<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nnz; i++) {
@@ -178,10 +179,10 @@ public final class DenseCooFieldVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> sub(
-            DenseFieldVectorBase<?, ?, ?, T> src1, CooFieldVectorBase<?, ?, ?, ?, T> src2) {
+    public static <T extends Field<T>> AbstractDenseFieldVector<?, ?, T> sub(
+            AbstractDenseFieldVector<?, ?, T> src1, AbstractCooFieldVector<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        DenseFieldVectorBase<?, ?, ?, T> dest = src1.copy();
+        AbstractDenseFieldVector<?, ?, T> dest = src1.copy();
 
         for(int i=0; i<src2.entries.length; i++) {
             int index = src2.indices[i];
@@ -199,10 +200,10 @@ public final class DenseCooFieldVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> sub(
-            CooFieldVectorBase<?, ?, ?, ?, T> src1, DenseFieldVectorBase<?, ?, ?, T> src2) {
+    public static <T extends Field<T>> AbstractDenseFieldVector<?, ?, T> sub(
+            AbstractCooFieldVector<?, ?, ?, ?, T> src1, AbstractDenseFieldVector<?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-//        DenseFieldVectorBase<?, ?, ?, T> dest = src2.makeLikeTensor(FieldOps.scalMult(src2.entries, -1));
+//        AbstractDenseFieldVector<?, ?, T> dest = src2.makeLikeTensor(FieldOps.scalMult(src2.entries, -1));
 //
 //        for(int i=0, size=src1.nnz; i<size; i++) {
 //            int idx = src1.indices[i];
@@ -220,7 +221,7 @@ public final class DenseCooFieldVectorOperations {
      * @param src1 Dense vector. Modified.
      * @param src2 Sparse vector.
      */
-    public static <T extends Field<T>> void subEq(DenseFieldVectorBase<?, ?, ?, T> src1, CooFieldVectorBase<?, ?, ?, ?, T> src2) {
+    public static <T extends Field<T>> void subEq(AbstractDenseFieldVector<?, ?, T> src1, AbstractCooFieldVector<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nnz; i++) {
@@ -237,15 +238,15 @@ public final class DenseCooFieldVectorOperations {
      * @return The result of the element-wise multiplication.
      * @throws IllegalArgumentException If the two vectors are not the same size.
      */
-    public static <T extends Field<T>> CooFieldVectorBase<?, ?, ?, ?, T> elemMult(
-            DenseFieldVectorBase<?, ?, ?, T> src1, CooFieldVectorBase<?, ?, ?, ?, T> src2) {
+    public static <T extends Field<T>> AbstractCooFieldVector<?, ?, ?, ?, T> elemMult(
+            AbstractDenseFieldVector<?, ?, T> src1, AbstractCooFieldVector<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         Field<T>[] entries = new Field[src2.entries.length];
 
         for(int i=0; i<src2.nnz; i++)
             entries[i] = src1.entries[src2.indices[i]].mult((T) src2.entries[i]);
 
-        return src2.makeLikeTensor(src1.size, entries, src2.indices.clone());
+        return src2.makeLikeTensor(src1.shape, entries, src2.indices.clone());
     }
 
 
@@ -255,14 +256,14 @@ public final class DenseCooFieldVectorOperations {
      * @param src2 Second vector in the element-wise division.
      * @return The result of the element-wise vector division.
      */
-    public static <T extends Field<T>> CooFieldVectorBase<?, ?, ?, ?, T> elemDiv(
-            CooFieldVectorBase<?, ?, ?, ?, T> src1, DenseFieldVectorBase<?, ?, ?, T> src2) {
+    public static <T extends Field<T>> AbstractCooFieldVector<?, ?, ?, ?, T> elemDiv(
+            AbstractCooFieldVector<?, ?, ?, ?, T> src1, AbstractDenseFieldVector<?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         Field<T>[] dest = new Field[src1.entries.length];
 
         for(int i=0; i<src1.nnz; i++)
             dest[i] = src1.entries[i].div((T) src2.entries[src1.indices[i]]);
 
-        return src1.makeLikeTensor(src1.size, dest, src1.indices.clone());
+        return src1.makeLikeTensor(src1.shape, dest, src1.indices.clone());
     }
 }

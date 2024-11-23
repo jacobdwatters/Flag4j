@@ -29,6 +29,7 @@ import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
+import org.flag4j.linalg.operations.common.real.RealOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
@@ -75,14 +76,14 @@ public final class RealComplexDenseSparseOperations {
      */
     public static CTensor add(Tensor src1, CooCTensor src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        CTensor dest = src1.toComplex();
+        Complex128[] entries = ArrayUtils.wrapAsComplex128(src1.entries, null);
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            int idx = dest.shape.getFlatIndex(src2.indices[i]);
-            dest.entries[idx] = dest.entries[idx].add((Complex128) src2.entries[i]);
+            int idx = src2.shape.getFlatIndex(src2.indices[i]);
+            entries[idx] = src2.entries[i].add(entries[idx]);
         }
 
-        return dest;
+        return new CTensor(src1.shape, entries);
     }
 
 
@@ -95,14 +96,14 @@ public final class RealComplexDenseSparseOperations {
      */
     public static CTensor sub(Tensor src1, CooCTensor src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        CTensor dest = src1.toComplex();
+        Complex128[] entries = ArrayUtils.wrapAsComplex128(src1.entries, null);
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            int idx = dest.shape.getFlatIndex(src2.indices[i]);
-            dest.entries[idx] = dest.entries[idx].sub((Complex128) src2.entries[i]);
+            int idx = src2.shape.getFlatIndex(src2.indices[i]);
+            entries[idx] = entries[idx].sub((Complex128) src2.entries[i]);
         }
 
-        return dest;
+        return new CTensor(src1.shape, entries);
     }
 
 
@@ -139,14 +140,15 @@ public final class RealComplexDenseSparseOperations {
     public static CTensor sub(CooCTensor src1, Tensor src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
-        CTensor dest = src2.mult(-1).toComplex();
+        Complex128[] entries = ArrayUtils.wrapAsComplex128(
+                RealOperations.scalMult(src2.entries, -1.0), null);
 
         for(int i=0, size=src1.nnz; i<size; i++) {
             int idx = src1.shape.getFlatIndex(src1.indices[i]);
-            dest.entries[idx] = dest.entries[idx].add((Complex128) src1.entries[i]);
+            entries[idx] = src1.entries[i].add(entries[idx].re);
         }
 
-        return dest;
+        return new CTensor(src1.shape, entries);
     }
 
 

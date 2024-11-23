@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.decompositions.lu;
 
-import org.flag4j.arrays.backend_new.MatrixMixin;
+import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.sparse.PermutationMatrix;
 import org.flag4j.linalg.decompositions.Decomposition;
 import org.flag4j.util.ArrayUtils;

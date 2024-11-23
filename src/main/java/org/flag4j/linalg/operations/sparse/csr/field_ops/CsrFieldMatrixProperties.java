@@ -25,7 +25,7 @@
 package org.flag4j.linalg.operations.sparse.csr.field_ops;
 
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.CsrFieldMatrixBase;
+import org.flag4j.arrays.backend.field.AbstractCsrFieldMatrix;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -45,7 +45,7 @@ public final class CsrFieldMatrixProperties {
      * @param src The matrix to check if it is the identity matrix.
      * @return True if the {@code src} matrix is the identity matrix. False otherwise.
      */
-    public static <T extends Field<T>> boolean isIdentity(CsrFieldMatrixBase<?, ?, ?, ?, T> src) {
+    public static <T extends Field<T>> boolean isIdentity(AbstractCsrFieldMatrix<?, ?, ?, T> src) {
         if(src.isSquare() && src.colIndices.length >= src.numCols) {
             int diagCount = 0;
 
@@ -72,7 +72,7 @@ public final class CsrFieldMatrixProperties {
      * @param src The matrix to check.
      * @return True if the {@code src} matrix is close to identity matrix. False otherwise.
      */
-    public static <T extends Field<T>> boolean isCloseToIdentity(CsrFieldMatrixBase<?, ?, ?, ?, T> src) {
+    public static <T extends Field<T>> boolean isCloseToIdentity(AbstractCsrFieldMatrix<?, ?, ?, T> src) {
         if(src.isSquare() && src.colIndices.length >= src.numCols) {
             // Tolerances corresponds to the allClose(...) methods.
             double diagTol = 1.001E-5;
@@ -104,7 +104,7 @@ public final class CsrFieldMatrixProperties {
      * @param src Source matrix to check symmetry of.
      * @return True if {@code src} is symmetric. Otherwise, returns false.
      */
-    public static <T extends Field<T>> boolean isSymmetric(CsrFieldMatrixBase<?, ?, ?, ?, T> src) {
+    public static <T extends Field<T>> boolean isSymmetric(AbstractCsrFieldMatrix<?, ?, ?, T> src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
         if(src.entries.length == 0) return true;
@@ -118,7 +118,7 @@ public final class CsrFieldMatrixProperties {
      * @param src Source matrix to check symmetry of.
      * @return True if {@code src} is symmetric. Otherwise, returns false.
      */
-    public static <T extends Field<T>> boolean isAntiSymmetric(CsrFieldMatrixBase<?, ?, ?, ?, T> src) {
+    public static <T extends Field<T>> boolean isAntiSymmetric(AbstractCsrFieldMatrix<?, ?, ?, T> src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
         if(src.entries.length == 0) return true;
@@ -132,7 +132,7 @@ public final class CsrFieldMatrixProperties {
      * @param src Source matrix to check.
      * @return True if {@code src} is Hermitian. Otherwise, returns false.
      */
-    public static <T extends Field<T>> boolean isHermitian(CsrFieldMatrixBase<?, ?, ?, ?, T> src) {
+    public static <T extends Field<T>> boolean isHermitian(AbstractCsrFieldMatrix<?, ?, ?, T> src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
         if(src.entries.length == 0) return true;
@@ -146,7 +146,7 @@ public final class CsrFieldMatrixProperties {
      * @param src Source matrix to check.
      * @return True if {@code src} is Hermitian. Otherwise, returns false.
      */
-    public static <T extends Field<T>> boolean isAntiHermitian(CsrFieldMatrixBase<?, ?, ?, ?, T> src) {
+    public static <T extends Field<T>> boolean isAntiHermitian(AbstractCsrFieldMatrix<?, ?, ?, T> src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
         if(src.entries.length == 0) return true;

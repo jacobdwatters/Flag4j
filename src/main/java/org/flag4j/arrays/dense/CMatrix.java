@@ -27,14 +27,16 @@ package org.flag4j.arrays.dense;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.field.AbstractDenseFieldMatrix;
+import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
+import org.flag4j.linalg.operations.MatrixMultiplyDispatcher;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,6 +54,7 @@ import java.util.List;
 public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex128> {
 
     // TODO: Add isReal() and isComplex() methods also in the above mentioned complex tensor classes.
+    // TODO: Add setRow() and setCol() methods.
 
     /**
      * Creates a complex matrix with the specified {@code entries} and {@code shape}.
@@ -305,7 +308,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * @return A sparse CSR matrix which is of a similar type as this dense matrix.
      */
     @Override
-    protected CsrCMatrix makeLikeCsrMatrix(Shape shape, Field<Complex128>[] entries, int[] rowPointers, int[] colIndices) {
+    public CsrCMatrix makeLikeCsrMatrix(Shape shape, Field<Complex128>[] entries, int[] rowPointers, int[] colIndices) {
         return new CsrCMatrix(shape, entries, rowPointers, colIndices);
     }
 
@@ -339,6 +342,18 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     @Override
     public CMatrix makeLikeTensor(Shape shape, Field<Complex128>[] entries) {
         return new CMatrix(shape, entries);
+    }
+
+
+    /**
+     * Constructs an empty matrix with the specified number of rows and columns. The entries of the resulting matrix will be
+     * all be {@code null}.
+     * @param rows The number of rows in the matrix to construct.
+     * @param cols The number of columns in the matrix to construct.
+     * @return An empty matrix (i.e. filled with {@code null} values) with the specified shape.
+     */
+    public static CMatrix getEmpty(int rows, int cols) {
+        return new CMatrix(rows, cols, new Complex128[rows*cols]);
     }
 
 
@@ -418,6 +433,22 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     public static CMatrix I(Shape shape) {
         ValidateParameters.ensureRank(shape, 2);
         return I(shape.get(0), shape.get(1));
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param b Second matrix in the matrix multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with matrix {@code b}.
+     *
+     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the number
+     *                                of rows in matrix {@code b}.
+     */
+    public CMatrix mult(Matrix b) {
+        Field<Complex128>[] dest = MatrixMultiplyDispatcher.dispatch(this, b);
+        return makeLikeTensor(new Shape(numRows, b.numCols), dest);
     }
 
 

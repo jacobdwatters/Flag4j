@@ -26,6 +26,7 @@ package org.flag4j.linalg.decompositions.svd;
 
 
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.DirectSum;
 import org.flag4j.linalg.Eigen;

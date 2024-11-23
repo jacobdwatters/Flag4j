@@ -5,10 +5,10 @@ org.flag4j.algebraic_structures.rings
 org.flag4j.algebraic_structures.semirings
 org.flag4j.arrays
 org.flag4j.arrays.backend
-org.flag4j.arrays.backend_new
-org.flag4j.arrays.backend_new.field
-org.flag4j.arrays.backend_new.ring
-org.flag4j.arrays.backend_new.semiring
+org.flag4j.arrays.backend
+org.flag4j.arrays.backend.field
+org.flag4j.arrays.backend.ring
+org.flag4j.arrays.backend.semiring
 org.flag4j.arrays.dense
 org.flag4j.arrays.sparse
 org.flag4j.concurrency

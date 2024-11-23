@@ -1,9 +1,8 @@
 package org.flag4j;
 
+import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.DenseTensorMixin;
-import org.flag4j.arrays.backend.MatrixMixinOld;
 import org.flag4j.arrays.backend.VectorMixinOld;
-import org.flag4j.arrays.backend_new.AbstractTensor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,8 +12,8 @@ public class TestHelpers {
 
     public static void printAsNumpyArray(Object... args) {
         for(Object arg : args) {
-            if(arg instanceof MatrixMixinOld<?,?,?,?,?,?>) {
-                printAsNumpyArray((MatrixMixinOld<?,?,?,?,?,?>) arg);
+            if(arg instanceof MatrixMixin<?, ?, ?, ?>) {
+                printAsNumpyArray((MatrixMixin<?, ?, ?, ?>) arg);
             } else {
                 System.out.print(arg.toString());
             }
@@ -24,8 +23,8 @@ public class TestHelpers {
 
     public static void printAsJavaArray(Object... args) {
         for(Object arg : args) {
-            if(arg instanceof MatrixMixinOld<?,?,?,?,?,?>) {
-                printAsJavaArray((MatrixMixinOld<?,?,?,?,?,?>) arg);
+            if(arg instanceof MatrixMixin<?, ?, ?, ?>) {
+                printAsJavaArray((MatrixMixin<?, ?, ?, ?>) arg);
             } else if(arg instanceof VectorMixinOld<?,?,?,?,?>) {
                 printAsJavaArray((VectorMixinOld<?,?,?,?,?>) arg);
             } else {
@@ -35,7 +34,7 @@ public class TestHelpers {
     }
 
 
-    private static <T extends MatrixMixinOld<?,?,?,?,?,?>> void printAsNumpyArray(T A) {
+    private static <T extends MatrixMixin<?, ?, ?, ?>> void printAsNumpyArray(T A) {
         System.out.println(" = np.array([");
 
         for(int i=0; i<A.numRows(); i++) {
@@ -83,7 +82,7 @@ public class TestHelpers {
     }
 
 
-    private static <T extends MatrixMixinOld<?,?,?,?,?,?>> void printAsJavaArray(T A) {
+    private static <T extends MatrixMixin<?, ?, ?, ?>> void printAsJavaArray(T A) {
         System.out.println("{");
 
         for(int i=0; i<A.numRows(); i++) {

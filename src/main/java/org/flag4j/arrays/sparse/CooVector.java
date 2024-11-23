@@ -26,8 +26,8 @@ package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.VectorMixin;
-import org.flag4j.arrays.backend_new.primitive.AbstractDoubleTensor;
+import org.flag4j.arrays.backend.VectorMixin;
+import org.flag4j.arrays.backend.primitive.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
@@ -410,6 +410,17 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
     public CooVector normalize() {
         double norm = VectorNorms.norm(entries);
         return norm==0 ? new CooVector(size) : this.div(norm);
+    }
+
+
+    /**
+     * Computes the magnitude of this vector.
+     *
+     * @return The magnitude of this vector.
+     */
+    @Override
+    public Double mag() {
+        return VectorNorms.norm(entries);
     }
 
 

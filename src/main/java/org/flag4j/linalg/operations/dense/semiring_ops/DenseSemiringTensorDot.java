@@ -28,7 +28,7 @@ import org.flag4j.algebraic_structures.semirings.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.linalg.operations.TensorDot;
 import org.flag4j.linalg.operations.TransposeDispatcher;
-import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiRingMatMultDispatcher;
+import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiringMatMultDispatcher;
 
 /**
  * Instances of this class can be used to compute the tensor dot product between two dense tensors.
@@ -75,6 +75,6 @@ public class DenseSemiringTensorDot<T extends Semiring<T>> extends TensorDot<Sem
         TransposeDispatcher.dispatchTensor(src1, shape1, src1NewAxes, at);
         TransposeDispatcher.dispatchTensor(src2, shape2, src2NewAxes, bt);
 
-        DenseSemiRingMatMultDispatcher.dispatch(at, newShape1, bt, newShape2, dest);
+        DenseSemiringMatMultDispatcher.dispatch(at, newShape1, bt, newShape2, dest);
     }
 }

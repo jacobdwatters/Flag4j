@@ -1,6 +1,7 @@
 package org.flag4j.complex_vector;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
@@ -8,6 +9,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CVectorElemMultTests {

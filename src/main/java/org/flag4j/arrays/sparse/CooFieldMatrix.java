@@ -26,7 +26,7 @@ package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.field.AbstractCooFieldMatrix;
+import org.flag4j.arrays.backend.field.AbstractCooFieldMatrix;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.FieldTensor;
 import org.flag4j.arrays.dense.FieldVector;

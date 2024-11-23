@@ -26,7 +26,7 @@ package org.flag4j.linalg.operations.sparse.coo.semiring_ops;
 
 import org.flag4j.algebraic_structures.semirings.Semiring;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.SparseTensorData;
+import org.flag4j.arrays.backend.SparseTensorData;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;

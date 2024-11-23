@@ -27,7 +27,7 @@ package org.flag4j.linalg.operations.dense.field_ops;
 
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.DenseFieldMatrixBase;
+import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.linalg.decompositions.lu.FieldLU;
 import org.flag4j.linalg.decompositions.lu.LU;
@@ -53,7 +53,7 @@ public final class DenseFieldDeterminant {
      * @return The determinant of the matrix.
      * @throws IllegalArgumentException If matrix is not square.
      */
-    public static <T extends Field<T>> T det(DenseFieldMatrixBase<?, ?, ?, ?, T> mat) {
+    public static <T extends Field<T>> T det(AbstractDenseFieldMatrix<?, ?, T> mat) {
         ValidateParameters.ensureSquareMatrix(mat.shape);
         T det;
 
@@ -82,7 +82,7 @@ public final class DenseFieldDeterminant {
      * @return The determinant of the matrix.
      * @throws IllegalArgumentException If matrix is not square.
      */
-    public static <T extends Field<T>> T detLU(DenseFieldMatrixBase<?, ?, ?, ?, T> mat) {
+    public static <T extends Field<T>> T detLU(AbstractDenseFieldMatrix<?, ?, T> mat) {
         ValidateParameters.ensureSquareMatrix(mat.shape);
         LU<FieldMatrix<T>> lu = new FieldLU().decompose(mat);
 
@@ -96,7 +96,7 @@ public final class DenseFieldDeterminant {
      * @param tri Triangular matrix.
      * @return The determinant of the triangular matrix {@code T}.
      */
-    public static <T extends Field<T>> T detTri(DenseFieldMatrixBase<?, ?, ?, ?, T> tri) {
+    public static <T extends Field<T>> T detTri(AbstractDenseFieldMatrix<?, ?, T> tri) {
         if(!tri.isTri()) throw new LinearAlgebraException("Matrix is not triangular.");
         return detTriUnsafe(tri);
     }
@@ -109,7 +109,7 @@ public final class DenseFieldDeterminant {
      * @param tri Triangular matrix. Assumed to be a square triangular matrix.
      * @return The determinant of the triangular matrix {@code tri}.
      */
-    public static <T extends Field<T>> T detTriUnsafe(DenseFieldMatrixBase<?, ?, ?, ?, T> tri) {
+    public static <T extends Field<T>> T detTriUnsafe(AbstractDenseFieldMatrix<?, ?, T> tri) {
         if(tri == null || tri.entries.length == 0) return null;
         T detU = (T) tri.entries[0];
 
@@ -126,7 +126,7 @@ public final class DenseFieldDeterminant {
      * @param mat Matrix to compute the determinant of.
      * @return The determinant of the 3x3 matrix.
      */
-    public static <T extends Field<T>> T det3(DenseFieldMatrixBase<?, ?, ?, ?, T> mat) {
+    public static <T extends Field<T>> T det3(AbstractDenseFieldMatrix<?, ?, T> mat) {
         ValidateParameters.ensureEqualShape(mat.shape, new Shape(3, 3));
         T det = mat.entries[0].mult(mat.entries[4].mult((T) mat.entries[8]).sub(mat.entries[5].mult((T) mat.entries[7])));
         det = det.sub(mat.entries[1].mult(mat.entries[3].mult((T) mat.entries[8]).sub(mat.entries[5].mult((T) mat.entries[6]))));
@@ -140,7 +140,7 @@ public final class DenseFieldDeterminant {
      * @param mat Matrix to compute the determinant of.
      * @return The determinant of the 2x2 matrix.
      */
-    public static <T extends Field<T>> T det2(DenseFieldMatrixBase<?, ?, ?, ?, T> mat) {
+    public static <T extends Field<T>> T det2(AbstractDenseFieldMatrix<?, ?, T> mat) {
         ValidateParameters.ensureEqualShape(mat.shape, new Shape(2, 2));
         return mat.entries[0].mult((T) mat.entries[3]).sub(mat.entries[1].mult((T) mat.entries[2]));
     }
@@ -151,7 +151,7 @@ public final class DenseFieldDeterminant {
      * @param mat Matrix to compute the determinant of.
      * @return The determinant of the 1x1 matrix.
      */
-    public static <T extends Field<T>> T det1(DenseFieldMatrixBase<?, ?, ?, ?, T> mat) {
+    public static <T extends Field<T>> T det1(AbstractDenseFieldMatrix<?, ?, T> mat) {
         ValidateParameters.ensureEqualShape(mat.shape, new Shape(1, 1));
         return (T) mat.entries[0];
     }

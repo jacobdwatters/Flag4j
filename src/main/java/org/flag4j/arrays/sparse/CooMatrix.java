@@ -26,9 +26,8 @@ package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.MatrixMixinOld;
-import org.flag4j.arrays.backend_new.MatrixMixin;
-import org.flag4j.arrays.backend_new.primitive.AbstractDoubleTensor;
+import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend.primitive.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
@@ -441,9 +440,11 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
 
     /**
      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
+     * @return A reference to this matrix.
      */
-    public void sortIndices() {
+    public CooMatrix sortIndices() {
         CooDataSorter.wrap(entries, rowIndices, colIndices).sparseSort().unwrap(entries, rowIndices, colIndices);
+        return this;
     }
 
 
@@ -462,7 +463,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
         ValidateParameters.ensureIndexInBounds(numRows, indices[0]);
         ValidateParameters.ensureIndexInBounds(numCols, indices[1]);
 
-        return RealSparseMatrixGetSet.matrixGet(this, indices[0], indices[1]);
+        return get(indices[0], indices[1]);
     }
 
 
@@ -825,6 +826,21 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
     @Override
     public int numCols() {
         return numCols;
+    }
+
+
+    /**
+     * Gets the element of this matrix at this specified {@code row} and {@code col}.
+     *
+     * @param row Row index of the item to get from this matrix.
+     * @param col Column index of the item to get from this matrix.
+     *
+     * @return The element of this matrix at the specified index.
+     */
+    @Override
+    public Double get(int row, int col) {
+        ValidateParameters.validateTensorIndex(shape, row, col);
+        return RealSparseMatrixGetSet.matrixGet(this, row, col);
     }
 
 
@@ -1594,8 +1610,23 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
      * @throws
      */
+    @Override
     public CooMatrix setRow(CooVector values, int rowIndex) {
-        return RealSparseMatrixGetSet.setCol(this, rowIndex, values);
+        return RealSparseMatrixGetSet.setRow(this, rowIndex, values);
+    }
+
+
+    /**
+     * Sets a specified row of this matrix to an array.
+     *
+     * @param row Array containing values to replace specified row in this matrix.
+     * @param rowIdx Index of the row to set.
+     *
+     * @return If this matrix is dense, the row set operation is done in place and a reference to this matrix is returned.
+     * If this matrix is sparse a copy will be created with the new row and returned.
+     */
+    public CooMatrix setRow(double[] row, int rowIdx) {
+        return RealSparseMatrixGetSet.setRow(this, rowIdx, row);
     }
 
 

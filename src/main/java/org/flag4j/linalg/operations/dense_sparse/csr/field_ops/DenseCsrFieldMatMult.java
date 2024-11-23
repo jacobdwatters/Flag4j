@@ -27,9 +27,9 @@ package org.flag4j.linalg.operations.dense_sparse.csr.field_ops;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.CsrFieldMatrixBase;
-import org.flag4j.arrays.backend.DenseFieldMatrixBase;
-import org.flag4j.arrays.backend.DenseFieldVectorBase;
+import org.flag4j.arrays.backend.field.AbstractCsrFieldMatrix;
+import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
+import org.flag4j.arrays.backend.field.AbstractDenseFieldVector;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
@@ -58,11 +58,11 @@ public final class DenseCsrFieldMatMult {
      * @throws IllegalArgumentException If {@code src1} does not have the same number of columns as {@code src2} has
      * rows.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> standard(
-            CsrFieldMatrixBase<?, ?, ?, ?, T> src1, DenseFieldMatrixBase<?, ?, ?, ?, T> src2) {
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> standard(
+            AbstractCsrFieldMatrix<?, ?, ?, T> src1, AbstractDenseFieldMatrix<?, ?, T> src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ValidateParameters.ensureMatMultShapes(src1.shape, src2.shape);
-
+        
         Field<T>[] destEntries = new Field[src1.numRows*src2.numCols];
         Arrays.fill(destEntries, src2.getZeroElement());
         int rows1 = src1.numRows;
@@ -99,8 +99,8 @@ public final class DenseCsrFieldMatMult {
      * @throws IllegalArgumentException If {@code src1} does not have the same number of columns as {@code src2} has
      * rows.
      */
-    public static <T extends Field<T>> DenseFieldMatrixBase<?, ?, ?, ?, T> standard(
-            DenseFieldMatrixBase<?, ?, ?, ?, T> src1, CsrFieldMatrixBase<?, ?, ?, ?, T> src2) {
+    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> standard(
+            AbstractDenseFieldMatrix<?, ?, T> src1, AbstractCsrFieldMatrix<?, ?, ?, T> src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
         ValidateParameters.ensureMatMultShapes(src1.shape, src2.shape);
 
@@ -139,11 +139,11 @@ public final class DenseCsrFieldMatMult {
      * @throws IllegalArgumentException If the number of columns in {@code src1} does not equal the length of
      * {@code src2}.
      */
-    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> standardVector(
-            CsrFieldMatrixBase<?, ?, ?, ?, T> src1, DenseFieldVectorBase<?, ?, ?, T> src2) {
+    public static <T extends Field<T>> AbstractDenseFieldVector<?, ?, T> standardVector(
+            AbstractCsrFieldMatrix<?, ?, ?, T> src1, AbstractDenseFieldVector<?, ?, T> src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
         ValidateParameters.ensureEquals(src1.numCols, src2.size);
-
+        
         Field<T>[] destEntries = new Field[src1.numRows];
         Arrays.fill(destEntries, Complex128.ZERO);
         int rows1 = src1.numRows;

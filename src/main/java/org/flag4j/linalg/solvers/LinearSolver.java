@@ -25,7 +25,7 @@
 package org.flag4j.linalg.solvers;
 
 
-import org.flag4j.arrays.backend_new.semiring.TensorOverSemiring;
+import org.flag4j.arrays.backend.semiring.TensorOverSemiring;
 
 /**
  * <p>This interface specifies methods which all linear system solvers should implement.
@@ -39,7 +39,7 @@ public interface LinearSolver<T> {
     /**
      * Solves the linear tensor equation given by A*X=B for the tensor X. All indices of X are summed over in
      * the tensor product with the rightmost indices of A as if by
-     * {@link org.flag4j.arrays.backend_new.ring.TensorOverRing#tensorDot(TensorOverSemiring, int) A.tensorDot(X, X.getRank())}.
+     * {@link org.flag4j.arrays.backend.ring.TensorOverRing#tensorDot(TensorOverSemiring, int) A.tensorDot(X, X.getRank())}.
      * @param A Coefficient tensor in the linear system.
      * @param B Tensor of constants in the linear system.
      * @return The solution to the tensor X in the linear system A*X=B.

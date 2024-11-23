@@ -26,7 +26,7 @@ package org.flag4j.arrays.dense;
 
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.field.AbstractDenseFieldMatrix;
+import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.sparse.CooFieldMatrix;
 import org.flag4j.arrays.sparse.CsrFieldMatrix;
 import org.flag4j.io.PrettyPrint;

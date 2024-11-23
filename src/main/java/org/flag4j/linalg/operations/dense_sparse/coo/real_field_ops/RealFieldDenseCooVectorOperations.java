@@ -27,8 +27,8 @@ package org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.DenseFieldVectorBase;
-import org.flag4j.arrays.backend_new.field.AbstractCooFieldVector;
+import org.flag4j.arrays.backend.field.AbstractCooFieldVector;
+import org.flag4j.arrays.backend.field.AbstractDenseFieldVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.operations.common.field_ops.FieldOps;
@@ -217,9 +217,9 @@ public final class RealFieldDenseCooVectorOperations {
      * @return The result of the vector addition.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> add(DenseFieldVectorBase<?, ?, ?, T> src1, CooVector src2) {
+    public static <T extends Field<T>> AbstractDenseFieldVector<?, ?, T> add(AbstractDenseFieldVector<?, ?, T> src1, CooVector src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        DenseFieldVectorBase<?, ?, ?, T> dest = src1.copy();
+        AbstractDenseFieldVector<?, ?, T> dest = src1.copy();
 
         for(int i=0; i<src2.entries.length; i++) {
             int index = src2.indices[i];
@@ -237,9 +237,9 @@ public final class RealFieldDenseCooVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> sub(CooVector src1, DenseFieldVectorBase<?, ?, ?, T> src2) {
+    public static <T extends Field<T>> AbstractDenseFieldVector<?, ?, T> sub(CooVector src1, AbstractDenseFieldVector<?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        DenseFieldVectorBase<?, ?, ?, T> dest = src2.makeLikeTensor(FieldOps.scalMult(src2.entries, -1, null));
+        AbstractDenseFieldVector<?, ?, T> dest = src2.makeLikeTensor(FieldOps.scalMult(src2.entries, -1, null));
 
         for(int i=0; i<src1.nnz; i++) {
             int idx = src1.indices[i];
@@ -276,9 +276,9 @@ public final class RealFieldDenseCooVectorOperations {
      * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
-    public static <T extends Field<T>> DenseFieldVectorBase<?, ?, ?, T> sub(DenseFieldVectorBase<?, ?, ?, T> src1, CooVector src2) {
+    public static <T extends Field<T>> AbstractDenseFieldVector<?, ?, T> sub(AbstractDenseFieldVector<?, ?, T> src1, CooVector src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        DenseFieldVectorBase<?, ?, ?, T> dest = src1.copy();
+        AbstractDenseFieldVector<?, ?, T> dest = src1.copy();
 
         for(int i=0; i<src2.nnz; i++) {
             int index = src2.indices[i];
@@ -296,7 +296,7 @@ public final class RealFieldDenseCooVectorOperations {
      * @param src2 Second vector to add.
      * @throws IllegalArgumentException If the vectors do not have the same size.
      */
-    public static <T extends Field<T>> void addEq(DenseFieldVectorBase<?, ?, ?, T> src1, CooVector src2) {
+    public static <T extends Field<T>> void addEq(AbstractDenseFieldVector<?, ?, T> src1, CooVector src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nnz; i++) {
@@ -312,7 +312,7 @@ public final class RealFieldDenseCooVectorOperations {
      * @param src1 First vector in subtraction.
      * @param src2 Second vector in subtraction.
      */
-    public static <T extends Field<T>> void subEq(DenseFieldVectorBase<?, ?, ?, T> src1, CooVector src2) {
+    public static <T extends Field<T>> void subEq(AbstractDenseFieldVector<?, ?, T> src1, CooVector src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nnz; i++) {

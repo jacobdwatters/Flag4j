@@ -26,8 +26,8 @@ package org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops;
 
 
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend_new.field.AbstractCooFieldMatrix;
-import org.flag4j.arrays.backend_new.field.AbstractDenseFieldMatrix;
+import org.flag4j.arrays.backend.field.AbstractCooFieldMatrix;
+import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.linalg.operations.common.field_ops.FieldOps;

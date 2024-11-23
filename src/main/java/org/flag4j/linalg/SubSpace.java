@@ -25,6 +25,8 @@
 package org.flag4j.linalg;
 
 
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;

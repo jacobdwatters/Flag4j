@@ -57,7 +57,7 @@ public interface Semiring<T extends Semiring<T>> {
      * @param b Second semi-ring element in sum.
      * @return The sum of this element and {@code b}.
      */
-    public T add(T b);
+    T add(T b);
 
 
     /**
@@ -65,7 +65,7 @@ public interface Semiring<T extends Semiring<T>> {
      * @param b Second semi-ring element in product.
      * @return The product of this semi-ring element and {@code b}.
      */
-    public T mult(T b);
+    T mult(T b);
 
 
     /**
@@ -75,7 +75,7 @@ public interface Semiring<T extends Semiring<T>> {
      *
      * @return True if this value is an additive identity for this semi-ring. Otherwise, false.
      */
-    public boolean isZero();
+    boolean isZero();
 
 
     /**
@@ -85,7 +85,7 @@ public interface Semiring<T extends Semiring<T>> {
      *
      * @return True if this value is a multiplicative identity for this semi-ring. Otherwise, false.
      */
-    public boolean isOne();
+    boolean isOne();
 
 
     /**
@@ -95,7 +95,7 @@ public interface Semiring<T extends Semiring<T>> {
      *
      * @return The additive identity for this semi-ring.
      */
-    public T getZero();
+    T getZero();
 
 
     /**
@@ -105,7 +105,7 @@ public interface Semiring<T extends Semiring<T>> {
      *
      * @return The multiplicative identity for this semi-ring.
      */
-    public T getOne();
+    T getOne();
 
 
     /**
@@ -121,5 +121,12 @@ public interface Semiring<T extends Semiring<T>> {
      *     than {@code b}.
      * </ul>
      */
-    public int compareTo(T b);
+    int compareTo(T b);
+
+
+    /**
+     * Converts this semiring value to an equivalent double value.
+     * @return A double value equivalent to this semiring element.
+     */
+    double doubleValue();
 }

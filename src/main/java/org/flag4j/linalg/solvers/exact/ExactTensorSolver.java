@@ -26,10 +26,9 @@ package org.flag4j.linalg.solvers.exact;
 
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.TensorOverSemiRing;
-import org.flag4j.arrays.backend_new.MatrixMixin;
-import org.flag4j.arrays.backend_new.TensorMixin;
-import org.flag4j.arrays.backend_new.VectorMixin;
+import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend.TensorMixin;
+import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.linalg.solvers.LinearMatrixSolver;
 import org.flag4j.linalg.solvers.LinearSolver;
 import org.flag4j.util.ValidateParameters;

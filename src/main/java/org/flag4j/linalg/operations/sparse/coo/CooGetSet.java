@@ -25,8 +25,8 @@
 package org.flag4j.linalg.operations.sparse.coo;
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend_new.SparseMatrixData;
-import org.flag4j.arrays.backend_new.SparseVectorData;
+import org.flag4j.arrays.backend.SparseMatrixData;
+import org.flag4j.arrays.backend.SparseVectorData;
 import org.flag4j.linalg.operations.sparse.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
@@ -45,6 +45,108 @@ public final class CooGetSet {
     private CooGetSet() {
         // Hide default constructor for utility class.
         throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+    }
+
+
+    /**
+     * Sets a specified row of a real sparse COO matrix to the values in a sparse COO vector.
+     * @param srcShape Shape of the matrix to set row in.
+     * @param srcEntries Non-zero entries of the COO matrix.
+     * @param rowIndices Non-zero row indices of the COO matrix.
+     * @param colIndices Non-zero column indices of the COO matrix.
+     * @param rowIdx Index of the row to set.
+     * @param size Full size of the COO vector.
+     * @param row Non-zero entries of the COO vector containing new row values.
+     * @param indices Non-zero indices of the COO vector containing new row values.
+     * @return Sparse matrix data containing the data for the COO matrix resulting from setting the specified row of the provided
+     * COO matrix to the provided COO vector.
+     * @throws IllegalArgumentException If {@code
+     * srcShape.get(1) != size}.
+     */
+    public static <T> SparseMatrixData<T> setRow(Shape srcShape, T[] srcEntries, int[] rowIndices, int[] colIndices,
+                                                 int rowIdx,
+                                                 int size, T[] row, int[] indices) {
+        if(srcShape.get(1) != size) {
+            throw new IllegalArgumentException("Cannot set row of matrix with shape " + srcShape
+                    + " with a vector of size " + size + ".");
+        }
+
+        int[] rowArray = new int[row.length];
+        Arrays.fill(rowArray, rowIdx);
+
+        List<T> entries = Arrays.asList(row);
+        List<Integer> destRowIndices = ArrayUtils.toArrayList(rowArray);
+        List<Integer> destColIndices = ArrayUtils.toArrayList(indices);
+
+        for(int i=0, nnz=srcEntries.length; i<nnz; i++) {
+            int srcRow = rowIndices[i];
+
+            if(srcRow != rowIdx) {
+                entries.add(srcEntries[i]);
+                destRowIndices.add(srcRow);
+                destColIndices.add(colIndices[i]);
+            }
+        }
+
+        // Ensure the data is properly sorted.
+        new CooDataSorter<>(entries, destRowIndices, destColIndices).sparseSort();
+
+        return new SparseMatrixData<>(srcShape, entries, destRowIndices, destColIndices);
+    }
+
+
+    /**
+     * Sets a column of a sparse matrix to the values in a sparse tensor.
+     * @param srcShape Shape of the matrix to set column in.
+     * @param srcEntries Non-zero entries of the COO matrix.
+     * @param rowIndices Non-zero row indices of the COO matrix.
+     * @param colIndices Non-zero column indices of the COO matrix.
+     * @param colIdx Index of the column to set.
+     * @param size Full size of the COO vector.
+     * @param col Non-zero entries of the COO vector containing new column values.
+     * @param indices Non-zero indices of the COO vector containing new column values.
+     * @return A copy of the {@code src} matrix with the specified column set to the {@code col} sparse vector.
+     * @throws IllegalArgumentException If the {@code src} matrix does not have the same number of rows as total entries
+     * in the {@code col} vector.
+     */
+    public static <T> SparseMatrixData<T> setCol(Shape srcShape, T[] srcEntries, int[] rowIndices, int[] colIndices,
+                                                 int colIdx,
+                                                 int size, T[] col, int[] indices) {
+        ValidateParameters.ensureIndexInBounds(srcShape.get(1), colIdx);
+        ValidateParameters.ensureEquals(srcShape.get(0), size);
+
+        // Initialize destination arrays with the new column and the appropriate indices.
+        List<T> destEntries = Arrays.asList(col);
+        List<Integer> destRowIndices = ArrayUtils.toArrayList(colIndices);
+        List<Integer> destColIndices = ArrayUtils.toArrayList(ArrayUtils.filledArray(col.length, colIdx));
+
+        addNotInCol(destEntries, destRowIndices, destColIndices,
+                srcEntries, rowIndices, colIndices, colIdx);
+
+        return new SparseMatrixData<T>(srcShape, destEntries, destRowIndices, destColIndices);
+    }
+
+
+    /**
+     * Adds values from a sparse matrix to specified lists if the value is not within a specified column.
+     * @param destEntries List to add non-zero entries from sparse matrix to.
+     * @param destRowIndices List to add non-zero row indices from sparse matrix to.
+     * @param destColIndices List to add non-zero column indices from sparse matrix to.
+     * @param src The sparse matrix to get non-zero values and indices from.
+     * @param colIdx Specified column to not add entries to the lists from.
+     */
+    private static <T> void addNotInCol(List<T> destEntries, List<Integer> destRowIndices,
+                                        List<Integer> destColIndices,
+                                        T[] srcEntries, int[] rowIndices, int[] colIndices,
+                                        int colIdx) {
+        for(int i=0, size=srcEntries.length; i<size; i++) {
+            // Add all entries which are not in the specified column.
+            if(colIndices[i]!=colIdx) {
+                destEntries.add(srcEntries[i]);
+                destRowIndices.add(rowIndices[i]);
+                destColIndices.add(colIndices[i]);
+            }
+        }
     }
 
 

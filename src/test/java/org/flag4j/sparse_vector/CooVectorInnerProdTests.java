@@ -4,7 +4,7 @@ import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.linalg.operations.common.semiring_ops.AggregateSemiRing;
+import org.flag4j.linalg.operations.common.semiring_ops.AggregateSemiring;
 import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
 import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOperations;
 import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
@@ -94,7 +94,7 @@ class CooVectorInnerProdTests {
         bIndices = new int[]{0, 2, 8};
         b = new CooCVector(sparseSize, bEntries, bIndices);
 
-        exp = AggregateSemiRing.sum(new Complex128[]{
+        exp = AggregateSemiring.sum(new Complex128[]{
                 new Complex128(-67,14).conj().mult(5.6), new Complex128(24,-56.134).conj().mult(-9.355)
         });
 
@@ -126,7 +126,7 @@ class CooVectorInnerProdTests {
                 };
         b = new CVector(bEntries);
 
-        exp = AggregateSemiRing.sum(new Complex128[]{
+        exp = AggregateSemiring.sum(new Complex128[]{
                 new Complex128(-9.245, 3.4).conj().mult(1.0),
                 new Complex128(14.5).conj().mult(5.6),
                 new Complex128(-0.924, -994.15).conj().mult(-9.355),
