@@ -49,10 +49,10 @@ public final class RealCsrProperties {
 
             for(int i=0; i<src.rowPointers.length-1; i++) {
                 for(int j=src.rowPointers[i]; j<src.rowPointers[i+1]; j++) {
-                    if(src.entries[j] == 1) {
+                    if(src.data[j] == 1) {
                         if(src.colIndices[j] != i) return false;
                         diagCount++;
-                    } else if(src.entries[j] != 0) {
+                    } else if(src.data[j] != 0) {
                         return false;
                     }
                 }
@@ -79,11 +79,11 @@ public final class RealCsrProperties {
 
             for(int i=0; i<src.rowPointers.length-1; i++) {
                 for(int j=src.rowPointers[i]; j<src.rowPointers[i+1]; j++) {
-                    if(Math.abs(src.entries[j]-1) > diagTol) {
+                    if(Math.abs(src.data[j]-1) > diagTol) {
                         if(src.colIndices[j] != i)
                             return false; // Diagonal value not close to one.
                         diagCount++;
-                    } else if(Math.abs(src.entries[i]) > nonDiagTol) {
+                    } else if(Math.abs(src.data[i]) > nonDiagTol) {
                         return false; // Non-diagonal value is not close to one.
                     }
                 }
@@ -104,7 +104,7 @@ public final class RealCsrProperties {
     public static boolean isSymmetric(CsrMatrix src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
-        if(src.entries.length == 0) return true;
+        if(src.data.length == 0) return true;
 
         return src.T().equals(src);
     }
@@ -118,7 +118,7 @@ public final class RealCsrProperties {
     public static boolean isAntiSymmetric(CsrMatrix src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
-        if(src.entries.length == 0) return true;
+        if(src.data.length == 0) return true;
 
         return src.T().mult(-1).equals(src);
     }

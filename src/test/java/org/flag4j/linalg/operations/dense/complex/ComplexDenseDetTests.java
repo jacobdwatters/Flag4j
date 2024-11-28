@@ -1,6 +1,7 @@
 package org.flag4j.linalg.operations.dense.complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.linalg.operations.dense.field_ops.DenseFieldDeterminant;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;

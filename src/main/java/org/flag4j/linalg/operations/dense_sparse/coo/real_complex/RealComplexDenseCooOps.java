@@ -25,11 +25,13 @@
 package org.flag4j.linalg.operations.dense_sparse.coo.real_complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
-import org.flag4j.linalg.operations.common.real.RealOperations;
+import org.flag4j.linalg.operations.common.real.RealOps;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
@@ -37,9 +39,9 @@ import org.flag4j.util.ValidateParameters;
 /**
  * This class contains methods to apply common binary operations to a real/complex dense matrix and to a complex/real sparse matrix.
  */
-public final class RealComplexDenseSparseOperations {
+public final class RealComplexDenseCooOps {
 
-    private RealComplexDenseSparseOperations() {
+    private RealComplexDenseCooOps() {
         // Hide default constructor for utility class.
         throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
@@ -60,7 +62,7 @@ public final class RealComplexDenseSparseOperations {
 
         for(int i=0, size=destEntries.length; i<size; i++) {
             int index = src2.shape.getFlatIndex(src1.indices[i]); // Get index of non-zero entry.
-            destEntries[i] = new Complex128(src1.entries[index]).div((Complex128) src2.entries[i]);
+            destEntries[i] = new Complex128(src1.data[index]).div((Complex128) src2.data[i]);
         }
 
         return new CooCTensor(src2.shape, destEntries, destIndices);
@@ -68,22 +70,26 @@ public final class RealComplexDenseSparseOperations {
 
 
     /**
-     * Adds a real dense tensor to a sparse complex tensor.
-     * @param src1 First tensor in the sum.
-     * @param src2 Second tensor in the sum.
-     * @return The result of the tensor addition.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.t
+     * Computes element-wise sum between a real dense tensor to a sparse COO complex tensor.
+     * @param shape1 Shape of the first tensor.
+     * @param src1 Entries of the first tensor.
+     * @param shape2 Shape of the COO tensor.
+     * @param src2 Non-zero data of the COO tensor.
+     * @param indices Non-zero indices of the COO tensor.
+     * @param dest Array to store the dense result of the element-wise sum. Must be at least as large as {@code src1}.
+     * May be {@code null} or the same array as {@code src1}.
+     * @throws IllegalArgumentException If {@code !shape1.equals(shape2)}.
      */
-    public static CTensor add(Tensor src1, CooCTensor src2) {
-        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        Complex128[] entries = ArrayUtils.wrapAsComplex128(src1.entries, null);
+    public static void add(Shape shape1, double[] src1,
+                           Shape shape2, Field<Complex128>[] src2, int[][] indices,
+                           Complex128[] dest) {
+        ValidateParameters.ensureEqualShape(shape1, shape2);
+        ArrayUtils.wrapAsComplex128(src1, dest);
 
-        for(int i=0, size=src2.nnz; i<size; i++) {
-            int idx = src2.shape.getFlatIndex(src2.indices[i]);
-            entries[idx] = src2.entries[i].add(entries[idx]);
+        for(int i=0, size=src2.length; i<size; i++) {
+            int idx = shape2.getFlatIndex(indices[i]);
+            dest[idx] = src2[i].add(dest[idx]);
         }
-
-        return new CTensor(src1.shape, entries);
     }
 
 
@@ -96,11 +102,11 @@ public final class RealComplexDenseSparseOperations {
      */
     public static CTensor sub(Tensor src1, CooCTensor src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        Complex128[] entries = ArrayUtils.wrapAsComplex128(src1.entries, null);
+        Complex128[] entries = ArrayUtils.wrapAsComplex128(src1.data, null);
 
         for(int i=0, size=src2.nnz; i<size; i++) {
             int idx = src2.shape.getFlatIndex(src2.indices[i]);
-            entries[idx] = entries[idx].sub((Complex128) src2.entries[i]);
+            entries[idx] = entries[idx].sub((Complex128) src2.data[i]);
         }
 
         return new CTensor(src1.shape, entries);
@@ -123,8 +129,29 @@ public final class RealComplexDenseSparseOperations {
         ArrayUtils.deepCopy( src2.indices, indices);
 
         for(int i=0, size=destEntries.length; i<size; i++) {
-            destEntries[i] = src1.entries[src2.shape.getFlatIndex(src2.indices[i])].mult(src2.entries[i]);
+            destEntries[i] = src1.data[src2.shape.getFlatIndex(src2.indices[i])].mult(src2.data[i]);
         }
+
+        return new CooCTensor(src2.shape, destEntries, indices);
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between a complex dense tensor and a real sparse matrix.
+     * @param src1 First tensor in the element-wise multiplication.
+     * @param src2 Second tensor in the element-wise multiplication.
+     * @return The result of element-wise multiplication.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static CooCTensor elemMult(Tensor src1, CooCTensor src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+        Complex128[] destEntries = new Complex128[src2.nnz];
+
+        int[][] indices = new int[src2.indices.length][src2.indices[0].length];
+        ArrayUtils.deepCopy(src2.indices, indices);
+
+        for(int i=0, size=destEntries.length; i<size; i++)
+            destEntries[i] = src2.data[i].mult(src1.data[src2.shape.getFlatIndex(src2.indices[i])]);
 
         return new CooCTensor(src2.shape, destEntries, indices);
     }
@@ -141,11 +168,11 @@ public final class RealComplexDenseSparseOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         Complex128[] entries = ArrayUtils.wrapAsComplex128(
-                RealOperations.scalMult(src2.entries, -1.0), null);
+                RealOps.scalMult(src2.data, -1.0, null), null);
 
         for(int i=0, size=src1.nnz; i<size; i++) {
             int idx = src1.shape.getFlatIndex(src1.indices[i]);
-            entries[idx] = src1.entries[i].add(entries[idx].re);
+            entries[idx] = src1.data[i].add(entries[idx].re);
         }
 
         return new CTensor(src1.shape, entries);
@@ -164,7 +191,7 @@ public final class RealComplexDenseSparseOperations {
 
         for(int i=0, size=src1.nnz; i<size; i++) {
             int idx = src1.shape.getFlatIndex(src1.indices[i]);
-            sum.entries[idx].add(src1.entries[i]);
+            sum.data[idx].add(src1.data[i]);
         }
 
         return sum;
@@ -183,7 +210,7 @@ public final class RealComplexDenseSparseOperations {
 
         for(int i=0, size=src1.nnz; i<size; i++) {
             int idx = src1.shape.getFlatIndex(src1.indices[i]);
-            sum.entries[idx].add(src1.entries[i]);
+            sum.data[idx].add(src1.data[i]);
         }
 
         return sum;
@@ -202,7 +229,7 @@ public final class RealComplexDenseSparseOperations {
 
         for(int i=0, size=src1.nnz; i<size; i++) {
             int idx = src1.shape.getFlatIndex(src1.indices[i]);
-            sum.entries[idx] = sum.entries[idx].sub((Complex128) src1.entries[i]);
+            sum.data[idx] = sum.data[idx].sub((Complex128) src1.data[i]);
         }
 
         return sum;
@@ -221,7 +248,7 @@ public final class RealComplexDenseSparseOperations {
 
         for(int i=0, size=src1.nnz; i<size; i++) {
             int idx = src1.shape.getFlatIndex(src1.indices[i]);
-            sum.entries[idx] = sum.entries[idx].add((Complex128) src1.entries[i]);
+            sum.data[idx] = sum.data[idx].add((Complex128) src1.data[i]);
         }
 
         return sum;

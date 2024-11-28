@@ -41,20 +41,23 @@ public final class SemiRingOperations {
      * @return The result of the scalar multiplication of a tensor.
      */
     public static <T extends Semiring<T>> Semiring<T>[] scalMult(Semiring<T>[] src, Semiring<T> factor) {
-        return scalMult(src, null, factor);
+        return scalMult(src, factor, null);
     }
 
 
     /**
      * Computes the scalar multiplication of a tensor.
+     *
      * @param src Entries of the tensor.
-     * @param dest Array to store result in. May be null.
      * @param factor Scalar value to multiply.
+     * @param dest Array to store result in. May be null.
+     *
      * @return A reference to the {@code dest} array if it was not null. Otherwise, a new array will be formed.
+     *
      * @throws ArrayIndexOutOfBoundsException If {@code dest} is not at least the size of {@code src}.
      */
     public static <T extends Semiring<T>> Semiring<T>[] scalMult(
-            Semiring<T>[] src, Semiring<T>[] dest, Semiring<T> factor) {
+            Semiring<T>[] src, Semiring<T> factor, Semiring<T>[] dest) {
         int size = src.length;
         if(dest==null) dest = new Semiring[size];
 
@@ -88,12 +91,14 @@ public final class SemiRingOperations {
 
     /**
      * Sums a value to each entry of tensor.
-     * @param src Entries of the tensor (non-zero entries if tensor is sparse).
-     * @param dest Array to store result in. If {@code null}, an appropriately sized array will be created.
+     *
+     * @param src Entries of the tensor (non-zero data if tensor is sparse).
      * @param summand Value to sum to each entry of the tensor.
+     * @param dest Array to store result in. If {@code null}, an appropriately sized array will be created.
+     *
      * @return A reference to the {@code dest} array if it was not {@code null}. Otherwise, a new array will be formed.
      */
-    public static <T extends Semiring<T>> Semiring<T>[] add(Semiring<T>[] src, Semiring<T>[] dest, Semiring<T> summand) {
+    public static <T extends Semiring<T>> Semiring<T>[] add(Semiring<T>[] src, Semiring<T> summand, Semiring<T>[] dest) {
         if(dest==null) dest = new Semiring[src.length];
         T val = (T) summand;
         for(int i=0, size=src.length; i<size; i++)
@@ -105,7 +110,7 @@ public final class SemiRingOperations {
 
     /**
      * Subtracts a value from each entry of tensor.
-     * @param src Entries of the tensor (non-zero entries if tensor is sparse).
+     * @param src Entries of the tensor (non-zero data if tensor is sparse).
      * @param dest Array to store result in. If {@code null}, an appropriately sized array will be created.
      * @param subtrahend Value to subtract from each entry of the tensor.
      * @return A reference to the {@code dest} array if it was not {@code null}. Otherwise, a new array will be formed.

@@ -3,6 +3,7 @@ package org.flag4j.sparse_complex_vector;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooCVector;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CooCVectorConversionTests {
 
@@ -145,6 +147,6 @@ class CooCVectorConversionTests {
         denseEntries[aIndices[3]] = aEntries[3];
         denseVector = new CVector(denseEntries);
 
-        assertEquals(a, CooCVector.fromDense(denseVector));
+        assertEquals(a, denseVector.toCoo());
     }
 }

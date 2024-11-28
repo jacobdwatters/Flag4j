@@ -37,7 +37,7 @@ import org.flag4j.util.ValidateParameters;
 public final class RealDenseVectorOperations {
 
     /**
-     * Minimum number of entries to apply concurrent algorithm for outer product.
+     * Minimum number of data to apply concurrent algorithm for outer product.
      */
     private static final int OUTER_CONCURRENT_THRESHOLD = 275_000;
 
@@ -121,8 +121,8 @@ public final class RealDenseVectorOperations {
     public static Matrix dispatchOuter(Vector src1, Vector src2) {
         int totalEntries = src1.size*src2.size;
         if(totalEntries < OUTER_CONCURRENT_THRESHOLD)
-            return new Matrix(src1.size, src2.size, outerProduct(src1.entries, src2.entries));
+            return new Matrix(src1.size, src2.size, outerProduct(src1.data, src2.data));
         else
-            return new Matrix(src1.size, src2.size, outerProductConcurrent(src1.entries, src2.entries));
+            return new Matrix(src1.size, src2.size, outerProductConcurrent(src1.data, src2.data));
     }
 }

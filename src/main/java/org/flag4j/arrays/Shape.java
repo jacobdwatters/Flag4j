@@ -45,12 +45,12 @@ import java.util.StringJoiner;
  * utilities for shape-related operations.
  *
  * <p>A shape is defined by an array of dimensions, where each dimension specifies the size of the tensor along a particular axis.
- * {@link #getStrides() Strides} can also be computed for the shape which specify the number of entries to step in each dimension of
+ * {@link #getStrides() Strides} can also be computed for the shape which specify the number of data to step in each dimension of
  * the shape when traversing an array with the given shape. Strides will always be row-major contiguous and allow for efficient
  * array traversal and mapping of nD indices to 1D contiguous indices.
  *
  * <p>This class also supports converting between multidimensional and flat indices, computing the shapes rank (i.e. number of
- * dimensions), computing the total number of entries of an array with the given shape, and manipulating dimensions through swaps or
+ * dimensions), computing the total number of data of an array with the given shape, and manipulating dimensions through swaps or
  * permutations.
  *
  * <p>The {@code Shape} class is immutable with respect to its dimensions, ensuring thread safety and consistency. Strides
@@ -80,11 +80,11 @@ public class Shape implements Serializable {
      */
     private int[] strides;
     /**
-     * Total entries of this shape. This is only computed on demand by {@link #totalEntries()}.
+     * Total data of this shape. This is only computed on demand by {@link #totalEntries()}.
      */
     private BigInteger totalEntries = null;
     /**
-     * Stores the total number of entries as exact integer if possible. This is only computed on demand by
+     * Stores the total number of data as exact integer if possible. This is only computed on demand by
      * {@link #totalEntriesIntValueExact()}.
      */
     private int totalEntriesIntExact = -1;
@@ -92,7 +92,7 @@ public class Shape implements Serializable {
 
     /**
      * Constructs a shape object from specified dimensions.
-     * @param dims A list of the dimension measurements for this shape object. All entries must be non-negative.
+     * @param dims A list of the dimension measurements for this shape object. All data must be non-negative.
      * @throws IllegalArgumentException If any dimension is negative.
      */
     public Shape(int... dims) {
@@ -336,14 +336,14 @@ public class Shape implements Serializable {
 
 
     /**
-     * Gets the total number of entries for a tensor with this shape.
-     * @return The total number of entries for a tensor with this shape.
+     * Gets the total number of data for a tensor with this shape.
+     * @return The total number of data for a tensor with this shape.
      */
     public BigInteger totalEntries() {
         // Check if totalEntries has already been computed for this shape.
         if(totalEntries!=null) return totalEntries;
 
-        // Otherwise the total entries needs to be computed.
+        // Otherwise the total data needs to be computed.
         BigInteger product = BigInteger.ONE;
         for(int dim : dims)
             product = product.multiply(BigInteger.valueOf(dim));
@@ -354,13 +354,13 @@ public class Shape implements Serializable {
 
 
     /**
-     * <p>Gets the total number of entries for a tensor with this shape.
-     * If the total number of entries exceeds Integer.MAX_VALUE, an exception is thrown.
+     * <p>Gets the total number of data for a tensor with this shape.
+     * If the total number of data exceeds Integer.MAX_VALUE, an exception is thrown.
      *
      * <p>This method is likely to be more efficient than {@link #totalEntries()} if a primitive int value is desired.
      *
-     * @return The total number of entries for a tensor with this shape.
-     * @throws ArithmeticException If the total number of entries overflows a primitive int.
+     * @return The total number of data for a tensor with this shape.
+     * @throws ArithmeticException If the total number of data overflows a primitive int.
      */
     public int totalEntriesIntValueExact() {
         if(totalEntriesIntExact >= 0) return totalEntriesIntExact; // Value has already been computed.
@@ -369,7 +369,7 @@ public class Shape implements Serializable {
         for (int dim : dims) {
             // Check for overflow before multiplying.
             if (dim > 0 && totalEntriesIntExact > Integer.MAX_VALUE / dim)
-                throw new ArithmeticException("Integer overflow while computing total entries in the shape.");
+                throw new ArithmeticException("Integer overflow while computing total data in the shape.");
 
             totalEntriesIntExact *= dim;
         }

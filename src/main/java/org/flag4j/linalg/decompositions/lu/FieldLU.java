@@ -80,7 +80,7 @@ public class FieldLU<T extends Field<T>> extends LU<FieldMatrix<T>> {
     @Override
     protected void initLU(FieldMatrix<T> src) {
         // TODO: Add overloaded constructor in super which has flag specifying if the decomposition should be done in place or copied.
-        LU = new FieldMatrix<>(src.shape, src.entries.clone());
+        LU = new FieldMatrix<>(src.shape, src.data.clone());
     }
 
 
@@ -91,7 +91,7 @@ public class FieldLU<T extends Field<T>> extends LU<FieldMatrix<T>> {
     protected void noPivot() {
         // Using Gaussian elimination and no pivoting
         for(int j=0; j<LU.numCols; j++) {
-            if(j<LU.numRows && (LU.entries[j*LU.numCols + j]).mag() < zeroPivotTol) {
+            if(j<LU.numRows && (LU.data[j*LU.numCols + j]).mag() < zeroPivotTol) {
                 throw new LinearAlgebraException("Zero pivot encountered in decomposition." +
                         " Consider using LU decomposition with partial pivoting.");
             }
@@ -150,17 +150,17 @@ public class FieldLU<T extends Field<T>> extends LU<FieldMatrix<T>> {
 
         for(int i=j+1; i<LU.numRows; i++) {
             int iRow = i*LU.numCols;
-            m = LU.entries[iRow + j];
-            m = LU.entries[pivotRow + j].isZero() ? m : m.div((T) LU.entries[pivotRow + j]);
+            m = LU.data[iRow + j];
+            m = LU.data[pivotRow + j].isZero() ? m : m.div((T) LU.data[pivotRow + j]);
 
             if(!m.isZero()) {
                 // Compute and set U values.
                 for(int k=j; k<LU.numCols; k++)
-                    LU.entries[iRow + k] = LU.entries[iRow + k].sub(m.mult((T) LU.entries[pivotRow + k]));
+                    LU.data[iRow + k] = LU.data[iRow + k].sub(m.mult((T) LU.data[pivotRow + k]));
             }
 
             // Compute and set L value.
-            LU.entries[iRow + j] = m;
+            LU.data[iRow + j] = m;
         }
     }
 
@@ -176,7 +176,7 @@ public class FieldLU<T extends Field<T>> extends LU<FieldMatrix<T>> {
         double value;
 
         for(int i=j; i<LU.numRows; i++) {
-            value = LU.entries[i*LU.numCols+j].mag();
+            value = LU.data[i*LU.numCols+j].mag();
 
             if(value > currentMax) {
                 currentMax = value;
@@ -203,7 +203,7 @@ public class FieldLU<T extends Field<T>> extends LU<FieldMatrix<T>> {
             idx = i*LU.numCols;
 
             for(int j=startIndex; j<LU.numCols; j++) {
-                value = LU.entries[idx+j].mag();
+                value = LU.data[idx+j].mag();
 
                 if(value > currentMax) {
                     currentMax = value;
@@ -224,15 +224,15 @@ public class FieldLU<T extends Field<T>> extends LU<FieldMatrix<T>> {
      */
     @Override
     public FieldMatrix<T> getL() {
-        FieldMatrix<T> L = new FieldMatrix(LU.numRows, Math.min(LU.numRows, LU.numCols), LU.entries[0].getZero());
-        final T ONE = LU.entries[0].getOne();
+        FieldMatrix<T> L = new FieldMatrix(LU.numRows, Math.min(LU.numRows, LU.numCols), LU.data[0].getZero());
+        final T ONE = LU.data[0].getOne();
 
         // Copy L values from LU matrix.
         for(int i=0; i<LU.numRows; i++) {
             if(i<LU.numCols)
-                L.entries[i*L.numCols+i] = ONE; // Set principle diagonal to be ones.
+                L.data[i*L.numCols+i] = ONE; // Set principle diagonal to be ones.
 
-            System.arraycopy(LU.entries, i*LU.numCols, L.entries, i*L.numCols, i);
+            System.arraycopy(LU.data, i*LU.numCols, L.data, i*L.numCols, i);
         }
 
         return L;
@@ -246,12 +246,12 @@ public class FieldLU<T extends Field<T>> extends LU<FieldMatrix<T>> {
      */
     @Override
     public FieldMatrix<T> getU() {
-        FieldMatrix<T> U = new FieldMatrix<T>(Math.min(LU.numRows, LU.numCols), LU.numCols, LU.entries[0].getZero());
+        FieldMatrix<T> U = new FieldMatrix<T>(Math.min(LU.numRows, LU.numCols), LU.numCols, LU.data[0].getZero());
         int stopIdx = Math.min(LU.numRows, LU.numCols);
 
         // Copy U values from LU matrix.
         for(int i=0; i<stopIdx; i++)
-            System.arraycopy(LU.entries, i*(LU.numCols+1), U.entries, i*(LU.numCols+1), LU.numCols-i);
+            System.arraycopy(LU.data, i*(LU.numCols+1), U.data, i*(LU.numCols+1), LU.numCols-i);
 
         return U;
     }

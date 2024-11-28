@@ -37,9 +37,9 @@ import java.util.Arrays;
  * This class provides low level methods for computing operations between dense/sparse and
  * sparse/dense field vectors.
  */
-public final class DenseCooFieldVectorOperations {
+public final class DenseCooFieldVectorOps {
 
-    private DenseCooFieldVectorOperations() {
+    private DenseCooFieldVectorOps() {
         // Hide default constructor in utility class.
         throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
@@ -48,11 +48,11 @@ public final class DenseCooFieldVectorOperations {
     /**
      * Computes the vector inner product between a complex dense vector and a complex sparse vector.
      * @param src1 Entries of the dense vector.
-     * @param src2 Non-zero entries of the sparse vector.
+     * @param src2 Non-zero data of the sparse vector.
      * @param indices Indices of nonzero values in sparse vector.
-     * @param sparseSize Full size of the sparse vector (i.e. total number of entries including zeros).
+     * @param sparseSize Full size of the sparse vector (i.e. total number of data including zeros).
      * @return The inner product of the two vectors.
-     * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
+     * @throws IllegalArgumentException If the number of data in the two vectors is not equivalent.
      */
     public static <T extends Field<T>> Field<T> innerProduct(Field<T>[] src1, Field<T>[] src2,
                                                              int[] indices, int sparseSize) {
@@ -71,11 +71,11 @@ public final class DenseCooFieldVectorOperations {
     /**
      * Computes the vector inner product between a complex dense vector and a complex sparse vector.
      * @param src1 Entries of the dense vector.
-     * @param src2 Non-zero entries of the sparse vector.
+     * @param src2 Non-zero data of the sparse vector.
      * @param indices Indices of nonzero values in sparse vector.
-     * @param sparseSize Full size of the sparse vector (i.e. total number of entries including zeros).
+     * @param sparseSize Full size of the sparse vector (i.e. total number of data including zeros).
      * @return The inner product of the two vectors.
-     * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
+     * @throws IllegalArgumentException If the number of data in the two vectors is not equivalent.
      */
     public static <T extends Field<T>> Field<T> innerProduct(Field<T>[] src1, int[] indices, int sparseSize, Field<T>[] src2) {
         ValidateParameters.ensureArrayLengthsEq(src1.length, sparseSize);
@@ -93,8 +93,8 @@ public final class DenseCooFieldVectorOperations {
     /**
      * Computes the vector outer product between a complex dense vector and a real sparse vector.
      * @param src1 Entries of the dense vector.
-     * @param src2 Non-zero entries of the sparse vector.
-     * @param indices Indices of non-zero entries of sparse vector.
+     * @param src2 Non-zero data of the sparse vector.
+     * @param indices Indices of non-zero data of sparse vector.
      * @return The matrix resulting from the vector outer product.
      */
     public static <T extends Field<T>> Field<T>[] outerProduct(Field<T>[] src1, Field<T>[] src2, int[] indices, int sparseSize) {
@@ -116,8 +116,8 @@ public final class DenseCooFieldVectorOperations {
     /**
      * Computes the vector outer product between a complex dense vector and a real sparse vector.
      * @param src1 Entries of the dense vector.
-     * @param src2 Non-zero entries of the sparse vector.
-     * @param indices Indices of non-zero entries of sparse vector.
+     * @param src2 Non-zero data of the sparse vector.
+     * @param indices Indices of non-zero data of sparse vector.
      * @return The matrix resulting from the vector outer product.
      */
     public static <T extends Field<T>> Field<T>[] outerProduct(Field<T>[] src2, int[] indices, int sparseSize, Field<T>[] src1) {
@@ -148,7 +148,7 @@ public final class DenseCooFieldVectorOperations {
         
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.indices[i];
-            dest.entries[idx] = dest.entries[idx].add((T) src2.entries[i]);
+            dest.data[idx] = dest.data[idx].add((T) src2.data[i]);
         }
 
         return dest;
@@ -166,7 +166,7 @@ public final class DenseCooFieldVectorOperations {
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.indices[i];
-            src1.entries[idx] = src1.entries[idx].add((T) src2.entries[i]);
+            src1.data[idx] = src1.data[idx].add((T) src2.data[i]);
         }
     }
 
@@ -184,9 +184,9 @@ public final class DenseCooFieldVectorOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         AbstractDenseFieldVector<?, ?, T> dest = src1.copy();
 
-        for(int i=0; i<src2.entries.length; i++) {
+        for(int i = 0; i<src2.data.length; i++) {
             int index = src2.indices[i];
-            dest.entries[index] = dest.entries[index].sub((T) src2.entries[i]);
+            dest.data[index] = dest.data[index].sub((T) src2.data[i]);
         }
 
         return dest;
@@ -203,11 +203,11 @@ public final class DenseCooFieldVectorOperations {
     public static <T extends Field<T>> AbstractDenseFieldVector<?, ?, T> sub(
             AbstractCooFieldVector<?, ?, ?, ?, T> src1, AbstractDenseFieldVector<?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-//        AbstractDenseFieldVector<?, ?, T> dest = src2.makeLikeTensor(FieldOps.scalMult(src2.entries, -1));
+//        AbstractDenseFieldVector<?, ?, T> dest = src2.makeLikeTensor(FieldOps.scalMult(src2.data, -1));
 //
 //        for(int i=0, size=src1.nnz; i<size; i++) {
 //            int idx = src1.indices[i];
-//            dest.entries[idx] = dest.entries[idx].add((T) src1.entries[i]);
+//            dest.data[idx] = dest.data[idx].add((T) src1.data[i]);
 //        }
 //
 //        return dest;
@@ -226,7 +226,7 @@ public final class DenseCooFieldVectorOperations {
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.indices[i];
-            src1.entries[idx] = src1.entries[idx].sub((T) src2.entries[i]);
+            src1.data[idx] = src1.data[idx].sub((T) src2.data[i]);
         }
     }
 
@@ -241,10 +241,10 @@ public final class DenseCooFieldVectorOperations {
     public static <T extends Field<T>> AbstractCooFieldVector<?, ?, ?, ?, T> elemMult(
             AbstractDenseFieldVector<?, ?, T> src1, AbstractCooFieldVector<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        Field<T>[] entries = new Field[src2.entries.length];
+        Field<T>[] entries = new Field[src2.data.length];
 
         for(int i=0; i<src2.nnz; i++)
-            entries[i] = src1.entries[src2.indices[i]].mult((T) src2.entries[i]);
+            entries[i] = src1.data[src2.indices[i]].mult((T) src2.data[i]);
 
         return src2.makeLikeTensor(src1.shape, entries, src2.indices.clone());
     }
@@ -259,10 +259,10 @@ public final class DenseCooFieldVectorOperations {
     public static <T extends Field<T>> AbstractCooFieldVector<?, ?, ?, ?, T> elemDiv(
             AbstractCooFieldVector<?, ?, ?, ?, T> src1, AbstractDenseFieldVector<?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        Field<T>[] dest = new Field[src1.entries.length];
+        Field<T>[] dest = new Field[src1.data.length];
 
         for(int i=0; i<src1.nnz; i++)
-            dest[i] = src1.entries[i].div((T) src2.entries[src1.indices[i]]);
+            dest[i] = src1.data[i].div((T) src2.data[src1.indices[i]]);
 
         return src1.makeLikeTensor(src1.shape, dest, src1.indices.clone());
     }

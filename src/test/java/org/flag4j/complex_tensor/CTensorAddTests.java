@@ -6,8 +6,8 @@ import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
-import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldTensorOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldTensorOps;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooOps;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -307,7 +307,7 @@ class CTensorAddTests {
         expEntries[expShape.getFlatIndex(sparseIndices[2])] = expEntries[expShape.getFlatIndex(sparseIndices[2])].add(bEntries[2]);
         exp = new CTensor(expShape, expEntries);
 
-        RealFieldDenseCooOperations.addEq(A, B);
+        RealFieldDenseCooOps.addEq(A, B);
         assertEquals(exp, A);
 
         // ------------------------- Sub-case 2 -------------------------
@@ -321,7 +321,7 @@ class CTensorAddTests {
         B = new CooTensor(bShape, bEntries, sparseIndices);
 
         CooTensor finalB = B;
-        assertThrows(LinearAlgebraException.class, ()->RealFieldDenseCooOperations.addEq(A, finalB));
+        assertThrows(LinearAlgebraException.class, ()-> RealFieldDenseCooOps.addEq(A, finalB));
     }
 
 
@@ -421,7 +421,7 @@ class CTensorAddTests {
         expEntries[expShape.getFlatIndex(sparseIndices[2])] = expEntries[expShape.getFlatIndex(sparseIndices[2])].add(bEntries[2]);
         exp = new CTensor(expShape, expEntries);
 
-        DenseCooFieldTensorOperations.addEq(A, B);
+        DenseCooFieldTensorOps.addEq(A, B);
         assertEquals(exp, A);
 
         // ------------------------- Sub-case 2 -------------------------
@@ -435,7 +435,7 @@ class CTensorAddTests {
         B = new CooCTensor(bShape, bEntries, sparseIndices);
 
         CooCTensor finalB = B;
-        assertThrows(LinearAlgebraException.class, ()-> DenseCooFieldTensorOperations.addEq(A, finalB));
+        assertThrows(LinearAlgebraException.class, ()-> DenseCooFieldTensorOps.addEq(A, finalB));
     }
 
 

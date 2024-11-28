@@ -33,7 +33,7 @@ import org.flag4j.linalg.operations.common.semiring_ops.SemiRingProperties;
 
 
 /**
- * This interface provides default functionality for all tensors whose entries are elements of a {@link Semiring}. This includes both
+ * This interface provides default functionality for all tensors whose data are elements of a {@link Semiring}. This includes both
  * sparse and dense tensors.
  * @param <T> Type of this tensor.
  * @param <U> Dense equivalent of this tensor. If this tensor is dense, this should be the same type as {@code T}
@@ -45,7 +45,7 @@ public interface SemiringTensorMixin<T extends SemiringTensorMixin<T, U, V>,
 
     /**
      * Adds a scalar value to each entry of this tensor. If the tensor is sparse, the scalar will only be added to the non-zero
-     * entries of the tensor.
+     * data of the tensor.
      *
      * @param b Scalar field value in sum.
      *
@@ -53,7 +53,7 @@ public interface SemiringTensorMixin<T extends SemiringTensorMixin<T, U, V>,
      */
     @Override
     default T add(V b) {
-        return makeLikeTensor(getShape(), (V[]) SemiRingOperations.add(getEntries(), null, b));
+        return makeLikeTensor(getShape(), (V[]) SemiRingOperations.add(getData(), b, null));
     }
 
     /**
@@ -63,8 +63,8 @@ public interface SemiringTensorMixin<T extends SemiringTensorMixin<T, U, V>,
      */
     @Override
     default void addEq(V b) {
-        Semiring<V>[] entries = getEntries();
-        SemiRingOperations.add(entries, entries, b);
+        Semiring<V>[] entries = getData();
+        SemiRingOperations.add(entries, b, entries);
     }
 
     /**
@@ -76,8 +76,8 @@ public interface SemiringTensorMixin<T extends SemiringTensorMixin<T, U, V>,
      */
     @Override
     default T mult(V b) {
-        Semiring<V>[] entries = getEntries();
-        return makeLikeTensor(getShape(), (V[]) SemiRingOperations.scalMult(getEntries(), null, b));
+        Semiring<V>[] entries = getData();
+        return makeLikeTensor(getShape(), (V[]) SemiRingOperations.scalMult(getData(), b, null));
     }
 
     /**
@@ -87,8 +87,8 @@ public interface SemiringTensorMixin<T extends SemiringTensorMixin<T, U, V>,
      */
     @Override
     default void multEq(V b) {
-        Semiring<V>[] entries = getEntries();
-        SemiRingOperations.scalMult(entries, entries, b);
+        Semiring<V>[] entries = getData();
+        SemiRingOperations.scalMult(entries, b, entries);
     }
 
     /**
@@ -98,17 +98,17 @@ public interface SemiringTensorMixin<T extends SemiringTensorMixin<T, U, V>,
      */
     @Override
     default boolean isZeros() {
-        return SemiRingProperties.isZeros(getEntries());
+        return SemiRingProperties.isZeros(getData());
     }
 
     /**
-     * Checks if this tensor only contains ones. If this tensor is sparse, only the non-zero entries are considered.
+     * Checks if this tensor only contains ones. If this tensor is sparse, only the non-zero data are considered.
      *
      * @return True if this tensor only contains ones. Otherwise, returns false.
      */
     @Override
     default boolean isOnes() {
-        return SemiRingProperties.isOnes(getEntries());
+        return SemiRingProperties.isOnes(getData());
     }
 
     /**
@@ -118,7 +118,7 @@ public interface SemiringTensorMixin<T extends SemiringTensorMixin<T, U, V>,
      */
     @Override
     default V sum() {
-        return AggregateSemiring.sum(getEntries());
+        return AggregateSemiring.sum(getData());
     }
 
     /**
@@ -128,7 +128,7 @@ public interface SemiringTensorMixin<T extends SemiringTensorMixin<T, U, V>,
      */
     @Override
     default V prod() {
-        return AggregateSemiring.prod(getEntries());
+        return AggregateSemiring.prod(getData());
     }
 
 
@@ -138,7 +138,7 @@ public interface SemiringTensorMixin<T extends SemiringTensorMixin<T, U, V>,
      * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
      */
     default V min() {
-        return (V) CompareSemiring.min(getEntries());
+        return (V) CompareSemiring.min(getData());
     }
 
 
@@ -148,7 +148,7 @@ public interface SemiringTensorMixin<T extends SemiringTensorMixin<T, U, V>,
      * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
      */
     default V max() {
-        return (V) CompareSemiring.max(getEntries());
+        return (V) CompareSemiring.max(getData());
     }
 
 
@@ -159,7 +159,7 @@ public interface SemiringTensorMixin<T extends SemiringTensorMixin<T, U, V>,
      * entry (in row-major ordering) are returned.
      */
     default int[] argmin() {
-        return getShape().getNdIndices(CompareSemiring.argmin(getEntries()));
+        return getShape().getNdIndices(CompareSemiring.argmin(getData()));
     }
 
 
@@ -170,6 +170,6 @@ public interface SemiringTensorMixin<T extends SemiringTensorMixin<T, U, V>,
      * entry (in row-major ordering) are returned.
      */
     default int[] argmax() {
-        return getShape().getNdIndices(CompareSemiring.argmax(getEntries()));
+        return getShape().getNdIndices(CompareSemiring.argmax(getData()));
     }
 }

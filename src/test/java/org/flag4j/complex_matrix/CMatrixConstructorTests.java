@@ -2,10 +2,11 @@ package org.flag4j.complex_matrix;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CMatrixConstructorTests {
     Complex128[][] entries;
@@ -38,7 +39,7 @@ class CMatrixConstructorTests {
         expNumCols = size;
         A = new CMatrix(size);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
@@ -55,7 +56,7 @@ class CMatrixConstructorTests {
         expNumCols = size;
         A = new CMatrix(size);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
@@ -81,7 +82,7 @@ class CMatrixConstructorTests {
         expNumCols = size;
         A = new CMatrix(size, value);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
@@ -99,7 +100,7 @@ class CMatrixConstructorTests {
         expNumCols = size;
         A = new CMatrix(size, value);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
@@ -127,7 +128,7 @@ class CMatrixConstructorTests {
         expNumCols = size;
         A = new CMatrix(size, valueD);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
@@ -145,7 +146,7 @@ class CMatrixConstructorTests {
         expNumCols = size;
         A = new CMatrix(size, valueD);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
@@ -170,7 +171,7 @@ class CMatrixConstructorTests {
 
         A = new CMatrix(expNumRows, expNumCols);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
@@ -186,7 +187,7 @@ class CMatrixConstructorTests {
 
         A = new CMatrix(expNumRows, expNumCols);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
@@ -224,7 +225,7 @@ class CMatrixConstructorTests {
 
         A = new CMatrix(expNumRows, expNumCols, value);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
@@ -241,7 +242,7 @@ class CMatrixConstructorTests {
 
         A = new CMatrix(expNumRows, expNumCols, value);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
@@ -282,7 +283,7 @@ class CMatrixConstructorTests {
 
         A = new CMatrix(expNumRows, expNumCols, valueD);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
@@ -298,7 +299,7 @@ class CMatrixConstructorTests {
 
         A = new CMatrix(expNumRows, expNumCols, valueD);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
@@ -339,7 +340,7 @@ class CMatrixConstructorTests {
 
         A = new CMatrix(shape);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
@@ -356,7 +357,7 @@ class CMatrixConstructorTests {
 
         A = new CMatrix(shape);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
     }
@@ -377,7 +378,7 @@ class CMatrixConstructorTests {
 
         A = new CMatrix(shape, value);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
@@ -395,7 +396,7 @@ class CMatrixConstructorTests {
 
         A = new CMatrix(shape, value);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
     }
@@ -416,7 +417,7 @@ class CMatrixConstructorTests {
 
         A = new CMatrix(shape, valueD);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
@@ -433,7 +434,7 @@ class CMatrixConstructorTests {
 
         A = new CMatrix(shape, valueD);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
     }
@@ -456,7 +457,7 @@ class CMatrixConstructorTests {
         }
         A = new CMatrix(entries);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
     }
@@ -476,7 +477,7 @@ class CMatrixConstructorTests {
         }
         A = new CMatrix(entriesS);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
     }
@@ -497,7 +498,7 @@ class CMatrixConstructorTests {
         }
         A = new CMatrix(entriesD);
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
     }
@@ -519,7 +520,7 @@ class CMatrixConstructorTests {
         }
 
         A = new CMatrix(B);
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
     }
@@ -541,7 +542,7 @@ class CMatrixConstructorTests {
                 new Complex128(5, 666666.4545), new Complex128(438905, 13)};
 
         A = new CMatrix(expNumRows, expNumCols, entriesC1D);
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
     }

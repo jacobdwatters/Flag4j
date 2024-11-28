@@ -89,17 +89,17 @@ public final class RealComplexCsrOperations {
                 int col2 = src2.colIndices[rowPtr2];
 
                 if(col1 == col2) {
-                    dest.add(opp.apply(src1.entries[rowPtr1], (Complex128) src2.entries[rowPtr2]));
+                    dest.add(opp.apply(src1.data[rowPtr1], (Complex128) src2.data[rowPtr2]));
                     colIndices.add(col1);
                     rowPtr1++;
                     rowPtr2++;
                 } else if(col1 < col2) {
-                    dest.add(new Complex128(src1.entries[rowPtr1]));
+                    dest.add(new Complex128(src1.data[rowPtr1]));
                     colIndices.add(col1);
                     rowPtr1++;
                 } else {
-                    if(uOpp!=null) dest.add(uOpp.apply((Complex128) src2.entries[rowPtr2]));
-                    else dest.add(src2.entries[rowPtr2]);
+                    if(uOpp!=null) dest.add(uOpp.apply((Complex128) src2.data[rowPtr2]));
+                    else dest.add(src2.data[rowPtr2]);
                     colIndices.add(col2);
                     rowPtr2++;
                 }
@@ -108,15 +108,15 @@ public final class RealComplexCsrOperations {
             }
 
             while(rowPtr1 < src1.rowPointers[i+1]) {
-                dest.add(new Complex128(src1.entries[rowPtr1]));
+                dest.add(new Complex128(src1.data[rowPtr1]));
                 colIndices.add(src1.colIndices[rowPtr1]);
                 rowPtr1++;
                 rowPointers[i+1]++;
             }
 
             while(rowPtr2 < src2.rowPointers[i+1]) {
-                if(uOpp!=null) dest.add(uOpp.apply((Complex128) src2.entries[rowPtr2]));
-                else dest.add(src2.entries[rowPtr2]);
+                if(uOpp!=null) dest.add(uOpp.apply((Complex128) src2.data[rowPtr2]));
+                else dest.add(src2.data[rowPtr2]);
                 colIndices.add(src2.colIndices[rowPtr2]);
                 rowPtr2++;
                 rowPointers[i+1]++;
@@ -172,18 +172,18 @@ public final class RealComplexCsrOperations {
                 int col2 = src2.colIndices[rowPtr2];
 
                 if(col1 == col2) {
-                    double val2 = uOpp==null ? src2.entries[rowPtr2] : uOpp.apply(src2.entries[rowPtr2]);
-                    dest.add(opp.apply(src1.entries[rowPtr1], val2));
+                    double val2 = uOpp==null ? src2.data[rowPtr2] : uOpp.apply(src2.data[rowPtr2]);
+                    dest.add(opp.apply(src1.data[rowPtr1], val2));
                     colIndices.add(col1);
                     rowPtr1++;
                     rowPtr2++;
                 } else if(col1 < col2) {
-                    dest.add(src1.entries[rowPtr1]);
+                    dest.add(src1.data[rowPtr1]);
                     colIndices.add(col1);
                     rowPtr1++;
                 } else {
-                    if(uOpp!=null) dest.add(new Complex128(uOpp.apply(src2.entries[rowPtr2])));
-                    else dest.add(new Complex128(src2.entries[rowPtr2]));
+                    if(uOpp!=null) dest.add(new Complex128(uOpp.apply(src2.data[rowPtr2])));
+                    else dest.add(new Complex128(src2.data[rowPtr2]));
                     colIndices.add(col2);
                     rowPtr2++;
                 }
@@ -192,15 +192,15 @@ public final class RealComplexCsrOperations {
             }
 
             while(rowPtr1 < src1.rowPointers[i+1]) {
-                dest.add(src1.entries[rowPtr1]);
+                dest.add(src1.data[rowPtr1]);
                 colIndices.add(src1.colIndices[rowPtr1]);
                 rowPtr1++;
                 rowPointers[i+1]++;
             }
 
             while(rowPtr2 < src2.rowPointers[i+1]) {
-                if(uOpp!=null) dest.add(new Complex128(uOpp.apply(src2.entries[rowPtr2])));
-                else dest.add(new Complex128(src2.entries[rowPtr2]));
+                if(uOpp!=null) dest.add(new Complex128(uOpp.apply(src2.data[rowPtr2])));
+                else dest.add(new Complex128(src2.data[rowPtr2]));
                 colIndices.add(src2.colIndices[rowPtr2]);
                 rowPtr2++;
                 rowPointers[i+1]++;
@@ -244,7 +244,7 @@ public final class RealComplexCsrOperations {
                 int col2 = src2.colIndices[rowPtr2];
 
                 if(col1 == col2) { // Only values at the same indices need to be multiplied.
-                    dest.add(src1.entries[rowPtr1].mult(src2.entries[rowPtr2]));
+                    dest.add(src1.data[rowPtr1].mult(src2.data[rowPtr2]));
                     colIndices.add(col1);
                     rowPtr1++;
                     rowPtr2++;
@@ -319,7 +319,7 @@ public final class RealComplexCsrOperations {
 
             for(int j=rowStart; j<rowEnd; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-                sum.entries[idx] = sum.entries[idx].add((Complex128) src1.entries[j]);
+                sum.data[idx] = sum.data[idx].add((Complex128) src1.data[j]);
             }
         }
 
@@ -346,7 +346,7 @@ public final class RealComplexCsrOperations {
 
             for(int j=rowStart; j<rowEnd; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-                sum.entries[idx] = sum.entries[idx].add((Complex128) src1.entries[j]);
+                sum.data[idx] = sum.data[idx].add((Complex128) src1.data[j]);
             }
         }
 
@@ -372,7 +372,7 @@ public final class RealComplexCsrOperations {
 
             for(int j=rowStart; j<rowEnd; j++) {
                 int idx = i*sum.numCols + src1.colIndices[j];
-                sum.entries[idx] = sum.entries[idx].add((Complex128) src1.entries[j]);
+                sum.data[idx] = sum.data[idx].add((Complex128) src1.data[j]);
             }
         }
 
@@ -398,7 +398,7 @@ public final class RealComplexCsrOperations {
 
             for(int j=rowStart; j<rowEnd; j++) {
                 int idx = i*sum.numCols + src1.colIndices[j];
-                sum.entries[idx] = sum.entries[idx].add((Complex128) src1.entries[j]);
+                sum.data[idx] = sum.data[idx].add((Complex128) src1.data[j]);
             }
         }
 

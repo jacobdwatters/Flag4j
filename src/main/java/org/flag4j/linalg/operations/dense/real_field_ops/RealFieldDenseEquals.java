@@ -51,7 +51,7 @@ public final class RealFieldDenseEquals {
      * @return True if the two matrices are element-wise equivalent.
      */
     public static <T extends Field<T>> boolean matrixEquals(Matrix A, AbstractDenseFieldMatrix<?, ?, T> B) {
-        return tensorEquals(A.entries, A.shape, B.entries, B.shape);
+        return tensorEquals(A.data, A.shape, B.data, B.shape);
     }
 
 
@@ -62,7 +62,7 @@ public final class RealFieldDenseEquals {
      * @return True if the two tensors are numerically element-wise equivalent.
      */
     public static <T extends Field<T>> boolean tensorEquals(Tensor A, AbstractDenseFieldTensor<?, T> B) {
-        return tensorEquals(A.entries, A.shape, B.entries, B.shape);
+        return tensorEquals(A.data, A.shape, B.data, B.shape);
     }
 
 

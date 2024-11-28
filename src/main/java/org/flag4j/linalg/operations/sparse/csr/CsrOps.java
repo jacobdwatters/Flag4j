@@ -55,7 +55,7 @@ public final class CsrOps {
      */
     public static <T> void transpose(T[] srcEntries, int[] srcRowPointers, int[] srcColIndices,
                                      T[] destEntries, int[] destRowPointers, int[] destColIndices) {
-        // Count number of entries in each row.
+        // Count number of data in each row.
         for(int i=0, size=srcColIndices.length; i<size; i++)
             destRowPointers[srcColIndices[i] + 1]++;
 
@@ -86,7 +86,7 @@ public final class CsrOps {
     public static <T extends Field<T>> void hermTranspose(
             Field<T>[] srcEntries, int[] srcRowPointers, int[] srcColIndices,
             Field<T>[] destEntries, int[] destRowPointers, int[] destColIndices) {
-        // Count number of entries in each row.
+        // Count number of data in each row.
         for(int i=0, size=srcColIndices.length; i<size; i++)
             destRowPointers[srcColIndices[i] + 1]++;
 
@@ -117,11 +117,11 @@ public final class CsrOps {
      * significantly slower than simply converting the matrices to dene matrices and using a dense matrix addition algorithm.
      *
      * @param shape1 Shape of the first CSR matrix.
-     * @param src1Entries Non-zero entries of the first CSR matrix.
+     * @param src1Entries Non-zero data of the first CSR matrix.
      * @param src1RowPointers Non-zero row pointers of the first CSR matrix.
      * @param src1ColIndices Non-zero column indices of the first CSR matrix.
      * @param shape2 Shape of the second CSR matrix.
-     * @param src2Entries Non-zero entries of the second CSR matrix.
+     * @param src2Entries Non-zero data of the second CSR matrix.
      * @param src2RowPointers Non-zero row pointers of the second CSR matrix.
      * @param src2ColIndices Non-zero column indices of the second CSR matrix.
      * @param opp Binary operator to apply element-wise to <code>src1</code> and <code>src2</code>.
@@ -200,10 +200,10 @@ public final class CsrOps {
     /**
      * Copies and inserts a new value into a sparse CSR matrix. This method assumes that a non-zero value is not already present at
      * the specified indices.
-     * @param srcEntries Non-zero entries of the original CSR matrix.
+     * @param srcEntries Non-zero data of the original CSR matrix.
      * @param srcRowPointers Non-zero row pointers of the original CSR matrix.
      * @param srcColIndices Non-zero column indices of the original CSR matrix.
-     * @param destEntries Array to store the new entries in.
+     * @param destEntries Array to store the new data in.
      * @param destRowPointers Array to store the new row pointers in.
      * @param destColIndices Array to store the new column indices in.
      * @param row Row index of the point to insert.
@@ -214,7 +214,7 @@ public final class CsrOps {
     public static <T> void insertNewValue(T[] srcEntries, int[] srcRowPointers, int[] srcColIndices,
                                           T[] destEntries, int[] destRowPointers, int[] destColIndices,
                                           int row, int col, int insertionPoint, T value) {
-        // Copy old entries and insert new one.
+        // Copy old data and insert new one.
         System.arraycopy(srcEntries, 0, destEntries, 0, insertionPoint);
         destEntries[insertionPoint] = value;
         System.arraycopy(srcEntries, insertionPoint, destEntries, insertionPoint+1,
@@ -234,7 +234,7 @@ public final class CsrOps {
 
     /**
      * Swaps two rows in a sparse CSR matrix. This is done in place.
-     * @param entries Non-zero entries of the CSR matrix.
+     * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      * @param rowIdx1 Index of the first row to swap.
@@ -254,33 +254,33 @@ public final class CsrOps {
         // Get range for values in the given rows.
         int start1 = rowPointers[rowIdx1];
         int end1 = rowPointers[rowIdx1+1];
-        int nnz1 = end1-start1;  // Number of non-zero entries in the first row to swap.
+        int nnz1 = end1-start1;  // Number of non-zero data in the first row to swap.
 
         int start2 = rowPointers[rowIdx2];
         int end2 = rowPointers[rowIdx2+1];
-        int nnz2 = end2-start2;  // Number of non-zero entries in the second row to swap.
+        int nnz2 = end2-start2;  // Number of non-zero data in the second row to swap.
 
         int destPos = 0;
 
         Field<Complex128>[] updatedEntries = new Field[end2-start1];
         int[] updatedColIndices = new int[end2-start1];
 
-        // Copy entries from second row in swap.
+        // Copy data from second row in swap.
         System.arraycopy(entries, start2, updatedEntries, destPos, nnz2);
         System.arraycopy(colIndices, start2, updatedColIndices, destPos, nnz2);
 
-        // Copy entries between rows.
+        // Copy data between rows.
         destPos += nnz2;
         System.arraycopy(entries, end1, updatedEntries, destPos, start2-end1);
         System.arraycopy(colIndices, end1, updatedColIndices, destPos, start2-end1);
 
-        // Copy entries from first row in swap.
+        // Copy data from first row in swap.
         destPos += (start2-end1);
         System.arraycopy(entries, start1, updatedEntries, destPos, nnz1);
         System.arraycopy(colIndices, start1, updatedColIndices, destPos, nnz1);
 
         // Update the row pointers.
-        int diff = nnz2-nnz1;  // Difference in number of entries.
+        int diff = nnz2-nnz1;  // Difference in number of data.
         for(int i=rowIdx1+1; i<=rowIdx2; i++)
             rowPointers[i] += diff;
 
@@ -292,7 +292,7 @@ public final class CsrOps {
 
     /**
      * Swaps two columns in a sparse CSR matrix. This is done in place.
-     * @param entries Non-zero entries of the CSR matrix.
+     * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      * @param colIdx1 Index of the first column to swap.
@@ -341,21 +341,21 @@ public final class CsrOps {
 
     /**
      * Moves a non-zero value in a row of a CSR matrix to a new column to the left of its current column. The new column is assumed
-     * to contain a zero. To accommodate this move, all entries between the columns are shifted right within the non-zero entries array.
-     * @param entries Non-zero entries of the CSR matrix.
+     * to contain a zero. To accommodate this move, all data between the columns are shifted right within the non-zero data array.
+     * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      * @param newColIdx New column for the value to be moved to within the row.
-     * @param currPos Current index of the value within the non-zero entries of {@code src} (assumed to be in the same row as {@code
+     * @param currPos Current index of the value within the non-zero data of {@code src} (assumed to be in the same row as {@code
      * newPos}).
-     * @param newPos New index for the value to be moved to within the non-zero entries of {@code src} (assumed to be in the same
+     * @param newPos New index for the value to be moved to within the non-zero data of {@code src} (assumed to be in the same
      * row as {@code currPos}).
      */
     private static <T> void moveAndShiftRight(T[] entries, int[] rowPointers, int[] colIndices,
                                               int newColIdx, int currPos, int newPos) {
         T value = entries[currPos];  // Extract the non-zero value.
 
-        // Shift entries in row to right.
+        // Shift data in row to right.
         for(int j=currPos; j>newPos; j--) {
             entries[j] = entries[j-1];
             colIndices[j] = colIndices[j-1];
@@ -368,21 +368,21 @@ public final class CsrOps {
 
     /**
      * Moves a non-zero value in a row of a CSR matrix to a new column to the right of its current column. The new column is assumed
-     * to contain a zero. To accommodate this move, all entries between the columns are shifted left within the non-zero entries array.
-     * @param entries Non-zero entries of the CSR matrix.
+     * to contain a zero. To accommodate this move, all data between the columns are shifted left within the non-zero data array.
+     * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      * @param newColIdx New column for the value to be moved to within the row.
-     * @param currPos Current index of the value within the non-zero entries of {@code src} (assumed to be in the same row as {@code
+     * @param currPos Current index of the value within the non-zero data of {@code src} (assumed to be in the same row as {@code
      * newPos}).
-     * @param newPos New index for the value to be moved to within the non-zero entries of {@code src} (assumed to be in the same
+     * @param newPos New index for the value to be moved to within the non-zero data of {@code src} (assumed to be in the same
      * row as {@code currPos}).
      */
     private static <T> void moveAndShiftLeft(T[] entries, int[] rowPointers, int[] colIndices,
                                              int newColIdx, int currPos, int newPos) {
         T value = entries[currPos];  // Extract the non-zero value.
 
-        // Shift entries in row to left.
+        // Shift data in row to left.
         for(int j=currPos; j<newPos; j++) {
             entries[j] = entries[j+1];
             colIndices[j] = colIndices[j+1];
@@ -396,7 +396,7 @@ public final class CsrOps {
     /**
      * Gets a specified slice of a CSR matrix.
      *
-     * @param entries Non-zero entries of the CSR matrix.
+     * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      * @param rowStart Starting row index of slice (inclusive).

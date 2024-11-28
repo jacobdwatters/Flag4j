@@ -28,7 +28,7 @@ class MatrixConstructorTests {
 
         A = new Matrix(size);
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
@@ -39,7 +39,7 @@ class MatrixConstructorTests {
 
         A = new Matrix(size);
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
@@ -50,7 +50,7 @@ class MatrixConstructorTests {
 
         A = new Matrix(size);
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
@@ -76,7 +76,7 @@ class MatrixConstructorTests {
         A = new Matrix(size, fillValue);
         Arrays.fill(expEntriesA, fillValue);
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
@@ -89,7 +89,7 @@ class MatrixConstructorTests {
         A = new Matrix(size, fillValue);
         Arrays.fill(expEntriesA, fillValue);
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
@@ -102,7 +102,7 @@ class MatrixConstructorTests {
         A = new Matrix(size, fillValue);
         Arrays.fill(expEntriesA, fillValue);
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
@@ -115,7 +115,7 @@ class MatrixConstructorTests {
         A = new Matrix(size, fillValue);
         Arrays.fill(expEntriesA, fillValue);
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
@@ -139,7 +139,7 @@ class MatrixConstructorTests {
 
         A = new Matrix(expNumRowsA, expNumRowsA);
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
@@ -150,7 +150,7 @@ class MatrixConstructorTests {
 
         A = new Matrix(expNumRowsA, expNumColsA);
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
@@ -161,7 +161,7 @@ class MatrixConstructorTests {
 
         A = new Matrix(expNumRowsA, expNumColsA);
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
@@ -172,7 +172,7 @@ class MatrixConstructorTests {
 
         A = new Matrix(expNumRowsA, expNumColsA);
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
@@ -183,7 +183,7 @@ class MatrixConstructorTests {
 
         A = new Matrix(expNumRowsA, expNumColsA);
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
@@ -210,7 +210,7 @@ class MatrixConstructorTests {
         A = new Matrix(expNumRowsA, expNumColsA, fillValue);
         Arrays.fill(expEntriesA, fillValue);
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
@@ -223,7 +223,7 @@ class MatrixConstructorTests {
         A = new Matrix(expNumRowsA, expNumColsA, fillValue);
         Arrays.fill(expEntriesA, fillValue);
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
@@ -236,7 +236,7 @@ class MatrixConstructorTests {
         A = new Matrix(expNumRowsA, expNumColsA, fillValue);
         Arrays.fill(expEntriesA, fillValue);
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
@@ -249,7 +249,7 @@ class MatrixConstructorTests {
         A = new Matrix(expNumRowsA, expNumColsA, fillValue);
         Arrays.fill(expEntriesA, fillValue);
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
@@ -279,7 +279,7 @@ class MatrixConstructorTests {
 
         A = new Matrix(expEntriesA2d);
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
     }
@@ -305,7 +305,7 @@ class MatrixConstructorTests {
 
         A = new Matrix(expEntriesAint2d);
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
     }
@@ -326,7 +326,7 @@ class MatrixConstructorTests {
         A = new Matrix(expEntriesA2d);
         B = new Matrix(A);
 
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
         assertEquals(A.numRows(), B.numRows());
         assertEquals(A.numCols(), B.numCols());
     }
@@ -343,7 +343,7 @@ class MatrixConstructorTests {
         expNumRowsA = 6;
         expNumColsA = 3;
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
     }
@@ -365,7 +365,7 @@ class MatrixConstructorTests {
         expNumRowsA = 5;
         expNumColsA = 9;
 
-        assertArrayEquals(expEntriesA, A.entries);
+        assertArrayEquals(expEntriesA, A.data);
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
     }

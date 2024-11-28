@@ -185,7 +185,7 @@ class ComplexCsrMatMultTests {
         expCsrColIndices = new int[]{1, 4, 10, 12, 13, 1, 6, 10, 12, 14, 7, 7, 2, 6, 14, 1, 2, 3, 7, 8, 12, 1, 2, 3, 8, 9, 6, 8, 9, 12};
         expCsr = new CsrCMatrix(expCsrShape, expCsrEntries, expCsrRowPointers, expCsrColIndices);
 
-        assertEquals(expCsr, A.mult2CSR(B));
+        assertEquals(expCsr, A.mult2Csr(B));
 
         // ---------------------- Sub-case 2 ----------------------
         aShape = new Shape(1201, 502);
@@ -206,7 +206,7 @@ class ComplexCsrMatMultTests {
         expCsrColIndices = new int[]{624, 498, 343, 1514, 230, 1081, 821, 716, 651, 1138, 1485};
         expCsr = new CsrCMatrix(expCsrShape, expCsrEntries, expCsrRowPointers, expCsrColIndices);
 
-        assertEquals(expCsr, A.mult2CSR(B));
+        assertEquals(expCsr, A.mult2Csr(B));
 
         // ---------------------- Sub-case 3 ----------------------
         aShape = new Shape(12, 15);
@@ -228,24 +228,24 @@ class ComplexCsrMatMultTests {
         expCsrColIndices = new int[]{1, 2, 1, 2, 1, 2, 0, 1, 2, 1, 2, 0, 2, 1, 2, 0};
         expCsr = new CsrCMatrix(expCsrShape, expCsrEntries, expCsrRowPointers, expCsrColIndices);
 
-        assertEquals(expCsr, A.mult2CSR(BReal));
+        assertEquals(expCsr, A.mult2Csr(BReal));
 
         // ---------------------- Sub-case 4 ----------------------
         A = new CsrCMatrix(10, 15);
         B = new CsrCMatrix(11, 124);
-        assertThrows(LinearAlgebraException.class, ()->A.mult2CSR(B));
+        assertThrows(LinearAlgebraException.class, ()->A.mult2Csr(B));
 
         A = new CsrCMatrix(156, 9);
         B = new CsrCMatrix(11, 156);
-        assertThrows(LinearAlgebraException.class, ()->A.mult2CSR(B));
+        assertThrows(LinearAlgebraException.class, ()->A.mult2Csr(B));
 
         // ---------------------- Sub-case 5 ----------------------
         A = new CsrCMatrix(10, 15);
         BReal = new CsrMatrix(11, 124);
-        assertThrows(LinearAlgebraException.class, ()->A.mult2CSR(BReal));
+        assertThrows(LinearAlgebraException.class, ()->A.mult2Csr(BReal));
 
         A = new CsrCMatrix(156, 9);
         BReal = new CsrMatrix(11, 156);
-        assertThrows(LinearAlgebraException.class, ()->A.mult2CSR(BReal));
+        assertThrows(LinearAlgebraException.class, ()->A.mult2Csr(BReal));
     }
 }

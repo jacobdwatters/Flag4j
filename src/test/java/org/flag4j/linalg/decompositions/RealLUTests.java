@@ -15,7 +15,7 @@ class RealLUTests {
 
     @Test
     void noPivotTestCase() {
-        RealLU lu = new RealLU(LU.Pivoting.NONE.ordinal());
+        RealLU lu = new RealLU(LU.Pivoting.NONE);
 
         // -------------------------- Sub-case 1 --------------------------
         aEntries = new double[][]
@@ -92,7 +92,7 @@ class RealLUTests {
 
     @Test
     void partialPivotTestCase() {
-        RealLU lu = new RealLU(LU.Pivoting.PARTIAL.ordinal());
+        RealLU lu = new RealLU(LU.Pivoting.PARTIAL);
 
         // -------------------------- Sub-case 1 --------------------------
         aEntries = new double[][]
@@ -190,7 +190,7 @@ class RealLUTests {
 
     @Test
     void completePivotTestCase() {
-        RealLU lu = new RealLU(LU.Pivoting.FULL.ordinal());
+        RealLU lu = new RealLU(LU.Pivoting.FULL);
 
         // -------------------------- Sub-case 1 --------------------------
         aEntries = new double[][]

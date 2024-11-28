@@ -58,7 +58,7 @@ public class DenseSemiringTensorDot<T extends Semiring<T>> extends TensorDot<Sem
 
     /**
      * Computes this tensor dot product as specified in the constructor.
-     * @param dest The array to store the entries of the tensor resulting from this tensor dot product. The size of this array
+     * @param dest The array to store the data of the tensor resulting from this tensor dot product. The size of this array
      * should be computed using {@link #getOutputSize()}.
      */
     @Override

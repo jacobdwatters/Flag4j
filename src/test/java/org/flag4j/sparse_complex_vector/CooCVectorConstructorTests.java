@@ -28,7 +28,7 @@ class CooCVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
         assertArrayEquals(expIndices, a.indices);
 
         // ------------- Sub-case 2 -------------
@@ -49,7 +49,7 @@ class CooCVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
 
         // ------------- Sub-case 2 -------------
         expSize = -1;
@@ -72,7 +72,7 @@ class CooCVectorConstructorTests {
                 new Complex128(83.133, -334), new Complex128(-92.133, -9.4), new Complex128(0, 13.435)};
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize, expEntries, expIndices));
+        assertThrows(IndexOutOfBoundsException.class, () -> new CooCVector(expSize, expEntries, expIndices));
     }
 
 
@@ -91,7 +91,7 @@ class CooCVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
 
         // ------------- Sub-case 2 -------------
         expSize = -1;
@@ -121,7 +121,7 @@ class CooCVectorConstructorTests {
         }
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize, expEntriesD, expIndices));
+        assertThrows(IndexOutOfBoundsException.class, () -> new CooCVector(expSize, expEntriesD, expIndices));
     }
 
 
@@ -138,6 +138,6 @@ class CooCVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
     }
 }

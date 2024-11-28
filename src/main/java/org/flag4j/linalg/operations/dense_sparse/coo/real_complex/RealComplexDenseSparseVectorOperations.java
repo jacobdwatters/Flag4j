@@ -29,7 +29,8 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.linalg.operations.common.real.RealOperations;
+import org.flag4j.linalg.operations.common.real.RealOps;
+import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
@@ -61,7 +62,7 @@ public final class RealComplexDenseSparseVectorOperations {
 
         for(int i=0; i<src2.nnz; i++) {
             index = src2.indices[i];
-            dest.entries[index] = dest.entries[index].add((Complex128) src2.entries[i]);
+            dest.data[index] = dest.data[index].add((Complex128) src2.data[i]);
         }
 
         return dest;
@@ -82,7 +83,7 @@ public final class RealComplexDenseSparseVectorOperations {
 
         for(int i=0; i<src2.nnz; i++) {
             index = src2.indices[i];
-            dest.entries[index] = dest.entries[index].sub((Complex128) src2.entries[i]);
+            dest.data[index] = dest.data[index].sub((Complex128) src2.data[i]);
         }
 
         return dest;
@@ -98,11 +99,14 @@ public final class RealComplexDenseSparseVectorOperations {
      */
     public static CVector sub(CooCVector src1, Vector src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        CVector dest = new Vector(RealOperations.scalMult(src2.entries, -1)).toComplex();
+
+        Complex128[] destEntries = ArrayUtils.wrapAsComplex128(
+                RealOps.scalMult(src2.data, -1, null), null);
+        CVector dest = new CVector(destEntries);
 
         for(int i=0; i<src1.nnz; i++) {
             int idx = src1.indices[i];
-            dest.entries[idx] = dest.entries[idx].add((Complex128) src1.entries[i]);
+            dest.data[idx] = dest.data[idx].add((Complex128) src1.data[i]);
         }
 
         return dest;
@@ -122,7 +126,7 @@ public final class RealComplexDenseSparseVectorOperations {
 
         for(int i=0; i<src2.nnz; i++) {
             int index = src2.indices[i];
-            dest.entries[index] = dest.entries[index].sub(src2.entries[i]);
+            dest.data[index] = dest.data[index].sub(src2.data[i]);
         }
 
         return dest;
@@ -138,10 +142,10 @@ public final class RealComplexDenseSparseVectorOperations {
      */
     public static CooCVector elemMult(CVector src1, CooVector src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        Complex128[] entries = new Complex128[src2.entries.length];
+        Complex128[] entries = new Complex128[src2.data.length];
 
         for(int i=0; i<src2.nnz; i++)
-            entries[i] = src1.entries[src2.indices[i]].mult(src2.entries[i]);
+            entries[i] = src1.data[src2.indices[i]].mult(src2.data[i]);
 
         return new CooCVector(src1.size, entries, src2.indices.clone());
     }
@@ -155,10 +159,10 @@ public final class RealComplexDenseSparseVectorOperations {
      */
     public static CooCVector elemDiv(CooVector src1, CVector src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        Complex128[] dest = new Complex128[src1.entries.length];
+        Complex128[] dest = new Complex128[src1.data.length];
 
         for(int i=0; i<src1.nnz; i++)
-            dest[i] = new Complex128(src1.entries[i]).div((Complex128) src2.entries[src1.indices[i]]);
+            dest[i] = new Complex128(src1.data[i]).div((Complex128) src2.data[src1.indices[i]]);
 
         return new CooCVector(src1.size, dest, src1.indices.clone());
     }

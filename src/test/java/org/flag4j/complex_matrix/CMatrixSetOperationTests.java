@@ -4,7 +4,6 @@ import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Matrix;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,28 +44,6 @@ class CMatrixSetOperationTests {
         A = new CMatrix(entriesA);
 
         Complex128[][] finalValues = values;
-        assertThrows(IllegalArgumentException.class, () -> A.setValues(finalValues));
-    }
-
-    @Test
-    void setValuesDTestCase() {
-        double[][] values;
-
-        // -------------- Sub-case 1 --------------
-        values = new double[][]{{1.345, 1.5455}, {-0.44, Math.PI}, {13., -9.4}};
-        exp = new CMatrix(values);
-        entriesA = new Complex128[][]{{new Complex128(0), new Complex128(0)}, {new Complex128(1), new Complex128(4)}, {new Complex128(1331.14), new Complex128(-1334.5)}};
-        A = new CMatrix(entriesA);
-        A.setValues(values);
-
-        assertEquals(exp, A);
-
-        // -------------- Sub-case 2 --------------
-        values = new double[][]{{1.345, 1.5455}, {-0.44, Math.PI}, {13., -9.4}};
-        entriesA = new Complex128[][]{{new Complex128(0), new Complex128(0), new Complex128(1)}, {new Complex128(1), new Complex128(4), new Complex128(2)}};
-        A = new CMatrix(entriesA);
-
-        double[][] finalValues = values;
         assertThrows(IllegalArgumentException.class, () -> A.setValues(finalValues));
     }
 
@@ -345,60 +322,6 @@ class CMatrixSetOperationTests {
         CVector finalValues2 = valuesVec;
         int finalRow2 = row;
         assertThrows(IndexOutOfBoundsException.class, () -> A.setRow(finalValues2, finalRow2));
-    }
-
-
-    @Test
-    void setSliceMatrixTestCase() {
-        double[][] valueEntries;
-        Matrix values;
-        int row, col;
-
-        // -------------- Sub-case 1 --------------
-        valueEntries = new double[][]{{1, -9.4}, {0.0024, 51.5}};
-        values = new Matrix(valueEntries);
-        row = 0;
-        col = 0;
-        entriesA = new Complex128[][]{
-                {new Complex128(-99.234), new Complex128(132), new Complex128(2.2), new Complex128(83.1)},
-                {new Complex128(11.346), new Complex128(124.6), new Complex128(-7.13), new Complex128(0.00013)}};
-        A = new CMatrix(entriesA);
-        entriesExp = new Complex128[][]{
-                {new Complex128(1), new Complex128(-9.4), new Complex128(2.2), new Complex128(83.1)},
-                {new Complex128(0.0024), new Complex128(51.5), new Complex128(-7.13), new Complex128(0.00013)}};
-        exp = new CMatrix(entriesExp);
-
-        A.setSlice(values, row, col);
-        assertEquals(exp, A);
-
-        // -------------- Sub-case 2 --------------
-        valueEntries = new double[][]{{1.234, -9.4}, {0.0024, 51.5}};
-        values = new Matrix(valueEntries);
-        row = 0;
-        col = 2;
-        entriesA = new Complex128[][]{
-                {new Complex128(-99.234), new Complex128(132), new Complex128(2.2), new Complex128(83.1)},
-                {new Complex128(11.346), new Complex128(124.6), new Complex128(-7.13), new Complex128(0.00013)}};
-        A = new CMatrix(entriesA);
-        entriesExp = new Complex128[][]{
-                {new Complex128(-99.234), new Complex128(132), new Complex128(1.234), new Complex128(-9.4)},
-                {new Complex128(11.346), new Complex128(124.6), new Complex128(0.0024), new Complex128(51.5)}};
-        exp = new CMatrix(entriesExp);
-
-        A.setSlice(values, row, col);
-
-        assertEquals(exp, A);
-
-        // -------------- Sub-case 3 --------------
-        valueEntries = new double[][]{{1.234, -9.4, 24.5, 1}, {0.0024, 51.5, -0.924, 51.6}};
-        values = new Matrix(valueEntries);
-        entriesA = new Complex128[][]{{new Complex128(-99.234), new Complex128(132), new Complex128(2.2), new Complex128(83.1)}, {new Complex128(11.346), new Complex128(124.6), new Complex128(-7.13), new Complex128(0.00013)}};
-        A = new CMatrix(entriesA);
-        entriesExp = new Complex128[][]{{new Complex128(-99.234), new Complex128(132), new Complex128(-71.33), new Complex128(34.61)}, {new Complex128(11.346), new Complex128(124.6), new Complex128(-99.24), new Complex128(-13.4)}};
-        exp = new CMatrix(entriesExp);
-
-        Matrix finalValues = values;
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.setSlice(finalValues, 1, 2));
     }
 
 

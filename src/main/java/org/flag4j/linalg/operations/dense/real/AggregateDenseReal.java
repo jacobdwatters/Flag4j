@@ -42,7 +42,7 @@ public final class AggregateDenseReal {
      * Computes the index of the minimum value in this tensor. If the minimum value occurs at more than one index,
      * the index of the first occurrence is taken.
      * @param entries Entries of the tensor.
-     * @return The index of the minimum value in this tensor. If there are zero entries in the array, -1 is returned.
+     * @return The index of the minimum value in this tensor. If there are zero data in the array, -1 is returned.
      */
     public static int argmin(double[] entries) {
         double currMin = Double.MAX_VALUE;
@@ -63,7 +63,7 @@ public final class AggregateDenseReal {
      * Computes the index of the minimum absolute value in this tensor. If the minimum absolute value occurs at more than one index,
      * the index of the first occurrence is taken.
      * @param entries Entries of the tensor.
-     * @return The index of the minimum absolute value in this tensor. If there are zero entries in the array, -1 is returned.
+     * @return The index of the minimum absolute value in this tensor. If there are zero data in the array, -1 is returned.
      */
     public static int argminAbs(double[] entries) {
         double currMin = Double.MAX_VALUE;
@@ -86,7 +86,7 @@ public final class AggregateDenseReal {
      * Computes the index of the maximum value in this tensor. If the maximum value occurs at more than one index,
      * the index of the first occurrence is taken.
      * @param entries Entries of the tensor.
-     * @return The index of the maximum value in this tensor. If there are zero entries in the array, -1 is returned.
+     * @return The index of the maximum value in this tensor. If there are zero data in the array, -1 is returned.
      */
     public static int argmax(double[] entries) {
         double currMax = Double.MIN_VALUE;
@@ -107,7 +107,7 @@ public final class AggregateDenseReal {
      * Computes the index of the maximum absolute value in this tensor. If the maximum absolute value occurs at more than one index,
      * the index of the first occurrence is taken.
      * @param entries Entries of the tensor.
-     * @return The index of the maximum absolute value in this tensor. If there are zero entries in the array, -1 is returned.
+     * @return The index of the maximum absolute value in this tensor. If there are zero data in the array, -1 is returned.
      */
     public static int argmaxAbs(double[] entries) {
         double currMax = 0;
@@ -130,7 +130,7 @@ public final class AggregateDenseReal {
      * Computes the index of the first entry in a tensor which is equal to the specified {@code value}.
      * @param entries Entries of this tensor.
      * @param value Value to find index of.
-     * @return The index of the first entry in {@code entries} which is equal to {@code value}. If no such value exists,
+     * @return The index of the first entry in {@code data} which is equal to {@code value}. If no such value exists,
      * then -1 is returned.
      */
     public static int argEq(double[] entries, double value) {
@@ -151,7 +151,7 @@ public final class AggregateDenseReal {
      * Computes the index of the first entry in a tensor which is equal to the specified {@code value}.
      * @param entries Entries of this tensor.
      * @param value Value to find index of.
-     * @return The index of the first entry in {@code entries} which is equal to {@code value}. If no such value exists,
+     * @return The index of the first entry in {@code data} which is equal to {@code value}. If no such value exists,
      * then -1 is returned.
      */
     public static int argEq(int[] entries, int value) {

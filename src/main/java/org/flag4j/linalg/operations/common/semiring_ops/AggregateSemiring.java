@@ -40,9 +40,9 @@ public final class AggregateSemiring {
 
 
     /**
-     * Computes the sum of all entries in this tensor. This can be applied to either real dense or spase tensors.
+     * Computes the sum of all data in this tensor. This can be applied to either real dense or spase tensors.
      * @param entries Entries of the tensor.
-     * @return The sum of all entries in this tensor. If {entries.length == 0}, null will be returned.
+     * @return The sum of all data in this tensor. If {data.length == 0}, null will be returned.
      */
     public static <T extends Semiring<T>> T sum(Semiring<T>... entries) {
         if(entries.length == 0) return null;
@@ -56,9 +56,9 @@ public final class AggregateSemiring {
 
 
     /**
-     * Computes the sum of all entries in this tensor. This can be applied to either real dense or spase tensors.
+     * Computes the sum of all data in this tensor. This can be applied to either real dense or spase tensors.
      * @param entries Entries of the tensor.
-     * @return The sum of all entries in this tensor. If {entries.length == 0}, null will be returned.
+     * @return The sum of all data in this tensor. If {data.length == 0}, null will be returned.
      */
     public static <T extends Semiring<T>> T prod(Semiring<T>... entries) {
         if(entries.length == 0) return null;

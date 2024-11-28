@@ -30,6 +30,8 @@ import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
 
+import static org.flag4j.util.ArrayUtils.makeNewIfNull;
+
 /**
  * This utility class provides implementations for the concatenation of dense tensors.
  */
@@ -51,8 +53,8 @@ public final class DenseConcat {
      * @throws IllegalArgumentException If {@code dest != null && dest.length < (src1.length + src2.length)}.
      */
     public static Object[] concat(Object[] src1, Object[] src2, Object[] dest) {
-        if(dest == null) dest = new Object[src1.length + src2.length];
-        else if(dest.length < src1.length + src2.length) {
+        dest = makeNewIfNull(dest, src1.length + src2.length);
+        if(dest.length < src1.length + src2.length) {
             throw new IllegalArgumentException(String.format("The size of the dest array must be at least as large sum of the sizes " +
                     "of the two source arrays but got sizes: dest=%d, src1=%d, src2=%d", dest.length, src1.length, src2.length));
         }
@@ -80,8 +82,8 @@ public final class DenseConcat {
      * @throws IllegalArgumentException If {@code dest != null && dest.length < (src1.length + src2.length)}.
      */
     public static Object[] repeat(Object[] src, int n, int axis, Object[] dest) {
-        if(dest == null) dest = new Object[src.length*n];
-        else if(dest.length < src.length*n) {
+        dest = makeNewIfNull(dest, src.length*n);
+        if(dest.length < src.length*n) {
             throw new IllegalArgumentException(String.format("The size of the dest array must be able to store %d repetitions of" +
                     "the src array but was too small.", n));
         }
@@ -133,8 +135,8 @@ public final class DenseConcat {
      * @throws IllegalArgumentException If {@code dest != null} and {@code dest.length < src1.length + src2.length}.
      */
     public static Object[] stack(Object[] src1, Object[] src2, int axis, Object[] dest) {
-        if(dest == null) dest = new Object[src1.length + src2.length];
-        else if(dest.length < src1.length + src2.length) {
+        dest = makeNewIfNull(dest, src1.length + src2.length);
+        if(dest.length < src1.length + src2.length) {
             throw new IllegalArgumentException(String.format("The size of the dest array must be at least as large sum of the sizes " +
                     "of the two source arrays but got sizes: dest=%d, src1=%d, src2=%d", dest.length, src1.length, src2.length));
         }
@@ -142,7 +144,7 @@ public final class DenseConcat {
         ValidateParameters.ensureAxis2D(axis);
 
         if(axis==0) {
-            // Copy entries from each vector to the matrix.
+            // Copy data from each vector to the matrix.
             System.arraycopy(src1, 0, dest, 0, src1.length);
             System.arraycopy(src2, 0, dest, src1.length, src2.length);
         } else {

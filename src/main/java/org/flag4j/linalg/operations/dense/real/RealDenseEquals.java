@@ -62,7 +62,7 @@ public final class RealDenseEquals {
      * @return True if the two matrices are element-wise equivalent.
      */
     public static boolean matrixEquals(Matrix A, Matrix B) {
-        return tensorEquals(A.entries, A.shape, B.entries, B.shape);
+        return tensorEquals(A.data, A.shape, B.data, B.shape);
     }
 
 
@@ -73,7 +73,7 @@ public final class RealDenseEquals {
      * @return True if the two tensors are numerically element-wise equivalent.
      */
     public static boolean tensorEquals(Tensor A, Tensor B) {
-        return tensorEquals(A.entries, A.shape, B.entries, B.shape);
+        return tensorEquals(A.data, A.shape, B.data, B.shape);
     }
 
 

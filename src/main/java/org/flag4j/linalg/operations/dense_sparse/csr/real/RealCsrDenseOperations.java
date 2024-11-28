@@ -60,10 +60,10 @@ public class RealCsrDenseOperations {
                                      BinaryOperator<Double> opp,
                                      UnaryOperator<Double> uOpp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
-        double[] dest = src2.entries.clone();
+        double[] dest = src2.data.clone();
 
         if(uOpp != null) {
-            // Apply unary operator to all entries in second matrix.
+            // Apply unary operator to all data in second matrix.
             for(int i = 0; i < dest.length; i++)
                dest[i] = uOpp.apply(dest[i]);
         }
@@ -76,7 +76,7 @@ public class RealCsrDenseOperations {
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src1.colIndices[j];
 
-                dest[idx] = opp.apply(src1.entries[j], dest[idx]);
+                dest[idx] = opp.apply(src1.data[j], dest[idx]);
             }
         }
 
@@ -96,7 +96,7 @@ public class RealCsrDenseOperations {
                                         BinaryOperator<Double> opp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
-        double[] dest = src1.entries.clone();
+        double[] dest = src1.data.clone();
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -106,7 +106,7 @@ public class RealCsrDenseOperations {
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src2.colIndices[j];
 
-                dest[idx] = opp.apply(src1.entries[idx], src2.entries[j]);
+                dest[idx] = opp.apply(src1.data[idx], src2.data[j]);
             }
         }
 
@@ -129,7 +129,7 @@ public class RealCsrDenseOperations {
 
         int[] rowPointers = src2.rowPointers.clone();
         int[] colIndices = src2.colIndices.clone();
-        double[] entries = new double[src2.entries.length];
+        double[] entries = new double[src2.data.length];
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -138,7 +138,7 @@ public class RealCsrDenseOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src2.colIndices[j];
-                entries[idx] = opp.apply(src1.entries[idx], src2.entries[j]);
+                entries[idx] = opp.apply(src1.data[idx], src2.data[j]);
             }
         }
 
@@ -174,7 +174,7 @@ public class RealCsrDenseOperations {
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src1.colIndices[j];
 
-                dest[idx] = opp.apply(src1.entries[j], dest[idx]);
+                dest[idx] = opp.apply(src1.data[j], dest[idx]);
             }
         }
 

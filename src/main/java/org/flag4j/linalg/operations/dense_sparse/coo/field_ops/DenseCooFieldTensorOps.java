@@ -37,9 +37,9 @@ import java.util.Arrays;
 /**
  * This class contains methods to apply common operations to a dense/sparse field matrix and to a sparse/dense field matrix.
  */
-public final class DenseCooFieldTensorOperations {
+public final class DenseCooFieldTensorOps {
 
-    private DenseCooFieldTensorOperations() {
+    private DenseCooFieldTensorOps() {
         // Hide default constructor for utility class.
         throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
@@ -55,14 +55,14 @@ public final class DenseCooFieldTensorOperations {
             AbstractDenseFieldTensor<?, T> src1,
             AbstractCooFieldTensor<?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        AbstractDenseFieldTensor<?, T> dest = src1.copy();
+        Field<T>[] destEntries = src1.data.clone();
         
         for(int i=0, size=src2.nnz; i<size; i++) {
-            dest.entries[src2.shape.getFlatIndex(src2.indices[i])] =
-                    dest.entries[src2.shape.getFlatIndex(src2.indices[i])].add((T) src2.entries[i]);
+            int idx = src2.shape.getFlatIndex(src2.indices[i]);
+            destEntries[idx] = destEntries[idx].add((T) src2.data[i]);
         }
 
-        return dest;
+        return src1.makeLikeTensor(src1.shape, destEntries);
     }
 
 
@@ -78,8 +78,8 @@ public final class DenseCooFieldTensorOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            src1.entries[src2.shape.getFlatIndex(src2.indices[i])] =
-                    src1.entries[src2.shape.getFlatIndex(src2.indices[i])].add((T) src2.entries[i]);
+            src1.data[src2.shape.getFlatIndex(src2.indices[i])] =
+                    src1.data[src2.shape.getFlatIndex(src2.indices[i])].add((T) src2.data[i]);
         }
     }
 
@@ -94,14 +94,15 @@ public final class DenseCooFieldTensorOperations {
             AbstractDenseFieldTensor<?, T> src1, 
             AbstractCooFieldTensor<?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        AbstractDenseFieldTensor<?, T> dest = src1.copy();
+        Field<T>[] destEntries = src1.data.clone();
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            dest.entries[src2.shape.getFlatIndex(src2.indices[i])] =
-                    dest.entries[src2.shape.getFlatIndex(src2.indices[i])].sub((T) src2.entries[i]);
+            int idx = src2.shape.getFlatIndex(src2.indices[i]);
+            destEntries[idx] =
+                    destEntries[idx].sub((T) src2.data[i]);
         }
 
-        return dest;
+        return src1.makeLikeTensor(src1.shape, destEntries);
     }
 
 
@@ -118,8 +119,8 @@ public final class DenseCooFieldTensorOperations {
         AbstractDenseFieldTensor<?, T> dest = src2.mult(-1);
 
         for(int i=0, size=src1.nnz; i<size; i++) {
-            dest.entries[src1.shape.getFlatIndex(src1.indices[i])] =
-                    dest.entries[src1.shape.getFlatIndex(src1.indices[i])].add((T) src1.entries[i]);
+            dest.data[src1.shape.getFlatIndex(src1.indices[i])] =
+                    dest.data[src1.shape.getFlatIndex(src1.indices[i])].add((T) src1.data[i]);
         }
 
         return dest;
@@ -136,8 +137,8 @@ public final class DenseCooFieldTensorOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            src1.entries[src2.shape.getFlatIndex(src2.indices[i])] =
-                    src1.entries[src2.shape.getFlatIndex(src2.indices[i])].sub((T) src2.entries[i]);
+            src1.data[src2.shape.getFlatIndex(src2.indices[i])] =
+                    src1.data[src2.shape.getFlatIndex(src2.indices[i])].sub((T) src2.data[i]);
         }
     }
 
@@ -156,7 +157,7 @@ public final class DenseCooFieldTensorOperations {
         ArrayUtils.deepCopy(src2.indices, indices);
 
         for(int i=0, size=destEntries.length; i<size; i++) {
-            destEntries[i] = src1.entries[src2.shape.getFlatIndex(src2.indices[i])].mult((T) src2.entries[i]);
+            destEntries[i] = src1.data[src2.shape.getFlatIndex(src2.indices[i])].mult((T) src2.data[i]);
         }
 
         return src2.makeLikeTensor(src2.shape, (T[]) destEntries, indices);
@@ -176,8 +177,8 @@ public final class DenseCooFieldTensorOperations {
         AbstractDenseFieldTensor<?, T> sum = src1.makeLikeDenseTensor(src1.shape, sumEntries);
 
         for(int i=0, size=src1.nnz; i<size; i++) {
-            sum.entries[src1.shape.getFlatIndex(src1.indices[i])] =
-                    sum.entries[src1.shape.getFlatIndex(src1.indices[i])].add((T) src1.entries[i]);
+            sum.data[src1.shape.getFlatIndex(src1.indices[i])] =
+                    sum.data[src1.shape.getFlatIndex(src1.indices[i])].add((T) src1.data[i]);
         }
 
         return sum;
@@ -198,7 +199,7 @@ public final class DenseCooFieldTensorOperations {
 
         for(int i=0, size=src1.nnz; i<size; i++) {
             int idx = src1.shape.getFlatIndex(src1.indices[i]);
-            sum.entries[idx].add((T) src1.entries[i]);
+            sum.data[idx].add((T) src1.data[i]);
         }
 
         return sum;
@@ -222,7 +223,7 @@ public final class DenseCooFieldTensorOperations {
 
         for(int i=0, size=destEntries.length; i<size; i++) {
             int index = src2.shape.getFlatIndex(src1.indices[i]); // Get index of non-zero entry.
-            destEntries[i] = src1.entries[index].div((T) src2.entries[i]);
+            destEntries[i] = src1.data[index].div((T) src2.data[i]);
         }
 
         return src1.makeLikeTensor(src2.shape, (T[]) destEntries, destIndices);

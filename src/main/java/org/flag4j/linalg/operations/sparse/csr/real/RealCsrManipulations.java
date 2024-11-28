@@ -62,38 +62,38 @@ public final class RealCsrManipulations {
         // Get range for values in the given rows.
         int start1 = src.rowPointers[rowIdx1];
         int end1 = src.rowPointers[rowIdx1+1];
-        int nnz1 = end1-start1;  // Number of non-zero entries in the first row to swap.
+        int nnz1 = end1-start1;  // Number of non-zero data in the first row to swap.
 
         int start2 = src.rowPointers[rowIdx2];
         int end2 = src.rowPointers[rowIdx2+1];
-        int nnz2 = end2-start2;  // Number of non-zero entries in the second row to swap.
+        int nnz2 = end2-start2;  // Number of non-zero data in the second row to swap.
 
         int destPos = 0;
 
         double[] updatedEntries = new double[end2-start1];
         int[] updatedColIndices = new int[end2-start1];
 
-        // Copy entries from second row in swap.
-        System.arraycopy(src.entries, start2, updatedEntries, destPos, nnz2);
+        // Copy data from second row in swap.
+        System.arraycopy(src.data, start2, updatedEntries, destPos, nnz2);
         System.arraycopy(src.colIndices, start2, updatedColIndices, destPos, nnz2);
 
-        // Copy entries between rows.
+        // Copy data between rows.
         destPos += nnz2;
-        System.arraycopy(src.entries, end1, updatedEntries, destPos, start2-end1);
+        System.arraycopy(src.data, end1, updatedEntries, destPos, start2-end1);
         System.arraycopy(src.colIndices, end1, updatedColIndices, destPos, start2-end1);
 
-        // Copy entries from first row in swap.
+        // Copy data from first row in swap.
         destPos += (start2-end1);
-        System.arraycopy(src.entries, start1, updatedEntries, destPos, nnz1);
+        System.arraycopy(src.data, start1, updatedEntries, destPos, nnz1);
         System.arraycopy(src.colIndices, start1, updatedColIndices, destPos, nnz1);
 
         // Update the row pointers.
-        int diff = nnz2-nnz1;  // Difference in number of entries.
+        int diff = nnz2-nnz1;  // Difference in number of data.
         for(int i=rowIdx1+1; i<=rowIdx2; i++)
             src.rowPointers[i] += diff;
 
         // Copy updated arrays_old to this tensors' storage.
-        System.arraycopy(updatedEntries, 0, src.entries, start1, updatedEntries.length);
+        System.arraycopy(updatedEntries, 0, src.data, start1, updatedEntries.length);
         System.arraycopy(updatedColIndices, 0, src.colIndices, start1, updatedEntries.length);
     }
 
@@ -129,7 +129,7 @@ public final class RealCsrManipulations {
 
             if(pos1 >= 0 && pos2 >= 0) {
                 // Both columns contain a non-zero value in this row.
-                ArrayUtils.swap(src.entries, pos1, pos2);
+                ArrayUtils.swap(src.data, pos1, pos2);
             } else if(pos1 >= 0) {
                 // Only first column contains non-zero value.
                 int newPos = -pos2-1;
@@ -147,48 +147,48 @@ public final class RealCsrManipulations {
 
     /**
      * Moves a non-zero value in a row of a CSR matrix to a new column to the left of its current column. The new column is assumed
-     * to contain a zero. To accommodate this move, all entries between the columns are shifted right within the non-zero entries array.
+     * to contain a zero. To accommodate this move, all data between the columns are shifted right within the non-zero data array.
      * @param src Source matrix to perform the move and shift within (modified).
      * @param newColIdx New column for the value to be moved to within the row.
-     * @param currPos Current index of the value within the non-zero entries of {@code src} (assumed to be in the same row as {@code
+     * @param currPos Current index of the value within the non-zero data of {@code src} (assumed to be in the same row as {@code
      * newPos}).
-     * @param newPos New index for the value to be moved to within the non-zero entries of {@code src} (assumed to be in the same
+     * @param newPos New index for the value to be moved to within the non-zero data of {@code src} (assumed to be in the same
      * row as {@code currPos}).
      */
     private static void moveAndShiftRight(CsrMatrix src, int newColIdx, int currPos, int newPos) {
-        double value = src.entries[currPos];  // Extract the non-zero value.
+        double value = src.data[currPos];  // Extract the non-zero value.
 
-        // Shift entries in row to right.
+        // Shift data in row to right.
         for(int j=currPos; j>newPos; j--) {
-            src.entries[j] = src.entries[j-1];
+            src.data[j] = src.data[j-1];
             src.colIndices[j] = src.colIndices[j-1];
         }
 
-        src.entries[newPos] = value;  // Move non-zero value to new location.
+        src.data[newPos] = value;  // Move non-zero value to new location.
         src.colIndices[newPos] = newColIdx;  // Update column index for the value.
     }
 
 
     /**
      * Moves a non-zero value in a row of a CSR matrix to a new column to the right of its current column. The new column is assumed
-     * to contain a zero. To accommodate this move, all entries between the columns are shifted left within the non-zero entries array.
+     * to contain a zero. To accommodate this move, all data between the columns are shifted left within the non-zero data array.
      * @param src Source matrix to perform the move and shift within (modified).
      * @param newColIdx New column for the value to be moved to within the row.
-     * @param currPos Current index of the value within the non-zero entries of {@code src} (assumed to be in the same row as {@code
+     * @param currPos Current index of the value within the non-zero data of {@code src} (assumed to be in the same row as {@code
      * newPos}).
-     * @param newPos New index for the value to be moved to within the non-zero entries of {@code src} (assumed to be in the same
+     * @param newPos New index for the value to be moved to within the non-zero data of {@code src} (assumed to be in the same
      * row as {@code currPos}).
      */
     private static void moveAndShiftLeft(CsrMatrix src, int newColIdx, int currPos, int newPos) {
-        double value = src.entries[currPos];  // Extract the non-zero value.
+        double value = src.data[currPos];  // Extract the non-zero value.
 
-        // Shift entries in row to left.
+        // Shift data in row to left.
         for(int j=currPos; j<newPos; j++) {
-            src.entries[j] = src.entries[j+1];
+            src.data[j] = src.data[j+1];
             src.colIndices[j] = src.colIndices[j+1];
         }
 
-        src.entries[newPos] = value;  // Move non-zero value to new location.
+        src.data[newPos] = value;  // Move non-zero value to new location.
         src.colIndices[newPos] = newColIdx;  // Update column index for the value.
     }
 }

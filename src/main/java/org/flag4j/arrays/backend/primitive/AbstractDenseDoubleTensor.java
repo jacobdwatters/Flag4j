@@ -28,6 +28,7 @@ package org.flag4j.arrays.backend.primitive;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.linalg.operations.TransposeDispatcher;
+import org.flag4j.linalg.operations.common.real.RealOps;
 import org.flag4j.linalg.operations.common.real.RealProperties;
 import org.flag4j.linalg.operations.dense.real.RealDenseElemDiv;
 import org.flag4j.linalg.operations.dense.real.RealDenseElemMult;
@@ -46,11 +47,11 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
         extends AbstractDoubleTensor<T> {
 
     /**
-     * Creates a tensor with the specified entries and shape.
+     * Creates a tensor with the specified data and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
-     * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
+     * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
+     * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
     protected AbstractDenseDoubleTensor(Shape shape, double[] entries) {
         super(shape, entries);
@@ -70,7 +71,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
     @Override
     public Double get(int... indices) {
         ValidateParameters.validateTensorIndex(shape, indices);
-        return entries[shape.getFlatIndex(indices)];
+        return data[shape.getFlatIndex(indices)];
     }
 
 
@@ -87,7 +88,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
     @Override
     public T set(Double value, int... indices) {
         ValidateParameters.validateTensorIndex(shape, indices);
-        entries[shape.getFlatIndex(indices)] = value;
+        data[shape.getFlatIndex(indices)] = value;
         return (T) this;
     }
 
@@ -127,7 +128,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
     @Override
     public T T(int... axes) {
         return makeLikeTensor(shape.permuteAxes(axes),
-                TransposeDispatcher.dispatchTensor(entries, shape, axes));
+                TransposeDispatcher.dispatchTensor(data, shape, axes));
     }
 
 
@@ -142,7 +143,10 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     @Override
     public T sub(T b) {
-        return makeLikeTensor(shape, RealDenseOperations.sub(entries, b.entries, null));
+        // TODO: For methods like RealDenseOperations.sub which only take arrays, the shape check should be done in the method itself
+        //   and we will perform no bounds check in RealDenseOperations.sub (which needs to be documented within the method itself).
+        ValidateParameters.ensureEqualShape(shape, b.shape);
+        return makeLikeTensor(shape, RealDenseOperations.sub(data, b.data, null));
     }
 
 
@@ -154,7 +158,8 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
      */
     public void subEq(T b) {
-        RealDenseOperations.sub(entries, b.entries, entries);
+        ValidateParameters.ensureEqualShape(shape, b.shape);
+        RealDenseOperations.sub(data, b.data, data);
     }
 
 
@@ -169,7 +174,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     @Override
     public T add(T b) {
-        return makeLikeTensor(shape, RealDenseOperations.add(entries,b.entries, null));
+        return makeLikeTensor(shape, RealDenseOperations.add(data,b.data, null));
     }
 
     /**
@@ -180,7 +185,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      * @return The sum of this tensor with {@code b}.
      */
     public void addEq(T b) {
-        RealDenseOperations.add(entries,b.entries, entries);
+        RealDenseOperations.add(data, b.data, data);
     }
 
 
@@ -195,7 +200,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     @Override
     public T elemMult(T b) {
-        return makeLikeTensor(shape, RealDenseElemMult.elemMult(entries,b.entries, null));
+        return makeLikeTensor(shape, RealDenseElemMult.elemMult(data,b.data, null));
     }
 
 
@@ -207,7 +212,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
      */
     public void elemMultEq(T b) {
-        RealDenseElemMult.elemMult(entries,b.entries, entries);
+        RealDenseElemMult.elemMult(data,b.data, data);
     }
 
 
@@ -229,7 +234,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
     @Override
     public T tensorDot(T src2, int[] aAxes, int[] bAxes) {
         RealDenseTensorDot problem = new RealDenseTensorDot(
-                shape, entries, src2.shape, src2.entries, aAxes, bAxes);
+                shape, data, src2.shape, src2.data, aAxes, bAxes);
         return makeLikeTensor(problem.getOutputShape(), problem.compute());
     }
 
@@ -254,7 +259,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
     public Tensor tensorTr(int axis1, int axis2) {
         Shape destShape = DenseSemiringOperations.getTrShape(shape, axis1, axis2);
         double[] destEntries = new double[destShape.totalEntriesIntValueExact()];
-        RealDenseOperations.tensorTr(shape, entries, axis1, axis2, destShape, destEntries);
+        RealDenseOperations.tensorTr(shape, data, axis1, axis2, destShape, destEntries);
         return new Tensor(destShape, destEntries);
     }
 
@@ -268,7 +273,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     @Override
     public T div(T b) {
-        return makeLikeTensor(shape, RealDenseElemDiv.dispatch(entries, b.entries, null));
+        return makeLikeTensor(shape, RealDenseElemDiv.dispatch(data, b.data, null));
     }
 
 
@@ -278,7 +283,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      * @param b Second tensor in the element-wise quotient.
      */
     public void divEq(T b) {
-        RealDenseElemDiv.dispatch(entries, b.entries, entries);
+        RealDenseElemDiv.dispatch(data, b.data, data);
     }
 
 
@@ -291,7 +296,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     @Override
     public int[] argminAbs() {
-        return shape.getNdIndices(RealProperties.argminAbs(entries));
+        return shape.getNdIndices(RealProperties.argminAbs(data));
     }
 
 
@@ -303,7 +308,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     @Override
     public int[] argmaxAbs() {
-        return shape.getNdIndices(RealProperties.argmaxAbs(entries));
+        return shape.getNdIndices(RealProperties.argmaxAbs(data));
     }
 
 
@@ -315,7 +320,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     @Override
     public int[] argmin() {
-        return shape.getNdIndices(RealProperties.argmin(entries));
+        return shape.getNdIndices(RealProperties.argmin(data));
     }
 
 
@@ -327,7 +332,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     @Override
     public int[] argmax() {
-        return shape.getNdIndices(RealProperties.argmax(entries));
+        return shape.getNdIndices(RealProperties.argmax(data));
     }
 
 
@@ -343,6 +348,62 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
     @Override
     public T reshape(Shape newShape) {
         ValidateParameters.ensureBroadcastable(shape, newShape);
-        return makeLikeTensor(newShape, entries.clone());
+        return makeLikeTensor(newShape, data.clone());
+    }
+
+
+    /**
+     * Rounds all data in this matrix to the nearest integer.
+     * @return A new matrix containing the data of this matrix rounded to the nearest integer.
+     */
+    public T round() {
+        return round(0);
+    }
+
+
+    /**
+     * Rounds all data within this matrix to the specified precision.
+     * @param precision The precision to round to (i.e. the number of decimal places to round to). Must be non-negative.
+     * @return A new matrix containing the data of this matrix rounded to the specified precision.
+     */
+    public T round(int precision) {
+        return makeLikeTensor(shape, RealOps.round(data, precision));
+    }
+
+
+    /**
+     * Sets all elements of this matrix to zero if they are within {@code tol} of zero. This is <i>not</i> done in place.
+     * @param precision The precision to round to (i.e. the number of decimal places to round to). Must be non-negative.
+     * @return A copy of this matrix with all data within {@code tol} of zero set to zero.
+     */
+    public T roundToZero(double tolerance) {
+        return makeLikeTensor(shape, RealOps.roundToZero(data, tolerance));
+    }
+
+
+    /**
+     * Checks if all data of this matrix are 'close' as defined below. Custom tolerances may be specified using
+     * {@link #allClose(AbstractDoubleTensor, double, double)}.
+     * @param b Second tensor in the comparison.
+     * @return True if both tensors have the same shape and all data are 'close' element-wise, i.e.
+     * elements {@code x} and {@code y} at the same positions in the two tensors respectively and satisfy
+     * {@code |x-y| <= (1E-05 + 1E-08*|y|)}. Otherwise, returns false.
+     * @see #allClose(AbstractDoubleTensor, double, double)
+     */
+    public boolean allClose(T b) {
+        return sameShape(b) && RealProperties.allClose(data, b.data);
+    }
+
+
+    /**
+     * Checks if all data of this matrix are 'close' as defined below.
+     * @param b Second tensor in the comparison.
+     * @return True if both tensors have the same length and all data are 'close' element-wise, i.e.
+     * elements {@code x} and {@code y} at the same positions in the two tensors respectively and satisfy
+     * {@code |x-y| <= (absTol + relTol*|y|)}. Otherwise, returns false.
+     * @see #allClose(AbstractDoubleTensor)
+     */
+    public boolean allClose(T b, double relTol, double absTol) {
+        return sameShape(b) && RealProperties.allClose(data, b.data, relTol, absTol);
     }
 }

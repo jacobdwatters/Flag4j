@@ -59,7 +59,7 @@ public final class MatrixNorms {
      * @return the 2-norm of this tensor.
      */
     public static double norm(Matrix src) {
-        return TensorNorms.tensorNormL2(src.entries);
+        return TensorNorms.tensorNormL2(src.data);
     }
 
 
@@ -82,7 +82,7 @@ public final class MatrixNorms {
                 norm = src.minAbs();
             }
         } else {
-            norm = TensorNorms.tensorNormLp(src.entries, p);
+            norm = TensorNorms.tensorNormLp(src.data, p);
         }
 
         return norm;
@@ -97,7 +97,7 @@ public final class MatrixNorms {
      * @see #infNorm(Matrix)
      */
     public static double maxNorm(Matrix src) {
-        return matrixMaxNorm(src.entries);
+        return matrixMaxNorm(src.data);
     }
 
 
@@ -109,7 +109,7 @@ public final class MatrixNorms {
      * @see #maxNorm(Matrix)
      */
     public static double infNorm(Matrix src) {
-        return matrixInfNorm(src.entries, src.shape);
+        return matrixInfNorm(src.data, src.shape);
     }
 
 
@@ -121,7 +121,7 @@ public final class MatrixNorms {
      * @return The L<sub>p, q</sub> norm of this matrix.
      */
     public static double norm(Matrix src, double p, double q) {
-        return matrixNormLpq(src.entries, src.shape, p, q);
+        return matrixNormLpq(src.data, src.shape, p, q);
     }
 
 
@@ -134,7 +134,7 @@ public final class MatrixNorms {
      * @return The L<sub>p, q</sub> norm of this matrix.
      */
     public static double norm(CMatrix src, double p, double q) {
-        return matrixNormLpq(src.entries, src.shape, p, q);
+        return matrixNormLpq(src.data, src.shape, p, q);
     }
 
 
@@ -145,7 +145,7 @@ public final class MatrixNorms {
      * @return The max norm of this matrix.
      */
     public static double maxNorm(CMatrix src) {
-        return matrixMaxNorm(src.entries);
+        return matrixMaxNorm(src.data);
     }
 
 
@@ -156,7 +156,7 @@ public final class MatrixNorms {
      * @return the 2-norm of this tensor.
      */
     public static double norm(CMatrix src) {
-        return matrixNormL2(src.entries, src.shape);
+        return matrixNormL2(src.data, src.shape);
     }
 
 
@@ -179,7 +179,7 @@ public final class MatrixNorms {
                 norm = src.minAbs();
             }
         } else {
-            norm = matrixNormLp(src.entries, src.shape, p);
+            norm = matrixNormLp(src.data, src.shape, p);
         }
 
         return norm;
@@ -193,7 +193,7 @@ public final class MatrixNorms {
      * @return The maximum/infinite norm of this tensor.
      */
     public static double infNorm(CMatrix src) {
-        return matrixInfNorm(src.entries, src.shape);
+        return matrixInfNorm(src.data, src.shape);
     }
 
 
@@ -220,7 +220,7 @@ public final class MatrixNorms {
      * @return The max norm of this matrix.
      */
     public static double maxNorm(CooMatrix src) {
-        return matrixMaxNorm(src.entries);
+        return matrixMaxNorm(src.data);
     }
 
 
@@ -275,7 +275,7 @@ public final class MatrixNorms {
      * @return The max norm of this matrix.
      */
     public static double maxNorm(CooCMatrix src) {
-        return matrixMaxNorm(src.entries);
+        return matrixMaxNorm(src.data);
     }
 
 
@@ -330,7 +330,7 @@ public final class MatrixNorms {
      * @return The max norm of this matrix.
      */
     public static double maxNorm(CsrMatrix src) {
-        return matrixMaxNorm(src.entries);
+        return matrixMaxNorm(src.data);
     }
 
 
@@ -341,7 +341,7 @@ public final class MatrixNorms {
      * @return the 2-norm of this tensor.
      */
     public double norm(CsrMatrix src) {
-        return TensorNorms.tensorNormL2(src.entries); // Zeros do not contribute to this norm.
+        return TensorNorms.tensorNormL2(src.data); // Zeros do not contribute to this norm.
     }
 
 
@@ -355,7 +355,7 @@ public final class MatrixNorms {
      * @throws IllegalArgumentException If p is less than 1.
      */
     public double norm(CsrMatrix src, double p) {
-        return TensorNorms.tensorNormLp(src.entries, p); // Zeros do not contribute to this norm.
+        return TensorNorms.tensorNormLp(src.data, p); // Zeros do not contribute to this norm.
     }
 
 
@@ -521,7 +521,7 @@ public final class MatrixNorms {
             double colNorm = 0;
 
             for(int j=start; j<stop; j++) {
-                colNorm += Math.pow(Math.abs(tSrc.entries[j]), p);
+                colNorm += Math.pow(Math.abs(tSrc.data[j]), p);
             }
 
             norm += Math.pow(colNorm, pOverQ);

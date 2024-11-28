@@ -63,15 +63,15 @@ public final class RealSparseEquals {
         List<int[]> bIndices = new ArrayList<>(b.nnz);
 
         for(int i=0; i<a.nnz; i++) {
-            if(a.entries[i] != 0) {
-                aEntries.add(a.entries[i]);
+            if(a.data[i] != 0) {
+                aEntries.add(a.data[i]);
                 aIndices.add(a.indices[i]);
             }
         }
 
         for(int i=0; i<b.nnz; i++) {
-            if(b.entries[i] != 0) {
-                bEntries.add(b.entries[i]);
+            if(b.data[i] != 0) {
+                bEntries.add(b.data[i]);
                 bIndices.add(b.indices[i]);
             }
         }
@@ -97,17 +97,17 @@ public final class RealSparseEquals {
         // Create src1 HashMap ignoring the explicit zeros in first matrix.
         Map<Integer, Double> nonZeroMapA = new HashMap<>();
         for (int i=0; i < src1.nnz; i++) {
-            if (src1.entries[i] != 0.0) {
-                nonZeroMapA.put(i-aZeroCount, src1.entries[i]);
+            if (src1.data[i] != 0.0) {
+                nonZeroMapA.put(i-aZeroCount, src1.data[i]);
             } else{
                 aZeroCount++;
             }
         }
 
-        // Iterate over matrix src2's entries and compare with matrix src1's entries.
+        // Iterate over matrix src2's data and compare with matrix src1's data.
         for (int i=0; i<src2.nnz; i++) {
             int key = i-bZeroCount;
-            double valueB = src2.entries[i];
+            double valueB = src2.data[i];
 
             // If valueB is non-zero, check against matrix src1.
             if(valueB != 0.0) {
@@ -152,15 +152,15 @@ public final class RealSparseEquals {
         List<Integer> bIndices = new ArrayList<>(b.nnz);
 
         for(int i=0; i<a.nnz; i++) {
-            if(a.entries[i] != 0) {
-                aEntries.add(a.entries[i]);
+            if(a.data[i] != 0) {
+                aEntries.add(a.data[i]);
                 aIndices.add(a.indices[i]);
             }
         }
 
         for(int i=0; i<b.nnz; i++) {
-            if(b.entries[i] != 0) {
-                bEntries.add(b.entries[i]);
+            if(b.data[i] != 0) {
+                bEntries.add(b.data[i]);
                 bIndices.add(b.indices[i]);
             }
         }
@@ -170,53 +170,53 @@ public final class RealSparseEquals {
 
 
     /**
-     * Checks that all non-zero entries are "close" according to {@link RealProperties#allClose(double[], double[])} and
+     * Checks that all non-zero data are "close" according to {@link RealProperties#allClose(double[], double[])} and
      *      * all indices are the same.
      * @param src1 First matrix in comparison.
      * @param src2 Second matrix in comparison.
      * @param relTol Relative tolerance.
      * @param absTol Absolute tolerance.
-     * @return True if all entries are "close". Otherwise, false.
+     * @return True if all data are "close". Otherwise, false.
      */
     public static boolean allCloseMatrix(CooMatrix src1, CooMatrix src2, double relTol, double absTol) {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.equals(src1.rowIndices, src2.rowIndices)
                 && Arrays.equals(src1.colIndices, src2.colIndices)
-                && RealProperties.allClose(src1.entries, src2.entries, relTol, absTol);
+                && RealProperties.allClose(src1.data, src2.data, relTol, absTol);
     }
 
 
     /**
-     * Checks that all non-zero entries are "close" according to {@link RealProperties#allClose(double[], double[], double, double)} and
+     * Checks that all non-zero data are "close" according to {@link RealProperties#allClose(double[], double[], double, double)} and
      * all indices are the same.
      * @param src1 First tensor in comparison.
      * @param src2 Second tensor in comparison.
      * @param relTol Relative tolerance.
      * @param absTol Absolute tolerance.
-     * @return True if all entries are "close". Otherwise, false.
+     * @return True if all data are "close". Otherwise, false.
      */
     public static boolean allCloseTensor(CooTensor src1, CooTensor src2, double relTol, double absTol) {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.deepEquals(src1.indices, src2.indices)
-                && RealProperties.allClose(src1.entries, src2.entries, relTol, absTol);
+                && RealProperties.allClose(src1.data, src2.data, relTol, absTol);
     }
 
 
     /**
-     * Checks that all non-zero entries are "close" according to {@link RealProperties#allClose(double[], double[])} and
+     * Checks that all non-zero data are "close" according to {@link RealProperties#allClose(double[], double[])} and
      * all indices are the same.
      * @param src1 First vector in comparison.
      * @param src2 Second vector in comparison.
      * @param relTol Relative tolerance.
      * @param absTol Absolute tolerance.
-     * @return True if all entries are "close". Otherwise, false.
+     * @return True if all data are "close". Otherwise, false.
      */
     public static boolean allCloseVector(CooVector src1, CooVector src2, double relTol, double absTol) {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.equals(src1.indices, src2.indices)
-                && RealProperties.allClose(src1.entries, src2.entries, relTol, absTol);
+                && RealProperties.allClose(src1.data, src2.data, relTol, absTol);
     }
 }

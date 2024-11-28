@@ -24,7 +24,7 @@ class MatrixTransposeTests {
         A = new Matrix(aEntries);
         expT = new Matrix(expEntries);
         AT = A.T();
-        assertArrayEquals(expT.entries, AT.entries);
+        assertArrayEquals(expT.data, AT.data);
         assertEquals(expT.numRows(), AT.numRows());
         assertEquals(expT.numCols(), AT.numCols());
     }

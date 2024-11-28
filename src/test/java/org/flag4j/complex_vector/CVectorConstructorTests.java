@@ -34,7 +34,7 @@ class CVectorConstructorTests {
         assertEquals(expSize, a.size);
         assertEquals(expShape, a.shape);
         for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
+            assertEquals(expEntries[i], a.data[i]);
         }
 
         // ----------- Sub-case 2 ------------
@@ -50,7 +50,7 @@ class CVectorConstructorTests {
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
         for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
+            assertEquals(expEntries[i], a.data[i]);
         }
 
         // ----------- Sub-case 3 ------------
@@ -74,7 +74,7 @@ class CVectorConstructorTests {
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
         for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
+            assertEquals(expEntries[i], a.data[i]);
         }
 
         // ----------- Sub-case 2 ------------
@@ -91,7 +91,7 @@ class CVectorConstructorTests {
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
         for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
+            assertEquals(expEntries[i], a.data[i]);
         }
 
         // ----------- Sub-case 3 ------------
@@ -117,7 +117,7 @@ class CVectorConstructorTests {
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
         for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
+            assertEquals(expEntries[i], a.data[i]);
         }
 
         // ----------- Sub-case 2 ------------
@@ -134,7 +134,7 @@ class CVectorConstructorTests {
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
         for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
+            assertEquals(expEntries[i], a.data[i]);
         }
 
         // ----------- Sub-case 3 ------------
@@ -160,7 +160,7 @@ class CVectorConstructorTests {
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
         for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
+            assertEquals(expEntries[i], a.data[i]);
         }
 
         // ----------- Sub-case 2 ------------
@@ -177,7 +177,7 @@ class CVectorConstructorTests {
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
         for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
+            assertEquals(expEntries[i], a.data[i]);
         }
     }
 
@@ -198,7 +198,7 @@ class CVectorConstructorTests {
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
         for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
+            assertEquals(expEntries[i], a.data[i]);
         }
 
         // ----------- Sub-case 2 ------------
@@ -215,7 +215,7 @@ class CVectorConstructorTests {
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
         for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
+            assertEquals(expEntries[i], a.data[i]);
         }
     }
 
@@ -233,7 +233,7 @@ class CVectorConstructorTests {
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
         for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
+            assertEquals(expEntries[i], a.data[i]);
         }
 
         // ----------- Sub-case 2 ------------
@@ -246,7 +246,7 @@ class CVectorConstructorTests {
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
         for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
+            assertEquals(expEntries[i], a.data[i]);
         }
     }
 
@@ -265,7 +265,7 @@ class CVectorConstructorTests {
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
         for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
+            assertEquals(expEntries[i], a.data[i]);
         }
 
         // ----------- Sub-case 2 ------------
@@ -283,7 +283,7 @@ class CVectorConstructorTests {
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
         for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
+            assertEquals(expEntries[i], a.data[i]);
         }
 
         // ----------- Sub-case 3 ------------
@@ -301,7 +301,7 @@ class CVectorConstructorTests {
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
                 for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
+            assertEquals(expEntries[i], a.data[i]);
         }
 
         // ----------- Sub-case 4 ------------
@@ -319,7 +319,7 @@ class CVectorConstructorTests {
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
         for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
+            assertEquals(expEntries[i], a.data[i]);
         }
     }
 

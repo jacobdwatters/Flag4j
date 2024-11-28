@@ -42,7 +42,7 @@ public final class DenseRingVectorNorms {
 
     /**
      * Computes the 2-norm of a vector.
-     * @param src Entries of the vector (or non-zero entries if vector is sparse).
+     * @param src Entries of the vector (or non-zero data if vector is sparse).
      * @return The 2-norm of the vector.
      */
     public static <T extends Ring<T>> double norm(Ring<T>... src) {
@@ -66,7 +66,7 @@ public final class DenseRingVectorNorms {
 
     /**
      * Computes the {@code p}-norm of a vector.
-     * @param src Entries of the vector (or non-zero entries if vector is sparse).
+     * @param src Entries of the vector (or non-zero data if vector is sparse).
      * @param p The {@code p} value in the {@code p}-norm. <br>
      *          - If {@code p} is {@link Double#POSITIVE_INFINITY}, then this method computes the maximum/infinite norm. <br>
      *          - If {@code p} is {@link Double#NEGATIVE_INFINITY}, then this method computes the minimum norm. <br>

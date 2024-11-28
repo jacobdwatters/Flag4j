@@ -6,8 +6,8 @@ import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseVectorOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOps;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -42,14 +42,14 @@ class CVectorInnerProductTests {
         b = new Vector(bEntries);
         exp = new Complex128("25.12969816999999 + 8968.199567075002i");
 
-        assertEquals(exp, RealFieldDenseVectorOperations.inner(a.entries, b.entries));
+        assertEquals(exp, RealFieldDenseVectorOperations.inner(a.data, b.data));
 
         // -------------------- Sub-case 2 --------------------
         bEntries = new double[]{1.455, 1.56, -8815.56};
         b = new Vector(bEntries);
 
         Vector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->RealFieldDenseVectorOperations.inner(a.entries, finalB.entries));
+        assertThrows(IllegalArgumentException.class, ()->RealFieldDenseVectorOperations.inner(a.data, finalB.data));
     }
 
 
@@ -65,7 +65,7 @@ class CVectorInnerProductTests {
         b = new CooVector(sparseSize, bEntries, sparseIndices);
         exp = new Complex128("-13.43870575+7.294682075000001j");
 
-        assertEquals(exp, RealFieldDenseCooVectorOperations.inner(a.entries, b.entries, b.indices, b.size));
+        assertEquals(exp, RealFieldDenseCooVectorOps.inner(a.data, b.data, b.indices, b.size));
 
         // -------------------- Sub-case 2 --------------------
         bEntries = new double[]{1.455, -0.00035};
@@ -75,7 +75,7 @@ class CVectorInnerProductTests {
 
         CooVector finalB = b;
         assertThrows(IllegalArgumentException.class,
-                ()->RealFieldDenseCooVectorOperations.inner(a.entries, finalB.entries, finalB.indices, finalB.size));
+                ()-> RealFieldDenseCooVectorOps.inner(a.data, finalB.data, finalB.indices, finalB.size));
     }
 
 
@@ -114,7 +114,7 @@ class CVectorInnerProductTests {
         b = new CooCVector(sparseSize, bEntries, sparseIndices);
         exp = new Complex128("-36783.725741 + 150104.24605j");
 
-        assertEquals(exp, DenseCooFieldVectorOperations.innerProduct(a.entries, b.entries, b.indices, b.size));
+        assertEquals(exp, DenseCooFieldVectorOps.innerProduct(a.data, b.data, b.indices, b.size));
 
         // -------------------- Sub-case 2 --------------------
         bEntries = new Complex128[]{new Complex128(24.5, -6.01), new Complex128(3)};
@@ -124,6 +124,6 @@ class CVectorInnerProductTests {
 
         CooCVector finalB = b;
         assertThrows(IllegalArgumentException.class,
-                ()->DenseCooFieldVectorOperations.innerProduct(a.entries, finalB.entries, finalB.indices, finalB.size));
+                ()-> DenseCooFieldVectorOps.innerProduct(a.data, finalB.data, finalB.indices, finalB.size));
     }
 }

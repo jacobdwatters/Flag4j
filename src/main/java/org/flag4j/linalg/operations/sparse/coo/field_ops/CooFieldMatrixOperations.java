@@ -60,7 +60,7 @@ public final class CooFieldMatrixOperations {
     add(AbstractCooFieldMatrix<?, ?, ?, V> src1, AbstractCooFieldMatrix<?, ?, ?, V> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
-        int initCapacity = Math.max(src1.entries.length, src2.entries.length);
+        int initCapacity = Math.max(src1.data.length, src2.data.length);
 
         List<Field<V>> sum = new ArrayList<>(initCapacity);
         List<Integer> rowIndices = new ArrayList<>(initCapacity);
@@ -73,10 +73,10 @@ public final class CooFieldMatrixOperations {
         boolean add1;
         boolean add2;
 
-        while(src1Counter < src1.entries.length || src2Counter < src2.entries.length) {
+        while(src1Counter < src1.data.length || src2Counter < src2.data.length) {
 
-            if(src1Counter >= src1.entries.length || src2Counter >= src2.entries.length) {
-                add1 = src2Counter >= src2.entries.length;
+            if(src1Counter >= src1.data.length || src2Counter >= src2.data.length) {
+                add1 = src2Counter >= src2.data.length;
                 add2 = !add1;
             } else if(src1.rowIndices[src1Counter] == src2.rowIndices[src2Counter]
                     && src1.colIndices[src1Counter] == src2.colIndices[src2Counter]) {
@@ -93,18 +93,18 @@ public final class CooFieldMatrixOperations {
             }
 
             if(add1 && add2) {
-                sum.add(src1.entries[src1Counter].add((V) src2.entries[src2Counter]));
+                sum.add(src1.data[src1Counter].add((V) src2.data[src2Counter]));
                 rowIndices.add(src1.rowIndices[src1Counter]);
                 colIndices.add(src1.colIndices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
             } else if(add1) {
-                sum.add(src1.entries[src1Counter]);
+                sum.add(src1.data[src1Counter]);
                 rowIndices.add(src1.rowIndices[src1Counter]);
                 colIndices.add(src1.colIndices[src1Counter]);
                 src1Counter++;
             } else {
-                sum.add(src2.entries[src2Counter]);
+                sum.add(src2.data[src2Counter]);
                 rowIndices.add(src2.rowIndices[src2Counter]);
                 colIndices.add(src2.colIndices[src2Counter]);
                 src2Counter++;
@@ -116,12 +116,12 @@ public final class CooFieldMatrixOperations {
 
 
     /**
-     * Adds a double all entries (including zero values) of a real sparse matrix.
+     * Adds a double all data (including zero values) of a real sparse matrix.
      * @param src Sparse matrix to add double value to.
      * @param a Double value to add to the sparse matrix.
      * @return The result of the matrix addition.
      * @throws ArithmeticException If the {@code src} sparse matrix is too large to be converted to a dense matrix.
-     * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
+     * That is, there are more than {@link Integer#MAX_VALUE} data in the matrix (including zero data).
      */
     public static <V extends Field<V>> FieldMatrix<V>
     add(AbstractCooFieldMatrix<?, ?, ?, V> src, double a) {
@@ -131,10 +131,10 @@ public final class CooFieldMatrixOperations {
         int row;
         int col;
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             row = src.rowIndices[i];
             col = src.colIndices[i];
-            sum[row*src.numCols + col] = sum[row*src.numCols + col].add((V) src.entries[i]);
+            sum[row*src.numCols + col] = sum[row*src.numCols + col].add((V) src.data[i]);
         }
 
         return new FieldMatrix<V>(src.shape, (V[]) sum);
@@ -153,7 +153,7 @@ public final class CooFieldMatrixOperations {
     sub(AbstractCooFieldMatrix<?, ?, ?, V> src1, AbstractCooFieldMatrix<?, ?, ?, V> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
-        int initCapacity = Math.max(src1.entries.length, src2.entries.length);
+        int initCapacity = Math.max(src1.data.length, src2.data.length);
 
         List<Field<V>> sum = new ArrayList<>(initCapacity);
         List<Integer> rowIndices = new ArrayList<>(initCapacity);
@@ -166,10 +166,10 @@ public final class CooFieldMatrixOperations {
         boolean add1;
         boolean add2;
 
-        while(src1Counter < src1.entries.length || src2Counter < src2.entries.length) {
+        while(src1Counter < src1.data.length || src2Counter < src2.data.length) {
 
-            if(src1Counter >= src1.entries.length || src2Counter >= src2.entries.length) {
-                add1 = src2Counter >= src2.entries.length;
+            if(src1Counter >= src1.data.length || src2Counter >= src2.data.length) {
+                add1 = src2Counter >= src2.data.length;
                 add2 = !add1;
             } else if(src1.rowIndices[src1Counter] == src2.rowIndices[src2Counter]
                     && src1.colIndices[src1Counter] == src2.colIndices[src2Counter]) {
@@ -186,18 +186,18 @@ public final class CooFieldMatrixOperations {
             }
 
             if(add1 && add2) {
-                sum.add(src1.entries[src1Counter].sub((V) src2.entries[src2Counter]));
+                sum.add(src1.data[src1Counter].sub((V) src2.data[src2Counter]));
                 rowIndices.add(src1.rowIndices[src1Counter]);
                 colIndices.add(src1.colIndices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
             } else if(add1) {
-                sum.add(src1.entries[src1Counter]);
+                sum.add(src1.data[src1Counter]);
                 rowIndices.add(src1.rowIndices[src1Counter]);
                 colIndices.add(src1.colIndices[src1Counter]);
                 src1Counter++;
             } else {
-                sum.add(src2.entries[src2Counter].addInv());
+                sum.add(src2.data[src2Counter].addInv());
                 rowIndices.add(src2.rowIndices[src2Counter]);
                 colIndices.add(src2.colIndices[src2Counter]);
                 src2Counter++;
@@ -209,12 +209,12 @@ public final class CooFieldMatrixOperations {
 
 
     /**
-     * Subtracts a double from all entries (including zero values) of a real sparse matrix.
+     * Subtracts a double from all data (including zero values) of a real sparse matrix.
      * @param src Sparse matrix to subtract double value from.
      * @param a Double value to subtract from the sparse matrix.
      * @return The result of the matrix subtraction.
      * @throws ArithmeticException If the {@code src} sparse matrix is too large to be converted to a dense matrix.
-     * That is, there are more than {@link Integer#MAX_VALUE} entries in the matrix (including zero entries).
+     * That is, there are more than {@link Integer#MAX_VALUE} data in the matrix (including zero data).
      */
     public static <V extends Field<V>> FieldMatrix<V>
     sub(AbstractCooFieldMatrix<?, ?, ?, V> src, double a) {
@@ -224,10 +224,10 @@ public final class CooFieldMatrixOperations {
         int row;
         int col;
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             row = src.rowIndices[i];
             col = src.colIndices[i];
-            sum[row*src.numCols + col] = sum[row*src.numCols + col].add((V) src.entries[i]);
+            sum[row*src.numCols + col] = sum[row*src.numCols + col].add((V) src.data[i]);
         }
 
         return new FieldMatrix<V>(src.shape, (V[]) sum);
@@ -247,7 +247,7 @@ public final class CooFieldMatrixOperations {
     elemMult(AbstractCooFieldMatrix<?, ?, ?, V> src1, AbstractCooFieldMatrix<?, ?, ?, V> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
-        int initCapacity = Math.max(src1.entries.length, src2.entries.length);
+        int initCapacity = Math.max(src1.data.length, src2.data.length);
 
         List<Field<V>> product = new ArrayList<>(initCapacity);
         List<Integer> rowIndices = new ArrayList<>(initCapacity);
@@ -256,10 +256,10 @@ public final class CooFieldMatrixOperations {
         int src1Counter = 0;
         int src2Counter = 0;
 
-        while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
+        while(src1Counter < src1.data.length && src2Counter < src2.data.length) {
             if(src1.rowIndices[src1Counter] == src2.rowIndices[src2Counter]
                     && src1.colIndices[src1Counter] == src2.colIndices[src2Counter]) {
-                product.add(src1.entries[src1Counter].mult((V) src2.entries[src2Counter]));
+                product.add(src1.data[src1Counter].mult((V) src2.data[src2Counter]));
                 rowIndices.add(src1.rowIndices[src1Counter]);
                 colIndices.add(src1.colIndices[src1Counter]);
                 src1Counter++;
@@ -295,15 +295,15 @@ public final class CooFieldMatrixOperations {
         Field<T>[] destEntries = new Field[src.totalEntries().intValueExact()];
 
         // Add values from sparse matrix.
-        for(int i=0; i<src.entries.length; i++) {
-            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = src.entries[i];
+        for(int i = 0; i<src.data.length; i++) {
+            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = src.data[i];
         }
 
         // Add values from sparse column.
-        for(int i=0; i<col.entries.length; i++) {
+        for(int i = 0; i<col.data.length; i++) {
             int idx = col.indices[i]*src.numCols;
             int end = idx + src.numCols;
-            T value = (T) col.entries[i];
+            T value = (T) col.data[i];
 
             while(idx < end) {
                 destEntries[idx] = destEntries[idx++].add(value);
@@ -325,15 +325,15 @@ public final class CooFieldMatrixOperations {
         Field<T>[] destEntries = new Field[src.totalEntries().intValueExact()];
 
         // Add values from sparse matrix.
-        for(int i=0; i<src.entries.length; i++) {
-            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = src.entries[i];
+        for(int i = 0; i<src.data.length; i++) {
+            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = src.data[i];
         }
 
         // Add values from sparse column.
-        for(int i=0; i<row.entries.length; i++) {
+        for(int i = 0; i<row.data.length; i++) {
             int colIdx = row.indices[i];
             int idx = colIdx;
-            T value = (T) row.entries[i];
+            T value = (T) row.data[i];
 
             while(idx < destEntries.length) {
                 destEntries[idx] = destEntries[idx].add(value);

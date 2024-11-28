@@ -121,7 +121,7 @@ public final class DenseFieldMatMultDispatcher {
 
         DenseFieldMatMultDispatcher dispatcher = getInstance();
         AlgorithmNames name = selectAlgorithm(A.shape, B.shape);
-        return dispatcher.algorithmMap.get(name).apply(A.entries, A.shape, B.entries, B.shape);
+        return dispatcher.algorithmMap.get(name).apply(A.data, A.shape, B.data, B.shape);
     }
 
 
@@ -141,16 +141,16 @@ public final class DenseFieldMatMultDispatcher {
 
         switch(algorithm) {
             case STANDARD_VECTOR:
-                dest = DenseFieldMatrixMultiplication.standardVector(src1.entries, src1.shape, src2.entries, bMatShape);
+                dest = DenseFieldMatrixMultiplication.standardVector(src1.data, src1.shape, src2.data, bMatShape);
                 break;
             case BLOCKED_VECTOR:
-                dest = DenseFieldMatrixMultiplication.blockedVector(src1.entries, src1.shape, src2.entries, bMatShape);
+                dest = DenseFieldMatrixMultiplication.blockedVector(src1.data, src1.shape, src2.data, bMatShape);
                 break;
             case CONCURRENT_STANDARD_VECTOR:
-                dest = DenseFieldMatrixMultiplication.concurrentStandardVector(src1.entries, src1.shape, src2.entries, bMatShape);
+                dest = DenseFieldMatrixMultiplication.concurrentStandardVector(src1.data, src1.shape, src2.data, bMatShape);
                 break;
             default:
-                dest = DenseFieldMatrixMultiplication.concurrentBlockedVector(src1.entries, src1.shape, src2.entries, bMatShape);
+                dest = DenseFieldMatrixMultiplication.concurrentBlockedVector(src1.data, src1.shape, src2.data, bMatShape);
                 break;
         }
 
@@ -187,7 +187,7 @@ public final class DenseFieldMatMultDispatcher {
 
         DenseFieldMatMultDispatcher dispatcher = getInstance();
         AlgorithmNames name = selectAlgorithmTranspose(A.shape);
-        return dispatcher.algorithmMap.get(name).apply(A.entries, A.shape, B.entries, B.shape);
+        return dispatcher.algorithmMap.get(name).apply(A.data, A.shape, B.data, B.shape);
     }
 
 

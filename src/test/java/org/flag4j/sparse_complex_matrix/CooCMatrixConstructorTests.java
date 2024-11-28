@@ -28,7 +28,7 @@ public class CooCMatrixConstructorTests {
         A = new CooCMatrix(size);
 
         Assertions.assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -50,7 +50,7 @@ public class CooCMatrixConstructorTests {
         A = new CooCMatrix(rows, cols);
 
         Assertions.assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -64,7 +64,7 @@ public class CooCMatrixConstructorTests {
         A = new CooCMatrix(rows, cols);
 
         Assertions.assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -97,7 +97,7 @@ public class CooCMatrixConstructorTests {
         A = new CooCMatrix(expShape);
 
         Assertions.assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -111,7 +111,7 @@ public class CooCMatrixConstructorTests {
         A = new CooCMatrix(expShape);
 
         Assertions.assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
     }
@@ -129,7 +129,7 @@ public class CooCMatrixConstructorTests {
         A = new CooCMatrix(size, expNonZero, expRowIndices, expColIndices);
 
         Assertions.assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -184,7 +184,7 @@ public class CooCMatrixConstructorTests {
         A = new CooCMatrix(rows, cols, expNonZero, expRowIndices, expColIndices);
 
         Assertions.assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -200,7 +200,7 @@ public class CooCMatrixConstructorTests {
         A = new CooCMatrix(rows, cols, expNonZero, expRowIndices, expColIndices);
 
         Assertions.assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -235,7 +235,7 @@ public class CooCMatrixConstructorTests {
         A = new CooCMatrix(expShape, expNonZero, expRowIndices, expColIndices);
 
         Assertions.assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -251,7 +251,7 @@ public class CooCMatrixConstructorTests {
         A = new CooCMatrix(expShape, expNonZero, expRowIndices, expColIndices);
 
         Assertions.assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
     }
@@ -272,7 +272,7 @@ public class CooCMatrixConstructorTests {
         A = new CooCMatrix(B);
 
         Assertions.assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -289,7 +289,7 @@ public class CooCMatrixConstructorTests {
         A = new CooCMatrix(B);
 
         Assertions.assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
     }

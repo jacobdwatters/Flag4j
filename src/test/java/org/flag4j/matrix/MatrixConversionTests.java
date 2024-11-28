@@ -1,6 +1,7 @@
 package org.flag4j.matrix;
 
 
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.dense.Vector;

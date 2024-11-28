@@ -403,11 +403,11 @@ public class RandomDenseTensor {
 
         for(int i=0; i<size; i++) {
             for(int j=0; j<i; j++) {
-                randMat.entries[i*size+j] = COMPLEX_RNG.nextDouble();
-                randMat.entries[j*size+i] = randMat.entries[i*size+j];
+                randMat.data[i*size+j] = COMPLEX_RNG.nextDouble();
+                randMat.data[j*size+i] = randMat.data[i*size+j];
             }
 
-            randMat.entries[i*(size+1)] = COMPLEX_RNG.nextDouble(); // Diagonal entry
+            randMat.data[i*(size+1)] = COMPLEX_RNG.nextDouble(); // Diagonal entry
         }
 
         return randMat;
@@ -559,7 +559,7 @@ public class RandomDenseTensor {
 
 
     /**
-     * Gets a pseudorandom upper triangular matrix of the specified size. The entries will be distributed according to a
+     * Gets a pseudorandom upper triangular matrix of the specified size. The data will be distributed according to a
      * standard normal distribution with a mean of 0 and standard deviation of 1.
      * @param size Size if the upper triangular matrix.
      * @return A pseudorandom upper triangular matrix of the specified size.
@@ -580,7 +580,7 @@ public class RandomDenseTensor {
 
 
     /**
-     * Gets a pseudorandom lower triangular matrix of the specified size. The entries will be distributed according to a
+     * Gets a pseudorandom lower triangular matrix of the specified size. The data will be distributed according to a
      * standard normal distribution with a mean of 0 and standard deviation of 1.
      * @param size Size if the lower triangular matrix.
      * @return A pseudorandom lower triangular matrix of the specified size.

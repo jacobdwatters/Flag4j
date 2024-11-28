@@ -25,14 +25,22 @@
 package org.flag4j.arrays.dense;
 
 
+import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.primitive.AbstractDenseDoubleTensor;
+import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.io.PrintOptions;
+import org.flag4j.linalg.operations.common.complex.Complex128Ops;
+import org.flag4j.linalg.operations.common.field_ops.FieldOps;
 import org.flag4j.linalg.operations.dense.real.RealDenseEquals;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOps;
+import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseCooTensorOps;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseCooOps;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
+import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +53,7 @@ import java.util.List;
  * <p>A tensor is a multidimensional array. If N indices are required to uniquely identify all elements of a tensor, then the
  * tensor is considered an N-dimensional tensor/array or a rank-N tensor.</p>
  *
- * <p>The {@link #entries} of a Tensor are mutable but the {@link #shape} is fixed.</p>
+ * <p>The {@link #data} of a Tensor are mutable but the {@link #shape} is fixed.</p>
  */
 public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
 
@@ -67,12 +75,12 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
      */
     public Tensor(Shape shape, double fillValue) {
         super(shape, new double[shape.totalEntries().intValueExact()]);
-        Arrays.fill(entries, fillValue);
+        Arrays.fill(data, fillValue);
     }
 
 
     /**
-     * Creates a tensor with the specified entries and shape.
+     * Creates a tensor with the specified data and shape.
      *
      * @param shape Shape of this tensor.
      * @param entries Entries of this tensor.
@@ -83,7 +91,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
 
 
     /**
-     * Flattens tensor to single dimension while preserving order of entries.
+     * Flattens tensor to single dimension while preserving order of data.
      *
      * @return The flattened tensor.
      *
@@ -91,7 +99,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
      */
     @Override
     public Tensor flatten() {
-        return new Tensor(new Shape(shape.totalEntriesIntValueExact()), entries.clone());
+        return new Tensor(new Shape(shape.totalEntriesIntValueExact()), data.clone());
     }
 
 
@@ -109,19 +117,19 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
         int[] dims = new int[rank];
         Arrays.fill(dims, 1);
         dims[axis] = shape.totalEntriesIntValueExact();
-        return new Tensor(new Shape(dims), entries.clone());
+        return new Tensor(new Shape(dims), data.clone());
     }
 
 
     /**
-     * Creates a tensor with the specified entries and shape.
+     * Creates a tensor with the specified data and shape.
      *
      * @param shape Shape of this tensor.
      * @param entries Entries of this tensor.
      */
     public Tensor(Shape shape, int[] entries) {
         super(shape, new double[entries.length]);
-        ArrayUtils.asDouble(entries, this.entries);
+        ArrayUtils.asDouble(entries, this.data);
     }
 
 
@@ -130,41 +138,41 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
      * @param src The tensor to make a copy of.
      */
     public Tensor(Tensor src) {
-        super(src.shape, src.entries.clone());
+        super(src.shape, src.data.clone());
     }
 
 
     /**
-     * Creates a tensor with the specified entries and shape.
+     * Creates a tensor with the specified data and shape.
      *
      * @param shape Shape of this tensor.
      * @param entries Entries of this tensor.
      */
     public Tensor(Shape shape, Double[] entries) {
         super(shape, new double[entries.length]);
-        ArrayUtils.unbox(entries, super.entries);
+        ArrayUtils.unbox(entries, super.data);
     }
 
 
     /**
-     * Creates a tensor with the specified entries and shape.
+     * Creates a tensor with the specified data and shape.
      *
      * @param shape Shape of this tensor.
      * @param entries Entries of this tensor.
      */
     public Tensor(Shape shape, Integer[] entries) {
         super(shape, new double[entries.length]);
-        ArrayUtils.asDouble(entries, super.entries);
+        ArrayUtils.asDouble(entries, super.data);
     }
 
 
     /**
-     * Constructs a tensor of the same type as this tensor with the given the shape and entries.
+     * Constructs a tensor of the same type as this tensor with the given the shape and data.
      *
      * @param shape Shape of the tensor to construct.
      * @param entries Entries of the tensor to construct.
      *
-     * @return A tensor of the same type as this tensor with the given the shape and entries.
+     * @return A tensor of the same type as this tensor with the given the shape and data.
      */
     @Override
     public Tensor makeLikeTensor(Shape shape, double[] entries) {
@@ -175,35 +183,35 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
     /**
      * Converts this tensor to an equivalent vector. If this vector is not rank-1 it will first be flattened then converted to a
      * vector.
-     * @return A vector with entries equivalent to this vector.
+     * @return A vector with data equivalent to this vector.
      */
     public Vector toVector() {
-        return new Vector(entries.clone());
+        return new Vector(data.clone());
     }
 
 
     /**
      * Converts this tensor to an equivalent matrix. If this matrix is not rank-2 it will first be flattened to a row vector then
      * converted to a matrix.
-     * @return A matrix with entries equivalent to this tensor.
+     * @return A matrix with data equivalent to this tensor.
      */
     public Matrix toMatrix() {
-        if(rank == 2) return new Matrix(shape, entries.clone());
-        else return new Matrix(new Shape(1, entries.length), entries.clone());
+        if(rank == 2) return new Matrix(shape, data.clone());
+        else return new Matrix(new Shape(1, data.length), data.clone());
     }
 
 
     /**
      * Converts this tensor to an equivalent matrix with the specified shape.
      * @param shape New shape for the matrix. Must be rank-2 and broadcastable to {@code this.shape}.
-     * @return A matrix with the specified shape and entries equivalent to this tensor.
+     * @return A matrix with the specified shape and data equivalent to this tensor.
      * @throws IllegalArgumentException If {@code shape} is not broadcastable to {@code this.shape}.
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code shape.getRank() != 2}.
      */
     public Matrix toMatrix(Shape shape) {
         // Matrix constructor checks the rank of the shape and
-        // ensures that shape.totalEntriesIntValueExact() == entries.length.
-        return new Matrix(shape, entries.clone());
+        // ensures that shape.totalEntriesIntValueExact() == data.length.
+        return new Matrix(shape, data.clone());
     }
 
 
@@ -218,6 +226,154 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
 
 
     /**
+     * Adds a complex-valued scalar value to each entry of this tensor. If the tensor is sparse, the scalar will only be added to the
+     * non-zero data of the tensor.
+     *
+     * @param b Scalar value in sum.
+     *
+     * @return The sum of this tensor with the scalar {@code b}.
+     */
+    public CTensor add(Complex128 b) {
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseOps.add(data, b, dest);
+        return new CTensor(shape, dest);
+    }
+
+
+    /**
+     * Computes the element-wise sum between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise sum.
+     *
+     * @return The sum of this tensor with {@code b}.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
+     */
+    public Tensor add(CooTensor b) {
+        return RealDenseCooTensorOps.add(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise sum between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise sum.
+     *
+     * @return The sum of this tensor with {@code b}.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
+     */
+    public CTensor add(CTensor b) {
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseOps.add(b.shape, b.data, shape, data, dest);
+        return new CTensor(shape, dest);
+    }
+
+
+    /**
+     * Computes the element-wise sum between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise sum.
+     *
+     * @return The sum of this tensor with {@code b}.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
+     */
+    public CTensor add(CooCTensor b) {
+        Complex128[] dest = new Complex128[data.length];
+        RealComplexDenseCooOps.add(shape, data, b.shape, b.data, b.indices, dest);
+        return new CTensor(shape, dest);
+    }
+
+
+    /**
+     * Subtracts a complex-valued scalar from each element of this tensor.
+     * @param b Scalar value in vector-scalar difference.
+     * @return The tensor resulting from subtracting {@code b} from each entry of this tensor.
+     */
+    public CTensor sub(Complex128 b) {
+        Complex128[] diff = new Complex128[data.length];
+        RealFieldDenseOps.sub(data, b, diff);
+        return new CTensor(shape, diff);
+    }
+
+
+    /**
+     * Computes the element-wise difference between two tensors of the same shape and stores the result in this tensor.
+     *
+     * @param b Second tensor in the element-wise difference.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
+     */
+    public CTensor sub(CooCTensor b) {
+        return RealComplexDenseCooOps.sub(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise difference between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise difference.
+     *
+     * @return The difference of this tensor with {@code b}.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
+     */
+    public Tensor sub(CooTensor b) {
+        return RealDenseCooTensorOps.sub(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise difference between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise difference.
+     *
+     * @return The difference of this tensor with {@code b}.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
+     */
+    public CTensor sub(CTensor b) {
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseOps.sub(b.shape, b.data, shape, data, dest);
+        return new CTensor(shape, dest);
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     * @param b Second tensor in the element-wise multiplication.
+     * @return The element-wise product of this matrix and {@code b}.
+     */
+    public CooTensor elemMult(CooTensor b) {
+        return RealDenseCooTensorOps.elemMult(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise multiplication of two tensors.
+     * @param b Second tensor in the element-wise product.
+     * @return The element-wise product of this tensor and {@code b}.
+     * @throws IllegalArgumentException If {@code !this.shape.equals(b.shape)}
+     */
+    public CTensor elemMult(CTensor b) {
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseOps.elemMult(b.shape, b.data, shape, data, dest);
+        return new CTensor(shape, dest);
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     * @param b Second tensor in the element-wise multiplication.
+     * @return The element-wise product of this matrix and {@code b}.
+     */
+    public CooCTensor elemMult(CooCTensor b) {
+        return RealComplexDenseCooOps.elemMult(this, b);
+    }
+
+
+    /**
      * Converts this tensor to an equivalent sparse COO tensor.
      * @param estimatedSparsity Estimated sparsity of the tensor. Must be between 0 and 1 inclusive. If this is an accurate estimation
      * it <i>may</i> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
@@ -227,7 +383,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
      */
     public CooTensor toCoo(double estimatedSparsity) {
         ValidateParameters.ensureInRange(estimatedSparsity, 0.0, 1.0, "estimatedSparsity");
-        int estimatedSize = (int) (entries.length*(1.0-estimatedSparsity));
+        int estimatedSize = (int) (data.length*(1.0-estimatedSparsity));
         List<Double> cooEntries = new ArrayList<>(estimatedSize);
         List<int[]> cooIndices = new ArrayList<>(estimatedSize);
         final Double ZERO = Double.valueOf(0d);
@@ -235,10 +391,10 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
         final int rows = shape.get(0);
         final int cols = shape.get(1);
 
-        for(int i=0, size=entries.length; i<size; i++) {
-            Double val = entries[i];
+        for(int i = 0, size = data.length; i<size; i++) {
+            Double val = data[i];
 
-            if(val.equals(ZERO)) {
+            if(!val.equals(ZERO)) {
                 cooEntries.add(val);
                 cooIndices.add(shape.getNdIndices(i));
             }
@@ -246,6 +402,54 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
 
         return new CooTensor(shape, cooEntries, cooIndices);
     }
+
+
+    /**
+     * Converts this tensor to an equivalent complex valued tensor.
+     * @return A complex tensor whose real components are the same as the data of
+     * this tensor and the imaginary components are zero.
+     */
+    public CTensor toComplex() {
+        return new CTensor(shape, ArrayUtils.wrapAsComplex128(data, null));
+    }
+
+
+    /**
+     * Multiplies a complex scalar value to each entry of this tensor.
+     *
+     * @param b Scalar value in product.
+     *
+     * @return The product of this tensor with {@code b}.
+     */
+    public CTensor mult(Complex128 b) {
+        return new CTensor(shape, FieldOps.mult(data, b, null));
+    }
+
+
+    /**
+     * Divides each entry of this tensor by a complex scalar value.
+     *
+     * @param b Scalar value in quotient.
+     *
+     * @return The tensor-scalar quotient of this tensor with {@code b}.
+     */
+    public CTensor div(Complex128 b) {
+        return new CTensor(shape, Complex128Ops.scalDiv(data, b));
+    }
+
+
+    /**
+     * Computes the element-wise division of two tensors.
+     * @param b The second tensor in the element-wise quotient.
+     * @return The element-wise quotient of this tensor with {@code b}.
+     * @throws IllegalArgumentException If {@code !this.shape.equals(b.shape)}
+     */
+    public CTensor div(CTensor b) {
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseOps.elemDiv(shape, data, b.shape, b.data, dest);
+        return new CTensor(shape, dest);
+    }
+
 
     /**
      * Checks if an object is equal to this tensor object.
@@ -260,7 +464,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
 
         Tensor src2 = (Tensor) object;
 
-        return RealDenseEquals.tensorEquals(this.entries, this.shape, src2.entries, src2.shape);
+        return RealDenseEquals.tensorEquals(this.data, this.shape, src2.data, src2.shape);
     }
 
 
@@ -268,7 +472,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
     public int hashCode() {
         int hash = 17;
         hash = 31*hash + shape.hashCode();
-        hash = 31*hash + Arrays.hashCode(entries);
+        hash = 31*hash + Arrays.hashCode(data);
 
         return hash;
     }
@@ -276,7 +480,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
 
     /**
      * Formats this tensor as a human-readable string. Specifically, a string containing the
-     * shape and flattened entries of this tensor.
+     * shape and flattened data of this tensor.
      * @return A human-readable string representing this tensor.
      */
     public String toString() {
@@ -288,9 +492,9 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
         int width;
         String value;
 
-        // Get entries up until the stopping point.
+        // Get data up until the stopping point.
         for(int i=0; i<stopIndex; i++) {
-            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+            value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
             width = PrintOptions.getPadding() + value.length();
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
@@ -304,7 +508,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
         }
 
         // Get last entry now
-        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+        value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
         width = PrintOptions.getPadding() + value.length();
         value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
         result.append(String.format("%-" + width + "s", value));

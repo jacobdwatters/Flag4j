@@ -44,11 +44,11 @@ import java.util.List;
 
 
 /**
- * <p>A sparse matrix stored in coordinate list (COO) format. The {@link #entries} of this COO tensor are
+ * <p>A sparse matrix stored in coordinate list (COO) format. The {@link #data} of this COO tensor are
  * elements of a {@link Field}.</p>
  *
- * <p>The {@link #entries non-zero entries} and non-zero indices of a COO matrix are mutable but the {@link #shape}
- * and total number of non-zero entries is fixed.</p>
+ * <p>The {@link #data non-zero data} and non-zero indices of a COO matrix are mutable but the {@link #shape}
+ * and total number of non-zero data is fixed.</p>
  *
  * <p>Sparse matrices allow for the efficient storage of and operations on matrices that contain many zero values.</p>
  *
@@ -58,13 +58,13 @@ import java.util.List;
  * <p>A sparse COO matrix is stored as:</p>
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
- *     <li>The non-zero {@link #entries} of the matrix. All other entries in the matrix are
- *     assumed to be zero. Zero values can also explicitly be stored in {@link #entries}.</li>
+ *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
+ *     assumed to be zero. Zero values can also explicitly be stored in {@link #data}.</li>
  *     <li>The {@link #rowIndices row indices} of the non-zero values in the sparse matrix.</li>
  *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
  *
- * <p>Note: many operations assume that the entries of the COO matrix are sorted lexicographically by the row and column indices.
+ * <p>Note: many operations assume that the data of the COO matrix are sorted lexicographically by the row and column indices.
  * (i.e.) by row indices first then column indices. However, this is not explicitly verified but any operations implemented in this
  * class will preserve the lexicographical sorting.</p>
  *
@@ -76,10 +76,10 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
         FieldMatrix<T>, CooFieldVector<T>, T> {
 
     /**
-     * Creates a sparse coo matrix with the specified non-zero entries, non-zero indices, and shape.
+     * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Non-zero entries of this sparse matrix.
+     * @param entries Non-zero data of this sparse matrix.
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
@@ -89,10 +89,10 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
 
 
     /**
-     * Creates a sparse coo matrix with the specified non-zero entries, non-zero indices, and shape.
+     * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Non-zero entries of this sparse matrix.
+     * @param entries Non-zero data of this sparse matrix.
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
@@ -106,11 +106,11 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
 
 
     /**
-     * Creates a sparse coo matrix with the specified non-zero entries, non-zero indices, and shape.
+     * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
      *
      * @param rows Rows in the coo matrix.
      * @param cols Columns in the coo matrix.
-     * @param entries Non-zero entries of this sparse matrix.
+     * @param entries Non-zero data of this sparse matrix.
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
@@ -120,11 +120,11 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
 
 
     /**
-     * Creates a sparse coo matrix with the specified non-zero entries, non-zero indices, and shape.
+     * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
      *
      * @param rows Rows in the coo matrix.
      * @param cols Columns in the coo matrix.
-     * @param entries Non-zero entries of this sparse matrix.
+     * @param entries Non-zero data of this sparse matrix.
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
@@ -138,14 +138,14 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
 
 
     /**
-     * Constructs a sparse COO tensor of the same type as this tensor with the specified non-zero entries and indices.
+     * Constructs a sparse COO tensor of the same type as this tensor with the specified non-zero data and indices.
      *
      * @param shape Shape of the matrix.
-     * @param entries Non-zero entries of the matrix.
+     * @param entries Non-zero data of the matrix.
      * @param rowIndices Non-zero row indices of the matrix.
      * @param colIndices Non-zero column indices of the matrix.
      *
-     * @return A sparse COO tensor of the same type as this tensor with the specified non-zero entries and indices.
+     * @return A sparse COO tensor of the same type as this tensor with the specified non-zero data and indices.
      */
     @Override
     public CooFieldMatrix<T> makeLikeTensor(Shape shape, T[] entries, int[] rowIndices, int[] colIndices) {
@@ -154,14 +154,14 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
 
 
     /**
-     * Constructs a COO matrix with the specified shape, non-zero entries, and non-zero indices.
+     * Constructs a COO matrix with the specified shape, non-zero data, and non-zero indices.
      *
      * @param shape Shape of the matrix.
      * @param entries Non-zero values of the matrix.
      * @param rowIndices Non-zero row indices of the matrix.
      * @param colIndices Non-zero column indices of the matrix.
      *
-     * @return A COO matrix with the specified shape, non-zero entries, and non-zero indices.
+     * @return A COO matrix with the specified shape, non-zero data, and non-zero indices.
      */
     @Override
     public CooFieldMatrix<T> makeLikeTensor(Shape shape, List<Field<T>> entries, List<Integer> rowIndices, List<Integer> colIndices) {
@@ -173,7 +173,7 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
      * Constructs a sparse COO vector of a similar type to this COO matrix.
      *
      * @param shape Shape of the vector. Must be rank 1.
-     * @param entries Non-zero entries of the COO vector.
+     * @param entries Non-zero data of the COO vector.
      * @param indices Non-zero indices of the COO vector.
      *
      * @return A sparse COO vector of a similar type to this COO matrix.
@@ -185,12 +185,12 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
 
 
     /**
-     * Constructs a dense tensor with the specified {@code shape} and {@code entries} which is a similar type to this sparse tensor.
+     * Constructs a dense tensor with the specified {@code shape} and {@code data} which is a similar type to this sparse tensor.
      *
      * @param shape Shape of the dense tensor.
      * @param entries Entries of the dense tensor.
      *
-     * @return A dense tensor with the specified {@code shape} and {@code entries} which is a similar type to this sparse tensor.
+     * @return A dense tensor with the specified {@code shape} and {@code data} which is a similar type to this sparse tensor.
      */
     @Override
     public FieldMatrix<T> makeLikeDenseTensor(Shape shape, Field<T>[] entries) {
@@ -202,7 +202,7 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
      * Constructs a sparse CSR matrix of a similar type to this sparse COO matrix.
      *
      * @param shape Shape of the CSR matrix to construct.
-     * @param entries Non-zero entries of the CSR matrix.
+     * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      *
@@ -216,14 +216,14 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
 
     /**
      * Constructs a tensor of the same type as this tensor with the given the {@code shape} and
-     * {@code entries}. The resulting tensor will also have
+     * {@code data}. The resulting tensor will also have
      * the same non-zero indices as this tensor.
      *
      * @param shape Shape of the tensor to construct.
      * @param entries Entries of the tensor to construct.
      *
      * @return A tensor of the same type and with the same non-zero indices as this tensor with the given the {@code shape} and
-     * {@code entries}.
+     * {@code data}.
      */
     @Override
     public CooFieldMatrix<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
@@ -266,7 +266,7 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
     public CsrFieldMatrix<T> toCsr() {
         int[] rowPointers = new int[numRows + 1];
 
-        // Count number of entries per row.
+        // Count number of data per row.
         for(int i=0; i<nnz; i++)
             rowPointers[rowIndices[i] + 1]++;
 
@@ -274,7 +274,7 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
         for(int i=0; i<numRows; i++)
             rowPointers[i+1] += rowPointers[i];
 
-        return new CsrFieldMatrix<T>(shape, entries.clone(), rowPointers, colIndices.clone());
+        return new CsrFieldMatrix<T>(shape, data.clone(), rowPointers, colIndices.clone());
     }
 
 
@@ -286,7 +286,7 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
     @Override
     public CooFieldTensor<T> toTensor() {
         int[][] tIndices = RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices});
-        return new CooFieldTensor<>(shape, entries.clone(), tIndices);
+        return new CooFieldTensor<>(shape, data.clone(), tIndices);
     }
 
 
@@ -316,7 +316,7 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
     @Override
     public FieldVector<T> mult(CooFieldVector<T> b) {
         Field<T>[] dest = new Field[b.size];
-        CooSemiringMatMult.standardVector(entries, rowIndices, colIndices, shape, b.entries, b.indices, dest);
+        CooSemiringMatMult.standardVector(data, rowIndices, colIndices, shape, b.data, b.indices, dest);
         return new FieldVector<T>(dest);
     }
 
@@ -344,9 +344,9 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
         int result = 17;
         result = 31*result + shape.hashCode();
 
-        for (int i = 0; i < entries.length; i++) {
-            if (!entries[i].isZero()) {
-                result = 31*result + entries[i].hashCode();
+        for (int i = 0; i < data.length; i++) {
+            if (!data[i].isZero()) {
+                result = 31*result + data[i].hashCode();
                 result = 31*result + Integer.hashCode(rowIndices[i]);
                 result = 31*result + Integer.hashCode(colIndices[i]);
             }
@@ -363,16 +363,16 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
     public String toString() {
         int size = nnz;
         StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
-        result.append("Non-zero entries: [");
+        result.append("Non-zero data: [");
 
         int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
         int width;
         String value;
 
-        if(entries.length > 0) {
-            // Get entries up until the stopping point.
+        if(data.length > 0) {
+            // Get data up until the stopping point.
             for(int i=0; i<stopIndex; i++) {
-                value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+                value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
                 width = PrintOptions.getPadding() + value.length();
                 value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
@@ -386,7 +386,7 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
             }
 
             // Get last entry now
-            value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+            value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
             width = PrintOptions.getPadding() + value.length();
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));

@@ -33,7 +33,7 @@ import java.util.Arrays;
 
 /**
  * <p>This utility class contains methods for combining or joining sparse COO tensors, matrices, and vectors.</p>
- * <p>All methods in this class will result in non-zero entries and indices being lexicographically sorted.</p>
+ * <p>All methods in this class will result in non-zero data and indices being lexicographically sorted.</p>
  */
 public final class CooConcat {
 
@@ -48,15 +48,15 @@ public final class CooConcat {
      * <p>WARNING: This method does <i>not</i> perform any bounds checks. If the destination arrays are not large enough, an
      * {@link IndexOutOfBoundsException} will be thrown.</p>
      *
-     * @param src1Entries Non-zero entries of the first COO matrix to stack.
+     * @param src1Entries Non-zero data of the first COO matrix to stack.
      * @param src1RowIndices Row indices of the first COO matrix to stack.
      * @param src1ColIndices Column indices of the first COO matrix to stack.
      * @param src1NumRows The number of rows in the first COO matrix. This is required to compute the shifted indices of the second
      * matrix.
-     * @param src2Entries Non-zero entries of the second COO matrix to stack.
+     * @param src2Entries Non-zero data of the second COO matrix to stack.
      * @param src2RowIndices Row indices of the second COO matrix to stack.
      * @param src2ColIndices Column indices of the second COO matrix to stack.
-     * @param destEntries Array to store the non-zero entries resulting from the stacking the two COO matrices.
+     * @param destEntries Array to store the non-zero data resulting from the stacking the two COO matrices.
      * @param destRowIndices Array to store the row indices resulting from the stacking the two COO matrices.
      * @param destColIndices Array to store the column indices resulting from the stacking the two COO matrices.
      *
@@ -86,15 +86,15 @@ public final class CooConcat {
     /**
      * Augments two matrices. This is equivalent to joining the matrices stacks matrices along rows.
      *
-     * @param src1Entries Non-zero entries of the first COO matrix to augment.
+     * @param src1Entries Non-zero data of the first COO matrix to augment.
      * @param src1RowIndices Row indices of the first COO matrix to augment.
      * @param src1ColIndices Column indices of the first COO matrix to augment.
      * @param src1NumCols The number of columns in the first COO matrix. This is required to compute the shifted indices of the second
      * matrix.
-     * @param src2Entries Non-zero entries of the second COO matrix to augment.
+     * @param src2Entries Non-zero data of the second COO matrix to augment.
      * @param src2RowIndices Row indices of the second COO matrix to augment.
      * @param src2ColIndices Column indices of the second COO matrix to augment.
-     * @param destEntries Array to store the non-zero entries resulting from the augmenting the two COO matrices.
+     * @param destEntries Array to store the non-zero data resulting from the augmenting the two COO matrices.
      * @param destRowIndices Array to store the row indices resulting from the augmenting the two COO matrices.
      * @param destColIndices Array to store the column indices resulting from the augmenting the two COO matrices.
      *
@@ -130,13 +130,13 @@ public final class CooConcat {
     /**
      * Augments two matrices. This is equivalent to joining the matrices stacks matrices along rows.
      *
-     * @param src1Entries Non-zero entries of the first COO matrix to augment.
+     * @param src1Entries Non-zero data of the first COO matrix to augment.
      * @param src1RowIndices Row indices of the first COO matrix to augment.
      * @param src1ColIndices Column indices of the first COO matrix to augment.
      * @param src1NumCols The number of columns in the first COO matrix. This is required to compute the shifted indices of vector.
-     * @param src2Entries Non-zero entries of the COO vector to augment.
+     * @param src2Entries Non-zero data of the COO vector to augment.
      * @param src2RowIndices Indices of the COO vector to augment.
-     * @param destEntries Array to store the non-zero entries resulting from the augmenting the two COO matrices.
+     * @param destEntries Array to store the non-zero data resulting from the augmenting the two COO matrices.
      * @param destRowIndices Array to store the row indices resulting from the augmenting the two COO matrices.
      * @param destColIndices Array to store the column indices resulting from the augmenting the two COO matrices.
      *
@@ -150,12 +150,12 @@ public final class CooConcat {
             T[] src1Entries, int[] src1RowIndices, int[] src1ColIndices, int src1NumCols,
             T[] src2Entries, int[] src2Indices,
             T[] destEntries, int[] destRowIndices, int[] destColIndices) {
-        // Copy entries and indices from this matrix.
+        // Copy data and indices from this matrix.
         System.arraycopy(src1Entries, 0, destEntries, 0, src1Entries.length);
         System.arraycopy(src1RowIndices, 0, destRowIndices, 0, src1Entries.length);
         System.arraycopy(src1ColIndices, 0, destColIndices, 0, src1Entries.length);
 
-        // Copy entries and indices from vector.
+        // Copy data and indices from vector.
         System.arraycopy(src2Entries, 0, destEntries, src1Entries.length, src2Entries.length);
         System.arraycopy(src2Indices, 0, destRowIndices, src1Entries.length, src2Entries.length);
         Arrays.fill(destColIndices, src1Entries.length, destColIndices.length, src1NumCols);
@@ -169,12 +169,12 @@ public final class CooConcat {
 
     /**
      * Joins two sparse COO vectors into one vector.
-     * @param src1Entries Non-zero entries of the first vector to join.
+     * @param src1Entries Non-zero data of the first vector to join.
      * @param src1Indices Non-zero indices of the first vector to join.
      * @param src1Size Full size of the first vector.
-     * @param src2Entries Non-zero entries of the second vector to join.
+     * @param src2Entries Non-zero data of the second vector to join.
      * @param src2Indices Non-zero indices of the second vector to join.
-     * @param destEntries Array to store the resulting non-zero entries of the vector join.
+     * @param destEntries Array to store the resulting non-zero data of the vector join.
      * @param destIndices Array to store the resulting non-zero indices of the vector join.
      * @throws IndexOutOfBoundsException If {@code destEntries.length < src1Entries.length + src2Entries.length} or
      * {@code destIndices.length < src1Indices.length + src2Indices.length}
@@ -199,13 +199,13 @@ public final class CooConcat {
 
     /**
      * Repeats a sparse COO vector {@code n} times along a certain axis to create a matrix.
-     * @param src Non-zero entries of the vector.
+     * @param src Non-zero data of the vector.
      * @param srcIndices Non-zero indices of the vector.
      * @param size The full size of the vector.
      * @param n Number of times to repeat vector.
      * @param axis Axis along which to repeat vector. If {@code axis=0} then each row of the resulting matrix will be equivalent to
      * this vector. If {@code axis=1} then each column of the resulting matrix will be equivalent to this vector.
-     * @param destEntries Array to store the non-zero entries of the resulting matrix.
+     * @param destEntries Array to store the non-zero data of the resulting matrix.
      * @param destRows Array to store the non-zero row indices of the resulting matrix.
      * @param destCols Array to store the non-zero column indices of the resulting matrix.
      * @return The shape of the resulting matrix.

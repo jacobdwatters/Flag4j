@@ -360,7 +360,7 @@ public class RealFloat32 implements Field<RealFloat32> {
 
 
     /**
-     * Computes the product of all entries of specified array.
+     * Computes the product of all data of specified array.
      * @param values Values to compute product of.
      * @return The product of all values in {@code values}.
      */
@@ -380,7 +380,7 @@ public class RealFloat32 implements Field<RealFloat32> {
 
 
     /**
-     * Computes the sum of all entries of specified array.
+     * Computes the sum of all data of specified array.
      * @param values Values to compute product of.
      * @return The sum of all values in {@code values}.
      */

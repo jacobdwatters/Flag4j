@@ -38,7 +38,7 @@ import java.util.*;
 /**
  * <p>Contains common utility functions for working with sparse matrices.</p>
  *
- * <p>All methods in this class which accept non-zero entries and non-zero indices, they are assumed to be sorted
+ * <p>All methods in this class which accept non-zero data and non-zero indices, they are assumed to be sorted
  * lexicographically. Similarly, all operations which store results in user provided destination arrays will also produce in
  * lexicographically sorted arrays.</p>
  */
@@ -127,7 +127,7 @@ public final class SparseUtils {
     /**
      * Creates a HashMap where the keys are row indices and the value is a list of all indices in src with that row
      * index.
-     * @param nnz Number of non-zero entries in the sparse matrix.
+     * @param nnz Number of non-zero data in the sparse matrix.
      * @param rowIndices Row indices of sparse matrix.
      * @return A HashMap where the keys are row indices and the value is a list of all indices in {@code src} with that row
      * index.
@@ -145,10 +145,10 @@ public final class SparseUtils {
 
 
     /**
-     * Sorts the non-zero entries and column indices of a sparse CSR matrix lexicographically by row and column index. The row
+     * Sorts the non-zero data and column indices of a sparse CSR matrix lexicographically by row and column index. The row
      * pointers in the CSR matrix are assumed to be correct already.
-     * @param entries Non-zero entries of the CSR matrix.
-     * @param rowPointers Row pointer array of the CSR matrix. Stores the starting index for each row of the CSR matrix in {@code entries}
+     * @param entries Non-zero data of the CSR matrix.
+     * @param rowPointers Row pointer array of the CSR matrix. Stores the starting index for each row of the CSR matrix in {@code data}
      * and
      * @param colIndices Non-zero column indices of the CSR matrix.
      */
@@ -163,10 +163,10 @@ public final class SparseUtils {
                 indices[i] = start + i;
             }
 
-            // Sort the indices based on the corresponding colIndices entries
+            // Sort the indices based on the corresponding colData data
             Arrays.sort(indices, (i, j) -> Integer.compare(colIndices[i], colIndices[j]));
 
-            // Reorder colIndices and entries based on sorted indices
+            // Reorder colData and data based on sorted indices
             int[] sortedColIndex = new int[end - start];
             double[] sortedValues = new double[end - start];
             for (int i = 0; i < indices.length; i++) {
@@ -174,7 +174,7 @@ public final class SparseUtils {
                 sortedValues[i] = entries[indices[i]];
             }
 
-            // Copy sorted arrays back to the original colIndices and entries
+            // Copy sorted arrays back to the original colData and data
             System.arraycopy(sortedColIndex, 0, colIndices, start, sortedColIndex.length);
             System.arraycopy(sortedValues, 0, entries, start, sortedValues.length);
         }
@@ -182,10 +182,10 @@ public final class SparseUtils {
 
 
     /**
-     * Sorts the non-zero entries and column indices of a sparse CSR matrix lexicographically by row and column index. The row
+     * Sorts the non-zero data and column indices of a sparse CSR matrix lexicographically by row and column index. The row
      * pointers in the CSR matrix are assumed to be correct already.
-     * @param entries Non-zero entries of the CSR matrix.
-     * @param rowPointers Row pointer array of the CSR matrix. Stores the starting index for each row of the CSR matrix in {@code entries}
+     * @param entries Non-zero data of the CSR matrix.
+     * @param rowPointers Row pointer array of the CSR matrix. Stores the starting index for each row of the CSR matrix in {@code data}
      * and
      * @param colIndices Non-zero column indices of the CSR matrix.
      */
@@ -199,10 +199,10 @@ public final class SparseUtils {
             for (int i = 0; i < indices.length; i++)
                 indices[i] = start + i;
 
-            // Sort the indices based on the corresponding colIndices entries
+            // Sort the indices based on the corresponding colData data
             Arrays.sort(indices, (i, j) -> Integer.compare(colIndices[i], colIndices[j]));
 
-            // Reorder colIndices and entries based on sorted indices
+            // Reorder colData and data based on sorted indices
             int[] sortedColIndex = new int[end - start];
             Object[] sortedValues = new Object[end - start];
             for (int i = 0; i < indices.length; i++) {
@@ -210,7 +210,7 @@ public final class SparseUtils {
                 sortedValues[i] = entries[indices[i]];
             }
 
-            // Copy sorted arrays back to the original colIndices and entries
+            // Copy sorted arrays back to the original colData and data
             System.arraycopy(sortedColIndex, 0, colIndices, start, sortedColIndex.length);
             System.arraycopy(sortedValues, 0, entries, start, sortedValues.length);
         }
@@ -247,17 +247,17 @@ public final class SparseUtils {
 
             while (src1Index < src1RowEnd || src2Index < src2RowEnd) {
                 // Skip explicit zeros in both matrices
-                while (src1Index < src1RowEnd && src1.entries[src1Index] == 0)
+                while (src1Index < src1RowEnd && src1.data[src1Index] == 0)
                     src1Index++;
 
-                while (src2Index < src2RowEnd && src2.entries[src2Index] == 0)
+                while (src2Index < src2RowEnd && src2.data[src2Index] == 0)
                     src2Index++;
 
                 if (src1Index < src1RowEnd && src2Index < src2RowEnd) {
                     int src1Col = src1.colIndices[src1Index];
                     int src2Col = src2.colIndices[src2Index];
-                    double src1Value = src1.entries[src1Index];
-                    double src2Value = src2.entries[src2Index];
+                    double src1Value = src1.data[src1Index];
+                    double src2Value = src2.data[src2Index];
 
                     if(src1Col != src2Col || Double.compare(src1Value, src2Value) != 0) {
                         return false;
@@ -266,13 +266,13 @@ public final class SparseUtils {
                     src1Index++;
                     src2Index++;
                 } else if (src1Index < src1RowEnd) {
-                    // Remaining entries in src1 row
-                    if (src1.entries[src1Index] != 0) return false;
+                    // Remaining data in src1 row
+                    if (src1.data[src1Index] != 0) return false;
 
                     src1Index++;
                 } else if (src2Index < src2RowEnd) {
-                    // Remaining entries in src2 row
-                    if (src2.entries[src2Index] != 0) return false;
+                    // Remaining data in src2 row
+                    if (src2.data[src2Index] != 0) return false;
 
                     src2Index++;
                 }
@@ -316,28 +316,28 @@ public final class SparseUtils {
 
             while (src1Index < src1RowEnd || src2Index < src2RowEnd) {
                 // Skip explicit zeros in both matrices
-                while (src1Index < src1RowEnd && src1.entries[src1Index].equals(ZERO))
+                while (src1Index < src1RowEnd && src1.data[src1Index].equals(ZERO))
                     src1Index++;
 
-                while (src2Index < src2RowEnd && src2.entries[src2Index].equals(ZERO))
+                while (src2Index < src2RowEnd && src2.data[src2Index].equals(ZERO))
                     src2Index++;
 
                 if (src1Index < src1RowEnd && src2Index < src2RowEnd) {
                     int src1Col = src1.colIndices[src1Index];
                     int src2Col = src2.colIndices[src2Index];
 
-                    if(src1Col != src2Col || !src1.entries[src1Index].equals(src2.entries[src2Index]))
+                    if(src1Col != src2Col || !src1.data[src1Index].equals(src2.data[src2Index]))
                         return false;
 
                     src1Index++;
                     src2Index++;
                 } else if (src1Index < src1RowEnd) {
-                    // Remaining entries in src1 row
-                    if (!src1.entries[src1Index].equals(ZERO)) return false;
+                    // Remaining data in src1 row
+                    if (!src1.data[src1Index].equals(ZERO)) return false;
                     src1Index++;
                 } else if (src2Index < src2RowEnd) {
-                    // Remaining entries in src2 row
-                    if (!src2.entries[src2Index].equals(ZERO)) return false;
+                    // Remaining data in src2 row
+                    if (!src2.data[src2Index].equals(ZERO)) return false;
                     src2Index++;
                 }
             }
@@ -348,14 +348,14 @@ public final class SparseUtils {
 
 
     /**
-     * A helper method which copies from a sparse COO matrix to a set of three arrays (non-zero entries, row indices, and
+     * A helper method which copies from a sparse COO matrix to a set of three arrays (non-zero data, row indices, and
      * column indices) but skips over a specified range.
      * @param srcEntries Non-zero matrix to copy ranges from.
      * @param srcRowIndices Row indices of matrix to copy ranges from.
      * @param srcColIndices Column indices of matrix to copy ranges from.
-     * @param destEntries Array to copy {@code} src non-zero entries to.
-     * @param destRowIndices Array to copy {@code} src row indices entries to.
-     * @param destColIndices Array to copy {@code} src column indices entries to.
+     * @param destEntries Array to copy {@code} src non-zero data to.
+     * @param destRowIndices Array to copy {@code} src row indices data to.
+     * @param destColIndices Array to copy {@code} src column indices data to.
      * @param startEnd An array of length two specifying the {@code start} (inclusive) and {@code end} (exclusive)
      *                 indices of the range to skip during the copy.
      */

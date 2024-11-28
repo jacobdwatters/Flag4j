@@ -43,7 +43,7 @@ public final class Complex128Properties {
 
     /**
      * Checks whether a tensor contains only real values.
-     * @param entries Entries of dense tensor or non-zero entries of sparse tensor.
+     * @param entries Entries of dense tensor or non-zero data of sparse tensor.
      * @return True if the tensor only contains real values. Returns false otherwise.
      */
     public static boolean isReal(Field<Complex128>[] entries) {
@@ -58,7 +58,7 @@ public final class Complex128Properties {
 
     /**
      * Checks whether a tensor contains at least one non-real value.
-     * @param entries Entries of dense tensor or non-zero entries of sparse tensor.
+     * @param entries Entries of dense tensor or non-zero data of sparse tensor.
      * @return True if the tensor contains at least one non-real value. Returns false otherwise.
      */
     public static boolean isComplex(Field<Complex128>[] entries) {

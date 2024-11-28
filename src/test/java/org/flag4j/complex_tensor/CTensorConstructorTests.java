@@ -33,7 +33,7 @@ public class CTensorConstructorTests {
         A = new CTensor(expShape);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // -------------- Sub-case 2 --------------
         expShape = new Shape();
@@ -45,7 +45,7 @@ public class CTensorConstructorTests {
         A = new CTensor(expShape);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // -------------- Sub-case 3 --------------
         expShape = new Shape(1003);
@@ -57,7 +57,7 @@ public class CTensorConstructorTests {
         A = new CTensor(expShape);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
     }
 
 
@@ -74,7 +74,7 @@ public class CTensorConstructorTests {
         A = new CTensor(expShape, value);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // -------------- Sub-case 2 --------------
         value = 11.4;
@@ -87,7 +87,7 @@ public class CTensorConstructorTests {
         A = new CTensor(expShape, value);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // -------------- Sub-case 3 --------------
         value = 8;
@@ -100,7 +100,7 @@ public class CTensorConstructorTests {
         A = new CTensor(expShape, value);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
     }
 
 
@@ -118,7 +118,7 @@ public class CTensorConstructorTests {
         A = new CTensor(expShape, valueC);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // -------------- Sub-case 2 --------------
         valueC = new Complex128(11.4, -0.3313);
@@ -131,7 +131,7 @@ public class CTensorConstructorTests {
         A = new CTensor(expShape, valueC);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // -------------- Sub-case 3 --------------
         valueC = new Complex128(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
@@ -144,7 +144,7 @@ public class CTensorConstructorTests {
         A = new CTensor(expShape, valueC);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
     }
 
 
@@ -164,7 +164,7 @@ public class CTensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 2 ----------
         expShape = new Shape(3, 2, 5);
@@ -180,7 +180,7 @@ public class CTensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 3 ----------
         expShape = new Shape(3, 10);
@@ -196,7 +196,7 @@ public class CTensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 4 ----------
         expShape = new Shape(6, 1, 1, 1, 5, 1, 1, 1, 1, 1);
@@ -212,7 +212,7 @@ public class CTensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 5 ----------
         expShape = new Shape(6, 1, 1, 1, 5, 1, 1, 1, 1, 1);
@@ -248,7 +248,7 @@ public class CTensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 2 ----------
         expShape = new Shape(1, 3, 2, 2);
@@ -261,7 +261,7 @@ public class CTensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 3 ----------
         expShape = new Shape(1, 3, 2, 2);
@@ -274,7 +274,7 @@ public class CTensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 4 ----------
         expShape = new Shape(1, 3, 2, 2);
@@ -287,7 +287,7 @@ public class CTensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 5 ----------
         expShape = new Shape(1, 3, 2, 2);
@@ -323,6 +323,6 @@ public class CTensorConstructorTests {
         A = new CTensor(B);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
     }
 }

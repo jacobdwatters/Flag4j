@@ -49,11 +49,11 @@ public class RealExactTensorSolver extends ExactTensorSolver<Tensor, Matrix, Vec
      *
      * @param A    Tensor to convert to matrix.
      * @param prod Product of all axis lengths in {@code A}.
-     * @return A matrix with the same entries as tensor {@code A} with shape (prod, prod).
+     * @return A matrix with the same data as tensor {@code A} with shape (prod, prod).
      */
     @Override
     protected Matrix initMatrix(Tensor A, int prod) {
-        return new Matrix(prod, prod, A.entries);
+        return new Matrix(prod, prod, A.data);
     }
 
 
@@ -65,7 +65,7 @@ public class RealExactTensorSolver extends ExactTensorSolver<Tensor, Matrix, Vec
      */
     @Override
     protected Vector initVector(Tensor B) {
-        return new Vector(B.entries);
+        return new Vector(B.data);
     }
 
 
@@ -78,6 +78,6 @@ public class RealExactTensorSolver extends ExactTensorSolver<Tensor, Matrix, Vec
      */
     @Override
     protected Tensor wrap(Vector x, Shape outputShape) {
-        return new Tensor(outputShape, x.entries);
+        return new Tensor(outputShape, x.data);
     }
 }

@@ -35,11 +35,11 @@ import org.flag4j.util.ValidateParameters;
 
 
 /**
- * <p>The base class for all dense vectors whose entries are {@link Field} elements.
+ * <p>The base class for all dense vectors whose data are {@link Field} elements.
  *
  * <p>Vectors are 1D tensors (i.e. rank 1 tensor).
  *
- * <p>AbstractDenseFieldVectors have mutable {@link #entries} but a fixed {@link #shape}.
+ * <p>AbstractDenseFieldVectors have mutable {@link #data} but a fixed {@link #shape}.
  *
  * @param <T> Type of the vector.
  * @param <U> Type of matrix equivalent to this vector.
@@ -51,17 +51,17 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
         implements VectorMixin<T, U, U, V> {
 
     /**
-     * The size of this vector. This is the total number of entries stored in this vector.
+     * The size of this vector. This is the total number of data stored in this vector.
      */
     public final int size;
 
 
     /**
-     * Creates a tensor with the specified entries and shape.
+     * Creates a tensor with the specified data and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
-     * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
+     * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
+     * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
     protected AbstractDenseFieldVector(Shape shape, Field<V>[] entries) {
         super(shape, entries);
@@ -71,17 +71,36 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
 
 
     /**
-     * Constructs a dense vector with the specified {@code entries} of the same type as the vector.
+     * Computes the conjugate transpose of a tensor by conjugating and exchanging {@code axis1} and {@code axis2}.
+     *
+     * @param axis1 First axis to exchange and conjugate.
+     * @param axis2 Second axis to exchange and conjugate.
+     *
+     * @return The conjugate transpose of this tensor according to the specified axes.
+     *
+     * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
+     * @see #H()
+     * @see #H(int...)
+     */
+    @Override
+    public T H(int axis1, int axis2) {
+        ValidateParameters.ensureValidAxes(shape, axis1, axis2);
+        return conj();
+    }
+
+
+    /**
+     * Constructs a dense vector with the specified {@code data} of the same type as the vector.
      * @param entries Entries of the dense vector to construct.
      */
     public abstract T makeLikeTensor(Field<V>[] entries);
 
 
     /**
-     * Constructs a matrix of similar type to this vector with the specified {@code shape} and {@code entries}.
+     * Constructs a matrix of similar type to this vector with the specified {@code shape} and {@code data}.
      * @param shape Shape of the matrix to construct.
      * @param entries Entries of the matrix to construct.
-     * @return A matrix of similar type to this vector with the specified {@code shape} and {@code entries}.
+     * @return A matrix of similar type to this vector with the specified {@code shape} and {@code data}.
      */
     public abstract U makeLikeMatrix(Shape shape, Field<V>[] entries);
 
@@ -97,7 +116,7 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
     @Override
     public T join(T b) {
         Field<V>[] dest = new Field[size + b.size];
-        DenseConcat.concat(entries, b.entries, dest);
+        DenseConcat.concat(data, b.data, dest);
         return makeLikeTensor(dest);
     }
 
@@ -109,12 +128,12 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
      *
      * @return The inner product between this vector and the vector {@code b}.
      *
-     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of entries.
+     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of data.
      * @see #dot(AbstractDenseFieldVector)
      */
     @Override
     public V inner(T b) {
-        return DenseFieldVectorOperations.innerProduct(entries, b.entries);
+        return DenseFieldVectorOperations.innerProduct(data, b.data);
     }
 
 
@@ -128,19 +147,19 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
      *
      * @return The dot product between this vector and the vector {@code b}.
      *
-     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of entries.
+     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of data.
      * @see #inner(AbstractDenseFieldVector)
      */
     @Override
     public V dot(T b) {
-        return DenseSemiRingVectorOps.dotProduct(entries, b.entries);
+        return DenseSemiRingVectorOps.dotProduct(data, b.data);
     }
 
 
     /**
      * Gets the length of a vector. Same as {@link #size()}.
      *
-     * @return The length, i.e. the number of entries, in this vector.
+     * @return The length, i.e. the number of data, in this vector.
      */
     @Override
     public int length() {
@@ -163,7 +182,7 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
     @Override
     public U repeat(int n, int axis) {
         Field<V>[] dest = new Field[size*n];
-        DenseConcat.repeat(entries, n, axis, dest); // n is verified to be 1 or 0 here.
+        DenseConcat.repeat(data, n, axis, dest); // n is verified to be 1 or 0 here.
         Shape shape = (n==0) ? new Shape(n, size) : new Shape(size, n);
         return makeLikeMatrix(shape, dest);
     }
@@ -184,14 +203,14 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
      *
      * @return The result of stacking this vector and the vector {@code b}.
      *
-     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
-     *                                  entries in the vector {@code b}.
+     * @throws IllegalArgumentException If the number of data in this vector is different from the number of
+     *                                  data in the vector {@code b}.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
     public U stack(T b, int axis) {
         Field<V>[] dest = new Field[2*size];
-        DenseConcat.stack(entries, b.entries, axis, dest);
+        DenseConcat.stack(data, b.data, axis, dest);
         Shape shape = (axis==0) ? new Shape(2, size) : new Shape(size, 2);
         return makeLikeMatrix(shape, dest);
     }
@@ -204,12 +223,12 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
      *
      * @return The result of the vector outer product between this vector and {@code b}.
      *
-     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
+     * @throws IllegalArgumentException If the two vectors do not have the same number of data.
      */
     @Override
     public U outer(T b) {
         Field<V>[] dest = new Field[size*b.size];
-        DenseSemiRingVectorOps.outerProduct(entries, b.entries, dest);
+        DenseSemiRingVectorOps.outerProduct(data, b.data, dest);
         return makeLikeMatrix(new Shape(size, size), dest);
     }
 
@@ -229,10 +248,10 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
     public U toMatrix(boolean columVector) {
         if(columVector) {
             // Convert to column vector.
-            return makeLikeMatrix(new Shape(entries.length, 1), entries.clone());
+            return makeLikeMatrix(new Shape(data.length, 1), data.clone());
         } else {
             // Convert to row vector.
-            return makeLikeMatrix(new Shape(1, entries.length), entries.clone());
+            return makeLikeMatrix(new Shape(1, data.length), data.clone());
         }
     }
 
@@ -258,9 +277,23 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
         V mag = getZeroElement();
 
         for(int i=0; i<size; i++)
-            mag = mag.add(entries[i].mult((V) entries[i]));
+            mag = mag.add(data[i].mult((V) data[i]));
 
         return mag.sqrt();
+    }
+
+
+    /**
+     * Gets the element of this vector at the specified index.
+     *
+     * @param idx Index of the element to get within this vector.
+     *
+     * @return The element of this vector at index {@code idx}.
+     */
+    @Override
+    public V get(int idx) {
+        ValidateParameters.validateTensorIndex(shape, idx);
+        return (V) data[idx];
     }
 
 
@@ -270,7 +303,7 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
      * @return The Euclidean norm of this vector.
      */
     public double norm() {
-        return VectorNorms.norm(entries);
+        return VectorNorms.norm(data);
     }
 
 
@@ -282,6 +315,6 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
      * @return The Euclidean norm of this vector.
      */
     public double norm(int p) {
-        return VectorNorms.norm(entries, p);
+        return VectorNorms.norm(data, p);
     }
 }

@@ -44,11 +44,11 @@ public class RealDenseSparseMatrixMultTranspose {
      * Multiplies a real dense matrix to the transpose of a real sparse matrix.
      * @param dSrc Entries of dense matrix.
      * @param dShape Shape of dense matrix.
-     * @param spSrc Non-zero entries of sparse matrix.
-     * @param rowIndices Row indices of non-zero entries in the sparse matrix.
-     * @param colIndices Column indices of non-zero entries in the sparse matrix.
+     * @param spSrc Non-zero data of sparse matrix.
+     * @param rowIndices Row indices of non-zero data in the sparse matrix.
+     * @param colIndices Column indices of non-zero data in the sparse matrix.
      * @param spShape Shape of the sparse matrix.
-     * @return The entries of the matrix resulting from multiplying the first matrix by the transpose of the second matrix.
+     * @return The data of the matrix resulting from multiplying the first matrix by the transpose of the second matrix.
      */
     public static double[] multTranspose(double[] dSrc, Shape dShape,
                                          double[] spSrc, int[] rowIndices, int[] colIndices, Shape spShape) {
@@ -65,7 +65,7 @@ public class RealDenseSparseMatrixMultTranspose {
             destStart = i*rows2;
             dSrcStart = i*cols2;
 
-            // Loop over non-zero entries of sparse matrix.
+            // Loop over non-zero data of sparse matrix.
             for(int j=0; j<spSrc.length; j++) {
                 row = colIndices[j];
                 col = rowIndices[j];

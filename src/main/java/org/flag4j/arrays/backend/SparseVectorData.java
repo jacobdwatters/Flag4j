@@ -31,13 +31,13 @@ import java.util.List;
 
 /**
  * <p>Data class for storing information for a sparse COO vector.
- * <p>This record stores two lists: the non-zero entries and the indices of the vector.
+ * <p>This record stores two lists: the non-zero data and the indices of the vector.
  *
  * @param shape Shape of the vector.
- * @param entries Non-zero entries of the sparse COO vector.
+ * @param data Non-zero data of the sparse COO vector.
  * @param indices Non-zero indices of the sparse COO vector.
  */
-public record SparseVectorData<T>(Shape shape, List<T> entries, List<Integer> indices) {
+public record SparseVectorData<T>(Shape shape, List<T> data, List<Integer> indices) {
 
 
     /**

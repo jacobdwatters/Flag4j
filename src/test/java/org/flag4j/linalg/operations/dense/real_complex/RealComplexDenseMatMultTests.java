@@ -6,6 +6,7 @@ import org.flag4j.arrays.dense.Matrix;
 import org.junit.jupiter.api.Test;
 
 import static org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseMatMult.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class RealComplexDenseMatMultTests {
     double[][] aEntries;
@@ -35,14 +36,14 @@ class RealComplexDenseMatMultTests {
                 {new Complex128("130.337844+66.8009098206i"), new Complex128("1978.9472913999998-846470.621682i")}};
         expC = new CMatrix(expCEntries);
 
-        assertArrayEquals(expC.entries, standard(A.entries, A.shape, B.entries, B.shape));
-        assertArrayEquals(expC.entries, reordered(A.entries, A.shape, B.entries, B.shape));
-        assertArrayEquals(expC.entries, blocked(A.entries, A.shape, B.entries, B.shape));
-        assertArrayEquals(expC.entries, blockedReordered(A.entries, A.shape, B.entries, B.shape));
-        assertArrayEquals(expC.entries, concurrentStandard(A.entries, A.shape, B.entries, B.shape));
-        assertArrayEquals(expC.entries, concurrentReordered(A.entries, A.shape, B.entries, B.shape));
-        assertArrayEquals(expC.entries, concurrentBlocked(A.entries, A.shape, B.entries, B.shape));
-        assertArrayEquals(expC.entries, concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape));
+        assertArrayEquals(expC.data, standard(A.data, A.shape, B.data, B.shape));
+        assertArrayEquals(expC.data, reordered(A.data, A.shape, B.data, B.shape));
+        assertArrayEquals(expC.data, blocked(A.data, A.shape, B.data, B.shape));
+        assertArrayEquals(expC.data, blockedReordered(A.data, A.shape, B.data, B.shape));
+        assertArrayEquals(expC.data, concurrentStandard(A.data, A.shape, B.data, B.shape));
+        assertArrayEquals(expC.data, concurrentReordered(A.data, A.shape, B.data, B.shape));
+        assertArrayEquals(expC.data, concurrentBlocked(A.data, A.shape, B.data, B.shape));
+        assertArrayEquals(expC.data, concurrentBlockedReordered(A.data, A.shape, B.data, B.shape));
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
@@ -57,14 +58,14 @@ class RealComplexDenseMatMultTests {
                 {new Complex128("-0.018649000000000002-79472.71350000001i"), new Complex128("0.011027000000000002+46991.56050000001i"), new Complex128("-0.0000184684-78.7030866i")}};
         expC = new CMatrix(expCEntries);
 
-        assertArrayEquals(expC.entries, standard(B.entries, B.shape, A.entries, A.shape));
-        assertArrayEquals(expC.entries, reordered(B.entries, B.shape, A.entries, A.shape));
-        assertArrayEquals(expC.entries, blocked(B.entries, B.shape, A.entries, A.shape));
-        assertArrayEquals(expC.entries, blockedReordered(B.entries, B.shape, A.entries, A.shape));
-        assertArrayEquals(expC.entries, concurrentStandard(B.entries, B.shape, A.entries, A.shape));
-        assertArrayEquals(expC.entries, concurrentReordered(B.entries, B.shape, A.entries, A.shape));
-        assertArrayEquals(expC.entries, concurrentBlocked(B.entries, B.shape, A.entries, A.shape));
-        assertArrayEquals(expC.entries, concurrentBlockedReordered(B.entries, B.shape, A.entries, A.shape));
+        assertArrayEquals(expC.data, standard(B.data, B.shape, A.data, A.shape));
+        assertArrayEquals(expC.data, reordered(B.data, B.shape, A.data, A.shape));
+        assertArrayEquals(expC.data, blocked(B.data, B.shape, A.data, A.shape));
+        assertArrayEquals(expC.data, blockedReordered(B.data, B.shape, A.data, A.shape));
+        assertArrayEquals(expC.data, concurrentStandard(B.data, B.shape, A.data, A.shape));
+        assertArrayEquals(expC.data, concurrentReordered(B.data, B.shape, A.data, A.shape));
+        assertArrayEquals(expC.data, concurrentBlocked(B.data, B.shape, A.data, A.shape));
+        assertArrayEquals(expC.data, concurrentBlockedReordered(B.data, B.shape, A.data, A.shape));
     }
 
 
@@ -89,10 +90,10 @@ class RealComplexDenseMatMultTests {
                 {new Complex128("130.337844+66.8009098206i")}};
         expC = new CMatrix(expCEntries);
 
-        assertArrayEquals(expC.entries, standardVector(A.entries, A.shape, B.entries, B.shape));
-        assertArrayEquals(expC.entries, blockedVector(A.entries, A.shape, B.entries, B.shape));
-        assertArrayEquals(expC.entries, concurrentStandardVector(A.entries, A.shape, B.entries, B.shape));
-        assertArrayEquals(expC.entries, concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape));
+        assertArrayEquals(expC.data, standardVector(A.data, A.shape, B.data, B.shape));
+        assertArrayEquals(expC.data, blockedVector(A.data, A.shape, B.data, B.shape));
+        assertArrayEquals(expC.data, concurrentStandardVector(A.data, A.shape, B.data, B.shape));
+        assertArrayEquals(expC.data, concurrentBlockedVector(A.data, A.shape, B.data, B.shape));
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new double[][]{{1.1234},
@@ -107,9 +108,9 @@ class RealComplexDenseMatMultTests {
                 {new Complex128("-0.018649000000000002-79472.71350000001i")}};
         expC = new CMatrix(expCEntries);
 
-        assertArrayEquals(expC.entries, standardVector(B.entries, B.shape, A.entries, A.shape));
-        assertArrayEquals(expC.entries, blockedVector(B.entries, B.shape, A.entries, A.shape));
-        assertArrayEquals(expC.entries, concurrentStandardVector(B.entries, B.shape, A.entries, A.shape));
-        assertArrayEquals(expC.entries, concurrentBlockedVector(B.entries, B.shape, A.entries, A.shape));
+        assertArrayEquals(expC.data, standardVector(B.data, B.shape, A.data, A.shape));
+        assertArrayEquals(expC.data, blockedVector(B.data, B.shape, A.data, A.shape));
+        assertArrayEquals(expC.data, concurrentStandardVector(B.data, B.shape, A.data, A.shape));
+        assertArrayEquals(expC.data, concurrentBlockedVector(B.data, B.shape, A.data, A.shape));
     }
 }

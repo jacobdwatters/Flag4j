@@ -49,11 +49,11 @@ public final class CooRingMatrixOps {
      * sorted
      * lexicographically.
      * @param shape1 Shape of the first matrix.
-     * @param src1Entries Non-zero entries of the first matrix.
+     * @param src1Entries Non-zero data of the first matrix.
      * @param src1RowIndices Non-zero row indices of the first matrix.
      * @param src1ColIndices Non-zero column indices of the first matrix.
      * @param shape2 Shape of the second matrix.
-     * @param src2Entries Non-zero entries of the second matrix.
+     * @param src2Entries Non-zero data of the second matrix.
      * @param src2RowIndices Non-zero row indices of the second matrix.
      * @param src2ColIndices Non-zero column indices of the second matrix.
      * @return The element-wise difference of the two matrices.

@@ -51,10 +51,10 @@ public final class CsrFieldMatrixProperties {
 
             for(int i=0; i<src.rowPointers.length-1; i++) {
                 for(int j=src.rowPointers[i]; j<src.rowPointers[i+1]; j++) {
-                    if(src.entries[j].isOne()) {
+                    if(src.data[j].isOne()) {
                         if(src.colIndices[j] != i) return false;
                         diagCount++;
-                    } else if(!src.entries[j].isZero()) {
+                    } else if(!src.data[j].isZero()) {
                         return false;
                     }
                 }
@@ -79,14 +79,14 @@ public final class CsrFieldMatrixProperties {
             double nonDiagTol = 1e-08;
             int diagCount = 0;
 
-            final T ONE = src.nnz > 0 ? src.entries[0].getOne() : null;
+            final T ONE = src.nnz > 0 ? src.data[0].getOne() : null;
 
             for(int i=0; i<src.rowPointers.length-1; i++) {
                 for(int j=src.rowPointers[i]; j<src.rowPointers[i+1]; j++) {
-                    if(src.entries[j].sub(ONE).abs() > diagTol) {
+                    if(src.data[j].sub(ONE).abs() > diagTol) {
                         if(src.colIndices[j] != i) return false; // Diagonal value not close to one.
                         diagCount++;
-                    } else if(src.entries[i].abs() > nonDiagTol) {
+                    } else if(src.data[i].abs() > nonDiagTol) {
                         return false; // Non-diagonal value is not close to one.
                     }
                 }
@@ -107,7 +107,7 @@ public final class CsrFieldMatrixProperties {
     public static <T extends Field<T>> boolean isSymmetric(AbstractCsrFieldMatrix<?, ?, ?, T> src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
-        if(src.entries.length == 0) return true;
+        if(src.data.length == 0) return true;
 
         return src.T().equals(src);
     }
@@ -121,7 +121,7 @@ public final class CsrFieldMatrixProperties {
     public static <T extends Field<T>> boolean isAntiSymmetric(AbstractCsrFieldMatrix<?, ?, ?, T> src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
-        if(src.entries.length == 0) return true;
+        if(src.data.length == 0) return true;
 
         return src.T().mult(-1).equals(src);
     }
@@ -135,7 +135,7 @@ public final class CsrFieldMatrixProperties {
     public static <T extends Field<T>> boolean isHermitian(AbstractCsrFieldMatrix<?, ?, ?, T> src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
-        if(src.entries.length == 0) return true;
+        if(src.data.length == 0) return true;
 
         return src.H().equals(src);
     }
@@ -149,7 +149,7 @@ public final class CsrFieldMatrixProperties {
     public static <T extends Field<T>> boolean isAntiHermitian(AbstractCsrFieldMatrix<?, ?, ?, T> src) {
         // Check for early returns.
         if(!src.isSquare()) return false;
-        if(src.entries.length == 0) return true;
+        if(src.data.length == 0) return true;
 
         return src.H().mult(-1).equals(src);
     }

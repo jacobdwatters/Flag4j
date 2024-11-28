@@ -46,7 +46,7 @@ public final class DenseFieldSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total data.
      */
     public static <T extends Field<T>> void setValues(Field<T>[] src, final Field<T>[] dest) {
         ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
@@ -59,7 +59,7 @@ public final class DenseFieldSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total entries.
+     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total data.
      */
     public static <T extends Field<T>> void setValues(Field<T>[][] src, final Field<T>[] dest) {
         ValidateParameters.ensureTotalEntriesEq(src, dest);

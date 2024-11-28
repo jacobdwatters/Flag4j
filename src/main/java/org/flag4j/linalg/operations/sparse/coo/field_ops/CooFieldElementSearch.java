@@ -51,7 +51,7 @@ public final class CooFieldElementSearch {
      *         row and column indices. If this value does not exist, then <code>(-(<i>insertion point</i>) - 1)</code>
      *         will be returned. The <i>insertion point</i> is defined as the point at which the
      *         value, with the row and column key, would be inserted into the array: the index of the first
-     *         element greater than the key, or {@code src.entries.length} if all
+     *         element greater than the key, or {@code src.data.length} if all
      *         elements in the array are less than the specified key.  Note
      *         that this guarantees that the return value will be &gt;= 0 if
      *         and only if the key is found.

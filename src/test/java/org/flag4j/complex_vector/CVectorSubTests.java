@@ -5,8 +5,8 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOps;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -528,7 +528,7 @@ class CVectorSubTests {
                 new Complex128(3.54698).sub(-1.4), new Complex128(0, 8.356)};
         exp = new CVector(expEntries);
 
-        RealFieldDenseCooVectorOperations.subEq(a, b);
+        RealFieldDenseCooVectorOps.subEq(a, b);
         assertEquals(exp, a);
 
         // ------------------ Sub-case 2 ------------------
@@ -542,7 +542,7 @@ class CVectorSubTests {
                 new Complex128(3.54698), new Complex128(0, 8.356).sub(-1.4)};
         exp = new CVector(expEntries);
 
-        RealFieldDenseCooVectorOperations.subEq(a, b);
+        RealFieldDenseCooVectorOps.subEq(a, b);
         assertEquals(exp, a);
 
         // ------------------ Sub-case 3 ------------------
@@ -553,7 +553,7 @@ class CVectorSubTests {
         b = new CooVector(sparseSize, bEntries, sparseIndices);
 
         final CooVector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->RealFieldDenseCooVectorOperations.subEq(a, finalB));
+        assertThrows(LinearAlgebraException.class, ()-> RealFieldDenseCooVectorOps.subEq(a, finalB));
 
         // ------------------ Sub-case 4 ------------------
         setup();
@@ -563,7 +563,7 @@ class CVectorSubTests {
         b = new CooVector(sparseSize, bEntries, sparseIndices);
 
         final CooVector finalB1 = b;
-        assertThrows(LinearAlgebraException.class, ()->RealFieldDenseCooVectorOperations.subEq(a, finalB1));
+        assertThrows(LinearAlgebraException.class, ()-> RealFieldDenseCooVectorOps.subEq(a, finalB1));
     }
 
 
@@ -635,7 +635,7 @@ class CVectorSubTests {
                 new Complex128(3.54698).sub(bEntries[1]), new Complex128(0, 8.356)};
         exp = new CVector(expEntries);
 
-        DenseCooFieldVectorOperations.subEq(a, b);
+        DenseCooFieldVectorOps.subEq(a, b);
         assertEquals(exp, a);
 
         // ------------------ Sub-case 2 ------------------
@@ -649,7 +649,7 @@ class CVectorSubTests {
                 new Complex128(3.54698), new Complex128(0, 8.356).sub(bEntries[0])};
         exp = new CVector(expEntries);
 
-        DenseCooFieldVectorOperations.subEq(a, b);
+        DenseCooFieldVectorOps.subEq(a, b);
         assertEquals(exp, a);
 
         // ------------------ Sub-case 3 ------------------
@@ -660,7 +660,7 @@ class CVectorSubTests {
         b = new CooCVector(sparseSize, bEntries, sparseIndices);
 
         final CooCVector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->DenseCooFieldVectorOperations.subEq(a, finalB));
+        assertThrows(LinearAlgebraException.class, ()-> DenseCooFieldVectorOps.subEq(a, finalB));
 
         // ------------------ Sub-case 4 ------------------
         setup();
@@ -670,6 +670,6 @@ class CVectorSubTests {
         b = new CooCVector(sparseSize, bEntries, sparseIndices);
 
         final CooCVector finalB1 = b;
-        assertThrows(LinearAlgebraException.class, ()->DenseCooFieldVectorOperations.subEq(a, finalB1));
+        assertThrows(LinearAlgebraException.class, ()-> DenseCooFieldVectorOps.subEq(a, finalB1));
     }
 }

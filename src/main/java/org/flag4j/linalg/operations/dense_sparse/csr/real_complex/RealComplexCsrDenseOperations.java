@@ -66,8 +66,8 @@ public final class RealComplexCsrDenseOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);  // Ensure both matrices are same shape.
 
         Complex128[] dest;
-        if(uOpp == null) dest = ArrayUtils.wrapAsComplex128(src2.entries, null);
-        else dest = ArrayUtils.applyTransform(src2.entries.clone(), (Double a)->new Complex128(uOpp.apply(a)));
+        if(uOpp == null) dest = ArrayUtils.wrapAsComplex128(src2.data, null);
+        else dest = ArrayUtils.applyTransform(src2.data.clone(), (Double a)->new Complex128(uOpp.apply(a)));
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
             int start = src1.rowPointers[i];
@@ -77,7 +77,7 @@ public final class RealComplexCsrDenseOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-                dest[idx] = opp.apply((Complex128) src1.entries[j], ((Complex128) dest[idx]).re);
+                dest[idx] = opp.apply((Complex128) src1.data[j], ((Complex128) dest[idx]).re);
             }
         }
 
@@ -95,7 +95,7 @@ public final class RealComplexCsrDenseOperations {
     public static CMatrix applyBinOpp(Matrix src1, CsrCMatrix src2, BiFunction<Double, Complex128, Complex128> opp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
-        Complex128[] dest = ArrayUtils.wrapAsComplex128(src1.entries, null);
+        Complex128[] dest = ArrayUtils.wrapAsComplex128(src1.data, null);
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -106,7 +106,7 @@ public final class RealComplexCsrDenseOperations {
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src2.colIndices[i];
 
-                dest[idx] = opp.apply(src1.entries[idx], (Complex128) src2.entries[j]);
+                dest[idx] = opp.apply(src1.data[idx], (Complex128) src2.data[j]);
             }
         }
 
@@ -143,7 +143,7 @@ public final class RealComplexCsrDenseOperations {
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src1.colIndices[j];
 
-                dest[idx] = opp.apply(src1.entries[j], dest[idx]);
+                dest[idx] = opp.apply(src1.data[j], dest[idx]);
             }
         }
 

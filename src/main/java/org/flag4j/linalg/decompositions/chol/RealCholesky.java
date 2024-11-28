@@ -98,20 +98,20 @@ public class RealCholesky extends Cholesky<Matrix> {
                 lIndex3 = lIndex1 + j;
 
                 for(int k=0; k<j; k++) {
-                    sum += L.entries[lIndex1 + k]*L.entries[lIndex2 + k];
+                    sum += L.data[lIndex1 + k]*L.data[lIndex2 + k];
                 }
 
                 if(i==j) {
-                    double diag = src.entries[lIndex3]-sum;
+                    double diag = src.data[lIndex3]-sum;
                     if(diag <= posDefTolerance) {
-                        // Diagonal entries of L must be positive (non-zero) for original matrix to be positive-definite.
+                        // Diagonal data of L must be positive (non-zero) for original matrix to be positive-definite.
                         throw new LinearAlgebraException("Matrix is not symmetric positive-definite.");
                     }
 
-                    L.entries[lIndex3] = Math.sqrt(diag);
+                    L.data[lIndex3] = Math.sqrt(diag);
                 } else {
-                    if(L.entries[j*(L.numCols + 1)] != 0) {
-                        L.entries[lIndex3] = (src.entries[lIndex3]-sum)/L.entries[lIndex2 + j];
+                    if(L.data[j*(L.numCols + 1)] != 0) {
+                        L.data[lIndex3] = (src.data[lIndex3]-sum)/L.data[lIndex2 + j];
                     }
                 }
             }

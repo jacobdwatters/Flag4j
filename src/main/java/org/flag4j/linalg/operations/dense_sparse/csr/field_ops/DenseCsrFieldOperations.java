@@ -64,8 +64,8 @@ public final class DenseCsrFieldOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
         Field<T>[] dest;
-        if(uOpp == null) dest = Arrays.copyOf(src2.entries, src2.entries.length);
-        else dest = ArrayUtils.applyTransform(src2.entries, uOpp);
+        if(uOpp == null) dest = Arrays.copyOf(src2.data, src2.data.length);
+        else dest = ArrayUtils.applyTransform(src2.data, uOpp);
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
             int start = src1.rowPointers[i];
@@ -74,7 +74,7 @@ public final class DenseCsrFieldOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-                dest[idx] = opp.apply((T) src1.entries[j], (T) dest[idx]);
+                dest[idx] = opp.apply((T) src1.data[j], (T) dest[idx]);
             }
         }
 
@@ -95,7 +95,7 @@ public final class DenseCsrFieldOperations {
             AbstractCsrFieldMatrix<?, ?, ?, T> src2, 
             BinaryOperator<T> opp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
-        Field<T>[] dest = Arrays.copyOf(src2.entries, src2.entries.length);
+        Field<T>[] dest = Arrays.copyOf(src2.data, src2.data.length);
 
         // TODO: Subtracting a sparse matrix from a dense matrix does not require a unary operator.
         //  Ensure that no method of this form requires this.
@@ -107,7 +107,7 @@ public final class DenseCsrFieldOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src2.colIndices[i];
-                dest[idx] = opp.apply((T) src1.entries[idx], (T) src2.entries[j]);
+                dest[idx] = opp.apply((T) src1.data[idx], (T) src2.data[j]);
             }
         }
 
@@ -144,7 +144,7 @@ public final class DenseCsrFieldOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-                dest[idx] = opp.apply((T) src1.entries[j], (T) dest[idx]);
+                dest[idx] = opp.apply((T) src1.data[j], (T) dest[idx]);
             }
         }
 
@@ -179,7 +179,7 @@ public final class DenseCsrFieldOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-                dest[idx] = opp.apply((T) src1.entries[j], (T) dest[idx]);
+                dest[idx] = opp.apply((T) src1.data[j], (T) dest[idx]);
             }
         }
 
@@ -201,7 +201,7 @@ public final class DenseCsrFieldOperations {
 
         int[] rowPointers = src2.rowPointers.clone();
         int[] colIndices = src2.colIndices.clone();
-        Field<T>[] entries = new Field[src2.entries.length];
+        Field<T>[] entries = new Field[src2.data.length];
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -210,7 +210,7 @@ public final class DenseCsrFieldOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src2.colIndices[j];
-                entries[idx] = opp.apply((T) src1.entries[idx], (T) src2.entries[j]);
+                entries[idx] = opp.apply((T) src1.data[idx], (T) src2.data[j]);
             }
         }
 

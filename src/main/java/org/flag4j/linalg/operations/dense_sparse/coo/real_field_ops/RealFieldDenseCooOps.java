@@ -37,9 +37,9 @@ import org.flag4j.util.ValidateParameters;
 /**
  * This class contains methods to apply common binary operations to a real/field dense matrix and to a field/real sparse matrix.
  */
-public final class RealFieldDenseCooOperations {
+public final class RealFieldDenseCooOps {
 
-    private RealFieldDenseCooOperations() {
+    private RealFieldDenseCooOps() {
         // Hide default constructor for utility class.
         throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
@@ -61,10 +61,34 @@ public final class RealFieldDenseCooOperations {
 
         for(int i=0, size=destEntries.length; i<size; i++) {
             int index = src2.shape.getFlatIndex(src2.indices[i]); // Get index of non-zero entry.
-            destEntries[i] = src2.entries[i].mult(src1.entries[index]);
+            destEntries[i] = src2.data[i].mult(src1.data[index]);
         }
 
         return src2.makeLikeTensor(src2.shape, (T[]) destEntries, destIndices);
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between a real dense tensor and a complex sparse tensor.
+     * @param src1 Real dense tensor.
+     * @param src2 Complex sparse tensor.
+     * @param destEntries Array to store non-zero data resulting from the element-wise product.
+     * Assumed to have length {@code src2.nnz}.
+     * @param destIndices Array to store non-zero indices resulting from the element-wise product.
+     * Assumed to have size {@code src2.nnz}-by-{@code src2.getRank()}.
+     * @return The result of element-wise multiplication between the two tensors.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static <T extends Field<T>> void elemMult(
+            AbstractDenseFieldTensor<?, T> src1, CooTensor src2,
+            Field<T>[] destEntries, int[][] destIndices) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+        ArrayUtils.deepCopy(src2.indices, destIndices); // Copy over indices.
+
+        for(int i=0, size=destEntries.length; i<size; i++) {
+            int index = src2.shape.getFlatIndex(src2.indices[i]); // Get index of non-zero entry.
+            destEntries[i] = src1.data[index].mult(src2.data[i]);
+        }
     }
 
 
@@ -83,7 +107,7 @@ public final class RealFieldDenseCooOperations {
 
         for(int i=0, size=destEntries.length; i<size; i++) {
             int index = src2.shape.getFlatIndex(src1.indices[i]); // Get index of non-zero entry.
-            destEntries[i] = src1.entries[index].div(src2.entries[i]);
+            destEntries[i] = src1.data[index].div(src2.data[i]);
         }
 
         return src1.makeLikeTensor(src2.shape, (T[]) destEntries, destIndices);
@@ -96,16 +120,17 @@ public final class RealFieldDenseCooOperations {
      * @param src2 Real sparse tensor.
      * @return The result of the tensor addition.
      */
-    public static <T extends Field<T>> AbstractDenseFieldTensor<?, T> add(AbstractDenseFieldTensor<?, T> src1, CooTensor src2) {
+    public static <T extends Field<T>> AbstractDenseFieldTensor<?, T> add(
+            AbstractDenseFieldTensor<?, T> src1, CooTensor src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        AbstractDenseFieldTensor<?, T> dest = src1.copy();
+        Field<T>[] destEntries = src1.data.clone();
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            int idx = dest.shape.getFlatIndex(src2.indices[i]);
-            dest.entries[idx] = dest.entries[idx].add(src2.entries[i]);
+            int idx = src1.shape.getFlatIndex(src2.indices[i]);
+            destEntries[idx] = destEntries[idx].add(src2.data[i]);
         }
 
-        return dest;
+        return src1.makeLikeTensor(src2.shape, destEntries);
     }
 
 
@@ -117,14 +142,14 @@ public final class RealFieldDenseCooOperations {
      */
     public static <T extends Field<T>> AbstractDenseFieldTensor<?, T> sub(AbstractDenseFieldTensor<?, T> src1, CooTensor src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        AbstractDenseFieldTensor<?, T> dest = src1.copy();
+        Field<T>[] destEntries = src1.data.clone();
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            int idx = dest.shape.getFlatIndex(src2.indices[i]);
-            dest.entries[idx] = dest.entries[idx].sub(src2.entries[i]);
+            int idx = src1.shape.getFlatIndex(src2.indices[i]);
+            destEntries[idx] = destEntries[idx].sub(src2.data[i]);
         }
 
-        return dest;
+        return src1.makeLikeTensor(src1.shape, destEntries);
     }
 
 
@@ -139,7 +164,7 @@ public final class RealFieldDenseCooOperations {
 
         for(int i=0, size=src2.nnz; i<size; i++) {
             int idx = src2.shape.getFlatIndex(src2.indices[i]);
-            src1.entries[idx] = src1.entries[idx].add(src2.entries[i]);
+            src1.data[idx] = src1.data[idx].add(src2.data[i]);
         }
     }
 
@@ -155,7 +180,7 @@ public final class RealFieldDenseCooOperations {
 
         for(int i=0, size=src2.nnz; i<size; i++) {
             int idx = src2.shape.getFlatIndex(src2.indices[i]);
-            src1.entries[idx] = src1.entries[idx].sub(src2.entries[i]);
+            src1.data[idx] = src1.data[idx].sub(src2.data[i]);
         }
     }
 
@@ -173,7 +198,7 @@ public final class RealFieldDenseCooOperations {
 
         for(int i=0, size=src1.nnz; i<size; i++) {
             int idx = src1.shape.getFlatIndex(src1.indices[i]);
-            dest.entries[idx] = dest.entries[idx].add(src1.entries[i]);
+            dest.data[idx] = dest.data[idx].add(src1.data[i]);
         }
 
         return dest;

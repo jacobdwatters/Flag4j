@@ -26,7 +26,7 @@ package org.flag4j.linalg.operations.dense_sparse.coo.real;
 
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.linalg.operations.common.real.RealOperations;
+import org.flag4j.linalg.operations.common.real.RealOps;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
@@ -46,11 +46,11 @@ public class RealDenseSparseVectorOperations {
     /**
      * Computes the vector inner product between a real dense vector and a real sparse vector.
      * @param src1 Entries of the dense vector.
-     * @param src2 Non-zero entries of the sparse vector.
-     * @param indices Indices of non-zero entries in the sparse vector.
-     * @param sparseSize The size of the sparse vector (including zero entries).
+     * @param src2 Non-zero data of the sparse vector.
+     * @param indices Indices of non-zero data in the sparse vector.
+     * @param sparseSize The size of the sparse vector (including zero data).
      * @return The inner product of the two vectors.
-     * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
+     * @throws IllegalArgumentException If the number of data in the two vectors is not equivalent.
      */
     public static double inner(double[] src1, double[] src2, int[] indices, int sparseSize) {
         ValidateParameters.ensureArrayLengthsEq(src1.length, sparseSize);
@@ -69,9 +69,9 @@ public class RealDenseSparseVectorOperations {
     /**
      * Computes the vector outer product between a real dense vector and a real sparse vector.
      * @param src1 Entries of the dense vector.
-     * @param src2 Non-zero entries of the sparse vector.
-     * @param indices Indices of non-zero entries of sparse vector.
-     * @param sparseSize Full size of the sparse vector including zero entries.
+     * @param src2 Non-zero data of the sparse vector.
+     * @param indices Indices of non-zero data of sparse vector.
+     * @param sparseSize Full size of the sparse vector including zero data.
      * @return The matrix resulting from the vector outer product.
      */
     public static double[] outerProduct(double[] src1, double[] src2, int[] indices, int sparseSize) {
@@ -92,10 +92,10 @@ public class RealDenseSparseVectorOperations {
 
     /**
      * Computes the vector outer product between a real dense vector and a real sparse vector.
-     * @param src1 Non-zero entries of the sparse vector.
+     * @param src1 Non-zero data of the sparse vector.
      * @param src2 Entries of the dense vector.
-     * @param indices Indices of non-zero entries of sparse vector.
-     * @param sparseSize Full size of the sparse vector including zero entries.
+     * @param indices Indices of non-zero data of sparse vector.
+     * @param sparseSize Full size of the sparse vector including zero data.
      * @return The matrix resulting from the vector outer product.
      */
     public static double[] outerProduct(double[] src1, int[] indices, int sparseSize, double[] src2) {
@@ -128,7 +128,7 @@ public class RealDenseSparseVectorOperations {
         Vector dest = new Vector(src1);
 
         for(int i=0; i<src2.nnz; i++) {
-            dest.entries[src2.indices[i]] -= src2.entries[i];
+            dest.data[src2.indices[i]] -= src2.data[i];
         }
 
         return dest;
@@ -144,11 +144,10 @@ public class RealDenseSparseVectorOperations {
      */
     public static Vector sub(CooVector src1, Vector src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        Vector dest = new Vector(RealOperations.scalMult(src2.entries, -1));
+        Vector dest = new Vector(RealOps.scalMult(src2.data, -1, null));
 
-        for(int i=0; i<src1.nnz; i++) {
-            dest.entries[src1.indices[i]] += src1.entries[i];
-        }
+        for(int i=0; i<src1.nnz; i++)
+            dest.data[src1.indices[i]] += src1.data[i];
 
         return dest;
     }
@@ -164,7 +163,7 @@ public class RealDenseSparseVectorOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nnz; i++) {
-            src1.entries[src2.indices[i]] += src2.entries[i];
+            src1.data[src2.indices[i]] += src2.data[i];
         }
     }
 
@@ -179,7 +178,7 @@ public class RealDenseSparseVectorOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0; i<src2.nnz; i++) {
-            src1.entries[src2.indices[i]] -= src2.entries[i];
+            src1.data[src2.indices[i]] -= src2.data[i];
         }
     }
 
@@ -193,10 +192,10 @@ public class RealDenseSparseVectorOperations {
      */
     public static CooVector elemMult(Vector src1, CooVector src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        double[] entries = new double[src2.entries.length];
+        double[] entries = new double[src2.data.length];
 
         for(int i=0; i<src2.nnz; i++)
-            entries[i] = src1.entries[src2.indices[i]]*src2.entries[i];
+            entries[i] = src1.data[src2.indices[i]]*src2.data[i];
 
         return new CooVector(src1.size, entries, src2.indices.clone());
     }
@@ -214,7 +213,7 @@ public class RealDenseSparseVectorOperations {
         Vector dest = new Vector(src1);
 
         for(int i=0; i<src2.nnz; i++) {
-            dest.entries[src2.indices[i]] += src2.entries[i];
+            dest.data[src2.indices[i]] += src2.data[i];
         }
 
         return dest;
@@ -229,10 +228,10 @@ public class RealDenseSparseVectorOperations {
      */
     public static CooVector elemDiv(CooVector src1, Vector src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        double[] dest = new double[src1.entries.length];
+        double[] dest = new double[src1.data.length];
 
-        for(int i=0; i<src1.entries.length; i++) {
-            dest[i] = src1.entries[i]/src2.entries[src1.indices[i]];
+        for(int i = 0; i<src1.data.length; i++) {
+            dest[i] = src1.data[i]/src2.data[src1.indices[i]];
         }
 
         return new CooVector(src1.size, dest, src1.indices.clone());

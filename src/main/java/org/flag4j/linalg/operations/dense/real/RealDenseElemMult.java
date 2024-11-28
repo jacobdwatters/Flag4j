@@ -29,13 +29,15 @@ import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
+import static org.flag4j.util.ArrayUtils.makeNewIfNull;
+
 /**
  * This class contains low level implementations of element-wise multiplications algorithms for real dense tensors.
  */
 public final class RealDenseElemMult {
 
     /**
-     * Minimum number of entries in each tensor to apply concurrent algorithm.
+     * Minimum number of data in each tensor to apply concurrent algorithm.
      */
     private static final int CONCURRENT_THRESHOLD = 30_000_000;
 
@@ -58,7 +60,7 @@ public final class RealDenseElemMult {
      */
     public static double[] elemMult(double[] src1, double[] src2, double[] dest) {
         ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
-        if(dest == null) dest = new double[src1.length];
+        dest = makeNewIfNull(dest, src1.length);
 
         for(int i=0, size=src1.length; i<size; i++)
             dest[i] = src1[i]*src2[i];
@@ -80,7 +82,7 @@ public final class RealDenseElemMult {
      */
     public static double[] elemMultConcurrent(double[] src1, double[] src2, double[] dest) {
         ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
-        if(dest == null) dest = new double[src1.length];
+        dest = makeNewIfNull(dest, src1.length);
 
         double[] finalDest = dest;
         ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
@@ -93,7 +95,7 @@ public final class RealDenseElemMult {
 
 
     /**
-     * <p>Dynamically chooses and applies element-wise multiplication algorithm to use based on the number of entries in the tensors.
+     * <p>Dynamically chooses and applies element-wise multiplication algorithm to use based on the number of data in the tensors.
      *
      * @param src1 Entries of first tensor.
      * @param src2 Entries of second tensor.

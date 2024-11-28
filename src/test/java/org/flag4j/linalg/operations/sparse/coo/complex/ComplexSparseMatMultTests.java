@@ -45,10 +45,10 @@ class ComplexSparseMatMultTests {
                 {new Complex128("0.0"), new Complex128("0.0")}};
         exp = new CMatrix(expEntries);
 
-        assertArrayEquals(exp.entries, standard(A.entries, A.rowIndices, A.colIndices, A.shape,
-                B.entries, B.rowIndices, B.colIndices, B.shape));
-        assertArrayEquals(exp.entries, concurrentStandard(A.entries, A.rowIndices, A.colIndices, A.shape,
-                B.entries, B.rowIndices, B.colIndices, B.shape));
+        assertArrayEquals(exp.data, standard(A.data, A.rowIndices, A.colIndices, A.shape,
+                B.data, B.rowIndices, B.colIndices, B.shape));
+        assertArrayEquals(exp.data, concurrentStandard(A.data, A.rowIndices, A.colIndices, A.shape,
+                B.data, B.rowIndices, B.colIndices, B.shape));
     }
 
 
@@ -71,12 +71,12 @@ class ComplexSparseMatMultTests {
                 {new Complex128("0.0")}};
         exp = new CMatrix(expEntries);
 
-        Field<Complex128>[] act = standardVector(A.entries, A.rowIndices, A.colIndices, A.shape,
-                bVector.entries, bVector.indices);
+        Field<Complex128>[] act = standardVector(A.data, A.rowIndices, A.colIndices, A.shape,
+                bVector.data, bVector.indices);
 
-        assertArrayEquals(exp.entries, standardVector(A.entries, A.rowIndices, A.colIndices, A.shape,
-                bVector.entries, bVector.indices));
-        assertArrayEquals(exp.entries, concurrentStandardVector(A.entries, A.rowIndices, A.colIndices, A.shape,
-                bVector.entries, bVector.indices));
+        assertArrayEquals(exp.data, standardVector(A.data, A.rowIndices, A.colIndices, A.shape,
+                bVector.data, bVector.indices));
+        assertArrayEquals(exp.data, concurrentStandardVector(A.data, A.rowIndices, A.colIndices, A.shape,
+                bVector.data, bVector.indices));
     }
 }

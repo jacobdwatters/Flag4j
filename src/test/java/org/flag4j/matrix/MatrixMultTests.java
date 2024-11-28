@@ -337,7 +337,7 @@ class MatrixMultTests {
         Matrix act = new Matrix(
                 new Shape(A.numRows, B.numRows),
                 RealDenseSparseMatrixMultTranspose.multTranspose(
-                        A.entries, A.shape, B.entries, B.rowIndices, B.colIndices, B.shape
+                        A.data, A.shape, B.data, B.rowIndices, B.colIndices, B.shape
                 )
         );
 

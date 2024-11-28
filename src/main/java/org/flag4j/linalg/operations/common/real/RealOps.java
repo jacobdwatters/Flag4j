@@ -33,21 +33,11 @@ import java.math.RoundingMode;
  * This class provides low level methods for computing operations on real tensors. These methods can be applied to
  * either sparse or dense real tensors.
  */
-public final class RealOperations {
+public final class RealOps {
 
-    private RealOperations() {
+    private RealOps() {
         // Hide default constructor for utility class.
         throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
-    }
-
-    /**
-     * Computes the scalar multiplication of a tensor.
-     * @param src Entries of the tensor.
-     * @param factor Scalar value to multiply.
-     * @return The scalar multiplication of the tensor.
-     */
-    public static double[] scalMult(double[] src, double factor) {
-        return scalMult(src, factor, null);
     }
 
 
@@ -123,9 +113,8 @@ public final class RealOperations {
     public static double[] sqrt(double[] src) {
         double[] roots = new double[src.length];
 
-        for(int i=0; i<roots.length; i++) {
+        for(int i=0; i<roots.length; i++)
             roots[i] = Math.sqrt(src[i]);
-        }
 
         return roots;
     }
@@ -139,9 +128,8 @@ public final class RealOperations {
     public static double[] abs(double[] src) {
         double[] abs = new double[src.length];
 
-        for(int i=0; i<abs.length; i++) {
+        for(int i=0; i<abs.length; i++)
             abs[i] = Math.abs(src[i]);
-        }
 
         return abs;
     }
@@ -150,15 +138,14 @@ public final class RealOperations {
     /**
      * Rounds the values of a tensor to the nearest integer. Also see {@link #round(double[], int)}.
      * @param src Entries of the tensor to round.
-     * @return The result of rounding all entries of the source tensor to the nearest integer.
+     * @return The result of rounding all data of the source tensor to the nearest integer.
      * @throws IllegalArgumentException If {@code precision} is negative.
      */
     public static double[] round(double[] src) {
         double[] dest = new double[src.length];
 
-        for(int i=0; i<dest.length; i++) {
+        for(int i=0; i<dest.length; i++)
             dest[i] = Math.round(src[i]);
-        }
 
         return dest;
     }
@@ -169,7 +156,7 @@ public final class RealOperations {
      * preferred.
      * @param src Entries of the tensor to round.
      * @param precision Precision to round to (i.e. the number of decimal places).
-     * @return The result of rounding all entries of the source tensor with the specified precision.
+     * @return The result of rounding all data of the source tensor with the specified precision.
      * @throws IllegalArgumentException If {@code precision} is negative.
      */
     public static double[] round(double[] src, int precision) {
@@ -199,19 +186,12 @@ public final class RealOperations {
      * @throws IllegalArgumentException If {@code threshold} is negative.
      */
     public static double[] roundToZero(double[] src, double threshold) {
-        if(threshold<0) {
+        if(threshold<0)
             throw new IllegalArgumentException(ErrorMessages.getNegValueErr(threshold));
-        }
 
         double[] dest = new double[src.length];
-
-        for(int i=0; i<dest.length; i++) {
-            if(Math.abs(src[i]) < threshold) {
-                dest[i] = 0;
-            } else {
-                dest[i] = src[i];
-            }
-        }
+        for(int i=0, size=dest.length; i<size; i++)
+            dest[i] = (Math.abs(src[i]) < threshold) ? 0 : src[i];
 
         return dest;
     }

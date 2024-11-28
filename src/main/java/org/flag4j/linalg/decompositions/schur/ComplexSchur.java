@@ -187,7 +187,7 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
     protected void setUpArrays() {
         householderVector = new Complex128[numRows];
         workArray = new Complex128[numRows]; // TODO: If givens are used in the single step, the work array will need length 2*numRows.
-        shiftCol = new Complex128[3]; // For storing non-zero entries (the first 2 or 3) of the first column of the double/single shift.
+        shiftCol = new Complex128[3]; // For storing non-zero data (the first 2 or 3) of the first column of the double/single shift.
         temp = new Complex128[9]; // For storing temporary values when computing shifts.
     }
 
@@ -198,7 +198,7 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
      * QR converge for certain pathological cases where the double shift algorithm oscillates or fails to converge for
      * repeated eigenvalues.
      *
-     * @param workingSize The current working size for the decomposition. I.e. all entries below this row have converged to an upper
+     * @param workingSize The current working size for the decomposition. I.e. all data below this row have converged to an upper
      *                    or possible 2x2 block upper triangular form.
      */
     @Override
@@ -214,7 +214,7 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
      * @return A shift in a random direction which has the same magnitude as the elements in the matrix.
      */
     protected Complex128 computeExceptionalShift(int k) {
-        double mag = T.entries[k*numRows + k].mag();
+        double mag = T.data[k*numRows + k].mag();
         mag = (mag==0) ? 1 : Math.abs(mag); // Ensure shift is not zero.
 
         double p = 1 - Math.pow(0.1, numExceptional);
@@ -225,25 +225,25 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
 
 
     /**
-     * Computes the non-zero entries of the first column for the single shifted QR algorithm.
+     * Computes the non-zero data of the first column for the single shifted QR algorithm.
      * @param k Size of current working matrix.
      * @param shift The shift to use.
      */
     protected void computeImplicitSingleShift(int k, Complex128 shift) {
         int leftIdx = k-1;
-        shiftCol[0] = T.entries[leftIdx*numRows + leftIdx].sub(shift);
-        shiftCol[1] = T.entries[k*numRows + leftIdx];
+        shiftCol[0] = T.data[leftIdx*numRows + leftIdx].sub(shift);
+        shiftCol[1] = T.data[k*numRows + leftIdx];
     }
 
 
     /**
      * Performs a full iteration of the implicit single shifted QR algorithm (this includes the bulge chase).
-     * @param workingSize The current working size for the decomposition. I.e. all entries below this row have converged to an upper
+     * @param workingSize The current working size for the decomposition. I.e. all data below this row have converged to an upper
      *                   or possible 2x2 block upper triangular form.
      * @param shift The shift to use in the implicit single shifted QR algorithm.
      */
     protected void performSingleShift(int workingSize, Complex128 shift) {
-        // Compute the non-zero entries of first column for shifted matrix.
+        // Compute the non-zero data of first column for shifted matrix.
         computeImplicitSingleShift(workingSize, shift);
 
         // Extract non-zero values from first column in shifted matrix.
@@ -255,8 +255,8 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
                 applySingleShiftReflector(i, i>0); // Apply the reflector if needed.
 
             // Set values to be used in computing the next bulge chasing reflector.
-            p1 = T.entries[(i + 1)*numRows + i];
-            if(i < workingSize-1) p2 = T.entries[(i + 2)*numRows + i];
+            p1 = T.data[(i + 1)*numRows + i];
+            if(i < workingSize-1) p2 = T.data[(i + 2)*numRows + i];
         }
     }
 
@@ -273,25 +273,25 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
         //  There should be negligible stability difference between the two for a 2x2 rotator, but the givens rotator is more
         //  simple to calculate. However, this seems to be incorrect. Figure out what this should be or if the left/right
         //  multiplication methods are incorrect.
-//        Matrix G = Givens.get2x2Rotator(T.entries[i*numRows + i - 1], T.entries[(i+1)*numRows + i - 1]);
+//        Matrix G = Givens.get2x2Rotator(T.data[i*numRows + i - 1], T.data[(i+1)*numRows + i - 1]);
 //        Givens.leftMult2x2Rotator(T, G, i+1, givensWorkArray);
 //        Givens.rightMult2x2Rotator(T, G, i+1, givensWorkArray);
 
         if(set) {
             // Explicitly zeros out values which should be zeroed by the reflector.
-            T.entries[i*numRows + i - 1] = norm.addInv();
-            T.entries[(i+1)*numRows + i - 1] = Complex128.ZERO;
+            T.data[i*numRows + i - 1] = norm.addInv();
+            T.data[(i+1)*numRows + i - 1] = Complex128.ZERO;
         }
     }
 
 
     /**
      * Performs a full iteration of the Francis implicit double shifted QR algorithm (this includes the bulge chase).
-     * @param workingSize The current working size for the decomposition. I.e. all entries below this row have converged to an upper
+     * @param workingSize The current working size for the decomposition. I.e. all data below this row have converged to an upper
      *                   or possible 2x2 block upper triangular form.
      */
     protected void performDoubleShift(int workingSize) {
-        // Compute the non-zero entries (first three) of the first column of the double shifted matrix.
+        // Compute the non-zero data (first three) of the first column of the double shifted matrix.
         computeImplicitDoubleShift(workingSize);
 
         // Extract non-zero values in first column of the double shifted matrix.
@@ -305,9 +305,9 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
                 applyDoubleShiftReflector(i, i>0); // Apply the reflector if needed.
 
             // Set values to be used in computing the next bulge chasing reflector.
-            p1 = T.entries[(i + 1)*numRows + i];
-            p2 = T.entries[(i + 2)*numRows + i];
-            if(i < workingSize-2) p3 = T.entries[(i + 3)*numRows + i];
+            p1 = T.data[(i + 1)*numRows + i];
+            p2 = T.data[(i + 2)*numRows + i];
+            if(i < workingSize-2) p3 = T.data[(i + 3)*numRows + i];
         }
 
         // The last reflector in the bulge chase only acts on last two rows of the working matrix.
@@ -329,17 +329,17 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
 
         // Extract values from lower right 2x2 sub-matrix within the working size.
         int leftIdx = workingSize-1;
-        Field<Complex128> x11 = T.entries[leftIdx*numRows + leftIdx];
-        Field<Complex128> x12 = T.entries[leftIdx*numRows + workingSize];
-        Field<Complex128> x21 = T.entries[workingSize*numRows + leftIdx];
-        Field<Complex128> x22 = T.entries[workingSize*numRows + workingSize];
+        Field<Complex128> x11 = T.data[leftIdx*numRows + leftIdx];
+        Field<Complex128> x12 = T.data[leftIdx*numRows + workingSize];
+        Field<Complex128> x21 = T.data[workingSize*numRows + leftIdx];
+        Field<Complex128> x22 = T.data[workingSize*numRows + workingSize];
 
-        // Extract top right entries of T for use in computing the shift p.
-        Field<Complex128> a11 = T.entries[0];
-        Field<Complex128> a12 = T.entries[1];
-        Field<Complex128> a21 = T.entries[numRows];
-        Field<Complex128> a22 = T.entries[numRows + 1];
-        Field<Complex128> a32 = T.entries[2*numRows + 1];
+        // Extract top right data of T for use in computing the shift p.
+        Field<Complex128> a11 = T.data[0];
+        Field<Complex128> a12 = T.data[1];
+        Field<Complex128> a21 = T.data[numRows];
+        Field<Complex128> a22 = T.data[numRows + 1];
+        Field<Complex128> a32 = T.data[2*numRows + 1];
 
         // Scale values to improve stability and help avoid possible over(under)flow issues.
         temp[0] = a11; temp[1] = a21; temp[2] = a12; temp[3] = a22; temp[4] = a32;
@@ -351,7 +351,7 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
 
         Complex128[] rho = Eigen.get2x2EigenValues(x11, x12, x21, x22); // Compute shifts to be eigenvalues of trailing 2x2 sub-matrix.
 
-        // Compute first three non-zero entries of the shift p.
+        // Compute first three non-zero data of the shift p.
         shiftCol[0] = a11.sub(rho[0]).mult( a11.sub(rho[1]) ).add( a12.mult((Complex128) a21) );
         shiftCol[1] = a21.mult( a11.add((Complex128) a21).sub( rho[0].add(rho[1])) );
         shiftCol[2] = a32.mult((Complex128) a21);
@@ -368,9 +368,9 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
 
         if(set) {
             // Explicitly zeros out values which should be zeroed by the reflector.
-            T.entries[i*numRows + i - 1] = norm.addInv();
-            T.entries[(i+1)*numRows + i - 1] = Complex128.ZERO;
-            T.entries[(i+2)*numRows + i - 1] = Complex128.ZERO;
+            T.data[i*numRows + i - 1] = norm.addInv();
+            T.data[(i+1)*numRows + i - 1] = Complex128.ZERO;
+            T.data[(i+2)*numRows + i - 1] = Complex128.ZERO;
         }
     }
 
@@ -409,7 +409,7 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
         // Scale components for stability and overflow purposes.
         double maxAbs = Math.max(p1.mag(), Math.max(p2.mag(), p3.mag()));
 
-        if(maxAbs <= Flag4jConstants.EPS_F64*T.entries[i*numRows + i].mag()) {
+        if(maxAbs <= Flag4jConstants.EPS_F64*T.data[i*numRows + i].mag()) {
             return false; // No reflector needs to be constructed or applied.
         }
 
@@ -449,7 +449,7 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
      */
     protected boolean makeReflector(int i, Field<Complex128> p1, Field<Complex128> p2) {
         double maxAbs = Math.max(p1.mag(), p2.mag());
-        if(maxAbs <= Flag4jConstants.EPS_F64*T.entries[i*numRows + i].mag()) {
+        if(maxAbs <= Flag4jConstants.EPS_F64*T.data[i*numRows + i].mag()) {
             return false; // No reflector needs to be constructed or applied.
         }
 
@@ -486,22 +486,22 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
     protected int checkConvergence(int workingSize) {
         int leftRow = (workingSize-1)*numRows;
 
-        Field<Complex128> a11 = T.entries[(workingSize-2)*numRows + workingSize - 2];
-        Field<Complex128> a21 = T.entries[leftRow + workingSize - 2];
-        Field<Complex128> a22 = T.entries[leftRow + workingSize - 1];
-        Field<Complex128> a23 = T.entries[leftRow + workingSize];
-        Field<Complex128> a32 = T.entries[workingSize*numRows + workingSize - 1];
-        Field<Complex128> a33 = T.entries[workingSize*numRows + workingSize];
+        Field<Complex128> a11 = T.data[(workingSize-2)*numRows + workingSize - 2];
+        Field<Complex128> a21 = T.data[leftRow + workingSize - 2];
+        Field<Complex128> a22 = T.data[leftRow + workingSize - 1];
+        Field<Complex128> a23 = T.data[leftRow + workingSize];
+        Field<Complex128> a32 = T.data[workingSize*numRows + workingSize - 1];
+        Field<Complex128> a33 = T.data[workingSize*numRows + workingSize];
 
         // Uses deflation criteria proposed by Wilkinson: |A[k, k-1]| < eps*(|A[k, k]| + |A[k-1, k-1]|)
         // AND the deflation criteria proposed by Ahues and Tisseur:
         //     |A[k, k-1]| *|A[k-1, k]| <= eps * |A[k, k]| * |A[k, k] - A[k-1, k-1]|
         if(a32.mag() < EPS_F64*(a33.mag() + a22.mag())
                 && a32.mag()*a23.mag() <= EPS_F64*a33.mag() * (a33.sub((Complex128) a22)).mag()) {
-            T.entries[workingSize*numRows + workingSize - 1] = Complex128.ZERO; // Zero out converged value.
+            T.data[workingSize*numRows + workingSize - 1] = Complex128.ZERO; // Zero out converged value.
             return 1; // Deflate by 1.
         } else if(a21.mag() < EPS_F64*(a11.mag() + a22.mag())) {
-            T.entries[leftRow + workingSize - 2] = Complex128.ZERO; // Zero out converged value.
+            T.data[leftRow + workingSize - 2] = Complex128.ZERO; // Zero out converged value.
             return 2; // Deflate by 2.
         }
 
@@ -516,10 +516,10 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
         Complex128[] givensWorkComplex = new Complex128[2*numRows];
 
         for(int m=numRows-1; m>0; m--) {
-            Field<Complex128> a11 = tComplex.entries[(m - 1)*numRows + m - 1];
-            Field<Complex128> a12 = tComplex.entries[(m - 1)*numRows + m];
-            Field<Complex128> a21 = tComplex.entries[m*numRows + m - 1];
-            Field<Complex128> a22 = tComplex.entries[m*numRows + m];
+            Field<Complex128> a11 = tComplex.data[(m - 1)*numRows + m - 1];
+            Field<Complex128> a12 = tComplex.data[(m - 1)*numRows + m];
+            Field<Complex128> a21 = tComplex.data[m*numRows + m - 1];
+            Field<Complex128> a22 = tComplex.data[m*numRows + m];
 
             if(a21.mag() > EPS_F64*(a11.mag() + a22.mag())) {
                 // non-converged 2x2 block found.

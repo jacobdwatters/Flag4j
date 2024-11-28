@@ -51,12 +51,12 @@ public final class CooGetSet {
     /**
      * Sets a specified row of a real sparse COO matrix to the values in a sparse COO vector.
      * @param srcShape Shape of the matrix to set row in.
-     * @param srcEntries Non-zero entries of the COO matrix.
+     * @param srcEntries Non-zero data of the COO matrix.
      * @param rowIndices Non-zero row indices of the COO matrix.
      * @param colIndices Non-zero column indices of the COO matrix.
      * @param rowIdx Index of the row to set.
      * @param size Full size of the COO vector.
-     * @param row Non-zero entries of the COO vector containing new row values.
+     * @param row Non-zero data of the COO vector containing new row values.
      * @param indices Non-zero indices of the COO vector containing new row values.
      * @return Sparse matrix data containing the data for the COO matrix resulting from setting the specified row of the provided
      * COO matrix to the provided COO vector.
@@ -98,15 +98,15 @@ public final class CooGetSet {
     /**
      * Sets a column of a sparse matrix to the values in a sparse tensor.
      * @param srcShape Shape of the matrix to set column in.
-     * @param srcEntries Non-zero entries of the COO matrix.
+     * @param srcEntries Non-zero data of the COO matrix.
      * @param rowIndices Non-zero row indices of the COO matrix.
      * @param colIndices Non-zero column indices of the COO matrix.
      * @param colIdx Index of the column to set.
      * @param size Full size of the COO vector.
-     * @param col Non-zero entries of the COO vector containing new column values.
+     * @param col Non-zero data of the COO vector containing new column values.
      * @param indices Non-zero indices of the COO vector containing new column values.
      * @return A copy of the {@code src} matrix with the specified column set to the {@code col} sparse vector.
-     * @throws IllegalArgumentException If the {@code src} matrix does not have the same number of rows as total entries
+     * @throws IllegalArgumentException If the {@code src} matrix does not have the same number of rows as total data
      * in the {@code col} vector.
      */
     public static <T> SparseMatrixData<T> setCol(Shape srcShape, T[] srcEntries, int[] rowIndices, int[] colIndices,
@@ -129,18 +129,18 @@ public final class CooGetSet {
 
     /**
      * Adds values from a sparse matrix to specified lists if the value is not within a specified column.
-     * @param destEntries List to add non-zero entries from sparse matrix to.
+     * @param destEntries List to add non-zero data from sparse matrix to.
      * @param destRowIndices List to add non-zero row indices from sparse matrix to.
      * @param destColIndices List to add non-zero column indices from sparse matrix to.
      * @param src The sparse matrix to get non-zero values and indices from.
-     * @param colIdx Specified column to not add entries to the lists from.
+     * @param colIdx Specified column to not add data to the lists from.
      */
     private static <T> void addNotInCol(List<T> destEntries, List<Integer> destRowIndices,
                                         List<Integer> destColIndices,
                                         T[] srcEntries, int[] rowIndices, int[] colIndices,
                                         int colIdx) {
         for(int i=0, size=srcEntries.length; i<size; i++) {
-            // Add all entries which are not in the specified column.
+            // Add all data which are not in the specified column.
             if(colIndices[i]!=colIdx) {
                 destEntries.add(srcEntries[i]);
                 destRowIndices.add(rowIndices[i]);
@@ -156,7 +156,7 @@ public final class CooGetSet {
      * @param indices Non-zero indices of the sparse COO vector.
      * @param index Index of the value to get from the vector.
      * @return The value in the sparse COO vector at the specified index if it exists. If the value is not found
-     * within the non-zero entries, {@code null} will be returned.
+     * within the non-zero data, {@code null} will be returned.
      */
     public static <V> V getCoo(V[] entries, int[] indices, int index) {
         int idx = Arrays.binarySearch(indices, index);
@@ -172,7 +172,7 @@ public final class CooGetSet {
      * @param row Row index of the value to get from the sparse matrix.
      * @param col Column index of the value to get from the sparse matrix.
      * @return The value in the sparse COO matrix at the specified row and column indices if it exists. If the value is not found
-     * within the non-zero entries, {@code null} will be returned.
+     * within the non-zero data, {@code null} will be returned.
      */
     public static <V> V getCoo(V[] entries, int[] rowIndices, int[] colIndices, int row, int col) {
         int idx = SparseElementSearch.matrixBinarySearch(rowIndices, colIndices, row, col);
@@ -184,11 +184,11 @@ public final class CooGetSet {
      * Gets an element of a sparse COO tensor at the specified {@cide target} index. If no non-zero value exists, then {@code null}
      * is returned.
      *
-     * @param entries Non-zero entries of the COO tensor.
+     * @param entries Non-zero data of the COO tensor.
      * @param indices Non-zero indices o the COO tensor.
      * @param target Target index to search for in {@code indices}.
-     * @return The value in {@code entries} which has an index matching the target. That is, if some {@code idx} is found such that
-     * {@code Arrays.equals(indices[idx], target)}, then {@code entries[idx]} is returned. If no such {@code idx} id found, then
+     * @return The value in {@code data} which has an index matching the target. That is, if some {@code idx} is found such that
+     * {@code Arrays.equals(indices[idx], target)}, then {@code data[idx]} is returned. If no such {@code idx} id found, then
      * {@code null} is returned.
      */
     public static <T> T getCoo(T[] entries, int[][] indices, int[] target) {
@@ -201,7 +201,7 @@ public final class CooGetSet {
      * Inserts a new value into a sparse COO tensor. This assumes there is no non-zero value already at the specified index.
      * @param value Value to insert into the tensor.
      * @param index Non-zero index for new value.
-     * @param srcEntries Non-zero entries of the source tensor. Unmodified.
+     * @param srcEntries Non-zero data of the source tensor. Unmodified.
      * @param srcIndices Non-zero indices of the source tensor. Assumed to be rectangular. Unmodified.
      * @param insertionPoint Index in {@code srcEntries} and {@code srcIndices} to insert {@code value} and {@code index}.
      * @param destEntries Destination for storing the result of inserting the {@code value} into {@code srcEntries}.
@@ -238,7 +238,7 @@ public final class CooGetSet {
      * Inserts a new value into a sparse COO matrix. This assumes there is no non-zero value at the specified row and column.
      * @param value Value to insert into the matrix.
      * @param rowIdx index for the value to insert.
-     * @param srcEntries Non-zero entries of the source matrix. Unmodified.
+     * @param srcEntries Non-zero data of the source matrix. Unmodified.
      * @param srcRowIndices Non-zero row indices of the source matrix. Unmodified.
      * @param insertionPoint Index in {@code srcEntries}, {@code srcRowIndices}, {@code srcColIndices} to insert {@code value},
      * {@code rowIdx}, and {@code colIdx}
@@ -278,7 +278,7 @@ public final class CooGetSet {
      * Inserts a new value into a sparse COO vector. This assumes there is no non-zero value at the specified index.
      * @param value Value to insert into the vector.
      * @param index Index for the value to insert.
-     * @param srcEntries Non-zero entries of the source vector. Unmodified.
+     * @param srcEntries Non-zero data of the source vector. Unmodified.
      * @param srcIndices Non-zero indices of the source vector. Unmodified.
      * @param insertionPoint Index in {@code srcEntries} and {@code srcIndices} to insert {@code value} and {@code index}.
      * @param destEntries Destination for storing the result of inserting the {@code value} into {@code srcEntries}.
@@ -310,11 +310,11 @@ public final class CooGetSet {
      * Gets an element of a sparse COO tensor at the specified {@cide target} index. If no non-zero value exists, then {@code null}
      * is returned.
      *
-     * @param entries Non-zero entries of the COO tensor.
+     * @param entries Non-zero data of the COO tensor.
      * @param indices Non-zero indices o the COO tensor.
      * @param target Target index to search for in {@code indices}.
-     * @return The value in {@code entries} which has an index matching the target. That is, if some {@code idx} is found such that
-     * {@code Arrays.equals(indices[idx], target)}, then {@code entries[idx]} is returned. If no such {@code idx} id found, then
+     * @return The value in {@code data} which has an index matching the target. That is, if some {@code idx} is found such that
+     * {@code Arrays.equals(indices[idx], target)}, then {@code data[idx]} is returned. If no such {@code idx} id found, then
      * {@code null} is returned.
      */
     public static double getCoo(double[] entries, int[][] indices, int[] target) {
@@ -327,11 +327,11 @@ public final class CooGetSet {
      * Gets an element of a sparse COO tensor at the specified {@cide target} index. If no non-zero value exists, then {@code null}
      * is returned.
      *
-     * @param entries Non-zero entries of the COO tensor.
+     * @param entries Non-zero data of the COO tensor.
      * @param indices Non-zero indices o the COO tensor.
      * @param target Target index to search for in {@code indices}.
-     * @return The value in {@code entries} which has an index matching the target. That is, if some {@code idx} is found such that
-     * {@code Arrays.equals(indices[idx], target)}, then {@code entries[idx]} is returned. If no such {@code idx} id found, then
+     * @return The value in {@code data} which has an index matching the target. That is, if some {@code idx} is found such that
+     * {@code Arrays.equals(indices[idx], target)}, then {@code data[idx]} is returned. If no such {@code idx} id found, then
      * {@code null} is returned.
      */
     public static float getCoo(float[] entries, int[][] indices, int[] target) {
@@ -344,11 +344,11 @@ public final class CooGetSet {
      * Gets an element of a sparse COO tensor at the specified {@cide target} index. If no non-zero value exists, then {@code null}
      * is returned.
      *
-     * @param entries Non-zero entries of the COO tensor.
+     * @param entries Non-zero data of the COO tensor.
      * @param indices Non-zero indices o the COO tensor.
      * @param target Target index to search for in {@code indices}.
-     * @return The value in {@code entries} which has an index matching the target. That is, if some {@code idx} is found such that
-     * {@code Arrays.equals(indices[idx], target)}, then {@code entries[idx]} is returned. If no such {@code idx} id found, then
+     * @return The value in {@code data} which has an index matching the target. That is, if some {@code idx} is found such that
+     * {@code Arrays.equals(indices[idx], target)}, then {@code data[idx]} is returned. If no such {@code idx} id found, then
      * {@code null} is returned.
      */
     public static int getCoo(int[] entries, int[][] indices, int[] target) {
@@ -367,14 +367,14 @@ public final class CooGetSet {
      *     <li>If {@code diagOffset == k} where {@code k < 0} then the values at and above the k<sup>th</sup> sub-diagonal.</li>
      * </ul>
      * @param shape Shape of the COO matrix.
-     * @param entries Non-zero entries of the COO matrix.
+     * @param entries Non-zero data of the COO matrix.
      * @param rowIndices Row indices of the COO matrix.
      * @param colIndices Column indices of the COO matrix.
-     * @return A data container containing the resulting upper-triangular non-zero entries, row indices, and column indices.
+     * @return A data container containing the resulting upper-triangular non-zero data, row indices, and column indices.
      */
     public static <T> SparseMatrixData<T> getTriU(int diagOffset, Shape shape, T[] entries, int[] rowIndices, int[] colIndices) {
         final int nnz = entries.length;
-        int sizeEst = nnz / 2; // Estimate the number of non-zero entries.
+        int sizeEst = nnz / 2; // Estimate the number of non-zero data.
         List<T> triuEntries = new ArrayList<>(sizeEst);
         List<Integer> triuRowIndices = new ArrayList<>(sizeEst);
         List<Integer> triuColIndices = new ArrayList<>(sizeEst);
@@ -404,14 +404,14 @@ public final class CooGetSet {
      *     <li>If {@code diagOffset == k} where {@code k < 0} then the values at and below the k<sup>th</sup> sub-diagonal.</li>
      * </ul>
      * @param shape Shape of the COO matrix.
-     * @param entries Non-zero entries of the COO matrix.
+     * @param entries Non-zero data of the COO matrix.
      * @param rowIndices Row indices of the COO matrix.
      * @param colIndices Column indices of the COO matrix.
-     * @return A data container containing the resulting lower-triangular non-zero entries, row indices, and column indices.
+     * @return A data container containing the resulting lower-triangular non-zero data, row indices, and column indices.
      */
     public static <T> SparseMatrixData<T> getTriL(int diagOffset, Shape shape, T[] entries, int[] rowIndices, int[] colIndices) {
         final int nnz = entries.length;
-        int sizeEst = nnz / 2; // Estimate the number of non-zero entries.
+        int sizeEst = nnz / 2; // Estimate the number of non-zero data.
         List<T> trilEntries = new ArrayList<>(sizeEst);
         List<Integer> trilRowIndices = new ArrayList<>(sizeEst);
         List<Integer> trilColIndices = new ArrayList<>(sizeEst);
@@ -432,14 +432,14 @@ public final class CooGetSet {
 
 
     /**
-     * Copies a sparse matrix and sets a slice of the sparse COO matrix to the entries of another sparse COO matrix.
+     * Copies a sparse matrix and sets a slice of the sparse COO matrix to the data of another sparse COO matrix.
      *
      * @param shape1 Shape of the first matrix.
-     * @param src1Entries Non-zero entries of the matrix to set slice within.
+     * @param src1Entries Non-zero data of the matrix to set slice within.
      * @param src1RowIndices Row indices of the matrix to set slice within.
      * @param src1ColIndices Column indices of the matrix to set slice within.
      * @param shape2 Shape of the first matrix.
-     * @param src2Entries Non-zero entries of the matrix to copy into the specified slice.
+     * @param src2Entries Non-zero data of the matrix to copy into the specified slice.
      * @param src2RowIndices Row indices of the matrix to copy into the specified slice.
      * @param src2ColIndices Column indices of the matrix to copy into the specified slice.
      * @param row Starting row index of slice.
@@ -474,7 +474,7 @@ public final class CooGetSet {
     /**
      * Extracts a specified slice from a sparse COO matrix.
      * @param shape Shape of the COO matrix.
-     * @param entries Non-zero entries of the COO matrix.
+     * @param entries Non-zero data of the COO matrix.
      * @param rowIndices Row indices of the COO matrix.
      * @param colIndices Column indices of the COO matrix.
      * @param rowStart Starting row index of the slice (inclusive).
@@ -516,7 +516,7 @@ public final class CooGetSet {
     /**
      * Gets the elements of a COO matrix along the specified diagonal.
      * @param shape Shape of the COO matrix.
-     * @param entries Non-zero entries of the COO matrix.
+     * @param entries Non-zero data of the COO matrix.
      * @param rowIndices Non-zero row indices of the COO matrix.
      * @param colIndices Non-zero column indices of the COO matrix.
      * @param diagOffset The diagonal to get within the COO matrix.
@@ -528,7 +528,7 @@ public final class CooGetSet {
      *     are collected.</li>
      * </ul>
      *
-     * @return A sparse vector data object containing the non-zero entries and indices along the specified diagonal of the COO matrix.
+     * @return A sparse vector data object containing the non-zero data and indices along the specified diagonal of the COO matrix.
      */
     public static <T> SparseVectorData<T> getDiag(Shape shape, T[] entries, int[] rowIndices, int[] colIndices, int diagOffset) {
         int numRows = shape.get(0);
@@ -552,7 +552,7 @@ public final class CooGetSet {
         List<Integer> idxList = new ArrayList<>();
         List<T> entriesList = new ArrayList<>();
 
-        // Iterate over non-zero entries in the COO matrix.
+        // Iterate over non-zero data in the COO matrix.
         for (int i = 0, nnz=entries.length; i < nnz; i++) {
             int row = rowIndices[i];
             int col = colIndices[i];
@@ -573,7 +573,7 @@ public final class CooGetSet {
      * Gets a specified row of a COO matrix between {@code start} (inclusive) and {@code end} (exclusive).
      *
      * @param shape Shape of the COO matrix.
-     * @param entries Non-zero entries of the COO matrix.
+     * @param entries Non-zero data of the COO matrix.
      * @param rowIndices Non-zero row indices of the COO matrix.
      * @param colIndices Non-zero column indices of the COO matrix.
      * @param rowIdx Index of the row of this matrix to get.
@@ -622,7 +622,7 @@ public final class CooGetSet {
      * Gets a specified column of a COO matrix between {@code start} (inclusive) and {@code end} (exclusive).
      *
      * @param shape Shape of the COO matrix.
-     * @param entries Non-zero entries of the COO matrix.
+     * @param entries Non-zero data of the COO matrix.
      * @param rowIndices Non-zero row indices of the COO matrix.
      * @param colIndices Non-zero column indices of the COO matrix.
      * @param colIdx Index of the column of this matrix to get.

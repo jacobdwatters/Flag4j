@@ -43,12 +43,12 @@ import java.util.Arrays;
 
 /**
  * <p>The base class for all dense {@link Ring} tensors.</p>
- * <p>The {@link #entries} of an AbstractDenseRingTensor are mutable but the {@link #shape} is fixed.</p>
+ * <p>The {@link #data} of an AbstractDenseRingTensor are mutable but the {@link #shape} is fixed.</p>
  *
  * @param <T> The type of this dense ring tensor.
  * @param <U> Type of sparse tensor equivalent to {@code T}. This type parameter is required because some operations (e.g.
  * {@link #toCoo()}) may result in a sparse tensor.
- * @param <V> The type of the {@link Ring} which this tensor's entries belong to.
+ * @param <V> The type of the {@link Ring} which this tensor's data belong to.
  */
 public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<T, V>, V extends Ring<V>>
         extends AbstractTensor<T, Ring<V>[], V>
@@ -60,11 +60,11 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
     protected Ring<V> zeroElement;
 
     /**
-     * Creates a tensor with the specified entries and shape.
+     * Creates a tensor with the specified data and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
-     * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
+     * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
+     * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
     protected AbstractDenseRingTensor(Shape shape, Ring<V>[] entries) {
         super(shape, entries);
@@ -76,7 +76,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
     /**
      * Constructs a sparse COO tensor which is of a similar type as this dense tensor.
      * @param shape Shape of the COO tensor.
-     * @param entries Non-zero entries of the COO tensor.
+     * @param entries Non-zero data of the COO tensor.
      * @param rowIndices Non-zero row indices of the COO tensor.
      * @param colIndices Non-zero column indices of the COO tensor.
      * @return A sparse COO tensor which is of a similar type as this dense tensor.
@@ -107,7 +107,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public V get(int... indices) {
-        return (V) entries[shape.getFlatIndex(indices)];
+        return (V) data[shape.getFlatIndex(indices)];
     }
 
 
@@ -124,13 +124,13 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T set(V value, int... indices) {
-        entries[shape.getFlatIndex(indices)] = value;
+        data[shape.getFlatIndex(indices)] = value;
         return (T) this;
     }
 
 
     /**
-     * Flattens tensor to single dimension while preserving order of entries.
+     * Flattens tensor to single dimension while preserving order of data.
      *
      * @return The flattened tensor.
      *
@@ -138,7 +138,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T flatten() {
-        return makeLikeTensor(new Shape(shape.totalEntriesIntValueExact()), entries.clone());
+        return makeLikeTensor(new Shape(shape.totalEntriesIntValueExact()), data.clone());
     }
 
 
@@ -158,7 +158,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
         dims[axis] = shape.totalEntries().intValueExact();
         Shape flatShape = new Shape(dims);
 
-        return makeLikeTensor(flatShape, entries.clone());
+        return makeLikeTensor(flatShape, data.clone());
     }
 
 
@@ -173,9 +173,9 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T reshape(Shape newShape) {
-        // No need to make explicit broadcastable check as the constructor will verify that the number of entries in the shape matches
-        // the number of entries in the array.
-        return makeLikeTensor(newShape, entries.clone());
+        // No need to make explicit broadcastable check as the constructor will verify that the number of data in the shape matches
+        // the number of data in the array.
+        return makeLikeTensor(newShape, data.clone());
     }
 
 
@@ -193,8 +193,8 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T T(int axis1, int axis2) {
-        Ring<V>[] dest = new Ring[entries.length];
-        TransposeDispatcher.dispatchTensor(entries, shape, axis1, axis2, dest);
+        Ring<V>[] dest = new Ring[data.length];
+        TransposeDispatcher.dispatchTensor(data, shape, axis1, axis2, dest);
         return makeLikeTensor(shape, (V[]) dest);
     }
 
@@ -215,8 +215,8 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T T(int... axes) {
-        Ring<V>[] dest = new Ring[entries.length];
-        TransposeDispatcher.dispatchTensor(entries, shape, axes, dest);
+        Ring<V>[] dest = new Ring[data.length];
+        TransposeDispatcher.dispatchTensor(data, shape, axes, dest);
         return makeLikeTensor(shape.permuteAxes(axes), (V[]) dest);
     }
 
@@ -228,7 +228,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T copy() {
-        return makeLikeTensor(shape, entries.clone());
+        return makeLikeTensor(shape, data.clone());
     }
 
 
@@ -243,8 +243,8 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T add(T b) {
-        Ring<V>[] sum = new Ring[entries.length];
-        DenseSemiringOperations.add(entries, shape, b.entries, b.shape, sum);
+        Ring<V>[] sum = new Ring[data.length];
+        DenseSemiringOperations.add(data, shape, b.data, b.shape, sum);
         return makeLikeTensor(shape, sum);
     }
 
@@ -255,7 +255,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      * @param b Second tensor in the element-wise sum.
      */
     public void addEq(T b) {
-        DenseSemiringOperations.add(entries, shape, b.entries, b.shape, entries);
+        DenseSemiringOperations.add(data, shape, b.data, b.shape, data);
     }
 
 
@@ -270,8 +270,8 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T elemMult(T b) {
-        Ring<V>[] prod = new Ring[entries.length];
-        DenseSemiRingElemMult.dispatch(entries, shape, b.entries, b.shape, prod);
+        Ring<V>[] prod = new Ring[data.length];
+        DenseSemiRingElemMult.dispatch(data, shape, b.data, b.shape, prod);
         return makeLikeTensor(shape, prod);
     }
 
@@ -293,7 +293,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T tensorDot(T src2, int[] aAxes, int[] bAxes) {
-        DenseSemiringTensorDot<V> dot = new DenseSemiringTensorDot(shape, entries, src2.shape, src2.entries, aAxes, bAxes);
+        DenseSemiringTensorDot<V> dot = new DenseSemiringTensorDot(shape, data, src2.shape, src2.data, aAxes, bAxes);
         Ring<V>[] dest = new Ring[dot.getOutputSize()];
         dot.compute(dest);
         return makeLikeTensor(dot.getOutputShape(), dest);
@@ -335,8 +335,8 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T sub(T b) {
-        Ring<V>[] diff = new Ring[entries.length];
-        DenseRingTensorOps.sub(shape, entries, b.shape, b.entries, diff);
+        Ring<V>[] diff = new Ring[data.length];
+        DenseRingTensorOps.sub(shape, data, b.shape, b.data, diff);
         return makeLikeTensor(shape, diff);
     }
 
@@ -349,7 +349,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
      */
     public void subEq(T b) {
-        DenseRingTensorOps.sub(shape, entries, b.shape, b.entries, entries);
+        DenseRingTensorOps.sub(shape, data, b.shape, b.data, data);
     }
 
 
@@ -367,8 +367,8 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T H(int axis1, int axis2) {
-        Ring<V>[] dest = new Ring[entries.length];
-        TransposeDispatcher.dispatchTensorHermitian(shape, entries, axis1, axis2, dest);
+        Ring<V>[] dest = new Ring[data.length];
+        TransposeDispatcher.dispatchTensorHermitian(shape, data, axis1, axis2, dest);
         return makeLikeTensor(shape, dest);
     }
 
@@ -389,8 +389,8 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T H(int... axes) {
-        Ring<V>[] dest = new Ring[entries.length];
-        TransposeDispatcher.dispatchTensorHermitian(shape, entries, axes, dest);
+        Ring<V>[] dest = new Ring[data.length];
+        TransposeDispatcher.dispatchTensorHermitian(shape, data, axes, dest);
         return makeLikeTensor(shape, dest);
     }
 
@@ -403,7 +403,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public int[] argminAbs() {
-        return shape.getNdIndices(CompareRing.argminAbs(entries));
+        return shape.getNdIndices(CompareRing.argminAbs(data));
     }
 
 
@@ -415,7 +415,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public int[] argmaxAbs() {
-        return shape.getNdIndices(CompareRing.argmaxAbs(entries));
+        return shape.getNdIndices(CompareRing.argmaxAbs(data));
     }
 
 
@@ -426,7 +426,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public double minAbs() {
-        return CompareRing.minAbs(entries);
+        return CompareRing.minAbs(data);
     }
 
 
@@ -437,7 +437,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public double maxAbs() {
-        return CompareRing.maxAbs(entries);
+        return CompareRing.maxAbs(data);
     }
 
 
@@ -460,8 +460,8 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      * @see #toCoo(double)
      */
     public AbstractTensor<?, Ring<V>[], V> toCoo(double estimatedSparsity) {
-        SparseTensorData<Semiring<V>> data = DenseSemiringConversions.toCooTensor(shape, entries, estimatedSparsity);
-        Ring<V>[] cooEntries = data.entries().toArray(new Ring[data.entries().size()]);
+        SparseTensorData<Semiring<V>> data = DenseSemiringConversions.toCooTensor(shape, this.data, estimatedSparsity);
+        Ring<V>[] cooEntries = data.data().toArray(new Ring[data.data().size()]);
         return makeLikeCooTensor(data.shape(), cooEntries, data.indicesToArray());
     }
 }

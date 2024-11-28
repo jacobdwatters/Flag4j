@@ -51,7 +51,7 @@ public final class CooFieldVectorOperations {
 
 
     /**
-     * Adds a real number to each entry of a sparse vector, including the zero entries.
+     * Adds a real number to each entry of a sparse vector, including the zero data.
      * @param src Sparse vector to add value to.
      * @param a Value to add to the {@code src} sparse vector.
      * @return The result of adding the specified value to the sparse vector.
@@ -60,9 +60,9 @@ public final class CooFieldVectorOperations {
         Field<T>[] dest = new Field[src.size];
         Arrays.fill(dest, a);
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             int idx = src.indices[i];
-            dest[src.indices[i]] = dest[src.indices[i]].add((T) src.entries[i]);
+            dest[src.indices[i]] = dest[src.indices[i]].add((T) src.data[i]);
         }
 
         return src.makeLikeDenseTensor(src.shape, (T[]) dest);
@@ -70,7 +70,7 @@ public final class CooFieldVectorOperations {
 
 
     /**
-     * Subtracts a real number from each entry of a sparse vector, including the zero entries.
+     * Subtracts a real number from each entry of a sparse vector, including the zero data.
      * @param src Sparse vector to subtract value from.
      * @param a Value to subtract from the {@code src} sparse vector.
      * @return The result of subtracting the specified value from the sparse vector.
@@ -79,9 +79,9 @@ public final class CooFieldVectorOperations {
         Field<T>[] dest = new Field[src.size];
         Arrays.fill(dest, a.addInv());
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             int idx = src.indices[i];
-            dest[idx] = dest[idx].add((T) src.entries[i]);
+            dest[idx] = dest[idx].add((T) src.data[i]);
         }
 
         return src.makeLikeDenseTensor(src.shape, (T[]) dest);
@@ -100,39 +100,39 @@ public final class CooFieldVectorOperations {
             AbstractCooFieldVector<?, ?, ?, ?, T> src1, 
             AbstractCooFieldVector<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        List<Field<T>> values = new ArrayList<>(src1.entries.length);
-        List<Integer> indices = new ArrayList<>(src1.entries.length);
+        List<Field<T>> values = new ArrayList<>(src1.data.length);
+        List<Integer> indices = new ArrayList<>(src1.data.length);
         
         int src1Counter = 0;
         int src2Counter = 0;
 
-        while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
+        while(src1Counter < src1.data.length && src2Counter < src2.data.length) {
             if(src1.indices[src1Counter] == src2.indices[src2Counter]) {
-                values.add(src1.entries[src1Counter].add((T) src2.entries[src2Counter]));
+                values.add(src1.data[src1Counter].add((T) src2.data[src2Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
 
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
-                values.add(src1.entries[src1Counter]);
+                values.add(src1.data[src1Counter]);
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
             } else {
-                values.add(src2.entries[src2Counter]);
+                values.add(src2.data[src2Counter]);
                 indices.add(src2.indices[src2Counter]);
                 src2Counter++;
             }
         }
 
         // Finish inserting the rest of the values.
-        if(src1Counter < src1.entries.length) {
-            for(int i=src1Counter; i<src1.entries.length; i++) {
-                values.add(src1.entries[i]);
+        if(src1Counter < src1.data.length) {
+            for(int i = src1Counter; i<src1.data.length; i++) {
+                values.add(src1.data[i]);
                 indices.add(src1.indices[i]);
             }
-        } else if(src2Counter < src2.entries.length) {
-            for(int i=src2Counter; i<src2.entries.length; i++) {
-                values.add(src2.entries[i]);
+        } else if(src2Counter < src2.data.length) {
+            for(int i = src2Counter; i<src2.data.length; i++) {
+                values.add(src2.data[i]);
                 indices.add(src2.indices[i]);
             }
         }
@@ -153,39 +153,39 @@ public final class CooFieldVectorOperations {
             AbstractCooFieldVector<?, ?, ?, ?, T> src1,
             AbstractCooFieldVector<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        List<Field<T>> values = new ArrayList<>(src1.entries.length);
-        List<Integer> indices = new ArrayList<>(src1.entries.length);
+        List<Field<T>> values = new ArrayList<>(src1.data.length);
+        List<Integer> indices = new ArrayList<>(src1.data.length);
 
         int src1Counter = 0;
         int src2Counter = 0;
 
-        while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
+        while(src1Counter < src1.data.length && src2Counter < src2.data.length) {
             if(src1.indices[src1Counter] == src2.indices[src2Counter]) {
-                values.add(src1.entries[src1Counter].sub((T) src2.entries[src2Counter]));
+                values.add(src1.data[src1Counter].sub((T) src2.data[src2Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
 
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
-                values.add(src1.entries[src1Counter]);
+                values.add(src1.data[src1Counter]);
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
             } else {
-                values.add(src2.entries[src2Counter].addInv());
+                values.add(src2.data[src2Counter].addInv());
                 indices.add(src2.indices[src2Counter]);
                 src2Counter++;
             }
         }
 
         // Finish inserting the rest of the values.
-        if(src1Counter < src1.entries.length) {
-            for(int i=src1Counter; i<src1.entries.length; i++) {
-                values.add(src1.entries[i]);
+        if(src1Counter < src1.data.length) {
+            for(int i = src1Counter; i<src1.data.length; i++) {
+                values.add(src1.data[i]);
                 indices.add(src1.indices[i]);
             }
-        } else if(src2Counter < src2.entries.length) {
-            for(int i=src2Counter; i<src2.entries.length; i++) {
-                values.add(src2.entries[i].addInv());
+        } else if(src2Counter < src2.data.length) {
+            for(int i = src2Counter; i<src2.data.length; i++) {
+                values.add(src2.data[i].addInv());
                 indices.add(src2.indices[i]);
             }
         }
@@ -205,16 +205,16 @@ public final class CooFieldVectorOperations {
     public static <T extends Field<T>> AbstractCooFieldVector<?, ?, ?, ?, T> elemMult(AbstractCooFieldVector<?, ?, ?, ?, T> src1,
                                                                             AbstractCooFieldVector<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        List<Field<T>> values = new ArrayList<>(src1.entries.length);
-        List<Integer> indices = new ArrayList<>(src1.entries.length);
+        List<Field<T>> values = new ArrayList<>(src1.data.length);
+        List<Integer> indices = new ArrayList<>(src1.data.length);
 
         int src1Counter = 0;
         int src2Counter = 0;
 
-        while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
+        while(src1Counter < src1.data.length && src2Counter < src2.data.length) {
             if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
                 // Then indices match, add product of elements.
-                values.add(src1.entries[src1Counter].mult((T) src2.entries[src2Counter]));
+                values.add(src1.data[src1Counter].mult((T) src2.data[src2Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
@@ -237,53 +237,22 @@ public final class CooFieldVectorOperations {
      * @return The result of the vector inner product.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static <T extends Field<T>> T inner(AbstractCooFieldVector<?, ?, ?, ?, T> src1, AbstractCooFieldVector<?, ?, ?, ?, T> src2) {
+    public static <T extends Field<T>> T inner(
+            AbstractCooFieldVector<?, ?, ?, ?, T> src1,
+            AbstractCooFieldVector<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         T product = null;
-        if(src1.nnz > 0) product = src1.entries[0].getZero();
-        else if(src2.nnz > 0) product = src2.entries[0].getZero();
+        if(src1.nnz > 0) product = src1.data[0].getZero();
+        else if(src2.nnz > 0) product = src2.data[0].getZero();
 
         int src1Counter = 0;
         int src2Counter = 0;
 
-        while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
+        while(src1Counter < src1.data.length && src2Counter < src2.data.length) {
             if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
                 // Then indices match, add product of elements.
-                product = product.add(src1.entries[src1Counter].mult(src2.entries[src2Counter].conj()));
-            } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
-                src1Counter++;
-            } else {
-                src2Counter++;
-            }
-        }
-
-        return product;
-    }
-
-
-    /**
-     * Computes the dot product of two complex sparse vectors. Both sparse vectors are assumed
-     * to have their indices sorted lexicographically.
-     * @param src1 First sparse vector in the dot product. Indices assumed to be sorted lexicographically.
-     * @param src2 Second sparse vector in the dot product. Indices assumed to be sorted lexicographically.
-     * @return The result of the vector dot product.
-     * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
-     */
-    public static <T extends Field<T>> T dot(AbstractCooFieldVector<?, ?, ?, ?, T> src1, AbstractCooFieldVector<?, ?, ?, ?, T> src2) {
-        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-
-        T product = null;
-        if(src1.nnz > 0) product = src1.entries[0].getZero();
-        else if(src2.nnz > 0) product = src2.entries[0].getZero();
-
-        int src1Counter = 0;
-        int src2Counter = 0;
-
-        while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
-            if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
-                // Then indices match, add product of elements.
-                product = product.add(src1.entries[src1Counter].mult((T) src2.entries[src2Counter]));
+                product = product.add(src1.data[src1Counter].mult(src2.data[src2Counter].conj()));
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
                 src1Counter++;
             } else {
@@ -313,11 +282,11 @@ public final class CooFieldVectorOperations {
         for(int i=0; i<src1.nnz; i++) {
             index1 = src1.indices[i];
             destRow = index1*src1.size;
-            Field<T> src1Val = src1.entries[i];
+            Field<T> src1Val = src1.data[i];
 
             for(int j=0; j<src2.nnz; j++) {
                 index2 = src2.indices[j];
-                dest[destRow + index2] = src1Val.mult((T) src2.entries[j]);
+                dest[destRow + index2] = src1Val.mult((T) src2.data[j]);
             }
         }
 
@@ -332,28 +301,28 @@ public final class CooFieldVectorOperations {
      * @param src1 First vector in the stack.
      * @param src2 Vector to stack to the bottom of the {@code src2} vector.
      * @return The result of stacking this vector and vector {@code src2}.
-     * @throws IllegalArgumentException If the number of entries in the {@code src1} vector is different from the number of entries in
+     * @throws IllegalArgumentException If the number of data in the {@code src1} vector is different from the number of data in
      *                                  the vector {@code src2}.
      */
     public static <T extends Field<T>> AbstractCooFieldMatrix<?, ?, ?, T> stack(AbstractCooFieldVector<?, ?, ?, ?, T> src1,
                                                                                 AbstractCooFieldVector<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
-        Field<T>[] entries = new Field[src1.entries.length + src2.entries.length];
+        Field<T>[] entries = new Field[src1.data.length + src2.data.length];
         int[][] indices = new int[2][src1.indices.length + src2.indices.length]; // Row and column indices.
 
         // Copy values from vector src1.
-        System.arraycopy(src1.entries, 0, entries, 0, src1.entries.length);
+        System.arraycopy(src1.data, 0, entries, 0, src1.data.length);
         // Copy values from vector src2.
-        System.arraycopy(src2.entries, 0, entries, src1.entries.length, src2.entries.length);
+        System.arraycopy(src2.data, 0, entries, src1.data.length, src2.data.length);
 
         // Set row indices to 1 for src2 values (this vectors row indices are 0 which was implicitly set already).
         Arrays.fill(indices[0], src1.indices.length, entries.length, 1);
 
         // Copy indices from src1 vector to the column indices.
-        System.arraycopy(src1.indices, 0, indices[1], 0, src1.entries.length);
+        System.arraycopy(src1.indices, 0, indices[1], 0, src1.data.length);
         // Copy indices from src2 vector to the column indices.
-        System.arraycopy(src2.indices, 0, indices[1], src1.entries.length, src2.entries.length);
+        System.arraycopy(src2.indices, 0, indices[1], src1.data.length, src2.data.length);
 
         return src1.makeLikeMatrix(new Shape(2, src1.size), (T[]) entries, indices[0], indices[1]);
     }
@@ -376,7 +345,7 @@ public final class CooFieldVectorOperations {
         ValidateParameters.ensureGreaterEq(0, n, "n");
 
         Shape tiledShape;
-        Field<T>[] tiledEntries = new Field[n*src.entries.length];
+        Field<T>[] tiledEntries = new Field[n*src.data.length];
         int[] tiledRows = new int[tiledEntries.length];
         int[] tiledCols = new int[tiledEntries.length];
         int nnz = src.nnz;
@@ -385,7 +354,7 @@ public final class CooFieldVectorOperations {
             tiledShape = new Shape(n, src.size);
 
             for(int i=0; i<n; i++) { // Copy values into row and set col indices as vector indices.
-                System.arraycopy(src.entries, 0, tiledEntries, i*nnz, nnz);
+                System.arraycopy(src.data, 0, tiledEntries, i*nnz, nnz);
                 System.arraycopy(src.indices, 0, tiledCols, i*nnz, src.indices.length);
                 Arrays.fill(tiledRows, i*nnz, (i+1)*nnz, i);
             }
@@ -394,7 +363,7 @@ public final class CooFieldVectorOperations {
             tiledShape = new Shape(src.size, n);
 
             for(int i=0; i<nnz; i++) {
-                Arrays.fill(tiledEntries, i*n, (i+1)*n, src.entries[i]);
+                Arrays.fill(tiledEntries, i*n, (i+1)*n, src.data[i]);
                 Arrays.fill(tiledRows, i*n, (i+1)*n, src.indices[i]);
                 System.arraycopy(colIndices, 0, tiledCols, i*n, n);
             }

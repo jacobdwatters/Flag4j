@@ -44,7 +44,7 @@ public final class CsrConversions {
     /**
      * Computes the new row pointers and column indices for a sparse CSR matrix flattened along some {@code axis}.
      * @param shape Shape of the CSR matrix to be flattened.
-     * @param entries Non-zero entries of the CSR matrix.
+     * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      * @param axis Axis along which to flatten matrix. Must be 0 or 1.
@@ -104,7 +104,7 @@ public final class CsrConversions {
     /**
      * Converts a sparse CSR matrix to a dense matrix.
      * @param shape Shape of the CSR matrix. Must be rank 2.
-     * @param entries Non-zero entries of the CSR matrix.
+     * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      * @param dest Array to store the dense result in.
@@ -134,10 +134,10 @@ public final class CsrConversions {
     /**
      * Converts a sparse CSR matrix to an equivalent sparse COO matrix.
      * @param shape Shape of the CSR matrix.
-     * @param entries Non-zero entries of the CSR matrix.
+     * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
-     * @param destEntries Array to store the non-zero entries of the COO matrix.
+     * @param destEntries Array to store the non-zero data of the COO matrix.
      * @param rowIndices Array to store the non-zero row indices of the COO matrix.
      * @param destColIndices Array to store the non-zero column indices of the COO matrix.
      */
@@ -145,13 +145,13 @@ public final class CsrConversions {
                                  T[] destEntries, int[] destRowIndices, int[] destColIndices) {
         final int numRows = shape.get(0);
 
-        // Find and copy row indices of non-zero entries in the CSR matrix.
+        // Find and copy row indices of non-zero data in the CSR matrix.
         for(int i=0; i<numRows; i++) {
             for(int j=rowPointers[i], stop=rowPointers[i+1]; j<stop; j++)
                 destRowIndices[j] = i;
         }
 
-        // Copy non-zero entries and column indices.
+        // Copy non-zero data and column indices.
         System.arraycopy(entries, 0, destEntries, 0, entries.length);
         System.arraycopy(colIndices, 0, destColIndices, 0, colIndices.length);
     }

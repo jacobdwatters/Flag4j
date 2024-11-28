@@ -55,15 +55,15 @@ public final class DenseCooFieldEquals {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
-            Field<T>[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);
+            Field<T>[] entriesCopy = Arrays.copyOf(A.data, A.data.length);
 
-            // Remove all nonZero entries from the entries of this matrix.
+            // Remove all nonZero data from the data of this matrix.
             for(int i=0; i<B.nnz; i++) {
                 int rowIndex = B.rowIndices[i];
                 int colIndex = B.colIndices[i];
                 int idx = rowIndex*A.numCols + colIndex;
 
-                if(!entriesCopy[idx].equals(B.entries[i])) {
+                if(!entriesCopy[idx].equals(B.data[i])) {
                     equal = false;
                     break;
                 }
@@ -88,24 +88,24 @@ public final class DenseCooFieldEquals {
      * Checks if a complex dense vector is equal to a complex sparse vector.
      * @param src1 Entries of dense vector.
      * @param src2 Non-zero Entries of sparse vector.
-     * @param indices Indices of non-zero entries in the sparse vector.
+     * @param indices Indices of non-zero data in the sparse vector.
      * @param sparseSize Size of the sparse vector.
      * @return True if the two vectors are equal. Returns false otherwise.
      */
     public static <T extends Field<T>> boolean vectorEquals(
             AbstractDenseFieldVector<?, ?, T> src1, AbstractCooFieldVector<?, ?, ?, ?, T> src2) {
         boolean equal = true;
-        final T ZERO = (src1.size > 0) ? src1.entries[0].getZero() : null;
+        final T ZERO = (src1.size > 0) ? src1.data[0].getZero() : null;
 
         if(src1.size == src2.size) {
             int index;
             Field<T>[] src1Copy = new Field[src1.size];
-            System.arraycopy(src1.entries, 0, src1Copy, 0, src1.size);
+            System.arraycopy(src1.data, 0, src1Copy, 0, src1.size);
 
             for(int i=0; i<src2.size; i++) {
                 index = src2.indices[i];
 
-                if(!src1.entries[index].equals(src2.entries[i])) {
+                if(!src1.data[index].equals(src2.data[i])) {
                     equal = false;
                     break;
                 } else {
@@ -137,15 +137,15 @@ public final class DenseCooFieldEquals {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
-            Complex128[] entriesCopy = new Complex128[A.entries.length];
-            System.arraycopy(A.entries, 0, entriesCopy, 0, A.entries.length);
+            Complex128[] entriesCopy = new Complex128[A.data.length];
+            System.arraycopy(A.data, 0, entriesCopy, 0, A.data.length);
             int entriesIndex;
 
-            // Remove all nonZero entries from the entries of this matrix.
+            // Remove all nonZero data from the data of this matrix.
             for(int i=0; i<B.nnz; i++) {
                 entriesIndex = A.shape.getFlatIndex(B.indices[i]);
 
-                if(!entriesCopy[entriesIndex].equals(B.entries[i])) {
+                if(!entriesCopy[entriesIndex].equals(B.data[i])) {
                     equal = false;
                     break;
                 }

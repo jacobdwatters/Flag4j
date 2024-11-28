@@ -94,7 +94,7 @@ public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?, ?>, U>
      */
     protected int minAxisSize;
     /**
-     * Sub-diagonal of the upper quasi-triangular matrix. That is, the sub0diagonal for which all entries below
+     * Sub-diagonal of the upper quasi-triangular matrix. That is, the sub0diagonal for which all data below
      *                    will be zero in the final upper quasi-triangular matrix. Must be zero or one.
      *                    If zero, it will be upper triangular. If one, it will be upper Hessenburg.
      */
@@ -219,7 +219,7 @@ public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?, ?>, U>
 
     /**
      * Finds the maximum value in {@link #transformMatrix} at column {@code j} at or below the {@code j}th row. This method also initializes
-     * the first {@code numRows-j} entries of the storage array {@link #householderVector} to the entries of this column.
+     * the first {@code numRows-j} data of the storage array {@link #householderVector} to the data of this column.
      * @param j Index of column (and starting row) to compute max of.
      * @return The maximum value in {@link #transformMatrix} at column {@code j} at or below the {@code j}th row.
      */

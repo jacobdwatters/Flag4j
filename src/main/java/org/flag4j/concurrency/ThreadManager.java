@@ -119,9 +119,6 @@ public final class ThreadManager {
         int chunkSize = (totalSize + parallelismLevel - 1) / parallelismLevel;
         List<Future<?>> futures = new ArrayList<>(parallelismLevel);
 
-        System.out.println("Parallelism Level: " + parallelismLevel);
-        System.out.println("Chunk Size: " + chunkSize);
-
         for(int threadIndex = 0; threadIndex < parallelismLevel; threadIndex++) {
             final int startIdx = threadIndex * chunkSize;
             final int endIdx = Math.min(startIdx + chunkSize, totalSize);

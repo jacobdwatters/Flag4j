@@ -101,7 +101,7 @@ class TensorElemDivTests {
         };
         expShape = new Shape(2, 3, 2);
         exp = new CTensor(expShape, expEntries);
-        assertEquals(exp, A.elemDiv(B));
+        assertEquals(exp, A.div(B));
 
         // ----------------------- Sub-case 2 -----------------------
         bEntries = new Complex128[]{
@@ -114,6 +114,6 @@ class TensorElemDivTests {
         B = new CTensor(bShape, bEntries);
 
         CTensor finalB = B;
-        assertThrows(LinearAlgebraException.class, ()->A.elemDiv(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.div(finalB));
     }
 }

@@ -46,9 +46,9 @@ public class RealDenseSparseMatrixMultiplication {
      * Computes the matrix multiplication between a real dense matrix and a real sparse matrix using a standard algorithm.
      * @param src1 Entries of the dense matrix.
      * @param shape1 Shape of the dense matrix.
-     * @param src2 Non-zero entries of the sparse matrix.
-     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
-     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param src2 Non-zero data of the sparse matrix.
+     * @param rowIndices Row indices for non-zero data of the sparse matrix.
+     * @param colIndices Column indices for non-zero data of the sparse matrix.
      * @param shape2 Shape of the sparse matrix.
      * @return The result of the matrix multiplication.
      */
@@ -67,7 +67,7 @@ public class RealDenseSparseMatrixMultiplication {
             destStart = i*cols2;
             src1Start = i*cols1;
 
-            // Loop over non-zero entries of sparse matrix.
+            // Loop over non-zero data of sparse matrix.
             for(int j=0; j<src2.length; j++) {
                 row = rowIndices[j];
                 col = colIndices[j];
@@ -83,9 +83,9 @@ public class RealDenseSparseMatrixMultiplication {
     /**
      * Computes the matrix multiplication between a real sparse matrix and a real dense matrix using a standard algorithm.
      *
-     * @param src1 Non-zero entries of the sparse matrix.
-     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
-     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param src1 Non-zero data of the sparse matrix.
+     * @param rowIndices Row indices for non-zero data of the sparse matrix.
+     * @param colIndices Column indices for non-zero data of the sparse matrix.
      * @param shape1 Shape of the sparse matrix.
      * @param src2 Entries of the dense matrix.
      * @param shape2 Shape of the dense matrix.
@@ -119,9 +119,9 @@ public class RealDenseSparseMatrixMultiplication {
      * Computes the matrix multiplication between a real dense matrix and a real sparse matrix using a concurrent standard algorithm.
      * @param src1 Entries of the dense matrix.
      * @param shape1 Shape of the dense matrix.
-     * @param src2 Non-zero entries of the sparse matrix.
-     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
-     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param src2 Non-zero data of the sparse matrix.
+     * @param rowIndices Row indices for non-zero data of the sparse matrix.
+     * @param colIndices Column indices for non-zero data of the sparse matrix.
      * @param shape2 Shape of the sparse matrix.
      * @return The result of the matrix multiplication.
      */
@@ -139,7 +139,7 @@ public class RealDenseSparseMatrixMultiplication {
                 int destRow = i*cols2;
                 int src1Row = i*cols1;
 
-                // Loop over non-zero entries of sparse matrix.
+                // Loop over non-zero data of sparse matrix.
                 for(int j=0; j<src2.length; j++) {
                     int row = rowIndices[j];
                     int col = colIndices[j];
@@ -164,9 +164,9 @@ public class RealDenseSparseMatrixMultiplication {
      * Computes the matrix multiplication between a real sparse matrix and a real dense matrix
      * using a concurrent standard algorithm.
      *
-     * @param src1 Non-zero entries of the sparse matrix.
-     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
-     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param src1 Non-zero data of the sparse matrix.
+     * @param rowIndices Row indices for non-zero data of the sparse matrix.
+     * @param colIndices Column indices for non-zero data of the sparse matrix.
      * @param shape1 Shape of the sparse matrix.
      * @param src2 Entries of the dense matrix.
      * @param shape2 Shape of the dense matrix.
@@ -211,8 +211,8 @@ public class RealDenseSparseMatrixMultiplication {
      * Computes the dense matrix sparse vector multiplication using a standard algorithm.
      * @param src1 Entries of the dense matrix.
      * @param shape1 Shape of the dense matrix.
-     * @param src2 Non-zero entries of the sparse vector.
-     * @param indices Indices of non-zero entries in sparse vector.
+     * @param src2 Non-zero data of the sparse vector.
+     * @param indices Indices of non-zero data in sparse vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static double[] standardVector(double[] src1, Shape shape1, double[] src2, int[] indices) {
@@ -241,8 +241,8 @@ public class RealDenseSparseMatrixMultiplication {
     /**
      * Computes the sparse matrix dense vector multiplication using a standard algorithm.
      * @param src1 Entries of the sparse matrix.
-     * @param rowIndices Row indices of non-zero entries in sparse matrix.
-     * @param colIndices Column indices of non-zero entries in sparse matrix.
+     * @param rowIndices Row indices of non-zero data in sparse matrix.
+     * @param colIndices Column indices of non-zero data in sparse matrix.
      * @param shape1 Shape of the sparse matrix.
      * @param src2 Entries of the dense vector.
      * @param shape2 Shape of the dense vector.
@@ -269,8 +269,8 @@ public class RealDenseSparseMatrixMultiplication {
      * Computes the dense matrix sparse vector multiplication using a blocked algorithm.
      * @param src1 Entries of the dense matrix.
      * @param shape1 Shape of the dense matrix.
-     * @param src2 Non-zero entries of the sparse vector.
-     * @param indices Indices of non-zero entries in sparse vector.
+     * @param src2 Non-zero data of the sparse vector.
+     * @param indices Indices of non-zero data in sparse vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static double[] blockedVector(double[] src1, Shape shape1, double[] src2, int[] indices) {
@@ -308,8 +308,8 @@ public class RealDenseSparseMatrixMultiplication {
      * Computes the dense matrix sparse vector multiplication using a concurrent standard algorithm.
      * @param src1 Entries of the dense matrix.
      * @param shape1 Shape of the dense matrix.
-     * @param src2 Non-zero entries of the sparse vector.
-     * @param indices Indices of non-zero entries in sparse vector.
+     * @param src2 Non-zero data of the sparse vector.
+     * @param indices Indices of non-zero data in sparse vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static double[] concurrentStandardVector(double[] src1, Shape shape1, double[] src2, int[] indices) {
@@ -340,8 +340,8 @@ public class RealDenseSparseMatrixMultiplication {
     /**
      * Computes the sparse matrix dense vector multiplication using a concurrent standard algorithm.
      * @param src1 Entries of the sparse matrix.
-     * @param rowIndices Row indices of non-zero entries in sparse matrix.
-     * @param colIndices Column indices of non-zero entries in sparse matrix.
+     * @param rowIndices Row indices of non-zero data in sparse matrix.
+     * @param colIndices Column indices of non-zero data in sparse matrix.
      * @param shape1 Shape of the sparse matrix.
      * @param src2 Entries of the dense vector.
      * @param shape2 Shape of the dense vector.
@@ -373,8 +373,8 @@ public class RealDenseSparseMatrixMultiplication {
      * Computes the dense matrix sparse vector multiplication using a blocked algorithm.
      * @param src1 Entries of the dense matrix.
      * @param shape1 Shape of the dense matrix.
-     * @param src2 Non-zero entries of the sparse vector.
-     * @param indices Indices of non-zero entries in sparse vector.
+     * @param src2 Non-zero data of the sparse vector.
+     * @param indices Indices of non-zero data in sparse vector.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
     public static double[] concurrentBlockedVector(double[] src1, Shape shape1, double[] src2, int[] indices) {

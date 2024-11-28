@@ -99,19 +99,19 @@ public class ComplexCholesky extends Cholesky<CMatrix> {
                 lIndex3 = lIndex1 + j;
 
                 for(int k=0; k<j; k++) {
-                    sum = sum.add(L.entries[lIndex1 + k].mult(L.entries[lIndex2 + k].conj()));
+                    sum = sum.add(L.data[lIndex1 + k].mult(L.data[lIndex2 + k].conj()));
                 }
 
                 if(i==j) {
-                    Complex128 diag = src.entries[lIndex3].sub(sum);
+                    Complex128 diag = src.data[lIndex3].sub(sum);
                     if(diag.re <= 0 || diag.mag() <= posDefTolerance) {
                         throw new LinearAlgebraException("Matrix is not Hermitian positive-definite.");
                     }
 
-                    L.entries[lIndex3] = diag.sqrt();
+                    L.data[lIndex3] = diag.sqrt();
                 } else {
-                    if(!L.entries[j*(L.numCols + 1)].isZero()) {
-                        L.entries[lIndex3] = (src.entries[lIndex3].sub(sum)).div((Complex128) L.entries[lIndex2 + j]);
+                    if(!L.data[j*(L.numCols + 1)].isZero()) {
+                        L.data[lIndex3] = (src.data[lIndex3].sub(sum)).div((Complex128) L.data[lIndex2 + j]);
                     }
                 }
             }

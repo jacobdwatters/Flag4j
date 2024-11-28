@@ -31,25 +31,33 @@ import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.field.AbstractCooFieldMatrix;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.io.PrintOptions;
+import org.flag4j.linalg.operations.common.complex.Complex128Ops;
+import org.flag4j.linalg.operations.common.complex.Complex128Properties;
 import org.flag4j.linalg.operations.dense.real.RealDenseTranspose;
+import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldMatrixOps;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseCooMatOps;
 import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldEquals;
+import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexCooConcats;
+import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseMatOps;
 import org.flag4j.linalg.operations.sparse.coo.semiring_ops.CooSemiringMatMult;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 
 /**
- * <p>A complex sparse matrix stored in coordinate list (COO) format. The {@link #entries} of this COO tensor are
+ * <p>A complex sparse matrix stored in coordinate list (COO) format. The {@link #data} of this COO tensor are
  * primitive doubles.
  *
- * <p>The {@link #entries non-zero entries} and non-zero indices of a COO matrix are mutable but the {@link #shape}
- * and total number of non-zero entries is fixed.
+ * <p>The {@link #data non-zero data} and non-zero indices of a COO matrix are mutable but the {@link #shape}
+ * and total number of non-zero data is fixed.
  *
  * <p>COO matrices are well-suited for incremental matrix construction and modification but may not have ideal efficiency for matrix
  * operations like matrix multiplication. For heavy computations, it may be better to construct a matrix as a {@code CooMatrix} then
@@ -60,13 +68,13 @@ import java.util.List;
  * <p>A sparse COO matrix is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
- *     <li>The non-zero {@link #entries} of the matrix. All other entries in the matrix are
- *     assumed to be zero. Zero values can also explicitly be stored in {@link #entries}.</li>
+ *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
+ *     assumed to be zero. Zero values can also explicitly be stored in {@link #data}.</li>
  *     <li>The {@link #rowIndices row indices} of the non-zero values in the sparse matrix.</li>
  *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
  *
- * <p>Note: many operations assume that the entries of the COO matrix are sorted lexicographically by the row and column indices.
+ * <p>Note: many operations assume that the data of the COO matrix are sorted lexicographically by the row and column indices.
  * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any operations implemented in this
  * class will preserve the lexicographical sorting.
  *
@@ -74,11 +82,13 @@ import java.util.List;
  */
 public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooCVector, Complex128> {
 
+    // TODO: add coalesce() which creates a new tensor checking to remove explicit zeros.
+
     /**
-     * Creates a sparse coo matrix with the specified non-zero entries, non-zero indices, and shape.
+     * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Non-zero entries of this sparse matrix.
+     * @param entries Non-zero data of this sparse matrix.
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
@@ -90,10 +100,10 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
 
 
     /**
-     * Creates a sparse coo matrix with the specified non-zero entries, non-zero indices, and shape.
+     * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Non-zero entries of this sparse matrix.
+     * @param entries Non-zero data of this sparse matrix.
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
@@ -120,11 +130,11 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
 
 
     /**
-     * Creates a sparse coo matrix with the specified non-zero entries, non-zero indices, and shape.
+     * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
      *
      * @param rows The number of rows in the matrix.
      * @param cols The number of columns in the matrix.
-     * @param entries Non-zero entries of this sparse matrix.
+     * @param entries Non-zero data of this sparse matrix.
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
@@ -135,11 +145,11 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
 
 
     /**
-     * Creates a sparse coo matrix with the specified non-zero entries, non-zero indices, and shape.
+     * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
      *
      * @param rows The number of rows in the matrix.
      * @param cols The number of columns in the matrix.
-     * @param entries Non-zero entries of this sparse matrix.
+     * @param entries Non-zero data of this sparse matrix.
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
@@ -148,7 +158,7 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
                 entries.toArray(new Complex128[entries.size()]),
                 ArrayUtils.fromIntegerList(rowIndices),
                 ArrayUtils.fromIntegerList(colIndices));
-        if(super.entries.length == 0 || super.entries[0] == null) setZeroElement(Complex128.ZERO);
+        if(super.data.length == 0 || super.data[0] == null) setZeroElement(Complex128.ZERO);
     }
 
 
@@ -165,11 +175,11 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
 
 
     /**
-     * Creates a sparse coo matrix with the specified non-zero entries, non-zero indices, and shape.
+     * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
      *
      * @param rows The number of rows in the matrix.
      * @param cols The number of columns in the matrix.
-     * @param entries Non-zero entries of this sparse matrix.
+     * @param entries Non-zero data of this sparse matrix.
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
@@ -191,7 +201,7 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     /**
      * Constructs a square complex sparse COO matrix with the specified {@code size}, non-zero values, and non-zero indices.
      * @param size Size of the square matrix to construct.
-     * @param entries Non-zero entries of the sparse matrix.
+     * @param entries Non-zero data of the sparse matrix.
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
@@ -205,19 +215,19 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
      * @param b Matrix to copy.
      */
     public CooCMatrix(CooCMatrix b) {
-        super(b.shape, b.entries.clone(), b.rowIndices.clone(), b.colIndices.clone());
+        super(b.shape, b.data.clone(), b.rowIndices.clone(), b.colIndices.clone());
     }
     
     
     /**
-     * Constructs a sparse COO tensor of the same type as this tensor with the specified non-zero entries and indices.
+     * Constructs a sparse COO tensor of the same type as this tensor with the specified non-zero data and indices.
      *
      * @param shape Shape of the matrix.
-     * @param entries Non-zero entries of the matrix.
+     * @param entries Non-zero data of the matrix.
      * @param rowIndices Non-zero row indices of the matrix.
      * @param colIndices Non-zero column indices of the matrix.
      *
-     * @return A sparse COO tensor of the same type as this tensor with the specified non-zero entries and indices.
+     * @return A sparse COO tensor of the same type as this tensor with the specified non-zero data and indices.
      */
     @Override
     public CooCMatrix makeLikeTensor(Shape shape, Complex128[] entries, int[] rowIndices, int[] colIndices) {
@@ -226,14 +236,14 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
 
 
     /**
-     * Constructs a COO matrix with the specified shape, non-zero entries, and non-zero indices.
+     * Constructs a COO matrix with the specified shape, non-zero data, and non-zero indices.
      *
      * @param shape Shape of the matrix.
      * @param entries Non-zero values of the matrix.
      * @param rowIndices Non-zero row indices of the matrix.
      * @param colIndices Non-zero column indices of the matrix.
      *
-     * @return A COO matrix with the specified shape, non-zero entries, and non-zero indices.
+     * @return A COO matrix with the specified shape, non-zero data, and non-zero indices.
      */
     @Override
     public CooCMatrix makeLikeTensor(Shape shape, List<Field<Complex128>> entries, List<Integer> rowIndices, List<Integer> colIndices) {
@@ -245,7 +255,7 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
      * Constructs a sparse COO vector of a similar type to this COO matrix.
      *
      * @param shape Shape of the vector. Must be rank 1.
-     * @param entries Non-zero entries of the COO vector.
+     * @param entries Non-zero data of the COO vector.
      * @param indices Non-zero indices of the COO vector.
      *
      * @return A sparse COO vector of a similar type to this COO matrix.
@@ -257,12 +267,12 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
 
 
     /**
-     * Constructs a dense tensor with the specified {@code shape} and {@code entries} which is a similar type to this sparse tensor.
+     * Constructs a dense tensor with the specified {@code shape} and {@code data} which is a similar type to this sparse tensor.
      *
      * @param shape Shape of the dense tensor.
      * @param entries Entries of the dense tensor.
      *
-     * @return A dense tensor with the specified {@code shape} and {@code entries} which is a similar type to this sparse tensor.
+     * @return A dense tensor with the specified {@code shape} and {@code data} which is a similar type to this sparse tensor.
      */
     @Override
     public CMatrix makeLikeDenseTensor(Shape shape, Field<Complex128>[] entries) {
@@ -272,14 +282,14 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
 
     /**
      * Constructs a tensor of the same type as this tensor with the given the {@code shape} and
-     * {@code entries}. The resulting tensor will also have
+     * {@code data}. The resulting tensor will also have
      * the same non-zero indices as this tensor.
      *
      * @param shape Shape of the tensor to construct.
      * @param entries Entries of the tensor to construct.
      *
      * @return A tensor of the same type and with the same non-zero indices as this tensor with the given the {@code shape} and
-     * {@code entries}.
+     * {@code data}.
      */
     @Override
     public CooCMatrix makeLikeTensor(Shape shape, Field<Complex128>[] entries) {
@@ -312,7 +322,7 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
      * Constructs a sparse CSR matrix of a similar type to this sparse COO matrix.
      *
      * @param shape Shape of the CSR matrix to construct.
-     * @param entries Non-zero entries of the CSR matrix.
+     * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      *
@@ -325,6 +335,17 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
 
 
     /**
+     * Converts this sparse COO matrix to an equivalent sparse CSR matrix.
+     *
+     * @return A sparse CSR matrix equivalent to this sparse COO matrix.
+     */
+    @Override
+    public CsrCMatrix toCsr() {
+        return (CsrCMatrix) super.toCsr();
+    }
+
+
+    /**
      * Converts this matrix to an equivalent tensor.
      *
      * @return A tensor which is equivalent to this matrix.
@@ -333,7 +354,7 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     public CooCTensor toTensor() {
         int[][] indices = {rowIndices.clone(), colIndices.clone()};
         indices = RealDenseTranspose.blockedIntMatrix(indices);
-        return new CooCTensor(shape, entries.clone(), indices);
+        return new CooCTensor(shape, data.clone(), indices);
     }
 
 
@@ -365,10 +386,152 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
         ValidateParameters.ensureMatMultShapes(shape, b.shape);
         Complex128[] dest = new Complex128[b.size];
         CooSemiringMatMult.standardVector(
-                entries, rowIndices, colIndices, shape,
-                b.entries, b.indices, dest);
+                data, rowIndices, colIndices, shape,
+                b.data, b.indices, dest);
 
         return new CVector(dest);
+    }
+
+
+    /**
+     * Augments a vector to this matrix. That is, inserts the vector as a new column on the right hand side of the matrix.
+     * @param b The vector to augment to this matrix.
+     * @return A new matrix resulting from augmenting the vector {@code b} to this matrix.
+     * @throws IllegalArgumentException If {@code a.numRows != b.size}.
+     */
+    public CooCMatrix augment(CooVector b) {
+        return RealComplexCooConcats.augment(this, b);
+    }
+
+
+    /**
+     * Augments a real COO matrix to this matrix. That is, combines the columns of this matrix and {@code a} into a single matrix.
+     * @param a Matrix to augment to this matrix. Must have the same number of columns as this matrix.
+     * @return A matrix resulting from augmenting {@code a} to this matrix. Will have shape
+     * {@code (this.numRows, this.numCols + a.numCols)}.
+     * @throws IllegalArgumentException If {@code this.numRows != a.numRows}
+     */
+    public CooCMatrix augment(CooMatrix a) {
+        return RealComplexCooConcats.augment(this, a);
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent real matrix. This is done by ignoring the imaginary components of this matrix.
+     * @return A real matrix which is equivalent to this matrix.
+     */
+    public CooMatrix toReal() {
+        return new CooMatrix(shape, Complex128Ops.toReal(data),
+                rowIndices.clone(), colIndices.clone());
+    }
+
+
+    /**
+     * Checks if all data of this matrix are real.
+     * @return {@code true} if all data of this matrix are real. Otherwise, returns {@code false}.
+     */
+    public boolean isReal() {
+        return Complex128Properties.isReal(data);
+    }
+
+
+    /**
+     * Checks if any entry within this matrix has non-zero imaginary component.
+     * @return {@code true} if any entry of this matrix has a non-zero imaginary component.
+     */
+    public boolean isComplex() {
+        return Complex128Properties.isComplex(data);
+    }
+
+
+    /**
+     * Rounds all data within this matrix to the specified precision.
+     * @param precision The precision to round to (i.e. the number of decimal places to round to). Must be non-negative.
+     * @return A new matrix containing the data of this matrix rounded to the specified precision.
+     */
+    public CooCMatrix round(int precision) {
+        return new CooCMatrix(shape, Complex128Ops.round(data, precision), rowIndices.clone(), colIndices.clone());
+    }
+
+
+    /**
+     * Sets all elements of this matrix to zero if they are within {@code tol} of zero. This is <i>not</i> done in place.
+     * @param precision The precision to round to (i.e. the number of decimal places to round to). Must be non-negative.
+     * @return A copy of this matrix with all data within {@code tol} of zero set to zero.
+     */
+    public CooCMatrix roundToZero(double tolerance) {
+        Complex128[] rounded = Complex128Ops.roundToZero(data, tolerance);
+        List<Field<Complex128>> dest = new ArrayList<>(data.length);
+        List<Integer> destRowIndices = new ArrayList<>(data.length);
+        List<Integer> destColIndices = new ArrayList<>(data.length);
+
+        for(int i = 0, size = data.length; i<size; i++) {
+            if(!rounded[i].isZero()) {
+                dest.add(rounded[i]);
+                destRowIndices.add(rowIndices[i]);
+                destColIndices.add(colIndices[i]);
+            }
+        }
+
+        return new CooCMatrix(shape, dest, destRowIndices, destColIndices);
+    }
+
+
+    /**
+     * Sets an index of this matrix to the specified value.
+     *
+     * @param value Value to set.
+     * @param row Row index to set.
+     * @param col Column index to set.
+     *
+     * @return A reference to this matrix.
+     */
+    public CooCMatrix set(double value, int row, int col) {
+        return super.set(new Complex128(value), row, col);
+    }
+
+
+    /**
+     * Computes the element-wise difference to two matrices.
+     * @param b The second matrix in the element-wise difference.
+     * @return The result of computing the element-wise difference between this matrix and {@code b}.
+     */
+    public CooCMatrix sub(CooMatrix b) {
+        return RealComplexSparseMatOps.sub(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between this tensor and a real COO matrix.
+     * @param b Second matrix in the element-wise product.
+     * @return The element-wise product of this tensor with {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}.
+     */
+    public CooCMatrix elemMult(CooMatrix b) {
+        return RealComplexSparseMatOps.elemMult(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between two matrices of the same shape.
+     * @param b The second matrix in the element-wise product.
+     * @return The element-wise product of this tensor with {@code b}.
+     */
+    public CooCMatrix elemMult(Matrix b) {
+        return RealComplexDenseCooMatOps.elemMult(b, this);
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between two matrices of the same shape.
+     * @param b Second tensor in the element-wise product.
+     * @return The element-wise product between this matrix and {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !this.shape.equals(b.shape)}
+     */
+    public CooCMatrix elemMult(CMatrix b) {
+        Complex128[] dest = new Complex128[nnz];
+        DenseCooFieldMatrixOps.elemMult(b.shape, b.data, shape, data, rowIndices, colIndices, dest);
+        return new CooCMatrix(shape, dest, rowIndices.clone(), colIndices.clone());
     }
 
 
@@ -393,9 +556,9 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
         int result = 17;
         result = 31*result + shape.hashCode();
 
-        for (int i = 0; i < entries.length; i++) {
-            if (!entries[i].isZero()) {
-                result = 31*result + entries[i].hashCode();
+        for (int i = 0; i < data.length; i++) {
+            if (!data[i].isZero()) {
+                result = 31*result + data[i].hashCode();
                 result = 31*result + Integer.hashCode(rowIndices[i]);
                 result = 31*result + Integer.hashCode(colIndices[i]);
             }
@@ -412,16 +575,16 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     public String toString() {
         int size = nnz;
         StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
-        result.append("Non-zero entries: [");
+        result.append("Non-zero data: [");
 
         int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
         int width;
         String value;
 
-        if(entries.length > 0) {
-            // Get entries up until the stopping point.
+        if(data.length > 0) {
+            // Get data up until the stopping point.
             for(int i=0; i<stopIndex; i++) {
-                value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+                value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
                 width = PrintOptions.getPadding() + value.length();
                 value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
@@ -435,7 +598,7 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
             }
 
             // Get last entry now
-            value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+            value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
             width = PrintOptions.getPadding() + value.length();
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));

@@ -34,13 +34,13 @@ import org.flag4j.arrays.dense.Vector;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.operations.common.real.RealProperties;
 import org.flag4j.linalg.operations.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOperations;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOps;
 import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseMatrixOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseCooMatOps;
 import org.flag4j.linalg.operations.sparse.coo.CooDataSorter;
 import org.flag4j.linalg.operations.sparse.coo.real.*;
+import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseMatOps;
 import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseMatrixMultiplication;
-import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseMatrixOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -55,11 +55,11 @@ import java.util.List;
 
 
 /**
- * <p>A real sparse matrix stored in coordinate list (COO) format. The {@link #entries} of this COO tensor are
+ * <p>A real sparse matrix stored in coordinate list (COO) format. The {@link #data} of this COO tensor are
  * primitive doubles.
  *
- * <p>The {@link #entries non-zero entries} and non-zero indices of a COO matrix are mutable but the {@link #shape}
- * and total number of non-zero entries is fixed.
+ * <p>The {@link #data non-zero data} and non-zero indices of a COO matrix are mutable but the {@link #shape}
+ * and total number of non-zero data is fixed.
  *
  * <p>COO matrices are well-suited for incremental matrix construction and modification but may not have ideal efficiency for matrix
  * operations like matrix multiplication. For heavy computations, it may be better to construct a matrix as a {@code CooMatrix} then
@@ -70,17 +70,17 @@ import java.util.List;
  * <p>A sparse COO matrix is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
- *     <li>The non-zero {@link #entries} of the matrix. All other entries in the matrix are
- *     assumed to be zero. Zero values can also explicitly be stored in {@link #entries}.</li>
+ *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
+ *     assumed to be zero. Zero values can also explicitly be stored in {@link #data}.</li>
  *     <li>The {@link #rowIndices row indices} of the non-zero values in the sparse matrix.</li>
  *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
  *
  * <p>Some operations on sparse tensors behave differently than on dense tensors. For instance, {@link #add(double)} will not
- * add the scalar to all entries of the tensor since this would cause catastrophic loss of sparsity. Instead, such non-zero preserving
- * element-wise operations only act on the non-zero entries of the sparse tensor as to not affect the sparsity.
+ * add the scalar to all data of the tensor since this would cause catastrophic loss of sparsity. Instead, such non-zero preserving
+ * element-wise operations only act on the non-zero data of the sparse tensor as to not affect the sparsity.
  *
- * <p>Note: many operations assume that the entries of the COO matrix are sorted lexicographically by the row and column indices.
+ * <p>Note: many operations assume that the data of the COO matrix are sorted lexicographically by the row and column indices.
  * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any operations implemented in this
  * class will preserve the lexicographical sorting.
  *
@@ -98,7 +98,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     public final int[] colIndices;
     /**
-     * Number of non-zero entries in this COO matrix.
+     * Number of non-zero data in this COO matrix.
      */
     public final int nnz;
     /**
@@ -116,10 +116,10 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
 
 
     /**
-     * Creates a sparse coo matrix with the specified non-zero entries, non-zero indices, and shape.
+     * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Non-zero entries of this sparse matrix.
+     * @param entries Non-zero data of this sparse matrix.
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
@@ -129,7 +129,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
         ValidateParameters.ensureArrayLengthsEq(entries.length, rowIndices.length, colIndices.length);
         ValidateParameters.ensureTrue(
                 shape.totalEntries().compareTo(BigInteger.valueOf(entries.length)) >= 0,
-                "Shape " + shape + " cannot hold " + entries.length + "entries.");
+                "Shape " + shape + " cannot hold " + entries.length + "data.");
 
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
@@ -140,11 +140,11 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
 
 
     /**
-     * Creates a sparse coo matrix with the specified non-zero entries, non-zero indices, and shape.
+     * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
      *
      * @param numRows Number of rows in the matrix.
      * @param numCols Number of columns in the matrix.
-     * @param entries Non-zero entries of this sparse matrix.
+     * @param entries Non-zero data of this sparse matrix.
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
@@ -154,7 +154,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
         ValidateParameters.ensureArrayLengthsEq(entries.length, rowIndices.length, colIndices.length);
         ValidateParameters.ensureTrue(
                 shape.totalEntries().compareTo(BigInteger.valueOf(entries.length)) >= 0,
-                "Shape " + shape + " cannot hold " + entries.length + "entries.");
+                "Shape " + shape + " cannot hold " + entries.length + "data.");
 
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
@@ -165,10 +165,10 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
 
 
     /**
-     * Creates a sparse coo matrix with the specified non-zero entries, non-zero indices, and shape.
+     * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Non-zero entries of this sparse matrix.
+     * @param entries Non-zero data of this sparse matrix.
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
@@ -177,14 +177,14 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
         ValidateParameters.ensureArrayLengthsEq(entries.size(), rowIndices.size(), colIndices.size());
         ValidateParameters.ensureTrue(
                 shape.totalEntries().compareTo(BigInteger.valueOf(entries.size())) >= 0,
-                "Shape " + shape + " cannot hold " + entries.size() + "entries.");
+                "Shape " + shape + " cannot hold " + entries.size() + "data.");
         ValidateParameters.ensureRank(shape, 2);
 
         this.rowIndices = ArrayUtils.fromIntegerList(rowIndices);
         this.colIndices = ArrayUtils.fromIntegerList(colIndices);
-        ValidateParameters.ensureArrayLengthsEq(super.entries.length, this.rowIndices.length, this.colIndices.length);
+        ValidateParameters.ensureArrayLengthsEq(super.data.length, this.rowIndices.length, this.colIndices.length);
 
-        nnz = super.entries.length;
+        nnz = super.data.length;
         numRows = shape.get(0);
         numCols = shape.get(1);
     }
@@ -234,18 +234,18 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
 
 
     /**
-     * Creates a square sparse COO matrix with the specified size, non-zero entries, and non-zero indices.
+     * Creates a square sparse COO matrix with the specified size, non-zero data, and non-zero indices.
      * @param size Size of the square matrix.
-     * @param entries Non-zero entries of the sparse matrix.
-     * @param rowIndices Row indices of the non-zero entries in the matrix.
-     * @param colIndices Column indices of the non-zero entries in the matrix.
+     * @param entries Non-zero data of the sparse matrix.
+     * @param rowIndices Row indices of the non-zero data in the matrix.
+     * @param colIndices Column indices of the non-zero data in the matrix.
      */
     public CooMatrix(int size, double[] entries, int[] rowIndices, int[] colIndices) {
         super(new Shape(size, size), entries);
         ValidateParameters.ensureArrayLengthsEq(entries.length, rowIndices.length, colIndices.length);
         ValidateParameters.ensureTrue(
                 shape.totalEntries().compareTo(BigInteger.valueOf(entries.length)) >= 0,
-                "Shape " + shape + " cannot hold " + entries.length + "entries.");
+                "Shape " + shape + " cannot hold " + entries.length + "data.");
 
         this.nnz = entries.length;
         this.rowIndices = rowIndices;
@@ -255,10 +255,10 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
 
 
     /**
-     * Creates a sparse coo matrix with the specified non-zero entries, non-zero indices, and shape.
+     * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Non-zero entries of this sparse matrix.
+     * @param entries Non-zero data of this sparse matrix.
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
@@ -267,10 +267,10 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
         ValidateParameters.ensureArrayLengthsEq(entries.length, rowIndices.length, colIndices.length);
         ValidateParameters.ensureTrue(
                 shape.totalEntries().compareTo(BigInteger.valueOf(entries.length)) >= 0,
-                "Shape " + shape + " cannot hold " + entries.length + "entries.");
+                "Shape " + shape + " cannot hold " + entries.length + "data.");
         ValidateParameters.ensureRank(shape, 2);
 
-        ArrayUtils.asDouble(entries, super.entries);
+        ArrayUtils.asDouble(entries, super.data);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
         nnz = entries.length;
@@ -284,7 +284,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @param b
      */
     public CooMatrix(CooMatrix b) {
-        super(b.shape, b.entries.clone());
+        super(b.shape, b.data.clone());
         rowIndices = b.rowIndices.clone();
         colIndices = b.colIndices.clone();
         nnz = b.nnz;
@@ -311,10 +311,10 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
     @Override
     public Matrix tensorDot(CooMatrix src2, int[] aAxes, int[] bAxes) {
         CooTensor t1 = new CooTensor(
-                shape, entries, RealDenseTranspose.blockedIntMatrix(
+                shape, data, RealDenseTranspose.blockedIntMatrix(
                         new int[][]{rowIndices, colIndices}));
         CooTensor t2 = new CooTensor(
-                src2.shape, src2.entries, RealDenseTranspose.blockedIntMatrix(
+                src2.shape, src2.data, RealDenseTranspose.blockedIntMatrix(
                 new int[][]{src2.rowIndices, src2.colIndices}));
 
         return RealCooTensorDot.tensorDot(t1, t2, aAxes, bAxes).toMatrix();
@@ -322,13 +322,13 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
 
 
     /**
-     * Constructs a sparse COO matrix of the same type as this tensor with the given the shape and entries and indices copied from
+     * Constructs a sparse COO matrix of the same type as this tensor with the given the shape and data and indices copied from
      * this matrix.
      *
      * @param shape Shape of the matrix to construct.
      * @param entries Entries of the matrix to construct.
      *
-     * @return A matrix of the same type as this matrix with the given the shape and entries.
+     * @return A matrix of the same type as this matrix with the given the shape and data.
      */
     @Override
     public CooMatrix makeLikeTensor(Shape shape, double[] entries) {
@@ -401,7 +401,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * Converts this sparse tensor to an equivalent dense tensor.
      *
      * @return A dense tensor equivalent to this sparse tensor.
-     * @throws ArithmeticException If the total number of entries in this sparse matrix does not fit into an int.
+     * @throws ArithmeticException If the total number of data in this sparse matrix does not fit into an int.
      */
     public Matrix toDense() {
         double[] entries = new double[totalEntries().intValueExact()];
@@ -412,7 +412,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
             row = rowIndices[i];
             col = colIndices[i];
 
-            entries[row*numCols + col] = this.entries[i];
+            entries[row*numCols + col] = this.data[i];
         }
 
         return new Matrix(shape, entries);
@@ -426,15 +426,15 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
     public CsrMatrix toCsr() {
         int[] csrRowPointers = new int[numRows + 1];
 
-        // Copy the non-zero entries anc column indices. Count number of entries per row.
-        for(int i=0, size=entries.length; i<size; i++)
+        // Copy the non-zero data anc column indices. Count number of data per row.
+        for(int i = 0, size = data.length; i<size; i++)
             csrRowPointers[rowIndices[i] + 1]++;
 
         // Shift each row count to be greater than or equal to the previous.
         for(int i=0, size=numRows; i<size; i++)
             csrRowPointers[i+1] += csrRowPointers[i];
 
-        return new CsrMatrix(shape, entries.clone(), csrRowPointers, colIndices.clone());
+        return new CsrMatrix(shape, data.clone(), csrRowPointers, colIndices.clone());
     }
 
 
@@ -443,7 +443,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @return A reference to this matrix.
      */
     public CooMatrix sortIndices() {
-        CooDataSorter.wrap(entries, rowIndices, colIndices).sparseSort().unwrap(entries, rowIndices, colIndices);
+        CooDataSorter.wrap(data, rowIndices, colIndices).sparseSort().unwrap(data, rowIndices, colIndices);
         return this;
     }
 
@@ -488,7 +488,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
 
 
     /**
-     * Flattens tensor to single dimension while preserving order of entries.
+     * Flattens tensor to single dimension while preserving order of data.
      *
      * @return The flattened tensor.
      *
@@ -496,12 +496,12 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public CooMatrix flatten() {
-        int[] destIndices = new int[entries.length];
+        int[] destIndices = new int[data.length];
 
-        for(int i = 0; i < entries.length; i++)
+        for(int i = 0; i < data.length; i++)
             destIndices[i] = shape.getFlatIndex(rowIndices[i], colIndices[i]);
 
-        return new CooMatrix(shape, entries.clone(), new int[entries.length], destIndices);
+        return new CooMatrix(shape, data.clone(), new int[data.length], destIndices);
     }
 
 
@@ -522,7 +522,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
         int[] rowIndices = axis==1 ? this.rowIndices.clone() : new int[this.rowIndices.length];
         int[] colIndices = axis==0 ? this.colIndices.clone() : new int[this.colIndices.length];
 
-        return new CooMatrix(new Shape(dims), entries.clone(), rowIndices, colIndices);
+        return new CooMatrix(new Shape(dims), data.clone(), rowIndices, colIndices);
     }
 
 
@@ -551,7 +551,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
             newColIndices[i] = flatIndex % newColCount;
         }
 
-        return new CooMatrix(newShape, entries.clone(), newRowIndices, newColIndices);
+        return new CooMatrix(newShape, data.clone(), newRowIndices, newColIndices);
     }
 
 
@@ -608,7 +608,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public int[] argmin() {
-        int idx = RealProperties.argmin(entries);
+        int idx = RealProperties.argmin(data);
         return new int[]{rowIndices[idx], colIndices[idx]};
     }
 
@@ -621,7 +621,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public int[] argmax() {
-        int idx = RealProperties.argmax(entries);
+        int idx = RealProperties.argmax(data);
         return new int[]{rowIndices[idx], colIndices[idx]};
     }
 
@@ -634,7 +634,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public int[] argminAbs() {
-        int idx = RealProperties.argminAbs(entries);
+        int idx = RealProperties.argminAbs(data);
         return new int[]{rowIndices[idx], colIndices[idx]};
     }
 
@@ -647,7 +647,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public int[] argmaxAbs() {
-        int idx = RealProperties.argmaxAbs(entries);
+        int idx = RealProperties.argmaxAbs(data);
         return new int[]{rowIndices[idx], colIndices[idx]};
     }
 
@@ -718,7 +718,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
     public CooMatrix T() {
         CooMatrix transpose = new CooMatrix(
                 shape.swapAxes(0, 1),
-                entries.clone(),
+                data.clone(),
                 colIndices.clone(),
                 rowIndices.clone()
         );
@@ -761,8 +761,9 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @return The result of adding the specified scalar value to each non-zero entry of this tensor.
      */
     public CooCMatrix add(Complex128 b) {
-        // Overrides method from super class to emphasize it only operates on the non-zero values.
-        return new CooCMatrix(shape, RealFieldDenseOperations.add(entries, b), rowIndices.clone(), colIndices.clone());
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseOps.add(data, b, dest);
+        return new CooCMatrix(shape, dest, rowIndices.clone(), colIndices.clone());
     }
 
 
@@ -802,8 +803,9 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @return The result of subtracting the specified scalar value from each non-zero entry of this tensor.
      */
     public CooCMatrix sub(Complex128 b) {
-        // Overrides method from super class to emphasize it operates only on the non-zero values.
-        return new CooCMatrix(shape, RealFieldDenseOperations.sub(entries, b), rowIndices.clone(), colIndices.clone());
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseOps.sub(data, b, dest);
+        return new CooCMatrix(shape, dest, rowIndices.clone(), colIndices.clone());
     }
 
 
@@ -857,8 +859,8 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
     public Double tr() {
         double trace = 0;
 
-        for(int i=0, size=entries.length; i<size; i++)
-            if(rowIndices[i]==colIndices[i]) trace += entries[i]; // Then entry on the diagonal.
+        for(int i = 0, size = data.length; i<size; i++)
+            if(rowIndices[i]==colIndices[i]) trace += data[i]; // Then entry on the diagonal.
 
         return trace;
     }
@@ -875,8 +877,8 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public boolean isTriU() {
-        for(int i=0, size=entries.length; i<size; i++)
-            if(rowIndices[i] > colIndices[i] && entries[i] != 0) return false; // Then entry is not in upper triangle.
+        for(int i = 0, size = data.length; i<size; i++)
+            if(rowIndices[i] > colIndices[i] && data[i] != 0) return false; // Then entry is not in upper triangle.
 
         return true;
     }
@@ -893,8 +895,8 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public boolean isTriL() {
-        for(int i=0, size=entries.length; i<size; i++)
-            if(rowIndices[i] < colIndices[i]&& entries[i] != 0) return false; // Then entry is not in lower triangle.
+        for(int i = 0, size = data.length; i<size; i++)
+            if(rowIndices[i] < colIndices[i]&& data[i] != 0) return false; // Then entry is not in lower triangle.
 
         return true;
     }
@@ -953,8 +955,8 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
 
         return new Matrix(numRows, b.numCols,
                 RealSparseMatrixMultiplication.standard(
-                    entries, rowIndices, colIndices, shape,
-                    b.entries, b.rowIndices, b.colIndices, b.shape
+                        data, rowIndices, colIndices, shape,
+                    b.data, b.rowIndices, b.colIndices, b.shape
                 )
         );
     }
@@ -974,8 +976,8 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
 
         return new CMatrix(numRows, b.numCols,
                 RealComplexSparseMatrixMultiplication.standard(
-                        entries, rowIndices, colIndices, shape,
-                        b.entries, b.rowIndices, b.colIndices, b.shape
+                        data, rowIndices, colIndices, shape,
+                        b.data, b.rowIndices, b.colIndices, b.shape
                 )
         );
     }
@@ -1027,13 +1029,13 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
         ValidateParameters.ensureEquals(numCols, b.numCols);
 
         Shape destShape = new Shape(numRows+b.numRows, numCols);
-        double[] destEntries = new double[entries.length + b.entries.length];
+        double[] destEntries = new double[data.length + b.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
         // Copy non-zero values.
-        System.arraycopy(entries, 0, destEntries, 0, entries.length);
-        System.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
+        System.arraycopy(data, 0, destEntries, 0, data.length);
+        System.arraycopy(b.data, 0, destEntries, data.length, b.data.length);
 
         // Copy row indices.
         int[] shiftedRowIndices = ArrayUtils.shift(numRows, b.rowIndices.clone());
@@ -1064,13 +1066,13 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
         ValidateParameters.ensureEquals(numRows, b.numRows);
 
         Shape destShape = new Shape(numRows, numCols + b.numCols);
-        double[] destEntries = new double[entries.length + b.entries.length];
+        double[] destEntries = new double[data.length + b.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
         // Copy non-zero values.
-        System.arraycopy(entries, 0, destEntries, 0, entries.length);
-        System.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
+        System.arraycopy(data, 0, destEntries, 0, data.length);
+        System.arraycopy(b.data, 0, destEntries, data.length, b.data.length);
 
         // Copy row indices.
         System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
@@ -1101,19 +1103,19 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
         ValidateParameters.ensureEquals(numRows, b.size);
 
         Shape destShape = new Shape(numRows, numCols + 1);
-        double[] destEntries = new double[entries.length + b.entries.length];
+        double[] destEntries = new double[data.length + b.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
         // Copy values and indices from this matrix.
-        System.arraycopy(entries, 0, destEntries, 0, entries.length);
-        System.arraycopy(rowIndices, 0, destRowIndices, 0, entries.length);
-        System.arraycopy(colIndices, 0, destColIndices, 0, entries.length);
+        System.arraycopy(data, 0, destEntries, 0, data.length);
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, data.length);
+        System.arraycopy(colIndices, 0, destColIndices, 0, data.length);
 
         // Copy values and indices from vector.
-        System.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
-        Arrays.fill(destRowIndices, entries.length, destRowIndices.length, numRows);
-        System.arraycopy(b.indices, 0, destColIndices, entries.length, b.entries.length);
+        System.arraycopy(b.data, 0, destEntries, data.length, b.data.length);
+        Arrays.fill(destRowIndices, data.length, destRowIndices.length, numRows);
+        System.arraycopy(b.indices, 0, destColIndices, data.length, b.data.length);
 
         return new CooMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
@@ -1308,24 +1310,24 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
 
 
     /**
-     * Extracts the upper-triangular portion of this matrix with a specified diagonal offset. All other entries of the resulting
+     * Extracts the upper-triangular portion of this matrix with a specified diagonal offset. All other data of the resulting
      * matrix will be zero.
      *
      * @param diagOffset Diagonal offset for upper-triangular portion to extract:
      * <ul>
-     *     <li>If zero, then all entries at and above the principle diagonal of this matrix are extracted.</li>
-     *     <li>If positive, then all entries at and above the equivalent super-diagonal are extracted.</li>
-     *     <li>If negative, then all entries at and above the equivalent sub-diagonal are extracted.</li>
+     *     <li>If zero, then all data at and above the principle diagonal of this matrix are extracted.</li>
+     *     <li>If positive, then all data at and above the equivalent super-diagonal are extracted.</li>
+     *     <li>If negative, then all data at and above the equivalent sub-diagonal are extracted.</li>
      * </ul>
      *
-     * @return The upper-triangular portion of this matrix with a specified diagonal offset. All other entries of the returned
+     * @return The upper-triangular portion of this matrix with a specified diagonal offset. All other data of the returned
      * matrix will be zero.
      *
      * @throws IllegalArgumentException If {@code diagOffset} is not in the range (-numRows, numCols).
      */
     @Override
     public CooMatrix getTriU(int diagOffset) {
-        int sizeEst = nnz / 2; // Estimate the number of non-zero entries.
+        int sizeEst = nnz / 2; // Estimate the number of non-zero data.
         List<Double> triuEntries = new ArrayList<>(sizeEst);
         List<Integer> triuRowIndices = new ArrayList<>(sizeEst);
         List<Integer> triuColIndices = new ArrayList<>(sizeEst);
@@ -1335,7 +1337,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
             int col = colIndices[i];
 
             if(col >= row) {
-                triuEntries.add(entries[i]);
+                triuEntries.add(data[i]);
                 triuRowIndices.add(row);
                 triuColIndices.add(col);
             }
@@ -1346,24 +1348,24 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
 
 
     /**
-     * Extracts the lower-triangular portion of this matrix with a specified diagonal offset. All other entries of the resulting
+     * Extracts the lower-triangular portion of this matrix with a specified diagonal offset. All other data of the resulting
      * matrix will be zero.
      *
      * @param diagOffset Diagonal offset for lower-triangular portion to extract:
      * <ul>
-     *     <li>If zero, then all entries at and above the principle diagonal of this matrix are extracted.</li>
-     *     <li>If positive, then all entries at and above the equivalent super-diagonal are extracted.</li>
-     *     <li>If negative, then all entries at and above the equivalent sub-diagonal are extracted.</li>
+     *     <li>If zero, then all data at and above the principle diagonal of this matrix are extracted.</li>
+     *     <li>If positive, then all data at and above the equivalent super-diagonal are extracted.</li>
+     *     <li>If negative, then all data at and above the equivalent sub-diagonal are extracted.</li>
      * </ul>
      *
-     * @return The lower-triangular portion of this matrix with a specified diagonal offset. All other entries of the returned
+     * @return The lower-triangular portion of this matrix with a specified diagonal offset. All other data of the returned
      * matrix will be zero.
      *
      * @throws IllegalArgumentException If {@code diagOffset} is not in the range (-numRows, numCols).
      */
     @Override
     public CooMatrix getTriL(int diagOffset) {
-        int sizeEst = nnz / 2; // Estimate the number of non-zero entries.
+        int sizeEst = nnz / 2; // Estimate the number of non-zero data.
         List<Double> trilEntries = new ArrayList<>(sizeEst);
         List<Integer> trilRowIndices = new ArrayList<>(sizeEst);
         List<Integer> trilColIndices = new ArrayList<>(sizeEst);
@@ -1373,7 +1375,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
             int col = colIndices[i];
 
             if(col <= row) {
-                trilEntries.add(entries[i]);
+                trilEntries.add(data[i]);
                 trilRowIndices.add(row);
                 trilColIndices.add(col);
             }
@@ -1391,13 +1393,13 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @return The result of matrix multiplying this matrix with vector {@code b}.
      *
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the
-     *                                  number of entries in the vector {@code b}.
+     *                                  number of data in the vector {@code b}.
      */
     @Override
     public Vector mult(CooVector b) {
         double[] dest = RealSparseMatrixMultiplication.standardVector(
-                entries, rowIndices, colIndices, shape,
-                b.entries, b.indices
+                data, rowIndices, colIndices, shape,
+                b.data, b.indices
         );
         return new Vector(dest);
     }
@@ -1416,7 +1418,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
         for(int i=0, size=nnz; i<size; i++)
             destIndices[i] = rowIndices[i]*colIndices[i];
 
-        return new CooVector(shape.totalEntriesIntValueExact(), entries.clone(), destIndices);
+        return new CooVector(shape.totalEntriesIntValueExact(), data.clone(), destIndices);
     }
 
 
@@ -1426,7 +1428,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     public CooTensor toTensor() {
         int[][] tensorIndices = {rowIndices.clone(),  colIndices.clone()};
-        return new CooTensor(shape, entries, RealDenseTranspose.blockedIntMatrix(tensorIndices));
+        return new CooTensor(shape, data, RealDenseTranspose.blockedIntMatrix(tensorIndices));
     }
 
 
@@ -1500,7 +1502,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
     /**
      * Extracts the diagonal elements of this matrix and returns them as a vector.
      *
-     * @return A vector containing the diagonal entries of this matrix.
+     * @return A vector containing the diagonal data of this matrix.
      */
     public CooVector getDiag() {
         List<Double> destEntries = new ArrayList<>();
@@ -1509,7 +1511,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
         for(int i=0, size=nnz; i<size; i++) {
             if(rowIndices[i]==colIndices[i]) {
                 // Then entry on the diagonal.
-                destEntries.add(entries[i]);
+                destEntries.add(data[i]);
                 destIndices.add(rowIndices[i]);
             }
         }
@@ -1556,7 +1558,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
         List<Integer> idxList = new ArrayList<>();
         List<Double> entriesList = new ArrayList<>();
 
-        // Iterate over non-zero entries in the COO matrix
+        // Iterate over non-zero data in the COO matrix
         for (int i = 0; i < nnz; i++) {
             int row = rowIndices[i];
             int col = colIndices[i];
@@ -1565,7 +1567,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
             if (col - row == diagOffset) {
                 int pos = row - startRow; // Position in the diagonal vector
                 idxList.add(pos);
-                entriesList.add(entries[i]);
+                entriesList.add(data[i]);
             }
         }
 
@@ -1635,7 +1637,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @return A complex sparse COO matrix equivalent to this matrix.
      */
     public CooCMatrix toComplex() {
-        return new CooCMatrix(shape, entries, rowIndices.clone(), colIndices.clone());
+        return new CooCMatrix(shape, data, rowIndices.clone(), colIndices.clone());
     }
 
 
@@ -1645,7 +1647,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @return The element-wise product of this matrix and {@code b}.
      */
     public CooCMatrix elemMult(CooCMatrix b) {
-        return RealComplexSparseMatrixOperations.elemMult(b, this);
+        return RealComplexSparseMatOps.elemMult(b, this);
     }
 
 
@@ -1665,7 +1667,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @return The element-wise product of this matrix and {@code b}.
      */
     public CooCMatrix elemMult(CMatrix b) {
-        return RealComplexDenseSparseMatrixOperations.elemMult(b, this);
+        return RealComplexDenseCooMatOps.elemMult(b, this);
     }
 
 
@@ -1692,9 +1694,9 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
         int result = 17;
         result = 31*result + shape.hashCode();
 
-        for (int i = 0; i < entries.length; i++) {
-            if (entries[i] != 0.0) {
-                result = 31*result + Double.hashCode(entries[i]);
+        for (int i = 0; i < data.length; i++) {
+            if (data[i] != 0.0) {
+                result = 31*result + Double.hashCode(data[i]);
                 result = 31*result + Integer.hashCode(rowIndices[i]);
                 result = 31*result + Integer.hashCode(colIndices[i]);
             }
@@ -1711,16 +1713,16 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
     public String toString() {
         int size = nnz;
         StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
-        result.append("Non-zero entries: [");
+        result.append("Non-zero data: [");
 
         int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
         int width;
         String value;
 
-        if(entries.length > 0) {
-            // Get entries up until the stopping point.
+        if(data.length > 0) {
+            // Get data up until the stopping point.
             for(int i=0; i<stopIndex; i++) {
-                value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+                value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
                 width = PrintOptions.getPadding() + value.length();
                 value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
@@ -1734,7 +1736,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
             }
 
             // Get last entry now
-            value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+            value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
             width = PrintOptions.getPadding() + value.length();
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));

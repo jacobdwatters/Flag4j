@@ -45,9 +45,9 @@ import java.util.List;
 
 
 /**
- * <p>Sparse tensor stored in coordinate list (COO) format. The entries of this COO tensor are elements of a {@link Field}</p>
+ * <p>Sparse tensor stored in coordinate list (COO) format. The data of this COO tensor are elements of a {@link Field}</p>
  *
- * <p>The non-zero entries and non-zero indices of a COO tensor are mutable but the shape and total number of non-zero entries is
+ * <p>The non-zero data and non-zero indices of a COO tensor are mutable but the shape and total number of non-zero data is
  * fixed.</p>
  *
  * <p>Sparse tensors allow for the efficient storage of and operations on tensors that contain many zero values.</p>
@@ -58,29 +58,29 @@ import java.util.List;
  * <p>A sparse COO tensor is stored as:</p>
  * <ul>
  *     <li>The full {@link #shape shape} of the tensor.</li>
- *     <li>The non-zero {@link #entries} of the tensor. All other entries in the tensor are
- *     assumed to be zero. Zero value can also explicitly be stored in {@link #entries}.</li>
+ *     <li>The non-zero {@link #data} of the tensor. All other data in the tensor are
+ *     assumed to be zero. Zero value can also explicitly be stored in {@link #data}.</li>
  *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many operations assume indices to be sorted in a
  *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.</p>
  *
- *     <p>The {@link #indices} array has shape {@code (nnz, rank)} where {@link #nnz} is the number of non-zero entries in this
+ *     <p>The {@link #indices} array has shape {@code (nnz, rank)} where {@link #nnz} is the number of non-zero data in this
  *     sparse tensor and {@code rank} is the {@link #getRank() tensor rank} of the tensor. This means {@code indices[i]} is the ND
- *     index of {@code entries[i]}.</p>
+ *     index of {@code data[i]}.</p>
  *     </li>
  * </ul>
  *
- * @param <T> Type of the {@link #entries} of this tensor.
+ * @param <T> Type of the {@link #data} of this tensor.
  */
 public class CooFieldTensor<T extends Field<T>>
         extends AbstractCooFieldTensor<CooFieldTensor<T>, FieldTensor<T>, T> {
 
     /**
-     * creates a tensor with the specified entries and shape.
+     * creates a tensor with the specified data and shape.
      *
      * @param shape shape of this tensor.
-     * @param entries non-zero entries of this tensor of this tensor. if this tensor is dense, this specifies all entries within the
+     * @param entries non-zero data of this tensor of this tensor. if this tensor is dense, this specifies all data within the
      * tensor.
-     * if this tensor is sparse, this specifies only the non-zero entries of the tensor.
+     * if this tensor is sparse, this specifies only the non-zero data of the tensor.
      * @param indices
      */
     public CooFieldTensor(Shape shape, Field<T>[] entries, int[][] indices) {
@@ -89,13 +89,13 @@ public class CooFieldTensor<T extends Field<T>>
 
 
     /**
-     * Constructs a tensor of the same type as this tensor with the specified shape and non-zero entries.
+     * Constructs a tensor of the same type as this tensor with the specified shape and non-zero data.
      *
      * @param shape Shape of the tensor to construct.
-     * @param entries Non-zero entries of the tensor to construct.
-     * @param indices Indices of the non-zero entries of the tensor.
+     * @param entries Non-zero data of the tensor to construct.
+     * @param indices Indices of the non-zero data of the tensor.
      *
-     * @return A tensor of the same type as this tensor with the specified shape and non-zero entries.
+     * @return A tensor of the same type as this tensor with the specified shape and non-zero data.
      */
     @Override
     public CooFieldTensor<T> makeLikeTensor(Shape shape, T[] entries, int[][] indices) {
@@ -104,12 +104,12 @@ public class CooFieldTensor<T extends Field<T>>
 
 
     /**
-     * Creates a tensor with the specified entries and shape.
+     * Creates a tensor with the specified data and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Non-zero entries of this tensor of this tensor. If this tensor is dense, this specifies all entries within the
+     * @param entries Non-zero data of this tensor of this tensor. If this tensor is dense, this specifies all data within the
      * tensor.
-     * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
+     * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      * @param indices
      */
     public CooFieldTensor(Shape shape, List<Field<T>> entries, List<int[]> indices) {
@@ -142,9 +142,9 @@ public class CooFieldTensor<T extends Field<T>>
         }
 
         if(idx > -1) {
-            // Copy entries and set new value.
-            dest = new CooFieldTensor<T>(shape, entries.clone(), ArrayUtils.deepCopy(indices, null));
-            dest.entries[idx] = value;
+            // Copy data and set new value.
+            dest = new CooFieldTensor<T>(shape, data.clone(), ArrayUtils.deepCopy(indices, null));
+            dest.data[idx] = value;
             dest.indices[idx] = index;
         } else {
             // Copy old indices and insert new one.
@@ -152,8 +152,8 @@ public class CooFieldTensor<T extends Field<T>>
             ArrayUtils.deepCopy(indices, newIndices);
             newIndices[indices.length] = index;
 
-            // Copy old entries and insert new one.
-            Field<T>[] newEntries = Arrays.copyOf(entries, entries.length+1);
+            // Copy old data and insert new one.
+            Field<T>[] newEntries = Arrays.copyOf(data, data.length+1);
             newEntries[newEntries.length-1] = value;
 
             dest = new CooFieldTensor<T>(shape, newEntries, newIndices);
@@ -166,13 +166,13 @@ public class CooFieldTensor<T extends Field<T>>
 
     /**
      * Constructs a sparse tensor of the same type as this tensor with the same indices as this sparse tensor and with the provided
-     * the shape and entries.
+     * the shape and data.
      *
      * @param shape Shape of the sparse tensor to construct.
      * @param entries Entries of the spares tensor to construct.
      *
      * @return A sparse tensor of the same type as this tensor with the same indices as this sparse tensor and with the provided
-     * the shape and entries.
+     * the shape and data.
      */
     @Override
     public CooFieldTensor<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
@@ -181,13 +181,13 @@ public class CooFieldTensor<T extends Field<T>>
 
 
     /**
-     * Constructs a sparse tensor of the same type as this tensor with the given the shape, non-zero entries, and non-zero indices.
+     * Constructs a sparse tensor of the same type as this tensor with the given the shape, non-zero data, and non-zero indices.
      *
      * @param shape Shape of the sparse tensor to construct.
-     * @param entries Non-zero entries of the sparse tensor to construct.
+     * @param entries Non-zero data of the sparse tensor to construct.
      * @param indices Non-zero indices of the sparse tensor to construct.
      *
-     * @return A sparse tensor of the same type as this tensor with the given the shape and entries.
+     * @return A sparse tensor of the same type as this tensor with the given the shape and data.
      */
     @Override
     public CooFieldTensor<T> makeLikeTensor(Shape shape, List<Field<T>> entries, List<int[]> indices) {
@@ -199,7 +199,7 @@ public class CooFieldTensor<T extends Field<T>>
      * Constructs a dense tensor that is a similar type as this sparse COO tensor.
      *
      * @param shape Shape of the tensor to construct.
-     * @param entries The entries of the dense tensor to construct.
+     * @param entries The data of the dense tensor to construct.
      *
      * @return A dense tensor that is a similar type as this sparse COO tensor.
      */
@@ -236,7 +236,7 @@ public class CooFieldTensor<T extends Field<T>>
         Field<T>[] entries = new Field[totalEntries().intValueExact()];
 
         for(int i = 0; i< nnz; i++)
-            entries[shape.getFlatIndex(indices[i])] = this.entries[i];
+            entries[shape.getFlatIndex(indices[i])] = this.data[i];
 
         return new FieldTensor<T>(shape, (T[]) entries);
     }
@@ -247,7 +247,7 @@ public class CooFieldTensor<T extends Field<T>>
      * @return A vector equivalent of this tensor.
      */
     public FieldVector<T> toVector() {
-        return new FieldVector<T>(this.entries.clone());
+        return new FieldVector<T>(this.data.clone());
     }
 
 
@@ -264,7 +264,7 @@ public class CooFieldTensor<T extends Field<T>>
         CooFieldTensor<T> t = reshape(matShape); // Reshape as rank 2 tensor. Broadcastable check is made here.
         int[][] tIndices = RealDenseTranspose.standardIntMatrix(t.indices);
 
-        return new CooFieldMatrix<T>(matShape, t.entries.clone(), tIndices[0], tIndices[1]);
+        return new CooFieldMatrix<T>(matShape, t.data.clone(), tIndices[0], tIndices[1]);
     }
 
 
@@ -279,11 +279,11 @@ public class CooFieldTensor<T extends Field<T>>
 
         if(this.getRank()==2) {
             int[][] tIndices = RealDenseTranspose.standardIntMatrix(this.indices);
-            mat = new CooFieldMatrix<T>(shape, entries.clone(), tIndices[0], tIndices[1]);
+            mat = new CooFieldMatrix<T>(shape, data.clone(), tIndices[0], tIndices[1]);
         } else {
             CooFieldTensor<T> flat = reshape(new Shape(1, shape.totalEntriesIntValueExact()));
             int[][] tIndices = RealDenseTranspose.standardIntMatrix(flat.indices);
-            mat = new CooFieldMatrix<T>(flat.shape, flat.entries.clone(), tIndices[0], tIndices[0]);
+            mat = new CooFieldMatrix<T>(flat.shape, flat.data.clone(), tIndices[0], tIndices[0]);
         }
 
         return mat;
@@ -314,8 +314,8 @@ public class CooFieldTensor<T extends Field<T>>
         result = 31*result + shape.hashCode();
 
         for(int i=0; i<nnz; i++) {
-            if (!entries[i].isZero()) {
-                result = 31*result + entries[i].hashCode();
+            if (!data[i].isZero()) {
+                result = 31*result + data[i].hashCode();
                 result = 31*result + Arrays.hashCode(indices[i]);
             }
         }
@@ -326,9 +326,9 @@ public class CooFieldTensor<T extends Field<T>>
 
     /**
      * <p>Formats this sparse COO tensor as a human-readable string specifying the full shape,
-     * non-zero entries, and non-zero indices.</p>
+     * non-zero data, and non-zero indices.</p>
      *
-     * @return A human-readable string specifying the full shape, non-zero entries, and non-zero indices of this tensor.
+     * @return A human-readable string specifying the full shape, non-zero data, and non-zero indices of this tensor.
      */
     public String toString() {
         int maxCols = PrintOptions.getMaxColumns();
@@ -339,7 +339,7 @@ public class CooFieldTensor<T extends Field<T>>
         StringBuilder sb = new StringBuilder();
 
         sb.append("Shape: " + shape + "\n");
-        sb.append("Non-zero Entries: " + PrettyPrint.abbreviatedArray(entries, maxCols, padding, precision, centring) + "\n");
+        sb.append("Non-zero Entries: " + PrettyPrint.abbreviatedArray(data, maxCols, padding, precision, centring) + "\n");
         sb.append("Non-zero Indices: " +
                 PrettyPrint.abbreviatedArray(indices, PrintOptions.getMaxRows(), maxCols, padding, 20, centring));
 

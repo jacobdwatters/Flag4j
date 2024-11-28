@@ -115,14 +115,14 @@ public class RandomSparseTensor {
 
 
     /**
-     * Generates a random sparse matrix with the specified number of non-zero entries. The non-zero values will have
+     * Generates a random sparse matrix with the specified number of non-zero data. The non-zero values will have
      * a uniform distribution in {@code [min, max)}. Values will be uniformly distributed throughout the matrix.
      * @param rows Number of rows in the random sparse matrix.
      * @param cols Number of columns in the random sparse matrix.
      * @param min Minimum value for random non-zero values in the sparse matrix.
      * @param max Maximum value for random non-zero values
-     * @param numNonZeroEntries Desired number of non-zero entries int the random sparse matrix.
-     * @return A sparse matrix filled with the specified number of non-zero entries uniformly
+     * @param numNonZeroEntries Desired number of non-zero data int the random sparse matrix.
+     * @return A sparse matrix filled with the specified number of non-zero data uniformly
      * distributed in {@code [min, max)}.
      */
     public CooMatrix randomCooMatrix(int rows, int cols, double min, double max, int numNonZeroEntries) {
@@ -131,13 +131,13 @@ public class RandomSparseTensor {
 
 
     /**
-     * Generates a random sparse matrix with the specified number of non-zero entries. The non-zero values will have
+     * Generates a random sparse matrix with the specified number of non-zero data. The non-zero values will have
      * a uniform distribution in {@code [min, max)}. Values will be uniformly distributed throughout the matrix.
      * @param shape Shape of the sparse matrix to generate.
      * @param min Minimum value for random non-zero values in the sparse matrix.
      * @param max Maximum value for random non-zero values
-     * @param numNonZeroEntries Desired number of non-zero entries int the random sparse matrix.
-     * @return A sparse matrix filled with the specified number of non-zero entries uniformly
+     * @param numNonZeroEntries Desired number of non-zero data int the random sparse matrix.
+     * @return A sparse matrix filled with the specified number of non-zero data uniformly
      * distributed in {@code [min, max)}.
      */
     public CooMatrix randomCooMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
@@ -190,14 +190,14 @@ public class RandomSparseTensor {
 
 
     /**
-     * Generates a random sparse matrix with the specified number of non-zero entries. The non-zero values will have
+     * Generates a random sparse matrix with the specified number of non-zero data. The non-zero values will have
      * a uniform distribution in {@code [min, max)}. Values will be uniformly distributed throughout the matrix.
      * @param rows Number of rows in the random sparse matrix.
      * @param cols Number of columns in the random sparse matrix.
      * @param min Minimum value for random non-zero values in the sparse matrix.
      * @param max Maximum value for random non-zero values
-     * @param numNonZeroEntries Desired number of non-zero entries int the random sparse matrix.
-     * @return A sparse matrix filled with the specified number of non-zero entries uniformly
+     * @param numNonZeroEntries Desired number of non-zero data int the random sparse matrix.
+     * @return A sparse matrix filled with the specified number of non-zero data uniformly
      * distributed in {@code [min, max)}.
      */
     public CsrMatrix randomCsrMatrix(int rows, int cols, double min, double max, int numNonZeroEntries) {
@@ -206,13 +206,13 @@ public class RandomSparseTensor {
 
 
     /**
-     * Generates a random sparse matrix with the specified number of non-zero entries. The non-zero values will have
+     * Generates a random sparse matrix with the specified number of non-zero data. The non-zero values will have
      * a uniform distribution in {@code [min, max)}. Values will be uniformly distributed throughout the matrix.
      * @param shape Shape of the sparse matrix to generate.
      * @param min Minimum value for random non-zero values in the sparse matrix.
      * @param max Maximum value for random non-zero values
-     * @param numNonZeroEntries Desired number of non-zero entries int the random sparse matrix.
-     * @return A sparse matrix filled with the specified number of non-zero entries uniformly
+     * @param numNonZeroEntries Desired number of non-zero data int the random sparse matrix.
+     * @return A sparse matrix filled with the specified number of non-zero data uniformly
      * distributed in {@code [min, max)}.
      */
     public CsrMatrix randomCsrMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
@@ -244,11 +244,11 @@ public class RandomSparseTensor {
                 .setScale(0, RoundingMode.HALF_UP).intValueExact();
         numEntries /= 2;
 
-        // Generate half of the random entries.
+        // Generate half of the random data.
         double[] entries = RAND_ARRAY.genUniformRealArray(numEntries, min, max);
         int[][] indices = RAND_ARRAY.randomUniqueIndices2D(numEntries, 0, shape.get(0), 0, shape.get(1));
 
-        // Mirror entries across diagonal.
+        // Mirror data across diagonal.
         entries = ArrayUtils.join(entries, entries);
         indices = new int[][]{
                 ArrayUtils.join(indices[0], indices[1]),
@@ -315,14 +315,14 @@ public class RandomSparseTensor {
 
 
     /**
-     * Generates a random sparse matrix with the specified number of non-zero entries. The non-zero values will have
+     * Generates a random sparse matrix with the specified number of non-zero data. The non-zero values will have
      * a uniform distribution in {@code [min, max)}. Values will be uniformly distributed throughout the matrix.
      * @param rows Number of rows in the random sparse matrix.
      * @param cols Number of columns in the random sparse matrix.
      * @param min Minimum value for random non-zero values in the sparse matrix.
      * @param max Maximum value for random non-zero values
-     * @param numNonZeroEntries Desired number of non-zero entries int the random sparse matrix.
-     * @return A sparse matrix filled with the specified number of non-zero entries uniformly
+     * @param numNonZeroEntries Desired number of non-zero data int the random sparse matrix.
+     * @return A sparse matrix filled with the specified number of non-zero data uniformly
      * distributed in {@code [min, max)}.
      */
     public CooCMatrix randomSparseCMatrix(int rows, int cols, double min, double max, int numNonZeroEntries) {
@@ -331,13 +331,13 @@ public class RandomSparseTensor {
 
 
     /**
-     * Generates a random sparse matrix with the specified number of non-zero entries. The non-zero values will have
+     * Generates a random sparse matrix with the specified number of non-zero data. The non-zero values will have
      * a uniform distribution in {@code [min, max)}. Values will be uniformly distributed throughout the matrix.
      * @param shape Shape of the sparse matrix to generate.
      * @param min Minimum value for random non-zero values in the sparse matrix.
      * @param max Maximum value for random non-zero values
-     * @param numNonZeroEntries Desired number of non-zero entries int the random sparse matrix.
-     * @return A sparse matrix filled with the specified number of non-zero entries uniformly
+     * @param numNonZeroEntries Desired number of non-zero data int the random sparse matrix.
+     * @return A sparse matrix filled with the specified number of non-zero data uniformly
      * distributed in {@code [min, max)}.
      */
     public CooCMatrix randomSparseCMatrix(Shape shape, double min, double max, int numNonZeroEntries) {

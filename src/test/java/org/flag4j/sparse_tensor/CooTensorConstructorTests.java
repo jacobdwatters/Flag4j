@@ -26,7 +26,7 @@ class CooTensorConstructorTests {
         A = new CooTensor(expShape);
 
         assertEquals(expShape, A.getShape());
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expIndices, A.indices);
 
         // --------------- Sub-case 2 ---------------
@@ -37,7 +37,7 @@ class CooTensorConstructorTests {
         A = new CooTensor(expShape);
 
         assertEquals(expShape, A.getShape());
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expIndices, A.indices);
     }
 
@@ -52,7 +52,7 @@ class CooTensorConstructorTests {
         A = new CooTensor(expShape, expNonZero, expIndices);
 
         assertEquals(expShape, A.getShape());
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expIndices, A.indices);
 
         // --------------- Sub-case 2 ---------------
@@ -63,7 +63,7 @@ class CooTensorConstructorTests {
         A = new CooTensor(expShape, expNonZero, expIndices);
 
         assertEquals(expShape, A.getShape());
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expIndices, A.indices);
 
 
@@ -101,7 +101,7 @@ class CooTensorConstructorTests {
         A = new CooTensor(expShape, expNonZeroI, expIndices);
 
         assertEquals(expShape, A.getShape());
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expIndices, A.indices);
 
         // --------------- Sub-case 2 ---------------
@@ -113,7 +113,7 @@ class CooTensorConstructorTests {
         A = new CooTensor(expShape, expNonZeroI, expIndices);
 
         assertEquals(expShape, A.getShape());
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expIndices, A.indices);
 
         // --------------- Sub-case 3 ---------------
@@ -149,7 +149,7 @@ class CooTensorConstructorTests {
         A = new CooTensor(B);
 
         assertEquals(expShape, A.getShape());
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expIndices, A.indices);
     }
 }

@@ -79,7 +79,7 @@ public final class RealCsrOperations {
                 int col2 = src2.colIndices[start2];
 
                 if (col1 == col2) {
-                    double prod = src1.entries[start1] * src2.entries[start2];
+                    double prod = src1.data[start1] * src2.data[start2];
 
                     if (prod != 0.0) {
                         colIndices.add(col1);
@@ -143,17 +143,17 @@ public final class RealCsrOperations {
                 int col2 = src2.colIndices[rowPtr2];
 
                 if(col1 == col2) {
-                    dest.add(bOpp.apply(src1.entries[rowPtr1], src2.entries[rowPtr2]));
+                    dest.add(bOpp.apply(src1.data[rowPtr1], src2.data[rowPtr2]));
                     colIndices.add(col1);
                     rowPtr1++;
                     rowPtr2++;
                 } else if(col1 < col2) {
-                    dest.add(src1.entries[rowPtr1]);
+                    dest.add(src1.data[rowPtr1]);
                     colIndices.add(col1);
                     rowPtr1++;
                 } else {
-                    if(uOpp!=null) dest.add(uOpp.apply(src2.entries[rowPtr2]));
-                    else dest.add(src2.entries[rowPtr2]);
+                    if(uOpp!=null) dest.add(uOpp.apply(src2.data[rowPtr2]));
+                    else dest.add(src2.data[rowPtr2]);
                     colIndices.add(col2);
                     rowPtr2++;
                 }
@@ -162,15 +162,15 @@ public final class RealCsrOperations {
             }
 
             while(rowPtr1 < src1.rowPointers[i+1]) {
-                dest.add(src1.entries[rowPtr1]);
+                dest.add(src1.data[rowPtr1]);
                 colIndices.add(src1.colIndices[rowPtr1]);
                 rowPtr1++;
                 rowPointers[i+1]++;
             }
 
             while(rowPtr2 < src2.rowPointers[i+1]) {
-                if(uOpp!=null) dest.add(uOpp.apply(src2.entries[rowPtr2]));
-                else dest.add(src2.entries[rowPtr2]);
+                if(uOpp!=null) dest.add(uOpp.apply(src2.data[rowPtr2]));
+                else dest.add(src2.data[rowPtr2]);
                 colIndices.add(src2.colIndices[rowPtr2]);
                 rowPtr2++;
                 rowPointers[i+1]++;
@@ -200,11 +200,11 @@ public final class RealCsrOperations {
      */
     public static CsrMatrix transpose(CsrMatrix src) {
 
-        double[] dest = new double[src.entries.length];
+        double[] dest = new double[src.data.length];
         int[] rowPtrs = new int[src.numCols+1];
-        int[] colIndices = new int[src.entries.length];
+        int[] colIndices = new int[src.data.length];
 
-        // Count number of entries in each row.
+        // Count number of data in each row.
         for(int i=0; i<src.colIndices.length; i++) {
             rowPtrs[src.colIndices[i] + 1]++;
         }
@@ -221,7 +221,7 @@ public final class RealCsrOperations {
             for (int i = src.rowPointers[row]; i < src.rowPointers[row + 1]; i++) {
                 int col = src.colIndices[i];
                 int pos = tempPos[col];
-                dest[pos] = src.entries[i];
+                dest[pos] = src.data[i];
                 colIndices[pos] = row;
                 tempPos[col]++;
             }
@@ -260,7 +260,7 @@ public final class RealCsrOperations {
 
                 // Add value if it is within the slice.
                 if(col >= colStart && col < colEnd) {
-                    slice.add(src.entries[j]);
+                    slice.add(src.data[j]);
                     sliceRowIndices.add(i);
                     sliceColIndices.add(col);
                 }
@@ -291,7 +291,7 @@ public final class RealCsrOperations {
             int rowOffset = i*sum.numCols;
 
             for(int j=rowStart; j<rowEnd; j++) {
-                sum.entries[rowOffset + src1.colIndices[j]] += src1.entries[j];
+                sum.data[rowOffset + src1.colIndices[j]] += src1.data[j];
             }
         }
 
@@ -317,7 +317,7 @@ public final class RealCsrOperations {
             int rowOffset = i*sum.numCols;
 
             for(int j=rowStart; j<rowEnd; j++) {
-                sum.entries[rowOffset + src1.colIndices[j]] += src1.entries[j];
+                sum.data[rowOffset + src1.colIndices[j]] += src1.data[j];
             }
         }
 
@@ -344,7 +344,7 @@ public final class RealCsrOperations {
 
             for(int j=rowStart; j<rowEnd; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-                sum.entries[idx] = sum.entries[idx].add(src1.entries[j]);
+                sum.data[idx] = sum.data[idx].add(src1.data[j]);
             }
         }
 
@@ -371,7 +371,7 @@ public final class RealCsrOperations {
 
             for(int j=rowStart; j<rowEnd; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-                sum.entries[idx] = sum.entries[idx].add(src1.entries[j]);
+                sum.data[idx] = sum.data[idx].add(src1.data[j]);
             }
         }
 
@@ -396,7 +396,7 @@ public final class RealCsrOperations {
             int rowEnd = src1.rowPointers[i+1];
 
             for(int j=rowStart; j<rowEnd; j++) {
-                sum.entries[i*sum.numCols + src1.colIndices[j]] += src1.entries[j];
+                sum.data[i*sum.numCols + src1.colIndices[j]] += src1.data[j];
             }
         }
 
@@ -421,7 +421,7 @@ public final class RealCsrOperations {
             int rowEnd = src1.rowPointers[i+1];
 
             for(int j=rowStart; j<rowEnd; j++) {
-                sum.entries[i*sum.numCols + src1.colIndices[j]] += src1.entries[j];
+                sum.data[i*sum.numCols + src1.colIndices[j]] += src1.data[j];
             }
         }
 
@@ -448,7 +448,7 @@ public final class RealCsrOperations {
 
             for(int j=rowStart; j<rowEnd; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-                sum.entries[idx] = sum.entries[idx].add(src1.entries[j]);
+                sum.data[idx] = sum.data[idx].add(src1.data[j]);
             }
         }
 
@@ -475,7 +475,7 @@ public final class RealCsrOperations {
 
             for(int j=rowStart; j<rowEnd; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-                sum.entries[idx] = sum.entries[idx].add(src1.entries[j]);
+                sum.data[idx] = sum.data[idx].add(src1.data[j]);
             }
         }
 

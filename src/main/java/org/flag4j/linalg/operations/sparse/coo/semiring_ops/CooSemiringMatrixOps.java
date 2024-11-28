@@ -49,11 +49,11 @@ public final class CooSemiringMatrixOps {
      * Adds two sparse matrices. This method assumes that the indices of the two matrices are sorted
      * lexicographically.
      * @param shape1 Shape of the first matrix.
-     * @param src1Entries Non-zero entries of the first matrix.
+     * @param src1Entries Non-zero data of the first matrix.
      * @param src1RowIndices Non-zero row indices of the first matrix.
      * @param src1ColIndices Non-zero column indices of the first matrix.
      * @param shape2 Shape of the second matrix.
-     * @param src2Entries Non-zero entries of the second matrix.
+     * @param src2Entries Non-zero data of the second matrix.
      * @param src2RowIndices Non-zero row indices of the second matrix.
      * @param src2ColIndices Non-zero column indices of the second matrix.
      * @return The sum of the two matrices.
@@ -123,11 +123,11 @@ public final class CooSemiringMatrixOps {
      * Multiplies two sparse matrices element-wise. This method assumes that the indices of the two matrices are sorted
      * lexicographically.
      * @param shape1 Shape of the first matrix.
-     * @param src1Entries Non-zero entries of the first matrix.
+     * @param src1Entries Non-zero data of the first matrix.
      * @param src1RowIndices Non-zero row indices of the first matrix.
      * @param src1ColIndices Non-zero column indices of the first matrix.
      * @param shape2 Shape of the second matrix.
-     * @param src2Entries Non-zero entries of the second matrix.
+     * @param src2Entries Non-zero data of the second matrix.
      * @param src2RowIndices Non-zero row indices of the second matrix.
      * @param src2ColIndices Non-zero column indices of the second matrix.
      * @return The element-wise product of the two matrices.

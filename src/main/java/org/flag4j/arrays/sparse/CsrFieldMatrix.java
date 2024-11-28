@@ -45,26 +45,26 @@ import java.util.List;
 
 
 /**
- * <p>A sparse matrix stored in compressed sparse row (CSR) format. The {@link #entries} of this CSR matrix are
+ * <p>A sparse matrix stored in compressed sparse row (CSR) format. The {@link #data} of this CSR matrix are
  * elements of a {@link Field}.
  *
- * <p>The {@link #entries non-zero entries} and non-zero indices of a CSR matrix are mutable but the {@link #shape}
- * and {@link #nnz total number of non-zero entries} is fixed.
+ * <p>The {@link #data non-zero data} and non-zero indices of a CSR matrix are mutable but the {@link #shape}
+ * and {@link #nnz total number of non-zero data} is fixed.
  *
  * <p>Sparse matrices allow for the efficient storage of and operations on matrices that contain many zero values.
  *
  * <p>A sparse CSR matrix is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
- *     <li>The non-zero {@link #entries} of the matrix. All other entries in the matrix are
- *     assumed to be zero. Zero values can also explicitly be stored in {@link #entries}.</li>
+ *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
+ *     assumed to be zero. Zero values can also explicitly be stored in {@link #data}.</li>
  *     <li>The {@link #rowPointers row pointers} of the non-zero values in the CSR matrix. Has size {@link #numRows numRows + 1}</li>
- *     <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all values in row
+ *     <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all values in row
  *     {@code i}.
  *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
  *
- * <p>Note: many operations assume that the entries of the CSR matrix are sorted lexicographically by the row and column indices.
+ * <p>Note: many operations assume that the data of the CSR matrix are sorted lexicographically by the row and column indices.
  * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any operations implemented in this
  * class will preserve the lexicographical sorting.
  *
@@ -77,15 +77,15 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
 
 
     /**
-     * Creates a sparse CSR matrix with the specified {@code shape}, non-zero entries, row pointers, and non-zero column indices.
+     * Creates a sparse CSR matrix with the specified {@code shape}, non-zero data, row pointers, and non-zero column indices.
      *
      * @param shape Shape of this tensor.
-     * @param entries The non-zero entries of this CSR matrix.
+     * @param entries The non-zero data of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
-     * <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all
+     * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
      * values in row {@code i}.
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
-     * {@code entries.length == colIndices.length}.
+     * {@code data.length == colData.length}.
      */
     public CsrFieldMatrix(Shape shape, Field<T>[] entries, int[] rowPointers, int[] colIndices) {
         super(shape, entries, rowPointers, colIndices);
@@ -93,15 +93,15 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
 
 
     /**
-     * Creates a sparse CSR matrix with the specified {@code shape}, non-zero entries, row pointers, and non-zero column indices.
+     * Creates a sparse CSR matrix with the specified {@code shape}, non-zero data, row pointers, and non-zero column indices.
      *
      * @param shape Shape of this tensor.
-     * @param entries The non-zero entries of this CSR matrix.
+     * @param entries The non-zero data of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
-     * <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all
+     * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
      * values in row {@code i}.
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
-     * {@code entries.length == colIndices.length}.
+     * {@code data.length == colData.length}.
      */
     public CsrFieldMatrix(Shape shape, List<Field<T>> entries, List<Integer> rowPointers, List<Integer> colIndices) {
         super(shape, entries.toArray(new Field[entries.size()]),
@@ -111,30 +111,30 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
 
 
     /**
-     * Constructs a sparse CSR tensor of the same type as this tensor with the specified non-zero entries and indices.
+     * Constructs a sparse CSR tensor of the same type as this tensor with the specified non-zero data and indices.
      *
      * @param shape Shape of the matrix.
-     * @param entries Non-zero entries of the CSR matrix.
+     * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Row pointers for the non-zero values in the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      *
-     * @return A sparse CSR tensor of the same type as this tensor with the specified non-zero entries and indices.
+     * @return A sparse CSR tensor of the same type as this tensor with the specified non-zero data and indices.
      */
     @Override
-    public CsrFieldMatrix<T> makeLikeTensor(Shape shape, T[] entries, int[] rowPointers, int[] colIndices) {
+    public CsrFieldMatrix<T> makeLikeTensor(Shape shape, Field<T>[] entries, int[] rowPointers, int[] colIndices) {
         return new CsrFieldMatrix<>(shape, entries, rowPointers, colIndices);
     }
 
 
     /**
-     * Constructs a CSR matrix with the specified shape, non-zero entries, and non-zero indices.
+     * Constructs a CSR matrix with the specified shape, non-zero data, and non-zero indices.
      *
      * @param shape Shape of the matrix.
      * @param entries Non-zero values of the CSR matrix.
      * @param rowPointers Row pointers for the non-zero values in the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      *
-     * @return A CSR matrix with the specified shape, non-zero entries, and non-zero indices.
+     * @return A CSR matrix with the specified shape, non-zero data, and non-zero indices.
      */
     @Override
     public CsrFieldMatrix<T> makeLikeTensor(Shape shape, List<T> entries, List<Integer> rowPointers, List<Integer> colIndices) {
@@ -149,21 +149,21 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
      * @param entries Entries of the dense matrix.
      *
      * @return A dense matrix which is of a similar type to this sparse CSR matrix with the specified {@code shape}
-     * and {@code entries}.
+     * and {@code data}.
      */
     @Override
-    public FieldMatrix<T> makeLikeDenseTensor(Shape shape, T[] entries) {
+    public FieldMatrix<T> makeLikeDenseTensor(Shape shape, Field<T>[] entries) {
         return new FieldMatrix<>(shape, entries);
     }
 
 
     /**
      * <p>Constructs a sparse COO matrix of a similar type to this sparse CSR matrix.
-     * <p>Note: this method constructs a new COO matrix with the specified entries and indices. It does <i>not</i> convert this matrix
+     * <p>Note: this method constructs a new COO matrix with the specified data and indices. It does <i>not</i> convert this matrix
      * to a CSR matrix. To convert this matrix to a sparse COO matrix use {@link #toCoo()}.
      *
      * @param shape Shape of the COO matrix.
-     * @param entries Non-zero entries of the COO matrix.
+     * @param entries Non-zero data of the COO matrix.
      * @param rowIndices Non-zero row indices of the sparse COO matrix.
      * @param colIndices Non-zero column indices of the Sparse COO matrix.
      *
@@ -177,14 +177,14 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
 
     /**
      * Constructs a tensor of the same type as this tensor with the given the {@code shape} and
-     * {@code entries}. The resulting tensor will also have
+     * {@code data}. The resulting tensor will also have
      * the same non-zero indices as this tensor.
      *
      * @param shape Shape of the tensor to construct.
      * @param entries Entries of the tensor to construct.
      *
      * @return A tensor of the same type and with the same non-zero indices as this tensor with the given the {@code shape} and
-     * {@code entries}.
+     * {@code data}.
      */
     @Override
     public CsrFieldMatrix<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
@@ -199,7 +199,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
      */
     @Override
     public CooFieldMatrix<T> toCoo() {
-        int[] cooRowIdx = new int[entries.length];
+        int[] cooRowIdx = new int[data.length];
 
         for(int i=0; i<numRows; i++) {
             int stop = rowPointers[i+1];
@@ -208,7 +208,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
                 cooRowIdx[j] = i;
         }
 
-        return new CooFieldMatrix<T>(shape, entries.clone(), cooRowIdx, colIndices.clone());
+        return new CooFieldMatrix<T>(shape, data.clone(), cooRowIdx, colIndices.clone());
     }
 
 
@@ -260,8 +260,8 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
         // Hash calculation ignores explicit zeros in the matrix. This upholds the contract with the equals(Object) method.
         for(int row = 0; row<numRows; row++) {
             for(int idx = rowPointers[row], rowStop = rowPointers[row + 1]; idx < rowStop; idx++) {
-                if(!entries[idx].isZero()) {
-                    result = 31*result + entries[idx].hashCode();
+                if(!data[idx].isZero()) {
+                    result = 31*result + data[idx].hashCode();
                     result = 31*result + Integer.hashCode(colIndices[idx]);
                     result = 31*result + Integer.hashCode(row);
                 }
@@ -285,8 +285,8 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
     @Override
     public FieldVector<T> mult(CooFieldVector<T> b) {
         Field<T>[] dest = new Field[b.size];
-        SemiringCsrMatMult.standardVector(shape, entries, rowPointers, colIndices,
-                b.size, b.entries, b.indices,
+        SemiringCsrMatMult.standardVector(shape, data, rowPointers, colIndices,
+                b.size, b.data, b.indices,
                 dest, getZeroElement());
         return new FieldVector<>(dest);
     }
@@ -301,7 +301,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
     @Override
     public CooFieldVector<T> toVector() {
         int type = vectorType();
-        int[] indices = new int[entries.length];
+        int[] indices = new int[data.length];
 
         if(type == -1) {
             // Not a vector.
@@ -328,7 +328,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
             }
         }
 
-        return new CooFieldVector<T>(shape.totalEntriesIntValueExact(), entries.clone(), indices);
+        return new CooFieldVector<T>(shape.totalEntriesIntValueExact(), data.clone(), indices);
     }
 
 
@@ -349,7 +349,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
         Field<T>[] destEntries = new Field[rowPointers[rowIdx + 1]-start];
         int[] destIndices = new int[destEntries.length];
 
-        System.arraycopy(entries, start, destEntries, 0, destEntries.length);
+        System.arraycopy(data, start, destEntries, 0, destEntries.length);
         System.arraycopy(colIndices, start, destIndices, 0, destEntries.length);
 
         return new CooFieldVector<T>(numCols, destEntries, destIndices);
@@ -382,7 +382,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
             int col = colIndices[j];
 
             if(col >= colStart && col < colEnd) {
-                row.add(entries[j]);
+                row.add(data[j]);
                 indices.add(col-colStart);
             }
         }
@@ -436,7 +436,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
 
             for(int j=start; j<stop; j++) {
                 if(colIndices[j]==colIdx) {
-                    destEntries.add(entries[j]);
+                    destEntries.add(data[j]);
                     destIndices.add(i);
                     break; // Should only be a single entry with this row and column index.
                 }
@@ -450,7 +450,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
     /**
      * Extracts the diagonal elements of this matrix and returns them as a vector.
      *
-     * @return A vector containing the diagonal entries of this matrix.
+     * @return A vector containing the diagonal data of this matrix.
      */
     public CooFieldVector<T> getDiag() {
         List<Field<T>> destEntries = new ArrayList<>();
@@ -462,7 +462,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
             int loc = Arrays.binarySearch(colIndices, start, stop, i); // Search for matching column index within row.
 
             if(loc >= 0) {
-                destEntries.add(entries[loc]);
+                destEntries.add(data[loc]);
                 destIndices.add(i);
             }
         }
@@ -519,16 +519,16 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
     public String toString() {
         int size = nnz;
         StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
-        result.append("Non-zero entries: [");
+        result.append("Non-zero data: [");
 
         int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
         int width;
         String value;
 
-        if(entries.length > 0) {
-            // Get entries up until the stopping point.
+        if(data.length > 0) {
+            // Get data up until the stopping point.
             for(int i=0; i<stopIndex; i++) {
-                value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+                value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
                 width = PrintOptions.getPadding() + value.length();
                 value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
@@ -542,7 +542,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
             }
 
             // Get last entry now
-            value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+            value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
             width = PrintOptions.getPadding() + value.length();
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));

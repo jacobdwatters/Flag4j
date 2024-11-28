@@ -1,6 +1,7 @@
 package org.flag4j.vector;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
@@ -87,7 +88,7 @@ class VectorElemMultDivTests {
         CooVector act = a.elemMult(b);
 
         assertEquals(exp.size, act.size);
-        assertArrayEquals(exp.entries, act.entries);
+        assertArrayEquals(exp.data, act.data);
         assertArrayEquals(exp.indices, act.indices);
 
         // ------------------------ Sub-case 2 ------------------------
@@ -121,7 +122,7 @@ class VectorElemMultDivTests {
         CooCVector act = a.elemMult(b);
 
         assertEquals(exp.size, act.size);
-        assertArrayEquals(exp.entries, act.entries);
+        assertArrayEquals(exp.data, act.data);
         assertArrayEquals(exp.indices, act.indices);
 
         // ------------------------ Sub-case 2 ------------------------

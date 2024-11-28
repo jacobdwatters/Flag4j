@@ -121,9 +121,6 @@ public final class DenseSemiringConversions {
         List<Semiring<T>> cooEntries = new ArrayList<>(estimatedSize);
         List<int[]> cooIndices = new ArrayList<>(estimatedSize);
 
-        final int rows = shape.get(0);
-        final int cols = shape.get(1);
-
         for(int i=0, size=entries.length; i<size; i++) {
             Semiring<T> val = entries[i];
 

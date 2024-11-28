@@ -2,10 +2,11 @@ package org.flag4j.complex_sparse_matrix;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldMatrixOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldMatrixOps;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOps;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,7 +47,7 @@ class CooCMatrixElemDivTests {
         expColIndices = new int[]{3, 4, 2, 4, 3};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, RealFieldDenseCooMatrixOperations.elemDiv(A, B));
+        assertEquals(exp, RealFieldDenseCooMatrixOps.elemDiv(A, B));
 
         // ------------------- Sub-case 2 -------------------
         aShape = new Shape(3, 5);
@@ -67,7 +68,7 @@ class CooCMatrixElemDivTests {
         expColIndices = new int[]{2, 4, 4};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, RealFieldDenseCooMatrixOperations.elemDiv(A, B));
+        assertEquals(exp, RealFieldDenseCooMatrixOps.elemDiv(A, B));
 
         // ------------------- Sub-case 3 -------------------
         aShape = new Shape(3, 5);
@@ -85,7 +86,7 @@ class CooCMatrixElemDivTests {
         B = new Matrix(bEntries);
 
         Matrix finalB = B;
-        assertThrows(Exception.class, ()->RealFieldDenseCooMatrixOperations.elemDiv(A, finalB));
+        assertThrows(Exception.class, ()-> RealFieldDenseCooMatrixOps.elemDiv(A, finalB));
     }
 
 
@@ -117,7 +118,7 @@ class CooCMatrixElemDivTests {
         expColIndices = new int[]{3, 4, 1, 4, 3};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, DenseCooFieldMatrixOperations.elemDiv(A, B));
+        assertEquals(exp, DenseCooFieldMatrixOps.elemDiv(A, B));
 
         // ------------------- Sub-case 2 -------------------
         aShape = new Shape(3, 5);
@@ -138,7 +139,7 @@ class CooCMatrixElemDivTests {
         expColIndices = new int[]{2, 0, 2};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, DenseCooFieldMatrixOperations.elemDiv(A, B));
+        assertEquals(exp, DenseCooFieldMatrixOps.elemDiv(A, B));
 
         // ------------------- Sub-case 3 -------------------
         aShape = new Shape(3, 5);
@@ -156,6 +157,6 @@ class CooCMatrixElemDivTests {
         B = new CMatrix(bEntries);
 
         CMatrix finalB = B;
-        assertThrows(Exception.class, ()->DenseCooFieldMatrixOperations.elemDiv(A, finalB));
+        assertThrows(Exception.class, ()-> DenseCooFieldMatrixOps.elemDiv(A, finalB));
     }
 }

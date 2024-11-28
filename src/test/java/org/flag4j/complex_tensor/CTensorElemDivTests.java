@@ -49,7 +49,7 @@ class CTensorElemDivTests {
         expShape = new Shape(2, 3, 2);
         exp = new CTensor(expShape, expEntries);
 
-        assertEquals(exp, A.elemDiv(B));
+        assertEquals(exp, A.div(B));
 
         // ----------------------- Sub-case 2 -----------------------
         bEntries = new double[]{
@@ -60,7 +60,7 @@ class CTensorElemDivTests {
         B = new Tensor(bShape, bEntries);
 
         Tensor finalB = B;
-        assertThrows(LinearAlgebraException.class, ()->A.elemDiv(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.div(finalB));
 
         // ----------------------- Sub-case 3 -----------------------
         bEntries = new double[]{
@@ -71,7 +71,7 @@ class CTensorElemDivTests {
         B = new Tensor(bShape, bEntries);
 
         Tensor finalB1 = B;
-        assertThrows(LinearAlgebraException.class, ()->A.elemDiv(finalB1));
+        assertThrows(LinearAlgebraException.class, ()->A.div(finalB1));
     }
 
 

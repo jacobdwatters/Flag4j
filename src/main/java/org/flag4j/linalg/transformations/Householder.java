@@ -32,7 +32,7 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.linalg.operations.common.real.RealOperations;
+import org.flag4j.linalg.operations.common.real.RealOps;
 import org.flag4j.linalg.operations.common.semiring_ops.SemiRingOperations;
 import org.flag4j.util.ErrorMessages;
 
@@ -58,16 +58,16 @@ public final class Householder {
     public static Matrix getReflector(Vector normal) {
         Vector v;
 
-        double signedNorm = -Math.copySign(VectorNorms.norm(normal.entries), normal.entries[0]);
-        v = normal.div(normal.entries[0] - signedNorm);
-        v.entries[0] = 1.0;
+        double signedNorm = -Math.copySign(VectorNorms.norm(normal.data), normal.data[0]);
+        v = normal.div(normal.data[0] - signedNorm);
+        v.data[0] = 1.0;
 
         // Create Householder matrix
         Matrix H = v.outer(v).mult(-2.0/v.inner(v));
 
         int step = H.numCols+1;
-        for(int i=0; i<H.entries.length; i+=step) {
-            H.entries[i] = 1 + H.entries[i];
+        for(int i = 0; i<H.data.length; i+=step) {
+            H.data[i] = 1 + H.data[i];
         }
 
         return H;
@@ -87,20 +87,20 @@ public final class Householder {
      * normal to {@code normal}.
      */
     public static Vector getVector(Vector normal) {
-        double normX = VectorNorms.norm(normal.entries);
-        double x1 = normal.entries[0];
+        double normX = VectorNorms.norm(normal.data);
+        double x1 = normal.data[0];
         normX = (x1 >= 0) ? -normX : normX;
         double v1 = x1 - normX;
 
         // Initialize v with norm and set first element
         Vector v = normal.copy();
-        v.entries[0] = v1;
+        v.data[0] = v1;
 
         // Compute norm of v noting that it only differs from normal by the first element.
         double normV = Math.sqrt(normX*normX - x1*x1 + v1*v1);
 
-        for(int i=0; i<v.entries.length; i++)
-            v.entries[i] /= normV; // Normalize v to make it a unit vector
+        for(int i = 0; i<v.data.length; i++)
+            v.data[i] /= normV; // Normalize v to make it a unit vector
 
         return v;
     }
@@ -122,19 +122,19 @@ public final class Householder {
         CVector v;
 
         // Compute signed norm using modified sgn function.
-        Complex128 signedNorm = normal.entries[0].equals(0) ?
-                new Complex128(-VectorNorms.norm(normal.entries)) :
-                Complex128.sgn((Complex128) normal.entries[0]).mult(-VectorNorms.norm(normal.entries));
+        Complex128 signedNorm = normal.data[0].equals(0) ?
+                new Complex128(-VectorNorms.norm(normal.data)) :
+                Complex128.sgn((Complex128) normal.data[0]).mult(-VectorNorms.norm(normal.data));
 
-        v = normal.div(normal.entries[0].sub(signedNorm));
-        v.entries[0] = new Complex128(1);
+        v = normal.div(normal.data[0].sub(signedNorm));
+        v.data[0] = new Complex128(1);
 
         // Create projection matrix
         CMatrix P = v.outer(v).mult(-2.0/v.innerSelf());
 
         int step = P.numCols+1;
-        for(int i=0; i<P.entries.length; i+=step)
-            P.entries[i] = P.entries[i].add(1.0);
+        for(int i = 0; i<P.data.length; i+=step)
+            P.data[i] = P.data[i].add(1.0);
 
         return P;
     }
@@ -167,25 +167,25 @@ public final class Householder {
         double v0 = householderVector[startRow];
 
         for(int i=startCol; i<numCols; i++) {
-            workArray[i] = v0*src.entries[srcRowOffset + i];
+            workArray[i] = v0*src.data[srcRowOffset + i];
         }
 
         for(int k=startRow + 1; k<endRow; k++) {
             int srcIdx = k*numCols + startCol;
             double reflectorValue = householderVector[k];
             for(int i=startCol; i<numCols; i++) {
-                workArray[i] += reflectorValue*src.entries[srcIdx++];
+                workArray[i] += reflectorValue*src.data[srcIdx++];
             }
         }
 
-        RealOperations.scalMult(workArray, alpha, startCol, numCols, workArray);
+        RealOps.scalMult(workArray, alpha, startCol, numCols, workArray);
 
         for(int i=startRow; i<endRow; i++) {
             double reflectorValue = householderVector[i];
             int indexA = i*numCols + startCol;
 
             for(int j=startCol; j<numCols; j++) {
-                src.entries[indexA++] -= reflectorValue*workArray[j];
+                src.data[indexA++] -= reflectorValue*workArray[j];
             }
         }
     }
@@ -213,13 +213,13 @@ public final class Householder {
             int rowIndex = startIndex;
 
             for(int j = startRow; j < endRow; j++) {
-                sum += src.entries[rowIndex++]*householderVector[j];
+                sum += src.data[rowIndex++]*householderVector[j];
             }
             sum *= -alpha;
 
             rowIndex = startIndex;
             for(int j=startRow; j<endRow; j++) {
-                src.entries[rowIndex++] += sum*householderVector[j];
+                src.data[rowIndex++] += sum*householderVector[j];
             }
         }
     }
@@ -248,7 +248,7 @@ public final class Householder {
         Complex128 v0 = householderVector[startRow].conj();
 
         for(int i=startCol; i<numCols; i++) {
-            workArray[i] = v0.mult((Complex128) src.entries[srcRowOffset + i]);
+            workArray[i] = v0.mult((Complex128) src.data[srcRowOffset + i]);
         }
 
         for(int k=startRow + 1; k<endRow; k++) {
@@ -256,7 +256,7 @@ public final class Householder {
             Complex128 reflectorValue = householderVector[k].conj();
 
             for(int i=startCol; i<numCols; i++)
-                workArray[i] = workArray[i].add(reflectorValue.mult((Complex128) src.entries[srcIdx++]));
+                workArray[i] = workArray[i].add(reflectorValue.mult((Complex128) src.data[srcIdx++]));
         }
 
         SemiRingOperations.scalMult(workArray, workArray, alpha, startCol, numCols);
@@ -266,7 +266,7 @@ public final class Householder {
             int indexA = i*numCols + startCol;
 
             for(int j=startCol; j<numCols; j++) {
-                src.entries[indexA] = src.entries[indexA++].sub(reflectorValue.mult((Complex128) workArray[j]));
+                src.data[indexA] = src.data[indexA++].sub(reflectorValue.mult((Complex128) workArray[j]));
             }
         }
     }
@@ -295,13 +295,13 @@ public final class Householder {
             int rowIndex = startIndex;
 
             for(int j = startRow; j < endRow; j++) {
-                sum = sum.add(src.entries[rowIndex++].mult((Complex128) householderVector[j]));
+                sum = sum.add(src.data[rowIndex++].mult((Complex128) householderVector[j]));
             }
             sum = sum.mult(negAlpha);
 
             rowIndex = startIndex;
             for(int j=startRow; j<endRow; j++) {
-                src.entries[rowIndex] = src.entries[rowIndex++].add(sum.mult(householderVector[j].conj()));
+                src.data[rowIndex] = src.data[rowIndex++].add(sum.mult(householderVector[j].conj()));
             }
         }
     }
@@ -334,10 +334,10 @@ public final class Householder {
             int rowOffset = i*numRows;
 
             for(int j=startCol; j<i; j++) {
-                total += src.entries[j*numRows + i]*householderVector[j];
+                total += src.data[j*numRows + i]*householderVector[j];
             }
             for(int j=i; j<src.numRows; j++) {
-                total += src.entries[rowOffset + j]*householderVector[j];
+                total += src.data[rowOffset + j]*householderVector[j];
             }
 
             workArray[i] = -alpha*total;
@@ -362,7 +362,7 @@ public final class Householder {
             int rowOffset = i*numRows;
 
             for(int j=i; j<src.numRows; j++) {
-                src.entries[rowOffset + j] += prod*householderVector[j] + workArray[j]*h;
+                src.data[rowOffset + j] += prod*householderVector[j] + workArray[j]*h;
             }
         }
     }
@@ -386,7 +386,7 @@ public final class Householder {
                                          double alpha,
                                          int startCol,
                                          int startRow, int endRow) {
-        leftMultReflector(src, householderVector.entries, alpha, startCol, startRow, endRow, new double[src.numCols-startCol]);
+        leftMultReflector(src, householderVector.data, alpha, startCol, startRow, endRow, new double[src.numCols-startCol]);
     }
 
 
@@ -410,7 +410,7 @@ public final class Householder {
                                           int startCol,
                                           int startRow, int endRow) {
 
-        rightMultReflector(src, householderVector.entries, alpha, startCol, startRow, endRow);
+        rightMultReflector(src, householderVector.data, alpha, startCol, startRow, endRow);
     }
 
 
@@ -433,7 +433,7 @@ public final class Householder {
                                          Complex128 alpha,
                                          int startCol,
                                          int startRow, int endRow) {
-        leftMultReflector(src, householderVector.entries, alpha, startCol, startRow, endRow, new Complex128[src.numCols-startCol]);
+        leftMultReflector(src, householderVector.data, alpha, startCol, startRow, endRow, new Complex128[src.numCols-startCol]);
     }
 
 
@@ -456,7 +456,7 @@ public final class Householder {
                                           Complex128 alpha,
                                           int startCol,
                                           int startRow, int endRow) {
-        rightMultReflector(src, householderVector.entries, alpha, startCol, startRow, endRow);
+        rightMultReflector(src, householderVector.data, alpha, startCol, startRow, endRow);
     }
 
 
@@ -487,10 +487,10 @@ public final class Householder {
             int rowOffset = i * numRows;
 
             for (int j = startCol; j < i; j++) {
-                total = total.add(src.entries[j*numRows + i].conj().mult((Complex128) householderVector[j]));
+                total = total.add(src.data[j*numRows + i].conj().mult((Complex128) householderVector[j]));
             }
             for (int j = i; j < src.numRows; j++) {
-                total = total.add(src.entries[rowOffset + j].mult((Complex128) householderVector[j]));
+                total = total.add(src.data[rowOffset + j].mult((Complex128) householderVector[j]));
             }
 
             workArray[i] = alpha.mult(total).addInv();
@@ -515,7 +515,7 @@ public final class Householder {
             int rowOffset = i * numRows;
 
             for (int j = i; j < src.numRows; j++) {
-                src.entries[rowOffset + j] = src.entries[rowOffset + j]
+                src.data[rowOffset + j] = src.data[rowOffset + j]
                         .add(prod.mult((Complex128) householderVector[j]))
                         .add(workArray[j].mult(h));
             }

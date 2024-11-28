@@ -28,6 +28,8 @@ package org.flag4j.linalg.operations.common.field_ops;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.util.ErrorMessages;
 
+import static org.flag4j.util.ArrayUtils.makeNewIfNull;
+
 /**
  * This utility class contains operations for tensors whose elements are members of a
  * {@link org.flag4j.algebraic_structures.fields.Field}.
@@ -51,7 +53,7 @@ public final class FieldOps {
      * @throws ArrayIndexOutOfBoundsException If {@code dest.length < src.length}.
      */
     public static <V extends Field<V>> Field<V>[] add(Field<V>[] src, double scalar, Field<V>[] dest) {
-        if(dest == null) dest = new Field[src.length];
+        dest = makeNewIfNull(dest, src.length);
 
         for(int i=0, size=src.length; i<size; i++)
             dest[i] = src[i].add(scalar);
@@ -71,7 +73,7 @@ public final class FieldOps {
      * @throws ArrayIndexOutOfBoundsException If {@code dest.length < src.length}.
      */
     public static <V extends Field<V>> Field<V>[] add(double[] src, Field<V> scalar, Field<V>[] dest) {
-        if(dest == null) dest = new Field[src.length];
+        dest = makeNewIfNull(dest, src.length);
 
         for(int i=0, size=src.length; i<size; i++)
             dest[i] = scalar.add(src[i]);
@@ -92,7 +94,7 @@ public final class FieldOps {
      * @throws ArrayIndexOutOfBoundsException If {@code dest.length < src.length}.
      */
     public static <V extends Field<V>> Field<V>[] sub(Field<V>[] src, double scalar, Field<V>[] dest) {
-        if(dest == null) dest = new Field[src.length];
+        dest = makeNewIfNull(dest, src.length);
 
         for(int i=0, size=src.length; i<size; i++)
             dest[i] = src[i].sub(scalar);
@@ -113,7 +115,7 @@ public final class FieldOps {
      * @throws ArrayIndexOutOfBoundsException If {@code dest.length < src.length}.
      */
     public static <V extends Field<V>> Field<V>[] sub(double[] src, Field<V> scalar, Field<V>[] dest) {
-        if(dest == null) dest = new Field[src.length];
+        dest = makeNewIfNull(dest, src.length);
         Field<V> scalarInv = scalar.addInv();
 
         for(int i=0, size=src.length; i<size; i++)
@@ -135,7 +137,7 @@ public final class FieldOps {
      * @throws ArrayIndexOutOfBoundsException If {@code dest.length < src.length}.
      */
     public static <V extends Field<V>> Field<V>[] mult(Field<V>[] src, double scalar, Field<V>[] dest) {
-        if(dest == null) dest = new Field[src.length];
+        dest = makeNewIfNull(dest, src.length);
 
         for(int i=0, size=src.length; i<size; i++)
             dest[i] = src[i].mult(scalar);
@@ -156,7 +158,7 @@ public final class FieldOps {
      * @throws ArrayIndexOutOfBoundsException If {@code dest.length < src.length}.
      */
     public static <V extends Field<V>> Field<V>[] mult(double[] src, Field<V> scalar, Field<V>[] dest) {
-        if(dest == null) dest = new Field[src.length];
+        dest = makeNewIfNull(dest, src.length);
 
         for(int i=0, size=src.length; i<size; i++)
             dest[i] = scalar.mult(src[i]);
@@ -176,7 +178,7 @@ public final class FieldOps {
      * @throws ArrayIndexOutOfBoundsException If {@code dest.length < src.length}.
      */
     public static <V extends Field<V>> Field<V>[] div(Field<V>[] src, V scalar, Field<V>[] dest) {
-        if(dest == null) dest = new Field[src.length];
+        dest = makeNewIfNull(dest, src.length);
 
         for(int i=0, size=src.length; i<size; i++)
             dest[i] = src[i].div(scalar);
@@ -196,7 +198,7 @@ public final class FieldOps {
      * @throws ArrayIndexOutOfBoundsException If {@code dest.length < src.length}.
      */
     public static <V extends Field<V>> Field<V>[] div(double[] src, V scalar, Field<V>[] dest) {
-        if(dest == null) dest = new Field[src.length];
+        dest = makeNewIfNull(dest, src.length);
         V scalarInv = scalar.multInv();
 
         for(int i=0, size=src.length; i<size; i++)
@@ -217,7 +219,7 @@ public final class FieldOps {
      * @throws ArrayIndexOutOfBoundsException If {@code dest.length < src.length}.
      */
     public static <V extends Field<V>> Field<V>[] div(Field<V>[] src, double scalar, Field<V>[] dest) {
-        if(dest == null) dest = new Field[src.length];
+        dest = makeNewIfNull(dest, src.length);
 
         for(int i=0, size=src.length; i<size; i++)
             dest[i] = src[i].div(scalar);
@@ -235,7 +237,7 @@ public final class FieldOps {
      * @throws IllegalArgumentException If {@code dest.length < src.length}.
      */
     public static <V extends Field<V>> Field<V>[] sqrt(Field<V>[] src, Field<V>[] dest) {
-        if(dest == null) dest = new Field[src.length];
+        dest = makeNewIfNull(dest, src.length);
 
         for(int i=0, size=src.length; i<size; i++)
             dest[i] = src[i].sqrt();
@@ -254,7 +256,7 @@ public final class FieldOps {
      * @throws IllegalArgumentException If {@code dest.length < src.length}.
      */
     public static <V extends Field<V>> Field<V>[] scalMult(Field<V>[] src, double factor, Field<V>[] dest) {
-        if(dest == null) dest = new Field[src.length];
+        dest = makeNewIfNull(dest, src.length);
 
         for(int i=0, size=src.length; i<size; i++)
             dest[i] = src[i].mult(factor);
@@ -273,7 +275,7 @@ public final class FieldOps {
      * @throws IllegalArgumentException If {@code dest.length < src.length}.
      */
     public static <V extends Field<V>> Field<V>[] scalMult(double[] entries, Field<V> factor, Field<V>[] dest) {
-        if(dest == null) dest = new Field[entries.length];
+        dest = makeNewIfNull(dest, entries.length);
 
         for(int i=0, size=dest.length; i<size; i++)
             dest[i] = factor.mult(entries[i]);
@@ -291,7 +293,7 @@ public final class FieldOps {
      * @throws IllegalArgumentException If {@code dest.length < src.length}.
      */
     public static <V extends Field<V>> Field<V>[] conj(Field<V>[] src, Field<V>[] dest) {
-        if(dest == null) dest = new Field[src.length];
+        dest = makeNewIfNull(dest, src.length);
 
         for(int i=0; i<src.length; i++)
             dest[i] = (Field) src[i].conj();
@@ -309,7 +311,7 @@ public final class FieldOps {
      * @throws IllegalArgumentException If {@code dest.length < src.length}.
      */
     public static <V extends Field<V>> Field<V>[] recip(Field<V>[] src, Field<V>[] dest) {
-        if(dest == null) dest = new Field[src.length];
+        dest = makeNewIfNull(dest, src.length);
 
         for(int i=0, size=src.length; i<size; i++)
             dest[i] = src[i].multInv();

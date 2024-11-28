@@ -2,12 +2,13 @@ package org.flag4j.sparse_matrix;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOperations;
-import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseMatrixOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOps;
+import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseMatOps;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -115,7 +116,7 @@ class CooMatrixAddSubTests {
         expColIndices = new int[]{0, 2, 3, 4, 0, 4, 1, 3};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, RealComplexSparseMatrixOperations.sub(A, B));
+        assertEquals(exp, RealComplexSparseMatOps.sub(A, B));
 
         // ------------------- Sub-case 2 -------------------
         aShape = new Shape(3, 5);
@@ -136,7 +137,7 @@ class CooMatrixAddSubTests {
         expColIndices = new int[]{1, 3, 1, 0};
         exp = new CooCMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, RealComplexSparseMatrixOperations.sub(A, B));
+        assertEquals(exp, RealComplexSparseMatOps.sub(A, B));
 
         // ------------------- Sub-case 3 -------------------
         aShape = new Shape(9, 5);
@@ -152,7 +153,7 @@ class CooMatrixAddSubTests {
         B = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
 
         CooCMatrix finalB = B;
-        assertThrows(Exception.class, ()->RealComplexSparseMatrixOperations.sub(A, finalB));
+        assertThrows(Exception.class, ()-> RealComplexSparseMatOps.sub(A, finalB));
     }
 
 
@@ -257,7 +258,7 @@ class CooMatrixAddSubTests {
                 {new Complex128("0.7430935522873594-0.58718i"), new Complex128("-0.17243740668084973-0.2181i"), new Complex128("-0.61738-0.18952i"), new Complex128("-0.51587-0.89177i"), new Complex128("-0.76042-0.31481i")}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, RealFieldDenseCooMatrixOperations.sub(A, B));
+        assertEquals(exp, RealFieldDenseCooMatrixOps.sub(A, B));
 
         // ------------------- Sub-case 2 -------------------
         aShape = new Shape(3, 5);
@@ -278,7 +279,7 @@ class CooMatrixAddSubTests {
                 {new Complex128("-0.53334-0.51873i"), new Complex128("-0.45876-0.354i"), new Complex128("-0.53354-0.6198i"), new Complex128("-0.76748-0.68158i"), new Complex128("-0.87113-0.69653i")}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, RealFieldDenseCooMatrixOperations.sub(A, B));
+        assertEquals(exp, RealFieldDenseCooMatrixOps.sub(A, B));
 
         // ------------------- Sub-case 3 -------------------
         aShape = new Shape(9, 5);
@@ -294,7 +295,7 @@ class CooMatrixAddSubTests {
         B = new CMatrix(bEntries);
 
         CMatrix finalB = B;
-        assertThrows(Exception.class, ()->RealFieldDenseCooMatrixOperations.sub(A, finalB));
+        assertThrows(Exception.class, ()-> RealFieldDenseCooMatrixOps.sub(A, finalB));
     }
 
 

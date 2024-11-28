@@ -30,16 +30,16 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.linalg.operations.common.real.RealOperations;
+import org.flag4j.linalg.operations.common.real.RealOps;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
  * This class contains low level implementations of operations between real/complex and dense/sparse matrices.
  */
-public final class RealComplexDenseSparseMatrixOperations {
+public final class RealComplexDenseCooMatOps {
 
-    private RealComplexDenseSparseMatrixOperations() {
+    private RealComplexDenseCooMatOps() {
         // Hide private constructor for utility class.
         throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
@@ -50,7 +50,7 @@ public final class RealComplexDenseSparseMatrixOperations {
      * @param src1 First matrix.
      * @param src2 Second matrix.
      * @return The result of the matrix addition.
-     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If the matrices do not have the same shape.
      */
     public static CMatrix add(Matrix src1, CooCMatrix src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
@@ -59,7 +59,7 @@ public final class RealComplexDenseSparseMatrixOperations {
         for(int i=0; i<src2.nnz; i++) {
             int row = src2.rowIndices[i];
             int col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col] = dest.entries[row*src1.numCols + col].add((Complex128) src2.entries[i]);
+            dest.data[row*src1.numCols + col] = dest.data[row*src1.numCols + col].add((Complex128) src2.data[i]);
         }
 
         return dest;
@@ -71,7 +71,7 @@ public final class RealComplexDenseSparseMatrixOperations {
      * @param src1 First matrix.
      * @param src2 Second matrix.
      * @return The result of the matrix subtraction.
-     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If the matrices do not have the same shape.
      */
     public static CMatrix sub(Matrix src1, CooCMatrix src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
@@ -79,7 +79,7 @@ public final class RealComplexDenseSparseMatrixOperations {
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            dest.entries[idx] = dest.entries[idx].sub((Complex128) src2.entries[i]);
+            dest.data[idx] = dest.data[idx].sub((Complex128) src2.data[i]);
         }
 
         return dest;
@@ -91,15 +91,15 @@ public final class RealComplexDenseSparseMatrixOperations {
      * @param src1 First matrix.
      * @param src2 Second matrix.
      * @return The result of the matrix subtraction.
-     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If the matrices do not have the same shape.
      */
     public static CMatrix sub(CooCMatrix src2, Matrix src1) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        CMatrix dest = new CMatrix(src1.shape, RealOperations.scalMult(src1.entries, -1));
+        CMatrix dest = new CMatrix(src1.shape, RealOps.scalMult(src1.data, -1, null));
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            dest.entries[idx] = dest.entries[idx].add((Complex128) src2.entries[i]);
+            dest.data[idx] = dest.data[idx].add((Complex128) src2.data[i]);
         }
 
         return dest;
@@ -111,7 +111,7 @@ public final class RealComplexDenseSparseMatrixOperations {
      * @param src1 First matrix.
      * @param src2 Second matrix.
      * @return The result of element-wise multiplication.
-     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If the matrices do not have the same shape.
      */
     public static CooCMatrix elemMult(CMatrix src1, CooMatrix src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
@@ -122,7 +122,28 @@ public final class RealComplexDenseSparseMatrixOperations {
         for(int i=0; i<destEntries.length; i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            destEntries[i] = src1.entries[row*src1.numCols + col].mult(src2.entries[i]);
+            destEntries[i] = src1.data[row*src1.numCols + col].mult(src2.data[i]);
+        }
+
+        return new CooCMatrix(src2.shape, destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between a complex dense matrix and a real sparse matrix.
+     * @param src1 First matrix in the element-wise product.
+     * @param src2 Second matrix in the element-wise product.
+     * @return The result of element-wise product of {@code src1} with {@code src2}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If the matrices do not have the same shape.
+     */
+    public static CooCMatrix elemMult(Matrix src1, CooCMatrix src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+        Complex128[] destEntries = new Complex128[src2.nnz];
+
+        for(int i=0, size=destEntries.length; i<size; i++) {
+            int row = src2.rowIndices[i];
+            int col = src2.colIndices[i];
+            destEntries[i] = src2.data[i].mult(src1.data[row*src1.numCols + col]);
         }
 
         return new CooCMatrix(src2.shape, destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
@@ -132,31 +153,28 @@ public final class RealComplexDenseSparseMatrixOperations {
     /**
      * Computes the element-wise division between a real sparse matrix and a complex dense matrix.
      *
-     * <p>
-     *     If the dense matrix contains a zero at the same index the sparse matrix contains a non-zero, the result will be
-     *     either {@link Double#POSITIVE_INFINITY} or {@link Double#NEGATIVE_INFINITY}.
-     * </p>
+     * <p>If the dense matrix contains a zero at the same index the sparse matrix contains a non-zero, the result will be
+     * either {@link Double#POSITIVE_INFINITY} or {@link Double#NEGATIVE_INFINITY}.
+     * 
      *
-     * <p>
-     *     If the dense matrix contains a zero at an index for which the sparse matrix is also zero, the result will be
-     *     zero. This is done to realize computational benefits from operations with sparse matrices.
-     * </p>
+     * <p>If the dense matrix contains a zero at an index for which the sparse matrix is also zero, the result will be
+     * zero. This is done to realize computational benefits from operations with sparse matrices.
      *
      * @param src1 Real sparse matrix and numerator in element-wise quotient.
      * @param src2 Real Dense matrix and denominator in element-wise quotient.
      * @return The element-wise quotient of {@code src1} and {@code src2}.
-     * @throws IllegalArgumentException If {@code src1} and {@code src2} do not have the same shape.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code src1} and {@code src2} do not have the same shape.
      */
     public static CooCMatrix elemDiv(CooMatrix src1, CMatrix src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        Complex128[] quotient = new Complex128[src1.entries.length];
+        Complex128[] quotient = new Complex128[src1.data.length];
         int row;
         int col;
 
-        for(int i=0; i<src1.entries.length; i++) {
+        for(int i = 0; i<src1.data.length; i++) {
             row = src1.rowIndices[i];
             col = src1.colIndices[i];
-            quotient[i] = new Complex128(src1.entries[i]).div((Complex128) src2.entries[row*src2.numCols + col]);
+            quotient[i] = new Complex128(src1.data[i]).div((Complex128) src2.data[row*src2.numCols + col]);
         }
 
         return new CooCMatrix(src1.shape, quotient, src1.rowIndices.clone(), src1.colIndices.clone());

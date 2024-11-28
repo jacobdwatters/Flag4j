@@ -61,10 +61,10 @@ public final class CooFieldMatrixGetSet {
      * @return The value in the sparse matrix at the specified indices.
      */
     public static <V extends Field<V>> V matrixGet(AbstractCooFieldMatrix<?, ?, ?, V> src, int row, int col) {
-        V zero = src.entries.length > 0 ? src.entries[0].getZero() : null;
+        V zero = src.data.length > 0 ? src.data[0].getZero() : null;
         int idx = SparseElementSearch.matrixBinarySearch(src.rowIndices, src.colIndices, row, col);
 
-        return idx<0 ? zero : (V) src.entries[idx];
+        return idx<0 ? zero : (V) src.data[idx];
     }
 
 
@@ -88,23 +88,23 @@ public final class CooFieldMatrixGetSet {
             idx = -idx - 1;
 
             // No non-zero element with these indices exists. Insert new value.
-            destEntries = new Field[src.entries.length + 1];
-            System.arraycopy(src.entries, 0, destEntries, 0, idx);
+            destEntries = new Field[src.data.length + 1];
+            System.arraycopy(src.data, 0, destEntries, 0, idx);
             destEntries[idx] = value;
-            System.arraycopy(src.entries, idx, destEntries, -idx, src.entries.length - idx);
+            System.arraycopy(src.data, idx, destEntries, -idx, src.data.length - idx);
 
-            destRowIndices = new int[src.entries.length + 1];
+            destRowIndices = new int[src.data.length + 1];
             System.arraycopy(src.rowIndices, 0, destRowIndices, 0, idx);
             destRowIndices[idx] = row;
             System.arraycopy(src.rowIndices, idx, destRowIndices, -idx, src.rowIndices.length - idx);
 
-            destColIndices = new int[src.entries.length + 1];
+            destColIndices = new int[src.data.length + 1];
             System.arraycopy(src.colIndices, 0, destColIndices, 0, idx);
             destColIndices[idx] = col;
             System.arraycopy(src.colIndices, idx, destColIndices, idx+1, src.colIndices.length - idx);
         } else {
             // Value with these indices exists. Simply update value.
-            destEntries = Arrays.copyOf(src.entries, src.entries.length);
+            destEntries = Arrays.copyOf(src.data, src.data.length);
             destEntries[idx] = value;
             destRowIndices = src.rowIndices.clone();
             destColIndices = src.colIndices.clone();
@@ -118,7 +118,7 @@ public final class CooFieldMatrixGetSet {
      * Sets a specified row of a complex sparse matrix to the values of a dense array.
      * @param src Source matrix to set the row of.
      * @param rowIdx Index of the row to set.
-     * @param row Dense array containing the entries of the row to set.
+     * @param row Dense array containing the data of the row to set.
      * @return A copy of the {@code src} matrix with the specified row set to the dense {@code row} array.
      */
     public static <V extends Field<V>> AbstractCooFieldMatrix<?, ?, ?, V>
@@ -135,15 +135,15 @@ public final class CooFieldMatrixGetSet {
         int[] destColIndices;
 
         if(start<0) {
-            // No entries with row index found.
-            destEntries = new Field[src.entries.length + row.length];
+            // No data with row index found.
+            destEntries = new Field[src.data.length + row.length];
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
-            System.arraycopy(src.entries, 0, destEntries, 0, -start-1);
+            System.arraycopy(src.data, 0, destEntries, 0, -start-1);
             System.arraycopy(row, 0, destEntries, -start-1, row.length);
             System.arraycopy(
-                    src.entries, -start-1,
+                    src.data, -start-1,
                     destEntries, -start-1+row.length, destEntries.length-(row.length - start - 1)
             );
 
@@ -163,14 +163,14 @@ public final class CooFieldMatrixGetSet {
 
         } else {
             // Entries with row index found.
-            destEntries = new Field[src.entries.length + row.length - (end-start)];
+            destEntries = new Field[src.data.length + row.length - (end-start)];
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
-            System.arraycopy(src.entries, 0, destEntries, 0, start);
+            System.arraycopy(src.data, 0, destEntries, 0, start);
             System.arraycopy(row, 0, destEntries, start, row.length);
             System.arraycopy(
-                    src.entries, end,
+                    src.data, end,
                     destEntries, start + row.length, destEntries.length-(start + row.length)
             );
 
@@ -197,7 +197,7 @@ public final class CooFieldMatrixGetSet {
      * Sets a specified row of a complex sparse matrix to the values of a sparse vector.
      * @param src Source matrix to set the row of.
      * @param rowIdx Index of the row to set.
-     * @param row Dense array containing the entries of the row to set.
+     * @param row Dense array containing the data of the row to set.
      * @return A copy of the {@code src} matrix with the specified row set to the dense {@code row} array.
      */
     public static <V extends Field<V>> AbstractCooFieldMatrix<?, ?, ?, V> setRow(
@@ -214,59 +214,59 @@ public final class CooFieldMatrixGetSet {
         int[] destColIndices;
 
         if(start<0) {
-            // No entries with row index found.
-            destEntries = new Field[src.entries.length + row.entries.length];
+            // No data with row index found.
+            destEntries = new Field[src.data.length + row.data.length];
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
-            System.arraycopy(src.entries, 0, destEntries, 0, -start-1);
-            System.arraycopy(row.entries, 0, destEntries, -start-1, row.entries.length);
+            System.arraycopy(src.data, 0, destEntries, 0, -start-1);
+            System.arraycopy(row.data, 0, destEntries, -start-1, row.data.length);
             System.arraycopy(
-                    src.entries, -start-1,
-                    destEntries, -start-1+row.entries.length, destEntries.length-(row.entries.length - start - 1)
+                    src.data, -start-1,
+                    destEntries, -start-1+row.data.length, destEntries.length-(row.data.length - start - 1)
             );
 
             System.arraycopy(src.rowIndices, 0, destRowIndices, 0, -start-1);
-            Arrays.fill(destRowIndices, -start-1, -start-1+row.entries.length, rowIdx);
+            Arrays.fill(destRowIndices, -start-1, -start-1+row.data.length, rowIdx);
             System.arraycopy(
                     src.rowIndices, -start-1,
-                    destRowIndices, -start-1+row.entries.length, destRowIndices.length-(row.entries.length - start - 1)
+                    destRowIndices, -start-1+row.data.length, destRowIndices.length-(row.data.length - start - 1)
             );
 
             System.arraycopy(src.colIndices, 0, destColIndices, 0, -start-1);
-            System.arraycopy(row.indices, 0, destColIndices, -start-1, row.entries.length);
+            System.arraycopy(row.indices, 0, destColIndices, -start-1, row.data.length);
             System.arraycopy(
                     src.colIndices, -start-1,
-                    destColIndices, -start-1+row.entries.length, destColIndices.length-(row.entries.length - start - 1)
+                    destColIndices, -start-1+row.data.length, destColIndices.length-(row.data.length - start - 1)
             );
 
         } else {
             // Entries with row index found.
-            destEntries = new Field[src.entries.length + row.entries.length - (end-start)];
+            destEntries = new Field[src.data.length + row.data.length - (end-start)];
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
-            System.arraycopy(src.entries, 0, destEntries, 0, start);
-            System.arraycopy(row.entries, 0, destEntries, start, row.entries.length);
-            int length = destEntries.length - (start + row.entries.length);
+            System.arraycopy(src.data, 0, destEntries, 0, start);
+            System.arraycopy(row.data, 0, destEntries, start, row.data.length);
+            int length = destEntries.length - (start + row.data.length);
 
             System.arraycopy(
-                    src.entries, end,
-                    destEntries, start + row.entries.length, length
+                    src.data, end,
+                    destEntries, start + row.data.length, length
             );
 
             System.arraycopy(src.rowIndices, 0, destRowIndices, 0, start);
-            Arrays.fill(destRowIndices, start, start+row.entries.length, rowIdx);
+            Arrays.fill(destRowIndices, start, start+row.data.length, rowIdx);
             System.arraycopy(
                     src.rowIndices, end,
-                    destRowIndices, start + row.entries.length, length
+                    destRowIndices, start + row.data.length, length
             );
 
             System.arraycopy(src.colIndices, 0, destColIndices, 0, start);
-            System.arraycopy(row.indices, 0, destColIndices, start, row.entries.length);
+            System.arraycopy(row.indices, 0, destColIndices, start, row.data.length);
             System.arraycopy(
                     src.colIndices, end,
-                    destColIndices, start + row.entries.length, length
+                    destColIndices, start + row.data.length, length
             );
         }
 
@@ -275,10 +275,10 @@ public final class CooFieldMatrixGetSet {
 
 
     /**
-     * Sets a column of a sparse matrix to the entries of a dense array.
+     * Sets a column of a sparse matrix to the data of a dense array.
      * @param src Source matrix to set column of.
      * @param colIdx The index of the column to set within the {@code src} matrix.
-     * @param col The dense array containing the new column entries for the {@code src} array.
+     * @param col The dense array containing the new column data for the {@code src} array.
      * @return A copy of the {@code src} matrix with the specified column set to the dense array.
      * @throws IllegalArgumentException If the {@code colIdx} is not within the range of the matrix.
      * @throws IllegalArgumentException If the {@code col} array does not have the same length as the number of
@@ -299,10 +299,10 @@ public final class CooFieldMatrixGetSet {
         ).boxed().collect(Collectors.toList());
         List<Integer> destColIndices = new ArrayList<>(Arrays.asList(colIndices));
 
-        // Add all entries in old matrix that are NOT in the specified column.
-        for(int i=0; i<src.entries.length; i++) {
+        // Add all data in old matrix that are NOT in the specified column.
+        for(int i = 0; i<src.data.length; i++) {
             if(src.colIndices[i]!=colIdx) {
-                destEntries.add(src.entries[i]);
+                destEntries.add(src.data[i]);
                 destRowIndices.add(src.rowIndices[i]);
                 destColIndices.add(src.colIndices[i]);
             }
@@ -316,10 +316,10 @@ public final class CooFieldMatrixGetSet {
 
 
     /**
-     * Sets a column of a sparse matrix to the entries of a sparse vector.
+     * Sets a column of a sparse matrix to the data of a sparse vector.
      * @param src Source matrix to set column of.
      * @param colIdx The index of the column to set within the {@code src} matrix.
-     * @param col The dense array containing the new column entries for the {@code src} array.
+     * @param col The dense array containing the new column data for the {@code src} array.
      * @return A copy of the {@code src} matrix with the specified column set to the dense array.
      * @throws IllegalArgumentException If the {@code colIdx} is not within the range of the matrix.
      * @throws IllegalArgumentException If the {@code col} array does not have the same length as the number of
@@ -332,18 +332,18 @@ public final class CooFieldMatrixGetSet {
         ValidateParameters.ensureIndexInBounds(src.numCols, colIdx);
         ValidateParameters.ensureEquals(src.numRows, col.size);
 
-        int[] colIndices = new int[col.entries.length];
+        int[] colIndices = new int[col.data.length];
         Arrays.fill(colIndices, colIdx);
 
         // Initialize destination arrays with the new column and the appropriate indices.
-        List<Field<T>> destEntries = new ArrayList(Arrays.asList(col.entries));
+        List<Field<T>> destEntries = new ArrayList(Arrays.asList(col.data));
         List<Integer> destRowIndices = ArrayUtils.toArrayList(col.indices);
         List<Integer> destColIndices = ArrayUtils.toArrayList(colIndices);
 
-        // Add all entries in old matrix that are NOT in the specified column.
-        for(int i=0; i<src.entries.length; i++) {
+        // Add all data in old matrix that are NOT in the specified column.
+        for(int i = 0; i<src.data.length; i++) {
             if(src.colIndices[i]!=colIdx) {
-                destEntries.add(src.entries[i]);
+                destEntries.add(src.data[i]);
                 destRowIndices.add(src.rowIndices[i]);
                 destColIndices.add(src.colIndices[i]);
             }
@@ -362,7 +362,7 @@ public final class CooFieldMatrixGetSet {
 
 
     /**
-     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of another sparse matrix.
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the data of another sparse matrix.
      * @param src Source sparse matrix to copy and set values of.
      * @param values Values of the slice to be set.
      * @param row Starting row index of slice.
@@ -380,7 +380,7 @@ public final class CooFieldMatrixGetSet {
         setSliceParamCheck(src, values, row, col);
 
         // Initialize lists to new values for the specified slice.
-        List<Field<V>> entries = new ArrayList<>(Arrays.asList(values.entries));
+        List<Field<V>> entries = new ArrayList<>(Arrays.asList(values.data));
         List<Integer> rowIndices = ArrayUtils.toArrayList(ArrayUtils.shift(row, values.rowIndices));
         List<Integer> colIndices = ArrayUtils.toArrayList(ArrayUtils.shift(col, values.colIndices));
 
@@ -389,7 +389,7 @@ public final class CooFieldMatrixGetSet {
 
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
-        // Create matrix and ensure entries are properly sorted.
+        // Create matrix and ensure data are properly sorted.
         AbstractCooFieldMatrix<?, ?, ?, V> mat = src.makeLikeTensor(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
@@ -398,7 +398,7 @@ public final class CooFieldMatrixGetSet {
 
 
     /**
-     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense array.
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the data of a dense array.
      * @param src Source sparse matrix to copy and set values of.
      * @param values Dense values of the slice to be set.
      * @param row Starting row index of slice.
@@ -446,7 +446,7 @@ public final class CooFieldMatrixGetSet {
 
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
-        // Create matrix and ensure entries are properly sorted.
+        // Create matrix and ensure data are properly sorted.
         AbstractCooFieldMatrix<?, ?, ?, V> mat = src.makeLikeTensor(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
@@ -466,9 +466,9 @@ public final class CooFieldMatrixGetSet {
         List<Field<T>> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             if(src.rowIndices[i]==rowIdx) {
-                entries.add(src.entries[i]);
+                entries.add(src.data[i]);
                 indices.add(src.colIndices[i]);
             }
         }
@@ -497,9 +497,9 @@ public final class CooFieldMatrixGetSet {
         List<Field<T>> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             if(src.rowIndices[i]==rowIdx && src.colIndices[i] >= start && src.colIndices[i] < end) {
-                entries.add(src.entries[i]);
+                entries.add(src.data[i]);
                 indices.add(src.colIndices[i]);
             }
         }
@@ -522,9 +522,9 @@ public final class CooFieldMatrixGetSet {
         List<Field<T>> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             if(src.colIndices[i]==colIdx) {
-                entries.add(src.entries[i]);
+                entries.add(src.data[i]);
                 indices.add(src.rowIndices[i]);
             }
         }
@@ -553,9 +553,9 @@ public final class CooFieldMatrixGetSet {
         List<Field<T>> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             if(src.colIndices[i]==colIdx && src.rowIndices[i] >= start && src.rowIndices[i] < end) {
-                entries.add(src.entries[i]);
+                entries.add(src.data[i]);
                 indices.add(src.rowIndices[i]);
             }
         }
@@ -593,9 +593,9 @@ public final class CooFieldMatrixGetSet {
             start = -start - 1;
         }
 
-        for(int i=start; i<src.entries.length; i++) {
+        for(int i = start; i<src.data.length; i++) {
             if(inSlice(src.rowIndices[i], src.colIndices[i], rowStart, rowEnd, colStart, colEnd)) {
-                entries.add(src.entries[i]);
+                entries.add(src.data[i]);
                 rowIndices.add(src.rowIndices[i]-rowStart);
                 colIndices.add(src.colIndices[i]-colStart);
             }
@@ -634,11 +634,11 @@ public final class CooFieldMatrixGetSet {
             List<Integer> rowIndices,
             List<Integer> colIndices, int[] rowRange, int[] colRange) {
         // Copy values not in slice.
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             if( !(ArrayUtils.contains(rowRange, src.rowIndices[i])
                     && ArrayUtils.contains(colRange, src.colIndices[i])) ) {
                 // Then the entry is not in the slice so add it.
-                entries.add(src.entries[i]);
+                entries.add(src.data[i]);
                 rowIndices.add(src.rowIndices[i]);
                 colIndices.add(src.colIndices[i]);
             }

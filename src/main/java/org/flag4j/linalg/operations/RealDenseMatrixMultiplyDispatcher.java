@@ -118,7 +118,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
 
         RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();
         AlgorithmNames name = selectAlgorithm(A.shape, B.shape);
-        return dispatcher.algorithmMap.get(name).apply(A.entries, A.shape, B.entries, B.shape);
+        return dispatcher.algorithmMap.get(name).apply(A.data, A.shape, B.data, B.shape);
     }
 
 
@@ -151,7 +151,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
 
         RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();
         AlgorithmNames name = selectAlgorithmTranspose(A.shape);
-        return dispatcher.algorithmMap.get(name).apply(A.entries, A.shape, B.entries, B.shape);
+        return dispatcher.algorithmMap.get(name).apply(A.data, A.shape, B.data, B.shape);
     }
 
 

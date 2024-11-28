@@ -44,9 +44,9 @@ import java.util.*;
  * This class provides low-level implementation of matrix multiplication between a real CSR matrix and a complex
  * CSR matrix.
  */
-public final class RealComplexCsrMatrixMultiplication {
+public final class RealComplexCsrMatMult {
 
-    private RealComplexCsrMatrixMultiplication() {
+    private RealComplexCsrMatMult() {
         // Hide default constructor for utility class.
         throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
@@ -71,12 +71,12 @@ public final class RealComplexCsrMatrixMultiplication {
 
             for(int aIndex=src1.rowPointers[i]; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                double aVal = src1.entries[aIndex];
+                double aVal = src1.data[aIndex];
                 int innerStop = src2.rowPointers[aCol+1];
 
                 for(int bIndex=src2.rowPointers[aCol]; bIndex<innerStop; bIndex++) {
                     int bCol = src2.colIndices[bIndex];
-                    Field<Complex128> bVal = src2.entries[bIndex];
+                    Field<Complex128> bVal = src2.data[bIndex];
 
                     destEntries[rowOffset + bCol] = destEntries[rowOffset + bCol].add(bVal.mult(aVal));
                 }
@@ -106,12 +106,12 @@ public final class RealComplexCsrMatrixMultiplication {
 
             for(int aIndex=src1.rowPointers[i]; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                Field<Complex128> aVal = src1.entries[aIndex];
+                Field<Complex128> aVal = src1.data[aIndex];
                 int innerStop = src2.rowPointers[aCol+1];
 
                 for(int bIndex=src2.rowPointers[aCol]; bIndex<innerStop; bIndex++) {
                     int bCol = src2.colIndices[bIndex];
-                    double bVal = src2.entries[bIndex];
+                    double bVal = src2.data[bIndex];
 
                     destEntries[rowOffset + bCol] = destEntries[rowOffset + bCol].add(aVal.mult(bVal));
                 }
@@ -148,19 +148,19 @@ public final class RealComplexCsrMatrixMultiplication {
 
             for (int aIndex=start; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                double aVal = src1.entries[aIndex];
+                double aVal = src1.data[aIndex];
                 int innerStart = src2.rowPointers[aCol];
                 int innerStop = src2.rowPointers[aCol + 1];
 
                 for (int bIndex=innerStart; bIndex<innerStop; bIndex++) {
                     int bCol = src2.colIndices[bIndex];
-                    Field<Complex128> bVal = src2.entries[bIndex];
+                    Field<Complex128> bVal = src2.data[bIndex];
 
                     tempMap.merge(bCol, bVal.mult(aVal), Complex128::add);
                 }
             }
 
-            // Ensure entries within each row are sorted by the column indices.
+            // Ensure data within each row are sorted by the column indices.
             List<Integer> tempColIndices = new ArrayList<>(tempMap.keySet());
             Collections.sort(tempColIndices);
 
@@ -205,19 +205,19 @@ public final class RealComplexCsrMatrixMultiplication {
 
             for (int aIndex=start; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                Field<Complex128> aVal = src1.entries[aIndex];
+                Field<Complex128> aVal = src1.data[aIndex];
                 int innerStart = src2.rowPointers[aCol];
                 int innerStop = src2.rowPointers[aCol + 1];
 
                 for (int bIndex=innerStart; bIndex<innerStop; bIndex++) {
                     int bCol = src2.colIndices[bIndex];
-                    double bVal = src2.entries[bIndex];
+                    double bVal = src2.data[bIndex];
 
                     tempMap.merge(bCol, aVal.mult(bVal), Complex128::add);
                 }
             }
 
-            // Ensure entries within each row are sorted by the column indices.
+            // Ensure data within each row are sorted by the column indices.
             List<Integer> tempColIndices = new ArrayList<>(tempMap.keySet());
             Collections.sort(tempColIndices);
 
@@ -252,9 +252,9 @@ public final class RealComplexCsrMatrixMultiplication {
         int rows1 = src1.numRows;
 
         // Iterate over the non-zero elements of the sparse vector.
-        for (int k=0; k < src2.entries.length; k++) {
+        for (int k = 0; k < src2.data.length; k++) {
             int col = src2.indices[k];
-            Field<Complex128> val = src2.entries[k];
+            Field<Complex128> val = src2.data[k];
 
             // Perform multiplication only for the non-zero elements.
             for (int i=0; i<rows1; i++) {
@@ -265,7 +265,7 @@ public final class RealComplexCsrMatrixMultiplication {
                 for (int aIndex=start; aIndex < stop; aIndex++) {
                     int aCol = src1.colIndices[aIndex];
                     if (aCol == col) {
-                        double aVal = src1.entries[aIndex];
+                        double aVal = src1.data[aIndex];
                         destVal = destVal.add(val.mult(aVal));
                     }
                 }
@@ -292,9 +292,9 @@ public final class RealComplexCsrMatrixMultiplication {
         int rows1 = src1.numRows;
 
         // Iterate over the non-zero elements of the sparse vector.
-        for (int k=0; k < src2.entries.length; k++) {
+        for (int k = 0; k < src2.data.length; k++) {
             int col = src2.indices[k];
-            double val = src2.entries[k];
+            double val = src2.data[k];
 
             // Perform multiplication only for the non-zero elements.
             for (int i=0; i<rows1; i++) {
@@ -305,7 +305,7 @@ public final class RealComplexCsrMatrixMultiplication {
                 for (int aIndex=start; aIndex < stop; aIndex++) {
                     int aCol = src1.colIndices[aIndex];
                     if (aCol == col) {
-                        Field<Complex128> aVal = src1.entries[aIndex];
+                        Field<Complex128> aVal = src1.data[aIndex];
                         destVal = destVal.add(aVal.mult(val));
                     }
                 }

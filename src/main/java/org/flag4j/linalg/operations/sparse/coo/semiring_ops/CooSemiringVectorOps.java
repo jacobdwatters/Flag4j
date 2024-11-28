@@ -36,7 +36,7 @@ import java.util.List;
 
 /**
  * <p>Utility class for computing operations between sparse COO {@link org.flag4j.algebraic_structures.semirings.Semiring} vectors.</p>
- * <p>Methods in this class assume that non-zero entries are sorted lexicographically by index.</p>
+ * <p>Methods in this class assume that non-zero data are sorted lexicographically by index.</p>
  */
 public final class CooSemiringVectorOps {
 
@@ -51,7 +51,7 @@ public final class CooSemiringVectorOps {
      * to have their indices sorted lexicographically.
      * @param src1 First sparse vector in the addition. Indices assumed to be sorted lexicographically.
      * @param src2 Second sparse vector in the addition. Indices assumed to be sorted lexicographically.
-     * @return A data class containing the non-zero entries and indices of the sparse COO vector resulting from the vector addition.
+     * @return A data class containing the non-zero data and indices of the sparse COO vector resulting from the vector addition.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
     public static <T extends Semiring<T>> SparseVectorData<Semiring<T>> add(
@@ -104,13 +104,13 @@ public final class CooSemiringVectorOps {
      * to have their indices sorted lexicographically.
      *
      * @param shape1 Shape of the first vector.
-     * @param src1 Non-zero entries of the first vector in the element-wise product.
+     * @param src1 Non-zero data of the first vector in the element-wise product.
      * @param src1Indices Non-zero indices of the first vector in the element-wise product.
      * @param shape2 Shape of the second vector.
-     * @param src2 Non-zero entries of the second vector in the element-wise product.
+     * @param src2 Non-zero data of the second vector in the element-wise product.
      * @param src2Indices Non-zero indices of the second vector in the element-wise product.
      *
-     * @return A data class containing the non-zero entries and indices of the sparse COO vector resulting
+     * @return A data class containing the non-zero data and indices of the sparse COO vector resulting
      * from the element-wise product.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
@@ -146,10 +146,10 @@ public final class CooSemiringVectorOps {
     /**
      * Computes the dot product between two sparse COO vectors.
      * @param shape1 The shape of the first vector.
-     * @param src1 The non-zero entries of the first vector.
+     * @param src1 The non-zero data of the first vector.
      * @param src1Indices The non-zero indices of the first vector.
      * @param shape2 The shape of the second vector.
-     * @param src2 The non-zero entries of the second vector.
+     * @param src2 The non-zero data of the second vector.
      * @param src2Indices The non-zero indices of the second vector.
      * @return The result of the dot product between the two specified COO vectors.
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !shape1.equals(shape2)}.
@@ -182,10 +182,10 @@ public final class CooSemiringVectorOps {
 
     /**
      * Computes the vector outer product between two sparse COO vectors.
-     * @param src1 Non-zero entries of the first vector.
+     * @param src1 Non-zero data of the first vector.
      * @param src1Indices Non-zero indices in the first vector.
      * @param src1Size The full size of the first vector.
-     * @param src2 Non-zero entries of the second vector.
+     * @param src2 Non-zero data of the second vector.
      * @param src2Indices Non-zero indices of the second vector.
      * @param dest Array to store the dense matrix resulting from the vector outer product.
      */

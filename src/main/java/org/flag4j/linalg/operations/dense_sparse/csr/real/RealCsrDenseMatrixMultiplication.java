@@ -70,12 +70,12 @@ public final class RealCsrDenseMatrixMultiplication {
 
             for(int aIndex=start; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                double aVal = src1.entries[aIndex];
+                double aVal = src1.data[aIndex];
                 int src2Idx = aCol*src2.numCols;
                 int destIdx = rowOffset;
 
                 while(destIdx < innerStop) {
-                    destEntries[destIdx++] += aVal*src2.entries[src2Idx++];
+                    destEntries[destIdx++] += aVal*src2.data[src2Idx++];
                 }
             }
         }
@@ -108,13 +108,13 @@ public final class RealCsrDenseMatrixMultiplication {
             int src1RowOffset = i*cols1;
 
             for (int j = 0; j < cols1; j++) {
-                double src1Val = src1.entries[src1RowOffset + j];
+                double src1Val = src1.data[src1RowOffset + j];
                 int start = src2.rowPointers[j];
                 int stop = src2.rowPointers[j + 1];
 
                 for (int aIndex = start; aIndex < stop; aIndex++) {
                     int aCol = src2.colIndices[aIndex];
-                    double aVal = src2.entries[aIndex];
+                    double aVal = src2.data[aIndex];
                     destEntries[rowOffset + aCol] += src1Val * aVal;
                 }
             }
@@ -154,7 +154,7 @@ public final class RealCsrDenseMatrixMultiplication {
                 stop = src1.rowPointers[i+1];
 
                 while(start < stop) {
-                    destEntries[destRowOffset] += src1.entries[start]*src2.entries[src2RowOffset + src1.colIndices[start++]];
+                    destEntries[destRowOffset] += src1.data[start]*src2.data[src2RowOffset + src1.colIndices[start++]];
                 }
             }
         }
@@ -184,9 +184,9 @@ public final class RealCsrDenseMatrixMultiplication {
 
             for (int aIndex = start; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                double aVal = src1.entries[aIndex];
+                double aVal = src1.data[aIndex];
 
-                destEntries[i] += aVal*src2.entries[aCol];
+                destEntries[i] += aVal*src2.data[aCol];
             }
         }
 

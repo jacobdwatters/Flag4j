@@ -26,7 +26,7 @@ class CooMatrixConstructorTests {
         A = new CooMatrix(size);
 
         assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -48,7 +48,7 @@ class CooMatrixConstructorTests {
         A = new CooMatrix(rows, cols);
 
         assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -62,7 +62,7 @@ class CooMatrixConstructorTests {
         A = new CooMatrix(rows, cols);
 
         assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -95,7 +95,7 @@ class CooMatrixConstructorTests {
         A = new CooMatrix(expShape);
 
         assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -109,7 +109,7 @@ class CooMatrixConstructorTests {
         A = new CooMatrix(expShape);
 
         assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
     }
@@ -126,7 +126,7 @@ class CooMatrixConstructorTests {
         A = new CooMatrix(size, expNonZero, expRowIndices, expColIndices);
 
         assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -175,7 +175,7 @@ class CooMatrixConstructorTests {
         A = new CooMatrix(rows, cols, expNonZero, expRowIndices, expColIndices);
 
         assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -189,7 +189,7 @@ class CooMatrixConstructorTests {
         A = new CooMatrix(rows, cols, expNonZero, expRowIndices, expColIndices);
 
         assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -222,7 +222,7 @@ class CooMatrixConstructorTests {
         A = new CooMatrix(expShape, expNonZero, expRowIndices, expColIndices);
 
         assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -236,7 +236,7 @@ class CooMatrixConstructorTests {
         A = new CooMatrix(expShape, expNonZero, expRowIndices, expColIndices);
 
         assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
     }
@@ -255,7 +255,7 @@ class CooMatrixConstructorTests {
         A = new CooMatrix(expShape, expNonZeroI, expRowIndices, expColIndices);
 
         assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -270,7 +270,7 @@ class CooMatrixConstructorTests {
         A = new CooMatrix(expShape, expNonZeroI, expRowIndices, expColIndices);
 
         assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
     }
@@ -288,7 +288,7 @@ class CooMatrixConstructorTests {
         A = new CooMatrix(expShape, expNonZeroI, expRowIndices, expColIndices);
 
         assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -303,7 +303,7 @@ class CooMatrixConstructorTests {
         A = new CooMatrix(expShape, expNonZeroI, expRowIndices, expColIndices);
 
         assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
     }
@@ -323,7 +323,7 @@ class CooMatrixConstructorTests {
         A = new CooMatrix(B);
 
         assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
@@ -339,7 +339,7 @@ class CooMatrixConstructorTests {
         A = new CooMatrix(B);
 
         assertEquals(expShape, A.shape);
-        assertArrayEquals(expNonZero, A.entries);
+        assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
     }

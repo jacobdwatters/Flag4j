@@ -116,8 +116,8 @@ public final class RealDenseProperties {
             int rowOffset = i*cols;
 
             for(int j=0; j<cols; j++) {
-                if(i==j && src.entries[rowOffset + j]!=1) return false;
-                if(i!=j &&src.entries[rowOffset + j]!=0) return false;
+                if(i==j && src.data[rowOffset + j]!=1) return false;
+                if(i!=j &&src.data[rowOffset + j]!=0) return false;
             }
         }
 
@@ -126,8 +126,8 @@ public final class RealDenseProperties {
 
 
     /**
-     * Checks if a matrix is the identity matrix approximately. Specifically, if the diagonal entries are no farther than
-     * 1.001E-5 in absolute value from 1.0 and the non-diagonal entries are no larger than 1e-08 in absolute value.
+     * Checks if a matrix is the identity matrix approximately. Specifically, if the diagonal data are no farther than
+     * 1.001E-5 in absolute value from 1.0 and the non-diagonal data are no larger than 1e-08 in absolute value.
      * These tolerances are derived from the {@link TensorBase#allClose(Object)} method.
      * @param src Matrix of interest to check if it is the identity matrix.
      * @return True if the {@code src} matrix is exactly the identity matrix.
@@ -144,8 +144,8 @@ public final class RealDenseProperties {
         int pos = 0;
         for(int i=0; i<rows; i++) {
             for(int j=0; j<cols; j++) {
-                if((i==j && Math.abs(src.entries[pos]-1) > diagTol)
-                        || (i!=j && Math.abs(src.entries[pos]) > nonDiagTol)) {
+                if((i==j && Math.abs(src.data[pos]-1) > diagTol)
+                        || (i!=j && Math.abs(src.data[pos]) > nonDiagTol)) {
                     return false;
                 }
 

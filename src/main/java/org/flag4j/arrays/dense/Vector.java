@@ -37,9 +37,9 @@ import org.flag4j.linalg.operations.common.field_ops.FieldOps;
 import org.flag4j.linalg.operations.dense.real.RealDenseVectorOperations;
 import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemDiv;
 import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemMult;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOperations;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOps;
 import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -55,23 +55,23 @@ import java.util.List;
  *
  * <p>Vectors are 1D tensors (i.e. rank 1 tensor).</p>
  *
- * <p>Vectors have mutable entries but are fixed in size.</p>
+ * <p>Vectors have mutable data but are fixed in size.</p>
  */
 public class Vector extends AbstractDenseDoubleTensor<Vector>
         implements VectorMixin<Vector, Matrix, Matrix, Double> {
 
     /**
-     * The size of this vector. That is, the number of entries in this vector.
+     * The size of this vector. That is, the number of data in this vector.
      */
     public final int size;
 
 
     /**
-     * Creates a tensor with the specified entries and shape.
+     * Creates a tensor with the specified data and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
-     * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
+     * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
+     * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
     public Vector(Shape shape, double[] entries) {
         super(shape, entries);
@@ -97,7 +97,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      */
     public Vector(int size, double fillValue) {
         super(new Shape(size), new double[size]);
-        Arrays.fill(super.entries, fillValue);
+        Arrays.fill(super.data, fillValue);
         this.size = shape.get(0);
     }
 
@@ -123,13 +123,13 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
     public Vector(Shape shape, double fillValue) {
         super(shape, new double[shape.get(0)]);
         ValidateParameters.ensureRank(shape, 1);
-        Arrays.fill(super.entries, fillValue);
+        Arrays.fill(super.data, fillValue);
         this.size = shape.get(0);
     }
 
 
     /**
-     * Creates a vector with specified entries.
+     * Creates a vector with specified data.
      * @param entries Entries for this column vector.
      */
     public Vector(double... entries) {
@@ -139,7 +139,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
 
 
     /**
-     * Creates a vector with specified entries.
+     * Creates a vector with specified data.
      * @param entries Entries for this column vector.
      */
     public Vector(int... entries) {
@@ -147,7 +147,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
         this.size = shape.get(0);
 
         for(int i=0; i<entries.length; i++) {
-            super.entries[i] = entries[i];
+            super.data[i] = entries[i];
         }
     }
 
@@ -157,18 +157,18 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @param a Vector to make copy of.
      */
     public Vector(Vector a) {
-        super(a.shape, a.entries.clone());
+        super(a.shape, a.data.clone());
         this.size = shape.get(0);
     }
 
 
     /**
-     * Constructs a tensor of the same type as this tensor with the given the shape and entries.
+     * Constructs a tensor of the same type as this tensor with the given the shape and data.
      *
      * @param shape Shape of the tensor to construct.
      * @param entries Entries of the tensor to construct.
      *
-     * @return A tensor of the same type as this tensor with the given the shape and entries.
+     * @return A tensor of the same type as this tensor with the given the shape and data.
      */
     @Override
     public Vector makeLikeTensor(Shape shape, double[] entries) {
@@ -177,7 +177,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
 
 
     /**
-     * Flattens tensor to single dimension while preserving order of entries.
+     * Flattens tensor to single dimension while preserving order of data.
      *
      * @return The flattened tensor.
      *
@@ -226,12 +226,12 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
             tiled = new Matrix(new Shape(n, size));
 
             for(int i=0, stop=tiled.numRows; i<stop; i++) // Set each row of the tiled matrix to be the vector values.
-                System.arraycopy(entries, 0, tiled.entries, i*tiled.numCols, size);
+                System.arraycopy(data, 0, tiled.data, i*tiled.numCols, size);
         } else {
             tiled = new Matrix(new Shape(size, n));
 
             for(int i=0, stop=tiled.numRows; i<stop; i++) // Fill each row of the tiled matrix with a single value from the vector.
-                Arrays.fill(tiled.entries, i*tiled.numCols, (i+1)*tiled.numCols, entries[i]);
+                Arrays.fill(tiled.data, i*tiled.numCols, (i+1)*tiled.numCols, data[i]);
         }
 
         return tiled;
@@ -245,7 +245,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      *
      * @return The result of stacking this vector and vector {@code b}.
      *
-     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of entries in
+     * @throws IllegalArgumentException If the number of data in this vector is different from the number of data in
      *                                  the vector {@code b}.
      */
     @Override
@@ -253,9 +253,9 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
         ValidateParameters.ensureEqualShape(shape, b.shape);
         Matrix stacked = new Matrix(2, size);
 
-        // Copy entries from each vector to the matrix.
-        System.arraycopy(entries, 0, stacked.entries, 0, size);
-        System.arraycopy(b.entries, 0, stacked.entries, size, b.size);
+        // Copy data from each vector to the matrix.
+        System.arraycopy(data, 0, stacked.data, 0, size);
+        System.arraycopy(b.data, 0, stacked.data, size, b.size);
 
         return stacked;
     }
@@ -282,8 +282,8 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      *
      * @return The result of stacking this vector and the vector {@code b}.
      *
-     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
-     *                                  entries in the vector {@code b}.
+     * @throws IllegalArgumentException If the number of data in this vector is different from the number of
+     *                                  data in the vector {@code b}.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
@@ -299,8 +299,8 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
 
             int count = 0;
             for(int i=0; i<stackedEntries.length; i+=2) {
-                stackedEntries[i] = this.entries[count];
-                stackedEntries[i+1] = b.entries[count++];
+                stackedEntries[i] = this.data[count];
+                stackedEntries[i+1] = b.data[count++];
             }
 
             stacked = new Matrix(this.size, 2, stackedEntries);
@@ -317,7 +317,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      *
      * @return The result of the vector outer product between this vector and {@code b}.
      *
-     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
+     * @throws IllegalArgumentException If the two vectors do not have the same number of data.
      */
     @Override
     public Matrix outer(Vector vector) {
@@ -337,9 +337,9 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
     @Override
     public Matrix toMatrix(boolean columVector) {
         if(columVector) {
-            return new Matrix(this.entries.length, 1, this.entries.clone()); // Convert to column vector.
+            return new Matrix(this.data.length, 1, this.data.clone()); // Convert to column vector.
         } else {
-            return new Matrix(1, this.entries.length, this.entries.clone()); // Convert to row vector.
+            return new Matrix(1, this.data.length, this.data.clone()); // Convert to row vector.
         }
     }
 
@@ -355,8 +355,8 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
     @Override
     public Vector join(Vector b) {
         Vector joined = new Vector(this.size+b.size);
-        System.arraycopy(this.entries, 0, joined.entries, 0, this.size);
-        System.arraycopy(b.entries, 0, joined.entries, this.size, b.size);
+        System.arraycopy(this.data, 0, joined.data, 0, this.size);
+        System.arraycopy(b.data, 0, joined.data, this.size, b.size);
 
         return joined;
     }
@@ -369,11 +369,11 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      *
      * @return The inner product between this vector and the vector {@code b}.
      *
-     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of entries.
+     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of data.
      */
     @Override
     public Double inner(Vector b) {
-        return RealDenseVectorOperations.innerProduct(entries, b.entries);
+        return RealDenseVectorOperations.innerProduct(data, b.data);
     }
 
 
@@ -384,7 +384,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      *
      * @return The dot product between this vector and the vector {@code b}.
      *
-     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of entries.
+     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of data.
      * @see #inner(Vector) 
      */
     @Override
@@ -399,7 +399,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return The Euclidean norm of this vector.
      */
     public double norm() {
-        return VectorNorms.norm(entries);
+        return VectorNorms.norm(data);
     }
 
 
@@ -411,7 +411,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return The Euclidean norm of this vector.
      */
     public double norm(int p) {
-        return VectorNorms.norm(entries, p);
+        return VectorNorms.norm(data, p);
     }
 
 
@@ -422,7 +422,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * zero vector will be returned.
      */
     public Vector normalize() {
-        double norm = VectorNorms.norm(entries);
+        double norm = VectorNorms.norm(data);
         return norm==0 ? new Vector(size) : (Vector) this.div(norm);
     }
 
@@ -434,7 +434,21 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      */
     @Override
     public Double mag() {
-        return VectorNorms.norm(entries);
+        return VectorNorms.norm(data);
+    }
+
+
+    /**
+     * Gets the element of this vector at the specified index.
+     *
+     * @param idx Index of the element to get within this vector.
+     *
+     * @return The element of this vector at index {@code idx}.
+     */
+    @Override
+    public Double get(int idx) {
+        ValidateParameters.validateTensorIndex(shape, idx);
+        return data[idx];
     }
 
 
@@ -445,15 +459,19 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      *
      * @return The result of the vector cross product between this vector and {@code b}.
      *
-     * @throws IllegalArgumentException If either this vector or {@code b} do not have exactly 3 entries.
+     * @throws IllegalArgumentException If either this vector or {@code b} do not have exactly 3 data.
      */
     public Vector cross(Vector b) {
-        ValidateParameters.ensureEquals(3, b.size, this.size);
+        if(size != 3 || b.size != 3) {
+            throw new LinearAlgebraException("Cross products can only be called vectors of size 3 but got sizes "
+                    + size + " and " + b.size);
+        }
+
         double[] entries = new double[3];
 
-        entries[0] = this.entries[1]*b.entries[2]-this.entries[2]*b.entries[1];
-        entries[1] = this.entries[2]*b.entries[0]-this.entries[0]*b.entries[2];
-        entries[2] = this.entries[0]*b.entries[1]-this.entries[1]*b.entries[0];
+        entries[0] = entries[1]*b.data[2] - entries[2]*b.data[1];
+        entries[1] = entries[2]*b.data[0] - entries[0]*b.data[2];
+        entries[2] = entries[0]*b.data[1] - entries[1]*b.data[0];
 
         return new Vector(entries);
     }
@@ -480,15 +498,15 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
 
             // Find first non-zero entry of b to compute the scaling factor.
             for(int i=0, size=b.size; i<size; i++) {
-                if(b.entries[i]!=0) {
-                    scale = this.entries[i]/b.entries[i];
+                if(b.data[i]!=0) {
+                    scale = this.data[i]/b.data[i];
                     break;
                 }
             }
 
-            // Ensure all entries of b are the same scalar multiple of the entries in this vector.
+            // Ensure all data of b are the same scalar multiple of the data in this vector.
             for(int i=0, size=this.size; i<size; i++) {
-                if(b.entries[i]*scale != this.entries[i]) {
+                if(b.data[i]*scale != this.data[i]) {
                     return false;
                 }
             }
@@ -520,7 +538,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
     /**
      * Gets the length of a vector.
      *
-     * @return The length, i.e. the number of entries, in this vector.
+     * @return The length, i.e. the number of data, in this vector.
      */
     @Override
     public int length() {
@@ -575,13 +593,13 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      */
     public CooVector toCoo() {
         // Estimate sparsity.
-        List<Double> nonZeroEntries = new ArrayList<>((int) (entries.length*0.5));
-        List<Integer> indices = new ArrayList<>((int) (entries.length*0.5));
+        List<Double> nonZeroEntries = new ArrayList<>((int) (data.length*0.5));
+        List<Integer> indices = new ArrayList<>((int) (data.length*0.5));
 
-        // Fill entries with non-zero values.
+        // Fill data with non-zero values.
         for(int i=0; i<size; i++) {
-            if(entries[i] != 0.0) {
-                nonZeroEntries.add(entries[i]);
+            if(data[i] != 0.0) {
+                nonZeroEntries.add(data[i]);
                 indices.add(i);
             }
         }
@@ -595,7 +613,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return A complex dense vector equivalent to this vector.
      */
     public CVector toComplex() {
-        return new CVector(ArrayUtils.wrapAsComplex128(entries, null));
+        return new CVector(ArrayUtils.wrapAsComplex128(data, null));
     }
 
 
@@ -611,7 +629,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
         ValidateParameters.ensureEqualShape(shape, b.shape);
 
         for(int i=0; i<size; i++)
-            entries[i] *= b.entries[i];
+            data[i] *= b.data[i];
     }
 
 
@@ -627,7 +645,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
         ValidateParameters.ensureEqualShape(shape, b.shape);
 
         for(int i=0; i<size; i++)
-            entries[i] += b.entries[i];
+            data[i] += b.data[i];
     }
 
 
@@ -643,7 +661,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
         ValidateParameters.ensureEqualShape(shape, b.shape);
 
         for(int i=0; i<size; i++)
-            entries[i] -= b.entries[i];
+            data[i] -= b.data[i];
     }
 
 
@@ -659,7 +677,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
         ValidateParameters.ensureEqualShape(shape, b.shape);
 
         for(int i=0; i<size; i++)
-            entries[i] /= b.entries[i];
+            data[i] /= b.data[i];
     }
 
 
@@ -678,7 +696,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
         double[] quotient = new double[size];
 
         for(int i=0; i<size; i++)
-            quotient[i] = this.entries[i] / b.entries[i];
+            quotient[i] = this.data[i] / b.data[i];
 
         return new Vector(quotient);
     }
@@ -697,7 +715,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
 
         Vector src2 = (Vector) object;
 
-        return shape.equals(src2.shape) && Arrays.equals(entries, src2.entries);
+        return shape.equals(src2.shape) && Arrays.equals(data, src2.data);
     }
 
 
@@ -705,7 +723,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
     public int hashCode() {
         int hash = 17;
         hash = 31*hash + shape.hashCode();
-        hash = 31*hash + Arrays.hashCode(entries);
+        hash = 31*hash + Arrays.hashCode(data);
 
         return hash;
     }
@@ -717,7 +735,9 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return The sum of this vector and {@code b}.
      */
     public CVector add(CVector b) {
-        return new CVector(RealFieldDenseOperations.add(b.entries, b.shape, entries, shape));
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseOps.add(b.shape, b.data, shape, data, dest);
+        return new CVector(dest);
     }
 
 
@@ -743,17 +763,17 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
 
 
     /**
-     * Adds a complex-valued scalar to each entry of this vector.
-     * @param b The scalar value in the sum.
-     * @return The sum of this vector's entries with the scalar value {@code b}.
+     * Adds a complex-valued scalar value to each entry of this tensor. If the tensor is sparse, the scalar will only be added to the
+     * non-zero data of the tensor.
+     *
+     * @param b Scalar value in sum.
+     *
+     * @return The sum of this tensor with the scalar {@code b}.
      */
     public CVector add(Complex128 b) {
-        Complex128[] sum = new Complex128[size];
-
-        for(int i=0; i<size; i++)
-            sum[i] = b.add(entries[i]);
-
-        return new CVector(sum);
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseOps.add(data, b, dest);
+        return new CVector(dest);
     }
 
 
@@ -763,7 +783,9 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return The difference of this vector and {@code b}.
      */
     public CVector sub(CVector b) {
-        return new CVector(RealFieldDenseOperations.sub(entries, shape, b.entries, b.shape));
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseOps.sub(b.shape, b.data, shape, data, dest);
+        return new CVector(dest);
     }
 
 
@@ -791,14 +813,14 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
     /**
      * Subtracts a complex-valued scalar from each entry of this vector.
      * @param b The scalar value in the difference.
-     * @return The difference of this vector's entries with the scalar value {@code b}.
+     * @return The difference of this vector's data with the scalar value {@code b}.
      */
     public CVector sub(Complex128 b) {
         Complex128 bInv = b.addInv();
         Complex128[] sum = new Complex128[size];
 
         for(int i=0; i<size; i++)
-            sum[i] = bInv.add(entries[i]);
+            sum[i] = bInv.add(data[i]);
 
         return new CVector(sum);
     }
@@ -810,7 +832,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return The scalar product of this vector with {@code b}.
      */
     public CVector mult(Complex128 b) {
-        return new CVector(FieldOps.scalMult(entries, b, null));
+        return new CVector(FieldOps.scalMult(data, b, null));
     }
 
 
@@ -820,7 +842,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return The scalar quotient of this vector with {@code b}.
      */
     public CVector div(Complex128 b) {
-        return new CVector(Complex128Ops.scalDiv(entries, b));
+        return new CVector(Complex128Ops.scalDiv(data, b));
     }
 
 
@@ -830,7 +852,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return The element-wise product of this vector and {@code b}.
      */
     public CVector elemMult(CVector b) {
-        return new CVector(RealFieldDenseElemMult.dispatch(b.entries, b.shape, this.entries, this.shape));
+        return new CVector(RealFieldDenseElemMult.dispatch(b.data, b.shape, this.data, this.shape));
     }
 
 
@@ -850,7 +872,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return The element-wise product of this vector and {@code b}.
      */
     public CooCVector elemMult(CooCVector b) {
-        return (CooCVector) RealFieldDenseCooVectorOperations.elemMult(this, b);
+        return (CooCVector) RealFieldDenseCooVectorOps.elemMult(this, b);
     }
 
 
@@ -860,7 +882,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return The element-wise quotient of this vector and {@code b}.
      */
     public CVector div(CVector b) {
-        return new CVector(RealFieldDenseElemDiv.dispatch(this.shape, this.entries, b.shape, b.entries));
+        return new CVector(RealFieldDenseElemDiv.dispatch(this.shape, this.data, b.shape, b.data));
     }
 
 
@@ -869,12 +891,12 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return A tensor equivalent to this vector.
      */
     public Tensor toTensor() {
-        return new Tensor(shape, entries.clone());
+        return new Tensor(shape, data.clone());
     }
 
 
     /**
-     * Converts this vector to a human-readable string format. To specify the maximum number of entries to print, use
+     * Converts this vector to a human-readable string format. To specify the maximum number of data to print, use
      * {@link PrintOptions#setMaxColumns(int)}.
      * @return A human-readable string representation of this vector.
      */
@@ -886,9 +908,9 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
         int width;
         String value;
 
-        // Get entries up until the stopping point.
+        // Get data up until the stopping point.
         for(int i=0; i<stopIndex; i++) {
-            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+            value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
             width = PrintOptions.getPadding() + value.length();
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
@@ -902,7 +924,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
         }
 
         // Get last entry now
-        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+        value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
         width = PrintOptions.getPadding() + value.length();
         value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
         result.append(String.format("%-" + width + "s", value));

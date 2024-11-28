@@ -176,7 +176,7 @@ public final class SubSpace {
             col = src2.getCol(j);
             solution = lstsq.solve(src1, col);
 
-            double norm = VectorNorms.norm(src1.mult(solution).sub(col).entries);
+            double norm = VectorNorms.norm(src1.mult(solution).sub(col).data);
             if(norm > tol) {
                 // Then the least squares solution does not provide an "exact" solution.
                 // Hence, the column of src2 cannot be expressed as a linear combination of the columns of src1

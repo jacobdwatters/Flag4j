@@ -46,11 +46,11 @@ public final class DenseCooFieldMatMultTranspose {
      * Multiplies a complex dense matrix to the transpose of a complex sparse matrix.
      * @param dSrc Entries of dense matrix.
      * @param dShape Shape of dense matrix.
-     * @param spSrc Non-zero entries of sparse matrix.
-     * @param rowIndices Row indices of non-zero entries in the sparse matrix.
-     * @param colIndices Column indices of non-zero entries in the sparse matrix.
+     * @param spSrc Non-zero data of sparse matrix.
+     * @param rowIndices Row indices of non-zero data in the sparse matrix.
+     * @param colIndices Column indices of non-zero data in the sparse matrix.
      * @param spShape Shape of the sparse matrix.
-     * @return The entries of the matrix resulting from multiplying the first matrix by the transpose of the second matrix.
+     * @return The data of the matrix resulting from multiplying the first matrix by the transpose of the second matrix.
      */
     public static <T extends Field<T>> Field<T>[] multTranspose(
             Field<T>[] dSrc, Shape dShape,
@@ -66,7 +66,7 @@ public final class DenseCooFieldMatMultTranspose {
             int destStart = i*rows2;
             int dSrcStart = i*cols2;
 
-            // Loop over non-zero entries of sparse matrix.
+            // Loop over non-zero data of sparse matrix.
             for(int j=0; j<spSrc.length; j++) {
                 int row = colIndices[j];
                 int col = rowIndices[j];

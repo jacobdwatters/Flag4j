@@ -43,10 +43,10 @@ class RealSparseMatMultTests {
                 {0, 0}};
         exp = new Matrix(expEntries);
 
-        assertArrayEquals(exp.entries, standard(A.entries, A.rowIndices, A.colIndices, A.shape,
-                B.entries, B.rowIndices, B.colIndices, B.shape));
-        assertArrayEquals(exp.entries, concurrentStandard(A.entries, A.rowIndices, A.colIndices, A.shape,
-                B.entries, B.rowIndices, B.colIndices, B.shape));
+        assertArrayEquals(exp.data, standard(A.data, A.rowIndices, A.colIndices, A.shape,
+                B.data, B.rowIndices, B.colIndices, B.shape));
+        assertArrayEquals(exp.data, concurrentStandard(A.data, A.rowIndices, A.colIndices, A.shape,
+                B.data, B.rowIndices, B.colIndices, B.shape));
     }
 
 
@@ -66,10 +66,10 @@ class RealSparseMatMultTests {
         expEntries = new double[][]{{0}, {0}, {12.6362}, {0}};
         exp = new Matrix(expEntries);
 
-        assertArrayEquals(exp.entries, standardVector(A.entries, A.rowIndices, A.colIndices, A.shape,
-                bVector.entries, bVector.indices));
-        assertArrayEquals(exp.entries, concurrentStandardVector(A.entries, A.rowIndices, A.colIndices, A.shape,
-                bVector.entries, bVector.indices));
+        assertArrayEquals(exp.data, standardVector(A.data, A.rowIndices, A.colIndices, A.shape,
+                bVector.data, bVector.indices));
+        assertArrayEquals(exp.data, concurrentStandardVector(A.data, A.rowIndices, A.colIndices, A.shape,
+                bVector.data, bVector.indices));
     }
 }
 

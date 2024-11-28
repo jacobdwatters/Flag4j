@@ -28,6 +28,8 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
+import static org.flag4j.util.ArrayUtils.makeNewIfNull;
+
 /**
  * This class provides low level methods for computing operations on real dense tensors.
  */
@@ -53,7 +55,7 @@ public final class RealDenseOperations {
     public static double[] add(double[] src1, double[] src2, double[] dest) {
         ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
         int length = src1.length;
-        if(dest == null) dest = new double[length];
+        dest = makeNewIfNull(dest, length);
 
         for(int i=0; i<length; i++)
             dest[i] = src1[i] + src2[i];
@@ -72,9 +74,8 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If {@code src1.length != src2.length}.
      */
     public static double[] sub(double[] src1, double[] src2, double[] dest) {
-        ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
         int length = src1.length;
-        if(dest == null) dest = new double[length];
+        dest = makeNewIfNull(dest, length);
 
         for(int i=0; i<length; i++)
             dest[i] = src1[i] - src2[i];
@@ -93,7 +94,7 @@ public final class RealDenseOperations {
      */
     public static double[] sub(double[] src, double b, double[] dest) {
         int length = src.length;
-        if(dest == null) dest = new double[length];
+        dest = makeNewIfNull(dest, length);
 
         for(int i=0; i<length; i++)
             dest[i] = src[i] - b;
@@ -157,9 +158,9 @@ public final class RealDenseOperations {
 
 
     /**
-     * Multiplies all entries in a tensor.
-     * @param src The entries of the tensor.
-     * @return The product of all entries in the tensor.
+     * Multiplies all data in a tensor.
+     * @param src The data of the tensor.
+     * @return The product of all data in the tensor.
      */
     public static double prod(double[] src) {
         if(src == null || src.length == 0) return 0;
@@ -173,9 +174,9 @@ public final class RealDenseOperations {
 
 
     /**
-     * Multiplies all entries in a tensor.
-     * @param src The entries of the tensor.
-     * @return The product of all entries in the tensor.
+     * Multiplies all data in a tensor.
+     * @param src The data of the tensor.
+     * @return The product of all data in the tensor.
      */
     public static int prod(int[] src) {
         if(src == null || src.length == 0) return 0;
@@ -213,7 +214,7 @@ public final class RealDenseOperations {
      */
     public static double[] add(double[] src, double b, double[] dest) {
         int length = src.length;
-        if(dest == null) dest = new double[length];
+        dest = makeNewIfNull(dest, length);
 
         for(int i=0; i<length; i++)
             dest[i] = src[i] + b;

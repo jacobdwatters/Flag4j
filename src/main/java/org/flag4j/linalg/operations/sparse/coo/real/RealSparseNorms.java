@@ -55,8 +55,8 @@ public final class RealSparseNorms {
         HashMap<Integer, Integer> columnMap = ArrayUtils.createUniqueMapping(src.colIndices);
 
         // Compute the column sums.
-        for(int i=0; i<src.entries.length; i++) {
-            colSums[columnMap.get(src.colIndices[i])] += src.entries[i]*src.entries[i];
+        for(int i = 0; i<src.data.length; i++) {
+            colSums[columnMap.get(src.colIndices[i])] += src.data[i]*src.data[i];
         }
 
         // Compute the norm from the column sums.
@@ -84,8 +84,8 @@ public final class RealSparseNorms {
         HashMap<Integer, Integer> columnMap = ArrayUtils.createUniqueMapping(src.colIndices);
 
         // Compute the column sums.
-        for(int i=0; i<src.entries.length; i++) {
-            colSums[columnMap.get(src.colIndices[i])] += Math.pow(Math.abs(src.entries[i]), p);
+        for(int i = 0; i<src.data.length; i++) {
+            colSums[columnMap.get(src.colIndices[i])] += Math.pow(Math.abs(src.data[i]), p);
         }
 
         // Compute the norm from the column sums.
@@ -113,8 +113,8 @@ public final class RealSparseNorms {
         HashMap<Integer, Integer> columnMap = ArrayUtils.createUniqueMapping(src.colIndices);
 
         // Compute the column sums.
-        for(int i=0; i<src.entries.length; i++) {
-            colSums[columnMap.get(src.colIndices[i])] += Math.pow(Math.abs(src.entries[i]), p);
+        for(int i = 0; i<src.data.length; i++) {
+            colSums[columnMap.get(src.colIndices[i])] += Math.pow(Math.abs(src.data[i]), p);
         }
 
         // Compute the norm from the column sums.

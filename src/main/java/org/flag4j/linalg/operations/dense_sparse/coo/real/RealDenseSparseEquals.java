@@ -48,7 +48,7 @@ public class RealDenseSparseEquals {
      * Checks if a real dense vector is equal to a sparse vector equals.
      * @param src1 Entries of dense vector.
      * @param src2 Non-zero Entries of sparse vector.
-     * @param indices Indices of non-zero entries in the sparse vector.
+     * @param indices Indices of non-zero data in the sparse vector.
      * @param sparseSize Size of the sparse vector.
      * @return True if the two matrices are equal. Returns false otherwise.
      */
@@ -95,18 +95,18 @@ public class RealDenseSparseEquals {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
-            double[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);
+            double[] entriesCopy = Arrays.copyOf(A.data, A.data.length);
 
             int rowIndex, colIndex;
             int entriesIndex;
 
-            // Remove all nonZero entries from the entries of this matrix.
+            // Remove all nonZero data from the data of this matrix.
             for(int i=0; i<B.nnz; i++) {
                 rowIndex = B.rowIndices[i];
                 colIndex = B.colIndices[i];
                 int idx = rowIndex*A.numCols + colIndex;
 
-                if(entriesCopy[idx] != B.entries[i]) {
+                if(entriesCopy[idx] != B.data[i]) {
                     equal = false;
                     break;
                 }
@@ -137,15 +137,15 @@ public class RealDenseSparseEquals {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
-            double[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);
+            double[] entriesCopy = Arrays.copyOf(A.data, A.data.length);
 
             int entriesIndex;
 
-            // Remove all nonZero entries from the entries of this matrix.
+            // Remove all nonZero data from the data of this matrix.
             for(int i=0; i<B.nnz; i++) {
                 entriesIndex = A.shape.getFlatIndex(B.indices[i]);
 
-                if(entriesCopy[entriesIndex] != B.entries[i]) {
+                if(entriesCopy[entriesIndex] != B.data[i]) {
                     equal = false;
                     break;
                 }

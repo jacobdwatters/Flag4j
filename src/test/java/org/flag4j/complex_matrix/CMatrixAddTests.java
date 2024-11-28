@@ -37,9 +37,9 @@ class CMatrixAddTests {
                 {345, 6.8883}};
         B = new Matrix(bEntries);
         expEntries = new Complex128[][]{
-                {new Complex128(234.56, -0.23).add(B.entries[0]), new Complex128(4).add(B.entries[1])},
-                {new Complex128(67.1, 0.0003443993).add(B.entries[2]), new Complex128(8.4554, -98.2).add(B.entries[3])},
-                {new Complex128(-723.234, 4).add(B.entries[4]), new Complex128(-9.431).add(B.entries[5])}};
+                {new Complex128(234.56, -0.23).add(B.data[0]), new Complex128(4).add(B.data[1])},
+                {new Complex128(67.1, 0.0003443993).add(B.data[2]), new Complex128(8.4554, -98.2).add(B.data[3])},
+                {new Complex128(-723.234, 4).add(B.data[4]), new Complex128(-9.431).add(B.data[5])}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, A.add(B));
@@ -93,9 +93,9 @@ class CMatrixAddTests {
                 {new Complex128(994.33134, Double.POSITIVE_INFINITY), new Complex128(445, 6)}};
         B = new CMatrix(bEntries);
         expEntries = new Complex128[][]{
-                {new Complex128(234.56, -0.23).add((Complex128) B.entries[0]), new Complex128(4).add((Complex128) B.entries[1])},
-                {new Complex128(67.1, 0.0003443993).add((Complex128) B.entries[2]), new Complex128(8.4554, -98.2).add((Complex128) B.entries[3])},
-                {new Complex128(-723.234, 4).add((Complex128) B.entries[4]), new Complex128(-9.431).add((Complex128) B.entries[5])}};
+                {new Complex128(234.56, -0.23).add((Complex128) B.data[0]), new Complex128(4).add((Complex128) B.data[1])},
+                {new Complex128(67.1, 0.0003443993).add((Complex128) B.data[2]), new Complex128(8.4554, -98.2).add((Complex128) B.data[3])},
+                {new Complex128(-723.234, 4).add((Complex128) B.data[4]), new Complex128(-9.431).add((Complex128) B.data[5])}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, A.add(B));
@@ -148,9 +148,9 @@ class CMatrixAddTests {
         sparseShape = new Shape(A.numRows, A.numCols);
         B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
         expEntries = new Complex128[][]{
-                {new Complex128(234.56, -0.23).add(B.entries[0]), new Complex128(4)},
+                {new Complex128(234.56, -0.23).add(B.data[0]), new Complex128(4)},
                 {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
-                {new Complex128(-723.234, 4), new Complex128(-9.431).add(B.entries[1])}};
+                {new Complex128(-723.234, 4), new Complex128(-9.431).add(B.data[1])}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, A.add(B));
@@ -205,9 +205,9 @@ class CMatrixAddTests {
         B = new CooCMatrix(sparseShape, bEntries, rowIndices, colIndices);
 
         expEntries = new Complex128[][]{
-                {new Complex128(234.56, -0.23).add((Complex128) B.entries[0]), new Complex128(4)},
+                {new Complex128(234.56, -0.23).add((Complex128) B.data[0]), new Complex128(4)},
                 {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
-                {new Complex128(-723.234, 4), new Complex128(-9.431).add((Complex128) B.entries[1])}};
+                {new Complex128(-723.234, 4), new Complex128(-9.431).add((Complex128) B.data[1])}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, A.add(B));

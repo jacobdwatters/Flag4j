@@ -50,14 +50,14 @@ public final class RealSparseMatrixProperties {
      * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
      */
     public static boolean isIdentity(CooMatrix src) {
-        // Ensure the matrix is square and there are at least the same number of non-zero entries as entries on the diagonal.
-        if(!src.isSquare() || src.entries.length<src.numRows) return false;
+        // Ensure the matrix is square and there are at least the same number of non-zero data as data on the diagonal.
+        if(!src.isSquare() || src.data.length<src.numRows) return false;
 
-        for(int i=0, size=src.entries.length; i<size; i++) {
+        for(int i = 0, size = src.data.length; i<size; i++) {
             // Ensure value is 1 and on the diagonal.
-            if(src.rowIndices[i] != i && src.rowIndices[i] != i && src.entries[i] != 1) {
+            if(src.rowIndices[i] != i && src.rowIndices[i] != i && src.data[i] != 1) {
                 return false;
-            } else if((src.rowIndices[i] != i || src.rowIndices[i] != i) && src.entries[i] != 0) {
+            } else if((src.rowIndices[i] != i || src.rowIndices[i] != i) && src.data[i] != 0) {
                 return false;
             }
         }
@@ -72,17 +72,17 @@ public final class RealSparseMatrixProperties {
      * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
      */
     public static boolean isCloseToIdentity(CooMatrix src) {
-        // Ensure the matrix is square and there are the same number of non-zero entries as entries on the diagonal.
-        boolean result = src.isSquare() && src.entries.length==src.numRows;
+        // Ensure the matrix is square and there are the same number of non-zero data as data on the diagonal.
+        boolean result = src.isSquare() && src.data.length==src.numRows;
 
         // Tolerances corresponds to the allClose(...) methods.
         double diagTol = 1.001E-5;
         double nonDiagTol = 1e-08;
 
-        for(int i=0; i<src.entries.length; i++) {
-            if(src.rowIndices[i] == i && src.colIndices[i] == i && Math.abs(src.entries[i]-1) > diagTol ) {
+        for(int i = 0; i<src.data.length; i++) {
+            if(src.rowIndices[i] == i && src.colIndices[i] == i && Math.abs(src.data[i]-1) > diagTol ) {
                 return false; // Diagonal value is not close to one.
-            } else if((src.rowIndices[i] != i && src.colIndices[i] != i) && Math.abs(src.entries[i]) > nonDiagTol) {
+            } else if((src.rowIndices[i] != i && src.colIndices[i] != i) && Math.abs(src.data[i]) > nonDiagTol) {
                 return false; // Non-diagonal value is not close to zero.
             }
         }
@@ -100,7 +100,7 @@ public final class RealSparseMatrixProperties {
     public static boolean isSymmetric(CooMatrix src) {
         boolean result = src.isSquare();
 
-        List<Double> entries = DoubleStream.of(src.entries).boxed().collect(Collectors.toList());
+        List<Double> entries = DoubleStream.of(src.data).boxed().collect(Collectors.toList());
         List<Integer> rowIndices = IntStream.of(src.rowIndices).boxed().collect(Collectors.toList());
         List<Integer> colIndices = IntStream.of(src.colIndices).boxed().collect(Collectors.toList());
 
@@ -155,7 +155,7 @@ public final class RealSparseMatrixProperties {
     public static boolean isAntiSymmetric(CooMatrix src) {
         boolean result = src.isSquare();
 
-        List<Double> entries = DoubleStream.of(src.entries).boxed().collect(Collectors.toList());
+        List<Double> entries = DoubleStream.of(src.data).boxed().collect(Collectors.toList());
         List<Integer> rowIndices = IntStream.of(src.rowIndices).boxed().collect(Collectors.toList());
         List<Integer> colIndices = IntStream.of(src.colIndices).boxed().collect(Collectors.toList());
 

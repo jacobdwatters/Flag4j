@@ -65,9 +65,9 @@ public final class TensorInvert {
         int prod = getProduct(originalShape.getDims(), numIndices);
 
         // Convert to an equivalent matrix inverse problem and solve.
-        Matrix matInverse = Invert.inv(new Matrix(prod, src.entries.length-prod, src.entries));
+        Matrix matInverse = Invert.inv(new Matrix(prod, src.data.length-prod, src.data));
 
-        return new Tensor(invShape, matInverse.entries); // Reshape as tensor.
+        return new Tensor(invShape, matInverse.data); // Reshape as tensor.
     }
 
 
@@ -93,9 +93,9 @@ public final class TensorInvert {
         int prod = getProduct(originalShape.getDims(), numIndices);
 
         // Convert to an equivalent matrix inverse problem and solve.
-        Matrix matInverse = Invert.inv(new Matrix(prod, src.entries.length-prod, src.entries));
+        Matrix matInverse = Invert.inv(new Matrix(prod, src.data.length-prod, src.data));
 
-        return src.makeLikeTensor(invShape, matInverse.entries); // Reshape as tensor.
+        return src.makeLikeTensor(invShape, matInverse.data); // Reshape as tensor.
     }
 
 
@@ -118,9 +118,9 @@ public final class TensorInvert {
         int prod = getProduct(originalShape.getDims(), numIndices);
 
         // Convert to an equivalent matrix inverse problem.
-        CMatrix matInverse = Invert.inv(new CMatrix(prod, src.entries.length-prod, src.entries));
+        CMatrix matInverse = Invert.inv(new CMatrix(prod, src.data.length-prod, src.data));
 
-        return new CTensor(invShape, matInverse.entries); // Reshape as tensor.
+        return new CTensor(invShape, matInverse.data); // Reshape as tensor.
     }
 
 
@@ -140,12 +140,12 @@ public final class TensorInvert {
 
 
     /**
-     * Computes the total number of entries in the last {@code numIndices} dimensions of a tensor with dimensions specified by
+     * Computes the total number of data in the last {@code numIndices} dimensions of a tensor with dimensions specified by
      * {@code dims}.
      * @param dims Dimensions of the tensor.
      * @param numIndices Number of last indices to compute product for.
-     * @return The total number of entries in the last {@code numIndices} dimensions of a tensor with dimensions specified by
-     * {@code dims}. That is, the product of the last {@code numIndices} entries of {@code dims}.
+     * @return The total number of data in the last {@code numIndices} dimensions of a tensor with dimensions specified by
+     * {@code dims}. That is, the product of the last {@code numIndices} data of {@code dims}.
      */
     private static int getProduct(int[] dims, int numIndices) {
         int prod = 1;

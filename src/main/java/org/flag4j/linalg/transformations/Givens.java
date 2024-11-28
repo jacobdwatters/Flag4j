@@ -74,10 +74,10 @@ public final class Givens {
         double c = Math.cos(theta);
         double s = Math.sin(theta);
 
-        G.entries[i*(G.numCols + 1)] = c;
-        G.entries[i*G.numCols + j] = s;
-        G.entries[j*G.numCols + i] = -s;
-        G.entries[j*(G.numCols + 1)] = c;
+        G.data[i*(G.numCols + 1)] = c;
+        G.data[i*G.numCols + j] = s;
+        G.data[j*G.numCols + i] = -s;
+        G.data[j*(G.numCols + 1)] = c;
 
         return G;
     }
@@ -94,7 +94,7 @@ public final class Givens {
      * @throws IndexOutOfBoundsException If {@code i} is not in the range [0, v.size).
      */
     public static Matrix getRotator(Vector v, int i) {
-        return getRotator(v.entries, i);
+        return getRotator(v.data, i);
     }
 
 
@@ -116,10 +116,10 @@ public final class Givens {
 
         Matrix G = Matrix.I(v.length); // Initialize rotator to identity matrix.
 
-        G.entries[i*(G.numCols + 1)] = cs[0];
-        G.entries[i*G.numCols] = -cs[1];
-        G.entries[i] = cs[1];
-        G.entries[0] = cs[0];
+        G.data[i*(G.numCols + 1)] = cs[0];
+        G.data[i*G.numCols] = -cs[1];
+        G.data[i] = cs[1];
+        G.data[0] = cs[0];
 
         return G;
     }
@@ -139,16 +139,16 @@ public final class Givens {
     public static CMatrix getRotator(CVector v, int i) {
         ValidateParameters.ensureIndexInBounds(v.size, i);
 
-        double r = VectorNorms.norm(v.entries);
-        Complex128 c = v.entries[0].div(r);
-        Complex128 s = v.entries[i].div(r);
+        double r = VectorNorms.norm(v.data);
+        Complex128 c = v.data[0].div(r);
+        Complex128 s = v.data[i].div(r);
 
         CMatrix G = CMatrix.I(v.size); // Initialize rotator to identity matrix.
 
-        G.entries[i*(G.numCols + 1)] = c.conj();
-        G.entries[i*G.numCols] = s.addInv();
-        G.entries[i] = s;
-        G.entries[0] = c;
+        G.data[i*(G.numCols + 1)] = c.conj();
+        G.data[i*G.numCols] = s.addInv();
+        G.data[i] = s;
+        G.data[0] = c;
 
         return G;
     }
@@ -164,7 +164,7 @@ public final class Givens {
      */
     public static Matrix get2x2Rotator(Vector v) {
         ValidateParameters.ensureArrayLengthsEq(2, v.size);
-        return get2x2Rotator(v.entries[0], v.entries[1]);
+        return get2x2Rotator(v.data[0], v.data[1]);
     }
 
 
@@ -200,11 +200,11 @@ public final class Givens {
      * @param row The row to the rotator is being applied to.
      * @param workArray Array to store temporary values. If null, a new array will be created (modified).
      * @throws ArrayIndexOutOfBoundsException If the {@code workArray} is not at least large enough to store the
-     * {@code 2*(A.numCols - i - 1)} entries.
+     * {@code 2*(A.numCols - i - 1)} data.
      */
     public static void leftMult2x2Rotator(Matrix src, Matrix G, int row, double[] workArray) {
-        double[] src1 = G.entries;
-        double[] src2 = src.entries;
+        double[] src1 = G.data;
+        double[] src2 = src.data;
 
         int cols2 = src.numCols;
         int destCols = (cols2 - (row-1));
@@ -248,11 +248,11 @@ public final class Givens {
      * @param row The row to the rotator is being applied to.
      * @param workArray Array to store temporary values. If null, a new array will be created (modified).
      * If the {@code workArray} is not at least large enough to store the
-     * {@code 2*(row+1)} entries.
+     * {@code 2*(row+1)} data.
      */
     public static void rightMult2x2Rotator(Matrix src, Matrix G, int row, double[] workArray) {
-        double[] src1 = src.entries;
-        double[] src2 = G.entries;
+        double[] src1 = src.data;
+        double[] src2 = G.data;
 
         int cols1 = src.numCols;
         int rows1 = src.numRows;
@@ -300,11 +300,11 @@ public final class Givens {
      * @param row The row to the rotator is being applied to.
      * @param workArray Array to store temporary values. If null, a new array will be created (modified).
      * If the {@code workArray} is not at least large enough to store the
-     * {@code 2*(A.numCols - i - 1)} entries.
+     * {@code 2*(A.numCols - i - 1)} data.
      */
     public static void leftMult2x2Rotator(CMatrix src, CMatrix G, int row, Field<Complex128>[] workArray) {
-        Field<Complex128>[] src1 = G.entries;
-        Field<Complex128>[] src2 = src.entries;
+        Field<Complex128>[] src1 = G.data;
+        Field<Complex128>[] src2 = src.data;
 
         int cols2 = src.shape.get(1);
         int destCols = (cols2 - (row-1));
@@ -351,11 +351,11 @@ public final class Givens {
      * @param row The row to the rotator is being applied to.
      * @param workArray Array to store temporary values. If null, a new array will be created (modified).
      * If the {@code workArray} is not at least large enough to store the 
-     * {@code 2*(row+1)} entries.     
+     * {@code 2*(row+1)} data.
      */
     public static void rightMult2x2Rotator(CMatrix src, CMatrix G, int row, Field<Complex128>[] workArray) {
-        Field<Complex128>[] src1 = src.entries;
-        Field<Complex128>[] src2 = G.entries;
+        Field<Complex128>[] src1 = src.data;
+        Field<Complex128>[] src2 = G.data;
 
         int cols1 = src.numCols;
         int rows1 = src.numRows;
@@ -399,7 +399,7 @@ public final class Givens {
     public static CMatrix get2x2Rotator(CVector v) {
         ValidateParameters.ensureArrayLengthsEq(2, v.size);
 
-        return get2x2Rotator((Complex128) v.entries[0], (Complex128) v.entries[1]);
+        return get2x2Rotator((Complex128) v.data[0], (Complex128) v.data[1]);
     }
 
 

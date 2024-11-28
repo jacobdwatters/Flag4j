@@ -57,8 +57,8 @@ public final class CooFieldNorms {
         HashMap<Integer, Integer> columnMap = ArrayUtils.createUniqueMapping(src.colIndices);
 
         // Compute the column sums.
-        for(int i=0; i<src.entries.length; i++) {
-            double mag = src.entries[i].mag();
+        for(int i = 0; i<src.data.length; i++) {
+            double mag = src.data[i].mag();
             colSums[columnMap.get(src.colIndices[i])] += mag*mag;
         }
 
@@ -86,8 +86,8 @@ public final class CooFieldNorms {
         HashMap<Integer, Integer> columnMap = ArrayUtils.createUniqueMapping(src.colIndices);
 
         // Compute the column sums.
-        for(int i=0; i<src.entries.length; i++)
-            colSums[columnMap.get(src.colIndices[i])] += Math.pow(src.entries[i].mag(), p);
+        for(int i = 0; i<src.data.length; i++)
+            colSums[columnMap.get(src.colIndices[i])] += Math.pow(src.data[i].mag(), p);
 
         // Compute the norm from the column sums.
         for(double colSum : colSums)
@@ -113,8 +113,8 @@ public final class CooFieldNorms {
         HashMap<Integer, Integer> columnMap = ArrayUtils.createUniqueMapping(src.colIndices);
 
         // Compute the column sums.
-        for(int i=0; i<src.entries.length; i++)
-            colSums[columnMap.get(src.colIndices[i])] += Math.pow(src.entries[i].mag(), p);
+        for(int i = 0; i<src.data.length; i++)
+            colSums[columnMap.get(src.colIndices[i])] += Math.pow(src.data[i].mag(), p);
 
         // Compute the norm from the column sums.
         for(double colSum : colSums)

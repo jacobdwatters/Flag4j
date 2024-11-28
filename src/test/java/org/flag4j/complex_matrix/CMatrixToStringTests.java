@@ -5,6 +5,8 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class CMatrixToStringTests {
 
     Complex128[][] aEntries;

@@ -90,22 +90,22 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Field<Comple
         int uIndex;
         int n = b.size;
         x = new CVector(U.numRows);
-        det = (Complex128) U.entries[n*n-1];
+        det = (Complex128) U.data[n*n-1];
 
-        x.entries[n-1] = b.entries[n-1].div(det);
+        x.data[n-1] = b.data[n-1].div(det);
 
         for(int i=n-2; i>-1; i--) {
             sum = Complex128.ZERO;
             uIndex = i*U.numCols;
 
-            Complex128 diag = (Complex128) U.entries[i*(n+1)];
+            Complex128 diag = (Complex128) U.data[i*(n+1)];
             det = det.mult(diag);
 
             for(int j=i+1; j<n; j++) {
-                sum = sum.add(U.entries[uIndex + j].mult((Complex128) x.entries[j]));
+                sum = sum.add(U.data[uIndex + j].mult((Complex128) x.data[j]));
             }
 
-            x.entries[i] = (b.entries[i].sub(sum)).div(diag);
+            x.data[i] = (b.data[i].sub(sum)).div(diag);
         }
 
         checkSingular(det.mag(), U.numRows, U.numCols); // Ensure the matrix is not singular.
@@ -132,33 +132,33 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Field<Comple
         int uIndex, xIndex;
         int n = B.numRows;
         X = new CMatrix(B.shape);
-        det = (Complex128) U.entries[U.entries.length-1];
+        det = (Complex128) U.data[U.data.length-1];
 
         xCol = new Complex128[n];
 
         for(int j=0; j<B.numCols; j++) {
-            X.entries[(n-1)*X.numCols + j] = B.entries[(n-1)*X.numCols + j].div((Complex128) U.entries[n*n-1]);
-            det = det.mult((Complex128) U.entries[j*(n+1)]);
+            X.data[(n-1)*X.numCols + j] = B.data[(n-1)*X.numCols + j].div((Complex128) U.data[n*n-1]);
+            det = det.mult((Complex128) U.data[j*(n+1)]);
 
             // Store column to improve cache performance on innermost loop.
             for(int k=0; k<n; k++) {
-                xCol[k] = X.entries[k*X.numCols + j];
+                xCol[k] = X.data[k*X.numCols + j];
             }
 
             for(int i=n-2; i>-1; i--) {
                 sum = Complex128.ZERO;
                 uIndex = i*U.numCols;
                 xIndex = i*X.numCols + j;
-                diag = (Complex128) U.entries[i*(n+1)];
+                diag = (Complex128) U.data[i*(n+1)];
 
                 if(j==0) det = det.mult(diag);
 
                 for(int k=i+1; k<n; k++) {
-                    sum = sum.add(U.entries[uIndex + k].mult((Complex128) xCol[k]));
+                    sum = sum.add(U.data[uIndex + k].mult((Complex128) xCol[k]));
                 }
 
-                Complex128 value = B.entries[xIndex].sub(sum).div(diag);
-                X.entries[xIndex] = value;
+                Complex128 value = B.data[xIndex].sub(sum).div(diag);
+                X.data[xIndex] = value;
                 xCol[i] = value;
             }
         }
@@ -186,16 +186,16 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Field<Comple
         int uIndex, xIndex;
         int n = U.numRows;
         X = new CMatrix(U.shape);
-        det = (Complex128) U.entries[U.entries.length-1];
+        det = (Complex128) U.data[U.data.length-1];
 
         xCol = new Complex128[n];
-        X.entries[X.entries.length-1] = det.multInv();
+        X.data[X.data.length-1] = det.multInv();
 
         for(int j=0; j<U.numCols; j++) {
 
             // Store column to improve cache performance on innermost loop.
             for(int k=0; k<n; k++) {
-                xCol[k] = X.entries[k*X.numCols + j];
+                xCol[k] = X.data[k*X.numCols + j];
             }
 
             for(int i=n-2; i>-1; i--) {
@@ -203,16 +203,16 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Field<Comple
                 uIndex = i*U.numCols;
                 xIndex = uIndex + j;
                 uIndex += i+1;
-                diag = (Complex128) U.entries[i*(n+1)];
+                diag = (Complex128) U.data[i*(n+1)];
 
                 if(j==0) det = det.mult(diag);
 
                 for(int k=i+1; k<n; k++) {
-                    sum = sum.sub(U.entries[uIndex++].mult((Complex128) xCol[k]));
+                    sum = sum.sub(U.data[uIndex++].mult((Complex128) xCol[k]));
                 }
 
                 Complex128 value = sum.div(diag);
-                X.entries[xIndex] = value;
+                X.data[xIndex] = value;
                 xCol[i] = value;
             }
         }
@@ -238,35 +238,35 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Field<Comple
         Complex128 sum, diag;
         int uIndex, xIndex;
         int n = L.numRows;
-        Complex128 uValue = (Complex128) U.entries[n*n-1];
+        Complex128 uValue = (Complex128) U.data[n*n-1];
         int rowOffset = (n-1)*n;
         X = new CMatrix(L.shape);
-        det = (Complex128) U.entries[U.entries.length-1];
+        det = (Complex128) U.data[U.data.length-1];
 
         xCol = new Complex128[n];
 
         for(int j=0; j<n; j++) {
-            X.entries[rowOffset] = L.entries[rowOffset++].div(uValue);
+            X.data[rowOffset] = L.data[rowOffset++].div(uValue);
 
             // Store column to improve cache performance on innermost loop.
             for(int k=0; k<n; k++) {
-                xCol[k] = X.entries[k*X.numCols + j];
+                xCol[k] = X.data[k*X.numCols + j];
             }
 
             for(int i=L.numCols-2; i>=0; i--) {
                 sum = Complex128.ZERO;
                 uIndex = i*U.numCols;
                 xIndex = uIndex + j;
-                diag = (Complex128) U.entries[i*(n+1)];
+                diag = (Complex128) U.data[i*(n+1)];
 
                 if(j==0) det = det.mult(diag);
 
                 for(int k=i+1; k<n; k++) {
-                    sum = sum.add(U.entries[uIndex + k].mult((Complex128) xCol[k]));
+                    sum = sum.add(U.data[uIndex + k].mult((Complex128) xCol[k]));
                 }
 
-                Complex128 value = L.entries[xIndex].sub(sum).div(diag);
-                X.entries[xIndex] = value;
+                Complex128 value = L.data[xIndex].sub(sum).div(diag);
+                X.data[xIndex] = value;
                 xCol[i] = value;
             }
         }

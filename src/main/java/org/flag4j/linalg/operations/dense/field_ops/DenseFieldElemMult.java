@@ -39,7 +39,7 @@ public final class DenseFieldElemMult {
     //  be provided for specifying the threshold so that different Field implementations can specify their own value.
 
     /**
-     * Minimum number of entries in each tensor to apply concurrent algorithm.
+     * Minimum number of data in each tensor to apply concurrent algorithm.
      */
     private static final int CONCURRENT_THRESHOLD = 50_000;
 
@@ -93,7 +93,7 @@ public final class DenseFieldElemMult {
 
 
     /**
-     * Dynamically chooses and applies element-wise multiplication algorithm to use based on the number of entries in the tensors.
+     * Dynamically chooses and applies element-wise multiplication algorithm to use based on the number of data in the tensors.
      * @param src1 Entries of first tensor.
      * @param shape1 Shape of first tensor.
      * @param src2 Entries of second tensor.

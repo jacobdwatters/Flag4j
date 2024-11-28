@@ -32,7 +32,7 @@ import org.flag4j.util.ArrayUtils;
 
 
 /**
- * This interface specifies methods which any tensor whose entries are elements of a semi-ring should implement. This includes
+ * This interface specifies methods which any tensor whose data are elements of a semi-ring should implement. This includes
  * primitive values.
  *
  * <p>To allow for primitive types, the elements of this tensor do not necessarily have to implement
@@ -52,7 +52,7 @@ import org.flag4j.util.ArrayUtils;
  * @param <T> Type of this tensor.
  * @param <U> Type of dense tensor equivalent to {@code T}. If {@code T} is dense, then this should be the same type as {@code T}.
  * This parameter required because some operations between two sparse tensors may result in a dense tensor.
- * @param <V> Storage for entries of this tensor.
+ * @param <V> Storage for data of this tensor.
  * @param <W> Type (or wrapper) of an element of this tensor. Should satisfy the axioms of a semi-ring as stated.
  */
 public interface TensorOverSemiring<T extends TensorOverSemiring<T, U, V, W>,
@@ -60,20 +60,20 @@ public interface TensorOverSemiring<T extends TensorOverSemiring<T, U, V, W>,
 
 
     /**
-     * Gets the entries of this tensor.
-     * @return The entries of this tensor.
+     * Gets the data of this tensor.
+     * @return The data of this tensor.
      */
-    V getEntries();
+    V getData();
 
 
     /**
      * Constructs a tensor of the same type as this tensor with the given the {@code shape} and
-     * {@code entries}. The resulting tensor will also have
+     * {@code data}. The resulting tensor will also have
      * the same non-zero indices as this tensor.
      * @param shape Shape of the tensor to construct.
      * @param entries Entries of the tensor to construct.
      * @return A tensor of the same type and with the same non-zero indices as this tensor with the given the {@code shape} and
-     * {@code entries}.
+     * {@code data}.
      */
     T makeLikeTensor(Shape shape, V entries);
 
@@ -95,7 +95,7 @@ public interface TensorOverSemiring<T extends TensorOverSemiring<T, U, V, W>,
 
     /**
      * Adds a scalar value to each entry of this tensor. If the tensor is sparse, the scalar will only be added to the non-zero
-     * entries of the tensor.
+     * data of the tensor.
      *
      * @param b Scalar field value in sum.
      *
@@ -255,7 +255,7 @@ public interface TensorOverSemiring<T extends TensorOverSemiring<T, U, V, W>,
 
 
     /**
-     * Checks if this tensor only contains ones. If this tensor is sparse, only the non-zero entries are considered.
+     * Checks if this tensor only contains ones. If this tensor is sparse, only the non-zero data are considered.
      * @return True if this tensor only contains ones. Otherwise, returns false.
      */
     boolean isOnes();

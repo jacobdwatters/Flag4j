@@ -25,10 +25,12 @@
 package org.flag4j.linalg.operations.dense.real_complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.junit.jupiter.api.Test;
 
 import static org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseMatMultTranspose.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class RealComplexDenseMatMultTransposeTests {
     double[][] aEntries;
@@ -53,10 +55,10 @@ class RealComplexDenseMatMultTransposeTests {
         B = new CMatrix(bEntries).T();
         expC = A.mult(B.T());
 
-        assertArrayEquals(expC.entries, multTranspose(A.entries, A.shape, B.entries, B.shape));
-        assertArrayEquals(expC.entries, multTransposeBlocked(A.entries, A.shape, B.entries, B.shape));
-        assertArrayEquals(expC.entries, multTransposeConcurrent(A.entries, A.shape, B.entries, B.shape));
-        assertArrayEquals(expC.entries, multTransposeBlockedConcurrent(A.entries, A.shape, B.entries, B.shape));
+        assertArrayEquals(expC.data, multTranspose(A.data, A.shape, B.data, B.shape));
+        assertArrayEquals(expC.data, multTransposeBlocked(A.data, A.shape, B.data, B.shape));
+        assertArrayEquals(expC.data, multTransposeConcurrent(A.data, A.shape, B.data, B.shape));
+        assertArrayEquals(expC.data, multTransposeBlockedConcurrent(A.data, A.shape, B.data, B.shape));
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
@@ -68,10 +70,10 @@ class RealComplexDenseMatMultTransposeTests {
         B = new CMatrix(bEntries).T();
         expC = A.mult(B.T());
 
-        assertArrayEquals(expC.entries, multTranspose(A.entries, A.shape, B.entries, B.shape));
-        assertArrayEquals(expC.entries, multTransposeBlocked(A.entries, A.shape, B.entries, B.shape));
-        assertArrayEquals(expC.entries, multTransposeConcurrent(A.entries, A.shape, B.entries, B.shape));
-        assertArrayEquals(expC.entries, multTransposeBlockedConcurrent(A.entries, A.shape, B.entries, B.shape));
+        assertArrayEquals(expC.data, multTranspose(A.data, A.shape, B.data, B.shape));
+        assertArrayEquals(expC.data, multTransposeBlocked(A.data, A.shape, B.data, B.shape));
+        assertArrayEquals(expC.data, multTransposeConcurrent(A.data, A.shape, B.data, B.shape));
+        assertArrayEquals(expC.data, multTransposeBlockedConcurrent(A.data, A.shape, B.data, B.shape));
 
         // ---------------------- Sub-case 3 ----------------------
         aEntries = new double[][]{
@@ -85,9 +87,9 @@ class RealComplexDenseMatMultTransposeTests {
         B = new CMatrix(bEntries).T();
         expC = B.mult(A.T());
 
-        assertArrayEquals(expC.entries, multTranspose(B.entries, B.shape, A.entries, A.shape));
-        assertArrayEquals(expC.entries, multTransposeBlocked(B.entries, B.shape, A.entries, A.shape));
-        assertArrayEquals(expC.entries, multTransposeConcurrent(B.entries, B.shape, A.entries, A.shape));
-        assertArrayEquals(expC.entries, multTransposeBlockedConcurrent(B.entries, B.shape, A.entries, A.shape));
+        assertArrayEquals(expC.data, multTranspose(B.data, B.shape, A.data, A.shape));
+        assertArrayEquals(expC.data, multTransposeBlocked(B.data, B.shape, A.data, A.shape));
+        assertArrayEquals(expC.data, multTransposeConcurrent(B.data, B.shape, A.data, A.shape));
+        assertArrayEquals(expC.data, multTransposeBlockedConcurrent(B.data, B.shape, A.data, A.shape));
     }
 }

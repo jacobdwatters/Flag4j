@@ -182,12 +182,12 @@ public class PermutationMatrix implements Serializable {
      */
     public Matrix leftMult(Matrix src) {
         ValidateParameters.ensureEquals(size, src.numRows);
-        double[] destEntries = new double[src.entries.length];
+        double[] destEntries = new double[src.data.length];
         int colIdx;
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
             colIdx = swapPointers[rowIdx];
-            System.arraycopy(src.entries, colIdx*src.numCols, destEntries, rowIdx*src.numCols, src.numCols);
+            System.arraycopy(src.data, colIdx*src.numCols, destEntries, rowIdx*src.numCols, src.numCols);
         }
 
         return new Matrix(src.shape, destEntries);
@@ -205,10 +205,10 @@ public class PermutationMatrix implements Serializable {
      */
     public Vector leftMult(Vector src) {
         ValidateParameters.ensureEquals(size, src.size);
-        double[] destEntries = new double[src.entries.length];
+        double[] destEntries = new double[src.data.length];
 
         for(int rowIdx=0; rowIdx<size; rowIdx++)
-            destEntries[rowIdx] = src.entries[swapPointers[rowIdx]];
+            destEntries[rowIdx] = src.data[swapPointers[rowIdx]];
 
         return new Vector(destEntries);
     }
@@ -225,12 +225,12 @@ public class PermutationMatrix implements Serializable {
      */
     public CMatrix leftMult(CMatrix src) {
         ValidateParameters.ensureEquals(size, src.numRows);
-        Complex128[] destEntries = new Complex128[src.entries.length];
+        Complex128[] destEntries = new Complex128[src.data.length];
         int colIdx;
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
             colIdx = swapPointers[rowIdx];
-            System.arraycopy(src.entries, colIdx*src.numCols, destEntries, rowIdx*src.numCols, src.numCols);
+            System.arraycopy(src.data, colIdx*src.numCols, destEntries, rowIdx*src.numCols, src.numCols);
         }
 
         return new CMatrix(src.shape, destEntries);
@@ -248,10 +248,10 @@ public class PermutationMatrix implements Serializable {
      */
     public CVector leftMult(CVector src) {
         ValidateParameters.ensureEquals(size, src.size);
-        Field<Complex128>[] destEntries = new Complex128[src.entries.length];
+        Field<Complex128>[] destEntries = new Complex128[src.data.length];
 
         for(int rowIdx=0; rowIdx<size; rowIdx++)
-            destEntries[rowIdx] = src.entries[swapPointers[rowIdx]];
+            destEntries[rowIdx] = src.data[swapPointers[rowIdx]];
 
         return new CVector(destEntries);
     }
@@ -268,7 +268,7 @@ public class PermutationMatrix implements Serializable {
      */
     public Matrix rightMult(Matrix src) {
         ValidateParameters.ensureEquals(size, src.numCols);
-        double[] destEntries = new double[src.entries.length];
+        double[] destEntries = new double[src.data.length];
 
         int colIdx;
         int rowOffset;
@@ -278,7 +278,7 @@ public class PermutationMatrix implements Serializable {
 
             for(int j=0; j<src.numRows; j++) {
                 rowOffset = j*src.numCols;
-                destEntries[rowOffset + colIdx] = src.entries[rowOffset + rowIdx];
+                destEntries[rowOffset + colIdx] = src.data[rowOffset + rowIdx];
             }
         }
 
@@ -313,7 +313,7 @@ public class PermutationMatrix implements Serializable {
      */
     public CMatrix rightMult(CMatrix src) {
         ValidateParameters.ensureEquals(size, src.numCols);
-        Field<Complex128>[] destEntries = new Complex128[src.entries.length];
+        Field<Complex128>[] destEntries = new Complex128[src.data.length];
         final int rows = src.numRows;
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
@@ -321,7 +321,7 @@ public class PermutationMatrix implements Serializable {
 
             for(int j=0; j<src.numRows; j++) {
                 int rowOffset = j*src.numCols;
-                destEntries[rowOffset + colIdx] = src.entries[rowOffset + rowIdx];
+                destEntries[rowOffset + colIdx] = src.data[rowOffset + rowIdx];
             }
         }
 
@@ -366,7 +366,7 @@ public class PermutationMatrix implements Serializable {
      */
     public void swapCols(int col1, int col2) {
         ValidateParameters.ensureValidArrayIndices(size, col1, col2);
-        // Find locations of entries with the given columns.
+        // Find locations of data with the given columns.
         int idx1 = ArrayUtils.indexOf(swapPointers, col1);
         int idx2 = ArrayUtils.indexOf(swapPointers, col2);
         ArrayUtils.swap(swapPointers, idx1, idx2); // Swap values.

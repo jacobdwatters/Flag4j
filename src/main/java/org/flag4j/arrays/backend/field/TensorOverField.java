@@ -27,7 +27,7 @@ package org.flag4j.arrays.backend.field;
 import org.flag4j.arrays.backend.ring.TensorOverRing;
 
 /**
- * This interface specifies methods which any tensor whose entries are elements of a field should implement.
+ * This interface specifies methods which any tensor whose data are elements of a field should implement.
  * This includes primitive values.
  *
  * <p>To allow for primitive types, the elements of this tensor do not necessarily have to implement
@@ -49,7 +49,7 @@ import org.flag4j.arrays.backend.ring.TensorOverRing;
  * @param <T> Type of this tensor.
  * @param <U> Type of dense tensor equivalent to {@code T}. If {@code T} is dense, then this should be the same type as {@code T}.
  * This parameter required because some operations between two sparse tensors may result in a dense tensor.
- * @param <V> Storage for entries of this tensor.
+ * @param <V> Storage for data of this tensor.
  * @param <W> Type (or wrapper) of an element of this tensor. Should satisfy the axioms of a field as stated.
  * @see TensorOverRing
  */
@@ -59,7 +59,7 @@ public interface TensorOverField<T extends TensorOverField<T, U, V, W>,
     /**
      * Adds a primitive scalar value to each entry of this tensor. If the tensor is sparse, the scalar will only be added to the
      * non-zero
-     * entries of the tensor.
+     * data of the tensor.
      *
      * @param b Scalar field value in sum.
      *

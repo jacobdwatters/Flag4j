@@ -92,10 +92,10 @@ public final class DenseFieldProperties {
 
 
     /**
-     * Checks if a matrix is the identity matrix approximately. Specifically, if the diagonal entries are no farther than
-     * 1.001E-5 in absolute value from 1.0 and the non-diagonal entries are no larger than 1e-08 in absolute value.
+     * Checks if a matrix is the identity matrix approximately. Specifically, if the diagonal data are no farther than
+     * 1.001E-5 in absolute value from 1.0 and the non-diagonal data are no larger than 1e-08 in absolute value.
      * @param src Matrix of interest to check if it is the identity matrix.
-     * @return True if the {@code src} matrix is close the identity matrix or if the matrix has zero entries.
+     * @return True if the {@code src} matrix is close the identity matrix or if the matrix has zero data.
      */
     public static <T extends Field<T>> boolean isCloseToIdentity(Shape shape, Field<T>[] src) {
         int numRows = shape.get(0);

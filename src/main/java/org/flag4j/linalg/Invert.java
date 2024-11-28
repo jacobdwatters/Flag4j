@@ -153,10 +153,10 @@ public final class Invert {
         int step = src.numCols+1;
         double det = 1;
 
-        for(int i=0; i<src.entries.length; i+=step) {
-            value = src.entries[i];
+        for(int i = 0; i<src.data.length; i+=step) {
+            value = src.data[i];
             det *= value;
-            inverse.entries[i] = 1.0/value;
+            inverse.data[i] = 1.0/value;
         }
 
         if(Math.abs(det) <= EPS_F64*Math.max(src.numRows, src.numCols)) {
@@ -210,10 +210,10 @@ public final class Invert {
         int step = src.numCols+1;
         Complex128 det = Complex128.ONE;
 
-        for(int i=0; i<src.entries.length; i+=step) {
-            value = (Complex128) src.entries[i];
+        for(int i = 0; i<src.data.length; i+=step) {
+            value = (Complex128) src.data[i];
             det = det.mult(value);
-            inverse.entries[i] = value.multInv();
+            inverse.data[i] = value.multInv();
         }
 
         if(det.mag() <= EPS_F64*Math.max(src.numRows, src.numCols))
@@ -372,7 +372,7 @@ public final class Invert {
         } else {
             CMatrix prod = src1.mult(src2);
             CMatrix I = CMatrix.I(src1.shape);
-            result = RingProperties.allClose(prod.entries, I.entries);
+            result = RingProperties.allClose(prod.data, I.data);
         }
 
         return result;

@@ -1,8 +1,10 @@
 package org.flag4j;
 
 import org.flag4j.arrays.backend.AbstractTensor;
-import org.flag4j.arrays.backend.DenseTensorMixin;
-import org.flag4j.arrays.backend.VectorMixinOld;
+import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend.VectorMixin;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,8 +27,8 @@ public class TestHelpers {
         for(Object arg : args) {
             if(arg instanceof MatrixMixin<?, ?, ?, ?>) {
                 printAsJavaArray((MatrixMixin<?, ?, ?, ?>) arg);
-            } else if(arg instanceof VectorMixinOld<?,?,?,?,?>) {
-                printAsJavaArray((VectorMixinOld<?,?,?,?,?>) arg);
+            } else if(arg instanceof VectorMixin<?,?,?,?>) {
+                printAsJavaArray((VectorMixin<?,?,?,?>) arg);
             } else {
                 System.out.print(arg.toString()); // Type not found, fall back to toString method.
             }
@@ -65,7 +67,7 @@ public class TestHelpers {
     }
 
 
-    private static <T extends VectorMixinOld<?,?,?,?,?>> void printAsJavaArray(T A) {
+    private static <T extends VectorMixin<?,?,?,?>> void printAsJavaArray(T A) {
         System.out.print("{");
 
         for(int i=0; i<A.length(); i++) {
@@ -116,9 +118,6 @@ public class TestHelpers {
      * @param b Second tensor to compare.
      */
     public static <T extends AbstractTensor<?,?,?>> List<int[]> findDiff(T a, T b) {
-        if(!(a instanceof DenseTensorMixin<?,?> && b instanceof DenseTensorMixin<?,?>)) {
-            System.out.println("Tensors are not dense.");
-        }
         if(!a.shape.equals(b.shape)) {
             System.out.printf("Not the same shape: %s and %s\n", a.shape, b.shape);
         }

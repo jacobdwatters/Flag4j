@@ -48,10 +48,10 @@ public final class CooSemiringTensorOps {
     /**
      * Sums two complex sparse COO tensors and stores result in a new COO tensor.
      * @param shape1 Shape of the first tensor.
-     * @param src1Entries Non-zero entries of the first tensor.
+     * @param src1Entries Non-zero data of the first tensor.
      * @param src1Indices Non-zero indices of the first tensor.
      * @param shape2 Shape of the second tensor.
-     * @param src2Entries Non-zero entries of the second tensor.
+     * @param src2Entries Non-zero data of the second tensor.
      * @param src2Indices Non-zero indices of the second tensor.
      * @return The element-wise tensor sum of the two tensors.
      * @throws LinearAlgebraException If the tensors {@code src1} and {@code src2} do not have the same shape.
@@ -64,7 +64,7 @@ public final class CooSemiringTensorOps {
         final int src1Nnz = src1Entries.length;
         final int src2Nnz = src2Entries.length;
 
-        // Roughly estimate the number of non-zero entries in sum.
+        // Roughly estimate the number of non-zero data in sum.
         int estimatedEntries = src1Nnz + src2Nnz;
         List<Semiring<V>> sumEntries = new ArrayList<>(estimatedEntries);
         List<int[]> sumIndices = new ArrayList<>(estimatedEntries);
@@ -104,10 +104,10 @@ public final class CooSemiringTensorOps {
      *
      * <p>Assumes indices of both tensors are sorted lexicographically by their indices.</p>
      * @param shape1 Shape of the first tensor.
-     * @param src1Entries Non-zero entries of the first tensor.
+     * @param src1Entries Non-zero data of the first tensor.
      * @param src1Indices Non-zero indices of the first tensor.
      * @param shape2 Shape of the second tensor.
-     * @param src2Entries Non-zero entries of the second tensor.
+     * @param src2Entries Non-zero data of the second tensor.
      * @param src2Indices Non-zero indices of the second tensor.
      * @return The element-wise product of the two specified tensors.
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !shape1.equals(shape2)}.
@@ -120,7 +120,7 @@ public final class CooSemiringTensorOps {
         int src1Nnz = src1Entries.length;
         int src2Nnz = src2Entries.length;
 
-        // Swap src1 and src2 if src2 has fewer non-zero entries for possibly better performance.
+        // Swap src1 and src2 if src2 has fewer non-zero data for possibly better performance.
         if (src2Nnz < src1Nnz) {
             Shape tempShape = shape1;
             shape1 = shape2;
@@ -164,7 +164,7 @@ public final class CooSemiringTensorOps {
      * {@code axis1} and {@code axis2} removed.</p>
      *
      * @param shape1 Shape of the tensor.
-     * @param src1Entries Non-zero entries of the tensor.
+     * @param src1Entries Non-zero data of the tensor.
      * @param src1Indices Non-zero indices of the tensor.
      * @param axis1 First axis for 2D sub-array.
      * @param axis2 Second axis for 2D sub-array.
@@ -196,14 +196,14 @@ public final class CooSemiringTensorOps {
             }
         }
 
-        // Lists to accumulate the non-zero entries and their indices.
+        // Lists to accumulate the non-zero data and their indices.
         List<int[]> resultIndicesList = new ArrayList<>();
         List<Semiring<T>> resultEntriesList = new ArrayList<>();
 
         // Map to keep track of linear indices and their positions in the lists.
         Map<Integer, Integer> indexMap = new HashMap<>();
 
-        // Iterate through the non-zero entries and accumulate trace for those on the diagonal.
+        // Iterate through the non-zero data and accumulate trace for those on the diagonal.
         for (int i = 0; i < nnz; i++) {
             int[] idxs = indices[i];
             Semiring<T> value = entries[i];

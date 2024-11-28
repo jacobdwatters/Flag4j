@@ -41,14 +41,14 @@ public final class CooConversions {
     /**
      * Converts a sparse COO tensor to an equivalent dense tensor.
      * @param shape Shape of the COO tensor.
-     * @param entries Non-zero entries of the COO tensor.
+     * @param entries Non-zero data of the COO tensor.
      * @param indices Non-zero indices of the COO tensor.
      * @param dest Array to store the dense result in.
      * @throws IllegalArgumentException If {@code dest.length != shape.totalEntriesIntValueExact()}.
      */
     public static <T> void toDense(Shape shape, T[] entries, int[][] indices, T[] dest) {
         if(dest.length != shape.totalEntriesIntValueExact()) {
-            throw new IllegalArgumentException("Cannot store entries from tensor with shape "
+            throw new IllegalArgumentException("Cannot store data from tensor with shape "
                     + shape + " in an array of length " + dest.length + ".");
         }
 
@@ -60,10 +60,10 @@ public final class CooConversions {
     /**
      * Converts a COO matrix to an equivalent CSR matrix.
      * @param shape Shape of the COO matrix.
-     * @param entries Non-zero entries of the COO matrix.
+     * @param entries Non-zero data of the COO matrix.
      * @param rowIndices Non-zero row indices of the COO matrix.
      * @param colIndices Non-zero column indices of the COO matrix.
-     * @param destEntries Array to store non-zero entries of the CSR matrix.
+     * @param destEntries Array to store non-zero data of the CSR matrix.
      * @param destRowPointers Array to store non-zero row pointers of the CSR matrix.
      * @param destColIndices Array to store non-zero column indices of the CSR matrix.
      */
@@ -71,7 +71,7 @@ public final class CooConversions {
                                  T[] destEntries, int[] destRowPointers, int[] destColIndices) {
         final int numRows = shape.get(0);
 
-        // Copy the non-zero entries anc column indices. Count number of entries per row.
+        // Copy the non-zero data anc column indices. Count number of data per row.
         for(int i=0, size=entries.length; i<size; i++)
             destRowPointers[rowIndices[i] + 1]++;
 
@@ -79,7 +79,7 @@ public final class CooConversions {
         for(int i=1, size=destRowPointers.length; i<size; i++)
             destRowPointers[i] += destRowPointers[i-1];
 
-        // Copy non-zero entries and column indices.
+        // Copy non-zero data and column indices.
         System.arraycopy(entries, 0, destEntries, 0, entries.length);
         System.arraycopy(colIndices, 0, destColIndices, 0, colIndices.length);
     }

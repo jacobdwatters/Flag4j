@@ -27,13 +27,19 @@ package org.flag4j.arrays.sparse;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.SparseMatrixData;
 import org.flag4j.arrays.backend.field.AbstractCsrFieldMatrix;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.CVector;
+import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.io.PrintOptions;
+import org.flag4j.linalg.operations.common.complex.Complex128Ops;
+import org.flag4j.linalg.operations.common.complex.Complex128Properties;
+import org.flag4j.linalg.operations.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
 import org.flag4j.linalg.operations.sparse.SparseUtils;
 import org.flag4j.linalg.operations.sparse.csr.CsrConversions;
+import org.flag4j.linalg.operations.sparse.csr.real_complex.RealComplexCsrMatMult;
 import org.flag4j.linalg.operations.sparse.csr.semiring_ops.SemiringCsrMatMult;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
@@ -44,26 +50,26 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * <p>A complex sparse matrix stored in compressed sparse row (CSR) format. The {@link #entries} of this CSR matrix are
+ * <p>A complex sparse matrix stored in compressed sparse row (CSR) format. The {@link #data} of this CSR matrix are
  * {@link Complex128}'s.</p>
  *
- * <p>The {@link #entries non-zero entries} and non-zero indices of a CSR matrix are mutable but the {@link #shape}
- * and {@link #nnz total number of non-zero entries} is fixed.</p>
+ * <p>The {@link #data non-zero data} and non-zero indices of a CSR matrix are mutable but the {@link #shape}
+ * and {@link #nnz total number of non-zero data} is fixed.</p>
  *
  * <p>Sparse matrices allow for the efficient storage of and operations on matrices that contain many zero values.</p>
  *
  * <p>A sparse CSR matrix is stored as:</p>
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
- *     <li>The non-zero {@link #entries} of the matrix. All other entries in the matrix are
- *     assumed to be zero. Zero values can also explicitly be stored in {@link #entries}.</li>
+ *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
+ *     assumed to be zero. Zero values can also explicitly be stored in {@link #data}.</li>
  *     <li>The {@link #rowPointers row pointers} of the non-zero values in the CSR matrix. Has size {@link #numRows numRows + 1}</li>
- *     <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all values in row
+ *     <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all values in row
  *     {@code i}.</p>
  *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
  *
- * <p>Note: many operations assume that the entries of the CSR matrix are sorted lexicographically by the row and column indices.
+ * <p>Note: many operations assume that the data of the CSR matrix are sorted lexicographically by the row and column indices.
  * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any operations implemented in this
  * class will preserve the lexicographical sorting.</p>
  *
@@ -72,16 +78,16 @@ import java.util.List;
 public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooCVector, Complex128> {
 
     /**
-     * Creates a complex sparse CSR matrix with the specified {@code shape}, non-zero entries, row pointers, and non-zero column
+     * Creates a complex sparse CSR matrix with the specified {@code shape}, non-zero data, row pointers, and non-zero column
      * indices.
      *
      * @param shape Shape of this tensor.
-     * @param entries The non-zero entries of this CSR matrix.
+     * @param entries The non-zero data of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
-     * <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all
+     * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
      * values in row {@code i}.</p>
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
-     * {@code entries.length == colIndices.length}.
+     * {@code data.length == colData.length}.
      */
     public CsrCMatrix(Shape shape, Field<Complex128>[] entries, int[] rowPointers, int[] colIndices) {
         super(shape, entries, rowPointers, colIndices);
@@ -91,16 +97,16 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
 
 
     /**
-     * Creates a complex sparse CSR matrix with the specified {@code shape}, non-zero entries, row pointers, and non-zero column
+     * Creates a complex sparse CSR matrix with the specified {@code shape}, non-zero data, row pointers, and non-zero column
      * indices.
      *
      * @param shape Shape of this tensor.
-     * @param entries The non-zero entries of this CSR matrix.
+     * @param entries The non-zero data of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
-     * <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all
+     * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
      * values in row {@code i}.</p>
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
-     * {@code entries.length == colIndices.length}.
+     * {@code data.length == colData.length}.
      */
     public CsrCMatrix(Shape shape, List<Complex128> entries, List<Integer> rowPointers, List<Integer> colIndices) {
         super(shape, entries.toArray(new Complex128[0]),
@@ -123,17 +129,17 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
 
 
     /**
-     * Creates a complex sparse CSR matrix with the specified shape, non-zero entries, row pointers, and non-zero column
+     * Creates a complex sparse CSR matrix with the specified shape, non-zero data, row pointers, and non-zero column
      * indices.
      *
      * @param rows The number of rows in the matrix.
      * @param cols The number of columns in the matrix.
-     * @param entries The non-zero entries of this CSR matrix.
+     * @param entries The non-zero data of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
-     * <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all
+     * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
      * values in row {@code i}.</p>
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
-     * {@code entries.length == colIndices.length}.
+     * {@code data.length == colData.length}.
      */
     public CsrCMatrix(int rows, int cols, Field<Complex128>[] entries, int[] rowPointers, int[] colIndices) {
         super(new Shape(rows, cols), entries, rowPointers, colIndices);
@@ -143,17 +149,17 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
 
 
     /**
-     * Creates a complex sparse CSR matrix with the specified {@code shape}, non-zero entries, row pointers, and non-zero column
+     * Creates a complex sparse CSR matrix with the specified {@code shape}, non-zero data, row pointers, and non-zero column
      * indices.
      *
      * @param rows The number of rows in the matrix.
      * @param cols The number of columns in the matrix.
-     * @param entries The non-zero entries of this CSR matrix.
+     * @param entries The non-zero data of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
-     * <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all
+     * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
      * values in row {@code i}.</p>
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
-     * {@code entries.length == colIndices.length}.
+     * {@code data.length == colData.length}.
      */
     public CsrCMatrix(int rows, int cols, List<Field<Complex128>> entries, List<Integer> rowPointers, List<Integer> colIndices) {
         super(new Shape(rows, cols), entries.toArray(new Complex128[0]),
@@ -177,30 +183,30 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
 
 
     /**
-     * Constructs a sparse CSR tensor of the same type as this tensor with the specified non-zero entries and indices.
+     * Constructs a sparse CSR tensor of the same type as this tensor with the specified non-zero data and indices.
      *
      * @param shape Shape of the matrix.
-     * @param entries Non-zero entries of the CSR matrix.
+     * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Row pointers for the non-zero values in the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      *
-     * @return A sparse CSR tensor of the same type as this tensor with the specified non-zero entries and indices.
+     * @return A sparse CSR tensor of the same type as this tensor with the specified non-zero data and indices.
      */
     @Override
-    public CsrCMatrix makeLikeTensor(Shape shape, Complex128[] entries, int[] rowPointers, int[] colIndices) {
+    public CsrCMatrix makeLikeTensor(Shape shape, Field<Complex128>[] entries, int[] rowPointers, int[] colIndices) {
         return new CsrCMatrix(shape, entries, rowPointers, colIndices);
     }
 
 
     /**
-     * Constructs a CSR matrix with the specified shape, non-zero entries, and non-zero indices.
+     * Constructs a CSR matrix with the specified shape, non-zero data, and non-zero indices.
      *
      * @param shape Shape of the matrix.
      * @param entries Non-zero values of the CSR matrix.
      * @param rowPointers Row pointers for the non-zero values in the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      *
-     * @return A CSR matrix with the specified shape, non-zero entries, and non-zero indices.
+     * @return A CSR matrix with the specified shape, non-zero data, and non-zero indices.
      */
     @Override
     public CsrCMatrix makeLikeTensor(Shape shape, List<Complex128> entries, List<Integer> rowPointers, List<Integer> colIndices) {
@@ -215,21 +221,21 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      * @param entries Entries of the dense matrix.
      *
      * @return A dense matrix which is of a similar type to this sparse CSR matrix with the specified {@code shape}
-     * and {@code entries}.
+     * and {@code data}.
      */
     @Override
-    public CMatrix makeLikeDenseTensor(Shape shape, Complex128[] entries) {
+    public CMatrix makeLikeDenseTensor(Shape shape, Field<Complex128>[] entries) {
         return new CMatrix(shape, entries);
     }
 
 
     /**
      * <p>Constructs a sparse COO matrix of a similar type to this sparse CSR matrix.
-     * <p>Note: this method constructs a new COO matrix with the specified entries and indices. It does <i>not</i> convert this matrix
+     * <p>Note: this method constructs a new COO matrix with the specified data and indices. It does <i>not</i> convert this matrix
      * to a CSR matrix. To convert this matrix to a sparse COO matrix use {@link #toCoo()}.
      *
      * @param shape Shape of the COO matrix.
-     * @param entries Non-zero entries of the COO matrix.
+     * @param entries Non-zero data of the COO matrix.
      * @param rowIndices Non-zero row indices of the sparse COO matrix.
      * @param colIndices Non-zero column indices of the Sparse COO matrix.
      *
@@ -251,7 +257,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
         Complex128[] cooEntries = new Complex128[nnz];
         int[] cooRowIndices = new int[nnz];
         int[] cooColIndices = new int[nnz];
-        CsrConversions.toCoo(shape, entries, rowPointers, colIndices, cooEntries, cooRowIndices, cooColIndices);
+        CsrConversions.toCoo(shape, data, rowPointers, colIndices, cooEntries, cooRowIndices, cooColIndices);
         return new CooCMatrix(shape, cooEntries, cooRowIndices, cooColIndices);
     }
 
@@ -279,15 +285,43 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
 
 
     /**
+     * Converts this matrix to an equivalent real matrix. This is done by ignoring the imaginary components of this matrix.
+     * @return A real matrix which is equivalent to this matrix.
+     */
+    public CsrMatrix toReal() {
+        return new CsrMatrix(shape, Complex128Ops.toReal(data),
+                rowPointers.clone(), colIndices.clone());
+    }
+
+
+    /**
+     * Checks if all data of this matrix are real.
+     * @return {@code true} if all data of this matrix are real. Otherwise, returns {@code false}.
+     */
+    public boolean isReal() {
+        return Complex128Properties.isReal(data);
+    }
+
+
+    /**
+     * Checks if any entry within this matrix has non-zero imaginary component.
+     * @return {@code true} if any entry of this matrix has a non-zero imaginary component.
+     */
+    public boolean isComplex() {
+        return Complex128Properties.isComplex(data);
+    }
+
+
+    /**
      * Constructs a tensor of the same type as this tensor with the given the {@code shape} and
-     * {@code entries}. The resulting tensor will also have
+     * {@code data}. The resulting tensor will also have
      * the same non-zero indices as this tensor.
      *
      * @param shape Shape of the tensor to construct.
      * @param entries Entries of the tensor to construct.
      *
      * @return A tensor of the same type and with the same non-zero indices as this tensor with the given the {@code shape} and
-     * {@code entries}.
+     * {@code data}.
      */
     @Override
     public CsrCMatrix makeLikeTensor(Shape shape, Field<Complex128>[] entries) {
@@ -299,7 +333,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
      * computes the sum of products between the two tensors along the specified set of axes.
      *
-     * @param src2 TensorOld to contract with this tensor.
+     * @param src2 Tensor to contract with this tensor.
      * @param aAxes Axes along which to compute products for this tensor.
      * @param bAxes Axes along which to compute products for {@code src2} tensor.
      *
@@ -317,6 +351,16 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
 
 
     /**
+     * Computes the matrix multiplication between two matrices.
+     * @param b Second matrix in the matrix multiplication.
+     * @return The result of multiplying this matrix with the matrix {@code b}.
+     */
+    public CMatrix mult(Matrix b) {
+        return (CMatrix) RealFieldDenseCsrMatMult.standard(this, b);
+    }
+
+
+    /**
      * Computes the matrix-vector multiplication of a vector with this matrix.
      *
      * @param b Vector in the matrix-vector multiplication.
@@ -328,10 +372,43 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
     @Override
     public CVector mult(CooCVector b) {
         Complex128[] dest = new Complex128[b.size];
-        SemiringCsrMatMult.standardVector(shape, entries, rowPointers, colIndices,
-                b.size, b.entries, b.indices,
+        SemiringCsrMatMult.standardVector(shape, data, rowPointers, colIndices,
+                b.size, b.data, b.indices,
                 dest, getZeroElement());
         return new CVector(dest);
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     * @param b Second matrix in the matrix multiplication.
+     * @return The result of multiplying this matrix with the matrix {@code b}.
+     */
+    public CMatrix mult(CsrMatrix b) {
+        return RealComplexCsrMatMult.standard(this, b);
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     * @param b Second matrix in the matrix multiplication.
+     * @return The result of multiplying this matrix with the matrix {@code b}.
+     */
+    public CsrCMatrix mult2Csr(CsrMatrix b) {
+        return RealComplexCsrMatMult.standardAsSparse(this, b);
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     * @param b Second matrix in the matrix multiplication.
+     * @return The result of multiplying this matrix with the matrix {@code b}.
+     */
+    public CsrCMatrix mult2Csr(CsrCMatrix b) {
+        SparseMatrixData<Complex128> destData = SemiringCsrMatMult.standardToSparse(
+                shape, data, rowPointers, colIndices,
+                b.shape, b.data, b.rowPointers, b.colIndices);
+        return new CsrCMatrix(destData.shape(), destData.data(), destData.rowData(), destData.colData());
     }
 
 
@@ -392,6 +469,39 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
 
 
     /**
+     * Sets the specified index of this matrix to the provided value. This is <i>not</i> done in place as the number of non-zero
+     * data in a sparse tensor is fixed.
+     * @param value Value to set within matrix.
+     * @param rowIdx Row index to set.
+     * @param colIdx Column index to set.
+     * @return A new CSR matrix with the specified
+     */
+    public CsrCMatrix set(double value, int rowIdx, int colIdx) {
+        return set(new Complex128(value), rowIdx, colIdx);
+    }
+
+
+    /**
+     * Rounds all data within this matrix to the specified precision.
+     * @param precision The precision to round to (i.e. the number of decimal places to round to). Must be non-negative.
+     * @return A new matrix containing the data of this matrix rounded to the specified precision.
+     */
+    public CsrCMatrix round(int precision) {
+        return new CsrCMatrix(shape, Complex128Ops.round(data, precision), rowPointers.clone(), colIndices.clone());
+    }
+
+
+    /**
+     * Sets all elements of this matrix to zero if they are within {@code tol} of zero. This is <i>not</i> done in place.
+     * @param precision The precision to round to (i.e. the number of decimal places to round to). Must be non-negative.
+     * @return A copy of this matrix with all data within {@code tol} of zero set to zero.
+     */
+    public CsrCMatrix roundToZero(double tolerance) {
+        return toCoo().roundToZero(tolerance).toCsr();
+    }
+
+
+    /**
      * Checks if an object is equal to this matrix object.
      * @param object Object to check equality with this matrix.
      * @return True if the two matrices have the same shape, are numerically equivalent, and are of type {@link CooMatrix}.
@@ -417,8 +527,8 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
         // Hash calculation ignores explicit zeros in the matrix. This upholds the contract with the equals(Object) method.
         for(int row = 0; row<numRows; row++) {
             for(int idx = rowPointers[row], rowStop = rowPointers[row + 1]; idx < rowStop; idx++) {
-                if(!entries[idx].isZero()) {
-                    result = 31*result + entries[idx].hashCode();
+                if(!data[idx].isZero()) {
+                    result = 31*result + data[idx].hashCode();
                     result = 31*result + Integer.hashCode(colIndices[idx]);
                     result = 31*result + Integer.hashCode(row);
                 }
@@ -436,16 +546,16 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
     public String toString() {
         int size = nnz;
         StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
-        result.append("Non-zero entries: [");
+        result.append("Non-zero data: [");
 
         int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
         int width;
         String value;
 
-        if(entries.length > 0) {
-            // Get entries up until the stopping point.
+        if(data.length > 0) {
+            // Get data up until the stopping point.
             for(int i=0; i<stopIndex; i++) {
-                value = StringUtils.ValueOfRound((Complex128) entries[i], PrintOptions.getPrecision());
+                value = StringUtils.ValueOfRound((Complex128) data[i], PrintOptions.getPrecision());
                 width = PrintOptions.getPadding() + value.length();
                 value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
@@ -459,7 +569,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
             }
 
             // Get last entry now
-            value = StringUtils.ValueOfRound((Complex128) entries[size-1], PrintOptions.getPrecision());
+            value = StringUtils.ValueOfRound((Complex128) data[size-1], PrintOptions.getPrecision());
             width = PrintOptions.getPadding() + value.length();
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));

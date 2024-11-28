@@ -50,7 +50,7 @@ public final class CooRingVectorOps {
      * to have their indices sorted lexicographically.
      * @param src1 First sparse vector in the difference. Indices assumed to be sorted lexicographically.
      * @param src2 Second sparse vector in the difference. Indices assumed to be sorted lexicographically.
-     * @return A data class containing the non-zero entries and indices of the sparse COO vector resulting from the vector subtraction.
+     * @return A data class containing the non-zero data and indices of the sparse COO vector resulting from the vector subtraction.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
     public static <T extends Ring<T>> SparseVectorData<Ring<T>> sub(

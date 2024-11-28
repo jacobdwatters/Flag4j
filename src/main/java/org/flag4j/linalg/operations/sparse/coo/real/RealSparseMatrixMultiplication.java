@@ -49,13 +49,13 @@ public final class RealSparseMatrixMultiplication {
 
     /**
      * Computes the matrix multiplication between two sparse matrices using a standard algorithm.
-     * @param src1 Non-zero entries of the first sparse matrix.
-     * @param rowIndices1 Row indices of non-zero entries for the first sparse matrix.
-     * @param colIndices1 Column indices of non-zero entries for the first sparse matrix.
+     * @param src1 Non-zero data of the first sparse matrix.
+     * @param rowIndices1 Row indices of non-zero data for the first sparse matrix.
+     * @param colIndices1 Column indices of non-zero data for the first sparse matrix.
      * @param shape1 Shape of the first sparse matrix.
-     * @param src2 Non-zero entries of the second sparse matrix.
-     * @param rowIndices2 Row indices of non-zero entries for the second sparse matrix.
-     * @param colIndices2 column indices of non-zero entries for the second sparse matrix.
+     * @param src2 Non-zero data of the second sparse matrix.
+     * @param rowIndices2 Row indices of non-zero data for the second sparse matrix.
+     * @param colIndices2 column indices of non-zero data for the second sparse matrix.
      * @param shape2 Shape of the second sparse matrix.
      * @return The result of the matrix multiplication stored in a dense matrix.
      */
@@ -79,7 +79,7 @@ public final class RealSparseMatrixMultiplication {
                 int r1 = rowIndices1[i]; // = i
                 int rowIdx = r1*cols2;
 
-                for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
+                for(int j : map.get(c1)) { // Iterate over all data in src2 where rowData[j] == colData[j]
                     int c2 = colIndices2[j]; // = j
                     dest[rowIdx + c2] += src1Val*src2[j];
                 }
@@ -96,13 +96,13 @@ public final class RealSparseMatrixMultiplication {
      *
      * NOTE: Caution should be exercised when using this method. It is rarely faster than
      * {@link #standard(double[], int[], int[], Shape, double[], int[], int[], Shape)}
-     * @param src1 Non-zero entries of the first sparse matrix.
-     * @param rowIndices1 Row indices of non-zero entries for the first sparse matrix.
-     * @param colIndices1 Column indices of non-zero entries for the first sparse matrix.
+     * @param src1 Non-zero data of the first sparse matrix.
+     * @param rowIndices1 Row indices of non-zero data for the first sparse matrix.
+     * @param colIndices1 Column indices of non-zero data for the first sparse matrix.
      * @param shape1 Shape of the first sparse matrix.
-     * @param src2 Non-zero entries of the second sparse matrix.
-     * @param rowIndices2 Row indices of non-zero entries for the second sparse matrix.
-     * @param colIndices2 column indices of non-zero entries for the second sparse matrix.
+     * @param src2 Non-zero data of the second sparse matrix.
+     * @param rowIndices2 Row indices of non-zero data for the second sparse matrix.
+     * @param colIndices2 column indices of non-zero data for the second sparse matrix.
      * @param shape2 Shape of the second sparse matrix.
      * @return The result of the matrix multiplication stored in a dense matrix.
      */
@@ -128,7 +128,7 @@ public final class RealSparseMatrixMultiplication {
                     int r1 = rowIndices1[i]; // = i
                     int rowIdx = r1*cols2;
 
-                    for(int j : map.get(c1)) { // Iterate over all entries in src2 where rowIndices[j] == colIndices[j]
+                    for(int j : map.get(c1)) { // Iterate over all data in src2 where rowData[j] == colData[j]
                         int idx = rowIdx + colIndices2[j];
                         destMap.put(idx, destMap.getOrDefault(idx, 0d) + src1Val*src2[j]);
                     }
@@ -150,12 +150,12 @@ public final class RealSparseMatrixMultiplication {
     /**
      * Computes the multiplication between a sparse matrix and a sparse vector using a standard algorithm.
      *
-     * @param src1        Non-zero entries of the first sparse matrix.
-     * @param rowIndices1 Row indices of non-zero entries for the first sparse matrix.
-     * @param colIndices1 Column indices of non-zero entries for the first sparse matrix.
+     * @param src1        Non-zero data of the first sparse matrix.
+     * @param rowIndices1 Row indices of non-zero data for the first sparse matrix.
+     * @param colIndices1 Column indices of non-zero data for the first sparse matrix.
      * @param shape1      Shape of the first sparse matrix.
-     * @param src2        Non-zero entries of the second sparse matrix.
-     * @param indices     Indices of non-zero entries in the sparse vector.
+     * @param src2        Non-zero data of the second sparse matrix.
+     * @param indices     Indices of non-zero data in the sparse vector.
      * @return The result of the matrix-vector multiplication stored in a dense matrix.
      */
     public static double[] standardVector(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
@@ -186,12 +186,12 @@ public final class RealSparseMatrixMultiplication {
     /**
      * Computes the multiplication between a sparse matrix and a sparse vector using a concurrent implementation
      * of the standard algorithm.
-     * @param src1 Non-zero entries of the first sparse matrix.
-     * @param rowIndices1 Row indices of non-zero entries for the first sparse matrix.
-     * @param colIndices1 Column indices of non-zero entries for the first sparse matrix.
+     * @param src1 Non-zero data of the first sparse matrix.
+     * @param rowIndices1 Row indices of non-zero data for the first sparse matrix.
+     * @param colIndices1 Column indices of non-zero data for the first sparse matrix.
      * @param shape1 Shape of the first sparse matrix.
-     * @param src2 Non-zero entries of the second sparse matrix.
-     * @param indices Indices of non-zero entries in the sparse vector.
+     * @param src2 Non-zero data of the second sparse matrix.
+     * @param indices Indices of non-zero data in the sparse vector.
      * @return The result of the matrix-vector multiplication stored in a dense matrix.
      */
     public static double[] concurrentStandardVector(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,

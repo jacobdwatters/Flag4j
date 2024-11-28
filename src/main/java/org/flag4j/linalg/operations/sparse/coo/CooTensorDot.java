@@ -44,10 +44,10 @@ public class CooTensorDot<T extends Semiring<T>> extends org.flag4j.linalg.opera
      * Constructs a tensor dot product problem for computing the tensor contraction of two tensors over the
      * specified set of axes. That is, computes the sum of products between the two tensors along the specified set of axes.
      * @param shape1 Shape of the first tensor in the contraction.
-     * @param src1 Non-zero entries of the first tensor in the contraction.
+     * @param src1 Non-zero data of the first tensor in the contraction.
      * @param indices1 Non-zero indices of the first tensor in the contraction.
      * @param shape2 Shape of the second tensor in the contraction.
-     * @param src2 Non-zero entries of the second tensor in the contraction.
+     * @param src2 Non-zero data of the second tensor in the contraction.
      * @param indices2 Non-zero indices of the second tensor in the contraction.
      * @param src1Axes Axes along which to compute products for {@code src1} tensor.
      * @param src2Axes Axes along which to compute products for {@code src2} tensor.
@@ -67,7 +67,7 @@ public class CooTensorDot<T extends Semiring<T>> extends org.flag4j.linalg.opera
 
     /**
      * Computes this tensor dot product as specified in the constructor.
-     * @param dest The array to store the entries of the dense tensor resulting from this tensor dot product. The size of this array
+     * @param dest The array to store the data of the dense tensor resulting from this tensor dot product. The size of this array
      * should be computed using {@link #getOutputSize()}.
      */
     @Override

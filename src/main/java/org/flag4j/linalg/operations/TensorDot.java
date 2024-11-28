@@ -30,7 +30,7 @@ import org.flag4j.util.ValidateParameters;
 
 /**
  * The base class for all classes whose instances may be used to compute a tensor dot product.
- * @param <T> Type of the storage for the entries of the tensor.rf
+ * @param <T> Type of the storage for the data of the tensor.rf
  */
 public abstract class TensorDot<T> {
 
@@ -54,9 +54,9 @@ public abstract class TensorDot<T> {
      * Constructs a tensor dot product problem for computing the tensor contraction of two tensors over the
      * specified set of axes. That is, computes the sum of products between the two tensors along the specified set of axes.
      * @param shape1 Shape of the first tensor in the contraction.
-     * @param src1 Entries/Non-zero entries of the first tensor in the contraction.
+     * @param src1 Entries/Non-zero data of the first tensor in the contraction.
      * @param shape2 Shape of the second tensor in the contraction.
-     * @param src2 Entries/Non-zero entries of the second tensor in the contraction.
+     * @param src2 Entries/Non-zero data of the second tensor in the contraction.
      * @param src1Axes Axes along which to compute products for {@code src1} tensor.
      * @param src2Axes Axes along which to compute products for {@code src2} tensor.
      * @throws IllegalArgumentException If {@code src1Axes} and {@code src2Axes} do not match in length, or if any of the axes
@@ -149,8 +149,8 @@ public abstract class TensorDot<T> {
 
 
     /**
-     * Gets the total number of entries in the tensor resulting from this tensor dot product as specified in the constructor.
-     * @return The total number of entries in the tensor resulting from this tensor dot product as specified in the constructor.
+     * Gets the total number of data in the tensor resulting from this tensor dot product as specified in the constructor.
+     * @return The total number of data in the tensor resulting from this tensor dot product as specified in the constructor.
      */
     public int getOutputSize() {
         return destLength;
@@ -159,7 +159,7 @@ public abstract class TensorDot<T> {
 
     /**
      * Computes this tensor dot product as specified in the constructor.
-     * @param dest The array to store the entries of the dense tensor resulting from this tensor dot product. The size of this array
+     * @param dest The array to store the data of the dense tensor resulting from this tensor dot product. The size of this array
      * should be computed using {@link #getOutputSize()}.
      */
     public abstract void compute(T dest);

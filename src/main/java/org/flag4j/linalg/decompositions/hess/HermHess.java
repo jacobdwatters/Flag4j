@@ -112,7 +112,7 @@ public class HermHess extends ComplexHess {
     public CMatrix getH() {
         CMatrix H = new CMatrix(numRows);
 
-        H.entries[0] = transformMatrix.entries[0];
+        H.data[0] = transformMatrix.data[0];
         int idx1;
         int idx0;
         int rowOffset = numRows;
@@ -121,12 +121,12 @@ public class HermHess extends ComplexHess {
             idx1 = rowOffset + i;
             idx0 = idx1 - numRows;
 
-            H.entries[idx1] = transformMatrix.entries[idx1]; // extract diagonal value.
+            H.data[idx1] = transformMatrix.data[idx1]; // extract diagonal value.
 
             // extract off-diagonal values.
-            Field<Complex128> a = transformMatrix.entries[idx0];
-            H.entries[idx0] = a;
-            H.entries[idx1 - 1] = a;
+            Field<Complex128> a = transformMatrix.data[idx0];
+            H.data[idx0] = a;
+            H.data[idx1 - 1] = a;
 
             // Update row index.
             rowOffset += numRows;
@@ -134,8 +134,8 @@ public class HermHess extends ComplexHess {
 
         if(numRows > 1) {
             int rowColBase = numRows*numRows - 1;
-            H.entries[rowColBase] = transformMatrix.entries[rowColBase];
-            H.entries[rowColBase - 1] = transformMatrix.entries[rowColBase - numRows];
+            H.data[rowColBase] = transformMatrix.data[rowColBase];
+            H.data[rowColBase - 1] = transformMatrix.data[rowColBase - numRows];
         }
 
         return H;
@@ -144,7 +144,7 @@ public class HermHess extends ComplexHess {
 
     /**
      * Finds the maximum value in {@link #transformMatrix} at column {@code j} at or below the {@code j}th row. This method also initializes
-     * the first {@code numRows-j} entries of the storage array {@link #householderVector} to the entries of this column.
+     * the first {@code numRows-j} data of the storage array {@link #householderVector} to the data of this column.
      * @param j Index of column (and starting row) to compute max of.
      * @return The maximum value in {@link #transformMatrix} at column {@code j} at or below the {@code j}th row.
      */
@@ -155,7 +155,7 @@ public class HermHess extends ComplexHess {
         // Compute max-abs value in row. (Equivalent to max value in column since matrix is Hermitian.)
         int rowU = (j-1)*numRows;
         for(int i=j; i<numRows; i++) {
-            Field<Complex128> d = householderVector[i] = transformMatrix.entries[rowU + i];
+            Field<Complex128> d = householderVector[i] = transformMatrix.data[rowU + i];
             maxAbs = Math.max(d.abs(), maxAbs);
         }
 
@@ -192,7 +192,7 @@ public class HermHess extends ComplexHess {
         // Copy upper triangular portion.
         for(int i=0; i<numRows; i++) {
             int pos = i*numRows + i;
-            System.arraycopy(src.entries, pos, transformMatrix.entries, pos, numRows - i);
+            System.arraycopy(src.data, pos, transformMatrix.data, pos, numRows - i);
         }
     }
 
@@ -205,12 +205,12 @@ public class HermHess extends ComplexHess {
     protected void updateData(int j) {
         Householder.hermLeftRightMultReflector(transformMatrix, householderVector, currentFactor, j, workArray);
 
-        if(j < numRows) transformMatrix.entries[(j-1)*numRows + j] = norm.addInv();
+        if(j < numRows) transformMatrix.data[(j-1)*numRows + j] = norm.addInv();
         if(storeReflectors) {
             // Store the Q matrix in the lower portion of the transformation data matrix.
             int col = j-1;
             for(int i=j+1; i<numRows; i++) {
-                transformMatrix.entries[i*numRows + col] = householderVector[i];
+                transformMatrix.data[i*numRows + col] = householderVector[i];
             }
         }
     }

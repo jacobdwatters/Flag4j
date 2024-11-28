@@ -107,7 +107,7 @@ public class ComplexSVD extends SVD<CMatrix> {
     protected CMatrix makeEigenPairs(CMatrix B, double[] eigVals) {
         CMatrix[] pairs = Eigen.getEigenPairs(B);
 
-        double[] vals = pairs[0].toReal().entries;
+        double[] vals = pairs[0].toReal().data;
         System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
 
         return pairs[1];
@@ -123,7 +123,7 @@ public class ComplexSVD extends SVD<CMatrix> {
      */
     @Override
     protected void makeEigenVals(CMatrix B, double[] eigVals) {
-        double[] vals = Eigen.getEigenValues(B).toReal().entries;
+        double[] vals = Eigen.getEigenValues(B).toReal().data;
         System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
     }
 

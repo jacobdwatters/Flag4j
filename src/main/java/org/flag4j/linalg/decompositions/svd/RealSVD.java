@@ -105,7 +105,7 @@ public class RealSVD extends SVD<Matrix> {
     protected Matrix makeEigenPairs(Matrix B, double[] eigVals) {
         CMatrix[] pairs = Eigen.getEigenPairs(B);
 
-        double[] vals = pairs[0].toReal().entries;
+        double[] vals = pairs[0].toReal().data;
         System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
 
         return pairs[1].toReal();
@@ -121,7 +121,7 @@ public class RealSVD extends SVD<Matrix> {
      */
     @Override
     protected void makeEigenVals(Matrix B, double[] eigVals) {
-        double[] vals = Eigen.getEigenValues(B).toReal().entries;
+        double[] vals = Eigen.getEigenValues(B).toReal().data;
         System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
     }
 

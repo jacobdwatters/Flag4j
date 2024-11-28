@@ -60,7 +60,7 @@ public final class RealSparseMatrixGetSet {
      */
     public static double matrixGet(CooMatrix src, int row, int col) {
         int idx = SparseElementSearch.matrixBinarySearch(src.rowIndices, src.colIndices, row, col);
-        return idx<0 ? 0 : src.entries[idx];
+        return idx<0 ? 0 : src.data[idx];
     }
 
 
@@ -81,23 +81,23 @@ public final class RealSparseMatrixGetSet {
 
         if(idx < 0) {
             // No non-zero element with these indices exists. Insert new value.
-            destEntries = new double[src.entries.length + 1];
-            System.arraycopy(src.entries, 0, destEntries, 0, -idx-1);
+            destEntries = new double[src.data.length + 1];
+            System.arraycopy(src.data, 0, destEntries, 0, -idx-1);
             destEntries[-idx-1] = value;
-            System.arraycopy(src.entries, -idx-1, destEntries, -idx, src.entries.length+idx+1);
+            System.arraycopy(src.data, -idx-1, destEntries, -idx, src.data.length+idx+1);
 
-            destRowIndices = new int[src.entries.length + 1];
+            destRowIndices = new int[src.data.length + 1];
             System.arraycopy(src.rowIndices, 0, destRowIndices, 0, -idx-1);
             destRowIndices[-idx-1] = row;
             System.arraycopy(src.rowIndices, -idx-1, destRowIndices, -idx, src.rowIndices.length+idx+1);
 
-            destColIndices = new int[src.entries.length + 1];
+            destColIndices = new int[src.data.length + 1];
             System.arraycopy(src.colIndices, 0, destColIndices, 0, -idx-1);
             destColIndices[-idx-1] = col;
             System.arraycopy(src.colIndices, -idx-1, destColIndices, -idx, src.colIndices.length+idx+1);
         } else {
             // Value with these indices exists. Simply update value.
-            destEntries = Arrays.copyOf(src.entries, src.entries.length);
+            destEntries = Arrays.copyOf(src.data, src.data.length);
             destEntries[idx] = value;
             destRowIndices = src.rowIndices.clone();
             destColIndices = src.colIndices.clone();
@@ -111,7 +111,7 @@ public final class RealSparseMatrixGetSet {
      * Sets a specified row of a real sparse COO matrix to the values in a sparse COO vector.
      * @param src Sparse COO matrix to set row in.
      * @param rowIdx Index of the row to set.
-     * @param row Sparse COO vector containing new entries for the row.
+     * @param row Sparse COO vector containing new data for the row.
      * @return A new COO matrix resulting from setting row {@code rowIdx} in {@code src} to {@code row}.
      * @throws IllegalArgumentException If {@code row.length != src.numCols}.
      */
@@ -124,7 +124,7 @@ public final class RealSparseMatrixGetSet {
         int[] rowArray = new int[row.nnz];
         Arrays.fill(rowArray, rowIdx);
 
-        List<Double> entries = ArrayUtils.toArrayList(row.entries);
+        List<Double> entries = ArrayUtils.toArrayList(row.data);
         List<Integer> rowIndices = ArrayUtils.toArrayList(rowArray);
         List<Integer> colIndices = ArrayUtils.toArrayList(row.indices);
 
@@ -132,7 +132,7 @@ public final class RealSparseMatrixGetSet {
             int srcRow = src.rowIndices[i];
 
             if(srcRow != rowIdx) {
-                entries.add(src.entries[i]);
+                entries.add(src.data[i]);
                 rowIndices.add(srcRow);
                 colIndices.add(src.colIndices[i]);
             }
@@ -146,7 +146,7 @@ public final class RealSparseMatrixGetSet {
      * Sets a specified row of a real sparse matrix to the values of a dense array.
      * @param src Source matrix to set the row of.
      * @param rowIdx Index of the row to set.
-     * @param row Dense array containing the entries of the row to set.
+     * @param row Dense array containing the data of the row to set.
      * @return A copy of the {@code src} matrix with the specified row set to the dense {@code row} array.
      */
     public static CooMatrix setRow(CooMatrix src, int rowIdx, double[] row) {
@@ -162,15 +162,15 @@ public final class RealSparseMatrixGetSet {
         int[] destColIndices;
 
         if(start<0) {
-            // No entries with row index found.
-            destEntries = new double[src.entries.length + row.length];
+            // No data with row index found.
+            destEntries = new double[src.data.length + row.length];
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
-            System.arraycopy(src.entries, 0, destEntries, 0, -start-1);
+            System.arraycopy(src.data, 0, destEntries, 0, -start-1);
             System.arraycopy(row, 0, destEntries, -start-1, row.length);
             System.arraycopy(
-                    src.entries, -start-1,
+                    src.data, -start-1,
                     destEntries, -start-1+row.length, destEntries.length-(row.length - start - 1)
             );
 
@@ -190,14 +190,14 @@ public final class RealSparseMatrixGetSet {
 
         } else {
             // Entries with row index found.
-            destEntries = new double[src.entries.length + row.length - (end-start)];
+            destEntries = new double[src.data.length + row.length - (end-start)];
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
-            System.arraycopy(src.entries, 0, destEntries, 0, start);
+            System.arraycopy(src.data, 0, destEntries, 0, start);
             System.arraycopy(row, 0, destEntries, start, row.length);
             System.arraycopy(
-                    src.entries, end,
+                    src.data, end,
                     destEntries, start + row.length, destEntries.length-(start + row.length)
             );
 
@@ -224,7 +224,7 @@ public final class RealSparseMatrixGetSet {
      * Sets a specified row of a real sparse matrix to the values of a dense array.
      * @param src Source matrix to set the row of.
      * @param rowIdx Index of the row to set.
-     * @param row Dense array containing the entries of the row to set.
+     * @param row Dense array containing the data of the row to set.
      * @return A copy of the {@code src} matrix with the specified row set to the dense {@code row} array.
      */
     public static CooMatrix setRow(CooMatrix src, int rowIdx, Double[] row) {
@@ -240,15 +240,15 @@ public final class RealSparseMatrixGetSet {
         int[] destColIndices;
 
         if(start<0) {
-            // No entries with row index found.
-            destEntries = new double[src.entries.length + row.length];
+            // No data with row index found.
+            destEntries = new double[src.data.length + row.length];
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
-            System.arraycopy(src.entries, 0, destEntries, 0, -start-1);
+            System.arraycopy(src.data, 0, destEntries, 0, -start-1);
             System.arraycopy(row, 0, destEntries, -start-1, row.length);
             System.arraycopy(
-                    src.entries, -start-1,
+                    src.data, -start-1,
                     destEntries, -start-1+row.length, destEntries.length-(row.length - start - 1)
             );
 
@@ -268,14 +268,14 @@ public final class RealSparseMatrixGetSet {
 
         } else {
             // Entries with row index found.
-            destEntries = new double[src.entries.length + row.length - (end-start)];
+            destEntries = new double[src.data.length + row.length - (end-start)];
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
-            System.arraycopy(src.entries, 0, destEntries, 0, start);
+            System.arraycopy(src.data, 0, destEntries, 0, start);
             System.arraycopy(row, 0, destEntries, start, row.length);
             System.arraycopy(
-                    src.entries, end,
+                    src.data, end,
                     destEntries, start + row.length, destEntries.length-(start + row.length)
             );
 
@@ -299,10 +299,10 @@ public final class RealSparseMatrixGetSet {
 
 
     /**
-     * Sets a column of a sparse matrix to the entries of a dense array.
+     * Sets a column of a sparse matrix to the data of a dense array.
      * @param src Source matrix to set column of.
      * @param colIdx The index of the column to set within the {@code src} matrix.
-     * @param col The dense array containing the new column entries for the {@code src} array.
+     * @param col The dense array containing the new column data for the {@code src} array.
      * @return A copy of the {@code src} matrix with the specified column set to the dense array.
      * @throws IllegalArgumentException If the {@code colIdx} is not within the range of the matrix.
      * @throws IllegalArgumentException If the {@code col} array does not have the same length as the number of
@@ -330,9 +330,9 @@ public final class RealSparseMatrixGetSet {
      * Sets a column of a sparse matrix to the values in a sparse tensor.
      * @param src Source matrix to set column of.
      * @param colIdx Index of the column to set.
-     * @param col New entries for the specified column.
+     * @param col New data for the specified column.
      * @return A copy of the {@code src} matrix with the specified column set to the {@code col} sparse vector.
-     * @throws IllegalArgumentException If the {@code src} matrix does not have the same number of rows as total entries
+     * @throws IllegalArgumentException If the {@code src} matrix does not have the same number of rows as total data
      * in the {@code col} vector.
      */
     public static CooMatrix setCol(CooMatrix src, int colIdx, CooVector col) {
@@ -340,7 +340,7 @@ public final class RealSparseMatrixGetSet {
         ValidateParameters.ensureEquals(src.numRows, col.size);
 
         // Initialize destination arrays with the new column and the appropriate indices.
-        List<Double> destEntries = ArrayUtils.toArrayList(col.entries);
+        List<Double> destEntries = ArrayUtils.toArrayList(col.data);
         List<Integer> destRowIndices = ArrayUtils.toArrayList(col.indices);
         List<Integer> destColIndices = ArrayUtils.toArrayList(ArrayUtils.filledArray(col.nnz, colIdx));
 
@@ -350,20 +350,20 @@ public final class RealSparseMatrixGetSet {
 
     /**
      * Adds values from a sparse matrix to specified lists if the value is not within a specified column.
-     * @param destEntries List to add non-zero entries from sparse matrix to.
+     * @param destEntries List to add non-zero data from sparse matrix to.
      * @param destRowIndices List to add non-zero row indices from sparse matrix to.
      * @param destColIndices List to add non-zero column indices from sparse matrix to.
      * @param src The sparse matrix to get non-zero values and indices from.
-     * @param colIdx Specified column to not add entries to the lists from.
+     * @param colIdx Specified column to not add data to the lists from.
      * @return A sparse matrix made from the resulting {@code destEntries, destRowIndices} and {@code destColIndices}
      * lists.
      */
     private static CooMatrix addNotInCol(List<Double> destEntries, List<Integer> destRowIndices,
                                          List<Integer> destColIndices, CooMatrix src, int colIdx) {
-        for(int i=0; i<src.entries.length; i++) {
-            // Add all entries which are not in the specified column.
+        for(int i = 0; i<src.data.length; i++) {
+            // Add all data which are not in the specified column.
             if(src.colIndices[i]!=colIdx) {
-                destEntries.add(src.entries[i]);
+                destEntries.add(src.data[i]);
                 destRowIndices.add(src.rowIndices[i]);
                 destColIndices.add(src.colIndices[i]);
             }
@@ -383,7 +383,7 @@ public final class RealSparseMatrixGetSet {
 
 
     /**
-     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of another sparse matrix.
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the data of another sparse matrix.
      * @param src Source sparse matrix to copy and set values of.
      * @param values Values of the slice to be set.
      * @param row Starting row index of slice.
@@ -402,7 +402,7 @@ public final class RealSparseMatrixGetSet {
         ValidateParameters.ensureLessEq(src.numCols, values.numCols + col);
 
         // Initialize lists to new values for the specified slice.
-        List<Double> entries = ArrayUtils.toArrayList(values.entries);
+        List<Double> entries = ArrayUtils.toArrayList(values.data);
         List<Integer> rowIndices = ArrayUtils.toArrayList(ArrayUtils.shift(row, values.rowIndices));
         List<Integer> colIndices = ArrayUtils.toArrayList(ArrayUtils.shift(col, values.colIndices));
 
@@ -411,7 +411,7 @@ public final class RealSparseMatrixGetSet {
 
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
-        // Create matrix and ensure entries are properly sorted.
+        // Create matrix and ensure data are properly sorted.
         CooMatrix mat = new CooMatrix(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
@@ -420,7 +420,7 @@ public final class RealSparseMatrixGetSet {
 
 
     /**
-     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense array.
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the data of a dense array.
      * @param src Source sparse matrix to copy and set values of.
      * @param values Dense values of the slice to be set.
      * @param row Starting row index of slice.
@@ -444,7 +444,7 @@ public final class RealSparseMatrixGetSet {
 
 
     /**
-     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense matrix.
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the data of a dense matrix.
      * @param src Source sparse matrix to copy and set values of.
      * @param values Dense matrix containing values of the slice to be set.
      * @param row Starting row index of slice.
@@ -461,12 +461,12 @@ public final class RealSparseMatrixGetSet {
         int[] sliceRows = ArrayUtils.intRange(row, values.numRows + row, values.numCols);
         int[] sliceCols = ArrayUtils.repeat(values.numRows, ArrayUtils.intRange(col, values.numCols + col));
 
-        return setSlice(src, values.entries, values.numRows, values.numCols, sliceRows, sliceCols, row, col);
+        return setSlice(src, values.data, values.numRows, values.numCols, sliceRows, sliceCols, row, col);
     }
 
 
     /**
-     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense array.
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the data of a dense array.
      * @param src Source sparse matrix to copy and set values of.
      * @param values Dense values of the slice to be set.
      * @param row Starting row index of slice.
@@ -496,7 +496,7 @@ public final class RealSparseMatrixGetSet {
 
 
     /**
-     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense array.
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the data of a dense array.
      * @param src Source sparse matrix to copy and set values of.
      * @param values Dense values of the slice to be set.
      * @param row Starting row index of slice.
@@ -521,7 +521,7 @@ public final class RealSparseMatrixGetSet {
 
 
     /**
-     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense array.
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the data of a dense array.
      * @param src Source sparse matrix to copy and set values of.
      * @param values Dense values of the slice to be set.
      * @param row Starting row index of slice.
@@ -575,7 +575,7 @@ public final class RealSparseMatrixGetSet {
 
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
-        // Create matrix and ensure entries are properly sorted.
+        // Create matrix and ensure data are properly sorted.
         CooMatrix mat = new CooMatrix(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
@@ -595,9 +595,9 @@ public final class RealSparseMatrixGetSet {
         List<Double> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             if(src.rowIndices[i]==rowIdx) {
-                entries.add(src.entries[i]);
+                entries.add(src.data[i]);
                 indices.add(src.colIndices[i]);
             }
         }
@@ -622,9 +622,9 @@ public final class RealSparseMatrixGetSet {
         List<Double> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             if(src.rowIndices[i]==rowIdx && src.colIndices[i] >= start && src.colIndices[i] < end) {
-                entries.add(src.entries[i]);
+                entries.add(src.data[i]);
                 indices.add(src.colIndices[i]);
             }
         }
@@ -645,9 +645,9 @@ public final class RealSparseMatrixGetSet {
         List<Double> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             if(src.colIndices[i]==colIdx) {
-                entries.add(src.entries[i]);
+                entries.add(src.data[i]);
                 indices.add(src.rowIndices[i]);
             }
         }
@@ -672,9 +672,9 @@ public final class RealSparseMatrixGetSet {
         List<Double> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             if(src.colIndices[i]==colIdx && src.rowIndices[i] >= start && src.rowIndices[i] < end) {
-                entries.add(src.entries[i]);
+                entries.add(src.data[i]);
                 indices.add(src.rowIndices[i]);
             }
         }
@@ -709,9 +709,9 @@ public final class RealSparseMatrixGetSet {
             start = -start - 1;
         }
 
-        for(int i=start; i<src.entries.length; i++) {
+        for(int i = start; i<src.data.length; i++) {
             if(inSlice(src.rowIndices[i], src.colIndices[i], rowStart, rowEnd, colStart, colEnd)) {
-                entries.add(src.entries[i]);
+                entries.add(src.data[i]);
                 rowIndices.add(src.rowIndices[i]-rowStart);
                 colIndices.add(src.colIndices[i]-colStart);
             }
@@ -748,12 +748,12 @@ public final class RealSparseMatrixGetSet {
     private static void copyValuesNotInSlice(CooMatrix src, List<Double> entries, List<Integer> rowIndices,
                                              List<Integer> colIndices, int[] rowRange, int[] colRange) {
         // Copy values not in slice.
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
 
             if( !(ArrayUtils.contains(rowRange, src.rowIndices[i])
                     && ArrayUtils.contains(colRange, src.colIndices[i])) ) {
                 // Then the entry is not in the slice so add it.
-                entries.add(src.entries[i]);
+                entries.add(src.data[i]);
                 rowIndices.add(src.rowIndices[i]);
                 colIndices.add(src.colIndices[i]);
             }

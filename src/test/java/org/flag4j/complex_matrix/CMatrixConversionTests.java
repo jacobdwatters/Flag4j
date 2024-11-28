@@ -60,7 +60,7 @@ class CMatrixConversionTests {
         expTensor = new CTensor(expTensorShape, expEntries);
 
         tensor = A.toTensor();
-        assertArrayEquals(A.entries, tensor.entries);
+        assertArrayEquals(A.data, tensor.data);
         assertEquals(A.shape, tensor.shape);
         assertEquals(2, tensor.getRank());
     }
@@ -81,6 +81,6 @@ class CMatrixConversionTests {
         expVector = new CVector(expEntries);
 
         vector = A.toVector();
-        assertArrayEquals(expVector.entries, vector.entries);
+        assertArrayEquals(expVector.data, vector.data);
     }
 }

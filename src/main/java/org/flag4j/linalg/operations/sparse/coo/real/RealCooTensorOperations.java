@@ -60,25 +60,25 @@ public final class RealCooTensorOperations {
         int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
         int[][] src2Indices = ArrayUtils.deepCopy(src2.indices, null);
 
-        // Roughly estimate the number of non-zero entries in sum.
+        // Roughly estimate the number of non-zero data in sum.
         int estimatedEntries = src1.nnz + src2.nnz;
         List<Double> sumEntries = new ArrayList<>(estimatedEntries);
         List<int[]> sumIndices = new ArrayList<>(estimatedEntries);
 
         int src2Pos = 0;
         for(int i = 0; i < src1.nnz; i++) {
-            double val1 = src1.entries[i];
+            double val1 = src1.data[i];
             int[] src1Idx = src1Indices[i];
 
             // Insert elements from src2 whose index is less than the current element from src1.
             while(src2Pos < src2.nnz && Arrays.compare(src2Indices[src2Pos], src1Idx) < 0) {
-                sumEntries.add(src2.entries[src2Pos]);
+                sumEntries.add(src2.data[src2Pos]);
                 sumIndices.add(src2Indices[src2Pos++]);
             }
 
             // Add the current element from src1 and handle matching indices from src2.
             if(src2Pos < src2.nnz && Arrays.equals(src1Idx, src2Indices[src2Pos])) {
-                sumEntries.add(val1 + src2.entries[src2Pos++]);
+                sumEntries.add(val1 + src2.data[src2Pos++]);
             } else {
                 sumEntries.add(val1);
             }
@@ -88,7 +88,7 @@ public final class RealCooTensorOperations {
 
         // Insert any remaining elements from src2.
         while(src2Pos < src2.nnz) {
-            sumEntries.add(src2.entries[src2Pos]);
+            sumEntries.add(src2.data[src2Pos]);
             sumIndices.add(src2Indices[src2Pos++]);
         }
 
@@ -110,25 +110,25 @@ public final class RealCooTensorOperations {
         int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
         int[][] src2Indices = ArrayUtils.deepCopy(src2.indices, null);
 
-        // Roughly estimate the number of non-zero entries in sum.
+        // Roughly estimate the number of non-zero data in sum.
         int estimatedEntries = src1.nnz + src2.nnz;
         List<Double> sumEntries = new ArrayList<>(estimatedEntries);
         List<int[]> sumIndices = new ArrayList<>(estimatedEntries);
 
         int src2Pos = 0;
         for(int i = 0; i < src1.nnz; i++) {
-            double val1 = src1.entries[i];
+            double val1 = src1.data[i];
             int[] src1Idx = src1Indices[i];
 
             // Insert elements from src2 whose index is less than the current element from src1.
             while(src2Pos < src2.nnz && Arrays.compare(src2Indices[src2Pos], src1Idx) < 0) {
-                sumEntries.add(-src2.entries[src2Pos]);
+                sumEntries.add(-src2.data[src2Pos]);
                 sumIndices.add(src2Indices[src2Pos++]);
             }
 
             // Add the current element from src1 and handle matching indices from src2.
             if(src2Pos < src2.nnz && Arrays.equals(src1Idx, src2Indices[src2Pos])) {
-                sumEntries.add(val1 - src2.entries[src2Pos++]);
+                sumEntries.add(val1 - src2.data[src2Pos++]);
             } else {
                 sumEntries.add(val1);
             }
@@ -137,7 +137,7 @@ public final class RealCooTensorOperations {
 
         // Insert any remaining elements from src2.
         while(src2Pos < src2.nnz) {
-            sumEntries.add(-src2.entries[src2Pos]);
+            sumEntries.add(-src2.data[src2Pos]);
             sumIndices.add(src2Indices[src2Pos++]);
         }
 
@@ -157,7 +157,7 @@ public final class RealCooTensorOperations {
     public static CooTensor elemMult(CooTensor src1, CooTensor src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
-        // Swap src1 and src2 if src2 has fewer non-zero entries for possibly better performance.
+        // Swap src1 and src2 if src2 has fewer non-zero data for possibly better performance.
         if (src2.nnz < src1.nnz) {
             CooTensor temp = src1;
             src1 = src2;
@@ -177,7 +177,7 @@ public final class RealCooTensorOperations {
             }
 
             if(src2Idx < src2.nnz && cmp == 0) {
-                productEntries[count] = src1.entries[i] * src2.entries[src2Idx];
+                productEntries[count] = src1.data[i] * src2.data[src2Idx];
                 productIndices[count] = src1.indices[i];
                 count++;
             }

@@ -1,14 +1,18 @@
 package org.flag4j.complex_vector;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseVectorOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOps;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CVectorOuterProductTests {
 
@@ -44,7 +48,7 @@ class CVectorOuterProductTests {
                 {new Complex128("-2267.8704+1228.0i"), new Complex128("917.3978999999999-496.75i")},
                 {new Complex128("2270.5719999999997-13811.1932i"), new Complex128("-918.4907499999998+5586.897574999999i")}};
         exp = new CMatrix(expEntries);
-        CMatrix act = new CMatrix(a.size, b.size, RealFieldDenseVectorOperations.outerProduct(a.entries, b.entries));
+        CMatrix act = new CMatrix(a.size, b.size, RealFieldDenseVectorOperations.outerProduct(a.data, b.data));
 
         assertEquals(exp, act);
 
@@ -56,7 +60,7 @@ class CVectorOuterProductTests {
                 {new Complex128("-2267.8704+1228.0i"), new Complex128("917.3978999999999-496.75i"), new Complex128("-14.3127+7.75i"), new Complex128("-5786.947800000001+3133.5i")},
                 {new Complex128("2270.5719999999997-13811.1932i"), new Complex128("-918.4907499999998+5586.897574999999i"), new Complex128("14.329749999999999-87.16347499999999i"), new Complex128("5793.8414999999995-35242.16115i")}};
         exp = new CMatrix(expEntries);
-        act = new CMatrix(a.size, b.size, RealFieldDenseVectorOperations.outerProduct(a.entries, b.entries));
+        act = new CMatrix(a.size, b.size, RealFieldDenseVectorOperations.outerProduct(a.data, b.data));
 
         assertEquals(exp, act);
     }
@@ -78,7 +82,7 @@ class CVectorOuterProductTests {
                 {new Complex128("2270.5719999999997-13811.1932i"), new Complex128("0.0")}};
         exp = new CMatrix(expEntries);
         CMatrix act = new CMatrix(a.size, b.size,
-                RealFieldDenseCooVectorOperations.outerProduct(a.entries, b.entries, b.indices, b.size));
+                RealFieldDenseCooVectorOps.outerProduct(a.data, b.data, b.indices, b.size));
 
         assertEquals(exp, act);
 
@@ -94,7 +98,7 @@ class CVectorOuterProductTests {
         exp = new CMatrix(expEntries);
 
         act = new CMatrix(a.size, b.size,
-                RealFieldDenseCooVectorOperations.outerProduct(a.entries, b.entries, b.indices, b.size));
+                RealFieldDenseCooVectorOps.outerProduct(a.data, b.data, b.indices, b.size));
 
         assertEquals(exp, act);
     }
@@ -145,7 +149,7 @@ class CVectorOuterProductTests {
                 {new Complex128("9093.601019999998-55875.669982i"), new Complex128("0.0")}};
         exp = new CMatrix(expEntries);
         CMatrix act = new CMatrix(a.size, b.size,
-                DenseCooFieldVectorOperations.outerProduct(a.entries, b.entries, b.indices, b.size));
+                DenseCooFieldVectorOps.outerProduct(a.data, b.data, b.indices, b.size));
 
         assertEquals(exp, act);
 
@@ -159,7 +163,7 @@ class CVectorOuterProductTests {
                 {new Complex128("-9164.649304+4981.5544i"), new Complex128("0.0"), new Complex128("41.75+77.1039i"), new Complex128("0.0")},
                 {new Complex128("9093.601019999998-55875.669982i"), new Complex128("0.0"), new Complex128("-469.558075-77.19574999999999i"), new Complex128("0.0")}};
         exp = new CMatrix(expEntries);
-        act = new CMatrix(a.size, b.size, DenseCooFieldVectorOperations.outerProduct(a.entries, b.entries, b.indices, b.size));
+        act = new CMatrix(a.size, b.size, DenseCooFieldVectorOps.outerProduct(a.data, b.data, b.indices, b.size));
 
         assertEquals(exp, act);
     }

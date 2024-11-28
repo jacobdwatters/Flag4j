@@ -25,6 +25,7 @@
 package org.flag4j.linalg.operations.dense_sparse.coo.field_ops;
 
 import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field.AbstractCooFieldMatrix;
 import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.backend.field.AbstractDenseFieldVector;
@@ -36,9 +37,9 @@ import java.util.Arrays;
 /**
  * This class contains low level implementations for operations between a dense and a sparse field matrix.
  */
-public final class DenseCooFieldMatrixOperations {
+public final class DenseCooFieldMatrixOps {
 
-    private DenseCooFieldMatrixOperations() {
+    private DenseCooFieldMatrixOps() {
         // Hide default constructor for utility class.
         throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
@@ -58,7 +59,7 @@ public final class DenseCooFieldMatrixOperations {
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            dest.entries[idx] = dest.entries[idx].add((T) src2.entries[i]);
+            dest.data[idx] = dest.data[idx].add((T) src2.data[i]);
         }
 
         return dest;
@@ -79,7 +80,7 @@ public final class DenseCooFieldMatrixOperations {
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            dest.entries[idx] = dest.entries[idx].sub((T) src2.entries[i]);
+            dest.data[idx] = dest.data[idx].sub((T) src2.data[i]);
         }
 
         return dest;
@@ -97,11 +98,11 @@ public final class DenseCooFieldMatrixOperations {
             AbstractCooFieldMatrix<?, ?, ?, T> src2,
             AbstractDenseFieldMatrix<?, ?, T> src1) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-//        AbstractDenseFieldMatrix<?, ?, T> dest = src1.makeLikeTensor(src1.shape, FieldOps.scalMult(src1.entries, -1));
+//        AbstractDenseFieldMatrix<?, ?, T> dest = src1.makeLikeTensor(src1.shape, FieldOps.scalMult(src1.data, -1));
 //
 //        for(int i=0; i<src2.nnz; i++) {
-//            int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-//            dest.entries[idx] = dest.entries[idx].add((T) src2.entries[i]);
+//            int idx = src2.rowData[i]*src1.numCols + src2.colData[i];
+//            dest.data[idx] = dest.data[idx].add((T) src2.data[i]);
 //        }
 //
 //        return dest;
@@ -120,7 +121,7 @@ public final class DenseCooFieldMatrixOperations {
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            src1.entries[idx] = src1.entries[idx].add((T) src2.entries[i]);
+            src1.data[idx] = src1.data[idx].add((T) src2.data[i]);
         }
     }
 
@@ -136,29 +137,37 @@ public final class DenseCooFieldMatrixOperations {
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            src1.entries[idx] = src1.entries[idx].sub((T) src2.entries[i]);
+            src1.data[idx] = src1.data[idx].sub((T) src2.data[i]);
         }
     }
 
 
     /**
      * Computes the element-wise multiplication between a real dense matrix and a real sparse matrix.
-     * @return The result of element-wise multiplication.
-     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     * @param shape1 Shape of the first matrix in element-wise product.
+     * @param data1 Entries of the first matrix in the element-wise product.
+     * @param shape2 Shape of the second matrix in the element-wise product.
+     * @param data2 Non-zero entries of the second matrix in the element-wise product.
+     * @param rowIndices2 Non-zero row indices of the second matrix in the element-wise product.
+     * @param colIndices2 Non-zero column indices of the second matrix in the element-wise product.
+     * @param dest Array to store the non-zero entries of the sparse COO matrix resulting from the element-wise multiplication
+     * (modified). Must have same length as {@code data2}. May be the same array as {@code data2}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !shape1.equals(shape2)}
      */
-    public static <T extends Field<T>> AbstractCooFieldMatrix<?, ?, ?, T> elemMult(
-            AbstractDenseFieldMatrix<?, ?, T> src1,
-            AbstractCooFieldMatrix<?, ?, ?, T> src2) {
-        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        Field<T>[] destEntries = new Field[src2.nnz];
+    public static <T extends Field<T>> void elemMult(
+            Shape shape1, Field<T>[] data1,
+            Shape shape2, Field<T>[] data2, int[] rowIndices2, int[] colIndices2,
+            Field<T>[] dest) {
+        ValidateParameters.ensureEqualShape(shape1, shape2);
+        ValidateParameters.ensureArrayHasLength(dest.length, data2.length, "dest");
 
-        for(int i=0; i<destEntries.length; i++) {
-            int row = src2.rowIndices[i];
-            int col = src2.colIndices[i];
-            destEntries[i] = src1.entries[row*src1.numCols + col].mult((T) src2.entries[i]);
+        int src1NumCols = shape1.get(1);
+
+        for(int i=0, size=dest.length; i<size; i++) {
+            int row = rowIndices2[i];
+            int col = colIndices2[i];
+            dest[i] = data1[row*src1NumCols + col].mult((T) data2[i]);
         }
-
-        return src2.makeLikeTensor(src2.shape, (T[]) destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
     }
 
 
@@ -184,12 +193,12 @@ public final class DenseCooFieldMatrixOperations {
             AbstractCooFieldMatrix<?, ?, ?, T> src1,
             AbstractDenseFieldMatrix<?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        Field<T>[] quotient = new Field[src1.entries.length];
+        Field<T>[] quotient = new Field[src1.data.length];
 
-        for(int i=0; i<src1.entries.length; i++) {
+        for(int i = 0; i<src1.data.length; i++) {
             int row = src1.rowIndices[i];
             int col = src1.colIndices[i];
-            quotient[i] = src1.entries[i].div((T) src2.entries[row*src2.numCols + col]);
+            quotient[i] = src1.data[i].div((T) src2.data[row*src2.numCols + col]);
         }
 
         return src1.makeLikeTensor(src1.shape, (T[]) quotient, src1.rowIndices.clone(), src1.colIndices.clone());
@@ -201,22 +210,22 @@ public final class DenseCooFieldMatrixOperations {
      * @param src Source sparse matrix.
      * @param col Vector to add to each column of the source matrix.
      * @return A dense copy of the {@code src} matrix with the specified vector added to each column.
-     * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
+     * @throws IllegalArgumentException If the number of data in the {@code col} vector does not match the number
      * of rows in the {@code src} matrix.
      */
     public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> addToEachCol(
             AbstractCooFieldMatrix<?, ?, ?, T> src,
             AbstractDenseFieldVector<?, ?, T> col) {
         Field<T>[] sumEntries = new Field[src.shape.totalEntriesIntValueExact()];
-        Arrays.fill(sumEntries, (col.entries.length > 0) ? col.entries[0].getZero() : null);
+        Arrays.fill(sumEntries, (col.data.length > 0) ? col.data[0].getZero() : null);
         AbstractDenseFieldMatrix<?, ?, T> sum = src.makeLikeDenseTensor(src.shape, sumEntries);
 
         for(int j=0; j<sum.numCols; j++)
-            sum.setCol((T[]) col.entries, j);
+            sum.setCol((T[]) col.data, j);
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             int idx = src.rowIndices[i]*src.numCols + src.colIndices[i];
-            sum.entries[idx] = sum.entries[idx].add((T) src.entries[i]);
+            sum.data[idx] = sum.data[idx].add((T) src.data[i]);
         }
 
         return sum;
@@ -228,22 +237,22 @@ public final class DenseCooFieldMatrixOperations {
      * @param src Source sparse matrix.
      * @param row Vector to add to each row of the source matrix.
      * @return A dense copy of the {@code src} matrix with the specified vector added to each row.
-     * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
+     * @throws IllegalArgumentException If the number of data in the {@code col} vector does not match the number
      * of columns in the {@code src} matrix.
      */
     public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> addToEachRow(
             AbstractCooFieldMatrix<?, ?, ?, T> src, AbstractDenseFieldVector<?, ?, T> row) {
 
         Field<T>[] sumEntries = new Field[src.shape.totalEntriesIntValueExact()];
-        Arrays.fill(sumEntries, (row.entries.length > 0) ? row.entries[0].getZero() : null);
+        Arrays.fill(sumEntries, (row.data.length > 0) ? row.data[0].getZero() : null);
         AbstractDenseFieldMatrix<?, ?, T> sum = src.makeLikeDenseTensor(src.shape, sumEntries);
 
         for(int i=0; i<sum.numRows; i++)
-            sum.setRow((T[]) row.entries, i);
+            sum.setRow((T[]) row.data, i);
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             int idx = src.rowIndices[i]*src.numCols + src.colIndices[i];
-            sum.entries[idx] = sum.entries[idx].add((T) src.entries[i]);
+            sum.data[idx] = sum.data[idx].add((T) src.data[i]);
         }
 
         return sum;

@@ -33,6 +33,6 @@ class RealDenseSparseMatMultTransposeTests {
         B = new CooMatrix(bShape, bEntries, rowIndices, colIndices);
         exp = A.mult(new CooMatrix(bShape.swapAxes(0, 1), bEntries, colIndices, rowIndices));
 
-        assertArrayEquals(exp.entries, multTranspose(A.entries, A.shape, B.entries, B.rowIndices, B.colIndices, B.shape));
+        assertArrayEquals(exp.data, multTranspose(A.data, A.shape, B.data, B.rowIndices, B.colIndices, B.shape));
     }
 }

@@ -30,9 +30,9 @@ class CooCTensorConstructorTests {
 
         Assertions.assertEquals(expShape, A.getShape());
         Assertions.assertArrayEquals(expIndices, A.indices);
-        Assertions.assertEquals(expNonZero.length, A.entries.length);
+        Assertions.assertEquals(expNonZero.length, A.data.length);
         for(int i=0; i<expNonZero.length; i++) {
-            Assertions.assertEquals(expNonZero[i], A.entries[i]);
+            Assertions.assertEquals(expNonZero[i], A.data[i]);
         }
 
         // ------------ Sub-case 2 ------------
@@ -43,9 +43,9 @@ class CooCTensorConstructorTests {
 
         Assertions.assertEquals(expShape, A.getShape());
         Assertions.assertArrayEquals(expIndices, A.indices);
-        Assertions.assertEquals(expNonZero.length, A.entries.length);
+        Assertions.assertEquals(expNonZero.length, A.data.length);
         for(int i=0; i<expNonZero.length; i++) {
-            Assertions.assertEquals(expNonZero[i], A.entries[i]);
+            Assertions.assertEquals(expNonZero[i], A.data[i]);
         }
     }
 
@@ -60,9 +60,9 @@ class CooCTensorConstructorTests {
 
         Assertions.assertEquals(expShape, A.getShape());
         Assertions.assertArrayEquals(expIndices, A.indices);
-        Assertions.assertEquals(expNonZero.length, A.entries.length);
+        Assertions.assertEquals(expNonZero.length, A.data.length);
         for(int i=0; i<expNonZero.length; i++) {
-            Assertions.assertEquals(expNonZero[i], A.entries[i]);
+            Assertions.assertEquals(expNonZero[i], A.data[i]);
         }
 
         // ------------ Sub-case 2 ------------
@@ -98,9 +98,9 @@ class CooCTensorConstructorTests {
 
         Assertions.assertEquals(expShape, A.getShape());
         Assertions.assertArrayEquals(expIndices, A.indices);
-        Assertions.assertEquals(expNonZero.length, A.entries.length);
+        Assertions.assertEquals(expNonZero.length, A.data.length);
         for(int i=0; i<expNonZero.length; i++) {
-            Assertions.assertEquals(expNonZero[i], A.entries[i]);
+            Assertions.assertEquals(expNonZero[i], A.data[i]);
         }
 
         // ------------ Sub-case 2 ------------
@@ -140,9 +140,9 @@ class CooCTensorConstructorTests {
 
         Assertions.assertEquals(expShape, A.getShape());
         Assertions.assertArrayEquals(expIndices, A.indices);
-        Assertions.assertEquals(expNonZero.length, A.entries.length);
+        Assertions.assertEquals(expNonZero.length, A.data.length);
         for(int i=0; i<expNonZero.length; i++) {
-            Assertions.assertEquals(expNonZero[i], A.entries[i]);
+            Assertions.assertEquals(expNonZero[i], A.data[i]);
         }
     }
 }

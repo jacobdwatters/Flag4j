@@ -28,7 +28,7 @@ package org.flag4j.linalg.operations.dense_sparse.coo.real;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.linalg.operations.common.real.RealOperations;
+import org.flag4j.linalg.operations.common.real.RealOps;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
@@ -59,7 +59,7 @@ public class RealDenseSparseMatrixOperations {
         for(int i=0; i<src2.nnz; i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col] += src2.entries[i];
+            dest.data[row*src1.numCols + col] += src2.data[i];
         }
 
         return dest;
@@ -82,7 +82,7 @@ public class RealDenseSparseMatrixOperations {
         for(int i=0; i<src2.nnz; i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col] -= src2.entries[i];
+            dest.data[row*src1.numCols + col] -= src2.data[i];
         }
 
         return dest;
@@ -100,12 +100,12 @@ public class RealDenseSparseMatrixOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         int row, col;
-        Matrix dest = new Matrix(src1.shape, RealOperations.scalMult(src1.entries, -1));
+        Matrix dest = new Matrix(src1.shape, RealOps.scalMult(src1.data, -1, null));
 
         for(int i=0; i<src2.nnz; i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col] += src2.entries[i];
+            dest.data[row*src1.numCols + col] += src2.data[i];
         }
 
         return dest;
@@ -126,7 +126,7 @@ public class RealDenseSparseMatrixOperations {
         for(int i=0; i<src2.nnz; i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            src1.entries[row*src1.numCols + col] += src2.entries[i];
+            src1.data[row*src1.numCols + col] += src2.data[i];
         }
     }
 
@@ -145,7 +145,7 @@ public class RealDenseSparseMatrixOperations {
         for(int i=0; i<src2.nnz; i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            src1.entries[row*src1.numCols + col] -= src2.entries[i];
+            src1.data[row*src1.numCols + col] -= src2.data[i];
         }
     }
 
@@ -166,7 +166,7 @@ public class RealDenseSparseMatrixOperations {
         for(int i=0; i<product.length; i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            product[i] = src1.entries[row*src1.numCols + col]*src2.entries[i];
+            product[i] = src1.data[row*src1.numCols + col]*src2.data[i];
         }
 
         return new CooMatrix(src2.shape, product, src2.rowIndices.clone(), src2.colIndices.clone());
@@ -194,15 +194,15 @@ public class RealDenseSparseMatrixOperations {
     public static CooMatrix elemDiv(CooMatrix src1, Matrix src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
-        double[] quotient = new double[src1.entries.length];
+        double[] quotient = new double[src1.data.length];
 
         int row;
         int col;
 
-        for(int i=0; i<src1.entries.length; i++) {
+        for(int i = 0; i<src1.data.length; i++) {
             row = src1.rowIndices[i];
             col = src1.colIndices[i];
-            quotient[i] = src1.entries[i] / src2.entries[row*src2.numCols + col];
+            quotient[i] = src1.data[i] / src2.data[row*src2.numCols + col];
         }
 
         return new CooMatrix(src1.shape, quotient, src1.rowIndices.clone(), src1.colIndices.clone());
@@ -214,7 +214,7 @@ public class RealDenseSparseMatrixOperations {
      * @param src Source sparse matrix.
      * @param col Vector to add to each column of the source matrix.
      * @return A dense copy of the {@code src} matrix with the specified vector added to each column.
-     * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
+     * @throws IllegalArgumentException If the number of data in the {@code col} vector does not match the number
      * of rows in the {@code src} matrix.
      */
     public static Matrix addToEachCol(CooMatrix src, Vector col) {
@@ -224,8 +224,8 @@ public class RealDenseSparseMatrixOperations {
             sum.setCol(col, j);
         }
 
-        for(int i=0; i<src.entries.length; i++) {
-            sum.entries[src.rowIndices[i]*src.numCols + src.colIndices[i]] += src.entries[i];
+        for(int i = 0; i<src.data.length; i++) {
+            sum.data[src.rowIndices[i]*src.numCols + src.colIndices[i]] += src.data[i];
         }
 
         return sum;
@@ -237,7 +237,7 @@ public class RealDenseSparseMatrixOperations {
      * @param src Source sparse matrix.
      * @param row Vector to add to each row of the source matrix.
      * @return A dense copy of the {@code src} matrix with the specified vector added to each row.
-     * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
+     * @throws IllegalArgumentException If the number of data in the {@code col} vector does not match the number
      * of columns in the {@code src} matrix.
      */
     public static Matrix addToEachRow(CooMatrix src, Vector row) {
@@ -247,7 +247,7 @@ public class RealDenseSparseMatrixOperations {
             sum.setRow(row, i);
 
         for(int i=0; i<src.nnz; i++)
-            sum.entries[src.rowIndices[i]*src.numCols + src.colIndices[i]] += src.entries[i];
+            sum.data[src.rowIndices[i]*src.numCols + src.colIndices[i]] += src.data[i];
 
         return sum;
     }

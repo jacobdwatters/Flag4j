@@ -39,7 +39,7 @@ public final class RealProperties {
 
 
     /**
-     * Checks if a tensor only contain positive values. If the tensor is sparse, only the non-zero entries are considered.
+     * Checks if a tensor only contain positive values. If the tensor is sparse, only the non-zero data are considered.
      * @param entries Entries of the tensor in question.
      * @return True if the tensor contains only positive values. Otherwise, returns false.
      */
@@ -58,7 +58,7 @@ public final class RealProperties {
 
 
     /**
-     * Checks if a tensor only contain negative values. If the tensor is sparse, only the non-zero entries are considered.
+     * Checks if a tensor only contain negative values. If the tensor is sparse, only the non-zero data are considered.
      * @param entries Entries of the tensor in question.
      * @return True if the tensor contains only negative values. Otherwise, returns false.
      */
@@ -95,11 +95,11 @@ public final class RealProperties {
 
 
     /**
-     * Checks if all entries of two arrays_old are 'close'.
+     * Checks if all data of two arrays are 'close'.
      * @param src1 First array in comparison.
      * @param src2 Second array in comparison.
-     * @return True if both arrays_old have the same length and all entries are 'close' element-wise, i.e.
-     * elements {@code a} and {@code b} at the same positions in the two arrays_old respectively and satisfy
+     * @return True if both arrays have the same length and all data are 'close' element-wise, i.e.
+     * elements {@code a} and {@code b} at the same positions in the two arrays respectively and satisfy
      * {@code |a-b| <= (1E-05 + 1E-08*|b|)}. Otherwise, returns false.
      * @see #allClose(double[], double[], double, double)
      */
@@ -108,13 +108,12 @@ public final class RealProperties {
     }
 
 
-
     /**
-     * Checks if all entries of two arrays_old are 'close'.
+     * Checks if all data of two arrays are 'close'.
      * @param src1 First array in comparison.
      * @param src2 Second array in comparison.
-     * @return True if both arrays_old have the same length and all entries are 'close' element-wise, i.e.
-     * elements {@code a} and {@code b} at the same positions in the two arrays_old respectively and satisfy
+     * @return True if both arrays have the same length and all data are 'close' element-wise, i.e.
+     * elements {@code a} and {@code b} at the same positions in the two arrays respectively and satisfy
      * {@code |a-b| <= (absTol + relTol*|b|)}. Otherwise, returns false.
      * @see #allClose(double[], double[])
      */
@@ -196,7 +195,7 @@ public final class RealProperties {
 
 
     /**
-     * Computes the minimum value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
+     * Computes the minimum value in a tensor. Note, if the data array is empty, this method will return 0 allowing
      * this method to be used for real sparse or dense tensors.
      * @param entries Entries of the tensor.
      * @return The minimum value in the tensor.
@@ -212,7 +211,7 @@ public final class RealProperties {
 
 
     /**
-     * Computes the maximum value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
+     * Computes the maximum value in a tensor. Note, if the data array is empty, this method will return 0 allowing
      * this method to be used for real sparse or dense tensors.
      * @param entries Entries of the tensor.
      * @return The maximum value in the tensor.
@@ -228,7 +227,7 @@ public final class RealProperties {
 
 
     /**
-     * Computes the minimum absolute value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
+     * Computes the minimum absolute value in a tensor. Note, if the data array is empty, this method will return 0 allowing
      * this method to be used for real sparse or dense tensors.
      * @param entries Entries of the tensor.
      * @return The minimum absolute value in the tensor.
@@ -244,7 +243,7 @@ public final class RealProperties {
 
 
     /**
-     * Computes the maximum absolute value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
+     * Computes the maximum absolute value in a tensor. Note, if the data array is empty, this method will return 0 allowing
      * this method to be used for real sparse or dense tensors.
      * @param entries Entries of the tensor.
      * @return The maximum absolute value in the tensor.
@@ -261,8 +260,8 @@ public final class RealProperties {
 
     /**
      * Finds the index of the minimum value within a tensor.
-     * @param entries The entries of the tensor.
-     * @return The index of the minimum values within {@code entries}. If {@code entries.length == 0} then -1 will be returned.
+     * @param entries The data of the tensor.
+     * @return The index of the minimum values within {@code data}. If {@code data.length == 0} then -1 will be returned.
      */
     public static int argmin(double... entries) {
         double currMin = (entries.length==0) ? 0 : Double.MAX_VALUE;
@@ -281,8 +280,8 @@ public final class RealProperties {
 
     /**
      * Finds the index of the maximum value within a tensor.
-     * @param entries The entries of the tensor.
-     * @return The index of the maximum values within {@code entries}. If {@code entries.length == 0} then -1 will be returned.
+     * @param entries The data of the tensor.
+     * @return The index of the maximum values within {@code data}. If {@code data.length == 0} then -1 will be returned.
      */
     public static int argmax(double... entries) {
         double currMax = (entries.length==0) ? 0 : Double.MIN_NORMAL;
@@ -301,8 +300,8 @@ public final class RealProperties {
 
     /**
      * Finds the index of the minimum absolute value within a tensor.
-     * @param entries The entries of the tensor.
-     * @return The index of the minimum absolute values within {@code entries}. If {@code entries.length == 0} then -1 will be
+     * @param entries The data of the tensor.
+     * @return The index of the minimum absolute values within {@code data}. If {@code data.length == 0} then -1 will be
      * returned.
      */
     public static int argminAbs(double... entries) {
@@ -322,8 +321,8 @@ public final class RealProperties {
 
     /**
      * Finds the index of the maximum absolute value within a tensor.
-     * @param entries The entries of the tensor.
-     * @return The index of the maximum absolute values within {@code entries}. If {@code entries.length == 0} then -1 will be
+     * @param entries The data of the tensor.
+     * @return The index of the maximum absolute values within {@code data}. If {@code data.length == 0} then -1 will be
      * returned.
      */
     public static int argmaxAbs(double... entries) {

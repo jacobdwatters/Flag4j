@@ -60,23 +60,23 @@ public final class View {
 
         Matrix view = new Matrix(4);
 
-        view.entries[0] = s.entries[0];
-        view.entries[4] = s.entries[1];
-        view.entries[8] = s.entries[2];
+        view.data[0] = s.data[0];
+        view.data[4] = s.data[1];
+        view.data[8] = s.data[2];
 
-        view.entries[1] = u.entries[0];
-        view.entries[5] = u.entries[1];
-        view.entries[9] = u.entries[2];
+        view.data[1] = u.data[0];
+        view.data[5] = u.data[1];
+        view.data[9] = u.data[2];
 
-        view.entries[2] = -f.entries[0];
-        view.entries[6] = -f.entries[1];
-        view.entries[10] = -f.entries[2];
+        view.data[2] = -f.data[0];
+        view.data[6] = -f.data[1];
+        view.data[10] = -f.data[2];
 
-        view.entries[12] = -s.inner(cameraPos);
-        view.entries[13] = -u.inner(cameraPos);
-        view.entries[14] = f.inner(cameraPos);
+        view.data[12] = -s.inner(cameraPos);
+        view.data[13] = -u.inner(cameraPos);
+        view.data[14] = f.inner(cameraPos);
 
-        view.entries[15] = 1.0;
+        view.data[15] = 1.0;
 
         return view;
     }

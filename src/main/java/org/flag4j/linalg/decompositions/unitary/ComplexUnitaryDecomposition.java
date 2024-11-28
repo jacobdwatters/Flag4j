@@ -59,7 +59,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
     /**
      * Creates a real unitary decomposer which will reduce the matrix to an upper triangular/Hessenburg matrix which is has zeros below
      * the specified sub-diagonal.
-     * @param subDiagonal Sub-diagonal of the upper triangular/Hessenburg matrix. That is, the sub-diagonal for which all entries
+     * @param subDiagonal Sub-diagonal of the upper triangular/Hessenburg matrix. That is, the sub-diagonal for which all data
      *                    below will be zero in the final upper quasi-triangular matrix. Must be Zero or one. If zero, it will be
      *                    upper triangular. If one, it will be upper Hessenburg.
      */
@@ -81,7 +81,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
      * to the total time to compute the decomposition. This is because the computation of {@code Q} is only
      * evaluated lazily once {@link #getQ()} is called, so this will only save on copy operations.</p>
      *
-     * @param subDiagonal Sub-diagonal of the upper triangular/Hessenburg matrix. That is, the sub-diagonal for which all entries
+     * @param subDiagonal Sub-diagonal of the upper triangular/Hessenburg matrix. That is, the sub-diagonal for which all data
      *                    below will be zero in the final upper quasi-triangular matrix. Must be Zero or one. If zero, it will be
      *                    upper triangular. If one, it will be upper Hessenburg.
      * @param storeReflectors Flag indicating if the reflectors used to bring the matrix to upper triangular/Hessenburg form
@@ -132,7 +132,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
         // Copy top rows.
         for(int i=0; i<subDiagonal; i++) {
             int rowOffset = i*numCols;
-            System.arraycopy(transformData, rowOffset, H.entries, rowOffset, numCols);
+            System.arraycopy(transformData, rowOffset, H.data, rowOffset, numCols);
         }
 
         // Copy rest of the rows.
@@ -141,7 +141,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
 
             int length = numCols - (i-subDiagonal);
             System.arraycopy(transformData, rowOffset + i - subDiagonal,
-                    H.entries, rowOffset + i - subDiagonal, length);
+                    H.data, rowOffset + i - subDiagonal, length);
         }
 
         return H;
@@ -155,7 +155,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
      */
     @Override
     protected void initWorkArrays(int maxAxisSize) {
-        transformData = transformMatrix.entries;
+        transformData = transformMatrix.data;
         qFactors = new Complex128[minAxisSize]; // Stores scaler factors for the Householder vectors.
         householderVector = new Complex128[maxAxisSize];
         workArray = new Complex128[maxAxisSize];
@@ -201,7 +201,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
     protected void computePhasedNorm(int j, double maxAbs) {
         // Computes the 2-norm of the column.
         for(int i=j; i<numRows; i++) {
-            // Scale entries of the householder vector to help reduce potential overflow.
+            // Scale data of the householder vector to help reduce potential overflow.
             householderVector[i] = householderVector[i].div(maxAbs);
             normRe += ((Complex128) householderVector[i]).magSquared();
         }
@@ -219,7 +219,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
 
     /**
      * Finds the maximum value in {@link #transformMatrix} at column {@code j} at or below the {@code j}th row. This method also initializes
-     * the first {@code numRows-j} entries of the storage array {@link #householderVector} to the entries of this column.
+     * the first {@code numRows-j} data of the storage array {@link #householderVector} to the data of this column.
      * @param j Index of column (and starting row) to compute max of.
      * @return The maximum value in {@link #transformMatrix} at column {@code j} at or below the {@code j}th row.
      */

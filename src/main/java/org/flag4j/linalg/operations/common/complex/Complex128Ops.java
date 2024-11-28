@@ -91,7 +91,7 @@ public final class Complex128Ops {
     /**
      * Rounds the values of a tensor to the nearest integer. Also see {@link #round(Complex128[], int)}.
      * @param src Entries of the tensor to round.
-     * @return The result of rounding all entries of the source tensor to the nearest integer.
+     * @return The result of rounding all data of the source tensor to the nearest integer.
      * @throws IllegalArgumentException If {@code precision} is negative.
      */
     public static Complex128[] round(Field<Complex128>[] src) {
@@ -105,11 +105,11 @@ public final class Complex128Ops {
 
 
     /**
-     * Rounds the values of a tensor with specified precision. Note, if precision is zero, {@link #round(Complex128[])} is
+     * Rounds the values of a tensor with specified precision. Note, if precision is zero, {@link #round(Field[])} is
      * preferred.
      * @param src Entries of the tensor to round.
      * @param precision Precision to round to (i.e. the number of decimal places).
-     * @return The result of rounding all entries of the source tensor with the specified precision.
+     * @return The result of rounding all data of the source tensor with the specified precision.
      * @throws IllegalArgumentException If {@code precision} is negative.
      */
     public static Complex128[] round(Field<Complex128>[] src, int precision) {
@@ -218,7 +218,7 @@ public final class Complex128Ops {
     /**
      * Converts a complex tensor to a real tensor by copying the real component and discarding the imaginary component.
      * @param src Entries of complex tensor.
-     * @return Equivalent real entries for complex tensor.
+     * @return Equivalent real data for complex tensor.
      */
     public static double[] toReal(Field<Complex128>[] src) {
         double[] real = new double[src.length];

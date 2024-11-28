@@ -120,9 +120,9 @@ public final class RealFieldDenseVectorOperations {
     }
 
     /**
-     * Adds a scalar value to all entries of a tensor.
+     * Adds a scalar value to all data of a tensor.
      * @param src1 Entries of first tensor.
-     * @param a Scalar to add to all entries of this tensor.
+     * @param a Scalar to add to all data of this tensor.
      * @return The result of adding the scalar to each entry of the tensor.
      */
     public static <T extends Field<T>> Field<T>[] add(double[] src1, Field<T> a) {

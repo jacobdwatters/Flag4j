@@ -29,6 +29,8 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
+import static org.flag4j.util.ArrayUtils.makeNewIfNull;
+
 /**
  * This class provides low level methods for computing operations on dense semi-ring tensors.
  */
@@ -54,7 +56,7 @@ public final class DenseSemiringOperations {
                                                             Semiring<T>[] src2, Shape shape2,
                                                             Semiring<T>[] dest) {
         ValidateParameters.ensureEqualShape(shape1, shape2);
-        if(dest == null) dest = new Semiring[src1.length];
+        dest = makeNewIfNull(dest, src1.length);
 
         for(int i=0, size=dest.length; i<size; i++)
             dest[i] = src1[i].add((T) src2[i]);
@@ -78,7 +80,7 @@ public final class DenseSemiringOperations {
                                                                  Semiring<T>[] src2, Shape shape2,
                                                                  Semiring<T>[] dest) {
         ValidateParameters.ensureEqualShape(shape1, shape2);
-        if(dest == null) dest = new Semiring[src1.length];
+        dest = makeNewIfNull(dest, src1.length);
 
         for(int i=0, size=dest.length; i<size; i++)
             dest[i] = src1[i].add((T) src2[i]);

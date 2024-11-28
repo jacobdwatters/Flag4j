@@ -50,11 +50,11 @@ public class ComplexExactTensorSolver extends ExactTensorSolver<CTensor, CMatrix
      *
      * @param A    Tensor to convert to matrix.
      * @param prod Product of all axis lengths in {@code A}.
-     * @return A matrix with the same entries as tensor {@code A} with shape (prod, prod).
+     * @return A matrix with the same data as tensor {@code A} with shape (prod, prod).
      */
     @Override
     protected CMatrix initMatrix(CTensor A, int prod) {
-        return new CMatrix(prod, prod, A.entries);
+        return new CMatrix(prod, prod, A.data);
     }
 
 
@@ -66,7 +66,7 @@ public class ComplexExactTensorSolver extends ExactTensorSolver<CTensor, CMatrix
      */
     @Override
     protected CVector initVector(CTensor B) {
-        return new CVector(B.entries);
+        return new CVector(B.data);
     }
 
 
@@ -79,6 +79,6 @@ public class ComplexExactTensorSolver extends ExactTensorSolver<CTensor, CMatrix
      */
     @Override
     protected CTensor wrap(CVector x, Shape outputShape) {
-        return new CTensor(outputShape, x.entries);
+        return new CTensor(outputShape, x.data);
     }
 }

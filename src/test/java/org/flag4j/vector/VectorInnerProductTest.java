@@ -1,12 +1,13 @@
 package org.flag4j.vector;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseVectorOperations;
 import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,7 +47,7 @@ class VectorInnerProductTest {
         b = new CooVector(sparseSize, bEntries, indices);
         exp = -13.7209785;
 
-        assertEquals(exp, RealDenseSparseVectorOperations.inner(a.entries, b.entries, b.indices, b.size));
+        assertEquals(exp, RealDenseSparseVectorOperations.inner(a.data, b.data, b.indices, b.size));
     }
 
 
@@ -62,7 +63,7 @@ class VectorInnerProductTest {
         b = new CVector(bEntries);
         exp = new Complex128("-21336.40357-10217.030400000001j");
 
-        assertEquals(exp, RealFieldDenseVectorOperations.inner(a.entries, b.entries));
+        assertEquals(exp, RealFieldDenseVectorOperations.inner(a.data, b.data));
     }
 
 
@@ -79,7 +80,7 @@ class VectorInnerProductTest {
         b = new CooCVector(sparseSize, bEntries, indices);
         exp = new Complex128("-21335.149999999998-9666.920000000002j");
 
-        assertEquals(exp, RealFieldDenseCooVectorOperations.inner(a.entries, b.entries, b.indices, b.size));
+        assertEquals(exp, RealFieldDenseCooVectorOps.inner(a.data, b.data, b.indices, b.size));
     }
 
 

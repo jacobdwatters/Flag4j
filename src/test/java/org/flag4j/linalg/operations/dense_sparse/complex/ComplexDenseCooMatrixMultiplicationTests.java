@@ -65,16 +65,16 @@ class ComplexDenseCooMatrixMultiplicationTests {
                 {new Complex128("0.0"), new Complex128("837.5426799999999+82.9007024i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("8092.32+2537.82i")}};
         createMatrices();
 
-        assertArrayEquals(ArrayUtils.flatten(expEntries),
-                DenseCooFieldMatMult.standard(
-                        A.entries, A.shape,
-                B.entries, B.rowIndices, B.colIndices, B.shape)
-        );
-        assertArrayEquals(ArrayUtils.flatten(expEntries),
-                DenseCooFieldMatMult.concurrentStandard(
-                        A.entries, A.shape,
-                        B.entries, B.rowIndices, B.colIndices, B.shape)
-        );
+        Complex128[] act = new Complex128[A.numRows*B.numCols];
+
+        DenseCooFieldMatMult.standard(A.data, A.shape,
+                B.data, B.rowIndices, B.colIndices, B.shape, act);
+        assertArrayEquals(ArrayUtils.flatten(expEntries), act);
+
+        DenseCooFieldMatMult.concurrentStandard(
+                A.data, A.shape,
+                B.data, B.rowIndices, B.colIndices, B.shape, act);
+        assertArrayEquals(ArrayUtils.flatten(expEntries), act);
 
         // ----------------------- Sub-case 2 -----------------------
         sparseShape = new Shape(2, 3);
@@ -86,16 +86,15 @@ class ComplexDenseCooMatrixMultiplicationTests {
                 {new Complex128("-39577.094399999994-5651.525600000002i"), new Complex128("8092.32+2537.82i")}};
         createMatrices();
 
-        assertArrayEquals(ArrayUtils.flatten(expEntries),
-                DenseCooFieldMatMult.standard(
-                        B.entries, B.rowIndices, B.colIndices, B.shape,
-                        A.entries, A.shape)
-        );
-        assertArrayEquals(ArrayUtils.flatten(expEntries),
-                DenseCooFieldMatMult.concurrentStandard(
-                        B.entries, B.rowIndices, B.colIndices, B.shape,
-                        A.entries, A.shape)
-        );
+        DenseCooFieldMatMult.standard(
+                B.data, B.rowIndices, B.colIndices, B.shape,
+                A.data, A.shape, act);
+        assertArrayEquals(ArrayUtils.flatten(expEntries), act);
+
+        DenseCooFieldMatMult.concurrentStandard(
+                B.data, B.rowIndices, B.colIndices, B.shape,
+                A.data, A.shape, act);
+        assertArrayEquals(ArrayUtils.flatten(expEntries), act);
     }
 
 
@@ -112,18 +111,17 @@ class ComplexDenseCooMatrixMultiplicationTests {
                 new Complex128("-1436.79728-450.59177999999997i")}};
         createMatrices();
         createDenseVector();
+        Complex128[] act = new Complex128[A.numRows];
 
-        assertArrayEquals(ArrayUtils.flatten(expEntries),
-                DenseCooFieldMatMult.standardVector(
-                        B.entries, B.rowIndices, B.colIndices, B.shape,
-                        bvec.entries, bvec.shape)
-        );
-        assertArrayEquals(ArrayUtils.flatten(expEntries),
-                DenseCooFieldMatMult.concurrentStandardVector(
-                        B.entries, B.rowIndices, B.colIndices, B.shape,
-                        bvec.entries, bvec.shape)
-        );
+        DenseCooFieldMatMult.standardVector(
+                B.data, B.rowIndices, B.colIndices, B.shape,
+                bvec.data, bvec.shape, act);
+        assertArrayEquals(ArrayUtils.flatten(expEntries), act);
 
+        DenseCooFieldMatMult.concurrentStandardVector(
+                B.data, B.rowIndices, B.colIndices, B.shape,
+                bvec.data, bvec.shape, act);
+        assertArrayEquals(ArrayUtils.flatten(expEntries), act);
 
         // ----------------------- Sub-case 2 -----------------------
         sparseSize = 2;
@@ -136,20 +134,16 @@ class ComplexDenseCooMatrixMultiplicationTests {
         createMatrices();
         createSparseVector();
 
-        assertArrayEquals(ArrayUtils.flatten(expEntries),
-                DenseCooFieldMatMult.standardVector(
-                        A.entries, A.shape, bSparse.entries, bSparse.indices
-                )
-        );
-        assertArrayEquals(ArrayUtils.flatten(expEntries),
-                DenseCooFieldMatMult.concurrentStandardVector(
-                        A.entries, A.shape, bSparse.entries, bSparse.indices
-                )
-        );
-        assertArrayEquals(ArrayUtils.flatten(expEntries),
-                DenseCooFieldMatMult.concurrentBlockedVector(
-                        A.entries, A.shape, bSparse.entries, bSparse.indices
-                )
-        );
+        DenseCooFieldMatMult.standardVector(
+                A.data, A.shape, bSparse.data, bSparse.indices, act);
+        assertArrayEquals(ArrayUtils.flatten(expEntries), act);
+
+        DenseCooFieldMatMult.concurrentStandardVector(
+                A.data, A.shape, bSparse.data, bSparse.indices, act);
+        assertArrayEquals(ArrayUtils.flatten(expEntries), act);
+
+        DenseCooFieldMatMult.concurrentBlockedVector(
+                A.data, A.shape, bSparse.data, bSparse.indices, act);
+        assertArrayEquals(ArrayUtils.flatten(expEntries), act);
     }
 }

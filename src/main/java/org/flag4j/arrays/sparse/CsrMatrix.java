@@ -37,7 +37,7 @@ import org.flag4j.linalg.operations.dense_sparse.csr.real.RealCsrDenseMatrixMult
 import org.flag4j.linalg.operations.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
 import org.flag4j.linalg.operations.sparse.SparseUtils;
 import org.flag4j.linalg.operations.sparse.csr.real.*;
-import org.flag4j.linalg.operations.sparse.csr.real_complex.RealComplexCsrMatrixMultiplication;
+import org.flag4j.linalg.operations.sparse.csr.real_complex.RealComplexCsrMatMult;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -53,26 +53,26 @@ import static org.flag4j.linalg.operations.sparse.SparseUtils.sortCsrMatrix;
 
 
 /**
- * <p>A real sparse matrix stored in compressed sparse row (CSR) format. The {@link #entries} of this CSR matrix are
+ * <p>A real sparse matrix stored in compressed sparse row (CSR) format. The {@link #data} of this CSR matrix are
  * primitive doubles.
  *
- * <p>The {@link #entries non-zero entries} and non-zero indices of a CSR matrix are mutable but the {@link #shape}
- * and {@link #nnz total number of non-zero entries} is fixed.
+ * <p>The {@link #data non-zero data} and non-zero indices of a CSR matrix are mutable but the {@link #shape}
+ * and {@link #nnz total number of non-zero data} is fixed.
  *
  * <p>Sparse matrices allow for the efficient storage of and operations on matrices that contain many zero values.
  *
  * <p>A sparse CSR matrix is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
- *     <li>The non-zero {@link #entries} of the matrix. All other entries in the matrix are
- *     assumed to be zero. Zero values can also explicitly be stored in {@link #entries}.</li>
+ *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
+ *     assumed to be zero. Zero values can also explicitly be stored in {@link #data}.</li>
  *     <li>The {@link #rowPointers row pointers} of the non-zero values in the CSR matrix. Has size {@link #numRows numRows + 1}</li>
- *     <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all values in row
+ *     <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all values in row
  *     {@code i}.
  *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
  *
- * <p>Note: many operations assume that the entries of the CSR matrix are sorted lexicographically by the row and column indices.
+ * <p>Note: many operations assume that the data of the CSR matrix are sorted lexicographically by the row and column indices.
  * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any operations implemented in this
  * class will preserve the lexicographical sorting.
  *
@@ -83,14 +83,14 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
 
 
     /**
-     * <p>Pointers indicating starting index of each row within the {@link #colIndices} and {@link #entries} arrays.
+     * <p>Pointers indicating starting index of each row within the {@link #colIndices} and {@link #data} arrays.
      * Has length {@link #numRows numRows + 1}.
      *
-     * <p>The range {@code [entries[rowPointers[i]], entries[rowPointers[i+1]])} contains all {@link #entries non-zero entries} within
+     * <p>The range {@code [data[rowPointers[i]], data[rowPointers[i+1]])} contains all {@link #data non-zero data} within
      * row {@code i}.
      *
-     * <p>Similarly, {@code [colIndices[rowPointers[i]], colIndices[rowPointers[i+1]])} contains all {@link #colIndices column indices}
-     * for the entries in row {@code i}.
+     * <p>Similarly, {@code [colData[rowPointers[i]], colData[rowPointers[i+1]])} contains all {@link #colIndices column indices}
+     * for the data in row {@code i}.
      */
     public final int[] rowPointers;
     /**
@@ -98,7 +98,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      */
     public final int[] colIndices;
     /**
-     * Number of non-zero entries in this CSR matrix.
+     * Number of non-zero data in this CSR matrix.
      */
     public final int nnz;
     /**
@@ -116,15 +116,15 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
 
 
     /**
-     * Creates a sparse CSR matrix with the specified {@code shape}, non-zero entries, row pointers, and non-zero column indices.
+     * Creates a sparse CSR matrix with the specified {@code shape}, non-zero data, row pointers, and non-zero column indices.
      *
      * @param shape Shape of this tensor.
-     * @param entries The non-zero entries of this CSR matrix.
+     * @param entries The non-zero data of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
-     * <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all
+     * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
      * values in row {@code i}.
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
-     * {@code entries.length == colIndices.length}.
+     * {@code data.length == colData.length}.
      */
     public CsrMatrix(Shape shape, double[] entries, int[] rowPointers, int[] colIndices) {
         super(shape, entries);
@@ -139,16 +139,16 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
 
 
     /**
-     * Creates a sparse CSR matrix with the specified {@code shape}, non-zero entries, row pointers, and non-zero column indices.
+     * Creates a sparse CSR matrix with the specified {@code shape}, non-zero data, row pointers, and non-zero column indices.
      *
      * @param numRows The number of rows in this matrix.
      * @param numCols The number of columns in this matrix.
-     * @param entries The non-zero entries of this CSR matrix.
+     * @param entries The non-zero data of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
-     * <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all
+     * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
      * values in row {@code i}.
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
-     * {@code entries.length == colIndices.length}.
+     * {@code data.length == colData.length}.
      */
     public CsrMatrix(int numRows, int numCols, double[] entries, int[] rowPointers, int[] colIndices) {
         super(new Shape(numRows, numCols), entries);
@@ -251,24 +251,24 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
         }
 
         if(found) {
-            newEntries = entries.clone();
+            newEntries = data.clone();
             newEntries[loc] = value;
             newRowPointers = rowPointers.clone();
             newColIndices = colIndices.clone();
         } else {
             loc = -loc - 1; // Compute insertion index as specified by Arrays.binarySearch
-            newEntries = new double[entries.length + 1];
-            newColIndices = new int[entries.length + 1];
+            newEntries = new double[data.length + 1];
+            newColIndices = new int[data.length + 1];
 
-            // Copy old entries and insert new one.
-            System.arraycopy(entries, 0, newEntries, 0, loc);
+            // Copy old data and insert new one.
+            System.arraycopy(data, 0, newEntries, 0, loc);
             newEntries[loc] = value;
-            System.arraycopy(entries, loc, newEntries, loc+1, entries.length-loc);
+            System.arraycopy(data, loc, newEntries, loc+1, data.length-loc);
 
             // Copy old column indices and insert new one.
             System.arraycopy(colIndices, 0, newColIndices, 0, loc);
             newColIndices[loc] = col;
-            System.arraycopy(colIndices, loc, newColIndices, loc+1, entries.length-loc);
+            System.arraycopy(colIndices, loc, newColIndices, loc+1, data.length-loc);
 
             // Increment row pointers.
             for(int i=row+1; i<rowPointers.length; i++) {
@@ -281,7 +281,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
 
 
     /**
-     * Flattens tensor to single dimension while preserving order of entries.
+     * Flattens tensor to single dimension while preserving order of data.
      *
      * @return The flattened tensor.
      *
@@ -341,13 +341,13 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
 
 
     /**
-     * Constructs a CSR matrix of the same type as this matrix with the given the {@code shape} and {@code entries} and the same
+     * Constructs a CSR matrix of the same type as this matrix with the given the {@code shape} and {@code data} and the same
      * row pointers and column indices as this matrix.
      *
      * @param shape Shape of the tensor to construct.
      * @param entries Entries of the tensor to construct.
      *
-     * @return A CSR matrix of the same type as this matrix with the given the {@code shape} and {@code entries} and the same
+     * @return A CSR matrix of the same type as this matrix with the given the {@code shape} and {@code data} and the same
      * row pointers and column indices as this matrix.
      */
     @Override
@@ -430,7 +430,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
             int rowOffset = i*numCols;
 
             for(int j=rowPointers[i]; j<rowPointers[i+1]; j++) {
-                dest[rowOffset + colIndices[j]] = entries[j];
+                dest[rowOffset + colIndices[j]] = data[j];
             }
         }
 
@@ -443,14 +443,14 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      * @return A {@link CooMatrix COO matrix} equivalent to this matrix.
      */
     public CooMatrix toCoo() {
-        int[] destRowIdx = new int[entries.length];
+        int[] destRowIdx = new int[data.length];
 
         for(int i=0; i<numRows; i++) {
             for(int j=rowPointers[i], stop=rowPointers[i+1]; j<stop; j++)
                 destRowIdx[j] = i;
         }
 
-        return new CooMatrix(shape, entries.clone(), destRowIdx, colIndices.clone());
+        return new CooMatrix(shape, data.clone(), destRowIdx, colIndices.clone());
     }
 
 
@@ -458,7 +458,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
      */
     public void sortIndices() {
-        sortCsrMatrix(entries, rowPointers, colIndices);
+        sortCsrMatrix(data, rowPointers, colIndices);
     }
 
 
@@ -497,7 +497,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
         ValidateParameters.validateTensorIndex(shape, row, col);
         int loc = Arrays.binarySearch(colIndices, rowPointers[row], rowPointers[row+1], col);
 
-        if(loc >= 0) return entries[loc];
+        if(loc >= 0) return data[loc];
         else return 0.0;
     }
 
@@ -522,7 +522,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
 
             for(int j=rowPtr; j<stop; j++) {
                 if(i==colIndices[j]) {
-                    trace += entries[j];
+                    trace += data[j];
                 }
             }
         }
@@ -550,7 +550,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
 
             for(int j=rowStart; j<stop; j++) {
                 if(colIndices[j] >= i) break; // Have reached the diagonal. No need to continue for this row.
-                else if(entries[j] != 0) return false; // Non-zero entry found. No need to continue.
+                else if(data[j] != 0) return false; // Non-zero entry found. No need to continue.
             }
         }
 
@@ -577,7 +577,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
 
             for(int j=rowStop-1; j>=rowStart; j--) {
                 if(colIndices[j] <= i) break; // Have reached the diagonal. No need to continue for this row.
-                else if(entries[j] != 0) return false; // Non-zero entry found. No need to continue.
+                else if(data[j] != 0) return false; // Non-zero entry found. No need to continue.
             }
         }
 
@@ -636,7 +636,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      */
     @Override
     public Matrix mult(CsrMatrix b) {
-        return RealCsrMatrixMultiplication.standard(this, b);
+        return RealCsrMatMult.standard(this, b);
     }
 
 
@@ -651,7 +651,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      * @return The result of matrix multiplying this matrix with {@code b} as a sparse CSR matrix.
      */
     public CsrCMatrix mult2Csr(CsrCMatrix b) {
-        return RealComplexCsrMatrixMultiplication.standardAsSparse(this, b);
+        return RealComplexCsrMatMult.standardAsSparse(this, b);
     }
 
 
@@ -666,7 +666,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      * @return The result of matrix multiplying this matrix with {@code b} as a sparse CSR matrix.
      */
     public CsrMatrix mult2Csr(CsrMatrix b) {
-        return RealCsrMatrixMultiplication.standardAsSparse(this, b);
+        return RealCsrMatMult.standardAsSparse(this, b);
     }
 
 
@@ -681,7 +681,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      *                                of rows in matrix {@code b}.
      */
     public CMatrix mult(CsrCMatrix b) {
-        return RealComplexCsrMatrixMultiplication.standard(this, b);
+        return RealComplexCsrMatMult.standard(this, b);
     }
 
 
@@ -698,7 +698,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      */
     @Override
     public Matrix multTranspose(CsrMatrix b) {
-        return RealCsrMatrixMultiplication.standard(this, b.T());
+        return RealCsrMatMult.standard(this, b.T());
     }
 
 
@@ -964,24 +964,24 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
         }
 
         if(found) {
-            newEntries = entries.clone();
+            newEntries = data.clone();
             newEntries[loc] = value;
             newRowPointers = rowPointers.clone();
             newColIndices = colIndices.clone();
         } else {
             loc = -loc - 1; // Compute insertion index as specified by Arrays.binarySearch
-            newEntries = new double[entries.length + 1];
-            newColIndices = new int[entries.length + 1];
+            newEntries = new double[data.length + 1];
+            newColIndices = new int[data.length + 1];
 
-            // Copy old entries and insert new one.
-            System.arraycopy(entries, 0, newEntries, 0, loc);
+            // Copy old data and insert new one.
+            System.arraycopy(data, 0, newEntries, 0, loc);
             newEntries[loc] = value;
-            System.arraycopy(entries, loc, newEntries, loc+1, entries.length-loc);
+            System.arraycopy(data, loc, newEntries, loc+1, data.length-loc);
 
             // Copy old column indices and insert new one.
             System.arraycopy(colIndices, 0, newColIndices, 0, loc);
             newColIndices[loc] = col;
-            System.arraycopy(colIndices, loc, newColIndices, loc+1, entries.length-loc);
+            System.arraycopy(colIndices, loc, newColIndices, loc+1, data.length-loc);
 
             // Increment row pointers.
             for(int i=row+1; i<rowPointers.length; i++) {
@@ -994,17 +994,17 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
 
 
     /**
-     * Extracts the upper-triangular portion of this matrix with a specified diagonal offset. All other entries of the resulting
+     * Extracts the upper-triangular portion of this matrix with a specified diagonal offset. All other data of the resulting
      * matrix will be zero.
      *
      * @param diagOffset Diagonal offset for upper-triangular portion to extract:
      * <ul>
-     *     <li>If zero, then all entries at and above the principle diagonal of this matrix are extracted.</li>
-     *     <li>If positive, then all entries at and above the equivalent super-diagonal are extracted.</li>
-     *     <li>If negative, then all entries at and above the equivalent sub-diagonal are extracted.</li>
+     *     <li>If zero, then all data at and above the principle diagonal of this matrix are extracted.</li>
+     *     <li>If positive, then all data at and above the equivalent super-diagonal are extracted.</li>
+     *     <li>If negative, then all data at and above the equivalent sub-diagonal are extracted.</li>
      * </ul>
      *
-     * @return The upper-triangular portion of this matrix with a specified diagonal offset. All other entries of the returned
+     * @return The upper-triangular portion of this matrix with a specified diagonal offset. All other data of the returned
      * matrix will be zero.
      *
      * @throws IllegalArgumentException If {@code diagOffset} is not in the range (-numRows, numCols).
@@ -1016,17 +1016,17 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
 
 
     /**
-     * Extracts the lower-triangular portion of this matrix with a specified diagonal offset. All other entries of the resulting
+     * Extracts the lower-triangular portion of this matrix with a specified diagonal offset. All other data of the resulting
      * matrix will be zero.
      *
      * @param diagOffset Diagonal offset for lower-triangular portion to extract:
      * <ul>
-     *     <li>If zero, then all entries at and above the principle diagonal of this matrix are extracted.</li>
-     *     <li>If positive, then all entries at and above the equivalent super-diagonal are extracted.</li>
-     *     <li>If negative, then all entries at and above the equivalent sub-diagonal are extracted.</li>
+     *     <li>If zero, then all data at and above the principle diagonal of this matrix are extracted.</li>
+     *     <li>If positive, then all data at and above the equivalent super-diagonal are extracted.</li>
+     *     <li>If negative, then all data at and above the equivalent sub-diagonal are extracted.</li>
      * </ul>
      *
-     * @return The lower-triangular portion of this matrix with a specified diagonal offset. All other entries of the returned
+     * @return The lower-triangular portion of this matrix with a specified diagonal offset. All other data of the returned
      * matrix will be zero.
      *
      * @throws IllegalArgumentException If {@code diagOffset} is not in the range (-numRows, numCols).
@@ -1045,11 +1045,11 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      * @return The result of matrix multiplying this matrix with vector {@code b}.
      *
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the
-     *                                  number of entries in the vector {@code b}.
+     *                                  number of data in the vector {@code b}.
      */
     @Override
     public Vector mult(CooVector b) {
-        return RealCsrMatrixMultiplication.standardVector(this, b);
+        return RealCsrMatMult.standardVector(this, b);
     }
 
 
@@ -1062,7 +1062,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
     @Override
     public CooVector toVector() {
         int type = vectorType();
-        int[] indices = new int[entries.length];
+        int[] indices = new int[data.length];
 
         if(type == -1) {
             // Not a vector.
@@ -1087,7 +1087,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
             }
         }
 
-        return new CooVector(shape.totalEntries().intValueExact(), entries.clone(), indices);
+        return new CooVector(shape.totalEntries().intValueExact(), data.clone(), indices);
     }
 
 
@@ -1117,7 +1117,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
         double[] destEntries = new double[rowPointers[rowIdx + 1]-start];
         int[] destIndices = new int[destEntries.length];
 
-        System.arraycopy(entries, start, destEntries, 0, destEntries.length);
+        System.arraycopy(data, start, destEntries, 0, destEntries.length);
         System.arraycopy(colIndices, start, destIndices, 0, destEntries.length);
 
         return new CooVector(this.numCols, destEntries, destIndices);
@@ -1150,7 +1150,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
             int col = colIndices[j];
 
             if(col >= colStart && col < colEnd) {
-                row.add(entries[j]);
+                row.add(data[j]);
                 indices.add(col-colStart);
             }
         }
@@ -1201,7 +1201,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
 
             for(int j=start; j<stop; j++) {
                 if(colIndices[j]==colIdx) {
-                    destEntries.add(entries[j]);
+                    destEntries.add(data[j]);
                     destIndices.add(i);
                     break; // Should only be a single entry with this row and column index.
                 }
@@ -1215,7 +1215,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
     /**
      * Extracts the diagonal elements of this matrix and returns them as a vector.
      *
-     * @return A vector containing the diagonal entries of this matrix.
+     * @return A vector containing the diagonal data of this matrix.
      */
     public CooVector getDiag() {
         List<Double> destEntries = new ArrayList<>();
@@ -1228,7 +1228,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
             int loc = Arrays.binarySearch(colIndices, start, stop, i); // Search for matching column index within row.
 
             if(loc >= 0) {
-                destEntries.add(entries[loc]);
+                destEntries.add(data[loc]);
                 destIndices.add(i);
             }
         }
@@ -1330,8 +1330,8 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
         // Hash calculation ignores explicit zeros in the matrix. This upholds the contract with the equals(Object) method.
         for(int row = 0; row<numRows; row++) {
             for(int idx = rowPointers[row], rowStop = rowPointers[row + 1]; idx < rowStop; idx++) {
-                if (entries[idx] != 0.0) {
-                    result = 31 * result + Double.hashCode(entries[idx]);
+                if (data[idx] != 0.0) {
+                    result = 31 * result + Double.hashCode(data[idx]);
                     result = 31 * result + Integer.hashCode(colIndices[idx]);
                     result = 31 * result + Integer.hashCode(row);
                 }
@@ -1433,7 +1433,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      */
     @Override
     public int[] argmin() {
-        return shape.getNdIndices(RealProperties.argmin(entries));
+        return shape.getNdIndices(RealProperties.argmin(data));
     }
 
 
@@ -1445,7 +1445,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      */
     @Override
     public int[] argmax() {
-        return shape.getNdIndices(RealProperties.argmax(entries));
+        return shape.getNdIndices(RealProperties.argmax(data));
     }
 
 
@@ -1457,7 +1457,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      */
     @Override
     public int[] argminAbs() {
-        return shape.getNdIndices(RealProperties.argminAbs(entries));
+        return shape.getNdIndices(RealProperties.argminAbs(data));
     }
 
 
@@ -1469,28 +1469,28 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      */
     @Override
     public int[] argmaxAbs() {
-        return shape.getNdIndices(RealProperties.argmaxAbs(entries));
+        return shape.getNdIndices(RealProperties.argmaxAbs(data));
     }
 
 
     /**
-     * Adds a complex-valued scalar to all non-zero entries of this sparse matrix.
+     * Adds a complex-valued scalar to all non-zero data of this sparse matrix.
      * @param b scalar to add.
      * @return The result of adding this matrix to {@code b}.
      */
     public CsrCMatrix add(Complex128 b) {
-//        return new CsrCMatrix(shape, DenseFieldOps.add(entries, b), rowPointers.clone(), colIndices.clone());
+//        return new CsrCMatrix(shape, DenseFieldOps.add(data, b), rowPointers.clone(), colData.clone());
         return null;
     }
 
 
     /**
-     * Subtracts a complex-valued scalar from all non-zero entries of this sparse matrix.
+     * Subtracts a complex-valued scalar from all non-zero data of this sparse matrix.
      * @param b scalar to subtract.
-     * @return The result of subtracting {@code b} from this matrix's non-zero entries.
+     * @return The result of subtracting {@code b} from this matrix's non-zero data.
      */
     public CsrCMatrix sub(Complex128 b) {
-//        return new CsrCMatrix(shape, DenseFieldOps.sub(entries, b), rowPointers.clone(), colIndices.clone());
+//        return new CsrCMatrix(shape, DenseFieldOps.sub(data, b), rowPointers.clone(), colData.clone());
         return null;
     }
 
@@ -1519,16 +1519,16 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
     public String toString() {
         int size = nnz;
         StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
-        result.append("Non-zero entries: [");
+        result.append("Non-zero data: [");
 
         int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
         int width;
         String value;
 
-        if(entries.length > 0) {
-            // Get entries up until the stopping point.
+        if(data.length > 0) {
+            // Get data up until the stopping point.
             for(int i=0; i<stopIndex; i++) {
-                value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+                value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
                 width = PrintOptions.getPadding() + value.length();
                 value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
@@ -1542,7 +1542,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
             }
 
             // Get last entry now
-            value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+            value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
             width = PrintOptions.getPadding() + value.length();
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));

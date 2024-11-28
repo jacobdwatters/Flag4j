@@ -37,7 +37,7 @@ import org.flag4j.util.ErrorMessages;
 import java.util.*;
 
 /**
- * <p>This utility class contains methods for checking the equality, or approximately equal, of sparse COO tensors whose entries are
+ * <p>This utility class contains methods for checking the equality, or approximately equal, of sparse COO tensors whose data are
  * {@link Field field} elements.
  */
 public final class CooFieldEquals {
@@ -69,19 +69,19 @@ public final class CooFieldEquals {
         List<int[]> bIndices = new ArrayList(b.nnz);
 
         for(int i=0; i<a.nnz; i++) {
-            if(a.entries[i] == null) return false;
+            if(a.data[i] == null) return false;
 
-            if(!a.entries[i].isZero()) {
-                aEntries.add((T) a.entries[i]);
+            if(!a.data[i].isZero()) {
+                aEntries.add((T) a.data[i]);
                 aIndices.add(a.indices[i]);
             }
         }
 
         for(int i=0; i<b.nnz; i++) {
-            if(b.entries[i] == null) return false;
+            if(b.data[i] == null) return false;
 
-            if(!b.entries[i].isZero()) {
-                bEntries.add((T) b.entries[i]);
+            if(!b.data[i].isZero()) {
+                bEntries.add((T) b.data[i]);
                 bIndices.add(b.indices[i]);
             }
         }
@@ -107,17 +107,17 @@ public final class CooFieldEquals {
         // Use maps to store non-zero values by their row and column indices.
         Map<Pair<Integer>, Field<T>> nonZeroMapA = new HashMap<>();
         for (int i = 0; i < a.nnz; i++) {
-            if (a.entries[i] == null) return false;
-            if (!a.entries[i].isZero())
-                nonZeroMapA.put(new Pair<>(a.rowIndices[i], a.colIndices[i]), a.entries[i]);
+            if (a.data[i] == null) return false;
+            if (!a.data[i].isZero())
+                nonZeroMapA.put(new Pair<>(a.rowIndices[i], a.colIndices[i]), a.data[i]);
         }
 
         // Compare with matrix b.
         for (int i = 0; i < b.nnz; i++) {
-            if (b.entries[i] == null) return false;
+            if (b.data[i] == null) return false;
 
             Pair<Integer> key = new Pair<>(b.rowIndices[i], b.colIndices[i]);
-            Field<T> valueB = b.entries[i];
+            Field<T> valueB = b.data[i];
 
             if (!valueB.isZero()) {
                 // If valueB is non-zero, check against matrix a.
@@ -155,19 +155,19 @@ public final class CooFieldEquals {
         List<Integer> bIndices = new ArrayList<>(b.nnz);
 
         for(int i=0; i<a.nnz; i++) {
-            if(a.entries[i] == null) return false;
+            if(a.data[i] == null) return false;
 
-            if(!a.entries[i].isZero()) {
-                aEntries.add(a.entries[i]);
+            if(!a.data[i].isZero()) {
+                aEntries.add(a.data[i]);
                 aIndices.add(a.indices[i]);
             }
         }
 
         for(int i=0; i<b.nnz; i++) {
-            if(b.entries[i] == null) return false;
+            if(b.data[i] == null) return false;
 
-            if(!b.entries[i].isZero()) {
-                bEntries.add(b.entries[i]);
+            if(!b.data[i].isZero()) {
+                bEntries.add(b.data[i]);
                 bIndices.add(b.indices[i]);
             }
         }
@@ -177,13 +177,13 @@ public final class CooFieldEquals {
 
 
     /**
-     * Checks that all non-zero entries are "close" according to {@link RealProperties#allClose(double[], double[])} and
+     * Checks that all non-zero data are "close" according to {@link RealProperties#allClose(double[], double[])} and
      *      * all indices are the same.
      * @param src1 First matrix in comparison.
      * @param src2 Second matrix in comparison.
      * @param relTol Relative tolerance.
      * @param absTol Absolute tolerance.
-     * @return True if all entries are "close". Otherwise, false.
+     * @return True if all data are "close". Otherwise, false.
      */
     public static <T extends Field<T>> boolean allClose(AbstractCooFieldMatrix<?, ?, ?, T> src1,
                                                         AbstractCooFieldMatrix<?, ?, ?, T> src2,
@@ -192,12 +192,12 @@ public final class CooFieldEquals {
         return src1.shape.equals(src2.shape)
                 && Arrays.equals(src1.rowIndices, src2.rowIndices)
                 && Arrays.equals(src1.colIndices, src2.colIndices)
-                && RingProperties.allClose(src1.entries, src2.entries, relTol, absTol);
+                && RingProperties.allClose(src1.data, src2.data, relTol, absTol);
     }
 
 
     /**
-     * Checks that all non-zero entries are "close" according to
+     * Checks that all non-zero data are "close" according to
      * 
      * {@link RingProperties#allClose(Ring[], Ring[], double, double)} and all indices
      * are the same.
@@ -205,7 +205,7 @@ public final class CooFieldEquals {
      * @param src2 Second tensor in comparison.
      * @param relTol Relative tolerance.
      * @param absTol Absolute tolerance.
-     * @return True if all entries are "close". Otherwise, false.
+     * @return True if all data are "close". Otherwise, false.
      */
     public static <T extends Field<T>> boolean allClose(AbstractCooFieldTensor<?, ?, T> src1,
                                                         AbstractCooFieldTensor<?, ?, T> src2,
@@ -213,18 +213,18 @@ public final class CooFieldEquals {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.deepEquals(src1.indices, src2.indices)
-                && RingProperties.allClose(src1.entries, src2.entries, relTol, absTol);
+                && RingProperties.allClose(src1.data, src2.data, relTol, absTol);
     }
 
 
     /**
-     * Checks that all non-zero entries are "close" according to
+     * Checks that all non-zero data are "close" according to
      * {@link RingProperties#allClose(Field[], Field[])} and all indices are the same.
      * @param src1 First vector in comparison.
      * @param src2 Second vector in comparison.
      * @param relTol Relative tolerance.
      * @param absTol Absolute tolerance.
-     * @return True if all entries are "close". Otherwise, false.
+     * @return True if all data are "close". Otherwise, false.
      */
     public static <T extends Field<T>> boolean allClose(AbstractCooFieldVector<?, ?, ?, ?, T> src1,
                                                         AbstractCooFieldVector<?, ?, ?, ?, T> src2,
@@ -232,6 +232,6 @@ public final class CooFieldEquals {
         // TODO: We need to first check if values are "close" to zero and remove them. Then do the indices and entry check.
         return src1.shape.equals(src2.shape)
                 && Arrays.equals(src1.indices, src2.indices)
-                && RingProperties.allClose(src1.entries, src2.entries, relTol, absTol);
+                && RingProperties.allClose(src1.data, src2.data, relTol, absTol);
     }
 }

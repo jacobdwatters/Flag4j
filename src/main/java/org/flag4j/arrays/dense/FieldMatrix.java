@@ -41,9 +41,9 @@ import java.util.List;
 
 
 /**
- * <p>A dense matrix whose entries are {@link Field} elements.</p>
+ * <p>A dense matrix whose data are {@link Field} elements.</p>
  *
- * <p>Field matrices have mutable entries but fixed shape.</p>
+ * <p>Field matrices have mutable data but fixed shape.</p>
  *
  * <p>A matrix is essentially equivalent to a rank 2 tensor but has some extended functionality and may have improved performance
  * for some operations.</p>
@@ -54,7 +54,7 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
 
 
     /**
-     * Creates a dense field matrix with the specified entries and shape.
+     * Creates a dense field matrix with the specified data and shape.
      *
      * @param shape Shape of this matrix.
      * @param entries Entries of this matrix.
@@ -65,7 +65,7 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
 
 
     /**
-     * Creates a dense field matrix with the specified entries and shape.
+     * Creates a dense field matrix with the specified data and shape.
      *
      * @param rows Number of rows in the matrix.
      * @param cols Number of columns in the matrix.
@@ -77,7 +77,7 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
 
 
     /**
-     * Creates a dense field matrix with the specified entries and shape.
+     * Creates a dense field matrix with the specified data and shape.
      *
      * @param shape Shape of this matrix.
      * @param entries Entries of this matrix.
@@ -88,19 +88,19 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
 
 
     /**
-     * Creates a dense field matrix with the specified entries and filled with {@code filledValue}.
+     * Creates a dense field matrix with the specified data and filled with {@code filledValue}.
      *
      * @param shape Shape of this matrix.
      * @param fillValue Entries of this matrix.
      */
     public FieldMatrix(Shape shape, T fillValue) {
         super(shape, (T[]) new Field[shape.totalEntriesIntValueExact()]);
-        Arrays.fill(entries, fillValue);
+        Arrays.fill(data, fillValue);
     }
 
 
     /**
-     * Creates a dense field matrix with the specified entries and shape.
+     * Creates a dense field matrix with the specified data and shape.
      *
      * @param rows Number of rows in the matrix.
      * @param cols Number of columns in the matrix.
@@ -113,7 +113,7 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
 
 
     /**
-     * Creates a dense field matrix with the specified entries and filled with {@code filledValue}.
+     * Creates a dense field matrix with the specified data and filled with {@code filledValue}.
      *
      * @param rows Number of rows in the matrix.
      * @param cols Number of columns in the matrix.
@@ -121,7 +121,7 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
      */
     public FieldMatrix(int rows, int cols, T fillValue) {
         super(new Shape(rows, cols), (T[]) new Field[rows*cols]);
-        Arrays.fill(entries, fillValue);
+        Arrays.fill(data, fillValue);
     }
 
 
@@ -129,7 +129,7 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
      * Constructs a sparse COO tensor which is of a similar type as this dense tensor.
      *
      * @param shape Shape of the COO tensor.
-     * @param entries Non-zero entries of the COO tensor.
+     * @param entries Non-zero data of the COO tensor.
      * @param indices
      *
      * @return A sparse COO tensor which is of a similar type as this dense tensor.
@@ -141,12 +141,12 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
 
 
     /**
-     * Constructs a tensor of the same type as this tensor with the given the shape and entries.
+     * Constructs a tensor of the same type as this tensor with the given the shape and data.
      *
      * @param shape Shape of the tensor to construct.
      * @param entries Entries of the tensor to construct.
      *
-     * @return A tensor of the same type as this tensor with the given the shape and entries.
+     * @return A tensor of the same type as this tensor with the given the shape and data.
      */
     @Override
     public FieldMatrix<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
@@ -155,11 +155,11 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
 
 
     /**
-     * Constructs a vector of similar type to this matrix with the given {@code entries}.
+     * Constructs a vector of similar type to this matrix with the given {@code data}.
      *
      * @param entries Entries of the vector.
      *
-     * @return A vector of similar type to this matrix with the given {@code entries}.
+     * @return A vector of similar type to this matrix with the given {@code data}.
      */
     @Override
     public FieldVector<T> makeLikeVector(Field<T>... entries) {
@@ -171,11 +171,11 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
      * Constructs a sparse CSR matrix of similar type to this dense matrix.
      *
      * @param shape Shape of the CSR matrix.
-     * @param entries Non-zero entries of the CSR matrix.
+     * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Row pointers of the CSR matrix.
-     * @param colIndices Column indices of the non-zero entries in the CSR matrix.
+     * @param colIndices Column indices of the non-zero data in the CSR matrix.
      *
-     * @return A sparse CSR matrix with the specified shape and non-zero entries.
+     * @return A sparse CSR matrix with the specified shape and non-zero data.
      */
     @Override
     public CsrFieldMatrix<T> makeLikeCsrMatrix(Shape shape, Field<T>[] entries, int[] rowPointers, int[] colIndices) {
@@ -187,11 +187,11 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
      * Constructs a sparse COO matrix of similar type to this dense matrix.
      *
      * @param shape Shape of the COO matrix.
-     * @param entries Non-zero entries of the COO matrix.
-     * @param rowIndices Row indices of the non-zero entries in the COO matrix.
-     * @param colIndices Column indices of the non-zero entries in the COO matrix.
+     * @param entries Non-zero data of the COO matrix.
+     * @param rowIndices Row indices of the non-zero data in the COO matrix.
+     * @param colIndices Column indices of the non-zero data in the COO matrix.
      *
-     * @return A sparse COO matrix with the specified shape and non-zero entries.
+     * @return A sparse COO matrix with the specified shape and non-zero data.
      */
     @Override
     public CooFieldMatrix<T> makeLikeCooMatrix(Shape shape, Field<T>[] entries, int[] rowIndices, int[] colIndices) {
@@ -216,7 +216,7 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
             int rowOffset = i*cols;
 
             for(int j=0; j<cols; j++) {
-                Field<T> val = entries[rowOffset + j];
+                Field<T> val = data[rowOffset + j];
 
                 if(!val.isZero()) {
                     sparseEntries.add((T) val);
@@ -244,11 +244,11 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
     /**
      * Converts this matrix to an equivalent tensor.
      *
-     * @return A tensor with the same shape and entries as this matrix.
+     * @return A tensor with the same shape and data as this matrix.
      */
     @Override
     public FieldTensor<T> toTensor() {
-        return new FieldTensor<>(new Shape(entries.length), entries.clone());
+        return new FieldTensor<>(new Shape(data.length), data.clone());
     }
 
 
@@ -257,11 +257,11 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
      *
      * @param newShape Shape of the tensor. Can be any rank but must be broadcastable to the shape of this matrix.
      *
-     * @return A tensor with the specified {@code newShape} and the same entries as this matrix.
+     * @return A tensor with the specified {@code newShape} and the same data as this matrix.
      */
     @Override
     public FieldTensor<T> toTensor(Shape newShape) {
-        return new FieldTensor<>(newShape, entries.clone());
+        return new FieldTensor<>(newShape, data.clone());
     }
 
 
@@ -336,11 +336,11 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
         ValidateParameters.ensureNonNegative(n);
 
         // Check for some quick returns.
-        if (n == 0) return I(numRows, entries[0]);
+        if (n == 0) return I(numRows, data[0]);
         if (n == 1) return copy();
         if (n == 2) return this.mult(this);
 
-        FieldMatrix<T> result = I(numRows, entries[0]);  // Start with identity matrix.
+        FieldMatrix<T> result = I(numRows, data[0]);  // Start with identity matrix.
         FieldMatrix<T> base = this;
 
         // Compute the matrix power efficiently using an "exponentiation by squaring" approach.
@@ -369,7 +369,7 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
 
         FieldMatrix<T> src2 = (FieldMatrix<T>) object;
 
-        return shape.equals(src2.shape) && Arrays.equals(entries, src2.entries);
+        return shape.equals(src2.shape) && Arrays.equals(data, src2.data);
     }
 
 
@@ -377,7 +377,7 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
     public int hashCode() {
         int hash = 17;
         hash = 31*hash + shape.hashCode();
-        hash = 31*hash + Arrays.hashCode(entries);
+        hash = 31*hash + Arrays.hashCode(data);
 
         return hash;
     }
@@ -429,8 +429,8 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
         StringBuilder result = new StringBuilder("shape: ").append(shape).append("\n");
         result.append("[");
 
-        if (entries.length == 0) {
-            result.append("[]"); // No entries in this matrix.
+        if (data.length == 0) {
+            result.append("[]"); // No data in this matrix.
         } else {
             int numRows = this.numRows;
             int numCols = this.numCols;
@@ -459,7 +459,7 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
                 if (colIndex == -1)
                     maxWidth = 3; // Width for '...'.
                 else
-                    maxWidth = PrettyPrint.maxStringLength(getCol(colIndex).entries, rowStopIndex + 1);
+                    maxWidth = PrettyPrint.maxStringLength(getCol(colIndex).data, rowStopIndex + 1);
 
                 maxWidths.add(maxWidth);
             }

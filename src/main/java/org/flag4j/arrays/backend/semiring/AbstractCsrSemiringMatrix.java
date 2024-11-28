@@ -48,26 +48,26 @@ import static org.flag4j.linalg.operations.sparse.SparseUtils.sortCsrMatrix;
 
 
 /**
- * <p>A real sparse matrix stored in compressed sparse row (CSR) format. The {@link #entries} of this CSR matrix are
+ * <p>A real sparse matrix stored in compressed sparse row (CSR) format. The {@link #data} of this CSR matrix are
  * elements of a {@link Semiring}.
  *
- * <p>The {@link #entries non-zero entries} and non-zero indices of a CSR matrix are mutable but the {@link #shape}
- * and {@link #nnz total number of non-zero entries} is fixed.
+ * <p>The {@link #data non-zero data} and non-zero indices of a CSR matrix are mutable but the {@link #shape}
+ * and {@link #nnz total number of non-zero data} is fixed.
  *
  * <p>Sparse matrices allow for the efficient storage of and operations on matrices that contain many zero values.
  *
  * <p>A sparse CSR matrix is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
- *     <li>The non-zero {@link #entries} of the matrix. All other entries in the matrix are
- *     assumed to be zero. Zero values can also explicitly be stored in {@link #entries}.</li>
+ *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
+ *     assumed to be zero. Zero values can also explicitly be stored in {@link #data}.</li>
  *     <li>The {@link #rowPointers row pointers} of the non-zero values in the CSR matrix. Has size {@link #numRows numRows + 1}</li>
- *     <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all values in row
+ *     <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all values in row
  *     {@code i}.
  *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
  *
- * <p>Note: many operations assume that the entries of the CSR matrix are sorted lexicographically by the row and column indices.
+ * <p>Note: many operations assume that the data of the CSR matrix are sorted lexicographically by the row and column indices.
  * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any operations implemented in this
  * class will preserve the lexicographical sorting.
  *
@@ -90,14 +90,14 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     private Semiring<W> zeroElement;
     /**
-     * <p>Pointers indicating starting index of each row within the {@link #colIndices} and {@link #entries} arrays.
+     * <p>Pointers indicating starting index of each row within the {@link #colIndices} and {@link #data} arrays.
      * Has length {@link #numRows numRows + 1}.
      *
-     * <p>The range [{@code entries[rowPointers[i]], entries[rowPointers[i+1]]}) contains all {@link #entries non-zero entries} within
+     * <p>The range [{@code data[rowPointers[i]], data[rowPointers[i+1]]}) contains all {@link #data non-zero data} within
      * row {@code i}.
      *
-     * <p>Similarly, [{@code colIndices[rowPointers[i]], colIndices[rowPointers[i+1]]}) contains all {@link #colIndices column indices}
-     * for the entries in row {@code i}.
+     * <p>Similarly, [{@code colData[rowPointers[i]], colData[rowPointers[i+1]]}) contains all {@link #colIndices column indices}
+     * for the data in row {@code i}.
      * 
      */
     public final int[] rowPointers;
@@ -106,7 +106,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     public final int[] colIndices;
     /**
-     * Number of non-zero entries in this CSR matrix.
+     * Number of non-zero data in this CSR matrix.
      */
     public final int nnz;
     /**
@@ -124,15 +124,15 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
 
 
     /**
-     * Creates a sparse CSR matrix with the specified {@code shape}, non-zero entries, row pointers, and non-zero column indices.
+     * Creates a sparse CSR matrix with the specified {@code shape}, non-zero data, row pointers, and non-zero column indices.
      *
      * @param shape Shape of this tensor.
-     * @param entries The non-zero entries of this CSR matrix.
+     * @param entries The non-zero data of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
-     * <p>{@code rowPointers[i]} indicates the starting index within {@code entries} and {@code colIndices} of all
+     * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
      * values in row {@code i}.
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
-     * {@code entries.length == colIndices.length}.
+     * {@code data.length == colData.length}.
      */
     protected AbstractCsrSemiringMatrix(Shape shape, Semiring<W>[] entries, int[] rowPointers, int[] colIndices) {
         super(shape, entries);
@@ -152,23 +152,23 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
 
 
     /**
-     * Constructs a sparse CSR tensor of the same type as this tensor with the specified non-zero entries and indices.
+     * Constructs a sparse CSR tensor of the same type as this tensor with the specified non-zero data and indices.
      * @param shape Shape of the matrix.
-     * @param entries Non-zero entries of the CSR matrix.
+     * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Row pointers for the non-zero values in the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
-     * @return A sparse CSR tensor of the same type as this tensor with the specified non-zero entries and indices.
+     * @return A sparse CSR tensor of the same type as this tensor with the specified non-zero data and indices.
      */
     public abstract T makeLikeTensor(Shape shape, W[] entries, int[] rowPointers, int[] colIndices);
 
 
     /**
-     * Constructs a CSR matrix with the specified shape, non-zero entries, and non-zero indices.
+     * Constructs a CSR matrix with the specified shape, non-zero data, and non-zero indices.
      * @param shape Shape of the matrix.
      * @param entries Non-zero values of the CSR matrix.
      * @param rowPointers Row pointers for the non-zero values in the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
-     * @return A CSR matrix with the specified shape, non-zero entries, and non-zero indices.
+     * @return A CSR matrix with the specified shape, non-zero data, and non-zero indices.
      */
     public abstract T makeLikeTensor(Shape shape, List<W> entries, List<Integer> rowPointers, List<Integer> colIndices);
 
@@ -178,17 +178,17 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      * @param shape Shape of the dense matrix.
      * @param entries Entries of the dense matrix.
      * @return A dense matrix which is of a similar type to this sparse CSR matrix with the specified {@code shape}
-     * and {@code entries}.
+     * and {@code data}.
      */
     public abstract U makeLikeDenseTensor(Shape shape, W[] entries);
 
 
     /**
      * <p>Constructs a sparse COO matrix of a similar type to this sparse CSR matrix.
-     * <p>Note: this method constructs a new COO matrix with the specified entries and indices. It does <i>not</i> convert this matrix
+     * <p>Note: this method constructs a new COO matrix with the specified data and indices. It does <i>not</i> convert this matrix
      * to a CSR matrix. To convert this matrix to a sparse COO matrix use {@link #toCoo()}.
      * @param shape Shape of the COO matrix.
-     * @param entries Non-zero entries of the COO matrix.
+     * @param entries Non-zero data of the COO matrix.
      * @param rowIndices Non-zero row indices of the sparse COO matrix.
      * @param colIndices Non-zero column indices of the Sparse COO matrix.
      * @return A sparse COO matrix of a similar type to this sparse CSR matrix.
@@ -199,7 +199,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
 
     /**
      * Gets the sparsity of this matrix as a decimal percentage.
-     * That is, the percentage of entries in this matrix that are zero.
+     * That is, the percentage of data in this matrix that are zero.
      * @return The sparsity of this matrix as a decimal percentage.
      * @see #density()
      */
@@ -210,7 +210,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
 
     /**
      * Gets the density of this matrix as a decimal percentage.
-     * That is, the percentage of entries in this matrix that are non-zero.
+     * That is, the percentage of data in this matrix that are non-zero.
      * @return The density of this matrix as a decimal percentage.
      * @see #sparsity
      */
@@ -285,7 +285,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
 
 
     /**
-     * Flattens tensor to single dimension while preserving order of entries.
+     * Flattens tensor to single dimension while preserving order of data.
      *
      * @return The flattened tensor.
      *
@@ -297,7 +297,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
         newRowPointers[1] = nnz;
         return makeLikeTensor(
                 new Shape(1, shape.totalEntriesIntValueExact()),
-                (W[]) entries.clone(),
+                (W[]) data.clone(),
                 newRowPointers,
                 colIndices.clone());
     }
@@ -329,11 +329,11 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
             newRowPointers = new int[flatSize + 1];
         }
 
-        Shape newShape = CsrConversions.flatten(shape, entries, rowPointers, colIndices, axis, newRowPointers, newColIndices);
+        Shape newShape = CsrConversions.flatten(shape, data, rowPointers, colIndices, axis, newRowPointers, newColIndices);
 
         return makeLikeTensor(
                 new Shape(shape.totalEntriesIntValueExact(), 1),
-                (W[]) entries.clone(),
+                (W[]) data.clone(),
                 newRowPointers,
                 newColIndices);
     }
@@ -364,10 +364,10 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     @Override
     public T T() {
-        Semiring<W>[] dest = new Semiring[entries.length];
+        Semiring<W>[] dest = new Semiring[data.length];
         int[] destRowPointers = new int[numCols+1];
-        int[] destColIndices = new int[entries.length];
-        CsrOps.transpose(entries, rowPointers, colIndices, dest, destRowPointers, destColIndices);
+        int[] destColIndices = new int[data.length];
+        CsrOps.transpose(data, rowPointers, colIndices, dest, destRowPointers, destColIndices);
 
         return makeLikeTensor(shape.swapAxes(0, 1), (W[]) dest, destRowPointers, destColIndices);
     }
@@ -385,11 +385,11 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
     @Override
     public T add(T b) {
         SparseMatrixData<W> destData = CsrOps.applyBinOpp(
-                shape, (W[]) entries, rowPointers, colIndices,
-                b.shape, (W[]) b.entries, b.rowPointers, b.colIndices,
+                shape, (W[]) data, rowPointers, colIndices,
+                b.shape, (W[]) b.data, b.rowPointers, b.colIndices,
                 Semiring::add, null);
 
-        return makeLikeTensor(shape, destData.entries(), destData.rowIndices(), destData.colIndices());
+        return makeLikeTensor(shape, destData.data(), destData.rowData(), destData.colData());
     }
 
 
@@ -405,11 +405,11 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
     @Override
     public T elemMult(T b) {
         SparseMatrixData<W> destData = CsrOps.applyBinOpp(
-                shape, (W[]) entries, rowPointers, colIndices,
-                b.shape, (W[]) b.entries, b.rowPointers, b.colIndices,
+                shape, (W[]) data, rowPointers, colIndices,
+                b.shape, (W[]) b.data, b.rowPointers, b.colIndices,
                 Semiring::mult, null);
 
-        return makeLikeTensor(shape, destData.entries(), destData.rowIndices(), destData.colIndices());
+        return makeLikeTensor(shape, destData.data(), destData.rowData(), destData.colData());
     }
 
 
@@ -539,7 +539,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
     public W get(int row, int col) {
         int loc = Arrays.binarySearch(colIndices, rowPointers[row], rowPointers[row+1], col);
 
-        if(loc >= 0) return (W) entries[loc];
+        if(loc >= 0) return (W) data[loc];
         else return (W) zeroElement;
     }
 
@@ -555,7 +555,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     @Override
     public W tr() {
-        W tr = (W) SemiringCsrOps.trace(entries, rowPointers, colIndices);
+        W tr = (W) SemiringCsrOps.trace(data, rowPointers, colIndices);
 
         return (tr == null) ? (W) zeroElement : tr;
     }
@@ -572,7 +572,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     @Override
     public boolean isTriU() {
-        return SemiringCsrProperties.isTriU(shape, entries, rowPointers, colIndices);
+        return SemiringCsrProperties.isTriU(shape, data, rowPointers, colIndices);
     }
 
 
@@ -587,7 +587,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     @Override
     public boolean isTriL() {
-        return SemiringCsrProperties.isTriL(shape, entries, rowPointers, colIndices);
+        return SemiringCsrProperties.isTriL(shape, data, rowPointers, colIndices);
     }
 
 
@@ -599,7 +599,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     @Override
     public boolean isI() {
-        return SemiringCsrProperties.isIdentity(shape, entries, rowPointers, colIndices);
+        return SemiringCsrProperties.isIdentity(shape, data, rowPointers, colIndices);
     }
 
 
@@ -620,8 +620,8 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
         W[] destArray = (W[]) new Semiring[numRows*b.numCols];
 
         SemiringCsrMatMult.standard(
-                shape, entries, rowPointers, colIndices, b.shape,
-                b.entries, b.rowPointers, b.colIndices,
+                shape, data, rowPointers, colIndices, b.shape,
+                b.data, b.rowPointers, b.colIndices,
                 destArray, zeroElement);
 
         return makeLikeDenseTensor(shape, destArray);
@@ -637,10 +637,10 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     public T multToSparse(T b) {
         SparseMatrixData<W> data = SemiringCsrMatMult.standardToSparse(
-                shape, entries, rowPointers, colIndices, b.shape,
-                b.entries, b.rowPointers, b.colIndices);
+                shape, this.data, rowPointers, colIndices, b.shape,
+                b.data, b.rowPointers, b.colIndices);
 
-        return makeLikeTensor(data.shape(), data.entries(), data.rowIndices(), data.colIndices());
+        return makeLikeTensor(data.shape(), data.data(), data.rowData(), data.colData());
     }
 
 
@@ -721,7 +721,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     @Override
     public T swapRows(int rowIndex1, int rowIndex2) {
-        CsrOps.swapRows(entries, rowPointers, colIndices, rowIndex1, rowIndex2);
+        CsrOps.swapRows(data, rowPointers, colIndices, rowIndex1, rowIndex2);
         return (T) this;
     }
 
@@ -738,7 +738,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     @Override
     public T swapCols(int colIndex1, int colIndex2) {
-        CsrOps.swapCols(entries, rowPointers, colIndices, colIndex1, colIndex2);
+        CsrOps.swapCols(data, rowPointers, colIndices, colIndex1, colIndex2);
         return (T) this;
     }
 
@@ -750,7 +750,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     @Override
     public boolean isSymmetric() {
-        return CsrProperties.isSymmetric(shape, entries, rowPointers, colIndices);
+        return CsrProperties.isSymmetric(shape, data, rowPointers, colIndices);
     }
 
 
@@ -866,10 +866,10 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
     @Override
     public T getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
         SparseMatrixData<Semiring<W>> sliceData = CsrOps.getSlice(
-                entries, rowPointers, colIndices,
+                data, rowPointers, colIndices,
                 rowStart, rowEnd, colStart, colEnd);
-        return makeLikeTensor(sliceData.shape(), (List<W>) sliceData.entries(),
-                sliceData.rowIndices(), sliceData.colIndices());
+        return makeLikeTensor(sliceData.shape(), (List<W>) sliceData.data(),
+                sliceData.rowData(), sliceData.colData());
     }
 
 
@@ -901,17 +901,17 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
         }
 
         if(found) {
-            newEntries = entries.clone();
+            newEntries = data.clone();
             newEntries[loc] = value;
             newRowPointers = rowPointers.clone();
             newColIndices = colIndices.clone();
         } else {
             loc = -loc - 1; // Compute insertion index as specified by Arrays.binarySearch.
-            newEntries = new Field[entries.length + 1];
-            newColIndices = new int[entries.length + 1];
+            newEntries = new Field[data.length + 1];
+            newColIndices = new int[data.length + 1];
 
             CsrOps.insertNewValue(
-                    entries, rowPointers, colIndices,
+                    data, rowPointers, colIndices,
                     newEntries, newRowPointers, newColIndices,
                     row, col, loc, value);
         }
@@ -921,17 +921,17 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
 
 
     /**
-     * Extracts the upper-triangular portion of this matrix with a specified diagonal offset. All other entries of the resulting
+     * Extracts the upper-triangular portion of this matrix with a specified diagonal offset. All other data of the resulting
      * matrix will be zero.
      *
      * @param diagOffset Diagonal offset for upper-triangular portion to extract:
      * <ul>
-     *     <li>If zero, then all entries at and above the principle diagonal of this matrix are extracted.</li>
-     *     <li>If positive, then all entries at and above the equivalent super-diagonal are extracted.</li>
-     *     <li>If negative, then all entries at and above the equivalent sub-diagonal are extracted.</li>
+     *     <li>If zero, then all data at and above the principle diagonal of this matrix are extracted.</li>
+     *     <li>If positive, then all data at and above the equivalent super-diagonal are extracted.</li>
+     *     <li>If negative, then all data at and above the equivalent sub-diagonal are extracted.</li>
      * </ul>
      *
-     * @return The upper-triangular portion of this matrix with a specified diagonal offset. All other entries of the returned
+     * @return The upper-triangular portion of this matrix with a specified diagonal offset. All other data of the returned
      * matrix will be zero.
      *
      * @throws IllegalArgumentException If {@code diagOffset} is not in the range (-numRows, numCols).
@@ -943,17 +943,17 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
 
 
     /**
-     * Extracts the lower-triangular portion of this matrix with a specified diagonal offset. All other entries of the resulting
+     * Extracts the lower-triangular portion of this matrix with a specified diagonal offset. All other data of the resulting
      * matrix will be zero.
      *
      * @param diagOffset Diagonal offset for lower-triangular portion to extract:
      * <ul>
-     *     <li>If zero, then all entries at and above the principle diagonal of this matrix are extracted.</li>
-     *     <li>If positive, then all entries at and above the equivalent super-diagonal are extracted.</li>
-     *     <li>If negative, then all entries at and above the equivalent sub-diagonal are extracted.</li>
+     *     <li>If zero, then all data at and above the principle diagonal of this matrix are extracted.</li>
+     *     <li>If positive, then all data at and above the equivalent super-diagonal are extracted.</li>
+     *     <li>If negative, then all data at and above the equivalent sub-diagonal are extracted.</li>
      * </ul>
      *
-     * @return The lower-triangular portion of this matrix with a specified diagonal offset. All other entries of the returned
+     * @return The lower-triangular portion of this matrix with a specified diagonal offset. All other data of the returned
      * matrix will be zero.
      *
      * @throws IllegalArgumentException If {@code diagOffset} is not in the range (-numRows, numCols).
@@ -971,7 +971,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     @Override
     public T copy() {
-        return makeLikeTensor(shape, entries.clone());
+        return makeLikeTensor(shape, data.clone());
     }
 
 
@@ -990,15 +990,15 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
      */
     public void sortIndices() {
-        sortCsrMatrix(entries, rowPointers, colIndices);
+        sortCsrMatrix(data, rowPointers, colIndices);
     }
 
 
     /**
      * <p>Converts this sparse CSR matrix to an equivalent dense matrix.
      * 
-     * <p>The zero entries of this CSR matrix will be attempted to be filled with a zero value if it could be determined during 
-     * construction of this sparse CSR matrix. If the zero value could not be determined the zero entries will be filled with 
+     * <p>The zero data of this CSR matrix will be attempted to be filled with a zero value if it could be determined during
+     * construction of this sparse CSR matrix. If the zero value could not be determined the zero data will be filled with
      * {@code null} (this only happens when {@code nnz==0}). To avoid this, the zero element of the semiring for this 
      * matrix can be set explicitly using {@link #setZeroElement(Semiring)}.
      * 
@@ -1006,7 +1006,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     public U toDense() {
         Semiring<W>[] dest = new Semiring[shape.totalEntriesIntValueExact()];
-        CsrConversions.toDense(shape, entries, rowPointers, colIndices, dest, zeroElement);
+        CsrConversions.toDense(shape, data, rowPointers, colIndices, dest, zeroElement);
         return makeLikeDenseTensor(shape, (W[]) dest);
     }
 
@@ -1019,7 +1019,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
         Semiring<W>[] cooEntries = new Semiring[nnz];
         int[] cooRowIndices = new int[nnz];
         int[] cooColIndices = new int[nnz];
-        CsrConversions.toCoo(shape, entries, rowPointers, colIndices, cooEntries, cooRowIndices, cooColIndices);
+        CsrConversions.toCoo(shape, data, rowPointers, colIndices, cooEntries, cooRowIndices, cooColIndices);
         return makeLikeCooMatrix(shape, cooEntries, cooRowIndices, cooColIndices);
     }
 

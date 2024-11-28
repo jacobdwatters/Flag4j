@@ -57,7 +57,7 @@ public class RealDenseTensorDot extends TensorDot<double[]> {
     /**
      * <p>Computes this tensor dot product as specified in the constructor.
      * <p>It is recommended to use {@link #compute()} over this method as it will reduce excess copying.
-     * @param dest The array to store the entries of the tensor resulting from this tensor dot product. The size of this array
+     * @param dest The array to store the data of the tensor resulting from this tensor dot product. The size of this array
      * should be computed using {@link #getOutputSize()}.
      */
     @Override

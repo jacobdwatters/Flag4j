@@ -21,25 +21,25 @@ class MatrixReshapeTests {
         expShape = new Shape(4, 3);
         B = A.reshape(expShape);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 2 ---------------
         expShape = new Shape(1, 12);
         B = A.reshape(expShape);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 3 ---------------
         expShape = new Shape(2, 6);
         B = A.reshape(expShape);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 4 ---------------
         expShape = new Shape(6, 2);
         B = A.reshape(expShape);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 5 ---------------
         expShape = new Shape(6, 1);
@@ -59,7 +59,7 @@ class MatrixReshapeTests {
         expShape = new Shape(rows, cols);
         B = A.reshape(rows, cols);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 2 ---------------
         rows = 1;
@@ -67,7 +67,7 @@ class MatrixReshapeTests {
         expShape = new Shape(rows, cols);
         B = A.reshape(rows, cols);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 3 ---------------
         rows = 2;
@@ -75,7 +75,7 @@ class MatrixReshapeTests {
         expShape = new Shape(rows, cols);
         B = A.reshape(rows, cols);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 4 ---------------
         rows = 6;
@@ -83,7 +83,7 @@ class MatrixReshapeTests {
         expShape = new Shape(rows, cols);
         B = A.reshape(rows, cols);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 5 ---------------
         rows = 6;
@@ -105,19 +105,19 @@ class MatrixReshapeTests {
         expShape = new Shape(1, entries.length);
         B = A.flatten();
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 2 ---------------
         expShape = new Shape(1, entries.length);
         B = A.flatten(1);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 2 ---------------
         expShape = new Shape(entries.length, 1);
         B = A.flatten(0);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-cases 2-4 ---------------
         assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.flatten(-1));

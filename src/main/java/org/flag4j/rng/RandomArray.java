@@ -335,7 +335,7 @@ public class RandomArray {
         int[] indices = ArrayUtils.intRange(start, end);
         shuffle(indices); // Shuffle indices.
 
-        indices = Arrays.copyOfRange(indices, 0, numIndices); // Extract first 'numIndices' entries.
+        indices = Arrays.copyOfRange(indices, 0, numIndices); // Extract first 'numIndices' data.
         Arrays.sort(indices); // Sort indices.
 
         return indices;

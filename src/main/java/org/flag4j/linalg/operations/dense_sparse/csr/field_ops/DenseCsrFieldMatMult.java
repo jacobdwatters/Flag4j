@@ -76,12 +76,12 @@ public final class DenseCsrFieldMatMult {
 
             for(int aIndex=start; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                Complex128 aVal = (Complex128) src1.entries[aIndex];
+                Complex128 aVal = (Complex128) src1.data[aIndex];
                 int src2Idx = aCol*src2.numCols;
                 int destIdx = rowOffset;
 
                 while(destIdx < innerStop)
-                    destEntries[destIdx] = destEntries[destIdx++].add(src2.entries[src2Idx++].mult((T) aVal));
+                    destEntries[destIdx] = destEntries[destIdx++].add(src2.data[src2Idx++].mult((T) aVal));
             }
         }
 
@@ -115,13 +115,13 @@ public final class DenseCsrFieldMatMult {
             int src1RowOffset = i*cols1;
 
             for (int j = 0; j < cols1; j++) {
-                Field<T> src1Val = src1.entries[src1RowOffset + j];
+                Field<T> src1Val = src1.data[src1RowOffset + j];
                 int start = src2.rowPointers[j];
                 int stop = src2.rowPointers[j + 1];
 
                 for (int aIndex = start; aIndex < stop; aIndex++) {
                     int aCol = src2.colIndices[aIndex];
-                    T aVal = (T) src2.entries[aIndex];
+                    T aVal = (T) src2.data[aIndex];
                     destEntries[rowOffset + aCol] = destEntries[rowOffset + aCol].add(src1Val.mult(aVal));
                 }
             }
@@ -154,7 +154,7 @@ public final class DenseCsrFieldMatMult {
 
             for (int aIndex = start; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                destEntries[i] = destEntries[i].add(src2.entries[aCol].mult((T) src1.entries[aIndex]));
+                destEntries[i] = destEntries[i].add(src2.data[aCol].mult((T) src1.data[aIndex]));
             }
         }
 

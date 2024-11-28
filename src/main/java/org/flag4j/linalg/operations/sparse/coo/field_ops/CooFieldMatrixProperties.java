@@ -56,14 +56,14 @@ public final class CooFieldMatrixProperties {
      * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
      */
     public static <V extends Field<V>> boolean isIdentity(AbstractCooFieldMatrix<?, ?, ?, V> src) {
-        // Ensure the matrix is square and there are at least the same number of non-zero entries as entries on the diagonal.
-        if(!src.isSquare() || src.entries.length<src.numRows) return false;
+        // Ensure the matrix is square and there are at least the same number of non-zero data as data on the diagonal.
+        if(!src.isSquare() || src.data.length<src.numRows) return false;
 
-        for(int i=0, size=src.entries.length; i<size; i++) {
+        for(int i = 0, size = src.data.length; i<size; i++) {
             // Ensure value is 1 and on the diagonal.
-            if(src.rowIndices[i] != i && src.rowIndices[i] != i && !src.entries[i].isOne()) {
+            if(src.rowIndices[i] != i && src.rowIndices[i] != i && !src.data[i].isOne()) {
                 return false;
-            } else if((src.rowIndices[i] != i || src.rowIndices[i] != i) && !src.entries[i].isZero()) {
+            } else if((src.rowIndices[i] != i || src.rowIndices[i] != i) && !src.data[i].isZero()) {
                 return false;
             }
         }
@@ -78,19 +78,19 @@ public final class CooFieldMatrixProperties {
      * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
      */
     public static <V extends Field<V>> boolean isCloseToIdentity(AbstractCooFieldMatrix<?, ?, ?, V> src) {
-        // Ensure the matrix is square and there are the same number of non-zero entries as entries on the diagonal.
-        boolean result = src.isSquare() && src.entries.length==src.numRows;
+        // Ensure the matrix is square and there are the same number of non-zero data as data on the diagonal.
+        boolean result = src.isSquare() && src.data.length==src.numRows;
 
         // Tolerances corresponds to the allClose(...) methods.
         double diagTol = 1.001E-5;
         double nonDiagTol = 1e-08;
 
-        final V ONE = src.entries.length > 0 ? src.entries[0].getOne() : null;
+        final V ONE = src.data.length > 0 ? src.data[0].getOne() : null;
 
-        for(int i=0; i<src.entries.length; i++) {
-            if(src.rowIndices[i] == i && src.colIndices[i] == i && src.entries[i].sub(ONE).abs() > diagTol ) {
+        for(int i = 0; i<src.data.length; i++) {
+            if(src.rowIndices[i] == i && src.colIndices[i] == i && src.data[i].sub(ONE).abs() > diagTol ) {
                 return false; // Diagonal value is not close to one.
-            } else if((src.rowIndices[i] != i && src.colIndices[i] != i) && src.entries[i].mag() > nonDiagTol) {
+            } else if((src.rowIndices[i] != i && src.colIndices[i] != i) && src.data[i].mag() > nonDiagTol) {
                 return false; // Non-diagonal value is not close to zero.
             }
         }
@@ -102,7 +102,7 @@ public final class CooFieldMatrixProperties {
     /**
      * Checks if a sparse COO matrix is hermitian. That is, the matrix is equal to its conjugate transpose.
      * @param shape Shape of the COO matrix.
-     * @param entries Non-zero entries of the COO matrix.
+     * @param entries Non-zero data of the COO matrix.
      * @param rowIndices Non-zero row indices of the COO matrix.
      * @param colIndices Non-zero column indices of the COO matrix.
      * @return {@code true} if the {@code src} matrix is hermitian. {@code false} otherwise.
@@ -114,7 +114,7 @@ public final class CooFieldMatrixProperties {
 
         // Build a map from (row, col) to value for quick access.
         Map<Pair<Integer>, Field<V>> matrixMap = new HashMap<>();
-        int nnz = entries.length; // Number of non-zero entries.
+        int nnz = entries.length; // Number of non-zero data.
 
         for (int i = 0; i < nnz; i++) {
             int row = rowIndices[i];
@@ -124,17 +124,17 @@ public final class CooFieldMatrixProperties {
             matrixMap.put(new Pair<>(row, col), value);
         }
 
-        // Iterate over the entries to check for Hermitian property.
+        // Iterate over the data to check for Hermitian property.
         for (Map.Entry<Pair<Integer>, Field<V>> entry : matrixMap.entrySet()) {
             int row = entry.getKey().first();
             int col = entry.getKey().second();
             Field<V> value = entry.getValue();
 
-            // Skip entries where row > col to avoid redundant checks.
+            // Skip data where row > col to avoid redundant checks.
             if (row > col) continue;
 
             if (row == col) {
-                // Diagonal entries must be real: value == value.conj()
+                // Diagonal data must be real: value == value.conj()
                 if (!value.equals(value.conj())) return false;
 
             } else {
@@ -162,7 +162,7 @@ public final class CooFieldMatrixProperties {
     public static <V extends Field<V>> boolean isSymmetric(AbstractCooFieldMatrix<?, ?, ?, V> src) {
         boolean result = src.isSquare();
 
-        List<Field<V>> entries = Arrays.asList(src.entries);
+        List<Field<V>> entries = Arrays.asList(src.data);
         List<Integer> rowIndices = IntStream.of(src.rowIndices).boxed().collect(Collectors.toList());
         List<Integer> colIndices = IntStream.of(src.colIndices).boxed().collect(Collectors.toList());
 
@@ -217,7 +217,7 @@ public final class CooFieldMatrixProperties {
     public static <V extends Field<V>> boolean isAntiHermitian(AbstractCooFieldMatrix<?, ?, ?, V> src) {
         boolean result = src.isSquare();
 
-        List<Field<V>> entries = Arrays.asList(src.entries);
+        List<Field<V>> entries = Arrays.asList(src.data);
         List<Integer> rowIndices = IntStream.of(src.rowIndices).boxed().collect(Collectors.toList());
         List<Integer> colIndices = IntStream.of(src.colIndices).boxed().collect(Collectors.toList());
 

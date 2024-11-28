@@ -51,11 +51,11 @@ import java.util.List;
 import static org.flag4j.linalg.operations.sparse.SparseUtils.copyRanges;
 
 /**
- * <p>A sparse matrix stored in coordinate list (COO) format. The {@link #entries} of this COO matrix are
+ * <p>A sparse matrix stored in coordinate list (COO) format. The {@link #data} of this COO matrix are
  * elements of a {@link Ring}.</p>
  *
- * <p>The {@link #entries non-zero entries} and non-zero indices of a COO matrix are mutable but the {@link #shape}
- * and total number of non-zero entries is fixed.</p>
+ * <p>The {@link #data non-zero data} and non-zero indices of a COO matrix are mutable but the {@link #shape}
+ * and total number of non-zero data is fixed.</p>
  *
  * <p>Sparse matrices allow for the efficient storage of and operations on matrices that contain many zero values.</p>
  *
@@ -65,13 +65,13 @@ import static org.flag4j.linalg.operations.sparse.SparseUtils.copyRanges;
  * <p>A sparse COO matrix is stored as:</p>
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
- *     <li>The non-zero {@link #entries} of the matrix. All other entries in the matrix are
- *     assumed to be zero. Zero values can also explicitly be stored in {@link #entries}.</li>
+ *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
+ *     assumed to be zero. Zero values can also explicitly be stored in {@link #data}.</li>
  *     <li>The {@link #rowIndices row indices} of the non-zero values in the sparse matrix.</li>
  *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
  *
- * <p>Note: many operations assume that the entries of the COO matrix are sorted lexicographically by the row and column indices.
+ * <p>Note: many operations assume that the data of the COO matrix are sorted lexicographically by the row and column indices.
  * (i.e.) by row indices first then column indices. However, this is not explicitly verified but any operations implemented in this
  * class will preserve the lexicographical sorting.</p>
  *
@@ -103,7 +103,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      */
     public final int[] colIndices;
     /**
-     * Number of non-zero entries in this COO matrix.
+     * Number of non-zero data in this COO matrix.
      */
     public final int nnz;
     /**
@@ -121,10 +121,10 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
 
 
     /**
-     * Creates a sparse coo matrix with the specified non-zero entries, non-zero indices, and shape.
+     * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Non-zero entries of this sparse matrix.
+     * @param entries Non-zero data of this sparse matrix.
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
@@ -148,23 +148,23 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
 
 
     /**
-     * Constructs a sparse COO tensor of the same type as this tensor with the specified non-zero entries and indices.
+     * Constructs a sparse COO tensor of the same type as this tensor with the specified non-zero data and indices.
      * @param shape Shape of the matrix.
-     * @param entries Non-zero entries of the matrix.
+     * @param entries Non-zero data of the matrix.
      * @param rowIndices Non-zero row indices of the matrix.
      * @param colIndices Non-zero column indices of the matrix.
-     * @return A sparse COO tensor of the same type as this tensor with the specified non-zero entries and indices.
+     * @return A sparse COO tensor of the same type as this tensor with the specified non-zero data and indices.
      */
     public abstract T makeLikeTensor(Shape shape, W[] entries, int[] rowIndices, int[] colIndices);
 
 
     /**
-     * Constructs a COO matrix with the specified shape, non-zero entries, and non-zero indices.
+     * Constructs a COO matrix with the specified shape, non-zero data, and non-zero indices.
      * @param shape Shape of the matrix.
      * @param entries Non-zero values of the matrix.
      * @param rowIndices Non-zero row indices of the matrix.
      * @param colIndices Non-zero column indices of the matrix.
-     * @return A COO matrix with the specified shape, non-zero entries, and non-zero indices.
+     * @return A COO matrix with the specified shape, non-zero data, and non-zero indices.
      */
     public abstract T makeLikeTensor(Shape shape, List<Ring<W>> entries, List<Integer> rowIndices, List<Integer> colIndices);
 
@@ -172,7 +172,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
     /**
      * Constructs a sparse COO vector of a similar type to this COO matrix.
      * @param shape Shape of the vector. Must be rank 1.
-     * @param entries Non-zero entries of the COO vector.
+     * @param entries Non-zero data of the COO vector.
      * @param indices Non-zero indices of the COO vector.
      * @return A sparse COO vector of a similar type to this COO matrix.
      */
@@ -180,10 +180,10 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
 
 
     /**
-     * Constructs a dense tensor with the specified {@code shape} and {@code entries} which is a similar type to this sparse tensor.
+     * Constructs a dense tensor with the specified {@code shape} and {@code data} which is a similar type to this sparse tensor.
      * @param shape Shape of the dense tensor.
      * @param entries Entries of the dense tensor.
-     * @return A dense tensor with the specified {@code shape} and {@code entries} which is a similar type to this sparse tensor.
+     * @return A dense tensor with the specified {@code shape} and {@code data} which is a similar type to this sparse tensor.
      */
     public abstract U makeLikeDenseTensor(Shape shape, Ring<W>[] entries);
 
@@ -191,7 +191,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
     /**
      * Constructs a sparse CSR matrix of a similar type to this sparse COO matrix.
      * @param shape Shape of the CSR matrix to construct.
-     * @param entries Non-zero entries of the CSR matrix.
+     * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      * @return A CSR matrix of a similar type to this sparse COO matrix.
@@ -214,7 +214,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
 
     /**
      * Gets the sparsity of this matrix as a decimal percentage.
-     * That is, the percentage of entries in this matrix that are zero.
+     * That is, the percentage of data in this matrix that are zero.
      * @return The sparsity of this matrix as a decimal percentage.
      * @see #density()
      */
@@ -225,7 +225,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
 
     /**
      * Gets the density of this matrix as a decimal percentage.
-     * That is, the percentage of entries in this matrix that are non-zero.
+     * That is, the percentage of data in this matrix that are non-zero.
      * @return The density of this matrix as a decimal percentage.
      * @see #sparsity
      */
@@ -266,7 +266,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
     @Override
     public W get(int... index) {
         ValidateParameters.validateTensorIndex(shape, index);
-        W value = (W) CooGetSet.getCoo(entries, rowIndices, colIndices, index[0], index[1]);
+        W value = (W) CooGetSet.getCoo(data, rowIndices, colIndices, index[0], index[1]);
         return (value == null) ? getZeroElement() : value;
     }
 
@@ -310,17 +310,17 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
             idx = -idx - 1;
 
             // No non-zero element with these indices exists. Insert new value.
-            destEntries = new Ring[entries.length + 1];
-            destRowIndices = new int[entries.length + 1];
-            destColIndices = new int[entries.length + 1];
+            destEntries = new Ring[data.length + 1];
+            destRowIndices = new int[data.length + 1];
+            destColIndices = new int[data.length + 1];
 
             CooGetSet.cooInsertNewValue(
                     value, row, col,
-                    entries, rowIndices, colIndices, idx,
+                    data, rowIndices, colIndices, idx,
                     destEntries, destRowIndices, destColIndices);
         } else {
             // Value with these indices exists. Simply update value.
-            destEntries = Arrays.copyOf(entries, entries.length);
+            destEntries = Arrays.copyOf(data, data.length);
             destEntries[idx] = value;
             destRowIndices = rowIndices.clone();
             destColIndices = colIndices.clone();
@@ -358,14 +358,14 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
         dims[1-axis] = shape.totalEntriesIntValueExact();
         Shape flatShape = new Shape(dims);
 
-        int[] destIndices = new int[entries.length];
+        int[] destIndices = new int[data.length];
 
-        for(int i = 0; i < entries.length; i++)
+        for(int i = 0; i < data.length; i++)
             destIndices[i] = shape.getFlatIndex(rowIndices[i], colIndices[i]);
 
         return (axis == 0)
-                ? makeLikeTensor(flatShape, (W[]) entries.clone(), new int[entries.length], destIndices)
-                : makeLikeTensor(flatShape, (W[]) entries.clone(), destIndices, new int[entries.length]);
+                ? makeLikeTensor(flatShape, (W[]) data.clone(), new int[data.length], destIndices)
+                : makeLikeTensor(flatShape, (W[]) data.clone(), destIndices, new int[data.length]);
     }
 
 
@@ -394,7 +394,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
             newColIndices[i] = flatIndex % newColCount;
         }
 
-        return makeLikeTensor(newShape, (W[]) entries.clone(), newRowIndices, newColIndices);
+        return makeLikeTensor(newShape, (W[]) data.clone(), newRowIndices, newColIndices);
     }
 
 
@@ -408,7 +408,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      */
     @Override
     public T T() {
-        T transpose = makeLikeTensor(shape.swapAxes(0, 1), (W[]) entries.clone(), colIndices.clone(), rowIndices.clone());
+        T transpose = makeLikeTensor(shape.swapAxes(0, 1), (W[]) data.clone(), colIndices.clone(), rowIndices.clone());
         transpose.sortIndices(); // Ensure the indices are sorted correctly.
 
         return transpose;
@@ -489,7 +489,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      */
     @Override
     public W get(int row, int col) {
-        return (W) CooGetSet.getCoo(entries, rowIndices, colIndices, row, col);
+        return (W) CooGetSet.getCoo(data, rowIndices, colIndices, row, col);
     }
 
 
@@ -506,8 +506,8 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
     public W tr() {
         W trace = getZeroElement();
 
-        for(int i=0; i<entries.length; i++)
-            if(rowIndices[i]==colIndices[i]) trace = trace.add((W) entries[i]); // Then entry is on the diagonal.
+        for(int i = 0; i< data.length; i++)
+            if(rowIndices[i]==colIndices[i]) trace = trace.add((W) data[i]); // Then entry is on the diagonal.
 
         return trace;
     }
@@ -524,8 +524,8 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      */
     @Override
     public boolean isTriU() {
-        for(int i=0; i<entries.length; i++)
-            if(rowIndices[i] > colIndices[i] && !entries[i].isZero()) return false; // Then non-zero entry is not in upper triangle.
+        for(int i = 0; i< data.length; i++)
+            if(rowIndices[i] > colIndices[i] && !data[i].isZero()) return false; // Then non-zero entry is not in upper triangle.
 
         return true;
     }
@@ -542,8 +542,8 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      */
     @Override
     public boolean isTriL() {
-        for(int i=0; i<entries.length; i++)
-            if(rowIndices[i] < colIndices[i] && !entries[i].isZero()) return false; // Then non-zero entry is not in lower triangle.
+        for(int i = 0; i< data.length; i++)
+            if(rowIndices[i] < colIndices[i] && !data[i].isZero()) return false; // Then non-zero entry is not in lower triangle.
 
         return true;
     }
@@ -557,7 +557,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      */
     @Override
     public boolean isI() {
-        return CooSemiringMatrixProperties.isIdentity(shape, entries, rowIndices, colIndices);
+        return CooSemiringMatrixProperties.isIdentity(shape, data, rowIndices, colIndices);
     }
 
 
@@ -576,8 +576,8 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
         ValidateParameters.ensureMatMultShapes(shape, b.shape);
         Ring<W>[] dest = new Ring[numRows*b.numCols];
         CooSemiringMatMult.standard(
-                entries, rowIndices, colIndices, shape,
-                b.entries, b.rowIndices, b.colIndices, b.shape, dest);
+                data, rowIndices, colIndices, shape,
+                b.data, b.rowIndices, b.colIndices, b.shape, dest);
 
         return makeLikeDenseTensor(new Shape(numRows, b.numCols), dest);
     }
@@ -617,11 +617,11 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
         ValidateParameters.ensureEquals(numCols, b.numCols);
 
         Shape destShape = new Shape(numRows+b.numRows, numCols);
-        Ring<W>[] destEntries = new Ring[entries.length + b.entries.length];
+        Ring<W>[] destEntries = new Ring[data.length + b.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
-        CooConcat.stack(entries, rowIndices, colIndices, numRows,
-                b.entries, b.rowIndices, b.colIndices,
+        CooConcat.stack(data, rowIndices, colIndices, numRows,
+                b.data, b.rowIndices, b.colIndices,
                 destEntries, destRowIndices, destColIndices);
 
         return makeLikeTensor(destShape, (W[]) destEntries, destRowIndices, destColIndices);
@@ -644,11 +644,11 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
         ValidateParameters.ensureEquals(numRows, b.numRows);
 
         Shape destShape = new Shape(numRows, numCols + b.numCols);
-        Ring<W>[] destEntries = new Ring[entries.length + b.entries.length];
+        Ring<W>[] destEntries = new Ring[data.length + b.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
-        CooConcat.augment(entries, rowIndices, colIndices, numCols,
-                b.entries, b.rowIndices, b.colIndices,
+        CooConcat.augment(data, rowIndices, colIndices, numCols,
+                b.data, b.rowIndices, b.colIndices,
                 destEntries, destRowIndices, destColIndices);
 
         return makeLikeTensor(destShape, (W[]) destEntries, destRowIndices, destColIndices);
@@ -667,12 +667,12 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
         ValidateParameters.ensureEquals(numRows, b.size);
 
         Shape destShape = new Shape(numRows, numCols + 1);
-        Ring<W>[] destEntries = new Ring[nnz + b.entries.length];
+        Ring<W>[] destEntries = new Ring[nnz + b.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
         CooConcat.augmentVector(
-                entries, rowIndices, colIndices, numCols,
-                b.entries, b.indices,
+                data, rowIndices, colIndices, numCols,
+                b.data, b.indices,
                 destEntries, destRowIndices, destColIndices);
 
         return makeLikeTensor(destShape, (W[]) destEntries, destRowIndices, destColIndices);
@@ -691,7 +691,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      */
     @Override
     public T swapRows(int rowIndex1, int rowIndex2) {
-        CooManipulations.swapRows(shape, entries, rowIndices, colIndices, rowIndex1, rowIndex2);
+        CooManipulations.swapRows(shape, data, rowIndices, colIndices, rowIndex1, rowIndex2);
         return (T) this;
     }
 
@@ -708,7 +708,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      */
     @Override
     public T swapCols(int colIndex1, int colIndex2) {
-        CooManipulations.swapCols(shape, entries, rowIndices, colIndices, colIndex1, colIndex2);
+        CooManipulations.swapCols(shape, data, rowIndices, colIndices, colIndex1, colIndex2);
         return (T) this;
     }
 
@@ -720,7 +720,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      */
     @Override
     public boolean isSymmetric() {
-        return CooSemiringMatrixProperties.isSymmetric(shape, entries, rowIndices, colIndices);
+        return CooSemiringMatrixProperties.isSymmetric(shape, data, rowIndices, colIndices);
     }
 
 
@@ -761,9 +761,9 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      */
     @Override
     public V getRow(int rowIdx, int start, int stop) {
-        SparseVectorData<Ring<W>> data = CooGetSet.getRow(shape, entries, rowIndices, colIndices, rowIdx, start, stop);
+        SparseVectorData<Ring<W>> data = CooGetSet.getRow(shape, this.data, rowIndices, colIndices, rowIdx, start, stop);
         return (V) makeLikeVector(data.shape(),
-                data.entries().toArray(new Ring[data.entries().size()]),
+                data.data().toArray(new Ring[data.data().size()]),
                 data.indicesToArray());
     }
 
@@ -782,9 +782,9 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      */
     @Override
     public V getCol(int colIdx, int start, int stop) {
-        SparseVectorData<Ring<W>> data = CooGetSet.getCol(shape, entries, rowIndices, colIndices, colIdx, start, stop);
+        SparseVectorData<Ring<W>> data = CooGetSet.getCol(shape, this.data, rowIndices, colIndices, colIdx, start, stop);
         return (V) makeLikeVector(data.shape(),
-                data.entries().toArray(new Ring[data.entries().size()]),
+                data.data().toArray(new Ring[data.data().size()]),
                 data.indicesToArray());
     }
 
@@ -805,9 +805,9 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      */
     @Override
     public V getDiag(int diagOffset) {
-        SparseVectorData<Ring<W>> data = CooGetSet.getDiag(shape, entries, rowIndices, colIndices, diagOffset);
+        SparseVectorData<Ring<W>> data = CooGetSet.getDiag(shape, this.data, rowIndices, colIndices, diagOffset);
         return (V) makeLikeVector(data.shape(),
-                data.entries().toArray(new Ring[data.entries().size()]),
+                data.data().toArray(new Ring[data.data().size()]),
                 data.indicesToArray());
     }
 
@@ -823,16 +823,16 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
     public T removeRow(int rowIndex) {
         Shape shape = new Shape(numRows-1, numCols);
 
-        // Find the start and end index within the entries array which have the given row index.
+        // Find the start and end index within the data array which have the given row index.
         int[] startEnd = SparseElementSearch.matrixFindRowStartEnd(rowIndices, rowIndex);
-        int size = entries.length - (startEnd[1]-startEnd[0]);
+        int size = data.length - (startEnd[1]-startEnd[0]);
 
         // Initialize arrays.
         Ring<W>[] entries = new Ring[size];
         int[] rowIndices = new int[size];
         int[] colIndices = new int[size];
 
-        copyRanges(this.entries, this.rowIndices, this.colIndices, entries, rowIndices, colIndices, startEnd);
+        copyRanges(this.data, this.rowIndices, this.colIndices, entries, rowIndices, colIndices, startEnd);
 
         return makeLikeTensor(shape, (W[]) entries, rowIndices, colIndices);
     }
@@ -856,7 +856,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
         for(int i=0; i<nnz; i++) {
             if(!ArrayUtils.contains(rowIdxs, this.rowIndices[i])) {
                 // Then copy the entry over.
-                entries.add(this.entries[i]);
+                entries.add(this.data[i]);
                 rowIndices.add(this.rowIndices[i]);
                 colIndices.add(this.colIndices[i]);
             }
@@ -876,14 +876,14 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
     @Override
     public T removeCol(int colIndex) {
         Shape shape = new Shape(numRows, numCols-1);
-        List<Ring<W>> destEntries = new ArrayList<>(entries.length);
-        List<Integer> destRowIndices = new ArrayList<>(entries.length);
-        List<Integer> destColIndices = new ArrayList<>(entries.length);
+        List<Ring<W>> destEntries = new ArrayList<>(data.length);
+        List<Integer> destRowIndices = new ArrayList<>(data.length);
+        List<Integer> destColIndices = new ArrayList<>(data.length);
 
-        for(int i=0; i<entries.length; i++) {
+        for(int i = 0; i< data.length; i++) {
             if(colIndices[i] != colIndex) {
                 // Then entry is not in the specified column, so remove it.
-                destEntries.add(entries[i]);
+                destEntries.add(data[i]);
                 destRowIndices.add(rowIndices[i]);
 
                 if(colIndices[i] < colIndex) destColIndices.add(colIndices[i]);
@@ -905,16 +905,16 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
     @Override
     public T removeCols(int... colIdxs) {
         Shape shape = new Shape(numRows, numCols-1);
-        List<Ring<W>> destEntries = new ArrayList<>(entries.length);
-        List<Integer> destRowIndices = new ArrayList<>(entries.length);
-        List<Integer> destColIndices = new ArrayList<>(entries.length);
+        List<Ring<W>> destEntries = new ArrayList<>(data.length);
+        List<Integer> destRowIndices = new ArrayList<>(data.length);
+        List<Integer> destColIndices = new ArrayList<>(data.length);
 
-        for(int i=0; i<entries.length; i++) {
+        for(int i = 0; i< data.length; i++) {
             int idx = Arrays.binarySearch(colIdxs, colIndices[i]);
 
             if(idx < 0) {
                 // Then entry is not in the specified column, so copy it with the appropriate column index shift.
-                destEntries.add(entries[i]);
+                destEntries.add(data[i]);
                 destRowIndices.add(rowIndices[i]);
                 destColIndices.add(colIndices[i] + (idx+1));
             }
@@ -941,10 +941,10 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
     @Override
     public T setSliceCopy(T values, int rowStart, int colStart) {
         SparseMatrixData<Ring<W>> sliceData = CooGetSet.setSlice(
-                shape, entries, rowIndices, colIndices,
-                values.shape, values.entries, values.rowIndices, values.colIndices,
+                shape, data, rowIndices, colIndices,
+                values.shape, values.data, values.rowIndices, values.colIndices,
                 rowStart, colStart);
-        return (T) makeLikeTensor(sliceData.shape(), sliceData.entries(), sliceData.rowIndices(), sliceData.colIndices());
+        return (T) makeLikeTensor(sliceData.shape(), sliceData.data(), sliceData.rowData(), sliceData.colData());
     }
 
 
@@ -964,55 +964,55 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
     @Override
     public T getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
         SparseMatrixData<Ring<W>> sliceData = CooGetSet.getSlice(
-                shape, entries, rowIndices, colIndices,
+                shape, data, rowIndices, colIndices,
                 rowStart, rowEnd, colStart, colEnd);
-        return (T) makeLikeTensor(sliceData.shape(), sliceData.entries(), sliceData.rowIndices(), sliceData.colIndices());
+        return (T) makeLikeTensor(sliceData.shape(), sliceData.data(), sliceData.rowData(), sliceData.colData());
     }
 
 
     /**
-     * Extracts the upper-triangular portion of this matrix with a specified diagonal offset. All other entries of the resulting
+     * Extracts the upper-triangular portion of this matrix with a specified diagonal offset. All other data of the resulting
      * matrix will be zero.
      *
      * @param diagOffset Diagonal offset for upper-triangular portion to extract:
      * <ul>
-     *     <li>If zero, then all entries at and above the principle diagonal of this matrix are extracted.</li>
-     *     <li>If positive, then all entries at and above the equivalent super-diagonal are extracted.</li>
-     *     <li>If negative, then all entries at and above the equivalent sub-diagonal are extracted.</li>
+     *     <li>If zero, then all data at and above the principle diagonal of this matrix are extracted.</li>
+     *     <li>If positive, then all data at and above the equivalent super-diagonal are extracted.</li>
+     *     <li>If negative, then all data at and above the equivalent sub-diagonal are extracted.</li>
      * </ul>
      *
-     * @return The upper-triangular portion of this matrix with a specified diagonal offset. All other entries of the returned
+     * @return The upper-triangular portion of this matrix with a specified diagonal offset. All other data of the returned
      * matrix will be zero.
      *
      * @throws IllegalArgumentException If {@code diagOffset} is not in the range (-numRows, numCols).
      */
     @Override
     public T getTriU(int diagOffset) {
-        SparseMatrixData<Ring<W>> data = CooGetSet.getTriU(diagOffset, shape, entries, rowIndices, colIndices);
-        return makeLikeTensor(data.shape(),  data.entries(), data.rowIndices(), data.colIndices());
+        SparseMatrixData<Ring<W>> data = CooGetSet.getTriU(diagOffset, shape, this.data, rowIndices, colIndices);
+        return makeLikeTensor(data.shape(),  data.data(), data.rowData(), data.colData());
     }
 
 
     /**
-     * Extracts the lower-triangular portion of this matrix with a specified diagonal offset. All other entries of the resulting
+     * Extracts the lower-triangular portion of this matrix with a specified diagonal offset. All other data of the resulting
      * matrix will be zero.
      *
      * @param diagOffset Diagonal offset for lower-triangular portion to extract:
      * <ul>
-     *     <li>If zero, then all entries at and above the principle diagonal of this matrix are extracted.</li>
-     *     <li>If positive, then all entries at and above the equivalent super-diagonal are extracted.</li>
-     *     <li>If negative, then all entries at and above the equivalent sub-diagonal are extracted.</li>
+     *     <li>If zero, then all data at and above the principle diagonal of this matrix are extracted.</li>
+     *     <li>If positive, then all data at and above the equivalent super-diagonal are extracted.</li>
+     *     <li>If negative, then all data at and above the equivalent sub-diagonal are extracted.</li>
      * </ul>
      *
-     * @return The lower-triangular portion of this matrix with a specified diagonal offset. All other entries of the returned
+     * @return The lower-triangular portion of this matrix with a specified diagonal offset. All other data of the returned
      * matrix will be zero.
      *
      * @throws IllegalArgumentException If {@code diagOffset} is not in the range (-numRows, numCols).
      */
     @Override
     public T getTriL(int diagOffset) {
-        SparseMatrixData<Ring<W>> data = CooGetSet.getTriL(diagOffset, shape, entries, rowIndices, colIndices);
-        return makeLikeTensor(data.shape(),  data.entries(), data.rowIndices(), data.colIndices());
+        SparseMatrixData<Ring<W>> data = CooGetSet.getTriL(diagOffset, shape, this.data, rowIndices, colIndices);
+        return makeLikeTensor(data.shape(),  data.data(), data.rowData(), data.colData());
     }
 
 
@@ -1023,7 +1023,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      */
     @Override
     public T copy() {
-        return makeLikeTensor(shape, entries);
+        return makeLikeTensor(shape, data);
     }
 
 
@@ -1039,10 +1039,10 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
     @Override
     public T sub(T b) {
         SparseMatrixData<Ring<W>> data = CooRingMatrixOps.sub(
-                shape, entries, rowIndices, colIndices,
-                b.shape, b.entries, b.rowIndices, b.colIndices);
+                shape, this.data, rowIndices, colIndices,
+                b.shape, b.data, b.rowIndices, b.colIndices);
 
-        return makeLikeTensor(data.shape(), data.entries(), data.rowIndices(), data.colIndices());
+        return makeLikeTensor(data.shape(), data.data(), data.rowData(), data.colData());
     }
 
 
@@ -1102,7 +1102,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      */
     @Override
     public W min() {
-        return (W) CompareSemiring.min(entries);
+        return (W) CompareSemiring.min(data);
     }
 
 
@@ -1113,7 +1113,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      */
     @Override
     public W max() {
-        return (W) CompareSemiring.max(entries);
+        return (W) CompareSemiring.max(data);
     }
 
 
@@ -1125,7 +1125,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      */
     @Override
     public int[] argmin() {
-        int idx = CompareSemiring.argmin(entries);
+        int idx = CompareSemiring.argmin(data);
         return new int[]{rowIndices[idx], colIndices[idx]};
     }
 
@@ -1138,7 +1138,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      */
     @Override
     public int[] argmax() {
-        int idx = CompareSemiring.argmax(entries);
+        int idx = CompareSemiring.argmax(data);
         return new int[]{rowIndices[idx], colIndices[idx]};
     }
 
@@ -1155,11 +1155,11 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
     @Override
     public T add(T b) {
         SparseMatrixData<Semiring<W>> data = CooSemiringMatrixOps.add(
-                shape, entries, rowIndices, colIndices,
-                b.shape, b.entries, b.rowIndices, b.colIndices);
+                shape, this.data, rowIndices, colIndices,
+                b.shape, b.data, b.rowIndices, b.colIndices);
 
         return makeLikeTensor(data.shape(),
-                (W[]) data.entries().toArray(new Ring[data.entries().size()]),
+                (W[]) data.data().toArray(new Ring[data.data().size()]),
                 data.rowIndicesToArray(),
                 data.colIndicesToArray());
     }
@@ -1177,11 +1177,11 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
     @Override
     public T elemMult(T b) {
         SparseMatrixData<Semiring<W>> data = CooSemiringMatrixOps.elemMult(
-                shape, entries, rowIndices, colIndices,
-                b.shape, b.entries, b.rowIndices, b.colIndices);
+                shape, this.data, rowIndices, colIndices,
+                b.shape, b.data, b.rowIndices, b.colIndices);
 
         return makeLikeTensor(data.shape(),
-                (W[]) data.entries().toArray(new Ring[data.entries().size()]),
+                (W[]) data.data().toArray(new Ring[data.data().size()]),
                 data.rowIndicesToArray(),
                 data.colIndicesToArray());
     }
@@ -1238,7 +1238,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
      */
     public void sortIndices() {
-        CooDataSorter.wrap(entries, rowIndices, colIndices).sparseSort().unwrap(entries, rowIndices, colIndices);
+        CooDataSorter.wrap(data, rowIndices, colIndices).sparseSort().unwrap(data, rowIndices, colIndices);
     }
 
 
@@ -1250,7 +1250,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
         Ring<W>[] entries = new Ring[totalEntries().intValueExact()];
 
         for(int i = 0; i< nnz; i++)
-            entries[rowIndices[i]*numCols + colIndices[i]] = this.entries[i];
+            entries[rowIndices[i]*numCols + colIndices[i]] = this.data[i];
 
         return makeLikeDenseTensor(shape, entries);
     }
@@ -1261,10 +1261,10 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      * @return A sparse CSR matrix equivalent to this sparse COO matrix.
      */
     public AbstractCsrRingMatrix<?, U, V, W> toCsr() {
-        Ring<W>[] csrEntries = new Ring[entries.length];
+        Ring<W>[] csrEntries = new Ring[data.length];
         int[] csrRowPointers = new int[numRows + 1];
         int[] csrColPointers = new int[colIndices.length];
-        CooConversions.toCsr(shape, entries, rowIndices, colIndices, csrEntries, csrRowPointers, csrColPointers);
+        CooConversions.toCsr(shape, data, rowIndices, colIndices, csrEntries, csrRowPointers, csrColPointers);
         return makeLikeCsrMatrix(shape, csrEntries, csrRowPointers, csrColPointers);
     }
 
@@ -1290,10 +1290,10 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      * @return A vector equivalent to this CSR matrix.
      */
     public V toVector() {
-        int[] destIndices = new int[entries.length];
-        for(int i=0; i<entries.length; i++)
+        int[] destIndices = new int[data.length];
+        for(int i = 0; i< data.length; i++)
             destIndices[i] = rowIndices[i]*colIndices[i];
 
-        return makeLikeVector(new Shape(numRows*numCols), entries.clone(), destIndices);
+        return makeLikeVector(new Shape(numRows*numCols), data.clone(), destIndices);
     }
 }

@@ -55,7 +55,7 @@ public final class ComplexSparseMatrixGetSet {
      * Sets a specified row of a complex sparse matrix to the values of a dense array.
      * @param src Source matrix to set the row of.
      * @param rowIdx Index of the row to set.
-     * @param row Dense array containing the entries of the row to set.
+     * @param row Dense array containing the data of the row to set.
      * @return A copy of the {@code src} matrix with the specified row set to the dense {@code row} array.
      */
     public static CooCMatrix setRow(CooCMatrix src, int rowIdx, double[] row) {
@@ -71,15 +71,15 @@ public final class ComplexSparseMatrixGetSet {
         int[] destColIndices;
 
         if(start<0) {
-            // No entries with row index found.
-            destEntries = new Complex128[src.entries.length + row.length];
+            // No data with row index found.
+            destEntries = new Complex128[src.data.length + row.length];
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
-            System.arraycopy(src.entries, 0, destEntries, 0, -start-1);
+            System.arraycopy(src.data, 0, destEntries, 0, -start-1);
             ArrayUtils.arraycopy(row, 0, destEntries, -start-1, row.length);
             System.arraycopy(
-                    src.entries, -start-1,
+                    src.data, -start-1,
                     destEntries, -start-1+row.length, destEntries.length-(row.length - start - 1)
             );
 
@@ -99,14 +99,14 @@ public final class ComplexSparseMatrixGetSet {
 
         } else {
             // Entries with row index found.
-            destEntries = new Complex128[src.entries.length + row.length - (end-start)];
+            destEntries = new Complex128[src.data.length + row.length - (end-start)];
             destRowIndices = new int[destEntries.length];
             destColIndices = new int[destEntries.length];
 
-            System.arraycopy(src.entries, 0, destEntries, 0, start);
+            System.arraycopy(src.data, 0, destEntries, 0, start);
             ArrayUtils.arraycopy(row, 0, destEntries, start, row.length);
             System.arraycopy(
-                    src.entries, end,
+                    src.data, end,
                     destEntries, start + row.length, destEntries.length-(start + row.length)
             );
 
@@ -130,10 +130,10 @@ public final class ComplexSparseMatrixGetSet {
 
 
     /**
-     * Sets a column of a sparse matrix to the entries of a dense array.
+     * Sets a column of a sparse matrix to the data of a dense array.
      * @param src Source matrix to set column of.
      * @param colIdx The index of the column to set within the {@code src} matrix.
-     * @param col The dense array containing the new column entries for the {@code src} array.
+     * @param col The dense array containing the new column data for the {@code src} array.
      * @return A copy of the {@code src} matrix with the specified column set to the dense array.
      * @throws IllegalArgumentException If the {@code colIdx} is not within the range of the matrix.
      * @throws IllegalArgumentException If the {@code col} array does not have the same length as the number of
@@ -144,14 +144,14 @@ public final class ComplexSparseMatrixGetSet {
         ValidateParameters.ensureEquals(src.numRows, col.length);
 
         // Initialize destination arrays_old with the new column and the appropriate indices.
-        List<Field<Complex128>> destEntries = new ArrayList<>(src.entries.length);
-        List<Integer> destRowIndices = new ArrayList<>(src.entries.length);
-        List<Integer> destColIndices = new ArrayList<>(src.entries.length);
+        List<Field<Complex128>> destEntries = new ArrayList<>(src.data.length);
+        List<Integer> destRowIndices = new ArrayList<>(src.data.length);
+        List<Integer> destColIndices = new ArrayList<>(src.data.length);
 
-        // Add all entries in old matrix that are NOT in the specified column.
-        for(int i=0; i<src.entries.length; i++) {
+        // Add all data in old matrix that are NOT in the specified column.
+        for(int i = 0; i<src.data.length; i++) {
             if(src.colIndices[i]!=colIdx) {
-                destEntries.add(src.entries[i]);
+                destEntries.add(src.data[i]);
                 destRowIndices.add(src.rowIndices[i]);
                 destColIndices.add(src.colIndices[i]);
             }
@@ -178,7 +178,7 @@ public final class ComplexSparseMatrixGetSet {
 
 
     /**
-     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of another sparse matrix.
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the data of another sparse matrix.
      * @param src Source sparse matrix to copy and set values of.
      * @param values Values of the slice to be set.
      * @param row Starting row index of slice.
@@ -193,7 +193,7 @@ public final class ComplexSparseMatrixGetSet {
         setSliceParamCheck(src, values, row, col);
 
         // Initialize lists to new values for the specified slice.
-        List<Field<Complex128>> entries = ArrayUtils.toComplexArrayList(values.entries);
+        List<Field<Complex128>> entries = ArrayUtils.toComplexArrayList(values.data);
         List<Integer> rowIndices = ArrayUtils.toArrayList(ArrayUtils.shift(row, values.rowIndices));
         List<Integer> colIndices = ArrayUtils.toArrayList(ArrayUtils.shift(col, values.colIndices));
 
@@ -202,7 +202,7 @@ public final class ComplexSparseMatrixGetSet {
 
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
-        // Create matrix and ensure entries are properly sorted.
+        // Create matrix and ensure data are properly sorted.
         CooCMatrix mat = new CooCMatrix(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
@@ -211,7 +211,7 @@ public final class ComplexSparseMatrixGetSet {
 
 
     /**
-     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense array.
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the data of a dense array.
      * @param src Source sparse matrix to copy and set values of.
      * @param values Dense values of the slice to be set.
      * @param row Starting row index of slice.
@@ -234,7 +234,7 @@ public final class ComplexSparseMatrixGetSet {
 
 
     /**
-     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense matrix.
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the data of a dense matrix.
      * @param src Source sparse matrix to copy and set values of.
      * @param values Dense matrix containing values of the slice to be set.
      * @param row Starting row index of slice.
@@ -250,7 +250,7 @@ public final class ComplexSparseMatrixGetSet {
         int[] sliceRows = ArrayUtils.intRange(row, values.numRows + row, values.numCols);
         int[] sliceCols = ArrayUtils.repeat(values.numRows, ArrayUtils.intRange(col, values.numCols + col));
 
-        return setSlice(src, values.entries, values.numRows, values.numCols, sliceRows, sliceCols, row, col);
+        return setSlice(src, values.data, values.numRows, values.numCols, sliceRows, sliceCols, row, col);
     }
 
 
@@ -279,7 +279,7 @@ public final class ComplexSparseMatrixGetSet {
 
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
-        // Create matrix and ensure entries are properly sorted.
+        // Create matrix and ensure data are properly sorted.
         CooCMatrix mat = new CooCMatrix(src.shape, entries, rowIndices, colIndices);
         mat.sortIndices();
 
@@ -288,7 +288,7 @@ public final class ComplexSparseMatrixGetSet {
 
 
     /**
-     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense array.
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the data of a dense array.
      * @param src Source sparse matrix to copy and set values of.
      * @param values Dense values of the slice to be set.
      * @param row Starting row index of slice.
@@ -312,7 +312,7 @@ public final class ComplexSparseMatrixGetSet {
 
 
     /**
-     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense array.
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the data of a dense array.
      * @param src Source sparse matrix to copy and set values of.
      * @param values Dense values of the slice to be set.
      * @param row Starting row index of slice.
@@ -341,7 +341,7 @@ public final class ComplexSparseMatrixGetSet {
 
 
     /**
-     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense array.
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the data of a dense array.
      * @param src Source sparse matrix to copy and set values of.
      * @param values Dense values of the slice to be set.
      * @param row Starting row index of slice.
@@ -380,11 +380,11 @@ public final class ComplexSparseMatrixGetSet {
     private static void copyValuesNotInSlice(CooCMatrix src, List<Field<Complex128>> entries, List<Integer> rowIndices,
                                              List<Integer> colIndices, int[] rowRange, int[] colRange) {
         // Copy values not in slice.
-        for(int i=0, size=src.entries.length; i<size; i++) {
+        for(int i = 0, size = src.data.length; i<size; i++) {
             if( !(ArrayUtils.contains(rowRange, src.rowIndices[i])
                     && ArrayUtils.contains(colRange, src.colIndices[i])) ) {
                 // Then the entry is not in the slice so add it.
-                entries.add(src.entries[i]);
+                entries.add(src.data[i]);
                 rowIndices.add(src.rowIndices[i]);
                 colIndices.add(src.colIndices[i]);
             }

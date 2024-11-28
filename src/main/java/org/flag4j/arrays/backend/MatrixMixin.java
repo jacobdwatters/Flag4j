@@ -506,15 +506,15 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
 
 
     /**
-     * Extracts the upper-triangular portion of this matrix with a specified diagonal offset. All other entries of the resulting
+     * Extracts the upper-triangular portion of this matrix with a specified diagonal offset. All other data of the resulting
      * matrix will be zero.
      * @param diagOffset Diagonal offset for upper-triangular portion to extract:
      * <ul>
-     *     <li>If zero, then all entries at and above the principle diagonal of this matrix are extracted.</li>
-     *     <li>If positive, then all entries at and above the equivalent super-diagonal are extracted.</li>
-     *     <li>If negative, then all entries at and above the equivalent sub-diagonal are extracted.</li>
+     *     <li>If zero, then all data at and above the principle diagonal of this matrix are extracted.</li>
+     *     <li>If positive, then all data at and above the equivalent super-diagonal are extracted.</li>
+     *     <li>If negative, then all data at and above the equivalent sub-diagonal are extracted.</li>
      * </ul>
-     * @return The upper-triangular portion of this matrix with a specified diagonal offset. All other entries of the returned
+     * @return The upper-triangular portion of this matrix with a specified diagonal offset. All other data of the returned
      * matrix will be zero.
      * @throws IllegalArgumentException If {@code diagOffset} is not in the range (-numRows, numCols).
      */
@@ -522,8 +522,8 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
 
 
     /**
-     * Extracts the upper-triangular portion of this matrix. All other entries in the resulting matrix will be zero.
-     * @return The upper-triangular portion of this matrix. with all other entries in the resulting matrix will be zero.
+     * Extracts the upper-triangular portion of this matrix. All other data in the resulting matrix will be zero.
+     * @return The upper-triangular portion of this matrix. with all other data in the resulting matrix will be zero.
      */
     default T getTriU() {
         return getTriU(0);
@@ -531,15 +531,15 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
 
 
     /**
-     * Extracts the lower-triangular portion of this matrix with a specified diagonal offset. All other entries of the resulting
+     * Extracts the lower-triangular portion of this matrix with a specified diagonal offset. All other data of the resulting
      * matrix will be zero.
      * @param diagOffset Diagonal offset for lower-triangular portion to extract:
      * <ul>
-     *     <li>If zero, then all entries at and above the principle diagonal of this matrix are extracted.</li>
-     *     <li>If positive, then all entries at and above the equivalent super-diagonal are extracted.</li>
-     *     <li>If negative, then all entries at and above the equivalent sub-diagonal are extracted.</li>
+     *     <li>If zero, then all data at and above the principle diagonal of this matrix are extracted.</li>
+     *     <li>If positive, then all data at and above the equivalent super-diagonal are extracted.</li>
+     *     <li>If negative, then all data at and above the equivalent sub-diagonal are extracted.</li>
      * </ul>
-     * @return The lower-triangular portion of this matrix with a specified diagonal offset. All other entries of the returned
+     * @return The lower-triangular portion of this matrix with a specified diagonal offset. All other data of the returned
      * matrix will be zero.
      * @throws IllegalArgumentException If {@code diagOffset} is not in the range (-numRows, numCols).
      */
@@ -547,8 +547,8 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
 
 
     /**
-     * Extracts the lower-triangular portion of this matrix. All other entries in the resulting matrix will be zero.
-     * @return The lower-triangular portion of this matrix. with all other entries in the resulting matrix will be zero.
+     * Extracts the lower-triangular portion of this matrix. All other data in the resulting matrix will be zero.
+     * @return The lower-triangular portion of this matrix. with all other data in the resulting matrix will be zero.
      */
     default T getTriL() {
         return getTriU(0);

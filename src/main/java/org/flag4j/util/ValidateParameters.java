@@ -26,6 +26,7 @@ package org.flag4j.util;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -60,14 +61,42 @@ public final class ValidateParameters {
 
 
     /**
+     * Checks if two tensors have the same shape.
+     * @param a First tensor to consider.
+     * @param shape2 Second tensor to consider.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !a.shape.equals(b.shape)}.
+     */
+    public static void ensureEqualShape(AbstractTensor<?, ?, ?> a, AbstractTensor<?, ?, ?> b) {
+        ensureEqualShape(a.shape, b.shape);
+    }
+
+
+    /**
      * Checks if two {@link Shape} objects satisfy the requirements of matrix multiplication.
      * @param shape1 First shape.
      * @param shape2 Second shape.
-     * @throws org.flag4j.util.exceptions.TensorShapeException If shapes do not satisfy the requirements of matrix multiplication.
+     * @throws LinearAlgebraException If shapes do not satisfy the requirements of matrix multiplication.
      */
     public static void ensureMatMultShapes(Shape shape1, Shape shape2) {
         if(shape1.getRank() != 2
                 || shape2.getRank() != 2
+                || shape1.get(1) != shape2.get(0)) {
+            throw new LinearAlgebraException(
+                    ErrorMessages.matMultShapeErrMsg(shape1, shape2));
+        }
+    }
+
+
+    /**
+     * Checks if two {@link Shape} objects satisfy the requirements of matrix-vector multiplication.
+     * @param shape1 Shape of the matrix.
+     * @param shape2 Shape of the vector.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code shape1.getRank() != 2}, {@code shape2.getRank() != 1},
+     * or {@code !shape1.get(1).equals(shape2.get(0))}.
+     */
+    public static void ensureMatVecMultShapes(Shape shape1, Shape shape2) {
+        if(shape1.getRank() != 2
+                || shape2.getRank() != 1
                 || shape1.get(1) != shape2.get(0)) {
             throw new TensorShapeException(
                     ErrorMessages.matMultShapeErrMsg(shape1, shape2)
@@ -91,10 +120,24 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks that two shapes can be broadcast, i.e. have the same total number of entries.
+     * Checks that an array has the specified length.
+     * @param arr Array to check length of.
+     * @param length Desired length of the array.
+     * @param arrayName Name of the array. May be {@code null} to provide no name.
+     * @throws IllegalArgumentException If {@code arr.length != length}
+     *
+     */
+    public static void ensureArrayHasLength(int actLength, int expLength, String arrayName) {
+        if(actLength != expLength)
+            throw new IllegalArgumentException(ErrorMessages.getArrayHasLengthErr(actLength, expLength, arrayName));
+    }
+
+
+    /**
+     * Checks that two shapes can be broadcast, i.e. have the same total number of data.
      * @param shape1 First shape to compare.
      * @param shape2 Second shape to compare.
-     * @throws TensorShapeException If the two shapes do not have the same total number of entries.
+     * @throws TensorShapeException If the two shapes do not have the same total number of data.
      */
     public static void ensureBroadcastable(Shape shape1, Shape shape2) {
         // TODO: This isn't really how numpy or PyTorch define broadcastable so it may be confusing. Need a different name for this.
@@ -104,10 +147,10 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if arrays_old have the same number of total entries.
+     * Checks if arrays_old have the same number of total data.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
+     * @throws IllegalArgumentException If arrays_old do not have the same number of total data.
      */
     public static void ensureTotalEntriesEq(Object[][] arr1, double[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length)
@@ -116,10 +159,10 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if arrays_old have the same number of total entries.
+     * Checks if arrays_old have the same number of total data.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
+     * @throws IllegalArgumentException If arrays_old do not have the same number of total data.
      */
     public static void ensureTotalEntriesEq(Object[][] arr1, Object[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length)
@@ -128,10 +171,10 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if arrays_old have the same number of total entries.
+     * Checks if arrays_old have the same number of total data.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
+     * @throws IllegalArgumentException If arrays_old do not have the same number of total data.
      */
     public static void ensureTotalEntriesEq(double[][] arr1, double[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length)
@@ -140,10 +183,10 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if arrays_old have the same number of total entries.
+     * Checks if arrays_old have the same number of total data.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
+     * @throws IllegalArgumentException If arrays_old do not have the same number of total data.
      */
     public static void ensureTotalEntriesEq(int[][] arr1, double[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length)
@@ -152,10 +195,10 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if arrays_old have the same number of total entries.
+     * Checks if arrays_old have the same number of total data.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
+     * @throws IllegalArgumentException If arrays_old do not have the same number of total data.
      */
     public static void ensureTotalEntriesEq(Object[][] arr1, Complex128[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length)
@@ -164,10 +207,10 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if arrays_old have the same number of total entries.
+     * Checks if arrays_old have the same number of total data.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
+     * @throws IllegalArgumentException If arrays_old do not have the same number of total data.
      */
     public static void ensureTotalEntriesEq(double[][] arr1, Complex128[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length)
@@ -176,10 +219,10 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if arrays_old have the same number of total entries.
+     * Checks if arrays_old have the same number of total data.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays_old do not have the same number of total entries.
+     * @throws IllegalArgumentException If arrays_old do not have the same number of total data.
      */
     public static void ensureTotalEntriesEq(int[][] arr1, Complex128[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length)

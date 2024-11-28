@@ -3,6 +3,8 @@ package org.flag4j.linalg.operations.dense_sparse.complex;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldMatMultTranspose;
@@ -56,13 +58,13 @@ class ComplexDenseSparseMatMultTransposeTests {
                 {0, 1},
                 {1, 4}};
         createMatrices();
-        expEntries = A.mult(new CooCMatrix(sparseShape, bEntries, sparseIndices[0], sparseIndices[1])).entries;
+        expEntries = A.mult(new CooCMatrix(sparseShape, bEntries, sparseIndices[0], sparseIndices[1])).data;
 
 
         Assertions.assertArrayEquals(expEntries,
                 DenseCooFieldMatMultTranspose.multTranspose(
-                        A.entries, A.shape,
-                        B.entries, B.rowIndices, B.colIndices, B.shape)
+                        A.data, A.shape,
+                        B.data, B.rowIndices, B.colIndices, B.shape)
         );
     }
 }

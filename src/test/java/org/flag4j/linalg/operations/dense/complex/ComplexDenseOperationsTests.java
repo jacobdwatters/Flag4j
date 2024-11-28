@@ -5,7 +5,7 @@ import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.linalg.operations.common.semiring_ops.AggregateSemiring;
 import org.flag4j.linalg.operations.common.semiring_ops.SemiRingOperations;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOperations;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOps;
 import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiringOperations;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -62,7 +62,10 @@ class ComplexDenseOperationsTests {
         a = 933.1334;
         expResult = new Complex128[]{new Complex128(9+a, -1), new Complex128(-0.99+a, 13.445),
                 new Complex128(0.9133+a), new Complex128(0+a, 10.3)};
-        assertArrayEquals(expResult, RealFieldDenseOperations.add(src1, a));
+
+        Complex128[] act = new Complex128[4];
+        RealFieldDenseOps.add(src1, a, act);
+        assertArrayEquals(expResult, act);
     }
 
 
@@ -74,7 +77,7 @@ class ComplexDenseOperationsTests {
         aC = new Complex128(10.34, -1.334);
         expResult = new Complex128[]{new Complex128(9, -1).add(aC), new Complex128(-0.99, 13.445).add(aC),
                 new Complex128(0.9133).add(aC), new Complex128(0, 10.3).add(aC)};
-        assertArrayEquals(expResult, SemiRingOperations.add(src1, null, aC));
+        assertArrayEquals(expResult, SemiRingOperations.add(src1, aC, null));
     }
 
 
@@ -119,7 +122,10 @@ class ComplexDenseOperationsTests {
         a = 933.1334;
         expResult = new Complex128[]{new Complex128(9-a, -1), new Complex128(-0.99-a, 13.445),
                 new Complex128(0.9133-a), new Complex128(0-a, 10.3)};
-        assertArrayEquals(expResult, RealFieldDenseOperations.sub(src1, a));
+
+        Complex128[] act = new Complex128[4];
+        RealFieldDenseOps.sub(src1, a, act);
+        assertArrayEquals(expResult, act);
     }
 
 

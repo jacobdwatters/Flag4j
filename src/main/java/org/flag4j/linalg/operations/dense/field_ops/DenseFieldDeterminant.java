@@ -36,7 +36,7 @@ import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 /**
- * This utility class contains methods for computing the determinant of a dense matrix whose entries are elements of a
+ * This utility class contains methods for computing the determinant of a dense matrix whose data are elements of a
  * {@link Field}.
  */
 public final class DenseFieldDeterminant {
@@ -86,7 +86,7 @@ public final class DenseFieldDeterminant {
         ValidateParameters.ensureSquareMatrix(mat.shape);
         LU<FieldMatrix<T>> lu = new FieldLU().decompose(mat);
 
-        T detP = (lu.getNumRowSwaps() & 1) == 0 ? mat.entries[0].getOne() : mat.entries[0].getOne().addInv();
+        T detP = (lu.getNumRowSwaps() & 1) == 0 ? mat.data[0].getOne() : mat.data[0].getOne().addInv();
         return detTriUnsafe(lu.getU()).mult(detP);
     }
 
@@ -110,12 +110,12 @@ public final class DenseFieldDeterminant {
      * @return The determinant of the triangular matrix {@code tri}.
      */
     public static <T extends Field<T>> T detTriUnsafe(AbstractDenseFieldMatrix<?, ?, T> tri) {
-        if(tri == null || tri.entries.length == 0) return null;
-        T detU = (T) tri.entries[0];
+        if(tri == null || tri.data.length == 0) return null;
+        T detU = (T) tri.data[0];
 
         // Compute the determinant of tri
         for(int i=1, size=tri.numRows; i<size; i++)
-            detU = detU.mult((T) tri.entries[i*tri.numCols + i]);
+            detU = detU.mult((T) tri.data[i*tri.numCols + i]);
 
         return detU;
     }
@@ -128,9 +128,9 @@ public final class DenseFieldDeterminant {
      */
     public static <T extends Field<T>> T det3(AbstractDenseFieldMatrix<?, ?, T> mat) {
         ValidateParameters.ensureEqualShape(mat.shape, new Shape(3, 3));
-        T det = mat.entries[0].mult(mat.entries[4].mult((T) mat.entries[8]).sub(mat.entries[5].mult((T) mat.entries[7])));
-        det = det.sub(mat.entries[1].mult(mat.entries[3].mult((T) mat.entries[8]).sub(mat.entries[5].mult((T) mat.entries[6]))));
-        det = det.add(mat.entries[2].mult(mat.entries[3].mult((T) mat.entries[7]).sub(mat.entries[4].mult((T) mat.entries[6]))));
+        T det = mat.data[0].mult(mat.data[4].mult((T) mat.data[8]).sub(mat.data[5].mult((T) mat.data[7])));
+        det = det.sub(mat.data[1].mult(mat.data[3].mult((T) mat.data[8]).sub(mat.data[5].mult((T) mat.data[6]))));
+        det = det.add(mat.data[2].mult(mat.data[3].mult((T) mat.data[7]).sub(mat.data[4].mult((T) mat.data[6]))));
         return det;
     }
 
@@ -142,7 +142,7 @@ public final class DenseFieldDeterminant {
      */
     public static <T extends Field<T>> T det2(AbstractDenseFieldMatrix<?, ?, T> mat) {
         ValidateParameters.ensureEqualShape(mat.shape, new Shape(2, 2));
-        return mat.entries[0].mult((T) mat.entries[3]).sub(mat.entries[1].mult((T) mat.entries[2]));
+        return mat.data[0].mult((T) mat.data[3]).sub(mat.data[1].mult((T) mat.data[2]));
     }
 
 
@@ -153,6 +153,6 @@ public final class DenseFieldDeterminant {
      */
     public static <T extends Field<T>> T det1(AbstractDenseFieldMatrix<?, ?, T> mat) {
         ValidateParameters.ensureEqualShape(mat.shape, new Shape(1, 1));
-        return (T) mat.entries[0];
+        return (T) mat.data[0];
     }
 }

@@ -73,7 +73,7 @@ public final class TensorNorms {
      * @return the 2-norm of this tensor.
      */
     public static double norm(Tensor src) {
-        return tensorNormL2(src.entries);
+        return tensorNormL2(src.data);
     }
 
 
@@ -87,7 +87,7 @@ public final class TensorNorms {
      * @throws IllegalArgumentException If p is less than 1.
      */
     public static double norm(Tensor src, double p) {
-        return tensorNormLp(src.entries, p);
+        return tensorNormLp(src.data, p);
     }
 
 
@@ -97,7 +97,7 @@ public final class TensorNorms {
      * @return the 2-norm of this tensor.
      */
     public double norm(CTensor src) {
-        return tensorNormL2(src.entries);
+        return tensorNormL2(src.data);
     }
 
 
@@ -111,7 +111,7 @@ public final class TensorNorms {
      * @throws IllegalArgumentException If p is less than 1.
      */
     public double norm(CTensor src, double p) {
-        return tensorNormLp(src.entries, p);
+        return tensorNormLp(src.data, p);
     }
 
 
@@ -122,7 +122,7 @@ public final class TensorNorms {
      * @return The maximum/infinite norm of this tensor.
      */
     public double infNorm(CTensor src) {
-        return CompareRing.maxAbs(src.entries);
+        return CompareRing.maxAbs(src.data);
     }
 
 
@@ -133,7 +133,7 @@ public final class TensorNorms {
      * @return the 2-norm of this tensor.
      */
     public static double norm(CooTensor src) {
-        return tensorNormL2(src.entries);
+        return tensorNormL2(src.data);
     }
 
 
@@ -147,7 +147,7 @@ public final class TensorNorms {
      * @throws IllegalArgumentException If p is less than 1.
      */
     public double norm(CooTensor src, double p) {
-        return tensorNormLp(src.entries, p);
+        return tensorNormLp(src.data, p);
     }
 
 
@@ -158,7 +158,7 @@ public final class TensorNorms {
      * @return the 2-norm of this tensor.
      */
     public static double norm(CooCTensor src) {
-        return tensorNormL2(src.entries);
+        return tensorNormL2(src.data);
     }
 
 
@@ -172,7 +172,7 @@ public final class TensorNorms {
      * @throws IllegalArgumentException If p is less than 1.
      */
     public double norm(CooCTensor src, double p) {
-        return tensorNormLp(src.entries, p);
+        return tensorNormLp(src.data, p);
     }
 
 

@@ -2,7 +2,7 @@ package org.flag4j.matrix;
 
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.util.exceptions.LinearAlgebraException;
+import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,7 +40,7 @@ class MatrixAddSubEqTests {
         B = new Matrix(bEntries);
 
         Matrix finalB = B;
-        assertThrows(LinearAlgebraException.class, ()->A.addEq(finalB));
+        assertThrows(IllegalArgumentException.class, ()->A.addEq(finalB));
     }
 
 
@@ -83,7 +83,7 @@ class MatrixAddSubEqTests {
         B = new Matrix(bEntries);
 
         Matrix finalB = B;
-        assertThrows(LinearAlgebraException.class, ()->A.subEq(finalB));
+        assertThrows(TensorShapeException.class, ()->A.subEq(finalB));
     }
 
 

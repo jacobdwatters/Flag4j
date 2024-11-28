@@ -53,7 +53,7 @@ public final class VectorNorms {
      * @return the 2-norm of this vector.
      */
     public static double norm(Vector src) {
-        return norm(src.entries);
+        return norm(src.data);
     }
 
 
@@ -67,7 +67,7 @@ public final class VectorNorms {
      * @throws IllegalArgumentException If p is less than 1.
      */
     public static double norm(Vector src, double p) {
-        return norm(src.entries, p);
+        return norm(src.data, p);
     }
 
 
@@ -78,7 +78,7 @@ public final class VectorNorms {
      * @return the 2-norm of this vector.
      */
     public static double norm(CooVector src) {
-        return norm(src.entries);
+        return norm(src.data);
     }
 
 
@@ -92,7 +92,7 @@ public final class VectorNorms {
      * @throws IllegalArgumentException If p is less than 1.
      */
     public static double norm(CooVector src, double p) {
-        return norm(src.entries, p);
+        return norm(src.data, p);
     }
 
 
@@ -103,7 +103,7 @@ public final class VectorNorms {
      */
     @Deprecated
     public static double norm(CVector src) {
-        return VectorNorms.norm(src.entries);
+        return VectorNorms.norm(src.data);
     }
 
 
@@ -117,7 +117,7 @@ public final class VectorNorms {
      */
     @Deprecated
     public static double norm(CVector src, double p) {
-        return VectorNorms.norm(src.entries, p);
+        return VectorNorms.norm(src.data, p);
     }
 
 
@@ -127,7 +127,7 @@ public final class VectorNorms {
      * @return the 2-norm of this vector.
      */
     public static <T extends Field<T>> double norm(FieldVector<T> src) {
-        return VectorNorms.norm(src.entries);
+        return VectorNorms.norm(src.data);
     }
 
 
@@ -143,7 +143,7 @@ public final class VectorNorms {
      * @return The p-norm of this vector.
      */
     public static <T extends Field<T>> double norm(FieldVector<T> src, double p) {
-        return VectorNorms.norm(src.entries, p);
+        return VectorNorms.norm(src.data, p);
     }
 
 
@@ -154,7 +154,7 @@ public final class VectorNorms {
      * @return the 2-norm of this vector.
      */
     public static double norm(CooCVector src) {
-        return VectorNorms.norm(src.entries);
+        return VectorNorms.norm(src.data);
     }
 
 
@@ -168,7 +168,7 @@ public final class VectorNorms {
      * @throws IllegalArgumentException If p is less than 1.
      */
     public static double norm(CooCVector src, double p) {
-        return VectorNorms.norm(src.entries, p);
+        return VectorNorms.norm(src.data, p);
     }
 
 
@@ -226,7 +226,7 @@ public final class VectorNorms {
     // ---------------------------------------------- Low-level Implementations ----------------------------------------------
     /**
      * Computes the 2-norm of a vector.
-     * @param src Entries of the vector (or non-zero entries if vector is sparse).
+     * @param src Entries of the vector (or non-zero data if vector is sparse).
      * @return The 2-norm of the vector.
      */
     public static double norm(double... src) {
@@ -246,7 +246,7 @@ public final class VectorNorms {
 
     /**
      * Computes the 2-norm of a vector.
-     * @param src Entries of the vector (or non-zero entries if vector is sparse).
+     * @param src Entries of the vector (or non-zero data if vector is sparse).
      * @return The 2-norm of the vector.
      */
     public static <T extends Ring<T>> double norm(Ring<T>... src) {
@@ -270,7 +270,7 @@ public final class VectorNorms {
 
     /**
      * Computes the {@code p}-norm of a vector.
-     * @param src Entries of the vector (or non-zero entries if vector is sparse).
+     * @param src Entries of the vector (or non-zero data if vector is sparse).
      * @param p The {@code p} value in the {@code p}-norm:
      * <ul>
      *     <li>If {@code p} is {@link Double#POSITIVE_INFINITY}, then this method computes the maximum/infinite norm.</li>
@@ -297,7 +297,7 @@ public final class VectorNorms {
 
     /**
      * Computes the {@code p}-norm of a vector.
-     * @param src Entries of the vector (or non-zero entries if vector is sparse).
+     * @param src Entries of the vector (or non-zero data if vector is sparse).
      * @param p The {@code p} value in the {@code p}-norm. <br>
      *          - If {@code p} is {@link Double#POSITIVE_INFINITY}, then this method computes the maximum/infinite norm. <br>
      *          - If {@code p} is {@link Double#NEGATIVE_INFINITY}, then this method computes the minimum norm. <br>

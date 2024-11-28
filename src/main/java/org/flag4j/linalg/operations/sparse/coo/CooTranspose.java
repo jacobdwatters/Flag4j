@@ -44,13 +44,13 @@ public final class CooTranspose {
      * <p>Computes the transpose of a sparse COO tensor by exchanging {@code axis1} and {@code axis2}.</p>
      *
      * @param shape Shape of the tensor to transpose.
-     * @param srcEntries The non-zero entries of the tensor to transpose.
+     * @param srcEntries The non-zero data of the tensor to transpose.
      * @param srcIndices The non-zero indices of the tensor to transpose. Must have shape
      * {@code [srcEntries.length][shape.getRank()]}.
      * @param srcIndices
      * @param axis1 First axis to exchange. Must be in the range [0, shape.getRank()).
      * @param axis2 Second axis to exchange. Must be in the range [0, shape.getRank()).
-     * @param destEntries Array to store the non-zero entries of the transpose. Must have the same length as {@code srcEntries}.
+     * @param destEntries Array to store the non-zero data of the transpose. Must have the same length as {@code srcEntries}.
      * @param destIndices Array to store the non-zero indices of the transpose. Must have shape
      * {@code [srcEntries.length][shape.getRank()]}
      *
@@ -84,12 +84,12 @@ public final class CooTranspose {
      * the permutation specified by {@code axes}.
      *
      * @param shape Shape of the tensor to transpose.
-     * @param srcEntries The non-zero entries of the tensor to transpose.
+     * @param srcEntries The non-zero data of the tensor to transpose.
      * @param srcIndices The non-zero indices of the tensor to transpose. Must have shape
      * {@code [srcEntries.length][shape.getRank()]}.
      * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
      * {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
-     * @param destEntries Array to store the non-zero entries of the transpose. Must have the same length as {@code srcEntries}.
+     * @param destEntries Array to store the non-zero data of the transpose. Must have the same length as {@code srcEntries}.
      * @param destIndices Array to store the non-zero indices of the transpose. Must have shape
      * {@code [srcEntries.length][shape.getRank()]}
      *

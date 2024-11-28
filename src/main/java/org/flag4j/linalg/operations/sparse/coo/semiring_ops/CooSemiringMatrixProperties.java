@@ -48,14 +48,14 @@ public final class CooSemiringMatrixProperties {
     /**
      * Checks if a complex sparse COO matrix is the identity matrix.
      * @param shape Shape of the matrix.
-     * @param entries Non-zero entries of the matrix.
+     * @param entries Non-zero data of the matrix.
      * @param rowIndices Non-zero row indices of the matrix.
      * @param colIndices Non-zero column indices of the matrix.
      * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
      */
     public static <T extends Semiring<T>> boolean isIdentity(
             Shape shape, Semiring<T>[] entries, int[] rowIndices, int[] colIndices) {
-        // Ensure the matrix is square and there are at least the same number of non-zero entries as entries on the diagonal.
+        // Ensure the matrix is square and there are at least the same number of non-zero data as data on the diagonal.
         if(shape.get(0) != shape.get(1) || entries.length<shape.get(0)) return false;
 
         for(int i=0, size=entries.length; i<size; i++) {
@@ -74,7 +74,7 @@ public final class CooSemiringMatrixProperties {
     /**
      * Checks if a sparse matrix is symmetric.
      * @param shape Shape of the matrix.
-     * @param entries Non-zero entries of the matrix.
+     * @param entries Non-zero data of the matrix.
      * @param rowIndices Non-zero row indices of the matrix.
      * @param colIndices Non-zero column indices of the matrix.
      * @return True if the {@code src} matrix is hermitian. False otherwise.

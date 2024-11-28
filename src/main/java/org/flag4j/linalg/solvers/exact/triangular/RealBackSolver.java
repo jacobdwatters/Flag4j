@@ -87,22 +87,22 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
         int uIndex;
         int n = b.size;
         x = new Vector(U.numRows);
-        det = U.entries[n*n-1];
+        det = U.data[n*n-1];
 
-        x.entries[n-1] = b.entries[n-1]/det;
+        x.data[n-1] = b.data[n-1]/det;
 
         for(int i=n-2; i>=0; i--) {
             sum = 0;
             uIndex = i*U.numCols;
 
-            diag = U.entries[i*(n+1)];
+            diag = U.data[i*(n+1)];
             det*=diag;
 
             for(int j=i+1; j<n; j++) {
-                sum += U.entries[uIndex + j]*x.entries[j];
+                sum += U.data[uIndex + j]*x.data[j];
             }
 
-            x.entries[i] = (b.entries[i]-sum)/diag;
+            x.data[i] = (b.data[i]-sum)/diag;
         }
 
         checkSingular(Math.abs(det), U.numRows, U.numCols); // Ensure the matrix is not singular.
@@ -128,36 +128,36 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
         double sum, diag;
         int uIndex, xIndex;
         int n = B.numRows;
-        double uValue = U.entries[n*n-1];
+        double uValue = U.data[n*n-1];
         int rowOffset = (n-1)*B.numCols;
         X = new Matrix(B.shape);
-        det = U.entries[n*n-1];
+        det = U.data[n*n-1];
 
         xCol = new double[n];
 
         for(int j=0; j<B.numCols; j++) {
-            X.entries[rowOffset + j] = B.entries[rowOffset + j]/uValue;
+            X.data[rowOffset + j] = B.data[rowOffset + j]/uValue;
 
             // Store column to improve cache performance on innermost loop.
             for(int k=0; k<n; k++) {
-                xCol[k] = X.entries[k*X.numCols + j];
+                xCol[k] = X.data[k*X.numCols + j];
             }
 
             for(int i=n-2; i>=0; i--) {
                 sum = 0;
                 uIndex = i*U.numCols;
                 xIndex = i*X.numCols + j;
-                diag = U.entries[i*(n+1)];
+                diag = U.data[i*(n+1)];
 
                 if(j==0) det *= diag;
 
                 for(int k=i+1; k<n; k++) {
-                    sum += U.entries[uIndex + k]*xCol[k];
+                    sum += U.data[uIndex + k]*xCol[k];
                 }
 
-                double value = (B.entries[xIndex] - sum) / diag;
+                double value = (B.data[xIndex] - sum) / diag;
 
-                X.entries[xIndex] = value;
+                X.data[xIndex] = value;
                 xCol[i] = value;
             }
         }
@@ -185,15 +185,15 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
         int uIndex, xIndex;
         int n = U.numRows;
         X = new Matrix(U.shape);
-        det = U.entries[n*n-1];
+        det = U.data[n*n-1];
 
         xCol = new double[n];
-        X.entries[X.entries.length-1] = 1.0/det;
+        X.data[X.data.length-1] = 1.0/det;
 
         for(int j=0; j<n; j++) {
             // Store column to improve cache performance on innermost loop.
             for(int k=0; k<n; k++) {
-                xCol[k] = X.entries[k*X.numCols + j];
+                xCol[k] = X.data[k*X.numCols + j];
             }
 
             for(int i=n-2; i>=0; i--) {
@@ -201,16 +201,16 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
                 uIndex = i*n;
                 xIndex = uIndex + j;
                 uIndex += i+1;
-                diag = U.entries[i*(n+1)];
+                diag = U.data[i*(n+1)];
 
                 if(j==0) det *= diag;
 
                 for(int k=i+1; k<n; k++) {
-                    sum -= U.entries[uIndex++]*xCol[k];
+                    sum -= U.data[uIndex++]*xCol[k];
                 }
 
                 double value = sum / diag;
-                X.entries[xIndex] = value;
+                X.data[xIndex] = value;
                 xCol[i] = value;
             }
         }
@@ -238,7 +238,7 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
         double sum, diag;
         int uIndex, xIndex;
         int n = L.numRows;
-        double uValue = U.entries[U.entries.length-1];
+        double uValue = U.data[U.data.length-1];
         int rowOffset = (n-1)*n;
         X = new Matrix(L.shape);
         det = uValue;
@@ -246,27 +246,27 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
         xCol = new double[n];
 
         for(int j=0; j<n; j++) {
-            X.entries[rowOffset] = L.entries[rowOffset++]/uValue;
+            X.data[rowOffset] = L.data[rowOffset++]/uValue;
 
             // Store column to improve cache performance on innermost loop.
             for(int k=0; k<n; k++) {
-                xCol[k] = X.entries[k*X.numCols + j];
+                xCol[k] = X.data[k*X.numCols + j];
             }
 
             for(int i=L.numCols-2; i>=0; i--) {
                 sum = 0;
                 uIndex = i*U.numCols;
                 xIndex = uIndex + j;
-                diag = U.entries[i*(n+1)];
+                diag = U.data[i*(n+1)];
 
                 if(j==0) det *= diag;
 
                 for(int k=i+1; k<n; k++) {
-                    sum += U.entries[uIndex + k]*xCol[k];
+                    sum += U.data[uIndex + k]*xCol[k];
                 }
 
-                double value = (L.entries[xIndex] - sum) / diag;
-                X.entries[xIndex] = value;
+                double value = (L.data[xIndex] - sum) / diag;
+                X.data[xIndex] = value;
                 xCol[i] = value;
             }
         }

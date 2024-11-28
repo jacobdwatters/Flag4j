@@ -61,25 +61,25 @@ public final class RealComplexCooTensorOperations {
         int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
         int[][] src2Indices = ArrayUtils.deepCopy(src2.indices, null);
 
-        // Roughly estimate the number of non-zero entries in sum.
+        // Roughly estimate the number of non-zero data in sum.
         int estimatedEntries = src1.nnz + src2.nnz;
         List<Field<Complex128>> sumEntries = new ArrayList<>(estimatedEntries);
         List<int[]> sumIndices = new ArrayList<>(estimatedEntries);
 
         int src2Pos = 0;
         for(int i = 0; i < src1.nnz; i++) {
-            Field<Complex128> val1 = src1.entries[i];
+            Field<Complex128> val1 = src1.data[i];
             int[] src1Idx = src1Indices[i];
 
             // Insert elements from src2 whose index is less than the current element from src1
             while(src2Pos < src2.nnz && Arrays.compare(src2Indices[src2Pos], src1Idx) < 0) {
-                sumEntries.add(new Complex128(src2.entries[src2Pos]));
+                sumEntries.add(new Complex128(src2.data[src2Pos]));
                 sumIndices.add(src2Indices[src2Pos++]);
             }
 
             // Add the current element from src1 and handle matching indices from src2
             if(src2Pos < src2.nnz && Arrays.equals(src1Idx, src2Indices[src2Pos])) {
-                sumEntries.add(val1.add(src2.entries[src2Pos++]));
+                sumEntries.add(val1.add(src2.data[src2Pos++]));
             } else {
                 sumEntries.add(val1);
             }
@@ -88,7 +88,7 @@ public final class RealComplexCooTensorOperations {
 
         // Insert any remaining elements from src2
         while(src2Pos < src2.nnz) {
-            sumEntries.add(new Complex128(src2.entries[src2Pos]));
+            sumEntries.add(new Complex128(src2.data[src2Pos]));
             sumIndices.add(src2Indices[src2Pos++]);
         }
 
@@ -110,25 +110,25 @@ public final class RealComplexCooTensorOperations {
         int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
         int[][] src2Indices = ArrayUtils.deepCopy(src2.indices, null);
 
-        // Roughly estimate the number of non-zero entries in sum.
+        // Roughly estimate the number of non-zero data in sum.
         int estimatedEntries = src1.nnz + src2.nnz;
         List<Field<Complex128>> sumEntries = new ArrayList<>(estimatedEntries);
         List<int[]> sumIndices = new ArrayList<>(estimatedEntries);
 
         int src2Pos = 0;
         for(int i = 0; i < src1.nnz; i++) {
-            Field<Complex128> val1 = src1.entries[i];
+            Field<Complex128> val1 = src1.data[i];
             int[] src1Idx = src1Indices[i];
 
             // Insert elements from src2 whose index is less than the current element from src1
             while(src2Pos < src2.nnz && Arrays.compare(src2Indices[src2Pos], src1Idx) < 0) {
-                sumEntries.add(new Complex128(-src2.entries[src2Pos]));
+                sumEntries.add(new Complex128(-src2.data[src2Pos]));
                 sumIndices.add(src2Indices[src2Pos++]);
             }
 
             // Add the current element from src1 and handle matching indices from src2
             if(src2Pos < src2.nnz && Arrays.equals(src1Idx, src2Indices[src2Pos])) {
-                sumEntries.add(val1.sub(src2.entries[src2Pos++]));
+                sumEntries.add(val1.sub(src2.data[src2Pos++]));
             } else {
                 sumEntries.add(val1);
             }
@@ -137,7 +137,7 @@ public final class RealComplexCooTensorOperations {
 
         // Insert any remaining elements from src2
         while(src2Pos < src2.nnz) {
-            sumEntries.add(new Complex128(-src2.entries[src2Pos]));
+            sumEntries.add(new Complex128(-src2.data[src2Pos]));
             sumIndices.add(src2Indices[src2Pos++]);
         }
 
@@ -159,25 +159,25 @@ public final class RealComplexCooTensorOperations {
         int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
         int[][] src2Indices = ArrayUtils.deepCopy(src2.indices, null);
 
-        // Roughly estimate the number of non-zero entries in sum.
+        // Roughly estimate the number of non-zero data in sum.
         int estimatedEntries = src1.nnz + src2.nnz;
         List<Field<Complex128>> sumEntries = new ArrayList<>(estimatedEntries);
         List<int[]> sumIndices = new ArrayList<>(estimatedEntries);
 
         int src2Pos = 0;
         for(int i = 0; i < src1.nnz; i++) {
-            double val1 = src1.entries[i];
+            double val1 = src1.data[i];
             int[] src1Idx = src1Indices[i];
 
             // Insert elements from src2 whose index is less than the current element from src1
             while(src2Pos < src2.nnz && Arrays.compare(src2Indices[src2Pos], src1Idx) < 0) {
-                sumEntries.add(src2.entries[src2Pos].addInv());
+                sumEntries.add(src2.data[src2Pos].addInv());
                 sumIndices.add(src2Indices[src2Pos++]);
             }
 
             // Add the current element from src1 and handle matching indices from src2
             if(src2Pos < src2.nnz && Arrays.equals(src1Idx, src2Indices[src2Pos])) {
-                sumEntries.add(src2.entries[src2Pos++].addInv().add(val1));
+                sumEntries.add(src2.data[src2Pos++].addInv().add(val1));
             } else {
                 sumEntries.add(new Complex128(val1));
             }
@@ -186,7 +186,7 @@ public final class RealComplexCooTensorOperations {
 
         // Insert any remaining elements from src2
         while(src2Pos < src2.nnz) {
-            sumEntries.add(src2.entries[src2Pos].addInv());
+            sumEntries.add(src2.data[src2Pos].addInv());
             sumIndices.add(src2Indices[src2Pos++]);
         }
 
@@ -218,7 +218,7 @@ public final class RealComplexCooTensorOperations {
             }
 
             if(src2Idx < src2.nnz && cmp == 0) {
-                productEntries[count] = src1.entries[i].mult(src2.entries[src2Idx]);
+                productEntries[count] = src1.data[i].mult(src2.data[src2Idx]);
                 productIndices[count] = src1.indices[i];
                 count++;
             }
@@ -253,7 +253,7 @@ public final class RealComplexCooTensorOperations {
             }
 
             if(src2Idx < src2.nnz && cmp == 0) {
-                productEntries[count] = src2.entries[src2Idx].mult(src1.entries[i]);
+                productEntries[count] = src2.data[src2Idx].mult(src1.data[i]);
                 productIndices[count] = src1.indices[i];
                 count++;
             }

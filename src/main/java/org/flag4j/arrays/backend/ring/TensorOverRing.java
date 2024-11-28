@@ -29,7 +29,7 @@ import org.flag4j.arrays.backend.semiring.TensorOverSemiring;
 
 
 /**
- * This interface specifies methods which any tensor whose entries are elements of a ring should implement. This includes
+ * This interface specifies methods which any tensor whose data are elements of a ring should implement. This includes
  * primitive values.
  *
  * <p>To allow for primitive types, the elements of this tensor do not necessarily have to implement
@@ -49,7 +49,7 @@ import org.flag4j.arrays.backend.semiring.TensorOverSemiring;
  * @param <T> Type of this tensor.
  * @param <U> Type of dense tensor equivalent to {@code T}. If {@code T} is dense, then this should be the same type as {@code T}.
  * This parameter required because some operations between two sparse tensors may result in a dense tensor.
- * @param <V> Storage for entries of this tensor.
+ * @param <V> Storage for data of this tensor.
  * @param <W> Type (or wrapper) of an element of this tensor. Should satisfy the axioms of a semi-ring as stated.
  *
  * @see TensorOverSemiring

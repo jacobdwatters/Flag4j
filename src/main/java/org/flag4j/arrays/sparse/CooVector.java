@@ -54,11 +54,11 @@ import java.util.List;
 
 
 /**
- * <p>A real sparse vector stored in coordinate list (COO) format. The {@link #entries} of this COO vector are
+ * <p>A real sparse vector stored in coordinate list (COO) format. The {@link #data} of this COO vector are
  * primitive doubles.
  *
- * <p>The {@link #entries non-zero entries} and {@link #indices non-zero indices} of a COO vector are mutable but the {@link #shape}
- * and total number of non-zero entries is fixed.
+ * <p>The {@link #data non-zero data} and {@link #indices non-zero indices} of a COO vector are mutable but the {@link #shape}
+ * and total number of non-zero data is fixed.
  *
  * <p>Sparse vectors allow for the efficient storage of and operations on vectors that contain many zero values.
  *
@@ -68,16 +68,16 @@ import java.util.List;
  * <p>A sparse COO vector is stored as:
  * <ul>
  *     <li>The full {@link #shape}/{@link #size} of the vector.</li>
- *     <li>The non-zero {@link #entries} of the vector. All other entries in the vector are
- *     assumed to be zero. Zero values can also explicitly be stored in {@link #entries}.</li>
+ *     <li>The non-zero {@link #data} of the vector. All other data in the vector are
+ *     assumed to be zero. Zero values can also explicitly be stored in {@link #data}.</li>
  *     <li>The {@link #indices} of the non-zero values in the sparse vector.</li>
  * </ul>
  *
  * <p>Some operations on sparse tensors behave differently than on dense tensors. For instance, {@link #add(Complex128)} will not
- * add the scalar to all entries of the tensor since this would cause catastrophic loss of sparsity. Instead, such non-zero preserving
- * element-wise operations only act on the non-zero entries of the sparse tensor as to not affect the sparsity.
+ * add the scalar to all data of the tensor since this would cause catastrophic loss of sparsity. Instead, such non-zero preserving
+ * element-wise operations only act on the non-zero data of the sparse tensor as to not affect the sparsity.
  *
- * <p>Note: many operations assume that the entries of the COO vector are sorted lexicographically. However, this is not explicitly
+ * <p>Note: many operations assume that the data of the COO vector are sorted lexicographically. However, this is not explicitly
  * verified. Every operation implemented in this class will preserve the lexicographical sorting.
  *
  * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.
@@ -86,7 +86,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
         implements VectorMixin<CooVector, CooMatrix, Matrix, Double> {
 
     /**
-     * The indices of the non-zero entries in this sparse COO vector.
+     * The indices of the non-zero data in this sparse COO vector.
      */
     public final int[] indices;
     /**
@@ -100,10 +100,10 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
 
 
     /**
-     * Creates sparse COO vector with the specified {@code size}, non-zero entries, and non-zero indices.
+     * Creates sparse COO vector with the specified {@code size}, non-zero data, and non-zero indices.
      *
      * @param size The size of this vector.
-     * @param entries The non-zero entries of this vector.
+     * @param entries The non-zero data of this vector.
      * @param indices The indices of the non-zero values.
      */
     public CooVector(Shape shape, double[] entries, int[] indices) {
@@ -117,10 +117,10 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
 
 
     /**
-     * Creates sparse COO vector with the specified {@code size}, non-zero entries, and non-zero indices.
+     * Creates sparse COO vector with the specified {@code size}, non-zero data, and non-zero indices.
      *
      * @param size The size of this vector.
-     * @param entries The non-zero entries of this vector.
+     * @param entries The non-zero data of this vector.
      * @param indices The indices of the non-zero values.
      */
     public CooVector(int size, double[] entries, int[] indices) {
@@ -133,10 +133,10 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
 
 
     /**
-     * Creates sparse COO vector with the specified {@code size}, non-zero entries, and non-zero indices.
+     * Creates sparse COO vector with the specified {@code size}, non-zero data, and non-zero indices.
      *
      * @param size The size of this vector.
-     * @param entries The non-zero entries of this vector.
+     * @param entries The non-zero data of this vector.
      * @param indices The indices of the non-zero values.
      */
     public CooVector(int size, List<Double> entries, List<Integer> indices) {
@@ -144,7 +144,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
         ValidateParameters.ensureArrayLengthsEq(entries.size(), indices.size());
         this.indices = ArrayUtils.fromIntegerList(indices);
         this.size = size;
-        this.nnz = this.entries.length;
+        this.nnz = this.data.length;
     }
 
 
@@ -160,10 +160,10 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
 
 
     /**
-     * Creates sparse COO vector with the specified {@code size}, non-zero entries, and non-zero indices.
+     * Creates sparse COO vector with the specified {@code size}, non-zero data, and non-zero indices.
      *
      * @param size The size of this vector.
-     * @param entries The non-zero entries of this vector.
+     * @param entries The non-zero data of this vector.
      * @param indices The indices of the non-zero values.
      */
     public CooVector(int size, int[] entries, int[] indices) {
@@ -180,7 +180,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @param b The vector to construct a copy of.
      */
     public CooVector(CooVector b) {
-        super(b.shape, b.entries.clone());
+        super(b.shape, b.data.clone());
         indices = b.indices.clone();
         nnz = b.nnz;
         size = b.size;
@@ -194,13 +194,13 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @return A sparse tensor which is equivalent to the {@code src} dense tensor.
      */
     public static CooVector fromDense(Vector src) {
-        List<Double> nonZeroEntries = new ArrayList<>((int) (src.entries.length*0.8));
-        List<Integer> indices = new ArrayList<>((int) (src.entries.length*0.8));
+        List<Double> nonZeroEntries = new ArrayList<>((int) (src.data.length*0.8));
+        List<Integer> indices = new ArrayList<>((int) (src.data.length*0.8));
 
-        // Fill entries with non-zero values.
-        for(int i=0; i<src.entries.length; i++) {
-            if(src.entries[i] != 0d) {
-                nonZeroEntries.add(src.entries[i]);
+        // Fill data with non-zero values.
+        for(int i = 0; i<src.data.length; i++) {
+            if(src.data[i] != 0d) {
+                nonZeroEntries.add(src.data[i]);
                 indices.add(i);
             }
         }
@@ -214,12 +214,12 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
 
 
     /**
-     * Constructs a tensor of the same type as this tensor with the given the shape and entries.
+     * Constructs a tensor of the same type as this tensor with the given the shape and data.
      *
      * @param shape Shape of the tensor to construct.
      * @param entries Entries of the tensor to construct.
      *
-     * @return A tensor of the same type as this tensor with the given the shape and entries.
+     * @return A tensor of the same type as this tensor with the given the shape and data.
      */
     @Override
     public CooVector makeLikeTensor(Shape shape, double[] entries) {
@@ -228,13 +228,13 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
 
 
     /**
-     * Constructs a vector of the same type as this tensor with the given the shape and entries.
+     * Constructs a vector of the same type as this tensor with the given the shape and data.
      *
      * @param shape Shape of the vector to construct.
-     * @param entries Non-zero entries of the vector to construct.
+     * @param entries Non-zero data of the vector to construct.
      * @param indices Indices of the non-zero values in this vector.
      *
-     * @return A vector of the same type as this tensor with the given the shape and entries.
+     * @return A vector of the same type as this tensor with the given the shape and data.
      */
     public CooVector makeLikeTensor(int size, double[] entries, int[] indices) {
         return new CooVector(size, entries, indices);
@@ -321,17 +321,17 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public CooVector join(CooVector b) {
-        double[] newEntries = new double[this.entries.length + b.entries.length];
+        double[] newEntries = new double[this.data.length + b.data.length];
         Arrays.fill(newEntries, 0.0);
         int[] newIndices = new int[this.indices.length + b.indices.length];
 
         // Copy values from this vector.
-        System.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);
+        System.arraycopy(this.data, 0, newEntries, 0, this.data.length);
         // Copy values from vector b.
-        System.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);
+        System.arraycopy(b.data, 0, newEntries, this.data.length, b.data.length);
 
         // Copy indices from this vector.
-        System.arraycopy(this.indices, 0, newIndices, 0, this.entries.length);
+        System.arraycopy(this.indices, 0, newIndices, 0, this.data.length);
 
         // Copy the indices from vector b with a shift.
         for(int i=0; i<b.indices.length; i++)
@@ -351,7 +351,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      *
      * @return The inner product between this vector and the vector {@code b}.
      *
-     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of entries.
+     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of data.
      * @see #dot(CooVector)
      */
     @Override
@@ -370,7 +370,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      *
      * @return The dot product between this vector and the vector {@code b}.
      *
-     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of entries.
+     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of data.
      * @see #inner(CooVector) 
      */
     @Override
@@ -385,7 +385,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @return The Euclidean norm of this vector.
      */
     public double norm() {
-        return VectorNorms.norm(entries);
+        return VectorNorms.norm(data);
     }
 
 
@@ -397,7 +397,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @return The Euclidean norm of this vector.
      */
     public double norm(int p) {
-        return VectorNorms.norm(entries, p);
+        return VectorNorms.norm(data, p);
     }
 
 
@@ -408,7 +408,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * zero vector will be returned.
      */
     public CooVector normalize() {
-        double norm = VectorNorms.norm(entries);
+        double norm = VectorNorms.norm(data);
         return norm==0 ? new CooVector(size) : this.div(norm);
     }
 
@@ -420,7 +420,22 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public Double mag() {
-        return VectorNorms.norm(entries);
+        return VectorNorms.norm(data);
+    }
+
+
+    /**
+     * Gets the element of this vector at the specified index.
+     *
+     * @param target Index of the element to get within this vector.
+     *
+     * @return The element of this vector at index {@code target}.
+     */
+    @Override
+    public Double get(int target) {
+        ValidateParameters.validateTensorIndex(shape, target);
+        int idx = Arrays.binarySearch(indices, target);
+        return idx>=0 ? data[idx] : 0;
     }
 
 
@@ -430,7 +445,13 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @param b Vector to compare to this vector.
      *
      * @return True if the vector {@code b} is parallel to this vector and the same size. Otherwise, returns false.
-     *
+     * @implNote This method uses a tolerance of {@code tol = 1.0e-12} to verify if the two vectors are parallel. Specifically, the
+     * scaled
+     * difference between the two vectors is computed using their first non-zero data as
+     * {@code scale = this.data[i]/b.data[this.indices[i]]} for some {@code i} such that
+     * {@code b.data[this.indices[i]] != 0.0}. Then if all data satisfy
+     * {@code Math.abs(b.data[i]*scale - data[j]) < tol} where
+     * {@code this.indices[i] == b.indices[j]}, the two vectors will be considered parallel.
      * @see #isPerp(CooVector)
      */
     public boolean isParallel(CooVector b) {
@@ -450,20 +471,20 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
 
             // Find first non-zero entry in b and compute the scaling factor (we know there is at least one from else-if).
             for(int i=0; i<b.size; i++) {
-                if(b.entries[i]!=0) {
-                    scale = this.entries[i]/b.entries[this.indices[i]];
+                if(b.data[i]!=0) {
+                    scale = this.data[i]/b.data[this.indices[i]];
                     break;
                 }
             }
 
             for(int i=0; i<b.size; i++) {
-                if(sparseIndex >= this.entries.length || i!=this.indices[sparseIndex]) {
+                if(sparseIndex >= this.data.length || i!=this.indices[sparseIndex]) {
                     // Then this index is not in the sparse vector.
-                    if(b.entries[i] != 0) return false;
+                    if(b.data[i] != 0) return false;
 
                 } else {
                     // Ensure the scaled entry is approximately equal to the entry in this vector.
-                    if(Math.abs(b.entries[i]*scale - this.entries[sparseIndex]) > tol) return false;
+                    if(Math.abs(b.data[i]*scale - data[sparseIndex]) > tol) return false;
                     sparseIndex++;
                 }
             }
@@ -486,14 +507,14 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     public boolean isPerp(CooVector b) {
         final double TOL = 1.0e-12; // Tolerance to accommodate floating point arithmetic error in scaling.
-        return this.size!=b.size ? false : Math.abs(this.inner(b)) < TOL;
+        return size!=b.size ? false : Math.abs(inner(b)) < TOL;
     }
 
 
     /**
      * Gets the length of a vector.
      *
-     * @return The length, i.e. the number of entries, in this vector.
+     * @return The length, i.e. the number of data, in this vector.
      */
     @Override
     public int length() {
@@ -519,7 +540,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
     public Vector toDense() {
         double[] entries = new double[size];
         for(int i = 0; i<nnz; i++)
-            entries[indices[i]] = this.entries[i];
+            entries[indices[i]] = this.data[i];
 
         return new Vector(entries);
     }
@@ -529,26 +550,22 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
      */
     public void sortIndices() {
-        CooDataSorter.wrap(entries, indices).sparseSort().unwrap(entries, indices);
+        CooDataSorter.wrap(data, indices).sparseSort().unwrap(data, indices);
     }
 
 
     /**
-     * Gets the element of this tensor at the specified indices.
+     * Gets the element of this tensor at the specified target index.
      *
-     * @param indices Indices of the element to get.
+     * @param target Index of the element to get.
      *
-     * @return The element of this tensor at the specified indices.
-     *
-     * @throws ArrayIndexOutOfBoundsException If any indices are not within this matrix.
+     * @return The element of this tensor at the specified target index.
+     * @throws IllegalArgumentException If {@code target.length != 1}.
      */
     @Override
-    public Double get(int... indices) {
-        ValidateParameters.ensureEquals(indices.length, 1);
-        ValidateParameters.ensureInRange(indices[0], 0, size, "index");
-
-        int idx = Arrays.binarySearch(this.indices, indices[0]);
-        return idx>=0 ? entries[idx] : 0;
+    public Double get(int... target) {
+        ValidateParameters.ensureArrayLengthsEq(target.length, 1);
+        return get(target[0]);
     }
 
 
@@ -572,22 +589,22 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
         if(idx >= 0) {
             // Then the index was found in the sparse vector.
             destIndices = this.indices.clone();
-            destEntries = entries.clone();
+            destEntries = data.clone();
             destEntries[idx] = value;
 
         } else{
             // Then the index was not found in the sparse vector.
             destIndices = new int[this.indices.length+1];
-            destEntries = new double[entries.length+1];
+            destEntries = new double[data.length+1];
             idx = -(idx+1);
 
             System.arraycopy(this.indices, 0, destIndices, 0, idx);
             destIndices[idx] = indices[0];
             System.arraycopy(this.indices, idx, destIndices, idx+1, this.indices.length-idx);
 
-            System.arraycopy(entries, 0, destEntries, 0, idx);
+            System.arraycopy(data, 0, destEntries, 0, idx);
             destEntries[idx] = value;
-            System.arraycopy(entries, idx, destEntries, idx+1, entries.length-idx);
+            System.arraycopy(data, idx, destEntries, idx+1, data.length-idx);
         }
 
         return new CooVector(size, destEntries, destIndices);
@@ -595,7 +612,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
 
 
     /**
-     * Flattens tensor to single dimension while preserving order of entries.
+     * Flattens tensor to single dimension while preserving order of data.
      *
      * @return The flattened tensor.
      *
@@ -660,8 +677,8 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @return The difference of this tensor's non-zero values and the scalar {@code b}.
      */
     public CooCVector sub(Complex128 b) {
-        Complex128[] dest = new Complex128[entries.length];
-        FieldOps.sub(entries, b, dest);
+        Complex128[] dest = new Complex128[data.length];
+        FieldOps.sub(data, b, dest);
         return new CooCVector(shape, dest, indices.clone());
     }
 
@@ -698,9 +715,9 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @return The sparse COO vector resulting from adding {@code b} to each non-zero entry of this vector.
      */
     public CooCVector add(Complex128 b) {
-        Complex128[] dest = new Complex128[entries.length];
-        FieldOps.add(entries, b, dest);
-        return new CooCVector(shape, FieldOps.add(entries, b, dest), indices.clone());
+        Complex128[] dest = new Complex128[data.length];
+        FieldOps.add(data, b, dest);
+        return new CooCVector(shape, FieldOps.add(data, b, dest), indices.clone());
     }
 
 
@@ -886,7 +903,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public int[] argmin() {
-        return new int[]{indices[RealProperties.argmin(entries)]};
+        return new int[]{indices[RealProperties.argmin(data)]};
     }
 
 
@@ -898,7 +915,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public int[] argmax() {
-        return new int[]{indices[RealProperties.argmax(entries)]};
+        return new int[]{indices[RealProperties.argmax(data)]};
     }
 
 
@@ -910,7 +927,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public int[] argminAbs() {
-        return new int[]{indices[RealProperties.argminAbs(entries)]};
+        return new int[]{indices[RealProperties.argminAbs(data)]};
     }
 
 
@@ -922,7 +939,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public int[] argmaxAbs() {
-        return new int[]{indices[RealProperties.argmaxAbs(entries)]};
+        return new int[]{indices[RealProperties.argmaxAbs(data)]};
     }
 
 
@@ -1006,9 +1023,9 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
         int result = 17;
         result = 31*result + shape.hashCode();
 
-        for (int i = 0; i < entries.length; i++) {
-            if (entries[i] != 0.0) {
-                result = 31*result + Double.hashCode(entries[i]);
+        for (int i = 0; i < data.length; i++) {
+            if (data[i] != 0.0) {
+                result = 31*result + Double.hashCode(data[i]);
                 result = 31*result + Integer.hashCode(indices[i]);
             }
         }
@@ -1042,7 +1059,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      *
      * @return The result of stacking this vector and vector {@code b}.
      *
-     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of entries in
+     * @throws IllegalArgumentException If the number of data in this vector is different from the number of data in
      *                                  the vector {@code b}.
      */
     @Override
@@ -1072,8 +1089,8 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      *
      * @return The result of stacking this vector and the vector {@code b}.
      *
-     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
-     *                                  entries in the vector {@code b}.
+     * @throws IllegalArgumentException If the number of data in this vector is different from the number of
+     *                                  data in the vector {@code b}.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
@@ -1090,7 +1107,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      *
      * @return The result of the vector outer product between this vector and {@code b}.
      *
-     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
+     * @throws IllegalArgumentException If the two vectors do not have the same number of data.
      */
     @Override
     public Matrix outer(CooVector b) {
@@ -1112,15 +1129,15 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
         if(columVector) {
             // Convert to column vector
             int[] rowIndices = indices.clone();
-            int[] colIndices = new int[entries.length];
+            int[] colIndices = new int[data.length];
 
-            return new CooMatrix(this.size, 1, entries.clone(), rowIndices, colIndices);
+            return new CooMatrix(this.size, 1, data.clone(), rowIndices, colIndices);
         } else {
             // Convert to row vector.
-            int[] rowIndices = new int[entries.length];
+            int[] rowIndices = new int[data.length];
             int[] colIndices = indices.clone();
 
-            return new CooMatrix(1, this.size, entries.clone(), rowIndices, colIndices);
+            return new CooMatrix(1, this.size, data.clone(), rowIndices, colIndices);
         }
     }
 
@@ -1130,7 +1147,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @return A complex COO vector equivalent to this vector.
      */
     public CooCVector toComplex() {
-        return new CooCVector(size, entries, indices.clone());
+        return new CooCVector(size, data, indices.clone());
     }
 
 
@@ -1151,8 +1168,8 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @return The result of multiplying this vector by the scalar {@code factor}.
      */
     public CooCVector mult(Complex128 factor) {
-        Complex128[] dest = new Complex128[entries.length];
-        FieldOps.mult(entries, factor, dest);
+        Complex128[] dest = new Complex128[data.length];
+        FieldOps.mult(data, factor, dest);
         return new CooCVector(shape, dest, indices.clone());
     }
 
@@ -1164,7 +1181,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
     public CooTensor toTensor() {
         return new CooTensor(
                 this.shape,
-                this.entries.clone(),
+                this.data.clone(),
                 RealDenseTranspose.standardIntMatrix(new int[][]{this.indices})
         );
     }
@@ -1196,28 +1213,28 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @return The vector-scalar quotient of this vector and {@code divisor}.
      */
     public CooCVector div(Complex128 divisor) {
-        return new CooCVector(size, Complex128Ops.scalDiv(entries, divisor), indices.clone());
+        return new CooCVector(size, Complex128Ops.scalDiv(data, divisor), indices.clone());
     }
 
 
     /**
      * Formats this tensor as a human-readable string. Specifically, a string containing the
-     * shape and flatten entries of this tensor.
+     * shape and flatten data of this tensor.
      * @return A human-readable string representing this tensor.
      */
     public String toString() {
         int size = nnz;
         StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
-        result.append("Non-zero entries: [");
+        result.append("Non-zero data: [");
 
         if(size > 0) {
             int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
             int width;
             String value;
 
-            // Get entries up until the stopping point.
+            // Get data up until the stopping point.
             for(int i=0; i<stopIndex; i++) {
-                value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+                value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
                 width = PrintOptions.getPadding() + value.length();
                 value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
@@ -1231,7 +1248,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
             }
 
             // Get last entry now
-            value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+            value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
             width = PrintOptions.getPadding() + value.length();
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));

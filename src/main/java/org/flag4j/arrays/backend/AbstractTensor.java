@@ -31,28 +31,28 @@ import java.io.Serializable;
 import java.math.BigInteger;
 
 /**
- * <p>The base class of all tensors. A tensor is a multi-dimensional array which consists of:
+ * <p>The base class of all tensors. A tensor is a multidimensional array which consists of:
  * <ul>
  *     <li>The {@link #shape} of the tensor. This specified the dimension of the tensor along each axes.
  *     The number of axes in this tensor is referred to as the "{@link #rank}" of the tensor and corresponds to the number of
  *     indices required to uniquely identify an element within the </li>
- *     <li>A one-dimensional container for the {@link #entries} of the tensor. If the tensor is dense, this will contain all
- *     entries of the tensor. If the tensor is sparse this will only contains the non-zero elements of the tensor.</li>
+ *     <li>A one-dimensional container for the {@link #data} of the tensor. If the tensor is dense, this will contain all
+ *     data of the tensor. If the tensor is sparse this will only contains the non-zero elements of the tensor.</li>
  * </ul>
- * </p>
+ * 
  *
  * @param <T> Type of this tensor.
- * @param <U> Storage for entries of this tensor.
+ * @param <U> Storage for data of this tensor.
  * @param <V> Type (or wrapper) of an element of this tensor.
  */
 public abstract class AbstractTensor<T extends AbstractTensor<T, U, V>, U, V>
         implements Serializable, TensorMixin<T, U, V> {
 
     /**
-     * Entry data of this tensor. If this tensor is dense, then this specifies all entries within this tensor. If this tensor is
-     * sparse, this specifies only the non-zero entries of this tensor.
+     * Entry data of this tensor. If this tensor is dense, then this specifies all data within this tensor. If this tensor is
+     * sparse, this specifies only the non-zero data of this tensor.
      */
-    public final U entries;
+    public final U data;
     /**
      * The shape of this tensor.
      */
@@ -65,14 +65,14 @@ public abstract class AbstractTensor<T extends AbstractTensor<T, U, V>, U, V>
 
 
     /**
-     * Creates a tensor with the specified entries and shape.
+     * Creates a tensor with the specified data and shape.
      * @param shape Shape of this tensor.
-     * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
-     *                If this tensor is sparse, this specifies only the non-zero entries of the tensor.
+     * @param data Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
+     *                If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
-    protected AbstractTensor(Shape shape, U entries) {
+    protected AbstractTensor(Shape shape, U data) {
         this.shape = shape;
-        this.entries = entries;
+        this.data = data;
         rank = shape.getRank();
     }
 
@@ -109,14 +109,10 @@ public abstract class AbstractTensor<T extends AbstractTensor<T, U, V>, U, V>
 
 
     /**
-     * <p>
-     * Gets the rank of this tensor. That is, number of indices needed to uniquely select an element of the tensor. This is also te
+     * <p>Gets the rank of this tensor. That is, number of indices needed to uniquely select an element of the tensor. This is also te
      * number of dimensions (i.e. order/degree) of the tensor.
-     * </p>
      *
-     * <p>
-     * Note, this method is distinct from the {@link DenseMatrixMixinOld#matrixRank()} method.
-     * </p>
+     * <p>Note, this method is distinct from the {@code matrix rank}.
      *
      * @return The rank of this tensor.
      */
@@ -128,17 +124,17 @@ public abstract class AbstractTensor<T extends AbstractTensor<T, U, V>, U, V>
 
     /**
      * Gets the entry data of this tensor as a 1D array.
-     * @return The entries of this tensor.
+     * @return The data of this tensor.
      */
     @Override
-    public U getEntries() {
-        return entries;
+    public U getData() {
+        return data;
     }
 
 
     /**
-     * Gets the total number of entries in this tensor.
-     * @return The total number of entries in this tensor.
+     * Gets the total number of data in this tensor.
+     * @return The total number of data in this tensor.
      */
     public BigInteger totalEntries() {
         return shape.totalEntries();
@@ -156,7 +152,7 @@ public abstract class AbstractTensor<T extends AbstractTensor<T, U, V>, U, V>
 
 
     /**
-     * Flattens tensor to single dimension while preserving order of entries.
+     * Flattens tensor to single dimension while preserving order of data.
      *
      * @return The flattened tensor.
      * @see #flatten(int)
@@ -197,12 +193,12 @@ public abstract class AbstractTensor<T extends AbstractTensor<T, U, V>, U, V>
 
     /**
      * Constructs a tensor of the same type as this tensor with the given the {@code shape} and
-     * {@code entries}. The resulting tensor will also have
+     * {@code data}. The resulting tensor will also have
      * the same non-zero indices as this tensor.
      * @param shape Shape of the tensor to construct.
      * @param entries Entries of the tensor to construct.
      * @return A tensor of the same type and with the same non-zero indices as this tensor with the given the {@code shape} and
-     * {@code entries}.
+     * {@code data}.
      */
     public abstract T makeLikeTensor(Shape shape, U entries);
 }

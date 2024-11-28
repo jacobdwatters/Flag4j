@@ -70,8 +70,8 @@ public final class RealFieldDenseCsrOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
         Field<T>[] dest;
 
-        if(uOpp == null) dest = src2.entries.clone();
-        else dest = ArrayUtils.applyTransform(src2.entries.clone(), uOpp);
+        if(uOpp == null) dest = src2.data.clone();
+        else dest = ArrayUtils.applyTransform(src2.data.clone(), uOpp);
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
             int start = src1.rowPointers[i];
@@ -80,7 +80,7 @@ public final class RealFieldDenseCsrOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-                dest[idx] = opp.apply(src1.entries[j], (T) dest[idx]);
+                dest[idx] = opp.apply(src1.data[j], (T) dest[idx]);
             }
         }
 
@@ -100,7 +100,7 @@ public final class RealFieldDenseCsrOperations {
             CsrMatrix src2,
             BiFunction<T, Double, T> opp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
-        Field<T>[] dest = new Field[src2.entries.length];
+        Field<T>[] dest = new Field[src2.data.length];
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -109,7 +109,7 @@ public final class RealFieldDenseCsrOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src2.colIndices[i];
-                dest[idx] = opp.apply((T) src1.entries[idx], src2.entries[j]);
+                dest[idx] = opp.apply((T) src1.data[idx], src2.data[j]);
             }
         }
 
@@ -132,7 +132,7 @@ public final class RealFieldDenseCsrOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
         int[] rowPointers = src2.rowPointers.clone();
         int[] colIndices = src2.colIndices.clone();
-        Field<T>[] entries = new Field[src2.entries.length];
+        Field<T>[] entries = new Field[src2.data.length];
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -141,7 +141,7 @@ public final class RealFieldDenseCsrOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src2.colIndices[j];
-                entries[idx] = opp.apply(src1.entries[idx], (T) src2.entries[j]);
+                entries[idx] = opp.apply(src1.data[idx], (T) src2.data[j]);
             }
         }
 
@@ -164,7 +164,7 @@ public final class RealFieldDenseCsrOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
         int[] rowPointers = src2.rowPointers.clone();
         int[] colIndices = src2.colIndices.clone();
-        Field<T>[] entries = new Field[src2.entries.length];
+        Field<T>[] entries = new Field[src2.data.length];
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];
@@ -173,7 +173,7 @@ public final class RealFieldDenseCsrOperations {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src2.colIndices[j];
-                entries[idx] = opp.apply((T) src1.entries[idx], src2.entries[j]);
+                entries[idx] = opp.apply((T) src1.data[idx], src2.data[j]);
             }
         }
 
@@ -196,7 +196,7 @@ public final class RealFieldDenseCsrOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
         int[] rowPointers = src1.rowPointers.clone();
         int[] colIndices = src1.colIndices.clone();
-        Field<T>[] entries = new Field[src1.entries.length];
+        Field<T>[] entries = new Field[src1.data.length];
 
         for(int i=0; i<src1.numRows; i++) {
             int start = src1.rowPointers[i];
@@ -204,7 +204,7 @@ public final class RealFieldDenseCsrOperations {
             int src2RowOffset = i*src2.numCols;
 
             for(int j=start; j<stop; j++)
-                entries[j] = opp.apply(src1.entries[j], (T) src2.entries[src2RowOffset + src1.colIndices[j]]);
+                entries[j] = opp.apply(src1.data[j], (T) src2.data[src2RowOffset + src1.colIndices[j]]);
         }
 
         return src2.makeLikeCsrMatrix(src1.shape, entries, rowPointers, colIndices);

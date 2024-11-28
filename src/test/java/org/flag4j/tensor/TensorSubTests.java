@@ -6,7 +6,7 @@ import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
-import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseTensorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseCooTensorOps;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -316,7 +316,7 @@ class TensorSubTests {
         expEntries[expShape.getFlatIndex(sparseIndices[2])] -= bEntries[2];
         exp = new Tensor(expShape, expEntries);
 
-        RealDenseSparseTensorOperations.subEq(A, B);
+        RealDenseCooTensorOps.subEq(A, B);
         assertEquals(exp, A);
 
         // ------------------------- Sub-case 2 -------------------------
@@ -330,7 +330,7 @@ class TensorSubTests {
         B = new CooTensor(bShape, bEntries, sparseIndices);
 
         CooTensor finalB = B;
-        assertThrows(LinearAlgebraException.class, ()->RealDenseSparseTensorOperations.subEq(A, finalB));
+        assertThrows(LinearAlgebraException.class, ()-> RealDenseCooTensorOps.subEq(A, finalB));
     }
 
 

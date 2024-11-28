@@ -39,7 +39,7 @@ public final class RealFieldDenseElemDiv {
 
     // TODO: This should be configurable
     /**
-     * Minimum number of entries in each tensor to apply concurrent algorithm.
+     * Minimum number of data in each tensor to apply concurrent algorithm.
      */
     private static final int CONCURRENT_THRESHOLD = 15_625;
 
@@ -135,7 +135,7 @@ public final class RealFieldDenseElemDiv {
 
     /**
      * Chooses if a concurrent algorithm for element-wise multiplication should be used based on the shape of the two tensors.
-     * @param numEntries Total entries in the tensors to multiply.
+     * @param numEntries Total data in the tensors to multiply.
      * @return True if a concurrent algorithm should be used for element-wise multiplication. Otherwise, returns false.
      */
     private static boolean useConcurrent(int numEntries) {

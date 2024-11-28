@@ -55,12 +55,12 @@ public final class DirectSum {
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
-            System.arraycopy(A.entries, i*A.numCols, sum.entries, i*sum.numCols, A.numCols);
+            System.arraycopy(A.data, i*A.numCols, sum.data, i*sum.numCols, A.numCols);
         }
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
-            System.arraycopy(B.entries, i*B.numCols, sum.entries, (i + A.numRows)*sum.numCols + A.numCols, B.numCols);
+            System.arraycopy(B.data, i*B.numCols, sum.data, (i + A.numRows)*sum.numCols + A.numCols, B.numCols);
         }
 
         return sum;
@@ -79,7 +79,7 @@ public final class DirectSum {
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
-            System.arraycopy(A.entries, i*A.numCols, sum.entries, i*sum.numCols, A.numCols);
+            System.arraycopy(A.data, i*A.numCols, sum.data, i*sum.numCols, A.numCols);
         }
 
         // Copy over second matrix.
@@ -88,7 +88,7 @@ public final class DirectSum {
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
-            sum.entries[(row+A.numRows)*sum.numCols + (col+A.numCols)] = B.entries[i];
+            sum.data[(row+A.numRows)*sum.numCols + (col+A.numCols)] = B.data[i];
         }
 
         return sum;
@@ -111,13 +111,13 @@ public final class DirectSum {
             int sumRowOffset = i*sum.numCols;
 
             for(int j=0; j<A.numCols; j++) {
-                sum.entries[sumRowOffset + j] = new Complex128(A.entries[rowOffset + j]);
+                sum.data[sumRowOffset + j] = new Complex128(A.data[rowOffset + j]);
             }
         }
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
-            System.arraycopy(B.entries, i*B.numCols, sum.entries, (i+A.numRows)*sum.numCols+(A.numCols), B.numCols);
+            System.arraycopy(B.data, i*B.numCols, sum.data, (i+A.numRows)*sum.numCols+(A.numCols), B.numCols);
         }
 
         return sum;
@@ -140,7 +140,7 @@ public final class DirectSum {
             int sumRowOffset = i*sum.numCols;
 
             for(int j=0; j<A.numCols; j++) {
-                sum.entries[sumRowOffset + j] = new Complex128(A.entries[rowOffset + j]);
+                sum.data[sumRowOffset + j] = new Complex128(A.data[rowOffset + j]);
             }
         }
 
@@ -150,7 +150,7 @@ public final class DirectSum {
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
-            sum.entries[(row+A.numRows)*sum.numCols + (col+A.numCols)] = B.entries[i];
+            sum.data[(row+A.numRows)*sum.numCols + (col+A.numCols)] = B.data[i];
         }
 
         return sum;
@@ -169,12 +169,12 @@ public final class DirectSum {
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
-            System.arraycopy(A.entries, i*A.numCols, sum.entries, (i+B.numRows)*sum.numCols, A.numCols);
+            System.arraycopy(A.data, i*A.numCols, sum.data, (i+B.numRows)*sum.numCols, A.numCols);
         }
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
-            System.arraycopy(B.entries, i*B.numCols, sum.entries, i*sum.numCols+A.numCols, B.numCols);
+            System.arraycopy(B.data, i*B.numCols, sum.data, i*sum.numCols+A.numCols, B.numCols);
         }
 
         return sum;
@@ -193,7 +193,7 @@ public final class DirectSum {
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
-            System.arraycopy(A.entries, i*A.numCols, sum.entries, (i+B.numRows)*sum.numCols, A.numCols);
+            System.arraycopy(A.data, i*A.numCols, sum.data, (i+B.numRows)*sum.numCols, A.numCols);
         }
 
         // Copy over second matrix.
@@ -202,7 +202,7 @@ public final class DirectSum {
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
-            sum.entries[row*sum.numCols + col + A.numCols] = B.entries[i];
+            sum.data[row*sum.numCols + col + A.numCols] = B.data[i];
         }
 
         return sum;
@@ -225,14 +225,14 @@ public final class DirectSum {
             int sumRowOffset = (i+B.numRows)*sum.numCols;
 
             for(int j=0; j<A.numCols; j++) {
-                sum.entries[sumRowOffset + j] = new Complex128(A.entries[aRowOffset + j]);
+                sum.data[sumRowOffset + j] = new Complex128(A.data[aRowOffset + j]);
             }
         }
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
             for(int j=0; j<B.numCols; j++) {
-                sum.entries[i*sum.numCols + j + A.numCols] = B.entries[i*B.numCols + j];
+                sum.data[i*sum.numCols + j + A.numCols] = B.data[i*B.numCols + j];
             }
         }
 
@@ -256,7 +256,7 @@ public final class DirectSum {
             int sumRowOffset = (i+B.numRows)*sum.numCols;
 
             for(int j=0; j<A.numCols; j++) {
-                sum.entries[sumRowOffset + j] = new Complex128(A.entries[aRowOffset + j]);
+                sum.data[sumRowOffset + j] = new Complex128(A.data[aRowOffset + j]);
             }
         }
 
@@ -266,7 +266,7 @@ public final class DirectSum {
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
-            sum.entries[row*sum.numCols + col + A.numCols] = B.entries[i];
+            sum.data[row*sum.numCols + col + A.numCols] = B.data[i];
         }
 
         return sum;
@@ -287,7 +287,7 @@ public final class DirectSum {
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
-            System.arraycopy(A.entries, i*A.numCols , sum.entries, i*sum.numCols, A.numCols);
+            System.arraycopy(A.data, i*A.numCols , sum.data, i*sum.numCols, A.numCols);
         }
 
         // Copy over second matrix.
@@ -296,7 +296,7 @@ public final class DirectSum {
             int sumRowOffset = (i+A.numRows)*sum.numCols + A.numCols;
 
             for(int j=0; j<B.numCols; j++) {
-                sum.entries[sumRowOffset + j] = new Complex128(B.entries[bRowOffset + j]);
+                sum.data[sumRowOffset + j] = new Complex128(B.data[bRowOffset + j]);
             }
         }
 
@@ -316,7 +316,7 @@ public final class DirectSum {
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
-            System.arraycopy(A.entries, i*A.numCols, sum.entries, i*sum.numCols, A.numCols);
+            System.arraycopy(A.data, i*A.numCols, sum.data, i*sum.numCols, A.numCols);
         }
 
         // Copy over second matrix.
@@ -326,7 +326,7 @@ public final class DirectSum {
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
-            sum.entries[(row+A.numRows)*sum.numCols + (col+A.numCols)] = new Complex128(B.entries[i]);
+            sum.data[(row+A.numRows)*sum.numCols + (col+A.numCols)] = new Complex128(B.data[i]);
         }
 
         return sum;
@@ -345,11 +345,11 @@ public final class DirectSum {
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++)
-            System.arraycopy(A.entries, i*A.numCols, sum.entries, i*sum.numCols, A.numCols);
+            System.arraycopy(A.data, i*A.numCols, sum.data, i*sum.numCols, A.numCols);
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++)
-            System.arraycopy(B.entries, i*B.numCols, sum.entries, (i+A.numRows)*sum.numCols + A.numCols, B.numCols);
+            System.arraycopy(B.data, i*B.numCols, sum.data, (i+A.numRows)*sum.numCols + A.numCols, B.numCols);
 
         return sum;
     }
@@ -367,7 +367,7 @@ public final class DirectSum {
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
-            System.arraycopy(A.entries, i*A.numCols, sum.entries, i*sum.numCols, A.numCols);
+            System.arraycopy(A.data, i*A.numCols, sum.data, i*sum.numCols, A.numCols);
         }
 
         // Copy over second matrix.
@@ -377,7 +377,7 @@ public final class DirectSum {
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
-            sum.entries[(row+A.numRows)*sum.numCols + (col+A.numCols)] = B.entries[i];
+            sum.data[(row+A.numRows)*sum.numCols + (col+A.numCols)] = B.data[i];
         }
 
         return sum;
@@ -396,7 +396,7 @@ public final class DirectSum {
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++) {
-            System.arraycopy(A.entries, i*A.numCols, sum.entries, (i+B.numRows)*sum.numCols, A.numCols);
+            System.arraycopy(A.data, i*A.numCols, sum.data, (i+B.numRows)*sum.numCols, A.numCols);
         }
 
         // Copy over second matrix.
@@ -405,7 +405,7 @@ public final class DirectSum {
             int bRowOffset = i*B.numCols;
 
             for(int j=0; j<B.numCols; j++) {
-                sum.entries[sumRowOffset + j] = new Complex128(B.entries[bRowOffset + j]);
+                sum.data[sumRowOffset + j] = new Complex128(B.data[bRowOffset + j]);
             }
         }
 
@@ -425,14 +425,14 @@ public final class DirectSum {
 
         // Copy over first matrix.
         for(int i=0; i<A.numRows; i++)
-            System.arraycopy(A.entries, i*A.numCols, sum.entries, (i+B.numRows)*sum.numCols, A.numCols);
+            System.arraycopy(A.data, i*A.numCols, sum.data, (i+B.numRows)*sum.numCols, A.numCols);
 
         // Copy over second matrix.
         for(int i=0; i<B.nnz; i++) {
             int row = B.rowIndices[i];
             int col = B.colIndices[i];
 
-            sum.entries[row*sum.numCols + col + A.numCols] = new Complex128(B.entries[i]);
+            sum.data[row*sum.numCols + col + A.numCols] = new Complex128(B.data[i]);
         }
 
         return sum;
@@ -455,7 +455,7 @@ public final class DirectSum {
             int aRowOffset = i*A.numCols;
 
             for(int j=0; j<A.numCols; j++)
-                sum.entries[sumRowOffset + j] = A.entries[aRowOffset + j];
+                sum.data[sumRowOffset + j] = A.data[aRowOffset + j];
         }
 
         // Copy over second matrix.
@@ -464,7 +464,7 @@ public final class DirectSum {
             int sumRowOffset = i*sum.numCols + A.numCols;
 
             for(int j=0; j<B.numCols; j++)
-                sum.entries[sumRowOffset + j] = B.entries[bRowOffset + j];
+                sum.data[sumRowOffset + j] = B.data[bRowOffset + j];
         }
 
         return sum;
@@ -487,7 +487,7 @@ public final class DirectSum {
             int aRowOffset = i*A.numCols;
 
             for(int j=0; j<A.numCols; j++)
-                sum.entries[sumRowOffset + j] = A.entries[aRowOffset + j];
+                sum.data[sumRowOffset + j] = A.data[aRowOffset + j];
         }
 
         // Copy over second matrix.
@@ -495,7 +495,7 @@ public final class DirectSum {
             int row = B.rowIndices[i];
             int col = B.colIndices[i];
 
-            sum.entries[row*sum.numCols + col + A.numCols] = B.entries[i];
+            sum.data[row*sum.numCols + col + A.numCols] = B.data[i];
         }
 
         return sum;
@@ -513,13 +513,13 @@ public final class DirectSum {
      */
     public static CooMatrix directSum(CooMatrix A, Matrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        double[] destEntries = new double[A.entries.length + B.entries.length];
+        double[] destEntries = new double[A.data.length + B.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
-        // Copy entries from both matrices.
-        System.arraycopy(A.entries, 0, destEntries, 0, A.entries.length);
-        System.arraycopy(B.entries, 0, destEntries, A.entries.length, B.entries.length);
+        // Copy data from both matrices.
+        System.arraycopy(A.data, 0, destEntries, 0, A.data.length);
+        System.arraycopy(B.data, 0, destEntries, A.data.length, B.data.length);
 
         // Copy indices of first matrix in the direct sum.
         System.arraycopy(A.rowIndices, 0, destRowIndices, 0, A.rowIndices.length);
@@ -529,8 +529,8 @@ public final class DirectSum {
         int[] indices;
 
         // Copy indices of second matrix with appropriate shifts.
-        for(int i=0; i<B.entries.length; i++) {
-            destIdx = i+A.entries.length;
+        for(int i = 0; i<B.data.length; i++) {
+            destIdx = i+A.data.length;
             indices = B.shape.getNdIndices(i);
             destRowIndices[destIdx] = indices[0] + A.numRows;
             destColIndices[destIdx] = indices[1] + A.numCols;
@@ -549,13 +549,13 @@ public final class DirectSum {
      */
     public static CooMatrix directSum(CooMatrix A, CooMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        double[] destEntries = new double[A.entries.length + B.entries.length];
+        double[] destEntries = new double[A.data.length + B.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
-        // Copy entries from both matrices.
-        System.arraycopy(A.entries, 0, destEntries, 0, A.entries.length);
-        System.arraycopy(B.entries, 0, destEntries, A.entries.length, B.entries.length);
+        // Copy data from both matrices.
+        System.arraycopy(A.data, 0, destEntries, 0, A.data.length);
+        System.arraycopy(B.data, 0, destEntries, A.data.length, B.data.length);
 
         // Copy indices of first matrix in the direct sum.
         System.arraycopy(A.rowIndices, 0, destRowIndices, 0, A.rowIndices.length);
@@ -564,8 +564,8 @@ public final class DirectSum {
         int destIdx;
 
         // Copy indices of second matrix with appropriate shifts.
-        for(int i=0; i<B.entries.length; i++) {
-            destIdx = i+A.entries.length;
+        for(int i = 0; i<B.data.length; i++) {
+            destIdx = i+A.data.length;
             destRowIndices[destIdx] = B.rowIndices[i] + A.numRows;
             destColIndices[destIdx] = B.colIndices[i] + A.numCols;
         }
@@ -583,13 +583,13 @@ public final class DirectSum {
      */
     public static CooCMatrix directSum(CooMatrix A, CMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.data.length + B.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
-        // Copy entries from both matrices.
-        ArrayUtils.arraycopy(A.entries, 0, destEntries, 0, A.entries.length);
-        System.arraycopy(B.entries, 0, destEntries, A.entries.length, B.entries.length);
+        // Copy data from both matrices.
+        ArrayUtils.arraycopy(A.data, 0, destEntries, 0, A.data.length);
+        System.arraycopy(B.data, 0, destEntries, A.data.length, B.data.length);
 
         // Copy indices of first matrix in the direct sum.
         System.arraycopy(A.rowIndices, 0, destRowIndices, 0, A.rowIndices.length);
@@ -599,8 +599,8 @@ public final class DirectSum {
         int[] indices;
 
         // Copy indices of second matrix with appropriate shifts.
-        for(int i=0; i<B.entries.length; i++) {
-            destIdx = i+A.entries.length;
+        for(int i = 0; i<B.data.length; i++) {
+            destIdx = i+A.data.length;
             indices = B.shape.getNdIndices(i);
             destRowIndices[destIdx] = indices[0] + A.numRows;
             destColIndices[destIdx] = indices[1] + A.numCols;
@@ -619,13 +619,13 @@ public final class DirectSum {
      */
     public static CooCMatrix directSum(CooMatrix A, CooCMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.data.length + B.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
-        // Copy entries from both matrices.
-        ArrayUtils.arraycopy(A.entries, 0, destEntries, 0, A.entries.length);
-        System.arraycopy(B.entries, 0, destEntries, A.entries.length, B.entries.length);
+        // Copy data from both matrices.
+        ArrayUtils.arraycopy(A.data, 0, destEntries, 0, A.data.length);
+        System.arraycopy(B.data, 0, destEntries, A.data.length, B.data.length);
 
         // Copy indices of first matrix in the direct sum.
         System.arraycopy(A.rowIndices, 0, destRowIndices, 0, A.rowIndices.length);
@@ -634,8 +634,8 @@ public final class DirectSum {
         int destIdx;
 
         // Copy indices of second matrix with appropriate shifts.
-        for(int i=0; i<B.entries.length; i++) {
-            destIdx = i+A.entries.length;
+        for(int i = 0; i<B.data.length; i++) {
+            destIdx = i+A.data.length;
             destRowIndices[destIdx] = B.rowIndices[i] + A.numRows;
             destColIndices[destIdx] = B.colIndices[i] + A.numCols;
         }
@@ -653,13 +653,13 @@ public final class DirectSum {
      */
     public static CooMatrix invDirectSum(CooMatrix A, Matrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        double[] destEntries = new double[A.entries.length + B.entries.length];
+        double[] destEntries = new double[A.data.length + B.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
-        // Copy entries from both matrices.
-        System.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
-        System.arraycopy(A.entries, 0, destEntries, B.entries.length, A.entries.length);
+        // Copy data from both matrices.
+        System.arraycopy(B.data, 0, destEntries, 0, B.data.length);
+        System.arraycopy(A.data, 0, destEntries, B.data.length, A.data.length);
 
         // Compute shifted indices.
         int[] shiftedRowIndices = ArrayUtils.shift(B.numRows, A.rowIndices.clone());
@@ -686,13 +686,13 @@ public final class DirectSum {
      */
     public static CooMatrix invDirectSum(CooMatrix A, CooMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        double[] destEntries = new double[A.entries.length + B.entries.length];
+        double[] destEntries = new double[A.data.length + B.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
-        // Copy entries from both matrices.
-        System.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
-        System.arraycopy(A.entries, 0, destEntries, B.entries.length, A.entries.length);
+        // Copy data from both matrices.
+        System.arraycopy(B.data, 0, destEntries, 0, B.data.length);
+        System.arraycopy(A.data, 0, destEntries, B.data.length, A.data.length);
 
         // Compute shifted indices.
         int[] shiftedColIndices = ArrayUtils.shift(A.numCols, B.colIndices.clone());
@@ -718,13 +718,13 @@ public final class DirectSum {
      */
     public static CooCMatrix invDirectSum(CooMatrix A, CMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.data.length + B.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
-        // Copy entries from both matrices.
-        System.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
-        ArrayUtils.arraycopy(A.entries, 0, destEntries, B.entries.length, A.entries.length);
+        // Copy data from both matrices.
+        System.arraycopy(B.data, 0, destEntries, 0, B.data.length);
+        ArrayUtils.arraycopy(A.data, 0, destEntries, B.data.length, A.data.length);
 
         // Compute shifted indices.
         int[] shiftedRowIndices = ArrayUtils.shift(B.numRows, A.rowIndices.clone());
@@ -751,13 +751,13 @@ public final class DirectSum {
      */
     public static CooCMatrix invDirectSum(CooMatrix A, CooCMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.data.length + B.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
-        // Copy entries from both matrices.
-        System.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
-        ArrayUtils.arraycopy(A.entries, 0, destEntries, B.entries.length, A.entries.length);
+        // Copy data from both matrices.
+        System.arraycopy(B.data, 0, destEntries, 0, B.data.length);
+        ArrayUtils.arraycopy(A.data, 0, destEntries, B.data.length, A.data.length);
 
         // Compute shifted indices.
         int[] shiftedColIndices = ArrayUtils.shift(A.numCols, B.colIndices.clone());
@@ -785,13 +785,13 @@ public final class DirectSum {
      */
     public static CooCMatrix directSum(CooCMatrix A, Matrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.data.length + B.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
-        // Copy entries from both matrices.
-        System.arraycopy(A.entries, 0, destEntries, 0, A.entries.length);
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, A.entries.length, B.entries.length);
+        // Copy data from both matrices.
+        System.arraycopy(A.data, 0, destEntries, 0, A.data.length);
+        ArrayUtils.arraycopy(B.data, 0, destEntries, A.data.length, B.data.length);
 
         // Copy indices of first matrix in the direct sum.
         System.arraycopy(A.rowIndices, 0, destRowIndices, 0, A.rowIndices.length);
@@ -801,8 +801,8 @@ public final class DirectSum {
         int[] indices;
 
         // Copy indices of second matrix with appropriate shifts.
-        for(int i=0; i<B.entries.length; i++) {
-            destIdx = i+A.entries.length;
+        for(int i = 0; i<B.data.length; i++) {
+            destIdx = i+A.data.length;
             indices = B.shape.getNdIndices(i);
             destRowIndices[destIdx] = indices[0] + A.numRows;
             destColIndices[destIdx] = indices[1] + A.numCols;
@@ -821,13 +821,13 @@ public final class DirectSum {
      */
     public static CooCMatrix directSum(CooCMatrix A, CooMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.data.length + B.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
-        // Copy entries from both matrices.
-        System.arraycopy(A.entries, 0, destEntries, 0, A.entries.length);
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, A.entries.length, B.entries.length);
+        // Copy data from both matrices.
+        System.arraycopy(A.data, 0, destEntries, 0, A.data.length);
+        ArrayUtils.arraycopy(B.data, 0, destEntries, A.data.length, B.data.length);
 
         // Copy indices of first matrix in the direct sum.
         System.arraycopy(A.rowIndices, 0, destRowIndices, 0, A.rowIndices.length);
@@ -836,8 +836,8 @@ public final class DirectSum {
         int destIdx;
 
         // Copy indices of second matrix with appropriate shifts.
-        for(int i=0; i<B.entries.length; i++) {
-            destIdx = i+A.entries.length;
+        for(int i = 0; i<B.data.length; i++) {
+            destIdx = i+A.data.length;
             destRowIndices[destIdx] = B.rowIndices[i] + A.numRows;
             destColIndices[destIdx] = B.colIndices[i] + A.numCols;
         }
@@ -855,13 +855,13 @@ public final class DirectSum {
      */
     public static CooCMatrix directSum(CooCMatrix A, CMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.data.length + B.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
-        // Copy entries from both matrices.
-        System.arraycopy(A.entries, 0, destEntries, 0, A.entries.length);
-        System.arraycopy(B.entries, 0, destEntries, A.entries.length, B.entries.length);
+        // Copy data from both matrices.
+        System.arraycopy(A.data, 0, destEntries, 0, A.data.length);
+        System.arraycopy(B.data, 0, destEntries, A.data.length, B.data.length);
 
         // Copy indices of first matrix in the direct sum.
         System.arraycopy(A.rowIndices, 0, destRowIndices, 0, A.rowIndices.length);
@@ -871,8 +871,8 @@ public final class DirectSum {
         int[] indices;
 
         // Copy indices of second matrix with appropriate shifts.
-        for(int i=0; i<B.entries.length; i++) {
-            destIdx = i+A.entries.length;
+        for(int i = 0; i<B.data.length; i++) {
+            destIdx = i+A.data.length;
             indices = B.shape.getNdIndices(i);
             destRowIndices[destIdx] = indices[0] + A.numRows;
             destColIndices[destIdx] = indices[1] + A.numCols;
@@ -891,13 +891,13 @@ public final class DirectSum {
      */
     public static CooCMatrix directSum(CooCMatrix A, CooCMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.data.length + B.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
-        // Copy entries from both matrices.
-        System.arraycopy(A.entries, 0, destEntries, 0, A.entries.length);
-        System.arraycopy(B.entries, 0, destEntries, A.entries.length, B.entries.length);
+        // Copy data from both matrices.
+        System.arraycopy(A.data, 0, destEntries, 0, A.data.length);
+        System.arraycopy(B.data, 0, destEntries, A.data.length, B.data.length);
 
         // Copy indices of first matrix in the direct sum.
         System.arraycopy(A.rowIndices, 0, destRowIndices, 0, A.rowIndices.length);
@@ -906,8 +906,8 @@ public final class DirectSum {
         int destIdx;
 
         // Copy indices of second matrix with appropriate shifts.
-        for(int i=0; i<B.entries.length; i++) {
-            destIdx = i+A.entries.length;
+        for(int i = 0; i<B.data.length; i++) {
+            destIdx = i+A.data.length;
             destRowIndices[destIdx] = B.rowIndices[i] + A.numRows;
             destColIndices[destIdx] = B.colIndices[i] + A.numCols;
         }
@@ -925,13 +925,13 @@ public final class DirectSum {
      */
     public static CooCMatrix invDirectSum(CooCMatrix A, Matrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.data.length + B.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
-        // Copy entries from both matrices.
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
-        System.arraycopy(A.entries, 0, destEntries, B.entries.length, A.entries.length);
+        // Copy data from both matrices.
+        ArrayUtils.arraycopy(B.data, 0, destEntries, 0, B.data.length);
+        System.arraycopy(A.data, 0, destEntries, B.data.length, A.data.length);
 
         // Compute shifted indices.
         int[] shiftedRowIndices = ArrayUtils.shift(B.numRows, A.rowIndices.clone());
@@ -958,13 +958,13 @@ public final class DirectSum {
      */
     public static CooCMatrix invDirectSum(CooCMatrix A, CooCMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.data.length + B.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
-        // Copy entries from both matrices.
-        System.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
-        System.arraycopy(A.entries, 0, destEntries, B.entries.length, A.entries.length);
+        // Copy data from both matrices.
+        System.arraycopy(B.data, 0, destEntries, 0, B.data.length);
+        System.arraycopy(A.data, 0, destEntries, B.data.length, A.data.length);
 
         // Compute shifted indices.
         int[] shiftedColIndices = ArrayUtils.shift(A.numCols, B.colIndices.clone());
@@ -990,13 +990,13 @@ public final class DirectSum {
      */
     public static CooCMatrix invDirectSum(CooCMatrix A, CooMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.data.length + B.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
-        // Copy entries from both matrices.
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
-        System.arraycopy(A.entries, 0, destEntries, B.entries.length, A.entries.length);
+        // Copy data from both matrices.
+        ArrayUtils.arraycopy(B.data, 0, destEntries, 0, B.data.length);
+        System.arraycopy(A.data, 0, destEntries, B.data.length, A.data.length);
 
         // Compute shifted indices.
         int[] shiftedColIndices = ArrayUtils.shift(A.numCols, B.colIndices.clone());
@@ -1022,13 +1022,13 @@ public final class DirectSum {
      */
     public static CooCMatrix invDirectSum(CooCMatrix A, CMatrix B) {
         Shape destShape = new Shape(A.numRows + B.numRows, A.numCols + B.numCols);
-        Complex128[] destEntries = new Complex128[A.entries.length + B.entries.length];
+        Complex128[] destEntries = new Complex128[A.data.length + B.data.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
-        // Copy entries from both matrices.
-        System.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
-        System.arraycopy(A.entries, 0, destEntries, B.entries.length, A.entries.length);
+        // Copy data from both matrices.
+        System.arraycopy(B.data, 0, destEntries, 0, B.data.length);
+        System.arraycopy(A.data, 0, destEntries, B.data.length, A.data.length);
 
         // Compute shifted indices.
         int[] shiftedRowIndices = ArrayUtils.shift(B.numRows, A.rowIndices.clone());

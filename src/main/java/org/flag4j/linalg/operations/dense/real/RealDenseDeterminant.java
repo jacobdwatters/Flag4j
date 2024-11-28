@@ -55,18 +55,18 @@ public final class RealDenseDeterminant {
 
         switch(rows) {
             case 1: // 1x1 determinant
-                return A.entries[0];
+                return A.data[0];
             case 2: // 2x2 determinant
-                return A.entries[0] * A.entries[3] - A.entries[1] * A.entries[2];
+                return A.data[0] * A.data[3] - A.data[1] * A.data[2];
             case 3: // 3x3 determinant
-                double a3 = A.entries[3];
-                double a4 = A.entries[4];
-                double a5 = A.entries[5];
-                double a6 = A.entries[6];
-                double a7 = A.entries[7];
-                double a8 = A.entries[8];
+                double a3 = A.data[3];
+                double a4 = A.data[4];
+                double a5 = A.data[5];
+                double a6 = A.data[6];
+                double a7 = A.data[7];
+                double a8 = A.data[8];
 
-                return A.entries[0]*(a4*a8 - a5*a7) - A.entries[1]*(a3*a8 - a5*a6) + A.entries[2]*(a3*a7 - a4*a6);
+                return A.data[0]*(a4*a8 - a5*a7) - A.data[1]*(a3*a8 - a5*a6) + A.data[2]*(a3*a7 - a4*a6);
             default:
                 LU<Matrix> lu = new RealLU().decompose(A);
                 // Compute the determinant of P. (Check if lowest bit is zero to determine parity)
@@ -102,9 +102,9 @@ public final class RealDenseDeterminant {
      */
     public static double det3(Matrix A) {
         ValidateParameters.ensureEqualShape(A.shape, new Shape(3, 3));
-        double det = A.entries[0] * (A.entries[4] * A.entries[8] - A.entries[5] * A.entries[7]);
-        det -= A.entries[1] * (A.entries[3] * A.entries[8] - A.entries[5] * A.entries[6]);
-        det += A.entries[2] * (A.entries[3] * A.entries[7] - A.entries[4] * A.entries[6]);
+        double det = A.data[0] * (A.data[4] * A.data[8] - A.data[5] * A.data[7]);
+        det -= A.data[1] * (A.data[3] * A.data[8] - A.data[5] * A.data[6]);
+        det += A.data[2] * (A.data[3] * A.data[7] - A.data[4] * A.data[6]);
         return det;
     }
 
@@ -117,7 +117,7 @@ public final class RealDenseDeterminant {
      */
     public static double det2(Matrix A) {
         ValidateParameters.ensureEqualShape(A.shape, new Shape(2, 2));
-        return A.entries[0] * A.entries[3] - A.entries[1] * A.entries[2];
+        return A.data[0] * A.data[3] - A.data[1] * A.data[2];
     }
 
 
@@ -129,7 +129,7 @@ public final class RealDenseDeterminant {
      */
     public static double det1(Matrix A) {
         ValidateParameters.ensureEqualShape(A.shape, new Shape(1, 1));
-        return A.entries[0];
+        return A.data[0];
     }
 
 
@@ -143,11 +143,11 @@ public final class RealDenseDeterminant {
     public static double detTri(Matrix A) {
         double det = 1;
         int step = A.numCols + 1;
-        int size =  A.entries.length;
+        int size =  A.data.length;
 
         // Compute the determinant of U
         for (int i=0; i<size; i += step) {
-            det *= A.entries[i];
+            det *= A.data[i];
         }
 
         return det;

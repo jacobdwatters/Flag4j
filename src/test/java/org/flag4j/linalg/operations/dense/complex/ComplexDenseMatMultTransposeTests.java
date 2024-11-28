@@ -26,6 +26,7 @@ package org.flag4j.linalg.operations.dense.complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.linalg.operations.dense.field_ops.DenseFieldMatrixMultTranspose;
 import org.junit.jupiter.api.Test;
 
@@ -46,22 +47,22 @@ class ComplexDenseMatMultTransposeTests {
                 {new Complex128("-8.314-1i"), new Complex128("814.4i"), new Complex128("1.4556+9.4414i")}};
         A = new CMatrix(entriesA);
         B = new CMatrix(entriesB);
-        exp = A.mult(B.T()).entries;
+        exp = A.mult(B.T()).data;
 
         // ------------ Sub-case 1 ------------
-        act = DenseFieldMatrixMultTranspose.multTranspose(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultTranspose.multTranspose(A.data, A.shape, B.data, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 2 ------------
-        act = DenseFieldMatrixMultTranspose.multTransposeBlocked(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultTranspose.multTransposeBlocked(A.data, A.shape, B.data, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 3 ------------
-        act = DenseFieldMatrixMultTranspose.multTransposeConcurrent(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultTranspose.multTransposeConcurrent(A.data, A.shape, B.data, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 4 ------------
-        act = DenseFieldMatrixMultTranspose.multTransposeBlockedConcurrent(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultTranspose.multTransposeBlockedConcurrent(A.data, A.shape, B.data, B.shape);
         assertArrayEquals(exp, act);
     }
 
@@ -79,22 +80,22 @@ class ComplexDenseMatMultTransposeTests {
                 new Complex128("831.3561400000001+94.51059280000001i"), new Complex128("576.090725-77867.69015722i")};
         A = new CMatrix(entriesA);
         B = new CMatrix(entriesB).T();
-        exp = A.mult(B.T()).entries;
+        exp = A.mult(B.T()).data;
 
         // ------------ Sub-case 1 ------------
-        act = DenseFieldMatrixMultTranspose.multTranspose(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultTranspose.multTranspose(A.data, A.shape, B.data, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 2 ------------
-        act = DenseFieldMatrixMultTranspose.multTransposeBlocked(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultTranspose.multTransposeBlocked(A.data, A.shape, B.data, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 3 ------------
-        act = DenseFieldMatrixMultTranspose.multTransposeConcurrent(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultTranspose.multTransposeConcurrent(A.data, A.shape, B.data, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 4 ------------
-        act = DenseFieldMatrixMultTranspose.multTransposeBlockedConcurrent(A.entries, A.shape, B.entries, B.shape);
+        act = DenseFieldMatrixMultTranspose.multTransposeBlockedConcurrent(A.data, A.shape, B.data, B.shape);
         assertArrayEquals(exp, act);
     }
 }

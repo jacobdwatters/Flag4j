@@ -27,6 +27,8 @@ package org.flag4j.util;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Complex64;
 import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.rings.Ring;
+import org.flag4j.algebraic_structures.semirings.Semiring;
 
 import java.util.*;
 import java.util.function.Function;
@@ -47,6 +49,102 @@ public final class ArrayUtils {
 
 
     /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static int[] makeNewIfNull(int[] arr, int size) {
+        return arr == null ? new int[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static double[] makeNewIfNull(double[] arr, int size) {
+        return arr == null ? new double[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static Complex128[] makeNewIfNull(Complex128[] arr, int size) {
+        return arr == null ? new Complex128[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static Complex64[] makeNewIfNull(Complex64[] arr, int size) {
+        return arr == null ? new Complex64[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static <T extends Semiring<T>> Semiring<T>[] makeNewIfNull(Semiring<T>[] arr, int size) {
+        return arr == null ? new Semiring[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static <T extends Ring<T>> Ring<T>[] makeNewIfNull(Ring<T>[] arr, int size) {
+        return arr == null ? new Ring[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static <T extends Field<T>> Field<T>[] makeNewIfNull(Field<T>[] arr, int size) {
+        return arr == null ? new Field[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static Object[] makeNewIfNull(Object[] arr, int size) {
+        return arr == null ? new Object[size] : arr;
+    }
+
+
+    /**
      * Computes the cumulative sum of the elements of  an array.
      * @param src Source array to compute cumulative sum within.
      * @param dest Array to store the result of the cumulative sum. May be the same array as {@code src} or {@code null}.
@@ -56,7 +154,7 @@ public final class ArrayUtils {
      */
     public static int[] cumSum(int[] src, int[] dest) {
         ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
-        if(dest == null) dest = new int[src.length];
+        dest = makeNewIfNull(dest, src.length);
 
         for(int i=1, size=src.length; i<size; i++)
             dest[i] = src[i] + src[i-1];
@@ -97,8 +195,8 @@ public final class ArrayUtils {
      * @return A reference to the {@code dest} array.
      */
     public static Complex128[] wrapAsComplex128(int[] src, Complex128[] dest) {
-        if(dest == null) dest = new Complex128[src.length];
-        else ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
+        dest = makeNewIfNull(dest, src.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
 
         for (int i=0, size=dest.length; i<size; i++)
             dest[i] = new Complex128(src[i]);
@@ -116,8 +214,8 @@ public final class ArrayUtils {
      * @return A reference to the {@code dest} array.
      */
     public static Complex128[] wrapAsComplex128(double[] src, Complex128[] dest) {
-        if(dest == null) dest = new Complex128[src.length];
-        else ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
+        dest = makeNewIfNull(dest, src.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
 
         for(int i=0, size=dest.length; i<size; i++)
             dest[i] = new Complex128(src[i]);
@@ -135,8 +233,8 @@ public final class ArrayUtils {
      * @return A reference to the {@code dest} array.
      */
     public static Complex128[] wrapAsComplex128(Integer[] src, Complex128[] dest) {
-        if(dest == null) dest = new Complex128[src.length];
-        else ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
+        dest = makeNewIfNull(dest, src.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
 
         for (int i=0, size=dest.length; i<size; i++)
             dest[i] = new Complex128(src[i]);
@@ -154,8 +252,8 @@ public final class ArrayUtils {
      * @return A reference to the {@code dest} array.
      */
     public static Complex128[] wrapAsComplex128(Double[] src, Complex128[] dest) {
-        if(dest == null) dest = new Complex128[src.length];
-        else ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
+        dest = makeNewIfNull(dest, src.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
 
         for(int i=0, size=dest.length; i<size; i++)
             dest[i] = new Complex128(src[i]);
@@ -173,8 +271,8 @@ public final class ArrayUtils {
      * @return A reference to the {@code dest} array.
      */
     public static Complex128[] wrapAsComplex128(Complex64[] src, Complex128[] dest) {
-        if(dest == null) dest = new Complex128[src.length];
-        else ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
+        dest = makeNewIfNull(dest, src.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
 
         for(int i=0, size=dest.length; i<size; i++)
             dest[i] = new Complex128(src[i]);
@@ -545,7 +643,7 @@ public final class ArrayUtils {
      * @param src  Source list to convert.
      * @param dest Destination array to store values from {@code src} in (modified). Must be at least as large as {@code src}.
      * @return A reference to the {@code dest} array.
-     * @throws IllegalArgumentException If the {@code dest} array is not large enough to store all entries of {@code src}
+     * @throws IllegalArgumentException If the {@code dest} array is not large enough to store all data of {@code src}
      *                                  list.
      */
     public static <T> T[] fromList(List<T> src, T[] dest) {
@@ -710,7 +808,7 @@ public final class ArrayUtils {
      *
      * @param src1 Double array.
      * @param src2 Complex number array.
-     * @return True if all entries in {@code src2} have zero imaginary component and real component equal to the
+     * @return True if all data in {@code src2} have zero imaginary component and real component equal to the
      * corresponding entry in {@code src1}. Otherwise, returns false.
      */
     public static <T extends Field<T>> boolean equals(double[] src1, Field<T>[] src2) {
@@ -1043,7 +1141,7 @@ public final class ArrayUtils {
      * values is returned.
      */
     public static double[] unbox(Double[] arr, double[] dest) {
-        if(dest == null) dest = new double[arr.length];
+        dest = makeNewIfNull(dest, arr.length);
 
         for (int i=0, size=dest.length; i<size; i++)
             dest[i] = arr[i];
@@ -1244,7 +1342,7 @@ public final class ArrayUtils {
      * @return A reference to the {@code dest} array.
      */
     public static double[] asDouble(int[] src, double[] dest) {
-        if(dest == null) dest = new double[src.length];
+        dest = makeNewIfNull(dest, src.length);
 
         for (int i = 0, size=src.length; i < size; i++)
             dest[i] = src[i];

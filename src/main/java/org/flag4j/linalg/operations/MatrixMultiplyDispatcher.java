@@ -83,16 +83,16 @@ public final class MatrixMultiplyDispatcher {
 
         switch(algorithm) {
             case STANDARD_VECTOR:
-                dest = RealDenseMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealDenseMatrixMultiplication.standardVector(A.data, A.shape, b.data, bMatShape);
                 break;
             case BLOCKED_VECTOR:
-                dest = RealDenseMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealDenseMatrixMultiplication.blockedVector(A.data, A.shape, b.data, bMatShape);
                 break;
             case CONCURRENT_STANDARD_VECTOR:
-                dest = RealDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealDenseMatrixMultiplication.concurrentStandardVector(A.data, A.shape, b.data, bMatShape);
                 break;
             default:
-                dest = RealDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealDenseMatrixMultiplication.concurrentBlockedVector(A.data, A.shape, b.data, bMatShape);
                 break;
         }
 
@@ -117,16 +117,16 @@ public final class MatrixMultiplyDispatcher {
 
         switch(algorithm) {
             case STANDARD_VECTOR:
-                dest = RealFieldDenseMatMult.standardVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealFieldDenseMatMult.standardVector(A.data, A.shape, b.data, bMatShape);
                 break;
             case BLOCKED_VECTOR:
-                dest = RealFieldDenseMatMult.blockedVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealFieldDenseMatMult.blockedVector(A.data, A.shape, b.data, bMatShape);
                 break;
             case CONCURRENT_STANDARD_VECTOR:
-                dest = RealFieldDenseMatMult.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealFieldDenseMatMult.concurrentStandardVector(A.data, A.shape, b.data, bMatShape);
                 break;
             default:
-                dest = RealFieldDenseMatMult.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealFieldDenseMatMult.concurrentBlockedVector(A.data, A.shape, b.data, bMatShape);
                 break;
         }
 
@@ -140,9 +140,8 @@ public final class MatrixMultiplyDispatcher {
      * @param b Vector to multiply.
      * @return The result of the matrix-vector multiplication.
      */
-    public static Field<Complex128>[] dispatch(CMatrix A, Vector b) {
-        Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
-        ValidateParameters.ensureMatMultShapes(A.shape, bMatShape);
+    public static CVector dispatch(CMatrix A, Vector b) {
+        ValidateParameters.ensureMatVecMultShapes(A.shape, b.shape);
 
         AlgorithmName algorithm;
         Field<Complex128>[] dest;
@@ -151,20 +150,20 @@ public final class MatrixMultiplyDispatcher {
 
         switch(algorithm) {
             case STANDARD_VECTOR:
-                dest = RealFieldDenseMatMult.standardVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealFieldDenseMatMult.standardVector(A.data, A.shape, b.data, b.shape);
                 break;
             case BLOCKED_VECTOR:
-                dest = RealFieldDenseMatMult.blockedVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealFieldDenseMatMult.blockedVector(A.data, A.shape, b.data, b.shape);
                 break;
             case CONCURRENT_STANDARD_VECTOR:
-                dest = RealFieldDenseMatMult.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealFieldDenseMatMult.concurrentStandardVector(A.data, A.shape, b.data, b.shape);
                 break;
             default:
-                dest = RealFieldDenseMatMult.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = RealFieldDenseMatMult.concurrentBlockedVector(A.data, A.shape, b.data, b.shape);
                 break;
         }
 
-        return dest;
+        return new CVector(dest);
     }
 
 
@@ -184,16 +183,16 @@ public final class MatrixMultiplyDispatcher {
 
         switch(algorithm) {
             case STANDARD_VECTOR:
-                dest = DenseFieldMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = DenseFieldMatrixMultiplication.standardVector(A.data, A.shape, b.data, bMatShape);
                 break;
             case BLOCKED_VECTOR:
-                dest = DenseFieldMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = DenseFieldMatrixMultiplication.blockedVector(A.data, A.shape, b.data, bMatShape);
                 break;
             case CONCURRENT_STANDARD_VECTOR:
-                dest = DenseFieldMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = DenseFieldMatrixMultiplication.concurrentStandardVector(A.data, A.shape, b.data, bMatShape);
                 break;
             default:
-                dest = DenseFieldMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);
+                dest = DenseFieldMatrixMultiplication.concurrentBlockedVector(A.data, A.shape, b.data, bMatShape);
                 break;
         }
 
@@ -209,7 +208,7 @@ public final class MatrixMultiplyDispatcher {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static <T extends Field<T>> Field<T>[] dispatch(FieldMatrix<T> A, FieldMatrix<T> B) {
-        return dispatch(A.entries, A.shape, B.entries, B.shape);
+        return dispatch(A.data, A.shape, B.data, B.shape);
     }
 
 
@@ -298,40 +297,40 @@ public final class MatrixMultiplyDispatcher {
 
         switch(algorithm) {
             case STANDARD:
-                dest = RealFieldDenseMatMult.standard(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.standard(A.data, A.shape, B.data, B.shape);
                 break;
             case REORDERED:
-                dest = RealFieldDenseMatMult.reordered(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.reordered(A.data, A.shape, B.data, B.shape);
                 break;
             case BLOCKED:
-                dest = RealFieldDenseMatMult.blocked(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.blocked(A.data, A.shape, B.data, B.shape);
                 break;
             case BLOCKED_REORDERED:
-                dest = RealFieldDenseMatMult.blockedReordered(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.blockedReordered(A.data, A.shape, B.data, B.shape);
                 break;
             case CONCURRENT_STANDARD:
-                dest = RealFieldDenseMatMult.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.concurrentStandard(A.data, A.shape, B.data, B.shape);
                 break;
             case CONCURRENT_REORDERED:
-                dest = RealFieldDenseMatMult.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.concurrentReordered(A.data, A.shape, B.data, B.shape);
                 break;
             case CONCURRENT_BLOCKED:
-                dest = RealFieldDenseMatMult.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.concurrentBlocked(A.data, A.shape, B.data, B.shape);
                 break;
             case CONCURRENT_BLOCKED_REORDERED:
-                dest = RealFieldDenseMatMult.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.concurrentBlockedReordered(A.data, A.shape, B.data, B.shape);
                 break;
             case STANDARD_VECTOR:
-                dest = RealFieldDenseMatMult.standardVector(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.standardVector(A.data, A.shape, B.data, B.shape);
                 break;
             case BLOCKED_VECTOR:
-                dest = RealFieldDenseMatMult.blockedVector(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.blockedVector(A.data, A.shape, B.data, B.shape);
                 break;
             case CONCURRENT_STANDARD_VECTOR:
-                dest = RealFieldDenseMatMult.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.concurrentStandardVector(A.data, A.shape, B.data, B.shape);
                 break;
             default:
-                dest = RealFieldDenseMatMult.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.concurrentBlockedVector(A.data, A.shape, B.data, B.shape);
                 break;
         }
 
@@ -360,40 +359,40 @@ public final class MatrixMultiplyDispatcher {
 
         switch(algorithm) {
             case STANDARD:
-                dest = RealFieldDenseMatMult.standard(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.standard(A.data, A.shape, B.data, B.shape);
                 break;
             case REORDERED:
-                dest = RealFieldDenseMatMult.reordered(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.reordered(A.data, A.shape, B.data, B.shape);
                 break;
             case BLOCKED:
-                dest = RealFieldDenseMatMult.blocked(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.blocked(A.data, A.shape, B.data, B.shape);
                 break;
             case BLOCKED_REORDERED:
-                dest = RealFieldDenseMatMult.blockedReordered(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.blockedReordered(A.data, A.shape, B.data, B.shape);
                 break;
             case CONCURRENT_STANDARD:
-                dest = RealFieldDenseMatMult.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.concurrentStandard(A.data, A.shape, B.data, B.shape);
                 break;
             case CONCURRENT_REORDERED:
-                dest = RealFieldDenseMatMult.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.concurrentReordered(A.data, A.shape, B.data, B.shape);
                 break;
             case CONCURRENT_BLOCKED:
-                dest = RealFieldDenseMatMult.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.concurrentBlocked(A.data, A.shape, B.data, B.shape);
                 break;
             case CONCURRENT_BLOCKED_REORDERED:
-                dest = RealFieldDenseMatMult.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.concurrentBlockedReordered(A.data, A.shape, B.data, B.shape);
                 break;
             case STANDARD_VECTOR:
-                dest = RealFieldDenseMatMult.standardVector(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.standardVector(A.data, A.shape, B.data, B.shape);
                 break;
             case BLOCKED_VECTOR:
-                dest = RealFieldDenseMatMult.blockedVector(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.blockedVector(A.data, A.shape, B.data, B.shape);
                 break;
             case CONCURRENT_STANDARD_VECTOR:
-                dest = RealFieldDenseMatMult.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.concurrentStandardVector(A.data, A.shape, B.data, B.shape);
                 break;
             default:
-                dest = RealFieldDenseMatMult.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
+                dest = RealFieldDenseMatMult.concurrentBlockedVector(A.data, A.shape, B.data, B.shape);
                 break;
         }
 
@@ -416,19 +415,19 @@ public final class MatrixMultiplyDispatcher {
         switch(algorithm) {
             case MULT_T:
                 dest = RealFieldDenseMatMultTranspose.multTranspose(
-                        A.entries, A.shape, B.entries, B.shape);
+                        A.data, A.shape, B.data, B.shape);
                 break;
             case MULT_T_BLOCKED:
                 dest = RealFieldDenseMatMultTranspose.multTransposeBlocked(
-                        A.entries, A.shape, B.entries, B.shape);
+                        A.data, A.shape, B.data, B.shape);
                 break;
             case MULT_T_CONCURRENT:
                 dest = RealFieldDenseMatMultTranspose.multTransposeConcurrent(
-                        A.entries, A.shape, B.entries, B.shape);
+                        A.data, A.shape, B.data, B.shape);
                 break;
             default:
                 dest = RealFieldDenseMatMultTranspose.multTransposeBlockedConcurrent(
-                        A.entries, A.shape, B.entries, B.shape);
+                        A.data, A.shape, B.data, B.shape);
         }
 
         return dest;
@@ -450,19 +449,19 @@ public final class MatrixMultiplyDispatcher {
         switch(algorithm) {
             case MULT_T:
                 dest = RealFieldDenseMatMultTranspose.multTranspose(
-                        A.entries, A.shape, B.entries, B.shape);
+                        A.data, A.shape, B.data, B.shape);
                 break;
             case MULT_T_BLOCKED:
                 dest = RealFieldDenseMatMultTranspose.multTransposeBlocked(
-                        A.entries, A.shape, B.entries, B.shape);
+                        A.data, A.shape, B.data, B.shape);
                 break;
             case MULT_T_CONCURRENT:
                 dest = RealFieldDenseMatMultTranspose.multTransposeConcurrent(
-                        A.entries, A.shape, B.entries, B.shape);
+                        A.data, A.shape, B.data, B.shape);
                 break;
             default:
                 dest = RealFieldDenseMatMultTranspose.multTransposeBlockedConcurrent(
-                        A.entries, A.shape, B.entries, B.shape);
+                        A.data, A.shape, B.data, B.shape);
         }
 
         return dest;
@@ -484,15 +483,15 @@ public final class MatrixMultiplyDispatcher {
         switch(algorithm) {
             case MULT_T:
                 dest = DenseFieldMatrixMultTranspose.multTranspose(
-                        A.entries, A.shape, B.entries, B.shape);
+                        A.data, A.shape, B.data, B.shape);
                 break;
             case MULT_T_CONCURRENT:
                 dest = DenseFieldMatrixMultTranspose.multTransposeConcurrent(
-                        A.entries, A.shape, B.entries, B.shape);
+                        A.data, A.shape, B.data, B.shape);
                 break;
             default:
                 dest = DenseFieldMatrixMultTranspose.multTransposeBlockedConcurrent(
-                        A.entries, A.shape, B.entries, B.shape);
+                        A.data, A.shape, B.data, B.shape);
         }
 
         return dest;

@@ -103,7 +103,7 @@ public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
      *          (i.e. all rows, or equivalently columns, must be linearly independent).
      * @param b Vector of constants in the linear system.
      * @return The solution to {@code x} in the linear system {@code A*x=b}.
-     * @throws IllegalArgumentException If the number of columns in {@code A} is not equal to the number of entries in
+     * @throws IllegalArgumentException If the number of columns in {@code A} is not equal to the number of data in
      * {@code b}.
      * @throws IllegalArgumentException If {@code A} is not square.
      * @throws SingularMatrixException If {@code A} is singular.
@@ -111,7 +111,7 @@ public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
     @Override
     public U solve(T A, U b) {
         ValidateParameters.ensureSquareMatrix(A.getShape()); // Ensure A is square.
-        ValidateParameters.ensureEquals(A.numCols(), b.length()); // b must have the same number of entries as columns in A.
+        ValidateParameters.ensureEquals(A.numCols(), b.length()); // b must have the same number of data as columns in A.
 
         decompose(A); // Compute LU decomposition.
 
@@ -134,7 +134,7 @@ public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
     @Override
     public T solve(T A, T B) {
         ValidateParameters.ensureSquareMatrix(A.getShape()); // Ensure A is square.
-        ValidateParameters.ensureEquals(A.numCols(), B.numRows()); // b must have the same number of entries as columns in A.
+        ValidateParameters.ensureEquals(A.numCols(), B.numRows()); // b must have the same number of data as columns in A.
 
         decompose(A); // Compute LU decomposition.
 

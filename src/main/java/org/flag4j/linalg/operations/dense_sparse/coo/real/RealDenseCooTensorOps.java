@@ -33,9 +33,9 @@ import org.flag4j.util.ValidateParameters;
 /**
  * This class contains methods to apply common binary operations to a real dense matrix and to a real sparse matrix.
  */
-public class RealDenseSparseTensorOperations {
+public class RealDenseCooTensorOps {
 
-    private RealDenseSparseTensorOperations() {
+    private RealDenseCooTensorOps() {
         // Hide default constructor for utility class.
         throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
@@ -56,7 +56,7 @@ public class RealDenseSparseTensorOperations {
 
         for(int i=0, size=src2.nnz; i<size; i++) {
             indices = src2.indices[i];
-            dest.entries[dest.shape.getFlatIndex(indices)] += src2.entries[i];
+            dest.data[dest.shape.getFlatIndex(indices)] += src2.data[i];
         }
 
         return dest;
@@ -80,7 +80,7 @@ public class RealDenseSparseTensorOperations {
 
         for(int i=0, size=destEntries.length; i<size; i++) {
             index = src2.shape.getFlatIndex(src2.indices[i]); // Get index of non-zero entry.
-            destEntries[i] = src1.entries[index]*src2.entries[i];
+            destEntries[i] = src1.data[index]*src2.data[i];
         }
 
         return new CooTensor(src2.shape, destEntries, destIndices);
@@ -103,7 +103,7 @@ public class RealDenseSparseTensorOperations {
 
         for(int i=0, size=destEntries.length; i<size; i++) {
             index = src2.shape.getFlatIndex(src1.indices[i]); // Get index of non-zero entry.
-            destEntries[i] = src1.entries[index]/src2.entries[i];
+            destEntries[i] = src1.data[index]/src2.data[i];
         }
 
         return new CooTensor(src2.shape, destEntries, destIndices);
@@ -122,7 +122,7 @@ public class RealDenseSparseTensorOperations {
         Tensor dest = src1.copy();
 
         for(int i=0, size=src2.nnz; i<size; i++)
-            dest.entries[dest.shape.getFlatIndex(src2.indices[i])] -= src2.entries[i];
+            dest.data[dest.shape.getFlatIndex(src2.indices[i])] -= src2.data[i];
         
         return dest;
     }
@@ -140,7 +140,7 @@ public class RealDenseSparseTensorOperations {
         Tensor dest = src2.mult(-1);
 
         for(int i=0, size=src1.nnz; i<size; i++)
-            dest.entries[src1.shape.getFlatIndex(src1.indices[i])] += src1.entries[i];
+            dest.data[src1.shape.getFlatIndex(src1.indices[i])] += src1.data[i];
         
 
         return dest;
@@ -157,7 +157,7 @@ public class RealDenseSparseTensorOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0, size=src2.nnz; i<size; i++)
-            src1.entries[src1.shape.getFlatIndex(src2.indices[i])] += src2.entries[i];
+            src1.data[src1.shape.getFlatIndex(src2.indices[i])] += src2.data[i];
     }
 
 
@@ -171,7 +171,7 @@ public class RealDenseSparseTensorOperations {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0, size=src2.nnz; i<size; i++)
-            src1.entries[src1.shape.getFlatIndex(src2.indices[i])] -= src2.entries[i];
+            src1.data[src1.shape.getFlatIndex(src2.indices[i])] -= src2.data[i];
     }
 
 
@@ -186,7 +186,7 @@ public class RealDenseSparseTensorOperations {
         Tensor sum = new Tensor(src1.shape, b);
 
         for(int i=0, size=src1.nnz; i<size; i++)
-            sum.entries[src1.shape.getFlatIndex(src1.indices[i])] += src1.entries[i];
+            sum.data[src1.shape.getFlatIndex(src1.indices[i])] += src1.data[i];
 
         return sum;
     }
@@ -203,7 +203,7 @@ public class RealDenseSparseTensorOperations {
         Tensor sum = new Tensor(src1.shape, b);
 
         for(int i=0, size=src1.nnz; i<size; i++)
-            sum.entries[src1.shape.getFlatIndex(src1.indices[i])] -= src1.entries[i];
+            sum.data[src1.shape.getFlatIndex(src1.indices[i])] -= src1.data[i];
 
         return sum;
     }

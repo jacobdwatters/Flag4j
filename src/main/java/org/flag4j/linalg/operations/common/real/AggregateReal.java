@@ -39,9 +39,9 @@ public final class AggregateReal {
 
 
     /**
-     * Computes the sum of all entries in this tensor. This can be applied to either real dense or spase tensors.
+     * Computes the sum of all data in this tensor. This can be applied to either real dense or spase tensors.
      * @param entries Entries of the tensor.
-     * @return The sum of all entries in this tensor.
+     * @return The sum of all data in this tensor.
      */
     public static double sum(double... entries) {
         double sum = 0;
@@ -53,9 +53,9 @@ public final class AggregateReal {
 
 
     /**
-     * Computes the sum of all entries in this tensor. This can be applied to either real dense or spase tensors.
+     * Computes the sum of all data in this tensor. This can be applied to either real dense or spase tensors.
      * @param entries Entries of the tensor.
-     * @return The sum of all entries in this tensor.
+     * @return The sum of all data in this tensor.
      */
     public static double prod(double... entries) {
         double sum = 0;

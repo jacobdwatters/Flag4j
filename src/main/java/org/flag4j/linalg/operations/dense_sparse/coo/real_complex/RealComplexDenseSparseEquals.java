@@ -55,7 +55,7 @@ public final class RealComplexDenseSparseEquals {
      * Checks if a real dense vector is equal to a complex sparse vector equals.
      * @param src1 Entries of dense vector.
      * @param src2 Non-zero Entries of sparse vector.
-     * @param indices Indices of non-zero entries in the sparse vector.
+     * @param indices Indices of non-zero data in the sparse vector.
      * @param sparseSize Size of the sparse vector.
      * @return True if the two vectors are equal. Returns false otherwise.
      */
@@ -95,7 +95,7 @@ public final class RealComplexDenseSparseEquals {
      * Checks if a complex dense vector is equal to a real sparse vector.
      * @param src1 Entries of dense vector.
      * @param src2 Non-zero Entries of sparse vector.
-     * @param indices Indices of non-zero entries in the sparse vector.
+     * @param indices Indices of non-zero data in the sparse vector.
      * @param sparseSize Size of the sparse vector.
      * @return True if the two vectors are equal. Returns false otherwise.
      */
@@ -142,18 +142,18 @@ public final class RealComplexDenseSparseEquals {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
-            double[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);
+            double[] entriesCopy = Arrays.copyOf(A.data, A.data.length);
 
             int rowIndex, colIndex;
             int entriesIndex;
 
-            // Remove all nonZero entries from the entries of this matrix.
+            // Remove all nonZero data from the data of this matrix.
             for(int i=0; i<B.nnz; i++) {
                 rowIndex = B.rowIndices[i];
                 colIndex = B.colIndices[i];
                 int idx = rowIndex*A.numCols + colIndex;
 
-                if(entriesCopy[idx] != ((Complex128) B.entries[i]).re || ((Complex128) B.entries[i]).im != 0) {
+                if(entriesCopy[idx] != ((Complex128) B.data[i]).re || ((Complex128) B.data[i]).im != 0) {
                     equal = false;
                     break;
                 }
@@ -184,17 +184,17 @@ public final class RealComplexDenseSparseEquals {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
-            Field<Complex128>[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);
+            Field<Complex128>[] entriesCopy = Arrays.copyOf(A.data, A.data.length);
 
             int rowIndex, colIndex;
 
-            // Remove all nonZero entries from the entries of this matrix.
+            // Remove all nonZero data from the data of this matrix.
             for(int i=0; i<B.nnz; i++) {
                 rowIndex = B.rowIndices[i];
                 colIndex = B.colIndices[i];
                 int idx = rowIndex*A.numCols + colIndex;
 
-                if(!entriesCopy[idx].equals(B.entries[i])) {
+                if(!entriesCopy[idx].equals(B.data[i])) {
                     equal = false;
                     break;
                 }
@@ -225,14 +225,14 @@ public final class RealComplexDenseSparseEquals {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
-            double[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);
+            double[] entriesCopy = Arrays.copyOf(A.data, A.data.length);
             int entriesIndex;
 
-            // Remove all nonZero entries from the entries of this matrix.
+            // Remove all nonZero data from the data of this matrix.
             for(int i=0; i<B.nnz; i++) {
                 entriesIndex = A.shape.getFlatIndex(B.indices[i]);
 
-                if(entriesCopy[entriesIndex] != ((Complex128) B.entries[i]).re || ((Complex128) B.entries[i]).im != 0) {
+                if(entriesCopy[entriesIndex] != ((Complex128) B.data[i]).re || ((Complex128) B.data[i]).im != 0) {
                     equal = false;
                     break;
                 }
@@ -263,15 +263,15 @@ public final class RealComplexDenseSparseEquals {
         boolean equal = true;
 
         if(A.shape.equals(B.shape)) {
-            Complex128[] entriesCopy = new Complex128[A.entries.length];
-            System.arraycopy(A.entries, 0, entriesCopy, 0, A.entries.length);
+            Complex128[] entriesCopy = new Complex128[A.data.length];
+            System.arraycopy(A.data, 0, entriesCopy, 0, A.data.length);
             int entriesIndex;
 
-            // Remove all nonZero entries from the entries of this matrix.
+            // Remove all nonZero data from the data of this matrix.
             for(int i=0; i<B.nnz; i++) {
                 entriesIndex = A.shape.getFlatIndex(B.indices[i]);
 
-                if(entriesCopy[entriesIndex].re != B.entries[i] || entriesCopy[entriesIndex].im != 0) {
+                if(entriesCopy[entriesIndex].re != B.data[i] || entriesCopy[entriesIndex].im != 0) {
                     equal = false;
                     break;
                 }

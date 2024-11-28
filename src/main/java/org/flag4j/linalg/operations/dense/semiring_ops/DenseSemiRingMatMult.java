@@ -34,7 +34,7 @@ import org.flag4j.util.ErrorMessages;
 import java.util.Arrays;
 
 /**
- * This utility class provides methods for computing dense matrix multiplication between matrices whose entries are members of a
+ * This utility class provides methods for computing dense matrix multiplication between matrices whose data are members of a
  * {@link Semiring}.
  */
 public final class DenseSemiRingMatMult {

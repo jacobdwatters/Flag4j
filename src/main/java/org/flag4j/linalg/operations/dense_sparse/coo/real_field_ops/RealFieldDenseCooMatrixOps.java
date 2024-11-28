@@ -37,9 +37,9 @@ import org.flag4j.util.ValidateParameters;
 /**
  * This class contains low level implementations of operations between real/field and dense/sparse matrices.
  */
-public final class RealFieldDenseCooMatrixOperations {
+public final class RealFieldDenseCooMatrixOps {
 
-    private RealFieldDenseCooMatrixOperations() {
+    private RealFieldDenseCooMatrixOps() {
         // Hide private constructor for utility class.
         throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
@@ -59,7 +59,7 @@ public final class RealFieldDenseCooMatrixOperations {
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            dest.entries[idx] = dest.entries[idx].add(src2.entries[i]);
+            dest.data[idx] = dest.data[idx].add(src2.data[i]);
         }
 
         return dest;
@@ -79,7 +79,7 @@ public final class RealFieldDenseCooMatrixOperations {
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            dest.entries[idx] = dest.entries[idx].sub(src2.entries[i]);
+            dest.data[idx] = dest.data[idx].sub(src2.data[i]);
         }
 
         return dest;
@@ -95,11 +95,11 @@ public final class RealFieldDenseCooMatrixOperations {
      */
     public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> sub(CooMatrix src2, AbstractDenseFieldMatrix<?, ?, T> src1) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        AbstractDenseFieldMatrix<?, ?, T> dest = src1.makeLikeTensor(src1.shape, FieldOps.scalMult(src1.entries, -1, null));
+        AbstractDenseFieldMatrix<?, ?, T> dest = src1.makeLikeTensor(src1.shape, FieldOps.scalMult(src1.data, -1, null));
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            dest.entries[idx] = dest.entries[idx].add(src2.entries[i]);
+            dest.data[idx] = dest.data[idx].add(src2.data[i]);
         }
 
         return dest;
@@ -117,7 +117,7 @@ public final class RealFieldDenseCooMatrixOperations {
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            src1.entries[idx] = src1.entries[idx].add(src2.entries[i]);
+            src1.data[idx] = src1.data[idx].add(src2.data[i]);
         }
     }
 
@@ -133,7 +133,7 @@ public final class RealFieldDenseCooMatrixOperations {
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            src1.entries[idx] = src1.entries[idx].sub(src2.entries[i]);
+            src1.data[idx] = src1.data[idx].sub(src2.data[i]);
         }
     }
 
@@ -153,10 +153,32 @@ public final class RealFieldDenseCooMatrixOperations {
         for(int i=0; i<destEntries.length; i++) {
             int row = src2.rowIndices[i];
             int col = src2.colIndices[i];
-            destEntries[i] = src2.entries[i].mult(src1.entries[row*src1.numCols + col]);
+            destEntries[i] = src2.data[i].mult(src1.data[row*src1.numCols + col]);
         }
 
         return src2.makeLikeTensor(src2.shape, (T[]) destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between two matrices.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
+     * @param destEntries Array to store non-zero values resulting from the element-wise product. Assumed to have length
+     * {@code src2.nnz}.
+     * @return The result of element-wise multiplication.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If the matrices do not have the same shape.
+     */
+    public static <T extends Field<T>> void elemMult(
+            AbstractDenseFieldMatrix<?, ?, T> src1, CooMatrix src2,
+            Field<T>[] destEntries) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+
+        for(int i=0, size=src2.nnz; i<size; i++) {
+            int row = src2.rowIndices[i];
+            int col = src2.colIndices[i];
+            destEntries[i] = src1.data[row*src1.numCols + col].mult(src2.data[i]);
+        }
     }
 
 
@@ -180,12 +202,12 @@ public final class RealFieldDenseCooMatrixOperations {
      */
     public static <T extends Field<T>> AbstractCooFieldMatrix<?, ?, ?, T> elemDiv(AbstractCooFieldMatrix<?, ?, ?, T> src1, Matrix src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        Field<T>[] quotient = new Field[src1.entries.length];
+        Field<T>[] quotient = new Field[src1.data.length];
 
-        for(int i=0; i<src1.entries.length; i++) {
+        for(int i = 0; i<src1.data.length; i++) {
             int row = src1.rowIndices[i];
             int col = src1.colIndices[i];
-            quotient[i] = src1.entries[i].div(src2.entries[row*src2.numCols + col]);
+            quotient[i] = src1.data[i].div(src2.data[row*src2.numCols + col]);
         }
 
         return src1.makeLikeTensor(src1.shape, (T[]) quotient, src1.rowIndices.clone(), src1.colIndices.clone());

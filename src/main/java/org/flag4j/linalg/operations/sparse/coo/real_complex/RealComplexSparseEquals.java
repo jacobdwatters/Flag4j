@@ -48,7 +48,7 @@ public final class RealComplexSparseEquals {
      * @return True if the tensors are equal. False otherwise.
      */
     public static boolean tensorEquals(CooTensor a, CooCTensor b) {
-        return a.shape.equals(b.shape) && ArrayUtils.equals(a.entries, b.entries)
+        return a.shape.equals(b.shape) && ArrayUtils.equals(a.data, b.data)
                 && Arrays.deepEquals(a.indices, b.indices);
     }
 
@@ -60,7 +60,7 @@ public final class RealComplexSparseEquals {
      * @return True if the vectors are equal. False otherwise.
      */
     public static boolean matrixEquals(CooMatrix a, CooCMatrix b) {
-        return a.shape.equals(b.shape) && ArrayUtils.equals(a.entries, b.entries)
+        return a.shape.equals(b.shape) && ArrayUtils.equals(a.data, b.data)
                 && Arrays.equals(a.rowIndices, b.rowIndices)
                 && Arrays.equals(a.colIndices, b.colIndices);
     }
@@ -73,6 +73,6 @@ public final class RealComplexSparseEquals {
      * @return True if the vectors are equal. False otherwise.
      */
     public static boolean vectorEquals(CooVector a, CooCVector b) {
-        return a.size==b.size && Arrays.equals(a.indices, b.indices) && ArrayUtils.equals(a.entries, b.entries);
+        return a.size==b.size && Arrays.equals(a.indices, b.indices) && ArrayUtils.equals(a.data, b.data);
     }
 }

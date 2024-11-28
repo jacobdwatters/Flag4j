@@ -2,12 +2,15 @@ package org.flag4j.linalg.operations.dense_sparse.real_complex;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatMultTranspose;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RealComplexDenseSparseMatMultTransposeTests {
     static double[][] rdEntries = {};
@@ -64,10 +67,10 @@ class RealComplexDenseSparseMatMultTransposeTests {
     void realDenseComplexSpTestCase() {
         // ---------------------- sub-case 1 ----------------------
         exp = realDense.mult(new CooCMatrix(complexSp.shape.swapAxes(0, 1),
-                complexSp.entries, complexSp.colIndices, complexSp.rowIndices));
+                complexSp.data, complexSp.colIndices, complexSp.rowIndices));
         CMatrix act = new CMatrix(realDense.numRows, complexSp.numRows,
                 RealFieldDenseCooMatMultTranspose.multTranspose(
-                        realDense.entries, realDense.shape, complexSp.entries,
+                        realDense.data, realDense.shape, complexSp.data,
                         complexSp.rowIndices, complexSp.colIndices, complexSp.shape));
         assertEquals(exp, act);
     }
@@ -77,9 +80,9 @@ class RealComplexDenseSparseMatMultTransposeTests {
     void complexDenseRealSpTestCase() {
         // ---------------------- sub-case 1 ----------------------
         exp = complexDense.mult(new CooMatrix(realSp.shape.swapAxes(0, 1),
-                realSp.entries, realSp.colIndices, realSp.rowIndices));
+                realSp.data, realSp.colIndices, realSp.rowIndices));
         CMatrix act = new CMatrix(complexDense.numRows, realSp.numRows, RealFieldDenseCooMatMultTranspose.multTranspose(
-                complexDense.entries, complexDense.shape, realSp.entries,
+                complexDense.data, complexDense.shape, realSp.data,
                 realSp.rowIndices, realSp.colIndices, realSp.shape));
         assertEquals(exp, act);
     }

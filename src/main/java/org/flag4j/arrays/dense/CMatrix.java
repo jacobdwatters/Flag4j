@@ -28,15 +28,24 @@ import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.arrays.sparse.*;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.operations.MatrixMultiplyDispatcher;
+import org.flag4j.linalg.operations.common.complex.Complex128Ops;
+import org.flag4j.linalg.operations.common.complex.Complex128Properties;
+import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOps;
+import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldMatMult;
+import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldMatrixOps;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatMult;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOps;
+import org.flag4j.linalg.operations.dense_sparse.csr.field_ops.DenseCsrFieldMatMult;
+import org.flag4j.linalg.operations.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
+import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,18 +55,15 @@ import java.util.List;
 /**
  * <p>A complex dense matrix backed by a {@link Complex128} array.
  *
- * <p>A CMatrix has mutable entries but fixed shape.
+ * <p>A CMatrix has mutable data but fixed shape.
  *
  * <p>A matrix is essentially equivalent to a rank 2 tensor but has some extended functionality and <i>may</i>
  * have improved performance for some operations.
  */
 public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex128> {
 
-    // TODO: Add isReal() and isComplex() methods also in the above mentioned complex tensor classes.
-    // TODO: Add setRow() and setCol() methods.
-
     /**
-     * Creates a complex matrix with the specified {@code entries} and {@code shape}.
+     * Creates a complex matrix with the specified {@code data} and {@code shape}.
      *
      * @param shape Shape of this matrix.
      * @param entries Entries of this matrix.
@@ -78,7 +84,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     public CMatrix(Shape shape, Complex128 fillValue) {
         super(shape, new Complex128[shape.totalEntriesIntValueExact()]);
         setZeroElement(Complex128.ZERO);
-        Arrays.fill(entries, fillValue);
+        Arrays.fill(data, fillValue);
     }
 
 
@@ -90,7 +96,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     public CMatrix(Shape shape) {
         super(shape, new Complex128[shape.totalEntriesIntValueExact()]);
         setZeroElement(Complex128.ZERO);
-        Arrays.fill(entries, Complex128.ZERO);
+        Arrays.fill(data, Complex128.ZERO);
     }
 
 
@@ -102,12 +108,12 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     public CMatrix(int size) {
         super(new Shape(size, size), new Complex128[size*size]);
         setZeroElement(Complex128.ZERO);
-        Arrays.fill(entries, Complex128.ZERO);
+        Arrays.fill(data, Complex128.ZERO);
     }
 
 
     /**
-     * Creates a complex matrix with the specified {@code entries}, and shape.
+     * Creates a complex matrix with the specified {@code data}, and shape.
      *
      * @param rows The number of rows in this matrix.
      * @param cols The number of columns in this matrix.
@@ -129,7 +135,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     public CMatrix(int rows, int cols, Complex128 fillValue) {
         super(new Shape(rows, cols), new Complex128[rows*cols]);
         setZeroElement(Complex128.ZERO);
-        Arrays.fill(entries, fillValue);
+        Arrays.fill(data, fillValue);
     }
 
 
@@ -142,7 +148,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     public CMatrix(int rows, int cols) {
         super(new Shape(rows, cols), new Complex128[rows*cols]);
         setZeroElement(Complex128.ZERO);
-        Arrays.fill(entries, Complex128.ZERO);
+        Arrays.fill(data, Complex128.ZERO);
     }
 
 
@@ -157,16 +163,16 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
 
         for(Field<Complex128>[] row : entries) {
             for(Field<Complex128> value : row)
-                super.entries[flatPos++] = value;
+                super.data[flatPos++] = value;
         }
     }
 
 
     /**
      * <p>Constructs a complex matrix from a 2D array of strings. Each string must be formatted properly as a complex number that can
-     * be parsed by {@link org.flag4j.io.parsing.ComplexNumberParser}</p>
+     * be parsed by {@link org.flag4j.io.parsing.ComplexNumberParser}
      *
-     * <p>The matrix will have the same shape as the array.</p>
+     * <p>The matrix will have the same shape as the array.
      * @param entries Entries of the matrix. Assumed to be a square array.
      */
     public CMatrix(String[][] entries) {
@@ -176,13 +182,13 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
 
         for(String[] row : entries) {
             for(String value : row)
-                super.entries[flatPos++] = new Complex128(value);
+                super.data[flatPos++] = new Complex128(value);
         }
     }
 
 
     /**
-     * Constructs a complex matrix with specified {@code shape} and {@code entries}.
+     * Constructs a complex matrix with specified {@code shape} and {@code data}.
      * @param shape Shape of the matrix to construct.
      * @param entries Entries of the matrix.
      */
@@ -190,7 +196,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
         super(shape, new Complex128[entries.length]);
         ValidateParameters.ensureRank(shape, 2);
         setZeroElement(Complex128.ZERO);
-        ArrayUtils.arraycopy(entries, 0, super.entries, 0, entries.length);
+        ArrayUtils.arraycopy(entries, 0, super.data, 0, entries.length);
     }
 
 
@@ -205,7 +211,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
         int idx = 0;
         for(double[] row : aEntriesReal) {
             for(double value : row)
-                super.entries[idx++] = new Complex128(value);
+                super.data[idx++] = new Complex128(value);
         }
     }
 
@@ -219,7 +225,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     public CMatrix(int numRows, int numCols, double fillValue) {
         super(new Shape(numRows, numCols), new Complex128[numRows*numCols]);
         setZeroElement(Complex128.ZERO);
-        Arrays.fill(entries, new Complex128(fillValue));
+        Arrays.fill(data, new Complex128(fillValue));
     }
 
 
@@ -231,7 +237,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     public CMatrix(int size, Complex128 fillValue) {
         super(new Shape(size, size), new Complex128[size*size]);
         setZeroElement(Complex128.ZERO);
-        Arrays.fill(entries, fillValue);
+        Arrays.fill(data, fillValue);
     }
 
 
@@ -243,7 +249,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     public CMatrix(int size, Double fillValue) {
         super(new Shape(size, size), new Complex128[size*size]);
         setZeroElement(Complex128.ZERO);
-        Arrays.fill(entries, new Complex128(fillValue));
+        Arrays.fill(data, new Complex128(fillValue));
     }
 
 
@@ -255,7 +261,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     public CMatrix(Shape shape, Double fillValue) {
         super(shape, new Complex128[shape.totalEntriesIntValueExact()]);
         setZeroElement(Complex128.ZERO);
-        Arrays.fill(entries, new Complex128(fillValue));
+        Arrays.fill(data, new Complex128(fillValue));
     }
 
 
@@ -264,7 +270,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * @param mat Matrix to create copy of.
      */
     public CMatrix(CMatrix mat) {
-        super(mat.shape, mat.entries.clone());
+        super(mat.shape, mat.data.clone());
     }
 
 
@@ -285,7 +291,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * Constructs a sparse COO matrix which is of a similar type as this dense matrix.
      *
      * @param shape Shape of the COO matrix.
-     * @param entries Non-zero entries of the COO matrix.
+     * @param entries Non-zero data of the COO matrix.
      * @param rowIndices Non-zero row indices of the COO matrix.
      * @param colIndices Non-zero column indices of the COO matrix.
      *
@@ -301,7 +307,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * Constructs a sparse CSR matrix which is of a similar type as this dense matrix.
      *
      * @param shape Shape of the CSR matrix.
-     * @param entries Non-zero entries of the CSR matrix.
+     * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      *
@@ -314,10 +320,70 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
 
 
     /**
+     * Converts this matrix to an equivalent sparse COO matrix.
+     *
+     * @return A sparse COO matrix that is equivalent to this dense matrix.
+     *
+     * @see #toCoo(double)
+     */
+    @Override
+    public CooCMatrix toCoo() {
+        return (CooCMatrix) super.toCoo();
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent sparse COO matrix.
+     *
+     * @param estimatedSparsity Estimated sparsity of the matrix. Must be between 0 and 1 inclusive. If this is an accurate estimation
+     * it <i>may</i> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
+     * over-estimate the sparsity. If speed is the concern it is better to under-estimate the sparsity.
+     *
+     * @return A sparse COO matrix that is equivalent to this dense matrix.
+     *
+     * @see #toCoo()
+     */
+    @Override
+    public CooCMatrix toCoo(double estimatedSparsity) {
+        return (CooCMatrix) super.toCoo(estimatedSparsity);
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent sparse CSR matrix.
+     *
+     * @return A sparse CSR matrix that is equivalent to this dense matrix.
+     *
+     * @see #toCsr(double)
+     */
+    @Override
+    public CsrCMatrix toCsr() {
+        return (CsrCMatrix) super.toCsr();
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent sparse CSR matrix.
+     *
+     * @param estimatedSparsity Estimated sparsity of the matrix. Must be between 0 and 1 inclusive. If this is an accurate estimation
+     * it <i>may</i> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
+     * over-estimate the sparsity. If speed is the concern it is better to under-estimate the sparsity.
+     *
+     * @return A sparse CSR matrix that is equivalent to this dense matrix.
+     *
+     * @see #toCsr()
+     */
+    @Override
+    public CsrCMatrix toCsr(double estimatedSparsity) {
+        return (CsrCMatrix) super.toCsr(estimatedSparsity);
+    }
+
+
+    /**
      * Constructs a sparse COO tensor which is of a similar type as this dense tensor.
      *
      * @param shape Shape of the COO tensor.
-     * @param entries Non-zero entries of the COO tensor.
+     * @param entries Non-zero data of the COO tensor.
      * @param indices
      *
      * @return A sparse COO tensor which is of a similar type as this dense tensor.
@@ -330,14 +396,14 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
 
     /**
      * Constructs a tensor of the same type as this tensor with the given the {@code shape} and
-     * {@code entries}. The resulting tensor will also have
+     * {@code data}. The resulting tensor will also have
      * the same non-zero indices as this tensor.
      *
      * @param shape Shape of the tensor to construct.
      * @param entries Entries of the tensor to construct.
      *
      * @return A tensor of the same type and with the same non-zero indices as this tensor with the given the {@code shape} and
-     * {@code entries}.
+     * {@code data}.
      */
     @Override
     public CMatrix makeLikeTensor(Shape shape, Field<Complex128>[] entries) {
@@ -346,7 +412,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
 
 
     /**
-     * Constructs an empty matrix with the specified number of rows and columns. The entries of the resulting matrix will be
+     * Constructs an empty matrix with the specified number of rows and columns. The data of the resulting matrix will be
      * all be {@code null}.
      * @param rows The number of rows in the matrix to construct.
      * @param cols The number of columns in the matrix to construct.
@@ -358,13 +424,165 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
 
 
     /**
+     * Computes the element-wise sum between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise sum.
+     *
+     * @return The sum of this tensor with {@code b}.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
+     */
+    public CMatrix add(CooCMatrix b) {
+        return (CMatrix) DenseCooFieldMatrixOps.add(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise sum between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise sum.
+     *
+     * @return The sum of this tensor with {@code b}.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
+     */
+    public CMatrix add(Matrix b) {
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseOps.add(shape, data, b.shape, b.data, dest);
+        return new CMatrix(shape, dest);
+    }
+
+
+    /**
+     * Computes the element-wise sum between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise sum.
+     *
+     * @return The sum of this tensor with {@code b}.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
+     */
+    public CMatrix add(CooMatrix b) {
+        return (CMatrix) RealFieldDenseCooMatrixOps.add(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise difference between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise difference.
+     *
+     * @return The difference of this tensor with {@code b}.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
+     */
+    public CMatrix sub(CooCMatrix b) {
+        return (CMatrix) DenseCooFieldMatrixOps.sub(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise difference between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise difference.
+     *
+     * @return The difference of this tensor with {@code b}.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
+     */
+    public CMatrix sub(Matrix b) {
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseOps.sub(shape, data, b.shape, b.data, dest);
+        return new CMatrix(shape, dest);
+    }
+
+
+
+    /**
+     * Computes the element-wise difference between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise difference.
+     *
+     * @return The difference of this tensor with {@code b}.
+     *
+     * @throws TensorShapeException If this tensor and {@code b} do not have the same shape.
+     */
+    public CMatrix sub(CooMatrix b) {
+        return (CMatrix) RealFieldDenseCooMatrixOps.sub(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise multiplication of two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise product.
+     *
+     * @return The element-wise product between this tensor and {@code b}.
+     *
+     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     */
+    public CooCMatrix elemMult(CooCMatrix b) {
+//        return (CooCMatrix) DenseCooFieldMatrixOps.elemMult(this, b);
+        Complex128[] dest = new Complex128[b.nnz];
+        DenseCooFieldMatrixOps.elemMult(shape, data, b.shape, b.data, b.rowIndices, b.colIndices, dest);
+        return new CooCMatrix(shape, dest, b.rowIndices.clone(), b.colIndices.clone());
+    }
+
+
+    /**
+     * Computes the element-wise multiplication of two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise product.
+     *
+     * @return The element-wise product between this tensor and {@code b}.
+     *
+     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     */
+    public CMatrix elemMult(Matrix b) {
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseOps.elemMult(shape, data, b.shape, b.data, dest);
+        return new CMatrix(shape, dest);
+    }
+
+
+    /**
+     * Computes the element-wise multiplication of two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise product.
+     *
+     * @return The element-wise product between this tensor and {@code b}.
+     *
+     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     */
+    public CooCMatrix elemMult(CooMatrix b) {
+        Complex128[] dest = new Complex128[b.nnz];
+        RealFieldDenseCooMatrixOps.elemMult(this, b, dest);
+        return new CooCMatrix(shape, dest, b.rowIndices.clone(), b.colIndices.clone());
+    }
+
+
+    /**
+     * Computes the element-wise quotient between two tensors.
+     *
+     * @param b Second tensor in the element-wise quotient.
+     *
+     * @return The element-wise quotient of this tensor with {@code b}.
+     */
+    public CMatrix div(Matrix b) {
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseOps.elemDiv(shape, data, b.shape, b.data, dest);
+        return new CMatrix(shape, dest);
+    }
+
+
+    /**
      * Converts this matrix to an equivalent tensor.
      *
-     * @return A tensor with the same shape and entries as this matrix.
+     * @return A tensor with the same shape and data as this matrix.
      */
     @Override
     public CTensor toTensor() {
-        return new CTensor(shape, entries.clone());
+        return new CTensor(shape, data.clone());
     }
 
 
@@ -373,12 +591,12 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      *
      * @param newShape Shape of the tensor. Can be any rank but must be broadcastable to the shape of this matrix.
      *
-     * @return A tensor with the specified {@code newShape} and the same entries as this matrix.
+     * @return A tensor with the specified {@code newShape} and the same data as this matrix.
      */
     @Override
     public CTensor toTensor(Shape newShape) {
         ValidateParameters.ensureBroadcastable(shape, newShape);
-        return new CTensor(newShape, entries.clone());
+        return new CTensor(newShape, data.clone());
     }
 
 
@@ -437,6 +655,119 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
 
 
     /**
+     * <p>Computes the matrix multiplication of this matrix with itself {@code n} times. This matrix must be square.
+     *
+     * <p>For large {@code n} values, this method <i>may</i> be significantly more efficient than calling
+     * {@link #mult(Matrix) this.mult(this)} a total of {@code n} times.
+     * @param n Number of times to multiply this matrix with itself. Must be non-negative.
+     * @return If {@code n=0}, then the identity
+     *
+     * @throws IllegalArgumentException If this matrix is not square (i.e. {@code !this.isSquare()}).
+     */
+    public CMatrix pow(int n) {
+        ValidateParameters.ensureSquare(shape);
+        ValidateParameters.ensureNonNegative(n);
+
+        // Check for some quick returns.
+        if (n == 0) return CMatrix.I(numRows);
+        if (n == 1) return copy();
+        if (n == 2) return mult(this);
+
+        CMatrix result = CMatrix.I(numRows);  // Start with identity matrix.
+        CMatrix base = this;
+
+        // Compute the matrix power efficiently using an "exponentiation by squaring" approach.
+        while(n > 0) {
+            if((n & 1) == 1)  // If n is odd.
+                result = result.mult(base);
+
+            base = base.mult(base);  // Square the base.
+            n >>= 1;  // Divide n by 2 (bitwise right shift).
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param b Second matrix in the matrix multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with matrix {@code b}.
+     *
+     * @throws LinearAlgebraException If {@code this.numCols != b.numRows}.
+     */
+    public CMatrix mult(Matrix b) {
+        Field<Complex128>[] dest = MatrixMultiplyDispatcher.dispatch(this, b);
+        return makeLikeTensor(new Shape(numRows, b.numCols), dest);
+    }
+
+
+    /**
+     * Computes the matrix-vector multiplication between this matrix and a vector.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with vector {@code b}.
+     *
+     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the number
+     *                                of length of the vector {@code b}.
+     */
+    public CVector mult(Vector b) {
+        return MatrixMultiplyDispatcher.dispatch(this, b);
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param b Second matrix in the matrix multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with matrix {@code b}.
+     *
+     * @throws LinearAlgebraException If {@code this.numCols != b.numRows}.
+     */
+    public CMatrix mult(CsrMatrix b) {
+        return (CMatrix) RealFieldDenseCsrMatMult.standard(this, b);
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param b Second matrix in the matrix multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with matrix {@code b}.
+     *
+     * @throws LinearAlgebraException If {@code this.numCols != b.numRows}.
+     */
+    public CMatrix mult(CooMatrix b) {
+        ValidateParameters.ensureEqualShape(shape, b.shape);
+        Complex128[] dest = new Complex128[numRows*b.numCols];
+        RealFieldDenseCooMatMult.standard(
+                data, shape, b.data, b.rowIndices, b.colIndices, b.shape, dest);
+        Shape shape = new Shape(this.numRows, b.numCols);
+
+        return new CMatrix(shape, data);
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param b Second matrix in the matrix multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with matrix {@code b}.
+     *
+     * @throws LinearAlgebraException If {@code this.numCols != b.numRows}.
+     */
+    public CMatrix mult(CsrCMatrix b) {
+        return (CMatrix) DenseCsrFieldMatMult .standard(this, b);
+    }
+
+
+    /**
      * Computes the matrix multiplication between two matrices.
      *
      * @param b Second matrix in the matrix multiplication.
@@ -446,24 +777,106 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * @throws LinearAlgebraException If the number of columns in this matrix do not equal the number
      *                                of rows in matrix {@code b}.
      */
-    public CMatrix mult(Matrix b) {
-        Field<Complex128>[] dest = MatrixMultiplyDispatcher.dispatch(this, b);
-        return makeLikeTensor(new Shape(numRows, b.numCols), dest);
+    public CMatrix mult(CooCMatrix b) {
+        ValidateParameters.ensureEqualShape(shape, b.shape);
+        Complex128[] dest = new Complex128[numRows*b.numCols];
+        DenseCooFieldMatMult.standard(
+                data, shape, b.data, b.rowIndices, b.colIndices, b.shape, dest);
+        Shape shape = new Shape(this.numRows, b.numCols);
+
+        return new CMatrix(shape, data);
+    }
+
+
+    /**
+     * Computes the matrix-vector multiplication between this matrix and a vector.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with vector {@code b}.
+     *
+     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the number
+     *                                of length of the vector {@code b}.
+     */
+    public CVector mult(CooVector b) {
+        ValidateParameters.ensureMatVecMultShapes(shape, b.shape);
+        return null;
+    }
+
+
+    /**
+     * Computes the matrix-vector multiplication between this matrix and a vector.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with vector {@code b}.
+     *
+     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the number
+     *                                of length of the vector {@code b}.
+     */
+    public CVector mult(CooCVector b) {
+        Complex128[] dest = new Complex128[b.size];
+        DenseCooFieldMatMult.blockedVector(data, shape, b.data, b.indices, dest);
+        return new CVector(dest);
     }
 
 
     /**
      * Converts this complex matrix to a real matrix. This conversion is done by taking the real component of each entry and
      * ignoring the imaginary component.
-     * @return A real matrix containing the real components of the entries of this matrix.
+     * @return A real matrix containing the real components of the data of this matrix.
      */
     public Matrix toReal() {
-        double[] re = new double[entries.length];
+        return new Matrix(shape, Complex128Ops.toReal(data));
+    }
 
-        for(int i=0, size=entries.length; i<size; i++)
-            re[i] = ((Complex128) entries[i]).re;
 
-        return new Matrix(shape, re);
+    /**
+     * Checks if all data of this matrix are real.
+     * @return {@code true} if all data of this matrix are real. Otherwise, returns {@code false}.
+     */
+    public boolean isReal() {
+        return Complex128Properties.isReal(data);
+    }
+
+
+    /**
+     * Checks if any entry within this matrix has non-zero imaginary component.
+     * @return {@code true} if any entry of this matrix has a non-zero imaginary component.
+     */
+    public boolean isComplex() {
+        return Complex128Properties.isComplex(data);
+    }
+
+
+    /**
+     * Rounds all data in this matrix to the nearest integer. The real and imaginary components will be rounded
+     * independently.
+     * @return A new matrix containing the data of this matrix rounded to the nearest integer.
+     */
+    public CMatrix round() {
+        return round(0);
+    }
+
+
+    /**
+     * Rounds all data within this matrix to the specified precision. The real and imaginary components will be rounded
+     * independently.
+     * @param precision The precision to round to (i.e. the number of decimal places to round to). Must be non-negative.
+     * @return A new matrix containing the data of this matrix rounded to the specified precision.
+     */
+    public CMatrix round(int precision) {
+        return new CMatrix(shape, Complex128Ops.round(data, precision));
+    }
+
+
+    /**
+     * Sets all elements of this matrix to zero if they are within {@code tol} of zero. This is <i>not</i> done in place.
+     * @param precision The precision to round to (i.e. the number of decimal places to round to). Must be non-negative.
+     * @return A copy of this matrix with all data within {@code tol} of zero set to zero.
+     */
+    public CMatrix roundToZero(double tolerance) {
+        return new CMatrix(shape, Complex128Ops.roundToZero(data, tolerance));
     }
 
 
@@ -480,7 +893,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
 
         CMatrix src2 = (CMatrix) object;
 
-        return shape.equals(src2.shape) && Arrays.equals(entries, src2.entries);
+        return shape.equals(src2.shape) && Arrays.equals(data, src2.data);
     }
 
 
@@ -488,7 +901,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     public int hashCode() {
         int hash = 17;
         hash = 31*hash + shape.hashCode();
-        hash = 31*hash + Arrays.hashCode(entries);
+        hash = 31*hash + Arrays.hashCode(data);
 
         return hash;
     }
@@ -540,8 +953,8 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
         StringBuilder result = new StringBuilder("shape: ").append(shape).append("\n");
         result.append("[");
 
-        if (entries.length == 0) {
-            result.append("[]"); // No entries in this matrix.
+        if (data.length == 0) {
+            result.append("[]"); // No data in this matrix.
         } else {
             int numRows = this.numRows;
             int numCols = this.numCols;
@@ -570,7 +983,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
                 if (colIndex == -1)
                     maxWidth = 3; // Width for '...'.
                 else
-                    maxWidth = PrettyPrint.maxStringLength(this.getCol(colIndex).entries, rowStopIndex + 1);
+                    maxWidth = PrettyPrint.maxStringLength(this.getCol(colIndex).data, rowStopIndex + 1);
 
                 maxWidths.add(maxWidth);
             }

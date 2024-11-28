@@ -49,10 +49,10 @@ public final class CooRingTensorOps {
     /**
      * Sums two complex sparse COO tensors and stores result in a new COO tensor.
      * @param shape1 Shape of the first tensor.
-     * @param src1Entries Non-zero entries of the first tensor.
+     * @param src1Entries Non-zero data of the first tensor.
      * @param src1Indices Non-zero indices of the first tensor.
      * @param shape2 Shape of the second tensor.
-     * @param src2Entries Non-zero entries of the second tensor.
+     * @param src2Entries Non-zero data of the second tensor.
      * @param src2Indices Non-zero indices of the second tensor.
      * @return The element-wise tensor sum of the two tensors.
      * @throws LinearAlgebraException If the tensors {@code src1} and {@code src2} do not have the same shape.
@@ -65,7 +65,7 @@ public final class CooRingTensorOps {
         final int src1Nnz = src1Entries.length;
         final int src2Nnz = src2Entries.length;
 
-        // Roughly estimate the number of non-zero entries in sum.
+        // Roughly estimate the number of non-zero data in sum.
         int estimatedEntries = src1Nnz + src2Nnz;
         List<Ring<V>> sumEntries = new ArrayList<>(estimatedEntries);
         List<int[]> sumIndices = new ArrayList<>(estimatedEntries);

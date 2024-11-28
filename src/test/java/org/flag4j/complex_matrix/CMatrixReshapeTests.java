@@ -2,11 +2,12 @@ package org.flag4j.complex_matrix;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CMatrixReshapeTests {
     Complex128[] entries = {
@@ -26,25 +27,25 @@ class CMatrixReshapeTests {
         expShape = new Shape(4, 3);
         B = A.reshape(expShape);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 2 ---------------
         expShape = new Shape(1, 12);
         B = A.reshape(expShape);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 3 ---------------
         expShape = new Shape(2, 6);
         B = A.reshape(expShape);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 4 ---------------
         expShape = new Shape(6, 2);
         B = A.reshape(expShape);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 5 ---------------
         expShape = new Shape(6, 1);
@@ -64,7 +65,7 @@ class CMatrixReshapeTests {
         expShape = new Shape(rows, cols);
         B = A.reshape(rows, cols);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 2 ---------------
         rows = 1;
@@ -72,7 +73,7 @@ class CMatrixReshapeTests {
         expShape = new Shape(rows, cols);
         B = A.reshape(rows, cols);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 3 ---------------
         rows = 2;
@@ -80,7 +81,7 @@ class CMatrixReshapeTests {
         expShape = new Shape(rows, cols);
         B = A.reshape(rows, cols);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 4 ---------------
         rows = 6;
@@ -88,7 +89,7 @@ class CMatrixReshapeTests {
         expShape = new Shape(rows, cols);
         B = A.reshape(rows, cols);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 5 ---------------
         rows = 6;
@@ -110,19 +111,19 @@ class CMatrixReshapeTests {
         expShape = new Shape(1, entries.length);
         B = A.flatten();
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 2 ---------------
         expShape = new Shape(1, entries.length);
         B = A.flatten(1);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 2 ---------------
         expShape = new Shape(entries.length, 1);
         B = A.flatten(0);
         assertEquals(expShape, B.shape);
-        assertArrayEquals(A.entries, B.entries);
+        assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-cases 2-4 ---------------
         assertThrows(LinearAlgebraException.class, ()->A.flatten(-1));

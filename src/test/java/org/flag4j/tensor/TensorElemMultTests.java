@@ -188,8 +188,7 @@ class TensorElemMultTests {
         };
         bShape = new Shape(13, 89, 14576);
         sparseIndices = new int[][]{
-                {0, 2, 1}, {1, 1, 0}
-        };
+                {0, 2, 1}, {1, 1, 0}};
         B = new CooCTensor(bShape, bEntries, sparseIndices);
 
         CooCTensor finalB = B;

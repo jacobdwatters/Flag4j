@@ -30,6 +30,8 @@ import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ErrorMessages;
 
+import static org.flag4j.util.ArrayUtils.makeNewIfNull;
+
 /**
  * This utility class provides methods for computing the transpose of a dense tensor.
  */
@@ -59,7 +61,7 @@ public final class DenseTranspose {
                     " tensor.");
         }
 
-        if(dest == null) dest = new Object[src.length];
+        dest = makeNewIfNull(dest, src.length);
         Shape destShape = shape.swapAxes(axis1, axis2);
         int[] destIndices;
 
@@ -91,7 +93,7 @@ public final class DenseTranspose {
                     + shape.getRank() + " tensor.");
         }
 
-        if(dest == null) dest = new Object[src.length];
+        dest = makeNewIfNull(dest, src.length);
         Shape destShape = shape.swapAxes(axis1, axis2);
         Object[] finalDest = dest; // Copy to an effectively final variable for lambda expression.
 
@@ -128,7 +130,7 @@ public final class DenseTranspose {
                     " tensor.");
         }
 
-        if(dest == null) dest = new Object[src.length];
+        dest = makeNewIfNull(dest, src.length);
         Shape destShape = shape.permuteAxes(axes);
         int[] destIndices;
 
@@ -162,7 +164,7 @@ public final class DenseTranspose {
                     " tensor.");
         }
 
-        if(dest == null) dest = new double[src.length];
+        dest = makeNewIfNull(dest, src.length);
         Shape destShape = shape.permuteAxes(axes);
         int[] destIndices;
 
@@ -196,7 +198,7 @@ public final class DenseTranspose {
                     " tensor.");
         }
 
-        if(dest == null) dest = new Object[src.length];
+        dest = makeNewIfNull(dest, src.length);
         Shape destShape = shape.permuteAxes(axes);
         Object[] finalDest = dest; // Copy to an effectively final variable for lambda expression.
 
@@ -225,7 +227,7 @@ public final class DenseTranspose {
      * appropriate size will be constructed and returned.
      */
     public static <T extends Object> Object[] standardMatrix(Object[] src, int numRows, int numCols, Object[] dest) {
-        if(dest == null) dest = new Object[src.length];
+        dest = makeNewIfNull(dest, src.length);
 
         int destIndex, srcIndex, end;
 
@@ -256,7 +258,7 @@ public final class DenseTranspose {
      * appropriate size will be constructed and returned.
      */
     public static Object[] blockedMatrix(Object[] src, int numRows, int numCols, Object[] dest) {
-        if(dest == null) dest = new Object[src.length];
+        dest = makeNewIfNull(dest, src.length);
         int blockSize = Configurations.getBlockSize();
         int blockRowEnd;
         int blockColEnd;
@@ -296,7 +298,7 @@ public final class DenseTranspose {
      * appropriate size will be constructed and returned.
      */
     public static Object[] standardMatrixConcurrent(Object[] src, int numRows, int numCols, Object[] dest) {
-        if(dest == null) dest = new Object[src.length];
+        dest = makeNewIfNull(dest, src.length);
         Object[] finalDest = dest; // Copy to an effectively final variable for lambda expression.
 
         // Compute transpose concurrently
@@ -328,7 +330,7 @@ public final class DenseTranspose {
      * appropriate size will be constructed and returned.
      */
     public static Object[] blockedMatrixConcurrent(Object[] src, int numRows, int numCols, Object[] dest) {
-        if(dest == null) dest = new Object[src.length];
+        dest = makeNewIfNull(dest, src.length);
         int blockSize = Configurations.getBlockSize();
         Object[] finalDest = dest; // Copy to an effectively final variable for lambda expression.
 

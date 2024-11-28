@@ -36,8 +36,8 @@ class RealDenseSparseMatMultTests {
                 {-11.4330901794, -115804.09409999999}};
         exp = new Matrix(expEntries);
 
-        assertArrayEquals(exp.entries, standard(A.entries, A.shape, B.entries, B.rowIndices, B.colIndices, B.shape));
-        assertArrayEquals(exp.entries, concurrentStandard(A.entries, A.shape, B.entries, B.rowIndices, B.colIndices, B.shape));
+        assertArrayEquals(exp.data, standard(A.data, A.shape, B.data, B.rowIndices, B.colIndices, B.shape));
+        assertArrayEquals(exp.data, concurrentStandard(A.data, A.shape, B.data, B.rowIndices, B.colIndices, B.shape));
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
@@ -57,8 +57,8 @@ class RealDenseSparseMatMultTests {
                 {0.0, 0.0, 0.0}};
         exp = new Matrix(expEntries);
 
-        assertArrayEquals(exp.entries, standard(B.entries, B.rowIndices, B.colIndices, B.shape, A.entries, A.shape));
-        assertArrayEquals(exp.entries, concurrentStandard(B.entries, B.rowIndices, B.colIndices, B.shape, A.entries, A.shape));
+        assertArrayEquals(exp.data, standard(B.data, B.rowIndices, B.colIndices, B.shape, A.data, A.shape));
+        assertArrayEquals(exp.data, concurrentStandard(B.data, B.rowIndices, B.colIndices, B.shape, A.data, A.shape));
     }
 
     @Test
@@ -80,10 +80,10 @@ class RealDenseSparseMatMultTests {
                 {-115815.52719017939}};
         exp = new Matrix(expEntries);
 
-        assertArrayEquals(exp.entries, standardVector(A.entries, A.shape, B.entries, B.rowIndices));
-        assertArrayEquals(exp.entries, concurrentStandardVector(A.entries, A.shape, B.entries, B.rowIndices));
-        assertArrayEquals(exp.entries, blockedVector(A.entries, A.shape, B.entries, B.rowIndices));
-        assertArrayEquals(exp.entries, concurrentBlockedVector(A.entries, A.shape, B.entries, B.rowIndices));
+        assertArrayEquals(exp.data, standardVector(A.data, A.shape, B.data, B.rowIndices));
+        assertArrayEquals(exp.data, concurrentStandardVector(A.data, A.shape, B.data, B.rowIndices));
+        assertArrayEquals(exp.data, blockedVector(A.data, A.shape, B.data, B.rowIndices));
+        assertArrayEquals(exp.data, concurrentBlockedVector(A.data, A.shape, B.data, B.rowIndices));
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new double[][]{{1.1234},
@@ -103,7 +103,7 @@ class RealDenseSparseMatMultTests {
                 {0.0}};
         exp = new Matrix(expEntries);
 
-        assertArrayEquals(exp.entries, standardVector(B.entries, B.rowIndices, B.colIndices, B.shape, A.entries, A.shape));
-        assertArrayEquals(exp.entries, concurrentStandardVector(B.entries, B.rowIndices, B.colIndices, B.shape, A.entries, A.shape));
+        assertArrayEquals(exp.data, standardVector(B.data, B.rowIndices, B.colIndices, B.shape, A.data, A.shape));
+        assertArrayEquals(exp.data, concurrentStandardVector(B.data, B.rowIndices, B.colIndices, B.shape, A.data, A.shape));
     }
 }

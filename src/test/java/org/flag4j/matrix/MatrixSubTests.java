@@ -112,7 +112,7 @@ public class MatrixSubTests {
 
         sumC = A.sub(bC);
 
-        assertArrayEquals(expEntriesC, sumC.entries);
+        assertArrayEquals(expEntriesC, sumC.data);
         assertEquals(expShape, sumC.shape);
 
         // --------------- Sub-case 2 ---------------
@@ -127,7 +127,7 @@ public class MatrixSubTests {
 
         sumC = A.sub(bC);
 
-        assertArrayEquals(expEntriesC, sumC.entries);
+        assertArrayEquals(expEntriesC, sumC.data);
         assertEquals(expShape, sumC.shape);
     }
 
@@ -152,7 +152,7 @@ public class MatrixSubTests {
 
         sumC = A.sub(BC);
 
-        assertArrayEquals(expEntriesC, sumC.entries);
+        assertArrayEquals(expEntriesC, sumC.data);
         assertEquals(expShape, sumC.shape);
 
 
@@ -172,7 +172,7 @@ public class MatrixSubTests {
 
         sumC = A.sub(BC);
 
-        assertArrayEquals(expEntriesC, sumC.entries);
+        assertArrayEquals(expEntriesC, sumC.data);
         assertEquals(expShape, sumC.shape);
 
         // --------------- Sub-case 3 ---------------

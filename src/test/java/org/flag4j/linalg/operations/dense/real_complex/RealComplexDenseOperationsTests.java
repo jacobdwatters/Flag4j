@@ -7,13 +7,13 @@ import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseVectorOpe
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
-import static org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOperations.add;
-import static org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOperations.sub;
+import static org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOps.add;
+import static org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOps.sub;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RealComplexDenseOperationsTests {
-    Complex128[] src1, expResult;
+    Complex128[] src1, expResult, act;
     double[] src2;
     double a;
     Complex128 aC;
@@ -29,7 +29,10 @@ class RealComplexDenseOperationsTests {
                 new Complex128(0.9133-3), new Complex128(0+4.13, 10.3)};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertArrayEquals(expResult, add(src1, shape1, src2, shape2));
+
+        act = new Complex128[4];
+        add(shape1, src1, shape2, src2, act);
+        assertArrayEquals(expResult, act);
 
         // ---------- Sub-case 2 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
@@ -37,7 +40,9 @@ class RealComplexDenseOperationsTests {
         src2 = new double[]{1, 2, 3, 4, 5};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(LinearAlgebraException.class, () -> add(src1, shape1, src2, shape2));
+
+        act = new Complex128[5];
+        assertThrows(LinearAlgebraException.class, () -> add(shape1, src1, shape2, src2, act));
 
         // ---------- Sub-case 3 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
@@ -45,7 +50,7 @@ class RealComplexDenseOperationsTests {
         src2 = new double[]{1, 2};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(LinearAlgebraException.class, () -> add(src1, shape1, src2, shape2));
+        assertThrows(LinearAlgebraException.class, () -> add(shape1, src1, shape2, src2, act));
     }
 
 
@@ -70,7 +75,10 @@ class RealComplexDenseOperationsTests {
                 new Complex128(0.9133+3), new Complex128(0-4.13, 10.3)};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertArrayEquals(expResult, sub(src1, shape1, src2, shape2));
+
+        act = new Complex128[4];
+        sub(shape1, src1, shape2, src2, act);
+        assertArrayEquals(expResult, act);
 
         // ---------- Sub-case 2 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
@@ -78,7 +86,9 @@ class RealComplexDenseOperationsTests {
         src2 = new double[]{1, 2, 3, 4, 5};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(LinearAlgebraException.class, () -> sub(src1, shape1, src2, shape2));
+
+        act = new Complex128[4];
+        assertThrows(LinearAlgebraException.class, () -> sub(shape1, src1, shape2, src2, act));
 
         // ---------- Sub-case 3 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
@@ -86,7 +96,9 @@ class RealComplexDenseOperationsTests {
         src2 = new double[]{1, 2};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(LinearAlgebraException.class, () -> sub(src1, shape1, src2, shape2));
+
+        act = new Complex128[4];
+        assertThrows(LinearAlgebraException.class, () -> sub(shape1, src1, shape2, src2, act));
     }
 
     @Test
@@ -99,7 +111,10 @@ class RealComplexDenseOperationsTests {
                 new Complex128(-3-0.9133), new Complex128(4.13, -10.3)};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertArrayEquals(expResult, sub(src2, shape2, src1, shape1));
+
+
+        sub(shape2, src2, shape1, src1, act);
+        assertArrayEquals(expResult, act);
 
         // ---------- Sub-case 2 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
@@ -107,7 +122,9 @@ class RealComplexDenseOperationsTests {
         src2 = new double[]{1, 2, 3, 4, 5};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(LinearAlgebraException.class, () -> sub(src2, shape2, src1, shape1));
+
+        act = new Complex128[4];
+        assertThrows(LinearAlgebraException.class, () -> sub(shape2, src2, shape1, src1, act));
 
         // ---------- Sub-case 3 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
@@ -115,7 +132,9 @@ class RealComplexDenseOperationsTests {
         src2 = new double[]{1, 2};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(LinearAlgebraException.class, () -> sub(src2, shape2, src1, shape1));
+
+        act = new Complex128[4];
+        assertThrows(LinearAlgebraException.class, () -> sub(shape2, src2, shape1, src1, act));
     }
 
 
@@ -126,7 +145,10 @@ class RealComplexDenseOperationsTests {
         aC = new Complex128(10.34, -9.331);
         expResult = new Complex128[]{new Complex128(1.1345-10.34, 9.331), new Complex128(2-10.34, 9.331),
                 new Complex128(-3-10.34, 9.331), new Complex128(4.13-10.34, 9.331)};
-        assertArrayEquals(expResult, sub(src2, aC));
+
+        act = new Complex128[4];
+        sub(src2, aC, act);
+        assertArrayEquals(expResult, act);
     }
 
 

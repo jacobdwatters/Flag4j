@@ -42,7 +42,7 @@ class TensorConstructorTests {
         A = new Tensor(expShape);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // -------------- Sub-case 2 --------------
         expShape = new Shape();
@@ -51,7 +51,7 @@ class TensorConstructorTests {
         A = new Tensor(expShape);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // -------------- Sub-case 3 --------------
         expShape = new Shape(1003);
@@ -60,7 +60,7 @@ class TensorConstructorTests {
         A = new Tensor(expShape);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
     }
 
 
@@ -75,7 +75,7 @@ class TensorConstructorTests {
         A = new Tensor(expShape, value);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // -------------- Sub-case 2 --------------
         value = 11.4;
@@ -86,7 +86,7 @@ class TensorConstructorTests {
         A = new Tensor(expShape, value);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // -------------- Sub-case 3 --------------
         value = 8;
@@ -97,7 +97,7 @@ class TensorConstructorTests {
         A = new Tensor(expShape, value);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
     }
 
 
@@ -114,7 +114,7 @@ class TensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 2 ----------
         expShape = new Shape(3, 2, 5);
@@ -127,7 +127,7 @@ class TensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 3 ----------
         expShape = new Shape(3, 10);
@@ -140,7 +140,7 @@ class TensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 4 ----------
         expShape = new Shape(6, 1, 1, 1, 5, 1, 1, 1, 1, 1);
@@ -153,7 +153,7 @@ class TensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 5 ----------
         expShape = new Shape(6, 1, 1, 1, 5, 1, 1, 1, 1, 1);
@@ -190,7 +190,7 @@ class TensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 2 ----------
         expShape = new Shape(3, 2, 5);
@@ -203,7 +203,7 @@ class TensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 3 ----------
         expShape = new Shape(3, 10);
@@ -216,7 +216,7 @@ class TensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 4 ----------
         expShape = new Shape(6, 1, 1, 1, 5, 1, 1, 1, 1, 1);
@@ -229,7 +229,7 @@ class TensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 5 ----------
         expShape = new Shape(6, 1, 1, 1, 5, 1, 1, 1, 1, 1);
@@ -261,7 +261,7 @@ class TensorConstructorTests {
         A = new Tensor(B);
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
     }
 
 
@@ -278,7 +278,7 @@ class TensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 2 ----------
         expShape = new Shape(3, 2, 5);
@@ -291,7 +291,7 @@ class TensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 3 ----------
         expShape = new Shape(3, 10);
@@ -304,7 +304,7 @@ class TensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 4 ----------
         expShape = new Shape(6, 1, 1, 1, 5, 1, 1, 1, 1, 1);
@@ -317,7 +317,7 @@ class TensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 5 ----------
         expShape = new Shape(6, 1, 1, 1, 5, 1, 1, 1, 1, 1);
@@ -353,7 +353,7 @@ class TensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 2 ----------
         expShape = new Shape(3, 2, 5);
@@ -366,7 +366,7 @@ class TensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 3 ----------
         expShape = new Shape(3, 10);
@@ -379,7 +379,7 @@ class TensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 4 ----------
         expShape = new Shape(6, 1, 1, 1, 5, 1, 1, 1, 1, 1);
@@ -392,7 +392,7 @@ class TensorConstructorTests {
 
         assertEquals(expShape, A.shape);
         assertEquals(expRank, A.getRank());
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // ---------- Sub-case 5 ----------
         expShape = new Shape(6, 1, 1, 1, 5, 1, 1, 1, 1, 1);
@@ -421,10 +421,10 @@ class TensorConstructorTests {
         expShape = new Shape(6, 2);
         entriesD = new double[]{1.3243, 4, -0.24, 0, 0.234235, -0.0, 234.567, 1.35, 1.45, 1.5, 88834.345, 9141.3335};
         mat = new Matrix(expShape, entriesD);
-        A = new Tensor(mat);
+        A = new Tensor(mat.shape, mat.data.clone());
 
         assertEquals(expShape, A.shape);
-        assertArrayEquals(mat.entries, A.entries);
+        assertArrayEquals(mat.data, A.data);
     }
 
 
@@ -435,10 +435,10 @@ class TensorConstructorTests {
         // ------------------------- Sub-case 1 -------------------------
         entriesD = new double[]{1.3243, 4, -0.24, 0, 0.234235};
         vec = new Vector(entriesD);
-        A = new Tensor(vec);
+        A = new Tensor(vec.shape, vec.data.clone());
 
         assertEquals(vec.shape, A.shape);
-        assertArrayEquals(vec.entries, A.entries);
+        assertArrayEquals(vec.data, A.data);
     }
 
 

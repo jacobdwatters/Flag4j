@@ -29,7 +29,7 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.field.TensorOverField;
 import org.flag4j.linalg.operations.common.real.AggregateReal;
-import org.flag4j.linalg.operations.common.real.RealOperations;
+import org.flag4j.linalg.operations.common.real.RealOps;
 import org.flag4j.linalg.operations.common.real.RealProperties;
 import org.flag4j.linalg.operations.dense.real.RealDenseOperations;
 import org.flag4j.util.Flag4jConstants;
@@ -46,11 +46,11 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
     //  values if the tensor is sparse.
 
     /**
-     * Creates a tensor with the specified entries and shape.
+     * Creates a tensor with the specified data and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
-     * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
+     * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
+     * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
     protected AbstractDoubleTensor(Shape shape, double[] entries) {
         super(shape, entries);
@@ -66,7 +66,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      * @see #roundToZero(double)
      */
     public T round() {
-        return makeLikeTensor(this.shape, RealOperations.round(this.entries));
+        return makeLikeTensor(this.shape, RealOps.round(this.data));
     }
 
 
@@ -81,7 +81,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      * @see #roundToZero(double)
      */
     public T round(int precision) {
-        return makeLikeTensor(this.shape, RealOperations.round(this.entries, precision));
+        return makeLikeTensor(this.shape, RealOps.round(this.data, precision));
     }
 
 
@@ -97,7 +97,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      * @see #round(int)
      */
     public T roundToZero() {
-        return makeLikeTensor(this.shape, RealOperations.roundToZero(this.entries, Flag4jConstants.EPS_F64));
+        return makeLikeTensor(this.shape, RealOps.roundToZero(this.data, Flag4jConstants.EPS_F64));
     }
 
 
@@ -113,7 +113,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      * @see #round(int)
      */
     public T roundToZero(double threshold) {
-        return makeLikeTensor(this.shape, RealOperations.roundToZero(this.entries, threshold));
+        return makeLikeTensor(this.shape, RealOps.roundToZero(this.data, threshold));
     }
 
 
@@ -122,7 +122,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      * @return Returns {@code true} if this tensor only contains positive values. Otherwise, returns {@code false}.
      */
     public boolean isPos() {
-        return RealProperties.isPos(entries);
+        return RealProperties.isPos(data);
     }
 
 
@@ -131,7 +131,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      * @return Returns {@code true} if this tensor only contains negative values. Otherwise, returns {@code false}.
      */
     public boolean isNeg() {
-        return RealProperties.isNeg(entries);
+        return RealProperties.isNeg(data);
     }
 
 
@@ -142,7 +142,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public T copy() {
-        return makeLikeTensor(shape, entries.clone());
+        return makeLikeTensor(shape, data.clone());
     }
 
 
@@ -177,7 +177,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public T abs() {
-        return makeLikeTensor(shape, RealOperations.abs(entries));
+        return makeLikeTensor(shape, RealOps.abs(data));
     }
 
 
@@ -237,7 +237,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public Double min() {
-        return RealProperties.min(entries);
+        return RealProperties.min(data);
     }
 
 
@@ -248,7 +248,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public Double max() {
-        return RealProperties.max(entries);
+        return RealProperties.max(data);
     }
 
 
@@ -259,7 +259,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public double minAbs() {
-        return RealProperties.minAbs(entries);
+        return RealProperties.minAbs(data);
     }
 
 
@@ -270,13 +270,13 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public double maxAbs() {
-        return RealProperties.maxAbs(entries);
+        return RealProperties.maxAbs(data);
     }
 
 
     /**
      * Adds a scalar value to each entry of this tensor. If the tensor is sparse, the scalar will only be added to the non-zero
-     * entries of the tensor.
+     * data of the tensor.
      *
      * @param b Scalar field value in sum.
      *
@@ -330,18 +330,18 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public boolean isZeros() {
-        return RealProperties.isZeros(entries);
+        return RealProperties.isZeros(data);
     }
 
 
     /**
-     * Checks if this tensor only contains ones. If this tensor is sparse, only the non-zero entries are considered.
+     * Checks if this tensor only contains ones. If this tensor is sparse, only the non-zero data are considered.
      *
      * @return True if this tensor only contains ones. Otherwise, returns false.
      */
     @Override
     public boolean isOnes() {
-        return RealProperties.isOnes(entries);
+        return RealProperties.isOnes(data);
     }
 
 
@@ -352,7 +352,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public Double sum() {
-        return AggregateReal.sum(entries);
+        return AggregateReal.sum(data);
     }
 
 
@@ -363,21 +363,21 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public Double prod() {
-        return AggregateReal.sum(entries);
+        return AggregateReal.sum(data);
     }
 
 
     /**
      * Adds a primitive scalar value to each entry of this tensor. If the tensor is sparse, the scalar will only be added to the
-     * non-zero entries of the tensor.
+     * non-zero data of the tensor.
      *
-     * @param b Scalar field value in sum.
+     * @param b Scalar value in sum.
      *
      * @return The sum of this tensor with the scalar {@code b}.
      */
     @Override
     public T add(double b) {
-        return makeLikeTensor(shape, RealDenseOperations.add(entries, b, null));
+        return makeLikeTensor(shape, RealDenseOperations.add(data, b, null));
     }
 
 
@@ -388,7 +388,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public void addEq(double b) {
-        RealDenseOperations.add(entries, b, entries);
+        RealDenseOperations.add(data, b, data);
     }
 
 
@@ -401,7 +401,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public T mult(double b) {
-        return makeLikeTensor(shape, RealOperations.scalMult(entries, b, null));
+        return makeLikeTensor(shape, RealOps.scalMult(data, b, null));
     }
 
 
@@ -412,7 +412,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public void multEq(double b) {
-        RealOperations.scalMult(entries, b, entries);
+        RealOps.scalMult(data, b, data);
     }
 
 
@@ -425,7 +425,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public T sub(double b) {
-        return makeLikeTensor(shape, RealDenseOperations.sub(entries, b, null));
+        return makeLikeTensor(shape, RealDenseOperations.sub(data, b, null));
     }
 
 
@@ -436,7 +436,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public void subEq(double b) {
-        RealDenseOperations.sub(entries, b, entries);
+        RealDenseOperations.sub(data, b, data);
     }
 
 
@@ -479,7 +479,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public T div(double b) {
-        return makeLikeTensor(shape, RealOperations.scalDiv(entries, b, null));
+        return makeLikeTensor(shape, RealOps.scalDiv(data, b, null));
     }
 
 
@@ -492,7 +492,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public void divEq(double b) {
-        RealOperations.scalDiv(entries, b, entries);
+        RealOps.scalDiv(data, b, data);
     }
 
 
@@ -503,7 +503,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public T sqrt() {
-        return makeLikeTensor(shape, RealOperations.sqrt(entries));
+        return makeLikeTensor(shape, RealOps.sqrt(data));
     }
 
 
@@ -514,7 +514,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public T recip() {
-        return makeLikeTensor(shape, RealDenseOperations.recip(entries));
+        return makeLikeTensor(shape, RealDenseOperations.recip(data));
     }
 
 
@@ -528,7 +528,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public boolean isFinite() {
-        return RealProperties.isFinite(entries);
+        return RealProperties.isFinite(data);
     }
 
 
@@ -542,7 +542,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public boolean isInfinite() {
-        return RealProperties.isInfinite(entries);
+        return RealProperties.isInfinite(data);
     }
 
 
@@ -556,6 +556,6 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public boolean isNaN() {
-        return RealProperties.isNaN(entries);
+        return RealProperties.isNaN(data);
     }
 }

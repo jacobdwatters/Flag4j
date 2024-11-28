@@ -151,17 +151,17 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
         x = new Vector(L.numRows);
         det = L.numRows; // Since it is unit lower, matrix has full rank.
 
-        x.entries[0] = b.entries[0];
+        x.data[0] = b.data[0];
 
         for(int i=1; i<L.numRows; i++) {
             sum = 0;
             lIndexStart = i*L.numCols;
 
             for(int j=i-1; j>-1; j--) {
-                sum += L.entries[lIndexStart + j]*x.entries[j];
+                sum += L.data[lIndexStart + j]*x.data[j];
             }
 
-            x.entries[i] = b.entries[i]-sum;
+            x.data[i] = b.data[i]-sum;
         }
 
         // No need to check if matrix is singular since it has full rank.
@@ -183,21 +183,21 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
         double sum, diag;
         int lIndexStart;
         x = new Vector(L.numRows);
-        det = L.entries[0];
-        x.entries[0] = b.entries[0]/det;
+        det = L.data[0];
+        x.data[0] = b.data[0]/det;
 
         for(int i=1; i<L.numRows; i++) {
             sum = 0;
             lIndexStart = i*L.numCols;
 
-            diag = L.entries[i*(L.numCols + 1)];
+            diag = L.data[i*(L.numCols + 1)];
             det *= diag;
 
             for(int j=i-1; j>-1; j--) {
-                sum += L.entries[lIndexStart + j]*x.entries[j];
+                sum += L.data[lIndexStart + j]*x.data[j];
             }
 
-            x.entries[i] = (b.entries[i]-sum)/diag;
+            x.data[i] = (b.data[i]-sum)/diag;
         }
 
         checkSingular(Math.abs(det), L.numRows, L.numCols); // Ensure matrix is not singular.
@@ -222,11 +222,11 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
         det = L.numRows; // Since it is unit lower, matrix has full rank.
 
         for(int j=0; j<B.numCols; j++) {
-            X.entries[j] = B.entries[j];
+            X.data[j] = B.data[j];
 
             // Temporarily store column for better cache performance on innermost loop.
             for(int k=0; k<xCol.length; k++) {
-                xCol[k] = X.entries[k*X.numCols + j];
+                xCol[k] = X.data[k*X.numCols + j];
             }
 
             for(int i=1; i<L.numRows; i++) {
@@ -235,11 +235,11 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
                 xIndex = i*X.numCols + j;
 
                 for(int k=i-1; k>-1; k--) {
-                    sum += L.entries[lIndexStart--]*X.entries[k*X.numCols + j];
+                    sum += L.data[lIndexStart--]*X.data[k*X.numCols + j];
                 }
 
 
-                xCol[i] = X.entries[xIndex] = B.entries[xIndex] - sum;
+                xCol[i] = X.data[xIndex] = B.data[xIndex] - sum;
             }
         }
 
@@ -264,14 +264,14 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
         int lIndexStart, xIndex;
         X = new Matrix(B.shape);
         xCol = new double[L.numRows];
-        det = L.entries[0];
+        det = L.data[0];
 
         for(int j=0; j<B.numCols; j++) {
-            X.entries[j] = B.entries[j]/L.entries[0];
+            X.data[j] = B.data[j]/L.data[0];
 
             // Temporarily store column for better cache performance on innermost loop.
             for(int k=0; k<xCol.length; k++) {
-                xCol[k] = X.entries[k*X.numCols + j];
+                xCol[k] = X.data[k*X.numCols + j];
             }
 
             for(int i=1; i<L.numRows; i++) {
@@ -279,16 +279,16 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
                 lIndexStart = i*L.numCols;
                 xIndex = i*X.numCols + j;
 
-                diag = L.entries[i*(L.numCols + 1)];
+                diag = L.data[i*(L.numCols + 1)];
 
                 if(j == 0) det *= diag;
 
                 for(int k=0; k<i; k++) {
-                    sum += L.entries[lIndexStart++]*xCol[k];
+                    sum += L.data[lIndexStart++]*xCol[k];
                 }
 
-                double value = (B.entries[xIndex] - sum) / diag;
-                X.entries[xIndex] = value;
+                double value = (B.data[xIndex] - sum) / diag;
+                X.data[xIndex] = value;
                 xCol[i] = value;
             }
         }
@@ -314,12 +314,12 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
         xCol = new double[L.numRows];
         det = L.numRows; // Since it is unit lower, matrix has full rank.
 
-        X.entries[0] = 1.0;
+        X.data[0] = 1.0;
 
         for(int j=0; j<L.numCols; j++) {
             // Temporarily store column for better cache performance on innermost loop.
             for(int k=0; k<xCol.length; k++) {
-                xCol[k] = X.entries[k*X.numCols + j];
+                xCol[k] = X.data[k*X.numCols + j];
             }
 
             for(int i=1; i<L.numRows; i++) {
@@ -328,10 +328,10 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
                 xIndex = lIndexStart + j;
 
                 for(int k=0; k<i; k++) {
-                    sum -= L.entries[lIndexStart++]*xCol[k];
+                    sum -= L.data[lIndexStart++]*xCol[k];
                 }
 
-                xCol[i] = X.entries[xIndex] = sum;
+                xCol[i] = X.data[xIndex] = sum;
             }
         }
 
@@ -356,29 +356,29 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
         int lIndexStart, xIndex;
         X = new Matrix(L.shape);
         xCol = new double[L.numRows];
-        det = L.entries[0];
-        X.entries[0] = 1.0/det;
+        det = L.data[0];
+        X.data[0] = 1.0/det;
 
         for(int j=0; j<L.numCols; j++) {
             // Temporarily store column for better cache performance on innermost loop.
             for(int k=0; k<xCol.length; k++) {
-                xCol[k] = X.entries[k*X.numCols + j];
+                xCol[k] = X.data[k*X.numCols + j];
             }
 
             for(int i=1; i<L.numRows; i++) {
                 sum = (i==j) ? 1.0 : 0.0;
                 lIndexStart = i*L.numCols;
                 xIndex = lIndexStart + j;
-                diag = L.entries[i*(L.numCols + 1)];
+                diag = L.data[i*(L.numCols + 1)];
 
                 if(j==0) det*=diag;
 
                 for(int k=0; k<i; k++) {
-                    sum -= L.entries[lIndexStart++]*xCol[k];
+                    sum -= L.data[lIndexStart++]*xCol[k];
                 }
 
                 double value = sum / diag;
-                X.entries[xIndex] = value;
+                X.data[xIndex] = value;
                 xCol[i] = value;
             }
         }

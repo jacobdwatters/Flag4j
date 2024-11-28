@@ -78,7 +78,7 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
      */
     protected U householderVector;
     /**
-     * Stores the non-zero entries of the first column of the shifted matrix (A- &rho<sub>1</sub>I)(A-&rho<sub>2</sub> I)
+     * Stores the non-zero data of the first column of the shifted matrix (A- &rho<sub>1</sub>I)(A-&rho<sub>2</sub> I)
      * where
      * &rho<sub>1</sub> and &rho<sub>2</sub> are the two shifts.
      */
@@ -283,7 +283,7 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
      * chosen to be a random value with the same magnitude as the lower right element of the working matrix. This can help the
      * QR converge for certain pathological cases where the double shift algorithm oscillates or fails to converge for
      * repeated eigenvalues.
-     * @param workingSize The current working size for the decomposition. I.e. all entries below this row have converged to an upper
+     * @param workingSize The current working size for the decomposition. I.e. all data below this row have converged to an upper
      *                   or possible 2x2 block upper triangular form.
      */
     protected abstract void performExceptionalShift(int workingSize);
@@ -291,7 +291,7 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
 
     /**
      * Performs a full iteration of the Francis implicit double shifted QR algorithm (this includes the bulge chase).
-     * @param workingSize The current working size for the decomposition. I.e. all entries below this row have converged to an upper
+     * @param workingSize The current working size for the decomposition. I.e. all data below this row have converged to an upper
      *                   or possible 2x2 block upper triangular form.
      */
     protected abstract void performDoubleShift(int workingSize);

@@ -1,10 +1,11 @@
 package org.flag4j.sparse_complex_vector;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOps;
 import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -132,7 +133,7 @@ class CooCVectorAddTests {
                 new Complex128(0, -99.145).add(new Complex128(-8.2, 55.1)), new Complex128(4.51, 8.456), new Complex128(11.34, -0.00245)};
         exp = new CVector(expValues);
 
-        assertEquals(exp, DenseCooFieldVectorOperations.add(b, a));
+        assertEquals(exp, DenseCooFieldVectorOps.add(b, a));
 
         // --------------------- Sub-case 2 ---------------------
         bValues = new Complex128[]{new Complex128(1.445, -9.24), new Complex128(1.45),
@@ -141,7 +142,7 @@ class CooCVectorAddTests {
         b = new CVector(bValues);
 
         CVector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->DenseCooFieldVectorOperations.add(finalB, a));
+        assertThrows(LinearAlgebraException.class, ()-> DenseCooFieldVectorOps.add(finalB, a));
     }
 
 

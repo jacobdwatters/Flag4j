@@ -55,7 +55,7 @@ public class CooDataSorter<T> {
     private final List<T> values;
     /**
      * Stores wrapped indices. Each list is a single index for the {@code values} data. If the tensor is of rank {@code N}, then
-     * each List in {@code keys} will have {@code N} entries. If there are {@code M} non-zero entries in the
+     * each List in {@code keys} will have {@code N} data. If there are {@code M} non-zero data in the
      * sparse tensor, then there will be {@code M} lists in the array.
      */
     private final List<Integer>[] keys;
@@ -145,8 +145,8 @@ public class CooDataSorter<T> {
     /**
      * Factory method which wraps data in an instance of {@link CooDataSorter} and returns that instance.
      * @param values Non-zero values of the sparse tensor.
-     * @param rowIndices Row indices of non-zero entries of the sparse tensor.
-     * @param colIndices Column indices of non-zero entries of the sparse tensor.
+     * @param rowIndices Row indices of non-zero data of the sparse tensor.
+     * @param colIndices Column indices of non-zero data of the sparse tensor.
      * @return A new instance of {@link CooDataSorter} which wraps the specified {@code values} and {@code indices}.
      */
     public static CooDataSorter wrap(double[] values, int[] rowIndices, int[] colIndices) {
@@ -158,8 +158,8 @@ public class CooDataSorter<T> {
     /**
      * Factory method which wraps data in an instance of {@link CooDataSorter} and returns that instance.
      * @param values Non-zero values of the sparse tensor.
-     * @param rowIndices Row indices of non-zero entries of the sparse tensor.
-     * @param colIndices Column indices of non-zero entries of the sparse tensor.
+     * @param rowIndices Row indices of non-zero data of the sparse tensor.
+     * @param colIndices Column indices of non-zero data of the sparse tensor.
      * @return A new instance of {@link CooDataSorter} which wraps the specified {@code values} and {@code indices}.
      */
     public static CooDataSorter wrap(Object[] values, int[] rowIndices, int[] colIndices) {

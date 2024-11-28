@@ -35,11 +35,11 @@ import org.flag4j.util.ValidateParameters;
 import java.util.Arrays;
 
 /**
- * <p>A dense vector whose entries are {@link Field field} elements.</p>
+ * <p>A dense vector whose data are {@link Field field} elements.</p>
  *
  * <p>Vectors are 1D tensors (i.e. rank 1 tensor).</p>
  *
- * <p>FieldVectors have mutable entries but a fixed size.</p>
+ * <p>FieldVectors have mutable data but a fixed size.</p>
  *
  * @param <T> Type of the field element for the vector.
  */
@@ -47,7 +47,7 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
 
 
     /**
-     * Creates a vector with the specified entries.
+     * Creates a vector with the specified data.
      *
      * @param entries Entries of this vector.
      */
@@ -64,12 +64,12 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
      */
     public FieldVector(int size, T fillValue) {
         super(new Shape(size), new Field[size]);
-        Arrays.fill(entries, fillValue);
+        Arrays.fill(data, fillValue);
     }
 
 
     /**
-     * Creates a vector with the specified {@code entries}.
+     * Creates a vector with the specified {@code data}.
      *
      * @param entries Entries of this vector.
      */
@@ -80,12 +80,12 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
 
 
     /**
-     * Constructs a matrix of similar type to this vector with the specified {@code shape} and {@code entries}.
+     * Constructs a matrix of similar type to this vector with the specified {@code shape} and {@code data}.
      *
      * @param shape Shape of the matrix to construct.
      * @param entries Entries of the matrix to construct.
      *
-     * @return A matrix of similar type to this vector with the specified {@code shape} and {@code entries}.
+     * @return A matrix of similar type to this vector with the specified {@code shape} and {@code data}.
      */
     @Override
     public FieldMatrix<T> makeLikeMatrix(Shape shape, Field<T>[] entries) {
@@ -94,12 +94,12 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
 
 
     /**
-     * Constructs a tensor of the same type as this tensor with the given the shape and entries.
+     * Constructs a tensor of the same type as this tensor with the given the shape and data.
      *
      * @param shape Shape of the tensor to construct.
      * @param entries Entries of the tensor to construct.
      *
-     * @return A tensor of the same type as this tensor with the given the shape and entries.
+     * @return A tensor of the same type as this tensor with the given the shape and data.
      */
     @Override
     public FieldVector<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
@@ -113,7 +113,7 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
      * Constructs a sparse COO tensor which is of a similar type as this dense tensor.
      *
      * @param shape Shape of the COO tensor.
-     * @param entries Non-zero entries of the COO tensor.
+     * @param entries Non-zero data of the COO tensor.
      * @param indices
      *
      * @return A sparse COO tensor which is of a similar type as this dense tensor.
@@ -137,7 +137,7 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
 
         FieldVector<T> src2 = (FieldVector<T>) object;
 
-        return shape.equals(src2.shape) && Arrays.equals(entries, src2.entries);
+        return shape.equals(src2.shape) && Arrays.equals(data, src2.data);
     }
 
 
@@ -145,14 +145,14 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
     public int hashCode() {
         int hash = 17;
         hash = 31*hash + shape.hashCode();
-        hash = 31*hash + Arrays.hashCode(entries);
+        hash = 31*hash + Arrays.hashCode(data);
 
         return hash;
     }
 
 
     /**
-     * Converts this vector to a human-readable string format. To specify the maximum number of entries to print, use
+     * Converts this vector to a human-readable string format. To specify the maximum number of data to print, use
      * {@link PrintOptions#setMaxColumns(int)}.
      * @return A human-readable string representation of this vector.
      */
@@ -164,9 +164,9 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
         int width;
         String value;
 
-        // Get entries up until the stopping point.
+        // Get data up until the stopping point.
         for(int i=0; i<stopIndex; i++) {
-            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+            value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
             width = PrintOptions.getPadding() + value.length();
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
@@ -180,7 +180,7 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
         }
 
         // Get last entry now
-        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+        value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
         width = PrintOptions.getPadding() + value.length();
         value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
         result.append(String.format("%-" + width + "s", value));

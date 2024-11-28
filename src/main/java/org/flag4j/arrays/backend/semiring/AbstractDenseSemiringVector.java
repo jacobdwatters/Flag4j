@@ -34,11 +34,11 @@ import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiRingVectorOps;
 import org.flag4j.util.ValidateParameters;
 
 /**
- * <p>The base class for all dense vectors whose entries are {@link Semiring} elements.</p>
+ * <p>The base class for all dense vectors whose data are {@link Semiring} elements.</p>
  *
  * <p>Vectors are 1D tensors (i.e. rank 1 tensor).</p>
  *
- * <p>AbstractDenseSemiringVector vectors have mutable {@link #entries} but a fixed {@link #shape}.</p>
+ * <p>AbstractDenseSemiringVector vectors have mutable {@link #data} but a fixed {@link #shape}.</p>
  *
  * @param <T> Type of the vector.
  * @param <U> Type of matrix equivalent to this vector.
@@ -50,17 +50,17 @@ public abstract class AbstractDenseSemiringVector<T extends AbstractDenseSemirin
         implements VectorMixin<T, U, U, V> {
 
     /**
-     * The size of this vector. This is the total number of entries stored in this vector.
+     * The size of this vector. This is the total number of data stored in this vector.
      */
     public final int size;
 
 
     /**
-     * Creates a tensor with the specified entries and shape.
+     * Creates a tensor with the specified data and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
-     * If this tensor is sparse, this specifies only the non-zero entries of the tensor.
+     * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
+     * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
     protected AbstractDenseSemiringVector(Shape shape, Semiring<V>[] entries) {
         super(shape, entries);
@@ -70,17 +70,17 @@ public abstract class AbstractDenseSemiringVector<T extends AbstractDenseSemirin
 
 
     /**
-     * Constructs a dense vector with the specified {@code entries} of the same type as the vector.
+     * Constructs a dense vector with the specified {@code data} of the same type as the vector.
      * @param entries Entries of the dense vector to construct.
      */
     protected abstract T makeLikeTensor(Semiring<V>[] entries);
 
 
     /**
-     * Constructs a matrix of similar type to this vector with the specified {@code shape} and {@code entries}.
+     * Constructs a matrix of similar type to this vector with the specified {@code shape} and {@code data}.
      * @param shape Shape of the matrix to construct.
      * @param entries Entries of the matrix to construct.
-     * @return A matrix of similar type to this vector with the specified {@code shape} and {@code entries}.
+     * @return A matrix of similar type to this vector with the specified {@code shape} and {@code data}.
      */
     protected abstract U makeLikeMatrix(Shape shape, Semiring<V>[] entries);
 
@@ -96,7 +96,7 @@ public abstract class AbstractDenseSemiringVector<T extends AbstractDenseSemirin
     @Override
     public T join(T b) {
         Semiring<V>[] dest = new Semiring[size + b.size];
-        DenseConcat.concat(entries, b.entries, dest);
+        DenseConcat.concat(data, b.data, dest);
         return makeLikeTensor(dest);
     }
 
@@ -108,7 +108,7 @@ public abstract class AbstractDenseSemiringVector<T extends AbstractDenseSemirin
      *
      * @return The inner product between this vector and the vector {@code b}.
      *
-     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of entries.
+     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of data.
      * @see #dot(AbstractDenseSemiringVector)
      */
     @Override
@@ -128,19 +128,19 @@ public abstract class AbstractDenseSemiringVector<T extends AbstractDenseSemirin
      *
      * @return The dot product between this vector and the vector {@code b}.
      *
-     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of entries.
+     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of data.
      * @see #inner(AbstractDenseSemiringVector)
      */
     @Override
     public V dot(T b) {
-        return DenseSemiRingVectorOps.dotProduct(entries, b.entries);
+        return DenseSemiRingVectorOps.dotProduct(data, b.data);
     }
 
 
     /**
      * Gets the length of a vector. Same as {@link #size()}.
      *
-     * @return The length, i.e. the number of entries, in this vector.
+     * @return The length, i.e. the number of data, in this vector.
      */
     @Override
     public int length() {
@@ -163,7 +163,7 @@ public abstract class AbstractDenseSemiringVector<T extends AbstractDenseSemirin
     @Override
     public U repeat(int n, int axis) {
         Semiring<V>[] dest = new Semiring[size*n];
-        DenseConcat.repeat(entries, n, axis, dest); // n is verified to be 1 or 0 here.
+        DenseConcat.repeat(data, n, axis, dest); // n is verified to be 1 or 0 here.
         Shape shape = (n==0) ? new Shape(n, size) : new Shape(size, n);
         return makeLikeMatrix(shape, dest);
     }
@@ -190,14 +190,14 @@ public abstract class AbstractDenseSemiringVector<T extends AbstractDenseSemirin
      *
      * @return The result of stacking this vector and the vector {@code b}.
      *
-     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
-     *                                  entries in the vector {@code b}.
+     * @throws IllegalArgumentException If the number of data in this vector is different from the number of
+     *                                  data in the vector {@code b}.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
     public U stack(T b, int axis) {
         Semiring<V>[] dest = new Semiring[2*size];
-        DenseConcat.stack(entries, b.entries, axis, dest);
+        DenseConcat.stack(data, b.data, axis, dest);
         Shape shape = (axis==0) ? new Shape(2, size) : new Shape(size, 2);
         return makeLikeMatrix(shape, dest);
     }
@@ -210,12 +210,12 @@ public abstract class AbstractDenseSemiringVector<T extends AbstractDenseSemirin
      *
      * @return The result of the vector outer product between this vector and {@code b}.
      *
-     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
+     * @throws IllegalArgumentException If the two vectors do not have the same number of data.
      */
     @Override
     public U outer(T b) {
         Semiring<V>[] dest = new Semiring[size*b.size];
-        DenseSemiRingVectorOps.outerProduct(entries, b.entries, dest);
+        DenseSemiRingVectorOps.outerProduct(data, b.data, dest);
         return makeLikeMatrix(new Shape(size, size), dest);
     }
 
@@ -233,10 +233,10 @@ public abstract class AbstractDenseSemiringVector<T extends AbstractDenseSemirin
     public U toMatrix(boolean columVector) {
         if(columVector) {
             // Convert to column vector.
-            return makeLikeMatrix(new Shape(this.entries.length, 1), this.entries.clone());
+            return makeLikeMatrix(new Shape(this.data.length, 1), this.data.clone());
         } else {
             // Convert to row vector.
-            return makeLikeMatrix(new Shape(1, this.entries.length), this.entries.clone());
+            return makeLikeMatrix(new Shape(1, this.data.length), this.data.clone());
         }
     }
 
@@ -259,6 +259,20 @@ public abstract class AbstractDenseSemiringVector<T extends AbstractDenseSemirin
      */
     @Override
     public V mag() {
-        return AggregateSemiring.sum(entries);
+        return AggregateSemiring.sum(data);
+    }
+
+
+    /**
+     * Gets the element of this vector at the specified index.
+     *
+     * @param idx Index of the element to get within this vector.
+     *
+     * @return The element of this vector at index {@code idx}.
+     */
+    @Override
+    public V get(int idx) {
+        ValidateParameters.validateTensorIndex(shape, idx);
+        return (V) data[idx];
     }
 }

@@ -45,7 +45,7 @@ public final class PrettyPrint {
     /**
      * Formats array as an abbreviated array so that no more than {@code maxEntries} is actually printed.
      * @param arr Array to format.
-     * @param maxEntries The maximum number of entries to print.
+     * @param maxEntries The maximum number of data to print.
      * @param padding The amount of padding to use between each entry.
      * @param precision The number of decimal places to print for each value.
      * @param centring Flag indicating if each value should be centered within the padding.
@@ -57,7 +57,7 @@ public final class PrettyPrint {
         String value;
         int width;
 
-        // Get entries up until the stopping point.
+        // Get data up until the stopping point.
         for(int i=0; i<maxEntries-1 && i<arr.length-1; i++) {
             value = StringUtils.ValueOfRound(arr[i], precision);
             width = padding + value.length();
@@ -85,7 +85,7 @@ public final class PrettyPrint {
     /**
      * Formats array as an abbreviated array so that no more than {@code maxEntries} is actually printed.
      * @param arr Array to format.
-     * @param maxEntries The maximum number of entries to print.
+     * @param maxEntries The maximum number of data to print.
      * @param padding The amount of padding to use between each entry.
      * @param precision The number of decimal places to print for each value.
      * @param centring Flag indicating if each value should be centered within the padding.
@@ -98,7 +98,7 @@ public final class PrettyPrint {
         String value;
         int width;
 
-        // Get entries up until the stopping point.
+        // Get data up until the stopping point.
         for(int i=0; i<maxEntries-1 && i<arr.length-1; i++) {
             value = StringUtils.ValueOfRound((Complex128) arr[i], precision);
             width = padding + value.length();
@@ -141,7 +141,7 @@ public final class PrettyPrint {
         String value;
         int width;
 
-        // Get entries up until the stopping point.
+        // Get data up until the stopping point.
         for(int i=0, stop=arr.length-1; i<maxRows-1 && i<stop; i++) {
             value = abbreviatedArray(arr[i], maxCols, padding, centering);
             width = padding + value.length();
@@ -167,7 +167,7 @@ public final class PrettyPrint {
     /**
      * Formats array as an abbreviated array so that no more than {@code maxEntries} is actually printed.
      * @param arr Array to format.
-     * @param maxEntries The maximum number of entries to print.
+     * @param maxEntries The maximum number of data to print.
      * @param padding The amount of padding to use between each entry.
      * @param precision The number of decimal places to print for each value.
      * @param centring Flag indicating if each value should be centered within the padding.
@@ -179,7 +179,7 @@ public final class PrettyPrint {
         String value;
         int width;
 
-        // Get entries up until the stopping point.
+        // Get data up until the stopping point.
         for(int i=0; i<maxEntries-1 && i<arr.length-1; i++) {
             value = String.valueOf(arr[i]);
             width = padding + value.length();

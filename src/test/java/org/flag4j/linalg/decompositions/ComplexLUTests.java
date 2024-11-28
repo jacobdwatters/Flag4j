@@ -7,6 +7,8 @@ import org.flag4j.linalg.decompositions.lu.ComplexLU;
 import org.flag4j.linalg.decompositions.lu.LU;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class ComplexLUTests {
 
     static Complex128[][] aEntries;
@@ -127,7 +129,7 @@ public class ComplexLUTests {
 
     @Test
     void partialFullTestCase() {
-        lu = new ComplexLU(LU.Pivoting.FULL.ordinal());
+        lu = new ComplexLU(LU.Pivoting.FULL);
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new Complex128[][]{

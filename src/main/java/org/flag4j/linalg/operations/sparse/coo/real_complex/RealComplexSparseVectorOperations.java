@@ -51,7 +51,7 @@ public final class RealComplexSparseVectorOperations {
 
 
     /**
-     * Adds a real number to each entry of a sparse vector, including the zero entries.
+     * Adds a real number to each entry of a sparse vector, including the zero data.
      * @param src Sparse vector to add value to.
      * @param a Value to add to the {@code src} sparse vector.
      * @return The result of adding the specified value to the sparse vector.
@@ -60,9 +60,9 @@ public final class RealComplexSparseVectorOperations {
         Complex128[] dest = new Complex128[src.size];
         Arrays.fill(dest, a);
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             int idx = src.indices[i];
-            dest[idx] = dest[idx].add(src.entries[i]);
+            dest[idx] = dest[idx].add(src.data[i]);
         }
 
         return new CVector(dest);
@@ -70,7 +70,7 @@ public final class RealComplexSparseVectorOperations {
 
 
     /**
-     * Adds a real number to each entry of a sparse vector, including the zero entries.
+     * Adds a real number to each entry of a sparse vector, including the zero data.
      * @param src Sparse vector to add value to.
      * @param a Value to add to the {@code src} sparse vector.
      * @return The result of adding the specified value to the sparse vector.
@@ -79,9 +79,9 @@ public final class RealComplexSparseVectorOperations {
         Complex128[] dest = new Complex128[src.size];
         ArrayUtils.fill(dest, a);
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             int idx = src.indices[i];
-            dest[idx] = dest[idx].add((Complex128) src.entries[i]);
+            dest[idx] = dest[idx].add((Complex128) src.data[i]);
         }
 
         return new CVector(dest);
@@ -89,7 +89,7 @@ public final class RealComplexSparseVectorOperations {
 
 
     /**
-     * Subtracts a real number from each entry of a sparse vector, including the zero entries.
+     * Subtracts a real number from each entry of a sparse vector, including the zero data.
      * @param src Sparse vector to subtract value from.
      * @param a Value to subtract from the {@code src} sparse vector.
      * @return The result of subtracting the specified value from the sparse vector.
@@ -98,9 +98,9 @@ public final class RealComplexSparseVectorOperations {
         Complex128[] dest = new Complex128[src.size];
         Arrays.fill(dest, a.addInv());
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             int idx = src.indices[i];
-            dest[idx] = dest[idx].add(src.entries[i]);
+            dest[idx] = dest[idx].add(src.data[i]);
         }
 
         return new CVector(dest);
@@ -117,39 +117,39 @@ public final class RealComplexSparseVectorOperations {
      */
     public static CooCVector add(CooCVector src1, CooVector src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        List<Field<Complex128>> values = new ArrayList<>(src1.entries.length);
-        List<Integer> indices = new ArrayList<>(src1.entries.length);
+        List<Field<Complex128>> values = new ArrayList<>(src1.data.length);
+        List<Integer> indices = new ArrayList<>(src1.data.length);
 
         int src1Counter = 0;
         int src2Counter = 0;
 
-        while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
+        while(src1Counter < src1.data.length && src2Counter < src2.data.length) {
             if(src1.indices[src1Counter] == src2.indices[src2Counter]) {
-                values.add(src1.entries[src1Counter].add(src2.entries[src2Counter]));
+                values.add(src1.data[src1Counter].add(src2.data[src2Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
 
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
-                values.add(src1.entries[src1Counter]);
+                values.add(src1.data[src1Counter]);
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
             } else {
-                values.add(new Complex128(src2.entries[src2Counter]));
+                values.add(new Complex128(src2.data[src2Counter]));
                 indices.add(src2.indices[src2Counter]);
                 src2Counter++;
             }
         }
 
         // Finish inserting the rest of the values.
-        if(src1Counter < src1.entries.length) {
-            for(int i=src1Counter; i<src1.entries.length; i++) {
-                values.add(src1.entries[i]);
+        if(src1Counter < src1.data.length) {
+            for(int i = src1Counter; i<src1.data.length; i++) {
+                values.add(src1.data[i]);
                 indices.add(src1.indices[i]);
             }
-        } else if(src2Counter < src2.entries.length) {
-            for(int i=src2Counter; i<src2.entries.length; i++) {
-                values.add(new Complex128(src2.entries[i]));
+        } else if(src2Counter < src2.data.length) {
+            for(int i = src2Counter; i<src2.data.length; i++) {
+                values.add(new Complex128(src2.data[i]));
                 indices.add(src2.indices[i]);
             }
         }
@@ -172,39 +172,39 @@ public final class RealComplexSparseVectorOperations {
      */
     public static CooCVector sub(CooCVector src1, CooVector src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        List<Field<Complex128>> values = new ArrayList<>(src1.entries.length);
-        List<Integer> indices = new ArrayList<>(src1.entries.length);
+        List<Field<Complex128>> values = new ArrayList<>(src1.data.length);
+        List<Integer> indices = new ArrayList<>(src1.data.length);
 
         int src1Counter = 0;
         int src2Counter = 0;
 
-        while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
+        while(src1Counter < src1.data.length && src2Counter < src2.data.length) {
             if(src1.indices[src1Counter] == src2.indices[src2Counter]) {
-                values.add(src1.entries[src1Counter].sub(src2.entries[src2Counter]));
+                values.add(src1.data[src1Counter].sub(src2.data[src2Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
 
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
-                values.add(src1.entries[src1Counter]);
+                values.add(src1.data[src1Counter]);
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
             } else {
-                values.add(new Complex128(-src2.entries[src2Counter]));
+                values.add(new Complex128(-src2.data[src2Counter]));
                 indices.add(src2.indices[src2Counter]);
                 src2Counter++;
             }
         }
 
         // Finish inserting the rest of the values.
-        if(src1Counter < src1.entries.length) {
-            for(int i=src1Counter; i<src1.entries.length; i++) {
-                values.add(src1.entries[i]);
+        if(src1Counter < src1.data.length) {
+            for(int i = src1Counter; i<src1.data.length; i++) {
+                values.add(src1.data[i]);
                 indices.add(src1.indices[i]);
             }
-        } else if(src2Counter < src2.entries.length) {
-            for(int i=src2Counter; i<src2.entries.length; i++) {
-                values.add(new Complex128(-src2.entries[i]));
+        } else if(src2Counter < src2.data.length) {
+            for(int i = src2Counter; i<src2.data.length; i++) {
+                values.add(new Complex128(-src2.data[i]));
                 indices.add(src2.indices[i]);
             }
         }
@@ -227,39 +227,39 @@ public final class RealComplexSparseVectorOperations {
      */
     public static CooCVector sub(CooVector src1, CooCVector src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        List<Field<Complex128>> values = new ArrayList<>(src1.entries.length);
-        List<Integer> indices = new ArrayList<>(src1.entries.length);
+        List<Field<Complex128>> values = new ArrayList<>(src1.data.length);
+        List<Integer> indices = new ArrayList<>(src1.data.length);
 
         int src1Counter = 0;
         int src2Counter = 0;
 
-        while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
+        while(src1Counter < src1.data.length && src2Counter < src2.data.length) {
             if(src1.indices[src1Counter] == src2.indices[src2Counter]) {
-                values.add(new Complex128(src1.entries[src1Counter]).sub((Complex128) src2.entries[src2Counter]));
+                values.add(new Complex128(src1.data[src1Counter]).sub((Complex128) src2.data[src2Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
 
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
-                values.add(new Complex128(src1.entries[src1Counter]));
+                values.add(new Complex128(src1.data[src1Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
             } else {
-                values.add(src2.entries[src2Counter].addInv());
+                values.add(src2.data[src2Counter].addInv());
                 indices.add(src2.indices[src2Counter]);
                 src2Counter++;
             }
         }
 
         // Finish inserting the rest of the values.
-        if(src1Counter < src1.entries.length) {
-            for(int i=src1Counter; i<src1.entries.length; i++) {
-                values.add(new Complex128(src1.entries[i]));
+        if(src1Counter < src1.data.length) {
+            for(int i = src1Counter; i<src1.data.length; i++) {
+                values.add(new Complex128(src1.data[i]));
                 indices.add(src1.indices[i]);
             }
-        } else if(src2Counter < src2.entries.length) {
-            for(int i=src2Counter; i<src2.entries.length; i++) {
-                values.add(src2.entries[i].addInv());
+        } else if(src2Counter < src2.data.length) {
+            for(int i = src2Counter; i<src2.data.length; i++) {
+                values.add(src2.data[i].addInv());
                 indices.add(src2.indices[i]);
             }
         }
@@ -282,16 +282,16 @@ public final class RealComplexSparseVectorOperations {
      */
     public static CooCVector elemMult(CooCVector src1, CooVector src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        List<Field<Complex128>> values = new ArrayList<>(src1.entries.length);
-        List<Integer> indices = new ArrayList<>(src1.entries.length);
+        List<Field<Complex128>> values = new ArrayList<>(src1.data.length);
+        List<Integer> indices = new ArrayList<>(src1.data.length);
 
         int src1Counter = 0;
         int src2Counter = 0;
 
-        while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
+        while(src1Counter < src1.data.length && src2Counter < src2.data.length) {
             if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
                 // Then indices match, add product of elements.
-                values.add(src1.entries[src1Counter].mult(src2.entries[src2Counter]));
+                values.add(src1.data[src1Counter].mult(src2.data[src2Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
@@ -326,10 +326,10 @@ public final class RealComplexSparseVectorOperations {
         int src1Counter = 0;
         int src2Counter = 0;
 
-        while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
+        while(src1Counter < src1.data.length && src2Counter < src2.data.length) {
             if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
                 // Then indices match, add product of elements.
-                product = product.add(src1.entries[src1Counter].mult(src2.entries[src2Counter]));
+                product = product.add(src1.data[src1Counter].mult(src2.data[src2Counter]));
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
                 src1Counter++;
             } else {
@@ -356,10 +356,10 @@ public final class RealComplexSparseVectorOperations {
         int src1Counter = 0;
         int src2Counter = 0;
 
-        while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
+        while(src1Counter < src1.data.length && src2Counter < src2.data.length) {
             if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
                 // Then indices match, add product of elements.
-                product = product.add(src2.entries[src2Counter].conj().mult(src1.entries[src1Counter]));
+                product = product.add(src2.data[src2Counter].conj().mult(src1.data[src1Counter]));
                 src1Counter++;
                 src2Counter++;
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
@@ -387,14 +387,14 @@ public final class RealComplexSparseVectorOperations {
         int index1;
         int index2;
 
-        for(int i=0; i<src1.entries.length; i++) {
+        for(int i = 0; i<src1.data.length; i++) {
             index1 = src1.indices[i];
             destRow = index1*src1.size;
 
-            for(int j=0; j<src2.entries.length; j++) {
+            for(int j = 0; j<src2.data.length; j++) {
                 index2 = src2.indices[j];
 
-                dest[destRow + index2] = src1.entries[i].mult(src2.entries[j]);
+                dest[destRow + index2] = src1.data[i].mult(src2.data[j]);
             }
         }
 
@@ -418,14 +418,14 @@ public final class RealComplexSparseVectorOperations {
         int index1;
         int index2;
 
-        for(int i=0; i<src1.entries.length; i++) {
+        for(int i = 0; i<src1.data.length; i++) {
             index1 = src1.indices[i];
             destRow = index1*src1.size;
 
-            for(int j=0; j<src2.entries.length; j++) {
+            for(int j = 0; j<src2.data.length; j++) {
                 index2 = src2.indices[j];
 
-                dest[destRow + index2] = src2.entries[j].mult(src1.entries[i]);
+                dest[destRow + index2] = src2.data[j].mult(src1.data[i]);
             }
         }
 

@@ -62,11 +62,11 @@ public final class Projection {
 
         double cotHalfFov = 1.0/Math.tan(fov/2.0);
 
-        perspective.entries[0] = cotHalfFov/aspectRatio;
-        perspective.entries[5] = cotHalfFov;
-        perspective.entries[10] = -(farClip + nearClip)/(farClip - nearClip);
-        perspective.entries[11] = -1.0;
-        perspective.entries[14] = -2.0*farClip*nearClip/(farClip - nearClip);
+        perspective.data[0] = cotHalfFov/aspectRatio;
+        perspective.data[5] = cotHalfFov;
+        perspective.data[10] = -(farClip + nearClip)/(farClip - nearClip);
+        perspective.data[11] = -1.0;
+        perspective.data[14] = -2.0*farClip*nearClip/(farClip - nearClip);
 
         return perspective;
     }
@@ -96,11 +96,11 @@ public final class Projection {
         double fovXRad = Math.toRadians(fovX);
         double fovYRad = Math.toRadians(fovY);
 
-        perspective.entries[0] = 1.0/(aspectRatio*Math.tan(fovXRad/2.0));
-        perspective.entries[5] = 1.0/(Math.tan(fovYRad/2.0));
-        perspective.entries[10] = -(farClip + nearClip)/(farClip - nearClip);
-        perspective.entries[11] = -1.0;
-        perspective.entries[14] = -2.0*farClip*nearClip/(farClip-nearClip);
+        perspective.data[0] = 1.0/(aspectRatio*Math.tan(fovXRad/2.0));
+        perspective.data[5] = 1.0/(Math.tan(fovYRad/2.0));
+        perspective.data[10] = -(farClip + nearClip)/(farClip - nearClip);
+        perspective.data[11] = -1.0;
+        perspective.data[14] = -2.0*farClip*nearClip/(farClip-nearClip);
 
         return perspective;
     }
@@ -124,13 +124,13 @@ public final class Projection {
             throw new IllegalArgumentException("nearClip cannot be equal to or greater than farClip.");
         Matrix ortho = new Matrix(4);
 
-        ortho.entries[0] = 2.0/(xMax-xMin);
-        ortho.entries[5] = 2.0/(yMax-yMin);
-        ortho.entries[10] = -2.0/(farClip-nearClip);
-        ortho.entries[12] = -(xMax + xMin)/(xMax - xMin);
-        ortho.entries[13] = -(yMax + yMin)/(yMax - yMin);
-        ortho.entries[14] = -(farClip + nearClip)/(farClip-nearClip);
-        ortho.entries[15] = 1.0;
+        ortho.data[0] = 2.0/(xMax-xMin);
+        ortho.data[5] = 2.0/(yMax-yMin);
+        ortho.data[10] = -2.0/(farClip-nearClip);
+        ortho.data[12] = -(xMax + xMin)/(xMax - xMin);
+        ortho.data[13] = -(yMax + yMin)/(yMax - yMin);
+        ortho.data[14] = -(farClip + nearClip)/(farClip-nearClip);
+        ortho.data[15] = 1.0;
 
         return ortho;
     }
@@ -153,13 +153,13 @@ public final class Projection {
             throw new IllegalArgumentException("nearClip cannot be equal to or greater than farClip.");
         Matrix ortho = new Matrix(4);
 
-        ortho.entries[0] = 2.0/xMax;
-        ortho.entries[5] = 2.0/yMax;
-        ortho.entries[10] = -2.0/(farClip-nearClip);
-        ortho.entries[12] = -1.0;
-        ortho.entries[13] = -1.0;
-        ortho.entries[14] = -(farClip + nearClip)/(farClip-nearClip);
-        ortho.entries[15] = 1.0;
+        ortho.data[0] = 2.0/xMax;
+        ortho.data[5] = 2.0/yMax;
+        ortho.data[10] = -2.0/(farClip-nearClip);
+        ortho.data[12] = -1.0;
+        ortho.data[13] = -1.0;
+        ortho.data[14] = -(farClip + nearClip)/(farClip-nearClip);
+        ortho.data[15] = 1.0;
 
         return ortho;
     }
@@ -184,13 +184,13 @@ public final class Projection {
 
         Matrix ortho = new Matrix(4);
 
-        ortho.entries[0] = 2.0/(xMax-xMin);
-        ortho.entries[5] = 2.0/(yMax-yMin);
-        ortho.entries[10] = -1.0;
-        ortho.entries[12] = -(xMax + xMin)/(xMax - xMin);
-        ortho.entries[13] = -(yMax + yMin)/(yMax - yMin);
-        ortho.entries[14] = 0.0;
-        ortho.entries[15] = 1.0;
+        ortho.data[0] = 2.0/(xMax-xMin);
+        ortho.data[5] = 2.0/(yMax-yMin);
+        ortho.data[10] = -1.0;
+        ortho.data[12] = -(xMax + xMin)/(xMax - xMin);
+        ortho.data[13] = -(yMax + yMin)/(yMax - yMin);
+        ortho.data[14] = 0.0;
+        ortho.data[15] = 1.0;
 
         return ortho;
     }
@@ -211,13 +211,13 @@ public final class Projection {
 
         Matrix ortho = new Matrix(4);
 
-        ortho.entries[0] = 2.0/xMax;
-        ortho.entries[5] = 2.0/yMax;
-        ortho.entries[10] = -1.0;
-        ortho.entries[12] = -1.0;
-        ortho.entries[13] = -1.0;
-        ortho.entries[14] = 0.0;
-        ortho.entries[15] = 1.0;
+        ortho.data[0] = 2.0/xMax;
+        ortho.data[5] = 2.0/yMax;
+        ortho.data[10] = -1.0;
+        ortho.data[12] = -1.0;
+        ortho.data[13] = -1.0;
+        ortho.data[14] = 0.0;
+        ortho.data[15] = 1.0;
 
         return ortho;
     }

@@ -1,12 +1,14 @@
 package org.flag4j.sparse_vector;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOperations;
+import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
 import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeAll;
@@ -109,7 +111,7 @@ class CooVectorOuterProductTest {
                 {-12.535700000000002, 0.0121615, -108.14380000000001, -0.0, 126.2925}};
         exp = new Matrix(expEntries);
         Matrix act = new Matrix(a.size, b.size,
-                RealDenseSparseVectorOperations.outerProduct(a.entries, a.indices, a.size, b.entries));
+                RealDenseSparseVectorOperations.outerProduct(a.data, a.indices, a.size, b.data));
 
         assertEquals(exp, act);
 
@@ -119,7 +121,7 @@ class CooVectorOuterProductTest {
 
         Vector finalB = b;
         assertThrows(IllegalArgumentException.class,
-                ()->RealDenseSparseVectorOperations.outerProduct(a.entries, a.indices, a.size, finalB.entries));
+                ()->RealDenseSparseVectorOperations.outerProduct(a.data, a.indices, a.size, finalB.data));
     }
 
 
@@ -142,7 +144,7 @@ class CooVectorOuterProductTest {
         exp = new CMatrix(expEntries);
 
         CMatrix act = new CMatrix(a.size, b.size,
-                RealFieldDenseCooVectorOperations.outerProduct(a.entries, a.indices, a.size, b.entries));
+                RealFieldDenseCooVectorOps.outerProduct(a.data, a.indices, a.size, b.data));
 
         assertEquals(exp, act);
 
@@ -152,6 +154,6 @@ class CooVectorOuterProductTest {
 
         CVector finalB = b;
         assertThrows(IllegalArgumentException.class,
-                ()->RealFieldDenseCooVectorOperations.outerProduct(a.entries, a.indices, a.size, finalB.entries));
+                ()-> RealFieldDenseCooVectorOps.outerProduct(a.data, a.indices, a.size, finalB.data));
     }
 }

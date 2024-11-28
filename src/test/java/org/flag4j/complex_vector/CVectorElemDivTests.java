@@ -25,7 +25,7 @@ class CVectorElemDivTests {
 
 
     /**
-     * Checks if all entries of two complex vectors are equal where two NaNs are considered equal.
+     * Checks if all data of two complex vectors are equal where two NaNs are considered equal.
      * @param exp Expected complex vector.
      * @param act Actual complex vector.
      */

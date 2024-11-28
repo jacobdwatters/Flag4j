@@ -47,11 +47,11 @@ public final class SemiringCsrMatMult {
     /**
      * Computes the matrix multiplication between two sparse CSR matrices. The result is a dense matrix.
      * @param shape1 Shape of the first matrix in the matrix multiplication.
-     * @param src1Entries Non-zero entries of the first CSR matrix in the matrix multiplication.
+     * @param src1Entries Non-zero data of the first CSR matrix in the matrix multiplication.
      * @param src1RowPointers Non-zero row pointers of the first CSR matrix in the matrix multiplication.
      * @param src1ColIndices Non-zero column indices of the first CSR matrix in the matrix multiplication.
      * @param shape2 Shape of the second matrix in the matrix multiplication.
-     * @param src2Entries Non-zero entries of the second CSR matrix in the matrix multiplication.
+     * @param src2Entries Non-zero data of the second CSR matrix in the matrix multiplication.
      * @param src2RowPointers Non-zero row pointers of the second CSR matrix in the matrix multiplication.
      * @param src2ColIndices Non-zero column indices of the second CSR matrix in the matrix multiplication.
      * @param destEntries Array to store the dense result of the matrix multiplication in (modified).
@@ -99,11 +99,11 @@ public final class SemiringCsrMatMult {
      * caution.
      *
      * @param shape1 Shape of the first matrix in the matrix multiplication.
-     * @param src1Entries Non-zero entries of the first CSR matrix in the matrix multiplication.
+     * @param src1Entries Non-zero data of the first CSR matrix in the matrix multiplication.
      * @param src1RowPointers Non-zero row pointers of the first CSR matrix in the matrix multiplication.
      * @param src1ColIndices Non-zero column indices of the first CSR matrix in the matrix multiplication.
      * @param shape2 Shape of the second matrix in the matrix multiplication.
-     * @param src2Entries Non-zero entries of the second CSR matrix in the matrix multiplication.
+     * @param src2Entries Non-zero data of the second CSR matrix in the matrix multiplication.
      * @param src2RowPointers Non-zero row pointers of the second CSR matrix in the matrix multiplication.
      * @param src2ColIndices Non-zero column indices of the second CSR matrix in the matrix multiplication.
      * @return Sparse CSR matrix resulting from the matrix multiplication of the two sparse CSR matrices.
@@ -141,7 +141,7 @@ public final class SemiringCsrMatMult {
                 }
             }
 
-            // Ensure entries within each row are sorted by the column indices.
+            // Ensure data within each row are sorted by the column indices.
             List<Integer> tempColIndices = new ArrayList<>(tempMap.keySet());
             Collections.sort(tempColIndices);
 
@@ -161,11 +161,11 @@ public final class SemiringCsrMatMult {
     /**
      * Computes the matrix-vector multiplication between a sparse CSR matrix and a sparse COO vector.
      * @param shape Shape of the CSR matrix.
-     * @param src1 Non-zero entries of the CSR matrix
+     * @param src1 Non-zero data of the CSR matrix
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      * @param size Full size of the COO vector.
-     * @param src2 Non-zero entries of the COO vector.
+     * @param src2 Non-zero data of the COO vector.
      * @param indices Non-zero indices of the COO Vector.
      * @param dest Array to store the dense result of the matrix-vector multiplication in.
      * @param zero Zero element of the semiring. If {@code null} then the zero value will attempt to be discerned from {@code src1}.

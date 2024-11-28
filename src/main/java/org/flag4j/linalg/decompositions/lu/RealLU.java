@@ -87,7 +87,7 @@ public class RealLU extends LU<Matrix> {
 
         // Using Gaussian elimination and no pivoting
         for(int j=0; j<colStop; j++) {
-            if(j<LU.numRows && Math.abs(LU.entries[j*LU.numCols + j]) < zeroPivotTol) {
+            if(j<LU.numRows && Math.abs(LU.data[j*LU.numCols + j]) < zeroPivotTol) {
                 throw new LinearAlgebraException("Zero pivot encountered in decomposition." +
                         " Consider using LU decomposition with partial pivoting.");
             }
@@ -153,18 +153,18 @@ public class RealLU extends LU<Matrix> {
 
         for(int i=j+1; i<LU.numRows; i++) {
             iRow = i*LU.numCols;
-            m = LU.entries[iRow + j];
-            m = LU.entries[pivotRow + j] == 0 ? m : m/LU.entries[pivotRow + j];
+            m = LU.data[iRow + j];
+            m = LU.data[pivotRow + j] == 0 ? m : m/LU.data[pivotRow + j];
 
             if(m!=0) {
                 // Compute and set U values.
                 for (int k = j; k < LU.numCols; k++) {
-                    LU.entries[iRow + k] -= m * LU.entries[pivotRow + k];
+                    LU.data[iRow + k] -= m * LU.data[pivotRow + k];
                 }
             }
 
             // Compute and set L value.
-            LU.entries[iRow + j] = m;
+            LU.data[iRow + j] = m;
         }
     }
 
@@ -180,7 +180,7 @@ public class RealLU extends LU<Matrix> {
         double value;
 
         for(int i=j; i<LU.numRows; i++) {
-            value = Math.abs(LU.entries[i*LU.numCols + j]);
+            value = Math.abs(LU.data[i*LU.numCols + j]);
             if(value > currentMax) {
                 currentMax = value;
                 maxIndex = i;
@@ -206,7 +206,7 @@ public class RealLU extends LU<Matrix> {
             rowIdx = i*LU.numCols;
 
             for(int j=startIndex; j<LU.numCols; j++) {
-                value = Math.abs(LU.entries[rowIdx+j]);
+                value = Math.abs(LU.data[rowIdx+j]);
 
                 if(value > currentMax) {
                     currentMax = value;
@@ -231,8 +231,8 @@ public class RealLU extends LU<Matrix> {
 
         // Copy L values from LU matrix.
         for(int i=0; i<LU.numRows; i++) {
-            if(i<LU.numCols) L.entries[i*L.numCols + i] = 1; // Set principle diagonal to be 1, so it is unit lower-triangular.
-            System.arraycopy(LU.entries, i*LU.numCols, L.entries, i*L.numCols, i);
+            if(i<LU.numCols) L.data[i*L.numCols + i] = 1; // Set principle diagonal to be 1, so it is unit lower-triangular.
+            System.arraycopy(LU.data, i*LU.numCols, L.data, i*L.numCols, i);
         }
 
         return L;
@@ -252,8 +252,8 @@ public class RealLU extends LU<Matrix> {
 
         // Copy U values from LU matrix.
         for(int i=0; i<stopIdx; i++) {
-            System.arraycopy(LU.entries, i*(LU.numCols+1),
-                    U.entries, i*(LU.numCols+1), LU.numCols-i);
+            System.arraycopy(LU.data, i*(LU.numCols+1),
+                    U.data, i*(LU.numCols+1), LU.numCols-i);
         }
 
         return U;

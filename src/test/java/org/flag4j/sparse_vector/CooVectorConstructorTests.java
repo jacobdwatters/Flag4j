@@ -28,7 +28,7 @@ class CooVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
         assertArrayEquals(expIndices, a.indices);
 
         // ------------- Sub-case 2 -------------
@@ -48,7 +48,7 @@ class CooVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
 
         // ------------- Sub-case 2 -------------
         expSize = -1;
@@ -85,7 +85,7 @@ class CooVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
 
         // ------------- Sub-case 2 -------------
         expSize = -1;
@@ -126,6 +126,6 @@ class CooVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
     }
 }

@@ -30,16 +30,16 @@ import org.flag4j.arrays.Shape;
  * This interface specifies methods which all tensors should implement.
  *
  * @param <T> Type of this tensor.
- * @param <U> Type of storage for the entries of this tensor. Should be array-like.
+ * @param <U> Type of storage for the data of this tensor. Should be array-like.
  * @param <V> Type (or wrapper) of an element of this tensor.
  */
 public interface TensorMixin<T extends TensorMixin<T, U, V>, U, V> {
 
     /**
-     * Gets the entries of this tensor.
-     * @return The entries of this tensor.
+     * Gets the data of this tensor.
+     * @return The data of this tensor.
      */
-    U getEntries();
+    U getData();
 
 
     /**
@@ -69,7 +69,7 @@ public interface TensorMixin<T extends TensorMixin<T, U, V>, U, V> {
      * @see #T(int...)
      */
     default T T() {
-        return T(0, getRank());
+        return T(0, getRank()-1);
     }
 
 

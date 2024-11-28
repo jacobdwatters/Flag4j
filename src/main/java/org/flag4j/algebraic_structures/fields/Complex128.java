@@ -256,7 +256,7 @@ public class Complex128 implements Field<Complex128> {
 
 
     /**
-     * Computes the sum of all entries of specified array.
+     * Computes the sum of all data of specified array.
      * @param values Values to compute product of.
      * @return The sum of all values in {@code values}.
      */

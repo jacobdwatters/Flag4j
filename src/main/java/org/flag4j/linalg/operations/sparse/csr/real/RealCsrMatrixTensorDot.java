@@ -127,6 +127,6 @@ public final class RealCsrMatrixTensorDot {
             destShape = new Shape(1, destShape.getDims()[0]);
         }
 
-        return new Matrix(destShape, prod.entries);
+        return new Matrix(destShape, prod.data);
     }
 }

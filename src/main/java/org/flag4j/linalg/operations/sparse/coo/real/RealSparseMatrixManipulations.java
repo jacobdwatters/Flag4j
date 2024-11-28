@@ -54,9 +54,9 @@ public final class RealSparseMatrixManipulations {
     public static CooMatrix removeRow(CooMatrix src, int rowIdx) {
         Shape shape = new Shape(src.numRows-1, src.numCols);
 
-        // Find the start and end index within the entries array which have the given row index.
+        // Find the start and end index within the data array which have the given row index.
         int[] startEnd = SparseElementSearch.matrixFindRowStartEnd(src.rowIndices, rowIdx);
-        int size = src.entries.length - (startEnd[1]-startEnd[0]);
+        int size = src.data.length - (startEnd[1]-startEnd[0]);
 
         // Initialize arrays_old.
         double[] entries = new double[size];
@@ -80,16 +80,16 @@ public final class RealSparseMatrixManipulations {
      */
     public static CooMatrix removeRows(CooMatrix src, int... rowIdxs) {
         Shape shape = new Shape(src.numRows-rowIdxs.length, src.numCols);
-        List<Double> entries = new ArrayList<>(src.entries.length);
-        List<Integer> rowIndices = new ArrayList<>(src.entries.length);
-        List<Integer> colIndices = new ArrayList<>(src.entries.length);
+        List<Double> entries = new ArrayList<>(src.data.length);
+        List<Integer> rowIndices = new ArrayList<>(src.data.length);
+        List<Integer> colIndices = new ArrayList<>(src.data.length);
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             int idx = Arrays.binarySearch(rowIdxs, src.rowIndices[i]);
 
             if(idx < 0) {
                 // Then copy the entry over and apply proper shift to row index.
-                entries.add(src.entries[i]);
+                entries.add(src.data[i]);
                 rowIndices.add(src.rowIndices[i] + (idx+1));
                 colIndices.add(src.colIndices[i]);
             }
@@ -107,14 +107,14 @@ public final class RealSparseMatrixManipulations {
      */
     public static CooMatrix removeCol(CooMatrix src, int colIdx) {
         Shape shape = new Shape(src.numRows, src.numCols-1);
-        List<Double> entries = new ArrayList<>(src.entries.length);
-        List<Integer> rowIndices = new ArrayList<>(src.entries.length);
-        List<Integer> colIndices = new ArrayList<>(src.entries.length);
+        List<Double> entries = new ArrayList<>(src.data.length);
+        List<Integer> rowIndices = new ArrayList<>(src.data.length);
+        List<Integer> colIndices = new ArrayList<>(src.data.length);
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             if(src.colIndices[i] != colIdx) {
                 // Then entry is not in the specified column, so remove it.
-                entries.add(src.entries[i]);
+                entries.add(src.data[i]);
                 rowIndices.add(src.rowIndices[i]);
 
                 if(src.colIndices[i] < colIdx) colIndices.add(src.colIndices[i]);
@@ -134,16 +134,16 @@ public final class RealSparseMatrixManipulations {
      */
     public static CooMatrix removeCols(CooMatrix src, int... colIdxs) {
         Shape shape = new Shape(src.numRows, src.numCols-1);
-        List<Double> entries = new ArrayList<>(src.entries.length);
-        List<Integer> rowIndices = new ArrayList<>(src.entries.length);
-        List<Integer> colIndices = new ArrayList<>(src.entries.length);
+        List<Double> entries = new ArrayList<>(src.data.length);
+        List<Integer> rowIndices = new ArrayList<>(src.data.length);
+        List<Integer> colIndices = new ArrayList<>(src.data.length);
 
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             int idx = Arrays.binarySearch(colIdxs, src.colIndices[i]);
 
             if(idx < 0) {
                 // Then entry is not in the specified column, so copy it with the appropriate column index shift.
-                entries.add(src.entries[i]);
+                entries.add(src.data[i]);
                 rowIndices.add(src.rowIndices[i]);
                 colIndices.add(src.colIndices[i] + (idx+1));
             }
@@ -154,20 +154,20 @@ public final class RealSparseMatrixManipulations {
 
 
     /**
-     * A helper method which copies from a sparse matrix to a set of three arrays_old (non-zero entries, row indices, and
+     * A helper method which copies from a sparse matrix to a set of three arrays_old (non-zero data, row indices, and
      * column indices) but skips over a specified range.
      * @param src Source sparse matrix to copy from.
-     * @param entries Array to copy {@code} src non-zero entries to.
-     * @param rowIndices Array to copy {@code} src row indices entries to.
-     * @param colIndices Array to copy {@code} src column indices entries to.
+     * @param entries Array to copy {@code} src non-zero data to.
+     * @param rowIndices Array to copy {@code} src row indices data to.
+     * @param colIndices Array to copy {@code} src column indices data to.
      * @param startEnd An array of length two specifying the {@code start} (inclusive) and {@code end} (exclusive)
      *                 indices of the range to skip during the copy.
      */
     private static void copyRanges(CooMatrix src, double[] entries,
                                    int[] rowIndices, int[] colIndices, int[] startEnd) {
         if(startEnd[0] >= 0) {
-            System.arraycopy(src.entries, 0, entries, 0, startEnd[0]);
-            System.arraycopy(src.entries, startEnd[1], entries, startEnd[0], entries.length - startEnd[0]);
+            System.arraycopy(src.data, 0, entries, 0, startEnd[0]);
+            System.arraycopy(src.data, startEnd[1], entries, startEnd[0], entries.length - startEnd[0]);
 
             System.arraycopy(src.rowIndices, 0, rowIndices, 0, startEnd[0]);
             System.arraycopy(src.rowIndices, startEnd[1], rowIndices, startEnd[0], entries.length - startEnd[0]);
@@ -176,7 +176,7 @@ public final class RealSparseMatrixManipulations {
             System.arraycopy(src.colIndices, 0, colIndices, 0, startEnd[0]);
             System.arraycopy(src.colIndices, startEnd[1], colIndices, startEnd[0], entries.length - startEnd[0]);
         } else {
-            System.arraycopy(src.entries, 0, entries, 0, entries.length);
+            System.arraycopy(src.data, 0, entries, 0, entries.length);
             System.arraycopy(src.rowIndices, 0, rowIndices, 0, rowIndices.length);
             System.arraycopy(src.colIndices, 0, colIndices, 0, colIndices.length);
 
@@ -193,7 +193,7 @@ public final class RealSparseMatrixManipulations {
      * @return A reference to the {@code src} sparse matrix.
      */
     public static CooMatrix swapRows(CooMatrix src, int rowIdx1, int rowIdx2) {
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             // Swap row indices.
             if(src.rowIndices[i]==rowIdx1) src.rowIndices[i] = rowIdx2;
             else if(src.rowIndices[i]==rowIdx2) src.rowIndices[i] = rowIdx1;
@@ -214,7 +214,7 @@ public final class RealSparseMatrixManipulations {
      * @return A reference to the {@code src} sparse matrix.
      */
     public static CooMatrix swapCols(CooMatrix src, int colIdx1, int colIdx2) {
-        for(int i=0; i<src.entries.length; i++) {
+        for(int i = 0; i<src.data.length; i++) {
             // Swap row indices.
             if(src.colIndices[i]==colIdx1) src.colIndices[i] = colIdx2;
             if(src.colIndices[i]==colIdx2) src.colIndices[i] = colIdx1;

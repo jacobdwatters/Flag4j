@@ -43,7 +43,7 @@ public final class SemiringCsrProperties {
     /**
      * Checks if a sparse CSR matrix is upper-triangular.
      * @param shape Shape of the CSR matrix.
-     * @param entries Non-zero entries of the CSR matrix.
+     * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR Matrix.
      * @return {@code true} if the CSR matrix is upper-triangular. Otherwise, returns {@code false}.
@@ -68,7 +68,7 @@ public final class SemiringCsrProperties {
     /**
      * Checks if a sparse CSR matrix is lower-triangular.
      * @param shape Shape of the CSR matrix.
-     * @param entries Non-zero entries of the CSR matrix.
+     * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR Matrix.
      * @return {@code true} if the CSR matrix is lower-triangular. Otherwise, returns {@code false}.

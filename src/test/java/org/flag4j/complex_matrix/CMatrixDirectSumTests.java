@@ -9,6 +9,8 @@ import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.linalg.DirectSum;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class CMatrixDirectSumTests {
 
     Shape sparseShape;

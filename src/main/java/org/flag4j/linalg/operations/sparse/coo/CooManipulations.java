@@ -42,7 +42,7 @@ public final class CooManipulations {
     /**
      * Swaps two rows, in place, in a sparse COO matrix.
      * @param shape Shape of the matrix to make swap in.
-     * @param entries Non-zero entries of the COO matrix.
+     * @param entries Non-zero data of the COO matrix.
      * @param rowIndices Row indices of the COO matrix.
      * @param colIndices Column indices of the COO matrix.
      * @param rowIdx1 Index of the first row in the swap.
@@ -67,7 +67,7 @@ public final class CooManipulations {
     /**
      * Swaps two columns, in place, in a sparse COO matrix.
      * @param shape Shape of the matrix to make swap in.
-     * @param entries Non-zero entries of the COO matrix.
+     * @param entries Non-zero data of the COO matrix.
      * @param rowIndices Row indices of the COO matrix.
      * @param colIndices Column indices of the COO matrix.
      * @param colIdx1 Index of the first column in the swap.

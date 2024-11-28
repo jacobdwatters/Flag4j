@@ -30,13 +30,13 @@ import java.util.List;
 
 /**
  * <p>Data class for storing information for a sparse COO tensor.
- * <p>This record stores two arrays: the non-zero entries, the non-zero indices.
+ * <p>This record stores two arrays: the non-zero data, the non-zero indices.
  * @param shape Shape of the tensor.
- * @param entries Non-zero entries of the sparse tensor.
+ * @param data Non-zero data of the sparse tensor.
  * @param indices Non-zero indices of the sparse tensor.
- * @param <T> Type of the entries of the tensor.
+ * @param <T> Type of the data of the tensor.
  */
-public record SparseTensorData<T>(Shape shape, List<T> entries, List<int[]> indices) {
+public record SparseTensorData<T>(Shape shape, List<T> data, List<int[]> indices) {
 
     /**
      * Converts the indices of this sparse tensor data to a 2D primitive integer array.

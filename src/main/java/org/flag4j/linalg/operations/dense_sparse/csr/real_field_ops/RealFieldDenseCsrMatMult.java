@@ -79,12 +79,12 @@ public final class RealFieldDenseCsrMatMult {
 
             for(int aIndex=start; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                double aVal = src1.entries[aIndex];
+                double aVal = src1.data[aIndex];
                 int src2Idx = aCol*src2.numCols;
                 int destIdx = rowOffset;
 
                 while(destIdx < innerStop) {
-                    destEntries[destIdx] = destEntries[destIdx++].add(src2.entries[src2Idx++].mult(aVal));
+                    destEntries[destIdx] = destEntries[destIdx++].add(src2.data[src2Idx++].mult(aVal));
                 }
             }
         }
@@ -126,7 +126,7 @@ public final class RealFieldDenseCsrMatMult {
 
                 while(start < stop) {
                     destEntries[destRowOffset] = destEntries[destRowOffset].add(
-                            src2.entries[src2RowOffset + src1.colIndices[start]].mult(src1.entries[start++]));
+                            src2.data[src2RowOffset + src1.colIndices[start]].mult(src1.data[start++]));
                 }
             }
         }
@@ -162,13 +162,13 @@ public final class RealFieldDenseCsrMatMult {
             int src1RowOffset = i*cols1;
 
             for(int j=0; j<cols1; j++) {
-                double src1Val = src1.entries[src1RowOffset + j];
+                double src1Val = src1.data[src1RowOffset + j];
                 int start = src2.rowPointers[j];
                 int stop = src2.rowPointers[j + 1];
 
                 for(int aIndex=start; aIndex<stop; aIndex++) {
                     int aCol = src2.colIndices[aIndex];
-                    Field<T> aVal = src2.entries[aIndex];
+                    Field<T> aVal = src2.data[aIndex];
                     destEntries[rowOffset + aCol] = destEntries[rowOffset + aCol].add(aVal.mult(src1Val));
                 }
             }
@@ -204,13 +204,13 @@ public final class RealFieldDenseCsrMatMult {
             int src1RowOffset = i*cols1;
 
             for(int j=0; j<cols1; j++) {
-                Field<T> src1Val = src1.entries[src1RowOffset + j];
+                Field<T> src1Val = src1.data[src1RowOffset + j];
                 int start = src2.rowPointers[j];
                 int stop = src2.rowPointers[j + 1];
 
                 for(int aIndex=start; aIndex<stop; aIndex++) {
                     int aCol = src2.colIndices[aIndex];
-                    double aVal = src2.entries[aIndex];
+                    double aVal = src2.data[aIndex];
                     destEntries[rowOffset + aCol] = destEntries[rowOffset + aCol].add(src1Val.mult(aVal));
                 }
             }
@@ -243,9 +243,9 @@ public final class RealFieldDenseCsrMatMult {
 
             for (int aIndex = start; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                double aVal = src1.entries[aIndex];
+                double aVal = src1.data[aIndex];
 
-                destEntries[i] = destEntries[i].add(src2.entries[aCol].mult(aVal));
+                destEntries[i] = destEntries[i].add(src2.data[aCol].mult(aVal));
             }
         }
 
@@ -281,12 +281,12 @@ public final class RealFieldDenseCsrMatMult {
 
             for(int aIndex=start; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                Field<T> aVal = src1.entries[aIndex];
+                Field<T> aVal = src1.data[aIndex];
                 int src2Idx = aCol*src2.numCols;
                 int destIdx = rowOffset;
 
                 while(destIdx < innerStop) {
-                    destEntries[destIdx] = destEntries[destIdx++].add(aVal.mult(src2.entries[src2Idx++]));
+                    destEntries[destIdx] = destEntries[destIdx++].add(aVal.mult(src2.data[src2Idx++]));
                 }
             }
         }
@@ -318,9 +318,9 @@ public final class RealFieldDenseCsrMatMult {
 
             for (int aIndex = start; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                Field<T> aVal = src1.entries[aIndex];
+                Field<T> aVal = src1.data[aIndex];
 
-                destEntries[i] = destEntries[i].add(aVal.mult(src2.entries[aCol]));
+                destEntries[i] = destEntries[i].add(aVal.mult(src2.data[aCol]));
             }
         }
 

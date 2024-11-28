@@ -53,7 +53,7 @@ public interface VectorMixin<T extends VectorMixin<T, U, V, W>,
      *
      * @param b Second vector in the inner product.
      * @return The inner product between this vector and the vector {@code b}.
-     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of entries.
+     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of data.
      * @see #dot(VectorMixin)
      */
     W inner(T b);
@@ -69,7 +69,7 @@ public interface VectorMixin<T extends VectorMixin<T, U, V, W>,
      *
      * @return The dot product between this vector and the vector {@code b}.
      *
-     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of entries.
+     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of data.
      * @see #inner(VectorMixin)
      */
     W dot(T b);
@@ -78,14 +78,14 @@ public interface VectorMixin<T extends VectorMixin<T, U, V, W>,
     /**
      * Gets the length of a vector. Same as {@link #size()}.
      *
-     * @return The length, i.e. the number of entries, in this vector.
+     * @return The length, i.e. the number of data, in this vector.
      */
     int length();
 
 
     /**
      * Gets the size/length of a vector. Same as {@link #length()}.
-     * @return The length, i.e. the number of entries, in this vector.
+     * @return The length, i.e. the number of data, in this vector.
      */
     default int size() {
         return length();
@@ -112,7 +112,7 @@ public interface VectorMixin<T extends VectorMixin<T, U, V, W>,
      *
      * @param b Vector to stack below this vector.
      * @return The result of stacking this vector and vector {@code b}.
-     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of entries in
+     * @throws IllegalArgumentException If the number of data in this vector is different from the number of data in
      *                                  the vector {@code b}.
      */
     default U stack(T b) {
@@ -139,8 +139,8 @@ public interface VectorMixin<T extends VectorMixin<T, U, V, W>,
      * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
      *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
      * @return The result of stacking this vector and the vector {@code b}.
-     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
-     *                                  entries in the vector {@code b}.
+     * @throws IllegalArgumentException If the number of data in this vector is different from the number of
+     *                                  data in the vector {@code b}.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     U stack(T b, int axis);
@@ -151,7 +151,7 @@ public interface VectorMixin<T extends VectorMixin<T, U, V, W>,
      *
      * @param b Second vector in the outer product.
      * @return The result of the vector outer product between this vector and {@code b}.
-     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
+     * @throws IllegalArgumentException If the two vectors do not have the same number of data.
      */
     V outer(T b);
 
@@ -188,4 +188,12 @@ public interface VectorMixin<T extends VectorMixin<T, U, V, W>,
      * @return The magnitude of this vector.
      */
     W mag();
+
+
+    /**
+     * Gets the element of this vector at the specified index.
+     * @param idx Index of the element to get within this vector.
+     * @return The element of this vector at index {@code idx}.
+     */
+    W get(int idx);
 }

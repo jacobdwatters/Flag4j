@@ -49,27 +49,28 @@ public final class RealFieldDenseCooMatMult {
      * Computes the matrix multiplication between a real dense matrix and a sparse field matrix using a standard algorithm.
      * @param src1 Entries of the dense matrix.
      * @param shape1 Shape of the dense matrix.
-     * @param src2 Non-zero entries of the sparse matrix.
-     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
-     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param src2 Non-zero data of the sparse matrix.
+     * @param rowIndices Row indices for non-zero data of the sparse matrix.
+     * @param colIndices Column indices for non-zero data of the sparse matrix.
      * @param shape2 Shape of the sparse matrix.
+     * @param dest Array to store the dense result of the matrix multiplication.
      * @return The result of the matrix multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] standard(
+    public static <T extends Field<T>> void standard(
             double[] src1, Shape shape1, Field<T>[] src2,
-            int[] rowIndices, int[] colIndices, Shape shape2) {
+            int[] rowIndices, int[] colIndices, Shape shape2,
+            Field<T>[] dest) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
 
-        Field<T>[] dest = new Field[rows1*cols2];
         Arrays.fill(dest, (src2.length > 0) ? src2[0].getZero() : null);
 
         int row;
         int col;
 
         for(int i=0; i<rows1; i++) {
-            // Loop over non-zero entries of sparse matrix.
+            // Loop over non-zero data of sparse matrix.
             int destRowOffset = i*cols2;
             int src1RowOffset = i*cols1;
 
@@ -80,29 +81,28 @@ public final class RealFieldDenseCooMatMult {
                 dest[destRowOffset + col] = dest[destRowOffset + col].add(src2[j].mult(src1[src1RowOffset + row]));
             }
         }
-
-        return dest;
     }
 
 
     /**
      * Computes the matrix multiplication between a real sparse matrix and a dense field matrix using a standard algorithm.
      *
-     * @param src1 Non-zero entries of the sparse matrix.
-     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
-     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param src1 Non-zero data of the sparse matrix.
+     * @param rowIndices Row indices for non-zero data of the sparse matrix.
+     * @param colIndices Column indices for non-zero data of the sparse matrix.
      * @param shape1 Shape of the sparse matrix.
      * @param src2 Entries of the dense matrix.
      * @param shape2 Shape of the dense matrix.
+     * @param dest Array to store the dense result of the matrix multiplication.
      * @return The result of the matrix multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] standard(
+    public static <T extends Field<T>> void standard(
             double[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
-            Field<T>[] src2, Shape shape2) {
+            Field<T>[] src2, Shape shape2,
+            Field<T>[] dest) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
 
-        Field<T>[] dest = new Field[rows1*cols2];
         Arrays.fill(dest, (src2.length > 0) ? src2[0].getZero() : null);
 
         int row;
@@ -117,8 +117,6 @@ public final class RealFieldDenseCooMatMult {
             for(int j=0; j<cols2; j++)
                 dest[destRowOffset + j] = dest[destRowOffset + j].add(src2[src2RowOffset + j].mult(src1[i]));
         }
-
-        return dest;
     }
 
 
@@ -126,27 +124,28 @@ public final class RealFieldDenseCooMatMult {
      * Computes the matrix multiplication between a real dense matrix and a sparse field matrix using a concurrent standard algorithm.
      * @param src1 Entries of the dense matrix.
      * @param shape1 Shape of the dense matrix.
-     * @param src2 Non-zero entries of the sparse matrix.
-     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
-     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param src2 Non-zero data of the sparse matrix.
+     * @param rowIndices Row indices for non-zero data of the sparse matrix.
+     * @param colIndices Column indices for non-zero data of the sparse matrix.
      * @param shape2 Shape of the sparse matrix.
+     * @param dest Array to store the dense result of the matrix multiplication.
      * @return The result of the matrix multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] concurrentStandard(
+    public static <T extends Field<T>> void concurrentStandard(
             double[] src1, Shape shape1, Field<T>[] src2,
-            int[] rowIndices, int[] colIndices, Shape shape2) {
+            int[] rowIndices, int[] colIndices, Shape shape2,
+            Field<T>[] dest) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
 
-        Field<T>[] dest = new Field[rows1*cols2];
         Arrays.fill(dest, (src2.length > 0) ? src2[0].getZero() : null);
 
         ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
                 int rowOffset = i*cols2;
 
-                // Loop over non-zero entries of sparse matrix.
+                // Loop over non-zero data of sparse matrix.
                 for(int j=0; j<src2.length; j++) {
                     int row = rowIndices[j];
                     int col = colIndices[j];
@@ -158,8 +157,6 @@ public final class RealFieldDenseCooMatMult {
                 }
             }
         });
-
-        return dest;
     }
 
 
@@ -167,21 +164,22 @@ public final class RealFieldDenseCooMatMult {
      * Computes the matrix multiplication between a real sparse matrix and a dense field matrix
      * using a concurrent standard algorithm.
      *
-     * @param src1 Non-zero entries of the sparse matrix.
-     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
-     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param src1 Non-zero data of the sparse matrix.
+     * @param rowIndices Row indices for non-zero data of the sparse matrix.
+     * @param colIndices Column indices for non-zero data of the sparse matrix.
      * @param shape1 Shape of the sparse matrix.
      * @param src2 Entries of the dense matrix.
      * @param shape2 Shape of the dense matrix.
+     * @param dest Array to store the dense result of the matrix multiplication.
      * @return The result of the matrix multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] concurrentStandard(
+    public static <T extends Field<T>> void concurrentStandard(
             double[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
-            Field<T>[] src2, Shape shape2) {
+            Field<T>[] src2, Shape shape2,
+            Field<T>[] dest) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
 
-        Field<T>[] dest = new Field[rows1*cols2];
         Arrays.fill(dest, (src2.length > 0) ? src2[0].getZero() : null);
 
         ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
@@ -199,8 +197,6 @@ public final class RealFieldDenseCooMatMult {
                 }
             }
         });
-
-        return dest;
     }
 
 
@@ -208,20 +204,21 @@ public final class RealFieldDenseCooMatMult {
      * Computes the matrix multiplication between a real dense matrix and a sparse field matrix using a standard algorithm.
      * @param src1 Entries of the dense matrix.
      * @param shape1 Shape of the dense matrix.
-     * @param src2 Non-zero entries of the sparse matrix.
-     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
-     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param src2 Non-zero data of the sparse matrix.
+     * @param rowIndices Row indices for non-zero data of the sparse matrix.
+     * @param colIndices Column indices for non-zero data of the sparse matrix.
      * @param shape2 Shape of the sparse matrix.
+     * @param dest Array to store the dense result of the matrix multiplication in.
      * @return The result of the matrix multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] standard(
+    public static <T extends Field<T>> void standard(
             Field<T>[] src1, Shape shape1, double[] src2,
-            int[] rowIndices, int[] colIndices, Shape shape2) {
+            int[] rowIndices, int[] colIndices, Shape shape2,
+            Field<T>[] dest) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
 
-        Field<T>[] dest = new Field[rows1*cols2];
         Arrays.fill(dest, (src1.length > 0) ? src1[0].getZero() : null);;
 
         int row;
@@ -230,7 +227,7 @@ public final class RealFieldDenseCooMatMult {
         for(int i=0; i<rows1; i++) {
             int destRowOffset = i*cols2;
 
-            // Loop over non-zero entries of sparse matrix.
+            // Loop over non-zero data of sparse matrix.
             for(int j=0; j<src2.length; j++) {
                 row = rowIndices[j];
                 col = colIndices[j];
@@ -238,29 +235,28 @@ public final class RealFieldDenseCooMatMult {
                 dest[destRowOffset + col] = dest[destRowOffset + col].add(src1[i*cols1 + row].mult(src2[j]));
             }
         }
-
-        return dest;
     }
 
 
     /**
      * Computes the matrix multiplication between a real sparse matrix and a dense field matrix using a standard algorithm.
      *
-     * @param src1 Non-zero entries of the sparse matrix.
-     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
-     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param src1 Non-zero data of the sparse matrix.
+     * @param rowIndices Row indices for non-zero data of the sparse matrix.
+     * @param colIndices Column indices for non-zero data of the sparse matrix.
      * @param shape1 Shape of the sparse matrix.
      * @param src2 Entries of the dense matrix.
      * @param shape2 Shape of the dense matrix.
+     * @param dest Array to store the dense result of the matrix multiplication.
      * @return The result of the matrix multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] standard(
+    public static <T extends Field<T>> void standard(
             Field<T>[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
-            double[] src2, Shape shape2) {
+            double[] src2, Shape shape2,
+            Field<T>[] dest) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
 
-        Field<T>[] dest = new Field[rows1*cols2];
         Arrays.fill(dest, (src1.length > 0) ? src1[0].getZero() : null);
 
         for(int i=0; i<src1.length; i++) {
@@ -272,8 +268,6 @@ public final class RealFieldDenseCooMatMult {
             for(int j=0; j<cols2; j++)
                 dest[destRowOffset + j] = dest[destRowOffset + j].add(src1[i].mult(src2[src2RowOffset + j]));
         }
-
-        return dest;
     }
 
 
@@ -281,20 +275,21 @@ public final class RealFieldDenseCooMatMult {
      * Computes the matrix multiplication between a real dense matrix and a sparse field matrix using a concurrent standard algorithm.
      * @param src1 Entries of the dense matrix.
      * @param shape1 Shape of the dense matrix.
-     * @param src2 Non-zero entries of the sparse matrix.
-     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
-     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param src2 Non-zero data of the sparse matrix.
+     * @param rowIndices Row indices for non-zero data of the sparse matrix.
+     * @param colIndices Column indices for non-zero data of the sparse matrix.
      * @param shape2 Shape of the sparse matrix.
+     * @param dest Array to store the dense result of the matrix multiplication.
      * @return The result of the matrix multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] concurrentStandard(
+    public static <T extends Field<T>> void concurrentStandard(
             Field<T>[] src1, Shape shape1, double[] src2, 
-            int[] rowIndices, int[] colIndices, Shape shape2) {
+            int[] rowIndices, int[] colIndices, Shape shape2,
+            Field<T>[] dest) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int cols2 = shape2.get(1);
 
-        Field<T>[] dest = new Field[rows1*cols2];
         Arrays.fill(dest, (src1.length > 0) ? src1[0].getZero() : null);
 
         ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
@@ -302,7 +297,7 @@ public final class RealFieldDenseCooMatMult {
                 int destRowOffset = i*cols2;
                 int productOffset = i*cols1;
 
-                // Loop over non-zero entries of sparse matrix.
+                // Loop over non-zero data of sparse matrix.
                 for(int j=0; j<src2.length; j++) {
                     int row = rowIndices[j];
                     int col = colIndices[j];
@@ -314,8 +309,6 @@ public final class RealFieldDenseCooMatMult {
                 }
             }
         });
-
-        return dest;
     }
 
 
@@ -323,21 +316,22 @@ public final class RealFieldDenseCooMatMult {
      * Computes the matrix multiplication between a real sparse matrix and a dense field matrix
      * using a concurrent standard algorithm.
      *
-     * @param src1 Non-zero entries of the sparse matrix.
-     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
-     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param src1 Non-zero data of the sparse matrix.
+     * @param rowIndices Row indices for non-zero data of the sparse matrix.
+     * @param colIndices Column indices for non-zero data of the sparse matrix.
      * @param shape1 Shape of the sparse matrix.
      * @param src2 Entries of the dense matrix.
      * @param shape2 Shape of the dense matrix.
+     * @param dest Array to store the dense result of the matrix multiplication.
      * @return The result of the matrix multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] concurrentStandard(
+    public static <T extends Field<T>> void concurrentStandard(
             Field<T>[] src1, int[] rowIndices, int[] colIndices, Shape shape1, 
-            double[] src2, Shape shape2) {
+            double[] src2, Shape shape2,
+            Field<T>[] dest) {
         int rows1 = shape1.get(0);
         int cols2 = shape2.get(1);
 
-        Field<T>[] dest = new Field[rows1*cols2];
         Arrays.fill(dest, (src1.length > 0) ? src1[0].getZero() : null);
 
         ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
@@ -355,8 +349,6 @@ public final class RealFieldDenseCooMatMult {
                 }
             }
         });
-
-        return dest;
     }
 
 
@@ -366,16 +358,19 @@ public final class RealFieldDenseCooMatMult {
      * Computes the dense matrix sparse vector multiplication using a standard algorithm.
      * @param src1 Entries of the dense matrix.
      * @param shape1 Shape of the dense matrix.
-     * @param src2 Non-zero entries of the sparse vector.
-     * @param indices Indices of non-zero entries in sparse vector.
+     * @param src2 Non-zero data of the sparse vector.
+     * @param indices Indices of non-zero data in sparse vector.
+     * @param dest Array to store the dense result of the matrix-vector multiplication.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] standardVector(double[] src1, Shape shape1, Field<T>[] src2, int[] indices) {
+    public static <T extends Field<T>> void standardVector(
+            double[] src1, Shape shape1,
+            Field<T>[] src2, int[] indices,
+            Field<T>[] dest) {
         int denseRows = shape1.get(0);
         int denseCols = shape1.get(1);
         int nonZeros = src2.length;
 
-        Field<T>[] dest = new Field[denseRows];
         Arrays.fill(dest, (src2.length > 0) ? src2[0].getZero() : null);
         int k;
 
@@ -390,26 +385,26 @@ public final class RealFieldDenseCooMatMult {
 
             dest[i] = sum;
         }
-
-        return dest;
     }
 
 
     /**
      * Computes the sparse matrix dense vector multiplication using a standard algorithm.
      * @param src1 Entries of the sparse matrix.
-     * @param rowIndices Row indices of non-zero entries in sparse matrix.
-     * @param colIndices Column indices of non-zero entries in sparse matrix.
+     * @param rowIndices Row indices of non-zero data in sparse matrix.
+     * @param colIndices Column indices of non-zero data in sparse matrix.
      * @param shape1 Shape of the sparse matrix.
      * @param src2 Entries of the dense vector.
      * @param shape2 Shape of the dense vector.
+     * @param dest Array to store the dense result of the matrix-vector multiplication.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] standardVector(
+    public static <T extends Field<T>> void standardVector(
             double[] src1, int[] rowIndices, int[] colIndices,
-            Shape shape1, Field<T>[] src2, Shape shape2) {
+            Shape shape1, Field<T>[] src2, Shape shape2,
+            Field<T>[] dest) {
         int rows1 = shape1.get(0);
-        Field<T>[] dest = new Field[rows1];
+
         Arrays.fill(dest, (src2.length > 0) ? src2[0].getZero() : null);;
         int row;
         int col;
@@ -419,8 +414,6 @@ public final class RealFieldDenseCooMatMult {
             col = colIndices[i];
             dest[row] = dest[row].add(src2[col].mult(src1[i]));
         }
-
-        return dest;
     }
 
 
@@ -428,18 +421,21 @@ public final class RealFieldDenseCooMatMult {
      * Computes the dense matrix sparse vector multiplication using a blocked algorithm.
      * @param src1 Entries of the dense matrix.
      * @param shape1 Shape of the dense matrix.
-     * @param src2 Non-zero entries of the sparse vector.
-     * @param indices Indices of non-zero entries in sparse vector.
+     * @param src2 Non-zero data of the sparse vector.
+     * @param indices Indices of non-zero data in sparse vector.
+     * @param dest Array to store the dense result of the matrix-vector multiplication.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] blockedVector(double[] src1, Shape shape1, Field<T>[] src2, int[] indices) {
+    public static <T extends Field<T>> void blockedVector(
+            double[] src1, Shape shape1,
+            Field<T>[] src2, int[] indices,
+            Field<T>[] dest) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
         int bsize = Configurations.getBlockSize(); // Get the block size to use.
 
-        Field<T>[] dest = new Field[rows1];
         Arrays.fill(dest, (src2.length > 0) ? src2[0].getZero() : null);
 
         // Blocked matrix-vector multiply
@@ -457,8 +453,6 @@ public final class RealFieldDenseCooMatMult {
                 }
             }
         }
-
-        return dest;
     }
 
 
@@ -466,17 +460,19 @@ public final class RealFieldDenseCooMatMult {
      * Computes the dense matrix sparse vector multiplication using a concurrent standard algorithm.
      * @param src1 Entries of the dense matrix.
      * @param shape1 Shape of the dense matrix.
-     * @param src2 Non-zero entries of the sparse vector.
-     * @param indices Indices of non-zero entries in sparse vector.
+     * @param src2 Non-zero data of the sparse vector.
+     * @param indices Indices of non-zero data in sparse vector.
+     * @param dest Array to store the dense result of the matrix-vector multiplication.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] concurrentStandardVector(
-            double[] src1, Shape shape1, Field<T>[] src2, int[] indices) {
+    public static <T extends Field<T>> void concurrentStandardVector(
+            double[] src1, Shape shape1,
+            Field<T>[] src2, int[] indices,
+            Field<T>[] dest) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
-        Field<T>[] dest = new Field[rows1];
         Arrays.fill(dest, (src2.length > 0) ? src2[0].getZero() : null);
 
         ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
@@ -491,26 +487,26 @@ public final class RealFieldDenseCooMatMult {
                 dest[i] = sum;
             }
         });
-
-        return dest;
     }
 
 
     /**
      * Computes the sparse matrix dense vector multiplication using a concurrent standard algorithm.
      * @param src1 Entries of the sparse matrix.
-     * @param rowIndices Row indices of non-zero entries in sparse matrix.
-     * @param colIndices Column indices of non-zero entries in sparse matrix.
+     * @param rowIndices Row indices of non-zero data in sparse matrix.
+     * @param colIndices Column indices of non-zero data in sparse matrix.
      * @param shape1 Shape of the sparse matrix.
      * @param src2 Entries of the dense vector.
      * @param shape2 Shape of the dense vector.
+     * @param dest Array to store the dense result of the matrix-vector multiplication.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] concurrentStandardVector(
+    public static <T extends Field<T>> void concurrentStandardVector(
             double[] src1, int[] rowIndices, int[] colIndices,
-            Shape shape1, Field<T>[] src2, Shape shape2) {
+            Shape shape1, Field<T>[] src2, Shape shape2,
+            Field<T>[] dest) {
         int rows1 = shape1.get(0);
-        Field<T>[] dest = new Field[rows1];
+
         Arrays.fill(dest, (src2.length > 0) ? src2[0].getZero() : null);;
 
         ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
@@ -524,8 +520,6 @@ public final class RealFieldDenseCooMatMult {
                 }
             }
         });
-
-        return dest;
     }
 
 
@@ -533,19 +527,21 @@ public final class RealFieldDenseCooMatMult {
      * Computes the dense matrix sparse vector multiplication using a blocked algorithm.
      * @param src1 Entries of the dense matrix.
      * @param shape1 Shape of the dense matrix.
-     * @param src2 Non-zero entries of the sparse vector.
-     * @param indices Indices of non-zero entries in sparse vector.
+     * @param src2 Non-zero data of the sparse vector.
+     * @param indices Indices of non-zero data in sparse vector.
+     * @param dest Array to store the dense result of the matrix-vector multiplication.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] concurrentBlockedVector(
-            double[] src1, Shape shape1, Field<T>[] src2, int[] indices) {
+    public static <T extends Field<T>> void concurrentBlockedVector(
+            double[] src1, Shape shape1,
+            Field<T>[] src2, int[] indices,
+            Field<T>[] dest) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
         final int bsize = Configurations.getBlockSize(); // Get the block size to use.
 
-        Field<T>[] dest = new Field[rows1];
         Arrays.fill(dest, (src2.length > 0) ? src2[0].getZero() : null);
 
         // Blocked matrix-vector multiply
@@ -566,8 +562,6 @@ public final class RealFieldDenseCooMatMult {
                 }
             }
         });
-
-        return dest;
     }
 
 
@@ -575,16 +569,19 @@ public final class RealFieldDenseCooMatMult {
      * Computes the dense matrix sparse vector multiplication using a standard algorithm.
      * @param src1 Entries of the dense matrix.
      * @param shape1 Shape of the dense matrix.
-     * @param src2 Non-zero entries of the sparse vector.
-     * @param indices Indices of non-zero entries in sparse vector.
+     * @param src2 Non-zero data of the sparse vector.
+     * @param indices Indices of non-zero data in sparse vector.
+     * @param dest Array to store the dense result of the matrix-vector multiplication.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] standardVector(Field<T>[] src1, Shape shape1, double[] src2, int[] indices) {
+    public static <T extends Field<T>> void standardVector(
+            Field<T>[] src1, Shape shape1,
+            double[] src2, int[] indices,
+            Field<T>[] dest) {
         int denseRows = shape1.get(0);
         int denseCols = shape1.get(1);
         int nonZeros = src2.length;
 
-        Field<T>[] dest = new Field[denseRows];
         Arrays.fill(dest, (src1.length > 0) ? src1[0].getZero() : null);
         int k;
 
@@ -598,26 +595,26 @@ public final class RealFieldDenseCooMatMult {
 
             dest[i] = sum;
         }
-
-        return dest;
     }
 
 
     /**
      * Computes the sparse matrix dense vector multiplication using a standard algorithm.
      * @param src1 Entries of the sparse matrix.
-     * @param rowIndices Row indices of non-zero entries in sparse matrix.
-     * @param colIndices Column indices of non-zero entries in sparse matrix.
+     * @param rowIndices Row indices of non-zero data in sparse matrix.
+     * @param colIndices Column indices of non-zero data in sparse matrix.
      * @param shape1 Shape of the sparse matrix.
      * @param src2 Entries of the dense vector.
      * @param shape2 Shape of the dense vector.
+     * @param dest Array to store the dense result of the matrix-vector multiplication.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] standardVector(
+    public static <T extends Field<T>> void standardVector(
             Field<T>[] src1, int[] rowIndices, int[] colIndices,
-            Shape shape1, double[] src2, Shape shape2) {
+            Shape shape1, double[] src2, Shape shape2,
+            Field<T>[] dest) {
         int rows1 = shape1.get(0);
-        Field<T>[] dest = new Field[rows1];
+
         Arrays.fill(dest, (src1.length > 0) ? src1[0].getZero() : null);
 
         for(int i=0; i<src1.length; i++) {
@@ -625,8 +622,6 @@ public final class RealFieldDenseCooMatMult {
             int col = colIndices[i];
             dest[row] = dest[row].add(src1[i].mult(src2[col]));
         }
-
-        return dest;
     }
 
 
@@ -634,16 +629,20 @@ public final class RealFieldDenseCooMatMult {
      * Computes the dense matrix sparse vector multiplication using a blocked algorithm.
      * @param src1 Entries of the dense matrix.
      * @param shape1 Shape of the dense matrix.
-     * @param src2 Non-zero entries of the sparse vector.
-     * @param indices Indices of non-zero entries in sparse vector.
+     * @param src2 Non-zero data of the sparse vector.
+     * @param indices Indices of non-zero data in sparse vector.
+     * @param dest Array to store the dense result of the matrix-vector multiplication.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] blockedVector(Field<T>[] src1, Shape shape1, double[] src2, int[] indices) {
+    public static <T extends Field<T>> void blockedVector(
+            Field<T>[] src1, Shape shape1,
+            double[] src2, int[] indices,
+            Field<T>[] dest) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = src2.length;
         int bsize = Configurations.getBlockSize(); // Get the block size to use.
-        Field<T>[] dest = new Field[rows1];
+
         Arrays.fill(dest, (src1.length > 0) ? src1[0].getZero() : null);
 
         // Blocked matrix-vector multiply.
@@ -661,8 +660,6 @@ public final class RealFieldDenseCooMatMult {
                 }
             }
         }
-
-        return dest;
     }
 
 
@@ -670,17 +667,19 @@ public final class RealFieldDenseCooMatMult {
      * Computes the dense matrix sparse vector multiplication using a concurrent standard algorithm.
      * @param src1 Entries of the dense matrix.
      * @param shape1 Shape of the dense matrix.
-     * @param src2 Non-zero entries of the sparse vector.
-     * @param indices Indices of non-zero entries in sparse vector.
+     * @param src2 Non-zero data of the sparse vector.
+     * @param indices Indices of non-zero data in sparse vector.
+     * @param dest Array to store the dense result of the matrix-vector multiplication.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] concurrentStandardVector(
-            Field<T>[] src1, Shape shape1, double[] src2, int[] indices) {
+    public static <T extends Field<T>> void concurrentStandardVector(
+            Field<T>[] src1, Shape shape1,
+            double[] src2, int[] indices,
+            Field<T>[] dest) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = src2.length;
 
-        Field<T>[] dest = new Field[rows1];
         Arrays.fill(dest, (src1.length > 0) ? src1[0].getZero() : null);
 
         ThreadManager.concurrentOperation(rows1, (startIdx, endIdx) -> {
@@ -695,26 +694,26 @@ public final class RealFieldDenseCooMatMult {
                 dest[i] = sum;
             }
         });
-
-        return dest;
     }
 
 
     /**
      * Computes the sparse matrix dense vector multiplication using a concurrent standard algorithm.
      * @param src1 Entries of the sparse matrix.
-     * @param rowIndices Row indices of non-zero entries in sparse matrix.
-     * @param colIndices Column indices of non-zero entries in sparse matrix.
+     * @param rowIndices Row indices of non-zero data in sparse matrix.
+     * @param colIndices Column indices of non-zero data in sparse matrix.
      * @param shape1 Shape of the sparse matrix.
      * @param src2 Entries of the dense vector.
      * @param shape2 Shape of the dense vector.
+     * @param dest Array to store the dense result of the matrix-vector multiplication.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] concurrentStandardVector(
+    public static <T extends Field<T>> void concurrentStandardVector(
             Field<T>[] src1, int[] rowIndices, int[] colIndices,
-            Shape shape1, double[] src2, Shape shape2) {
+            Shape shape1, double[] src2, Shape shape2,
+            Field<T>[] dest) {
         int rows1 = shape1.get(0);
-        Field<T>[] dest = new Field[rows1];
+
         Arrays.fill(dest, (src1.length > 0) ? src1[0].getZero() : null);
 
         ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {
@@ -728,8 +727,6 @@ public final class RealFieldDenseCooMatMult {
                 }
             }
         });
-
-        return dest;
     }
 
 
@@ -737,17 +734,20 @@ public final class RealFieldDenseCooMatMult {
      * Computes the dense matrix sparse vector multiplication using a blocked algorithm.
      * @param src1 Entries of the dense matrix.
      * @param shape1 Shape of the dense matrix.
-     * @param src2 Non-zero entries of the sparse vector.
-     * @param indices Indices of non-zero entries in sparse vector.
+     * @param src2 Non-zero data of the sparse vector.
+     * @param indices Indices of non-zero data in sparse vector.
+     * @param dest Array to store the dense result of the matrix-vector multiplication.
      * @return Entries of the dense matrix resulting from the matrix vector multiplication.
      */
-    public static <T extends Field<T>> Field<T>[] concurrentBlockedVector(
-            Field<T>[] src1, Shape shape1, double[] src2, int[] indices) {
+    public static <T extends Field<T>> void concurrentBlockedVector(
+            Field<T>[] src1, Shape shape1,
+            double[] src2, int[] indices,
+            Field<T>[] dest) {
         int rows1 = shape1.get(0);
         int cols1 = shape1.get(1);
         int rows2 = src2.length;
         final int bsize = Configurations.getBlockSize(); // Get the block size to use.
-        Field<T>[] dest = new Field[rows1];
+
         Arrays.fill(dest, (src1.length > 0) ? src1[0].getZero() : null);
 
         // Blocked matrix-vector multiply.
@@ -767,7 +767,5 @@ public final class RealFieldDenseCooMatMult {
                 }
             }
         });
-
-        return dest;
     }
 }

@@ -52,11 +52,11 @@ import java.util.Arrays;
 public class SymmTriDiag implements Serializable {
 
     /**
-     * Stores the diagonal entries of this symmetric tri-diagonal matrix.
+     * Stores the diagonal data of this symmetric tri-diagonal matrix.
      */
     final double[] diag;
     /**
-     * Stores the first sub/super diagonal entries of this symmetric tri-diagonal matrix.
+     * Stores the first sub/super diagonal data of this symmetric tri-diagonal matrix.
      */
     final double[] offDiag;
     /**
@@ -66,9 +66,9 @@ public class SymmTriDiag implements Serializable {
 
 
     /**
-     * Constructs a symmetric tri-diagonal matrix with the provided diagonal and off-diagonal entries.
-     * @param diag Diagonal entries of the symmetric tri-diagonal matrix.
-     * @param offDiag Sub/super diagonal entries of the symmetric tri-diagonal matrix.
+     * Constructs a symmetric tri-diagonal matrix with the provided diagonal and off-diagonal data.
+     * @param diag Diagonal data of the symmetric tri-diagonal matrix.
+     * @param offDiag Sub/super diagonal data of the symmetric tri-diagonal matrix.
      */
     public SymmTriDiag(double[] diag, double[] offDiag) {
         ValidateParameters.ensureArrayLengthsEq(diag.length-1, offDiag.length);
@@ -125,9 +125,9 @@ public class SymmTriDiag implements Serializable {
 
     /**
      * Checks if an object is equal to this symmetric tri-diagonal matrix. An object is considered equal to this matrix if it is
-     * an instance of {@link org.flag4j.arrays.sparse.SymmTriDiag} and all diagonal and off diagonal entries are equal.
+     * an instance of {@link org.flag4j.arrays.sparse.SymmTriDiag} and all diagonal and off diagonal data are equal.
      * @param object Object to compare to this symmetric tri-diagonal matrix.
-     * @return True if {@code b} is an instance of {@link org.flag4j.arrays.sparse.SymmTriDiag} and all diagonal and off diagonal entries are equal to the
+     * @return True if {@code b} is an instance of {@link org.flag4j.arrays.sparse.SymmTriDiag} and all diagonal and off diagonal data are equal to the
      * corresponding values in this symmetric tri-diagonal matrix.
      */
     public boolean equals(Object object) {

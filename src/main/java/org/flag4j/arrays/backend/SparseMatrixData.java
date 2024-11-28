@@ -32,14 +32,14 @@ import java.util.List;
 
 /**
  * <p>Data class for storing information for a sparse (CSR or COO) matrix.</p>
- * <p>This record stores three lists: the non-zero entries, the row indices/pointers, and the column indices.</p>
+ * <p>This record stores three lists: the non-zero data, the row indices/pointers, and the column indices.</p>
  * @param shape Shape of the matrix.
- * @param entries Non-zero entries of the sparse matrix.
- * @param rowIndices Non-zero row indices/pointers.
- * @param colIndices Non-zero column indices.
- * @param <T> Type of the entries of the matrix.
+ * @param data Non-zero data of the sparse matrix.
+ * @param rowData Non-zero row indices/pointers.
+ * @param colData Non-zero column indices.
+ * @param <T> Type of the data of the matrix.
  */
-public record SparseMatrixData<T>(Shape shape, List<T> entries, List<Integer> rowIndices, List<Integer> colIndices) {
+public record SparseMatrixData<T>(Shape shape, List<T> data, List<Integer> rowData, List<Integer> colData) {
 
 
     /**
@@ -47,7 +47,7 @@ public record SparseMatrixData<T>(Shape shape, List<T> entries, List<Integer> ro
      * @return A primitive integer array containing the row indices of this sparse matrix data.
      */
     public int[] rowIndicesToArray() {
-        return ArrayUtils.fromIntegerList(rowIndices);
+        return ArrayUtils.fromIntegerList(rowData);
     }
 
 
@@ -56,6 +56,6 @@ public record SparseMatrixData<T>(Shape shape, List<T> entries, List<Integer> ro
      * @return A primitive integer array containing the column indices of this sparse matrix data.
      */
     public int[] colIndicesToArray() {
-        return ArrayUtils.fromIntegerList(colIndices);
+        return ArrayUtils.fromIntegerList(colData);
     }
 }

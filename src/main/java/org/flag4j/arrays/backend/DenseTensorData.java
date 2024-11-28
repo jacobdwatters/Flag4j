@@ -29,10 +29,10 @@ import org.flag4j.arrays.Shape;
 
 /**
  * <p>Data class for storing information for a dense tensor.
- * <p>This record stores two objects: The shape of the tensor and the entries of the tensor.
+ * <p>This record stores two objects: The shape of the tensor and the data of the tensor.
  * @param shape Shape of the tensor.
- * @param entries Non-zero entries of the tensor.
- * @param <T> Type of the entries of the tensor.
+ * @param entries Non-zero data of the tensor.
+ * @param <T> Type of the data of the tensor.
  */
 public record DenseTensorData<T>(Shape shape, T[] entries) {
 }

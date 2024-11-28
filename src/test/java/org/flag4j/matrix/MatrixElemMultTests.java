@@ -3,6 +3,7 @@ package org.flag4j.matrix;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
@@ -57,11 +58,11 @@ class MatrixElemMultTests {
         entriesB = new double[][]{{4.344, 555.6, 94, -0.4442}, {0.0000234, 1333.4, 44.5, 134.3}};
         A = new Matrix(entriesA);
         B = new Matrix(entriesB);
-        expResult = new Matrix(A.shape, getExp(A.entries, B.entries));
+        expResult = new Matrix(A.shape, getExp(A.data, B.data));
 
         result = A.elemMult(B);
 
-        assertArrayEquals(expResult.entries, result.entries);
+        assertArrayEquals(expResult.data, result.data);
         assertEquals(expResult.shape, result.shape);
 
         // ----------------- Sub-case 1 -----------------
@@ -82,11 +83,11 @@ class MatrixElemMultTests {
                 {new Complex128(4.55, -93.2), new Complex128(-2, -13), new Complex128(8.9), new Complex128(0, 13)}};
         A = new Matrix(entriesA);
         BC = new CMatrix(entriesBC);
-        expResultC = new CMatrix(A.shape, getExp(A.entries, BC.entries));
+        expResultC = new CMatrix(A.shape, getExp(A.data, BC.data));
 
         resultC = A.elemMult(BC);
 
-        assertArrayEquals(expResultC.entries, resultC.entries);
+        assertArrayEquals(expResultC.data, resultC.data);
         assertEquals(expResultC.shape, resultC.shape);
 
         // ----------------- Sub-case 1 -----------------
@@ -116,7 +117,7 @@ class MatrixElemMultTests {
 
         sparseResult = A.elemMult(BSparse);
 
-        assertArrayEquals(expSparse.entries, sparseResult.entries);
+        assertArrayEquals(expSparse.data, sparseResult.data);
         assertEquals(expSparse.shape, sparseResult.shape);
 
         // ----------------- Sub-case 2 -----------------
@@ -148,7 +149,7 @@ class MatrixElemMultTests {
 
         sparseComplexResult = A.elemMult(BSparseComplex);
 
-        assertArrayEquals(expSparseComplex.entries, sparseComplexResult.entries);
+        assertArrayEquals(expSparseComplex.data, sparseComplexResult.data);
         assertEquals(expSparseComplex.shape, sparseComplexResult.shape);
 
         // ----------------- Sub-case 2 -----------------

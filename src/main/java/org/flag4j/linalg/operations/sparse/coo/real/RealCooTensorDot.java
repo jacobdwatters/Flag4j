@@ -125,8 +125,8 @@ public final class RealCooTensorDot {
 
         // Compute equivalent matrix multiplication problem.
         double[] productEntries = RealSparseMatrixMultiplication.standard(
-                at.entries, atMatIndices[0], atMatIndices[1], at.shape,
-                bt.entries, btMatIndices[0], btMatIndices[1], bt.shape
+                at.data, atMatIndices[0], atMatIndices[1], at.shape,
+                bt.data, btMatIndices[0], btMatIndices[1], bt.shape
         );
 
         // Reshape to proper N-dimensional shape.

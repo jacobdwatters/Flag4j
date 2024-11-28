@@ -116,7 +116,7 @@ public abstract class ExactTensorSolver<T extends TensorMixin<T, ?, ?>,
 
     /**
      * Ensures that {@code aNumEntries==prod}.
-     * @param aNumEntries The total number of entries in the {@code A} tensor.
+     * @param aNumEntries The total number of data in the {@code A} tensor.
      * @param prod Product of all axis lengths in the output shape.
      */
     protected void checkSize(int aNumEntries, int prod) {
@@ -128,7 +128,7 @@ public abstract class ExactTensorSolver<T extends TensorMixin<T, ?, ?>,
      * Initializes matrix for equivalent linear matrix equation.
      * @param A Tensor to convert to matrix.
      * @param prod Product of all axis lengths in {@code A}.
-     * @return A matrix with the same entries as tensor {@code A} with shape (prod, prod).
+     * @return A matrix with the same data as tensor {@code A} with shape (prod, prod).
      */
     protected abstract U initMatrix(T A, int prod);
 

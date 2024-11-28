@@ -62,7 +62,7 @@ public final class Eigen {
      */
     public static CVector get2x2EigenValues(Matrix src) {
         ValidateParameters.ensureEquals(2, src.numRows, src.numCols);
-        return new CVector(get2x2EigenValues(src.entries[0], src.entries[1], src.entries[2], src.entries[3]));
+        return new CVector(get2x2EigenValues(src.data[0], src.data[1], src.data[2], src.data[3]));
     }
 
 
@@ -149,7 +149,7 @@ public final class Eigen {
      */
     public static CVector get2x2EigenValues(CMatrix src) {
         ValidateParameters.ensureEquals(2, src.numRows, src.numCols);
-        return new CVector(get2x2EigenValues(src.entries[0], src.entries[1], src.entries[2], src.entries[3]));
+        return new CVector(get2x2EigenValues(src.data[0], src.data[1], src.data[2], src.data[3]));
     }
 
 
@@ -266,20 +266,20 @@ public final class Eigen {
         // Extract eigenvalues of T.
         for(int m=0; m<numRows; m++) {
             if(m == numRows-1) {
-                lambdas.entries[m] = new Complex128(T.entries[m*numRows + m]);
+                lambdas.data[m] = new Complex128(T.data[m*numRows + m]);
             } else {
-                double a11 = T.entries[m*numRows + m];
-                double a12 = T.entries[m*numRows + m + 1];
-                double a21 = T.entries[(m+1)*numRows + m];
-                double a22 = T.entries[(m+1)*numRows + m + 1];
+                double a11 = T.data[m*numRows + m];
+                double a12 = T.data[m*numRows + m + 1];
+                double a21 = T.data[(m+1)*numRows + m];
+                double a22 = T.data[(m+1)*numRows + m + 1];
 
                 if(Math.abs(a21) > EPS_F64*(Math.abs(a11) + Math.abs(a22))) {
                     // Non-converged 2x2 block found.
                     Complex128[] mu = Eigen.get2x2EigenValues(a11, a12, a21, a22);
-                    lambdas.entries[m] = mu[0];
-                    lambdas.entries[++m] = mu[1];
+                    lambdas.data[m] = mu[0];
+                    lambdas.data[++m] = mu[1];
                 } else {
-                    lambdas.entries[m] = new Complex128(a11);
+                    lambdas.data[m] = new Complex128(a11);
                 }
             }
         }
@@ -344,20 +344,20 @@ public final class Eigen {
         // Extract eigenvalues of T.
         for(int m=0; m<numRows; m++) {
             if(m == numRows-1) {
-                lambdas.entries[m] = T.entries[m*numRows + m];
+                lambdas.data[m] = T.data[m*numRows + m];
             } else {
-                Complex128 a11 = (Complex128) T.entries[m*numRows + m];
-                Complex128 a12 = (Complex128) T.entries[m*numRows + m + 1];
-                Complex128 a21 = (Complex128) T.entries[(m+1)*numRows + m];
-                Complex128 a22 = (Complex128) T.entries[(m+1)*numRows + m  +1];
+                Complex128 a11 = (Complex128) T.data[m*numRows + m];
+                Complex128 a12 = (Complex128) T.data[m*numRows + m + 1];
+                Complex128 a21 = (Complex128) T.data[(m+1)*numRows + m];
+                Complex128 a22 = (Complex128) T.data[(m+1)*numRows + m  +1];
 
                 if(a21.mag() > EPS_F64*(a11.mag() + a22.mag())) {
                     // Non-converged 2x2 block found.
                     Complex128[] mu = Eigen.get2x2EigenValues(a11, a12, a21, a22);
-                    lambdas.entries[m] = mu[0];
-                    lambdas.entries[++m] = mu[1];
+                    lambdas.data[m] = mu[0];
+                    lambdas.data[++m] = mu[1];
                 } else {
-                    lambdas.entries[m] = a11;
+                    lambdas.data[m] = a11;
                 }
             }
         }
@@ -545,7 +545,7 @@ public final class Eigen {
             r = new Vector(j);
             makeSystem(T, j, S_hat, r);
 
-            if(S_hat.entries.length > 0) {
+            if(S_hat.data.length > 0) {
                 v = backSolver.solve(S_hat, r);
                 v = v.join(new Vector(1.0));
             } else {
@@ -578,7 +578,7 @@ public final class Eigen {
             r = CVector.getEmpty(j);
             makeSystem(T, j, S_hat, r);
 
-            if(S_hat.entries.length > 0) {
+            if(S_hat.data.length > 0) {
                 v = backSolver.solve(S_hat, r);
                 v = v.join(new CVector(Complex128.ONE));
             } else {
@@ -600,15 +600,15 @@ public final class Eigen {
      * @param j The diagonal index of {@code T} where the eigenvalue &lambda; appears.
      */
     private static void makeSystem(CMatrix T, int j, CMatrix S_hat, CVector r) {
-        Complex128 lam = (Complex128) T.entries[j*T.numCols + j];
+        Complex128 lam = (Complex128) T.data[j*T.numCols + j];
 
         // Copy values from T and subtract eigenvalue from diagonal.
         for(int i=0; i<j; i++) {
             int tRow = i*T.numRows;
             int diffRow = i*j;
-            System.arraycopy(T.entries, tRow, S_hat.entries, diffRow, j);
-            S_hat.entries[diffRow + i] = S_hat.entries[diffRow + i].sub(lam);
-            r.entries[i] = T.entries[tRow + j].mult(-1);
+            System.arraycopy(T.data, tRow, S_hat.data, diffRow, j);
+            S_hat.data[diffRow + i] = S_hat.data[diffRow + i].sub(lam);
+            r.data[i] = T.data[tRow + j].mult(-1);
         }
     }
 
@@ -620,15 +620,15 @@ public final class Eigen {
      * @param j The diagonal index of {@code T} where the eigenvalue &lambda; appears.
      */
     private static void makeSystem(Matrix T, int j, Matrix S_hat, Vector r) {
-        double lam = T.entries[j*T.numCols + j];
+        double lam = T.data[j*T.numCols + j];
 
         // Copy values from T and subtract eigenvalue from diagonal.
         for(int i=0; i<j; i++) {
             int tRow = i*T.numRows;
             int diffRow = i*j;
-            System.arraycopy(T.entries, tRow, S_hat.entries, diffRow, j);
-            S_hat.entries[diffRow + i] -= (lam);
-            r.entries[i] = -T.entries[tRow + j];
+            System.arraycopy(T.data, tRow, S_hat.data, diffRow, j);
+            S_hat.data[diffRow + i] -= (lam);
+            r.data[i] = -T.data[tRow + j];
         }
     }
 
@@ -651,7 +651,7 @@ public final class Eigen {
 
         // Extract eigenvalues of T.
         for(int i=0; i<numRows; i++) {
-            lambdas.entries[i] = T.entries[i*numRows + i];
+            lambdas.data[i] = T.data[i*numRows + i];
         }
 
         // If the source matrix is symmetric, then U will contain its eigenvectors.
@@ -680,7 +680,7 @@ public final class Eigen {
 
         // Extract eigenvalues of T.
         for(int i=0; i<numRows; i++) {
-            lambdas.entries[i] = T.entries[i*numRows + i];
+            lambdas.data[i] = T.data[i*numRows + i];
         }
 
         // If the src matrix is hermitian, then U will contain the eigenvectors.
