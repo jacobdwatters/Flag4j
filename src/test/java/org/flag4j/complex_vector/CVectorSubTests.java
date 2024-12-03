@@ -5,8 +5,8 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOps;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldVectorOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -326,7 +326,7 @@ class CVectorSubTests {
         // ------------------ Sub-case 4 ------------------
         bEntries = new Complex128[]{new Complex128(9.3455, 15.6)};
         sparseSize = 3;
-        sparseIndices = new int[]{3};
+        sparseIndices = new int[]{2};
         b = new CooCVector(sparseSize, bEntries, sparseIndices);
 
         CooCVector finalB2 = b;
@@ -666,7 +666,7 @@ class CVectorSubTests {
         setup();
         bEntries = new Complex128[]{new Complex128(9.3455, 15.6)};
         sparseSize = 3;
-        sparseIndices = new int[]{3};
+        sparseIndices = new int[]{2};
         b = new CooCVector(sparseSize, bEntries, sparseIndices);
 
         final CooCVector finalB1 = b;

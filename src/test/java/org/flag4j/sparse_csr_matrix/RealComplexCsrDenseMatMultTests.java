@@ -4,7 +4,7 @@ import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
-import org.flag4j.linalg.operations.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
+import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

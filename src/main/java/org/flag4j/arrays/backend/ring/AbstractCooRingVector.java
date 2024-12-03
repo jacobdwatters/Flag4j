@@ -26,17 +26,16 @@ package org.flag4j.arrays.backend.ring;
 
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.algebraic_structures.rings.Ring;
-import org.flag4j.algebraic_structures.semirings.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.SparseVectorData;
 import org.flag4j.arrays.backend.VectorMixin;
-import org.flag4j.linalg.operations.common.semiring_ops.AggregateSemiring;
-import org.flag4j.linalg.operations.sparse.coo.CooConcat;
-import org.flag4j.linalg.operations.sparse.coo.CooDataSorter;
-import org.flag4j.linalg.operations.sparse.coo.CooGetSet;
-import org.flag4j.linalg.operations.sparse.coo.ring_ops.CooRingVectorOps;
-import org.flag4j.linalg.operations.sparse.coo.semiring_ops.CooSemiringVectorOps;
+import org.flag4j.linalg.ops.common.semiring_ops.AggregateSemiring;
+import org.flag4j.linalg.ops.sparse.coo.CooConcat;
+import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
+import org.flag4j.linalg.ops.sparse.coo.CooGetSet;
+import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingVectorOps;
+import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringVectorOps;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -48,17 +47,17 @@ import java.util.List;
 
 /**
  * <p>A sparse vector stored in coordinate list (COO) format. The {@link #data} of this COO vector are
- * elements of a {@link Ring}.</p>
+ * elements of a {@link Ring}.
  *
  * <p>The {@link #data non-zero data} and {@link #indices non-zero indices} of a COO vector are mutable but the {@link #shape}
- * and total number of non-zero data is fixed.</p>
+ * and total number of non-zero data is fixed.
  *
- * <p>Sparse vectors allow for the efficient storage of and operations on large vectors that contain many zero values.</p>
+ * <p>Sparse vectors allow for the efficient storage of and ops on large vectors that contain many zero values.
  *
  * <p>COO vectors are optimized for large hyper-sparse vectors (i.e. vectors which contain almost all zeros relative to the size of the
- * vector).</p>
+ * vector).
  *
- * <p>A sparse COO vector is stored as:</p>
+ * <p>A sparse COO vector is stored as:
  * <ul>
  *     <li>The full {@link #shape}/{@link #size} of the vector.</li>
  *     <li>The non-zero {@link #data} of the vector. All other data in the vector are
@@ -66,10 +65,10 @@ import java.util.List;
  *     <li>The {@link #indices} of the non-zero values in the sparse vector.</li>
  * </ul>
  *
- * <p>Note: many operations assume that the data of the COO vector are sorted lexicographically. However, this is not explicitly
- * verified. Every operation implemented in this class will preserve the lexicographical sorting.</p>
+ * <p>Note: many ops assume that the data of the COO vector are sorted lexicographically. However, this is not explicitly
+ * verified. Every operation implemented in this class will preserve the lexicographical sorting.
  *
- * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.</p>
+ * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.
  *
  * @param <T> Type of this vector.
  * @param <U> Type of equivalent dense vector.
@@ -83,14 +82,14 @@ public abstract class AbstractCooRingVector<
         V extends AbstractCooRingMatrix<V, W, T, Y>,
         W extends AbstractDenseRingMatrix<W, U, Y>,
         Y extends Ring<Y>>
-        extends AbstractTensor<T, Ring<Y>[], Y>
+        extends AbstractTensor<T, Y[], Y>
         implements RingTensorMixin<T, U, Y>, VectorMixin<T, V, W, Y> {
 
 
     /**
      * The zero element for the ring that this tensor's elements belong to.
      */
-    private Ring<Y> zeroElement;
+    private Y zeroElement;
     /**
      * Indices of the non-zero values of this sparse COO vector.
      */
@@ -116,10 +115,10 @@ public abstract class AbstractCooRingVector<
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
      * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
-    protected AbstractCooRingVector(int size, Ring<Y>[] entries, int[] indices) {
+    protected AbstractCooRingVector(int size, Y[] entries, int[] indices) {
         super(new Shape(size), entries);
         ValidateParameters.ensureRank(shape, 1);
-        ValidateParameters.ensureIndexInBounds(shape.get(0), indices);
+        ValidateParameters.ensureIndicesInBounds(shape.get(0), indices);
         if(entries.length != indices.length) {
             throw new IllegalArgumentException("data and indices arrays of a COO vector must have the same length but got " +
                     "lengths" + entries.length + " and " + indices.length + ".");
@@ -146,7 +145,7 @@ public abstract class AbstractCooRingVector<
      * @param indices Non-zero row indices of the vector to construct.
      * @return A sparse COO vector of the same type as this vector with the specified non-zero data and indices.
      */
-    public abstract T makeLikeTensor(Shape shape, Ring<Y>[] entries, int[] indices);
+    public abstract T makeLikeTensor(Shape shape, Y[] entries, int[] indices);
 
 
     /**
@@ -155,7 +154,7 @@ public abstract class AbstractCooRingVector<
      * @param entries Entries of the vector to construct.
      * @return A dense vector of a similar type as this vector with the specified data.
      */
-    public abstract U makeLikeDenseTensor(Shape shape, Ring<Y>... entries);
+    public abstract U makeLikeDenseTensor(Shape shape, Y... entries);
 
 
     /**
@@ -164,7 +163,7 @@ public abstract class AbstractCooRingVector<
      * @param entries Entries of the matrix to construct.
      * @return A dense matrix of a similar type as this vector with the specified data.
      */
-    public abstract W makeLikeDenseMatrix(Shape shape, Ring<Y>... entries);
+    public abstract W makeLikeDenseMatrix(Shape shape, Y... entries);
 
 
     /**
@@ -174,7 +173,7 @@ public abstract class AbstractCooRingVector<
      * @param indices Indices of the non-zero values in the vector.
      * @return A COO vector of the same type as this vector with the specified shape, non-zero data, and non-zero indices.
      */
-    public abstract T makeLikeTensor(Shape shape, List<Ring<Y>> entries, List<Integer> indices);
+    public abstract T makeLikeTensor(Shape shape, List<Y> entries, List<Integer> indices);
 
 
     /**
@@ -185,7 +184,7 @@ public abstract class AbstractCooRingVector<
      * @param colIndices Column indices of the matrix.
      * @return A COO matrix of similar type as this vector with the specified shape, non-zero data, and non-zero row/col indices.
      */
-    public abstract V makeLikeMatrix(Shape shape, Ring<Y>[] entries, int[] rowIndices, int[] colIndices);
+    public abstract V makeLikeMatrix(Shape shape, Y[] entries, int[] rowIndices, int[] colIndices);
 
 
     /**
@@ -302,7 +301,7 @@ public abstract class AbstractCooRingVector<
         ValidateParameters.validateTensorIndex(shape, target);
         int idx = Arrays.binarySearch(indices, target[0]);
 
-        Ring<Y>[] destEntries;
+        Y[] destEntries;
         int[] destIndices;
 
         if (idx >= 0) {
@@ -313,13 +312,13 @@ public abstract class AbstractCooRingVector<
             destIndices[idx] = target[0];
         } else {
             // Target not found, insert new value and index.
-            destEntries = new Ring[nnz + 1];
+            destEntries = (Y[]) new Ring[nnz + 1];
             destIndices = new int[nnz + 1];
             int insertionPoint = - (idx + 1);
             CooGetSet.cooInsertNewValue(value, target[0], data, indices, insertionPoint, destEntries, destIndices);
         }
 
-        return makeLikeTensor(shape, (Y[]) destEntries, destIndices);
+        return makeLikeTensor(shape, destEntries, destIndices);
     }
 
 
@@ -377,7 +376,7 @@ public abstract class AbstractCooRingVector<
      */
     @Override
     public T join(T b) {
-        Ring<Y>[] destEntries = new Ring[this.data.length + b.data.length];
+        Y[] destEntries = (Y[]) new Ring[this.data.length + b.data.length];
         int[] destIndices = new int[this.indices.length + b.indices.length];
         CooConcat.join(data, indices, size, b.data, b.indices, destEntries, destIndices);
         return makeLikeTensor(new Shape(shape.get(0) + b.shape.get(0)), destEntries, destIndices);
@@ -385,10 +384,10 @@ public abstract class AbstractCooRingVector<
 
 
     /**
-     * <p>Computes the inner product between two vectors.</p>
+     * <p>Computes the inner product between two vectors.
      *
      * <p>Note: this method is distinct from {@link #dot(AbstractCooRingVector)}. The inner product is equivalent to the dot product
-     * of this tensor with the conjugation of {@code b}.</p>
+     * of this tensor with the conjugation of {@code b}.
      *
      * @param b Second vector in the inner product.
      *
@@ -404,10 +403,10 @@ public abstract class AbstractCooRingVector<
 
 
     /**
-     * <p>Computes the dot product between two vectors.</p>
+     * <p>Computes the dot product between two vectors.
      *
      * <p>Note: this method is distinct from {@link #inner(AbstractCooRingVector)}.
-     * The inner product is equivalent to the dot product of this tensor with the conjugation of {@code b}.</p>
+     * The inner product is equivalent to the dot product of this tensor with the conjugation of {@code b}.
      *
      * @param b Second vector in the dot product.
      *
@@ -418,15 +417,15 @@ public abstract class AbstractCooRingVector<
      */
     @Override
     public Y dot(T b) {
-        return (Y) CooSemiringVectorOps.dot(shape, data, indices, b.shape, b.data, b.indices);
+        return CooSemiringVectorOps.dot(shape, data, indices, b.shape, b.data, b.indices);
     }
 
 
     /**
-     * <p>Gets the length of a vector. Same as {@link #size()}.</p>
+     * <p>Gets the length of a vector. Same as {@link #size()}.
      * <p>WARNING: This method will throw a {@link ArithmeticException} if the
      * total number of data in this vector is greater than the maximum integer. In this case, the true size of this vector can
-     * still be found by calling {@code shape.totalEntries()} on this vector.</p>
+     * still be found by calling {@code shape.totalEntries()} on this vector.
      *
      * @return The length, i.e. the number of data, in this vector.
      * @throws ArithmeticException If the total number of data in this vector is greater than the maximum integer.
@@ -451,7 +450,7 @@ public abstract class AbstractCooRingVector<
      */
     @Override
     public V repeat(int n, int axis) {
-        Ring<Y>[] tiledEntries = new Field[n*data.length];
+        Y[] tiledEntries = (Y[]) new Field[n*data.length];
         int[] tiledRows = new int[tiledEntries.length];
         int[] tiledCols = new int[tiledEntries.length];
         Shape tiledShape = CooConcat.repeat(data, indices, size, n, axis, tiledEntries, tiledRows, tiledCols);
@@ -462,17 +461,17 @@ public abstract class AbstractCooRingVector<
     /**
      * <p>
      * Stacks two vectors along specified axis.
-     * </p>
+     * 
      *
      * <p>
      * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
      * as if they were row vectors resulting in a {@code 2-by-n} matrix.
-     * </p>
+     * 
      *
      * <p>
      * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
      * as if they were column vectors resulting in a {@code n-by-2} matrix.
-     * </p>
+     * 
      *
      * @param b Vector to stack with this vector.
      * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
@@ -487,7 +486,7 @@ public abstract class AbstractCooRingVector<
     @Override
     public V stack(T b, int axis) {
         ValidateParameters.ensureEquals(size, b.size);
-        Ring<Y>[] destEntries = new Ring[data.length + b.data.length];
+        Y[] destEntries = (Y[]) new Ring[data.length + b.data.length];
         int[][] destIndices = new int[2][indices.length + indices.length]; // Row and column indices.
 
         CooConcat.stack(data, indices, b.data, b.indices, destEntries, destIndices[0], destIndices[1]);
@@ -509,7 +508,7 @@ public abstract class AbstractCooRingVector<
     @Override
     public W outer(T b) {
         Shape destShape = new Shape(size, b.size);
-        Ring<Y>[] dest = new Ring[size*b.size];
+        Y[] dest = (Y[]) new Ring[size*b.size];
         CooSemiringVectorOps.outerProduct(data, indices, size, b.data, b.indices, dest);
         return makeLikeDenseMatrix(shape, dest);
     }
@@ -519,8 +518,8 @@ public abstract class AbstractCooRingVector<
      * Converts a vector to an equivalent matrix representing either a row or column vector.
      *
      * @param columVector Flag indicating whether to convert this vector to a matrix representing a row or column vector:
-     * <p>If {@code true}, the vector will be converted to a matrix representing a column vector.</p>
-     * <p>If {@code false}, The vector will be converted to a matrix representing a row vector.</p>
+     * <p>If {@code true}, the vector will be converted to a matrix representing a column vector.
+     * <p>If {@code false}, The vector will be converted to a matrix representing a row vector.
      *
      * @return A matrix equivalent to this vector.
      */
@@ -576,8 +575,8 @@ public abstract class AbstractCooRingVector<
     @Override
     public Y get(int idx) {
         ValidateParameters.validateTensorIndex(shape, idx);
-        Y value = (Y) CooGetSet.getCoo(data, indices, idx);
-        return (value == null) ? (Y) getZeroElement() : value;
+        Y value = CooGetSet.getCoo(data, indices, idx);
+        return (value == null) ? getZeroElement() : value;
     }
 
 
@@ -592,7 +591,7 @@ public abstract class AbstractCooRingVector<
      */
     @Override
     public T add(T b) {
-        SparseVectorData<Semiring<Y>> result = CooSemiringVectorOps.add(
+        SparseVectorData<Y> result = CooSemiringVectorOps.add(
                 shape, data, indices, b.shape, b.data, b.indices);
         return makeLikeTensor(shape,
                 (Y[]) result.data().toArray(new Ring[result.data().size()]),
@@ -611,7 +610,7 @@ public abstract class AbstractCooRingVector<
      */
     @Override
     public T elemMult(T b) {
-        SparseVectorData<Semiring<Y>> prod = CooSemiringVectorOps.elemMult(
+        SparseVectorData<Y> prod = CooSemiringVectorOps.elemMult(
                 shape, data, indices,
                 b.shape, b.data, b.indices);
         return makeLikeTensor(shape,
@@ -651,11 +650,11 @@ public abstract class AbstractCooRingVector<
 
 
     /**
-     * <p>Computes the generalized trace of this tensor along the specified axes.</p>
+     * <p>Computes the generalized trace of this tensor along the specified axes.
      *
      * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays of this tensor specified by
      * {@code axis1} and {@code axis2}. The shape of the resulting tensor is equal to this tensor with the
-     * {@code axis1} and {@code axis2} removed.</p>
+     * {@code axis1} and {@code axis2} removed.
      *
      * @param axis1 First axis for 2D sub-array.
      * @param axis2 Second axis for 2D sub-array.
@@ -679,7 +678,7 @@ public abstract class AbstractCooRingVector<
      * and has not been set explicitly by {@link #setZeroElement(Ring)} then {@code null} will be returned.
      */
     public Y getZeroElement() {
-        return (Y) zeroElement;
+        return zeroElement;
     }
 
 
@@ -688,7 +687,7 @@ public abstract class AbstractCooRingVector<
      * @param zeroElement The zero element of this tensor.
      * @throws IllegalArgumentException If {@code zeroElement} is not an additive identity for the ring.
      */
-    public void setZeroElement(Ring<Y> zeroElement) {
+    public void setZeroElement(Y zeroElement) {
         if (zeroElement.isZero()) {
             this.zeroElement = zeroElement;
         } else {
@@ -702,7 +701,7 @@ public abstract class AbstractCooRingVector<
      * @return A dense matrix equivalent to this sparse COO matrix.
      */
     public U toDense() {
-        Ring<Y>[] entries = new Ring[shape.totalEntriesIntValueExact()];
+        Y[] entries = (Y[]) new Ring[shape.totalEntriesIntValueExact()];
 
         for(int i = 0; i< nnz; i++)
             entries[indices[i]] = this.data[i];
@@ -715,7 +714,7 @@ public abstract class AbstractCooRingVector<
      * Converts this matrix to an equivalent rank 1 tensor.
      * @return A tensor which is equivalent to this matrix.
      */
-    public abstract AbstractTensor<?, Ring<Y>[], Y> toTensor();
+    public abstract AbstractTensor<?, Y[], Y> toTensor();
 
 
     /**
@@ -723,7 +722,7 @@ public abstract class AbstractCooRingVector<
      * @param newShape New shape for the tensor. Can be any rank but must be broadcastable to {@link #shape this.shape}.
      * @return A tensor equivalent to this matrix which has been reshaped to {@code newShape}
      */
-    public abstract AbstractTensor<?,  Ring<Y>[], Y> toTensor(Shape newShape);
+    public abstract AbstractTensor<?,  Y[], Y> toTensor(Shape newShape);
 
 
     /**
@@ -737,7 +736,7 @@ public abstract class AbstractCooRingVector<
      */
     @Override
     public T sub(T b) {
-        SparseVectorData<Ring<Y>> result = CooRingVectorOps.sub(
+        SparseVectorData<Y> result = CooRingVectorOps.sub(
                 shape, data, indices, b.shape, b.data, b.indices);
         return makeLikeTensor(shape, result.data(), result.indices());
     }

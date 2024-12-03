@@ -6,7 +6,7 @@ import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
-import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseCooTensorOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseCooTensorOps;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -2,6 +2,7 @@ package org.flag4j.matrix;
 
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.Test;
 
@@ -120,8 +121,8 @@ class MatrixReshapeTests {
         assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-cases 2-4 ---------------
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.flatten(-1));
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.flatten(4));
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.flatten(2));
+        assertThrows(LinearAlgebraException.class, ()->A.flatten(-1));
+        assertThrows(LinearAlgebraException.class, ()->A.flatten(4));
+        assertThrows(LinearAlgebraException.class, ()->A.flatten(2));
     }
 }

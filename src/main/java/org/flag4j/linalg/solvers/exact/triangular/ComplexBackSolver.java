@@ -26,7 +26,6 @@ package org.flag4j.linalg.solvers.exact.triangular;
 
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.util.exceptions.SingularMatrixException;
@@ -36,7 +35,7 @@ import org.flag4j.util.exceptions.SingularMatrixException;
  * This solver solves linear systems of equations where the coefficient matrix in an upper triangular complex dense matrix
  * and the constant vector is a complex dense vector.
  */
-public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Field<Complex128>[]> {
+public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]> {
     
     /**
      * For computing determinant of coefficient matrix during solve.

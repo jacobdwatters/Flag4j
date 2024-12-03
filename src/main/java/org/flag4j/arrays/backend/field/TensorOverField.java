@@ -33,7 +33,7 @@ import org.flag4j.arrays.backend.ring.TensorOverRing;
  * <p>To allow for primitive types, the elements of this tensor do not necessarily have to implement
  * {@link org.flag4j.algebraic_structures.fields.Field}.</p>
  *
- * <p>Formally, an field is a set <b>F</b> with the binary operations addition (+) and multiplication (*)
+ * <p>Formally, an field is a set <b>F</b> with the binary ops addition (+) and multiplication (*)
  * defined such that for elements a, b, c in <b>F</b> the following are satisfied:
  *  <ul>
  *      <li>Addition and multiplication are associative: a + (b + c) = (a + b) + c and a * (b * c) = (a * b) * c.</li>
@@ -48,7 +48,7 @@ import org.flag4j.arrays.backend.ring.TensorOverRing;
  *
  * @param <T> Type of this tensor.
  * @param <U> Type of dense tensor equivalent to {@code T}. If {@code T} is dense, then this should be the same type as {@code T}.
- * This parameter required because some operations between two sparse tensors may result in a dense tensor.
+ * This parameter required because some ops between two sparse tensors may result in a dense tensor.
  * @param <V> Storage for data of this tensor.
  * @param <W> Type (or wrapper) of an element of this tensor. Should satisfy the axioms of a field as stated.
  * @see TensorOverRing

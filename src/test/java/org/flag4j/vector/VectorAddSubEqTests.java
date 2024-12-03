@@ -2,7 +2,7 @@ package org.flag4j.vector;
 
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOperations;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 

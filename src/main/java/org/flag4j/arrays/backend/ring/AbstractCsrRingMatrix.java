@@ -31,12 +31,12 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.SparseMatrixData;
-import org.flag4j.linalg.operations.sparse.csr.CsrConversions;
-import org.flag4j.linalg.operations.sparse.csr.CsrOps;
-import org.flag4j.linalg.operations.sparse.csr.CsrProperties;
-import org.flag4j.linalg.operations.sparse.csr.semiring_ops.SemiringCsrMatMult;
-import org.flag4j.linalg.operations.sparse.csr.semiring_ops.SemiringCsrOps;
-import org.flag4j.linalg.operations.sparse.csr.semiring_ops.SemiringCsrProperties;
+import org.flag4j.linalg.ops.sparse.csr.CsrConversions;
+import org.flag4j.linalg.ops.sparse.csr.CsrOps;
+import org.flag4j.linalg.ops.sparse.csr.CsrProperties;
+import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrMatMult;
+import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrOps;
+import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrProperties;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -45,7 +45,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.flag4j.linalg.operations.sparse.SparseUtils.sortCsrMatrix;
+import static org.flag4j.linalg.ops.sparse.SparseUtils.sortCsrMatrix;
 
 
 /**
@@ -55,7 +55,7 @@ import static org.flag4j.linalg.operations.sparse.SparseUtils.sortCsrMatrix;
  * <p>The {@link #data non-zero data} and non-zero indices of a CSR matrix are mutable but the {@link #shape}
  * and {@link #nnz total number of non-zero data} is fixed.
  *
- * <p>Sparse matrices allow for the efficient storage of and operations on matrices that contain many zero values.
+ * <p>Sparse matrices allow for the efficient storage of and ops on matrices that contain many zero values.
  *
  * <p>A sparse CSR matrix is stored as:
  * <ul>
@@ -68,8 +68,8 @@ import static org.flag4j.linalg.operations.sparse.SparseUtils.sortCsrMatrix;
  *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
  *
- * <p>Note: many operations assume that the data of the CSR matrix are sorted lexicographically by the row and column indices.
- * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any operations implemented in this
+ * <p>Note: many ops assume that the data of the CSR matrix are sorted lexicographically by the row and column indices.
+ * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any ops implemented in this
  * class will preserve the lexicographical sorting.
  *
  * <p>If indices need to be sorted, call {@link #sortIndices()}.
@@ -83,13 +83,13 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
         U extends AbstractDenseRingMatrix<U, ?, W>,
         V extends AbstractCooRingVector<V, ?, ?, U, W>,
         W extends Ring<W>>
-        extends AbstractTensor<T, Ring<W>[], W>
+        extends AbstractTensor<T, W[], W>
         implements RingTensorMixin<T, U, W>, MatrixMixin<T, U, V, W> {
 
     /**
      * The zero element for the ring that this tensor's elements belong to.
      */
-    private Ring<W> zeroElement;
+    private W zeroElement;
     /**
      * <p>Pointers indicating starting index of each row within the {@link #colIndices} and {@link #data} arrays.
      * Has length {@link #numRows numRows + 1}.
@@ -135,7 +135,7 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code data.length == colData.length}.
      */
-    protected AbstractCsrRingMatrix(Shape shape, Ring<W>[] entries, int[] rowPointers, int[] colIndices) {
+    protected AbstractCsrRingMatrix(Shape shape, W[] entries, int[] rowPointers, int[] colIndices) {
         super(shape, entries);
         ValidateParameters.ensureRank(shape, 2);
 
@@ -195,7 +195,7 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
      * @return A sparse COO matrix of a similar type to this sparse CSR matrix.
      */
     public abstract AbstractCooRingMatrix<?, U, V, W> makeLikeCooMatrix(
-            Shape shape, Ring<W>[] entries, int[] rowIndices, int[] colIndices);
+            Shape shape, W[] entries, int[] rowIndices, int[] colIndices);
 
 
     /**
@@ -228,7 +228,7 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
      * @see #setZeroElement(Ring)
      */
     public W getZeroElement() {
-        return (W) zeroElement;
+        return  zeroElement;
     }
 
 
@@ -239,7 +239,7 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
      *
      * @see #getZeroElement()
      */
-    public void setZeroElement(Ring<W> zeroElement) {
+    public void setZeroElement(W zeroElement) {
         if (zeroElement.isZero()) {
             this.zeroElement = zeroElement;
         } else {
@@ -298,7 +298,7 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
         newRowPointers[1] = nnz;
         return makeLikeTensor(
                 new Shape(1, shape.totalEntriesIntValueExact()),
-                (W[]) data.clone(),
+                 data.clone(),
                 newRowPointers,
                 colIndices.clone());
     }
@@ -334,7 +334,7 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
 
         return makeLikeTensor(
                 new Shape(shape.totalEntriesIntValueExact(), 1),
-                (W[]) data.clone(),
+                 data.clone(),
                 newRowPointers,
                 newColIndices);
     }
@@ -365,12 +365,12 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
      */
     @Override
     public T T() {
-        Ring<W>[] dest = new Ring[data.length];
+        W[] dest = (W[]) new Ring[data.length];
         int[] destRowPointers = new int[numCols+1];
         int[] destColIndices = new int[data.length];
         CsrOps.transpose(data, rowPointers, colIndices, dest, destRowPointers, destColIndices);
 
-        return makeLikeTensor(shape.swapAxes(0, 1), (W[]) dest, destRowPointers, destColIndices);
+        return makeLikeTensor(shape.swapAxes(0, 1), dest, destRowPointers, destColIndices);
     }
 
 
@@ -386,8 +386,8 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
     @Override
     public T add(T b) {
         SparseMatrixData<W> destData = CsrOps.applyBinOpp(
-                shape, (W[]) data, rowPointers, colIndices,
-                b.shape, (W[]) b.data, b.rowPointers, b.colIndices,
+                shape,  data, rowPointers, colIndices,
+                b.shape,  b.data, b.rowPointers, b.colIndices,
                 Ring::add, null);
 
         return makeLikeTensor(shape, destData.data(), destData.rowData(), destData.colData());
@@ -406,8 +406,8 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
     @Override
     public T elemMult(T b) {
         SparseMatrixData<W> destData = CsrOps.applyBinOpp(
-                shape, (W[]) data, rowPointers, colIndices,
-                b.shape, (W[]) b.data, b.rowPointers, b.colIndices,
+                shape,  data, rowPointers, colIndices,
+                b.shape,  b.data, b.rowPointers, b.colIndices,
                 Ring::mult, null);
 
         return makeLikeTensor(shape, destData.data(), destData.rowData(), destData.colData());
@@ -457,7 +457,7 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
         ValidateParameters.ensureNotEquals(axis1, axis2);
         ValidateParameters.ensureValidAxes(shape, axis1, axis2);
 
-        return (T) makeLikeTensor(new Shape(1, 1), (W[]) new Ring[]{tr()}, new int[]{0}, new int[]{0});
+        return  makeLikeTensor(new Shape(1, 1), (W[]) new Ring[]{tr()}, new int[]{0}, new int[]{0});
     }
 
 
@@ -540,8 +540,8 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
     public W get(int row, int col) {
         int loc = Arrays.binarySearch(colIndices, rowPointers[row], rowPointers[row+1], col);
 
-        if(loc >= 0) return (W) data[loc];
-        else return (W) zeroElement;
+        if(loc >= 0) return  data[loc];
+        else return  zeroElement;
     }
 
 
@@ -556,9 +556,9 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
      */
     @Override
     public W tr() {
-        W tr = (W) SemiringCsrOps.trace(data, rowPointers, colIndices);
+        W tr =  SemiringCsrOps.trace(data, rowPointers, colIndices);
 
-        return (tr == null) ? (W) zeroElement : tr;
+        return (tr == null) ? zeroElement : tr;
     }
 
 
@@ -866,7 +866,7 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
      */
     @Override
     public T getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
-        SparseMatrixData<Ring<W>> sliceData = CsrOps.getSlice(
+        SparseMatrixData<W> sliceData = CsrOps.getSlice(
                 data, rowPointers, colIndices,
                 rowStart, rowEnd, colStart, colEnd);
         return makeLikeTensor(sliceData.shape(), (List<W>) sliceData.data(),
@@ -887,7 +887,7 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
     public T set(W value, int row, int col) {
         // Ensure indices are in bounds.
         ValidateParameters.validateTensorIndex(shape, row, col);
-        Ring<W>[] newEntries;
+        W[] newEntries;
         int[] newRowPointers = rowPointers.clone();
         int[] newColIndices;
         boolean found = false; // Flag indicating an element already exists in this matrix at the specified row and col.
@@ -908,7 +908,7 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
             newColIndices = colIndices.clone();
         } else {
             loc = -loc - 1; // Compute insertion index as specified by Arrays.binarySearch.
-            newEntries = new Field[data.length + 1];
+            newEntries = (W[]) new Field[data.length + 1];
             newColIndices = new int[data.length + 1];
 
             CsrOps.insertNewValue(
@@ -917,7 +917,7 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
                     row, col, loc, value);
         }
 
-        return makeLikeTensor(shape, (W[]) newEntries, newRowPointers, newColIndices);
+        return makeLikeTensor(shape,  newEntries, newRowPointers, newColIndices);
     }
 
 
@@ -988,8 +988,8 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
     @Override
     public T sub(T b) {
         SparseMatrixData<W> destData = CsrOps.applyBinOpp(
-                shape, (W[]) data, rowPointers, colIndices,
-                b.shape, (W[]) b.data, b.rowPointers, b.colIndices,
+                shape,  data, rowPointers, colIndices,
+                b.shape,  b.data, b.rowPointers, b.colIndices,
                 Ring::add, Ring::addInv);
 
         return makeLikeTensor(shape, destData.data(), destData.rowData(), destData.colData());
@@ -1064,9 +1064,9 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
      * @return A dense matrix which is equivalent to this sparse CSR matrix.
      */
     public U toDense() {
-        Ring<W>[] dest = new Ring[shape.totalEntriesIntValueExact()];
+        W[] dest = (W[]) new Ring[shape.totalEntriesIntValueExact()];
         CsrConversions.toDense(shape, data, rowPointers, colIndices, dest, zeroElement);
-        return makeLikeDenseTensor(shape, (W[]) dest);
+        return makeLikeDenseTensor(shape,  dest);
     }
 
 
@@ -1075,7 +1075,7 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
      * @return A sparse COO matrix equivalent to this sparse CSR matrix.
      */
     public AbstractCooRingMatrix toCoo() {
-        Ring<W>[] cooEntries = new Ring[nnz];
+        W[] cooEntries = (W[]) new Ring[nnz];
         int[] cooRowIndices = new int[nnz];
         int[] cooColIndices = new int[nnz];
         CsrConversions.toCoo(shape, data, rowPointers, colIndices, cooEntries, cooRowIndices, cooColIndices);
@@ -1087,7 +1087,7 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
      * Converts this CSR matrix to an equivalent sparse COO tensor.
      * @return An sparse COO tensor equivalent to this CSR matrix.
      */
-    public AbstractTensor<?, Ring<W>[], W> toTensor() {
+    public AbstractTensor<?, W[], W> toTensor() {
         return toCoo().toTensor();
     }
 
@@ -1097,7 +1097,7 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
      * @param newShape New shape for the COO tensor. Can be any rank but must be broadcastable to {@link #shape this.shape}.
      * @return A COO tensor equivalent to this CSR matrix which has been reshaped to {@code newShape}
      */
-    public AbstractTensor<?, Ring<W>[], W> toTensor(Shape shape) {
+    public AbstractTensor<?, W[], W> toTensor(Shape shape) {
         return toCoo().toTensor();
     }
 

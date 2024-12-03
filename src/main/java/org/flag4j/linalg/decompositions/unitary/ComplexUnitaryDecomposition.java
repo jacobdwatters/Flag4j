@@ -26,7 +26,6 @@ package org.flag4j.linalg.decompositions.unitary;
 
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.linalg.transformations.Householder;
 import org.flag4j.util.Flag4jConstants;
@@ -36,7 +35,7 @@ import org.flag4j.util.Flag4jConstants;
  * (specifically Householder reflectors) to bring a matrix into an upper triangular/Hessenburg matrix. Specifically, the QR and
  * Hessenburg decompositions.
  */
-public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<CMatrix, Field<Complex128>[]> {
+public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<CMatrix, Complex128[]> {
 
     /**
      * To store norms of columns in {@link #transformMatrix}. Will be real.
@@ -79,7 +78,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
      *
      * <p>It should be noted that if performance is improved, it will be a very slight improvement compared
      * to the total time to compute the decomposition. This is because the computation of {@code Q} is only
-     * evaluated lazily once {@link #getQ()} is called, so this will only save on copy operations.</p>
+     * evaluated lazily once {@link #getQ()} is called, so this will only save on copy ops.</p>
      *
      * @param subDiagonal Sub-diagonal of the upper triangular/Hessenburg matrix. That is, the sub-diagonal for which all data
      *                    below will be zero in the final upper quasi-triangular matrix. Must be Zero or one. If zero, it will be
@@ -229,7 +228,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
         int idx = j*numCols + j - subDiagonal;
 
         for(int i=j; i<numRows; i++) {
-            Field<Complex128> d = householderVector[i] = transformData[idx];
+            Complex128 d = householderVector[i] = transformData[idx];
             idx += numCols; // Move index to next row.
             maxAbs = Math.max(d.mag(), maxAbs);
         }

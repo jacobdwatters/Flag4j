@@ -42,7 +42,7 @@ import java.util.StringJoiner;
 
 /**
  * Represents the shape of a multidimensional array (e.g. tensor, matrix, vector, etc.), specifying its dimensions and providing
- * utilities for shape-related operations.
+ * utilities for shape-related ops.
  *
  * <p>A shape is defined by an array of dimensions, where each dimension specifies the size of the tensor along a particular axis.
  * {@link #getStrides() Strides} can also be computed for the shape which specify the number of data to step in each dimension of
@@ -56,7 +56,7 @@ import java.util.StringJoiner;
  * <p>The {@code Shape} class is immutable with respect to its dimensions, ensuring thread safety and consistency. Strides
  * are computed lazily only when needed to minimize overhead.
  *
- * <p>This class is a fundamental building block for tensor operations, particularly in contexts where multidimensional
+ * <p>This class is a fundamental building block for tensor ops, particularly in contexts where multidimensional
  * indexing and dimension manipulations are required.
  *
  * <p>Example usage:
@@ -263,7 +263,8 @@ public class Shape implements Serializable {
 
 
     /**
-     * Swaps two axes of this shape. New strides are constructed for this shape.
+     * Swaps two axes of this shape. If this shape has had its strides computed, then new strides will also be computed for the
+     * resulting shape.
      * @param axis1 First axis to swap.
      * @param axis2 Second axis to swap.
      * @return A copy of this shape with the specified axis swapped.

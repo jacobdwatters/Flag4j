@@ -3,6 +3,7 @@ package org.flag4j.sparse_complex_tensor;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooCTensor;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -131,7 +132,7 @@ class CooCTensorHermTransposeTests {
         assertThrows(IllegalArgumentException.class, ()->A.H(0, 3, 4, 1, 2, 5));
         assertThrows(IllegalArgumentException.class, ()->A.H(0, 3, -4, 1, 2));
         assertThrows(IllegalArgumentException.class, ()->A.H(0, 15, 4, 1, 2));
-        assertThrows(IndexOutOfBoundsException.class, ()->A.H(5, 1));
+        assertThrows(LinearAlgebraException.class, ()->A.H(5, 1));
     }
 
 
@@ -247,6 +248,6 @@ class CooCTensorHermTransposeTests {
         assertThrows(IllegalArgumentException.class, ()->A.T(0, 3, 4, 1, 2, 5));
         assertThrows(IllegalArgumentException.class, ()->A.T(0, 3, -4, 1, 2));
         assertThrows(IllegalArgumentException.class, ()->A.T(0, 15, 4, 1, 2));
-        assertThrows(IndexOutOfBoundsException.class, ()->A.T(5, 1));
+        assertThrows(LinearAlgebraException.class, ()->A.T(5, 1));
     }
 }

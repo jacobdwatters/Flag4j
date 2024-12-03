@@ -28,10 +28,10 @@ package org.flag4j.arrays.backend.primitive;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.field.TensorOverField;
-import org.flag4j.linalg.operations.common.real.AggregateReal;
-import org.flag4j.linalg.operations.common.real.RealOps;
-import org.flag4j.linalg.operations.common.real.RealProperties;
-import org.flag4j.linalg.operations.dense.real.RealDenseOperations;
+import org.flag4j.linalg.ops.common.real.AggregateReal;
+import org.flag4j.linalg.ops.common.real.RealOps;
+import org.flag4j.linalg.ops.common.real.RealProperties;
+import org.flag4j.linalg.ops.dense.real.RealDenseOperations;
 import org.flag4j.util.Flag4jConstants;
 
 /**

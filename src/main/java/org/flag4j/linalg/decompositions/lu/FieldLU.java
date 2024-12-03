@@ -145,18 +145,18 @@ public class FieldLU<T extends Field<T>> extends LU<FieldMatrix<T>> {
      * @param j Column for which to compute values to the right of.
      */
     private void computeRows(int j) {
-        Field<T> m;
+        T m;
         int pivotRow = j*LU.numCols;
 
         for(int i=j+1; i<LU.numRows; i++) {
             int iRow = i*LU.numCols;
             m = LU.data[iRow + j];
-            m = LU.data[pivotRow + j].isZero() ? m : m.div((T) LU.data[pivotRow + j]);
+            m = LU.data[pivotRow + j].isZero() ? m : m.div(LU.data[pivotRow + j]);
 
             if(!m.isZero()) {
                 // Compute and set U values.
                 for(int k=j; k<LU.numCols; k++)
-                    LU.data[iRow + k] = LU.data[iRow + k].sub(m.mult((T) LU.data[pivotRow + k]));
+                    LU.data[iRow + k] = LU.data[iRow + k].sub(m.mult(LU.data[pivotRow + k]));
             }
 
             // Compute and set L value.

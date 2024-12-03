@@ -72,35 +72,18 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if two {@link Shape} objects satisfy the requirements of matrix multiplication.
+     * Checks if two {@link Shape} objects satisfy the requirements of matrix-matrix or matrix-vector multiplication.
      * @param shape1 First shape.
      * @param shape2 Second shape.
-     * @throws LinearAlgebraException If shapes do not satisfy the requirements of matrix multiplication.
+     * @throws LinearAlgebraException If shapes do not satisfy the requirements of matrix-matrix or matrix-vector multiplication.
      */
     public static void ensureMatMultShapes(Shape shape1, Shape shape2) {
-        if(shape1.getRank() != 2
-                || shape2.getRank() != 2
-                || shape1.get(1) != shape2.get(0)) {
+        boolean valid = shape1.getRank() == 2 && (shape2.getRank() == 1 || shape2.getRank() == 2);
+        valid &= shape1.get(1) == shape2.get(0);
+
+        if(!valid) {
             throw new LinearAlgebraException(
                     ErrorMessages.matMultShapeErrMsg(shape1, shape2));
-        }
-    }
-
-
-    /**
-     * Checks if two {@link Shape} objects satisfy the requirements of matrix-vector multiplication.
-     * @param shape1 Shape of the matrix.
-     * @param shape2 Shape of the vector.
-     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code shape1.getRank() != 2}, {@code shape2.getRank() != 1},
-     * or {@code !shape1.get(1).equals(shape2.get(0))}.
-     */
-    public static void ensureMatVecMultShapes(Shape shape1, Shape shape2) {
-        if(shape1.getRank() != 2
-                || shape2.getRank() != 1
-                || shape1.get(1) != shape2.get(0)) {
-            throw new TensorShapeException(
-                    ErrorMessages.matMultShapeErrMsg(shape1, shape2)
-            );
         }
     }
 
@@ -111,11 +94,9 @@ public final class ValidateParameters {
      * @throws IllegalArgumentException If all lengths are not equal.
      */
     public static void ensureArrayLengthsEq(int... lengths) {
-        for(int i=0; i<lengths.length-1; i++) {
-            if(lengths[i]!=lengths[i+1]) {
+        for(int i=0; i<lengths.length-1; i++)
+            if(lengths[i] != lengths[i+1])
                 throw new IllegalArgumentException(ErrorMessages.getArrayLengthsMismatchErr(lengths));
-            }
-        }
     }
 
 
@@ -508,15 +489,30 @@ public final class ValidateParameters {
      * @throws IllegalArgumentException If {@code axis} is not a permutation of {@code {0, 1, 2, ..., N-1}}.
      */
     public static void ensurePermutation(int... axes) {
-        int[] axesCopy = axes.clone();
+        if (axes == null)
+            throw new IllegalArgumentException("Array is not a permutation of v");
 
-        Arrays.sort(axesCopy);
+        ensurePermutation(axes, axes.length);
+    }
 
-        for(int i=0; i<axesCopy.length; i++) {
-            if(axesCopy[i]!=i) {
-                throw new IllegalArgumentException("Array is not a permutation of integers 0 through " + axes.length + ".\n" +
-                        "Got " + Arrays.toString(axes));
+
+    /**
+     * Checks that a list of axis are a permutation of {@code {0, 1, 2, ..., n-1}}.
+     * @param axes List of axes of interest.
+     * @param n The length of the permutation.
+     * @throws IllegalArgumentException If {@code axis} is not a permutation of {@code {0, 1, 2, ..., n-1}}.
+     */
+    public static void ensurePermutation(int[] axes, int n) {
+        if (axes == null || axes.length != n)
+            throw new IllegalArgumentException("Array length does not match expected size n=" + n);
+
+        boolean[] seen = new boolean[n];
+        for (int axis : axes) {
+            if(axis < 0 || axis >= n || seen[axis]) {
+                throw new IllegalArgumentException("Array is not a permutation of integers 0 through " + (n - 1) +
+                        ". Got " + Arrays.toString(axes));
             }
+            seen[axis] = true;
         }
     }
 
@@ -532,7 +528,7 @@ public final class ValidateParameters {
     public static void ensureInRange(double value, double lowerBound, double upperBound, String paramName) {
         if(value < lowerBound || value > upperBound) {
             String name = paramName==null ? "Value" : paramName;
-            String errMsg = String.format("%s = %f must be in range [%f, %f]", name, value, lowerBound, upperBound);
+            String errMsg = String.format("Got %s = %f but must be in range [%f, %f]", name, value, lowerBound, upperBound);
 
             throw new IllegalArgumentException(errMsg);
         }
@@ -543,9 +539,9 @@ public final class ValidateParameters {
      * Checks that a set of indices is within {@code [0, upperBound)}.
      * @param upperBound Upper bound of range for indices (exclusive).
      * @param indices Array of indices to check.
-     * @throws IndexOutOfBoundsException If any {@code indices} or not within {@code [0, upperBound)}.
+     * @throws IndexOutOfBoundsException If any {@code indices} are not within {@code [0, upperBound)}.
      */
-    public static void ensureIndexInBounds(int upperBound, int... indices) {
+    public static void ensureIndicesInBounds(int upperBound, int... indices) {
         for(int i : indices) {
             if(i < 0 || i >= upperBound) {
                 String errMsg = i<0 ?
@@ -594,8 +590,8 @@ public final class ValidateParameters {
         for(int i=0, size=indices.length; i<size; i++) {
             if(indices[i] < 0 || indices[i] >= length) {
                 String errMsg = indices[i]<0 ?
-                        "Index " + i + " is out of bounds for lower bound of 0" :
-                        "Index " + i + " is out of bounds for upper bound of " + length + ".";
+                        "Index " + indices[i] + " is out of bounds for lower bound of 0" :
+                        "Index " + indices[i] + " is out of bounds for upper bound of " + length + ".";
 
                 throw new IndexOutOfBoundsException(errMsg);
             }

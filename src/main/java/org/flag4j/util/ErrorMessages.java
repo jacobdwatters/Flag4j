@@ -50,7 +50,7 @@ public final class ErrorMessages {
      * Error message for matrices which do not have valid dimensions for matrix multiplication.
      */
     private static final String MAT_MULT_DIM_MISMATCH_ERR = "Expecting the number of columns in the first matrix to" +
-            " match the number rows in the second matrix but got shapes %s and %s.";
+            " match the number rows/length in the second matrix/vector but got shapes %s and %s.";
     /**
      * Error message for vector which was expected to be row vector.
      */

@@ -32,7 +32,7 @@ import java.util.concurrent.*;
 import java.util.logging.Logger;
 
 /**
- * This class contains the base thread pool for all concurrent operations and methods for managing the pool.
+ * This class contains the base thread pool for all concurrent ops and methods for managing the pool.
  */
 public final class ThreadManager {
     private ThreadManager() {
@@ -52,7 +52,7 @@ public final class ThreadManager {
 
     /**
      * The parallelism level for the thread manager. That is, the number of threads to be used in the thread pool
-     * when executing concurrent operations.
+     * when executing concurrent ops.
      */
     private static int parallelismLevel = Configurations.DEFAULT_NUM_THREADS;
 
@@ -62,7 +62,7 @@ public final class ThreadManager {
     private static final Logger threadLogger = Logger.getLogger(ThreadManager.class.getName());
 
     /**
-     * Thread pool for managing threads executing concurrent operations.
+     * Thread pool for managing threads executing concurrent ops.
      */
     private static ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(parallelismLevel, daemonFactory);
     private static ForkJoinPool streamPool = new ForkJoinPool(parallelismLevel);
@@ -147,7 +147,7 @@ public final class ThreadManager {
      *
      * <p>Unlike {@link #concurrentOperation(int, TensorOperation)} this method respects the block size of the blocked operation.
      * This means tasks split across threads will be aligned to block borders if possible which allows for the improved cache
-     * performance benefits of blocked operations to be fully realized. For this reason, it is not recommended to use
+     * performance benefits of blocked ops to be fully realized. For this reason, it is not recommended to use
      * {@link #concurrentOperation(int, TensorOperation)} to compute a blocked operation concurrently.</p>
      *
      * <p>WARNING: This method provides <i>no</i> guarantees of thread safety. It is the responsibility of the caller to ensure that

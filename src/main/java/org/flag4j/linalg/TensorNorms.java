@@ -25,12 +25,11 @@
 package org.flag4j.linalg;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
-import org.flag4j.linalg.operations.common.ring_ops.CompareRing;
+import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
@@ -215,10 +214,10 @@ public final class TensorNorms {
      * @param src Entries of the tensor.
      * @return The L<sub>2</sub> norm of the tensor.
      */
-    public static double tensorNormL2(Field<Complex128>[] src) {
+    public static double tensorNormL2(Complex128[] src) {
         double norm = 0;
 
-        for(Field<Complex128> cNumber : src)
+        for(Complex128 cNumber : src)
             norm += Complex128.pow((Complex128) cNumber, 2).mag();
 
         return Math.sqrt(norm);
@@ -231,10 +230,10 @@ public final class TensorNorms {
      * @param p The {@code p} parameter of the L<sub>p</sub> norm.
      * @return The L<sub>p</sub> norm of the tensor.
      */
-    public static double tensorNormLp(Field<Complex128>[] src, double p) {
+    public static double tensorNormLp(Complex128[] src, double p) {
         double norm = 0;
 
-        for(Field<Complex128> cNumber : src)
+        for(Complex128 cNumber : src)
             norm += Complex128.pow((Complex128) cNumber, p).mag();
 
         return Math.pow(norm, 1.0/p);

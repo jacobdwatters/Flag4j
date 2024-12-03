@@ -29,14 +29,16 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.SparseMatrixData;
-import org.flag4j.arrays.backend.ring.AbstractCsrRingMatrix;
-import org.flag4j.linalg.operations.common.field_ops.FieldOps;
-import org.flag4j.linalg.operations.sparse.csr.CsrConversions;
-import org.flag4j.linalg.operations.sparse.csr.CsrOps;
-import org.flag4j.linalg.operations.sparse.csr.CsrProperties;
-import org.flag4j.linalg.operations.sparse.csr.semiring_ops.SemiringCsrMatMult;
-import org.flag4j.linalg.operations.sparse.csr.semiring_ops.SemiringCsrOps;
-import org.flag4j.linalg.operations.sparse.csr.semiring_ops.SemiringCsrProperties;
+import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.linalg.ops.common.field_ops.FieldOps;
+import org.flag4j.linalg.ops.common.ring_ops.RingOps;
+import org.flag4j.linalg.ops.sparse.csr.CsrConversions;
+import org.flag4j.linalg.ops.sparse.csr.CsrOps;
+import org.flag4j.linalg.ops.sparse.csr.CsrProperties;
+import org.flag4j.linalg.ops.sparse.csr.field_ops.CsrFieldMatrixProperties;
+import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrMatMult;
+import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrOps;
+import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrProperties;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -46,18 +48,18 @@ import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.flag4j.linalg.operations.sparse.SparseUtils.sortCsrMatrix;
+import static org.flag4j.linalg.ops.sparse.SparseUtils.sortCsrMatrix;
 
 public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T, U, V, W>,
         U extends AbstractDenseFieldMatrix<U, ?, W>,
         V extends AbstractCooFieldVector<V, ?, ?, U, W>,
         W extends Field<W>>
-        extends AbstractTensor<T, Field<W>[], W>
+        extends AbstractTensor<T, W[], W>
         implements FieldTensorMixin<T, U, W>, MatrixMixin<T, U, V, W> {
     /**
      * The zero element for the field that this tensor's elements belong to.
      */
-    private Field<W> zeroElement;
+    private W zeroElement;
     /**
      * <p>Pointers indicating starting index of each row within the {@link #colIndices} and {@link #data} arrays.
      * Has length {@link #numRows numRows + 1}.
@@ -103,7 +105,7 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code data.length == colData.length}.
      */
-    protected AbstractCsrFieldMatrix(Shape shape, Field<W>[] entries, int[] rowPointers, int[] colIndices) {
+    protected AbstractCsrFieldMatrix(Shape shape, W[] entries, int[] rowPointers, int[] colIndices) {
         super(shape, entries);
         ValidateParameters.ensureRank(shape, 2);
 
@@ -128,7 +130,7 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
      * @param colIndices Non-zero column indices of the CSR matrix.
      * @return A sparse CSR tensor of the same type as this tensor with the specified non-zero data and indices.
      */
-    public abstract T makeLikeTensor(Shape shape, Field<W>[] entries, int[] rowPointers, int[] colIndices);
+    public abstract T makeLikeTensor(Shape shape, W[] entries, int[] rowPointers, int[] colIndices);
 
 
     /**
@@ -149,7 +151,7 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
      * @return A dense matrix which is of a similar type to this sparse CSR matrix with the specified {@code shape}
      * and {@code data}.
      */
-    public abstract U makeLikeDenseTensor(Shape shape, Field<W>[] entries);
+    public abstract U makeLikeDenseTensor(Shape shape, W[] entries);
 
 
     /**
@@ -163,7 +165,7 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
      * @return A sparse COO matrix of a similar type to this sparse CSR matrix.
      */
     public abstract AbstractCooFieldMatrix<?, U, V, W> makeLikeCooMatrix(
-            Shape shape, Field<W>[] entries, int[] rowIndices, int[] colIndices);
+            Shape shape, W[] entries, int[] rowIndices, int[] colIndices);
 
 
     /**
@@ -196,7 +198,7 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
      * @see #setZeroElement(Field)
      */
     public W getZeroElement() {
-        return (W) zeroElement;
+        return zeroElement;
     }
 
 
@@ -207,7 +209,7 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
      *
      * @see #getZeroElement()
      */
-    public void setZeroElement(Field<W> zeroElement) {
+    public void setZeroElement(W zeroElement) {
         if (zeroElement.isZero()) {
             this.zeroElement = zeroElement;
         } else {
@@ -333,7 +335,7 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
      */
     @Override
     public T T() {
-        Field<W>[] dest = new Field[data.length];
+        W[] dest = makeEmptyDataArray(data.length);
         int[] destRowPointers = new int[numCols+1];
         int[] destColIndices = new int[data.length];
         CsrOps.transpose(data, rowPointers, colIndices, dest, destRowPointers, destColIndices);
@@ -354,8 +356,8 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
     @Override
     public T add(T b) {
         SparseMatrixData<W> destData = CsrOps.applyBinOpp(
-                shape, (W[]) data, rowPointers, colIndices,
-                b.shape, (W[]) b.data, b.rowPointers, b.colIndices,
+                shape, data, rowPointers, colIndices,
+                b.shape, b.data, b.rowPointers, b.colIndices,
                 Field::add, null);
 
         return makeLikeTensor(shape, destData.data(), destData.rowData(), destData.colData());
@@ -374,8 +376,8 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
     @Override
     public T elemMult(T b) {
         SparseMatrixData<W> destData = CsrOps.applyBinOpp(
-                shape, (W[]) data, rowPointers, colIndices,
-                b.shape, (W[]) b.data, b.rowPointers, b.colIndices,
+                shape, data, rowPointers, colIndices,
+                b.shape, b.data, b.rowPointers, b.colIndices,
                 Field::mult, null);
 
         return makeLikeTensor(shape, destData.data(), destData.rowData(), destData.colData());
@@ -400,11 +402,12 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
      */
     @Override
     public T tensorTr(int axis1, int axis2) {
-        // TODO: Needs to return a tensor and probably be abstract and implemented in a children concrete classes.
+        // TODO: Needs to return a tensor and probably be abstract and implemented in concrete children classes.
         ValidateParameters.ensureNotEquals(axis1, axis2);
         ValidateParameters.ensureValidAxes(shape, axis1, axis2);
 
-        return (T) makeLikeTensor(new Shape(1, 1), new Field[]{tr()}, new int[]{0}, new int[]{0});
+        // TODO: Investigate the (W[]) cast for array of specific field implementation (e.g. complex128).
+        return (T) makeLikeTensor(new Shape(1, 1), (W[]) new Field[]{tr()}, new int[]{0}, new int[]{0});
     }
 
 
@@ -488,8 +491,8 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
         ValidateParameters.validateTensorIndex(shape, row, col);
         int loc = Arrays.binarySearch(colIndices, rowPointers[row], rowPointers[row+1], col);
 
-        if(loc >= 0) return (W) data[loc];
-        else return (W) zeroElement;
+        if(loc >= 0) return data[loc];
+        else return zeroElement;
     }
 
 
@@ -504,8 +507,9 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
      */
     @Override
     public W tr() {
-        W tr = (W) SemiringCsrOps.trace(data, rowPointers, colIndices);
-        return (tr == null) ? (W) zeroElement : tr;
+        ValidateParameters.ensureSquare(shape);
+        W tr = SemiringCsrOps.trace(data, rowPointers, colIndices);
+        return (tr == null) ? zeroElement : tr;
     }
 
 
@@ -560,19 +564,19 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
      *
      * @throws LinearAlgebraException If the number of columns in this matrix do not equal the number
      *                                of rows in matrix {@code b}.
-     * @see #multToSparse(AbstractCsrRingMatrix)
+     * @see #mult2Csr(AbstractCsrFieldMatrix) 
      */
     @Override
     public U mult(T b) {
         Shape destShape = new Shape(numRows, b.numCols);
-        Field<W>[] destArray = new Field[numRows*b.numCols];
+        W[] destArray = makeEmptyDataArray(numRows*b.numCols);
 
         SemiringCsrMatMult.standard(
                 shape, data, rowPointers, colIndices, b.shape,
                 b.data, b.rowPointers, b.colIndices,
                 destArray, zeroElement);
 
-        return makeLikeDenseTensor(shape, destArray);
+        return makeLikeDenseTensor(destShape, destArray);
     }
 
 
@@ -582,7 +586,7 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
      * In such a case, this method will likely be significantly slower than {@link #mult(AbstractCsrFieldMatrix)}.
      * @param b Second matrix in the matrix multiplication.
      * @return The result of matrix multiplying this matrix with matrix {@code b} as a sparse CSR matrix.
-     * @see {@link #mult(AbstractCsrFieldMatrix)}
+     * @see #mult(AbstractCsrFieldMatrix)
      */
     public T mult2Csr(T b) {
         SparseMatrixData<W> data = SemiringCsrMatMult.standardToSparse(
@@ -711,7 +715,7 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
     @Override
     public boolean isHermitian() {
         // For a field matrix, same as isSymmetric.
-        return isSymmetric();
+        return CsrFieldMatrixProperties.isHermitian(this);
     }
 
 
@@ -844,10 +848,10 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
      */
     @Override
     public T getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
-        SparseMatrixData<Field<W>> sliceData = CsrOps.getSlice(
+        SparseMatrixData<W> sliceData = CsrOps.getSlice(
                 data, rowPointers, colIndices,
                 rowStart, rowEnd, colStart, colEnd);
-        return makeLikeTensor(sliceData.shape(), (List<W>) sliceData.data(),
+        return makeLikeTensor(sliceData.shape(), sliceData.data(),
                 sliceData.rowData(), sliceData.colData());
     }
 
@@ -865,7 +869,7 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
     public T set(W value, int row, int col) {
         // Ensure indices are in bounds.
         ValidateParameters.validateTensorIndex(shape, row, col);
-        Field<W>[] newEntries;
+        W[] newEntries;
         int[] newRowPointers = rowPointers.clone();
         int[] newColIndices;
         boolean found = false; // Flag indicating an element already exists in this matrix at the specified row and col.
@@ -886,7 +890,7 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
             newColIndices = colIndices.clone();
         } else {
             loc = -loc - 1; // Compute insertion index as specified by Arrays.binarySearch.
-            newEntries = new Field[data.length + 1];
+            newEntries = makeEmptyDataArray(data.length + 1);
             newColIndices = new int[data.length + 1];
 
             CsrOps.insertNewValue(
@@ -965,13 +969,25 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
      */
     @Override
     public T sub(T b) {
-        // TODO: Investigate the safety of these casts.
         SparseMatrixData<W> destData = CsrOps.applyBinOpp(
-                shape, (W[]) data, rowPointers, colIndices,
-                b.shape, (W[]) b.data, b.rowPointers, b.colIndices,
+                shape, data, rowPointers, colIndices,
+                b.shape, b.data, b.rowPointers, b.colIndices,
                 Field::add, Field::addInv);
 
         return makeLikeTensor(shape, destData.data(), destData.rowData(), destData.colData());
+    }
+
+
+    /**
+     * Computes the element-wise absolute value of this tensor.
+     *
+     * @return The element-wise absolute value of this tensor.
+     */
+    @Override
+    public CsrMatrix abs() {
+        double[] abs = new double[data.length];
+        RingOps.abs(data, abs);
+        return new CsrMatrix(getShape(), abs, rowPointers.clone(), colIndices.clone());
     }
 
 
@@ -982,12 +998,12 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
      */
     @Override
     public T H() {
-        Field<W>[] dest = new Field[data.length];
+        W[] dest = makeEmptyDataArray(data.length);
         int[] destRowPointers = new int[numCols+1];
         int[] destColIndices = new int[data.length];
         CsrOps.hermTranspose(data, rowPointers, colIndices, dest, destRowPointers, destColIndices);
 
-        return makeLikeTensor(shape.swapAxes(0, 1), (W[]) dest, destRowPointers, destColIndices);
+        return makeLikeTensor(shape.swapAxes(0, 1), dest, destRowPointers, destColIndices);
     }
 
 
@@ -1048,9 +1064,9 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
      * @return A dense matrix which is equivalent to this sparse CSR matrix.
      */
     public U toDense() {
-        Field<W>[] dest = new Field[shape.totalEntriesIntValueExact()];
+        W[] dest = makeEmptyDataArray(shape.totalEntriesIntValueExact());
         CsrConversions.toDense(shape, data, rowPointers, colIndices, dest, zeroElement);
-        return makeLikeDenseTensor(shape, (W[]) dest);
+        return makeLikeDenseTensor(shape, dest);
     }
 
 
@@ -1110,7 +1126,7 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
      */
     @Override
     public T sqrt() {
-        Field<W>[] dest = new Field[data.length];
+        W[] dest = makeEmptyDataArray(data.length);
         FieldOps.sqrt(data, dest);
         return makeLikeTensor(shape, dest);
     }

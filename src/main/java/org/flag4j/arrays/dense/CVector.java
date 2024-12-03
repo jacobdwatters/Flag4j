@@ -26,18 +26,17 @@ package org.flag4j.arrays.dense;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Complex64;
-import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field.AbstractDenseFieldVector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.operations.common.complex.Complex128Ops;
-import org.flag4j.linalg.operations.common.complex.Complex128Properties;
-import org.flag4j.linalg.operations.dense.field_ops.DenseFieldVectorOperations;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOps;
-import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldVectorOps;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
+import org.flag4j.linalg.ops.common.complex.Complex128Ops;
+import org.flag4j.linalg.ops.common.complex.Complex128Properties;
+import org.flag4j.linalg.ops.dense.field_ops.DenseFieldVectorOps;
+import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldVectorOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -55,7 +54,7 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
      *
      * @param entries Entries of this vector.
      */
-    public CVector(Field<Complex128>... entries) {
+    public CVector(Complex128... entries) {
         super(new Shape(entries.length), entries);
         setZeroElement(Complex128.ZERO);
     }
@@ -151,6 +150,12 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
     }
 
 
+    @Override
+    public Complex128[] makeEmptyDataArray(int length) {
+        return new Complex128[length];
+    }
+
+
     /**
      * Sets the specified index of this vector to the provided real value.
      * @param val Value to set in this vector.
@@ -179,7 +184,7 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
      * @param entries Entries of the dense vector to construct.
      */
     @Override
-    public CVector makeLikeTensor(Field<Complex128>[] entries) {
+    public CVector makeLikeTensor(Complex128[] entries) {
         return new CVector(entries);
     }
 
@@ -193,7 +198,7 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
      * @return A matrix of similar type to this vector with the specified {@code shape} and {@code data}.
      */
     @Override
-    public CMatrix makeLikeMatrix(Shape shape, Field<Complex128>[] entries) {
+    public CMatrix makeLikeMatrix(Shape shape, Complex128[] entries) {
         return new CMatrix(shape, entries);
     }
 
@@ -339,7 +344,7 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
      * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
      */
     public CooCVector elemMult(CooVector b) {
-        Field<Complex128>[] dest = RealFieldDenseCooVectorOps.elemMult(this, b);
+        Complex128[] dest = RealFieldDenseCooVectorOps.elemMult(this, b);
         return new CooCVector(shape, dest, b.indices.clone());
     }
 
@@ -388,7 +393,7 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
         double mag = 0;
 
         for(int i = 0, size = data.length; i < size; i++) {
-            Complex128 v = (Complex128) data[i];
+            Complex128 v =  data[i];
             mag += (v.re*v.re + v.im*v.im);
         }
 
@@ -406,8 +411,11 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
      * @return A sparse COO tensor which is of a similar type as this dense tensor.
      */
     @Override
-    protected CooCVector makeLikeCooTensor(Shape shape, Field<Complex128>[] entries, int[][] indices) {
-        return new CooCVector(shape, entries, indices[0]);
+    protected CooCVector makeLikeCooTensor(Shape shape, Complex128[] entries, int[][] indices) {
+        // Check for case when vector contains no non-zero entries.
+        return (indices.length == 0)
+                ? new CooCVector(shape, entries, new int[0])
+                : new CooCVector(shape, entries, indices[0]);
     }
 
 
@@ -453,7 +461,7 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
      * {@code data}.
      */
     @Override
-    public CVector makeLikeTensor(Shape shape, Field<Complex128>[] entries) {
+    public CVector makeLikeTensor(Shape shape, Complex128[] entries) {
         ValidateParameters.ensureRank(shape, 1);
         ValidateParameters.ensureEquals(shape.totalEntriesIntValueExact(), entries.length);
         return new CVector(entries);
@@ -513,12 +521,17 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
      * @return
      */
     public double innerSelf() {
-        return DenseFieldVectorOperations.innerSelfProduct(data);
+        return DenseFieldVectorOps.innerSelfProduct(data);
     }
 
 
     /**
-     * Computes the vector cross product between two vectors.
+     * <p>Computes the vector cross product between two vectors.
+     *
+     * <p><b>Note</b>: Formally speaking, the vector cross product cannot be
+     * defined for complex vectors while maintaining the same properties as vectors from &#8477<sup>3</sup> (e.g. orthogonality).
+     * However, it can still be defined algebraically in the same way as it is for real vectors though it may fail to satisfy
+     * properties of a true cross product. This is algebraic definition is what this method implements.
      *
      * @param b Second vector in the cross product.
      *
@@ -532,16 +545,16 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
                     + size + " and " + b.size);
         }
 
-        Complex128[] entries = new Complex128[3];
+        Complex128[] dest = new Complex128[3];
 
-        entries[0] = entries[1].mult((Complex128) b.data[2])
-                .sub(entries[2].mult((Complex128) b.data[1]));
-        entries[1] = entries[2].mult((Complex128) b.data[0])
-                .sub(entries[0].mult((Complex128) b.data[2]));
-        entries[2] = entries[0].mult((Complex128) b.data[1])
-                .sub(entries[1].mult((Complex128) b.data[0]));
+        dest[0] = data[1].mult(b.data[2])
+                .sub(data[2].mult(b.data[1]));
+        dest[1] = data[2].mult(b.data[0])
+                .sub(data[0].mult(b.data[2]));
+        dest[2] = data[0].mult(b.data[1])
+                .sub(data[1].mult(b.data[0]));
 
-        return new CVector(entries);
+        return new CVector(dest);
     }
 
 

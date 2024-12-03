@@ -58,8 +58,8 @@ class MatrixToStringTest {
         PrintOptions.setMaxColumns(50);
         PrintOptions.setCentering(true);
         exp = "shape: (2, 4)\n" +
-                "[[  1.0    2.0     1.0        0     ]\n" +
-                " [   0     1.0    -123.0    2342.0  ]]";
+                "[[  1    2     1       0    ]\n" +
+                " [  0    1    -123    2342  ]]";
 
         assertEquals(exp, A.toString());
 
@@ -90,8 +90,8 @@ class MatrixToStringTest {
         PrintOptions.setMaxColumns(4);
         PrintOptions.setCentering(true);
         exp = "shape: (2, 4)\n" +
-                "[ [           ...            ]\n" +
-                " [ 0  1.46  -123.4  2341.56 ]]";
+                "[ [             ...             ]\n" +
+                " [  0    1.46  -123.4  2341.56 ]]";
 
         assertEquals(exp, A.toString());
 

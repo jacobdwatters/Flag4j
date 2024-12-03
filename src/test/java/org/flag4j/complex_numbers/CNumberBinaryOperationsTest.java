@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
- * This class contains various tests for operations with complex numbers.
+ * This class contains various tests for ops with complex numbers.
  */
 class Complex128BinaryOperationsTest {
     Complex128 a;

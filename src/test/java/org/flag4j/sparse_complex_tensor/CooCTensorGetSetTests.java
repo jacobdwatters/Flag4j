@@ -26,7 +26,7 @@ public class CooCTensorGetSetTests {
         aEntries = new Complex128[]{
                 new Complex128(1, 2), new Complex128(0.2324, -239.1),
                 new Complex128(5.1), new Complex128(0, 18.2)};
-        aIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
+        aIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 0}};
         A = new CooCTensor(aShape, aEntries, aIndices);
 
         // --------------- Sub-case 1 ---------------
@@ -34,7 +34,7 @@ public class CooCTensorGetSetTests {
         expEntries = new Complex128[]{
                 new Complex128(1, 2), new Complex128(2.41, -23.23),
                 new Complex128(5.1), new Complex128(0, 18.2)};
-        expIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
+        expIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 0}};
         exp = new CooCTensor(expShape, expEntries, expIndices);
 
         assertEquals(exp, A.set(new Complex128(2.41, -23.23), 1, 2, 0, 0));
@@ -44,7 +44,7 @@ public class CooCTensorGetSetTests {
         expEntries = new Complex128[]{
                 new Complex128(1, 2), new Complex128(0.2324, -239.1), new Complex128(0, -9.2),
                 new Complex128(5.1), new Complex128(0, 18.2)};
-        expIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {1, 2, 4, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
+        expIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {1, 2, 4, 0}, {2, 3, 2, 0}, {2, 3, 4, 0}};
         exp = new CooCTensor(expShape, expEntries, expIndices);
 
         assertEquals(exp, A.set(new Complex128(0, -9.2), 1, 2, 4, 0));
@@ -54,7 +54,7 @@ public class CooCTensorGetSetTests {
         expEntries = new Complex128[]{
                 new Complex128(0.001), new Complex128(1, 2), new Complex128(0.2324, -239.1),
                 new Complex128(5.1), new Complex128(0, 18.2)};
-        expIndices = new int[][]{{0, 0, 0, 0}, {0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
+        expIndices = new int[][]{{0, 0, 0, 0}, {0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 0}};
         exp = new CooCTensor(expShape, expEntries, expIndices);
 
         assertEquals(exp, A.set(0.001, 0, 0, 0, 0));
@@ -73,7 +73,7 @@ public class CooCTensorGetSetTests {
         aEntries = new Complex128[]{
                 new Complex128(1, 2), new Complex128(0.2324, -239.1),
                 new Complex128(5.1), new Complex128(0, 18.2)};
-        aIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
+        aIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 0}};
         A = new CooCTensor(aShape, aEntries, aIndices);
 
         // --------------- Sub-case 1 ---------------

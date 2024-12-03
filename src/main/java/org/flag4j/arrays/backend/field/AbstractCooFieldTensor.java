@@ -25,18 +25,19 @@
 package org.flag4j.arrays.backend.field;
 
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.algebraic_structures.rings.Ring;
-import org.flag4j.algebraic_structures.semirings.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.SparseTensorData;
-import org.flag4j.linalg.operations.common.field_ops.FieldOps;
-import org.flag4j.linalg.operations.common.semiring_ops.CompareSemiring;
-import org.flag4j.linalg.operations.sparse.SparseElementSearch;
-import org.flag4j.linalg.operations.sparse.SparseUtils;
-import org.flag4j.linalg.operations.sparse.coo.*;
-import org.flag4j.linalg.operations.sparse.coo.ring_ops.CooRingTensorOps;
-import org.flag4j.linalg.operations.sparse.coo.semiring_ops.CooSemiringTensorOps;
+import org.flag4j.arrays.sparse.CooTensor;
+import org.flag4j.linalg.ops.common.field_ops.FieldOps;
+import org.flag4j.linalg.ops.common.ring_ops.RingOps;
+import org.flag4j.linalg.ops.common.semiring_ops.CompareSemiring;
+import org.flag4j.linalg.ops.sparse.SparseElementSearch;
+import org.flag4j.linalg.ops.sparse.SparseUtils;
+import org.flag4j.linalg.ops.sparse.coo.*;
+import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldHermTranspose;
+import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingTensorOps;
+import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringTensorOps;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -54,7 +55,7 @@ import java.util.List;
  * <p>The {@link #data non-zero data} and {@link #indices non-zero indices} of a COO tensor are mutable but the {@link #shape}
  * and total {@link #nnz number of non-zero data} is fixed.
  *
- * <p>Sparse tensors allow for the efficient storage of and operations on tensors that contain many zero values.
+ * <p>Sparse tensors allow for the efficient storage of and ops on tensors that contain many zero values.
  *
  * <p>COO tensors are optimized for hyper-sparse tensors (i.e. tensors which contain almost all zeros relative to the size of the
  * tensor).
@@ -64,7 +65,7 @@ import java.util.List;
  *     <li>The full {@link #shape shape} of the tensor.</li>
  *     <li>The non-zero {@link #data} of the tensor. All other data in the tensor are
  *     assumed to be zero. Zero value can also explicitly be stored in {@link #data}.</li>
- *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many operations assume indices to be sorted in a
+ *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many ops assume indices to be sorted in a
  *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.
  *
  *     <p>The {@link #indices} array has shape {@code (nnz, rank)} where {@link #nnz} is the number of non-zero data in this
@@ -74,19 +75,19 @@ import java.util.List;
  * </ul>
  *
  * @param <T> Type of this sparse COO tensor.
- * @param <U> Type of dense tensor equivalent to {@code T}. This type parameter is required because some operations (e.g.
+ * @param <U> Type of dense tensor equivalent to {@code T}. This type parameter is required because some ops (e.g.
  * {@link #tensorDot(AbstractCooFieldTensor, int[], int[])} between two sparse tensors results in a dense tensor.
  * @param <V> Type of the {@link Field} which the data of this tensor belong to.
  */
 public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T, U, V>,
         U extends AbstractDenseFieldTensor<U, V>, V extends Field<V>>
-        extends AbstractTensor<T, Field<V>[], V>
+        extends AbstractTensor<T, V[], V>
         implements FieldTensorMixin<T, T, V> {
 
     /**
      * The zero element for the field that this tensor's elements belong to.
      */
-    private Field<V> zeroElement;
+    private V zeroElement;
     /**
      * <p>The non-zero indices of this sparse tensor.
      *
@@ -110,7 +111,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
      * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
-    protected AbstractCooFieldTensor(Shape shape, Field<V>[] entries, int[][] indices) {
+    protected AbstractCooFieldTensor(Shape shape, V[] entries, int[][] indices) {
         super(shape, entries);
         if(indices.length != 0) ValidateParameters.ensureLengthEqualsRank(shape, indices[0].length);
         ValidateParameters.ensureArrayLengthsEq(entries.length, indices.length);
@@ -141,7 +142,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      * @param indices Indices of the non-zero data of the tensor.
      * @return A tensor of the same type as this tensor with the specified shape and non-zero data.
      */
-    public abstract T makeLikeTensor(Shape shape, List<Field<V>> entries, List<int[]> indices);
+    public abstract T makeLikeTensor(Shape shape, List<V> entries, List<int[]> indices);
 
 
     /**
@@ -150,7 +151,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      * @param entries The data of the dense tensor to construct.
      * @return A dense tensor that is a similar type as this sparse COO tensor.
      */
-    public abstract U makeLikeDenseTensor(Shape shape, Field<V>[] entries);
+    public abstract U makeLikeDenseTensor(Shape shape, V[] entries);
 
 
     /**
@@ -159,7 +160,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      * and has not been set explicitly by {@link #setZeroElement(Field)} then {@code null} will be returned.
      */
     public V getZeroElement() {
-        return (V) zeroElement;
+        return zeroElement;
     }
 
 
@@ -168,7 +169,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      * @param zeroElement The zero element of this tensor.
      * @throws IllegalArgumentException If {@code zeroElement} is not an additive identity for the field.
      */
-    public void setZeroElement(Field<V> zeroElement) {
+    public void setZeroElement(V zeroElement) {
         if (zeroElement.isZero()) {
             this.zeroElement = zeroElement;
         } else {
@@ -209,13 +210,13 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      */
     @Override
     public T add(T b) {
-        SparseTensorData<Semiring<V>> data = CooSemiringTensorOps.add(
+        SparseTensorData<V> data = CooSemiringTensorOps.add(
                 shape, this.data, indices,
                 b.shape, b.data, b.indices
         );
 
         return makeLikeTensor(data.shape(),
-                (V[]) data.data().toArray(new Field[data.data().size()]),
+                data.data().toArray(makeEmptyDataArray(data.data().size())),
                 data.indices().toArray(new int[data.indices().size()][]));
     }
 
@@ -231,10 +232,10 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      */
     @Override
     public T elemMult(T b) {
-        SparseTensorData<Semiring<V>> data = CooSemiringTensorOps.elemMult(
+        SparseTensorData<V> data = CooSemiringTensorOps.elemMult(
                 shape, this.data, indices, b.shape, b.data, b.indices);
         return makeLikeTensor(data.shape(),
-                (V[]) data.data().toArray(new Field[data.data().size()]),
+                data.data().toArray(makeEmptyDataArray(data.data().size())),
                 data.indices().toArray(new int[data.indices().size()][]));
     }
 
@@ -259,7 +260,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
         CooTensorDot<V> problem = new CooTensorDot<>(shape, data, indices,
                 src2.shape, src2.data, src2.indices,
                 aAxes, bAxes);
-        Field<V>[] dest = new Field[problem.getOutputSize()];
+        V[] dest = makeEmptyDataArray(problem.getOutputSize());
         problem.compute(dest);
         return makeLikeDenseTensor(problem.getOutputShape(), dest);
     }
@@ -283,10 +284,10 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      */
     @Override
     public T tensorTr(int axis1, int axis2) {
-        SparseTensorData<Semiring<V>> data = CooSemiringTensorOps.tensorTr(
+        SparseTensorData<V> data = CooSemiringTensorOps.tensorTr(
                 shape, this.data, indices, axis1, axis2);
         return makeLikeTensor(data.shape(),
-                (V[]) data.data().toArray(new Field[data.data().size()]),
+                data.data().toArray(makeEmptyDataArray(data.data().size())),
                 data.indices().toArray(new int[data.indices().size()][]));
     }
 
@@ -301,10 +302,10 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      */
     @Override
     public T T() {
-        Field<V>[] destEntries = new Field[nnz];
+        V[] destEntries = makeEmptyDataArray(nnz);
         int[][] destIndices = new int[nnz][rank];
         CooTranspose.tensorTranspose(shape, data, indices,0, shape.getRank()-1, destEntries, destIndices);
-        return makeLikeTensor(shape.swapAxes(0, rank-1), (V[]) destEntries, destIndices);
+        return makeLikeTensor(shape.swapAxes(0, rank-1), destEntries, destIndices);
     }
 
 
@@ -322,10 +323,10 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      */
     @Override
     public T T(int axis1, int axis2) {
-        Field<V>[] destEntries = new Field[nnz];
+        V[] destEntries = makeEmptyDataArray(nnz);
         int[][] destIndices = new int[nnz][rank];
         CooTranspose.tensorTranspose(shape, data, indices, axis1, axis2, destEntries, destIndices);
-        return makeLikeTensor(shape.swapAxes(axis1, axis2), (V[]) destEntries, destIndices);
+        return makeLikeTensor(shape.swapAxes(axis1, axis2), destEntries, destIndices);
     }
 
 
@@ -345,10 +346,10 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      */
     @Override
     public T T(int... axes) {
-        Field<V>[] destEntries = new Field[nnz];
+        V[] destEntries = makeEmptyDataArray(nnz);
         int[][] destIndices = new int[nnz][rank];
         CooTranspose.tensorTranspose(shape, data, indices, axes, destEntries, destIndices);
-        return makeLikeTensor(shape.permuteAxes(axes), (V[]) destEntries, destIndices);
+        return makeLikeTensor(shape.permuteAxes(axes), destEntries, destIndices);
     }
 
 
@@ -371,7 +372,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      */
     @Override
     public V min() {
-        return (V) CompareSemiring.min(data);
+        return CompareSemiring.min(data);
     }
 
 
@@ -382,7 +383,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      */
     @Override
     public V max() {
-        return (V) CompareSemiring.max(data);
+        return CompareSemiring.max(data);
     }
 
 
@@ -424,7 +425,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
     @Override
     public V get(int... target) {
         ValidateParameters.validateTensorIndex(shape, target);
-        V value = (V) CooGetSet.getCoo(data, indices, target);
+        V value = CooGetSet.getCoo(data, indices, target);
         return (value == null) ? getZeroElement() : value;
     }
 
@@ -445,7 +446,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
         ValidateParameters.validateTensorIndex(shape, target);
         int idx = SparseElementSearch.binarySearchCoo(indices, target);
 
-        Field<V>[] destEntries;
+        V[] destEntries;
         int[][] destIndices;
 
         if (idx >= 0) {
@@ -456,13 +457,13 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
             destIndices[idx] = target;
         } else {
             // Target not found, insert new value and index.
-            destEntries = new Field[nnz + 1];
+            destEntries = makeEmptyDataArray(nnz + 1);
             destIndices = new int[nnz + 1][rank];
             int insertionPoint = - (idx + 1);
             CooGetSet.cooInsertNewValue(value, target, data, indices, insertionPoint, destEntries, destIndices);
         }
 
-        return makeLikeTensor(shape, (V[]) destEntries, destIndices);
+        return makeLikeTensor(shape, destEntries, destIndices);
     }
 
 
@@ -477,7 +478,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
     public T flatten() {
         return makeLikeTensor(
                 new Shape(shape.totalEntriesIntValueExact()),
-                (V[]) data.clone(),
+                data.clone(),
                 SparseUtils.cooFlattenIndices(shape, indices));
     }
 
@@ -498,7 +499,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
 
         return makeLikeTensor(
                 new Shape(destShape),
-                (V[]) data.clone(),
+                data.clone(),
                 SparseUtils.cooFlattenIndices(shape, indices, axis));
     }
 
@@ -514,7 +515,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      */
     @Override
     public T reshape(Shape newShape) {
-        return makeLikeTensor(newShape, (V[]) data.clone(), SparseUtils.cooReshape(shape, newShape, indices));
+        return makeLikeTensor(newShape, data.clone(), SparseUtils.cooReshape(shape, newShape, indices));
     }
 
 
@@ -532,7 +533,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      * @throws ArithmeticException If the number of data in the dense tensor exceeds 2,147,483,647.
      */
     public U toDense() {
-        Field<V>[] denseEntries = new Field[shape.totalEntriesIntValueExact()];
+        V[] denseEntries = makeEmptyDataArray(shape.totalEntriesIntValueExact());
         CooConversions.toDense(shape, data, indices, denseEntries);
         return makeLikeDenseTensor(shape, denseEntries);
     }
@@ -549,13 +550,26 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      */
     @Override
     public T sub(T b) {
-        SparseTensorData<Ring<V>> data = CooRingTensorOps.sub(
+        SparseTensorData<V> data = CooRingTensorOps.sub(
                 shape, this.data, indices,
                 b.shape, b.data, b.indices);
 
         return makeLikeTensor(data.shape(),
-                (V[]) data.data().toArray(new Field[data.data().size()]),
+                data.data().toArray(makeEmptyDataArray(data.data().size())),
                 data.indicesToArray());
+    }
+
+
+    /**
+     * Computes the element-wise absolute value of this tensor.
+     *
+     * @return The element-wise absolute value of this tensor.
+     */
+    @Override
+    public CooTensor abs() {
+        double[] abs = new double[data.length];
+        RingOps.abs(data, abs);
+        return new CooTensor(getShape(), abs, ArrayUtils.deepCopy(indices, null));
     }
 
 
@@ -573,7 +587,10 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      */
     @Override
     public T H(int axis1, int axis2) {
-        return T(axis1, axis2);
+        V[] destData = makeEmptyDataArray(data.length);
+        int[][] destIndices = new int[nnz][rank];
+        CooFieldHermTranspose.tensorHermTranspose(shape, data, indices, axis1, axis2, destData, destIndices);
+        return makeLikeTensor(shape.swapAxes(axis1, axis2), destData, destIndices);
     }
 
 
@@ -593,7 +610,10 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      */
     @Override
     public T H(int... axes) {
-        return T(axes);
+        V[] destData = makeEmptyDataArray(data.length);
+        int[][] destIndices = new int[nnz][rank];
+        CooFieldHermTranspose.tensorHermTranspose(shape, data, indices, axes, destData, destIndices);
+        return makeLikeTensor(shape.permuteAxes(axes), destData, destIndices);
     }
 
 
@@ -621,7 +641,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      */
     @Override
     public T sqrt() {
-        Field<V>[] dest = new Field[data.length];
+        V[] dest = makeEmptyDataArray(data.length);
         FieldOps.sqrt(data, dest);
         return makeLikeTensor(shape, dest);
     }

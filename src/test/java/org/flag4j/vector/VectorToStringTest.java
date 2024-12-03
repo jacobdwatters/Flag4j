@@ -33,7 +33,7 @@ class VectorToStringTest {
         PrintOptions.resetAll();
         // ---------------------- Sub-case 1 ----------------------
         exp = "shape: (12)\n" +
-                "[ 1.0  -1.4133  113.4  0.4  11.3  445.0  133.445  9.8  13384.0  ...  12.0 ]";
+                "[ 1  -1.4133  113.4  0.4  11.3  445  133.445  9.8  13384  ...  12 ]";
         assertEquals(exp, A.toString());
 
         // ---------------------- Sub-case 2 ----------------------
@@ -41,7 +41,7 @@ class VectorToStringTest {
         PrintOptions.setPrecision(2);
         PrintOptions.setCentering(false);
         exp = "shape: (12)\n" +
-                "[1.0  -1.41  113.4  0.4  11.3  445.0  133.45  9.8  13384.0  -993.44  11.0  12.0  ]";
+                "[1  -1.41  113.4  0.4  11.3  445  133.45  9.8  13384  -993.44  11  12  ]";
         assertEquals(exp, A.toString());
     }
 }

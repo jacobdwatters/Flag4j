@@ -25,7 +25,6 @@
 package org.flag4j.arrays.dense;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.MatrixMixin;
@@ -34,28 +33,28 @@ import org.flag4j.arrays.sparse.*;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
-import org.flag4j.linalg.operations.MatrixMultiplyDispatcher;
-import org.flag4j.linalg.operations.RealDenseMatrixMultiplyDispatcher;
-import org.flag4j.linalg.operations.TransposeDispatcher;
-import org.flag4j.linalg.operations.common.complex.Complex128Ops;
-import org.flag4j.linalg.operations.common.field_ops.FieldOps;
-import org.flag4j.linalg.operations.dense.real.RealDenseDeterminant;
-import org.flag4j.linalg.operations.dense.real.RealDenseEquals;
-import org.flag4j.linalg.operations.dense.real.RealDenseProperties;
-import org.flag4j.linalg.operations.dense.real.RealDenseSetOperations;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemDiv;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemMult;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseMatMult;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOps;
-import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseMatrixMultiplication;
-import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseCooMatOps;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatMult;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOps;
-import org.flag4j.linalg.operations.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
-import org.flag4j.linalg.operations.dense_sparse.csr.real.RealCsrDenseOperations;
-import org.flag4j.linalg.operations.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
-import org.flag4j.linalg.operations.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
+import org.flag4j.linalg.ops.MatrixMultiplyDispatcher;
+import org.flag4j.linalg.ops.RealDenseMatrixMultiplyDispatcher;
+import org.flag4j.linalg.ops.TransposeDispatcher;
+import org.flag4j.linalg.ops.common.complex.Complex128Ops;
+import org.flag4j.linalg.ops.common.field_ops.FieldOps;
+import org.flag4j.linalg.ops.dense.real.RealDenseDeterminant;
+import org.flag4j.linalg.ops.dense.real.RealDenseEquals;
+import org.flag4j.linalg.ops.dense.real.RealDenseProperties;
+import org.flag4j.linalg.ops.dense.real.RealDenseSetOperations;
+import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseElemDiv;
+import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseElemMult;
+import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseMatMult;
+import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatMult;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseCooMatOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatMult;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOps;
+import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
+import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseOperations;
+import org.flag4j.linalg.ops.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
+import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -74,7 +73,7 @@ import java.util.List;
  * <p>The {@link #data} of a matrix are mutable but the {@link #shape} is fixed.
  *
  * <p>A matrix is essentially equivalent to a rank 2 tensor but has some extended functionality and <i>may</i> have improved
- * performance for some operations.
+ * performance for some ops.
  */
 public class Matrix extends AbstractDenseDoubleTensor<Matrix>
         implements MatrixMixin<Matrix, Matrix, Vector, Double> {
@@ -160,16 +159,16 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
 
     /**
      * Creates a real dense matrix whose data are specified by a double array.
-     * @param entries Entries of the real dense matrix.
+     * @param data Entries of the real dense matrix.
      */
-    public Matrix(Double[][] entries) {
-        super(new Shape(entries.length, entries[0].length),
-                new double[entries.length*entries[0].length]);
+    public Matrix(Double[][] data) {
+        super(new Shape(data.length, data[0].length),
+                new double[data.length*data[0].length]);
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
 
         int index = 0;
-        for(Double[] row : entries) {
+        for(Double[] row : data) {
             for(Double value : row)
                 super.data[index++] = value;
         }
@@ -178,16 +177,16 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
 
     /**
      * Creates a real dense matrix whose data are specified by a double array.
-     * @param entries Entries of the real dense matrix.
+     * @param data Entries of the real dense matrix.
      */
-    public Matrix(Integer[][] entries) {
-        super(new Shape(entries.length, entries[0].length),
-                new double[entries.length*entries[0].length]);
+    public Matrix(Integer[][] data) {
+        super(new Shape(data.length, data[0].length),
+                new double[data.length*data[0].length]);
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
 
         int index = 0;
-        for(Integer[] row : entries) {
+        for(Integer[] row : data) {
             for(Integer value : row)
                 super.data[index++] = value;
         }
@@ -196,16 +195,16 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
 
     /**
      * Creates a real dense matrix whose data are specified by a double array.
-     * @param entries Entries of the real dense matrix.
+     * @param data Entries of the real dense matrix.
      */
-    public Matrix(double[][] entries) {
-        super(new Shape(entries.length, entries[0].length),
-                new double[entries.length*entries[0].length]);
+    public Matrix(double[][] data) {
+        super(new Shape(data.length, data[0].length),
+                new double[data.length*data[0].length]);
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
 
         int index = 0;
-        for(double[] row : entries) {
+        for(double[] row : data) {
             for(double value : row)
                 super.data[index++] = value;
         }
@@ -214,16 +213,16 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
 
     /**
      * Creates a real dense matrix whose data are specified by a double array.
-     * @param entries Entries of the real dense matrix.
+     * @param data Entries of the real dense matrix.
      */
-    public Matrix(int[][] entries) {
-        super(new Shape(entries.length, entries[0].length), new double[entries.length*entries[0].length]);
+    public Matrix(int[][] data) {
+        super(new Shape(data.length, data[0].length), new double[data.length*data[0].length]);
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
 
         // Copy the int array
         int index=0;
-        for(int[] row : entries) {
+        for(int[] row : data) {
             for(int value : row)
                 super.data[index++] = value;
         }
@@ -247,7 +246,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
      */
     public Matrix(Shape shape) {
-        super(shape, new double[shape.totalEntries().intValue()]);
+        super(shape, new double[shape.totalEntriesIntValueExact()]);
         ValidateParameters.ensureRank(shape, 2);
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
@@ -270,14 +269,13 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
 
 
     /**
-     * Constructs a matrix with specified shape and data. Note, unlike other constructors, the data' parameter
-     * is not copied.
+     * Constructs a matrix with specified shape and data.
      * @param numRows Number of rows in this matrix.
      * @param numCols Number of columns in this matrix.
-     * @param entries Entries of the matrix.
+     * @param data Entries of the matrix.
      */
-    public Matrix(int numRows, int numCols, double[] entries) {
-        super(new Shape(numRows, numCols), entries);
+    public Matrix(int numRows, int numCols, double[] data) {
+        super(new Shape(numRows, numCols), data);
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
     }
@@ -287,13 +285,13 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * Constructs a tensor of the same type as this tensor with the given the shape and data.
      *
      * @param shape Shape of the tensor to construct.
-     * @param entries Entries of the tensor to construct.
+     * @param data Entries of the tensor to construct.
      *
      * @return A tensor of the same type as this tensor with the given the shape and data.
      */
     @Override
-    public Matrix makeLikeTensor(Shape shape, double[] entries) {
-        return new Matrix(shape, entries);
+    public Matrix makeLikeTensor(Shape shape, double[] data) {
+        return new Matrix(shape, data);
     }
 
 
@@ -306,7 +304,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     @Override
     public Matrix flatten() {
-        return flatten(0);
+        return flatten(1);
     }
     
 
@@ -314,17 +312,20 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * Flattens this matrix along the specified axis.
      *
      * @param axis Axis along which to flatten tensor.
-     * @return If {@code axis == 0} a matrix with the shape {@code (1, this.numRows*this.numCols)} is returned.
-     * If {@code axis == 1} a matrix with the shape {@code (this.numRows*this.numCols, 1)} is returned.
-     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     * @return A new matrix containing the same entries as this matrix but flattened along the specified axis.
+     * <ul>
+     *     <li>If {@code axis == 0} a matrix with the shape {@code (this.numRows*this.numCols, 1)} is returned.</li>
+     *     <li>If {@code axis == 1} a matrix with the shape {@code (1, this.numRows*this.numCols)} is returned.</li>
+     * </ul>
+     * @throws ArrayIndexOutOfBoundsException If the axis is negative or larger than <code>this.{@link #getRank()}-1</code>.
      * @see #flatten()
      */
     @Override
     public Matrix flatten(int axis) {
         ValidateParameters.ensureValidAxes(shape, axis);
         return (axis == 0)
-                ? new Matrix(1, data.length, data.clone())
-                : new Matrix(data.length, 1, data.clone());
+                ? new Matrix(data.length, 1, data.clone())
+                : new Matrix(1, data.length, data.clone());
     }
 
 
@@ -1368,7 +1369,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     @Override
     public Vector getRow(int rowIdx, int colStart, int colEnd) {
-        ValidateParameters.ensureIndexInBounds(numCols, colStart, colEnd-1);
+        ValidateParameters.ensureIndicesInBounds(numCols, colStart, colEnd-1);
         ValidateParameters.ensureGreaterEq(colStart, colEnd);
         int start = rowIdx*numCols + colStart;
         int stop = rowIdx*numCols + colEnd;
@@ -1394,8 +1395,8 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     @Override
     public Vector getCol(int colIdx, int rowStart, int rowEnd) {
-        ValidateParameters.ensureValidArrayIndices(numRows, rowStart, rowEnd);
-        ValidateParameters.ensureGreaterEq(rowEnd, rowStart);
+        ValidateParameters.ensureValidArrayIndices(numRows, rowStart, rowEnd-1);
+        ValidateParameters.ensureGreaterEq(rowStart, rowEnd);
         double[] col = new double[numRows];
 
         for(int i=rowStart; i<rowEnd; i++)
@@ -1638,7 +1639,9 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @return A matrix containing the sum of each entry in this matrix with {@code b}.
      */
     public CMatrix add(Complex128 b) {
-        return new CMatrix(shape, FieldOps.add(data, b, null));
+        Complex128[] dest = new Complex128[data.length];
+        FieldOps.add(data, b, dest);
+        return new CMatrix(shape, dest);
     }
 
 
@@ -1700,7 +1703,9 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @return A matrix containing the difference of each entry in this matrix with {@code b}.
      */
     public CMatrix sub(Complex128 b) {
-        return new CMatrix(shape, FieldOps.sub(data, b, null));
+        Complex128[] dest = new Complex128[data.length];
+        FieldOps.sub(data, b, dest);
+        return new CMatrix(shape, dest);
     }
 
 
@@ -1711,7 +1716,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code this.numCols != b.numRows}.
      */
     public CMatrix mult(CMatrix b) {
-        Field<Complex128>[] entries = MatrixMultiplyDispatcher.dispatch(this, b);
+        Complex128[] entries = MatrixMultiplyDispatcher.dispatch(this, b);
         Shape shape = new Shape(this.numRows, b.numCols);
         return new CMatrix(shape, entries);
     }
@@ -1769,11 +1774,11 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @return The matrix-vector product of this matrix and the vector {@code b}.
      */
     public CVector mult(CVector b) {
-        ValidateParameters.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
-        Field<Complex128>[] entries = RealFieldDenseMatMult.standardVector(
-                this.data, this.shape, b.data, b.shape);
+        ValidateParameters.ensureMatMultShapes(shape, new Shape(b.size, 1));
+        Complex128[] dest = new Complex128[numRows];
+        RealFieldDenseMatMult.standardVector(data, shape, b.data, b.shape, dest);
 
-        return new CVector(entries);
+        return new CVector(dest);
     }
 
 
@@ -1784,7 +1789,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     public Vector mult(CooVector b) {
         ValidateParameters.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
-        double[] entries = RealDenseSparseMatrixMultiplication.standardVector(
+        double[] entries = RealDenseSparseMatMult.standardVector(
                 this.data, this.shape, b.data, b.indices);
 
         return new Vector(entries);
@@ -1813,7 +1818,9 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @return The matrix-scalar product of this matrix and {@code b}.
      */
     public CMatrix mult(Complex128 b) {
-        return new CMatrix(shape, FieldOps.scalMult(data, b, null));
+        Complex128[] dest = new Complex128[data.length];
+        FieldOps.scalMult(data, b, dest);
+        return new CMatrix(shape, dest);
     }
 
 
@@ -1827,10 +1834,9 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @throws TensorShapeException If this tensor and {@code b}'s shape are not equal.
      */
     public CMatrix div(CMatrix b) {
-        return new CMatrix(
-                shape,
-                RealFieldDenseElemDiv.dispatch(shape, data, b.shape, b.data)
-        );
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseElemDiv.dispatch(shape, data, b.shape, b.data, dest);
+        return new CMatrix(shape, dest);
     }
 
 
@@ -1883,7 +1889,9 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @return The element-wise product of this matrix and {@code b}.
      */
     public CMatrix elemMult(CMatrix b) {
-        return new CMatrix(shape, RealFieldDenseElemMult.dispatch(b.data, b.shape, data, shape));
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseElemMult.dispatch(b.data, b.shape, data, shape, dest);
+        return new CMatrix(shape, dest);
     }
 
 

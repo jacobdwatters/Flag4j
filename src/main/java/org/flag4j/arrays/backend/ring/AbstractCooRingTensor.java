@@ -25,16 +25,15 @@
 package org.flag4j.arrays.backend.ring;
 
 import org.flag4j.algebraic_structures.rings.Ring;
-import org.flag4j.algebraic_structures.semirings.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.SparseTensorData;
-import org.flag4j.linalg.operations.common.semiring_ops.CompareSemiring;
-import org.flag4j.linalg.operations.sparse.SparseElementSearch;
-import org.flag4j.linalg.operations.sparse.SparseUtils;
-import org.flag4j.linalg.operations.sparse.coo.*;
-import org.flag4j.linalg.operations.sparse.coo.ring_ops.CooRingTensorOps;
-import org.flag4j.linalg.operations.sparse.coo.semiring_ops.CooSemiringTensorOps;
+import org.flag4j.linalg.ops.common.semiring_ops.CompareSemiring;
+import org.flag4j.linalg.ops.sparse.SparseElementSearch;
+import org.flag4j.linalg.ops.sparse.SparseUtils;
+import org.flag4j.linalg.ops.sparse.coo.*;
+import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingTensorOps;
+import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringTensorOps;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -50,7 +49,7 @@ import java.util.List;
  * <p>The {@link #data non-zero data} and {@link #indices non-zero indices} of a COO tensor are mutable but the {@link #shape}
  * and total {@link #nnz number of non-zero data} is fixed.
  *
- * <p>Sparse tensors allow for the efficient storage of and operations on tensors that contain many zero values.
+ * <p>Sparse tensors allow for the efficient storage of and ops on tensors that contain many zero values.
  *
  * <p>COO tensors are optimized for hyper-sparse tensors (i.e. tensors which contain almost all zeros relative to the size of the
  * tensor).
@@ -60,7 +59,7 @@ import java.util.List;
  *     <li>The full {@link #shape shape} of the tensor.</li>
  *     <li>The non-zero {@link #data} of the tensor. All other data in the tensor are
  *     assumed to be zero. Zero value can also explicitly be stored in {@link #data}.</li>
- *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many operations assume indices to be sorted in a
+ *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many ops assume indices to be sorted in a
  *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.
  *
  *     <p>The {@link #indices} array has shape {@code (nnz, rank)} where {@link #nnz} is the number of non-zero data in this
@@ -70,19 +69,19 @@ import java.util.List;
  * </ul>
  *
  * @param <T> Type of this sparse COO tensor.
- * @param <U> Type of dense tensor equivalent to {@code T}. This type parameter is required because some operations (e.g.
+ * @param <U> Type of dense tensor equivalent to {@code T}. This type parameter is required because some ops (e.g.
  * {@link #tensorDot(AbstractCooRingTensor, int[], int[])} ) between two sparse tensors results in a dense tensor.
  * @param <V> Type of the {@link Ring} which the data of this tensor belong to.
  */
 public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U, V>,
         U extends AbstractDenseRingTensor<U, V>, V extends Ring<V>>
-        extends AbstractTensor<T, Ring<V>[], V>
+        extends AbstractTensor<T, V[], V>
         implements RingTensorMixin<T, T, V> {
 
     /**
      * The zero element for the ring that this tensor's elements belong to.
      */
-    private Ring<V> zeroElement;
+    private V zeroElement;
     /**
      * <p>The non-zero indices of this sparse tensor.
      *
@@ -103,20 +102,20 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
      * Creates a tensor with the specified data and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
+     * @param data Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
      * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
-    protected AbstractCooRingTensor(Shape shape, Ring<V>[] entries, int[][] indices) {
-        super(shape, entries);
+    protected AbstractCooRingTensor(Shape shape, V[] data, int[][] indices) {
+        super(shape, data);
         if(indices.length != 0) ValidateParameters.ensureLengthEqualsRank(shape, indices[0].length);
-        ValidateParameters.ensureArrayLengthsEq(entries.length, indices.length);
+        ValidateParameters.ensureArrayLengthsEq(data.length, indices.length);
         ValidateParameters.validateTensorIndices(shape, indices);
         this.indices = indices;
-        this.nnz = entries.length;
+        this.nnz = data.length;
         sparsity = BigDecimal.valueOf(nnz).divide(new BigDecimal(shape.totalEntries())).doubleValue();
 
         // Attempt to set the zero element for the ring.
-        this.zeroElement = (entries.length > 0) ? entries[0].getZero() : null;
+        this.zeroElement = (data.length > 0) ? data[0].getZero() : null;
     }
 
 
@@ -137,7 +136,7 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
      * @param indices Indices of the non-zero data of the tensor.
      * @return A tensor of the same type as this tensor with the specified shape and non-zero data.
      */
-    public abstract T makeLikeTensor(Shape shape, List<Ring<V>> entries, List<int[]> indices);
+    public abstract T makeLikeTensor(Shape shape, List<V> entries, List<int[]> indices);
 
 
     /**
@@ -146,7 +145,7 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
      * @param entries The data of the dense tensor to construct.
      * @return A dense tensor that is a similar type as this sparse COO tensor.
      */
-    public abstract U makeLikeDenseTensor(Shape shape, Ring<V>[] entries);
+    public abstract U makeLikeDenseTensor(Shape shape, V[] entries);
 
 
     /**
@@ -155,7 +154,7 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
      * and has not been set explicitly by {@link #setZeroElement(Ring)} then {@code null} will be returned.
      */
     public V getZeroElement() {
-        return (V) zeroElement;
+        return zeroElement;
     }
 
 
@@ -164,7 +163,7 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
      * @param zeroElement The zero element of this tensor.
      * @throws IllegalArgumentException If {@code zeroElement} is not an additive identity for the ring.
      */
-    public void setZeroElement(Ring<V> zeroElement) {
+    public void setZeroElement(V zeroElement) {
         if (zeroElement.isZero()) {
             this.zeroElement = zeroElement;
         } else {
@@ -205,7 +204,7 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
      */
     @Override
     public T add(T b) {
-        SparseTensorData<Semiring<V>> data = CooSemiringTensorOps.add(
+        SparseTensorData<V> data = CooSemiringTensorOps.add(
                 shape, this.data, indices,
                 b.shape, b.data, b.indices
         );
@@ -227,7 +226,7 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
      */
     @Override
     public T elemMult(T b) {
-        SparseTensorData<Semiring<V>> data = CooSemiringTensorOps.elemMult(
+        SparseTensorData<V> data = CooSemiringTensorOps.elemMult(
                 shape, this.data, indices, b.shape, b.data, b.indices);
         return makeLikeTensor(data.shape(),
                 (V[]) data.data().toArray(new Ring[data.data().size()]),
@@ -255,7 +254,7 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
         CooTensorDot<V> problem = new CooTensorDot<>(shape, data, indices,
                 src2.shape, src2.data, src2.indices,
                 aAxes, bAxes);
-        Ring<V>[] dest = new Ring[problem.getOutputSize()];
+        V[] dest = (V[]) new Ring[problem.getOutputSize()];
         problem.compute(dest);
         return makeLikeDenseTensor(problem.getOutputShape(), dest);
     }
@@ -279,7 +278,7 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
      */
     @Override
     public T tensorTr(int axis1, int axis2) {
-        SparseTensorData<Semiring<V>> data = CooSemiringTensorOps.tensorTr(
+        SparseTensorData<V> data = CooSemiringTensorOps.tensorTr(
                 shape, this.data, indices, axis1, axis2);
         return makeLikeTensor(data.shape(),
                 (V[]) data.data().toArray(new Ring[data.data().size()]),
@@ -297,7 +296,7 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
      */
     @Override
     public T T() {
-        Ring<V>[] destEntries = new Ring[nnz];
+        V[] destEntries = (V[]) new Ring[nnz];
         int[][] destIndices = new int[nnz][rank];
         CooTranspose.tensorTranspose(shape, data, indices,0, shape.getRank()-1, destEntries, destIndices);
         return makeLikeTensor(shape.swapAxes(0, rank-1), (V[]) destEntries, destIndices);
@@ -318,7 +317,7 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
      */
     @Override
     public T T(int axis1, int axis2) {
-        Ring<V>[] destEntries = new Ring[nnz];
+        V[] destEntries = (V[]) new Ring[nnz];
         int[][] destIndices = new int[nnz][rank];
         CooTranspose.tensorTranspose(shape, data, indices, axis1, axis2, destEntries, destIndices);
         return makeLikeTensor(shape.swapAxes(axis1, axis2), (V[]) destEntries, destIndices);
@@ -341,10 +340,10 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
      */
     @Override
     public T T(int... axes) {
-        Ring<V>[] destEntries = new Ring[nnz];
+        V[] destEntries = (V[]) new Ring[nnz];
         int[][] destIndices = new int[nnz][rank];
         CooTranspose.tensorTranspose(shape, data, indices, axes, destEntries, destIndices);
-        return makeLikeTensor(shape.permuteAxes(axes), (V[]) destEntries, destIndices);
+        return makeLikeTensor(shape.permuteAxes(axes), destEntries, destIndices);
     }
 
 
@@ -367,7 +366,7 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
      */
     @Override
     public V min() {
-        return (V) CompareSemiring.min(data);
+        return CompareSemiring.min(data);
     }
 
 
@@ -378,7 +377,7 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
      */
     @Override
     public V max() {
-        return (V) CompareSemiring.max(data);
+        return CompareSemiring.max(data);
     }
 
 
@@ -420,7 +419,7 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
     @Override
     public V get(int... target) {
         ValidateParameters.validateTensorIndex(shape, target);
-        V value = (V) CooGetSet.getCoo(data, indices, target);
+        V value = CooGetSet.getCoo(data, indices, target);
         return (value == null) ? getZeroElement() : value;
     }
 
@@ -441,7 +440,7 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
         ValidateParameters.validateTensorIndex(shape, target);
         int idx = SparseElementSearch.binarySearchCoo(indices, target);
 
-        Ring<V>[] destEntries;
+        V[] destEntries;
         int[][] destIndices;
 
         if (idx >= 0) {
@@ -452,13 +451,13 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
             destIndices[idx] = target;
         } else {
             // Target not found, insert new value and index.
-            destEntries = new Ring[nnz + 1];
+            destEntries = (V[]) new Ring[nnz + 1];
             destIndices = new int[nnz + 1][rank];
             int insertionPoint = - (idx + 1);
             CooGetSet.cooInsertNewValue(value, target, data, indices, insertionPoint, destEntries, destIndices);
         }
 
-        return makeLikeTensor(shape, (V[]) destEntries, destIndices);
+        return makeLikeTensor(shape, destEntries, destIndices);
     }
 
 
@@ -473,7 +472,7 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
     public T flatten() {
         return makeLikeTensor(
                 new Shape(shape.totalEntriesIntValueExact()),
-                (V[]) data.clone(),
+                data.clone(),
                 SparseUtils.cooFlattenIndices(shape, indices));
     }
 
@@ -494,7 +493,7 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
 
         return makeLikeTensor(
                 new Shape(destShape),
-                (V[]) data.clone(),
+                data.clone(),
                 SparseUtils.cooFlattenIndices(shape, indices, axis));
     }
 
@@ -510,7 +509,7 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
      */
     @Override
     public T reshape(Shape newShape) {
-        return makeLikeTensor(newShape, (V[]) data.clone(), SparseUtils.cooReshape(shape, newShape, indices));
+        return makeLikeTensor(newShape, data.clone(), SparseUtils.cooReshape(shape, newShape, indices));
     }
 
 
@@ -528,7 +527,7 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
      * @throws ArithmeticException If the number of data in the dense tensor exceeds 2,147,483,647.
      */
     public U toDense() {
-        Ring<V>[] denseEntries = new Ring[shape.totalEntriesIntValueExact()];
+        V[] denseEntries = (V[]) new Ring[shape.totalEntriesIntValueExact()];
         CooConversions.toDense(shape, data, indices, denseEntries);
         return makeLikeDenseTensor(shape, denseEntries);
     }
@@ -545,7 +544,7 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
      */
     @Override
     public T sub(T b) {
-        SparseTensorData<Ring<V>> data = CooRingTensorOps.sub(
+        SparseTensorData<V> data = CooRingTensorOps.sub(
                 shape, this.data, indices,
                 b.shape, b.data, b.indices);
 

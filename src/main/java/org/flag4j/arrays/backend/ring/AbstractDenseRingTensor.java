@@ -25,17 +25,16 @@
 package org.flag4j.arrays.backend.ring;
 
 import org.flag4j.algebraic_structures.rings.Ring;
-import org.flag4j.algebraic_structures.semirings.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.SparseTensorData;
-import org.flag4j.linalg.operations.TransposeDispatcher;
-import org.flag4j.linalg.operations.common.ring_ops.CompareRing;
-import org.flag4j.linalg.operations.dense.DenseSemiringTensorDot;
-import org.flag4j.linalg.operations.dense.ring_ops.DenseRingTensorOps;
-import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiRingElemMult;
-import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiringConversions;
-import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiringOperations;
+import org.flag4j.linalg.ops.TransposeDispatcher;
+import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
+import org.flag4j.linalg.ops.dense.DenseSemiringTensorDot;
+import org.flag4j.linalg.ops.dense.ring_ops.DenseRingTensorOps;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringConversions;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringElemMult;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringOperations;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -46,30 +45,30 @@ import java.util.Arrays;
  * <p>The {@link #data} of an AbstractDenseRingTensor are mutable but the {@link #shape} is fixed.</p>
  *
  * @param <T> The type of this dense ring tensor.
- * @param <U> Type of sparse tensor equivalent to {@code T}. This type parameter is required because some operations (e.g.
+ * @param <U> Type of sparse tensor equivalent to {@code T}. This type parameter is required because some ops (e.g.
  * {@link #toCoo()}) may result in a sparse tensor.
  * @param <V> The type of the {@link Ring} which this tensor's data belong to.
  */
 public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<T, V>, V extends Ring<V>>
-        extends AbstractTensor<T, Ring<V>[], V>
+        extends AbstractTensor<T, V[], V>
         implements RingTensorMixin<T, T, V> {
 
     /**
      * The zero element for the ring that this tensor's elements belong to.
      */
-    protected Ring<V> zeroElement;
+    protected V zeroElement;
 
     /**
      * Creates a tensor with the specified data and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
+     * @param data Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
      * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
-    protected AbstractDenseRingTensor(Shape shape, Ring<V>[] entries) {
-        super(shape, entries);
-        ValidateParameters.ensureEquals(shape.totalEntriesIntValueExact(), entries.length);
-        this.zeroElement = (entries.length > 0) ? entries[0].getZero() : null;
+    protected AbstractDenseRingTensor(Shape shape, V[] data) {
+        super(shape, data);
+        ValidateParameters.ensureEquals(shape.totalEntriesIntValueExact(), data.length);
+        this.zeroElement = (data.length > 0) ? data[0].getZero() : null;
     }
 
 
@@ -81,8 +80,8 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      * @param colIndices Non-zero column indices of the COO tensor.
      * @return A sparse COO tensor which is of a similar type as this dense tensor.
      */
-    protected abstract AbstractTensor<?, Ring<V>[], V> makeLikeCooTensor(
-            Shape shape, Ring<V>[] entries, int[][] indices);
+    protected abstract AbstractTensor<?, V[], V> makeLikeCooTensor(
+            Shape shape, V[] entries, int[][] indices);
 
 
     /**
@@ -107,7 +106,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public V get(int... indices) {
-        return (V) data[shape.getFlatIndex(indices)];
+        return data[shape.getFlatIndex(indices)];
     }
 
 
@@ -193,9 +192,9 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T T(int axis1, int axis2) {
-        Ring<V>[] dest = new Ring[data.length];
+        V[] dest = (V[]) new Ring[data.length];
         TransposeDispatcher.dispatchTensor(data, shape, axis1, axis2, dest);
-        return makeLikeTensor(shape, (V[]) dest);
+        return makeLikeTensor(shape, dest);
     }
 
 
@@ -215,9 +214,9 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T T(int... axes) {
-        Ring<V>[] dest = new Ring[data.length];
+        V[] dest = (V[]) new Ring[data.length];
         TransposeDispatcher.dispatchTensor(data, shape, axes, dest);
-        return makeLikeTensor(shape.permuteAxes(axes), (V[]) dest);
+        return makeLikeTensor(shape.permuteAxes(axes), dest);
     }
 
 
@@ -243,7 +242,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T add(T b) {
-        Ring<V>[] sum = new Ring[data.length];
+        V[] sum = (V[]) new Ring[data.length];
         DenseSemiringOperations.add(data, shape, b.data, b.shape, sum);
         return makeLikeTensor(shape, sum);
     }
@@ -270,8 +269,8 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T elemMult(T b) {
-        Ring<V>[] prod = new Ring[data.length];
-        DenseSemiRingElemMult.dispatch(data, shape, b.data, b.shape, prod);
+        V[] prod = (V[]) new Ring[data.length];
+        DenseSemiringElemMult.dispatch(data, shape, b.data, b.shape, prod);
         return makeLikeTensor(shape, prod);
     }
 
@@ -294,7 +293,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
     @Override
     public T tensorDot(T src2, int[] aAxes, int[] bAxes) {
         DenseSemiringTensorDot<V> dot = new DenseSemiringTensorDot(shape, data, src2.shape, src2.data, aAxes, bAxes);
-        Ring<V>[] dest = new Ring[dot.getOutputSize()];
+        V[] dest = (V[]) new Ring[dot.getOutputSize()];
         dot.compute(dest);
         return makeLikeTensor(dot.getOutputShape(), dest);
     }
@@ -319,7 +318,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
     @Override
     public T tensorTr(int axis1, int axis2) {
         Shape destShape = DenseSemiringOperations.getTrShape(shape, axis1, axis2);
-        Ring<V>[] destEntries = new Ring[destShape.totalEntriesIntValueExact()];
+        V[] destEntries = (V[]) new Ring[destShape.totalEntriesIntValueExact()];
         return makeLikeTensor(destShape, destEntries);
     }
 
@@ -335,7 +334,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T sub(T b) {
-        Ring<V>[] diff = new Ring[data.length];
+        V[] diff = (V[]) new Ring[data.length];
         DenseRingTensorOps.sub(shape, data, b.shape, b.data, diff);
         return makeLikeTensor(shape, diff);
     }
@@ -367,7 +366,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T H(int axis1, int axis2) {
-        Ring<V>[] dest = new Ring[data.length];
+        V[] dest = (V[]) new Ring[data.length];
         TransposeDispatcher.dispatchTensorHermitian(shape, data, axis1, axis2, dest);
         return makeLikeTensor(shape, dest);
     }
@@ -389,7 +388,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T H(int... axes) {
-        Ring<V>[] dest = new Ring[data.length];
+        V[] dest = (V[]) new Ring[data.length];
         TransposeDispatcher.dispatchTensorHermitian(shape, data, axes, dest);
         return makeLikeTensor(shape, dest);
     }
@@ -446,7 +445,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      * @return A sparse COO tensor that is equivalent to this dense tensor.
      * @see #toCoo(double)
      */
-    public AbstractTensor<?, Ring<V>[], V> toCoo() {
+    public AbstractTensor<?, V[], V> toCoo() {
         return toCoo(0.9);
     }
 
@@ -459,9 +458,9 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      * @return A sparse COO tensor that is equivalent to this dense tensor.
      * @see #toCoo(double)
      */
-    public AbstractTensor<?, Ring<V>[], V> toCoo(double estimatedSparsity) {
-        SparseTensorData<Semiring<V>> data = DenseSemiringConversions.toCooTensor(shape, this.data, estimatedSparsity);
-        Ring<V>[] cooEntries = data.data().toArray(new Ring[data.data().size()]);
+    public AbstractTensor<?, V[], V> toCoo(double estimatedSparsity) {
+        SparseTensorData<V> data = DenseSemiringConversions.toCooTensor(shape, this.data, estimatedSparsity);
+        V[] cooEntries = (V[]) data.data().toArray(new Ring[data.data().size()]);
         return makeLikeCooTensor(data.shape(), cooEntries, data.indicesToArray());
     }
 }

@@ -27,7 +27,7 @@ package org.flag4j.concurrency;
 import org.flag4j.util.ErrorMessages;
 
 /**
- * Configurations for standard and concurrent operations.
+ * Configurations for standard and concurrent ops.
  */
 public final class Configurations {
 
@@ -55,7 +55,7 @@ public final class Configurations {
 
 
     /**
-     * Sets the number of threads for use in concurrent operations as the number of processors available to the Java
+     * Sets the number of threads for use in concurrent ops as the number of processors available to the Java
      * virtual machine. Note that this value may change during runtime. This method will include logical cores so the value
      * returned may be higher than the number of physical cores on the machine if hyper-threading is enabled.
      * <br><br>

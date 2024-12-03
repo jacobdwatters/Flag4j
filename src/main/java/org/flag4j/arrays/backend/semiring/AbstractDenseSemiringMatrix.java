@@ -29,9 +29,9 @@ import org.flag4j.algebraic_structures.semirings.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.SparseMatrixData;
-import org.flag4j.linalg.operations.TransposeDispatcher;
-import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiringConversions;
-import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiringMatMultDispatcher;
+import org.flag4j.linalg.ops.TransposeDispatcher;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringConversions;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringMatMultDispatcher;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -48,9 +48,6 @@ import java.util.Arrays;
 public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemiringMatrix<T, U, V>,
         U extends AbstractDenseSemiringVector<U, T, V>, V extends Semiring<V>>
         extends AbstractDenseSemiringTensor<T, V> implements MatrixMixin<T, T, U, V> {
-
-    // TODO: Need to override flatten() and flatten(int) as the super class will try to construct a rank 1 tensor which will
-    //  then throw an exception when checking for the rank in the constructor.
 
     /**
      * The number of rows in this matrix.
@@ -69,7 +66,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
      * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
-    protected AbstractDenseSemiringMatrix(Shape shape, Semiring<V>[] entries) {
+    protected AbstractDenseSemiringMatrix(Shape shape, V[] entries) {
         super(shape, entries);
         ValidateParameters.ensureRank(shape, 2);
         numRows = shape.get(0);
@@ -83,7 +80,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      * @param entries Entries of the vector.
      * @return A vector of a similar type as this matrix.
      */
-    protected abstract U makeLikeVector(Shape shape, Semiring<V>[] entries);
+    protected abstract U makeLikeVector(Shape shape, V[] entries);
 
 
     /**
@@ -95,7 +92,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      * @return A sparse COO matrix which is of a similar type as this dense matrix.
      */
     protected abstract AbstractCooSemiringMatrix<?, T, ?, V> makeLikeCooMatrix(
-            Shape shape, Semiring<V>[] entries, int[] rowIndices, int[] colIndices);
+            Shape shape, V[] entries, int[] rowIndices, int[] colIndices);
 
 
     /**
@@ -107,7 +104,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      * @return A sparse CSR matrix which is of a similar type as this dense matrix.
      */
     protected abstract AbstractCsrSemiringMatrix<?, T, ?, V> makeLikeCsrMatrix(
-            Shape shape, Semiring<V>[] entries, int[] rowPointers, int[] colIndices);
+            Shape shape, V[] entries, int[] rowPointers, int[] colIndices);
 
 
     /**
@@ -120,7 +117,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      */
     @Override
     public T T() {
-        Semiring<V>[] dest = new Semiring[data.length];
+        V[] dest = (V[]) new Semiring[data.length];
         TransposeDispatcher.dispatch(data, shape, dest);
         return makeLikeTensor(shape.swapAxes(0, 1), dest);
     }
@@ -174,7 +171,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
     @Override
     public V tr() {
         ValidateParameters.ensureSquareMatrix(shape);
-        Semiring<V> sum = data[0];
+        V sum = data[0];
         int colsOffset = this.numCols + 1;
 
         for(int i=1; i<numRows; i++)
@@ -275,7 +272,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      */
     @Override
     public T mult(T b) {
-        Semiring<V>[] dest = new Semiring[numRows*b.numCols];
+        V[]  dest = (V[]) new Semiring[numRows*b.numCols];
         DenseSemiringMatMultDispatcher.dispatch(data, shape, b.data, b.shape, dest);
         return makeLikeTensor(new Shape(numRows, b.numCols), dest);
     }
@@ -293,7 +290,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      */
     @Override
     public T multTranspose(T b) {
-        Semiring<V>[] dest = new Semiring[numRows*b.numRows];
+        V[]  dest = (V[]) new Semiring[numRows*b.numRows];
         DenseSemiringMatMultDispatcher.dispatchTranspose(data, shape, b.data, b.shape, dest);
         return makeLikeTensor(new Shape(numRows, b.numRows), dest);
     }
@@ -314,7 +311,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
     public T stack(T b) {
         ValidateParameters.ensureArrayLengthsEq(this.numCols, b.numCols);
         Shape stackedShape = new Shape(this.numRows + b.numRows, this.numCols);
-        Semiring<V>[] stackedEntries = new Semiring[stackedShape.totalEntries().intValueExact()];
+        V[]  stackedEntries = (V[]) new Semiring[stackedShape.totalEntries().intValueExact()];
 
         System.arraycopy(this.data, 0, stackedEntries, 0, this.data.length);
         System.arraycopy(b.data, 0, stackedEntries, this.data.length, b.data.length);
@@ -340,7 +337,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
 
         int augNumCols = numCols + b.numCols;
         Shape augShape = new Shape(numRows, augNumCols);
-        Semiring<V>[] augEntries = new Semiring[numRows*augNumCols];
+        V[]  augEntries = (V[]) new Semiring[numRows*augNumCols];
 
         // Copy data from this matrix.
         for(int i=0; i<numRows; i++) {
@@ -366,7 +363,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
     @Override
     public T augment(U b) {
         ValidateParameters.ensureArrayLengthsEq(numRows, b.size);
-        Semiring<V>[] augmented = new Semiring[numRows*(numCols + 1)];
+        V[]  augmented = (V[]) new Semiring[numRows*(numCols + 1)];
 
         // Copy data from this matrix.
         for(int i=0; i<numRows; i++) {
@@ -396,7 +393,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
         int row2Offset = rowIndex2*numCols;
 
         if(rowIndex1 != rowIndex2) {
-            Semiring<V> temp;
+            V temp;
 
             for(int j=0; j<numCols; j++) {
                 // Swap elements.
@@ -425,7 +422,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
         ValidateParameters.ensureValidArrayIndices(numCols, colIndex1, colIndex2);
 
         if(colIndex1 != colIndex2) {
-            Semiring<V> temp;
+            V temp;
 
             for(int i=0; i<numRows; i++) {
                 // Swap elements.
@@ -487,7 +484,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
     @Override
     public T removeRow(int rowIndex) {
         Shape copyShape = new Shape(numRows-1, numCols);
-        Semiring<V>[] copyEntries = new Semiring[(numRows-1)*numCols];
+        V[]  copyEntries = (V[]) new Semiring[(numRows-1)*numCols];
         int row = 0;
 
         for(int i=0; i<numRows; i++) {
@@ -511,7 +508,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
     @Override
     public T removeRows(int... rowIndices) {
         Shape copyShape = new Shape(numRows-rowIndices.length, numCols);
-        Semiring<V>[] copyEntries = new Semiring[(numRows-rowIndices.length)*numCols];
+        V[]  copyEntries = (V[]) new Semiring[(numRows-rowIndices.length)*numCols];
         int row = 0;
 
         for(int i=0; i<this.numRows; i++) {
@@ -536,7 +533,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
     public T removeCol(int colIndex) {
         int copyNumCols = numCols-1;
         Shape copyShape = new Shape(numRows, copyNumCols);
-        Semiring<V>[] copyEntries = new Semiring[numRows*copyNumCols];
+        V[]  copyEntries = (V[]) new Semiring[numRows*copyNumCols];
 
         for(int i=0; i<this.numRows; i++) {
             int rowOffset = i*numCols;
@@ -566,7 +563,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
     public T removeCols(int... colIndices) {
         int copyNumCols = this.numCols-colIndices.length;
         Shape copyShape = new Shape(numRows, copyNumCols);
-        Semiring<V>[] copyEntries = new Semiring[numRows*copyNumCols];
+        V[]  copyEntries = (V[]) new Semiring[numRows*copyNumCols];
 
         for(int i=0; i<this.numRows; i++) {
             int rowOffset = i*numCols;
@@ -657,7 +654,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
         int sliceRows = rowEnd-rowStart;
         int sliceCols = colEnd-colStart;
         int destPos = 0;
-        Semiring<V>[] slice = new Semiring[sliceRows*sliceCols];
+        V[]  slice = (V[]) new Semiring[sliceRows*sliceCols];
 
         for(int i=rowStart; i<rowEnd; i++) {
             int srcPos = i*numCols + colStart;
@@ -729,7 +726,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
     @Override
     public T getTriU(int diagOffset) {
         ValidateParameters.ensureInRange(diagOffset, -numRows+1, numCols-1, "diagOffset");
-        Semiring<V>[] copyEntries = new Semiring[data.length];
+        V[]  copyEntries = (V[]) new Semiring[data.length];
         Arrays.fill(copyEntries, (data.length > 0) ? data[0].getZero() : null);
         T result = makeLikeTensor(shape, copyEntries);
 
@@ -766,7 +763,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
     @Override
     public T getTriL(int diagOffset) {
         ValidateParameters.ensureInRange(diagOffset, -numRows+1, numCols-1, "diagOffset");
-        Semiring<V>[] copyEntries = new Semiring[data.length];
+        V[]  copyEntries = (V[]) new Semiring[data.length];
         Arrays.fill(copyEntries, (data.length > 0) ? data[0].getZero() : null);
         T result = makeLikeTensor(shape, copyEntries);
 
@@ -804,8 +801,8 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
         ValidateParameters.ensureInRange(diagOffset, -(numRows-1), numCols-1, "diagOffset");
 
         // Check for some quick returns.
-        if(numRows == 1 && diagOffset > 0) return (U) makeLikeVector(shape, new Semiring[]{data[diagOffset]});
-        if(numCols == 1 && diagOffset < 0) return (U) makeLikeVector(shape, new Semiring[]{data[-diagOffset]});
+        if(numRows == 1 && diagOffset > 0) return makeLikeVector(shape, (V[]) new Semiring[]{data[diagOffset]});
+        if(numCols == 1 && diagOffset < 0) return makeLikeVector(shape, (V[]) new Semiring[]{data[-diagOffset]});
 
         // Compute the length of the diagonal.
         int newSize = Math.min(numRows, numCols);
@@ -820,7 +817,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
             idx = -diagOffset*numCols;
         }
 
-        Semiring<V>[] diag = new Semiring[newSize];
+        V[]  diag = (V[]) new Semiring[newSize];
 
         for(int i=0; i<newSize; i++) {
             diag[i] = this.data[idx];
@@ -917,12 +914,12 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      */
     @Override
     public U getRow(int rowIdx, int colStart, int colEnd) {
-        ValidateParameters.ensureIndexInBounds(numCols, colStart, colEnd-1);
+        ValidateParameters.ensureIndicesInBounds(numCols, colStart, colEnd-1);
         ValidateParameters.ensureGreaterEq(colStart, colEnd);
         int start = rowIdx*numCols + colStart;
         int stop = rowIdx*numCols + colEnd;
 
-        Semiring<V>[] row = Arrays.copyOfRange(this.data, start, stop);
+        V[] row = Arrays.copyOfRange(this.data, start, stop);
 
         return makeLikeVector(shape, row);
     }
@@ -945,7 +942,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
     public U getCol(int colIdx, int rowStart, int rowEnd) {
         ValidateParameters.ensureValidArrayIndices(numRows, rowStart, rowEnd);
         ValidateParameters.ensureGreaterEq(rowEnd, rowStart);
-        Semiring<V>[] col = new Semiring[numRows];
+        V[]  col = (V[]) new Semiring[numRows];
 
         for(int i=rowStart; i<rowEnd; i++)
             col[i] = data[i*numCols + colIdx];
@@ -1001,7 +998,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      * @return A sparse COO matrix that is equivalent to this dense matrix.
      * @see #toCoo(double) 
      */
-    public AbstractCooSemiringMatrix<?, T, ?, V> toCoo() {
+    public AbstractCooSemiringMatrix<?, ?, ?, V> toCoo() {
         return toCoo(0.9);
     }
 
@@ -1014,9 +1011,9 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      * @return A sparse COO matrix that is equivalent to this dense matrix.
      * @see #toCoo() 
      */
-    public AbstractCooSemiringMatrix<?, T, ?, V> toCoo(double estimatedSparsity) {
-        SparseMatrixData<Semiring<V>> data = DenseSemiringConversions.toCoo(shape, this.data, estimatedSparsity);
-        Semiring<V>[] cooEntries = data.data().toArray(new Semiring[data.data().size()]);
+    public AbstractCooSemiringMatrix<?, ?, ?, V> toCoo(double estimatedSparsity) {
+        SparseMatrixData<V> data = DenseSemiringConversions.toCoo(shape, this.data, estimatedSparsity);
+        V[] cooEntries = (V[]) data.data().toArray(new Semiring[data.data().size()]);
         int[] rowIndices = ArrayUtils.fromIntegerList(data.rowData());
         int[] colIndices = ArrayUtils.fromIntegerList(data.colData());
 
@@ -1029,7 +1026,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      * @return A sparse CSR matrix that is equivalent to this dense matrix.
      * @see #toCsr(double)
      */
-    public AbstractCsrSemiringMatrix<?, T, ?, V> toCsr() {
+    public AbstractCsrSemiringMatrix<?, ?, ?, V> toCsr() {
         return toCoo(0.9).toCsr();
     }
 
@@ -1042,7 +1039,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      * @return A sparse CSR matrix that is equivalent to this dense matrix.
      * @see #toCsr()
      */
-    public AbstractCsrSemiringMatrix<?, T, ?, V> toCsr(double estimatedSparsity) {
+    public AbstractCsrSemiringMatrix<?, ?, ?, V> toCsr(double estimatedSparsity) {
         return toCoo(estimatedSparsity).toCsr();
     }
 

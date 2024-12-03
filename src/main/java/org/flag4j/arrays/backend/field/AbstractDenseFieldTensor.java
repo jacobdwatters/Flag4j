@@ -25,21 +25,20 @@
 package org.flag4j.arrays.backend.field;
 
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.algebraic_structures.semirings.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.SparseTensorData;
 import org.flag4j.arrays.backend.VectorMixin;
-import org.flag4j.linalg.operations.TransposeDispatcher;
-import org.flag4j.linalg.operations.common.field_ops.FieldOps;
-import org.flag4j.linalg.operations.common.field_ops.FieldProperties;
-import org.flag4j.linalg.operations.dense.DenseSemiringTensorDot;
-import org.flag4j.linalg.operations.dense.field_ops.DenseFieldElemDiv;
-import org.flag4j.linalg.operations.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.operations.dense.ring_ops.DenseRingTensorOps;
-import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiRingElemMult;
-import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiringConversions;
-import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiringOperations;
+import org.flag4j.linalg.ops.TransposeDispatcher;
+import org.flag4j.linalg.ops.common.field_ops.FieldOps;
+import org.flag4j.linalg.ops.common.field_ops.FieldProperties;
+import org.flag4j.linalg.ops.dense.DenseSemiringTensorDot;
+import org.flag4j.linalg.ops.dense.field_ops.DenseFieldElemDiv;
+import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
+import org.flag4j.linalg.ops.dense.ring_ops.DenseRingTensorOps;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringConversions;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringElemMult;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringOperations;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -50,18 +49,18 @@ import java.util.Arrays;
  * <p>The {@link #data} of an AbstractDenseFieldTensor are mutable but the {@link #shape} is fixed.</p>
  *
  * @param <T> The type of this dense field tensor.
- * @param <U> Type of sparse tensor equivalent to {@code T}. This type parameter is required because some operations (e.g.
+ * @param <U> Type of sparse tensor equivalent to {@code T}. This type parameter is required because some ops (e.g.
  * {@link #toCoo()}) may result in a sparse tensor.
  * @param <V> The type of the {@link Field} which this tensor's data belong to.
  */
 public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTensor<T, V>, V extends Field<V>>
-        extends AbstractTensor<T, Field<V>[], V>
+        extends AbstractTensor<T, V[], V>
         implements FieldTensorMixin<T, T, V> {
 
     /**
      * The zero element for the field that this tensor's elements belong to.
      */
-    private Field<V> zeroElement;
+    private V zeroElement;
 
     /**
      * Creates a tensor with the specified data and shape.
@@ -70,7 +69,7 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
      * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
-    protected AbstractDenseFieldTensor(Shape shape, Field<V>[] entries) {
+    protected AbstractDenseFieldTensor(Shape shape, V[] entries) {
         super(shape, entries);
         ValidateParameters.ensureEquals(shape.totalEntriesIntValueExact(), entries.length);
         this.zeroElement = (entries.length > 0 && entries[0] != null) ? entries[0].getZero() : null;
@@ -84,7 +83,7 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
      *
      * @see #getZeroElement()
      */
-    public void setZeroElement(Field<V> zeroElement) {
+    public void setZeroElement(V zeroElement) {
         if (zeroElement.isZero()) {
             this.zeroElement = zeroElement;
         } else {
@@ -96,12 +95,12 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
     /**
      * Gets the zero element for the field of this tensor.
      * @return The zero element for the field of this tensor. If it could not be determined during construction of this object
-     * and has not been set explicitly by {@link #setZeroElement(Semiring)} then {@code null} will be returned.
+     * and has not been set explicitly by {@link #setZeroElement(Field)} then {@code null} will be returned.
      *
-     * @see #setZeroElement(Semiring)
+     * @see #setZeroElement(Field)
      */
     public V getZeroElement() {
-        return (V) zeroElement;
+        return zeroElement;
     }
 
 
@@ -113,8 +112,8 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
      * @param colIndices Non-zero column indices of the COO tensor.
      * @return A sparse COO tensor which is of a similar type as this dense tensor.
      */
-    protected abstract AbstractTensor<?, Field<V>[], V> makeLikeCooTensor(
-            Shape shape, Field<V>[] entries, int[][] indices);
+    protected abstract AbstractTensor<?, V[], V> makeLikeCooTensor(
+            Shape shape, V[] entries, int[][] indices);
 
 
     /**
@@ -128,7 +127,7 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
      */
     @Override
     public V get(int... indices) {
-        return (V) data[shape.getFlatIndex(indices)];
+        return data[shape.getFlatIndex(indices)];
     }
 
 
@@ -146,9 +145,10 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
      */
     @Override
     public T T(int axis1, int axis2) {
-        Field<V>[] dest = new Field[data.length];
+        ValidateParameters.ensureValidAxes(shape, axis1, axis2);
+        V[] dest = makeEmptyDataArray(data.length);
         TransposeDispatcher.dispatchTensor(data, shape, axis1, axis2, dest);
-        return makeLikeTensor(shape, (V[]) dest);
+        return makeLikeTensor(shape.swapAxes(axis1, axis2), dest);
     }
 
 
@@ -168,9 +168,9 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
      */
     @Override
     public T T(int... axes) {
-        Field<V>[] dest = new Field[data.length];
+        V[] dest = makeEmptyDataArray(data.length);
         TransposeDispatcher.dispatchTensor(data, shape, axes, dest);
-        return makeLikeTensor(shape.permuteAxes(axes), (V[]) dest);
+        return makeLikeTensor(shape.permuteAxes(axes), dest);
     }
 
 
@@ -264,7 +264,7 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
      */
     @Override
     public T sub(T b) {
-        Field<V>[] diff = new Field[data.length];
+        V[] diff = makeEmptyDataArray(data.length);
         DenseRingTensorOps.sub(shape, data, b.shape, b.data, diff);
         return makeLikeTensor(shape, diff);
     }
@@ -296,9 +296,9 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
      */
     @Override
     public T H(int axis1, int axis2) {
-        Field<V>[] dest = new Field[data.length];
+        V[] dest = makeEmptyDataArray(data.length);
         TransposeDispatcher.dispatchTensorHermitian(shape, data, axis1, axis2, dest);
-        return makeLikeTensor(shape, dest);
+        return makeLikeTensor(shape.swapAxes(axis1, axis2), dest);
     }
 
 
@@ -318,9 +318,9 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
      */
     @Override
     public T H(int... axes) {
-        Field<V>[] dest = new Field[data.length];
+        V[] dest = makeEmptyDataArray(data.length);
         TransposeDispatcher.dispatchTensorHermitian(shape, data, axes, dest);
-        return makeLikeTensor(shape, dest);
+        return makeLikeTensor(shape.permuteAxes(axes), dest);
     }
 
 
@@ -335,7 +335,7 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
      */
     @Override
     public T add(T b) {
-        Field<V>[] sum = new Field[data.length];
+        V[] sum = makeEmptyDataArray(data.length);
         DenseSemiringOperations.add(data, shape, b.data, b.shape, sum);
         return makeLikeTensor(shape, sum);
     }
@@ -362,8 +362,8 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
      */
     @Override
     public T elemMult(T b) {
-        Field<V>[] prod = new Field[data.length];
-        DenseSemiRingElemMult.dispatch(data, shape, b.data, b.shape, prod);
+        V[] prod = makeEmptyDataArray(data.length);
+        DenseSemiringElemMult.dispatch(data, shape, b.data, b.shape, prod);
         return makeLikeTensor(shape, prod);
     }
 
@@ -386,7 +386,7 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
     @Override
     public T tensorDot(T src2, int[] aAxes, int[] bAxes) {
         DenseSemiringTensorDot<V> dot = new DenseSemiringTensorDot(shape, data, src2.shape, src2.data, aAxes, bAxes);
-        Field<V>[] dest = new Field[dot.getOutputSize()];
+        V[] dest = makeEmptyDataArray(dot.getOutputSize());
         dot.compute(dest);
         return makeLikeTensor(dot.getOutputShape(), dest);
     }
@@ -411,7 +411,7 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
     @Override
     public T tensorTr(int axis1, int axis2) {
         Shape destShape = DenseSemiringOperations.getTrShape(shape, axis1, axis2);
-        Field<V>[] dest = new Field[destShape.totalEntriesIntValueExact()];
+        V[] dest = makeEmptyDataArray(destShape.totalEntriesIntValueExact());
         return makeLikeTensor(destShape, dest);
     }
 
@@ -425,7 +425,7 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
      */
     @Override
     public T div(T b) {
-        Field<V>[] dest = new Field[data.length];
+        V[] dest = makeEmptyDataArray(data.length);
         DenseFieldElemDiv.dispatch(data, shape, b.data, b.shape, dest);
         return makeLikeTensor(shape, dest);
     }
@@ -438,7 +438,7 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
      */
     @Override
     public T sqrt() {
-        Field<V>[] dest = new Field[data.length];
+        V[] dest = makeEmptyDataArray(data.length);
         FieldOps.sqrt(data, dest);
         return makeLikeTensor(shape, dest);
     }
@@ -505,8 +505,8 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
      * @see #toCoo(double)
      */
     public AbstractTensor<?, ?, V> toCoo(double estimatedSparsity) {
-        SparseTensorData<Semiring<V>> data = DenseSemiringConversions.toCooTensor(shape, this.data, estimatedSparsity);
-        Field<V>[] cooEntries = data.data().toArray(new Field[data.data().size()]);
+        SparseTensorData<V> data = DenseSemiringConversions.toCooTensor(shape, this.data, estimatedSparsity);
+        V[] cooEntries = data.data().toArray(makeEmptyDataArray(data.data().size()));
 
         // TODO: First check if this tensor is a vector then delegate to specialized toCooVector
         //  or toCooTensor methods.

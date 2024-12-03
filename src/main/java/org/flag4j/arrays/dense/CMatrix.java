@@ -25,22 +25,21 @@
 package org.flag4j.arrays.dense;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.sparse.*;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.operations.MatrixMultiplyDispatcher;
-import org.flag4j.linalg.operations.common.complex.Complex128Ops;
-import org.flag4j.linalg.operations.common.complex.Complex128Properties;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOps;
-import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldMatMult;
-import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldMatrixOps;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatMult;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOps;
-import org.flag4j.linalg.operations.dense_sparse.csr.field_ops.DenseCsrFieldMatMult;
-import org.flag4j.linalg.operations.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
+import org.flag4j.linalg.ops.MatrixMultiplyDispatcher;
+import org.flag4j.linalg.ops.common.complex.Complex128Ops;
+import org.flag4j.linalg.ops.common.complex.Complex128Properties;
+import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldMatMult;
+import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldMatrixOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatMult;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOps;
+import org.flag4j.linalg.ops.dense_sparse.csr.field_ops.DenseCsrFieldMatMult;
+import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -58,9 +57,10 @@ import java.util.List;
  * <p>A CMatrix has mutable data but fixed shape.
  *
  * <p>A matrix is essentially equivalent to a rank 2 tensor but has some extended functionality and <i>may</i>
- * have improved performance for some operations.
+ * have improved performance for some ops.
  */
 public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex128> {
+
 
     /**
      * Creates a complex matrix with the specified {@code data} and {@code shape}.
@@ -68,7 +68,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * @param shape Shape of this matrix.
      * @param entries Entries of this matrix.
      */
-    public CMatrix(Shape shape, Field<Complex128>[] entries) {
+    public CMatrix(Shape shape, Complex128[] entries) {
         super(shape, entries);
         ValidateParameters.ensureRank(shape, 2);
         if(entries.length == 0 || entries[0] == null) setZeroElement(Complex128.ZERO);
@@ -119,7 +119,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * @param cols The number of columns in this matrix.
      * @param entries Entries of this matrix.
      */
-    public CMatrix(int rows, int cols, Field<Complex128>[] entries) {
+    public CMatrix(int rows, int cols, Complex128[] entries) {
         super(new Shape(rows, cols), entries);
         if(entries.length == 0 || entries[0] == null) setZeroElement(Complex128.ZERO);
     }
@@ -156,13 +156,13 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * Constructs a complex matrix from a 2D array. The matrix will have the same shape as the array.
      * @param entries Entries of the matrix. Assumed to be a square array.
      */
-    public CMatrix(Field<Complex128>[][] entries) {
+    public CMatrix(Complex128[][] entries) {
         super(new Shape(entries.length, entries[0].length), new Complex128[entries.length*entries[0].length]);
         setZeroElement(Complex128.ZERO);
         int flatPos = 0;
 
-        for(Field<Complex128>[] row : entries) {
-            for(Field<Complex128> value : row)
+        for(Complex128[] row : entries) {
+            for(Complex128 value : row)
                 super.data[flatPos++] = value;
         }
     }
@@ -274,6 +274,12 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     }
 
 
+    @Override
+    public Complex128[] makeEmptyDataArray(int length) {
+        return new Complex128[length];
+    }
+
+
     /**
      * Constructs a vector of a similar type as this matrix.
      *
@@ -282,7 +288,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * @return A vector of a similar type as this matrix.
      */
     @Override
-    protected CVector makeLikeVector(Field<Complex128>[] entries) {
+    protected CVector makeLikeVector(Complex128[] entries) {
         return new CVector(entries);
     }
 
@@ -298,7 +304,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * @return A sparse COO matrix which is of a similar type as this dense matrix.
      */
     @Override
-    protected CooCMatrix makeLikeCooMatrix(Shape shape, Field<Complex128>[] entries, int[] rowIndices, int[] colIndices) {
+    protected CooCMatrix makeLikeCooMatrix(Shape shape, Complex128[] entries, int[] rowIndices, int[] colIndices) {
         return new CooCMatrix(shape, entries, rowIndices, colIndices);
     }
 
@@ -314,7 +320,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * @return A sparse CSR matrix which is of a similar type as this dense matrix.
      */
     @Override
-    public CsrCMatrix makeLikeCsrMatrix(Shape shape, Field<Complex128>[] entries, int[] rowPointers, int[] colIndices) {
+    public CsrCMatrix makeLikeCsrMatrix(Shape shape, Complex128[] entries, int[] rowPointers, int[] colIndices) {
         return new CsrCMatrix(shape, entries, rowPointers, colIndices);
     }
 
@@ -389,7 +395,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * @return A sparse COO tensor which is of a similar type as this dense tensor.
      */
     @Override
-    protected CooCMatrix makeLikeCooTensor(Shape shape, Field<Complex128>[] entries, int[][] indices) {
+    protected CooCMatrix makeLikeCooTensor(Shape shape, Complex128[] entries, int[][] indices) {
         return makeLikeCooMatrix(shape, entries, indices[0], indices[1]);
     }
 
@@ -406,7 +412,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * {@code data}.
      */
     @Override
-    public CMatrix makeLikeTensor(Shape shape, Field<Complex128>[] entries) {
+    public CMatrix makeLikeTensor(Shape shape, Complex128[] entries) {
         return new CMatrix(shape, entries);
     }
 
@@ -522,7 +528,6 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
      */
     public CooCMatrix elemMult(CooCMatrix b) {
-//        return (CooCMatrix) DenseCooFieldMatrixOps.elemMult(this, b);
         Complex128[] dest = new Complex128[b.nnz];
         DenseCooFieldMatrixOps.elemMult(shape, data, b.shape, b.data, b.rowIndices, b.colIndices, dest);
         return new CooCMatrix(shape, dest, b.rowIndices.clone(), b.colIndices.clone());
@@ -699,7 +704,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * @throws LinearAlgebraException If {@code this.numCols != b.numRows}.
      */
     public CMatrix mult(Matrix b) {
-        Field<Complex128>[] dest = MatrixMultiplyDispatcher.dispatch(this, b);
+        Complex128[] dest = MatrixMultiplyDispatcher.dispatch(this, b);
         return makeLikeTensor(new Shape(numRows, b.numCols), dest);
     }
 
@@ -743,13 +748,13 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * @throws LinearAlgebraException If {@code this.numCols != b.numRows}.
      */
     public CMatrix mult(CooMatrix b) {
-        ValidateParameters.ensureEqualShape(shape, b.shape);
+        ValidateParameters.ensureMatMultShapes(shape, b.shape);
         Complex128[] dest = new Complex128[numRows*b.numCols];
         RealFieldDenseCooMatMult.standard(
                 data, shape, b.data, b.rowIndices, b.colIndices, b.shape, dest);
         Shape shape = new Shape(this.numRows, b.numCols);
 
-        return new CMatrix(shape, data);
+        return new CMatrix(shape, dest);
     }
 
 
@@ -778,13 +783,13 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      *                                of rows in matrix {@code b}.
      */
     public CMatrix mult(CooCMatrix b) {
-        ValidateParameters.ensureEqualShape(shape, b.shape);
+        ValidateParameters.ensureMatMultShapes(shape, b.shape);
         Complex128[] dest = new Complex128[numRows*b.numCols];
         DenseCooFieldMatMult.standard(
                 data, shape, b.data, b.rowIndices, b.colIndices, b.shape, dest);
-        Shape shape = new Shape(this.numRows, b.numCols);
+        Shape shape = new Shape(numRows, b.numCols);
 
-        return new CMatrix(shape, data);
+        return new CMatrix(shape, dest);
     }
 
 
@@ -799,8 +804,10 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      *                                of length of the vector {@code b}.
      */
     public CVector mult(CooVector b) {
-        ValidateParameters.ensureMatVecMultShapes(shape, b.shape);
-        return null;
+        ValidateParameters.ensureMatMultShapes(shape, b.shape);
+        Complex128[] dest = new Complex128[numRows];
+        RealFieldDenseCooMatMult.blockedVector(data, shape, b.data, b.indices, dest);
+        return new CVector(dest);
     }
 
 
@@ -815,7 +822,8 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      *                                of length of the vector {@code b}.
      */
     public CVector mult(CooCVector b) {
-        Complex128[] dest = new Complex128[b.size];
+        ValidateParameters.ensureMatMultShapes(shape, b.shape);
+        Complex128[] dest = new Complex128[numRows];
         DenseCooFieldMatMult.blockedVector(data, shape, b.data, b.indices, dest);
         return new CVector(dest);
     }

@@ -30,12 +30,12 @@ import org.flag4j.arrays.backend.primitive.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.operations.common.real.RealProperties;
-import org.flag4j.linalg.operations.sparse.coo.CooDataSorter;
-import org.flag4j.linalg.operations.sparse.coo.real.RealCooTensorDot;
-import org.flag4j.linalg.operations.sparse.coo.real.RealCooTensorOperations;
-import org.flag4j.linalg.operations.sparse.coo.real.RealSparseEquals;
-import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexCooTensorOperations;
+import org.flag4j.linalg.ops.common.real.RealProperties;
+import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
+import org.flag4j.linalg.ops.sparse.coo.real.RealCooTensorDot;
+import org.flag4j.linalg.ops.sparse.coo.real.RealCooTensorOperations;
+import org.flag4j.linalg.ops.sparse.coo.real.RealSparseEquals;
+import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexCooTensorOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -56,7 +56,7 @@ import java.util.Map;
  * <p>The {@link #data non-zero data} and {@link #indices non-zero indices} of a COO tensor are mutable but the {@link #shape}
  * and total number of non-zero data is fixed.</p>
  *
- * <p>Sparse tensors allow for the efficient storage of and operations on tensors that contain many zero values.</p>
+ * <p>Sparse tensors allow for the efficient storage of and ops on tensors that contain many zero values.</p>
  *
  * <p>COO tensors are optimized for hyper-sparse tensors (i.e. tensors which contain almost all zeros relative to the size of the
  * tensor).</p>
@@ -66,7 +66,7 @@ import java.util.Map;
  *     <li>The full {@link #shape shape} of the tensor.</li>
  *     <li>The non-zero {@link #data} of the tensor. All other data in the tensor are
  *     assumed to be zero. Zero value can also explicitly be stored in {@link #data}.</li>
- *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many operations assume indices to be sorted in a
+ *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many ops assume indices to be sorted in a
  *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.</p>
  *
  *     <p>The {@link #indices} array has shape {@code (nnz, rank)} where {@link #nnz} is the number of non-zero data in this
@@ -75,11 +75,11 @@ import java.util.Map;
  *     </li>
  * </ul>
  *
- * <p>Some operations on sparse tensors behave differently than on dense tensors. For instance, {@link #add(double)} will not
+ * <p>Some ops on sparse tensors behave differently than on dense tensors. For instance, {@link #add(double)} will not
  * add the scalar to all data of the tensor since this would cause catastrophic loss of sparsity. Instead, such non-zero preserving
- * element-wise operations only act on the non-zero data of the sparse tensor as to not affect the sparsity.
+ * element-wise ops only act on the non-zero data of the sparse tensor as to not affect the sparsity.
  *
- * <p>Note: many operations assume that the data of the COO tensor are sorted lexicographically. However, this is not explicitly
+ * <p>Note: many ops assume that the data of the COO tensor are sorted lexicographically. However, this is not explicitly
  * verified. Every operation implemented in this class will preserve the lexicographical sorting.
  *
  * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.
@@ -378,7 +378,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     @Override
     public CooTensor flatten(int axis) {
-        ValidateParameters.ensureIndexInBounds(indices[0].length, axis);
+        ValidateParameters.ensureIndicesInBounds(indices[0].length, axis);
         int[][] destIndices = new int[indices.length][indices[0].length];
 
         // Compute new shape.
@@ -731,7 +731,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
     @Override
     public CooTensor T(int axis1, int axis2) {
         int rank = getRank();
-        ValidateParameters.ensureIndexInBounds(rank, axis1, axis2);
+        ValidateParameters.ensureIndicesInBounds(rank, axis1, axis2);
 
         if(axis1 == axis2) return copy(); // Simply return a copy.
 

@@ -6,9 +6,9 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOps;
-import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseMatOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOps;
+import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseMatOps;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -28,12 +28,12 @@ import org.flag4j.algebraic_structures.semirings.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.SparseTensorData;
-import org.flag4j.linalg.operations.TransposeDispatcher;
-import org.flag4j.linalg.operations.common.semiring_ops.CompareSemiring;
-import org.flag4j.linalg.operations.dense.DenseSemiringTensorDot;
-import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiRingElemMult;
-import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiringConversions;
-import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiringOperations;
+import org.flag4j.linalg.ops.TransposeDispatcher;
+import org.flag4j.linalg.ops.common.semiring_ops.CompareSemiring;
+import org.flag4j.linalg.ops.dense.DenseSemiringTensorDot;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringConversions;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringElemMult;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringOperations;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -45,44 +45,44 @@ import java.util.Arrays;
  * <p>The {@link #data} of an AbstractDenseSemiringTensor are mutable but the {@link #shape} is fixed.</p>
  *
  * @param <T> The type of this dense semi-ring tensor.
- * @param <U> Type of sparse tensor equivalent to {@code T}. This type parameter is required because some operations (e.g.
+ * @param <U> Type of sparse tensor equivalent to {@code T}. This type parameter is required because some ops (e.g.
  * {@link #toCoo()}) may result in a sparse tensor.
  * @param <V> The type of the {@link Semiring} which this tensor's data belong to.
  */
 public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemiringTensor<T, V>, V extends Semiring<V>>
-        extends AbstractTensor<T, Semiring<V>[], V>
+        extends AbstractTensor<T, V[], V>
         implements SemiringTensorMixin<T, T, V> {
 
     /**
      * The zero element for the semi-ring that this tensor's elements belong to.
      */
-    private final Semiring<V> ZERO_ELEMENT;
+    private final V ZERO_ELEMENT;
 
 
     /**
      * Creates a tensor with the specified data and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
+     * @param data Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
      * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
-    protected AbstractDenseSemiringTensor(Shape shape, Semiring<V>[] entries) {
-        super(shape, entries);
-        ValidateParameters.ensureEquals(shape.totalEntriesIntValueExact(), entries.length);
-        this.ZERO_ELEMENT = (entries.length > 0) ? entries[0].getZero() : null;
+    protected AbstractDenseSemiringTensor(Shape shape, V[] data) {
+        super(shape, data);
+        ValidateParameters.ensureEquals(shape.totalEntriesIntValueExact(), data.length);
+        this.ZERO_ELEMENT = (data.length > 0) ? data[0].getZero() : null;
     }
 
 
     /**
      * Constructs a sparse COO tensor which is of a similar type as this dense tensor.
      * @param shape Shape of the COO tensor.
-     * @param entries Non-zero data of the COO tensor.
+     * @param data Non-zero data of the COO tensor.
      * @param rowIndices Non-zero row indices of the COO tensor.
      * @param colIndices Non-zero column indices of the COO tensor.
      * @return A sparse COO tensor which is of a similar type as this dense tensor.
      */
-    protected abstract AbstractTensor<?, Semiring<V>[], V> makeLikeCooTensor(
-            Shape shape, Semiring<V>[] entries, int[][] indices);
+    protected abstract AbstractCooSemiringTensor<?, ?, V> makeLikeCooTensor(
+            Shape shape, V[] data, int[][] indices);
 
 
     /**
@@ -179,7 +179,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      */
     @Override
     public T add(T b) {
-        Semiring<V>[] sum = new Semiring[data.length];
+        V[] sum = (V[]) new Semiring[data.length];
         DenseSemiringOperations.add(data, shape, b.data, b.shape, sum);
         return makeLikeTensor(shape, sum);
     }
@@ -206,8 +206,8 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      */
     @Override
     public T elemMult(T b) {
-        Semiring<V>[] prod = new Semiring[data.length];
-        DenseSemiRingElemMult.dispatch(data, shape, b.data, b.shape, prod);
+        V[] prod = makeEmptyDataArray(data.length);
+        DenseSemiringElemMult.dispatch(data, shape, b.data, b.shape, prod);
         return makeLikeTensor(shape, prod);
     }
 
@@ -230,7 +230,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
     @Override
     public T tensorDot(T src2, int[] aAxes, int[] bAxes) {
         DenseSemiringTensorDot<V> dot = new DenseSemiringTensorDot(shape, data, src2.shape, src2.data, aAxes, bAxes);
-        Semiring<V>[] dest = new Semiring[dot.getOutputSize()];
+        V[] dest = makeEmptyDataArray(dot.getOutputSize());
         dot.compute(dest);
         return makeLikeTensor(dot.getOutputShape(), dest);
     }
@@ -255,7 +255,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
     @Override
     public T tensorTr(int axis1, int axis2) {
         Shape destShape = DenseSemiringOperations.getTrShape(shape, axis1, axis2);
-        Semiring<V>[] destEntries = new Semiring[destShape.totalEntriesIntValueExact()];
+        V[] destEntries = makeEmptyDataArray(destShape.totalEntriesIntValueExact());
         DenseSemiringOperations.tensorTr(shape, data, axis1, axis2, destShape, destEntries);
         return makeLikeTensor(destShape, destEntries);
     }
@@ -267,7 +267,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
      */
     public V min() {
-        return (V) CompareSemiring.min(data);
+        return CompareSemiring.min(data);
     }
 
 
@@ -277,7 +277,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
      */
     public V max() {
-        return (V) CompareSemiring.max(data);
+        return CompareSemiring.max(data);
     }
 
 
@@ -317,7 +317,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      */
     @Override
     public T T(int axis1, int axis2) {
-        Semiring<V>[] dest = new Semiring[data.length];
+        V[] dest = makeEmptyDataArray(data.length);
         TransposeDispatcher.dispatchTensor(data, shape, axis1, axis2, dest);
         return makeLikeTensor(shape, dest);
     }
@@ -339,7 +339,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      */
     @Override
     public T T(int... axes) {
-        Semiring<V>[] dest = new Semiring[data.length];
+        V[] dest = makeEmptyDataArray(data.length);
         TransposeDispatcher.dispatchTensor(data, shape, axes, dest);
         return makeLikeTensor(shape.permuteAxes(axes), dest);
     }
@@ -447,7 +447,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      * @return A sparse COO tensor that is equivalent to this dense tensor.
      * @see #toCoo(double)
      */
-    public AbstractTensor<?, Semiring<V>[], V> toCoo() {
+    public AbstractTensor<?, V[], V> toCoo() {
         return toCoo(0.9);
     }
 
@@ -460,9 +460,11 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      * @return A sparse COO tensor that is equivalent to this dense tensor.
      * @see #toCoo()
      */
-    public AbstractTensor<?, Semiring<V>[], V> toCoo(double estimatedSparsity) {
-        SparseTensorData<Semiring<V>> data = DenseSemiringConversions.toCooTensor(shape, this.data, estimatedSparsity);
-        Semiring<V>[] cooEntries = data.data().toArray(new Semiring[data.data().size()]);
+    public AbstractTensor<?, V[], V> toCoo(double estimatedSparsity) {
+        SparseTensorData<V> data = DenseSemiringConversions.toCooTensor(shape, this.data, estimatedSparsity);
+        // TODO: Consider implementing something like this for all instances of converting to arrays:
+        //  (V[]) data.data().stream().toArray(size -> (V[]) Array.newInstance(Semiring.class, size))
+        V[] cooEntries = data.data().toArray((V[]) new Semiring[data.data().size()]);
         return makeLikeCooTensor(data.shape(), cooEntries, data.indicesToArray());
     }
 }

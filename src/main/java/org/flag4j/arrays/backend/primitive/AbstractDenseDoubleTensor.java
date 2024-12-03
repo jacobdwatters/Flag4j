@@ -27,14 +27,14 @@ package org.flag4j.arrays.backend.primitive;
 
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Tensor;
-import org.flag4j.linalg.operations.TransposeDispatcher;
-import org.flag4j.linalg.operations.common.real.RealOps;
-import org.flag4j.linalg.operations.common.real.RealProperties;
-import org.flag4j.linalg.operations.dense.real.RealDenseElemDiv;
-import org.flag4j.linalg.operations.dense.real.RealDenseElemMult;
-import org.flag4j.linalg.operations.dense.real.RealDenseOperations;
-import org.flag4j.linalg.operations.dense.real.RealDenseTensorDot;
-import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiringOperations;
+import org.flag4j.linalg.ops.TransposeDispatcher;
+import org.flag4j.linalg.ops.common.real.RealOps;
+import org.flag4j.linalg.ops.common.real.RealProperties;
+import org.flag4j.linalg.ops.dense.real.RealDenseElemDiv;
+import org.flag4j.linalg.ops.dense.real.RealDenseElemMult;
+import org.flag4j.linalg.ops.dense.real.RealDenseOperations;
+import org.flag4j.linalg.ops.dense.real.RealDenseTensorDot;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringOperations;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -174,7 +174,8 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     @Override
     public T add(T b) {
-        return makeLikeTensor(shape, RealDenseOperations.add(data,b.data, null));
+        ValidateParameters.ensureEqualShape(shape, b.shape);
+        return makeLikeTensor(shape, RealDenseOperations.add(data, b.data, null));
     }
 
     /**
@@ -185,6 +186,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      * @return The sum of this tensor with {@code b}.
      */
     public void addEq(T b) {
+        ValidateParameters.ensureEqualShape(shape, b.shape);
         RealDenseOperations.add(data, b.data, data);
     }
 
@@ -200,7 +202,8 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     @Override
     public T elemMult(T b) {
-        return makeLikeTensor(shape, RealDenseElemMult.elemMult(data,b.data, null));
+        ValidateParameters.ensureEqualShape(shape, b.shape);
+        return makeLikeTensor(shape, RealDenseElemMult.elemMult(data, b.data, null));
     }
 
 
@@ -273,6 +276,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     @Override
     public T div(T b) {
+        ValidateParameters.ensureEqualShape(shape, b.shape);
         return makeLikeTensor(shape, RealDenseElemDiv.dispatch(data, b.data, null));
     }
 

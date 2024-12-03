@@ -30,7 +30,7 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.Eigen;
 import org.flag4j.linalg.decompositions.hess.RealHess;
-import org.flag4j.linalg.operations.common.real.RealProperties;
+import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.transformations.Givens;
 import org.flag4j.linalg.transformations.Householder;
 import org.flag4j.rng.RandomComplex;

@@ -25,13 +25,14 @@
 package org.flag4j.arrays.backend.ring;
 
 import org.flag4j.algebraic_structures.rings.Ring;
+import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.linalg.operations.common.ring_ops.CompareRing;
-import org.flag4j.linalg.operations.common.ring_ops.RingOps;
-import org.flag4j.linalg.operations.common.semiring_ops.AggregateSemiring;
-import org.flag4j.linalg.operations.common.semiring_ops.CompareSemiring;
-import org.flag4j.linalg.operations.common.semiring_ops.SemiRingOperations;
-import org.flag4j.linalg.operations.common.semiring_ops.SemiRingProperties;
+import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
+import org.flag4j.linalg.ops.common.ring_ops.RingOps;
+import org.flag4j.linalg.ops.common.semiring_ops.AggregateSemiring;
+import org.flag4j.linalg.ops.common.semiring_ops.CompareSemiring;
+import org.flag4j.linalg.ops.common.semiring_ops.SemiringOps;
+import org.flag4j.linalg.ops.common.semiring_ops.SemiringProperties;
 
 /**
  * <p>This interface provides default functionality for all tensors whose data are elements of a {@link Ring}. This includes both
@@ -44,7 +45,18 @@ import org.flag4j.linalg.operations.common.semiring_ops.SemiRingProperties;
  */
 public interface RingTensorMixin<T extends RingTensorMixin<T, U, V>,
         U extends RingTensorMixin<U, U, V>, V extends Ring<V>>
-        extends TensorOverRing<T, U, Ring<V>[], V> {
+        extends TensorOverRing<T, U, V[], V> {
+
+
+    /**
+     * Creates an empty array of the same type as the data array of this tensor.
+     * @param length The length of the array to construct.
+     * @return An empty array of the same type as the data array of this tensor.
+     */
+    default V[] makeEmptyDataArray(int length) {
+        return (V[]) new Ring[length];
+    }
+
 
     /**
      * Subtracts a scalar value from each entry of this tensor.
@@ -55,9 +67,9 @@ public interface RingTensorMixin<T extends RingTensorMixin<T, U, V>,
      */
     @Override
     default T sub(V b) {
-        Ring<V>[] entries = getData();
-        Ring<V>[] diff = new Ring[entries.length];
-        RingOps.sub(entries, b, diff);
+        V[] data = getData();
+        V[] diff = makeEmptyDataArray(data.length);
+        RingOps.sub(data, b, diff);
         return makeLikeTensor(getShape(), diff);
     }
 
@@ -69,8 +81,8 @@ public interface RingTensorMixin<T extends RingTensorMixin<T, U, V>,
      */
     @Override
     default void subEq(V b) {
-        Ring<V>[] entries = getData();
-        RingOps.sub(entries, b, entries);
+        V[] data = getData();
+        RingOps.sub(data, b, data);
     }
 
 
@@ -80,12 +92,11 @@ public interface RingTensorMixin<T extends RingTensorMixin<T, U, V>,
      * @return The element-wise absolute value of this tensor.
      */
     @Override
-    default TensorOverRing abs() {
-        Ring<V>[] entries = getData();
-        double[] abs = new double[entries.length];
-        RingOps.abs(entries, abs);
-//        return new Tensor(getShape(), abs); // TODO: Need concrete DenseRingTensor to be implemented.
-        return null;
+    default Tensor abs() {
+        V[] data = getData();
+        double[] abs = new double[data.length];
+        RingOps.abs(data, abs);
+        return new Tensor(getShape(), abs);
     }
 
 
@@ -96,9 +107,9 @@ public interface RingTensorMixin<T extends RingTensorMixin<T, U, V>,
      */
     @Override
     default T conj() {
-        Ring<V>[] entries = getData();
-        Ring<V>[] conj = new Ring[entries.length];
-        RingOps.conj(entries, conj);
+        V[] data = getData();
+        V[] conj = makeEmptyDataArray(data.length);
+        RingOps.conj(data, conj);
         return makeLikeTensor(getShape(), conj);
     }
 
@@ -109,7 +120,7 @@ public interface RingTensorMixin<T extends RingTensorMixin<T, U, V>,
      * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
      */
     default V min() {
-        return (V) CompareSemiring.min(getData());
+        return CompareSemiring.min(getData());
     }
 
 
@@ -119,7 +130,7 @@ public interface RingTensorMixin<T extends RingTensorMixin<T, U, V>,
      * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
      */
     default V max() {
-        return (V) CompareSemiring.max(getData());
+        return CompareSemiring.max(getData());
     }
 
 
@@ -201,7 +212,10 @@ public interface RingTensorMixin<T extends RingTensorMixin<T, U, V>,
      */
     @Override
     default T add(V b) {
-        return makeLikeTensor(getShape(), (V[]) SemiRingOperations.add(getData(), b, null));
+        V[] data = getData();
+        V[] sum = makeEmptyDataArray(data.length);
+        SemiringOps.add(data, b, sum);
+        return makeLikeTensor(getShape(), sum);
     }
 
 
@@ -212,8 +226,8 @@ public interface RingTensorMixin<T extends RingTensorMixin<T, U, V>,
      */
     @Override
     default void addEq(V b) {
-        Ring<V>[] entries = getData();
-        SemiRingOperations.add(entries, b, entries);
+        V[] data = getData();
+        SemiringOps.add(data, b, data);
     }
 
 
@@ -226,8 +240,10 @@ public interface RingTensorMixin<T extends RingTensorMixin<T, U, V>,
      */
     @Override
     default T mult(V b) {
-        Ring<V>[] entries = getData();
-        return makeLikeTensor(getShape(), (V[]) SemiRingOperations.scalMult(getData(), b, null));
+        V[] data = getData();
+        V[] prod = makeEmptyDataArray(data.length);
+        SemiringOps.scalMult(getData(), b, prod);
+        return makeLikeTensor(getShape(), prod);
     }
 
 
@@ -238,8 +254,8 @@ public interface RingTensorMixin<T extends RingTensorMixin<T, U, V>,
      */
     @Override
     default void multEq(V b) {
-        Ring<V>[] entries = getData();
-        SemiRingOperations.scalMult(entries, b, entries);
+        V[] data = getData();
+        SemiringOps.scalMult(data, b, data);
     }
 
 
@@ -250,7 +266,7 @@ public interface RingTensorMixin<T extends RingTensorMixin<T, U, V>,
      */
     @Override
     default boolean isZeros() {
-        return SemiRingProperties.isZeros(getData());
+        return SemiringProperties.isZeros(getData());
     }
 
     /**
@@ -260,7 +276,7 @@ public interface RingTensorMixin<T extends RingTensorMixin<T, U, V>,
      */
     @Override
     default boolean isOnes() {
-        return SemiRingProperties.isOnes(getData());
+        return SemiringProperties.isOnes(getData());
     }
 
 

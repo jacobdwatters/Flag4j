@@ -2,6 +2,7 @@ package org.flag4j.complex_vector;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.dense.CVector;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -53,7 +54,7 @@ class CVectorCrossTests {
                 new Complex128(99.24455, 0.0035)};
         b = new CVector(bEntries);
         CVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.cross(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.cross(finalB));
 
         // --------------------- Sub-case 3 ---------------------
         aEntries = new Complex128[]{new Complex128(1.455, 6126.347),
@@ -65,6 +66,6 @@ class CVectorCrossTests {
         b = new CVector(bEntries);
 
         CVector finalB2 = b;
-        assertThrows(IllegalArgumentException.class, ()->a.cross(finalB2));
+        assertThrows(LinearAlgebraException.class, ()->a.cross(finalB2));
     }
 }

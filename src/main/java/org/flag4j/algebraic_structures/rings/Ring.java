@@ -29,11 +29,11 @@ import org.flag4j.algebraic_structures.semirings.Semiring;
 
 /**
  * <p>This interface specifies a mathematical ring. This interface not only meets the basic definition of a ring,
- * but also specifies some additional operations which are common and useful.
+ * but also specifies some additional ops which are common and useful.
  *
  * <p>Ring elements should be immutable.
  *
- * <p>Formally, a ring is a set <b>R</b> with the binary operations addition (+) and multiplication (*)
+ * <p>Formally, a ring is a set <b>R</b> with the binary ops addition (+) and multiplication (*)
  * defined such that for elements a, b, c in <b>R</b> the following are satisfied:
  *  <ul>
  *      <li>Addition and multiplication are associative: a + (b + c) = (a + b) + c and a * (b * c) = (a * b) * c.</li>

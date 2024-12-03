@@ -4,7 +4,6 @@ import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -83,7 +82,7 @@ class CooCVectorJoinTests {
         b = new CooCVector(bSize, bEntries, bIndices);
 
         CooCVector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->a.stack(finalB));
+        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB));
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, 3));
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, -2));
     }

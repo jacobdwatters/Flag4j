@@ -95,7 +95,7 @@ class TensorDotTests {
         aAxes = new int[]{0, 1, 2, 3};
         bAxes = new int[]{1, 0, 3, 2};
 
-        assertThrows(IllegalArgumentException.class, ()->A.tensorDot(B, aAxes, bAxes));
+        assertThrows(LinearAlgebraException.class, ()->A.tensorDot(B, aAxes, bAxes));
     }
 
 

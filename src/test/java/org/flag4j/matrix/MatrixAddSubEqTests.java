@@ -40,7 +40,7 @@ class MatrixAddSubEqTests {
         B = new Matrix(bEntries);
 
         Matrix finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.addEq(finalB));
+        assertThrows(TensorShapeException.class, ()->A.addEq(finalB));
     }
 
 

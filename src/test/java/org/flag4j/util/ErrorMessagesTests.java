@@ -38,9 +38,8 @@ class ErrorMessagesTests {
         // --------- sub-case 1 ---------
         s1 = new Shape(10, 5);
         s2 = new Shape(14, 4);
-        expMsg = String.format("Expecting the number of columns in the first matrix to" +
-                        " match the number rows in the second matrix but got shapes %s and %s.",
-                "(10, 5)", "(14, 4)");
+        expMsg = String.format("Expecting the number of columns in the first matrix to match the number " +
+                "rows/length in the second matrix/vector but got shapes (10, 5) and (14, 4).");
 
         assertEquals(expMsg, ErrorMessages.matMultShapeErrMsg(s1, s2));
     }

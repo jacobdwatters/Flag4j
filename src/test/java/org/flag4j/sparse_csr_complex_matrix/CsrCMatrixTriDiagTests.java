@@ -5,7 +5,6 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CsrCMatrix;
-import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,7 +53,7 @@ class CsrCMatrixTriDiagTests {
         assertEquals(new Complex128(0.21806, 0.5938), A.trace());
 
         // ----------------------- sub-case 4 -----------------------
-        assertThrows(LinearAlgebraException.class, ()->new CsrCMatrix(12, 4).tr());
+        assertThrows(IllegalArgumentException.class, ()->new CsrCMatrix(12, 4).tr());
     }
 
 

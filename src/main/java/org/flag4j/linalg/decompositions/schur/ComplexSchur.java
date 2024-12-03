@@ -26,12 +26,11 @@ package org.flag4j.linalg.decompositions.schur;
 
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.linalg.Eigen;
 import org.flag4j.linalg.decompositions.hess.ComplexHess;
-import org.flag4j.linalg.operations.common.ring_ops.CompareRing;
+import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
 import org.flag4j.linalg.transformations.Givens;
 import org.flag4j.linalg.transformations.Householder;
 import org.flag4j.rng.RandomComplex;
@@ -52,7 +51,7 @@ import static org.flag4j.util.Flag4jConstants.EPS_F64;
  * <a href="https://www.math.wsu.edu/faculty/watkins/books.html">Fundamentals of Matrix
  * Computations 3rd Edition by David S. Watkins</a>.
  */
-public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
+public class ComplexSchur extends Schur<CMatrix, Complex128[]> {
 
     /**
      * The complex number equal to zero.
@@ -247,8 +246,8 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
         computeImplicitSingleShift(workingSize, shift);
 
         // Extract non-zero values from first column in shifted matrix.
-        Field<Complex128> p1 = shiftCol[0];
-        Field<Complex128> p2 = shiftCol[1];
+        Complex128 p1 = shiftCol[0];
+        Complex128 p2 = shiftCol[1];
 
         for(int i=0; i<=workingSize-1; i++) {
             if(makeReflector(i, p1, p2)) // Construct reflector.
@@ -295,9 +294,9 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
         computeImplicitDoubleShift(workingSize);
 
         // Extract non-zero values in first column of the double shifted matrix.
-        Field<Complex128> p1 = shiftCol[0];
-        Field<Complex128> p2 = shiftCol[1];
-        Field<Complex128> p3 = shiftCol[2];
+        Complex128 p1 = shiftCol[0];
+        Complex128 p2 = shiftCol[1];
+        Complex128 p3 = shiftCol[2];
 
         // Apply shift and chase bulge.
         for(int i=0; i<=workingSize-2; i++) {
@@ -329,17 +328,17 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
 
         // Extract values from lower right 2x2 sub-matrix within the working size.
         int leftIdx = workingSize-1;
-        Field<Complex128> x11 = T.data[leftIdx*numRows + leftIdx];
-        Field<Complex128> x12 = T.data[leftIdx*numRows + workingSize];
-        Field<Complex128> x21 = T.data[workingSize*numRows + leftIdx];
-        Field<Complex128> x22 = T.data[workingSize*numRows + workingSize];
+        Complex128 x11 = T.data[leftIdx*numRows + leftIdx];
+        Complex128 x12 = T.data[leftIdx*numRows + workingSize];
+        Complex128 x21 = T.data[workingSize*numRows + leftIdx];
+        Complex128 x22 = T.data[workingSize*numRows + workingSize];
 
         // Extract top right data of T for use in computing the shift p.
-        Field<Complex128> a11 = T.data[0];
-        Field<Complex128> a12 = T.data[1];
-        Field<Complex128> a21 = T.data[numRows];
-        Field<Complex128> a22 = T.data[numRows + 1];
-        Field<Complex128> a32 = T.data[2*numRows + 1];
+        Complex128 a11 = T.data[0];
+        Complex128 a12 = T.data[1];
+        Complex128 a21 = T.data[numRows];
+        Complex128 a22 = T.data[numRows + 1];
+        Complex128 a32 = T.data[2*numRows + 1];
 
         // Scale values to improve stability and help avoid possible over(under)flow issues.
         temp[0] = a11; temp[1] = a21; temp[2] = a12; temp[3] = a22; temp[4] = a32;
@@ -405,7 +404,7 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
      * @return True if a reflector needs to be constructed to return matrix to upper Hessenburg form. False if column is
      * already in the correct form.
      */
-    protected boolean makeReflector(int i, Field<Complex128> p1, Field<Complex128> p2, Field<Complex128> p3) {
+    protected boolean makeReflector(int i, Complex128 p1, Complex128 p2, Complex128 p3) {
         // Scale components for stability and overflow purposes.
         double maxAbs = Math.max(p1.mag(), Math.max(p2.mag(), p3.mag()));
 
@@ -447,7 +446,7 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
      * @return True if a reflector needs to be constructed to return matrix to upper Hessenburg form. False if column is
      * already in the correct form.
      */
-    protected boolean makeReflector(int i, Field<Complex128> p1, Field<Complex128> p2) {
+    protected boolean makeReflector(int i, Complex128 p1, Complex128 p2) {
         double maxAbs = Math.max(p1.mag(), p2.mag());
         if(maxAbs <= Flag4jConstants.EPS_F64*T.data[i*numRows + i].mag()) {
             return false; // No reflector needs to be constructed or applied.
@@ -486,12 +485,12 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
     protected int checkConvergence(int workingSize) {
         int leftRow = (workingSize-1)*numRows;
 
-        Field<Complex128> a11 = T.data[(workingSize-2)*numRows + workingSize - 2];
-        Field<Complex128> a21 = T.data[leftRow + workingSize - 2];
-        Field<Complex128> a22 = T.data[leftRow + workingSize - 1];
-        Field<Complex128> a23 = T.data[leftRow + workingSize];
-        Field<Complex128> a32 = T.data[workingSize*numRows + workingSize - 1];
-        Field<Complex128> a33 = T.data[workingSize*numRows + workingSize];
+        Complex128 a11 = T.data[(workingSize-2)*numRows + workingSize - 2];
+        Complex128 a21 = T.data[leftRow + workingSize - 2];
+        Complex128 a22 = T.data[leftRow + workingSize - 1];
+        Complex128 a23 = T.data[leftRow + workingSize];
+        Complex128 a32 = T.data[workingSize*numRows + workingSize - 1];
+        Complex128 a33 = T.data[workingSize*numRows + workingSize];
 
         // Uses deflation criteria proposed by Wilkinson: |A[k, k-1]| < eps*(|A[k, k]| + |A[k-1, k-1]|)
         // AND the deflation criteria proposed by Ahues and Tisseur:
@@ -516,10 +515,10 @@ public class ComplexSchur extends Schur<CMatrix, Field<Complex128>[]> {
         Complex128[] givensWorkComplex = new Complex128[2*numRows];
 
         for(int m=numRows-1; m>0; m--) {
-            Field<Complex128> a11 = tComplex.data[(m - 1)*numRows + m - 1];
-            Field<Complex128> a12 = tComplex.data[(m - 1)*numRows + m];
-            Field<Complex128> a21 = tComplex.data[m*numRows + m - 1];
-            Field<Complex128> a22 = tComplex.data[m*numRows + m];
+            Complex128 a11 = tComplex.data[(m - 1)*numRows + m - 1];
+            Complex128 a12 = tComplex.data[(m - 1)*numRows + m];
+            Complex128 a21 = tComplex.data[m*numRows + m - 1];
+            Complex128 a22 = tComplex.data[m*numRows + m];
 
             if(a21.mag() > EPS_F64*(a11.mag() + a22.mag())) {
                 // non-converged 2x2 block found.

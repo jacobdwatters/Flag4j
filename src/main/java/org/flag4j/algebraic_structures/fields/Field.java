@@ -34,7 +34,7 @@ import org.flag4j.algebraic_structures.semirings.Semiring;
  *
  * <p>Field elements should be immutable.</p>
  *
- * <p>Formally, an field is a set <b>F</b> with the binary operations addition (+) and multiplication (*)
+ * <p>Formally, an field is a set <b>F</b> with the binary ops addition (+) and multiplication (*)
  * defined such that for elements a, b, c in <b>F</b> the following are satisfied:
  *  <ul>
  *      <li>Addition and multiplication are associative: a + (b + c) = (a + b) + c and a * (b * c) = (a * b) * c.</li>
@@ -70,7 +70,9 @@ public interface Field<T extends Field<T>> extends Ring<T> {
      * @param b Real element in sum.
      * @return The sum of this element and {@code b}.
      */
-    T add(double b);
+    default T add(double b) {
+        throw new UnsupportedOperationException("Addition with primitive doubles is not supported for this field.");
+    }
 
 
     /**
@@ -78,7 +80,9 @@ public interface Field<T extends Field<T>> extends Ring<T> {
      * @param b Real value in difference.
      * @return The difference of this ring element and {@code b}.
      */
-    T sub(double b);
+    default T sub(double b) {
+        throw new UnsupportedOperationException("Subtraction with primitive doubles is not supported for this field.");
+    }
 
 
     /**
@@ -86,7 +90,9 @@ public interface Field<T extends Field<T>> extends Ring<T> {
      * @param b Real number in product.
      * @return The product of this field element and {@code b}.
      */
-    T mult(double b);
+    default T mult(double b) {
+        throw new UnsupportedOperationException("Multiplication with primitive doubles is not supported for this field.");
+    }
 
 
     /**
@@ -94,7 +100,9 @@ public interface Field<T extends Field<T>> extends Ring<T> {
      * @param b Real number in quotient.
      * @return The quotient of this field element and {@code b}.
      */
-    T div(double b);
+    default T div(double b) {
+        throw new UnsupportedOperationException("Division with primitive doubles is not supported for this field.");
+    }
 
 
     /**

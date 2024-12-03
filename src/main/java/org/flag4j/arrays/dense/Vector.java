@@ -32,14 +32,15 @@ import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.linalg.operations.common.complex.Complex128Ops;
-import org.flag4j.linalg.operations.common.field_ops.FieldOps;
-import org.flag4j.linalg.operations.dense.real.RealDenseVectorOperations;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemDiv;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseElemMult;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOps;
-import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
+import org.flag4j.linalg.ops.common.complex.Complex128Ops;
+import org.flag4j.linalg.ops.common.field_ops.FieldOps;
+import org.flag4j.linalg.ops.dense.real.RealDenseVectorOperations;
+import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseElemDiv;
+import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseElemMult;
+import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -133,8 +134,8 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @param entries Entries for this column vector.
      */
     public Vector(double... entries) {
-        super(new Shape(entries.length), entries.clone());
-        this.size = shape.get(0);
+        super(new Shape(entries.length), entries);
+        size = shape.get(0);
     }
 
 
@@ -469,9 +470,9 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
 
         double[] entries = new double[3];
 
-        entries[0] = entries[1]*b.data[2] - entries[2]*b.data[1];
-        entries[1] = entries[2]*b.data[0] - entries[0]*b.data[2];
-        entries[2] = entries[0]*b.data[1] - entries[1]*b.data[0];
+        entries[0] = data[1]*b.data[2] - data[2]*b.data[1];
+        entries[1] = data[2]*b.data[0] - data[0]*b.data[2];
+        entries[2] = data[0]*b.data[1] - data[1]*b.data[0];
 
         return new Vector(entries);
     }
@@ -757,8 +758,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return The sum of this vector and {@code b}.
      */
     public CVector add(CooCVector b) {
-//        return RealComplexDenseSparseVectorOperations.add(this, b);
-        return null;
+        return RealComplexDenseSparseVectorOperations.add(this, b);
     }
 
 
@@ -784,7 +784,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      */
     public CVector sub(CVector b) {
         Complex128[] dest = new Complex128[data.length];
-        RealFieldDenseOps.sub(b.shape, b.data, shape, data, dest);
+        RealFieldDenseOps.sub(shape, data, b.shape, b.data, dest);
         return new CVector(dest);
     }
 
@@ -805,8 +805,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return The difference of this vector and {@code b}.
      */
     public CVector sub(CooCVector b) {
-//        return RealComplexDenseSparseVectorOperations.sub(this, b);
-        return null;
+        return RealComplexDenseSparseVectorOperations.sub(this, b);
     }
 
 
@@ -832,7 +831,9 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return The scalar product of this vector with {@code b}.
      */
     public CVector mult(Complex128 b) {
-        return new CVector(FieldOps.scalMult(data, b, null));
+        Complex128[] dest = new Complex128[data.length];
+        FieldOps.scalMult(data, b, dest);
+        return new CVector(dest);
     }
 
 
@@ -852,7 +853,9 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return The element-wise product of this vector and {@code b}.
      */
     public CVector elemMult(CVector b) {
-        return new CVector(RealFieldDenseElemMult.dispatch(b.data, b.shape, this.data, this.shape));
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseElemMult.dispatch(b.data, b.shape, data, shape, dest);
+        return new CVector(dest);
     }
 
 
@@ -882,7 +885,9 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return The element-wise quotient of this vector and {@code b}.
      */
     public CVector div(CVector b) {
-        return new CVector(RealFieldDenseElemDiv.dispatch(this.shape, this.data, b.shape, b.data));
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseElemDiv.dispatch(shape, data, b.shape, b.data, dest);
+        return new CVector(dest);
     }
 
 

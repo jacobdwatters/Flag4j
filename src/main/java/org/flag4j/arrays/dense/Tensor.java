@@ -31,12 +31,12 @@ import org.flag4j.arrays.backend.primitive.AbstractDenseDoubleTensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.operations.common.complex.Complex128Ops;
-import org.flag4j.linalg.operations.common.field_ops.FieldOps;
-import org.flag4j.linalg.operations.dense.real.RealDenseEquals;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOps;
-import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseCooTensorOps;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseCooOps;
+import org.flag4j.linalg.ops.common.complex.Complex128Ops;
+import org.flag4j.linalg.ops.common.field_ops.FieldOps;
+import org.flag4j.linalg.ops.dense.real.RealDenseEquals;
+import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseCooTensorOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseCooOps;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -335,7 +335,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
      */
     public CTensor sub(CTensor b) {
         Complex128[] dest = new Complex128[data.length];
-        RealFieldDenseOps.sub(b.shape, b.data, shape, data, dest);
+        RealFieldDenseOps.sub(shape, data, b.shape, b.data, dest);
         return new CTensor(shape, dest);
     }
 
@@ -422,7 +422,9 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
      * @return The product of this tensor with {@code b}.
      */
     public CTensor mult(Complex128 b) {
-        return new CTensor(shape, FieldOps.mult(data, b, null));
+        Complex128[] dest = new Complex128[data.length];
+        FieldOps.mult(data, b, dest);
+        return new CTensor(shape, dest);
     }
 
 

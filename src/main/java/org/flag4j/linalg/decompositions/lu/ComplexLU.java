@@ -26,7 +26,6 @@ package org.flag4j.linalg.decompositions.lu;
 
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
@@ -147,7 +146,7 @@ public class ComplexLU extends LU<CMatrix> {
      * @param j Column for which to compute values to the right of.
      */
     private void computeRows(int j) {
-        Field<Complex128> m;
+        Complex128 m;
         int pivotRow = j*LU.numCols;
 
         for(int i=j+1; i<LU.numRows; i++) {

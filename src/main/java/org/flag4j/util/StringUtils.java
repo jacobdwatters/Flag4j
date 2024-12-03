@@ -86,7 +86,7 @@ public final class StringUtils {
      * @param precision Precision to round value to if the value can be rounded.
      * @return The string representation of {@code value} rounded to the specified precision if the field type can be rounded.
      */
-    public static <T extends Field<T>> String ValueOfRound(Field<T> value, int precision) {
+    public static <T extends Field<T>> String ValueOfRound(T value, int precision) {
         String valueOf;
         if(value instanceof Complex128)
             valueOf = Complex128.round((Complex128) value, precision).toString();

@@ -26,16 +26,15 @@ package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Complex64;
-import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field.AbstractCooFieldTensor;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.operations.common.complex.Complex128Ops;
-import org.flag4j.linalg.operations.common.complex.Complex128Properties;
-import org.flag4j.linalg.operations.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldEquals;
+import org.flag4j.linalg.ops.common.complex.Complex128Ops;
+import org.flag4j.linalg.ops.common.complex.Complex128Properties;
+import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
+import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldEquals;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -50,7 +49,7 @@ import java.util.List;
  * <p>The non-zero data and non-zero indices of a COO tensor are mutable but the {@link #shape} and total number of
  * {@link #data non-zero data} is fixed.</p>
  *
- * <p>Sparse tensors allow for the efficient storage of and operations on tensors that contain many zero values.</p>
+ * <p>Sparse tensors allow for the efficient storage of and ops on tensors that contain many zero values.</p>
  *
  * <p>COO tensors are optimized for hyper-sparse tensors (i.e. tensors which contain almost all zeros relative to the size of the
  * tensor).</p>
@@ -60,7 +59,7 @@ import java.util.List;
  *     <li>The full {@link #shape shape} of the tensor.</li>
  *     <li>The non-zero {@link #data} of the tensor. All other data in the tensor are
  *     assumed to be zero. Zero value can also explicitly be stored in {@link #data}.</li>
- *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many operations assume indices to be sorted in a
+ *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many ops assume indices to be sorted in a
  *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.</p>
  *
  *     <p>The {@link #indices} array has shape {@code (nnz, rank)} where {@link #nnz} is the number of non-zero data in this
@@ -78,7 +77,7 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
      * @param entries Non-zero data of this tensor of this tensor.
      * @param indices Indices of the non-zero data of this tensor.
      */
-    public CooCTensor(Shape shape, Field<Complex128>[] entries, int[][] indices) {
+    public CooCTensor(Shape shape, Complex128[] entries, int[][] indices) {
         super(shape, entries, indices);
         if(entries.length == 0 || entries[0] == null) setZeroElement(Complex128.ZERO);
     }
@@ -91,7 +90,7 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
      * @param entries Non-zero data of this tensor of this tensor.
      * @param indices Indices of the non-zero data of this tensor.
      */
-    public CooCTensor(Shape shape, List<Field<Complex128>> entries, List<int[]> indices) {
+    public CooCTensor(Shape shape, List<Complex128> entries, List<int[]> indices) {
         super(shape, entries.toArray(new Complex128[0]), indices.toArray(new int[0][]));
         if(super.data.length == 0 || super.data[0] == null) setZeroElement(Complex128.ZERO);
     }
@@ -148,6 +147,12 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
     }
 
 
+    @Override
+    public Complex128[] makeEmptyDataArray(int length) {
+        return new Complex128[length];
+    }
+
+
     /**
      * Constructs a tensor of the same type as this tensor with the given the {@code shape} and
      * {@code data}. The resulting tensor will also have
@@ -160,7 +165,7 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
      * {@code data}.
      */
     @Override
-    public CooCTensor makeLikeTensor(Shape shape, Field<Complex128>[] entries) {
+    public CooCTensor makeLikeTensor(Shape shape, Complex128[] entries) {
         return new CooCTensor(shape, entries, ArrayUtils.deepCopy(indices, null));
     }
 
@@ -190,7 +195,7 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
      * @return A tensor of the same type as this tensor with the specified shape and non-zero data.
      */
     @Override
-    public CooCTensor makeLikeTensor(Shape shape, List<Field<Complex128>> entries, List<int[]> indices) {
+    public CooCTensor makeLikeTensor(Shape shape, List<Complex128> entries, List<int[]> indices) {
         return new CooCTensor(shape, entries, indices);
     }
 
@@ -204,7 +209,7 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
      * @return A dense tensor that is a similar type as this sparse COO tensor.
      */
     @Override
-    public CTensor makeLikeDenseTensor(Shape shape, Field<Complex128>[] entries) {
+    public CTensor makeLikeDenseTensor(Shape shape, Complex128[] entries) {
         return new CTensor(shape, entries);
     }
 
@@ -254,7 +259,7 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
      */
     public CooCTensor roundToZero(double tolerance) {
         Complex128[] rounded = Complex128Ops.roundToZero(data, tolerance);
-        List<Field<Complex128>> dest = new ArrayList<>(data.length);
+        List<Complex128> dest = new ArrayList<>(data.length);
         List<int[]> destIndices = new ArrayList<>(data.length);
 
         for(int i = 0, size = data.length; i<size; i++) {

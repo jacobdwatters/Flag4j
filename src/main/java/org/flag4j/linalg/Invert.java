@@ -36,7 +36,7 @@ import org.flag4j.linalg.decompositions.lu.RealLU;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
 import org.flag4j.linalg.decompositions.svd.SVD;
-import org.flag4j.linalg.operations.common.ring_ops.RingProperties;
+import org.flag4j.linalg.ops.common.ring_ops.RingProperties;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolver;
 import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;

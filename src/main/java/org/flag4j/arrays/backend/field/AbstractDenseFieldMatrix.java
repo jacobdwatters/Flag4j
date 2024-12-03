@@ -25,14 +25,15 @@
 package org.flag4j.arrays.backend.field;
 
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.algebraic_structures.semirings.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.SparseMatrixData;
-import org.flag4j.linalg.operations.TransposeDispatcher;
-import org.flag4j.linalg.operations.dense.field_ops.DenseFieldProperties;
-import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiringConversions;
-import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiringMatMultDispatcher;
+import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.linalg.ops.TransposeDispatcher;
+import org.flag4j.linalg.ops.common.ring_ops.RingOps;
+import org.flag4j.linalg.ops.dense.field_ops.DenseFieldProperties;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringConversions;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringMatMultDispatcher;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -42,7 +43,6 @@ import java.util.Arrays;
 public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatrix<T, U, V>,
         U extends AbstractDenseFieldVector<U, T, V>, V extends Field<V>>
         extends AbstractDenseFieldTensor<T, V> implements MatrixMixin<T, T, U, V> {
-
 
     /**
      * The number of rows in this matrix.
@@ -58,11 +58,11 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
      * Creates a tensor with the specified data and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
+     * @param data Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
      * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
-    protected AbstractDenseFieldMatrix(Shape shape, Field<V>[] entries) {
-        super(shape, entries);
+    protected AbstractDenseFieldMatrix(Shape shape, V[] data) {
+        super(shape, data);
         ValidateParameters.ensureRank(shape, 2);
         numRows = shape.get(0);
         numCols = shape.get(1);
@@ -74,7 +74,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
      * @param entries Entries of the vector.
      * @return A vector of a similar type as this matrix.
      */
-    protected abstract U makeLikeVector(Field<V>[] entries);
+    protected abstract U makeLikeVector(V[] entries);
 
 
     /**
@@ -86,7 +86,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
      * @return A sparse COO matrix which is of a similar type as this dense matrix.
      */
     protected abstract AbstractCooFieldMatrix<?, T, ?, V> makeLikeCooMatrix(
-            Shape shape, Field<V>[] entries, int[] rowIndices, int[] colIndices);
+            Shape shape, V[] entries, int[] rowIndices, int[] colIndices);
 
 
     /**
@@ -98,7 +98,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
      * @return A sparse CSR matrix which is of a similar type as this dense matrix.
      */
     public abstract AbstractCsrFieldMatrix<?, T, ?, V> makeLikeCsrMatrix(
-            Shape shape, Field<V>[] entries, int[] rowPointers, int[] colIndices);
+            Shape shape, V[] entries, int[] rowPointers, int[] colIndices);
 
 
     /**
@@ -111,7 +111,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
      */
     @Override
     public T T() {
-        Field<V>[] dest = new Field[data.length];
+        V[] dest = makeEmptyDataArray(data.length);
         TransposeDispatcher.dispatch(data, shape, dest);
         return makeLikeTensor(shape.swapAxes(0, 1), dest);
     }
@@ -149,7 +149,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
      */
     @Override
     public V get(int row, int col) {
-        return (V) data[row*numCols + col];
+        return data[row*numCols + col];
     }
 
 
@@ -165,13 +165,13 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
     @Override
     public V tr() {
         ValidateParameters.ensureSquareMatrix(shape);
-        Field<V> sum = data[0];
+        V sum = data[0];
         int colsOffset = this.numCols + 1;
 
         for(int i=1; i<numRows; i++)
-            sum = sum.add((V) data[i*colsOffset]);
+            sum = sum.add(data[i*colsOffset]);
 
-        return (V) sum;
+        return sum;
     }
 
 
@@ -265,7 +265,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
      */
     @Override
     public T mult(T b) {
-        Field<V>[] dest = new Field[numRows*b.numCols];
+        V[] dest = makeEmptyDataArray(numRows*b.numCols);
         DenseSemiringMatMultDispatcher.dispatch(data, shape, b.data, b.shape, dest);
         return makeLikeTensor(new Shape(numRows, b.numCols), dest);
     }
@@ -283,7 +283,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
      */
     @Override
     public U mult(U b) {
-        Field<V>[] dest = new Field[b.size];
+        V[] dest = makeEmptyDataArray(numRows);
         DenseSemiringMatMultDispatcher.dispatchVector(data, shape, b.data, b.shape, dest);
         return makeLikeVector(dest);
     }
@@ -301,7 +301,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
      */
     @Override
     public T multTranspose(T b) {
-        Field<V>[] dest = new Field[numRows*b.numRows];
+        V[] dest = makeEmptyDataArray(numRows*b.numRows);
         DenseSemiringMatMultDispatcher.dispatchTranspose(data, shape, b.data, b.shape, dest);
         return makeLikeTensor(new Shape(numRows, b.numRows), dest);
     }
@@ -322,7 +322,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
     public T stack(T b) {
         ValidateParameters.ensureArrayLengthsEq(this.numCols, b.numCols);
         Shape stackedShape = new Shape(this.numRows + b.numRows, this.numCols);
-        Field<V>[] stackedEntries = new Field[stackedShape.totalEntries().intValueExact()];
+        V[] stackedEntries = makeEmptyDataArray(stackedShape.totalEntries().intValueExact());
 
         System.arraycopy(this.data, 0, stackedEntries, 0, this.data.length);
         System.arraycopy(b.data, 0, stackedEntries, this.data.length, b.data.length);
@@ -348,7 +348,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
 
         int augNumCols = numCols + b.numCols;
         Shape augShape = new Shape(numRows, augNumCols);
-        Field<V>[] augEntries = new Field[numRows*augNumCols];
+        V[] augEntries = makeEmptyDataArray(numRows*augNumCols);
 
         // Copy data from this matrix.
         for(int i=0; i<numRows; i++) {
@@ -374,7 +374,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
     @Override
     public T augment(U b) {
         ValidateParameters.ensureArrayLengthsEq(numRows, b.size);
-        Field<V>[] augmented = new Field[numRows*(numCols + 1)];
+        V[] augmented = makeEmptyDataArray(numRows*(numCols + 1));
 
         // Copy data from this matrix.
         for(int i=0; i<numRows; i++) {
@@ -404,7 +404,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
         int row2Offset = rowIndex2*numCols;
 
         if(rowIndex1 != rowIndex2) {
-            Field<V> temp;
+            V temp;
 
             for(int j=0; j<numCols; j++) {
                 // Swap elements.
@@ -433,7 +433,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
         ValidateParameters.ensureValidArrayIndices(numCols, colIndex1, colIndex2);
 
         if(colIndex1 != colIndex2) {
-            Field<V> temp;
+            V temp;
 
             for(int i=0; i<numRows; i++) {
                 // Swap elements.
@@ -495,7 +495,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
     @Override
     public T removeRow(int rowIndex) {
         Shape copyShape = new Shape(numRows-1, numCols);
-        Field<V>[] copyEntries = new Field[(numRows-1)*numCols];
+        V[] copyEntries = makeEmptyDataArray((numRows-1)*numCols);
         int row = 0;
 
         for(int i=0; i<numRows; i++) {
@@ -519,7 +519,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
     @Override
     public T removeRows(int... rowIndices) {
         Shape copyShape = new Shape(numRows-rowIndices.length, numCols);
-        Field<V>[] copyEntries = new Field[(numRows-rowIndices.length)*numCols];
+        V[] copyEntries = makeEmptyDataArray((numRows-rowIndices.length)*numCols);
         int row = 0;
 
         for(int i=0; i<this.numRows; i++) {
@@ -544,7 +544,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
     public T removeCol(int colIndex) {
         int copyNumCols = numCols-1;
         Shape copyShape = new Shape(numRows, copyNumCols);
-        Field<V>[] copyEntries = new Field[numRows*copyNumCols];
+        V[] copyEntries = makeEmptyDataArray(numRows*copyNumCols);
 
         for(int i=0; i<this.numRows; i++) {
             int rowOffset = i*numCols;
@@ -574,7 +574,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
     public T removeCols(int... colIndices) {
         int copyNumCols = this.numCols-colIndices.length;
         Shape copyShape = new Shape(numRows, copyNumCols);
-        Field<V>[] copyEntries = new Field[numRows*copyNumCols];
+        V[] copyEntries = makeEmptyDataArray(numRows*copyNumCols);
 
         for(int i=0; i<this.numRows; i++) {
             int rowOffset = i*numCols;
@@ -665,7 +665,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
         int sliceRows = rowEnd-rowStart;
         int sliceCols = colEnd-colStart;
         int destPos = 0;
-        Field<V>[] slice = new Field[sliceRows*sliceCols];
+        V[] slice = makeEmptyDataArray(sliceRows*sliceCols);
 
         for(int i=rowStart; i<rowEnd; i++) {
             int srcPos = i*numCols + colStart;
@@ -737,7 +737,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
     @Override
     public T getTriU(int diagOffset) {
         ValidateParameters.ensureInRange(diagOffset, -numRows+1, numCols-1, "diagOffset");
-        Field<V>[] copyEntries = new Field[data.length];
+        V[] copyEntries = makeEmptyDataArray(data.length);
         Arrays.fill(copyEntries, (data.length > 0) ? data[0].getZero() : null);
         T result = makeLikeTensor(shape, copyEntries);
 
@@ -774,7 +774,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
     @Override
     public T getTriL(int diagOffset) {
         ValidateParameters.ensureInRange(diagOffset, -numRows+1, numCols-1, "diagOffset");
-        Field<V>[] copyEntries = new Field[data.length];
+        V[] copyEntries = makeEmptyDataArray(data.length);
         Arrays.fill(copyEntries, (data.length > 0) ? data[0].getZero() : null);
         T result = makeLikeTensor(shape, copyEntries);
 
@@ -812,8 +812,8 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
         ValidateParameters.ensureInRange(diagOffset, -(numRows-1), numCols-1, "diagOffset");
 
         // Check for some quick returns.
-        if(numRows == 1 && diagOffset > 0) return (U) makeLikeVector(new Field[]{data[diagOffset]});
-        if(numCols == 1 && diagOffset < 0) return (U) makeLikeVector(new Field[]{data[-diagOffset]});
+        if(numRows == 1 && diagOffset > 0) return makeLikeVector((V[]) new Field[]{data[diagOffset]});
+        if(numCols == 1 && diagOffset < 0) return makeLikeVector((V[]) new Field[]{data[-diagOffset]});
 
         // Compute the length of the diagonal.
         int newSize = Math.min(numRows, numCols);
@@ -828,7 +828,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
             idx = -diagOffset*numCols;
         }
 
-        Field<V>[] diag = new Field[newSize];
+        V[] diag = makeEmptyDataArray(newSize);
 
         for(int i=0; i<newSize; i++) {
             diag[i] = this.data[idx];
@@ -884,7 +884,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
      */
     @Override
     public T setCol(U col, int colIdx) {
-        return setRow((V[]) col.data, colIdx);
+        return setCol(col.data, colIdx);
     }
 
 
@@ -925,12 +925,12 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
      */
     @Override
     public U getRow(int rowIdx, int colStart, int colEnd) {
-        ValidateParameters.ensureIndexInBounds(numCols, colStart, colEnd-1);
+        ValidateParameters.ensureIndicesInBounds(numCols, colStart, colEnd-1);
         ValidateParameters.ensureGreaterEq(colStart, colEnd);
         int start = rowIdx*numCols + colStart;
         int stop = rowIdx*numCols + colEnd;
 
-        Field<V>[] row = Arrays.copyOfRange(this.data, start, stop);
+        V[] row = Arrays.copyOfRange(data, start, stop);
 
         return makeLikeVector(row);
     }
@@ -951,14 +951,27 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
      */
     @Override
     public U getCol(int colIdx, int rowStart, int rowEnd) {
-        ValidateParameters.ensureValidArrayIndices(numRows, rowStart, rowEnd);
-        ValidateParameters.ensureGreaterEq(rowEnd, rowStart);
-        Field<V>[] col = new Field[numRows];
+        ValidateParameters.ensureValidArrayIndices(numRows, rowStart, rowEnd-1);
+        ValidateParameters.ensureGreaterEq(rowStart, rowEnd);
+        V[] col = makeEmptyDataArray(numRows);
 
         for(int i=rowStart; i<rowEnd; i++)
             col[i] = data[i*numCols + colIdx];
 
         return makeLikeVector(col);
+    }
+
+
+    /**
+     * Computes the element-wise absolute value of this tensor.
+     *
+     * @return The element-wise absolute value of this tensor.
+     */
+    @Override
+    public Matrix abs() {
+        double[] abs = new double[data.length];
+        RingOps.abs(data, abs);
+        return new Matrix(shape, abs);
     }
 
 
@@ -969,7 +982,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
      */
     @Override
     public T H() {
-        Field<V>[] dest = new Field[data.length];
+        V[] dest = makeEmptyDataArray(data.length);
         TransposeDispatcher.dispatchHermitian(data, shape, dest);
         return makeLikeTensor(shape.swapAxes(0, 1), dest);
     }
@@ -984,7 +997,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
      */
     @Override
     public T flatten() {
-        return flatten(0);
+        return flatten(1);
     }
 
 
@@ -992,17 +1005,21 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
      * Flattens this matrix along the specified axis.
      *
      * @param axis Axis along which to flatten tensor.
-     * @return If {@code axis == 0} a matrix with the shape {@code (1, this.numRows*this.numCols)} is returned.
-     * If {@code axis == 1} a matrix with the shape {@code (this.numRows*this.numCols, 1)} is returned.
-     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     * @return A new matrix containing the same entries as this matrix but flattened along the specified axis.
+     * <ul>
+     *     <li>If {@code axis == 0} a matrix with the shape {@code (this.numRows*this.numCols, 1)} is returned.</li>
+     *     <li>If {@code axis == 1} a matrix with the shape {@code (1, this.numRows*this.numCols)} is returned.</li>
+     * </ul>
+     *
+     * @throws ArrayIndexOutOfBoundsException If the axis is negative or larger than <code>this.{@link #getRank()}-1</code>.
      * @see #flatten()
      */
     @Override
     public T flatten(int axis) {
         ValidateParameters.ensureValidAxes(shape, axis);
         return (axis == 0)
-                ? makeLikeTensor(new Shape(1, data.length), data.clone())
-                : makeLikeTensor(new Shape(data.length, 1), data.clone());
+                ? makeLikeTensor(new Shape(data.length, 1), data.clone())
+                : makeLikeTensor(new Shape(1, data.length), data.clone());
     }
 
 
@@ -1025,8 +1042,8 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
      * @see #toCoo()
      */
     public AbstractCooFieldMatrix<?, T, ?, V> toCoo(double estimatedSparsity) {
-        SparseMatrixData<Semiring<V>> data = DenseSemiringConversions.toCoo(shape, this.data, 0.1);
-        Field<V>[] cooEntries = data.data().toArray(new Field[data.data().size()]);
+        SparseMatrixData<V> data = DenseSemiringConversions.toCoo(shape, this.data, 0.1);
+        V[] cooEntries = data.data().toArray(makeEmptyDataArray(data.data().size()));
         int[] rowIndices = ArrayUtils.fromIntegerList(data.rowData());
         int[] colIndices = ArrayUtils.fromIntegerList(data.colData());
 

@@ -32,12 +32,13 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.operations.common.real.RealProperties;
-import org.flag4j.linalg.operations.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
-import org.flag4j.linalg.operations.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
-import org.flag4j.linalg.operations.sparse.SparseUtils;
-import org.flag4j.linalg.operations.sparse.csr.real.*;
-import org.flag4j.linalg.operations.sparse.csr.real_complex.RealComplexCsrMatMult;
+import org.flag4j.linalg.ops.common.real.RealProperties;
+import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
+import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
+import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
+import org.flag4j.linalg.ops.sparse.SparseUtils;
+import org.flag4j.linalg.ops.sparse.csr.real.*;
+import org.flag4j.linalg.ops.sparse.csr.real_complex.RealComplexCsrMatMult;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -49,7 +50,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.flag4j.linalg.operations.sparse.SparseUtils.sortCsrMatrix;
+import static org.flag4j.linalg.ops.sparse.SparseUtils.sortCsrMatrix;
 
 
 /**
@@ -59,7 +60,7 @@ import static org.flag4j.linalg.operations.sparse.SparseUtils.sortCsrMatrix;
  * <p>The {@link #data non-zero data} and non-zero indices of a CSR matrix are mutable but the {@link #shape}
  * and {@link #nnz total number of non-zero data} is fixed.
  *
- * <p>Sparse matrices allow for the efficient storage of and operations on matrices that contain many zero values.
+ * <p>Sparse matrices allow for the efficient storage of and ops on matrices that contain many zero values.
  *
  * <p>A sparse CSR matrix is stored as:
  * <ul>
@@ -72,8 +73,8 @@ import static org.flag4j.linalg.operations.sparse.SparseUtils.sortCsrMatrix;
  *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
  *
- * <p>Note: many operations assume that the data of the CSR matrix are sorted lexicographically by the row and column indices.
- * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any operations implemented in this
+ * <p>Note: many ops assume that the data of the CSR matrix are sorted lexicographically by the row and column indices.
+ * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any ops implemented in this
  * class will preserve the lexicographical sorting.
  *
  * <p>If indices need to be sorted explicitly, call {@link #sortIndices()}.
@@ -1111,7 +1112,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      *                                        the number of rows in this matrix.
      */
     public CooVector getRow(int rowIdx) {
-        ValidateParameters.ensureIndexInBounds(numRows, rowIdx);
+        ValidateParameters.ensureIndicesInBounds(numRows, rowIdx);
         int start = rowPointers[rowIdx];
 
         double[] destEntries = new double[rowPointers[rowIdx + 1]-start];
@@ -1138,8 +1139,8 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      * @throws IllegalArgumentException  If {@code colEnd} is less than {@code colStart}.
      */
     public CooVector getRow(int rowIdx, int colStart, int colEnd) {
-        ValidateParameters.ensureIndexInBounds(numRows, rowIdx);
-        ValidateParameters.ensureIndexInBounds(numCols, colStart, colEnd-1);
+        ValidateParameters.ensureIndicesInBounds(numRows, rowIdx);
+        ValidateParameters.ensureIndicesInBounds(numCols, colStart, colEnd-1);
         int start = rowPointers[rowIdx];
         int end = rowPointers[rowIdx+1];
 
@@ -1189,8 +1190,8 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      * @throws IllegalArgumentException If {@code rowEnd} is less than {@code rowStart}.
      */
     public CooVector getCol(int colIdx, int rowStart, int rowEnd) {
-        ValidateParameters.ensureIndexInBounds(numCols, colIdx);
-        ValidateParameters.ensureIndexInBounds(numRows, rowStart, rowEnd-1);
+        ValidateParameters.ensureIndicesInBounds(numCols, colIdx);
+        ValidateParameters.ensureIndicesInBounds(numRows, rowStart, rowEnd-1);
 
         List<Double> destEntries = new ArrayList<>();
         List<Integer> destIndices = new ArrayList<>();
@@ -1479,8 +1480,9 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      * @return The result of adding this matrix to {@code b}.
      */
     public CsrCMatrix add(Complex128 b) {
-//        return new CsrCMatrix(shape, DenseFieldOps.add(data, b), rowPointers.clone(), colData.clone());
-        return null;
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseOps.add(data, b, dest);
+        return new CsrCMatrix(shape, dest, rowPointers.clone(), colIndices.clone());
     }
 
 
@@ -1490,8 +1492,9 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      * @return The result of subtracting {@code b} from this matrix's non-zero data.
      */
     public CsrCMatrix sub(Complex128 b) {
-//        return new CsrCMatrix(shape, DenseFieldOps.sub(data, b), rowPointers.clone(), colData.clone());
-        return null;
+        Complex128[] dest = new Complex128[data.length];
+        RealFieldDenseOps.sub(data, b, dest);
+        return new CsrCMatrix(shape, dest, rowPointers.clone(), colIndices.clone());
     }
 
 

@@ -32,8 +32,8 @@ import org.flag4j.arrays.dense.FieldTensor;
 import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.operations.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldEquals;
+import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
+import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldEquals;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -50,7 +50,7 @@ import java.util.List;
  * <p>The non-zero data and non-zero indices of a COO tensor are mutable but the shape and total number of non-zero data is
  * fixed.</p>
  *
- * <p>Sparse tensors allow for the efficient storage of and operations on tensors that contain many zero values.</p>
+ * <p>Sparse tensors allow for the efficient storage of and ops on tensors that contain many zero values.</p>
  *
  * <p>COO tensors are optimized for hyper-sparse tensors (i.e. tensors which contain almost all zeros relative to the size of the
  * tensor).</p>
@@ -60,7 +60,7 @@ import java.util.List;
  *     <li>The full {@link #shape shape} of the tensor.</li>
  *     <li>The non-zero {@link #data} of the tensor. All other data in the tensor are
  *     assumed to be zero. Zero value can also explicitly be stored in {@link #data}.</li>
- *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many operations assume indices to be sorted in a
+ *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many ops assume indices to be sorted in a
  *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.</p>
  *
  *     <p>The {@link #indices} array has shape {@code (nnz, rank)} where {@link #nnz} is the number of non-zero data in this
@@ -83,7 +83,7 @@ public class CooFieldTensor<T extends Field<T>>
      * if this tensor is sparse, this specifies only the non-zero data of the tensor.
      * @param indices
      */
-    public CooFieldTensor(Shape shape, Field<T>[] entries, int[][] indices) {
+    public CooFieldTensor(Shape shape, T[] entries, int[][] indices) {
         super(shape, entries, indices);
     }
 
@@ -112,8 +112,8 @@ public class CooFieldTensor<T extends Field<T>>
      * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      * @param indices
      */
-    public CooFieldTensor(Shape shape, List<Field<T>> entries, List<int[]> indices) {
-        super(shape, (T[]) entries.toArray(new Field[0]), indices.toArray(new int[0][]));
+    public CooFieldTensor(Shape shape, List<T> entries, List<int[]> indices) {
+        super(shape, (T[]) entries.toArray(), indices.toArray(new int[0][]));
     }
 
 
@@ -153,7 +153,7 @@ public class CooFieldTensor<T extends Field<T>>
             newIndices[indices.length] = index;
 
             // Copy old data and insert new one.
-            Field<T>[] newEntries = Arrays.copyOf(data, data.length+1);
+            T[] newEntries = Arrays.copyOf(data, data.length+1);
             newEntries[newEntries.length-1] = value;
 
             dest = new CooFieldTensor<T>(shape, newEntries, newIndices);
@@ -175,7 +175,7 @@ public class CooFieldTensor<T extends Field<T>>
      * the shape and data.
      */
     @Override
-    public CooFieldTensor<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
+    public CooFieldTensor<T> makeLikeTensor(Shape shape, T[] entries) {
         return new CooFieldTensor(shape, entries, ArrayUtils.deepCopy(indices, null));
     }
 
@@ -190,7 +190,7 @@ public class CooFieldTensor<T extends Field<T>>
      * @return A sparse tensor of the same type as this tensor with the given the shape and data.
      */
     @Override
-    public CooFieldTensor<T> makeLikeTensor(Shape shape, List<Field<T>> entries, List<int[]> indices) {
+    public CooFieldTensor<T> makeLikeTensor(Shape shape, List<T> entries, List<int[]> indices) {
         return new CooFieldTensor(shape, entries, indices);
     }
 
@@ -204,7 +204,7 @@ public class CooFieldTensor<T extends Field<T>>
      * @return A dense tensor that is a similar type as this sparse COO tensor.
      */
     @Override
-    public FieldTensor<T> makeLikeDenseTensor(Shape shape, Field<T>[] entries) {
+    public FieldTensor<T> makeLikeDenseTensor(Shape shape, T[] entries) {
         return new FieldTensor<T>(shape, entries);
     }
 
@@ -233,12 +233,12 @@ public class CooFieldTensor<T extends Field<T>>
      */
     @Override
     public FieldTensor<T> toDense() {
-        Field<T>[] entries = new Field[totalEntries().intValueExact()];
+        T[] entries = (T[]) new Field[totalEntries().intValueExact()];
 
         for(int i = 0; i< nnz; i++)
             entries[shape.getFlatIndex(indices[i])] = this.data[i];
 
-        return new FieldTensor<T>(shape, (T[]) entries);
+        return new FieldTensor<T>(shape, entries);
     }
 
 

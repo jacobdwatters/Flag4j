@@ -28,9 +28,9 @@ import org.flag4j.algebraic_structures.rings.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.linalg.operations.common.semiring_ops.AggregateSemiring;
-import org.flag4j.linalg.operations.dense.DenseConcat;
-import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiRingVectorOps;
+import org.flag4j.linalg.ops.common.semiring_ops.AggregateSemiring;
+import org.flag4j.linalg.ops.dense.DenseConcat;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringVectorOps;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -59,30 +59,30 @@ public abstract class AbstractDenseRingVector<T extends AbstractDenseRingVector<
      * Creates a tensor with the specified data and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
+     * @param data Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
      * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
-    protected AbstractDenseRingVector(Shape shape, Ring<V>[] entries) {
-        super(shape, entries);
+    protected AbstractDenseRingVector(Shape shape, V[] data) {
+        super(shape, data);
         ValidateParameters.ensureRank(shape, 1);
-        size = entries.length;
+        size = data.length;
     }
 
 
     /**
      * Constructs a dense vector with the specified {@code data} of the same type as the vector.
-     * @param entries Entries of the dense vector to construct.
+     * @param data Entries of the dense vector to construct.
      */
-    protected abstract T makeLikeTensor(Ring<V>[] entries);
+    protected abstract T makeLikeTensor(V[] data);
 
 
     /**
      * Constructs a matrix of similar type to this vector with the specified {@code shape} and {@code data}.
      * @param shape Shape of the matrix to construct.
-     * @param entries Entries of the matrix to construct.
+     * @param data Entries of the matrix to construct.
      * @return A matrix of similar type to this vector with the specified {@code shape} and {@code data}.
      */
-    protected abstract U makeLikeMatrix(Shape shape, Ring<V>[] entries);
+    protected abstract U makeLikeMatrix(Shape shape, V[] data);
 
 
     /**
@@ -95,7 +95,7 @@ public abstract class AbstractDenseRingVector<T extends AbstractDenseRingVector<
      */
     @Override
     public T join(T b) {
-        Ring<V>[] dest = new Ring[size + b.size];
+        V[] dest = (V[]) new Ring[size + b.size];
         DenseConcat.concat(data, b.data, dest);
         return makeLikeTensor(dest);
     }
@@ -133,7 +133,7 @@ public abstract class AbstractDenseRingVector<T extends AbstractDenseRingVector<
      */
     @Override
     public V dot(T b) {
-        return DenseSemiRingVectorOps.dotProduct(data, b.data);
+        return DenseSemiringVectorOps.dotProduct(data, b.data);
     }
 
 
@@ -162,7 +162,7 @@ public abstract class AbstractDenseRingVector<T extends AbstractDenseRingVector<
      */
     @Override
     public U repeat(int n, int axis) {
-        Ring<V>[] dest = new Ring[size*n];
+        V[] dest = (V[]) new Ring[size*n];
         DenseConcat.repeat(data, n, axis, dest); // n is verified to be 1 or 0 here.
         Shape shape = (n==0) ? new Shape(n, size) : new Shape(size, n);
         return makeLikeMatrix(shape, dest);
@@ -190,7 +190,7 @@ public abstract class AbstractDenseRingVector<T extends AbstractDenseRingVector<
      */
     @Override
     public U stack(T b, int axis) {
-        Ring<V>[] dest = new Ring[2*size];
+        V[] dest = (V[]) new Ring[2*size];
         DenseConcat.stack(data, b.data, axis, dest);
         Shape shape = (axis==0) ? new Shape(2, size) : new Shape(size, 2);
         return makeLikeMatrix(shape, dest);
@@ -208,8 +208,8 @@ public abstract class AbstractDenseRingVector<T extends AbstractDenseRingVector<
      */
     @Override
     public U outer(T b) {
-        Ring<V>[] dest = new Ring[size*b.size];
-        DenseSemiRingVectorOps.outerProduct(data, b.data, dest);
+        V[] dest = (V[]) new Ring[size*b.size];
+        DenseSemiringVectorOps.outerProduct(data, b.data, dest);
         return makeLikeMatrix(new Shape(size, size), dest);
     }
 
@@ -269,7 +269,7 @@ public abstract class AbstractDenseRingVector<T extends AbstractDenseRingVector<
     @Override
     public V get(int idx) {
         ValidateParameters.validateTensorIndex(shape, idx);
-        return (V) data[idx];
+        return data[idx];
     }
 
 

@@ -25,7 +25,6 @@
 package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.SparseMatrixData;
 import org.flag4j.arrays.backend.field.AbstractCsrFieldMatrix;
@@ -34,13 +33,13 @@ import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.operations.common.complex.Complex128Ops;
-import org.flag4j.linalg.operations.common.complex.Complex128Properties;
-import org.flag4j.linalg.operations.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
-import org.flag4j.linalg.operations.sparse.SparseUtils;
-import org.flag4j.linalg.operations.sparse.csr.CsrConversions;
-import org.flag4j.linalg.operations.sparse.csr.real_complex.RealComplexCsrMatMult;
-import org.flag4j.linalg.operations.sparse.csr.semiring_ops.SemiringCsrMatMult;
+import org.flag4j.linalg.ops.common.complex.Complex128Ops;
+import org.flag4j.linalg.ops.common.complex.Complex128Properties;
+import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
+import org.flag4j.linalg.ops.sparse.SparseUtils;
+import org.flag4j.linalg.ops.sparse.csr.CsrConversions;
+import org.flag4j.linalg.ops.sparse.csr.real_complex.RealComplexCsrMatMult;
+import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrMatMult;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -56,7 +55,7 @@ import java.util.List;
  * <p>The {@link #data non-zero data} and non-zero indices of a CSR matrix are mutable but the {@link #shape}
  * and {@link #nnz total number of non-zero data} is fixed.</p>
  *
- * <p>Sparse matrices allow for the efficient storage of and operations on matrices that contain many zero values.</p>
+ * <p>Sparse matrices allow for the efficient storage of and ops on matrices that contain many zero values.</p>
  *
  * <p>A sparse CSR matrix is stored as:</p>
  * <ul>
@@ -69,8 +68,8 @@ import java.util.List;
  *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
  *
- * <p>Note: many operations assume that the data of the CSR matrix are sorted lexicographically by the row and column indices.
- * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any operations implemented in this
+ * <p>Note: many ops assume that the data of the CSR matrix are sorted lexicographically by the row and column indices.
+ * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any ops implemented in this
  * class will preserve the lexicographical sorting.</p>
  *
  * <p>If indices need to be sorted explicitly, call {@link #sortIndices()}.</p>
@@ -89,7 +88,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code data.length == colData.length}.
      */
-    public CsrCMatrix(Shape shape, Field<Complex128>[] entries, int[] rowPointers, int[] colIndices) {
+    public CsrCMatrix(Shape shape, Complex128[] entries, int[] rowPointers, int[] colIndices) {
         super(shape, entries, rowPointers, colIndices);
         ValidateParameters.ensureRank(shape, 2);
         setZeroElement(Complex128.ZERO);
@@ -141,7 +140,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code data.length == colData.length}.
      */
-    public CsrCMatrix(int rows, int cols, Field<Complex128>[] entries, int[] rowPointers, int[] colIndices) {
+    public CsrCMatrix(int rows, int cols, Complex128[] entries, int[] rowPointers, int[] colIndices) {
         super(new Shape(rows, cols), entries, rowPointers, colIndices);
         ValidateParameters.ensureRank(shape, 2);
         setZeroElement(Complex128.ZERO);
@@ -161,7 +160,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code data.length == colData.length}.
      */
-    public CsrCMatrix(int rows, int cols, List<Field<Complex128>> entries, List<Integer> rowPointers, List<Integer> colIndices) {
+    public CsrCMatrix(int rows, int cols, List<Complex128> entries, List<Integer> rowPointers, List<Integer> colIndices) {
         super(new Shape(rows, cols), entries.toArray(new Complex128[0]),
                 ArrayUtils.fromIntegerList(rowPointers),
                 ArrayUtils.fromIntegerList(colIndices));
@@ -182,6 +181,12 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
     }
 
 
+    @Override
+    public Complex128[] makeEmptyDataArray(int length) {
+        return new Complex128[length];
+    }
+
+
     /**
      * Constructs a sparse CSR tensor of the same type as this tensor with the specified non-zero data and indices.
      *
@@ -193,7 +198,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      * @return A sparse CSR tensor of the same type as this tensor with the specified non-zero data and indices.
      */
     @Override
-    public CsrCMatrix makeLikeTensor(Shape shape, Field<Complex128>[] entries, int[] rowPointers, int[] colIndices) {
+    public CsrCMatrix makeLikeTensor(Shape shape, Complex128[] entries, int[] rowPointers, int[] colIndices) {
         return new CsrCMatrix(shape, entries, rowPointers, colIndices);
     }
 
@@ -224,7 +229,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      * and {@code data}.
      */
     @Override
-    public CMatrix makeLikeDenseTensor(Shape shape, Field<Complex128>[] entries) {
+    public CMatrix makeLikeDenseTensor(Shape shape, Complex128[] entries) {
         return new CMatrix(shape, entries);
     }
 
@@ -242,7 +247,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      * @return A sparse COO matrix of a similar type to this sparse CSR matrix.
      */
     @Override
-    public CooCMatrix makeLikeCooMatrix(Shape shape, Field<Complex128>[] entries, int[] rowIndices, int[] colIndices) {
+    public CooCMatrix makeLikeCooMatrix(Shape shape, Complex128[] entries, int[] rowIndices, int[] colIndices) {
         return new CooCMatrix(shape, entries, rowIndices, colIndices);
     }
 
@@ -324,7 +329,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      * {@code data}.
      */
     @Override
-    public CsrCMatrix makeLikeTensor(Shape shape, Field<Complex128>[] entries) {
+    public CsrCMatrix makeLikeTensor(Shape shape, Complex128[] entries) {
         return new CsrCMatrix(shape, entries, rowPointers.clone(), colIndices.clone());
     }
 
@@ -555,7 +560,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
         if(data.length > 0) {
             // Get data up until the stopping point.
             for(int i=0; i<stopIndex; i++) {
-                value = StringUtils.ValueOfRound((Complex128) data[i], PrintOptions.getPrecision());
+                value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
                 width = PrintOptions.getPadding() + value.length();
                 value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
@@ -569,7 +574,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
             }
 
             // Get last entry now
-            value = StringUtils.ValueOfRound((Complex128) data[size-1], PrintOptions.getPrecision());
+            value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
             width = PrintOptions.getPadding() + value.length();
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));

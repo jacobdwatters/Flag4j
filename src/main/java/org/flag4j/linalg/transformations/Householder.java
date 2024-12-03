@@ -26,14 +26,13 @@ package org.flag4j.linalg.transformations;
 
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.linalg.operations.common.real.RealOps;
-import org.flag4j.linalg.operations.common.semiring_ops.SemiRingOperations;
+import org.flag4j.linalg.ops.common.real.RealOps;
+import org.flag4j.linalg.ops.common.semiring_ops.SemiringOps;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -238,11 +237,11 @@ public final class Householder {
      *                  garbage collection if this method is called repeatedly.
      */
     public static void leftMultReflector(CMatrix src,
-                                         Field<Complex128>[] householderVector,
+                                         Complex128[] householderVector,
                                          Complex128 alpha,
                                          int startCol,
                                          int startRow, int endRow,
-                                         Field<Complex128>[] workArray) {
+                                         Complex128[] workArray) {
         int numCols = src.numCols;
         int srcRowOffset = startRow*numCols;
         Complex128 v0 = householderVector[startRow].conj();
@@ -259,10 +258,10 @@ public final class Householder {
                 workArray[i] = workArray[i].add(reflectorValue.mult((Complex128) src.data[srcIdx++]));
         }
 
-        SemiRingOperations.scalMult(workArray, workArray, alpha, startCol, numCols);
+        SemiringOps.scalMult(workArray, alpha, workArray, startCol, numCols);
 
         for(int i=startRow; i<endRow; i++) {
-            Field<Complex128> reflectorValue = householderVector[i];
+            Complex128 reflectorValue = householderVector[i];
             int indexA = i*numCols + startCol;
 
             for(int j=startCol; j<numCols; j++) {
@@ -283,7 +282,7 @@ public final class Householder {
      * @param endRow Starting row of sub-matrix in {@code src} to apply reflector to.
      */
     public static void rightMultReflector(CMatrix src,
-                                          Field<Complex128>[] householderVector,
+                                          Complex128[] householderVector,
                                           Complex128 alpha,
                                           int startCol,
                                           int startRow, int endRow) {
@@ -475,10 +474,10 @@ public final class Householder {
      * @param workArray Array for storing temporary values during the computation. Contents will be overwritten.
      */
     public static void hermLeftRightMultReflector(CMatrix src,
-                                                  Field<Complex128>[] householderVector,
+                                                  Complex128[] householderVector,
                                                   Complex128 alpha,
                                                   int startCol,
-                                                  Field<Complex128>[] workArray) {
+                                                  Complex128[] workArray) {
         int numRows = src.numRows;
 
         // Computes w = -alpha*A*v (taking conjugate for lower triangular part)
@@ -510,7 +509,7 @@ public final class Householder {
 
         // Computes A + w*v^T + v*w^T (ensuring Hermitian property is maintained)
         for (int i = startCol; i < numRows; i++) {
-            Field<Complex128> prod = workArray[i];
+            Complex128 prod = workArray[i];
             Complex128 h = householderVector[i].conj();
             int rowOffset = i * numRows;
 

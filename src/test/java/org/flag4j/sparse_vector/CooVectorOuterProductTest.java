@@ -7,9 +7,9 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
-import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
+import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -143,8 +143,9 @@ class CooVectorOuterProductTest {
                 {new Complex128("-225.45550000000003-506.10550000000006i"), new Complex128("86.486975-31.807000000000002i"), new Complex128("-135.6475"), new Complex128("-0.0-880.6797i"), new Complex128("-1057.115-520.3251i")}};
         exp = new CMatrix(expEntries);
 
-        CMatrix act = new CMatrix(a.size, b.size,
-                RealFieldDenseCooVectorOps.outerProduct(a.data, a.indices, a.size, b.data));
+        Complex128[] actData = new Complex128[a.size*b.size];
+        RealFieldDenseCooVectorOps.outerProduct(a.data, a.indices, a.size, b.data, actData);
+        CMatrix act = new CMatrix(a.size, b.size, actData);
 
         assertEquals(exp, act);
 
@@ -153,7 +154,8 @@ class CooVectorOuterProductTest {
         b = new CVector(bEntries);
 
         CVector finalB = b;
+        int actSize = a.size*b.size;
         assertThrows(IllegalArgumentException.class,
-                ()-> RealFieldDenseCooVectorOps.outerProduct(a.data, a.indices, a.size, finalB.data));
+                ()-> RealFieldDenseCooVectorOps.outerProduct(a.data, a.indices, a.size, finalB.data, new Complex128[actSize]));
     }
 }

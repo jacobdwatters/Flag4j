@@ -30,8 +30,8 @@ import org.flag4j.arrays.backend.field.AbstractCooFieldVector;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.operations.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldEquals;
+import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
+import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldEquals;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -47,7 +47,7 @@ import java.util.List;
  * <p>The {@link #data non-zero data} and {@link #indices non-zero indices} of a COO vector are mutable but the {@link #shape}
  * and total number of non-zero data is fixed.</p>
  *
- * <p>Sparse vectors allow for the efficient storage of and operations on vectors that contain many zero values.</p>
+ * <p>Sparse vectors allow for the efficient storage of and ops on vectors that contain many zero values.</p>
  *
  * <p>COO vectors are optimized for hyper-sparse vectors (i.e. vectors which contain almost all zeros relative to the size of the
  * vector).</p>
@@ -60,11 +60,11 @@ import java.util.List;
  *     <li>The {@link #indices} of the non-zero values in the sparse vector.</li>
  * </ul>
  *
- * <p>Some operations on sparse tensors behave differently than on dense tensors. For instance, {@link #add(Field)} will not
+ * <p>Some ops on sparse tensors behave differently than on dense tensors. For instance, {@link #add(Field)} will not
  * add the scalar to all data of the tensor since this would cause catastrophic loss of sparsity. Instead, such non-zero preserving
- * element-wise operations only act on the non-zero data of the sparse tensor as to not affect the sparsity.
+ * element-wise ops only act on the non-zero data of the sparse tensor as to not affect the sparsity.
  *
- * <p>Note: many operations assume that the data of the COO vector are sorted lexicographically. However, this is not explicitly
+ * <p>Note: many ops assume that the data of the COO vector are sorted lexicographically. However, this is not explicitly
  * verified. Every operation implemented in this class will preserve the lexicographical sorting.</p>
  *
  * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.</p>
@@ -82,7 +82,7 @@ public class CooFieldVector<T extends Field<T>> extends AbstractCooFieldVector<C
      * @param entries The non-zero data of this vector.
      * @param indices The indices of the non-zero values.
      */
-    public CooFieldVector(int size, Field<T>[] entries, int[] indices) {
+    public CooFieldVector(int size, T[] entries, int[] indices) {
         super(new Shape(size), entries, indices);
     }
 
@@ -94,7 +94,7 @@ public class CooFieldVector<T extends Field<T>> extends AbstractCooFieldVector<C
      * @param entries The non-zero data of this vector.
      * @param indices The indices of the non-zero values.
      */
-    public CooFieldVector(Shape shape, Field<T>[] entries, int[] indices) {
+    public CooFieldVector(Shape shape, T[] entries, int[] indices) {
         super(shape, entries, indices);
     }
 
@@ -106,7 +106,7 @@ public class CooFieldVector<T extends Field<T>> extends AbstractCooFieldVector<C
      * @param entries The non-zero data of this vector.
      * @param indices The indices of the non-zero values.
      */
-    public CooFieldVector(int size, List<Field<T>> entries, List<Integer> indices) {
+    public CooFieldVector(int size, List<T> entries, List<Integer> indices) {
         super(new Shape(size), (T[]) entries.toArray(Field[]::new), ArrayUtils.fromIntegerList(indices));
     }
 
@@ -115,7 +115,7 @@ public class CooFieldVector<T extends Field<T>> extends AbstractCooFieldVector<C
      * Creates a zero vector of the specified {@code size}.
      */
     public CooFieldVector(int size) {
-        super(new Shape(size), new Field[0], new int[0]);
+        super(new Shape(size), (T[]) new Field[0], new int[0]);
     }
 
 
@@ -129,7 +129,7 @@ public class CooFieldVector<T extends Field<T>> extends AbstractCooFieldVector<C
      * @return A sparse COO vector of the same type as this vector with the specified non-zero data and indices.
      */
     @Override
-    public CooFieldVector<T> makeLikeTensor(Shape shape, Field<T>[] entries, int[] indices) {
+    public CooFieldVector<T> makeLikeTensor(Shape shape, T[] entries, int[] indices) {
         return new CooFieldVector<>(shape, entries, indices);
     }
 
@@ -143,7 +143,7 @@ public class CooFieldVector<T extends Field<T>> extends AbstractCooFieldVector<C
      * @return A dense vector of a similar type as this vector with the specified data.
      */
     @Override
-    public FieldVector<T> makeLikeDenseTensor(Shape shape, Field<T>... entries) {
+    public FieldVector<T> makeLikeDenseTensor(Shape shape, T... entries) {
         ValidateParameters.ensureRank(shape, 1);
         return new FieldVector<>(entries);
     }
@@ -158,7 +158,7 @@ public class CooFieldVector<T extends Field<T>> extends AbstractCooFieldVector<C
      * @return A dense matrix of a similar type as this vector with the specified data.
      */
     @Override
-    public FieldMatrix<T> makeLikeDenseMatrix(Shape shape, Field<T>... entries) {
+    public FieldMatrix<T> makeLikeDenseMatrix(Shape shape, T... entries) {
         return new FieldMatrix<>(shape, entries);
     }
 
@@ -173,7 +173,7 @@ public class CooFieldVector<T extends Field<T>> extends AbstractCooFieldVector<C
      * @return A COO vector of the same type as this vector with the specified shape, non-zero data, and non-zero indices.
      */
     @Override
-    public CooFieldVector<T> makeLikeTensor(Shape shape, List<Field<T>> entries, List<Integer> indices) {
+    public CooFieldVector<T> makeLikeTensor(Shape shape, List<T> entries, List<Integer> indices) {
         return new CooFieldVector<>(size, entries, indices);
     }
 
@@ -189,7 +189,7 @@ public class CooFieldVector<T extends Field<T>> extends AbstractCooFieldVector<C
      * @return A COO matrix of similar type as this vector with the specified shape, non-zero data, and non-zero row/col indices.
      */
     @Override
-    public CooFieldMatrix<T> makeLikeMatrix(Shape shape, Field<T>[] entries, int[] rowIndices, int[] colIndices) {
+    public CooFieldMatrix<T> makeLikeMatrix(Shape shape, T[] entries, int[] rowIndices, int[] colIndices) {
         return new CooFieldMatrix<>(shape, entries, rowIndices, colIndices);
     }
 
@@ -206,7 +206,7 @@ public class CooFieldVector<T extends Field<T>> extends AbstractCooFieldVector<C
      * {@code data}.
      */
     @Override
-    public CooFieldVector<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
+    public CooFieldVector<T> makeLikeTensor(Shape shape, T[] entries) {
         return new CooFieldVector<T>(shape, entries, indices.clone());
     }
 

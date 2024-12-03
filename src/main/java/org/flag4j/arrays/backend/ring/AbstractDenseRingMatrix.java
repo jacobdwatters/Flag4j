@@ -26,13 +26,12 @@ package org.flag4j.arrays.backend.ring;
 
 
 import org.flag4j.algebraic_structures.rings.Ring;
-import org.flag4j.algebraic_structures.semirings.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.SparseMatrixData;
-import org.flag4j.linalg.operations.TransposeDispatcher;
-import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiringConversions;
-import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiringMatMultDispatcher;
+import org.flag4j.linalg.ops.TransposeDispatcher;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringConversions;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringMatMultDispatcher;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -63,11 +62,11 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
      * Creates a tensor with the specified data and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
+     * @param data Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
      * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
-    protected AbstractDenseRingMatrix(Shape shape, Ring<V>[] entries) {
-        super(shape, entries);
+    protected AbstractDenseRingMatrix(Shape shape, V[] data) {
+        super(shape, data);
         ValidateParameters.ensureRank(shape, 2);
         numRows = shape.get(0);
         numCols = shape.get(1);
@@ -77,34 +76,34 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
     /**
      * Constructs a vector of a similar type as this matrix.
      * @param shape Shape of the vector to construct. Must be rank 1.
-     * @param entries Entries of the vector.
+     * @param data Entries of the vector.
      * @return A vector of a similar type as this matrix.
      */
-    protected abstract U makeLikeVector(Shape shape, Ring<V>[] entries);
+    protected abstract U makeLikeVector(Shape shape, V[] data);
 
 
     /**
      * Constructs a sparse COO matrix which is of a similar type as this dense matrix.
      * @param shape Shape of the COO matrix.
-     * @param entries Non-zero data of the COO matrix.
+     * @param data Non-zero data of the COO matrix.
      * @param rowIndices Non-zero row indices of the COO matrix.
      * @param colIndices Non-zero column indices of the COO matrix.
      * @return A sparse COO matrix which is of a similar type as this dense matrix.
      */
     protected abstract AbstractCooRingMatrix<?, T, ?, V> makeLikeCooMatrix(
-            Shape shape, Ring<V>[] entries, int[] rowIndices, int[] colIndices);
+            Shape shape, V[] data, int[] rowIndices, int[] colIndices);
 
 
     /**
      * Constructs a sparse CSR matrix which is of a similar type as this dense matrix.
      * @param shape Shape of the CSR matrix.
-     * @param entries Non-zero data of the CSR matrix.
+     * @param data Non-zero data of the CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      * @return A sparse CSR matrix which is of a similar type as this dense matrix.
      */
     protected abstract AbstractCsrRingMatrix<?, T, ?, V> makeLikeCsrMatrix(
-            Shape shape, Ring<V>[] entries, int[] rowPointers, int[] colIndices);
+            Shape shape, V[] data, int[] rowPointers, int[] colIndices);
 
 
     /**
@@ -117,7 +116,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
      */
     @Override
     public T T() {
-        Ring<V>[] dest = new Ring[data.length];
+        V[] dest = (V[]) new Ring[data.length];
         TransposeDispatcher.dispatch(data, shape, dest);
         return makeLikeTensor(shape.swapAxes(0, 1), dest);
     }
@@ -155,7 +154,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
      */
     @Override
     public V get(int row, int col) {
-        return (V) data[row*numCols + col];
+        return data[row*numCols + col];
     }
 
 
@@ -171,7 +170,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
     @Override
     public V tr() {
         ValidateParameters.ensureSquareMatrix(shape);
-        Ring<V> sum = data[0];
+        V sum = data[0];
         int colsOffset = this.numCols + 1;
 
         for(int i=1; i<numRows; i++)
@@ -272,7 +271,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
      */
     @Override
     public T mult(T b) {
-        Ring<V>[] dest = new Ring[numRows*b.numCols];
+        V[] dest = makeEmptyDataArray(numRows*b.numCols);
         DenseSemiringMatMultDispatcher.dispatch(data, shape, b.data, b.shape, dest);
         return makeLikeTensor(new Shape(numRows, b.numCols), dest);
     }
@@ -290,7 +289,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
      */
     @Override
     public T multTranspose(T b) {
-        Ring<V>[] dest = new Ring[numRows*b.numRows];
+        V[] dest = makeEmptyDataArray(numRows*b.numRows);
         DenseSemiringMatMultDispatcher.dispatchTranspose(data, shape, b.data, b.shape, dest);
         return makeLikeTensor(new Shape(numRows, b.numRows), dest);
     }
@@ -311,7 +310,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
     public T stack(T b) {
         ValidateParameters.ensureArrayLengthsEq(this.numCols, b.numCols);
         Shape stackedShape = new Shape(this.numRows + b.numRows, this.numCols);
-        Ring<V>[] stackedEntries = new Ring[stackedShape.totalEntries().intValueExact()];
+        V[] stackedEntries = makeEmptyDataArray(stackedShape.totalEntries().intValueExact());
 
         System.arraycopy(this.data, 0, stackedEntries, 0, this.data.length);
         System.arraycopy(b.data, 0, stackedEntries, this.data.length, b.data.length);
@@ -337,7 +336,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
 
         int augNumCols = numCols + b.numCols;
         Shape augShape = new Shape(numRows, augNumCols);
-        Ring<V>[] augEntries = new Ring[numRows*augNumCols];
+        V[] augEntries = makeEmptyDataArray(numRows*augNumCols);
 
         // Copy data from this matrix.
         for(int i=0; i<numRows; i++) {
@@ -363,7 +362,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
     @Override
     public T augment(U b) {
         ValidateParameters.ensureArrayLengthsEq(numRows, b.size);
-        Ring<V>[] augmented = new Ring[numRows*(numCols + 1)];
+        V[] augmented = makeEmptyDataArray(numRows*(numCols + 1));
 
         // Copy data from this matrix.
         for(int i=0; i<numRows; i++) {
@@ -393,7 +392,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
         int row2Offset = rowIndex2*numCols;
 
         if(rowIndex1 != rowIndex2) {
-            Ring<V> temp;
+            V temp;
 
             for(int j=0; j<numCols; j++) {
                 // Swap elements.
@@ -422,7 +421,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
         ValidateParameters.ensureValidArrayIndices(numCols, colIndex1, colIndex2);
 
         if(colIndex1 != colIndex2) {
-            Ring<V> temp;
+            V temp;
 
             for(int i=0; i<numRows; i++) {
                 // Swap elements.
@@ -484,7 +483,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
     @Override
     public T removeRow(int rowIndex) {
         Shape copyShape = new Shape(numRows-1, numCols);
-        Ring<V>[] copyEntries = new Ring[(numRows-1)*numCols];
+        V[] copyEntries = makeEmptyDataArray((numRows-1)*numCols);
         int row = 0;
 
         for(int i=0; i<numRows; i++) {
@@ -508,7 +507,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
     @Override
     public T removeRows(int... rowIndices) {
         Shape copyShape = new Shape(numRows-rowIndices.length, numCols);
-        Ring<V>[] copyEntries = new Ring[(numRows-rowIndices.length)*numCols];
+        V[] copyEntries = makeEmptyDataArray((numRows-rowIndices.length)*numCols);
         int row = 0;
 
         for(int i=0; i<this.numRows; i++) {
@@ -533,7 +532,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
     public T removeCol(int colIndex) {
         int copyNumCols = numCols-1;
         Shape copyShape = new Shape(numRows, copyNumCols);
-        Ring<V>[] copyEntries = new Ring[numRows*copyNumCols];
+        V[] copyEntries = makeEmptyDataArray(numRows*copyNumCols);
 
         for(int i=0; i<this.numRows; i++) {
             int rowOffset = i*numCols;
@@ -563,7 +562,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
     public T removeCols(int... colIndices) {
         int copyNumCols = this.numCols-colIndices.length;
         Shape copyShape = new Shape(numRows, copyNumCols);
-        Ring<V>[] copyEntries = new Ring[numRows*copyNumCols];
+        V[] copyEntries = makeEmptyDataArray(numRows*copyNumCols);
 
         for(int i=0; i<this.numRows; i++) {
             int rowOffset = i*numCols;
@@ -654,7 +653,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
         int sliceRows = rowEnd-rowStart;
         int sliceCols = colEnd-colStart;
         int destPos = 0;
-        Ring<V>[] slice = new Ring[sliceRows*sliceCols];
+        V[] slice = makeEmptyDataArray(sliceRows*sliceCols);
 
         for(int i=rowStart; i<rowEnd; i++) {
             int srcPos = i*numCols + colStart;
@@ -726,7 +725,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
     @Override
     public T getTriU(int diagOffset) {
         ValidateParameters.ensureInRange(diagOffset, -numRows+1, numCols-1, "diagOffset");
-        Ring<V>[] copyEntries = new Ring[data.length];
+        V[] copyEntries = makeEmptyDataArray(data.length);
         Arrays.fill(copyEntries, (data.length > 0) ? data[0].getZero() : null);
         T result = makeLikeTensor(shape, copyEntries);
 
@@ -763,7 +762,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
     @Override
     public T getTriL(int diagOffset) {
         ValidateParameters.ensureInRange(diagOffset, -numRows+1, numCols-1, "diagOffset");
-        Ring<V>[] copyEntries = new Ring[data.length];
+        V[] copyEntries = makeEmptyDataArray(data.length);
         Arrays.fill(copyEntries, (data.length > 0) ? data[0].getZero() : null);
         T result = makeLikeTensor(shape, copyEntries);
 
@@ -801,8 +800,8 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
         ValidateParameters.ensureInRange(diagOffset, -(numRows-1), numCols-1, "diagOffset");
 
         // Check for some quick returns.
-        if(numRows == 1 && diagOffset > 0) return (U) makeLikeVector(shape, new Ring[]{data[diagOffset]});
-        if(numCols == 1 && diagOffset < 0) return (U) makeLikeVector(shape, new Ring[]{data[-diagOffset]});
+        if(numRows == 1 && diagOffset > 0) return (U) makeLikeVector(shape, (V[]) new Ring[]{data[diagOffset]});
+        if(numCols == 1 && diagOffset < 0) return (U) makeLikeVector(shape, (V[]) new Ring[]{data[-diagOffset]});
 
         // Compute the length of the diagonal.
         int newSize = Math.min(numRows, numCols);
@@ -817,7 +816,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
             idx = -diagOffset*numCols;
         }
 
-        Ring<V>[] diag = new Ring[newSize];
+        V[] diag = makeEmptyDataArray(newSize);
 
         for(int i=0; i<newSize; i++) {
             diag[i] = this.data[idx];
@@ -914,12 +913,12 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
      */
     @Override
     public U getRow(int rowIdx, int colStart, int colEnd) {
-        ValidateParameters.ensureIndexInBounds(numCols, colStart, colEnd-1);
+        ValidateParameters.ensureIndicesInBounds(numCols, colStart, colEnd-1);
         ValidateParameters.ensureGreaterEq(colStart, colEnd);
         int start = rowIdx*numCols + colStart;
         int stop = rowIdx*numCols + colEnd;
 
-        Ring<V>[] row = Arrays.copyOfRange(this.data, start, stop);
+        V[] row = Arrays.copyOfRange(this.data, start, stop);
 
         return makeLikeVector(shape, row);
     }
@@ -942,7 +941,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
     public U getCol(int colIdx, int rowStart, int rowEnd) {
         ValidateParameters.ensureValidArrayIndices(numRows, rowStart, rowEnd);
         ValidateParameters.ensureGreaterEq(rowEnd, rowStart);
-        Ring<V>[] col = new Ring[numRows];
+        V[] col = makeEmptyDataArray(numRows);
 
         for(int i=rowStart; i<rowEnd; i++)
             col[i] = data[i*numCols + colIdx];
@@ -1012,8 +1011,8 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
      * @see #toCoo()
      */
     public AbstractCooRingMatrix<?, T, ?, V> toCoo(double estimatedSparsity) {
-        SparseMatrixData<Semiring<V>> data = DenseSemiringConversions.toCoo(shape, this.data, 0.1);
-        Ring<V>[] cooEntries = data.data().toArray(new Ring[data.data().size()]);
+        SparseMatrixData<V> data = DenseSemiringConversions.toCoo(shape, this.data, 0.1);
+        V[] cooEntries = (V[]) data.data().toArray(new Ring[data.data().size()]);
         int[] rowIndices = ArrayUtils.fromIntegerList(data.rowData());
         int[] colIndices = ArrayUtils.fromIntegerList(data.colData());
 

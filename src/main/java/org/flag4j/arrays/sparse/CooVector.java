@@ -33,16 +33,16 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.linalg.operations.common.complex.Complex128Ops;
-import org.flag4j.linalg.operations.common.field_ops.FieldOps;
-import org.flag4j.linalg.operations.common.real.RealProperties;
-import org.flag4j.linalg.operations.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
-import org.flag4j.linalg.operations.sparse.coo.CooDataSorter;
-import org.flag4j.linalg.operations.sparse.coo.real.RealCooVectorOperations;
-import org.flag4j.linalg.operations.sparse.coo.real.RealSparseEquals;
-import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
+import org.flag4j.linalg.ops.common.complex.Complex128Ops;
+import org.flag4j.linalg.ops.common.field_ops.FieldOps;
+import org.flag4j.linalg.ops.common.real.RealProperties;
+import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
+import org.flag4j.linalg.ops.sparse.coo.real.RealCooVectorOperations;
+import org.flag4j.linalg.ops.sparse.coo.real.RealSparseEquals;
+import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -60,7 +60,7 @@ import java.util.List;
  * <p>The {@link #data non-zero data} and {@link #indices non-zero indices} of a COO vector are mutable but the {@link #shape}
  * and total number of non-zero data is fixed.
  *
- * <p>Sparse vectors allow for the efficient storage of and operations on vectors that contain many zero values.
+ * <p>Sparse vectors allow for the efficient storage of and ops on vectors that contain many zero values.
  *
  * <p>COO vectors are optimized for hyper-sparse vectors (i.e. vectors which contain almost all zeros relative to the size of the
  * vector).
@@ -73,11 +73,11 @@ import java.util.List;
  *     <li>The {@link #indices} of the non-zero values in the sparse vector.</li>
  * </ul>
  *
- * <p>Some operations on sparse tensors behave differently than on dense tensors. For instance, {@link #add(Complex128)} will not
+ * <p>Some ops on sparse tensors behave differently than on dense tensors. For instance, {@link #add(Complex128)} will not
  * add the scalar to all data of the tensor since this would cause catastrophic loss of sparsity. Instead, such non-zero preserving
- * element-wise operations only act on the non-zero data of the sparse tensor as to not affect the sparsity.
+ * element-wise ops only act on the non-zero data of the sparse tensor as to not affect the sparsity.
  *
- * <p>Note: many operations assume that the data of the COO vector are sorted lexicographically. However, this is not explicitly
+ * <p>Note: many ops assume that the data of the COO vector are sorted lexicographically. However, this is not explicitly
  * verified. Every operation implemented in this class will preserve the lexicographical sorting.
  *
  * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.
@@ -717,7 +717,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
     public CooCVector add(Complex128 b) {
         Complex128[] dest = new Complex128[data.length];
         FieldOps.add(data, b, dest);
-        return new CooCVector(shape, FieldOps.add(data, b, dest), indices.clone());
+        return new CooCVector(shape, dest, indices.clone());
     }
 
 

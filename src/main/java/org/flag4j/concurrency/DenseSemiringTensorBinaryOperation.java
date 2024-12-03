@@ -40,5 +40,5 @@ public interface DenseSemiringTensorBinaryOperation {
      * @param shape2 Shape of the second tensor.
      * @param dest Array to store the result of the binary operation of the two tensors in.
      */
-    public <T extends Semiring<T>> void apply(Semiring<T>[] src1, Shape shape1, Semiring<T>[] src2, Shape shape2, Semiring<T>[] dest);
+    public <T extends Semiring<T>> void apply(T[] src1, Shape shape1, T[] src2, Shape shape2, T[] dest);
 }

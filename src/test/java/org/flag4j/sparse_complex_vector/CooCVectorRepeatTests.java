@@ -72,7 +72,7 @@ class CooCVectorRepeatTests {
                 Complex128.ZERO, new Complex128(2.45)};
         a = new CVector(aEntries).toCoo();
 
-        assertThrows(IllegalArgumentException.class, ()-> a.repeat(-1, 0));
+        assertThrows(NegativeArraySizeException.class, ()-> a.repeat(-1, 0));
         assertThrows(IllegalArgumentException.class, ()-> a.repeat(13, -2));
         assertThrows(IllegalArgumentException.class, ()-> a.repeat(13, 2));
     }
@@ -133,7 +133,7 @@ class CooCVectorRepeatTests {
                 Complex128.ZERO, new Complex128(2.45)};
         a = new CVector(aEntries).toCoo();
 
-        assertThrows(IllegalArgumentException.class, ()-> a.repeat(-1, 1));
+        assertThrows(NegativeArraySizeException.class, ()-> a.repeat(-1, 1));
         assertThrows(IllegalArgumentException.class, ()-> a.repeat(13, -2));
         assertThrows(IllegalArgumentException.class, ()-> a.repeat(13, 2));
     }

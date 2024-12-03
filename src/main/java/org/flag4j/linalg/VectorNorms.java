@@ -31,8 +31,8 @@ import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.linalg.operations.common.real.RealProperties;
-import org.flag4j.linalg.operations.common.ring_ops.CompareRing;
+import org.flag4j.linalg.ops.common.real.RealProperties;
+import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
 import org.flag4j.util.ErrorMessages;
 
 
@@ -249,7 +249,7 @@ public final class VectorNorms {
      * @param src Entries of the vector (or non-zero data if vector is sparse).
      * @return The 2-norm of the vector.
      */
-    public static <T extends Ring<T>> double norm(Ring<T>... src) {
+    public static <T extends Ring<T>> double norm(T... src) {
         double norm = 0;
         double scaledMag;
         double maxAbs = CompareRing.maxAbs(src);
@@ -304,14 +304,14 @@ public final class VectorNorms {
      *          Warning, if {@code p} is large in absolute value, overflow errors may occur.
      * @return The {@code p}-norm of the vector.
      */
-    public static <T extends Ring<T>> double norm(Ring<T>[] src, double p) {
+    public static <T extends Ring<T>> double norm(T[] src, double p) {
         if(Double.isInfinite(p)) {
             if(p > 0) return CompareRing.maxAbs(src); // Maximum norm.
             else return CompareRing.minAbs(src); // Minimum norm.
         } else {
             double norm = 0;
 
-            for(Ring<T> value : src)
+            for(T value : src)
                 norm += Math.pow(value.mag(), p);
 
             return Math.pow(norm, 1.0/p);

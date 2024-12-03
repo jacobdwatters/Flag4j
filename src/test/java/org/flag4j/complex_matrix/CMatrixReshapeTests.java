@@ -4,7 +4,6 @@ import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.util.exceptions.LinearAlgebraException;
-import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -49,11 +48,11 @@ class CMatrixReshapeTests {
 
         // --------------- Sub-case 5 ---------------
         expShape = new Shape(6, 1);
-        assertThrows(TensorShapeException.class, ()->A.reshape(expShape));
+        assertThrows(IllegalArgumentException.class, ()->A.reshape(expShape));
 
         // --------------- Sub-case 6 ---------------
         expShape = new Shape(12, 2);
-        assertThrows(TensorShapeException.class, ()->A.reshape(expShape));
+        assertThrows(IllegalArgumentException.class, ()->A.reshape(expShape));
     }
 
 
@@ -94,14 +93,12 @@ class CMatrixReshapeTests {
         // --------------- Sub-case 5 ---------------
         rows = 6;
         cols = 1;
-        expShape = new Shape(rows, cols);
-        assertThrows(TensorShapeException.class, ()->A.reshape(rows, cols));
+        assertThrows(IllegalArgumentException.class, ()->A.reshape(rows, cols));
 
         // --------------- Sub-case 6 ---------------
         rows = 12;
         cols = 2;
-        expShape = new Shape(12, 2);
-        assertThrows(TensorShapeException.class, ()->A.reshape(rows, cols));
+        assertThrows(IllegalArgumentException.class, ()->A.reshape(rows, cols));
     }
 
 

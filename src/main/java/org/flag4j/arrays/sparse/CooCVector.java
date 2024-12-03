@@ -25,17 +25,16 @@
 package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field.AbstractCooFieldVector;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.operations.common.complex.Complex128Ops;
-import org.flag4j.linalg.operations.common.complex.Complex128Properties;
-import org.flag4j.linalg.operations.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldEquals;
-import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
+import org.flag4j.linalg.ops.common.complex.Complex128Ops;
+import org.flag4j.linalg.ops.common.complex.Complex128Properties;
+import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
+import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldEquals;
+import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -52,7 +51,7 @@ import java.util.List;
  * <p>The {@link #data non-zero data} and {@link #indices non-zero indices} of a COO vector are mutable but the {@link #shape}
  * and total number of non-zero data is fixed.</p>
  *
- * <p>Sparse vectors allow for the efficient storage of and operations on vectors that contain many zero values.</p>
+ * <p>Sparse vectors allow for the efficient storage of and ops on vectors that contain many zero values.</p>
  *
  * <p>COO vectors are optimized for hyper-sparse vectors (i.e. vectors which contain almost all zeros relative to the size of the
  * vector).</p>
@@ -65,7 +64,7 @@ import java.util.List;
  *     <li>The {@link #indices} of the non-zero values in the sparse vector.</li>
  * </ul>
  *
- * <p>Note: many operations assume that the data of the COO vector are sorted lexicographically. However, this is not explicitly
+ * <p>Note: many ops assume that the data of the COO vector are sorted lexicographically. However, this is not explicitly
  * verified. Every operation implemented in this class will preserve the lexicographical sorting.</p>
  *
  * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.</p>
@@ -79,7 +78,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * @param entries Non-zero data of the sparse vector.
      * @param indices Non-zero indices of the sparse vector.
      */
-    public CooCVector(int size, Field<Complex128>[] entries, int[] indices) {
+    public CooCVector(int size, Complex128[] entries, int[] indices) {
         super(new Shape(size), entries, indices);
         setZeroElement(Complex128.ZERO);
     }
@@ -92,7 +91,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * @param entries Non-zero data of the sparse vector.
      * @param indices Non-zero indices of the sparse vector.
      */
-    public CooCVector(Shape shape, Field<Complex128>[] entries, int[] indices) {
+    public CooCVector(Shape shape, Complex128[] entries, int[] indices) {
         super(shape, entries, indices);
         setZeroElement(Complex128.ZERO);
     }
@@ -104,7 +103,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * @param entries The non-zero data of the vector.
      * @param indices The indices of the non-zero data.
      */
-    public CooCVector(int size, List<Field<Complex128>> entries, List<Integer> indices) {
+    public CooCVector(int size, List<Complex128> entries, List<Integer> indices) {
         super(new Shape(size), entries.toArray(new Complex128[0]), ArrayUtils.fromIntegerList(indices));
         setZeroElement(Complex128.ZERO);
     }
@@ -116,7 +115,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * @param entries The non-zero data of the vector.
      * @param indices The indices of the non-zero data.
      */
-    public CooCVector(Shape shape, List<Field<Complex128>> entries, List<Integer> indices) {
+    public CooCVector(Shape shape, List<Complex128> entries, List<Integer> indices) {
         super(shape, entries.toArray(new Complex128[0]), ArrayUtils.fromIntegerList(indices));
         setZeroElement(Complex128.ZERO);
     }
@@ -154,6 +153,12 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
     }
 
 
+    @Override
+    public Complex128[] makeEmptyDataArray(int length) {
+        return new Complex128[length];
+    }
+
+
     /**
      * Constructs a sparse COO vector of the same type as this vector with the specified non-zero data and indices.
      *
@@ -164,7 +169,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * @return A sparse COO vector of the same type as this vector with the specified non-zero data and indices.
      */
     @Override
-    public CooCVector makeLikeTensor(Shape shape, Field<Complex128>[] entries, int[] indices) {
+    public CooCVector makeLikeTensor(Shape shape, Complex128[] entries, int[] indices) {
         return new CooCVector(shape, entries, indices);
     }
 
@@ -178,7 +183,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * @return A dense vector of a similar type as this vector with the specified data.
      */
     @Override
-    public CVector makeLikeDenseTensor(Shape shape, Field<Complex128>... entries) {
+    public CVector makeLikeDenseTensor(Shape shape, Complex128... entries) {
         ValidateParameters.ensureRank(shape, 1);
         return new CVector(entries);
     }
@@ -193,7 +198,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * @return A dense matrix of a similar type as this vector with the specified data.
      */
     @Override
-    public CMatrix makeLikeDenseMatrix(Shape shape, Field<Complex128>... entries) {
+    public CMatrix makeLikeDenseMatrix(Shape shape, Complex128... entries) {
         return new CMatrix(shape, entries);
     }
 
@@ -208,7 +213,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * @return A COO vector of the same type as this vector with the specified shape, non-zero data, and non-zero indices.
      */
     @Override
-    public CooCVector makeLikeTensor(Shape shape, List<Field<Complex128>> entries, List<Integer> indices) {
+    public CooCVector makeLikeTensor(Shape shape, List<Complex128> entries, List<Integer> indices) {
         return new CooCVector(shape, entries, indices);
     }
 
@@ -224,7 +229,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * @return A COO matrix of similar type as this vector with the specified shape, non-zero data, and non-zero row/col indices.
      */
     @Override
-    public CooCMatrix makeLikeMatrix(Shape shape, Field<Complex128>[] entries, int[] rowIndices, int[] colIndices) {
+    public CooCMatrix makeLikeMatrix(Shape shape, Complex128[] entries, int[] rowIndices, int[] colIndices) {
         return new CooCMatrix(shape, entries, rowIndices, colIndices);
     }
 
@@ -241,7 +246,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * {@code data}.
      */
     @Override
-    public CooCVector makeLikeTensor(Shape shape, Field<Complex128>[] entries) {
+    public CooCVector makeLikeTensor(Shape shape, Complex128[] entries) {
         return new CooCVector(shape, entries, indices.clone());
     }
 
@@ -316,7 +321,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      */
     public CooCVector roundToZero(double tolerance) {
         Complex128[] rounded = Complex128Ops.roundToZero(data, tolerance);
-        List<Field<Complex128>> dest = new ArrayList<>(data.length);
+        List<Complex128> dest = new ArrayList<>(data.length);
         List<Integer> destIndices = new ArrayList<>(data.length);
 
         for(int i = 0, size = data.length; i<size; i++) {

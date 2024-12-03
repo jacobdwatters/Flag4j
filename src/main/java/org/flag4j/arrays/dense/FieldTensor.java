@@ -29,7 +29,8 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field.AbstractDenseFieldTensor;
 import org.flag4j.arrays.sparse.CooFieldTensor;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.operations.dense.field_ops.DenseFieldEquals;
+import org.flag4j.linalg.ops.common.ring_ops.RingOps;
+import org.flag4j.linalg.ops.dense.field_ops.DenseFieldEquals;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -52,7 +53,7 @@ public class FieldTensor<T extends Field<T>> extends AbstractDenseFieldTensor<Fi
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
      * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
-    public FieldTensor(Shape shape, Field<T>[] entries) {
+    public FieldTensor(Shape shape, T[] entries) {
         super(shape, entries);
     }
 
@@ -64,7 +65,7 @@ public class FieldTensor<T extends Field<T>> extends AbstractDenseFieldTensor<Fi
      * @param fillValue Value to fill tensor with.
      */
     public FieldTensor(Shape shape, T fillValue) {
-        super(shape, new Field[shape.totalEntries().intValueExact()]);
+        super(shape, (T[]) new Field[shape.totalEntries().intValueExact()]);
         Arrays.fill(data, fillValue);
     }
 
@@ -79,7 +80,7 @@ public class FieldTensor<T extends Field<T>> extends AbstractDenseFieldTensor<Fi
      * @return A sparse COO tensor which is of a similar type as this dense tensor.
      */
     @Override
-    protected CooFieldTensor<T> makeLikeCooTensor(Shape shape, Field<T>[] entries, int[][] indices) {
+    protected CooFieldTensor<T> makeLikeCooTensor(Shape shape, T[] entries, int[][] indices) {
         return new CooFieldTensor<>(shape, entries, indices);
     }
 
@@ -94,7 +95,7 @@ public class FieldTensor<T extends Field<T>> extends AbstractDenseFieldTensor<Fi
      * @return A tensor of the same type as this tensor with the given the shape and data.
      */
     @Override
-    public FieldTensor<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
+    public FieldTensor<T> makeLikeTensor(Shape shape, T[] entries) {
         return new FieldTensor<T>(shape, entries);
     }
 
@@ -139,6 +140,21 @@ public class FieldTensor<T extends Field<T>> extends AbstractDenseFieldTensor<Fi
         }
 
         return mat;
+    }
+
+
+    /**
+     * Computes the element-wise absolute value of this tensor.
+     *
+     * @return The element-wise absolute value of this tensor.
+     */
+    @Override
+    public Tensor abs() {
+        // TODO: Absolute value should not be defined for general field. Implement in real and complex classes only. Remove from
+        //  semiring interface as well.
+        double[] abs = new double[data.length];
+        RingOps.abs(data, abs);
+        return new Tensor(shape, abs);
     }
 
 

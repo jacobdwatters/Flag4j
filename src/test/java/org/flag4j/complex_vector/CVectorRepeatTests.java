@@ -50,7 +50,7 @@ class CVectorRepeatTests {
         assertEquals(exp, a.repeat(2, 0));
 
         // ---------------------- Sub-case 3 ----------------------
-        assertThrows(IllegalArgumentException.class, ()-> a.repeat(-1, 0));
+        assertThrows(NegativeArraySizeException.class, ()-> a.repeat(-1, 0));
         assertThrows(LinearAlgebraException.class, ()-> a.repeat(13, -2));
         assertThrows(LinearAlgebraException.class, ()-> a.repeat(13, 2));
     }

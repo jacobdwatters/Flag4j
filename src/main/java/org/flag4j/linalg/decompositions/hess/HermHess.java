@@ -25,7 +25,6 @@
 package org.flag4j.linalg.decompositions.hess;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.linalg.transformations.Householder;
 import org.flag4j.util.ValidateParameters;
@@ -124,7 +123,7 @@ public class HermHess extends ComplexHess {
             H.data[idx1] = transformMatrix.data[idx1]; // extract diagonal value.
 
             // extract off-diagonal values.
-            Field<Complex128> a = transformMatrix.data[idx0];
+            Complex128 a = transformMatrix.data[idx0];
             H.data[idx0] = a;
             H.data[idx1 - 1] = a;
 
@@ -155,7 +154,7 @@ public class HermHess extends ComplexHess {
         // Compute max-abs value in row. (Equivalent to max value in column since matrix is Hermitian.)
         int rowU = (j-1)*numRows;
         for(int i=j; i<numRows; i++) {
-            Field<Complex128> d = householderVector[i] = transformMatrix.data[rowU + i];
+            Complex128 d = householderVector[i] = transformMatrix.data[rowU + i];
             maxAbs = Math.max(d.abs(), maxAbs);
         }
 

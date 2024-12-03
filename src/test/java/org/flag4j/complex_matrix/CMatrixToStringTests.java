@@ -29,7 +29,7 @@ class CMatrixToStringTests {
         PrintOptions.setMaxColumns(50);
         PrintOptions.setCentering(true);
         exp = "shape: (2, 4)\n" +
-                "[[   2.0 + 4.25i    -2.345E-4    9.4i         1.2598       ]\n" +
+                "[[    2 + 4.25i     -2.345E-4    9.4i         1.2598       ]\n" +
                 " [ 56.25 - 0.0024i      0      -1.4545i  -3.356 - 84.2525i ]]";
 
         assertEquals(exp, A.toString());
@@ -47,7 +47,7 @@ class CMatrixToStringTests {
         PrintOptions.setMaxColumns(50);
         PrintOptions.setCentering(true);
         exp = "shape: (2, 4)\n" +
-                "[[  2.0 + 4.25i    0   9.4i          1.26       ]\n" +
+                "[[   2 + 4.25i     0   9.4i          1.26       ]\n" +
                 " [ 56.25 - 0.002i  0  -1.455i  -3.356 - 84.253i ]]";
 
         assertEquals(exp, A.toString());
@@ -65,8 +65,8 @@ class CMatrixToStringTests {
         PrintOptions.setMaxColumns(50);
         PrintOptions.setCentering(true);
         exp = "shape: (2, 4)\n" +
-                "[[  2.0 + 4.0i    0    9.0i        1.0       ]\n" +
-                " [     56.0       0     -i     -3.0 - 84.0i  ]]";
+                "[[  2 + 4i    0    9i       1      ]\n" +
+                " [    56      0    -i    -3 - 84i  ]]";
 
         assertEquals(exp, A.toString());
 
@@ -83,8 +83,8 @@ class CMatrixToStringTests {
         PrintOptions.setMaxColumns(4);
         PrintOptions.setCentering(true);
         exp = "shape: (2, 4)\n" +
-                "[[ 2.0 + 4.25i  0   9.4i        1.26      ]\n" +
-                " [    56.25     0  -1.45i  -3.36 - 84.25i ]]";
+                "[[ 2 + 4.25i  0   9.4i        1.26      ]\n" +
+                " [   56.25    0  -1.45i  -3.36 - 84.25i ]]";
 
         assertEquals(exp, A.toString());
 
@@ -101,8 +101,8 @@ class CMatrixToStringTests {
         PrintOptions.setMaxColumns(4);
         PrintOptions.setCentering(true);
         exp = "shape: (2, 4)\n" +
-                "[ [               ...                ]\n" +
-                " [ 56.25  0  -1.45i  -3.36 - 84.25i ]]";
+                "[ [                 ...                  ]\n" +
+                " [   56.25    0  -1.45i  -3.36 - 84.25i ]]";
 
         assertEquals(exp, A.toString());
 
@@ -119,8 +119,8 @@ class CMatrixToStringTests {
         PrintOptions.setMaxColumns(3);
         PrintOptions.setCentering(true);
         exp = "shape: (2, 4)\n" +
-                "[[ 2.0 + 4.25i  0  ...       1.26      ]\n" +
-                " [    56.25     0  ...  -3.36 - 84.25i ]]";
+                "[[ 2 + 4.25i  0  ...       1.26      ]\n" +
+                " [   56.25    0  ...  -3.36 - 84.25i ]]";
 
         assertEquals(exp, A.toString());
 
@@ -137,8 +137,8 @@ class CMatrixToStringTests {
         PrintOptions.setMaxColumns(2);
         PrintOptions.setCentering(true);
         exp = "shape: (2, 4)\n" +
-                "[[ 2.0 + 4.25i  ...       1.26      ]\n" +
-                " [    56.25     ...  -3.36 - 84.25i ]]";
+                "[[ 2 + 4.25i  ...       1.26      ]\n" +
+                " [   56.25    ...  -3.36 - 84.25i ]]";
 
         assertEquals(exp, A.toString());
 
@@ -155,7 +155,7 @@ class CMatrixToStringTests {
         PrintOptions.setMaxColumns(4);
         PrintOptions.setCentering(false);
         exp = "shape: (2, 4)\n" +
-                "[[2.0 + 4.25i      0   9.4i      1.26               ]\n" +
+                "[[2 + 4.25i        0   9.4i      1.26               ]\n" +
                 " [56.25 - 0.002i   0   -1.455i   -3.356 - 84.253i   ]]";
 
         assertEquals(exp, A.toString());

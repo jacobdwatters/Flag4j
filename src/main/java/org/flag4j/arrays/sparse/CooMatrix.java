@@ -32,15 +32,15 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.operations.common.real.RealProperties;
-import org.flag4j.linalg.operations.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOps;
-import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_complex.RealComplexDenseCooMatOps;
-import org.flag4j.linalg.operations.sparse.coo.CooDataSorter;
-import org.flag4j.linalg.operations.sparse.coo.real.*;
-import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseMatOps;
-import org.flag4j.linalg.operations.sparse.coo.real_complex.RealComplexSparseMatrixMultiplication;
+import org.flag4j.linalg.ops.common.real.RealProperties;
+import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
+import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseCooMatOps;
+import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
+import org.flag4j.linalg.ops.sparse.coo.real.*;
+import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseMatOps;
+import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseMatrixMultiplication;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -62,10 +62,10 @@ import java.util.List;
  * and total number of non-zero data is fixed.
  *
  * <p>COO matrices are well-suited for incremental matrix construction and modification but may not have ideal efficiency for matrix
- * operations like matrix multiplication. For heavy computations, it may be better to construct a matrix as a {@code CooMatrix} then
+ * ops like matrix multiplication. For heavy computations, it may be better to construct a matrix as a {@code CooMatrix} then
  * convert to a {@link CsrMatrix} (using {@link #toCsr()}) as CSR (compressed sparse row) matrices are generally better suited for
  * efficient
- * matrix operations.
+ * matrix ops.
  *
  * <p>A sparse COO matrix is stored as:
  * <ul>
@@ -76,12 +76,12 @@ import java.util.List;
  *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
  *
- * <p>Some operations on sparse tensors behave differently than on dense tensors. For instance, {@link #add(double)} will not
+ * <p>Some ops on sparse tensors behave differently than on dense tensors. For instance, {@link #add(double)} will not
  * add the scalar to all data of the tensor since this would cause catastrophic loss of sparsity. Instead, such non-zero preserving
- * element-wise operations only act on the non-zero data of the sparse tensor as to not affect the sparsity.
+ * element-wise ops only act on the non-zero data of the sparse tensor as to not affect the sparsity.
  *
- * <p>Note: many operations assume that the data of the COO matrix are sorted lexicographically by the row and column indices.
- * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any operations implemented in this
+ * <p>Note: many ops assume that the data of the COO matrix are sorted lexicographically by the row and column indices.
+ * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any ops implemented in this
  * class will preserve the lexicographical sorting.
  *
  * <p>If indices need to be sorted, call {@link #sortIndices()}.
@@ -460,8 +460,8 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
     @Override
     public Double get(int... indices) {
         ValidateParameters.ensureEquals(indices.length, 2);
-        ValidateParameters.ensureIndexInBounds(numRows, indices[0]);
-        ValidateParameters.ensureIndexInBounds(numCols, indices[1]);
+        ValidateParameters.ensureIndicesInBounds(numRows, indices[0]);
+        ValidateParameters.ensureIndicesInBounds(numCols, indices[1]);
 
         return get(indices[0], indices[1]);
     }
@@ -480,8 +480,8 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
     @Override
     public CooMatrix set(Double value, int... indices) {
         ValidateParameters.ensureArrayLengthsEq(2, indices.length);
-        ValidateParameters.ensureIndexInBounds(numRows, indices[0]);
-        ValidateParameters.ensureIndexInBounds(numCols, indices[1]);
+        ValidateParameters.ensureIndicesInBounds(numRows, indices[0]);
+        ValidateParameters.ensureIndicesInBounds(numCols, indices[1]);
 
         return RealSparseMatrixGetSet.matrixSet(this, indices[0], indices[1], value);
     }

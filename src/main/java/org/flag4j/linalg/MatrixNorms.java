@@ -25,17 +25,16 @@
 package org.flag4j.linalg;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
-import org.flag4j.linalg.operations.common.real.RealProperties;
-import org.flag4j.linalg.operations.common.ring_ops.CompareRing;
-import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldNorms;
-import org.flag4j.linalg.operations.sparse.coo.real.RealSparseNorms;
+import org.flag4j.linalg.ops.common.real.RealProperties;
+import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
+import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldNorms;
+import org.flag4j.linalg.ops.sparse.coo.real.RealSparseNorms;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
@@ -399,7 +398,7 @@ public final class MatrixNorms {
      * @return The L<sub>p, q</sub> norm of the matrix.
      * @throws IllegalArgumentException If {@code p} or {@code q} is less than 1.
      */
-    private static double matrixNormLpq(Field<Complex128>[] src, Shape shape, double p, double q) {
+    private static double matrixNormLpq(Complex128[] src, Shape shape, double p, double q) {
         ValidateParameters.ensureGreaterEq(1, p, q);
 
         double norm = 0;
@@ -421,14 +420,14 @@ public final class MatrixNorms {
 
     /**
      * Compute the L<sub>p</sub> norm of a matrix. This is equivalent to passing {@code q=1} to
-     * {@link #matrixNormLpq(Field<Complex128>[], Shape, double, double)}
+     * {@link #matrixNormLpq(Complex128[], Shape, double, double)}
      * @param src Entries of the matrix.
      * @param shape Shape of the matrix.
      * @param p Parameter in L<sub>p</sub> norm.
      * @return The L<sub>p</sub> norm of the matrix.
      * @throws IllegalArgumentException If {@code p} is less than 1.
      */
-    private static double matrixNormLp(Field<Complex128>[] src, Shape shape, double p) {
+    private static double matrixNormLp(Complex128[] src, Shape shape, double p) {
         ValidateParameters.ensureGreaterEq(1, p);
 
         double norm = 0;
@@ -451,12 +450,12 @@ public final class MatrixNorms {
 
     /**
      * Compute the L<sub>2</sub> norm of a matrix. This is equivalent to passing {@code q=1} to
-     * {@link #matrixNormLpq(Field<Complex128>[], Shape, double, double)}
+     * {@link #matrixNormLpq(Complex128[], Shape, double, double)}
      * @param src Entries of the matrix.
      * @param shape Shape of the matrix.
      * @return The L<sub>2</sub> norm of the matrix.
      */
-    private static double matrixNormL2(Field<Complex128>[] src, Shape shape) {
+    private static double matrixNormL2(Complex128[] src, Shape shape) {
         double norm = 0;
         int rows = shape.get(0);
         int cols = shape.get(1);
@@ -480,7 +479,7 @@ public final class MatrixNorms {
      * @param src Entries of the matrix.
      * @return The infinity norm of the matrix.
      */
-    private static double matrixMaxNorm(Field<Complex128>[] src) {
+    private static double matrixMaxNorm(Complex128[] src) {
         return CompareRing.maxAbs(src);
     }
 
@@ -490,7 +489,7 @@ public final class MatrixNorms {
      * @param src Entries of the matrix.
      * @return The infinity norm of the matrix.
      */
-    private static double matrixInfNorm(Field<Complex128>[] src, Shape shape) {
+    private static double matrixInfNorm(Complex128[] src, Shape shape) {
         int rows = shape.get(0);
         int cols = shape.get(1);
         double[] rowSums = new double[rows];

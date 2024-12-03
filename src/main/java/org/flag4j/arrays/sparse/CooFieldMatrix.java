@@ -31,9 +31,9 @@ import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.FieldTensor;
 import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.operations.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.operations.sparse.coo.field_ops.CooFieldEquals;
-import org.flag4j.linalg.operations.sparse.coo.semiring_ops.CooSemiringMatMult;
+import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
+import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldEquals;
+import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringMatMult;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -50,7 +50,7 @@ import java.util.List;
  * <p>The {@link #data non-zero data} and non-zero indices of a COO matrix are mutable but the {@link #shape}
  * and total number of non-zero data is fixed.</p>
  *
- * <p>Sparse matrices allow for the efficient storage of and operations on matrices that contain many zero values.</p>
+ * <p>Sparse matrices allow for the efficient storage of and ops on matrices that contain many zero values.</p>
  *
  * <p>COO matrices are optimized for hyper-sparse matrices (i.e. matrices which contain almost all zeros relative to the size of the
  * matrix).</p>
@@ -64,8 +64,8 @@ import java.util.List;
  *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
  *
- * <p>Note: many operations assume that the data of the COO matrix are sorted lexicographically by the row and column indices.
- * (i.e.) by row indices first then column indices. However, this is not explicitly verified but any operations implemented in this
+ * <p>Note: many ops assume that the data of the COO matrix are sorted lexicographically by the row and column indices.
+ * (i.e.) by row indices first then column indices. However, this is not explicitly verified but any ops implemented in this
  * class will preserve the lexicographical sorting.</p>
  *
  * <p>If indices need to be sorted, call {@link #sortIndices()}.</p>
@@ -83,7 +83,7 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
-    public CooFieldMatrix(Shape shape, Field<T>[] entries, int[] rowIndices, int[] colIndices) {
+    public CooFieldMatrix(Shape shape, T[] entries, int[] rowIndices, int[] colIndices) {
         super(shape, entries, rowIndices, colIndices);
     }
 
@@ -96,9 +96,9 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
-    public CooFieldMatrix(Shape shape, List<Field<T>> entries, List<Integer> rowIndices, List<Integer> colIndices) {
+    public CooFieldMatrix(Shape shape, List<T> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(shape,
-                entries.toArray(new Field[entries.size()]),
+                (T[]) entries.toArray(new Field[entries.size()]),
                 ArrayUtils.fromIntegerList(rowIndices),
                 ArrayUtils.fromIntegerList(colIndices));
         ValidateParameters.ensureRank(shape, 2);
@@ -114,7 +114,7 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
-    public CooFieldMatrix(int rows, int cols, Field<T>[] entries, int[] rowIndices, int[] colIndices) {
+    public CooFieldMatrix(int rows, int cols, T[] entries, int[] rowIndices, int[] colIndices) {
         super(new Shape(rows, cols), entries, rowIndices, colIndices);
     }
 
@@ -128,9 +128,9 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
-    public CooFieldMatrix(int rows, int cols, List<Field<T>> entries, List<Integer> rowIndices, List<Integer> colIndices) {
+    public CooFieldMatrix(int rows, int cols, List<T> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(new Shape(rows, cols),
-                entries.toArray(new Field[entries.size()]),
+                (T[]) entries.toArray(new Field[entries.size()]),
                 ArrayUtils.fromIntegerList(rowIndices),
                 ArrayUtils.fromIntegerList(colIndices));
         ValidateParameters.ensureRank(shape, 2);
@@ -164,7 +164,7 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
      * @return A COO matrix with the specified shape, non-zero data, and non-zero indices.
      */
     @Override
-    public CooFieldMatrix<T> makeLikeTensor(Shape shape, List<Field<T>> entries, List<Integer> rowIndices, List<Integer> colIndices) {
+    public CooFieldMatrix<T> makeLikeTensor(Shape shape, List<T> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         return new CooFieldMatrix<>(shape, entries, rowIndices, colIndices);
     }
 
@@ -179,7 +179,7 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
      * @return A sparse COO vector of a similar type to this COO matrix.
      */
     @Override
-    public CooFieldVector<T> makeLikeVector(Shape shape, Field<T>[] entries, int[] indices) {
+    public CooFieldVector<T> makeLikeVector(Shape shape, T[] entries, int[] indices) {
         return new CooFieldVector<>(shape, entries, indices);
     }
 
@@ -193,7 +193,7 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
      * @return A dense tensor with the specified {@code shape} and {@code data} which is a similar type to this sparse tensor.
      */
     @Override
-    public FieldMatrix<T> makeLikeDenseTensor(Shape shape, Field<T>[] entries) {
+    public FieldMatrix<T> makeLikeDenseTensor(Shape shape, T[] entries) {
         return new FieldMatrix<>(shape, entries);
     }
 
@@ -209,7 +209,7 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
      * @return A CSR matrix of a similar type to this sparse COO matrix.
      */
     @Override
-    public CsrFieldMatrix<T> makeLikeCsrMatrix(Shape shape, Field<T>[] entries, int[] rowPointers, int[] colIndices) {
+    public CsrFieldMatrix<T> makeLikeCsrMatrix(Shape shape, T[] entries, int[] rowPointers, int[] colIndices) {
         return new CsrFieldMatrix<>(shape, entries, rowPointers, colIndices);
     }
 
@@ -226,7 +226,7 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
      * {@code data}.
      */
     @Override
-    public CooFieldMatrix<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
+    public CooFieldMatrix<T> makeLikeTensor(Shape shape, T[] entries) {
         return new CooFieldMatrix<>(shape, entries, rowIndices.clone(), colIndices.clone());
     }
 
@@ -315,7 +315,7 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
      */
     @Override
     public FieldVector<T> mult(CooFieldVector<T> b) {
-        Field<T>[] dest = new Field[b.size];
+        T[] dest = (T[]) new Field[b.size];
         CooSemiringMatMult.standardVector(data, rowIndices, colIndices, shape, b.data, b.indices, dest);
         return new FieldVector<T>(dest);
     }

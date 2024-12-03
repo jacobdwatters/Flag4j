@@ -31,11 +31,11 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.SparseVectorData;
 import org.flag4j.arrays.backend.VectorMixin;
-import org.flag4j.linalg.operations.common.semiring_ops.AggregateSemiring;
-import org.flag4j.linalg.operations.sparse.coo.CooConcat;
-import org.flag4j.linalg.operations.sparse.coo.CooDataSorter;
-import org.flag4j.linalg.operations.sparse.coo.CooGetSet;
-import org.flag4j.linalg.operations.sparse.coo.semiring_ops.CooSemiringVectorOps;
+import org.flag4j.linalg.ops.common.semiring_ops.AggregateSemiring;
+import org.flag4j.linalg.ops.sparse.coo.CooConcat;
+import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
+import org.flag4j.linalg.ops.sparse.coo.CooGetSet;
+import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringVectorOps;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -52,7 +52,7 @@ import java.util.List;
  * <p>The {@link #data non-zero data} and {@link #indices non-zero indices} of a COO vector are mutable but the {@link #shape}
  * and total number of non-zero data is fixed.</p>
  *
- * <p>Sparse vectors allow for the efficient storage of and operations on large vectors that contain many zero values.</p>
+ * <p>Sparse vectors allow for the efficient storage of and ops on large vectors that contain many zero values.</p>
  *
  * <p>COO vectors are optimized for large hyper-sparse vectors (i.e. vectors which contain almost all zeros relative to the size of the
  * vector).</p>
@@ -65,7 +65,7 @@ import java.util.List;
  *     <li>The {@link #indices} of the non-zero values in the sparse vector.</li>
  * </ul>
  *
- * <p>Note: many operations assume that the data of the COO vector are sorted lexicographically. However, this is not explicitly
+ * <p>Note: many ops assume that the data of the COO vector are sorted lexicographically. However, this is not explicitly
  * verified. Every operation implemented in this class will preserve the lexicographical sorting.</p>
  *
  * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.</p>
@@ -82,13 +82,13 @@ public abstract class AbstractCooSemiringVector<
         V extends AbstractCooSemiringMatrix<V, W, T, Y>,
         W extends AbstractDenseSemiringMatrix<W, U, Y>,
         Y extends Semiring<Y>>
-        extends AbstractTensor<T, Semiring<Y>[], Y>
+        extends AbstractTensor<T, Y[], Y>
         implements SemiringTensorMixin<T, U, Y>, VectorMixin<T, V, W, Y> {
 
     /**
      * The zero element for the semiring that this tensor's elements belong to.
      */
-    private Semiring<Y> zeroElement;
+    private Y zeroElement;
     /**
      * Indices of the non-zero values of this sparse COO vector.
      */
@@ -114,10 +114,10 @@ public abstract class AbstractCooSemiringVector<
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
      * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
-    protected AbstractCooSemiringVector(int size, Semiring<Y>[] entries, int[] indices) {
+    protected AbstractCooSemiringVector(int size, Y[] entries, int[] indices) {
         super(new Shape(size), entries);
         ValidateParameters.ensureRank(shape, 1);
-        ValidateParameters.ensureIndexInBounds(shape.get(0), indices);
+        ValidateParameters.ensureIndicesInBounds(shape.get(0), indices);
         if(entries.length != indices.length) {
             throw new IllegalArgumentException("data and indices arrays of a COO vector must have the same length but got " +
                     "lengths" + entries.length + " and " + indices.length + ".");
@@ -144,7 +144,7 @@ public abstract class AbstractCooSemiringVector<
      * @param indices Non-zero row indices of the vector to construct.
      * @return A sparse COO vector of the same type as this vector with the specified non-zero data and indices.
      */
-    public abstract T makeLikeTensor(Shape shape, Semiring<Y>[] entries, int[] indices);
+    public abstract T makeLikeTensor(Shape shape, Y[] entries, int[] indices);
 
 
     /**
@@ -153,7 +153,7 @@ public abstract class AbstractCooSemiringVector<
      * @param entries Entries of the vector to construct.
      * @return A dense vector of a similar type as this vector with the specified data.
      */
-    public abstract U makeLikeDenseTensor(Shape shape, Semiring<Y>... entries);
+    public abstract U makeLikeDenseTensor(Shape shape, Y... entries);
 
 
     /**
@@ -162,7 +162,7 @@ public abstract class AbstractCooSemiringVector<
      * @param entries Entries of the matrix to construct.
      * @return A dense matrix of a similar type as this vector with the specified data.
      */
-    public abstract W makeLikeDenseMatrix(Shape shape, Semiring<Y>... entries);
+    public abstract W makeLikeDenseMatrix(Shape shape, Y... entries);
 
 
     /**
@@ -172,7 +172,7 @@ public abstract class AbstractCooSemiringVector<
      * @param indices Indices of the non-zero values in the vector.
      * @return A COO vector of the same type as this vector with the specified shape, non-zero data, and non-zero indices.
      */
-    public abstract T makeLikeTensor(Shape shape, List<Semiring<Y>> entries, List<Integer> indices);
+    public abstract T makeLikeTensor(Shape shape, List<Y> entries, List<Integer> indices);
 
 
     /**
@@ -183,7 +183,7 @@ public abstract class AbstractCooSemiringVector<
      * @param colIndices Column indices of the matrix.
      * @return A COO matrix of similar type as this vector with the specified shape, non-zero data, and non-zero row/col indices.
      */
-    public abstract V makeLikeMatrix(Shape shape, Semiring<Y>[] entries, int[] rowIndices, int[] colIndices);
+    public abstract V makeLikeMatrix(Shape shape, Y[] entries, int[] rowIndices, int[] colIndices);
 
 
     /**
@@ -300,7 +300,7 @@ public abstract class AbstractCooSemiringVector<
         ValidateParameters.validateTensorIndex(shape, target);
         int idx = Arrays.binarySearch(indices, target[0]);
 
-        Semiring<Y>[] destEntries;
+        Y[] destEntries;
         int[] destIndices;
 
         if (idx >= 0) {
@@ -311,13 +311,13 @@ public abstract class AbstractCooSemiringVector<
             destIndices[idx] = target[0];
         } else {
             // Target not found, insert new value and index.
-            destEntries = new Semiring[nnz + 1];
+            destEntries = (Y[]) new Semiring[nnz + 1];
             destIndices = new int[nnz + 1];
             int insertionPoint = - (idx + 1);
             CooGetSet.cooInsertNewValue(value, target[0], data, indices, insertionPoint, destEntries, destIndices);
         }
 
-        return makeLikeTensor(shape, (Y[]) destEntries, destIndices);
+        return makeLikeTensor(shape, destEntries, destIndices);
     }
 
 
@@ -375,7 +375,7 @@ public abstract class AbstractCooSemiringVector<
      */
     @Override
     public T join(T b) {
-        Semiring<Y>[] destEntries = new Semiring[this.data.length + b.data.length];
+        Y[] destEntries = (Y[]) new Semiring[this.data.length + b.data.length];
         int[] destIndices = new int[this.indices.length + b.indices.length];
         CooConcat.join(data, indices, size, b.data, b.indices, destEntries, destIndices);
         return makeLikeTensor(new Shape(shape.get(0) + b.shape.get(0)), destEntries, destIndices);
@@ -416,7 +416,7 @@ public abstract class AbstractCooSemiringVector<
      */
     @Override
     public Y dot(T b) {
-        return (Y) CooSemiringVectorOps.dot(shape, data, indices, b.shape, b.data, b.indices);
+        return CooSemiringVectorOps.dot(shape, data, indices, b.shape, b.data, b.indices);
     }
 
 
@@ -449,7 +449,7 @@ public abstract class AbstractCooSemiringVector<
      */
     @Override
     public V repeat(int n, int axis) {
-        Semiring<Y>[] tiledEntries = new Field[n*data.length];
+        Y[] tiledEntries = (Y[]) new Field[n*data.length];
         int[] tiledRows = new int[tiledEntries.length];
         int[] tiledCols = new int[tiledEntries.length];
         Shape tiledShape = CooConcat.repeat(data, indices, size, n, axis, tiledEntries, tiledRows, tiledCols);
@@ -485,7 +485,7 @@ public abstract class AbstractCooSemiringVector<
     @Override
     public V stack(T b, int axis) {
         ValidateParameters.ensureEquals(size, b.size);
-        Semiring<Y>[] destEntries = new Semiring[data.length + b.data.length];
+        Y[] destEntries = (Y[]) new Semiring[data.length + b.data.length];
         int[][] destIndices = new int[2][indices.length + indices.length]; // Row and column indices.
 
         CooConcat.stack(data, indices, b.data, b.indices, destEntries, destIndices[0], destIndices[1]);
@@ -507,7 +507,7 @@ public abstract class AbstractCooSemiringVector<
     @Override
     public W outer(T b) {
         Shape destShape = new Shape(size, b.size);
-        Semiring<Y>[] dest = new Semiring[size*b.size];
+        Y[] dest = (Y[]) new Semiring[size*b.size];
         CooSemiringVectorOps.outerProduct(data, indices, size, b.data, b.indices, dest);
         return makeLikeDenseMatrix(shape, dest);
     }
@@ -553,7 +553,7 @@ public abstract class AbstractCooSemiringVector<
      */
     @Override
     public T add(T b) {
-        SparseVectorData<Semiring<Y>> result = CooSemiringVectorOps.add(
+        SparseVectorData<Y> result = CooSemiringVectorOps.add(
                 shape, data, indices, b.shape, b.data, b.indices);
         return makeLikeTensor(shape, result.data(), result.indices());
     }
@@ -570,7 +570,7 @@ public abstract class AbstractCooSemiringVector<
      */
     @Override
     public T elemMult(T b) {
-        SparseVectorData<Semiring<Y>> prod = CooSemiringVectorOps.elemMult(
+        SparseVectorData<Y> prod = CooSemiringVectorOps.elemMult(
                 shape, data, indices,
                 b.shape, b.data, b.indices);
         return makeLikeTensor(shape, prod.data(), prod.indices());
@@ -636,7 +636,7 @@ public abstract class AbstractCooSemiringVector<
      * and has not been set explicitly by {@link #setZeroElement(Semiring)} then {@code null} will be returned.
      */
     public Y getZeroElement() {
-        return (Y) zeroElement;
+        return zeroElement;
     }
 
 
@@ -645,7 +645,7 @@ public abstract class AbstractCooSemiringVector<
      * @param zeroElement The zero element of this tensor.
      * @throws IllegalArgumentException If {@code zeroElement} is not an additive identity for the semiring.
      */
-    public void setZeroElement(Semiring<Y> zeroElement) {
+    public void setZeroElement(Y zeroElement) {
         if (zeroElement.isZero()) {
             this.zeroElement = zeroElement;
         } else {
@@ -659,7 +659,7 @@ public abstract class AbstractCooSemiringVector<
      * @return A dense matrix equivalent to this sparse COO matrix.
      */
     public U toDense() {
-        Semiring<Y>[] entries = new Semiring[shape.totalEntriesIntValueExact()];
+        Y[] entries = (Y[]) new Semiring[shape.totalEntriesIntValueExact()];
 
         for(int i = 0; i< nnz; i++)
             entries[indices[i]] = this.data[i];
@@ -672,7 +672,7 @@ public abstract class AbstractCooSemiringVector<
      * Converts this matrix to an equivalent rank 1 tensor.
      * @return A tensor which is equivalent to this matrix.
      */
-    public abstract AbstractTensor<?, Semiring<Y>[], Y> toTensor();
+    public abstract AbstractTensor<?, Y[], Y> toTensor();
 
 
     /**
@@ -680,7 +680,7 @@ public abstract class AbstractCooSemiringVector<
      * @param newShape New shape for the tensor. Can be any rank but must be broadcastable to {@link #shape this.shape}.
      * @return A tensor equivalent to this matrix which has been reshaped to {@code newShape}
      */
-    public abstract AbstractTensor<?,  Semiring<Y>[], Y> toTensor(Shape newShape);
+    public abstract AbstractTensor<?,  Y[], Y> toTensor(Shape newShape);
 
 
     /**
@@ -715,7 +715,7 @@ public abstract class AbstractCooSemiringVector<
     @Override
     public Y get(int idx) {
         ValidateParameters.validateTensorIndex(shape, idx);
-        Y value = (Y) CooGetSet.getCoo(data, indices, idx);
-        return (value == null) ? (Y) getZeroElement() : value;
+        Y value = CooGetSet.getCoo(data, indices, idx);
+        return (value == null) ? getZeroElement() : value;
     }
 }

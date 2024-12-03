@@ -25,16 +25,14 @@
 package org.flag4j.arrays.backend.field;
 
 import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.ring.TensorOverRing;
-import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.linalg.operations.common.field_ops.FieldOps;
-import org.flag4j.linalg.operations.common.ring_ops.CompareRing;
-import org.flag4j.linalg.operations.common.ring_ops.RingOps;
-import org.flag4j.linalg.operations.common.semiring_ops.AggregateSemiring;
-import org.flag4j.linalg.operations.common.semiring_ops.CompareSemiring;
-import org.flag4j.linalg.operations.common.semiring_ops.SemiRingOperations;
-import org.flag4j.linalg.operations.common.semiring_ops.SemiRingProperties;
+import org.flag4j.linalg.ops.common.field_ops.FieldOps;
+import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
+import org.flag4j.linalg.ops.common.ring_ops.RingOps;
+import org.flag4j.linalg.ops.common.semiring_ops.AggregateSemiring;
+import org.flag4j.linalg.ops.common.semiring_ops.CompareSemiring;
+import org.flag4j.linalg.ops.common.semiring_ops.SemiringOps;
+import org.flag4j.linalg.ops.common.semiring_ops.SemiringProperties;
 
 /**
  * <p>This interface provides default functionality for all tensors whose data are elements of a
@@ -47,7 +45,17 @@ import org.flag4j.linalg.operations.common.semiring_ops.SemiRingProperties;
  */
 public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
         U extends FieldTensorMixin<U, U, V>, V extends Field<V>>
-        extends TensorOverField<T, U, Field<V>[], V> {
+        extends TensorOverField<T, U, V[], V> {
+
+    /**
+     * Creates an empty array of the same type as the data array of this tensor.
+     * @param length The length of the array to construct.
+     * @return An empty array of the same type as the data array of this tensor.
+     */
+    default V[] makeEmptyDataArray(int length) {
+        return (V[]) new Field[length];
+    }
+
 
     /**
      * Subtracts a scalar value from each entry of this tensor.
@@ -58,9 +66,9 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default T sub(V b) {
-        Field<V>[] entries = getData();
-        Field<V>[] diff = new Field[entries.length];
-        RingOps.sub(entries, b, diff);
+        V[] data = getData();
+        V[] diff = makeEmptyDataArray(data.length);
+        RingOps.sub(data, b, diff);
         return makeLikeTensor(getShape(), diff);
     }
 
@@ -72,22 +80,8 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default void subEq(V b) {
-        Field<V>[] entries = getData();
-        RingOps.sub(entries, b, entries);
-    }
-
-
-    /**
-     * Computes the element-wise absolute value of this tensor.
-     *
-     * @return The element-wise absolute value of this tensor.
-     */
-    @Override
-    default TensorOverRing abs() {
-        Field<V>[] entries = getData();
-        double[] abs = new double[entries.length];
-        RingOps.abs(entries, abs);
-        return new Tensor(getShape(), abs);
+        V[] data = getData();
+        RingOps.sub(data, b, data);
     }
 
 
@@ -98,9 +92,9 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default T conj() {
-        Field<V>[] entries = getData();
-        Field<V>[] conj = new Field[entries.length];
-        RingOps.conj(entries, conj);
+        V[] data = getData();
+        V[] conj = makeEmptyDataArray(data.length);
+        RingOps.conj(data, conj);
         return makeLikeTensor(getShape(), conj);
     }
 
@@ -111,9 +105,9 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default T recip() {
-        Field<V>[] entries = getData();
-        Field<V>[] recip = new Field[entries.length];
-        FieldOps.recip(entries, recip);
+        V[] data = getData();
+        V[] recip = makeEmptyDataArray(data.length);
+        FieldOps.recip(data, recip);
         return makeLikeTensor(getShape(), recip);
     }
 
@@ -124,7 +118,7 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
      */
     default V min() {
-        return (V) CompareSemiring.min(getData());
+        return CompareSemiring.min(getData());
     }
 
 
@@ -134,7 +128,7 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
      */
     default V max() {
-        return (V) CompareSemiring.max(getData());
+        return CompareSemiring.max(getData());
     }
 
 
@@ -216,9 +210,9 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default T add(V b) {
-        Field<V>[] data = getData();
-        Field<V>[] dest = new Field[data.length];
-        SemiRingOperations.add(getData(), b, dest);
+        V[] data = getData();
+        V[] dest = makeEmptyDataArray(data.length);
+        SemiringOps.add(getData(), b, dest);
         return makeLikeTensor(getShape(), dest);
     }
 
@@ -230,8 +224,8 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default void addEq(V b) {
-        Field<V>[] entries = getData();
-        SemiRingOperations.add(entries, b, entries);
+        V[] data = getData();
+        SemiringOps.add(data, b, data);
     }
 
 
@@ -244,9 +238,9 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default T mult(V b) {
-        Field<V>[] data = getData();
-        Field<V>[] dest = new Field[data.length];
-        SemiRingOperations.scalMult(getData(), b, dest);
+        V[] data = getData();
+        V[] dest = makeEmptyDataArray(data.length);
+        SemiringOps.scalMult(getData(), b, dest);
         return makeLikeTensor(getShape(), dest);
     }
 
@@ -258,8 +252,8 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default void multEq(V b) {
-        Field<V>[] entries = getData();
-        SemiRingOperations.scalMult(entries, b, entries);
+        V[] data = getData();
+        SemiringOps.scalMult(data, b, data);
     }
 
 
@@ -270,7 +264,7 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default boolean isZeros() {
-        return SemiRingProperties.isZeros(getData());
+        return SemiringProperties.isZeros(getData());
     }
 
     /**
@@ -280,7 +274,7 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default boolean isOnes() {
-        return SemiRingProperties.isOnes(getData());
+        return SemiringProperties.isOnes(getData());
     }
 
 
@@ -316,10 +310,10 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default T add(double b) {
-        Field<V>[] entries = getData();
-        Field<V>[] dest = new Field[entries.length];
-        FieldOps.add(entries, b, dest);
-        return makeLikeTensor(getShape(), entries);
+        V[] data = getData();
+        V[] dest = makeEmptyDataArray(data.length);
+        FieldOps.add(data, b, dest);
+        return makeLikeTensor(getShape(), dest);
     }
 
     /**
@@ -329,8 +323,8 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default void addEq(double b) {
-        Field<V>[] entries = getData();
-        FieldOps.add(entries, b, entries);
+        V[] data = getData();
+        FieldOps.add(data, b, data);
     }
 
     /**
@@ -342,10 +336,10 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default T mult(double b) {
-        Field<V>[] entries = getData();
-        Field<V>[] dest = new Field[entries.length];
-        FieldOps.mult(entries, b, dest);
-        return makeLikeTensor(getShape(), entries);
+        V[] data = getData();
+        V[] dest = makeEmptyDataArray(data.length);
+        FieldOps.mult(data, b, dest);
+        return makeLikeTensor(getShape(), dest);
     }
 
     /**
@@ -355,8 +349,8 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default void multEq(double b) {
-        Field<V>[] entries = getData();
-        FieldOps.mult(entries, b, entries);
+        V[] data = getData();
+        FieldOps.mult(data, b, data);
     }
 
     /**
@@ -368,10 +362,10 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default T sub(double b) {
-        Field<V>[] entries = getData();
-        Field<V>[] dest = new Field[entries.length];
-        FieldOps.sub(entries, b, dest);
-        return makeLikeTensor(getShape(), entries);
+        V[] data = getData();
+        V[] dest = makeEmptyDataArray(data.length);
+        FieldOps.sub(data, b, dest);
+        return makeLikeTensor(getShape(), dest);
     }
 
     /**
@@ -381,8 +375,8 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default void subEq(double b) {
-        Field<V>[] entries = getData();
-        FieldOps.sub(entries, b, entries);
+        V[] data = getData();
+        FieldOps.sub(data, b, data);
     }
 
     /**
@@ -398,10 +392,10 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default T div(V b) {
-        Field<V>[] entries = getData();
-        Field<V>[] dest = new Field[entries.length];
-        FieldOps.div(entries, b, dest);
-        return makeLikeTensor(getShape(), entries);
+        V[] data = getData();
+        V[] dest = makeEmptyDataArray(data.length);
+        FieldOps.div(data, b, dest);
+        return makeLikeTensor(getShape(), dest);
     }
 
     /**
@@ -415,8 +409,8 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default void divEq(V b) {
-        Field<V>[] entries = getData();
-        FieldOps.div(entries, b, entries);
+        V[] data = getData();
+        FieldOps.div(data, b, data);
     }
 
     /**
@@ -432,10 +426,10 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default T div(double b) {
-        Field<V>[] entries = getData();
-        Field<V>[] dest = new Field[entries.length];
-        FieldOps.div(entries, b, dest);
-        return makeLikeTensor(getShape(), entries);
+        V[] data = getData();
+        V[] dest = makeEmptyDataArray(data.length);
+        FieldOps.div(data, b, dest);
+        return makeLikeTensor(getShape(), dest);
     }
 
     /**
@@ -449,8 +443,8 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      */
     @Override
     default void divEq(double b) {
-        Field<V>[] entries = getData();
-        FieldOps.div(entries, b, entries);
+        V[] data = getData();
+        FieldOps.div(data, b, data);
     }
 
 

@@ -32,15 +32,15 @@
  * <p>Sparse arrays can offer advantages such as reduced memory usage and, in many cases, improved computational performance.
  * These benefits depend on the degree of sparsity and the algorithms used.
  *
- * <p>It should be noted that certain operations on sparse arrays can result in catastrophic loss of sparsity significantly increasing
+ * <p>It should be noted that certain ops on sparse arrays can result in catastrophic loss of sparsity significantly increasing
  * the number of non-zero elements, resulting in higher memory consumption and degraded performance. These effects can be
  * particularly problematic for algorithms optimized for sparse data.
- * Such operations will be documented and should be used with care.
+ * Such ops will be documented and should be used with care.
  *
  * <p>This package includes implementations for arrays with real and complex values, as well as generalized support for
  * {@link org.flag4j.algebraic_structures.semirings.Semiring semirings},
  * {@link org.flag4j.algebraic_structures.rings.Ring rings}, and {@link org.flag4j.algebraic_structures.fields.Field fields}.
- * Additionally, some specialized sparse matrix types are provided with limited support for operations:
+ * Additionally, some specialized sparse matrix types are provided with limited support for ops:
  * {@link org.flag4j.arrays.sparse.PermutationMatrix permutation matrix} and the {@link org.flag4j.arrays.sparse.SymmTriDiag
  * symmetric tri-diagonal matrix}.
  */

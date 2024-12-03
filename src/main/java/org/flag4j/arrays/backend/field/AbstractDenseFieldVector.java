@@ -27,10 +27,12 @@ package org.flag4j.arrays.backend.field;
 import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.VectorMixin;
+import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.linalg.operations.dense.DenseConcat;
-import org.flag4j.linalg.operations.dense.field_ops.DenseFieldVectorOperations;
-import org.flag4j.linalg.operations.dense.semiring_ops.DenseSemiRingVectorOps;
+import org.flag4j.linalg.ops.common.ring_ops.RingOps;
+import org.flag4j.linalg.ops.dense.DenseConcat;
+import org.flag4j.linalg.ops.dense.field_ops.DenseFieldVectorOps;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringVectorOps;
 import org.flag4j.util.ValidateParameters;
 
 
@@ -63,7 +65,7 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
      * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
-    protected AbstractDenseFieldVector(Shape shape, Field<V>[] entries) {
+    protected AbstractDenseFieldVector(Shape shape, V[] entries) {
         super(shape, entries);
         ValidateParameters.ensureRank(shape, 1);
         size = entries.length;
@@ -93,7 +95,7 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
      * Constructs a dense vector with the specified {@code data} of the same type as the vector.
      * @param entries Entries of the dense vector to construct.
      */
-    public abstract T makeLikeTensor(Field<V>[] entries);
+    public abstract T makeLikeTensor(V[] entries);
 
 
     /**
@@ -102,7 +104,7 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
      * @param entries Entries of the matrix to construct.
      * @return A matrix of similar type to this vector with the specified {@code shape} and {@code data}.
      */
-    public abstract U makeLikeMatrix(Shape shape, Field<V>[] entries);
+    public abstract U makeLikeMatrix(Shape shape, V[] entries);
 
 
     /**
@@ -115,7 +117,7 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
      */
     @Override
     public T join(T b) {
-        Field<V>[] dest = new Field[size + b.size];
+        V[] dest = makeEmptyDataArray(size + b.size);
         DenseConcat.concat(data, b.data, dest);
         return makeLikeTensor(dest);
     }
@@ -133,7 +135,7 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
      */
     @Override
     public V inner(T b) {
-        return DenseFieldVectorOperations.innerProduct(data, b.data);
+        return DenseFieldVectorOps.innerProduct(data, b.data);
     }
 
 
@@ -152,7 +154,7 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
      */
     @Override
     public V dot(T b) {
-        return DenseSemiRingVectorOps.dotProduct(data, b.data);
+        return DenseSemiringVectorOps.dotProduct(data, b.data);
     }
 
 
@@ -181,9 +183,10 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
      */
     @Override
     public U repeat(int n, int axis) {
-        Field<V>[] dest = new Field[size*n];
-        DenseConcat.repeat(data, n, axis, dest); // n is verified to be 1 or 0 here.
-        Shape shape = (n==0) ? new Shape(n, size) : new Shape(size, n);
+        V[] dest = makeEmptyDataArray(size*n);
+        DenseConcat.repeat(data, n, axis, dest); // axis is verified to be 1 or 0 here.
+        Shape shape = (axis==0) ? new Shape(n, size) : new Shape(size, n);
+
         return makeLikeMatrix(shape, dest);
     }
 
@@ -209,7 +212,7 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
      */
     @Override
     public U stack(T b, int axis) {
-        Field<V>[] dest = new Field[2*size];
+        V[] dest = makeEmptyDataArray(2*size);
         DenseConcat.stack(data, b.data, axis, dest);
         Shape shape = (axis==0) ? new Shape(2, size) : new Shape(size, 2);
         return makeLikeMatrix(shape, dest);
@@ -227,9 +230,9 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
      */
     @Override
     public U outer(T b) {
-        Field<V>[] dest = new Field[size*b.size];
-        DenseSemiRingVectorOps.outerProduct(data, b.data, dest);
-        return makeLikeMatrix(new Shape(size, size), dest);
+        V[] dest = makeEmptyDataArray(size*b.size);
+        DenseFieldVectorOps.outerProduct(data, b.data, dest);
+        return makeLikeMatrix(new Shape(size, b.size), dest);
     }
 
 
@@ -257,6 +260,19 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
 
 
     /**
+     * Computes the element-wise absolute value of this tensor.
+     *
+     * @return The element-wise absolute value of this tensor.
+     */
+    @Override
+    public Vector abs() {
+        double[] abs = new double[data.length];
+        RingOps.abs(data, abs);
+        return new Vector(shape, abs);
+    }
+
+
+    /**
      * Normalizes this vector to a unit length vector.
      *
      * @return This vector normalized to a unit length.
@@ -277,7 +293,7 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
         V mag = getZeroElement();
 
         for(int i=0; i<size; i++)
-            mag = mag.add(data[i].mult((V) data[i]));
+            mag = mag.add(data[i].mult( data[i]));
 
         return mag.sqrt();
     }
@@ -293,7 +309,7 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
     @Override
     public V get(int idx) {
         ValidateParameters.validateTensorIndex(shape, idx);
-        return (V) data[idx];
+        return data[idx];
     }
 
 

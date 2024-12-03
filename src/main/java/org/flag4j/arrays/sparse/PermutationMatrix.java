@@ -25,7 +25,6 @@
 package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
@@ -248,7 +247,7 @@ public class PermutationMatrix implements Serializable {
      */
     public CVector leftMult(CVector src) {
         ValidateParameters.ensureEquals(size, src.size);
-        Field<Complex128>[] destEntries = new Complex128[src.data.length];
+        Complex128[] destEntries = new Complex128[src.data.length];
 
         for(int rowIdx=0; rowIdx<size; rowIdx++)
             destEntries[rowIdx] = src.data[swapPointers[rowIdx]];
@@ -313,7 +312,7 @@ public class PermutationMatrix implements Serializable {
      */
     public CMatrix rightMult(CMatrix src) {
         ValidateParameters.ensureEquals(size, src.numCols);
-        Field<Complex128>[] destEntries = new Complex128[src.data.length];
+        Complex128[] destEntries = new Complex128[src.data.length];
         final int rows = src.numRows;
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {

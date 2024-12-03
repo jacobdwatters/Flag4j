@@ -51,7 +51,7 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
      *
      * @param entries Entries of this vector.
      */
-    public FieldVector(Field<T>... entries) {
+    public FieldVector(T... entries) {
         super(new Shape(entries.length), entries);
     }
 
@@ -63,7 +63,7 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
      * @param fillValue Value to fill this vector with.
      */
     public FieldVector(int size, T fillValue) {
-        super(new Shape(size), new Field[size]);
+        super(new Shape(size), (T[]) new Field[size]);
         Arrays.fill(data, fillValue);
     }
 
@@ -74,7 +74,7 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
      * @param entries Entries of this vector.
      */
     @Override
-    public FieldVector<T> makeLikeTensor(Field<T>... entries) {
+    public FieldVector<T> makeLikeTensor(T... entries) {
         return new FieldVector<T>(entries);
     }
 
@@ -88,7 +88,7 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
      * @return A matrix of similar type to this vector with the specified {@code shape} and {@code data}.
      */
     @Override
-    public FieldMatrix<T> makeLikeMatrix(Shape shape, Field<T>[] entries) {
+    public FieldMatrix<T> makeLikeMatrix(Shape shape, T[] entries) {
         return new FieldMatrix<>(shape, entries);
     }
 
@@ -102,7 +102,7 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
      * @return A tensor of the same type as this tensor with the given the shape and data.
      */
     @Override
-    public FieldVector<T> makeLikeTensor(Shape shape, Field<T>[] entries) {
+    public FieldVector<T> makeLikeTensor(Shape shape, T[] entries) {
         ValidateParameters.ensureEquals(shape.totalEntriesIntValueExact(), entries.length);
         ValidateParameters.ensureRank(shape, 1);
         return new FieldVector<T>(entries);
@@ -119,7 +119,7 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
      * @return A sparse COO tensor which is of a similar type as this dense tensor.
      */
     @Override
-    protected CooFieldVector<T> makeLikeCooTensor(Shape shape, Field<T>[] entries, int[][] indices) {
+    protected CooFieldVector<T> makeLikeCooTensor(Shape shape, T[] entries, int[][] indices) {
         return new CooFieldVector<>(shape.totalEntriesIntValueExact(), entries, indices[0]);
     }
 

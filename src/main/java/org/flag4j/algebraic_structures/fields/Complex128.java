@@ -1253,8 +1253,24 @@ public class Complex128 implements Field<Complex128> {
     @Override
     public String toString() {
         if (isZero()) return "0";
-        String realPart = re % 1 == 0 ? String.valueOf((int) re) : String.valueOf(re);
-        String imagPart = im == 0 ? "" : (im > 0 ? " + " : " - ") + (Math.abs(im) % 1 == 0 ? (int) Math.abs(im) : Math.abs(im)) + "i";
+        String realPart = "";
+        String imagPart = "";
+        String sign;
+        double imAbs = Math.abs(im);
+
+        if(re != 0.0) {
+            realPart = re % 1 == 0 ? String.valueOf((int) re) : String.valueOf(re);
+            sign = im > 0.0 ? " + " : " - ";
+        } else {
+            sign = im > 0.0 ? "" : "-";
+        }
+
+        if(imAbs == 1.0) {
+            imagPart = sign + (im < 0.0 ? "i" : "i");
+        }
+        else if(im != 0.0)
+            imagPart = sign + (im % 1 == 0 ? String.valueOf((int) imAbs) : String.valueOf(imAbs)) + "i";
+
         return realPart + imagPart;
     }
 }

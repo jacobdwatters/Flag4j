@@ -7,9 +7,9 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseVectorOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
+import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -83,8 +83,10 @@ class VectorOuterProductTests {
                 {new Complex128("0.0-251.99999999999997i"), new Complex128("-52.332-11.822187999999999i"), new Complex128("400.4+44.8i")},
                 {new Complex128("0.0+420.975i"), new Complex128("87.422475+19.749387275i"), new Complex128("-668.8825-74.84i")}};
         exp = new CMatrix(expEntries);
-        CMatrix act = new CMatrix(a.size, b.size,
-                RealFieldDenseVectorOperations.outerProduct(a.data, b.data));
+
+        Complex128[] actData = new Complex128[a.size*b.size];
+        RealFieldDenseVectorOperations.outerProduct(a.data, b.data, actData);
+        CMatrix act = new CMatrix(a.size, b.size, actData);
 
         assertEquals(exp, act);
     }
@@ -108,8 +110,10 @@ class VectorOuterProductTests {
                 {new Complex128("0.0"), new Complex128("0.0"), new Complex128("400.4+44.8i")},
                 {new Complex128("0.0"), new Complex128("0.0"), new Complex128("-668.8825-74.84i")}};
         exp = new CMatrix(expEntries);
-        CMatrix act = new CMatrix(a.size, b.size,
-                RealFieldDenseCooVectorOps.outerProduct(a.data, b.data, b.indices, b.size));
+
+        Complex128[] actData = new Complex128[a.data.length*b.size];
+        RealFieldDenseCooVectorOps.outerProduct(a.data, b.data, b.indices, b.size, actData);
+        CMatrix act = new CMatrix(a.size, b.size, actData);
 
         assertEquals(exp, act);
     }

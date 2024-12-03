@@ -26,18 +26,19 @@ package org.flag4j.arrays.dense;
 
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.algebraic_structures.fields.Complex64;
-import org.flag4j.algebraic_structures.fields.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field.AbstractDenseFieldTensor;
+import org.flag4j.arrays.backend.ring.TensorOverRing;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.io.parsing.ComplexNumberParser;
-import org.flag4j.linalg.operations.common.complex.Complex128Ops;
-import org.flag4j.linalg.operations.common.complex.Complex128Properties;
-import org.flag4j.linalg.operations.dense.real_field_ops.RealFieldDenseOps;
-import org.flag4j.linalg.operations.dense_sparse.coo.field_ops.DenseCooFieldTensorOps;
-import org.flag4j.linalg.operations.dense_sparse.coo.real_field_ops.RealFieldDenseCooOps;
+import org.flag4j.linalg.ops.common.complex.Complex128Ops;
+import org.flag4j.linalg.ops.common.complex.Complex128Properties;
+import org.flag4j.linalg.ops.common.ring_ops.RingOps;
+import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldTensorOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooOps;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -59,7 +60,7 @@ public class CTensor extends AbstractDenseFieldTensor<CTensor, Complex128> {
      * @param shape Shape of this tensor.
      * @param entries Entries of this tensor.
      */
-    public CTensor(Shape shape, Field<Complex128>[] entries) {
+    public CTensor(Shape shape, Complex128[] entries) {
         super(shape, entries);
         if(entries.length == 0 || entries[0] == null) setZeroElement(Complex128.ZERO);
     }
@@ -190,6 +191,12 @@ public class CTensor extends AbstractDenseFieldTensor<CTensor, Complex128> {
     }
 
 
+    @Override
+    public Complex128[] makeEmptyDataArray(int length) {
+        return new Complex128[length];
+    }
+
+
     /**
      * Constructs a tensor of the same type as this tensor with the given the shape and data.
      *
@@ -199,7 +206,7 @@ public class CTensor extends AbstractDenseFieldTensor<CTensor, Complex128> {
      * @return A tensor of the same type as this tensor with the given the shape and data.
      */
     @Override
-    public CTensor makeLikeTensor(Shape shape, Field<Complex128>[] entries) {
+    public CTensor makeLikeTensor(Shape shape, Complex128[] entries) {
         return new CTensor(shape, entries);
     }
 
@@ -214,7 +221,7 @@ public class CTensor extends AbstractDenseFieldTensor<CTensor, Complex128> {
      * @return A sparse COO tensor which is of a similar type as this dense tensor.
      */
     @Override
-    protected CooCTensor makeLikeCooTensor(Shape shape, Field<Complex128>[] entries, int[][] indices) {
+    protected CooCTensor makeLikeCooTensor(Shape shape, Complex128[] entries, int[][] indices) {
         return new CooCTensor(shape, entries, indices);
     }
 
@@ -468,11 +475,13 @@ public class CTensor extends AbstractDenseFieldTensor<CTensor, Complex128> {
 
 
     /**
-     * Converts this tensor to an equivalent matrix. This tensor must have rank-2 to be converted.
+     * Converts this tensor to an equivalent matrix. If this tensor is not rank-2, it will be flattened to a row vector before
+     * conversion.
      * @return A matrix which is equivalent to this tensor.
      */
     public CMatrix toMatrix() {
-        return new CMatrix(shape, data.clone());
+        Shape matShape = (shape.getRank() == 2) ? shape : new Shape(1, data.length);
+        return new CMatrix(matShape, data.clone());
     }
 
 
@@ -482,6 +491,19 @@ public class CTensor extends AbstractDenseFieldTensor<CTensor, Complex128> {
      */
     public CVector toVector() {
         return new CVector(data.clone());
+    }
+
+
+    /**
+     * Computes the element-wise absolute value of this tensor.
+     *
+     * @return The element-wise absolute value of this tensor.
+     */
+    @Override
+    public TensorOverRing abs() {
+        double[] abs = new double[data.length];
+        RingOps.abs(data, abs);
+        return new Tensor(shape, abs);
     }
 
 
@@ -528,7 +550,7 @@ public class CTensor extends AbstractDenseFieldTensor<CTensor, Complex128> {
 
         // Get data up until the stopping point.
         for(int i=0; i<stopIndex; i++) {
-            value = StringUtils.ValueOfRound((Complex128) data[i], PrintOptions.getPrecision());
+            value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
             width = PrintOptions.getPadding() + value.length();
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
@@ -542,7 +564,7 @@ public class CTensor extends AbstractDenseFieldTensor<CTensor, Complex128> {
         }
 
         // Get last entry now
-        value = StringUtils.ValueOfRound((Complex128) data[size-1], PrintOptions.getPrecision());
+        value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
         width = PrintOptions.getPadding() + value.length();
         value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
         result.append(String.format("%-" + width + "s", value));

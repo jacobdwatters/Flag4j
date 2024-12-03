@@ -3,6 +3,7 @@ package org.flag4j.linalg;
 import org.flag4j.algebraic_structures.fields.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
+import org.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -158,6 +159,25 @@ class ComplexEigenTests {
                 {new Complex128(0.5983605131212475, -0.25768827700111113), new Complex128(0.4990402817485113, 0.4520242186668835), new Complex128(0.017946251980771932, -0.5964453528250875)}
         };
         expV = new CMatrix(expVEntries);
+
+        PrintOptions.setPrecision(100);
+        System.out.println(A);
+
+        CVector lambdas;
+        CMatrix vecs;
+
+        CMatrix[] pairs = Eigen.getEigenPairs(A, seed);
+        lambdas = pairs[0].toVector();
+        vecs = pairs[1];
+
+        System.out.println(A.mult(vecs.getCol(0)));
+        System.out.println(vecs.getCol(0).mult(lambdas.get(0)) + "\n\n");
+
+        System.out.println(A.mult(vecs.getCol(1)));
+        System.out.println(vecs.getCol(1).mult(lambdas.get(1))+ "\n\n");
+
+        System.out.println(A.mult(vecs.getCol(2)));
+        System.out.println(vecs.getCol(2).mult(lambdas.get(2)));
 
         assertEquals(expV, Eigen.getEigenVectors(A, seed));
     }
