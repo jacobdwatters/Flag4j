@@ -193,7 +193,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
             int rowOffset = i*numCols;
 
             for(int j=0; j<i; j++)
-                if(!data[rowOffset + j].isOne()) return false; // No need to continue.
+                if(!data[rowOffset + j].isZero()) return false; // No need to continue.
         }
 
         return true;
@@ -218,7 +218,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
             int rowOffset = i*numCols;
 
             for(int j=i+1; j<numCols; j++)
-                if(!data[rowOffset + j].isOne()) return false; // No need to continue.
+                if(!data[rowOffset + j].isZero()) return false; // No need to continue.
         }
 
         return true;
@@ -481,6 +481,9 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
      */
     @Override
     public boolean isOrthogonal() {
+        // TODO: This should not be implemented for field matrices. It does not make sense to define orthogonality for a complex
+        //  matrix as A^TA is not sufficient to describe an orthonormal set of complex vectors because the complex inner product
+        //  requires conjugation. Remove from MatrixMixin and implement isUnitary() in CMatrix.
         return numRows == numCols && mult(T()).isI();
     }
 

@@ -85,7 +85,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
      * @param shape Shape of this tensor.
      * @param entries Entries of this tensor.
      */
-    public Tensor(Shape shape, double[] entries) {
+    public Tensor(Shape shape, double... entries) {
         super(shape, entries);
     }
 
@@ -127,7 +127,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
      * @param shape Shape of this tensor.
      * @param entries Entries of this tensor.
      */
-    public Tensor(Shape shape, int[] entries) {
+    public Tensor(Shape shape, int... entries) {
         super(shape, new double[entries.length]);
         ArrayUtils.asDouble(entries, this.data);
     }

@@ -86,9 +86,8 @@ public abstract class BackSolver<T extends MatrixMixin<T, ?, U, ?>, U extends Ve
         ValidateParameters.ensureSquare(coeff.getShape());
         ValidateParameters.ensureEquals(coeff.numRows(), constantRows);
 
-        if(enforceTriU && !coeff.isTriU()) {
+        if(enforceTriU && !coeff.isTriU())
             throw new IllegalArgumentException("Expecting matrix U to be upper triangular.");
-        }
     }
 
 

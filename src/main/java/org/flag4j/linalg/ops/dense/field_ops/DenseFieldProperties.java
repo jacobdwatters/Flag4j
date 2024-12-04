@@ -60,7 +60,7 @@ public final class DenseFieldProperties {
             int stop = count1 + i;
 
             while(count1 < stop) {
-                if(src[count1++].equals(src[count2].conj())) return false;
+                if(!src[count1++].equals(src[count2].conj())) return false;
                 count2 += numCols;
             }
         }

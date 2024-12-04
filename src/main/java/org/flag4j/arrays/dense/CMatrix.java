@@ -858,6 +858,17 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
 
 
     /**
+     * Checks if this matrix is unitary. That is, if the inverse of this matrix is approximately equal to its conjugate transpose.
+     *
+     * @return True if this matrix it is unitary. Otherwise, returns false.
+     */
+    public boolean isUnitary() {
+        // TODO: Investigate what precision should be used in rounding.
+        return numRows == numCols && mult(H()).round(8).isI();
+    }
+
+
+    /**
      * Rounds all data in this matrix to the nearest integer. The real and imaginary components will be rounded
      * independently.
      * @return A new matrix containing the data of this matrix rounded to the nearest integer.
