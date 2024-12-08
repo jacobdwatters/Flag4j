@@ -76,6 +76,47 @@ import java.util.Arrays;
  * @see FieldTensor
  * @see AbstractDenseFieldMatrix
  */
+
+/**
+ * <p>Instances of this class represents a dense matrix backed by a {@link Field} array. The {@code FieldMatrix} class
+ * provides functionality for matrix operations whose elements are members of a field, supporting mutable data with a fixed shape.
+ *
+ * <p>A {@code FieldMatrix} is essentially equivalent to a rank-2 tensor but includes extended functionality
+ * and may offer improved performance for certain operations compared to general tensors.
+ *
+ * <p><b>Key Features:</b>
+ * <ul>
+ *   <li>Support for standard matrix operations like addition, subtraction, multiplication, and exponentiation.</li>
+ *   <li>Conversion methods to other matrix representations, such as COO (Coordinate) and CSR (Compressed Sparse Row) formats.</li>
+ *   <li>Utility methods for checking properties like being unitary, real, or complex.</li>
+ * </ul>
+ *
+ * <p><b>Example Usage:</b>
+ * <pre>{@code
+ * // Constructing a complex matrix from a 2D array of complex numbers
+ * Complex128[][] complexData = {
+ *     { new Complex128(1, 2), new Complex128(3, 4) },
+ *     { new Complex128(5, 6), new Complex128(7, 8) }
+ * };
+ * FieldMatrix<Complex128> matrix = new FieldMatrix(complexData);
+ *
+ * // Performing matrix multiplication.
+ * FieldMatrix<Complex128> result = matrix.mult(matrix);
+ *
+ * // Performing matrix conjugate transpose (i.e. Hermitian transpose).
+ * FieldMatrix<Complex128> conjugateTranspose = matrix.H();  // May not be supported for all field types.
+ *
+ * // Checking if the matrix is unitary.
+ * boolean isUnitary = matrix.isUnitary();
+ * }</pre>
+ *
+ * @param <T> Type of the {@link Field field} element for the matrix.
+ *
+ * @see FieldMatrix
+ * @see FieldVector
+ * @see FieldTensor
+ * @see AbstractDenseFieldMatrix
+ */
 public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<FieldMatrix<T>, FieldVector<T>, T> {
     private static final long serialVersionUID = 1L;
 

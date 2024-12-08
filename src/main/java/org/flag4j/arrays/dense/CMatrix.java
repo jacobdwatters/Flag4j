@@ -90,6 +90,7 @@ import java.util.List;
  *
  * @see Complex128
  * @see CVector
+ * @see CTensor
  * @see AbstractDenseFieldMatrix
  */
 public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex128> {
