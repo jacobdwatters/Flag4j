@@ -1,4 +1,4 @@
-package org.flag4j.arrays.sparse.csr_matrix;
+package org.flag4j.sparse_csr_matrix;
 
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooMatrix;
@@ -29,7 +29,6 @@ class CsrMatrixToStringTests {
         colIndices = new int[]{150, 2500, 14, 15, 892, 156};
         exp = """
                 shape: (150, 2256)
-                nnz: 6
                 Non-zero data: [ 1  14.235  239034  -882334.348  15.235  1.5342 ]
                 Row Pointers: [ 0  2  3  3  3  3  3  3  3  ...  6 ]
                 Col Indices: [ 150  2500  14  15  892  156 ]""";
@@ -42,12 +41,11 @@ class CsrMatrixToStringTests {
         nnz = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25};
         rowIndices = new int[]{0, 0, 0, 0, 1, 1, 1,  2, 2, 2, 2, 2, 2,  2,  3, 5, 5, 5,  8, 8, 8, 8, 9, 9, 9};
         colIndices = new int[]{0, 1, 2, 9, 5, 6, 11, 0, 2, 7, 8, 9, 10, 11, 6, 2, 9, 11, 0, 1, 5, 7, 8, 9, 11};
-        exp = String.format("""
+        exp = """
                 shape: (12, 12)
-                nnz: %d
                 Non-zero data: [ 1  2  3  4  5  6  7  8  9  ...  25 ]
                 Row Pointers: [ 0  4  7  14  15  15  18  18  18  ...  25 ]
-                Col Indices: [ 0  1  2  9  5  6  11  0  2  ...  11 ]""", nnz.length);
+                Col Indices: [ 0  1  2  9  5  6  11  0  2  ...  11 ]""";
         build();
 
         assertEquals(exp, A.toString());

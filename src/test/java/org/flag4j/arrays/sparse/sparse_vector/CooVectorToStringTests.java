@@ -1,4 +1,4 @@
-package org.flag4j.arrays.sparse.sparse_vector;
+package org.flag4j.sparse_vector;
 
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.io.PrintOptions;
@@ -32,23 +32,19 @@ class CooVectorToStringTests {
 
     @Test
     void toStringTestCase() {
-        // --------------------- sub-case 1 ---------------------
-        exp = """
-                shape: (3056)
-                nnz: 4
-                Non-zero data: [ 1.34  525  63.7  -0.0234 ]
-                Indices: [ 1  567  1567  2506 ]""";
+        // --------------------- Sub-case 1 ---------------------
+        exp = "shape: (3056)\n" +
+                "Non-zero data: [ 1.34  525  63.7  -0.0234 ]\n" +
+                "Indices: [ 1  567  1567  2506 ]";
         assertEquals(exp, a.toString());
 
-        // --------------------- sub-case 2 ---------------------
+        // --------------------- Sub-case 2 ---------------------
         PrintOptions.setCentering(false);
         PrintOptions.setMaxColumns(2);
         PrintOptions.setPrecision(2);
-        exp = """
-                shape: (3056)
-                nnz: 4
-                Non-zero data: [1.34  ...  -0.02  ]
-                Indices: [1  ...  2506  ]""";
+        exp = "shape: (3056)\n" +
+                "Non-zero data: [1.34  ...  -0.02  ]\n" +
+                "Indices: [1  ...  2506  ]";
         assertEquals(exp, a.toString());
     }
 }

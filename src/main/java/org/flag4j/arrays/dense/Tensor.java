@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,6 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.primitive_arrays.AbstractDenseDoubleTensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
-import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
 import org.flag4j.linalg.ops.common.field_ops.FieldOps;
@@ -38,8 +37,8 @@ import org.flag4j.linalg.ops.dense.real.RealDenseEquals;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseCooTensorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseCooOps;
-import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -66,18 +65,6 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
      */
     public Tensor(Shape shape) {
         super(shape, new double[shape.totalEntries().intValueExact()]);
-    }
-
-
-    /**
-     * Creates a tensor from an nD array. The tensors shape will be inferred from.
-     * @param nDArray Array to construct tensor from. Must be a rectangular array.
-     * @throws IllegalArgumentException If {@code nDArray} is not an array or not rectangular.
-     */
-    public Tensor(Object nDArray) {
-        super(ArrayUtils.nDArrayShape(nDArray),
-                new double[ArrayUtils.nDArrayShape(nDArray).totalEntriesIntValueExact()]);
-        ArrayUtils.nDFlatten(nDArray, shape, data, 0);
     }
 
 
@@ -113,7 +100,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
      */
     @Override
     public Tensor flatten() {
-        return new Tensor(shape.flatten(), data.clone());
+        return new Tensor(new Shape(shape.totalEntriesIntValueExact()), data.clone());
     }
 
 
@@ -143,7 +130,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
      */
     public Tensor(Shape shape, int... entries) {
         super(shape, new double[entries.length]);
-        ArrayConversions.asDouble(entries, this.data);
+        ArrayUtils.asDouble(entries, this.data);
     }
 
 
@@ -164,7 +151,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
      */
     public Tensor(Shape shape, Double[] entries) {
         super(shape, new double[entries.length]);
-        ArrayConversions.unbox(entries, super.data);
+        ArrayUtils.unbox(entries, super.data);
     }
 
 
@@ -176,7 +163,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
      */
     public Tensor(Shape shape, Integer[] entries) {
         super(shape, new double[entries.length]);
-        ArrayConversions.asDouble(entries, super.data);
+        ArrayUtils.asDouble(entries, super.data);
     }
 
 
@@ -424,7 +411,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
      * this tensor and the imaginary components are zero.
      */
     public CTensor toComplex() {
-        return new CTensor(shape, ArrayConversions.toComplex128(data, null));
+        return new CTensor(shape, ArrayUtils.wrapAsComplex128(data, null));
     }
 
 
@@ -502,12 +489,38 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
     public String toString() {
         int size = shape.totalEntries().intValueExact();
         StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
+        result.append("[");
 
-        result.append(PrettyPrint.abbreviatedArray(data,
-                PrintOptions.getMaxColumns(),
-                PrintOptions.getPadding(),
-                PrintOptions.getPrecision(),
-                PrintOptions.useCentering()));
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int width;
+        String value;
+
+        // Get data up until the stopping point.
+        int padding = PrintOptions.getPadding();
+        boolean centering = PrintOptions.useCentering();
+        int precision = PrintOptions.getPrecision();
+
+        for(int i = 0; i<stopIndex; i++) {
+            value = StringUtils.ValueOfRound(data[i], precision);
+            width = padding + value.length();
+            value = centering ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(stopIndex < size-1) {
+            width = padding + 3;
+            value = "...";
+            value = centering ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry now
+        value = StringUtils.ValueOfRound(data[size-1], precision);
+        width = padding + value.length();
+        value = centering ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s", value));
+
+        result.append("]");
 
         return result.toString();
     }
