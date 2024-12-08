@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,11 +28,10 @@ import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.MatrixMixin;
-import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.backend.primitive_arrays.AbstractDenseDoubleTensor;
-import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.arrays.sparse.*;
 import org.flag4j.io.PrettyPrint;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
 import org.flag4j.linalg.ops.MatrixMultiplyDispatcher;
 import org.flag4j.linalg.ops.RealDenseMatrixMultiplyDispatcher;
@@ -56,8 +55,8 @@ import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseMatrixMultiplicat
 import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_complex.RealComplexCsrDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
-import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -74,7 +73,7 @@ import java.util.List;
  * arithmetic and matrix computations.
  *
  * <p>A {@code Matrix} is essentially equivalent to a rank-2 tensor but includes extended functionality
- * and may offer improved performance for certain operations compared to general rank-n tensors.
+ * and may offer improved performance for certain operations compared to general tensors.
  *
  * <p><b>Key Features:</b>
  * <ul>
@@ -109,55 +108,9 @@ import java.util.List;
  * @see Tensor
  * @see Vector
  */
-
-/**
- * <p>Instances of this class represents a complex dense matrix backed by a {@link Complex128} array. The {@code CMatrix} class
- * provides functionality for complex matrix operations, supporting mutable data with a fixed shape.
- * This class extends {@link AbstractDenseFieldMatrix} and offers additional methods optimized for complex
- * arithmetic and matrix computations.
- *
- * <p>A {@code CMatrix} is essentially equivalent to a rank-2 tensor but includes extended functionality
- * and may offer improved performance for certain operations compared to general tensors.
- *
- * <p><b>Key Features:</b>
- * <ul>
- *   <li>Construction from various data types such as arrays of {@link Complex128}, {@code double}, and {@link String}.</li>
- *   <li>Support for standard matrix operations like addition, subtraction, multiplication, and exponentiation.</li>
- *   <li>Conversion methods to other matrix representations, such as COO (Coordinate) and CSR (Compressed Sparse Row) formats.</li>
- *   <li>Utility methods for checking properties like being unitary, real, or complex.</li>
- * </ul>
- *
- * <p><b>Example Usage:</b>
- * <pre>{@code
- * // Constructing a complex matrix from a 2D array of complex numbers
- * Complex128[][] complexData = {
- *     { new Complex128(1, 2), new Complex128(3, 4) },
- *     { new Complex128(5, 6), new Complex128(7, 8) }
- * };
- * CMatrix matrix = new CMatrix(complexData);
- *
- * // Performing matrix multiplication.
- * CMatrix result = matrix.mult(matrix);
- *
- * // Performing matrix transpose.
- * CMatrix transpose = matrix.T();
- *
- * // Performing matrix conjugate transpose (i.e. Hermitian transpose).
- * CMatrix conjugateTranspose = matrix.H();
- *
- * // Checking if the matrix is unitary.
- * boolean isUnitary = matrix.isUnitary();
- * }</pre>
- *
- * @see Complex128
- * @see CVector
- * @see AbstractDenseFieldMatrix
- */
 public class Matrix extends AbstractDenseDoubleTensor<Matrix>
         implements MatrixMixin<Matrix, Matrix, Vector, Double> {
     private static final long serialVersionUID = 1L;
-
-    // TODO: Add norm methods.
 
     /**
      * The number of rows in this matrix.
@@ -175,7 +128,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
      * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
-    public Matrix(Shape shape, double... entries) {
+    public Matrix(Shape shape, double[] entries) {
         super(shape, entries);
         ValidateParameters.ensureRank(shape, 2);
 
@@ -359,25 +312,6 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
         super(new Shape(numRows, numCols), data);
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
-    }
-
-
-    /**
-     * Constructs a diagonal matrix from an array specifying the diagonal elements of the matrix.
-     * @param data Diagonal elements of the matrix. All other values will be zero.
-     * @return A diagonal matrix whose diagonal elements are equal to {@code data}.
-     */
-    public static Matrix diag(double[] data) {
-        int size = data.length;
-        double[] fullData = new double[size*size];
-
-        int destIdx = 0;
-        for(int i=0; i<size; i++) {
-            fullData[destIdx] = data[i];
-            destIdx += size + 1;
-        }
-
-        return new Matrix(size, size, fullData);
     }
 
 
@@ -1236,7 +1170,6 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     @Override
     public Matrix setCol(Vector values, int colIndex) {
-        System.out.println("values: " + values);
         return setCol(values.data, colIndex);
     }
 
@@ -1567,7 +1500,8 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
         if(diagOffset > 0) {
             newSize = Math.min(newSize, numCols - diagOffset);
             idx = diagOffset;
-        } else if(diagOffset < 0) {
+        }
+        else if(diagOffset < 0) {
             newSize = Math.min(newSize, numRows + diagOffset);
             idx = -diagOffset*numCols;
         }
@@ -1688,7 +1622,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @return A complex matrix with real components equal to the data of this matrix and imaginary components set to zero.
      */
     public CMatrix toComplex() {
-        return new CMatrix(shape, ArrayConversions.toComplex128(data, null));
+        return new CMatrix(shape, ArrayUtils.wrapAsComplex128(data, null));
     }
 
 
@@ -2042,23 +1976,6 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
 
 
     /**
-     * Accepts a visitor that implements the {@link MatrixVisitor} interface.
-     * This method is part of the "Visitor Pattern" and allows operations to be performed
-     * on the matrix without modifying the matrix's class directly.
-     *
-     * @param visitor The visitor implementing the operation to be performed.
-     *
-     * @return The result of the visitor's operation, typically another matrix or a scalar value.
-     *
-     * @throws NullPointerException if the visitor is {@code null}.
-     */
-    @Override
-    public <R> R accept(MatrixVisitor<R> visitor) {
-        return visitor.visit(this);
-    }
-
-
-    /**
      * Checks if an object is equal to this matrix object.
      * @param object Object to check equality with this vector.
      * @return True if the two matrices have the same shape, are numerically equivalent, and are of type {@link Matrix}.
@@ -2086,11 +2003,109 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
 
 
     /**
+     * Gets a row of the matrix formatted as a human-readable string.
+     * @param rowIndex Index of the row to get.
+     * @param columnsToPrint List of column indices to print.
+     * @param maxWidths List of maximum string lengths for each column.
+     * @return A human-readable string representation of the specified row.
+     */
+    private String rowToString(int rowIndex, List<Integer> columnsToPrint, List<Integer> maxWidths) {
+        StringBuilder sb = new StringBuilder();
+
+        // Start the row with appropriate bracket.
+        sb.append(rowIndex > 0 ? " [" : "[");
+
+        // Loop over the columns to print.
+        for (int i = 0; i < columnsToPrint.size(); i++) {
+            int colIndex = columnsToPrint.get(i);
+            String value;
+            int width = PrintOptions.getPadding() + maxWidths.get(i);
+
+            if (colIndex == -1) // Placeholder for truncated columns.
+                value = "...";
+            else
+                value = StringUtils.ValueOfRound(this.get(rowIndex, colIndex), PrintOptions.getPrecision());
+
+            if (PrintOptions.useCentering())
+                value = StringUtils.center(value, width);
+
+            sb.append(String.format("%-" + width + "s", value));
+        }
+
+        // Close the row.
+        sb.append("]");
+
+        return sb.toString();
+    }
+
+
+    /**
      * Generates a human-readable string representing this matrix.
      * @return A human-readable string representing this matrix.
      */
     @Override
     public String toString() {
-        return PrettyPrint.matrixToString(shape, data);
+        StringBuilder result = new StringBuilder("shape: ").append(shape).append("\n");
+        result.append("[");
+
+        if (data.length == 0) {
+            result.append("[]"); // No data in this matrix.
+        } else {
+            int numRows = this.numRows;
+            int numCols = this.numCols;
+
+            int maxRows = PrintOptions.getMaxRows();
+            int maxCols = PrintOptions.getMaxColumns();
+
+            int rowStopIndex = Math.min(maxRows - 1, numRows - 1);
+            boolean truncatedRows = maxRows < numRows;
+
+            int colStopIndex = Math.min(maxCols - 1, numCols - 1);
+            boolean truncatedCols = maxCols < numCols;
+
+            // Build list of column indices to print
+            List<Integer> columnsToPrint = new ArrayList<>();
+            for (int j = 0; j < colStopIndex; j++)
+                columnsToPrint.add(j);
+
+            if (truncatedCols) columnsToPrint.add(-1); // Use -1 to indicate '...'.
+            columnsToPrint.add(numCols - 1); // Always include the last column.
+
+            // Compute maximum widths for each column
+            List<Integer> maxWidths = new ArrayList<>();
+            for (Integer colIndex : columnsToPrint) {
+                int maxWidth;
+                if (colIndex == -1)
+                    maxWidth = 3; // Width for '...'.
+                else
+                    maxWidth = PrettyPrint.maxStringLength(this.getCol(colIndex).data, rowStopIndex + 1);
+
+                maxWidths.add(maxWidth);
+            }
+
+            // Build the rows up to the stopping index.
+            for (int i = 0; i < rowStopIndex; i++) {
+                result.append(rowToString(i, columnsToPrint, maxWidths));
+                result.append("\n");
+            }
+
+            if (truncatedRows) {
+                // Print a '...' row to indicate truncated rows.
+                int totalWidth = maxWidths.stream().mapToInt(w -> w + PrintOptions.getPadding()).sum();
+                String value = "...";
+
+                if (PrintOptions.useCentering())
+                    value = StringUtils.center(value, totalWidth);
+
+                result.append(String.format(" [%-" + totalWidth + "s]\n", value));
+            }
+
+            // Append the last row.
+            result.append(rowToString(numRows - 1, columnsToPrint, maxWidths));
+        }
+
+        result.append("]");
+
+        return result.toString();
     }
 }
